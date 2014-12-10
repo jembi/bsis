@@ -1,8 +1,11 @@
 package model.product;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import constraintvalidator.CollectedSampleExists;
+import constraintvalidator.ProductTypeExists;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -18,7 +21,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
-
 import model.collectedsample.CollectedSample;
 import model.compatibility.CompatibilityTest;
 import model.modificationtracker.ModificationTracker;
@@ -28,18 +30,15 @@ import model.producttype.ProductType;
 import model.request.Request;
 import model.usage.ProductUsage;
 import model.user.User;
-
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
-import constraintvalidator.CollectedSampleExists;
-import constraintvalidator.ProductTypeExists;
-
 
 @Entity
 @Audited
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class Product implements ModificationTracker {
 
   @Id
@@ -51,7 +50,7 @@ public class Product implements ModificationTracker {
   // imported from another location. In such a case the corresponding collection
   // field is allowed to be null.
   @CollectedSampleExists
-  @ManyToOne(optional=true, fetch=FetchType.LAZY)
+  @ManyToOne(optional=true, fetch=FetchType.EAGER)
   private CollectedSample collectedSample;
 
   @ProductTypeExists
@@ -107,7 +106,7 @@ public class Product implements ModificationTracker {
   private RowModificationTracker modificationTracker;
 
   @Column(length=20)
-  private String donationIdentificationNumber;
+  private String componentIdentificationNumber;
   
   public Product() {
     modificationTracker = new RowModificationTracker();
@@ -120,7 +119,7 @@ public class Product implements ModificationTracker {
     this.createdOn = product.createdOn;
     this.expiresOn = product.expiresOn;
     this.notes = product.notes;
-    this.donationIdentificationNumber = product.donationIdentificationNumber;
+    this.componentIdentificationNumber = product.componentIdentificationNumber;
   }
 
   public Long getId() {
@@ -289,12 +288,12 @@ public class Product implements ModificationTracker {
     this.parentProduct = parentProduct;
   }
 
-	public String getDonationIdentificationNumber() {
-		return donationIdentificationNumber;
+	public String getComponentIdentificationNumber() {
+		return componentIdentificationNumber;
 	}
 
-	public void setDonationIdentificationNumber(String donationIdentificationNumber) {
-		this.donationIdentificationNumber = donationIdentificationNumber;
+	public void setComponentIdentificationNumber(String componentIdentificationNumber) {
+		this.componentIdentificationNumber = componentIdentificationNumber;
 	}
   
 }

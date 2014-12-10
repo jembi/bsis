@@ -7,40 +7,33 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
+import java.util.logging.Level;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-
 import model.bloodtesting.TTIStatus;
 import model.collectedsample.CollectedSample;
 import model.product.Product;
 import model.product.ProductStatus;
 import model.producttype.ProductType;
 import model.util.BloodGroup;
-import model.worksheet.Worksheet;
-
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.hibernate.NonUniqueObjectException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import repository.events.ApplicationContextProvider;
@@ -74,7 +67,7 @@ public class CollectedSampleRepository {
     em.flush();
   }
 
-  public CollectedSample updateCollectedSample(CollectedSample collectedSample) {
+  public CollectedSample updateCollectedSample(CollectedSample collectedSample) throws NoResultException{
     CollectedSample existingCollectedSample = findCollectedSampleById(collectedSample.getId());
     if (existingCollectedSample == null) {
       return null;
@@ -91,12 +84,16 @@ public class CollectedSampleRepository {
     String queryString = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE c.id = :collectedSampleId and c.isDeleted = :isDeleted";
     TypedQuery<CollectedSample> query = em.createQuery(queryString, CollectedSample.class);
     query.setParameter("isDeleted", Boolean.FALSE);
+    try{
     return query.setParameter("collectedSampleId", collectedSampleId).getSingleResult();
+    }catch(NoResultException ex){
+        throw new NoResultException("No Donation Exists with ID :" + collectedSampleId);
+    }
   }
 
   public List<Object> findCollectedSamples(
       String collectionNumber, List<Integer> bloodBagTypeIds, List<Long> centerIds, List<Long> siteIds, String dateCollectedFrom,
-      String dateCollectedTo, boolean includeTestedCollections, Map<String, Object> pagingParams) {
+      String dateCollectedTo, boolean includeTestedCollections, Map<String, Object> pagingParams) throws ParseException {
 
     String queryStr = "";
     if (StringUtils.isNotBlank(collectionNumber)) {
@@ -140,6 +137,7 @@ public class CollectedSampleRepository {
     query.setParameter("siteIds", siteIds);
     query.setParameter("dateCollectedFrom", getDateCollectedFromOrDefault(dateCollectedFrom));
     query.setParameter("dateCollectedTo", getDateCollectedToOrDefault(dateCollectedTo));
+             
 
     int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
     int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
@@ -179,7 +177,7 @@ public class CollectedSampleRepository {
     query.setParameter("fromDate", fromDate);
     query.setParameter("toDate", toDate);
     List<CollectedSample> collectedSamples = query.getResultList();
-    if (CollectionUtils.isEmpty(collectedSamples)) {
+    if (collectedSamples.isEmpty()) {
       return new ArrayList<CollectedSample>();
     }
     return collectedSamples;
@@ -218,33 +216,28 @@ public class CollectedSampleRepository {
     return resultList;
   }
 
-  private Date getDateCollectedFromOrDefault(String dateCollectedFrom) {
+  private Date getDateCollectedFromOrDefault(String dateCollectedFrom) throws ParseException{
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    Date from = null;
-    try {
-      from = (dateCollectedFrom == null || dateCollectedFrom.equals("")) ? dateFormat
-          .parse("31/12/1970") : dateFormat.parse(dateCollectedFrom);
-    } catch (ParseException ex) {
-    	LOGGER.error("Inside getDateCollectedFromOrDefault::"+ex);
-    }
+    Date from = 
+             (dateCollectedFrom == null || dateCollectedFrom.equals("")) ? dateFormat
+                          .parse("31/12/1970") : dateFormat.parse(dateCollectedFrom);
+              
+ 
     return from;      
   }
 
-  private Date getDateCollectedToOrDefault(String dateCollectedTo) {
+  private Date getDateCollectedToOrDefault(String dateCollectedTo) throws ParseException{
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     Date to = null;
-    try {
-      to = (dateCollectedTo == null || dateCollectedTo.equals("")) ? new Date() :
-              dateFormat.parse(dateCollectedTo);
-    } catch (ParseException ex) {
-    	LOGGER.error("Inside getDateCollectedToOrDefault::"+ex);
-    }
+                  to = (dateCollectedTo == null || dateCollectedTo.equals("")) ? new Date() :
+                          dateFormat.parse(dateCollectedTo);
+              
     return to;      
   }
 
   public Map<String, Map<Long, Long>> findNumberOfCollectedSamples(Date dateCollectedFrom,
       Date dateCollectedTo, String aggregationCriteria,
-      List<String> centers, List<String> sites, List<String> bloodGroups) {
+      List<String> centers, List<String> sites, List<String> bloodGroups)throws ParseException{
 
     List<Long> centerIds = new ArrayList<Long>();
     if (centers != null) {
@@ -298,15 +291,8 @@ public class CollectedSampleRepository {
     for (String bloodGroup : bloodGroups) {
       Map<Long, Long> m = new HashMap<Long, Long>();
       Calendar gcal = new GregorianCalendar();
-      Date lowerDate = null;
-      Date upperDate = null;
-      try {
-        lowerDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
-        upperDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
-      } catch (ParseException e1) {
-        // TODO Auto-generated catch block
-        e1.printStackTrace();
-      }
+      Date lowerDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
+      Date upperDate =  resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
       gcal.setTime(lowerDate);
       while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
         m.put(gcal.getTime().getTime(), (long) 0);
@@ -323,8 +309,8 @@ public class CollectedSampleRepository {
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)
         continue;
-      try {
-        Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
+        Date formattedDate = null;
+        formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
         Long utcTime = formattedDate.getTime();
         if (m.containsKey(utcTime)) {
           Long newVal = m.get(utcTime) + (Long) result[0];
@@ -332,16 +318,13 @@ public class CollectedSampleRepository {
         } else {
           m.put(utcTime, (Long) result[0]);
         }
-      } catch (ParseException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
+    
     }
 
     return resultMap;
   }
 
-  public CollectedSample addCollectedSample(CollectedSample collectedSample) {
+  public CollectedSample addCollectedSample(CollectedSample collectedSample) throws PersistenceException{
     collectedSample.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     collectedSample.setTTIStatus(TTIStatus.NOT_DONE);
     em.persist(collectedSample);
@@ -353,7 +336,7 @@ public class CollectedSampleRepository {
     // Add product
     Product product = new Product();
     product.setIsDeleted(false);
-    product.setDonationIdentificationNumber(collectedSample.getCollectionNumber());
+    product.setComponentIdentificationNumber(collectedSample.getCollectionNumber() + "-WB-1");
     product.setCollectedSample(collectedSample);
     product.setStatus(ProductStatus.QUARANTINED);
     product.setCreatedDate(collectedSample.getCreatedDate());
@@ -361,25 +344,34 @@ public class CollectedSampleRepository {
     product.setCreatedBy(collectedSample.getCreatedBy());
     
     ProductType productType = productRepository.findProductTypeByProductTypeName("Whole Blood");
-    
+
+    // set cal to collectedOn Date 
     Calendar cal = Calendar.getInstance();
     cal.setTime(collectedSample.getCollectedOn());
+    
+    // second calendar to store bleedStartTime 
+    Calendar bleedStartTime = Calendar.getInstance();
+    bleedStartTime.setTime(collectedSample.getBleedStartTime());
+    
+    // update cal to set time to bleedStartTime
+    cal.set(Calendar.HOUR_OF_DAY, bleedStartTime.get(Calendar.HOUR_OF_DAY));
+    cal.set(Calendar.MINUTE, bleedStartTime.get(Calendar.MINUTE));
+    cal.set(Calendar.SECOND, bleedStartTime.get(Calendar.SECOND));
+    
+    // update cal with initial component expiry period
     cal.add(Calendar.DATE, productType.getExpiresAfter());
     Date expiresOn = cal.getTime();    
-    
+
     product.setExpiresOn(expiresOn);
     product.setProductType(productType);
-    
     em.persist(product);
     //em.flush();
     em.refresh(product);
-    
-    
     return collectedSample;
   }
 
   public List<CollectedSample> findCollectedSampleByCenters(
-      List<Long> centerIds, String dateCollectedFrom, String dateCollectedTo) {
+      List<Long> centerIds, String dateCollectedFrom, String dateCollectedTo)throws ParseException{
     TypedQuery<CollectedSample> query = em
         .createQuery(
             "SELECT c FROM CollectedSample c WHERE " +
@@ -414,42 +406,31 @@ public class CollectedSampleRepository {
   }
 
   public CollectedSample findCollectedSampleByCollectionNumber(
-      String collectionNumber) {
+      String collectionNumber)throws NoResultException, NonUniqueResultException{
     String queryString = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE c.collectionNumber = :collectionNumber and c.isDeleted = :isDeleted";
     TypedQuery<CollectedSample> query = em.createQuery(queryString, CollectedSample.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("collectionNumber", collectionNumber);
     CollectedSample c = null;
-    try {
-       c = query.getSingleResult();
-    } catch (NoResultException ex) {
-    	LOGGER.error("Inside findCollectedSampleByCollectionNumber::"+ex);
-      System.out.println("Collection number not found: " + collectionNumber);
-    } catch (NonUniqueObjectException ex) {
-    	LOGGER.error("Inside findCollectedSampleByCollectionNumber::"+ex);
-    	LOGGER.error("Multiple collections for collection::"+collectionNumber);
-    }
+    c = query.getSingleResult();
     return c;
   }
 
   public CollectedSample findCollectionByCollectionNumberIncludeDeleted(
-      String collectionNumber) {
+      String collectionNumber){
     String queryString = "SELECT c FROM CollectedSample c WHERE c.collectionNumber = :collectionNumber";
     TypedQuery<CollectedSample> query = em.createQuery(queryString, CollectedSample.class);
     query.setParameter("collectionNumber", collectionNumber);
     CollectedSample c = null;
-    try {
-       c = query.getSingleResult();
-    } catch (NoResultException ex) {
-    	LOGGER.error("Inside findCollectionByCollectionNumberIncludeDeleted::"+ex);
-    	LOGGER.error("Collection number not found::"+collectionNumber);
-    } catch (NonUniqueObjectException ex) {
-    	LOGGER.error("Inside findCollectionByCollectionNumberIncludeDeleted::"+ex);
-    	LOGGER.error("Multiple collections for collection::"+collectionNumber);
-    }
+    try{
+    c = query.getSingleResult();
+    }catch(Exception ex){}
     return c;
   }
 
+  /**
+   * Worksheets are not used in BSIS later versions
+   *
   public void saveToWorksheet(String collectionNumber,
       List<Integer> bloodBagTypeIds, List<Long> centerIds,
       List<Long> siteIds, String dateCollectedFrom, String dateCollectedTo,
@@ -536,7 +517,20 @@ public class CollectedSampleRepository {
     query.setParameter("worksheetId", worksheetId);
     return query.getSingleResult().longValue();
   }
+  */
 
+  public CollectedSample verifyCollectionNumber(String collectionNumber) {
+	  CollectedSample collection = new CollectedSample();
+	  CollectedSample collectedSample = new CollectedSample();
+	  collectedSample.setCollectionNumber(collectionNumber);
+	  collectedSample = findCollectedSampleByCollectionNumber(collectionNumber);
+	  if (collectedSample != null) {
+	    return collectedSample;
+	  } else {
+	    return null;
+	  }
+  }
+  
   public List<CollectedSample> verifyCollectionNumbers(List<String> collectionNumbers) {
     List<CollectedSample> collections = new ArrayList<CollectedSample>();
     for (String collectionNumber : collectionNumbers) {
@@ -568,24 +562,4 @@ public class CollectedSampleRepository {
     return statusMap;
   }
   
-  
-  public List<CollectedSample> findLotReleseById(String din) {
-  	String queryString = "SELECT c FROM CollectedSample c WHERE c.collectionNumber = :collectionNumber and c.isDeleted= :isDeleted";
-  	List<CollectedSample> collectedSample;
-  	TypedQuery<CollectedSample> query = em.createQuery(queryString,CollectedSample.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("collectionNumber",din);
-    collectedSample = query.getResultList();
-    
-    for(CollectedSample sample : collectedSample){
-    	sample.getProducts().size();
-    	sample.getBloodTestResults().size();
-    	sample.getDonor().getDeferrals().size();
-    }
-    
-  	if(collectedSample.size() == 0)
-  		return null;
-  	else 
-  		return collectedSample;
-  }
 }

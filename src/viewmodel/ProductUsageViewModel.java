@@ -1,5 +1,6 @@
 package viewmodel;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import utils.CustomDateFormatter;
 import model.usage.ProductUsage;
 
@@ -15,6 +16,7 @@ public class ProductUsageViewModel {
     return productUsage.getId();
   }
 
+  @JsonIgnore
   public String getCollectionNumber() {
     return productUsage.getProduct().getCollectionNumber();
   }
@@ -36,7 +38,7 @@ public class ProductUsageViewModel {
   }
 
   public String getUsageDate() {
-    return CustomDateFormatter.getDateString(productUsage.getUsageDate());
+    return CustomDateFormatter.getDateTimeString(productUsage.getUsageDate());
   }
 
   public String getNotes() {

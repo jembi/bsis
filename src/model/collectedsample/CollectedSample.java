@@ -1,12 +1,18 @@
 package model.collectedsample;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import constraintvalidator.BloodBagTypeExists;
+import constraintvalidator.CollectionBatchExists;
+import constraintvalidator.DonationTypeExists;
+import constraintvalidator.DonorExists;
+import constraintvalidator.LocationExists;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -18,11 +24,11 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.validation.Valid;
-
+import javax.validation.constraints.NotNull;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
@@ -35,17 +41,11 @@ import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
 import model.user.User;
 import model.worksheet.Worksheet;
-
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
-
-import constraintvalidator.BloodBagTypeExists;
-import constraintvalidator.CollectionBatchExists;
-import constraintvalidator.DonationTypeExists;
-import constraintvalidator.DonorExists;
-import constraintvalidator.LocationExists;
+import org.hibernate.validator.constraints.Range;
 import repository.bloodtesting.BloodTypingStatus;
 
 /**
@@ -55,6 +55,7 @@ import repository.bloodtesting.BloodTypingStatus;
  */
 @Entity
 @Audited
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class CollectedSample implements ModificationTracker, Comparable<CollectedSample> {
 
   @Id
@@ -88,19 +89,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @OneToMany(mappedBy="collectedSample")
   private List<BloodTestResult> bloodTestResults;
 
-  /**
-   * Which center the collection comes to.
-   */
-  @LocationExists
-  @ManyToOne
-  private Location collectionCenter;
 
-  /**
-   * Where was it actually collected.
-   */
-  @LocationExists
-  @ManyToOne
-  private Location collectionSite;
 
   /**
    * Index to find collections done between date ranges.
@@ -127,19 +116,22 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @ManyToMany(mappedBy="collectedSamples")
   private Set<Worksheet> worksheets;
 
- 
+  @Range(min = 0, max = 30)
   private BigDecimal haemoglobinCount;
 
   @Column(name="bloodPressureSystolic")
+  @Range(min = 0, max = 250)
   private Integer bloodPressureSystolic;
   
   @Column(name="bloodPressureDiastolic")
+  @Range(min = 0, max = 150)
   private Integer bloodPressureDiastolic;
 
   /**
    * Limit the number of bytes required to store.
    */
   
+  @Range(min = 0, max = 300)
   private BigDecimal donorWeight;
 
   @ManyToOne(optional=true)
@@ -165,9 +157,20 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   private Boolean isDeleted;
   
-  
+  @Range(min =0 ,max = 290)
   private Integer donorPulse;
-  
+
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date bleedStartTime;
+
+  @Temporal(TemporalType.TIMESTAMP) 
+  private Date bleedEndTime;
+
+  @OneToOne
+  @LocationExists
+  @NotNull
+  private Location donorPanel;
+
   public CollectedSample() {
     modificationTracker = new RowModificationTracker();
     worksheets = new HashSet<Worksheet>();
@@ -177,8 +180,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     return id;
   }
 
-
-  
   public String getCollectionNumber() {
     return collectionNumber;
   }
@@ -187,13 +188,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     return donor;
   }
 
-  public Location getCollectionCenter() {
-    return collectionCenter;
-  }
-
-  public Location getCollectionSite() {
-    return collectionSite;
-  }
 
   public Date getCollectedOn() {
     return collectedOn;
@@ -223,13 +217,6 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.donor = donor;
   }
 
-  public void setCollectionCenter(Location collectionCenter) {
-    this.collectionCenter = collectionCenter;
-  }
-
-  public void setCollectionSite(Location collectionSite) {
-    this.collectionSite = collectionSite;
-  }
 
   public void setCollectedOn(Date collectedOn) {
     this.collectedOn = collectedOn;
@@ -255,14 +242,13 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.bloodBagType = collectedSample.bloodBagType;
     this.collectedOn = collectedSample.collectedOn;
     this.collectionBatch = collectedSample.collectionBatch;
-    this.collectionCenter = collectedSample.collectionCenter;
-    this.collectionSite = collectedSample.collectionSite;
     this.notes = collectedSample.notes;
     this.haemoglobinCount=collectedSample.haemoglobinCount;
     this.donorPulse = collectedSample.donorPulse;
     this.donorWeight=collectedSample.donorWeight;
     this.bloodPressureDiastolic=collectedSample.bloodPressureDiastolic;
     this.bloodPressureSystolic=collectedSample.bloodPressureSystolic;
+    this.donorPanel = collectedSample.getDonorPanel();
   }
 
   public List<Product> getProducts() {
@@ -440,16 +426,40 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     return extraBloodTypeInformation;
   }
 
-  public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
-    this.extraBloodTypeInformation = extraBloodTypeInformation;
-  }
+    public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
+        this.extraBloodTypeInformation = extraBloodTypeInformation;
+    }
 
-	public Integer getDonorPulse() {
-		return donorPulse;
-	}
+    public Integer getDonorPulse() {
+        return donorPulse;
+    }
 
-	public void setDonorPulse(Integer donorPulse) {
-		this.donorPulse = donorPulse;
-	}
-  
+    public void setDonorPulse(Integer donorPulse) {
+        this.donorPulse = donorPulse;
+    }
+
+    public Date getBleedStartTime() {
+        return bleedStartTime;
+    }
+
+    public void setBleedStartTime(Date bleedStartTime) {
+        this.bleedStartTime = bleedStartTime;
+    }
+
+    public Date getBleedEndTime() {
+        return bleedEndTime;
+    }
+
+    public void setBleedEndTime(Date bleedEndTime) {
+        this.bleedEndTime = bleedEndTime;
+    }
+
+    public Location getDonorPanel() {
+        return donorPanel;
+    }
+
+    public void setDonorPanel(Location donorPanel) {
+        this.donorPanel = donorPanel;
+    }
+
 }

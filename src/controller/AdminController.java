@@ -1,5 +1,8 @@
 package controller;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,36 +22,27 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import model.admin.FormField;
 import model.bloodbagtype.BloodBagType;
-import model.bloodtesting.BloodTest;
-import model.bloodtesting.rules.BloodTestingRule;
 import model.compatibility.CrossmatchType;
 import model.donationtype.DonationType;
-import model.requesttype.RequestType;
 import model.tips.Tips;
-
 import org.apache.http.conn.util.InetAddressUtils;
 import org.apache.log4j.Logger;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
+import org.springframework.web.bind.annotation.RestController;
 import repository.BloodBagTypeRepository;
 import repository.CrossmatchTypeRepository;
 import repository.DonationTypeRepository;
@@ -56,20 +50,15 @@ import repository.FormFieldRepository;
 import repository.GenericConfigRepository;
 import repository.LabSetupRepository;
 import repository.LocationRepository;
-import repository.ProductTypeRepository;
-import repository.RequestTypeRepository;
 import repository.TipsRepository;
 import repository.UserRepository;
 import repository.WorksheetTypeRepository;
-import repository.bloodtesting.BloodTestingRepository;
 import utils.PermissionConstants;
-import viewmodel.BloodTestViewModel;
-import viewmodel.BloodTestingRuleViewModel;
 
-@Controller
+@RestController
 public class AdminController {
 	
-	private static final Logger LOGGER = Logger.getLogger(AdminController.class);
+  private static final Logger LOGGER = Logger.getLogger(AdminController.class);
 
   @Autowired
   FormFieldRepository formFieldRepository;
@@ -81,22 +70,13 @@ public class AdminController {
   LocationRepository locationRepository;
 
   @Autowired
-  ProductTypeRepository productTypesRepository;
-
-  @Autowired
   BloodBagTypeRepository bloodBagTypesRepository;
 
   @Autowired
   DonationTypeRepository donationTypesRepository;
 
   @Autowired
-  RequestTypeRepository requestTypesRepository;
-
-  @Autowired
   CrossmatchTypeRepository crossmatchTypesRepository;
-
-  @Autowired
-  BloodTestingRepository bloodTestingRepository;
 
   @Autowired
   WorksheetTypeRepository worksheetTypeRepository;
@@ -128,24 +108,19 @@ public class AdminController {
     return reqUrl;
   }
 
-  @RequestMapping("/getFormToConfigure")
-  public ModelAndView getFormToConfigure(HttpServletRequest request,
-          @RequestParam(value="formToConfigure", required=false) String formToConfigure, 
-                              Model model) {
-    ModelAndView mv = new ModelAndView("admin/configureForms");
+  @RequestMapping(value = "/getform", method = RequestMethod.GET)
+  public  Map<String, Object> getFormToConfigure(HttpServletRequest request,
+          @RequestParam(value="formToConfigure", required=false) String formToConfigure) {
+    Map<String, Object> map = new HashMap<String, Object>();
 
-    Map<String, Object> m = model.asMap();
-    m.put("requestUrl", getUrl(request));
-    m.put("refreshUrl", getUrl(request));
-    m.put("formName", formToConfigure);
-    m.put("formFields", formFieldRepository.getFormFields(formToConfigure));
-    mv.addObject("model", m);
-    return mv;
+    map.put("formName", formToConfigure);
+    map.put("formFields", formFieldRepository.getFormFields(formToConfigure));
+    return map;
   }
 
-  @RequestMapping(value="/configureFormFieldChange", method=RequestMethod.POST)
+  @RequestMapping(value="/formfieldchange", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_FORMS+"')")
-  public @ResponseBody Map<String, ? extends Object>
+  public  Map<String, ? extends Object>
     configureFormFieldChange(@RequestParam Map<String, String> params) {
 
     boolean success = true;
@@ -204,59 +179,17 @@ public class AdminController {
     return m;
   }
 
-  @RequestMapping("/configureBloodTests")
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public ModelAndView configureBloodTests(HttpServletRequest request) {
-    ModelAndView mv = new ModelAndView("admin/configureBloodTests");
-    List<BloodTestViewModel> bloodTests = new ArrayList<BloodTestViewModel>();
-    for (BloodTest bt : bloodTestingRepository.getAllBloodTestsIncludeInactive()) {
-      bloodTests.add(new BloodTestViewModel(bt));
-    }
-    mv.addObject("bloodTests", bloodTests);
-    mv.addObject("worksheetTypes", worksheetTypeRepository.getAllWorksheetTypes());
-    mv.addObject("refreshUrl", getUrl(request));
-    return mv;
-  }
-
-  @RequestMapping("/configureBloodTypingRules")
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TYPING_RULES+"')")
-  public ModelAndView configureBloodTypingTests(HttpServletRequest request) {
-    ModelAndView mv = new ModelAndView("admin/configureBloodTypingRules");
-    mv.addObject("bloodTypingTests", bloodTestingRepository.getBloodTypingTests());
-    List<BloodTestingRuleViewModel> rules = new ArrayList<BloodTestingRuleViewModel>();
-    for (BloodTestingRule rule : bloodTestingRepository.getBloodTypingRules(true)) {
-      rules.add(new BloodTestingRuleViewModel(rule));
-    }
-    mv.addObject("bloodTypingRules", rules);
-    mv.addObject("refreshUrl", getUrl(request));
-    return mv;
-  }
-  
-  @RequestMapping("/configureForms")
+  @RequestMapping(value = "/forms", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_FORMS+"')")
-  public ModelAndView configureForms(HttpServletRequest request,
-                              Model model) {
-    ModelAndView mv = new ModelAndView("admin/selectFormToConfigure");
-
-    Map<String, Object> m = model.asMap();
-    m.put("requestUrl", getUrl(request));    
-    mv.addObject("model", m);
-    return mv;
+  public  Map<String, Object> configureForms() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("model", map);
+    return map;
   }
 
-  @RequestMapping("/createSampleDataFormGenerator")
+  @RequestMapping(value="/createsampledata", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DATA_SETUP+"')")
-  public ModelAndView createSampleDataFormGenerator(
-                HttpServletRequest request, Map<String, Object> params) {
-
-    ModelAndView mv = new ModelAndView("admin/createSampleDataForm");
-    return mv;
-  }
-
-  @RequestMapping(value="/createSampleData", method=RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DATA_SETUP+"')")
-  public @ResponseBody Map<String, ? extends Object> createSampleData(
-                HttpServletRequest request,
+  public  Map<String, ? extends Object> createSampleData(
                 @RequestParam Map<String, String> params) {
 
     boolean success = true;
@@ -278,42 +211,33 @@ public class AdminController {
       errMsg = "Internal Server Error";
     }
     Map<String, Object> m = new HashMap<String, Object>();
-    m.put("requestUrl", getUrl(request));
     m.put("success", success);
     m.put("errMsg", errMsg);
     return m;
   }
 
-  @RequestMapping(value="/configureTipsFormGenerator", method=RequestMethod.GET)
+  @RequestMapping(value="/tipsform", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_TIPS+"')")
-  public ModelAndView configureTipsFormGenerator(
-      HttpServletRequest request, HttpServletResponse response,
-      Model model) {
+  public  Map<String, Object> configureTipsFormGenerator() {
 
-    ModelAndView mv = new ModelAndView("admin/configureTips");
-    Map<String, Object> m = model.asMap();
-    addAllTipsToModel(m);
-    m.put("refreshUrl", getUrl(request));
-    mv.addObject("model", model);
-    return mv;
+    Map<String, Object> map = new HashMap<String, Object>();
+    addAllTipsToModel(map);
+    return map;
   }
 
-  @RequestMapping(value="/labSetupPageGenerator", method=RequestMethod.GET)
+  @RequestMapping(value="/labsetuppage", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_LAB_SETUP+"')")
-  public ModelAndView labSetupFormGenerator(
-      HttpServletRequest request, HttpServletResponse response,
-      Model model) {
+  public  Map<String, Object> labSetupFormGenerator() {
 
-    ModelAndView mv = new ModelAndView("admin/labSetup");
-    mv.addObject("labsetup", genericConfigRepository.getConfigProperties("labsetup"));
-    mv.addObject("refreshUrl", getUrl(request));
-    return mv;
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("labsetup", genericConfigRepository.getConfigProperties("labsetup"));
+    return map;
   }
 
   @SuppressWarnings("unchecked")
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_LAB_SETUP+"')")
   @RequestMapping(value="/updateLabSetup", method=RequestMethod.POST)
-  public @ResponseBody Map<String, Object> updateLabSetup(HttpServletRequest request,
+  public  Map<String, Object> updateLabSetup(HttpServletRequest request,
       @RequestParam(value="labSetupParams") String params) {
 
     ObjectMapper mapper = new ObjectMapper();
@@ -335,88 +259,28 @@ public class AdminController {
     m.put("success", true);
     return m;
   }
-  
-  @RequestMapping(value="/configureProductTypes", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public ModelAndView configureProductTypes(
-      HttpServletRequest request, HttpServletResponse response) {
 
-    ModelAndView mv = new ModelAndView("admin/configureProductTypes");
-    mv.addObject("productTypes", productTypesRepository.getAllProductTypesIncludeDeleted());
-    mv.addObject("refreshUrl", getUrl(request));
-    return mv;
-  }
-
-  @RequestMapping(value="/configureProductTypeCombinations", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public ModelAndView configureProductTypeCombinations(
-      HttpServletRequest request, HttpServletResponse response) {
-
-    ModelAndView mv = new ModelAndView("admin/configureProductTypeCombinations");
-    mv.addObject("productTypeCombinations", productTypesRepository.getAllProductTypeCombinationsIncludeDeleted());
-    mv.addObject("productTypes", productTypesRepository.getAllProductTypes());
-    mv.addObject("refreshUrl", getUrl(request));
-    return mv;
-  }
-
-  @RequestMapping(value="/configureRequestTypesFormGenerator", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_REQUESTS+"')")
-  public ModelAndView configureRequestTypesFormGenerator(
-      HttpServletRequest request, HttpServletResponse response,
-      Model model) {
-
-    ModelAndView mv = new ModelAndView("admin/configureRequestTypes");
-    Map<String, Object> m = model.asMap();
-    addAllRequestTypesToModel(m);
-    m.put("refreshUrl", getUrl(request));
-    mv.addObject("model", model);
-    return mv;
-  }
-
-  @RequestMapping(value="/configureCrossmatchTypesFormGenerator", method=RequestMethod.GET)
+  @RequestMapping(value="/crossmatchtypes", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_CROSS_MATCH_TYPES+"')")
-  public ModelAndView configureCrossmatchTypesFormGenerator(
-      HttpServletRequest request, HttpServletResponse response,
-      Model model) {
+  public  Map<String, Object> configureCrossmatchTypesFormGenerator() {
 
-    ModelAndView mv = new ModelAndView("admin/configureCrossmatchTypes");
-    Map<String, Object> m = model.asMap();
-    addAllCrossmatchTypesToModel(m);
-    m.put("refreshUrl", getUrl(request));
-    mv.addObject("model", model);
-    return mv;
+    Map<String, Object> map = new HashMap<String, Object>();
+    addAllCrossmatchTypesToModel(map);
+    return map;
   }
 
-  @RequestMapping(value="/configureBloodBagTypesFormGenerator", method=RequestMethod.GET)
-  public ModelAndView configureBloodBagTypesFormGenerator(
-      HttpServletRequest request, HttpServletResponse response,
-      Model model) {
+  @RequestMapping(value="/packtypes", method=RequestMethod.GET)
+  public  Map<String, Object> configureBloodBagTypesFormGenerator() {
 
-    ModelAndView mv = new ModelAndView("admin/configureBloodBagTypes");
-    Map<String, Object> m = model.asMap();
-    addAllBloodBagTypesToModel(m);
-    m.put("refreshUrl", getUrl(request));
-    mv.addObject("model", model);
-    return mv;
+    Map<String, Object> map = new HashMap<String, Object>();
+    addAllBloodBagTypesToModel(map);
+    return map;
   }
 
-  @RequestMapping(value="/backupDataFormGenerator", method=RequestMethod.GET)
-  public ModelAndView backupDataFormGenerator(
-      HttpServletRequest request, HttpServletResponse response,
-      Model model) {
-
-    ModelAndView mv = new ModelAndView("admin/backupData");
-    Map<String, Object> m = model.asMap();
-    m.put("refreshUrl", getUrl(request));
-    mv.addObject("model", model);
-    return mv;
-  }
-
-  @RequestMapping(value="/backupData", method=RequestMethod.GET)
+  @RequestMapping(value="/backupdata", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BACKUP_DATA+"')")
   public void backupData(
-      HttpServletRequest request, HttpServletResponse response,
-      Model model) {
+      HttpServletRequest request, HttpServletResponse response) {
 
     DateFormat dateFormat = new SimpleDateFormat("MM_dd_yyyy_HH_mm_ss");
 
@@ -466,18 +330,14 @@ public class AdminController {
       LOGGER.debug(e.getMessage() + e.getStackTrace());
     }
   }
-  @RequestMapping(value="/configureDonationTypesFormGenerator", method=RequestMethod.GET)
+  
+  @RequestMapping(value="/donationtypes", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-  public ModelAndView configureDonationTypesFormGenerator(
-      HttpServletRequest request, HttpServletResponse response,
-      Model model) {
+  public  Map<String, Object> configureDonationTypesFormGenerator() {
 
-    ModelAndView mv = new ModelAndView("admin/configureDonationTypes");
-    Map<String, Object> m = model.asMap();
-    addAllDonationTypesToModel(m);
-    m.put("refreshUrl", getUrl(request));
-    mv.addObject("model", model);
-    return mv;
+    Map<String, Object> map = new HashMap<String, Object>();
+    addAllDonationTypesToModel(map);
+    return map;
   }
 
   private void addAllDonationTypesToModel(Map<String, Object> m) {
@@ -488,10 +348,6 @@ public class AdminController {
     m.put("allBloodBagTypes", bloodBagTypesRepository.getAllBloodBagTypes());
   }
 
-  private void addAllRequestTypesToModel(Map<String, Object> m) {
-    m.put("allRequestTypes", requestTypesRepository.getAllRequestTypes());
-  }
-
   private void addAllCrossmatchTypesToModel(Map<String, Object> m) {
     m.put("allCrossmatchTypes", crossmatchTypesRepository.getAllCrossmatchTypes());
   }
@@ -500,12 +356,12 @@ public class AdminController {
     m.put("allTips", tipsRepository.getAllTips());
   }
 
-  @RequestMapping("/configureTips")
+  @RequestMapping(value = "/tips", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_TIPS+"')") 
-  public ModelAndView configureTips(
+  public  Map<String, Object> configureTips(
       HttpServletRequest request, HttpServletResponse response,
-      @RequestParam(value="params") String paramsAsJson, Model model) {
-    ModelAndView mv = new ModelAndView("admin/configureTips");
+      @RequestParam(value="params") String paramsAsJson) {
+    Map<String, Object> map = new HashMap<String, Object>();
     LOGGER.debug(paramsAsJson);
     List<Tips> allTips = new ArrayList<Tips>();
     try {
@@ -526,62 +382,16 @@ public class AdminController {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
 
-    Map<String, Object> m = model.asMap();
-    addAllTipsToModel(m);
-    m.put("refreshUrl", "configureTipsFormGenerator.html");
-    mv.addObject("model", model);
-    return mv;
-  }
+    addAllTipsToModel(map);
+    return map;
+  } 
 
-  @RequestMapping("/configureRequestTypes")
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_REQUESTS+"')")
-  public ModelAndView configureRequestTypes(
-      HttpServletRequest request, HttpServletResponse response,
-      @RequestParam(value="params") String paramsAsJson, Model model) {
-    ModelAndView mv = new ModelAndView("admin/configureRequestTypes");
-    LOGGER.debug(paramsAsJson);
-    List<RequestType> allRequestTypes = new ArrayList<RequestType>();
-    try {      
-    	@SuppressWarnings("unchecked")
-      Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
-      for (String id : params.keySet()) {
-        @SuppressWarnings("unchecked")
-        Map<String, Object> paramValue = (Map<String, Object>) params.get(id);
-				
-        RequestType rt = new RequestType();
-
-        rt.setRequestType((String) paramValue.get("requestType"));
-        rt.setBulkTransfer((Boolean) paramValue.get("bulkTransfer"));
-        
-        try {
-          rt.setId(Integer.parseInt(id));
-        } catch (NumberFormatException ex) {
-        	LOGGER.debug(ex.getMessage() + ex.getStackTrace());
-          rt.setId(null);
-        }
-        rt.setIsDeleted(false);
-        allRequestTypes.add(rt);
-      }
-      requestTypesRepository.saveAllRequestTypes(allRequestTypes);
-      LOGGER.debug(params);
-    } catch (Exception ex) {
-    	LOGGER.debug(ex.getMessage() + ex.getStackTrace());
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    }
-
-    Map<String, Object> m = model.asMap();
-    addAllRequestTypesToModel(m);
-    m.put("refreshUrl", "configureRequestTypesFormGenerator.html");
-    mv.addObject("model", model);
-    return mv;
-  }
-
-  @RequestMapping("/configureCrossmatchTypes")
+  @RequestMapping(value = "/crossmatchtypes", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_CROSS_MATCH_TYPES+"')")
-  public ModelAndView configureCrossmatchTypes(
+  public  Map<String, Object> configureCrossmatchTypes(
       HttpServletRequest request, HttpServletResponse response,
-      @RequestParam(value="params") String paramsAsJson, Model model) {
-    ModelAndView mv = new ModelAndView("admin/configureCrossmatchTypes");
+      @RequestParam(value="params") String paramsAsJson) {
+    Map<String, Object> map = new HashMap<String, Object>();
     LOGGER.debug(paramsAsJson);
     List<CrossmatchType> allCrossmatchTypes = new ArrayList<CrossmatchType>();
     try {
@@ -590,12 +400,7 @@ public class AdminController {
       for (String id : params.keySet()) {
         String crossmatchType = (String) params.get(id);
         CrossmatchType ct = new CrossmatchType();
-        try {
-          ct.setId(Integer.parseInt(id));
-        } catch (NumberFormatException ex) {
-          LOGGER.debug(ex.getMessage() + ex.getStackTrace());
-          ct.setId(null);
-        }
+        ct.setId(Integer.parseInt(id));
         ct.setCrossmatchType(crossmatchType);
         ct.setIsDeleted(false);
         allCrossmatchTypes.add(ct);
@@ -607,102 +412,65 @@ public class AdminController {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
 
-    Map<String, Object> m = model.asMap();
-    addAllCrossmatchTypesToModel(m);
-    m.put("refreshUrl", "configureCrossmatchTypesFormGenerator.html");
-    mv.addObject("model", model);
-    return mv;
+    addAllCrossmatchTypesToModel(map);
+    return map;
   }
-
-  @RequestMapping("/configureBloodBagTypes")
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_BAG_TYPES+"')")
-  public ModelAndView configureBloodBagTypes(
-      HttpServletRequest request, HttpServletResponse response,
-      @RequestParam(value="params") String paramsAsJson, Model model) {
-    ModelAndView mv = new ModelAndView("admin/configureBloodBagTypes");
-    LOGGER.debug(paramsAsJson);
-    List<BloodBagType> allBloodBagTypes = new ArrayList<BloodBagType>();
-    try {
-      @SuppressWarnings("unchecked")
-      Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
-      for (String id : params.keySet()) {
-        String bloodBagType = (String) params.get(id);
-        BloodBagType bt = new BloodBagType();
-        try {
-          bt.setId(Integer.parseInt(id));
-        } catch (NumberFormatException ex) {
-          LOGGER.debug(ex.getMessage() + ex.getStackTrace());
-          bt.setId(null);
-        }
-        bt.setBloodBagType(bloodBagType);
-        bt.setIsDeleted(false);
-        allBloodBagTypes.add(bt);
-      }
-      bloodBagTypesRepository.saveAllBloodBagTypes(allBloodBagTypes);
-      LOGGER.debug(params);
-    } catch (Exception ex) {
-      LOGGER.debug(ex.getMessage() + ex.getStackTrace());
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+  
+   @RequestMapping(value = "/packtypes/{id}", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
+    public ResponseEntity<BloodBagType> getPackTypeById(@PathVariable Integer id){
+        Map<String, Object> map = new HashMap<String, Object>();
+        BloodBagType packType = bloodBagTypesRepository.getBloodBagTypeById(id);
+        map.put("packtype", packType);
+        return new ResponseEntity(map, HttpStatus.OK);
     }
 
-    Map<String, Object> m = model.asMap();
-    addAllBloodBagTypesToModel(m);
-    m.put("refreshUrl", "configureBloodBagTypesFormGenerator.html");
-    mv.addObject("model", model);
-    return mv;
-  }
-
-  @RequestMapping("/configureDonationTypes")
+    @RequestMapping(value = "/packtypes", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
+    public ResponseEntity savePackType(@RequestBody BloodBagType packType){
+        bloodBagTypesRepository.saveBloodBagType(packType);
+        return new ResponseEntity(packType, HttpStatus.CREATED);
+    }
+  
+	@RequestMapping(value = "/packtypes/{id}", method = RequestMethod.PUT)
+	@PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
+	public ResponseEntity updateBloodBagType(@RequestBody BloodBagType packType , @PathVariable Integer id){
+	    Map<String, Object> map = new HashMap<String, Object>();
+	    packType.setId(id);
+	    packType = bloodBagTypesRepository.updateBloodBagType(packType);
+	    map.put("packtype", packType);
+	    return new ResponseEntity(map, HttpStatus.OK);
+	}
+    
+  @RequestMapping(value = "/donationtypes/{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-  public ModelAndView configureDonationTypes(
-      HttpServletRequest request, HttpServletResponse response,
-      @RequestParam(value="params") String paramsAsJson, Model model) {
-    ModelAndView mv = new ModelAndView("admin/configureDonationTypes");
-    List<DonationType> allDonationTypes = new ArrayList<DonationType>();
-    try {
-      @SuppressWarnings("unchecked")
-      Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
-      for (String id : params.keySet()) {
-        String donationType = (String) params.get(id);
-        DonationType dt = new DonationType();
-        try {
-          dt.setId(Integer.parseInt(id));
-        } catch (NumberFormatException ex) {
-          LOGGER.debug(ex.getMessage() + ex.getStackTrace());
-          dt.setId(null);
-        }
-        dt.setDonationType(donationType);
-        dt.setIsDeleted(false);
+  public  ResponseEntity getDonationType(@PathVariable Integer id) {
+      Map<String, Object> map = new HashMap<String, Object>();
+      DonationType donationType = donationTypesRepository.getDonationTypeById(id);
+      map.put("donationType", donationType);
+      return new ResponseEntity(map, HttpStatus.OK);
 
-        allDonationTypes.add(dt);
-      }
-      donationTypesRepository.saveAllDonationTypes(allDonationTypes);
-      LOGGER.debug(params);
-    } catch (Exception ex) {
-      LOGGER.debug(ex.getMessage() + ex.getStackTrace());
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    }
+  } 
+  
+  @RequestMapping(value = "/donationtypes", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
+  public  ResponseEntity saveDonationType(@RequestBody DonationType donationType) {
+       
+      donationTypesRepository.saveDonationType(donationType);
+      return new ResponseEntity(donationType, HttpStatus.CREATED);
 
-    Map<String, Object> m = model.asMap();
-    addAllDonationTypesToModel(m);
-    m.put("refreshUrl", "configureDonationTypesFormGenerator.html");
-    mv.addObject("model", model);
-    return mv;
   }
+  
+  @RequestMapping(value = "/donationtypes/{id}", method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
+  public  ResponseEntity updateDonationType(@PathVariable Integer id,
+          @RequestBody DonationType donationType) {
+      Map<String, Object> map = new HashMap<String, Object>();
+      donationType.setId(id);
+      donationType = donationTypesRepository.updateDonationType(donationType);
+      map.put("donationType", donationType);
+      return new ResponseEntity(map , HttpStatus.OK);
 
-  @RequestMapping(value="/adminWelcomePageGenerator")
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_ADMIN_INFORMATION+"')")
-  public ModelAndView adminWelcomePageGenerator(HttpServletRequest request, Model model) {
-    ModelAndView mv = new ModelAndView("admin/adminWelcomePage");
-    Map<String, Object> m = model.asMap();
-    List<InetAddress> wirelessAddresses = getServerNetworkAddresses();
-    List<String> serverAddresses = new ArrayList<String>();
-    for (InetAddress addr : wirelessAddresses) {
-      serverAddresses.add("http://" + addr.getHostAddress() + ":" + request.getServerPort() + "/v2v");
-    }
-    m.put("serverAddresses", serverAddresses);
-    mv.addObject("model", m);
-    return mv;
   }
 
   List<InetAddress> getServerNetworkAddresses() {
@@ -736,5 +504,5 @@ public class AdminController {
     }
     return listOfServerAddresses;
   }
-
+  
 }

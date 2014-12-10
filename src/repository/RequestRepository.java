@@ -34,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import controller.UtilController;
+import javax.persistence.NonUniqueResultException;
 
 @Repository
 @Transactional
@@ -63,23 +64,20 @@ public class RequestRepository {
     return existingRequest;
   }
 
-  public Request findRequest(String requestNumber) {
+  public Request findRequest(String requestNumber)throws NoResultException, NonUniqueResultException{
     Request request = null;
     if (requestNumber != null && requestNumber.length() > 0) {
       String queryString = "SELECT r FROM Request r WHERE r.requestNumber = :requestNumber and r.isDeleted= :isDeleted";
       TypedQuery<Request> query = em.createQuery(queryString, Request.class);
       query.setParameter("isDeleted", Boolean.FALSE);
       query.setParameter("requestNumber", requestNumber);
-      try {
-        request = query.getSingleResult();
-      } catch (NoResultException ex) {
-        ex.printStackTrace();
-      }
+      request = query.getSingleResult();
+     
     }
     return request;
   }
 
-  public Request findRequestWithIssuedProducts(String requestNumber) {
+  public Request findRequestWithIssuedProducts(String requestNumber)throws NoResultException, NonUniqueResultException{
     Request request = null;
     if (requestNumber != null && requestNumber.length() > 0) {
       String queryString = "SELECT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
@@ -87,29 +85,19 @@ public class RequestRepository {
       TypedQuery<Request> query = em.createQuery(queryString, Request.class);
       query.setParameter("isDeleted", Boolean.FALSE);
       query.setParameter("requestNumber", requestNumber);
-      try {
-        request = query.getSingleResult();
-      } catch (NoResultException ex) {
-        ex.printStackTrace();
-      }
+      request = query.getSingleResult();
     }
     return request;
   }
 
-  public Request findRequestById(Long requestId) {
-    Request request = null;
-    if (requestId != null) {
+  public Request findRequestById(Long requestId) throws NoResultException, NonUniqueResultException{
       String queryString = "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
                            "r.id = :requestId and r.isDeleted= :isDeleted";
       TypedQuery<Request> query = em.createQuery(queryString, Request.class);
       query.setParameter("isDeleted", Boolean.FALSE);
-      List<Request> requests = query.setParameter("requestId", requestId)
-          .getResultList();
-      if (requests != null && requests.size() > 0) {
-        request = requests.get(0);
-      }
-    }
-    return request;
+      Request request = query.setParameter("requestId", requestId)
+          .getSingleResult();
+      return request;
   }
 
   public ArrayList<Request> getAllRequests() {
@@ -150,7 +138,7 @@ public class RequestRepository {
   public List<Request> findAnyRequestMatching(String requestNumber,
       String dateRequestedFrom, String dateRequestedTo,
       String dateRequiredFrom, String dateRequiredTo, List<String> sites,
-      List<String> productTypes, List<String> statuses) {
+      List<String> productTypes, List<String> statuses) throws ParseException {
 
     TypedQuery<Request> query = em
         .createQuery(
@@ -172,43 +160,30 @@ public class RequestRepository {
     query.setParameter("statuses", statuses);
 
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    try {
       Date from = (dateRequestedFrom == null || dateRequestedFrom.equals("")) ? dateFormat
           .parse("31/12/1970") : dateFormat.parse(dateRequestedFrom);
       query.setParameter("dateRequestedFrom", from);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-    try {
       Date to = (dateRequestedTo == null || dateRequestedTo.equals("")) ? dateFormat
           .parse(dateFormat.format(new Date())) : dateFormat
           .parse(dateRequestedTo);
       query.setParameter("dateRequestedTo", to);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-
-    try {
+      
+/*
+      //dupliate code
       Date from = (dateRequiredFrom == null || dateRequiredFrom.equals("")) ? dateFormat
           .parse("31/12/1970") : dateFormat.parse(dateRequiredFrom);
       query.setParameter("dateRequiredFrom", from);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-    try {
       Date to = (dateRequiredTo == null || dateRequiredTo.equals("")) ? dateFormat
           .parse(dateFormat.format(new Date())) : dateFormat
           .parse(dateRequiredTo);
       query.setParameter("dateRequiredTo", to);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
+*/
 
     List<Request> resultList = query.getResultList();
     return resultList;
   }
 
-  public Request findRequestByRequestNumber(String requestNumber) {
+  public Request findRequestByRequestNumber(String requestNumber) throws NoResultException, NonUniqueResultException{
     TypedQuery<Request> query = em
         .createQuery(
             "SELECT r FROM Request r WHERE r.requestNumber = :requestNumber and r.isDeleted= :isDeleted",
@@ -216,26 +191,18 @@ public class RequestRepository {
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("requestNumber", requestNumber);
     Request request = null;
-    try {
-      request = query.getSingleResult();
-    } catch (NoResultException ex) {
-      ex.printStackTrace();
-    }
+    request = query.getSingleResult();
     return request;
   }
 
-  public Request findRequestByRequestNumberIncludeDeleted(String requestNumber) {
+  public Request findRequestByRequestNumberIncludeDeleted(String requestNumber) throws NoResultException, NonUniqueResultException{
     TypedQuery<Request> query = em
         .createQuery(
             "SELECT r FROM Request r WHERE r.requestNumber = :requestNumber",
             Request.class);
     query.setParameter("requestNumber", requestNumber);
     Request request = null;
-    try {
-      request = query.getSingleResult();
-    } catch (NoResultException ex) {
-      ex.printStackTrace();
-    }
+    request = query.getSingleResult();
     return request;
   }
 
@@ -288,40 +255,31 @@ public class RequestRepository {
     return productRequest;
   }
 
-  private Date getDateRequestedAfterOrDefault(String requestedAfter) {
+  private Date getDateRequestedAfterOrDefault(String requestedAfter) throws ParseException {
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    Date from = null;
-    try {
+      Date from = null;
       from = (requestedAfter == null || requestedAfter.equals("")) ? dateFormat
-          .parse("31/12/1970") : dateFormat.parse(requestedAfter);
-    } catch (ParseException ex) {
-      ex.printStackTrace();
-    }
-    return from;      
+              .parse("31/12/1970") : dateFormat.parse(requestedAfter);
+      return from;
   }
 
-  private Date getDateRequiredByOrDefault(String dateRequiredBy) {
+  private Date getDateRequiredByOrDefault(String dateRequiredBy) throws ParseException {
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    Date to = null;
-    try {
-      if (StringUtils.isBlank(dateRequiredBy)) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        cal.add(Calendar.DATE, 365);
-        to = cal.getTime();
-      }
-      else {
-        to = dateFormat.parse(dateRequiredBy);
-      }
-    } catch (ParseException ex) {
-      ex.printStackTrace();
-    }
-    return to;      
+        Date to = null;
+        if (StringUtils.isBlank(dateRequiredBy)) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            cal.add(Calendar.DATE, 365);
+            to = cal.getTime();
+        } else {
+            to = dateFormat.parse(dateRequiredBy);
+        }
+    return to ;
   }
 
   public List<Object> findRequests(String requestNumber, List<Integer> productTypeIds,
       List<Long> requestSiteIds, String requestedAfter,
-      String requiredBy, Boolean includeSatisfiedRequests, Map<String, Object> pagingParams) {
+      String requiredBy, Boolean includeSatisfiedRequests, Map<String, Object> pagingParams) throws ParseException  {
 
     String queryStr = "";
     if (StringUtils.isNotBlank(requestNumber)) {
@@ -398,7 +356,7 @@ public class RequestRepository {
     return existingRequest;
   }
 
-  public void issueProductsToRequest(Long requestId, String productsToIssue) throws Exception {
+  public void issueProductsToRequest(Long requestId, String productsToIssue) throws RuntimeException {
     Request request = findRequestById(requestId);
     productsToIssue = productsToIssue.replaceAll("\"", "");
     productsToIssue = productsToIssue.replaceAll("\\[", "");
@@ -413,7 +371,7 @@ public class RequestRepository {
       // between the time when matching products are searched and selected
       // for issuing
       if (!canIssueProduct(product, request))
-        throw new Exception("Could not issue products");
+        throw new RuntimeException("Could not issue products");
     }
 
     for (String productId : productIds) {
@@ -493,11 +451,7 @@ public class RequestRepository {
 
   public Request findRequestById(String requestId) {
     Request request = null;
-    try {
-      request = findRequestById(Long.parseLong(requestId));
-    } catch (NumberFormatException ex) {
-      ex.printStackTrace();
-    }
+    request = findRequestById(Long.parseLong(requestId));
     return request;
   }
 
@@ -513,7 +467,7 @@ public class RequestRepository {
 
   public Map<String, Map<Long, Long>> findNumberOfRequests(Date dateRequestedFrom,
       Date dateRequestedTo, String aggregationCriteria,
-      List<String> sites, List<String> bloodGroups) {
+      List<String> sites, List<String> bloodGroups) throws ParseException{
 
     List<Long> siteIds = new ArrayList<Long>();
     if (sites != null) {
@@ -557,15 +511,9 @@ public class RequestRepository {
     for (String bloodGroup : bloodGroups) {
       Map<Long, Long> m = new HashMap<Long, Long>();
       Calendar gcal = new GregorianCalendar();
-      Date lowerDate = null;
-      Date upperDate = null;
-      try {
-        lowerDate = resultDateFormat.parse(resultDateFormat.format(dateRequestedFrom));
-        upperDate = resultDateFormat.parse(resultDateFormat.format(dateRequestedTo));
-      } catch (ParseException e1) {
-        // TODO Auto-generated catch block
-        e1.printStackTrace();
-      }
+      Date lowerDate = resultDateFormat.parse(resultDateFormat.format(dateRequestedFrom));
+      Date upperDate =  resultDateFormat.parse(resultDateFormat.format(dateRequestedTo));
+      
       gcal.setTime(lowerDate);
       while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
         m.put(gcal.getTime().getTime(), (long) 0);
@@ -582,7 +530,6 @@ public class RequestRepository {
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)
         continue;
-      try {
         Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
         Long utcTime = formattedDate.getTime();
         if (m.containsKey(utcTime)) {
@@ -591,10 +538,6 @@ public class RequestRepository {
         } else {
           m.put(utcTime, (Long) result[0]);
         }
-      } catch (ParseException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
     }
     return resultMap;
   }

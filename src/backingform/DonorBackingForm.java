@@ -1,37 +1,32 @@
 package backingform;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
 import model.address.ContactMethodType;
 import model.donor.Donor;
+import model.donor.DonorStatus;
 import model.idtype.IdType;
 import model.location.Location;
 import model.preferredlanguage.PreferredLanguage;
 import model.user.User;
 import model.util.Gender;
 import org.apache.commons.lang3.StringUtils;
-import org.hsqldb.Tokens;
+import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.DateTime;
 import utils.CustomDateFormatter;
-import viewmodel.DonorViewModel;
 
 public class DonorBackingForm {
 
     @Valid
+    @JsonIgnore
     private Donor donor;
-
-    // store a local copy of birthdate string as validation may have failed
-    private String birthDate;
-
-    //to capture date of birth parameters--#11
-    String year;
-    String month;
-    String dayOfMonth;
 
     private Boolean ageFormatCorrect;
 
@@ -39,8 +34,10 @@ public class DonorBackingForm {
 
     private String dateOfFirstDonation;
 
+    @Valid
     private Address address;
 
+    @Valid
     private Contact contact;
 
     public DonorBackingForm() {
@@ -53,44 +50,29 @@ public class DonorBackingForm {
     public DonorBackingForm(Donor donor) {
         this.donor = donor;
     }
-
+    
+    @JsonIgnore
+    public DonorStatus getDonorStatus() {
+        return donor.getDonorStatus();
+    }
+    
     public String getBirthDate() {
-        if (birthDate != null) {
-            return birthDate;
-        }
-        if (donor == null) {
-            return "";
-        }
         return CustomDateFormatter.getDateString(donor.getBirthDate());
     }
-
-    public void setBirthDate() {
-
-        if (year.isEmpty() || month.isEmpty() || dayOfMonth.isEmpty()) {
-            donor.setBirthDate(null);
-            return;
-        }
-        birthDate = dayOfMonth + "/" + month + "/" + year;
-        try {
-            donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
-        } catch (ParseException ex) {
-            donor.setBirthDate(null);
-        }
-    }
-
+    
     public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
         try {
             donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
         } catch (ParseException ex) {
             ex.printStackTrace();
             donor.setBirthDate(null);
         }
-    }
-
-    public DonorViewModel getDonorViewModel() {
-        return new DonorViewModel(donor);
-    }
+    } 
+    
+//
+//    public DonorViewModel getDonorViewModel() {
+//        return new DonorViewModel(donor);
+//    }
 
     public Donor getDonor() {
         return donor;
@@ -143,14 +125,52 @@ public class DonorBackingForm {
         }
         return donor.getGender().toString();
     }
-
+    
+    @JsonIgnore
     public Date getLastUpdated() {
         return donor.getLastUpdated();
     }
 
+    @JsonIgnore
     public Date getCreatedDate() {
         return donor.getCreatedDate();
     }
+    
+    @JsonIgnore
+    public User getCreatedBy() {
+        return donor.getCreatedBy();
+    }
+
+    @JsonIgnore
+    public User getLastUpdatedBy() {
+        return donor.getLastUpdatedBy();
+    }
+    
+    public void setCreatedDate(Date createdDate) {
+        donor.setCreatedDate(createdDate);
+    }
+    
+    public void setCreatedBy(User createdBy) {
+        donor.setCreatedBy(createdBy);
+    }
+
+    public void setLastUpdatedBy(User lastUpdatedBy) {
+        donor.setLastUpdatedBy(lastUpdatedBy);
+    }
+    
+    public void setLastUpdated(Date lastUpDated){
+        donor.setLastUpdated(lastUpDated);
+    }
+    
+    @JsonIgnore
+    public Date getDateOfLastDonation() {
+	    return donor.getDateOfLastDonation();
+	}
+	
+	public void setDateOfLastDonation(Date dateOfLastDonation) {
+	    donor.setDateOfLastDonation(dateOfLastDonation);
+	}
+
 
     public String getNotes() {
         return donor.getNotes();
@@ -160,13 +180,7 @@ public class DonorBackingForm {
         return donor.getIsDeleted();
     }
 
-    public User getCreatedBy() {
-        return donor.getCreatedBy();
-    }
 
-    public User getLastUpdatedBy() {
-        return donor.getLastUpdatedBy();
-    }
 
     public int hashCode() {
         return donor.hashCode();
@@ -204,9 +218,6 @@ public class DonorBackingForm {
         donor.setBirthDateEstimated(birthDateEstimated);
     }
 
-    public void setCreatedDate(Date createdDate) {
-        donor.setCreatedDate(createdDate);
-    }
 
     public void setNotes(String notes) {
         donor.setNotes(notes);
@@ -216,17 +227,8 @@ public class DonorBackingForm {
         donor.setIsDeleted(isDeleted);
     }
 
-    public void setCreatedBy(User createdBy) {
-        donor.setCreatedBy(createdBy);
-    }
-
-    public void setLastUpdatedBy(User lastUpdatedBy) {
-        donor.setLastUpdatedBy(lastUpdatedBy);
-    }
     
-    public void setLastUpdated(Date lastUpDated){
-        donor.setLastUpdated(lastUpDated);
-    }
+
 
     public String toString() {
         return donor.toString();
@@ -269,78 +271,52 @@ public class DonorBackingForm {
     public Boolean isAgeFormatCorrect() {
         return ageFormatCorrect;
     }
-
+    
     public String getDonorPanel() {
         Location donorPanel = donor.getDonorPanel();
         if (donorPanel == null || donorPanel.getId() == null) {
             return null;
         }
+        
         return donorPanel.getId().toString();
     }
-
-    public String getYear() {
-        return year;
-    }
-
-    public void setYear(String year) {
-        this.year = year;
-    }
-
-    public String getMonth() {
-        return month;
-    }
-
-    public void setMonth(String month) {
-        this.month = month;
-    }
-
-    public String getDayOfMonth() {
-        return dayOfMonth;
-    }
-
-    public void setDayOfMonth(String dayOfMonth) {
-        this.dayOfMonth = dayOfMonth;
-    }
-
-    public void setDonorPanel(String donorPanel) {
-        if (StringUtils.isBlank(donorPanel)) {
+    
+    public void setDonorPanel(Location donorPanel) {
+        if (donorPanel == null || donorPanel.getId() == null) {
             donor.setDonorPanel(null);
         } else {
             Location l = new Location();
             try {
-                l.setId(Long.parseLong(donorPanel));
+                l.setId(donorPanel.getId());
                 donor.setDonorPanel(l);
             } catch (NumberFormatException ex) {
                 ex.printStackTrace();
                 donor.setDonorPanel(null);
-            }
+            } 
         }
     }
-
-
-    public void setPreferredLanguage(String language) {
-
-        if (StringUtils.isBlank(language)) {
-            donor.setPreferredLanguage(null);
-        } else {
-            PreferredLanguage preferredLanguage = new PreferredLanguage();
-            try {
-                preferredLanguage.setId(Long.parseLong(language));
-                donor.setPreferredLanguage(preferredLanguage);
-            } catch (NumberFormatException ex) {
-                ex.printStackTrace();
-                donor.setPreferredLanguage(null);
-            }
-        }
-    }
-
+    
     public String getPreferredLanguage() {
 
-        if (donor.getPreferredLanguage()!=null) {
-            return donor.getPreferredLanguage().getId().toString();
+        if (donor.getPreferredLanguage()==null || donor.getPreferredLanguage().getId() == null) {
+        	return null;
         }
-        return null;
+        return donor.getPreferredLanguage().getId().toString();
         
+    }
+    
+    public void setPreferredLanguage(PreferredLanguage preferredLanguage){
+    	if (preferredLanguage == null){
+    		donor.setPreferredLanguage(null);
+    	}
+    	else if (preferredLanguage.getId() == null){
+    		donor.setPreferredLanguage(null);
+    	}
+    	else{
+    		PreferredLanguage pl  = new PreferredLanguage();
+	        pl.setId(preferredLanguage.getId());
+	        donor.setPreferredLanguage(pl);
+    	}
     }
 
     public String getDateOfFirstDonation() {
@@ -394,6 +370,14 @@ public class DonorBackingForm {
             donor.setBloodRh(bloodRh);
         }
     }
+    
+    @JsonIgnore
+    public String getBloodGroup() {
+	    if (StringUtils.isBlank(donor.getBloodAbo()) || StringUtils.isBlank(donor.getBloodRh()))
+	      return "";
+	    else
+	      return donor.getBloodAbo() + donor.getBloodRh();
+	}
 
     /**
      * Home Address getter & Setters
@@ -640,46 +624,42 @@ public class DonorBackingForm {
     public Contact getContact(){
         return contact;
     }
-    
+
     public void setContact(Contact contact){
         this.contact = contact ;
     }
-
-    /**
-     * Address Type Getters & Setters
-     */
+    
     public String getPreferredAddressType() {
-         
-        if (donor.getAddressType()!=null) {
-           return donor.getAddressType().getId().toString();
+        
+        if (donor.getAddressType()==null  || donor.getAddressType().getId() == null) {
+            return null;
         }
-        return null;
+        return donor.getAddressType().getId().toString();
     }
-
-    public void setPreferredAddressType(String addressTypeID) {
-        if (StringUtils.isBlank(addressTypeID)) {
-              donor.setAddressType(null);
-        } else {
-            AddressType addressType = new AddressType();
-            addressType.setId(Long.parseLong(addressTypeID));
-            donor.setAddressType(addressType);
-        }
-
+    
+    public void setPreferredAddressType(AddressType addressType){
+        donor.setAddressType(addressType);
     }
+    
     public String getIdType() {
-        if (donor.getIdType()!=null) {
-            return donor.getIdType().getId().toString();
+        if (donor.getIdType()==null || donor.getIdType().getId() == null) {
+            return null;
         }
-        return null;
+        return donor.getIdType().getId().toString();
     }
-    public void setIdType(String idType){
-         if (StringUtils.isBlank(idType)) {
-              donor.setIdType(null);
-        } else {
-            IdType preferredIdType = new IdType();
-            preferredIdType.setId(Long.parseLong(idType));
-            donor.setIdType(preferredIdType);
-        }
+    
+    public void setIdType(IdType idType){
+    	if(idType == null){
+    		donor.setIdType(null);
+    	}
+    	else if(idType.getId() == null){
+    		donor.setIdType(null);
+    	}
+    	else{
+	    	IdType idt = new IdType();
+	    	idt.setId(idType.getId());
+	        donor.setIdType(idt);
+    	}
     }
     
     public String getIdNumber(){
@@ -688,26 +668,31 @@ public class DonorBackingForm {
     public void setIdNumber(String idNumber){
         donor.setIdNumber(idNumber);
     }
-    public String getPreferredContactMethod(){
-         
-        if (donor.getContactMethodType()!=null) {
-            return donor.getContactMethodType().getId().toString();
+    
+    public String getContactMethodType(){
+        
+        if (donor.getContactMethodType()==null || donor.getContactMethodType().getId() == null) {
+            return null;
         }
-        return null;
+        return donor.getContactMethodType().getId().toString();
         
     }
     
-    public void setPreferredContactMethod(String preferredContactMethodId) {
-        if (StringUtils.isBlank(preferredContactMethodId)) {
-              donor.setContactMethodType(null);
-        } else {
-            ContactMethodType contactMethodType  = new ContactMethodType();
-            contactMethodType.setId(Integer.parseInt(preferredContactMethodId));
-            donor.setContactMethodType(contactMethodType);
-        }
-
-    }
+    public void setContactMethodType(ContactMethodType contactMethodType){
+    	if (contactMethodType == null){
+    		donor.setContactMethodType(null);
+    	}
+    	else if (contactMethodType.getId() == null){
+    		donor.setContactMethodType(null);
+    	}
+    	else{
+	    	ContactMethodType cmt  = new ContactMethodType();
+	        cmt.setId(contactMethodType.getId());
+	        donor.setContactMethodType(cmt);
+    	}
+    }    
     
+   @JsonIgnore
     public String getContactId(){
         if(contact.getId()!=null)     
         return contact.getId().toString();
@@ -718,6 +703,7 @@ public class DonorBackingForm {
         contact.setId(Long.parseLong(contactId));
     }
     
+    @JsonIgnore
     public String getAddressId(){
         if(address.getId()!=null)
         return  address.getId().toString();

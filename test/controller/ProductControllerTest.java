@@ -72,7 +72,7 @@ public class ProductControllerTest {
 	      		try{
 		        	Product product = new Product();
 		          product.setIsDeleted(false);
-		          product.setDonationIdentificationNumber(createdPackNumber+"-"+i);
+		          product.setComponentIdentificationNumber(createdPackNumber+"-"+i);
 		          Calendar c=new GregorianCalendar();
 		          System.out.println("after :"+ productTypeRepository.getProductTypeById(1).getExpiryIntervalMinutes());
 		          c.add(Calendar.MINUTE, productTypeRepository.getProductTypeById(1).getExpiryIntervalMinutes());
@@ -92,7 +92,7 @@ public class ProductControllerTest {
 			        productRepository.addProduct(product);
 	
 			        // Once product save successfully update selected product status with processed
-			        productRepository.updateProductByProductId(productId);
+			        productRepository.setProductStatusToProcessed(productId);
 			        
 			      } catch (EntityExistsException ex) {
 			        ex.printStackTrace();
@@ -106,7 +106,7 @@ public class ProductControllerTest {
 	      	try{
 		        	Product product = new Product();
 		          product.setIsDeleted(false);
-		          product.setDonationIdentificationNumber(createdPackNumber);
+		          product.setComponentIdentificationNumber(createdPackNumber);
 
 		          Calendar c=new GregorianCalendar();
 		          System.out.println("after :"+ productTypeRepository.getProductTypeById(1).getExpiryIntervalMinutes());
@@ -124,7 +124,7 @@ public class ProductControllerTest {
 		          product.setCollectedSample(collectedSample);
 		          product.setStatus(ProductStatus.QUARANTINED);
 			        productRepository.addProduct(product);
-			        productRepository.updateProductByProductId(productId);
+			        productRepository.setProductStatusToProcessed(productId);
 			        
 			      } catch (EntityExistsException ex) {
 			        ex.printStackTrace();

@@ -1,13 +1,10 @@
 package viewmodel;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-
-import repository.bloodtesting.BloodTypingStatus;
-import utils.CustomDateFormatter;
 import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
 import model.donationtype.DonationType;
@@ -15,6 +12,9 @@ import model.donor.Donor;
 import model.location.Location;
 import model.product.Product;
 import model.user.User;
+import org.apache.commons.lang3.StringUtils;
+import repository.bloodtesting.BloodTypingStatus;
+import utils.CustomDateFormatter;
 
 public class CollectedSampleViewModel {
 
@@ -34,7 +34,7 @@ public class CollectedSampleViewModel {
   public String getCollectedOn() {
     if (collectedSample.getCollectedOn() == null)
       return "";
-    return CustomDateFormatter.getDateTimeString(collectedSample.getCollectedOn());
+    return CustomDateFormatter.getDateString(collectedSample.getCollectedOn());
   }
 
   public boolean equals(Object obj) {
@@ -49,23 +49,16 @@ public class CollectedSampleViewModel {
     return collectedSample.getCollectionNumber();
   }
 
+  @JsonIgnore
   public Donor getDonor() {
     return collectedSample.getDonor();
-  }
-
-  public Location getCollectionCenter() {
-    return collectedSample.getCollectionCenter();
-  }
-
-  public Location getCollectionSite() {
-    return collectedSample.getCollectionSite();
   }
 
   public DonationType getDonationType() {
     return collectedSample.getDonationType();
   }
 
-  public BloodBagType getBloodBagType() {
+  public BloodBagType getPackType() {
     return collectedSample.getBloodBagType();
   }
 
@@ -182,27 +175,39 @@ public class CollectedSampleViewModel {
   }
 
   public Integer getBloodPressureSystolic() {
-		return  collectedSample.getBloodPressureSystolic();
+    return  collectedSample.getBloodPressureSystolic();
   }
-	
-  public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
-		 collectedSample.setBloodPressureSystolic(bloodPressureSystolic);
-  }
-  
-  public Integer  getBloodPressureDiastolic() {
-		return collectedSample.getBloodPressureDiastolic();
-	}
 
-	public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
-		collectedSample.setBloodPressureDiastolic(bloodPressureDiastolic);
-	}
-	
-	public String getBloodPressure()
-	{
-		 if(collectedSample.getBloodPressureSystolic()!=null && collectedSample.getBloodPressureDiastolic()!=null)
-		 return collectedSample.getBloodPressureSystolic()+"/"+getBloodPressureDiastolic();
-		 else
-		 return null;
-	}
-	 
+  public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
+    collectedSample.setBloodPressureSystolic(bloodPressureSystolic);
+  }
+
+  public Integer getBloodPressureDiastolic() {
+    return collectedSample.getBloodPressureDiastolic();
+  }
+
+  public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+    collectedSample.setBloodPressureDiastolic(bloodPressureDiastolic);
+  }
+    
+  public String getBleedStartTime() {
+    Date bleedStartTime = collectedSample.getBleedStartTime();
+    if (bleedStartTime != null) {
+        return CustomDateFormatter.getTimeString(bleedStartTime);
+    }
+    return "";
+  }
+
+  public String getBleedEndTime() {
+    Date bleedEndTime = collectedSample.getBleedEndTime();
+    if (bleedEndTime != null) {
+        return CustomDateFormatter.getTimeString(bleedEndTime);
+    }
+    return "";
+  }
+
+  public  LocationViewModel getDonorPanel(){
+      return new LocationViewModel(collectedSample.getDonorPanel());
+  }
+
 }

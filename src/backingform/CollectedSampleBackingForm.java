@@ -1,24 +1,22 @@
 package backingform;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
 import model.collectionbatch.CollectionBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
+import model.product.Product;
 import model.location.Location;
 import model.user.User;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-
 import utils.CustomDateFormatter;
 
 public class CollectedSampleBackingForm {
@@ -27,21 +25,15 @@ public class CollectedSampleBackingForm {
 
   @NotNull
   @Valid
+  @JsonIgnore
   private CollectedSample collectedSample;
 
   private List<String> centers;
   private List<String> sites;
-  private String dateCollectedFrom;
-  private String dateCollectedTo;
-  private String donorPulse;
-  private String haemoglobinCount;
-  private String donorWeight;
-  private String bloodPressureSystolic;
-  private String bloodPressureDiastolic;
-  
-  
-
   private String collectedOn;
+  private String bleedStartTime;
+  private String bleedEndTime;
+  private String donorNumber;
 
   // setting this to false is required as the use parameters from batch
   // may be hidden by the user in which case we will get a null pointer
@@ -61,7 +53,7 @@ public class CollectedSampleBackingForm {
   }
 
   public CollectedSample getCollectedSample() {
-    return this.collectedSample;
+    return collectedSample;
   }
 
   public List<String> getCenters() {
@@ -79,6 +71,22 @@ public class CollectedSampleBackingForm {
       return "";
     return CustomDateFormatter.getDateTimeString(collectedSample.getCollectedOn());
   }
+  
+  public String getBleedStartTime() {
+    if (bleedStartTime != null)
+      return bleedStartTime;
+    if (collectedSample == null)
+      return "";
+    return CustomDateFormatter.getDateTimeString(collectedSample.getBleedStartTime());
+  }
+  
+  public String getBleedEndTime() {
+    if (bleedEndTime != null)
+      return bleedEndTime;
+    if (collectedSample == null)
+      return "";
+    return CustomDateFormatter.getDateTimeString(collectedSample.getBleedEndTime());
+  }
 
   public String getCollectionNumber() {
     return collectedSample.getCollectionNumber();
@@ -87,29 +95,33 @@ public class CollectedSampleBackingForm {
   public void setCollectedOn(String collectedOn) {
     this.collectedOn = collectedOn;
     try {
-      collectedSample.setCollectedOn(CustomDateFormatter.getDateTimeFromString(collectedOn));
+      collectedSample.setCollectedOn(CustomDateFormatter.getDateFromString(collectedOn));
     } catch (ParseException ex) {
       ex.printStackTrace();
       collectedSample.setCollectedOn(null);
     }
   }
-
-  public String getDateCollectedFrom() {
-    return dateCollectedFrom;
+  
+  public void setBleedStartTime(String bleedStartTime) {
+    this.bleedStartTime = bleedStartTime;
+    try {
+      collectedSample.setBleedStartTime(CustomDateFormatter.getTimeFromString(bleedStartTime));
+    } catch (ParseException ex) {
+      ex.printStackTrace();
+      collectedSample.setBleedStartTime(null);
+    }
   }
-
-  public void setDateCollectedFrom(String dateCollectedFrom) {
-    this.dateCollectedFrom = dateCollectedFrom;
+  
+  public void setBleedEndTime(String bleedEndTime) {
+    this.bleedEndTime = bleedEndTime;
+    try {
+      collectedSample.setBleedEndTime(CustomDateFormatter.getTimeFromString(bleedEndTime));
+    } catch (ParseException ex) {
+      ex.printStackTrace();
+      collectedSample.setBleedEndTime(null);
+    }
   }
-
-  public String getDateCollectedTo() {
-    return dateCollectedTo;
-  }
-
-  public void setDateCollectedTo(String dateCollectedTo) {
-    this.dateCollectedTo = dateCollectedTo;
-  }
-
+	  
   public void setCollection(CollectedSample collection) {
     this.collectedSample = collection;
   }
@@ -134,19 +146,6 @@ public class CollectedSampleBackingForm {
     return collectedSample.getDonor();
   }
 
-  public String getCollectionCenter() {
-    Location center = collectedSample.getCollectionCenter();
-    if (center == null || center.getId() == null)
-      return null;
-    return center.getId().toString();
-  }
-
-  public String getCollectionSite() {
-    Location site = collectedSample.getCollectionSite();
-    if (site == null || site.getId() == null)
-      return null;
-    return site.getId().toString();
-  }
 
   public String getDonationType() {
     DonationType donationType = collectedSample.getDonationType();
@@ -156,26 +155,30 @@ public class CollectedSampleBackingForm {
       return donationType.getId().toString();
   }
 
-  public String getBloodBagType() {
-    BloodBagType bloodBagType = collectedSample.getBloodBagType();
-    if (bloodBagType == null || bloodBagType.getId() == null)
+  public String getPackType() {
+    BloodBagType packType = collectedSample.getBloodBagType();
+    if (packType == null || packType.getId() == null)
       return null;
     else
-      return bloodBagType.getId().toString();
+      return packType.getId().toString();
   }
-
+  
+  @JsonIgnore
   public Date getLastUpdated() {
     return collectedSample.getLastUpdated();
   }
 
+  @JsonIgnore
   public Date getCreatedDate() {
     return collectedSample.getCreatedDate();
   }
 
+  @JsonIgnore
   public User getCreatedBy() {
     return collectedSample.getCreatedBy();
   }
 
+  @JsonIgnore
   public User getLastUpdatedBy() {
     return collectedSample.getLastUpdatedBy();
   }
@@ -203,71 +206,36 @@ public class CollectedSampleBackingForm {
   public void setDonor(Donor donor) {
     collectedSample.setDonor(donor);
   }
-
-  public void setCollectionCenter(String center) {
-    if (StringUtils.isBlank(center)) {
-      collectedSample.setCollectionCenter(null);
-    }
-    else {
-      Location l = new Location();
-      try {
-        l.setId(Long.parseLong(center));
-        collectedSample.setCollectionCenter(l);
-      } catch (NumberFormatException ex) {
-        ex.printStackTrace();
-        collectedSample.setCollectionCenter(null);
-      }
-    }
+  
+ 
+  public void setDonationType(DonationType donationType){
+  	if (donationType == null){
+  		collectedSample.setDonationType(null);
+  	}
+  	else if (donationType.getId() == null){
+  		collectedSample.setDonationType(null);
+  	}
+  	else{
+  		DonationType dt = new DonationType();
+  		dt.setId(donationType.getId());
+  		collectedSample.setDonationType(dt);
+  	}
   }
 
-  public void setCollectionSite(String collectionSite) {
-    if (StringUtils.isBlank(collectionSite)) {
-      collectedSample.setCollectionSite(null);
-    }
-    else {
-      Location l = new Location();
-      try {
-        l.setId(Long.parseLong(collectionSite));
-        collectedSample.setCollectionSite(l);
-      } catch (NumberFormatException ex) {
-        ex.printStackTrace();
-        collectedSample.setCollectionSite(null);
-      }
-    }
+  public void setPackType(BloodBagType packType){
+  	if (packType == null){
+  		collectedSample.setBloodBagType(null);
+  	}
+  	else if (packType.getId() == null){
+  		collectedSample.setBloodBagType(null);
+  	}
+  	else{
+  		BloodBagType bt = new BloodBagType();
+  		bt.setId(packType.getId());
+  		collectedSample.setBloodBagType(bt);
+  	}
   }
-
-  public void setDonationType(String donationTypeId) {
-    if (StringUtils.isBlank(donationTypeId)) {
-      collectedSample.setDonationType(null);
-    }
-    else {
-      DonationType dt = new DonationType();
-      try {
-        dt.setId(Integer.parseInt(donationTypeId));
-        collectedSample.setDonationType(dt);
-      } catch (NumberFormatException ex) {
-        ex.printStackTrace();
-        collectedSample.setDonationType(null);
-      }
-    }
-  }
-
-  public void setBloodBagType(String bloodBagTypeId) {
-    if (StringUtils.isBlank(bloodBagTypeId)) {
-      collectedSample.setBloodBagType(null);
-    }
-    else {
-      BloodBagType bt = new BloodBagType();
-      try {
-        bt.setId(Integer.parseInt(bloodBagTypeId));
-        collectedSample.setBloodBagType(bt);
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        collectedSample.setBloodBagType(null);
-      }
-    }
-  }
-
+  
   public void setLastUpdated(Date lastUpdated) {
     collectedSample.setLastUpdated(lastUpdated);
   }
@@ -300,11 +268,7 @@ public class CollectedSampleBackingForm {
   }
 
   public String getDonorNumber() {
-    if (collectedSample == null || collectedSample.getDonor() == null ||
-        collectedSample.getDonor().getDonorNumber() == null
-       )
-      return "";
-    return collectedSample.getDonor().getDonorNumber();
+    return donorNumber;
   }
 
   public String getCollectionBatchNumber() {
@@ -316,11 +280,9 @@ public class CollectedSampleBackingForm {
   }
 
   public void setDonorNumber(String donorNumber) {
-    Donor donor = new Donor();
-    donor.setDonorNumber(donorNumber);
-    collectedSample.setDonor(donor);
+	this.donorNumber = donorNumber;
   }
-
+  
   public void setCollectionBatchNumber(String collectionBatchNumber) {
     if (StringUtils.isNotBlank(collectionBatchNumber)) {
       CollectionBatch collectionBatch = new CollectionBatch();
@@ -329,6 +291,7 @@ public class CollectedSampleBackingForm {
     }
   }
 
+  @JsonIgnore
   public String getDonorIdHidden() {
     if (collectedSample == null)
       return null;
@@ -338,6 +301,7 @@ public class CollectedSampleBackingForm {
     return donor.getId().toString();
   }
 
+  @JsonIgnore
   public void setDonorIdHidden(String donorId) {
     if (donorId == null || donorId=="") {
       collectedSample.setDonor(null);
@@ -355,6 +319,7 @@ public class CollectedSampleBackingForm {
     }
   }
 
+  @JsonIgnore
   public CollectionBatch getCollectionBatch() {
     return collectedSample.getCollectionBatch();
   }
@@ -371,92 +336,122 @@ public class CollectedSampleBackingForm {
     this.useParametersFromBatch = useParametersFromBatch;
   }
 
-  public String getDonorWeight() {
-		return donorWeight;
-	}
+    public BigDecimal getDonorWeight() {
+        return collectedSample.getDonorWeight();
+    }
 
-  public void setDonorWeight(String donorWeight) {
-		this.donorWeight=donorWeight;
-	}
-  
-	
-	public String getHaemoglobinCount() {
-		return haemoglobinCount;
-	}
-	
-	public void setHaemoglobinCount(String haemoglobinCount) {
-		this.haemoglobinCount = haemoglobinCount;
-	}
+    public void setDonorWeight(BigDecimal donorWeight) {
+        collectedSample.setDonorWeight(donorWeight);
+    }
 
-  public String getDonorPulse() {
-		return donorPulse;
-	}
+    public BigDecimal getHaemoglobinCount() {
+        return collectedSample.getHaemoglobinCount();
+    }
 
-  public void setDonorPulse(String donorPulse) {
-		this.donorPulse = donorPulse;
-	}
-  
-  public String getBloodPressureSystolic() {
-		return bloodPressureSystolic;
-	}
-	
-  public void setBloodPressureSystolic(String bloodPressureSystolic) {
-		this.bloodPressureSystolic=bloodPressureSystolic;
-	}
-	
-  public String getBloodPressureDiastolic() {
-	return bloodPressureDiastolic;
-	}
+    public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
+        collectedSample.setHaemoglobinCount(haemoglobinCount);
+    }
 
-  public void setBloodPressureDiastolic(String bloodPressureDiastolic) {
-	this.bloodPressureDiastolic=bloodPressureDiastolic;
+    public Integer getDonorPulse() {
+        return collectedSample.getDonorPulse();
+    }
+    
+    public void setDonorPulse(Integer donorPulse) {
+        collectedSample.setDonorPulse(donorPulse);
+    }
+    
+    public Integer getBloodPressureSystolic() {
+        return collectedSample.getBloodPressureSystolic();
+    }
+    
+    public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
+        collectedSample.setBloodPressureSystolic(bloodPressureSystolic);
+    }
+    
+    public Integer getBloodPressureDiastolic() {
+        return collectedSample.getBloodPressureDiastolic();
+    }
+    
+    public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+        collectedSample.setBloodPressureDiastolic(bloodPressureDiastolic);
+    }
+    
+    public String getExtraBloodTypeInformation() {
+        return collectedSample.getExtraBloodTypeInformation();
+    }
+
+    public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
+        collectedSample.setExtraBloodTypeInformation(extraBloodTypeInformation);
+    }
+    
+    @JsonIgnore
+    public String getTTIStatus() {
+	    if(collectedSample.getTTIStatus()!=null)
+	    	return collectedSample.getTTIStatus().toString();
+	    else
+	        return "";
+	}
+    
+    @JsonIgnore
+    public String getBloodTypingStatus() {
+        if(collectedSample.getBloodTypingStatus()!=null)
+	    	return collectedSample.getBloodTypingStatus().toString();
+	    else
+	        return "";
+    }
+    
+    @JsonIgnore
+    public List<Product> getProducts() {
+        return collectedSample.getProducts();
+    }
+    
+    @JsonIgnore
+    public String getBloodGroup() {
+	    if (StringUtils.isBlank(collectedSample.getBloodAbo()) || StringUtils.isBlank(collectedSample.getBloodRh()))
+	      return "";
+	    else
+	      return collectedSample.getBloodAbo() + collectedSample.getBloodRh();
 	}
   
-  public void setCollectedSample()
-  {
-	  if(!StringUtils.isBlank(donorWeight))
-	  collectedSample.setDonorWeight(new BigDecimal(donorWeight));
-	  
-	  if(!StringUtils.isBlank(donorPulse))
-	  collectedSample.setDonorPulse(new Integer(donorPulse));
-	  
-	  if(!StringUtils.isBlank(haemoglobinCount))
-	  collectedSample.setHaemoglobinCount(new BigDecimal(haemoglobinCount));
-	  
-	  if(!StringUtils.isBlank(bloodPressureSystolic))
-	  collectedSample.setBloodPressureSystolic(new Integer(bloodPressureSystolic));
-	  
-	  if(!StringUtils.isBlank(bloodPressureDiastolic))
-	  collectedSample.setBloodPressureDiastolic(new Integer(bloodPressureDiastolic));
-	  
-  }
-  
-  public void getCollectedSampleIntegerProps()
-  {
-	  if(collectedSample.getDonorWeight()!=null)
-     	  donorWeight = collectedSample.getDonorWeight()+"";
-	  else 
-	      donorWeight ="";
-	  
-	  if(collectedSample.getDonorPulse()!=null)
-	       donorPulse = collectedSample.getDonorPulse()+"";
-	  else 
-	      donorPulse ="";
-	  
-	  if(collectedSample.getHaemoglobinCount() != null)
-	       haemoglobinCount = collectedSample.getHaemoglobinCount()+"";
-	  else
-		  haemoglobinCount= "";
-	  
-	  if(collectedSample.getBloodPressureDiastolic() != null)
-	      bloodPressureDiastolic = collectedSample.getBloodPressureDiastolic()+"";
-	  else
-		  bloodPressureDiastolic="";
-	  
-	  if( collectedSample.getBloodPressureSystolic() !=null)
-	      bloodPressureSystolic = collectedSample.getBloodPressureSystolic()+"";
-	  else
-		  bloodPressureDiastolic="";
-  }
-  
+    public String getBloodAbo() {
+        if (StringUtils.isBlank(collectedSample.getBloodAbo()) || collectedSample.getBloodAbo() == null) {
+            return "";
+        } else {
+            return collectedSample.getBloodAbo();
+        }
+    }
+
+    public void setBloodAbo(String bloodAbo) {
+        if (StringUtils.isBlank(bloodAbo)) {
+        	collectedSample.setBloodAbo(null);
+        } else {
+        	collectedSample.setBloodAbo(bloodAbo);
+        }
+    }
+
+    public String getBloodRh() {
+        if (StringUtils.isBlank(collectedSample.getBloodRh()) || collectedSample.getBloodRh() == null) {
+            return "";
+        } else {
+            return collectedSample.getBloodRh();
+        }
+    }
+
+    public void setBloodRh(String bloodRh) {
+        if (StringUtils.isBlank(bloodRh)) {
+        	collectedSample.setBloodRh(null);
+        } else {
+        	collectedSample.setBloodRh(bloodRh);
+        }
+    }
+    
+    public void setDonorPanel(Location donorPanel){
+        if(donorPanel == null || donorPanel.getId() == null){
+            collectedSample.setDonorPanel(null);
+        }else{
+            collectedSample.setDonorPanel(donorPanel);
+        }
+            
+    }
+
 }

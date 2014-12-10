@@ -3,19 +3,15 @@ package repository;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 import model.producttype.ProductTypeTimeUnits;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +47,7 @@ public class ProductTypeRepository {
     return false;
   }
 
-  public ProductType getProductTypeById(Integer id) {
+  public ProductType getProductTypeById(Integer id) throws NoResultException, NonUniqueResultException{
     TypedQuery<ProductType> query;
     query = em.createQuery("SELECT pt from ProductType pt " +
             "where pt.id=:id", ProductType.class);
@@ -60,18 +56,16 @@ public class ProductTypeRepository {
       return null;
     return query.getSingleResult();
   }
-
-  public void saveNewProductType(Map<String, Object> newProductTypeAsMap) {
+/**
+ * 
+ * issue - #209 Not Used anywhere 
+ *
+  public void saveNewProductType(Map<String, Object> newProductTypeAsMap) throws PersistenceException{
     ProductType productType = new ProductType();
     productType.setProductType((String) newProductTypeAsMap.get("productTypeName"));
     productType.setProductTypeNameShort((String) newProductTypeAsMap.get("productTypeNameShort"));
-    try {
-      Integer expiresAfter = Integer.parseInt((String) newProductTypeAsMap.get("expiresAfter"));
-      productType.setExpiresAfter(expiresAfter);
-    } catch (NumberFormatException ex) {
-      productType.setExpiresAfter(0);
-      ex.printStackTrace();
-    }
+    Integer expiresAfter = Integer.parseInt((String) newProductTypeAsMap.get("expiresAfter"));
+    productType.setExpiresAfter(expiresAfter);
     productType.setDescription("");
     Boolean hasBloodGroup = Boolean.valueOf((String) newProductTypeAsMap.get("hasBloodGroup"));
     productType.setHasBloodGroup(hasBloodGroup);
@@ -93,8 +87,8 @@ public class ProductTypeRepository {
     }
     em.persist(productType);
   }
-
-  public void deactivateProductType(Integer productTypeId) {
+*/
+  public void deactivateProductType(Integer productTypeId){
     ProductType productType = getProductTypeById(productTypeId);
     productType.setIsDeleted(true);
     em.merge(productType);
@@ -122,46 +116,31 @@ public class ProductTypeRepository {
     return query.getResultList();
   }
 
-  public ProductTypeCombination getProductTypeCombinationById(Integer id) {
+  public ProductTypeCombination getProductTypeCombinationById(Integer id)
+          throws NoResultException, NonUniqueResultException{
     TypedQuery<ProductTypeCombination> query;
     query = em.createQuery("SELECT pt from ProductTypeCombination pt " +
             "where pt.id=:id", ProductTypeCombination.class);
     query.setParameter("id", id);
-    if (query.getResultList().size() == 0)
-      return null;
     return query.getSingleResult();
   }
-
-  public void updateProductType(Map<String, Object> newProductTypeAsMap) {
+/**
+  public void updateProductType(Map<String, Object> newProductTypeAsMap){
     String productTypeId = (String) newProductTypeAsMap.get("id");
     ProductType productType = getProductTypeById(Integer.parseInt(productTypeId));
     productType.setProductType((String) newProductTypeAsMap.get("productTypeName"));
     productType.setProductTypeNameShort((String) newProductTypeAsMap.get("productTypeNameShort"));
-    try {
-      Integer expiresAfter = Integer.parseInt((String) newProductTypeAsMap.get("expiresAfter"));
-      productType.setExpiresAfter(expiresAfter);
-    } catch (NumberFormatException ex) {
-      productType.setExpiresAfter(0);
-      ex.printStackTrace();
-    }
+    Integer expiresAfter = Integer.parseInt((String) newProductTypeAsMap.get("expiresAfter"));
+    productType.setExpiresAfter(expiresAfter);
     ProductTypeTimeUnits expiresAfterUnits;
     expiresAfterUnits = ProductTypeTimeUnits.valueOf((String) newProductTypeAsMap.get("expiresAfterUnits"));
     productType.setExpiresAfterUnits(expiresAfterUnits);
     em.merge(productType);
   }
 
-  public void deactivateProductTypeCombination(Integer productTypeCombinationId) {
-    ProductTypeCombination productTypeCombination = getProductTypeCombinationById(productTypeCombinationId);
-    productTypeCombination.setIsDeleted(true);
-    em.merge(productTypeCombination);
-  }
 
-  public void activateProductTypeCombination(Integer productTypeCombinationId) {
-    ProductTypeCombination productTypeCombination = getProductTypeCombinationById(productTypeCombinationId);
-    productTypeCombination.setIsDeleted(false);
-    em.merge(productTypeCombination);
-  }
-
+/**
+ * Not used anywhere - #209
   public void saveNewProductTypeCombination(
       Map<String, Object> newProductTypeCombinationAsMap) {
     ProductTypeCombination productTypeCombination = new ProductTypeCombination();
@@ -187,20 +166,38 @@ public class ProductTypeRepository {
     productTypeCombination.setIsDeleted(false);
     em.persist(productTypeCombination);
   }
+  * */
 
-  public ProductType getProductTypeByName(String productTypeName) {
+  public void saveComponentTypeCombination(
+      ProductTypeCombination productTypeCombination) {
+      
+    String combinationName = productTypeCombination.getCombinationName();
+    Set<ProductType> productTypes = new HashSet<ProductType>();
+    List<String> combinationNameList = new ArrayList<String>();
+  
+    for (ProductType productType : productTypeCombination.getProductTypes()) {
+      productTypes.add(productType);
+      combinationNameList.add(productType.getProductTypeNameShort());
+    }
+
+    if (StringUtils.isBlank(combinationName)) {
+      combinationName = StringUtils.join(combinationNameList, ",");
+    }
+
+    productTypeCombination.setCombinationName(combinationName);
+    productTypeCombination.setProductTypes(productTypes);
+
+    productTypeCombination.setIsDeleted(false);
+    em.persist(productTypeCombination);
+  }
+  
+  public ProductType getProductTypeByName(String productTypeName) throws NoResultException, NonUniqueResultException{
     TypedQuery<ProductType> query;
     query = em.createQuery("SELECT pt from ProductType pt " +
             "where pt.productType=:productTypeName", ProductType.class);
     query.setParameter("productTypeName", productTypeName);
     ProductType productType = null;
-    try {
-      productType = query.getSingleResult();
-    } catch (NoResultException ex) {
-      ex.printStackTrace();
-    } catch (NonUniqueResultException ex) {
-      ex.printStackTrace();
-    }
+    productType = query.getSingleResult();
     return productType;
   }
   
@@ -227,4 +224,38 @@ public class ProductTypeRepository {
       return null;
     return query.getResultList();
   }
+  
+    public void saveComponentType(ProductType componentType) {
+        em.persist(componentType);
+    }
+  
+  public ProductType updateComponentType(ProductType productType)throws IllegalArgumentException{
+    ProductType existingProductType = getProductTypeById(productType.getId());
+    existingProductType.setProductType(productType.getProductType());
+    existingProductType.setProductTypeNameShort(productType.getProductTypeNameShort());
+    existingProductType.setExpiresAfter(productType.getExpiresAfter());
+    ProductTypeTimeUnits  expiresAfterUnits = productType.getExpiresAfterUnits();
+    existingProductType.setExpiresAfterUnits(expiresAfterUnits);
+    return em.merge(existingProductType);
+  }
+  
+  
+  public ProductTypeCombination updateComponentTypeCombination(
+          ProductTypeCombination componentTypeCombination)throws IllegalArgumentException{
+      return em.merge(componentTypeCombination);
+  }
+  
+  
+  public void deactivateProductTypeCombination(Integer productTypeCombinationId) {
+    ProductTypeCombination productTypeCombination = getProductTypeCombinationById(productTypeCombinationId);
+    productTypeCombination.setIsDeleted(true);
+    em.merge(productTypeCombination);
+  }
+
+  public void activateProductTypeCombination(Integer productTypeCombinationId) {
+    ProductTypeCombination productTypeCombination = getProductTypeCombinationById(productTypeCombinationId);
+    productTypeCombination.setIsDeleted(false);
+    em.merge(productTypeCombination);
+  }
+          
 }

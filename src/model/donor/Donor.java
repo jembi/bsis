@@ -1,5 +1,8 @@
 package model.donor;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import constraintvalidator.LocationExists;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +51,7 @@ import utils.DonorUtils;
 
 @Entity
 @Audited
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class Donor implements ModificationTracker {
 
   @Id
@@ -188,7 +192,7 @@ public class Donor implements ModificationTracker {
  
  @NotAudited
  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
- @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+ @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
  @JoinColumn(name="addressId")
  private Address address;
   
@@ -337,7 +341,6 @@ public void setDonorCodes(List<DonorCode> donorCodes) {
 
 public void copy(Donor donor) {
     assert (donor.getId().equals(this.getId()));
-    setDonorNumber(donor.getDonorNumber());
     setTitle(donor.getTitle());
     setFirstName(donor.getFirstName());
     setMiddleName(donor.getMiddleName());

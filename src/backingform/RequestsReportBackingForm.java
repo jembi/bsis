@@ -1,3 +1,6 @@
+/**
+ * issue #209 [Adapt BSIS to Expose Reset Services]
+ *
 package backingform;
 
 import java.util.Arrays;
@@ -56,3 +59,4 @@ public class RequestsReportBackingForm {
     this.bloodGroups = bloodGroups;
   }
 }
+* */

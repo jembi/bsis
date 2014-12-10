@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 
 import org.hibernate.envers.Audited;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Audited
@@ -15,6 +16,7 @@ public class Location {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
+  @NotBlank
   private String name;
 
   private Boolean isCollectionCenter;

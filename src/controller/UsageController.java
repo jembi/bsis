@@ -1,29 +1,26 @@
 package controller;
 
+import backingform.ProductUsageBackingForm;
+import backingform.validator.UsageBackingFormValidator;
+import java.util.HashMap;
 import java.util.Map;
-
-import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import model.product.Product;
 import model.request.Request;
 import model.usage.ProductUsage;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-
+import org.springframework.web.bind.annotation.RestController;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
 import repository.RequestRepository;
@@ -31,10 +28,9 @@ import repository.UsageRepository;
 import utils.PermissionConstants;
 import viewmodel.ProductUsageViewModel;
 import viewmodel.RequestViewModel;
-import backingform.ProductUsageBackingForm;
-import backingform.validator.UsageBackingFormValidator;
 
-@Controller
+@RestController
+@RequestMapping("usages")
 public class UsageController {
 
   @Autowired
@@ -69,196 +65,87 @@ public class UsageController {
     return reqUrl;
   }
 
-  @RequestMapping(value = "/addUsageFormGenerator", method = RequestMethod.GET)
+  @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public ModelAndView addUsageFormGenerator(HttpServletRequest request) {
+  public Map<String, Object> addUsageFormGenerator(HttpServletRequest request) {
 
     ProductUsageBackingForm form = new ProductUsageBackingForm();
 
-    ModelAndView mv = new ModelAndView("usage/addUsageForm");
-    mv.addObject("requestUrl", getUrl(request));
-    mv.addObject("firstTimeRender", true);
-    mv.addObject("addUsageForm", form);
-    mv.addObject("refreshUrl", getUrl(request));
-    addEditSelectorOptions(mv.getModelMap());
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("addUsageForm", form);
+    addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
     // to ensure custom field names are displayed in the form
-    mv.addObject("usageFields", formFields);
-    return mv;
+    map.put("usageFields", formFields);
+    return map;
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("productTypes", productTypeRepository.getAllProductTypes());
   }
 
-  @RequestMapping(value = "/addUsage", method = RequestMethod.POST)
+  @RequestMapping( method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public ModelAndView addUsage(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      @ModelAttribute("addUsageForm") @Valid ProductUsageBackingForm form,
-      BindingResult result, Model model) {
+    public ResponseEntity<Map<String, Object>> addUsage(
+            @Valid @RequestBody ProductUsageBackingForm form) {
 
-    ModelAndView mv = new ModelAndView();
-    boolean success = false;
+        Map<String, Object> map = new HashMap<String, Object>();
 
-    addEditSelectorOptions(mv.getModelMap());
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
-    mv.addObject("usageFields", formFields);
+        addEditSelectorOptions(map);
+        Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
+        map.put("usageFields", formFields);
 
-    ProductUsage savedUsage = null;
-    if (result.hasErrors()) {
-      mv.addObject("hasErrors", true);
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      success = false;
-    } else {
-      try {
+        ProductUsage savedUsage = null;
         ProductUsage productUsage = form.getUsage();
         productUsage.setIsDeleted(false);
         savedUsage = usageRepository.addUsage(productUsage);
-        mv.addObject("hasErrors", false);
-        success = true;
+        map.put("hasErrors", false);
         form = new ProductUsageBackingForm();
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        success = false;
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        success = false;
-      }
-    }
 
-    if (success) {
-      mv.addObject("usageId", savedUsage.getId());
-      mv.addObject("usage",  new ProductUsageViewModel(savedUsage));
-      mv.addObject("addAnotherUsageUrl", "addUsageFormGenerator.html");
-      mv.setViewName("usage/addUsageSuccess");
-    } else {
-      mv.addObject("errorMessage", "Error creating usage. Please fix the errors noted below.");
-      mv.addObject("firstTimeRender", false);
-      mv.addObject("addUsageForm", form);
-      mv.addObject("refreshUrl", "addUsageFormGenerator.html");
-      mv.setViewName("usage/addUsageError");
-    }
+        map.put("usageId", savedUsage.getId());
+        map.put("usage",  new ProductUsageViewModel(savedUsage));
+        map.put("addAnotherUsageUrl", "addUsageFormGenerator.html");
 
-    mv.addObject("success", success);
-    return mv;
+        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
 
-  @RequestMapping(value = "/addUsageByRequestFormGenerator", method=RequestMethod.GET)
+  @RequestMapping(value="/find/components/{requestNumber}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public ModelAndView addUsageByRequestFormGenerator(HttpServletRequest request) {
-
-    ModelAndView mv = new ModelAndView("usage/addUsageByRequestForm");
-    mv.addObject("requestUrl", getUrl(request));
-    mv.addObject("firstTimeRender", true);
-    mv.addObject("refreshUrl", getUrl(request));
-    addEditSelectorOptions(mv.getModelMap());
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
-    // to ensure custom field names are displayed in the form
-    mv.addObject("usageFields", formFields);
-    return mv;
-  }
-
-  @RequestMapping(value="/findIssuedProductsForRequest", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public ModelAndView findIssuedProductsForRequest(HttpServletRequest request,
-      HttpServletResponse response,
-      @RequestParam(value="requestNumber") String requestNumber) {
-
-    ModelAndView mv = new ModelAndView();
-
+  public  ResponseEntity<Map<String, Object>> findIssuedProductsForRequest(
+      @PathVariable String requestNumber) {
+    Map<String, Object> map = new HashMap<String, Object>();
     Request req = requestRepository.findRequest(requestNumber);
-    boolean success = true;
-    if (req == null) {
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      success = false;
-      mv.addObject("errorMessage", "Request not found");
-    } else {
-      mv.addObject("request", new RequestViewModel(req));
-      mv.addObject("issuedProducts", requestRepository.getIssuedProductsForRequest(req.getId()));
-    }
-
-    mv.addObject("productFields", utilController.getFormFieldsForForm("product"));
-    mv.addObject("success", success);
-    mv.setViewName("usage/addUsageForIssuedProducts");
-    return mv;
+    map.put("request", new RequestViewModel(req));
+    map.put("issuedProducts", requestRepository.getIssuedProductsForRequest(req.getId()));
+    map.put("productFields", utilController.getFormFieldsForForm("product"));
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 
-  @RequestMapping(value = "/addUsageForProductFormGenerator", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public ModelAndView addUsageForProductFormGenerator(HttpServletRequest request,
-      @RequestParam(value="productId") Long productId) {
+    @RequestMapping(value = "/forproduct", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
+    public ResponseEntity<Map<String, Object>> addUsageForProduct(
+            @Valid @RequestBody ProductUsageBackingForm form) {
 
-    ProductUsageBackingForm form = new ProductUsageBackingForm();
+        Map<String, Object> map = new HashMap<String, Object>();
+        boolean success = false;
 
-    Product product = productRepository.findProductById(productId);
-    form.setProduct(product);
+        addEditSelectorOptions(map);
+        Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
+        map.put("usageFields", formFields);
 
-    ModelAndView mv = new ModelAndView("usage/addUsageForProductForm");
-    mv.addObject("requestUrl", getUrl(request));
-    mv.addObject("firstTimeRender", true);
-    mv.addObject("addUsageForProductForm", form);
-    mv.addObject("productType", product.getProductType().getProductTypeNameShort());
-    mv.addObject("refreshUrl", getUrl(request));
-    addEditSelectorOptions(mv.getModelMap());
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
-    // to ensure custom field names are displayed in the form
-    mv.addObject("usageFields", formFields);
-    return mv;
-  }
-
-  @RequestMapping(value = "/addUsageForProduct", method = RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public ModelAndView addUsageForProduct(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      @ModelAttribute("addUsageForProductForm") @Valid ProductUsageBackingForm form,
-      BindingResult result, Model model) {
-
-    ModelAndView mv = new ModelAndView();
-    boolean success = false;
-
-    addEditSelectorOptions(mv.getModelMap());
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
-    mv.addObject("usageFields", formFields);
-
-    ProductUsage savedUsage = null;
-    if (result.hasErrors()) {
-      mv.addObject("hasErrors", true);
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      success = false;
-    } else {
-      try {
+        ProductUsage savedUsage = null;
         ProductUsage productUsage = form.getUsage();
         productUsage.setIsDeleted(false);
         savedUsage = usageRepository.addUsage(productUsage);
-        mv.addObject("hasErrors", false);
+        map.put("hasErrors", false);
         success = true;
         form = new ProductUsageBackingForm();
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        success = false;
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        success = false;
-      }
-    }
 
-    if (success) {
-      mv.addObject("usageId", savedUsage.getId());
-      mv.addObject("usage",  new ProductUsageViewModel(savedUsage));
-      mv.setViewName("usage/addUsageForProductSuccess");
-    } else {
-      mv.addObject("errorMessage", "Error creating usage. Please fix the errors noted below.");
-      mv.addObject("firstTimeRender", false);
-      mv.addObject("addUsageForm", form);
-      mv.addObject("refreshUrl", "addUsageForProductFormGenerator.html");
-      mv.setViewName("usage/addUsageForProductError");
-    }
-
-    mv.addObject("success", success);
-    return mv;
+        map.put("usageId", savedUsage.getId());
+        map.put("usage", new ProductUsageViewModel(savedUsage));
+      
+        map.put("success", success);
+        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
 
 }

@@ -1,5 +1,11 @@
 package controller.bloodtesting;
 
+import au.com.bytecode.opencsv.CSVReader;
+import backingform.TestResultBackingForm;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import controller.UtilController;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,34 +22,29 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.TreeMap;
-
+import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestType;
 import model.bloodtesting.TSVFileHeaderName;
 import model.bloodtesting.UploadTTIResultConstant;
 import model.collectedsample.CollectedSample;
-
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
-
 import repository.CollectedSampleRepository;
 import repository.GenericConfigRepository;
 import repository.WellTypeRepository;
@@ -53,10 +54,9 @@ import utils.PermissionConstants;
 import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.CollectedSampleViewModel;
-import au.com.bytecode.opencsv.CSVReader;
-import controller.UtilController;
 
-@Controller
+@RestController
+@RequestMapping("ttitests")
 public class TTIController {
 
 	private static final Logger LOGGER = Logger.getLogger(TTIController.class);
@@ -89,19 +89,19 @@ public class TTIController {
 		return reqUrl;
 	}
 
-	@RequestMapping(value = "/ttiFormGenerator", method = RequestMethod.GET)
+	@RequestMapping(value = "/form", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	public ModelAndView getTTIForm(HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView("bloodtesting/addTTIForm");
-		mv.addObject("refreshUrl", "ttiFormGenerator.html");
-		mv.addObject("ttiFormFields",
-				utilController.getFormFieldsForForm("TTIForm"));
-		mv.addObject("firstTimeRender", true);
+	public Map<String, Object> getTTIForm(HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		//map.put("ttiFormFields", utilController.getFormFieldsForForm("TTIForm"));
 
-		List<BloodTestViewModel> ttiTests = getBasicTTITests();
-		mv.addObject("allTTITests", ttiTests);
+		List<BloodTestViewModel> basicTTITests = getBasicTTITests();
+		map.put("basicTTITests", basicTTITests);
+		
+		List<BloodTestViewModel> confirmatoryTTITests = getConfirmatoryTTITests();
+		map.put("confirmatoryTTITests", confirmatoryTTITests);
 
-		return mv;
+		return map;
 	}
 
 	public List<BloodTestViewModel> getBasicTTITests() {
@@ -112,97 +112,58 @@ public class TTIController {
 		}
 		return tests;
 	}
+	
+	public List<BloodTestViewModel> getConfirmatoryTTITests() {
+		List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
+		for (BloodTest rawBloodTest : bloodTestingRepository
+				.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
+			tests.add(new BloodTestViewModel(rawBloodTest));
+		}
+		return tests;
+	}
 
+	/* #229 - replaced with TestResultController.saveTestResults()
 	@SuppressWarnings("unchecked")
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	@RequestMapping(value = "/saveTTITests", method = RequestMethod.POST)
-	public ModelAndView saveTTITests(HttpServletRequest request,
-			HttpServletResponse response,
-			@RequestParam("collectionNumber") String collectionNumber,
-			@RequestParam("ttiInput") String ttiInput) {
-		ModelAndView mv = new ModelAndView();
+	@RequestMapping(value = "/results", method = RequestMethod.POST)
+	public ResponseEntity<Map<String, Object>> saveTTITestResults(
+			@RequestBody @Valid TestResultBackingForm form) {
 
+		Map<Long, String> ttiTestResults = form.getTestResults();
+        HttpStatus httpStatus = HttpStatus.CREATED;        
 		boolean success = true;
 		String errorMessage = "";
 		Map<Long, Map<Long, String>> errorMap = null;
 		Map<String, Object> fieldErrors = new HashMap<String, Object>();
-		CollectedSample collectedSample = null;
-		try {
-			collectedSample = collectedSampleRepository
-					.findCollectedSampleByCollectionNumber(collectionNumber);
-		} catch (Exception ex) {
-			LOGGER.error(ex.getMessage() + ex.getStackTrace());
-			success = false;
-		}
-
-		if (collectedSample == null) {
-			fieldErrors.put("collectionNumber",
-					"Collection Number does not exist");
-			success = false;
-		}
+		Map<String, Object> map = new HashMap<String, Object>();
+        CollectedSample collectedSample = collectedSampleRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
 
 		Map<String, Object> results = null;
+		
+		results = bloodTestingRepository.saveBloodTestingResults(collectedSample.getId(), form.getTestResults(), true);
+	    if (results != null)
+	      errorMap = (Map<Long, Map<Long, String>>) results.get("errors");
+	    if (errorMap != null && !errorMap.isEmpty())
+	      success = false;
 
-		if (success) {
-			Map<Long, Map<Long, String>> bloodTestResultsMap = new HashMap<Long, Map<Long, String>>();
-			bloodTestResultsMap.put(collectedSample.getId(),
-					ttiInputToMap(ttiInput));
-			results = bloodTestingRepository.saveBloodTestingResults(
-					bloodTestResultsMap, true);
-			if (results != null)
-				errorMap = (Map<Long, Map<Long, String>>) results.get("errors");
-			success = true;
-		}
+	    if (success) {
+	      map.put("overview", results.get("bloodTestingResults"));
+	    }
+	    else {
+	      // errors found
+	      map.put("errorMap", errorMap);
+	      map.put("uninterpretableResults", results.get("uninterpretableResults"));
+	      map.put("errorMessage", "There were errors adding tests.");      
+	      httpStatus = HttpStatus.BAD_REQUEST;
+	    }
 
-		if (errorMap != null && !errorMap.isEmpty()) {
-			success = false;
-		}
-		if (results == null) {
-			success = false;
-		}
-
-		if (success) {
-			List<BloodTest> allTTITests = bloodTestingRepository.getTTITests();
-			Map<String, BloodTest> allTTITestsMap = new HashMap<String, BloodTest>();
-			for (BloodTest ttiTest : allTTITests) {
-				allTTITestsMap.put(ttiTest.getId().toString(), ttiTest);
-			}
-			mv.addObject("allTTITests", allTTITestsMap);
-			mv.addObject("collectionFields",
-					utilController.getFormFieldsForForm("collectedSample"));
-			mv.addObject("collections", results.get("collections"));
-
-			Map<Long, BloodTestingRuleResult> ruleResultsForCollections;
-			ruleResultsForCollections = (Map<Long, BloodTestingRuleResult>) results
-					.get("bloodTestingResults");
-			mv.addObject("collectionId", collectedSample.getId());
-			mv.addObject("ttiOutputForCollection",
-					ruleResultsForCollections.get(collectedSample.getId()));
-			mv.addObject("success", success);
-			mv.setViewName("bloodtesting/addTTIFormSuccess");
-		} else {
-			// errors found
-			mv.addObject("errorMap", errorMap);
-			mv.addObject("success", success);
-			errorMessage = "There were errors adding tests. Please verify the values of all tests.";
-			mv.setViewName("bloodtesting/addTTIFormError");
-			mv.addObject("ttiFormFields",
-					utilController.getFormFieldsForForm("TTIForm"));
-			mv.addObject("firstTimeRender", false);
-
-			List<BloodTestViewModel> ttiTests = getBasicTTITests();
-			mv.addObject("allTTITests", ttiTests);
-
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-		}
-
-		mv.addObject("addAnotherTTIUrl", "ttiFormGenerator.html");
-		mv.addObject("refreshUrl", "ttiFormGenerator.html");
-		mv.addObject("success", success);
-		mv.addObject("errorMessage", errorMessage);
-		return mv;
+	    map.put("collection",  new CollectedSampleViewModel((CollectedSample)results.get("collection")));
+		map.put("success", success);
+		return new ResponseEntity<Map<String, Object>>(map, httpStatus);
 	}
+	*/
 
+	/* #209 - unused method, was used by previous version of saveTTITests() method
 	@SuppressWarnings("unchecked")
 	private Map<Long, String> ttiInputToMap(String ttiInput) {
 		ObjectMapper mapper = new ObjectMapper();
@@ -226,13 +187,13 @@ public class TTIController {
 		}
 		return ttiInputMap;
 	}
+	*/
 
-	@RequestMapping(value = "/showTTIResultsForCollection", method = RequestMethod.GET)
+	@RequestMapping(value = "/results/{collectionId}", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.VIEW_TTI_OUTCOME+"')")
-	public ModelAndView showTTIResultsForCollection(HttpServletRequest request,
-			HttpServletResponse response,
-			@RequestParam(value = "collectionId") String collectionId) {
-		ModelAndView mv = new ModelAndView();
+	public Map<String, Object> showTTIResultsForCollection(HttpServletRequest request,
+			@PathVariable String collectionId) {
+                Map<String, Object> map = new HashMap<String, Object>();
 		collectionId = collectionId.trim();
 		Long collectedSampleId = Long.parseLong(collectionId);
 		CollectedSample collectedSample = collectedSampleRepository
@@ -241,92 +202,71 @@ public class TTIController {
 		// tests
 		BloodTestingRuleResult ruleResult = bloodTestingRepository
 				.getAllTestsStatusForCollection(collectedSampleId);
-		mv.addObject("collection",
-				new CollectedSampleViewModel(collectedSample));
-		mv.addObject("collectionId", collectedSample.getId());
-		mv.addObject("ttiOutputForCollection", ruleResult);
-		mv.addObject("collectionFields",
-				utilController.getFormFieldsForForm("collectedSample"));
+		map.put("donation", new CollectedSampleViewModel(collectedSample));
+		//map.put("collectionId", collectedSample.getId());
+		map.put("overview", ruleResult);
+		//map.put("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
 
-		mv.addObject("recordMachineReadingsForTTI",
-				utilController.recordMachineResultsForTTI());
+		//map.put("recordMachineReadingsForTTI", utilController.recordMachineResultsForTTI());
 
-		List<BloodTest> ttiTests = bloodTestingRepository.getTTITests();
-		Map<String, BloodTest> ttiTestsMap = new LinkedHashMap<String, BloodTest>();
-		for (BloodTest ttiTest : ttiTests) {
-			ttiTestsMap.put(ttiTest.getId().toString(), ttiTest);
-		}
-		mv.addObject("allTTITests", ttiTestsMap);
-
-		List<BloodTest> allTTITests = bloodTestingRepository.getTTITests();
-		Map<String, BloodTest> allTTITestsMap = new TreeMap<String, BloodTest>();
-		for (BloodTest ttiTest : allTTITests) {
-			allTTITestsMap.put(ttiTest.getId().toString(), ttiTest);
-		}
-		mv.addObject("allTTITests", allTTITestsMap);
-
-		mv.setViewName("bloodtesting/ttiSummaryCollection");
-
-		mv.addObject("refreshUrl", getUrl(request));
-
-		return mv;
+		return map;
 	}
 
 	@SuppressWarnings("unchecked")
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	@RequestMapping(value = "/saveAdditionalTTITests", method = RequestMethod.POST)
-	public @ResponseBody
-	Map<String, Object> saveAdditionalTTITests(HttpServletRequest request,
-			HttpServletResponse response,
-			@RequestParam(value = "collectionId") String collectionId,
-			@RequestParam(value = "saveTestsData") String saveTestsDataStr) {
+	@RequestMapping(value = "/results/additional", method = RequestMethod.POST)
+	public ResponseEntity<Map<String, Object>> saveAdditionalTTITests(
+			@RequestBody TestResultBackingForm form) {
 
-		Map<String, Object> m = new HashMap<String, Object>();
+		HttpStatus httpStatus = HttpStatus.CREATED;
+                Map<String, Object> m = new HashMap<String, Object>();
 
-		try {
+		
 			Map<Long, Map<Long, String>> ttiTestResultsMap = new HashMap<Long, Map<Long, String>>();
 			Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
 			ObjectMapper mapper = new ObjectMapper();
-			Map<String, String> saveTestsData = mapper.readValue(
-					saveTestsDataStr, HashMap.class);
-			for (String testIdStr : saveTestsData.keySet()) {
-				saveTestsDataWithLong.put(Long.parseLong(testIdStr),
+			Map<Long, String> saveTestsData = form.getTestResults();
+			for (Long testIdStr : saveTestsData.keySet()) {
+				saveTestsDataWithLong.put(testIdStr,
 						saveTestsData.get(testIdStr));
 			}
-			ttiTestResultsMap.put(Long.parseLong(collectionId),
+                        CollectedSample collectedSample = 
+                                collectedSampleRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
+			ttiTestResultsMap.put(collectedSample.getId(),
 					saveTestsDataWithLong);
 			Map<String, Object> results = bloodTestingRepository
 					.saveBloodTestingResults(ttiTestResultsMap, true);
 			Map<String, Object> errorMap = (Map<String, Object>) results
 					.get("errors");
 			if (errorMap != null && !errorMap.isEmpty())
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-		} catch (Exception ex) {
-			LOGGER.error(ex.getMessage() + ex.getStackTrace());
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-		}
+				httpStatus = HttpStatus.BAD_REQUEST;
 
-		return m;
+		return new ResponseEntity<Map<String, Object>>(m, httpStatus);
 	}
 
-	@RequestMapping(value = "/saveAllTestResults", method = RequestMethod.POST)
+	/* #209 Method replaced by saveTTITestResults (method saves the results for a single donation, rather than multiple donations)
+	@RequestMapping(value = "/results", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	public @ResponseBody
-	Map<String, Object> saveAllTestResults(
-			HttpServletRequest request,
-			HttpServletResponse response,
+	public 
+	ResponseEntity<Map<String, Object>> saveAllTestResults(
 			@RequestParam(value = "saveTestsData") String saveTestsDataStr,
 			@RequestParam(value = "saveUninterpretableResults") boolean saveUninterpretableResults) {
 
 		Map<String, Object> m = new HashMap<String, Object>();
-
-		try {
+                HttpStatus httpStatus = HttpStatus.OK;
 
 			Map<Long, Map<Long, String>> testResultsMap = new HashMap<Long, Map<Long, String>>();
 			ObjectMapper mapper = new ObjectMapper();
 			@SuppressWarnings("unchecked")
-			Map<String, Map<String, String>> saveTestsData = mapper.readValue(
-					saveTestsDataStr, HashMap.class);
+			Map<String, Map<String, String>> saveTestsData;
+            try {
+                saveTestsData = mapper.readValue(
+                        saveTestsDataStr, HashMap.class);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+                return new ResponseEntity<Map<String, Object>>(m, httpStatus);
+            }
 			for (String collectionIdStr : saveTestsData.keySet()) {
 				Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
 				Map<String, String> testsForCollection = saveTestsData
@@ -347,49 +287,49 @@ public class TTIController {
 					.get("errors");
 
 			if (errorMap != null && !errorMap.isEmpty())
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-		} catch (Exception ex) {
-			LOGGER.error(ex.getMessage() + ex.getStackTrace());
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-		}
+			    httpStatus = HttpStatus.BAD_REQUEST;
+		
 
-		return m;
+		return new ResponseEntity<Map<String, Object>>(m, httpStatus);
 	}
-
+	*/
+        
+        /**
+         *issue $209[Adapt BSIS to expos rest Services] 
+         * Reason _ No worksheet concept
+         * 
 	@RequestMapping(value = "/ttiWellsWorksheetFormGenerator", method = RequestMethod.GET)
-	public ModelAndView ttiWellsWorksheetFormGenerator(
+	public Map<String, Object> ttiWellsWorksheetFormGenerator(
 			HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView("bloodtesting/ttiWellsWorksheetForm");
-		mv.addObject("ttiTests", bloodTestingRepository.getBloodTTITests());
-		mv.addObject("refreshUrl", getUrl(request));
-		return mv;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("ttiTests", bloodTestingRepository.getBloodTTITests());
+		return map;
 	}
 
 	@RequestMapping(value = "/ttiWellsWorksheetGenerator", method = RequestMethod.GET)
-	public ModelAndView ttiWellsWorksheetGenerator(HttpServletRequest request,
+	public Map<String, Object> ttiWellsWorksheetGenerator(HttpServletRequest request,
 			@RequestParam(value = "ttiTestId") Integer ttiTestId) {
-		ModelAndView mv = new ModelAndView("bloodtesting/ttiWellsWorksheet");
-		mv.addObject("plate", bloodTestingRepository.getPlate("tti"));
-		mv.addObject("ttiTestId", ttiTestId);
-		mv.addObject("ttiTest",
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("plate", bloodTestingRepository.getPlate("tti"));
+		map.put("ttiTestId", ttiTestId);
+		map.put("ttiTest",
 				bloodTestingRepository.findBloodTestById(ttiTestId));
-		mv.addObject("ttiConfig",
+		map.put("ttiConfig",
 				genericConfigRepository.getConfigProperties("ttiWells"));
-		mv.addObject("allWellTypes", wellTypeRepository.getAllWellTypes());
-		return mv;
+		map.put("allWellTypes", wellTypeRepository.getAllWellTypes());
+		return map;
 	}
+        */
 
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "saveTTIResultsOnPlate", method = RequestMethod.POST)
+	@RequestMapping(value = "results/onplate", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	public ModelAndView saveTTIResultsOnPlate(HttpServletRequest request,
+	public Map<String, Object> saveTTIResultsOnPlate(HttpServletRequest request,
 			HttpServletResponse response,
 			@RequestParam(value = "ttiTestId") Long ttiTestId,
 			@RequestParam(value = "ttiResults") String ttiResults) {
 
-		ModelAndView mv = new ModelAndView();
-
-		mv.setViewName("bloodtesting/ttiWellsWorksheet");
+		Map<String, Object> map = new HashMap<String, Object>();
 
 		ObjectMapper mapper = new ObjectMapper();
 		boolean success = false;
@@ -401,16 +341,16 @@ public class TTIController {
 			if (results.get("errorsFound").equals(false))
 				success = true;
 
-			mv.addObject("errorsByWellNumber",
+			map.put("errorsByWellNumber",
 					results.get("errorsByWellNumber"));
-			mv.addObject("errorsByWellNumberAsJSON", mapper
+			map.put("errorsByWellNumberAsJSON", mapper
 					.writeValueAsString(results.get("errorsByWellNumber")));
-			mv.addObject("errorsByWellNumber",
+			map.put("errorsByWellNumber",
 					results.get("errorsByWellNumber"));
-			mv.addObject("errorsByWellNumberAsJSON", mapper
+			map.put("errorsByWellNumberAsJSON", mapper
 					.writeValueAsString(results.get("errorsByWellNumber")));
-			mv.addObject("collections", results.get("collections"));
-			mv.addObject("bloodTestingResults",
+			map.put("collections", results.get("collections"));
+			map.put("bloodTestingResults",
 					results.get("bloodTestingResults"));
 		} catch (JsonParseException e) {
 			LOGGER.error(e.getMessage() + e.getStackTrace());
@@ -420,42 +360,45 @@ public class TTIController {
 			LOGGER.error(e.getMessage() + e.getStackTrace());
 		}
 
-		mv.addObject("success", success);
-		if (success) {
-			mv.setViewName("bloodtesting/ttiWellsWorksheetSuccess");
-		} else {
-			mv.addObject("errorMessage",
+		map.put("success", success);
+		if (!success) {
+			map.put("errorMessage",
 					"Please correct the errors on the highlighted wells before proceeding.");
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 
-		mv.addObject("plate", bloodTestingRepository.getPlate("tti"));
-		mv.addObject("ttiTestId", ttiTestId);
-		mv.addObject("ttiTestResults", ttiResults);
-		mv.addObject("ttiTest",
+		map.put("plate", bloodTestingRepository.getPlate("tti"));
+		map.put("ttiTestId", ttiTestId);
+		map.put("ttiTestResults", ttiResults);
+		map.put("ttiTest",
 				bloodTestingRepository.findBloodTestById(ttiTestId.intValue()));
-		mv.addObject("ttiConfig",
+		map.put("ttiConfig",
 				genericConfigRepository.getConfigProperties("ttiWells"));
-		mv.addObject("allWellTypes", wellTypeRepository.getAllWellTypes());
+		map.put("allWellTypes", wellTypeRepository.getAllWellTypes());
 
-		return mv;
+		return map;
 	}
 
-	@RequestMapping(value = "/uploadTTIResultsFormGenerator", method = RequestMethod.GET)
+	/**
+         * 
+         *  
+         *
+        @RequestMapping(value = "/uploadTTIResultsFormGenerator", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	public ModelAndView uploadTTIResultsFormGenerator(HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView("bloodtesting/uploadTTIResults");
-		mv.addObject("refreshUrl", getUrl(request));
-		return mv;
+		ModelAndView map = new ModelAndView("bloodtesting/uploadTTIResults");
+		return map;
 	}
+        * */
 
-	@RequestMapping(value = "/uploadTTIResultsGenerator", method = RequestMethod.POST)
+	@RequestMapping(value = "results/upload", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	public ModelAndView uploadTTIResultsGenerator(
+	public ResponseEntity<Map<String, Object>> uploadTTIResultsGenerator(
 			MultipartHttpServletRequest request, HttpServletResponse response)
 			throws IOException, ParseException {
 
-		ModelAndView mv = new ModelAndView();
+		HttpStatus httpStatus = HttpStatus.CREATED;
+                Map<String, Object> map = new HashMap<String, Object>();
 		MultipartFile tsvFile = null;
 		String fileName, uploadPath;
 		boolean success = true;
@@ -463,12 +406,10 @@ public class TTIController {
 		try{
 			Iterator<String> iterator = request.getFileNames();
 			if (!iterator.hasNext()) {
-				mv.addObject("refreshUrl", getUrl(request));
-				mv.addObject("errorMessage", UploadTTIResultConstant.MESSAGE1);
+				map.put("errorMessage", UploadTTIResultConstant.MESSAGE1);
 				success = false;
-				mv.setViewName("bloodtesting/uploadTTIResults");
-				mv.addObject("success", success);
-				return mv;
+				map.put("success", success);
+				return new ResponseEntity<Map<String, Object>>(map, HttpStatus.BAD_REQUEST);
 			}
 			if (iterator.hasNext()) {
 				tsvFile = request.getFile(iterator.next());
@@ -484,32 +425,31 @@ public class TTIController {
 					.split(UploadTTIResultConstant.FILE_SPLIT);
 			if (StringUtils.isBlank(tsvFilestr.toString())	|| 
 					!tsvFilestr[1].equals(UploadTTIResultConstant.FILE_EXTENTION)) {
-				mv.addObject("refreshUrl", getUrl(request));
-				mv.addObject("errorMessage",UploadTTIResultConstant.MESSAGE2);
+				map.put("errorMessage",UploadTTIResultConstant.MESSAGE2);
 				success = false;
-				mv.setViewName("bloodtesting/uploadTTIResults");
-				mv.addObject("success", success);
-				return mv;
+				map.put("success", success);
+				return new ResponseEntity<Map<String, Object>>(map, HttpStatus.BAD_REQUEST);
 			}
 			
 			String fileWithExt= FileUploadUtils.splitFilePath(fileName);
 			writeTSVFile(fileWithExt, uploadPath, tsvFile);
 			String file = uploadPath + fileWithExt;
-			readTSVToDB(request, mv, tsvFilestr, file);
-			mv.addObject("success", success);
+			readTSVToDB(request, map, tsvFilestr, file);
+			map.put("success", success);
 		}	
 		catch (Exception ex){
 			ex.printStackTrace();
 			success = false;
-			mv.addObject("success", success);
+			map.put("success", success);
+                        httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 		
-		return mv;
+		return new ResponseEntity<Map<String, Object>>(map, httpStatus);
 
 	}
 
 	private void readTSVToDB(MultipartHttpServletRequest request,
-			ModelAndView mv, String[] tsvFilestr, String file)
+			Map<String, Object> map, String[] tsvFilestr, String file)
 			throws IOException, ParseException {
 		CSVReader csvReader;
 		String successRows;
@@ -562,10 +502,8 @@ public class TTIController {
 						+ UploadTTIResultConstant.SUCCESS_ROW;
 				failedRows = tSVFailedList.size()
 						+ UploadTTIResultConstant.FAIL_ROW;
-				mv.addObject("SuccessRows", successRows);
-				mv.addObject("FailedRows", failedRows);
-				mv.addObject("refreshUrl", getUrl(request));
-				mv.setViewName("bloodtesting/uploadTTIResultSuccess");
+				map.put("SuccessRows", successRows);
+				map.put("FailedRows", failedRows);
 			} catch (FileNotFoundException e) {
 				LOGGER.error("File Not Found:" + e);
 			}

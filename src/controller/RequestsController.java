@@ -1,35 +1,32 @@
 package controller;
 
+import backingform.RequestBackingForm;
+import backingform.validator.RequestBackingFormValidator;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import model.product.Product;
 import model.request.Request;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
+import org.springframework.web.bind.annotation.RestController;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
 import repository.ProductRepository;
@@ -40,11 +37,9 @@ import utils.PermissionConstants;
 import viewmodel.MatchingProductViewModel;
 import viewmodel.ProductViewModel;
 import viewmodel.RequestViewModel;
-import backingform.FindRequestBackingForm;
-import backingform.RequestBackingForm;
-import backingform.validator.RequestBackingFormValidator;
 
-@Controller
+@RestController
+@RequestMapping("requests")
 public class RequestsController {
 
   @Autowired
@@ -85,123 +80,7 @@ public class RequestsController {
     return reqUrl;
   }
 
-  @RequestMapping(value = "/requestSummary", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REQUEST+"')")
-  public ModelAndView requestSummaryGenerator(HttpServletRequest request,
-      @RequestParam(value = "requestId", required = false) Long requestId) {
-
-    ModelAndView mv = new ModelAndView("requests/requestSummary");
-
-    mv.addObject("requestUrl", getUrl(request));
-
-    Request productRequest = null;
-    if (requestId != null) {
-      productRequest = requestRepository.findRequestById(requestId);
-      if (productRequest != null) {
-        mv.addObject("existingRequest", true);
-      }
-      else {
-        mv.addObject("existingRequest", false);
-      }
-    }
-
-    RequestViewModel requestViewModel = getRequestViewModels(Arrays.asList(productRequest)).get(0);
-    mv.addObject("request", requestViewModel);
-    mv.addObject("refreshUrl", getUrl(request));
-    Map<String, Object> tips = new HashMap<String, Object>();
-    utilController.addTipsToModel(tips, "requests.findpending.requestsummary");
-    mv.addObject("tips", tips);
-    // to ensure custom field names are displayed in the form
-    mv.addObject("requestFields", utilController.getFormFieldsForForm("request"));
-    return mv;
-  }
-
-  @RequestMapping(value = "/findRequestFormGenerator", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REQUEST+"')")
-  public ModelAndView findRequestFormGenerator(HttpServletRequest request, Model model) {
-
-    FindRequestBackingForm form = new FindRequestBackingForm();
-    model.addAttribute("findRequestForm", form);
-
-    ModelAndView mv = new ModelAndView("requests/findRequestForm");
-    addEditSelectorOptions(mv.getModelMap());
-    // to ensure custom field names are displayed in the form
-    mv.addObject("requestFields", utilController.getFormFieldsForForm("request"));
-    Map<String, Object> tips = new HashMap<String, Object>();
-    utilController.addTipsToModel(tips, "requests.findpending");
-    mv.addObject("tips", tips);
-    mv.addObject("refreshUrl", getUrl(request));
-    return mv;
-  }
-
-  @RequestMapping("/findRequest")
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REQUEST+"')")
-  public ModelAndView findRequest(HttpServletRequest request,
-      Model model,
-      @ModelAttribute("findRequestForm") FindRequestBackingForm form,
-      BindingResult result) {
-
-    List<Request> productRequests = Arrays.asList(new Request[0]);
-
-    ModelAndView modelAndView = new ModelAndView("requests/requestsTable");
-    Map<String, Object> m = model.asMap();
-    m.put("requestFields", utilController.getFormFieldsForForm("request"));
-    m.put("allRequests", getRequestViewModels(productRequests));
-    m.put("refreshUrl", getUrl(request));
-    m.put("nextPageUrl", getNextPageUrl(request));
-    addEditSelectorOptions(m);
-
-    modelAndView.addObject("model", m);
-    return modelAndView;
-
-  }
-
-  @RequestMapping("/findRequestPagination")
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REQUEST+"')")
-  public @ResponseBody Map<String, Object> findRequestPagination(HttpServletRequest request,
-      @ModelAttribute("findRequestForm") FindRequestBackingForm form,
-      BindingResult result, Model model) {
-
-    Map<String, Object> pagingParams = utilController.parsePagingParameters(request);
-    int sortColumnId = (Integer) pagingParams.get("sortColumnId");
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
-    pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
-
-    String requestedAfter = form.getRequestedAfter();
-    String requiredBy = form.getRequiredBy();
-
-    Boolean includeSatisfiedRequests = form.getIncludeSatisfiedRequests();
-
-    List<Integer> productTypeIds = new ArrayList<Integer>();
-    productTypeIds.add(-1);
-    if (form.getProductTypes() != null) {
-      for (String productTypeId : form.getProductTypes()) {
-        productTypeIds.add(Integer.parseInt(productTypeId));
-      }
-    }
-
-    List<Long> siteIds = new ArrayList<Long>();
-    // add an invalid ID so that hibernate does not throw an exception
-    siteIds.add((long)-1);
-    if (form.getRequestSites() != null) {
-      for (String siteId : form.getRequestSites()) {
-        siteIds.add(Long.parseLong(siteId));
-      }
-    }
-
-    List<Object> results = requestRepository.findRequests(
-                        form.getRequestNumber(),
-                        productTypeIds, siteIds,
-                        requestedAfter, requiredBy,
-                        includeSatisfiedRequests, pagingParams);
-
-    @SuppressWarnings("unchecked")
-    List<Request> productRequests = (List<Request>) results.get(0);
-    Long totalRecords = (Long) results.get(1);
-
-    return generateDatatablesMap(productRequests, totalRecords, formFields);
-  }
-
+  
   private String getNextPageUrl(HttpServletRequest request) {
     String reqUrl = request.getRequestURL().toString().replaceFirst("findRequest.html", "findRequestPagination.html");
     String queryString = request.getQueryString();   // d=789
@@ -215,6 +94,71 @@ public class RequestsController {
     m.put("productTypes", productTypeRepository.getAllProductTypes());
     m.put("requestTypes", requestTypeRepository.getAllRequestTypes());
     m.put("sites", locationRepository.getAllUsageSites());
+  }
+
+  @RequestMapping(value = "{id}", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REQUEST+"')")
+  public  Map<String, Object> requestSummaryGenerator(HttpServletRequest request,
+      @PathVariable Long id) {
+
+    Map<String, Object> map = new HashMap<String, Object>();
+
+    Request productRequest = requestRepository.findRequestById(id);
+
+    RequestViewModel requestViewModel = getRequestViewModels(Arrays.asList(productRequest)).get(0);
+    map.put("request", requestViewModel);
+    return map;
+  }
+ 
+  @RequestMapping(value = "/search", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REQUEST+"')")
+  public  Map<String, Object> findRequestPagination(
+          @RequestParam(value = "requestNumber", required = false) String requestNumber,
+          @RequestParam(value = "requestedAfter", required = false) String requestedAfter,
+          @RequestParam(value = "requiredBy", required = false) String requiredBy,
+          @RequestParam(value = "requestSites", required = false) List<String> requestSites,
+          @RequestParam(value = "productTypes", required = false) List<String> productTypes,
+          @RequestParam(value = "includeSatisfiedRequests", required = false) Boolean includeSatisfiedRequests) throws ParseException {
+
+      Map<String, Object> pagingParams = new HashMap<String, Object>();
+      pagingParams.put("sortColumn", "id");
+      pagingParams.put("start", "0");
+      pagingParams.put("length", "10");
+      pagingParams.put("sortDirection", "asc");
+      
+      int sortColumnId = (Integer) pagingParams.get("sortColumnId");
+      Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
+      pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
+
+
+    List<Integer> productTypeIds = new ArrayList<Integer>();
+    productTypeIds.add(-1);
+    if (productTypes != null) {
+      for (String productTypeId : productTypes) {
+        productTypeIds.add(Integer.parseInt(productTypeId));
+      }
+    }
+
+    List<Long> siteIds = new ArrayList<Long>();
+    // add an invalid ID so that hibernate does not throw an exception
+    siteIds.add((long)-1);
+    if (requestSites != null) {
+      for (String siteId : requestSites) {
+        siteIds.add(Long.parseLong(siteId));
+      }
+    }
+
+    List<Object> results = requestRepository.findRequests(
+                        requestNumber,
+                        productTypeIds, siteIds,
+                        requestedAfter, requiredBy,
+                        includeSatisfiedRequests, pagingParams);
+
+    @SuppressWarnings("unchecked")
+    List<Request> productRequests = (List<Request>) results.get(0);
+    Long totalRecords = (Long) results.get(1);
+
+    return generateDatatablesMap(productRequests, totalRecords, formFields);
   }
 
   /**
@@ -297,177 +241,57 @@ public class RequestsController {
     return collectionsMap;
   }
 
-  @RequestMapping(value = "/addRequestFormGenerator", method = RequestMethod.GET)
+  @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_REQUEST+"')")
-  public ModelAndView addRequestFormGenerator(HttpServletRequest request) {
-
+  public  Map<String, Object> addRequestFormGenerator(HttpServletRequest request) {
     RequestBackingForm form = new RequestBackingForm();
-
-    ModelAndView mv = new ModelAndView("requests/addRequestForm");
-    mv.addObject("requestUrl", getUrl(request));
-    mv.addObject("firstTimeRender", true);
-    mv.addObject("addRequestForm", form);
-    mv.addObject("refreshUrl", getUrl(request));
-    addEditSelectorOptions(mv.getModelMap());
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
-    // to ensure custom field names are displayed in the form
-    mv.addObject("requestFields", formFields);
-    return mv;
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("addRequestForm", form);
+    addEditSelectorOptions(map);
+    return map;
   }
-
-  @RequestMapping(value = "/editRequestFormGenerator", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_REQUEST+"')")
-  public ModelAndView editRequestFormGenerator(HttpServletRequest request,
-      @RequestParam(value="requestId") Long requestId) {
-
-    Request productRequest = requestRepository.findRequestById(requestId);
-    RequestBackingForm form = new RequestBackingForm(productRequest);
-
-    ModelAndView mv = new ModelAndView("requests/editRequestForm");
-    mv.addObject("editRequestForm", form);
-    mv.addObject("refreshUrl", getUrl(request));
-    addEditSelectorOptions(mv.getModelMap());
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
-    // to ensure custom field names are displayed in the form
-    mv.addObject("requestFields", formFields);
-    return mv;
-  }
-
-  @RequestMapping(value = "/addRequest", method = RequestMethod.POST)
+ 
+  @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_REQUEST+"')")
-  public ModelAndView addRequest(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      @ModelAttribute("addRequestForm") @Valid RequestBackingForm form,
-      BindingResult result, Model model) {
+  public ResponseEntity<Map<String, Object>> addRequest(@Valid @RequestBody RequestBackingForm form) {
 
-    ModelAndView mv = new ModelAndView();
-    boolean success = false;
-
-    addEditSelectorOptions(mv.getModelMap());
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
-    mv.addObject("requestFields", formFields);
+    HttpStatus httpStatus = HttpStatus.CREATED;
+    Map<String, Object> map = new HashMap<String, Object>();
 
     Request savedRequest = null;
-    if (result.hasErrors()) {
-      mv.addObject("hasErrors", true);
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      success = false;
-    } else {
-      try {
-        Request productRequest = form.getRequest();
-        productRequest.setIsDeleted(false);
-        savedRequest = requestRepository.addRequest(productRequest);
-        mv.addObject("hasErrors", false);
-        success = true;
-        form = new RequestBackingForm();
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        success = false;
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        success = false;
-      }
-    }
-
-    if (success) {
-      mv.addObject("requestId", savedRequest.getId());
-      mv.addObject("request",  new RequestViewModel(savedRequest));
-      mv.addObject("addAnotherRequestUrl", "addRequestFormGenerator.html");
-      mv.setViewName("requests/addRequestSuccess");
-    } else {
-      mv.addObject("errorMessage", "Error creating request. Please fix the errors noted below.");
-      mv.addObject("firstTimeRender", false);
-      mv.addObject("addRequestForm", form);
-      mv.addObject("refreshUrl", "addRequestFormGenerator.html");
-      mv.setViewName("requests/addRequestError");
-    }
-
-    mv.addObject("success", success);
-    return mv;
+    Request productRequest = form.getRequest();
+    productRequest.setIsDeleted(false);
+    savedRequest = requestRepository.addRequest(productRequest);
+    map.put("hasErrors", false);
+    form = new RequestBackingForm();
+    map.put("requestId", savedRequest.getId());
+    map.put("request", new RequestViewModel(savedRequest));
+    map.put("addAnotherRequestUrl", "addRequestFormGenerator.html");
+    return new ResponseEntity < Map<String, Object> > (map, httpStatus);
   }
 
-  @RequestMapping(value="/listIssuedProductsForRequest", method=RequestMethod.GET)
+  @RequestMapping(value="{id}/issuedcomponents", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public ModelAndView listIssuedProductsForRequest(HttpServletRequest request,
-      HttpServletResponse response, Model model,
-      @RequestParam(value="requestId") Long requestId) {
-    ModelAndView mv = new ModelAndView("requests/productsIssuedToRequest");
-    Map<String, Object> m = model.asMap();
-    System.out.println(m);
-    addEditSelectorOptions(m);
-    List<Product> issuedProducts = requestRepository.getIssuedProductsForRequest(requestId);
+  public  Map<String, Object> listIssuedProductsForRequest(@PathVariable Long id) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    addEditSelectorOptions(map);
+    List<Product> issuedProducts = requestRepository.getIssuedProductsForRequest(id);
     List<ProductViewModel> issuedProductViewModels = null;
-    if (request == null) {
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    } else {
-      issuedProductViewModels = ProductController.getProductViewModels(issuedProducts);
-    }
-
-    m.put("issuedProducts", issuedProductViewModels);
-    m.put("productFields", utilController.getFormFieldsForForm("Product"));
-    m.put("productTypeFields", utilController.getFormFieldsForForm("ProductType"));
-    mv.addObject("model", m);
-    return mv;
+    issuedProductViewModels = ProductController.getProductViewModels(issuedProducts);
+    map.put("issuedProducts", issuedProductViewModels);
+    map.put("productTypeFields", utilController.getFormFieldsForForm("ProductType"));
+    return map;
   }
   
-  @RequestMapping(value = "/updateRequest", method = RequestMethod.POST)
+  @RequestMapping(value = "{id}",method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_REQUEST+"')")
-  public ModelAndView updateRequest(
-      HttpServletResponse response,
-      @ModelAttribute("editRequestForm") @Valid RequestBackingForm form,
-      BindingResult result) {
+  public  ResponseEntity updateRequest(@Valid @RequestBody RequestBackingForm form,
+          @PathVariable Long id) {
 
-    ModelAndView mv = new ModelAndView("requests/editRequestForm");
-    boolean success = false;
-    String message = "";
-    addEditSelectorOptions(mv.getModelMap());
-    // only when the collection is correctly added the existingCollectedSample
-    // property will be changed
-    mv.addObject("existingRequest", true);
-
-    if (result.hasErrors()) {
-      mv.addObject("hasErrors", true);
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      success = false;
-      message = "Please fix the errors noted";
-    }
-    else {
-      try {
-
-        form.setIsDeleted(false);
-        Request existingRequest = requestRepository.updateRequest(form.getRequest());
-        if (existingRequest == null) {
-          mv.addObject("hasErrors", true);
-          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-          success = false;
-          mv.addObject("existingRequest", false);
-          message = "Request does not already exist.";
-        }
-        else {
-          mv.addObject("hasErrors", false);
-          success = true;
-          message = "Request Successfully Updated";
-        }
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        success = false;
-        message = "Request Already exists.";
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        success = false;
-        message = "Internal Error. Please try again or report a Problem.";
-      }
-   }
-
-    mv.addObject("editRequestForm", form);
-    mv.addObject("success", success);
-    mv.addObject("errorMessage", message);
-    mv.addObject("requestFields", utilController.getFormFieldsForForm("request"));
-
-    return mv;
+      form.setId(id);
+      form.setIsDeleted(false);
+      Request request = requestRepository.updateRequest(form.getRequest());
+      return new ResponseEntity(new RequestViewModel(request), HttpStatus.OK);
   }
 
   private List<RequestViewModel> getRequestViewModels(
@@ -481,78 +305,36 @@ public class RequestsController {
     return requestViewModels;
   }
 
-  @RequestMapping(value = "/deleteRequest", method = RequestMethod.POST)
-  public @ResponseBody
-  Map<String, ? extends Object> deleteProduct(
-      @RequestParam("requestId") Long requestId) {
-
-    boolean success = true;
-    String errMsg = "";
-    try {
-      requestRepository.deleteRequest(requestId);
-    } catch (Exception ex) {
-      // TODO: Replace with logger
-      System.err.println("Internal Exception");
-      System.err.println(ex.getMessage());
-      success = false;
-      errMsg = "Internal Server Error";
-    }
-
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("success", success);
-    m.put("errMsg", errMsg);
-    return m;
+  @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+  public 
+  ResponseEntity deleteRequest(
+      @RequestParam("id") Long id) {
+    requestRepository.deleteRequest(id);
+     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
-
-  @RequestMapping("/findMatchingProductsForRequest")
+  @RequestMapping(value = "{id}/matchingcomponents", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.BLOOD_CROSS_MATCH_CHECK+"')")
-  public ModelAndView findMatchingProductsForRequest(HttpServletRequest request,
-      @RequestParam(value="requestId", required=false) Long requestId) {
+  public  Map<String, Object> findMatchingProductsForRequest(
+      @PathVariable Long id) {
 
-    ModelAndView mv = new ModelAndView("requests/matchingProductsForRequest");
-
-    mv.addObject("refreshUrl", getUrl(request));
-    mv.addObject("existingRequest", false);
-
-    mv.addObject("requestId", requestId);
-    List<MatchingProductViewModel> products = productRepository.findMatchingProductsForRequest(requestId);
-    mv.addObject("refreshUrl", getUrl(request));
-    // to ensure custom field names are displayed in the form
-    mv.addObject("productFields", utilController.getFormFieldsForForm("Product"));
-    mv.addObject("compatibilityTestFields", utilController.getFormFieldsForForm("CompatibilityTest"));
-    Map<String, Object> tips = new HashMap<String, Object>();
-    utilController.addTipsToModel(tips, "requests.findpending.findmatchingproducts");
-    mv.addObject("tips", tips);
-    mv.addObject("allProducts", products);
-    Map<String, String> configProperties = genericConfigRepository.getConfigProperties("labsetup");
-    mv.getModelMap().addAllAttributes(configProperties);
-    return mv;
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("requestId", id);
+    List<MatchingProductViewModel> products = productRepository.findMatchingProductsForRequest(id);
+    map.put("compatibilityTestFields", utilController.getFormFieldsForForm("CompatibilityTest"));
+    map.put("allProducts", products);
+    map.put("labProperties", genericConfigRepository.getConfigProperties("labsetup"));
+    return map;
   }
 
-  @RequestMapping("/issueSelectedProducts")
+  @RequestMapping(value = "{id}/issuecomponent", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public @ResponseBody Map<String, Object> issueSelectedProducts(
-      HttpServletResponse response,
-      @RequestParam("requestId") Long requestId,
-      @RequestParam("productsToIssue") String productsToIssue) {
-    boolean success = true;
-    String errMsg = "";
-    try {
-      requestRepository.issueProductsToRequest(requestId, productsToIssue);
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      // TODO: Replace with logger
-      System.err.println("Internal Exception");
-      System.err.println(ex.getMessage());
-      success = false;
-      errMsg = "Internal Server Error";
-    }
-
-    Map<String, Object> m = new HashMap<String, Object>();
-    m.put("success", success);
-    m.put("errMsg", errMsg);
-    return m;
+  public  ResponseEntity issueSelectedProducts(
+      @PathVariable Long id,
+      @RequestParam String componentName) {
+   
+       requestRepository.issueProductsToRequest(id, componentName);
+       return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
+
 }

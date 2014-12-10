@@ -346,12 +346,14 @@
 
     create table DonorDeferral (
         id bigint not null auto_increment,
+        deferredDonor_id bigint,
         deferralReasonText longtext,
-        deferredOn date,
         deferredUntil date,
         deferralReason_id SMALLINT,
-        deferredBy_id SMALLINT,
-        deferredDonor_id bigint,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -359,12 +361,14 @@
         id bigint not null,
         REV integer not null,
         REVTYPE tinyint,
+        deferredDonor_id bigint,
         deferralReasonText longtext,
-        deferredOn date,
         deferredUntil date,
         deferralReason_id SMALLINT,
-        deferredBy_id SMALLINT,
-        deferredDonor_id bigint,
+        createdDate TIMESTAMP,
+        lastUpdated TIMESTAMP,
+        createdBy_id SMALLINT,
+        lastUpdatedBy_id SMALLINT,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
@@ -853,13 +857,13 @@
     create table User (
         id SMALLINT not null auto_increment,
         emailId varchar(255),
-        firstName varchar(15) not null,
+        firstName varchar(20) not null,
         isActive boolean,
         isAdmin boolean,
         isDeleted boolean,
         isStaff boolean,
         lastLogin datetime,
-        lastName varchar(15),
+        lastName varchar(20),
         notes longtext,
         password varchar(255) not null,
         username varchar(30) not null unique,
@@ -871,13 +875,13 @@
         REV integer not null,
         REVTYPE tinyint,
         emailId varchar(255),
-        firstName varchar(15),
+        firstName varchar(20),
         isActive boolean,
         isAdmin boolean,
         isDeleted boolean,
         isStaff boolean,
         lastLogin datetime,
-        lastName varchar(15),
+        lastName varchar(20),
         notes longtext,
         password varchar(255),
         username varchar(30),
@@ -1226,9 +1230,9 @@
         references Donor (id);
 
     alter table DonorDeferral 
-        add index FKC7E323D1ED3A012D (deferredBy_id), 
+        add index FKC7E323D1ED3A012D (createdBy_id), 
         add constraint FKC7E323D1ED3A012D 
-        foreign key (deferredBy_id) 
+        foreign key (createdBy_id) 
         references User (id);
 
     alter table DonorDeferral 

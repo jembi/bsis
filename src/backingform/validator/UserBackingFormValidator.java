@@ -12,13 +12,14 @@ import repository.UserRepository;
 import viewmodel.UserViewModel;
 import backingform.UserBackingForm;
 import controller.UtilController;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class UserBackingFormValidator implements Validator {
 
   private Validator validator;
 	private UtilController utilController;
 	private UserRepository userRepository;
-	boolean editingUser=false;
 
   public UserBackingFormValidator(Validator validator, UtilController utilController, UserRepository userRepository) {
     super();
@@ -41,9 +42,18 @@ public class UserBackingFormValidator implements Validator {
     UserBackingForm form = (UserBackingForm) obj;
      utilController.commonFieldChecks(form, "user", errors);
     checkUserName(form,errors);
-    if(editingUser){
-       if(form.isModifyPassword())
-          comparePassword(form,errors);
+    if(form.getId() != null){
+       if(form.isModifyPassword()){
+          User existingUser = userRepository.findUserById(form.getId());
+           BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+           //verify password match
+           boolean matches = encoder.matches(form.getCurrentPassword(), existingUser.getPassword());
+           if (!matches) {
+               errors.rejectValue("user.password", "user.incorrect", "Entered Current password is wrong");
+           } else {
+               comparePassword(form, errors);
+           }
+       }
     }
     else  
     	  comparePassword(form,errors);
@@ -53,17 +63,14 @@ public class UserBackingFormValidator implements Validator {
   
  
   private void comparePassword(UserBackingForm form, Errors errors) {
-	if( (form.getPassword()==null||form.getPassword().isEmpty() ) && (form.getUserConfirPassword()==null||form.getUserConfirPassword().isEmpty()) )
+	if( StringUtils.isBlank(form.getPassword()) ||  StringUtils.isBlank(form.getConfirmPassword()))
   	    errors.rejectValue("user.password","user.incorrect" ,"Password cannot be blank");
   	    else
-  	if(!form.getPassword().equals(form.getUserConfirPassword())){
+  	if(!form.getPassword().equals(form.getConfirmPassword())){
   		errors.rejectValue("user.password","user.incorrect" ,"Passwords do not match");
   	}
   
   }
-  
- 
-  
   
   private void checkRoles(UserBackingForm form, Errors errors) {
 	  if(form.getUserRoles()==null)
@@ -72,24 +79,21 @@ public class UserBackingFormValidator implements Validator {
   }
   
   private void checkUserName(UserBackingForm form, Errors errors) {
+      
   	boolean flag=false;
-  	
   	String userName=form.getUsername();
-  	
   	User existingUser=null;
-  	if(!userName.equals(""))
-  	{
-  		existingUser=userRepository.findUser(userName);
-  		 if(existingUser != null && existingUser.getId().equals(form.getId()))
-  			 editingUser=true;
-  		
-  		 if(existingUser != null && !existingUser.getId().equals(form.getId())){
-  			 errors.rejectValue("user.username", "userName.nonunique",
-           "Username  already exists.");
-  		 return;
-  		 
-       }
-  	}
+        
+      if (!userName.equals("")) {
+          existingUser = userRepository.findUser(userName);
+
+          if (existingUser != null && !existingUser.getId().equals(form.getId())) {
+              errors.rejectValue("user.username", "userName.nonunique",
+                      "Username  already exists.");
+              return;
+
+          }
+      }
   	if(userName.length() <= 2 ||  userName.length() >= 50){
   		flag=true;
   	}

@@ -11,21 +11,19 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.NoResultException;
 import javax.sql.DataSource;
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
-import model.address.ContactMethodType;
+import model.location.Location;
 import model.collectedsample.CollectionConstants;
 import model.donor.Donor;
 import model.donorcodes.DonorCodeGroup;
 import model.donorcodes.DonorDonorCode;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
-import model.idtype.IdNumber;
-import model.idtype.IdType;
 import model.user.User;
-import model.util.BloodGroup;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.dbunit.database.DatabaseConfig;
@@ -37,9 +35,6 @@ import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.After;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -185,26 +180,24 @@ public class DonorRepositoryTest {
                 findDonor.getId() == 1 ? true : false);
     }
 
-    @Test
+    
     /**
-     * Should return null when Donor id does not exist findDonorById(Long)
+     * Expects NoResultException to be thrown  when Donor id does not exist findDonorById(Long)
      */
-    public void findDonorById_shouldReturnNull() {
+    @Test(expected = NoResultException.class)
+    public void findDonorById_shouldExpectNoResultException() {
         // 18 ID is not exist into Donor table.
-        assertNull(
-                "Donor's Object should null. Donor Id is not exist into Donor's table.",
-                donorRepository.findDonorById(18l));
+        donorRepository.findDonorById(18l);
     }
 
-    @Test
+    
     /**
-     * Should return null when Donor has been deleted findDonorById(Long)
+     *  Expects NoResultException to be thrown when Donor has been deleted findDonorById(Long)
      */
-    public void findDonorById_shouldReturnNullDonorIsDeleted() {
+    @Test(expected = NoResultException.class)
+    public void findDonorById_shouldExpectNoResultExceptionWhenDonorIsDeleted() {
         // 2 is Deleted Donor's ID.
-        assertNull(
-                "Donor object should null. Donor's Id is exist into Donor table but it is deleted.",
-                donorRepository.findDonorById(2l));
+        donorRepository.findDonorById(2l);
     }
 
     @Test
@@ -226,7 +219,7 @@ public class DonorRepositoryTest {
         assertEquals("List size should be zero, no matching search results.",
                 0, ((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
                         donorFirstName, donorLastName, pagingParams,
-                        true, donationIdentificationNumber).get(0))).size());
+                        true, donationIdentificationNumber))).size());
     }
 
     @Test
@@ -245,7 +238,7 @@ public class DonorRepositoryTest {
 
         List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
                 searchDonorNumber, donorFirstName, donorLastName,
-                pagingParams, true, donationIdentificationNumber).get(0)));
+                pagingParams, true, donationIdentificationNumber)));
 
         assertNotSame(
                 "List size should not zero.Matching records is found base on firstname.",
@@ -279,7 +272,7 @@ public class DonorRepositoryTest {
 
         List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
                 searchDonorNumber, donorFirstName, donorLastName,
-                pagingParams, false, donationIdentificationNumber).get(0)));
+                pagingParams, false, donationIdentificationNumber)));
 
         assertNotSame(
                 "List size should not zero.Matching records is found base on firstname.",
@@ -312,7 +305,7 @@ public class DonorRepositoryTest {
         setPaginationParam(pagingParams);
 
         List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
-                searchDonorNumber, donorFirstName, donorLastName, pagingParams, true, donationIdentificationNumber).get(0)));
+                searchDonorNumber, donorFirstName, donorLastName, pagingParams, true, donationIdentificationNumber)));
 
         assertNotSame(
                 "List size should not zero.Matching records is found base on lastname.",
@@ -343,7 +336,7 @@ public class DonorRepositoryTest {
         setPaginationParam(pagingParams);
 
         List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
-                searchDonorNumber, donorFirstName, donorLastName, pagingParams, true, donationIdentificationNumber).get(0));
+                searchDonorNumber, donorFirstName, donorLastName, pagingParams, true, donationIdentificationNumber));
 
         for (Donor donor : listDonor) {
             // 2 is deleted donor id
@@ -369,7 +362,7 @@ public class DonorRepositoryTest {
 
         List<Donor> donorList = (List<Donor>) (donorRepository.findAnyDonor(
                 searchDonorNumber, donorFirstName, donorLastName,
-                pagingParams, false, donationIdentificationNumber).get(0));
+                pagingParams, false, donationIdentificationNumber));
         assertEquals("Should return a single Donor result", 1, donorList.size());
         boolean isValid = false;
         if (donorList.get(0).getDonorNumber().equals("000001")) {
@@ -436,18 +429,18 @@ public class DonorRepositoryTest {
 
     }
 
-    @Test
+    
     /**
-     * Should return null when Donor Number does not match an existing Donor
+     * Expects NoResultException to be thrown  when Donor Number does not match an existing Donor
      * updateDonor(Donor)
      */
-    public void updateDonor_shouldReturnNull() {
+    @Test(expected = NoResultException.class)
+    public void updateDonor_shouldExpectNoResultException() {
         Donor editDonor = new Donor();
         editDonor.setId(-1l);
         donorBackingForm = new DonorBackingForm(editDonor);
         setBackingUpdateFormValue(donorBackingForm);
-        assertNull("Donor Object should null.",
-                donorRepository.updateDonor(donorBackingForm.getDonor()));
+        donorRepository.updateDonor(donorBackingForm.getDonor());
     }
 
     @Test
@@ -628,28 +621,27 @@ public class DonorRepositoryTest {
                 .getDonorNumber().equals("000001"));
     }
 
-    @Test
     /**
-     * Should return donor with given Donor Number
+     * Expects null when donor not exists
      * findDonorByDonorNumber(String,boolean)
      */
+    @Test
     public void findDonorByDonorNumber_donorObjectShouldNullDonorDeleteFalse() {
         // 000009 DonorNumber is not exist.
-        assertNull(
-                "Donor object should null.Because DonorNumber is not exist into database.",
-                donorRepository.findDonorByDonorNumber("000014", false));
+         assertNull("Donor with donor number 000014 should return null",
+        donorRepository.findDonorByDonorNumber("000014", false));
     }
 
-    @Test
+
     /**
-     * Should return donor with given Donor Number
+     * Expects null  when donor with given donor number doesn't exist
      * findDonorByDonorNumber(String,boolean)
      */
+    @Test
     public void findDonorByDonorNumber_donorObjectShouldNullDonorDeleteTrue() {
-        // 000001 DonorNumber
-        assertNull(
-                "Donor object should null. Because Donor's Donor Number is exist into database table but that record is not deleted.",
-                donorRepository.findDonorByDonorNumber("000001", true));
+        //000001 donor number
+        assertNull("Donor with donor number 000001 should return null",
+        donorRepository.findDonorByDonorNumber("000001", true));
     }
 
     @Test
@@ -706,16 +698,12 @@ public class DonorRepositoryTest {
      * Should add Deferral for Donor deferDonor(String,String,String,String)
      */
     public void deferDonor_ShouldPersist() throws ParseException {
-        try {
-            this.userAuthentication();
-
-            DonorDeferral donorDeferral = donorRepository.deferDonor("1",
-                    "19/07/2015", "3", "");
-            assertTrue("DeferDonor object Should persist.",
-                    donorDeferral.getId() != 0 ? true : false);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    	DonorDeferral donorDeferral = new DonorDeferral();
+    	donorDeferral.setDeferredDonor(donorRepository.findDonorById(1l));
+    	donorDeferral.setDeferredUntil(dateFormat.parse("2015-07-19"));
+    	donorDeferral.setDeferralReason(donorRepository.findDeferralReasonById("3"));
+        donorRepository.deferDonor(donorDeferral);
+        assertTrue("DeferDonor object Should persist.", donorDeferral.getId() != 0 ? true : false);
     }
 
     @Test
@@ -726,7 +714,7 @@ public class DonorRepositoryTest {
     public void findDeferralReasonById_shouldReturnNoneDeletedDeferralReason() {
         // 1 is DeferralReason ID.
         DeferralReason deferralReason = donorRepository
-                .findDeferralReasonUsingId("1");
+                .findDeferralReasonById("1");
         assertNotNull("DeferralReason's object should not null.",
                 deferralReason);
         assertTrue("Deferral's Reason Id should be 1.",
@@ -734,15 +722,15 @@ public class DonorRepositoryTest {
 
     }
 
-    @Test
+    
     /**
      * Should return null deferral reason where deferral reason is deleted from
      * the database findDeferralReasonById(String)
      */
-    public void findDeferralReasonById_shouldReturnNullDeferralReason() {
+    @Test(expected = NoResultException.class)
+    public void findDeferralReasonById_shouldExpectNoResultExceptionWhenDeferralReason() {
         // 7 ID is deleted from DeferralReason.
-        assertNull("Deferral Reason object should null.",
-                donorRepository.findDeferralReasonUsingId("7"));
+        donorRepository.findDeferralReasonById("7");
     }
 
     @Test
@@ -891,6 +879,11 @@ public class DonorRepositoryTest {
      */
     public void setBackingFormValue(DonorBackingForm donorBackingForm) {
         Date date = new Date();
+        Location l = new Location();
+        l.setId(Long.parseLong("1"));
+        AddressType a = new AddressType();
+        a.setId(Long.parseLong("1"));
+        donorBirthdate = "11/06/1991";
         donorBackingForm.setAddress(new Address());
         donorBackingForm.setContact(new Contact());
         donorBackingForm.setHomeAddressLine1("myaddress");
@@ -905,24 +898,17 @@ public class DonorRepositoryTest {
         donorBackingForm.setHomeAddressLine1("homeAddressLine1");
         user = new User();
         user.setId(userDbId);
-        donorBackingForm.setCreatedBy(user);
-        donorBackingForm.setCreatedDate(date);
-        donorBackingForm.setLastUpdated(date);
-        donorBackingForm.setLastUpdatedBy(user);
         donorBackingForm.setHomeAddressDistrict("District");
-        donorBackingForm.setDonorPanel("1");
+        donorBackingForm.setDonorPanel(l);
         donorBackingForm.setIdNumber("1111");
         donorBackingForm.setNotes("Notes");
         donorBackingForm.setMobileNumber("9999999999");
         donorBackingForm.setWorkNumber("8888888888");
-        donorBackingForm.setPreferredAddressType("1");
+        donorBackingForm.setPreferredAddressType(a);
         donorBackingForm.setHomeAddressProvince("Province");
         donorBackingForm.setHomeAddressState("State");
         donorBackingForm.setHomeAddressZipcode("361001");
         donorBackingForm.setBirthDate(donorBirthdate);
-        donorBackingForm.setDayOfMonth("10");
-        donorBackingForm.setMonth("06");
-        donorBackingForm.setYear("2000");
         donorBackingForm.setBirthDateEstimated(true);
 
     }
@@ -945,7 +931,11 @@ public class DonorRepositoryTest {
         } else {
             donorBackingForm.setContact(new Contact());
         }
-
+        
+        Location l = new Location();
+        l.setId(Long.parseLong("2"));
+        AddressType a = new AddressType();
+        a.setId(Long.parseLong("2"));
         donorBackingForm.setHomeAddressLine1("address_update");
         donorBackingForm.setFirstName("firstName_update");
         donorBackingForm.setMiddleName("middlename_update");
@@ -956,18 +946,15 @@ public class DonorRepositoryTest {
         donorBackingForm.setHomeAddressCity("City_update");
         donorBackingForm.setHomeAddressCountry("country_update");
         donorBackingForm.setHomeAddressDistrict("District_update");
-        donorBackingForm.setDonorPanel("2");
+        donorBackingForm.setDonorPanel(l);
         donorBackingForm.setIdNumber("1212");
         donorBackingForm.setNotes("Notes_update");
         donorBackingForm.setMobileNumber("9878787878");
         donorBackingForm.setWorkNumber("874525452");
-        donorBackingForm.setPreferredAddressType("1");
+        donorBackingForm.setPreferredAddressType(a);
         donorBackingForm.setHomeAddressProvince("Province_update");
         donorBackingForm.setHomeAddressState("State_update");
         donorBackingForm.setHomeAddressZipcode("361001");
-        user = new User();
-        user.setId(userDbId);
-        donorBackingForm.setCreatedBy(user);
     }
 
     public Donor copyDonor(Donor donor) {
@@ -1042,8 +1029,8 @@ public class DonorRepositoryTest {
      */
     public void saveDonorDonorCode_shouldPersist() {
         DonorDonorCode donorDonorCode = new DonorDonorCode();
-        donorDonorCode.setDonorCodeId(donorRepository.findDonorCodeById(1l));
-        donorDonorCode.setDonorId(donorRepository.findDonorById(5l));
+        donorDonorCode.setDonorCode(donorRepository.findDonorCodeById(1l));
+        donorDonorCode.setDonor(donorRepository.findDonorById(5l));
         donorRepository.saveDonorDonorCode(donorDonorCode);
         assertNotNull("Failed to save DonorDonorCode object ", donorDonorCode.getId());
 

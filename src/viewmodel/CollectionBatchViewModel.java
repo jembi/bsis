@@ -1,9 +1,12 @@
 package viewmodel;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import utils.CustomDateFormatter;
 
+import viewmodel.CollectedSampleViewModel;
 import model.collectedsample.CollectedSample;
 import model.collectionbatch.CollectionBatch;
 import model.location.Location;
@@ -13,12 +16,11 @@ public class CollectionBatchViewModel {
 
   private CollectionBatch collectionBatch;
 
+  public CollectionBatchViewModel() {
+  }
+  
   public CollectionBatchViewModel(CollectionBatch collectionBatch) {
     this.collectionBatch = collectionBatch;
-  }
-
-  public CollectionBatch getCollectionBatch() {
-    return collectionBatch;
   }
 
   public Integer getId() {
@@ -33,16 +35,19 @@ public class CollectionBatchViewModel {
     return collectionBatch.getNotes();
   }
 
-  public List<CollectedSample> getCollectionsInBatch() {
-    return collectionBatch.getCollectionsInBatch();
+  public List<CollectedSampleViewModel> getCollectionsInBatch() {
+    //return collectionBatch.getCollectionsInBatch();
+    if (collectionBatch.getCollectionsInBatch() == null)
+      return Arrays.asList(new CollectedSampleViewModel[0]);
+    List<CollectedSampleViewModel> collectionViewModels = new ArrayList<CollectedSampleViewModel>();
+    for (CollectedSample collection : collectionBatch.getCollectionsInBatch()) {
+      collectionViewModels.add(new CollectedSampleViewModel(collection));
+    }
+    return collectionViewModels;
   }
-
-  public Location getCollectionCenter() {
-    return collectionBatch.getCollectionCenter();
-  }
-
-  public Location getCollectionSite() {
-    return collectionBatch.getCollectionSite();
+  
+  public Integer getNumCollections() {
+	 return collectionBatch.getCollectionsInBatch().size();
   }
 
   public String getLastUpdated() {
@@ -50,7 +55,7 @@ public class CollectionBatchViewModel {
   }
 
   public String getCreatedDate() {
-    return CustomDateFormatter.getDateTimeString(collectionBatch.getCreatedDate());
+    return CustomDateFormatter.getDateString(collectionBatch.getCreatedDate());
   }
 
   public String getCreatedBy() {
@@ -65,5 +70,13 @@ public class CollectionBatchViewModel {
     if (user == null || user.getUsername() == null)
       return "";
     return user.getUsername();
+  }
+  
+  public Boolean getIsClosed() {
+    return collectionBatch.getIsClosed();
+  }
+  
+  public LocationViewModel getDonorPanel(){
+      return  new LocationViewModel((collectionBatch.getDonorPanel()));
   }
 }

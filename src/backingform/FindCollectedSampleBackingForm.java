@@ -1,3 +1,7 @@
+/**
+ * issue - #209{Adapt Bsis To Expose rest Services}
+ * Reason - Not required in later versions as get requests should not be binded to be objects
+ *
 package backingform;
 
 import java.util.List;
@@ -90,3 +94,4 @@ public class FindCollectedSampleBackingForm {
     this.includeTestedCollections = includeTestedCollections;
   }
 }
+* */

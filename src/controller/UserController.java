@@ -1,245 +1,182 @@
 package controller;
 
+import backingform.UserBackingForm;
+import backingform.validator.UserBackingFormValidator;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import model.user.Role;
 import model.user.User;
-
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-
+import org.springframework.web.bind.annotation.RestController;
 import repository.RoleRepository;
 import repository.UserRepository;
 import utils.PermissionConstants;
 import viewmodel.UserViewModel;
-import backingform.UserBackingForm;
-import backingform.validator.UserBackingFormValidator;
 
-@Controller
+@RestController
+@RequestMapping("/users")
 public class UserController {
 
-  @Autowired
-  private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-  @Autowired
-  private UtilController utilController;
+    @Autowired
+    private UtilController utilController;
 
-  @Autowired
-  private RoleRepository roleRepository;
-  
-  @InitBinder
-  protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new UserBackingFormValidator(binder.getValidator(), utilController,userRepository));
-  }
+    @Autowired
+    private RoleRepository roleRepository;
 
-  @RequestMapping(value="/configureUsersFormGenerator", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_USERS+"')")
-  public ModelAndView configureUsersFormGenerator(
-      HttpServletRequest request, HttpServletResponse response,
-      Model model) {
-
-    ModelAndView mv = new ModelAndView("admin/configureUsers");
-    Map<String, Object> m = model.asMap();
-    addAllUsersToModel(m);
-    m.put("refreshUrl", utilController.getUrl(request));
-    m.put("userRoles", roleRepository.getAllRoles());
-    mv.addObject("model", model);
-    return mv;
-  }
-
-  private void addAllUsersToModel(Map<String, Object> m) {
-    List<UserViewModel> users = userRepository.getAllUsers();
-    m.put("allUsers", users);
-  }
-
-  @RequestMapping(value = "/editUserFormGenerator", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_USERS+"')")
-  public ModelAndView editUserFormGenerator(HttpServletRequest request, Model model,
-      @RequestParam(value = "userId", required = false) Integer userId) {
-	 UserBackingForm form = new UserBackingForm();
-    ModelAndView mv = new ModelAndView("admin/editUserForm");
-    Map<String, Object> m = model.asMap();
-    m.put("requestUrl", utilController.getUrl(request));
-    if (userId != null) {
-      form.setId(userId);
-      User user = userRepository.findUserById(userId);
-      if (user != null) {
-        form = new UserBackingForm(user);
-        form.setCurrentPassword(user.getPassword());
-        m.put("userRoles", roleRepository.getAllRoles());
-        m.put("existingUser", true);
-      }
-      else {
-    	form = new UserBackingForm();
-        m.put("existingUser", false);
-      }
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.setValidator(new UserBackingFormValidator(binder.getValidator(), utilController, userRepository));
     }
-    m.put("allRoles",roleRepository.getAllRoles());
-    m.put("userRoles", form.getRoles());
-    m.put("editUserForm", form);
-    m.put("refreshUrl", utilController.getUrl(request));
-    // to ensure custom field names are displayed in the form
-    mv.addObject("model", m);
-    return mv;
-  }
 
-  @RequestMapping(value = "/addUser", method = RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_USERS+"')")
-  public ModelAndView
-        addUser(HttpServletRequest request,
-                 HttpServletResponse response,
-                 @ModelAttribute("editUserForm") @Valid UserBackingForm form,
-                 BindingResult result, Model model) {
-    ModelAndView mv = new ModelAndView("admin/editUserForm");
-    boolean success = false;
-    
-    String message = "";
-    Map<String, Object> m = model.asMap();
+    @RequestMapping(method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+    public 
+    Map<String, Object> configureUsersFormGenerator(HttpServletRequest request) {
 
-    if (result.hasErrors()) {
-      m.put("hasErrors", true);
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);      
-      success = false;
-      message = "Error creating new User. Please fix the errors noted below.";
-    } else {
-      try {
-        User user = form.getUser();
-        user.setIsDeleted(false);
-        user.setRoles(assignUserRoles(form));
-        user.setIsActive(true);
-        userRepository.addUser(user);
-        m.put("hasErrors", false);
-        success = true;
-        message = "User Successfully Added";
-        form = new UserBackingForm();
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        success = false;
-        message = "User Already exists.";
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        success = false;
-        message = "Internal Error. Please try again or report a Problem.";
-      }
+        Map<String, Object> map = new HashMap<String, Object>();
+        addAllUsersToModel(map);
+        map.put("userRoles", roleRepository.getAllRoles());
+        return map;
     }
-    m.put("allRoles", roleRepository.getAllRoles());
-    m.put("editUserForm", form);
-    m.put("existingUser", false);
-    m.put("refreshUrl", "editUserFormGenerator.html");
-    m.put("success", success);
-    m.put("errorMessage", message);
 
-    mv.addObject("model", m);
-    return mv;
-  }
-   
-  public List<Role> assignUserRoles(UserBackingForm userForm)
-  {
-	   List<String> userRoles=userForm.getUserRoles();
-       List<Role> roles=new ArrayList<Role>();
-       for(String roleId : userRoles)
-       {
-       	roles.add(userRepository.findRoleById(Long.parseLong(roleId)));
-       }
-       return roles;
-  }
-  @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_USERS+"')")
-  public ModelAndView updateUser(
-      HttpServletResponse response,
-      @ModelAttribute(value="editUserForm") @Valid UserBackingForm form,
-      BindingResult result, Model model) {
-
-    ModelAndView mv = new ModelAndView("admin/editUserForm");
-    boolean success = false;
-    String message = "";
-    Map<String, Object> m = model.asMap();
-    // only when the collection is correctly added the existingCollectedSample
-    // property will be changed
-    m.put("existingUser", true);
-    if (result.hasErrors()) {
-      m.put("allRoles", roleRepository.getAllRoles());
-      m.put("hasErrors", true);
-      form.setModifyPassword(false);
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      success = false;
-      message = "Error Updating user. Please fix the errors noted below";
+    @RequestMapping(value = "/form", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+    public 
+    Map<String, Object> editUserFormGenerator() {
+        UserBackingForm form = new UserBackingForm();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("allRoles", roleRepository.getAllRoles());
+        map.put("userRoles", form.getRoles());
+        map.put("editUserForm", form);
+        return map;
     }
-    else {
-      try {
+
+    @RequestMapping(method = RequestMethod.POST)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+    public ResponseEntity
+            addUser(@Valid @RequestBody UserBackingForm form) {
+        
+            User user = form.getUser();
+            String hashedPassword = getHashedPassword(user.getPassword());
+            user.setPassword(hashedPassword);
+            user.setIsDeleted(false);
+            user.setRoles(assignUserRoles(form));
+            user.setIsActive(true);
+            userRepository.addUser(user);
+            return new ResponseEntity(user, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+    public ResponseEntity updateUser(
+            @Valid @RequestBody UserBackingForm form,
+            @PathVariable Integer id) {
+
         form.setIsDeleted(false);
         User user = form.getUser();
-        if (form.isModifyPassword())
-          user.setPassword(form.getPassword());
-        else
-        	user.setPassword(form.getCurrentPassword());
+        user.setId(id);
+        boolean modifyPassword  = form.isModifyPassword();
+        if (modifyPassword) {
+            String hashedPassword = getHashedPassword(user.getPassword());
+            user.setPassword(hashedPassword);
+        }
         user.setRoles(assignUserRoles(form));
         user.setIsActive(true);
-        User existingUser = userRepository.updateUser(user, true);
-        if (existingUser == null) {
-          m.put("hasErrors", true);
-          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-          success = false;
-          m.put("existingUser", false);
-      }
-        else {
-          m.put("hasErrors", false);
-          success = true;
-          message = "User Successfully Updated";
-        }
-      } catch (EntityExistsException ex) {
-        ex.printStackTrace();
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        success = false;
-        message = "User Already exists.";
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        success = false;
-        message = "Internal Error. Please try again or report a Problem.";
-      }
-   }
+        userRepository.updateUser(user, modifyPassword);
     
- //   m.put("userRoles", form.getUserRole());
-    m.put("editUserForm", form);
-    m.put("success", success);
-    m.put("errorMessage", message);
+        return new ResponseEntity(user, HttpStatus.OK);
+    }
+    
+    
+    @RequestMapping(method = RequestMethod.PUT)
+    @PreAuthorize("hasRole('" + PermissionConstants.AUTHENTICATED+ "')")
+    public ResponseEntity updateLoginUserInfo(
+            @Valid @RequestBody UserBackingForm form) {
 
-    mv.addObject("model", m);
+        User user = form.getUser();
+        user.setId(getLoginUser().getId());
+        boolean modifyPassword  = form.isModifyPassword();
+        if (modifyPassword) {
+            String hashedPassword = getHashedPassword(user.getPassword());
+            user.setPassword(hashedPassword);
+        }
+        userRepository.updateBasicUserInfo(user, modifyPassword);
+        return new ResponseEntity(user, HttpStatus.OK);
+    }
+    
+            
+    @RequestMapping(value = "/login-user-details", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.AUTHENTICATED+ "' )" )
+    public ResponseEntity getUserDetails(){
+        User user =  getLoginUser();
+        return new ResponseEntity(new UserViewModel(user), HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+    public ResponseEntity deleteUser(@PathVariable Integer id){
+        
+        userRepository.deleteUserById(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+    
+       private void addAllUsersToModel(Map<String, Object> m) {
+        List<UserViewModel> users = userRepository.getAllUsers();
+        m.put("allUsers", users);
+    }
 
-    return mv;
-  }
-  
-	
-	
-	public String userRole(Integer id) {
-		String userRole = "";
-		User user=userRepository.findUserById(id);
-		List<Role> roles=user.getRoles();
-		if(roles!=null && roles.size() > 0){
-			for(Role r:roles){
-				userRole= userRole +" "+ r.getId();
-			}
-			
-		}
-		return userRole;
-	}
+    public List<Role> assignUserRoles(UserBackingForm userForm) {
+        List<String> userRoles = userForm.getUserRoles();
+        List<Role> roles = new ArrayList<Role>();
+        for (String roleId : userRoles) {
+            roles.add(userRepository.findRoleById(Long.parseLong(roleId)));
+        }
+        return roles;
+    }
+
+    public String userRole(Integer id) {
+        String userRole = "";
+        User user = userRepository.findUserById(id);
+        List<Role> roles = user.getRoles();
+        if (roles != null && roles.size() > 0) {
+            for (Role r : roles) {
+                userRole = userRole + " " + r.getId();
+            }
+
+        }
+        return userRole;
+    }
+    
+    private User getLoginUser(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userName = auth.getName(); //get logged in username
+        return userRepository.findUser(userName);
+    }
+    
+    private String getHashedPassword(String rawPassword) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(rawPassword);
+        return hashedPassword;
+    }
+
 }

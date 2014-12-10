@@ -1,29 +1,25 @@
 package backingform.validator;
 
+import backingform.ProductBackingForm;
+import backingform.ProductCombinationBackingForm;
+import backingform.RecordProductBackingForm;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import controller.UtilController;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
 import model.collectedsample.CollectedSample;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-
 import utils.CustomDateFormatter;
 import viewmodel.ProductViewModel;
-import backingform.FindProductBackingForm;
-import backingform.ProductBackingForm;
-import backingform.ProductCombinationBackingForm;
-import backingform.RecordProductBackingForm;
-import controller.UtilController;
 
 public class ProductBackingFormValidator implements Validator {
 
@@ -39,8 +35,7 @@ public class ProductBackingFormValidator implements Validator {
   @SuppressWarnings("unchecked")
   @Override
   public boolean supports(Class<?> clazz) {
-    return Arrays.asList(FindProductBackingForm.class,
-                         ProductBackingForm.class,
+    return Arrays.asList(ProductBackingForm.class,
                          ProductViewModel.class,
                          ProductCombinationBackingForm.class,
                          RecordProductBackingForm.class).contains(clazz);

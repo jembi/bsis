@@ -1,5 +1,6 @@
 package viewmodel;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -16,6 +17,7 @@ import utils.CustomDateFormatter;
 
 public class ProductViewModel {
 
+ @JsonIgnore
   private Product product;
 
   public ProductViewModel() {
@@ -37,12 +39,13 @@ public class ProductViewModel {
     return product.getId();
   }
 
+  @JsonIgnore
   public CollectedSample getCollectedSample() {
     return product.getCollectedSample();
   }
 
-  public ProductType getProductType() {
-    return product.getProductType();
+  public ProductTypeViewModel getProductType() {
+    return new ProductTypeViewModel(product.getProductType());
   }
   
   public String getNotes() {
@@ -71,6 +74,14 @@ public class ProductViewModel {
        )
       return "";
     return getProduct().getCollectedSample().getCollectionNumber();
+  }
+  
+  public String getCollectedSampleID() {
+    if (getProduct() == null || getProduct().getCollectedSample() == null ||
+        getProduct().getCollectedSample().getId() == null
+       )
+      return "";
+    return getProduct().getCollectedSample().getId().toString();
   }
 
   public String getAge() {
@@ -104,6 +115,7 @@ public class ProductViewModel {
     return CustomDateFormatter.getDateTimeString(product.getCreatedDate());
   }
 
+  @JsonIgnore
   public String getCreatedBy() {
     User user = product.getCreatedBy();
     if (user == null || user.getUsername() == null)
@@ -111,6 +123,7 @@ public class ProductViewModel {
     return user.getUsername();
   }
 
+  @JsonIgnore
   public String getLastUpdatedBy() {
     User user = product.getLastUpdatedBy();
     if (user == null || user.getUsername() == null)
@@ -122,6 +135,7 @@ public class ProductViewModel {
     return CustomDateFormatter.getDateTimeString(product.getIssuedOn());
   }
 
+  @JsonIgnore
   public RequestViewModel getIssuedTo() {
     ProductStatus status = product.getStatus();
     if (status == null)
@@ -136,6 +150,7 @@ public class ProductViewModel {
     return CustomDateFormatter.getDateTimeString(product.getDiscardedOn());
   }
 
+  @JsonIgnore
   public String getBloodGroup() {
     if (product == null || product.getCollectedSample() == null ||
         product.getCollectedSample().getCollectionNumber() == null
@@ -154,8 +169,8 @@ public class ProductViewModel {
                  .contains(product.getStatus());
   }
   
-  public String getDonationIdentificationNumber() {
-    return product.getDonationIdentificationNumber();
+  public String getComponentIdentificationNumber() {
+    return product.getComponentIdentificationNumber();
   }
   
 }

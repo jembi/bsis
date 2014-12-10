@@ -1,114 +1,99 @@
 package controller;
 
-import javax.servlet.http.HttpServletRequest;
-
-
-
-import javax.servlet.http.HttpServletResponse;
-
+import backingform.DonorCodeBackingForm;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.persistence.EntityExistsException;
+import javax.validation.Valid;
 import model.donor.Donor;
+import model.donorcodes.DonorCode;
+import model.donorcodes.DonorCodeGroup;
 import model.donorcodes.DonorDonorCode;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-
+import org.springframework.web.bind.annotation.RestController;
 import repository.DonorRepository;
 import utils.PermissionConstants;
-import backingform.DonorCodeBackingForm;
-import backingform.validator.DonorCodeBackingFormValidator;
-import javax.validation.Valid;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
+import viewmodel.DonorCodeViewModel;
+import viewmodel.DonorViewModel;
 
-
-@Controller
+@RestController
+@RequestMapping("donorcodes")
 public class DonorCodeController {
-	
-	  @Autowired
-	  private DonorRepository donorRepository;
-	  
-	  @Autowired
-	  private UtilController utilController;
-	  
-         @InitBinder
-         protected void initBinder(WebDataBinder binder) {
-                binder.setValidator(new DonorCodeBackingFormValidator(binder.getValidator(), donorRepository));
-          }
 
-	  @RequestMapping(value = "/updateDonorCodesFormGenerator", method = RequestMethod.GET)
-	  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONOR_CODE+"')")
-	  public ModelAndView updateDonorCodesForm(HttpServletRequest request  ,@RequestParam(value="donorId") Long donorId){
-		  ModelAndView modelAndView = new ModelAndView("donors/donorCodes/updateDonorCodes");  
-		  Donor donor = donorRepository.findDonorById(donorId);
-		  modelAndView.addObject("donor", donor);
-		  modelAndView.addObject("donorFields", utilController.getFormFieldsForForm("donor"));	  
-		  return modelAndView;
-		  
-	  }
-           @RequestMapping(value = "/addDonorCodeFormGenerator", method = RequestMethod.GET)
-	  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONOR_CODE+"')")
-              public ModelAndView addDonorCodeFormGenerator(HttpServletRequest request ,Model model ,@RequestParam(value="donorId") Long donorId){
-              ModelAndView modelAndView = new ModelAndView("donors/donorCodes/addDonorCodeForm");  
-	      model.addAttribute("addDonorCodeForm", new DonorCodeBackingForm());
-              modelAndView.addObject("donor",donorRepository.findDonorById(donorId)  );
-              modelAndView.addObject("donorCodeGroups",  donorRepository.getAllDonorCodeGroups());
-              return modelAndView;
-                
-          }
-	  
-	
-	  @RequestMapping(value = "/addDonorCodeForm", method = RequestMethod.POST)
-	  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONOR_CODE+"')")
-	  public ModelAndView addDonorCode(HttpServletRequest request,HttpServletResponse response, 
-			@ModelAttribute("addDonorCodeForm")  @Valid DonorCodeBackingForm form,
-                         BindingResult result){
-	      
-             
-                ModelAndView modelAndView = new ModelAndView("donors/donorCodes/donorCodesTable");  
-                  if (result.hasErrors()) {
-                      modelAndView.setViewName("donors/donorCodes/addDonorCodeForm");
-                      modelAndView.addObject("addDonorCodeForm",form);          
-                      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-	             return modelAndView;
-		
-                     }
-	         DonorDonorCode  donorDonorCode =  new DonorDonorCode();
-		 donorDonorCode.setDonorId(donorRepository.findDonorById(form.getDonorId()));
-		 donorDonorCode.setDonorCodeId(donorRepository.findDonorCodeById(form.getDonorCodeId()));
-		 donorRepository.saveDonorDonorCode(donorDonorCode);
-		 modelAndView.addObject("donorDonorCodes", donorRepository.findDonorDonorCodesOfDonorByDonorId(form.getDonorId()));
-	         return modelAndView;
-		  
-	  }
-	  
-	  @RequestMapping(value = "/donorCodesTable", method = RequestMethod.GET)
-	  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR_CODE+"')")
-	  public ModelAndView donorCodesTable(HttpServletRequest request,Long donorId){
-		
-		  ModelAndView modelAndView = new ModelAndView("donors/donorCodes/donorCodesTable");  
-		  modelAndView.addObject("donorDonorCodes", donorRepository.findDonorDonorCodesOfDonorByDonorId(donorId));
-		  return modelAndView;
-		  
-		  
-	  }
-	  
-	  @RequestMapping(value = "/deleteDonorCode", method = RequestMethod.GET)
-	  @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONOR_CODE+"')")
-	  public ModelAndView deleteDomorCode(@RequestParam(value="id") Long id){
-		  ModelAndView modelAndView = new ModelAndView("donors/donorCodes/donorCodesTable");  
-		  Donor donor = donorRepository.deleteDonorCode(id);
-		  modelAndView.addObject("donorDonorCodes", donorRepository.findDonorDonorCodesOfDonorByDonorId(donor.getId()));
-		  return modelAndView;
-		  
-	  }
-	  
-	  
+    @Autowired
+    private DonorRepository donorRepository;
+
+    @RequestMapping(value = "/form", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONOR_CODE + "')")
+    public 
+    List<DonorCodeGroup> addDonorCodeFormGenerator() {
+        return donorRepository.getAllDonorCodeGroups();
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONOR_CODE + "')")
+    public 
+    ResponseEntity<Map <String, Object>> addDonorCode(
+            @Valid @RequestBody DonorCodeBackingForm formObject) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        DonorDonorCode donorDonorCode = new DonorDonorCode();
+        Long donorId = formObject.getDonorId();
+        donorDonorCode.setDonor(donorRepository.findDonorById(donorId));
+        DonorCode donorCode = donorRepository.findDonorCodeById(formObject.getDonorCodeId());
+        donorDonorCode.setDonorCode(donorCode);
+        if( donorRepository.findDonorById(donorId).getDonorCodes().contains(donorCode))
+           throw new EntityExistsException("Donor Code is already assigned to donor");
+        donorRepository.saveDonorDonorCode(donorDonorCode);
+        List<DonorDonorCode>  donorDonorCodes = donorRepository.findDonorDonorCodesOfDonorByDonorId(donorId);
+        map.put("donorCodeViewModels", getDonorCodeViewModels(donorDonorCodes));
+        return new ResponseEntity<Map<String , Object>>(map , HttpStatus.OK);
+
+    }
+
+    @RequestMapping(value ="{donorId}" , method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_CODE + "')")
+    public 
+    ResponseEntity<Map <String, Object>> donorCodesTable(@PathVariable Long donorId) {
+
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        List<DonorDonorCode>  donorDonorCodes = donorRepository.findDonorDonorCodesOfDonorByDonorId(donorId);
+        map.put("donorCodeViewModels", getDonorCodeViewModels(donorDonorCodes));
+        return new ResponseEntity<Map<String , Object>>(map , HttpStatus.OK);
+
+    }
+
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @PreAuthorize("hasRole('" + PermissionConstants.VOID_DONOR_CODE + "')")
+    public 
+   ResponseEntity<Map <String, Object>> deleteDomorCode(@PathVariable Long id) {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        Donor donor = donorRepository.deleteDonorCode(id);
+        List<DonorDonorCode> donorDonorCodes = donorRepository.findDonorDonorCodesOfDonorByDonorId(donor.getId());
+        map.put("donorCodeViewModels", getDonorCodeViewModels(donorDonorCodes));
+        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    }
+   
+    private  List<DonorCodeViewModel> getDonorCodeViewModels(
+            List<DonorDonorCode> donorDonorCodes) {
+        if (donorDonorCodes == null) {
+            return Arrays.asList(new DonorCodeViewModel[0]);
+        }
+        List<DonorCodeViewModel> DonorCodeViewModel = new ArrayList<DonorCodeViewModel>();
+        for (DonorDonorCode donorDonorCode : donorDonorCodes) {
+            DonorCodeViewModel.add(new DonorCodeViewModel(donorDonorCode));
+        }
+        return DonorCodeViewModel;
+    }
+
 }

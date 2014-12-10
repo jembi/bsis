@@ -9,7 +9,9 @@ import java.util.List;
 import javax.persistence.Entity;
 
 import org.hibernate.cfg.Configuration;
-import org.hibernate.envers.configuration.AuditConfiguration;
+/** Deprecated - But I see no impact auditing
+ * import org.hibernate.envers.configuration.AuditConfiguration;
+*/
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -54,7 +56,7 @@ public class SchemaGenerator {
       cfg.addAnnotatedClass(clazz);
     }
     cfg.buildMappings();
-    AuditConfiguration.getFor(cfg);
+   // AuditConfiguration.getFor(cfg);
   }
 
   /**

@@ -2,80 +2,115 @@ package controller;
 
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.List;
+import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
-
 import model.collectedsample.CollectedSample;
-
+import model.collectionbatch.CollectionBatch;
+import model.testbatch.TestBatch;
+import backingform.TestResultBackingForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+import javax.validation.Valid;
 import repository.CollectedSampleRepository;
+import repository.TestBatchRepository;
+import repository.bloodtesting.BloodTestingRepository;
 import utils.PermissionConstants;
-import backingform.FindTestResultBackingForm;
+import viewmodel.CollectedSampleViewModel;
+import viewmodel.BloodTestingRuleResult;
 
-@Controller
+@RestController
+@RequestMapping("testresults")
 public class TestResultController {
 
   @Autowired
   private CollectedSampleRepository collectedSampleRepository;
 
   @Autowired
-  private UtilController utilController;
-
+  private TestBatchRepository testBatchRepository;
+  
+  @Autowired
+  private BloodTestingRepository bloodTestingRepository;
+  
   public TestResultController() {
   }
 
-  @RequestMapping(value = "/findTestResultFormGenerator", method = RequestMethod.GET)
+  @RequestMapping(value = "{donationIdentificationNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
-  public ModelAndView findTestResultFormGenerator(HttpServletRequest request) {
+  public ResponseEntity findTestResult(@PathVariable String donationIdentificationNumber ) {
 
-    FindTestResultBackingForm form = new FindTestResultBackingForm();
-
-    ModelAndView mv = new ModelAndView("testresults/findTestResultForm");
-    mv.addObject("findTestResultForm", form);
-
-    Map<String, Object> tips = new HashMap<String, Object>();
-    utilController.addTipsToModel(tips, "testResults.find");
-    mv.addObject("tips", tips);
-
-    // to ensure custom field names are displayed in the form
-    mv.addObject("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    mv.addObject("refreshUrl", getUrl(request));
-    return mv;
+    Map<String, Object> map = new HashMap<String, Object>();
+    CollectedSample c = collectedSampleRepository.findCollectedSampleByCollectionNumber(donationIdentificationNumber);
+    BloodTestingRuleResult results =  bloodTestingRepository.getAllTestsStatusForCollection(c.getId());
+    map.put("donation", new CollectedSampleViewModel(c));
+    map.put("testResults", results);
+    return new ResponseEntity(map, HttpStatus.OK);
   }
-
-  public static String getUrl(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString();
-    String queryString = req.getQueryString();   // d=789
-    if (queryString != null) {
-        reqUrl += "?"+queryString;
-    }
-    return reqUrl;
-  }
-
-  @RequestMapping("/findTestResult")
+  
+  @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
-  public ModelAndView findTestResult(HttpServletRequest request,
-      @ModelAttribute("findTestResultForm") FindTestResultBackingForm form) {
-
-    ModelAndView mv = new ModelAndView("testresults/testResultsForCollection");
-
-    String collectionNumber = form.getCollectionNumber();
-    CollectedSample c = null;
-    c = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber);
-    if (c == null) {
-      mv.addObject("collectionFound", false);
-    }
-    else {
-      mv.addObject("collectionFound", true);
-      mv.addObject("collectionId", c.getId());
-    }
-    return mv;
+  public ResponseEntity findTestResultsForTestBatch(HttpServletRequest request,
+		@RequestParam(value = "testBatch", required = true) Long testBatchId) {
+	  
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
+		List<CollectionBatch> collectionBatches = testBatch.getCollectionBatches();
+		List<Integer> donationBatchIds = new ArrayList<Integer>();
+		for(CollectionBatch collectionBatch : collectionBatches){
+			donationBatchIds.add(collectionBatch.getId());
+		}
+	
+	    List<BloodTestingRuleResult> ruleResults =
+	    		bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds);
+	
+		map.put("testResults", ruleResults);
+	
+		return new ResponseEntity(map, HttpStatus.OK);
   }
+  
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_TEST_OUTCOME+"')")
+  @RequestMapping(method = RequestMethod.POST)
+  public ResponseEntity<Map<String, Object>> saveTestResults(
+		@RequestBody @Valid TestResultBackingForm form) {
+	
+		HttpStatus httpStatus = HttpStatus.CREATED;        
+		boolean success = true;
+		String errorMessage = "";
+		Map<Long, Map<Long, String>> errorMap = null;
+		Map<String, Object> fieldErrors = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
+		CollectedSample collectedSample = collectedSampleRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
+	
+		Map<String, Object> results = null;
+		
+		results = bloodTestingRepository.saveBloodTestingResults(collectedSample.getId(), form.getTestResults(), true);
+	    if (results != null)
+	      errorMap = (Map<Long, Map<Long, String>>) results.get("errors");
+	    if (errorMap != null && !errorMap.isEmpty())
+	      success = false;
+	
+	    if (success) {
+	      map.put("testresults", results.get("bloodTestingResults"));
+	    }
+	    else {
+	      // errors found
+	      map.put("errorMap", errorMap);
+	      map.put("uninterpretableResults", results.get("uninterpretableResults"));
+	      map.put("errorMessage", "There were errors adding tests.");      
+	      httpStatus = HttpStatus.BAD_REQUEST;
+	    }
+	
+		map.put("success", success);
+		return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+  }
+
 }

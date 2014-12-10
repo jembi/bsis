@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
 import model.address.Address;
 import model.address.Contact;
 import model.bloodbagtype.BloodBagType;
@@ -33,10 +32,8 @@ import model.util.Gender;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RestController;
 import repository.BloodBagTypeRepository;
 import repository.CollectedSampleRepository;
 import repository.DonationTypeRepository;
@@ -50,9 +47,9 @@ import repository.RequestTypeRepository;
 import repository.SequenceNumberRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import utils.CustomDateFormatter;
-import utils.PermissionConstants;
 
-@Controller
+@RestController
+@RequestMapping("createdata")
 public class CreateDataController {
 
   @Autowired
@@ -335,13 +332,19 @@ public class CreateDataController {
       "Williamson", "Willis", "Wilson", "Wise", "Wolfe", "Wong", "Wood",
       "Woods", "Wright", "Yates", "Young", "Zimmerman" };
 
+  /**
+   * 
+   * #209 - method do nothing
+   *
   @RequestMapping("/admin-createData")
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DATA_SETUP+"')")
+  @Deprecated
   public ModelAndView createDataPage(HttpServletRequest request) {
 
     ModelAndView modelAndView = new ModelAndView("createData");
     return modelAndView;
   }
+  */
 
   public void createDonors(int numDonors) {
 
@@ -434,15 +437,13 @@ public class CreateDataController {
       CollectedSampleBackingForm collection = new CollectedSampleBackingForm();
       collection.setCollectionNumber(collectionNumbers.get(i));    
 
-      collection.setBloodBagType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()).getId().toString());
-      collection.setCollectionCenter(centers.get(Math.abs(random.nextInt()) % centers.size()).getId().toString());
-      collection.setCollectionSite(sites.get(Math.abs(random.nextInt()) % sites.size()).getId().toString());
+      collection.setPackType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()));
 
       String collectionDate = CustomDateFormatter.getDateTimeString(getRandomCollectionDate());
       collection.setCollectedOn(collectionDate);
       collection.setDonor(donors.get(Math.abs(random.nextInt()) % donors.size()));
       collection.setNotes("notes sample " + i);
-      collection.setDonationType(donationTypes.get(Math.abs(random.nextInt()) % donationTypes.size()).getId().toString());
+      collection.setDonationType(donationTypes.get(Math.abs(random.nextInt()) % donationTypes.size()));
       collection.setIsDeleted(false);
 
       collectedSamples.add(collection.getCollectedSample());
@@ -728,9 +729,10 @@ public class CreateDataController {
       form.setRequestNumber(requestNumbers.get(i));
       form.setRequestDate(CustomDateFormatter.getDateTimeString(requestDate));
       form.setRequiredDate(CustomDateFormatter.getDateTimeString(requiredDate));
+    /** issue - #225 straight object bindings
       form.setProductType(productTypes.get(random.nextInt(productTypes.size())).getId().toString());
       form.setRequestType(requestTypes.get(random.nextInt(requestTypes.size())).getId().toString());
-      form.setRequestSite(sites.get(random.nextInt(sites.size())).getId().toString());
+      form.setRequestSite(sites.get(random.nextInt(sites.size())).getId().toString());*/
       form.setNumUnitsRequested(1 + Math.abs(random.nextInt()) % 20);
       form.setIsDeleted(false);
       form.setFulfilled(false);

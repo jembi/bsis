@@ -1,12 +1,15 @@
 package viewmodel;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
 import java.util.Set;
-
 import model.bloodtesting.BloodTest;
 import model.worksheet.WorksheetType;
+import scala.Char;
 
 public class BloodTestViewModel {
 
+  @JsonIgnore
   private BloodTest rawBloodTest;
 
   public BloodTestViewModel(BloodTest rawBloodTest) {
@@ -33,8 +36,15 @@ public class BloodTestViewModel {
     return rawBloodTest.getTestName();
   }
 
-  public String getValidResults() {
-    return rawBloodTest.getValidResults();
+  public ArrayList<String> getValidResults() {
+      String validResults = rawBloodTest.getValidResults();
+      ArrayList<String> formatValidResults = new ArrayList<String>();
+      for(int i=0; i< validResults.length() ; i++){
+          char c = validResults.charAt(i);
+          if(c != ',')
+              formatValidResults.add(String.valueOf(c));
+      }
+      return  formatValidResults;
   }
 
   public String getCategory() {
@@ -42,7 +52,7 @@ public class BloodTestViewModel {
     if (rawBloodTest.getCategory() == null)
       return "";
     switch (rawBloodTest.getCategory()) {
-    case BLOODTYPING: category = "Blood typing";
+    case BLOODTYPING: category = "BLOODTYPING";
                       break;
     case TTI: category = "TTI";
               break;
@@ -53,6 +63,10 @@ public class BloodTestViewModel {
   public String getNegativeResults() {
     return rawBloodTest.getNegativeResults();
   }
+  
+  public String getPositiveResults(){
+      return rawBloodTest.getPositiveResults();
+  }
 
   public Boolean getIsActive() {
     return rawBloodTest.getIsActive();
@@ -62,6 +76,7 @@ public class BloodTestViewModel {
     return rawBloodTest.getRankInCategory();
   }
 
+  @JsonIgnore
   public Set<WorksheetType> getWorksheetTypes() {
     return rawBloodTest.getWorksheetTypes();
   }

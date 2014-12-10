@@ -162,20 +162,14 @@ public class LocationRepository {
     return query.getResultList();
   }
 
-  public Location findLocationByName(String locationName) {
+  public Location findLocationByName(String locationName) throws NoResultException, NonUniqueResultException{
     TypedQuery<Location> query = em.createQuery(
         "SELECT l FROM Location l where l.name= :locationName and l.isDeleted= :isDeleted",
         Location.class);
       query.setParameter("isDeleted", false);
       query.setParameter("locationName", locationName);
       Location location = null;
-      try {
-        location = query.getSingleResult();
-      } catch (NoResultException ex) {
-        ex.printStackTrace();
-      } catch (NonUniqueResultException ex) {
-        ex.printStackTrace();
-      }
+      location = query.getSingleResult();
       return location;
   }
 }

@@ -1,8 +1,8 @@
 package model.donorcodes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.Valid;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -24,90 +23,91 @@ import model.user.User;
 @Audited
 public class DonorDonorCode implements ModificationTracker{
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(nullable=false, updatable=false, insertable=false)
-	private Long id;
-	
+    @Column(nullable = false, updatable = false, insertable = false)
+    private Long id;
+
     @NotAudited
-	@ManyToOne
-	@JoinColumn(name="donorId",nullable= false,updatable = false)
-	private Donor donorId;
-	
+    @ManyToOne
+    @JoinColumn(name = "donorId", nullable = false, updatable = false)
+    private Donor donor;
+
     @NotAudited
-	@ManyToOne
-    @JoinColumn(name="donorCodeId",nullable= false,updatable = false)
-	private DonorCode donorCodeId;
+    @ManyToOne
+    @JoinColumn(name = "donorCodeId", nullable = false, updatable = false)
+    private DonorCode donorCode;
 
-	  @Valid
-	  private RowModificationTracker modificationTracker;
-	
-	  public DonorDonorCode() {
-		    modificationTracker = new RowModificationTracker();
-		  }
+    private RowModificationTracker modificationTracker;
 
-	public Long getId() {
-		return id;
-	}
+    public DonorDonorCode() {
+        modificationTracker = new RowModificationTracker();
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public Donor getDonorId() {
-		return donorId;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setDonorId(Donor donorId) {
-		this.donorId = donorId;
-	}
+    public Donor getDonor() {
+        return donor;
+    }
 
-	public DonorCode getDonorCodeId() {
-		return donorCodeId;
-	}
+    public void setDonor(Donor donor) {
+        this.donor = donor;
+    }
 
-	public void setDonorCodeId(DonorCode donorCodeId) {
-		this.donorCodeId = donorCodeId;
-	}
+    public DonorCode getDonorCode() {
+        return donorCode;
+    }
 
-
-	public Date getLastUpdated() {
-	    return modificationTracker.getLastUpdated();
-	  }
-
-	
-	  public Date getCreatedDate() {
-	    return modificationTracker.getCreatedDate();
-	  }
-
-	
-	public User getCreatedBy() {
-	    return modificationTracker.getCreatedBy();
-	  }
-
-	
-	public User getLastUpdatedBy() {
-	    return modificationTracker.getLastUpdatedBy();
-	  }
+    public void setDonorCode(DonorCode donorCode) {
+        this.donorCode = donorCode;
+    }
 
 
-	  public void setLastUpdated(Date lastUpdated) {
-	    modificationTracker.setLastUpdated(lastUpdated);
-	  }
+    public Date getLastUpdated() {
+        return modificationTracker.getLastUpdated();
+    }
 
-	  public void setCreatedDate(Date createdDate) {
-	    modificationTracker.setCreatedDate(createdDate);
-	  }
+    public Date getCreatedDate() {
+        return modificationTracker.getCreatedDate();
+    }
 
-	  public void setCreatedBy(User createdBy) {
-	    modificationTracker.setCreatedBy(createdBy);
-	  }
+    @JsonIgnore
+    public User getCreatedBy() {
+        return modificationTracker.getCreatedBy();
+    }
+
+    @JsonIgnore
+    public User getLastUpdatedBy() {
+        return modificationTracker.getLastUpdatedBy();
+    }
 
 
-	  public void setLastUpdatedBy(User lastUpdatedBy) {
-	    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
-	  }
+    @Override
+    public void setLastUpdated(Date lastUpdated) {
+        modificationTracker.setLastUpdated(lastUpdated);
+    }
 
-	
+    @Override
+    public void setCreatedDate(Date createdDate) {
+        modificationTracker.setCreatedDate(createdDate);
+    }
+
+    @Override
+    public void setCreatedBy(User createdBy) {
+        modificationTracker.setCreatedBy(createdBy);
+    }
+
+    @Override
+    public void setLastUpdatedBy(User lastUpdatedBy) {
+        modificationTracker.setLastUpdatedBy(lastUpdatedBy);
+    }
+
+
 	
 }

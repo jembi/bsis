@@ -1,15 +1,19 @@
 package backingform;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.validation.Valid;
-
+import java.util.Date;
+import java.util.List;
+import model.user.User;
 import model.collectionbatch.CollectionBatch;
 import model.location.Location;
-
+import model.collectedsample.CollectedSample;
 import org.apache.commons.lang3.StringUtils;
 
 public class CollectionBatchBackingForm {
 
   @Valid
+  @JsonIgnore
   private CollectionBatch collectionBatch;
 
   public CollectionBatchBackingForm() {
@@ -24,12 +28,12 @@ public class CollectionBatchBackingForm {
     this.collectionBatch = collectionBatch;
   }
 
-  public Integer getId() {
-    return collectionBatch.getId();
-  }
-
   public void setId(Integer id) {
     collectionBatch.setId(id);
+  }
+  
+  public Integer getId(){
+      return collectionBatch.getId();
   }
 
   public String getBatchNumber() {
@@ -40,51 +44,6 @@ public class CollectionBatchBackingForm {
     collectionBatch.setBatchNumber(batchNumber);
   }
 
-  public String getCollectionCenter() {
-    Location center = collectionBatch.getCollectionCenter();
-    if (center == null || center.getId() == null)
-      return null;
-    return center.getId().toString();
-  }
-
-  public String getCollectionSite() {
-    Location site = collectionBatch.getCollectionSite();
-    if (site == null || site.getId() == null)
-      return null;
-    return site.getId().toString();
-  }
-
-  public void setCollectionCenter(String center) {
-    if (StringUtils.isBlank(center)) {
-      collectionBatch.setCollectionCenter(null);
-    }
-    else {
-      Location l = new Location();
-      try {
-        l.setId(Long.parseLong(center));
-        collectionBatch.setCollectionCenter(l);
-      } catch (NumberFormatException ex) {
-        ex.printStackTrace();
-        collectionBatch.setCollectionCenter(null);
-      }
-    }
-  }
-
-  public void setCollectionSite(String collectionSite) {
-    if (StringUtils.isBlank(collectionSite)) {
-      collectionBatch.setCollectionSite(null);
-    }
-    else {
-      Location l = new Location();
-      try {
-        l.setId(Long.parseLong(collectionSite));
-        collectionBatch.setCollectionSite(l);
-      } catch (NumberFormatException ex) {
-        ex.printStackTrace();
-        collectionBatch.setCollectionSite(null);
-      }
-    }
-  }
 
   public String getNotes() {
     return collectionBatch.getNotes();
@@ -93,4 +52,49 @@ public class CollectionBatchBackingForm {
   public void setNotes(String notes) {
     collectionBatch.setNotes(notes);
   }
+  
+  public Boolean getIsClosed() {
+    return collectionBatch.getIsClosed();
+  }
+
+  public void setIsClosed(Boolean isClosed) {
+    collectionBatch.setIsClosed(isClosed);
+  }
+  
+  public void setDonorPanel(Long donorPanelId){
+    Location donorPanel = new Location();
+    donorPanel.setId(donorPanelId);
+    collectionBatch.setDonorPanel(donorPanel);
+  }
+
+  @JsonIgnore
+  public Date getLastUpdated() {
+    return collectionBatch.getLastUpdated();
+  }
+
+  @JsonIgnore
+  public Date getCreatedDate() {
+    return collectionBatch.getCreatedDate();
+  }
+
+  @JsonIgnore
+  public User getCreatedBy() {
+    return collectionBatch.getCreatedBy();
+  }
+
+  @JsonIgnore
+  public User getLastUpdatedBy() {
+    return collectionBatch.getLastUpdatedBy();
+  }
+  
+  @JsonIgnore
+  public List<CollectedSample> getCollectionsInBatch() {
+    return collectionBatch.getCollectionsInBatch();
+  }
+  
+  @JsonIgnore
+  public Integer getNumCollections() {
+    return collectionBatch.getCollectionsInBatch().size();
+  }
+
 }
