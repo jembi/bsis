@@ -424,8 +424,8 @@ public class CreateDataController {
   }
 
   void createCollectionsWithTestResults(int numCollections) {
-    List<Location> sites = locationRepository.getAllCollectionSites();
-    List<Location> centers = locationRepository.getAllCenters();
+    List<Location> sites = locationRepository.getAllDonorPanels();
+    List<Location> centers = locationRepository.getAllDonorPanels();
     List<Donor> donors = donorRepository.getAllDonors();
     List<DonationType> donationTypes = donorTypeRepository.getAllDonationTypes();
 
