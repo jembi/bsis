@@ -241,39 +241,31 @@
 	<changeSet id="20141117-0938" author="srikanthmalyala">
 		<comment>Add locations</comment>
 		<insert tableName = "Location">
-			<column name="name" value="Lusaka"/>
-			<column name="isCollectionCenter" value="1"/>
-			<column name="isCollectionSite" value="0"/>
+			<column name="name" value="Key North"/>
 			<column name="isMobileSite" value="0"/>
 			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="0"/>
+			<column name="isDonorPanel" value="1"/>
 			<column name="isDeleted" value="0"/>
 			<column name="notes" value=""/>
 		</insert>
 		<insert tableName = "Location">
-			<column name="name" value="Ndola"/>
-			<column name="isCollectionCenter" value="1"/>
-			<column name="isCollectionSite" value="1"/>
+			<column name="name" value="Key East"/>
 			<column name="isMobileSite" value="0"/>
-			<column name="isUsageSite" value="1"/>
-			<column name="isDonorPanel" value="0"/>
+			<column name="isUsageSite" value="0"/>
+			<column name="isDonorPanel" value="1"/>
 			<column name="isDeleted" value="0"/>
 			<column name="notes" value=""/>
 		</insert>
 		<insert tableName = "Location">
-			<column name="name" value="Livingstone"/>
-			<column name="isCollectionCenter" value="1"/>
-			<column name="isCollectionSite" value="1"/>
+			<column name="name" value="Key South"/>
 			<column name="isMobileSite" value="0"/>
-			<column name="isUsageSite" value="1"/>
+			<column name="isUsageSite" value="0"/>
 			<column name="isDonorPanel" value="1"/>
 			<column name="isDeleted" value="0"/>
 			<column name="notes" value=""/>
 		</insert>	
 		<insert tableName = "Location">
-			<column name="name" value="Luanshya"/>
-			<column name="isCollectionCenter" value="1"/>
-			<column name="isCollectionSite" value="0"/>
+			<column name="name" value="Key West"/>
 			<column name="isMobileSite" value="0"/>
 			<column name="isUsageSite" value="0"/>
 			<column name="isDonorPanel" value="1"/>
@@ -281,32 +273,34 @@
 			<column name="notes" value=""/>
 		</insert>
 		<insert tableName = "Location">
-			<column name="name" value="Kasama"/>
-			<column name="isCollectionCenter" value="1"/>
-			<column name="isCollectionSite" value="1"/>
+			<column name="name" value="Key Mobile"/>
+			<column name="isMobileSite" value="1"/>
+			<column name="isUsageSite" value="0"/>
+			<column name="isDonorPanel" value="1"/>
+			<column name="isDeleted" value="0"/>
+			<column name="notes" value=""/>
+		</insert>
+		<insert tableName = "Location">
+			<column name="name" value="General Clinic"/>
 			<column name="isMobileSite" value="0"/>
 			<column name="isUsageSite" value="1"/>
-			<column name="isDonorPanel" value="1"/>
-			<column name="isDeleted" value="0"/>
-			<column name="notes" value=""/>
-		</insert>
-		<insert tableName = "Location">
-			<column name="name" value="Chipata"/>
-			<column name="isCollectionCenter" value="1"/>
-			<column name="isCollectionSite" value="0"/>
-			<column name="isMobileSite" value="0"/>
-			<column name="isUsageSite" value="0"/>
 			<column name="isDonorPanel" value="0"/>
 			<column name="isDeleted" value="0"/>
 			<column name="notes" value=""/>
 		</insert>
 		<insert tableName = "Location">
-			<column name="name" value="Chingola"/>
-			<column name="isCollectionCenter" value="1"/>
-			<column name="isCollectionSite" value="1"/>
+			<column name="name" value="General Clinic #2"/>
 			<column name="isMobileSite" value="0"/>
 			<column name="isUsageSite" value="1"/>
-			<column name="isDonorPanel" value="1"/>
+			<column name="isDonorPanel" value="0"/>
+			<column name="isDeleted" value="0"/>
+			<column name="notes" value=""/>
+		</insert>	
+		<insert tableName = "Location">
+			<column name="name" value="General Clinic #3"/>
+			<column name="isMobileSite" value="0"/>
+			<column name="isUsageSite" value="1"/>
+			<column name="isDonorPanel" value="0"/>
 			<column name="isDeleted" value="0"/>
 			<column name="notes" value=""/>
 		</insert>

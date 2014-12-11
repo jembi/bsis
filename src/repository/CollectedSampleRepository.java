@@ -92,7 +92,7 @@ public class CollectedSampleRepository {
   }
 
   public List<Object> findCollectedSamples(
-      String collectionNumber, List<Integer> bloodBagTypeIds, List<Long> centerIds, List<Long> siteIds, String dateCollectedFrom,
+      String collectionNumber, List<Integer> bloodBagTypeIds, List<Long> panelIds, String dateCollectedFrom,
       String dateCollectedTo, boolean includeTestedCollections, Map<String, Object> pagingParams) throws ParseException {
 
     String queryStr = "";
@@ -100,15 +100,13 @@ public class CollectedSampleRepository {
       queryStr = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE " +
                  "c.collectionNumber = :collectionNumber AND " +
                  "c.bloodBagType.id IN :bloodBagTypeIds AND " +
-                 "c.collectionCenter.id IN :centerIds AND " +
-                 "c.collectionSite.id IN :siteIds AND " +
+                 "c.donorPanel.id IN :donorPanelIds AND " +
                  "c.collectedOn >= :dateCollectedFrom AND c.collectedOn <= :dateCollectedTo AND " +
                  "c.isDeleted=:isDeleted";
     } else {
       queryStr = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE " +
           "c.bloodBagType.id IN :bloodBagTypeIds AND " +
-          "c.collectionCenter.id IN :centerIds AND " +
-          "c.collectionSite.id IN :siteIds AND " +
+          "c.donorPanel.id IN :panelIds AND " +
           "c.collectedOn >= :dateCollectedFrom AND c.collectedOn <= :dateCollectedTo AND " +
           "c.isDeleted=:isDeleted";
     }
@@ -133,8 +131,7 @@ public class CollectedSampleRepository {
     }
     
     query.setParameter("bloodBagTypeIds", bloodBagTypeIds);
-    query.setParameter("centerIds", centerIds);
-    query.setParameter("siteIds", siteIds);
+    query.setParameter("panelIds", panelIds);
     query.setParameter("dateCollectedFrom", getDateCollectedFromOrDefault(dateCollectedFrom));
     query.setParameter("dateCollectedTo", getDateCollectedToOrDefault(dateCollectedTo));
              
@@ -237,24 +234,15 @@ public class CollectedSampleRepository {
 
   public Map<String, Map<Long, Long>> findNumberOfCollectedSamples(Date dateCollectedFrom,
       Date dateCollectedTo, String aggregationCriteria,
-      List<String> centers, List<String> sites, List<String> bloodGroups)throws ParseException{
+      List<String> panels, List<String> bloodGroups)throws ParseException{
 
-    List<Long> centerIds = new ArrayList<Long>();
-    if (centers != null) {
-      for (String center : centers) {
-        centerIds.add(Long.parseLong(center));
+    List<Long> panelIds = new ArrayList<Long>();
+    if (panels != null) {
+      for (String panel : panels) {
+        panelIds.add(Long.parseLong(panel));
       }
     } else {
-      centerIds.add((long)-1);
-    }
-
-    List<Long> siteIds = new ArrayList<Long>();
-    if (sites != null) {
-      for (String site : sites) {
-        siteIds.add(Long.parseLong(site));
-      }
-    } else {
-      siteIds.add((long)-1);
+    	panelIds.add((long)-1);
     }
 
     Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long,Long>>();
@@ -264,13 +252,12 @@ public class CollectedSampleRepository {
 
     TypedQuery<Object[]> query = em.createQuery(
         "SELECT count(c), c.collectedOn, c.bloodAbo, c.bloodRh FROM CollectedSample c WHERE " +
-        "c.collectionCenter.id IN (:centerIds) AND c.collectionSite.id IN (:siteIds) AND " +
+        "c.donorPanel.id IN (:panelIds) AND " +
         "c.collectedOn BETWEEN :dateCollectedFrom AND " +
         ":dateCollectedTo AND (c.isDeleted= :isDeleted) GROUP BY " +
         "bloodAbo, bloodRh, collectedOn", Object[].class);
 
-    query.setParameter("centerIds", centerIds);
-    query.setParameter("siteIds", siteIds);
+    query.setParameter("panelIds", panelIds);
     query.setParameter("isDeleted", Boolean.FALSE);
 
     query.setParameter("dateCollectedFrom", dateCollectedFrom);
@@ -368,28 +355,6 @@ public class CollectedSampleRepository {
     //em.flush();
     em.refresh(product);
     return collectedSample;
-  }
-
-  public List<CollectedSample> findCollectedSampleByCenters(
-      List<Long> centerIds, String dateCollectedFrom, String dateCollectedTo)throws ParseException{
-    TypedQuery<CollectedSample> query = em
-        .createQuery(
-            "SELECT c FROM CollectedSample c WHERE " +
-            "c.collectionCenter.id IN (:centers) and " +
-            "((c.collectedOn is NULL) or " +
-            " (c.collectedOn >= :fromDate and c.collectedOn <= :toDate)) and " +
-            "c.isDeleted= :isDeleted",
-            CollectedSample.class);
-
-    Date from = getDateCollectedFromOrDefault(dateCollectedFrom);
-    Date to = getDateCollectedToOrDefault(dateCollectedTo);
-
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("centers", centerIds);
-    query.setParameter("fromDate", from);
-    query.setParameter("toDate", to);
-
-    return query.getResultList();
   }
 
   public List<CollectedSample> addAllCollectedSamples(List<CollectedSample> collectedSamples) {

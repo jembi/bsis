@@ -89,7 +89,7 @@ public class CollectedSampleController {
       
       row.add(collection.getId().toString());
 
-      for (String property : Arrays.asList("collectionNumber", "collectedOn", "bloodBagType", "collectionCenter", "collectionSite")) {
+      for (String property : Arrays.asList("collectionNumber", "collectedOn", "bloodBagType", "donorPanel")) {
         if (formFields.containsKey(property)) {
           Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
           if (properties.get("hidden").equals(false)) {
@@ -249,8 +249,7 @@ public class CollectedSampleController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public  Map<String, Object> findCollectionPagination(
      @RequestParam(value = "collectionNumber", required = false)  String collectionNumber,
-     @RequestParam(value = "centers",required = false)  List<Long> centerIds,
-     @RequestParam(value = "sites",required = false)  List<Long> siteIds,
+     @RequestParam(value = "panels",required = false)  List<Long> panelIds,
      @RequestParam(value = "bloodBagTypes",required = false)  List<Integer> bloodBagTypeIds,
      @RequestParam(value = "dateCollectedFrom", required = false)  String dateCollectedFrom,
      @RequestParam(value = "dateCollectedTo", required = false)  String dateCollectedTo,
@@ -275,7 +274,7 @@ public class CollectedSampleController {
     List<Object> results;
           results = collectedSampleRepository.findCollectedSamples(
                   collectionNumber,
-                  bloodBagTypeIds, centerIds, siteIds,
+                  bloodBagTypeIds, panelIds,
                   dateCollectedFrom, dateCollectedTo, includeTestedCollections, pagingParams);
   
     @SuppressWarnings("unchecked")

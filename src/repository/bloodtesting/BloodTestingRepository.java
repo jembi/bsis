@@ -1018,35 +1018,25 @@ public class BloodTestingRepository {
 	public Map<String, Map<Long, Long>> findNumberOfPositiveTests(
 			List<String> ttiTests, Date dateCollectedFrom,
 			Date dateCollectedTo, String aggregationCriteria,
-			List<String> centers, List<String> sites) throws ParseException {
+			List<String> panels) throws ParseException {
 		TypedQuery<Object[]> query = em
 				.createQuery(
 						"SELECT count(t), c.collectedOn, t.bloodTest.testNameShort FROM BloodTestResult t join t.bloodTest bt join t.collectedSample c WHERE "
 								+ "bt.id IN (:ttiTestIds) AND "
 								+ "t.result != :positiveResult AND "
-								+ "c.collectionCenter.id IN (:centerIds) AND "
-								+ "c.collectionSite.id IN (:siteIds) AND "
+								+ "c.donorPanel.id IN (:panelIds) AND "
 								+ "c.collectedOn BETWEEN :dateCollectedFrom AND :dateCollectedTo "
 								+ "GROUP BY bt.testNameShort, c.collectedOn",
 						Object[].class);
 
-		List<Long> centerIds = new ArrayList<Long>();
-		if (centers != null) {
-			for (String center : centers) {
-				centerIds.add(Long.parseLong(center));
-			}
-		} else {
-			centerIds.add((long) -1);
-		}
-
-		List<Long> siteIds = new ArrayList<Long>();
-		if (ttiTests != null) {
-			for (String site : sites) {
-				siteIds.add(Long.parseLong(site));
-			}
-		} else {
-			siteIds.add((long) -1);
-		}
+		List<Long> panelIds = new ArrayList<Long>();
+	    if (panels != null) {
+	      for (String panel : panels) {
+	    	panelIds.add(Long.parseLong(panel));
+	      }
+	    } else {
+	      panelIds.add((long)-1);
+	    }
 
 		List<Integer> ttiTestIds = new ArrayList<Integer>();
 		if (ttiTests != null) {
@@ -1057,8 +1047,7 @@ public class BloodTestingRepository {
 			ttiTestIds.add(-1);
 		}
 
-		query.setParameter("centerIds", centerIds);
-		query.setParameter("siteIds", siteIds);
+		query.setParameter("panelIds", panelIds);
 		query.setParameter("ttiTestIds", ttiTestIds);
 		query.setParameter("positiveResult", "+");
 

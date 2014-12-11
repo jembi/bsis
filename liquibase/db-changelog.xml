@@ -993,5 +993,13 @@
 			<column name="bleedEndTime" type="DATETIME"></column>
 		</addColumn>
 	</changeSet>
+	
+	<!-- Remove isCollectionCenter & isCollectionSite fields from Location -->
+	<changeSet id="20141211-1520" author="danfuterman">
+		<dropColumn columnName="isCollectionCenter" tableName="Location"/>
+		<dropColumn columnName="isCollectionCenter" tableName="Location_AUD"/>
+		<dropColumn columnName="isCollectionSite" tableName="Location"/>
+		<dropColumn columnName="isCollectionSite" tableName="Location_AUD"/>
+	</changeSet>
 
 </databaseChangeLog>

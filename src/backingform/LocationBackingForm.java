@@ -37,22 +37,6 @@ public class LocationBackingForm {
         location.setName(name);
     }
 
-    public Boolean getIsCollectionCenter() {
-        return location.getIsCollectionCenter();
-    }
-
-    public void setIsCollectionCenter(Boolean isCollectionCenter) {
-        location.setIsCollectionCenter(isCollectionCenter);
-    }
-
-    public Boolean getIsDonationSite() {
-        return location.getIsCollectionSite();
-    }
-
-    public void setIsDonationSite(Boolean isCollectionSite) {
-        location.setIsCollectionSite(isCollectionSite);
-    }
-
     public Boolean getIsUsageSite() {
         return location.getIsUsageSite();
     }
@@ -75,6 +59,14 @@ public class LocationBackingForm {
     
     public void setIsDonorPanel(Boolean isDonorPanel){
         location.setIsDonorPanel(isDonorPanel);
+    }
+    
+    public Boolean getIsDeleted(){
+        return location.getIsDeleted();
+    }
+    
+    public void setIsDeleted(Boolean isDeleted){
+        location.setIsDeleted(isDeleted);
     }
     
     public String getNotes(){
