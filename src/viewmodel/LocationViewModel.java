@@ -19,17 +19,11 @@ public class LocationViewModel {
 	   return "";
     return location.getName();
   }
-
-  public String getIsCollectionCenter() {
-	if (location.getIsCollectionCenter() == null)
-	   return "";
-    return location.getIsCollectionCenter().toString();
-  }
-
-  public String getIsCollectionSite() {
-	if (location.getIsCollectionSite() == null)
+  
+  public String getIsDeleted() {
+	if (location.getIsDeleted() == null)
 		return "";
-    return location.getIsCollectionSite().toString();
+    return location.getIsDeleted().toString();
   }
 
   public String getIsUsageSite() {
