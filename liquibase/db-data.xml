@@ -671,7 +671,7 @@
 			<column name="isAdmin" value="0"></column>
 			<column name="isDeleted" value="0"></column>
 			<column name="isStaff" value="1"></column>
-			<column name="password" value="$2a$10$Qn3GyGwmaSt.oBtLfAT.9.4OVHQdjaj/APBj0UE13Uieyk3Fs6/cq"></column>
+			<column name="password" value="$2a$10$ar6Wj.Clf/BDJOdlr.aRzerFBNt12JkGzaoP6IlSx5L2cKpIloRlO"></column>
 			<column name="username" value="donorclinicstaff"></column>
 		</insert>
 		<insert tableName="User_Role">
