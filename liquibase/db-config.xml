@@ -1630,6 +1630,26 @@
        <column name="roles_id" value="10"></column>
     </insert>
     <insert tableName="Permission_Role">
+       <column name="permissions_id" value="62"></column>
+       <column name="roles_id" value="11"></column>
+    </insert>
+    <insert tableName="Permission_Role">
+       <column name="permissions_id" value="62"></column>
+       <column name="roles_id" value="12"></column>
+    </insert>
+    <insert tableName="Permission_Role">
+       <column name="permissions_id" value="62"></column>
+       <column name="roles_id" value="13"></column>
+    </insert>
+    <insert tableName="Permission_Role">
+       <column name="permissions_id" value="62"></column>
+       <column name="roles_id" value="14"></column>
+    </insert>
+    <insert tableName="Permission_Role">
+       <column name="permissions_id" value="62"></column>
+       <column name="roles_id" value="15"></column>
+    </insert>
+    <insert tableName="Permission_Role">
        <column name="permissions_id" value="63"></column>
        <column name="roles_id" value="1"></column>
     </insert>
