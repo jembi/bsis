@@ -49,7 +49,7 @@ public class TestBatchController {
     }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TESTING_INFORMATION+"')")
   public ResponseEntity findAndAddTestBatchFormGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();

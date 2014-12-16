@@ -38,7 +38,7 @@ public class DeferralController {
     private DonorRepository donorRepository;
 
     @RequestMapping(value = "/form", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.ADD_DEFERRAL + "')")
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
     public 
     Map<String, Object> deferDonorFormGenerator() {
 

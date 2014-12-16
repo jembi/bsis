@@ -148,7 +148,7 @@ public class DonorController {
   }
 
     @RequestMapping(method = RequestMethod.POST)
-    @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONOR + "')")
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
     public
             ResponseEntity<Map<String, Object>>
             addDonor(@Valid @RequestBody DonorBackingForm form) {
