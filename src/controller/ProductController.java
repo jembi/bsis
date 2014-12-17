@@ -99,6 +99,7 @@ public class ProductController {
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public   Map<String, Object> productSummaryGenerator(HttpServletRequest request, 
       @PathVariable Long id) {
 
