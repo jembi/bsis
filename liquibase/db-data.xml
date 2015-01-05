@@ -859,7 +859,7 @@
 			<column name="roles_id" value="13"></column>
 		</insert>
 	</changeSet>
-
+	
 	<changeSet id="20141117-1430" author="srikanthmalyala">
 		<comment>Add blood group serology staff user</comment>
 		<insert tableName="User">
@@ -871,7 +871,7 @@
 			<column name="isAdmin" value="0"></column>
 			<column name="isDeleted" value="0"></column>
 			<column name="isStaff" value="1"></column>
-			<column name="password" value="$2a$10$Bb5D6.MC7YTvHo0W2cl/N.YyrNgUK/1OiWuJz/hZrgiYyd9vUMjeq"></column>
+			<column name="password" value="$2a$10$cIOYMi3Zglj.w5enfhcIUOChXvXFMYxjMexCgoXFrOLNBV0H8bDLC"></column>
 			<column name="username" value="serologystaff"></column>
 		</insert>
 		<insert tableName="User_Role">

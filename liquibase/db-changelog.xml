@@ -313,7 +313,7 @@
 	<!-- For issue 118[improve admin UI to manage users ] -->
 	<changeSet id="20140203-1608" author="srikanthmalyala">
 		<insert tableName="FormField">
-			<column name="form" value="user"></column>
+			<column name="form" value="User"></column>
 			<column name="FIELD" value="username"></column>
 			<column name="defaultDisplayName" value="Username"></column>
 			<column name="defaultValue" value=""></column>
@@ -332,7 +332,7 @@
 	<!-- For issue 118[improve admin UI to manage users ] -->
 	<changeSet id="20140203-1615" author="srikanthmalyala">
 		<insert tableName="FormField">
-			<column name="form" value="user"></column>
+			<column name="form" value="User"></column>
 			<column name="FIELD" value="firstName"></column>
 			<column name="defaultDisplayName" value="Firstname"></column>
 			<column name="defaultValue" value=""></column>
@@ -348,7 +348,7 @@
 		</insert>
 		
 		<insert tableName="FormField">
-			<column name="form" value="user"></column>
+			<column name="form" value="User"></column>
 			<column name="FIELD" value="lastname"></column>
 			<column name="defaultDisplayName" value="Lastname"></column>
 			<column name="defaultValue" value=""></column>
