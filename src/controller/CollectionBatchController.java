@@ -78,7 +78,7 @@ public class CollectionBatchController {
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION_BATCH+"')")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_INFORMATION+"')")
   public   Map<String, Object> addCollectionBatchFormGenerator(HttpServletRequest request) {
 
     CollectionBatchBackingForm form = new CollectionBatchBackingForm();

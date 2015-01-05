@@ -99,6 +99,7 @@ public class ProductController {
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public   Map<String, Object> productSummaryGenerator(HttpServletRequest request, 
       @PathVariable Long id) {
 
@@ -114,7 +115,7 @@ public class ProductController {
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT_INFORMATION+"')")
   public  Map<String, Object> findProductFormGenerator(HttpServletRequest request) {
     Map<String, Object> map = new HashMap<String, Object>();
     addEditSelectorOptions(map);

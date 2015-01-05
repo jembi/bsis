@@ -35,7 +35,7 @@ public class DonorCodeController {
     private DonorRepository donorRepository;
 
     @RequestMapping(value = "/form", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONOR_CODE + "')")
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
     public 
     List<DonorCodeGroup> addDonorCodeFormGenerator() {
         return donorRepository.getAllDonorCodeGroups();

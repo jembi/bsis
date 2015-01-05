@@ -123,7 +123,7 @@ public class CollectedSampleController {
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION+"')")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_INFORMATION+"')")
   public  Map<String, Object> addCollectionFormGenerator(HttpServletRequest request) {
 
     CollectedSampleBackingForm form = new CollectedSampleBackingForm();

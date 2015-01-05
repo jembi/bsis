@@ -49,7 +49,7 @@ public class TestBatchController {
     }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TESTING_INFORMATION+"')")
   public ResponseEntity findAndAddTestBatchFormGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
@@ -59,7 +59,7 @@ public class TestBatchController {
   }
   
     @RequestMapping(method = RequestMethod.POST)
-    @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
+    @PreAuthorize("hasRole('"+PermissionConstants.ADD_TEST_BATCH+"')")
     public ResponseEntity addTestBatch(@Valid @RequestBody TestBatchBackingForm form) {
         
         TestBatch testBatch = testBatchRepository.saveTestBatch(form.getTestBatch(), getNextTestBatchNumber());
@@ -67,7 +67,7 @@ public class TestBatchController {
     }
     
     @RequestMapping(value = "{id}",  method = RequestMethod.GET)
-    @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
+    @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")
     public ResponseEntity getTestBatchById(@PathVariable Long id){
         
         Map<String, Object> map = new HashMap<String, Object>();
@@ -78,7 +78,7 @@ public class TestBatchController {
     }
     
     @RequestMapping(value = "{id}",  method = RequestMethod.PUT)
-    @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
+    @PreAuthorize("hasRole('"+PermissionConstants.EDIT_TEST_BATCH+"')")
     public ResponseEntity updateTestBatch(@PathVariable Long id,
             @RequestBody TestBatchBackingForm form){
         
@@ -89,7 +89,7 @@ public class TestBatchController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
+    @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")
     public ResponseEntity findTestBatchPagination(
             @RequestParam(value = "status", required = false) String status,
             @RequestParam(value = "createdBeforeDate", required = false) String createdBeforeDate,
@@ -110,7 +110,7 @@ public class TestBatchController {
     }
     
     @RequestMapping(method = RequestMethod.DELETE)
-    @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
+    @PreAuthorize("hasRole('"+PermissionConstants.VOID_TEST_BATCH+"')")
     public ResponseEntity deleteTestBatchById(Long id){
         testBatchRepository.deleteTestBatch(id);
         return  new ResponseEntity(HttpStatus.NO_CONTENT);
