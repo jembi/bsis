@@ -61,6 +61,12 @@ public class PermissionConstants {
 	public static final String ADD_BLOOD_TYPING_OUTCOME = "Add Blood Typing Outcome";
 	public static final String VIEW_BLOOD_TYPING_OUTCOME = "View Blood Typing Outcome";
 	
+	// Test Batch Permissions
+	public static final String ADD_TEST_BATCH  = "Add Test Batch";
+	public static final String VIEW_TEST_BATCH = "View Test Batch";
+	public static final String EDIT_TEST_BATCH = "Edit Test Batch";
+	public static final String VOID_TEST_BATCH = "Void Test Batch";
+	
 	// Blood Bank Staff Permissions
 	public static final String BLOOD_CROSS_MATCH_CHECK = "Blood Cross Match Check";
 	public static final String ISSUE_COMPONENT= "Issue Component";
@@ -112,7 +118,9 @@ public class PermissionConstants {
 	public static final String VIEW_DISCARD_INFORMATION = "View Discard Information";
 	public static final String VIEW_REPORTING_INFORMATION = "View Reporting Information";
 	public static final String VIEW_ADMIN_INFORMATION = "View Admin Information";
-        public static final String AUTHENTICATED = "Authenticated";
+    
+	//General Authenticated Permission
+	public static final String AUTHENTICATED = "Authenticated";
         
         
 

@@ -2,11 +2,8 @@ package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import model.bloodtesting.BloodTest;
+import model.bloodtesting.BloodTestCategory;
 
-/**
- *
- * @author srikanth
- */
 public class BloodTestBackingForm {
 
     @JsonIgnore
@@ -14,17 +11,19 @@ public class BloodTestBackingForm {
 
     private Integer numberOfConfirmatoryTests;
 
-    private String bloodTestCategory;
-
     public BloodTestBackingForm() {
         bloodTest = new BloodTest();
     }
 
-    public BloodTest getBloosTest() {
+    public BloodTest getBloodTest() {
         return bloodTest;
     }
+    
+    public void setId(Integer id){
+        bloodTest.setId(id);
+    }
 
-    public void setBloosTest(BloodTest bloodTest) {
+    public void setBloodTest(BloodTest bloodTest) {
         this.bloodTest = bloodTest;
     }
 
@@ -36,16 +35,8 @@ public class BloodTestBackingForm {
         return bloodTest.getTestNameShort();
     }
 
-    public BloodTest getBloodTest() {
-        return bloodTest;
-    }
-
     public Integer getNumberOfConfirmatoryTests() {
         return numberOfConfirmatoryTests;
-    }
-
-    public void setBloodTest(BloodTest bloodTest) {
-        this.bloodTest = bloodTest;
     }
 
     public void setNumberOfConfirmatoryTests(Integer numberOfConfirmatoryTests) {
@@ -60,12 +51,28 @@ public class BloodTestBackingForm {
         bloodTest.setTestNameShort(testNameShort);
     }
 
-    public String getBloodTestCategory() {
-        return bloodTestCategory;
+    public void setBloodTestCategory(String Category) {
+        bloodTest.setCategory(BloodTestCategory.valueOf(Category));
     }
-
-    public void setBloodTestCategory(String bloodTestCategory) {
-        this.bloodTestCategory = bloodTestCategory;
+    
+    public void setValidResults(String validResults){
+        bloodTest.setValidResults(validResults);
+    }
+    
+    public void setIsActive(Boolean isActive){
+        bloodTest.setIsActive(isActive);
+    }
+    
+    public void setNegativeResults(String negativeResults){
+        bloodTest.setNegativeResults(negativeResults);
+    }
+    
+    public void setPositiveResults(String positiveResults){
+        bloodTest.setNegativeResults(positiveResults);
+    }
+    
+    public void setRankInCategory(Integer rankInCategory){
+        bloodTest.setRankInCategory(rankInCategory);
     }
 
 }

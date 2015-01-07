@@ -109,23 +109,6 @@ public class RequestsController {
     map.put("request", requestViewModel);
     return map;
   }
-
-  /**
-   * 
-   *issue - #209 
-   * Reason - duplicate method refer /form
-   *
-  @RequestMapping(value = "find/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REQUEST+"')")
-  public  Map<String, Object> findRequestFormGenerator(HttpServletRequest request) {
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    addEditSelectorOptions(map);
-    // to ensure custom field names are displayed in the form
-    map.put("requestFields", utilController.getFormFieldsForForm("request"));
-    return map;
-  }
-*/
  
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REQUEST+"')")
@@ -268,26 +251,6 @@ public class RequestsController {
     return map;
   }
  
-  /*
-    issue - dupicat eend point , refer /form
- 
-  @RequestMapping(value = "{id}/edit/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_REQUEST+"')")
-  public  Map<String, Object> editRequestFormGenerator(HttpServletRequest request,
-      @PathVariable Long id) {
-
-    Request productRequest = requestRepository.findRequestById(id);
-    RequestBackingForm form = new RequestBackingForm(productRequest);
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("editRequestForm", form);
-    addEditSelectorOptions(map);
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
-    // to ensure custom field names are displayed in the form
-    map.put("requestFields", formFields);
-    return map;
-  }
-*/
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_REQUEST+"')")
   public ResponseEntity<Map<String, Object>> addRequest(@Valid @RequestBody RequestBackingForm form) {
@@ -350,7 +313,6 @@ public class RequestsController {
      return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
-
   @RequestMapping(value = "{id}/matchingcomponents", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.BLOOD_CROSS_MATCH_CHECK+"')")
   public  Map<String, Object> findMatchingProductsForRequest(
@@ -374,28 +336,5 @@ public class RequestsController {
        requestRepository.issueProductsToRequest(id, componentName);
        return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
-  
-  /*
-  @RequestMapping("/findRequest")
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REQUEST+"')")
-  public  Map<String, Object> findRequest(HttpServletRequest request,
-      ,
-      @ModelAttribute("findRequestForm") FindRequestBackingForm form,
-      BindingResult result) {
 
-    List<Request> productRequests = Arrays.asList(new Request[0]);
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    Map<String, Object> m = model.asMap();
-    m.put("requestFields", utilController.getFormFieldsForForm("request"));
-    m.put("allRequests", getRequestViewModels(productRequests));
-    m.put("nextPageUrl", getNextPageUrl(request));
-    addEditSelectorOptions(m);
-
-    map.put("model", m);
-    return map;
-
-  }
-  */
-  
 }

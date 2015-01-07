@@ -71,16 +71,6 @@ public class LocationRepository {
     em.flush();
   }
 
-  public List<String> getAllCentersAsString() {
-    List<Location> locations = getAllCenters();
-    List<String> locationNames = new ArrayList<String>();
-    for (Location l : locations) {
-      if (l.getIsCollectionCenter())
-        locationNames.add(l.getName());
-    }
-    return locationNames;
-  }
-
   public List<String> getAllUsageSitesAsString() {
     List<Location> locations = getAllUsageSites();
     List<String> locationNames = new ArrayList<String>();
@@ -91,24 +81,6 @@ public class LocationRepository {
     return locationNames;
   }
 
-  public Location getCollectionSiteByName(String name) {
-    List<Location> locations = getAllCollectionSites();
-    for (Location l : locations) {
-      if (l.getName().equals(name))
-        return l;
-    }
-    return null;
-  }
-
-  public Location getCenterByName(String name) {
-    List<Location> locations = getAllCenters();
-    for (Location l : locations) {
-      if (l.getName().equals(name))
-        return l;
-    }
-    return null;
-  }
-
   public Long getIDByName(String name) {
     List<Location> locations = getAllLocations();
     for (Location l : locations) {
@@ -116,23 +88,6 @@ public class LocationRepository {
         return l.getId();
     }
     return (long) -1;
-  }
-
-  public List<Location> getAllCollectionSites() {
-    TypedQuery<Location> query = em.createQuery(
-        "SELECT l from Location l where l.isCollectionSite=:isCollectionSite and l.isDeleted=:isDeleted",
-        Location.class);
-    query.setParameter("isCollectionSite", true);
-    query.setParameter("isDeleted", false);
-    return query.getResultList();
-  }
-
-  public List<Location> getAllCenters() {
-    TypedQuery<Location> query = em
-        .createQuery("SELECT l FROM Location l where l.isCollectionCenter=:isCollectionCenter and l.isDeleted= :isDeleted", Location.class);
-    query.setParameter("isCollectionCenter", true);
-    query.setParameter("isDeleted", false);
-    return query.getResultList();
   }
 
   public void saveAllLocations(List<Location> locations) {

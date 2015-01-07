@@ -108,21 +108,7 @@ public class UsageController {
 
         return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
-/**
- * issue - isue #209 
- * eson - duplicate method refer end point "/add/form"
-  @RequestMapping(value = "/addUsageByRequestFormGenerator", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public Map<String, Object> addUsageByRequestFormGenerator(HttpServletRequest request) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
-    addEditSelectorOptions(map);
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
-    // to ensure custom field names are displayed in the form
-    map.put("usageFields", formFields);
-    return map;
-  }
-*/
   @RequestMapping(value="/find/components/{requestNumber}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public  ResponseEntity<Map<String, Object>> findIssuedProductsForRequest(
@@ -134,29 +120,7 @@ public class UsageController {
     map.put("productFields", utilController.getFormFieldsForForm("product"));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
-  
-/**
- * dupiv=cate - method - #209
-  @RequestMapping(value = "/components/usage/add/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public Map<String, Object> addUsageForProductFormGenerator(HttpServletRequest request,
-      @RequestParam(value="productId") Long productId) {
 
-    ProductUsageBackingForm form = new ProductUsageBackingForm();
-
-    Product product = productRepository.findProductById(productId);
-    form.setProduct(product);
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("addUsageForProductForm", form);
-    map.put("productType", product.getProductType().getProductTypeNameShort());
-    addEditSelectorOptions(map);
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
-    // to ensure custom field names are displayed in the form
-    map.put("usageFields", formFields);
-    return map;
-  }
-*/
     @RequestMapping(value = "/forproduct", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
     public ResponseEntity<Map<String, Object>> addUsageForProduct(
