@@ -36,7 +36,7 @@ public class PackTypeViewModel {
         return packType.getCanSplit();
     }
     
-    public Boolean get(){
+    public Boolean getIsDeleted(){
         return packType.getIsDeleted();
     }
     
