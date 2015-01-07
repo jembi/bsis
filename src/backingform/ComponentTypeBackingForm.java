@@ -54,4 +54,25 @@ public class ComponentTypeBackingForm {
     public void setProductTypeCombinations(Set<ProductTypeCombination> productTypeCombinations){
         productType.setProductTypeCombinations(productTypeCombinations);
     }
+    
+    public void setHighStorageTemperature(Integer highStorageTemperature) {
+        productType.setHighStorageTemperature(highStorageTemperature);
+    }
+    
+    public void setLowStorageTemperature(Integer lowStorageTemperature) {
+        productType.setLowStorageTemperature(lowStorageTemperature);
+    }
+
+    public void setLowTransportTemperature(Integer lowTransportTemperature) {
+        productType.setLowTransportTemperature(lowTransportTemperature);
+    }
+
+    public void setHighTransportTemperature(Integer highTransportTemperature) {
+        productType.setHighTransportTemperature(highTransportTemperature);
+    }
+
+    public void setPreparation(String preparation) {
+        productType.setPreparation(preparation);
+    }
+        
 }
