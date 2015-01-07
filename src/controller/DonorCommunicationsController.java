@@ -54,7 +54,7 @@ public class DonorCommunicationsController {
     }
 
     @RequestMapping(value = "/form", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
     public @ResponseBody
     Map<String, Object> donorCommunicationsFormGenerator(
             HttpServletRequest request) {
@@ -69,32 +69,6 @@ public class DonorCommunicationsController {
        // map.put("donorCommunicationsForm", dbform);
         return map;
     }
-
-//    @RequestMapping(value = "/find", method = RequestMethod.GET)
-//    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
-//    public @ResponseBody
-//    Map<String, Object> findDonorCommunications(
-//            HttpServletRequest request,
-//            @ModelAttribute("donorCommunicationsForm") @Valid DonorCommunicationsBackingForm form,
-//            BindingResult result) {
-//        Map<String, Object> map = new HashMap<String, Object>();
-//        addEditSelectorOptions(map);
-//        map.put("donorFields", utilController.getFormFieldsForForm("donor"));
-//        form.getDonorPanels();
-//        if (result.hasErrors()) {
-//            map.put("hasErrors", true);
-//            map.put("errorMessage", "Missing information for one or more required fields.");
-//            map.put("success", Boolean.FALSE);
-//            map.put("success", Boolean.FALSE);
-//            return map;
-//        }
-//        form.setCreateDonorSummaryView(true);
-//        map.put("contentLabel", "Find Donors");
-//        map.put("nextPageUrl", getNextPageUrlForDonorCommunication(request));
-//        map.put("donorRowClickUrl", "donorSummary.html");
-//        map.put("createDonorSummaryView", form.getCreateDonorSummaryView());
-//        return map;
-//    }
 
     public static String getNextPageUrlForDonorCommunication(HttpServletRequest req) {
         String reqUrl = req.getRequestURL().toString().replaceFirst("findDonorCommunicationsForm.html", "findDonorCommunicationsPagination.html");
@@ -159,43 +133,6 @@ public class DonorCommunicationsController {
                 .format(cal.getTime()) : "";
     }
 
-    /**
-     * issue - #209 - Not used anyehere
-     *
-    private Map<String, Object> generateDatatablesMapForDonorCommunications(List<Donor> donors, Long totalRecords,
-            Map<String, Map<String, Object>> formFields) {
-        Map<String, Object> donorsMap = new HashMap<String, Object>();
-        ArrayList<Object> donorList = new ArrayList<Object>();
-        for (DonorViewModel donor : getDonorsViewModels(donors)) {
-
-            List<Object> row = new ArrayList<Object>();
-            row.add(donor.getId().toString());
-            for (String property : Arrays.asList("donorNumber", "firstName", "lastName", "phoneNumber", "dateOfLastDonation", "bloodGroup", "donorPanel")) {
-                if (formFields.containsKey(property)) {
-                    Map<String, Object> properties = (Map<String, Object>) formFields.get(property);
-                    if (properties.get("hidden").equals(false)) {
-                        String propertyValue = property;
-                        try {
-                            propertyValue = BeanUtils.getProperty(donor, property);
-                        } catch (IllegalAccessException e) {
-                            LOGGER.debug("DonorCommunicationsController:generateDatatablesMapForDonorCommunications:IllegalAccessException" + e);
-                        } catch (InvocationTargetException e) {
-                            LOGGER.debug("DonorCommunicationsController:generateDatatablesMapForDonorCommunications:InvocationTargetException" + e);
-                        } catch (NoSuchMethodException e) {
-                            LOGGER.debug("DonorCommunicationsController:generateDatatablesMapForDonorCommunications:NoSuchMethodException" + e);
-                        }
-                        row.add(propertyValue != null ? propertyValue.toString() : "");
-                    }
-                }
-            }
-            donorList.add(row);
-        }
-        donorsMap.put("aaData", donorList);
-        donorsMap.put("iTotalRecords", totalRecords);
-        donorsMap.put("iTotalDisplayRecords", totalRecords);
-        return donorsMap;
-    }
-*/
     public static String getUrl(HttpServletRequest req) {
         String reqUrl = req.getRequestURL().toString();
         String queryString = req.getQueryString(); // d=789
@@ -205,17 +142,6 @@ public class DonorCommunicationsController {
         return reqUrl;
     }
 
-     /**
-     * issue - #209 - Not used anyehere
-     *
-    private List<DonorViewModel> getDonorsViewModels(List<Donor> donors) {
-        List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
-        for (Donor donor : donors) {
-            donorViewModels.add(new DonorViewModel(donor));
-        }
-        return donorViewModels;
-    }
-    */
     private DonorViewModel getDonorsViewModel(Donor donor) {
 	    DonorViewModel donorViewModel = new DonorViewModel(donor);
 	    return donorViewModel;
@@ -225,43 +151,6 @@ public class DonorCommunicationsController {
         m.put("donorPanels", locationRepository.getAllDonorPanels());
         m.put("bloodGroups", BloodGroup.getBloodgroups());
     }
-
-    /**
-     * issue - #209 - Not used anyehere
-     *
-     * Get column name from column id, depends on sequence of columns in
-     * donorsCommunicationTable.jsp
-     *
-    private String getSortingColumn(int columnId,
-            Map<String, Map<String, Object>> formFields) {
-
-        List<String> visibleFields = new ArrayList<String>();
-        visibleFields.add("id");
-        for (String field : Arrays.asList("donorNumber", "firstName", "lastName", "gender", "bloodGroup", "birthDate")) {
-            Map<String, Object> fieldProperties = (Map<String, Object>) formFields.get(field);
-            if (fieldProperties.get("hidden").equals(false)) {
-                visibleFields.add(field);
-            }
-        }
-
-        Map<String, String> sortColumnMap = new HashMap<String, String>();
-        sortColumnMap.put("id", "id");
-        sortColumnMap.put("donorNumber", "donorNumber");
-        sortColumnMap.put("firstName", "firstName");
-        sortColumnMap.put("lastName", "lastName");
-        sortColumnMap.put("phoneNumber", "phoneNumber");
-        sortColumnMap.put("dateOfLastDonation", "dateOfLastDonation");
-        sortColumnMap.put("bloodGroup", "bloodAbo");
-        sortColumnMap.put("donorPanel", "donorPanel");
-        String sortColumn = visibleFields.get(columnId);
-
-        if (sortColumnMap.get(sortColumn) == null) {
-            return "id";
-        } else {
-            return sortColumnMap.get(sortColumn);
-        }
-    }
-*/
 
     public List<Location> setLocations(List<String> donorPanels) {
 

@@ -28,20 +28,6 @@ public class DonorBackingForm {
     @JsonIgnore
     private Donor donor;
 
-    // store a local copy of birthdate string as validation may have failed
-    private String birthDate;
-
-    //to capture date of birth parameters--#11
-    
-    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
-    String year;
-    
-    @Pattern(regexp = "[0-9]+",  message = "Given Input Must be a number")
-    String month;
-    
-    @Pattern(regexp = "[0-9]+",  message = "Given Input Must be a number")
-    String dayOfMonth;
-
     private Boolean ageFormatCorrect;
 
     private String ageSpecified;
@@ -69,66 +55,20 @@ public class DonorBackingForm {
     public DonorStatus getDonorStatus() {
         return donor.getDonorStatus();
     }
-
-    public String getYear() {
-        return year;
-    }
-
-    public void setYear(String year) {
-        this.year = year;
-    }
-
-    public String getMonth() {
-        return month;
-    }
-
-    public void setMonth(String month) {
-        this.month = month;
-    }
-
-    public String getDayOfMonth() {
-        return dayOfMonth;
-    }
-
-    public void setDayOfMonth(String dayOfMonth) {
-        this.dayOfMonth = dayOfMonth;
-    }
     
     public String getBirthDate() {
-        if (birthDate != null) {
-            return birthDate;
-        }
-        if (donor == null) {
-            return "";
-        }
         return CustomDateFormatter.getDateString(donor.getBirthDate());
     }
-
-    public void setBirthDate() {
-        birthDate = dayOfMonth + "/" + month + "/" + year;
+    
+    public void setBirthDate(String birthDate) {
         try {
             donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
         } catch (ParseException ex) {
             ex.printStackTrace();
             donor.setBirthDate(null);
         }
-    }
-
-    public void setBirthDate(String birthDate) {
-    	// if birthDate is an empty string or is null, try set it using dayOfMonth, month and year values
-    	if (birthDate.equals("") || birthDate == null){
-    		setBirthDate();
-    	}
-    	else{
-	        this.birthDate = birthDate;
-	        try {
-	            donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
-	        } catch (ParseException ex) {
-	            ex.printStackTrace();
-	            donor.setBirthDate(null);
-	        }
-    	}
-    }
+    } 
+    
 //
 //    public DonorViewModel getDonorViewModel() {
 //        return new DonorViewModel(donor);

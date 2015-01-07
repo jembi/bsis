@@ -55,7 +55,7 @@ public class ReportsController {
     Map<String, Object> map = new HashMap<String, Object>();
     utilController.addTipsToModel(map, "report.inventory.generate");
     utilController.addTipsToModel(map, "report.inventory.productinventorychart");
-    map.put("centers", locationRepository.getAllCenters());
+    map.put("panels", locationRepository.getAllDonorPanels());
     map.put("model", map);
     return map;
   }
@@ -65,11 +65,11 @@ public class ReportsController {
   public  Map<String, Object> generateInventoryReport(
                   HttpServletRequest request, HttpServletResponse response,
                   @RequestParam(value="status") String status,
-                  @RequestParam(value="centers") String centers
+                  @RequestParam(value="panels") String panels
                   ) {
 
     List<String> productStatuses = Arrays.asList(status.split("\\|"));
-    List<String> centerIds = Arrays.asList(centers.split("\\|"));
+    List<String> centerIds = Arrays.asList(panels.split("\\|"));
 
     List<Long> centerIdsLong = new ArrayList<Long>();
     centerIdsLong.add((long)-1);
@@ -95,8 +95,7 @@ public class ReportsController {
   public Map<String, Object> collectionsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     utilController.addTipsToModel(map, "report.collections.collectionsreport");
-    map.put("centers", locationRepository.getAllCenters());
-    map.put("sites", locationRepository.getAllCollectionSites());
+    map.put("panels", locationRepository.getAllDonorPanels());
     return map;
   }
 
@@ -114,8 +113,7 @@ public class ReportsController {
   public Map<String, Object> discardedProductsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     utilController.addTipsToModel(map, "report.products.discardedproductsreport");
-    map.put("centers", locationRepository.getAllCenters());
-    map.put("sites", locationRepository.getAllCollectionSites());
+    map.put("panels", locationRepository.getAllDonorPanels());
     map.put("model", map);
     return map;
   }
@@ -125,8 +123,7 @@ public class ReportsController {
   public Map<String, Object> issuedProductsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     utilController.addTipsToModel(map, "report.products.issuedproductsreport");
-    map.put("centers", locationRepository.getAllCenters());
-    map.put("sites", locationRepository.getAllCollectionSites());
+    map.put("panels", locationRepository.getAllDonorPanels());
     return map;
   }
 
@@ -137,8 +134,7 @@ public class ReportsController {
           @RequestParam(value = "dateCollectedFrom", required = false) String dateCollectedFrom,
           @RequestParam(value = "dateCollectedTo", required = false) String dateCollectedTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
-          @RequestParam(value = "centers", required = false) List<String> centers,
-          @RequestParam(value = "sites", required = false) List<String> sites,
+          @RequestParam(value = "panels", required = false) List<String> panels,
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
 
 
@@ -165,7 +161,7 @@ public class ReportsController {
 
       Map<String, Map<Long, Long>> numCollections = collectionRepository
           .findNumberOfCollectedSamples(dateFrom, dateTo,
-              aggregationCriteria, centers, sites, bloodGroups);
+              aggregationCriteria, panels, bloodGroups);
       // TODO: potential leap year bug here
       Long interval = (long) (24 * 3600 * 1000);
   
@@ -190,8 +186,7 @@ public class ReportsController {
           @RequestParam(value = "dateCollectedFrom", required = false) String dateCollectedFrom,
           @RequestParam(value = "dateCollectedTo", required = false) String dateCollectedTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
-          @RequestParam(value = "centers", required = false) List<String> centers,
-          @RequestParam(value = "sites", required = false) List<String> sites,
+          @RequestParam(value = "panels", required = false) List<String> panels,
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
 
     HttpStatus httpStatus = HttpStatus.OK;
@@ -216,7 +211,7 @@ public class ReportsController {
 
       Map<String, Map<Long, Long>> numRequests = requestRepository
           .findNumberOfRequests(dateFrom, dateTo,
-              aggregationCriteria, sites, bloodGroups);
+              aggregationCriteria, panels, bloodGroups);
       // TODO: potential leap year bug here
       Long interval = (long) (24 * 3600 * 1000);
   
@@ -241,8 +236,7 @@ public class ReportsController {
           @RequestParam(value = "dateCollectedFrom", required = false) String dateCollectedFrom,
           @RequestParam(value = "dateCollectedTo", required = false) String dateCollectedTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
-          @RequestParam(value = "centers", required = false) List<String> centers,
-          @RequestParam(value = "sites", required = false) List<String> sites,
+          @RequestParam(value = "panels", required = false) List<String> panels,
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
 
     HttpStatus httpStatus = HttpStatus.OK;
@@ -268,7 +262,7 @@ public class ReportsController {
 
       Map<String, Map<Long, Long>> numDiscardedProducts = productRepository
           .findNumberOfDiscardedProducts(dateFrom, dateTo,
-              aggregationCriteria, centers, sites, bloodGroups);
+              aggregationCriteria, panels, bloodGroups);
       // TODO: potential leap year bug here
       Long interval = (long) (24 * 3600 * 1000);
   
@@ -293,8 +287,7 @@ public class ReportsController {
           @RequestParam(value = "dateIssuedFrom", required = false) String dateCollectedFrom,
           @RequestParam(value = "dateIssuedTo", required = false) String dateCollectedTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
-          @RequestParam(value = "centers", required = false) List<String> centers,
-          @RequestParam(value = "sites", required = false) List<String> sites,
+          @RequestParam(value = "panels", required = false) List<String> panels,
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
 
     HttpStatus httpStatus = HttpStatus.OK;
@@ -319,7 +312,7 @@ public class ReportsController {
 
       Map<String, Map<Long, Long>> numIssuedProducts = productRepository
           .findNumberOfIssuedProducts(dateFrom, dateTo,
-              aggregationCriteria, centers, sites, bloodGroups);
+              aggregationCriteria, panels, bloodGroups);
       // TODO: potential leap year bug here
       Long interval = (long) (24 * 3600 * 1000);
   
@@ -350,8 +343,7 @@ public class ReportsController {
   public Map<String, Object> testResultsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("ttiTests", bloodTestingRepository.getTTITests());
-    map.put("centers", locationRepository.getAllCenters());
-    map.put("sites", locationRepository.getAllCollectionSites());
+    map.put("panels", locationRepository.getAllDonorPanels());
     utilController.addTipsToModel(map, "report.collections.testresultsreport");
     return map;
   }
@@ -363,8 +355,7 @@ public class ReportsController {
           @RequestParam(value = "dateTestedFrom", required = false) String dateTestedFrom,
           @RequestParam(value = "dateTestedTo", required = false) String dateTestedTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
-          @RequestParam(value = "centers", required = false) List<String> centers,
-          @RequestParam(value = "sites", required = false) List<String> sites,
+          @RequestParam(value = "panels", required = false) List<String> panels,
           @RequestParam(value = "ttiTests", required = false) List<String> ttiTests) throws ParseException {
 
    
@@ -390,7 +381,7 @@ public class ReportsController {
   
       Map<String, Map<Long, Long>> numTestResults = bloodTestingRepository
           .findNumberOfPositiveTests(ttiTests, dateFrom, dateTo,
-              aggregationCriteria, centers, sites);
+              aggregationCriteria, panels);
   
       // TODO: potential leap year bug here
       Long interval = (long) (24 * 3600 * 1000);

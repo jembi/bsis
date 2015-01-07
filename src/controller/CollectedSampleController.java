@@ -49,7 +49,6 @@ public class CollectedSampleController {
   @Autowired
   private DonationTypeRepository donorTypeRepository;
 
-
   @Autowired
   private UtilController utilController;
 
@@ -90,7 +89,7 @@ public class CollectedSampleController {
       
       row.add(collection.getId().toString());
 
-      for (String property : Arrays.asList("collectionNumber", "collectedOn", "bloodBagType", "collectionCenter", "collectionSite")) {
+      for (String property : Arrays.asList("collectionNumber", "collectedOn", "bloodBagType", "donorPanel")) {
         if (formFields.containsKey(property)) {
           Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
           if (properties.get("hidden").equals(false)) {
@@ -118,14 +117,13 @@ public class CollectedSampleController {
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("centers", locationRepository.getAllCenters());
+	m.put("donorPanels", locationRepository.getAllDonorPanels());
     m.put("donationTypes", donorTypeRepository.getAllDonationTypes());
-    m.put("packTypes", bloodBagTypeRepository.getAllBloodBagTypes());
-    m.put("sites", locationRepository.getAllCollectionSites());
+    m.put("packTypes", bloodBagTypeRepository.getAllBloodBagTypes()); 
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION+"')")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_INFORMATION+"')")
   public  Map<String, Object> addCollectionFormGenerator(HttpServletRequest request) {
 
     CollectedSampleBackingForm form = new CollectedSampleBackingForm();
@@ -251,8 +249,7 @@ public class CollectedSampleController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public  Map<String, Object> findCollectionPagination(
      @RequestParam(value = "collectionNumber", required = false)  String collectionNumber,
-     @RequestParam(value = "centers",required = false)  List<Long> centerIds,
-     @RequestParam(value = "sites",required = false)  List<Long> siteIds,
+     @RequestParam(value = "panels",required = false)  List<Long> panelIds,
      @RequestParam(value = "bloodBagTypes",required = false)  List<Integer> bloodBagTypeIds,
      @RequestParam(value = "dateCollectedFrom", required = false)  String dateCollectedFrom,
      @RequestParam(value = "dateCollectedTo", required = false)  String dateCollectedTo,
@@ -277,7 +274,7 @@ public class CollectedSampleController {
     List<Object> results;
           results = collectedSampleRepository.findCollectedSamples(
                   collectionNumber,
-                  bloodBagTypeIds, centerIds, siteIds,
+                  bloodBagTypeIds, panelIds,
                   dateCollectedFrom, dateCollectedTo, includeTestedCollections, pagingParams);
   
     @SuppressWarnings("unchecked")
@@ -286,197 +283,4 @@ public class CollectedSampleController {
 
     return generateDatatablesMap(collectedSamples, totalRecords, formFields);
   }
-
-  /**
- * issue #209[Adapt_Bsis_To_Expose_Rest_Services]
- * Reason - no worksheets
-  @RequestMapping(value="/saveFindCollectionsResultsToWorksheet", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
-  public  Map<String, Object> saveFindCollectionsResultsToWorksheet(HttpServletRequest request,
-      HttpServletResponse response,
-      @ModelAttribute("findCollectedSampleForm") WorksheetBackingForm form) {
-
-    String collectionNumber = form.getCollectionNumber();
-    if (collectionNumber != null)
-      collectionNumber = collectionNumber.trim();
-    String dateCollectedFrom = form.getDateCollectedFrom();
-    String dateCollectedTo = form.getDateCollectedTo();
-
-    List<Integer> bloodBagTypeIds = new ArrayList<Integer>();
-    if (form.getBloodBagTypes() != null) {
-      for (String bloodBagTypeId : form.getBloodBagTypes()) {
-        bloodBagTypeIds.add(Integer.parseInt(bloodBagTypeId));
-      }
-    }
-
-    List<Long> centerIds = new ArrayList<Long>();
-    if (form.getCollectionCenters() != null) {
-      for (String center : form.getCollectionCenters()) {
-        centerIds.add(Long.parseLong(center));
-      }
-    }
-
-    List<Long> siteIds = new ArrayList<Long>();
-    if (form.getCollectionSites() != null) {
-      for (String site : form.getCollectionSites()) {
-        siteIds.add(Long.parseLong(site));
-      }
-    }
-
-    String worksheetNumber = form.getWorksheetNumber();
-    Map<String, Object> map = new  HashMap<String, Object>();
-    map.put("worksheetNumber", worksheetNumber);
-    try {
-      collectedSampleRepository.saveToWorksheet(
-                                        form.getCollectionNumber(),
-                                        bloodBagTypeIds, centerIds, siteIds,
-                                        dateCollectedFrom, dateCollectedTo,
-                                        form.getIncludeTestedCollections(),
-                                        worksheetNumber);
-      map.put("success", true);
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      map.put("success", false);
-      response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-    }
-
-    map.put("model", map);
-    
-    return map;
-  }
-  */
-  /**
-   * issue #209[Adapt_Bsis_To_Expose_Rest_Services]
-   * Reason - not sure is this method going to be included in later versions
-   *
-  @RequestMapping(value = "/findLastDonationForDonor", method = RequestMethod.GET)  
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
-  public   
-  Map<String, String> findLastDonationForDonor(@ModelAttribute("addCollectionForm")  CollectedSampleBackingForm form) {  
-	   
-   CollectedSample collectedSample = form.getCollectedSample();
-   long diffInDays =0;
-   Date dateofLastDonation = null;
-   List<String> message = new ArrayList<String>();
-   
-   Map<String, String> m = new HashMap<String, String>();
-   
-   try{
-	   // if the donor exists
-	   if(donorRepository.findDonorByNumber(collectedSample.getDonor().getDonorNumber()) != null){
-		   Donor donor = donorRepository.findDonorByNumber(collectedSample.getDonor().getDonorNumber());
-		   
-		   // if the donor has donated before
-		   if(donor.getDateOfLastDonation() != null){
-			   dateofLastDonation = donor.getDateOfLastDonation();
-			   Date collectedOnDate = collectedSample.getCollectedOn();
-			   
-			   long diff = collectedOnDate.getTime() - dateofLastDonation.getTime();
-			   diffInDays = diff / (24 * 60 * 60 * 1000);
-			 	
-			   SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-			
-			   m.put("diffInDays",String.valueOf(diffInDays));
-			   m.put("dateOfLastDonation",formatter.format(dateofLastDonation).toString());
-			   m.put("collectedOnDate",formatter.format(collectedOnDate).toString());
-		   }  
-	   }
-   }
-   catch(Exception ex){
-	 ex.printStackTrace();
-   }
-   return m;  
-  }  
-  */
-  /*
-  issue - #209[Commented out as un being unused]
- *
-  private String getNextPageUrl(HttpServletRequest request) {
-    String reqUrl = request.getRequestURL().toString().replaceFirst("findCollection.html", "search.html");
-    String queryString = request.getQueryString();   // d=789
-    if (queryString != null) {
-        reqUrl += "?"+queryString;
-    }
-    return reqUrl;
-  }
-  
-  
-
-  @RequestMapping(value = "/findform", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
-  public  Map<String, Object> findCollectionFormGenerator(HttpServletRequest request) {
-
-    Map<String, Object> map = new  HashMap<String, Object>();
-    addEditSelectorOptions(map);
-    // to ensure custom field names are displayed in the form
-    map.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    return map;
-  }
-*/
-  /**
- * issue - #209[Adapt_Bsis_To_Expose_Rest_Services]
- * Reason - duplicate method (see findCollectionPagination method) 
-  @RequestMapping(value = "/findCollection" , method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
-  public  Map<String, Object> findCollection(HttpServletRequest request,
-      @ModelAttribute("findCollectionForm") FindCollectedSampleBackingForm form) {
-
-    List<CollectedSample> collections = Arrays.asList(new CollectedSample[0]);
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    map.put("allCollectedSamples", getCollectionViewModels(collections));
-    map.put("nextPageUrl", getNextPageUrl(request));
-    map.put("saveToWorksheetUrl", getWorksheetUrl(request));
-    addEditSelectorOptions(map);
-
-    map.put("model", map);
-    return map;
-  }
-  */
-  
-/**
- * issue #209[Adapt_Bsis_To_Expose_Rest_Services]
- * Reason - worksheet concepts are not used in later versions
- * 
-  private String getWorksheetUrl(HttpServletRequest request) {
-    String worksheetUrl = request.getRequestURL().toString().replaceFirst("findCollection.html", "saveFindCollectionsResultsToWorksheet.html");
-    String queryString = request.getQueryString();   // d=789
-    if (queryString != null) {
-        worksheetUrl += "?" + queryString;
-    }
-    return worksheetUrl;
-  }
-  */
-
-  /**
-   * Get column name from column id, depends on sequence of columns in collectionsTable.jsp
-   
-  private String getSortingColumn(int columnId, Map<String, Map<String, Object>> formFields) {
-
-    List<String> visibleFields = new ArrayList<String>();
-    visibleFields.add("id");
-    for (String field : Arrays.asList("collectionNumber", "collectedOn","bloodBagType", "collectionCenter", "collectionSite")) {
-      Map<String, Object> fieldProperties = (Map<String, Object>) formFields.get(field);
-      if (fieldProperties.get("hidden").equals(false))
-        visibleFields.add(field);
-    }
-
-    Map<String, String> sortColumnMap = new HashMap<String, String>();
-    sortColumnMap.put("id", "id");
-    sortColumnMap.put("collectionNumber", "collectionNumber");
-    sortColumnMap.put("collectedOn", "collectedOn");
-    sortColumnMap.put("bloodBagType", "bloodBagType.bloodBagType");
-    sortColumnMap.put("collectionCenter", "collectionCenter.name");
-    sortColumnMap.put("collectionSite", "collectionSite.name");
-    String sortColumn = visibleFields.get(columnId);
-
-    if (sortColumnMap.get(sortColumn) == null)
-      return "id";
-    else
-      return sortColumnMap.get(sortColumn);
-  }
-
- 
-*/
 }

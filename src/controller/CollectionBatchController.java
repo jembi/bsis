@@ -57,40 +57,19 @@ public class CollectionBatchController {
     }
     return reqUrl;
   }
-  
-  /**
-   * #209 - COmmented as not used anywhere 
-   * @param request
-   * @return 
-   
 
-  @RequestMapping(value = "/findform", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
-  public  Map<String, Object> findCollectionFormGenerator(HttpServletRequest request) {
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    addEditSelectorOptions(map);
-    // to ensure custom field names are displayed in the form
-    map.put("collectionBatchFields", utilController.getFormFieldsForForm("collectionBatch"));
-    return map;
-  }
-*/
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public  ResponseEntity findCollectionBatch(HttpServletRequest request,
           @RequestParam(value = "isClosed", required = false) Boolean isClosed,
-          @RequestParam(value = "collectionCenters", required = false) List<Long> centerIds,
-          @RequestParam(value = "collectionSites", required = false) List<Long> siteIds ) {
+          @RequestParam(value = "donorPanels", required = false) List<Long> donorPanels) {
 
-	if(centerIds == null){
-		centerIds = new ArrayList<Long>();
-	}
-	if(siteIds == null){
-		siteIds = new ArrayList<Long>();
+	if(donorPanels == null){
+		donorPanels = new ArrayList<Long>();
 	}
 
     List<CollectionBatch> collectionBatches =
-        collectionBatchRepository.findCollectionBatches(isClosed, centerIds, siteIds);
+        collectionBatchRepository.findCollectionBatches(isClosed, donorPanels);
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("donationBatches", getCollectionBatchViewModels(collectionBatches));
@@ -98,9 +77,8 @@ public class CollectionBatchController {
     return new ResponseEntity(map, HttpStatus.OK);
   }
 
-  
   @RequestMapping(value = "/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION_BATCH+"')")
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_INFORMATION+"')")
   public   Map<String, Object> addCollectionBatchFormGenerator(HttpServletRequest request) {
 
     CollectionBatchBackingForm form = new CollectionBatchBackingForm();
@@ -124,7 +102,6 @@ public class CollectionBatchController {
         return new ResponseEntity(new CollectionBatchViewModel(collectionBatch), HttpStatus.CREATED);
   }
   
-  
   @RequestMapping(value = "{id}",method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION_BATCH+"')")
   public ResponseEntity updateCollectionBatch(@PathVariable Long id,
@@ -133,7 +110,6 @@ public class CollectionBatchController {
       CollectionBatch collectionBatch = collectionBatchRepository.updateCollectionBatch(form.getCollectionBatch());
       return new ResponseEntity(new CollectionBatchViewModel(collectionBatch), HttpStatus.OK);
   }
-  
 
   @RequestMapping(value = "{id}" ,method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
@@ -145,13 +121,11 @@ public class CollectionBatchController {
     CollectionBatchViewModel collectionBatchViewModel = getCollectionBatchViewModel(collectionBatch);
     map.put("collectionBatch", collectionBatchViewModel);
 
-
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   
   private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("centers", locationRepository.getAllCenters());
-    m.put("sites", locationRepository.getAllCollectionSites());
+    m.put("donorPanels", locationRepository.getAllDonorPanels());
   }
 
   private CollectionBatchViewModel getCollectionBatchViewModel(CollectionBatch collectionBatch) {
@@ -169,5 +143,4 @@ public class CollectionBatchController {
     }
     return collectionBatchViewModels;
   }
-  
 }

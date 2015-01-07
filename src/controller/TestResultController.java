@@ -42,30 +42,6 @@ public class TestResultController {
   
   public TestResultController() {
   }
-  
-  /*
-  isssue - #209
-  Reason - Dummy method
-  @RequestMapping(value = "/findform", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
-  public  Map<String, Object> findTestResultFormGenerator(HttpServletRequest request) {
-
-    Map<String, Object> map = new  HashMap<String, Object>();
-
-    // to ensure custom field names are displayed in the form
-    map.put("collectedSampleFields", utilController.getFormFieldsForForm("collectedSample"));
-    return map;
-  }
-
-  public static String getUrl(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString();
-    String queryString = req.getQueryString();   // d=789
-    if (queryString != null) {
-        reqUrl += "?"+queryString;
-    }
-    return reqUrl;
-  }
-  */
 
   @RequestMapping(value = "{donationIdentificationNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")

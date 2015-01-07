@@ -34,22 +34,8 @@ public class DonorCodeController {
     @Autowired
     private DonorRepository donorRepository;
 
-/**
- * issue #209 - Not required
-    @RequestMapping(value = "update/form", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONOR_CODE + "')")
-    public 
-    Map<String, Object> updateDonorCodesForm(@PathVariable Long donorId) {
-
-        Map<String, Object> map = new HashMap<String, Object>();
-        Donor donor = donorRepository.findDonorById(donorId);
-        map.put("donor", new DonorViewModel(donor));
-        return map;
-
-    }
-*/
     @RequestMapping(value = "/form", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONOR_CODE + "')")
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
     public 
     List<DonorCodeGroup> addDonorCodeFormGenerator() {
         return donorRepository.getAllDonorCodeGroups();
@@ -97,7 +83,6 @@ public class DonorCodeController {
         map.put("donorCodeViewModels", getDonorCodeViewModels(donorDonorCodes));
         return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
     }
-   
    
     private  List<DonorCodeViewModel> getDonorCodeViewModels(
             List<DonorDonorCode> donorDonorCodes) {

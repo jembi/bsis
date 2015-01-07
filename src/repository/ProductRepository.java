@@ -482,14 +482,14 @@ public class ProductRepository {
     return matchingProducts;
   }
   
-  public Map<String, Object> generateInventorySummaryFast(List<String> status, List<Long> centerIds) {
+  public Map<String, Object> generateInventorySummaryFast(List<String> status, List<Long> panelIds) {
     Map<String, Object> inventory = new HashMap<String, Object>();
     // IMPORTANT: Distinct is necessary to avoid a cartesian product of test results and products from being returned
     // Also LEFT JOIN FETCH prevents the N+1 queries problem associated with Lazy Many-to-One joins
     TypedQuery<Product> q = em.createQuery(
                              "SELECT DISTINCT p from Product p " +
                              "WHERE p.status IN :status AND " +
-                             "p.collectedSample.collectionCenter.id IN (:collectionCenterIds) AND " +
+                             "p.collectedSample.donorPanel.id IN (:panelIds) AND " +
                              "p.isDeleted=:isDeleted",
                              Product.class);
     List<ProductStatus> productStatus = new ArrayList<ProductStatus>();
@@ -497,7 +497,7 @@ public class ProductRepository {
       productStatus.add(ProductStatus.lookup(s));
     }
     q.setParameter("status", productStatus);
-    q.setParameter("collectionCenterIds", centerIds);
+    q.setParameter("panelIds", panelIds);
     q.setParameter("isDeleted", false);
 //    q.setParameter("expiresOn", DateUtils.round(new Date(), Calendar.DATE));
 
@@ -617,24 +617,15 @@ public class ProductRepository {
 
   public Map<String, Map<Long, Long>> findNumberOfDiscardedProducts(
       Date dateCollectedFrom, Date dateCollectedTo, String aggregationCriteria,
-      List<String> centers, List<String> sites, List<String> bloodGroups) throws ParseException {
+      List<String> panels, List<String> bloodGroups) throws ParseException {
 
-    List<Long> centerIds = new ArrayList<Long>();
-    if (centers != null) {
-      for (String center : centers) {
-        centerIds.add(Long.parseLong(center));
+    List<Long> panelIds = new ArrayList<Long>();
+    if (panels != null) {
+      for (String panel : panels) {
+    	panelIds.add(Long.parseLong(panel));
       }
     } else {
-      centerIds.add((long)-1);
-    }
-
-    List<Long> siteIds = new ArrayList<Long>();
-    if (sites != null) {
-      for (String site : sites) {
-        siteIds.add(Long.parseLong(site));
-      }
-    } else {
-      siteIds.add((long)-1);
+      panelIds.add((long)-1);
     }
 
     Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long,Long>>();
@@ -645,15 +636,13 @@ public class ProductRepository {
     TypedQuery<Object[]> query = em.createQuery(
         "SELECT count(p), p.collectedSample.collectedOn, p.collectedSample.bloodAbo, " +
         "p.collectedSample.bloodRh FROM Product p WHERE " +
-        "p.collectedSample.collectionCenter.id IN (:centerIds) AND " +
-        "p.collectedSample.collectionSite.id IN (:siteIds) AND " +
+        "p.collectedSample.donorPanel.id IN (:panelIds) AND " +
         "p.collectedSample.collectedOn BETWEEN :dateCollectedFrom AND :dateCollectedTo AND " +
         "p.status IN (:discardedStatuses) AND " +
         "(p.isDeleted= :isDeleted) " +
         "GROUP BY bloodAbo, bloodRh, collectedOn", Object[].class);
 
-    query.setParameter("centerIds", centerIds);
-    query.setParameter("siteIds", siteIds);
+    query.setParameter("panelIds", panelIds);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("discardedStatuses",
                        Arrays.asList(ProductStatus.DISCARDED,
@@ -713,24 +702,15 @@ public class ProductRepository {
 
   public Map<String, Map<Long, Long>> findNumberOfIssuedProducts(
       Date dateCollectedFrom, Date dateCollectedTo, String aggregationCriteria,
-      List<String> centers, List<String> sites, List<String> bloodGroups) throws ParseException {
+      List<String> panels, List<String> bloodGroups) throws ParseException {
 
-    List<Long> centerIds = new ArrayList<Long>();
-    if (centers != null) {
-      for (String center : centers) {
-        centerIds.add(Long.parseLong(center));
+	List<Long> panelIds = new ArrayList<Long>();
+    if (panels != null) {
+      for (String panel : panels) {
+    	panelIds.add(Long.parseLong(panel));
       }
     } else {
-      centerIds.add((long)-1);
-    }
-
-    List<Long> siteIds = new ArrayList<Long>();
-    if (sites != null) {
-      for (String site : sites) {
-        siteIds.add(Long.parseLong(site));
-      }
-    } else {
-      siteIds.add((long)-1);
+      panelIds.add((long)-1);
     }
 
     Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long,Long>>();
@@ -741,15 +721,13 @@ public class ProductRepository {
     TypedQuery<Object[]> query = em.createQuery(
         "SELECT count(p), p.issuedOn, p.collectedSample.bloodAbo, " +
         "p.collectedSample.bloodRh FROM Product p WHERE " +
-        "p.collectedSample.collectionCenter.id IN (:centerIds) AND " +
-        "p.collectedSample.collectionSite.id IN (:siteIds) AND " +
+        "p.collectedSample.donorPanel.id IN (:panelIds) AND " +
         "p.collectedSample.collectedOn BETWEEN :dateCollectedFrom AND :dateCollectedTo AND " +
         "p.status=:issuedStatus AND " +
         "(p.isDeleted= :isDeleted) " +
         "GROUP BY bloodAbo, bloodRh, collectedOn", Object[].class);
 
-    query.setParameter("centerIds", centerIds);
-    query.setParameter("siteIds", siteIds);
+    query.setParameter("panelIds", panelIds);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("issuedStatus", ProductStatus.ISSUED);
 

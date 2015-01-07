@@ -37,9 +37,8 @@ public class DeferralController {
     @Autowired
     private DonorRepository donorRepository;
 
-
     @RequestMapping(value = "/form", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.ADD_DEFERRAL + "')")
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
     public 
     Map<String, Object> deferDonorFormGenerator() {
 
@@ -48,30 +47,6 @@ public class DeferralController {
         return map;
     }
 
-    /**
-     * 
-     * Not Used anywhere - #209 
-     *
-    @RequestMapping(value = "edit/form", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DEFERRAL + "')")
-    public 
-    Map<String, Object> editDeferDonorFormGenerator(
-            @PathVariable String donorId) {
-
-        Map<String, Object> map = new HashMap<String, Object>();
-        DonorDeferral donorDeferral = donorRepository.getDonorDeferralsId(Long.parseLong(donorId));
-        if (donorDeferral != null) {
-            map.put("deferralUntilDate", CustomDateFormatter.getDateString(donorDeferral.getDeferredUntil()));
-            map.put("deferReasonText", donorDeferral.getDeferralReasonText());
-            map.put("deferReasonId", donorDeferral.getDeferralReason().getId());
-            map.put("donorId", donorDeferral.getDeferredDonor().getId());
-            map.put("donorDeferralId", donorDeferral.getId());
-        }
-        map.put("deferralReasons", donorRepository.getDeferralReasons());
-        return map;
-    }
-   */
- 
     @RequestMapping(value = "{donorId}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DEFERRAL + "')")
     public 

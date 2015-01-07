@@ -12,15 +12,19 @@ public class CustomDateFormatter {
 
   private static String dateTimePattern = "MM/dd/yyyy hh:mm:ss a"; 
   private static String dateTimePatternHumanReadable = "MM/dd/yyyy hour:minute:second AM/PM";
-
+  private static String timePattern = "hh:mm:ss a"; 
+  
   private static DateFormat dateFormat;
   private static DateFormat dateTimeFormat;
+  private static DateFormat timeFormat;
 
   static {
     dateFormat = new SimpleDateFormat(getDatePattern());
     dateFormat.setLenient(false);
-    dateTimeFormat = new SimpleDateFormat(getDatetimepattern());
+    dateTimeFormat = new SimpleDateFormat(getDateTimePattern());
     dateTimeFormat.setLenient(false);
+    timeFormat = new SimpleDateFormat(getTimePattern());
+    timeFormat.setLenient(false);
   }
 
   public static Date getDateFromString(String dateString) throws ParseException {
@@ -34,6 +38,13 @@ public class CustomDateFormatter {
     Date date = null;
     if (!isDateEmpty(dateTimeString))
       date = dateTimeFormat.parse(dateTimeString);
+    return date;
+  }
+  
+  public static Date getTimeFromString(String timeString) throws ParseException {
+    Date date = null;
+    if (!isDateEmpty(timeString))
+      date = timeFormat.parse(timeString);
     return date;
   }
 
@@ -72,6 +83,22 @@ public class CustomDateFormatter {
     }
     return valid;
   }
+  
+  public static boolean isTimeStringValid(String timeString) {
+    boolean valid = false;
+    if (isDateEmpty(timeString)) {
+      valid = true;
+    } else {
+      try {
+        timeFormat.parse(timeString);
+        valid = true;
+      } catch (ParseException ex) {
+        ex.printStackTrace();
+        valid = false;
+      }
+    }
+    return valid;
+  }
 
   public static String getDateErrorMessage() {
     return "Invalid Date specified.";
@@ -79,6 +106,10 @@ public class CustomDateFormatter {
 
   public static String getDateTimeErrorMessage() {
     return "Invalid Date specified.";
+  }
+  
+  public static String getTimeErrorMessage() {
+    return "Invalid Time specified.";
   }
 
   public static String getDateString(Date date) {
@@ -93,6 +124,13 @@ public class CustomDateFormatter {
       return "";
     else
       return dateTimeFormat.format(date);
+  }
+  
+  public static String getTimeString(Date date) {
+    if (date == null)
+      return "";
+    else
+      return timeFormat.format(date);
   }
 
   public static String getDatePattern() {
@@ -112,14 +150,22 @@ public class CustomDateFormatter {
     CustomDateFormatter.datePatternHumanReadable = datePatternHumanReadable;
   }
 
-  public static String getDatetimepattern() {
+  public static String getDateTimePattern() {
     return dateTimePattern;
   }
 
-  public static String getDatetimepatternhumanreadable() {
+  public static String getDateTimePatternHumanReadable() {
     return dateTimePatternHumanReadable;
   }
   
+  public static String getTimePattern() {
+    return timePattern;
+  }
+  
+  public static void setTimePattern(String timePattern) {
+    CustomDateFormatter.timePattern = timePattern;
+  }
+
   public static String format(Date date){
 	  return getDateString(date);
   }

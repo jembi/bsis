@@ -58,7 +58,7 @@ import utils.PermissionConstants;
 @RestController
 public class AdminController {
 	
-	private static final Logger LOGGER = Logger.getLogger(AdminController.class);
+  private static final Logger LOGGER = Logger.getLogger(AdminController.class);
 
   @Autowired
   FormFieldRepository formFieldRepository;
@@ -69,17 +69,14 @@ public class AdminController {
   @Autowired
   LocationRepository locationRepository;
 
- 
   @Autowired
   BloodBagTypeRepository bloodBagTypesRepository;
 
   @Autowired
   DonationTypeRepository donationTypesRepository;
 
-
   @Autowired
   CrossmatchTypeRepository crossmatchTypesRepository;
-
 
   @Autowired
   WorksheetTypeRepository worksheetTypeRepository;
@@ -182,10 +179,6 @@ public class AdminController {
     return m;
   }
 
-
-
-
-  
   @RequestMapping(value = "/forms", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_FORMS+"')")
   public  Map<String, Object> configureForms() {
@@ -193,20 +186,6 @@ public class AdminController {
     map.put("model", map);
     return map;
   }
-
-  /**
-   * issue #209
-   * seems method does nothing
-   *
-  @RequestMapping("/createSampleDataFormGenerator")
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DATA_SETUP+"')")
-  public  Map<String, Object> createSampleDataFormGenerator(
-                HttpServletRequest request, Map<String, Object> params) {
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    return map;
-  }
-  */
 
   @RequestMapping(value="/createsampledata", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DATA_SETUP+"')")
@@ -280,12 +259,6 @@ public class AdminController {
     m.put("success", true);
     return m;
   }
-  
-
-
-
-
-
 
   @RequestMapping(value="/crossmatchtypes", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_CROSS_MATCH_TYPES+"')")
@@ -303,21 +276,6 @@ public class AdminController {
     addAllBloodBagTypesToModel(map);
     return map;
   }
-
-  /*
-  * -- Does Nothing #209  
-  
-  @RequestMapping(value="/backupdata", method=RequestMethod.GET)
-  public  Map<String, Object> backupDataFormGenerator(
-      HttpServletRequest request, HttpServletResponse response,
-      Model model) {
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    Map<String, Object> m = model.asMap();
-    map.put("model", model);
-    return map;
-  }
-  */
 
   @RequestMapping(value="/backupdata", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BACKUP_DATA+"')")
@@ -372,6 +330,7 @@ public class AdminController {
       LOGGER.debug(e.getMessage() + e.getStackTrace());
     }
   }
+  
   @RequestMapping(value="/donationtypes", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
   public  Map<String, Object> configureDonationTypesFormGenerator() {
@@ -388,7 +347,6 @@ public class AdminController {
   private void addAllBloodBagTypesToModel(Map<String, Object> m) {
     m.put("allBloodBagTypes", bloodBagTypesRepository.getAllBloodBagTypes());
   }
-
 
   private void addAllCrossmatchTypesToModel(Map<String, Object> m) {
     m.put("allCrossmatchTypes", crossmatchTypesRepository.getAllCrossmatchTypes());
@@ -426,8 +384,7 @@ public class AdminController {
 
     addAllTipsToModel(map);
     return map;
-  }
- 
+  } 
 
   @RequestMapping(value = "/crossmatchtypes", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_CROSS_MATCH_TYPES+"')")
@@ -458,33 +415,7 @@ public class AdminController {
     addAllCrossmatchTypesToModel(map);
     return map;
   }
-
-  /**
-   * 
-   * Not used anywhere - #209 
-   *
-  @RequestMapping(value = "/packtypes", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
-    public 
-    Map<String, Object> configureBloodBagTypes(
-            HttpServletRequest request, HttpServletResponse response,
-            @RequestBody Map<String, String> params) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        List<BloodBagType> allBloodBagTypes = new ArrayList<BloodBagType>();
-            for (String id : params.keySet()) {
-                String bloodBagType = (String) params.get(id);
-                BloodBagType bt = new BloodBagType();
-                bt.setId(Integer.parseInt(id));
-                bt.setBloodBagType(bloodBagType);
-                bt.setIsDeleted(false);
-                allBloodBagTypes.add(bt);
-            }
-            bloodBagTypesRepository.saveAllBloodBagTypes(allBloodBagTypes);
-            LOGGER.debug(params);
-        addAllBloodBagTypesToModel(map);
-        return map;
-    }
-    */
+  
    @RequestMapping(value = "/packtypes/{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
     public ResponseEntity<BloodBagType> getPackTypeById(@PathVariable Integer id){
@@ -493,9 +424,7 @@ public class AdminController {
         map.put("packtype", packType);
         return new ResponseEntity(map, HttpStatus.OK);
     }
-  
-    
-    
+
     @RequestMapping(value = "/packtypes", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
     public ResponseEntity savePackType(@RequestBody BloodBagType packType){
@@ -503,46 +432,16 @@ public class AdminController {
         return new ResponseEntity(packType, HttpStatus.CREATED);
     }
   
-    @RequestMapping(value = "/packtypes/{id}", method = RequestMethod.PUT)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
-    public ResponseEntity updateBloodBagType(@RequestBody BloodBagType packType , @PathVariable Integer id){
-        Map<String, Object> map = new HashMap<String, Object>();
-        packType.setId(id);
-        packType = bloodBagTypesRepository.updateBloodBagType(packType);
-        map.put("packtype", packType);
-        return new ResponseEntity(map, HttpStatus.OK);
-    }
-
-    /**
-     * 
-     * issue - $209 -- Not used anywhere 
-     *
-  @RequestMapping(value = "/donationtypes", method = RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-  public  Map<String, Object> configureDonationTypes(
-      HttpServletRequest request, HttpServletResponse response,
-    @RequestBody  Map<String,String> params) {
-    Map<String, Object> map = new HashMap<String, Object>();
-    List<DonationType> allDonationTypes = new ArrayList<DonationType>();
-      for (String id : params.keySet()) {
-        String donationType = (String) params.get(id);
-        DonationType dt = new DonationType();
-          dt.setId(Integer.parseInt(id));
-      
-        dt.setDonationType(donationType);
-        dt.setIsDeleted(false);
-
-        allDonationTypes.add(dt);
-      }
-      donationTypesRepository.saveAllDonationTypes(allDonationTypes);
-      LOGGER.debug(params);
-   
-    addAllDonationTypesToModel(map);
-    return map;
-  }
-  */
-  
-  
+	@RequestMapping(value = "/packtypes/{id}", method = RequestMethod.PUT)
+	@PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
+	public ResponseEntity updateBloodBagType(@RequestBody BloodBagType packType , @PathVariable Integer id){
+	    Map<String, Object> map = new HashMap<String, Object>();
+	    packType.setId(id);
+	    packType = bloodBagTypesRepository.updateBloodBagType(packType);
+	    map.put("packtype", packType);
+	    return new ResponseEntity(map, HttpStatus.OK);
+	}
+    
   @RequestMapping(value = "/donationtypes/{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
   public  ResponseEntity getDonationType(@PathVariable Integer id) {
@@ -551,8 +450,7 @@ public class AdminController {
       map.put("donationType", donationType);
       return new ResponseEntity(map, HttpStatus.OK);
 
-  }
-    
+  } 
   
   @RequestMapping(value = "/donationtypes", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
@@ -574,26 +472,6 @@ public class AdminController {
       return new ResponseEntity(map , HttpStatus.OK);
 
   }
-  
-  
-  
-
-/**
- * 
- 
-  @RequestMapping(value="/adminWelcomePageGenerator", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_ADMIN_INFORMATION+"')")
-  public  Map<String, Object> adminWelcomePageGenerator(HttpServletRequest request) {
-    Map<String, Object> map = new HashMap<String, Object>();
-    List<InetAddress> wirelessAddresses = getServerNetworkAddresses();
-    List<String> serverAddresses = new ArrayList<String>();
-    for (InetAddress addr : wirelessAddresses) {
-      serverAddresses.add("http://" + addr.getHostAddress() + ":" + request.getServerPort() + "/v2v");
-    }
-    map.put("serverAddresses", serverAddresses);
-    return map;
-  }
-  */
 
   List<InetAddress> getServerNetworkAddresses() {
     List<InetAddress> listOfServerAddresses = new ArrayList<InetAddress>();
