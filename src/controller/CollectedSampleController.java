@@ -35,6 +35,8 @@ import repository.DonorRepository;
 import repository.LocationRepository;
 import utils.PermissionConstants;
 import viewmodel.CollectedSampleViewModel;
+import viewmodel.PackTypeViewModel;
+import model.bloodbagtype.BloodBagType;
 
 @RestController
 @RequestMapping("/donations")
@@ -122,7 +124,7 @@ public class CollectedSampleController {
   private void addEditSelectorOptions(Map<String, Object> m) {
 	m.put("donorPanels", locationRepository.getAllDonorPanels());
     m.put("donationTypes", donorTypeRepository.getAllDonationTypes());
-    m.put("packTypes", bloodBagTypeRepository.getAllBloodBagTypes()); 
+    m.put("packTypes", getPackTypeViewModels(bloodBagTypeRepository.getAllBloodBagTypes())); 
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
@@ -281,4 +283,12 @@ public class CollectedSampleController {
 
     return generateDatatablesMap(collectedSamples, totalRecords, formFields);
   }
+     
+  private List<PackTypeViewModel> getPackTypeViewModels(List<BloodBagType> packTypes){     
+       List<PackTypeViewModel> viewModels = new ArrayList<PackTypeViewModel>();
+       for(BloodBagType packtType : packTypes){
+           viewModels.add(new PackTypeViewModel(packtType));
+       }
+       return viewModels;
+   }
 }
