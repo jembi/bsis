@@ -51,21 +51,23 @@ public class ProductTypeViewModel {
         return productType.getDescription();
     }
     
-    public String getStorageInformation(){
-        final String DEGREECELSIUS  = "\u2103";
-        return "store at " + productType.getLowStorageTemperature() + DEGREECELSIUS+ " to "
-                + productType.getHighStorageTemperature() + DEGREECELSIUS; 
-                
+    public Integer getLowStorageTemperature(){
+        return productType.getLowStorageTemperature();
     }
     
-    public String getTransportInformation(){
-        final String DEGREECELSIUS  = "\u2103";
-        return "transport at " + productType.getLowTransportTemperature()+ DEGREECELSIUS+ " to "
-                + productType.getHighTransportTemperature()+ DEGREECELSIUS; 
-                
+    public Integer getHighStorageTemperature(){
+        return productType.getHighStorageTemperature();
     }
     
-    public String getPreparation(){
+    public Integer getLowTransportTemperature(){
+        return productType.getLowTransportTemperature();
+    }
+    
+    public Integer getHighTransportTemperature(){
+        return productType.getHighTransportTemperature();
+    }
+    
+    public String getPreparationInfo(){
         return productType.getPreparation();
     }
         
