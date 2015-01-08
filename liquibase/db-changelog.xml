@@ -3559,5 +3559,15 @@
 
 </changeSet>
 
-
+<changeSet id="20140106-1212" author = "srikanth" >
+	 <renameColumn columnDataType="VARCHAR(50)"
+            newColumnName="productTypeName"
+            oldColumnName="productType"
+            tableName="ProductType"/>
+	 <renameColumn columnDataType="VARCHAR(50)"
+            newColumnName="productTypeName"
+            oldColumnName="productType"
+            tableName="ProductType_AUD"/>
+            
+</changeSet>
 </databaseChangeLog>	
