@@ -1,111 +1,25 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 
-	<!-- NEVER DELETE OR MODIFY EXISTING CHANGE SETS - instead add change sets 
-		reversing the previous ones if you need to change or delete -->
-	<!-- ALWAYS USE A UNIQUE IDENTIFIER of format id="yyyy-mm-dd-<n>" eg: id="2010-12-07-1" -->
-	<!-- ALWAYS UPDATE YOUR LOCAL COPY FROM SVN AND THEN VERIFY YOUR id BASED 
-		ON THAT LATEST VERSION -->
+xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
 
-	<!-- NEVER EVER FORMAT THIS FILE -->
-	<!-- ALWAYS FORMAT YOUR ID IN YYYY-MM-DD-XX -->
-	<!-- NEVER ENTER SINGLE DIGIT MONTH / YEAR / COUNTER. ALWAYS USE 2 DIGITS 
-		SO THAT ORDER BY THIS ID IS ALWAYS PROPER -->
-	<!-- "2012-05-05-01" < "2012-1-1-1" - WHICH IS DB WISE CORRECT, BUT INVALID 
-		AS SUCH, BUT "2012-05-05-01" > "2012-01-01-01" WHICH IS VALID FOR BOTH DB 
-		AS WELL AS CHRONOLOGICALLY -->
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
 
-	<changeSet author="devang" id="2013-10-18-01">
-		<sql>
-			CREATE TABLE TEMPTABLE ( `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-			`username` VARCHAR(50) NOT NULL,
-			PRIMARY KEY (`id`)
-			)
-		</sql>
-	</changeSet>
-	<changeSet id="2013-10-19-01" author="devang">
-		<dropTable tableName="TEMPTABLE" />
-	</changeSet>
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-	<!-- For issue 26 [Add WHO Deferral Reasons] -->
-	<changeSet id="201310241525" author="nikita">
-		<delete tableName="DeferralReason"></delete>
-	</changeSet>
-	<changeSet id="201310241526" author="nikita">
-		<sql>
-			ALTER TABLE DeferralReason AUTO_INCREMENT=1;
-		</sql>
-	</changeSet>
-	<changeSet id="201310241527" author="nikita">
-		<insert tableName="DeferralReason">
-        	<column name="reason" value="High risk behaviour"/>
-        	<column name="isDeleted" value="0"/>
-        </insert>
-        <insert tableName="DeferralReason">
-        	<column name="reason" value="Low weight"/>
-        	<column name="isDeleted" value="0"/>
-        </insert>
-        <insert tableName="DeferralReason">
-        	<column name="reason" value="Low haemoglobin"/>
-        	<column name="isDeleted" value="0"/>
-        </insert>
-        <insert tableName="DeferralReason">
-        	<column name="reason" value="Other reasons"/>
-        	<column name="isDeleted" value="0"/>
-        </insert>
-        <insert tableName="DeferralReason">
-        	<column name="reason" value="Other medical conditions"/>
-        	<column name="isDeleted" value="0"/>
-        </insert>
-        <insert tableName="DeferralReason">
-        	<column name="reason" value="Travel history"/>
-        	<column name="isDeleted" value="0"/>
-        </insert>
-	</changeSet>
+	<!-- ALWAYS USE A UNIQUE IDENTIFIER of format id="yyyymmdd-hhmm" eg: id="20140225-
 
-	<!-- For issue 57 [Add WHO Product Discard Reasons] -->
-	<changeSet id="201310241507" author="nikita">
-		<delete tableName="ProductStatusChangeReason">
-			<where>category='DISCARDED'</where>
-		</delete>
-	</changeSet>
-	<changeSet id="201310241508" author="nikita">
-		<insert tableName="ProductStatusChangeReason">
-            <column name="statusChangeReason" value="Incomplete Donation"/>
-            <column name="category" value="DISCARDED"/>
-            <column name="isDeleted" value="0"/>
-    	</insert>
-    	<insert tableName="ProductStatusChangeReason">
-            <column name="statusChangeReason" value="Processing Problems"/>
-            <column name="category" value="DISCARDED"/>
-            <column name="isDeleted" value="0"/>
-    	</insert>
-    	<insert tableName="ProductStatusChangeReason">
-            <column name="statusChangeReason" value="Passed Expiry Dates"/>
-            <column name="category" value="DISCARDED"/>
-            <column name="isDeleted" value="0"/>
-    	</insert>
-    	<insert tableName="ProductStatusChangeReason">
-            <column name="statusChangeReason" value="Reactive FOR TTIs"/>
-            <column name="category" value="DISCARDED"/>
-            <column name="isDeleted" value="0"/>
-    	</insert>
-    	<insert tableName="ProductStatusChangeReason">
-            <column name="statusChangeReason" value="Storage Problems"/>
-            <column name="category" value="DISCARDED"/>
-            <column name="isDeleted" value="0"/>
-    	</insert>
-    	<insert tableName="ProductStatusChangeReason">
-            <column name="statusChangeReason" value="Transport Problems"/>
-            <column name="category" value="DISCARDED"/>
-            <column name="isDeleted" value="0"/>
-    	</insert>
-	</changeSet>
+1815" -->
+	<!-- ALWAYS UPDATE YOUR LOCAL REPO FROM GITHUB AND VERIFY YOUR id IS UNIQUE -->
+	<!-- NEVER DELETE OR MODIFY EXISTING CHANGE SETS - instead add new change sets 
+		 reversing the previous ones if you need to change or delete info from another 
+
+changeset-->
 
 	<!-- For issue 62 [Allow for entry of donor haemoglobin count] -->
-	<changeSet id="201310242025" author="devang">
+	<changeSet id="20131024-2025" author="gtldevang">
 		<insert tableName="FormField">
 			<column name="form" value="CollectedSample"></column>
 			<column name="FIELD" value="haemoglobinCount"></column>
@@ -122,15 +36,19 @@
 			<column name="isTimeField" value="0"></column>			
 		</insert>
 		<update tableName="CollectedSample">
-			<column name="haemoglobinCount" type="DECIMAL(7,1)" defaultValue="NULL"></column>
+			<column name="haemoglobinCount" type="DECIMAL(7,1)" 
+
+defaultValue="NULL"></column>
 		</update>
 		<update tableName="CollectedSample_AUD">
-			<column name="haemoglobinCount" type="DECIMAL(7,1)" defaultValue="NULL"></column>
+			<column name="haemoglobinCount" type="DECIMAL(7,1)" 
+
+defaultValue="NULL"></column>
 		</update>
 	</changeSet>
 
 	<!-- For issue 69 [Allow for entry of donor weight] -->
-	<changeSet id="201310241815" author="devang">
+	<changeSet id="20131024-1815" author="gtldevang">
 		<insert tableName="FormField">
 			<column name="form" value="CollectedSample"></column>
 			<column name="FIELD" value="donorWeight"></column>
@@ -147,63 +65,79 @@
 			<column name="isTimeField" value="0"></column>			
 		</insert>
 		<update tableName="CollectedSample">
-			<column name="donorWeight" type="DECIMAL(7,1)" defaultValue="NULL"></column>
+			<column name="donorWeight" type="DECIMAL(7,1)" 
+
+defaultValue="NULL"></column>
 		</update>
 		<update tableName="CollectedSample_AUD">
-			<column name="donorWeight" type="DECIMAL(7,1)" defaultValue="NULL"></column>
+			<column name="donorWeight" type="DECIMAL(7,1)" 
+
+defaultValue="NULL"></column>
 		</update>
 	</changeSet>
 	
 	<!-- For issue 61 [Add donor blood pressure (systolic & diastolic)] -->
-    <changeSet id="201310242001" author="devang">
-        <insert tableName="FormField">
-            <column name="form" value="CollectedSample"></column>
-            <column name="FIELD" value="bloodPressureSystolic"></column>
-            <column name="defaultDisplayName" value="Blood Pressure Systolic"></column>
-            <column name="defaultValue" value=""></column>
-            <column name="maxLength" value="0"></column>
-            <column name="hidden" value="0"></column>
-            <column name="isHidable" value="1"></column>
-            <column name="isRequired" value="0"></column>
-            <column name="canBeOptional" value="1"></column>
-            <column name="autoGenerate" value="0"></column>
-            <column name="isAutoGeneratable" value="0"></column>
-            <column name="useCurrentTime" value="0"></column>
-            <column name="isTimeField" value="0"></column>                        
-        </insert>
-        <insert tableName="FormField">
-            <column name="form" value="CollectedSample"></column>
-            <column name="FIELD" value="bloodPressureDiastolic"></column>
-            <column name="defaultDisplayName" value="Blood Pressure Diastolic"></column>
-            <column name="defaultValue" value=""></column>
-            <column name="maxLength" value="0"></column>
-            <column name="hidden" value="0"></column>
-            <column name="isHidable" value="1"></column>
-            <column name="isRequired" value="0"></column>
-            <column name="canBeOptional" value="1"></column>
-            <column name="autoGenerate" value="0"></column>
-            <column name="isAutoGeneratable" value="0"></column>
-            <column name="useCurrentTime" value="0"></column>
-            <column name="isTimeField" value="0"></column>                        
-        </insert>                        
-        <update tableName="CollectedSample">
-            <column name="bloodPressure" type="int" defaultValue="NULL"></column>
-        </update>
-        <renameColumn tableName="CollectedSample" oldColumnName="bloodPressure" newColumnName="bloodPressureSystolic" columnDataType="int"/>
-        <update tableName="CollectedSample_AUD">
-            <column name="bloodPressure" type="int" defaultValue="NULL"></column>
-        </update>
-        <renameColumn tableName="CollectedSample_AUD" oldColumnName="bloodPressure" newColumnName="bloodPressureSystolic" columnDataType="int"/>
-        <addColumn tableName="CollectedSample">
-            <column name="bloodPressureDiastolic" type="int" defaultValue="NULL"></column>
-        </addColumn>
-        <addColumn tableName="CollectedSample_AUD">
-            <column name="bloodPressureDiastolic" type="int" defaultValue="NULL"></column>
-        </addColumn>                        
-    </changeSet>
+	<changeSet id="20131024-2001" author="gtldevang">
+		<insert tableName="FormField">
+			<column name="form" value="CollectedSample"></column>
+			<column name="FIELD" value="bloodPressureSystolic"></column>
+			<column name="defaultDisplayName" value="Blood Pressure 
+
+Systolic"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>                        
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="CollectedSample"></column>
+			<column name="FIELD" value="bloodPressureDiastolic"></column>
+			<column name="defaultDisplayName" value="Blood Pressure 
+
+Diastolic"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>                        
+		</insert>                        
+		<update tableName="CollectedSample">
+			<column name="bloodPressure" type="int" defaultValue="NULL"></column>
+		</update>
+		<renameColumn tableName="CollectedSample" oldColumnName="bloodPressure" 
+
+newColumnName="bloodPressureSystolic" columnDataType="int"/>
+		<update tableName="CollectedSample_AUD">
+			<column name="bloodPressure" type="int" defaultValue="NULL"></column>
+		</update>
+		<renameColumn tableName="CollectedSample_AUD" oldColumnName="bloodPressure" 
+
+newColumnName="bloodPressureSystolic" columnDataType="int"/>
+		<addColumn tableName="CollectedSample">
+			<column name="bloodPressureDiastolic" type="int" 
+
+defaultValue="NULL"></column>
+		</addColumn>
+		<addColumn tableName="CollectedSample_AUD">
+			<column name="bloodPressureDiastolic" type="int" 
+
+defaultValue="NULL"></column>
+		</addColumn>                        
+	</changeSet>
 	
 	<!-- For issue 70 [Allow for entry of donor pulse] -->
-	<changeSet id="201310241926" author="devang">
+	<changeSet id="20131024-1926" author="gtldevang">
 		<insert tableName="FormField">
 			<column name="form" value="CollectedSample"></column>
 			<column name="FIELD" value="donorPulse"></column>
@@ -228,42 +162,54 @@
 	</changeSet>
 
 	<!-- For issue 39 [Add in Date of first donation field to Donor form] -->
- 	<changeSet id="201310251212" author="ankur">
- 		<addColumn tableName="Donor">
- 			<column name="dateOfFirstDonation" type="DATE" defaultValue="NULL"></column>
- 		</addColumn>
- 		<addColumn tableName="Donor_AUD">
- 			<column name="dateOfFirstDonation" type="DATE" defaultValue="NULL"></column>
- 		</addColumn>		
- 		<insert tableName="FormField">
- 			<column name="form" value="Donor"></column>
- 			<column name="FIELD" value="dateOfFirstDonation"></column>
- 			<column name="defaultDisplayName" value="Date of First Donation"></column>
- 			<column name="defaultValue" value=""></column>
- 			<column name="maxLength" value="0"></column>
- 			<column name="hidden" value="0"></column>
- 			<column name="isHidable" value="1"></column>
- 			<column name="isRequired" value="0"></column>
- 			<column name="canBeOptional" value="1"></column>
- 			<column name="autoGenerate" value="0"></column>
- 			<column name="isAutoGeneratable" value="0"></column>
- 			<column name="useCurrentTime" value="0"></column>
- 			<column name="isTimeField" value="0"></column>			
- 		</insert>
- 	</changeSet>
+	<changeSet id="20131025-1212" author="gtlankur">
+		<addColumn tableName="Donor">
+			<column name="dateOfFirstDonation" type="DATE" 
+
+defaultValue="NULL"></column>
+		</addColumn>
+		<addColumn tableName="Donor_AUD">
+			<column name="dateOfFirstDonation" type="DATE" 
+
+defaultValue="NULL"></column>
+		</addColumn>		
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="dateOfFirstDonation"></column>
+			<column name="defaultDisplayName" value="Date of First 
+
+Donation"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+	</changeSet>
 
 	<!-- For issue 27 [Add 'Record Product' tab to Component Processing] -->
-	<changeSet id="201311071844" author="Ankur">
+	<changeSet id="20131107-1844" author="gtlankur">
 		<addColumn tableName="Product">
-			<column name="componentIdentificationNumber" type="VARCHAR(30)" defaultValue=""></column>
+			<column name="componentIdentificationNumber" type="VARCHAR(30)" 
+
+defaultValue=""></column>
 		</addColumn>
 		<addColumn tableName="Product_AUD">
-			<column name="componentIdentificationNumber" type="VARCHAR(30)" defaultValue=""></column>
+			<column name="componentIdentificationNumber" type="VARCHAR(30)" 
+
+defaultValue=""></column>
 		</addColumn>
 		<insert tableName="FormField">
 			<column name="form" value="Product"></column>
 			<column name="FIELD" value="componentIdentificationNumber"></column>
-			<column name="defaultDisplayName" value="Component Identification Number"></column>
+			<column name="defaultDisplayName" value="Component Identification 
+
+Number"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
 			<column name="hidden" value="0"></column>
@@ -293,102 +239,104 @@
 	</changeSet>
 	
 	<!-- For issue 102 [Add Request Type 'Bulk Transfer' Flag] -->
-	<changeSet id="201311081617" author="devang">
-	    <addColumn tableName="RequestType">
-	        <column name="bulkTransfer" type="TINYINT(1)"/>
-	    </addColumn>
+	<changeSet id="20131108-1617" author="gtldevang">
+		<addColumn tableName="RequestType">
+			<column name="bulkTransfer" type="TINYINT(1)"/>
+		</addColumn>
 		<addColumn tableName="RequestType_AUD">
-	        <column name="bulkTransfer" type="TINYINT(1)"/>
-	    </addColumn>
+			<column name="bulkTransfer" type="TINYINT(1)"/>
+		</addColumn>
 	</changeSet>
 	
 	<!-- Update FormField table to rename Collection info to Donation -->
-	<changeSet id="201311081720" author="danfuterman">
+	<changeSet id="20131108-1720" author="danfuterman">
 		<update tableName="FormField">
-    		<column name="defaultDisplayName" value="Donation Identification Number" />
-    		<where>field = "collectionNumber"</where>
+			<column name="defaultDisplayName" value="Donation Identification 
+
+Number" />
+			<where>field = "collectionNumber"</where>
 		</update>
 		<update tableName="FormField">
-    		<column name="defaultDisplayName" value="Donation Site" />
-    		<where>field = "collectionSite"</where>
+			<column name="defaultDisplayName" value="Donation Site" />
+			<where>field = "collectionSite"</where>
 		</update>
 		<update tableName="FormField">
-    		<column name="defaultDisplayName" value="Donation Centre" />
-    		<where>field = "collectionCenter"</where>
+			<column name="defaultDisplayName" value="Donation Centre" />
+			<where>field = "collectionCenter"</where>
 		</update>
 	</changeSet>
 
 	<!-- For issue 104 [Add Lot Release Functionality] -->
-    <changeSet id="201311111726" author="devang">
-            <insert tableName="GenericConfig">
-                    <column name="id" value="48"></column>
-                    <column name="propertyName" value="lotRelease"></column>
-                    <column name="propertyOwner" value="labsetup"></column>
-                    <column name="propertyValue" value="TRUE"></column>
-            </insert>
-    </changeSet>
+	<changeSet id="20131111-1726" author="gtldevang">
+		<insert tableName="GenericConfig">
+			<column name="id" value="48"></column>
+			<column name="propertyName" value="lotRelease"></column>
+			<column name="propertyOwner" value="labsetup"></column>
+			<column name="propertyValue" value="TRUE"></column>
+		</insert>
+	</changeSet>
 
-    <!-- For issue 95 [Add TTI Test Result import mechanism and UI] -->
-     <changeSet id="201311071517" author="devang">
-	     <addColumn tableName="BloodTestResult">
-	     	<column name="reagentLotNumber" type="varchar(20)" />
-	     </addColumn>
-	     <insert tableName="GenericConfig">
-	     	<column name="id" value="47"></column>
-	     	<column name="propertyName" value="ttiUploadResult"></column>
-	     	<column name="propertyOwner" value="labsetup"></column>
-	     	<column name="propertyValue" value="true"></column>
-	     </insert>
+	<!-- For issue 95 [Add TTI Test Result import mechanism and UI] -->
+	 <changeSet id="20131107-1517" author="gtldevang">
+		 <addColumn tableName="BloodTestResult">
+			<column name="reagentLotNumber" type="varchar(20)" />
+		 </addColumn>
+		 <insert tableName="GenericConfig">
+			<column name="id" value="47"></column>
+			<column name="propertyName" value="ttiUploadResult"></column>
+			<column name="propertyOwner" value="labsetup"></column>
+			<column name="propertyValue" value="true"></column>
+		 </insert>
    </changeSet>
    
    <!-- For issue 58 [Add ability to update Deferrals] -->
-     <changeSet id="201311251517" author="devang">
-	     <addColumn tableName="DonorDeferral">
-	     	<column name="isVoided" type="tinyint(1)" />
-	     	<column name="voidedBy_id" type="smallint(6)" />
-	     	<column name="voidedDate" type="date" />
-	     </addColumn>
-	    <addForeignKeyConstraint constraintName="fk_voidedBy"
+	 <changeSet id="20131125-1517" author="gtldevang">
+		 <addColumn tableName="DonorDeferral">
+			<column name="isVoided" type="tinyint(1)" />
+			<column name="voidedBy_id" type="smallint(6)" />
+			<column name="voidedDate" type="date" />
+		 </addColumn>
+		<addForeignKeyConstraint constraintName="fk_voidedBy"
 			baseTableName="DonorDeferral" baseColumnNames="voidedBy_id"
 			referencedTableName="User" referencedColumnNames="id"/>
    </changeSet>
    
-    <changeSet id="201311251525" author="devang">
-	     <addColumn tableName="DonorDeferral_AUD">
-	     	<column name="isVoided" type="tinyint(1)" />
-	     	<column name="voidedBy_id" type="smallint(6)" />
-	     	<column name="voidedDate" type="date" />
-	     </addColumn>
-	    <addForeignKeyConstraint constraintName="fk_voidedBy_aud"
+	<changeSet id="20131125-1525" author="gtldevang">
+		 <addColumn tableName="DonorDeferral_AUD">
+			<column name="isVoided" type="tinyint(1)" />
+			<column name="voidedBy_id" type="smallint(6)" />
+			<column name="voidedDate" type="date" />
+		 </addColumn>
+		<addForeignKeyConstraint constraintName="fk_voidedBy_aud"
 			baseTableName="DonorDeferral" baseColumnNames="voidedBy_id"
 			referencedTableName="User" referencedColumnNames="id"/>
    </changeSet>
 
    <!-- For issue 64 [Add isDeleted field to BloodTest and BloodTest_AUD Tables] -->
-     <changeSet id="201401140950" author="srikanth">
-	     <addColumn tableName="BloodTest">
-	     	<column name="isDeleted" type="TINYINT(1)" />
-	     </addColumn>
-	     
-	     <addColumn tableName="BloodTest_AUD">
-	     	<column name="isDeleted" type="TINYINT(1)" />
-	     </addColumn>
+	 <changeSet id="20140114-0950" author="srikanthmalyala">
+		 <addColumn tableName="BloodTest">
+			<column name="isDeleted" type="TINYINT(1)" />
+		 </addColumn>
+		 
+		 <addColumn tableName="BloodTest_AUD">
+			<column name="isDeleted" type="TINYINT(1)" />
+		 </addColumn>
 	</changeSet>
    
 	<!-- For issue 117 [Configure Role] -->
-	<changeSet id="20131129112" author="nikita">
+	<changeSet id="20131129-1312" author="gtlnikita">
 		<addColumn tableName="Role">
 			<column name="description" type="longtext"></column>
 		</addColumn>
 	</changeSet>
-	<changeSet id="20131129113" author="nikita">
+	<changeSet id="20131129-1313" author="gtlnikita">
 		<addColumn tableName="Role_AUD">
 			<column name="description" type="longtext"></column>
 		</addColumn>
 	</changeSet>
 	
 	<!-- For issue 117 [for issue role management] -->
-	<changeSet id="201401310210" author="srikanth">
+	<changeSet id="20140131-1410" author="srikanthmalyala">
 		<insert tableName="FormField">
 			<column name="form" value="Role"></column>
 			<column name="FIELD" value="name"></column>
@@ -407,9 +355,9 @@
 		</changeSet>
 		
 	<!-- For issue 118[improve admin UI to manage users ] -->
-	<changeSet id="201402030408" author="srikanth">
+	<changeSet id="20140203-1608" author="srikanthmalyala">
 		<insert tableName="FormField">
-			<column name="form" value="user"></column>
+			<column name="form" value="User"></column>
 			<column name="FIELD" value="username"></column>
 			<column name="defaultDisplayName" value="Username"></column>
 			<column name="defaultValue" value=""></column>
@@ -426,9 +374,9 @@
 	</changeSet>
 	
 	<!-- For issue 118[improve admin UI to manage users ] -->
-	<changeSet id="201402030415" author="srikanth">
+	<changeSet id="20140203-1615" author="srikanthmalyala">
 		<insert tableName="FormField">
-			<column name="form" value="user"></column>
+			<column name="form" value="User"></column>
 			<column name="FIELD" value="firstName"></column>
 			<column name="defaultDisplayName" value="Firstname"></column>
 			<column name="defaultValue" value=""></column>
@@ -444,7 +392,7 @@
 		</insert>
 		
 		<insert tableName="FormField">
-			<column name="form" value="user"></column>
+			<column name="form" value="User"></column>
 			<column name="FIELD" value="lastname"></column>
 			<column name="defaultDisplayName" value="Lastname"></column>
 			<column name="defaultValue" value=""></column>
@@ -458,1834 +406,10 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimeField" value="0"></column>			
 		</insert>
-		
-	</changeSet>
-	
-	<!-- For issue 134 [Add New Roles And Permissions]  -->
-	<changeSet id="201402210359" author="srikanth">
-		<delete tableName="User_Role"></delete>
-		<delete tableName="Permission_Role"></delete>
-		<delete tableName="Role"></delete>
-		<delete tableName="Permission"></delete>
-	</changeSet>
-	
-	<!-- For issue 134 [Add New Roles And Permissions]  -->
-	<changeSet id="201402251103" author="srikanth">
-	     <insert tableName="Role">
-	       <column name="id" value="1"></column>
-	       <column name="name" value="Super User"></column>
-	       <column name="description" value="Super User"></column>
-	    </insert>
-	    <insert tableName="Role">
-	       <column name="id" value="2"></column>
-	       <column name="name" value="Admin"></column>
-	       <column name="description" value="Admin User"></column>
-	    </insert>
-	    <insert tableName="Role">
-	       <column name="id" value="3"></column>
-	       <column name="name" value="Donor Clinic Supervisor"></column>
-	       <column name="description" value="Donor Clinic Supervisor "></column>
-	    </insert>
-	    <insert tableName="Role">
-	       <column name="id" value="4"></column>
-	       <column name="name" value="Donor Clinic Staff"></column>
-	       <column name="description" value="Donor Clinic Staff"></column>
-	    </insert>
-	    <insert tableName="Role">
-	       <column name="id" value="5"></column>
-	       <column name="name" value="Donor Communications Staff"></column>
-	       <column name="description" value="Donor Communications Staff"></column>
-	    </insert>
-	     <insert tableName="Role">
-	       <column name="id" value="6"></column>
-	       <column name="name" value="Donor Counselling Staff"></column>
-	       <column name="description" value="Donor Counselling Staff"></column>
-	    </insert>
-	    <insert tableName="Role">
-	       <column name="id" value="7"></column>
-	       <column name="name" value="Data Entry Clerk"></column>
-	       <column name="description" value="Data Entry Clerk"></column>
-	    </insert>
-	    <insert tableName="Role">
-	       <column name="id" value="8"></column>
-	       <column name="name" value="Medical Officer"></column>
-	       <column name="description" value="Medical Officer"></column>
-	    </insert>
-	    <insert tableName="Role">
-	       <column name="id" value="9"></column>
-	       <column name="name" value="Component Supervisor"></column>
-	       <column name="description" value="Component Supervisor"></column>
-	    </insert>
-	    <insert tableName="Role">
-	       <column name="id" value="10"></column>
-	       <column name="name" value="Component Staff"></column>
-	       <column name="description" value="Component Staff"></column>
-	    </insert>
-	     <insert tableName="Role">
-	       <column name="id" value="11"></column>
-	       <column name="name" value="TTI Testing Supervisor"></column>
-	       <column name="description" value="TTI Testing Supervisor"></column>
-	    </insert>
-	      <insert tableName="Role">
-	       <column name="id" value="12"></column>
-	       <column name="name" value="TTI Testing Staff"></column>
-	       <column name="description" value="TTI Testing Staff"></column>
-	    </insert>
-	      <insert tableName="Role">
-	       <column name="id" value="13"></column>
-	       <column name="name" value="Serology Supervisor"></column>
-	       <column name="description" value="Serology Supervisor"></column>
-	    </insert>
-	    <insert tableName="Role">
-	       <column name="id" value="14"></column>
-	       <column name="name" value="Serology Staff"></column>
-	       <column name="description" value="Serology Staff"></column>
-	    </insert>
-	    <insert tableName="Role">
-	       <column name="id" value="15"></column>
-	       <column name="name" value="Inventory Staff"></column>
-	       <column name="description" value="Inventory Staff"></column>
-	    </insert>
-	    <insert tableName="Role">
-	       <column name="id" value="16"></column>
-	       <column name="name" value="Blood Bank  Staff"></column>
-	       <column name="description" value="Blood Bank Staff"></column>
-	    </insert>
-	    
-	    <!-- Permissions  -->
-	 
-	   <insert tableName="Permission">
-	       <column name="id" value="1"></column>
-	       <column name="name" value="Add Donor"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="2"></column>
-	       <column name="name" value="View Donor"></column>
-	   </insert> 
-	   <insert tableName="Permission">
-	       <column name="id" value="3"></column>
-	       <column name="name" value="Edit Donor"></column>
-	   </insert>
-      <insert tableName="Permission">
-	       <column name="id" value="4"></column>
-	       <column name="name" value="Void Donor"></column>
-	   </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="5"></column>
-	       <column name="name" value="Add Deferral"></column>
-	   </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="6"></column>
-	       <column name="name" value="View Deferral"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="7"></column>
-	       <column name="name" value="Edit Deferral"></column>
-	   </insert> 
-	   <insert tableName="Permission">
-	       <column name="id" value="8"></column>
-	       <column name="name" value="Void Deferral"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="9"></column>
-	       <column name="name" value="Add Donor Code"></column>
-	   </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="10"></column>
-	       <column name="name" value="View Donor Code"></column>
-	   </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="11"></column>
-	       <column name="name" value="Edit Donor Code"></column>
-	   </insert>
-	   <insert tableName="Permission">
-	        <column name="id" value="12"></column>
-	       <column name="name" value="Void Donor Code"></column>
-	   </insert>
-	   <insert tableName="Permission">
-	        <column name="id" value="13"></column>
-	       <column name="name" value="View Donor Code Group"></column>
-	   </insert>
-      <insert tableName="Permission">
-	       <column name="id" value="14"></column>
-	       <column name="name" value="Add Donation"></column>
-	   </insert> 
-	   <insert tableName="Permission">
-	       <column name="id" value="15"></column>
-	       <column name="name" value="View Donation"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="16"></column>
-	       <column name="name" value="Edit Donation"></column>
-	   </insert> 
-	   <insert tableName="Permission">
-	       <column name="id" value="17"></column>
-	       <column name="name" value="Void Donation"></column>
-	   </insert> 
-	   <insert tableName="Permission">
-	       <column name="id" value="18"></column>
-	       <column name="name" value="Import Clinic Data"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="19"></column>
-	       <column name="name" value="Export Clinic Data"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="20"></column>
-	       <column name="name" value="Add Component"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="21"></column>
-	       <column name="name" value="View Component"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="22"></column>
-	       <column name="name" value="Edit Component"></column>
-	   </insert> 
-	   <insert tableName="Permission">
-	       <column name="id" value="23"></column>
-	       <column name="name" value="Void Component"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="24"></column>
-	       <column name="name" value="Add TTI Outcome"></column>
-	   </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="25"></column>
-	       <column name="name" value="Edit TTI Outcome"></column>
-	   </insert>
-	     <insert tableName="Permission">
-	       <column name="id" value="26"></column>
-	       <column name="name" value="View TTI Outcome"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="27"></column>
-	       <column name="name" value="Add Blood Typing Outcome"></column>
-	   </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="28"></column>
-	       <column name="name" value="Edit Blood Typing Outcome"></column>
-	   </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="29"></column>
-	       <column name="name" value="View Blood Typing Outcome"></column>
-	   </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="30"></column>
-	       <column name="name" value="Blood Cross-Match Check"></column>
-	   </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="31"></column>
-	       <column name="name" value="Label Component"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="32"></column>
-	       <column name="name" value="Issue Component"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="33"></column>
-	       <column name="name" value="Discard Component"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="34"></column>
-	       <column name="name" value="View Discards"></column>
-	   </insert> 
-	   <insert tableName="Permission">
-	       <column name="id" value="35"></column>
-	       <column name="name" value="Reporting - Donations"></column>
-	   </insert> 
-	   <insert tableName="Permission">
-	       <column name="id" value="36"></column>
-	       <column name="name" value="Reporting - Requests"></column>
-	   </insert> 
-	   <insert tableName="Permission">
-	       <column name="id" value="37"></column>
-	       <column name="name" value="Reporting - TTI Testing"></column>
-	   </insert> 
-	   <insert tableName="Permission">
-	       <column name="id" value="38"></column>
-	       <column name="name" value="Reporting - Components"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="39"></column>
-	       <column name="name" value="Reporting - Discards"></column>
-	   </insert>
-	  
-	   <!-- Super User and Admin Permissions permissions -->
-	   
-	    <insert tableName="Permission">
-	       <column name="id" value="40"></column>
-	       <column name="name" value="Manage Users"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="41"></column>
-	       <column name="name" value="Manage Roles"></column>
-	   </insert> 
-	   <insert tableName="Permission">
-	       <column name="id" value="42"></column>
-	       <column name="name" value="Manage Donation Sites"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="43"></column>
-	       <column name="name" value="Manage Donation Types"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="44"></column>
-	       <column name="name" value="Manage Donation Categories"></column>
-	   </insert> 
-	   <insert tableName="Permission">
-	       <column name="id" value="45"></column>
-	       <column name="name" value="Manage Component Combinations"></column>
-	   </insert> 
-	   <insert tableName="Permission">
-	       <column name="id" value="46"></column>
-	       <column name="name" value="Manage Cross Match Types"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="47"></column>
-	       <column name="name" value="Manage Blood Tests"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="48"></column>
-	       <column name="name" value="Manage Blood Typing Rules"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="49"></column>
-	       <column name="name" value="Manage Blood Bag Types"></column>
-	   </insert> 
-	   <insert tableName="Permission">
-	       <column name="id" value="50"></column>
-	       <column name="name" value="Manage Discard Reasons"></column>
-	   </insert> 
-	   <insert tableName="Permission">
-	       <column name="id" value="51"></column>
-	       <column name="name" value="Manage Deferral Reasons"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="52"></column>
-	       <column name="name" value="Manage Donor Codes"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="53"></column>
-	       <column name="name" value="Manage Diagnosis Codes"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="54"></column>
-	       <column name="name" value="Manage Lab Setup"></column>
-	   </insert> 
-	   <insert tableName="Permission">
-	       <column name="id" value="55"></column>
-	       <column name="name" value="Manage Data Setup"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="56"></column>
-	       <column name="name" value="Manage Forms"></column>
-	   </insert> 
-	   <insert tableName="Permission">
-	       <column name="id" value="57"></column>
-	       <column name="name" value="Manage Blood Tests"></column>
-	   </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="58"></column>
-	       <column name="name" value="Manage Backup Data"></column>
-	   </insert>
-	   
-	   
-	   <!-- Information control permissions -->
-	   
-	   <insert tableName="Permission">
-	       <column name="id" value="59"></column>
-	       <column name="name" value="View Donor Information"></column>
-	   </insert>
-	    <insert tableName="Permission">
-	       <column name="id" value="60"></column>
-	       <column name="name" value="View Donation Information"></column>
-	   </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="61"></column>
-	       <column name="name" value="View Mobile Clinic Information"></column>
-	   </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="62"></column>
-	       <column name="name" value="View Component Information"></column>
-	   </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="63"></column>
-	       <column name="name" value="View Testing Information"></column>
-	   </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="64"></column>
-	       <column name="name" value="View Blood Bank Information"></column>
-	   </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="65"></column>
-	       <column name="name" value="View Inventory Information"></column>
-	   </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="66"></column>
-	       <column name="name" value="View Discard Information"></column>
-	   </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="67"></column>
-	       <column name="name" value="View Reporting Information"></column>
-	   </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="68"></column>
-	       <column name="name" value="View Admin Information"></column>
-	   </insert>
-	   
-	 </changeSet>
-  
-  
-	<!-- For issue 134 [Add New Roles And Permissions]  -->
-	<changeSet id="201402210416" author="srikanth">
-  
-       <!-- Donor Permission Association With Roles -->
-       
-       <!-- Add Donor Permission Role Mappings -->
-       
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="1"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="1"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="1"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="1"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="1"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="1"></column>
-	     <column name="roles_id" value="6"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="1"></column>
-	     <column name="roles_id" value="7"></column>
-	  </insert>
-	  
-	    <!-- View Donor Permission mapping with Roles -->
-	    
-	    <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="2"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="2"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="2"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="2"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="2"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="2"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="2"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="2"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="2"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="2"></column>
-	     <column name="roles_id" value="6"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="2"></column>
-	     <column name="roles_id" value="7"></column>
-	  </insert>
-	  
-	    <!-- Edit Donor Permission mapping with Roles -->
-	    
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="3"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	    <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="3"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert> 
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="3"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	    <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="3"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	    <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="3"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	    <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="3"></column>
-	     <column name="roles_id" value="6"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="3"></column>
-	     <column name="roles_id" value="7"></column>
-	  </insert>
-	  
-	    <!-- Void Donor Permission mapping with Roles -->
-	  
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="4"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="4"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="4"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="4"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="4"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="4"></column>
-	     <column name="roles_id" value="6"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="4"></column>
-	     <column name="roles_id" value="7"></column>
-	  </insert>
-	  
-	    <!-- Add Deferra; Permission mapping with Roles -->
-	    
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="5"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="5"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="5"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="5"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="5"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="5"></column>
-	     <column name="roles_id" value="6"></column>
-	  </insert>
-	  
-	     <!-- View Deferra; Permission mapping with Roles -->
-	     
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="6"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="6"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert> 
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="6"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="6"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="6"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="6"></column>
-	     <column name="roles_id" value="6"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="6"></column>
-	     <column name="roles_id" value="7"></column>
-	  </insert>
-	   
-	  <!-- Edit Deferral Permission mapping with Roles -->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="7"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="7"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="7"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="7"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="7"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="7"></column>
-	     <column name="roles_id" value="6"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="7"></column>
-	     <column name="roles_id" value="7"></column>
-	  </insert>
-
-	 <!-- Void  Deferral Permission mapping with Roles -->
-	     
-     <insert tableName="Permission_Role">
-	    <column name="permissions_id" value="8"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	<insert tableName="Permission_Role">
-	    <column name="permissions_id" value="8"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	 <insert tableName="Permission_Role">
-	    <column name="permissions_id" value="8"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	 <insert tableName="Permission_Role">
-	    <column name="permissions_id" value="8"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	 <insert tableName="Permission_Role">
-	    <column name="permissions_id" value="8"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	 <insert tableName="Permission_Role">
-	    <column name="permissions_id" value="8"></column>
-	     <column name="roles_id" value="6"></column>
-	  </insert>
-	 <insert tableName="Permission_Role">
-	    <column name="permissions_id" value="8"></column>
-	     <column name="roles_id" value="7"></column>
-	  </insert>
-	  
-	   <!-- Add Donor Code Permission mapping with Roles -->
-     
-      <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="9"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="9"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="9"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="9"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="9"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="9"></column>
-	     <column name="roles_id" value="6"></column>
-	  </insert>
-	  
-	   <!-- View Donor Code Permission mapping with Roles -->
-     
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="10"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="10"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="10"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="10"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	  
-	  <!-- Edir Donor Code Permission mapping with Roles -->
-	    
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="11"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="11"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="11"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="11"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	  
-	  <!-- Void Donor Code Permission mapping with Roles -->
-	   
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="12"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="12"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="12"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="12"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	  
-	  <!-- Void Donor Code Gruups Permission mapping with Roles -->
-	   
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="13"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="13"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="13"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-         <column name="permissions_id" value="13"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="13"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="13"></column>
-	     <column name="roles_id" value="6"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="13"></column>
-	     <column name="roles_id" value="7"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="13"></column>
-	     <column name="roles_id" value="8"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="13"></column>
-	     <column name="roles_id" value="9"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="13"></column>
-	     <column name="roles_id" value="10"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="13"></column>
-	     <column name="roles_id" value="11"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="13"></column>
-	     <column name="roles_id" value="13"></column>
-	  </insert>
-	  
-	  <!-- Add Donation Permission mapping with Roles -->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="14"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="14"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="14"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="14"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="14"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="14"></column>
-	     <column name="roles_id" value="8"></column>
-	  </insert>
-	  
-	  <!-- View Donation Permission mapping with Roles -->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="15"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="15"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="15"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="15"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="15"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="15"></column>
-	     <column name="roles_id" value="8"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="15"></column>
-	     <column name="roles_id" value="11"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="15"></column>
-	     <column name="roles_id" value="12"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="15"></column>
-	     <column name="roles_id" value="13"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="15"></column>
-	     <column name="roles_id" value="14"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="15"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  
-	  <!-- Edit Donation Permission mapping with Roles -->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="16"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="16"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="16"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="16"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="16"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="16"></column>
-	     <column name="roles_id" value="8"></column>
-	  </insert>
-	  
-	  <!-- Void Donation Permission mapping with Roles -->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="17"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="17"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="17"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="17"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="17"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	  
-	  
-	  <!-- Import Clinic Data  Permissions mapping with Roles -->
-	   
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="18"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="18"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="18"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="18"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="18"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="18"></column>
-	     <column name="roles_id" value="8"></column>
-	  </insert>
-
-	  
-	  <!-- Export Clinic Data Permissions mapping with Roles -->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="19"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="19"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="19"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="19"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="19"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="19"></column>
-	     <column name="roles_id" value="8"></column>
-	  </insert>
-	  
-	  <!-- Add Component Permission Role Mappings-->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="20"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="20"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="20"></column>
-	     <column name="roles_id" value="9"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="20"></column>
-	     <column name="roles_id" value="10"></column>
-	  </insert>
-	  
-	  <!-- View Component Permission Role Mappings-->
-
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="21"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="21"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="21"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="21"></column>
-	     <column name="roles_id" value="9"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="21"></column>
-	     <column name="roles_id" value="10"></column>
-	  </insert>
-	  
-	  <!-- Edit Component Permission Role Mappings-->
-
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="22"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="22"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="22"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="22"></column>
-	     <column name="roles_id" value="9"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="22"></column>
-	     <column name="roles_id" value="10"></column>
-	  </insert>
-	  
-	  <!-- Void Component Permission Role Mappings-->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="23"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="23"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="23"></column>
-	     <column name="roles_id" value="9"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="23"></column>
-	     <column name="roles_id" value="10"></column>
-	  </insert>
-	  
-	  <!-- Add TTI Outcomes Permission Role Mappings-->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="24"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="24"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="24"></column>
-	     <column name="roles_id" value="11"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="24"></column>
-	     <column name="roles_id" value="12"></column>
-	  </insert>
-	  
-	  <!-- Edit TTI Outcomes Permission Role Mappings-->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="25"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="25"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="25"></column>
-	     <column name="roles_id" value="13"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="25"></column>
-	     <column name="roles_id" value="14"></column>
-	  </insert>
-	  
-	  <!-- View TTI Outcomes Permission Role Mappings-->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="26"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="26"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="26"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="26"></column>
-	     <column name="roles_id" value="6"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="26"></column>
-	     <column name="roles_id" value="11"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="26"></column>
-	     <column name="roles_id" value="12"></column>
-	  </insert>
-	  
-	  <!-- Add Blood Typing  Outcomes Permission Role Mappings-->  
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="27"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="27"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="27"></column>
-	     <column name="roles_id" value="13"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="27"></column>
-	     <column name="roles_id" value="14"></column>
-	  </insert>
-	  
-	  <!-- Edit Blood Typing  Outcomes Permission Role Mappings-->    
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="28"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="28"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="28"></column>
-	     <column name="roles_id" value="13"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="28"></column>
-	     <column name="roles_id" value="14"></column>
-	  </insert>
-	  
-	  <!-- View Blood Typing Outcomes Permission Role Mappings-->  
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="29"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="29"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="29"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="29"></column>
-	     <column name="roles_id" value="6"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="29"></column>
-	     <column name="roles_id" value="13"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="29"></column>
-	     <column name="roles_id" value="14"></column>
-	  </insert>
-	  
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="30"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="30"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="30"></column>
-	     <column name="roles_id" value="16"></column>
-	  </insert>
-	  
-	
-	  
-	  <!-- Components Labelling pemisson role Mappings -->
-	  
-	    <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="31"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="31"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="31"></column>
-	     <column name="roles_id" value="15"></column>
-	  </insert>
-	  
-	  <!-- Issue Components  pemisson role Mappings -->
-	 
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="32"></column>
-	     <column name="roles_id" value="15"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="32"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="32"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  
-	   <!-- Discard Components  pemisson role Mappings -->
-	  
-      <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="33"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="33"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="33"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="33"></column>
-	     <column name="roles_id" value="10"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="33"></column>
-	     <column name="roles_id" value="11"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="33"></column>
-	     <column name="roles_id" value="12"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="33"></column>
-	     <column name="roles_id" value="13"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="33"></column>
-	     <column name="roles_id" value="16"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="33"></column>
-	     <column name="roles_id" value="14"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="33"></column>
-	     <column name="roles_id" value="15"></column>
-	  </insert>
-	  
-	  <!-- View Discarded Components  pemisson role Mappings --> 
-	 
-      <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="34"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="34"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="34"></column>
-	     <column name="roles_id" value="9"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="34"></column>
-	     <column name="roles_id" value="10"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="34"></column>
-	     <column name="roles_id" value="11"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="34"></column>
-	     <column name="roles_id" value="12"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="34"></column>
-	     <column name="roles_id" value="13"></column>
-	  </insert>
-	    <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="34"></column>
-	     <column name="roles_id" value="14"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="34"></column>
-	     <column name="roles_id" value="15"></column>
-	  </insert>
-       <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="34"></column>
-	     <column name="roles_id" value="16"></column>
-	  </insert>
-	
-	  <!-- Donations Reporting Permission Role Mappings  -->
-	
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="35"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="35"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="35"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="35"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="35"></column>
-	     <column name="roles_id" value="6"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="35"></column>
-	     <column name="roles_id" value="7"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="35"></column>
-	     <column name="roles_id" value="15"></column>
-	  </insert>
-	
-	  <!-- Request Reporting Permission Association Role Mapings -->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="36"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="36"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="36"></column>
-	     <column name="roles_id" value="15"></column>
-	  </insert>
-	    
-	  <!-- TTI Reporting Pemission  Role Mapppings -->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="37"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="37"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="37"></column>
-	     <column name="roles_id" value="11"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="37"></column>
-	     <column name="roles_id" value="15"></column>
-	  </insert>
-	  
-	  <!-- Components Issued Reporting Permission Role Mappings -->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="38"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="38"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="38"></column>
-	     <column name="roles_id" value="9"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="38"></column>
-	     <column name="roles_id" value="15"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="38"></column>
-	     <column name="roles_id" value="16"></column>
-	  </insert>
-	  
-	  <!-- Components Discarded Reporting Permission ROle Mapppings -->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="39"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="39"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="39"></column>
-	     <column name="roles_id" value="9"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="39"></column>
-	     <column name="roles_id" value="15"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="39"></column>
-	     <column name="roles_id" value="16"></column>
-	  </insert>
-  
-	  <!-- Super User and Admin Permissions  Role Mappings -->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="40"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="40"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="41"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="41"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="42"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="42"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="43"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="43"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="44"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="44"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="45"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="45"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="46"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="46"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="47"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="47"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="48"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="48"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="49"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	    <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="49"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="50"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-    <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="50"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>   
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="51"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="51"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="52"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="52"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="53"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="53"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="54"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="54"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="55"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="55"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="56"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="56"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="57"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="57"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="58"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="58"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	 
-	 
-	   
-	  <!-- Information control permission role mappings -->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="59"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="59"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="59"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="59"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="59"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="59"></column>
-	     <column name="roles_id" value="6"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="59"></column>
-	     <column name="roles_id" value="7"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="59"></column>
-	     <column name="roles_id" value="8"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="60"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="60"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="60"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="60"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="60"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="60"></column>
-	     <column name="roles_id" value="8"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="61"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="61"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="61"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="61"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="61"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="61"></column>
-	     <column name="roles_id" value="7"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="62"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="62"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="62"></column>
-	     <column name="roles_id" value="8"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="62"></column>
-	     <column name="roles_id" value="9"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="63"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="63"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="63"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="63"></column>
-	     <column name="roles_id" value="11"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="63"></column>
-	     <column name="roles_id" value="12"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="63"></column>
-	     <column name="roles_id" value="13"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="63"></column>
-	     <column name="roles_id" value="14"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="64"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="64"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="64"></column>
-	     <column name="roles_id" value="15"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="64"></column>
-	     <column name="roles_id" value="16"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="65"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="65"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="65"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="65"></column>
-	     <column name="roles_id" value="15"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="65"></column>
-	     <column name="roles_id" value="16"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="66"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="66"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="66"></column>
-	     <column name="roles_id" value="7"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="66"></column>
-	     <column name="roles_id" value="13"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="66"></column>
-	     <column name="roles_id" value="14"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="67"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="67"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="67"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="67"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="67"></column>
-	     <column name="roles_id" value="6"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="68"></column>
-	     <column name="roles_id" value="7"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="67"></column>
-	     <column name="roles_id" value="9"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="67"></column>
-	     <column name="roles_id" value="11"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="67"></column>
-	     <column name="roles_id" value="15"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="67"></column>
-	     <column name="roles_id" value="16"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="68"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="68"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
- 	</changeSet>
-  
-    <!-- For issue 134 Remove existing users and add in new Super User  -->
-	<changeSet id="201411071127" author="srikanth">
-		<delete tableName="User"></delete>
-		
-		<insert tableName="User">
-			<column name="id" value="1"></column>
-			<column name="emailId" value="xxxx@jembi.org"></column>
-			<column name="firstName" value="superuser"></column>
-			<column name="isActive" value="1"></column>
-			<column name="isAdmin" value="1"></column>
-			<column name="isDeleted" value="0"></column>
-			<column name="isStaff" value="1"></column>
-			<column name="password" value="$2a$10$LCm5DaDhgfCdzPecqLVPyemfk6WfmbRduFTwDPPfAdABTLPb9d6c6"></column>
-			<column name="username" value="superuser"></column>
-		</insert>
-		<insert tableName="User_Role">
-			<column name="users_id" value="1"></column>
-			<column name="roles_id" value="1"></column>
-		</insert>
 	</changeSet>
 
 	<!-- For issue 71 [Include additional columns in Donation History table] -->
-	<changeSet id="201401151001" author="srikanth">
+	<changeSet id="20140115-1001" author="srikanthmalyala">
 		<update tableName="FormField">
 			<column name="displayName" value="DIN" />
 			<where>field = "collectionNumber"</where>
@@ -2319,814 +443,251 @@
 			<column name="isTimeField" value="0"></column>	
 			<column name="displayName" value="BP"></column>		
 		</insert>
-  </changeSet>
-  
-   <!-- For issue 150 - Adding New Permissions and Prmission Role Mappings -->
-   <changeSet id="201403191102" author="srikanth">
-   
-      <!-- Donation Batch Permissions -->
-      
-      <insert tableName="Permission">
-	       <column name="id" value="69"></column>
-	       <column name="name" value="Add Donation Batch"></column>
-	  </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="70"></column>
-	       <column name="name" value="View Donation Batch"></column>
-	  </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="71"></column>
-	       <column name="name" value="Edit Donation Batch"></column>
-	  </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="72"></column>
-	       <column name="name" value="Void Donation Batch"></column>
-	  </insert>
-	  
-	  <!-- Test Reslut Permissions -->
-	  
-	   <insert tableName="Permission">
-	       <column name="id" value="73"></column>
-	       <column name="name" value="Add Test Outcome"></column>
-	  </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="74"></column>
-	       <column name="name" value="View Test Outcome"></column>
-	  </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="75"></column>
-	       <column name="name" value="Edit Test Outcome"></column>
-	  </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="76"></column>
-	       <column name="name" value="Void Test Outcome"></column>
-	  </insert>
-	  
-	  <!-- Product Request Permissions -->
-	  
-	  <insert tableName="Permission">
-	       <column name="id" value="77"></column>
-	       <column name="name" value="Add Request"></column>
-	  </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="78"></column>
-	       <column name="name" value="View Request"></column>
-	  </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="79"></column>
-	       <column name="name" value="Edit Request"></column>
-	  </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="80"></column>
-	       <column name="name" value="Void Request"></column>
-	  </insert>
-	  
-	  <!-- Admin & Super-User Permissions -->
-	  
-	   <insert tableName="Permission">
-	       <column name="id" value="81"></column>
-	       <column name="name" value="Manage Requests"></column>
-	  </insert>
-	   <insert tableName="Permission">
-	       <column name="id" value="82"></column>
-	       <column name="name" value="Manage Tips"></column>
-	  </insert>
-	  
-	  <!-- Donation Batch Role mappings -->
-	  <!-- Add Donation Batch Permission Role Mappings -->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="69"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="69"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="69"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="69"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="69"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="69"></column>
-	     <column name="roles_id" value="8"></column>
-	  </insert>
-	  
-	  <!-- View Donation Permission mapping with Roles -->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="70"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="70"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="70"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="70"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="70"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="70"></column>
-	     <column name="roles_id" value="8"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="70"></column>
-	     <column name="roles_id" value="11"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="70"></column>
-	     <column name="roles_id" value="12"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="70"></column>
-	     <column name="roles_id" value="13"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="70"></column>
-	     <column name="roles_id" value="14"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="70"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  
-	  <!-- Edit Donation Batch Permission Role Mappings -->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="71"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="71"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="71"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="71"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="71"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="71"></column>
-	     <column name="roles_id" value="8"></column>
-	  </insert>
-	  
-	  <!-- Void Donation Batch Permission Role Mappings -->
-	  
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="72"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="72"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="72"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="72"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="72"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	  
-	 <!-- Test Resluts Permission Role Mappings -->
-	  <!-- Add Test Outcome Permission Role mappings-->
-	  
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="73"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="73"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="73"></column>
-	     <column name="roles_id" value="11"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="73"></column>
-	     <column name="roles_id" value="12"></column>
-	  </insert>
-	    <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="73"></column>
-	     <column name="roles_id" value="13"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="73"></column>
-	     <column name="roles_id" value="14"></column>
-	  </insert>
-	  
-	   <!--View Test Outcome Permission Role mappings-->
-	   
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="74"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="74"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="74"></column>
-	     <column name="roles_id" value="6"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="74"></column>
-	     <column name="roles_id" value="11"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="74"></column>
-	     <column name="roles_id" value="12"></column>
-	  </insert>
-	    <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="74"></column>
-	     <column name="roles_id" value="13"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="74"></column>
-	     <column name="roles_id" value="14"></column>
-	  </insert>
-	  
-	   <!-- Add Test Outcome Permission Role mappings-->
-	   
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="75"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="75"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="75"></column>
-	     <column name="roles_id" value="11"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="75"></column>
-	     <column name="roles_id" value="12"></column>
-	  </insert>
-	    <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="75"></column>
-	     <column name="roles_id" value="13"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="75"></column>
-	     <column name="roles_id" value="14"></column>
-	  </insert>
-	  
-	   <!-- Add Test Outcome Permission Role mappings-->
-	   
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="76"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="76"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="76"></column>
-	     <column name="roles_id" value="11"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="76"></column>
-	     <column name="roles_id" value="12"></column>
-	  </insert>
-	    <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="76"></column>
-	     <column name="roles_id" value="13"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="76"></column>
-	     <column name="roles_id" value="14"></column>
-	  </insert>
-	  
-	   <!-- Product Request Permission Role Mappings -->
-	    <!-- Add Request Permission Role  Mappings-->
-	    
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="77"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="77"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="77"></column>
-	     <column name="roles_id" value="15"></column>
-	  </insert>
-	  
-    <!-- View Request Permission Role  -->
-    
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="78"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="78"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="78"></column>
-	     <column name="roles_id" value="15"></column>
-	  </insert>
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="78"></column>
-	     <column name="roles_id" value="16"></column>
-	  </insert>
-	  
-	  
-	   <!-- Edit Request Permission Role  -->
-	   
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="79"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="79"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="79"></column>
-	     <column name="roles_id" value="15"></column>
-	  </insert>
-	  
-	    <!-- Void Request Permission Role  -->
-	    
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="80"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="80"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="80"></column>
-	     <column name="roles_id" value="15"></column>
-	  </insert>
-	  
-	  <!-- Admin & Super-user Permission Role Mappings For Requests & Tips-->
-	  
-	   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="81"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="81"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	    <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="82"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="82"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	  
-</changeSet>
-  
-<!-- For issue 172[Add in additional donor demographic fields] --> 
-<changeSet id="201405200258" author="srikanth">
-
-  <createTable  tableName="IdType">
-     <column name="id" type="BIGINT" autoIncrement = "true">
-           	<constraints primaryKey="true" nullable="false" />
-     </column>
-     <column name="idType" type="varchar(255)"/> 
-      <column name="regExp" type="varchar(255)" defaultValue = "NULL"/>
-  </createTable>
-
-  <createTable  tableName="PreferredLanguage">
-     <column name="id" type="BIGINT" autoIncrement = "true">
-           	<constraints primaryKey="true" nullable="false" />
-     </column>
-     <column name="preferredLanguage" type="varchar(255)"/> 
-  </createTable>
-
-
-  <dropColumn  columnName="address" tableName="Donor"/>
-  <dropColumn  columnName="phoneNumber" tableName="Donor"/>
- 
-	 <insert tableName="IdType">
-	     <column name="id" value="1"></column>
-	     <column name="idType" value="National Id"></column>
-	 </insert>
-	<insert tableName="IdType">
-	     <column name="id" value="2"></column>
-	     <column name="idType" value="Passport Number"></column>
-	 </insert>
-	<insert tableName="IdType">
-	     <column name="id" value="3"></column>
-	     <column name="idType" value="License Number"></column>
-	 </insert>
-    
-    
-  <insert tableName="PreferredLanguage">
-     <column name="id" value="1"></column>
-     <column name="preferredLanguage" value="English"></column>
-  </insert>
-  <insert tableName="PreferredLanguage">
-     <column name="id" value="2"></column>
-     <column name="preferredLanguage" value="French"></column> 
-  </insert>
-	<insert tableName="PreferredLanguage">
-	     <column name="id" value="3"></column>
-	     <column name="preferredLanguage" value="Portuguese"></column>
-	  </insert>
-	<insert tableName="PreferredLanguage">
-	     <column name="id" value="4"></column>
-	     <column name="preferredLanguage" value="Spanish"></column>
-	  </insert>
-	<insert tableName="PreferredLanguage">
-	     <column name="id" value="5"></column>
-	     <column name="preferredLanguage" value="Arabic"></column>
-	  </insert>
-	<insert tableName="PreferredLanguage">
-	     <column name="id" value="6"></column>
-	     <column name="preferredLanguage" value="Berber"></column>
-	  </insert>
-	<insert tableName="PreferredLanguage">
-	     <column name="id" value="7"></column>
-	     <column name="preferredLanguage" value="Amharic"></column>
-	  </insert>
-	<insert tableName="PreferredLanguage">
-	     <column name="id" value="8"></column>
-	     <column name="preferredLanguage" value="Tigrinya"></column>
-	  </insert>
-	<insert tableName="PreferredLanguage">
-	     <column name="id" value="9"></column>
-	     <column name="preferredLanguage" value="Setswana"></column>
-	  </insert>
-	<insert tableName="PreferredLanguage">
-	     <column name="id" value="10"></column>
-	     <column name="preferredLanguage" value="Swahili"></column>
-	  </insert>
-	<insert tableName="PreferredLanguage">
-	     <column name="id" value="11"></column>
-	     <column name="preferredLanguage" value="Comorian"></column>
-	  </insert>
-	<insert tableName="PreferredLanguage">
-	     <column name="id" value="12"></column>
-	     <column name="preferredLanguage" value="Chichewa"></column>
-	  </insert>
-	<insert tableName="PreferredLanguage">
-	     <column name="id" value="13"></column>
-	     <column name="preferredLanguage" value="Kinyarwanda"></column>
-	  </insert>
-	<insert tableName="PreferredLanguage">
-	     <column name="id" value="14"></column>
-	     <column name="preferredLanguage" value="Kirundi"></column>
-	  </insert>
-	<insert tableName="PreferredLanguage">
-	     <column name="id" value="15"></column>
-	     <column name="preferredLanguage" value="Sango"></column>
-	  </insert>
-	<insert tableName="PreferredLanguage">
-	     <column name="id" value="16"></column>
-	     <column name="preferredLanguage" value="Swati"></column>
-	  </insert>
-	<insert tableName="PreferredLanguage">
-	     <column name="id" value="17"></column>
-	     <column name="preferredLanguage" value="Malagasy"></column>
-	  </insert>
-	<insert tableName="PreferredLanguage">
-	     <column name="id" value="18"></column>
-	     <column name="preferredLanguage" value="Seychellois"></column>
-	  </insert>
-	<insert tableName="PreferredLanguage">
-	     <column name="id" value="19"></column>
-	     <column name="preferredLanguage" value="Mauritian"></column>
-	  </insert>
-	<insert tableName="PreferredLanguage">
-	     <column name="id" value="20"></column>
-	     <column name="preferredLanguage" value="Shona"></column>
-	  </insert>
-	<insert tableName="PreferredLanguage">
-	     <column name="id" value="21"></column>
-	     <column name="preferredLanguage" value="Sesotho"></column>
-	  </insert>
-	<insert tableName="PreferredLanguage">
-	     <column name="id" value="22"></column>
-	     <column name="preferredLanguage" value="Afrikaans"></column>
-	  </insert>
-
-	<addColumn tableName="Donor">
-	            <column name="idType_id" type="BIGINT" defaultValue="NULL">
-                          <constraints foreignKeyName="Donor_Idtype_FK" references="IdType(id)"/>
-	            </column>
-	</addColumn>
-
+	</changeSet>
 	
-	<addColumn tableName="Donor">
-	            <column name="preferredLanguage_id" type="BIGINT" defaultValue="NULL"> </column>
-	</addColumn>
+	<!-- For issue 172[Add in additional donor demographic fields] --> 
+	<changeSet id="20140520-1458" author="srikanthmalyala">
 
+		<createTable  tableName="IdType">
+			<column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="idType" type="varchar(255)"/> 
+			<column name="regExp" type="varchar(255)" defaultValue="NULL"/>
+		</createTable>
 
-	 <addForeignKeyConstraint baseColumnNames="preferredLanguage_id"
-	            baseTableName="Donor"
-	            constraintName="fk_donor_preferredLanguage"
-	            referencedColumnNames="id"
-	            referencedTableName="PreferredLanguage"/>
+		<createTable  tableName="PreferredLanguage">
+			<column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="preferredLanguage" type="varchar(255)"/> 
+		</createTable>
 
+		<dropColumn  columnName="address" tableName="Donor"/>
+		<dropColumn  columnName="phoneNumber" tableName="Donor"/>
 
+		<addColumn tableName="Donor">
+			<column name="idType_id" type="BIGINT" defaultValue="NULL">
+				<constraints foreignKeyName="Donor_Idtype_FK" 
 
+references="IdType(id)"/>
+			</column>
+		</addColumn>
 
-      <!-- For issue 38 [Add Donor Title field] -->
-       <addColumn tableName="Donor">
-            <column name="title" type="VARCHAR(15)"></column>
-        </addColumn>
+		<addColumn tableName="Donor">
+			<column name="preferredLanguage_id" type="BIGINT" defaultValue="NULL"> 
 
-        <addColumn tableName="Donor_AUD">
-            <column name="title" type="VARCHAR(15)" defaultValue="Blank"></column>
-        </addColumn>
+</column>
+		</addColumn>
 
-        <insert tableName="FormField">
-            <column name="form" value="Donor"></column>
-            <column name="FIELD" value="title"></column>
-            <column name="defaultDisplayName" value="Title"></column>
-            <column name="defaultValue" value=""></column>
-            <column name="maxLength" value="0"></column>
-            <column name="hidden" value="0"></column>
-            <column name="isHidable" value="0"></column>
-            <column name="isRequired" value="0"></column>
-            <column name="canBeOptional" value="1"></column>
-            <column name="autoGenerate" value="0"></column>
-            <column name="isAutoGeneratable" value="0"></column>
-            <column name="useCurrentTime" value="0"></column>
-            <column name="isTimeField" value="0"></column>
-        </insert>
-</changeSet>
+		<addForeignKeyConstraint baseColumnNames="preferredLanguage_id"
+			 baseTableName="Donor"
+			 constraintName="fk_donor_preferredLanguage"
+			 referencedColumnNames="id"
+			 referencedTableName="PreferredLanguage"/>
 
-<!--For Issue #36[Add Donor Codes Functionality] -->
-<changeSet id="201405041130" author="srikanth">
+		<!-- For issue 38 [Add Donor Title field] -->
+		<addColumn tableName="Donor">
+			<column name="title" type="VARCHAR(15)"></column>
+		</addColumn>
 
+		<addColumn tableName="Donor_AUD">
+			<column name="title" type="VARCHAR(15)" defaultValue="Blank"></column>
+		</addColumn>
 
-       <createTable  tableName="DonorCodeGroup">
-          <column name="id" type="BIGINT" autoIncrement = "true">
-          	<constraints primaryKey="true" nullable="false" />
-          </column>
-           <column name="donorCodeGroup" type="varchar(255)"/> 
-       </createTable>
-     
-       <createTable  tableName="DonorCode">
-          <column name="id" type="BIGINT" autoIncrement="true">
-          	<constraints primaryKey="true" nullable="false" />
-         </column>
-          <column name="donorCode" type="varchar(255)"/> 
-         <column name="donorCodeGroupId" type="BIGINT">
-          	<constraints  nullable="false" />
-         </column>
-      </createTable>
-       <addForeignKeyConstraint baseColumnNames="donorCodeGroupId"
-                                  baseTableName="DonorCode"
-                                  constraintName="fk_DonorCode_DonorCodeGroup"
-                                  referencedColumnNames="id"
-                                  referencedTableName="DonorCodeGroup"/>
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="title"></column>
+			<column name="defaultDisplayName" value="Title"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="0"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+	</changeSet>
 
-       
-      
-      <createTable  tableName="DonorDonorCode">
-         <column name="id" type="BIGINT" autoIncrement="true">
-          	<constraints primaryKey="true" nullable="false" />
-         </column>
-          <column name="donorId" type="BIGINT">
-          	<constraints  nullable="false" />
-          </column>
-          <column name="donorCodeId" type="BIGINT">
-          	<constraints  nullable="false" />
-          </column>
-          <column name="createdDate" type="TIMESTAMP"/>
-          <column name="lastUpdated" type="TIMESTAMP"/>
-          <column name="createdBy_id" type="SMALLINT"/>
-          <column name="lastUpdatedBy_id" type="SMALLINT"/>
-     </createTable>
-        <addForeignKeyConstraint baseColumnNames="donorCodeId"
-                                  baseTableName="DonorDonorCode"
-                                  constraintName="fk_DonorDonorCode_DonorCode"
-                                  referencedColumnNames="id"
-                                  referencedTableName="DonorCode"/>
-        <addForeignKeyConstraint baseColumnNames="donorId"
-                                  baseTableName="DonorDonorCode"
-                                  constraintName="fk_DonorDonorCode_Donor"
-                                  referencedColumnNames="id"
-                                  referencedTableName="Donor"/>
-   
-    <createTable  tableName="DonorDonorCode_AUD">
-         <column name="id" type="BIGINT" autoIncrement="true">
-          	<constraints primaryKey="true" nullable="false" />
-         </column>
-          <column name="REV" type="INT">
-          	<constraints  primaryKey="true" nullable="false" />
-          </column>
-          <column name="REVTYPE" type="TINYINT"/>
-          <column name="createdDate" type="TIMESTAMP"/>
-          <column name="lastUpdated" type="TIMESTAMP"/>
-          <column name="createdBy_id" type="SMALLINT"/>
-          <column name="lastUpdatedBy_id" type="SMALLINT"/>
-    </createTable>
-    
- 
+	<changeSet id="20131024-1526" author="gtlnikita">
+		<sql>
+			ALTER TABLE DeferralReason AUTO_INCREMENT=1;
+		</sql>
+	</changeSet>
 
-	   <insert tableName="DonorCodeGroup">
-	     <column name="id" value="1"></column>
-	     <column name="donorCodeGroup" value="Test Only"></column>
-	  </insert>
-      <insert tableName="DonorCodeGroup">
-	     <column name="id" value="2"></column>
-	     <column name="donorCodeGroup" value="Do Not Bleed"></column>
-	  </insert>
-      
-       <insert tableName="DonorCode">
-	     <column name="id" value="1"></column>
-	     <column name="donorCode" value="Blood group antibody"></column>
-	      <column name="donorCodeGroupId" value="1"></column>   
-	  </insert>
-     <insert tableName="DonorCode">
-	     <column name="id" value="2"></column>
-	     <column name="donorCode" value="Follow up samples required"></column>
-	      <column name="donorCodeGroupId" value="1"></column>   
-	  </insert>
-	  <insert tableName="DonorCode">
-	     <column name="id" value="3"></column>
-	     <column name="donorCode" value="Lab query"></column>
-	      <column name="donorCodeGroupId" value="1"></column>   
-	  </insert>
-	  <insert tableName="DonorCode">
-	     <column name="id" value="4"></column>
-	     <column name="donorCode" value="Biological false positive"></column>
-	      <column name="donorCodeGroupId" value="2"></column>   
-	  </insert>
-	  <insert tableName="DonorCode">
-	     <column name="id" value="5"></column>
-	     <column name="donorCode" value="For counseling – HCV"></column>
-	      <column name="donorCodeGroupId" value="2"></column>   
-	  </insert>
-	  <insert tableName="DonorCode">
-	     <column name="id" value="6"></column>
-	     <column name="donorCode" value="For counseling – HIV"></column>
-	      <column name="donorCodeGroupId" value="2"></column>   
-	  </insert>
-	  <insert tableName="DonorCode">
-	     <column name="id" value="7"></column>
-	     <column name="donorCode" value="TTI Reactive"></column>
-	      <column name="donorCodeGroupId" value="2"></column>   
-	  </insert>
-     
+	<!--For Issue #36[Add Donor Codes Functionality] -->
+	<changeSet id="20140504-1130" author="srikanthmalyala">
 
-</changeSet>
-<!-- For issue 172[Add in additional donor demographic fields] -->
- <changeSet id ="201405040141" author = "srikanth">
-   
-     <addColumn tableName="Donor">
+		<createTable  tableName="DonorCodeGroup">
+			<column name="id" type="BIGINT" autoIncrement = "true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="donorCodeGroup" type="varchar(255)"/> 
+		</createTable>
+	
+		<createTable  tableName="DonorCode">
+			<column name="id" type="BIGINT" autoIncrement="true">
+			<constraints primaryKey="true" nullable="false" />
+			 </column>
+			  <column name="donorCode" type="varchar(255)"/> 
+			 <column name="donorCodeGroupId" type="BIGINT">
+				<constraints  nullable="false" />
+			 </column>
+		</createTable>
+		<addForeignKeyConstraint baseColumnNames="donorCodeGroupId"
+			 baseTableName="DonorCode"
+			 constraintName="fk_DonorCode_DonorCodeGroup"
+			 referencedColumnNames="id"
+			 referencedTableName="DonorCodeGroup"/>
+
+		<createTable  tableName="DonorDonorCode">
+			<column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="donorId" type="BIGINT">
+				<constraints  nullable="false" />
+			</column>
+			<column name="donorCodeId" type="BIGINT">
+				<constraints  nullable="false" />
+			</column>
+			<column name="createdDate" type="TIMESTAMP"/>
+			<column name="lastUpdated" type="TIMESTAMP"/>
+			<column name="createdBy_id" type="SMALLINT"/>
+			<column name="lastUpdatedBy_id" type="SMALLINT"/>
+		</createTable>
+		<addForeignKeyConstraint baseColumnNames="donorCodeId"
+			  baseTableName="DonorDonorCode"
+			  constraintName="fk_DonorDonorCode_DonorCode"
+			  referencedColumnNames="id"
+			  referencedTableName="DonorCode"/>
+		<addForeignKeyConstraint baseColumnNames="donorId"
+			  baseTableName="DonorDonorCode"
+			  constraintName="fk_DonorDonorCode_Donor"
+			  referencedColumnNames="id"
+			  referencedTableName="Donor"/>
+
+		<createTable  tableName="DonorDonorCode_AUD">
+			 <column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="REV" type="INT">
+				<constraints  primaryKey="true" nullable="false" />
+			</column>
+			<column name="REVTYPE" type="TINYINT"/>
+			<column name="createdDate" type="TIMESTAMP"/>
+			<column name="lastUpdated" type="TIMESTAMP"/>
+			<column name="createdBy_id" type="SMALLINT"/>
+			<column name="lastUpdatedBy_id" type="SMALLINT"/>
+		</createTable>
+	</changeSet>
+
+	<!-- For issue 172[Add in additional donor demographic fields] -->
+	<changeSet id="20140504-1341" author="srikanthmalyala">
+		<addColumn tableName="Donor">
 			<column name="addressId" type="int" defaultValue="NULL"></column>
-     </addColumn>
-     <addColumn tableName="Donor">
+		</addColumn>
+		<addColumn tableName="Donor">
 			<column name="contactId" type="int" defaultValue="NULL"></column>
-     </addColumn>
-     <addColumn tableName="Donor">
+		</addColumn>
+		<addColumn tableName="Donor">
 			<column name="idNumber" type="VARCHAR(255)" ></column>
-     </addColumn>
-     <addColumn tableName="Donor_AUD">
+		</addColumn>
+		<addColumn tableName="Donor_AUD">
 			<column name="idNumber" type="VARCHAR(255)" ></column>
-     </addColumn>
-    
-   <createTable  tableName="AddressType">
-       <column name="id" type="BIGINT" autoIncrement = "true">
-           	<constraints primaryKey="true" nullable="false" />
-       </column>
-       <column name="preferredAddressType" type="varchar(255)"/> 
-   </createTable>
+		</addColumn>
 
-   <createTable  tableName="Address">
-       <column name="id" type="BIGINT" autoIncrement = "true">
-           	<constraints primaryKey="true" nullable="false" />
-       </column>
+		<createTable  tableName="AddressType">
+			<column name="id" type="BIGINT" autoIncrement = "true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="preferredAddressType" type="varchar(255)"/> 
+		</createTable>
 
-       <column name="homeAddressLine1" type="varchar(255)"/> 
-       <column name="homeAddressLine2" type="varchar(255)"/> 
-       <column name="homeAddressCity" type="varchar(255)"/> 
-       <column name="homeAddressProvince" type="varchar(255)"/> 
-       <column name="homeAddressDistrict" type="varchar(255)"/> 
-       <column name="homeAddressState" type="varchar(255)"/> 
-       <column name="homeAddressCountry" type="varchar(255)"/> 
-       <column name="homeAddressZipcode" type="varchar(255)"/> 
+		<createTable  tableName="Address">
+			<column name="id" type="BIGINT" autoIncrement = "true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
 
-	    <column name="workAddressLine1" type="varchar(255)"/> 
-	    <column name="workAddressLine2" type="varchar(255)"/> 
-	    <column name="workAddressCity" type="varchar(255)"/> 
-	    <column name="workAddressProvince" type="varchar(255)"/> 
-	    <column name="workAddressDistrict" type="varchar(255)"/> 
-	    <column name="workAddressCountry" type="varchar(255)"/> 
-	    <column name="workAddressState" type="varchar(255)"/> 
-	    <column name="workAddressZipcode" type="varchar(255)"/> 
+			<column name="homeAddressLine1" type="varchar(255)"/> 
+			<column name="homeAddressLine2" type="varchar(255)"/> 
+			<column name="homeAddressCity" type="varchar(255)"/> 
+			<column name="homeAddressProvince" type="varchar(255)"/> 
+			<column name="homeAddressDistrict" type="varchar(255)"/> 
+			<column name="homeAddressState" type="varchar(255)"/> 
+			<column name="homeAddressCountry" type="varchar(255)"/> 
+			<column name="homeAddressZipcode" type="varchar(255)"/> 
 
+			<column name="workAddressLine1" type="varchar(255)"/> 
+			<column name="workAddressLine2" type="varchar(255)"/> 
+			<column name="workAddressCity" type="varchar(255)"/> 
+			<column name="workAddressProvince" type="varchar(255)"/> 
+			<column name="workAddressDistrict" type="varchar(255)"/> 
+			<column name="workAddressCountry" type="varchar(255)"/> 
+			<column name="workAddressState" type="varchar(255)"/> 
+			<column name="workAddressZipcode" type="varchar(255)"/> 
 
-       <column name="postalAddressLine1" type="varchar(255)"/> 
-       <column name="postalAddressLine2" type="varchar(255)"/> 
-       <column name="postalAddressCity" type="varchar(255)"/> 
-       <column name="postalAddressProvince" type="varchar(255)"/> 
-       <column name="postalAddressDistrict" type="varchar(255)"/> 
-       <column name="postalAddressCountry" type="varchar(255)"/> 
-       <column name="postalAddressState" type="varchar(255)"/> 
-       <column name="postalAddressZipcode" type="varchar(255)"/> 
-      
+			<column name="postalAddressLine1" type="varchar(255)"/> 
+			<column name="postalAddressLine2" type="varchar(255)"/> 
+			<column name="postalAddressCity" type="varchar(255)"/> 
+			<column name="postalAddressProvince" type="varchar(255)"/> 
+			<column name="postalAddressDistrict" type="varchar(255)"/> 
+			<column name="postalAddressCountry" type="varchar(255)"/> 
+			<column name="postalAddressState" type="varchar(255)"/> 
+			<column name="postalAddressZipcode" type="varchar(255)"/> 
+		</createTable>
 
-       
-  </createTable>
+		<dropForeignKeyConstraint baseTableName="Donor" 
 
-  <dropForeignKeyConstraint baseTableName="Donor" constraintName="FK3F25E46FCE9E976"/>
+constraintName="FK3F25E46FCE9E976"/>
 
+		<createTable  tableName="Contact">
+			<column name="id" type="BIGINT" autoIncrement = "true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
 
- <createTable  tableName="Contact">
-       <column name="id" type="BIGINT" autoIncrement = "true">
-           	<constraints primaryKey="true" nullable="false" />
-       </column>
+			<column name="mobileNumber" type="varchar(255)"/> 
+			<column name="homeNumber" type="varchar(255)"/> 
+			<column name="workNumber" type="varchar(255)"/> 
+			<column name="email" type="varchar(255)"/>
+		</createTable>
 
-       <column name="mobileNumber" type="varchar(255)"/> 
-       <column name="homeNumber" type="varchar(255)"/> 
-       <column name="workNumber" type="varchar(255)"/> 
-       <column name="email" type="varchar(255)"/>
-  </createTable>
+		<dropColumn  columnName="city" tableName="Donor"/>
+		<dropColumn  columnName="province" tableName="Donor"/>
+		<dropColumn  columnName="district" tableName="Donor"/>
+		<dropColumn  columnName="country" tableName="Donor"/>
+		<dropColumn  columnName="state" tableName="Donor"/>
+		<dropColumn  columnName="zipcode" tableName="Donor"/>
+		<dropColumn  columnName="nationalId" tableName="Donor"/>
+		<dropColumn  columnName="otherPhoneNumber" tableName="Donor"/>
 
-      <insert tableName="AddressType">
-	     <column name="id" value="1"></column>
-	     <column name="preferredAddressType" value="Home Address"></column>
-      </insert>
-      <insert tableName="AddressType">
-	     <column name="id" value="2"></column>
-	     <column name="preferredAddressType" value="Work Address"></column>
-      </insert>
-      <insert tableName="AddressType">
-	     <column name="id" value="3"></column>
-	     <column name="preferredAddressType" value="Postal Address"></column>
-      </insert>
+		<dropColumn  columnName="city" tableName="Donor_AUD"/>
+		<dropColumn  columnName="province" tableName="Donor_AUD"/>
+		<dropColumn  columnName="district" tableName="Donor_AUD"/>
+		<dropColumn  columnName="country" tableName="Donor_AUD"/>
+		<dropColumn  columnName="state" tableName="Donor_AUD"/>
+		<dropColumn  columnName="zipcode" tableName="Donor_AUD"/>
+		<dropColumn  columnName="nationalId" tableName="Donor_AUD"/>
+		<dropColumn  columnName="otherPhoneNumber" tableName="Donor_AUD"/>
 
+		<addColumn tableName="Donor">
+			<column name="contactMethodType_id" type="SMALLINT(6)">
+					<constraints foreignKeyName="Contact_ContactType_FK" 
 
-     
+references="ContactMethodType(id)"/>
+			</column> 
+		</addColumn>
+		<addColumn tableName="Donor">
+			<column name="addressTypeId" type="BIGINT"> 
+				<constraints foreignKeyName="Address_AddressType_fk" 
 
- <dropColumn  columnName="city" tableName="Donor"/>
- <dropColumn  columnName="province" tableName="Donor"/>
- <dropColumn  columnName="district" tableName="Donor"/>
- <dropColumn  columnName="country" tableName="Donor"/>
- <dropColumn  columnName="state" tableName="Donor"/>
- <dropColumn  columnName="zipcode" tableName="Donor"/>
- <dropColumn  columnName="nationalId" tableName="Donor"/>
- <dropColumn  columnName="otherPhoneNumber" tableName="Donor"/>
+references="AddressType(id)"/>
+			</column>
+		</addColumn>
 
- <dropColumn  columnName="city" tableName="Donor_AUD"/>
- <dropColumn  columnName="province" tableName="Donor_AUD"/>
- <dropColumn  columnName="district" tableName="Donor_AUD"/>
- <dropColumn  columnName="country" tableName="Donor_AUD"/>
- <dropColumn  columnName="state" tableName="Donor_AUD"/>
- <dropColumn  columnName="zipcode" tableName="Donor_AUD"/>
- <dropColumn  columnName="nationalId" tableName="Donor_AUD"/>
- <dropColumn  columnName="otherPhoneNumber" tableName="Donor_AUD"/>
-
- <addColumn tableName="Donor">
-	<column name="contactMethodType_id" type="SMALLINT(6)">
-			  	    <constraints foreignKeyName="Contact_ContactType_FK" references="ContactMethodType(id)"/>
-    </column> 
- </addColumn>
- <addColumn tableName="Donor">
-	<column name="addressTypeId" type="BIGINT"> 
-		 <constraints foreignKeyName="Address_AddressType_fk" references="AddressType(id)"/>
-   </column>
- </addColumn>
-
- 
- <insert tableName="FormField">
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="mobileNumber"></column>
 			<column name="defaultDisplayName" value="Mobile Number"></column>
@@ -3139,9 +700,9 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
- <insert tableName="FormField">
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="idNumber"></column>
 			<column name="defaultDisplayName" value="ID Number"></column>
@@ -3154,9 +715,9 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
-<insert tableName="FormField">
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="workNumber"></column>
 			<column name="defaultDisplayName" value="Work Number"></column>
@@ -3169,10 +730,10 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
+			<column name="isTimeField" value="0"></column>
+		</insert>
 
-<insert tableName="FormField">
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="callingName"></column>
 			<column name="defaultDisplayName" value="Calling Name"></column>
@@ -3185,9 +746,9 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
- <insert tableName="FormField">
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="idType"></column>
 			<column name="defaultDisplayName" value="Id Type"></column>
@@ -3200,10 +761,10 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
+			<column name="isTimeField" value="0"></column>
+		</insert>
 
- <insert tableName="FormField">
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="homeNumber"></column>
 			<column name="defaultDisplayName" value="Home Number"></column>
@@ -3216,10 +777,10 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
+			<column name="isTimeField" value="0"></column>
+		</insert>
 
-<insert tableName="FormField">
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="email"></column>
 			<column name="defaultDisplayName" value="Email"></column>
@@ -3232,9 +793,9 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
- <insert tableName="FormField">
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="addressLine1"></column>
 			<column name="defaultDisplayName" value="Address Line1"></column>
@@ -3247,9 +808,9 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
-<insert tableName="FormField">
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="addressLine2"></column>
 			<column name="defaultDisplayName" value="Address Line2"></column>
@@ -3262,12 +823,14 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
-<insert tableName="FormField">
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="preferredAddressType"></column>
-			<column name="defaultDisplayName" value="Preferred Address Type"></column>
+			<column name="defaultDisplayName" value="Preferred Address 
+
+Type"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
 			<column name="hidden" value="0"></column>
@@ -3277,9 +840,9 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
- <insert tableName="FormField">
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="workAddress"></column>
 			<column name="defaultDisplayName" value="Work Address"></column>
@@ -3292,10 +855,10 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
+			<column name="isTimeField" value="0"></column>
+		</insert>
 
-  <insert tableName="FormField">
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="homeAddress"></column>
 			<column name="defaultDisplayName" value="Home Address"></column>
@@ -3308,10 +871,10 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
+			<column name="isTimeField" value="0"></column>
+		</insert>
 
- <insert tableName="FormField">
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="postalAddress"></column>
 			<column name="defaultDisplayName" value="Postal Address"></column>
@@ -3324,12 +887,14 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
-  <insert tableName="FormField">
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="contactMethodType"></column>
-			<column name="defaultDisplayName" value="Contact Method Type"></column>
+			<column name="defaultDisplayName" value="Contact Method 
+
+Type"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
 			<column name="hidden" value="0"></column>
@@ -3339,9 +904,9 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
- <insert tableName="FormField">
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="preferredLanguage"></column>
 			<column name="defaultDisplayName" value="Preferred Language"></column>
@@ -3354,220 +919,217 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
- </insert>
- </changeSet>
- 
- <!-- Add in 'isClosed' field to collectionBatch tables -->
- <changeSet id="201410281957" author="danfuterman">
-	<addColumn tableName="CollectionBatch">
-		<column name="isClosed" type="tinyint(1)" defaultValue="0"></column>
-	</addColumn>
-	<addColumn tableName="CollectionBatch_AUD">
-		<column name="isClosed" type="tinyint(1)" defaultValue="0"></column>
-	</addColumn>		
- </changeSet>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+	</changeSet>
 
-<!-- For issue 229 [Create testBatch table]  -->
-   <changeSet id="201311122005" author="nikita">
-    <createTable tableName="TestBatch">
-    	<column name="id" type="smallint(6)" autoIncrement="true">
-    		<constraints primaryKey="true" nullable="false"/>
-    	</column>
-    	<column name="batchNumber" type="varchar(20)"></column>
-    	<column name="isDeleted" type="tinyint(1)"></column>
-    	<column name="createdDate" type="timestamp"></column>
-    	<column name="lastUpdated" type="timestamp"></column>
-    	<column name="notes" type="longtext"></column>
-    	<column name="status" type="varchar(20)"></column>
-    	<column name="createdBy_id" type="smallint(6)"></column>
-    	<column name="lastUpdatedBy_id" type="smallint(6)"></column>
-    </createTable>
-    </changeSet>
-    <changeSet id="201411140420" author="srikanth">
-	    <addColumn tableName="CollectionBatch">
-	    	<column name="testBatch_id" type="smallint(6)"></column>
-	    </addColumn>
-	    <addForeignKeyConstraint constraintName="testBatch_id_FK" 
-	    						 referencedTableName="TestBatch" 
-	    						 baseColumnNames="testBatch_id" 
-	    						 baseTableName="CollectionBatch" 
-	    						 referencedColumnNames="id"/>
-    </changeSet>
-    <changeSet id="201411140425" author="srikanth">
-     <addColumn tableName="CollectionBatch_AUD">
-	    	<column name="testBatch_id" type="smallint(6)"></column>
-	    </addColumn>
-	    <addForeignKeyConstraint constraintName="testBatch_id_aud_FK" 
-	    						 referencedTableName="TestBatch" 
-	    						 baseColumnNames="testBatch_id" 
-	    						 baseTableName="CollectionBatch_AUD" 
-	    						 referencedColumnNames="id"/>
-    </changeSet>
-    <changeSet id="201311130733" author="srikanth">
-    <createTable tableName="TestBatch_AUD">
-    	<column name="id" type="smallint(6)">
-    		<constraints primaryKey="true" nullable="false"/>
-    	</column>
-    	<column name="batchNumber" type="varchar(20)"></column>
-    	<column name="isDeleted" type="tinyint(1)"></column>
-    	<column name="createdDate" type="timestamp"></column>
-    	<column name="lastUpdated" type="timestamp"></column>
-    	<column name="notes" type="longtext"></column>
-    	<column name="status" type="varchar(20)"></column>
-    	<column name="createdBy_id" type="smallint(6)"></column>
-    	<column name="lastUpdatedBy_id" type="smallint(6)"></column>
-    	<column name="REV" type="INT">
-          	<constraints  primaryKey="true" nullable="false" />
-        </column>
-    	<column name="REVTYPE" type="tinyint(4)"></column>
-    </createTable>
-    </changeSet>
+	<!-- Add in 'isClosed' field to collectionBatch tables -->
+	<changeSet id="20141028-1957" author="danfuterman">
+		<addColumn tableName="CollectionBatch">
+			<column name="isClosed" type="tinyint(1)" defaultValue="0"></column>
+		</addColumn>
+		<addColumn tableName="CollectionBatch_AUD">
+			<column name="isClosed" type="tinyint(1)" defaultValue="0"></column>
+		</addColumn>
+	</changeSet>
 
-     <!-- Add AUTHENTICATED permission level to the system -->
- <changeSet id="201411101128" author="srikanth">
+	<!-- For issue 229 [Create testBatch table]  -->
+	<changeSet id="20131112-2005" author="gtlnikita">
+		<createTable tableName="TestBatch">
+			<column name="id" type="smallint(6)" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="batchNumber" type="varchar(20)"></column>
+			<column name="isDeleted" type="tinyint(1)"></column>
+			<column name="createdDate" type="timestamp"></column>
+			<column name="lastUpdated" type="timestamp"></column>
+			<column name="notes" type="longtext"></column>
+			<column name="status" type="varchar(20)"></column>
+			<column name="createdBy_id" type="smallint(6)"></column>
+			<column name="lastUpdatedBy_id" type="smallint(6)"></column>
+		</createTable>
+	</changeSet>
 
- 	 <insert tableName="Permission">
-	       <column name="id" value="83"> </column>
-	       <column name="name" value="Authenticated"></column>
-	  </insert>
+	<changeSet id="20141114-1620" author="srikanthmalyala">
+		<addColumn tableName="CollectionBatch">
+			<column name="testBatch_id" type="smallint(6)"></column>
+		</addColumn>
+		<addForeignKeyConstraint constraintName="testBatch_id_FK" 
+			 referencedTableName="TestBatch" 
+			 baseColumnNames="testBatch_id" 
+			 baseTableName="CollectionBatch" 
+			 referencedColumnNames="id"/>
+	</changeSet>
 
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="83"></column>
-	     <column name="roles_id" value="1"></column>
-	  </insert>
-   <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="83"></column>
-	     <column name="roles_id" value="2"></column>
-	  </insert>
-	     <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="83"></column>
-	     <column name="roles_id" value="3"></column>
-	  </insert>
-	     <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="83"></column>
-	     <column name="roles_id" value="4"></column>
-	  </insert>
-	     <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="83"></column>
-	     <column name="roles_id" value="5"></column>
-	  </insert>
-	     <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="83"></column>
-	     <column name="roles_id" value="6"></column>
-	  </insert>
-	     <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="83"></column>
-	     <column name="roles_id" value="7"></column>
-	  </insert>
-	     <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="83"></column>
-	     <column name="roles_id" value="8"></column>
-	  </insert>
-	     <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="83"></column>
-	     <column name="roles_id" value="9"></column>
-	  </insert>
-	     <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="83"></column>
-	     <column name="roles_id" value="10"></column>
-	  </insert>
-	     <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="83"></column>
-	     <column name="roles_id" value="11"></column>
-	  </insert>
-	     <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="83"></column>
-	     <column name="roles_id" value="12"></column>
-	  </insert>
-	     <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="83"></column>
-	     <column name="roles_id" value="13"></column>
-	  </insert>
-	     <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="83"></column>
-	     <column name="roles_id" value="14"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="83"></column>
-	     <column name="roles_id" value="15"></column>
-	  </insert>
-	  <insert tableName="Permission_Role">
-	     <column name="permissions_id" value="83"></column>
-	     <column name="roles_id" value="16"></column>
-	  </insert>
- </changeSet>
+	<changeSet id="20141114-1625" author="srikanthmalyala">
+		<addColumn tableName="CollectionBatch_AUD">
+				<column name="testBatch_id" type="smallint(6)"></column>
+		</addColumn>
+		<addForeignKeyConstraint constraintName="testBatch_id_aud_FK" 
+			 referencedTableName="TestBatch" 
+			 baseColumnNames="testBatch_id" 
+			 baseTableName="CollectionBatch_AUD" 
+			 referencedColumnNames="id"/>
+	</changeSet>
 
- <!--issue 234[Associate Pack Type with Initial Component Type in Donation]-->
- <changeSet author="srikanth" id="201411120953">
+	<changeSet id="20131113-1933" author="srikanthmalyala">
+		<createTable tableName="TestBatch_AUD">
+			<column name="id" type="smallint(6)">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="batchNumber" type="varchar(20)"></column>
+			<column name="isDeleted" type="tinyint(1)"></column>
+			<column name="createdDate" type="timestamp"></column>
+			<column name="lastUpdated" type="timestamp"></column>
+			<column name="notes" type="longtext"></column>
+			<column name="status" type="varchar(20)"></column>
+			<column name="createdBy_id" type="smallint(6)"></column>
+			<column name="lastUpdatedBy_id" type="smallint(6)"></column>
+			<column name="REV" type="INT">
+				<constraints  primaryKey="true" nullable="false" />
+			</column>
+			<column name="REVTYPE" type="tinyint(4)"></column>
+		</createTable>
+	</changeSet>
 
+	<!-- #246 Adapt Donations to use single Location field -->
+	<changeSet id="20141119-1235" author="srikanthmalyala">
+		<dropForeignKeyConstraint baseTableName="CollectedSample" 
+
+constraintName="FKF0658A33B29562D0"/>
+		<dropForeignKeyConstraint baseTableName="CollectedSample" 
+
+constraintName="FKF0658A33AED1731E"/>
+		<dropColumn columnName="collectionCenter_id" tableName="CollectedSample"/>
+		<dropColumn columnName="collectionCenter_id" tableName="CollectedSample_AUD"/>
+		<dropColumn columnName="collectionSite_id" tableName="CollectedSample"/>
+		<dropColumn columnName="collectionSite_id" tableName="CollectedSample_AUD"/>
+	</changeSet>
+
+	<!-- #246 Adapt Donations to use single Location field -->
+	<changeSet id="20141119-1356" author="srikanthmalyala">
+		<addColumn tableName="CollectedSample">
+			<column name="donorPanel_id" type="bigint">
+				<constraints foreignKeyName="FK_donation_Location" 
+
+references="Location(id)"/>
+			</column>
+		</addColumn>
+		<addColumn tableName="CollectedSample_AUD">
+			<column name="donorPanel_id" type="bigint"></column>
+		</addColumn>
+	</changeSet>
+
+	<!-- #246 Adapt Donations to use single Location field -->
+	<changeSet id="20141119-1558" author="srikanthmalyala">
+		<dropForeignKeyConstraint baseTableName="CollectionBatch" 
+
+constraintName="FK227631CAED1731E"/>
+		<dropForeignKeyConstraint baseTableName="CollectionBatch" 
+
+constraintName="FK227631CB29562D0"/>
+		<dropColumn columnName="collectionCenter_id" tableName="CollectionBatch"/>
+		<dropColumn columnName="collectionCenter_id" tableName="CollectionBatch_AUD"/>
+		<dropColumn columnName="collectionSite_id" tableName="CollectionBatch"/>
+		<dropColumn columnName="collectionSite_id" tableName="CollectionBatch_AUD"/>
+	</changeSet>
+
+	<!-- #246 Adapt Donations to use single Location field -->
+	<changeSet id="20141119-1605" author="srikanthmalyala">
+		<addColumn tableName="CollectionBatch">
+			<column name="donorPanel_id" type="bigint">
+				<constraints foreignKeyName="FK_DonationBatch_Location" 
+
+references="Location(id)"/>
+			</column>
+		</addColumn>
+		<addColumn tableName="CollectionBatch_AUD">
+			<column name="donorPanel_id" type="bigint"></column>
+		</addColumn>
+	</changeSet>
+
+	<!-- Add donation bleed time fields -->
+	<changeSet id="20141114-0949" author="srikanthmalyala">
+		<addColumn tableName="CollectedSample">
+			<column name="bleedStartTime" type="DATETIME"></column>
+		</addColumn>
+		<addColumn tableName="CollectedSample">
+			<column name="bleedEndTime" type="DATETIME"></column>
+		</addColumn>
+		<addColumn tableName="CollectedSample_AUD">
+			<column name="bleedStartTime" type="DATETIME"></column>
+		</addColumn>
+		<addColumn tableName="CollectedSample_AUD">
+			<column name="bleedEndTime" type="DATETIME"></column>
+		</addColumn>
+	</changeSet>
+	
+	<!-- Remove isCollectionCenter & isCollectionSite fields from Location -->
+	<changeSet id="20141211-1520" author="danfuterman">
+		<dropColumn columnName="isCollectionCenter" tableName="Location"/>
+		<dropColumn columnName="isCollectionCenter" tableName="Location_AUD"/>
+		<dropColumn columnName="isCollectionSite" tableName="Location"/>
+		<dropColumn columnName="isCollectionSite" tableName="Location_AUD"/>
+	</changeSet>
+
+	<!-- #234 Associate Pack Type with Initial Component Type in Donation -->
+	<changeSet id="20141112-0953" author="srikanthmalyala">
 		<addColumn tableName="BloodBagType">
-		    <column name="productType_id" type="smallint(6)"></column>
+			<column name="productType_id" type="smallint(6)"></column>
 		</addColumn>
-
 		<addColumn tableName="BloodBagType_AUD">
-		    <column name="productType_id" type="smallint(6)"></column>
+			<column name="productType_id" type="smallint(6)"></column>
 		</addColumn>
+		<addForeignKeyConstraint baseColumnNames="productType_id"
+			baseTableName="BloodBagType"
+			constraintName="fk_packType_componentType"
+			onDelete="CASCADE"
+			onUpdate="RESTRICT"
+			referencedColumnNames="id"
+			referencedTableName="ProductType"
+		/>
+	</changeSet>
 
-
-    <addForeignKeyConstraint baseColumnNames="productType_id"
-            baseTableName="BloodBagType"
-            constraintName="fk_packType_componentType"
-            onDelete="CASCADE"
-            onUpdate="RESTRICT"
-            referencedColumnNames="id"
-            referencedTableName="ProductType"/>
-</changeSet>
-
- <!--issue 236[Incorporate use of countAsDonation & periodBetweenDonation fields]-->
- <changeSet author="srikanth" id="201411121255">
-
+	<!-- #236 Incorporate use of countAsDonation field -->
+	<changeSet id="20141112-1255" author="srikanthmalyala">
 		<addColumn tableName="BloodBagType">
-		    <column name="countAsDonation" type="tinyint(1)"></column>
+			<column name="countAsDonation" type="tinyint(1)"></column>
 		</addColumn>
-
 		<addColumn tableName="BloodBagType_AUD">
-		    <column name="countAsDonation" type="tinyint(1)"></column>
+			<column name="countAsDonation" type="tinyint(1)"></column>
 		</addColumn>
+	</changeSet>
 
-</changeSet>
-
-
- <!--issue 236[Incorporate use of countAsDonation & periodBetweenDonation fields]-->
- <changeSet author="srikanth" id="201411120115">
-
+	<!-- #236 Incorporate use of periodBetweenDonation field -->
+	<changeSet id="20141112-1315" author="srikanthmalyala">
 		<addColumn tableName="BloodBagType">
-		    <column name="periodBetweenDonations" type="smallint(6)"></column>
+			<column name="periodBetweenDonations" type="smallint(6)"></column>
 		</addColumn>
-
 		<addColumn tableName="BloodBagType_AUD">
-		    <column name="periodBetweenDonations" type="smallint(6)"></column>
+			<column name="periodBetweenDonations" type="smallint(6)"></column>
 		</addColumn>
+	</changeSet>
 
-</changeSet>
-
- <!--issue 236[Incorporate use of countAsDonation & periodBetweenDonation fields]-->
- <changeSet author="srikanth" id="201411120158">
-
+	<!-- #236 Incorporate use of dueToDonate field -->
+	<changeSet id="20141112-1358" author="srikanthmalyala">
 		<addColumn tableName="Donor">
-		    <column name="dueToDonate" type="date"></column>
+			<column name="dueToDonate" type="date"></column>
 		</addColumn>
-
 		<addColumn tableName="Donor_AUD">
-		    <column name="dueToDonate" type="date"></column>
+			<column name="dueToDonate" type="date"></column>
 		</addColumn>
+	</changeSet>
 
-</changeSet>
-
-<changeSet id="20140106-1212" author = "srikanth" >
-	 <renameColumn columnDataType="VARCHAR(50)"
-            newColumnName="productTypeName"
-            oldColumnName="productType"
-            tableName="ProductType"/>
-	 <renameColumn columnDataType="VARCHAR(50)"
-            newColumnName="productTypeName"
-            oldColumnName="productType"
-            tableName="ProductType_AUD"/>
+	<changeSet id="20140106-1212" author = "srikanthmalyala" >
+	        <renameColumn columnDataType="VARCHAR(50)"
+            		newColumnName="productTypeName"
+            		oldColumnName="productType"
+            		tableName="ProductType"/>
+	 	<renameColumn columnDataType="VARCHAR(50)"
+           		newColumnName="productTypeName"
+            		oldColumnName="productType"
+            		tableName="ProductType_AUD"/>
             
-</changeSet>
-</databaseChangeLog>	
+	 </changeSet>
+
+</databaseChangeLog>
