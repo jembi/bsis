@@ -129,7 +129,7 @@ public class UserController {
     @PreAuthorize("hasRole('" + PermissionConstants.AUTHENTICATED+ "' )" )
     public ResponseEntity getUserDetails(){
         User user =  getLoginUser();
-        return new ResponseEntity(user, HttpStatus.OK);
+        return new ResponseEntity(new UserViewModel(user), HttpStatus.OK);
     }
     
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)

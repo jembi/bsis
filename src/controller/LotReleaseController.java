@@ -62,16 +62,7 @@ public class LotReleaseController {
     }
     return reqUrl;
   }
-  /*
-  *Not Required to expose dummy method which returns nothing
-  *
-  @RequestMapping(value = "/lotReleaseFormGenerator", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public  Map<String, Object> lotReleaseFormGenerator(HttpServletRequest request) {
-    Map<String, Object> map = new  HashMap<String, Object>();
-    return map;
-  }
-  */
+
   @RequestMapping(value = "/status/{donationIdentificationNumber}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DISCARDS+"')")
   public ResponseEntity findlotRelease(HttpServletRequest request,
@@ -358,16 +349,13 @@ public class LotReleaseController {
 
     }
         
-        private Boolean checkProductForDiscard(Product product){
-            
-            
-            if(product.getCollectedSample().getTTIStatus().equals(TTIStatus.TTI_UNSAFE))
-                return true;
-            
-             if (product.getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED)) 
-                 return true;
-             return false;
-            
-        }
+    private Boolean checkProductForDiscard(Product product){ 
+	    if(product.getCollectedSample().getTTIStatus().equals(TTIStatus.TTI_UNSAFE))
+	        return true;
+	    
+	     if (product.getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED)) 
+	         return true;
+	     return false;
+    }
   
 }

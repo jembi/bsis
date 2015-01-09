@@ -4,16 +4,8 @@ package backingform;
 import javax.validation.Valid;
 import model.location.Location;
 
-/**
- *
- * @author srikanth
- */
 public class LocationBackingForm {
 
-    
-    
-
-    
     @Valid
     private Location location;
 
@@ -45,23 +37,7 @@ public class LocationBackingForm {
         location.setName(name);
     }
 
-    public Boolean isIsDonationCenter() {
-        return location.getIsCollectionCenter();
-    }
-
-    public void setIsDonationCenter(Boolean isCenter) {
-        location.setIsCollectionCenter(isCenter);
-    }
-
-    public Boolean isIsDonationSite() {
-        return location.getIsCollectionSite();
-    }
-
-    public void setIsDonationSite(Boolean isCollectionSite) {
-        location.setIsCollectionSite(isCollectionSite);
-    }
-
-    public Boolean isIsUsageSite() {
+    public Boolean getIsUsageSite() {
         return location.getIsUsageSite();
     }
 
@@ -69,7 +45,7 @@ public class LocationBackingForm {
         location.setIsUsageSite(isUsageSite);
     }
     
-    public Boolean isIsMobilesite(){
+    public Boolean getIsMobilesite(){
         return location.getIsMobileSite();
     }
     
@@ -77,12 +53,20 @@ public class LocationBackingForm {
         location.setIsMobileSite(isMobileSite);
     }
     
-    public Boolean isIsDonorPanel(){
+    public Boolean getIsDonorPanel(){
         return location.getIsDonorPanel();
     }
     
     public void setIsDonorPanel(Boolean isDonorPanel){
         location.setIsDonorPanel(isDonorPanel);
+    }
+    
+    public Boolean getIsDeleted(){
+        return location.getIsDeleted();
+    }
+    
+    public void setIsDeleted(Boolean isDeleted){
+        location.setIsDeleted(isDeleted);
     }
     
     public String getNotes(){

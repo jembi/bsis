@@ -701,12 +701,6 @@ insert into FormField
  '0', '0',
  '0', '0');
 
- insert into DonationType (donationType, isDeleted) values
-('Voluntary', '0'),
-('Family', '0'),
-('Autologous', '0'),
-('Other', '0');
-
 insert into FormField
 (form, field, defaultDisplayName, defaultValue, maxLength,
  hidden, isHidable,
@@ -784,62 +778,6 @@ insert into FormField
  '0', '0',
  '0', '0');
 
-insert into RequestType (requestType, description, isDeleted) values
-('Emergency', '', '0'),
-('Group and Save', '', '0'),
-('Group and Screen', '', '0'),
-('Standard', '', '0'),
-('Urgent', '', '0'),
-('Elective Surgery', '', '0');
-
-insert into ProductType (id, productTypeNameShort, productType, description, expiresAfter, expiresAfterUnits, hasBloodGroup, pediProductType_id, isDeleted) values
-(1, 'Whole Blood', 'Whole Blood', '', 35, 'DAYS', '1', NULL, '0'),
-(2, 'RCC', 'Red Cell Concentrate', '', 35, 'DAYS', '1', NULL, '0'),
-(3, 'FFP', 'Fresh Frozen Plasma', '', 365, 'DAYS', '1', NULL, '0'),
-(4, 'Platelets', 'Platelets', '', 5, 'DAYS', '1', NULL, '0'),
-(5, 'Whole Blood Pedi', 'Whole Blood Pedi', '', 35, 'DAYS', '1', NULL, '0'),
-(6, 'RCC Pedi', 'Red Cell Concentrate Pedi', '', 35, 'DAYS', '1', NULL, '0'),
-(7, 'FFP Pedi', 'Fresh Frozen Plasma Pedi', '', 365, 'DAYS', '1', NULL, '0'),
-(8, 'Platelets Pedi', 'Platelets Pedi', '', 5, 'DAYS', '1', NULL, '0');
-
-
-/**
- * Create references to pedi product types.
- */
-update ProductType set pediProductType_id=5 where id=1;
-update ProductType set pediProductType_id=6 where id=2;
-update ProductType set pediProductType_id=7 where id=3;
-update ProductType set pediProductType_id=8 where id=4;
-
-insert into ProductTypeCombination (id, combinationName, isDeleted) values
-(1, 'Whole Blood', 0),
-(2, 'RCC, FFP, Platelets', 0),
-(3, 'Whole Blood Pedi', 0),
-(4, 'RCC Pedi, FFP Pedi, FFP Pedi', 0);
-
-insert into ProductTypeCombination_ProductType (productTypeCombinations_id, productTypes_id) values
-(1, 1),
-(2, 2),
-(2, 3),
-(2, 4),
-(3, 5),
-(4, 6),
-(4, 7),
-(4, 8);
-
-insert into BloodBagType (bloodBagType, isDeleted) values
-('Single', '0'),
-('Triple', '0'),
-('Pedi', '0');
-
-insert into Location(name, isCollectionCenter, isCollectionSite, isMobileSite, isUsageSite, isDonorPanel, isDeleted, notes) values
-('Lusaka', 1, 0, 0, 0, 0, 0, ''),
-('Ndola', 1, 1, 0, 1, 0, 0, ''),
-('Livingstone', 1, 1, 0, 1, 1, 0, ''),
-('Luanshya', 1, 0, 0, 0, 1, 0, ''),
-('Kasama', 1, 1, 0, 1, 0, 0, ''),
-('Chipata', 1, 0, 0, 0, 0, 0, ''),
-('Chingola', 1, 1, 0, 1, 1, 0, '');
 
 insert into Tips (tipsKey, tipsName, tipsContent) values
 ('report.inventory.generate', 'Generate Inventory' ,'Click the Generate Inventory Report button below to generate a report of your products.'),
@@ -895,74 +833,6 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("allowProductsWithoutCollection", "true", "productCreationRequirements"),
 ("allowImportedProducts", "true", "productCreationRequirements");
 
-insert into DeferralReason (reason, isDeleted) values
-("Other", 0),
-("Symptoms of cold", 0),
-("Travel to malarial region", 0),
-("On medication", 0);
-
-insert into ProductStatusChangeReason (statusChangeReason, category, isDeleted) values
-("Other", "DISCARDED", 0),
-("Positive TTI", "DISCARDED", 0),
-("Expired", "DISCARDED", 0),
-("Other",   "RETURNED", 0),
-("Expired", "RETURNED", 0),
-("Not required", "RETURNED", 0),
-("Wrong product sent", "RETURNED", 0),
-("Did not crossmatch with patient sample", "RETURNED", 0),
-("Split", "SPLIT", 0);
-
-insert ignore into User (id, username,password,firstname,isAdmin,isStaff,isActive,isDeleted) values
-(1, 'admin','admin321123','admin',1,1,1,0),
-(2, 'test','test','technician',0,1,1,0),
-(3, 'donor_user', 'donor_user', 'donor_user', 0,1,1,0),
-(4, 'test_user', 'test_user', 'test_user', 0,1,1,0);
-
-insert into Role(id, name) values
-(1, 'ROLE_ADMIN'),
-(2, 'ROLE_DONORLAB'),
-(3, 'ROLE_TESTLAB'),
-(4, 'ROLE_USER');
-
-insert into Permission(id, name) values
-(1, 'PERM_LOGIN'),
-(2, 'PERM_VIEW_DONOR_INFORMATION'),
-(3, 'PERM_VIEW_TEST_INFORMATION'),
-(4, 'PERM_EDIT_INFORMATION'),
-(5, 'PERM_EDIT_CONFIGURATION');
-
-insert into User_Role (users_id, roles_id) values
-(1, 1),
-(1, 2),
-(1, 3),
-(1, 4),
-(2, 1),
-(2, 2),
-(2, 3),
-(2, 4),
-(3, 2),
-(3, 4),
-(4, 3),
-(4, 4);
-
-insert into Permission_Role (roles_id, permissions_id) values
-(1, 2),
-(1, 3),
-(1, 4),
-(1, 5),
-(2, 1),
-(2, 2),
-(3, 1),
-(3, 3),
-(4, 1);
-
-insert into ContactMethodType (contactMethodType, isDeleted) values
-("None", 0),
-("Phone", 0),
-("SMS", 0),
-("Email", 0),
-("Mail", 0),
-("Do not contact", 0);
 
 insert into WellType (wellType, requiresSample, isDeleted) values
 ("Sample", 1, 0),

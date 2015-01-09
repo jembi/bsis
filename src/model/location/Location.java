@@ -19,10 +19,6 @@ public class Location {
   @NotBlank
   private String name;
 
-  private Boolean isCollectionCenter;
-
-  private Boolean isCollectionSite;
-
   private Boolean isUsageSite;
 
   private Boolean isMobileSite;
@@ -39,22 +35,15 @@ public class Location {
 
   public void copy(Location location) {
     this.name = location.name;
-    this.isCollectionCenter = location.isCollectionCenter;
-    this.isCollectionSite = location.isCollectionSite;
+    this.isDonorPanel = location.isDonorPanel;
+    this.isMobileSite = location.isMobileSite;
     this.isUsageSite = location.isUsageSite;
+    this.isDeleted = location.isDeleted;
     this.notes = location.notes;
   }
 
   public String getName() {
     return name;
-  }
-
-  public Boolean getIsCollectionCenter() {
-    return isCollectionCenter;
-  }
-
-  public Boolean getIsCollectionSite() {
-    return isCollectionSite;
   }
 
   public Long getId() {
@@ -83,14 +72,6 @@ public class Location {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public void setIsCollectionCenter(Boolean isCollectionCenter) {
-    this.isCollectionCenter = isCollectionCenter;
-  }
-
-  public void setIsCollectionSite(Boolean collectionSite) {
-    isCollectionSite = collectionSite;
   }
 
   public void setIsMobileSite(Boolean mobileSite) {
