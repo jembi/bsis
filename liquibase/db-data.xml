@@ -82,7 +82,7 @@
 		<comment>Add product types</comment>
 		<insert tableName = "ProductType">
 			<column name="productTypeNameShort" value="Whole Blood"/>
-			<column name="productType" value="Whole Blood"/>
+			<column name="productTypeName" value="Whole Blood"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
@@ -92,7 +92,7 @@
 		</insert>
 		<insert tableName = "ProductType">
 			<column name="productTypeNameShort" value="RCC"/>
-			<column name="productType" value="Red Cell Concentrate"/>
+			<column name="productTypeName" value="Red Cell Concentrate"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
@@ -102,7 +102,7 @@
 		</insert>
 		<insert tableName = "ProductType">
 			<column name="productTypeNameShort" value="FFP"/>
-			<column name="productType" value="Fresh Frozen Plasma"/>
+			<column name="productTypeName" value="Fresh Frozen Plasma"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="365"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
@@ -112,7 +112,7 @@
 		</insert>
 		<insert tableName = "ProductType">
 			<column name="productTypeNameShort" value="Platelets"/>
-			<column name="productType" value="Platelets"/>
+			<column name="productTypeName" value="Platelets"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="5"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
@@ -122,7 +122,7 @@
 		</insert>
 		<insert tableName = "ProductType">
 			<column name="productTypeNameShort" value="Whole Blood Pedi"/>
-			<column name="productType" value="Whole Blood Pedi"/>
+			<column name="productTypeName" value="Whole Blood Pedi"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
@@ -132,7 +132,7 @@
 		</insert>
 		<insert tableName = "ProductType">
 			<column name="productTypeNameShort" value="RCC Pedi"/>
-			<column name="productType" value="Red Cell Concentrate Pedi"/>
+			<column name="productTypeName" value="Red Cell Concentrate Pedi"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
@@ -142,7 +142,7 @@
 		</insert>
 		<insert tableName = "ProductType">
 			<column name="productTypeNameShort" value="FFP Pedi"/>
-			<column name="productType" value="Fresh Frozen Plasma Pedi"/>
+			<column name="productTypeName" value="Fresh Frozen Plasma Pedi"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="365"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
@@ -152,7 +152,7 @@
 		</insert>
 		<insert tableName = "ProductType">
 			<column name="productTypeNameShort" value="Platelets Pedi"/>
-			<column name="productType" value="Platelets Pedi"/>
+			<column name="productTypeName" value="Platelets Pedi"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="5"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
