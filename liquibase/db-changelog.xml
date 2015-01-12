@@ -1,22 +1,12 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
-
-http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
-		http://www.liquibase.org/xml/ns/dbchangelog-ext 
-
-http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-
-	<!-- ALWAYS USE A UNIQUE IDENTIFIER of format id="yyyymmdd-hhmm" eg: id="20140225-
-
-1815" -->
+	<!-- ALWAYS USE A UNIQUE IDENTIFIER of format id="yyyymmdd-hhmm" eg: id="20140225-1815" -->
 	<!-- ALWAYS UPDATE YOUR LOCAL REPO FROM GITHUB AND VERIFY YOUR id IS UNIQUE -->
 	<!-- NEVER DELETE OR MODIFY EXISTING CHANGE SETS - instead add new change sets 
-		 reversing the previous ones if you need to change or delete info from another 
-
-changeset-->
+		 reversing the previous ones if you need to change or delete info from another changeset-->
 
 	<!-- For issue 62 [Allow for entry of donor haemoglobin count] -->
 	<changeSet id="20131024-2025" author="gtldevang">
@@ -36,14 +26,10 @@ changeset-->
 			<column name="isTimeField" value="0"></column>			
 		</insert>
 		<update tableName="CollectedSample">
-			<column name="haemoglobinCount" type="DECIMAL(7,1)" 
-
-defaultValue="NULL"></column>
+			<column name="haemoglobinCount" type="DECIMAL(7,1)" defaultValue="NULL"></column>
 		</update>
 		<update tableName="CollectedSample_AUD">
-			<column name="haemoglobinCount" type="DECIMAL(7,1)" 
-
-defaultValue="NULL"></column>
+			<column name="haemoglobinCount" type="DECIMAL(7,1)" defaultValue="NULL"></column>
 		</update>
 	</changeSet>
 
@@ -65,14 +51,10 @@ defaultValue="NULL"></column>
 			<column name="isTimeField" value="0"></column>			
 		</insert>
 		<update tableName="CollectedSample">
-			<column name="donorWeight" type="DECIMAL(7,1)" 
-
-defaultValue="NULL"></column>
+			<column name="donorWeight" type="DECIMAL(7,1)" defaultValue="NULL"></column>
 		</update>
 		<update tableName="CollectedSample_AUD">
-			<column name="donorWeight" type="DECIMAL(7,1)" 
-
-defaultValue="NULL"></column>
+			<column name="donorWeight" type="DECIMAL(7,1)" defaultValue="NULL"></column>
 		</update>
 	</changeSet>
 	
@@ -81,9 +63,7 @@ defaultValue="NULL"></column>
 		<insert tableName="FormField">
 			<column name="form" value="CollectedSample"></column>
 			<column name="FIELD" value="bloodPressureSystolic"></column>
-			<column name="defaultDisplayName" value="Blood Pressure 
-
-Systolic"></column>
+			<column name="defaultDisplayName" value="Blood Pressure Systolic"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
 			<column name="hidden" value="0"></column>
@@ -98,9 +78,7 @@ Systolic"></column>
 		<insert tableName="FormField">
 			<column name="form" value="CollectedSample"></column>
 			<column name="FIELD" value="bloodPressureDiastolic"></column>
-			<column name="defaultDisplayName" value="Blood Pressure 
-
-Diastolic"></column>
+			<column name="defaultDisplayName" value="Blood Pressure Diastolic"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
 			<column name="hidden" value="0"></column>
@@ -115,24 +93,16 @@ Diastolic"></column>
 		<update tableName="CollectedSample">
 			<column name="bloodPressure" type="int" defaultValue="NULL"></column>
 		</update>
-		<renameColumn tableName="CollectedSample" oldColumnName="bloodPressure" 
-
-newColumnName="bloodPressureSystolic" columnDataType="int"/>
+		<renameColumn tableName="CollectedSample" oldColumnName="bloodPressure" newColumnName="bloodPressureSystolic" columnDataType="int"/>
 		<update tableName="CollectedSample_AUD">
 			<column name="bloodPressure" type="int" defaultValue="NULL"></column>
 		</update>
-		<renameColumn tableName="CollectedSample_AUD" oldColumnName="bloodPressure" 
-
-newColumnName="bloodPressureSystolic" columnDataType="int"/>
+		<renameColumn tableName="CollectedSample_AUD" oldColumnName="bloodPressure" newColumnName="bloodPressureSystolic" columnDataType="int"/>
 		<addColumn tableName="CollectedSample">
-			<column name="bloodPressureDiastolic" type="int" 
-
-defaultValue="NULL"></column>
+			<column name="bloodPressureDiastolic" type="int" defaultValue="NULL"></column>
 		</addColumn>
 		<addColumn tableName="CollectedSample_AUD">
-			<column name="bloodPressureDiastolic" type="int" 
-
-defaultValue="NULL"></column>
+			<column name="bloodPressureDiastolic" type="int" defaultValue="NULL"></column>
 		</addColumn>                        
 	</changeSet>
 	
@@ -164,21 +134,15 @@ defaultValue="NULL"></column>
 	<!-- For issue 39 [Add in Date of first donation field to Donor form] -->
 	<changeSet id="20131025-1212" author="gtlankur">
 		<addColumn tableName="Donor">
-			<column name="dateOfFirstDonation" type="DATE" 
-
-defaultValue="NULL"></column>
+			<column name="dateOfFirstDonation" type="DATE" defaultValue="NULL"></column>
 		</addColumn>
 		<addColumn tableName="Donor_AUD">
-			<column name="dateOfFirstDonation" type="DATE" 
-
-defaultValue="NULL"></column>
+			<column name="dateOfFirstDonation" type="DATE" defaultValue="NULL"></column>
 		</addColumn>		
 		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="dateOfFirstDonation"></column>
-			<column name="defaultDisplayName" value="Date of First 
-
-Donation"></column>
+			<column name="defaultDisplayName" value="Date of First Donation"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
 			<column name="hidden" value="0"></column>
@@ -195,21 +159,15 @@ Donation"></column>
 	<!-- For issue 27 [Add 'Record Product' tab to Component Processing] -->
 	<changeSet id="20131107-1844" author="gtlankur">
 		<addColumn tableName="Product">
-			<column name="componentIdentificationNumber" type="VARCHAR(30)" 
-
-defaultValue=""></column>
+			<column name="componentIdentificationNumber" type="VARCHAR(30)" defaultValue=""></column>
 		</addColumn>
 		<addColumn tableName="Product_AUD">
-			<column name="componentIdentificationNumber" type="VARCHAR(30)" 
-
-defaultValue=""></column>
+			<column name="componentIdentificationNumber" type="VARCHAR(30)" defaultValue=""></column>
 		</addColumn>
 		<insert tableName="FormField">
 			<column name="form" value="Product"></column>
 			<column name="FIELD" value="componentIdentificationNumber"></column>
-			<column name="defaultDisplayName" value="Component Identification 
-
-Number"></column>
+			<column name="defaultDisplayName" value="Component Identification Number"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
 			<column name="hidden" value="0"></column>
@@ -251,9 +209,7 @@ Number"></column>
 	<!-- Update FormField table to rename Collection info to Donation -->
 	<changeSet id="20131108-1720" author="danfuterman">
 		<update tableName="FormField">
-			<column name="defaultDisplayName" value="Donation Identification 
-
-Number" />
+			<column name="defaultDisplayName" value="Donation Identification Number" />
 			<where>field = "collectionNumber"</where>
 		</update>
 		<update tableName="FormField">
@@ -468,16 +424,12 @@ Number" />
 
 		<addColumn tableName="Donor">
 			<column name="idType_id" type="BIGINT" defaultValue="NULL">
-				<constraints foreignKeyName="Donor_Idtype_FK" 
-
-references="IdType(id)"/>
+				<constraints foreignKeyName="Donor_Idtype_FK" references="IdType(id)"/>
 			</column>
 		</addColumn>
 
 		<addColumn tableName="Donor">
-			<column name="preferredLanguage_id" type="BIGINT" defaultValue="NULL"> 
-
-</column>
+			<column name="preferredLanguage_id" type="BIGINT" defaultValue="NULL"> </column>
 		</addColumn>
 
 		<addForeignKeyConstraint baseColumnNames="preferredLanguage_id"
@@ -639,9 +591,7 @@ references="IdType(id)"/>
 			<column name="postalAddressZipcode" type="varchar(255)"/> 
 		</createTable>
 
-		<dropForeignKeyConstraint baseTableName="Donor" 
-
-constraintName="FK3F25E46FCE9E976"/>
+		<dropForeignKeyConstraint baseTableName="Donor" constraintName="FK3F25E46FCE9E976"/>
 
 		<createTable  tableName="Contact">
 			<column name="id" type="BIGINT" autoIncrement = "true">
@@ -674,16 +624,12 @@ constraintName="FK3F25E46FCE9E976"/>
 
 		<addColumn tableName="Donor">
 			<column name="contactMethodType_id" type="SMALLINT(6)">
-					<constraints foreignKeyName="Contact_ContactType_FK" 
-
-references="ContactMethodType(id)"/>
+					<constraints foreignKeyName="Contact_ContactType_FK" references="ContactMethodType(id)"/>
 			</column> 
 		</addColumn>
 		<addColumn tableName="Donor">
 			<column name="addressTypeId" type="BIGINT"> 
-				<constraints foreignKeyName="Address_AddressType_fk" 
-
-references="AddressType(id)"/>
+				<constraints foreignKeyName="Address_AddressType_fk" references="AddressType(id)"/>
 			</column>
 		</addColumn>
 
@@ -828,9 +774,7 @@ references="AddressType(id)"/>
 		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="preferredAddressType"></column>
-			<column name="defaultDisplayName" value="Preferred Address 
-
-Type"></column>
+			<column name="defaultDisplayName" value="Preferred Address Type"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
 			<column name="hidden" value="0"></column>
@@ -892,9 +836,7 @@ Type"></column>
 		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="contactMethodType"></column>
-			<column name="defaultDisplayName" value="Contact Method 
-
-Type"></column>
+			<column name="defaultDisplayName" value="Contact Method Type"></column>
 			<column name="defaultValue" value=""></column>
 			<column name="maxLength" value="0"></column>
 			<column name="hidden" value="0"></column>
@@ -994,12 +936,8 @@ Type"></column>
 
 	<!-- #246 Adapt Donations to use single Location field -->
 	<changeSet id="20141119-1235" author="srikanthmalyala">
-		<dropForeignKeyConstraint baseTableName="CollectedSample" 
-
-constraintName="FKF0658A33B29562D0"/>
-		<dropForeignKeyConstraint baseTableName="CollectedSample" 
-
-constraintName="FKF0658A33AED1731E"/>
+		<dropForeignKeyConstraint baseTableName="CollectedSample" constraintName="FKF0658A33B29562D0"/>
+		<dropForeignKeyConstraint baseTableName="CollectedSample" constraintName="FKF0658A33AED1731E"/>
 		<dropColumn columnName="collectionCenter_id" tableName="CollectedSample"/>
 		<dropColumn columnName="collectionCenter_id" tableName="CollectedSample_AUD"/>
 		<dropColumn columnName="collectionSite_id" tableName="CollectedSample"/>
@@ -1010,9 +948,7 @@ constraintName="FKF0658A33AED1731E"/>
 	<changeSet id="20141119-1356" author="srikanthmalyala">
 		<addColumn tableName="CollectedSample">
 			<column name="donorPanel_id" type="bigint">
-				<constraints foreignKeyName="FK_donation_Location" 
-
-references="Location(id)"/>
+				<constraints foreignKeyName="FK_donation_Location" references="Location(id)"/>
 			</column>
 		</addColumn>
 		<addColumn tableName="CollectedSample_AUD">
@@ -1022,12 +958,8 @@ references="Location(id)"/>
 
 	<!-- #246 Adapt Donations to use single Location field -->
 	<changeSet id="20141119-1558" author="srikanthmalyala">
-		<dropForeignKeyConstraint baseTableName="CollectionBatch" 
-
-constraintName="FK227631CAED1731E"/>
-		<dropForeignKeyConstraint baseTableName="CollectionBatch" 
-
-constraintName="FK227631CB29562D0"/>
+		<dropForeignKeyConstraint baseTableName="CollectionBatch" constraintName="FK227631CAED1731E"/>
+		<dropForeignKeyConstraint baseTableName="CollectionBatch" constraintName="FK227631CB29562D0"/>
 		<dropColumn columnName="collectionCenter_id" tableName="CollectionBatch"/>
 		<dropColumn columnName="collectionCenter_id" tableName="CollectionBatch_AUD"/>
 		<dropColumn columnName="collectionSite_id" tableName="CollectionBatch"/>
@@ -1038,9 +970,7 @@ constraintName="FK227631CB29562D0"/>
 	<changeSet id="20141119-1605" author="srikanthmalyala">
 		<addColumn tableName="CollectionBatch">
 			<column name="donorPanel_id" type="bigint">
-				<constraints foreignKeyName="FK_DonationBatch_Location" 
-
-references="Location(id)"/>
+				<constraints foreignKeyName="FK_DonationBatch_Location" references="Location(id)"/>
 			</column>
 		</addColumn>
 		<addColumn tableName="CollectionBatch_AUD">
@@ -1071,8 +1001,8 @@ references="Location(id)"/>
 		<dropColumn columnName="isCollectionSite" tableName="Location"/>
 		<dropColumn columnName="isCollectionSite" tableName="Location_AUD"/>
 	</changeSet>
-
-	<!-- #234 Associate Pack Type with Initial Component Type in Donation -->
+	
+		<!-- #234 Associate Pack Type with Initial Component Type in Donation -->
 	<changeSet id="20141112-0953" author="srikanthmalyala">
 		<addColumn tableName="BloodBagType">
 			<column name="productType_id" type="smallint(6)"></column>
@@ -1120,16 +1050,16 @@ references="Location(id)"/>
 		</addColumn>
 	</changeSet>
 
-	<changeSet id="20140106-1212" author = "srikanthmalyala" >
-	        <renameColumn columnDataType="VARCHAR(50)"
-            		newColumnName="productTypeName"
-            		oldColumnName="productType"
-            		tableName="ProductType"/>
-	 	<renameColumn columnDataType="VARCHAR(50)"
-           		newColumnName="productTypeName"
-            		oldColumnName="productType"
-            		tableName="ProductType_AUD"/>
-            
+	<!-- #234 Refactor productType  to productTypeName -->
+	<changeSet id="20140106-1212" author="srikanthmalyala">
+		<renameColumn columnDataType="VARCHAR(50)"
+			newColumnName="productTypeName"
+			oldColumnName="productType"
+			tableName="ProductType"/>
+		<renameColumn columnDataType="VARCHAR(50)"
+			newColumnName="productTypeName"
+			oldColumnName="productType"
+			tableName="ProductType_AUD"/>
 	 </changeSet>
 
 </databaseChangeLog>
