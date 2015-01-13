@@ -32,7 +32,7 @@ public class ProductTypeViewModel {
     }
     
     public String getProductTypeName(){
-        return productType.getProductType();
+        return productType.getProductTypeName();
     }
 
     public String getProductTypeNameShort(){

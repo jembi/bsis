@@ -82,7 +82,7 @@ public class ProductControllerTest {
 		          product.setCreatedOn(new Date());
 		          product.setExpiresOn(expiredate);
 		          ProductType productType = new ProductType();
-		          productType.setProductType(productType2.getProductType());
+		          productType.setProductTypeName(productType2.getProductTypeName());
 		          productType.setId(productType2.getId());
 		          product.setProductType(productType);
 		          CollectedSample collectedSample = new CollectedSample();
@@ -116,7 +116,7 @@ public class ProductControllerTest {
 		          product.setCreatedOn(new Date());
 		          product.setExpiresOn(expiredate);
 		          ProductType productType = new ProductType();
-		          productType.setProductType(productType2.getProductType());
+		          productType.setProductTypeName(productType2.getProductTypeName());
 		          productType.setId(productType2.getId());
 		          product.setProductType(productType);
 		          CollectedSample collectedSample = new CollectedSample();

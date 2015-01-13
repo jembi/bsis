@@ -247,6 +247,8 @@ public void setDonorCodes(List<DonorCode> donorCodes) {
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   private PreferredLanguage  preferredLanguage;
   
+  private Date dueToDonate;
+  
   public Donor() {
     modificationTracker = new RowModificationTracker();
   }
@@ -584,5 +586,12 @@ public void copy(Donor donor) {
         this.contactMethodType = contactMethodType;
     }
 
-    
+    public Date getDueToDonate() {
+        return dueToDonate;
+    }
+
+    public void setDueToDonate(Date dueToDonate) {
+        this.dueToDonate = dueToDonate;
+    }
+
 }

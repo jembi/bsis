@@ -41,7 +41,7 @@ public class ProductTypeRepository {
     TypedQuery<ProductType> query = em.createQuery(queryString, ProductType.class);
     query.setParameter("isDeleted", false);
     for (ProductType productType : query.getResultList()) {
-      if (productType.getProductType().equals(checkProductType))
+      if (productType.getProductTypeName().equals(checkProductType))
         return true;
     }
     return false;
@@ -231,7 +231,7 @@ public class ProductTypeRepository {
   
   public ProductType updateComponentType(ProductType productType)throws IllegalArgumentException{
     ProductType existingProductType = getProductTypeById(productType.getId());
-    existingProductType.setProductType(productType.getProductType());
+    existingProductType.setProductTypeName(productType.getProductTypeName());
     existingProductType.setProductTypeNameShort(productType.getProductTypeNameShort());
     existingProductType.setExpiresAfter(productType.getExpiresAfter());
     ProductTypeTimeUnits  expiresAfterUnits = productType.getExpiresAfterUnits();

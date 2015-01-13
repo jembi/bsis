@@ -317,7 +317,7 @@ public class LotReleaseController {
     		for(Product product : products){
     				if(!product.getStatus().equals(ProductStatus.PROCESSED) && !product.getStatus().equals(ProductStatus.SPLIT)){
 	                    productStatus.put("componentId", product.getId());
-	                    productStatus.put("componentName", product.getProductType().getProductType());
+	                    productStatus.put("componentName", product.getProductType().getProductTypeName());
 	                    productStatus.put("componentIdentificationNumber", product.getComponentIdentificationNumber());
 	                    productStatus.put("discardPackLabel", true);
 	                    productStatus.put("printPackLabel", false);
@@ -332,7 +332,7 @@ public class LotReleaseController {
                 	Map<String, Object> productStatus = new HashMap<String, Object>();
                 	if(!product.getStatus().equals(ProductStatus.PROCESSED) && !product.getStatus().equals(ProductStatus.SPLIT)){
 	                    productStatus.put("componentId", product.getId());
-	                    productStatus.put("componentName", product.getProductType().getProductType());
+	                    productStatus.put("componentName", product.getProductType().getProductTypeName());
 	                    productStatus.put("componentIdentificationNumber", product.getComponentIdentificationNumber());
 	                    if (product.getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED)) {
 	                        productStatus.put("discardPackLabel", true);
