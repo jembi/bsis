@@ -73,7 +73,7 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
 					
 		}	
 		
-		// Id Clinic Date is specified, Donors should not be deferred on that date
+		// If Clinic Date is specified, Donors should not be deferred on that date
 		if(!StringUtils.isBlank(clinicDate)) {
 				panelPredicates.add(cb.lessThanOrEqualTo(root.get("dueToDonate").as(Date.class), CustomDateFormatter.parse(clinicDate)));				
 				if(!StringUtils.isBlank(clinicDateToCheckdeferredDonor)) {					
