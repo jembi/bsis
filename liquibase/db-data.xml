@@ -81,7 +81,7 @@
 	<changeSet id="20141117-1404" author="srikanthmalyala">
 		<comment>Add product types</comment>
 		<insert tableName = "ProductType">
-			<column name="productTypeNameShort" value="Whole Blood"/>
+			<column name="productTypeNameShort" value="WB"/>
 			<column name="productTypeName" value="Whole Blood"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
