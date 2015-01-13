@@ -62,22 +62,6 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1323" author="srikanthmalyala">
-		<comment>add blood bag types</comment>
-		<insert tableName = "BloodBagType">
-			<column name="bloodBagType" value="Single"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "BloodBagType">
-			<column name="bloodBagType" value="Triple"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "BloodBagType">
-			<column name="bloodBagType" value="Pedi"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-	</changeSet>
-
 	<changeSet id="20141117-1404" author="srikanthmalyala">
 		<comment>Add product types</comment>
 		<insert tableName = "ProductType">
@@ -159,6 +143,31 @@
 			<column name="hasBloodGroup" value="0"/>
 			<column name="pediProductType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
+		</insert>
+	</changeSet>
+	
+	<changeSet id="20141117-1423" author="srikanthmalyala">
+		<comment>add blood bag types</comment>
+		<insert tableName = "BloodBagType">
+			<column name="bloodBagType" value="Single"/>
+			<column name="isDeleted" value="0"/>
+			<column name="productType_id" value="1"/>
+			<column name="countAsDonation" value="1"/>
+			<column name="periodBetweenDonations" value="90"/>
+		</insert>
+		<insert tableName = "BloodBagType">
+			<column name="bloodBagType" value="Triple"/>
+			<column name="isDeleted" value="0"/>
+			<column name="productType_id" value="1"/>
+			<column name="countAsDonation" value="1"/>
+			<column name="periodBetweenDonations" value="90"/>
+		</insert>
+		<insert tableName = "BloodBagType">
+			<column name="bloodBagType" value="Pedi"/>
+			<column name="isDeleted" value="0"/>
+			<column name="productType_id" value="1"/>
+			<column name="countAsDonation" value="1"/>
+			<column name="periodBetweenDonations" value="90"/>
 		</insert>
 	</changeSet>
 
