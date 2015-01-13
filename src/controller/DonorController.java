@@ -115,11 +115,13 @@ public class DonorController {
 	    map.put("lastDonation", getCollectionViewModel(donations.get(donations.size()-1)));
 	    map.put("dateOfFirstDonation",CustomDateFormatter.getDateString(donations.get(0).getCollectedOn()));
 	    map.put("totalDonations",getNumberOfDonations(donations));
+	    map.put("dueToDonate",CustomDateFormatter.getDateString(donor.getDueToDonate()));
     }
     else {
     	map.put("lastDonation", "");
 	    map.put("dateOfFirstDonation","");
 	    map.put("totalDonations",0);
+	    map.put("dueToDonate","");
     }
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
