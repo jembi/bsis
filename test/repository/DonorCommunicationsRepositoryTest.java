@@ -83,9 +83,11 @@ public class DonorCommunicationsRepositoryTest {
 			Map<String, Object> replacements = new HashMap<String, Object>();
 			
 			replacements.put("today", today);
+			replacements.put("yesterday", DateUtils.addDays(today, -(1)));
 			replacements.put("twoWeeksAgo", DateUtils.addDays(today, -(14)));
 			replacements.put("oneMonthAgo", DateUtils.addDays(today, -(30)));
 			replacements.put("threeMonthsAgo", DateUtils.addDays(today, -(90)));
+			replacements.put("threeMonthsAhead", DateUtils.addDays(today, (90)));
 			replacements.put("sixMonthsAhead", DateUtils.addDays(today, (180)));
 			
 			ReplacementDataSet rDataSet = new ReplacementDataSet(dataSet);
