@@ -27,8 +27,8 @@ public class ComponentTypeBackingForm {
         productType.setId(id);
     }
     
-    public void setProductType(String productTypeName){
-        productType.setProductType(productTypeName);
+    public void setProductTypeName(String productTypeName){
+        productType.setProductTypeName(productTypeName);
     }
     
     public void setProductTypeNameShort(String productTypeNameShort){

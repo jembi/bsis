@@ -114,7 +114,7 @@ public class DonorController {
     if(donations.size() > 0){
 	    map.put("lastDonation", getCollectionViewModel(donations.get(donations.size()-1)));
 	    map.put("dateOfFirstDonation",CustomDateFormatter.getDateString(donations.get(0).getCollectedOn()));
-	    map.put("totalDonations",donations.size());
+	    map.put("totalDonations",getNumberOfDonations(donations));
     }
     else {
     	map.put("lastDonation", "");
@@ -322,4 +322,12 @@ public class DonorController {
     return collectionViewModels;
   }
  
+  private int getNumberOfDonations(List<CollectedSample> donations){
+      int count = 0;
+      for(CollectedSample donation :donations){
+          if(donation.getBloodBagType().isCountAsDonation() == true)
+              count = count +1;
+      }
+      return count;
+  }
 }

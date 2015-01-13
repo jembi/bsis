@@ -5,6 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.NotNull;
+import model.producttype.ProductType;
 
 import org.hibernate.envers.Audited;
 
@@ -28,6 +32,24 @@ public class BloodBagType {
   private Boolean canPool;
 
   private Boolean isDeleted;
+  
+  @ManyToOne
+  private ProductType productType;
+  
+  @NotNull
+  private Boolean countAsDonation;
+  
+ @AssertTrue(message="Component type should be not null when countAsDonation is set to true")
+  private boolean isValid(){
+      if(this.countAsDonation == true)
+          if(productType != null)
+              return true;
+          else 
+              return false;
+  return true;
+   }
+  
+  private Integer periodBetweenDonations;
   
   public Integer getId() {
     return id;
@@ -73,4 +95,30 @@ public class BloodBagType {
   public void setCanSplit(Boolean canSplit) {
     this.canSplit = canSplit;
   }
+
+  public ProductType getProductType() {
+      return productType;
+  }
+
+  public void setProductType(ProductType productType) {
+      this.productType = productType;
+  }
+
+  public Boolean isCountAsDonation() {
+        return countAsDonation;
+  }
+
+  public void setCountAsDonation(Boolean countAsDonation) {
+       this.countAsDonation = countAsDonation;
+  }
+
+    public Integer getPeriodBetweenDonations() {
+        return periodBetweenDonations;
+    }
+
+    public void setPeriodBetweenDonations(Integer periodBetweenDonations) {
+        this.periodBetweenDonations = periodBetweenDonations;
+    }
+  
+  
 }

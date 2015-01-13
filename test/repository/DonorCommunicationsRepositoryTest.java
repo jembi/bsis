@@ -83,9 +83,11 @@ public class DonorCommunicationsRepositoryTest {
 			Map<String, Object> replacements = new HashMap<String, Object>();
 			
 			replacements.put("today", today);
+			replacements.put("yesterday", DateUtils.addDays(today, -(1)));
 			replacements.put("twoWeeksAgo", DateUtils.addDays(today, -(14)));
 			replacements.put("oneMonthAgo", DateUtils.addDays(today, -(30)));
 			replacements.put("threeMonthsAgo", DateUtils.addDays(today, -(90)));
+			replacements.put("threeMonthsAhead", DateUtils.addDays(today, (90)));
 			replacements.put("sixMonthsAhead", DateUtils.addDays(today, (180)));
 			
 			ReplacementDataSet rDataSet = new ReplacementDataSet(dataSet);
@@ -231,14 +233,14 @@ public class DonorCommunicationsRepositoryTest {
 		Map<String, Object> pagingParams = createPagingParamsMap();
 
 		List<Donor> results = new ArrayList<Donor>();
-		results = donorCommunicationsRepository.findDonors(donorPanels, getEligibleDonationDate(clinicDate), lastDonationFromDate,
+		results = donorCommunicationsRepository.findDonors(donorPanels, clinicDate, lastDonationFromDate,
 				lastDonationToDate, bloodGroups, anyBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
 
 		assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, results.size());
 		
 		boolean isvalid = true;
 		for(Donor donor:results){
-			if(donor.getDateOfLastDonation().after(CustomDateFormatter.parse(getEligibleDonationDate(clinicDate))))
+			if(donor.getDueToDonate().after(CustomDateFormatter.parse(clinicDate)))
 			{
 				isvalid = false;
 				break;
@@ -321,7 +323,7 @@ public class DonorCommunicationsRepositoryTest {
 		bloodGroups = createBloodGroupList(bloodGroupStrArray);
 		//List<Object> results = new ArrayList<Object>();
 
-		List<Donor> donors = donorCommunicationsRepository.findDonors(donorPanels, getEligibleDonationDate(clinicDate), lastDonationFromDate, 
+		List<Donor> donors = donorCommunicationsRepository.findDonors(donorPanels, clinicDate, lastDonationFromDate, 
 				lastDonationToDate, bloodGroups, anyBloodGroup, pagingParams, clinicDate);		
 		
 		for (Donor donor : donors) {
@@ -362,7 +364,7 @@ public class DonorCommunicationsRepositoryTest {
 		donorPanels = createDonorPanelList(id);
 		bloodGroups = createBloodGroupList(bloodGroupStrArray);
 		
-		List<Donor> donors = donorCommunicationsRepository.findDonors(donorPanels, getEligibleDonationDate(clinicDate), lastDonationFromDate, 
+		List<Donor> donors = donorCommunicationsRepository.findDonors(donorPanels, clinicDate, lastDonationFromDate, 
 				lastDonationToDate, bloodGroups, anyBloodGroup, pagingParams, clinicDate);	
 		
 		assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, donors.size());
@@ -408,7 +410,7 @@ public class DonorCommunicationsRepositoryTest {
 		donorPanels = createDonorPanelList(id);
 		bloodGroups = createBloodGroupList(bloodGroupStrArray);
 		
-		List<Donor> donors = donorCommunicationsRepository.findDonors(donorPanels, getEligibleDonationDate(clinicDate), lastDonationFromDate, 
+		List<Donor> donors = donorCommunicationsRepository.findDonors(donorPanels, clinicDate, lastDonationFromDate, 
 				lastDonationToDate,	bloodGroups, anyBloodGroup, pagingParams, clinicDate);	
 		
 		assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, donors.size());
@@ -453,7 +455,7 @@ public class DonorCommunicationsRepositoryTest {
 		donorPanels    =  createDonorPanelList(id);
 		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
 
-		List<Donor> donors = donorCommunicationsRepository.findDonors(donorPanels, getEligibleDonationDate(clinicDate), lastDonationFromDate, 
+		List<Donor> donors = donorCommunicationsRepository.findDonors(donorPanels, clinicDate, lastDonationFromDate, 
 				lastDonationToDate,	bloodGroups, anyBloodGroup, pagingParams, clinicDate);	
 
 		assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, donors.size());
@@ -519,14 +521,6 @@ public class DonorCommunicationsRepositoryTest {
 
 		return pagingParams;
 	}
-	
-	private String getEligibleDonationDate(String clinicDate) throws ParseException {
-		if(!clinicDate.trim().equalsIgnoreCase(""))
-		{
-			return CustomDateFormatter.format(DateUtils.addDays(CustomDateFormatter.parse(clinicDate), -(CollectionConstants.BLOCK_BETWEEN_COLLECTIONS)));
-		}
-		else return "";
-	 }
 	 
 	 private long getDonorListSizeWithoutAnyCriteria() throws ParseException {
 		List<Location> donorPanel = new ArrayList<Location>();

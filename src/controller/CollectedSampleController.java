@@ -6,12 +6,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import model.collectedsample.CollectedSample;
+import model.donor.Donor;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,6 +35,8 @@ import repository.DonorRepository;
 import repository.LocationRepository;
 import utils.PermissionConstants;
 import viewmodel.CollectedSampleViewModel;
+import viewmodel.PackTypeViewModel;
+import model.bloodbagtype.BloodBagType;
 
 @RestController
 @RequestMapping("/donations")
@@ -119,7 +124,7 @@ public class CollectedSampleController {
   private void addEditSelectorOptions(Map<String, Object> m) {
 	m.put("donorPanels", locationRepository.getAllDonorPanels());
     m.put("donationTypes", donorTypeRepository.getAllDonationTypes());
-    m.put("packTypes", bloodBagTypeRepository.getAllBloodBagTypes()); 
+    m.put("packTypes", getPackTypeViewModels(bloodBagTypeRepository.getAllBloodBagTypes())); 
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
@@ -165,11 +170,6 @@ public class CollectedSampleController {
       CollectedSample savedCollection = null;
       CollectedSample collectedSample = form.getCollectedSample();
 
-         if (collectedSample.getDonor().getDateOfFirstDonation() == null) {
-          collectedSample.getDonor().setDateOfFirstDonation(collectedSample.getCollectedOn());
-      }
-
-      collectedSample.setIsDeleted(false);
       savedCollection = collectedSampleRepository.addCollectedSample(collectedSample);
       map.put("hasErrors", false);
       form = new CollectedSampleBackingForm();
@@ -283,4 +283,12 @@ public class CollectedSampleController {
 
     return generateDatatablesMap(collectedSamples, totalRecords, formFields);
   }
+     
+  private List<PackTypeViewModel> getPackTypeViewModels(List<BloodBagType> packTypes){     
+       List<PackTypeViewModel> viewModels = new ArrayList<PackTypeViewModel>();
+       for(BloodBagType packtType : packTypes){
+           viewModels.add(new PackTypeViewModel(packtType));
+       }
+       return viewModels;
+   }
 }

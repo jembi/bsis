@@ -30,7 +30,7 @@ public class ProductType {
   private Integer id;
 
   @Column(length=50)
-  private String productType;
+  private String productTypeName;
 
   @Column(length=30)
   private String productTypeNameShort;
@@ -73,7 +73,7 @@ public class ProductType {
 
   @Override
   public String toString() {
-    return productType;
+    return productTypeName;
   }
 
   public Boolean getIsDeleted() {
@@ -84,13 +84,13 @@ public class ProductType {
     this.isDeleted = isDeleted;
   }
 
-  public String getProductType() {
-    return productType;
-  }
+    public String getProductTypeName() {
+        return productTypeName;
+    }
 
-  public void setProductType(String productType) {
-    this.productType = productType;
-  }
+    public void setProductTypeName(String productTypeName) {
+        this.productTypeName = productTypeName;
+    }
 
   public String getDescription() {
     return description;

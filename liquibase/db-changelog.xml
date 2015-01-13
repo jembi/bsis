@@ -1001,5 +1001,65 @@
 		<dropColumn columnName="isCollectionSite" tableName="Location"/>
 		<dropColumn columnName="isCollectionSite" tableName="Location_AUD"/>
 	</changeSet>
+	
+		<!-- #234 Associate Pack Type with Initial Component Type in Donation -->
+	<changeSet id="20141112-0953" author="srikanthmalyala">
+		<addColumn tableName="BloodBagType">
+			<column name="productType_id" type="smallint(6)"></column>
+		</addColumn>
+		<addColumn tableName="BloodBagType_AUD">
+			<column name="productType_id" type="smallint(6)"></column>
+		</addColumn>
+		<addForeignKeyConstraint baseColumnNames="productType_id"
+			baseTableName="BloodBagType"
+			constraintName="fk_packType_componentType"
+			onDelete="CASCADE"
+			onUpdate="RESTRICT"
+			referencedColumnNames="id"
+			referencedTableName="ProductType"
+		/>
+	</changeSet>
+
+	<!-- #236 Incorporate use of countAsDonation field -->
+	<changeSet id="20141112-1255" author="srikanthmalyala">
+		<addColumn tableName="BloodBagType">
+			<column name="countAsDonation" type="tinyint(1)"></column>
+		</addColumn>
+		<addColumn tableName="BloodBagType_AUD">
+			<column name="countAsDonation" type="tinyint(1)"></column>
+		</addColumn>
+	</changeSet>
+
+	<!-- #236 Incorporate use of periodBetweenDonation field -->
+	<changeSet id="20141112-1315" author="srikanthmalyala">
+		<addColumn tableName="BloodBagType">
+			<column name="periodBetweenDonations" type="smallint(6)"></column>
+		</addColumn>
+		<addColumn tableName="BloodBagType_AUD">
+			<column name="periodBetweenDonations" type="smallint(6)"></column>
+		</addColumn>
+	</changeSet>
+
+	<!-- #236 Incorporate use of dueToDonate field -->
+	<changeSet id="20141112-1358" author="srikanthmalyala">
+		<addColumn tableName="Donor">
+			<column name="dueToDonate" type="date"></column>
+		</addColumn>
+		<addColumn tableName="Donor_AUD">
+			<column name="dueToDonate" type="date"></column>
+		</addColumn>
+	</changeSet>
+
+	<!-- #234 Refactor productType  to productTypeName -->
+	<changeSet id="20140106-1212" author="srikanthmalyala">
+		<renameColumn columnDataType="VARCHAR(50)"
+			newColumnName="productTypeName"
+			oldColumnName="productType"
+			tableName="ProductType"/>
+		<renameColumn columnDataType="VARCHAR(50)"
+			newColumnName="productTypeName"
+			oldColumnName="productType"
+			tableName="ProductType_AUD"/>
+	 </changeSet>
 
 </databaseChangeLog>
