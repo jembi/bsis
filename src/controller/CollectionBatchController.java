@@ -132,7 +132,7 @@ public class CollectionBatchController {
         Map<String, Object> map = new HashMap<String, Object>();   
         List<CollectionBatch> collectionBatches = 
                 collectionBatchRepository.getRecentlyClosedDonationBatches(numOfResults);
-        map.put("collectionBatches", getCollectionBatchViewModels(collectionBatches));
+        map.put("donationBatches", getCollectionBatchViewModels(collectionBatches));
         return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
     }
   
