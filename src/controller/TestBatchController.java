@@ -116,6 +116,19 @@ public class TestBatchController {
         return  new ResponseEntity(HttpStatus.NO_CONTENT);
     }
     
+       @RequestMapping(value = "/recentlyclosed/{numOfResults}" ,method = RequestMethod.GET)
+   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")  
+   public ResponseEntity<Map<String, Object>> getRecentlyClosedTestBatches(
+            @PathVariable Integer numOfResults) {
+        
+        Map<String, Object> map = new HashMap<String, Object>();   
+        List<TestBatch> testBatches = 
+                testBatchRepository.getRecentlyClosedTestBatches(numOfResults);
+        map.put("testBatches", getTestBatchViewModels(testBatches));
+        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    }
+  
+    
     public String getNextTestBatchNumber() {
         return sequenceNumberRepository.getNextTestBatchNumber();
     }
@@ -130,5 +143,18 @@ public class TestBatchController {
 	    }
 	    return collectionBatchViewModels;
 	}
+    
+    public static List<TestBatchViewModel> getTestBatchViewModels(
+            List<TestBatch> testBatches) {
+        if (testBatches == null) {
+            return Arrays.asList(new TestBatchViewModel[0]);
+        }
+        List<TestBatchViewModel> testBatchViewModels = new ArrayList<TestBatchViewModel>();
+        for (TestBatch testBatch : testBatches) {
+            testBatchViewModels.add(new TestBatchViewModel(testBatch));
+        }
+        return testBatchViewModels;
+    }
 
+       
 }
