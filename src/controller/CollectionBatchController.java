@@ -124,15 +124,15 @@ public class CollectionBatchController {
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   
-   @RequestMapping(value = "/recentlyclosed/{numOfResults}" ,method = RequestMethod.GET)
+   @RequestMapping(value = "/recent/{count}" ,method = RequestMethod.GET)
    @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")  
    public ResponseEntity<Map<String, Object>> getRecentlyClosedDonationBatches(
-            @PathVariable Integer numOfResults) {
+            @PathVariable Integer count) {
         
         Map<String, Object> map = new HashMap<String, Object>();   
-        List<CollectionBatch> collectionBatches = 
-                collectionBatchRepository.getRecentlyClosedDonationBatches(numOfResults);
-        map.put("donationBatches", getCollectionBatchViewModels(collectionBatches));
+        List<CollectionBatch> donationBatches = 
+                collectionBatchRepository.getRecentlyClosedDonationBatches(count);
+        map.put("donationBatches", getCollectionBatchViewModels(donationBatches));
         return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
     }
   

@@ -116,14 +116,14 @@ public class TestBatchController {
         return  new ResponseEntity(HttpStatus.NO_CONTENT);
     }
     
-       @RequestMapping(value = "/recentlyclosed/{numOfResults}" ,method = RequestMethod.GET)
+       @RequestMapping(value = "/recent/{count}" ,method = RequestMethod.GET)
    @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")  
    public ResponseEntity<Map<String, Object>> getRecentlyClosedTestBatches(
-            @PathVariable Integer numOfResults) {
+            @PathVariable Integer count) {
         
         Map<String, Object> map = new HashMap<String, Object>();   
         List<TestBatch> testBatches = 
-                testBatchRepository.getRecentlyClosedTestBatches(numOfResults);
+                testBatchRepository.getRecentlyClosedTestBatches(count);
         map.put("testBatches", getTestBatchViewModels(testBatches));
         return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
     }
