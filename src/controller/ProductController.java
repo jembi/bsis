@@ -379,6 +379,24 @@ public class ProductController {
     return map;
   }
   
+  @RequestMapping(value="/combinationrules", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
+  public Map<String, Object> getProductTypeCombinationRules() {
+	Map<String, Object> map = new HashMap<String, Object>();
+    List<ProductTypeCombinationRule> allProductTypeCombinationRules = productTypeRepository.getAllProductTypeCombinationRules();
+    map.put("combinations",allProductTypeCombinationRules);
+    return map;
+  }
+  
+  @RequestMapping(value="/combinations", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
+  public Map<String, Object> getProductTypeCombinations() {
+	Map<String, Object> map = new HashMap<String, Object>();
+    List<ProductTypeCombination> allProductTypeCombinationsIncludeDeleted = productTypeRepository.getAllProductTypeCombinationsIncludeDeleted();
+    map.put("combinations",getProductTypeCombinationViewModels(allProductTypeCombinationsIncludeDeleted));
+    return map;
+  }
+  
   @RequestMapping(value = "/record", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public  ResponseEntity<Map<String, Object>> recordNewProductComponents(
