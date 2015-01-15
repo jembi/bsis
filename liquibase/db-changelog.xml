@@ -1061,5 +1061,28 @@
 			oldColumnName="productType"
 			tableName="ProductType_AUD"/>
 	 </changeSet>
+	 
+	<!-- #263 Add units fields to ProductTypeCombination_ProductType -->
+	<changeSet id="20140115-2047" author="danfuterman">
+		<addColumn tableName="ProductTypeCombination_ProductType">
+			<column name="units" type="SMALLINT"></column>
+		</addColumn>
+	</changeSet>
+	
+	<!-- #263 Add ProductTypeCombinationRule table -->
+	<changeSet id="20140115-2055" author="danfuterman">
+		<createTable tableName="ProductTypeCombinationRule">
+			<column name="id" type="INT" autoIncrement = "true">
+				<constraints primaryKey="true" nullable="false" />
+				
+			</column>
+			<column name="productType" type="SMALLINT">
+			<constraints foreignKeyName="pTID_FK" references="ProductType(id)"/>
+			</column> 
+			<column name="productTypeCombination" type="SMALLINT">
+			<constraints foreignKeyName="pTCID_FK" references="ProductTypeCombination(id)"/>
+			</column>
+		</createTable>
+	</changeSet>
 
 </databaseChangeLog>
