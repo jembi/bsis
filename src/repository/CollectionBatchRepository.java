@@ -137,4 +137,15 @@ public class CollectionBatchRepository {
     }
     return collectedSamples;
   }
+  
+  
+  public List<CollectionBatch> getRecentlyClosedDonationBatches(Integer numOfResults){
+      
+       String queryStr = "SELECT b FROM CollectionBatch b "
+               + "WHERE isClosed = true  ORDER BY lastUpdated DESC";
+         TypedQuery<CollectionBatch> query = em.createQuery(queryStr, CollectionBatch.class);
+         query.setMaxResults(numOfResults);
+         return query.getResultList();
+      
+  }
 }
