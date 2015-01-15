@@ -28,6 +28,7 @@ import model.productmovement.ProductStatusChangeReason;
 import model.productmovement.ProductStatusChangeReasonCategory;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
+import model.producttype.ProductTypeCombinationRule;
 import model.producttype.ProductTypeTimeUnits;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -51,6 +52,7 @@ import utils.PermissionConstants;
 import viewmodel.ProductViewModel;
 import viewmodel.ProductTypeViewModel;
 import viewmodel.ProductStatusChangeViewModel;
+import viewmodel.ProductTypeCombinationViewModel;
 import utils.CustomDateFormatter;
 
 @RestController
@@ -402,13 +404,14 @@ public class ProductController {
   public  ResponseEntity<Map<String, Object>> recordNewProductComponents(
        @RequestBody @Valid RecordProductBackingForm form) throws ParseException{
 
-      ProductType productType2 = productTypeRepository.getProductTypeById(Integer.valueOf(form.getChildComponentTypeId()));
+      //ProductType productType2 = productTypeRepository.getProductTypeById(Integer.valueOf(form.getChildComponentTypeId()));
       Product parentComponent = productRepository.findProductById(Long.valueOf(form.getParentComponentId()));
       CollectedSample collectedSample = parentComponent.getCollectedSample();
       String collectionNumber = collectedSample.getCollectionNumber();
       ProductStatus status = parentComponent.getStatus();
       long productId = Long.valueOf(form.getParentComponentId());
 
+      /*
       String sortName = productType2.getProductTypeNameShort();
       int noOfUnits = 1;
       if (form.getNumUnits() != null){
@@ -453,6 +456,56 @@ public class ProductController {
 		      // Set source component status to PROCESSED
 		      productRepository.setProductStatusToProcessed(productId);
       	   }
+      }
+      */
+      
+      for(ProductType pt : form.getProductTypeCombination().getProductTypes()){
+	      
+	      String componentTypeCode = pt.getProductTypeNameShort();
+	      int noOfUnits = 1;
+	      //if (form.getNumUnits() != null){
+	    	//  noOfUnits = form.getNumUnits();
+	      //}
+	      long collectedSampleID = collectedSample.getId();      
+	      String createdPackNumber = collectionNumber +"-"+componentTypeCode;
+	      
+	      // Add New product
+	      if(!status.equals(ProductStatus.PROCESSED) && !status.equals(ProductStatus.DISCARDED)){
+		      	
+	      	   for (int i = 1; i <= noOfUnits; i++) {
+	              Product product = new Product();
+	              product.setIsDeleted(false);
+	              product.setComponentIdentificationNumber(createdPackNumber + "-" + i);
+		          product.setProductType(pt);
+		          product.setCollectedSample(collectedSample);
+		          product.setParentProduct(parentComponent);
+		          product.setStatus(ProductStatus.QUARANTINED);
+		          product.setCreatedOn(collectedSample.getCollectedOn());
+		          
+			      Calendar cal = Calendar.getInstance();
+			      Date createdOn = cal.getTime(); 
+			      cal.setTime(product.getCreatedOn());
+	                  
+	                      //set product expiry date
+	                      if(pt.getExpiresAfterUnits() == ProductTypeTimeUnits.DAYS)
+	                          cal.add(Calendar.DAY_OF_YEAR, pt.getExpiresAfter());
+	                      else
+	                      if(pt.getExpiresAfterUnits() == ProductTypeTimeUnits.HOURS)
+	                          cal.add(Calendar.HOUR, pt.getExpiresAfter());
+	                      else
+	                      if(pt.getExpiresAfterUnits() == ProductTypeTimeUnits.YEARS)
+	                           cal.add(Calendar.YEAR, pt.getExpiresAfter());
+	
+			      Date expiresOn = cal.getTime();    
+			      product.setCreatedOn(createdOn);
+			      product.setExpiresOn(expiresOn);
+		          
+			      productRepository.addProduct(product);
+	
+			      // Set source component status to PROCESSED
+			      productRepository.setProductStatusToProcessed(productId);
+	      	   }
+	      }
       }
    
 	Map<String, Object> map = new HashMap<String, Object>();
@@ -631,6 +684,17 @@ public class ProductController {
       }
     }
     return productStatusList;
+  }
+  
+  public  List<ProductTypeCombinationViewModel> 
+	  getProductTypeCombinationViewModels(List<ProductTypeCombination> productTypeConminations){
+	List<ProductTypeCombinationViewModel> productTypeCombinationViewModels
+	        = new ArrayList<ProductTypeCombinationViewModel> ();
+	for(ProductTypeCombination productTypeCombination : productTypeConminations)
+	    productTypeCombinationViewModels.add(new ProductTypeCombinationViewModel(productTypeCombination));
+	    
+	return productTypeCombinationViewModels;
+	
   }
   
 }
