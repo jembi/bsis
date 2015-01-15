@@ -125,7 +125,7 @@ public class TestBatchController {
         List<TestBatch> testBatches = 
                 testBatchRepository.getRecentlyClosedTestBatches(count);
         map.put("testBatches", getTestBatchViewModels(testBatches));
-        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+        return new ResponseEntity(map, HttpStatus.OK);
     }
   
     

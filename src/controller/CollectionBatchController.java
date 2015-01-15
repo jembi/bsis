@@ -133,7 +133,7 @@ public class CollectionBatchController {
         List<CollectionBatch> donationBatches = 
                 collectionBatchRepository.getRecentlyClosedDonationBatches(count);
         map.put("donationBatches", getCollectionBatchViewModels(donationBatches));
-        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+        return new ResponseEntity(map, HttpStatus.OK);
     }
   
   private void addEditSelectorOptions(Map<String, Object> m) {
