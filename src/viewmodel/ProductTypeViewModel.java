@@ -4,6 +4,7 @@ package viewmodel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import model.producttype.ProductType;
+import model.producttype.ProductTypeTimeUnits;
 
 /**
  *
@@ -45,6 +46,10 @@ public class ProductTypeViewModel {
     
     public Integer getExpiresAfter(){
         return productType.getExpiresAfter();
+    }
+    
+    public ProductTypeTimeUnits getExpiresAfterUnits(){
+        return productType.getExpiresAfterUnits();
     }
     
     public String getDescription(){
