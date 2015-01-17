@@ -341,11 +341,25 @@ public class CollectedSampleRepository {
       
     Product product = new Product();
     product.setIsDeleted(false);
-    product.setComponentIdentificationNumber(collectedSample.getCollectionNumber() +productType.getProductTypeNameShort());
+    product.setComponentIdentificationNumber(collectedSample.getCollectionNumber() +"-"+productType.getProductTypeNameShort());
     product.setCollectedSample(collectedSample);
     product.setStatus(ProductStatus.QUARANTINED);
     product.setCreatedDate(collectedSample.getCreatedDate());
+
+    // set new component creation date to match donation date 
     product.setCreatedOn(collectedSample.getCollectedOn());
+    // if bleed time is provided, update component creation time to match bleed start time 
+    if (collectedSample.getBleedStartTime() != null){
+    	Calendar donationDate = Calendar.getInstance();
+    	donationDate.setTime(collectedSample.getCollectedOn());
+    	Calendar bleedTime = Calendar.getInstance();
+    	bleedTime.setTime(collectedSample.getBleedStartTime());
+    	donationDate.set(Calendar.HOUR_OF_DAY, bleedTime.get(Calendar.HOUR_OF_DAY));
+    	donationDate.set(Calendar.MINUTE, bleedTime.get(Calendar.MINUTE));
+    	donationDate.set(Calendar.SECOND, bleedTime.get(Calendar.SECOND));
+    	donationDate.set(Calendar.MILLISECOND, bleedTime.get(Calendar.MILLISECOND));
+    	product.setCreatedOn(donationDate.getTime());
+    }
     product.setCreatedBy(collectedSample.getCreatedBy());
     
     // set cal to collectedOn Date 
