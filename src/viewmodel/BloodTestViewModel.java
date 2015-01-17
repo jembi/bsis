@@ -39,11 +39,18 @@ public class BloodTestViewModel {
   public ArrayList<String> getValidResults() {
       String validResults = rawBloodTest.getValidResults();
       ArrayList<String> formatValidResults = new ArrayList<String>();
+      String validResultStr = "";
       for(int i=0; i< validResults.length() ; i++){
           char c = validResults.charAt(i);
-          if(c != ',')
-              formatValidResults.add(String.valueOf(c));
+          if(c != ','){
+        	  validResultStr += c;
+          }
+          else {
+        	  formatValidResults.add(validResultStr);
+        	  validResultStr = "";
+          }
       }
+      formatValidResults.add(validResultStr);
       return  formatValidResults;
   }
 
