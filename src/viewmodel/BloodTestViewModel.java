@@ -1,11 +1,12 @@
 package viewmodel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import model.bloodtesting.BloodTest;
 import model.worksheet.WorksheetType;
-import scala.actors.threadpool.Arrays;
+
 
 public class BloodTestViewModel {
 
