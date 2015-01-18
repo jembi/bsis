@@ -8,6 +8,7 @@ import model.collectedsample.CollectedSample;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
 import repository.bloodtesting.BloodTypingStatus;
+import repository.bloodtesting.BloodTypingMatchStatus;
 import viewmodel.CollectedSampleViewModel;
 
 public class BloodTestingRuleResult {
@@ -33,6 +34,8 @@ public class BloodTestingRuleResult {
   private Map<String, BloodTestResultViewModel> recentTestResults;
 
   private BloodTypingStatus bloodTypingStatus;
+  
+  private BloodTypingMatchStatus bloodTypingMatchStatus;
 
   private Map<String, String> storedTestResults;
 
@@ -122,6 +125,14 @@ public class BloodTestingRuleResult {
 
   public void setBloodTypingStatus(BloodTypingStatus bloodTypingStatus) {
     this.bloodTypingStatus = bloodTypingStatus;
+  }
+  
+  public BloodTypingMatchStatus getBloodTypingMatchStatus() {
+    return bloodTypingMatchStatus;
+  }
+
+  public void setBloodTypingMatchStatus(BloodTypingMatchStatus bloodTypingMatchStatus) {
+    this.bloodTypingMatchStatus = bloodTypingMatchStatus;
   }
 
   public Map<String, String> getStoredTestResults() {
