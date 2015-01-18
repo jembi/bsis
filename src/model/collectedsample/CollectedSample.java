@@ -47,6 +47,7 @@ import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Range;
 import repository.bloodtesting.BloodTypingStatus;
+import repository.bloodtesting.BloodTypingMatchStatus;
 
 /**
  * A donation or a collection as it is in the UI.
@@ -150,6 +151,10 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @Enumerated(EnumType.STRING)
   @Column(length=20)
   private BloodTypingStatus bloodTypingStatus;
+  
+  @Enumerated(EnumType.STRING)
+  @Column(length=20)
+  private BloodTypingMatchStatus bloodTypingMatchStatus;
 
   @Enumerated(EnumType.STRING)
   @Column(length=20)
@@ -396,6 +401,14 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   public void setBloodTypingStatus(BloodTypingStatus bloodTypingStatus) {
     this.bloodTypingStatus = bloodTypingStatus;
+  }
+  
+  public BloodTypingMatchStatus getBloodTypingMatchStatus() {
+    return bloodTypingMatchStatus;
+  }
+
+  public void setBloodTypingMatchStatus(BloodTypingMatchStatus bloodTypingMatchStatus) {
+    this.bloodTypingMatchStatus = bloodTypingMatchStatus;
   }
 
   public String getBloodAbo() {

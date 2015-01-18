@@ -14,6 +14,7 @@ import model.product.Product;
 import model.user.User;
 import org.apache.commons.lang3.StringUtils;
 import repository.bloodtesting.BloodTypingStatus;
+import repository.bloodtesting.BloodTypingMatchStatus;
 import utils.CustomDateFormatter;
 
 public class CollectedSampleViewModel {
@@ -122,6 +123,12 @@ public class CollectedSampleViewModel {
     if (collectedSample.getBloodTypingStatus() == null)
       return "";
     return collectedSample.getBloodTypingStatus().toString();
+  }
+  
+  public String getBloodTypingMatchStatus() {
+    if (collectedSample.getBloodTypingMatchStatus() == null)
+      return "";
+    return collectedSample.getBloodTypingMatchStatus().toString();
   }
 
   public String getBloodAbo() {

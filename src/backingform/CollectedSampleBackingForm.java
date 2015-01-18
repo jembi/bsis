@@ -401,6 +401,14 @@ public class CollectedSampleBackingForm {
     }
     
     @JsonIgnore
+    public String getBloodTypingMatchStatus() {
+        if(collectedSample.getBloodTypingMatchStatus()!=null)
+	    	return collectedSample.getBloodTypingMatchStatus().toString();
+	    else
+	        return "";
+    }
+    
+    @JsonIgnore
     public List<Product> getProducts() {
         return collectedSample.getProducts();
     }
