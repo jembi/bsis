@@ -23,6 +23,9 @@ import javax.validation.Valid;
 import repository.CollectedSampleRepository;
 import repository.TestBatchRepository;
 import repository.bloodtesting.BloodTestingRepository;
+import model.bloodtesting.TTIStatus;
+import repository.bloodtesting.BloodTypingStatus;
+
 import utils.PermissionConstants;
 import viewmodel.CollectedSampleViewModel;
 import viewmodel.BloodTestingRuleResult;
@@ -73,6 +76,41 @@ public class TestResultController {
 	    		bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds);
 	
 		map.put("testResults", ruleResults);
+	
+		return new ResponseEntity(map, HttpStatus.OK);
+  }
+  
+  @RequestMapping(value = "/overview", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
+  public ResponseEntity findTestResultsOverviewForTestBatch(HttpServletRequest request,
+		@RequestParam(value = "testBatch", required = true) Long testBatchId) {
+	  
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
+		List<CollectionBatch> collectionBatches = testBatch.getCollectionBatches();
+		List<Integer> donationBatchIds = new ArrayList<Integer>();
+		for(CollectionBatch collectionBatch : collectionBatches){
+			donationBatchIds.add(collectionBatch.getId());
+		}
+	
+	    List<BloodTestingRuleResult> ruleResults =
+	    		bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds);
+	    
+	    Boolean pendingBloodTypingTests = false;
+	    Boolean pendingTTITests = false;
+	    
+	    for(BloodTestingRuleResult result : ruleResults){
+	    	if(result.getPendingBloodTypingTestsIds().size() > 0 || !result.getBloodTypingStatus().equals(BloodTypingStatus.COMPLETE)){
+	    		pendingBloodTypingTests = true;
+	    	}
+	    	if(result.getPendingTTITestsIds().size() > 0 || result.getTTIStatus().equals(TTIStatus.NOT_DONE)){
+	    		pendingTTITests = true;
+	    	}
+	    }
+	
+		map.put("pendingBloodTypingTests", pendingBloodTypingTests);
+		map.put("pendingTTITests", pendingTTITests);
 	
 		return new ResponseEntity(map, HttpStatus.OK);
   }
