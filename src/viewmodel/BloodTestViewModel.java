@@ -1,11 +1,11 @@
 package viewmodel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import model.bloodtesting.BloodTest;
 import model.worksheet.WorksheetType;
-import scala.Char;
+import scala.actors.threadpool.Arrays;
 
 public class BloodTestViewModel {
 
@@ -36,15 +36,8 @@ public class BloodTestViewModel {
     return rawBloodTest.getTestName();
   }
 
-  public ArrayList<String> getValidResults() {
-      String validResults = rawBloodTest.getValidResults();
-      ArrayList<String> formatValidResults = new ArrayList<String>();
-      for(int i=0; i< validResults.length() ; i++){
-          char c = validResults.charAt(i);
-          if(c != ',')
-              formatValidResults.add(String.valueOf(c));
-      }
-      return  formatValidResults;
+  public List<String> getValidResults() {
+      return Arrays.asList(rawBloodTest.getValidResults().split(","));
   }
 
   public String getCategory() {
