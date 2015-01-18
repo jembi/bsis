@@ -26,7 +26,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import viewmodel.BloodTestResultViewModel;
 
+import model.donor.Donor;
 import viewmodel.BloodTestingRuleResult;
+import repository.bloodtesting.BloodTypingMatchStatus;
 
 @Repository
 @Transactional
@@ -93,8 +95,8 @@ public class BloodTestingRuleEngine {
       basicTTITestsNotAdded.remove(new Integer(extraTestId.toString()));
     }
 
-    System.out.println("available test results:" + availableTestResults);
-    System.out.println("basic TTI Tests not added:" + basicTTITestsNotAdded);
+    //System.out.println("available test results:" + availableTestResults);
+    //System.out.println("basic TTI Tests not added:" + basicTTITestsNotAdded);
 
     Set<String> bloodAboChanges = new HashSet<String>();
     Set<String> bloodRhChanges = new HashSet<String>();
@@ -247,6 +249,39 @@ public class BloodTestingRuleEngine {
 
     if (bloodAboChanges.size() == 1 && bloodRhChanges.size() == 1) {
       bloodTypingStatus = BloodTypingStatus.COMPLETE;
+    }
+    
+    // Check ABO/Rh results against donor's ABO/Rh
+    // If donor's ABO/Rh empty - considered as First Time Donor 
+    //		- required to enter confirmatory results
+    // If donation ABO/Rh do not match donor's ABO/Rh, required to enter confirmatory results 
+    //		- these results overwrite donor's existing values
+    Donor donor = collectedSample.getDonor();
+    if(collectedSample.getBloodAbo() != null && collectedSample.getBloodRh() != null){
+    	
+    	// first time donor - required to enter in confirmatory result
+    	if(donor.getBloodAbo() == null || donor.getBloodRh() == null){
+    		ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_MATCH);
+    		collectedSample.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_MATCH);
+    	}
+    	
+    	// ambiguous result - required to enter in confirmatory result
+    	else if(!donor.getBloodAbo().equals(collectedSample.getBloodAbo())
+    			|| !donor.getBloodRh().equals(collectedSample.getBloodRh())){
+    		ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS);
+    		collectedSample.setBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS);
+    	}
+    	
+    	// blood Abo/Rh matches
+    	else if(donor.getBloodAbo().equals(collectedSample.getBloodAbo())
+    			&& donor.getBloodRh().equals(collectedSample.getBloodRh())){
+    		ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
+    		collectedSample.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
+    	}
+    }
+    else{
+    	ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
+    	collectedSample.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     }
 
     System.out.println(ttiStatusChanges);
