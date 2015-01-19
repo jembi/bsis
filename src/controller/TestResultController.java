@@ -106,18 +106,34 @@ public class TestResultController {
 	    
 	    Boolean pendingBloodTypingTests = false;
 	    Boolean pendingTTITests = false;
+	    Boolean basicBloodTypingComplete = true;
+	    Boolean basicTTIComplete = true;
+	    Boolean pendingBloodTypingMatchTests = false;
 	    
 	    for(BloodTestingRuleResult result : ruleResults){
-	    	if(result.getPendingBloodTypingTestsIds().size() > 0 || !result.getBloodTypingStatus().equals(BloodTypingStatus.COMPLETE)){
+	    	if(!result.getBloodTypingStatus().equals(BloodTypingStatus.COMPLETE)){
+	    		basicBloodTypingComplete = false;
+	    	}
+	    	if(result.getTTIStatus().equals(TTIStatus.NOT_DONE)){
+	    		basicTTIComplete = false;
+	    	}
+	    	if(result.getPendingBloodTypingTestsIds().size() > 0){
 	    		pendingBloodTypingTests = true;
 	    	}
-	    	if(result.getPendingTTITestsIds().size() > 0 || result.getTTIStatus().equals(TTIStatus.NOT_DONE)){
+	    	if(result.getPendingTTITestsIds().size() > 0){
 	    		pendingTTITests = true;
+	    	}
+	    	if(result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.NO_MATCH) ||
+	    	   result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS)	){
+	    		pendingBloodTypingMatchTests = true;
 	    	}
 	    }
 	
 		map.put("pendingBloodTypingTests", pendingBloodTypingTests);
 		map.put("pendingTTITests", pendingTTITests);
+		map.put("basicBloodTypingComplete", basicBloodTypingComplete);
+		map.put("basicTTIComplete", basicTTIComplete);
+		map.put("pendingBloodTypingMatchTests", pendingBloodTypingMatchTests);
 	
 		return new ResponseEntity(map, HttpStatus.OK);
   }
