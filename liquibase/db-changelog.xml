@@ -1084,5 +1084,16 @@
 			</column>
 		</createTable>
 	</changeSet>
+	
+	<!-- #263 Add bloodTypingMatchStatus field to CollectedSample -->
+	<changeSet id="20140118-2258" author="danfuterman">
+		<addColumn tableName="CollectedSample">
+			<column name="bloodTypingMatchStatus" type="VARCHAR(20)"></column>
+		</addColumn>
+		<addColumn tableName="CollectedSample_AUD">
+			<column name="bloodTypingMatchStatus" type="VARCHAR(20)"></column>
+		</addColumn>
+	</changeSet>
+
 
 </databaseChangeLog>
