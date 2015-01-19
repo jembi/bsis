@@ -184,5 +184,8 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
       collectedSample = em.merge(collectedSample);
     }
     updateProductStatus(collectedSample);
+    
+    collectedSample.setBloodTypingMatchStatus(ruleResult.getBloodTypingMatchStatus());
+
   }
 }
