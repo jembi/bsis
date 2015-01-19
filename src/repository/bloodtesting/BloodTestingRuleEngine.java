@@ -260,29 +260,28 @@ public class BloodTestingRuleEngine {
     if(collectedSample.getBloodAbo() != null && collectedSample.getBloodRh() != null){
     	
     	// first time donor - required to enter in confirmatory result
-    	if(donor.getBloodAbo() == null || donor.getBloodRh() == null){
+    	if(donor.getBloodAbo().equals("") || donor.getBloodRh().equals("")){
     		ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_MATCH);
-    		collectedSample.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_MATCH);
     	}
     	
     	// ambiguous result - required to enter in confirmatory result
-    	else if(!donor.getBloodAbo().equals(collectedSample.getBloodAbo())
-    			|| !donor.getBloodRh().equals(collectedSample.getBloodRh())){
+    	else if((!donor.getBloodAbo().equals("")  && !donor.getBloodAbo().equals(collectedSample.getBloodAbo()))
+    			|| (!donor.getBloodRh().equals("")  && !donor.getBloodRh().equals(collectedSample.getBloodRh()))){
     		ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS);
-    		collectedSample.setBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS);
     	}
     	
     	// blood Abo/Rh matches
-    	else if(donor.getBloodAbo().equals(collectedSample.getBloodAbo())
-    			&& donor.getBloodRh().equals(collectedSample.getBloodRh())){
+    	else if((!donor.getBloodAbo().equals("")  && donor.getBloodAbo().equals(collectedSample.getBloodAbo()))
+    			&& (!donor.getBloodRh().equals("")  && donor.getBloodRh().equals(collectedSample.getBloodRh()))){
     		ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
-    		collectedSample.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
     	}
     }
     else{
     	ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
-    	collectedSample.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     }
+    
+    collectedSample.setBloodTypingMatchStatus(ruleResult.getBloodTypingMatchStatus());
+    
 
     System.out.println(ttiStatusChanges);
     TTIStatus ttiStatus = TTIStatus.NOT_DONE;
