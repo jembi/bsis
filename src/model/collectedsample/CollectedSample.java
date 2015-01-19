@@ -254,6 +254,9 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.bloodPressureDiastolic=collectedSample.bloodPressureDiastolic;
     this.bloodPressureSystolic=collectedSample.bloodPressureSystolic;
     this.donorPanel = collectedSample.getDonorPanel();
+    this.bloodAbo = collectedSample.bloodAbo;
+    this.bloodRh = collectedSample.bloodRh;
+    this.setBloodTypingMatchStatus(collectedSample.getBloodTypingMatchStatus());
   }
 
   public List<Product> getProducts() {
