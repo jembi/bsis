@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import model.collectedsample.CollectedSample;
 import model.collectionbatch.CollectionBatch;
 import model.testbatch.TestBatch;
+import model.donor.Donor;
 import backingform.TestResultBackingForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,13 +22,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 import repository.CollectedSampleRepository;
+import repository.DonorRepository;
 import repository.TestBatchRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import model.bloodtesting.TTIStatus;
 import repository.bloodtesting.BloodTypingStatus;
+import repository.bloodtesting.BloodTypingMatchStatus;
 
 import utils.PermissionConstants;
 import viewmodel.CollectedSampleViewModel;
+import viewmodel.DonorViewModel;
 import viewmodel.BloodTestingRuleResult;
 
 @RestController
@@ -42,6 +46,9 @@ public class TestResultController {
   
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
+  
+  @Autowired
+  private DonorRepository donorRepository;
   
   public TestResultController() {
   }
@@ -149,6 +156,43 @@ public class TestResultController {
 	
 		map.put("success", success);
 		return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+  }
+  
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_TEST_OUTCOME+"')")
+  @RequestMapping(value = "/bloodgroupmatches", method = RequestMethod.GET)
+  public ResponseEntity<Map<String, Object>> saveBloodGroupMatchTestResults(
+		  @RequestParam(value = "donationIdentificationNumber", required = true) String donationIdentificationNumber,
+		  @RequestParam(value = "bloodAbo", required = true) String bloodAbo,
+		  @RequestParam(value = "bloodRh", required = true) String bloodRh) {
+	  
+		HttpStatus httpStatus = HttpStatus.CREATED;        
+		boolean success = true;
+		String errorMessage = "";
+		Map<Long, Map<Long, String>> errorMap = null;
+		Map<String, Object> fieldErrors = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
+		//CollectedSample collectedSample = collectedSampleRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
+	
+		Map<String, Object> results = null;
+		
+		CollectedSample donation = collectedSampleRepository.findCollectedSampleByCollectionNumber(donationIdentificationNumber);
+		Donor donor = donation.getDonor();
+		donor.setBloodAbo(bloodAbo);
+		donor.setBloodRh(bloodRh);
+		donation.setBloodAbo(bloodAbo);
+		donation.setBloodRh(bloodRh);
+		donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
+		
+		Donor updatedDonor = donorRepository.updateDonor(donor);
+		CollectedSample cs = collectedSampleRepository.updateCollectedSample(donation);
+		
+		map.put("donor", getDonorsViewModel(donorRepository.findDonorById(updatedDonor.getId())));
+        return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+  }
+  
+  private DonorViewModel getDonorsViewModel(Donor donor) {
+    DonorViewModel donorViewModel = new DonorViewModel(donor);
+    return donorViewModel;
   }
 
 }
