@@ -38,6 +38,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingStatus;
+import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.events.ApplicationContextProvider;
 import repository.events.CollectionUpdatedEvent;
 import viewmodel.BloodTestingRuleResult;
@@ -315,6 +316,7 @@ public class CollectedSampleRepository {
 
   public CollectedSample addCollectedSample(CollectedSample collectedSample) throws PersistenceException{
     collectedSample.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+    collectedSample.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     collectedSample.setTTIStatus(TTIStatus.NOT_DONE);
     collectedSample.setIsDeleted(false);
     
