@@ -647,9 +647,10 @@
     ) ENGINE=InnoDB;
 
     create table ProductTypeCombination_ProductType (
+    	id SMALLINT not null auto_increment,
         productTypeCombinations_id SMALLINT not null,
         productTypes_id SMALLINT not null,
-        primary key (productTypeCombinations_id, productTypes_id)
+        primary key (id)
     ) ENGINE=InnoDB;
 
     create table ProductType_AUD (
