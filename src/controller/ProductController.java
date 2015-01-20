@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Calendar;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -406,14 +407,13 @@ public class ProductController {
   public  ResponseEntity<Map<String, Object>> recordNewProductComponents(
        @RequestBody @Valid RecordProductBackingForm form) throws ParseException{
 
-      //ProductType productType2 = productTypeRepository.getProductTypeById(Integer.valueOf(form.getChildComponentTypeId()));
+      ProductType productType2 = productTypeRepository.getProductTypeById(Integer.valueOf(form.getChildComponentTypeId()));
       Product parentComponent = productRepository.findProductById(Long.valueOf(form.getParentComponentId()));
       CollectedSample collectedSample = parentComponent.getCollectedSample();
       String collectionNumber = collectedSample.getCollectionNumber();
       ProductStatus status = parentComponent.getStatus();
       long productId = Long.valueOf(form.getParentComponentId());
 
-      /*
       String sortName = productType2.getProductTypeNameShort();
       int noOfUnits = 1;
       if (form.getNumUnits() != null){
@@ -459,15 +459,67 @@ public class ProductController {
 		      productRepository.setProductStatusToProcessed(productId);
       	   }
       }
-      */
+   
+	Map<String, Object> map = new HashMap<String, Object>();
+	Map<String, Object> pagingParams = new HashMap<String, Object>();
+	pagingParams.put("sortColumn", "id");
+	pagingParams.put("sortDirection", "asc");
+	List<Product> results = new ArrayList<Product>();
+	List<ProductStatus> statusList = Arrays.asList(ProductStatus.values());
+	
+	results = productRepository.findProductByCollectionNumber(
+	      collectedSample.getCollectionNumber(), statusList,
+	      pagingParams);
+	
+	List<ProductViewModel> components = new ArrayList<ProductViewModel>();
+	
+	if (results != null){
+	    for(Product product : results){
+	    	ProductViewModel productViewModel = getProductViewModel(product);
+	    	components.add(productViewModel);
+	    }
+	}
+	
+	map.put("components", components);
+	
+	return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
+  }
+  
+  @RequestMapping(value = "/recordcombinations", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
+  public  ResponseEntity<Map<String, Object>> recordNewProductComponents(
+       @RequestBody @Valid RecordProductBackingForm form) throws ParseException{
+
+      Product parentComponent = productRepository.findProductById(Long.valueOf(form.getParentComponentId()));
+      CollectedSample collectedSample = parentComponent.getCollectedSample();
+      String collectionNumber = collectedSample.getCollectionNumber();
+      ProductStatus status = parentComponent.getStatus();
+      long productId = Long.valueOf(form.getParentComponentId());
       
-      for(ProductType pt : form.getProductTypeCombination().getProductTypes()){
-	      
+      
+      // map of new components, storing product type and num. of units 
+      Map<ProductType, Integer> newComponents = new HashMap<ProductType, Integer>();
+      
+      // iterate over components in combination, adding them to the new components map, along with the num. of units of each component
+      for(ProductType pt : form.getProductTypeCombination().getProductTypes()){    	  
+    	  boolean check = false;
+    	  for(ProductType ptm : newComponents.keySet()){  
+    		  if(pt.getId() == ptm.getId()){
+    	    		Integer count = newComponents.get(ptm) + 1;
+    	    		newComponents.put(ptm,count); 
+    	    		check = true;
+    	    		break;
+    		  }
+          }
+    	  if (!check){
+    		  newComponents.put(pt,1);
+    	  }
+      }
+      
+      for(ProductType pt : newComponents.keySet()){
+    	        	      
 	      String componentTypeCode = pt.getProductTypeNameShort();
-	      int noOfUnits = 1;
-	      //if (form.getNumUnits() != null){
-	    	//  noOfUnits = form.getNumUnits();
-	      //}
+	      int noOfUnits = newComponents.get(pt);
 	      long collectedSampleID = collectedSample.getId();      
 	      String createdPackNumber = collectionNumber +"-"+componentTypeCode;
 	      
@@ -477,8 +529,14 @@ public class ProductController {
 	      	   for (int i = 1; i <= noOfUnits; i++) {
 	              Product product = new Product();
 	              product.setIsDeleted(false);
-	              //product.setComponentIdentificationNumber(createdPackNumber + "-" + i);
-	              product.setComponentIdentificationNumber(createdPackNumber);
+	              
+	              // if there is more than one unit of the component, append unit number suffix
+	              if(noOfUnits > 1){
+	            	  product.setComponentIdentificationNumber(createdPackNumber + "-0" + i);
+	              }
+	              else {
+	            	  product.setComponentIdentificationNumber(createdPackNumber);
+	              }
 		          product.setProductType(pt);
 		          product.setCollectedSample(collectedSample);
 		          product.setParentProduct(parentComponent);
@@ -510,7 +568,7 @@ public class ProductController {
 	      	   }
 	      }
       }
-   
+      
 	Map<String, Object> map = new HashMap<String, Object>();
 	Map<String, Object> pagingParams = new HashMap<String, Object>();
 	pagingParams.put("sortColumn", "id");
