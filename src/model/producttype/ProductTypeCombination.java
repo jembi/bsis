@@ -3,6 +3,7 @@ package model.producttype;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.Set;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,8 +31,8 @@ public class ProductTypeCombination {
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @ManyToMany(fetch=FetchType.EAGER)
-  private Set<ProductType> productTypes;
-
+  private List<ProductType> productTypes;
+  
   private Boolean isDeleted;
 
   public Integer getId() {
@@ -42,11 +43,11 @@ public class ProductTypeCombination {
     this.id = id;
   }
 
-  public Set<ProductType> getProductTypes() {
+  public List<ProductType> getProductTypes() {
     return productTypes;
   }
 
-  public void setProductTypes(Set<ProductType> productTypes) {
+  public void setProductTypes(List<ProductType> productTypes) {
     this.productTypes = productTypes;
   }
 

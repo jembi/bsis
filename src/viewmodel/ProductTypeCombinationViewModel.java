@@ -10,10 +10,6 @@ import java.util.Set;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 
-/**
- *
- * @author srikanth
- */
 public class ProductTypeCombinationViewModel {
 
     public ProductTypeCombinationViewModel(ProductTypeCombination productTypeCombination) {
@@ -43,11 +39,14 @@ public class ProductTypeCombinationViewModel {
         return getProductTypes(productTypeCombination.getProductTypes());
     }
 
-    private List<ProductTypeViewModel> getProductTypes(Set<ProductType> productTypes) {
+    private List<ProductTypeViewModel> getProductTypes(List<ProductType> productTypes) {
       List<ProductTypeViewModel> productTypeViewModels = new ArrayList<ProductTypeViewModel> ();
-      for(ProductType productType : productTypes)
+      System.out.println("\t\tProductTypeCombination: "+productTypeCombination.getCombinationName());
+      for(ProductType productType : productTypes){
+    	  System.out.println("\t\tProductType: "+productType);
           productTypeViewModels.add(new ProductTypeViewModel(productType));
+      }
       return productTypeViewModels;
-    }
-    
+    }    
+
 }
