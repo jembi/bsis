@@ -21,17 +21,17 @@ Exec {
 }
 
 # Remove database
-exec { "clean-database":
-	command => "echo drop database $mysql_bsis_database_name | mysql -uroot -p$mysql_root_password",
-	timeout	=>	3600,
-	returns => [0, 1],
-}
+#exec { "clean-database":
+#	command => "echo drop database $mysql_bsis_database_name | mysql -uroot -p$mysql_root_password",
+#	timeout	=>	3600,
+#	returns => [0, 1],
+#}
 
 # Create bsis demo database
 exec { "create-database":
-	command => "echo create database $mysql_bsis_database_name | mysql -uroot -p$mysql_root_password",
+	command => "echo create database if not exists $mysql_bsis_database_name | mysql -uroot -p$mysql_root_password",
 	returns => [0, 1],
-	require	=> Exec["clean-database"],
+#	require	=> Exec["clean-database"],
 }
 
 # Build using maven
