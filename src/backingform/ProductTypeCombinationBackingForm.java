@@ -1,4 +1,3 @@
-
 package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -7,12 +6,7 @@ import java.util.Set;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 
-/**
- *
- * @author srikanth
- */
 public class ProductTypeCombinationBackingForm {
-    
     @JsonIgnore
     private ProductTypeCombination productTypeCombination;
     
@@ -27,8 +21,7 @@ public class ProductTypeCombinationBackingForm {
     public void setProductTypeCombination(ProductTypeCombination productTypeCombination) {
         this.productTypeCombination = productTypeCombination;
     }
-    
-    
+     
     public Integer getId() {
         return productTypeCombination.getId();
     }
