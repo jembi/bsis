@@ -1060,13 +1060,6 @@
 			newColumnName="productTypeName"
 			oldColumnName="productType"
 			tableName="ProductType_AUD"/>
-	 </changeSet>
-	 
-	<!-- #263 Add units fields to ProductTypeCombination_ProductType -->
-	<changeSet id="20140115-2047" author="danfuterman">
-		<addColumn tableName="ProductTypeCombination_ProductType">
-			<column name="units" type="SMALLINT"></column>
-		</addColumn>
 	</changeSet>
 	
 	<!-- #263 Add ProductTypeCombinationRule table -->
