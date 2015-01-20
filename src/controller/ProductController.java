@@ -267,8 +267,8 @@ public class ProductController {
   @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
   public  ResponseEntity discardProduct(
       @PathVariable Long id,
-      @RequestParam("discardReasonId") Integer discardReasonId,
-      @RequestParam("discardReasonText") String discardReasonText) {
+      @RequestParam(value="discardReasonId") Integer discardReasonId,
+      @RequestParam(value="discardReasonText", required = false) String discardReasonText) {
 
       ProductStatusChangeReason statusChangeReason = new ProductStatusChangeReason();
       statusChangeReason.setId(discardReasonId);
@@ -381,6 +381,7 @@ public class ProductController {
     return map;
   }
   
+  /*
   @RequestMapping(value="/combinationrules", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public Map<String, Object> getProductTypeCombinationRules() {
@@ -389,6 +390,7 @@ public class ProductController {
     map.put("combinations",allProductTypeCombinationRules);
     return map;
   }
+  */
   
   @RequestMapping(value="/combinations", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
@@ -475,7 +477,8 @@ public class ProductController {
 	      	   for (int i = 1; i <= noOfUnits; i++) {
 	              Product product = new Product();
 	              product.setIsDeleted(false);
-	              product.setComponentIdentificationNumber(createdPackNumber + "-" + i);
+	              //product.setComponentIdentificationNumber(createdPackNumber + "-" + i);
+	              product.setComponentIdentificationNumber(createdPackNumber);
 		          product.setProductType(pt);
 		          product.setCollectedSample(collectedSample);
 		          product.setParentProduct(parentComponent);
@@ -687,10 +690,10 @@ public class ProductController {
   }
   
   public  List<ProductTypeCombinationViewModel> 
-	  getProductTypeCombinationViewModels(List<ProductTypeCombination> productTypeConminations){
+	  getProductTypeCombinationViewModels(List<ProductTypeCombination> productTypeCombinations){
 	List<ProductTypeCombinationViewModel> productTypeCombinationViewModels
 	        = new ArrayList<ProductTypeCombinationViewModel> ();
-	for(ProductTypeCombination productTypeCombination : productTypeConminations)
+	for(ProductTypeCombination productTypeCombination : productTypeCombinations)
 	    productTypeCombinationViewModels.add(new ProductTypeCombinationViewModel(productTypeCombination));
 	    
 	return productTypeCombinationViewModels;
