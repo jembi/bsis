@@ -409,8 +409,8 @@ public class RequestRepository {
     // the product may have expired so this update is required
     // we update the expiry date of a product periodically
     productRepository.updateProductInternalFields(product);
-    String requestedProductType = request.getProductType().getProductType();
-    String productType = product.getProductType().getProductType();
+    String requestedProductType = request.getProductType().getProductTypeName();
+    String productType = product.getProductType().getProductTypeName();
 
     if (!productType.equals(requestedProductType))
       return false;

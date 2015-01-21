@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Calendar;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -28,6 +29,7 @@ import model.productmovement.ProductStatusChangeReason;
 import model.productmovement.ProductStatusChangeReasonCategory;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
+import model.producttype.ProductTypeCombinationRule;
 import model.producttype.ProductTypeTimeUnits;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -51,6 +53,7 @@ import utils.PermissionConstants;
 import viewmodel.ProductViewModel;
 import viewmodel.ProductTypeViewModel;
 import viewmodel.ProductStatusChangeViewModel;
+import viewmodel.ProductTypeCombinationViewModel;
 import utils.CustomDateFormatter;
 
 @RestController
@@ -265,8 +268,8 @@ public class ProductController {
   @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
   public  ResponseEntity discardProduct(
       @PathVariable Long id,
-      @RequestParam("discardReasonId") Integer discardReasonId,
-      @RequestParam("discardReasonText") String discardReasonText) {
+      @RequestParam(value="discardReasonId") Integer discardReasonId,
+      @RequestParam(value="discardReasonText", required = false) String discardReasonText) {
 
       ProductStatusChangeReason statusChangeReason = new ProductStatusChangeReason();
       statusChangeReason.setId(discardReasonId);
@@ -379,6 +382,27 @@ public class ProductController {
     return map;
   }
   
+  /*
+  @RequestMapping(value="/combinationrules", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
+  public Map<String, Object> getProductTypeCombinationRules() {
+	Map<String, Object> map = new HashMap<String, Object>();
+    List<ProductTypeCombinationRule> allProductTypeCombinationRules = productTypeRepository.getAllProductTypeCombinationRules();
+    map.put("combinations",allProductTypeCombinationRules);
+    return map;
+  }
+  */
+  
+  @RequestMapping(value="/combinations", method=RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
+  public Map<String, Object> getProductTypeCombinations() {
+	Map<String, Object> map = new HashMap<String, Object>();
+    List<ProductTypeCombination> allProductTypeCombinationsIncludeDeleted = productTypeRepository.getAllProductTypeCombinationsIncludeDeleted();
+    map.put("combinations",getProductTypeCombinationViewModels(allProductTypeCombinationsIncludeDeleted));
+    return map;
+  }
+  
+  /*
   @RequestMapping(value = "/record", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public  ResponseEntity<Map<String, Object>> recordNewProductComponents(
@@ -437,6 +461,116 @@ public class ProductController {
       	   }
       }
    
+	Map<String, Object> map = new HashMap<String, Object>();
+	Map<String, Object> pagingParams = new HashMap<String, Object>();
+	pagingParams.put("sortColumn", "id");
+	pagingParams.put("sortDirection", "asc");
+	List<Product> results = new ArrayList<Product>();
+	List<ProductStatus> statusList = Arrays.asList(ProductStatus.values());
+	
+	results = productRepository.findProductByCollectionNumber(
+	      collectedSample.getCollectionNumber(), statusList,
+	      pagingParams);
+	
+	List<ProductViewModel> components = new ArrayList<ProductViewModel>();
+	
+	if (results != null){
+	    for(Product product : results){
+	    	ProductViewModel productViewModel = getProductViewModel(product);
+	    	components.add(productViewModel);
+	    }
+	}
+	
+	map.put("components", components);
+	
+	return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
+  }
+  */
+  
+  @RequestMapping(value = "/recordcombinations", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
+  public  ResponseEntity<Map<String, Object>> recordNewProductCombinations(
+       @RequestBody @Valid RecordProductBackingForm form) throws ParseException{
+
+      Product parentComponent = productRepository.findProductById(Long.valueOf(form.getParentComponentId()));
+      CollectedSample collectedSample = parentComponent.getCollectedSample();
+      String collectionNumber = collectedSample.getCollectionNumber();
+      ProductStatus status = parentComponent.getStatus();
+      long productId = Long.valueOf(form.getParentComponentId());
+      
+      
+      // map of new components, storing product type and num. of units 
+      Map<ProductType, Integer> newComponents = new HashMap<ProductType, Integer>();
+      
+      // iterate over components in combination, adding them to the new components map, along with the num. of units of each component
+      for(ProductType pt : form.getProductTypeCombination().getProductTypes()){    	  
+    	  boolean check = false;
+    	  for(ProductType ptm : newComponents.keySet()){  
+    		  if(pt.getId() == ptm.getId()){
+    	    		Integer count = newComponents.get(ptm) + 1;
+    	    		newComponents.put(ptm,count); 
+    	    		check = true;
+    	    		break;
+    		  }
+          }
+    	  if (!check){
+    		  newComponents.put(pt,1);
+    	  }
+      }
+      
+      for(ProductType pt : newComponents.keySet()){
+    	        	      
+	      String componentTypeCode = pt.getProductTypeNameShort();
+	      int noOfUnits = newComponents.get(pt);
+	      long collectedSampleID = collectedSample.getId();      
+	      String createdPackNumber = collectionNumber +"-"+componentTypeCode;
+	      
+	      // Add New product
+	      if(!status.equals(ProductStatus.PROCESSED) && !status.equals(ProductStatus.DISCARDED)){
+		      	
+	      	   for (int i = 1; i <= noOfUnits; i++) {
+	              Product product = new Product();
+	              product.setIsDeleted(false);
+	              
+	              // if there is more than one unit of the component, append unit number suffix
+	              if(noOfUnits > 1){
+	            	  product.setComponentIdentificationNumber(createdPackNumber + "-0" + i);
+	              }
+	              else {
+	            	  product.setComponentIdentificationNumber(createdPackNumber);
+	              }
+		          product.setProductType(pt);
+		          product.setCollectedSample(collectedSample);
+		          product.setParentProduct(parentComponent);
+		          product.setStatus(ProductStatus.QUARANTINED);
+		          product.setCreatedOn(collectedSample.getCollectedOn());
+		          
+			      Calendar cal = Calendar.getInstance();
+			      Date createdOn = cal.getTime(); 
+			      cal.setTime(product.getCreatedOn());
+	                  
+	                      //set product expiry date
+	                      if(pt.getExpiresAfterUnits() == ProductTypeTimeUnits.DAYS)
+	                          cal.add(Calendar.DAY_OF_YEAR, pt.getExpiresAfter());
+	                      else
+	                      if(pt.getExpiresAfterUnits() == ProductTypeTimeUnits.HOURS)
+	                          cal.add(Calendar.HOUR, pt.getExpiresAfter());
+	                      else
+	                      if(pt.getExpiresAfterUnits() == ProductTypeTimeUnits.YEARS)
+	                           cal.add(Calendar.YEAR, pt.getExpiresAfter());
+	
+			      Date expiresOn = cal.getTime();    
+			      product.setCreatedOn(createdOn);
+			      product.setExpiresOn(expiresOn);
+		          
+			      productRepository.addProduct(product);
+	
+			      // Set source component status to PROCESSED
+			      productRepository.setProductStatusToProcessed(productId);
+	      	   }
+	      }
+      }
+      
 	Map<String, Object> map = new HashMap<String, Object>();
 	Map<String, Object> pagingParams = new HashMap<String, Object>();
 	pagingParams.put("sortColumn", "id");
@@ -613,6 +747,17 @@ public class ProductController {
       }
     }
     return productStatusList;
+  }
+  
+  public  List<ProductTypeCombinationViewModel> 
+	  getProductTypeCombinationViewModels(List<ProductTypeCombination> productTypeCombinations){
+	List<ProductTypeCombinationViewModel> productTypeCombinationViewModels
+	        = new ArrayList<ProductTypeCombinationViewModel> ();
+	for(ProductTypeCombination productTypeCombination : productTypeCombinations)
+	    productTypeCombinationViewModels.add(new ProductTypeCombinationViewModel(productTypeCombination));
+	    
+	return productTypeCombinationViewModels;
+	
   }
   
 }

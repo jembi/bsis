@@ -516,12 +516,12 @@ public class ProductRepository {
       inventoryByBloodGroup.put("AB-", getMapWithNumDaysWindows());
       inventoryByBloodGroup.put("O-", getMapWithNumDaysWindows());
 
-      inventory.put(productType.getProductType(), inventoryByBloodGroup);
+      inventory.put(productType.getProductTypeName(), inventoryByBloodGroup);
     }
 
     DateTime today = new DateTime();
     for (Product product : q.getResultList()) {
-      String productType = product.getProductType().getProductType();
+      String productType = product.getProductType().getProductTypeName();
       @SuppressWarnings("unchecked")
       Map<String, Map<Long, Long>> inventoryByBloodGroup = (Map<String, Map<Long, Long>>) inventory.get(productType);
       CollectedSampleViewModel collectedSample;

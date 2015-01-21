@@ -62,27 +62,11 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1323" author="srikanthmalyala">
-		<comment>add blood bag types</comment>
-		<insert tableName = "BloodBagType">
-			<column name="bloodBagType" value="Single"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "BloodBagType">
-			<column name="bloodBagType" value="Triple"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "BloodBagType">
-			<column name="bloodBagType" value="Pedi"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-	</changeSet>
-
 	<changeSet id="20141117-1404" author="srikanthmalyala">
 		<comment>Add product types</comment>
 		<insert tableName = "ProductType">
-			<column name="productTypeNameShort" value="Whole Blood"/>
-			<column name="productType" value="Whole Blood"/>
+			<column name="productTypeNameShort" value="WB"/>
+			<column name="productTypeName" value="Whole Blood"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
@@ -92,7 +76,7 @@
 		</insert>
 		<insert tableName = "ProductType">
 			<column name="productTypeNameShort" value="RCC"/>
-			<column name="productType" value="Red Cell Concentrate"/>
+			<column name="productTypeName" value="Red Cell Concentrate"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
@@ -102,7 +86,7 @@
 		</insert>
 		<insert tableName = "ProductType">
 			<column name="productTypeNameShort" value="FFP"/>
-			<column name="productType" value="Fresh Frozen Plasma"/>
+			<column name="productTypeName" value="Fresh Frozen Plasma"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="365"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
@@ -112,7 +96,7 @@
 		</insert>
 		<insert tableName = "ProductType">
 			<column name="productTypeNameShort" value="Platelets"/>
-			<column name="productType" value="Platelets"/>
+			<column name="productTypeName" value="Platelets"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="5"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
@@ -122,7 +106,7 @@
 		</insert>
 		<insert tableName = "ProductType">
 			<column name="productTypeNameShort" value="Whole Blood Pedi"/>
-			<column name="productType" value="Whole Blood Pedi"/>
+			<column name="productTypeName" value="Whole Blood Pedi"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
@@ -132,7 +116,7 @@
 		</insert>
 		<insert tableName = "ProductType">
 			<column name="productTypeNameShort" value="RCC Pedi"/>
-			<column name="productType" value="Red Cell Concentrate Pedi"/>
+			<column name="productTypeName" value="Red Cell Concentrate Pedi"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
@@ -142,7 +126,7 @@
 		</insert>
 		<insert tableName = "ProductType">
 			<column name="productTypeNameShort" value="FFP Pedi"/>
-			<column name="productType" value="Fresh Frozen Plasma Pedi"/>
+			<column name="productTypeName" value="Fresh Frozen Plasma Pedi"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="365"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
@@ -152,13 +136,38 @@
 		</insert>
 		<insert tableName = "ProductType">
 			<column name="productTypeNameShort" value="Platelets Pedi"/>
-			<column name="productType" value="Platelets Pedi"/>
+			<column name="productTypeName" value="Platelets Pedi"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="5"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
 			<column name="hasBloodGroup" value="0"/>
 			<column name="pediProductType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
+		</insert>
+	</changeSet>
+	
+	<changeSet id="20141117-1423" author="srikanthmalyala">
+		<comment>add blood bag types</comment>
+		<insert tableName = "BloodBagType">
+			<column name="bloodBagType" value="Single"/>
+			<column name="isDeleted" value="0"/>
+			<column name="productType_id" value="1"/>
+			<column name="countAsDonation" value="1"/>
+			<column name="periodBetweenDonations" value="90"/>
+		</insert>
+		<insert tableName = "BloodBagType">
+			<column name="bloodBagType" value="Triple"/>
+			<column name="isDeleted" value="0"/>
+			<column name="productType_id" value="1"/>
+			<column name="countAsDonation" value="1"/>
+			<column name="periodBetweenDonations" value="90"/>
+		</insert>
+		<insert tableName = "BloodBagType">
+			<column name="bloodBagType" value="Pedi"/>
+			<column name="isDeleted" value="0"/>
+			<column name="productType_id" value="1"/>
+			<column name="countAsDonation" value="1"/>
+			<column name="periodBetweenDonations" value="90"/>
 		</insert>
 	</changeSet>
 

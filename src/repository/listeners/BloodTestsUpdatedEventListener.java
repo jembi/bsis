@@ -73,6 +73,7 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
 
     List<CollectedSample> collectedSamples = query.getResultList();
 
+    /*
     String bloodAbo = BloodAbo.Unknown.toString();
     String bloodRh = BloodRh.Unknown.toString();
     if (collectedSamples.size() > 0) {
@@ -102,6 +103,7 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
       newBloodAbo = bloodAbo;
       newBloodRh = bloodRh;
     }
+    */
 
     // If TTI is unsafe then this status should override existing status
     if (collectedSample.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)) {
@@ -184,5 +186,8 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
       collectedSample = em.merge(collectedSample);
     }
     updateProductStatus(collectedSample);
+    
+    collectedSample.setBloodTypingMatchStatus(ruleResult.getBloodTypingMatchStatus());
+
   }
 }
