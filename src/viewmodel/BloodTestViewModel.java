@@ -36,6 +36,7 @@ public class BloodTestViewModel {
     return rawBloodTest.getTestName();
   }
 
+  /*
   public ArrayList<String> getValidResults() {
       String validResults = rawBloodTest.getValidResults();
       ArrayList<String> formatValidResults = new ArrayList<String>();
@@ -53,12 +54,11 @@ public class BloodTestViewModel {
       formatValidResults.add(validResultStr);
       return  formatValidResults;
   }
+  */
   
-  /*
   public List<String> getValidResults() {
       return Arrays.asList(rawBloodTest.getValidResults().split(","));
   }
-  */
 
   public String getCategory() {
     String category = "";
