@@ -25,16 +25,17 @@ public class ProductTypeCombinationRule {
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(nullable=false, insertable=false, updatable=false, columnDefinition="SMALLINT")
   private Integer id;
-
+/*
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @ManyToMany(fetch=FetchType.EAGER)
+  @Column
   private ProductType productType;
   
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @ManyToMany(fetch=FetchType.EAGER)
   private Set<ProductTypeCombination> productTypeCombinations;
+  */
 
   public Integer getId() {
     return id;
@@ -43,7 +44,7 @@ public class ProductTypeCombinationRule {
   public void setId(Integer id) {
     this.id = id;
   }
-
+/*
   public ProductType getProductType() {
     return productType;
   }
@@ -59,5 +60,5 @@ public class ProductTypeCombinationRule {
   public void setProductTypeCombinations(Set<ProductTypeCombination> productTypeCombinations) {
     this.productTypeCombinations = productTypeCombinations;
   }
-
+*/
 }
