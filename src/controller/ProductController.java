@@ -402,6 +402,7 @@ public class ProductController {
     return map;
   }
   
+  /*
   @RequestMapping(value = "/record", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public  ResponseEntity<Map<String, Object>> recordNewProductComponents(
@@ -484,10 +485,11 @@ public class ProductController {
 	
 	return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
+  */
   
   @RequestMapping(value = "/recordcombinations", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public  ResponseEntity<Map<String, Object>> recordNewProductComponents(
+  public  ResponseEntity<Map<String, Object>> recordNewProductCombinations(
        @RequestBody @Valid RecordProductBackingForm form) throws ParseException{
 
       Product parentComponent = productRepository.findProductById(Long.valueOf(form.getParentComponentId()));
