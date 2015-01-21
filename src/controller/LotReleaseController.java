@@ -105,7 +105,8 @@ public class LotReleaseController {
 	        }
 	        else if (collectedSample.getBloodRh().contains("-")){	
 	        	bloodRh = "Negative";
-	        	inverse = "^LRY^FO562,175^GB204,0,171^FS^LRN";
+	        	//inverse = "^LRY^FO562,175^GB204,0,171^FS^LRN";
+	        	inverse = "^FO542,346^GB116,50,50^FS";
 	        }
 	        String collectionDate = df.format(collectedSample.getCollectedOn());        	
 	
@@ -118,6 +119,38 @@ public class LotReleaseController {
 	    	c.add(Calendar.DATE,35);
 	    	expiryDate = df.format(c.getTime());
 	
+	    	map.put("labelZPL",
+	    			"CT~~CD,~CC^~CT~"+
+	    			"^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD15^JUS^LRN^CI0^XZ"+
+	    			"^XA" +
+			        "^MMT" +
+			        "^PW799" +
+			        "^LL0799" +
+			        "^LS0" +
+			        "^BY3,3,80^FT445,147^BCN,,Y,N"+
+			        "^FD>:"+bloodABO+"^FS"+
+			        "^FT505,304^A0N,152,148^FB166,1,0,C^FH\\^FD"+bloodABO+"^FS"+
+			        "^BY2,3,82^FT451,538^BCN,,Y,N"+
+			        "^FD>:"+expiryDate+"^FS"+
+			        "^BY3,3,82^FT62,150^BCN,,Y,N"+
+			        "^FD>:"+product.getCollectionNumber()+"^FS"+
+			        "^FT66,608^A0N,20,21^FH\\^FD"+product.getProductType().getProductTypeName()+"^FS"+
+			        "^BY3,3,77^FT69,535^BCN,,Y,N"+
+			        "^FD>:"+product.getProductType().getProductTypeNameShort()+"^FS"+
+			        "^BY2,3,84^FT65,296^BCN,,Y,N"+
+			        "^FD>:"+collectionDate+"^FS"+
+			        //inverse+
+			        "^FT532,387^A0N,28,28^FB113,1,0,C^FH\\^FD"+bloodRh+"^FS"+
+			        "^FT450,448^A0N,17,38^FH\\^FDExpiration Date^FS"+
+			        "^FT61,64^A0N,17,38^FH\\^FDDIN^FS"+
+			        "^FT62,204^A0N,17,38^FH\\^FDDate Bled^FS"+
+			        "^FT65,387^A0N,20,24^FH\\^FDNot intended for actual use^FS"+
+			        "^PQ1,0,1,Y^XZ"
+			        );
+			        
+			         
+	    	
+	    	/* OLD ZPL CODE    	
 	    	map.put("labelZPL",
 	    			         "^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD15^JUS^LRN^CI0^XZ" +
 	    			         "^XA" +
@@ -158,6 +191,8 @@ public class LotReleaseController {
 	    	    			 inverse +
 	    			         "^PQ1,0,1,Y^XZ"
 	    			         );
+	    	
+	    	*/
 	    	
 	    		
 	    

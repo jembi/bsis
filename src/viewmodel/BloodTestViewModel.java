@@ -7,7 +7,6 @@ import java.util.Set;
 import model.bloodtesting.BloodTest;
 import model.worksheet.WorksheetType;
 
-
 public class BloodTestViewModel {
 
   @JsonIgnore
@@ -37,6 +36,26 @@ public class BloodTestViewModel {
     return rawBloodTest.getTestName();
   }
 
+  /*
+  public ArrayList<String> getValidResults() {
+      String validResults = rawBloodTest.getValidResults();
+      ArrayList<String> formatValidResults = new ArrayList<String>();
+      String validResultStr = "";
+      for(int i=0; i< validResults.length() ; i++){
+          char c = validResults.charAt(i);
+          if(c != ','){
+        	  validResultStr += c;
+          }
+          else {
+        	  formatValidResults.add(validResultStr);
+        	  validResultStr = "";
+          }
+      }
+      formatValidResults.add(validResultStr);
+      return  formatValidResults;
+  }
+  */
+  
   public List<String> getValidResults() {
       return Arrays.asList(rawBloodTest.getValidResults().split(","));
   }

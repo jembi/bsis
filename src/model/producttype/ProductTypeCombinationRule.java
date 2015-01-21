@@ -3,7 +3,6 @@ package model.producttype;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.Set;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,26 +13,29 @@ import javax.persistence.ManyToMany;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
+import model.producttype.ProductType;
+import model.producttype.ProductTypeCombination;
 
 @Audited
 @Entity
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class ProductTypeCombination {
+public class ProductTypeCombinationRule {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(nullable=false, insertable=false, updatable=false, columnDefinition="SMALLINT")
   private Integer id;
-
-  @Column(length=300)
-  private String combinationName;
-
+/*
+  @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+  @Column
+  private ProductType productType;
+  
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @ManyToMany(fetch=FetchType.EAGER)
-  private List<ProductType> productTypes;
-  
-  private Boolean isDeleted;
+  private Set<ProductTypeCombination> productTypeCombinations;
+  */
 
   public Integer getId() {
     return id;
@@ -42,29 +44,21 @@ public class ProductTypeCombination {
   public void setId(Integer id) {
     this.id = id;
   }
-
-  public List<ProductType> getProductTypes() {
-    return productTypes;
+/*
+  public ProductType getProductType() {
+    return productType;
   }
 
-  public void setProductTypes(List<ProductType> productTypes) {
-    this.productTypes = productTypes;
+  public void setProductType(ProductType productType) {
+    this.productType = productType;
+  }
+  
+  public Set<ProductTypeCombination> getProductTypeCombinations() {
+    return productTypeCombinations;
   }
 
-  public String getCombinationName() {
-    return combinationName;
+  public void setProductTypeCombinations(Set<ProductTypeCombination> productTypeCombinations) {
+    this.productTypeCombinations = productTypeCombinations;
   }
-
-  public void setCombinationName(String combinationName) {
-    this.combinationName = combinationName;
-  }
-
-  public Boolean getIsDeleted() {
-    return isDeleted;
-  }
-
-  public void setIsDeleted(Boolean isDeleted) {
-    this.isDeleted = isDeleted;
-  }
-
+*/
 }

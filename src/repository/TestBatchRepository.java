@@ -120,19 +120,17 @@ public class TestBatchRepository {
 */
   
   public void deleteTestBatch(Long id){
-      
       TestBatch testBatch = findTestBatchById(id);
       testBatch.setIsDeleted(false);
       em.merge(testBatch);
   }
   
-    public List<TestBatch> getRecentlyClosedTestBatches(Integer numOfResults){
-      
-       String queryStr = "SELECT tb FROM TestBatch tb "
-               + "WHERE status = :status  ORDER BY lastUpdated DESC";
-         TypedQuery<TestBatch> query = em.createQuery(queryStr, TestBatch.class);
-         query.setParameter("status", TestBatchStatus.CLOSED);
-         query.setMaxResults(numOfResults);
-         return query.getResultList();
+  public List<TestBatch> getRecentlyClosedTestBatches(Integer numOfResults){ 
+	String queryStr = "SELECT tb FROM TestBatch tb "
+			+ "WHERE status = :status  ORDER BY lastUpdated DESC";
+	TypedQuery<TestBatch> query = em.createQuery(queryStr, TestBatch.class);
+	query.setParameter("status", TestBatchStatus.CLOSED);
+	query.setMaxResults(numOfResults);
+	return query.getResultList();
   }
 }
