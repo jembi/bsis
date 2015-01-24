@@ -4,7 +4,9 @@ package viewmodel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import model.producttype.ProductType;
+import model.producttype.ProductTypeCombination;
 import model.producttype.ProductTypeTimeUnits;
+import java.util.Set;
 
 /**
  *
@@ -55,5 +57,14 @@ public class ProductTypeViewModel {
     public String getDescription(){
         return productType.getDescription();
     }
+    
+    public Set<ProductTypeCombination> getProductTypeCombinations(){
+    	return productType.getProductTypeCombinations();
+    }
+    
+    public Set<ProductTypeCombination> getProducedProductTypeCombinations(){
+    	return productType.getProducedProductTypeCombinations();
+    }
+
    
 }

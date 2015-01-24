@@ -18,6 +18,7 @@ import javax.persistence.OneToOne;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 @Entity
 @Audited
@@ -44,6 +45,11 @@ public class ProductType {
   @NotAudited
   @ManyToMany(mappedBy="productTypes", fetch = FetchType.EAGER)
   private Set<ProductTypeCombination> productTypeCombinations;
+  
+  @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+  @ManyToMany(fetch=FetchType.EAGER)
+  private Set<ProductTypeCombination> producedProductTypeCombinations;
 
   /**
    * TODO: Not used for now. Some product types like Cryoprecipitate may not require
@@ -155,6 +161,14 @@ public class ProductType {
 
   public void setProductTypeCombinations(Set<ProductTypeCombination> productTypeCombinations) {
     this.productTypeCombinations = productTypeCombinations;
+  }
+  
+  public Set<ProductTypeCombination> getProducedProductTypeCombinations() {
+    return producedProductTypeCombinations;
+  }
+
+  public void setProducedProductTypeCombinations(Set<ProductTypeCombination> producedProductTypeCombinations) {
+    this.producedProductTypeCombinations = producedProductTypeCombinations;
   }
 
   public ProductType getPediProductType() {

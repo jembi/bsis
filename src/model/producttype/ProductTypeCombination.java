@@ -33,6 +33,10 @@ public class ProductTypeCombination {
   @ManyToMany(fetch=FetchType.EAGER)
   private List<ProductType> productTypes;
   
+  @NotAudited
+  @ManyToMany(mappedBy="producedProductTypeCombinations", fetch = FetchType.EAGER)
+  private List<ProductType> sourceProductTypes;
+  
   private Boolean isDeleted;
 
   public Integer getId() {
@@ -49,6 +53,14 @@ public class ProductTypeCombination {
 
   public void setProductTypes(List<ProductType> productTypes) {
     this.productTypes = productTypes;
+  }
+  
+  public List<ProductType> getSourceProductTypes() {
+    return sourceProductTypes;
+  }
+
+  public void setSourceProductTypes(List<ProductType> sourceProductTypes) {
+    this.sourceProductTypes = sourceProductTypes;
   }
 
   public String getCombinationName() {

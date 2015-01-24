@@ -45,6 +45,14 @@ public class ProductTypeCombinationViewModel {
           productTypeViewModels.add(new ProductTypeViewModel(productType));
       }
       return productTypeViewModels;
-    }    
+    }   
+    
+    
+    public List<ProductTypeViewModel> getSourceProductTypes(){
+        return getProductTypes(productTypeCombination.getSourceProductTypes());
+    }
+    
+    
+
 
 }
