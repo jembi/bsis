@@ -3,6 +3,7 @@ package backingform;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Collections;
 import java.util.List;
+import java.util.Date;
 import javax.validation.Valid;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
@@ -41,6 +42,11 @@ public class TestBatchBackingForm {
 
     public void setCollectionBatchIds(List<Integer> collectionBatchIds) {
         this.collectionBatchIds = collectionBatchIds;
+    }
+    
+    @JsonIgnore
+    public Date getLastUpdated() {
+      return testBatch.getLastUpdated();
     }
 
 }
