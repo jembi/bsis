@@ -39,20 +39,16 @@ public class ProductTypeCombinationViewModel {
         return getProductTypes(productTypeCombination.getProductTypes());
     }
 
-    private List<ProductTypeViewModel> getProductTypes(List<ProductType> productTypes) {
-      List<ProductTypeViewModel> productTypeViewModels = new ArrayList<ProductTypeViewModel> ();
-      for(ProductType productType : productTypes){
-          productTypeViewModels.add(new ProductTypeViewModel(productType));
-      }
-      return productTypeViewModels;
-    }   
-    
-    
     public List<ProductTypeViewModel> getSourceProductTypes(){
         return getProductTypes(productTypeCombination.getSourceProductTypes());
     }
     
-    
-
+    private List<ProductTypeViewModel> getProductTypes(Set<ProductType> productTypes) {
+        List<ProductTypeViewModel> productTypeViewModels = new ArrayList<ProductTypeViewModel> ();
+        for(ProductType productType : productTypes){
+            productTypeViewModels.add(new ProductTypeViewModel(productType));
+        }
+        return productTypeViewModels;
+      }  
 
 }

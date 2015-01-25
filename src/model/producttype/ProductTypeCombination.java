@@ -3,7 +3,6 @@ package model.producttype;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.Set;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,11 +30,11 @@ public class ProductTypeCombination {
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @ManyToMany(fetch=FetchType.EAGER)
-  private List<ProductType> productTypes;
+  private Set<ProductType> productTypes;
   
   @NotAudited
   @ManyToMany(mappedBy="producedProductTypeCombinations", fetch = FetchType.EAGER)
-  private List<ProductType> sourceProductTypes;
+  private Set<ProductType> sourceProductTypes;
   
   private Boolean isDeleted;
 
@@ -47,19 +46,19 @@ public class ProductTypeCombination {
     this.id = id;
   }
 
-  public List<ProductType> getProductTypes() {
+  public Set<ProductType> getProductTypes() {
     return productTypes;
   }
 
-  public void setProductTypes(List<ProductType> productTypes) {
+  public void setProductTypes(Set<ProductType> productTypes) {
     this.productTypes = productTypes;
   }
   
-  public List<ProductType> getSourceProductTypes() {
+  public Set<ProductType> getSourceProductTypes() {
     return sourceProductTypes;
   }
 
-  public void setSourceProductTypes(List<ProductType> sourceProductTypes) {
+  public void setSourceProductTypes(Set<ProductType> sourceProductTypes) {
     this.sourceProductTypes = sourceProductTypes;
   }
 

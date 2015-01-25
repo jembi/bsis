@@ -32,13 +32,13 @@ public class ProductTypeCombinationBackingForm {
         productTypeCombination.setId(id);
     }
     
-    public List<ProductType> getProductTypes() {
+    public Set<ProductType> getProductTypes() {
         return productTypeCombination.getProductTypes();
     }
     
     public void setProductTypes(List<Integer> productTypeIds) {
         
-        List<ProductType> productTypes = new ArrayList<ProductType>();
+        Set<ProductType> productTypes = new HashSet<ProductType>();
         ProductType productType = new ProductType();
         for (Integer productTypeId : productTypeIds) {
             productType.setId(productTypeId);

@@ -172,7 +172,7 @@ public class ProductTypeRepository {
       ProductTypeCombination productTypeCombination) {
       
     String combinationName = productTypeCombination.getCombinationName();
-    List<ProductType> productTypes = new ArrayList<ProductType>();
+    Set<ProductType> productTypes = new HashSet<ProductType>();
     List<String> combinationNameList = new ArrayList<String>();
   
     for (ProductType productType : productTypeCombination.getProductTypes()) {
