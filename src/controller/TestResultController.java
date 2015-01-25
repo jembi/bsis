@@ -123,8 +123,8 @@ public class TestResultController {
 	    	if(result.getPendingTTITestsIds().size() > 0){
 	    		pendingTTITests = true;
 	    	}
-	    	if(result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.NO_MATCH) ||
-	    	   result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS)	){
+	    	if(!result.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE) && (result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.NO_MATCH) ||
+	    	   result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS))	){
 	    		pendingBloodTypingMatchTests = true;
 	    	}
 	    }
