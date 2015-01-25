@@ -168,13 +168,12 @@ public class ProductTypeController {
       
   }
   
-  
   public  List<ProductTypeCombinationViewModel> 
-        getProductTypeCombinationViewModels(List<ProductTypeCombination> productTypeConminations){
+        getProductTypeCombinationViewModels(List<ProductTypeCombination> productTypeCombinations){
       
       List<ProductTypeCombinationViewModel> productTypeCombinationViewModels
               = new ArrayList<ProductTypeCombinationViewModel> ();
-      for(ProductTypeCombination productTypeCombination : productTypeConminations)
+      for(ProductTypeCombination productTypeCombination : productTypeCombinations)
           productTypeCombinationViewModels.add(new ProductTypeCombinationViewModel(productTypeCombination));
           
       return productTypeCombinationViewModels;

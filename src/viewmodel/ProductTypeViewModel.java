@@ -1,23 +1,19 @@
-
-
 package viewmodel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
+import viewmodel.ProductTypeCombinationViewModel;
 import model.producttype.ProductTypeTimeUnits;
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 
-/**
- *
- * @author srikanth
- */
 public class ProductTypeViewModel {
 
     public ProductTypeViewModel(ProductType productType) {
         this.productType = productType;
-    }
-    
+    }  
     
     @JsonIgnore
     private ProductType productType;
@@ -58,13 +54,21 @@ public class ProductTypeViewModel {
         return productType.getDescription();
     }
     
-    public Set<ProductTypeCombination> getProductTypeCombinations(){
-    	return productType.getProductTypeCombinations();
+    public List<ProductTypeCombinationViewModel> getProducedProductTypeCombinations(){
+    	return getProductTypeCombinationViewModels(productType.getProducedProductTypeCombinations());
     }
     
-    public Set<ProductTypeCombination> getProducedProductTypeCombinations(){
-    	return productType.getProducedProductTypeCombinations();
-    }
+    public List<ProductTypeCombinationViewModel> 
+	    getProductTypeCombinationViewModels(Set<ProductTypeCombination> productTypeCombinations){
+	  
+	  List<ProductTypeCombinationViewModel> productTypeCombinationViewModels
+	          = new ArrayList<ProductTypeCombinationViewModel> ();
+	  for(ProductTypeCombination productTypeCombination : productTypeCombinations)
+	      productTypeCombinationViewModels.add(new ProductTypeCombinationViewModel(productTypeCombination));
+	      
+	  return productTypeCombinationViewModels;
+	  
+	}
 
    
 }
