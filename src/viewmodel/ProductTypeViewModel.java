@@ -59,7 +59,7 @@ public class ProductTypeViewModel {
     }
     
     public List<ProductTypeCombinationViewModel> 
-	    getProductTypeCombinationViewModels(Set<ProductTypeCombination> productTypeCombinations){
+	    getProductTypeCombinationViewModels(List<ProductTypeCombination> productTypeCombinations){
 	  
 	  List<ProductTypeCombinationViewModel> productTypeCombinationViewModels
 	          = new ArrayList<ProductTypeCombinationViewModel> ();

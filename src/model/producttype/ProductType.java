@@ -2,7 +2,7 @@ package model.producttype;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +19,8 @@ import javax.persistence.OneToOne;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Audited
@@ -44,12 +46,14 @@ public class ProductType {
 
   @NotAudited
   @ManyToMany(mappedBy="productTypes", fetch = FetchType.EAGER)
-  private Set<ProductTypeCombination> productTypeCombinations;
+  @Fetch(FetchMode.SELECT)
+  private List<ProductTypeCombination> productTypeCombinations;
   
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @ManyToMany(fetch=FetchType.EAGER)
-  private Set<ProductTypeCombination> producedProductTypeCombinations;
+  @Fetch(FetchMode.SELECT)
+  private List<ProductTypeCombination> producedProductTypeCombinations;
 
   /**
    * TODO: Not used for now. Some product types like Cryoprecipitate may not require
@@ -155,19 +159,19 @@ public class ProductType {
     return expiresAfter * factor;
   }
 
-  public Set<ProductTypeCombination> getProductTypeCombinations() {
+  public List<ProductTypeCombination> getProductTypeCombinations() {
     return productTypeCombinations;
   }
 
-  public void setProductTypeCombinations(Set<ProductTypeCombination> productTypeCombinations) {
+  public void setProductTypeCombinations(List<ProductTypeCombination> productTypeCombinations) {
     this.productTypeCombinations = productTypeCombinations;
   }
   
-  public Set<ProductTypeCombination> getProducedProductTypeCombinations() {
+  public List<ProductTypeCombination> getProducedProductTypeCombinations() {
     return producedProductTypeCombinations;
   }
 
-  public void setProducedProductTypeCombinations(Set<ProductTypeCombination> producedProductTypeCombinations) {
+  public void setProducedProductTypeCombinations(List<ProductTypeCombination> producedProductTypeCombinations) {
     this.producedProductTypeCombinations = producedProductTypeCombinations;
   }
 
