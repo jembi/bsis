@@ -60,7 +60,7 @@ public class BloodTestViewModel {
       return Arrays.asList(rawBloodTest.getValidResults().split(","));
   }
 
-  public String getCategory() {
+  public String getBloodTestCategory() {
     String category = "";
     if (rawBloodTest.getCategory() == null)
       return "";
