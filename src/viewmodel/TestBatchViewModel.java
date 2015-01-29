@@ -62,5 +62,9 @@ public class TestBatchViewModel {
 	    }
 	    return collectionBatchViewModels;
 	}
+    
+    public String getLastUpdated() {
+    	return CustomDateFormatter.getDateTimeString(testBatch.getLastUpdated());
+    }
 
 }

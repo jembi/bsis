@@ -29,7 +29,6 @@ import model.productmovement.ProductStatusChangeReason;
 import model.productmovement.ProductStatusChangeReasonCategory;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
-import model.producttype.ProductTypeCombinationRule;
 import model.producttype.ProductTypeTimeUnits;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -381,17 +380,6 @@ public class ProductController {
     map.put("components", components);
     return map;
   }
-  
-  /*
-  @RequestMapping(value="/combinationrules", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public Map<String, Object> getProductTypeCombinationRules() {
-	Map<String, Object> map = new HashMap<String, Object>();
-    List<ProductTypeCombinationRule> allProductTypeCombinationRules = productTypeRepository.getAllProductTypeCombinationRules();
-    map.put("combinations",allProductTypeCombinationRules);
-    return map;
-  }
-  */
   
   @RequestMapping(value="/combinations", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")

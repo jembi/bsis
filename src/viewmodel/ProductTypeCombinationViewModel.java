@@ -1,5 +1,3 @@
-
-
 package viewmodel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -36,15 +34,15 @@ public class ProductTypeCombinationViewModel {
     }
     
     public List<ProductTypeViewModel> getProductTypes(){
-        return getProductTypes(productTypeCombination.getProductTypes());
+        return getProductTypeViewModels(productTypeCombination.getProductTypes());
     }
-
-    private List<ProductTypeViewModel> getProductTypes(List<ProductType> productTypes) {
-      List<ProductTypeViewModel> productTypeViewModels = new ArrayList<ProductTypeViewModel> ();
-      for(ProductType productType : productTypes){
-          productTypeViewModels.add(new ProductTypeViewModel(productType));
-      }
-      return productTypeViewModels;
-    }    
+    
+    private List<ProductTypeViewModel> getProductTypeViewModels(List<ProductType> productTypes) {
+        List<ProductTypeViewModel> productTypeViewModels = new ArrayList<ProductTypeViewModel> ();
+        for(ProductType productType : productTypes){
+            productTypeViewModels.add(new ProductTypeViewModel(productType));
+        }
+        return productTypeViewModels;
+    }  
 
 }
