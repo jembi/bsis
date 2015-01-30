@@ -1,5 +1,6 @@
 package viewmodel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -37,4 +38,13 @@ public class RoleViewModel {
 	public String getDescription() {
 		return role.getDescription();
 	}
+        
+        public List<Long> getPermissionValues(){
+            Set<Permission> permissions = role.getPermissions();
+            List<Long> permissionids =  new ArrayList<Long>();
+            for(Permission permission : permissions)
+                permissionids.add(permission.getId());
+                
+            return permissionids;
+        }
 }
