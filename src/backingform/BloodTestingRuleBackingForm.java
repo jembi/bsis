@@ -48,7 +48,7 @@ public class BloodTestingRuleBackingForm {
     }
     
     public void setContext(String context){
-        typingRule.setContext(BloodTestContext.valueOf(context.replaceAll("\\s","").toUpperCase(Locale.FRENCH)));
+        typingRule.setContext(BloodTestContext.valueOf(context.replaceAll("\\s","").toUpperCase()));
     }
     
     public void setExtraInformation(String extraInformation){
