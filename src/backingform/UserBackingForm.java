@@ -163,6 +163,10 @@ public class UserBackingForm {
     public List<Role> getRoles() {
         return user.getRoles();
     }
+    
+    public void setRoles(List<Role> roles){
+        user.setRoles(roles);
+    }
 
   
     public List<String> getUserRoles() {
@@ -252,12 +256,6 @@ public class UserBackingForm {
     public void setRoleUser(String roleUser) {
         this.roleUser = roleUser;
     }
-
-    /**
-     * @param userRole the userRole to set
-     */
-    public void setUserRoles(List<String> userRoles) {
-        this.userRoles = userRoles;
-    }
+    
 
 }

@@ -1,5 +1,6 @@
 package viewmodel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import model.user.Role;
@@ -49,14 +50,14 @@ public class UserViewModel {
 	/**
 	 * @return the userRole
 	 */
-	public String getUserRole() {
+	public List<String> getUserRoles() {
 		List<Role> roles=user.getRoles();
-		String userRoles="";
+                List<String> userRoles = new ArrayList<String>();
 		if(roles.size() > 0){
 			for(Role r:roles){
-				userRole= userRole +","+ r.getName();
+                                userRoles.add(r.getId()+"");
 			}
-			userRoles=userRole.substring(1);
+			
 		}
 		return userRoles;
 	}

@@ -70,6 +70,16 @@ public class UserController {
         map.put("editUserForm", form);
         return map;
     }
+    
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+    public  ResponseEntity getUserDetails(@PathVariable Integer id){
+         Map<String, Object> map = new HashMap<String, Object>();
+         User user = userRepository.findUserById(id);
+         map.put("user", new UserViewModel(user));
+         return new ResponseEntity(map, HttpStatus.OK);
+    }
+     
 
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
