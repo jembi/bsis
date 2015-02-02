@@ -8,7 +8,7 @@
 	<!-- NEVER DELETE OR MODIFY EXISTING CHANGE SETS - instead add new change sets 
 		 reversing the previous ones if you need to change or delete info from another changeset-->
 
-	<changeSet id="20141117-1301" author="srikanthmalyala">
+	<changeSet id="20150114-0956" author="danfuterman">
 		<comment>Add donation types</comment>
 		<insert tableName = "DonationType">
 			<column name="donationType" value="Voluntary"/>
@@ -28,7 +28,8 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1303" author="srikanthmalyala">
+	<!-- REQUESTS NOT REQUIRED FOR BETA-RELEASE
+	<changeSet id="20150114-0957" author="danfuterman">
 		<comment>Add request types</comment>
 		<insert tableName = "RequestType">
 			<column name="requestType" value="Emergency"/>
@@ -61,12 +62,14 @@
 			<column name="isDeleted" value="0"/>
 		</insert>
 	</changeSet>
+	-->
 
-	<changeSet id="20141117-1404" author="srikanthmalyala">
+	<changeSet id="20150114-0959" author="danfuterman">
 		<comment>Add product types</comment>
 		<insert tableName = "ProductType">
-			<column name="productTypeNameShort" value="WB"/>
-			<column name="productTypeName" value="Whole Blood"/>
+			<column name="id" value="1"/>
+			<column name="productTypeNameShort" value="0011"/>
+			<column name="productTypeName" value="Whole Blood Single Pack - CPDA"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
@@ -75,8 +78,9 @@
 			<column name="isDeleted" value="0"/>
 		</insert>
 		<insert tableName = "ProductType">
-			<column name="productTypeNameShort" value="RCC"/>
-			<column name="productTypeName" value="Red Cell Concentrate"/>
+			<column name="id" value="2"/>
+			<column name="productTypeNameShort" value="0012"/>
+			<column name="productTypeName" value="Whole Blood Double Pack - CPDA"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
@@ -85,18 +89,31 @@
 			<column name="isDeleted" value="0"/>
 		</insert>
 		<insert tableName = "ProductType">
-			<column name="productTypeNameShort" value="FFP"/>
-			<column name="productTypeName" value="Fresh Frozen Plasma"/>
+			<column name="id" value="3"/>
+			<column name="productTypeNameShort" value="0013"/>
+			<column name="productTypeName" value="Whole Blood Triple Pack - CPDA"/>
 			<column name="description" value=""/>
-			<column name="expiresAfter" value="365"/>
+			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
 			<column name="hasBloodGroup" value="1"/>
 			<column name="pediProductType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
 		<insert tableName = "ProductType">
-			<column name="productTypeNameShort" value="Platelets"/>
-			<column name="productTypeName" value="Platelets"/>
+			<column name="id" value="4"/>
+			<column name="productTypeNameShort" value="0014"/>
+			<column name="productTypeName" value="Whole Blood Quad Pack - CPDA"/>
+			<column name="description" value=""/>
+			<column name="expiresAfter" value="35"/>
+			<column name="expiresAfterUnits" value="DAYS"/>
+			<column name="hasBloodGroup" value="1"/>
+			<column name="pediProductType_id" value="NULL"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName = "ProductType">
+			<column name="id" value="5"/>
+			<column name="productTypeNameShort" value="0021"/>
+			<column name="productTypeName" value="Apheresis"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="5"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
@@ -105,48 +122,129 @@
 			<column name="isDeleted" value="0"/>
 		</insert>
 		<insert tableName = "ProductType">
-			<column name="productTypeNameShort" value="Whole Blood Pedi"/>
-			<column name="productTypeName" value="Whole Blood Pedi"/>
+			<column name="id" value="6"/>
+			<column name="productTypeNameShort" value="1001"/>
+			<column name="productTypeName" value="Whole Blood - CPDA"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="0"/>
+			<column name="hasBloodGroup" value="1"/>
 			<column name="pediProductType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
 		<insert tableName = "ProductType">
-			<column name="productTypeNameShort" value="RCC Pedi"/>
-			<column name="productTypeName" value="Red Cell Concentrate Pedi"/>
+			<column name="id" value="7"/>
+			<column name="productTypeNameShort" value="1005"/>
+			<column name="productTypeName" value="Whole Blood Poor Platelets - CPDA"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="0"/>
+			<column name="hasBloodGroup" value="1"/>
 			<column name="pediProductType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
 		<insert tableName = "ProductType">
-			<column name="productTypeNameShort" value="FFP Pedi"/>
-			<column name="productTypeName" value="Fresh Frozen Plasma Pedi"/>
+			<column name="id" value="8"/>
+			<column name="productTypeNameShort" value="2001"/>
+			<column name="productTypeName" value="Packed Red Cells - CPDA"/>
+			<column name="description" value=""/>
+			<column name="expiresAfter" value="35"/>
+			<column name="expiresAfterUnits" value="DAYS"/>
+			<column name="hasBloodGroup" value="1"/>
+			<column name="pediProductType_id" value="NULL"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName = "ProductType">
+			<column name="id" value="9"/>
+			<column name="productTypeNameShort" value="2011"/>
+			<column name="productTypeName" value="Packed Red Cells - SAGM"/>
+			<column name="description" value=""/>
+			<column name="expiresAfter" value="42"/>
+			<column name="expiresAfterUnits" value="DAYS"/>
+			<column name="hasBloodGroup" value="1"/>
+			<column name="pediProductType_id" value="NULL"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName = "ProductType">
+			<column name="id" value="10"/>
+			<column name="productTypeNameShort" value="3001"/>
+			<column name="productTypeName" value="Fresh Frozen Plasma - Whole Blood"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="365"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="0"/>
+			<column name="hasBloodGroup" value="1"/>
 			<column name="pediProductType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
 		<insert tableName = "ProductType">
-			<column name="productTypeNameShort" value="Platelets Pedi"/>
-			<column name="productTypeName" value="Platelets Pedi"/>
+			<column name="id" value="11"/>
+			<column name="productTypeNameShort" value="3002"/>
+			<column name="productTypeName" value="Frozen Plasma - Whole Blood"/>
+			<column name="description" value=""/>
+			<column name="expiresAfter" value="365"/>
+			<column name="expiresAfterUnits" value="DAYS"/>
+			<column name="hasBloodGroup" value="1"/>
+			<column name="pediProductType_id" value="NULL"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName = "ProductType">
+			<column name="id" value="12"/>
+			<column name="productTypeNameShort" value="4001"/>
+			<column name="productTypeName" value="Platelets Concentrate - Whole Blood"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="5"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="0"/>
+			<column name="hasBloodGroup" value="1"/>
+			<column name="pediProductType_id" value="NULL"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName = "ProductType">
+			<column name="id" value="13"/>
+			<column name="productTypeNameShort" value="4011"/>
+			<column name="productTypeName" value="Platelets Concentrate - Whole Blood - 24H"/>
+			<column name="description" value=""/>
+			<column name="expiresAfter" value="1"/>
+			<column name="expiresAfterUnits" value="DAYS"/>
+			<column name="hasBloodGroup" value="1"/>
+			<column name="pediProductType_id" value="NULL"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName = "ProductType">
+			<column name="id" value="14"/>
+			<column name="productTypeNameShort" value="2101"/>
+			<column name="productTypeName" value="Packed Red Cells - Paediatric - CPDA"/>
+			<column name="description" value=""/>
+			<column name="expiresAfter" value="35"/>
+			<column name="expiresAfterUnits" value="DAYS"/>
+			<column name="hasBloodGroup" value="1"/>
+			<column name="pediProductType_id" value="NULL"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName = "ProductType">
+			<column name="id" value="15"/>
+			<column name="productTypeNameShort" value="3011"/>
+			<column name="productTypeName" value="Fresh Frozen Plasma - Apheresis"/>
+			<column name="description" value=""/>
+			<column name="expiresAfter" value="365"/>
+			<column name="expiresAfterUnits" value="DAYS"/>
+			<column name="hasBloodGroup" value="1"/>
+			<column name="pediProductType_id" value="NULL"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName = "ProductType">
+			<column name="id" value="16"/>
+			<column name="productTypeNameShort" value="4021"/>
+			<column name="productTypeName" value="Platelets Concentrate - Apheresis"/>
+			<column name="description" value=""/>
+			<column name="expiresAfter" value="5"/>
+			<column name="expiresAfterUnits" value="DAYS"/>
+			<column name="hasBloodGroup" value="1"/>
 			<column name="pediProductType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
 	</changeSet>
 	
-	<changeSet id="20141117-1423" author="srikanthmalyala">
+	<changeSet id="20150114-1103" author="danfuterman">
 		<comment>add blood bag types</comment>
 		<insert tableName = "BloodBagType">
 			<column name="bloodBagType" value="Single"/>
@@ -156,77 +254,252 @@
 			<column name="periodBetweenDonations" value="90"/>
 		</insert>
 		<insert tableName = "BloodBagType">
-			<column name="bloodBagType" value="Triple"/>
+			<column name="bloodBagType" value="Double"/>
 			<column name="isDeleted" value="0"/>
-			<column name="productType_id" value="1"/>
+			<column name="productType_id" value="2"/>
 			<column name="countAsDonation" value="1"/>
 			<column name="periodBetweenDonations" value="90"/>
 		</insert>
 		<insert tableName = "BloodBagType">
-			<column name="bloodBagType" value="Pedi"/>
+			<column name="bloodBagType" value="Triple"/>
 			<column name="isDeleted" value="0"/>
-			<column name="productType_id" value="1"/>
+			<column name="productType_id" value="3"/>
 			<column name="countAsDonation" value="1"/>
 			<column name="periodBetweenDonations" value="90"/>
 		</insert>
+		<insert tableName = "BloodBagType">
+			<column name="bloodBagType" value="Quad"/>
+			<column name="isDeleted" value="0"/>
+			<column name="productType_id" value="4"/>
+			<column name="countAsDonation" value="1"/>
+			<column name="periodBetweenDonations" value="90"/>
+		</insert>
+		<insert tableName = "BloodBagType">
+			<column name="bloodBagType" value="Apheresis"/>
+			<column name="isDeleted" value="0"/>
+			<column name="productType_id" value="5"/>
+			<column name="countAsDonation" value="1"/>
+			<column name="periodBetweenDonations" value="30"/>
+		</insert>
+		<insert tableName = "BloodBagType">
+			<column name="bloodBagType" value="Dry Pack"/>
+			<column name="isDeleted" value="0"/>
+			<column name="productType_id" value="NULL"/>
+			<column name="countAsDonation" value="0"/>
+			<column name="periodBetweenDonations" value="0"/>
+		</insert>
+		<insert tableName = "BloodBagType">
+			<column name="bloodBagType" value="Test Only"/>
+			<column name="isDeleted" value="0"/>
+			<column name="productType_id" value="NULL"/>
+			<column name="countAsDonation" value="0"/>
+			<column name="periodBetweenDonations" value="0"/>
+		</insert>
+		<insert tableName = "BloodBagType">
+			<column name="bloodBagType" value="Did Not Bleed"/>
+			<column name="isDeleted" value="0"/>
+			<column name="productType_id" value="NULL"/>
+			<column name="countAsDonation" value="0"/>
+			<column name="periodBetweenDonations" value="0"/>
+		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-0915" author="srikanthmalyala">
+	
+	<changeSet id="20150115-2132" author="danfuterman">
 		<comment>Add product type combinations</comment>
 		<insert tableName = "ProductTypeCombination">
+			<column name="id" value="1"/>
 			<column name="combinationName" value="Whole Blood"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
 		<insert tableName = "ProductTypeCombination">
-			<column name="combinationName" value="RCC, FFP, Platelets"/>
+			<column name="id" value="2"/>
+			<column name="combinationName" value="PRC-CPDA, FFP"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
 		<insert tableName = "ProductTypeCombination">
-			<column name="combinationName" value="Whole Blood Pedi"/>
+			<column name="id" value="3"/>
+			<column name="combinationName" value="PRC-CPDA, FP"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
 		<insert tableName = "ProductTypeCombination">
-			<column name="combinationName" value="RCC Pedi, FFP Pedi, FFP Pedi"/>
+			<column name="id" value="4"/>
+			<column name="combinationName" value="WB Poor Platelets, PC-24H"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination">
+			<column name="id" value="5"/>
+			<column name="combinationName" value="PRC-SAGM, FFP, PC"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination">
+			<column name="id" value="6"/>
+			<column name="combinationName" value="PRC-SAGM, FFP"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination">
+			<column name="id" value="7"/>
+			<column name="combinationName" value="PRC-SAGM, FP"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination">
+			<column name="id" value="8"/>
+			<column name="combinationName" value="3 X PRC-Paed-CPDA, FFP"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination">
+			<column name="id" value="9"/>
+			<column name="combinationName" value="FFP-Apheresis, PC-Apheresis"/>
+			<column name="isDeleted" value="0"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination">
+			<column name="id" value="10"/>
+			<column name="combinationName" value="FFP Apheresis, 2 X PC-Apheresis"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-0919" author="srikanthmalyala">
+	<changeSet id="20150115-2137" author="danfuterman">
 		<comment>Add product type combination mappings</comment>
 		<insert tableName = "ProductTypeCombination_ProductType">
 			<column name="productTypeCombinations_id" value="1"/>
-			<column name="productTypes_id" value="1"/>
-		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="2"/>
-			<column name="productTypes_id" value="2"/>
-		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="2"/>
-			<column name="productTypes_id" value="3"/>
-		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="2"/>
-			<column name="productTypes_id" value="4"/>
-		</insert>
-			<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="3"/>
-			<column name="productTypes_id" value="5"/>
-		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="4"/>
 			<column name="productTypes_id" value="6"/>
 		</insert>
 		<insert tableName = "ProductTypeCombination_ProductType">
+			<column name="productTypeCombinations_id" value="2"/>
+			<column name="productTypes_id" value="8"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination_ProductType">
+			<column name="productTypeCombinations_id" value="2"/>
+			<column name="productTypes_id" value="10"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination_ProductType">
+			<column name="productTypeCombinations_id" value="3"/>
+			<column name="productTypes_id" value="8"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination_ProductType">
+			<column name="productTypeCombinations_id" value="3"/>
+			<column name="productTypes_id" value="11"/>
+		</insert>
+			<insert tableName = "ProductTypeCombination_ProductType">
 			<column name="productTypeCombinations_id" value="4"/>
 			<column name="productTypes_id" value="7"/>
 		</insert>
 		<insert tableName = "ProductTypeCombination_ProductType">
 			<column name="productTypeCombinations_id" value="4"/>
-			<column name="productTypes_id" value="8"/>
+			<column name="productTypes_id" value="13"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination_ProductType">
+			<column name="productTypeCombinations_id" value="5"/>
+			<column name="productTypes_id" value="9"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination_ProductType">
+			<column name="productTypeCombinations_id" value="5"/>
+			<column name="productTypes_id" value="10"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination_ProductType">
+			<column name="productTypeCombinations_id" value="5"/>
+			<column name="productTypes_id" value="12"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination_ProductType">
+			<column name="productTypeCombinations_id" value="6"/>
+			<column name="productTypes_id" value="9"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination_ProductType">
+			<column name="productTypeCombinations_id" value="6"/>
+			<column name="productTypes_id" value="10"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination_ProductType">
+			<column name="productTypeCombinations_id" value="7"/>
+			<column name="productTypes_id" value="9"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination_ProductType">
+			<column name="productTypeCombinations_id" value="7"/>
+			<column name="productTypes_id" value="11"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination_ProductType">
+			<column name="productTypeCombinations_id" value="8"/>
+			<column name="productTypes_id" value="14"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination_ProductType">
+			<column name="productTypeCombinations_id" value="8"/>
+			<column name="productTypes_id" value="14"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination_ProductType">
+			<column name="productTypeCombinations_id" value="8"/>
+			<column name="productTypes_id" value="14"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination_ProductType">
+			<column name="productTypeCombinations_id" value="8"/>
+			<column name="productTypes_id" value="10"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination_ProductType">
+			<column name="productTypeCombinations_id" value="9"/>
+			<column name="productTypes_id" value="15"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination_ProductType">
+			<column name="productTypeCombinations_id" value="9"/>
+			<column name="productTypes_id" value="16"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination_ProductType">
+			<column name="productTypeCombinations_id" value="10"/>
+			<column name="productTypes_id" value="15"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination_ProductType">
+			<column name="productTypeCombinations_id" value="10"/>
+			<column name="productTypes_id" value="16"/>
+		</insert>
+		<insert tableName = "ProductTypeCombination_ProductType">
+			<column name="productTypeCombinations_id" value="10"/>
+			<column name="productTypes_id" value="16"/>
 		</insert>
 	</changeSet>
-
+	
+	<changeSet id="20150115-2152" author="danfuterman">
+		<comment>Add product type combination rules</comment>
+		<insert tableName = "ProductType_ProductTypeCombination">
+			<column name="sourceProductTypes_id" value="1"/>
+			<column name="producedProductTypeCombinations_id" value="1"/>
+		</insert>
+		<insert tableName = "ProductType_ProductTypeCombination">
+			<column name="sourceProductTypes_id" value="2"/>
+			<column name="producedProductTypeCombinations_id" value="2"/>
+		</insert>
+		<insert tableName = "ProductType_ProductTypeCombination">
+			<column name="sourceProductTypes_id" value="2"/>
+			<column name="producedProductTypeCombinations_id" value="3"/>
+		</insert>
+		<insert tableName = "ProductType_ProductTypeCombination">
+			<column name="sourceProductTypes_id" value="2"/>
+			<column name="producedProductTypeCombinations_id" value="4"/>
+		</insert>
+		<insert tableName = "ProductType_ProductTypeCombination">
+			<column name="sourceProductTypes_id" value="3"/>
+			<column name="producedProductTypeCombinations_id" value="5"/>
+		</insert>
+		<insert tableName = "ProductType_ProductTypeCombination">
+			<column name="sourceProductTypes_id" value="3"/>
+			<column name="producedProductTypeCombinations_id" value="6"/>
+		</insert>
+		<insert tableName = "ProductType_ProductTypeCombination">
+			<column name="sourceProductTypes_id" value="3"/>
+			<column name="producedProductTypeCombinations_id" value="7"/>
+		</insert>
+		<insert tableName = "ProductType_ProductTypeCombination">
+			<column name="sourceProductTypes_id" value="4"/>
+			<column name="producedProductTypeCombinations_id" value="8"/>
+		</insert>
+		<insert tableName = "ProductType_ProductTypeCombination">
+			<column name="sourceProductTypes_id" value="5"/>
+			<column name="producedProductTypeCombinations_id" value="9"/>
+		</insert>
+		<insert tableName = "ProductType_ProductTypeCombination">
+			<column name="sourceProductTypes_id" value="5"/>
+			<column name="producedProductTypeCombinations_id" value="10"/>
+		</insert>
+	</changeSet>
+	
+	<!-- NOT USED FOR BETA-RELEASE
 	<changeSet id="20141117-0931" author="srikanthmalyala">
 		<comment>Add paediatric product type associations</comment>
 		<update tableName="ProductType">
@@ -246,11 +519,13 @@
 			<where>id = "4"</where>
 		</update>
 	</changeSet>
+	
+	 -->
 
-	<changeSet id="20141117-0938" author="srikanthmalyala">
+	<changeSet id="20150114-1146" author="danfuterman">
 		<comment>Add locations</comment>
 		<insert tableName = "Location">
-			<column name="name" value="Key North"/>
+			<column name="name" value="Maseru"/>
 			<column name="isMobileSite" value="0"/>
 			<column name="isUsageSite" value="0"/>
 			<column name="isDonorPanel" value="1"/>
@@ -258,7 +533,7 @@
 			<column name="notes" value=""/>
 		</insert>
 		<insert tableName = "Location">
-			<column name="name" value="Key East"/>
+			<column name="name" value="Leribe"/>
 			<column name="isMobileSite" value="0"/>
 			<column name="isUsageSite" value="0"/>
 			<column name="isDonorPanel" value="1"/>
@@ -266,50 +541,10 @@
 			<column name="notes" value=""/>
 		</insert>
 		<insert tableName = "Location">
-			<column name="name" value="Key South"/>
+			<column name="name" value="Mohale's Hoek"/>
 			<column name="isMobileSite" value="0"/>
 			<column name="isUsageSite" value="0"/>
 			<column name="isDonorPanel" value="1"/>
-			<column name="isDeleted" value="0"/>
-			<column name="notes" value=""/>
-		</insert>	
-		<insert tableName = "Location">
-			<column name="name" value="Key West"/>
-			<column name="isMobileSite" value="0"/>
-			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
-			<column name="isDeleted" value="0"/>
-			<column name="notes" value=""/>
-		</insert>
-		<insert tableName = "Location">
-			<column name="name" value="Key Mobile"/>
-			<column name="isMobileSite" value="1"/>
-			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
-			<column name="isDeleted" value="0"/>
-			<column name="notes" value=""/>
-		</insert>
-		<insert tableName = "Location">
-			<column name="name" value="General Clinic"/>
-			<column name="isMobileSite" value="0"/>
-			<column name="isUsageSite" value="1"/>
-			<column name="isDonorPanel" value="0"/>
-			<column name="isDeleted" value="0"/>
-			<column name="notes" value=""/>
-		</insert>
-		<insert tableName = "Location">
-			<column name="name" value="General Clinic #2"/>
-			<column name="isMobileSite" value="0"/>
-			<column name="isUsageSite" value="1"/>
-			<column name="isDonorPanel" value="0"/>
-			<column name="isDeleted" value="0"/>
-			<column name="notes" value=""/>
-		</insert>	
-		<insert tableName = "Location">
-			<column name="name" value="General Clinic #3"/>
-			<column name="isMobileSite" value="0"/>
-			<column name="isUsageSite" value="1"/>
-			<column name="isDonorPanel" value="0"/>
 			<column name="isDeleted" value="0"/>
 			<column name="notes" value=""/>
 		</insert>
@@ -542,6 +777,7 @@
 		</insert>
 	</changeSet>
 
+	<!--  NOT USED FOR BETA-RELEASE
 	<changeSet id="20141117-1128" author="srikanthmalyala">
 		<comment>Add donor code groups</comment>
 		<insert tableName="DonorCodeGroup">
@@ -592,6 +828,8 @@
 			<column name="donorCodeGroupId" value="2"></column>   
 		</insert>
 	</changeSet>
+	
+	-->
 
 	<changeSet id="20141117-1141" author="srikanthmalyala">
 		<comment>Add address types</comment>
@@ -608,5 +846,7 @@
 			<column name="preferredAddressType" value="Postal Address"></column>
 		</insert>
 	</changeSet>
+
+	
 
 </databaseChangeLog>
