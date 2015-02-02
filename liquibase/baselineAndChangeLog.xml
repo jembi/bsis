@@ -6,6 +6,6 @@
 	<include file="./liquibase/db-baseline.xml" />
  	<include file="./liquibase/db-changelog.xml" />
 	<include file="./liquibase/db-config.xml" />
-	<include file="./liquibase/db-data-beta.xml" />
+	<include file="./liquibase/db-data-lbts.xml" />
 
 </databaseChangeLog>
