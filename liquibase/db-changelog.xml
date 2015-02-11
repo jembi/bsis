@@ -1087,6 +1087,11 @@
 			<column name="bloodTypingMatchStatus" type="VARCHAR(20)"></column>
 		</addColumn>
 	</changeSet>
+	
+	<!-- Remove sequenceNumberContext field from SequenceNumberStore -->
+	<changeSet id="20150210-1026" author="danfuterman">
+		<dropColumn columnName="sequenceNumberContext" tableName="SequenceNumberStore"/>
+	</changeSet>
 
 
 </databaseChangeLog>
