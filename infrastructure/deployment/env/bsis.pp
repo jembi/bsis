@@ -12,7 +12,7 @@ $mysql_root_password = "root"
 $mysql_bsis_user = "bsis"
 $mysql_bsis_user_password = "bsis"
 $mysql_bsis_database_name = "v2v_new"
-$git_branch = "develop"
+$git_branch = "master"
 
 # defaults for Exec
 Exec {
