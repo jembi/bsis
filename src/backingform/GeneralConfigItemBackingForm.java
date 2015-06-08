@@ -2,6 +2,9 @@ package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import model.admin.GeneralConfig;
+import javax.validation.Valid;
+import model.admin.DataType;
+
 
 /**
  * Created by debonair on 2015/06/02.
@@ -13,6 +16,9 @@ public class GeneralConfigItemBackingForm {
 
     private String value;
     private String name;
+    
+    @Valid
+    private DataType dataType;
 
     public GeneralConfigItemBackingForm(){
         setGeneralConfig(new GeneralConfig());
@@ -61,5 +67,9 @@ public class GeneralConfigItemBackingForm {
 
     public void setValue(String value){
         this.value = value;
+    }
+    
+    public void setDataType(DataType dataType){
+        this.dataType = dataType;
     }
 }
