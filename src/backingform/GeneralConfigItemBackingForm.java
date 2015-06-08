@@ -51,6 +51,8 @@ public class GeneralConfigItemBackingForm {
     }
 
     private String description;
+
+    @JsonIgnore
     private Integer id;
 
     public String getValue() {
