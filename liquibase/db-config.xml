@@ -371,6 +371,12 @@
        <column name="name" value="View Admin Information"></column>
    </insert>
   </changeSet>
+  <changeSet id="20150601-1533" author="debonair">
+    <insert tableName="Permission">
+        <column name="id" value="88"></column>
+        <column name="name" value="Manage General Configs"></column>
+    </insert>
+  </changeSet>
 
   <!-- For issue 134 [Add New Permission Role Mappings]  -->
   <changeSet id="20140221-1616" author="srikanthmalyala">
@@ -2181,7 +2187,18 @@
     <insert tableName="Permission_Role">
        <column name="permissions_id" value="82"></column>
        <column name="roles_id" value="2"></column>
-    </insert>  
+    </insert>
+  </changeSet>
+  <changeSet id="20150601-1556" author="debonair">
+    <insert tableName="Permission_Role">
+        <column name="permissions_id" value="88"></column>
+        <column name="roles_id" value="1"></column>
+    </insert>
+
+    <insert tableName="Permission_Role">
+        <column name="permissions_id" value="88"></column>
+        <column name="roles_id" value="2"></column>
+    </insert>
   </changeSet>
 
   <!-- Add AUTHENTICATED Permission and Role Mappings -->

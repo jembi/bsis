@@ -34,6 +34,13 @@
     <intercept-url pattern="/configure/**" access="isAnonymous()" method="OPTIONS"/>
     <intercept-url pattern="/configure/**" access="isFullyAuthenticated()" />
   </http>
+
+  <http pattern="/generalConfigs/**" create-session="never" use-expressions="true">
+    <http-basic />
+    <session-management />
+    <intercept-url pattern="/generalConfigs/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/generalConfigs/**" access="isFullyAuthenticated()" />
+  </http>
   
   <http pattern="/bloodtests/**" create-session="never" use-expressions="true">
   	<http-basic />
