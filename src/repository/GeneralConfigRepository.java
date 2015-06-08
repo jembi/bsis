@@ -42,14 +42,14 @@ public class GeneralConfigRepository {
         em.merge(generalConfig);
     }
 
+    public void save(GeneralConfig generalConfig) {
+        em.persist(generalConfig);
+    }
+
     public GeneralConfig getGeneralConfigById(Integer id) {
         TypedQuery<GeneralConfig> query = em.createQuery("SELECT gc FROM GeneralConfig gc WHERE gc.id = :id ", GeneralConfig.class);
         query.setParameter("id", id);
         return query.getSingleResult();
     }
-
-
-
-
 
 }

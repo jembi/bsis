@@ -51,7 +51,7 @@ public class GeneralConfigController {
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_GENERAL_CONFIGS + "')")
     public ResponseEntity<Map<String, Object>> generalConfigGenerator(HttpServletRequest request) {
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("generalConfigs", configRepository.getAll());
+        map.put("configs", configRepository.getAll());
         return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
     }
 
@@ -60,7 +60,7 @@ public class GeneralConfigController {
     public ResponseEntity addGeneralConfig(@Valid @RequestBody GeneralConfigItemBackingForm form
                                                                 ) throws IOException {
 
-        configRepository.update(form.getGeneralConfig());
+        configRepository.save(form.getGeneralConfig());
         return new ResponseEntity<GeneralConfig>(form.getGeneralConfig(), HttpStatus.CREATED);
     }
 
