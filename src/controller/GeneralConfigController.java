@@ -47,7 +47,7 @@ public class GeneralConfigController {
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_GENERAL_CONFIGS + "')")
     public ResponseEntity addGeneralConfig(@RequestBody @Valid GeneralConfigBackingForm form) {
         configRepository.save(form.getGeneralConfig());
-        return new ResponseEntity<GeneralConfig>(form.getGeneralConfig(), HttpStatus.CREATED);
+        return new ResponseEntity<GeneralConfig>(configRepository.getGeneralConfigByName(form.getName()), HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)

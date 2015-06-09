@@ -72,7 +72,7 @@ public class GeneralConfigBackingFormValidator implements Validator {
         generalConfig.setDataType(dataType);
         formItem.setGeneralConfig(generalConfig);
 
-        if (utilController.isDuplicateGeneralConfigName(generalConfig))
+        if (utilController.isDuplicateGeneralConfigName(generalConfig) && generalConfig.getId() != formItem.getId())
             errors.rejectValue("generalConfig.name", "generalConfig.nonunique",
                     "There exists a generalConfig with the same name.");
     }
