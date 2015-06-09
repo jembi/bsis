@@ -1093,7 +1093,7 @@
 		<dropColumn columnName="sequenceNumberContext" tableName="SequenceNumberStore"/>
 	</changeSet>
 
-	<changeSet id="20150601-1124" author="duma">
+	<changeSet id="20150601-1124" author="debonair">
 		<createTable  tableName="DataType">
 			<column name="id" type="smallint" autoIncrement = "true">
 				<constraints primaryKey="true" nullable="false" />
