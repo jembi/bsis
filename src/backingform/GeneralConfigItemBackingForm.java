@@ -58,7 +58,6 @@ public class GeneralConfigItemBackingForm {
 
     private String description;
 
-    @JsonIgnore
     private Integer id;
 
     public String getValue() {
@@ -71,5 +70,9 @@ public class GeneralConfigItemBackingForm {
     
     public void setDataType(DataType dataType){
         this.dataType = dataType;
+    }
+
+    public DataType getDataType(){
+        return dataType;
     }
 }

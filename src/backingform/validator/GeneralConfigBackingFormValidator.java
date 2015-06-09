@@ -2,6 +2,7 @@ package backingform.validator;
 
 import backingform.GeneralConfigItemBackingForm;
 import model.admin.DataType;
+import model.admin.EnumDataType;
 import model.admin.GeneralConfig;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -35,11 +36,14 @@ public class GeneralConfigBackingFormValidator implements Validator {
         if (target == null || validator == null) {
             return;
         }
+
         GeneralConfigItemBackingForm formItem = (GeneralConfigItemBackingForm) target;
+        DataType dataType = formItem.getDataType();
         GeneralConfig generalConfig = new GeneralConfig();
         generalConfig.setName(formItem.getName());
         generalConfig.setValue(formItem.getValue());
         generalConfig.setDescription(formItem.getDescription());
+        generalConfig.setDataType(dataType);
         formItem.setGeneralConfig(generalConfig);
     }
 }
