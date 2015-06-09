@@ -8,6 +8,7 @@ package repository;
 
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -50,6 +51,16 @@ public class GeneralConfigRepository {
         TypedQuery<GeneralConfig> query = em.createQuery("SELECT gc FROM GeneralConfig gc WHERE gc.id = :id ", GeneralConfig.class);
         query.setParameter("id", id);
         return query.getSingleResult();
+    }
+
+    public GeneralConfig getGeneralConfigByName(String name) {
+        TypedQuery<GeneralConfig> query = em.createQuery("SELECT gc FROM GeneralConfig gc WHERE gc.name = :name ", GeneralConfig.class);
+        query.setParameter("name", name);
+        GeneralConfig result = null;
+        try {
+             result = query.getSingleResult();
+        } catch (NoResultException ex){}
+        return  result;
     }
 
 }

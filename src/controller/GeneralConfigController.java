@@ -31,9 +31,12 @@ public class GeneralConfigController {
     @Autowired
     private GeneralConfigRepository configRepository;
 
+    @Autowired
+    private UtilController utilController;
+
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(new GeneralConfigBackingFormValidator(binder.getValidator(), configRepository));
+        binder.setValidator(new GeneralConfigBackingFormValidator(binder.getValidator(), configRepository, utilController));
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)

@@ -1,6 +1,7 @@
 package backingform.validator;
 
 import backingform.GeneralConfigBackingForm;
+import controller.UtilController;
 import model.admin.DataType;
 import model.admin.EnumDataType;
 import model.admin.GeneralConfig;
@@ -19,10 +20,13 @@ public class GeneralConfigBackingFormValidator implements Validator {
 
     private GeneralConfigRepository configRepository;
 
-    public GeneralConfigBackingFormValidator(Validator validator, GeneralConfigRepository configRepository) {
+    private UtilController utilController;
+
+    public GeneralConfigBackingFormValidator(Validator validator, GeneralConfigRepository configRepository, UtilController utilController) {
         super();
         this.validator = validator;
         this.configRepository = configRepository;
+        this.utilController = utilController;
     }
 
     @Override
@@ -63,12 +67,15 @@ public class GeneralConfigBackingFormValidator implements Validator {
         if(error)
             errors.rejectValue("value","400", formItem.getName() + " is incorrect");
 
-
         GeneralConfig generalConfig = new GeneralConfig();
         generalConfig.setName(formItem.getName());
         generalConfig.setValue(formItem.getValue());
         generalConfig.setDescription(formItem.getDescription());
         generalConfig.setDataType(dataType);
         formItem.setGeneralConfig(generalConfig);
+
+        if (utilController.isDuplicateGeneralConfigName(generalConfig))
+            errors.rejectValue("generalConfig.name", "generalConfig.nonunique",
+                    "There exists a generalConfig with the same name.");
     }
 }
