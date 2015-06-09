@@ -6,26 +6,20 @@
 
 package controller;
 
-import backingform.GeneralConfigBackingForm;
 import backingform.GeneralConfigItemBackingForm;
-import backingform.validator.GeneralConfigFormValidator;
+import backingform.validator.GeneralConfigBackingFormValidator;
 import model.admin.GeneralConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import repository.GeneralConfigRepository;
 import utils.PermissionConstants;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,7 +38,7 @@ public class GeneralConfigController {
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(new GeneralConfigFormValidator(binder.getValidator(), configRepository));
+        binder.setValidator(new GeneralConfigBackingFormValidator(binder.getValidator(), configRepository));
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -57,9 +51,7 @@ public class GeneralConfigController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_GENERAL_CONFIGS + "')")
-    public ResponseEntity addGeneralConfig(@Valid @RequestBody GeneralConfigItemBackingForm form
-                                                                ) throws IOException {
-
+    public ResponseEntity addGeneralConfig(@RequestBody @Valid GeneralConfigItemBackingForm form) {
         configRepository.save(form.getGeneralConfig());
         return new ResponseEntity<GeneralConfig>(form.getGeneralConfig(), HttpStatus.CREATED);
     }
@@ -75,8 +67,7 @@ public class GeneralConfigController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_GENERAL_CONFIGS+"')")
-    public ResponseEntity<Map<String, Object>> updateGeneralConfig(@RequestBody  @Valid GeneralConfigItemBackingForm form,
-                                                                @PathVariable Integer id) {
+    public ResponseEntity<Map<String, Object>> updateGeneralConfig(@RequestBody  @Valid GeneralConfigItemBackingForm form, @PathVariable Integer id) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("config", configRepository.getGeneralConfigById(id));
         return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
