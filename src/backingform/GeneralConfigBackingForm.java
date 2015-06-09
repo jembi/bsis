@@ -1,38 +1,78 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package backingform;
 
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import model.admin.GeneralConfig;
+import javax.validation.Valid;
+import model.admin.DataType;
+
 
 /**
- * @author srikanth
+ * Created by debonair on 2015/06/02.
  */
-
 public class GeneralConfigBackingForm {
 
-    private List<String> values;
+    @JsonIgnore
+    private GeneralConfig generalConfig;
 
-    private List<GeneralConfig> configs;
+    private String value;
+    private String name;
+    
+    @Valid
+    private DataType dataType;
 
-    public List<String> getValues() {
-        return values;
+    public GeneralConfigBackingForm(){
+        setGeneralConfig(new GeneralConfig());
     }
 
-    public void setValues(List<String> values) {
-        this.values = values;
+    public String getDescription() {
+        return description;
     }
 
-    public List<GeneralConfig> getConfigs() {
-        return configs;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public void setConfigs(List<GeneralConfig> configs) {
-        this.configs = configs;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public GeneralConfig getGeneralConfig() {
+        return generalConfig;
+    }
+
+    public void setGeneralConfig(GeneralConfig generalConfig) {
+        this.generalConfig = generalConfig;
+    }
+
+    private String description;
+
+    private Integer id;
+
+    public String getValue() {
+        return this.value;
+    }
+
+    public void setValue(String value){
+        this.value = value;
+    }
+    
+    public void setDataType(DataType dataType){
+        this.dataType = dataType;
+    }
+
+    public DataType getDataType(){
+        return dataType;
     }
 }

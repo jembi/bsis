@@ -1,6 +1,6 @@
 package backingform.validator;
 
-import backingform.GeneralConfigItemBackingForm;
+import backingform.GeneralConfigBackingForm;
 import model.admin.DataType;
 import model.admin.EnumDataType;
 import model.admin.GeneralConfig;
@@ -27,7 +27,7 @@ public class GeneralConfigBackingFormValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return Arrays.asList(GeneralConfigItemBackingForm.class,
+        return Arrays.asList(GeneralConfigBackingForm.class,
                 GeneralConfig.class, String.class).contains(clazz);
     }
 
@@ -37,8 +37,33 @@ public class GeneralConfigBackingFormValidator implements Validator {
             return;
         }
 
-        GeneralConfigItemBackingForm formItem = (GeneralConfigItemBackingForm) target;
+        boolean error = false;
+        GeneralConfigBackingForm formItem = (GeneralConfigBackingForm) target;
         DataType dataType = formItem.getDataType();
+
+        EnumDataType enumDataType = EnumDataType.valueOf(formItem.getDataType().getDatatype().toUpperCase());
+        switch(enumDataType){
+            case TEXT:
+                // Allow all
+                break;
+            case INTEGER:
+                if (!formItem.getValue().matches("[0-9]+"))
+                    error=true;
+                break;
+            case DECIMAL:
+                if (!formItem.getValue().matches("[0-9]*\\.?[0-9]+"))
+                    error=true;
+                break;
+            case BOOLEAN:
+                if(!(formItem.getValue().equalsIgnoreCase("true") || formItem.getValue().equalsIgnoreCase("false")))
+                    error = true;
+                break;
+
+        }
+        if(error)
+            errors.rejectValue("value","400", formItem.getName() + " is incorrect");
+
+
         GeneralConfig generalConfig = new GeneralConfig();
         generalConfig.setName(formItem.getName());
         generalConfig.setValue(formItem.getValue());
