@@ -11,9 +11,7 @@ import repository.GeneralConfigRepository;
 
 import java.util.Arrays;
 
-/**
- * Created by duma on 2015/06/08.
- */
+
 public class GeneralConfigBackingFormValidator implements Validator {
 
     private Validator validator;

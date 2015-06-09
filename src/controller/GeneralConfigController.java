@@ -21,9 +21,7 @@ import utils.PermissionConstants;
 import javax.validation.Valid;
 import java.util.List;
 
-/**
- * @author Duma Mtungwa
- */
+
 @RestController
 @RequestMapping(value = "/configure")
 public class GeneralConfigController {

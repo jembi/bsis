@@ -6,9 +6,6 @@ import javax.validation.Valid;
 import model.admin.DataType;
 
 
-/**
- * Created by debonair on 2015/06/02.
- */
 public class GeneralConfigBackingForm {
 
     @JsonIgnore
