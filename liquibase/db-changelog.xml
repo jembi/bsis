@@ -1120,7 +1120,9 @@
 			<column name="id" type="int" autoIncrement = "true">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name"  type="varchar(255)"/>
+			<column name="name"  type="varchar(255)">
+				<constraints unique="true" nullable="false" />
+			</column>
 			<column name="value" type="varchar(255)"/>
 			<column name="description"  type="longtext"/>
 			<column name="dataType_id"  type="smallint">

@@ -7,12 +7,7 @@
 package model.admin;
 
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 /**
  *
@@ -25,7 +20,9 @@ public class GeneralConfig implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @Column(unique=true)
     private String name;
+
     private String value;
     private String description ;
 
