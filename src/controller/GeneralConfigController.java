@@ -63,9 +63,11 @@ public class GeneralConfigController {
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_GENERAL_CONFIGS+"')")
     public ResponseEntity<GeneralConfig> updateGeneralConfig(@RequestBody  @Valid GeneralConfigBackingForm form, @PathVariable Integer id) {
-        GeneralConfig updatedConfig = form.getGeneralConfig();
-        updatedConfig.setId(id);
-        configRepository.update(updatedConfig);
+    	
+    	GeneralConfig updatedConfig = null;
+        form.setId(id);
+        updatedConfig = configRepository.update(form.getGeneralConfig());
+
         return new ResponseEntity<GeneralConfig>(updatedConfig, HttpStatus.CREATED);
     }
 }

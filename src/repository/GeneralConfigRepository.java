@@ -39,8 +39,9 @@ public class GeneralConfigRepository {
         }
     }
 
-    public void update(GeneralConfig generalConfig) {
-        em.merge(generalConfig);
+    public GeneralConfig update(GeneralConfig generalConfig) {
+    	generalConfig = em.merge(generalConfig);
+        return generalConfig;
     }
 
     public void save(GeneralConfig generalConfig) {
