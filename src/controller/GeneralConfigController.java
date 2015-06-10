@@ -14,7 +14,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import repository.DataTypeRepository;
 import repository.GeneralConfigRepository;
 import utils.PermissionConstants;
@@ -69,7 +74,7 @@ public class GeneralConfigController {
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_GENERAL_CONFIGS+"')")
     public ResponseEntity<GeneralConfigViewModel> updateGeneralConfig(@RequestBody  @Valid GeneralConfigBackingForm form, @PathVariable Integer id) {
-    	
+
     	GeneralConfig updatedConfig = null;
         form.setId(id);
         updatedConfig = configRepository.update(form.getGeneralConfig());
