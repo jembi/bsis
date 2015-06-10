@@ -40,6 +40,7 @@ public class GeneralConfigRepository {
     }
 
     public GeneralConfig update(GeneralConfig generalConfig) {
+        generalConfig = getGeneralConfigById(generalConfig.getId());
     	generalConfig = em.merge(generalConfig);
         return generalConfig;
     }
