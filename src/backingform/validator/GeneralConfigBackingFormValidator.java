@@ -7,6 +7,7 @@ import model.admin.EnumDataType;
 import model.admin.GeneralConfig;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import repository.DataTypeRepository;
 import repository.GeneralConfigRepository;
 
 import java.util.Arrays;
@@ -20,11 +21,14 @@ public class GeneralConfigBackingFormValidator implements Validator {
 
     private UtilController utilController;
 
-    public GeneralConfigBackingFormValidator(Validator validator, GeneralConfigRepository configRepository, UtilController utilController) {
+    private DataTypeRepository dataTypeRepository;
+
+    public GeneralConfigBackingFormValidator(Validator validator, GeneralConfigRepository configRepository, UtilController utilController, DataTypeRepository dataTypeRepository) {
         super();
         this.validator = validator;
         this.configRepository = configRepository;
         this.utilController = utilController;
+        this.dataTypeRepository = dataTypeRepository;
     }
 
     @Override
@@ -38,42 +42,41 @@ public class GeneralConfigBackingFormValidator implements Validator {
         if (target == null || validator == null) {
             return;
         }
-
-        boolean error = false;
         GeneralConfigBackingForm formItem = (GeneralConfigBackingForm) target;
-        DataType dataType = formItem.getDataType();
+        DataType dataType = dataTypeRepository.getDataTypeByid(formItem.getDataType().getId());
 
-        EnumDataType enumDataType = EnumDataType.valueOf(formItem.getDataType().getDatatype().toUpperCase());
+        EnumDataType enumDataType = EnumDataType.valueOf(dataType.getDatatype().toUpperCase());
         switch(enumDataType){
             case TEXT:
                 // Allow all
                 break;
             case INTEGER:
                 if (!formItem.getValue().matches("[0-9]+"))
-                    error=true;
+                    errors.rejectValue("value","400", formItem.getName() + " is not an integer");
                 break;
             case DECIMAL:
                 if (!formItem.getValue().matches("[0-9]*\\.?[0-9]+"))
-                    error=true;
+                    errors.rejectValue("value","400", formItem.getName() + " is not a decimal");
                 break;
             case BOOLEAN:
                 if(!(formItem.getValue().equalsIgnoreCase("true") || formItem.getValue().equalsIgnoreCase("false")))
-                    error = true;
+                    errors.rejectValue("value","400", formItem.getName() + " is not a boolean");
                 break;
 
         }
-        if(error)
-            errors.rejectValue("value","400", formItem.getName() + " is incorrect");
+
 
         GeneralConfig generalConfig = new GeneralConfig();
+        generalConfig.setId(formItem.getId()); // I would like to get the Id from the url for put requests
         generalConfig.setName(formItem.getName());
         generalConfig.setValue(formItem.getValue());
         generalConfig.setDescription(formItem.getDescription());
         generalConfig.setDataType(dataType);
-        formItem.setGeneralConfig(generalConfig);
 
-        if (utilController.isDuplicateGeneralConfigName(generalConfig) && generalConfig.getId() != formItem.getId())
-            errors.rejectValue("generalConfig.name", "generalConfig.nonunique",
+        if (utilController.isDuplicateGeneralConfigName(generalConfig))
+            errors.rejectValue("name", "400",
                     "There exists a generalConfig with the same name.");
+
+        formItem.setGeneralConfig(generalConfig);
     }
 }

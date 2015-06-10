@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import repository.DataTypeRepository;
 import repository.GeneralConfigRepository;
 import utils.PermissionConstants;
 
@@ -30,11 +31,14 @@ public class GeneralConfigController {
     private GeneralConfigRepository configRepository;
 
     @Autowired
+    private DataTypeRepository dataTypeRepository;
+
+    @Autowired
     private UtilController utilController;
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(new GeneralConfigBackingFormValidator(binder.getValidator(), configRepository, utilController));
+        binder.setValidator(new GeneralConfigBackingFormValidator(binder.getValidator(), configRepository, utilController, dataTypeRepository));
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
