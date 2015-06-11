@@ -9,9 +9,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-/**
- * Created by duma on 2015/06/10.
- */
 @Repository
 @Transactional
 public class DataTypeRepository {

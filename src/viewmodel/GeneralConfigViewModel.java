@@ -3,9 +3,6 @@ package viewmodel;
 import model.admin.DataType;
 import model.admin.GeneralConfig;
 
-/**
- * Created by duma on 2015/06/01.
- */
 public class GeneralConfigViewModel {
 
     private GeneralConfig generalConfig;
