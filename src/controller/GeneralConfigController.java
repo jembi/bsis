@@ -25,7 +25,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping(value = "/configure")
+@RequestMapping(value = "/configurations")
 public class GeneralConfigController {
 
     @Autowired
