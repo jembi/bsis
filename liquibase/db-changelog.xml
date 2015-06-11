@@ -1093,6 +1093,7 @@
 		<dropColumn columnName="sequenceNumberContext" tableName="SequenceNumberStore"/>
 	</changeSet>
 
+	<!-- #194 Add General Configuration tables -->
 	<changeSet id="20150601-1124" author="debonair">
 		<createTable  tableName="DataType">
 			<column name="id" type="smallint" autoIncrement = "true">
@@ -1129,28 +1130,7 @@
 				<constraints foreignKeyName="Config_DataType_FK" references="DataType(id)"/>
 			</column>
 		</createTable>
-
-		<insert tableName="GeneralConfig">
-			<column name="id" value="1"></column>
-			<column name="name" value="donation.bpSystolicMax"></column>
-			<column name="value" value="250"></column>
-			<column name="description" value="Blood Pressure systolic value cannot be more than 250"></column>
-			<column name="dataType_id" value="2"></column>
-		</insert>
-		<insert tableName="GeneralConfig">
-			<column name="id" value="2"></column>
-			<column name="name" value="donation.bpDiastolicMax"></column>
-			<column name="value" value="150"></column>
-			<column name="description" value="Blood Pressure diastolic value cannot be less than 0"></column>
-			<column name="dataType_id" value="2"></column>
-		</insert>
-		<insert tableName="GeneralConfig">
-			<column name="id" value="3"></column>
-			<column name="name" value="donation.daysBetweenDonations"></column>
-			<column name="value" value="56"></column>
-			<column name="description" value="Donor can donate only after 56 dsya"></column>
-			<column name="dataType_id" value="3"></column>
-		</insert>
+		
 		<insert tableName="FormField">
 			<column name="form" value="GeneralConfig"></column>
 			<column name="FIELD" value="name"></column>
@@ -1197,6 +1177,32 @@
 			<column name="isTimeField" value="0"></column>
 		</insert>
 	</changeSet>
+
+	<!-- #194 Add General Configuration sample rows -->
+	<changeSet id="20150601-1125" author="debonair">
+		<insert tableName="GeneralConfig">
+			<column name="id" value="1"></column>
+			<column name="name" value="donation.bpSystolicMax"></column>
+			<column name="value" value="250"></column>
+			<column name="description" value="Blood Pressure systolic value cannot be more than 250"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="id" value="2"></column>
+			<column name="name" value="donation.bpDiastolicMax"></column>
+			<column name="value" value="150"></column>
+			<column name="description" value="Blood Pressure diastolic value cannot be less than 0"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="id" value="3"></column>
+			<column name="name" value="donation.daysBetweenDonations"></column>
+			<column name="value" value="56"></column>
+			<column name="description" value="Period between donations is restrcited to 56 days"></column>
+			<column name="dataType_id" value="3"></column>
+		</insert>
+	</changeSet>
+		
 
 
 </databaseChangeLog>
