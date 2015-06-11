@@ -28,11 +28,11 @@
     <intercept-url pattern="/donations/**" access="isFullyAuthenticated()" />
   </http>
   
-  <http pattern="/configure/**" create-session="never" use-expressions="true">
+  <http pattern="/configurations/**" create-session="never" use-expressions="true">
   	<http-basic />
     <session-management />
-    <intercept-url pattern="/configure/**" access="isAnonymous()" method="OPTIONS"/>
-    <intercept-url pattern="/configure/**" access="isFullyAuthenticated()" />
+    <intercept-url pattern="/configurations/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/configurations/**" access="isFullyAuthenticated()" />
   </http>
   
   <http pattern="/bloodtests/**" create-session="never" use-expressions="true">
