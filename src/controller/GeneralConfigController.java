@@ -22,6 +22,8 @@ import viewmodel.GeneralConfigViewModel;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -44,12 +46,15 @@ public class GeneralConfigController {
 
     @RequestMapping(method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_GENERAL_CONFIGS + "')")
-    public ResponseEntity<List<GeneralConfigViewModel>> generalConfigGenerator() {
+    public ResponseEntity<Map<String, Object>> generalConfigGenerator() {
+    	
+    	Map<String, Object> map = new HashMap<String, Object>();
         List<GeneralConfigViewModel> configs = new ArrayList<GeneralConfigViewModel>();
         for (GeneralConfig config : configRepository.getAll()) {
             configs.add(new GeneralConfigViewModel(config));
         }
-        return new ResponseEntity<List<GeneralConfigViewModel>>(configs, HttpStatus.OK);
+        map.put("configurations", configs);
+        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST)
