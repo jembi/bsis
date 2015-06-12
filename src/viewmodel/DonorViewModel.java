@@ -68,8 +68,8 @@ public class DonorViewModel {
       return donor.getBloodAbo() + donor.getBloodRh();
   }
 
-  public String getBirthDate() {
-	return CustomDateFormatter.getDateString(donor.getBirthDate());
+  public Date getBirthDate() {
+	return donor.getBirthDate();
   }
   
   public String getDateOfFirstDonation() {
@@ -105,12 +105,12 @@ public class DonorViewModel {
 		  return donor.getPreferredLanguage();
   }
   
-  public String getLastUpdated() {
-    return CustomDateFormatter.getDateTimeString(donor.getLastUpdated());
+  public Date getLastUpdated() {
+    return donor.getLastUpdated();
   }
 
-  public String getCreatedDate() {
-    return CustomDateFormatter.getDateTimeString(donor.getCreatedDate());
+  public Date getCreatedDate() {
+    return donor.getCreatedDate();
   }
 
   public String getCreatedBy() {
