@@ -25,7 +25,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping(value = "/configurations")
+@RequestMapping("/configurations")
 public class GeneralConfigController {
 
     @Autowired
@@ -42,7 +42,7 @@ public class GeneralConfigController {
         binder.setValidator(new GeneralConfigBackingFormValidator(binder.getValidator(), configRepository, utilController, dataTypeRepository));
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_GENERAL_CONFIGS + "')")
     public ResponseEntity<List<GeneralConfigViewModel>> generalConfigGenerator() {
         List<GeneralConfigViewModel> configs = new ArrayList<GeneralConfigViewModel>();
@@ -52,7 +52,7 @@ public class GeneralConfigController {
         return new ResponseEntity<List<GeneralConfigViewModel>>(configs, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_GENERAL_CONFIGS + "')")
     public ResponseEntity<GeneralConfigViewModel> addGeneralConfig(@RequestBody @Valid GeneralConfigBackingForm form) {
         configRepository.save(form.getGeneralConfig());
