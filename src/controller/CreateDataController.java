@@ -439,7 +439,7 @@ public class CreateDataController {
 
       collection.setPackType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()));
 
-      String collectionDate = CustomDateFormatter.getDateTimeString(getRandomCollectionDate());
+      Long collectionDate = CustomDateFormatter.getUnixTimestampLong(getRandomCollectionDate());
       collection.setCollectedOn(collectionDate);
       collection.setDonor(donors.get(Math.abs(random.nextInt()) % donors.size()));
       collection.setNotes("notes sample " + i);
@@ -727,8 +727,8 @@ public class CreateDataController {
       Date requiredDate = new DateTime(requestDate).plusDays(random.nextInt(21)).toDate();
       RequestBackingForm form = new RequestBackingForm();
       form.setRequestNumber(requestNumbers.get(i));
-      form.setRequestDate(CustomDateFormatter.getDateTimeString(requestDate));
-      form.setRequiredDate(CustomDateFormatter.getDateTimeString(requiredDate));
+      form.setRequestDate(CustomDateFormatter.getUnixTimestampLong(requestDate));
+      form.setRequiredDate(CustomDateFormatter.getUnixTimestampLong(requiredDate));
     /** issue - #225 straight object bindings
       form.setProductType(productTypes.get(random.nextInt(productTypes.size())).getId().toString());
       form.setRequestType(requestTypes.get(random.nextInt(requestTypes.size())).getId().toString());

@@ -41,11 +41,11 @@ public class CompatibilityTestBackingFormValidator implements Validator {
       return;
     ValidationUtils.invokeValidator(validator, obj, errors);
     CompatibilityTestBackingForm form = (CompatibilityTestBackingForm) obj;
-    String crossmatchTestDate = form.getCompatibilityTestDate();
-    if (!CustomDateFormatter.isDateTimeStringValid(crossmatchTestDate)) {
-      errors.rejectValue("compatiblityTest.compatibilityTestDate", "dateFormat.incorrect",
-          CustomDateFormatter.getDateTimeErrorMessage());
-    }
+    Long crossmatchTestDate = form.getCompatibilityTestDate();
+//    if (!CustomDateFormatter.isDateTimeStringValid(crossmatchTestDate)) {
+//      errors.rejectValue("compatiblityTest.compatibilityTestDate", "dateFormat.incorrect",
+//          CustomDateFormatter.getDateTimeErrorMessage());
+//    }
 
     String requestNumber = form.getRequestNumber();
     Request productRequest = null;

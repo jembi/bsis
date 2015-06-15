@@ -70,7 +70,7 @@ public class DonorBackingFormValidator implements Validator {
 
   private boolean validateBirthDate(DonorBackingForm form, Errors errors) {
 
-  String birthDate = form.getBirthDate();
+  Long birthDate = form.getBirthDate();
   
     Boolean isAgeFormatCorrect = form.isAgeFormatCorrect();
     if (isAgeFormatCorrect != null && !isAgeFormatCorrect) {
@@ -81,9 +81,9 @@ public class DonorBackingFormValidator implements Validator {
     try{
 
     	// if valid date
-    	if (CustomDateFormatter.isDateStringValid(birthDate) && birthDate != null && !birthDate.isEmpty()){
+    	if (birthDate != null){
     		
-    	  Date date = CustomDateFormatter.getDateFromString(birthDate);
+    	  Date date = CustomDateFormatter.getDateFromUnixTimestamp(birthDate);
     	  
 		  // verify Birthdate is not in the future
 		  if(utilController.isFutureDate(date)){

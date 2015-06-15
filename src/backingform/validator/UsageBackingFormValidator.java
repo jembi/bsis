@@ -38,10 +38,10 @@ public class UsageBackingFormValidator implements Validator {
     ValidationUtils.invokeValidator(validator, obj, errors);
     ProductUsageBackingForm form = (ProductUsageBackingForm) obj;
 
-    String usageDate = form.getUsageDate();
-    if (!CustomDateFormatter.isDateTimeStringValid(usageDate))
-      errors.rejectValue("usage.usageDate", "dateFormat.incorrect",
-          CustomDateFormatter.getDateTimeErrorMessage());
+    Long usageDate = form.getUsageDate();
+//    if (!CustomDateFormatter.isDateTimeStringValid(usageDate))
+//      errors.rejectValue("usage.usageDate", "dateFormat.incorrect",
+//          CustomDateFormatter.getDateTimeErrorMessage());
 
     updateRelatedEntities(form);
 

@@ -131,8 +131,8 @@ public class ReportsController {
   @PreAuthorize("hasRole('"+PermissionConstants.DONATIONS_REPORTING+"')")
   public 
   ResponseEntity<Map<String, Object>> getCollectionsReport(
-          @RequestParam(value = "dateCollectedFrom", required = false) String dateCollectedFrom,
-          @RequestParam(value = "dateCollectedTo", required = false) String dateCollectedTo,
+          @RequestParam(value = "dateCollectedFrom", required = false) Long dateCollectedFrom,
+          @RequestParam(value = "dateCollectedTo", required = false) Long dateCollectedTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
           @RequestParam(value = "panels", required = false) List<String> panels,
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
@@ -146,7 +146,7 @@ public class ReportsController {
       if (dateCollectedTo == null || dateCollectedTo.equals(""))
         dateTo = new Date();
       else
-        dateTo = CustomDateFormatter.getDateFromString(dateCollectedTo);
+        dateTo = CustomDateFormatter.getDateFromUnixTimestamp(dateCollectedTo);
 
       Calendar gcal = new GregorianCalendar();
       gcal.setTime(dateTo);
@@ -157,7 +157,7 @@ public class ReportsController {
       if (dateCollectedFrom == null || dateCollectedFrom.equals(""))
         dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
       else
-        dateFrom = CustomDateFormatter.getDateFromString(dateCollectedFrom);
+        dateFrom = CustomDateFormatter.getDateFromUnixTimestamp(dateCollectedFrom);
 
       Map<String, Map<Long, Long>> numCollections = collectionRepository
           .findNumberOfCollectedSamples(dateFrom, dateTo,
@@ -183,8 +183,8 @@ public class ReportsController {
   @PreAuthorize("hasRole('"+PermissionConstants.REQUESTS_REPORTING+"')")
   public 
   ResponseEntity<Map<String, Object>> getRequestsReport(
-          @RequestParam(value = "dateCollectedFrom", required = false) String dateCollectedFrom,
-          @RequestParam(value = "dateCollectedTo", required = false) String dateCollectedTo,
+          @RequestParam(value = "dateCollectedFrom", required = false) Long dateCollectedFrom,
+          @RequestParam(value = "dateCollectedTo", required = false) Long dateCollectedTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
           @RequestParam(value = "panels", required = false) List<String> panels,
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
@@ -196,7 +196,7 @@ public class ReportsController {
       if (dateCollectedTo == null || dateCollectedTo.equals(""))
         dateTo = new Date();
       else
-        dateTo = CustomDateFormatter.getDateFromString(dateCollectedTo);
+        dateTo = CustomDateFormatter.getDateFromUnixTimestamp(dateCollectedTo);
 
       Calendar gcal = new GregorianCalendar();
       gcal.setTime(dateTo);
@@ -207,7 +207,7 @@ public class ReportsController {
       if (dateCollectedFrom == null || dateCollectedFrom.equals(""))
         dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
       else
-        dateFrom = CustomDateFormatter.getDateFromString(dateCollectedFrom);
+        dateFrom = CustomDateFormatter.getDateFromUnixTimestamp(dateCollectedFrom);
 
       Map<String, Map<Long, Long>> numRequests = requestRepository
           .findNumberOfRequests(dateFrom, dateTo,
@@ -233,8 +233,8 @@ public class ReportsController {
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_DISCARDED_REPORTING+"')")
   public 
   ResponseEntity<Map<String, Object>> getDiscardedProductsReport(
-          @RequestParam(value = "dateCollectedFrom", required = false) String dateCollectedFrom,
-          @RequestParam(value = "dateCollectedTo", required = false) String dateCollectedTo,
+          @RequestParam(value = "dateCollectedFrom", required = false) Long dateCollectedFrom,
+          @RequestParam(value = "dateCollectedTo", required = false) Long dateCollectedTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
           @RequestParam(value = "panels", required = false) List<String> panels,
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
@@ -247,7 +247,7 @@ public class ReportsController {
       if (dateCollectedTo == null || dateCollectedTo.equals(""))
         dateTo = new Date();
       else
-        dateTo = CustomDateFormatter.getDateFromString(dateCollectedTo);
+        dateTo = CustomDateFormatter.getDateFromUnixTimestamp(dateCollectedTo);
 
       Calendar gcal = new GregorianCalendar();
       gcal.setTime(dateTo);
@@ -258,7 +258,7 @@ public class ReportsController {
       if (dateCollectedFrom == null || dateCollectedFrom.equals(""))
         dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
       else
-        dateFrom = CustomDateFormatter.getDateFromString(dateCollectedFrom);
+        dateFrom = CustomDateFormatter.getDateFromUnixTimestamp(dateCollectedFrom);
 
       Map<String, Map<Long, Long>> numDiscardedProducts = productRepository
           .findNumberOfDiscardedProducts(dateFrom, dateTo,
@@ -284,8 +284,8 @@ public class ReportsController {
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_ISSUED_REPORTING+"')")
   public 
   ResponseEntity<Map<String, Object>> getIssuedProductsReport(
-          @RequestParam(value = "dateIssuedFrom", required = false) String dateCollectedFrom,
-          @RequestParam(value = "dateIssuedTo", required = false) String dateCollectedTo,
+          @RequestParam(value = "dateIssuedFrom", required = false) Long dateCollectedFrom,
+          @RequestParam(value = "dateIssuedTo", required = false) Long dateCollectedTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
           @RequestParam(value = "panels", required = false) List<String> panels,
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
@@ -297,7 +297,7 @@ public class ReportsController {
       if (dateCollectedTo == null || dateCollectedTo.equals(""))
         dateTo = new Date();
       else
-        dateTo = CustomDateFormatter.getDateFromString(dateCollectedTo);
+        dateTo = CustomDateFormatter.getDateFromUnixTimestamp(dateCollectedTo);
 
       Calendar gcal = new GregorianCalendar();
       gcal.setTime(dateTo);
@@ -308,7 +308,7 @@ public class ReportsController {
       if (dateCollectedFrom == null || dateCollectedFrom.equals(""))
         dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
       else
-        dateFrom = CustomDateFormatter.getDateFromString(dateCollectedFrom);
+        dateFrom = CustomDateFormatter.getDateFromUnixTimestamp(dateCollectedFrom);
 
       Map<String, Map<Long, Long>> numIssuedProducts = productRepository
           .findNumberOfIssuedProducts(dateFrom, dateTo,
@@ -352,8 +352,8 @@ public class ReportsController {
   @PreAuthorize("hasRole('"+PermissionConstants.TTI_REPORTING+"')")
   public 
    ResponseEntity<Map<String, Object>> getTestResultsReport(
-          @RequestParam(value = "dateTestedFrom", required = false) String dateTestedFrom,
-          @RequestParam(value = "dateTestedTo", required = false) String dateTestedTo,
+          @RequestParam(value = "dateTestedFrom", required = false) Long dateTestedFrom,
+          @RequestParam(value = "dateTestedTo", required = false) Long dateTestedTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
           @RequestParam(value = "panels", required = false) List<String> panels,
           @RequestParam(value = "ttiTests", required = false) List<String> ttiTests) throws ParseException {
@@ -367,7 +367,7 @@ public class ReportsController {
       if (dateTestedTo == null || dateTestedTo.equals(""))
         dateTo = new Date();
       else
-        dateTo = CustomDateFormatter.getDateFromString(dateTestedTo);
+        dateTo = CustomDateFormatter.getDateFromUnixTimestamp(dateTestedTo);
       Calendar gcal = new GregorianCalendar();
       gcal.setTime(dateTo);
       gcal.add(Calendar.DATE, 1);
@@ -377,7 +377,7 @@ public class ReportsController {
       if (dateTestedFrom == null || dateTestedFrom.equals(""))
         dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
       else
-        dateFrom = CustomDateFormatter.getDateFromString(dateTestedFrom);
+        dateFrom = CustomDateFormatter.getDateFromUnixTimestamp(dateTestedFrom);
   
       Map<String, Map<Long, Long>> numTestResults = bloodTestingRepository
           .findNumberOfPositiveTests(ttiTests, dateFrom, dateTo,

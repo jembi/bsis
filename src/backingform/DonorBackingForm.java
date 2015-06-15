@@ -32,7 +32,7 @@ public class DonorBackingForm {
 
     private String ageSpecified;
 
-    private String dateOfFirstDonation;
+    private Long dateOfFirstDonation;
 
     @Valid
     private Address address;
@@ -56,13 +56,13 @@ public class DonorBackingForm {
         return donor.getDonorStatus();
     }
     
-    public String getBirthDate() {
-        return CustomDateFormatter.getDateString(donor.getBirthDate());
+    public Long getBirthDate() {
+        return CustomDateFormatter.getUnixTimestampLong(donor.getBirthDate());
     }
     
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(Long birthDate) {
         try {
-            donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
+            donor.setBirthDate(CustomDateFormatter.getDateFromUnixTimestamp(birthDate));
         } catch (ParseException ex) {
             ex.printStackTrace();
             donor.setBirthDate(null);
@@ -329,10 +329,10 @@ public class DonorBackingForm {
         return CustomDateFormatter.getDateString(donor.getDateOfFirstDonation());
     }
 
-    public void setDateOfFirstDonation(String dateOfFirstDonation) {
+    public void setDateOfFirstDonation(Long dateOfFirstDonation) {
         this.dateOfFirstDonation = dateOfFirstDonation;
         try {
-            donor.setDateOfFirstDonation(CustomDateFormatter.getDateFromString(dateOfFirstDonation));
+            donor.setDateOfFirstDonation(CustomDateFormatter.getDateFromUnixTimestamp(dateOfFirstDonation));
         } catch (ParseException ex) {
             ex.printStackTrace();
             donor.setDateOfFirstDonation(null);

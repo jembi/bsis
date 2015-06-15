@@ -21,7 +21,7 @@ public class CompatibilityTestBackingForm {
 
   private String collectionNumber;
 
-  private String compatiblityTestDate;
+  private Long compatiblityTestDate;
 
   public CompatibilityTestBackingForm() {
     compatibilityTest = new CompatibilityTest();
@@ -146,22 +146,22 @@ public class CompatibilityTestBackingForm {
     return compatibilityTest.getTestedBy();
   }
 
-  public String getCompatibilityTestDate() {
+  public Long getCompatibilityTestDate() {
     if (compatiblityTestDate != null)
       return compatiblityTestDate;
     if (compatibilityTest == null)
-      return "";
-    return CustomDateFormatter.getDateTimeString(compatibilityTest.getCompatibilityTestDate());
+      return null;
+    return CustomDateFormatter.getUnixTimestampLong(compatibilityTest.getCompatibilityTestDate());
   }
 
   public void setTestedBy(String testedBy) {
     compatibilityTest.setTestedBy(testedBy);
   }
 
-  public void setCompatibilityTestDate(String compatibilityTestDate) {
+  public void setCompatibilityTestDate(Long compatibilityTestDate) {
     this.compatiblityTestDate = compatibilityTestDate;
     try {
-      compatibilityTest.setCompatibilityTestDate(CustomDateFormatter.getDateTimeFromString(compatibilityTestDate));
+      compatibilityTest.setCompatibilityTestDate(CustomDateFormatter.getDateFromUnixTimestamp(compatibilityTestDate));
     } catch (ParseException ex) {
       ex.printStackTrace();
       compatibilityTest.setCompatibilityTestDate(null);

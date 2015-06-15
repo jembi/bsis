@@ -12,11 +12,13 @@ public class CustomDateFormatter {
 
   private static String dateTimePattern = "MM/dd/yyyy hh:mm:ss a"; 
   private static String dateTimePatternHumanReadable = "MM/dd/yyyy hour:minute:second AM/PM";
-  private static String timePattern = "hh:mm:ss a"; 
+  private static String timePattern = "hh:mm:ss a";
+  private static String unixTimestampPattern = "EEE, dd MMM yyyy hh:mm:ss z";
   
   private static DateFormat dateFormat;
   private static DateFormat dateTimeFormat;
   private static DateFormat timeFormat;
+  private static DateFormat unixTimestampFormat;
 
   static {
     dateFormat = new SimpleDateFormat(getDatePattern());
@@ -25,6 +27,7 @@ public class CustomDateFormatter {
     dateTimeFormat.setLenient(false);
     timeFormat = new SimpleDateFormat(getTimePattern());
     timeFormat.setLenient(false);
+    unixTimestampFormat = new SimpleDateFormat(getUnixTimestampPattern());
   }
 
   public static Date getDateFromString(String dateString) throws ParseException {
@@ -32,6 +35,10 @@ public class CustomDateFormatter {
     if (!isDateEmpty(dateString))
       date = dateFormat.parse(dateString);
     return date;
+  }
+
+  public static Date getDateFromUnixTimestamp(Long unixSeconds) throws ParseException {
+    return  new Date(unixSeconds*1000L);
   }
 
   public static Date getDateTimeFromString(String dateTimeString) throws ParseException {
@@ -125,6 +132,17 @@ public class CustomDateFormatter {
     else
       return dateTimeFormat.format(date);
   }
+
+  public static String getUnixTimestampString(Date date) {
+    if (date == null)
+      return "";
+    else
+      return unixTimestampFormat.format(date);
+  }
+
+  public static long getUnixTimestampLong(Date date) {
+    return date.getTime()/1000;
+  }
   
   public static String getTimeString(Date date) {
     if (date == null)
@@ -135,6 +153,9 @@ public class CustomDateFormatter {
 
   public static String getDatePattern() {
     return datePattern;
+  }
+  public static String getUnixTimestampPattern() {
+    return unixTimestampPattern;
   }
 
   public static void setDatePattern(String datePattern) {
@@ -164,6 +185,10 @@ public class CustomDateFormatter {
   
   public static void setTimePattern(String timePattern) {
     CustomDateFormatter.timePattern = timePattern;
+  }
+
+  public static void setUnixTimestampPattern(String unixTimestampPattern) {
+    CustomDateFormatter.unixTimestampPattern = unixTimestampPattern;
   }
 
   public static String format(Date date){

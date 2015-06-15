@@ -133,10 +133,10 @@ public class DeferralBackingForm {
         return CustomDateFormatter.getDateString(deferral.getDeferredUntil());
     }
     
-    public void setDeferredUntil(String deferredUntil) {
+    public void setDeferredUntil(Long deferredUntil) {
     	if (deferredUntil != null){
     		try {
-                deferral.setDeferredUntil(CustomDateFormatter.getDateFromString(deferredUntil));
+                deferral.setDeferredUntil(CustomDateFormatter.getDateFromUnixTimestamp(deferredUntil));
             } catch (ParseException ex) {
                 ex.printStackTrace();
                 deferral.setDeferredUntil(null);

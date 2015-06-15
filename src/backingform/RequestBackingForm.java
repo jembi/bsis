@@ -20,7 +20,7 @@ public class RequestBackingForm {
   @JsonIgnore
   private Request request;
 
-  private String patientBirthDate;
+  private Long patientBirthDate;
 
   public RequestBackingForm() {
     setRequest(new Request());
@@ -78,18 +78,18 @@ public class RequestBackingForm {
     request.setRequestNumber(requestNumber);
   }
 
-  public void setRequestDate(String requestDate) {
+  public void setRequestDate(Long requestDate) {
     try {
-      request.setRequestDate(CustomDateFormatter.getDateTimeFromString(requestDate));
+      request.setRequestDate(CustomDateFormatter.getDateFromUnixTimestamp(requestDate));
     } catch (ParseException ex) {
       ex.printStackTrace();
       request.setRequestDate(null);
     }
   }
 
-  public void setRequiredDate(String requiredDate) {
+  public void setRequiredDate(Long requiredDate) {
     try {
-      request.setRequiredDate(CustomDateFormatter.getDateFromString(requiredDate));
+      request.setRequiredDate(CustomDateFormatter.getDateFromUnixTimestamp(requiredDate));
     } catch (ParseException ex) {
       ex.printStackTrace();
       request.setRequiredDate(null);
@@ -199,18 +199,18 @@ public class RequestBackingForm {
     request.setPatientLastName(patientLastName);
   }
 
-  public String getPatientBirthDate() {
+  public Long getPatientBirthDate() {
     if (patientBirthDate != null)
       return patientBirthDate;
     if (request == null)
-      return "";
-    return CustomDateFormatter.getDateString(request.getPatientBirthDate());
+      return null;
+    return CustomDateFormatter.getUnixTimestampLong(request.getPatientBirthDate());
   }
 
-  public void setPatientBirthDate(String patientBirthDate) {
+  public void setPatientBirthDate(Long patientBirthDate) {
     this.patientBirthDate = patientBirthDate;
     try {
-      request.setPatientBirthDate(CustomDateFormatter.getDateFromString(patientBirthDate));
+      request.setPatientBirthDate(CustomDateFormatter.getDateFromUnixTimestamp(patientBirthDate));
     } catch (ParseException ex) {
       ex.printStackTrace();
       request.setPatientBirthDate(null);
