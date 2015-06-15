@@ -45,7 +45,7 @@ public class GeneralConfigController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_GENERAL_CONFIGS + "')")
+    // no @PreAuthorize() - allow anonymous access to GET list of general configs
     public ResponseEntity<Map<String, Object>> generalConfigGenerator() {
     	
     	Map<String, Object> map = new HashMap<String, Object>();
