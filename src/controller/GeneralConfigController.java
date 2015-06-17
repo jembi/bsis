@@ -22,10 +22,12 @@ import viewmodel.GeneralConfigViewModel;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
-@RequestMapping(value = "/configurations")
+@RequestMapping("/configurations")
 public class GeneralConfigController {
 
     @Autowired
@@ -42,17 +44,20 @@ public class GeneralConfigController {
         binder.setValidator(new GeneralConfigBackingFormValidator(binder.getValidator(), configRepository, utilController, dataTypeRepository));
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_GENERAL_CONFIGS + "')")
-    public ResponseEntity<List<GeneralConfigViewModel>> generalConfigGenerator() {
+    @RequestMapping(method = RequestMethod.GET)
+    // no @PreAuthorize() - allow anonymous access to GET list of general configs
+    public ResponseEntity<Map<String, Object>> generalConfigGenerator() {
+    	
+    	Map<String, Object> map = new HashMap<String, Object>();
         List<GeneralConfigViewModel> configs = new ArrayList<GeneralConfigViewModel>();
         for (GeneralConfig config : configRepository.getAll()) {
             configs.add(new GeneralConfigViewModel(config));
         }
-        return new ResponseEntity<List<GeneralConfigViewModel>>(configs, HttpStatus.OK);
+        map.put("configurations", configs);
+        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_GENERAL_CONFIGS + "')")
     public ResponseEntity<GeneralConfigViewModel> addGeneralConfig(@RequestBody @Valid GeneralConfigBackingForm form) {
         configRepository.save(form.getGeneralConfig());
