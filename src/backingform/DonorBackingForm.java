@@ -55,7 +55,7 @@ public class DonorBackingForm {
     public DonorStatus getDonorStatus() {
         return donor.getDonorStatus();
     }
-    
+
     public Long getBirthDate() {
         return CustomDateFormatter.getUnixTimestampLong(donor.getBirthDate());
     }

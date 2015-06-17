@@ -38,7 +38,10 @@ public class CustomDateFormatter {
   }
 
   public static Date getDateFromUnixTimestamp(Long unixSeconds) throws ParseException {
-    return  new Date(unixSeconds*1000L);
+    Date date = null;
+    if (unixSeconds != null)
+      date = new Date(unixSeconds*1000L);
+    return date;
   }
 
   public static Date getDateTimeFromString(String dateTimeString) throws ParseException {
@@ -140,8 +143,11 @@ public class CustomDateFormatter {
       return unixTimestampFormat.format(date);
   }
 
-  public static long getUnixTimestampLong(Date date) {
-    return date.getTime()/1000;
+  public static Long getUnixTimestampLong(Date date) {
+    if (date == null)
+      return null;
+    else
+      return date.getTime()/1000;
   }
   
   public static String getTimeString(Date date) {
