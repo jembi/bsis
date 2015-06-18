@@ -110,12 +110,12 @@ public class DonorController {
     List<CollectedSample> donations = donor.getCollectedSamples();
     
     map.put("currentlyDeferred",donorRepository.isCurrentlyDeferred(donor));
-    map.put("deferredUntil",CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
+    map.put("deferredUntil",CustomDateFormatter.getUnixTimestampLong(donorRepository.getLastDonorDeferralDate(id)));
     if(donations.size() > 0){
 	    map.put("lastDonation", getCollectionViewModel(donations.get(donations.size()-1)));
-	    map.put("dateOfFirstDonation",CustomDateFormatter.getDateString(donations.get(0).getCollectedOn()));
+	    map.put("dateOfFirstDonation",CustomDateFormatter.getUnixTimestampLong(donations.get(0).getCollectedOn()));
 	    map.put("totalDonations",getNumberOfDonations(donations));
-	    map.put("dueToDonate",CustomDateFormatter.getDateString(donor.getDueToDonate()));
+	    map.put("dueToDonate",CustomDateFormatter.getUnixTimestampLong(donor.getDueToDonate()));
     }
     else {
     	map.put("lastDonation", "");
