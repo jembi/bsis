@@ -30,9 +30,9 @@ public class CollectedSampleBackingForm {
 
   private List<String> centers;
   private List<String> sites;
-  private String collectedOn;
-  private String bleedStartTime;
-  private String bleedEndTime;
+  private Long collectedOn;
+  private Long bleedStartTime;
+  private Long bleedEndTime;
   private String donorNumber;
 
   // setting this to false is required as the use parameters from batch
@@ -64,58 +64,58 @@ public class CollectedSampleBackingForm {
     return sites;
   }
 
-  public String getCollectedOn() {
+  public Long getCollectedOn() {
     if (collectedOn != null)
       return collectedOn;
     if (collectedSample == null)
-      return "";
-    return CustomDateFormatter.getDateTimeString(collectedSample.getCollectedOn());
+      return null;
+    return CustomDateFormatter.getUnixTimestampLong(collectedSample.getCollectedOn());
   }
   
-  public String getBleedStartTime() {
+  public Long getBleedStartTime() {
     if (bleedStartTime != null)
       return bleedStartTime;
     if (collectedSample == null)
-      return "";
-    return CustomDateFormatter.getDateTimeString(collectedSample.getBleedStartTime());
+      return null;
+    return CustomDateFormatter.getUnixTimestampLong(collectedSample.getBleedStartTime());
   }
   
-  public String getBleedEndTime() {
+  public Long getBleedEndTime() {
     if (bleedEndTime != null)
       return bleedEndTime;
     if (collectedSample == null)
-      return "";
-    return CustomDateFormatter.getDateTimeString(collectedSample.getBleedEndTime());
+      return null;
+    return CustomDateFormatter.getUnixTimestampLong(collectedSample.getBleedEndTime());
   }
 
   public String getCollectionNumber() {
     return collectedSample.getCollectionNumber();
   }
 
-  public void setCollectedOn(String collectedOn) {
+  public void setCollectedOn(Long collectedOn) {
     this.collectedOn = collectedOn;
     try {
-      collectedSample.setCollectedOn(CustomDateFormatter.getDateFromString(collectedOn));
+      collectedSample.setCollectedOn(CustomDateFormatter.getDateFromUnixTimestamp(collectedOn));
     } catch (ParseException ex) {
       ex.printStackTrace();
       collectedSample.setCollectedOn(null);
     }
   }
   
-  public void setBleedStartTime(String bleedStartTime) {
+  public void setBleedStartTime(Long bleedStartTime) {
     this.bleedStartTime = bleedStartTime;
     try {
-      collectedSample.setBleedStartTime(CustomDateFormatter.getTimeFromString(bleedStartTime));
+      collectedSample.setBleedStartTime(CustomDateFormatter.getDateFromUnixTimestamp(bleedStartTime));
     } catch (ParseException ex) {
       ex.printStackTrace();
       collectedSample.setBleedStartTime(null);
     }
   }
   
-  public void setBleedEndTime(String bleedEndTime) {
+  public void setBleedEndTime(Long bleedEndTime) {
     this.bleedEndTime = bleedEndTime;
     try {
-      collectedSample.setBleedEndTime(CustomDateFormatter.getTimeFromString(bleedEndTime));
+      collectedSample.setBleedEndTime(CustomDateFormatter.getDateFromUnixTimestamp(bleedEndTime));
     } catch (ParseException ex) {
       ex.printStackTrace();
       collectedSample.setBleedEndTime(null);

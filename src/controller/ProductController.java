@@ -182,8 +182,8 @@ public class ProductController {
             @RequestParam(value = "donationIdentificationNumber", required=false, defaultValue ="") String collectionNumber,
             @RequestParam(value = "componentTypes", required=false, defaultValue ="") List<Integer> componentTypeIds,
             @RequestParam(value = "status", required=false, defaultValue ="") List<String> status,
-            @RequestParam(value = "donationDateFrom", required=false, defaultValue ="") String donationDateFrom,
-            @RequestParam(value = "donationDateTo", required=false, defaultValue ="") String donationDateTo) throws ParseException {
+            @RequestParam(value = "donationDateFrom", required=false, defaultValue ="") Long donationDateFrom,
+            @RequestParam(value = "donationDateTo", required=false, defaultValue ="") Long donationDateTo) throws ParseException {
 
     	
     	Map<String, Object> map = new HashMap<String, Object>();    	
@@ -199,10 +199,10 @@ public class ProductController {
         Date dateTo = null;
         
         if(!donationDateFrom.equals("")){
-	        	dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
+	        	dateFrom = CustomDateFormatter.getDateFromUnixTimestamp(donationDateFrom);
         }
         if(!donationDateTo.equals("")){
-	        	dateTo = CustomDateFormatter.getDateFromString(donationDateTo);
+	        	dateTo = CustomDateFormatter.getDateFromUnixTimestamp(donationDateTo);
         }
         
         results = productRepository.findAnyProduct(

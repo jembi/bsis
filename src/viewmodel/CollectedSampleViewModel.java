@@ -32,10 +32,10 @@ public class CollectedSampleViewModel {
     collection.copy(collection);
   }
 
-  public String getCollectedOn() {
+  public Long getCollectedOn() {
     if (collectedSample.getCollectedOn() == null)
-      return "";
-    return CustomDateFormatter.getDateString(collectedSample.getCollectedOn());
+      return null;
+    return CustomDateFormatter.getUnixTimestampLong(collectedSample.getCollectedOn());
   }
 
   public boolean equals(Object obj) {

@@ -126,17 +126,17 @@ public class DeferralBackingForm {
         deferral.setDeferralReasonText(deferralReasonText);
     }
     
-    public String getDeferredUntil() {
+    public Long getDeferredUntil() {
     	if (deferral.getDeferredUntil() == null) {
-            return "";
+            return null;
         }
-        return CustomDateFormatter.getDateString(deferral.getDeferredUntil());
+        return CustomDateFormatter.getUnixTimestampLong(deferral.getDeferredUntil());
     }
     
-    public void setDeferredUntil(String deferredUntil) {
+    public void setDeferredUntil(Long deferredUntil) {
     	if (deferredUntil != null){
     		try {
-                deferral.setDeferredUntil(CustomDateFormatter.getDateFromString(deferredUntil));
+                deferral.setDeferredUntil(CustomDateFormatter.getDateFromUnixTimestamp(deferredUntil));
             } catch (ParseException ex) {
                 ex.printStackTrace();
                 deferral.setDeferredUntil(null);

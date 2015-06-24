@@ -68,16 +68,16 @@ public class DonorViewModel {
       return donor.getBloodAbo() + donor.getBloodRh();
   }
 
-  public String getBirthDate() {
-	return CustomDateFormatter.getDateString(donor.getBirthDate());
+  public Long getBirthDate() {
+	return CustomDateFormatter.getUnixTimestampLong(donor.getBirthDate());
   }
   
-  public String getDateOfFirstDonation() {
+  public Long getDateOfFirstDonation() {
     Date dateOfFirstDonation = donor.getDateOfFirstDonation();
     if (dateOfFirstDonation != null) {
-      return CustomDateFormatter.getDateString(dateOfFirstDonation);
+      return CustomDateFormatter.getUnixTimestampLong(dateOfFirstDonation);
     } else {
-      return "";
+      return null;
     }
   }
   
@@ -105,12 +105,12 @@ public class DonorViewModel {
 		  return donor.getPreferredLanguage();
   }
   
-  public String getLastUpdated() {
-    return CustomDateFormatter.getDateTimeString(donor.getLastUpdated());
+  public Long getLastUpdated() {
+    return CustomDateFormatter.getUnixTimestampLong(donor.getLastUpdated());
   }
 
-  public String getCreatedDate() {
-    return CustomDateFormatter.getDateTimeString(donor.getCreatedDate());
+  public Long getCreatedDate() {
+    return CustomDateFormatter.getUnixTimestampLong(donor.getCreatedDate());
   }
 
   public String getCreatedBy() {
@@ -133,7 +133,7 @@ public class DonorViewModel {
 
   public String getDateOfLastDonation() {
     Date dateOfLastDonation = donor.getDateOfLastDonation();
-    return CustomDateFormatter.getDateString(dateOfLastDonation);
+    return CustomDateFormatter.getUnixTimestampString(dateOfLastDonation);
   }
 
   public DonorStatus getDonorStatus() {
@@ -174,8 +174,7 @@ public class DonorViewModel {
 	  return donor.getContactMethodType();
   }
   
-  public AddressType getPreferredAddressType(){
-     //return donor.getAddressType()!=null?donor.getAddressType().getPreferredAddressType():"";
+  public AddressType getPreferredAddressType(){     //return donor.getAddressType()!=null?donor.getAddressType().getPreferredAddressType():"";
 	 return donor.getAddressType();
   }
   

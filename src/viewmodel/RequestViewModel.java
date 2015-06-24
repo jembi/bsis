@@ -25,16 +25,16 @@ public class RequestViewModel {
     return request.getRequestNumber();
   }
 
-  public String getRequestDate() {
+  public Long getRequestDate() {
     if (request.getRequestDate() == null)
-      return "";
-    return CustomDateFormatter.getDateString(request.getRequestDate());
+      return null;
+    return CustomDateFormatter.getUnixTimestampLong(request.getRequestDate());
   }
 
-  public String getRequiredDate() {
+  public Long getRequiredDate() {
     if (request.getRequiredDate() == null)
-      return "";
-    return CustomDateFormatter.getDateString(request.getRequiredDate());
+      return null;
+    return CustomDateFormatter.getUnixTimestampLong(request.getRequiredDate());
   }
 
   public String getRequestDateWithTime() {
@@ -101,10 +101,10 @@ public class RequestViewModel {
     return request.getPatientLastName();
   }
 
-  public String getPatientBirthDate() {
+  public Long getPatientBirthDate() {
     if (request.getPatientBirthDate() == null)
-      return ""; 
-    return CustomDateFormatter.getDateString(request.getPatientBirthDate());
+      return null;
+    return CustomDateFormatter.getUnixTimestampLong(request.getPatientBirthDate());
   }
 
   public String getPatientGender() {

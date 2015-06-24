@@ -21,7 +21,7 @@ public class ProductUsageBackingForm {
   @Valid
   private ProductUsage usage;
 
-  private String usageDate;
+  private Long usageDate;
 
   public ProductUsageBackingForm() {
     usage = new ProductUsage();
@@ -80,12 +80,12 @@ public class ProductUsageBackingForm {
     return usage.getUseIndication();
   }
 
-  public String getUsageDate() {
+  public Long getUsageDate() {
     if (usageDate != null)
       return usageDate;
     if (usage == null)
-      return "";
-    return CustomDateFormatter.getDateTimeString(usage.getUsageDate());
+      return null;
+    return CustomDateFormatter.getUnixTimestampLong(usage.getUsageDate());
   }
 
   public String getNotes() {
@@ -146,10 +146,10 @@ public class ProductUsageBackingForm {
     usage.setUseIndication(useIndication);
   }
 
-  public void setUsageDate(String usageDate) {
+  public void setUsageDate(Long usageDate) {
     this.usageDate = usageDate;
     try {
-      usage.setUsageDate(CustomDateFormatter.getDateTimeFromString(usageDate));
+      usage.setUsageDate(CustomDateFormatter.getDateFromUnixTimestamp(usageDate));
     } catch (ParseException ex) {
       ex.printStackTrace();
       usage.setUsageDate(null);

@@ -39,12 +39,12 @@ public class BloodTestResultViewModel {
         return testResult.getResult();
     }
     
-    public String getTestedOn() {
+    public Long getTestedOn() {
     	Date testedOn = testResult.getTestedOn();
         if (testedOn != null) {
-          return CustomDateFormatter.getDateString(testedOn);
+          return CustomDateFormatter.getUnixTimestampLong(testedOn);
         } else {
-          return "";
+          return null;
         }
 	}
     

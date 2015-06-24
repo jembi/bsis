@@ -54,8 +54,8 @@ public class CollectionBatchViewModel {
     return CustomDateFormatter.getDateTimeString(collectionBatch.getLastUpdated());
   }
 
-  public String getCreatedDate() {
-    return CustomDateFormatter.getDateString(collectionBatch.getCreatedDate());
+  public Long getCreatedDate() {
+    return CustomDateFormatter.getUnixTimestampLong(collectionBatch.getCreatedDate());
   }
 
   public String getCreatedBy() {
