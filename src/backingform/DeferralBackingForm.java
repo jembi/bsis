@@ -126,11 +126,11 @@ public class DeferralBackingForm {
         deferral.setDeferralReasonText(deferralReasonText);
     }
     
-    public String getDeferredUntil() {
+    public Long getDeferredUntil() {
     	if (deferral.getDeferredUntil() == null) {
-            return "";
+            return null;
         }
-        return CustomDateFormatter.getDateString(deferral.getDeferredUntil());
+        return CustomDateFormatter.getUnixTimestampLong(deferral.getDeferredUntil());
     }
     
     public void setDeferredUntil(Long deferredUntil) {
