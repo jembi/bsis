@@ -65,7 +65,7 @@ public class RoleController {
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_ROLES + "')")
     public ResponseEntity updateRole(
             @Valid @RequestBody RoleBackingForm form, @PathVariable Long id) {
-        Set<Permission> permissions = setPermissions(form.getPermissionValues());
+        Set<Permission> permissions = form.getPermissions();
         Role role = form.getRole();
         role.setId(id);
         role.setName(form.getName());
@@ -88,12 +88,12 @@ public class RoleController {
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_ROLES + "')")
     public ResponseEntity addRole(
             @Valid @RequestBody RoleBackingForm form) {
-        Set<Permission> permissions = setPermissions(form.getPermissionValues());
+        //Set<Permission> permissions = form.getPermissions();
         Role role = new Role();
         role.setName(form.getName());
         role.setDescription(form.getDescription());
-        role.setPermissions(permissions);
-        roleRepository.addRole(role);
+        role.setPermissions(form.getPermissions());
+        role = roleRepository.addRole(role);
         form = new RoleBackingForm();
         return new ResponseEntity(new RoleViewModel(role), HttpStatus.CREATED);
     }
@@ -107,6 +107,7 @@ public class RoleController {
         
     }
 
+    /*
 	private Set<Permission> setPermissions(Set<String> permissionValues) {
          Set<Permission> permissions = new HashSet<Permission>();
 		for (String permissionId : permissionValues) {
@@ -118,6 +119,7 @@ public class RoleController {
 		}
 		return permissions;
 	}
+	*/
         
         private void addAllRolesToModel(Map<String, Object> map) {
 		List<RoleViewModel> roles = roleRepository.getAllRoles();

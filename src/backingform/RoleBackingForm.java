@@ -16,10 +16,10 @@ public class RoleBackingForm {
     private Role role;
 
     @Valid
-    private Set<String> permissionValues;
-
-    @Valid
     private String name;
+    
+    //@Valid
+    //private Set<Permission> permissions;
 
     public RoleBackingForm() {
         setRole(new Role());
@@ -30,11 +30,11 @@ public class RoleBackingForm {
     }
 
     public boolean equals(Object obj) {
-        return getRole().equals(obj);
+        return role.equals(obj);
     }
 
     public Long getId() {
-        return getRole().getId();
+        return role.getId();
     }
 
     public String getName() {
@@ -43,16 +43,19 @@ public class RoleBackingForm {
 
     @JsonIgnore
     public List<User> getUsers() {
-        return getRole().getUsers();
+        return role.getUsers();
     }
 
-    @JsonIgnore
+    /*public Set<Permission> getPermissions() {
+        return permissions;
+    }
+    */
     public Set<Permission> getPermissions() {
-        return getRole().getPermissions();
+        return role.getPermissions();
     }
 
     public String getDescription() {
-        return getRole().getDescription();
+        return role.getDescription();
     }
 
     public Role getRole() {
@@ -64,7 +67,7 @@ public class RoleBackingForm {
     }
 
     public void setId(Long id) {
-        getRole().setId(id);
+        role.setId(id);
     }
 
     public void setName(String name) {
@@ -72,24 +75,20 @@ public class RoleBackingForm {
     }
 
     public void setUsers(List<User> users) {
-        getRole().setUsers(users);
+        role.setUsers(users);
     }
 
+    /*
     public void setPermissions(Set<Permission> permissions) {
-        getRole().setPermissions(permissions);
+        this.permissions = permissions;
+    }
+    */
+    public void setPermissions(Set<Permission> permissions) {
+        role.setPermissions(permissions);
     }
 
     public void setDescription(String description) {
-        getRole().setDescription(description);
-    }
-
-    public void setPermissionValues(Set<String> permissionValues) {
-        this.permissionValues = permissionValues;
-    }
-
-   
-    public Set<String> getPermissionValues() {
-        return permissionValues;
+        role.setDescription(description);
     }
 
 }
