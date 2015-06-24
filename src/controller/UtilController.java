@@ -26,6 +26,7 @@ import model.product.ProductStatus;
 import model.producttype.ProductType;
 import model.request.Request;
 import model.user.User;
+import model.user.Role;
 import model.worksheet.Worksheet;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -35,6 +36,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
+
+import backingform.RoleBackingForm;
 
 import repository.CollectedSampleRepository;
 import repository.CollectionBatchRepository;
@@ -47,6 +50,7 @@ import repository.RequestRepository;
 import repository.SequenceNumberRepository;
 import repository.TipsRepository;
 import repository.UserRepository;
+import repository.RoleRepository;
 import repository.WorksheetRepository;
 import repository.GeneralConfigRepository;
 import security.V2VUserDetails;
@@ -94,6 +98,9 @@ public class UtilController {
   
   @Autowired
   private UserRepository userRepository;
+  
+  @Autowired
+  private RoleRepository roleRepository;
 
   @Autowired
   private GeneralConfigRepository generalConfigRepository;
@@ -437,6 +444,16 @@ public class UtilController {
       return false;
     GeneralConfig existingConfig = generalConfigRepository.getGeneralConfigByName(configName);
     if (existingConfig != null && !existingConfig.getId().equals(config.getId()))
+      return true;
+    return false;
+  }
+  
+  public boolean isDuplicateRoleName(RoleBackingForm role) {
+    String roleName = role.getName();
+    if (StringUtils.isBlank(roleName))
+      return false;
+    Role existingRole = roleRepository.findRoleByName(roleName);
+    if (existingRole != null && !existingRole.getId().equals(role.getId()))
       return true;
     return false;
   }
