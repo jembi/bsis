@@ -16,6 +16,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import model.admin.FormField;
+import model.admin.GeneralConfig;
 import model.collectedsample.CollectedSample;
 import model.collectionbatch.CollectionBatch;
 import model.donor.Donor;
@@ -47,6 +48,7 @@ import repository.SequenceNumberRepository;
 import repository.TipsRepository;
 import repository.UserRepository;
 import repository.WorksheetRepository;
+import repository.GeneralConfigRepository;
 import security.V2VUserDetails;
 import utils.DonorUtils;
 
@@ -92,6 +94,9 @@ public class UtilController {
   
   @Autowired
   private UserRepository userRepository;
+
+  @Autowired
+  private GeneralConfigRepository generalConfigRepository;
   
   public Map<String, Map<String, Object>> getFormFieldsForForm(String formName) {
     List<FormField> formFields = formFieldRepository.getFormFields(formName);
@@ -422,6 +427,16 @@ public class UtilController {
       return false;
     CollectedSample existingCollection = collectedSampleRepository.findCollectionByCollectionNumberIncludeDeleted(collectionNumber);
     if (existingCollection != null && !existingCollection.getId().equals(collection.getId()))
+      return true;
+    return false;
+  }
+
+  public boolean isDuplicateGeneralConfigName(GeneralConfig config) {
+    String configName = config.getName();
+    if (StringUtils.isBlank(configName))
+      return false;
+    GeneralConfig existingConfig = generalConfigRepository.getGeneralConfigByName(configName);
+    if (existingConfig != null && !existingConfig.getId().equals(config.getId()))
       return true;
     return false;
   }
