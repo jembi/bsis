@@ -36,7 +36,7 @@ public class BloodTestingRuleBackingForm {
     }
     
     public void setCategory(String category){
-        typingRule.setCategory(BloodTestCategory.valueOf(category.replaceAll("\\s","").toUpperCase(Locale.FRENCH)));
+        typingRule.setCategory(BloodTestCategory.valueOf(category.replaceAll("\\s","").toUpperCase()));
     } 
     
     public void setCollectionFieldChanged(String collectionField){
