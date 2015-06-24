@@ -82,15 +82,15 @@ public class RoleRepository {
 	}
 	
 	public Role addRole(Role role) throws IllegalArgumentException{
-	    em.merge(role);
+	    em.persist(role);
 	    em.flush();
-	    
 	    return role;
-	  }
-        public void deleteRole(Long id){
-            Role role = findRoleDetailById(id);
-            em.remove(role);
-        }
+	}
+	
+    public void deleteRole(Long id){
+        Role role = findRoleDetailById(id);
+        em.remove(role);
+    }
 
 	public Permission findPermissionByPermissionId(long permissionId) {
 		// TODO Auto-generated method stub
