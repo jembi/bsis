@@ -751,10 +751,11 @@ public class BloodTestingRepository {
 		em.persist(rule);
 	}
         */
-     public void saveBloodTypingRule(
+     public BloodTestingRule saveBloodTypingRule(
             BloodTestingRule bloodTestingRule) {
          bloodTestingRule.setIsActive(Boolean.TRUE);
-        em.persist(bloodTestingRule);
+         em.persist(bloodTestingRule);
+         return bloodTestingRule;
     }
 
     public BloodTestingRule updateBloodTypingRule(BloodTestingRule bloodTestingRule){
