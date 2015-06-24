@@ -15,12 +15,6 @@ public class RoleBackingForm {
     @JsonIgnore
     private Role role;
 
-    @Valid
-    private String name;
-    
-    //@Valid
-    //private Set<Permission> permissions;
-
     public RoleBackingForm() {
         setRole(new Role());
     }
@@ -38,7 +32,7 @@ public class RoleBackingForm {
     }
 
     public String getName() {
-        return name;
+        return role.getName();
     }
 
     @JsonIgnore
@@ -46,10 +40,6 @@ public class RoleBackingForm {
         return role.getUsers();
     }
 
-    /*public Set<Permission> getPermissions() {
-        return permissions;
-    }
-    */
     public Set<Permission> getPermissions() {
         return role.getPermissions();
     }
@@ -71,18 +61,13 @@ public class RoleBackingForm {
     }
 
     public void setName(String name) {
-        this.name = name;
+        role.setName(name);
     }
 
     public void setUsers(List<User> users) {
         role.setUsers(users);
     }
 
-    /*
-    public void setPermissions(Set<Permission> permissions) {
-        this.permissions = permissions;
-    }
-    */
     public void setPermissions(Set<Permission> permissions) {
         role.setPermissions(permissions);
     }

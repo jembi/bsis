@@ -37,8 +37,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
-import backingform.RoleBackingForm;
-
 import repository.CollectedSampleRepository;
 import repository.CollectionBatchRepository;
 import repository.DonorRepository;
@@ -448,7 +446,7 @@ public class UtilController {
     return false;
   }
   
-  public boolean isDuplicateRoleName(RoleBackingForm role) {
+  public boolean isDuplicateRoleName(Role role) {
     String roleName = role.getName();
     if (StringUtils.isBlank(roleName))
       return false;
