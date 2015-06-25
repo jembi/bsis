@@ -6,7 +6,6 @@ import java.util.Set;
 
 import model.user.Permission;
 import model.user.Role;
-import model.user.User;
 
 public class RoleViewModel {
 
@@ -25,10 +24,6 @@ public class RoleViewModel {
 
 	public String getName() {
 		return role.getName();
-	}
-
-	public List<User> getUsers() {
-		return role.getUsers();
 	}
 
 	public Set<Permission> getPermissions() {
