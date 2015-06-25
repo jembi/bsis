@@ -53,7 +53,7 @@ public class RoleController {
 		return map;
 	}
 
-	@RequestMapping(value = "/form", method = RequestMethod.GET)
+	@RequestMapping(value = "/permissions", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
 	public  Map<String, Object> editRoleFormGenerator() {
                 Map<String, Object> map = new HashMap<String, Object>();
@@ -108,12 +108,12 @@ public class RoleController {
         
     private void addAllRolesToModel(Map<String, Object> map) {
 		List<RoleViewModel> roles = roleRepository.getAllRoles();
-		map.put("allRoles", roles);
+		map.put("roles", roles);
 	}
 
 	private void addAllPermissionsToModel(Map<String, Object> map) {
 		List<Permission> permissions = roleRepository.getAllPermissionsByName();
-		map.put("allPermissions", permissions);
+		map.put("permissions", permissions);
 	}
         
 }
