@@ -455,6 +455,16 @@ public class UtilController {
       return true;
     return false;
   }
+  
+  public boolean isDuplicateUserName(User user) {
+    String userName = user.getUsername();
+    if (StringUtils.isBlank(userName))
+      return false;
+    User existingUser = userRepository.findUser(userName);
+    if (existingUser != null && !existingUser.getId().equals(user.getId()))
+      return true;
+    return false;
+  }
 
   public boolean isDuplicateRequestNumber(Request request) {
     String requestNumber = request.getRequestNumber();
