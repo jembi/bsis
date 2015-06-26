@@ -105,9 +105,11 @@ public class UserRepository {
     }
   }
 
-  public void addUser(User user) {
+  public User addUser(User user) {
     em.persist(user);
     em.flush();
+    em.refresh(user);
+    return user;
   }
   
 	public List<Role> getUserRole(String []str) {

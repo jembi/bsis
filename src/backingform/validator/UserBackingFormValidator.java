@@ -73,27 +73,21 @@ public class UserBackingFormValidator implements Validator {
   }
   
   private void checkRoles(UserBackingForm form, Errors errors) {
-	  if(form.getUserRoles()==null)
-		  errors.rejectValue("userRoles","user.selectRole" ,"Must select at least one Role");
+	  if(form.getRoles().isEmpty())
+		  errors.rejectValue("user.roles","user.selectRole" ,"Must select at least one Role");
 	  return;
   }
   
   private void checkUserName(UserBackingForm form, Errors errors) {
       
   	boolean flag=false;
-  	String userName=form.getUsername();
+  	String userName=form.getUser().getUsername();
   	User existingUser=null;
         
-      if (!userName.equals("")) {
-          existingUser = userRepository.findUser(userName);
+  	if (utilController.isDuplicateUserName(form.getUser())){
+    	errors.rejectValue("user.username", "userName.nonunique", "Username already exists.");
+    }
 
-          if (existingUser != null && !existingUser.getId().equals(form.getId())) {
-              errors.rejectValue("user.username", "userName.nonunique",
-                      "Username  already exists.");
-              return;
-
-          }
-      }
   	if(userName.length() <= 2 ||  userName.length() >= 50){
   		flag=true;
   	}

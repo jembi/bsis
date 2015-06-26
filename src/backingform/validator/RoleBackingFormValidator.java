@@ -40,27 +40,20 @@ public RoleBackingFormValidator(Validator validator, UtilController utilControll
 	 if (obj == null || validator == null)
       return;
     
-   	RoleBackingForm form = (RoleBackingForm) obj;  
 	ValidationUtils.invokeValidator(validator, obj, errors);
-    utilController.commonFieldChecks(form, "Role", errors);
+	RoleBackingForm form = (RoleBackingForm) obj; 
     
-   String roleName=form.getName();
-   Role existingRole ;
-// Role name cannot exist already
-    if(!roleName.equals(""))
-      {
-         existingRole=roleRepository.findRoleByName(roleName);
-         if(existingRole != null && !existingRole.getId().equals(form.getId()))
-            errors.rejectValue("Role.name", "roleName.nonunique",
-          "Role name already exists.");
-      }
-	if(form.getPermissionValues()==null)
-  	errors.rejectValue("Role.permissions", "permissions.empty",
+    if (utilController.isDuplicateRoleName(form.getRole())){
+    	errors.rejectValue("role.name", "roleName.nonunique",
+    	          "Role name already exists.");
+    }
+    
+	if(form.getPermissions().isEmpty()){
+		errors.rejectValue("Role.permissions", "permissions.empty",
 	            "Role must have one or more permissions");
-  
-     if(errors.hasErrors())
-        	    return;
-	    	
+	}
+	
+	utilController.commonFieldChecks(form, "Role", errors);
     
    }
 }

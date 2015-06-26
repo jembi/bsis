@@ -29,7 +29,7 @@ public class BloodTestingRuleController {
 
     @RequestMapping(method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TYPING_RULES + "')")
-    public Map<String, Object> configureBloodTypingTests() {
+    public ResponseEntity configureBloodTypingTests() {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("bloodTypingTests", bloodTestingRepository.getBloodTypingTests());
         List<BloodTestingRuleViewModel> rules = new ArrayList<BloodTestingRuleViewModel>();
@@ -37,27 +37,30 @@ public class BloodTestingRuleController {
             rules.add(new BloodTestingRuleViewModel(rule));
         }
         map.put("bloodTypingRules", rules);
-        return map;
+        return new ResponseEntity(map, HttpStatus.OK);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME + "')")
-    public Map<String, Object> getBloodTypingRuleSummary(@PathVariable Integer id) {
+    public ResponseEntity getBloodTypingRuleSummary(@PathVariable Integer id) {
 
         Map<String, Object> map = new HashMap<String, Object>();
         BloodTestingRuleViewModel bloodTestingRule;
         bloodTestingRule = new BloodTestingRuleViewModel(bloodTestingRepository.getBloodTestingRuleById(id));
         map.put("bloodTypingRule", bloodTestingRule);
-        return map;
+        return new ResponseEntity(map, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTS + "')")
     public ResponseEntity saveBloodTypingRule(
             @RequestBody BloodTestingRuleBackingForm form) {
+    	
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	BloodTestingRule typingRule = bloodTestingRepository.saveBloodTypingRule(form.getTypingRule());
+        map.put("bloodtest", new BloodTestingRuleViewModel(typingRule));
+        return new ResponseEntity(map,HttpStatus.CREATED);
 
-        bloodTestingRepository.saveBloodTypingRule(form.getTypingRule());
-        return new ResponseEntity(HttpStatus.CREATED);
 
     }
 

@@ -15,12 +15,6 @@ public class RoleBackingForm {
     @JsonIgnore
     private Role role;
 
-    @Valid
-    private Set<String> permissionValues;
-
-    @Valid
-    private String name;
-
     public RoleBackingForm() {
         setRole(new Role());
     }
@@ -30,29 +24,28 @@ public class RoleBackingForm {
     }
 
     public boolean equals(Object obj) {
-        return getRole().equals(obj);
+        return role.equals(obj);
     }
 
     public Long getId() {
-        return getRole().getId();
+        return role.getId();
     }
 
     public String getName() {
-        return name;
+        return role.getName();
     }
 
     @JsonIgnore
     public List<User> getUsers() {
-        return getRole().getUsers();
+        return role.getUsers();
     }
 
-    @JsonIgnore
     public Set<Permission> getPermissions() {
-        return getRole().getPermissions();
+        return role.getPermissions();
     }
 
     public String getDescription() {
-        return getRole().getDescription();
+        return role.getDescription();
     }
 
     public Role getRole() {
@@ -64,32 +57,23 @@ public class RoleBackingForm {
     }
 
     public void setId(Long id) {
-        getRole().setId(id);
+        role.setId(id);
     }
 
     public void setName(String name) {
-        this.name = name;
+        role.setName(name);
     }
 
     public void setUsers(List<User> users) {
-        getRole().setUsers(users);
+        role.setUsers(users);
     }
 
     public void setPermissions(Set<Permission> permissions) {
-        getRole().setPermissions(permissions);
+        role.setPermissions(permissions);
     }
 
     public void setDescription(String description) {
-        getRole().setDescription(description);
-    }
-
-    public void setPermissionValues(Set<String> permissionValues) {
-        this.permissionValues = permissionValues;
-    }
-
-   
-    public Set<String> getPermissionValues() {
-        return permissionValues;
+        role.setDescription(description);
     }
 
 }

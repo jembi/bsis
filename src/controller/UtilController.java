@@ -26,6 +26,7 @@ import model.product.ProductStatus;
 import model.producttype.ProductType;
 import model.request.Request;
 import model.user.User;
+import model.user.Role;
 import model.worksheet.Worksheet;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -47,6 +48,7 @@ import repository.RequestRepository;
 import repository.SequenceNumberRepository;
 import repository.TipsRepository;
 import repository.UserRepository;
+import repository.RoleRepository;
 import repository.WorksheetRepository;
 import repository.GeneralConfigRepository;
 import security.V2VUserDetails;
@@ -94,6 +96,9 @@ public class UtilController {
   
   @Autowired
   private UserRepository userRepository;
+  
+  @Autowired
+  private RoleRepository roleRepository;
 
   @Autowired
   private GeneralConfigRepository generalConfigRepository;
@@ -437,6 +442,26 @@ public class UtilController {
       return false;
     GeneralConfig existingConfig = generalConfigRepository.getGeneralConfigByName(configName);
     if (existingConfig != null && !existingConfig.getId().equals(config.getId()))
+      return true;
+    return false;
+  }
+  
+  public boolean isDuplicateRoleName(Role role) {
+    String roleName = role.getName();
+    if (StringUtils.isBlank(roleName))
+      return false;
+    Role existingRole = roleRepository.findRoleByName(roleName);
+    if (existingRole != null && !existingRole.getId().equals(role.getId()))
+      return true;
+    return false;
+  }
+  
+  public boolean isDuplicateUserName(User user) {
+    String userName = user.getUsername();
+    if (StringUtils.isBlank(userName))
+      return false;
+    User existingUser = userRepository.findUser(userName);
+    if (existingUser != null && !existingUser.getId().equals(user.getId()))
       return true;
     return false;
   }
