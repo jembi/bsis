@@ -108,6 +108,7 @@ public class UserRepository {
   public User addUser(User user) {
     em.persist(user);
     em.flush();
+    em.refresh(user);
     return user;
   }
   

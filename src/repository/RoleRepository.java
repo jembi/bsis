@@ -84,6 +84,7 @@ public class RoleRepository {
 	public Role addRole(Role role) throws IllegalArgumentException{
 	    em.persist(role);
 	    em.flush();
+	    em.refresh(role);
 	    return role;
 	}
 	
