@@ -55,20 +55,17 @@ public class UserController {
 
         Map<String, Object> map = new HashMap<String, Object>();
         addAllUsersToModel(map);
-        map.put("userRoles", roleRepository.getAllRoles());
+        map.put("roles", roleRepository.getAllRoles());
         return map;
     }
 
-    @RequestMapping(value = "/form", method = RequestMethod.GET)
+    @RequestMapping(value = "/roles", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
-    public 
-    Map<String, Object> editUserFormGenerator() {
+    public ResponseEntity getRoles() {
         UserBackingForm form = new UserBackingForm();
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("allRoles", roleRepository.getAllRoles());
-        map.put("userRoles", form.getRoles());
-        map.put("editUserForm", form);
-        return map;
+        map.put("roles", roleRepository.getAllRoles());
+        return new ResponseEntity(map, HttpStatus.OK);
     }
     
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
@@ -152,7 +149,7 @@ public class UserController {
     
        private void addAllUsersToModel(Map<String, Object> m) {
         List<UserViewModel> users = userRepository.getAllUsers();
-        m.put("allUsers", users);
+        m.put("users", users);
     }
 
     public List<Role> assignUserRoles(UserBackingForm userForm) {

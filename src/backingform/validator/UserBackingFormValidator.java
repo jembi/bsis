@@ -74,7 +74,7 @@ public class UserBackingFormValidator implements Validator {
   
   private void checkRoles(UserBackingForm form, Errors errors) {
 	  if(form.getUserRoles()==null)
-		  errors.rejectValue("userRoles","user.selectRole" ,"Must select at least one Role");
+		  errors.rejectValue("user.roles","user.selectRole" ,"Must select at least one Role");
 	  return;
   }
   
