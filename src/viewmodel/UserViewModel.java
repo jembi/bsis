@@ -9,7 +9,6 @@ import model.user.User;
 public class UserViewModel {
 
   private User user;
-  private String userRole="";
 
   public UserViewModel() {
   }
@@ -49,16 +48,5 @@ public class UserViewModel {
 		roleViewModels.add(new RoleViewModel(role));
 	}
 	return roleViewModels;
-  }
-  
-  public List<String> getUserRoles() {
-	List<Role> roles=user.getRoles();
-    List<String> userRoles = new ArrayList<String>();
-	if(roles.size() > 0){
-		for(Role r:roles){
-			userRoles.add(r.getId()+"");
-		}	
-	}
-	return userRoles;
   }
 }

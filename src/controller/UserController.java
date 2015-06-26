@@ -82,15 +82,14 @@ public class UserController {
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
     public ResponseEntity
             addUser(@Valid @RequestBody UserBackingForm form) {
-        
-            User user = form.getUser();
-            String hashedPassword = getHashedPassword(user.getPassword());
-            user.setPassword(hashedPassword);
-            user.setIsDeleted(false);
-            user.setRoles(assignUserRoles(form));
-            user.setIsActive(true);
-            user = userRepository.addUser(user);
-            return new ResponseEntity(new UserViewModel(user), HttpStatus.CREATED);
+
+        User user = form.getUser();
+        String hashedPassword = getHashedPassword(user.getPassword());
+        user.setPassword(hashedPassword);
+        user.setIsDeleted(false);
+        user.setIsActive(true);
+        user = userRepository.addUser(user);
+        return new ResponseEntity(new UserViewModel(user), HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
@@ -107,7 +106,6 @@ public class UserController {
             String hashedPassword = getHashedPassword(user.getPassword());
             user.setPassword(hashedPassword);
         }
-        user.setRoles(assignUserRoles(form));
         user.setIsActive(true);
         userRepository.updateUser(user, modifyPassword);
     
@@ -150,15 +148,6 @@ public class UserController {
        private void addAllUsersToModel(Map<String, Object> m) {
         List<UserViewModel> users = userRepository.getAllUsers();
         m.put("users", users);
-    }
-
-    public List<Role> assignUserRoles(UserBackingForm userForm) {
-        List<String> userRoles = userForm.getUserRoles();
-        List<Role> roles = new ArrayList<Role>();
-        for (String roleId : userRoles) {
-            roles.add(userRepository.findRoleById(Long.parseLong(roleId)));
-        }
-        return roles;
     }
 
     public String userRole(Integer id) {

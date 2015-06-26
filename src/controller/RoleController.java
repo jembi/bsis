@@ -93,7 +93,6 @@ public class RoleController {
         role.setDescription(form.getDescription());
         role.setPermissions(form.getPermissions());
         role = roleRepository.addRole(role);
-        form = new RoleBackingForm();
         return new ResponseEntity(new RoleViewModel(role), HttpStatus.CREATED);
     }
     

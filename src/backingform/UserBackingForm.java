@@ -16,7 +16,6 @@ public class UserBackingForm {
     private User user;
 
     private boolean modifyPassword;
-    private List<String> userRoles;
     private String userConfirmPassword;
     private String currentPassword;
     private String roleAdmin;
@@ -166,11 +165,6 @@ public class UserBackingForm {
     
     public void setRoles(List<Role> roles){
         user.setRoles(roles);
-    }
-
-  
-    public List<String> getUserRoles() {
-        return userRoles;
     }
 
     /**
