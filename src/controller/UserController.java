@@ -89,8 +89,8 @@ public class UserController {
             user.setIsDeleted(false);
             user.setRoles(assignUserRoles(form));
             user.setIsActive(true);
-            userRepository.addUser(user);
-            return new ResponseEntity(user, HttpStatus.CREATED);
+            user = userRepository.addUser(user);
+            return new ResponseEntity(new UserViewModel(user), HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
