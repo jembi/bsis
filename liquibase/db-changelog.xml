@@ -1218,6 +1218,12 @@
 			<column name="description" value="Global DateTime Format"></column>
 			<column name="dataType_id" value="1"></column>
 		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="timeFormat"></column>
+			<column name="value" value="hh:mm:ss a"></column>
+			<column name="description" value="Global Time Format"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
 	</changeSet>
 
 
