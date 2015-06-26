@@ -43,22 +43,22 @@ public class UserViewModel {
     return user.getUsername();
   }
   
-  public List<Role> getRoles() {
-    return user.getRoles();
-  }
-
-	/**
-	 * @return the userRole
-	 */
-	public List<String> getUserRoles() {
-		List<Role> roles=user.getRoles();
-                List<String> userRoles = new ArrayList<String>();
-		if(roles.size() > 0){
-			for(Role r:roles){
-                                userRoles.add(r.getId()+"");
-			}
-			
-		}
-		return userRoles;
+  public List<RoleViewModel> getRoles() {
+	List<RoleViewModel> roleViewModels = new ArrayList<RoleViewModel>();
+	for (Role role : user.getRoles()) {
+		roleViewModels.add(new RoleViewModel(role));
 	}
+	return roleViewModels;
+  }
+  
+  public List<String> getUserRoles() {
+	List<Role> roles=user.getRoles();
+    List<String> userRoles = new ArrayList<String>();
+	if(roles.size() > 0){
+		for(Role r:roles){
+			userRoles.add(r.getId()+"");
+		}	
+	}
+	return userRoles;
+  }
 }
