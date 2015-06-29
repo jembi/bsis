@@ -1,15 +1,11 @@
 package controller;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import model.collectedsample.CollectionConstants;
 import model.donor.Donor;
 import model.location.Location;
 import model.util.BloodGroup;
@@ -87,7 +83,8 @@ public class DonorCommunicationsController {
             @RequestParam(value="clinicDate",required=false ) String clinicDate,
             @RequestParam(value="lastDonationFromDate",required=false ) String lastDonationFromDate,
             @RequestParam(value="lastDonationToDate",required=false ) String lastDonationToDate,
-            @RequestParam(value="anyBloodGroup",required=false ) boolean anyBloodGroup) throws ParseException{
+            @RequestParam(value="anyBloodGroup",required=false ) boolean anyBloodGroup,
+            @RequestParam(value="noBloodGroup",required=false ) boolean noBloodGroup) throws ParseException{
        
        LOGGER.debug("Start DonorCommunicationsController:findDonorCommunicationsPagination");
    //    String eligibleClinicDate = getEligibleDonorDate(clinicDate);
@@ -102,7 +99,7 @@ public class DonorCommunicationsController {
         
         List<Donor> results = new ArrayList<Donor>();
         results = donorCommunicationsRepository.findDonors(setLocations(donorPanels), clinicDate, lastDonationFromDate,
-                lastDonationToDate, setBloodGroups(bloodGroups), anyBloodGroup, pagingParams, clinicDate);
+                lastDonationToDate, setBloodGroups(bloodGroups), anyBloodGroup, noBloodGroup, pagingParams, clinicDate);
         
         List<DonorViewModel> donors = new ArrayList<DonorViewModel>();
         
