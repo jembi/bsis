@@ -36,6 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import utils.DonorUtils;
+import viewmodel.DonorSummaryViewModel;
 
 @Repository
 @Transactional
@@ -509,6 +510,17 @@ public class DonorRepository {
                 "SELECT addressType FROM AddressType addressType", AddressType.class);
         return query.getResultList();
 
+    }
+    
+    public DonorSummaryViewModel findDonorSummaryByDonorNumber(String donorNumber) throws NoResultException {
+        return em.createQuery(
+                "SELECT NEW viewmodel.DonorSummaryViewModel(d.firstName, d.lastName, d.gender, d.birthDate) " +
+                "FROM Donor d " +
+                "WHERE d.donorNumber = :donorNumber " +
+                "AND d.isDeleted = FALSE ",
+                DonorSummaryViewModel.class)
+                .setParameter("donorNumber", donorNumber)
+                .getSingleResult();
     }
 
 }
