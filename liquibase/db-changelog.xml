@@ -1205,16 +1205,16 @@
 
 	<!-- Add default date and dateTime formats to GeneralConfig -->
 	<changeSet id="20150611-1409" author="debonair">
-		<comment>Add date formats</comment>
+		<comment>Add date and time formats</comment>
 		<insert tableName="GeneralConfig">
 			<column name="name" value="dateFormat"></column>
-			<column name="value" value="MM/dd/yyyy"></column>
+			<column name="value" value="dd/MM/yyyy"></column>
 			<column name="description" value="Global Date Format"></column>
 			<column name="dataType_id" value="1"></column>
 		</insert>
 		<insert tableName="GeneralConfig">
 			<column name="name" value="dateTimeFormat"></column>
-			<column name="value" value="MM/dd/yyyy hh:mm:ss a"></column>
+			<column name="value" value="dd/MM/yyyy hh:mm:ss a"></column>
 			<column name="description" value="Global DateTime Format"></column>
 			<column name="dataType_id" value="1"></column>
 		</insert>
