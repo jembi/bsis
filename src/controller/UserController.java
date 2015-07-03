@@ -115,7 +115,7 @@ public class UserController {
     
     @RequestMapping(method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.AUTHENTICATED+ "')")
-    public ResponseEntity updateLoginUserInfo(
+    public ResponseEntity<UserViewModel> updateLoginUserInfo(
             @Valid @RequestBody UserBackingForm form) {
 
         User user = form.getUser();
@@ -126,7 +126,7 @@ public class UserController {
             user.setPassword(hashedPassword);
         }
         userRepository.updateBasicUserInfo(user, modifyPassword);
-        return new ResponseEntity(user, HttpStatus.OK);
+        return new ResponseEntity<UserViewModel>(new UserViewModel(user), HttpStatus.OK);
     }
     
             
