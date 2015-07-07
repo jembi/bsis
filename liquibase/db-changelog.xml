@@ -1226,5 +1226,11 @@
 		</insert>
 	</changeSet>
 
+	<!-- ##288 change id of BloodTestingRule to smallint as mediumint is not 
+		supported in dbunit and it is unnecessary -->
+	<changeSet id="20150707-22:14" author="timler">
+		<modifyDataType columnName="id" newDataType="smallint"
+			tableName="BloodTestingRule" />
+	</changeSet>
 
 </databaseChangeLog>
