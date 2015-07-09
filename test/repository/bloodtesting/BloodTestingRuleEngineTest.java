@@ -157,41 +157,4 @@ public class BloodTestingRuleEngineTest {
 		Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
 		Assert.assertFalse("No TTI Uninterpretable", result.getTtiUninterpretable());
 	}
-	
-	// Useful to generate datasets from a database.
-	/*
-	public static void main(String[] args) throws Exception {
-		// database connection
-		Class driverClass = Class.forName("com.mysql.jdbc.Driver");
-		Connection jdbcConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/v2v_new", "root", "root");
-		IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
-		
-		// partial database export
-		QueryDataSet partialDataSet = new QueryDataSet(connection);
-		partialDataSet.addTable("BloodTestingRule");
-		partialDataSet.addTable("BloodTest");
-		partialDataSet.addTable("BloodTestResult");
-		partialDataSet.addTable("BloodTest_WorksheetType");
-		partialDataSet.addTable("BloodTest_AUD");
-		partialDataSet.addTable("BloodTestingRule_AUD");
-		partialDataSet.addTable("CollectedSample");
-		partialDataSet.addTable("Donor");
-		partialDataSet.addTable("DonationType");
-		partialDataSet.addTable("BloodBagType");
-		partialDataSet.addTable("Product");
-		partialDataSet.addTable("CollectionBatch");
-		partialDataSet.addTable("Location");
-		partialDataSet.addTable("ProductType");
-		partialDataSet.addTable("TestBatch");
-		partialDataSet.addTable("Contact");
-		partialDataSet.addTable("Address");
-		partialDataSet.addTable("AddressType");
-		partialDataSet.addTable("IdType");
-		partialDataSet.addTable("PreferredLanguage");
-		partialDataSet.addTable("ContactMethodType");
-		partialDataSet.addTable("DeferralReason");
-		partialDataSet.addTable("DonorDeferral");
-		partialDataSet.addTable("DonorCode");
-		FlatXmlDataSet.write(partialDataSet, new FileOutputStream("test/dataset/BloodTestingRuleRepositoryDataset_new.xml"));
-	}*/
 }
