@@ -157,4 +157,81 @@ public class BloodTestingRuleEngineTest {
 		Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
 		Assert.assertFalse("No TTI Uninterpretable", result.getTtiUninterpretable());
 	}
+	
+	@Test
+	@Transactional
+	public void testBloodTestingRuleEngineWithCollectedSample4() throws Exception {
+		CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(4l);
+		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(collectedSample, new HashMap<Long, String>());
+		Assert.assertEquals("bloodTypingMatchStatus is AMBIGUOUS", BloodTypingMatchStatus.AMBIGUOUS,
+		    result.getBloodTypingMatchStatus());
+		Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
+		Assert.assertEquals("bloodAb is B", "B", result.getBloodAbo());
+		Assert.assertEquals("bloodRh is +", "+", result.getBloodRh());
+		Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
+		Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
+		Assert.assertEquals("Available Test results", 5, result.getAvailableTestResults().size());
+		Map<String, String> tests = result.getAvailableTestResults();
+		Iterator<String> testIts = tests.values().iterator();
+		Assert.assertEquals("Available test result value", "B", testIts.next());
+		Assert.assertEquals("Available test result value", "NEG", testIts.next());
+		Assert.assertEquals("Available test result value", "POS", testIts.next());
+		Assert.assertEquals("Available test result value", "LOW", testIts.next());
+		Assert.assertEquals("Available test result value", "NEG", testIts.next());
+		Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
+		Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
+		Assert.assertFalse("No TTI Uninterpretable", result.getTtiUninterpretable());
+	}
+	
+	@Test
+	@Transactional
+	public void testBloodTestingRuleEngineWithCollectedSample5() throws Exception {
+		CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(5l);
+		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(collectedSample, new HashMap<Long, String>());
+		Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.MATCH,
+		    result.getBloodTypingMatchStatus());
+		Assert.assertEquals("ttiStatus is TTI_UNSAFE", TTIStatus.TTI_UNSAFE, result.getTTIStatus());
+		Assert.assertEquals("bloodAb is A", "A", result.getBloodAbo());
+		Assert.assertEquals("bloodRh is -", "-", result.getBloodRh());
+		Assert.assertEquals("2 pending TTI tests", 2, result.getPendingTTITestsIds().size());
+		Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
+		Assert.assertEquals("Available Test results", 8, result.getAvailableTestResults().size());
+		Map<String, String> tests = result.getAvailableTestResults();
+		Iterator<String> testIts = tests.values().iterator();
+		Assert.assertEquals("Available test result value", "A", testIts.next());
+		Assert.assertEquals("Available test result value", "POS", testIts.next());
+		Assert.assertEquals("Available test result value", "NEG", testIts.next());
+		Assert.assertEquals("Available test result value", "NEG", testIts.next());
+		Assert.assertEquals("Available test result value", "NEG", testIts.next());
+		Assert.assertEquals("Available test result value", "NEG", testIts.next());
+		Assert.assertEquals("Available test result value", "LOW", testIts.next());
+		Assert.assertEquals("Available test result value", "NEG", testIts.next());
+		Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
+		Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
+		Assert.assertFalse("No TTI Uninterpretable", result.getTtiUninterpretable());
+	}
+
+	@Test
+	@Transactional
+	public void testBloodTestingRuleEngineWithCollectedSample6() throws Exception {
+		CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(6l);
+		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(collectedSample, new HashMap<Long, String>());
+		Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.MATCH,
+		    result.getBloodTypingMatchStatus());
+		Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
+		Assert.assertEquals("bloodAb is unknown", "", result.getBloodAbo());
+		Assert.assertEquals("bloodRh is unknown", "", result.getBloodRh());
+		Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
+		Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
+		Assert.assertEquals("Available Test results", 3, result.getAvailableTestResults().size());
+		Map<String, String> tests = result.getAvailableTestResults();
+		Iterator<String> testIts = tests.values().iterator();
+		Assert.assertEquals("Available test result value", "Z", testIts.next());
+		Assert.assertEquals("Available test result value", "?", testIts.next());
+		Assert.assertEquals("Available test result value", "-", testIts.next());
+		Assert.assertTrue("ABO Uninterpretable", result.getAboUninterpretable());
+		Assert.assertTrue("RH Uninterpretable", result.getRhUninterpretable());
+		// TTI Uninterpretable is always set to false - is this a bug?
+		//Assert.assertTrue("TTI Uninterpretable", result.getTtiUninterpretable());
+	}
 }

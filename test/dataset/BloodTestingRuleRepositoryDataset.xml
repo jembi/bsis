@@ -331,6 +331,30 @@
 		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
 		donorPanel_id="1" bleedStartTime="1970-01-01 11:24:30.0" bleedEndTime="1970-01-01 11:44:30.0"
 		bloodTypingMatchStatus="NOT_DONE" />
+	<CollectedSample id="4" bloodAbo="B" bloodRh="+"
+		bloodTypingStatus="NOT_DONE" collectedOn="2015-04-03 00:00:00.0"
+		collectionNumber="123123" extraBloodTypeInformation="" isDeleted="0"
+		createdDate="2015-04-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
+		ttiStatus="NOT_DONE" bloodBagType_id="1" collectionBatch_id="1"
+		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
+		donorPanel_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
+		bloodTypingMatchStatus="AMBIGUOUS" />
+	<CollectedSample id="5" bloodAbo="A" bloodRh="-"
+		bloodTypingStatus="COMPLETE" collectedOn="2015-04-04 00:00:00.0"
+		collectionNumber="124124" extraBloodTypeInformation="" isDeleted="0"
+		createdDate="2015-04-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
+		ttiStatus="TTI_UNSAFE" bloodBagType_id="1" collectionBatch_id="1"
+		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
+		donorPanel_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
+		bloodTypingMatchStatus="MATCH" />
+	<CollectedSample id="6" bloodAbo="A" bloodRh="-"
+		bloodTypingStatus="COMPLETE" collectedOn="2015-04-05 00:00:00.0"
+		collectionNumber="125125" extraBloodTypeInformation="" isDeleted="0"
+		createdDate="2015-04-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
+		ttiStatus="TTI_SAFE" bloodBagType_id="1" collectionBatch_id="1"
+		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
+		donorPanel_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
+		bloodTypingMatchStatus="MATCH" />
 
 	<BloodTestResult id="1" createdDate="2015-02-06 02:09:13.0"
 		lastUpdated="2015-02-06 02:09:13.0" notes="" result="NEG"
@@ -403,6 +427,74 @@
 	<BloodTestResult id="18" createdDate="2015-06-24 06:39:25.0"
 		lastUpdated="2015-06-24 06:39:25.0" notes="" result="NEG"
 		testedOn="2015-06-24 06:39:25.0" bloodTest_id="26" collectedSample_id="2"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="19" createdDate="2015-04-24 04:43:06.0"
+		lastUpdated="2015-04-24 04:43:06.0" notes="" result="B"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" collectedSample_id="4"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="20" createdDate="2015-04-24 04:43:06.0"
+		lastUpdated="2015-04-24 04:43:06.0" notes="" result="POS"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="2" collectedSample_id="4"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="21" createdDate="2015-04-24 04:43:06.0"
+		lastUpdated="2015-04-24 04:43:06.0" notes="" result="LOW"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="3" collectedSample_id="4"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="22" createdDate="2015-04-24 04:43:06.0"
+		lastUpdated="2015-04-24 04:43:06.0" notes="" result="NEG"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="4" collectedSample_id="4"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="23" createdDate="2015-06-24 06:39:25.0"
+		lastUpdated="2015-06-24 06:39:25.0" notes="" result="NEG"
+		testedOn="2015-06-24 06:39:25.0" bloodTest_id="17" collectedSample_id="4"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="24" createdDate="2015-04-24 04:42:49.0"
+		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
+		testedOn="2015-04-24 04:30:49.0" bloodTest_id="17" collectedSample_id="5"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="25" createdDate="2015-04-24 04:42:49.0"
+		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
+		testedOn="2015-04-24 04:42:49.0" bloodTest_id="20" collectedSample_id="5"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="26" createdDate="2015-04-24 04:42:49.0"
+		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
+		testedOn="2015-04-24 04:42:49.0" bloodTest_id="23" collectedSample_id="5"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="27" createdDate="2015-04-24 04:42:49.0"
+		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
+		testedOn="2015-04-24 04:42:49.0" bloodTest_id="26" collectedSample_id="5"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="28" createdDate="2015-04-24 04:43:06.0"
+		lastUpdated="2015-04-24 04:43:06.0" notes="" result="A"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" collectedSample_id="5"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="29" createdDate="2015-04-24 04:43:06.0"
+		lastUpdated="2015-04-24 04:43:06.0" notes="" result="NEG"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="2" collectedSample_id="5"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="30" createdDate="2015-04-24 04:43:06.0"
+		lastUpdated="2015-04-24 04:43:06.0" notes="" result="LOW"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="3" collectedSample_id="5"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="31" createdDate="2015-04-24 04:43:06.0"
+		lastUpdated="2015-04-24 04:43:06.0" notes="" result="NEG"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="4" collectedSample_id="5"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="32" createdDate="2015-04-24 04:42:49.0"
+		lastUpdated="2015-04-24 04:42:49.0" notes="" result="POS"
+		testedOn="2015-04-24 04:42:49.0" bloodTest_id="17" collectedSample_id="5"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="33" createdDate="2015-04-24 04:43:06.0"
+		lastUpdated="2015-04-24 04:43:06.0" notes="" result="Z"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" collectedSample_id="6"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="35" createdDate="2015-04-24 04:43:06.0"
+		lastUpdated="2015-04-24 04:43:06.0" notes="" result="-"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="2" collectedSample_id="6"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="36" createdDate="2015-04-24 04:43:06.0"
+		lastUpdated="2015-04-24 04:43:06.0" notes="" result="?"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="17" collectedSample_id="6"
 		createdBy_id="1" lastUpdatedBy_id="1" />
 
 	<Product id="1" createdOn="2015-02-02 10:26:36.0" expiresOn="2015-03-09 10:26:36.0"
