@@ -91,10 +91,10 @@ public class BloodTestingRuleEngineTest {
 		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(collectedSample, new HashMap<Long, String>());
 		Assert.assertEquals("bloodTypingMatchStatus is MATCH", result.getBloodTypingMatchStatus(),
 		    BloodTypingMatchStatus.MATCH);
-		Assert.assertEquals("ttiStatus is TTI_SAFE", result.getTTIStatus(), TTIStatus.TTI_SAFE);
-		Assert.assertEquals("bloodAb is )", result.getBloodAbo(), "O");
-		Assert.assertEquals("bloodRh is +", result.getBloodRh(), "+");
-		Assert.assertTrue("No pending TTI tests", result.getPendingTTITestsIds().size() == 0);
+		Assert.assertEquals("ttiStatus is TTI_SAFE", TTIStatus.TTI_SAFE, result.getTTIStatus());
+		Assert.assertEquals("bloodAb is )", "O", result.getBloodAbo());
+		Assert.assertEquals("bloodRh is +", "+", result.getBloodRh());
+		Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
 		Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
 		Assert.assertEquals("No pending tti tests", 0, result.getPendingTTITestsIds().size());
 		Map<String, String> tests = result.getAvailableTestResults();
@@ -117,10 +117,10 @@ public class BloodTestingRuleEngineTest {
 		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(collectedSample, new HashMap<Long, String>());
 		Assert.assertEquals("bloodTypingMatchStatus is MATCH", result.getBloodTypingMatchStatus(),
 		    BloodTypingMatchStatus.MATCH);
-		Assert.assertEquals("ttiStatus is TTI_SAFE", result.getTTIStatus(), TTIStatus.TTI_SAFE);
-		Assert.assertEquals("bloodAb is )", result.getBloodAbo(), "A");
-		Assert.assertEquals("bloodRh is +", result.getBloodRh(), "-");
-		Assert.assertTrue("No pending TTI tests", result.getPendingTTITestsIds().size() == 0);
+		Assert.assertEquals("ttiStatus is TTI_SAFE", TTIStatus.TTI_SAFE, result.getTTIStatus());
+		Assert.assertEquals("bloodAb is )", "A", result.getBloodAbo());
+		Assert.assertEquals("bloodRh is +", "-", result.getBloodRh());
+		Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
 		Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
 		Assert.assertEquals("No pending tti tests", 0, result.getPendingTTITestsIds().size());
 		Assert.assertEquals("Available Test results", 8, result.getAvailableTestResults().size());
@@ -146,10 +146,10 @@ public class BloodTestingRuleEngineTest {
 		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(collectedSample, new HashMap<Long, String>());
 		Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", result.getBloodTypingMatchStatus(),
 		    BloodTypingMatchStatus.NOT_DONE);
-		Assert.assertEquals("ttiStatus is NOT_DONE", result.getTTIStatus(), TTIStatus.NOT_DONE);
-		Assert.assertEquals("bloodAb is empty", result.getBloodAbo().length(), 0);
-		Assert.assertEquals("bloodRh is empty", result.getBloodRh().length(), 0);
-		Assert.assertTrue("No pending TTI tests", result.getPendingTTITestsIds().size() == 0);
+		Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
+		Assert.assertEquals("bloodAb is empty", 0, result.getBloodAbo().length());
+		Assert.assertEquals("bloodRh is empty", 0, result.getBloodRh().length());
+		Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
 		Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
 		Assert.assertEquals("No pending tti tests", 0, result.getPendingTTITestsIds().size());
 		Assert.assertEquals("No availale test results", 0, result.getAvailableTestResults().size());
