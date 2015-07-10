@@ -30,6 +30,7 @@ import repository.DonorRepository;
 import repository.LocationRepository;
 import utils.PermissionConstants;
 import viewmodel.DonorDeferralViewModel;
+import viewmodel.DonorSummaryViewModel;
 import viewmodel.DonorViewModel;
 import viewmodel.CollectedSampleViewModel;
 import utils.CustomDateFormatter;
@@ -125,6 +126,19 @@ public class DonorController {
     }
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
+  
+    @RequestMapping(value = "/summaries", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
+    public ResponseEntity<Map<String, Object>> viewDonorSummary(HttpServletRequest request,
+            @RequestParam(value = "donorNumber", required = true) String donorNumber) {
+
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        DonorSummaryViewModel donorSummary = donorRepository.findDonorSummaryByDonorNumber(donorNumber);
+        map.put("donor", donorSummary);
+
+        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    }
 
   @RequestMapping(value = "/{id}/donations", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
