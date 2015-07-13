@@ -55,35 +55,41 @@ public class UserController {
 
         Map<String, Object> map = new HashMap<String, Object>();
         addAllUsersToModel(map);
-        map.put("userRoles", roleRepository.getAllRoles());
+        map.put("roles", roleRepository.getAllRoles());
         return map;
     }
 
-    @RequestMapping(value = "/form", method = RequestMethod.GET)
+    @RequestMapping(value = "/roles", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
-    public 
-    Map<String, Object> editUserFormGenerator() {
+    public ResponseEntity getRoles() {
         UserBackingForm form = new UserBackingForm();
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("allRoles", roleRepository.getAllRoles());
-        map.put("userRoles", form.getRoles());
-        map.put("editUserForm", form);
-        return map;
+        map.put("roles", roleRepository.getAllRoles());
+        return new ResponseEntity(map, HttpStatus.OK);
     }
+    
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+    public  ResponseEntity getUserDetails(@PathVariable Integer id){
+         Map<String, Object> map = new HashMap<String, Object>();
+         User user = userRepository.findUserById(id);
+         map.put("user", new UserViewModel(user));
+         return new ResponseEntity(map, HttpStatus.OK);
+    }
+     
 
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
     public ResponseEntity
             addUser(@Valid @RequestBody UserBackingForm form) {
-        
-            User user = form.getUser();
-            String hashedPassword = getHashedPassword(user.getPassword());
-            user.setPassword(hashedPassword);
-            user.setIsDeleted(false);
-            user.setRoles(assignUserRoles(form));
-            user.setIsActive(true);
-            userRepository.addUser(user);
-            return new ResponseEntity(user, HttpStatus.CREATED);
+
+        User user = form.getUser();
+        String hashedPassword = getHashedPassword(user.getPassword());
+        user.setPassword(hashedPassword);
+        user.setIsDeleted(false);
+        user.setIsActive(true);
+        user = userRepository.addUser(user);
+        return new ResponseEntity(new UserViewModel(user), HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
@@ -100,7 +106,6 @@ public class UserController {
             String hashedPassword = getHashedPassword(user.getPassword());
             user.setPassword(hashedPassword);
         }
-        user.setRoles(assignUserRoles(form));
         user.setIsActive(true);
         userRepository.updateUser(user, modifyPassword);
     
@@ -110,7 +115,7 @@ public class UserController {
     
     @RequestMapping(method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.AUTHENTICATED+ "')")
-    public ResponseEntity updateLoginUserInfo(
+    public ResponseEntity<UserViewModel> updateLoginUserInfo(
             @Valid @RequestBody UserBackingForm form) {
 
         User user = form.getUser();
@@ -121,7 +126,7 @@ public class UserController {
             user.setPassword(hashedPassword);
         }
         userRepository.updateBasicUserInfo(user, modifyPassword);
-        return new ResponseEntity(user, HttpStatus.OK);
+        return new ResponseEntity<UserViewModel>(new UserViewModel(user), HttpStatus.OK);
     }
     
             
@@ -142,16 +147,7 @@ public class UserController {
     
        private void addAllUsersToModel(Map<String, Object> m) {
         List<UserViewModel> users = userRepository.getAllUsers();
-        m.put("allUsers", users);
-    }
-
-    public List<Role> assignUserRoles(UserBackingForm userForm) {
-        List<String> userRoles = userForm.getUserRoles();
-        List<Role> roles = new ArrayList<Role>();
-        for (String roleId : userRoles) {
-            roles.add(userRepository.findRoleById(Long.parseLong(roleId)));
-        }
-        return roles;
+        m.put("users", users);
     }
 
     public String userRole(Integer id) {

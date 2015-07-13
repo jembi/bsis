@@ -1,18 +1,12 @@
-
 package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 
-/**
- *
- * @author srikanth
- */
 public class ProductTypeCombinationBackingForm {
-    
     @JsonIgnore
     private ProductTypeCombination productTypeCombination;
     
@@ -27,8 +21,7 @@ public class ProductTypeCombinationBackingForm {
     public void setProductTypeCombination(ProductTypeCombination productTypeCombination) {
         this.productTypeCombination = productTypeCombination;
     }
-    
-    
+     
     public Integer getId() {
         return productTypeCombination.getId();
     }
@@ -37,13 +30,13 @@ public class ProductTypeCombinationBackingForm {
         productTypeCombination.setId(id);
     }
     
-    public Set<ProductType> getProductTypes() {
+    public List<ProductType> getProductTypes() {
         return productTypeCombination.getProductTypes();
     }
     
-    public void setProductTypes(Set<Integer> productTypeIds) {
+    public void setProductTypes(List<Integer> productTypeIds) {
         
-        Set<ProductType> productTypes = new HashSet<ProductType>();
+        List<ProductType> productTypes = new ArrayList<ProductType>();
         ProductType productType = new ProductType();
         for (Integer productTypeId : productTypeIds) {
             productType.setId(productTypeId);

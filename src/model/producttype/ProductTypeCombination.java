@@ -2,6 +2,7 @@ package model.producttype;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +14,8 @@ import javax.persistence.ManyToMany;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Audited
 @Entity
@@ -30,8 +33,14 @@ public class ProductTypeCombination {
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @ManyToMany(fetch=FetchType.EAGER)
-  private Set<ProductType> productTypes;
-
+  @Fetch(FetchMode.SELECT)
+  private List<ProductType> productTypes;
+  
+  @NotAudited
+  @ManyToMany(mappedBy="producedProductTypeCombinations", fetch = FetchType.EAGER)
+  @Fetch(FetchMode.SELECT)
+  private Set<ProductType> sourceProductTypes;
+  
   private Boolean isDeleted;
 
   public Integer getId() {
@@ -42,12 +51,20 @@ public class ProductTypeCombination {
     this.id = id;
   }
 
-  public Set<ProductType> getProductTypes() {
+  public List<ProductType> getProductTypes() {
     return productTypes;
   }
 
-  public void setProductTypes(Set<ProductType> productTypes) {
+  public void setProductTypes(List<ProductType> productTypes) {
     this.productTypes = productTypes;
+  }
+  
+  public Set<ProductType> getSourceProductTypes() {
+    return sourceProductTypes;
+  }
+
+  public void setSourceProductTypes(Set<ProductType> sourceProductTypes) {
+    this.sourceProductTypes = sourceProductTypes;
   }
 
   public String getCombinationName() {

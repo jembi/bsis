@@ -45,7 +45,7 @@ public class ProductBackingFormValidator implements Validator {
   public void validate(Object obj, Errors errors) {
     if (obj == null || validator == null)
       return;
-    ValidationUtils.invokeValidator(validator, obj, errors);
+    //ValidationUtils.invokeValidator(validator, obj, errors);
     if (obj instanceof ProductBackingForm)
       validateProductBackingForm((ProductBackingForm) obj, errors);
     if (obj instanceof ProductCombinationBackingForm)

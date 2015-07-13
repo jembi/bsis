@@ -23,15 +23,6 @@ public class SequenceNumberStore {
   @Column(length=5)
   private String prefix;
 
-  /**
-   * Sometimes sequence numbers recycle after an year
-   * of use. Store this kind of context information
-   * in a generic manner using this field. It could be
-   * anything else for another field. 
-   */
-  @Column(length=5)
-  private String sequenceNumberContext;
-
   private Long lastNumber;
 
   public String getTargetTable() {
@@ -48,14 +39,6 @@ public class SequenceNumberStore {
 
   public void setColumnName(String columnName) {
     this.columnName = columnName;
-  }
-
-  public String getSequenceNumberContext() {
-    return sequenceNumberContext;
-  }
-
-  public void setSequenceNumberContext(String sequenceNumberContext) {
-    this.sequenceNumberContext = sequenceNumberContext;
   }
 
   public Long getLastNumber() {

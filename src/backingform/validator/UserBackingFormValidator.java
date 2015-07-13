@@ -44,15 +44,7 @@ public class UserBackingFormValidator implements Validator {
     checkUserName(form,errors);
     if(form.getId() != null){
        if(form.isModifyPassword()){
-          User existingUser = userRepository.findUserById(form.getId());
-           BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-           //verify password match
-           boolean matches = encoder.matches(form.getCurrentPassword(), existingUser.getPassword());
-           if (!matches) {
-               errors.rejectValue("user.password", "user.incorrect", "Entered Current password is wrong");
-           } else {
-               comparePassword(form, errors);
-           }
+           comparePassword(form, errors);
        }
     }
     else  
@@ -73,27 +65,21 @@ public class UserBackingFormValidator implements Validator {
   }
   
   private void checkRoles(UserBackingForm form, Errors errors) {
-	  if(form.getUserRoles()==null)
-		  errors.rejectValue("userRoles","user.selectRole" ,"Must select at least one Role");
+	  if(form.getRoles().isEmpty())
+		  errors.rejectValue("user.roles","user.selectRole" ,"Must select at least one Role");
 	  return;
   }
   
   private void checkUserName(UserBackingForm form, Errors errors) {
       
   	boolean flag=false;
-  	String userName=form.getUsername();
+  	String userName=form.getUser().getUsername();
   	User existingUser=null;
         
-      if (!userName.equals("")) {
-          existingUser = userRepository.findUser(userName);
+  	if (utilController.isDuplicateUserName(form.getUser())){
+    	errors.rejectValue("user.username", "userName.nonunique", "Username already exists.");
+    }
 
-          if (existingUser != null && !existingUser.getId().equals(form.getId())) {
-              errors.rejectValue("user.username", "userName.nonunique",
-                      "Username  already exists.");
-              return;
-
-          }
-      }
   	if(userName.length() <= 2 ||  userName.length() >= 50){
   		flag=true;
   	}

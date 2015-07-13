@@ -1,6 +1,6 @@
 package backingform;
 
-import java.util.Set;
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
@@ -51,7 +51,7 @@ public class ComponentTypeBackingForm {
         productType.setHasBloodGroup(hasBloodGroup);
     }    
     
-    public void setProductTypeCombinations(Set<ProductTypeCombination> productTypeCombinations){
+    public void setProductTypeCombinations(List<ProductTypeCombination> productTypeCombinations){
         productType.setProductTypeCombinations(productTypeCombinations);
     }
     

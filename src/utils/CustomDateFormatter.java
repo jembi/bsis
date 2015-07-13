@@ -4,13 +4,16 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+import org.joda.time.DateTime;
 
 public class CustomDateFormatter {
 
-  private static String datePattern = "MM/dd/yyyy"; 
+  private static String datePattern = "yyyy-MM-dd";
   private static String datePatternHumanReadable = "MM/dd/yyyy"; 
 
-  private static String dateTimePattern = "MM/dd/yyyy hh:mm:ss a"; 
+  private static String dateTimePattern = "yyyy-MM-dd'T'HH:mm:ss'Z'";
   private static String dateTimePatternHumanReadable = "MM/dd/yyyy hour:minute:second AM/PM";
   private static String timePattern = "hh:mm:ss a"; 
   
@@ -29,15 +32,17 @@ public class CustomDateFormatter {
 
   public static Date getDateFromString(String dateString) throws ParseException {
     Date date = null;
+
     if (!isDateEmpty(dateString))
-      date = dateFormat.parse(dateString);
+      date = new DateTime(dateString).toDate();
+
     return date;
   }
 
   public static Date getDateTimeFromString(String dateTimeString) throws ParseException {
     Date date = null;
     if (!isDateEmpty(dateTimeString))
-      date = dateTimeFormat.parse(dateTimeString);
+      date = new DateTime(dateTimeString).toDate();
     return date;
   }
   
@@ -116,21 +121,21 @@ public class CustomDateFormatter {
     if (date == null)
       return "";
     else
-      return dateFormat.format(date);
+      return getISO8601StringForDate(date);
   }
 
   public static String getDateTimeString(Date date) {
     if (date == null)
       return "";
     else
-      return dateTimeFormat.format(date);
+      return getISO8601StringForDate(date);
   }
   
   public static String getTimeString(Date date) {
     if (date == null)
       return "";
     else
-      return timeFormat.format(date);
+      return getISO8601StringForDate(date);
   }
 
   public static String getDatePattern() {
@@ -172,5 +177,11 @@ public class CustomDateFormatter {
   
   public static Date parse(String dateStr) throws ParseException{
 	  return getDateFromString(dateStr);
+  }
+
+  private static String getISO8601StringForDate(Date date) {
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    return dateFormat.format(date);
   }
 }

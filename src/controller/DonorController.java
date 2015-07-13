@@ -30,6 +30,7 @@ import repository.DonorRepository;
 import repository.LocationRepository;
 import utils.PermissionConstants;
 import viewmodel.DonorDeferralViewModel;
+import viewmodel.DonorSummaryViewModel;
 import viewmodel.DonorViewModel;
 import viewmodel.CollectedSampleViewModel;
 import utils.CustomDateFormatter;
@@ -115,14 +116,29 @@ public class DonorController {
 	    map.put("lastDonation", getCollectionViewModel(donations.get(donations.size()-1)));
 	    map.put("dateOfFirstDonation",CustomDateFormatter.getDateString(donations.get(0).getCollectedOn()));
 	    map.put("totalDonations",getNumberOfDonations(donations));
+	    map.put("dueToDonate",CustomDateFormatter.getDateString(donor.getDueToDonate()));
     }
     else {
     	map.put("lastDonation", "");
 	    map.put("dateOfFirstDonation","");
 	    map.put("totalDonations",0);
+	    map.put("dueToDonate","");
     }
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
+  
+    @RequestMapping(value = "/summaries", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
+    public ResponseEntity<Map<String, Object>> viewDonorSummary(HttpServletRequest request,
+            @RequestParam(value = "donorNumber", required = true) String donorNumber) {
+
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        DonorSummaryViewModel donorSummary = donorRepository.findDonorSummaryByDonorNumber(donorNumber);
+        map.put("donor", donorSummary);
+
+        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    }
 
   @RequestMapping(value = "/{id}/donations", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")

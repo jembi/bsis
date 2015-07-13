@@ -53,25 +53,24 @@ public class RoleController {
 		return map;
 	}
 
-	@RequestMapping(value = "/form", method = RequestMethod.GET)
+	@RequestMapping(value = "/permissions", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
 	public  Map<String, Object> editRoleFormGenerator() {
                 Map<String, Object> map = new HashMap<String, Object>();
 		addAllPermissionsToModel(map);
 		return map;
 	}
-
+	
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_ROLES + "')")
     public ResponseEntity updateRole(
             @Valid @RequestBody RoleBackingForm form, @PathVariable Long id) {
-        Set<Permission> permissions = setPermissions(form.getPermissionValues());
-        Role role = form.getRole();
-        role.setId(id);
-        role.setName(form.getName());
-        role.setPermissions(permissions);
-        roleRepository.updateRole(role);
-        return new ResponseEntity(new RoleViewModel(role), HttpStatus.OK);
+        
+    	Role updatedRole = null;
+    	form.setId(id);
+    	updatedRole = roleRepository.updateRole(form.getRole());
+    	return new ResponseEntity(new RoleViewModel(updatedRole), HttpStatus.OK);
+
     }
     
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
@@ -88,13 +87,12 @@ public class RoleController {
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_ROLES + "')")
     public ResponseEntity addRole(
             @Valid @RequestBody RoleBackingForm form) {
-        Set<Permission> permissions = setPermissions(form.getPermissionValues());
+    	
         Role role = new Role();
         role.setName(form.getName());
         role.setDescription(form.getDescription());
-        role.setPermissions(permissions);
-        roleRepository.addRole(role);
-        form = new RoleBackingForm();
+        role.setPermissions(form.getPermissions());
+        role = roleRepository.addRole(role);
         return new ResponseEntity(new RoleViewModel(role), HttpStatus.CREATED);
     }
     
@@ -106,27 +104,15 @@ public class RoleController {
         return new ResponseEntity<Role>(HttpStatus.NO_CONTENT);
         
     }
-
-	private Set<Permission> setPermissions(Set<String> permissionValues) {
-         Set<Permission> permissions = new HashSet<Permission>();
-		for (String permissionId : permissionValues) {
-			if(!permissionId.equals("")){
-			Permission permission = roleRepository
-					.findPermissionByPermissionId(Long.parseLong(permissionId));
-			permissions.add(permission);
-			}
-		}
-		return permissions;
-	}
         
-        private void addAllRolesToModel(Map<String, Object> map) {
+    private void addAllRolesToModel(Map<String, Object> map) {
 		List<RoleViewModel> roles = roleRepository.getAllRoles();
-		map.put("allRoles", roles);
+		map.put("roles", roles);
 	}
 
 	private void addAllPermissionsToModel(Map<String, Object> map) {
 		List<Permission> permissions = roleRepository.getAllPermissionsByName();
-		map.put("allPermissions", permissions);
+		map.put("permissions", permissions);
 	}
         
 }

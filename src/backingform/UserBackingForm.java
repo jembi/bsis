@@ -16,7 +16,6 @@ public class UserBackingForm {
     private User user;
 
     private boolean modifyPassword;
-    private List<String> userRoles;
     private String userConfirmPassword;
     private String currentPassword;
     private String roleAdmin;
@@ -163,10 +162,9 @@ public class UserBackingForm {
     public List<Role> getRoles() {
         return user.getRoles();
     }
-
-  
-    public List<String> getUserRoles() {
-        return userRoles;
+    
+    public void setRoles(List<Role> roles){
+        user.setRoles(roles);
     }
 
     /**
@@ -252,12 +250,6 @@ public class UserBackingForm {
     public void setRoleUser(String roleUser) {
         this.roleUser = roleUser;
     }
-
-    /**
-     * @param userRole the userRole to set
-     */
-    public void setUserRoles(List<String> userRoles) {
-        this.userRoles = userRoles;
-    }
+    
 
 }

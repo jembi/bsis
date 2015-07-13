@@ -1,11 +1,13 @@
 package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Locale;
 import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestContext;
 import model.bloodtesting.rules.BloodTestSubCategory;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.bloodtesting.rules.CollectionField;
+import scala.actors.threadpool.Arrays;
 
 public class BloodTestingRuleBackingForm {
 
@@ -28,16 +30,17 @@ public class BloodTestingRuleBackingForm {
         typingRule.setId(id);
     }
     
-    public void setPendingTestsIds(String pendingTestsIds){
-        typingRule.setPendingTestsIds(pendingTestsIds);
+    public void setPendingTestsIds(int[] pendingTestsIds){
+        String testIds = Arrays.toString(pendingTestsIds).replaceAll("\\s","");
+        typingRule.setPendingTestsIds(testIds.substring(1, testIds.length()-1));
     }
     
     public void setCategory(String category){
-        typingRule.setCategory(BloodTestCategory.valueOf(category));
+        typingRule.setCategory(BloodTestCategory.valueOf(category.replaceAll("\\s","").toUpperCase()));
     } 
     
     public void setCollectionFieldChanged(String collectionField){
-        typingRule.setCollectionFieldChanged(CollectionField.valueOf(collectionField));
+        typingRule.setCollectionFieldChanged(CollectionField.valueOf(collectionField.replaceAll("\\s","").toUpperCase()));
     }
     
     public void setPattern(String pattern){
@@ -45,7 +48,7 @@ public class BloodTestingRuleBackingForm {
     }
     
     public void setContext(String context){
-        typingRule.setContext(BloodTestContext.valueOf(context));
+        typingRule.setContext(BloodTestContext.valueOf(context.replaceAll("\\s","").toUpperCase()));
     }
     
     public void setExtraInformation(String extraInformation){
@@ -53,7 +56,7 @@ public class BloodTestingRuleBackingForm {
     }
     
     public void setSubCategory(String subCategory){
-        typingRule.setSubCategory(BloodTestSubCategory.valueOf(subCategory));
+        typingRule.setSubCategory(BloodTestSubCategory.valueOf(subCategory.replaceAll("\\s","").toUpperCase()));
     }
     
     public void setIsActive(Boolean isActive){

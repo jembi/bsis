@@ -9,7 +9,7 @@
 	<changeSet id="20131018-0101" author="devang">
 		<sqlFile path="./ddl_mysql.sql"/>
 		<sqlFile path="./initial_data.sql"/>
-		<sqlFile path="./tests.sql"/>
+		<sqlFile path="./tests-lbts.sql"/>
 	</changeSet>
 
 </databaseChangeLog>

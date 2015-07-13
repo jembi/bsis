@@ -1,5 +1,3 @@
-
-
 package viewmodel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,10 +8,6 @@ import java.util.Set;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 
-/**
- *
- * @author srikanth
- */
 public class ProductTypeCombinationViewModel {
 
     public ProductTypeCombinationViewModel(ProductTypeCombination productTypeCombination) {
@@ -39,15 +33,16 @@ public class ProductTypeCombinationViewModel {
         return productTypeCombination.getCombinationName();
     }
     
-    public List<ProductTypeViewModel> getProductTypeViewModels(){
+    public List<ProductTypeViewModel> getProductTypes(){
         return getProductTypeViewModels(productTypeCombination.getProductTypes());
     }
-
-    private List<ProductTypeViewModel> getProductTypeViewModels(Set<ProductType> productTypes) {
-      List<ProductTypeViewModel> productTypeViewModels = new ArrayList<ProductTypeViewModel> ();
-      for(ProductType productType : productTypes)
-          productTypeViewModels.add(new ProductTypeViewModel(productType));
-      return productTypeViewModels;
-    }
     
+    private List<ProductTypeViewModel> getProductTypeViewModels(List<ProductType> productTypes) {
+        List<ProductTypeViewModel> productTypeViewModels = new ArrayList<ProductTypeViewModel> ();
+        for(ProductType productType : productTypes){
+            productTypeViewModels.add(new ProductTypeViewModel(productType));
+        }
+        return productTypeViewModels;
+    }  
+
 }

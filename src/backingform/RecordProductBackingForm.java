@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import model.producttype.ProductType;
+import model.producttype.ProductTypeCombination;
 import model.user.User;
 
 public class RecordProductBackingForm {
@@ -14,8 +15,13 @@ public class RecordProductBackingForm {
 	@NotBlank
     private String parentComponentId;
 
+	/*
 	@NotBlank
     private String childComponentTypeId;
+    */
+	
+	@NotBlank 
+	private ProductTypeCombination productTypeCombination;
 	
     private Integer numUnits;
 	
@@ -36,12 +42,22 @@ public class RecordProductBackingForm {
 		this.parentComponentId = parentComponentId;
 	}
 	
+	/*
 	public String getChildComponentTypeId() {
         return childComponentTypeId;
     }
 	
 	public void setChildComponentTypeId(String childComponentTypeId){
 		this.childComponentTypeId = childComponentTypeId;
+	}
+	*/
+	
+	public ProductTypeCombination getProductTypeCombination() {
+        return productTypeCombination;
+    }
+	
+	public void setProductTypeCombination(ProductTypeCombination productTypeCombination){
+		this.productTypeCombination = productTypeCombination;
 	}
 	
 	public Integer getNumUnits() {

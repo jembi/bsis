@@ -1,8 +1,10 @@
 package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.List;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestCategory;
+import org.apache.commons.lang3.StringUtils;
 
 public class BloodTestBackingForm {
 
@@ -55,8 +57,8 @@ public class BloodTestBackingForm {
         bloodTest.setCategory(BloodTestCategory.valueOf(Category));
     }
     
-    public void setValidResults(String validResults){
-        bloodTest.setValidResults(validResults);
+    public void setValidResults(List<String> validResults){
+        bloodTest.setValidResults(StringUtils.join(validResults));
     }
     
     public void setIsActive(Boolean isActive){
