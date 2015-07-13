@@ -36,6 +36,10 @@ public class UserViewModel {
   public Boolean getIsAdmin() {
     return user.getIsAdmin();
   }
+  
+  public String getEmailId() {
+      return user.getEmailId();
+  }
 
   @Override
   public String toString() {
