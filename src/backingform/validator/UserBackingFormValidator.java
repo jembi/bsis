@@ -44,15 +44,7 @@ public class UserBackingFormValidator implements Validator {
     checkUserName(form,errors);
     if(form.getId() != null){
        if(form.isModifyPassword()){
-          User existingUser = userRepository.findUserById(form.getId());
-           BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-           //verify password match
-           boolean matches = encoder.matches(form.getCurrentPassword(), existingUser.getPassword());
-           if (!matches) {
-               errors.rejectValue("user.password", "user.incorrect", "Entered Current password is wrong");
-           } else {
-               comparePassword(form, errors);
-           }
+           comparePassword(form, errors);
        }
     }
     else  
