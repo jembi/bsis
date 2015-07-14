@@ -30,9 +30,16 @@ public class GeneralConfigRepository {
     }
 
     public GeneralConfig update(GeneralConfig generalConfig) {
-        generalConfig = getGeneralConfigById(generalConfig.getId());
-    	generalConfig = em.merge(generalConfig);
-        return generalConfig;
+        GeneralConfig existingGeneralConfig = getGeneralConfigById(generalConfig.getId());
+
+        existingGeneralConfig.setName(generalConfig.getName());
+        existingGeneralConfig.setDescription(generalConfig.getDescription());
+        existingGeneralConfig.setValue(generalConfig.getValue());
+        existingGeneralConfig.setDataType(generalConfig.getDataType());
+
+        em.merge(existingGeneralConfig);
+        em.flush();
+        return existingGeneralConfig;
     }
 
     public void save(GeneralConfig generalConfig) {
