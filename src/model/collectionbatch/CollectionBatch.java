@@ -2,10 +2,13 @@ package model.collectionbatch;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import constraintvalidator.LocationExists;
+
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,12 +20,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
-import model.collectedsample.CollectedSample;
+
+import model.donation.Donation;
 import model.location.Location;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.testbatch.TestBatch;
 import model.user.User;
+
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
@@ -44,7 +49,7 @@ public class CollectionBatch implements ModificationTracker {
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="collectionBatch", fetch = FetchType.EAGER)
-  private List<CollectedSample> collectionsInBatch = Collections.EMPTY_LIST;
+  private List<Donation> collectionsInBatch = Collections.EMPTY_LIST;
   
   @OneToOne
   @LocationExists
@@ -91,11 +96,11 @@ public class CollectionBatch implements ModificationTracker {
     this.notes = notes;
   }
 
-  public List<CollectedSample> getCollectionsInBatch() {
+  public List<Donation> getCollectionsInBatch() {
     return collectionsInBatch;
   }
 
-  public void setCollectionsInBatch(List<CollectedSample> collectionsInBatch) {
+  public void setCollectionsInBatch(List<Donation> collectionsInBatch) {
     this.collectionsInBatch = collectionsInBatch;
   }
 

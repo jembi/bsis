@@ -129,7 +129,7 @@
  		notes="Notes" donorPanel_Id = "1"
  		createdBy_id="1" lastUpdatedBy_id="1"></collectionbatch>
  	
- 	<collectedsample id="1" bloodAbo=""
+ 	<donation id="1" bloodAbo=""
  		bloodPressureSystolic="43" bloodRh="" bloodTypingStatus="NOT_DONE"
  		collectedOn="2014-03-25 00:00:00" collectionNumber="000001"
  		donorWeight="60.00" extraBloodTypeInformation="" haemoglobinCount="14.00"
@@ -138,7 +138,7 @@
  		collectionBatch_id="1" donorPanel_Id = "1"
  		donationCreatedBy_id="1" donationType_id="2" donor_id="1"
  		createdBy_id="1" lastUpdatedBy_id="1" bloodPressureDiastolic="55"
- 		donorPulse="60"></collectedsample>
+ 		donorPulse="60"></donation>
 
 
 	<genericconfig id="1" propertyName="rowHeight"

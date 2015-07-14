@@ -7,7 +7,7 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
 import model.product.Product;
 import model.product.ProductStatus;
 import model.producttype.ProductType;
@@ -49,8 +49,8 @@ public class ProductBackingForm {
     return product.getId();
   }
 
-  public CollectedSample getCollectedSample() {
-    return product.getCollectedSample();
+  public Donation getDonation() {
+    return product.getDonation();
   }
 
   public String getProductType() {
@@ -97,8 +97,8 @@ public class ProductBackingForm {
     product.setId(id);
   }
 
-  public void setCollectedSample(CollectedSample collectedSample) {
-    product.setCollectedSample(collectedSample);
+  public void setDonation(Donation donation) {
+    product.setDonation(donation);
   }
 
   public void setProductType(String productTypeId) {
@@ -190,17 +190,17 @@ public class ProductBackingForm {
   }
 
   public String getCollectionNumber() {
-    if (product == null || product.getCollectedSample() == null ||
-        product.getCollectedSample().getCollectionNumber() == null
+    if (product == null || product.getDonation() == null ||
+        product.getDonation().getCollectionNumber() == null
        )
       return "";
-    return product.getCollectedSample().getCollectionNumber();
+    return product.getDonation().getCollectionNumber();
   }
 
   public void setCollectionNumber(String collectionNumber) {
-    CollectedSample collectedSample = new CollectedSample();
-    collectedSample.setCollectionNumber(collectionNumber);
-    product.setCollectedSample(collectedSample);
+    Donation donation = new Donation();
+    donation.setCollectionNumber(collectionNumber);
+    product.setDonation(donation);
   }
 
   @JsonIgnore

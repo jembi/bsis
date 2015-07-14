@@ -43,7 +43,7 @@
         result varchar(10),
         testedOn datetime,
         bloodTest_id SMALLINT,
-        collectedSample_id bigint,
+        donation_id bigint,
         machineReading_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
@@ -116,7 +116,7 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table CollectedSample (
+    create table Donation (
         id bigint not null auto_increment,
         bloodAbo varchar(50),
         bloodPressure decimal(6,2),
@@ -144,7 +144,7 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table CollectedSample_AUD (
+    create table Donation_AUD (
         id bigint not null,
         REV integer not null,
         REVTYPE tinyint,
@@ -562,7 +562,7 @@
         notes longtext,
         status varchar(30),
         subdivisionCode varchar(3),
-        collectedSample_id bigint,
+        donation_id bigint,
         issuedTo_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
@@ -720,7 +720,7 @@
         notes longtext,
         status varchar(30),
         subdivisionCode varchar(3),
-        collectedSample_id bigint,
+        donation_id bigint,
         issuedTo_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
@@ -966,10 +966,10 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table Worksheet_CollectedSample (
+    create table Worksheet_Donation (
         worksheets_id bigint not null,
-        collectedSamples_id bigint not null,
-        primary key (worksheets_id, collectedSamples_id)
+        donations_id bigint not null,
+        primary key (worksheets_id, donations_id)
     ) ENGINE=InnoDB;
 
     alter table BloodBagType_AUD 
@@ -985,10 +985,10 @@
         references User (id);
 
     alter table BloodTestResult 
-        add index FK39946CC932E145A (collectedSample_id), 
+        add index FK39946CC932E145A (donation_id), 
         add constraint FK39946CC932E145A 
-        foreign key (collectedSample_id) 
-        references CollectedSample (id);
+        foreign key (donation_id) 
+        references Donation (id);
 
     alter table BloodTestResult 
         add index FK39946CC9E104121F (machineReading_id), 
@@ -1038,65 +1038,65 @@
         foreign key (REV) 
         references REVINFO (REV);
 
-    create index collectedSample_collectedOn_index on CollectedSample (collectedOn);
+    create index donation_collectedOn_index on Donation (collectedOn);
 
-    create index collectedSample_collectionNumber_index on CollectedSample (collectionNumber);
+    create index donation_collectionNumber_index on Donation (collectionNumber);
 
-    alter table CollectedSample 
+    alter table Donation 
         add index FKF0658A33A49787C4 (createdBy_id), 
         add constraint FKF0658A33A49787C4 
         foreign key (createdBy_id) 
         references User (id);
 
-    alter table CollectedSample 
+    alter table Donation 
         add index FKF0658A33D04A4456 (donationCreatedBy_id), 
         add constraint FKF0658A33D04A4456 
         foreign key (donationCreatedBy_id) 
         references User (id);
 
-    alter table CollectedSample 
+    alter table Donation 
         add index FKF0658A33AED1731E (collectionSite_id), 
         add constraint FKF0658A33AED1731E 
         foreign key (collectionSite_id) 
         references Location (id);
 
-    alter table CollectedSample 
+    alter table Donation 
         add index FKF0658A33B29562D0 (collectionCenter_id), 
         add constraint FKF0658A33B29562D0 
         foreign key (collectionCenter_id) 
         references Location (id);
 
-    alter table CollectedSample 
+    alter table Donation 
         add index FKF0658A33E5D4FEA3 (collectionBatch_id), 
         add constraint FKF0658A33E5D4FEA3 
         foreign key (collectionBatch_id) 
         references CollectionBatch (id);
 
-    alter table CollectedSample 
+    alter table Donation 
         add index FKF0658A3359FAB30D (donor_id), 
         add constraint FKF0658A3359FAB30D 
         foreign key (donor_id) 
         references Donor (id);
 
-    alter table CollectedSample 
+    alter table Donation 
         add index FKF0658A338461A8D7 (donationType_id), 
         add constraint FKF0658A338461A8D7 
         foreign key (donationType_id) 
         references DonationType (id);
 
-    alter table CollectedSample 
+    alter table Donation 
         add index FKF0658A33D0AFB367 (lastUpdatedBy_id), 
         add constraint FKF0658A33D0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
 
-    alter table CollectedSample 
+    alter table Donation 
         add index FKF0658A331D73927B (bloodBagType_id), 
         add constraint FKF0658A331D73927B 
         foreign key (bloodBagType_id) 
         references BloodBagType (id);
 
-    alter table CollectedSample_AUD 
+    alter table Donation_AUD 
         add index FKD18B6684DF74E053 (REV), 
         add constraint FKD18B6684DF74E053 
         foreign key (REV) 
@@ -1335,10 +1335,10 @@
         references Request (id);
 
     alter table Product 
-        add index FK50C664CF32E145A (collectedSample_id), 
+        add index FK50C664CF32E145A (donation_id), 
         add constraint FK50C664CF32E145A 
-        foreign key (collectedSample_id) 
-        references CollectedSample (id);
+        foreign key (donation_id) 
+        references Donation (id);
 
     alter table Product 
         add index FK50C664CF73AC2B90 (productType_id), 
@@ -1572,17 +1572,17 @@
         foreign key (REV) 
         references REVINFO (REV);
 
-    alter table Worksheet_CollectedSample 
+    alter table Worksheet_Donation 
         add index FK1BCDFCC2EA518FDE (worksheets_id), 
         add constraint FK1BCDFCC2EA518FDE 
         foreign key (worksheets_id) 
         references Worksheet (id);
 
-    alter table Worksheet_CollectedSample 
-        add index FK1BCDFCC2C02466CD (collectedSamples_id), 
+    alter table Worksheet_Donation
+        add index FK1BCDFCC2C02466CD (donations_id), 
         add constraint FK1BCDFCC2C02466CD 
-        foreign key (collectedSamples_id) 
-        references CollectedSample (id);
+        foreign key (donations_id) 
+        references Donation (id);
         
    
         

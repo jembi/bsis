@@ -21,9 +21,9 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import model.bloodtesting.TTIStatus;
-import model.collectedsample.CollectedSample;
 import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
+import model.donation.Donation;
 import model.product.Product;
 import model.product.ProductStatus;
 import model.productmovement.ProductStatusChange;
@@ -34,7 +34,9 @@ import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 import model.request.Request;
 import model.util.BloodGroup;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,13 +45,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import controller.UtilController;
-
 import repository.bloodtesting.BloodTypingStatus;
 import utils.CustomDateFormatter;
-import viewmodel.CollectedSampleViewModel;
+import viewmodel.DonationViewModel;
 import viewmodel.MatchingProductViewModel;
 import backingform.ProductCombinationBackingForm;
+
 import javax.persistence.PessimisticLockException;
+
 import org.apache.commons.lang3.StringUtils;
 
 @Repository
@@ -60,7 +63,7 @@ public class ProductRepository {
   private EntityManager em;
 
   @Autowired
-  private CollectedSampleRepository collectedSampleRepository;
+  private DonationRepository donationRepository;
 
   @Autowired
   private ProductTypeRepository productTypeRepository;
@@ -112,10 +115,10 @@ public class ProductRepository {
     if (product.getStatus() != null && statusNotToBeChanged.contains(product.getStatus()))
       return false;
 
-    if (product.getCollectedSample() == null)
+    if (product.getDonation() == null)
       return false;
-    Long collectedSampleId = product.getCollectedSample().getId();
-    CollectedSample c = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
+    Long donationId = product.getDonation().getId();
+    Donation c = donationRepository.findDonationById(donationId);
     BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();
     TTIStatus ttiStatus = c.getTTIStatus();
 
@@ -162,23 +165,23 @@ public class ProductRepository {
   public List<Product> findAnyProduct(String donationIdentificationNumber, List<Integer> productTypes, List<ProductStatus> status, 
 		  Date donationDateFrom, Date donationDateTo, Map<String, Object> pagingParams){
 	  	TypedQuery<Product> query;
-	    String queryStr = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +     
+	    String queryStr = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.donation WHERE " +     
 	                      "p.isDeleted= :isDeleted ";
 	    
 	    if(status != null && !status.isEmpty()){
 	    	queryStr += "AND p.status IN :status ";
 	    }	
 	    if(!StringUtils.isBlank(donationIdentificationNumber)){
-	    	queryStr += "AND p.collectedSample.collectionNumber = :donationIdentificationNumber ";
+	    	queryStr += "AND p.donation.collectionNumber = :donationIdentificationNumber ";
 	    }
 	    if(productTypes != null && !productTypes.isEmpty()){
 	    	queryStr += "AND p.productType.id IN (:productTypeIds) ";
 	    }	    
 	    if(donationDateFrom != null){
-	    	queryStr += "AND p.collectedSample.collectedOn >= :donationDateFrom ";
+	    	queryStr += "AND p.donation.collectedOn >= :donationDateFrom ";
 	    }
 	    if(donationDateTo != null){
-	    	queryStr += "AND p.collectedSample.collectedOn <= :donationDateTo ";
+	    	queryStr += "AND p.donation.collectedOn <= :donationDateTo ";
 	    }
 	    
 	    if (pagingParams.containsKey("sortColumn")) {
@@ -217,13 +220,13 @@ public class ProductRepository {
       String collectionNumber, List<ProductStatus> status, Map<String, Object> pagingParams) {
 
     TypedQuery<Product> query;
-    String queryStr = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +
-                      "p.collectedSample.collectionNumber = :collectionNumber AND " +
+    String queryStr = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.donation WHERE " +
+                      "p.donation.collectionNumber = :collectionNumber AND " +
                       "p.status IN :status AND " +
                       "p.isDeleted= :isDeleted";
 
     String queryStrWithoutJoin = "SELECT p FROM Product p WHERE " +
-        "p.collectedSample.collectionNumber = :collectionNumber AND " +
+        "p.donation.collectionNumber = :collectionNumber AND " +
         "p.status IN :status AND " +
         "p.isDeleted= :isDeleted";
 
@@ -250,7 +253,7 @@ public class ProductRepository {
       List<Integer> productTypeIds, List<ProductStatus> status,
       Map<String, Object> pagingParams) {
 
-    String queryStr = "SELECT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +
+    String queryStr = "SELECT p FROM Product p LEFT JOIN FETCH p.donation WHERE " +
         "p.productType.id IN (:productTypeIds) AND " +
         "p.status IN :status AND " +
         "p.isDeleted= :isDeleted";
@@ -386,7 +389,7 @@ public class ProductRepository {
   }
 
   public Product findProductById(Long productId)throws NoResultException{
-    String queryString = "SELECT p FROM Product p LEFT JOIN FETCH p.collectedSample LEFT JOIN FETCH p.issuedTo where p.id = :productId AND p.isDeleted = :isDeleted";
+    String queryString = "SELECT p FROM Product p LEFT JOIN FETCH p.donation LEFT JOIN FETCH p.issuedTo where p.id = :productId AND p.isDeleted = :isDeleted";
     TypedQuery<Product> query = em.createQuery(queryString, Product.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("productId", productId);
@@ -428,13 +431,13 @@ public class ProductRepository {
     Request request = requestRepository.findRequestById(requestId);
     
     TypedQuery<Product> query = em.createQuery(
-                 "SELECT p from Product p LEFT JOIN FETCH p.collectedSample WHERE " +
+                 "SELECT p from Product p LEFT JOIN FETCH p.donation WHERE " +
                  "p.productType = :productType AND " +
                  "p.expiresOn >= :today AND " +
                  "p.status = :status AND " + 
-                 "p.collectedSample.ttiStatus = :ttiStatus AND " +
-                 "((p.collectedSample.bloodAbo = :bloodAbo AND p.collectedSample.bloodRh = :bloodRh) OR " +
-                 "(p.collectedSample.bloodAbo = :bloodAboO AND p.collectedSample.bloodRh = :bloodRhNeg)) AND " +
+                 "p.donation.ttiStatus = :ttiStatus AND " +
+                 "((p.donation.bloodAbo = :bloodAbo AND p.donation.bloodRh = :bloodRh) OR " +
+                 "(p.donation.bloodAbo = :bloodAboO AND p.donation.bloodRh = :bloodRhNeg)) AND " +
                  "p.isDeleted = :isDeleted " +
                  "ORDER BY p.expiresOn ASC",
                   Product.class);
@@ -489,7 +492,7 @@ public class ProductRepository {
     TypedQuery<Product> q = em.createQuery(
                              "SELECT DISTINCT p from Product p " +
                              "WHERE p.status IN :status AND " +
-                             "p.collectedSample.donorPanel.id IN (:panelIds) AND " +
+                             "p.donation.donorPanel.id IN (:panelIds) AND " +
                              "p.isDeleted=:isDeleted",
                              Product.class);
     List<ProductStatus> productStatus = new ArrayList<ProductStatus>();
@@ -524,9 +527,9 @@ public class ProductRepository {
       String productType = product.getProductType().getProductTypeName();
       @SuppressWarnings("unchecked")
       Map<String, Map<Long, Long>> inventoryByBloodGroup = (Map<String, Map<Long, Long>>) inventory.get(productType);
-      CollectedSampleViewModel collectedSample;
-      collectedSample = new CollectedSampleViewModel(product.getCollectedSample());
-      Map<Long, Long> numDayMap = inventoryByBloodGroup.get(collectedSample.getBloodGroup());
+      DonationViewModel donation;
+      donation = new DonationViewModel(product.getDonation());
+      Map<Long, Long> numDayMap = inventoryByBloodGroup.get(donation.getBloodGroup());
       DateTime createdOn = new DateTime(product.getCreatedOn().getTime());
       Long age = (long) Days.daysBetween(createdOn, today).getDays();
       // compute window based on age
@@ -561,7 +564,7 @@ public class ProductRepository {
   }
 
   public void updateQuarantineStatus() {
-    String queryString = "SELECT p FROM Product p LEFT JOIN FETCH p.collectedSample where p.status is NULL AND p.isDeleted = :isDeleted";
+    String queryString = "SELECT p FROM Product p LEFT JOIN FETCH p.donation where p.status is NULL AND p.isDeleted = :isDeleted";
     TypedQuery<Product> query = em.createQuery(queryString, Product.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     List<Product> products = query.getResultList();
@@ -634,10 +637,10 @@ public class ProductRepository {
     }
 
     TypedQuery<Object[]> query = em.createQuery(
-        "SELECT count(p), p.collectedSample.collectedOn, p.collectedSample.bloodAbo, " +
-        "p.collectedSample.bloodRh FROM Product p WHERE " +
-        "p.collectedSample.donorPanel.id IN (:panelIds) AND " +
-        "p.collectedSample.collectedOn BETWEEN :dateCollectedFrom AND :dateCollectedTo AND " +
+        "SELECT count(p), p.donation.collectedOn, p.donation.bloodAbo, " +
+        "p.donation.bloodRh FROM Product p WHERE " +
+        "p.donation.donorPanel.id IN (:panelIds) AND " +
+        "p.donation.collectedOn BETWEEN :dateCollectedFrom AND :dateCollectedTo AND " +
         "p.status IN (:discardedStatuses) AND " +
         "(p.isDeleted= :isDeleted) " +
         "GROUP BY bloodAbo, bloodRh, collectedOn", Object[].class);
@@ -719,10 +722,10 @@ public class ProductRepository {
     }
 
     TypedQuery<Object[]> query = em.createQuery(
-        "SELECT count(p), p.issuedOn, p.collectedSample.bloodAbo, " +
-        "p.collectedSample.bloodRh FROM Product p WHERE " +
-        "p.collectedSample.donorPanel.id IN (:panelIds) AND " +
-        "p.collectedSample.collectedOn BETWEEN :dateCollectedFrom AND :dateCollectedTo AND " +
+        "SELECT count(p), p.issuedOn, p.donation.bloodAbo, " +
+        "p.donation.bloodRh FROM Product p WHERE " +
+        "p.donation.donorPanel.id IN (:panelIds) AND " +
+        "p.donation.collectedOn BETWEEN :dateCollectedFrom AND :dateCollectedTo AND " +
         "p.status=:issuedStatus AND " +
         "(p.isDeleted= :isDeleted) " +
         "GROUP BY bloodAbo, bloodRh, collectedOn", Object[].class);
@@ -789,7 +792,7 @@ public class ProductRepository {
 
   public Product findProduct(String collectionNumber, String productTypeId) {
     String queryStr = "SELECT p from Product p WHERE " +
-                      "p.collectedSample.collectionNumber = :collectionNumber AND " +
+                      "p.donation.collectionNumber = :collectionNumber AND " +
                       "p.productType.id = :productTypeId";
     TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
     query.setParameter("collectionNumber", collectionNumber);
@@ -834,7 +837,7 @@ public class ProductRepository {
 
   public List<Product> findProductsByCollectionNumber(String collectionNumber) {
     String queryStr = "SELECT p from Product p WHERE " +
-        "p.collectedSample.collectionNumber=:collectionNumber AND p.isDeleted=:isDeleted";
+        "p.donation.collectionNumber=:collectionNumber AND p.isDeleted=:isDeleted";
     TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
     query.setParameter("collectionNumber", collectionNumber);
     query.setParameter("isDeleted", false);
@@ -858,7 +861,7 @@ public class ProductRepository {
     productTypeCombination = productTypeRepository.getProductTypeCombinationById(Integer.parseInt(form.getProductTypeCombination()));
     for (ProductType productType : productTypeCombination.getProductTypes()) {
       Product product = new Product();
-      product.setCollectedSample(form.getCollectedSample());
+      product.setDonation(form.getDonation());
       product.setProductType(productType);
       product.setCreatedOn(form.getProduct().getCreatedOn());
       String expiryDateStr = expiryDateByProductType.get(productType.getId().toString());

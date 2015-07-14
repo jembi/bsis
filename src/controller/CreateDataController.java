@@ -1,8 +1,9 @@
 package controller;
 
-import backingform.CollectedSampleBackingForm;
+import backingform.DonationBackingForm;
 import backingform.ProductBackingForm;
 import backingform.RequestBackingForm;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,13 +15,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+
 import model.address.Address;
 import model.address.Contact;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.TTIStatus;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.bloodtesting.rules.CollectionField;
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
@@ -29,13 +31,15 @@ import model.producttype.ProductType;
 import model.request.Request;
 import model.requesttype.RequestType;
 import model.util.Gender;
+
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import repository.BloodBagTypeRepository;
-import repository.CollectedSampleRepository;
+import repository.DonationRepository;
 import repository.DonationTypeRepository;
 import repository.DonorRepository;
 import repository.GenericConfigRepository;
@@ -71,7 +75,7 @@ public class CreateDataController {
   private LocationRepository locationRepository;
 
   @Autowired
-  private CollectedSampleRepository collectionRepository;
+  private DonationRepository collectionRepository;
 
   @Autowired
   private RequestRepository requestRepository;
@@ -429,12 +433,12 @@ public class CreateDataController {
     List<Donor> donors = donorRepository.getAllDonors();
     List<DonationType> donationTypes = donorTypeRepository.getAllDonationTypes();
 
-    List<CollectedSample> collectedSamples = new ArrayList<CollectedSample>();
+    List<Donation> donations = new ArrayList<Donation>();
 
     List<BloodBagType> bloodBagTypes = bloodBagTypeRepository.getAllBloodBagTypes();
     List<String> collectionNumbers = sequenceNumberRepository.getBatchCollectionNumbers(numCollections);
     for (int i = 0; i < numCollections; i++) {
-      CollectedSampleBackingForm collection = new CollectedSampleBackingForm();
+      DonationBackingForm collection = new DonationBackingForm();
       collection.setCollectionNumber(collectionNumbers.get(i));    
 
       collection.setPackType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()));
@@ -446,28 +450,28 @@ public class CreateDataController {
       collection.setDonationType(donationTypes.get(Math.abs(random.nextInt()) % donationTypes.size()));
       collection.setIsDeleted(false);
 
-      collectedSamples.add(collection.getCollectedSample());
+      donations.add(collection.getDonation());
     }
 
-    collectionRepository.addAllCollectedSamples(collectedSamples);
+    collectionRepository.addAllDonations(donations);
 
-    addTestResultsForCollections(collectedSamples);
+    addTestResultsForCollections(donations);
   }
 
   private void addTestResultsForCollections(
-      List<CollectedSample> collectedSamples) {
-    addBloodTypingResultsForCollections(collectedSamples);
-    addTTIResultsForCollections(collectedSamples);
+      List<Donation> donations) {
+    addBloodTypingResultsForCollections(donations);
+    addTTIResultsForCollections(donations);
   }
 
   public void createProducts(int numProducts) {
-    List<CollectedSample> collections = collectionRepository.getAllCollectedSamples();
+    List<Donation> collections = collectionRepository.getAllDonations();
     List<ProductType> productTypes = productTypeRepository.getAllProductTypes();
     List<Product> products = new ArrayList<Product>();
     for (int i = 0; i < numProducts; i++) {
-      CollectedSample c = collections.get(random.nextInt(collections.size()));
+      Donation c = collections.get(random.nextInt(collections.size()));
       Product p = new ProductBackingForm(true).getProduct();
-      p.setCollectedSample(c);
+      p.setDonation(c);
       p.setProductType(productTypes.get(random.nextInt(productTypes.size())));
       Date d = c.getCollectedOn();
       p.setCreatedOn(d);
@@ -481,7 +485,7 @@ public class CreateDataController {
     productRepository.addAllProducts(products);
   }
 
-  private void addBloodTypingResultsForCollections(List<CollectedSample> collectedSamples) {
+  private void addBloodTypingResultsForCollections(List<Donation> donations) {
 
     Map<String, List<BloodTestingRule>> bloodAboRuleMap = new HashMap<String, List<BloodTestingRule>>();
     Map<String, List<BloodTestingRule>> bloodRhRuleMap = new HashMap<String, List<BloodTestingRule>>();
@@ -512,7 +516,7 @@ public class CreateDataController {
 
     Random generator = new Random();
 
-    for (CollectedSample collection : collectedSamples) {
+    for (Donation collection : donations) {
 
       if (Math.random() < leaveOutCollectionsPercentage) {
         // do not add results for a small fraction of the collections
@@ -579,10 +583,10 @@ public class CreateDataController {
   }
 
   @SuppressWarnings("unchecked")
-  private void addTTIResultsForCollections(List<CollectedSample> collectedSamples) {
+  private void addTTIResultsForCollections(List<Donation> donations) {
 
     Map<Long, String> collectionNumberMap = new HashMap<Long, String>();
-    for (CollectedSample c : collectedSamples) {
+    for (Donation c : donations) {
       collectionNumberMap.put(c.getId(), c.getCollectionNumber());
     }
 
@@ -605,7 +609,7 @@ public class CreateDataController {
     Map<Long, Map<Long, String>> testResults = new HashMap<Long, Map<Long,String>>();
     Random generator = new Random();
 
-    for (CollectedSample collection : collectedSamples) {
+    for (Donation collection : donations) {
 
       if (Math.random() < leaveOutCollectionsPercentage) {
         // do not add results for a small fraction of the collections

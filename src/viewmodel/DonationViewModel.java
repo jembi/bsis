@@ -2,151 +2,155 @@ package viewmodel;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
 import model.bloodbagtype.BloodBagType;
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
 import model.product.Product;
 import model.user.User;
+
 import org.apache.commons.lang3.StringUtils;
+
 import repository.bloodtesting.BloodTypingStatus;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import utils.CustomDateFormatter;
 
-public class CollectedSampleViewModel {
+public class DonationViewModel {
 
-  private CollectedSample collectedSample;
+  private Donation donation;
 
-  public CollectedSampleViewModel() {
+  public DonationViewModel() {
   }
 
-  public CollectedSampleViewModel(CollectedSample collection) {
-    this.collectedSample = collection;
+  public DonationViewModel(Donation collection) {
+    this.donation = collection;
   }
 
-  public void copy(CollectedSample collection) {
+  public void copy(Donation collection) {
     collection.copy(collection);
   }
 
   public String getCollectedOn() {
-    if (collectedSample.getCollectedOn() == null)
+    if (donation.getCollectedOn() == null)
       return "";
-    return CustomDateFormatter.getDateString(collectedSample.getCollectedOn());
+    return CustomDateFormatter.getDateString(donation.getCollectedOn());
   }
 
   public boolean equals(Object obj) {
-    return collectedSample.equals(obj);
+    return donation.equals(obj);
   }
 
   public Long getId() {
-    return collectedSample.getId();
+    return donation.getId();
   }
 
   public String getCollectionNumber() {
-    return collectedSample.getCollectionNumber();
+    return donation.getCollectionNumber();
   }
 
   @JsonIgnore
   public Donor getDonor() {
-    return collectedSample.getDonor();
+    return donation.getDonor();
   }
 
   public DonationType getDonationType() {
-    return collectedSample.getDonationType();
+    return donation.getDonationType();
   }
 
   public BloodBagType getPackType() {
-    return collectedSample.getBloodBagType();
+    return donation.getBloodBagType();
   }
 
   public String getNotes() {
-    return collectedSample.getNotes();
+    return donation.getNotes();
   }
 
   public Boolean getIsDeleted() {
-    return collectedSample.getIsDeleted();
+    return donation.getIsDeleted();
   }
 
   public List<Product> getProducts() {
-    return collectedSample.getProducts();
+    return donation.getProducts();
   }
 
   public int hashCode() {
-    return collectedSample.hashCode();
+    return donation.hashCode();
   }
 
   public String getDonorNumber() {
-   if (collectedSample.getDonor() == null)
+   if (donation.getDonor() == null)
      return "";
-   return collectedSample.getDonor().getDonorNumber();
+   return donation.getDonor().getDonorNumber();
   }
 
   public String getLastUpdated() {
-    return CustomDateFormatter.getDateTimeString(collectedSample.getLastUpdated());
+    return CustomDateFormatter.getDateTimeString(donation.getLastUpdated());
   }
 
   public String getCreatedDate() {
-    return CustomDateFormatter.getDateTimeString(collectedSample.getCreatedDate());
+    return CustomDateFormatter.getDateTimeString(donation.getCreatedDate());
   }
 
   public String getCreatedBy() {
-    User user = collectedSample.getCreatedBy();
+    User user = donation.getCreatedBy();
     if (user == null || user.getUsername() == null)
       return "";
     return user.getUsername();
   }
 
   public String getLastUpdatedBy() {
-    User user = collectedSample.getLastUpdatedBy();
+    User user = donation.getLastUpdatedBy();
     if (user == null || user.getUsername() == null)
       return "";
     return user.getUsername();
   }
 
   public String getTTIStatus() {
-    if (collectedSample.getTTIStatus() == null)
+    if (donation.getTTIStatus() == null)
       return "";
-    return collectedSample.getTTIStatus().toString();
+    return donation.getTTIStatus().toString();
   }
 
   public String getCollectionBatchNumber() {
-    if (collectedSample.getCollectionBatch() == null)
+    if (donation.getCollectionBatch() == null)
       return "";
-    return collectedSample.getCollectionBatch().getBatchNumber();
+    return donation.getCollectionBatch().getBatchNumber();
   }
 
   public String getBloodTypingStatus() {
-    if (collectedSample.getBloodTypingStatus() == null)
+    if (donation.getBloodTypingStatus() == null)
       return "";
-    return collectedSample.getBloodTypingStatus().toString();
+    return donation.getBloodTypingStatus().toString();
   }
   
   public String getBloodTypingMatchStatus() {
-    if (collectedSample.getBloodTypingMatchStatus() == null)
+    if (donation.getBloodTypingMatchStatus() == null)
       return "";
-    return collectedSample.getBloodTypingMatchStatus().toString();
+    return donation.getBloodTypingMatchStatus().toString();
   }
 
   public String getBloodAbo() {
-    if (collectedSample.getBloodAbo() == null)
+    if (donation.getBloodAbo() == null)
       return "";
-    return collectedSample.getBloodAbo().toString();
+    return donation.getBloodAbo().toString();
   }
 
   public String getBloodRh() {
-    if (collectedSample.getBloodRh() == null)
+    if (donation.getBloodRh() == null)
       return "";
-    return collectedSample.getBloodRh().toString();
+    return donation.getBloodRh().toString();
   }
 
   public String getExtraBloodTypeInformation() {
-    if (collectedSample.getExtraBloodTypeInformation() == null)
+    if (donation.getExtraBloodTypeInformation() == null)
       return "";
-    return collectedSample.getExtraBloodTypeInformation();
+    return donation.getExtraBloodTypeInformation();
   }
 
   public String getBloodGroup() {
@@ -158,47 +162,47 @@ public class CollectedSampleViewModel {
   }
 
   public BigDecimal getHaemoglobinCount() {
-		return collectedSample.getHaemoglobinCount();
+		return donation.getHaemoglobinCount();
 	}
 	
   public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
-		collectedSample.setHaemoglobinCount(haemoglobinCount);
+		donation.setHaemoglobinCount(haemoglobinCount);
 	}
   
   public BigDecimal getDonorWeight() {
-		return collectedSample.getDonorWeight();
+		return donation.getDonorWeight();
 	}
 
   public void setDonorWeight(BigDecimal donorWeight) {
-		collectedSample.setDonorWeight(donorWeight);
+		donation.setDonorWeight(donorWeight);
 	}
 
   public Integer  getDonorPulse() {
-		return collectedSample.getDonorPulse();
+		return donation.getDonorPulse();
 	}
 
   public void setDonorPulse(Integer donorPulse) {
-		collectedSample.setDonorPulse(donorPulse);
+		donation.setDonorPulse(donorPulse);
   }
 
   public Integer getBloodPressureSystolic() {
-    return  collectedSample.getBloodPressureSystolic();
+    return  donation.getBloodPressureSystolic();
   }
 
   public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
-    collectedSample.setBloodPressureSystolic(bloodPressureSystolic);
+    donation.setBloodPressureSystolic(bloodPressureSystolic);
   }
 
   public Integer getBloodPressureDiastolic() {
-    return collectedSample.getBloodPressureDiastolic();
+    return donation.getBloodPressureDiastolic();
   }
 
   public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
-    collectedSample.setBloodPressureDiastolic(bloodPressureDiastolic);
+    donation.setBloodPressureDiastolic(bloodPressureDiastolic);
   }
     
   public String getBleedStartTime() {
-    Date bleedStartTime = collectedSample.getBleedStartTime();
+    Date bleedStartTime = donation.getBleedStartTime();
     if (bleedStartTime != null) {
         return CustomDateFormatter.getTimeString(bleedStartTime);
     }
@@ -206,7 +210,7 @@ public class CollectedSampleViewModel {
   }
 
   public String getBleedEndTime() {
-    Date bleedEndTime = collectedSample.getBleedEndTime();
+    Date bleedEndTime = donation.getBleedEndTime();
     if (bleedEndTime != null) {
         return CustomDateFormatter.getTimeString(bleedEndTime);
     }
@@ -214,7 +218,7 @@ public class CollectedSampleViewModel {
   }
 
   public  LocationViewModel getDonorPanel(){
-      return new LocationViewModel(collectedSample.getDonorPanel());
+      return new LocationViewModel(donation.getDonorPanel());
   }
 
 }

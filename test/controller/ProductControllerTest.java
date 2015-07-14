@@ -22,10 +22,10 @@ import org.junit.Test;
 import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import repository.CollectedSampleRepository;
+import repository.DonationRepository;
 import repository.ProductRepository;
 import repository.ProductTypeRepository;
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
 import model.product.Product;
 import model.product.ProductStatus;
 import model.producttype.ProductType;
@@ -39,7 +39,7 @@ public class ProductControllerTest {
 	private ProductRepository productRepository;
 	
 	@Autowired
-	private CollectedSampleRepository collectedSampleRepository;
+	private DonationRepository donationRepository;
 	
 	@Autowired
 	private ProductTypeRepository productTypeRepository;
@@ -60,7 +60,7 @@ public class ProductControllerTest {
 	      }
 	      String sortName = productType2.getProductTypeNameShort();
 	      int noOfUnits = 3;
-	      long collectedSampleID = 1;
+	      long donationId = 1;
 	      
 	      String createdPackNumber = collectionNumber +"-"+sortName;
 	      
@@ -85,9 +85,9 @@ public class ProductControllerTest {
 		          productType.setProductTypeName(productType2.getProductTypeName());
 		          productType.setId(productType2.getId());
 		          product.setProductType(productType);
-		          CollectedSample collectedSample = new CollectedSample();
-		          collectedSample.setId(collectedSampleID);
-		          product.setCollectedSample(collectedSample);
+		          Donation donation = new Donation();
+		          donation.setId(donationId);
+		          product.setDonation(donation);
 		          product.setStatus(ProductStatus.QUARANTINED);
 			        productRepository.addProduct(product);
 	
@@ -119,9 +119,9 @@ public class ProductControllerTest {
 		          productType.setProductTypeName(productType2.getProductTypeName());
 		          productType.setId(productType2.getId());
 		          product.setProductType(productType);
-		          CollectedSample collectedSample = new CollectedSample();
-		          collectedSample.setId(collectedSampleID);
-		          product.setCollectedSample(collectedSample);
+		          Donation donation = new Donation();
+		          donation.setId(donationId);
+		          product.setDonation(donation);
 		          product.setStatus(ProductStatus.QUARANTINED);
 			        productRepository.addProduct(product);
 			        productRepository.setProductStatusToProcessed(productId);

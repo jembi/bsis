@@ -26,7 +26,7 @@ public class SequenceNumberRepository {
                       "where s.targetTable=:targetTable AND " +
                       " s.columnName=:columnName";
     TypedQuery<SequenceNumberStore> query = em.createQuery(queryStr, SequenceNumberStore.class);
-    query.setParameter("targetTable", "CollectedSample");
+    query.setParameter("targetTable", "Donation");
     query.setParameter("columnName", "collectionNumber");
 
     SequenceNumberStore seqNumStore = null;
@@ -42,7 +42,7 @@ public class SequenceNumberRepository {
       valuePresentInTable = false;
       prefix = "C";
       seqNumStore = new SequenceNumberStore();
-      seqNumStore.setTargetTable("CollectedSample");
+      seqNumStore.setTargetTable("Donation");
       seqNumStore.setColumnName("collectionNumber");
       seqNumStore.setPrefix(prefix);
     }
@@ -191,7 +191,7 @@ public class SequenceNumberRepository {
         "where s.targetTable=:targetTable AND " +
         " s.columnName=:columnName";
     TypedQuery<SequenceNumberStore> query = em.createQuery(queryStr, SequenceNumberStore.class);
-    query.setParameter("targetTable", "CollectedSample");
+    query.setParameter("targetTable", "Donation");
     query.setParameter("columnName", "collectionNumber");
     
     SequenceNumberStore seqNumStore = null;
@@ -207,7 +207,7 @@ public class SequenceNumberRepository {
     valuePresentInTable = false;
     prefix = "C";
     seqNumStore = new SequenceNumberStore();
-    seqNumStore.setTargetTable("CollectedSample");
+    seqNumStore.setTargetTable("Donation");
     seqNumStore.setColumnName("collectionNumber");
     seqNumStore.setPrefix(prefix);
     }

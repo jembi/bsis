@@ -4,12 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
-import model.collectedsample.CollectedSample;
+
 import model.collectionbatch.CollectionBatch;
 import model.testbatch.TestBatch;
+import model.donation.Donation;
 import model.donor.Donor;
 import backingform.TestResultBackingForm;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,17 +23,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
+
 import javax.validation.Valid;
-import repository.CollectedSampleRepository;
+
+import repository.DonationRepository;
 import repository.DonorRepository;
 import repository.TestBatchRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import model.bloodtesting.TTIStatus;
 import repository.bloodtesting.BloodTypingStatus;
 import repository.bloodtesting.BloodTypingMatchStatus;
-
 import utils.PermissionConstants;
-import viewmodel.CollectedSampleViewModel;
+import viewmodel.DonationViewModel;
 import viewmodel.DonorViewModel;
 import viewmodel.BloodTestingRuleResult;
 
@@ -39,7 +43,7 @@ import viewmodel.BloodTestingRuleResult;
 public class TestResultController {
 
   @Autowired
-  private CollectedSampleRepository collectedSampleRepository;
+  private DonationRepository donationRepository;
 
   @Autowired
   private TestBatchRepository testBatchRepository;
@@ -58,9 +62,9 @@ public class TestResultController {
   public ResponseEntity findTestResult(@PathVariable String donationIdentificationNumber ) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    CollectedSample c = collectedSampleRepository.findCollectedSampleByCollectionNumber(donationIdentificationNumber);
-    BloodTestingRuleResult results =  bloodTestingRepository.getAllTestsStatusForCollection(c.getId());
-    map.put("donation", new CollectedSampleViewModel(c));
+    Donation c = donationRepository.findDonationByCollectionNumber(donationIdentificationNumber);
+    BloodTestingRuleResult results =  bloodTestingRepository.getAllTestsStatusForDonation(c.getId());
+    map.put("donation", new DonationViewModel(c));
     map.put("testResults", results);
     return new ResponseEntity(map, HttpStatus.OK);
   }
@@ -149,11 +153,11 @@ public class TestResultController {
 		Map<Long, Map<Long, String>> errorMap = null;
 		Map<String, Object> fieldErrors = new HashMap<String, Object>();
 		Map<String, Object> map = new HashMap<String, Object>();
-		CollectedSample collectedSample = collectedSampleRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
+		Donation donation = donationRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
 	
 		Map<String, Object> results = null;
 		
-		results = bloodTestingRepository.saveBloodTestingResults(collectedSample.getId(), form.getTestResults(), true);
+		results = bloodTestingRepository.saveBloodTestingResults(donation.getId(), form.getTestResults(), true);
 	    if (results != null)
 	      errorMap = (Map<Long, Map<Long, String>>) results.get("errors");
 	    if (errorMap != null && !errorMap.isEmpty())
@@ -187,11 +191,11 @@ public class TestResultController {
 		Map<Long, Map<Long, String>> errorMap = null;
 		Map<String, Object> fieldErrors = new HashMap<String, Object>();
 		Map<String, Object> map = new HashMap<String, Object>();
-		//CollectedSample collectedSample = collectedSampleRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
+		//Donation donation = donationRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
 	
 		Map<String, Object> results = null;
 		
-		CollectedSample donation = collectedSampleRepository.findCollectedSampleByCollectionNumber(donationIdentificationNumber);
+		Donation donation = donationRepository.findDonationByCollectionNumber(donationIdentificationNumber);
 		Donor donor = donation.getDonor();
 		donor.setBloodAbo(bloodAbo);
 		donor.setBloodRh(bloodRh);
@@ -200,7 +204,7 @@ public class TestResultController {
 		donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
 		
 		Donor updatedDonor = donorRepository.updateDonor(donor);
-		CollectedSample cs = collectedSampleRepository.updateCollectedSample(donation);
+		Donation cs = donationRepository.updateDonation(donation);
 		
 		map.put("donor", getDonorsViewModel(donorRepository.findDonorById(updatedDonor.getId())));
         return new ResponseEntity<Map<String, Object>>(map, httpStatus);

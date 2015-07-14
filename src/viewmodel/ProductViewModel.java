@@ -1,10 +1,11 @@
 package viewmodel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Arrays;
 import java.util.Date;
 
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
 import model.product.Product;
 import model.product.ProductStatus;
 import model.producttype.ProductType;
@@ -40,8 +41,8 @@ public class ProductViewModel {
   }
 
   @JsonIgnore
-  public CollectedSample getCollectedSample() {
-    return product.getCollectedSample();
+  public Donation getDonation() {
+    return product.getDonation();
   }
 
   public ProductTypeViewModel getProductType() {
@@ -69,19 +70,19 @@ public class ProductViewModel {
   }
 
   public String getCollectionNumber() {
-    if (getProduct() == null || getProduct().getCollectedSample() == null ||
-        getProduct().getCollectedSample().getCollectionNumber() == null
+    if (getProduct() == null || getProduct().getDonation() == null ||
+        getProduct().getDonation().getCollectionNumber() == null
        )
       return "";
-    return getProduct().getCollectedSample().getCollectionNumber();
+    return getProduct().getDonation().getCollectionNumber();
   }
   
-  public String getCollectedSampleID() {
-    if (getProduct() == null || getProduct().getCollectedSample() == null ||
-        getProduct().getCollectedSample().getId() == null
+  public String getDonationID() {
+    if (getProduct() == null || getProduct().getDonation() == null ||
+        getProduct().getDonation().getId() == null
        )
       return "";
-    return getProduct().getCollectedSample().getId().toString();
+    return getProduct().getDonation().getId().toString();
   }
 
   public String getAge() {
@@ -152,11 +153,11 @@ public class ProductViewModel {
 
   @JsonIgnore
   public String getBloodGroup() {
-    if (product == null || product.getCollectedSample() == null ||
-        product.getCollectedSample().getCollectionNumber() == null
+    if (product == null || product.getDonation() == null ||
+        product.getDonation().getCollectionNumber() == null
        )
       return "";
-    CollectedSampleViewModel collectionViewModel = new CollectedSampleViewModel(product.getCollectedSample());
+    DonationViewModel collectionViewModel = new DonationViewModel(product.getDonation());
     return collectionViewModel.getBloodGroup();
   }
 

@@ -3,9 +3,11 @@ package controller;
 import backingform.ProductCombinationBackingForm;
 import backingform.RecordProductBackingForm;
 import backingform.validator.ProductBackingFormValidator;
+
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
@@ -19,9 +21,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Calendar;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import model.collectedsample.CollectedSample;
+
+import model.donation.Donation;
 import model.product.Product;
 import model.product.ProductStatus;
 import model.productmovement.ProductStatusChange;
@@ -30,6 +34,7 @@ import model.productmovement.ProductStatusChangeReasonCategory;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 import model.producttype.ProductTypeTimeUnits;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +49,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import repository.CollectedSampleRepository;
+
+import repository.DonationRepository;
 import repository.ProductRepository;
 import repository.ProductStatusChangeReasonRepository;
 import repository.ProductTypeRepository;
@@ -63,7 +69,7 @@ public class ProductController {
   private ProductRepository productRepository;
   
   @Autowired
-  private CollectedSampleRepository collectedSampleRepository;
+  private DonationRepository donationRepository;
 
   @Autowired
   private ProductStatusChangeReasonRepository productStatusChangeReasonRepository;
@@ -272,7 +278,7 @@ public class ProductController {
 
       ProductStatusChangeReason statusChangeReason = new ProductStatusChangeReason();
       statusChangeReason.setId(discardReasonId);
-      CollectedSample collectedSample = productRepository.findProductById(id).getCollectedSample();
+      Donation donation = productRepository.findProductById(id).getDonation();
       productRepository.discardProduct(id, statusChangeReason, discardReasonText);
       
       Map<String, Object> map = new HashMap<String, Object>();
@@ -283,7 +289,7 @@ public class ProductController {
 	  List<ProductStatus> statusList = Arrays.asList(ProductStatus.values());
 	
 	  results = productRepository.findProductByCollectionNumber(
-	      collectedSample.getCollectionNumber(), statusList,
+	      donation.getCollectionNumber(), statusList,
 	      pagingParams);
 	
 	  List<ProductViewModel> components = new ArrayList<ProductViewModel>();
@@ -398,8 +404,8 @@ public class ProductController {
 
       ProductType productType2 = productTypeRepository.getProductTypeById(Integer.valueOf(form.getChildComponentTypeId()));
       Product parentComponent = productRepository.findProductById(Long.valueOf(form.getParentComponentId()));
-      CollectedSample collectedSample = parentComponent.getCollectedSample();
-      String collectionNumber = collectedSample.getCollectionNumber();
+      Donation donation = parentComponent.getDonation();
+      String collectionNumber = donation.getCollectionNumber();
       ProductStatus status = parentComponent.getStatus();
       long productId = Long.valueOf(form.getParentComponentId());
 
@@ -408,7 +414,7 @@ public class ProductController {
       if (form.getNumUnits() != null){
     	  noOfUnits = form.getNumUnits();
       }
-      long collectedSampleID = collectedSample.getId();      
+      long donationID = donation.getId();      
       String createdPackNumber = collectionNumber +"-"+sortName;
       
       // Add New product
@@ -419,10 +425,10 @@ public class ProductController {
               product.setIsDeleted(false);
               product.setComponentIdentificationNumber(createdPackNumber + "-" + i);
 	          product.setProductType(productType2);
-	          product.setCollectedSample(collectedSample);
+	          product.setDonation(donation);
 	          product.setParentProduct(parentComponent);
 	          product.setStatus(ProductStatus.QUARANTINED);
-	          product.setCreatedOn(collectedSample.getCollectedOn());
+	          product.setCreatedOn(donation.getCollectedOn());
 	          
 		      Calendar cal = Calendar.getInstance();
 		      Date createdOn = cal.getTime(); 
@@ -457,7 +463,7 @@ public class ProductController {
 	List<ProductStatus> statusList = Arrays.asList(ProductStatus.values());
 	
 	results = productRepository.findProductByCollectionNumber(
-	      collectedSample.getCollectionNumber(), statusList,
+	      donation.getCollectionNumber(), statusList,
 	      pagingParams);
 	
 	List<ProductViewModel> components = new ArrayList<ProductViewModel>();
@@ -481,8 +487,8 @@ public class ProductController {
        @RequestBody @Valid RecordProductBackingForm form) throws ParseException{
 
       Product parentComponent = productRepository.findProductById(Long.valueOf(form.getParentComponentId()));
-      CollectedSample collectedSample = parentComponent.getCollectedSample();
-      String collectionNumber = collectedSample.getCollectionNumber();
+      Donation donation = parentComponent.getDonation();
+      String collectionNumber = donation.getCollectionNumber();
       ProductStatus status = parentComponent.getStatus();
       long productId = Long.valueOf(form.getParentComponentId());
       
@@ -510,7 +516,6 @@ public class ProductController {
     	        	      
 	      String componentTypeCode = pt.getProductTypeNameShort();
 	      int noOfUnits = newComponents.get(pt);
-	      long collectedSampleID = collectedSample.getId();      
 	      String createdPackNumber = collectionNumber +"-"+componentTypeCode;
 	      
 	      // Add New product
@@ -528,10 +533,10 @@ public class ProductController {
 	            	  product.setComponentIdentificationNumber(createdPackNumber);
 	              }
 		          product.setProductType(pt);
-		          product.setCollectedSample(collectedSample);
+		          product.setDonation(donation);
 		          product.setParentProduct(parentComponent);
 		          product.setStatus(ProductStatus.QUARANTINED);
-		          product.setCreatedOn(collectedSample.getCollectedOn());
+		          product.setCreatedOn(donation.getCollectedOn());
 		          
 			      Calendar cal = Calendar.getInstance();
 			      Date createdOn = cal.getTime(); 
@@ -567,7 +572,7 @@ public class ProductController {
 	List<ProductStatus> statusList = Arrays.asList(ProductStatus.values());
 	
 	results = productRepository.findProductByCollectionNumber(
-	      collectedSample.getCollectionNumber(), statusList,
+	      donation.getCollectionNumber(), statusList,
 	      pagingParams);
 	
 	List<ProductViewModel> components = new ArrayList<ProductViewModel>();
@@ -695,7 +700,7 @@ public class ProductController {
       List<Object> row = new ArrayList<Object>();
       
       row.add(product.getId().toString());
-      row.add(product.getCollectedSample().getId());
+      row.add(product.getDonation().getId());
       for (String property : Arrays.asList("productType", "donationIdentificationNumber", "createdOn", "expiresOn", "status", "createdBy")) {
         if (formFields.containsKey(property)) {
           Map<String, Object> properties = (Map<String, Object>)formFields.get(property);

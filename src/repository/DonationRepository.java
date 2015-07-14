@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -22,20 +23,23 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.TTIStatus;
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
 import model.donor.Donor;
 import model.product.Product;
 import model.product.ProductStatus;
 import model.producttype.ProductType;
 import model.util.BloodGroup;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
 import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import repository.bloodtesting.BloodTypingMatchStatus;
@@ -45,13 +49,13 @@ import viewmodel.BloodTestingRuleResult;
 
 @Repository
 @Transactional
-public class CollectedSampleRepository {
+public class DonationRepository {
 	
 	
 	/**
 	  * The Constant LOGGER.
 	  */
-	  private static final Logger LOGGER = Logger.getLogger(CollectedSampleRepository.class);
+	  private static final Logger LOGGER = Logger.getLogger(DonationRepository.class);
 
   @PersistenceContext
   private EntityManager em;
@@ -65,70 +69,70 @@ public class CollectedSampleRepository {
   @Autowired
   private ProductRepository productRepository;
   
-  public void saveCollectedSample(CollectedSample collectedSample) {
-    em.persist(collectedSample);
+  public void saveDonation(Donation donation) {
+    em.persist(donation);
     em.flush();
   }
 
-  public CollectedSample updateCollectedSample(CollectedSample collectedSample) throws NoResultException{
-    CollectedSample existingCollectedSample = findCollectedSampleById(collectedSample.getId());
-    if (existingCollectedSample == null) {
+  public Donation updateDonation(Donation donation) throws NoResultException{
+    Donation existingDonation = findDonationById(donation.getId());
+    if (existingDonation == null) {
       return null;
     }
-    existingCollectedSample.copy(collectedSample);
-    existingCollectedSample = em.merge(existingCollectedSample);
+    existingDonation.copy(donation);
+    existingDonation = em.merge(existingDonation);
     ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
-    applicationContext.publishEvent(new CollectionUpdatedEvent("10", collectedSample));
+    applicationContext.publishEvent(new CollectionUpdatedEvent("10", donation));
     em.flush();
-    return existingCollectedSample;
+    return existingDonation;
   }
 
-  public CollectedSample findCollectedSampleById(Long collectedSampleId) {
-    String queryString = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE c.id = :collectedSampleId and c.isDeleted = :isDeleted";
-    TypedQuery<CollectedSample> query = em.createQuery(queryString, CollectedSample.class);
+  public Donation findDonationById(Long donationId) {
+    String queryString = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE c.id = :donationId and c.isDeleted = :isDeleted";
+    TypedQuery<Donation> query = em.createQuery(queryString, Donation.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     try{
-    return query.setParameter("collectedSampleId", collectedSampleId).getSingleResult();
+    return query.setParameter("donationId", donationId).getSingleResult();
     }catch(NoResultException ex){
-        throw new NoResultException("No Donation Exists with ID :" + collectedSampleId);
+        throw new NoResultException("No Donation Exists with ID :" + donationId);
     }
   }
 
-  public List<Object> findCollectedSamples(
+  public List<Object> findDonations(
       String collectionNumber, List<Integer> bloodBagTypeIds, List<Long> panelIds, String dateCollectedFrom,
-      String dateCollectedTo, boolean includeTestedCollections, Map<String, Object> pagingParams) throws ParseException {
+      String dateCollectedTo, boolean includeTestedDonations, Map<String, Object> pagingParams) throws ParseException {
 
     String queryStr = "";
     if (StringUtils.isNotBlank(collectionNumber)) {
-      queryStr = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE " +
+      queryStr = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE " +
                  "c.collectionNumber = :collectionNumber AND " +
                  "c.bloodBagType.id IN :bloodBagTypeIds AND " +
                  "c.donorPanel.id IN :donorPanelIds AND " +
                  "c.collectedOn >= :dateCollectedFrom AND c.collectedOn <= :dateCollectedTo AND " +
                  "c.isDeleted=:isDeleted";
     } else {
-      queryStr = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE " +
+      queryStr = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE " +
           "c.bloodBagType.id IN :bloodBagTypeIds AND " +
           "c.donorPanel.id IN :panelIds AND " +
           "c.collectedOn >= :dateCollectedFrom AND c.collectedOn <= :dateCollectedTo AND " +
           "c.isDeleted=:isDeleted";
     }
 
-    if (!includeTestedCollections)
+    if (!includeTestedDonations)
       queryStr = queryStr + " AND (c.bloodTypingStatus=:bloodTypingStatus OR c.ttiStatus=:ttiStatus)";
 
-    TypedQuery<CollectedSample> query;
+    TypedQuery<Donation> query;
     if (pagingParams.containsKey("sortColumn")) {
       queryStr += " ORDER BY c." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
     }
     
-    query = em.createQuery(queryStr, CollectedSample.class);
+    query = em.createQuery(queryStr, Donation.class);
     query.setParameter("isDeleted", Boolean.FALSE);
 
     if (StringUtils.isNotBlank(collectionNumber))
       query.setParameter("collectionNumber", collectionNumber);
 
-    if (!includeTestedCollections) {
+    if (!includeTestedDonations) {
       query.setParameter("bloodTypingStatus", BloodTypingStatus.NOT_DONE);
       query.setParameter("ttiStatus", TTIStatus.NOT_DONE);
     }
@@ -160,59 +164,59 @@ public class CollectedSampleRepository {
     return countQuery.getSingleResult().longValue();
   }  
 
-  public List<CollectedSample> getAllCollectedSamples() {
-    TypedQuery<CollectedSample> query = em.createQuery(
-        "SELECT c FROM CollectedSample c WHERE c.isDeleted= :isDeleted",
-        CollectedSample.class);
+  public List<Donation> getAllDonations() {
+    TypedQuery<Donation> query = em.createQuery(
+        "SELECT c FROM Donation c WHERE c.isDeleted= :isDeleted",
+        Donation.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     return query.getResultList();
   }
 
-  public List<CollectedSample> getCollectedSamples(Date fromDate, Date toDate) {
-    TypedQuery<CollectedSample> query = em
+  public List<Donation> getDonations(Date fromDate, Date toDate) {
+    TypedQuery<Donation> query = em
         .createQuery(
-            "SELECT c FROM CollectedSample c WHERE c.dateCollected >= :fromDate and c.dateCollected<= :toDate and c.isDeleted= :isDeleted",
-            CollectedSample.class);
+            "SELECT c FROM Donation c WHERE c.dateCollected >= :fromDate and c.dateCollected<= :toDate and c.isDeleted= :isDeleted",
+            Donation.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("fromDate", fromDate);
     query.setParameter("toDate", toDate);
-    List<CollectedSample> collectedSamples = query.getResultList();
-    if (collectedSamples.isEmpty()) {
-      return new ArrayList<CollectedSample>();
+    List<Donation> donations = query.getResultList();
+    if (donations.isEmpty()) {
+      return new ArrayList<Donation>();
     }
-    return collectedSamples;
+    return donations;
   }
 
-  public void deleteCollectedSample(Long collectedSampleId) {
-    CollectedSample existingCollectedSample = findCollectedSampleById(collectedSampleId);
-    existingCollectedSample.setIsDeleted(Boolean.TRUE);
-    em.merge(existingCollectedSample);
+  public void deleteDonation(Long donationId) {
+    Donation existingDonation = findDonationById(donationId);
+    existingDonation.setIsDeleted(Boolean.TRUE);
+    em.merge(existingDonation);
     em.flush();
   }
 
-  public List<CollectedSample> findAnyCollectedSampleMatching(String collectionNumber,
+  public List<Donation> findAnyDonationMatching(String collectionNumber,
       String sampleNumber, String shippingNumber, String dateCollectedFrom,
       String dateCollectedTo, List<String> centers) {
 
-    TypedQuery<CollectedSample> query = em.createQuery(
-        "SELECT c FROM CollectedSample c JOIN c.center center WHERE "
+    TypedQuery<Donation> query = em.createQuery(
+        "SELECT c FROM Donation c JOIN c.center center WHERE "
             + "(c.collectionNumber = :collectionNumber OR "
             + "c.sampleNumber = :sampleNumber OR "
             + "c.shippingNumber = :shippingNumber OR "
             + "center.id IN (:centers)) AND ("
             + "c.collectedOn BETWEEN :dateCollectedFrom AND "
             + ":dateCollectedTo" + ") AND " + "(c.isDeleted= :isDeleted)",
-        CollectedSample.class);
+        Donation.class);
 
     query.setParameter("isDeleted", Boolean.FALSE);
-    String collectedSampleNo = ((collectionNumber == null) ? "" : collectionNumber);
-    query.setParameter("collectionNumber", collectedSampleNo);
+    String donationNo = ((collectionNumber == null) ? "" : collectionNumber);
+    query.setParameter("collectionNumber", donationNo);
     query.setParameter("sampleNumber", sampleNumber);
     query.setParameter("shippingNumber", shippingNumber);
 
     query.setParameter("centers", centers);
 
-    List<CollectedSample> resultList = query.getResultList();
+    List<Donation> resultList = query.getResultList();
     return resultList;
   }
 
@@ -235,7 +239,7 @@ public class CollectedSampleRepository {
     return to;      
   }
 
-  public Map<String, Map<Long, Long>> findNumberOfCollectedSamples(Date dateCollectedFrom,
+  public Map<String, Map<Long, Long>> findNumberOfDonations(Date dateCollectedFrom,
       Date dateCollectedTo, String aggregationCriteria,
       List<String> panels, List<String> bloodGroups)throws ParseException{
 
@@ -254,7 +258,7 @@ public class CollectedSampleRepository {
     }
 
     TypedQuery<Object[]> query = em.createQuery(
-        "SELECT count(c), c.collectedOn, c.bloodAbo, c.bloodRh FROM CollectedSample c WHERE " +
+        "SELECT count(c), c.collectedOn, c.bloodAbo, c.bloodRh FROM Donation c WHERE " +
         "c.donorPanel.id IN (:panelIds) AND " +
         "c.collectedOn BETWEEN :dateCollectedFrom AND " +
         ":dateCollectedTo AND (c.isDeleted= :isDeleted) GROUP BY " +
@@ -314,63 +318,63 @@ public class CollectedSampleRepository {
     return resultMap;
   }
 
-  public CollectedSample addCollectedSample(CollectedSample collectedSample) throws PersistenceException{
-    collectedSample.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
-    collectedSample.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
-    collectedSample.setTTIStatus(TTIStatus.NOT_DONE);
-    collectedSample.setIsDeleted(false);
+  public Donation addDonation(Donation donation) throws PersistenceException{
+    donation.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+    donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
+    donation.setTTIStatus(TTIStatus.NOT_DONE);
+    donation.setIsDeleted(false);
     
-    em.persist(collectedSample);
+    em.persist(donation);
     em.flush();
-    em.refresh(collectedSample);
-    updateDonorFields(collectedSample);
+    em.refresh(donation);
+    updateDonorFields(donation);
     
     ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
-    applicationContext.publishEvent(new CollectionUpdatedEvent("10", collectedSample));
+    applicationContext.publishEvent(new CollectionUpdatedEvent("10", donation));
     
-    em.refresh(collectedSample);
+    em.refresh(donation);
    
     //Create initial component only if the countAsDonation is true
-    if( collectedSample.getBloodBagType().isCountAsDonation() == true)
-        createInitialComponent(collectedSample);
+    if( donation.getBloodBagType().isCountAsDonation() == true)
+        createInitialComponent(donation);
   
-    return collectedSample;
+    return donation;
   }
   
-  public void createInitialComponent(CollectedSample collectedSample){
+  public void createInitialComponent(Donation donation){
     
-    ProductType productType = collectedSample.getBloodBagType().getProductType();
+    ProductType productType = donation.getBloodBagType().getProductType();
       
     Product product = new Product();
     product.setIsDeleted(false);
-    product.setComponentIdentificationNumber(collectedSample.getCollectionNumber() +"-"+productType.getProductTypeNameShort());
-    product.setCollectedSample(collectedSample);
+    product.setComponentIdentificationNumber(donation.getCollectionNumber() +"-"+productType.getProductTypeNameShort());
+    product.setDonation(donation);
     product.setStatus(ProductStatus.QUARANTINED);
-    product.setCreatedDate(collectedSample.getCreatedDate());
+    product.setCreatedDate(donation.getCreatedDate());
 
     // set new component creation date to match donation date 
-    product.setCreatedOn(collectedSample.getCollectedOn());
+    product.setCreatedOn(donation.getCollectedOn());
     // if bleed time is provided, update component creation time to match bleed start time 
-    if (collectedSample.getBleedStartTime() != null){
+    if (donation.getBleedStartTime() != null){
     	Calendar donationDate = Calendar.getInstance();
-    	donationDate.setTime(collectedSample.getCollectedOn());
+    	donationDate.setTime(donation.getCollectedOn());
     	Calendar bleedTime = Calendar.getInstance();
-    	bleedTime.setTime(collectedSample.getBleedStartTime());
+    	bleedTime.setTime(donation.getBleedStartTime());
     	donationDate.set(Calendar.HOUR_OF_DAY, bleedTime.get(Calendar.HOUR_OF_DAY));
     	donationDate.set(Calendar.MINUTE, bleedTime.get(Calendar.MINUTE));
     	donationDate.set(Calendar.SECOND, bleedTime.get(Calendar.SECOND));
     	donationDate.set(Calendar.MILLISECOND, bleedTime.get(Calendar.MILLISECOND));
     	product.setCreatedOn(donationDate.getTime());
     }
-    product.setCreatedBy(collectedSample.getCreatedBy());
+    product.setCreatedBy(donation.getCreatedBy());
     
     // set cal to collectedOn Date 
     Calendar cal = Calendar.getInstance();
-    cal.setTime(collectedSample.getCollectedOn());
+    cal.setTime(donation.getCollectedOn());
     
     // second calendar to store bleedStartTime 
     Calendar bleedStartTime = Calendar.getInstance();
-    bleedStartTime.setTime(collectedSample.getBleedStartTime());
+    bleedStartTime.setTime(donation.getBleedStartTime());
     
     // update cal to set time to bleedStartTime
     cal.set(Calendar.HOUR_OF_DAY, bleedStartTime.get(Calendar.HOUR_OF_DAY));
@@ -388,18 +392,18 @@ public class CollectedSampleRepository {
    
   }
   
-  private void updateDonorFields(CollectedSample collectedSample){
-           Donor donor = collectedSample.getDonor();
+  private void updateDonorFields(Donation donation){
+           Donor donor = donation.getDonor();
      
      //set date of first donation 
-     if (collectedSample.getDonor().getDateOfFirstDonation() == null) {
-          donor.setDateOfFirstDonation(collectedSample.getCollectedOn());
+     if (donation.getDonor().getDateOfFirstDonation() == null) {
+          donor.setDateOfFirstDonation(donation.getCollectedOn());
       }
        //set dueToDonate
-      BloodBagType packType = collectedSample.getBloodBagType();
+      BloodBagType packType = donation.getBloodBagType();
       int periodBetweenDays = packType.getPeriodBetweenDonations();
       Calendar dueToDonateDate = Calendar.getInstance();
-      dueToDonateDate.setTime(collectedSample.getCollectedOn());
+      dueToDonateDate.setTime(donation.getCollectedOn());
       dueToDonateDate.add(Calendar.DAY_OF_YEAR, periodBetweenDays);
 
       if (donor.getDueToDonate() == null || dueToDonateDate.getTime().after(donor.getDueToDonate())) {
@@ -407,9 +411,9 @@ public class CollectedSampleRepository {
       }
   }
 
-  public List<CollectedSample> addAllCollectedSamples(List<CollectedSample> collectedSamples) {
+  public List<Donation> addAllDonations(List<Donation> donations) {
     ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
-    for (CollectedSample c : collectedSamples) {
+    for (Donation c : donations) {
       c.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
       c.setTTIStatus(TTIStatus.NOT_DONE);
       em.persist(c);
@@ -417,161 +421,69 @@ public class CollectedSampleRepository {
       em.refresh(c);
     }
     em.flush();
-    return collectedSamples;
+    return donations;
   }
 
-  public CollectedSample findCollectedSampleByCollectionNumber(
+  public Donation findDonationByCollectionNumber(
       String collectionNumber)throws NoResultException, NonUniqueResultException{
-    String queryString = "SELECT c FROM CollectedSample c LEFT JOIN FETCH c.donor WHERE c.collectionNumber = :collectionNumber and c.isDeleted = :isDeleted";
-    TypedQuery<CollectedSample> query = em.createQuery(queryString, CollectedSample.class);
+    String queryString = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE c.collectionNumber = :collectionNumber and c.isDeleted = :isDeleted";
+    TypedQuery<Donation> query = em.createQuery(queryString, Donation.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("collectionNumber", collectionNumber);
-    CollectedSample c = null;
+    Donation c = null;
     c = query.getSingleResult();
     return c;
   }
 
-  public CollectedSample findCollectionByCollectionNumberIncludeDeleted(
+  public Donation findDonationByCollectionNumberIncludeDeleted(
       String collectionNumber){
-    String queryString = "SELECT c FROM CollectedSample c WHERE c.collectionNumber = :collectionNumber";
-    TypedQuery<CollectedSample> query = em.createQuery(queryString, CollectedSample.class);
+    String queryString = "SELECT c FROM Donation c WHERE c.collectionNumber = :collectionNumber";
+    TypedQuery<Donation> query = em.createQuery(queryString, Donation.class);
     query.setParameter("collectionNumber", collectionNumber);
-    CollectedSample c = null;
+    Donation c = null;
     try{
     c = query.getSingleResult();
     }catch(Exception ex){}
     return c;
   }
 
-  /**
-   * Worksheets are not used in BSIS later versions
-   *
-  public void saveToWorksheet(String collectionNumber,
-      List<Integer> bloodBagTypeIds, List<Long> centerIds,
-      List<Long> siteIds, String dateCollectedFrom, String dateCollectedTo,
-      boolean includeUntestedCollections, String worksheetNumber) throws Exception {
-
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    List<Object> results = findCollectedSamples(collectionNumber, bloodBagTypeIds,
-                                          centerIds, siteIds,
-                                          dateCollectedFrom, dateCollectedTo,
-                                          includeUntestedCollections,
-                                          pagingParams);
-
-    Worksheet worksheet = worksheetRepository.findWorksheetFullInformation(worksheetNumber);
-    
-    @SuppressWarnings("unchecked")
-    List<CollectedSample> collectedSamples = (List<CollectedSample>) results.get(0);
-    Set<String> collectionNumbers = new HashSet<String>();
-    for (CollectedSample c : collectedSamples) {
-      collectionNumbers.add(c.getCollectionNumber());
-    }
-
-    worksheetRepository.addCollectionsToWorksheet(worksheet.getId(), collectionNumbers);
-
-    em.persist(worksheet);
-    em.flush();
-  }
-
-  public Worksheet findWorksheet(String worksheetNumber) {
-    String queryStr = "SELECT w from Worksheet w LEFT JOIN FETCH w.collectedSamples c " +
-        "where w.worksheetNumber = :worksheetNumber";
-
-    TypedQuery<Worksheet> query = em.createQuery(queryStr, Worksheet.class);
-    query.setParameter("worksheetNumber", worksheetNumber);
-    Worksheet worksheet = null;
-    try {
-    worksheet = query.getSingleResult();
-    } catch (NoResultException ex) {
-    	LOGGER.error("Inside findWorksheet::"+ex);
-    }
-    
-    if (worksheet == null)
-      return null;
-    return worksheet;
-  }
-
-  public List<CollectedSample> findCollectionsInWorksheet(String worksheetNumber) {
-
-    Worksheet worksheet = findWorksheet(worksheetNumber);
-    if (worksheet == null)
-      return null;
-
-    List<CollectedSample> collectedSamples = new ArrayList<CollectedSample>(worksheet.getCollectedSamples());
-    Collections.sort(collectedSamples);
-    return collectedSamples;
-  }
-
-  public List<Object> findCollectionsInWorksheet(Long worksheetId, Map<String, Object> pagingParams) {
-
-    try {
-      String collectionsQueryStr = "SELECT c from CollectedSample c LEFT JOIN FETCH c.worksheets w " +
-                                   "WHERE w.id = :worksheetId ORDER BY c.id ASC";
-      TypedQuery<CollectedSample> collectionsQuery = em.createQuery(collectionsQueryStr, CollectedSample.class);
-      collectionsQuery.setParameter("worksheetId", worksheetId);
-  
-      int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
-      int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
-  
-      collectionsQuery.setFirstResult(start);
-      collectionsQuery.setMaxResults(length);
-  
-      List<CollectedSample> collectedSamples = collectionsQuery.getResultList();
-  
-      return Arrays.asList(collectedSamples, getTotalCollectionsInWorksheet(worksheetId));
-    } catch (NoResultException ex){
-      return Arrays.asList(Arrays.asList(new CollectedSample[0]), new Long(0));
-    }
-  }
-
-  private Long getTotalCollectionsInWorksheet(Long worksheetId) {
-    String queryStr = "SELECT COUNT(c) from Worksheet w LEFT JOIN w.collectedSamples c " +
-        "where w.id = :worksheetId";
-
-    TypedQuery<Long> query = em.createQuery(queryStr, Long.class);
-    query.setParameter("worksheetId", worksheetId);
-    return query.getSingleResult().longValue();
-  }
-  */
-
-  public CollectedSample verifyCollectionNumber(String collectionNumber) {
-	  CollectedSample collection = new CollectedSample();
-	  CollectedSample collectedSample = new CollectedSample();
-	  collectedSample.setCollectionNumber(collectionNumber);
-	  collectedSample = findCollectedSampleByCollectionNumber(collectionNumber);
-	  if (collectedSample != null) {
-	    return collectedSample;
+  public Donation verifyCollectionNumber(String collectionNumber) {
+	  Donation donation = new Donation();
+	  donation.setCollectionNumber(collectionNumber);
+	  donation = findDonationByCollectionNumber(collectionNumber);
+	  if (donation != null) {
+	    return donation;
 	  } else {
 	    return null;
 	  }
   }
   
-  public List<CollectedSample> verifyCollectionNumbers(List<String> collectionNumbers) {
-    List<CollectedSample> collections = new ArrayList<CollectedSample>();
+  public List<Donation> verifyCollectionNumbers(List<String> collectionNumbers) {
+    List<Donation> donations = new ArrayList<Donation>();
     for (String collectionNumber : collectionNumbers) {
       if (StringUtils.isBlank(collectionNumber))
         continue;
-      CollectedSample collectedSample = new CollectedSample();
-      collectedSample.setCollectionNumber(collectionNumber);
-      collectedSample = findCollectedSampleByCollectionNumber(collectionNumber);
-      if (collectedSample != null) {
-        collections.add(collectedSample);
+      Donation donation = new Donation();
+      donation.setCollectionNumber(collectionNumber);
+      donation = findDonationByCollectionNumber(collectionNumber);
+      if (donation != null) {
+        donations.add(donation);
       } else {
-        collections.add(null);
+        donations.add(null);
       }
     }
-    return collections;
+    return donations;
   }
 
   public Map<Long, BloodTestingRuleResult> filterCollectionsWithBloodTypingResults(
-      Collection<CollectedSample> collectedSamples) {
-    Iterator<CollectedSample> iter = collectedSamples.iterator();
+      Collection<Donation> donations) {
+    Iterator<Donation> iter = donations.iterator();
     Map<Long, BloodTestingRuleResult> statusMap = new HashMap<Long, BloodTestingRuleResult>();
     while (iter.hasNext()) {
-      CollectedSample c = iter.next();
+      Donation c = iter.next();
       BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();
       if (bloodTypingStatus != null && !bloodTypingStatus.equals(BloodTypingStatus.NOT_DONE)) {
-        statusMap.put(c.getId(), bloodTypingRepository.getAllTestsStatusForCollection(c.getId()));
+        statusMap.put(c.getId(), bloodTypingRepository.getAllTestsStatusForDonation(c.getId()));
       }
     }
     return statusMap;

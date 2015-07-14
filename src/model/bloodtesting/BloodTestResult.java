@@ -2,7 +2,9 @@ package model.bloodtesting;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +17,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
-import model.collectedsample.CollectedSample;
+
+import model.donation.Donation;
 import model.microtiterplate.MachineReading;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
@@ -37,7 +40,7 @@ public class BloodTestResult implements ModificationTracker {
   private Long id;
 
   @ManyToOne(cascade = {CascadeType.MERGE})
-  private CollectedSample collectedSample;
+  private Donation donation;
 
   @ManyToOne(cascade = {CascadeType.MERGE})
   private BloodTest bloodTest;
@@ -96,12 +99,12 @@ public class BloodTestResult implements ModificationTracker {
     this.notes = notes;
   }
 
-  public CollectedSample getCollectedSample() {
-    return collectedSample;
+  public Donation getDonation() {
+    return donation;
   }
 
-  public void setCollectedSample(CollectedSample collectedSample) {
-    this.collectedSample = collectedSample;
+  public void setDonation(Donation donation) {
+    this.donation = donation;
   }
 
   public Date getTestedOn() {

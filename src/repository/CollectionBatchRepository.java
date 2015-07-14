@@ -9,8 +9,8 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import model.collectedsample.CollectedSample;
 import model.collectionbatch.CollectionBatch;
+import model.donation.Donation;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
@@ -129,13 +129,13 @@ public class CollectionBatchRepository {
     return query.getResultList();
   }
   
-  public List<CollectedSample> findCollectionsInBatch(Integer batchId) {
+  public List<Donation> findCollectionsInBatch(Integer batchId) {
     CollectionBatch collectionBatch = findCollectionBatchByIdEager(batchId);
-    List<CollectedSample> collectedSamples = new ArrayList<CollectedSample>();
-    for (CollectedSample c : collectionBatch.getCollectionsInBatch()) {
-    	collectedSamples.add(c);
+    List<Donation> donations = new ArrayList<Donation>();
+    for (Donation c : collectionBatch.getCollectionsInBatch()) {
+    	donations.add(c);
     }
-    return collectedSamples;
+    return donations;
   }
   
   

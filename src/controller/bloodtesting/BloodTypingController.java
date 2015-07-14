@@ -1,10 +1,13 @@
 package controller.bloodtesting;
 
 import backingform.TestResultBackingForm;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import controller.UtilController;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,11 +16,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
+
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestType;
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,13 +35,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import repository.CollectedSampleRepository;
+
+import repository.DonationRepository;
 import repository.GenericConfigRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import utils.PermissionConstants;
 import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
-import viewmodel.CollectedSampleViewModel;
+import viewmodel.DonationViewModel;
 
 @RestController
 @RequestMapping("bloodgroupingtests")
@@ -45,7 +52,7 @@ public class BloodTypingController {
   private UtilController utilController;
 
   @Autowired
-  private CollectedSampleRepository collectedSampleRepository;
+  private DonationRepository donationRepository;
 
   @Autowired
   private GenericConfigRepository genericConfigRepository;
@@ -91,11 +98,11 @@ public class BloodTypingController {
     // here the key of the map corresponds to the index of the
     // collection number in the parameter collectionNumbers
     // corresponding to the collected sample in the value of the map
-    List<CollectedSample> collections = collectedSampleRepository.verifyCollectionNumbers(collectionNumbers);
+    List<Donation> collections = donationRepository.verifyCollectionNumbers(collectionNumbers);
 
     int numErrors = 0;
     int numValid = 0;
-    for (CollectedSample c : collections) {
+    for (Donation c : collections) {
       if (c == null)
         numErrors++;
       else
@@ -114,15 +121,15 @@ public class BloodTypingController {
     } else {
 
       // this is a map with id of the collected sample as the key
-      Map<Long, CollectedSample> collectionMap = new HashMap<Long, CollectedSample>();
-      for (CollectedSample c : collections) {
+      Map<Long, Donation> collectionMap = new HashMap<Long, Donation>();
+      for (Donation c : collections) {
         collectionMap.put(c.getId(), c);
       }
       map.put("collectionMap", collectionMap);
 
       // no errors but the user should be warned if there are any collections for which testing partly done
       Map<Long, BloodTestingRuleResult> collectionsWithBloodTypingTests = 
-          collectedSampleRepository.filterCollectionsWithBloodTypingResults(collections);
+          donationRepository.filterCollectionsWithBloodTypingResults(collections);
       map.put("collectionsWithBloodTypingTests", collectionsWithBloodTypingTests);
 
       Map<String, BloodTest> bloodTypingTestsMap = new HashMap<String, BloodTest>();
@@ -181,7 +188,7 @@ public class BloodTypingController {
 
     HttpStatus httpStatus = HttpStatus.CREATED;
     Map<String, Object> map = new HashMap<String, Object>();
-    List<CollectedSample> collections = collectedSampleRepository.verifyCollectionNumbers(collectionNumbers);
+    List<Donation> collections = donationRepository.verifyCollectionNumbers(collectionNumbers);
     //map.put("collectionNumbers", StringUtils.join(collectionNumbers, ","));
     map.put("collections", collections);
 
@@ -205,7 +212,7 @@ public class BloodTypingController {
       map.put("collectionsByCollectionId", results.get("collections"));
 
       List<String> collectionIds = new ArrayList<String>();
-      for (CollectedSample collection : collections) {
+      for (Donation collection : collections) {
         collectionIds.add(collection.getId().toString());
       }
       map.put("collectionIds", StringUtils.join(collectionIds, ","));
@@ -269,7 +276,7 @@ public class BloodTypingController {
 
     HttpStatus httpStatus = HttpStatus.CREATED;
     Map<String, Object> map = new HashMap<String, Object>();
-    CollectedSample collection = collectedSampleRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
+    Donation collection = donationRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
 
     Map<Long, String> bloodTypingTestResults = form.getTestResults();
     Map<Long, Map<Long, String>> errorMap = null;
@@ -294,7 +301,7 @@ public class BloodTypingController {
       httpStatus = HttpStatus.BAD_REQUEST;
     }
     
-    map.put("collection",  new CollectedSampleViewModel((CollectedSample)results.get("collection")));
+    map.put("collection",  new DonationViewModel((Donation)results.get("collection")));
     map.put("success", success);
 
     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
@@ -307,9 +314,9 @@ public class BloodTypingController {
                         @PathVariable String donationIds) {
     Map<String, Object> map = new HashMap<String, Object>();
     String[] collectionIds = donationIds.split(",");
-    Map<String, Object> results = bloodTestingRepository.getAllTestsStatusForCollections(Arrays.asList(collectionIds));
+    Map<String, Object> results = bloodTestingRepository.getAllTestsStatusForDonations(Arrays.asList(collectionIds));
     
-    LinkedHashMap<String, CollectedSample> collections = (LinkedHashMap<String, CollectedSample>)results.get("collections");
+    LinkedHashMap<String, Donation> collections = (LinkedHashMap<String, Donation>)results.get("collections");
 
     // depend on the getBloodTypingTestStatus() method to return collections, blood typing output as
     // a linked hashmap so that iteration is done in the same order as the collections in the well
@@ -319,13 +326,13 @@ public class BloodTypingController {
     return map;
   }
   
-  private Map<String, CollectedSampleViewModel> getCollectionViewModels(LinkedHashMap<String, CollectedSample> collections) {
+  private Map<String, DonationViewModel> getCollectionViewModels(LinkedHashMap<String, Donation> collections) {
     if (collections == null)
       return null;
-    Map<String, CollectedSampleViewModel> collectionViewModels = new LinkedHashMap<String, CollectedSampleViewModel>();    
-    for (Map.Entry<String, CollectedSample> entry : collections.entrySet())
+    Map<String, DonationViewModel> collectionViewModels = new LinkedHashMap<String, DonationViewModel>();    
+    for (Map.Entry<String, Donation> entry : collections.entrySet())
     {
-        collectionViewModels.put(entry.getKey(), new CollectedSampleViewModel(entry.getValue()));
+        collectionViewModels.put(entry.getKey(), new DonationViewModel(entry.getValue()));
     }
     return collectionViewModels;
   }
@@ -336,29 +343,14 @@ public class BloodTypingController {
       @PathVariable Long donationId) {
       
     Map<String, Object> map = new HashMap<String, Object>();
-    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(donationId);
-    BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForCollection(donationId);
-    map.put("donation", new CollectedSampleViewModel(collectedSample));
-    //map.put("collectionId", collectedSample.getId());
+    Donation donation = donationRepository.findDonationById(donationId);
+    BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForDonation(donationId);
+    map.put("donation", new DonationViewModel(donation));
     map.put("overview", ruleResult);
 
     return map;
   }
   
-/**
- * issue - #209 refer COllection sample end points
-  @RequestMapping(value="/test/donation/{id}", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
-  public Map<String, Object> showCollectionSummaryForTesting(
-      @PathVariable Long id) {
-    Map<String, Object> map = new HashMap<String, Object>();
-    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(id);
-    map.put("collection", new CollectedSampleViewModel(collectedSample));
-    map.put("collectionId", collectedSample.getId());
-    map.put("collectionFields", utilController.getFormFieldsForForm("collectedSample"));
-    return map;
-  }
-*/
   @RequestMapping(value="/results/additional", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public ResponseEntity<Map<String, Object>> saveAdditionalBloodTypingTests(
@@ -372,11 +364,11 @@ public class BloodTypingController {
       @SuppressWarnings("unchecked")
       Map<Long, String> saveTestsData = null;
       saveTestsData = form.getTestResults();
-       CollectedSample collectedSample = collectedSampleRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
+       Donation donation = donationRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
       for (Long testIdStr : saveTestsData.keySet()) {
         saveTestsDataWithLong.put(testIdStr, saveTestsData.get(testIdStr));
       }
-      bloodTypingTestResultsMap.put(collectedSample.getId(), saveTestsDataWithLong);
+      bloodTypingTestResultsMap.put(donation.getId(), saveTestsDataWithLong);
       Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResultsMap, form.getSaveUninterpretableResults());
       @SuppressWarnings("unchecked")
       Map<Long, Object> errorMap = (Map<Long, Object>) results.get("errors");
@@ -384,7 +376,7 @@ public class BloodTypingController {
       if (errorMap != null && !errorMap.isEmpty()) {
         httpStatus = HttpStatus.BAD_REQUEST;
         @SuppressWarnings("unchecked")
-        Map<Long, String> errorsForCollection = (Map<Long, String>) errorMap.get(collectedSample.getId());
+        Map<Long, String> errorsForCollection = (Map<Long, String>) errorMap.get(donation.getId());
         if (errorsForCollection != null && errorsForCollection.size() == 1 && errorsForCollection.containsKey((long)-1))
           m.put("uninterpretable", true);
         else

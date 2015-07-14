@@ -5,7 +5,7 @@ import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
 import model.donor.Donor;
 
 import org.springframework.context.ApplicationListener;
@@ -27,7 +27,7 @@ public class CollectionUpdatedEventListener implements ApplicationListener<Colle
   }
 
   private void updateDonor(CollectionUpdatedEvent event) {
-    CollectedSample c = (CollectedSample) event.getEventContext();
+    Donation c = (Donation) event.getEventContext();
     Donor donor = c.getDonor();
     if (donor == null)
       return;

@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import model.admin.FormField;
 import model.admin.GeneralConfig;
-import model.collectedsample.CollectedSample;
 import model.collectionbatch.CollectionBatch;
+import model.donation.Donation;
 import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
 import model.product.Product;
@@ -37,7 +37,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
-import repository.CollectedSampleRepository;
+import repository.DonationRepository;
 import repository.CollectionBatchRepository;
 import repository.DonorRepository;
 import repository.FormFieldRepository;
@@ -68,7 +68,7 @@ public class UtilController {
   private LocationRepository locationRepository;
 
   @Autowired
-  private CollectedSampleRepository collectedSampleRepository;
+  private DonationRepository donationRepository;
 
   @Autowired
   private ProductRepository productRepository;
@@ -310,19 +310,19 @@ public class UtilController {
     return collectionBatch;
   }
 
-  public CollectedSample findCollectionInForm(Map<String, Object> bean) {
-    CollectedSample collectedSample = null;
+  public Donation findCollectionInForm(Map<String, Object> bean) {
+    Donation donation = null;
     String collectionNumber = null;
     if (collectionNumber == null)
       collectionNumber = (String) bean.get("collectionNumber");
     if (StringUtils.isNotBlank(collectionNumber)) {
       try {
-        collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber);
+        donation = donationRepository.findDonationByCollectionNumber(collectionNumber);
       } catch (NoResultException ex) {
         ex.printStackTrace();
       }
     }
-    return collectedSample;
+    return donation;
   }
 
   public boolean isFutureDate(Date date){
@@ -426,11 +426,11 @@ public class UtilController {
     return false;
   }
 
-  public boolean isDuplicateCollectionNumber(CollectedSample collection) {
+  public boolean isDuplicateCollectionNumber(Donation collection) {
     String collectionNumber = collection.getCollectionNumber();
     if (StringUtils.isBlank(collectionNumber))
       return false;
-    CollectedSample existingCollection = collectedSampleRepository.findCollectionByCollectionNumberIncludeDeleted(collectionNumber);
+    Donation existingCollection = donationRepository.findDonationByCollectionNumberIncludeDeleted(collectionNumber);
     if (existingCollection != null && !existingCollection.getId().equals(collection.getId()))
       return true;
     return false;

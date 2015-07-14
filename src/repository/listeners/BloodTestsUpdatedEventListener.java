@@ -10,7 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import model.bloodtesting.TTIStatus;
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
 import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.product.Product;
@@ -48,8 +48,8 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
   }
 
   private void updateDonorStatus(BloodTestsUpdatedEvent event) {
-    CollectedSample collectedSample = event.getCollectedSample();
-    Donor donor = collectedSample.getDonor();
+    Donation donation = event.getDonation();
+    Donor donor = donation.getDonor();
 
     String oldBloodAbo = donor.getBloodAbo();
     String newBloodAbo = donor.getBloodAbo();
@@ -64,23 +64,23 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
     if (newBloodRh == null)
       newBloodRh = "";
 
-    String queryStr = "SELECT c FROM CollectedSample c WHERE " +
+    String queryStr = "SELECT c FROM Donation c WHERE " +
         "c.donor.id=:donorId AND c.isDeleted=:isDeleted";
-    TypedQuery<CollectedSample> query = em.createQuery(queryStr, CollectedSample.class);
+    TypedQuery<Donation> query = em.createQuery(queryStr, Donation.class);
 
     query.setParameter("donorId", donor.getId());
     query.setParameter("isDeleted", false);
 
-    List<CollectedSample> collectedSamples = query.getResultList();
+    List<Donation> donations = query.getResultList();
 
     /*
     String bloodAbo = BloodAbo.Unknown.toString();
     String bloodRh = BloodRh.Unknown.toString();
-    if (collectedSamples.size() > 0) {
-      bloodAbo = collectedSamples.get(0).getBloodAbo();
-      bloodRh = collectedSamples.get(0).getBloodRh();
-      for (int i = 1; i < collectedSamples.size(); i++) {
-        CollectedSample c = collectedSamples.get(i);
+    if (donations.size() > 0) {
+      bloodAbo = donations.get(0).getBloodAbo();
+      bloodRh = donations.get(0).getBloodRh();
+      for (int i = 1; i < donations.size(); i++) {
+        Donation c = donations.get(i);
         BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();
         // blood typing should be done otherwise we will not compare
         if (!bloodTypingStatus.equals(BloodTypingStatus.COMPLETE))
@@ -106,7 +106,7 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
     */
 
     // If TTI is unsafe then this status should override existing status
-    if (collectedSample.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)) {
+    if (donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)) {
       newDonorStatus = DonorStatus.POSITIVE_TTI;
     }
     if (newBloodAbo == null)
@@ -125,11 +125,11 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
     }
   }
 
-  private void updateProductStatus(CollectedSample collectedSample) {
+  private void updateProductStatus(Donation donation) {
     String queryStr = "SELECT p FROM Product p WHERE " +
-        "p.collectedSample.id=:collectedSampleId AND p.isDeleted=:isDeleted";
+        "p.donation.id=:donationId AND p.isDeleted=:isDeleted";
     TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
-    query.setParameter("collectedSampleId", collectedSample.getId());
+    query.setParameter("donationId", donation.getId());
     query.setParameter("isDeleted", false);
     List<Product> products = query.getResultList();
     for (Product product : products) {
@@ -141,13 +141,13 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
 
   private void updateCollectionStatus(BloodTestsUpdatedEvent event) {
 
-    CollectedSample collectedSample = event.getCollectedSample();
+    Donation donation = event.getDonation();
     BloodTestingRuleResult ruleResult = event.getBloodTestingRuleResult();
 
     Set<String> extraInformationNewSet = ruleResult.getExtraInformation();
 
-    String oldExtraInformation = collectedSample.getExtraBloodTypeInformation();
-    String newExtraInformation = collectedSample.getExtraBloodTypeInformation();
+    String oldExtraInformation = donation.getExtraBloodTypeInformation();
+    String newExtraInformation = donation.getExtraBloodTypeInformation();
 
     Set<String> oldExtraInformationSet = new HashSet<String>();
     if (StringUtils.isNotBlank(oldExtraInformation)) {
@@ -161,15 +161,15 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
       newExtraInformation = StringUtils.join(extraInformationNewSet, ",");
     }
 
-    String oldBloodAbo = collectedSample.getBloodAbo();
+    String oldBloodAbo = donation.getBloodAbo();
     String newBloodAbo = ruleResult.getBloodAbo();
-    String oldBloodRh = collectedSample.getBloodRh();
+    String oldBloodRh = donation.getBloodRh();
     String newBloodRh = ruleResult.getBloodRh();
 
-    TTIStatus oldTtiStatus = collectedSample.getTTIStatus();
+    TTIStatus oldTtiStatus = donation.getTTIStatus();
     TTIStatus newTtiStatus = ruleResult.getTTIStatus();
 
-    BloodTypingStatus oldBloodTypingStatus = collectedSample.getBloodTypingStatus();
+    BloodTypingStatus oldBloodTypingStatus = donation.getBloodTypingStatus();
     BloodTypingStatus newBloodTypingStatus = ruleResult.getBloodTypingStatus();
 
     if (!newExtraInformation.equals(oldExtraInformation) ||
@@ -178,16 +178,16 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
         !newTtiStatus.equals(oldTtiStatus) ||
         !newBloodTypingStatus.equals(oldBloodTypingStatus)
         ) {
-      collectedSample.setExtraBloodTypeInformation(newExtraInformation);
-      collectedSample.setBloodAbo(newBloodAbo);
-      collectedSample.setBloodRh(newBloodRh);
-      collectedSample.setTTIStatus(ruleResult.getTTIStatus());
-      collectedSample.setBloodTypingStatus(ruleResult.getBloodTypingStatus());
-      collectedSample = em.merge(collectedSample);
+      donation.setExtraBloodTypeInformation(newExtraInformation);
+      donation.setBloodAbo(newBloodAbo);
+      donation.setBloodRh(newBloodRh);
+      donation.setTTIStatus(ruleResult.getTTIStatus());
+      donation.setBloodTypingStatus(ruleResult.getBloodTypingStatus());
+      donation = em.merge(donation);
     }
-    updateProductStatus(collectedSample);
+    updateProductStatus(donation);
     
-    collectedSample.setBloodTypingMatchStatus(ruleResult.getBloodTypingMatchStatus());
+    donation.setBloodTypingMatchStatus(ruleResult.getBloodTypingMatchStatus());
 
   }
 }

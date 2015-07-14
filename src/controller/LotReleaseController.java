@@ -1,6 +1,7 @@
 package controller;
 
-import backingform.validator.CollectedSampleBackingFormValidator;
+import backingform.validator.DonationBackingFormValidator;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,10 +10,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
+
 import model.bloodtesting.TTIStatus;
-import model.collectedsample.CollectedSample;
-import model.collectedsample.LotReleaseConstant;
+import model.donation.Donation;
+import model.donation.LotReleaseConstant;
 import model.product.Product;
 import model.product.ProductStatus;
 
@@ -26,7 +29,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import repository.CollectedSampleRepository;
+
+import repository.DonationRepository;
 import repository.ProductRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import utils.PermissionConstants;
@@ -36,7 +40,7 @@ import utils.PermissionConstants;
 public class LotReleaseController {
 
   @Autowired
-  private CollectedSampleRepository collectedSampleRepository;
+  private DonationRepository donationRepository;
   
   @Autowired
   private ProductRepository productRepository;
@@ -50,7 +54,7 @@ public class LotReleaseController {
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new CollectedSampleBackingFormValidator(binder.getValidator(),
+    binder.setValidator(new DonationBackingFormValidator(binder.getValidator(),
                         utilController));
   }
   
@@ -69,9 +73,9 @@ public class LotReleaseController {
           @PathVariable String donationIdentificationNumber)  {
         Map<String, Object> componentMap = new HashMap<String, Object>();
 
-    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(donationIdentificationNumber);
+    Donation donation = donationRepository.findDonationByCollectionNumber(donationIdentificationNumber);
     List<Product> products = productRepository.findProductsByCollectionNumber(donationIdentificationNumber);
-    List<Map<String, Object>> components = getComponentLabellingStatus(collectedSample, products);
+    List<Map<String, Object>> components = getComponentLabellingStatus(donation, products);
     
     componentMap.put("donationNumber", donationIdentificationNumber);
     componentMap.put("components", new HashSet(components));
@@ -85,37 +89,37 @@ public class LotReleaseController {
 	  
 	    Map<String, Object> map = new  HashMap<String, Object>();
             Product product = productRepository.findProductById(componentId);
-	    CollectedSample collectedSample = product.getCollectedSample();
+	    Donation donation = product.getDonation();
 	    
 	    boolean success = false;
 	    
 	    // check to make sure label can be printed
-	    if (checkCollectionNumber(collectedSample)){
+	    if (checkCollectionNumber(donation)){
 	    
 		    // label can be printed
 		    success = true;
 		    
 		    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 	    
-	        String bloodABO = collectedSample.getBloodAbo();
+	        String bloodABO = donation.getBloodAbo();
 	        String inverse = "";
 	        String bloodRh = "";
-	        if (collectedSample.getBloodRh().contains("+")){
+	        if (donation.getBloodRh().contains("+")){
 	        	bloodRh = "Positive";
 	        }
-	        else if (collectedSample.getBloodRh().contains("-")){	
+	        else if (donation.getBloodRh().contains("-")){	
 	        	bloodRh = "Negative";
 	        	//inverse = "^LRY^FO562,175^GB204,0,171^FS^LRN";
 	        	inverse = "^FO542,346^GB116,50,50^FS";
 	        }
-	        String collectionDate = df.format(collectedSample.getCollectedOn());        	
+	        String collectionDate = df.format(donation.getCollectedOn());        	
 	
 	        // TODO: improve calculation of expiry date according to final processed components expiry dates 
-	        // i.e. expiryDate = df.format(collectedSample.getProducts().get(i).getExpiresOn());
+	        // i.e. expiryDate = df.format(donation.getProducts().get(i).getExpiresOn());
 	        // For now, generates expiry date as Collection Date + 35 Days.
 	        String expiryDate = "";
 	    	Calendar c = Calendar.getInstance();
-	    	c.setTime(collectedSample.getCollectedOn());
+	    	c.setTime(donation.getCollectedOn());
 	    	c.add(Calendar.DATE,35);
 	    	expiryDate = df.format(c.getTime());
 	
@@ -262,7 +266,7 @@ public class LotReleaseController {
  		// discard label can be printed
  		success = true;
 	 	DateFormat df = new SimpleDateFormat("dd/MM/yyyy");        
-	    String collectionDate = df.format(product.getCollectedSample().getCollectedOn());        	
+	    String collectionDate = df.format(product.getDonation().getCollectedOn());        	
 	
 	    // Generate ZPL label
 	    map.put("labelZPL",	
@@ -298,41 +302,41 @@ public class LotReleaseController {
   }
 
 
-	private boolean checkCollectionNumber(CollectedSample collectedSample) {
+	private boolean checkCollectionNumber(Donation donation) {
 		boolean success=false;
-		if(collectedSample != null){
+		if(donation != null){
     	success=true;
-    	if(collectedSample.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)
-    			|| collectedSample.getTTIStatus().equals(TTIStatus.NOT_DONE)
+    	if(donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)
+    			|| donation.getTTIStatus().equals(TTIStatus.NOT_DONE)
     			){
     		success=false;
-    	}else if(collectedSample.getDonor()!=null && collectedSample.getDonor().getDonorStatus().equals(LotReleaseConstant.POSITIVE_TTI)){
+    	}else if(donation.getDonor()!=null && donation.getDonor().getDonorStatus().equals(LotReleaseConstant.POSITIVE_TTI)){
     		success=false;
     	}
     	// TODO: improve product & blood test checks, or remove if not relevant
     	/*
-    	else if(collectedSample.getProducts()!=null && !collectedSample.getProducts().isEmpty() && 
-    			(collectedSample.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED) 
-    			|| collectedSample.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_EXPIRED)
-    			|| collectedSample.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_QUARANTINED) 
-    			|| collectedSample.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_SPLIT))){   		
+    	else if(donation.getProducts()!=null && !donation.getProducts().isEmpty() && 
+    			(donation.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED) 
+    			|| donation.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_EXPIRED)
+    			|| donation.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_QUARANTINED) 
+    			|| donation.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_SPLIT))){   		
     		success=false;
-    	}else if(collectedSample.getBloodTestResults()!=null 
-    			&& !collectedSample.getBloodTestResults().isEmpty() 
-    			&& !collectedSample.getBloodTestResults().get(0).getBloodTest().getPositiveResults().equals(LotReleaseConstant.POSITIVE_BLOOD)){
+    	}else if(donation.getBloodTestResults()!=null 
+    			&& !donation.getBloodTestResults().isEmpty() 
+    			&& !donation.getBloodTestResults().get(0).getBloodTest().getPositiveResults().equals(LotReleaseConstant.POSITIVE_BLOOD)){
     		success=false;
     	}
     	*/
-    	else if(collectedSample.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE) 
-    			|| collectedSample.getBloodTypingStatus().equals(BloodTypingStatus.AMBIGUOUS)
-    			|| collectedSample.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE)
-    			|| collectedSample.getBloodTypingStatus().equals(BloodTypingStatus.PENDING_TESTS)
+    	else if(donation.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE) 
+    			|| donation.getBloodTypingStatus().equals(BloodTypingStatus.AMBIGUOUS)
+    			|| donation.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE)
+    			|| donation.getBloodTypingStatus().equals(BloodTypingStatus.PENDING_TESTS)
     			){
     		success = false;
     	}
     	// TODO: improve deferrals check - should only flag donors that are CURRENTLY deferred 
-    	/*else if(collectedSample.getDonor().getDeferrals()!=null 
-    			&& ! collectedSample.getDonor().getDeferrals().isEmpty()){
+    	/*else if(donation.getDonor().getDeferrals()!=null 
+    			&& ! donation.getDonor().getDeferrals().isEmpty()){
     		success=false;
     	}
     	*/
@@ -343,11 +347,11 @@ public class LotReleaseController {
 		return success;
 	}
 	
-	private List<Map<String, Object>> getComponentLabellingStatus(CollectedSample collectedSample, List<Product> products){
+	private List<Map<String, Object>> getComponentLabellingStatus(Donation donation, List<Product> products){
 		
                
            List<Map<String, Object>> productsList= new ArrayList<Map<String, Object>>(); 
-	     if(collectedSample.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)){
+	     if(donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)){
                   Map<String, Object> productStatus = new HashMap<String, Object>();
     		for(Product product : products){
     				if(!product.getStatus().equals(ProductStatus.PROCESSED) && !product.getStatus().equals(ProductStatus.SPLIT)){
@@ -374,7 +378,7 @@ public class LotReleaseController {
 	                        productStatus.put("printPackLabel", false);
 	                    } else {
 	                        productStatus.put("discardPackLabel", false);
-	                        productStatus.put("printPackLabel", checkCollectionNumber(collectedSample));
+	                        productStatus.put("printPackLabel", checkCollectionNumber(donation));
 	                    }
 	                    productsList.add(productStatus);
                 	}
@@ -385,7 +389,7 @@ public class LotReleaseController {
     }
         
     private Boolean checkProductForDiscard(Product product){ 
-	    if(product.getCollectedSample().getTTIStatus().equals(TTIStatus.TTI_UNSAFE))
+	    if(product.getDonation().getTTIStatus().equals(TTIStatus.TTI_UNSAFE))
 	        return true;
 	    
 	     if (product.getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED)) 

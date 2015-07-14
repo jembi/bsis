@@ -1,6 +1,7 @@
 package repository.bloodtesting;
 
 import backingform.BloodTestBackingForm;
+
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -31,7 +32,7 @@ import model.bloodtesting.WellType;
 import model.bloodtesting.rules.BloodTestSubCategory;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.bloodtesting.rules.CollectionField;
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
 import model.microtiterplate.MachineReading;
 import model.microtiterplate.MicrotiterPlate;
 import model.microtiterplate.PlateSession;
@@ -44,7 +45,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import repository.CollectedSampleRepository;
+import repository.DonationRepository;
 import repository.CollectionBatchRepository;
 import repository.GenericConfigRepository;
 import repository.WellTypeRepository;
@@ -63,7 +64,7 @@ public class BloodTestingRepository {
 	EntityManager em;
 
 	@Autowired
-	private CollectedSampleRepository collectedSampleRepository;
+	private DonationRepository donationRepository;
 	
 	@Autowired
 	private CollectionBatchRepository collectionBatchRepository;	
@@ -122,22 +123,22 @@ public class BloodTestingRepository {
 			Map<Long, Map<Long, String>> bloodTestResultsMap,
 			boolean saveIfUninterpretable) {
 
-		Map<Long, CollectedSample> collectedSamplesMap = new HashMap<Long, CollectedSample>();
-		Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForCollections = new HashMap<Long, BloodTestingRuleResult>();
-		List<Long> collectionsWithUninterpretableResults = new ArrayList<Long>();
+		Map<Long, Donation> donationsMap = new HashMap<Long, Donation>();
+		Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForDonations = new HashMap<Long, BloodTestingRuleResult>();
+		List<Long> donationsWithUninterpretableResults = new ArrayList<Long>();
 		Date testedOn = new Date();
 		Map<Long, Map<Long, String>> errorMap = validateTestResultValues(bloodTestResultsMap);
 		if (errorMap.isEmpty()) {
-			for (Long collectionId : bloodTestResultsMap.keySet()) {
-				Map<Long, String> bloodTestResultsForCollection = bloodTestResultsMap
-						.get(collectionId);
-				CollectedSample collectedSample = collectedSampleRepository
-						.findCollectedSampleById(collectionId);
+			for (Long donationId : bloodTestResultsMap.keySet()) {
+				Map<Long, String> bloodTestResultsForDonation = bloodTestResultsMap
+						.get(donationId);
+				Donation donation = donationRepository
+						.findDonationById(donationId);
 				BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
-						collectedSample, bloodTestResultsForCollection);
-				collectedSamplesMap.put(collectedSample.getId(),
-						collectedSample);
-				bloodTestRuleResultsForCollections.put(collectedSample.getId(),
+						donation, bloodTestResultsForDonation);
+				donationsMap.put(donation.getId(),
+						donation);
+				bloodTestRuleResultsForDonations.put(donation.getId(),
 						ruleResult);
 
 				if (ruleResult.getAboUninterpretable()
@@ -145,18 +146,18 @@ public class BloodTestingRepository {
 						|| ruleResult.getTtiUninterpretable()) {
 					if (saveIfUninterpretable) {
 						saveBloodTestResultsToDatabase(
-								bloodTestResultsForCollection, collectedSample,
+								bloodTestResultsForDonation, donation,
 								testedOn, ruleResult);
 					} else {
 						Map<Long, String> uninterpretable = new HashMap<Long, String>();
-						collectionsWithUninterpretableResults.add(collectionId);
+						donationsWithUninterpretableResults.add(donationId);
 						uninterpretable.put((long) -1,
 								"Test results are uninterpretable");
-						errorMap.put(collectionId, uninterpretable);
+						errorMap.put(donationId, uninterpretable);
 					}
 				} else {
 					saveBloodTestResultsToDatabase(
-							bloodTestResultsForCollection, collectedSample,
+							bloodTestResultsForDonation, donation,
 							testedOn, ruleResult);
 				}
 
@@ -165,53 +166,53 @@ public class BloodTestingRepository {
 		}
 
 		Map<String, Object> results = new HashMap<String, Object>();
-		results.put("collections", collectedSamplesMap);
-		results.put("bloodTestingResults", bloodTestRuleResultsForCollections);
+		results.put("collections", donationsMap);
+		results.put("bloodTestingResults", bloodTestRuleResultsForDonations);
 		results.put("collectionsWithUninterpretableResults",
-				collectionsWithUninterpretableResults);
+				donationsWithUninterpretableResults);
 		results.put("errors", errorMap);
 
 		return results;
 	}
 	
 	public Map<String, Object> saveBloodTestingResults(
-			Long collectionId,
+			Long donationId,
 			Map<Long, String> bloodTypingTestResults,
 			boolean saveIfUninterpretable) {
 
-		CollectedSample collectedSample = new CollectedSample();
+		Donation donation = new Donation();
 		BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
 		Boolean uninterpretableResults = false;
 		Date testedOn = new Date();
-		Map<Long, String> errorMap = validateTestResultValues(collectionId, bloodTypingTestResults);
+		Map<Long, String> errorMap = validateTestResultValues(donationId, bloodTypingTestResults);
 		if (errorMap.isEmpty()) {
-			Map<Long, String> bloodTestResultsForCollection = bloodTypingTestResults;
-			collectedSample = collectedSampleRepository
-					.findCollectedSampleById(collectionId);
+			Map<Long, String> bloodTestResultsForDonation = bloodTypingTestResults;
+			donation = donationRepository
+					.findDonationById(donationId);
 			ruleResult = ruleEngine.applyBloodTests(
-					collectedSample, bloodTestResultsForCollection);
+					donation, bloodTestResultsForDonation);
 
 			if (ruleResult.getAboUninterpretable()
 					|| ruleResult.getRhUninterpretable()
 					|| ruleResult.getTtiUninterpretable()) {
 				if (saveIfUninterpretable) {
 					saveBloodTestResultsToDatabase(
-							bloodTestResultsForCollection, collectedSample,
+							bloodTestResultsForDonation, donation,
 							testedOn, ruleResult);
 				} else {
 					uninterpretableResults = true;
-					errorMap.put(collectionId, "Test results are uninterpretable");
+					errorMap.put(donationId, "Test results are uninterpretable");
 				}
 			} else {
 				saveBloodTestResultsToDatabase(
-						bloodTestResultsForCollection, collectedSample,
+						bloodTestResultsForDonation, donation,
 						testedOn, ruleResult);
 			}
 			em.flush();
 		}
 
 		Map<String, Object> results = new HashMap<String, Object>();
-		results.put("collection", collectedSample);
+		results.put("collection", donation);
 		results.put("bloodTestingResults", ruleResult);
 		results.put("uninterpretableResults",
 				uninterpretableResults);
@@ -220,7 +221,7 @@ public class BloodTestingRepository {
 		return results;
 	}
 	
-	public Map<Long, String> validateTestResultValues(Long collectionId,
+	public Map<Long, String> validateTestResultValues(Long donationId,
 			Map<Long, String> bloodTypingTestResults) {
 
 		Map<String, BloodTest> allBloodTestsMap = new HashMap<String, BloodTest>();
@@ -231,22 +232,22 @@ public class BloodTestingRepository {
 
 		Map<Long, String> errorMap = new HashMap<Long, String>();
 
-		Map<Long, String> testsForCollection = bloodTypingTestResults;
-		for (Long testId : testsForCollection.keySet()) {
-			String result = testsForCollection.get(testId);
+		Map<Long, String> testsForDonation = bloodTypingTestResults;
+		for (Long testId : testsForDonation.keySet()) {
+			String result = testsForDonation.get(testId);
 			BloodTest test = allBloodTestsMap.get(testId.toString());
 			if (test == null) {
-				addError(errorMap, collectionId, testId,
+				addError(errorMap, donationId, testId,
 						"Invalid test");
 			}
 			if (StringUtils.isBlank(result) && !test.getIsEmptyAllowed()) {
-				addError(errorMap, collectionId, testId,
+				addError(errorMap, donationId, testId,
 						"No value specified");
 			}
 			List<String> validResults = Arrays.asList(test
 					.getValidResults().split(","));
 			if (!validResults.contains(result)) {
-				addError(errorMap, collectionId, testId,
+				addError(errorMap, donationId, testId,
 						"Invalid value specified");
 			}
 		}
@@ -255,10 +256,10 @@ public class BloodTestingRepository {
 	}
 	
 	private void saveBloodTestResultsToDatabase(
-			Map<Long, String> bloodTestResultsForCollection,
-			CollectedSample collectedSample, Date testedOn,
+			Map<Long, String> bloodTestResultsForDonation,
+			Donation donation, Date testedOn,
 			BloodTestingRuleResult ruleResult) {
-		for (Long testId : bloodTestResultsForCollection.keySet()) {
+		for (Long testId : bloodTestResultsForDonation.keySet()) {
 			BloodTestResult btResult = new BloodTestResult();
 			BloodTest bloodTest = new BloodTest();
 			// the only reason we are using Long in the parameter is that
@@ -269,12 +270,12 @@ public class BloodTestingRepository {
 			bloodTest.setId(testId.intValue());
 			btResult.setBloodTest(bloodTest);
 			// not updating the inverse relation which means the
-			// collectedSample.getBloodTypingResults() will not
+			// donation.getBloodTypingResults() will not
 			// contain this result
-			btResult.setCollectedSample(collectedSample);
+			btResult.setDonation(donation);
 			btResult.setTestedOn(testedOn);
 			btResult.setNotes("");
-			btResult.setResult(bloodTestResultsForCollection.get(testId));
+			btResult.setResult(bloodTestResultsForDonation.get(testId));
 			em.persist(btResult);
 		}
 
@@ -282,8 +283,8 @@ public class BloodTestingRepository {
 				.getApplicationContext();
 		BloodTestsUpdatedEvent bloodTestsUpdatedEvent;
 		bloodTestsUpdatedEvent = new BloodTestsUpdatedEvent("10",
-				Arrays.asList(collectedSample, ruleResult));
-		bloodTestsUpdatedEvent.setCollectedSample(collectedSample);
+				Arrays.asList(donation, ruleResult));
+		bloodTestsUpdatedEvent.setDonation(donation);
 		bloodTestsUpdatedEvent.setBloodTestingRuleResult(ruleResult);
 		applicationContext.publishEvent(bloodTestsUpdatedEvent);
 	}
@@ -299,25 +300,25 @@ public class BloodTestingRepository {
 
 		Map<Long, Map<Long, String>> errorMap = new HashMap<Long, Map<Long, String>>();
 
-		for (Long collectionId : bloodTypingTestResults.keySet()) {
-			Map<Long, String> testsForCollection = bloodTypingTestResults
-					.get(collectionId);
-			for (Long testId : testsForCollection.keySet()) {
-				String result = testsForCollection.get(testId);
+		for (Long donationId : bloodTypingTestResults.keySet()) {
+			Map<Long, String> testsForDonation = bloodTypingTestResults
+					.get(donationId);
+			for (Long testId : testsForDonation.keySet()) {
+				String result = testsForDonation.get(testId);
 				BloodTest test = allBloodTestsMap.get(testId.toString());
 				if (test == null) {
-					addErrorToMap(errorMap, collectionId, testId,
+					addErrorToMap(errorMap, donationId, testId,
 							"Invalid test");
 					continue;
 				}
 				if (StringUtils.isBlank(result) && !test.getIsEmptyAllowed()) {
-					addErrorToMap(errorMap, collectionId, testId,
+					addErrorToMap(errorMap, donationId, testId,
 							"No value specified");
 				}
 				List<String> validResults = Arrays.asList(test
 						.getValidResults().split(","));
 				if (!validResults.contains(result)) {
-					addErrorToMap(errorMap, collectionId, testId,
+					addErrorToMap(errorMap, donationId, testId,
 							"Invalid value specified");
 				}
 			}
@@ -354,44 +355,44 @@ public class BloodTestingRepository {
 	}
 
 	private void addErrorToMap(Map<Long, Map<Long, String>> errorMap,
-			Long collectionId, Long testId, String errorMessage) {
-		Map<Long, String> errorsForCollection = errorMap.get(collectionId);
-		if (errorsForCollection == null) {
-			errorsForCollection = new HashMap<Long, String>();
-			errorMap.put(collectionId, errorsForCollection);
+			Long donationId, Long testId, String errorMessage) {
+		Map<Long, String> errorsForDonation = errorMap.get(donationId);
+		if (errorsForDonation == null) {
+			errorsForDonation = new HashMap<Long, String>();
+			errorMap.put(donationId, errorsForDonation);
 		}
-		errorsForCollection.put(testId, errorMessage);
+		errorsForDonation.put(testId, errorMessage);
 	}
 	
 	private void addError(Map<Long, String> errorMap,
-			Long collectionId, Long testId, String errorMessage) {
+			Long donationId, Long testId, String errorMessage) {
 		if (errorMap == null) {
 			errorMap = new HashMap<Long, String>();
 		}
 		errorMap.put(testId, errorMessage);
 	}
 
-	public Map<String, Object> getAllTestsStatusForCollections(
-			List<String> collectionIds) {
+	public Map<String, Object> getAllTestsStatusForDonations(
+			List<String> donationIds) {
 		// linked hashmap is required to ensure that results are returned in the
 		// same order as inserted
-		Map<Long, CollectedSample> collectedSamplesMap = new LinkedHashMap<Long, CollectedSample>();
-		Map<Long, BloodTestingRuleResult> bloodTypingResultsForCollections = new LinkedHashMap<Long, BloodTestingRuleResult>();
+		Map<Long, Donation> donationsMap = new LinkedHashMap<Long, Donation>();
+		Map<Long, BloodTestingRuleResult> bloodTypingResultsForDonations = new LinkedHashMap<Long, BloodTestingRuleResult>();
 
-		for (String collectionIdStr : collectionIds) {
-			Long collectionId = Long.parseLong(collectionIdStr);
-			CollectedSample collectedSample = collectedSampleRepository
-					.findCollectedSampleById(collectionId);
+		for (String donationIdStr : donationIds) {
+			Long donationId = Long.parseLong(donationIdStr);
+			Donation donation = donationRepository
+					.findDonationById(donationId);
 			BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
-					collectedSample, new HashMap<Long, String>());
-			collectedSamplesMap.put(collectedSample.getId(), collectedSample);
-			bloodTypingResultsForCollections.put(collectedSample.getId(),
+					donation, new HashMap<Long, String>());
+			donationsMap.put(donation.getId(), donation);
+			bloodTypingResultsForDonations.put(donation.getId(),
 					ruleResult);
 		}
 
 		Map<String, Object> results = new HashMap<String, Object>();
-		results.put("collections", collectedSamplesMap);
-		results.put("bloodTestingResults", bloodTypingResultsForCollections);
+		results.put("collections", donationsMap);
+		results.put("bloodTestingResults", bloodTypingResultsForDonations);
 		return results;
 	}
 	
@@ -400,13 +401,13 @@ public class BloodTestingRepository {
 
 		List<BloodTestingRuleResult> bloodTestingRuleResults = new ArrayList<BloodTestingRuleResult>();
 
-		for (Integer donationBatchId : donationBatchIds) {
-			List<CollectedSample> collectedSamples = collectionBatchRepository.findCollectionsInBatch(donationBatchId);
+		for (Integer collectionBatchId : donationBatchIds) {
+			List<Donation> donations = collectionBatchRepository.findCollectionsInBatch(collectionBatchId);
 			
-			for (CollectedSample collectedSample : collectedSamples) {
+			for (Donation donation : donations) {
 
 			BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
-					collectedSample, new HashMap<Long, String>());
+					donation, new HashMap<Long, String>());
 			bloodTestingRuleResults.add(ruleResult);
 			}
 		}
@@ -414,11 +415,11 @@ public class BloodTestingRepository {
 		return bloodTestingRuleResults;
 	}
 
-	public BloodTestingRuleResult getAllTestsStatusForCollection(
-			Long collectionId) {
-		CollectedSample collectedSample = collectedSampleRepository
-				.findCollectedSampleById(collectionId);
-		return ruleEngine.applyBloodTests(collectedSample,
+	public BloodTestingRuleResult getAllTestsStatusForDonation(
+			Long donationId) {
+		Donation donation = donationRepository
+				.findDonationById(donationId);
+		return ruleEngine.applyBloodTests(donation,
 				new HashMap<Long, String>());
 	}
 
@@ -431,24 +432,24 @@ public class BloodTestingRepository {
 		return bloodTests;
 	}
 	
-	public List<BloodTestResult> getBloodTestResultsForCollection(
-			Long collectedSampleId) {
+	public List<BloodTestResult> getBloodTestResultsForDonation(
+			Long donationId) {
 		String queryStr = "SELECT bt FROM BloodTestResult bt WHERE "
-				+ "bt.collectedSample.id=:collectedSampleId";
+				+ "bt.donation.id=:donationId";
 		TypedQuery<BloodTestResult> query = em.createQuery(queryStr,
 				BloodTestResult.class);
-		query.setParameter("collectedSampleId", collectedSampleId);
+		query.setParameter("donationId", donationId);
 		List<BloodTestResult> bloodTestResults = query.getResultList();
 		return bloodTestResults;
 	}
 
-	public Map<Integer, BloodTestResult> getRecentTestResultsForCollection(
-			Long collectedSampleId) {
+	public Map<Integer, BloodTestResult> getRecentTestResultsForDonation(
+			Long donationId) {
 		String queryStr = "SELECT bt FROM BloodTestResult bt WHERE "
-				+ "bt.collectedSample.id=:collectedSampleId";
+				+ "bt.donation.id=:donationId";
 		TypedQuery<BloodTestResult> query = em.createQuery(queryStr,
 				BloodTestResult.class);
-		query.setParameter("collectedSampleId", collectedSampleId);
+		query.setParameter("donationId", donationId);
 		List<BloodTestResult> bloodTestResults = query.getResultList();
 		Map<Integer, BloodTestResult> recentBloodTestResults = new HashMap<Integer, BloodTestResult>();
 		for (BloodTestResult bt : bloodTestResults) {
@@ -487,12 +488,12 @@ public class BloodTestingRepository {
 
 		Map<String, Object> results = new HashMap<String, Object>();
 		Map<String, List<String>> errorsByWellNumber = new HashMap<String, List<String>>();
-		Map<String, Long> collectionIdByWellNumber = new HashMap<String, Long>();
-		Map<Long, String> errorsByCollectionId = new HashMap<Long, String>();
+		Map<String, Long> donationIdByWellNumber = new HashMap<String, Long>();
+		Map<Long, String> errorsByDonationId = new HashMap<Long, String>();
 
-		Map<Long, CollectedSample> collectionIdMap = new HashMap<Long, CollectedSample>();
+		Map<Long, Donation> donationIdMap = new HashMap<Long, Donation>();
 
-		Map<Long, MachineReading> machineReadingsForCollections = new HashMap<Long, MachineReading>();
+		Map<Long, MachineReading> machineReadingsForDonations = new HashMap<Long, MachineReading>();
 		List<MachineReading> specialMachineReadings = new ArrayList<MachineReading>();
 
 		BloodTest bloodTest = findBloodTestById(ttiTestId.intValue());
@@ -542,34 +543,34 @@ public class BloodTestingRepository {
 
 				if (wellType.getRequiresSample()) {
 					String collectionNumber = wellData.get("collectionNumber");
-					CollectedSample collection = collectedSampleRepository
-							.findCollectedSampleByCollectionNumber(collectionNumber);
-					if (collection == null) {
+					Donation donation = donationRepository
+							.findDonationByCollectionNumber(collectionNumber);
+					if (donation == null) {
 						addErrorToWell(errorsByWellNumber, wellNumber,
 								"Invalid collection number");
 						errorsFound = true;
 					} else {
 						String result = wellData.get("testResult");
-						collectionIdMap.put(collection.getId(), collection);
-						if (bloodTestResultsMap.containsKey(collection.getId())) {
+						donationIdMap.put(donation.getId(), donation);
+						if (bloodTestResultsMap.containsKey(donation.getId())) {
 							errorsFound = true;
 							addErrorToWell(errorsByWellNumber, wellNumber,
 									"Duplicate collection number");
-							errorsByCollectionId.put(collection.getId(),
+							errorsByDonationId.put(donation.getId(),
 									"Duplicate collection number");
-							collectionIdByWellNumber.put(wellNumber,
-									collection.getId());
+							donationIdByWellNumber.put(wellNumber,
+									donation.getId());
 						}
 						if (!isResultValidForBloodTest(bloodTest, result)) {
 							errorsFound = true;
 							addErrorToWell(errorsByWellNumber, wellNumber,
 									"Invalid test result specified");
 						}
-						Map<Long, String> resultsForCollection = new HashMap<Long, String>();
-						resultsForCollection.put(ttiTestId, result);
-						bloodTestResultsMap.put(collection.getId(),
-								resultsForCollection);
-						machineReadingsForCollections.put(collection.getId(),
+						Map<Long, String> resultsForDonation = new HashMap<Long, String>();
+						resultsForDonation.put(ttiTestId, result);
+						bloodTestResultsMap.put(donation.getId(),
+								resultsForDonation);
+						machineReadingsForDonations.put(donation.getId(),
 								machineReading);
 					}
 				} else {
@@ -578,26 +579,26 @@ public class BloodTestingRepository {
 			}
 		}
 
-		Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForCollections = new HashMap<Long, BloodTestingRuleResult>();
+		Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForDonations = new HashMap<Long, BloodTestingRuleResult>();
 
 		if (!errorsFound) {
 			em.persist(plateSession);
 			// first determine whether there are any uninterpretable results
-			for (Long collectionId : collectionIdMap.keySet()) {
-				Map<Long, String> bloodTestResultsForCollection = bloodTestResultsMap
-						.get(collectionId);
-				MachineReading machineReading = machineReadingsForCollections
-						.get(collectionId);
-				CollectedSample collectedSample = collectionIdMap
-						.get(collectionId);
+			for (Long donationId : donationIdMap.keySet()) {
+				Map<Long, String> bloodTestResultsForDonation = bloodTestResultsMap
+						.get(donationId);
+				MachineReading machineReading = machineReadingsForDonations
+						.get(donationId);
+				Donation donation = donationIdMap
+						.get(donationId);
 				BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
-						collectedSample, bloodTestResultsForCollection);
-				bloodTestRuleResultsForCollections
-						.put(collectionId, ruleResult);
+						donation, bloodTestResultsForDonation);
+				bloodTestRuleResultsForDonations
+						.put(donationId, ruleResult);
 				BloodTestResult btResult = saveBloodTestResultToDatabase(
 						new Long(ttiTestId),
-						bloodTestResultsForCollection.get(ttiTestId),
-						collectedSample, testedOn, ruleResult);
+						bloodTestResultsForDonation.get(ttiTestId),
+						donation, testedOn, ruleResult);
 				// no need to worry about uninterpretable results here
 				btResult.setMachineReading(machineReading);
 				// bidirectional relationship with blood test result as the
@@ -613,10 +614,10 @@ public class BloodTestingRepository {
 			}
 		}
 
-		results.put("collections", collectionIdMap);
-		results.put("bloodTestingResults", bloodTestRuleResultsForCollections);
+		results.put("collections", donationIdMap);
+		results.put("bloodTestingResults", bloodTestRuleResultsForDonations);
 		results.put("errorsFound", errorsFound);
-		results.put("errorsByCollectionId", errorsByCollectionId);
+		results.put("errorsByCollectionId", errorsByDonationId);
 		results.put("errorsByWellNumber", errorsByWellNumber);
 		return results;
 	}
@@ -630,7 +631,7 @@ public class BloodTestingRepository {
 	}
 
 	private BloodTestResult saveBloodTestResultToDatabase(Long testId,
-			String testResult, CollectedSample collectedSample, Date testedOn,
+			String testResult, Donation donation, Date testedOn,
 			BloodTestingRuleResult ruleResult) {
 
 		BloodTestResult btResult = new BloodTestResult();
@@ -642,9 +643,9 @@ public class BloodTestingRepository {
 		bloodTest.setId(testId.intValue());
 		btResult.setBloodTest(bloodTest);
 		// not updating the inverse relation which means the
-		// collectedSample.getBloodTypingResults() will not
+		// donation.getBloodTypingResults() will not
 		// contain this result
-		btResult.setCollectedSample(collectedSample);
+		btResult.setDonation(donation);
 		btResult.setTestedOn(testedOn);
 		btResult.setNotes("");
 		btResult.setResult(testResult);
@@ -654,8 +655,8 @@ public class BloodTestingRepository {
 				.getApplicationContext();
 		BloodTestsUpdatedEvent bloodTestsUpdatedEvent;
 		bloodTestsUpdatedEvent = new BloodTestsUpdatedEvent("10",
-				Arrays.asList(collectedSample, ruleResult));
-		bloodTestsUpdatedEvent.setCollectedSample(collectedSample);
+				Arrays.asList(donation, ruleResult));
+		bloodTestsUpdatedEvent.setDonation(donation);
 		bloodTestsUpdatedEvent.setBloodTestingRuleResult(ruleResult);
 		applicationContext.publishEvent(bloodTestsUpdatedEvent);
 		return btResult;
@@ -1022,12 +1023,12 @@ public class BloodTestingRepository {
 			List<String> panels) throws ParseException {
 		TypedQuery<Object[]> query = em
 				.createQuery(
-						"SELECT count(t), c.collectedOn, t.bloodTest.testNameShort FROM BloodTestResult t join t.bloodTest bt join t.collectedSample c WHERE "
+						"SELECT count(t), d.collectedOn, t.bloodTest.testNameShort FROM BloodTestResult t join t.bloodTest bt join t.donation d WHERE "
 								+ "bt.id IN (:ttiTestIds) AND "
 								+ "t.result != :positiveResult AND "
-								+ "c.donorPanel.id IN (:panelIds) AND "
-								+ "c.collectedOn BETWEEN :dateCollectedFrom AND :dateCollectedTo "
-								+ "GROUP BY bt.testNameShort, c.collectedOn",
+								+ "d.donorPanel.id IN (:panelIds) AND "
+								+ "d.collectedOn BETWEEN :dateCollectedFrom AND :dateCollectedTo "
+								+ "GROUP BY bt.testNameShort, d.collectedOn",
 						Object[].class);
 
 		List<Long> panelIds = new ArrayList<Long>();
@@ -1135,18 +1136,18 @@ public class BloodTestingRepository {
 			List<TSVFileHeaderName> tSVFileHeaderNameList) {
 		for (TSVFileHeaderName ts : tSVFileHeaderNameList) {
 			
-			CollectedSample cs = collectedSampleRepository
-					.findCollectedSampleByCollectionNumber(ts.getSID());
+			Donation cs = donationRepository
+					.findDonationByCollectionNumber(ts.getSID());
 			if (cs != null){
 				
 				try{
 					
 					Map<Long, Map<Long, String>> bloodTestResultsMap = new HashMap<Long, Map<Long, String>>();
-					Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForCollections = new HashMap<Long, BloodTestingRuleResult>();
+					Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForDonations = new HashMap<Long, BloodTestingRuleResult>();
 	
 					BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
 							cs,	new HashMap<Long, String>());
-					bloodTestRuleResultsForCollections.put(cs.getId(), ruleResult);
+					bloodTestRuleResultsForDonations.put(cs.getId(), ruleResult);
 					
 					saveBloodTestResultToDatabase(Long.valueOf(ts.getAssayNumber()),
 							ts.getInterpretation(), cs, ts.getCompleted(), ruleResult);

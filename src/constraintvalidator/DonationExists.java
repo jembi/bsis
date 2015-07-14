@@ -9,10 +9,10 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 @Documented
-@Constraint(validatedBy = CollectedSampleExistsConstraintValidator.class)
+@Constraint(validatedBy = DonationExistsConstraintValidator.class)
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CollectedSampleExists {
+public @interface DonationExists {
 
   String message() default "Collection does not exist";
 

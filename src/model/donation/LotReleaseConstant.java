@@ -1,4 +1,4 @@
-package model.collectedsample;
+package model.donation;
 
 public class LotReleaseConstant {
 	

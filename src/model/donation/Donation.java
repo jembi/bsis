@@ -1,4 +1,4 @@
-package model.collectedsample;
+package model.donation;
 
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -57,7 +57,7 @@ import repository.bloodtesting.BloodTypingMatchStatus;
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class CollectedSample implements ModificationTracker, Comparable<CollectedSample> {
+public class Donation implements ModificationTracker, Comparable<Donation> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -69,7 +69,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
    * In most cases the collection numbers will be preprinted labels.
    */
   @Column(length=20, unique=true)
-  @Index(name="collectedSample_collectionNumber_index")
+  @Index(name="donation_collectionNumber_index")
   private String collectionNumber;
 
   @DonorExists
@@ -87,7 +87,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy="collectedSample")
+  @OneToMany(mappedBy="donation")
   private List<BloodTestResult> bloodTestResults;
 
 
@@ -96,7 +96,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
    * Index to find collections done between date ranges.
    */
   @Temporal(TemporalType.TIMESTAMP)
-  @Index(name="collectedSample_collectedOn_index")
+  @Index(name="donation_collectedOn_index")
   private Date collectedOn;
 
   @DonationTypeExists
@@ -110,11 +110,11 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   /**
    * List of products created from this collection.
    */
-  @OneToMany(mappedBy="collectedSample")
+  @OneToMany(mappedBy="donation")
   private List<Product> products;
 
   @NotAudited
-  @ManyToMany(mappedBy="collectedSamples")
+  @ManyToMany(mappedBy="donations")
   private Set<Worksheet> worksheets;
 
   @Range(min = 0, max = 30)
@@ -176,7 +176,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @NotNull
   private Location donorPanel;
 
-  public CollectedSample() {
+  public Donation() {
     modificationTracker = new RowModificationTracker();
     worksheets = new HashSet<Worksheet>();
   }
@@ -239,24 +239,24 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.isDeleted = isDeleted;
   }
 
-  public void copy(CollectedSample collectedSample) {
-    assert (this.getId().equals(collectedSample.getId()));
-    this.collectionNumber = collectedSample.collectionNumber;
-    this.donor = collectedSample.donor;
-    this.setDonationType(collectedSample.getDonationType());
-    this.bloodBagType = collectedSample.bloodBagType;
-    this.collectedOn = collectedSample.collectedOn;
-    this.collectionBatch = collectedSample.collectionBatch;
-    this.notes = collectedSample.notes;
-    this.haemoglobinCount=collectedSample.haemoglobinCount;
-    this.donorPulse = collectedSample.donorPulse;
-    this.donorWeight=collectedSample.donorWeight;
-    this.bloodPressureDiastolic=collectedSample.bloodPressureDiastolic;
-    this.bloodPressureSystolic=collectedSample.bloodPressureSystolic;
-    this.donorPanel = collectedSample.getDonorPanel();
-    this.bloodAbo = collectedSample.bloodAbo;
-    this.bloodRh = collectedSample.bloodRh;
-    this.setBloodTypingMatchStatus(collectedSample.getBloodTypingMatchStatus());
+  public void copy(Donation donation) {
+    assert (this.getId().equals(donation.getId()));
+    this.collectionNumber = donation.collectionNumber;
+    this.donor = donation.donor;
+    this.setDonationType(donation.getDonationType());
+    this.bloodBagType = donation.bloodBagType;
+    this.collectedOn = donation.collectedOn;
+    this.collectionBatch = donation.collectionBatch;
+    this.notes = donation.notes;
+    this.haemoglobinCount=donation.haemoglobinCount;
+    this.donorPulse = donation.donorPulse;
+    this.donorWeight=donation.donorWeight;
+    this.bloodPressureDiastolic=donation.bloodPressureDiastolic;
+    this.bloodPressureSystolic=donation.bloodPressureSystolic;
+    this.donorPanel = donation.getDonorPanel();
+    this.bloodAbo = donation.bloodAbo;
+    this.bloodRh = donation.bloodRh;
+    this.setBloodTypingMatchStatus(donation.getBloodTypingMatchStatus());
   }
 
   public List<Product> getProducts() {
@@ -313,7 +313,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
    * This method allows invoking Collections.sort on the collections.
    */
   @Override
-  public int compareTo(CollectedSample c) {
+  public int compareTo(Donation c) {
     Long diff = (this.id - c.id);
     if (diff < 0)
       return -1;

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import repository.CollectedSampleRepository;
+import repository.DonationRepository;
 import repository.LocationRepository;
 import repository.ProductRepository;
 import repository.RequestRepository;
@@ -32,7 +32,7 @@ import utils.PermissionConstants;
 public class ReportsController {
 
   @Autowired
-  private CollectedSampleRepository collectionRepository;
+  private DonationRepository collectionRepository;
 
   @Autowired
   private ProductRepository productRepository;
@@ -160,7 +160,7 @@ public class ReportsController {
         dateFrom = CustomDateFormatter.getDateFromString(dateCollectedFrom);
 
       Map<String, Map<Long, Long>> numCollections = collectionRepository
-          .findNumberOfCollectedSamples(dateFrom, dateTo,
+          .findNumberOfDonations(dateFrom, dateTo,
               aggregationCriteria, panels, bloodGroups);
       // TODO: potential leap year bug here
       Long interval = (long) (24 * 3600 * 1000);

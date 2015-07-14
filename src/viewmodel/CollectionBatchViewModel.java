@@ -5,10 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import utils.CustomDateFormatter;
-
-import viewmodel.CollectedSampleViewModel;
-import model.collectedsample.CollectedSample;
+import viewmodel.DonationViewModel;
 import model.collectionbatch.CollectionBatch;
+import model.donation.Donation;
 import model.location.Location;
 import model.user.User;
 
@@ -35,13 +34,13 @@ public class CollectionBatchViewModel {
     return collectionBatch.getNotes();
   }
 
-  public List<CollectedSampleViewModel> getCollectionsInBatch() {
+  public List<DonationViewModel> getCollectionsInBatch() {
     //return collectionBatch.getCollectionsInBatch();
     if (collectionBatch.getCollectionsInBatch() == null)
-      return Arrays.asList(new CollectedSampleViewModel[0]);
-    List<CollectedSampleViewModel> collectionViewModels = new ArrayList<CollectedSampleViewModel>();
-    for (CollectedSample collection : collectionBatch.getCollectionsInBatch()) {
-      collectionViewModels.add(new CollectedSampleViewModel(collection));
+      return Arrays.asList(new DonationViewModel[0]);
+    List<DonationViewModel> collectionViewModels = new ArrayList<DonationViewModel>();
+    for (Donation collection : collectionBatch.getCollectionsInBatch()) {
+      collectionViewModels.add(new DonationViewModel(collection));
     }
     return collectionViewModels;
   }
