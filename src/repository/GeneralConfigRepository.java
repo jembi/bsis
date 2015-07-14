@@ -31,9 +31,7 @@ public class GeneralConfigRepository {
 
     public GeneralConfig update(GeneralConfig generalConfig) {
         GeneralConfig existingGeneralConfig = getGeneralConfigById(generalConfig.getId());
-
         existingGeneralConfig.copy(generalConfig);
-
         em.merge(existingGeneralConfig);
         em.flush();
         return existingGeneralConfig;
