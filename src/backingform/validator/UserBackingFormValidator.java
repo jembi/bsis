@@ -9,11 +9,17 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import repository.UserRepository;
+import security.UserAuthority;
+import utils.PermissionConstants;
 import viewmodel.UserViewModel;
 import backingform.UserBackingForm;
 import controller.UtilController;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class UserBackingFormValidator implements Validator {
@@ -45,14 +51,27 @@ public class UserBackingFormValidator implements Validator {
         utilController.commonFieldChecks(form, "user", errors);
         checkUserName(form, errors);
         if (form.getId() != null) {
-            if (form.isModifyPassword()) {
+            // Existing user, so check if password is being changed and validate it
+            if (form.isModifyPassword() &&
+                    (form.getCurrentPassword() == null && canManageUsers() || checkCurrentPassword(form, errors))) {
                 comparePassword(form, errors);
             }
         } else {
+            // New user, so always compare passwords
             comparePassword(form, errors);
         }
 
         checkRoles(form, errors);
+    }
+    
+    private boolean checkCurrentPassword(UserBackingForm form, Errors errors) {
+        User user = userRepository.findUserById(form.getId());
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        boolean matches = encoder.matches(form.getCurrentPassword(), user.getPassword());
+        if (!matches) {
+            errors.rejectValue("user.password", "user.incorrect", "Current password does not match");
+        }
+        return matches;
     }
 
     private void comparePassword(UserBackingForm form, Errors errors) {
@@ -93,5 +112,21 @@ public class UserBackingFormValidator implements Validator {
                     "Username invalid. Use only alphanumeric characters, underscore (_), hyphen (-), and period (.).");
         }
 
+    }
+    
+    /**
+     * Check if the logged on user has the authority to manage users.
+     */
+    private boolean canManageUsers() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return false;
+        }
+        for (GrantedAuthority authority : authentication.getAuthorities()) {
+            if (PermissionConstants.MANAGE_USERS.equals(authority.getAuthority())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
