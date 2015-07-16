@@ -31,6 +31,10 @@ public class PackTypeBackingForm {
         packType.setBloodBagType(packTypeStr);
     }
     
+    public String getBloodBagType(){
+        return packType.getBloodBagType();
+    }
+    
     public void setProductType(ProductType productType){
     	packType.setProductType(productType);
     }

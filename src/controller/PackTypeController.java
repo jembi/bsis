@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.apache.log4j.Logger;
 import repository.BloodBagTypeRepository;
 import backingform.PackTypeBackingForm;
+import backingform.validator.PackTypeBackingFormValidator;
 import viewmodel.PackTypeViewModel;
 import model.bloodbagtype.BloodBagType;
 import utils.PermissionConstants;
@@ -11,9 +12,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,12 +43,10 @@ public class PackTypeController {
 	  public PackTypeController() {
 	  }
 	  
-	  /*
 	  @InitBinder
 	  protected void initBinder(WebDataBinder binder) {
-	    binder.setValidator(new ProductBackingFormValidator(binder.getValidator(), utilController));
+	    binder.setValidator(new PackTypeBackingFormValidator(binder.getValidator(), utilController, bloodBagTypeRepository));
 	  }
-	  */
 
 	  @RequestMapping(method=RequestMethod.GET)
 	  public  Map<String, Object> configureBloodBagTypesFormGenerator() {
