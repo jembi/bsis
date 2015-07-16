@@ -104,8 +104,8 @@ public class BloodBagType {
       this.productType = productType;
   }
 
-  public Boolean isCountAsDonation() {
-        return countAsDonation;
+  public Boolean getCountAsDonation() {
+       return countAsDonation;
   }
 
   public void setCountAsDonation(Boolean countAsDonation) {
