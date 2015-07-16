@@ -341,7 +341,7 @@ public class DonorController {
   private int getNumberOfDonations(List<CollectedSample> donations){
       int count = 0;
       for(CollectedSample donation :donations){
-          if(donation.getBloodBagType().isCountAsDonation() == true)
+          if(donation.getBloodBagType().getCountAsDonation() == true)
               count = count +1;
       }
       return count;
