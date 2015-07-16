@@ -1,5 +1,3 @@
-
-
 package viewmodel;
 
 import model.bloodbagtype.BloodBagType;
