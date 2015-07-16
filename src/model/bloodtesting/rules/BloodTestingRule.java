@@ -19,7 +19,7 @@ public class BloodTestingRule {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable=false, updatable=false, columnDefinition="MEDIUMINT")
+  @Column(nullable = false, insertable=false, updatable=false, columnDefinition="SMALLINT")
   private Integer id;
 
   /**

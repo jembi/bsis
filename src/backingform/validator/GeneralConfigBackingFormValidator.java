@@ -52,15 +52,15 @@ public class GeneralConfigBackingFormValidator implements Validator {
                 break;
             case INTEGER:
                 if (!formItem.getValue().matches("[0-9]+"))
-                    errors.rejectValue("value","400", formItem.getName() + " is not an integer");
+                    errors.rejectValue("value","400", "Invalid integer value");
                 break;
             case DECIMAL:
                 if (!formItem.getValue().matches("[0-9]*\\.?[0-9]+"))
-                    errors.rejectValue("value","400", formItem.getName() + " is not a decimal");
+                    errors.rejectValue("value","400", "Invalid decimal value");
                 break;
             case BOOLEAN:
                 if(!(formItem.getValue().equalsIgnoreCase("true") || formItem.getValue().equalsIgnoreCase("false")))
-                    errors.rejectValue("value","400", formItem.getName() + " is not a boolean");
+                    errors.rejectValue("value","400", "Invalid boolean value");
                 break;
 
         }
@@ -74,8 +74,7 @@ public class GeneralConfigBackingFormValidator implements Validator {
         generalConfig.setDataType(dataType);
 
         if (utilController.isDuplicateGeneralConfigName(generalConfig))
-            errors.rejectValue("name", "400",
-                    "There exists a generalConfig with the same name.");
+            errors.rejectValue("name", "400", "Configuration name already exists.");
 
         formItem.setGeneralConfig(generalConfig);
     }
