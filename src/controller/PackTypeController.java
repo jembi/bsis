@@ -48,13 +48,13 @@ public class PackTypeController {
 	    binder.setValidator(new PackTypeBackingFormValidator(binder.getValidator(), utilController, bloodBagTypeRepository));
 	  }
 
-	  @RequestMapping(method=RequestMethod.GET)
-	  public  Map<String, Object> configureBloodBagTypesFormGenerator() {
-	
-	    Map<String, Object> map = new HashMap<String, Object>();
-	    addAllBloodBagTypesToModel(map);
-	    return map;
-	  }
+	  	@RequestMapping(method=RequestMethod.GET)
+	  	@PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
+	  	public  Map<String, Object> getPackTypes() {
+	  		Map<String, Object> map = new HashMap<String, Object>();
+	  		addAllBloodBagTypesToModel(map);
+	  		return map;
+	  	}
 	  
 		@RequestMapping(value = "{id}", method = RequestMethod.GET)
 		@PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
