@@ -430,7 +430,7 @@ public class AdminController {
     @RequestMapping(value = "/packtypes", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
     public ResponseEntity savePackType(@Valid @RequestBody BloodBagType packType){
-        bloodBagTypesRepository.saveBloodBagType(packType);
+        packType = bloodBagTypesRepository.saveBloodBagType(packType);
         return new ResponseEntity(new PackTypeViewModel(packType), HttpStatus.CREATED);
     }
   

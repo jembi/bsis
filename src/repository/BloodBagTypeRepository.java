@@ -60,12 +60,20 @@ public class BloodBagTypeRepository {
     em.flush();
   }
   
-  public void saveBloodBagType(BloodBagType packType){
+  public BloodBagType saveBloodBagType(BloodBagType packType){
       em.persist(packType);
-      
+      em.flush();
+      return packType;
   }
   
   public BloodBagType updateBloodBagType(BloodBagType packType){
-      return em.merge(packType);
+	  BloodBagType existingPackType = getBloodBagTypeById(packType.getId());
+      if (existingPackType == null) {
+          return null;
+      }
+      existingPackType.copy(packType);
+      em.merge(existingPackType);
+      em.flush();
+      return existingPackType;
   }
 }
