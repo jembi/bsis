@@ -1,42 +1,41 @@
 package controller;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
-import model.collectionbatch.CollectionBatch;
-import model.testbatch.TestBatch;
+import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
+import model.donationbatch.DonationBatch;
 import model.donor.Donor;
-import backingform.TestResultBackingForm;
+import model.testbatch.TestBatch;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.RestController;
 
 import repository.DonationRepository;
 import repository.DonorRepository;
 import repository.TestBatchRepository;
 import repository.bloodtesting.BloodTestingRepository;
-import model.bloodtesting.TTIStatus;
-import repository.bloodtesting.BloodTypingStatus;
 import repository.bloodtesting.BloodTypingMatchStatus;
+import repository.bloodtesting.BloodTypingStatus;
 import utils.PermissionConstants;
+import viewmodel.BloodTestingRuleResult;
 import viewmodel.DonationViewModel;
 import viewmodel.DonorViewModel;
-import viewmodel.BloodTestingRuleResult;
+import backingform.TestResultBackingForm;
 
 @RestController
 @RequestMapping("testresults")
@@ -77,10 +76,10 @@ public class TestResultController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
-		List<CollectionBatch> collectionBatches = testBatch.getCollectionBatches();
+		List<DonationBatch> donationBatches = testBatch.getDonationBatches();
 		List<Integer> donationBatchIds = new ArrayList<Integer>();
-		for(CollectionBatch collectionBatch : collectionBatches){
-			donationBatchIds.add(collectionBatch.getId());
+		for(DonationBatch donationBatch : donationBatches){
+			donationBatchIds.add(donationBatch.getId());
 		}
 	
 	    List<BloodTestingRuleResult> ruleResults =
@@ -99,10 +98,10 @@ public class TestResultController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
-		List<CollectionBatch> collectionBatches = testBatch.getCollectionBatches();
+		List<DonationBatch> donationBatches = testBatch.getDonationBatches();
 		List<Integer> donationBatchIds = new ArrayList<Integer>();
-		for(CollectionBatch collectionBatch : collectionBatches){
-			donationBatchIds.add(collectionBatch.getId());
+		for(DonationBatch donationBatch : donationBatches){
+			donationBatchIds.add(donationBatch.getId());
 		}
 	
 	    List<BloodTestingRuleResult> ruleResults =

@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import model.admin.FormField;
 import model.admin.GeneralConfig;
-import model.collectionbatch.CollectionBatch;
 import model.donation.Donation;
+import model.donationbatch.DonationBatch;
 import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
 import model.product.Product;
@@ -38,7 +38,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import repository.DonationRepository;
-import repository.CollectionBatchRepository;
+import repository.DonationBatchRepository;
 import repository.DonorRepository;
 import repository.FormFieldRepository;
 import repository.GenericConfigRepository;
@@ -77,7 +77,7 @@ public class UtilController {
   private RequestRepository requestRepository;
 
   @Autowired
-  private CollectionBatchRepository collectionBatchRepository;
+  private DonationBatchRepository donationBatchRepository;
 
   @Autowired
   private WorksheetRepository worksheetRepository;
@@ -294,20 +294,20 @@ public class UtilController {
     return donor;
   }
 
-  public CollectionBatch findCollectionBatchInForm(Map<String, Object> bean) {
+  public DonationBatch findDonationBatchInForm(Map<String, Object> bean) {
 
-    CollectionBatch collectionBatch = null;
+    DonationBatch donationBatch = null;
     String batchNumber = null;
     if (batchNumber == null)
-      batchNumber = (String) bean.get("collectionBatchNumber");
+      batchNumber = (String) bean.get("donationBatchNumber");
     if (StringUtils.isNotBlank(batchNumber)) {
       try {
-        collectionBatch = collectionBatchRepository.findCollectionBatchByBatchNumber(batchNumber);
+        donationBatch = donationBatchRepository.findDonationBatchByBatchNumber(batchNumber);
       } catch (NoResultException ex) {
         ex.printStackTrace();
       }
     }
-    return collectionBatch;
+    return donationBatch;
   }
 
   public Donation findDonationInForm(Map<String, Object> bean) {
@@ -476,12 +476,12 @@ public class UtilController {
     return false;
   }
 
-  public boolean isDuplicateCollectionBatchNumber(CollectionBatch collectionBatch) {
-    String batchNumber = collectionBatch.getBatchNumber();
+  public boolean isDuplicateDonationBatchNumber(DonationBatch donationBatch) {
+    String batchNumber = donationBatch.getBatchNumber();
     if (StringUtils.isBlank(batchNumber))
       return false;
-    CollectionBatch existingCollectionBatch = collectionBatchRepository.findCollectionBatchByBatchNumberIncludeDeleted(batchNumber);
-    if (existingCollectionBatch != null && !existingCollectionBatch.getId().equals(collectionBatch.getId()))
+    DonationBatch existingDonationBatch = donationBatchRepository.findDonationBatchByBatchNumberIncludeDeleted(batchNumber);
+    if (existingDonationBatch != null && !existingDonationBatch.getId().equals(donationBatch.getId()))
       return true;
     return false;
   }

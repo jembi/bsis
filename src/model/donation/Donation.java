@@ -1,18 +1,12 @@
 package model.donation;
 
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import constraintvalidator.BloodBagTypeExists;
-import constraintvalidator.CollectionBatchExists;
-import constraintvalidator.DonationTypeExists;
-import constraintvalidator.DonorExists;
-import constraintvalidator.LocationExists;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -29,10 +23,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
-import model.collectionbatch.CollectionBatch;
+import model.donationbatch.DonationBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
@@ -41,13 +36,24 @@ import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
 import model.user.User;
 import model.worksheet.Worksheet;
+
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Range;
-import repository.bloodtesting.BloodTypingStatus;
+
 import repository.bloodtesting.BloodTypingMatchStatus;
+import repository.bloodtesting.BloodTypingStatus;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import constraintvalidator.BloodBagTypeExists;
+import constraintvalidator.DonationBatchExists;
+import constraintvalidator.DonationTypeExists;
+import constraintvalidator.DonorExists;
+import constraintvalidator.LocationExists;
 
 /**
  * A donation or a collection as it is in the UI.
@@ -138,9 +144,9 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
   @ManyToOne(optional=true)
   private User donationCreatedBy;
 
-  @CollectionBatchExists
+  @DonationBatchExists
   @ManyToOne(optional=true)
-  private CollectionBatch collectionBatch;
+  private DonationBatch donationBatch;
 
   @Lob
   private String notes;
@@ -246,7 +252,7 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     this.setDonationType(donation.getDonationType());
     this.bloodBagType = donation.bloodBagType;
     this.collectedOn = donation.collectedOn;
-    this.collectionBatch = donation.collectionBatch;
+    this.donationBatch = donation.donationBatch;
     this.notes = donation.notes;
     this.haemoglobinCount=donation.haemoglobinCount;
     this.donorPulse = donation.donorPulse;
@@ -362,12 +368,12 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     this.donationCreatedBy = donationCreatedBy;
   }
 
-  public CollectionBatch getCollectionBatch() {
-    return collectionBatch;
+  public DonationBatch getDonationBatch() {
+    return donationBatch;
   }
 
-  public void setCollectionBatch(CollectionBatch collectionBatch) {
-    this.collectionBatch = collectionBatch;
+  public void setDonationBatch(DonationBatch donationBatch) {
+    this.donationBatch = donationBatch;
   }
 
   public DonationType getDonationType() {
@@ -384,9 +390,9 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     return "";
   }
 
-  public String getCollectionBatchNumber() {
-    if (collectionBatch != null)
-      return collectionBatch.getBatchNumber();
+  public String getDonationBatchNumber() {
+    if (donationBatch != null)
+      return donationBatch.getBatchNumber();
     return "";
   }
 

@@ -133,7 +133,7 @@
         notes longtext,
         ttiStatus varchar(20),
         bloodBagType_id SMALLINT,
-        collectionBatch_id SMALLINT,
+        donationBatch_id SMALLINT,
         collectionCenter_id bigint,
         collectionSite_id bigint,
         donationCreatedBy_id SMALLINT,
@@ -163,7 +163,7 @@
         notes longtext,
         ttiStatus varchar(20),
         bloodBagType_id SMALLINT,
-        collectionBatch_id SMALLINT,
+        donationBatch_id SMALLINT,
         collectionCenter_id bigint,
         collectionSite_id bigint,
         donationCreatedBy_id SMALLINT,
@@ -174,7 +174,7 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table CollectionBatch (
+    create table DonationBatch (
         id SMALLINT not null auto_increment,
         batchNumber varchar(20) unique,
         isDeleted boolean not null,
@@ -188,7 +188,7 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table CollectionBatch_AUD (
+    create table DonationBatch_AUD (
         id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
@@ -1067,10 +1067,10 @@
         references Location (id);
 
     alter table Donation 
-        add index FKF0658A33E5D4FEA3 (collectionBatch_id), 
+        add index FKF0658A33E5D4FEA3 (donationBatch_id), 
         add constraint FKF0658A33E5D4FEA3 
-        foreign key (collectionBatch_id) 
-        references CollectionBatch (id);
+        foreign key (donationBatch_id) 
+        references DonationBatch (id);
 
     alter table Donation 
         add index FKF0658A3359FAB30D (donor_id), 
@@ -1102,31 +1102,31 @@
         foreign key (REV) 
         references REVINFO (REV);
 
-    alter table CollectionBatch 
+    alter table DonationBatch 
         add index FK227631CA49787C4 (createdBy_id), 
         add constraint FK227631CA49787C4 
         foreign key (createdBy_id) 
         references User (id);
 
-    alter table CollectionBatch 
+    alter table DonationBatch 
         add index FK227631CAED1731E (collectionSite_id), 
         add constraint FK227631CAED1731E 
         foreign key (collectionSite_id) 
         references Location (id);
 
-    alter table CollectionBatch 
+    alter table DonationBatch 
         add index FK227631CB29562D0 (collectionCenter_id), 
         add constraint FK227631CB29562D0 
         foreign key (collectionCenter_id) 
         references Location (id);
 
-    alter table CollectionBatch 
+    alter table DonationBatch 
         add index FK227631CD0AFB367 (lastUpdatedBy_id), 
         add constraint FK227631CD0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
 
-    alter table CollectionBatch_AUD 
+    alter table DonationBatch_AUD 
         add index FKB74A2EDDF74E053 (REV), 
         add constraint FKB74A2EDDF74E053 
         foreign key (REV) 

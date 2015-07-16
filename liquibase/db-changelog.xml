@@ -947,12 +947,16 @@
 		</insert>
 	</changeSet>
 
-	<!-- Add in 'isClosed' field to collectionBatch tables -->
-	<changeSet id="20141028-1957" author="danfuterman">
-		<addColumn tableName="CollectionBatch">
+	<!-- Add in 'isClosed' field to DonationBatch tables -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150716-1036" author="danfuterman">
+	    <preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="DonationBatch" columnName="isClosed"/></not>
+		</preConditions>
+		<addColumn tableName="DonationBatch">
 			<column name="isClosed" type="tinyint(1)" defaultValue="0"></column>
 		</addColumn>
-		<addColumn tableName="CollectionBatch_AUD">
+		<addColumn tableName="DonationBatch_AUD">
 			<column name="isClosed" type="tinyint(1)" defaultValue="0"></column>
 		</addColumn>
 	</changeSet>
@@ -974,25 +978,33 @@
 		</createTable>
 	</changeSet>
 
-	<changeSet id="20141114-1620" author="srikanthmalyala">
-		<addColumn tableName="CollectionBatch">
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150716-1040" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="DonationBatch" columnName="testBatch_id"/></not>
+		</preConditions>
+		<addColumn tableName="DonationBatch">
 			<column name="testBatch_id" type="smallint(6)"></column>
 		</addColumn>
 		<addForeignKeyConstraint constraintName="testBatch_id_FK" 
 			 referencedTableName="TestBatch" 
 			 baseColumnNames="testBatch_id" 
-			 baseTableName="CollectionBatch" 
+			 baseTableName="DonationBatch" 
 			 referencedColumnNames="id"/>
 	</changeSet>
 
-	<changeSet id="20141114-1625" author="srikanthmalyala">
-		<addColumn tableName="CollectionBatch_AUD">
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150716-1041" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="DonationBatch_AUD" columnName="testBatch_id"/></not>
+		</preConditions>
+		<addColumn tableName="DonationBatch_AUD">
 				<column name="testBatch_id" type="smallint(6)"></column>
 		</addColumn>
 		<addForeignKeyConstraint constraintName="testBatch_id_aud_FK" 
 			 referencedTableName="TestBatch" 
 			 baseColumnNames="testBatch_id" 
-			 baseTableName="CollectionBatch_AUD" 
+			 baseTableName="DonationBatch_AUD" 
 			 referencedColumnNames="id"/>
 	</changeSet>
 
@@ -1047,23 +1059,39 @@
 	</changeSet>
 
 	<!-- #246 Adapt Donations to use single Location field -->
-	<changeSet id="20141119-1558" author="srikanthmalyala">
-		<dropForeignKeyConstraint baseTableName="CollectionBatch" constraintName="FK227631CAED1731E"/>
-		<dropForeignKeyConstraint baseTableName="CollectionBatch" constraintName="FK227631CB29562D0"/>
-		<dropColumn columnName="collectionCenter_id" tableName="CollectionBatch"/>
-		<dropColumn columnName="collectionCenter_id" tableName="CollectionBatch_AUD"/>
-		<dropColumn columnName="collectionSite_id" tableName="CollectionBatch"/>
-		<dropColumn columnName="collectionSite_id" tableName="CollectionBatch_AUD"/>
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150716-1046" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+		    <columnExists tableName="DonationBatch" columnName="collectionCenter_id"/>
+		</preConditions>
+		<dropForeignKeyConstraint baseTableName="DonationBatch" constraintName="FK227631CB29562D0"/>
+		<dropColumn columnName="collectionCenter_id" tableName="DonationBatch"/>
+		<dropColumn columnName="collectionCenter_id" tableName="DonationBatch_AUD"/>
+	</changeSet>
+	
+	<!-- #246 Adapt Donations to use single Location field -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150716-1048" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+		    <columnExists tableName="DonationBatch" columnName="collectionSite_id"/>
+		</preConditions>
+		<dropForeignKeyConstraint baseTableName="DonationBatch" constraintName="FK227631CAED1731E"/>
+		<dropColumn columnName="collectionSite_id" tableName="DonationBatch"/>
+		<dropColumn columnName="collectionSite_id" tableName="DonationBatch_AUD"/>
 	</changeSet>
 
 	<!-- #246 Adapt Donations to use single Location field -->
-	<changeSet id="20141119-1605" author="srikanthmalyala">
-		<addColumn tableName="CollectionBatch">
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150716-1058" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="DonationBatch" columnName="donorPanel_id"/></not>
+		</preConditions>
+		<addColumn tableName="DonationBatch">
 			<column name="donorPanel_id" type="bigint">
 				<constraints foreignKeyName="FK_DonationBatch_Location" references="Location(id)"/>
 			</column>
 		</addColumn>
-		<addColumn tableName="CollectionBatch_AUD">
+		<addColumn tableName="DonationBatch_AUD">
 			<column name="donorPanel_id" type="bigint"></column>
 		</addColumn>
 	</changeSet>

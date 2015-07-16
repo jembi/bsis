@@ -1,19 +1,23 @@
 package backingform.validator;
 
 import backingform.TestBatchBackingForm;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import model.collectionbatch.CollectionBatch;
+
+import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
+
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-import repository.CollectionBatchRepository;
+
+import repository.DonationBatchRepository;
 
 public class TestBatchBackingFormValidator implements Validator {
 
-    private CollectionBatchRepository collectionBatchRepository;
+    private DonationBatchRepository donationBatchRepository;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -22,9 +26,9 @@ public class TestBatchBackingFormValidator implements Validator {
     
     private Validator validator;
 
-    public TestBatchBackingFormValidator(Validator validator, CollectionBatchRepository collectionBatchRepository) {
+    public TestBatchBackingFormValidator(Validator validator, DonationBatchRepository donationBatchRepository) {
         this.validator = validator;
-        this.collectionBatchRepository = collectionBatchRepository;
+        this.donationBatchRepository = donationBatchRepository;
     }
     
     
@@ -38,17 +42,17 @@ public class TestBatchBackingFormValidator implements Validator {
     ValidationUtils.invokeValidator(validator, object, errors);
         TestBatchBackingForm form = (TestBatchBackingForm) object;
         TestBatch testBatch = form.getTestBatch();
-        List<Integer> collectionBatchIds = form.getCollectionBatchIds();
-        List<CollectionBatch> collectionBatches = new ArrayList<CollectionBatch>();
-        if (!collectionBatchIds.isEmpty() && collectionBatchIds != null) {
-            for (Integer donationBatchId : collectionBatchIds) {
-                CollectionBatch cb = collectionBatchRepository.findCollectionBatchById(donationBatchId);
+        List<Integer> donationBatchIds = form.getDonationBatchIds();
+        List<DonationBatch> donationBatches = new ArrayList<DonationBatch>();
+        if (!donationBatchIds.isEmpty() && donationBatchIds != null) {
+            for (Integer donationBatchId : donationBatchIds) {
+                DonationBatch cb = donationBatchRepository.findDonationBatchById(donationBatchId);
                 if(cb.getTestBatch() != null)
-                    errors.rejectValue("collectionBatchIds", "", "Donation  batch with id " + cb.getId() + " is already in test batch ");
-                collectionBatches.add(cb);
+                    errors.rejectValue("donationBatchIds", "", "Donation  batch with id " + cb.getId() + " is already in test batch ");
+                donationBatches.add(cb);
             }
         }
-        testBatch.setCollectionBatches(collectionBatches);
+        testBatch.setDonationBatches(donationBatches);
     }
 
 }

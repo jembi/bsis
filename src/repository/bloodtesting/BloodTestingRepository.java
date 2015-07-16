@@ -46,7 +46,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import repository.DonationRepository;
-import repository.CollectionBatchRepository;
+import repository.DonationBatchRepository;
 import repository.GenericConfigRepository;
 import repository.WellTypeRepository;
 import repository.events.ApplicationContextProvider;
@@ -67,7 +67,7 @@ public class BloodTestingRepository {
 	private DonationRepository donationRepository;
 	
 	@Autowired
-	private CollectionBatchRepository collectionBatchRepository;	
+	private DonationBatchRepository donationBatchRepository;	
 
 	@Autowired
 	private BloodTestingRuleEngine ruleEngine;
@@ -401,8 +401,8 @@ public class BloodTestingRepository {
 
 		List<BloodTestingRuleResult> bloodTestingRuleResults = new ArrayList<BloodTestingRuleResult>();
 
-		for (Integer collectionBatchId : donationBatchIds) {
-			List<Donation> donations = collectionBatchRepository.findCollectionsInBatch(collectionBatchId);
+		for (Integer donationBatchId : donationBatchIds) {
+			List<Donation> donations = donationBatchRepository.findDonationsInBatch(donationBatchId);
 			
 			for (Donation donation : donations) {
 

@@ -15,8 +15,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.collectionbatch.CollectionBatch;
 import model.donation.Donation;
+import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 
@@ -44,10 +44,10 @@ public class TestBatchRepository {
   
   public void updateDonationWithTestBatch(TestBatch testBatch){
 		
-		List<CollectionBatch> donationBatches = testBatch.getCollectionBatches();
+		List<DonationBatch> donationBatches = testBatch.getDonationBatches();
 		if (donationBatches != null && !donationBatches.isEmpty()) {
 		        em.persist(testBatch);
-			for(CollectionBatch donationBatch : donationBatches){
+			for(DonationBatch donationBatch : donationBatches){
 				donationBatch.setTestBatch(testBatch);
 				em.merge(donationBatch); 
 			}

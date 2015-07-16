@@ -115,10 +115,10 @@ public class DonationViewModel {
     return donation.getTTIStatus().toString();
   }
 
-  public String getCollectionBatchNumber() {
-    if (donation.getCollectionBatch() == null)
+  public String getDonationBatchNumber() {
+    if (donation.getDonationBatch() == null)
       return "";
-    return donation.getCollectionBatch().getBatchNumber();
+    return donation.getDonationBatch().getBatchNumber();
   }
 
   public String getBloodTypingStatus() {

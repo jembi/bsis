@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
-import model.collectionbatch.CollectionBatch;
 import model.donation.Donation;
 import model.donation.DonationConstants;
+import model.donationbatch.DonationBatch;
 import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.location.Location;
@@ -74,7 +74,7 @@ public class DonationBackingFormValidator implements Validator {
           CustomDateFormatter.getTimeErrorMessage());
 
     updateRelatedEntities(form);
-    inheritParametersFromCollectionBatch(form, errors);
+    inheritParametersFromDonationBatch(form, errors);
     Donor donor = form.getDonor();
     if (donor != null) {
       String errorMessageDonorAge = utilController.verifyDonorAge(donor.getBirthDate());
@@ -150,12 +150,12 @@ public class DonationBackingFormValidator implements Validator {
 		 
 
   
-  private void inheritParametersFromCollectionBatch(
+  private void inheritParametersFromDonationBatch(
       DonationBackingForm form, Errors errors) {
     if (form.getUseParametersFromBatch()) {
-      CollectionBatch collectionBatch = form.getCollectionBatch();
-      if (collectionBatch == null) {
-        errors.rejectValue("donation.collectionBatch", "collectionbatch.notspecified", "Collection batch should be specified");
+      DonationBatch donationBatch = form.getDonationBatch();
+      if (donationBatch == null) {
+        errors.rejectValue("donation.donationBatch", "donationbatch.notspecified", "Donation batch should be specified");
         return;
       }
     }
@@ -181,8 +181,8 @@ public class DonationBackingFormValidator implements Validator {
       bean = BeanUtils.describe(form);
       Donor donor = utilController.findDonorInForm(bean);
       form.setDonor(donor);
-      CollectionBatch collectionBatch = utilController.findCollectionBatchInForm(bean);
-      form.setCollectionBatch(collectionBatch);
+      DonationBatch donationBatch = utilController.findDonationBatchInForm(bean);
+      form.setDonationBatch(donationBatch);
     } catch (IllegalAccessException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

@@ -11,8 +11,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import model.bloodbagtype.BloodBagType;
-import model.collectionbatch.CollectionBatch;
 import model.donation.Donation;
+import model.donationbatch.DonationBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.product.Product;
@@ -276,23 +276,23 @@ public class DonationBackingForm {
     return donorNumber;
   }
 
-  public String getCollectionBatchNumber() {
-    if (donation == null || donation.getCollectionBatch() == null ||
-        donation.getCollectionBatch().getBatchNumber() == null
+  public String getDonationBatchNumber() {
+    if (donation == null || donation.getDonationBatch() == null ||
+        donation.getDonationBatch().getBatchNumber() == null
        )
       return "";
-    return donation.getCollectionBatch().getBatchNumber();
+    return donation.getDonationBatch().getBatchNumber();
   }
 
   public void setDonorNumber(String donorNumber) {
 	this.donorNumber = donorNumber;
   }
   
-  public void setCollectionBatchNumber(String collectionBatchNumber) {
-    if (StringUtils.isNotBlank(collectionBatchNumber)) {
-      CollectionBatch collectionBatch = new CollectionBatch();
-      collectionBatch.setBatchNumber(collectionBatchNumber);
-      donation.setCollectionBatch(collectionBatch);
+  public void setDonationBatchNumber(String donationBatchNumber) {
+    if (StringUtils.isNotBlank(donationBatchNumber)) {
+      DonationBatch donationBatch = new DonationBatch();
+      donationBatch.setBatchNumber(donationBatchNumber);
+      donation.setDonationBatch(donationBatch);
     }
   }
 
@@ -325,12 +325,12 @@ public class DonationBackingForm {
   }
 
   @JsonIgnore
-  public CollectionBatch getCollectionBatch() {
-    return donation.getCollectionBatch();
+  public DonationBatch getDonationBatch() {
+    return donation.getDonationBatch();
   }
 
-  public void setCollectionBatch(CollectionBatch collectionBatch) {
-    donation.setCollectionBatch(collectionBatch);
+  public void setDonationBatch(DonationBatch donationBatch) {
+    donation.setDonationBatch(donationBatch);
   }
 
   public Boolean getUseParametersFromBatch() {

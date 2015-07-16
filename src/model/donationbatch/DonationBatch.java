@@ -1,4 +1,4 @@
-package model.collectionbatch;
+package model.donationbatch;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -36,7 +36,7 @@ import org.hibernate.envers.RelationTargetAuditMode;
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class CollectionBatch implements ModificationTracker {
+public class DonationBatch implements ModificationTracker {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -46,10 +46,11 @@ public class CollectionBatch implements ModificationTracker {
   @Column(length=20, unique=true)
   private String batchNumber;
 
+  @SuppressWarnings("unchecked")
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy="collectionBatch", fetch = FetchType.EAGER)
-  private List<Donation> collectionsInBatch = Collections.EMPTY_LIST;
+  @OneToMany(mappedBy="donationBatch", fetch = FetchType.EAGER)
+  private List<Donation> donationsInBatch = Collections.EMPTY_LIST;
   
   @OneToOne
   @LocationExists
@@ -68,7 +69,7 @@ public class CollectionBatch implements ModificationTracker {
 
   private RowModificationTracker modificationTracker;
 
-  public CollectionBatch() {
+  public DonationBatch() {
     modificationTracker = new RowModificationTracker();
   }
 
@@ -96,12 +97,12 @@ public class CollectionBatch implements ModificationTracker {
     this.notes = notes;
   }
 
-  public List<Donation> getCollectionsInBatch() {
-    return collectionsInBatch;
+  public List<Donation> getDonationsInBatch() {
+    return donationsInBatch;
   }
 
-  public void setCollectionsInBatch(List<Donation> collectionsInBatch) {
-    this.collectionsInBatch = collectionsInBatch;
+  public void setDonationInBatch(List<Donation> donationsInBatch) {
+    this.donationsInBatch = donationsInBatch;
   }
 
   public boolean getIsDeleted() {
@@ -177,9 +178,9 @@ public class CollectionBatch implements ModificationTracker {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
   
-  public void copy(CollectionBatch collectionBatch){
-      this.setNotes(collectionBatch.getNotes());
-      this.donorPanel = collectionBatch.getDonorPanel();
+  public void copy(DonationBatch donationBatch){
+      this.setNotes(donationBatch.getNotes());
+      this.donorPanel = donationBatch.getDonorPanel();
   }
 
 
