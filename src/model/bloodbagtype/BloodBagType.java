@@ -112,12 +112,20 @@ public class BloodBagType {
        this.countAsDonation = countAsDonation;
   }
 
-    public Integer getPeriodBetweenDonations() {
-        return periodBetweenDonations;
-    }
-
-    public void setPeriodBetweenDonations(Integer periodBetweenDonations) {
-        this.periodBetweenDonations = periodBetweenDonations;
+	public Integer getPeriodBetweenDonations() {
+	    return periodBetweenDonations;
+	}
+	
+	public void setPeriodBetweenDonations(Integer periodBetweenDonations) {
+	    this.periodBetweenDonations = periodBetweenDonations;
+	}
+	
+	public void copy(BloodBagType bloodBagType) {
+		this.bloodBagType = bloodBagType.getBloodBagType();
+        this.productType = bloodBagType.getProductType();
+        this.periodBetweenDonations = bloodBagType.getPeriodBetweenDonations();
+        this.countAsDonation = bloodBagType.getCountAsDonation();
+        this.isDeleted = bloodBagType.getIsDeleted();
     }
   
   
