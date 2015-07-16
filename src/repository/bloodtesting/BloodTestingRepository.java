@@ -1,6 +1,7 @@
 package repository.bloodtesting;
 
 import backingform.BloodTestBackingForm;
+
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -1121,6 +1122,18 @@ public class BloodTestingRepository {
 		query.setParameter("category", BloodTestCategory.TTI);
 		List<BloodTest> bloodTests = query.getResultList();
 		return bloodTests;
+	}
+	
+	/**
+	 * Retrieve a full list of the active Blood Testing Rules.
+	 *
+	 * @return List<BloodTestingRule> list of rules, should not be null although this is not guaranteed
+	 */
+	public List<BloodTestingRule> getActiveBloodTestingRules() {
+		String queryStr = "SELECT r FROM BloodTestingRule r WHERE isActive=:isActive";
+		TypedQuery<BloodTestingRule> query = em.createQuery(queryStr, BloodTestingRule.class);
+		query.setParameter("isActive", true);
+		return query.getResultList();
 	}
 
 	public User getUser(Integer id) {
