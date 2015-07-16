@@ -35,7 +35,7 @@ public class DonationBackingForm {
 
   private List<String> centers;
   private List<String> sites;
-  private String collectedOn;
+  private String donationDate;
   private String bleedStartTime;
   private String bleedEndTime;
   private String donorNumber;
@@ -69,12 +69,12 @@ public class DonationBackingForm {
     return sites;
   }
 
-  public String getCollectedOn() {
-    if (collectedOn != null)
-      return collectedOn;
+  public String getDonationDate() {
+    if (donationDate != null)
+      return donationDate;
     if (donation == null)
       return "";
-    return CustomDateFormatter.getDateTimeString(donation.getCollectedOn());
+    return CustomDateFormatter.getDateTimeString(donation.getDonationDate());
   }
   
   public String getBleedStartTime() {
@@ -97,13 +97,13 @@ public class DonationBackingForm {
     return donation.getCollectionNumber();
   }
 
-  public void setCollectedOn(String collectedOn) {
-    this.collectedOn = collectedOn;
+  public void setDonationDate(String donationDate) {
+    this.donationDate = donationDate;
     try {
-      donation.setCollectedOn(CustomDateFormatter.getDateFromString(collectedOn));
+      donation.setDonationDate(CustomDateFormatter.getDateFromString(donationDate));
     } catch (ParseException ex) {
       ex.printStackTrace();
-      donation.setCollectedOn(null);
+      donation.setDonationDate(null);
     }
   }
   

@@ -178,10 +178,10 @@ public class ProductRepository {
 	    	queryStr += "AND p.productType.id IN (:productTypeIds) ";
 	    }	    
 	    if(donationDateFrom != null){
-	    	queryStr += "AND p.donation.collectedOn >= :donationDateFrom ";
+	    	queryStr += "AND p.donation.donationDate >= :donationDateFrom ";
 	    }
 	    if(donationDateTo != null){
-	    	queryStr += "AND p.donation.collectedOn <= :donationDateTo ";
+	    	queryStr += "AND p.donation.donationDate <= :donationDateTo ";
 	    }
 	    
 	    if (pagingParams.containsKey("sortColumn")) {
@@ -619,7 +619,7 @@ public class ProductRepository {
   }
 
   public Map<String, Map<Long, Long>> findNumberOfDiscardedProducts(
-      Date dateCollectedFrom, Date dateCollectedTo, String aggregationCriteria,
+      Date donationDateFrom, Date donationDateTo, String aggregationCriteria,
       List<String> panels, List<String> bloodGroups) throws ParseException {
 
     List<Long> panelIds = new ArrayList<Long>();
@@ -637,13 +637,13 @@ public class ProductRepository {
     }
 
     TypedQuery<Object[]> query = em.createQuery(
-        "SELECT count(p), p.donation.collectedOn, p.donation.bloodAbo, " +
+        "SELECT count(p), p.donation.donationDate, p.donation.bloodAbo, " +
         "p.donation.bloodRh FROM Product p WHERE " +
         "p.donation.donorPanel.id IN (:panelIds) AND " +
-        "p.donation.collectedOn BETWEEN :dateCollectedFrom AND :dateCollectedTo AND " +
+        "p.donation.donationDate BETWEEN :donationDateFrom AND :donationDateTo AND " +
         "p.status IN (:discardedStatuses) AND " +
         "(p.isDeleted= :isDeleted) " +
-        "GROUP BY bloodAbo, bloodRh, collectedOn", Object[].class);
+        "GROUP BY bloodAbo, bloodRh, donationDate", Object[].class);
 
     query.setParameter("panelIds", panelIds);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -652,8 +652,8 @@ public class ProductRepository {
                                      ProductStatus.UNSAFE,
                                      ProductStatus.EXPIRED));
 
-    query.setParameter("dateCollectedFrom", dateCollectedFrom);
-    query.setParameter("dateCollectedTo", dateCollectedTo);
+    query.setParameter("donationDateFrom", donationDateFrom);
+    query.setParameter("donationDateTo", donationDateTo);
 
     DateFormat resultDateFormat = new SimpleDateFormat("dd/MM/yyyy");
     int incrementBy = Calendar.DAY_OF_YEAR;
@@ -670,8 +670,8 @@ public class ProductRepository {
     for (String bloodGroup : bloodGroups) {
       Map<Long, Long> m = new HashMap<Long, Long>();
       Calendar gcal = new GregorianCalendar();
-      Date lowerDate =  resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
-      Date upperDate =  resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
+      Date lowerDate =  resultDateFormat.parse(resultDateFormat.format(donationDateFrom));
+      Date upperDate =  resultDateFormat.parse(resultDateFormat.format(donationDateTo));
       gcal.setTime(lowerDate);
       while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
         m.put(gcal.getTime().getTime(), (long) 0);
@@ -704,7 +704,7 @@ public class ProductRepository {
   }
 
   public Map<String, Map<Long, Long>> findNumberOfIssuedProducts(
-      Date dateCollectedFrom, Date dateCollectedTo, String aggregationCriteria,
+      Date donationDateFrom, Date donationDateTo, String aggregationCriteria,
       List<String> panels, List<String> bloodGroups) throws ParseException {
 
 	List<Long> panelIds = new ArrayList<Long>();
@@ -725,17 +725,17 @@ public class ProductRepository {
         "SELECT count(p), p.issuedOn, p.donation.bloodAbo, " +
         "p.donation.bloodRh FROM Product p WHERE " +
         "p.donation.donorPanel.id IN (:panelIds) AND " +
-        "p.donation.collectedOn BETWEEN :dateCollectedFrom AND :dateCollectedTo AND " +
+        "p.donation.donationDate BETWEEN :donationDateFrom AND :donationDateTo AND " +
         "p.status=:issuedStatus AND " +
         "(p.isDeleted= :isDeleted) " +
-        "GROUP BY bloodAbo, bloodRh, collectedOn", Object[].class);
+        "GROUP BY bloodAbo, bloodRh, donationDate", Object[].class);
 
     query.setParameter("panelIds", panelIds);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("issuedStatus", ProductStatus.ISSUED);
 
-    query.setParameter("dateCollectedFrom", dateCollectedFrom);
-    query.setParameter("dateCollectedTo", dateCollectedTo);
+    query.setParameter("donationDateFrom", donationDateFrom);
+    query.setParameter("donationDateTo", donationDateTo);
 
     DateFormat resultDateFormat = new SimpleDateFormat("dd/MM/yyyy");
     int incrementBy = Calendar.DAY_OF_YEAR;
@@ -755,8 +755,8 @@ public class ProductRepository {
       Date lowerDate = null;
       Date upperDate = null;
       try {
-        lowerDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
-        upperDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
+        lowerDate = resultDateFormat.parse(resultDateFormat.format(donationDateFrom));
+        upperDate = resultDateFormat.parse(resultDateFormat.format(donationDateTo));
       } catch (ParseException e1) {
         e1.printStackTrace();
       }

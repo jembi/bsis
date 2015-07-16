@@ -95,7 +95,7 @@ public class DonationController {
       
       row.add(donation.getId().toString());
 
-      for (String property : Arrays.asList("collectionNumber", "collectedOn", "bloodBagType", "donorPanel")) {
+      for (String property : Arrays.asList("collectionNumber", "donationDate", "bloodBagType", "donorPanel")) {
         if (formFields.containsKey(property)) {
           Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
           if (properties.get("hidden").equals(false)) {
@@ -252,8 +252,8 @@ public class DonationController {
      @RequestParam(value = "collectionNumber", required = false)  String collectionNumber,
      @RequestParam(value = "panels",required = false)  List<Long> panelIds,
      @RequestParam(value = "bloodBagTypes",required = false)  List<Integer> bloodBagTypeIds,
-     @RequestParam(value = "dateCollectedFrom", required = false)  String dateCollectedFrom,
-     @RequestParam(value = "dateCollectedTo", required = false)  String dateCollectedTo,
+     @RequestParam(value = "donationDateFrom", required = false)  String donationDateFrom,
+     @RequestParam(value = "donationDateTo", required = false)  String donationDateTo,
      @RequestParam(value = "includeTestedDonations",required = true)  boolean includeTestedDonations)throws  ParseException{
    
       Map<String, Object> pagingParams = new HashMap<String, Object>();
@@ -276,7 +276,7 @@ public class DonationController {
           results = donationRepository.findDonations(
                   collectionNumber,
                   bloodBagTypeIds, panelIds,
-                  dateCollectedFrom, dateCollectedTo, includeTestedDonations, pagingParams);
+                  donationDateFrom, donationDateTo, includeTestedDonations, pagingParams);
   
     @SuppressWarnings("unchecked")
     List<Donation> donations = (List<Donation>) results.get(0);

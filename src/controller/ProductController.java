@@ -1,26 +1,15 @@
 package controller;
 
-import backingform.ProductCombinationBackingForm;
-import backingform.RecordProductBackingForm;
-import backingform.validator.ProductBackingFormValidator;
-
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.Calendar;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -54,12 +43,19 @@ import repository.DonationRepository;
 import repository.ProductRepository;
 import repository.ProductStatusChangeReasonRepository;
 import repository.ProductTypeRepository;
+import utils.CustomDateFormatter;
 import utils.PermissionConstants;
-import viewmodel.ProductViewModel;
-import viewmodel.ProductTypeViewModel;
 import viewmodel.ProductStatusChangeViewModel;
 import viewmodel.ProductTypeCombinationViewModel;
-import utils.CustomDateFormatter;
+import viewmodel.ProductTypeViewModel;
+import viewmodel.ProductViewModel;
+import backingform.ProductCombinationBackingForm;
+import backingform.RecordProductBackingForm;
+import backingform.validator.ProductBackingFormValidator;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("components")
@@ -396,91 +392,6 @@ public class ProductController {
     return map;
   }
   
-  /*
-  @RequestMapping(value = "/record", method = RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public  ResponseEntity<Map<String, Object>> recordNewProductComponents(
-       @RequestBody @Valid RecordProductBackingForm form) throws ParseException{
-
-      ProductType productType2 = productTypeRepository.getProductTypeById(Integer.valueOf(form.getChildComponentTypeId()));
-      Product parentComponent = productRepository.findProductById(Long.valueOf(form.getParentComponentId()));
-      Donation donation = parentComponent.getDonation();
-      String collectionNumber = donation.getCollectionNumber();
-      ProductStatus status = parentComponent.getStatus();
-      long productId = Long.valueOf(form.getParentComponentId());
-
-      String sortName = productType2.getProductTypeNameShort();
-      int noOfUnits = 1;
-      if (form.getNumUnits() != null){
-    	  noOfUnits = form.getNumUnits();
-      }
-      long donationID = donation.getId();      
-      String createdPackNumber = collectionNumber +"-"+sortName;
-      
-      // Add New product
-      if(!status.equals(ProductStatus.PROCESSED) && !status.equals(ProductStatus.DISCARDED)){
-	      	
-      	   for (int i = 1; i <= noOfUnits; i++) {
-              Product product = new Product();
-              product.setIsDeleted(false);
-              product.setComponentIdentificationNumber(createdPackNumber + "-" + i);
-	          product.setProductType(productType2);
-	          product.setDonation(donation);
-	          product.setParentProduct(parentComponent);
-	          product.setStatus(ProductStatus.QUARANTINED);
-	          product.setCreatedOn(donation.getCollectedOn());
-	          
-		      Calendar cal = Calendar.getInstance();
-		      Date createdOn = cal.getTime(); 
-		      cal.setTime(product.getCreatedOn());
-                  
-                      //set product expiry date
-                      if(productType2.getExpiresAfterUnits() == ProductTypeTimeUnits.DAYS)
-                          cal.add(Calendar.DAY_OF_YEAR, productType2.getExpiresAfter());
-                      else
-                      if(productType2.getExpiresAfterUnits() == ProductTypeTimeUnits.HOURS)
-                          cal.add(Calendar.HOUR, productType2.getExpiresAfter());
-                      else
-                      if(productType2.getExpiresAfterUnits() == ProductTypeTimeUnits.YEARS)
-                           cal.add(Calendar.YEAR, productType2.getExpiresAfter());
-
-		      Date expiresOn = cal.getTime();    
-		      product.setCreatedOn(createdOn);
-		      product.setExpiresOn(expiresOn);
-	          
-		      productRepository.addProduct(product);
-
-		      // Set source component status to PROCESSED
-		      productRepository.setProductStatusToProcessed(productId);
-      	   }
-      }
-   
-	Map<String, Object> map = new HashMap<String, Object>();
-	Map<String, Object> pagingParams = new HashMap<String, Object>();
-	pagingParams.put("sortColumn", "id");
-	pagingParams.put("sortDirection", "asc");
-	List<Product> results = new ArrayList<Product>();
-	List<ProductStatus> statusList = Arrays.asList(ProductStatus.values());
-	
-	results = productRepository.findProductByCollectionNumber(
-	      donation.getCollectionNumber(), statusList,
-	      pagingParams);
-	
-	List<ProductViewModel> components = new ArrayList<ProductViewModel>();
-	
-	if (results != null){
-	    for(Product product : results){
-	    	ProductViewModel productViewModel = getProductViewModel(product);
-	    	components.add(productViewModel);
-	    }
-	}
-	
-	map.put("components", components);
-	
-	return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
-  }
-  */
-  
   @RequestMapping(value = "/recordcombinations", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public  ResponseEntity<Map<String, Object>> recordNewProductCombinations(
@@ -536,7 +447,7 @@ public class ProductController {
 		          product.setDonation(donation);
 		          product.setParentProduct(parentComponent);
 		          product.setStatus(ProductStatus.QUARANTINED);
-		          product.setCreatedOn(donation.getCollectedOn());
+		          product.setCreatedOn(donation.getDonationDate());
 		          
 			      Calendar cal = Calendar.getInstance();
 			      Date createdOn = cal.getTime(); 

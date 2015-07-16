@@ -98,8 +98,8 @@ public class DonationRepository {
   }
 
   public List<Object> findDonations(
-      String collectionNumber, List<Integer> bloodBagTypeIds, List<Long> panelIds, String dateCollectedFrom,
-      String dateCollectedTo, boolean includeTestedDonations, Map<String, Object> pagingParams) throws ParseException {
+      String collectionNumber, List<Integer> bloodBagTypeIds, List<Long> panelIds, String donationDateFrom,
+      String donationDateTo, boolean includeTestedDonations, Map<String, Object> pagingParams) throws ParseException {
 
     String queryStr = "";
     if (StringUtils.isNotBlank(collectionNumber)) {
@@ -107,13 +107,13 @@ public class DonationRepository {
                  "c.collectionNumber = :collectionNumber AND " +
                  "c.bloodBagType.id IN :bloodBagTypeIds AND " +
                  "c.donorPanel.id IN :donorPanelIds AND " +
-                 "c.collectedOn >= :dateCollectedFrom AND c.collectedOn <= :dateCollectedTo AND " +
+                 "c.donationDate >= :donationDateFrom AND c.donationDate <= :donationDateTo AND " +
                  "c.isDeleted=:isDeleted";
     } else {
       queryStr = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE " +
           "c.bloodBagType.id IN :bloodBagTypeIds AND " +
           "c.donorPanel.id IN :panelIds AND " +
-          "c.collectedOn >= :dateCollectedFrom AND c.collectedOn <= :dateCollectedTo AND " +
+          "c.donationDate >= :donationDateFrom AND c.donationDate <= :donationDateTo AND " +
           "c.isDeleted=:isDeleted";
     }
 
@@ -138,8 +138,8 @@ public class DonationRepository {
     
     query.setParameter("bloodBagTypeIds", bloodBagTypeIds);
     query.setParameter("panelIds", panelIds);
-    query.setParameter("dateCollectedFrom", getDateCollectedFromOrDefault(dateCollectedFrom));
-    query.setParameter("dateCollectedTo", getDateCollectedToOrDefault(dateCollectedTo));
+    query.setParameter("donationDateFrom", getDonationDateFromOrDefault(donationDateFrom));
+    query.setParameter("donationDateTo", getDonationDateToOrDefault(donationDateTo));
              
 
     int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
@@ -174,7 +174,7 @@ public class DonationRepository {
   public List<Donation> getDonations(Date fromDate, Date toDate) {
     TypedQuery<Donation> query = em
         .createQuery(
-            "SELECT c FROM Donation c WHERE c.dateCollected >= :fromDate and c.dateCollected<= :toDate and c.isDeleted= :isDeleted",
+            "SELECT c FROM Donation c WHERE c.donationDate >= :fromDate and c.donationDate<= :toDate and c.isDeleted= :isDeleted",
             Donation.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("fromDate", fromDate);
@@ -194,8 +194,8 @@ public class DonationRepository {
   }
 
   public List<Donation> findAnyDonationMatching(String collectionNumber,
-      String sampleNumber, String shippingNumber, String dateCollectedFrom,
-      String dateCollectedTo, List<String> centers) {
+      String sampleNumber, String shippingNumber, String donationDateFrom,
+      String donationDateTo, List<String> centers) {
 
     TypedQuery<Donation> query = em.createQuery(
         "SELECT c FROM Donation c JOIN c.center center WHERE "
@@ -203,8 +203,8 @@ public class DonationRepository {
             + "c.sampleNumber = :sampleNumber OR "
             + "c.shippingNumber = :shippingNumber OR "
             + "center.id IN (:centers)) AND ("
-            + "c.collectedOn BETWEEN :dateCollectedFrom AND "
-            + ":dateCollectedTo" + ") AND " + "(c.isDeleted= :isDeleted)",
+            + "c.donationDate BETWEEN :donationDateFrom AND "
+            + ":donationDateTo" + ") AND " + "(c.isDeleted= :isDeleted)",
         Donation.class);
 
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -219,27 +219,27 @@ public class DonationRepository {
     return resultList;
   }
 
-  private Date getDateCollectedFromOrDefault(String dateCollectedFrom) throws ParseException{
+  private Date getDonationDateFromOrDefault(String donationDateFrom) throws ParseException{
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     Date from = 
-             (dateCollectedFrom == null || dateCollectedFrom.equals("")) ? dateFormat
-                          .parse("31/12/1970") : dateFormat.parse(dateCollectedFrom);
+             (donationDateFrom == null || donationDateFrom.equals("")) ? dateFormat
+                          .parse("31/12/1970") : dateFormat.parse(donationDateFrom);
               
  
     return from;      
   }
 
-  private Date getDateCollectedToOrDefault(String dateCollectedTo) throws ParseException{
+  private Date getDonationDateToOrDefault(String donationDateTo) throws ParseException{
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     Date to = null;
-                  to = (dateCollectedTo == null || dateCollectedTo.equals("")) ? new Date() :
-                          dateFormat.parse(dateCollectedTo);
+                  to = (donationDateTo == null || donationDateTo.equals("")) ? new Date() :
+                          dateFormat.parse(donationDateTo);
               
     return to;      
   }
 
-  public Map<String, Map<Long, Long>> findNumberOfDonations(Date dateCollectedFrom,
-      Date dateCollectedTo, String aggregationCriteria,
+  public Map<String, Map<Long, Long>> findNumberOfDonations(Date donationDateFrom,
+      Date donationDateTo, String aggregationCriteria,
       List<String> panels, List<String> bloodGroups)throws ParseException{
 
     List<Long> panelIds = new ArrayList<Long>();
@@ -257,17 +257,17 @@ public class DonationRepository {
     }
 
     TypedQuery<Object[]> query = em.createQuery(
-        "SELECT count(c), c.collectedOn, c.bloodAbo, c.bloodRh FROM Donation c WHERE " +
+        "SELECT count(c), c.donationDate, c.bloodAbo, c.bloodRh FROM Donation c WHERE " +
         "c.donorPanel.id IN (:panelIds) AND " +
-        "c.collectedOn BETWEEN :dateCollectedFrom AND " +
-        ":dateCollectedTo AND (c.isDeleted= :isDeleted) GROUP BY " +
-        "bloodAbo, bloodRh, collectedOn", Object[].class);
+        "c.donationDate BETWEEN :donationDateFrom AND " +
+        ":donationDateTo AND (c.isDeleted= :isDeleted) GROUP BY " +
+        "bloodAbo, bloodRh, donationDate", Object[].class);
 
     query.setParameter("panelIds", panelIds);
     query.setParameter("isDeleted", Boolean.FALSE);
 
-    query.setParameter("dateCollectedFrom", dateCollectedFrom);
-    query.setParameter("dateCollectedTo", dateCollectedTo);
+    query.setParameter("donationDateFrom", donationDateFrom);
+    query.setParameter("donationDateTo", donationDateTo);
 
     DateFormat resultDateFormat = new SimpleDateFormat("dd/MM/yyyy");
     int incrementBy = Calendar.DAY_OF_YEAR;
@@ -284,8 +284,8 @@ public class DonationRepository {
     for (String bloodGroup : bloodGroups) {
       Map<Long, Long> m = new HashMap<Long, Long>();
       Calendar gcal = new GregorianCalendar();
-      Date lowerDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
-      Date upperDate =  resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
+      Date lowerDate = resultDateFormat.parse(resultDateFormat.format(donationDateFrom));
+      Date upperDate =  resultDateFormat.parse(resultDateFormat.format(donationDateTo));
       gcal.setTime(lowerDate);
       while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
         m.put(gcal.getTime().getTime(), (long) 0);
@@ -352,11 +352,11 @@ public class DonationRepository {
     product.setCreatedDate(donation.getCreatedDate());
 
     // set new component creation date to match donation date 
-    product.setCreatedOn(donation.getCollectedOn());
+    product.setCreatedOn(donation.getDonationDate());
     // if bleed time is provided, update component creation time to match bleed start time 
     if (donation.getBleedStartTime() != null){
     	Calendar donationDate = Calendar.getInstance();
-    	donationDate.setTime(donation.getCollectedOn());
+    	donationDate.setTime(donation.getDonationDate());
     	Calendar bleedTime = Calendar.getInstance();
     	bleedTime.setTime(donation.getBleedStartTime());
     	donationDate.set(Calendar.HOUR_OF_DAY, bleedTime.get(Calendar.HOUR_OF_DAY));
@@ -367,9 +367,9 @@ public class DonationRepository {
     }
     product.setCreatedBy(donation.getCreatedBy());
     
-    // set cal to collectedOn Date 
+    // set cal to donationDate Date 
     Calendar cal = Calendar.getInstance();
-    cal.setTime(donation.getCollectedOn());
+    cal.setTime(donation.getDonationDate());
     
     // second calendar to store bleedStartTime 
     Calendar bleedStartTime = Calendar.getInstance();
@@ -396,13 +396,13 @@ public class DonationRepository {
      
      //set date of first donation 
      if (donation.getDonor().getDateOfFirstDonation() == null) {
-          donor.setDateOfFirstDonation(donation.getCollectedOn());
+          donor.setDateOfFirstDonation(donation.getDonationDate());
       }
        //set dueToDonate
       BloodBagType packType = donation.getBloodBagType();
       int periodBetweenDays = packType.getPeriodBetweenDonations();
       Calendar dueToDonateDate = Calendar.getInstance();
-      dueToDonateDate.setTime(donation.getCollectedOn());
+      dueToDonateDate.setTime(donation.getDonationDate());
       dueToDonateDate.add(Calendar.DAY_OF_YEAR, periodBetweenDays);
 
       if (donor.getDueToDonate() == null || dueToDonateDate.getTime().after(donor.getDueToDonate())) {
@@ -474,7 +474,7 @@ public class DonationRepository {
     return donations;
   }
 
-  public Map<Long, BloodTestingRuleResult> filterCollectionsWithBloodTypingResults(
+  public Map<Long, BloodTestingRuleResult> filterDonationsWithBloodTypingResults(
       Collection<Donation> donations) {
     Iterator<Donation> iter = donations.iterator();
     Map<Long, BloodTestingRuleResult> statusMap = new HashMap<Long, BloodTestingRuleResult>();

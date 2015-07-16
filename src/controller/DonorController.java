@@ -119,7 +119,7 @@ public class DonorController {
     map.put("deferredUntil",CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
     if(donations.size() > 0){
 	    map.put("lastDonation", getDonationViewModel(donations.get(donations.size()-1)));
-	    map.put("dateOfFirstDonation",CustomDateFormatter.getDateString(donations.get(0).getCollectedOn()));
+	    map.put("dateOfFirstDonation",CustomDateFormatter.getDateString(donations.get(0).getDonationDate()));
 	    map.put("totalDonations",getNumberOfDonations(donations));
 	    map.put("dueToDonate",CustomDateFormatter.getDateString(donor.getDueToDonate()));
     }

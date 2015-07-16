@@ -198,7 +198,7 @@ insert into FormField
  '0', '1',
  '0', '0',
  '0', '0'),
- ('Donation', 'collectedOn', 'Collected on', '', 0,
+ ('Donation', 'donationDate', 'Donated on', '', 0,
  '0', '0',
  '1', '0',
  '0', '0',

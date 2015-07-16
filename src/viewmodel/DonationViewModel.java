@@ -34,10 +34,10 @@ public class DonationViewModel {
     donation.copy(donation);
   }
 
-  public String getCollectedOn() {
-    if (donation.getCollectedOn() == null)
+  public String getDonationDate() {
+    if (donation.getDonationDate() == null)
       return "";
-    return CustomDateFormatter.getDateString(donation.getCollectedOn());
+    return CustomDateFormatter.getDateString(donation.getDonationDate());
   }
 
   public boolean equals(Object obj) {

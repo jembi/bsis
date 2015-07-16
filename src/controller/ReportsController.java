@@ -131,8 +131,8 @@ public class ReportsController {
   @PreAuthorize("hasRole('"+PermissionConstants.DONATIONS_REPORTING+"')")
   public 
   ResponseEntity<Map<String, Object>> getDonationsReport(
-          @RequestParam(value = "dateCollectedFrom", required = false) String dateCollectedFrom,
-          @RequestParam(value = "dateCollectedTo", required = false) String dateCollectedTo,
+          @RequestParam(value = "donationDateFrom", required = false) String donationDateFrom,
+          @RequestParam(value = "donationDateTo", required = false) String donationDateTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
           @RequestParam(value = "panels", required = false) List<String> panels,
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
@@ -143,10 +143,10 @@ public class ReportsController {
 
 
       Date dateTo;
-      if (dateCollectedTo == null || dateCollectedTo.equals(""))
+      if (donationDateTo == null || donationDateTo.equals(""))
         dateTo = new Date();
       else
-        dateTo = CustomDateFormatter.getDateFromString(dateCollectedTo);
+        dateTo = CustomDateFormatter.getDateFromString(donationDateTo);
 
       Calendar gcal = new GregorianCalendar();
       gcal.setTime(dateTo);
@@ -154,10 +154,10 @@ public class ReportsController {
       dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
 
       Date dateFrom;
-      if (dateCollectedFrom == null || dateCollectedFrom.equals(""))
+      if (donationDateFrom == null || donationDateFrom.equals(""))
         dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
       else
-        dateFrom = CustomDateFormatter.getDateFromString(dateCollectedFrom);
+        dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
 
       Map<String, Map<Long, Long>> numCollections = donationRepository
           .findNumberOfDonations(dateFrom, dateTo,
@@ -173,8 +173,8 @@ public class ReportsController {
       map.put("interval", interval);
       map.put("numCollections", numCollections);
 
-      map.put("dateCollectedFromUTC", dateFrom.getTime());
-      map.put("dateCollectedToUTC", dateTo.getTime());
+      map.put("donationDateFromUTC", dateFrom.getTime());
+      map.put("donationDateToUTC", dateTo.getTime());
 
     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }

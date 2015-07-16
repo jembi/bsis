@@ -112,14 +112,14 @@ public class LotReleaseController {
 	        	//inverse = "^LRY^FO562,175^GB204,0,171^FS^LRN";
 	        	inverse = "^FO542,346^GB116,50,50^FS";
 	        }
-	        String collectionDate = df.format(donation.getCollectedOn());        	
+	        String collectionDate = df.format(donation.getDonationDate());        	
 	
 	        // TODO: improve calculation of expiry date according to final processed components expiry dates 
 	        // i.e. expiryDate = df.format(donation.getProducts().get(i).getExpiresOn());
 	        // For now, generates expiry date as Collection Date + 35 Days.
 	        String expiryDate = "";
 	    	Calendar c = Calendar.getInstance();
-	    	c.setTime(donation.getCollectedOn());
+	    	c.setTime(donation.getDonationDate());
 	    	c.add(Calendar.DATE,35);
 	    	expiryDate = df.format(c.getTime());
 	
@@ -266,7 +266,7 @@ public class LotReleaseController {
  		// discard label can be printed
  		success = true;
 	 	DateFormat df = new SimpleDateFormat("dd/MM/yyyy");        
-	    String collectionDate = df.format(product.getDonation().getCollectedOn());        	
+	    String collectionDate = df.format(product.getDonation().getDonationDate());        	
 	
 	    // Generate ZPL label
 	    map.put("labelZPL",	

@@ -102,8 +102,8 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
    * Index to find collections done between date ranges.
    */
   @Temporal(TemporalType.TIMESTAMP)
-  @Index(name="donation_collectedOn_index")
-  private Date collectedOn;
+  @Index(name="donation_donationDate_index")
+  private Date donationDate;
 
   @DonationTypeExists
   @ManyToOne
@@ -200,8 +200,8 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
   }
 
 
-  public Date getCollectedOn() {
-    return collectedOn;
+  public Date getDonationDate() {
+    return donationDate;
   }
 
   public BloodBagType getBloodBagType() {
@@ -229,8 +229,8 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
   }
 
 
-  public void setCollectedOn(Date collectedOn) {
-    this.collectedOn = collectedOn;
+  public void setDonationDate(Date donationDate) {
+    this.donationDate = donationDate;
   }
 
   public void setBloodBagType(BloodBagType bloodBagType) {
@@ -251,7 +251,7 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     this.donor = donation.donor;
     this.setDonationType(donation.getDonationType());
     this.bloodBagType = donation.bloodBagType;
-    this.collectedOn = donation.collectedOn;
+    this.donationDate = donation.donationDate;
     this.donationBatch = donation.donationBatch;
     this.notes = donation.notes;
     this.haemoglobinCount=donation.haemoglobinCount;

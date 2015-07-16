@@ -413,7 +413,7 @@ public class CreateDataController {
     return date;
   }
 
-  private Date getRandomCollectionDate() {
+  private Date getRandomDonationDate() {
     // Date twoYearsAgo = new DateTime().minusYears(2).toDate();
     // return getRandomDate(twoYearsAgo, new Date());
     Date twoYearsAgo = new DateTime().minusDays(300).toDate();
@@ -443,8 +443,8 @@ public class CreateDataController {
 
       donation.setPackType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()));
 
-      String collectionDate = CustomDateFormatter.getDateTimeString(getRandomCollectionDate());
-      donation.setCollectedOn(collectionDate);
+      String donationDate = CustomDateFormatter.getDateTimeString(getRandomDonationDate());
+      donation.setDonationDate(donationDate);
       donation.setDonor(donors.get(Math.abs(random.nextInt()) % donors.size()));
       donation.setNotes("notes sample " + i);
       donation.setDonationType(donationTypes.get(Math.abs(random.nextInt()) % donationTypes.size()));
@@ -473,7 +473,7 @@ public class CreateDataController {
       Product p = new ProductBackingForm(true).getProduct();
       p.setDonation(c);
       p.setProductType(productTypes.get(random.nextInt(productTypes.size())));
-      Date d = c.getCollectedOn();
+      Date d = c.getDonationDate();
       p.setCreatedOn(d);
       Calendar cal = Calendar.getInstance();
       cal.setTime(d);

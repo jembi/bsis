@@ -166,9 +166,9 @@ public class BloodTestingRepository {
 		}
 
 		Map<String, Object> results = new HashMap<String, Object>();
-		results.put("collections", donationsMap);
+		results.put("donations", donationsMap);
 		results.put("bloodTestingResults", bloodTestRuleResultsForDonations);
-		results.put("collectionsWithUninterpretableResults",
+		results.put("donationsWithUninterpretableResults",
 				donationsWithUninterpretableResults);
 		results.put("errors", errorMap);
 
@@ -212,7 +212,7 @@ public class BloodTestingRepository {
 		}
 
 		Map<String, Object> results = new HashMap<String, Object>();
-		results.put("collection", donation);
+		results.put("donation", donation);
 		results.put("bloodTestingResults", ruleResult);
 		results.put("uninterpretableResults",
 				uninterpretableResults);
@@ -391,7 +391,7 @@ public class BloodTestingRepository {
 		}
 
 		Map<String, Object> results = new HashMap<String, Object>();
-		results.put("collections", donationsMap);
+		results.put("donations", donationsMap);
 		results.put("bloodTestingResults", bloodTypingResultsForDonations);
 		return results;
 	}
@@ -614,10 +614,10 @@ public class BloodTestingRepository {
 			}
 		}
 
-		results.put("collections", donationIdMap);
+		results.put("donations", donationIdMap);
 		results.put("bloodTestingResults", bloodTestRuleResultsForDonations);
 		results.put("errorsFound", errorsFound);
-		results.put("errorsByCollectionId", errorsByDonationId);
+		results.put("errorsByDonationId", errorsByDonationId);
 		results.put("errorsByWellNumber", errorsByWellNumber);
 		return results;
 	}
@@ -717,41 +717,6 @@ public class BloodTestingRepository {
 		return query.getSingleResult();
 	}
 
-        /**
-         * Not Used Anywhere
-	public void saveNewBloodTypingRule(
-			Map<String, Object> newBloodTypingRuleAsMap) {
-
-		BloodTestingRule rule = new BloodTestingRule();
-
-		BloodTestSubCategory subCategory = BloodTestSubCategory
-				.valueOf((String) newBloodTypingRuleAsMap.get("subCategory"));
-		rule.setSubCategory(subCategory);
-
-		@SuppressWarnings("unchecked")
-		Map<String, String> pattern = (Map<String, String>) newBloodTypingRuleAsMap
-				.get("pattern");
-		List<String> testIdsInPattern = new ArrayList<String>();
-		List<String> resultsInPattern = new ArrayList<String>();
-		for (String testId : pattern.keySet()) {
-			testIdsInPattern.add(testId);
-			resultsInPattern.add(pattern.get(testId));
-		}
-
-		rule.setPendingTestsIds((String) newBloodTypingRuleAsMap
-				.get("pendingTestsIds"));
-		rule.setBloodTestsIds(StringUtils.join(testIdsInPattern, ","));
-		rule.setPattern(StringUtils.join(resultsInPattern, ","));
-		rule.setPart(CollectionField.valueOf((String) newBloodTypingRuleAsMap
-				.get("collectionFieldChanged")));
-		rule.setNewInformation((String) newBloodTypingRuleAsMap.get("result"));
-
-		rule.setCategory(BloodTestCategory.BLOODTYPING);
-		rule.setContext(genericConfigRepository.getCurrentBloodTypingContext());
-		rule.setIsActive(true);
-		em.persist(rule);
-	}
-        */
      public BloodTestingRule saveBloodTypingRule(
             BloodTestingRule bloodTestingRule) {
          bloodTestingRule.setIsActive(Boolean.TRUE);
@@ -771,120 +736,6 @@ public class BloodTestingRepository {
 		query.executeUpdate();
 		em.flush();
 	}
-/**
- * not used duplicate method - issue #209
-	public void saveBloodTest(Map<String, Object> newBloodTestAsMap) {
-		BloodTest bt = new BloodTest();
-		bt.setTestName((String) newBloodTestAsMap.get("testName"));
-		bt.setTestNameShort((String) newBloodTestAsMap.get("testNameShort"));
-		BloodTestCategory category = BloodTestCategory
-				.valueOf((String) newBloodTestAsMap.get("category"));
-		bt.setCategory(category);
-		bt.setIsEmptyAllowed(false);
-		bt.setNegativeResults("");
-		bt.setPositiveResults("");
-		bt.setValidResults("+,-");
-		bt.setRankInCategory(1);
-		Set<WorksheetType> worksheetTypes = new HashSet<WorksheetType>();
-		String worksheetTypeIds = (String) newBloodTestAsMap
-				.get("worksheetTypeIds");
-		for (String worksheetTypeId : worksheetTypeIds.split(",")) {
-			if (StringUtils.isBlank(worksheetTypeId))
-				continue;
-			WorksheetType wt = new WorksheetType();
-			wt.setId(Integer.parseInt(worksheetTypeId));
-			worksheetTypes.add(wt);
-		}
-		bt.setWorksheetTypes(worksheetTypes);
-		bt.setIsActive(true);
-		if (category.equals(BloodTestCategory.BLOODTYPING)) {
-			bt.setBloodTestType(BloodTestType.ADVANCED_BLOODTYPING);
-			bt.setContext(genericConfigRepository
-					.getCurrentBloodTypingContext());
-			em.persist(bt);
-		} else {
-			bt.setBloodTestType(BloodTestType.BASIC_TTI);
-			bt.setContext(BloodTestContext.RECORD_TTI_TESTS);
-			Integer numConfirmtatoryTests = 0;
-			if (newBloodTestAsMap.containsKey("numConfirmatoryTests"))
-				numConfirmtatoryTests = Integer
-						.parseInt((String) newBloodTestAsMap
-								.get("numConfirmatoryTests"));
-			List<Integer> pendingTestIds = new ArrayList<Integer>();
-			em.persist(bt);
-			em.refresh(bt);
-
-			BloodTestingRule ttiSafeRule = new BloodTestingRule();
-			ttiSafeRule.setBloodTestsIds("" + bt.getId());
-			ttiSafeRule.setPattern("-");
-			ttiSafeRule.setCollectionFieldChanged(CollectionField.TTISTATUS);
-			ttiSafeRule.setNewInformation(TTIStatus.TTI_SAFE.toString());
-			ttiSafeRule.setExtraInformation("");
-			ttiSafeRule.setContext(BloodTestContext.RECORD_TTI_TESTS);
-			ttiSafeRule.setCategory(BloodTestCategory.TTI);
-			ttiSafeRule.setSubCategory(BloodTestSubCategory.TTI);
-			ttiSafeRule.setPendingTestsIds("");
-			ttiSafeRule.setMarkSampleAsUnsafe(false);
-			ttiSafeRule.setIsActive(true);
-			em.persist(ttiSafeRule);
-
-			for (int i = 1; i <= numConfirmtatoryTests; ++i) {
-				BloodTest confirmatoryBloodTest = new BloodTest();
-				confirmatoryBloodTest.setTestName(bt.getTestName()
-						+ " Confirmatory " + i);
-				confirmatoryBloodTest.setTestNameShort(bt.getTestNameShort()
-						+ " Conf " + i);
-				confirmatoryBloodTest.setCategory(category);
-				confirmatoryBloodTest
-						.setBloodTestType(BloodTestType.CONFIRMATORY_TTI);
-				confirmatoryBloodTest
-						.setContext(BloodTestContext.RECORD_TTI_TESTS);
-				confirmatoryBloodTest.setIsEmptyAllowed(false);
-				confirmatoryBloodTest.setNegativeResults("");
-				confirmatoryBloodTest.setPositiveResults("");
-				confirmatoryBloodTest.setValidResults("+,-");
-				confirmatoryBloodTest.setRankInCategory(1);
-				confirmatoryBloodTest.setIsActive(true);
-				em.persist(confirmatoryBloodTest);
-				em.refresh(confirmatoryBloodTest);
-				pendingTestIds.add(i);
-
-				BloodTestingRule confirmatoryTestRule = new BloodTestingRule();
-				confirmatoryTestRule.setBloodTestsIds(""
-						+ confirmatoryBloodTest.getId());
-				confirmatoryTestRule.setPattern("+");
-				confirmatoryTestRule
-						.setCollectionFieldChanged(CollectionField.TTISTATUS);
-				confirmatoryTestRule.setNewInformation(TTIStatus.TTI_UNSAFE
-						.toString());
-				confirmatoryTestRule.setExtraInformation("");
-				confirmatoryTestRule
-						.setContext(BloodTestContext.RECORD_TTI_TESTS);
-				confirmatoryTestRule.setCategory(BloodTestCategory.TTI);
-				confirmatoryTestRule.setSubCategory(BloodTestSubCategory.TTI);
-				confirmatoryTestRule.setPendingTestsIds("");
-				confirmatoryTestRule.setMarkSampleAsUnsafe(false);
-				confirmatoryTestRule.setIsActive(true);
-				em.persist(confirmatoryTestRule);
-			}
-
-			BloodTestingRule ttiUnsafeRule = new BloodTestingRule();
-			ttiUnsafeRule.setBloodTestsIds("" + bt.getId());
-			ttiUnsafeRule.setPattern("+");
-			ttiUnsafeRule.setCollectionFieldChanged(CollectionField.TTISTATUS);
-			ttiUnsafeRule.setNewInformation(TTIStatus.TTI_UNSAFE.toString());
-			ttiUnsafeRule.setExtraInformation("");
-			ttiUnsafeRule.setContext(BloodTestContext.RECORD_TTI_TESTS);
-			ttiUnsafeRule.setCategory(BloodTestCategory.TTI);
-			ttiUnsafeRule.setSubCategory(BloodTestSubCategory.TTI);
-			ttiUnsafeRule.setPendingTestsIds(StringUtils.join(pendingTestIds,
-					","));
-			ttiUnsafeRule.setMarkSampleAsUnsafe(false);
-			ttiUnsafeRule.setIsActive(true);
-			em.persist(ttiUnsafeRule);
-		}
-	}
-        */
         
 	public void saveBloodTest(BloodTestBackingForm form) {
 		BloodTest bt = form.getBloodTest();
@@ -1018,17 +869,17 @@ public class BloodTestingRepository {
 	}
 
 	public Map<String, Map<Long, Long>> findNumberOfPositiveTests(
-			List<String> ttiTests, Date dateCollectedFrom,
-			Date dateCollectedTo, String aggregationCriteria,
+			List<String> ttiTests, Date donationDateFrom,
+			Date donationDateTo, String aggregationCriteria,
 			List<String> panels) throws ParseException {
 		TypedQuery<Object[]> query = em
 				.createQuery(
-						"SELECT count(t), d.collectedOn, t.bloodTest.testNameShort FROM BloodTestResult t join t.bloodTest bt join t.donation d WHERE "
+						"SELECT count(t), d.donationDate, t.bloodTest.testNameShort FROM BloodTestResult t join t.bloodTest bt join t.donation d WHERE "
 								+ "bt.id IN (:ttiTestIds) AND "
 								+ "t.result != :positiveResult AND "
 								+ "d.donorPanel.id IN (:panelIds) AND "
-								+ "d.collectedOn BETWEEN :dateCollectedFrom AND :dateCollectedTo "
-								+ "GROUP BY bt.testNameShort, d.collectedOn",
+								+ "d.donationDate BETWEEN :donationDateFrom AND :donationDateTo "
+								+ "GROUP BY bt.testNameShort, d.donationDate",
 						Object[].class);
 
 		List<Long> panelIds = new ArrayList<Long>();
@@ -1062,8 +913,8 @@ public class BloodTestingRepository {
 			resultMap.put(bt.getTestNameShort(), new HashMap<Long, Long>());
 		}
 
-		query.setParameter("dateCollectedFrom", dateCollectedFrom);
-		query.setParameter("dateCollectedTo", dateCollectedTo);
+		query.setParameter("donationDateFrom", donationDateFrom);
+		query.setParameter("donationDateTo", donationDateTo);
 
 		// decide date format based on aggregation criteria
 		DateFormat resultDateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -1080,9 +931,9 @@ public class BloodTestingRepository {
 
 		Calendar gcal = new GregorianCalendar();
 		Date lowerDate =  resultDateFormat.parse(resultDateFormat
-					.format(dateCollectedFrom));
+					.format(donationDateFrom));
 		Date upperDate =  resultDateFormat.parse(resultDateFormat
-					.format(dateCollectedTo));
+					.format(donationDateTo));
 	
 		// initialize the counter map storing (date, count) for each blood test
 		// counts should be set to 0

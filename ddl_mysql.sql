@@ -122,7 +122,7 @@
         bloodPressure decimal(6,2),
         bloodRh varchar(50),
         bloodTypingStatus varchar(20),
-        collectedOn datetime,
+        donationDate datetime,
         collectionNumber varchar(20) unique,
         donorWeight decimal(6,2),
         extraBloodTypeInformation varchar(150),
@@ -152,7 +152,7 @@
         bloodPressure decimal(6,2),
         bloodRh varchar(50),
         bloodTypingStatus varchar(20),
-        collectedOn datetime,
+        donationDate datetime,
         collectionNumber varchar(20),
         donorWeight decimal(6,2),
         extraBloodTypeInformation varchar(150),
@@ -1038,7 +1038,7 @@
         foreign key (REV) 
         references REVINFO (REV);
 
-    create index donation_collectedOn_index on Donation (collectedOn);
+    create index donation_donationDate_index on Donation (donationDate);
 
     create index donation_collectionNumber_index on Donation (collectionNumber);
 

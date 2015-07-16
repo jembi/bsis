@@ -32,8 +32,8 @@ public class CollectionUpdatedEventListener implements ApplicationListener<Colle
     if (donor == null)
       return;
     Date dateOfLastDonation = donor.getDateOfLastDonation();
-    if (dateOfLastDonation == null || c.getCollectedOn().after(dateOfLastDonation)) {
-      donor.setDateOfLastDonation(c.getCollectedOn());
+    if (dateOfLastDonation == null || c.getDonationDate().after(dateOfLastDonation)) {
+      donor.setDateOfLastDonation(c.getDonationDate());
     }
     em.merge(donor);
   }
