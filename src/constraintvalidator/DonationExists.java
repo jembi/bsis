@@ -14,7 +14,7 @@ import javax.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DonationExists {
 
-  String message() default "Collection does not exist";
+  String message() default "Donation does not exist";
 
   Class<?>[] groups() default {};
 

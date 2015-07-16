@@ -49,12 +49,12 @@ public class DonationBackingForm {
     donation = new Donation();
   }
 
-  public DonationBackingForm(Donation collection) {
-    this.donation = collection;
+  public DonationBackingForm(Donation donation) {
+    this.donation = donation;
   }
 
-  public void copy(Donation collection) {
-    collection.copy(collection);
+  public void copy(Donation donation) {
+    donation.copy(donation);
   }
 
   public Donation getDonation() {
@@ -127,8 +127,8 @@ public class DonationBackingForm {
     }
   }
 	  
-  public void setCollection(Donation collection) {
-    this.donation = collection;
+  public void setDonation(Donation donation) {
+    this.donation = donation;
   }
 
   public void setCenters(List<String> centers) {

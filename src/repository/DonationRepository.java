@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -41,8 +40,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import repository.bloodtesting.BloodTestingRepository;
-import repository.bloodtesting.BloodTypingStatus;
 import repository.bloodtesting.BloodTypingMatchStatus;
+import repository.bloodtesting.BloodTypingStatus;
 import repository.events.ApplicationContextProvider;
 import repository.events.CollectionUpdatedEvent;
 import viewmodel.BloodTestingRuleResult;

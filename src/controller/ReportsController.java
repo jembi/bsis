@@ -32,7 +32,7 @@ import utils.PermissionConstants;
 public class ReportsController {
 
   @Autowired
-  private DonationRepository collectionRepository;
+  private DonationRepository donationRepository;
 
   @Autowired
   private ProductRepository productRepository;
@@ -92,7 +92,7 @@ public class ReportsController {
   
   @RequestMapping(value = "/donations/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.DONATIONS_REPORTING+"')")
-  public Map<String, Object> collectionsReportFormGenerator() {
+  public Map<String, Object> donationsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     utilController.addTipsToModel(map, "report.collections.collectionsreport");
     map.put("panels", locationRepository.getAllDonorPanels());
@@ -130,7 +130,7 @@ public class ReportsController {
   @RequestMapping(value = "/donations/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.DONATIONS_REPORTING+"')")
   public 
-  ResponseEntity<Map<String, Object>> getCollectionsReport(
+  ResponseEntity<Map<String, Object>> getDonationsReport(
           @RequestParam(value = "dateCollectedFrom", required = false) String dateCollectedFrom,
           @RequestParam(value = "dateCollectedTo", required = false) String dateCollectedTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
@@ -159,7 +159,7 @@ public class ReportsController {
       else
         dateFrom = CustomDateFormatter.getDateFromString(dateCollectedFrom);
 
-      Map<String, Map<Long, Long>> numCollections = collectionRepository
+      Map<String, Map<Long, Long>> numCollections = donationRepository
           .findNumberOfDonations(dateFrom, dateTo,
               aggregationCriteria, panels, bloodGroups);
       // TODO: potential leap year bug here

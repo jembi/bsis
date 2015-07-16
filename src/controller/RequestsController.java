@@ -202,7 +202,7 @@ public class RequestsController {
    * in requestsTable.jsp.
    */
   private Map<String, Object> generateDatatablesMap(List<Request> productRequests, Long totalRecords, Map<String, Map<String, Object>> formFields) {
-    Map<String, Object> collectionsMap = new HashMap<String, Object>();
+    Map<String, Object> donationsMap = new HashMap<String, Object>();
 
     ArrayList<Object> requestList = new ArrayList<Object>();
 
@@ -235,10 +235,10 @@ public class RequestsController {
 
       requestList.add(row);
     }
-    collectionsMap.put("aaData", requestList);
-    collectionsMap.put("iTotalRecords", totalRecords);
-    collectionsMap.put("iTotalDisplayRecords", totalRecords);
-    return collectionsMap;
+    donationsMap.put("aaData", requestList);
+    donationsMap.put("iTotalRecords", totalRecords);
+    donationsMap.put("iTotalDisplayRecords", totalRecords);
+    return donationsMap;
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)

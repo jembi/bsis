@@ -310,7 +310,7 @@ public class UtilController {
     return collectionBatch;
   }
 
-  public Donation findCollectionInForm(Map<String, Object> bean) {
+  public Donation findDonationInForm(Map<String, Object> bean) {
     Donation donation = null;
     String collectionNumber = null;
     if (collectionNumber == null)
@@ -426,12 +426,12 @@ public class UtilController {
     return false;
   }
 
-  public boolean isDuplicateCollectionNumber(Donation collection) {
-    String collectionNumber = collection.getCollectionNumber();
+  public boolean isDuplicateCollectionNumber(Donation donation) {
+    String collectionNumber = donation.getCollectionNumber();
     if (StringUtils.isBlank(collectionNumber))
       return false;
-    Donation existingCollection = donationRepository.findDonationByCollectionNumberIncludeDeleted(collectionNumber);
-    if (existingCollection != null && !existingCollection.getId().equals(collection.getId()))
+    Donation existingDonation = donationRepository.findDonationByCollectionNumberIncludeDeleted(collectionNumber);
+    if (existingDonation != null && !existingDonation.getId().equals(donation.getId()))
       return true;
     return false;
   }

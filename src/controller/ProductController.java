@@ -169,8 +169,8 @@ public class ProductController {
       // at least one product should be created, all products should have the same collection number
       map.put("collectionNumber", savedProducts.get(0).getCollectionNumber());
       map.put("createdProducts", getProductViewModels(savedProducts));
-      List<Product> allProductsForCollection = productRepository.findProductsByCollectionNumber(savedProducts.get(0).getCollectionNumber());
-      map.put("allProductsForCollection", getProductViewModels(allProductsForCollection));
+      List<Product> allProductsForDonation = productRepository.findProductsByCollectionNumber(savedProducts.get(0).getCollectionNumber());
+      map.put("allProductsForDonation", getProductViewModels(allProductsForDonation));
       map.put("addAnotherProductUrl", "addProductCombinationFormGenerator.html");
    
     return new ResponseEntity<Map<String, Object>>(map, httpStatus);

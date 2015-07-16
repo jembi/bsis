@@ -56,7 +56,7 @@ public class DonationBackingFormValidator implements Validator {
     Donation donation = form.getDonation();
     if (utilController.isDuplicateCollectionNumber(donation))
       errors.rejectValue("donation.collectionNumber", "collectionNumber.nonunique",
-          "There exists a collection with the same collection number.");
+          "There exists a donation with the same collection number.");
 
     String collectedOn = form.getCollectedOn();
     if (!CustomDateFormatter.isDateStringValid(collectedOn))
@@ -120,16 +120,16 @@ public class DonationBackingFormValidator implements Validator {
           errors.rejectValue("donation", "", "Bleed End time should be after start time");
 
   }
-  private void validateBloodPressure(DonationBackingForm collectionForm, Errors errors)
+  private void validateBloodPressure(DonationBackingForm donationForm, Errors errors)
   {
 	 Integer bloodPressureSystolic = null;
          Integer bloodPressureDiastolic = null;
          
-         if(collectionForm.getBloodPressureSystolic() != null)
-             bloodPressureSystolic = collectionForm.getBloodPressureSystolic();
+         if(donationForm.getBloodPressureSystolic() != null)
+             bloodPressureSystolic = donationForm.getBloodPressureSystolic();
          
-         if(collectionForm.getBloodPressureDiastolic() != null)
-             bloodPressureDiastolic = collectionForm.getBloodPressureDiastolic();
+         if(donationForm.getBloodPressureDiastolic() != null)
+             bloodPressureDiastolic = donationForm.getBloodPressureDiastolic();
 
 	
 	 if( bloodPressureSystolic != null || bloodPressureDiastolic != null)

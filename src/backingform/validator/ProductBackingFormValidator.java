@@ -122,7 +122,7 @@ public class ProductBackingFormValidator implements Validator {
     Map<String, Object> bean = null;
     try {
       bean = BeanUtils.describe(form);
-      Donation donation = utilController.findCollectionInForm(bean);
+      Donation donation = utilController.findDonationInForm(bean);
       form.setDonation(donation);
     } catch (IllegalAccessException e) {
       e.printStackTrace();
@@ -138,7 +138,7 @@ public class ProductBackingFormValidator implements Validator {
     Map<String, Object> bean = null;
     try {
       bean = BeanUtils.describe(form);
-      Donation donation = utilController.findCollectionInForm(bean);
+      Donation donation = utilController.findDonationInForm(bean);
       form.setDonation(donation);
     } catch (IllegalAccessException e) {
       e.printStackTrace();

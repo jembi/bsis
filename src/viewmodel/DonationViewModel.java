@@ -1,8 +1,6 @@
 package viewmodel;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -11,15 +9,15 @@ import model.bloodbagtype.BloodBagType;
 import model.donation.Donation;
 import model.donationtype.DonationType;
 import model.donor.Donor;
-import model.location.Location;
 import model.product.Product;
 import model.user.User;
 
 import org.apache.commons.lang3.StringUtils;
 
 import repository.bloodtesting.BloodTypingStatus;
-import repository.bloodtesting.BloodTypingMatchStatus;
 import utils.CustomDateFormatter;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class DonationViewModel {
 
@@ -28,12 +26,12 @@ public class DonationViewModel {
   public DonationViewModel() {
   }
 
-  public DonationViewModel(Donation collection) {
-    this.donation = collection;
+  public DonationViewModel(Donation donation) {
+    this.donation = donation;
   }
 
-  public void copy(Donation collection) {
-    collection.copy(collection);
+  public void copy(Donation donation) {
+    donation.copy(donation);
   }
 
   public String getCollectedOn() {

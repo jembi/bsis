@@ -118,7 +118,7 @@ public class DonorController {
     map.put("currentlyDeferred",donorRepository.isCurrentlyDeferred(donor));
     map.put("deferredUntil",CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
     if(donations.size() > 0){
-	    map.put("lastDonation", getCollectionViewModel(donations.get(donations.size()-1)));
+	    map.put("lastDonation", getDonationViewModel(donations.get(donations.size()-1)));
 	    map.put("dateOfFirstDonation",CustomDateFormatter.getDateString(donations.get(0).getCollectedOn()));
 	    map.put("totalDonations",getNumberOfDonations(donations));
 	    map.put("dueToDonate",CustomDateFormatter.getDateString(donor.getDueToDonate()));
@@ -152,7 +152,7 @@ public class DonorController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Donor donor = donorRepository.findDonorById(id);
-    map.put("allDonations", getCollectionViewModels(donor.getDonations()));
+    map.put("allDonations", getDonationViewModels(donor.getDonations()));
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
 
@@ -327,20 +327,20 @@ public class DonorController {
     return donorViewModel;
   }
   
-  private DonationViewModel getCollectionViewModel(Donation collection) {
-    DonationViewModel collectionViewModel = new DonationViewModel(collection);
-    return collectionViewModel;
+  private DonationViewModel getDonationViewModel(Donation donation) {
+    DonationViewModel donationViewModel = new DonationViewModel(donation);
+    return donationViewModel;
   }
 
-  private List<DonationViewModel> getCollectionViewModels(
-      List<Donation> collections) {
-    if (collections == null)
+  private List<DonationViewModel> getDonationViewModels(
+      List<Donation> donations) {
+    if (donations == null)
       return Arrays.asList(new DonationViewModel[0]);
-    List<DonationViewModel> collectionViewModels = new ArrayList<DonationViewModel>();
-    for (Donation collection : collections) {
-      collectionViewModels.add(new DonationViewModel(collection));
+    List<DonationViewModel> donationViewModels = new ArrayList<DonationViewModel>();
+    for (Donation donation : donations) {
+      donationViewModels.add(new DonationViewModel(donation));
     }
-    return collectionViewModels;
+    return donationViewModels;
   }
  
   private int getNumberOfDonations(List<Donation> donations){
