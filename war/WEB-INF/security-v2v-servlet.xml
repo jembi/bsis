@@ -20,6 +20,8 @@
     <intercept-url pattern="/donors/**" access="isAnonymous()" method="OPTIONS"/>
     <intercept-url pattern="/donors/**" access="isFullyAuthenticated()" />
   </http>
+  
+  <http pattern="/passwordresets/**" security="none" />
 
   <http pattern="/donations/**" create-session="never" use-expressions="true">
   	<http-basic />

@@ -31,7 +31,7 @@
   <!-- Annotations like PreAuthorize, needed here and not in security-v2v-servlet.xml
        as this is the MVC configuration dealing with URLs??? -->
   <security:global-method-security pre-post-annotations="enabled" />
-  <context:property-placeholder location="classpath:database.properties, classpath:swagger.properties" />
+  <context:property-placeholder location="classpath:database.properties, classpath:swagger.properties, classpath:email.properties" />
 
   <!-- Configures the @Controller programming model -->
   <mvc:annotation-driven>
@@ -119,6 +119,19 @@
   <!--swagger configuration--> 
   <bean class="com.mangofactory.swagger.configuration.DocumentationConfig" />
   <mvc:default-servlet-handler/>
+
+  <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <property name="host" value="${smtp.host}" />
+    <property name="port" value="${smtp.port}" />
+    <property name="username" value="${smtp.auth.username}" />
+    <property name="password" value="${smtp.auth.password}" />
+    <property name="javaMailProperties">
+      <props>
+        <prop key="mail.smtp.auth">true</prop>
+        <prop key="mail.smtp.starttls.enable">true</prop>
+      </props>
+    </property>
+  </bean>
 
 
   <!-- Following part is for sending and receiving emails. Not using it right now. -->
