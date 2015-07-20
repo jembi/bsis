@@ -21,8 +21,6 @@ import org.hibernate.validator.constraints.Length;
 @Audited
 public class User implements Serializable {
 
-    private static final long serialVersionUID = -7182612069701363311L;
-
 @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(nullable=false, insertable=false, updatable=false, columnDefinition="SMALLINT")
@@ -34,7 +32,7 @@ public class User implements Serializable {
   @Column(length=255, nullable=false)
   private String password;
   
-  @Column(nullable=false)
+  @Column(name="passwordReset")
   private Boolean passwordReset = Boolean.FALSE;
 
   @Column(length=15, nullable=false)
@@ -204,11 +202,11 @@ public class User implements Serializable {
 		this.userRole = userRole;
 	}
 
-    public boolean isPasswordReset() {
+    public Boolean isPasswordReset() {
         return passwordReset;
     }
 
-    public void setPasswordReset(boolean passwordReset) {
+    public void setPasswordReset(Boolean passwordReset) {
         this.passwordReset = passwordReset;
     }
   

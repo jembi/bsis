@@ -46,6 +46,10 @@ public class UserBackingForm {
     public String getPassword() {
         return getUser().getPassword();
     }
+    
+    public Boolean isPasswordReset() {
+        return getUser().isPasswordReset();
+    }
 
     public String getFirstName() {
         return getUser().getFirstName();
