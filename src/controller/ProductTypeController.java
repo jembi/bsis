@@ -46,10 +46,11 @@ public class ProductTypeController {
   
   @RequestMapping( method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  List<ProductTypeViewModel> configureProductTypes() {
-
+  public  ResponseEntity<Map<String, Object>>  configureProductTypes() {
+    Map<String, Object> map = new HashMap<String, Object>();
     List<ProductType> productTypes = productTypeRepository.getAllProductTypesIncludeDeleted();
-    return getProductTypeViewModels(productTypes);
+    map.put("componentTypes", getProductTypeViewModels(productTypes));
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
