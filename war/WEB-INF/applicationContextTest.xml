@@ -30,7 +30,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 
 
 
-  <context:property-placeholder location="classpath:database.properties" />
+  <context:property-placeholder location="classpath:database.properties, classpath:email.properties" />
 
   <!-- Configures the @Controller programming model -->
   <mvc:annotation-driven />
@@ -84,6 +84,19 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 
   <bean id="applicationContextProvider" class="repository.events.ApplicationContextProvider"></bean>
   <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+  </bean>
+
+  <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <property name="host" value="${smtp.host}" />
+    <property name="port" value="${smtp.port}" />
+    <property name="username" value="${smtp.auth.username}" />
+    <property name="password" value="${smtp.auth.password}" />
+    <property name="javaMailProperties">
+      <props>
+        <prop key="mail.smtp.auth">true</prop>
+        <prop key="mail.smtp.starttls.enable">true</prop>
+      </props>
+    </property>
   </bean>
 
   <mvc:interceptors>
