@@ -32,7 +32,7 @@ public class User implements Serializable {
   @Column(length=255, nullable=false)
   private String password;
   
-  @Column(name="passwordReset")
+  @Column
   private Boolean passwordReset = Boolean.FALSE;
 
   @Column(length=15, nullable=false)
