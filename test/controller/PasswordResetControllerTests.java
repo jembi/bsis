@@ -3,8 +3,13 @@ package controller;
 import static helpers.builders.PasswordResetBackingFormBuilder.aPasswordResetBackingForm;
 import static helpers.builders.SimpleMailMessageBuilder.aSimpleMailMessage;
 import static helpers.builders.UserBuilder.aUser;
+import static helpers.matchers.UserPasswordMatcher.hasPassword;
+import static org.mockito.AdditionalMatchers.and;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -87,7 +92,7 @@ public class PasswordResetControllerTests {
         // Verify
         verify(userRepository).findUser(expectedUsername);
         verify(passwordGenerationService).generatePassword();
-        verify(userRepository).updateUser(expectedUser, true);
+        verify(userRepository).updateUser(and(same(expectedUser), argThat(hasPassword(expectedPassword))), eq(true));
         verify(mailSender).send(expectedMessage);
         verifyNoMoreInteractions(userRepository);
         verifyNoMoreInteractions(mailSender);
