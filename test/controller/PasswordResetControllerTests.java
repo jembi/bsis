@@ -8,6 +8,8 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.Map;
@@ -48,6 +50,9 @@ public class PasswordResetControllerTests {
 
         // Verify
         verify(userRepository).findUser(expectedUsername);
+        verifyNoMoreInteractions(userRepository);
+        verifyZeroInteractions(mailSender);
+        verifyZeroInteractions(passwordGenerationService);
         Assert.assertEquals("Response status should be NOT_FOUND", HttpStatus.NOT_FOUND, response.getStatusCode());
     }
     
@@ -81,8 +86,12 @@ public class PasswordResetControllerTests {
 
         // Verify
         verify(userRepository).findUser(expectedUsername);
+        verify(passwordGenerationService).generatePassword();
         verify(userRepository).updateUser(expectedUser, true);
         verify(mailSender).send(expectedMessage);
+        verifyNoMoreInteractions(userRepository);
+        verifyNoMoreInteractions(mailSender);
+        verifyNoMoreInteractions(passwordGenerationService);
         Assert.assertEquals("Response status should be CREATED", HttpStatus.CREATED, response.getStatusCode());
     }
     
