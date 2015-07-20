@@ -1233,5 +1233,14 @@
 		<modifyDataType columnName="id" newDataType="smallint"
 			tableName="BloodTestingRule" />
 	</changeSet>
+	
+	<changeSet id="20150720-1404" author="bausmeier">
+	   <comment>Add password reset column to user</comment>
+	   <addColumn tableName="User">
+	       <column name="passwordReset" type="tinyint(1)" defaultValue="0">
+	           <constraints nullable="false" />
+	       </column>
+	   </addColumn>
+	</changeSet>
 
 </databaseChangeLog>

@@ -3,13 +3,13 @@ package controller;
 import static helpers.builders.PasswordResetBackingFormBuilder.aPasswordResetBackingForm;
 import static helpers.builders.SimpleMailMessageBuilder.aSimpleMailMessage;
 import static helpers.builders.UserBuilder.aUser;
+import static helpers.matchers.UserMatcher.hasSameStateAsUser;
 import static helpers.matchers.UserPasswordMatcher.hasPassword;
 import static org.mockito.AdditionalMatchers.and;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -70,7 +70,7 @@ public class PasswordResetControllerTests {
         String expectedEmailId = "expected.emailId@jembi.org";
         String expectedPassword = "Jxa4cgV2d3OoyRfL";
 
-        User expectedUser = aUser().withEmailId(expectedEmailId).build();
+        User existingUser = aUser().withEmailId(expectedEmailId).build();
         
         SimpleMailMessage expectedMessage = aSimpleMailMessage()
                 .withTo(expectedEmailId)
@@ -80,9 +80,14 @@ public class PasswordResetControllerTests {
                 .build();
         
         // Set up expectations
-        when(userRepository.findUser(expectedUsername)).thenReturn(expectedUser);
+        User expectedUser = aUser()
+                .withEmailId(expectedEmailId)
+                .withPasswordReset()
+                .build();
+
+        when(userRepository.findUser(expectedUsername)).thenReturn(existingUser);
         when(passwordGenerationService.generatePassword()).thenReturn(expectedPassword);
-        when(userRepository.updateUser(expectedUser, true)).thenReturn(expectedUser);
+        when(userRepository.updateUser(existingUser, true)).thenReturn(existingUser);
         doNothing().when(mailSender).send(any(SimpleMailMessage.class));
 
         // Exercise SUT
@@ -92,7 +97,7 @@ public class PasswordResetControllerTests {
         // Verify
         verify(userRepository).findUser(expectedUsername);
         verify(passwordGenerationService).generatePassword();
-        verify(userRepository).updateUser(and(same(expectedUser), argThat(hasPassword(expectedPassword))), eq(true));
+        verify(userRepository).updateUser(and(argThat(hasSameStateAsUser(expectedUser)), argThat(hasPassword(expectedPassword))), eq(true));
         verify(mailSender).send(expectedMessage);
         verifyNoMoreInteractions(userRepository);
         verifyNoMoreInteractions(mailSender);

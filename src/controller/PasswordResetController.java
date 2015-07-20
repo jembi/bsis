@@ -56,6 +56,7 @@ public class PasswordResetController {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String newPassword = passwordGenerationService.generatePassword();
         user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPasswordReset(true);
         userRepository.updateUser(user, true);
 
         // Send an email containing the new password to the user
