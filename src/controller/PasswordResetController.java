@@ -6,7 +6,6 @@ import javax.validation.Valid;
 
 import model.user.User;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import repository.UserRepository;
+import service.PasswordGenerationService;
 import backingform.PasswordResetBackingForm;
 
 @RestController
@@ -30,7 +30,21 @@ public class PasswordResetController {
     private JavaMailSender mailSender;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordGenerationService passwordGenerationService;
     
+    public void setMailSender(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+    
+    public void setPasswordGenerationService(PasswordGenerationService passwordGenerationService) {
+        this.passwordGenerationService = passwordGenerationService;
+    }
+
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> resetPassword(@Valid @RequestBody PasswordResetBackingForm form) {
         User user = userRepository.findUser(form.getUsername());
@@ -40,7 +54,7 @@ public class PasswordResetController {
 
         // Generate a new random alphanumeric password
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String newPassword = RandomStringUtils.randomAlphanumeric(16);
+        String newPassword = passwordGenerationService.generatePassword();
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.updateUser(user, true);
 

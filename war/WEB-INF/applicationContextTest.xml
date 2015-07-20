@@ -42,6 +42,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
   <context:component-scan base-package="tasks" />
   <context:component-scan base-package="utils" />
   <context:component-scan base-package="security" />
+  <context:component-scan base-package="service" />
 
   <bean id="messageSource"
     class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
