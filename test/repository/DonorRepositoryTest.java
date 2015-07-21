@@ -94,9 +94,9 @@ public class DonorRepositoryTest {
             Date today = new Date();
             Map<String, Object> replacements = new HashMap<String, Object>();
             replacements.put("DateDonorNotDue", DateUtils.addDays(today,
-                    -(DonationConstants.BLOCK_BETWEEN_DONATIONS - 1)));
+                    -(DonationConstants.BLOCK_BETWEEN_COLLECTIONS - 1)));
             replacements.put("DateDonorDue", DateUtils.addDays(today,
-                    -(DonationConstants.BLOCK_BETWEEN_DONATIONS + 1)));
+                    -(DonationConstants.BLOCK_BETWEEN_COLLECTIONS + 1)));
 
             replacements.put("DateDeferredOn", DateUtils.addDays(today, -(2)));
             replacements.put("DateDeferredUnit", DateUtils.addDays(today, (2)));
