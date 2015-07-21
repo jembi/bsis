@@ -23,9 +23,7 @@ public class DeferralReasonRepository {
 
     public List <DeferralReason> getAllDeferralReasons (){
         TypedQuery <DeferralReason> query;
-        query = em.createQuery("SELECT d from DeferralReason d WHERE d.isDeleted=:isDeleted", DeferralReason.class);
-        query.setParameter("isDeleted", false);
-
+        query = em.createQuery("SELECT d from DeferralReason d", DeferralReason.class);
         return query.getResultList();
     }
 
@@ -43,8 +41,7 @@ public class DeferralReasonRepository {
     public DeferralReason getDeferralReasonById(Integer DeferralReasonId) {
         TypedQuery<DeferralReason> query;
         query = em.createQuery("SELECT d from DeferralReason d " +
-                "where d.id=:id AND d.isDeleted=:isDeleted", DeferralReason.class);
-        query.setParameter("isDeleted", false);
+                "where d.id=:id", DeferralReason.class);
         query.setParameter("id", DeferralReasonId);
         if (query.getResultList().size() == 0)
             return null;
