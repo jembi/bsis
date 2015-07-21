@@ -162,7 +162,7 @@ public class ProductController {
       map.put("hasErrors", false);
       form = new ProductCombinationBackingForm();
    
-      // at least one product should be created, all products should have the same collection number
+      // at least one product should be created, all products should have the same donation number
       map.put("donationIdentificationNumber", savedProducts.get(0).getDonationIdentificationNumber());
       map.put("createdProducts", getProductViewModels(savedProducts));
       List<Product> allProductsForDonation = productRepository.findProductsByDonationIdentificationNumber(savedProducts.get(0).getDonationIdentificationNumber());

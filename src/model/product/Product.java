@@ -52,7 +52,7 @@ public class Product implements ModificationTracker {
   private Long id;
 
   // A product may not have a corresponding donation. Some products may be
-  // imported from another location. In such a case the corresponding collection
+  // imported from another location. In such a case the corresponding donation
   // field is allowed to be null.
   @DonationExists
   @ManyToOne(optional=true, fetch=FetchType.EAGER)

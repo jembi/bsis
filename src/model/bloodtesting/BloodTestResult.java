@@ -25,7 +25,7 @@ import model.modificationtracker.RowModificationTracker;
 import model.user.User;
 
 /**
- * Stores the result of one blood typing test for one collection.
+ * Stores the result of one blood typing test for one donation.
  * No need to audit this table. NEVER update the entities of this table.
  * Always insert a new row. Use testedOn to find the latest test result.
  * @author iamrohitbanga

@@ -555,9 +555,9 @@ public class BloodTestingRepository {
 						if (bloodTestResultsMap.containsKey(donation.getId())) {
 							errorsFound = true;
 							addErrorToWell(errorsByWellNumber, wellNumber,
-									"Duplicate collection number");
+									"Duplicate donation identification number");
 							errorsByDonationId.put(donation.getId(),
-									"Duplicate collection number");
+									"Duplicate donation identification number");
 							donationIdByWellNumber.put(wellNumber,
 									donation.getId());
 						}

@@ -271,7 +271,7 @@ public class UtilController {
 
   public Donor findDonorInForm(Map<String, Object> bean) {
     // IMPORTANT: Validation code just checks if the ID exists.
-    // We still need to store the collected sample as part of the product.
+    // We still need to store the donation as part of the product.
     String donorId = null;
     if (bean.containsKey("donorIdHidden"))
       donorId = (String) bean.get("donorIdHidden");

@@ -35,14 +35,14 @@ public class DonationBatchViewModel {
   public List<DonationViewModel> getDonations() {
     if (donationBatch.getDonations() == null)
       return Arrays.asList(new DonationViewModel[0]);
-    List<DonationViewModel> collectionViewModels = new ArrayList<DonationViewModel>();
-    for (Donation collection : donationBatch.getDonations()) {
-      collectionViewModels.add(new DonationViewModel(collection));
+    List<DonationViewModel> donationViewModels = new ArrayList<DonationViewModel>();
+    for (Donation donation : donationBatch.getDonations()) {
+      donationViewModels.add(new DonationViewModel(donation));
     }
-    return collectionViewModels;
+    return donationViewModels;
   }
   
-  public Integer getNumCollections() {
+  public Integer getNumDonations() {
 	 return donationBatch.getDonations().size();
   }
 

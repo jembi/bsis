@@ -156,8 +156,8 @@ public class ProductViewModel {
         product.getDonation().getDonationIdentificationNumber() == null
        )
       return "";
-    DonationViewModel collectionViewModel = new DonationViewModel(product.getDonation());
-    return collectionViewModel.getBloodGroup();
+    DonationViewModel donationViewModel = new DonationViewModel(product.getDonation());
+    return donationViewModel.getBloodGroup();
   }
 
   public String getSubdivisionCode() {

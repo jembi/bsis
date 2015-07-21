@@ -43,7 +43,7 @@ import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
 import repository.events.ApplicationContextProvider;
-import repository.events.CollectionUpdatedEvent;
+import repository.events.DonationUpdatedEvent;
 import viewmodel.BloodTestingRuleResult;
 
 @Repository
@@ -81,7 +81,7 @@ public class DonationRepository {
     existingDonation.copy(donation);
     existingDonation = em.merge(existingDonation);
     ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
-    applicationContext.publishEvent(new CollectionUpdatedEvent("10", donation));
+    applicationContext.publishEvent(new DonationUpdatedEvent("10", donation));
     em.flush();
     return existingDonation;
   }
@@ -329,7 +329,7 @@ public class DonationRepository {
     updateDonorFields(donation);
     
     ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
-    applicationContext.publishEvent(new CollectionUpdatedEvent("10", donation));
+    applicationContext.publishEvent(new DonationUpdatedEvent("10", donation));
     
     em.refresh(donation);
    
@@ -416,7 +416,7 @@ public class DonationRepository {
       c.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
       c.setTTIStatus(TTIStatus.NOT_DONE);
       em.persist(c);
-      applicationContext.publishEvent(new CollectionUpdatedEvent("10", c));
+      applicationContext.publishEvent(new DonationUpdatedEvent("10", c));
       em.refresh(c);
     }
     em.flush();

@@ -82,7 +82,6 @@ public class DonationController {
   /**
    * Datatables on the client side expects a json response for rendering data from the server
    * in jquery datatables. Remember of columns is important and should match the column headings
-   * in collectionsTable.jsp.
    */
   private Map<String, Object> generateDatatablesMap(List<Donation> donations, Long totalRecords, Map<String, Map<String, Object>> formFields) {
     Map<String, Object> donationsMap = new HashMap<String, Object>();

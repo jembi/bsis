@@ -12,21 +12,21 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import repository.events.CollectionUpdatedEvent;
+import repository.events.DonationUpdatedEvent;
 
 @Repository
 @Transactional
-public class CollectionUpdatedEventListener implements ApplicationListener<CollectionUpdatedEvent> {
+public class DonationUpdatedEventListener implements ApplicationListener<DonationUpdatedEvent> {
 
   @PersistenceContext
   private EntityManager em;
   
   @Override
-  public void onApplicationEvent(CollectionUpdatedEvent event) {
+  public void onApplicationEvent(DonationUpdatedEvent event) {
     updateDonor(event);
   }
 
-  private void updateDonor(CollectionUpdatedEvent event) {
+  private void updateDonor(DonationUpdatedEvent event) {
     Donation c = (Donation) event.getEventContext();
     Donor donor = c.getDonor();
     if (donor == null)

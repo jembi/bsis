@@ -112,11 +112,11 @@ public class LotReleaseController {
 	        	//inverse = "^LRY^FO562,175^GB204,0,171^FS^LRN";
 	        	inverse = "^FO542,346^GB116,50,50^FS";
 	        }
-	        String collectionDate = df.format(donation.getDonationDate());        	
+	        String donationDate = df.format(donation.getDonationDate());        	
 	
 	        // TODO: improve calculation of expiry date according to final processed components expiry dates 
 	        // i.e. expiryDate = df.format(donation.getProducts().get(i).getExpiresOn());
-	        // For now, generates expiry date as Collection Date + 35 Days.
+	        // For now, generates expiry date as Donation Date + 35 Days.
 	        String expiryDate = "";
 	    	Calendar c = Calendar.getInstance();
 	    	c.setTime(donation.getDonationDate());
@@ -142,7 +142,7 @@ public class LotReleaseController {
 			        "^BY3,3,77^FT69,535^BCN,,Y,N"+
 			        "^FD>:"+product.getProductType().getProductTypeNameShort()+"^FS"+
 			        "^BY2,3,84^FT65,296^BCN,,Y,N"+
-			        "^FD>:"+collectionDate+"^FS"+
+			        "^FD>:"+donationDate+"^FS"+
 			        //inverse+
 			        "^FT532,387^A0N,28,28^FB113,1,0,C^FH\\^FD"+bloodRh+"^FS"+
 			        "^FT450,448^A0N,17,38^FH\\^FDExpiration Date^FS"+
@@ -165,10 +165,10 @@ public class LotReleaseController {
 	    			         "^FT301,348^A0N,243,240^FH\\^FD" + bloodABO + "^FS" +
 	    			         "^FT603,302^A0N,39,31^FH\\^FD" + bloodRh + "^FS" +
 	    			         "^FT626,119^A0N,28,28^FH\\^FD" + expiryDate + "^FS" +
-	    			         "^FT49,118^A0N,28,28^FH\\^FD" + collectionDate + "^FS" +
+	    			         "^FT49,118^A0N,28,28^FH\\^FD" + donationDate + "^FS" +
 	    			         "^FT631,37^A0N,18,43^FH\\^FDExpiry ^FS" +
 	    			         "^FT631,59^A0N,18,43^FH\\^FD  Date^FS" +
-	    			         "^FT15,37^A0N,18,43^FH\\^FDCollection^FS" +
+	    			         "^FT15,37^A0N,18,43^FH\\^FDDonation^FS" +
 	    			         "^FT15,59^A0N,18,43^FH\\^FD    Date^FS" +
 	    			         "^FT320,42^A0N,18,43^FH\\^FDPack ID^FS" +
 	    			         "^FO575,11^GB0,150,8^FS" +
@@ -185,7 +185,7 @@ public class LotReleaseController {
 	    			         "^FO15,379^GB750,0,6^FS" +
 	    			         "^FT28,194^A0N,29,64^FH\\^FDWHOLE ^FS" +
 	    			         "^FT28,230^A0N,29,64^FH\\^FDBLOOD^FS" +
-	    			         "^FT98,410^A0N,18,19^FH\\^FDVolunteer donor blood collected and processed by the National Blood Service ^FS" +
+	    			         "^FT98,410^A0N,18,19^FH\\^FDVolunteer donor blood donated and processed by the National Blood Service ^FS" +
 	    			         "^FT98,432^A0N,18,19^FH\\^FD                      This product may transmit infectious agents^FS" +
 	    			         "^FT599,237^A0N,39,31^FH\\^FD  Rh (D) ^FS" +
 	    			         "^FT106,752^A0N,23,33^FH\\^FDPROPERLY IDENTIFY INTENDED RECIPIENT^FS" +
@@ -213,10 +213,10 @@ public class LotReleaseController {
 	    				"^FT308,356^A0N,226,240^FH\\^FD" + bloodABO + "^FS"+
 	    				"^FT603,302^A0N,39,31^FH\\^FD" + bloodRh + "^FS"+
 	    				"^FT626,119^A0N,28,28^FH\\^FD" + expiryDate + "^FS"+
-	    				"^FT49,118^A0N,28,28^FH\\^FD" + collectionDate + "^FS"+
+	    				"^FT49,118^A0N,28,28^FH\\^FD" + donationDate + "^FS"+
 	    				"^FT631,37^A0N,18,43^FH\\^FDExpiry ^FS"+
 	    				"^FT631,59^A0N,18,43^FH\\^FD  Date^FS"+
-	    				"^FT15,37^A0N,18,43^FH\\^FDCollection^FS"+
+	    				"^FT15,37^A0N,18,43^FH\\^FDDonation^FS"+
 	    				"^FT15,59^A0N,18,43^FH\\^FD    Date^FS"+
 	    				"^FT237,46^A0N,18,43^FH\\^FDDonation Number^FS"+
 	    				"^FO575,11^GB0,150,8^FS"+
@@ -265,8 +265,8 @@ public class LotReleaseController {
     
  		// discard label can be printed
  		success = true;
-	 	DateFormat df = new SimpleDateFormat("dd/MM/yyyy");        
-	    String collectionDate = df.format(product.getDonation().getDonationDate());        	
+	 	//DateFormat df = new SimpleDateFormat("dd/MM/yyyy");        
+	    //String donationDate = df.format(product.getDonation().getDonationDate());        	
 	
 	    // Generate ZPL label
 	    map.put("labelZPL",	
@@ -283,7 +283,7 @@ public class LotReleaseController {
 	    		"^FT424,610^A0N,39,38^FH\\^FDDISPOSAL ONLY^FS"+
 	    		"^FT458,523^A0N,39,38^FH\\^FDBIOHAZARD^FS"+
 	    		"^FT454,440^A0N,39,38^FH\\^FDDO NOT USE^FS"+
-	    		"^FT67,65^A0N,28,28^FH\\^FDCollection Date^FS"+
+	    		"^FT67,65^A0N,28,28^FH\\^FDDonation Date^FS"+
 	    		"^FT414,63^A0N,28,28^FH\\^FDDonation Number^FS"+
 	    		"^FT151,307^A0N,135,134^FH\\^FDDISCARD^FS"+
 	    		"^FO18,357^GB748,0,8^FS"+
@@ -316,10 +316,10 @@ public class LotReleaseController {
     	// TODO: improve product & blood test checks, or remove if not relevant
     	/*
     	else if(donation.getProducts()!=null && !donation.getProducts().isEmpty() && 
-    			(donation.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED) 
-    			|| donation.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_EXPIRED)
-    			|| donation.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_QUARANTINED) 
-    			|| donation.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_SPLIT))){   		
+    			(donation.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED) 
+    			|| donation.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_EXPIRED)
+    			|| donation.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_QUARANTINED) 
+    			|| donation.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_SPLIT))){   		
     		success=false;
     	}else if(donation.getBloodTestResults()!=null 
     			&& !donation.getBloodTestResults().isEmpty() 
@@ -373,7 +373,7 @@ public class LotReleaseController {
 	                    productStatus.put("componentId", product.getId());
 	                    productStatus.put("componentName", product.getProductType().getProductTypeName());
 	                    productStatus.put("componentIdentificationNumber", product.getComponentIdentificationNumber());
-	                    if (product.getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED)) {
+	                    if (product.getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED)) {
 	                        productStatus.put("discardPackLabel", true);
 	                        productStatus.put("printPackLabel", false);
 	                    } else {
@@ -392,7 +392,7 @@ public class LotReleaseController {
 	    if(product.getDonation().getTTIStatus().equals(TTIStatus.TTI_UNSAFE))
 	        return true;
 	    
-	     if (product.getStatus().toString().equals(LotReleaseConstant.COLLECTION_FLAG_DISCARDED)) 
+	     if (product.getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED)) 
 	         return true;
 	     return false;
     }
