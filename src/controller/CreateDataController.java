@@ -506,7 +506,7 @@ public class CreateDataController {
 
     Map<String, String> createDataProperties = genericConfigRepository.getConfigProperties("createData");
 
-    double leaveOutCollectionsPercentage = Double.parseDouble(createDataProperties.get("leaveOutCollectionsProbability"));
+    double leaveOutDonationsPercentage = Double.parseDouble(createDataProperties.get("leaveOutDonationsProbability"));
     double incorrectBloodTypePercentage = Double.parseDouble(createDataProperties.get("incorrectBloodTypeProbability"));
 
     List<String> aboValues = new ArrayList<String>(bloodAboRuleMap.keySet());
@@ -518,7 +518,7 @@ public class CreateDataController {
 
     for (Donation donation : donations) {
 
-      if (Math.random() < leaveOutCollectionsPercentage) {
+      if (Math.random() < leaveOutDonationsPercentage) {
         // do not add results for a small fraction of the donations
         continue;
       }
@@ -601,7 +601,7 @@ public class CreateDataController {
     }
 
     Map<String, String> createDataProperties = genericConfigRepository.getConfigProperties("createData");
-    double leaveOutCollectionsPercentage = Double.parseDouble(createDataProperties.get("leaveOutCollectionsProbability"));
+    double leaveOutDonationsPercentage = Double.parseDouble(createDataProperties.get("leaveOutDonationsProbability"));
     double unsafePercentage = Double.parseDouble(createDataProperties.get("unsafeProbability"));
 
     Set<String> allBloodTestsIds = new HashSet<String>();
@@ -611,7 +611,7 @@ public class CreateDataController {
 
     for (Donation donation : donations) {
 
-      if (Math.random() < leaveOutCollectionsPercentage) {
+      if (Math.random() < leaveOutDonationsPercentage) {
         // do not add results for a small fraction of the donations
         continue;
       }

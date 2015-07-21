@@ -142,11 +142,11 @@
 
 
 	<genericconfig id="1" propertyName="rowHeight"
-		propertyOwner="collectionsWorksheet" propertyValue="30" />
+		propertyOwner="donationsWorksheet" propertyValue="30" />
 	<genericconfig id="2" propertyName="columnWidth"
-		propertyOwner="collectionsWorksheet" propertyValue="100" />
+		propertyOwner="donationsWorksheet" propertyValue="100" />
 	<genericconfig id="3" propertyName="donationIdentificationNumber"
-		propertyOwner="collectionsWorksheet" propertyValue="true" />
+		propertyOwner="donationsWorksheet" propertyValue="true" />
 	<genericconfig id="4" propertyName="haemoglobinUnit"
 		propertyOwner="measurementUnit" propertyValue="g/dL" />
 	<genericconfig id="5" propertyName="bloodPressureUnit"
@@ -176,11 +176,11 @@
 		propertyValue="true" />
 	<genericconfig id="17" propertyName="donorRecordRequired"
 		propertyOwner="productReleaseRequirements" propertyValue="true" />
-	<genericconfig id="18" propertyName="allowProductsWithoutCollection"
+	<genericconfig id="18" propertyName="allowProductsWithoutDonation"
 		propertyOwner="productReleaseRequirements" propertyValue="true" />
 	<genericconfig id="19" propertyName="allowImportedProducts"
 		propertyOwner="productReleaseRequirements" propertyValue="true" />
-	<genericconfig id="20" propertyName="leaveOutCollectionsProbability"
+	<genericconfig id="20" propertyName="leaveOutDonationsProbability"
 		propertyOwner="createdata" propertyValue="0.10" />
 	<genericconfig id="21" propertyName="incorrectBloodTypeProbability"
 		propertyOwner="createdata" propertyValue="0.05" />
@@ -210,7 +210,7 @@
 		propertyOwner="labsetup" propertyValue="false" />
 	<genericconfig id="34" propertyName="donorsTabEnabled"
 		propertyOwner="labsetup" propertyValue="true" />
-	<genericconfig id="35" propertyName="collectionsTabEnabled"
+	<genericconfig id="35" propertyName="donationsTabEnabled"
 		propertyOwner="labsetup" propertyValue="true" />
 	<genericconfig id="36" propertyName="productsTabEnabled"
 		propertyOwner="labsetup" propertyValue="true" />

@@ -43,7 +43,7 @@ public class BloodTestingRuleEngine {
   /**
    * Apply blood typing rules to blood typing tests (combination of what is present in the database and
    * those passed as parameter.
-   * @param donation Blood Typing results for which collection
+   * @param donation Blood Typing results for which donation
    * @param bloodTestResults map of blood typing test id to result. Only character allowed in the result.
    *                               multiple characters should be mapped to negative/positive (TODO)
    *                               Assume validation of results already done.

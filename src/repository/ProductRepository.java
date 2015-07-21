@@ -88,22 +88,22 @@ public class ProductRepository {
 
     // if a product has been explicitly discarded maintain that status.
     // if the product has been issued do not change its status.
-    // suppose a product from a collection tested as safe was issued
+    // suppose a product from a donation tested as safe was issued
     // then some additional tests were done for some reason and it was
     // discovered that the product was actually unsafe and it should not
     // have been issued then it should be easy to track down all products
     // created from that sample which were issued. By maintaining the status as
     // issued even if the product is unsafe we can search for all products created
-    // from that collection and then look at which ones were already issued.
+    // from that donation and then look at which ones were already issued.
     // Conclusion is do not change the product status once it is marked as issued.
     // Similar reasoning for not changing USED status for a product. It should be
-    // easy to track which used products were made from unsafe collected samples.
-    // of course if the test results are not available or the collection is known
+    // easy to track which used products were made from unsafe donations.
+    // of course if the test results are not available or the donation is known
     // to be unsafe it should not have been issued in the first place.
     // In exceptional cases an admin can always delete this product and create a new one
     // if he wants to change the status to a new one.
     // once a product has been labeled as split it does not exist anymore so we just mark
-    // it as SPLIT/PROCESSED. Even if the collection is found to be unsafe later it should not matter
+    // it as SPLIT/PROCESSED. Even if the donation is found to be unsafe later it should not matter
     // as SPLIT/PROCESSED products are not allowed to be issued
     List<ProductStatus> statusNotToBeChanged =
         Arrays.asList(ProductStatus.DISCARDED, ProductStatus.ISSUED,
@@ -301,7 +301,7 @@ public class ProductRepository {
   }
 
   public List<Product> getAllUnissuedThirtyFiveDayProducts() {
-    String queryString = "SELECT p FROM Product p where p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.dateCollected > :minDate";
+    String queryString = "SELECT p FROM Product p where p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.createdOn > :minDate";
     TypedQuery<Product> query = em.createQuery(queryString, Product.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("isIssued", Boolean.FALSE);
@@ -345,7 +345,7 @@ public class ProductRepository {
   public List<Product> getProducts(Date fromDate, Date toDate) {
     TypedQuery<Product> query = em
         .createQuery(
-            "SELECT p FROM Product p WHERE  p.dateCollected >= :fromDate and p.dateCollected<= :toDate and p.isDeleted = :isDeleted",
+            "SELECT p FROM Product p WHERE  p.createdOn >= :fromDate and p.createdOn<= :toDate and p.isDeleted = :isDeleted",
             Product.class);
     query.setParameter("fromDate", fromDate);
     query.setParameter("toDate", toDate);
@@ -371,7 +371,7 @@ public class ProductRepository {
 
   public List<Product> getAllUnissuedThirtyFiveDayProducts(String productType,
       String abo, String rhd) {
-    String queryString = "SELECT p FROM Product p where p.type = :productType and p.abo= :abo and p.rhd= :rhd and p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.dateCollected > :minDate";
+    String queryString = "SELECT p FROM Product p where p.type = :productType and p.abo= :abo and p.rhd= :rhd and p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.createdOn > :minDate";
     TypedQuery<Product> query = em.createQuery(queryString, Product.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("isIssued", Boolean.FALSE);

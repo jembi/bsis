@@ -14,8 +14,6 @@ import model.donation.Donation;
 import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.product.Product;
-import model.util.BloodAbo;
-import model.util.BloodRh;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +38,10 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
 
   @Override
   public void onApplicationEvent(BloodTestsUpdatedEvent event) {
-    System.out.println("collection added event listener called");
+    System.out.println("donation added event listener called");
     System.out.println("event ID: " + event.getEventId());
     System.out.println("event context: " + event.getEventContext());
-    updateCollectionStatus(event);
+    updateDonationStatus(event);
     updateDonorStatus(event);
   }
 
@@ -139,7 +137,7 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
     }
   }
 
-  private void updateCollectionStatus(BloodTestsUpdatedEvent event) {
+  private void updateDonationStatus(BloodTestsUpdatedEvent event) {
 
     Donation donation = event.getDonation();
     BloodTestingRuleResult ruleResult = event.getBloodTestingRuleResult();
