@@ -173,6 +173,7 @@ public class User implements Serializable {
     this.isAdmin = user.getIsAdmin();
     this.isActive = user.getIsActive();
     this.roles = user.getRoles();
+    this.passwordReset = user.isPasswordReset();
   }
 
   @Override
