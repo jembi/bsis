@@ -31,7 +31,7 @@ import model.bloodtesting.TTIStatus;
 import model.bloodtesting.WellType;
 import model.bloodtesting.rules.BloodTestSubCategory;
 import model.bloodtesting.rules.BloodTestingRule;
-import model.bloodtesting.rules.CollectionField;
+import model.bloodtesting.rules.DonationField;
 import model.donation.Donation;
 import model.microtiterplate.MachineReading;
 import model.microtiterplate.MicrotiterPlate;
@@ -764,7 +764,7 @@ public class BloodTestingRepository {
 			BloodTestingRule ttiSafeRule = new BloodTestingRule();
 			ttiSafeRule.setBloodTestsIds("" + bt.getId());
 			ttiSafeRule.setPattern("-");
-			ttiSafeRule.setCollectionFieldChanged(CollectionField.TTISTATUS);
+			ttiSafeRule.setDonationFieldChanged(DonationField.TTISTATUS);
 			ttiSafeRule.setNewInformation(TTIStatus.TTI_SAFE.toString());
 			ttiSafeRule.setExtraInformation("");
 			ttiSafeRule.setContext(BloodTestContext.RECORD_TTI_TESTS);
@@ -801,7 +801,7 @@ public class BloodTestingRepository {
 						+ confirmatoryBloodTest.getId());
 				confirmatoryTestRule.setPattern("+");
 				confirmatoryTestRule
-						.setCollectionFieldChanged(CollectionField.TTISTATUS);
+						.setDonationFieldChanged(DonationField.TTISTATUS);
 				confirmatoryTestRule.setNewInformation(TTIStatus.TTI_UNSAFE
 						.toString());
 				confirmatoryTestRule.setExtraInformation("");
@@ -818,7 +818,7 @@ public class BloodTestingRepository {
 			BloodTestingRule ttiUnsafeRule = new BloodTestingRule();
 			ttiUnsafeRule.setBloodTestsIds("" + bt.getId());
 			ttiUnsafeRule.setPattern("+");
-			ttiUnsafeRule.setCollectionFieldChanged(CollectionField.TTISTATUS);
+			ttiUnsafeRule.setDonationFieldChanged(DonationField.TTISTATUS);
 			ttiUnsafeRule.setNewInformation(TTIStatus.TTI_UNSAFE.toString());
 			ttiUnsafeRule.setExtraInformation("");
 			ttiUnsafeRule.setContext(BloodTestContext.RECORD_TTI_TESTS);

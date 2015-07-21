@@ -4,7 +4,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<!-- Updated (timler): for #293 (refactoring) -->
-	<changeSet id="20150721-1108" author="devang">
+	<changeSet id="20150721-1236" author="devang">
 	    <preConditions onFail="MARK_RAN">
 		    <not><tableExists tableName="BloodBagType" /></not>
 		</preConditions>
@@ -24,7 +24,7 @@
 	</changeSet>
 	
 	<!-- Updated (timler): for #293 (refactoring) -->
-	<changeSet id="20150717-0942" author="devang">
+	<changeSet id="201507121-1237" author="devang">
 	    <preConditions onFail="MARK_RAN">
 		    <sqlCheck expectedResult="0"> 
 				<![CDATA[

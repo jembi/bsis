@@ -21,7 +21,7 @@ import model.address.Contact;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.TTIStatus;
 import model.bloodtesting.rules.BloodTestingRule;
-import model.bloodtesting.rules.CollectionField;
+import model.bloodtesting.rules.DonationField;
 import model.donation.Donation;
 import model.donationtype.DonationType;
 import model.donor.Donor;
@@ -490,7 +490,7 @@ public class CreateDataController {
     Map<String, List<BloodTestingRule>> bloodAboRuleMap = new HashMap<String, List<BloodTestingRule>>();
     Map<String, List<BloodTestingRule>> bloodRhRuleMap = new HashMap<String, List<BloodTestingRule>>();
     for (BloodTestingRule rule : bloodTestingRepository.getBloodTypingRules(true)) {
-      switch (rule.getCollectionFieldChanged()) {
+      switch (rule.getDonationFieldChanged()) {
         case BLOODABO: if (!bloodAboRuleMap.containsKey(rule.getNewInformation())) {
                          bloodAboRuleMap.put(rule.getNewInformation(), new ArrayList<BloodTestingRule>());
                        }
@@ -592,7 +592,7 @@ public class CreateDataController {
 
     Map<String, List<BloodTestingRule>> ttiRuleMap = new HashMap<String, List<BloodTestingRule>>();
     for (BloodTestingRule rule : bloodTestingRepository.getTTIRules(true)) {
-      if (rule.getCollectionFieldChanged().equals(CollectionField.TTISTATUS)) {
+      if (rule.getDonationFieldChanged().equals(DonationField.TTISTATUS)) {
         if (!ttiRuleMap.containsKey(rule.getNewInformation())) {
           ttiRuleMap.put(rule.getNewInformation(), new ArrayList<BloodTestingRule>());
         }

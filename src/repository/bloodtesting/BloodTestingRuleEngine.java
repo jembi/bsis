@@ -17,7 +17,7 @@ import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
 import model.bloodtesting.rules.BloodTestingRule;
-import model.bloodtesting.rules.CollectionField;
+import model.bloodtesting.rules.DonationField;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,8 +147,8 @@ public class BloodTestingRuleEngine {
 //                            rule.getPart() + ", " + rule.getNewInformation() + ", " +
 //                            rule.getExtraInformation() + ", " + rule.getMarkSampleAsUnsafe());
 //
-        CollectionField collectionFieldChanged = rule.getCollectionFieldChanged();
-        switch (collectionFieldChanged) {
+        DonationField donationFieldChanged = rule.getDonationFieldChanged();
+        switch (donationFieldChanged) {
           case BLOODABO:
             bloodAboChanges.add(rule.getNewInformation());
             break;
@@ -184,8 +184,8 @@ public class BloodTestingRuleEngine {
 
       } else {
         // pattern did not match
-        CollectionField collectionFieldChanged = rule.getCollectionFieldChanged();
-        switch (collectionFieldChanged) {
+        DonationField donationFieldChanged = rule.getDonationFieldChanged();
+        switch (donationFieldChanged) {
         case BLOODABO:  if (atLeastOneResultFoundForPattern)
                           aboUninterpretable = true;
                       break;
