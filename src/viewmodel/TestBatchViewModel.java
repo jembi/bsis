@@ -42,7 +42,7 @@ public class TestBatchViewModel {
     public Integer getNumSamples(){
     	Integer count = 0;
     	for(DonationBatch cb: testBatch.getDonationBatches()){
-    		count += cb.getDonationsInBatch().size();
+    		count += cb.getDonations().size();
     	}
     	return count;
     }

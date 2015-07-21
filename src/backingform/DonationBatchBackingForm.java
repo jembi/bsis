@@ -90,13 +90,13 @@ public class DonationBatchBackingForm {
   }
   
   @JsonIgnore
-  public List<Donation> getDonationsInBatch() {
-    return donationBatch.getDonationsInBatch();
+  public List<Donation> getDonations() {
+    return donationBatch.getDonations();
   }
   
   @JsonIgnore
   public Integer getNumDonations() {
-    return donationBatch.getDonationsInBatch().size();
+    return donationBatch.getDonations().size();
   }
 
 }

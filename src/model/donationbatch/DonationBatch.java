@@ -50,7 +50,7 @@ public class DonationBatch implements ModificationTracker {
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="donationBatch", fetch = FetchType.EAGER)
-  private List<Donation> donationsInBatch = Collections.EMPTY_LIST;
+  private List<Donation> donations = Collections.EMPTY_LIST;
   
   @OneToOne
   @LocationExists
@@ -97,12 +97,12 @@ public class DonationBatch implements ModificationTracker {
     this.notes = notes;
   }
 
-  public List<Donation> getDonationsInBatch() {
-    return donationsInBatch;
+  public List<Donation> getDonations() {
+    return donations;
   }
 
-  public void setDonationInBatch(List<Donation> donationsInBatch) {
-    this.donationsInBatch = donationsInBatch;
+  public void setDonation(List<Donation> donations) {
+    this.donations = donations;
   }
 
   public boolean getIsDeleted() {

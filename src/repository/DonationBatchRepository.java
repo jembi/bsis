@@ -26,7 +26,7 @@ public class DonationBatchRepository {
   }
 
   public DonationBatch findDonationBatchByIdEager(Integer batchId) {
-    String queryString = "SELECT distinct b FROM DonationBatch b LEFT JOIN FETCH b.donationsInBatch LEFT JOIN FETCH b.donorPanel " +
+    String queryString = "SELECT distinct b FROM DonationBatch b LEFT JOIN FETCH b.donations LEFT JOIN FETCH b.donorPanel " +
                          "WHERE b.id = :batchId and b.isDeleted = :isDeleted";
     TypedQuery<DonationBatch> query = em.createQuery(queryString, DonationBatch.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -35,7 +35,7 @@ public class DonationBatchRepository {
   }
 
   public DonationBatch findDonationBatchById(Integer batchId) {
-    String queryString = "SELECT distinct b FROM DonationBatch b LEFT JOIN FETCH b.donationsInBatch " +
+    String queryString = "SELECT distinct b FROM DonationBatch b LEFT JOIN FETCH b.donations " +
                          "WHERE b.id = :batchId and b.isDeleted = :isDeleted";
     TypedQuery<DonationBatch> query = em.createQuery(queryString, DonationBatch.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -43,7 +43,7 @@ public class DonationBatchRepository {
   }
 
   public DonationBatch findDonationBatchByBatchNumber(String batchNumber) throws NoResultException,NonUniqueResultException {
-    String queryString = "SELECT distinct b FROM DonationBatch b LEFT JOIN FETCH b.donationsInBatch " +
+    String queryString = "SELECT distinct b FROM DonationBatch b LEFT JOIN FETCH b.donations " +
         "WHERE b.batchNumber = :batchNumber and b.isDeleted = :isDeleted";
     TypedQuery<DonationBatch> query = em.createQuery(queryString, DonationBatch.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -56,7 +56,7 @@ public class DonationBatchRepository {
   
   public DonationBatch
 	  findDonationBatchByBatchNumberIncludeDeleted(String batchNumber){
-	String queryString = "SELECT distinct b FROM DonationBatch b LEFT JOIN FETCH b.donationsInBatch " +
+	String queryString = "SELECT distinct b FROM DonationBatch b LEFT JOIN FETCH b.donations " +
 	 "WHERE b.batchNumber = :batchNumber";
 	TypedQuery<DonationBatch> query = em.createQuery(queryString, DonationBatch.class);
 	DonationBatch batch = null;
@@ -83,7 +83,7 @@ public class DonationBatchRepository {
 
   public List<DonationBatch> findDonationBatches(Boolean isClosed,
       List<Long> donorPanelIds) {
-    String queryStr = "SELECT distinct b from DonationBatch b LEFT JOIN FETCH b.donationsInBatch WHERE b.isDeleted=:isDeleted ";
+    String queryStr = "SELECT distinct b from DonationBatch b LEFT JOIN FETCH b.donations WHERE b.isDeleted=:isDeleted ";
     if(!donorPanelIds.isEmpty()){
     	queryStr += "AND b.donorPanel.id IN (:donorPanelIds) ";
     }
@@ -104,7 +104,7 @@ public class DonationBatchRepository {
   }
   
   public List<DonationBatch> findUnassignedDonationBatches() {
-    String queryStr = "SELECT distinct b from DonationBatch b LEFT JOIN FETCH b.donationsInBatch WHERE b.isDeleted=:isDeleted " +
+    String queryStr = "SELECT distinct b from DonationBatch b LEFT JOIN FETCH b.donations WHERE b.isDeleted=:isDeleted " +
     	"AND b.isClosed=:isClosed " + 
     	"AND b.testBatch=null";
 
@@ -119,7 +119,7 @@ public class DonationBatchRepository {
   public List<Donation> findDonationsInBatch(Integer batchId) {
     DonationBatch donationBatch = findDonationBatchByIdEager(batchId);
     List<Donation> donations = new ArrayList<Donation>();
-    for (Donation c : donationBatch.getDonationsInBatch()) {
+    for (Donation c : donationBatch.getDonations()) {
     	donations.add(c);
     }
     return donations;

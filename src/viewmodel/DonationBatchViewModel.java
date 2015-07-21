@@ -32,19 +32,18 @@ public class DonationBatchViewModel {
     return donationBatch.getNotes();
   }
 
-  public List<DonationViewModel> getCollectionsInBatch() {
-    //return donationBatch.getCollectionsInBatch();
-    if (donationBatch.getDonationsInBatch() == null)
+  public List<DonationViewModel> getDonations() {
+    if (donationBatch.getDonations() == null)
       return Arrays.asList(new DonationViewModel[0]);
     List<DonationViewModel> collectionViewModels = new ArrayList<DonationViewModel>();
-    for (Donation collection : donationBatch.getDonationsInBatch()) {
+    for (Donation collection : donationBatch.getDonations()) {
       collectionViewModels.add(new DonationViewModel(collection));
     }
     return collectionViewModels;
   }
   
   public Integer getNumCollections() {
-	 return donationBatch.getDonationsInBatch().size();
+	 return donationBatch.getDonations().size();
   }
 
   public String getLastUpdated() {
