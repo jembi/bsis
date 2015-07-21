@@ -1,13 +1,12 @@
 package repository;
 
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import model.bloodbagtype.BloodBagType;
-
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,15 +23,16 @@ public class BloodBagTypeRepository {
     query.setParameter("isDeleted", false);
     return query.getResultList();
   }
-
   
-  public BloodBagType getBloodBagType(String checkBloodBagType) {
-    TypedQuery<BloodBagType> query;
-    query = em.createQuery("SELECT b from BloodBagType b " +
-            "where b.bloodBagType=:bloodBagType AND isDeleted=:isDeleted", BloodBagType.class);
-    query.setParameter("bloodBagType", checkBloodBagType);
-    query.setParameter("isDeleted", false);
-    return query.getSingleResult();
+  public BloodBagType findBloodBagTypeByName(String bloodBagType){
+	String queryString = "SELECT b FROM BloodBagType b WHERE b.bloodBagType = :bloodBagTypeName";
+	TypedQuery<BloodBagType> query = em.createQuery(queryString, BloodBagType.class);
+	query.setParameter("bloodBagTypeName", bloodBagType);
+	BloodBagType result = null;
+      try{
+    	  result = query.getSingleResult();
+      }catch(NoResultException ex){}
+      return result;
   }
 
   public BloodBagType getBloodBagTypeById(Integer bloodBagTypeId) {
@@ -60,12 +60,20 @@ public class BloodBagTypeRepository {
     em.flush();
   }
   
-  public void saveBloodBagType(BloodBagType packType){
+  public BloodBagType saveBloodBagType(BloodBagType packType){
       em.persist(packType);
-      
+      em.flush();
+      return packType;
   }
   
   public BloodBagType updateBloodBagType(BloodBagType packType){
-      return em.merge(packType);
+	  BloodBagType existingPackType = getBloodBagTypeById(packType.getId());
+      if (existingPackType == null) {
+          return null;
+      }
+      existingPackType.copy(packType);
+      em.merge(existingPackType);
+      em.flush();
+      return existingPackType;
   }
 }

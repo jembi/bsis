@@ -974,6 +974,18 @@ public class BloodTestingRepository {
 		List<BloodTest> bloodTests = query.getResultList();
 		return bloodTests;
 	}
+	
+	/**
+	 * Retrieve a full list of the active Blood Testing Rules.
+	 *
+	 * @return List<BloodTestingRule> list of rules, should not be null although this is not guaranteed
+	 */
+	public List<BloodTestingRule> getActiveBloodTestingRules() {
+		String queryStr = "SELECT r FROM BloodTestingRule r WHERE isActive=:isActive";
+		TypedQuery<BloodTestingRule> query = em.createQuery(queryStr, BloodTestingRule.class);
+		query.setParameter("isActive", true);
+		return query.getResultList();
+	}
 
 	public User getUser(Integer id) {
 		String queryStr = "SELECT u FROM User u WHERE u.id=:id";

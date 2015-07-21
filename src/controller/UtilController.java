@@ -28,6 +28,7 @@ import model.request.Request;
 import model.user.User;
 import model.user.Role;
 import model.worksheet.Worksheet;
+import model.bloodbagtype.BloodBagType;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -51,6 +52,7 @@ import repository.UserRepository;
 import repository.RoleRepository;
 import repository.WorksheetRepository;
 import repository.GeneralConfigRepository;
+import repository.BloodBagTypeRepository;
 import security.V2VUserDetails;
 import utils.DonorUtils;
 
@@ -102,6 +104,9 @@ public class UtilController {
 
   @Autowired
   private GeneralConfigRepository generalConfigRepository;
+  
+  @Autowired
+  private BloodBagTypeRepository bloodBagTypeRepository;
   
   public Map<String, Map<String, Object>> getFormFieldsForForm(String formName) {
     List<FormField> formFields = formFieldRepository.getFormFields(formName);
@@ -442,6 +447,16 @@ public class UtilController {
       return false;
     GeneralConfig existingConfig = generalConfigRepository.getGeneralConfigByName(configName);
     if (existingConfig != null && !existingConfig.getId().equals(config.getId()))
+      return true;
+    return false;
+  }
+  
+  public boolean isDuplicatePackTypeName(BloodBagType packType) {
+    String packTypeName = packType.getBloodBagType();
+    if (StringUtils.isBlank(packTypeName))
+      return false;
+    BloodBagType existingPackType = bloodBagTypeRepository.findBloodBagTypeByName(packTypeName);
+    if (existingPackType != null && !existingPackType.getId().equals(packType.getId()))
       return true;
     return false;
   }

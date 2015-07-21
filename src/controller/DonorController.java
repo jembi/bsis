@@ -1,8 +1,5 @@
 package controller;
 
-import backingform.DonorBackingForm;
-import backingform.validator.DonorBackingFormValidator;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -33,12 +30,14 @@ import org.springframework.web.bind.annotation.RestController;
 import repository.ContactMethodTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
+import utils.CustomDateFormatter;
 import utils.PermissionConstants;
+import viewmodel.DonationViewModel;
 import viewmodel.DonorDeferralViewModel;
 import viewmodel.DonorSummaryViewModel;
 import viewmodel.DonorViewModel;
-import viewmodel.DonationViewModel;
-import utils.CustomDateFormatter;
+import backingform.DonorBackingForm;
+import backingform.validator.DonorBackingFormValidator;
 
 @RestController
 @RequestMapping("donors")
@@ -346,7 +345,7 @@ public class DonorController {
   private int getNumberOfDonations(List<Donation> donations){
       int count = 0;
       for(Donation donation :donations){
-          if(donation.getBloodBagType().isCountAsDonation() == true)
+          if(donation.getBloodBagType().getCountAsDonation() == true)
               count = count +1;
       }
       return count;

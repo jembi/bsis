@@ -1,333 +1,360 @@
 package repository.bloodtesting;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.bloodtesting.rules.DonationField;
+import model.donation.Donation;
+import model.donor.Donor;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import viewmodel.BloodTestResultViewModel;
-import model.donation.Donation;
-import model.donor.Donor;
 import viewmodel.BloodTestingRuleResult;
-import repository.bloodtesting.BloodTypingMatchStatus;
 
 @Repository
 @Transactional
 public class BloodTestingRuleEngine {
-
-  @PersistenceContext
-  private EntityManager em;
-
-  @Autowired
-  private BloodTestingRepository bloodTestingRepository;
-  
-  /**
-   * Apply blood typing rules to blood typing tests (combination of what is present in the database and
-   * those passed as parameter.
-   * @param donation Blood Typing results for which donation
-   * @param bloodTestResults map of blood typing test id to result. Only character allowed in the result.
-   *                               multiple characters should be mapped to negative/positive (TODO)
-   *                               Assume validation of results already done.
-   * @return Result of applying the rules. The following values should be present in the map
-   *         bloodAbo (what changes should be made to blood abo after applying these rules),\
-   *         bloodRh (what changes should be made to blood rh),
-   *         extra (extra information that should be added to the blood type like weak A),
-   *         pendingTests (comma separated list of blood typing tests that must be done to
-   *                       determine the blood type),
-   *         testResults (map of blood typing test id to blood typing test either stored or
-   *                      those passed to this function or those already stored in the database),
-   *         bloodTypingStatus (enum BloodTypingStatus indicates if complete typing information is available),
-   *         storedTestResults (what blood typing results are actually stored in the database,
-   *                            a subset of testResults)
-   */
-  public BloodTestingRuleResult applyBloodTests(Donation donation, Map<Long, String> bloodTestResults) {
-
-    String queryStr = "SELECT r FROM BloodTestingRule r WHERE isActive=:isActive";
-    TypedQuery<BloodTestingRule> query = em.createQuery(queryStr, BloodTestingRule.class);
-
-    query.setParameter("isActive", true);
-    List<BloodTestingRule> rules = query.getResultList();
-
-    Map<String, String> storedTestResults = new TreeMap<String, String>();
-
-    Map<Integer, BloodTestResult> recentTestResults = 
-        bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
-    for (Integer testId : recentTestResults.keySet()) {
-      BloodTestResult testResult = recentTestResults.get(testId); 
-      storedTestResults.put(testId.toString(), testResult.getResult());
-    }
-
-    List<BloodTest> basicTTITests = bloodTestingRepository.getBasicTTITests();
-    Set<Integer> basicTTITestsNotAdded = new HashSet<Integer>();
-
-    for (BloodTest bt : basicTTITests) {
-      basicTTITestsNotAdded.add(bt.getId());
-    }
-    
-    Map<String, String> availableTestResults = new TreeMap<String, String>();
-    availableTestResults.putAll(storedTestResults);
-    for (String storedTestId: storedTestResults.keySet()) {
-      basicTTITestsNotAdded.remove(new Integer(storedTestId.toString()));
-    }
-    for (Long extraTestId : bloodTestResults.keySet()) {
-      // for rule comparison we are overwriting existing test results with new test results
-      availableTestResults.put(extraTestId.toString(), bloodTestResults.get(extraTestId));
-      // this will check if all basic tti tests are available
-      basicTTITestsNotAdded.remove(new Integer(extraTestId.toString()));
-    }
-
-    //System.out.println("available test results:" + availableTestResults);
-    //System.out.println("basic TTI Tests not added:" + basicTTITestsNotAdded);
-
-    Set<String> bloodAboChanges = new HashSet<String>();
-    Set<String> bloodRhChanges = new HashSet<String>();
-    Set<String> ttiStatusChanges = new HashSet<String>();
-    Set<String> extraInformation = new HashSet<String>();
-    List<String> pendingAboTestsIds = new ArrayList<String>();
-    List<String> pendingRhTestsIds = new ArrayList<String>();
-    List<String> pendingTtiTestsIds = new ArrayList<String>();
-
-    boolean aboUninterpretable = false;
-    boolean rhUninterpretable = false;
-    @SuppressWarnings("unused")
-    boolean ttiUninterpretable = false;
-
-    for (BloodTestingRule rule : rules) {
-
-      List<String> pattern = Arrays.asList(rule.getPattern().split(","));
-      boolean patternMatch = true;
-      int indexInPattern = 0;
-
-      List<String> missingTestIdsForRule = new ArrayList<String>();
-      List<String> testIds = Arrays.asList(rule.getBloodTestsIds().split(","));
-
-      boolean atLeastOneResultFoundForPattern = false;
-      for (String testId : testIds) {
-        String actualResult = availableTestResults.get(testId);
-        if (actualResult == null) {
-          missingTestIdsForRule.add(testId);
-          patternMatch = false;
-          continue;
-        }
-        atLeastOneResultFoundForPattern = true;
-        String expectedResult = pattern.get(indexInPattern);
-        if (!expectedResult.equals(actualResult)) {
-          patternMatch = false;
-        }
-        indexInPattern = indexInPattern+1;
-      }
-
-//      System.out.println();
-      if (patternMatch) {
-        System.out.println("Pattern matched for rule.");
-//        System.out.println("test ids: " + rule.getBloodTypingTestIds() + ", " +
-//                           "pattern: " + rule.getPattern() + ", " +
-//                           "input pattern: " + inputPattern);
-//        System.out.println("extra tests to be done: " + rule.getExtraTestsIds());
-//        System.out.println("Changes to result: " +
-//                            rule.getPart() + ", " + rule.getNewInformation() + ", " +
-//                            rule.getExtraInformation() + ", " + rule.getMarkSampleAsUnsafe());
-//
-        DonationField donationFieldChanged = rule.getDonationFieldChanged();
-        switch (donationFieldChanged) {
-          case BLOODABO:
-            bloodAboChanges.add(rule.getNewInformation());
-            break;
-          case BLOODRH:
-            bloodRhChanges.add(rule.getNewInformation());
-            break;
-          case TTISTATUS:
-            ttiStatusChanges.add(rule.getNewInformation());
-            break;
-          case EXTRA:
-            extraInformation.add(rule.getNewInformation());
-            break;
-        }
-
-        if (StringUtils.isNotBlank(rule.getExtraInformation())) 
-          extraInformation.add(rule.getExtraInformation());
-
-        // find extra tests for ABO
-        if (StringUtils.isNotBlank(rule.getPendingTestsIds())) {
-          for (String extraTestId : rule.getPendingTestsIds().split(",")) {
-            if (!availableTestResults.containsKey(extraTestId)) {
-              switch (rule.getSubCategory()) {
-                case BLOODABO: pendingAboTestsIds.add(extraTestId);
-                               break;
-                case BLOODRH:  pendingRhTestsIds.add(extraTestId);
-                               break;
-                case TTI:      pendingTtiTestsIds.add(extraTestId);
-                               break;
-              }
-            }
-          }
-        }
-
-      } else {
-        // pattern did not match
-        DonationField donationFieldChanged = rule.getDonationFieldChanged();
-        switch (donationFieldChanged) {
-        case BLOODABO:  if (atLeastOneResultFoundForPattern)
-                          aboUninterpretable = true;
-                      break;
-        case BLOODRH:   if (atLeastOneResultFoundForPattern)
-                          rhUninterpretable = true;
-                      break;
-        case TTISTATUS: if (atLeastOneResultFoundForPattern)
-                          ttiUninterpretable = true;
-                      break;
-        }
-      }
-    }
-
-    String bloodAbo = "";
-    String bloodRh = "";
-
-    BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
-    ruleResult.setDonation(donation);
-    BloodTypingStatus bloodTypingStatus = BloodTypingStatus.NOT_DONE;
-
-    int numBloodTypingTests = 0;
-    for (BloodTest bt : bloodTestingRepository.getBloodTypingTests()) {
-      if (availableTestResults.containsKey((bt.getId().toString())))
-          numBloodTypingTests++;
-    }
-
-    // if even one blood typing test is done then we cannot say
-    // blood typing status is NOT_DONE
-    if (numBloodTypingTests > 0)
-      bloodTypingStatus = BloodTypingStatus.NO_MATCH;
-
-    if (bloodAboChanges.size() > 1 || bloodRhChanges.size() > 1) {
-      bloodTypingStatus = BloodTypingStatus.AMBIGUOUS;
-    }
-    else {
-      if (bloodAboChanges.size() == 1)
-        bloodAbo = bloodAboChanges.iterator().next();
-      if (bloodRhChanges.size() == 1)
-        bloodRh = bloodRhChanges.iterator().next();
-    }
-
-    if (bloodAboChanges.isEmpty()) {
-      if (pendingAboTestsIds.size() > 0) {
-        bloodTypingStatus = BloodTypingStatus.PENDING_TESTS;
-      }
-      else if (aboUninterpretable){
-        // there was an attempt to match a rule for blood abo
-        ruleResult.setAboUninterpretable(true);
-      }
-    }
-
-    if (bloodRhChanges.isEmpty()) {
-      if (pendingRhTestsIds.size() > 0) {
-        bloodTypingStatus = BloodTypingStatus.PENDING_TESTS;
-      }
-      else if (rhUninterpretable){
-        // there was an attempt to match a rule for blood abo
-        ruleResult.setRhUninterpretable(true);
-      }
-    }
-
-    if (bloodAboChanges.size() == 1 && bloodRhChanges.size() == 1) {
-      bloodTypingStatus = BloodTypingStatus.COMPLETE;
-    }
-    
-    // Check ABO/Rh results against donor's ABO/Rh
-    // If donor's ABO/Rh empty - considered as First Time Donor 
-    //		- required to enter confirmatory results
-    // If donation ABO/Rh do not match donor's ABO/Rh, required to enter confirmatory results 
-    //		- these results overwrite donor's existing values
-    Donor donor = donation.getDonor();
-    if(donation.getBloodAbo() != null && donation.getBloodRh() != null){
-    	
-    	// first time donor - required to enter in confirmatory result
-    	if(donor.getBloodAbo().equals("") || donor.getBloodRh().equals("")){
-    		ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_MATCH);
-    	}
-    	
-    	// ambiguous result - required to enter in confirmatory result
-    	else if((!donor.getBloodAbo().equals("")  && !donor.getBloodAbo().equals(donation.getBloodAbo()))
-    			|| (!donor.getBloodRh().equals("")  && !donor.getBloodRh().equals(donation.getBloodRh()))){
-    		ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS);
-    	}
-    	
-    	// blood Abo/Rh matches
-    	else if((!donor.getBloodAbo().equals("")  && donor.getBloodAbo().equals(donation.getBloodAbo()))
-    			&& (!donor.getBloodRh().equals("")  && donor.getBloodRh().equals(donation.getBloodRh()))){
-    		ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
-    	}
-    }
-    else{
-    	ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
-    }
-    
-    donation.setBloodTypingMatchStatus(ruleResult.getBloodTypingMatchStatus());
-    
-
-    System.out.println(ttiStatusChanges);
-    TTIStatus ttiStatus = TTIStatus.NOT_DONE;
-    if (!ttiStatusChanges.isEmpty()) {
-      if (ttiStatusChanges.contains(TTIStatus.TTI_UNSAFE.toString())) {
-        ttiStatus = TTIStatus.TTI_UNSAFE;
-      }
-      else if (ttiStatusChanges.size() == 1 &&
-               ttiStatusChanges.contains(TTIStatus.TTI_SAFE.toString())) {
-        ttiStatus = TTIStatus.TTI_SAFE;
-      }
-    }
-
-    if (ttiStatus.equals(TTIStatus.TTI_SAFE) && !basicTTITestsNotAdded.isEmpty()) {
-      // the test has been marked as safe while some basic TTI Tests were not done
-      ttiStatus = TTIStatus.NOT_DONE;
-    }
-
-    List<String> pendingBloodTypingTestsIds = new ArrayList<String>();
-    pendingBloodTypingTestsIds.addAll(pendingAboTestsIds);
-    pendingBloodTypingTestsIds.addAll(pendingRhTestsIds);
-    ruleResult.setAllBloodAboChanges(bloodAboChanges);
-    ruleResult.setAllBloodRhChanges(bloodRhChanges);
-    ruleResult.setBloodAbo(bloodAbo);
-    ruleResult.setBloodRh(bloodRh);
-    ruleResult.setExtraInformation(extraInformation);
-    ruleResult.setPendingBloodTypingTestsIds(pendingBloodTypingTestsIds);
-    ruleResult.setPendingTTITestsIds(pendingTtiTestsIds);
-    ruleResult.setAvailableTestResults(availableTestResults);
-    ruleResult.setBloodTypingStatus(bloodTypingStatus);
-    ruleResult.setStoredTestResults(storedTestResults);
-
-    Map<String, BloodTestResultViewModel> recentTestResultsWithStringKey = new HashMap<String, BloodTestResultViewModel>();
-
-    for (Integer testId : recentTestResults.keySet()) {
-      recentTestResultsWithStringKey.put(testId.toString(), new BloodTestResultViewModel
-        (recentTestResults.get(testId)));
-    }
-    
-    ruleResult.setRecentTestResults(recentTestResultsWithStringKey);
-
-    ruleResult.setTTIStatusChanges(ttiStatusChanges);
-    ruleResult.setTTIStatus(ttiStatus);
-    ruleResult.setTtiUninterpretable(false);
-
-    return ruleResult;
-  }
-
+	
+	private static final Logger LOGGER = Logger.getLogger(BloodTestingRuleEngine.class);
+	
+	@Autowired
+	private BloodTestingRepository bloodTestingRepository;
+	
+	/**
+	 * Apply blood typing rules to blood typing tests (combination of what is present in the
+	 * database and those passed as parameter.
+	 * 
+	 * @param donation Blood Typing results for which collection
+	 * @param bloodTestResults map of blood typing test id to result. Only character allowed in the
+	 *            result. multiple characters should be mapped to negative/positive (TODO) Assume
+	 *            validation of results already done.
+	 * @return Result of applying the rules. The following values should be present in the map
+	 *         bloodAbo (what changes should be made to blood abo after applying these rules),\
+	 *         bloodRh (what changes should be made to blood rh), extra (extra information that
+	 *         should be added to the blood type like weak A), pendingTests (comma separated list of
+	 *         blood typing tests that must be done to determine the blood type), testResults (map
+	 *         of blood typing test id to blood typing test either stored or those passed to this
+	 *         function or those already stored in the database), bloodTypingStatus (enum
+	 *         BloodTypingStatus indicates if complete typing information is available),
+	 *         storedTestResults (what blood typing results are actually stored in the database, a
+	 *         subset of testResults)
+	 */
+	public BloodTestingRuleResult applyBloodTests(Donation donation, Map<Long, String> bloodTestResults) {
+		
+		List<BloodTestingRule> rules = bloodTestingRepository.getActiveBloodTestingRules();
+		
+		// Get the latest test results 
+		Map<String, String> storedTestResults = new TreeMap<String, String>();
+		Map<String, String> availableTestResults = new TreeMap<String, String>();
+		Map<Integer, BloodTestResult> recentTestResults = bloodTestingRepository
+		        .getRecentTestResultsForDonation(donation.getId());
+		for (Integer testId : recentTestResults.keySet()) {
+			BloodTestResult testResult = recentTestResults.get(testId);
+			String testKey = testId.toString();
+			String testValue = testResult.getResult();
+			storedTestResults.put(testKey, testValue);
+			availableTestResults.put(testKey, testValue);
+		}
+		
+		// Overwrite the existing blood  and (where necessary) with the new bloodTestResults provided (as a parameter)
+		for (Long testId : bloodTestResults.keySet()) {
+			String testResult = bloodTestResults.get(testId);
+			availableTestResults.put(testId.toString(), testResult);
+		}
+		
+		BloodTestingRuleResultSet resultSet = new BloodTestingRuleResultSet(donation, storedTestResults,
+		        availableTestResults, recentTestResults);
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("BloodTestingRuleEngine running for donation with id '" + donation.getId()
+			        + "' and donor with number '" + donation.getDonorNumber() + "' using available test results = "
+			        + availableTestResults);
+		}
+		
+		// Go through each rule and see if the pattern matches the available result and tally the TTI, ABO, RH results
+		for (BloodTestingRule rule : rules) {
+			processRule(rule, resultSet, availableTestResults);
+		}
+		
+		// Determine how many blood typing tests were done
+		List<BloodTest> bloodTypingTests = bloodTestingRepository.getBloodTypingTests();
+		setBloodTypingTestsDone(resultSet, bloodTypingTests, availableTestResults);
+		
+		// Determine the blood status based on ABO/Rh tests
+		setBloodMatchStatus(resultSet);
+		
+		// Check ABO/Rh results against donor's ABO/Rh
+		setBloodTypingMatchStatus(resultSet, donation);
+		
+		// Determine if there are missing required basic blood TTI tests
+		List<BloodTest> basicTTITests = bloodTestingRepository.getBasicTTITests();
+		setBasicTtiTestsNotDone(resultSet, basicTTITests, availableTestResults);
+		
+		// Determine the TTI status
+		setTTIStatus(resultSet);
+		
+		return resultSet.buildBloodTestingRuleResult();
+	}
+	
+	/**
+	 * Process the specified BloodTestingRule and store the results in the blood testing result set.
+	 * 
+	 * @param rule BloodTestingRule defining what is being tested
+	 * @param resultSet BloodTestingRuleResultSet that contains the processed test results.
+	 * @param availableTestResults Map<String, String> the currently available (and recent) test
+	 *            results
+	 */
+	private void processRule(BloodTestingRule rule, BloodTestingRuleResultSet resultSet,
+	                         Map<String, String> availableTestResults) {
+		boolean patternMatch = true;
+		boolean atLeastOneResultFoundForPattern = false;
+		List<String> pattern = Arrays.asList(rule.getPattern().split(","));
+		List<String> testIds = Arrays.asList(rule.getBloodTestsIds().split(","));
+		for (int i = 0, n = testIds.size(); i < n; i++) {
+			String testId = testIds.get(i);
+			String expectedResult = pattern.get(i);
+			String actualResult = availableTestResults.get(testId);
+			if (actualResult == null) {
+				patternMatch = false;
+				continue;
+			}
+			if (expectedResult != null) {
+				atLeastOneResultFoundForPattern = true;
+				if (!expectedResult.equals(actualResult)) {
+					patternMatch = false;
+				}
+			}
+		}
+		
+		if (patternMatch) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Pattern matched for rule with id '" + rule.getId() + "' and subcategory '"
+				        + rule.getSubCategory() + "'.");
+			}
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("Test ids: " + rule.getBloodTestsIds());
+				LOGGER.trace("pattern: " + rule.getPattern());
+				LOGGER.trace("Collection field changed: " + rule.getDonationFieldChanged());
+				LOGGER.trace("Pending test ids: " + rule.getPendingTestsIds());
+				LOGGER.trace("Changes to result: " + rule.getNewInformation() + ", " + rule.getExtraInformation());
+			}
+			DonationField collectionFieldChanged = rule.getDonationFieldChanged();
+			switch (collectionFieldChanged) {
+				case BLOODABO:
+					resultSet.addBloodAboChanges(rule.getNewInformation());
+					break;
+				case BLOODRH:
+					resultSet.addBloodRhChanges(rule.getNewInformation());
+					break;
+				case TTISTATUS:
+					resultSet.addTtiStatusChanges(rule.getNewInformation());
+					break;
+				case EXTRA:
+					resultSet.addExtraInformation(rule.getNewInformation());
+					break;
+				default:
+					LOGGER.warn("Unknown collection field: " + collectionFieldChanged);
+					break;
+			}
+			
+			if (StringUtils.isNotBlank(rule.getExtraInformation()))
+				resultSet.addExtraInformation(rule.getExtraInformation());
+			
+			// find extra tests for ABO
+			if (StringUtils.isNotBlank(rule.getPendingTestsIds())) {
+				for (String extraTestId : rule.getPendingTestsIds().split(",")) {
+					if (!availableTestResults.containsKey(extraTestId)) {
+						switch (rule.getSubCategory()) {
+							case BLOODABO:
+								resultSet.addPendingAboTestsIds(extraTestId);
+								break;
+							case BLOODRH:
+								resultSet.addPendingRhTestsIds(extraTestId);
+								break;
+							case TTI:
+								resultSet.addPendingTtiTestsIds(extraTestId);
+								break;
+							default:
+								LOGGER.warn("Unknown rule subcategory: " + rule.getSubCategory());
+								break;
+						}
+					}
+				}
+			}
+		} else {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Pattern NOT matched for rule with id '" + rule.getId()
+				        + "' and at least one result was found for pattern: " + atLeastOneResultFoundForPattern);
+			}
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("Test ids: " + rule.getBloodTestsIds());
+				LOGGER.trace("pattern: " + rule.getPattern());
+				LOGGER.trace("Collection field changed: " + rule.getDonationFieldChanged());
+				LOGGER.trace("Changes to result: " + rule.getNewInformation() + ", " + rule.getExtraInformation());
+			}
+			DonationField collectionFieldChanged = rule.getDonationFieldChanged();
+			switch (collectionFieldChanged) {
+				case BLOODABO:
+					if (atLeastOneResultFoundForPattern)
+						resultSet.setAboUninterpretable(true);
+					break;
+				case BLOODRH:
+					if (atLeastOneResultFoundForPattern)
+						resultSet.setRhUninterpretable(true);
+					break;
+				case TTISTATUS:
+					if (atLeastOneResultFoundForPattern)
+						resultSet.setTtiUninterpretable(true);
+					break;
+				default:
+					LOGGER.warn("Unknown collection field: " + collectionFieldChanged);
+					break;
+			}
+		}
+	}
+	
+	/**
+	 * Determines which TTI tests were not done by comparing the available test results to the basic
+	 * TTI tests.
+	 * 
+	 * @param resultSet BloodTestingRuleResultSet that contains the processed test results.
+	 * @param basicTTITests List<BloodTest> the required TTI tests
+	 * @param availableTestResults Map<String, String> the currently available (and recent) test
+	 *            results
+	 */
+	private void setBasicTtiTestsNotDone(BloodTestingRuleResultSet resultSet, List<BloodTest> basicTTITests,
+	                                     Map<String, String> availableTestResults) {
+		Set<Integer> basicTtiTestsNotDone = new HashSet<Integer>();
+		for (BloodTest bt : basicTTITests) {
+			basicTtiTestsNotDone.add(bt.getId());
+		}
+		for (String testId : availableTestResults.keySet()) {
+			System.out.println("available test=" + testId + " result=" + availableTestResults.get(testId));
+			basicTtiTestsNotDone.remove(Integer.parseInt(testId));
+		}
+		System.out.println("basicTtiTestsNotDone=" + basicTtiTestsNotDone);
+		resultSet.setBasicTtiTestsNotDone(basicTtiTestsNotDone);
+	}
+	
+	/**
+	 * Counts the number of blood typing tests done by comparing all the blood typing tests to the
+	 * available test results.
+	 * 
+	 * @param resultSet BloodTestingRuleResultSet that contains the processed test results.
+	 * @param bloodTypingTests List<BloodTest> all the blood typing tests
+	 * @param availableTestResults Map<String, String> the currently available (and recent) test
+	 *            results
+	 */
+	private void setBloodTypingTestsDone(BloodTestingRuleResultSet resultSet, List<BloodTest> bloodTypingTests,
+	                                     Map<String, String> availableTestResults) {
+		int numBloodTypingTests = 0;
+		for (BloodTest bt : bloodTypingTests) {
+			if (availableTestResults.containsKey((bt.getId().toString())))
+				numBloodTypingTests++;
+		}
+		resultSet.setNumBloodTypingTests(numBloodTypingTests);
+	}
+	
+	/**
+	 * Determine the blood status based on ABO/Rh tests (and pending tests) results. Saves the
+	 * BloodTypingStatus result in the resultSet.
+	 * 
+	 * @param resultSet BloodTestingRuleResultSet that contains the processed test results.
+	 */
+	private void setBloodMatchStatus(BloodTestingRuleResultSet resultSet) {
+		// Determine the blood status based on ABO/Rh tests results
+		BloodTypingStatus bloodTypingStatus = BloodTypingStatus.NOT_DONE;
+		
+		if (resultSet.getNumBloodTypingTests() > 0) {
+			bloodTypingStatus = BloodTypingStatus.NO_MATCH;
+		}
+		int numAboChanges = resultSet.getBloodAboChanges().size();
+		int numRhChanges = resultSet.getBloodRhChanges().size();
+		if (numAboChanges > 1 || numRhChanges > 1) {
+			bloodTypingStatus = BloodTypingStatus.AMBIGUOUS;
+		}
+		int numPendingAboTests = resultSet.getPendingAboTestsIds().size();
+		if (numAboChanges == 0 && numPendingAboTests > 0) {
+			bloodTypingStatus = BloodTypingStatus.PENDING_TESTS;
+		}
+		int numPendingRhTests = resultSet.getPendingRhTestsIds().size();
+		if (numRhChanges == 0 && numPendingRhTests > 0) {
+			bloodTypingStatus = BloodTypingStatus.PENDING_TESTS;
+		}
+		if (numAboChanges == 1 && numRhChanges == 1) {
+			bloodTypingStatus = BloodTypingStatus.COMPLETE;
+		}
+		
+		resultSet.setBloodTypingStatus(bloodTypingStatus);
+	}
+	
+	/**
+	 * Check ABO/Rh results against donor's ABO/Rh and saves the BloodTypingMatchStatus result in
+	 * the resultSet
+	 * 
+	 * @param resultSet BloodTestingRuleResultSet that contains the processed test results.
+	 * @param donation Donation containing the information about the Donor.
+	 */
+	private void setBloodTypingMatchStatus(BloodTestingRuleResultSet resultSet, Donation donation) {
+		BloodTypingMatchStatus bloodTypingMatchStatus = BloodTypingMatchStatus.NOT_DONE;
+		
+		Donor donor = donation.getDonor();
+		if (donation.getBloodAbo() != null && donation.getBloodRh() != null) {
+			// first time donor - required to enter in confirmatory result
+			if (donor.getBloodAbo().equals("") || donor.getBloodRh().equals("")) {
+				bloodTypingMatchStatus = BloodTypingMatchStatus.NO_MATCH;
+			}
+			// ambiguous result - required to enter in confirmatory result
+			else if ((!donor.getBloodAbo().equals("") && !donor.getBloodAbo().equals(donation.getBloodAbo()))
+			        || (!donor.getBloodRh().equals("") && !donor.getBloodRh().equals(donation.getBloodRh()))) {
+				bloodTypingMatchStatus = BloodTypingMatchStatus.AMBIGUOUS;
+			}
+			// blood Abo/Rh matches
+			else if ((!donor.getBloodAbo().equals("") && donor.getBloodAbo().equals(donation.getBloodAbo()))
+			        && (!donor.getBloodRh().equals("") && donor.getBloodRh().equals(donation.getBloodRh()))) {
+				bloodTypingMatchStatus = BloodTypingMatchStatus.MATCH;
+			}
+		}
+		
+		resultSet.setBloodTypingMatchStatus(bloodTypingMatchStatus);
+		donation.setBloodTypingMatchStatus(bloodTypingMatchStatus);
+	}
+	
+	/**
+	 * Check the TTI status and determine if it is safe or not. Result will be stored in the
+	 * resultSet.
+	 * 
+	 * @param resultSet BloodTestingRuleResultSet that contains the processed test results.
+	 */
+	private void setTTIStatus(BloodTestingRuleResultSet resultSet) {
+		TTIStatus ttiStatus = TTIStatus.NOT_DONE;
+		
+		Set<String> ttiStatusChanges = resultSet.getTtiStatusChanges();
+		if (!ttiStatusChanges.isEmpty()) {
+			if (ttiStatusChanges.contains(TTIStatus.TTI_UNSAFE.toString())) {
+				ttiStatus = TTIStatus.TTI_UNSAFE;
+			} else if (ttiStatusChanges.size() == 1 && ttiStatusChanges.contains(TTIStatus.TTI_SAFE.toString())) {
+				ttiStatus = TTIStatus.TTI_SAFE;
+			}
+		}
+		
+		Set<Integer> basicTtiTestsNotDone = resultSet.getBasicTtiTestsNotDone();
+		if (ttiStatus.equals(TTIStatus.TTI_SAFE) && !basicTtiTestsNotDone.isEmpty()) {
+			// the test has been marked as safe while some basic TTI Tests were not done
+			ttiStatus = TTIStatus.NOT_DONE;
+		}
+		
+		resultSet.setTtiStatus(ttiStatus);
+	}
 }

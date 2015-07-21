@@ -334,7 +334,7 @@ public class DonationRepository {
     em.refresh(donation);
    
     //Create initial component only if the countAsDonation is true
-    if( donation.getBloodBagType().isCountAsDonation() == true)
+    if( donation.getBloodBagType().getCountAsDonation() == true)
         createInitialComponent(donation);
   
     return donation;
