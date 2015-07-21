@@ -21,6 +21,10 @@ public class DeferralReasonBackingForm {
         return deferralReason;
     }
 
+    public String getReason(){
+        return deferralReason.getReason();
+    }
+
     public void setDeferralReason(DeferralReason deferralReason) {
         this.deferralReason = deferralReason;
     }
