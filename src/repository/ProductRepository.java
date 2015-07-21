@@ -172,7 +172,7 @@ public class ProductRepository {
 	    	queryStr += "AND p.status IN :status ";
 	    }	
 	    if(!StringUtils.isBlank(donationIdentificationNumber)){
-	    	queryStr += "AND p.donation.donationIdentificationmber = :donationIdentificationNumber ";
+	    	queryStr += "AND p.donation.donationIdentificationNumber = :donationIdentificationNumber ";
 	    }
 	    if(productTypes != null && !productTypes.isEmpty()){
 	    	queryStr += "AND p.productType.id IN (:productTypeIds) ";
