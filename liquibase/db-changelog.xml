@@ -278,19 +278,6 @@
 			<column name="bulkTransfer" type="TINYINT(1)"/>
 		</addColumn>
 	</changeSet>
-	
-	<!-- Update FormField table to rename Collection info to Donation -->
-	<!-- Updated (timler): for #293 (refactoring) -->
-	<changeSet id="20140721-0839" author="danfuterman">
-		<update tableName="FormField">
-			<column name="defaultDisplayName" value="Donation Site" />
-			<where>field = "collectionSite"</where>
-		</update>
-		<update tableName="FormField">
-			<column name="defaultDisplayName" value="Donation Centre" />
-			<where>field = "collectionCenter"</where>
-		</update>
-	</changeSet>
 
 	<!-- For issue 104 [Add Lot Release Functionality] -->
 	<changeSet id="20131111-1726" author="gtldevang">
@@ -1027,20 +1014,6 @@
 
 	<!-- #246 Adapt Donations to use single Location field -->
 	<!-- Updated (timler): for #293 (refactoring) -->
-	<changeSet id="20150714-1157" author="srikanthmalyala">
-		<preConditions onFail="MARK_RAN">
-		    <columnExists tableName="Donation" columnName="collectionCenter_id" />
-		</preConditions>
-		<dropForeignKeyConstraint baseTableName="Donation" constraintName="FKF0658A33B29562D0" />
-		<dropForeignKeyConstraint baseTableName="Donation" constraintName="FKF0658A33AED1731E" />
-		<dropColumn columnName="collectionCenter_id" tableName="Donation" />
-		<dropColumn columnName="collectionCenter_id" tableName="Donation_AUD" />
-		<dropColumn columnName="collectionSite_id" tableName="Donation" />
-		<dropColumn columnName="collectionSite_id" tableName="Donation_AUD" />
-	</changeSet>
-
-	<!-- #246 Adapt Donations to use single Location field -->
-	<!-- Updated (timler): for #293 (refactoring) -->
 	<changeSet id="20150714-1201" author="srikanthmalyala">
 		<preConditions onFail="MARK_RAN">
 			<not><columnExists tableName="Donation" columnName="donorPanel_id" /></not>
@@ -1053,28 +1026,6 @@
 		<addColumn tableName="Donation_AUD">
 			<column name="donorPanel_id" type="bigint"></column>
 		</addColumn>
-	</changeSet>
-
-	<!-- #246 Adapt Donations to use single Location field -->
-	<!-- Updated (timler): for #293 (refactoring) -->
-	<changeSet id="20150716-1046" author="srikanthmalyala">
-	    <preConditions onFail="MARK_RAN">
-		    <columnExists tableName="DonationBatch" columnName="collectionCenter_id"/>
-		</preConditions>
-		<dropForeignKeyConstraint baseTableName="DonationBatch" constraintName="FK227631CB29562D0"/>
-		<dropColumn columnName="collectionCenter_id" tableName="DonationBatch"/>
-		<dropColumn columnName="collectionCenter_id" tableName="DonationBatch_AUD"/>
-	</changeSet>
-	
-	<!-- #246 Adapt Donations to use single Location field -->
-	<!-- Updated (timler): for #293 (refactoring) -->
-	<changeSet id="20150716-1048" author="srikanthmalyala">
-	    <preConditions onFail="MARK_RAN">
-		    <columnExists tableName="DonationBatch" columnName="collectionSite_id"/>
-		</preConditions>
-		<dropForeignKeyConstraint baseTableName="DonationBatch" constraintName="FK227631CAED1731E"/>
-		<dropColumn columnName="collectionSite_id" tableName="DonationBatch"/>
-		<dropColumn columnName="collectionSite_id" tableName="DonationBatch_AUD"/>
 	</changeSet>
 
 	<!-- #246 Adapt Donations to use single Location field -->
@@ -1111,14 +1062,6 @@
 		<addColumn tableName="Donation_AUD">
 			<column name="bleedEndTime" type="DATETIME"></column>
 		</addColumn>
-	</changeSet>
-	
-	<!-- Remove isCollectionCenter & isCollectionSite fields from Location -->
-	<changeSet id="20141211-1520" author="danfuterman">
-		<dropColumn columnName="isCollectionCenter" tableName="Location"/>
-		<dropColumn columnName="isCollectionCenter" tableName="Location_AUD"/>
-		<dropColumn columnName="isCollectionSite" tableName="Location"/>
-		<dropColumn columnName="isCollectionSite" tableName="Location_AUD"/>
 	</changeSet>
 	
 		<!-- #234 Associate Pack Type with Initial Component Type in Donation -->

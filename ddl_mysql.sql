@@ -134,8 +134,6 @@
         ttiStatus varchar(20),
         bloodBagType_id SMALLINT,
         donationBatch_id SMALLINT,
-        collectionCenter_id bigint,
-        collectionSite_id bigint,
         donationCreatedBy_id SMALLINT,
         donationType_id SMALLINT,
         donor_id bigint,
@@ -164,8 +162,6 @@
         ttiStatus varchar(20),
         bloodBagType_id SMALLINT,
         donationBatch_id SMALLINT,
-        collectionCenter_id bigint,
-        collectionSite_id bigint,
         donationCreatedBy_id SMALLINT,
         donationType_id SMALLINT,
         donor_id bigint,
@@ -181,8 +177,6 @@
         createdDate TIMESTAMP,
         lastUpdated TIMESTAMP,
         notes longtext,
-        collectionCenter_id bigint,
-        collectionSite_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
         primary key (id)
@@ -197,8 +191,6 @@
         createdDate TIMESTAMP,
         lastUpdated TIMESTAMP,
         notes longtext,
-        collectionCenter_id bigint,
-        collectionSite_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
         primary key (id, REV)
@@ -441,8 +433,6 @@
 
     create table Location (
         id bigint not null auto_increment,
-        isCollectionCenter boolean,
-        isCollectionSite boolean,
         isDeleted boolean,
         isDonorPanel boolean,
         isMobileSite boolean,
@@ -456,8 +446,6 @@
         id bigint not null,
         REV integer not null,
         REVTYPE tinyint,
-        isCollectionCenter boolean,
-        isCollectionSite boolean,
         isDeleted boolean,
         isDonorPanel boolean,
         isMobileSite boolean,
@@ -1055,18 +1043,6 @@
         references User (id);
 
     alter table Donation 
-        add index FKF0658A33AED1731E (collectionSite_id), 
-        add constraint FKF0658A33AED1731E 
-        foreign key (collectionSite_id) 
-        references Location (id);
-
-    alter table Donation 
-        add index FKF0658A33B29562D0 (collectionCenter_id), 
-        add constraint FKF0658A33B29562D0 
-        foreign key (collectionCenter_id) 
-        references Location (id);
-
-    alter table Donation 
         add index FKF0658A33E5D4FEA3 (donationBatch_id), 
         add constraint FKF0658A33E5D4FEA3 
         foreign key (donationBatch_id) 
@@ -1107,18 +1083,6 @@
         add constraint FK227631CA49787C4 
         foreign key (createdBy_id) 
         references User (id);
-
-    alter table DonationBatch 
-        add index FK227631CAED1731E (collectionSite_id), 
-        add constraint FK227631CAED1731E 
-        foreign key (collectionSite_id) 
-        references Location (id);
-
-    alter table DonationBatch 
-        add index FK227631CB29562D0 (collectionCenter_id), 
-        add constraint FK227631CB29562D0 
-        foreign key (collectionCenter_id) 
-        references Location (id);
 
     alter table DonationBatch 
         add index FK227631CD0AFB367 (lastUpdatedBy_id), 
