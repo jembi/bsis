@@ -61,13 +61,13 @@ public class CompatibilityTestBackingFormValidator implements Validator {
       form.setForRequest(null);
     }
 
-    String collectionNumber = form.getCollectionNumber();
-    if (StringUtils.isNotBlank(collectionNumber) && productRequest != null) {
+    String donationIdentificationNumber = form.getDonationIdentificationNumber();
+    if (StringUtils.isNotBlank(donationIdentificationNumber) && productRequest != null) {
       try {
-        Product testedProduct = utilController.findProduct(collectionNumber, productRequest.getProductType());
+        Product testedProduct = utilController.findProduct(donationIdentificationNumber, productRequest.getProductType());
         if (testedProduct == null)
           errors.rejectValue("compatibilityTest.testedProduct", "compatibilitytest.testedProduct.notFound",
-              "Product with this collection number and product type not found or not available");
+              "Product with this donation identification number and product type not found or not available");
         form.setTestedProduct(testedProduct);
       } catch (NoResultException ex) {
         form.setTestedProduct(null);

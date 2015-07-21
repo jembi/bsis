@@ -436,10 +436,10 @@ public class CreateDataController {
     List<Donation> donations = new ArrayList<Donation>();
 
     List<BloodBagType> bloodBagTypes = bloodBagTypeRepository.getAllBloodBagTypes();
-    List<String> collectionNumbers = sequenceNumberRepository.getBatchCollectionNumbers(numDonations);
+    List<String> donationIdentificationNumbers = sequenceNumberRepository.getBatchDonationIdentificationNumbers(numDonations);
     for (int i = 0; i < numDonations; i++) {
       DonationBackingForm donation = new DonationBackingForm();
-      donation.setCollectionNumber(collectionNumbers.get(i));    
+      donation.setDonationIdentificationNumber(donationIdentificationNumbers.get(i));    
 
       donation.setPackType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()));
 
@@ -585,9 +585,9 @@ public class CreateDataController {
   @SuppressWarnings("unchecked")
   private void addTTIResultsForDonations(List<Donation> donations) {
 
-    Map<Long, String> collectionNumberMap = new HashMap<Long, String>();
+    Map<Long, String> donationIdentificationNumberMap = new HashMap<Long, String>();
     for (Donation c : donations) {
-      collectionNumberMap.put(c.getId(), c.getCollectionNumber());
+      donationIdentificationNumberMap.put(c.getId(), c.getDonationIdentificationNumber());
     }
 
     Map<String, List<BloodTestingRule>> ttiRuleMap = new HashMap<String, List<BloodTestingRule>>();
@@ -697,7 +697,7 @@ public class CreateDataController {
 
         Map<String, String> wellData = (Map<String, String>) plate.get(rowNum.toString()).get(colNum.toString());
         wellData.put("contents", "sample");
-        wellData.put("collectionNumber", collectionNumberMap.get(donationId));
+        wellData.put("donationIdentificationNumber", donationIdentificationNumberMap.get(donationId));
         wellData.put("welltype", "1");
         wellData.put("testResult", testResultsForDonation.get(testId));
         wellData.put("machineReading", Double.toString(Math.random()));

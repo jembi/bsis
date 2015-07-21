@@ -98,13 +98,13 @@ public class DonationRepository {
   }
 
   public List<Object> findDonations(
-      String collectionNumber, List<Integer> bloodBagTypeIds, List<Long> panelIds, String donationDateFrom,
+      String donationIdentificationNumber, List<Integer> bloodBagTypeIds, List<Long> panelIds, String donationDateFrom,
       String donationDateTo, boolean includeTestedDonations, Map<String, Object> pagingParams) throws ParseException {
 
     String queryStr = "";
-    if (StringUtils.isNotBlank(collectionNumber)) {
+    if (StringUtils.isNotBlank(donationIdentificationNumber)) {
       queryStr = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE " +
-                 "c.collectionNumber = :collectionNumber AND " +
+                 "c.donationIdentificationNumber = :donationIdentificationNumber AND " +
                  "c.bloodBagType.id IN :bloodBagTypeIds AND " +
                  "c.donorPanel.id IN :donorPanelIds AND " +
                  "c.donationDate >= :donationDateFrom AND c.donationDate <= :donationDateTo AND " +
@@ -128,8 +128,8 @@ public class DonationRepository {
     query = em.createQuery(queryStr, Donation.class);
     query.setParameter("isDeleted", Boolean.FALSE);
 
-    if (StringUtils.isNotBlank(collectionNumber))
-      query.setParameter("collectionNumber", collectionNumber);
+    if (StringUtils.isNotBlank(donationIdentificationNumber))
+      query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
 
     if (!includeTestedDonations) {
       query.setParameter("bloodTypingStatus", BloodTypingStatus.NOT_DONE);
@@ -193,13 +193,13 @@ public class DonationRepository {
     em.flush();
   }
 
-  public List<Donation> findAnyDonationMatching(String collectionNumber,
+  public List<Donation> findAnyDonationMatching(String donationIdentificationNumber,
       String sampleNumber, String shippingNumber, String donationDateFrom,
       String donationDateTo, List<String> centers) {
 
     TypedQuery<Donation> query = em.createQuery(
         "SELECT c FROM Donation c JOIN c.center center WHERE "
-            + "(c.collectionNumber = :collectionNumber OR "
+            + "(c.donationIdentificationNumber = :donationIdentificationNumber OR "
             + "c.sampleNumber = :sampleNumber OR "
             + "c.shippingNumber = :shippingNumber OR "
             + "center.id IN (:centers)) AND ("
@@ -208,8 +208,8 @@ public class DonationRepository {
         Donation.class);
 
     query.setParameter("isDeleted", Boolean.FALSE);
-    String donationNo = ((collectionNumber == null) ? "" : collectionNumber);
-    query.setParameter("collectionNumber", donationNo);
+    String donationNo = ((donationIdentificationNumber == null) ? "" : donationIdentificationNumber);
+    query.setParameter("donationIdentificationNumber", donationNo);
     query.setParameter("sampleNumber", sampleNumber);
     query.setParameter("shippingNumber", shippingNumber);
 
@@ -346,7 +346,7 @@ public class DonationRepository {
       
     Product product = new Product();
     product.setIsDeleted(false);
-    product.setComponentIdentificationNumber(donation.getCollectionNumber() +"-"+productType.getProductTypeNameShort());
+    product.setComponentIdentificationNumber(donation.getDonationIdentificationNumber() +"-"+productType.getProductTypeNameShort());
     product.setDonation(donation);
     product.setStatus(ProductStatus.QUARANTINED);
     product.setCreatedDate(donation.getCreatedDate());
@@ -423,22 +423,22 @@ public class DonationRepository {
     return donations;
   }
 
-  public Donation findDonationByCollectionNumber(
-      String collectionNumber)throws NoResultException, NonUniqueResultException{
-    String queryString = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE c.collectionNumber = :collectionNumber and c.isDeleted = :isDeleted";
+  public Donation findDonationByDonationIdentificationNumber(
+      String donationIdentificationNumber)throws NoResultException, NonUniqueResultException{
+    String queryString = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE c.donationIdentificationNumber = :donationIdentificationNumber and c.isDeleted = :isDeleted";
     TypedQuery<Donation> query = em.createQuery(queryString, Donation.class);
     query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("collectionNumber", collectionNumber);
+    query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
     Donation c = null;
     c = query.getSingleResult();
     return c;
   }
 
-  public Donation findDonationByCollectionNumberIncludeDeleted(
-      String collectionNumber){
-    String queryString = "SELECT c FROM Donation c WHERE c.collectionNumber = :collectionNumber";
+  public Donation findDonationByDonationIdentificationNumberIncludeDeleted(
+      String donationIdentificationNumber){
+    String queryString = "SELECT c FROM Donation c WHERE c.donationIdentificationNumber = :donationIdentificationNumber";
     TypedQuery<Donation> query = em.createQuery(queryString, Donation.class);
-    query.setParameter("collectionNumber", collectionNumber);
+    query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
     Donation c = null;
     try{
     c = query.getSingleResult();
@@ -446,10 +446,10 @@ public class DonationRepository {
     return c;
   }
 
-  public Donation verifyCollectionNumber(String collectionNumber) {
+  public Donation verifyDonationIdentificationNumber(String donationIdentificationNumber) {
 	  Donation donation = new Donation();
-	  donation.setCollectionNumber(collectionNumber);
-	  donation = findDonationByCollectionNumber(collectionNumber);
+	  donation.setDonationIdentificationNumber(donationIdentificationNumber);
+	  donation = findDonationByDonationIdentificationNumber(donationIdentificationNumber);
 	  if (donation != null) {
 	    return donation;
 	  } else {
@@ -457,14 +457,14 @@ public class DonationRepository {
 	  }
   }
   
-  public List<Donation> verifyCollectionNumbers(List<String> collectionNumbers) {
+  public List<Donation> verifyDonationIdentificationNumbers(List<String> donationIdentificationNumbers) {
     List<Donation> donations = new ArrayList<Donation>();
-    for (String collectionNumber : collectionNumbers) {
-      if (StringUtils.isBlank(collectionNumber))
+    for (String donationIdentificationNumber : donationIdentificationNumbers) {
+      if (StringUtils.isBlank(donationIdentificationNumber))
         continue;
       Donation donation = new Donation();
-      donation.setCollectionNumber(collectionNumber);
-      donation = findDonationByCollectionNumber(collectionNumber);
+      donation.setDonationIdentificationNumber(donationIdentificationNumber);
+      donation = findDonationByDonationIdentificationNumber(donationIdentificationNumber);
       if (donation != null) {
         donations.add(donation);
       } else {

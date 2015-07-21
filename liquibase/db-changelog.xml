@@ -280,11 +280,8 @@
 	</changeSet>
 	
 	<!-- Update FormField table to rename Collection info to Donation -->
-	<changeSet id="20131108-1720" author="danfuterman">
-		<update tableName="FormField">
-			<column name="defaultDisplayName" value="Donation Identification Number" />
-			<where>field = "collectionNumber"</where>
-		</update>
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20140721-0839" author="danfuterman">
 		<update tableName="FormField">
 			<column name="defaultDisplayName" value="Donation Site" />
 			<where>field = "collectionSite"</where>
@@ -439,18 +436,18 @@
 
 	<!-- For issue 71 [Include additional columns in Donation History table] -->
 	<!-- Updated (timler): for #293 (refactoring) -->
-	<changeSet id="20150714-0910" author="srikanthmalyala">
+	<changeSet id="20150721-0850" author="srikanthmalyala">
    	    <preConditions onFail="MARK_RAN">
 		    <sqlCheck expectedResult="0"> 
 				<![CDATA[
 				SELECT count(*) FROM FormField 
-				where displayName = 'DIN' and field = 'collectionNumber';
+				where displayName = 'DIN' and field = 'donationIdentificationNumber';
 				]]>
 			</sqlCheck>
 		</preConditions>
 		<update tableName="FormField">
 			<column name="displayName" value="DIN" />
-			<where>field = "collectionNumber"</where>
+			<where>field = "donationIdentificationNumber"</where>
 		</update>
 		<update tableName="FormField">
 			<column name="displayName" value="HGB" />

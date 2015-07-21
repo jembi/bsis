@@ -61,7 +61,7 @@ public class TestResultController {
   public ResponseEntity findTestResult(@PathVariable String donationIdentificationNumber ) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    Donation c = donationRepository.findDonationByCollectionNumber(donationIdentificationNumber);
+    Donation c = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
     BloodTestingRuleResult results =  bloodTestingRepository.getAllTestsStatusForDonation(c.getId());
     map.put("donation", new DonationViewModel(c));
     map.put("testResults", results);
@@ -152,7 +152,7 @@ public class TestResultController {
 		Map<Long, Map<Long, String>> errorMap = null;
 		Map<String, Object> fieldErrors = new HashMap<String, Object>();
 		Map<String, Object> map = new HashMap<String, Object>();
-		Donation donation = donationRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
+		Donation donation = donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
 	
 		Map<String, Object> results = null;
 		
@@ -190,11 +190,11 @@ public class TestResultController {
 		Map<Long, Map<Long, String>> errorMap = null;
 		Map<String, Object> fieldErrors = new HashMap<String, Object>();
 		Map<String, Object> map = new HashMap<String, Object>();
-		//Donation donation = donationRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
+		//Donation donation = donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
 	
 		Map<String, Object> results = null;
 		
-		Donation donation = donationRepository.findDonationByCollectionNumber(donationIdentificationNumber);
+		Donation donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
 		Donor donor = donation.getDonor();
 		donor.setBloodAbo(bloodAbo);
 		donor.setBloodRh(bloodRh);

@@ -160,7 +160,7 @@ public class DonorRepository {
             looped = true;
             for (Donor donor : donorResults) {
                 for (Donation donation : donor.getDonations()) {
-                    if (donation.getCollectionNumber().equals(donationIdentificationNumber)) {
+                    if (donation.getDonationIdentificationNumber().equals(donationIdentificationNumber)) {
                         uniqueResult.add(donor);
                         return uniqueResult;
                     }

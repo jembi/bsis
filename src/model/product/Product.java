@@ -215,10 +215,10 @@ public class Product implements ModificationTracker {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 
-  public String getCollectionNumber() {
+  public String getDonationIdentificationNumber() {
     if (donation == null)
       return null;
-    return donation.getCollectionNumber();
+    return donation.getDonationIdentificationNumber();
   }
 
   public ProductStatus getStatus() {

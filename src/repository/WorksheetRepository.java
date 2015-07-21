@@ -44,9 +44,9 @@ public class WorksheetRepository {
     return query.getSingleResult();
   }
 
-  public void addDonationsToWorksheet(Long worksheetId, Set<String> collectionNumbers) {
+  public void addDonationsToWorksheet(Long worksheetId, Set<String> donationIdentificationNumbers) {
 
-    if (collectionNumbers.isEmpty())
+    if (donationIdentificationNumbers.isEmpty())
       return;
     String queryStr = "SELECT w from Worksheet w LEFT JOIN FETCH w.donations " +
         "WHERE w.id=:worksheetId AND w.isDeleted=:isDeleted";
@@ -56,20 +56,20 @@ public class WorksheetRepository {
 
     String donationQueryStr = "SELECT c from Donation c " +
         "LEFT JOIN FETCH c.worksheets WHERE " +
-        "c.collectionNumber IN :collectionNumbers";
+        "c.donationIdentificationNumber IN :donationIdentificationNumbers";
     TypedQuery<Donation> donationQuery = em.createQuery(donationQueryStr, Donation.class);
-    donationQuery.setParameter("collectionNumbers", collectionNumbers);
+    donationQuery.setParameter("donationIdentificationNumbers", donationIdentificationNumbers);
     List<Donation> newDonations = donationQuery.getResultList();
 
     Worksheet worksheet = query.getSingleResult();
-    Set<String> existingCollectionNumbers = new HashSet<String>();
+    Set<String> existingDonationIdentificationNumbers = new HashSet<String>();
     for (Donation c : worksheet.getDonations()) {
-      existingCollectionNumbers.add(c.getCollectionNumber());
+      existingDonationIdentificationNumbers.add(c.getDonationIdentificationNumber());
     }
 
     List<Donation> donations = new ArrayList<Donation>();
     for (Donation c : newDonations) {
-      if (existingCollectionNumbers.contains(c.getCollectionNumber()))
+      if (existingDonationIdentificationNumbers.contains(c.getDonationIdentificationNumber()))
         continue;
       donations.add(c);
 //      c.getWorksheets().add(worksheet);

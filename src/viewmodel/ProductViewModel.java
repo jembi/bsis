@@ -1,20 +1,19 @@
 package viewmodel;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.Arrays;
 import java.util.Date;
 
 import model.donation.Donation;
 import model.product.Product;
 import model.product.ProductStatus;
-import model.producttype.ProductType;
 import model.user.User;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
 import utils.CustomDateFormatter;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ProductViewModel {
 
@@ -69,12 +68,12 @@ public class ProductViewModel {
     return CustomDateFormatter.getDateTimeString(product.getExpiresOn());
   }
 
-  public String getCollectionNumber() {
+  public String getDonationIdentificationNumber() {
     if (getProduct() == null || getProduct().getDonation() == null ||
-        getProduct().getDonation().getCollectionNumber() == null
+        getProduct().getDonation().getDonationIdentificationNumber() == null
        )
       return "";
-    return getProduct().getDonation().getCollectionNumber();
+    return getProduct().getDonation().getDonationIdentificationNumber();
   }
   
   public String getDonationID() {
@@ -154,7 +153,7 @@ public class ProductViewModel {
   @JsonIgnore
   public String getBloodGroup() {
     if (product == null || product.getDonation() == null ||
-        product.getDonation().getCollectionNumber() == null
+        product.getDonation().getDonationIdentificationNumber() == null
        )
       return "";
     DonationViewModel collectionViewModel = new DonationViewModel(product.getDonation());

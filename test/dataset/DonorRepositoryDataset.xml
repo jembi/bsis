@@ -131,7 +131,7 @@
  	
  	<donation id="1" bloodAbo=""
  		bloodPressureSystolic="43" bloodRh="" bloodTypingStatus="NOT_DONE"
- 		donationDate="2014-03-25 00:00:00" collectionNumber="000001"
+ 		donationDate="2014-03-25 00:00:00" donationIdentificationNumber="000001"
  		donorWeight="60.00" extraBloodTypeInformation="" haemoglobinCount="14.00"
  		isDeleted="0" createdDate="2014-03-27 15:00:51" lastUpdated="2014-03-27 15:00:51"
  		notes="notes" ttiStatus="NOT_DONE" bloodBagType_id="2"
@@ -145,7 +145,7 @@
 		propertyOwner="collectionsWorksheet" propertyValue="30" />
 	<genericconfig id="2" propertyName="columnWidth"
 		propertyOwner="collectionsWorksheet" propertyValue="100" />
-	<genericconfig id="3" propertyName="collectionNumber"
+	<genericconfig id="3" propertyName="donationIdentificationNumber"
 		propertyOwner="collectionsWorksheet" propertyValue="true" />
 	<genericconfig id="4" propertyName="haemoglobinUnit"
 		propertyOwner="measurementUnit" propertyValue="g/dL" />

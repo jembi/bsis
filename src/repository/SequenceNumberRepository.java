@@ -10,7 +10,6 @@ import javax.persistence.TypedQuery;
 
 import model.sequencenumber.SequenceNumberStore;
 
-import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,13 +20,13 @@ public class SequenceNumberRepository {
   @PersistenceContext
   private EntityManager em;
   
-  synchronized public String getNextCollectionNumber() {
+  synchronized public String getNextDonationIdentificationNumber() {
     String queryStr = "SELECT s from SequenceNumberStore s " +
                       "where s.targetTable=:targetTable AND " +
                       " s.columnName=:columnName";
     TypedQuery<SequenceNumberStore> query = em.createQuery(queryStr, SequenceNumberStore.class);
     query.setParameter("targetTable", "Donation");
-    query.setParameter("columnName", "collectionNumber");
+    query.setParameter("columnName", "donationIdentificationNumber");
 
     SequenceNumberStore seqNumStore = null;
     Long lastNumber = (long)0;
@@ -43,13 +42,13 @@ public class SequenceNumberRepository {
       prefix = "C";
       seqNumStore = new SequenceNumberStore();
       seqNumStore.setTargetTable("Donation");
-      seqNumStore.setColumnName("collectionNumber");
+      seqNumStore.setColumnName("donationIdentificationNumber");
       seqNumStore.setPrefix(prefix);
     }
 
     String lastNumberStr = String.format("%06d", lastNumber);
     // may need a prefix for center where the number is generated
-    String collectionNumber = prefix + lastNumberStr;
+    String donationIdentificationNumber = prefix + lastNumberStr;
     lastNumber = lastNumber + 1;
     seqNumStore.setLastNumber(lastNumber);
     if (valuePresentInTable) {
@@ -59,7 +58,7 @@ public class SequenceNumberRepository {
     }
 
     em.flush();
-    return collectionNumber;
+    return donationIdentificationNumber;
   }
 
   synchronized public String getNextRequestNumber() {
@@ -186,13 +185,13 @@ public class SequenceNumberRepository {
 }
 
 
-  synchronized public List<String> getBatchCollectionNumbers(int numCollections) {
+  synchronized public List<String> getBatchDonationIdentificationNumbers(int numDonations) {
     String queryStr = "SELECT s from SequenceNumberStore s " +
         "where s.targetTable=:targetTable AND " +
         " s.columnName=:columnName";
     TypedQuery<SequenceNumberStore> query = em.createQuery(queryStr, SequenceNumberStore.class);
     query.setParameter("targetTable", "Donation");
-    query.setParameter("columnName", "collectionNumber");
+    query.setParameter("columnName", "donationIdentificationNumber");
     
     SequenceNumberStore seqNumStore = null;
     Long lastNumber = (long)0;
@@ -208,18 +207,18 @@ public class SequenceNumberRepository {
     prefix = "C";
     seqNumStore = new SequenceNumberStore();
     seqNumStore.setTargetTable("Donation");
-    seqNumStore.setColumnName("collectionNumber");
+    seqNumStore.setColumnName("donationIdentificationNumber");
     seqNumStore.setPrefix(prefix);
     }
 
-    List<String> collectionNumbers = new ArrayList<String>();
-    for (int i = 0; i < numCollections; ++i) {
+    List<String> donationIdentificationNumbers = new ArrayList<String>();
+    for (int i = 0; i < numDonations; ++i) {
       String lastNumberStr = String.format("%06d", lastNumber+i);
       // may need a prefix for center where the number is generated
-      String collectionNumber = prefix + lastNumberStr;
-      collectionNumbers.add(collectionNumber);
+      String donationIdentificationNumber = prefix + lastNumberStr;
+      donationIdentificationNumbers.add(donationIdentificationNumber);
     }
-    lastNumber = lastNumber + numCollections;
+    lastNumber = lastNumber + numDonations;
     seqNumStore.setLastNumber(lastNumber);
     if (valuePresentInTable) {
     em.merge(seqNumStore);
@@ -228,7 +227,7 @@ public class SequenceNumberRepository {
     }
     
     em.flush();
-    return collectionNumbers;
+    return donationIdentificationNumbers;
   }
 
   synchronized public List<String> getBatchRequestNumbers(int numRequests) {

@@ -56,8 +56,7 @@ import constraintvalidator.DonorExists;
 import constraintvalidator.LocationExists;
 
 /**
- * A donation or a collection as it is in the UI.
- * Not naming the class as Collection to avoid confusion with java.util.Collection.
+ * A donation of blood
  * @author iamrohitbanga
  */
 @Entity
@@ -71,12 +70,12 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
   private Long id;
 
   /**
-   * Very common usecase to search for collection by collection number.
-   * In most cases the collection numbers will be preprinted labels.
+   * Very common usecase to search for donation by donation identification number.
+   * In most cases the donation numbers will be preprinted labels.
    */
   @Column(length=20, unique=true)
-  @Index(name="donation_collectionNumber_index")
-  private String collectionNumber;
+  @Index(name="donation_donationIdentificationNumber_index")
+  private String donationIdentificationNumber;
 
   @DonorExists
   @ManyToOne
@@ -99,7 +98,7 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
 
 
   /**
-   * Index to find collections done between date ranges.
+   * Index to find donations done between date ranges.
    */
   @Temporal(TemporalType.TIMESTAMP)
   @Index(name="donation_donationDate_index")
@@ -114,7 +113,7 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
   private BloodBagType bloodBagType;
 
   /**
-   * List of products created from this collection.
+   * List of products created from this donation.
    */
   @OneToMany(mappedBy="donation")
   private List<Product> products;
@@ -191,8 +190,8 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     return id;
   }
 
-  public String getCollectionNumber() {
-    return collectionNumber;
+  public String getDonationIdentificationNumber() {
+    return donationIdentificationNumber;
   }
 
   public Donor getDonor() {
@@ -220,8 +219,8 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     this.id = id;
   }
 
-  public void setCollectionNumber(String collectionNumber) {
-    this.collectionNumber = collectionNumber;
+  public void setDonationIdentificationNumber(String donationIdentificationNumber) {
+    this.donationIdentificationNumber = donationIdentificationNumber;
   }
 
   public void setDonor(Donor donor) {
@@ -247,7 +246,7 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
 
   public void copy(Donation donation) {
     assert (this.getId().equals(donation.getId()));
-    this.collectionNumber = donation.collectionNumber;
+    this.donationIdentificationNumber = donation.donationIdentificationNumber;
     this.donor = donation.donor;
     this.setDonationType(donation.getDonationType());
     this.bloodBagType = donation.bloodBagType;
@@ -314,9 +313,7 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
   }
 
   /**
-   * Must implement this method because the collections
-   * in worksheet must be sorted in the same order every time.
-   * This method allows invoking Collections.sort on the collections.
+   * Compares two donations using the object's identifier (id field)
    */
   @Override
   public int compareTo(Donation c) {

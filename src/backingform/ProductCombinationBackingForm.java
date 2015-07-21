@@ -173,17 +173,17 @@ public class ProductCombinationBackingForm {
     return product.toString();
   }
 
-  public String getCollectionNumber() {
+  public String getDonationIdentificationNumber() {
     if (product == null || product.getDonation() == null ||
-        product.getDonation().getCollectionNumber() == null
+        product.getDonation().getDonationIdentificationNumber() == null
        )
       return "";
-    return product.getDonation().getCollectionNumber();
+    return product.getDonation().getDonationIdentificationNumber();
   }
 
-  public void setCollectionNumber(String collectionNumber) {
+  public void setDonationIdentificationNumber(String donationIdentificationNumber) {
     Donation donation = new Donation();
-    donation.setCollectionNumber(collectionNumber);
+    donation.setDonationIdentificationNumber(donationIdentificationNumber);
     product.setDonation(donation);
   }
 

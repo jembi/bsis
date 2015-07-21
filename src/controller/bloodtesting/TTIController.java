@@ -163,7 +163,7 @@ public class TTIController {
 						saveTestsData.get(testIdStr));
 			}
                         Donation donation = 
-                                donationRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
+                                donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
 			ttiTestResultsMap.put(donation.getId(),
 					saveTestsDataWithLong);
 			Map<String, Object> results = bloodTestingRepository

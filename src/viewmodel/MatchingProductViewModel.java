@@ -75,8 +75,8 @@ public class MatchingProductViewModel {
     return productViewModel.getExpiresOn();
   }
 
-  public String getCollectionNumber() {
-    return productViewModel.getCollectionNumber();
+  public String getDonationIdentificationNumber() {
+    return productViewModel.getDonationIdentificationNumber();
   }
 
   public String getAge() {

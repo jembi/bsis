@@ -123,7 +123,7 @@
         bloodRh varchar(50),
         bloodTypingStatus varchar(20),
         donationDate datetime,
-        collectionNumber varchar(20) unique,
+        donationIdentificationNumber varchar(20) unique,
         donorWeight decimal(6,2),
         extraBloodTypeInformation varchar(150),
         haemoglobinCount decimal(6,2),
@@ -153,7 +153,7 @@
         bloodRh varchar(50),
         bloodTypingStatus varchar(20),
         donationDate datetime,
-        collectionNumber varchar(20),
+        donationIdentificationNumber varchar(20),
         donorWeight decimal(6,2),
         extraBloodTypeInformation varchar(150),
         haemoglobinCount decimal(6,2),
@@ -1040,7 +1040,7 @@
 
     create index donation_donationDate_index on Donation (donationDate);
 
-    create index donation_collectionNumber_index on Donation (collectionNumber);
+    create index donation_donationIdentificationNumber_index on Donation (donationIdentificationNumber);
 
     alter table Donation 
         add index FKF0658A33A49787C4 (createdBy_id), 

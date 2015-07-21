@@ -163,9 +163,9 @@ public class ProductController {
       form = new ProductCombinationBackingForm();
    
       // at least one product should be created, all products should have the same collection number
-      map.put("collectionNumber", savedProducts.get(0).getCollectionNumber());
+      map.put("donationIdentificationNumber", savedProducts.get(0).getDonationIdentificationNumber());
       map.put("createdProducts", getProductViewModels(savedProducts));
-      List<Product> allProductsForDonation = productRepository.findProductsByCollectionNumber(savedProducts.get(0).getCollectionNumber());
+      List<Product> allProductsForDonation = productRepository.findProductsByDonationIdentificationNumber(savedProducts.get(0).getDonationIdentificationNumber());
       map.put("allProductsForDonation", getProductViewModels(allProductsForDonation));
       map.put("addAnotherProductUrl", "addProductCombinationFormGenerator.html");
    
@@ -181,7 +181,7 @@ public class ProductController {
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
     public Map<String, Object> findProductPagination(HttpServletRequest request,
             @RequestParam(value = "componentNumber", required=false, defaultValue ="") String productNumber,
-            @RequestParam(value = "donationIdentificationNumber", required=false, defaultValue ="") String collectionNumber,
+            @RequestParam(value = "donationIdentificationNumber", required=false, defaultValue ="") String donationIdentificationNumber,
             @RequestParam(value = "componentTypes", required=false, defaultValue ="") List<Integer> componentTypeIds,
             @RequestParam(value = "status", required=false, defaultValue ="") List<String> status,
             @RequestParam(value = "donationDateFrom", required=false, defaultValue ="") String donationDateFrom,
@@ -208,7 +208,7 @@ public class ProductController {
         }
         
         results = productRepository.findAnyProduct(
-                collectionNumber, componentTypeIds, statusStringToProductStatus(status),
+                donationIdentificationNumber, componentTypeIds, statusStringToProductStatus(status),
                 dateFrom, dateTo, pagingParams);
 
         List<ProductViewModel> components = new ArrayList<ProductViewModel>();
@@ -284,8 +284,8 @@ public class ProductController {
 	  List<Product> results = new ArrayList<Product>();
 	  List<ProductStatus> statusList = Arrays.asList(ProductStatus.values());
 	
-	  results = productRepository.findProductByCollectionNumber(
-	      donation.getCollectionNumber(), statusList,
+	  results = productRepository.findProductByDonationIdentificationNumber(
+	      donation.getDonationIdentificationNumber(), statusList,
 	      pagingParams);
 	
 	  List<ProductViewModel> components = new ArrayList<ProductViewModel>();
@@ -366,7 +366,7 @@ public class ProductController {
     List<Product> results = new ArrayList<Product>();
     List<ProductStatus> status = Arrays.asList(ProductStatus.values());
     
-      results = productRepository.findProductByCollectionNumber(
+      results = productRepository.findProductByDonationIdentificationNumber(
           donationNumber, status,
           pagingParams);
     
@@ -399,7 +399,7 @@ public class ProductController {
 
       Product parentComponent = productRepository.findProductById(Long.valueOf(form.getParentComponentId()));
       Donation donation = parentComponent.getDonation();
-      String collectionNumber = donation.getCollectionNumber();
+      String donationIdentificationNumber = donation.getDonationIdentificationNumber();
       ProductStatus status = parentComponent.getStatus();
       long productId = Long.valueOf(form.getParentComponentId());
       
@@ -427,7 +427,7 @@ public class ProductController {
     	        	      
 	      String componentTypeCode = pt.getProductTypeNameShort();
 	      int noOfUnits = newComponents.get(pt);
-	      String createdPackNumber = collectionNumber +"-"+componentTypeCode;
+	      String createdPackNumber = donationIdentificationNumber +"-"+componentTypeCode;
 	      
 	      // Add New product
 	      if(!status.equals(ProductStatus.PROCESSED) && !status.equals(ProductStatus.DISCARDED)){
@@ -482,8 +482,8 @@ public class ProductController {
 	List<Product> results = new ArrayList<Product>();
 	List<ProductStatus> statusList = Arrays.asList(ProductStatus.values());
 	
-	results = productRepository.findProductByCollectionNumber(
-	      donation.getCollectionNumber(), statusList,
+	results = productRepository.findProductByDonationIdentificationNumber(
+	      donation.getDonationIdentificationNumber(), statusList,
 	      pagingParams);
 	
 	List<ProductViewModel> components = new ArrayList<ProductViewModel>();
@@ -579,7 +579,7 @@ public class ProductController {
     String reqUrl = req.getRequestURL().toString();
     String queryString[] = qString.split("-");   
     if (queryString != null) {
-        reqUrl += "?collectionNumber="+queryString[0];
+        reqUrl += "?donationIdentificationNumber="+queryString[0];
     }
     return reqUrl;
   }
@@ -594,7 +594,7 @@ public class ProductController {
   	}
     String queryString[] = qString.split("-"); 
     if (queryString != null) {
-        reqUrl += "?collectionNumber="+queryString[0];
+        reqUrl += "?donationIdentificationNumber="+queryString[0];
     }
     return reqUrl;
   }

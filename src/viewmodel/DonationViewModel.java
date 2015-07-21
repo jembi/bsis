@@ -48,8 +48,8 @@ public class DonationViewModel {
     return donation.getId();
   }
 
-  public String getCollectionNumber() {
-    return donation.getCollectionNumber();
+  public String getDonationIdentificationNumber() {
+    return donation.getDonationIdentificationNumber();
   }
 
   @JsonIgnore

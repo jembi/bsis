@@ -19,7 +19,7 @@ public class CompatibilityTestBackingForm {
   @Valid
   private CompatibilityTest compatibilityTest;
 
-  private String collectionNumber;
+  private String donationIdentificationNumber;
 
   private String compatiblityTestDate;
 
@@ -185,11 +185,11 @@ public class CompatibilityTestBackingForm {
     this.compatibilityTest = crossmatchTest;
   }
 
-  public void setCollectionNumber(String collectionNumber) {
-    this.collectionNumber = collectionNumber;
+  public void setDonationIdentificationNumber(String donationIdentificationNumber) {
+    this.donationIdentificationNumber = donationIdentificationNumber;
   }
 
-  public String getCollectionNumber() {
-    return collectionNumber;
+  public String getDonationIdentificationNumber() {
+    return donationIdentificationNumber;
   }
 }

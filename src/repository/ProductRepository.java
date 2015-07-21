@@ -172,7 +172,7 @@ public class ProductRepository {
 	    	queryStr += "AND p.status IN :status ";
 	    }	
 	    if(!StringUtils.isBlank(donationIdentificationNumber)){
-	    	queryStr += "AND p.donation.collectionNumber = :donationIdentificationNumber ";
+	    	queryStr += "AND p.donation.donationIdentificationmber = :donationIdentificationNumber ";
 	    }
 	    if(productTypes != null && !productTypes.isEmpty()){
 	    	queryStr += "AND p.productType.id IN (:productTypeIds) ";
@@ -216,17 +216,17 @@ public class ProductRepository {
 	    return query.getResultList();
   }
 
-  public List<Product> findProductByCollectionNumber(
-      String collectionNumber, List<ProductStatus> status, Map<String, Object> pagingParams) {
+  public List<Product> findProductByDonationIdentificationNumber(
+      String donationIdentificationNumber, List<ProductStatus> status, Map<String, Object> pagingParams) {
 
     TypedQuery<Product> query;
     String queryStr = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.donation WHERE " +
-                      "p.donation.collectionNumber = :collectionNumber AND " +
+                      "p.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
                       "p.status IN :status AND " +
                       "p.isDeleted= :isDeleted";
 
     String queryStrWithoutJoin = "SELECT p FROM Product p WHERE " +
-        "p.donation.collectionNumber = :collectionNumber AND " +
+        "p.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
         "p.status IN :status AND " +
         "p.isDeleted= :isDeleted";
 
@@ -237,7 +237,7 @@ public class ProductRepository {
     query = em.createQuery(queryStr, Product.class);
     query.setParameter("status", status);
     query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("collectionNumber", collectionNumber);
+    query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
 
     int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
     int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
@@ -317,12 +317,12 @@ public class ProductRepository {
     return query.getResultList();
   }
 
-  public boolean isProductCreated(String collectionNumber) {
-    String queryString = "SELECT p FROM Product p WHERE p.collectionNumber = :collectionNumber and p.isDeleted = :isDeleted";
+  public boolean isProductCreated(String donationIdentificationNumber) {
+    String queryString = "SELECT p FROM Product p WHERE p.donationIdentificationNumber = :donationIdentificationNumber and p.isDeleted = :isDeleted";
     TypedQuery<Product> query = em.createQuery(queryString, Product.class);
     query.setParameter("isDeleted", Boolean.FALSE);
-    List<Product> products = query.setParameter("collectionNumber",
-        collectionNumber).getResultList();
+    List<Product> products = query.setParameter("donationIdentificationNumber",
+        donationIdentificationNumber).getResultList();
     if (products != null && products.size() > 0) {
       return true;
     }
@@ -790,12 +790,12 @@ public class ProductRepository {
     return resultMap;
   }
 
-  public Product findProduct(String collectionNumber, String productTypeId) {
+  public Product findProduct(String donationIdentificationNumber, String productTypeId) {
     String queryStr = "SELECT p from Product p WHERE " +
-                      "p.donation.collectionNumber = :collectionNumber AND " +
+                      "p.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
                       "p.productType.id = :productTypeId";
     TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
-    query.setParameter("collectionNumber", collectionNumber);
+    query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
     query.setParameter("productTypeId", Integer.parseInt(productTypeId));
     Product product = null;
     try {
@@ -835,11 +835,11 @@ public class ProductRepository {
     return statusChanges;
   }
 
-  public List<Product> findProductsByCollectionNumber(String collectionNumber) {
+  public List<Product> findProductsByDonationIdentificationNumber(String donationIdentificationNumber) {
     String queryStr = "SELECT p from Product p WHERE " +
-        "p.donation.collectionNumber=:collectionNumber AND p.isDeleted=:isDeleted";
+        "p.donation.donationIdentificationNumber=:donationIdentificationNumber AND p.isDeleted=:isDeleted";
     TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
-    query.setParameter("collectionNumber", collectionNumber);
+    query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
     query.setParameter("isDeleted", false);
     return query.getResultList();
   }

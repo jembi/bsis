@@ -188,7 +188,7 @@ insert into FormField
  isRequired, canBeOptional,
  autoGenerate, isAutoGeneratable,
  useCurrentTime, isTimeField) values
-('Donation', 'collectionNumber', 'Collection Number', '', 0,
+('Donation', 'donationIdentificationNumber', 'Donation Identification Number', '', 0,
  '0', '0',
  '1', '0',
  '0', '1',
@@ -374,7 +374,7 @@ insert into FormField
  isRequired, canBeOptional,
  autoGenerate, isAutoGeneratable,
  useCurrentTime, isTimeField) values
-('Product', 'collectionNumber', 'Collection Number', '', 0,
+('Product', 'donationIdentificationNumber', 'Donation indentification number', '', 0,
  '0', '1',
  '1', '0',
  '0', '0',
@@ -486,7 +486,7 @@ insert into FormField
  isRequired, canBeOptional,
  autoGenerate, isAutoGeneratable,
  useCurrentTime, isTimeField) values
-('TTIForm', 'collectionNumber', 'Collection Number', '', 0,
+('TTIForm', 'donationIdentificationNumber', 'Donation indentification number', '', 0,
  '0', '0',
  '1', '0',
  '0', '0',
@@ -640,7 +640,7 @@ insert into FormField
  isRequired, canBeOptional,
  autoGenerate, isAutoGeneratable,
  useCurrentTime, isTimeField) values
-('CompatibilityTest', 'collectionNumber', 'Collection number', '', 0,
+('CompatibilityTest', 'donationIdentificationNumber', 'Donation indentification number', '', 0,
  '0', '0',
  '1', '0',
  '0', '0',
@@ -712,7 +712,7 @@ insert into FormField
  '1', '0',
  '0', '0',
  '0', '0'),
-('Usage', 'collectionNumber', 'Collection number', '', 0,
+('Usage', 'donationIdentificationNumber', 'Donation indentification number', '', 0,
  '0', '0',
  '1', '0',
  '0', '0',
@@ -804,7 +804,7 @@ insert into CrossmatchType (crossmatchType, isDeleted) values
 insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("rowHeight", "30", "collectionsWorksheet"),
 ("columnWidth", "100", "collectionsWorksheet"),
-("collectionNumber", "true", "collectionsWorksheet"),
+("donationIdentificationNumber", "true", "collectionsWorksheet"),
 
 ("haemoglobinUnit", "g/dL", "measurementUnit"),
 ("bloodPressureUnit", "mmHg", "measurementUnit"),

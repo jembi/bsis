@@ -93,8 +93,8 @@ public class DonationBackingForm {
     return CustomDateFormatter.getDateTimeString(donation.getBleedEndTime());
   }
 
-  public String getCollectionNumber() {
-    return donation.getCollectionNumber();
+  public String getDonationIdentificationNumber() {
+    return donation.getDonationIdentificationNumber();
   }
 
   public void setDonationDate(String donationDate) {
@@ -204,8 +204,8 @@ public class DonationBackingForm {
     donation.setId(id);
   }
 
-  public void setCollectionNumber(String collectionNumber) {
-    donation.setCollectionNumber(collectionNumber);
+  public void setDonationIdentificationNumber(String donationIdentificationNumber) {
+    donation.setDonationIdentificationNumber(donationIdentificationNumber);
   }
 
   public void setDonor(Donor donor) {
@@ -265,11 +265,11 @@ public class DonationBackingForm {
     donation.setIsDeleted(isDeleted);
   }
 
-  public void generateCollectionNumber() {
-    String uniqueCollectedSampleNumber;
-    uniqueCollectedSampleNumber = "C-" +
+  public void generateDonationIdentificationNumber() {
+    String uniqueDonationNumber;
+    uniqueDonationNumber = "C-" +
                         RandomStringUtils.randomNumeric(ID_LENGTH).toUpperCase();
-    donation.setCollectionNumber(uniqueCollectedSampleNumber);
+    donation.setDonationIdentificationNumber(uniqueDonationNumber);
   }
 
   public String getDonorNumber() {

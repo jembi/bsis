@@ -95,7 +95,7 @@ public class DonationController {
       
       row.add(donation.getId().toString());
 
-      for (String property : Arrays.asList("collectionNumber", "donationDate", "bloodBagType", "donorPanel")) {
+      for (String property : Arrays.asList("donationIdentificationNumber", "donationDate", "bloodBagType", "donorPanel")) {
         if (formFields.containsKey(property)) {
           Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
           if (properties.get("hidden").equals(false)) {
@@ -249,7 +249,7 @@ public class DonationController {
      @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public  Map<String, Object> findDonationPagination(
-     @RequestParam(value = "collectionNumber", required = false)  String collectionNumber,
+     @RequestParam(value = "donationIdentificationNumber", required = false)  String donationIdentificationNumber,
      @RequestParam(value = "panels",required = false)  List<Long> panelIds,
      @RequestParam(value = "bloodBagTypes",required = false)  List<Integer> bloodBagTypeIds,
      @RequestParam(value = "donationDateFrom", required = false)  String donationDateFrom,
@@ -264,8 +264,8 @@ public class DonationController {
       
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("Donation");
   
-    if (collectionNumber != null)
-      collectionNumber = collectionNumber.trim();
+    if (donationIdentificationNumber != null)
+      donationIdentificationNumber = donationIdentificationNumber.trim();
 
 
    /* bloodBagTypeIds.add(-1);
@@ -274,7 +274,7 @@ public class DonationController {
 
     List<Object> results;
           results = donationRepository.findDonations(
-                  collectionNumber,
+                  donationIdentificationNumber,
                   bloodBagTypeIds, panelIds,
                   donationDateFrom, donationDateTo, includeTestedDonations, pagingParams);
   

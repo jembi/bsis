@@ -265,8 +265,8 @@ public class UtilController {
 	  }
 	  
 
-  public String getNextCollectionNumber() {
-    return sequenceNumberRepository.getNextCollectionNumber();
+  public String getNextDonationIdentificationNumber() {
+    return sequenceNumberRepository.getNextDonationIdentificationNumber();
   }
 
   public Donor findDonorInForm(Map<String, Object> bean) {
@@ -312,12 +312,12 @@ public class UtilController {
 
   public Donation findDonationInForm(Map<String, Object> bean) {
     Donation donation = null;
-    String collectionNumber = null;
-    if (collectionNumber == null)
-      collectionNumber = (String) bean.get("collectionNumber");
-    if (StringUtils.isNotBlank(collectionNumber)) {
+    String donationIdentificationNumber = null;
+    if (donationIdentificationNumber == null)
+      donationIdentificationNumber = (String) bean.get("donationIdentificationNumber");
+    if (StringUtils.isNotBlank(donationIdentificationNumber)) {
       try {
-        donation = donationRepository.findDonationByCollectionNumber(collectionNumber);
+        donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
       } catch (NoResultException ex) {
         ex.printStackTrace();
       }
@@ -363,8 +363,8 @@ public class UtilController {
     return errorMessage;
   }
 
-  public Product findProduct(String collectionNumber, String productType) {
-    return productRepository.findProduct(collectionNumber, productType);
+  public Product findProduct(String donationIdentificationNumber, String productType) {
+    return productRepository.findProduct(donationIdentificationNumber, productType);
   }
 
   public String getNextWorksheetNumber() {
@@ -379,8 +379,8 @@ public class UtilController {
     return requestRepository.findRequestByRequestNumber(requestNumber);
   }
 
-  public Product findProduct(String collectionNumber, ProductType productType) {
-    List<Product> products = productRepository.findProductsByCollectionNumber(collectionNumber);
+  public Product findProduct(String donationIdentificationNumber, ProductType productType) {
+    List<Product> products = productRepository.findProductsByDonationIdentificationNumber(donationIdentificationNumber);
     Product matchingProduct = null; 
     for (Product product : products) {
       if (product.getProductType().equals(productType)) {
@@ -426,11 +426,11 @@ public class UtilController {
     return false;
   }
 
-  public boolean isDuplicateCollectionNumber(Donation donation) {
-    String collectionNumber = donation.getCollectionNumber();
-    if (StringUtils.isBlank(collectionNumber))
+  public boolean isDuplicateDonationIdentificationNumber(Donation donation) {
+    String donationIdentificationNumber = donation.getDonationIdentificationNumber();
+    if (StringUtils.isBlank(donationIdentificationNumber))
       return false;
-    Donation existingDonation = donationRepository.findDonationByCollectionNumberIncludeDeleted(collectionNumber);
+    Donation existingDonation = donationRepository.findDonationByDonationIdentificationNumberIncludeDeleted(donationIdentificationNumber);
     if (existingDonation != null && !existingDonation.getId().equals(donation.getId()))
       return true;
     return false;

@@ -73,8 +73,8 @@ public class LotReleaseController {
           @PathVariable String donationIdentificationNumber)  {
         Map<String, Object> componentMap = new HashMap<String, Object>();
 
-    Donation donation = donationRepository.findDonationByCollectionNumber(donationIdentificationNumber);
-    List<Product> products = productRepository.findProductsByCollectionNumber(donationIdentificationNumber);
+    Donation donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
+    List<Product> products = productRepository.findProductsByDonationIdentificationNumber(donationIdentificationNumber);
     List<Map<String, Object>> components = getComponentLabellingStatus(donation, products);
     
     componentMap.put("donationNumber", donationIdentificationNumber);
@@ -94,7 +94,7 @@ public class LotReleaseController {
 	    boolean success = false;
 	    
 	    // check to make sure label can be printed
-	    if (checkCollectionNumber(donation)){
+	    if (checkDonationIdentificationNumber(donation)){
 	    
 		    // label can be printed
 		    success = true;
@@ -137,7 +137,7 @@ public class LotReleaseController {
 			        "^BY2,3,82^FT451,538^BCN,,Y,N"+
 			        "^FD>:"+expiryDate+"^FS"+
 			        "^BY3,3,82^FT62,150^BCN,,Y,N"+
-			        "^FD>:"+product.getCollectionNumber()+"^FS"+
+			        "^FD>:"+product.getDonationIdentificationNumber()+"^FS"+
 			        "^FT66,608^A0N,20,21^FH\\^FD"+product.getProductType().getProductTypeName()+"^FS"+
 			        "^BY3,3,77^FT69,535^BCN,,Y,N"+
 			        "^FD>:"+product.getProductType().getProductTypeNameShort()+"^FS"+
@@ -191,7 +191,7 @@ public class LotReleaseController {
 	    			         "^FT106,752^A0N,23,33^FH\\^FDPROPERLY IDENTIFY INTENDED RECIPIENT^FS" +
 	    			         "^FT244,606^A@N,28,31,TT0003M_^FH\\^CI17^F8^FDAffix compatibility label^FS^CI0" +
 	    	    			 "^BY2,3,42^FT285,111^BCN,,Y,N"+
-	    	    			 "^FD>:" + product.getCollectionNumber() + "^FS"+
+	    	    			 "^FD>:" + product.getDonationIdentificationNumber() + "^FS"+
 	    	    			 inverse +
 	    			         "^PQ1,0,1,Y^XZ"
 	    			         );
@@ -289,7 +289,7 @@ public class LotReleaseController {
 	    		"^FO18,357^GB748,0,8^FS"+
 	    		"^FT52,749^A0N,28,28^FH\\^FDIf found contact the BTS immediately at (000) 000-0000^FS" +
 	    		"^BY2,3,52^FT408,135^BCN,,Y,N" +
-	    		"^FD>:" + product.getCollectionNumber() + "^FS" +
+	    		"^FD>:" + product.getDonationIdentificationNumber() + "^FS" +
 	    		"^FT88,118^A0N,28,28^FH\\^FD2013/01/01^FS" +
 	    		"^PQ1,0,1,Y^XZ^XA^ID000.GRF^FS^XZ" 
 	    		);
@@ -302,7 +302,7 @@ public class LotReleaseController {
   }
 
 
-	private boolean checkCollectionNumber(Donation donation) {
+	private boolean checkDonationIdentificationNumber(Donation donation) {
 		boolean success=false;
 		if(donation != null){
     	success=true;
@@ -378,7 +378,7 @@ public class LotReleaseController {
 	                        productStatus.put("printPackLabel", false);
 	                    } else {
 	                        productStatus.put("discardPackLabel", false);
-	                        productStatus.put("printPackLabel", checkCollectionNumber(donation));
+	                        productStatus.put("printPackLabel", checkDonationIdentificationNumber(donation));
 	                    }
 	                    productsList.add(productStatus);
                 	}

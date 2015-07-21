@@ -542,12 +542,12 @@ public class BloodTestingRepository {
 				}
 
 				if (wellType.getRequiresSample()) {
-					String collectionNumber = wellData.get("collectionNumber");
+					String donationIdentificationNumber = wellData.get("donationIdentificationNumber");
 					Donation donation = donationRepository
-							.findDonationByCollectionNumber(collectionNumber);
+							.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
 					if (donation == null) {
 						addErrorToWell(errorsByWellNumber, wellNumber,
-								"Invalid collection number");
+								"Invalid donation identification number");
 						errorsFound = true;
 					} else {
 						String result = wellData.get("testResult");
@@ -988,7 +988,7 @@ public class BloodTestingRepository {
 		for (TSVFileHeaderName ts : tSVFileHeaderNameList) {
 			
 			Donation cs = donationRepository
-					.findDonationByCollectionNumber(ts.getSID());
+					.findDonationByDonationIdentificationNumber(ts.getSID());
 			if (cs != null){
 				
 				try{

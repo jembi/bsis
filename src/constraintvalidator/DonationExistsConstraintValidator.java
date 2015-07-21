@@ -35,13 +35,13 @@ public class DonationExistsConstraintValidator implements
       if (target.getId() != null) {
         donation = donationRepository.findDonationById(target.getId());
       }
-      else if (target.getCollectionNumber() != null) {
+      else if (target.getDonationIdentificationNumber() != null) {
 
-        if (target.getCollectionNumber().isEmpty())
+        if (target.getDonationIdentificationNumber().isEmpty())
           return true;
 
         donation = 
-          donationRepository.findDonationByCollectionNumber(target.getCollectionNumber());
+          donationRepository.findDonationByDonationIdentificationNumber(target.getDonationIdentificationNumber());
       }
       if (donation != null) {
         return true;

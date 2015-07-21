@@ -157,7 +157,7 @@ public class BloodTypingController {
       @SuppressWarnings("unchecked")
       Map<Long, String> saveTestsData = null;
       saveTestsData = form.getTestResults();
-       Donation donation = donationRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
+       Donation donation = donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
       for (Long testIdStr : saveTestsData.keySet()) {
         saveTestsDataWithLong.put(testIdStr, saveTestsData.get(testIdStr));
       }
