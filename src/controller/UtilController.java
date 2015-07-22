@@ -23,6 +23,7 @@ import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
 import model.product.Product;
 import model.product.ProductStatus;
+import model.productmovement.ProductStatusChangeReason;
 import model.producttype.ProductType;
 import model.request.Request;
 import model.user.User;
@@ -38,21 +39,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
-import repository.CollectedSampleRepository;
-import repository.CollectionBatchRepository;
-import repository.DonorRepository;
-import repository.FormFieldRepository;
-import repository.GenericConfigRepository;
-import repository.LocationRepository;
-import repository.ProductRepository;
-import repository.RequestRepository;
-import repository.SequenceNumberRepository;
-import repository.TipsRepository;
-import repository.UserRepository;
-import repository.RoleRepository;
-import repository.WorksheetRepository;
-import repository.GeneralConfigRepository;
-import repository.BloodBagTypeRepository;
+import repository.*;
 import security.V2VUserDetails;
 import utils.DonorUtils;
 
@@ -107,6 +94,9 @@ public class UtilController {
   
   @Autowired
   private BloodBagTypeRepository bloodBagTypeRepository;
+
+  @Autowired
+  private DiscardReasonRepository discardReasonRepository;
   
   public Map<String, Map<String, Object>> getFormFieldsForForm(String formName) {
     List<FormField> formFields = formFieldRepository.getFormFields(formName);
@@ -437,6 +427,16 @@ public class UtilController {
       return false;
     CollectedSample existingCollection = collectedSampleRepository.findCollectionByCollectionNumberIncludeDeleted(collectionNumber);
     if (existingCollection != null && !existingCollection.getId().equals(collection.getId()))
+      return true;
+    return false;
+  }
+
+  public boolean isDuplicateDiscardReason(ProductStatusChangeReason discardReason){
+    String reason = discardReason.getStatusChangeReason();
+    if (StringUtils.isBlank(reason))
+      return false;
+    ProductStatusChangeReason existingDiscardReason = discardReasonRepository.findDiscardReason(reason);
+    if (existingDiscardReason != null && !existingDiscardReason.getId().equals(discardReason.getId()))
       return true;
     return false;
   }
