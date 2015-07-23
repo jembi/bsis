@@ -41,7 +41,7 @@ public class DeferralReasonController {
     }
 
     @RequestMapping(method=RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DEFERRAL_REASONS + "')")
     public  Map<String, Object> getDeferralReasons() {
         Map<String, Object> map = new HashMap<String, Object>();
         addAllDeferralReasonsToModel(map);
@@ -49,7 +49,7 @@ public class DeferralReasonController {
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DEFERRAL_REASONS + "')")
     public ResponseEntity<DeferralReason> getDeferralReasonById(@PathVariable Integer id){
         Map<String, Object> map = new HashMap<String, Object>();
         DeferralReason deferralReason = deferralReasonRepository.getDeferralReasonById(id);
@@ -58,7 +58,7 @@ public class DeferralReasonController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DEFERRAL_REASONS + "')")
     public ResponseEntity saveDeferralReason(@Valid @RequestBody DeferralReasonBackingForm formData){
         DeferralReason deferralReason = formData.getDeferralReason();
         deferralReason = deferralReasonRepository.saveDeferralReason(deferralReason);
@@ -66,7 +66,7 @@ public class DeferralReasonController {
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
+    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DEFERRAL_REASONS + "')")
     public ResponseEntity updateDeferralReason(@Valid @RequestBody DeferralReasonBackingForm formData , @PathVariable Integer id){
         Map<String, Object> map = new HashMap<String, Object>();
         DeferralReason deferralReason = formData.getDeferralReason();
