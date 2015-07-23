@@ -45,4 +45,11 @@ public class DeferralReason {
   public void setIsDeleted(Boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
+
+  public void copy (DeferralReason deferralReason){
+    this.id = deferralReason.getId();
+    this.reason = deferralReason.getReason();
+    this.isDeleted = deferralReason.getIsDeleted();
+  }
+
 }

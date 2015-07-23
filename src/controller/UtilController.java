@@ -20,6 +20,7 @@ import model.admin.GeneralConfig;
 import model.collectedsample.CollectedSample;
 import model.collectionbatch.CollectionBatch;
 import model.donor.Donor;
+import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.product.Product;
 import model.product.ProductStatus;
@@ -53,6 +54,7 @@ import repository.RoleRepository;
 import repository.WorksheetRepository;
 import repository.GeneralConfigRepository;
 import repository.BloodBagTypeRepository;
+import repository.DeferralReasonRepository;
 import security.V2VUserDetails;
 import utils.DonorUtils;
 
@@ -107,6 +109,9 @@ public class UtilController {
   
   @Autowired
   private BloodBagTypeRepository bloodBagTypeRepository;
+
+  @Autowired
+  private DeferralReasonRepository deferralReasonRepository;
   
   public Map<String, Map<String, Object>> getFormFieldsForForm(String formName) {
     List<FormField> formFields = formFieldRepository.getFormFields(formName);
@@ -457,6 +462,16 @@ public class UtilController {
       return false;
     BloodBagType existingPackType = bloodBagTypeRepository.findBloodBagTypeByName(packTypeName);
     if (existingPackType != null && !existingPackType.getId().equals(packType.getId()))
+      return true;
+    return false;
+  }
+
+  public boolean isDuplicateDeferralReason(DeferralReason deferralReason) {
+    String reason = deferralReason.getReason();
+    if (StringUtils.isBlank(reason))
+      return false;
+    DeferralReason existingDeferralReason = deferralReasonRepository.findDeferralReason(reason);
+    if (existingDeferralReason != null && !existingDeferralReason.getId().equals(deferralReason.getId()))
       return true;
     return false;
   }
