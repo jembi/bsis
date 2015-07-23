@@ -44,7 +44,7 @@ public class DeferralReasonBackingFormValidator implements Validator {
 
         if (utilController.isDuplicateDeferralReason(form.getDeferralReason())){
             errors.rejectValue("reason", "400",
-                    "Reason already exists.");
+                    "Deferral Reason already exists.");
         }
 
 
