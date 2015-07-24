@@ -52,8 +52,9 @@ public class UserBackingFormValidator implements Validator {
         checkUserName(form, errors);
         if (form.getId() != null) {
             // Existing user, so check if password is being changed and validate it
-            if (form.isModifyPassword() &&
-                    (form.getCurrentPassword() == null && canManageUsers() || checkCurrentPassword(form, errors))) {
+            boolean skipCurrentPasswordCheck = form.getCurrentPassword() == null &&
+                    (canManageUsers() || isOwnPasswordReset(form));
+            if (form.isModifyPassword() && (skipCurrentPasswordCheck || checkCurrentPassword(form, errors))) {
                 comparePassword(form, errors);
             }
         } else {
@@ -65,6 +66,12 @@ public class UserBackingFormValidator implements Validator {
     }
     
     private boolean checkCurrentPassword(UserBackingForm form, Errors errors) {
+
+        if (form.getCurrentPassword() == null) {
+            errors.rejectValue("user.password", "user.incorrect", "Current password is required");
+            return false;
+        }
+        
         User user = userRepository.findUserById(form.getId());
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         boolean matches = encoder.matches(form.getCurrentPassword(), user.getPassword());
@@ -112,6 +119,18 @@ public class UserBackingFormValidator implements Validator {
                     "Username invalid. Use only alphanumeric characters, underscore (_), hyphen (-), and period (.).");
         }
 
+    }
+    
+    /**
+     * Check if the loggedOnUser is resetting their own password.
+     */
+    private boolean isOwnPasswordReset(UserBackingForm form) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return false;
+        }
+        User loggedOnUser = userRepository.findUser(authentication.getName());
+        return loggedOnUser != null && loggedOnUser.isPasswordReset() && loggedOnUser.getId() == form.getId();
     }
     
     /**
