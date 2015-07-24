@@ -63,6 +63,13 @@
     <intercept-url pattern="/deferrals/**" access="isAnonymous()" method="OPTIONS"/>
     <intercept-url pattern="/deferrals/**" access="isFullyAuthenticated()" />
   </http>
+
+  <http pattern="/deferralreasons/**" create-session="never" use-expressions="true">
+    <http-basic />
+    <session-management />
+    <intercept-url pattern="/deferralreasons/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/deferralreasons/**" access="isFullyAuthenticated()" />
+  </http>
   
   <http pattern="/donorcodes/**" create-session="never" use-expressions="true">
   	<http-basic />
