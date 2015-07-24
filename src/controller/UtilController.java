@@ -24,6 +24,7 @@ import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.product.Product;
 import model.product.ProductStatus;
+import model.productmovement.ProductStatusChangeReason;
 import model.producttype.ProductType;
 import model.request.Request;
 import model.user.User;
@@ -55,6 +56,7 @@ import repository.WorksheetRepository;
 import repository.GeneralConfigRepository;
 import repository.BloodBagTypeRepository;
 import repository.DeferralReasonRepository;
+import repository.DiscardReasonRepository;
 import security.V2VUserDetails;
 import utils.DonorUtils;
 
@@ -67,7 +69,7 @@ public class UtilController {
 
   @Autowired
   private DonorRepository donorRepository;
-  
+
   @Autowired
   private LocationRepository locationRepository;
 
@@ -97,22 +99,25 @@ public class UtilController {
 
   @Autowired
   private GenericConfigRepository genericConfigRepository;
-  
+
   @Autowired
   private UserRepository userRepository;
-  
+
   @Autowired
   private RoleRepository roleRepository;
 
   @Autowired
   private GeneralConfigRepository generalConfigRepository;
-  
+
   @Autowired
   private BloodBagTypeRepository bloodBagTypeRepository;
 
   @Autowired
+  private DiscardReasonRepository discardReasonRepository;
+
+  @Autowired
   private DeferralReasonRepository deferralReasonRepository;
-  
+
   public Map<String, Map<String, Object>> getFormFieldsForForm(String formName) {
     List<FormField> formFields = formFieldRepository.getFormFields(formName);
     Map<String, Map<String, Object>> formFieldMap = new HashMap<String, Map<String, Object>>();
@@ -261,7 +266,7 @@ public class UtilController {
       return false;
     return formField.getAutoGenerate();
   }
-  
+
   public Boolean isDonorPanel(Long locationId) {
     return locationRepository.getLocation(locationId).getIsDonorPanel();
   }
@@ -269,11 +274,11 @@ public class UtilController {
   public String getNextDonorNumber() {
     return sequenceNumberRepository.getNextDonorNumber();
   }
-  
+
   public String getSequenceNumber(String targetTable,String columnName) {
 	    return sequenceNumberRepository.getSequenceNumber(targetTable,columnName);
 	  }
-	  
+
 
   public String getNextCollectionNumber() {
     return sequenceNumberRepository.getNextCollectionNumber();
@@ -344,7 +349,7 @@ public class UtilController {
 		  return false;
 	  }
   }
-  
+
   public String verifyDonorAge(Date birthDate) {
     Map<String, String> config = getConfigProperty("donationRequirements");
     String errorMessage = "";
@@ -360,7 +365,7 @@ public class UtilController {
             errorMessage = "Donor age must be between " + minAge + " and " + maxAge + " years.";
           }
         }
-     
+
     }
     return errorMessage;
   }
@@ -391,7 +396,7 @@ public class UtilController {
 
   public Product findProduct(String collectionNumber, ProductType productType) {
     List<Product> products = productRepository.findProductsByCollectionNumber(collectionNumber);
-    Product matchingProduct = null; 
+    Product matchingProduct = null;
     for (Product product : products) {
       if (product.getProductType().equals(productType)) {
         if (matchingProduct != null &&
@@ -426,7 +431,7 @@ public class UtilController {
       return true;
     return false;
   }
-  
+
   public boolean donorNumberExists(String donorNumber) {
     if (StringUtils.isBlank(donorNumber))
       return false;
@@ -446,6 +451,16 @@ public class UtilController {
     return false;
   }
 
+  public boolean isDuplicateDiscardReason(ProductStatusChangeReason discardReason){
+    String reason = discardReason.getStatusChangeReason();
+    if (StringUtils.isBlank(reason))
+      return false;
+    ProductStatusChangeReason existingDiscardReason = discardReasonRepository.findDiscardReason(reason);
+    if (existingDiscardReason != null && !existingDiscardReason.getId().equals(discardReason.getId()))
+      return true;
+    return false;
+  }
+
   public boolean isDuplicateGeneralConfigName(GeneralConfig config) {
     String configName = config.getName();
     if (StringUtils.isBlank(configName))
@@ -455,7 +470,7 @@ public class UtilController {
       return true;
     return false;
   }
-  
+
   public boolean isDuplicatePackTypeName(BloodBagType packType) {
     String packTypeName = packType.getBloodBagType();
     if (StringUtils.isBlank(packTypeName))
