@@ -61,7 +61,7 @@ public class BloodBagTypeRepository {
   }
   
   public BloodBagType saveBloodBagType(BloodBagType packType){
-      em.persist(packType);
+      packType = em.merge(packType);
       em.flush();
       return packType;
   }
