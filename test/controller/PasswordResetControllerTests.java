@@ -114,6 +114,8 @@ public class PasswordResetControllerTests {
         controller.setUserRepository(userRepository);
         controller.setMailSender(mailSender);
         controller.setPasswordGenerationService(passwordGenerationService);
+        controller.setPasswordResetSubject("BSIS Password reset");
+        controller.setPasswordResetMessage("Your password has been reset to \"%s\". You will be required to change it next time you log in.");
     }
 
 }

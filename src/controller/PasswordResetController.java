@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import model.user.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
@@ -33,6 +34,11 @@ public class PasswordResetController {
     @Autowired
     private PasswordGenerationService passwordGenerationService;
     
+    @Value("${password.reset.subject}")
+    private String passwordResetSubject;
+    @Value("${password.reset.message}")
+    private String passwordResetMessage;
+    
     public void setMailSender(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
@@ -43,6 +49,14 @@ public class PasswordResetController {
     
     public void setPasswordGenerationService(PasswordGenerationService passwordGenerationService) {
         this.passwordGenerationService = passwordGenerationService;
+    }
+
+    public void setPasswordResetSubject(String passwordResetSubject) {
+        this.passwordResetSubject = passwordResetSubject;
+    }
+
+    public void setPasswordResetMessage(String passwordResetMessage) {
+        this.passwordResetMessage = passwordResetMessage;
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -62,9 +76,8 @@ public class PasswordResetController {
         // Send an email containing the new password to the user
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(user.getEmailId());
-        message.setSubject("BSIS Password reset");
-        message.setText("Your password has been reset to \"" + newPassword +
-                "\". You will be required to change it next time you log in.");
+        message.setSubject(passwordResetSubject);
+        message.setText(String.format(passwordResetMessage, newPassword));
         mailSender.send(message);
 
         return new ResponseEntity<Map<String, Object>>(HttpStatus.CREATED);
