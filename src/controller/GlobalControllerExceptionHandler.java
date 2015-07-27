@@ -266,7 +266,7 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("moreInfo", error.getMessage());
     errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
     error.printStackTrace();
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_GATEWAY);
+    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
   }
   
   /**
