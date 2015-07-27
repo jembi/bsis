@@ -2,9 +2,7 @@ package repository;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 
 import model.donationtype.DonationType;
 
@@ -21,10 +19,18 @@ public class DonationTypeRepository {
   public DonationType getDonationType(String checkDonationType) {
     TypedQuery<DonationType> query;
     query = em.createQuery("SELECT dt from DonationType dt where " +
-                           "dt.donorType=:donorType and dt.isDeleted=:isDeleted", DonationType.class);
-    query.setParameter("donorType", checkDonationType);
+            "dt.donationType=:donationType and dt.isDeleted=:isDeleted", DonationType.class);
+    query.setParameter("donationType", checkDonationType);
     query.setParameter("isDeleted", false);
-    return query.getSingleResult();
+    DonationType result = null;
+    try {
+      result = query.getSingleResult();
+    } catch (NoResultException ex) {
+      return null;
+    } catch (NonUniqueResultException ex) {
+      throw new NonUniqueResultException("More than on erole exists with name :" + checkDonationType);
+    }
+    return result;
   }
 
   public List<DonationType> getAllDonationTypes() {
@@ -64,12 +70,16 @@ public class DonationTypeRepository {
   }
   */
   
-  public void saveDonationType(DonationType donationType){
+  public DonationType saveDonationType(DonationType donationType){
       em.persist(donationType);
+      em.flush();
+      return donationType;
   }
   
   public DonationType updateDonationType(DonationType donationType){
-      return em.merge(donationType);
+      em.merge(donationType);
+      em.flush();
+      return donationType;
   }
 
 }

@@ -21,7 +21,7 @@ public class DonationTypeBackingForm {
         return donationType;
     }
 
-    public String getDonorType(){
+    public String getType() {
         return donationType.getDonationType();
     }
 
@@ -37,8 +37,8 @@ public class DonationTypeBackingForm {
         donationType.setId(id);
     }
 
-    public void setDonationType(String donorType){
-        donationType.setDonationType(donorType);
+    public void setType(String donationTypeStr){
+        donationType.setDonationType(donationTypeStr);
     }
 
     public void setIsDeleted(Boolean isDeleted){

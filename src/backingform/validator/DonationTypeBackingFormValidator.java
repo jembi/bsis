@@ -8,20 +8,20 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import repository.DonationTypeRepository;
 import viewmodel.DonationTypeViewModel;
-
+import javax.persistence.NonUniqueResultException;
 import java.util.Arrays;
 
 public class DonationTypeBackingFormValidator implements Validator {
 
     private Validator validator;
     private UtilController utilController;
-    private DonationTypeRepository deferralReasonRepository;
+    private DonationTypeRepository donationTypeRepository;
 
-    public DonationTypeBackingFormValidator(Validator validator, UtilController utilController,DonationTypeRepository deferralReasonRepository) {
+    public DonationTypeBackingFormValidator(Validator validator, UtilController utilController,DonationTypeRepository donationTypeRepository) {
         super();
         this.validator = validator;
         this.utilController = utilController;
-        this.deferralReasonRepository=deferralReasonRepository;
+        this.donationTypeRepository=donationTypeRepository;
     }
 
     @SuppressWarnings("unchecked")

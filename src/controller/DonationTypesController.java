@@ -1,5 +1,6 @@
 package controller;
 
+import backingform.DonationTypeBackingForm;
 import backingform.validator.DonationTypeBackingFormValidator;
 import model.donationtype.DonationType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import repository.DonationTypeRepository;
 import utils.PermissionConstants;
+import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import viewmodel.DonationTypeViewModel;
@@ -56,20 +58,20 @@ public class DonationTypesController {
 
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-    public  ResponseEntity saveDonationType(@RequestBody DonationType donationType) {
-        donationTypesRepository.saveDonationType(donationType);
-        return new ResponseEntity(donationType, HttpStatus.CREATED);
+    public  ResponseEntity saveDonationType(@Valid @RequestBody DonationTypeBackingForm form) {
+        DonationType donationType = donationTypesRepository.saveDonationType(form.getDonationType());
+        return new ResponseEntity(new DonationTypeViewModel(donationType), HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-    public  ResponseEntity updateDonationType(@PathVariable Integer id,
-                                              @RequestBody DonationType donationType) {
+    public  ResponseEntity updateDonationType(@Valid @RequestBody DonationTypeBackingForm form,  @PathVariable Integer id) {
         Map<String, Object> map = new HashMap<String, Object>();
+        DonationType donationType = form.getDonationType();
         donationType.setId(id);
         donationType = donationTypesRepository.updateDonationType(donationType);
-        map.put("donationType", donationType);
-        return new ResponseEntity(map , HttpStatus.OK);
+        map.put("donationType", new DonationTypeViewModel(donationType));
+        return new ResponseEntity(map, HttpStatus.OK);
     }
 
     private void addAllDonationTypesToModel(Map<String, Object> m) {
