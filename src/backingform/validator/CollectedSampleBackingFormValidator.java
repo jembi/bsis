@@ -63,6 +63,16 @@ public class CollectedSampleBackingFormValidator implements Validator {
       errors.rejectValue("collectedSample.collectedOn", "dateFormat.incorrect",
           CustomDateFormatter.getDateErrorMessage());
     
+    String bleedStartTime = form.getBleedStartTime();
+    if (!CustomDateFormatter.isDateTimeStringValid(bleedStartTime))
+      errors.rejectValue("collectedSample.bleedStartTime", "timeFormat.incorrect",
+          CustomDateFormatter.getDateErrorMessage());
+    
+    String bleedEndTime = form.getBleedEndTime();
+    if (!CustomDateFormatter.isDateTimeStringValid(bleedEndTime))
+      errors.rejectValue("collectedSample.bleedEndTime", "timeFormat.incorrect",
+          CustomDateFormatter.getDateErrorMessage());
+    
     updateRelatedEntities(form);
     inheritParametersFromCollectionBatch(form, errors);
     Donor donor = form.getDonor();
