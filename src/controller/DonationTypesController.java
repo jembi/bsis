@@ -1,20 +1,26 @@
 package controller;
 
+import backingform.validator.DonationTypeBackingFormValidator;
 import model.donationtype.DonationType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import repository.DonationTypeRepository;
 import utils.PermissionConstants;
 
 import org.apache.log4j.Logger;
+import viewmodel.DonationTypeViewModel;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("donationtypes")
 public class DonationTypesController {
 
     private static final Logger LOGGER = Logger.getLogger(DonationTypesController.class);
@@ -22,7 +28,15 @@ public class DonationTypesController {
     @Autowired
     DonationTypeRepository donationTypesRepository;
 
-    @RequestMapping(value="/donationtypes", method=RequestMethod.GET)
+    @Autowired
+    private UtilController utilController;
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.setValidator(new DonationTypeBackingFormValidator(binder.getValidator(), utilController, donationTypesRepository));
+    }
+
+    @RequestMapping(method=RequestMethod.GET)
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
     public Map<String, Object> configureDonationTypesFormGenerator() {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -30,29 +44,24 @@ public class DonationTypesController {
         return map;
     }
 
-    private void addAllDonationTypesToModel(Map<String, Object> m) {
-        m.put("allDonationTypes", donationTypesRepository.getAllDonationTypes());
-    }
-
-
-    @RequestMapping(value = "/donationtypes/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
     public  ResponseEntity getDonationType(@PathVariable Integer id) {
         Map<String, Object> map = new HashMap<String, Object>();
         DonationType donationType = donationTypesRepository.getDonationTypeById(id);
-        map.put("donationType", donationType);
+        map.put("donationType", new DonationTypeViewModel(donationType));
         return new ResponseEntity(map, HttpStatus.OK);
 
     }
 
-    @RequestMapping(value = "/donationtypes", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
     public  ResponseEntity saveDonationType(@RequestBody DonationType donationType) {
         donationTypesRepository.saveDonationType(donationType);
         return new ResponseEntity(donationType, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/donationtypes/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
     public  ResponseEntity updateDonationType(@PathVariable Integer id,
                                               @RequestBody DonationType donationType) {
@@ -61,5 +70,17 @@ public class DonationTypesController {
         donationType = donationTypesRepository.updateDonationType(donationType);
         map.put("donationType", donationType);
         return new ResponseEntity(map , HttpStatus.OK);
+    }
+
+    private void addAllDonationTypesToModel(Map<String, Object> m) {
+        m.put("allDonationTypes", getDonationTypeViewModels(donationTypesRepository.getAllDonationTypes()));
+    }
+
+    private List<DonationTypeViewModel> getDonationTypeViewModels(List<DonationType> donationTypes){
+        List<DonationTypeViewModel> viewModels = new ArrayList<DonationTypeViewModel>();
+        for(DonationType donationType : donationTypes){
+            viewModels.add(new DonationTypeViewModel(donationType));
+        }
+        return viewModels;
     }
 }
