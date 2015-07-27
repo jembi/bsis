@@ -7,14 +7,13 @@ import java.util.Date;
 import java.util.List;
 import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
+import model.collectedsample.HaemoglobinLevel;
 import model.donationtype.DonationType;
 import model.donor.Donor;
-import model.location.Location;
 import model.product.Product;
 import model.user.User;
 import org.apache.commons.lang3.StringUtils;
 import repository.bloodtesting.BloodTypingStatus;
-import repository.bloodtesting.BloodTypingMatchStatus;
 import utils.CustomDateFormatter;
 
 public class CollectedSampleViewModel {
@@ -167,6 +166,10 @@ public class CollectedSampleViewModel {
   public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
 		collectedSample.setHaemoglobinCount(haemoglobinCount);
 	}
+  
+  public HaemoglobinLevel getHaemoglobinLevel() {
+      return collectedSample.getHaemoglobinLevel();
+  }
   
   public BigDecimal getDonorWeight() {
 		return collectedSample.getDonorWeight();
