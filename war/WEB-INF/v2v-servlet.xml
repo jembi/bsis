@@ -87,7 +87,7 @@
   <!-- persistence unit name comes from persistence.xml -->
   <bean id="entityManagerFactory"
     class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
-    p:dataSource-ref="dataSource" p:persistenceUnitName="v2v">
+    p:dataSource-ref="dataSource" p:persistenceUnitName="bsis">
     <property name="jpaProperties">
       <props>
         <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
