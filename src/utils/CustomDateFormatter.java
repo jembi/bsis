@@ -11,7 +11,7 @@ import org.joda.time.DateTime;
 public class CustomDateFormatter {
 
   private static String datePattern = "yyyy-MM-dd";
-  private static String dateTimePattern = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+  private static String dateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
   
   private static DateFormat dateFormat;
   private static DateFormat dateTimeFormat;
