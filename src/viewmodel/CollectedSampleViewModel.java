@@ -222,5 +222,12 @@ public class CollectedSampleViewModel {
   public  LocationViewModel getDonorPanel(){
       return new LocationViewModel(collectedSample.getDonorPanel());
   }
+  
+  public PackTypeViewModel getBloodBagType() {
+      if (collectedSample.getBloodBagType() == null) {
+          return null;
+      }
+      return new PackTypeViewModel(collectedSample.getBloodBagType());
+  }
 
 }

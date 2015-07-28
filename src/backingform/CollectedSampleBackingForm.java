@@ -470,5 +470,9 @@ public class CollectedSampleBackingForm {
         }
             
     }
+    
+    public void setBloodBagType(BloodBagType bloodBagType) {
+        collectedSample.setBloodBagType(bloodBagType);
+    }
 
 }
