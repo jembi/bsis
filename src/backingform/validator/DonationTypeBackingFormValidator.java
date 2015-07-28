@@ -40,7 +40,7 @@ public class DonationTypeBackingFormValidator implements Validator {
         DonationTypeBackingForm form = (DonationTypeBackingForm) obj;
 
         if (utilController.isDuplicateDonationType(form.getDonationType())){
-            errors.rejectValue("donationType", "400",
+            errors.rejectValue("type", "400",
                     "Donation type already exists.");
         }
     }

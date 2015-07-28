@@ -28,7 +28,7 @@ public class DonationTypeRepository {
     } catch (NoResultException ex) {
       return null;
     } catch (NonUniqueResultException ex) {
-      throw new NonUniqueResultException("More than on erole exists with name :" + checkDonationType);
+      throw new NonUniqueResultException("More than one donation type exists with name :" + checkDonationType);
     }
     return result;
   }
