@@ -59,8 +59,11 @@ public class CollectedSampleViewModel {
     return collectedSample.getDonationType();
   }
 
-  public BloodBagType getPackType() {
-    return collectedSample.getBloodBagType();
+  public PackTypeViewModel getPackType() {
+      if (collectedSample.getBloodBagType() == null) {
+          return null;
+      }
+      return new PackTypeViewModel(collectedSample.getBloodBagType());
   }
 
   public String getNotes() {
