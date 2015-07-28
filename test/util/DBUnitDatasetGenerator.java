@@ -27,7 +27,7 @@ public class DBUnitDatasetGenerator {
 	
 	static final String DATABASE_PWD = "root";
 	
-	static final String DATABASE_URL = "jdbc:mysql://localhost:3306/v2v_new";
+	static final String DATABASE_URL = "jdbc:mysql://localhost:3306/bsis";
 	
 	static final String DATABASE_DRIVER = "com.mysql.jdbc.Driver";
 	
