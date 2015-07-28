@@ -31,7 +31,7 @@ import model.product.ProductStatus;
 import model.producttype.ProductType;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:**/v2v-servlet.xml")
+@ContextConfiguration(locations = "file:**/bsis-servlet.xml")
 @WebAppConfiguration
 public class ProductControllerTest {
 	

@@ -11,7 +11,7 @@
          Spring MVC configuration is loaded by DispatcherServlet and not by ContextLoaderListener.  -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/security-v2v-servlet.xml</param-value>
+        <param-value>/WEB-INF/security-bsis-servlet.xml</param-value>
     </context-param>
 
     <!-- Loaded at startup -->
@@ -28,9 +28,9 @@
         <location>/errorPage.jsp</location>
     </error-page>
 
-    <!-- by default looks for v2v-servlet.xml -->
+    <!-- by default looks for bsis-servlet.xml -->
     <servlet>
-        <servlet-name>v2v</servlet-name>
+        <servlet-name>bsis</servlet-name>
         <servlet-class>
             org.springframework.web.servlet.DispatcherServlet
         </servlet-class>
@@ -44,11 +44,11 @@
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>v2v</servlet-name>
+        <servlet-name>bsis</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>v2v</servlet-name>
+        <servlet-name>bsis</servlet-name>
         <url-pattern>*.zip</url-pattern>
     </servlet-mapping>
 

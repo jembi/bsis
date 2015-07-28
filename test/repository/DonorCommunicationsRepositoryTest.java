@@ -477,12 +477,12 @@ public class DonorCommunicationsRepositoryTest {
 	}
 	
 	/**
-	 * UserPassword,V2vUserDetails(Principal) and authority detail store into
+	 * UserPassword,BsisUserDetails(Principal) and authority detail store into
 	 * SecurityContextHolder.
 	 */
 	public void userAuthentication() {
 		applicationContext = new ClassPathXmlApplicationContext(
-				"file:**/security-v2v-servlet.xml");
+				"file:**/security-bsis-servlet.xml");
 		userDetailsService = applicationContext.getBean(LoginUserService.class);
 		BsisUserDetails userDetails = (BsisUserDetails) userDetailsService
 				.loadUserByUsername("admin");

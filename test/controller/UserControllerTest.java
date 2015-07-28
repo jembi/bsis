@@ -14,7 +14,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import repository.UserRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"file:**/v2v-servlet.xml" })
+@ContextConfiguration(locations = {"file:**/bsis-servlet.xml" })
 @WebAppConfiguration
 public class UserControllerTest {
 
