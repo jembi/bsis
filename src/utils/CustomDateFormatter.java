@@ -121,7 +121,7 @@ public class CustomDateFormatter {
   }
 
   private static String getISO8601StringForDate(Date date) {
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+    DateFormat dateFormat = new SimpleDateFormat(dateTimePattern, Locale.US);
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     return dateFormat.format(date);
   }
