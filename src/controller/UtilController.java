@@ -57,7 +57,7 @@ import repository.GeneralConfigRepository;
 import repository.BloodBagTypeRepository;
 import repository.DeferralReasonRepository;
 import repository.DiscardReasonRepository;
-import security.V2VUserDetails;
+import security.BsisUserDetails;
 import utils.DonorUtils;
 
 @Component
@@ -561,8 +561,8 @@ public class UtilController {
   public User getCurrentUser() {
     Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     User user = null;
-    if (principal != null && principal instanceof V2VUserDetails)
-      user = ((V2VUserDetails) principal).getUser();
+    if (principal != null && principal instanceof BsisUserDetails)
+      user = ((BsisUserDetails) principal).getUser();
     return user;
   }
   

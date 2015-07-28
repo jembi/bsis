@@ -47,7 +47,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import security.LoginUserService;
-import security.V2VUserDetails;
+import security.BsisUserDetails;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
@@ -484,7 +484,7 @@ public class DonorCommunicationsRepositoryTest {
 		applicationContext = new ClassPathXmlApplicationContext(
 				"file:**/security-v2v-servlet.xml");
 		userDetailsService = applicationContext.getBean(LoginUserService.class);
-		V2VUserDetails userDetails = (V2VUserDetails) userDetailsService
+		BsisUserDetails userDetails = (BsisUserDetails) userDetailsService
 				.loadUserByUsername("admin");
 		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
 				userDetails, userDetails.getPassword(),
