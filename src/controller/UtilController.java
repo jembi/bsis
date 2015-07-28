@@ -223,9 +223,9 @@ public class UtilController {
     return reqUrl;
   }
 
-  public Properties getV2VProperties() throws IOException {
+  public Properties getDatabaseProperties() throws IOException {
     Properties prop = new Properties();
-    BufferedReader reader = new BufferedReader(new InputStreamReader(servletContext.getResourceAsStream("/WEB-INF/v2v.properties")));
+    BufferedReader reader = new BufferedReader(new InputStreamReader(servletContext.getResourceAsStream("/WEB-INF/classes/database.properties")));
     String propertyFileContents = "";
     String line;
     while ((line = reader.readLine()) != null) {
@@ -572,5 +572,9 @@ public class UtilController {
   	if(user!=null)
   		pwd=user.getPassword();
   	return pwd;
+  }
+  
+  void setServletContext(ServletContext servletContext) {
+	  this.servletContext = servletContext;
   }
 }
