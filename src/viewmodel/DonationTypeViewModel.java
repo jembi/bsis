@@ -14,7 +14,7 @@ public class DonationTypeViewModel {
         return donationType.getId();
     }
 
-    public String getDonationType(){
+    public String getType(){
         return donationType.getDonationType();
     }
 
