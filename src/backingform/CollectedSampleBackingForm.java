@@ -105,7 +105,7 @@ public class CollectedSampleBackingForm {
   public void setBleedStartTime(String bleedStartTime) {
     this.bleedStartTime = bleedStartTime;
     try {
-      collectedSample.setBleedStartTime(CustomDateFormatter.getTimeFromString(bleedStartTime));
+      collectedSample.setBleedStartTime(CustomDateFormatter.getDateTimeFromString(bleedStartTime));
     } catch (ParseException ex) {
       ex.printStackTrace();
       collectedSample.setBleedStartTime(null);
@@ -115,7 +115,7 @@ public class CollectedSampleBackingForm {
   public void setBleedEndTime(String bleedEndTime) {
     this.bleedEndTime = bleedEndTime;
     try {
-      collectedSample.setBleedEndTime(CustomDateFormatter.getTimeFromString(bleedEndTime));
+      collectedSample.setBleedEndTime(CustomDateFormatter.getDateTimeFromString(bleedEndTime));
     } catch (ParseException ex) {
       ex.printStackTrace();
       collectedSample.setBleedEndTime(null);
