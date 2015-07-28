@@ -24,7 +24,7 @@ import org.springframework.util.SystemPropertyUtils;
 
 /**
  * Auto generate schema using hibernate hbm2ddl tool. This will prepare the full
- * schema for a fresh installation of v2v.
+ * schema for a fresh installation of BSIS.
  * The schema changes for the update need to be worked out manually.
  * Source:
  * http://jandrewthompson.blogspot.com/2009/10/how-to-generate-ddl-scripts-from.html

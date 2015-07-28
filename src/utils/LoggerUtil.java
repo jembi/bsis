@@ -7,7 +7,7 @@ import log4j.BsisLogLevel;
 import org.apache.log4j.Logger;
 
 public class LoggerUtil {
-  static final Logger logger = Logger.getLogger("v2v");
+  static final Logger logger = Logger.getLogger("bsis");
 
   static {
     // PropertyConfigurator.configure("classes/log4j.properties");
