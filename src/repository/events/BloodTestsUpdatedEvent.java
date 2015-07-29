@@ -1,26 +1,26 @@
 package repository.events;
 
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
 import viewmodel.BloodTestingRuleResult;
 
 public class BloodTestsUpdatedEvent extends AbstractApplicationEvent {
 
   private static final long serialVersionUID = 1L;
 
-  private CollectedSample collectedSample;
+  private Donation donation;
   private BloodTestingRuleResult ruleResult;
 
   public BloodTestsUpdatedEvent(String eventId, Object eventContext) {
     super(eventId, eventContext);
   }
 
-  public CollectedSample getCollectedSample() {
-    return collectedSample;
+  public Donation getDonation() {
+    return donation;
   }
 
 
-  public void setCollectedSample(CollectedSample collectedSample) {
-    this.collectedSample = collectedSample;
+  public void setDonation(Donation donation) {
+    this.donation = donation;
   }
 
 

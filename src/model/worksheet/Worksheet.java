@@ -14,7 +14,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
@@ -41,7 +41,7 @@ public class Worksheet implements ModificationTracker {
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @ManyToMany
-  private Set<CollectedSample> collectedSamples;
+  private Set<Donation> donations;
 
   private Boolean isDeleted;
 
@@ -53,7 +53,7 @@ public class Worksheet implements ModificationTracker {
 
   public Worksheet() {
     modificationTracker = new RowModificationTracker();
-    collectedSamples = new HashSet<CollectedSample>();
+    donations = new HashSet<Donation>();
   }
 
   public Long getId() {
@@ -104,12 +104,12 @@ public class Worksheet implements ModificationTracker {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 
-  public Set<CollectedSample> getCollectedSamples() {
-    return collectedSamples;
+  public Set<Donation> getDonations() {
+    return donations;
   }
 
-  public void setCollectedSamples(Set<CollectedSample> collectedSamples) {
-    this.collectedSamples = collectedSamples;
+  public void setDonations(Set<Donation> donations) {
+    this.donations = donations;
   }
 
   public WorksheetType getWorksheetType() {

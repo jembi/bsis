@@ -3,9 +3,12 @@ package model.donor;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import constraintvalidator.LocationExists;
+
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,11 +28,12 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
+
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
 import model.address.ContactMethodType;
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
 import model.donorcodes.DonorCode;
 import model.donordeferral.DonorDeferral;
 import model.idtype.IdType;
@@ -39,6 +43,7 @@ import model.modificationtracker.RowModificationTracker;
 import model.preferredlanguage.PreferredLanguage;
 import model.user.User;
 import model.util.Gender;
+
 import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -47,6 +52,7 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Length;
+
 import utils.DonorUtils;
 
 @Entity
@@ -172,7 +178,7 @@ public class Donor implements ModificationTracker {
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="donor")
-  private List<CollectedSample> collectedSamples;
+  private List<Donation> donations;
 
   /**
    * If a donor has been deferred then we can disallow him to donate the next time.
@@ -369,13 +375,13 @@ public void copy(Donor donor) {
     
   }
 
-  public List<CollectedSample> getCollectedSamples() {
-    return collectedSamples;
+  public List<Donation> getDonations() {
+    return donations;
   }
 
    
-  public void setCollectedSamples(List<CollectedSample> collectedSamples) {
-    this.collectedSamples = collectedSamples;
+  public void setDonations(List<Donation> donations) {
+    this.donations = donations;
   }
 
   

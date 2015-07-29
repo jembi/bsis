@@ -21,9 +21,9 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import model.bloodtesting.TTIStatus;
-import model.collectedsample.CollectedSample;
 import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
+import model.donation.Donation;
 import model.product.Product;
 import model.product.ProductStatus;
 import model.productmovement.ProductStatusChange;
@@ -34,7 +34,9 @@ import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 import model.request.Request;
 import model.util.BloodGroup;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,13 +45,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import controller.UtilController;
-
 import repository.bloodtesting.BloodTypingStatus;
 import utils.CustomDateFormatter;
-import viewmodel.CollectedSampleViewModel;
+import viewmodel.DonationViewModel;
 import viewmodel.MatchingProductViewModel;
 import backingform.ProductCombinationBackingForm;
+
 import javax.persistence.PessimisticLockException;
+
 import org.apache.commons.lang3.StringUtils;
 
 @Repository
@@ -60,7 +63,7 @@ public class ProductRepository {
   private EntityManager em;
 
   @Autowired
-  private CollectedSampleRepository collectedSampleRepository;
+  private DonationRepository donationRepository;
 
   @Autowired
   private ProductTypeRepository productTypeRepository;
@@ -85,22 +88,22 @@ public class ProductRepository {
 
     // if a product has been explicitly discarded maintain that status.
     // if the product has been issued do not change its status.
-    // suppose a product from a collection tested as safe was issued
+    // suppose a product from a donation tested as safe was issued
     // then some additional tests were done for some reason and it was
     // discovered that the product was actually unsafe and it should not
     // have been issued then it should be easy to track down all products
     // created from that sample which were issued. By maintaining the status as
     // issued even if the product is unsafe we can search for all products created
-    // from that collection and then look at which ones were already issued.
+    // from that donation and then look at which ones were already issued.
     // Conclusion is do not change the product status once it is marked as issued.
     // Similar reasoning for not changing USED status for a product. It should be
-    // easy to track which used products were made from unsafe collected samples.
-    // of course if the test results are not available or the collection is known
+    // easy to track which used products were made from unsafe donations.
+    // of course if the test results are not available or the donation is known
     // to be unsafe it should not have been issued in the first place.
     // In exceptional cases an admin can always delete this product and create a new one
     // if he wants to change the status to a new one.
     // once a product has been labeled as split it does not exist anymore so we just mark
-    // it as SPLIT/PROCESSED. Even if the collection is found to be unsafe later it should not matter
+    // it as SPLIT/PROCESSED. Even if the donation is found to be unsafe later it should not matter
     // as SPLIT/PROCESSED products are not allowed to be issued
     List<ProductStatus> statusNotToBeChanged =
         Arrays.asList(ProductStatus.DISCARDED, ProductStatus.ISSUED,
@@ -112,10 +115,10 @@ public class ProductRepository {
     if (product.getStatus() != null && statusNotToBeChanged.contains(product.getStatus()))
       return false;
 
-    if (product.getCollectedSample() == null)
+    if (product.getDonation() == null)
       return false;
-    Long collectedSampleId = product.getCollectedSample().getId();
-    CollectedSample c = collectedSampleRepository.findCollectedSampleById(collectedSampleId);
+    Long donationId = product.getDonation().getId();
+    Donation c = donationRepository.findDonationById(donationId);
     BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();
     TTIStatus ttiStatus = c.getTTIStatus();
 
@@ -162,23 +165,23 @@ public class ProductRepository {
   public List<Product> findAnyProduct(String donationIdentificationNumber, List<Integer> productTypes, List<ProductStatus> status, 
 		  Date donationDateFrom, Date donationDateTo, Map<String, Object> pagingParams){
 	  	TypedQuery<Product> query;
-	    String queryStr = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +     
+	    String queryStr = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.donation WHERE " +     
 	                      "p.isDeleted= :isDeleted ";
 	    
 	    if(status != null && !status.isEmpty()){
 	    	queryStr += "AND p.status IN :status ";
 	    }	
 	    if(!StringUtils.isBlank(donationIdentificationNumber)){
-	    	queryStr += "AND p.collectedSample.collectionNumber = :donationIdentificationNumber ";
+	    	queryStr += "AND p.donation.donationIdentificationNumber = :donationIdentificationNumber ";
 	    }
 	    if(productTypes != null && !productTypes.isEmpty()){
 	    	queryStr += "AND p.productType.id IN (:productTypeIds) ";
 	    }	    
 	    if(donationDateFrom != null){
-	    	queryStr += "AND p.collectedSample.collectedOn >= :donationDateFrom ";
+	    	queryStr += "AND p.donation.donationDate >= :donationDateFrom ";
 	    }
 	    if(donationDateTo != null){
-	    	queryStr += "AND p.collectedSample.collectedOn <= :donationDateTo ";
+	    	queryStr += "AND p.donation.donationDate <= :donationDateTo ";
 	    }
 	    
 	    if (pagingParams.containsKey("sortColumn")) {
@@ -213,17 +216,17 @@ public class ProductRepository {
 	    return query.getResultList();
   }
 
-  public List<Product> findProductByCollectionNumber(
-      String collectionNumber, List<ProductStatus> status, Map<String, Object> pagingParams) {
+  public List<Product> findProductByDonationIdentificationNumber(
+      String donationIdentificationNumber, List<ProductStatus> status, Map<String, Object> pagingParams) {
 
     TypedQuery<Product> query;
-    String queryStr = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +
-                      "p.collectedSample.collectionNumber = :collectionNumber AND " +
+    String queryStr = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.donation WHERE " +
+                      "p.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
                       "p.status IN :status AND " +
                       "p.isDeleted= :isDeleted";
 
     String queryStrWithoutJoin = "SELECT p FROM Product p WHERE " +
-        "p.collectedSample.collectionNumber = :collectionNumber AND " +
+        "p.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
         "p.status IN :status AND " +
         "p.isDeleted= :isDeleted";
 
@@ -234,7 +237,7 @@ public class ProductRepository {
     query = em.createQuery(queryStr, Product.class);
     query.setParameter("status", status);
     query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("collectionNumber", collectionNumber);
+    query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
 
     int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
     int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
@@ -250,7 +253,7 @@ public class ProductRepository {
       List<Integer> productTypeIds, List<ProductStatus> status,
       Map<String, Object> pagingParams) {
 
-    String queryStr = "SELECT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +
+    String queryStr = "SELECT p FROM Product p LEFT JOIN FETCH p.donation WHERE " +
         "p.productType.id IN (:productTypeIds) AND " +
         "p.status IN :status AND " +
         "p.isDeleted= :isDeleted";
@@ -298,7 +301,7 @@ public class ProductRepository {
   }
 
   public List<Product> getAllUnissuedThirtyFiveDayProducts() {
-    String queryString = "SELECT p FROM Product p where p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.dateCollected > :minDate";
+    String queryString = "SELECT p FROM Product p where p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.createdOn > :minDate";
     TypedQuery<Product> query = em.createQuery(queryString, Product.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("isIssued", Boolean.FALSE);
@@ -314,12 +317,12 @@ public class ProductRepository {
     return query.getResultList();
   }
 
-  public boolean isProductCreated(String collectionNumber) {
-    String queryString = "SELECT p FROM Product p WHERE p.collectionNumber = :collectionNumber and p.isDeleted = :isDeleted";
+  public boolean isProductCreated(String donationIdentificationNumber) {
+    String queryString = "SELECT p FROM Product p WHERE p.donationIdentificationNumber = :donationIdentificationNumber and p.isDeleted = :isDeleted";
     TypedQuery<Product> query = em.createQuery(queryString, Product.class);
     query.setParameter("isDeleted", Boolean.FALSE);
-    List<Product> products = query.setParameter("collectionNumber",
-        collectionNumber).getResultList();
+    List<Product> products = query.setParameter("donationIdentificationNumber",
+        donationIdentificationNumber).getResultList();
     if (products != null && products.size() > 0) {
       return true;
     }
@@ -342,7 +345,7 @@ public class ProductRepository {
   public List<Product> getProducts(Date fromDate, Date toDate) {
     TypedQuery<Product> query = em
         .createQuery(
-            "SELECT p FROM Product p WHERE  p.dateCollected >= :fromDate and p.dateCollected<= :toDate and p.isDeleted = :isDeleted",
+            "SELECT p FROM Product p WHERE  p.createdOn >= :fromDate and p.createdOn<= :toDate and p.isDeleted = :isDeleted",
             Product.class);
     query.setParameter("fromDate", fromDate);
     query.setParameter("toDate", toDate);
@@ -368,7 +371,7 @@ public class ProductRepository {
 
   public List<Product> getAllUnissuedThirtyFiveDayProducts(String productType,
       String abo, String rhd) {
-    String queryString = "SELECT p FROM Product p where p.type = :productType and p.abo= :abo and p.rhd= :rhd and p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.dateCollected > :minDate";
+    String queryString = "SELECT p FROM Product p where p.type = :productType and p.abo= :abo and p.rhd= :rhd and p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.createdOn > :minDate";
     TypedQuery<Product> query = em.createQuery(queryString, Product.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("isIssued", Boolean.FALSE);
@@ -386,7 +389,7 @@ public class ProductRepository {
   }
 
   public Product findProductById(Long productId)throws NoResultException{
-    String queryString = "SELECT p FROM Product p LEFT JOIN FETCH p.collectedSample LEFT JOIN FETCH p.issuedTo where p.id = :productId AND p.isDeleted = :isDeleted";
+    String queryString = "SELECT p FROM Product p LEFT JOIN FETCH p.donation LEFT JOIN FETCH p.issuedTo where p.id = :productId AND p.isDeleted = :isDeleted";
     TypedQuery<Product> query = em.createQuery(queryString, Product.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("productId", productId);
@@ -428,13 +431,13 @@ public class ProductRepository {
     Request request = requestRepository.findRequestById(requestId);
     
     TypedQuery<Product> query = em.createQuery(
-                 "SELECT p from Product p LEFT JOIN FETCH p.collectedSample WHERE " +
+                 "SELECT p from Product p LEFT JOIN FETCH p.donation WHERE " +
                  "p.productType = :productType AND " +
                  "p.expiresOn >= :today AND " +
                  "p.status = :status AND " + 
-                 "p.collectedSample.ttiStatus = :ttiStatus AND " +
-                 "((p.collectedSample.bloodAbo = :bloodAbo AND p.collectedSample.bloodRh = :bloodRh) OR " +
-                 "(p.collectedSample.bloodAbo = :bloodAboO AND p.collectedSample.bloodRh = :bloodRhNeg)) AND " +
+                 "p.donation.ttiStatus = :ttiStatus AND " +
+                 "((p.donation.bloodAbo = :bloodAbo AND p.donation.bloodRh = :bloodRh) OR " +
+                 "(p.donation.bloodAbo = :bloodAboO AND p.donation.bloodRh = :bloodRhNeg)) AND " +
                  "p.isDeleted = :isDeleted " +
                  "ORDER BY p.expiresOn ASC",
                   Product.class);
@@ -489,7 +492,7 @@ public class ProductRepository {
     TypedQuery<Product> q = em.createQuery(
                              "SELECT DISTINCT p from Product p " +
                              "WHERE p.status IN :status AND " +
-                             "p.collectedSample.donorPanel.id IN (:panelIds) AND " +
+                             "p.donation.donorPanel.id IN (:panelIds) AND " +
                              "p.isDeleted=:isDeleted",
                              Product.class);
     List<ProductStatus> productStatus = new ArrayList<ProductStatus>();
@@ -524,9 +527,9 @@ public class ProductRepository {
       String productType = product.getProductType().getProductTypeName();
       @SuppressWarnings("unchecked")
       Map<String, Map<Long, Long>> inventoryByBloodGroup = (Map<String, Map<Long, Long>>) inventory.get(productType);
-      CollectedSampleViewModel collectedSample;
-      collectedSample = new CollectedSampleViewModel(product.getCollectedSample());
-      Map<Long, Long> numDayMap = inventoryByBloodGroup.get(collectedSample.getBloodGroup());
+      DonationViewModel donation;
+      donation = new DonationViewModel(product.getDonation());
+      Map<Long, Long> numDayMap = inventoryByBloodGroup.get(donation.getBloodGroup());
       DateTime createdOn = new DateTime(product.getCreatedOn().getTime());
       Long age = (long) Days.daysBetween(createdOn, today).getDays();
       // compute window based on age
@@ -561,7 +564,7 @@ public class ProductRepository {
   }
 
   public void updateQuarantineStatus() {
-    String queryString = "SELECT p FROM Product p LEFT JOIN FETCH p.collectedSample where p.status is NULL AND p.isDeleted = :isDeleted";
+    String queryString = "SELECT p FROM Product p LEFT JOIN FETCH p.donation where p.status is NULL AND p.isDeleted = :isDeleted";
     TypedQuery<Product> query = em.createQuery(queryString, Product.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     List<Product> products = query.getResultList();
@@ -616,7 +619,7 @@ public class ProductRepository {
   }
 
   public Map<String, Map<Long, Long>> findNumberOfDiscardedProducts(
-      Date dateCollectedFrom, Date dateCollectedTo, String aggregationCriteria,
+      Date donationDateFrom, Date donationDateTo, String aggregationCriteria,
       List<String> panels, List<String> bloodGroups) throws ParseException {
 
     List<Long> panelIds = new ArrayList<Long>();
@@ -634,13 +637,13 @@ public class ProductRepository {
     }
 
     TypedQuery<Object[]> query = em.createQuery(
-        "SELECT count(p), p.collectedSample.collectedOn, p.collectedSample.bloodAbo, " +
-        "p.collectedSample.bloodRh FROM Product p WHERE " +
-        "p.collectedSample.donorPanel.id IN (:panelIds) AND " +
-        "p.collectedSample.collectedOn BETWEEN :dateCollectedFrom AND :dateCollectedTo AND " +
+        "SELECT count(p), p.donation.donationDate, p.donation.bloodAbo, " +
+        "p.donation.bloodRh FROM Product p WHERE " +
+        "p.donation.donorPanel.id IN (:panelIds) AND " +
+        "p.donation.donationDate BETWEEN :donationDateFrom AND :donationDateTo AND " +
         "p.status IN (:discardedStatuses) AND " +
         "(p.isDeleted= :isDeleted) " +
-        "GROUP BY bloodAbo, bloodRh, collectedOn", Object[].class);
+        "GROUP BY bloodAbo, bloodRh, donationDate", Object[].class);
 
     query.setParameter("panelIds", panelIds);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -649,8 +652,8 @@ public class ProductRepository {
                                      ProductStatus.UNSAFE,
                                      ProductStatus.EXPIRED));
 
-    query.setParameter("dateCollectedFrom", dateCollectedFrom);
-    query.setParameter("dateCollectedTo", dateCollectedTo);
+    query.setParameter("donationDateFrom", donationDateFrom);
+    query.setParameter("donationDateTo", donationDateTo);
 
     DateFormat resultDateFormat = new SimpleDateFormat("dd/MM/yyyy");
     int incrementBy = Calendar.DAY_OF_YEAR;
@@ -667,8 +670,8 @@ public class ProductRepository {
     for (String bloodGroup : bloodGroups) {
       Map<Long, Long> m = new HashMap<Long, Long>();
       Calendar gcal = new GregorianCalendar();
-      Date lowerDate =  resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
-      Date upperDate =  resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
+      Date lowerDate =  resultDateFormat.parse(resultDateFormat.format(donationDateFrom));
+      Date upperDate =  resultDateFormat.parse(resultDateFormat.format(donationDateTo));
       gcal.setTime(lowerDate);
       while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
         m.put(gcal.getTime().getTime(), (long) 0);
@@ -701,7 +704,7 @@ public class ProductRepository {
   }
 
   public Map<String, Map<Long, Long>> findNumberOfIssuedProducts(
-      Date dateCollectedFrom, Date dateCollectedTo, String aggregationCriteria,
+      Date donationDateFrom, Date donationDateTo, String aggregationCriteria,
       List<String> panels, List<String> bloodGroups) throws ParseException {
 
 	List<Long> panelIds = new ArrayList<Long>();
@@ -719,20 +722,20 @@ public class ProductRepository {
     }
 
     TypedQuery<Object[]> query = em.createQuery(
-        "SELECT count(p), p.issuedOn, p.collectedSample.bloodAbo, " +
-        "p.collectedSample.bloodRh FROM Product p WHERE " +
-        "p.collectedSample.donorPanel.id IN (:panelIds) AND " +
-        "p.collectedSample.collectedOn BETWEEN :dateCollectedFrom AND :dateCollectedTo AND " +
+        "SELECT count(p), p.issuedOn, p.donation.bloodAbo, " +
+        "p.donation.bloodRh FROM Product p WHERE " +
+        "p.donation.donorPanel.id IN (:panelIds) AND " +
+        "p.donation.donationDate BETWEEN :donationDateFrom AND :donationDateTo AND " +
         "p.status=:issuedStatus AND " +
         "(p.isDeleted= :isDeleted) " +
-        "GROUP BY bloodAbo, bloodRh, collectedOn", Object[].class);
+        "GROUP BY bloodAbo, bloodRh, donationDate", Object[].class);
 
     query.setParameter("panelIds", panelIds);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("issuedStatus", ProductStatus.ISSUED);
 
-    query.setParameter("dateCollectedFrom", dateCollectedFrom);
-    query.setParameter("dateCollectedTo", dateCollectedTo);
+    query.setParameter("donationDateFrom", donationDateFrom);
+    query.setParameter("donationDateTo", donationDateTo);
 
     DateFormat resultDateFormat = new SimpleDateFormat("dd/MM/yyyy");
     int incrementBy = Calendar.DAY_OF_YEAR;
@@ -752,8 +755,8 @@ public class ProductRepository {
       Date lowerDate = null;
       Date upperDate = null;
       try {
-        lowerDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedFrom));
-        upperDate = resultDateFormat.parse(resultDateFormat.format(dateCollectedTo));
+        lowerDate = resultDateFormat.parse(resultDateFormat.format(donationDateFrom));
+        upperDate = resultDateFormat.parse(resultDateFormat.format(donationDateTo));
       } catch (ParseException e1) {
         e1.printStackTrace();
       }
@@ -787,12 +790,12 @@ public class ProductRepository {
     return resultMap;
   }
 
-  public Product findProduct(String collectionNumber, String productTypeId) {
+  public Product findProduct(String donationIdentificationNumber, String productTypeId) {
     String queryStr = "SELECT p from Product p WHERE " +
-                      "p.collectedSample.collectionNumber = :collectionNumber AND " +
+                      "p.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
                       "p.productType.id = :productTypeId";
     TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
-    query.setParameter("collectionNumber", collectionNumber);
+    query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
     query.setParameter("productTypeId", Integer.parseInt(productTypeId));
     Product product = null;
     try {
@@ -832,11 +835,11 @@ public class ProductRepository {
     return statusChanges;
   }
 
-  public List<Product> findProductsByCollectionNumber(String collectionNumber) {
+  public List<Product> findProductsByDonationIdentificationNumber(String donationIdentificationNumber) {
     String queryStr = "SELECT p from Product p WHERE " +
-        "p.collectedSample.collectionNumber=:collectionNumber AND p.isDeleted=:isDeleted";
+        "p.donation.donationIdentificationNumber=:donationIdentificationNumber AND p.isDeleted=:isDeleted";
     TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
-    query.setParameter("collectionNumber", collectionNumber);
+    query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
     query.setParameter("isDeleted", false);
     return query.getResultList();
   }
@@ -858,7 +861,7 @@ public class ProductRepository {
     productTypeCombination = productTypeRepository.getProductTypeCombinationById(Integer.parseInt(form.getProductTypeCombination()));
     for (ProductType productType : productTypeCombination.getProductTypes()) {
       Product product = new Product();
-      product.setCollectedSample(form.getCollectedSample());
+      product.setDonation(form.getDonation());
       product.setProductType(productType);
       product.setCreatedOn(form.getProduct().getCreatedOn());
       String expiryDateStr = expiryDateByProductType.get(productType.getId().toString());

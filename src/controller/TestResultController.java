@@ -1,45 +1,48 @@
 package controller;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
-import model.collectedsample.CollectedSample;
-import model.collectionbatch.CollectionBatch;
-import model.testbatch.TestBatch;
+import javax.validation.Valid;
+
+import model.bloodtesting.TTIStatus;
+import model.donation.Donation;
+import model.donationbatch.DonationBatch;
 import model.donor.Donor;
-import backingform.TestResultBackingForm;
+import model.testbatch.TestBatch;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestBody;
-import javax.validation.Valid;
-import repository.CollectedSampleRepository;
+import org.springframework.web.bind.annotation.RestController;
+
+import repository.DonationRepository;
 import repository.DonorRepository;
 import repository.TestBatchRepository;
 import repository.bloodtesting.BloodTestingRepository;
-import model.bloodtesting.TTIStatus;
-import repository.bloodtesting.BloodTypingStatus;
 import repository.bloodtesting.BloodTypingMatchStatus;
-
+import repository.bloodtesting.BloodTypingStatus;
 import utils.PermissionConstants;
-import viewmodel.CollectedSampleViewModel;
-import viewmodel.DonorViewModel;
 import viewmodel.BloodTestingRuleResult;
+import viewmodel.DonationViewModel;
+import viewmodel.DonorViewModel;
+import backingform.TestResultBackingForm;
 
 @RestController
 @RequestMapping("testresults")
 public class TestResultController {
 
   @Autowired
-  private CollectedSampleRepository collectedSampleRepository;
+  private DonationRepository donationRepository;
 
   @Autowired
   private TestBatchRepository testBatchRepository;
@@ -58,9 +61,9 @@ public class TestResultController {
   public ResponseEntity findTestResult(@PathVariable String donationIdentificationNumber ) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    CollectedSample c = collectedSampleRepository.findCollectedSampleByCollectionNumber(donationIdentificationNumber);
-    BloodTestingRuleResult results =  bloodTestingRepository.getAllTestsStatusForCollection(c.getId());
-    map.put("donation", new CollectedSampleViewModel(c));
+    Donation c = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
+    BloodTestingRuleResult results =  bloodTestingRepository.getAllTestsStatusForDonation(c.getId());
+    map.put("donation", new DonationViewModel(c));
     map.put("testResults", results);
     return new ResponseEntity(map, HttpStatus.OK);
   }
@@ -73,10 +76,10 @@ public class TestResultController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
-		List<CollectionBatch> collectionBatches = testBatch.getCollectionBatches();
+		List<DonationBatch> donationBatches = testBatch.getDonationBatches();
 		List<Integer> donationBatchIds = new ArrayList<Integer>();
-		for(CollectionBatch collectionBatch : collectionBatches){
-			donationBatchIds.add(collectionBatch.getId());
+		for(DonationBatch donationBatch : donationBatches){
+			donationBatchIds.add(donationBatch.getId());
 		}
 	
 	    List<BloodTestingRuleResult> ruleResults =
@@ -95,10 +98,10 @@ public class TestResultController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
-		List<CollectionBatch> collectionBatches = testBatch.getCollectionBatches();
+		List<DonationBatch> donationBatches = testBatch.getDonationBatches();
 		List<Integer> donationBatchIds = new ArrayList<Integer>();
-		for(CollectionBatch collectionBatch : collectionBatches){
-			donationBatchIds.add(collectionBatch.getId());
+		for(DonationBatch donationBatch : donationBatches){
+			donationBatchIds.add(donationBatch.getId());
 		}
 	
 	    List<BloodTestingRuleResult> ruleResults =
@@ -149,11 +152,11 @@ public class TestResultController {
 		Map<Long, Map<Long, String>> errorMap = null;
 		Map<String, Object> fieldErrors = new HashMap<String, Object>();
 		Map<String, Object> map = new HashMap<String, Object>();
-		CollectedSample collectedSample = collectedSampleRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
+		Donation donation = donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
 	
 		Map<String, Object> results = null;
 		
-		results = bloodTestingRepository.saveBloodTestingResults(collectedSample.getId(), form.getTestResults(), true);
+		results = bloodTestingRepository.saveBloodTestingResults(donation.getId(), form.getTestResults(), true);
 	    if (results != null)
 	      errorMap = (Map<Long, Map<Long, String>>) results.get("errors");
 	    if (errorMap != null && !errorMap.isEmpty())
@@ -187,11 +190,11 @@ public class TestResultController {
 		Map<Long, Map<Long, String>> errorMap = null;
 		Map<String, Object> fieldErrors = new HashMap<String, Object>();
 		Map<String, Object> map = new HashMap<String, Object>();
-		//CollectedSample collectedSample = collectedSampleRepository.verifyCollectionNumber(form.getDonationIdentificationNumber());
+		//Donation donation = donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
 	
 		Map<String, Object> results = null;
 		
-		CollectedSample donation = collectedSampleRepository.findCollectedSampleByCollectionNumber(donationIdentificationNumber);
+		Donation donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
 		Donor donor = donation.getDonor();
 		donor.setBloodAbo(bloodAbo);
 		donor.setBloodRh(bloodRh);
@@ -200,7 +203,7 @@ public class TestResultController {
 		donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
 		
 		Donor updatedDonor = donorRepository.updateDonor(donor);
-		CollectedSample cs = collectedSampleRepository.updateCollectedSample(donation);
+		Donation cs = donationRepository.updateDonation(donation);
 		
 		map.put("donor", getDonorsViewModel(donorRepository.findDonorById(updatedDonor.getId())));
         return new ResponseEntity<Map<String, Object>>(map, httpStatus);

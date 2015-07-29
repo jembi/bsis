@@ -1,20 +1,19 @@
 package controller;
 
-import backingform.CollectedSampleBackingForm;
-import backingform.validator.CollectedSampleBackingFormValidator;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import model.collectedsample.CollectedSample;
-import model.donor.Donor;
+
+import model.bloodbagtype.BloodBagType;
+import model.donation.Donation;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,22 +27,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import repository.BloodBagTypeRepository;
-import repository.CollectedSampleRepository;
+import repository.DonationRepository;
 import repository.DonationTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
 import utils.PermissionConstants;
-import viewmodel.CollectedSampleViewModel;
+import viewmodel.DonationViewModel;
 import viewmodel.PackTypeViewModel;
-import model.bloodbagtype.BloodBagType;
+import backingform.DonationBackingForm;
+import backingform.validator.DonationBackingFormValidator;
 
 @RestController
 @RequestMapping("/donations")
-public class CollectedSampleController {
+public class DonationController {
 
   @Autowired
-  private CollectedSampleRepository collectedSampleRepository;
+  private DonationRepository donationRepository;
 
   @Autowired
   private LocationRepository locationRepository;
@@ -60,12 +61,12 @@ public class CollectedSampleController {
   @Autowired
   private DonorRepository donorRepository;
   
-  public CollectedSampleController() {
+  public DonationController() {
   }
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new CollectedSampleBackingFormValidator(binder.getValidator(),
+    binder.setValidator(new DonationBackingFormValidator(binder.getValidator(),
                         utilController));
   }
 
@@ -81,26 +82,25 @@ public class CollectedSampleController {
   /**
    * Datatables on the client side expects a json response for rendering data from the server
    * in jquery datatables. Remember of columns is important and should match the column headings
-   * in collectionsTable.jsp.
    */
-  private Map<String, Object> generateDatatablesMap(List<CollectedSample> collectedSamples, Long totalRecords, Map<String, Map<String, Object>> formFields) {
-    Map<String, Object> collectionsMap = new HashMap<String, Object>();
+  private Map<String, Object> generateDatatablesMap(List<Donation> donations, Long totalRecords, Map<String, Map<String, Object>> formFields) {
+    Map<String, Object> donationsMap = new HashMap<String, Object>();
 
-    ArrayList<Object> collectionList = new ArrayList<Object>();
+    ArrayList<Object> donationList = new ArrayList<Object>();
 
-    for (CollectedSampleViewModel collection : getCollectionViewModels(collectedSamples)) {
+    for (DonationViewModel donation : getDonationViewModels(donations)) {
 
       List<Object> row = new ArrayList<Object>();
       
-      row.add(collection.getId().toString());
+      row.add(donation.getId().toString());
 
-      for (String property : Arrays.asList("collectionNumber", "collectedOn", "bloodBagType", "donorPanel")) {
+      for (String property : Arrays.asList("donationIdentificationNumber", "donationDate", "bloodBagType", "donorPanel")) {
         if (formFields.containsKey(property)) {
           Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
           if (properties.get("hidden").equals(false)) {
             String propertyValue = property;
             try {
-              propertyValue = BeanUtils.getProperty(collection, property);
+              propertyValue = BeanUtils.getProperty(donation, property);
             } catch (IllegalAccessException e) {
               e.printStackTrace();
             } catch (InvocationTargetException e) {
@@ -113,12 +113,12 @@ public class CollectedSampleController {
         }
       }
 
-      collectionList.add(row);
+      donationList.add(row);
     }
-    collectionsMap.put("aaData", collectionList);
-    collectionsMap.put("iTotalRecords", totalRecords);
-    collectionsMap.put("iTotalDisplayRecords", totalRecords);
-    return collectionsMap;
+    donationsMap.put("aaData", donationList);
+    donationsMap.put("iTotalRecords", totalRecords);
+    donationsMap.put("iTotalDisplayRecords", totalRecords);
+    return donationsMap;
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
@@ -129,14 +129,14 @@ public class CollectedSampleController {
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_INFORMATION+"')")
-  public  Map<String, Object> addCollectionFormGenerator(HttpServletRequest request) {
+  public  Map<String, Object> addDonationFormGenerator(HttpServletRequest request) {
 
-    CollectedSampleBackingForm form = new CollectedSampleBackingForm();
+    DonationBackingForm form = new DonationBackingForm();
 
     Map<String, Object> map = new  HashMap<String, Object>();
     map.put("addDonationForm", form);
     addEditSelectorOptions(map);
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donation");
     // to ensure custom field names are displayed in the form
     map.put("donationFields", formFields);
     return map;
@@ -144,15 +144,15 @@ public class CollectedSampleController {
 
   @RequestMapping(value = "{id}/edit/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION+"')")
-  public  Map<String, Object> editCollectionFormGenerator(HttpServletRequest request,
+  public  Map<String, Object> editDonationFormGenerator(HttpServletRequest request,
       @PathVariable Long id) {
 
-    CollectedSample collectedSample = collectedSampleRepository.findCollectedSampleById(id);
-    CollectedSampleBackingForm form = new CollectedSampleBackingForm(collectedSample);
+    Donation donation = donationRepository.findDonationById(id);
+    DonationBackingForm form = new DonationBackingForm(donation);
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("editDonationForm", form);
     addEditSelectorOptions(map);
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donation");
     // to ensure custom field names are displayed in the form
     map.put("donationFields", formFields);
     return map;
@@ -160,86 +160,86 @@ public class CollectedSampleController {
 
   @RequestMapping( method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION+"')")
-  public  ResponseEntity<Map<String, Object>> addCollection(
-      @RequestBody @Valid CollectedSampleBackingForm form) {
+  public  ResponseEntity<Map<String, Object>> addDonation(
+      @RequestBody @Valid DonationBackingForm form) {
 
       Map<String, Object> map = new HashMap<String, Object>();
       addEditSelectorOptions(map);
-      Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("collectedSample");
+      Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donation");
       map.put("donationFields", formFields);
-      CollectedSample savedCollection = null;
-      CollectedSample collectedSample = form.getCollectedSample();
+      Donation savedDonation = null;
+      Donation donation = form.getDonation();
 
-      savedCollection = collectedSampleRepository.addCollectedSample(collectedSample);
+      savedDonation = donationRepository.addDonation(donation);
       map.put("hasErrors", false);
-      form = new CollectedSampleBackingForm();
+      form = new DonationBackingForm();
 	
-      map.put("donationId", savedCollection.getId());
-      map.put("donation", getCollectionViewModel(savedCollection));
+      map.put("donationId", savedDonation.getId());
+      map.put("donation", getDonationViewModel(savedDonation));
       return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
 
-  private CollectedSampleViewModel getCollectionViewModel(CollectedSample collection) {
-    CollectedSampleViewModel collectionViewModel = new CollectedSampleViewModel(collection);
-    return collectionViewModel;
+  private DonationViewModel getDonationViewModel(Donation donation) {
+    DonationViewModel donationViewModel = new DonationViewModel(donation);
+    return donationViewModel;
   }
   
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION+"')")
   public ResponseEntity<Map<String, Object>>
-  	  updateCollectedSample(@RequestBody  @Valid CollectedSampleBackingForm form, @PathVariable Long id) {
+  	  updateDonation(@RequestBody  @Valid DonationBackingForm form, @PathVariable Long id) {
 	  
 	  HttpStatus httpStatus = HttpStatus.OK;
 	  Map<String, Object> map = new HashMap<String, Object>();
-	  CollectedSample updatedCollectedSample = null;
+	  Donation updatedDonation = null;
 	  
       form.setId(id);
       form.setIsDeleted(false);
-      updatedCollectedSample = collectedSampleRepository.updateCollectedSample(form.getCollectedSample());
+      updatedDonation = donationRepository.updateDonation(form.getDonation());
             
-      map.put("donation", getCollectionViewModel(collectedSampleRepository.findCollectedSampleById(updatedCollectedSample.getId())));
+      map.put("donation", getDonationViewModel(donationRepository.findDonationById(updatedDonation.getId())));
       return new ResponseEntity<Map<String, Object>>(map, httpStatus);
 
   }
 
-  private List<CollectedSampleViewModel> getCollectionViewModels(
-      List<CollectedSample> collections) {
-    if (collections == null)
-      return Arrays.asList(new CollectedSampleViewModel[0]);
-    List<CollectedSampleViewModel> collectionViewModels = new ArrayList<CollectedSampleViewModel>();
-    for (CollectedSample collection : collections) {
-      collectionViewModels.add(new CollectedSampleViewModel(collection));
+  private List<DonationViewModel> getDonationViewModels(
+      List<Donation> donations) {
+    if (donations == null)
+      return Arrays.asList(new DonationViewModel[0]);
+    List<DonationViewModel> donationViewModels = new ArrayList<DonationViewModel>();
+    for (Donation donation : donations) {
+      donationViewModels.add(new DonationViewModel(donation));
     }
-    return collectionViewModels;
+    return donationViewModels;
   }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     @PreAuthorize("hasRole('" + PermissionConstants.VOID_DONATION + "')")
-    public HttpStatus deleteCollection(
+    public HttpStatus deleteDonation(
             @PathVariable Long id) {
-        collectedSampleRepository.deleteCollectedSample(id);
+        donationRepository.deleteDonation(id);
         return HttpStatus.OK;
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONATION + "')")
-    public Map<String, Object> collectionSummaryGenerator(
+    public Map<String, Object> donationSummaryGenerator(
             @PathVariable Long id) {
 
         Map<String, Object> map = new HashMap<String, Object>();
 
-        CollectedSample collectedSample = null;
+        Donation donation = null;
         if (id != null) {
-            collectedSample = collectedSampleRepository.findCollectedSampleById(id);
-            if (collectedSample != null) {
+            donation = donationRepository.findDonationById(id);
+            if (donation != null) {
                 map.put("existingDonation", true);
             } else {
                 map.put("existingDonation", false);
             }
         }
 
-        CollectedSampleViewModel collectionViewModel = getCollectionViewModel(collectedSample);
-        map.put("donation", collectionViewModel);
+        DonationViewModel donationViewModel = getDonationViewModel(donation);
+        map.put("donation", donationViewModel);
 
       
         return map;
@@ -247,13 +247,13 @@ public class CollectedSampleController {
     
      @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
-  public  Map<String, Object> findCollectionPagination(
-     @RequestParam(value = "collectionNumber", required = false)  String collectionNumber,
+  public  Map<String, Object> findDonationPagination(
+     @RequestParam(value = "donationIdentificationNumber", required = false)  String donationIdentificationNumber,
      @RequestParam(value = "panels",required = false)  List<Long> panelIds,
      @RequestParam(value = "bloodBagTypes",required = false)  List<Integer> bloodBagTypeIds,
-     @RequestParam(value = "dateCollectedFrom", required = false)  String dateCollectedFrom,
-     @RequestParam(value = "dateCollectedTo", required = false)  String dateCollectedTo,
-     @RequestParam(value = "includeTestedCollections",required = true)  boolean includeTestedCollections)throws  ParseException{
+     @RequestParam(value = "donationDateFrom", required = false)  String donationDateFrom,
+     @RequestParam(value = "donationDateTo", required = false)  String donationDateTo,
+     @RequestParam(value = "includeTestedDonations",required = true)  boolean includeTestedDonations)throws  ParseException{
    
       Map<String, Object> pagingParams = new HashMap<String, Object>();
       pagingParams.put("sortColumn", "id");
@@ -261,10 +261,10 @@ public class CollectedSampleController {
 //      pagingParams.put("length", "10");
       pagingParams.put("sortDirection", "asc");
       
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("CollectedSample");
+    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("Donation");
   
-    if (collectionNumber != null)
-      collectionNumber = collectionNumber.trim();
+    if (donationIdentificationNumber != null)
+      donationIdentificationNumber = donationIdentificationNumber.trim();
 
 
    /* bloodBagTypeIds.add(-1);
@@ -272,16 +272,16 @@ public class CollectedSampleController {
     siteIds.add((long)-1);*/
 
     List<Object> results;
-          results = collectedSampleRepository.findCollectedSamples(
-                  collectionNumber,
+          results = donationRepository.findDonations(
+                  donationIdentificationNumber,
                   bloodBagTypeIds, panelIds,
-                  dateCollectedFrom, dateCollectedTo, includeTestedCollections, pagingParams);
+                  donationDateFrom, donationDateTo, includeTestedDonations, pagingParams);
   
     @SuppressWarnings("unchecked")
-    List<CollectedSample> collectedSamples = (List<CollectedSample>) results.get(0);
+    List<Donation> donations = (List<Donation>) results.get(0);
     Long totalRecords = (Long) results.get(1);
 
-    return generateDatatablesMap(collectedSamples, totalRecords, formFields);
+    return generateDatatablesMap(donations, totalRecords, formFields);
   }
      
   private List<PackTypeViewModel> getPackTypeViewModels(List<BloodBagType> packTypes){     

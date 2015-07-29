@@ -13,7 +13,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import model.bloodtesting.BloodTest;
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
 import model.worksheet.Worksheet;
 import model.worksheet.WorksheetType;
 
@@ -44,39 +44,39 @@ public class WorksheetRepository {
     return query.getSingleResult();
   }
 
-  public void addCollectionsToWorksheet(Long worksheetId, Set<String> collectionNumbers) {
+  public void addDonationsToWorksheet(Long worksheetId, Set<String> donationIdentificationNumbers) {
 
-    if (collectionNumbers.isEmpty())
+    if (donationIdentificationNumbers.isEmpty())
       return;
-    String queryStr = "SELECT w from Worksheet w LEFT JOIN FETCH w.collectedSamples " +
+    String queryStr = "SELECT w from Worksheet w LEFT JOIN FETCH w.donations " +
         "WHERE w.id=:worksheetId AND w.isDeleted=:isDeleted";
     TypedQuery<Worksheet> query = em.createQuery(queryStr, Worksheet.class);
     query.setParameter("worksheetId", worksheetId);
     query.setParameter("isDeleted", false);
 
-    String collectionQueryStr = "SELECT c from CollectedSample c " +
+    String donationQueryStr = "SELECT c from Donation c " +
         "LEFT JOIN FETCH c.worksheets WHERE " +
-        "c.collectionNumber IN :collectionNumbers";
-    TypedQuery<CollectedSample> collectionsQuery = em.createQuery(collectionQueryStr, CollectedSample.class);
-    collectionsQuery.setParameter("collectionNumbers", collectionNumbers);
-    List<CollectedSample> newCollections = collectionsQuery.getResultList();
+        "c.donationIdentificationNumber IN :donationIdentificationNumbers";
+    TypedQuery<Donation> donationQuery = em.createQuery(donationQueryStr, Donation.class);
+    donationQuery.setParameter("donationIdentificationNumbers", donationIdentificationNumbers);
+    List<Donation> newDonations = donationQuery.getResultList();
 
     Worksheet worksheet = query.getSingleResult();
-    Set<String> existingCollectionNumbers = new HashSet<String>();
-    for (CollectedSample c : worksheet.getCollectedSamples()) {
-      existingCollectionNumbers.add(c.getCollectionNumber());
+    Set<String> existingDonationIdentificationNumbers = new HashSet<String>();
+    for (Donation c : worksheet.getDonations()) {
+      existingDonationIdentificationNumbers.add(c.getDonationIdentificationNumber());
     }
 
-    List<CollectedSample> collectedSamples = new ArrayList<CollectedSample>();
-    for (CollectedSample c : newCollections) {
-      if (existingCollectionNumbers.contains(c.getCollectionNumber()))
+    List<Donation> donations = new ArrayList<Donation>();
+    for (Donation c : newDonations) {
+      if (existingDonationIdentificationNumbers.contains(c.getDonationIdentificationNumber()))
         continue;
-      collectedSamples.add(c);
+      donations.add(c);
 //      c.getWorksheets().add(worksheet);
 //      em.merge(c);
     }
 
-    worksheet.getCollectedSamples().addAll(collectedSamples);
+    worksheet.getDonations().addAll(donations);
     em.merge(worksheet);
     em.flush();
   }
@@ -95,13 +95,13 @@ public class WorksheetRepository {
     worksheetTypeIds.add(-1);
     TypedQuery<Worksheet> query = null;
     if (StringUtils.isBlank(worksheetNumber)) {
-      String queryStr = "SELECT DISTINCT w FROM Worksheet w LEFT JOIN FETCH w.collectedSamples WHERE " +
+      String queryStr = "SELECT DISTINCT w FROM Worksheet w LEFT JOIN FETCH w.donations WHERE " +
           "w.worksheetType.id IN (:worksheetTypeIds) AND w.isDeleted=:isDeleted";
       query = em.createQuery(queryStr, Worksheet.class);
       query.setParameter("worksheetTypeIds", worksheetTypeIds);
       query.setParameter("isDeleted", false);
     } else {
-      String queryStr = "SELECT DISTINCT w FROM Worksheet w LEFT JOIN FETCH w.collectedSamples WHERE " +
+      String queryStr = "SELECT DISTINCT w FROM Worksheet w LEFT JOIN FETCH w.donations WHERE " +
           "w.worksheetNumber = :worksheetNumber AND w.isDeleted=:isDeleted";
       query = em.createQuery(queryStr, Worksheet.class);
       query.setParameter("worksheetNumber", worksheetNumber);
@@ -120,7 +120,7 @@ public class WorksheetRepository {
   }
 
   public Worksheet findWorksheetFullInformation(Long worksheetId) {
-    String queryStr = "SELECT w from Worksheet w LEFT JOIN FETCH w.collectedSamples WHERE " +
+    String queryStr = "SELECT w from Worksheet w LEFT JOIN FETCH w.donations WHERE " +
         "w.id=:worksheetId AND w.isDeleted=:isDeleted";
     TypedQuery<Worksheet> query = em.createQuery(queryStr, Worksheet.class);
     query.setParameter("worksheetId", worksheetId);
@@ -129,7 +129,7 @@ public class WorksheetRepository {
   }
 
   public Worksheet findWorksheetFullInformation(String worksheetNumber) {
-    String queryStr = "SELECT w from Worksheet w LEFT JOIN FETCH w.collectedSamples WHERE " +
+    String queryStr = "SELECT w from Worksheet w LEFT JOIN FETCH w.donations WHERE " +
         "w.worksheetNumber=:worksheetNumber AND w.isDeleted=:isDeleted";
     TypedQuery<Worksheet> query = em.createQuery(queryStr, Worksheet.class);
     query.setParameter("worksheetNumber", worksheetNumber);

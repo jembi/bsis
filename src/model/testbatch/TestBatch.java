@@ -2,8 +2,10 @@ package model.testbatch;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -16,10 +18,12 @@ import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
-import model.collectionbatch.CollectionBatch;
+
+import model.donationbatch.DonationBatch;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
+
 import org.hibernate.envers.Audited;
 
 
@@ -52,7 +56,7 @@ public class TestBatch implements ModificationTracker {
 	private TestBatchStatus status;
         
         @OneToMany(mappedBy = "testBatch", fetch = FetchType.EAGER)
-        private List<CollectionBatch> collectionBatches;
+        private List<DonationBatch> donationBatches;
 
 
 	public TestBatch() {
@@ -131,12 +135,12 @@ public class TestBatch implements ModificationTracker {
 		modificationTracker.setLastUpdatedBy(lastUpdatedBy);
 	}
 
-    public List<CollectionBatch> getCollectionBatches() {
-            return collectionBatches;
+    public List<DonationBatch> getDonationBatches() {
+            return donationBatches;
     }
 
-    public void setCollectionBatches(List<CollectionBatch> collectionBatches) {
-            this.collectionBatches = collectionBatches;
+    public void setDonationBatches(List<DonationBatch> donationBatches) {
+            this.donationBatches = donationBatches;
     }
 
 }

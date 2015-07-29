@@ -198,9 +198,9 @@ public class ProductUsage implements ModificationTracker {
     this.usedBy = usedBy;
   }
 
-  public String getCollectionNumber() {
-    if (product == null || product.getCollectedSample() == null || product.getCollectionNumber() == null)
+  public String getDonationIdentificationNumber() {
+    if (product == null || product.getDonation() == null || product.getDonationIdentificationNumber() == null)
       return "";
-    return product.getCollectionNumber();
+    return product.getDonationIdentificationNumber();
   }
 }

@@ -2,22 +2,28 @@ package repository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import static java.util.Collections.list;
+
 import java.util.List;
 import java.util.Map;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import model.collectedsample.CollectedSample;
-import model.collectionbatch.CollectionBatch;
+
+import model.donation.Donation;
+import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
 import viewmodel.TestBatchViewModel;
 
 @Repository
@@ -32,16 +38,16 @@ public class TestBatchRepository {
 	  testBatch.setIsDeleted(false);
 	  testBatch.setBatchNumber(testBatchNumber);
 	  testBatch.setStatus(TestBatchStatus.OPEN);
-	  updateCollectedSampleWithTestBatch(testBatch);
+	  updateDonationWithTestBatch(testBatch);
           return  testBatch;
   }
   
-  public void updateCollectedSampleWithTestBatch(TestBatch testBatch){
+  public void updateDonationWithTestBatch(TestBatch testBatch){
 		
-		List<CollectionBatch> donationBatches = testBatch.getCollectionBatches();
+		List<DonationBatch> donationBatches = testBatch.getDonationBatches();
 		if (donationBatches != null && !donationBatches.isEmpty()) {
 		        em.persist(testBatch);
-			for(CollectionBatch donationBatch : donationBatches){
+			for(DonationBatch donationBatch : donationBatches){
 				donationBatch.setTestBatch(testBatch);
 				em.merge(donationBatch); 
 			}

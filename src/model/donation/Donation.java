@@ -1,18 +1,12 @@
-package model.collectedsample;
+package model.donation;
 
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import constraintvalidator.BloodBagTypeExists;
-import constraintvalidator.CollectionBatchExists;
-import constraintvalidator.DonationTypeExists;
-import constraintvalidator.DonorExists;
-import constraintvalidator.LocationExists;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -29,10 +23,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
-import model.collectionbatch.CollectionBatch;
+import model.donationbatch.DonationBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
@@ -41,23 +36,33 @@ import model.modificationtracker.RowModificationTracker;
 import model.product.Product;
 import model.user.User;
 import model.worksheet.Worksheet;
+
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Range;
-import repository.bloodtesting.BloodTypingStatus;
+
 import repository.bloodtesting.BloodTypingMatchStatus;
+import repository.bloodtesting.BloodTypingStatus;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import constraintvalidator.BloodBagTypeExists;
+import constraintvalidator.DonationBatchExists;
+import constraintvalidator.DonationTypeExists;
+import constraintvalidator.DonorExists;
+import constraintvalidator.LocationExists;
 
 /**
- * A donation or a collection as it is in the UI.
- * Not naming the class as Collection to avoid confusion with java.util.Collection.
+ * A donation of blood
  * @author iamrohitbanga
  */
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class CollectedSample implements ModificationTracker, Comparable<CollectedSample> {
+public class Donation implements ModificationTracker, Comparable<Donation> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -65,12 +70,12 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   private Long id;
 
   /**
-   * Very common usecase to search for collection by collection number.
-   * In most cases the collection numbers will be preprinted labels.
+   * Very common usecase to search for donation by donation identification number.
+   * In most cases the donation numbers will be preprinted labels.
    */
   @Column(length=20, unique=true)
-  @Index(name="collectedSample_collectionNumber_index")
-  private String collectionNumber;
+  @Index(name="donation_donationIdentificationNumber_index")
+  private String donationIdentificationNumber;
 
   @DonorExists
   @ManyToOne
@@ -87,17 +92,17 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy="collectedSample")
+  @OneToMany(mappedBy="donation")
   private List<BloodTestResult> bloodTestResults;
 
 
 
   /**
-   * Index to find collections done between date ranges.
+   * Index to find donations done between date ranges.
    */
   @Temporal(TemporalType.TIMESTAMP)
-  @Index(name="collectedSample_collectedOn_index")
-  private Date collectedOn;
+  @Index(name="donation_donationDate_index")
+  private Date donationDate;
 
   @DonationTypeExists
   @ManyToOne
@@ -108,13 +113,13 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   private BloodBagType bloodBagType;
 
   /**
-   * List of products created from this collection.
+   * List of products created from this donation.
    */
-  @OneToMany(mappedBy="collectedSample")
+  @OneToMany(mappedBy="donation")
   private List<Product> products;
 
   @NotAudited
-  @ManyToMany(mappedBy="collectedSamples")
+  @ManyToMany(mappedBy="donations")
   private Set<Worksheet> worksheets;
 
   @Range(min = 0, max = 30)
@@ -138,9 +143,9 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @ManyToOne(optional=true)
   private User donationCreatedBy;
 
-  @CollectionBatchExists
+  @DonationBatchExists
   @ManyToOne(optional=true)
-  private CollectionBatch collectionBatch;
+  private DonationBatch donationBatch;
 
   @Lob
   private String notes;
@@ -176,7 +181,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   @NotNull
   private Location donorPanel;
 
-  public CollectedSample() {
+  public Donation() {
     modificationTracker = new RowModificationTracker();
     worksheets = new HashSet<Worksheet>();
   }
@@ -185,8 +190,8 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     return id;
   }
 
-  public String getCollectionNumber() {
-    return collectionNumber;
+  public String getDonationIdentificationNumber() {
+    return donationIdentificationNumber;
   }
 
   public Donor getDonor() {
@@ -194,8 +199,8 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   }
 
 
-  public Date getCollectedOn() {
-    return collectedOn;
+  public Date getDonationDate() {
+    return donationDate;
   }
 
   public BloodBagType getBloodBagType() {
@@ -214,8 +219,8 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.id = id;
   }
 
-  public void setCollectionNumber(String collectionNumber) {
-    this.collectionNumber = collectionNumber;
+  public void setDonationIdentificationNumber(String donationIdentificationNumber) {
+    this.donationIdentificationNumber = donationIdentificationNumber;
   }
 
   public void setDonor(Donor donor) {
@@ -223,8 +228,8 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   }
 
 
-  public void setCollectedOn(Date collectedOn) {
-    this.collectedOn = collectedOn;
+  public void setDonationDate(Date donationDate) {
+    this.donationDate = donationDate;
   }
 
   public void setBloodBagType(BloodBagType bloodBagType) {
@@ -239,24 +244,24 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.isDeleted = isDeleted;
   }
 
-  public void copy(CollectedSample collectedSample) {
-    assert (this.getId().equals(collectedSample.getId()));
-    this.collectionNumber = collectedSample.collectionNumber;
-    this.donor = collectedSample.donor;
-    this.setDonationType(collectedSample.getDonationType());
-    this.bloodBagType = collectedSample.bloodBagType;
-    this.collectedOn = collectedSample.collectedOn;
-    this.collectionBatch = collectedSample.collectionBatch;
-    this.notes = collectedSample.notes;
-    this.haemoglobinCount=collectedSample.haemoglobinCount;
-    this.donorPulse = collectedSample.donorPulse;
-    this.donorWeight=collectedSample.donorWeight;
-    this.bloodPressureDiastolic=collectedSample.bloodPressureDiastolic;
-    this.bloodPressureSystolic=collectedSample.bloodPressureSystolic;
-    this.donorPanel = collectedSample.getDonorPanel();
-    this.bloodAbo = collectedSample.bloodAbo;
-    this.bloodRh = collectedSample.bloodRh;
-    this.setBloodTypingMatchStatus(collectedSample.getBloodTypingMatchStatus());
+  public void copy(Donation donation) {
+    assert (this.getId().equals(donation.getId()));
+    this.donationIdentificationNumber = donation.donationIdentificationNumber;
+    this.donor = donation.donor;
+    this.setDonationType(donation.getDonationType());
+    this.bloodBagType = donation.bloodBagType;
+    this.donationDate = donation.donationDate;
+    this.donationBatch = donation.donationBatch;
+    this.notes = donation.notes;
+    this.haemoglobinCount=donation.haemoglobinCount;
+    this.donorPulse = donation.donorPulse;
+    this.donorWeight=donation.donorWeight;
+    this.bloodPressureDiastolic=donation.bloodPressureDiastolic;
+    this.bloodPressureSystolic=donation.bloodPressureSystolic;
+    this.donorPanel = donation.getDonorPanel();
+    this.bloodAbo = donation.bloodAbo;
+    this.bloodRh = donation.bloodRh;
+    this.setBloodTypingMatchStatus(donation.getBloodTypingMatchStatus());
   }
 
   public List<Product> getProducts() {
@@ -308,12 +313,10 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   }
 
   /**
-   * Must implement this method because the collections
-   * in worksheet must be sorted in the same order every time.
-   * This method allows invoking Collections.sort on the collections.
+   * Compares two donations using the object's identifier (id field)
    */
   @Override
-  public int compareTo(CollectedSample c) {
+  public int compareTo(Donation c) {
     Long diff = (this.id - c.id);
     if (diff < 0)
       return -1;
@@ -362,12 +365,12 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.donationCreatedBy = donationCreatedBy;
   }
 
-  public CollectionBatch getCollectionBatch() {
-    return collectionBatch;
+  public DonationBatch getDonationBatch() {
+    return donationBatch;
   }
 
-  public void setCollectionBatch(CollectionBatch collectionBatch) {
-    this.collectionBatch = collectionBatch;
+  public void setDonationBatch(DonationBatch donationBatch) {
+    this.donationBatch = donationBatch;
   }
 
   public DonationType getDonationType() {
@@ -384,9 +387,9 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     return "";
   }
 
-  public String getCollectionBatchNumber() {
-    if (collectionBatch != null)
-      return collectionBatch.getBatchNumber();
+  public String getDonationBatchNumber() {
+    if (donationBatch != null)
+      return donationBatch.getBatchNumber();
     return "";
   }
 

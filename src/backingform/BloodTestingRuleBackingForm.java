@@ -6,7 +6,7 @@ import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestContext;
 import model.bloodtesting.rules.BloodTestSubCategory;
 import model.bloodtesting.rules.BloodTestingRule;
-import model.bloodtesting.rules.CollectionField;
+import model.bloodtesting.rules.DonationField;
 import scala.actors.threadpool.Arrays;
 
 public class BloodTestingRuleBackingForm {
@@ -39,8 +39,8 @@ public class BloodTestingRuleBackingForm {
         typingRule.setCategory(BloodTestCategory.valueOf(category.replaceAll("\\s","").toUpperCase()));
     } 
     
-    public void setCollectionFieldChanged(String collectionField){
-        typingRule.setCollectionFieldChanged(CollectionField.valueOf(collectionField.replaceAll("\\s","").toUpperCase()));
+    public void setDonationFieldChanged(String donationField){
+        typingRule.setDonationFieldChanged(DonationField.valueOf(donationField.replaceAll("\\s","").toUpperCase()));
     }
     
     public void setPattern(String pattern){
