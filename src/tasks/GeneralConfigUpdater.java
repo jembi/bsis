@@ -35,8 +35,16 @@ public class GeneralConfigUpdater {
             GeneralConfig[] generalConfigsArray = gson.fromJson(reader, GeneralConfig[].class);
 
             for (GeneralConfig temp : generalConfigsArray) {
-                System.out.println("Updating general config from file: " + temp.getDescription());
-                generalConfigRepository.update(temp);
+                // Check if there is an existing config
+                GeneralConfig existingConfig = generalConfigRepository.getGeneralConfigByName(temp.getName());
+                if(existingConfig != null) {
+                    System.out.println("Updating general config from file: " + temp.getName());
+                    existingConfig.setValue(temp.getValue());
+                    generalConfigRepository.update(existingConfig);
+                } else {
+                    System.out.println("Adding new general config from file: " + temp.getName());
+                    generalConfigRepository.save(temp);
+                }
             }
 
         } catch (IOException error){
