@@ -121,7 +121,7 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
   private BigDecimal haemoglobinCount;
   
   @Enumerated(EnumType.STRING)
-  @Column(length=20)
+  @Column(length = 20)
   private HaemoglobinLevel haemoglobinLevel;
 
   @Column(name="bloodPressureSystolic")
@@ -343,15 +343,15 @@ public class CollectedSample implements ModificationTracker, Comparable<Collecte
     this.haemoglobinCount = haemoglobinCount;
   }
   
-  public HaemoglobinLevel getHaemoglobinLevel() {
-    return haemoglobinLevel;
-}
+    public HaemoglobinLevel getHaemoglobinLevel() {
+        return haemoglobinLevel;
+    }
 
-public void setHaemoglobinLevel(HaemoglobinLevel haemoglobinLevel) {
-    this.haemoglobinLevel = haemoglobinLevel;
-}
+    public void setHaemoglobinLevel(HaemoglobinLevel haemoglobinLevel) {
+        this.haemoglobinLevel = haemoglobinLevel;
+    }
 
-public Integer getBloodPressureSystolic() {
+  public Integer getBloodPressureSystolic() {
 		return bloodPressureSystolic;
 	}
 
