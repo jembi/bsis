@@ -29,7 +29,7 @@ public class GeneralConfigUpdater {
     @Scheduled(fixedDelay = Integer.MAX_VALUE)
     public void applyCustomConfigsFromJSON () throws IOException {
         try {
-            
+
             Reader reader = new InputStreamReader(servletContext.getResourceAsStream("/WEB-INF/general-configs.json"), "UTF-8");
             Gson gson = new Gson();
             GeneralConfig[] generalConfigsArray = gson.fromJson(reader, GeneralConfig[].class);
