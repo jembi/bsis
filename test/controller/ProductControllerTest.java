@@ -3,35 +3,31 @@
  */
 package controller;
 
-import static org.junit.Assert.*;
-
-import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.persistence.EntityExistsException;
 
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.junit.Test;
-import org.junit.Ignore;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import repository.CollectedSampleRepository;
-import repository.ProductRepository;
-import repository.ProductTypeRepository;
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
 import model.product.Product;
 import model.product.ProductStatus;
 import model.producttype.ProductType;
 
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+
+import repository.DonationRepository;
+import repository.ProductRepository;
+import repository.ProductTypeRepository;
+
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:**/v2v-servlet.xml")
+@ContextConfiguration(locations = "file:**/bsis-servlet.xml")
 @WebAppConfiguration
 public class ProductControllerTest {
 	
@@ -39,7 +35,7 @@ public class ProductControllerTest {
 	private ProductRepository productRepository;
 	
 	@Autowired
-	private CollectedSampleRepository collectedSampleRepository;
+	private DonationRepository donationRepository;
 	
 	@Autowired
 	private ProductTypeRepository productTypeRepository;
@@ -51,18 +47,18 @@ public class ProductControllerTest {
 		 Product savedProduct = null;
 		
 				ProductType productType2 = productRepository.findProductTypeBySelectedProductType(1);
-	      String collectionNumber = "D0001";
+	      String donationIdentificationNumber = "D0001";
 	      String status = "QUARANTINED";
 	      long productId = 1L;
 	      
-	      if(collectionNumber.contains("-")){
-	      	collectionNumber = collectionNumber.split("-")[0];
+	      if(donationIdentificationNumber.contains("-")){
+	      	donationIdentificationNumber = donationIdentificationNumber.split("-")[0];
 	      }
 	      String sortName = productType2.getProductTypeNameShort();
 	      int noOfUnits = 3;
-	      long collectedSampleID = 1;
+	      long donationId = 1;
 	      
-	      String createdPackNumber = collectionNumber +"-"+sortName;
+	      String createdPackNumber = donationIdentificationNumber +"-"+sortName;
 	      
 	      // Add New product
 	      if(!status.equalsIgnoreCase("PROCESSED")){
@@ -85,9 +81,9 @@ public class ProductControllerTest {
 		          productType.setProductTypeName(productType2.getProductTypeName());
 		          productType.setId(productType2.getId());
 		          product.setProductType(productType);
-		          CollectedSample collectedSample = new CollectedSample();
-		          collectedSample.setId(collectedSampleID);
-		          product.setCollectedSample(collectedSample);
+		          Donation donation = new Donation();
+		          donation.setId(donationId);
+		          product.setDonation(donation);
 		          product.setStatus(ProductStatus.QUARANTINED);
 			        productRepository.addProduct(product);
 	
@@ -119,9 +115,9 @@ public class ProductControllerTest {
 		          productType.setProductTypeName(productType2.getProductTypeName());
 		          productType.setId(productType2.getId());
 		          product.setProductType(productType);
-		          CollectedSample collectedSample = new CollectedSample();
-		          collectedSample.setId(collectedSampleID);
-		          product.setCollectedSample(collectedSample);
+		          Donation donation = new Donation();
+		          donation.setId(donationId);
+		          product.setDonation(donation);
 		          product.setStatus(ProductStatus.QUARANTINED);
 			        productRepository.addProduct(product);
 			        productRepository.setProductStatusToProcessed(productId);

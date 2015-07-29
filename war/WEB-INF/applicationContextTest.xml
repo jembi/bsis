@@ -67,7 +67,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
   <!-- persistence unit name comes from persistence.xml -->
   <bean id="entityManagerFactory"
     class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
-    p:dataSource-ref="dataSource" p:persistenceUnitName="v2vTest">
+    p:dataSource-ref="dataSource" p:persistenceUnitName="bsisTest">
     <property name="persistenceXmlLocation" value="classpath:/META-INF/persistenceTest.xml"/>
     <property name="jpaProperties">
       <props>

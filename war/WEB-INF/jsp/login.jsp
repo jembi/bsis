@@ -30,7 +30,7 @@
   </script>
   <div class="mainBody">
     <div class="mainContent">
-      <div id="v2vHeading">
+      <div id="bsisHeading">
         <a href="/bsis">Blood Safety Information System</a>
       </div>
       <div class="loginPanel">

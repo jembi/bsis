@@ -1,0 +1,484 @@
+package model.donation;
+
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+import model.bloodbagtype.BloodBagType;
+import model.bloodtesting.BloodTestResult;
+import model.bloodtesting.TTIStatus;
+import model.donationbatch.DonationBatch;
+import model.donationtype.DonationType;
+import model.donor.Donor;
+import model.location.Location;
+import model.modificationtracker.ModificationTracker;
+import model.modificationtracker.RowModificationTracker;
+import model.product.Product;
+import model.user.User;
+import model.worksheet.Worksheet;
+
+import org.hibernate.annotations.Index;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
+import org.hibernate.validator.constraints.Range;
+
+import repository.bloodtesting.BloodTypingMatchStatus;
+import repository.bloodtesting.BloodTypingStatus;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import constraintvalidator.BloodBagTypeExists;
+import constraintvalidator.DonationBatchExists;
+import constraintvalidator.DonationTypeExists;
+import constraintvalidator.DonorExists;
+import constraintvalidator.LocationExists;
+
+/**
+ * A donation of blood
+ * @author iamrohitbanga
+ */
+@Entity
+@Audited
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+public class Donation implements ModificationTracker, Comparable<Donation> {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(nullable=false)
+  private Long id;
+
+  /**
+   * Very common usecase to search for donation by donation identification number.
+   * In most cases the donation numbers will be preprinted labels.
+   */
+  @Column(length=20, unique=true)
+  @Index(name="donation_donationIdentificationNumber_index")
+  private String donationIdentificationNumber;
+
+  @DonorExists
+  @ManyToOne
+  private Donor donor;
+
+  @Column(length=50)
+  private String bloodAbo;
+
+  @Column(length=50)
+  private String bloodRh;
+
+  @Column(length=150)
+  private String extraBloodTypeInformation;
+
+  @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+  @OneToMany(mappedBy="donation")
+  private List<BloodTestResult> bloodTestResults;
+
+
+
+  /**
+   * Index to find donations done between date ranges.
+   */
+  @Temporal(TemporalType.TIMESTAMP)
+  @Index(name="donation_donationDate_index")
+  private Date donationDate;
+
+  @DonationTypeExists
+  @ManyToOne
+  private DonationType donationType;
+
+  @BloodBagTypeExists
+  @ManyToOne
+  private BloodBagType bloodBagType;
+
+  /**
+   * List of products created from this donation.
+   */
+  @OneToMany(mappedBy="donation")
+  private List<Product> products;
+
+  @NotAudited
+  @ManyToMany(mappedBy="donations")
+  private Set<Worksheet> worksheets;
+
+  @Range(min = 0, max = 30)
+  private BigDecimal haemoglobinCount;
+
+  @Column(name="bloodPressureSystolic")
+  @Range(min = 0, max = 250)
+  private Integer bloodPressureSystolic;
+  
+  @Column(name="bloodPressureDiastolic")
+  @Range(min = 0, max = 150)
+  private Integer bloodPressureDiastolic;
+
+  /**
+   * Limit the number of bytes required to store.
+   */
+  
+  @Range(min = 0, max = 300)
+  private BigDecimal donorWeight;
+
+  @ManyToOne(optional=true)
+  private User donationCreatedBy;
+
+  @DonationBatchExists
+  @ManyToOne(optional=true)
+  private DonationBatch donationBatch;
+
+  @Lob
+  private String notes;
+
+  @Valid
+  private RowModificationTracker modificationTracker;
+
+  @Enumerated(EnumType.STRING)
+  @Column(length=20)
+  private BloodTypingStatus bloodTypingStatus;
+  
+  @Enumerated(EnumType.STRING)
+  @Column(length=20)
+  private BloodTypingMatchStatus bloodTypingMatchStatus;
+
+  @Enumerated(EnumType.STRING)
+  @Column(length=20)
+  private TTIStatus ttiStatus;
+
+  private Boolean isDeleted;
+  
+  @Range(min =0 ,max = 290)
+  private Integer donorPulse;
+
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date bleedStartTime;
+
+  @Temporal(TemporalType.TIMESTAMP) 
+  private Date bleedEndTime;
+
+  @OneToOne
+  @LocationExists
+  @NotNull
+  private Location donorPanel;
+
+  public Donation() {
+    modificationTracker = new RowModificationTracker();
+    worksheets = new HashSet<Worksheet>();
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public String getDonationIdentificationNumber() {
+    return donationIdentificationNumber;
+  }
+
+  public Donor getDonor() {
+    return donor;
+  }
+
+
+  public Date getDonationDate() {
+    return donationDate;
+  }
+
+  public BloodBagType getBloodBagType() {
+    return bloodBagType;
+  }
+
+  public String getNotes() {
+    return notes;
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public void setDonationIdentificationNumber(String donationIdentificationNumber) {
+    this.donationIdentificationNumber = donationIdentificationNumber;
+  }
+
+  public void setDonor(Donor donor) {
+    this.donor = donor;
+  }
+
+
+  public void setDonationDate(Date donationDate) {
+    this.donationDate = donationDate;
+  }
+
+  public void setBloodBagType(BloodBagType bloodBagType) {
+    this.bloodBagType = bloodBagType;
+  }
+
+  public void setNotes(String notes) {
+    this.notes = notes;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
+
+  public void copy(Donation donation) {
+    assert (this.getId().equals(donation.getId()));
+    this.donationIdentificationNumber = donation.donationIdentificationNumber;
+    this.donor = donation.donor;
+    this.setDonationType(donation.getDonationType());
+    this.bloodBagType = donation.bloodBagType;
+    this.donationDate = donation.donationDate;
+    this.donationBatch = donation.donationBatch;
+    this.notes = donation.notes;
+    this.haemoglobinCount=donation.haemoglobinCount;
+    this.donorPulse = donation.donorPulse;
+    this.donorWeight=donation.donorWeight;
+    this.bloodPressureDiastolic=donation.bloodPressureDiastolic;
+    this.bloodPressureSystolic=donation.bloodPressureSystolic;
+    this.donorPanel = donation.getDonorPanel();
+    this.bloodAbo = donation.bloodAbo;
+    this.bloodRh = donation.bloodRh;
+    this.setBloodTypingMatchStatus(donation.getBloodTypingMatchStatus());
+  }
+
+  public List<Product> getProducts() {
+    return products;
+  }
+
+  public void setProducts(List<Product> products) {
+    this.products = products;
+  }
+
+  public Date getLastUpdated() {
+    return modificationTracker.getLastUpdated();
+  }
+
+  public Date getCreatedDate() {
+    return modificationTracker.getCreatedDate();
+  }
+
+  public User getCreatedBy() {
+    return modificationTracker.getCreatedBy();
+  }
+
+  public User getLastUpdatedBy() {
+    return modificationTracker.getLastUpdatedBy();
+  }
+
+  public void setLastUpdated(Date lastUpdated) {
+    modificationTracker.setLastUpdated(lastUpdated);
+  }
+
+  public void setCreatedDate(Date createdDate) {
+    modificationTracker.setCreatedDate(createdDate);
+  }
+
+  public void setCreatedBy(User createdBy) {
+    modificationTracker.setCreatedBy(createdBy);
+  }
+
+  public void setLastUpdatedBy(User lastUpdatedBy) {
+    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
+  }
+
+  public Set<Worksheet> getWorksheets() {
+    return worksheets;
+  }
+
+  public void setWorksheets(Set<Worksheet> worksheets) {
+    this.worksheets = worksheets;
+  }
+
+  /**
+   * Compares two donations using the object's identifier (id field)
+   */
+  @Override
+  public int compareTo(Donation c) {
+    Long diff = (this.id - c.id);
+    if (diff < 0)
+      return -1;
+    if (diff > 0)
+      return 1;
+    return 0;
+  }
+
+  public TTIStatus getTTIStatus() {
+    return ttiStatus;
+  }
+
+  public void setTTIStatus(TTIStatus testedStatus) {
+    this.ttiStatus = testedStatus;
+  }
+
+  public BigDecimal getHaemoglobinCount() {
+    return haemoglobinCount;
+  }
+
+  public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
+    this.haemoglobinCount = haemoglobinCount;
+  }
+  
+  public Integer getBloodPressureSystolic() {
+		return bloodPressureSystolic;
+	}
+
+  public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
+		this.bloodPressureSystolic = bloodPressureSystolic;
+	}
+
+  public BigDecimal getDonorWeight() {
+    return donorWeight;
+  }
+  
+  public void setDonorWeight(BigDecimal donorWeight) {
+    this.donorWeight = donorWeight;
+  }
+
+  public User getDonationCreatedBy() {
+    return donationCreatedBy;
+  }
+
+  public void setDonationCreatedBy(User donationCreatedBy) {
+    this.donationCreatedBy = donationCreatedBy;
+  }
+
+  public DonationBatch getDonationBatch() {
+    return donationBatch;
+  }
+
+  public void setDonationBatch(DonationBatch donationBatch) {
+    this.donationBatch = donationBatch;
+  }
+
+  public DonationType getDonationType() {
+    return donationType;
+  }
+
+  public void setDonationType(DonationType donationType) {
+    this.donationType = donationType;
+  }
+
+  public String getDonorNumber() {
+    if (donor != null)
+      return donor.getDonorNumber();
+    return "";
+  }
+
+  public String getDonationBatchNumber() {
+    if (donationBatch != null)
+      return donationBatch.getBatchNumber();
+    return "";
+  }
+
+  public List<BloodTestResult> getBloodTestResults() {
+    return bloodTestResults;
+  }
+
+  public void setBloodTestResults(List<BloodTestResult> bloodTestResults) {
+    this.bloodTestResults = bloodTestResults;
+  }
+
+  public BloodTypingStatus getBloodTypingStatus() {
+    return bloodTypingStatus;
+  }
+
+  public void setBloodTypingStatus(BloodTypingStatus bloodTypingStatus) {
+    this.bloodTypingStatus = bloodTypingStatus;
+  }
+  
+  public BloodTypingMatchStatus getBloodTypingMatchStatus() {
+    return bloodTypingMatchStatus;
+  }
+
+  public void setBloodTypingMatchStatus(BloodTypingMatchStatus bloodTypingMatchStatus) {
+    this.bloodTypingMatchStatus = bloodTypingMatchStatus;
+  }
+
+  public String getBloodAbo() {
+    return bloodAbo;
+  }
+
+  public void setBloodAbo(String bloodAbo) {
+    this.bloodAbo = bloodAbo;
+  }
+
+  public String getBloodRh() {
+    return bloodRh;
+  }
+
+  public void setBloodRh(String bloodRh) {
+    this.bloodRh = bloodRh;
+  }
+
+  public Integer getBloodPressureDiastolic() {
+		return bloodPressureDiastolic;
+	}
+
+	public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+		this.bloodPressureDiastolic = bloodPressureDiastolic;
+	}
+
+	public String getExtraBloodTypeInformation() {
+    return extraBloodTypeInformation;
+  }
+
+    public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
+        this.extraBloodTypeInformation = extraBloodTypeInformation;
+    }
+
+    public Integer getDonorPulse() {
+        return donorPulse;
+    }
+
+    public void setDonorPulse(Integer donorPulse) {
+        this.donorPulse = donorPulse;
+    }
+
+    public Date getBleedStartTime() {
+        return bleedStartTime;
+    }
+
+    public void setBleedStartTime(Date bleedStartTime) {
+        this.bleedStartTime = bleedStartTime;
+    }
+
+    public Date getBleedEndTime() {
+        return bleedEndTime;
+    }
+
+    public void setBleedEndTime(Date bleedEndTime) {
+        this.bleedEndTime = bleedEndTime;
+    }
+
+    public Location getDonorPanel() {
+        return donorPanel;
+    }
+
+    public void setDonorPanel(Location donorPanel) {
+        this.donorPanel = donorPanel;
+    }
+
+}

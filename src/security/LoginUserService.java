@@ -28,7 +28,7 @@ public class LoginUserService implements UserDetailsService {
 
     User user = userRepository.findUser(username);
     if (user != null)
-      return new V2VUserDetails(user);
+      return new BsisUserDetails(user);
     else
       return null;
   }

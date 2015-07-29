@@ -37,7 +37,7 @@ package controller.mailreceiver;
 //@Service
 public class EmailReceiverService {
 
-//  private static final String CREATE_REQUEST_PREFIX = "V2V Request:";
+//  private static final String CREATE_REQUEST_PREFIX = "BSIS Request:";
 //
 //  @Autowired
 //  private VerifiedSenderRepository verifiedSenderRepository;

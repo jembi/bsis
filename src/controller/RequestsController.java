@@ -1,7 +1,5 @@
 package controller;
 
-import backingform.RequestBackingForm;
-import backingform.validator.RequestBackingFormValidator;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -9,11 +7,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
 import model.product.Product;
 import model.request.Request;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
 import repository.ProductRepository;
@@ -37,6 +38,8 @@ import utils.PermissionConstants;
 import viewmodel.MatchingProductViewModel;
 import viewmodel.ProductViewModel;
 import viewmodel.RequestViewModel;
+import backingform.RequestBackingForm;
+import backingform.validator.RequestBackingFormValidator;
 
 @RestController
 @RequestMapping("requests")
@@ -162,7 +165,7 @@ public class RequestsController {
   }
 
   /**
-   * Get column name from column id, depends on sequence of columns in collectionsTable.jsp
+   * Get column name from column id, depends on sequence of columns
    */
   private String getSortingColumn(int columnId, Map<String, Map<String, Object>> formFields) {
 
@@ -202,7 +205,7 @@ public class RequestsController {
    * in requestsTable.jsp.
    */
   private Map<String, Object> generateDatatablesMap(List<Request> productRequests, Long totalRecords, Map<String, Map<String, Object>> formFields) {
-    Map<String, Object> collectionsMap = new HashMap<String, Object>();
+    Map<String, Object> donationsMap = new HashMap<String, Object>();
 
     ArrayList<Object> requestList = new ArrayList<Object>();
 
@@ -235,10 +238,10 @@ public class RequestsController {
 
       requestList.add(row);
     }
-    collectionsMap.put("aaData", requestList);
-    collectionsMap.put("iTotalRecords", totalRecords);
-    collectionsMap.put("iTotalDisplayRecords", totalRecords);
-    return collectionsMap;
+    donationsMap.put("aaData", requestList);
+    donationsMap.put("iTotalRecords", totalRecords);
+    donationsMap.put("iTotalDisplayRecords", totalRecords);
+    return donationsMap;
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)

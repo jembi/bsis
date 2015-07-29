@@ -3,21 +3,27 @@ package backingform.validator;
 import backingform.ProductBackingForm;
 import backingform.ProductCombinationBackingForm;
 import backingform.RecordProductBackingForm;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import controller.UtilController;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import model.collectedsample.CollectedSample;
+
+import model.donation.Donation;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
+
 import utils.CustomDateFormatter;
 import viewmodel.ProductViewModel;
 
@@ -116,8 +122,8 @@ public class ProductBackingFormValidator implements Validator {
     Map<String, Object> bean = null;
     try {
       bean = BeanUtils.describe(form);
-      CollectedSample collectedSample = utilController.findCollectionInForm(bean);
-      form.setCollectedSample(collectedSample);
+      Donation donation = utilController.findDonationInForm(bean);
+      form.setDonation(donation);
     } catch (IllegalAccessException e) {
       e.printStackTrace();
     } catch (InvocationTargetException e) {
@@ -132,8 +138,8 @@ public class ProductBackingFormValidator implements Validator {
     Map<String, Object> bean = null;
     try {
       bean = BeanUtils.describe(form);
-      CollectedSample collectedSample = utilController.findCollectionInForm(bean);
-      form.setCollectedSample(collectedSample);
+      Donation donation = utilController.findDonationInForm(bean);
+      form.setDonation(donation);
     } catch (IllegalAccessException e) {
       e.printStackTrace();
     } catch (InvocationTargetException e) {

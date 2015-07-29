@@ -1,8 +1,8 @@
 package viewmodel;
 
-import model.collectedsample.CollectedSample;
 import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
+import model.donation.Donation;
 import model.product.Product;
 
 public class MatchingProductViewModel {
@@ -35,8 +35,8 @@ public class MatchingProductViewModel {
     return productViewModel.getId();
   }
 
-  public CollectedSample getCollectedSample() {
-    return productViewModel.getCollectedSample();
+  public Donation getDonation() {
+    return productViewModel.getDonation();
   }
 
   public ProductTypeViewModel getProductType() {
@@ -75,8 +75,8 @@ public class MatchingProductViewModel {
     return productViewModel.getExpiresOn();
   }
 
-  public String getCollectionNumber() {
-    return productViewModel.getCollectionNumber();
+  public String getDonationIdentificationNumber() {
+    return productViewModel.getDonationIdentificationNumber();
   }
 
   public String getAge() {

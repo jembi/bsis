@@ -192,12 +192,12 @@ public class AdminController {
     String errMsg = "";
     try {
       Integer numDonors = Integer.parseInt(params.get("numDonors"));
-      Integer numCollections = Integer.parseInt(params.get("numCollections"));
+      Integer numDonations = Integer.parseInt(params.get("numDonations"));
       Integer numProducts = Integer.parseInt(params.get("numProducts"));
       Integer numRequests = Integer.parseInt(params.get("numRequests"));
 
       createDataController.createDonors(numDonors);
-      createDataController.createCollectionsWithTestResults(numCollections);
+      createDataController.createDonationsWithTestResults(numDonations);
       createDataController.createProducts(numProducts);
       createDataController.createRequests(numRequests);
     }
@@ -279,11 +279,11 @@ public class AdminController {
     LOGGER.debug("Writing backup to " + fullFileName);
 
     try {
-      Properties prop = utilController.getV2VProperties();
-      String mysqldumpPath = (String) prop.get("v2v.dbbackup.mysqldumppath");
-      String username = (String) prop.get("v2v.dbbackup.username");
-      String password = (String) prop.get("v2v.dbbackup.password");
-      String dbname = (String) prop.get("v2v.dbbackup.dbname");
+      Properties prop = utilController.getDatabaseProperties();
+      String mysqldumpPath = (String) prop.get("dbbackup.mysqldumppath");
+      String username = (String) prop.get("dbbackup.username");
+      String password = (String) prop.get("dbbackup.password");
+      String dbname = (String) prop.get("dbbackup.dbname");
 
       LOGGER.debug(mysqldumpPath);
       LOGGER.debug(username);

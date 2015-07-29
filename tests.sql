@@ -76,7 +76,7 @@ isEmptyAllowed, isActive) values
 
 insert into BloodTestingRule
 (bloodTestsIds, pattern,
- collectionFieldChanged, newInformation, extraInformation,
+ donationFieldChangedionFieldChanged, newInformation, extraInformation,
  context, category, subCategory,
  pendingTestsIds, markSampleAsUnsafe, isActive
 ) values
@@ -220,7 +220,7 @@ isEmptyAllowed, isActive) values
 
 insert into BloodTestingRule
 (bloodTestsIds, pattern,
- collectionFieldChanged, newInformation, extraInformation,
+ donationFieldChanged, newInformation, extraInformation,
  context, category, subCategory,
  pendingTestsIds, markSampleAsUnsafe, isActive
 ) values
@@ -335,7 +335,7 @@ isEmptyAllowed, isActive) values
 
 insert into BloodTestingRule
 (bloodTestsIds, pattern,
- collectionFieldChanged, newInformation, extraInformation,
+ donationFieldChanged, newInformation, extraInformation,
  context, category, subCategory,
  pendingTestsIds, markSampleAsUnsafe, isActive
 ) values
