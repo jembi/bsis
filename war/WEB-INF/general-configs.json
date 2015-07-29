@@ -1,31 +1,24 @@
-[
-    {
-      "name": "donation.bpSystolicMax",
-      "value": "250"
-    },
-    {
-      "name": "donation.bpDiastolicMax",
-      "value": "150"
-    },
-    {
-      "name": "donation.daysBetweenDonations",
-      "value": "56"
-    },
-    {
-      "name": "dateFormat",
-      "value": "dd/MM/yyyy"
-    },
-    {
-      "name": "dateTimeFormat",
-      "value": "dd/MM/yyyy hh:mm:ss a"
-    },
-    {
-      "dataType": {
-        "id": 1,
-        "datatype": "text"
-      },
-      "description": "TestGeneralConfig",
-      "name": "TestGeneralConfig",
-      "value": "testval"
-    }
-]
+/**
+    *  Adding a new Config
+    [
+
+        {
+           "dataType": {
+               "id": 1,
+               "datatype": "text"
+           },
+           "description": "TestGeneralConfig",
+           "name": "TestGeneralConfig",
+           "value": "testval"
+        }
+    ]
+    *
+    * Updating an existing one
+    *
+    [
+       {
+           "name": "donation.bpSystolicMax",
+           "value": "250"
+       }
+    ]
+*/

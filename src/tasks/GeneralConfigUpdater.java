@@ -33,17 +33,18 @@ public class GeneralConfigUpdater {
             Reader reader = new InputStreamReader(servletContext.getResourceAsStream("/WEB-INF/general-configs.json"), "UTF-8");
             Gson gson = new Gson();
             GeneralConfig[] generalConfigsArray = gson.fromJson(reader, GeneralConfig[].class);
-
-            for (GeneralConfig temp : generalConfigsArray) {
-                // Check if there is an existing config
-                GeneralConfig existingConfig = generalConfigRepository.getGeneralConfigByName(temp.getName());
-                if(existingConfig != null) {
-                    System.out.println("Updating general config from file: " + temp.getName());
-                    existingConfig.setValue(temp.getValue());
-                    generalConfigRepository.update(existingConfig);
-                } else {
-                    System.out.println("Adding new general config from file: " + temp.getName());
-                    generalConfigRepository.save(temp);
+            if (generalConfigsArray != null) {
+                for (GeneralConfig temp : generalConfigsArray) {
+                    // Check if there is an existing config
+                    GeneralConfig existingConfig = generalConfigRepository.getGeneralConfigByName(temp.getName());
+                    if (existingConfig != null) {
+                        System.out.println("Updating general config from file: " + temp.getName());
+                        existingConfig.setValue(temp.getValue());
+                        generalConfigRepository.update(existingConfig);
+                    } else {
+                        System.out.println("Adding new general config from file: " + temp.getName());
+                        generalConfigRepository.save(temp);
+                    }
                 }
             }
 
