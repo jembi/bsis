@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import model.bloodbagtype.BloodBagType;
 import model.collectedsample.CollectedSample;
+import model.collectedsample.HaemoglobinLevel;
 import model.collectionbatch.CollectionBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
@@ -105,7 +106,7 @@ public class CollectedSampleBackingForm {
   public void setBleedStartTime(String bleedStartTime) {
     this.bleedStartTime = bleedStartTime;
     try {
-      collectedSample.setBleedStartTime(CustomDateFormatter.getTimeFromString(bleedStartTime));
+      collectedSample.setBleedStartTime(CustomDateFormatter.getDateTimeFromString(bleedStartTime));
     } catch (ParseException ex) {
       ex.printStackTrace();
       collectedSample.setBleedStartTime(null);
@@ -115,7 +116,7 @@ public class CollectedSampleBackingForm {
   public void setBleedEndTime(String bleedEndTime) {
     this.bleedEndTime = bleedEndTime;
     try {
-      collectedSample.setBleedEndTime(CustomDateFormatter.getTimeFromString(bleedEndTime));
+      collectedSample.setBleedEndTime(CustomDateFormatter.getDateTimeFromString(bleedEndTime));
     } catch (ParseException ex) {
       ex.printStackTrace();
       collectedSample.setBleedEndTime(null);
@@ -352,6 +353,14 @@ public class CollectedSampleBackingForm {
         collectedSample.setHaemoglobinCount(haemoglobinCount);
     }
 
+    public HaemoglobinLevel getHaemoglobinLevel() {
+        return collectedSample.getHaemoglobinLevel();
+    }
+
+    public void setHaemoglobinLevel(HaemoglobinLevel haemoglobinLevel) {
+        collectedSample.setHaemoglobinLevel(haemoglobinLevel);
+    }
+
     public Integer getDonorPulse() {
         return collectedSample.getDonorPulse();
     }
@@ -460,6 +469,10 @@ public class CollectedSampleBackingForm {
             collectedSample.setDonorPanel(donorPanel);
         }
             
+    }
+    
+    public void setBloodBagType(BloodBagType bloodBagType) {
+        collectedSample.setBloodBagType(bloodBagType);
     }
 
 }

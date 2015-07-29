@@ -96,7 +96,7 @@ public class PermissionConstants {
 	public static final String MANAGE_BLOOD_TYPING_RULES = "Manage Blood Typing Rules";
 	public static final String MANAGE_BLOOD_BAG_TYPES = "Manage Blood Bag Types";
 	public static final String MANAGE_DISCARD_REASONS = "Manage Discard Reasons";
-	public static final String MANAGE_DONOR_DEFER_REASONS = "Manage Donor Defer Reasons";
+	public static final String MANAGE_DEFERRAL_REASONS = "Manage Deferral Reasons";
 	public static final String MANAGE_DONOR_CODES = "Manage Donor Codes";
 	public static final String MANAGE_DIAGNOSES_CODES = "Manage Diagnoses Codes";
 	public static final String MANAGE_LAB_SETUP = "Manage Lab Setup";
