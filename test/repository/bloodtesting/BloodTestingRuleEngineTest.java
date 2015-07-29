@@ -59,7 +59,7 @@ public class BloodTestingRuleEngineTest {
 			getConnection();
 		}
 		IDataSet dataSet = getDataSet();
-		DatabaseOperation.INSERT.execute(connection, dataSet);
+		DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
 	}
 	
 	@After
