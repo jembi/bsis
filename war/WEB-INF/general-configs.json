@@ -7,9 +7,9 @@
                "id": 1,
                "datatype": "text"
            },
-           "description": "TestGeneralConfig",
-           "name": "TestGeneralConfig",
-           "value": "testval"
+           "description": "Example Property Description",
+           "name": "examplePropertyName",
+           "value": "exampleValue"
         }
     ]
     *
@@ -17,8 +17,8 @@
     *
     [
        {
-           "name": "donation.bpSystolicMax",
-           "value": "250"
+           "name": "examplePropertyName",
+           "value": "exampleValue"
        }
     ]
 */
