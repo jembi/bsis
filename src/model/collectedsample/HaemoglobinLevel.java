@@ -2,8 +2,18 @@ package model.collectedsample;
 
 public enum HaemoglobinLevel {
     
-    LOW,
-    NORMAL,
-    HIGH
+    LOW("Low"),
+    NORMAL("Normal"),
+    HIGH("High");
+    
+    private String label;
+
+    private HaemoglobinLevel(String label) {
+        this.label = label;
+    }
+
+    public String getLabel() {
+        return label;
+    }
 
 }
