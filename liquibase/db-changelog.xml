@@ -1244,4 +1244,19 @@
 	   </addColumn>
 	</changeSet>
 
+	<changeSet id="20150728-1553" author="bausmeier">
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.hbNumericValue"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Allow capturing of numeric haemoglobin value"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.hbQualitativeValue"></column>
+			<column name="value" value="false"></column>
+			<column name="description" value="Allow capturing of qualitative haemoglobin value"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+  </changeSet>
+
 </databaseChangeLog>
