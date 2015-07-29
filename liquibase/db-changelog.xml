@@ -1234,6 +1234,20 @@
 			tableName="BloodTestingRule" />
 	</changeSet>
 	
+	<changeSet id="20150720-1611" author="bausmeier">
+	   <comment>Add password reset column to user</comment>
+	   <addColumn tableName="User">
+	       <column name="passwordReset" type="tinyint(1)" defaultValue="0">
+	           <constraints nullable="false" />
+	       </column>
+	   </addColumn>
+	   <addColumn tableName="User_AUD">
+	       <column name="passwordReset" type="tinyint(1)" defaultValue="0">
+	           <constraints nullable="false" />
+	       </column>
+	   </addColumn>
+	</changeSet>
+	
 	<changeSet id="20150727-1140" author="bausmeier">
 	   <comment>Add haemoglobin level column to collected sample</comment>
 	   <addColumn tableName="CollectedSample">

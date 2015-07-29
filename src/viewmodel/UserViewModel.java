@@ -40,6 +40,10 @@ public class UserViewModel {
   public String getEmailId() {
       return user.getEmailId();
   }
+  
+  public Boolean isPasswordReset() {
+      return user.isPasswordReset();
+  }
 
   @Override
   public String toString() {
