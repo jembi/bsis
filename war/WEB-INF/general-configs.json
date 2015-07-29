@@ -1,0 +1,62 @@
+[
+    {
+      "dataType": {
+        "id": 2,
+        "datatype": "integer"
+      },
+      "description": "Blood Pressure systolic value cannot be more than 250",
+      "name": "donation.bpSystolicMax",
+      "value": "250",
+      "id": 1
+    },
+    {
+      "dataType": {
+        "id": 2,
+        "datatype": "integer"
+      },
+      "description": "Blood Pressure diastolic value cannot be less than 0",
+      "name": "donation.bpDiastolicMax",
+      "value": "150",
+      "id": 2
+    },
+    {
+      "dataType": {
+        "id": 2,
+        "datatype": "integer"
+      },
+      "description": "Period between donations is restrcited to 56 days",
+      "name": "donation.daysBetweenDonations",
+      "value": "56",
+      "id": 3
+    },
+    {
+      "dataType": {
+        "id": 1,
+        "datatype": "text"
+      },
+      "description": "Global Date Format",
+      "name": "dateFormat",
+      "value": "dd/MM/yyyy",
+      "id": 4
+    },
+    {
+      "dataType": {
+        "id": 1,
+        "datatype": "text"
+      },
+      "description": "Global DateTime Format",
+      "name": "dateTimeFormat",
+      "value": "dd/MM/yyyy hh:mm:ss a",
+      "id": 5
+    },
+    {
+      "dataType": {
+        "id": 1,
+        "datatype": "text"
+      },
+      "description": "Global Time Format",
+      "name": "timeFormat",
+      "value": "hh:mm:ss a",
+      "id": 6
+    }
+]
