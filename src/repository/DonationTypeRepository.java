@@ -33,9 +33,18 @@ public class DonationTypeRepository {
     return result;
   }
 
-  public List<DonationType> getAllDonationTypes() {
+  public  List<DonationType> getAllDonationTypes(){
+    return getAllDonationTypes(false);
+  }
+
+  public List<DonationType> getAllDonationTypes(Boolean includeDeleted) {
     TypedQuery<DonationType> query;
-    query = em.createQuery("SELECT dt from DonationType dt", DonationType.class);
+    if (includeDeleted){
+      query = em.createQuery("SELECT dt from DonationType dt", DonationType.class);
+    } else {
+      query = em.createQuery("SELECT dt from DonationType dt where dt.isDeleted=:isDeleted", DonationType.class);
+      query.setParameter("isDeleted", false);
+    }
     return query.getResultList();
   }
 

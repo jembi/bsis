@@ -75,7 +75,7 @@ public class DonationTypesController {
     }
 
     private void addAllDonationTypesToModel(Map<String, Object> m) {
-        m.put("allDonationTypes", getDonationTypeViewModels(donationTypesRepository.getAllDonationTypes()));
+        m.put("allDonationTypes", getDonationTypeViewModels(donationTypesRepository.getAllDonationTypes(true)));
     }
 
     private List<DonationTypeViewModel> getDonationTypeViewModels(List<DonationType> donationTypes){
