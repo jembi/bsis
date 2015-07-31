@@ -2,6 +2,8 @@ package repository;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -90,40 +92,31 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
 		}
 		
           
-        if (bloodGroups != null && !bloodGroups.isEmpty() && !anyBloodGroup) {
-            List<Predicate> bgPredicates = new ArrayList<Predicate>();
-            for (BloodGroup bg : bloodGroups) {
+		List<Predicate> bgPredicates = new ArrayList<Predicate>();
+		
+		// If anyBloodGroup is true then use all blood groups otherwise use the selected blood groups
+		Collection<BloodGroup> selectedBloodGroups = anyBloodGroup ? BloodGroup.getAllBloodGroups() : bloodGroups;
+        if (selectedBloodGroups != null) {
+            for (BloodGroup bg : selectedBloodGroups) {
                 Expression<Boolean> aboExp = cb.equal(root.<String> get("bloodAbo"), bg.getBloodAbo().toString());
                 Expression<Boolean> rhExp = cb.equal(root.<String> get("bloodRh"), bg.getBloodRh().toString());
                 bgPredicates.add(cb.and(aboExp, rhExp));
             }
-            if (noBloodGroup) {
-                Expression<String> bloodAbo = root.<String> get("bloodAbo");
-                Expression<String> bloodRh = root.<String> get("bloodRh");
-                Expression<Boolean> aboExpression = cb.or(cb.isNull(bloodAbo), cb.equal(bloodAbo, ""));
-                Expression<Boolean> rhExpression = cb.or(cb.isNull(bloodRh), cb.equal(bloodRh, ""));
-                bgPredicates.add(cb.and(aboExpression, rhExpression));
-            }
-            panelPredicates.add(cb.or(bgPredicates.toArray(new Predicate[0])));
         }
-        // If anyBloodGroup set to TRUE, use list of all blood groups (i.e. will not return donors who have NO blood group)
-        else if (anyBloodGroup) {
-            List<Predicate> bgPredicates = new ArrayList<Predicate>();
-            for (BloodGroup bg : BloodGroup.getAllBloodGroups()) {
-                System.out.println("\tANY BLOODGROUP: " + bg);
-                Expression<Boolean> aboExp = cb.equal(root.<String> get("bloodAbo"), bg.getBloodAbo().toString());
-                Expression<Boolean> rhExp = cb.equal(root.<String> get("bloodRh"), bg.getBloodRh().toString());
-                bgPredicates.add(cb.and(aboExp, rhExp));
-            }
-            if (noBloodGroup) {
-                Expression<String> bloodAbo = root.<String> get("bloodAbo");
-                Expression<String> bloodRh = root.<String> get("bloodRh");
-                Expression<Boolean> aboExpression = cb.or(cb.isNull(bloodAbo), cb.equal(bloodAbo, ""));
-                Expression<Boolean> rhExpression = cb.or(cb.isNull(bloodRh), cb.equal(bloodRh, ""));
-                bgPredicates.add(cb.and(aboExpression, rhExpression));
-            }
-            panelPredicates.add(cb.or(bgPredicates.toArray(new Predicate[0])));
+
+        // If noBloodGroup is true then include donors with no blood group
+        if (noBloodGroup) {
+            Expression<String> bloodAbo = root.<String> get("bloodAbo");
+            Expression<String> bloodRh = root.<String> get("bloodRh");
+            Expression<Boolean> aboExpression = cb.or(cb.isNull(bloodAbo), cb.equal(bloodAbo, ""));
+            Expression<Boolean> rhExpression = cb.or(cb.isNull(bloodRh), cb.equal(bloodRh, ""));
+            bgPredicates.add(cb.and(aboExpression, rhExpression));
+        } else if (selectedBloodGroups == null || selectedBloodGroups.isEmpty()) {
+            // No blood groups were selected so return early
+            return Collections.emptyList();
         }
+        
+        panelPredicates.add(cb.or(bgPredicates.toArray(new Predicate[0])));
 	    
 	    panelPredicates.add(cb.equal(root.<String> get("isDeleted"), false));
 		cq.where(panelPredicates.toArray(new Predicate[0]));
