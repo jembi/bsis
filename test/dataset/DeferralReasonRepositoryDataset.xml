@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <DeferralReason id="1" isDeleted="false" reason="High risk behaviour"/>
+  <DeferralReason id="2" isDeleted="false" reason="Low weight"/>
+  <DeferralReason id="3" isDeleted="false" reason="Low haemoglobin"/>
+  <DeferralReason id="4" isDeleted="false" reason="Other reasons"/>
+  <DeferralReason id="5" isDeleted="false" reason="Other medical conditions"/>
+  <DeferralReason id="6" isDeleted="false" reason="Travel history"/>
+</dataset>
