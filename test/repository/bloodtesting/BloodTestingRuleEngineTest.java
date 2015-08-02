@@ -26,6 +26,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,7 @@ import viewmodel.BloodTestingRuleResult;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @WebAppConfiguration
 public class BloodTestingRuleEngineTest {
 	
@@ -50,40 +52,43 @@ public class BloodTestingRuleEngineTest {
 	
 	@Autowired
 	private DataSource dataSource;
-	
-	static IDatabaseConnection connection;
-	
-	@Before
-	public void init() throws Exception {
-		if (connection == null) {
-			getConnection();
-		}
-		IDataSet dataSet = getDataSet();
-		DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
-	}
-	
-	@After
-	public void after() throws Exception {
-		// Remove data from database
-		DatabaseOperation.DELETE_ALL.execute(connection, getDataSet());
-	}
-	
-	/**
-	 * This method is executed once before test case execution start and acquires datasource from
-	 * spring context and create new dbunit IDatabaseConnection. This method is also useful to set
-	 * HSQLDB datatypefactory.
-	 */
-	private void getConnection() throws SQLException {
-		connection = new DatabaseDataSourceConnection(dataSource);
-		DatabaseConfig config = connection.getConfig();
-		config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
-	}
-	
+
 	private IDataSet getDataSet() throws Exception {
 		File file = new File("test/dataset/BloodTestingRuleRepositoryDataset.xml");
 		return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
 	}
 	
+	private IDatabaseConnection getConnection() throws SQLException {
+		IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
+		DatabaseConfig config = connection.getConfig();
+		config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
+		return connection;
+	}
+	
+	@Before
+	public void init() throws Exception {
+		IDatabaseConnection connection = getConnection();
+		try {
+			IDataSet dataSet = getDataSet();
+			DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
+		}
+		finally {
+			connection.close();
+		}
+	}
+
+	@After
+	public void after() throws Exception {
+		IDatabaseConnection connection = getConnection();
+		try {
+			IDataSet dataSet = getDataSet();
+			DatabaseOperation.DELETE_ALL.execute(connection, dataSet);
+		}
+		finally {
+			connection.close();
+		}
+	}
+
 	@Test
 	@Transactional
 	public void testBloodTestingRuleEngineWithDonation1() throws Exception {

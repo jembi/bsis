@@ -1,11 +1,12 @@
 package repository;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,15 +20,14 @@ import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
 import model.location.Location;
 import model.util.BloodGroup;
-import utils.CustomDateFormatter;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseDataSourceConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.dataset.ReplacementDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.After;
@@ -42,15 +42,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional; 
+import org.springframework.transaction.annotation.Transactional;
 
-
-import security.LoginUserService;
 import security.BsisUserDetails;
+import security.LoginUserService;
+import utils.CustomDateFormatter;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @WebAppConfiguration
 public class DonorCommunicationsRepositoryTest {
 	
@@ -58,19 +60,29 @@ public class DonorCommunicationsRepositoryTest {
 	DonorRepository donorRepository;	
 	@Autowired
 	private DataSource dataSource;
-	static IDatabaseConnection connection;
 	
 	@Autowired
 	DonorCommunicationsRepository donorCommunicationsRepository;
 		
 	ApplicationContext applicationContext = null;
 	UserDetailsService userDetailsService;
+
+	private IDataSet getDataSet() throws Exception {
+		File file = new File("test/dataset/DonorCommunicationsRepositoryDataset.xml");
+		return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
+	}
+
+	private IDatabaseConnection getConnection() throws SQLException {
+		IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
+		DatabaseConfig config = connection.getConfig();
+		config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
+		return connection;
+	}
 		
 	@Before
-	public void init() {
+	public void init() throws Exception {
+		IDatabaseConnection connection = getConnection();
 		try {
-			if (connection == null)
-				getConnection();
 			// Insert Data into database using DonorCommunicationsRepositoryDataset.xml
 			IDataSet dataSet = getDataSet();
 			
@@ -90,41 +102,26 @@ public class DonorCommunicationsRepositoryTest {
 				rDataSet.addReplacementObject("${" + key + "}",
 						replacements.get(key));
 			}
-			DatabaseOperation.INSERT.execute(connection, rDataSet);
-		} catch (Exception e) {
-			e.printStackTrace();
+			DatabaseOperation.CLEAN_INSERT.execute(connection, rDataSet);
+		} finally {
+			try {
+				connection.close();
+			}
+			catch (SQLException e) {}
 		}
 	}
-		
+
 	@After
 	public void after() throws Exception {
-		// Remove data from database
-		DatabaseOperation.DELETE_ALL.execute(connection, getDataSet());
-	}
-	
-	/**
-	 * This method is executed once before test case execution start and acquires
-	 * datasource from spring context and create new dbunit IDatabaseConnection.
-	 * This method is also useful to set HSQLDB datatypefactory.
-	 */
-	private void getConnection() {
+		IDatabaseConnection connection = getConnection();
 		try {
-			connection = new DatabaseDataSourceConnection(dataSource);
-			DatabaseConfig config = connection.getConfig();
-			// Set HSQLDB datatypefactory
-			config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
-					new HsqldbDataTypeFactory());
-		} catch (Exception e) {
-			e.printStackTrace();
+			IDataSet dataSet = getDataSet();
+			DatabaseOperation.DELETE_ALL.execute(connection, dataSet);
+		}
+		finally {
+			connection.close();
 		}
 	}
-
-	@SuppressWarnings("deprecation")
-	private IDataSet getDataSet() throws Exception {
-		File file = new File("test/dataset/DonorCommunicationsRepositoryDataset.xml");
-		return new FlatXmlDataSet(file);
-	}
-
 	
 	/**
 	* should return empty list when no results are found

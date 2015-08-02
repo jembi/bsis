@@ -9,6 +9,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,7 +40,7 @@ import org.dbunit.database.DatabaseDataSourceConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ReplacementDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.After;
@@ -54,6 +55,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import security.BsisUserDetails;
@@ -63,6 +65,7 @@ import controller.UtilController;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @WebAppConfiguration
 public class DonorRepositoryTest {
 
@@ -79,15 +82,25 @@ public class DonorRepositoryTest {
     private Donor donor;
     @Autowired
     private DataSource dataSource;
-    static IDatabaseConnection connection;
+
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+    private IDataSet getDataSet() throws Exception {
+        File file = new File("test/dataset/DonorRepositoryDataset.xml");
+        return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
+    }
+
+    private IDatabaseConnection getConnection() throws Exception {
+    	IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
+		DatabaseConfig config = connection.getConfig();
+		config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
+        return connection;
+    }
+
     @Before
-    public void init() {
+    public void init() throws Exception {
+    	IDatabaseConnection connection = getConnection();
         try {
-            if (connection == null) {
-                getConnection();
-            }
             // Insert Data into database using DonorRepositoryDataset.xml
             IDataSet dataSet = getDataSet();
             Date today = new Date();
@@ -105,43 +118,29 @@ public class DonorRepositoryTest {
                 rDataSet.addReplacementObject("${" + key + "}",
                         replacements.get(key));
             }
-            DatabaseOperation.INSERT.execute(connection, rDataSet);
+            DatabaseOperation.CLEAN_INSERT.execute(connection, rDataSet);
 
             donor = new Donor();
             donorBackingForm = new DonorBackingForm(donor);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } finally {
+			try {
+				connection.close();
+			}
+			catch (SQLException e) {}
         }
     }
 
-    @After
-    public void after() throws Exception {
-        // Remove data from database
-        DatabaseOperation.DELETE_ALL.execute(connection, getDataSet());
-    }
-
-    /**
-     * This method is executed once before test case execution start and
-     * acquires datasource from spring context and create new dbunit
-     * IDatabaseConnection. This method is also useful to set HSQLDB
-     * datatypefactory.
-     */
-    private void getConnection() {
-        try {
-            connection = new DatabaseDataSourceConnection(dataSource);
-            DatabaseConfig config = connection.getConfig();
-            // Set HSQLDB datatypefactory
-            config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
-                    new HsqldbDataTypeFactory());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private IDataSet getDataSet() throws Exception {
-        File file = new File("test/dataset/DonorRepositoryDataset.xml");
-        return new FlatXmlDataSet(file);
-    }
+	@After
+	public void after() throws Exception {
+		IDatabaseConnection connection = getConnection();
+		try {
+			IDataSet dataSet = getDataSet();
+			DatabaseOperation.DELETE_ALL.execute(connection, dataSet);
+		}
+		finally {
+			connection.close();
+		}
+	}
 
     @Test
     /**
