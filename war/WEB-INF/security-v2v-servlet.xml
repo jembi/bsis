@@ -20,6 +20,8 @@
     <intercept-url pattern="/donors/**" access="isAnonymous()" method="OPTIONS"/>
     <intercept-url pattern="/donors/**" access="isFullyAuthenticated()" />
   </http>
+  
+  <http pattern="/passwordresets/**" security="none" />
 
   <http pattern="/donations/**" create-session="never" use-expressions="true">
   	<http-basic />
@@ -62,6 +64,13 @@
     <session-management />
     <intercept-url pattern="/deferrals/**" access="isAnonymous()" method="OPTIONS"/>
     <intercept-url pattern="/deferrals/**" access="isFullyAuthenticated()" />
+  </http>
+
+  <http pattern="/deferralreasons/**" create-session="never" use-expressions="true">
+    <http-basic />
+    <session-management />
+    <intercept-url pattern="/deferralreasons/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/deferralreasons/**" access="isFullyAuthenticated()" />
   </http>
   
   <http pattern="/donorcodes/**" create-session="never" use-expressions="true">
@@ -181,6 +190,20 @@
     <session-management />
     <intercept-url pattern="/packtypes/**" access="isAnonymous()" method="OPTIONS"/>
     <intercept-url pattern="/packtypes/**" access="isFullyAuthenticated()" />
+  </http>
+
+  <http pattern="/discardreasons/**" create-session="never" use-expressions="true">
+    <http-basic />
+    <session-management />
+    <intercept-url pattern="/discardreasons/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/discardreasons/**" access="isFullyAuthenticated()" />
+  </http>
+
+  <http pattern="/donationtypes/**" create-session="never" use-expressions="true">
+    <http-basic />
+    <session-management />
+    <intercept-url pattern="/donationtypes/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/donationtypes/**" access="isFullyAuthenticated()" />
   </http>
   
   <!-- Enable stateful access to swagger-ui  -->

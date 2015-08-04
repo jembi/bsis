@@ -19,10 +19,13 @@ import model.admin.FormField;
 import model.admin.GeneralConfig;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
+import model.donationtype.DonationType;
 import model.donor.Donor;
+import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.product.Product;
 import model.product.ProductStatus;
+import model.productmovement.ProductStatusChangeReason;
 import model.producttype.ProductType;
 import model.request.Request;
 import model.user.User;
@@ -53,6 +56,9 @@ import repository.RoleRepository;
 import repository.WorksheetRepository;
 import repository.GeneralConfigRepository;
 import repository.BloodBagTypeRepository;
+import repository.DeferralReasonRepository;
+import repository.DiscardReasonRepository;
+import repository.DonationTypeRepository;
 import security.V2VUserDetails;
 import utils.DonorUtils;
 
@@ -65,7 +71,7 @@ public class UtilController {
 
   @Autowired
   private DonorRepository donorRepository;
-  
+
   @Autowired
   private LocationRepository locationRepository;
 
@@ -95,19 +101,28 @@ public class UtilController {
 
   @Autowired
   private GenericConfigRepository genericConfigRepository;
-  
+
   @Autowired
   private UserRepository userRepository;
-  
+
   @Autowired
   private RoleRepository roleRepository;
 
   @Autowired
   private GeneralConfigRepository generalConfigRepository;
-  
+
   @Autowired
   private BloodBagTypeRepository bloodBagTypeRepository;
-  
+
+  @Autowired
+  private DiscardReasonRepository discardReasonRepository;
+
+  @Autowired
+  private DeferralReasonRepository deferralReasonRepository;
+
+  @Autowired
+  private DonationTypeRepository donationTypeRepository;
+
   public Map<String, Map<String, Object>> getFormFieldsForForm(String formName) {
     List<FormField> formFields = formFieldRepository.getFormFields(formName);
     Map<String, Map<String, Object>> formFieldMap = new HashMap<String, Map<String, Object>>();
@@ -256,7 +271,7 @@ public class UtilController {
       return false;
     return formField.getAutoGenerate();
   }
-  
+
   public Boolean isDonorPanel(Long locationId) {
     return locationRepository.getLocation(locationId).getIsDonorPanel();
   }
@@ -264,11 +279,11 @@ public class UtilController {
   public String getNextDonorNumber() {
     return sequenceNumberRepository.getNextDonorNumber();
   }
-  
+
   public String getSequenceNumber(String targetTable,String columnName) {
 	    return sequenceNumberRepository.getSequenceNumber(targetTable,columnName);
 	  }
-	  
+
 
   public String getNextDonationIdentificationNumber() {
     return sequenceNumberRepository.getNextDonationIdentificationNumber();
@@ -339,7 +354,7 @@ public class UtilController {
 		  return false;
 	  }
   }
-  
+
   public String verifyDonorAge(Date birthDate) {
     Map<String, String> config = getConfigProperty("donationRequirements");
     String errorMessage = "";
@@ -355,7 +370,7 @@ public class UtilController {
             errorMessage = "Donor age must be between " + minAge + " and " + maxAge + " years.";
           }
         }
-     
+
     }
     return errorMessage;
   }
@@ -421,7 +436,7 @@ public class UtilController {
       return true;
     return false;
   }
-  
+
   public boolean donorNumberExists(String donorNumber) {
     if (StringUtils.isBlank(donorNumber))
       return false;
@@ -441,6 +456,26 @@ public class UtilController {
     return false;
   }
 
+  public boolean isDuplicateDiscardReason(ProductStatusChangeReason discardReason){
+    String reason = discardReason.getStatusChangeReason();
+    if (StringUtils.isBlank(reason))
+      return false;
+    ProductStatusChangeReason existingDiscardReason = discardReasonRepository.findDiscardReason(reason);
+    if (existingDiscardReason != null && !existingDiscardReason.getId().equals(discardReason.getId()))
+      return true;
+    return false;
+  }
+
+  public boolean isDuplicateDonationType(DonationType donationType){
+    String type = donationType.getDonationType();
+    if (StringUtils.isBlank(type))
+      return false;
+    DonationType existingDonationType = donationTypeRepository.getDonationType(type);
+    if (existingDonationType != null && !existingDonationType.getId().equals(donationType.getId()))
+      return true;
+    return false;
+  }
+
   public boolean isDuplicateGeneralConfigName(GeneralConfig config) {
     String configName = config.getName();
     if (StringUtils.isBlank(configName))
@@ -450,13 +485,23 @@ public class UtilController {
       return true;
     return false;
   }
-  
+
   public boolean isDuplicatePackTypeName(BloodBagType packType) {
     String packTypeName = packType.getBloodBagType();
     if (StringUtils.isBlank(packTypeName))
       return false;
     BloodBagType existingPackType = bloodBagTypeRepository.findBloodBagTypeByName(packTypeName);
     if (existingPackType != null && !existingPackType.getId().equals(packType.getId()))
+      return true;
+    return false;
+  }
+
+  public boolean isDuplicateDeferralReason(DeferralReason deferralReason) {
+    String reason = deferralReason.getReason();
+    if (StringUtils.isBlank(reason))
+      return false;
+    DeferralReason existingDeferralReason = deferralReasonRepository.findDeferralReason(reason);
+    if (existingDeferralReason != null && !existingDeferralReason.getId().equals(deferralReason.getId()))
       return true;
     return false;
   }

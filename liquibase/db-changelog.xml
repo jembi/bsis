@@ -1299,5 +1299,44 @@
 		<modifyDataType columnName="id" newDataType="smallint"
 			tableName="BloodTestingRule" />
 	</changeSet>
+	
+	<changeSet id="20150720-1611" author="bausmeier">
+	   <comment>Add password reset column to user</comment>
+	   <addColumn tableName="User">
+	       <column name="passwordReset" type="tinyint(1)" defaultValue="0">
+	           <constraints nullable="false" />
+	       </column>
+	   </addColumn>
+	   <addColumn tableName="User_AUD">
+	       <column name="passwordReset" type="tinyint(1)" defaultValue="0">
+	           <constraints nullable="false" />
+	       </column>
+	   </addColumn>
+	</changeSet>
+	
+	<changeSet id="20150727-1140" author="bausmeier">
+	   <comment>Add haemoglobin level column to donation</comment>
+	   <addColumn tableName="Donation">
+	       <column name="haemoglobinLevel" type="varchar(20)"></column>
+	   </addColumn>
+	   <addColumn tableName="Donation_AUD">
+	       <column name="haemoglobinLevel" type="varchar(20)"></column>
+	   </addColumn>
+	</changeSet>
+
+	<changeSet id="20150728-1553" author="bausmeier">
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.hbNumericValue"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Allow capturing of numeric haemoglobin value"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.hbQualitativeValue"></column>
+			<column name="value" value="false"></column>
+			<column name="description" value="Allow capturing of qualitative haemoglobin value"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+  </changeSet>
 
 </databaseChangeLog>

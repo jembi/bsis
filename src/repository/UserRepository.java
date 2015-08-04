@@ -41,8 +41,10 @@ public class UserRepository {
       existingUser.setFirstName(user.getFirstName());
       existingUser.setLastName(user.getLastName());
       existingUser.setEmailId(user.getEmailId());
-      if(modifyPassword)
+      if (modifyPassword) {
           existingUser.setPassword(user.getPassword());
+          existingUser.setPasswordReset(user.isPasswordReset());
+      }
       return em.merge(existingUser);
   }
 

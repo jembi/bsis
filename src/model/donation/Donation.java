@@ -124,6 +124,10 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
 
   @Range(min = 0, max = 30)
   private BigDecimal haemoglobinCount;
+  
+  @Enumerated(EnumType.STRING)
+  @Column(length = 20)
+  private HaemoglobinLevel haemoglobinLevel;
 
   @Column(name="bloodPressureSystolic")
   @Range(min = 0, max = 250)
@@ -254,6 +258,7 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     this.donationBatch = donation.donationBatch;
     this.notes = donation.notes;
     this.haemoglobinCount=donation.haemoglobinCount;
+    this.haemoglobinLevel = donation.haemoglobinLevel;
     this.donorPulse = donation.donorPulse;
     this.donorWeight=donation.donorWeight;
     this.bloodPressureDiastolic=donation.bloodPressureDiastolic;
@@ -341,6 +346,14 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     this.haemoglobinCount = haemoglobinCount;
   }
   
+    public HaemoglobinLevel getHaemoglobinLevel() {
+        return haemoglobinLevel;
+    }
+
+    public void setHaemoglobinLevel(HaemoglobinLevel haemoglobinLevel) {
+        this.haemoglobinLevel = haemoglobinLevel;
+    }
+
   public Integer getBloodPressureSystolic() {
 		return bloodPressureSystolic;
 	}

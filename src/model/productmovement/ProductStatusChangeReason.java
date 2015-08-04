@@ -63,4 +63,11 @@ public class ProductStatusChangeReason {
   public void setIsDeleted(Boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
+
+  public void copy(ProductStatusChangeReason productStatusChangeReason){
+    this.setId(productStatusChangeReason.getId());
+    this.setCategory(productStatusChangeReason.getCategory());
+    this.setStatusChangeReason(productStatusChangeReason.getStatusChangeReason());
+    this.setIsDeleted(productStatusChangeReason.getIsDeleted());
+  }
 }
