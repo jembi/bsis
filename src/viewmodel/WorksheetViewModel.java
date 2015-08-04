@@ -4,8 +4,7 @@ import java.util.Date;
 import java.util.Set;
 
 import utils.CustomDateFormatter;
-
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
 import model.user.User;
 import model.worksheet.Worksheet;
 import model.worksheet.WorksheetType;
@@ -38,8 +37,8 @@ public class WorksheetViewModel {
     return worksheet.getLastUpdatedBy();
   }
 
-  public Set<CollectedSample> getCollectedSamples() {
-    return worksheet.getCollectedSamples();
+  public Set<Donation> getDonations() {
+    return worksheet.getDonations();
   }
 
   public WorksheetType getWorksheetType() {

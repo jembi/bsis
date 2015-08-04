@@ -47,7 +47,7 @@ public class GenericConfigRepository {
   }
 
   public void updateWorksheetProperties(Map<String, String> params) {
-    updateConfigProperties(ConfigPropertyConstants.COLLECTIONS_WORKSHEET, params);
+    updateConfigProperties(ConfigPropertyConstants.DONATIONS_WORKSHEET, params);
   }
 
   public Map<String, String> getConfigProperties(String propertyOwner) {

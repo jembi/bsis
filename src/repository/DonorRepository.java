@@ -1,11 +1,13 @@
 package repository;
 
 import controller.UtilController;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -18,8 +20,9 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+
 import model.address.AddressType;
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
 import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.donorcodes.DonorCode;
@@ -29,12 +32,14 @@ import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.idtype.IdType;
 import model.preferredlanguage.PreferredLanguage;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
 import utils.DonorUtils;
 import viewmodel.DonorSummaryViewModel;
 
@@ -69,7 +74,7 @@ public class DonorRepository {
     }
 
     public Donor findDonorById(Long donorId) throws NoResultException{
-            String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.collectedSamples  WHERE d.id = :donorId and d.isDeleted = :isDeleted";
+            String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.donations  WHERE d.id = :donorId and d.isDeleted = :isDeleted";
             TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
             query.setParameter("isDeleted", Boolean.FALSE);
             return query.setParameter("donorId", donorId).getSingleResult();
@@ -154,8 +159,8 @@ public class DonorRepository {
             List<Donor> uniqueResult = new ArrayList<Donor>();
             looped = true;
             for (Donor donor : donorResults) {
-                for (CollectedSample collectedSample : donor.getCollectedSamples()) {
-                    if (collectedSample.getCollectionNumber().equals(donationIdentificationNumber)) {
+                for (Donation donation : donor.getDonations()) {
+                    if (donation.getDonationIdentificationNumber().equals(donationIdentificationNumber)) {
                         uniqueResult.add(donor);
                         return uniqueResult;
                     }
@@ -266,7 +271,7 @@ public class DonorRepository {
 
     public Donor findDonorByDonorNumber(String donorNumber, boolean isDelete) {
         Donor donor = null;
-        String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.collectedSamples  WHERE d.donorNumber = :donorNumber and d.isDeleted = :isDeleted";
+        String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.donations  WHERE d.donorNumber = :donorNumber and d.isDeleted = :isDeleted";
         TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
         query.setParameter("isDeleted", isDelete);
         try{
@@ -285,7 +290,7 @@ public class DonorRepository {
 
     /*y
      public Donor findDonorByDonorNumberIncludeDeleted(String donorNumber) {
-     String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.collectedSamples  WHERE d.donorNumber = :donorNumber";
+     String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.donations  WHERE d.donorNumber = :donorNumber";
      TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
      Donor donor = null;
      try {

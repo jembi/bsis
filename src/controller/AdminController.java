@@ -192,12 +192,12 @@ public class AdminController {
     String errMsg = "";
     try {
       Integer numDonors = Integer.parseInt(params.get("numDonors"));
-      Integer numCollections = Integer.parseInt(params.get("numCollections"));
+      Integer numDonations = Integer.parseInt(params.get("numDonations"));
       Integer numProducts = Integer.parseInt(params.get("numProducts"));
       Integer numRequests = Integer.parseInt(params.get("numRequests"));
 
       createDataController.createDonors(numDonors);
-      createDataController.createCollectionsWithTestResults(numCollections);
+      createDataController.createDonationsWithTestResults(numDonations);
       createDataController.createProducts(numProducts);
       createDataController.createRequests(numRequests);
     }

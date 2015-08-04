@@ -10,12 +10,12 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 @Documented
-@Constraint(validatedBy = CollectionBatchExistsConstraintValidator.class)
+@Constraint(validatedBy = DonationBatchExistsConstraintValidator.class)
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CollectionBatchExists {
+public @interface DonationBatchExists {
 
-  String message() default "Collection batch does not exist";
+  String message() default "Donation batch does not exist";
 
   Class<?>[] groups() default {};
 

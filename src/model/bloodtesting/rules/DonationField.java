@@ -1,5 +1,5 @@
 package model.bloodtesting.rules;
 
-public enum CollectionField {
+public enum DonationField {
   BLOODABO, BLOODRH, EXTRA, NOCHANGE, TTISTATUS
 }

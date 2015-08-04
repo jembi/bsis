@@ -1,6 +1,7 @@
 package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
@@ -10,13 +11,14 @@ import java.util.Map;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
 import model.product.Product;
 import model.product.ProductStatus;
 import model.producttype.ProductTypeCombination;
 import model.user.User;
 
 import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -59,8 +61,8 @@ public class ProductCombinationBackingForm {
   }
 
   @JsonIgnore
-  public CollectedSample getCollectedSample() {
-    return product.getCollectedSample();
+  public Donation getDonation() {
+    return product.getDonation();
   }
   
   @JsonIgnore
@@ -99,8 +101,8 @@ public class ProductCombinationBackingForm {
     product.setId(id);
   }
 
-  public void setCollectedSample(CollectedSample collectedSample) {
-    product.setCollectedSample(collectedSample);
+  public void setDonation(Donation donation) {
+    product.setDonation(donation);
   }
 
   public String getCreatedOn() {
@@ -171,18 +173,18 @@ public class ProductCombinationBackingForm {
     return product.toString();
   }
 
-  public String getCollectionNumber() {
-    if (product == null || product.getCollectedSample() == null ||
-        product.getCollectedSample().getCollectionNumber() == null
+  public String getDonationIdentificationNumber() {
+    if (product == null || product.getDonation() == null ||
+        product.getDonation().getDonationIdentificationNumber() == null
        )
       return "";
-    return product.getCollectedSample().getCollectionNumber();
+    return product.getDonation().getDonationIdentificationNumber();
   }
 
-  public void setCollectionNumber(String collectionNumber) {
-    CollectedSample collectedSample = new CollectedSample();
-    collectedSample.setCollectionNumber(collectionNumber);
-    product.setCollectedSample(collectedSample);
+  public void setDonationIdentificationNumber(String donationIdentificationNumber) {
+    Donation donation = new Donation();
+    donation.setDonationIdentificationNumber(donationIdentificationNumber);
+    product.setDonation(donation);
   }
 
   public Product getProduct() {

@@ -1,16 +1,17 @@
 package controller;
 
-import backingform.TestBatchBackingForm;
-import backingform.validator.TestBatchBackingFormValidator;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Arrays;
-import java.util.ArrayList;
+
 import javax.validation.Valid;
-import model.collectionbatch.CollectionBatch;
+
+import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +24,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import repository.CollectionBatchRepository;
+
+import repository.DonationBatchRepository;
 import repository.SequenceNumberRepository;
 import repository.TestBatchRepository;
 import utils.PermissionConstants;
+import viewmodel.DonationBatchViewModel;
 import viewmodel.TestBatchViewModel;
-import viewmodel.CollectionBatchViewModel;
+import backingform.TestBatchBackingForm;
+import backingform.validator.TestBatchBackingFormValidator;
 
 @RestController
 @RequestMapping("testbatches")
@@ -38,14 +42,14 @@ public class TestBatchController {
     private TestBatchRepository testBatchRepository;
     
     @Autowired
-    private CollectionBatchRepository collectionBatchRepository;
+    private DonationBatchRepository donationBatchRepository;
     
     @Autowired
     private SequenceNumberRepository sequenceNumberRepository;
     
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(new TestBatchBackingFormValidator(binder.getValidator(), collectionBatchRepository));
+        binder.setValidator(new TestBatchBackingFormValidator(binder.getValidator(), donationBatchRepository));
     }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
@@ -54,7 +58,7 @@ public class TestBatchController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("status", TestBatchStatus.values());
-    map.put("donationBatches", getCollectionBatchViewModels(collectionBatchRepository.findUnassignedCollectionBatches()));
+    map.put("donationBatches", getDonationBatchViewModels(donationBatchRepository.findUnassignedDonationBatches()));
     return new ResponseEntity(map, HttpStatus.OK);
   }
   
@@ -133,15 +137,15 @@ public class TestBatchController {
         return sequenceNumberRepository.getNextTestBatchNumber();
     }
     
-    public static List<CollectionBatchViewModel> getCollectionBatchViewModels(
-	      List<CollectionBatch> collectionBatches) {
-	    if (collectionBatches == null)
-	      return Arrays.asList(new CollectionBatchViewModel[0]);
-	    List<CollectionBatchViewModel> collectionBatchViewModels = new ArrayList<CollectionBatchViewModel>();
-	    for (CollectionBatch collectionBatch : collectionBatches) {
-	      collectionBatchViewModels.add(new CollectionBatchViewModel(collectionBatch));
+    public static List<DonationBatchViewModel> getDonationBatchViewModels(
+	      List<DonationBatch> donationBatches) {
+	    if (donationBatches == null)
+	      return Arrays.asList(new DonationBatchViewModel[0]);
+	    List<DonationBatchViewModel> donationBatchViewModels = new ArrayList<DonationBatchViewModel>();
+	    for (DonationBatch donationBatch : donationBatches) {
+	      donationBatchViewModels.add(new DonationBatchViewModel(donationBatch));
 	    }
-	    return collectionBatchViewModels;
+	    return donationBatchViewModels;
 	}
     
     public static List<TestBatchViewModel> getTestBatchViewModels(
