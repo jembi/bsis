@@ -28,9 +28,9 @@ public class DataTypeRepository {
         return query.getSingleResult();
     }
 
-    public DataType getDataTypeByDatatype(String datatype){
+    public DataType getDataTypeByName(String dataType){
         TypedQuery<DataType> query = em.createQuery("SELECT dt FROM DataType dt WHERE dt.datatype = :datatype ", DataType.class);
-        query.setParameter("datatype", datatype);
+        query.setParameter("datatype", dataType);
         DataType result = null;
         try {
             result = query.getSingleResult();

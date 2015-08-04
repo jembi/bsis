@@ -45,12 +45,17 @@ public class GeneralConfigUpdater {
                     for (GeneralConfigFile temp : generalConfigsArray) {
                         // Check if there is an existing config
                         GeneralConfig existingConfig = generalConfigRepository.getGeneralConfigByName(temp.getName());
+                        
+                        // If config exists, update the value of the existing config property
                         if (existingConfig != null) {
-                            System.out.println("Updating an existing general config named: " + temp.getName());
+                            System.out.println("Updating general config: " + temp.getName());
                             existingConfig.setValue(temp.getValue());
                             generalConfigRepository.update(existingConfig);
-                        } else {
-                            DataType dataType = dataTypeRepository.getDataTypeByDatatype(temp.getDatatype());
+                        } 
+                        
+                        // If config doesn't exist, create a new config property 
+                        else {
+                            DataType dataType = dataTypeRepository.getDataTypeByName(temp.getDataType());
                             // get the dataType
                             if (dataType != null) {
                                 System.out.println("Adding new general config from file: " + temp.getName());
@@ -61,7 +66,7 @@ public class GeneralConfigUpdater {
                                 generalConfig.setValue(temp.getValue());
                                 generalConfigRepository.save(generalConfig);
                             } else {
-                                System.out.println("Please check your datatype: " + temp.getDatatype());
+                                System.out.println("Please check your dataType: " + temp.getDataType());
                             }
                         }
                     }
