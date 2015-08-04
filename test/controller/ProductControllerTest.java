@@ -27,7 +27,7 @@ import repository.ProductRepository;
 import repository.ProductTypeRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:**/v2v-servlet.xml")
+@ContextConfiguration(locations = "file:**/bsis-servlet.xml")
 @WebAppConfiguration
 public class ProductControllerTest {
 	

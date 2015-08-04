@@ -31,7 +31,7 @@ ul.adminTopPanelTabs li {
 	width: 138px;
 }
 
-#v2vHeading {
+#bsisHeading {
   background-color: #024747;
   background-image: linear-gradient(bottom, #1075A1 0%, #0C5575 64%);
   background-image: -o-linear-gradient(bottom, #1075A1 0%, #0C5575 64%);
@@ -50,7 +50,7 @@ ul.adminTopPanelTabs li {
 	border-top-right-radius: 5px;
 }
 
-#v2vHeading a {
+#bsisHeading a {
 	text-decoration: none;
 	color: white;
 	font-weight: bold;

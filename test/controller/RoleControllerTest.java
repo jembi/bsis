@@ -25,7 +25,7 @@ import repository.RoleRepository;
 import controller.RoleController;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:**/v2v-servlet.xml")
+@ContextConfiguration(locations = "file:**/bsis-servlet.xml")
 @WebAppConfiguration
 
 public class RoleControllerTest {

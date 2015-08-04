@@ -11,12 +11,12 @@ import model.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class V2VUserDetails implements UserDetails {
+public class BsisUserDetails implements UserDetails {
 
   private static final long serialVersionUID = 1L;
   private User user;
 
-  public V2VUserDetails(User user) {
+  public BsisUserDetails(User user) {
     this.user = user;
   }
 
