@@ -1,35 +1,21 @@
-/**
-    *  Adding a new Config
-    [
-
-        {
-           "datatype": "text",
-           "description": "Example Property Description",
-           "name": "examplePropertyName",
-           "value": "exampleValue"
-        }
-    ]
-    *
-    * Updating an existing one
-    *
-    [
-       {
-           "name": "examplePropertyName",
-           "value": "exampleValue"
-       }
-    ]
-
-
+/*
 [
-  {
-    "datatype": "text",
-    "description": "Example Property Description",
-    "name": "examplePropertyName",
-    "value": "exampleValue"
-  },
-  {
-    "name": "examplePropertyName",
-    "value": "exampleValue"
-  }
+	// example to add a new config property
+	{ 
+	   "name": "examplePropertyName",
+	   "value": "exampleValue",
+	   "description": "Example Property Description",
+	   "dataType": "text" // accepted dataType values: text, integer, decimal, boolean
+	   
+	},
+	// example to update an existing config property
+	{
+       "name": "examplePropertyName",
+       "value": "exampleValue"
+	}
 ]
 */
+
+[
+
+]
