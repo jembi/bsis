@@ -22,6 +22,8 @@ public class UserBackingForm {
     private String roleDonorLab;
     private String roleTestLab;
     private String roleUser;
+    @JsonIgnore
+    private String passwordReset;
 
     public UserBackingForm() {
         setUser(new User());
@@ -45,6 +47,10 @@ public class UserBackingForm {
 
     public String getPassword() {
         return getUser().getPassword();
+    }
+    
+    public Boolean isPasswordReset() {
+        return getUser().isPasswordReset();
     }
 
     public String getFirstName() {

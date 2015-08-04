@@ -31,6 +31,9 @@ public class User implements Serializable {
 
   @Column(length=255, nullable=false)
   private String password;
+  
+  @Column
+  private Boolean passwordReset = Boolean.FALSE;
 
   @Column(length=15, nullable=false)
   private String firstName;
@@ -170,6 +173,7 @@ public class User implements Serializable {
     this.isAdmin = user.getIsAdmin();
     this.isActive = user.getIsActive();
     this.roles = user.getRoles();
+    this.passwordReset = user.isPasswordReset();
   }
 
   @Override
@@ -198,5 +202,13 @@ public class User implements Serializable {
 	public void setUserRole(List<UserRole> userRole) {
 		this.userRole = userRole;
 	}
+
+    public Boolean isPasswordReset() {
+        return passwordReset;
+    }
+
+    public void setPasswordReset(Boolean passwordReset) {
+        this.passwordReset = passwordReset;
+    }
   
 }

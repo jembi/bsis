@@ -20,6 +20,8 @@
     <intercept-url pattern="/donors/**" access="isAnonymous()" method="OPTIONS"/>
     <intercept-url pattern="/donors/**" access="isFullyAuthenticated()" />
   </http>
+  
+  <http pattern="/passwordresets/**" security="none" />
 
   <http pattern="/donations/**" create-session="never" use-expressions="true">
   	<http-basic />
@@ -195,6 +197,13 @@
     <session-management />
     <intercept-url pattern="/discardreasons/**" access="isAnonymous()" method="OPTIONS"/>
     <intercept-url pattern="/discardreasons/**" access="isFullyAuthenticated()" />
+  </http>
+
+  <http pattern="/donationtypes/**" create-session="never" use-expressions="true">
+    <http-basic />
+    <session-management />
+    <intercept-url pattern="/donationtypes/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/donationtypes/**" access="isFullyAuthenticated()" />
   </http>
   
   <!-- Enable stateful access to swagger-ui  -->
