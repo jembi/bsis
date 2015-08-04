@@ -145,12 +145,12 @@ public class BloodTestingRuleEngine {
 			if (LOGGER.isTraceEnabled()) {
 				LOGGER.trace("Test ids: " + rule.getBloodTestsIds());
 				LOGGER.trace("pattern: " + rule.getPattern());
-				LOGGER.trace("Collection field changed: " + rule.getDonationFieldChanged());
+				LOGGER.trace("Donation field changed: " + rule.getDonationFieldChanged());
 				LOGGER.trace("Pending test ids: " + rule.getPendingTestsIds());
 				LOGGER.trace("Changes to result: " + rule.getNewInformation() + ", " + rule.getExtraInformation());
 			}
-			DonationField collectionFieldChanged = rule.getDonationFieldChanged();
-			switch (collectionFieldChanged) {
+			DonationField donationFieldChanged = rule.getDonationFieldChanged();
+			switch (donationFieldChanged) {
 				case BLOODABO:
 					resultSet.addBloodAboChanges(rule.getNewInformation());
 					break;
@@ -164,7 +164,7 @@ public class BloodTestingRuleEngine {
 					resultSet.addExtraInformation(rule.getNewInformation());
 					break;
 				default:
-					LOGGER.warn("Unknown collection field: " + collectionFieldChanged);
+					LOGGER.warn("Unknown donation field: " + donationFieldChanged);
 					break;
 			}
 			
@@ -200,11 +200,11 @@ public class BloodTestingRuleEngine {
 			if (LOGGER.isTraceEnabled()) {
 				LOGGER.trace("Test ids: " + rule.getBloodTestsIds());
 				LOGGER.trace("pattern: " + rule.getPattern());
-				LOGGER.trace("Collection field changed: " + rule.getDonationFieldChanged());
+				LOGGER.trace("Donation field changed: " + rule.getDonationFieldChanged());
 				LOGGER.trace("Changes to result: " + rule.getNewInformation() + ", " + rule.getExtraInformation());
 			}
-			DonationField collectionFieldChanged = rule.getDonationFieldChanged();
-			switch (collectionFieldChanged) {
+			DonationField donationFieldChanged = rule.getDonationFieldChanged();
+			switch (donationFieldChanged) {
 				case BLOODABO:
 					if (atLeastOneResultFoundForPattern)
 						resultSet.setAboUninterpretable(true);
@@ -218,7 +218,7 @@ public class BloodTestingRuleEngine {
 						resultSet.setTtiUninterpretable(true);
 					break;
 				default:
-					LOGGER.warn("Unknown collection field: " + collectionFieldChanged);
+					LOGGER.warn("Unknown donation field: " + donationFieldChanged);
 					break;
 			}
 		}
