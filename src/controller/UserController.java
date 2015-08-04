@@ -105,6 +105,7 @@ public class UserController {
         if (modifyPassword) {
             String hashedPassword = getHashedPassword(user.getPassword());
             user.setPassword(hashedPassword);
+            user.setPasswordReset(false);
         }
         user.setIsActive(true);
         userRepository.updateUser(user, modifyPassword);
@@ -124,6 +125,7 @@ public class UserController {
         if (modifyPassword) {
             String hashedPassword = getHashedPassword(user.getPassword());
             user.setPassword(hashedPassword);
+            user.setPasswordReset(false);
         }
         userRepository.updateBasicUserInfo(user, modifyPassword);
         return new ResponseEntity<UserViewModel>(new UserViewModel(user), HttpStatus.OK);

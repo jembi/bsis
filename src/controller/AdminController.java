@@ -192,12 +192,12 @@ public class AdminController {
     String errMsg = "";
     try {
       Integer numDonors = Integer.parseInt(params.get("numDonors"));
-      Integer numCollections = Integer.parseInt(params.get("numCollections"));
+      Integer numDonations = Integer.parseInt(params.get("numDonations"));
       Integer numProducts = Integer.parseInt(params.get("numProducts"));
       Integer numRequests = Integer.parseInt(params.get("numRequests"));
 
       createDataController.createDonors(numDonors);
-      createDataController.createCollectionsWithTestResults(numCollections);
+      createDataController.createDonationsWithTestResults(numDonations);
       createDataController.createProducts(numProducts);
       createDataController.createRequests(numRequests);
     }
@@ -319,18 +319,7 @@ public class AdminController {
     }
   }
   
-  @RequestMapping(value="/donationtypes", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-  public  Map<String, Object> configureDonationTypesFormGenerator() {
 
-    Map<String, Object> map = new HashMap<String, Object>();
-    addAllDonationTypesToModel(map);
-    return map;
-  }
-
-  private void addAllDonationTypesToModel(Map<String, Object> m) {
-    m.put("allDonationTypes", donationTypesRepository.getAllDonationTypes());
-  }
 
 
 
@@ -402,36 +391,6 @@ public class AdminController {
     return map;
   }
 
-  @RequestMapping(value = "/donationtypes/{id}", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-  public  ResponseEntity getDonationType(@PathVariable Integer id) {
-      Map<String, Object> map = new HashMap<String, Object>();
-      DonationType donationType = donationTypesRepository.getDonationTypeById(id);
-      map.put("donationType", donationType);
-      return new ResponseEntity(map, HttpStatus.OK);
-
-  } 
-  
-  @RequestMapping(value = "/donationtypes", method = RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-  public  ResponseEntity saveDonationType(@RequestBody DonationType donationType) {
-       
-      donationTypesRepository.saveDonationType(donationType);
-      return new ResponseEntity(donationType, HttpStatus.CREATED);
-
-  }
-  
-  @RequestMapping(value = "/donationtypes/{id}", method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-  public  ResponseEntity updateDonationType(@PathVariable Integer id,
-          @RequestBody DonationType donationType) {
-      Map<String, Object> map = new HashMap<String, Object>();
-      donationType.setId(id);
-      donationType = donationTypesRepository.updateDonationType(donationType);
-      map.put("donationType", donationType);
-      return new ResponseEntity(map , HttpStatus.OK);
-
-  }
 
   List<InetAddress> getServerNetworkAddresses() {
     List<InetAddress> listOfServerAddresses = new ArrayList<InetAddress>();

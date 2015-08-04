@@ -196,7 +196,7 @@ public class CompatibilityTest implements ModificationTracker {
     return forRequest.getRequestNumber();
   }
 
-  public String getCollectionNumber() {
+  public String getDonationIdentificationNumber() {
     return "";
   }
 }

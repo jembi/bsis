@@ -17,8 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import model.admin.FormField;
 import model.admin.GeneralConfig;
-import model.collectedsample.CollectedSample;
-import model.collectionbatch.CollectionBatch;
+import model.donation.Donation;
+import model.donationbatch.DonationBatch;
+import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
@@ -40,8 +41,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
-import repository.CollectedSampleRepository;
-import repository.CollectionBatchRepository;
+import repository.DonationRepository;
+import repository.DonationBatchRepository;
 import repository.DonorRepository;
 import repository.FormFieldRepository;
 import repository.GenericConfigRepository;
@@ -58,6 +59,7 @@ import repository.BloodBagTypeRepository;
 import repository.DeferralReasonRepository;
 import repository.DiscardReasonRepository;
 import security.BsisUserDetails;
+import repository.DonationTypeRepository;
 import utils.DonorUtils;
 
 @Component
@@ -74,7 +76,7 @@ public class UtilController {
   private LocationRepository locationRepository;
 
   @Autowired
-  private CollectedSampleRepository collectedSampleRepository;
+  private DonationRepository donationRepository;
 
   @Autowired
   private ProductRepository productRepository;
@@ -83,7 +85,7 @@ public class UtilController {
   private RequestRepository requestRepository;
 
   @Autowired
-  private CollectionBatchRepository collectionBatchRepository;
+  private DonationBatchRepository donationBatchRepository;
 
   @Autowired
   private WorksheetRepository worksheetRepository;
@@ -117,6 +119,9 @@ public class UtilController {
 
   @Autowired
   private DeferralReasonRepository deferralReasonRepository;
+
+  @Autowired
+  private DonationTypeRepository donationTypeRepository;
 
   public Map<String, Map<String, Object>> getFormFieldsForForm(String formName) {
     List<FormField> formFields = formFieldRepository.getFormFields(formName);
@@ -280,13 +285,13 @@ public class UtilController {
 	  }
 
 
-  public String getNextCollectionNumber() {
-    return sequenceNumberRepository.getNextCollectionNumber();
+  public String getNextDonationIdentificationNumber() {
+    return sequenceNumberRepository.getNextDonationIdentificationNumber();
   }
 
   public Donor findDonorInForm(Map<String, Object> bean) {
     // IMPORTANT: Validation code just checks if the ID exists.
-    // We still need to store the collected sample as part of the product.
+    // We still need to store the donation as part of the product.
     String donorId = null;
     if (bean.containsKey("donorIdHidden"))
       donorId = (String) bean.get("donorIdHidden");
@@ -309,35 +314,35 @@ public class UtilController {
     return donor;
   }
 
-  public CollectionBatch findCollectionBatchInForm(Map<String, Object> bean) {
+  public DonationBatch findDonationBatchInForm(Map<String, Object> bean) {
 
-    CollectionBatch collectionBatch = null;
+    DonationBatch donationBatch = null;
     String batchNumber = null;
     if (batchNumber == null)
-      batchNumber = (String) bean.get("collectionBatchNumber");
+      batchNumber = (String) bean.get("donationBatchNumber");
     if (StringUtils.isNotBlank(batchNumber)) {
       try {
-        collectionBatch = collectionBatchRepository.findCollectionBatchByBatchNumber(batchNumber);
+        donationBatch = donationBatchRepository.findDonationBatchByBatchNumber(batchNumber);
       } catch (NoResultException ex) {
         ex.printStackTrace();
       }
     }
-    return collectionBatch;
+    return donationBatch;
   }
 
-  public CollectedSample findCollectionInForm(Map<String, Object> bean) {
-    CollectedSample collectedSample = null;
-    String collectionNumber = null;
-    if (collectionNumber == null)
-      collectionNumber = (String) bean.get("collectionNumber");
-    if (StringUtils.isNotBlank(collectionNumber)) {
+  public Donation findDonationInForm(Map<String, Object> bean) {
+    Donation donation = null;
+    String donationIdentificationNumber = null;
+    if (donationIdentificationNumber == null)
+      donationIdentificationNumber = (String) bean.get("donationIdentificationNumber");
+    if (StringUtils.isNotBlank(donationIdentificationNumber)) {
       try {
-        collectedSample = collectedSampleRepository.findCollectedSampleByCollectionNumber(collectionNumber);
+        donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
       } catch (NoResultException ex) {
         ex.printStackTrace();
       }
     }
-    return collectedSample;
+    return donation;
   }
 
   public boolean isFutureDate(Date date){
@@ -378,8 +383,8 @@ public class UtilController {
     return errorMessage;
   }
 
-  public Product findProduct(String collectionNumber, String productType) {
-    return productRepository.findProduct(collectionNumber, productType);
+  public Product findProduct(String donationIdentificationNumber, String productType) {
+    return productRepository.findProduct(donationIdentificationNumber, productType);
   }
 
   public String getNextWorksheetNumber() {
@@ -394,9 +399,9 @@ public class UtilController {
     return requestRepository.findRequestByRequestNumber(requestNumber);
   }
 
-  public Product findProduct(String collectionNumber, ProductType productType) {
-    List<Product> products = productRepository.findProductsByCollectionNumber(collectionNumber);
-    Product matchingProduct = null;
+  public Product findProduct(String donationIdentificationNumber, ProductType productType) {
+    List<Product> products = productRepository.findProductsByDonationIdentificationNumber(donationIdentificationNumber);
+    Product matchingProduct = null; 
     for (Product product : products) {
       if (product.getProductType().equals(productType)) {
         if (matchingProduct != null &&
@@ -441,12 +446,12 @@ public class UtilController {
     return false;
   }
 
-  public boolean isDuplicateCollectionNumber(CollectedSample collection) {
-    String collectionNumber = collection.getCollectionNumber();
-    if (StringUtils.isBlank(collectionNumber))
+  public boolean isDuplicateDonationIdentificationNumber(Donation donation) {
+    String donationIdentificationNumber = donation.getDonationIdentificationNumber();
+    if (StringUtils.isBlank(donationIdentificationNumber))
       return false;
-    CollectedSample existingCollection = collectedSampleRepository.findCollectionByCollectionNumberIncludeDeleted(collectionNumber);
-    if (existingCollection != null && !existingCollection.getId().equals(collection.getId()))
+    Donation existingDonation = donationRepository.findDonationByDonationIdentificationNumberIncludeDeleted(donationIdentificationNumber);
+    if (existingDonation != null && !existingDonation.getId().equals(donation.getId()))
       return true;
     return false;
   }
@@ -457,6 +462,16 @@ public class UtilController {
       return false;
     ProductStatusChangeReason existingDiscardReason = discardReasonRepository.findDiscardReason(reason);
     if (existingDiscardReason != null && !existingDiscardReason.getId().equals(discardReason.getId()))
+      return true;
+    return false;
+  }
+
+  public boolean isDuplicateDonationType(DonationType donationType){
+    String type = donationType.getDonationType();
+    if (StringUtils.isBlank(type))
+      return false;
+    DonationType existingDonationType = donationTypeRepository.getDonationType(type);
+    if (existingDonationType != null && !existingDonationType.getId().equals(donationType.getId()))
       return true;
     return false;
   }
@@ -521,12 +536,12 @@ public class UtilController {
     return false;
   }
 
-  public boolean isDuplicateCollectionBatchNumber(CollectionBatch collectionBatch) {
-    String batchNumber = collectionBatch.getBatchNumber();
+  public boolean isDuplicateDonationBatchNumber(DonationBatch donationBatch) {
+    String batchNumber = donationBatch.getBatchNumber();
     if (StringUtils.isBlank(batchNumber))
       return false;
-    CollectionBatch existingCollectionBatch = collectionBatchRepository.findCollectionBatchByBatchNumberIncludeDeleted(batchNumber);
-    if (existingCollectionBatch != null && !existingCollectionBatch.getId().equals(collectionBatch.getId()))
+    DonationBatch existingDonationBatch = donationBatchRepository.findDonationBatchByBatchNumberIncludeDeleted(batchNumber);
+    if (existingDonationBatch != null && !existingDonationBatch.getId().equals(donationBatch.getId()))
       return true;
     return false;
   }

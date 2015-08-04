@@ -9,12 +9,12 @@ import java.util.Set;
 
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
 import viewmodel.BloodTestResultViewModel;
 import viewmodel.BloodTestingRuleResult;
 
 /**
- * Collects the intermediate analysis of the CollectedSample during the processing of the
+ * Collects the intermediate analysis of the Donation during the processing of the
  * BloodTestingRules and generates the final outcomes.
  * 
  * @see BloodTestingRuleResult
@@ -22,7 +22,7 @@ import viewmodel.BloodTestingRuleResult;
 public class BloodTestingRuleResultSet {
 	
 	/* the blood donation */
-	private CollectedSample collectedSample;
+	private Donation donation;
 	
 	/* the previously saved test results */
 	private Map<String, String> storedTestResults;
@@ -45,13 +45,13 @@ public class BloodTestingRuleResultSet {
 	/* how many blood typing tests were done */
 	private Integer numBloodTypingTests = 0;
 	
-	/* the status of the collectedSample blood typing */
+	/* the status of the donation blood typing */
 	private BloodTypingStatus bloodTypingStatus;
 	
-	/* the status of the blood typing match between the collectedSample and the donor */
+	/* the status of the blood typing match between the donation and the donor */
 	private BloodTypingMatchStatus bloodTypingMatchStatus;
 	
-	/* the TTI status of the collectedSample */
+	/* the TTI status of the donation */
 	private TTIStatus ttiStatus;
 	
 	/* collection of the basic TTI tests that weren't done */
@@ -81,14 +81,14 @@ public class BloodTestingRuleResultSet {
 	/**
 	 * Creates and initialises the BloodTestingRuleResultSet
 	 * 
-	 * @param collectedSample CollectedSample regarding the blood donation
+	 * @param donation Donation regarding the blood donation
 	 * @param storedTestResults Map<String, String> of the saved test results
 	 * @param availableTestResults Map<String, String> of the available test results (saved and latest)
 	 * @param recentTestResults Map<Integer, BloodTestResult> of the most recent test results
 	 */
-	public BloodTestingRuleResultSet(CollectedSample collectedSample, Map<String, String> storedTestResults,
+	public BloodTestingRuleResultSet(Donation donation, Map<String, String> storedTestResults,
 	    Map<String, String> availableTestResults, Map<Integer, BloodTestResult> recentTestResults) {
-		this.collectedSample = collectedSample;
+		this.donation = donation;
 		this.storedTestResults = storedTestResults;
 		this.availableTestResults = availableTestResults;
 		this.recentTestResults = recentTestResults;
@@ -103,7 +103,7 @@ public class BloodTestingRuleResultSet {
 		BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
 		
 		// the blood donation
-		ruleResult.setCollectedSample(collectedSample);
+		ruleResult.setDonation(donation);
 		
 		// test data in various formats
 		ruleResult.setStoredTestResults(storedTestResults);
@@ -158,12 +158,12 @@ public class BloodTestingRuleResultSet {
 		return ruleResult;
 	}
 	
-	public CollectedSample getCollectedSample() {
-		return collectedSample;
+	public Donation getDonation() {
+		return donation;
 	}
 	
-	public void setCollectedSample(CollectedSample collectedSample) {
-		this.collectedSample = collectedSample;
+	public void setDonation(Donation donation) {
+		this.donation = donation;
 	}
 	
 	public Map<Integer, BloodTestResult> getRecentTestResults() {

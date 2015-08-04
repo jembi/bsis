@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import backingform.DonorBackingForm;
+import controller.UtilController;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -23,7 +25,8 @@ import javax.sql.DataSource;
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
-import model.collectedsample.CollectionConstants;
+import model.location.Location;
+import model.donation.DonationConstants;
 import model.donor.Donor;
 import model.donorcodes.DonorCodeGroup;
 import model.donorcodes.DonorDonorCode;
@@ -92,9 +95,9 @@ public class DonorRepositoryTest {
             Date today = new Date();
             Map<String, Object> replacements = new HashMap<String, Object>();
             replacements.put("DateDonorNotDue", DateUtils.addDays(today,
-                    -(CollectionConstants.BLOCK_BETWEEN_COLLECTIONS - 1)));
+                    -(DonationConstants.BLOCK_BETWEEN_DONATIONS - 1)));
             replacements.put("DateDonorDue", DateUtils.addDays(today,
-                    -(CollectionConstants.BLOCK_BETWEEN_COLLECTIONS + 1)));
+                    -(DonationConstants.BLOCK_BETWEEN_DONATIONS + 1)));
 
             replacements.put("DateDeferredOn", DateUtils.addDays(today, -(2)));
             replacements.put("DateDeferredUnit", DateUtils.addDays(today, (2)));
