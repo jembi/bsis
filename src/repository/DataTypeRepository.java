@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -25,5 +26,15 @@ public class DataTypeRepository {
         TypedQuery<DataType> query = em.createQuery("SELECT dt FROM DataType dt WHERE dt.id = :id ", DataType.class);
         query.setParameter("id", id);
         return query.getSingleResult();
+    }
+
+    public DataType getDataTypeByDatatype(String datatype){
+        TypedQuery<DataType> query = em.createQuery("SELECT dt FROM DataType dt WHERE dt.datatype = :datatype ", DataType.class);
+        query.setParameter("datatype", datatype);
+        DataType result = null;
+        try {
+            result = query.getSingleResult();
+        } catch (NoResultException ex){}
+        return  result;
     }
 }
