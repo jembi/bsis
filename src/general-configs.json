@@ -3,7 +3,7 @@
     [
 
         {
-           "dataType": "text",
+           "datatype": "text",
            "description": "Example Property Description",
            "name": "examplePropertyName",
            "value": "exampleValue"
@@ -22,7 +22,7 @@
 
 [
   {
-    "dataType": "text",
+    "datatype": "text",
     "description": "Example Property Description",
     "name": "examplePropertyName",
     "value": "exampleValue"

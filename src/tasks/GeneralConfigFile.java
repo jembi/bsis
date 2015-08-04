@@ -6,7 +6,7 @@ public class GeneralConfigFile {
     private String value;
     private String name;
     private String description;
-    private String dataType;
+    private String datatype;
 
 
     public GeneralConfigFile() {
@@ -20,8 +20,8 @@ public class GeneralConfigFile {
         this.description = description;
     }
 
-    public void setDataType(String dataType){
-        this.dataType = dataType;
+    public void setDatatype(String datatype){
+        this.datatype = datatype;
     }
 
     public void setValue(String value){
@@ -41,8 +41,8 @@ public class GeneralConfigFile {
         return description;
     }
 
-    public String getDataType(){
-        return dataType;
+    public String getDatatype(){
+        return datatype;
     }
 
 }
