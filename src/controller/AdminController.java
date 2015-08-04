@@ -279,11 +279,11 @@ public class AdminController {
     LOGGER.debug("Writing backup to " + fullFileName);
 
     try {
-      Properties prop = utilController.getV2VProperties();
-      String mysqldumpPath = (String) prop.get("v2v.dbbackup.mysqldumppath");
-      String username = (String) prop.get("v2v.dbbackup.username");
-      String password = (String) prop.get("v2v.dbbackup.password");
-      String dbname = (String) prop.get("v2v.dbbackup.dbname");
+      Properties prop = utilController.getDatabaseProperties();
+      String mysqldumpPath = (String) prop.get("dbbackup.mysqldumppath");
+      String username = (String) prop.get("dbbackup.username");
+      String password = (String) prop.get("dbbackup.password");
+      String dbname = (String) prop.get("dbbackup.dbname");
 
       LOGGER.debug(mysqldumpPath);
       LOGGER.debug(username);

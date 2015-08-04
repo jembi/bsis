@@ -58,8 +58,8 @@ import repository.GeneralConfigRepository;
 import repository.BloodBagTypeRepository;
 import repository.DeferralReasonRepository;
 import repository.DiscardReasonRepository;
+import security.BsisUserDetails;
 import repository.DonationTypeRepository;
-import security.V2VUserDetails;
 import utils.DonorUtils;
 
 @Component
@@ -228,9 +228,9 @@ public class UtilController {
     return reqUrl;
   }
 
-  public Properties getV2VProperties() throws IOException {
+  public Properties getDatabaseProperties() throws IOException {
     Properties prop = new Properties();
-    BufferedReader reader = new BufferedReader(new InputStreamReader(servletContext.getResourceAsStream("/WEB-INF/v2v.properties")));
+    BufferedReader reader = new BufferedReader(new InputStreamReader(servletContext.getResourceAsStream("/WEB-INF/classes/database.properties")));
     String propertyFileContents = "";
     String line;
     while ((line = reader.readLine()) != null) {
@@ -576,8 +576,8 @@ public class UtilController {
   public User getCurrentUser() {
     Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     User user = null;
-    if (principal != null && principal instanceof V2VUserDetails)
-      user = ((V2VUserDetails) principal).getUser();
+    if (principal != null && principal instanceof BsisUserDetails)
+      user = ((BsisUserDetails) principal).getUser();
     return user;
   }
   
@@ -587,5 +587,9 @@ public class UtilController {
   	if(user!=null)
   		pwd=user.getPassword();
   	return pwd;
+  }
+  
+  void setServletContext(ServletContext servletContext) {
+	  this.servletContext = servletContext;
   }
 }
