@@ -41,21 +41,21 @@ public class BloodTestingRuleViewModel {
     return rule.getPattern();
   }
 
-  public String getCollectionFieldChanged() {
-    String collectionField = "";
-    switch (rule.getCollectionFieldChanged()) {
-    case BLOODABO:  collectionField = "Blood ABO";
+  public String getDonationFieldChanged() {
+    String donationField = "";
+    switch (rule.getDonationFieldChanged()) {
+    case BLOODABO:  donationField = "Blood ABO";
                     break;
-    case BLOODRH:   collectionField = "Blood Rh";
+    case BLOODRH:   donationField = "Blood Rh";
                     break;
-    case EXTRA:     collectionField = "Extra Info";
+    case EXTRA:     donationField = "Extra Info";
                     break;
-    case NOCHANGE:  collectionField = "No Change";
+    case NOCHANGE:  donationField = "No Change";
                     break;
-    case TTISTATUS: collectionField = "TTI Status";
+    case TTISTATUS: donationField = "TTI Status";
                     break;
     }
-    return collectionField;
+    return donationField;
   }
 
   public Boolean getMarkSampleAsUnsafe() {

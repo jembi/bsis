@@ -5,7 +5,7 @@ import java.util.List;
 public class MultipleTestResultsBackingForm {
 
   String testedOn;
-  String collectionNumber;
+  String donationIdentificationNumber;
   List<String> testResults;
   
   public MultipleTestResultsBackingForm() {

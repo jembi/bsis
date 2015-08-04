@@ -1,11 +1,14 @@
-package model.collectionbatch;
+package model.donationbatch;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import constraintvalidator.LocationExists;
+
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,12 +20,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
-import model.collectedsample.CollectedSample;
+
+import model.donation.Donation;
 import model.location.Location;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.testbatch.TestBatch;
 import model.user.User;
+
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
@@ -31,7 +36,7 @@ import org.hibernate.envers.RelationTargetAuditMode;
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class CollectionBatch implements ModificationTracker {
+public class DonationBatch implements ModificationTracker {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -41,10 +46,11 @@ public class CollectionBatch implements ModificationTracker {
   @Column(length=20, unique=true)
   private String batchNumber;
 
+  @SuppressWarnings("unchecked")
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy="collectionBatch", fetch = FetchType.EAGER)
-  private List<CollectedSample> collectionsInBatch = Collections.EMPTY_LIST;
+  @OneToMany(mappedBy="donationBatch", fetch = FetchType.EAGER)
+  private List<Donation> donations = Collections.EMPTY_LIST;
   
   @OneToOne
   @LocationExists
@@ -63,7 +69,7 @@ public class CollectionBatch implements ModificationTracker {
 
   private RowModificationTracker modificationTracker;
 
-  public CollectionBatch() {
+  public DonationBatch() {
     modificationTracker = new RowModificationTracker();
   }
 
@@ -91,12 +97,12 @@ public class CollectionBatch implements ModificationTracker {
     this.notes = notes;
   }
 
-  public List<CollectedSample> getCollectionsInBatch() {
-    return collectionsInBatch;
+  public List<Donation> getDonations() {
+    return donations;
   }
 
-  public void setCollectionsInBatch(List<CollectedSample> collectionsInBatch) {
-    this.collectionsInBatch = collectionsInBatch;
+  public void setDonation(List<Donation> donations) {
+    this.donations = donations;
   }
 
   public boolean getIsDeleted() {
@@ -172,9 +178,9 @@ public class CollectionBatch implements ModificationTracker {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
   
-  public void copy(CollectionBatch collectionBatch){
-      this.setNotes(collectionBatch.getNotes());
-      this.donorPanel = collectionBatch.getDonorPanel();
+  public void copy(DonationBatch donationBatch){
+      this.setNotes(donationBatch.getNotes());
+      this.donorPanel = donationBatch.getDonorPanel();
   }
 
 

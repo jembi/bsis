@@ -2,10 +2,13 @@ package model.product;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import constraintvalidator.CollectedSampleExists;
+
+import constraintvalidator.DonationExists;
 import constraintvalidator.ProductTypeExists;
+
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -21,8 +24,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
-import model.collectedsample.CollectedSample;
+
 import model.compatibility.CompatibilityTest;
+import model.donation.Donation;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.productmovement.ProductStatusChange;
@@ -30,6 +34,7 @@ import model.producttype.ProductType;
 import model.request.Request;
 import model.usage.ProductUsage;
 import model.user.User;
+
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -46,12 +51,12 @@ public class Product implements ModificationTracker {
   @Column(nullable = false)
   private Long id;
 
-  // A product may not have a corresponding sample. Some products may be
-  // imported from another location. In such a case the corresponding collection
+  // A product may not have a corresponding donation. Some products may be
+  // imported from another location. In such a case the corresponding donation
   // field is allowed to be null.
-  @CollectedSampleExists
+  @DonationExists
   @ManyToOne(optional=true, fetch=FetchType.EAGER)
-  private CollectedSample collectedSample;
+  private Donation donation;
 
   @ProductTypeExists
   @ManyToOne
@@ -114,7 +119,7 @@ public class Product implements ModificationTracker {
 
   public void copy(Product product) {
     assert (this.getId().equals(product.getId()));
-    this.collectedSample = product.collectedSample;
+    this.donation = product.donation;
     this.productType = product.productType;
     this.createdOn = product.createdOn;
     this.expiresOn = product.expiresOn;
@@ -126,8 +131,8 @@ public class Product implements ModificationTracker {
     return id;
   }
 
-  public CollectedSample getCollectedSample() {
-    return collectedSample;
+  public Donation getDonation() {
+    return donation;
   }
 
   public ProductType getProductType() {
@@ -150,8 +155,8 @@ public class Product implements ModificationTracker {
     this.id = id;
   }
 
-  public void setCollectedSample(CollectedSample collectedSample) {
-    this.collectedSample = collectedSample;
+  public void setDonation(Donation donation) {
+    this.donation = donation;
   }
 
   public void setProductType(ProductType productType) {
@@ -210,10 +215,10 @@ public class Product implements ModificationTracker {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 
-  public String getCollectionNumber() {
-    if (collectedSample == null)
+  public String getDonationIdentificationNumber() {
+    if (donation == null)
       return null;
-    return collectedSample.getCollectionNumber();
+    return donation.getDonationIdentificationNumber();
   }
 
   public ProductStatus getStatus() {

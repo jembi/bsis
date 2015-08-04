@@ -124,29 +124,29 @@
  	<donationtype id="3" donationType="Autologous" isDeleted="0"></donationtype>
  	<donationtype id="4" donationType="Other" isDeleted="0"></donationtype>
  	
- 	<collectionbatch id="1" batchNumber="B0314000000"
+ 	<donationbatch id="1" batchNumber="B0314000000"
  		isDeleted="0" isClosed="0" createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
  		notes="Notes" donorPanel_Id = "1"
- 		createdBy_id="1" lastUpdatedBy_id="1"></collectionbatch>
+ 		createdBy_id="1" lastUpdatedBy_id="1"></donationbatch>
  	
- 	<collectedsample id="1" bloodAbo=""
+ 	<donation id="1" bloodAbo=""
  		bloodPressureSystolic="43" bloodRh="" bloodTypingStatus="NOT_DONE"
- 		collectedOn="2014-03-25 00:00:00" collectionNumber="000001"
+ 		donationDate="2014-03-25 00:00:00" donationIdentificationNumber="000001"
  		donorWeight="60.00" extraBloodTypeInformation="" haemoglobinCount="14.00"
  		isDeleted="0" createdDate="2014-03-27 15:00:51" lastUpdated="2014-03-27 15:00:51"
  		notes="notes" ttiStatus="NOT_DONE" bloodBagType_id="2"
- 		collectionBatch_id="1" donorPanel_Id = "1"
+ 		donationBatch_id="1" donorPanel_Id = "1"
  		donationCreatedBy_id="1" donationType_id="2" donor_id="1"
  		createdBy_id="1" lastUpdatedBy_id="1" bloodPressureDiastolic="55"
- 		donorPulse="60"></collectedsample>
+ 		donorPulse="60"></donation>
 
 
 	<genericconfig id="1" propertyName="rowHeight"
-		propertyOwner="collectionsWorksheet" propertyValue="30" />
+		propertyOwner="donationsWorksheet" propertyValue="30" />
 	<genericconfig id="2" propertyName="columnWidth"
-		propertyOwner="collectionsWorksheet" propertyValue="100" />
-	<genericconfig id="3" propertyName="collectionNumber"
-		propertyOwner="collectionsWorksheet" propertyValue="true" />
+		propertyOwner="donationsWorksheet" propertyValue="100" />
+	<genericconfig id="3" propertyName="donationIdentificationNumber"
+		propertyOwner="donationsWorksheet" propertyValue="true" />
 	<genericconfig id="4" propertyName="haemoglobinUnit"
 		propertyOwner="measurementUnit" propertyValue="g/dL" />
 	<genericconfig id="5" propertyName="bloodPressureUnit"
@@ -176,11 +176,11 @@
 		propertyValue="true" />
 	<genericconfig id="17" propertyName="donorRecordRequired"
 		propertyOwner="productReleaseRequirements" propertyValue="true" />
-	<genericconfig id="18" propertyName="allowProductsWithoutCollection"
+	<genericconfig id="18" propertyName="allowProductsWithoutDonation"
 		propertyOwner="productReleaseRequirements" propertyValue="true" />
 	<genericconfig id="19" propertyName="allowImportedProducts"
 		propertyOwner="productReleaseRequirements" propertyValue="true" />
-	<genericconfig id="20" propertyName="leaveOutCollectionsProbability"
+	<genericconfig id="20" propertyName="leaveOutDonationsProbability"
 		propertyOwner="createdata" propertyValue="0.10" />
 	<genericconfig id="21" propertyName="incorrectBloodTypeProbability"
 		propertyOwner="createdata" propertyValue="0.05" />
@@ -210,7 +210,7 @@
 		propertyOwner="labsetup" propertyValue="false" />
 	<genericconfig id="34" propertyName="donorsTabEnabled"
 		propertyOwner="labsetup" propertyValue="true" />
-	<genericconfig id="35" propertyName="collectionsTabEnabled"
+	<genericconfig id="35" propertyName="donationsTabEnabled"
 		propertyOwner="labsetup" propertyValue="true" />
 	<genericconfig id="36" propertyName="productsTabEnabled"
 		propertyOwner="labsetup" propertyValue="true" />
