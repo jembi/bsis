@@ -1,19 +1,19 @@
 package viewmodel;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Arrays;
 import java.util.Date;
 
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
 import model.product.Product;
 import model.product.ProductStatus;
-import model.producttype.ProductType;
 import model.user.User;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
 import utils.CustomDateFormatter;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ProductViewModel {
 
@@ -40,8 +40,8 @@ public class ProductViewModel {
   }
 
   @JsonIgnore
-  public CollectedSample getCollectedSample() {
-    return product.getCollectedSample();
+  public Donation getDonation() {
+    return product.getDonation();
   }
 
   public ProductTypeViewModel getProductType() {
@@ -68,20 +68,20 @@ public class ProductViewModel {
     return CustomDateFormatter.getDateTimeString(product.getExpiresOn());
   }
 
-  public String getCollectionNumber() {
-    if (getProduct() == null || getProduct().getCollectedSample() == null ||
-        getProduct().getCollectedSample().getCollectionNumber() == null
+  public String getDonationIdentificationNumber() {
+    if (getProduct() == null || getProduct().getDonation() == null ||
+        getProduct().getDonation().getDonationIdentificationNumber() == null
        )
       return "";
-    return getProduct().getCollectedSample().getCollectionNumber();
+    return getProduct().getDonation().getDonationIdentificationNumber();
   }
   
-  public String getCollectedSampleID() {
-    if (getProduct() == null || getProduct().getCollectedSample() == null ||
-        getProduct().getCollectedSample().getId() == null
+  public String getDonationID() {
+    if (getProduct() == null || getProduct().getDonation() == null ||
+        getProduct().getDonation().getId() == null
        )
       return "";
-    return getProduct().getCollectedSample().getId().toString();
+    return getProduct().getDonation().getId().toString();
   }
 
   public String getAge() {
@@ -152,12 +152,12 @@ public class ProductViewModel {
 
   @JsonIgnore
   public String getBloodGroup() {
-    if (product == null || product.getCollectedSample() == null ||
-        product.getCollectedSample().getCollectionNumber() == null
+    if (product == null || product.getDonation() == null ||
+        product.getDonation().getDonationIdentificationNumber() == null
        )
       return "";
-    CollectedSampleViewModel collectionViewModel = new CollectedSampleViewModel(product.getCollectedSample());
-    return collectionViewModel.getBloodGroup();
+    DonationViewModel donationViewModel = new DonationViewModel(product.getDonation());
+    return donationViewModel.getBloodGroup();
   }
 
   public String getSubdivisionCode() {

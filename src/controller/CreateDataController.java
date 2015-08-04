@@ -1,8 +1,9 @@
 package controller;
 
-import backingform.CollectedSampleBackingForm;
+import backingform.DonationBackingForm;
 import backingform.ProductBackingForm;
 import backingform.RequestBackingForm;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,13 +15,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+
 import model.address.Address;
 import model.address.Contact;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.TTIStatus;
 import model.bloodtesting.rules.BloodTestingRule;
-import model.bloodtesting.rules.CollectionField;
-import model.collectedsample.CollectedSample;
+import model.bloodtesting.rules.DonationField;
+import model.donation.Donation;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
@@ -29,13 +31,15 @@ import model.producttype.ProductType;
 import model.request.Request;
 import model.requesttype.RequestType;
 import model.util.Gender;
+
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import repository.BloodBagTypeRepository;
-import repository.CollectedSampleRepository;
+import repository.DonationRepository;
 import repository.DonationTypeRepository;
 import repository.DonorRepository;
 import repository.GenericConfigRepository;
@@ -71,7 +75,7 @@ public class CreateDataController {
   private LocationRepository locationRepository;
 
   @Autowired
-  private CollectedSampleRepository collectionRepository;
+  private DonationRepository donationRepository;
 
   @Autowired
   private RequestRepository requestRepository;
@@ -409,7 +413,7 @@ public class CreateDataController {
     return date;
   }
 
-  private Date getRandomCollectionDate() {
+  private Date getRandomDonationDate() {
     // Date twoYearsAgo = new DateTime().minusYears(2).toDate();
     // return getRandomDate(twoYearsAgo, new Date());
     Date twoYearsAgo = new DateTime().minusDays(300).toDate();
@@ -423,53 +427,53 @@ public class CreateDataController {
     return getRandomDate(twoYearsAgo, new Date());
   }
 
-  void createCollectionsWithTestResults(int numCollections) {
+  void createDonationsWithTestResults(int numDonations) {
     List<Location> sites = locationRepository.getAllDonorPanels();
     List<Location> centers = locationRepository.getAllDonorPanels();
     List<Donor> donors = donorRepository.getAllDonors();
     List<DonationType> donationTypes = donorTypeRepository.getAllDonationTypes();
 
-    List<CollectedSample> collectedSamples = new ArrayList<CollectedSample>();
+    List<Donation> donations = new ArrayList<Donation>();
 
     List<BloodBagType> bloodBagTypes = bloodBagTypeRepository.getAllBloodBagTypes();
-    List<String> collectionNumbers = sequenceNumberRepository.getBatchCollectionNumbers(numCollections);
-    for (int i = 0; i < numCollections; i++) {
-      CollectedSampleBackingForm collection = new CollectedSampleBackingForm();
-      collection.setCollectionNumber(collectionNumbers.get(i));    
+    List<String> donationIdentificationNumbers = sequenceNumberRepository.getBatchDonationIdentificationNumbers(numDonations);
+    for (int i = 0; i < numDonations; i++) {
+      DonationBackingForm donation = new DonationBackingForm();
+      donation.setDonationIdentificationNumber(donationIdentificationNumbers.get(i));    
 
-      collection.setPackType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()));
+      donation.setPackType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()));
 
-      String collectionDate = CustomDateFormatter.getDateTimeString(getRandomCollectionDate());
-      collection.setCollectedOn(collectionDate);
-      collection.setDonor(donors.get(Math.abs(random.nextInt()) % donors.size()));
-      collection.setNotes("notes sample " + i);
-      collection.setDonationType(donationTypes.get(Math.abs(random.nextInt()) % donationTypes.size()));
-      collection.setIsDeleted(false);
+      String donationDate = CustomDateFormatter.getDateTimeString(getRandomDonationDate());
+      donation.setDonationDate(donationDate);
+      donation.setDonor(donors.get(Math.abs(random.nextInt()) % donors.size()));
+      donation.setNotes("notes sample " + i);
+      donation.setDonationType(donationTypes.get(Math.abs(random.nextInt()) % donationTypes.size()));
+      donation.setIsDeleted(false);
 
-      collectedSamples.add(collection.getCollectedSample());
+      donations.add(donation.getDonation());
     }
 
-    collectionRepository.addAllCollectedSamples(collectedSamples);
+    donationRepository.addAllDonations(donations);
 
-    addTestResultsForCollections(collectedSamples);
+    addTestResultsForDonations(donations);
   }
 
-  private void addTestResultsForCollections(
-      List<CollectedSample> collectedSamples) {
-    addBloodTypingResultsForCollections(collectedSamples);
-    addTTIResultsForCollections(collectedSamples);
+  private void addTestResultsForDonations(
+      List<Donation> donations) {
+    addBloodTypingResultsForDonations(donations);
+    addTTIResultsForDonations(donations);
   }
 
   public void createProducts(int numProducts) {
-    List<CollectedSample> collections = collectionRepository.getAllCollectedSamples();
+    List<Donation> donations = donationRepository.getAllDonations();
     List<ProductType> productTypes = productTypeRepository.getAllProductTypes();
     List<Product> products = new ArrayList<Product>();
     for (int i = 0; i < numProducts; i++) {
-      CollectedSample c = collections.get(random.nextInt(collections.size()));
+      Donation c = donations.get(random.nextInt(donations.size()));
       Product p = new ProductBackingForm(true).getProduct();
-      p.setCollectedSample(c);
+      p.setDonation(c);
       p.setProductType(productTypes.get(random.nextInt(productTypes.size())));
-      Date d = c.getCollectedOn();
+      Date d = c.getDonationDate();
       p.setCreatedOn(d);
       Calendar cal = Calendar.getInstance();
       cal.setTime(d);
@@ -481,12 +485,12 @@ public class CreateDataController {
     productRepository.addAllProducts(products);
   }
 
-  private void addBloodTypingResultsForCollections(List<CollectedSample> collectedSamples) {
+  private void addBloodTypingResultsForDonations(List<Donation> donations) {
 
     Map<String, List<BloodTestingRule>> bloodAboRuleMap = new HashMap<String, List<BloodTestingRule>>();
     Map<String, List<BloodTestingRule>> bloodRhRuleMap = new HashMap<String, List<BloodTestingRule>>();
     for (BloodTestingRule rule : bloodTestingRepository.getBloodTypingRules(true)) {
-      switch (rule.getCollectionFieldChanged()) {
+      switch (rule.getDonationFieldChanged()) {
         case BLOODABO: if (!bloodAboRuleMap.containsKey(rule.getNewInformation())) {
                          bloodAboRuleMap.put(rule.getNewInformation(), new ArrayList<BloodTestingRule>());
                        }
@@ -502,7 +506,7 @@ public class CreateDataController {
 
     Map<String, String> createDataProperties = genericConfigRepository.getConfigProperties("createData");
 
-    double leaveOutCollectionsPercentage = Double.parseDouble(createDataProperties.get("leaveOutCollectionsProbability"));
+    double leaveOutDonationsPercentage = Double.parseDouble(createDataProperties.get("leaveOutDonationsProbability"));
     double incorrectBloodTypePercentage = Double.parseDouble(createDataProperties.get("incorrectBloodTypeProbability"));
 
     List<String> aboValues = new ArrayList<String>(bloodAboRuleMap.keySet());
@@ -512,21 +516,21 @@ public class CreateDataController {
 
     Random generator = new Random();
 
-    for (CollectedSample collection : collectedSamples) {
+    for (Donation donation : donations) {
 
-      if (Math.random() < leaveOutCollectionsPercentage) {
-        // do not add results for a small fraction of the collections
+      if (Math.random() < leaveOutDonationsPercentage) {
+        // do not add results for a small fraction of the donations
         continue;
       }
 
       String bloodAbo = "";
       String bloodRh = "";
-      if (collection.getDonor() == null) {
-        bloodAbo = collection.getDonor().getBloodAbo();
-        bloodRh = collection.getDonor().getBloodRh();
+      if (donation.getDonor() == null) {
+        bloodAbo = donation.getDonor().getBloodAbo();
+        bloodRh = donation.getDonor().getBloodRh();
       }
       if (StringUtils.isBlank(bloodAbo) || StringUtils.isBlank(bloodRh)) {
-        // first collection for this donor
+        // first donation for this donor
         bloodAbo = aboValues.get(generator.nextInt(aboValues.size()));
         bloodRh = rhValues.get(generator.nextInt(rhValues.size()));
       }
@@ -549,8 +553,8 @@ public class CreateDataController {
       BloodTestingRule rhRule = rhRules.get(generator.nextInt(rhRules.size()));
 
       // we know which rule to apply
-      Map<Long, String> testResultsForCollection = new HashMap<Long, String>();
-      testResults.put(collection.getId(), testResultsForCollection);
+      Map<Long, String> testResultsForDonation = new HashMap<Long, String>();
+      testResults.put(donation.getId(), testResultsForDonation);
 
       int index = 0;
       String[] patternResults = aboRule.getPattern().split(",");
@@ -559,7 +563,7 @@ public class CreateDataController {
             index >= patternResults.length ||
             StringUtils.isBlank(patternResults[index]))
           continue;
-        testResultsForCollection.put(Long.parseLong(testId), patternResults[index]);
+        testResultsForDonation.put(Long.parseLong(testId), patternResults[index]);
         index++;
       }
 
@@ -570,7 +574,7 @@ public class CreateDataController {
             index >= patternResults.length ||
             StringUtils.isBlank(patternResults[index]))
           continue;
-        testResultsForCollection.put(Long.parseLong(testId), patternResults[index]);
+        testResultsForDonation.put(Long.parseLong(testId), patternResults[index]);
         index++;
       }
     }
@@ -579,16 +583,16 @@ public class CreateDataController {
   }
 
   @SuppressWarnings("unchecked")
-  private void addTTIResultsForCollections(List<CollectedSample> collectedSamples) {
+  private void addTTIResultsForDonations(List<Donation> donations) {
 
-    Map<Long, String> collectionNumberMap = new HashMap<Long, String>();
-    for (CollectedSample c : collectedSamples) {
-      collectionNumberMap.put(c.getId(), c.getCollectionNumber());
+    Map<Long, String> donationIdentificationNumberMap = new HashMap<Long, String>();
+    for (Donation c : donations) {
+      donationIdentificationNumberMap.put(c.getId(), c.getDonationIdentificationNumber());
     }
 
     Map<String, List<BloodTestingRule>> ttiRuleMap = new HashMap<String, List<BloodTestingRule>>();
     for (BloodTestingRule rule : bloodTestingRepository.getTTIRules(true)) {
-      if (rule.getCollectionFieldChanged().equals(CollectionField.TTISTATUS)) {
+      if (rule.getDonationFieldChanged().equals(DonationField.TTISTATUS)) {
         if (!ttiRuleMap.containsKey(rule.getNewInformation())) {
           ttiRuleMap.put(rule.getNewInformation(), new ArrayList<BloodTestingRule>());
         }
@@ -597,7 +601,7 @@ public class CreateDataController {
     }
 
     Map<String, String> createDataProperties = genericConfigRepository.getConfigProperties("createData");
-    double leaveOutCollectionsPercentage = Double.parseDouble(createDataProperties.get("leaveOutCollectionsProbability"));
+    double leaveOutDonationsPercentage = Double.parseDouble(createDataProperties.get("leaveOutDonationsProbability"));
     double unsafePercentage = Double.parseDouble(createDataProperties.get("unsafeProbability"));
 
     Set<String> allBloodTestsIds = new HashSet<String>();
@@ -605,10 +609,10 @@ public class CreateDataController {
     Map<Long, Map<Long, String>> testResults = new HashMap<Long, Map<Long,String>>();
     Random generator = new Random();
 
-    for (CollectedSample collection : collectedSamples) {
+    for (Donation donation : donations) {
 
-      if (Math.random() < leaveOutCollectionsPercentage) {
-        // do not add results for a small fraction of the collections
+      if (Math.random() < leaveOutDonationsPercentage) {
+        // do not add results for a small fraction of the donations
         continue;
       }
 
@@ -628,8 +632,8 @@ public class CreateDataController {
       BloodTestingRule ttiRule = ttiRules.get(generator.nextInt(ttiRules.size()));
 
       // we know which rule to apply
-      Map<Long, String> testResultsForCollection = new HashMap<Long, String>();
-      testResults.put(collection.getId(), testResultsForCollection);
+      Map<Long, String> testResultsForDonation = new HashMap<Long, String>();
+      testResults.put(donation.getId(), testResultsForDonation);
 
       int index = 0;
       String[] patternResults = ttiRule.getPattern().split(",");
@@ -639,12 +643,12 @@ public class CreateDataController {
             StringUtils.isBlank(patternResults[index]))
           continue;
         allBloodTestsIds.add(testId);
-        testResultsForCollection.put(Long.parseLong(testId), patternResults[index]);
+        testResultsForDonation.put(Long.parseLong(testId), patternResults[index]);
         index++;
       }
     }
 
-    // these test results are grouped by collection, put them on a plate
+    // these test results are grouped by donation, put them on a plate
     // so that we can record machine readings also
 
     // for each test we will have a separate map of the plate
@@ -656,9 +660,9 @@ public class CreateDataController {
     Integer rowNum = maxRows;
     Integer colNum = maxColumns;
 
-    for (Long collectionId : testResults.keySet()) {
-      Map<Long, String> testResultsForCollection = testResults.get(collectionId);
-      for (Long testId : testResultsForCollection.keySet()) {
+    for (Long donationId : testResults.keySet()) {
+      Map<Long, String> testResultsForDonation = testResults.get(donationId);
+      for (Long testId : testResultsForDonation.keySet()) {
         if (rowNum == maxRows && colNum == maxColumns) {
           // save the data on the plate
 
@@ -693,9 +697,9 @@ public class CreateDataController {
 
         Map<String, String> wellData = (Map<String, String>) plate.get(rowNum.toString()).get(colNum.toString());
         wellData.put("contents", "sample");
-        wellData.put("collectionNumber", collectionNumberMap.get(collectionId));
+        wellData.put("donationIdentificationNumber", donationIdentificationNumberMap.get(donationId));
         wellData.put("welltype", "1");
-        wellData.put("testResult", testResultsForCollection.get(testId));
+        wellData.put("testResult", testResultsForDonation.get(testId));
         wellData.put("machineReading", Double.toString(Math.random()));
 
         // fill data in the plates in column major manner

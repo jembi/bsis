@@ -4,16 +4,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import model.collectedsample.CollectedSample;
+import model.donation.Donation;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
 import repository.bloodtesting.BloodTypingStatus;
 import repository.bloodtesting.BloodTypingMatchStatus;
-import viewmodel.CollectedSampleViewModel;
+import viewmodel.DonationViewModel;
 
 public class BloodTestingRuleResult {
 	
-  private CollectedSampleViewModel collectedSample;
+  private DonationViewModel donation;
 
   private Set<String> allBloodAboChanges;
 
@@ -55,12 +55,12 @@ public class BloodTestingRuleResult {
   public BloodTestingRuleResult() {
   }
   
-  public CollectedSampleViewModel getCollectedSample() {
-    return collectedSample;
+  public DonationViewModel getDonation() {
+    return donation;
   }
 
-  public void setCollectedSample(CollectedSample collectedSample) {
-    this.collectedSample = new CollectedSampleViewModel(collectedSample);
+  public void setDonation(Donation donation) {
+    this.donation = new DonationViewModel(donation);
   }
   
   public Set<String> getAllBloodAboChanges() {

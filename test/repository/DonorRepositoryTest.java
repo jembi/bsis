@@ -2,6 +2,7 @@ package repository;
 
 import backingform.DonorBackingForm;
 import controller.UtilController;
+
 import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -11,13 +12,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.persistence.NoResultException;
 import javax.sql.DataSource;
+
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
 import model.location.Location;
-import model.collectedsample.CollectionConstants;
+import model.donation.DonationConstants;
 import model.donor.Donor;
 import model.donorcodes.DonorCodeGroup;
 import model.donorcodes.DonorDonorCode;
@@ -35,12 +38,14 @@ import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.After;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,6 +58,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+
 import security.LoginUserService;
 import security.V2VUserDetails;
 
@@ -88,9 +94,9 @@ public class DonorRepositoryTest {
             Date today = new Date();
             Map<String, Object> replacements = new HashMap<String, Object>();
             replacements.put("DateDonorNotDue", DateUtils.addDays(today,
-                    -(CollectionConstants.BLOCK_BETWEEN_COLLECTIONS - 1)));
+                    -(DonationConstants.BLOCK_BETWEEN_DONATIONS - 1)));
             replacements.put("DateDonorDue", DateUtils.addDays(today,
-                    -(CollectionConstants.BLOCK_BETWEEN_COLLECTIONS + 1)));
+                    -(DonationConstants.BLOCK_BETWEEN_DONATIONS + 1)));
 
             replacements.put("DateDeferredOn", DateUtils.addDays(today, -(2)));
             replacements.put("DateDeferredUnit", DateUtils.addDays(today, (2)));
