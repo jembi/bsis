@@ -8,8 +8,10 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import controller.UtilController;
 import model.sequencenumber.SequenceNumberStore;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,9 @@ public class SequenceNumberRepository {
 
   @PersistenceContext
   private EntityManager em;
+
+  @Autowired
+  private UtilController utilController;
   
   synchronized public String getNextDonationIdentificationNumber() {
     String queryStr = "SELECT s from SequenceNumberStore s " +
@@ -46,7 +51,9 @@ public class SequenceNumberRepository {
       seqNumStore.setPrefix(prefix);
     }
 
-    String lastNumberStr = String.format("%06d", lastNumber);
+    String donorNumberFormat = utilController.getGeneralConfigValueByName("donor.donorNumberFormat");
+
+    String lastNumberStr = String.format(donorNumberFormat, lastNumber);
     // may need a prefix for center where the number is generated
     String donationIdentificationNumber = prefix + lastNumberStr;
     lastNumber = lastNumber + 1;

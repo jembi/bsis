@@ -95,6 +95,9 @@ public class DonorRepository {
         Root<Donor> root = cq.from(Donor.class);
         Predicate donorNumberExp = cb.equal(root.<String>get("donorNumber"), donorNumber);
         Predicate firstNameExp, lastNameExp;
+
+        String donorSearchMode = utilController.getGeneralConfigValueByName("donor.searchMode");
+
         if (!usePhraseMatch) {
             firstNameExp = cb.equal(root.<String>get("firstName"), firstName);
             lastNameExp = cb.equal(root.<String>get("lastName"), lastName);
@@ -102,13 +105,28 @@ public class DonorRepository {
             if (firstName.trim().equals("")) {
                 firstNameExp = cb.disjunction();
             } else {
-                firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName + "%");
+                if (donorSearchMode.equals("start_and_end"))
+                    firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName + "%");
+                else if (donorSearchMode.equals("start"))
+                    firstNameExp = cb.like(root.<String>get("firstName"),  firstName + "%");
+                else if (donorSearchMode.equals("end"))
+                    firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName);
+                else
+                    firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName + "%");
+
             }
 
             if (lastName.trim().equals("")) {
                 lastNameExp = cb.disjunction();
             } else {
-                lastNameExp = cb.like(root.<String>get("lastName"), "%" + lastName + "%");
+                if (donorSearchMode.equals("start_and_end"))
+                    lastNameExp = cb.like(root.<String>get("firstName"), "%" + lastName + "%");
+                else if (donorSearchMode.equals("start"))
+                    lastNameExp = cb.like(root.<String>get("firstName"),  lastName + "%");
+                else if (donorSearchMode.equals("end"))
+                    lastNameExp = cb.like(root.<String>get("firstName"), "%" + lastName);
+                else
+                    lastNameExp = cb.like(root.<String>get("firstName"), "%" + lastName + "%");
             }
         }
 

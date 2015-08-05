@@ -1,10 +1,12 @@
 package backingform.validator;
 
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
+import backingform.DonationTypeBackingForm;
 import model.donation.Donation;
 import model.donation.DonationConstants;
 import model.donationbatch.DonationBatch;
@@ -104,6 +106,10 @@ public class DonationBackingFormValidator implements Validator {
     } 
 
     validateBloodPressure(form,errors);
+    validateHaemoglobinCount(form, errors);
+    validateWeight(form, errors);
+    validatePulse(form, errors);
+
     utilController.commonFieldChecks(form, "donation", errors);
   }
   
@@ -120,36 +126,88 @@ public class DonationBackingFormValidator implements Validator {
           errors.rejectValue("donation", "", "Bleed End time should be after start time");
 
   }
-  private void validateBloodPressure(DonationBackingForm donationForm, Errors errors)
-  {
-	 Integer bloodPressureSystolic = null;
-         Integer bloodPressureDiastolic = null;
-         
-         if(donationForm.getBloodPressureSystolic() != null)
-             bloodPressureSystolic = donationForm.getBloodPressureSystolic();
-         
-         if(donationForm.getBloodPressureDiastolic() != null)
-             bloodPressureDiastolic = donationForm.getBloodPressureDiastolic();
 
-	
-	 if( bloodPressureSystolic != null || bloodPressureDiastolic != null)
-	  {
-		 
-		   if(bloodPressureSystolic == null || !( bloodPressureSystolic >= DonationConstants.BLOOD_PRESSURE_MIN_VALUE && 
-                         bloodPressureSystolic  <= DonationConstants.BLOOD_PRESSURE_SYSTOLIC_MAX_VALUE))
-			  		errors.rejectValue("donation.bloodPressureSystolic","bloodPressureSystolic.incorrect" ,"Enter a value between 0 to 250.");
-	             
-	
-			  	if(bloodPressureDiastolic == null || !( bloodPressureDiastolic >= DonationConstants.BLOOD_PRESSURE_MIN_VALUE && 
-                                        bloodPressureDiastolic <= DonationConstants.BLOOD_PRESSURE_DIASTOLIC_MAX_VALUE))
-			  		errors.rejectValue("donation.bloodPressureDiastolic","bloodPressureDiastolic.incorrect" ,"Enter a value between 0 to 150.");
-	  }
-	  return;
-			  
+  private void validateBloodPressure(DonationBackingForm donationForm, Errors errors) {
+    Integer bloodPressureSystolic = null;
+    Integer bloodPressureDiastolic = null;
+
+    if (donationForm.getBloodPressureSystolic() != null)
+      bloodPressureSystolic = donationForm.getBloodPressureSystolic();
+
+    if (donationForm.getBloodPressureDiastolic() != null)
+      bloodPressureDiastolic = donationForm.getBloodPressureDiastolic();
+
+    Integer bloodPressureSystolicMin = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.bpSystolicMin"));
+    Integer bloodPressureSystolicMax = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.bpSystolicMax"));
+
+    Integer bloodPressureDiastolicMin = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.bpDiastolicMin"));
+    Integer bloodPressureDiastolicMax = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.bpDiastolicMax"));
+
+    if (bloodPressureSystolic != null || bloodPressureDiastolic != null) {
+
+      if (bloodPressureSystolic == null || !(bloodPressureSystolic >= bloodPressureSystolicMin &&
+              bloodPressureSystolic <= bloodPressureSystolicMax))
+        errors.rejectValue("donation.bloodPressureSystolic", "bloodPressureSystolic.incorrect", "Enter a value between "+ bloodPressureSystolicMin+" to "+ bloodPressureSystolicMax+".");
+
+
+      if (bloodPressureDiastolic == null || !(bloodPressureDiastolic >= bloodPressureDiastolicMin &&
+              bloodPressureDiastolic <= bloodPressureDiastolicMax))
+        errors.rejectValue("donation.bloodPressureDiastolic", "bloodPressureDiastolic.incorrect", "Enter a value between "+ bloodPressureDiastolicMin+" to "+ bloodPressureDiastolicMax+".");
+
+    }
+    return;
+
   }
-		 
 
-  
+  private void validateHaemoglobinCount(DonationBackingForm donationBackingForm, Errors errors) {
+    Integer haemoglobinCount = null;
+    Integer hbMin = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.hbMin"));
+    Integer hbMax = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.hbMax"));
+
+    if (donationBackingForm.getHaemoglobinCount() != null)
+      haemoglobinCount = donationBackingForm.getHaemoglobinCount().intValue();
+
+    if (haemoglobinCount != null){
+      if (haemoglobinCount == null || !(haemoglobinCount >= hbMin &&
+              haemoglobinCount <= hbMax))
+        errors.rejectValue("donation.haemoglobinCount", "haemoglobinCount.incorrect", "Enter a value between "+ hbMin+ " to " + hbMax);
+
+    }
+  }
+
+  private void validateWeight (DonationBackingForm donationBackingForm, Errors errors) {
+    Integer weight = null;
+    Integer weightMin = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.weightMin"));
+    Integer weightMax = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.weightMax"));
+
+    if (donationBackingForm.getDonorWeight() != null)
+      weight = donationBackingForm.getDonorWeight().intValue();
+
+    if (weight != null){
+      if (weight == null || !(weight >= weightMin &&
+              weight <= weightMax))
+        errors.rejectValue("donation.weight", "weight.incorrect", "Enter a value between "+ weightMin + " to " + weightMax);
+
+    }
+  }
+
+  private void validatePulse (DonationBackingForm donationBackingForm, Errors errors) {
+    Integer pulse = null;
+    Integer pulseMin = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.pulseMin"));
+    Integer pulseMax = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.pulseMax"));
+
+    if (donationBackingForm.getDonorPulse() != null)
+      pulse = donationBackingForm.getDonorPulse();
+
+    if (pulse != null){
+      if (pulse == null || !(pulse >= pulseMin &&
+              pulse <= pulseMax))
+        errors.rejectValue("donation.pulse", "pulse.incorrect", "Enter a value between "+ pulseMin + " to " + pulseMax);
+
+    }
+  }
+
+
   private void inheritParametersFromDonationBatch(
       DonationBackingForm form, Errors errors) {
     if (form.getUseParametersFromBatch()) {

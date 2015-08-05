@@ -486,6 +486,11 @@ public class UtilController {
     return false;
   }
 
+  public String getGeneralConfigValueByName(String generalConfigName){
+    GeneralConfig generalConfig = generalConfigRepository.getGeneralConfigByName(generalConfigName);
+    return generalConfig.getValue();
+  }
+
   public boolean isDuplicatePackTypeName(BloodBagType packType) {
     String packTypeName = packType.getBloodBagType();
     if (StringUtils.isBlank(packTypeName))
