@@ -45,5 +45,10 @@ public class PackTypeViewModel {
     public Integer getPeriodBetweenDonations(){
         return packType.getPeriodBetweenDonations();
     }
+
+    @Override
+    public String toString() {
+        return packType.toString();
+    }
     
 }

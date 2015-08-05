@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import model.bloodbagtype.BloodBagType;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
+import model.donation.HaemoglobinLevel;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.product.Product;
@@ -357,6 +358,14 @@ public class DonationBackingForm {
         donation.setHaemoglobinCount(haemoglobinCount);
     }
 
+    public HaemoglobinLevel getHaemoglobinLevel() {
+        return donation.getHaemoglobinLevel();
+    }
+
+    public void setHaemoglobinLevel(HaemoglobinLevel haemoglobinLevel) {
+        donation.setHaemoglobinLevel(haemoglobinLevel);
+    }
+
     public Integer getDonorPulse() {
         return donation.getDonorPulse();
     }
@@ -465,6 +474,10 @@ public class DonationBackingForm {
             donation.setDonorPanel(donorPanel);
         }
             
+    }
+    
+    public void setBloodBagType(BloodBagType bloodBagType) {
+        donation.setBloodBagType(bloodBagType);
     }
 
 }

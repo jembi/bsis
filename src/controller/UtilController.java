@@ -19,6 +19,7 @@ import model.admin.FormField;
 import model.admin.GeneralConfig;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
+import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
@@ -58,6 +59,7 @@ import repository.BloodBagTypeRepository;
 import repository.DeferralReasonRepository;
 import repository.DiscardReasonRepository;
 import security.BsisUserDetails;
+import repository.DonationTypeRepository;
 import utils.DonorUtils;
 
 @Component
@@ -117,6 +119,9 @@ public class UtilController {
 
   @Autowired
   private DeferralReasonRepository deferralReasonRepository;
+
+  @Autowired
+  private DonationTypeRepository donationTypeRepository;
 
   public Map<String, Map<String, Object>> getFormFieldsForForm(String formName) {
     List<FormField> formFields = formFieldRepository.getFormFields(formName);
@@ -457,6 +462,16 @@ public class UtilController {
       return false;
     ProductStatusChangeReason existingDiscardReason = discardReasonRepository.findDiscardReason(reason);
     if (existingDiscardReason != null && !existingDiscardReason.getId().equals(discardReason.getId()))
+      return true;
+    return false;
+  }
+
+  public boolean isDuplicateDonationType(DonationType donationType){
+    String type = donationType.getDonationType();
+    if (StringUtils.isBlank(type))
+      return false;
+    DonationType existingDonationType = donationTypeRepository.getDonationType(type);
+    if (existingDonationType != null && !existingDonationType.getId().equals(donationType.getId()))
       return true;
     return false;
   }

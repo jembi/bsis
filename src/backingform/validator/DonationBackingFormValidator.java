@@ -66,12 +66,12 @@ public class DonationBackingFormValidator implements Validator {
     String bleedStartTime = form.getBleedStartTime();
     if (!CustomDateFormatter.isDateTimeStringValid(bleedStartTime))
       errors.rejectValue("donation.bleedStartTime", "timeFormat.incorrect",
-          CustomDateFormatter.getDateTimeErrorMessage());
-    
+          CustomDateFormatter.getDateErrorMessage());
+
     String bleedEndTime = form.getBleedEndTime();
     if (!CustomDateFormatter.isDateTimeStringValid(bleedEndTime))
       errors.rejectValue("donation.bleedEndTime", "timeFormat.incorrect",
-          CustomDateFormatter.getDateTimeErrorMessage());
+          CustomDateFormatter.getDateErrorMessage());
 
     updateRelatedEntities(form);
     inheritParametersFromDonationBatch(form, errors);

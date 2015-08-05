@@ -10,10 +10,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
 import model.bloodbagtype.BloodBagType;
 import model.donation.Donation;
-
+import model.donation.HaemoglobinLevel;
+import model.donor.Donor;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -125,6 +125,14 @@ public class DonationController {
 	m.put("donorPanels", locationRepository.getAllDonorPanels());
     m.put("donationTypes", donorTypeRepository.getAllDonationTypes());
     m.put("packTypes", getPackTypeViewModels(bloodBagTypeRepository.getAllBloodBagTypes())); 
+    List<Map<String, Object>> haemoglobinLevels = new ArrayList<>();
+    for (HaemoglobinLevel value : HaemoglobinLevel.values()) {
+        Map<String, Object> haemoglobinLevel = new HashMap<>();
+        haemoglobinLevel.put("value", value.name());
+        haemoglobinLevel.put("label", value.getLabel());
+        haemoglobinLevels.add(haemoglobinLevel);
+    }
+    m.put("haemoglobinLevels", haemoglobinLevels);
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
