@@ -105,28 +105,36 @@ public class DonorRepository {
             if (firstName.trim().equals("")) {
                 firstNameExp = cb.disjunction();
             } else {
-                if (donorSearchMode.equals("start_and_end"))
+                if (donorSearchMode != null) {
+                    System.out.println(donorSearchMode);
+                    if (donorSearchMode.equals("start_and_end"))
+                        firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName + "%");
+                    else if (donorSearchMode.equals("start"))
+                        firstNameExp = cb.like(root.<String>get("firstName"), firstName + "%");
+                    else if (donorSearchMode.equals("end"))
+                        firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName);
+                    else
+                        firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName + "%");
+                } else {
                     firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName + "%");
-                else if (donorSearchMode.equals("start"))
-                    firstNameExp = cb.like(root.<String>get("firstName"),  firstName + "%");
-                else if (donorSearchMode.equals("end"))
-                    firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName);
-                else
-                    firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName + "%");
-
+                }
             }
 
             if (lastName.trim().equals("")) {
                 lastNameExp = cb.disjunction();
             } else {
-                if (donorSearchMode.equals("start_and_end"))
-                    lastNameExp = cb.like(root.<String>get("firstName"), "%" + lastName + "%");
-                else if (donorSearchMode.equals("start"))
-                    lastNameExp = cb.like(root.<String>get("firstName"),  lastName + "%");
-                else if (donorSearchMode.equals("end"))
-                    lastNameExp = cb.like(root.<String>get("firstName"), "%" + lastName);
-                else
-                    lastNameExp = cb.like(root.<String>get("firstName"), "%" + lastName + "%");
+                if (donorSearchMode != null) {
+                    if (donorSearchMode.equals("start_and_end"))
+                        lastNameExp = cb.like(root.<String>get("lastName"), "%" + lastName + "%");
+                    else if (donorSearchMode.equals("start"))
+                        lastNameExp = cb.like(root.<String>get("lastName"), lastName + "%");
+                    else if (donorSearchMode.equals("end"))
+                        lastNameExp = cb.like(root.<String>get("lastName"), "%" + lastName);
+                    else
+                        lastNameExp = cb.like(root.<String>get("lastName"), "%" + lastName + "%");
+                } else {
+                    lastNameExp = cb.like(root.<String>get("lastName"), "%" + lastName + "%");
+                }
             }
         }
 
