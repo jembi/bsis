@@ -34,6 +34,9 @@ public class LoggerUtil {
       LogManager.getRootLogger().setLevel(Level.FATAL);
     } else if ("warn".equalsIgnoreCase(level)) {
       LogManager.getRootLogger().setLevel(Level.WARN);
+    } else {
+      // Default to info log level
+      LogManager.getRootLogger().setLevel(Level.INFO);
     }
   }
 }

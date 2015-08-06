@@ -79,7 +79,7 @@ public class GeneralConfigController {
     	GeneralConfig updatedConfig = null;
         form.setId(id);
         updatedConfig = configRepository.update(form.getGeneralConfig());
-        
+
         //Update log level if changed
         if (form.getName().equalsIgnoreCase("log.level"))
             setLogLevel(configRepository.getGeneralConfigByName("log.level").getValue());
