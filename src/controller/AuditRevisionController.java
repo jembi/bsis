@@ -5,11 +5,13 @@ import java.util.List;
 import model.audit.AuditRevision;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import repository.AuditRevisionRepository;
+import utils.PermissionConstants;
 import viewmodel.AuditRevisionViewModel;
 import factory.AuditRevisionViewModelFactory;
 
@@ -30,8 +32,8 @@ public class AuditRevisionController {
         this.auditRevisionViewModelFactory = auditRevisionViewModelFactory;
     }
 
-    // TODO: Authorisation
     @RequestMapping(method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_AUDIT_LOG + "')")
     public List<AuditRevisionViewModel> getAuditRevisions() {
         List<AuditRevision> auditRevisions = auditRevisionRepository.findRecentAuditRevisions();
         return auditRevisionViewModelFactory.createAuditRevisionViewModels(auditRevisions);
