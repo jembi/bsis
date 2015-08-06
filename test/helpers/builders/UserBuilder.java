@@ -7,6 +7,12 @@ public class UserBuilder {
     private String emailId;
     private String username;
     private boolean passwordReset;
+    private int id;
+
+    public UserBuilder withId(int id) {
+        this.id = id;
+        return this;
+    }
     
     public UserBuilder withEmailId(String emailId) {
         this.emailId = emailId;
@@ -25,6 +31,7 @@ public class UserBuilder {
     
     public User build() {
         User user = new User();
+        user.setId(id);
         user.setEmailId(emailId);
         user.setUsername(username);
         user.setPasswordReset(passwordReset);
