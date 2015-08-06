@@ -183,10 +183,6 @@ public class DonationBackingFormValidator implements Validator {
     if (donationBackingForm.getDonorWeight() != null)
       weight = donationBackingForm.getDonorWeight().intValue();
 
-    System.out.println("THIS IS THE WEIGHT " + weight);
-    System.out.println("THIS IS THE WEIGHT Min" + weightMin);
-    System.out.println("THIS IS THE WEIGHT Max" + weightMax);
-
     if (weight != null){
       if (weight == null || !(weight >= weightMin &&
               weight <= weightMax))
