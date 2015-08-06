@@ -11,3 +11,5 @@ before_install:
   - mysql -e 'create database bsis;'
 
 script: mvn clean install
+
+sudo: false
