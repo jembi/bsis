@@ -60,17 +60,17 @@ public class DonationBackingFormValidator implements Validator {
 
     String donationDate = form.getDonationDate();
     if (!CustomDateFormatter.isDateStringValid(donationDate))
-      errors.rejectValue("donation.donationDate", "dateFormat.incorrect",
+      errors.rejectValue("donation.donationDate", "400",
           CustomDateFormatter.getDateErrorMessage());
     
     String bleedStartTime = form.getBleedStartTime();
     if (!CustomDateFormatter.isDateTimeStringValid(bleedStartTime))
-      errors.rejectValue("donation.bleedStartTime", "timeFormat.incorrect",
+      errors.rejectValue("donation.bleedStartTime", "400",
           CustomDateFormatter.getDateErrorMessage());
     
     String bleedEndTime = form.getBleedEndTime();
     if (!CustomDateFormatter.isDateTimeStringValid(bleedEndTime))
-      errors.rejectValue("donation.bleedEndTime", "timeFormat.incorrect",
+      errors.rejectValue("donation.bleedEndTime", "400",
           CustomDateFormatter.getDateErrorMessage());
 
     updateRelatedEntities(form);
@@ -79,14 +79,14 @@ public class DonationBackingFormValidator implements Validator {
     if (donor != null) {
       String errorMessageDonorAge = utilController.verifyDonorAge(donor.getBirthDate());
       if (StringUtils.isNotBlank(errorMessageDonorAge))
-        errors.rejectValue("donation.donor", "donor.age", errorMessageDonorAge);
+        errors.rejectValue("donation.donor", "400", errorMessageDonorAge);
       
       String errorMessageDonorDeferral = utilController.isDonorDeferred(donor);
       if (StringUtils.isNotBlank(errorMessageDonorDeferral))
-        errors.rejectValue("donation.donor", "donor.deferral", errorMessageDonorDeferral);
+        errors.rejectValue("donation.donor", "400", errorMessageDonorDeferral);
       
       if (donor.getDonorStatus().equals(DonorStatus.POSITIVE_TTI))
-        errors.rejectValue("donation.donor", "donor.tti", "Donor is not allowed to donate.");
+        errors.rejectValue("donation.donor", "400", "Donor is not allowed to donate.");
     }
 
     if(donation.getBleedStartTime() != null || donation.getBleedEndTime() != null){
@@ -95,11 +95,11 @@ public class DonationBackingFormValidator implements Validator {
 
     Location donorPanel = form.getDonation().getDonorPanel();
     if (donorPanel == null) {
-      errors.rejectValue("donation.donorPanel", "donorPanel.empty",
+      errors.rejectValue("donation.donorPanel", "400",
         "Donor Panel is required.");
     } 
     else if (utilController.isDonorPanel(donorPanel.getId()) == false) {
-      errors.rejectValue("donation.donorPanel", "donorPanel.invalid",
+      errors.rejectValue("donation.donorPanel", "400",
     	"Location is not a Donor Panel.");
     } 
 
@@ -113,15 +113,15 @@ public class DonationBackingFormValidator implements Validator {
   
   public void validateBleedTimes(Date bleedStartTime, Date bleedEndTime, Errors errors){
       if(bleedStartTime == null){
-          errors.rejectValue("donation.bleedStartTime", "", "This is required");
+          errors.rejectValue("donation.bleedStartTime", "400", "This is required");
           return;
       }
       if(bleedEndTime == null){
-          errors.rejectValue("donation.bleedEndTime", "", "This is required");
+          errors.rejectValue("donation.bleedEndTime", "400", "This is required");
           return;
       }
       if(bleedStartTime.after(bleedEndTime))
-          errors.rejectValue("donation", "", "Bleed End time should be after start time");
+          errors.rejectValue("donation", "400", "Bleed End time should be after start time");
 
   }
 
@@ -145,12 +145,12 @@ public class DonationBackingFormValidator implements Validator {
 
       if (bloodPressureSystolic == null || !(bloodPressureSystolic >= bloodPressureSystolicMin &&
               bloodPressureSystolic <= bloodPressureSystolicMax))
-        errors.rejectValue("donation.bloodPressureSystolic", "bloodPressureSystolic.incorrect", "Enter a value between "+ bloodPressureSystolicMin+" to "+ bloodPressureSystolicMax+".");
+        errors.rejectValue("donation.bloodPressureSystolic", "400", "Enter a value between "+ bloodPressureSystolicMin+" to "+ bloodPressureSystolicMax+".");
 
 
       if (bloodPressureDiastolic == null || !(bloodPressureDiastolic >= bloodPressureDiastolicMin &&
               bloodPressureDiastolic <= bloodPressureDiastolicMax))
-        errors.rejectValue("donation.bloodPressureDiastolic", "bloodPressureDiastolic.incorrect", "Enter a value between "+ bloodPressureDiastolicMin+" to "+ bloodPressureDiastolicMax+".");
+        errors.rejectValue("donation.bloodPressureDiastolic", "400", "Enter a value between "+ bloodPressureDiastolicMin+" to "+ bloodPressureDiastolicMax+".");
 
     }
     return;
@@ -168,9 +168,9 @@ public class DonationBackingFormValidator implements Validator {
     if (haemoglobinCount != null){
       if (haemoglobinCount == null || !(haemoglobinCount >= hbMin &&
               haemoglobinCount <= hbMax))
-        errors.rejectValue("donation.haemoglobinCount", "haemoglobinCount.incorrect", "Enter a value between "+ hbMin+ " to " + hbMax);
-
+        errors.rejectValue("donation.haemoglobinCount", "400", "Enter a value between "+ hbMin + " to " + hbMax);
     }
+
   }
 
   private void validateWeight (DonationBackingForm donationBackingForm, Errors errors) {
@@ -178,13 +178,19 @@ public class DonationBackingFormValidator implements Validator {
     Integer weightMin = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.weightMin"));
     Integer weightMax = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.weightMax"));
 
+
+
     if (donationBackingForm.getDonorWeight() != null)
       weight = donationBackingForm.getDonorWeight().intValue();
+
+    System.out.println("THIS IS THE WEIGHT " + weight);
+    System.out.println("THIS IS THE WEIGHT Min" + weightMin);
+    System.out.println("THIS IS THE WEIGHT Max" + weightMax);
 
     if (weight != null){
       if (weight == null || !(weight >= weightMin &&
               weight <= weightMax))
-        errors.rejectValue("donation.weight", "weight.incorrect", "Enter a value between "+ weightMin + " to " + weightMax);
+        errors.rejectValue("donation.donorWeight", "400", "Enter a value between " + weightMin + " to " + weightMax);
 
     }
   }
@@ -200,7 +206,7 @@ public class DonationBackingFormValidator implements Validator {
     if (pulse != null){
       if (pulse == null || !(pulse >= pulseMin &&
               pulse <= pulseMax))
-        errors.rejectValue("donation.pulse", "pulse.incorrect", "Enter a value between "+ pulseMin + " to " + pulseMax);
+        errors.rejectValue("donation.donorPulse", "400", "Enter a value between "+ pulseMin + " to " + pulseMax);
 
     }
   }
@@ -211,7 +217,7 @@ public class DonationBackingFormValidator implements Validator {
     if (form.getUseParametersFromBatch()) {
       DonationBatch donationBatch = form.getDonationBatch();
       if (donationBatch == null) {
-        errors.rejectValue("donation.donationBatch", "donationbatch.notspecified", "Donation batch should be specified");
+        errors.rejectValue("donation.donationBatch", "400", "Donation batch should be specified");
         return;
       }
     }
