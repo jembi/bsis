@@ -1,12 +1,10 @@
 package backingform.validator;
 
 import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
-import backingform.DonationTypeBackingForm;
 import model.donation.Donation;
 import model.donation.DonationConstants;
 import model.donationbatch.DonationBatch;

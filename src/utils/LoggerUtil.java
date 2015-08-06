@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import log4j.BsisLogLevel;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 public class LoggerUtil {
@@ -19,5 +21,19 @@ public class LoggerUtil {
     urlString += queryString != null && queryString.length() > 0 ? "?"
         + queryString : "";
     logger.log(BsisLogLevel.BSIS, urlString);
+  }
+
+  public static void setLogLevel(String level) {
+    if ("debug".equalsIgnoreCase(level)) {
+      LogManager.getRootLogger().setLevel(Level.DEBUG);
+    } else if ("info".equalsIgnoreCase(level)) {
+      LogManager.getRootLogger().setLevel(Level.INFO);
+    } else if ("error".equalsIgnoreCase(level)) {
+      LogManager.getRootLogger().setLevel(Level.ERROR);
+    } else if ("fatal".equalsIgnoreCase(level)) {
+      LogManager.getRootLogger().setLevel(Level.FATAL);
+    } else if ("warn".equalsIgnoreCase(level)) {
+      LogManager.getRootLogger().setLevel(Level.WARN);
+    }
   }
 }
