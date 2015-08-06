@@ -3,6 +3,9 @@ package viewmodel;
 import java.util.Date;
 
 import model.user.User;
+import utils.JsonDateSerialiser;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class AuditRevisionViewModel {
     
@@ -18,6 +21,7 @@ public class AuditRevisionViewModel {
         this.id = id;
     }
 
+    @JsonSerialize(using = JsonDateSerialiser.class)
     public Date getRevisionDate() {
         return revisionDate;
     }
