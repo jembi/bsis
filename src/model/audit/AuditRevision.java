@@ -9,11 +9,19 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.ModifiedEntityNames;
 import org.hibernate.envers.RevisionEntity;
 
+import repository.AuditRevisionNamedQueryConstants;
+
+@NamedQueries({
+    @NamedQuery(name = AuditRevisionNamedQueryConstants.NAME_FIND_RECENT_AUDIT_REVISIONS,
+            query = AuditRevisionNamedQueryConstants.QUERY_FIND_RECENT_AUDIT_REVISIONS)
+})
 @Entity
 @RevisionEntity(AuditRevisionListener.class)
 public class AuditRevision extends DefaultRevisionEntity {
