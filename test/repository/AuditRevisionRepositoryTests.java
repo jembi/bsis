@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import model.audit.AuditRevision;
 
 import org.joda.time.DateTime;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ public class AuditRevisionRepositoryTests {
     @Autowired
     private AuditRevisionRepository auditRevisionRepository;
     
+    @Ignore("Pending changes to old tests in 318")
     @Test
     public void testFindRecentAuditRevisions_shouldReturnAuditRevisionsOrderedByTimestamp() {
         
