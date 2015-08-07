@@ -236,7 +236,21 @@ public class ProductType {
     }
     
     
- 
+    public void copy(ProductType productType){
+    	this.productTypeName = productType.getProductTypeName();
+    	this.productTypeNameShort = productType.getProductTypeNameShort();
+    	this.expiresAfter = productType.getExpiresAfter();
+    	this.expiresAfterUnits = productType.getExpiresAfterUnits();
+    	this.description = productType.getDescription();
+    	this.hasBloodGroup = productType.getHasBloodGroup();
+    	this.productTypeCombinations = productType.getProductTypeCombinations();
+    	this.producedProductTypeCombinations = productType.getProducedProductTypeCombinations();
+    	this.highStorageTemperature =  productType.getHighStorageTemperature();
+    	this.lowStorageTemperature =  productType.getLowStorageTemperature();
+    	this.lowTransportTemperature = productType.getLowTransportTemperature();
+    	this.highTransportTemperature =  productType.getHighTransportTemperature();
+    	this.preparationInfo = productType.getPreparationInfo();
+    }
     
   
 }
