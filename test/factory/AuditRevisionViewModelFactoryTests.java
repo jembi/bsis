@@ -14,9 +14,11 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import model.audit.AuditRevision;
+import model.donor.Donor;
 import model.user.User;
 
 import org.joda.time.DateTime;
@@ -31,7 +33,7 @@ public class AuditRevisionViewModelFactoryTests {
     private UserRepository userRepository;
     
     @Test
-    public void testCreateAuditRevisionViewModelsWithAuditRevisionWithUsername_shouldCreateAuditRevisionViewModelWithUser() {
+    public void testCreateAuditRevisionViewModelsWithAuditRevision_shouldCreateAuditRevisionViewModelWithTheCorrectState() {
         // Set up fixture
         setUpFixture();
         
@@ -39,6 +41,14 @@ public class AuditRevisionViewModelFactoryTests {
         int irrelevantUserId = 56;
         int irrelevantAuditRevisionId = 78;
         Date irrelevantRevisionDate = new DateTime().minusDays(7).toDate();
+
+        AuditRevision auditRevision = anAuditRevision()
+                .withId(irrelevantAuditRevisionId)
+                .withRevisionDate(irrelevantRevisionDate)
+                .withUsername(irrelevantUsername)
+                .withModifiedEntityNames(
+                        new HashSet<String>(Arrays.asList(Donor.class.getName(), User.class.getName())))
+                .build();
 
         User auditRevisionUser = aUser()
                 .withId(irrelevantUserId)
@@ -49,12 +59,8 @@ public class AuditRevisionViewModelFactoryTests {
                 .withId(irrelevantAuditRevisionId)
                 .withRevisionDate(irrelevantRevisionDate)
                 .withUser(auditRevisionUser)
-                .build();
-
-        AuditRevision auditRevision = anAuditRevision()
-                .withId(irrelevantAuditRevisionId)
-                .withRevisionDate(irrelevantRevisionDate)
-                .withUsername(irrelevantUsername)
+                .withEntityNames(
+                        new HashSet<String>(Arrays.asList(Donor.class.getSimpleName(), User.class.getSimpleName())))
                 .build();
         
         when(userRepository.findUser(irrelevantUsername)).thenReturn(auditRevisionUser);

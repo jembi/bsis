@@ -1,6 +1,7 @@
 package helpers.builders;
 
 import java.util.Date;
+import java.util.Set;
 
 import model.user.User;
 import viewmodel.AuditRevisionViewModel;
@@ -10,6 +11,7 @@ public class AuditRevisionViewModelBuilder {
     private int id;
     private Date revisionDate;
     private User user;
+    private Set<String> entityNames;
 
     public AuditRevisionViewModelBuilder withId(int id) {
         this.id = id;
@@ -26,11 +28,17 @@ public class AuditRevisionViewModelBuilder {
         return this;
     }
     
+    public AuditRevisionViewModelBuilder withEntityNames(Set<String> entityNames) {
+        this.entityNames = entityNames;
+        return this;
+    }
+    
     public AuditRevisionViewModel build() {
         AuditRevisionViewModel viewModel = new AuditRevisionViewModel();
         viewModel.setId(id);
         viewModel.setRevisionDate(revisionDate);
         viewModel.setUser(user);
+        viewModel.setEntityNames(entityNames);
         return viewModel;
     }
     

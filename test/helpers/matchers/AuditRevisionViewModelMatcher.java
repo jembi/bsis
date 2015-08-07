@@ -20,14 +20,16 @@ public class AuditRevisionViewModelMatcher extends TypeSafeMatcher<AuditRevision
         description.appendText("An AuditRevisionViewModel with the following state:")
                 .appendText("\nId: ").appendValue(expected.getId())
                 .appendText("\nRevision date: ").appendValue(expected.getRevisionDate())
-                .appendText("\nUser: ").appendValue(expected.getUser());
+                .appendText("\nUser: ").appendValue(expected.getUser())
+                .appendText("\nEntity names: ").appendValue(expected.getEntityNames());
     }
 
     @Override
     public boolean matchesSafely(AuditRevisionViewModel actual) {
         return Objects.equals(actual.getId(), expected.getId()) &&
                 Objects.equals(actual.getRevisionDate(), expected.getRevisionDate()) &&
-                Objects.equals(actual.getUser(), expected.getUser());
+                Objects.equals(actual.getUser(), expected.getUser()) &&
+                Objects.equals(actual.getEntityNames(), expected.getEntityNames());
     }
     
     public static AuditRevisionViewModelMatcher hasSameStateAsAuditRevisionViewModel(AuditRevisionViewModel expected) {
