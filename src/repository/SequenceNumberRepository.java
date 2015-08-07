@@ -23,7 +23,7 @@ public class SequenceNumberRepository {
   private EntityManager em;
 
   @Autowired
-  private UtilController utilController;
+  private GeneralConfigRepository generalConfigRepository;
   
   synchronized public String getNextDonationIdentificationNumber() {
     String queryStr = "SELECT s from SequenceNumberStore s " +
@@ -51,8 +51,7 @@ public class SequenceNumberRepository {
       seqNumStore.setPrefix(prefix);
     }
 
-    String donorNumberFormat = utilController.getGeneralConfigValueByName("donor.donorNumberFormat");
-
+    String donorNumberFormat = generalConfigRepository.getGeneralConfigByName("donor.donorNumberFormat").getValue();
     String lastNumberStr = String.format(donorNumberFormat, lastNumber);
     // may need a prefix for center where the number is generated
     String donationIdentificationNumber = prefix + lastNumberStr;
