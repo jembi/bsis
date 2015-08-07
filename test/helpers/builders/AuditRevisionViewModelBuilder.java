@@ -1,8 +1,10 @@
 package helpers.builders;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
+import model.audit.EntityModification;
 import model.user.User;
 import viewmodel.AuditRevisionViewModel;
 
@@ -11,7 +13,7 @@ public class AuditRevisionViewModelBuilder {
     private int id;
     private Date revisionDate;
     private User user;
-    private Set<String> entityNames;
+    private Set<EntityModification> entityModifications = new HashSet<>();
 
     public AuditRevisionViewModelBuilder withId(int id) {
         this.id = id;
@@ -28,8 +30,8 @@ public class AuditRevisionViewModelBuilder {
         return this;
     }
     
-    public AuditRevisionViewModelBuilder withEntityNames(Set<String> entityNames) {
-        this.entityNames = entityNames;
+    public AuditRevisionViewModelBuilder withEntityModifications(Set<EntityModification> entityModifications) {
+        this.entityModifications = entityModifications;
         return this;
     }
     
@@ -38,7 +40,7 @@ public class AuditRevisionViewModelBuilder {
         viewModel.setId(id);
         viewModel.setRevisionDate(revisionDate);
         viewModel.setUser(user);
-        viewModel.setEntityNames(entityNames);
+        viewModel.setEntityModifications(entityModifications);
         return viewModel;
     }
     

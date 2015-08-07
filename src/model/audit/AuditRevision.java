@@ -2,19 +2,18 @@ package model.audit;
 
 import interceptor.AuditRevisionListener;
 
+import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CollectionTable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 
 import org.hibernate.envers.DefaultRevisionEntity;
-import org.hibernate.envers.ModifiedEntityNames;
 import org.hibernate.envers.RevisionEntity;
 
 import repository.AuditRevisionNamedQueryConstants;
@@ -31,12 +30,9 @@ public class AuditRevision extends DefaultRevisionEntity {
 
     @Column(length = 30)
     private String username;
-
-    @ModifiedEntityNames
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "REVCHANGES", joinColumns = @JoinColumn(name = "REV"))
-    @Column(name = "entityName")
-    private Set<String> modifiedEntityNames;
+    
+    @OneToMany(mappedBy = "auditRevision", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
+    private Set<EntityModification> entityModifications = new HashSet<>();
 
     public String getUsername() {
         return username;
@@ -46,12 +42,16 @@ public class AuditRevision extends DefaultRevisionEntity {
         this.username = username;
     }
 
-    public Set<String> getModifiedEntityNames() {
-        return modifiedEntityNames;
+    public Set<EntityModification> getEntityModifications() {
+        return entityModifications;
     }
 
-    public void setModifiedEntityNames(Set<String> modifiedEntityNames) {
-        this.modifiedEntityNames = modifiedEntityNames;
+    public void setEntityModifications(Set<EntityModification> entityModifications) {
+        this.entityModifications = entityModifications;
+    }
+    
+    public boolean addEntityModification(EntityModification entityModification) {
+        return entityModifications.add(entityModification);
     }
 
 }

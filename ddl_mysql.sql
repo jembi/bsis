@@ -724,9 +724,12 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
-    CREATE TABLE REVCHANGES (
-      REV integer not null,
-      entityName varchar(255) not null
+    CREATE TABLE EntityModification (
+        id integer not null auto_increment,
+        auditRevision_id integer not null,
+        revisionType varchar(30) not null,
+        entityName varchar(30) not null,
+        primary key (id)
     ) ENGINE=InnoDB;
 
     create table Request (

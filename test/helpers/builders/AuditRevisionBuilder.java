@@ -1,16 +1,18 @@
 package helpers.builders;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import model.audit.AuditRevision;
+import model.audit.EntityModification;
 
 public class AuditRevisionBuilder {
     
     private int id;
     private long timestamp;
     private String username;
-    private Set<String> modifiedEntityNames;
+    private Set<EntityModification> entityModifications = new HashSet<>();
 
     public AuditRevisionBuilder withId(int id) {
         this.id = id;
@@ -27,8 +29,8 @@ public class AuditRevisionBuilder {
         return this;
     }
     
-    public AuditRevisionBuilder withModifiedEntityNames(Set<String> modifiedEntityNames) {
-        this.modifiedEntityNames = modifiedEntityNames;
+    public AuditRevisionBuilder withEntityModifications(Set<EntityModification> entityModifications) {
+        this.entityModifications = entityModifications;
         return this;
     }
     
@@ -37,7 +39,10 @@ public class AuditRevisionBuilder {
         auditRevision.setId(id);
         auditRevision.setTimestamp(timestamp);
         auditRevision.setUsername(username);
-        auditRevision.setModifiedEntityNames(modifiedEntityNames);
+        for (EntityModification entityModification : entityModifications) {
+            entityModification.setAuditRevision(auditRevision);
+        }
+        auditRevision.setEntityModifications(entityModifications);
         return auditRevision;
     }
     

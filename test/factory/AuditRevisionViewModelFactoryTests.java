@@ -2,6 +2,7 @@ package factory;
 
 import static helpers.builders.AuditRevisionBuilder.anAuditRevision;
 import static helpers.builders.AuditRevisionViewModelBuilder.anAuditRevisionViewModel;
+import static helpers.builders.EntityModificationBuilder.anEntityModification;
 import static helpers.builders.UserBuilder.aUser;
 import static helpers.matchers.AuditRevisionViewModelMatcher.hasSameStateAsAuditRevisionViewModel;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,9 +19,12 @@ import java.util.HashSet;
 import java.util.List;
 
 import model.audit.AuditRevision;
+import model.audit.EntityModification;
+import model.donation.Donation;
 import model.donor.Donor;
 import model.user.User;
 
+import org.hibernate.envers.RevisionType;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
@@ -33,25 +37,36 @@ public class AuditRevisionViewModelFactoryTests {
     private UserRepository userRepository;
     
     @Test
-    public void testCreateAuditRevisionViewModelsWithAuditRevision_shouldCreateAuditRevisionViewModelWithTheCorrectState() {
+    public void testCreateAuditRevisionViewModels_shouldCreateAuditRevisionViewModelWithTheCorrectState() {
         // Set up fixture
         setUpFixture();
         
         String irrelevantUsername = "irrelevant.username";
-        int irrelevantUserId = 56;
         int irrelevantAuditRevisionId = 78;
         Date irrelevantRevisionDate = new DateTime().minusDays(7).toDate();
+        
+        List<EntityModification> entityModifications = Arrays.asList(
+                anEntityModification()
+                        .withId(88)
+                        .withRevisionType(RevisionType.MOD)
+                        .withEntityName(Donor.class.getSimpleName())
+                        .build(),
+                anEntityModification()
+                        .withId(107)
+                        .withRevisionType(RevisionType.ADD)
+                        .withEntityName(Donation.class.getSimpleName())
+                        .build()
+        );
 
         AuditRevision auditRevision = anAuditRevision()
                 .withId(irrelevantAuditRevisionId)
                 .withRevisionDate(irrelevantRevisionDate)
                 .withUsername(irrelevantUsername)
-                .withModifiedEntityNames(
-                        new HashSet<String>(Arrays.asList(Donor.class.getName(), User.class.getName())))
+                .withEntityModifications(new HashSet<>(entityModifications))
                 .build();
 
         User auditRevisionUser = aUser()
-                .withId(irrelevantUserId)
+                .withId(56)
                 .withUsername(irrelevantUsername)
                 .build();
 
@@ -59,8 +74,7 @@ public class AuditRevisionViewModelFactoryTests {
                 .withId(irrelevantAuditRevisionId)
                 .withRevisionDate(irrelevantRevisionDate)
                 .withUser(auditRevisionUser)
-                .withEntityNames(
-                        new HashSet<String>(Arrays.asList(Donor.class.getSimpleName(), User.class.getSimpleName())))
+                .withEntityModifications(new HashSet<>(entityModifications))
                 .build();
         
         when(userRepository.findUser(irrelevantUsername)).thenReturn(auditRevisionUser);

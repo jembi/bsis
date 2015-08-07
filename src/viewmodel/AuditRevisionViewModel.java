@@ -1,8 +1,12 @@
 package viewmodel;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import model.audit.EntityModification;
 import model.user.User;
 import utils.JsonDateSerialiser;
 
@@ -13,7 +17,7 @@ public class AuditRevisionViewModel {
     private int id;
     private Date revisionDate;
     private User user;
-    private Set<String> entityNames;
+    private Set<EntityModification> entityModifications = new HashSet<>();
 
     public int getId() {
         return id;
@@ -43,12 +47,20 @@ public class AuditRevisionViewModel {
         this.user = user;
     }
 
-    public Set<String> getEntityNames() {
-        return entityNames;
+    public List<EntityModificationViewModel> getEntityModifications() {
+        List<EntityModificationViewModel> viewModels = new ArrayList<>();
+        for (EntityModification entityModification : entityModifications) {
+            EntityModificationViewModel viewModel = new EntityModificationViewModel();
+            viewModel.setId(entityModification.getId());
+            viewModel.setRevisionType(entityModification.getRevisionType());
+            viewModel.setEntityName(entityModification.getEntityName());
+            viewModels.add(viewModel);
+        }
+        return viewModels;
     }
 
-    public void setEntityNames(Set<String> modifiedEntityNames) {
-        this.entityNames = modifiedEntityNames;
+    public void setEntityModifications(Set<EntityModification> entityModifications) {
+        this.entityModifications = entityModifications;
     }
 
 }
