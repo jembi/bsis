@@ -56,38 +56,7 @@ public class ProductTypeRepository {
       return null;
     return query.getSingleResult();
   }
-/**
- * 
- * issue - #209 Not Used anywhere 
- *
-  public void saveNewProductType(Map<String, Object> newProductTypeAsMap) throws PersistenceException{
-    ProductType productType = new ProductType();
-    productType.setProductType((String) newProductTypeAsMap.get("productTypeName"));
-    productType.setProductTypeNameShort((String) newProductTypeAsMap.get("productTypeNameShort"));
-    Integer expiresAfter = Integer.parseInt((String) newProductTypeAsMap.get("expiresAfter"));
-    productType.setExpiresAfter(expiresAfter);
-    productType.setDescription("");
-    Boolean hasBloodGroup = Boolean.valueOf((String) newProductTypeAsMap.get("hasBloodGroup"));
-    productType.setHasBloodGroup(hasBloodGroup);
-    ProductTypeTimeUnits expiresAfterUnits;
-    expiresAfterUnits = ProductTypeTimeUnits.valueOf((String) newProductTypeAsMap.get("expiresAfterUnits"));
-    productType.setExpiresAfterUnits(expiresAfterUnits);
-    productType.setIsDeleted(false);
-    if (newProductTypeAsMap.get("createPediProductType").equals("true")) {
-      ProductType pediProductType = new ProductType();
-      pediProductType.setProductType(productType.getProductType() + " Pedi");
-      pediProductType.setProductTypeNameShort(productType.getProductTypeNameShort() + " Pedi");
-      pediProductType.setExpiresAfter(productType.getExpiresAfter());
-      pediProductType.setExpiresAfterUnits(productType.getExpiresAfterUnits());
-      pediProductType.setDescription("");
-      pediProductType.setHasBloodGroup(productType.getHasBloodGroup());
-      productType.setPediProductType(pediProductType);
-      pediProductType.setIsDeleted(false);
-      em.persist(pediProductType);
-    }
-    em.persist(productType);
-  }
-*/
+
   public void deactivateProductType(Integer productTypeId){
     ProductType productType = getProductTypeById(productTypeId);
     productType.setIsDeleted(true);
@@ -124,49 +93,6 @@ public class ProductTypeRepository {
     query.setParameter("id", id);
     return query.getSingleResult();
   }
-/**
-  public void updateProductType(Map<String, Object> newProductTypeAsMap){
-    String productTypeId = (String) newProductTypeAsMap.get("id");
-    ProductType productType = getProductTypeById(Integer.parseInt(productTypeId));
-    productType.setProductType((String) newProductTypeAsMap.get("productTypeName"));
-    productType.setProductTypeNameShort((String) newProductTypeAsMap.get("productTypeNameShort"));
-    Integer expiresAfter = Integer.parseInt((String) newProductTypeAsMap.get("expiresAfter"));
-    productType.setExpiresAfter(expiresAfter);
-    ProductTypeTimeUnits expiresAfterUnits;
-    expiresAfterUnits = ProductTypeTimeUnits.valueOf((String) newProductTypeAsMap.get("expiresAfterUnits"));
-    productType.setExpiresAfterUnits(expiresAfterUnits);
-    em.merge(productType);
-  }
-
-
-/**
- * Not used anywhere - #209
-  public void saveNewProductTypeCombination(
-      Map<String, Object> newProductTypeCombinationAsMap) {
-    ProductTypeCombination productTypeCombination = new ProductTypeCombination();
-    String combinationName = (String) newProductTypeCombinationAsMap.get("combinationName");
-    String productTypeIds = (String) newProductTypeCombinationAsMap.get("productTypeIds");
-    Set<ProductType> productTypes = new HashSet<ProductType>();
-    List<String> combinationNameList = new ArrayList<String>();
-    for (String productTypeId : productTypeIds.split(",")) {
-      if (StringUtils.isBlank(productTypeId))
-        continue;
-      ProductType productType = getProductTypeById(Integer.parseInt(productTypeId));
-      productTypes.add(productType);
-      combinationNameList.add(productType.getProductTypeNameShort());
-    }
-
-    if (StringUtils.isBlank(combinationName)) {
-      combinationName = StringUtils.join(combinationNameList, ",");
-    }
-
-    productTypeCombination.setCombinationName(combinationName);
-    productTypeCombination.setProductTypes(productTypes);
-
-    productTypeCombination.setIsDeleted(false);
-    em.persist(productTypeCombination);
-  }
-  * */
 
   public void saveComponentTypeCombination(
       ProductTypeCombination productTypeCombination) {
@@ -213,12 +139,7 @@ public class ProductTypeRepository {
   
   public List<ProductType> getProductTypeByIdList(Integer id) {
     TypedQuery<ProductType> query;
-//    query = em.createQuery("SELECT pt from ProductType pt " +
-//            "where pt.id=:id", ProductType.class);
-
-  query = em.createQuery("SELECT pt from ProductType pt where pt.id IN (SELECT pt1.pediProductType from ProductType pt1 WHERE pt1.id=:id) ", ProductType.class);
-
-    //SELECT * FROM productType WHERE id IN (SELECT pediProductType_id FROM productType WHERE id=2);
+    query = em.createQuery("SELECT pt from ProductType pt where pt.id IN (SELECT pt1.pediProductType from ProductType pt1 WHERE pt1.id=:id) ", ProductType.class);
     query.setParameter("id", id);
     if (query.getResultList().size() == 0)
       return null;
