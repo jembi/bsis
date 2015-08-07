@@ -225,18 +225,15 @@ public class ProductTypeRepository {
     return query.getResultList();
   }
   
-    public ProductType saveComponentType(ProductType componentType) {
-        em.persist(componentType);
-        em.flush();
-        return componentType;
-    }
+  public ProductType saveComponentType(ProductType componentType) {
+	em.persist(componentType);
+	return componentType;
+  }
   
   public ProductType updateComponentType(ProductType productType){
     ProductType existingProductType = getProductTypeById(productType.getId());
     existingProductType.copy(productType);
-    em.merge(existingProductType);
-    em.flush();
-    return existingProductType;
+    return em.merge(existingProductType);
   }
   
   
@@ -252,14 +249,12 @@ public class ProductTypeRepository {
     ProductTypeCombination productTypeCombination = getProductTypeCombinationById(productTypeCombinationId);
     productTypeCombination.setIsDeleted(true);
     em.merge(productTypeCombination);
-    em.flush();
   }
 
   public void activateProductTypeCombination(Integer productTypeCombinationId) {
     ProductTypeCombination productTypeCombination = getProductTypeCombinationById(productTypeCombinationId);
     productTypeCombination.setIsDeleted(false);
     em.merge(productTypeCombination);
-    em.flush();
   }
           
 }
