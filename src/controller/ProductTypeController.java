@@ -45,8 +45,8 @@ public class ProductTypeController {
   }
   
   @RequestMapping( method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  ResponseEntity<Map<String, Object>>  configureProductTypes() {
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_TYPES+"')")
+  public  ResponseEntity<Map<String, Object>>  getComponentTypes() {
     Map<String, Object> map = new HashMap<String, Object>();
     List<ProductType> productTypes = productTypeRepository.getAllProductTypesIncludeDeleted();
     map.put("componentTypes", getProductTypeViewModels(productTypes));
@@ -54,7 +54,8 @@ public class ProductTypeController {
   }
   
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
-  public ResponseEntity<Map<String, Object>> getProductTypeSummary(@PathVariable Integer id) {
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_TYPES+"')")
+  public ResponseEntity<Map<String, Object>> getComponentTypeById(@PathVariable Integer id) {
 
     Map<String, Object> map = new HashMap<String, Object> ();
     ProductType productType = productTypeRepository.getProductTypeById(id);
@@ -63,16 +64,16 @@ public class ProductTypeController {
   }
 
   @RequestMapping(method=RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  ResponseEntity saveComponentTypeByID(@Valid @RequestBody ComponentTypeBackingForm form) {
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_TYPES+"')")
+  public  ResponseEntity saveComponentType(@Valid @RequestBody ComponentTypeBackingForm form) {
       
 	  ProductType componentType = productTypeRepository.saveComponentType(form.getProductType());
       return new ResponseEntity(new ProductTypeViewModel(componentType), HttpStatus.CREATED);
   }
   
   @RequestMapping(value="{id}", method=RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  ResponseEntity updatedComponentTypeByID(@Valid @RequestBody ComponentTypeBackingForm form,
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_TYPES+"')")
+  public  ResponseEntity updateComponentType(@Valid @RequestBody ComponentTypeBackingForm form,
   @PathVariable Integer id) {
 
       ProductType componentType = form.getProductType();
@@ -82,16 +83,16 @@ public class ProductTypeController {
   }
 
   @RequestMapping(value="{id}/deactivate", method=RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  ResponseEntity deactivateProductType(@PathVariable Integer id) {
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_TYPES+"')")
+  public  ResponseEntity deactivateComponentType(@PathVariable Integer id) {
    
     productTypeRepository.deactivateProductType(id);
     return new ResponseEntity(HttpStatus.OK);
   }
 
   @RequestMapping(value="{id}/activate", method=RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  ResponseEntity activateProductType(HttpServletRequest request,
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_TYPES+"')")
+  public  ResponseEntity activateComponentType(HttpServletRequest request,
       @PathVariable Integer id) {
 
     productTypeRepository.activateProductType(id);
@@ -100,14 +101,14 @@ public class ProductTypeController {
 
   @RequestMapping(value="/combinations", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public List<ProductTypeCombinationViewModel> configureProductTypeCombinations() {
+  public List<ProductTypeCombinationViewModel> getComponentTypeCombinations() {
     List<ProductTypeCombination> allProductTypeCombinationsIncludeDeleted = productTypeRepository.getAllProductTypeCombinationsIncludeDeleted();
     return getProductTypeCombinationViewModels(allProductTypeCombinationsIncludeDeleted);
   }
   
   @RequestMapping(value="/combinations/{id}", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public  Map<String, Object> getProductTypeCombinationSummary(HttpServletRequest request,
+  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
+  public  Map<String, Object> getComponentTypeCombination(HttpServletRequest request,
       @PathVariable Integer id) {
 
     Map<String, Object> map = new HashMap<String, Object> ();
@@ -118,8 +119,7 @@ public class ProductTypeController {
 
     @RequestMapping(value = "/combinations", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
-    public
-            ResponseEntity saveProductTypeCombination(@RequestBody ProductTypeCombinationBackingForm productTypeCombinationBackingForm) {
+    public ResponseEntity saveComponentTypeCombination(@RequestBody ProductTypeCombinationBackingForm productTypeCombinationBackingForm) {
         ProductTypeCombination productTypeCombination
                 = productTypeCombinationBackingForm.getProductTypeCombination();
 
@@ -130,7 +130,7 @@ public class ProductTypeController {
     @RequestMapping(value = "/combinations/{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
     public 
-    ResponseEntity updateProductTypeCombination(HttpServletResponse response,
+    ResponseEntity updateComponentTypeCombination(HttpServletResponse response,
             @RequestBody ProductTypeCombinationBackingForm productTypeCombinationBackingForm
             , @PathVariable Integer id) {
        ProductTypeCombination productTypeCombination = 
@@ -142,7 +142,7 @@ public class ProductTypeController {
   
   @RequestMapping(value="/combinations/{id}/deactivate", method=RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public ResponseEntity deactivateProductTypeCombination(
+  public ResponseEntity deactivateComponentTypeCombination(
       @PathVariable Integer id) {
 
     productTypeRepository.deactivateProductTypeCombination(id);
@@ -151,14 +151,14 @@ public class ProductTypeController {
 
   @RequestMapping(value="/combinations/{id}/activate", method=RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  ResponseEntity activateProductTypeCombination(
+  public  ResponseEntity activateComponentTypeCombination(
       @PathVariable Integer id) {
 
      productTypeRepository.activateProductTypeCombination(id);
      return new ResponseEntity(HttpStatus.OK);
   }
   
-  private  List<ProductTypeViewModel> getProductTypeViewModels(List<ProductType> productTypes){
+  private List<ProductTypeViewModel> getProductTypeViewModels(List<ProductType> productTypes){
       
       List<ProductTypeViewModel> productTypeViewModels = new ArrayList<ProductTypeViewModel> ();
       for(ProductType productType : productTypes)
@@ -168,7 +168,7 @@ public class ProductTypeController {
       
   }
   
-  private  List<ProductTypeCombinationViewModel> 
+  private List<ProductTypeCombinationViewModel> 
         getProductTypeCombinationViewModels(List<ProductTypeCombination> productTypeCombinations){
       
       List<ProductTypeCombinationViewModel> productTypeCombinationViewModels
