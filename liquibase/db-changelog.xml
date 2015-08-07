@@ -1100,14 +1100,6 @@
 			 <column name="preparation" type="text"></column>
 		</addColumn>
 	</changeSet>
-
-	<!-- Remove isCollectionCenter & isCollectionSite fields from Location -->
-	<changeSet id="20141211-1520" author="danfuterman">
-		<dropColumn columnName="isCollectionCenter" tableName="Location"/>
-		<dropColumn columnName="isCollectionCenter" tableName="Location_AUD"/>
-		<dropColumn columnName="isCollectionSite" tableName="Location"/>
-		<dropColumn columnName="isCollectionSite" tableName="Location_AUD"/>
-	</changeSet>
 	
 		<!-- #234 Associate Pack Type with Initial Component Type in Donation -->
 	<changeSet id="20141112-0953" author="srikanthmalyala">
