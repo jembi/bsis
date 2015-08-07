@@ -1093,11 +1093,11 @@
 	<!-- Add Component Preparation labelling fields to Component Types #238 -->
 	<changeSet id="20141114-1435" author="srikanthmalyala">
 		<addColumn tableName="ProductType">
-			 <column name="preparation" type="text"></column>
+			 <column name="preparationInfo" type="text"></column>
 		</addColumn>
 
 			<addColumn tableName="ProductType_AUD">
-			 <column name="preparation" type="text"></column>
+			 <column name="preparationInfo" type="text"></column>
 		</addColumn>
 	</changeSet>
 	

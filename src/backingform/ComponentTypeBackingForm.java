@@ -71,8 +71,8 @@ public class ComponentTypeBackingForm {
         productType.setHighTransportTemperature(highTransportTemperature);
     }
 
-    public void setPreparation(String preparation) {
-        productType.setPreparation(preparation);
+    public void setPreparationInfo(String preparationInfo) {
+        productType.setPreparationInfo(preparationInfo);
     }
         
 }

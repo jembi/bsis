@@ -71,7 +71,7 @@ public class ProductTypeViewModel {
     }
     
     public String getPreparationInfo(){
-        return productType.getPreparation();
+        return productType.getPreparationInfo();
     }
 
     public List<ProductTypeCombinationViewModel> getProducedProductTypeCombinations(){
