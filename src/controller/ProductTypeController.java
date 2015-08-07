@@ -65,10 +65,9 @@ public class ProductTypeController {
   @RequestMapping(method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
   public  ResponseEntity saveComponentTypeByID(@Valid @RequestBody ComponentTypeBackingForm form) {
-
-      ProductType componentType = form.getProductType();
-      productTypeRepository.saveComponentType(componentType);
-      return new ResponseEntity( new ProductTypeViewModel(componentType), HttpStatus.CREATED);
+      
+	  ProductType componentType = productTypeRepository.saveComponentType(form.getProductType());
+      return new ResponseEntity(new ProductTypeViewModel(componentType), HttpStatus.CREATED);
   }
   
   @RequestMapping(value="{id}", method=RequestMethod.PUT)

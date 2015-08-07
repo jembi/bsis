@@ -225,24 +225,26 @@ public class ProductTypeRepository {
     return query.getResultList();
   }
   
-    public void saveComponentType(ProductType componentType) {
+    public ProductType saveComponentType(ProductType componentType) {
         em.persist(componentType);
+        em.flush();
+        return componentType;
     }
   
-  public ProductType updateComponentType(ProductType productType)throws IllegalArgumentException{
+  public ProductType updateComponentType(ProductType productType){
     ProductType existingProductType = getProductTypeById(productType.getId());
-    existingProductType.setProductTypeName(productType.getProductTypeName());
-    existingProductType.setProductTypeNameShort(productType.getProductTypeNameShort());
-    existingProductType.setExpiresAfter(productType.getExpiresAfter());
-    ProductTypeTimeUnits  expiresAfterUnits = productType.getExpiresAfterUnits();
-    existingProductType.setExpiresAfterUnits(expiresAfterUnits);
-    return em.merge(existingProductType);
+    existingProductType.copy(productType);
+    em.merge(existingProductType);
+    em.flush();
+    return existingProductType;
   }
   
   
   public ProductTypeCombination updateComponentTypeCombination(
           ProductTypeCombination componentTypeCombination)throws IllegalArgumentException{
-      return em.merge(componentTypeCombination);
+     em.merge(componentTypeCombination);
+     em.flush();
+     return componentTypeCombination;
   }
   
   
@@ -250,12 +252,14 @@ public class ProductTypeRepository {
     ProductTypeCombination productTypeCombination = getProductTypeCombinationById(productTypeCombinationId);
     productTypeCombination.setIsDeleted(true);
     em.merge(productTypeCombination);
+    em.flush();
   }
 
   public void activateProductTypeCombination(Integer productTypeCombinationId) {
     ProductTypeCombination productTypeCombination = getProductTypeCombinationById(productTypeCombinationId);
     productTypeCombination.setIsDeleted(false);
     em.merge(productTypeCombination);
+    em.flush();
   }
           
 }
