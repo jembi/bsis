@@ -2380,6 +2380,27 @@
         <column name="roles_id" value="2"></column>
     </insert>
   </changeSet>
+  
+  <!-- Add Manage Component Types Permission and Role Mappings -->
+  <changeSet id="20150807-1710" author="danfuterman">
+ 	 <insert tableName="Permission">
+	       <column name="id" value="89"> </column>
+	       <column name="name" value="Manage Component Types"></column>
+	  </insert>
+  </changeSet>
+  <changeSet id="20150807-1712" author="danfuterman">
+    <insert tableName="Permission_Role">
+        <column name="permissions_id" value="89"></column>
+        <column name="roles_id" value="1"></column>
+    </insert>
+
+    <insert tableName="Permission_Role">
+        <column name="permissions_id" value="89"></column>
+        <column name="roles_id" value="2"></column>
+    </insert>
+  </changeSet>
+  
+  
   <changeSet id="20141117-1127" author="srikanthmalyala">
 		<comment>Add superuser user</comment>
 		<insert tableName="User">
