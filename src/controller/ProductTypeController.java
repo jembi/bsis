@@ -54,12 +54,12 @@ public class ProductTypeController {
   }
   
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
-  public  Map<String, Object> getProductTypeSummary(@PathVariable Integer id) {
+  public ResponseEntity<Map<String, Object>> getProductTypeSummary(@PathVariable Integer id) {
 
     Map<String, Object> map = new HashMap<String, Object> ();
     ProductType productType = productTypeRepository.getProductTypeById(id);
     map.put("productType", new ProductTypeViewModel(productType));
-    return map;
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 
   @RequestMapping(method=RequestMethod.POST)
@@ -86,7 +86,7 @@ public class ProductTypeController {
   public  ResponseEntity deactivateProductType(@PathVariable Integer id) {
    
     productTypeRepository.deactivateProductType(id);
-     return new ResponseEntity(HttpStatus.NO_CONTENT);
+    return new ResponseEntity(HttpStatus.OK);
   }
 
   @RequestMapping(value="{id}/activate", method=RequestMethod.PUT)
@@ -95,7 +95,7 @@ public class ProductTypeController {
       @PathVariable Integer id) {
 
     productTypeRepository.activateProductType(id);
-    return new ResponseEntity(HttpStatus.NO_CONTENT);
+    return new ResponseEntity(HttpStatus.OK);
   }
 
   @RequestMapping(value="/combinations", method=RequestMethod.GET)
@@ -137,7 +137,7 @@ public class ProductTypeController {
               productTypeCombinationBackingForm.getProductTypeCombination();
         productTypeCombination.setId(id);
         productTypeRepository.updateComponentTypeCombination(productTypeCombination);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity(HttpStatus.OK);
     }
   
   @RequestMapping(value="/combinations/{id}/deactivate", method=RequestMethod.PUT)
@@ -146,7 +146,7 @@ public class ProductTypeController {
       @PathVariable Integer id) {
 
     productTypeRepository.deactivateProductTypeCombination(id);
-   return new ResponseEntity(HttpStatus.CREATED);
+   return new ResponseEntity(HttpStatus.OK);
   }
 
   @RequestMapping(value="/combinations/{id}/activate", method=RequestMethod.PUT)
@@ -155,10 +155,10 @@ public class ProductTypeController {
       @PathVariable Integer id) {
 
      productTypeRepository.activateProductTypeCombination(id);
-     return new ResponseEntity(HttpStatus.CREATED);
+     return new ResponseEntity(HttpStatus.OK);
   }
   
-  public  List<ProductTypeViewModel> getProductTypeViewModels(List<ProductType> productTypes){
+  private  List<ProductTypeViewModel> getProductTypeViewModels(List<ProductType> productTypes){
       
       List<ProductTypeViewModel> productTypeViewModels = new ArrayList<ProductTypeViewModel> ();
       for(ProductType productType : productTypes)
@@ -168,7 +168,7 @@ public class ProductTypeController {
       
   }
   
-  public  List<ProductTypeCombinationViewModel> 
+  private  List<ProductTypeCombinationViewModel> 
         getProductTypeCombinationViewModels(List<ProductTypeCombination> productTypeCombinations){
       
       List<ProductTypeCombinationViewModel> productTypeCombinationViewModels
