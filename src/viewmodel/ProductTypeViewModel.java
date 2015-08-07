@@ -78,6 +78,7 @@ public class ProductTypeViewModel {
         return getProductTypeCombinationViewModels(productType.getProducedProductTypeCombinations());
     }
     
+    @JsonIgnore
     public List<ProductTypeCombinationViewModel> 
         getProductTypeCombinationViewModels(List<ProductTypeCombination> productTypeCombinations){
       
