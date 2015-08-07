@@ -8,7 +8,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import controller.UtilController;
 import model.sequencenumber.SequenceNumberStore;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +50,7 @@ public class SequenceNumberRepository {
       seqNumStore.setPrefix(prefix);
     }
 
-    String donorNumberFormat = generalConfigRepository.getGeneralConfigByName("donor.donorNumberFormat").getValue();
-    String lastNumberStr = String.format(donorNumberFormat, lastNumber);
+    String lastNumberStr = String.format("%06d", lastNumber);
     // may need a prefix for center where the number is generated
     String donationIdentificationNumber = prefix + lastNumberStr;
     lastNumber = lastNumber + 1;
@@ -136,7 +134,8 @@ public class SequenceNumberRepository {
     if (lastNumber == 0){
     	lastNumber ++;
     }
-    String lastNumberStr = String.format("%06d", lastNumber);
+    String donorNumberFormat = generalConfigRepository.getGeneralConfigByName("donor.donorNumberFormat").getValue();
+    String lastNumberStr = String.format(donorNumberFormat, lastNumber);
     String requestNumber = lastNumberStr;
     lastNumber = lastNumber + 1;
     seqNumStore.setLastNumber(lastNumber);
