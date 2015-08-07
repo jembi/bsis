@@ -160,9 +160,9 @@ public class ProductTypeRepository {
   
   public ProductTypeCombination updateComponentTypeCombination(
           ProductTypeCombination componentTypeCombination)throws IllegalArgumentException{
-     em.merge(componentTypeCombination);
-     em.flush();
-     return componentTypeCombination;
+	 ProductTypeCombination existingProductTypeCombination = getProductTypeCombinationById(componentTypeCombination.getId());
+	 existingProductTypeCombination.copy(componentTypeCombination);
+     return em.merge(existingProductTypeCombination);
   }
   
   

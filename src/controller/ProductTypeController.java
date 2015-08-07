@@ -136,7 +136,7 @@ public class ProductTypeController {
        ProductTypeCombination productTypeCombination = 
               productTypeCombinationBackingForm.getProductTypeCombination();
         productTypeCombination.setId(id);
-        productTypeRepository.saveComponentTypeCombination(productTypeCombination);
+        productTypeRepository.updateComponentTypeCombination(productTypeCombination);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
   

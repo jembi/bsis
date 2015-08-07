@@ -235,7 +235,6 @@ public class ProductType {
         this.preparationInfo = preparationInfo;
     }
     
-    
     public void copy(ProductType productType){
     	this.productTypeName = productType.getProductTypeName();
     	this.productTypeNameShort = productType.getProductTypeNameShort();
