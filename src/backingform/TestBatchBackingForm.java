@@ -1,12 +1,15 @@
 package backingform;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Collections;
-import java.util.List;
 import java.util.Date;
+import java.util.List;
+
 import javax.validation.Valid;
+
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class TestBatchBackingForm {
 
@@ -14,7 +17,8 @@ public class TestBatchBackingForm {
     @JsonIgnore
     private TestBatch testBatch;
 
-    private List<Integer> collectionBatchIds = Collections.EMPTY_LIST;
+    @SuppressWarnings("unchecked")
+    private List<Integer> donationBatchIds = Collections.EMPTY_LIST;
 
     public TestBatchBackingForm() {
         testBatch = new TestBatch();
@@ -36,12 +40,12 @@ public class TestBatchBackingForm {
         testBatch.setStatus(TestBatchStatus.valueOf(status));
     }
 
-    public List<Integer> getCollectionBatchIds() {
-        return collectionBatchIds;
+    public List<Integer> getDonationBatchIds() {
+        return donationBatchIds;
     }
 
-    public void setCollectionBatchIds(List<Integer> collectionBatchIds) {
-        this.collectionBatchIds = collectionBatchIds;
+    public void setDonationBatchIds(List<Integer> donationBatchIds) {
+        this.donationBatchIds = donationBatchIds;
     }
     
     @JsonIgnore

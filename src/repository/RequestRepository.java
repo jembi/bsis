@@ -143,7 +143,7 @@ public class RequestRepository {
     TypedQuery<Request> query = em
         .createQuery(
             "SELECT r FROM Request r, Location L WHERE "
-                + "(L.locationId=r.siteId AND L.isCollectionSite=TRUE) AND "
+                + "(L.locationId=r.siteId AND L.isDonorPanel=TRUE) AND "
                 + "(r.requestNumber = :requestNumber OR L.name IN (:sites) OR "
                 + "r.productType IN (:productTypes)) AND (r.status IN (:statuses)) AND "
                 + "((r.dateRequested BETWEEN :dateRequestedFrom AND "
@@ -224,7 +224,7 @@ public class RequestRepository {
   public List<Request> findRequestsNotFulfilled() {
     TypedQuery<Request> query = em.createQuery(
         "SELECT r FROM Request r, Location L WHERE "
-            + "(L.locationId=r.siteId AND L.isCollectionSite=TRUE) AND"
+            + "(L.locationId=r.siteId AND L.isDonorPanel=TRUE) AND"
             + "(r.status NOT IN (:statuses)) AND "
             + "(r.isDeleted= :isDeleted)", Request.class);
 
@@ -426,8 +426,8 @@ public class RequestRepository {
     if (product.getExpiresOn().before(today))
       return false;
     
-    String bloodAbo = product.getCollectedSample().getBloodAbo();
-    String bloodRh = product.getCollectedSample().getBloodRh();
+    String bloodAbo = product.getDonation().getBloodAbo();
+    String bloodRh = product.getDonation().getBloodRh();
 
     boolean canIssue = true;
 
@@ -456,7 +456,7 @@ public class RequestRepository {
   }
 
   public List<Product> getIssuedProductsForRequest(Long requestId) {
-    String queryString = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.collectedSample WHERE " +
+    String queryString = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.donation WHERE " +
                          "p.issuedTo.id = :requestId AND p.isDeleted= :isDeleted";
     TypedQuery<Product> query = em.createQuery(queryString, Product.class);
     query.setParameter("isDeleted", Boolean.FALSE);

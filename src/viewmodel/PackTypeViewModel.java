@@ -1,5 +1,3 @@
-
-
 package viewmodel;
 
 import model.bloodbagtype.BloodBagType;
@@ -40,12 +38,17 @@ public class PackTypeViewModel {
         return packType.getIsDeleted();
     }
     
-    public Boolean isCountAsDonation(){
-        return packType.isCountAsDonation();
+    public Boolean getCountAsDonation(){
+        return packType.getCountAsDonation();
     }
     
     public Integer getPeriodBetweenDonations(){
         return packType.getPeriodBetweenDonations();
+    }
+
+    @Override
+    public String toString() {
+        return packType.toString();
     }
     
 }

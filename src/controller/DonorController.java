@@ -1,17 +1,18 @@
 package controller;
 
-import backingform.DonorBackingForm;
-import backingform.validator.DonorBackingFormValidator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import model.donation.Donation;
 import model.donor.Donor;
-import model.collectedsample.CollectedSample;
 import model.donordeferral.DonorDeferral;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,15 +26,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import repository.ContactMethodTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
+import utils.CustomDateFormatter;
 import utils.PermissionConstants;
+import viewmodel.DonationViewModel;
 import viewmodel.DonorDeferralViewModel;
 import viewmodel.DonorSummaryViewModel;
 import viewmodel.DonorViewModel;
-import viewmodel.CollectedSampleViewModel;
-import utils.CustomDateFormatter;
+import backingform.DonorBackingForm;
+import backingform.validator.DonorBackingFormValidator;
 
 @RestController
 @RequestMapping("donors")
@@ -108,13 +112,13 @@ public class DonorController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Donor donor = donorRepository.findDonorById(id);
-    List<CollectedSample> donations = donor.getCollectedSamples();
+    List<Donation> donations = donor.getDonations();
     
     map.put("currentlyDeferred",donorRepository.isCurrentlyDeferred(donor));
     map.put("deferredUntil",CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
     if(donations.size() > 0){
-	    map.put("lastDonation", getCollectionViewModel(donations.get(donations.size()-1)));
-	    map.put("dateOfFirstDonation",CustomDateFormatter.getDateString(donations.get(0).getCollectedOn()));
+	    map.put("lastDonation", getDonationViewModel(donations.get(donations.size()-1)));
+	    map.put("dateOfFirstDonation",CustomDateFormatter.getDateString(donations.get(0).getDonationDate()));
 	    map.put("totalDonations",getNumberOfDonations(donations));
 	    map.put("dueToDonate",CustomDateFormatter.getDateString(donor.getDueToDonate()));
     }
@@ -147,7 +151,7 @@ public class DonorController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Donor donor = donorRepository.findDonorById(id);
-    map.put("allCollectedSamples", getCollectionViewModels(donor.getCollectedSamples()));
+    map.put("allDonations", getDonationViewModels(donor.getDonations()));
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
 
@@ -322,26 +326,26 @@ public class DonorController {
     return donorViewModel;
   }
   
-  private CollectedSampleViewModel getCollectionViewModel(CollectedSample collection) {
-    CollectedSampleViewModel collectionViewModel = new CollectedSampleViewModel(collection);
-    return collectionViewModel;
+  private DonationViewModel getDonationViewModel(Donation donation) {
+    DonationViewModel donationViewModel = new DonationViewModel(donation);
+    return donationViewModel;
   }
 
-  private List<CollectedSampleViewModel> getCollectionViewModels(
-      List<CollectedSample> collections) {
-    if (collections == null)
-      return Arrays.asList(new CollectedSampleViewModel[0]);
-    List<CollectedSampleViewModel> collectionViewModels = new ArrayList<CollectedSampleViewModel>();
-    for (CollectedSample collection : collections) {
-      collectionViewModels.add(new CollectedSampleViewModel(collection));
+  private List<DonationViewModel> getDonationViewModels(
+      List<Donation> donations) {
+    if (donations == null)
+      return Arrays.asList(new DonationViewModel[0]);
+    List<DonationViewModel> donationViewModels = new ArrayList<DonationViewModel>();
+    for (Donation donation : donations) {
+      donationViewModels.add(new DonationViewModel(donation));
     }
-    return collectionViewModels;
+    return donationViewModels;
   }
  
-  private int getNumberOfDonations(List<CollectedSample> donations){
+  private int getNumberOfDonations(List<Donation> donations){
       int count = 0;
-      for(CollectedSample donation :donations){
-          if(donation.getBloodBagType().isCountAsDonation() == true)
+      for(Donation donation :donations){
+          if(donation.getBloodBagType().getCountAsDonation() == true)
               count = count +1;
       }
       return count;

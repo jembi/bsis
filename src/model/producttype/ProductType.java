@@ -1,6 +1,7 @@
 package model.producttype;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.List;
 
@@ -156,6 +157,7 @@ public class ProductType {
     this.hasBloodGroup = hasBloodGroup;
   }
 
+  @JsonIgnore
   public int getExpiryIntervalMinutes() {
     int factor = 1;
     switch (expiresAfterUnits) {

@@ -2,6 +2,7 @@ package controller;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +79,7 @@ public class DonorCommunicationsController {
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public @ResponseBody
     Map<String, Object> findDonorCommunicationsPagination(
-            @RequestParam(value="bloodGroups",required=true ) List<String> bloodGroups,
+            @RequestParam(value="bloodGroups",required=false ) List<String> bloodGroups,
             @RequestParam(value="donorPanels",required=true) List<String> donorPanels,
             @RequestParam(value="clinicDate",required=false ) String clinicDate,
             @RequestParam(value="lastDonationFromDate",required=false ) String lastDonationFromDate,
@@ -148,6 +149,9 @@ public class DonorCommunicationsController {
     }
     
     public List<BloodGroup> setBloodGroups(List<String> bloodGroups) {
+        if (bloodGroups == null) {
+            return Collections.emptyList();
+        }
 
         List<BloodGroup> bloodGroupsList = new ArrayList<BloodGroup>();
 

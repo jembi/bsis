@@ -19,7 +19,7 @@ public class BloodTestingRule {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable=false, updatable=false, columnDefinition="MEDIUMINT")
+  @Column(nullable = false, insertable=false, updatable=false, columnDefinition="SMALLINT")
   private Integer id;
 
   /**
@@ -33,7 +33,7 @@ public class BloodTestingRule {
 
   @Enumerated(EnumType.STRING)
   @Column(length=12)
-  private CollectionField collectionFieldChanged;
+  private DonationField donationFieldChanged;
 
   @Column(length=30)
   private String newInformation;
@@ -75,8 +75,8 @@ public class BloodTestingRule {
     return pattern;
   }
 
-  public CollectionField getCollectionFieldChanged() {
-    return collectionFieldChanged;
+  public DonationField getDonationFieldChanged() {
+    return donationFieldChanged;
   }
 
   public Boolean getMarkSampleAsUnsafe() {
@@ -99,8 +99,8 @@ public class BloodTestingRule {
     this.pattern = pattern;
   }
 
-  public void setPart(CollectionField part) {
-    this.setCollectionFieldChanged(part);
+  public void setPart(DonationField part) {
+    this.setDonationFieldChanged(part);
   }
 
   public void setMarkSampleAsUnsafe(Boolean markSampleAsUnsafe) {
@@ -159,7 +159,7 @@ public class BloodTestingRule {
     this.subCategory = subCategory;
   }
 
-  public void setCollectionFieldChanged(CollectionField collectionFieldChanged) {
-    this.collectionFieldChanged = collectionFieldChanged;
+  public void setDonationFieldChanged(DonationField donationFieldChanged) {
+    this.donationFieldChanged = donationFieldChanged;
   }
 }

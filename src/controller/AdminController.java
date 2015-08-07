@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import model.admin.FormField;
-import model.bloodbagtype.BloodBagType;
 import model.compatibility.CrossmatchType;
 import model.donationtype.DonationType;
 import model.tips.Tips;
@@ -44,7 +43,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import repository.BloodBagTypeRepository;
 import repository.CrossmatchTypeRepository;
 import repository.DonationTypeRepository;
 import repository.FormFieldRepository;
@@ -55,7 +53,6 @@ import repository.TipsRepository;
 import repository.UserRepository;
 import repository.WorksheetTypeRepository;
 import utils.PermissionConstants;
-import viewmodel.PackTypeViewModel;
 
 @RestController
 public class AdminController {
@@ -70,9 +67,6 @@ public class AdminController {
 
   @Autowired
   LocationRepository locationRepository;
-
-  @Autowired
-  BloodBagTypeRepository bloodBagTypesRepository;
 
   @Autowired
   DonationTypeRepository donationTypesRepository;
@@ -198,12 +192,12 @@ public class AdminController {
     String errMsg = "";
     try {
       Integer numDonors = Integer.parseInt(params.get("numDonors"));
-      Integer numCollections = Integer.parseInt(params.get("numCollections"));
+      Integer numDonations = Integer.parseInt(params.get("numDonations"));
       Integer numProducts = Integer.parseInt(params.get("numProducts"));
       Integer numRequests = Integer.parseInt(params.get("numRequests"));
 
       createDataController.createDonors(numDonors);
-      createDataController.createCollectionsWithTestResults(numCollections);
+      createDataController.createDonationsWithTestResults(numDonations);
       createDataController.createProducts(numProducts);
       createDataController.createRequests(numRequests);
     }
@@ -271,14 +265,6 @@ public class AdminController {
     return map;
   }
 
-  @RequestMapping(value="/packtypes", method=RequestMethod.GET)
-  public  Map<String, Object> configureBloodBagTypesFormGenerator() {
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    addAllBloodBagTypesToModel(map);
-    return map;
-  }
-
   @RequestMapping(value="/backupdata", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BACKUP_DATA+"')")
   public void backupData(
@@ -293,11 +279,11 @@ public class AdminController {
     LOGGER.debug("Writing backup to " + fullFileName);
 
     try {
-      Properties prop = utilController.getV2VProperties();
-      String mysqldumpPath = (String) prop.get("v2v.dbbackup.mysqldumppath");
-      String username = (String) prop.get("v2v.dbbackup.username");
-      String password = (String) prop.get("v2v.dbbackup.password");
-      String dbname = (String) prop.get("v2v.dbbackup.dbname");
+      Properties prop = utilController.getDatabaseProperties();
+      String mysqldumpPath = (String) prop.get("dbbackup.mysqldumppath");
+      String username = (String) prop.get("dbbackup.username");
+      String password = (String) prop.get("dbbackup.password");
+      String dbname = (String) prop.get("dbbackup.dbname");
 
       LOGGER.debug(mysqldumpPath);
       LOGGER.debug(username);
@@ -333,22 +319,9 @@ public class AdminController {
     }
   }
   
-  @RequestMapping(value="/donationtypes", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-  public  Map<String, Object> configureDonationTypesFormGenerator() {
 
-    Map<String, Object> map = new HashMap<String, Object>();
-    addAllDonationTypesToModel(map);
-    return map;
-  }
 
-  private void addAllDonationTypesToModel(Map<String, Object> m) {
-    m.put("allDonationTypes", donationTypesRepository.getAllDonationTypes());
-  }
 
-  private void addAllBloodBagTypesToModel(Map<String, Object> m) {
-    m.put("allBloodBagTypes", getPackTypeViewModels(bloodBagTypesRepository.getAllBloodBagTypes()));
-  }
 
   private void addAllCrossmatchTypesToModel(Map<String, Object> m) {
     m.put("allCrossmatchTypes", crossmatchTypesRepository.getAllCrossmatchTypes());
@@ -417,63 +390,7 @@ public class AdminController {
     addAllCrossmatchTypesToModel(map);
     return map;
   }
-  
-   @RequestMapping(value = "/packtypes/{id}", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
-    public ResponseEntity<BloodBagType> getPackTypeById(@PathVariable Integer id){
-        Map<String, Object> map = new HashMap<String, Object>();
-        BloodBagType packType = bloodBagTypesRepository.getBloodBagTypeById(id);
-        map.put("packtype", new PackTypeViewModel(packType));
-        return new ResponseEntity(map, HttpStatus.OK);
-    }
 
-    @RequestMapping(value = "/packtypes", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
-    public ResponseEntity savePackType(@Valid @RequestBody BloodBagType packType){
-        bloodBagTypesRepository.saveBloodBagType(packType);
-        return new ResponseEntity(new PackTypeViewModel(packType), HttpStatus.CREATED);
-    }
-  
-    @RequestMapping(value = "/packtypes/{id}", method = RequestMethod.PUT)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_BAG_TYPES + "')")
-    public ResponseEntity updateBloodBagType(@RequestBody BloodBagType packType , @PathVariable Integer id){
-        Map<String, Object> map = new HashMap<String, Object>();
-        packType.setId(id);
-        packType = bloodBagTypesRepository.updateBloodBagType(packType);
-        map.put("packtype", new PackTypeViewModel(packType));
-        return new ResponseEntity(map, HttpStatus.OK);
-    }
-
-  @RequestMapping(value = "/donationtypes/{id}", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-  public  ResponseEntity getDonationType(@PathVariable Integer id) {
-      Map<String, Object> map = new HashMap<String, Object>();
-      DonationType donationType = donationTypesRepository.getDonationTypeById(id);
-      map.put("donationType", donationType);
-      return new ResponseEntity(map, HttpStatus.OK);
-
-  } 
-  
-  @RequestMapping(value = "/donationtypes", method = RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-  public  ResponseEntity saveDonationType(@RequestBody DonationType donationType) {
-       
-      donationTypesRepository.saveDonationType(donationType);
-      return new ResponseEntity(donationType, HttpStatus.CREATED);
-
-  }
-  
-  @RequestMapping(value = "/donationtypes/{id}", method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-  public  ResponseEntity updateDonationType(@PathVariable Integer id,
-          @RequestBody DonationType donationType) {
-      Map<String, Object> map = new HashMap<String, Object>();
-      donationType.setId(id);
-      donationType = donationTypesRepository.updateDonationType(donationType);
-      map.put("donationType", donationType);
-      return new ResponseEntity(map , HttpStatus.OK);
-
-  }
 
   List<InetAddress> getServerNetworkAddresses() {
     List<InetAddress> listOfServerAddresses = new ArrayList<InetAddress>();
@@ -505,15 +422,6 @@ public class AdminController {
         return new ArrayList<InetAddress>();
     }
     return listOfServerAddresses;
-  }
-  
-  private List<PackTypeViewModel> getPackTypeViewModels(List<BloodBagType> packTypes){
-      
-      List<PackTypeViewModel> viewModels = new ArrayList<PackTypeViewModel>();
-      for(BloodBagType packtType : packTypes){
-          viewModels.add(new PackTypeViewModel(packtType));
-      }
-      return viewModels;
   }
 }
 

@@ -9,9 +9,18 @@
 		 reversing the previous ones if you need to change or delete info from another changeset-->
 
 	<!-- For issue 62 [Allow for entry of donor haemoglobin count] -->
-	<changeSet id="20131024-2025" author="gtldevang">
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-0900" author="gtldevang">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM FormField 
+				where form = 'Donation' and field = 'haemoglobinCount';
+				]]>
+			</sqlCheck>
+		</preConditions>
 		<insert tableName="FormField">
-			<column name="form" value="CollectedSample"></column>
+			<column name="form" value="Donation"></column>
 			<column name="FIELD" value="haemoglobinCount"></column>
 			<column name="defaultDisplayName" value="Haemoglobin Count"></column>
 			<column name="defaultValue" value=""></column>
@@ -25,18 +34,27 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimeField" value="0"></column>			
 		</insert>
-		<update tableName="CollectedSample">
+		<update tableName="Donation">
 			<column name="haemoglobinCount" type="DECIMAL(7,1)" defaultValue="NULL"></column>
 		</update>
-		<update tableName="CollectedSample_AUD">
+		<update tableName="Donation_AUD">
 			<column name="haemoglobinCount" type="DECIMAL(7,1)" defaultValue="NULL"></column>
 		</update>
 	</changeSet>
 
 	<!-- For issue 69 [Allow for entry of donor weight] -->
-	<changeSet id="20131024-1815" author="gtldevang">
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-0901" author="gtldevang">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM FormField 
+				where form = 'Donation' and field = 'donorWeight';
+				]]>
+			</sqlCheck>
+		</preConditions>
 		<insert tableName="FormField">
-			<column name="form" value="CollectedSample"></column>
+			<column name="form" value="Donation"></column>
 			<column name="FIELD" value="donorWeight"></column>
 			<column name="defaultDisplayName" value="Donor Weight"></column>
 			<column name="defaultValue" value=""></column>
@@ -50,18 +68,27 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimeField" value="0"></column>			
 		</insert>
-		<update tableName="CollectedSample">
+		<update tableName="Donation">
 			<column name="donorWeight" type="DECIMAL(7,1)" defaultValue="NULL"></column>
 		</update>
-		<update tableName="CollectedSample_AUD">
+		<update tableName="Donation_AUD">
 			<column name="donorWeight" type="DECIMAL(7,1)" defaultValue="NULL"></column>
 		</update>
 	</changeSet>
 	
 	<!-- For issue 61 [Add donor blood pressure (systolic & diastolic)] -->
-	<changeSet id="20131024-2001" author="gtldevang">
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-0902" author="gtldevang">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM FormField 
+				where form = 'Donation' and field = 'bloodPressureSystolic';
+				]]>
+			</sqlCheck>
+		</preConditions>
 		<insert tableName="FormField">
-			<column name="form" value="CollectedSample"></column>
+			<column name="form" value="Donation"></column>
 			<column name="FIELD" value="bloodPressureSystolic"></column>
 			<column name="defaultDisplayName" value="Blood Pressure Systolic"></column>
 			<column name="defaultValue" value=""></column>
@@ -75,8 +102,21 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimeField" value="0"></column>                        
 		</insert>
+	</changeSet>
+
+	<!-- For issue 61 [Add donor blood pressure (systolic & diastolic)] -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-0903" author="gtldevang">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM FormField 
+				where form = 'Donation' and field = 'bloodPressureDiastolic';
+				]]>
+			</sqlCheck>
+		</preConditions>
 		<insert tableName="FormField">
-			<column name="form" value="CollectedSample"></column>
+			<column name="form" value="Donation"></column>
 			<column name="FIELD" value="bloodPressureDiastolic"></column>
 			<column name="defaultDisplayName" value="Blood Pressure Diastolic"></column>
 			<column name="defaultValue" value=""></column>
@@ -89,27 +129,52 @@
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimeField" value="0"></column>                        
-		</insert>                        
-		<update tableName="CollectedSample">
+		</insert>
+	</changeSet>
+	
+	<!-- For issue 61 [Add donor blood pressure (systolic & diastolic)] -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-0904" author="gtldevang">
+	    <preConditions onFail="MARK_RAN">
+		    <columnExists tableName="Donation" columnName="bloodPressure"/>
+		</preConditions>
+		<update tableName="Donation">
 			<column name="bloodPressure" type="int" defaultValue="NULL"></column>
 		</update>
-		<renameColumn tableName="CollectedSample" oldColumnName="bloodPressure" newColumnName="bloodPressureSystolic" columnDataType="int"/>
-		<update tableName="CollectedSample_AUD">
-			<column name="bloodPressure" type="int" defaultValue="NULL"></column>
-		</update>
-		<renameColumn tableName="CollectedSample_AUD" oldColumnName="bloodPressure" newColumnName="bloodPressureSystolic" columnDataType="int"/>
-		<addColumn tableName="CollectedSample">
+		<renameColumn tableName="Donation" oldColumnName="bloodPressure" newColumnName="bloodPressureSystolic" columnDataType="int"/>
+		<addColumn tableName="Donation">
 			<column name="bloodPressureDiastolic" type="int" defaultValue="NULL"></column>
 		</addColumn>
-		<addColumn tableName="CollectedSample_AUD">
+	</changeSet>
+
+		<!-- For issue 61 [Add donor blood pressure (systolic & diastolic)] -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-0905" author="gtldevang">
+	    <preConditions onFail="MARK_RAN">
+		    <columnExists tableName="Donation_AUD" columnName="bloodPressure"/>
+		</preConditions>
+		<update tableName="Donation_AUD">
+			<column name="bloodPressure" type="int" defaultValue="NULL"></column>
+		</update>
+		<renameColumn tableName="Donation_AUD" oldColumnName="bloodPressure" newColumnName="bloodPressureSystolic" columnDataType="int"/>
+		<addColumn tableName="Donation_AUD">
 			<column name="bloodPressureDiastolic" type="int" defaultValue="NULL"></column>
 		</addColumn>                        
 	</changeSet>
 	
 	<!-- For issue 70 [Allow for entry of donor pulse] -->
-	<changeSet id="20131024-1926" author="gtldevang">
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-0906" author="gtldevang">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM FormField 
+				where form = 'Donation' and field = 'donorPulse';
+				]]>
+			</sqlCheck>
+		</preConditions>
 		<insert tableName="FormField">
-			<column name="form" value="CollectedSample"></column>
+			<column name="form" value="Donation"></column>
 			<column name="FIELD" value="donorPulse"></column>
 			<column name="defaultDisplayName" value="Donor Pulse"></column>
 			<column name="defaultValue" value=""></column>
@@ -123,10 +188,18 @@
 			<column name="useCurrentTime" value="0"></column>
 			<column name="isTimeField" value="0"></column>			
 		</insert>
-		<addColumn tableName="CollectedSample">
+	</changeSet>
+
+		<!-- For issue 70 [Allow for entry of donor pulse] -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-0907" author="gtldevang">
+	    <preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="Donation" columnName="donorPulse" /></not>
+		</preConditions>
+		<addColumn tableName="Donation">
 			<column name="donorPulse" type="int" defaultValue="NULL"></column>
 		</addColumn>
-		<addColumn tableName="CollectedSample_AUD">
+		<addColumn tableName="Donation_AUD">
 			<column name="donorPulse" type="int" defaultValue="NULL"></column>
 		</addColumn>		
 	</changeSet>
@@ -204,22 +277,6 @@
 		<addColumn tableName="RequestType_AUD">
 			<column name="bulkTransfer" type="TINYINT(1)"/>
 		</addColumn>
-	</changeSet>
-	
-	<!-- Update FormField table to rename Collection info to Donation -->
-	<changeSet id="20131108-1720" author="danfuterman">
-		<update tableName="FormField">
-			<column name="defaultDisplayName" value="Donation Identification Number" />
-			<where>field = "collectionNumber"</where>
-		</update>
-		<update tableName="FormField">
-			<column name="defaultDisplayName" value="Donation Site" />
-			<where>field = "collectionSite"</where>
-		</update>
-		<update tableName="FormField">
-			<column name="defaultDisplayName" value="Donation Centre" />
-			<where>field = "collectionCenter"</where>
-		</update>
 	</changeSet>
 
 	<!-- For issue 104 [Add Lot Release Functionality] -->
@@ -365,10 +422,19 @@
 	</changeSet>
 
 	<!-- For issue 71 [Include additional columns in Donation History table] -->
-	<changeSet id="20140115-1001" author="srikanthmalyala">
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150721-0850" author="srikanthmalyala">
+   	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM FormField 
+				where displayName = 'DIN' and field = 'donationIdentificationNumber';
+				]]>
+			</sqlCheck>
+		</preConditions>
 		<update tableName="FormField">
 			<column name="displayName" value="DIN" />
-			<where>field = "collectionNumber"</where>
+			<where>field = "donationIdentificationNumber"</where>
 		</update>
 		<update tableName="FormField">
 			<column name="displayName" value="HGB" />
@@ -384,7 +450,7 @@
 		</update>
 
 		<insert tableName="FormField">
-			<column name="form" value="CollectedSample"></column>
+			<column name="form" value="Donation"></column>
 			<column name="FIELD" value="bloodPressure"></column>
 			<column name="defaultDisplayName" value="Blood Pressure"></column>
 			<column name="defaultValue" value=""></column>
@@ -865,12 +931,16 @@
 		</insert>
 	</changeSet>
 
-	<!-- Add in 'isClosed' field to collectionBatch tables -->
-	<changeSet id="20141028-1957" author="danfuterman">
-		<addColumn tableName="CollectionBatch">
+	<!-- Add in 'isClosed' field to DonationBatch tables -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150716-1036" author="danfuterman">
+	    <preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="DonationBatch" columnName="isClosed"/></not>
+		</preConditions>
+		<addColumn tableName="DonationBatch">
 			<column name="isClosed" type="tinyint(1)" defaultValue="0"></column>
 		</addColumn>
-		<addColumn tableName="CollectionBatch_AUD">
+		<addColumn tableName="DonationBatch_AUD">
 			<column name="isClosed" type="tinyint(1)" defaultValue="0"></column>
 		</addColumn>
 	</changeSet>
@@ -892,25 +962,33 @@
 		</createTable>
 	</changeSet>
 
-	<changeSet id="20141114-1620" author="srikanthmalyala">
-		<addColumn tableName="CollectionBatch">
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150716-1040" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="DonationBatch" columnName="testBatch_id"/></not>
+		</preConditions>
+		<addColumn tableName="DonationBatch">
 			<column name="testBatch_id" type="smallint(6)"></column>
 		</addColumn>
 		<addForeignKeyConstraint constraintName="testBatch_id_FK" 
 			 referencedTableName="TestBatch" 
 			 baseColumnNames="testBatch_id" 
-			 baseTableName="CollectionBatch" 
+			 baseTableName="DonationBatch" 
 			 referencedColumnNames="id"/>
 	</changeSet>
 
-	<changeSet id="20141114-1625" author="srikanthmalyala">
-		<addColumn tableName="CollectionBatch_AUD">
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150716-1041" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="DonationBatch_AUD" columnName="testBatch_id"/></not>
+		</preConditions>
+		<addColumn tableName="DonationBatch_AUD">
 				<column name="testBatch_id" type="smallint(6)"></column>
 		</addColumn>
 		<addForeignKeyConstraint constraintName="testBatch_id_aud_FK" 
 			 referencedTableName="TestBatch" 
 			 baseColumnNames="testBatch_id" 
-			 baseTableName="CollectionBatch_AUD" 
+			 baseTableName="DonationBatch_AUD" 
 			 referencedColumnNames="id"/>
 	</changeSet>
 
@@ -935,61 +1013,53 @@
 	</changeSet>
 
 	<!-- #246 Adapt Donations to use single Location field -->
-	<changeSet id="20141119-1235" author="srikanthmalyala">
-		<dropForeignKeyConstraint baseTableName="CollectedSample" constraintName="FKF0658A33B29562D0"/>
-		<dropForeignKeyConstraint baseTableName="CollectedSample" constraintName="FKF0658A33AED1731E"/>
-		<dropColumn columnName="collectionCenter_id" tableName="CollectedSample"/>
-		<dropColumn columnName="collectionCenter_id" tableName="CollectedSample_AUD"/>
-		<dropColumn columnName="collectionSite_id" tableName="CollectedSample"/>
-		<dropColumn columnName="collectionSite_id" tableName="CollectedSample_AUD"/>
-	</changeSet>
-
-	<!-- #246 Adapt Donations to use single Location field -->
-	<changeSet id="20141119-1356" author="srikanthmalyala">
-		<addColumn tableName="CollectedSample">
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-1201" author="srikanthmalyala">
+		<preConditions onFail="MARK_RAN">
+			<not><columnExists tableName="Donation" columnName="donorPanel_id" /></not>
+		</preConditions>
+		<addColumn tableName="Donation">
 			<column name="donorPanel_id" type="bigint">
 				<constraints foreignKeyName="FK_donation_Location" references="Location(id)"/>
 			</column>
 		</addColumn>
-		<addColumn tableName="CollectedSample_AUD">
+		<addColumn tableName="Donation_AUD">
 			<column name="donorPanel_id" type="bigint"></column>
 		</addColumn>
 	</changeSet>
 
 	<!-- #246 Adapt Donations to use single Location field -->
-	<changeSet id="20141119-1558" author="srikanthmalyala">
-		<dropForeignKeyConstraint baseTableName="CollectionBatch" constraintName="FK227631CAED1731E"/>
-		<dropForeignKeyConstraint baseTableName="CollectionBatch" constraintName="FK227631CB29562D0"/>
-		<dropColumn columnName="collectionCenter_id" tableName="CollectionBatch"/>
-		<dropColumn columnName="collectionCenter_id" tableName="CollectionBatch_AUD"/>
-		<dropColumn columnName="collectionSite_id" tableName="CollectionBatch"/>
-		<dropColumn columnName="collectionSite_id" tableName="CollectionBatch_AUD"/>
-	</changeSet>
-
-	<!-- #246 Adapt Donations to use single Location field -->
-	<changeSet id="20141119-1605" author="srikanthmalyala">
-		<addColumn tableName="CollectionBatch">
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150716-1058" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="DonationBatch" columnName="donorPanel_id"/></not>
+		</preConditions>
+		<addColumn tableName="DonationBatch">
 			<column name="donorPanel_id" type="bigint">
 				<constraints foreignKeyName="FK_DonationBatch_Location" references="Location(id)"/>
 			</column>
 		</addColumn>
-		<addColumn tableName="CollectionBatch_AUD">
+		<addColumn tableName="DonationBatch_AUD">
 			<column name="donorPanel_id" type="bigint"></column>
 		</addColumn>
 	</changeSet>
 
 	<!-- Add donation bleed time fields -->
-	<changeSet id="20141114-0949" author="srikanthmalyala">
-		<addColumn tableName="CollectedSample">
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-1203" author="srikanthmalyala">
+		<preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="Donation" columnName="bleedStartTime" /></not>
+		</preConditions>
+		<addColumn tableName="Donation">
 			<column name="bleedStartTime" type="DATETIME"></column>
 		</addColumn>
-		<addColumn tableName="CollectedSample">
+		<addColumn tableName="Donation">
 			<column name="bleedEndTime" type="DATETIME"></column>
 		</addColumn>
-		<addColumn tableName="CollectedSample_AUD">
+		<addColumn tableName="Donation_AUD">
 			<column name="bleedStartTime" type="DATETIME"></column>
 		</addColumn>
-		<addColumn tableName="CollectedSample_AUD">
+		<addColumn tableName="Donation_AUD">
 			<column name="bleedEndTime" type="DATETIME"></column>
 		</addColumn>
 	</changeSet>
@@ -1115,12 +1185,16 @@
 		</createTable>
 	</changeSet>
 	
-	<!-- #263 Add bloodTypingMatchStatus field to CollectedSample -->
-	<changeSet id="20140118-2258" author="danfuterman">
-		<addColumn tableName="CollectedSample">
+	<!-- #263 Add bloodTypingMatchStatus field to Donation -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-1204" author="danfuterman">
+		<preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="Donation" columnName="bloodTypingMatchStatus" /></not>
+		</preConditions>
+		<addColumn tableName="Donation">
 			<column name="bloodTypingMatchStatus" type="VARCHAR(20)"></column>
 		</addColumn>
-		<addColumn tableName="CollectedSample_AUD">
+		<addColumn tableName="Donation_AUD">
 			<column name="bloodTypingMatchStatus" type="VARCHAR(20)"></column>
 		</addColumn>
 	</changeSet>
@@ -1262,6 +1336,221 @@
 			<column name="dataType_id" value="1"></column>
 		</insert>
 	</changeSet>
+
+	<!-- ##288 change id of BloodTestingRule to smallint as mediumint is not 
+		supported in dbunit and it is unnecessary -->
+	<changeSet id="20150707-2214" author="timler">
+		<comment>Change BloodTestingRule Id to smallint</comment>
+		<modifyDataType columnName="id" newDataType="smallint"
+			tableName="BloodTestingRule" />
+	</changeSet>
+	
+	<changeSet id="20150720-1611" author="bausmeier">
+	   <comment>Add password reset column to user</comment>
+	   <addColumn tableName="User">
+	       <column name="passwordReset" type="tinyint(1)" defaultValue="0">
+	           <constraints nullable="false" />
+	       </column>
+	   </addColumn>
+	   <addColumn tableName="User_AUD">
+	       <column name="passwordReset" type="tinyint(1)" defaultValue="0">
+	           <constraints nullable="false" />
+	       </column>
+	   </addColumn>
+	</changeSet>
+	
+	<changeSet id="20150727-1140" author="bausmeier">
+	   <comment>Add haemoglobin level column to donation</comment>
+	   <addColumn tableName="Donation">
+	       <column name="haemoglobinLevel" type="varchar(20)"></column>
+	   </addColumn>
+	   <addColumn tableName="Donation_AUD">
+	       <column name="haemoglobinLevel" type="varchar(20)"></column>
+	   </addColumn>
+	</changeSet>
+
+	<changeSet id="20150728-1553" author="bausmeier">
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.hbNumericValue"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Allow capturing of numeric haemoglobin value"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.hbQualitativeValue"></column>
+			<column name="value" value="false"></column>
+			<column name="description" value="Allow capturing of qualitative haemoglobin value"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+  </changeSet>
+
+	<changeSet id="20150729-1109" author="debonair">
+		<comment>Add Donation-related properties to General Configs</comment>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.donor.bpSystolicMin"></column>
+			<column name="value" value="70"></column>
+			<column name="description" value="Donation Donor bpSystolicMin"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.donor.bpSystolicMax"></column>
+			<column name="value" value="190"></column>
+			<column name="description" value="Donation Donor bpSystolicMax"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.donor.bpDiastolicMin"></column>
+			<column name="value" value="40"></column>
+			<column name="description" value="Donation Donor bpDiastolicMin"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.donor.bpDiastolicMax"></column>
+			<column name="value" value="100"></column>
+			<column name="description" value="Donation Donor bpDiastolicMax"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.donor.hbMin"></column>
+			<column name="value" value="1"></column>
+			<column name="description" value="Donation Donor hbMin"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.donor.hbMax"></column>
+			<column name="value" value="25"></column>
+			<column name="description" value="Donation Donor hbMax"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.donor.weightMin"></column>
+			<column name="value" value="30"></column>
+			<column name="description" value="Donation Donor weightMin"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.donor.weightMax"></column>
+			<column name="value" value="300"></column>
+			<column name="description" value="Donation Donor weightMax"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.donor.pulseMin"></column>
+			<column name="value" value="30"></column>
+			<column name="description" value="Donation Donor pulseMin"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.donor.pulseMax"></column>
+			<column name="value" value="200"></column>
+			<column name="description" value="Donation Donor pulseMax"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.bpUnit"></column>
+			<column name="value" value="mmHg"></column>
+			<column name="description" value="Donation Blood Pressure Unit"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.hbUnit"></column>
+			<column name="value" value="g/dL"></column>
+			<column name="description" value="Donation HB unit"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.weightUnit"></column>
+			<column name="value" value="kg"></column>
+			<column name="description" value="Donation Weight Unit"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.pulseUnit"></column>
+			<column name="value" value="bpm"></column>
+			<column name="description" value="Donation Pulse Unit"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+	</changeSet>
+
+	<changeSet id="20150729-1129" author="debonair">
+		<comment>UI Related Properties</comment>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.donorsTabEnabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Donors Tab Enabled"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.componentsTabEnabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Components Tab Enabled"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.testingTabEnabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Testing Tab Enabled"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.labellingTabEnabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Labelling Tab Enabled"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.inventoryTabEnabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Inventory Tab Enabled"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.reportsTabEnabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Reports Tab Enabled"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.mobileClinicTabEnabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Mobile Clinic Tab Enabled"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+	</changeSet>
+
+	<changeSet id="20150729-1139" author="debonair">
+		<comment>Identifier Related Properties</comment>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donor.donorNumberFormat"></column>
+			<column name="value" value="%06d"></column>
+			<column name="description" value="Donor Number Format"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+	</changeSet>
+
+	<changeSet id="20150729-1149" author="debonair">
+		<comment>Other Properties</comment>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="locale.default"></column>
+			<column name="value" value="en"></column>
+			<column name="description" value="Default Locale"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="log.level"></column>
+			<column name="value" value="info"></column>
+			<column name="description" value="Log Level"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donor.searchMode"></column>
+			<column name="value" value="start_and_end"></column>
+			<column name="description" value="Donor Search Mode"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+	</changeSet>
+
 
 
 </databaseChangeLog>

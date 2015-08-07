@@ -31,7 +31,7 @@ isEmptyAllowed, isActive) values
 
 insert into BloodTestingRule
 (bloodTestsIds, pattern,
- collectionFieldChanged, newInformation, extraInformation,
+ donationFieldChanged, newInformation, extraInformation,
  context, category, subCategory,
  pendingTestsIds, markSampleAsUnsafe, isActive
 ) values
@@ -135,7 +135,7 @@ isEmptyAllowed, isActive) values
 
 insert into BloodTestingRule
 (bloodTestsIds, pattern,
- collectionFieldChanged, newInformation, extraInformation,
+ donationFieldChanged, newInformation, extraInformation,
  context, category, subCategory,
  pendingTestsIds, markSampleAsUnsafe, isActive
 ) values
@@ -221,7 +221,7 @@ insert into BloodTestingRule
  );
 
 insert into Tips(tipsKey, tipsName, tipsContent) values
-('bloodtyping.plate.step1', 'Step 1 of Blood Typing', 'Scan/type collection numbers for all columns on microtiter plate');
+('bloodtyping.plate.step1', 'Step 1 of Blood Typing', 'Scan/type DINs for all columns on microtiter plate');
 
 insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("horizontalentry", "true", "bloodtyping"),

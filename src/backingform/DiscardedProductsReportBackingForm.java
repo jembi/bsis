@@ -8,8 +8,8 @@ import java.util.List;
 
 public class DiscardedProductsReportBackingForm {
 
-  private String dateCollectedFrom;
-  private String dateCollectedTo;
+  private String donationDateFrom;
+  private String donationDateTo;
   private String aggregationCriteria;
   private List<String> centers;
   private List<String> sites;
@@ -21,20 +21,20 @@ public class DiscardedProductsReportBackingForm {
     setBloodGroups(Arrays.asList(new String[0]));
   }
 
-  public String getDateCollectedFrom() {
-    return dateCollectedFrom;
+  public String getDonationDateFrom() {
+    return donationDateFrom;
   }
 
-  public void setDateCollectedFrom(String dateCollectedFrom) {
-    this.dateCollectedFrom = dateCollectedFrom;
+  public void setDonationDateFrom(String donationDateFrom) {
+    this.donationDateFrom = donationDateFrom;
   }
 
-  public String getDateCollectedTo() {
-    return dateCollectedTo;
+  public String getDonationDateTo() {
+    return donationDateTo;
   }
 
-  public void setDateCollectedTo(String dateCollectedTo) {
-    this.dateCollectedTo = dateCollectedTo;
+  public void setDonationDateTo(String donationDateTo) {
+    this.donationDateTo = donationDateTo;
   }
 
   public String getAggregationCriteria() {
@@ -69,5 +69,4 @@ public class DiscardedProductsReportBackingForm {
     this.bloodGroups = bloodGroups;
   }
 }
-
 */

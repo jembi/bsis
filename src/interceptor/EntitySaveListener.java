@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 
 //import com.mysql.jdbc.Security;
 
-import security.V2VUserDetails;
+import security.BsisUserDetails;
 
 @Component
 
@@ -45,8 +45,8 @@ public class EntitySaveListener implements PersistEventListener, MergeEventListe
 				&& SecurityContextHolder.getContext().getAuthentication() != null) {
 			Object principal = SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
-			if (principal != null && principal instanceof V2VUserDetails) {
-				User user = ((V2VUserDetails) principal).getUser();
+			if (principal != null && principal instanceof BsisUserDetails) {
+				User user = ((BsisUserDetails) principal).getUser();
 				if (event.getObject() instanceof ModificationTracker &&
 				user != null) {
 					ModificationTracker entity = (ModificationTracker) event.getObject();
@@ -72,8 +72,8 @@ public class EntitySaveListener implements PersistEventListener, MergeEventListe
 				&& SecurityContextHolder.getContext().getAuthentication() != null) {
 			Object principal = SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
-			if (principal != null && principal instanceof V2VUserDetails) {
-				User user = ((V2VUserDetails) principal).getUser();
+			if (principal != null && principal instanceof BsisUserDetails) {
+				User user = ((BsisUserDetails) principal).getUser();
 				if (event.getEntity() instanceof ModificationTracker
 						&& user != null) {
 					ModificationTracker entity = (ModificationTracker) event

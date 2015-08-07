@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import repository.CollectedSampleRepository;
+import repository.DonationRepository;
 import repository.LocationRepository;
 import repository.ProductRepository;
 import repository.RequestRepository;
@@ -32,7 +32,7 @@ import utils.PermissionConstants;
 public class ReportsController {
 
   @Autowired
-  private CollectedSampleRepository collectionRepository;
+  private DonationRepository donationRepository;
 
   @Autowired
   private ProductRepository productRepository;
@@ -92,9 +92,9 @@ public class ReportsController {
   
   @RequestMapping(value = "/donations/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.DONATIONS_REPORTING+"')")
-  public Map<String, Object> collectionsReportFormGenerator() {
+  public Map<String, Object> donationsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
-    utilController.addTipsToModel(map, "report.collections.collectionsreport");
+    utilController.addTipsToModel(map, "report.donations.donationsreport");
     map.put("panels", locationRepository.getAllDonorPanels());
     return map;
   }
@@ -130,9 +130,9 @@ public class ReportsController {
   @RequestMapping(value = "/donations/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.DONATIONS_REPORTING+"')")
   public 
-  ResponseEntity<Map<String, Object>> getCollectionsReport(
-          @RequestParam(value = "dateCollectedFrom", required = false) String dateCollectedFrom,
-          @RequestParam(value = "dateCollectedTo", required = false) String dateCollectedTo,
+  ResponseEntity<Map<String, Object>> getDonationsReport(
+          @RequestParam(value = "donationDateFrom", required = false) String donationDateFrom,
+          @RequestParam(value = "donationDateTo", required = false) String donationDateTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
           @RequestParam(value = "panels", required = false) List<String> panels,
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
@@ -143,10 +143,10 @@ public class ReportsController {
 
 
       Date dateTo;
-      if (dateCollectedTo == null || dateCollectedTo.equals(""))
+      if (donationDateTo == null || donationDateTo.equals(""))
         dateTo = new Date();
       else
-        dateTo = CustomDateFormatter.getDateFromString(dateCollectedTo);
+        dateTo = CustomDateFormatter.getDateFromString(donationDateTo);
 
       Calendar gcal = new GregorianCalendar();
       gcal.setTime(dateTo);
@@ -154,13 +154,13 @@ public class ReportsController {
       dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
 
       Date dateFrom;
-      if (dateCollectedFrom == null || dateCollectedFrom.equals(""))
+      if (donationDateFrom == null || donationDateFrom.equals(""))
         dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
       else
-        dateFrom = CustomDateFormatter.getDateFromString(dateCollectedFrom);
+        dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
 
-      Map<String, Map<Long, Long>> numCollections = collectionRepository
-          .findNumberOfCollectedSamples(dateFrom, dateTo,
+      Map<String, Map<Long, Long>> numDonations = donationRepository
+          .findNumberOfDonations(dateFrom, dateTo,
               aggregationCriteria, panels, bloodGroups);
       // TODO: potential leap year bug here
       Long interval = (long) (24 * 3600 * 1000);
@@ -171,10 +171,10 @@ public class ReportsController {
         interval = interval * 365;
   
       map.put("interval", interval);
-      map.put("numCollections", numCollections);
+      map.put("numDonations", numDonations);
 
-      map.put("dateCollectedFromUTC", dateFrom.getTime());
-      map.put("dateCollectedToUTC", dateTo.getTime());
+      map.put("donationDateFromUTC", dateFrom.getTime());
+      map.put("donationDateToUTC", dateTo.getTime());
 
     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
@@ -183,8 +183,8 @@ public class ReportsController {
   @PreAuthorize("hasRole('"+PermissionConstants.REQUESTS_REPORTING+"')")
   public 
   ResponseEntity<Map<String, Object>> getRequestsReport(
-          @RequestParam(value = "dateCollectedFrom", required = false) String dateCollectedFrom,
-          @RequestParam(value = "dateCollectedTo", required = false) String dateCollectedTo,
+          @RequestParam(value = "donationDateFrom", required = false) String donationDateFrom,
+          @RequestParam(value = "donationDateTo", required = false) String donationDateTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
           @RequestParam(value = "panels", required = false) List<String> panels,
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
@@ -193,10 +193,10 @@ public class ReportsController {
     Map<String, Object> map = new HashMap<String, Object>();
 
       Date dateTo;
-      if (dateCollectedTo == null || dateCollectedTo.equals(""))
+      if (donationDateTo == null || donationDateTo.equals(""))
         dateTo = new Date();
       else
-        dateTo = CustomDateFormatter.getDateFromString(dateCollectedTo);
+        dateTo = CustomDateFormatter.getDateFromString(donationDateTo);
 
       Calendar gcal = new GregorianCalendar();
       gcal.setTime(dateTo);
@@ -204,10 +204,10 @@ public class ReportsController {
       dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
 
       Date dateFrom;
-      if (dateCollectedFrom == null || dateCollectedFrom.equals(""))
+      if (donationDateFrom == null || donationDateFrom.equals(""))
         dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
       else
-        dateFrom = CustomDateFormatter.getDateFromString(dateCollectedFrom);
+        dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
 
       Map<String, Map<Long, Long>> numRequests = requestRepository
           .findNumberOfRequests(dateFrom, dateTo,
@@ -233,8 +233,8 @@ public class ReportsController {
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_DISCARDED_REPORTING+"')")
   public 
   ResponseEntity<Map<String, Object>> getDiscardedProductsReport(
-          @RequestParam(value = "dateCollectedFrom", required = false) String dateCollectedFrom,
-          @RequestParam(value = "dateCollectedTo", required = false) String dateCollectedTo,
+          @RequestParam(value = "donationDateFrom", required = false) String donationDateFrom,
+          @RequestParam(value = "donationDateTo", required = false) String donationDateTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
           @RequestParam(value = "panels", required = false) List<String> panels,
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
@@ -244,10 +244,10 @@ public class ReportsController {
 
 
       Date dateTo;
-      if (dateCollectedTo == null || dateCollectedTo.equals(""))
+      if (donationDateTo == null || donationDateTo.equals(""))
         dateTo = new Date();
       else
-        dateTo = CustomDateFormatter.getDateFromString(dateCollectedTo);
+        dateTo = CustomDateFormatter.getDateFromString(donationDateTo);
 
       Calendar gcal = new GregorianCalendar();
       gcal.setTime(dateTo);
@@ -255,10 +255,10 @@ public class ReportsController {
       dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
 
       Date dateFrom;
-      if (dateCollectedFrom == null || dateCollectedFrom.equals(""))
+      if (donationDateFrom == null || donationDateFrom.equals(""))
         dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
       else
-        dateFrom = CustomDateFormatter.getDateFromString(dateCollectedFrom);
+        dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
 
       Map<String, Map<Long, Long>> numDiscardedProducts = productRepository
           .findNumberOfDiscardedProducts(dateFrom, dateTo,
@@ -274,8 +274,8 @@ public class ReportsController {
       map.put("interval", interval);
       map.put("numDiscardedProducts", numDiscardedProducts);
 
-      map.put("dateCollectedFromUTC", dateFrom.getTime());
-      map.put("dateCollectedToUTC", dateTo.getTime());
+      map.put("donationDateFromUTC", dateFrom.getTime());
+      map.put("donationDateToUTC", dateTo.getTime());
 
    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
@@ -284,8 +284,8 @@ public class ReportsController {
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_ISSUED_REPORTING+"')")
   public 
   ResponseEntity<Map<String, Object>> getIssuedProductsReport(
-          @RequestParam(value = "dateIssuedFrom", required = false) String dateCollectedFrom,
-          @RequestParam(value = "dateIssuedTo", required = false) String dateCollectedTo,
+          @RequestParam(value = "dateIssuedFrom", required = false) String donationDateFrom,
+          @RequestParam(value = "dateIssuedTo", required = false) String donationDateTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
           @RequestParam(value = "panels", required = false) List<String> panels,
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
@@ -294,10 +294,10 @@ public class ReportsController {
     Map<String, Object> map = new HashMap<String, Object>();
 
       Date dateTo;
-      if (dateCollectedTo == null || dateCollectedTo.equals(""))
+      if (donationDateTo == null || donationDateTo.equals(""))
         dateTo = new Date();
       else
-        dateTo = CustomDateFormatter.getDateFromString(dateCollectedTo);
+        dateTo = CustomDateFormatter.getDateFromString(donationDateTo);
 
       Calendar gcal = new GregorianCalendar();
       gcal.setTime(dateTo);
@@ -305,10 +305,10 @@ public class ReportsController {
       dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
 
       Date dateFrom;
-      if (dateCollectedFrom == null || dateCollectedFrom.equals(""))
+      if (donationDateFrom == null || donationDateFrom.equals(""))
         dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
       else
-        dateFrom = CustomDateFormatter.getDateFromString(dateCollectedFrom);
+        dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
 
       Map<String, Map<Long, Long>> numIssuedProducts = productRepository
           .findNumberOfIssuedProducts(dateFrom, dateTo,
@@ -344,7 +344,7 @@ public class ReportsController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("ttiTests", bloodTestingRepository.getTTITests());
     map.put("panels", locationRepository.getAllDonorPanels());
-    utilController.addTipsToModel(map, "report.collections.testresultsreport");
+    utilController.addTipsToModel(map, "report.donations.testresultsreport");
     return map;
   }
 
