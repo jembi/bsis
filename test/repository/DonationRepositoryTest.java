@@ -1,10 +1,15 @@
 package repository;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -20,6 +25,7 @@ import org.dbunit.operation.DatabaseOperation;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +34,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
+import viewmodel.BloodTestingRuleResult;
 
 /**
  * Test using DBUnit to test the Donation Repository
@@ -43,19 +51,19 @@ public class DonationRepositoryTest {
 	
 	@Autowired
 	private DataSource dataSource;
-
+	
 	private IDataSet getDataSet() throws Exception {
 		File file = new File("test/dataset/DonationRepositoryDataset.xml");
 		return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
 	}
-
+	
 	private IDatabaseConnection getConnection() throws SQLException {
 		IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
 		DatabaseConfig config = connection.getConfig();
 		config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
 		return connection;
 	}
-
+	
 	@Before
 	public void init() throws Exception {
 		IDatabaseConnection connection = getConnection();
@@ -67,7 +75,7 @@ public class DonationRepositoryTest {
 			connection.close();
 		}
 	}
-
+	
 	@After
 	public void after() throws Exception {
 		IDatabaseConnection connection = getConnection();
@@ -87,13 +95,51 @@ public class DonationRepositoryTest {
 		Assert.assertNotNull("There is a donation with id 1", donation);
 		Assert.assertEquals("The donation has a DIN of 1234567", "1234567", donation.getDonationIdentificationNumber());
 	}
-
+	
+	@Test
+	@Transactional
+	public void testFindDonationByDIN() throws Exception {
+		Donation donation = donationRepository.findDonationByDonationIdentificationNumber("1234567");
+		Assert.assertNotNull("There is a donation with DIN 1234567", donation);
+		Assert.assertEquals("The donation has a DIN of 1234567", "1234567", donation.getDonationIdentificationNumber());
+	}
+	
+	@Test
+	@Transactional
+	public void testVerifyDonationIdentificationNumber() throws Exception {
+		Donation donation = donationRepository.verifyDonationIdentificationNumber("1234567");
+		Assert.assertNotNull("There is a donation with DIN 1234567", donation);
+		Assert.assertEquals("The donation has a DIN of 1234567", "1234567", donation.getDonationIdentificationNumber());
+	}
+	
+	@Test
+	@Transactional
+	@Ignore("This test fails because a javax.persistence.NoResultException is thrown. I believe this is a bug as the method wants to return null")
+	public void testVerifyDonationIdentificationNumberUnknown() throws Exception {
+		Donation donation = donationRepository.verifyDonationIdentificationNumber("999999999");
+		Assert.assertNull("There is no donation with DIN 999999999", donation);
+	}
+	
+	@Test
+	@Transactional
+	@Ignore("This test will fail - see above test")
+	public void testVerifyDonationIdentificationNumbers() throws Exception {
+		// this test will fail as soon as one of the DINs in the list is unknown - it will throw an
+		// exception and the method will not return any results for the other DINs.
+	}
+	
+	@Test(expected = javax.persistence.NoResultException.class)
+	@Transactional
+	public void testFindDonationByIdUnknown() throws Exception {
+		donationRepository.findDonationById(123L);
+	}
+	
 	@Test
 	@Transactional
 	public void testGetAllDonations() throws Exception {
 		List<Donation> all = donationRepository.getAllDonations();
 		Assert.assertNotNull("There are donations", all);
-		Assert.assertEquals("There are 3 donations", 3, all.size());
+		Assert.assertEquals("There are 6 donations", 6, all.size());
 	}
 	
 	@Test
@@ -103,6 +149,248 @@ public class DonationRepositoryTest {
 		Date end = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-10");
 		List<Donation> all = donationRepository.getDonations(start, end);
 		Assert.assertNotNull("There are donations", all);
-		Assert.assertEquals("There are 2 donations", 2, all.size());
+		Assert.assertEquals("There are 5 donations", 5, all.size());
+	}
+	
+	@Test
+	@Transactional
+	public void testGetDonationsNone() throws Exception {
+		Date start = new SimpleDateFormat("yyyy-MM-dd").parse("2012-02-01");
+		Date end = new SimpleDateFormat("yyyy-MM-dd").parse("2012-02-10");
+		List<Donation> all = donationRepository.getDonations(start, end);
+		Assert.assertNotNull("There are no donations but list is not null", all);
+		Assert.assertEquals("There are 0 donations", 0, all.size());
+	}
+	
+	@Test
+	@Transactional
+	public void testFindNumberOfDonationsDaily() throws Exception {
+		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01");
+		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-10");
+		List<String> panels = new ArrayList<String>();
+		panels.add("1");
+		panels.add("2");
+		List<String> bloodGroups = new ArrayList<String>();
+		bloodGroups.add("A-");
+		Map<String, Map<Long, Long>> results = donationRepository.findNumberOfDonations(donationDateFrom, donationDateTo,
+		    "daily", panels, bloodGroups);
+		Assert.assertEquals("One blood type searched", 1, results.size());
+		Map<Long, Long> aResults = results.get("A-");
+		Assert.assertEquals("10 days in the searched period", 10, aResults.size());
+		Date formattedDate = new SimpleDateFormat("dd/MM/yyyy").parse("02/02/2015");
+		Long secondOfFebResults = aResults.get(formattedDate.getTime());
+		Assert.assertEquals("2 A- donations on 2015-02-02", new Long(2), secondOfFebResults);
+	}
+	
+	@Test
+	@Transactional
+	public void testFindNumberOfDonationsMonthly() throws Exception {
+		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01");
+		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-03-10");
+		List<String> panels = new ArrayList<String>();
+		panels.add("1");
+		panels.add("2");
+		List<String> bloodGroups = new ArrayList<String>();
+		bloodGroups.add("A-");
+		bloodGroups.add("A+");
+		bloodGroups.add("O-");
+		bloodGroups.add("O+");
+		Map<String, Map<Long, Long>> results = donationRepository.findNumberOfDonations(donationDateFrom, donationDateTo,
+		    "monthly", panels, bloodGroups);
+		Assert.assertEquals("Four blood type searched", 4, results.size());
+		Date formattedDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/02/2015");
+		Map<Long, Long> aMinusResults = results.get("A-");
+		Assert.assertEquals("2 months in the searched period", 2, aMinusResults.size());
+		Long aMinusFebResults = aMinusResults.get(formattedDate.getTime());
+		Assert.assertEquals("2 A- donations in Feb", new Long(2), aMinusFebResults);
+		Map<Long, Long> aPlusResults = results.get("A+");
+		Long aPlusFebResults = aPlusResults.get(formattedDate.getTime());
+		Assert.assertEquals("0 A+ donations in Feb", new Long(0), aPlusFebResults);
+	}
+	
+	@Test
+	@Transactional
+	public void testFindNumberOfDonationsYearly() throws Exception {
+		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01");
+		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-10");
+		List<String> panels = new ArrayList<String>();
+		panels.add("1");
+		panels.add("2");
+		List<String> bloodGroups = new ArrayList<String>();
+		bloodGroups.add("AB-");
+		bloodGroups.add("AB+");
+		Map<String, Map<Long, Long>> results = donationRepository.findNumberOfDonations(donationDateFrom, donationDateTo,
+		    "yearly", panels, bloodGroups);
+		Assert.assertEquals("2 blood type searched", 2, results.size());
+		Date formattedDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2015");
+		Map<Long, Long> abMinusResults = results.get("AB-");
+		Long abMinus2015Results = abMinusResults.get(formattedDate.getTime());
+		Assert.assertEquals("0 AB- donations in 2015", new Long(0), abMinus2015Results);
+		Map<Long, Long> abPlusResults = results.get("AB+");
+		Long abPlus2015Results = abPlusResults.get(formattedDate.getTime());
+		Assert.assertEquals("1 AB+ donations in 2015", new Long(1), abPlus2015Results);
+	}
+	
+	@Test
+	@Transactional
+	@Ignore("findAnyDonationMatching has a bug in the HSQL, so this test fails")
+	public void testFindAnyDonationMatchingDIN() throws Exception {
+		List<Donation> donations = donationRepository.findAnyDonationMatching("1234567", null, null, null, null, null);
+		Assert.assertNotNull("List is not null", donations);
+		Assert.assertNotNull("1 Donation matches", donations.size());
+		Donation donation = donations.get(0);
+		Assert.assertEquals("Donation has a matching DIN", "1234567", donation.getDonationIdentificationNumber());
+	}
+	
+	@Test
+	@Transactional
+	@Ignore("findDonations has a bug in the HSQL when querying a DIN with parameter name panelIds/donorPanelIds")
+	public void testFindDonationsDIN() throws Exception {
+		Map<String, Object> pagingParams = new HashMap<String, Object>();
+		List<Integer> bloodBagTypeIds = new ArrayList<Integer>();
+		bloodBagTypeIds.add(new Integer(1));
+		List<Long> panelIds = new ArrayList<Long>();
+		panelIds.add(new Long(1));
+		panelIds.add(new Long(2));
+		List<Object> donations = donationRepository.findDonations("1234567", bloodBagTypeIds, panelIds, "2015-02-01",
+		    "2015-02-10", false, pagingParams);
+		Assert.assertNotNull("List is not null", donations);
+		Assert.assertNotNull("1 Donation matches", donations.size());
+		Donation donation = (Donation) donations.get(0);
+		Assert.assertEquals("Donation has a matching DIN", "1234567", donation.getDonationIdentificationNumber());
+	}
+	
+	@Test
+	@Transactional
+	public void testFindDonations() throws Exception {
+		Map<String, Object> pagingParams = new HashMap<String, Object>();
+		List<Integer> bloodBagTypeIds = new ArrayList<Integer>();
+		bloodBagTypeIds.add(new Integer(1));
+		List<Long> panelIds = new ArrayList<Long>();
+		panelIds.add(new Long(2));
+		List<Object> result = donationRepository.findDonations(null, bloodBagTypeIds, panelIds, "01/02/2015", "10/02/2015",
+		    true, pagingParams);
+		Assert.assertNotNull("List is not null", result);
+		ArrayList<Donation> donations = (ArrayList<Donation>) result.get(0);
+		Assert.assertEquals("4 donations", 4, donations.size());
+		Date afterDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/02/2015");
+		Date beforeDate = new SimpleDateFormat("dd/MM/yyyy").parse("10/02/2015");
+		for (Donation donation : donations) {
+			Assert.assertTrue("Donation date before", donation.getDonationDate().before(beforeDate));
+			Assert.assertTrue("Donation date after", donation.getDonationDate().after(afterDate));
+			Assert.assertEquals("BloodBagId matches", new Integer(1), donation.getBloodBagType().getId());
+			Assert.assertEquals("PanelId matches", new Long(2), donation.getDonationBatch().getDonorPanel().getId());
+		}
+	}
+	
+	@Test
+	@Transactional
+	public void testFilterDonationsWithBloodTypingResults() throws Exception {
+		List<Donation> donations = new ArrayList<Donation>();
+		donations.add(donationRepository.findDonationById(1L));
+		donations.add(donationRepository.findDonationById(2L));
+		donations.add(donationRepository.findDonationById(3L));
+		Map<Long, BloodTestingRuleResult> result = donationRepository.filterDonationsWithBloodTypingResults(donations);
+		Assert.assertEquals("There are two donations with completed tests", 2, result.size());
+		for (BloodTestingRuleResult r : result.values()) {
+			if (r.getDonation().getDonationIdentificationNumber().equals("1234567")) {
+				Assert.assertEquals("O type blood match", "O", r.getBloodAbo());
+			} else if (r.getDonation().getDonationIdentificationNumber().equals("1212129")) {
+				Assert.assertEquals("A type blood match", "A", r.getBloodAbo());
+			}
+		}
+	}
+	
+	@Test
+	@Transactional
+	@Ignore("Because this test inserts data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
+	public void testAddDonation() throws Exception {
+		Donation newDonation = new Donation();
+		Donation existingDonation = donationRepository.findDonationById(1L);
+		newDonation.copy(existingDonation); // to save time....
+		newDonation.setDonationIdentificationNumber("JUNIT123");
+		Calendar today = Calendar.getInstance();
+		newDonation.setCreatedDate(today.getTime());
+		newDonation.setBleedEndTime(today.getTime());
+		today.add(Calendar.MINUTE, -15);
+		newDonation.setBleedStartTime(today.getTime());
+		donationRepository.addDonation(newDonation);
+		Donation savedDonation = donationRepository.findDonationByDonationIdentificationNumber("JUNIT123");
+		Assert.assertNotNull("Found new donation", savedDonation);
+	}
+	
+	@Test(expected = javax.persistence.PersistenceException.class)
+	@Transactional
+	@Ignore("Because this test inserts data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
+	public void testAddDonationSameDIN() throws Exception {
+		Donation newDonation = new Donation();
+		Donation existingDonation = donationRepository.findDonationById(1L);
+		newDonation.copy(existingDonation);
+		newDonation.getBloodBagType().setCountAsDonation(false);
+		donationRepository.addDonation(newDonation);
+		// should fail because DIN already exists
+	}
+	
+	@Test
+	@Transactional
+	@Ignore("This test doesn't work (bug?)- when the test retrieves the donation from the database it cannot be found")
+	public void testAddAllDonations() throws Exception {
+		Donation newDonation1 = new Donation();
+		Donation existingDonation = donationRepository.findDonationById(1L);
+		newDonation1.copy(existingDonation); // to save time....
+		newDonation1.setDonationIdentificationNumber("JUNIT12345"); // note: doesn't do automatic "createInitialComponent"
+		Donation newDonation2 = new Donation();
+		newDonation2.copy(existingDonation); // to save time....
+		newDonation2.setDonationIdentificationNumber("JUNIT123456"); // note: doesn't do automatic "createInitialComponent"
+		List<Donation> newDonations = new ArrayList<Donation>();
+		newDonations.add(newDonation1);
+		newDonations.add(newDonation2);
+		newDonations = donationRepository.addAllDonations(newDonations);
+		for (Donation d : newDonations) {
+			Donation savedDonation = donationRepository.findDonationByDonationIdentificationNumber(d
+			        .getDonationIdentificationNumber());
+			//Donation savedDonation = donationRepository.findDonationById(d.getId());
+			Assert.assertNotNull("new donation created", savedDonation);
+		}
+	}
+	
+	@Test
+	@Transactional
+	@Ignore("Because this test inserts data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
+	public void testUpdateDonation() throws Exception {
+		Donation existingDonation = donationRepository.findDonationById(1L);
+		existingDonation.setDonorWeight(new BigDecimal(123));
+		donationRepository.updateDonation(existingDonation);
+		Donation updatedDonation = donationRepository.findDonationById(1L);
+		Assert.assertEquals("donor weight was updataed", new BigDecimal(123), updatedDonation.getDonorWeight());
+	}
+	
+	@Test
+	@Transactional
+	@Ignore("Because this test inserts data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
+	public void testDeleteDonation() throws Exception {
+		Donation newDonation = new Donation();
+		Donation existingDonation = donationRepository.findDonationById(1L);
+		newDonation.copy(existingDonation); // to save time....
+		newDonation.setDonationIdentificationNumber("JUNIT1234");
+		newDonation.getBloodBagType().setCountAsDonation(false); // doesn't create an initial component when adding
+		Donation savedDonation = donationRepository.addDonation(newDonation);
+		donationRepository.deleteDonation(savedDonation.getId());
+		Donation deletedDonation = donationRepository.findDonationByDonationIdentificationNumberIncludeDeleted("JUNIT1234");
+		Assert.assertTrue("Donation has been deleted", deletedDonation.getIsDeleted());
+	}
+	
+	@Test(expected = javax.persistence.NoResultException.class)
+	@Transactional
+	@Ignore("Because this test inserts data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
+	public void testDeleteDonationFindByDIN() throws Exception {
+		Donation newDonation = new Donation();
+		Donation existingDonation = donationRepository.findDonationById(1L);
+		newDonation.copy(existingDonation); // to save time....
+		newDonation.setDonationIdentificationNumber("JUNIT12345");
+		newDonation.getBloodBagType().setCountAsDonation(false); // doesn't create an initial component when adding
+		Donation savedDonation = donationRepository.addDonation(newDonation);
+		donationRepository.deleteDonation(savedDonation.getId());
+		donationRepository.findDonationByDonationIdentificationNumber("JUNIT12345");
 	}
 }
