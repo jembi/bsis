@@ -82,5 +82,12 @@ public class ProductTypeCombination {
   public void setIsDeleted(Boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
+  
+  public void copy(ProductTypeCombination productTypeCombination){
+  	this.productTypes = productTypeCombination.getProductTypes();
+  	this.sourceProductTypes = productTypeCombination.getSourceProductTypes();
+  	this.combinationName = productTypeCombination.getCombinationName();
+  	this.isDeleted = productTypeCombination.getIsDeleted();
+  }
 
 }

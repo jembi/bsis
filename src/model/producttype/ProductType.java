@@ -74,6 +74,16 @@ public class ProductType {
 
   private Boolean isDeleted;
   
+  private Integer lowStorageTemperature;
+  
+  private Integer highStorageTemperature;
+  
+  private Integer lowTransportTemperature;
+  
+  private Integer highTransportTemperature;
+  
+  private String preparationInfo;
+  
   public Integer getId() {
     return id;
   }
@@ -184,4 +194,62 @@ public class ProductType {
   public void setPediProductType(ProductType pediProductType) {
     this.pediProductType = pediProductType;
   }
+
+    public Integer getLowStorageTemperature() {
+        return lowStorageTemperature;
+    }
+
+    public void setLowStorageTemperature(Integer lowStorageTemperature) {
+        this.lowStorageTemperature = lowStorageTemperature;
+    }
+
+    public Integer getHighStorageTemperature() {
+        return highStorageTemperature;
+    }
+
+    public void setHighStorageTemperature(Integer highStorageTemperature) {
+        this.highStorageTemperature = highStorageTemperature;
+    }
+
+    public Integer getLowTransportTemperature() {
+        return lowTransportTemperature;
+    }
+
+    public void setLowTransportTemperature(Integer lowTransportTemperature) {
+        this.lowTransportTemperature = lowTransportTemperature;
+    }
+
+    public Integer getHighTransportTemperature() {
+        return highTransportTemperature;
+    }
+
+    public void setHighTransportTemperature(Integer highTransportTemperature) {
+        this.highTransportTemperature = highTransportTemperature;
+    }
+
+    public String getPreparationInfo() {
+        return preparationInfo;
+    }
+
+    public void setPreparationInfo(String preparationInfo) {
+        this.preparationInfo = preparationInfo;
+    }
+    
+    public void copy(ProductType productType){
+    	this.productTypeName = productType.getProductTypeName();
+    	this.productTypeNameShort = productType.getProductTypeNameShort();
+    	this.expiresAfter = productType.getExpiresAfter();
+    	this.expiresAfterUnits = productType.getExpiresAfterUnits();
+    	this.description = productType.getDescription();
+    	this.hasBloodGroup = productType.getHasBloodGroup();
+    	this.productTypeCombinations = productType.getProductTypeCombinations();
+    	this.producedProductTypeCombinations = productType.getProducedProductTypeCombinations();
+    	this.highStorageTemperature =  productType.getHighStorageTemperature();
+    	this.lowStorageTemperature =  productType.getLowStorageTemperature();
+    	this.lowTransportTemperature = productType.getLowTransportTemperature();
+    	this.highTransportTemperature =  productType.getHighTransportTemperature();
+    	this.preparationInfo = productType.getPreparationInfo();
+    }
+    
+  
 }

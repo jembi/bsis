@@ -371,12 +371,6 @@
        <column name="name" value="View Admin Information"></column>
    </insert>
   </changeSet>
-  <changeSet id="20150601-1533" author="debonair">
-    <insert tableName="Permission">
-        <column name="id" value="88"></column>
-        <column name="name" value="Manage General Configs"></column>
-    </insert>
-  </changeSet>
 
   <!-- For issue 134 [Add New Permission Role Mappings]  -->
   <changeSet id="20140221-1616" author="srikanthmalyala">
@@ -2189,17 +2183,6 @@
        <column name="roles_id" value="2"></column>
     </insert>
   </changeSet>
-  <changeSet id="20150601-1556" author="debonair">
-    <insert tableName="Permission_Role">
-        <column name="permissions_id" value="88"></column>
-        <column name="roles_id" value="1"></column>
-    </insert>
-
-    <insert tableName="Permission_Role">
-        <column name="permissions_id" value="88"></column>
-        <column name="roles_id" value="2"></column>
-    </insert>
-  </changeSet>
 
   <!-- Add AUTHENTICATED Permission and Role Mappings -->
   <changeSet id="20141110-1128" author="srikanthmalyala">
@@ -2378,6 +2361,45 @@
 	  </insert>
 
   </changeSet>
+  
+  <!-- Add General Configs Permission and Role Mappings -->
+  <changeSet id="20150601-1533" author="debonair">
+    <insert tableName="Permission">
+        <column name="id" value="88"></column>
+        <column name="name" value="Manage General Configs"></column>
+    </insert>
+  </changeSet>
+  <changeSet id="20150601-1556" author="debonair">
+    <insert tableName="Permission_Role">
+        <column name="permissions_id" value="88"></column>
+        <column name="roles_id" value="1"></column>
+    </insert>
+
+    <insert tableName="Permission_Role">
+        <column name="permissions_id" value="88"></column>
+        <column name="roles_id" value="2"></column>
+    </insert>
+  </changeSet>
+  
+  <!-- Add Manage Component Types Permission and Role Mappings -->
+  <changeSet id="20150807-1710" author="danfuterman">
+ 	 <insert tableName="Permission">
+	       <column name="id" value="89"> </column>
+	       <column name="name" value="Manage Component Types"></column>
+	  </insert>
+  </changeSet>
+  <changeSet id="20150807-1712" author="danfuterman">
+    <insert tableName="Permission_Role">
+        <column name="permissions_id" value="89"></column>
+        <column name="roles_id" value="1"></column>
+    </insert>
+
+    <insert tableName="Permission_Role">
+        <column name="permissions_id" value="89"></column>
+        <column name="roles_id" value="2"></column>
+    </insert>
+  </changeSet>
+  
   
   <changeSet id="20141117-1127" author="srikanthmalyala">
 		<comment>Add superuser user</comment>

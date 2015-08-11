@@ -1063,6 +1063,43 @@
 			<column name="bleedEndTime" type="DATETIME"></column>
 		</addColumn>
 	</changeSet>
+
+	<!-- Add Component Storage labelling fields to Component Types #238 -->
+	<changeSet id="20141114-1321" author="srikanthmalyala">
+		<addColumn tableName="ProductType">
+			 <column name="lowStorageTemperature" type="smallint(6)"></column>
+			 <column name="highStorageTemperature" type="smallint(6)"></column>
+		</addColumn>
+
+			<addColumn tableName="ProductType_AUD">
+			 <column name="lowStorageTemperature" type="smallint(6)"></column>
+			 <column name="highStorageTemperature" type="smallint(6)"></column>
+		</addColumn>
+	</changeSet>
+
+	<!-- Add Component Transport labelling fields to Component Types #238 -->
+	<changeSet id="20141114-1430" author="srikanthmalyala">
+		<addColumn tableName="ProductType">
+			 <column name="lowTransportTemperature" type="smallint(6)"></column>
+			 <column name="highTransportTemperature" type="smallint(6)"></column>
+		</addColumn>
+
+		<addColumn tableName="ProductType_AUD">
+			 <column name="lowTransportTemperature" type="smallint(6)"></column>
+			 <column name="highTransportTemperature" type="smallint(6)"></column>
+		</addColumn>
+	</changeSet>
+
+	<!-- Add Component Preparation labelling fields to Component Types #238 -->
+	<changeSet id="20141114-1435" author="srikanthmalyala">
+		<addColumn tableName="ProductType">
+			 <column name="preparationInfo" type="text"></column>
+		</addColumn>
+
+			<addColumn tableName="ProductType_AUD">
+			 <column name="preparationInfo" type="text"></column>
+		</addColumn>
+	</changeSet>
 	
 		<!-- #234 Associate Pack Type with Initial Component Type in Donation -->
 	<changeSet id="20141112-0953" author="srikanthmalyala">
