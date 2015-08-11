@@ -27,7 +27,7 @@ public class AuditRevisionControllerTests {
     private AuditRevisionViewModelFactory auditRevisionViewModelFactory;
     
     @Test
-    public void testGetAuditRevisions_shouldCreateAndReturnAuditRevisionViewModels() {
+    public void testGetAuditRevisionsWithNoSearch_shouldCreateAndReturnAuditRevisionViewModels() {
         // Set up fixture
         setUpFixture();
         
@@ -44,10 +44,41 @@ public class AuditRevisionControllerTests {
         when(auditRevisionViewModelFactory.createAuditRevisionViewModels(auditRevisions)).thenReturn(auditRevisionViewModels);
         
         // Exercise SUT
-        List<AuditRevisionViewModel> returnedAuditRevisionViewModels = auditRevisionController.getAuditRevisions();
+        List<AuditRevisionViewModel> returnedAuditRevisionViewModels = auditRevisionController.getAuditRevisions(null);
         
         // Verify
         verify(auditRevisionRepository).findRecentAuditRevisions();
+        verify(auditRevisionViewModelFactory).createAuditRevisionViewModels(auditRevisions);
+        verifyNoMoreInteractions(auditRevisionRepository);
+        verifyNoMoreInteractions(auditRevisionViewModelFactory);
+        
+        assertThat(returnedAuditRevisionViewModels, is(auditRevisionViewModels));
+    }
+    
+    @Test
+    public void testGetAuditRevisionsWithSearchParam_shouldCreateAndReturnAuditRevisionViewModelsMatchingSearch() {
+        // Set up fixture
+        setUpFixture();
+        
+        List<AuditRevision> auditRevisions = Arrays.asList(
+                anAuditRevision().withId(1).build(),
+                anAuditRevision().withId(2).build()
+        );
+        List<AuditRevisionViewModel> auditRevisionViewModels = Arrays.asList(
+                anAuditRevisionViewModel().withId(1).build(),
+                anAuditRevisionViewModel().withId(2).build()
+        );
+        
+        String searchParam = "search";
+        
+        when(auditRevisionRepository.findAuditRevisionsByUser(searchParam)).thenReturn(auditRevisions);
+        when(auditRevisionViewModelFactory.createAuditRevisionViewModels(auditRevisions)).thenReturn(auditRevisionViewModels);
+        
+        // Exercise SUT
+        List<AuditRevisionViewModel> returnedAuditRevisionViewModels = auditRevisionController.getAuditRevisions(searchParam);
+        
+        // Verify
+        verify(auditRevisionRepository).findAuditRevisionsByUser(searchParam);
         verify(auditRevisionViewModelFactory).createAuditRevisionViewModels(auditRevisions);
         verifyNoMoreInteractions(auditRevisionRepository);
         verifyNoMoreInteractions(auditRevisionViewModelFactory);

@@ -7,7 +7,7 @@ import java.util.Set;
 import model.audit.AuditRevision;
 import model.audit.EntityModification;
 
-public class AuditRevisionBuilder {
+public class AuditRevisionBuilder extends AbstractEntityBuilder<AuditRevision> {
     
     private int id;
     private long timestamp;
@@ -34,6 +34,7 @@ public class AuditRevisionBuilder {
         return this;
     }
     
+    @Override
     public AuditRevision build() {
         AuditRevision auditRevision = new AuditRevision();
         auditRevision.setId(id);

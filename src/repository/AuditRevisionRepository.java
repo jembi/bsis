@@ -23,5 +23,13 @@ public class AuditRevisionRepository {
                 AuditRevision.class)
                 .getResultList();
     }
+    
+    public List<AuditRevision> findAuditRevisionsByUser(String search) {
+        return entityManager.createNamedQuery(
+                AuditRevisionNamedQueryConstants.NAME_FIND_AUDIT_REVISIONS_BY_USER,
+                AuditRevision.class)
+                .setParameter("search", "%" + search.toLowerCase() + "%")
+                .getResultList();
+    }
 
 }
