@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import model.audit.AuditRevision;
@@ -21,6 +22,10 @@ import viewmodel.AuditRevisionViewModel;
 import factory.AuditRevisionViewModelFactory;
 
 public class AuditRevisionControllerTests {
+
+        
+    private static final Date IRRELEVANT_START_DATE = new Date();
+    private static final Date IRRELEVANT_END_DATE = new Date();
     
     private AuditRevisionController auditRevisionController;
     private AuditRevisionRepository auditRevisionRepository;
@@ -40,14 +45,15 @@ public class AuditRevisionControllerTests {
                 anAuditRevisionViewModel().withId(2).build()
         );
         
-        when(auditRevisionRepository.findRecentAuditRevisions()).thenReturn(auditRevisions);
+        when(auditRevisionRepository.findAuditRevisions(IRRELEVANT_START_DATE, IRRELEVANT_END_DATE)).thenReturn(auditRevisions);
         when(auditRevisionViewModelFactory.createAuditRevisionViewModels(auditRevisions)).thenReturn(auditRevisionViewModels);
         
         // Exercise SUT
-        List<AuditRevisionViewModel> returnedAuditRevisionViewModels = auditRevisionController.getAuditRevisions(null);
+        List<AuditRevisionViewModel> returnedAuditRevisionViewModels = auditRevisionController.getAuditRevisions(null,
+                IRRELEVANT_START_DATE, IRRELEVANT_END_DATE);
         
         // Verify
-        verify(auditRevisionRepository).findRecentAuditRevisions();
+        verify(auditRevisionRepository).findAuditRevisions(IRRELEVANT_START_DATE, IRRELEVANT_END_DATE);
         verify(auditRevisionViewModelFactory).createAuditRevisionViewModels(auditRevisions);
         verifyNoMoreInteractions(auditRevisionRepository);
         verifyNoMoreInteractions(auditRevisionViewModelFactory);
@@ -71,14 +77,16 @@ public class AuditRevisionControllerTests {
         
         String searchParam = "search";
         
-        when(auditRevisionRepository.findAuditRevisionsByUser(searchParam)).thenReturn(auditRevisions);
+        when(auditRevisionRepository.findAuditRevisionsByUser(searchParam, IRRELEVANT_START_DATE, IRRELEVANT_END_DATE))
+                .thenReturn(auditRevisions);
         when(auditRevisionViewModelFactory.createAuditRevisionViewModels(auditRevisions)).thenReturn(auditRevisionViewModels);
         
         // Exercise SUT
-        List<AuditRevisionViewModel> returnedAuditRevisionViewModels = auditRevisionController.getAuditRevisions(searchParam);
+        List<AuditRevisionViewModel> returnedAuditRevisionViewModels = auditRevisionController.getAuditRevisions(
+                searchParam, IRRELEVANT_START_DATE, IRRELEVANT_END_DATE);
         
         // Verify
-        verify(auditRevisionRepository).findAuditRevisionsByUser(searchParam);
+        verify(auditRevisionRepository).findAuditRevisionsByUser(searchParam, IRRELEVANT_START_DATE, IRRELEVANT_END_DATE);
         verify(auditRevisionViewModelFactory).createAuditRevisionViewModels(auditRevisions);
         verifyNoMoreInteractions(auditRevisionRepository);
         verifyNoMoreInteractions(auditRevisionViewModelFactory);

@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.Date;
 import java.util.List;
 
 import model.audit.AuditRevision;
@@ -35,12 +36,16 @@ public class AuditRevisionController {
 
     @RequestMapping(method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_AUDIT_LOG + "')")
-    public List<AuditRevisionViewModel> getAuditRevisions(@RequestParam(required = false) String search) {
+    public List<AuditRevisionViewModel> getAuditRevisions(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = true) Date startDate,
+            @RequestParam(required = true) Date endDate) {
+
         List<AuditRevision> auditRevisions;
         if (search == null) {
-            auditRevisions = auditRevisionRepository.findRecentAuditRevisions();
+            auditRevisions = auditRevisionRepository.findAuditRevisions(startDate, endDate);
         } else {
-            auditRevisions = auditRevisionRepository.findAuditRevisionsByUser(search);
+            auditRevisions = auditRevisionRepository.findAuditRevisionsByUser(search, startDate, endDate);
         }
         return auditRevisionViewModelFactory.createAuditRevisionViewModels(auditRevisions);
     }

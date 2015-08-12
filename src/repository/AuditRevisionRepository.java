@@ -1,5 +1,6 @@
 package repository;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -17,18 +18,22 @@ public class AuditRevisionRepository {
     @PersistenceContext
     private EntityManager entityManager;
     
-    public List<AuditRevision> findRecentAuditRevisions() {
+    public List<AuditRevision> findAuditRevisions(Date startDate, Date endDate) {
         return entityManager.createNamedQuery(
-                AuditRevisionNamedQueryConstants.NAME_FIND_RECENT_AUDIT_REVISIONS,
+                AuditRevisionNamedQueryConstants.NAME_FIND_AUDIT_REVISIONS,
                 AuditRevision.class)
+                .setParameter("startTimestamp", startDate.getTime())
+                .setParameter("endTimestamp", endDate.getTime())
                 .getResultList();
     }
     
-    public List<AuditRevision> findAuditRevisionsByUser(String search) {
+    public List<AuditRevision> findAuditRevisionsByUser(String search, Date startDate, Date endDate) {
         return entityManager.createNamedQuery(
                 AuditRevisionNamedQueryConstants.NAME_FIND_AUDIT_REVISIONS_BY_USER,
                 AuditRevision.class)
                 .setParameter("search", "%" + search.toLowerCase() + "%")
+                .setParameter("startTimestamp", startDate.getTime())
+                .setParameter("endTimestamp", endDate.getTime())
                 .getResultList();
     }
 
