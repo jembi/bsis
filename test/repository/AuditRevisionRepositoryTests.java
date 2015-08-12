@@ -126,4 +126,41 @@ public class AuditRevisionRepositoryTests {
         assertThat(returnedAuditRevisions, is(expectedAuditRevisions));
     }
 
+    @Ignore("Pending changes to old tests in 318")
+    @Test
+    public void testFindAuditRevisionsByUserWithFullName_shouldReturnMatchingAuditRevision() {
+
+        User userWithMatchingName = aUser()
+                .withUsername("irrelevant.username.1")
+                .withFirstName("Test")
+                .withLastName("User")
+                .buildAndPersist(entityManager);
+
+        User userWithNonMatchingName = aUser()
+                .withUsername("irrelevant.username.2")
+                .withFirstName("Test")
+                .withLastName("Abuser")
+                .buildAndPersist(entityManager);
+
+        Date dateInRange = START_OF_RANGE.plusDays(1).toDate();
+        
+        List<AuditRevision> expectedAuditRevisions = Arrays.asList(
+                anAuditRevision()
+                    .withUsername(userWithMatchingName.getUsername())
+                    .withRevisionDate(dateInRange)
+                    .buildAndPersist(entityManager)
+        );
+
+        // Excluded by user
+        anAuditRevision()
+            .withUsername(userWithNonMatchingName.getUsername())
+            .withRevisionDate(dateInRange)
+            .buildAndPersist(entityManager);
+        
+        List<AuditRevision> returnedAuditRevisions = auditRevisionRepository.findAuditRevisionsByUser(
+                "Test User", START_OF_RANGE.toDate(), END_OF_RANGE.toDate());
+        
+        assertThat(returnedAuditRevisions, is(expectedAuditRevisions));
+    }
+
 }

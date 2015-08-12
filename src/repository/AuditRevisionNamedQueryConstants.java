@@ -20,8 +20,7 @@ public class AuditRevisionNamedQueryConstants {
             "AND ar.timestamp <= :endTimestamp " +
             "AND ar.username = u.username " +
             "AND (LOWER(u.username) LIKE :search " +
-            " OR LOWER(u.firstName) LIKE :search " +
-            " OR LOWER(u.lastName) LIKE :search) " +
+            " OR LOWER(CONCAT(u.firstName, ' ', u.lastName)) LIKE :search) " +
             "ORDER BY ar.timestamp DESC ";
 
 }
