@@ -1,6 +1,9 @@
 package backingform;
 
 import java.util.List;
+
+import viewmodel.ProductTypeCombinationViewModel;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
@@ -54,4 +57,29 @@ public class ComponentTypeBackingForm {
     public void setProductTypeCombinations(List<ProductTypeCombination> productTypeCombinations){
         productType.setProductTypeCombinations(productTypeCombinations);
     }
+    
+    public void setProducedProductTypeCombinations(List<ProductTypeCombination> producedProductTypeCombinations){
+    	productType.setProducedProductTypeCombinations(producedProductTypeCombinations);
+    }
+    
+    public void setHighStorageTemperature(Integer highStorageTemperature) {
+        productType.setHighStorageTemperature(highStorageTemperature);
+    }
+    
+    public void setLowStorageTemperature(Integer lowStorageTemperature) {
+        productType.setLowStorageTemperature(lowStorageTemperature);
+    }
+
+    public void setLowTransportTemperature(Integer lowTransportTemperature) {
+        productType.setLowTransportTemperature(lowTransportTemperature);
+    }
+
+    public void setHighTransportTemperature(Integer highTransportTemperature) {
+        productType.setHighTransportTemperature(highTransportTemperature);
+    }
+
+    public void setPreparationInfo(String preparationInfo) {
+        productType.setPreparationInfo(preparationInfo);
+    }
+        
 }

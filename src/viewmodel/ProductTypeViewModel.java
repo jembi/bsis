@@ -53,22 +53,43 @@ public class ProductTypeViewModel {
     public String getDescription(){
         return productType.getDescription();
     }
-    
-    public List<ProductTypeCombinationViewModel> getProducedProductTypeCombinations(){
-    	return getProductTypeCombinationViewModels(productType.getProducedProductTypeCombinations());
+
+    public Integer getLowStorageTemperature(){
+        return productType.getLowStorageTemperature();
     }
     
+    public Integer getHighStorageTemperature(){
+        return productType.getHighStorageTemperature();
+    }
+    
+    public Integer getLowTransportTemperature(){
+        return productType.getLowTransportTemperature();
+    }
+    
+    public Integer getHighTransportTemperature(){
+        return productType.getHighTransportTemperature();
+    }
+    
+    public String getPreparationInfo(){
+        return productType.getPreparationInfo();
+    }
+
+    public List<ProductTypeCombinationViewModel> getProducedProductTypeCombinations(){
+        return getProductTypeCombinationViewModels(productType.getProducedProductTypeCombinations());
+    }
+    
+    @JsonIgnore
     public List<ProductTypeCombinationViewModel> 
-	    getProductTypeCombinationViewModels(List<ProductTypeCombination> productTypeCombinations){
-	  
-	  List<ProductTypeCombinationViewModel> productTypeCombinationViewModels
-	          = new ArrayList<ProductTypeCombinationViewModel> ();
-	  for(ProductTypeCombination productTypeCombination : productTypeCombinations)
-	      productTypeCombinationViewModels.add(new ProductTypeCombinationViewModel(productTypeCombination));
-	      
-	  return productTypeCombinationViewModels;
-	  
-	}
+        getProductTypeCombinationViewModels(List<ProductTypeCombination> productTypeCombinations){
+      
+      List<ProductTypeCombinationViewModel> productTypeCombinationViewModels
+              = new ArrayList<ProductTypeCombinationViewModel> ();
+      for(ProductTypeCombination productTypeCombination : productTypeCombinations)
+          productTypeCombinationViewModels.add(new ProductTypeCombinationViewModel(productTypeCombination));
+          
+      return productTypeCombinationViewModels;
+      
+    }
 
    
 }
