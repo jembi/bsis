@@ -6,6 +6,7 @@ import java.util.List;
 import model.audit.AuditRevision;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,8 +39,8 @@ public class AuditRevisionController {
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_AUDIT_LOG + "')")
     public List<AuditRevisionViewModel> getAuditRevisions(
             @RequestParam(required = false) String search,
-            @RequestParam(required = true) Date startDate,
-            @RequestParam(required = true) Date endDate) {
+            @RequestParam(required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+            @RequestParam(required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
 
         List<AuditRevision> auditRevisions;
         if (search == null) {
