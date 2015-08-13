@@ -16,15 +16,14 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,7 +67,7 @@ public class LocationRepositoryTest {
 		}
 	}
 	
-	@After
+	@AfterTransaction
 	public void after() throws Exception {
 		IDatabaseConnection connection = getConnection();
 		try {
@@ -159,7 +158,6 @@ public class LocationRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testDeleteAll() throws Exception {
 		locationRepository.deleteAllLocations();
 		List<Location> all = locationRepository.getAllLocations();
@@ -169,7 +167,6 @@ public class LocationRepositoryTest {
 
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testDeleteLocation() throws Exception {
 		List<Location> all1 = locationRepository.getAllDonorPanels();
 		locationRepository.deleteLocation(1L);
@@ -179,7 +176,6 @@ public class LocationRepositoryTest {
 
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testUpdateLocation() throws Exception {
 		Location one = locationRepository.findLocationByName("Maseru");
 		one.setIsMobileSite(true);
@@ -190,7 +186,6 @@ public class LocationRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testSave() throws Exception {
 		Location one = new Location();
 		one.setName("Clara");
@@ -205,7 +200,6 @@ public class LocationRepositoryTest {
 
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testSaveAll() throws Exception {
 		Location one = new Location();
 		one.setName("Clara");

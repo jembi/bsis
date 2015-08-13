@@ -20,15 +20,14 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,7 +74,7 @@ public class DonationBatchRepositoryTest {
 		}
 	}
 	
-	@After
+	@AfterTransaction
 	public void after() throws Exception {
 		IDatabaseConnection connection = getConnection();
 		try {
@@ -122,7 +121,6 @@ public class DonationBatchRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test inserts data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testAddDonationBatches() throws Exception {
 		DonationBatch donationBatch = new DonationBatch();
 		donationBatch.setBatchNumber("JUNIT123");
@@ -142,7 +140,6 @@ public class DonationBatchRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testUpdateDonationBatch() throws Exception {
 		DonationBatch one = donationBatchRepository.findDonationBatchByBatchNumber("B0215000000");
 		Assert.assertNotNull("There is a donation batch with the number 'B0215000000'", one);
@@ -155,7 +152,6 @@ public class DonationBatchRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test inserts data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testFindUnassignedDonationBatches() throws Exception {
 		List<DonationBatch> unassigned = donationBatchRepository.findUnassignedDonationBatches();
 		Assert.assertNotNull("Should not return a null list", unassigned);

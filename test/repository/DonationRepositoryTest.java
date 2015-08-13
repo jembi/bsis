@@ -22,7 +22,6 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -31,6 +30,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,7 +76,7 @@ public class DonationRepositoryTest {
 		}
 	}
 	
-	@After
+	@AfterTransaction
 	public void after() throws Exception {
 		IDatabaseConnection connection = getConnection();
 		try {
@@ -303,11 +303,12 @@ public class DonationRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test inserts data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testAddDonation() throws Exception {
 		Donation newDonation = new Donation();
 		Donation existingDonation = donationRepository.findDonationById(1L);
-		newDonation.copy(existingDonation); // to save time....
+		newDonation.setId(existingDonation.getId());
+		newDonation.copy(existingDonation);
+		newDonation.setId(null); // don't want to override, just save time with the copy
 		newDonation.setDonationIdentificationNumber("JUNIT123");
 		Calendar today = Calendar.getInstance();
 		newDonation.setCreatedDate(today.getTime());
@@ -321,11 +322,12 @@ public class DonationRepositoryTest {
 	
 	@Test(expected = javax.persistence.PersistenceException.class)
 	@Transactional
-	@Ignore("Because this test inserts data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testAddDonationSameDIN() throws Exception {
 		Donation newDonation = new Donation();
 		Donation existingDonation = donationRepository.findDonationById(1L);
+		newDonation.setId(existingDonation.getId());
 		newDonation.copy(existingDonation);
+		newDonation.setId(null); // don't want to override, just save time with the copy
 		newDonation.getBloodBagType().setCountAsDonation(false);
 		donationRepository.addDonation(newDonation);
 		// should fail because DIN already exists
@@ -337,10 +339,14 @@ public class DonationRepositoryTest {
 	public void testAddAllDonations() throws Exception {
 		Donation newDonation1 = new Donation();
 		Donation existingDonation = donationRepository.findDonationById(1L);
-		newDonation1.copy(existingDonation); // to save time....
+		newDonation1.setId(existingDonation.getId());
+		newDonation1.copy(existingDonation);
+		newDonation1.setId(null); // don't want to override, just save time with the copy
 		newDonation1.setDonationIdentificationNumber("JUNIT12345"); // note: doesn't do automatic "createInitialComponent"
 		Donation newDonation2 = new Donation();
-		newDonation2.copy(existingDonation); // to save time....
+		newDonation2.setId(existingDonation.getId());
+		newDonation2.copy(existingDonation);
+		newDonation2.setId(null); // don't want to override, just save time with the copy
 		newDonation2.setDonationIdentificationNumber("JUNIT123456"); // note: doesn't do automatic "createInitialComponent"
 		List<Donation> newDonations = new ArrayList<Donation>();
 		newDonations.add(newDonation1);
@@ -356,7 +362,6 @@ public class DonationRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test inserts data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testUpdateDonation() throws Exception {
 		Donation existingDonation = donationRepository.findDonationById(1L);
 		existingDonation.setDonorWeight(new BigDecimal(123));
@@ -367,11 +372,12 @@ public class DonationRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test inserts data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testDeleteDonation() throws Exception {
 		Donation newDonation = new Donation();
 		Donation existingDonation = donationRepository.findDonationById(1L);
-		newDonation.copy(existingDonation); // to save time....
+		newDonation.setId(existingDonation.getId());
+		newDonation.copy(existingDonation); 
+		newDonation.setId(null); // don't want to override, just save time with the copy
 		newDonation.setDonationIdentificationNumber("JUNIT1234");
 		newDonation.getBloodBagType().setCountAsDonation(false); // doesn't create an initial component when adding
 		Donation savedDonation = donationRepository.addDonation(newDonation);
@@ -382,11 +388,12 @@ public class DonationRepositoryTest {
 	
 	@Test(expected = javax.persistence.NoResultException.class)
 	@Transactional
-	@Ignore("Because this test inserts data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testDeleteDonationFindByDIN() throws Exception {
 		Donation newDonation = new Donation();
 		Donation existingDonation = donationRepository.findDonationById(1L);
-		newDonation.copy(existingDonation); // to save time....
+		newDonation.setId(existingDonation.getId());
+		newDonation.copy(existingDonation);
+		newDonation.setId(null); // don't want to override, just save time with the copy
 		newDonation.setDonationIdentificationNumber("JUNIT12345");
 		newDonation.getBloodBagType().setCountAsDonation(false); // doesn't create an initial component when adding
 		Donation savedDonation = donationRepository.addDonation(newDonation);

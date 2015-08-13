@@ -18,7 +18,6 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -27,6 +26,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,7 +70,7 @@ public class ProductTypeRepositoryTest {
 		}
 	}
 	
-	@After
+	@AfterTransaction
 	public void after() throws Exception {
 		IDatabaseConnection connection = getConnection();
 		try {
@@ -145,7 +145,6 @@ public class ProductTypeRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testDeactivateProductType() throws Exception {
 		productTypeRepository.deactivateProductType(1);
 		ProductType productType = productTypeRepository.getProductTypeById(1); // includes deleted
@@ -155,7 +154,6 @@ public class ProductTypeRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testActivateProductType() throws Exception {
 		productTypeRepository.activateProductType(17);
 		ProductType productType = productTypeRepository.getProductTypeById(17);
@@ -165,7 +163,6 @@ public class ProductTypeRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testSaveComponentType() throws Exception {
 		ProductType productType = new ProductType();
 		productType.setProductTypeName("Junit");
@@ -183,7 +180,6 @@ public class ProductTypeRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testUpdateComponentType() throws Exception {
 		ProductType existingProductType = productTypeRepository.getProductTypeById(1);
 		existingProductType.setDescription("Junit");
@@ -243,7 +239,6 @@ public class ProductTypeRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testDeactivateProductTypeCombination() throws Exception {
 		productTypeRepository.deactivateProductTypeCombination(1);
 		ProductTypeCombination one = productTypeRepository.getProductTypeCombinationById(1); // returns deleted entities
@@ -253,7 +248,6 @@ public class ProductTypeRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testActivateProductTypeCombinationUnknown() throws Exception {
 		productTypeRepository.activateProductTypeCombination(11);
 		ProductTypeCombination one = productTypeRepository.getProductTypeCombinationById(11);
@@ -263,7 +257,6 @@ public class ProductTypeRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testUpdateComponentTypeCombination() throws Exception {
 		ProductTypeCombination one = productTypeRepository.getProductTypeCombinationById(1);
 		one.setCombinationName("Testing");
@@ -274,7 +267,6 @@ public class ProductTypeRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testSaveComponentTypeCombination() throws Exception {
 		ProductTypeCombination one = new ProductTypeCombination();
 		one.setCombinationName("Testing");

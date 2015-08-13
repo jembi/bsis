@@ -16,15 +16,14 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,7 +67,7 @@ public class DiscardReasonRepositoryTest {
 		}
 	}
 
-	@After
+	@AfterTransaction
 	public void after() throws Exception {
 		IDatabaseConnection connection = getConnection();
 		try {
@@ -112,7 +111,6 @@ public class DiscardReasonRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testUpdateDeferralReason() throws Exception {
 		ProductStatusChangeReason reason = discardReasonRepository.getDiscardReasonById(1);
 		Assert.assertNotNull("Discard reason exists", reason);
@@ -127,7 +125,6 @@ public class DiscardReasonRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test inserts data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testSaveDeferralReason() throws Exception {
 		ProductStatusChangeReason reason = new ProductStatusChangeReason();
 		reason.setStatusChangeReason("Junit");

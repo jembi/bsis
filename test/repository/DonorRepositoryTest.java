@@ -6,8 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import backingform.DonorBackingForm;
-import controller.UtilController;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -22,11 +20,11 @@ import java.util.Map;
 
 import javax.persistence.NoResultException;
 import javax.sql.DataSource;
+import javax.transaction.Transactional;
 
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
-import model.location.Location;
 import model.donation.DonationConstants;
 import model.donor.Donor;
 import model.donorcodes.DonorCodeGroup;
@@ -45,7 +43,6 @@ import org.dbunit.dataset.ReplacementDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,6 +54,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -69,6 +67,7 @@ import controller.UtilController;
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @WebAppConfiguration
+@Transactional
 public class DonorRepositoryTest {
 
     @Autowired
@@ -132,7 +131,7 @@ public class DonorRepositoryTest {
         }
     }
 
-	@After
+	@AfterTransaction
 	public void after() throws Exception {
 		IDatabaseConnection connection = getConnection();
 		try {

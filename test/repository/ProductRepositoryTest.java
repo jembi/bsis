@@ -27,7 +27,6 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -38,6 +37,7 @@ import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
@@ -93,7 +93,7 @@ public class ProductRepositoryTest {
 		}
 	}
 	
-	@After
+	@AfterTransaction
 	public void after() throws Exception {
 		IDatabaseConnection connection = getConnection();
 		try {
@@ -495,7 +495,6 @@ public class ProductRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	// FIXME: issue with package dependencies here - ProductRepository uses UtilController to retrieve the logged in user.  
 	public void testDiscardProduct() throws Exception {
 		ProductStatusChangeReason discardReason = productStatusChangeReasonRepository.getProductStatusChangeReasonById(5);
@@ -509,7 +508,6 @@ public class ProductRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	// FIXME: issue with package dependencies here - ProductRepository uses UtilController to retrieve the logged in user.  
 	public void testReturnProduct() throws Exception {
 		ProductStatusChangeReason returnReason = productStatusChangeReasonRepository.getProductStatusChangeReasonById(7);
@@ -523,7 +521,6 @@ public class ProductRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	// FIXME: issue with package dependencies here - ProductRepository uses UtilController to retrieve the logged in user.  
 	public void testSplitProduct() throws Exception {
 		boolean split = productRepository.splitProduct(2l, 2);
@@ -540,7 +537,6 @@ public class ProductRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testSplitProductTwice() throws Exception {
 		productRepository.splitProduct(2l, 1);
 		List<Product> products = productRepository.findProductsByDonationIdentificationNumber("1111111");
@@ -554,7 +550,6 @@ public class ProductRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testSplitProductUnknown() throws Exception {
 		boolean split = productRepository.splitProduct(123l, 2);
 		Assert.assertFalse("Unknown product", split);
@@ -562,7 +557,6 @@ public class ProductRepositoryTest {
 
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testUpdateProduct() throws Exception {
 		Product productToUpdate = productRepository.findProduct(2l);
 		productToUpdate.setComponentIdentificationNumber("junit123");
@@ -573,7 +567,6 @@ public class ProductRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testUpdateExpiryStatus() throws Exception {
 		// create expirable product
 		Product productToExpire = productRepository.findProduct(2l);
@@ -591,7 +584,6 @@ public class ProductRepositoryTest {
 
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testSetProductStatusToProcessed() throws Exception {
 		productRepository.setProductStatusToProcessed(2l);
 		Product processedProduct = productRepository.findProduct(2l);
@@ -606,8 +598,12 @@ public class ProductRepositoryTest {
 		Product newProduct = new Product();
 		Donation newDonation = new Donation();
 		Product existingProduct = productRepository.findProduct(1l);
+		newProduct.setId(existingProduct.getId());
 		newProduct.copy(existingProduct);
+		newProduct.setId(null); // don't want to override the existing product
+		newDonation.setId(existingProduct.getDonation().getId());
 		newDonation.copy(existingProduct.getDonation());
+		newDonation.setId(null); // don't want to override the existing donation
 		newDonation.setDonationIdentificationNumber("7654321");
 		Calendar today = Calendar.getInstance();
 		newDonation.setCreatedDate(today.getTime());
@@ -730,7 +726,6 @@ public class ProductRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testDeleteProduct() throws Exception {
 		productRepository.deleteProduct(1l);
 		Product deletedProduct = productRepository.findProduct(1l);
@@ -745,8 +740,12 @@ public class ProductRepositoryTest {
 		Product newProduct = new Product();
 		Donation newDonation = new Donation();
 		Product existingProduct = productRepository.findProduct(1l);
+		newProduct.setId(existingProduct.getId());
 		newProduct.copy(existingProduct);
+		newProduct.setId(null); // don't want to override, just save time with a copy
+		newDonation.setId(existingProduct.getDonation().getId());
 		newDonation.copy(existingProduct.getDonation());
+		newDonation.setId(null); // don't want to override, just save time with a copy
 		newDonation.setDonationIdentificationNumber("7654321");
 		Calendar today = Calendar.getInstance();
 		newDonation.setCreatedDate(today.getTime());
@@ -762,13 +761,16 @@ public class ProductRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testAddAllProducts() throws Exception {
 		Product newProduct1 = new Product();
 		Donation newDonation1 = new Donation();
 		Product existingProduct1 = productRepository.findProduct(1l);
+		newProduct1.setId(existingProduct1.getId());
 		newProduct1.copy(existingProduct1);
+		newProduct1.setId(null); // don't want to overwrite the old product
+		newDonation1.setId(existingProduct1.getDonation().getId());
 		newDonation1.copy(existingProduct1.getDonation());
+		newDonation1.setId(null); // don't want to overwrite the old donation
 		newDonation1.setDonationIdentificationNumber("7654321");
 		Calendar today = Calendar.getInstance();
 		newDonation1.setCreatedDate(today.getTime());
@@ -781,8 +783,12 @@ public class ProductRepositoryTest {
 		Product newProduct2 = new Product();
 		Donation newDonation2 = new Donation();
 		Product existingProduct2 = productRepository.findProduct(1l);
+		newProduct2.setId(existingProduct2.getId());
 		newProduct2.copy(existingProduct2);
+		newProduct2.setId(null); // don't want to overwrite the old product
+		newDonation2.setId(existingProduct2.getDonation().getId());
 		newDonation2.copy(existingProduct2.getDonation());
+		newDonation2.setId(null); // don't want to overwrite the old donation
 		newDonation2.setDonationIdentificationNumber("7654320");
 		newDonation2.setCreatedDate(today.getTime());
 		newDonation2.setBleedEndTime(today.getTime());
