@@ -335,19 +335,32 @@ public class DonationRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("This test doesn't work (bug?)- when the test retrieves the donation from the database it cannot be found")
 	public void testAddAllDonations() throws Exception {
 		Donation newDonation1 = new Donation();
-		Donation existingDonation = donationRepository.findDonationById(1L);
-		newDonation1.setId(existingDonation.getId());
-		newDonation1.copy(existingDonation);
-		newDonation1.setId(null); // don't want to override, just save time with the copy
+		Donation existingDonation1 = donationRepository.findDonationById(1L);
+		newDonation1.setDonor(existingDonation1.getDonor());
+		newDonation1.setDonorPanel(existingDonation1.getDonorPanel());
 		newDonation1.setDonationIdentificationNumber("JUNIT12345"); // note: doesn't do automatic "createInitialComponent"
+		newDonation1.setIsDeleted(false);
+		Calendar today = Calendar.getInstance();
+		newDonation1.setDonationDate(today.getTime());
+		newDonation1.setCreatedDate(today.getTime());
+		newDonation1.setBleedEndTime(today.getTime());
+		today.add(Calendar.MINUTE, -15);
+		newDonation1.setBleedStartTime(today.getTime());
+		
 		Donation newDonation2 = new Donation();
-		newDonation2.setId(existingDonation.getId());
-		newDonation2.copy(existingDonation);
-		newDonation2.setId(null); // don't want to override, just save time with the copy
+		Donation existingDonation2 = donationRepository.findDonationById(2L);
+		newDonation2.setDonor(existingDonation2.getDonor());
+		newDonation2.setDonorPanel(existingDonation2.getDonorPanel());
 		newDonation2.setDonationIdentificationNumber("JUNIT123456"); // note: doesn't do automatic "createInitialComponent"
+		newDonation2.setIsDeleted(false);
+		newDonation2.setDonationDate(today.getTime());
+		newDonation2.setCreatedDate(today.getTime());
+		newDonation2.setBleedEndTime(today.getTime());
+		today.add(Calendar.MINUTE, -15);
+		newDonation2.setBleedStartTime(today.getTime());
+		
 		List<Donation> newDonations = new ArrayList<Donation>();
 		newDonations.add(newDonation1);
 		newDonations.add(newDonation2);
