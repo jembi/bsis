@@ -735,7 +735,6 @@ public class ProductRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testAddProduct() throws Exception {
 		Product newProduct = new Product();
 		Donation newDonation = new Donation();

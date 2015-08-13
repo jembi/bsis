@@ -191,7 +191,6 @@ public class RoleRepositoryTest {
 	@Test
 	@Transactional
 	@Ignore("Bug? - after the delete, all queries fail due to foreign key reference:  integrity constraint violation: foreign key no action; FK_TC5K40I3KIT8944SYRD366VY1 table: USER_ROLE")
-	//@Ignore("Because this test updates data and rollback is not working correctly, DBUnit hangs when cleaning up the database")
 	public void testDelete() throws Exception {
 		Role one = roleRepository.findRoleDetailById(1l);
 		one.setPermissions(new HashSet<Permission>());
