@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import model.admin.GeneralConfig;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
@@ -27,9 +28,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import constant.GeneralConfigConstants;
 import repository.ContactMethodTypeRepository;
+import repository.DonationBatchRepository;
 import repository.DonorRepository;
+import repository.GeneralConfigRepository;
 import repository.LocationRepository;
+import service.GeneralConfigAccessorService;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 import viewmodel.DonationViewModel;
@@ -59,6 +64,12 @@ public class DonorController {
 
   @Autowired
   private ContactMethodTypeRepository contactMethodTypeRepository;
+  
+  @Autowired
+  private DonationBatchRepository donationBatchRepository;
+  
+  @Autowired
+  private GeneralConfigAccessorService generalConfigAccessorService;
   
   public DonorController() {
   }
@@ -294,6 +305,10 @@ public class DonorController {
     }
 
     map.put("donors", donors);
+    
+    boolean openBatchRequired = generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.DONOR_REGISTRATION_OPEN_BATCH_REQUIRED);
+    map.put("canAddDonors", !openBatchRequired || donationBatchRepository.countOpenDonationBatches() > 0);
+    
     return map;
   }
 
