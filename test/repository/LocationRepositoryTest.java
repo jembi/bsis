@@ -86,7 +86,7 @@ public class LocationRepositoryTest {
 		Assert.assertNotNull("There are Locations", all);
 		Assert.assertEquals("There are 5 Locations", 5, all.size());
 	}
-
+	
 	@Test
 	@Transactional
 	public void testGetAllUsageSites() throws Exception {
@@ -94,7 +94,7 @@ public class LocationRepositoryTest {
 		Assert.assertNotNull("There are usage site Locations", all);
 		Assert.assertEquals("There are 2 usage site Location", 2, all.size());
 	}
-
+	
 	@Test
 	@Transactional
 	public void testGetAllDonorPanels() throws Exception {
@@ -102,7 +102,7 @@ public class LocationRepositoryTest {
 		Assert.assertNotNull("There are donor panel Locations", all);
 		Assert.assertEquals("There are 3 donor panel Locations", 3, all.size());
 	}
-
+	
 	@Test
 	@Transactional
 	public void testGetLocation() throws Exception {
@@ -110,13 +110,13 @@ public class LocationRepositoryTest {
 		Assert.assertNotNull("There is a Location", one);
 		Assert.assertEquals("The Location matches", "Maseru", one.getName());
 	}
-
+	
 	@Test(expected = javax.persistence.NoResultException.class)
 	@Transactional
 	public void testGetLocationDeleted() throws Exception {
 		Location one = locationRepository.getLocation(6l);
 	}
-
+	
 	@Test
 	@Transactional
 	public void testGetLocationByName() throws Exception {
@@ -124,7 +124,7 @@ public class LocationRepositoryTest {
 		Assert.assertNotNull("There is a Location", one);
 		Assert.assertEquals("The Location matches", "Maseru", one.getName());
 	}
-
+	
 	@Test(expected = javax.persistence.NoResultException.class)
 	@Transactional
 	public void testGetLocationByNameDeleted() throws Exception {
@@ -147,7 +147,7 @@ public class LocationRepositoryTest {
 		Assert.assertNotNull("There is an ID", id);
 		Assert.assertEquals("The id for Maseru is correct", new Long(1), id);
 	}
-
+	
 	@Test
 	@Transactional
 	public void testGetIDByNameUnknown() throws Exception {
@@ -164,16 +164,16 @@ public class LocationRepositoryTest {
 		Assert.assertNotNull("Does not return an empty list", all);
 		Assert.assertEquals("There are 0 Locations", 0, all.size());
 	}
-
+	
 	@Test
 	@Transactional
 	public void testDeleteLocation() throws Exception {
 		List<Location> all1 = locationRepository.getAllDonorPanels();
 		locationRepository.deleteLocation(1L);
 		List<Location> all2 = locationRepository.getAllDonorPanels();
-		Assert.assertEquals("Location has been deleted", all1.size()-1, all2.size());
+		Assert.assertEquals("Location has been deleted", all1.size() - 1, all2.size());
 	}
-
+	
 	@Test
 	@Transactional
 	public void testUpdateLocation() throws Exception {
@@ -181,7 +181,7 @@ public class LocationRepositoryTest {
 		one.setIsMobileSite(true);
 		locationRepository.updateLocation(1l, one);
 		Location savedOne = locationRepository.findLocationByName("Maseru");
-		Assert.assertTrue("The location is saved", savedOne.getIsMobileSite());		
+		Assert.assertTrue("The location is saved", savedOne.getIsMobileSite());
 	}
 	
 	@Test
@@ -195,9 +195,9 @@ public class LocationRepositoryTest {
 		one.setIsDonorPanel(false);
 		locationRepository.saveLocation(one);
 		Location savedOne = locationRepository.findLocationByName("Clara");
-		Assert.assertEquals("The location is saved", "Clara", savedOne.getName());		
+		Assert.assertEquals("The location is saved", "Clara", savedOne.getName());
 	}
-
+	
 	@Test
 	@Transactional
 	public void testSaveAll() throws Exception {
@@ -216,6 +216,6 @@ public class LocationRepositoryTest {
 		Location savedOne = locationRepository.findLocationByName("Maseru");
 		Assert.assertEquals("Maseru was updated", "junit", savedOne.getNotes());
 		Location savedTwo = locationRepository.findLocationByName("Clara");
-		Assert.assertNotNull("Is added", savedTwo);		
+		Assert.assertNotNull("Is added", savedTwo);
 	}
 }

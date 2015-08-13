@@ -1,9 +1,15 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <ContactMethodType id="1" contactMethodType="None" isDeleted="0"/>
-  <ContactMethodType id="2" contactMethodType="Phone" isDeleted="0"/>
-  <ContactMethodType id="3" contactMethodType="SMS" isDeleted="0"/>
-  <ContactMethodType id="4" contactMethodType="Email" isDeleted="0"/>
-  <ContactMethodType id="5" contactMethodType="Mail" isDeleted="0"/>
-  <ContactMethodType id="6" contactMethodType="Do not contact" isDeleted="0"/>
+	<ContactMethodType id="1" contactMethodType="None"
+		isDeleted="0" />
+	<ContactMethodType id="2" contactMethodType="Phone"
+		isDeleted="0" />
+	<ContactMethodType id="3" contactMethodType="SMS"
+		isDeleted="0" />
+	<ContactMethodType id="4" contactMethodType="Email"
+		isDeleted="0" />
+	<ContactMethodType id="5" contactMethodType="Mail"
+		isDeleted="0" />
+	<ContactMethodType id="6" contactMethodType="Do not contact"
+		isDeleted="0" />
 </dataset>

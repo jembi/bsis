@@ -14,8 +14,7 @@
 		isMobileSite="false" isUsageSite="true" name="Leribe Hospital"
 		notes="" />
 	<Location id="6" isDeleted="true" isDonorPanel="false"
-		isMobileSite="false" isUsageSite="true" name="Leribe Clinic"
-		notes="" />
+		isMobileSite="false" isUsageSite="true" name="Leribe Clinic" notes="" />
 	<Location id="7" isDeleted="true" isDonorPanel="true"
 		isMobileSite="false" isUsageSite="false" name="Hlotse" notes="" />
 </dataset>

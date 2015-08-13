@@ -38,22 +38,22 @@ public class DonationTypeRepositoryTest {
 	
 	@Autowired
 	DonationTypeRepository donationTypeRepository;
-
+	
 	@Autowired
 	private DataSource dataSource;
-
+	
 	private IDataSet getDataSet() throws Exception {
 		File file = new File("test/dataset/DonationTypeRepositoryDataset.xml");
 		return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
 	}
-
+	
 	private IDatabaseConnection getConnection() throws SQLException {
 		IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
 		DatabaseConfig config = connection.getConfig();
 		config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
 		return connection;
 	}
-
+	
 	@Before
 	public void init() throws Exception {
 		IDatabaseConnection connection = getConnection();
@@ -65,7 +65,7 @@ public class DonationTypeRepositoryTest {
 			connection.close();
 		}
 	}
-
+	
 	@AfterTransaction
 	public void after() throws Exception {
 		IDatabaseConnection connection = getConnection();
@@ -85,7 +85,7 @@ public class DonationTypeRepositoryTest {
 		Assert.assertNotNull("There are donation types defined", all);
 		Assert.assertEquals("There are 4 donation types that aren't deleted", 4, all.size());
 	}
-
+	
 	@Test
 	@Transactional
 	public void testGetAllTrue() throws Exception {
@@ -93,7 +93,7 @@ public class DonationTypeRepositoryTest {
 		Assert.assertNotNull("There are donation types defined", all);
 		Assert.assertEquals("There are 5 donation types in total", 5, all.size());
 	}
-
+	
 	@Test
 	@Transactional
 	public void testGetAllFalse() throws Exception {
@@ -109,7 +109,7 @@ public class DonationTypeRepositoryTest {
 		Assert.assertNotNull("There is a donation types with id 1", one);
 		Assert.assertEquals("There is a donation type named 'Voluntary'", "Voluntary", one.getDonationType());
 	}
-
+	
 	@Test
 	@Transactional
 	public void testgetDonationType() throws Exception {

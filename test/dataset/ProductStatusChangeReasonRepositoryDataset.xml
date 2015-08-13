@@ -15,7 +15,7 @@
 	<ProductStatusChangeReason id="7" category="RETURNED"
 		isDeleted="false" statusChangeReason="Expired" />
 	<ProductStatusChangeReason id="8" category="RETURNED"
-		isDeleted="false" statusChangeReason="Not required" />
+	isDeleted="false" statusChangeReason="Not required" />
 	<ProductStatusChangeReason id="9" category="RETURNED"
 		isDeleted="false" statusChangeReason="Incorrect Component Sent" />
 	<ProductStatusChangeReason id="10" category="RETURNED"

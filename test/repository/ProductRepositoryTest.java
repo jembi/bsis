@@ -503,7 +503,8 @@ public class ProductRepositoryTest {
 		List<ProductStatusChange> changes = productRepository.getProductStatusChanges(product);
 		Assert.assertNotNull("Not empty list", changes);
 		Assert.assertEquals("1 ProductStatusChange", 1, changes.size());
-		Assert.assertEquals("Correct ProductStatusChangeType", ProductStatusChangeType.DISCARDED, changes.get(0).getStatusChangeType());
+		Assert.assertEquals("Correct ProductStatusChangeType", ProductStatusChangeType.DISCARDED, changes.get(0)
+		        .getStatusChangeType());
 	}
 	
 	@Test
@@ -516,7 +517,8 @@ public class ProductRepositoryTest {
 		List<ProductStatusChange> changes = productRepository.getProductStatusChanges(product);
 		Assert.assertNotNull("Not empty list", changes);
 		Assert.assertEquals("1 ProductStatusChange", 1, changes.size());
-		Assert.assertEquals("Correct ProductStatusChangeType", ProductStatusChangeType.RETURNED, changes.get(0).getStatusChangeType());
+		Assert.assertEquals("Correct ProductStatusChangeType", ProductStatusChangeType.RETURNED, changes.get(0)
+		        .getStatusChangeType());
 	}
 	
 	@Test
@@ -529,10 +531,11 @@ public class ProductRepositoryTest {
 		Assert.assertEquals("Status is changed to SPLIT", ProductStatus.SPLIT, product.getStatus());
 		List<ProductStatusChange> changes = productRepository.getProductStatusChanges(product);
 		Assert.assertEquals("1 ProductStatusChange", 1, changes.size());
-		Assert.assertEquals("Correct ProductStatusChangeType", ProductStatusChangeType.SPLIT, changes.get(0).getStatusChangeType());
+		Assert.assertEquals("Correct ProductStatusChangeType", ProductStatusChangeType.SPLIT, changes.get(0)
+		        .getStatusChangeType());
 		List<Product> products = productRepository.findProductsByDonationIdentificationNumber("1111111");
 		// FIXME: I'm not sure that numProductsAfterSplitting is correctly named - expected only 1 extra product to be created after the split
-		Assert.assertEquals("4 products after split",  4, products.size());
+		Assert.assertEquals("4 products after split", 4, products.size());
 	}
 	
 	@Test
@@ -554,7 +557,7 @@ public class ProductRepositoryTest {
 		boolean split = productRepository.splitProduct(123l, 2);
 		Assert.assertFalse("Unknown product", split);
 	}
-
+	
 	@Test
 	@Transactional
 	public void testUpdateProduct() throws Exception {
@@ -581,7 +584,7 @@ public class ProductRepositoryTest {
 		Product expiredProduct = productRepository.findProduct(expiringProduct.getId());
 		Assert.assertEquals("Product has been expired", ProductStatus.EXPIRED, expiredProduct.getStatus());
 	}
-
+	
 	@Test
 	@Transactional
 	public void testSetProductStatusToProcessed() throws Exception {
@@ -622,7 +625,7 @@ public class ProductRepositoryTest {
 		Product processedProduct = productRepository.findProduct(savedProduct.getId());
 		Assert.assertEquals("Product has been QUARANTINED", ProductStatus.QUARANTINED, processedProduct.getStatus());
 	}
-
+	
 	@Test
 	@Transactional
 	public void testUpdateProductInternalFieldsProcessed() throws Exception {
@@ -638,7 +641,7 @@ public class ProductRepositoryTest {
 		boolean updatedProductStatus = productRepository.updateProductInternalFields(product);
 		Assert.assertFalse("DISCARDED product is not updated", updatedProductStatus);
 	}
-
+	
 	@Test
 	@Transactional
 	public void testUpdateProductInternalFieldsIssued() throws Exception {
@@ -660,7 +663,7 @@ public class ProductRepositoryTest {
 		boolean updatedProductStatus = productRepository.updateProductInternalFields(product);
 		Assert.assertFalse("USED product is not updated", updatedProductStatus);
 	}
-
+	
 	@Test
 	@Transactional
 	public void testUpdateProductInternalFieldsSplit() throws Exception {
@@ -671,7 +674,7 @@ public class ProductRepositoryTest {
 		boolean updatedProductStatus = productRepository.updateProductInternalFields(product);
 		Assert.assertFalse("SPLIT product is not updated", updatedProductStatus);
 	}
-
+	
 	@Test
 	@Transactional
 	public void testUpdateProductInternalFieldsQuarantined() throws Exception {
@@ -699,7 +702,7 @@ public class ProductRepositoryTest {
 		Assert.assertTrue("SAFE product status is changed", updatedProductStatus);
 		Assert.assertEquals("Product status is actually AVAILABLE", ProductStatus.AVAILABLE, product.getStatus());
 	}
-
+	
 	@Test
 	@Transactional
 	public void testUpdateProductInternalFieldsUnSafe() throws Exception {

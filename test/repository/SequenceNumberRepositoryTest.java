@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @WebAppConfiguration
-public class SequenceNumberRepositoryTest  extends AbstractTransactionalJUnit4SpringContextTests  {
+public class SequenceNumberRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
 	
 	@Autowired
 	SequenceNumberRepository sequenceNumberRepository;

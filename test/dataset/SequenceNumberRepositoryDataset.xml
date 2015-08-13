@@ -14,5 +14,5 @@
 	<SequenceNumberStore id="6" columnName="requestNumber"
 		lastNumber="5" prefix="R" targetTable="Request" />
 	<SequenceNumberStore id="7" columnName="testNumber"
-		lastNumber="23" prefix="T" targetTable="Test" />
+	lastNumber="23" prefix="T" targetTable="Test" />
 </dataset>

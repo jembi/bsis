@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <DataType id="1" dataType="text"/>
-  <DataType id="2" dataType="integer"/>
-  <DataType id="3" dataType="decimal"/>
-  <DataType id="4" dataType="boolean"/>
+	<DataType id="1" dataType="text" />
+	<DataType id="2" dataType="integer" />
+	<DataType id="3" dataType="decimal" />
+	<DataType id="4" dataType="boolean" />
 </dataset>

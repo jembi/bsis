@@ -66,7 +66,7 @@ public class WellTypeRepositoryTest {
 			connection.close();
 		}
 	}
-
+	
 	@AfterTransaction
 	public void after() throws Exception {
 		IDatabaseConnection connection = getConnection();
@@ -108,7 +108,7 @@ public class WellTypeRepositoryTest {
 		Assert.assertNotNull("There is a WellType defined", one);
 		Assert.assertEquals("WellType is correct", "Sample", one.getWellType());
 	}
-
+	
 	@Test
 	@Transactional
 	public void testGetWellTypeByIdUnknown() throws Exception {

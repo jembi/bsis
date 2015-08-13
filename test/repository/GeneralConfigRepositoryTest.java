@@ -125,7 +125,7 @@ public class GeneralConfigRepositoryTest {
 		GeneralConfig savedGeneralConfig = generalConfigRepository.getGeneralConfigByName("donation.bpSystolicMax");
 		Assert.assertEquals("The GeneralConfig has been updated", "255", savedGeneralConfig.getValue());
 	}
-
+	
 	@Test
 	@Transactional
 	public void testUpdateAll() throws Exception {

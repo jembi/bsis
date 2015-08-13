@@ -85,7 +85,7 @@ public class DonationBatchRepositoryTest {
 			connection.close();
 		}
 	}
-
+	
 	@Test
 	@Transactional
 	public void testFindDonationBatchById() throws Exception {

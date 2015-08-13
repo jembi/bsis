@@ -178,7 +178,7 @@ public class UserRepositoryTest {
 		User savedUser = userRepository.findUserById(1);
 		Assert.assertFalse("Password was changed", !user.getPassword().equals(savedUser.getPassword()));
 	}
-
+	
 	@Test
 	@Transactional
 	public void testUpdateLastLogin() throws Exception {

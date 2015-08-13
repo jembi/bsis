@@ -15,8 +15,11 @@
   <User id="13" emailId="xxxx@jembi.org" firstName="Serology" isActive="true" isAdmin="false" isDeleted="false" isStaff="true" lastName="Supervisor" password="$2a$10$U/Ms/YP3g3lv1rkQ4AFBWefLxmQBM6D4sP2TKUCar2SVPGiTqUFDu" username="serologysupervisor" passwordReset="false"/>
   <User id="14" emailId="xxxx@jembi.org" firstName="Serology" isActive="true" isAdmin="false" isDeleted="false" isStaff="true" lastName="Staff" password="$2a$10$cIOYMi3Zglj.w5enfhcIUOChXvXFMYxjMexCgoXFrOLNBV0H8bDLC" username="serologystaff" passwordReset="false"/>
   <User id="15" emailId="xxxx@jembi.org" firstName="Inventory" isActive="true" isAdmin="false" isDeleted="false" isStaff="true" lastName="Staff" password="$2a$10$fymzp94ex44miYJMFQspXO2RwTT5ZXjybFxzuC2F7eIDWYu/Def8e" username="inventorystaff" passwordReset="false"/>
-  <User id="16" emailId="xxxx@jembi.org" firstName="Blood Bank" isActive="true" isAdmin="false" isDeleted="false" isStaff="true" lastName="Staff" password="$2a$10$l6oa.rSWP6WO32Kqn2YCCO3EiELvFsKZdaPIKuFDMKexAgkr6isSS" username="bloodbankstaff" passwordReset="false"/>
-  <Role id="1" name="Super User" description="Super User"/>
+  <User id="16" emailId="xxxx@jembi.org" firstName="Blood Bank"
+	isActive="true" isAdmin="false" isDeleted="false" isStaff="true"
+	lastName="Staff" password="$2a$10$l6oa.rSWP6WO32Kqn2YCCO3EiELvFsKZdaPIKuFDMKexAgkr6isSS"
+	username="bloodbankstaff" passwordReset="false" />
+	<Role id="1" name="Super User" description="Super User" />
   <Role id="2" name="Admin" description="Admin User"/>
   <Role id="3" name="Donor Clinic Supervisor" description="Donor Clinic Supervisor "/>
   <Role id="4" name="Donor Clinic Staff" description="Donor Clinic Staff"/>

@@ -19,16 +19,17 @@
 	<ProductTypeCombination id="9"
 		combinationName="FFP-Apheresis, PC-Apheresis" isDeleted="false" />
 	<ProductTypeCombination id="10"
-		combinationName="FFP Apheresis, 2 X PC-Apheresis" isDeleted="false" />
-	<ProductTypeCombination id="11"
-		combinationName="Ignore me" isDeleted="true" />
+	combinationName="FFP Apheresis, 2 X PC-Apheresis" isDeleted="false" />
+	<ProductTypeCombination id="11" combinationName="Ignore me"
+		isDeleted="true" />
 	<ProductType id="14" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		productTypeName="Packed Red Cells - Paediatric - CPDA"
 		productTypeNameShort="2101" />
 	<ProductType id="1" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood Single Pack - CPDA" productTypeNameShort="0011" pediProductType_id="14" />
+		productTypeName="Whole Blood Single Pack - CPDA" productTypeNameShort="0011"
+		pediProductType_id="14" />
 	<ProductType id="2" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		productTypeName="Whole Blood Double Pack - CPDA" productTypeNameShort="0012" />

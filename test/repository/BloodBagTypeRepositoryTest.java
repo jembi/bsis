@@ -38,22 +38,22 @@ public class BloodBagTypeRepositoryTest {
 	
 	@Autowired
 	BloodBagTypeRepository bloodBagTypeRepository;
-
+	
 	@Autowired
 	private DataSource dataSource;
-
+	
 	private IDataSet getDataSet() throws Exception {
 		File file = new File("test/dataset/BloodBagTypeRepositoryDataset.xml");
 		return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
 	}
-
+	
 	private IDatabaseConnection getConnection() throws SQLException {
 		IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
 		DatabaseConfig config = connection.getConfig();
 		config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
 		return connection;
 	}
-
+	
 	@Before
 	public void init() throws Exception {
 		IDatabaseConnection connection = getConnection();
@@ -65,7 +65,7 @@ public class BloodBagTypeRepositoryTest {
 			connection.close();
 		}
 	}
-
+	
 	@AfterTransaction
 	public void after() throws Exception {
 		IDatabaseConnection connection = getConnection();

@@ -66,7 +66,7 @@ public class DiscardReasonRepositoryTest {
 			connection.close();
 		}
 	}
-
+	
 	@AfterTransaction
 	public void after() throws Exception {
 		IDatabaseConnection connection = getConnection();

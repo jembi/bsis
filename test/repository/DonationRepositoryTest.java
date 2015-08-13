@@ -389,7 +389,7 @@ public class DonationRepositoryTest {
 		Donation newDonation = new Donation();
 		Donation existingDonation = donationRepository.findDonationById(1L);
 		newDonation.setId(existingDonation.getId());
-		newDonation.copy(existingDonation); 
+		newDonation.copy(existingDonation);
 		newDonation.setId(null); // don't want to override, just save time with the copy
 		newDonation.setDonationIdentificationNumber("JUNIT1234");
 		newDonation.getBloodBagType().setCountAsDonation(false); // doesn't create an initial component when adding
