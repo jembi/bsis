@@ -143,11 +143,11 @@ public class DonationBackingFormValidator implements Validator {
 
     if (bloodPressureSystolic != null || bloodPressureDiastolic != null) {
 
-      if ((bloodPressureSystolic < bloodPressureSystolicMin || bloodPressureSystolic > bloodPressureSystolicMax))
+      if (bloodPressureSystolic == null || (bloodPressureSystolic < bloodPressureSystolicMin || bloodPressureSystolic > bloodPressureSystolicMax))
         errors.rejectValue("donation.bloodPressureSystolic", "400", "Enter a value between "+ bloodPressureSystolicMin+" to "+ bloodPressureSystolicMax+".");
 
 
-      if ((bloodPressureDiastolic < bloodPressureDiastolicMin && bloodPressureDiastolic > bloodPressureDiastolicMax))
+      if (bloodPressureDiastolic == null || (bloodPressureDiastolic < bloodPressureDiastolicMin && bloodPressureDiastolic > bloodPressureDiastolicMax))
         errors.rejectValue("donation.bloodPressureDiastolic", "400", "Enter a value between "+ bloodPressureDiastolicMin+" to "+ bloodPressureDiastolicMax+".");
 
     }
