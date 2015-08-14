@@ -143,13 +143,11 @@ public class DonationBackingFormValidator implements Validator {
 
     if (bloodPressureSystolic != null || bloodPressureDiastolic != null) {
 
-      if (bloodPressureSystolic == null || !(bloodPressureSystolic >= bloodPressureSystolicMin &&
-              bloodPressureSystolic <= bloodPressureSystolicMax))
+      if ((bloodPressureSystolic < bloodPressureSystolicMin || bloodPressureSystolic > bloodPressureSystolicMax))
         errors.rejectValue("donation.bloodPressureSystolic", "400", "Enter a value between "+ bloodPressureSystolicMin+" to "+ bloodPressureSystolicMax+".");
 
 
-      if (bloodPressureDiastolic == null || !(bloodPressureDiastolic >= bloodPressureDiastolicMin &&
-              bloodPressureDiastolic <= bloodPressureDiastolicMax))
+      if ((bloodPressureDiastolic < bloodPressureDiastolicMin && bloodPressureDiastolic > bloodPressureDiastolicMax))
         errors.rejectValue("donation.bloodPressureDiastolic", "400", "Enter a value between "+ bloodPressureDiastolicMin+" to "+ bloodPressureDiastolicMax+".");
 
     }
@@ -165,12 +163,9 @@ public class DonationBackingFormValidator implements Validator {
     if (donationBackingForm.getHaemoglobinCount() != null)
       haemoglobinCount = donationBackingForm.getHaemoglobinCount().intValue();
 
-    if (haemoglobinCount != null){
-      if (haemoglobinCount == null || !(haemoglobinCount >= hbMin &&
-              haemoglobinCount <= hbMax))
+    if (haemoglobinCount != null && (haemoglobinCount < hbMin || haemoglobinCount > hbMax)) {
         errors.rejectValue("donation.haemoglobinCount", "400", "Enter a value between "+ hbMin + " to " + hbMax);
     }
-
   }
 
   private void validateWeight (DonationBackingForm donationBackingForm, Errors errors) {
@@ -183,11 +178,8 @@ public class DonationBackingFormValidator implements Validator {
     if (donationBackingForm.getDonorWeight() != null)
       weight = donationBackingForm.getDonorWeight().intValue();
 
-    if (weight != null){
-      if (weight == null || !(weight >= weightMin &&
-              weight <= weightMax))
+    if (weight != null && (weight < weightMin || weight > weightMax)){
         errors.rejectValue("donation.donorWeight", "400", "Enter a value between " + weightMin + " to " + weightMax);
-
     }
   }
 
@@ -199,11 +191,8 @@ public class DonationBackingFormValidator implements Validator {
     if (donationBackingForm.getDonorPulse() != null)
       pulse = donationBackingForm.getDonorPulse();
 
-    if (pulse != null){
-      if (pulse == null || !(pulse >= pulseMin &&
-              pulse <= pulseMax))
+    if (pulse != null && (pulse < pulseMin || pulse > pulseMax)){
         errors.rejectValue("donation.donorPulse", "400", "Enter a value between "+ pulseMin + " to " + pulseMax);
-
     }
   }
 
