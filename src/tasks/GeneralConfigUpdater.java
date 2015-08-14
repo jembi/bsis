@@ -17,7 +17,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-import static utils.LoggerUtil.setLogLevel;
+import utils.LoggerUtil;
 
 
 @Component
@@ -92,7 +92,7 @@ public class GeneralConfigUpdater {
     public void initializeGeneralConfigs () {
         //Set the application root log level at startup
         GeneralConfig generalConfig = generalConfigRepository.getGeneralConfigByName("log.level");
-        setLogLevel(generalConfig.getValue());
+        LoggerUtil.setLogLevel(generalConfig.getValue());
     }
 
 

@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
-import static utils.LoggerUtil.setLogLevel;
+import utils.LoggerUtil;
 
 
 @RestController
@@ -82,7 +82,7 @@ public class GeneralConfigController {
 
         //Update log level if changed
         if (form.getName().equalsIgnoreCase("log.level"))
-            setLogLevel(configRepository.getGeneralConfigByName("log.level").getValue());
+            LoggerUtil.setLogLevel(configRepository.getGeneralConfigByName("log.level").getValue());
 
         return new ResponseEntity<GeneralConfigViewModel>(new GeneralConfigViewModel(updatedConfig), HttpStatus.CREATED);
     }
