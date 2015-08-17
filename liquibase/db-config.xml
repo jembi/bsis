@@ -2721,4 +2721,20 @@
 		</insert>
 	</changeSet>
 
+    <changeSet id="20150806-1504" author="bausmeier">
+        <insert tableName="Permission">
+            <column name="id" value="90"></column>
+            <column name="name" value="View Audit Log"></column>
+        </insert>
+        <insert tableName="Permission_Role">
+            <column name="permissions_id" value="90"></column>
+            <column name="roles_id" value="1"></column>
+        </insert>
+
+        <insert tableName="Permission_Role">
+            <column name="permissions_id" value="90"></column>
+            <column name="roles_id" value="2"></column>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>
