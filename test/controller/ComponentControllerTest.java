@@ -11,8 +11,8 @@ import javax.persistence.EntityExistsException;
 
 import model.component.Component;
 import model.component.ProductStatus;
+import model.componenttype.ComponentType;
 import model.donation.Donation;
-import model.producttype.ProductType;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -24,7 +24,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import repository.DonationRepository;
 import repository.ComponentRepository;
-import repository.ProductTypeRepository;
+import repository.ComponentTypeRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/bsis-servlet.xml")
@@ -38,7 +38,7 @@ public class ComponentControllerTest {
 	private DonationRepository donationRepository;
 	
 	@Autowired
-	private ProductTypeRepository productTypeRepository;
+	private ComponentTypeRepository componentTypeRepository;
 	
 	// Test case for record new productComponents
 	@Ignore @Test
@@ -46,7 +46,7 @@ public class ComponentControllerTest {
 		
 		 Component savedProduct = null;
 		
-				ProductType productType2 = componentRepository.findProductTypeBySelectedProductType(1);
+				ComponentType componentType2 = componentRepository.findComponentTypeBySelectedComponentType(1);
 	      String donationIdentificationNumber = "D0001";
 	      String status = "QUARANTINED";
 	      long productId = 1L;
@@ -54,7 +54,7 @@ public class ComponentControllerTest {
 	      if(donationIdentificationNumber.contains("-")){
 	      	donationIdentificationNumber = donationIdentificationNumber.split("-")[0];
 	      }
-	      String sortName = productType2.getProductTypeNameShort();
+	      String sortName = componentType2.getComponentTypeNameShort();
 	      int noOfUnits = 3;
 	      long donationId = 1;
 	      
@@ -70,17 +70,17 @@ public class ComponentControllerTest {
 		          product.setIsDeleted(false);
 		          product.setComponentIdentificationNumber(createdPackNumber+"-"+i);
 		          Calendar c=new GregorianCalendar();
-		          System.out.println("after :"+ productTypeRepository.getProductTypeById(1).getExpiryIntervalMinutes());
-		          c.add(Calendar.MINUTE, productTypeRepository.getProductTypeById(1).getExpiryIntervalMinutes());
+		          System.out.println("after :"+ componentTypeRepository.getComponentTypeById(1).getExpiryIntervalMinutes());
+		          c.add(Calendar.MINUTE, componentTypeRepository.getComponentTypeById(1).getExpiryIntervalMinutes());
 		          Date expiredate=c.getTime();
 		          
 		          
 		          product.setCreatedOn(new Date());
 		          product.setExpiresOn(expiredate);
-		          ProductType productType = new ProductType();
-		          productType.setProductTypeName(productType2.getProductTypeName());
-		          productType.setId(productType2.getId());
-		          product.setProductType(productType);
+		          ComponentType componentType = new ComponentType();
+		          componentType.setComponentTypeName(componentType2.getComponentTypeName());
+		          componentType.setId(componentType2.getId());
+		          product.setComponentType(componentType);
 		          Donation donation = new Donation();
 		          donation.setId(donationId);
 		          product.setDonation(donation);
@@ -105,16 +105,16 @@ public class ComponentControllerTest {
 		          product.setComponentIdentificationNumber(createdPackNumber);
 
 		          Calendar c=new GregorianCalendar();
-		          System.out.println("after :"+ productTypeRepository.getProductTypeById(1).getExpiryIntervalMinutes());
-		          c.add(Calendar.MINUTE, productTypeRepository.getProductTypeById(1).getExpiryIntervalMinutes());
+		          System.out.println("after :"+ componentTypeRepository.getComponentTypeById(1).getExpiryIntervalMinutes());
+		          c.add(Calendar.MINUTE, componentTypeRepository.getComponentTypeById(1).getExpiryIntervalMinutes());
 		          Date expiredate=c.getTime();
 		          
 		          product.setCreatedOn(new Date());
 		          product.setExpiresOn(expiredate);
-		          ProductType productType = new ProductType();
-		          productType.setProductTypeName(productType2.getProductTypeName());
-		          productType.setId(productType2.getId());
-		          product.setProductType(productType);
+		          ComponentType componentType = new ComponentType();
+		          componentType.setComponentTypeName(componentType2.getComponentTypeName());
+		          componentType.setId(componentType2.getId());
+		          product.setComponentType(componentType);
 		          Donation donation = new Donation();
 		          donation.setId(donationId);
 		          product.setDonation(donation);

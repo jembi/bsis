@@ -5,7 +5,7 @@
 
 	<!-- Updated (timler): for #293 (refactoring) -->
 	<!-- Updated (timler): for #294 (refactoring) -->
-	<changeSet id="20150817-0735" author="devang">
+	<changeSet id="20150817-1100" author="devang">
 	    <preConditions onFail="MARK_RAN">
 		    <not><tableExists tableName="BloodBagType" /></not>
 		</preConditions>
@@ -14,7 +14,7 @@
 	
 	<!-- Updated (timler): for #293 (refactoring) -->
 	<!-- Updated (timler): for #294 (refactoring) -->
-	<changeSet id="20150817-0736" author="devang">
+	<changeSet id="20150817-1124" author="devang">
 	    <preConditions onFail="MARK_RAN">
 		    <sqlCheck expectedResult="0"> 
 				<![CDATA[

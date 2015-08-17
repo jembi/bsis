@@ -28,7 +28,7 @@
 		propertyOwner="donationRequirements" propertyValue="true" />
 	<GenericConfig id="14" propertyName="donorHistoryCheckRequired"
 		propertyOwner="donationRequirements" propertyValue="true" />
-	<GenericConfig id="15" propertyName="useShortNameForProductTypes"
+	<GenericConfig id="15" propertyName="useShortNameForComponentTypes"
 		propertyOwner="products" propertyValue="true" />
 	<GenericConfig id="16"
 	propertyName="allowPediComponentsFromFirstTimeDonors" propertyOwner="componentSplit"

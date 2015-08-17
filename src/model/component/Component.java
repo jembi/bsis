@@ -20,11 +20,11 @@ import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
 import model.compatibility.CompatibilityTest;
+import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.productmovement.ProductStatusChange;
-import model.producttype.ProductType;
 import model.request.Request;
 import model.usage.ProductUsage;
 import model.user.User;
@@ -37,8 +37,8 @@ import org.hibernate.envers.RelationTargetAuditMode;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import constraintvalidator.ComponentTypeExists;
 import constraintvalidator.DonationExists;
-import constraintvalidator.ProductTypeExists;
 
 
 @Entity
@@ -58,9 +58,9 @@ public class Component implements ModificationTracker {
   @ManyToOne(optional=true, fetch=FetchType.EAGER)
   private Donation donation;
 
-  @ProductTypeExists
+  @ComponentTypeExists
   @ManyToOne
-  private ProductType productType;
+  private ComponentType componentType;
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date createdOn;
@@ -120,7 +120,7 @@ public class Component implements ModificationTracker {
   public void copy(Component component) {
     assert (this.getId().equals(component.getId()));
     this.donation = component.donation;
-    this.productType = component.productType;
+    this.componentType = component.componentType;
     this.createdOn = component.createdOn;
     this.expiresOn = component.expiresOn;
     this.notes = component.notes;
@@ -135,8 +135,8 @@ public class Component implements ModificationTracker {
     return donation;
   }
 
-  public ProductType getProductType() {
-    return productType;
+  public ComponentType getComponentType() {
+    return componentType;
   }
 
   public Date getExpiresOn() {
@@ -159,8 +159,8 @@ public class Component implements ModificationTracker {
     this.donation = donation;
   }
 
-  public void setProductType(ProductType productType) {
-    this.productType = productType;
+  public void setComponentType(ComponentType componentType) {
+    this.componentType = componentType;
   }
 
   public void setExpiresOn(Date expiresOn) {

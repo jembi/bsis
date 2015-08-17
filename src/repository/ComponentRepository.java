@@ -26,13 +26,13 @@ import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
 import model.component.Component;
 import model.component.ProductStatus;
+import model.componenttype.ComponentType;
+import model.componenttype.ComponentTypeCombination;
 import model.donation.Donation;
 import model.productmovement.ProductStatusChange;
 import model.productmovement.ProductStatusChangeReason;
 import model.productmovement.ProductStatusChangeReasonCategory;
 import model.productmovement.ProductStatusChangeType;
-import model.producttype.ProductType;
-import model.producttype.ProductTypeCombination;
 import model.request.Request;
 import model.util.BloodGroup;
 
@@ -65,7 +65,7 @@ public class ComponentRepository {
   private DonationRepository donationRepository;
 
   @Autowired
-  private ProductTypeRepository productTypeRepository;
+  private ComponentTypeRepository componentTypeRepository;
 
   @Autowired
   private RequestRepository requestRepository;
@@ -161,7 +161,7 @@ public class ComponentRepository {
     return component;
   }
   
-  public List<Component> findAnyComponent(String donationIdentificationNumber, List<Integer> productTypes, List<ProductStatus> status, 
+  public List<Component> findAnyComponent(String donationIdentificationNumber, List<Integer> componentTypes, List<ProductStatus> status, 
 		  Date donationDateFrom, Date donationDateTo, Map<String, Object> pagingParams){
 	  	TypedQuery<Component> query;
 	    String queryStr = "SELECT DISTINCT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +     
@@ -173,8 +173,8 @@ public class ComponentRepository {
 	    if(!StringUtils.isBlank(donationIdentificationNumber)){
 	    	queryStr += "AND c.donation.donationIdentificationNumber = :donationIdentificationNumber ";
 	    }
-	    if(productTypes != null && !productTypes.isEmpty()){
-	    	queryStr += "AND c.productType.id IN (:productTypeIds) ";
+	    if(componentTypes != null && !componentTypes.isEmpty()){
+	    	queryStr += "AND c.componentType.id IN (:componentTypeIds) ";
 	    }	    
 	    if(donationDateFrom != null){
 	    	queryStr += "AND c.donation.donationDate >= :donationDateFrom ";
@@ -196,8 +196,8 @@ public class ComponentRepository {
 	    if(!StringUtils.isBlank(donationIdentificationNumber)){
 	    	query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
 	    }
-	    if (productTypes != null && !productTypes.isEmpty()) {
-	    	query.setParameter("productTypeIds", productTypes);
+	    if (componentTypes != null && !componentTypes.isEmpty()) {
+	    	query.setParameter("componentTypeIds", componentTypes);
 	    }
 	    if(donationDateFrom != null){
 	    	query.setParameter("donationDateFrom", donationDateFrom);
@@ -248,17 +248,17 @@ public class ComponentRepository {
     return query.getResultList();
   }
   
-  public List<Component> findComponentByProductTypes(
-      List<Integer> productTypeIds, List<ProductStatus> status,
+  public List<Component> findComponentByComponentTypes(
+      List<Integer> componentTypeIds, List<ProductStatus> status,
       Map<String, Object> pagingParams) {
 
     String queryStr = "SELECT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +
-        "c.productType.id IN (:productTypeIds) AND " +
+        "c.componentType.id IN (:componentTypeIds) AND " +
         "c.status IN :status AND " +
         "c.isDeleted= :isDeleted";
 
     String queryStrWithoutJoin = "SELECT c FROM Component c WHERE " +
-        "c.productType.id IN (:productTypeIds) AND " +
+        "c.componentType.id IN (:componentTypeIds) AND " +
         "c.status IN :status AND " +
         "c.isDeleted= :isDeleted";
 
@@ -270,7 +270,7 @@ public class ComponentRepository {
     TypedQuery<Component> query = em.createQuery(queryStr, Component.class);
     query.setParameter("status", status);
     query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("productTypeIds", productTypeIds);
+    query.setParameter("componentTypeIds", componentTypeIds);
 
     int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
     int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
@@ -333,11 +333,11 @@ public class ComponentRepository {
     query.executeUpdate();
   }
 
-  public List<Component> getAllComponents(String productType) {
-    String queryString = "SELECT c FROM Component c where c.type = :productType and c.isDeleted = :isDeleted";
+  public List<Component> getAllComponents(String componentType) {
+    String queryString = "SELECT c FROM Component c where c.type = :componentType and c.isDeleted = :isDeleted";
     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("productType", productType);
+    query.setParameter("componentType", componentType);
     return query.getResultList();
   }
 
@@ -356,25 +356,25 @@ public class ComponentRepository {
     return components;
   }
 
-  public List<Component> getAllUnissuedComponents(String productType, String abo,
+  public List<Component> getAllUnissuedComponents(String componentType, String abo,
       String rhd) {
-    String queryString = "SELECT c FROM Component c where c.type = :productType and c.abo= :abo and c.rhd= :rhd and c.isDeleted = :isDeleted and c.isIssued= :isIssued";
+    String queryString = "SELECT c FROM Component c where c.type = :componentType and c.abo= :abo and c.rhd= :rhd and c.isDeleted = :isDeleted and c.isIssued= :isIssued";
     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("isIssued", Boolean.FALSE);
-    query.setParameter("productType", productType);
+    query.setParameter("componentType", componentType);
     query.setParameter("abo", abo);
     query.setParameter("rhd", rhd);
     return query.getResultList();
   }
 
-  public List<Component> getAllUnissuedThirtyFiveDayComponents(String productType,
+  public List<Component> getAllUnissuedThirtyFiveDayComponents(String componentType,
       String abo, String rhd) {
-    String queryString = "SELECT c FROM Component c where c.type = :productType and c.abo= :abo and c.rhd= :rhd and c.isDeleted = :isDeleted and c.isIssued= :isIssued and c.createdOn > :minDate";
+    String queryString = "SELECT c FROM Component c where c.type = :componentType and c.abo= :abo and c.rhd= :rhd and c.isDeleted = :isDeleted and c.isIssued= :isIssued and c.createdOn > :minDate";
     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("isIssued", Boolean.FALSE);
-    query.setParameter("productType", productType);
+    query.setParameter("componentType", componentType);
     query.setParameter("abo", abo);
     query.setParameter("rhd", rhd);
     query.setParameter("minDate", new DateTime(new Date()).minusDays(35)
@@ -431,7 +431,7 @@ public class ComponentRepository {
     
     TypedQuery<Component> query = em.createQuery(
                  "SELECT c from Component c LEFT JOIN FETCH c.donation WHERE " +
-                 "c.productType = :productType AND " +
+                 "c.componentType = :componentType AND " +
                  "c.expiresOn >= :today AND " +
                  "c.status = :status AND " + 
                  "c.donation.ttiStatus = :ttiStatus AND " +
@@ -441,7 +441,7 @@ public class ComponentRepository {
                  "ORDER BY c.expiresOn ASC",
                   Component.class);
 
-    query.setParameter("productType", request.getProductType());
+    query.setParameter("componentType", request.getComponentType());
     query.setParameter("today", today);
     query.setParameter("status", ProductStatus.AVAILABLE);
     query.setParameter("ttiStatus", TTIStatus.TTI_SAFE);
@@ -503,9 +503,9 @@ public class ComponentRepository {
     q.setParameter("isDeleted", false);
 //    q.setParameter("expiresOn", DateUtils.round(new Date(), Calendar.DATE));
 
-    TypedQuery<ProductType> productTypeQuery = em.createQuery("SELECT pt FROM ProductType pt", ProductType.class);
+    TypedQuery<ComponentType> componentTypeQuery = em.createQuery("SELECT pt FROM ComponentType pt", ComponentType.class);
 
-    for (ProductType productType : productTypeQuery.getResultList()) {
+    for (ComponentType componentType : componentTypeQuery.getResultList()) {
       Map<String, Map<Long, Long>> inventoryByBloodGroup = new HashMap<String, Map<Long, Long>>();
 
       inventoryByBloodGroup.put("", getMapWithNumDaysWindows());
@@ -518,14 +518,14 @@ public class ComponentRepository {
       inventoryByBloodGroup.put("AB-", getMapWithNumDaysWindows());
       inventoryByBloodGroup.put("O-", getMapWithNumDaysWindows());
 
-      inventory.put(productType.getProductTypeName(), inventoryByBloodGroup);
+      inventory.put(componentType.getComponentTypeName(), inventoryByBloodGroup);
     }
 
     DateTime today = new DateTime();
     for (Component component : q.getResultList()) {
-      String productType = component.getProductType().getProductTypeName();
+      String componentType = component.getComponentType().getComponentTypeName();
       @SuppressWarnings("unchecked")
-      Map<String, Map<Long, Long>> inventoryByBloodGroup = (Map<String, Map<Long, Long>>) inventory.get(productType);
+      Map<String, Map<Long, Long>> inventoryByBloodGroup = (Map<String, Map<Long, Long>>) inventory.get(componentType);
       DonationViewModel donation;
       donation = new DonationViewModel(component.getDonation());
       Map<Long, Long> numDayMap = inventoryByBloodGroup.get(donation.getBloodGroup());
@@ -789,13 +789,13 @@ public class ComponentRepository {
     return resultMap;
   }
 
-  public Component findComponent(String donationIdentificationNumber, String productTypeId) {
+  public Component findComponent(String donationIdentificationNumber, String componentTypeId) {
     String queryStr = "SELECT c from Component c WHERE " +
                       "c.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
-                      "c.productType.id = :productTypeId";
+                      "c.componentType.id = :componentTypeId";
     TypedQuery<Component> query = em.createQuery(queryStr, Component.class);
     query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
-    query.setParameter("productTypeId", Integer.parseInt(productTypeId));
+    query.setParameter("componentTypeId", Integer.parseInt(componentTypeId));
     Component component = null;
     try {
       component = query.getSingleResult();
@@ -849,21 +849,21 @@ public class ComponentRepository {
     String expiresOn = form.getExpiresOn();
     ObjectMapper mapper = new ObjectMapper();
 
-    Map<String, String> expiryDateByProductType = null;
+    Map<String, String> expiryDateByComponentType = null;
       try {
-          expiryDateByProductType = mapper.readValue(expiresOn, HashMap.class);
+          expiryDateByComponentType = mapper.readValue(expiresOn, HashMap.class);
       } catch (IOException ex) {
           ex.printStackTrace();
       }
 
-    ProductTypeCombination productTypeCombination;
-    productTypeCombination = productTypeRepository.getProductTypeCombinationById(Integer.parseInt(form.getProductTypeCombination()));
-    for (ProductType productType : productTypeCombination.getProductTypes()) {
+    ComponentTypeCombination componentTypeCombination;
+    componentTypeCombination = componentTypeRepository.getComponentTypeCombinationById(Integer.parseInt(form.getComponentTypeCombination()));
+    for (ComponentType componentType : componentTypeCombination.getComponentTypes()) {
       Component component = new Component();
       component.setDonation(form.getDonation());
-      component.setProductType(productType);
+      component.setComponentType(componentType);
       component.setCreatedOn(form.getComponent().getCreatedOn());
-      String expiryDateStr = expiryDateByProductType.get(productType.getId().toString());
+      String expiryDateStr = expiryDateByComponentType.get(componentType.getId().toString());
       component.setExpiresOn(CustomDateFormatter.getDateTimeFromString(expiryDateStr));
       component.setIsDeleted(false);
       updateComponentInternalFields(component);
@@ -882,8 +882,8 @@ public class ComponentRepository {
     if (component == null || component.getStatus().equals(ProductStatus.SPLIT))
       return false;
 
-    ProductType pediProductType = component.getProductType().getPediProductType();
-    if (pediProductType == null) {
+    ComponentType pediComponentType = component.getComponentType().getPediComponentType();
+    if (pediComponentType == null) {
       return false;
     }
 
@@ -894,7 +894,7 @@ public class ComponentRepository {
       newComponent.setId(componentId);
       newComponent.copy(component);
       newComponent.setId(null);
-      newComponent.setProductType(pediProductType);
+      newComponent.setComponentType(pediComponentType);
       newComponent.setSubdivisionCode("" + nextSubdivisionCode);
       newComponent.setParentComponent(component);
       newComponent.setIsDeleted(false);
@@ -930,20 +930,20 @@ public class ComponentRepository {
     return true;
   }
 
-  public ProductType findProductTypeBySelectedProductType(int productTypeId) throws NoResultException{
-    String queryString = "SELECT p FROM ProductType p where p.id = :productTypeId";
-    TypedQuery<ProductType> query = em.createQuery(queryString, ProductType.class);
-    query.setParameter("productTypeId", productTypeId);
-    ProductType productType =  productType = query.getSingleResult();
-    return productType;
+  public ComponentType findComponentTypeBySelectedComponentType(int componentTypeId) throws NoResultException{
+    String queryString = "SELECT p FROM ComponentType p where p.id = :componentTypeId";
+    TypedQuery<ComponentType> query = em.createQuery(queryString, ComponentType.class);
+    query.setParameter("componentTypeId", componentTypeId);
+    ComponentType componentType =  componentType = query.getSingleResult();
+    return componentType;
   }
   
-  public ProductType findProductTypeByProductTypeName(String productTypeName) throws NoResultException{
-    String queryString = "SELECT p FROM ProductType p where p.productType = :productTypeName";
-    TypedQuery<ProductType> query = em.createQuery(queryString, ProductType.class);
-    query.setParameter("productTypeName", productTypeName);
-    ProductType productType = productType = query.getSingleResult();
-    return productType;
+  public ComponentType findComponentTypeByComponentTypeName(String componentTypeName) throws NoResultException{
+    String queryString = "SELECT p FROM ComponentType p where p.componentType = :componentTypeName";
+    TypedQuery<ComponentType> query = em.createQuery(queryString, ComponentType.class);
+    query.setParameter("componentTypeName", componentTypeName);
+    ComponentType componentType = componentType = query.getSingleResult();
+    return componentType;
   }
   
   public void setProductStatusToProcessed(long componentId) throws NoResultException {

@@ -8,7 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
-import model.producttype.ProductType;
+
+import model.componenttype.ComponentType;
 
 import org.hibernate.envers.Audited;
 
@@ -34,7 +35,7 @@ public class BloodBagType {
   private Boolean isDeleted;
   
   @ManyToOne
-  private ProductType productType;
+  private ComponentType componentType;
   
   @NotNull
   private Boolean countAsDonation;
@@ -42,7 +43,7 @@ public class BloodBagType {
  @AssertTrue(message="Component type should be not null when countAsDonation is set to true")
   private boolean isValid(){
       if(this.countAsDonation == true)
-          if(productType != null)
+          if(componentType != null)
               return true;
           else 
               return false;
@@ -96,12 +97,12 @@ public class BloodBagType {
     this.canSplit = canSplit;
   }
 
-  public ProductType getProductType() {
-      return productType;
+  public ComponentType getComponentType() {
+      return componentType;
   }
 
-  public void setProductType(ProductType productType) {
-      this.productType = productType;
+  public void setComponentType(ComponentType componentType) {
+      this.componentType = componentType;
   }
 
   public Boolean getCountAsDonation() {
@@ -122,7 +123,7 @@ public class BloodBagType {
 	
 	public void copy(BloodBagType bloodBagType) {
 		this.bloodBagType = bloodBagType.getBloodBagType();
-        this.productType = bloodBagType.getProductType();
+        this.componentType = bloodBagType.getComponentType();
         this.periodBetweenDonations = bloodBagType.getPeriodBetweenDonations();
         this.countAsDonation = bloodBagType.getCountAsDonation();
         this.isDeleted = bloodBagType.getIsDeleted();

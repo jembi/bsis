@@ -18,10 +18,10 @@ import javax.validation.Valid;
 
 import model.compatibility.CompatibilityTest;
 import model.component.Component;
+import model.componenttype.ComponentType;
 import model.location.Location;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
-import model.producttype.ProductType;
 import model.requesttype.RequestType;
 import model.user.User;
 import model.util.Gender;
@@ -33,7 +33,7 @@ import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
 import constraintvalidator.LocationExists;
-import constraintvalidator.ProductTypeExists;
+import constraintvalidator.ComponentTypeExists;
 import constraintvalidator.RequestTypeExists;
 
 
@@ -132,9 +132,9 @@ public class Request implements ModificationTracker {
   @Valid
   private RowModificationTracker modificationTracker;
 
-  @ProductTypeExists
+  @ComponentTypeExists
   @ManyToOne
-  private ProductType productType;
+  private ComponentType componentType;
 
   @RequestTypeExists
   @ManyToOne
@@ -169,7 +169,7 @@ public class Request implements ModificationTracker {
     this.patientGender = request.patientGender;
     this.ward = request.ward;
     this.patientNumber = request.patientNumber;
-    this.productType = request.productType;
+    this.componentType = request.componentType;
     this.requestDate = request.requestDate;
     this.requiredDate = request.requiredDate;
     this.numUnitsRequested = request.numUnitsRequested;
@@ -213,8 +213,8 @@ public class Request implements ModificationTracker {
     return modificationTracker;
   }
 
-  public ProductType getProductType() {
-    return productType;
+  public ComponentType getComponentType() {
+    return componentType;
   }
 
   public Location getRequestSite() {
@@ -261,8 +261,8 @@ public class Request implements ModificationTracker {
     this.modificationTracker = modificationTracker;
   }
 
-  public void setProductType(ProductType productType) {
-    this.productType = productType;
+  public void setComponentType(ComponentType componentType) {
+    this.componentType = componentType;
   }
 
   public void setRequestSite(Location requestSite) {

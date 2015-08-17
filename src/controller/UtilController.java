@@ -19,6 +19,7 @@ import model.admin.FormField;
 import model.admin.GeneralConfig;
 import model.component.Component;
 import model.component.ProductStatus;
+import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.donationtype.DonationType;
@@ -26,7 +27,6 @@ import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.productmovement.ProductStatusChangeReason;
-import model.producttype.ProductType;
 import model.request.Request;
 import model.user.User;
 import model.user.Role;
@@ -382,8 +382,8 @@ public class UtilController {
     return errorMessage;
   }
 
-  public Component findComponent(String donationIdentificationNumber, String productType) {
-    return componentRepository.findComponent(donationIdentificationNumber, productType);
+  public Component findComponent(String donationIdentificationNumber, String componentType) {
+    return componentRepository.findComponent(donationIdentificationNumber, componentType);
   }
 
   public String getNextWorksheetNumber() {
@@ -398,11 +398,11 @@ public class UtilController {
     return requestRepository.findRequestByRequestNumber(requestNumber);
   }
 
-  public Component findComponent(String donationIdentificationNumber, ProductType productType) {
+  public Component findComponent(String donationIdentificationNumber, ComponentType componentType) {
     List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
     Component matchingComponent = null; 
     for (Component component : components) {
-      if (component.getProductType().equals(productType)) {
+      if (component.getComponentType().equals(componentType)) {
         if (matchingComponent != null &&
             matchingComponent.getStatus().equals(ProductStatus.AVAILABLE)) {
           // multiple products available have the same product type

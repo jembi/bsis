@@ -555,7 +555,7 @@
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
         parentComponent_id bigint,
-        productType_id SMALLINT,
+        componentType_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -605,27 +605,27 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table ProductType (
+    create table ComponentType (
         id SMALLINT not null auto_increment,
         description longtext,
         expiresAfter integer,
         expiresAfterUnits varchar(30),
         hasBloodGroup boolean,
         isDeleted boolean,
-        productType varchar(50),
-        productTypeNameShort varchar(30),
-        pediProductType_id SMALLINT,
+        componentType varchar(50),
+        componentTypeNameShort varchar(30),
+        pediComponentType_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table ProductTypeCombination (
+    create table ComponentTypeCombination (
         id SMALLINT not null auto_increment,
         combinationName varchar(300),
         isDeleted boolean,
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table ProductTypeCombination_AUD (
+    create table ComponentTypeCombination_AUD (
         id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
@@ -634,14 +634,14 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table ProductTypeCombination_ProductType (
+    create table ComponentTypeCombination_ComponentType (
     	id SMALLINT not null auto_increment,
-        productTypeCombinations_id SMALLINT not null,
-        productTypes_id SMALLINT not null,
+        componentTypeCombinations_id SMALLINT not null,
+        componentTypes_id SMALLINT not null,
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table ProductType_AUD (
+    create table ComponentType_AUD (
         id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
@@ -650,9 +650,9 @@
         expiresAfterUnits varchar(30),
         hasBloodGroup boolean,
         isDeleted boolean,
-        productType varchar(50),
-        productTypeNameShort varchar(30),
-        pediProductType_id SMALLINT,
+        componentType varchar(50),
+        componentTypeNameShort varchar(30),
+        pediComponentType_id SMALLINT,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
@@ -713,7 +713,7 @@
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
         parentComponent_id bigint,
-        productType_id SMALLINT,
+        componentType_id SMALLINT,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
@@ -751,7 +751,7 @@
         ward varchar(20),
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        productType_id SMALLINT,
+        componentType_id SMALLINT,
         requestSite_id bigint,
         requestType_id SMALLINT,
         primary key (id)
@@ -805,7 +805,7 @@
         ward varchar(20),
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        productType_id SMALLINT,
+        componentType_id SMALLINT,
         requestSite_id bigint,
         requestType_id SMALLINT,
         primary key (id, REV)
@@ -1305,10 +1305,10 @@
         references Donation (id);
 
     alter table Component 
-        add index FK50C664CF73AC2B90 (productType_id), 
+        add index FK50C664CF73AC2B90 (componentType_id), 
         add constraint FK50C664CF73AC2B90 
-        foreign key (productType_id) 
-        references ProductType (id);
+        foreign key (componentType_id) 
+        references ComponentType (id);
 
     alter table Component 
         add index FK50C664CFD946D0A0 (parentComponent_id), 
@@ -1358,31 +1358,31 @@
         foreign key (REV) 
         references REVINFO (REV);
 
-    alter table ProductType 
-        add index FKA8168A93E7CEF4A (pediProductType_id), 
+    alter table ComponentType 
+        add index FKA8168A93E7CEF4A (pediComponentType_id), 
         add constraint FKA8168A93E7CEF4A 
-        foreign key (pediProductType_id) 
-        references ProductType (id);
+        foreign key (pediComponentType_id) 
+        references ComponentType (id);
 
-    alter table ProductTypeCombination_AUD 
+    alter table ComponentTypeCombination_AUD 
         add index FK61943137DF74E053 (REV), 
         add constraint FK61943137DF74E053 
         foreign key (REV) 
         references REVINFO (REV);
 
-    alter table ProductTypeCombination_ProductType 
-        add index FK3F6704507548F61D (productTypeCombinations_id), 
+    alter table ComponentTypeCombination_ComponentType 
+        add index FK3F6704507548F61D (componentTypeCombinations_id), 
         add constraint FK3F6704507548F61D 
-        foreign key (productTypeCombinations_id) 
-        references ProductTypeCombination (id);
+        foreign key (componentTypeCombinations_id) 
+        references ComponentTypeCombination (id);
 
-    alter table ProductTypeCombination_ProductType 
-        add index FK3F670450EE5B3BAF (productTypes_id), 
+    alter table ComponentTypeCombination_ComponentType 
+        add index FK3F670450EE5B3BAF (componentTypes_id), 
         add constraint FK3F670450EE5B3BAF 
-        foreign key (productTypes_id) 
-        references ProductType (id);
+        foreign key (componentTypes_id) 
+        references ComponentType (id);
 
-    alter table ProductType_AUD 
+    alter table ComponentType_AUD 
         add index FKA50719FADF74E053 (REV), 
         add constraint FKA50719FADF74E053 
         foreign key (REV) 
@@ -1441,10 +1441,10 @@
         references Location (id);
 
     alter table Request 
-        add index FKA4878A6F73AC2B90 (productType_id), 
+        add index FKA4878A6F73AC2B90 (componentType_id), 
         add constraint FKA4878A6F73AC2B90 
-        foreign key (productType_id) 
-        references ProductType (id);
+        foreign key (componentType_id) 
+        references ComponentType (id);
 
     alter table Request 
         add index FKA4878A6F537AAD30 (requestType_id), 

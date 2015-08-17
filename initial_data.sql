@@ -359,7 +359,7 @@ insert into FormField
  '1', '0',
  '0', '0',
 '0', '0'),
-('Component', 'productType', 'Product Type', '', 0,
+('Component', 'componentType', 'Component Type', '', 0,
  '0', '1',
  '1', '0',
  '0', '0',
@@ -523,7 +523,7 @@ insert into FormField
  '0', '1',
  '0', '0',
 '0', '0'),
-('Request', 'productType', 'Product type', '', 0,
+('Request', 'componentType', 'Component type', '', 0,
  '0', '0',
  '1', '0',
  '0', '0',
@@ -697,7 +697,7 @@ insert into FormField
  '1', '0',
  '0', '0',
  '0', '0'),
-('Usage', 'productType', 'Product type', '', 0,
+('Usage', 'componentType', 'Component type', '', 0,
  '0', '0',
  '1', '0',
  '0', '0',
@@ -780,7 +780,7 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("donorBloodGroupMatchRequired", "true", "donationRequirements"),
 ("donorHistoryCheckRequired", "true", "donationRequirements"),
 
-("useShortNameForProductTypes", "true" ,"products"),
+("useShortNameForComponentTypes", "true" ,"products"),
 
 ("allowPediComponentsFromFirstTimeDonors", "true", "componentSplit"),
 

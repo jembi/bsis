@@ -10,10 +10,10 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 @Documented
-@Constraint(validatedBy = ProductTypeExistsConstraintValidator.class)
+@Constraint(validatedBy = ComponentTypeExistsConstraintValidator.class)
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ProductTypeExists {
+public @interface ComponentTypeExists {
 
   String message() default "Invalid Component Type specified";
 

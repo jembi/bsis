@@ -139,14 +139,14 @@ public class RequestRepository {
   public List<Request> findAnyRequestMatching(String requestNumber,
       String dateRequestedFrom, String dateRequestedTo,
       String dateRequiredFrom, String dateRequiredTo, List<String> sites,
-      List<String> productTypes, List<String> statuses) throws ParseException {
+      List<String> componentTypes, List<String> statuses) throws ParseException {
 
     TypedQuery<Request> query = em
         .createQuery(
             "SELECT r FROM Request r, Location L WHERE "
                 + "(L.locationId=r.siteId AND L.isDonorPanel=TRUE) AND "
                 + "(r.requestNumber = :requestNumber OR L.name IN (:sites) OR "
-                + "r.productType IN (:productTypes)) AND (r.status IN (:statuses)) AND "
+                + "r.componentType IN (:componentTypes)) AND (r.status IN (:statuses)) AND "
                 + "((r.dateRequested BETWEEN :dateRequestedFrom AND "
                 + ":dateRequestedTo) AND (r.dateRequired BETWEEN "
                 + ":dateRequiredFrom AND " + ":dateRequiredTo)) AND "
@@ -157,7 +157,7 @@ public class RequestRepository {
     query.setParameter("requestNumber", requestNumber == null ? ""
         : requestNumber);
     query.setParameter("sites", sites);
-    query.setParameter("productTypes", productTypes);
+    query.setParameter("componentTypes", componentTypes);
     query.setParameter("statuses", statuses);
 
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -278,7 +278,7 @@ public class RequestRepository {
     return to ;
   }
 
-  public List<Object> findRequests(String requestNumber, List<Integer> productTypeIds,
+  public List<Object> findRequests(String requestNumber, List<Integer> componentTypeIds,
       List<Long> requestSiteIds, String requestedAfter,
       String requiredBy, Boolean includeSatisfiedRequests, Map<String, Object> pagingParams) throws ParseException  {
 
@@ -289,7 +289,7 @@ public class RequestRepository {
                  "r.isDeleted= :isDeleted";
     } else {
       queryStr = "SELECT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
-          "(r.productType.id IN (:productTypeIds) AND " +
+          "(r.componentType.id IN (:componentTypeIds) AND " +
           "r.requestSite.id IN (:requestSiteIds)) AND" +
           "(r.requestDate >= :requestedAfter and r.requiredDate <= :requiredBy) AND " +
           "r.isDeleted= :isDeleted";
@@ -310,7 +310,7 @@ public class RequestRepository {
       query.setParameter("requestNumber", requestNumber);
     }
     else {
-      query.setParameter("productTypeIds", productTypeIds);
+      query.setParameter("componentTypeIds", componentTypeIds);
       query.setParameter("requestSiteIds", requestSiteIds);
       query.setParameter("requestedAfter", getDateRequestedAfterOrDefault(requestedAfter));
       query.setParameter("requiredBy", getDateRequiredByOrDefault(requiredBy));
@@ -410,10 +410,10 @@ public class RequestRepository {
     // the product may have expired so this update is required
     // we update the expiry date of a product periodically
     componentRepository.updateComponentInternalFields(component);
-    String requestedProductType = request.getProductType().getProductTypeName();
-    String productType = component.getProductType().getProductTypeName();
+    String requestedComponentType = request.getComponentType().getComponentTypeName();
+    String componentType = component.getComponentType().getComponentTypeName();
 
-    if (!productType.equals(requestedProductType))
+    if (!componentType.equals(requestedComponentType))
       return false;
     
     // product available or not

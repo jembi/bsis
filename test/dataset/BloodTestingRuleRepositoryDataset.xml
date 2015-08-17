@@ -177,71 +177,71 @@
 	<DonationType id="2" donationType="Family" isDeleted="false" />
 	<DonationType id="3" donationType="Autologous" isDeleted="false" />
 	<DonationType id="4" donationType="Other" isDeleted="false" />
-	<ProductType id="1" description="" expiresAfter="35"
+	<ComponentType id="1" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood Single Pack - CPDA" productTypeNameShort="0011" />
-	<ProductType id="2" description="" expiresAfter="35"
+		componentTypeName="Whole Blood Single Pack - CPDA" componentTypeNameShort="0011" />
+	<ComponentType id="2" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood Double Pack - CPDA" productTypeNameShort="0012" />
-	<ProductType id="3" description="" expiresAfter="35"
+		componentTypeName="Whole Blood Double Pack - CPDA" componentTypeNameShort="0012" />
+	<ComponentType id="3" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood Triple Pack - CPDA" productTypeNameShort="0013" />
-	<ProductType id="4" description="" expiresAfter="35"
+		componentTypeName="Whole Blood Triple Pack - CPDA" componentTypeNameShort="0013" />
+	<ComponentType id="4" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood Quad Pack - CPDA" productTypeNameShort="0014" />
-	<ProductType id="5" description="" expiresAfter="5"
+		componentTypeName="Whole Blood Quad Pack - CPDA" componentTypeNameShort="0014" />
+	<ComponentType id="5" description="" expiresAfter="5"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Apheresis" productTypeNameShort="0021" />
-	<ProductType id="6" description="" expiresAfter="35"
+		componentTypeName="Apheresis" componentTypeNameShort="0021" />
+	<ComponentType id="6" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood - CPDA" productTypeNameShort="1001" />
-	<ProductType id="7" description="" expiresAfter="35"
+		componentTypeName="Whole Blood - CPDA" componentTypeNameShort="1001" />
+	<ComponentType id="7" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood Poor Platelets - CPDA"
-		productTypeNameShort="1005" />
-	<ProductType id="8" description="" expiresAfter="35"
+		componentTypeName="Whole Blood Poor Platelets - CPDA"
+		componentTypeNameShort="1005" />
+	<ComponentType id="8" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Packed Red Cells - CPDA" productTypeNameShort="2001" />
-	<ProductType id="9" description="" expiresAfter="42"
+		componentTypeName="Packed Red Cells - CPDA" componentTypeNameShort="2001" />
+	<ComponentType id="9" description="" expiresAfter="42"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Packed Red Cells - SAGM" productTypeNameShort="2011" />
-	<ProductType id="10" description="" expiresAfter="365"
+		componentTypeName="Packed Red Cells - SAGM" componentTypeNameShort="2011" />
+	<ComponentType id="10" description="" expiresAfter="365"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Fresh Frozen Plasma - Whole Blood"
-		productTypeNameShort="3001" />
-	<ProductType id="11" description="" expiresAfter="365"
+		componentTypeName="Fresh Frozen Plasma - Whole Blood"
+		componentTypeNameShort="3001" />
+	<ComponentType id="11" description="" expiresAfter="365"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Frozen Plasma - Whole Blood" productTypeNameShort="3002" />
-	<ProductType id="12" description="" expiresAfter="5"
+		componentTypeName="Frozen Plasma - Whole Blood" componentTypeNameShort="3002" />
+	<ComponentType id="12" description="" expiresAfter="5"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Platelets Concentrate - Whole Blood"
-		productTypeNameShort="4001" />
-	<ProductType id="13" description="" expiresAfter="1"
+		componentTypeName="Platelets Concentrate - Whole Blood"
+		componentTypeNameShort="4001" />
+	<ComponentType id="13" description="" expiresAfter="1"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Platelets Concentrate - Whole Blood - 24H"
-		productTypeNameShort="4011" />
-	<ProductType id="14" description="" expiresAfter="35"
+		componentTypeName="Platelets Concentrate - Whole Blood - 24H"
+		componentTypeNameShort="4011" />
+	<ComponentType id="14" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Packed Red Cells - Paediatric - CPDA"
-		productTypeNameShort="2101" />
-	<ProductType id="15" description="" expiresAfter="365"
+		componentTypeName="Packed Red Cells - Paediatric - CPDA"
+		componentTypeNameShort="2101" />
+	<ComponentType id="15" description="" expiresAfter="365"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Fresh Frozen Plasma - Apheresis"
-		productTypeNameShort="3011" />
-	<ProductType id="16" description="" expiresAfter="5"
+		componentTypeName="Fresh Frozen Plasma - Apheresis"
+		componentTypeNameShort="3011" />
+	<ComponentType id="16" description="" expiresAfter="5"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Platelets Concentrate - Apheresis"
-		productTypeNameShort="4021" />
+		componentTypeName="Platelets Concentrate - Apheresis"
+		componentTypeNameShort="4021" />
 	<BloodBagType id="1" bloodBagType="Single" isDeleted="false"
-		productType_id="1" countAsDonation="true" periodBetweenDonations="90" />
+		componentType_id="1" countAsDonation="true" periodBetweenDonations="90" />
 	<BloodBagType id="2" bloodBagType="Double" isDeleted="false"
-		productType_id="2" countAsDonation="true" periodBetweenDonations="90" />
+		componentType_id="2" countAsDonation="true" periodBetweenDonations="90" />
 	<BloodBagType id="3" bloodBagType="Triple" isDeleted="false"
-		productType_id="3" countAsDonation="true" periodBetweenDonations="90" />
+		componentType_id="3" countAsDonation="true" periodBetweenDonations="90" />
 	<BloodBagType id="4" bloodBagType="Quad" isDeleted="false"
-		productType_id="4" countAsDonation="true" periodBetweenDonations="90" />
+		componentType_id="4" countAsDonation="true" periodBetweenDonations="90" />
 	<BloodBagType id="5" bloodBagType="Apheresis" isDeleted="false"
-		productType_id="5" countAsDonation="true" periodBetweenDonations="30" />
+		componentType_id="5" countAsDonation="true" periodBetweenDonations="30" />
 	<BloodBagType id="6" bloodBagType="Dry Pack" isDeleted="false"
 		countAsDonation="false" periodBetweenDonations="0" />
 	<BloodBagType id="7" bloodBagType="Test Only" isDeleted="false"
@@ -500,29 +500,29 @@
 	<Component id="1" createdOn="2015-02-02 10:26:36.0" expiresOn="2015-03-09 10:26:36.0"
 		isDeleted="false" createdDate="2015-02-02 03:42:04.0" lastUpdated="2015-02-02 03:42:32.0"
 		status="PROCESSED" donation_id="1" createdBy_id="1"
-		lastUpdatedBy_id="1" productType_id="3" componentIdentificationNumber="1234567-0013" />
+		lastUpdatedBy_id="1" componentType_id="3" componentIdentificationNumber="1234567-0013" />
 	<Component id="2" createdOn="2015-02-02 03:42:31.0" expiresOn="2015-02-07 00:00:00.0"
 		isDeleted="false" createdDate="2015-02-07 00:06:53.0" lastUpdated="2015-02-06 02:09:23.0"
 		status="EXPIRED" donation_id="1" createdBy_id="1"
-		lastUpdatedBy_id="1" parentComponent_id="1" productType_id="12"
+		lastUpdatedBy_id="1" parentComponent_id="1" componentType_id="12"
 		componentIdentificationNumber="1234567-4001" />
 	<Component id="3" createdOn="2015-02-02 03:42:31.0" expiresOn="2016-02-02 00:00:00.0"
 		isDeleted="false" createdDate="2015-02-02 03:42:31.0" lastUpdated="2015-02-06 02:09:23.0"
 		status="AVAILABLE" donation_id="1" createdBy_id="1"
-		lastUpdatedBy_id="1" parentComponent_id="1" productType_id="10"
+		lastUpdatedBy_id="1" parentComponent_id="1" componentType_id="10"
 		componentIdentificationNumber="1234567-3001" />
 	<Component id="4" createdOn="2015-02-02 03:42:32.0" discardedOn="2015-06-29 05:49:00.0"
 		expiresOn="2015-03-16 00:00:00.0" isDeleted="false" createdDate="2015-03-16 00:09:35.0"
 		lastUpdated="2015-06-29 05:49:00.0" status="DISCARDED"
 		donation_id="1" createdBy_id="1" lastUpdatedBy_id="1"
-		parentComponent_id="1" productType_id="9" componentIdentificationNumber="1234567-2011" />
+		parentComponent_id="1" componentType_id="9" componentIdentificationNumber="1234567-2011" />
 	<Component id="5" createdOn="2015-02-02 14:53:37.0" expiresOn="2015-03-09 14:53:37.0"
 		isDeleted="false" createdDate="2015-02-18 07:53:57.0" lastUpdated="2015-04-24 04:42:49.0"
 		status="EXPIRED" donation_id="2" createdBy_id="1"
-		lastUpdatedBy_id="1" productType_id="1" componentIdentificationNumber="1212129-0011" />
+		lastUpdatedBy_id="1" componentType_id="1" componentIdentificationNumber="1212129-0011" />
 	<Component id="6" createdOn="2015-06-26 11:24:30.0" expiresOn="2015-07-31 11:24:30.0"
 		isDeleted="false" createdDate="2015-06-29 05:24:35.0" lastUpdated="2015-06-29 05:24:35.0"
 		status="QUARANTINED" donation_id="3" createdBy_id="1"
-		lastUpdatedBy_id="1" productType_id="1" componentIdentificationNumber="9090908-0011" />
+		lastUpdatedBy_id="1" componentType_id="1" componentIdentificationNumber="9090908-0011" />
 
 </dataset>

@@ -63,22 +63,22 @@
 
 	<DonationType id="1" donationType="Voluntary" isDeleted="false" />
 
-	<ProductType id="1" description="" expiresAfter="35"
+	<ComponentType id="1" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood Single Pack - CPDA" productTypeNameShort="0011" />
-	<ProductType id="2" description="" expiresAfter="35"
+		componentTypeName="Whole Blood Single Pack - CPDA" componentTypeNameShort="0011" />
+	<ComponentType id="2" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood Double Pack - CPDA" productTypeNameShort="0012" />
-	<ProductType id="3" description="" expiresAfter="35"
+		componentTypeName="Whole Blood Double Pack - CPDA" componentTypeNameShort="0012" />
+	<ComponentType id="3" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood Triple Pack - CPDA" productTypeNameShort="0013" />
+		componentTypeName="Whole Blood Triple Pack - CPDA" componentTypeNameShort="0013" />
 
 	<BloodBagType id="1" bloodBagType="Single" isDeleted="false"
-		productType_id="1" countAsDonation="true" periodBetweenDonations="90" />
+		componentType_id="1" countAsDonation="true" periodBetweenDonations="90" />
 	<BloodBagType id="2" bloodBagType="Double" isDeleted="false"
-		productType_id="2" countAsDonation="true" periodBetweenDonations="90" />
+		componentType_id="2" countAsDonation="true" periodBetweenDonations="90" />
 	<BloodBagType id="3" bloodBagType="Triple" isDeleted="false"
-		productType_id="3" countAsDonation="true" periodBetweenDonations="90" />
+		componentType_id="3" countAsDonation="true" periodBetweenDonations="90" />
 
 	<Location id="1" isDeleted="false" isDonorPanel="true"
 		isMobileSite="false" isUsageSite="false" name="Maseru" notes="" />

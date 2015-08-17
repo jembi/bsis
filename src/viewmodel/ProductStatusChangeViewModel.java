@@ -7,10 +7,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import model.request.Request;
 import model.component.Component;
 import model.component.ProductStatus;
+import model.componenttype.ComponentType;
 import model.productmovement.ProductStatusChange;
 import model.productmovement.ProductStatusChangeType;
 import model.productmovement.ProductStatusChangeReason;
-import model.producttype.ProductType;
 import model.user.User;
 
 public class ProductStatusChangeViewModel {

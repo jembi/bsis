@@ -75,8 +75,8 @@ public class ComponentBackingFormValidator implements Validator {
 
   private void validateComponentCombinationBackingForm(ComponentCombinationBackingForm form, Errors errors) {
 
-    if (StringUtils.isBlank(form.getProductTypeCombination()))
-      errors.rejectValue("productTypeCombination", "product.productTypeCombination",
+    if (StringUtils.isBlank(form.getComponentTypeCombination()))
+      errors.rejectValue("componentTypeCombination", "product.componentTypeCombination",
           "Component type combination should be specified");
 
     String createdOn = form.getCreatedOn();
@@ -90,9 +90,9 @@ public class ComponentBackingFormValidator implements Validator {
     try {
 
       @SuppressWarnings("unchecked")
-      Map<String, String> expiryDateByProductType = mapper.readValue(expiresOn, HashMap.class);
-      for (String productTypeId : expiryDateByProductType.keySet()) {
-        String expiryDate = expiryDateByProductType.get(productTypeId);
+      Map<String, String> expiryDateByComponentType = mapper.readValue(expiresOn, HashMap.class);
+      for (String componentTypeId : expiryDateByComponentType.keySet()) {
+        String expiryDate = expiryDateByComponentType.get(componentTypeId);
         if (!CustomDateFormatter.isDateTimeStringValid(expiryDate))
           errors.rejectValue("product.expiresOn", "dateFormat.incorrect",
               CustomDateFormatter.getDateErrorMessage());

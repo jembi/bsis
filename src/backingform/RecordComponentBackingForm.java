@@ -1,13 +1,17 @@
 package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 import java.util.Date;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.hibernate.validator.constraints.NotBlank;
-import model.producttype.ProductType;
-import model.producttype.ProductTypeCombination;
+
+import model.componenttype.ComponentType;
+import model.componenttype.ComponentTypeCombination;
 import model.user.User;
 
 public class RecordComponentBackingForm {
@@ -21,7 +25,7 @@ public class RecordComponentBackingForm {
     */
 	
 	@NotBlank 
-	private ProductTypeCombination productTypeCombination;
+	private ComponentTypeCombination componentTypeCombination;
 	
     private Integer numUnits;
 	
@@ -52,12 +56,12 @@ public class RecordComponentBackingForm {
 	}
 	*/
 	
-	public ProductTypeCombination getProductTypeCombination() {
-        return productTypeCombination;
+	public ComponentTypeCombination getComponentTypeCombination() {
+        return componentTypeCombination;
     }
 	
-	public void setProductTypeCombination(ProductTypeCombination productTypeCombination){
-		this.productTypeCombination = productTypeCombination;
+	public void setComponentTypeCombination(ComponentTypeCombination componentTypeCombination){
+		this.componentTypeCombination = componentTypeCombination;
 	}
 	
 	public Integer getNumUnits() {

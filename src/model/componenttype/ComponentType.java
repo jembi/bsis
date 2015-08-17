@@ -1,4 +1,4 @@
-package model.producttype;
+package model.componenttype;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -26,7 +26,7 @@ import org.hibernate.annotations.FetchMode;
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class ProductType {
+public class ComponentType {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,40 +34,40 @@ public class ProductType {
   private Integer id;
 
   @Column(length=50)
-  private String productTypeName;
+  private String componentTypeName;
 
   @Column(length=30)
-  private String productTypeNameShort;
+  private String componentTypeNameShort;
 
   private Integer expiresAfter;
 
   @Enumerated(EnumType.STRING)
   @Column(length=30)
-  private ProductTypeTimeUnits expiresAfterUnits;
+  private ComponentTypeTimeUnits expiresAfterUnits;
 
   @NotAudited
-  @ManyToMany(mappedBy="productTypes", fetch = FetchType.EAGER)
+  @ManyToMany(mappedBy="componentTypes", fetch = FetchType.EAGER)
   @Fetch(FetchMode.SELECT)
-  private List<ProductTypeCombination> productTypeCombinations;
+  private List<ComponentTypeCombination> componentTypeCombinations;
   
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @ManyToMany(fetch=FetchType.EAGER)
   @Fetch(FetchMode.SELECT)
-  private List<ProductTypeCombination> producedProductTypeCombinations;
+  private List<ComponentTypeCombination> producedComponentTypeCombinations;
 
   /**
-   * TODO: Not used for now. Some product types like Cryoprecipitate may not require
+   * TODO: Not used for now. Some component types like Cryoprecipitate may not require
    * blood group match before issuing. Usecase not clear yet.
    */
   private Boolean hasBloodGroup;
 
   /**
-   * Pedi Component Type for this product type.
+   * Pedi Component Type for this component type.
    * can be null. This allows us to determine the target type after splitting.
    */
   @OneToOne(optional=true)
-  private ProductType pediProductType;
+  private ComponentType pediComponentType;
 
   @Lob
   private String description;
@@ -94,7 +94,7 @@ public class ProductType {
 
   @Override
   public String toString() {
-    return productTypeName;
+    return componentTypeName;
   }
 
   public Boolean getIsDeleted() {
@@ -105,12 +105,12 @@ public class ProductType {
     this.isDeleted = isDeleted;
   }
 
-    public String getProductTypeName() {
-        return productTypeName;
+    public String getComponentTypeName() {
+        return componentTypeName;
     }
 
-    public void setProductTypeName(String productTypeName) {
-        this.productTypeName = productTypeName;
+    public void setComponentTypeName(String componentTypeName) {
+        this.componentTypeName = componentTypeName;
     }
 
   public String getDescription() {
@@ -121,23 +121,23 @@ public class ProductType {
     this.description = description;
   }
 
-  public boolean equals(ProductType pt) {
+  public boolean equals(ComponentType pt) {
     return this.id == pt.id;
   }
 
-  public String getProductTypeNameShort() {
-    return productTypeNameShort;
+  public String getComponentTypeNameShort() {
+    return componentTypeNameShort;
   }
 
-  public void setProductTypeNameShort(String productTypeShortName) {
-    this.productTypeNameShort = productTypeShortName;
+  public void setComponentTypeNameShort(String componentTypeShortName) {
+    this.componentTypeNameShort = componentTypeShortName;
   }
 
-  public ProductTypeTimeUnits getExpiresAfterUnits() {
+  public ComponentTypeTimeUnits getExpiresAfterUnits() {
     return expiresAfterUnits;
   }
 
-  public void setExpiresAfterUnits(ProductTypeTimeUnits expiresAfterUnits) {
+  public void setExpiresAfterUnits(ComponentTypeTimeUnits expiresAfterUnits) {
     this.expiresAfterUnits = expiresAfterUnits;
   }
 
@@ -171,28 +171,28 @@ public class ProductType {
     return expiresAfter * factor;
   }
 
-  public List<ProductTypeCombination> getProductTypeCombinations() {
-    return productTypeCombinations;
+  public List<ComponentTypeCombination> getComponentTypeCombinations() {
+    return componentTypeCombinations;
   }
 
-  public void setProductTypeCombinations(List<ProductTypeCombination> productTypeCombinations) {
-    this.productTypeCombinations = productTypeCombinations;
+  public void setComponentTypeCombinations(List<ComponentTypeCombination> componentTypeCombinations) {
+    this.componentTypeCombinations = componentTypeCombinations;
   }
   
-  public List<ProductTypeCombination> getProducedProductTypeCombinations() {
-    return producedProductTypeCombinations;
+  public List<ComponentTypeCombination> getProducedComponentTypeCombinations() {
+    return producedComponentTypeCombinations;
   }
 
-  public void setProducedProductTypeCombinations(List<ProductTypeCombination> producedProductTypeCombinations) {
-    this.producedProductTypeCombinations = producedProductTypeCombinations;
+  public void setProducedComponentTypeCombinations(List<ComponentTypeCombination> producedComponentTypeCombinations) {
+    this.producedComponentTypeCombinations = producedComponentTypeCombinations;
   }
 
-  public ProductType getPediProductType() {
-    return pediProductType;
+  public ComponentType getPediComponentType() {
+    return pediComponentType;
   }
 
-  public void setPediProductType(ProductType pediProductType) {
-    this.pediProductType = pediProductType;
+  public void setPediComponentType(ComponentType pediComponentType) {
+    this.pediComponentType = pediComponentType;
   }
 
     public Integer getLowStorageTemperature() {
@@ -235,20 +235,20 @@ public class ProductType {
         this.preparationInfo = preparationInfo;
     }
     
-    public void copy(ProductType productType){
-    	this.productTypeName = productType.getProductTypeName();
-    	this.productTypeNameShort = productType.getProductTypeNameShort();
-    	this.expiresAfter = productType.getExpiresAfter();
-    	this.expiresAfterUnits = productType.getExpiresAfterUnits();
-    	this.description = productType.getDescription();
-    	this.hasBloodGroup = productType.getHasBloodGroup();
-    	this.productTypeCombinations = productType.getProductTypeCombinations();
-    	this.producedProductTypeCombinations = productType.getProducedProductTypeCombinations();
-    	this.highStorageTemperature =  productType.getHighStorageTemperature();
-    	this.lowStorageTemperature =  productType.getLowStorageTemperature();
-    	this.lowTransportTemperature = productType.getLowTransportTemperature();
-    	this.highTransportTemperature =  productType.getHighTransportTemperature();
-    	this.preparationInfo = productType.getPreparationInfo();
+    public void copy(ComponentType componentType){
+    	this.componentTypeName = componentType.getComponentTypeName();
+    	this.componentTypeNameShort = componentType.getComponentTypeNameShort();
+    	this.expiresAfter = componentType.getExpiresAfter();
+    	this.expiresAfterUnits = componentType.getExpiresAfterUnits();
+    	this.description = componentType.getDescription();
+    	this.hasBloodGroup = componentType.getHasBloodGroup();
+    	this.componentTypeCombinations = componentType.getComponentTypeCombinations();
+    	this.producedComponentTypeCombinations = componentType.getProducedComponentTypeCombinations();
+    	this.highStorageTemperature =  componentType.getHighStorageTemperature();
+    	this.lowStorageTemperature =  componentType.getLowStorageTemperature();
+    	this.lowTransportTemperature = componentType.getLowTransportTemperature();
+    	this.highTransportTemperature =  componentType.getHighTransportTemperature();
+    	this.preparationInfo = componentType.getPreparationInfo();
     }
     
   

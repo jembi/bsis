@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import repository.ComponentRepository;
-import repository.ProductTypeRepository;
+import repository.ComponentTypeRepository;
 import repository.RequestRepository;
 import repository.UsageRepository;
 import utils.PermissionConstants;
@@ -39,7 +39,7 @@ public class UsageController {
   private UsageRepository usageRepository;
 
   @Autowired
-  private ProductTypeRepository productTypeRepository;
+  private ComponentTypeRepository componentTypeRepository;
 
   @Autowired
   private ComponentRepository componentRepository;
@@ -83,7 +83,7 @@ public class UsageController {
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("productTypes", productTypeRepository.getAllProductTypes());
+    m.put("componentTypes", componentTypeRepository.getAllComponentTypes());
   }
 
   @RequestMapping( method = RequestMethod.POST)

@@ -1,4 +1,4 @@
-package model.producttype;
+package model.componenttype;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -20,7 +20,7 @@ import org.hibernate.annotations.FetchMode;
 @Audited
 @Entity
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class ProductTypeCombination {
+public class ComponentTypeCombination {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,12 +34,12 @@ public class ProductTypeCombination {
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @ManyToMany(fetch=FetchType.EAGER)
   @Fetch(FetchMode.SELECT)
-  private List<ProductType> productTypes;
+  private List<ComponentType> componentTypes;
   
   @NotAudited
-  @ManyToMany(mappedBy="producedProductTypeCombinations", fetch = FetchType.EAGER)
+  @ManyToMany(mappedBy="producedComponentTypeCombinations", fetch = FetchType.EAGER)
   @Fetch(FetchMode.SELECT)
-  private Set<ProductType> sourceProductTypes;
+  private Set<ComponentType> sourceComponentTypes;
   
   private Boolean isDeleted;
 
@@ -51,20 +51,20 @@ public class ProductTypeCombination {
     this.id = id;
   }
 
-  public List<ProductType> getProductTypes() {
-    return productTypes;
+  public List<ComponentType> getComponentTypes() {
+    return componentTypes;
   }
 
-  public void setProductTypes(List<ProductType> productTypes) {
-    this.productTypes = productTypes;
+  public void setComponentTypes(List<ComponentType> componentTypes) {
+    this.componentTypes = componentTypes;
   }
   
-  public Set<ProductType> getSourceProductTypes() {
-    return sourceProductTypes;
+  public Set<ComponentType> getSourceComponentTypes() {
+    return sourceComponentTypes;
   }
 
-  public void setSourceProductTypes(Set<ProductType> sourceProductTypes) {
-    this.sourceProductTypes = sourceProductTypes;
+  public void setSourceComponentTypes(Set<ComponentType> sourceComponentTypes) {
+    this.sourceComponentTypes = sourceComponentTypes;
   }
 
   public String getCombinationName() {
@@ -83,11 +83,11 @@ public class ProductTypeCombination {
     this.isDeleted = isDeleted;
   }
   
-  public void copy(ProductTypeCombination productTypeCombination){
-  	this.productTypes = productTypeCombination.getProductTypes();
-  	this.sourceProductTypes = productTypeCombination.getSourceProductTypes();
-  	this.combinationName = productTypeCombination.getCombinationName();
-  	this.isDeleted = productTypeCombination.getIsDeleted();
+  public void copy(ComponentTypeCombination componentTypeCombination){
+  	this.componentTypes = componentTypeCombination.getComponentTypes();
+  	this.sourceComponentTypes = componentTypeCombination.getSourceComponentTypes();
+  	this.combinationName = componentTypeCombination.getCombinationName();
+  	this.isDeleted = componentTypeCombination.getIsDeleted();
   }
 
 }

@@ -7,8 +7,8 @@
     <BloodTest/>
     <BloodTestingRule/>
     <BloodTestResult/>
-    <Product/>
-	<ProductType/>
+    <Component/>
+	<ComponentType/>
 	<BloodBagType/>
 	<DonationType/>	
 	<Location/>

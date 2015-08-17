@@ -138,9 +138,9 @@ public class LotReleaseController {
 			        "^FD>:"+expiryDate+"^FS"+
 			        "^BY3,3,82^FT62,150^BCN,,Y,N"+
 			        "^FD>:"+component.getDonationIdentificationNumber()+"^FS"+
-			        "^FT66,608^A0N,20,21^FH\\^FD"+component.getProductType().getProductTypeName()+"^FS"+
+			        "^FT66,608^A0N,20,21^FH\\^FD"+component.getComponentType().getComponentTypeName()+"^FS"+
 			        "^BY3,3,77^FT69,535^BCN,,Y,N"+
-			        "^FD>:"+component.getProductType().getProductTypeNameShort()+"^FS"+
+			        "^FD>:"+component.getComponentType().getComponentTypeNameShort()+"^FS"+
 			        "^BY2,3,84^FT65,296^BCN,,Y,N"+
 			        "^FD>:"+donationDate+"^FS"+
 			        //inverse+
@@ -356,7 +356,7 @@ public class LotReleaseController {
     		for(Component component : components){
     				if(!component.getStatus().equals(ProductStatus.PROCESSED) && !component.getStatus().equals(ProductStatus.SPLIT)){
 	                    productStatus.put("componentId", component.getId());
-	                    productStatus.put("componentName", component.getProductType().getProductTypeName());
+	                    productStatus.put("componentName", component.getComponentType().getComponentTypeName());
 	                    productStatus.put("componentIdentificationNumber", component.getComponentIdentificationNumber());
 	                    productStatus.put("discardPackLabel", true);
 	                    productStatus.put("printPackLabel", false);
@@ -371,7 +371,7 @@ public class LotReleaseController {
                 	Map<String, Object> productStatus = new HashMap<String, Object>();
                 	if(!component.getStatus().equals(ProductStatus.PROCESSED) && !component.getStatus().equals(ProductStatus.SPLIT)){
 	                    productStatus.put("componentId", component.getId());
-	                    productStatus.put("componentName", component.getProductType().getProductTypeName());
+	                    productStatus.put("componentName", component.getComponentType().getComponentTypeName());
 	                    productStatus.put("componentIdentificationNumber", component.getComponentIdentificationNumber());
 	                    if (component.getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED)) {
 	                        productStatus.put("discardPackLabel", true);

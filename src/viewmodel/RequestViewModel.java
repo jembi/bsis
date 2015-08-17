@@ -74,8 +74,8 @@ public class RequestViewModel {
     return request.getModificationTracker();
   }
 
-  public String getProductType() {
-    return request.getProductType().getProductTypeNameShort();
+  public String getComponentType() {
+    return request.getComponentType().getComponentTypeNameShort();
   }
 
   public Location getRequestSite() {

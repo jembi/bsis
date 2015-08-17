@@ -27,9 +27,9 @@ import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.TTIStatus;
 import model.component.Component;
 import model.component.ProductStatus;
+import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.donor.Donor;
-import model.producttype.ProductType;
 import model.util.BloodGroup;
 
 import org.apache.commons.lang3.StringUtils;
@@ -342,11 +342,11 @@ public class DonationRepository {
   
   public void createInitialComponent(Donation donation){
     
-    ProductType productType = donation.getBloodBagType().getProductType();
+    ComponentType componentType = donation.getBloodBagType().getComponentType();
       
     Component component = new Component();
     component.setIsDeleted(false);
-    component.setComponentIdentificationNumber(donation.getDonationIdentificationNumber() +"-"+productType.getProductTypeNameShort());
+    component.setComponentIdentificationNumber(donation.getDonationIdentificationNumber() +"-"+componentType.getComponentTypeNameShort());
     component.setDonation(donation);
     component.setStatus(ProductStatus.QUARANTINED);
     component.setCreatedDate(donation.getCreatedDate());
@@ -381,11 +381,11 @@ public class DonationRepository {
     cal.set(Calendar.SECOND, bleedStartTime.get(Calendar.SECOND));
     
     // update cal with initial component expiry period
-    cal.add(Calendar.DATE, productType.getExpiresAfter());
+    cal.add(Calendar.DATE, componentType.getExpiresAfter());
     Date expiresOn = cal.getTime();    
 
     component.setExpiresOn(expiresOn);
-    component.setProductType(productType);
+    component.setComponentType(componentType);
     em.persist(component);
     em.refresh(component);
    

@@ -6,9 +6,9 @@ import java.text.ParseException;
 import java.util.List;
 
 import model.component.Component;
+import model.componenttype.ComponentType;
 import model.location.Location;
 import model.modificationtracker.RowModificationTracker;
-import model.producttype.ProductType;
 import model.request.Request;
 import model.requesttype.RequestType;
 import model.util.BloodGroup;
@@ -127,14 +127,14 @@ public class RequestBackingForm {
 	}
   }
 
-  public void setProductType(String productTypeId) {
-	if (StringUtils.isBlank(productTypeId)) {
-		request.setProductType(null);
+  public void setComponentType(String componentTypeId) {
+	if (StringUtils.isBlank(componentTypeId)) {
+		request.setComponentType(null);
 	}
 	else {
-		ProductType pt = new ProductType();
-		pt.setId(Integer.parseInt(productTypeId));
-		request.setProductType(pt);
+		ComponentType pt = new ComponentType();
+		pt.setId(Integer.parseInt(componentTypeId));
+		request.setComponentType(pt);
 	}
   }
 

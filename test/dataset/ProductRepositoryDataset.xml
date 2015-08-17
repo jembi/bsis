@@ -54,19 +54,19 @@
 	<DonationBatch id="1" batchNumber="000000" isDeleted="false"
 		createdDate="2015-08-11 09:05:56.0" lastUpdated="2015-08-11 09:07:10.0"
 		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" donorPanel_id="1" />
-	<ProductType id="1" description="" expiresAfter="35"
+	<ComponentType id="1" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood Single Pack - CPDA" productTypeNameShort="0011" />
-	<ProductType id="14" description="" expiresAfter="35"
+		componentTypeName="Whole Blood Single Pack - CPDA" componentTypeNameShort="0011" />
+	<ComponentType id="14" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Packed Red Cells - Paediatric - CPDA"
-		productTypeNameShort="2101" />
-	<ProductType id="6" description="" expiresAfter="35"
+		componentTypeName="Packed Red Cells - Paediatric - CPDA"
+		componentTypeNameShort="2101" />
+	<ComponentType id="6" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood - CPDA" productTypeNameShort="1001"
-		pediProductType_id="14" />
+		componentTypeName="Whole Blood - CPDA" componentTypeNameShort="1001"
+		pediComponentType_id="14" />
 	<BloodBagType id="1" bloodBagType="Single" isDeleted="false"
-		productType_id="1" countAsDonation="true" periodBetweenDonations="90" />
+		componentType_id="1" countAsDonation="true" periodBetweenDonations="90" />
 	<DonationType id="1" donationType="Voluntary" isDeleted="false" />
 	<Donation id="1" bloodTypingStatus="NOT_DONE" donationDate="2015-08-11 09:05:56.0"
 		donationIdentificationNumber="1111111" donorWeight="85.00" isDeleted="false"
@@ -107,34 +107,34 @@
 	<Component id="1" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
 		isDeleted="false" createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:07:29.0"
 		status="PROCESSED" donation_id="1" createdBy_id="1" lastUpdatedBy_id="1"
-		productType_id="1" componentIdentificationNumber="1111111-0011" />
+		componentType_id="1" componentIdentificationNumber="1111111-0011" />
 	<Component id="2" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
 		isDeleted="false" createdDate="2015-08-11 09:07:29.0" lastUpdated="2015-08-11 09:07:29.0"
 		status="QUARANTINED" donation_id="1" createdBy_id="1"
-		lastUpdatedBy_id="1" parentComponent_id="1" productType_id="6"
+		lastUpdatedBy_id="1" parentComponent_id="1" componentType_id="6"
 		componentIdentificationNumber="1111111-1001" />
 	<Component id="3" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
 		isDeleted="false" createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:07:29.0"
 		status="PROCESSED" donation_id="2" createdBy_id="1" lastUpdatedBy_id="1"
-		productType_id="1" componentIdentificationNumber="2222222-0011" />
+		componentType_id="1" componentIdentificationNumber="2222222-0011" />
 	<Component id="4" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
 		isDeleted="false" createdDate="2015-08-11 09:07:29.0" lastUpdated="2015-08-11 09:07:29.0"
 		status="QUARANTINED" donation_id="2" createdBy_id="1"
-		lastUpdatedBy_id="1" parentComponent_id="3" productType_id="6"
+		lastUpdatedBy_id="1" parentComponent_id="3" componentType_id="6"
 		componentIdentificationNumber="2222222-1001" />
 	<Component id="5" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
 		isDeleted="false" createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:07:29.0"
 		status="PROCESSED" donation_id="3" createdBy_id="1" lastUpdatedBy_id="1"
-		productType_id="1" componentIdentificationNumber="3333333-0011" />
+		componentType_id="1" componentIdentificationNumber="3333333-0011" />
 	<Component id="6" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
 		discardedOn="2015-08-11 16:13:00.0" isDeleted="false" createdDate="2015-08-11 09:07:29.0"
 		lastUpdated="2015-08-11 09:07:29.0" status="DISCARDED" donation_id="3"
 		createdBy_id="1" lastUpdatedBy_id="1" parentComponent_id="5"
-		productType_id="6" componentIdentificationNumber="3333333-1001" />
+		componentType_id="6" componentIdentificationNumber="3333333-1001" />
 	<Component id="7" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
 		isDeleted="false" createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:07:29.0"
 		status="QUARANTINED" donation_id="5" createdBy_id="1" lastUpdatedBy_id="1"
-		productType_id="6" componentIdentificationNumber="5555555-0011" />
+		componentType_id="6" componentIdentificationNumber="5555555-0011" />
 	<ProductStatusChangeReason id="5" category="DISCARDED"
 		isDeleted="false" statusChangeReason="Storage Problems" />
 	<ProductStatusChangeReason id="7" category="RETURNED"

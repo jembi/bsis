@@ -39,8 +39,8 @@ public class MatchingComponentViewModel {
     return componentViewModel.getDonation();
   }
 
-  public ProductTypeViewModel getProductType() {
-    return componentViewModel.getProductType();
+  public ComponentTypeViewModel getComponentType() {
+    return componentViewModel.getComponentType();
   }
 
   public String getLastUpdated() {

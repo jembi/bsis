@@ -169,7 +169,7 @@
 		propertyOwner="donationRequirements" propertyValue="true" />
 	<genericconfig id="14" propertyName="donorHistoryCheckRequired"
 		propertyOwner="donationRequirements" propertyValue="true" />
-	<genericconfig id="15" propertyName="useShortNameForProductTypes"
+	<genericconfig id="15" propertyName="useShortNameForComponentTypes"
 		propertyOwner="components" propertyValue="true" />
 	<genericconfig id="16"
 		propertyName="allowPediComponentsFromFirstTimeDonors" propertyOwner="componentSplit"

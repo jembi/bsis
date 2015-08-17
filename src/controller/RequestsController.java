@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
 import repository.ComponentRepository;
-import repository.ProductTypeRepository;
+import repository.ComponentTypeRepository;
 import repository.RequestRepository;
 import repository.RequestTypeRepository;
 import utils.PermissionConstants;
@@ -55,7 +55,7 @@ public class RequestsController {
   private LocationRepository locationRepository;
 
   @Autowired
-  private ProductTypeRepository productTypeRepository;
+  private ComponentTypeRepository componentTypeRepository;
 
   @Autowired
   private RequestTypeRepository requestTypeRepository;
@@ -94,7 +94,7 @@ public class RequestsController {
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("productTypes", productTypeRepository.getAllProductTypes());
+    m.put("componentTypes", componentTypeRepository.getAllComponentTypes());
     m.put("requestTypes", requestTypeRepository.getAllRequestTypes());
     m.put("sites", locationRepository.getAllUsageSites());
   }
@@ -120,7 +120,7 @@ public class RequestsController {
           @RequestParam(value = "requestedAfter", required = false) String requestedAfter,
           @RequestParam(value = "requiredBy", required = false) String requiredBy,
           @RequestParam(value = "requestSites", required = false) List<String> requestSites,
-          @RequestParam(value = "productTypes", required = false) List<String> productTypes,
+          @RequestParam(value = "componentTypes", required = false) List<String> componentTypes,
           @RequestParam(value = "includeSatisfiedRequests", required = false) Boolean includeSatisfiedRequests) throws ParseException {
 
       Map<String, Object> pagingParams = new HashMap<String, Object>();
@@ -134,11 +134,11 @@ public class RequestsController {
       pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
 
-    List<Integer> productTypeIds = new ArrayList<Integer>();
-    productTypeIds.add(-1);
-    if (productTypes != null) {
-      for (String productTypeId : productTypes) {
-        productTypeIds.add(Integer.parseInt(productTypeId));
+    List<Integer> componentTypeIds = new ArrayList<Integer>();
+    componentTypeIds.add(-1);
+    if (componentTypes != null) {
+      for (String componentTypeId : componentTypes) {
+        componentTypeIds.add(Integer.parseInt(componentTypeId));
       }
     }
 
@@ -153,7 +153,7 @@ public class RequestsController {
 
     List<Object> results = requestRepository.findRequests(
                         requestNumber,
-                        productTypeIds, siteIds,
+                        componentTypeIds, siteIds,
                         requestedAfter, requiredBy,
                         includeSatisfiedRequests, pagingParams);
 
@@ -172,7 +172,7 @@ public class RequestsController {
     List<String> visibleFields = new ArrayList<String>();
     visibleFields.add("id");
     for (String field : Arrays.asList("requestNumber", "patientBloodAbo","patientBloodRh",
-                                      "requestDate", "requiredDate", "productType",
+                                      "requestDate", "requiredDate", "componentType",
                                       "numUnitsRequested", "numUnitsIssued", "requestSite")) {
       Map<String, Object> fieldProperties = (Map<String, Object>) formFields.get(field);
       if (fieldProperties.get("hidden").equals(false))
@@ -186,7 +186,7 @@ public class RequestsController {
     sortColumnMap.put("patientBloodRh", "patientBloodRh");
     sortColumnMap.put("requestDate", "requestDate");
     sortColumnMap.put("requiredDate", "requiredDate");
-    sortColumnMap.put("productType", "productType.productTypeNameShort");
+    sortColumnMap.put("componentType", "componentType.componentTypeNameShort");
     sortColumnMap.put("numUnitsRequested", "numUnitsRequested");
     sortColumnMap.put("numUnitsIssued", "numUnitsIssued");
     sortColumnMap.put("requestSite", "requestSite");
@@ -216,7 +216,7 @@ public class RequestsController {
       row.add(productRequest.getId().toString());
 
       for (String property : Arrays.asList("requestNumber", "patientBloodAbo", "patientBloodRh",
-                                           "requestDate", "requiredDate", "productType",
+                                           "requestDate", "requiredDate", "componentType",
                                            "numUnitsRequested", "numUnitsIssued", "requestSite")) {
         if (formFields.containsKey(property)) {
           Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
@@ -282,7 +282,7 @@ public class RequestsController {
     List<ComponentViewModel> issuedComponentViewModels = null;
     issuedComponentViewModels = ComponentController.getComponentViewModels(issuedComponents);
     map.put("issuedProducts", issuedComponentViewModels);
-    map.put("productTypeFields", utilController.getFormFieldsForForm("ProductType"));
+    map.put("componentTypeFields", utilController.getFormFieldsForForm("ComponentType"));
     return map;
   }
   

@@ -14,11 +14,11 @@ import javax.sql.DataSource;
 
 import model.component.Component;
 import model.component.ProductStatus;
+import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.productmovement.ProductStatusChange;
 import model.productmovement.ProductStatusChangeReason;
 import model.productmovement.ProductStatusChangeType;
-import model.producttype.ProductType;
 
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseDataSourceConnection;
@@ -188,7 +188,7 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Bug - error in HQL: could not resolve property: type of: model.component.Component [SELECT p FROM model.component.Component p where p.type = :productType and p.abo= :abo and p.rhd= :rhd and p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.createdOn > :minDate]")
+	@Ignore("Bug - error in HQL: could not resolve property: type of: model.component.Component [SELECT p FROM model.component.Component p where p.type = :componentType and p.abo= :abo and p.rhd= :rhd and p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.createdOn > :minDate]")
 	public void testGetAllUnissuedThirtyFiveDayComponentsWithParameters() throws Exception {
 		List<Component> all = componentRepository.getAllUnissuedThirtyFiveDayComponents("PROCESSED", "A", "+");
 		Assert.assertNotNull("There are Components", all);
@@ -198,7 +198,7 @@ public class ComponentRepositoryTest {
 	@Test
 	@Transactional
 	@Ignore("There appears to be a bug in the HQL: could not resolve property: type of: model.component.Component")
-	public void testGetAllComponentsWithProductTypeQUARANTINED() throws Exception {
+	public void testGetAllComponentsWithComponentTypeQUARANTINED() throws Exception {
 		List<Component> all = componentRepository.getAllComponents("QUARANTINED");
 		Assert.assertNotNull("There are Components", all);
 		Assert.assertEquals("There are 3 Components", 3, all.size());
@@ -207,7 +207,7 @@ public class ComponentRepositoryTest {
 	@Test
 	@Transactional
 	@Ignore("There appears to be a bug in the HQL: could not resolve property: type of: model.component.Component")
-	public void testGetAllComponentsWithProductTypeEXPIRED() throws Exception {
+	public void testGetAllComponentsWithComponentTypeEXPIRED() throws Exception {
 		List<Component> all = componentRepository.getAllComponents("EXPIRED");
 		Assert.assertNotNull("There are Components", all);
 		Assert.assertEquals("There are 0 Components", 0, all.size());
@@ -262,7 +262,7 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	@Transactional
-	public void testFindComponentByDINAndProductTypeId() throws Exception {
+	public void testFindComponentByDINAndComponentTypeId() throws Exception {
 		Component one = componentRepository.findComponent("1111111", "1");
 		Assert.assertNotNull("There is a Component with DIN 1111111", one);
 		Assert.assertEquals("Component is linked to the correct Donation", "1111111", one.getDonationIdentificationNumber());
@@ -270,33 +270,33 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	@Transactional
-	public void testFindComponentByDINAndProductTypeIdUnknown() throws Exception {
+	public void testFindComponentByDINAndComponentTypeIdUnknown() throws Exception {
 		Component one = componentRepository.findComponent("1111112", "1");
 		Assert.assertNull("There is no a Component with DIN 1111112", one);
 	}
 	
 	@Test
 	@Transactional
-	public void testFindComponentByProductTypes() throws Exception {
+	public void testFindComponentByComponentTypes() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<ProductStatus> status = new ArrayList<ProductStatus>();
 		status.add(ProductStatus.PROCESSED);
-		List<Integer> productTypeIds = new ArrayList<Integer>();
-		productTypeIds.add(1);
-		List<Component> all = componentRepository.findComponentByProductTypes(productTypeIds, status, pagingParams);
+		List<Integer> componentTypeIds = new ArrayList<Integer>();
+		componentTypeIds.add(1);
+		List<Component> all = componentRepository.findComponentByComponentTypes(componentTypeIds, status, pagingParams);
 		Assert.assertNotNull("Does not return an null", all);
 		Assert.assertEquals("There are 3 'Whole Blood Single Pack - CPDA' Components", 3, all.size());
 	}
 	
 	@Test
 	@Transactional
-	public void testFindComponentByProductTypesNone() throws Exception {
+	public void testFindComponentByComponentTypesNone() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<ProductStatus> status = new ArrayList<ProductStatus>();
 		status.add(ProductStatus.QUARANTINED);
-		List<Integer> productTypeIds = new ArrayList<Integer>();
-		productTypeIds.add(1);
-		List<Component> all = componentRepository.findComponentByProductTypes(productTypeIds, status, pagingParams);
+		List<Integer> componentTypeIds = new ArrayList<Integer>();
+		componentTypeIds.add(1);
+		List<Component> all = componentRepository.findComponentByComponentTypes(componentTypeIds, status, pagingParams);
 		Assert.assertNotNull("Does not return a null list", all);
 		Assert.assertTrue("There are no Components", all.isEmpty());
 	}
@@ -362,9 +362,9 @@ public class ComponentRepositoryTest {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<ProductStatus> status = new ArrayList<ProductStatus>();
 		status.add(ProductStatus.QUARANTINED);
-		List<Integer> productTypeIds = new ArrayList<Integer>();
-		productTypeIds.add(1);
-		List<Component> all = componentRepository.findAnyComponent(null, productTypeIds, status, null, null, pagingParams);
+		List<Integer> componentTypeIds = new ArrayList<Integer>();
+		componentTypeIds.add(1);
+		List<Component> all = componentRepository.findAnyComponent(null, componentTypeIds, status, null, null, pagingParams);
 		Assert.assertNotNull("There aren't matching components", all);
 		Assert.assertTrue("There should be 0 components", all.isEmpty());
 	}
@@ -382,25 +382,25 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("Bug - error in the HQL: could not resolve property: productType of: model.producttype.ProductType [SELECT p FROM model.producttype.ProductType p where p.productType = :productTypeName]")
-	public void testFindProductTypeByProductTypeName() throws Exception {
-		ProductType one = componentRepository.findProductTypeByProductTypeName("Whole Blood Single Pack - CPDA");
-		Assert.assertNotNull("ProductType match", one);
-		Assert.assertEquals("ProductType is correct", "0011", one.getProductTypeNameShort());
+	@Ignore("Bug - error in the HQL:  org.hibernate.QueryException: could not resolve property: componentType of: model.componenttype.ComponentType [SELECT p FROM model.componenttype.ComponentType p where p.componentType = :componentTypeName]")
+	public void testFindComponentTypeByComponentTypeName() throws Exception {
+		ComponentType one = componentRepository.findComponentTypeByComponentTypeName("Whole Blood Single Pack - CPDA");
+		Assert.assertNotNull("ComponentType match", one);
+		Assert.assertEquals("ComponentType is correct", "0011", one.getComponentTypeNameShort());
 	}
 	
 	@Test
 	@Transactional
-	public void testFindProductTypeByProductTypeId() throws Exception {
-		ProductType one = componentRepository.findProductTypeBySelectedProductType(1);
-		Assert.assertNotNull("ProductType match", one);
-		Assert.assertEquals("ProductType is correct", "Whole Blood Single Pack - CPDA", one.getProductTypeName());
+	public void testFindComponentTypeByComponentTypeId() throws Exception {
+		ComponentType one = componentRepository.findComponentTypeBySelectedComponentType(1);
+		Assert.assertNotNull("ComponentType match", one);
+		Assert.assertEquals("ComponentType is correct", "Whole Blood Single Pack - CPDA", one.getComponentTypeName());
 	}
 	
 	@Test(expected = javax.persistence.NoResultException.class)
 	@Transactional
-	public void testFindProductTypeByProductTypeIdUnknown() throws Exception {
-		componentRepository.findProductTypeBySelectedProductType(123);
+	public void testFindComponentTypeByComponentTypeIdUnknown() throws Exception {
+		componentRepository.findComponentTypeBySelectedComponentType(123);
 	}
 	
 	@Test

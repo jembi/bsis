@@ -9,8 +9,8 @@ import javax.validation.constraints.NotNull;
 
 import model.component.Component;
 import model.component.ProductStatus;
+import model.componenttype.ComponentType;
 import model.donation.Donation;
-import model.producttype.ProductType;
 import model.user.User;
 
 import org.apache.commons.lang3.StringUtils;
@@ -31,7 +31,7 @@ public class ComponentBackingForm {
 
   private String expiresOn;
 
-  private List<String> productTypes;
+  private List<String> componentTypes;
 
   public ComponentBackingForm() {
     setComponent(new Component());
@@ -53,12 +53,12 @@ public class ComponentBackingForm {
     return component.getDonation();
   }
 
-  public String getProductType() {
-    ProductType productType = component.getProductType();
-    if (productType == null)
+  public String getComponentType() {
+    ComponentType componentType = component.getComponentType();
+    if (componentType == null)
       return "";
     else
-      return productType.getId().toString();
+      return componentType.getId().toString();
   }
   
   @JsonIgnore
@@ -101,18 +101,18 @@ public class ComponentBackingForm {
     component.setDonation(donation);
   }
 
-  public void setProductType(String productTypeId) {
-    if (StringUtils.isBlank(productTypeId)) {
-      component.setProductType(null);
+  public void setComponentType(String componentTypeId) {
+    if (StringUtils.isBlank(componentTypeId)) {
+      component.setComponentType(null);
     }
     else {
-      ProductType pt = new ProductType();
+      ComponentType pt = new ComponentType();
       try {
-        pt.setId(Integer.parseInt(productTypeId));
-        component.setProductType(pt);
+        pt.setId(Integer.parseInt(componentTypeId));
+        component.setComponentType(pt);
       } catch (Exception ex) {
         ex.printStackTrace();
-        component.setProductType(null);
+        component.setComponentType(null);
       }
     }
   }
@@ -181,12 +181,12 @@ public class ComponentBackingForm {
     return component.toString();
   }
 
-  public List<String> getProductTypes() {
-    return productTypes;
+  public List<String> getComponentTypes() {
+    return componentTypes;
   }
 
-  public void setProductTypes(List<String> productTypes) {
-    this.productTypes = productTypes;
+  public void setComponentTypes(List<String> componentTypes) {
+    this.componentTypes = componentTypes;
   }
 
   public String getDonationIdentificationNumber() {

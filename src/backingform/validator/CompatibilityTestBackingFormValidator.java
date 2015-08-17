@@ -64,7 +64,7 @@ public class CompatibilityTestBackingFormValidator implements Validator {
     String donationIdentificationNumber = form.getDonationIdentificationNumber();
     if (StringUtils.isNotBlank(donationIdentificationNumber) && productRequest != null) {
       try {
-        Component testedComponent = utilController.findComponent(donationIdentificationNumber, productRequest.getProductType());
+        Component testedComponent = utilController.findComponent(donationIdentificationNumber, productRequest.getComponentType());
         if (testedComponent == null)
           errors.rejectValue("compatibilityTest.testedComponent", "compatibilitytest.testedComponent.notFound",
               "Component with this donation identification number and product type not found or not available");

@@ -13,8 +13,8 @@ import javax.validation.constraints.NotNull;
 
 import model.component.Component;
 import model.component.ProductStatus;
+import model.componenttype.ComponentTypeCombination;
 import model.donation.Donation;
-import model.producttype.ProductTypeCombination;
 import model.user.User;
 
 import org.apache.commons.lang3.StringUtils;
@@ -38,17 +38,17 @@ public class ComponentCombinationBackingForm {
 
   private String expiresOn;
 
-  private ProductTypeCombination productTypeCombination;
+  private ComponentTypeCombination componentTypeCombination;
 
-  Map<String, String> expiresOnByProductTypeId;
+  Map<String, String> expiresOnByComponentTypeId;
   
   public ComponentCombinationBackingForm() {
-    expiresOnByProductTypeId = new HashMap<String, String>();
+    expiresOnByComponentTypeId = new HashMap<String, String>();
     setComponent(new Component());
   }
 
   public ComponentCombinationBackingForm(boolean autoGenerate) {
-    expiresOnByProductTypeId = new HashMap<String, String>();
+    expiresOnByComponentTypeId = new HashMap<String, String>();
     setComponent(new Component());
   }
 
@@ -156,7 +156,7 @@ public class ComponentCombinationBackingForm {
     this.expiresOn = expiresOn;
     ObjectMapper mapper = new ObjectMapper();
     try {
-      expiresOnByProductTypeId = mapper.readValue(expiresOn, HashMap.class);
+      expiresOnByComponentTypeId = mapper.readValue(expiresOn, HashMap.class);
     } catch (JsonParseException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -207,21 +207,21 @@ public class ComponentCombinationBackingForm {
     component.setStatus(ProductStatus.valueOf(status));
   }
 
-  public String getProductTypeCombination() {
-    if (productTypeCombination == null || productTypeCombination.getId() == null)
+  public String getComponentTypeCombination() {
+    if (componentTypeCombination == null || componentTypeCombination.getId() == null)
       return "";
     else
-      return productTypeCombination.getId().toString();
+      return componentTypeCombination.getId().toString();
   }
 
-  public void setProductTypeCombination(String productTypeCombinationId) {
-    if (StringUtils.isBlank(productTypeCombinationId)) {
-      productTypeCombination = null;
+  public void setComponentTypeCombination(String componentTypeCombinationId) {
+    if (StringUtils.isBlank(componentTypeCombinationId)) {
+      componentTypeCombination = null;
     }
     else {
-      productTypeCombination = new ProductTypeCombination();
+      componentTypeCombination = new ComponentTypeCombination();
       try {
-        productTypeCombination.setId(Integer.parseInt(productTypeCombinationId));
+        componentTypeCombination.setId(Integer.parseInt(componentTypeCombinationId));
       } catch (Exception ex) {
         ex.printStackTrace();
       }

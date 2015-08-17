@@ -1,16 +1,17 @@
  package controller;
 
-import backingform.ComponentTypeBackingForm;
-import backingform.ProductTypeCombinationBackingForm;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import model.producttype.ProductType;
-import model.producttype.ProductTypeCombination;
+
+import model.componenttype.ComponentType;
+import model.componenttype.ComponentTypeCombination;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,19 +21,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import repository.ProductTypeRepository;
+
+import repository.ComponentTypeRepository;
 import utils.PermissionConstants;
-import viewmodel.ProductTypeCombinationViewModel;
-import viewmodel.ProductTypeViewModel;
+import viewmodel.ComponentTypeCombinationViewModel;
+import viewmodel.ComponentTypeViewModel;
+import backingform.ComponentTypeBackingForm;
+import backingform.ComponentTypeCombinationBackingForm;
 
 @RestController
 @RequestMapping("componenttypes")
-public class ProductTypeController {
+public class ComponentTypeController {
 
   @Autowired
-  private ProductTypeRepository productTypeRepository;
+  private ComponentTypeRepository componentTypeRepository;
   
-  public ProductTypeController() {
+  public ComponentTypeController() {
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -48,8 +52,8 @@ public class ProductTypeController {
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_TYPES+"')")
   public  ResponseEntity<Map<String, Object>>  getComponentTypes() {
     Map<String, Object> map = new HashMap<String, Object>();
-    List<ProductType> productTypes = productTypeRepository.getAllProductTypesIncludeDeleted();
-    map.put("componentTypes", getProductTypeViewModels(productTypes));
+    List<ComponentType> componentTypes = componentTypeRepository.getAllComponentTypesIncludeDeleted();
+    map.put("componentTypes", getComponentTypeViewModels(componentTypes));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   
@@ -58,8 +62,8 @@ public class ProductTypeController {
   public ResponseEntity<Map<String, Object>> getComponentTypeById(@PathVariable Integer id) {
 
     Map<String, Object> map = new HashMap<String, Object> ();
-    ProductType productType = productTypeRepository.getProductTypeById(id);
-    map.put("productType", new ProductTypeViewModel(productType));
+    ComponentType componentType = componentTypeRepository.getComponentTypeById(id);
+    map.put("componentType", new ComponentTypeViewModel(componentType));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 
@@ -67,8 +71,8 @@ public class ProductTypeController {
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_TYPES+"')")
   public  ResponseEntity saveComponentType(@Valid @RequestBody ComponentTypeBackingForm form) {
       
-	  ProductType componentType = productTypeRepository.saveComponentType(form.getProductType());
-      return new ResponseEntity(new ProductTypeViewModel(componentType), HttpStatus.CREATED);
+	  ComponentType componentType = componentTypeRepository.saveComponentType(form.getComponentType());
+      return new ResponseEntity(new ComponentTypeViewModel(componentType), HttpStatus.CREATED);
   }
   
   @RequestMapping(value="{id}", method=RequestMethod.PUT)
@@ -76,17 +80,17 @@ public class ProductTypeController {
   public  ResponseEntity updateComponentType(@Valid @RequestBody ComponentTypeBackingForm form,
   @PathVariable Integer id) {
 
-      ProductType componentType = form.getProductType();
+      ComponentType componentType = form.getComponentType();
       componentType.setId(id);
-      componentType = productTypeRepository.updateComponentType(componentType);
-      return new ResponseEntity(new ProductTypeViewModel(componentType), HttpStatus.OK);
+      componentType = componentTypeRepository.updateComponentType(componentType);
+      return new ResponseEntity(new ComponentTypeViewModel(componentType), HttpStatus.OK);
   }
 
   @RequestMapping(value="{id}/deactivate", method=RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_TYPES+"')")
   public  ResponseEntity deactivateComponentType(@PathVariable Integer id) {
    
-    productTypeRepository.deactivateProductType(id);
+    componentTypeRepository.deactivateComponentType(id);
     return new ResponseEntity(HttpStatus.OK);
   }
 
@@ -95,15 +99,15 @@ public class ProductTypeController {
   public  ResponseEntity activateComponentType(HttpServletRequest request,
       @PathVariable Integer id) {
 
-    productTypeRepository.activateProductType(id);
+    componentTypeRepository.activateComponentType(id);
     return new ResponseEntity(HttpStatus.OK);
   }
 
   @RequestMapping(value="/combinations", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public List<ProductTypeCombinationViewModel> getComponentTypeCombinations() {
-    List<ProductTypeCombination> allProductTypeCombinationsIncludeDeleted = productTypeRepository.getAllProductTypeCombinationsIncludeDeleted();
-    return getProductTypeCombinationViewModels(allProductTypeCombinationsIncludeDeleted);
+  public List<ComponentTypeCombinationViewModel> getComponentTypeCombinations() {
+    List<ComponentTypeCombination> allComponentTypeCombinationsIncludeDeleted = componentTypeRepository.getAllComponentTypeCombinationsIncludeDeleted();
+    return getComponentTypeCombinationViewModels(allComponentTypeCombinationsIncludeDeleted);
   }
   
   @RequestMapping(value="/combinations/{id}", method=RequestMethod.GET)
@@ -112,18 +116,18 @@ public class ProductTypeController {
       @PathVariable Integer id) {
 
     Map<String, Object> map = new HashMap<String, Object> ();
-    ProductTypeCombination productTypeCombination = productTypeRepository.getProductTypeCombinationById(id);
-    map.put("productTypeCombination", new ProductTypeCombinationViewModel(productTypeCombination));
+    ComponentTypeCombination componentTypeCombination = componentTypeRepository.getComponentTypeCombinationById(id);
+    map.put("componentTypeCombination", new ComponentTypeCombinationViewModel(componentTypeCombination));
     return map;
   }
 
     @RequestMapping(value = "/combinations", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
-    public ResponseEntity saveComponentTypeCombination(@RequestBody ProductTypeCombinationBackingForm productTypeCombinationBackingForm) {
-        ProductTypeCombination productTypeCombination
-                = productTypeCombinationBackingForm.getProductTypeCombination();
+    public ResponseEntity saveComponentTypeCombination(@RequestBody ComponentTypeCombinationBackingForm componentTypeCombinationBackingForm) {
+        ComponentTypeCombination componentTypeCombination
+                = componentTypeCombinationBackingForm.getComponentTypeCombination();
 
-        productTypeRepository.saveComponentTypeCombination(productTypeCombination);
+        componentTypeRepository.saveComponentTypeCombination(componentTypeCombination);
         return new ResponseEntity(HttpStatus.CREATED);
     }
     
@@ -131,12 +135,12 @@ public class ProductTypeController {
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
     public 
     ResponseEntity updateComponentTypeCombination(HttpServletResponse response,
-            @RequestBody ProductTypeCombinationBackingForm productTypeCombinationBackingForm
+            @RequestBody ComponentTypeCombinationBackingForm componentTypeCombinationBackingForm
             , @PathVariable Integer id) {
-       ProductTypeCombination productTypeCombination = 
-              productTypeCombinationBackingForm.getProductTypeCombination();
-        productTypeCombination.setId(id);
-        productTypeRepository.updateComponentTypeCombination(productTypeCombination);
+       ComponentTypeCombination componentTypeCombination = 
+              componentTypeCombinationBackingForm.getComponentTypeCombination();
+        componentTypeCombination.setId(id);
+        componentTypeRepository.updateComponentTypeCombination(componentTypeCombination);
         return new ResponseEntity(HttpStatus.OK);
     }
   
@@ -145,7 +149,7 @@ public class ProductTypeController {
   public ResponseEntity deactivateComponentTypeCombination(
       @PathVariable Integer id) {
 
-    productTypeRepository.deactivateProductTypeCombination(id);
+    componentTypeRepository.deactivateComponentTypeCombination(id);
    return new ResponseEntity(HttpStatus.OK);
   }
 
@@ -154,29 +158,29 @@ public class ProductTypeController {
   public  ResponseEntity activateComponentTypeCombination(
       @PathVariable Integer id) {
 
-     productTypeRepository.activateProductTypeCombination(id);
+     componentTypeRepository.activateComponentTypeCombination(id);
      return new ResponseEntity(HttpStatus.OK);
   }
   
-  private List<ProductTypeViewModel> getProductTypeViewModels(List<ProductType> productTypes){
+  private List<ComponentTypeViewModel> getComponentTypeViewModels(List<ComponentType> componentTypes){
       
-      List<ProductTypeViewModel> productTypeViewModels = new ArrayList<ProductTypeViewModel> ();
-      for(ProductType productType : productTypes)
-          productTypeViewModels.add(new ProductTypeViewModel(productType));
+      List<ComponentTypeViewModel> componentTypeViewModels = new ArrayList<ComponentTypeViewModel> ();
+      for(ComponentType componentType : componentTypes)
+          componentTypeViewModels.add(new ComponentTypeViewModel(componentType));
           
-      return productTypeViewModels;
+      return componentTypeViewModels;
       
   }
   
-  private List<ProductTypeCombinationViewModel> 
-        getProductTypeCombinationViewModels(List<ProductTypeCombination> productTypeCombinations){
+  private List<ComponentTypeCombinationViewModel> 
+        getComponentTypeCombinationViewModels(List<ComponentTypeCombination> componentTypeCombinations){
       
-      List<ProductTypeCombinationViewModel> productTypeCombinationViewModels
-              = new ArrayList<ProductTypeCombinationViewModel> ();
-      for(ProductTypeCombination productTypeCombination : productTypeCombinations)
-          productTypeCombinationViewModels.add(new ProductTypeCombinationViewModel(productTypeCombination));
+      List<ComponentTypeCombinationViewModel> componentTypeCombinationViewModels
+              = new ArrayList<ComponentTypeCombinationViewModel> ();
+      for(ComponentTypeCombination componentTypeCombination : componentTypeCombinations)
+          componentTypeCombinationViewModels.add(new ComponentTypeCombinationViewModel(componentTypeCombination));
           
-      return productTypeCombinationViewModels;
+      return componentTypeCombinationViewModels;
       
   }
 

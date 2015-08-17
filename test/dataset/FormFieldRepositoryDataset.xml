@@ -274,7 +274,7 @@
 		hidden="false" isAutoGeneratable="false" isHidable="true" isRequired="true"
 		isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="65" autoGenerate="false" canBeOptional="false"
-		defaultDisplayName="Product Type" defaultValue="" field="productType"
+		defaultDisplayName="Product Type" defaultValue="" field="componentType"
 		form="Product" hidden="false" isAutoGeneratable="false" isHidable="true"
 		isRequired="true" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="66" autoGenerate="false" canBeOptional="false"
@@ -399,7 +399,7 @@
 		form="Request" hidden="false" isAutoGeneratable="false" isHidable="false"
 		isRequired="false" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="95" autoGenerate="false" canBeOptional="false"
-		defaultDisplayName="Product type" defaultValue="" field="productType"
+		defaultDisplayName="Product type" defaultValue="" field="componentType"
 		form="Request" hidden="false" isAutoGeneratable="false" isHidable="false"
 		isRequired="true" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="96" autoGenerate="false" canBeOptional="true"
@@ -541,7 +541,7 @@
 		hidden="false" isAutoGeneratable="false" isHidable="false" isRequired="true"
 		isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="127" autoGenerate="false" canBeOptional="false"
-		defaultDisplayName="Product type" defaultValue="" field="productType"
+		defaultDisplayName="Product type" defaultValue="" field="componentType"
 		form="Usage" hidden="false" isAutoGeneratable="false" isHidable="false"
 		isRequired="true" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="128" autoGenerate="false" canBeOptional="false"

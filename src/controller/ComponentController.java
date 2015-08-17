@@ -16,13 +16,13 @@ import javax.validation.Valid;
 
 import model.component.Component;
 import model.component.ProductStatus;
+import model.componenttype.ComponentType;
+import model.componenttype.ComponentTypeCombination;
+import model.componenttype.ComponentTypeTimeUnits;
 import model.donation.Donation;
 import model.productmovement.ProductStatusChange;
 import model.productmovement.ProductStatusChangeReason;
 import model.productmovement.ProductStatusChangeReasonCategory;
-import model.producttype.ProductType;
-import model.producttype.ProductTypeCombination;
-import model.producttype.ProductTypeTimeUnits;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -40,15 +40,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import repository.ComponentRepository;
+import repository.ComponentTypeRepository;
 import repository.DonationRepository;
 import repository.ProductStatusChangeReasonRepository;
-import repository.ProductTypeRepository;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
+import viewmodel.ComponentTypeCombinationViewModel;
+import viewmodel.ComponentTypeViewModel;
 import viewmodel.ComponentViewModel;
 import viewmodel.ProductStatusChangeViewModel;
-import viewmodel.ProductTypeCombinationViewModel;
-import viewmodel.ProductTypeViewModel;
 import backingform.ComponentCombinationBackingForm;
 import backingform.RecordComponentBackingForm;
 import backingform.validator.ComponentBackingFormValidator;
@@ -71,7 +71,7 @@ public class ComponentController {
   private ProductStatusChangeReasonRepository productStatusChangeReasonRepository;
   
   @Autowired
-  private ProductTypeRepository productTypeRepository;
+  private ComponentTypeRepository componentTypeRepository;
   
   @Autowired
   private UtilController utilController;
@@ -245,15 +245,15 @@ public class ComponentController {
     return componentViewModels;
   }
   
-  public static List<ProductTypeViewModel> getProductTypeViewModels(
-      List<ProductType> productTypes) {
-    if (productTypes == null)
-      return Arrays.asList(new ProductTypeViewModel[0]);
-    List<ProductTypeViewModel> productTypeViewModels = new ArrayList<ProductTypeViewModel>();
-    for (ProductType productType : productTypes) {
-    	productTypeViewModels.add(new ProductTypeViewModel(productType));
+  public static List<ComponentTypeViewModel> getComponentTypeViewModels(
+      List<ComponentType> componentTypes) {
+    if (componentTypes == null)
+      return Arrays.asList(new ComponentTypeViewModel[0]);
+    List<ComponentTypeViewModel> componentTypeViewModels = new ArrayList<ComponentTypeViewModel>();
+    for (ComponentType componentType : componentTypes) {
+    	componentTypeViewModels.add(new ComponentTypeViewModel(componentType));
     }
-    return productTypeViewModels;
+    return componentTypeViewModels;
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
@@ -385,10 +385,10 @@ public class ComponentController {
   
   @RequestMapping(value="/combinations", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public Map<String, Object> getProductTypeCombinations() {
+  public Map<String, Object> getComponentTypeCombinations() {
 	Map<String, Object> map = new HashMap<String, Object>();
-    List<ProductTypeCombination> allProductTypeCombinationsIncludeDeleted = productTypeRepository.getAllProductTypeCombinationsIncludeDeleted();
-    map.put("combinations",getProductTypeCombinationViewModels(allProductTypeCombinationsIncludeDeleted));
+    List<ComponentTypeCombination> allComponentTypeCombinationsIncludeDeleted = componentTypeRepository.getAllComponentTypeCombinationsIncludeDeleted();
+    map.put("combinations",getComponentTypeCombinationViewModels(allComponentTypeCombinationsIncludeDeleted));
     return map;
   }
   
@@ -405,12 +405,12 @@ public class ComponentController {
       
       
       // map of new components, storing product type and num. of units 
-      Map<ProductType, Integer> newComponents = new HashMap<ProductType, Integer>();
+      Map<ComponentType, Integer> newComponents = new HashMap<ComponentType, Integer>();
       
       // iterate over components in combination, adding them to the new components map, along with the num. of units of each component
-      for(ProductType pt : form.getProductTypeCombination().getProductTypes()){    	  
+      for(ComponentType pt : form.getComponentTypeCombination().getComponentTypes()){    	  
     	  boolean check = false;
-    	  for(ProductType ptm : newComponents.keySet()){  
+    	  for(ComponentType ptm : newComponents.keySet()){  
     		  if(pt.getId() == ptm.getId()){
     	    		Integer count = newComponents.get(ptm) + 1;
     	    		newComponents.put(ptm,count); 
@@ -423,9 +423,9 @@ public class ComponentController {
     	  }
       }
       
-      for(ProductType pt : newComponents.keySet()){
+      for(ComponentType pt : newComponents.keySet()){
     	        	      
-	      String componentTypeCode = pt.getProductTypeNameShort();
+	      String componentTypeCode = pt.getComponentTypeNameShort();
 	      int noOfUnits = newComponents.get(pt);
 	      String createdPackNumber = donationIdentificationNumber +"-"+componentTypeCode;
 	      
@@ -443,7 +443,7 @@ public class ComponentController {
 	              else {
 	            	  component.setComponentIdentificationNumber(createdPackNumber);
 	              }
-		          component.setProductType(pt);
+		          component.setComponentType(pt);
 		          component.setDonation(donation);
 		          component.setParentComponent(parentComponent);
 		          component.setStatus(ProductStatus.QUARANTINED);
@@ -454,13 +454,13 @@ public class ComponentController {
 			      cal.setTime(component.getCreatedOn());
 	                  
 	                      //set component expiry date
-	                      if(pt.getExpiresAfterUnits() == ProductTypeTimeUnits.DAYS)
+	                      if(pt.getExpiresAfterUnits() == ComponentTypeTimeUnits.DAYS)
 	                          cal.add(Calendar.DAY_OF_YEAR, pt.getExpiresAfter());
 	                      else
-	                      if(pt.getExpiresAfterUnits() == ProductTypeTimeUnits.HOURS)
+	                      if(pt.getExpiresAfterUnits() == ComponentTypeTimeUnits.HOURS)
 	                          cal.add(Calendar.HOUR, pt.getExpiresAfter());
 	                      else
-	                      if(pt.getExpiresAfterUnits() == ProductTypeTimeUnits.YEARS)
+	                      if(pt.getExpiresAfterUnits() == ComponentTypeTimeUnits.YEARS)
 	                           cal.add(Calendar.YEAR, pt.getExpiresAfter());
 	
 			      Date expiresOn = cal.getTime();    
@@ -503,13 +503,13 @@ public class ComponentController {
   @RequestMapping(value = "/record/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public  Map<String, Object> getRecordNewComponents(HttpServletRequest request,
-      @RequestParam(value = "componentTypeNames") List<String> productTypes,
+      @RequestParam(value = "componentTypeNames") List<String> componentTypes,
       @RequestParam(value = "donationIdentificationNumber") String donationIdentificationNumber) {
 
-  	ProductType productType = null;
-  	if(productTypes!= null){
-	  	String productTypeName = productTypes.get(productTypes.size()-1);
-	  	productType = componentRepository.findProductTypeByProductTypeName(productTypeName);
+  	ComponentType componentType = null;
+  	if(componentTypes!= null){
+	  	String componentTypeName = componentTypes.get(componentTypes.size()-1);
+	  	componentType = componentRepository.findComponentTypeByComponentTypeName(componentTypeName);
   	}
   	List<Component> components = Arrays.asList(new Component[0]);
   	
@@ -517,8 +517,8 @@ public class ComponentController {
     map.put("allComponents", getComponentViewModels(components));
     map.put("nextPageUrl", getNextPageUrlForNewRecordComponent(request,donationIdentificationNumber));
     
-    if(productTypes != null){
-    	addEditSelectorOptionsForNewRecordByList(map,productType);
+    if(componentTypes != null){
+    	addEditSelectorOptionsForNewRecordByList(map,componentType);
   	}
   	else{
   		 addEditSelectorOptionsForNewRecord(map);
@@ -528,22 +528,22 @@ public class ComponentController {
   }
   
    private void addOptionsForAddComponentsCombinationForm(Map<String, Object> m) {
-    m.put("componentTypes", productTypeRepository.getAllProductTypes());
+    m.put("componentTypes", componentTypeRepository.getAllComponentTypes());
 
-    List<ProductTypeCombination> productTypeCombinations = productTypeRepository.getAllProductTypeCombinations();
-    m.put("componentTypeCombinations", productTypeCombinations);
+    List<ComponentTypeCombination> componentTypeCombinations = componentTypeRepository.getAllComponentTypeCombinations();
+    m.put("componentTypeCombinations", componentTypeCombinations);
 
     ObjectMapper mapper = new ObjectMapper();
-    Map<Integer, String> productTypeCombinationsMap = new HashMap<Integer, String>();
-    for (ProductTypeCombination productTypeCombination : productTypeCombinations) {
+    Map<Integer, String> componentTypeCombinationsMap = new HashMap<Integer, String>();
+    for (ComponentTypeCombination componentTypeCombination : componentTypeCombinations) {
       Map<String, String> componentExpiryIntervals = new HashMap<String, String>();
-      for (ProductType productType : productTypeCombination.getProductTypes()) {
-        Integer expiryIntervalMinutes = productType.getExpiryIntervalMinutes();
-        componentExpiryIntervals.put(productType.getId().toString(), expiryIntervalMinutes.toString());
+      for (ComponentType componentType : componentTypeCombination.getComponentTypes()) {
+        Integer expiryIntervalMinutes = componentType.getExpiryIntervalMinutes();
+        componentExpiryIntervals.put(componentType.getId().toString(), expiryIntervalMinutes.toString());
       }
 
       try {
-        productTypeCombinationsMap.put(productTypeCombination.getId(), mapper.writeValueAsString(componentExpiryIntervals));
+        componentTypeCombinationsMap.put(componentTypeCombination.getId(), mapper.writeValueAsString(componentExpiryIntervals));
       } catch (JsonGenerationException e) {
         e.printStackTrace();
       } catch (JsonMappingException e) {
@@ -552,7 +552,7 @@ public class ComponentController {
         e.printStackTrace();
       }
     }
-    m.put("componentTypeCombinationsMap", productTypeCombinationsMap);
+    m.put("componentTypeCombinationsMap", componentTypeCombinationsMap);
   }
   
   public static String getNextPageUrlForRecordComponent(HttpServletRequest req) {
@@ -565,14 +565,14 @@ public class ComponentController {
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("componentTypes", getProductTypeViewModels(productTypeRepository.getAllProductTypes()));
+    m.put("componentTypes", getComponentTypeViewModels(componentTypeRepository.getAllComponentTypes()));
   }
   
-  private void addEditSelectorOptionsForNewRecordByList(Map<String, Object> m, ProductType productType) {
-    m.put("componentTypes", getProductTypeViewModels(productTypeRepository.getProductTypeByIdList(productType.getId())));
+  private void addEditSelectorOptionsForNewRecordByList(Map<String, Object> m, ComponentType componentType) {
+    m.put("componentTypes", getComponentTypeViewModels(componentTypeRepository.getComponentTypeByIdList(componentType.getId())));
   }
   private void addEditSelectorOptionsForNewRecord(Map<String, Object> m) {
-    m.put("componentTypes", getProductTypeViewModels(productTypeRepository.getAllParentProductTypes()));
+    m.put("componentTypes", getComponentTypeViewModels(componentTypeRepository.getAllParentComponentTypes()));
   }
   
   public static String getUrlForNewComponent(HttpServletRequest req,String qString) {
@@ -612,7 +612,7 @@ public class ComponentController {
       
       row.add(component.getId().toString());
       row.add(component.getDonation().getId());
-      for (String property : Arrays.asList("productType", "donationIdentificationNumber", "createdOn", "expiresOn", "status", "createdBy")) {
+      for (String property : Arrays.asList("componentType", "donationIdentificationNumber", "createdOn", "expiresOn", "status", "createdBy")) {
         if (formFields.containsKey(property)) {
           Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
           if (properties.get("hidden").equals(false)) {
@@ -626,7 +626,7 @@ public class ComponentController {
             } catch (NoSuchMethodException e) {
               e.printStackTrace();
             }
-            if (property.equals("productType") &&
+            if (property.equals("componentType") &&
                 StringUtils.isNotBlank(component.getSubdivisionCode())) {
               propertyValue = propertyValue + " (" + component.getSubdivisionCode() + ")";
             }
@@ -653,14 +653,14 @@ public class ComponentController {
     return productStatusList;
   }
   
-  public  List<ProductTypeCombinationViewModel> 
-	  getProductTypeCombinationViewModels(List<ProductTypeCombination> productTypeCombinations){
-	List<ProductTypeCombinationViewModel> productTypeCombinationViewModels
-	        = new ArrayList<ProductTypeCombinationViewModel> ();
-	for(ProductTypeCombination productTypeCombination : productTypeCombinations)
-	    productTypeCombinationViewModels.add(new ProductTypeCombinationViewModel(productTypeCombination));
+  public  List<ComponentTypeCombinationViewModel> 
+	  getComponentTypeCombinationViewModels(List<ComponentTypeCombination> componentTypeCombinations){
+	List<ComponentTypeCombinationViewModel> componentTypeCombinationViewModels
+	        = new ArrayList<ComponentTypeCombinationViewModel> ();
+	for(ComponentTypeCombination componentTypeCombination : componentTypeCombinations)
+	    componentTypeCombinationViewModels.add(new ComponentTypeCombinationViewModel(componentTypeCombination));
 	    
-	return productTypeCombinationViewModels;
+	return componentTypeCombinationViewModels;
 	
   }
   

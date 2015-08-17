@@ -44,8 +44,8 @@ public class ComponentViewModel {
     return component.getDonation();
   }
 
-  public ProductTypeViewModel getProductType() {
-    return new ProductTypeViewModel(component.getProductType());
+  public ComponentTypeViewModel getComponentType() {
+    return new ComponentTypeViewModel(component.getComponentType());
   }
   
   public String getNotes() {
