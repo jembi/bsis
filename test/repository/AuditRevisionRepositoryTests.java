@@ -22,13 +22,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @WebAppConfiguration
-@Transactional
 public class AuditRevisionRepositoryTests {
         
     private static final DateTime END_OF_RANGE = new DateTime().minusDays(1);
@@ -36,11 +37,12 @@ public class AuditRevisionRepositoryTests {
     
     @PersistenceContext
     private EntityManager entityManager;
+    
     @Autowired
     private AuditRevisionRepository auditRevisionRepository;
     
-    @Ignore("Pending changes to old tests in 318")
     @Test
+	@Transactional
     public void testFindRecentAuditRevisions_shouldReturnAuditRevisionsOrderedByTimestamp() {
         
         AuditRevision chronologicallyFirstAuditRevision = anAuditRevision()
@@ -68,8 +70,8 @@ public class AuditRevisionRepositoryTests {
         assertThat(returnedAuditRevisions.get(1), is(chronologicallyFirstAuditRevision));
     }
     
-    @Ignore("Pending changes to old tests in 318")
     @Test
+	@Transactional
     public void testFindAuditRevisionsByUser_shouldReturnAuditRevisionsMatchingSearch() {
         
         User userWithMatchingUsername = aUser()
@@ -126,8 +128,8 @@ public class AuditRevisionRepositoryTests {
         assertThat(returnedAuditRevisions, is(expectedAuditRevisions));
     }
 
-    @Ignore("Pending changes to old tests in 318")
     @Test
+	@Transactional
     public void testFindAuditRevisionsByUserWithFullName_shouldReturnMatchingAuditRevision() {
 
         User userWithMatchingName = aUser()
