@@ -210,5 +210,14 @@ public class User implements Serializable {
     public void setPasswordReset(Boolean passwordReset) {
         this.passwordReset = passwordReset;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        return other instanceof User &&
+                ((User) other).id == id;
+    }
   
 }

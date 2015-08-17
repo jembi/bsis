@@ -123,6 +123,9 @@ public class PermissionConstants {
     
 	//General Authenticated Permission
 	public static final String AUTHENTICATED = "Authenticated";
+	
+	// Audit permissions
+	public static final String VIEW_AUDIT_LOG = "View Audit Log";
         
         
 
