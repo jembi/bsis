@@ -53,6 +53,7 @@ import utils.CustomDateFormatter;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class DonorCommunicationsRepositoryTest {
 	
@@ -334,7 +335,6 @@ public class DonorCommunicationsRepositoryTest {
 	}
 
 	@Test
-	@Transactional
 	/**
 	 *  should not return donors who will be currently deferred when specifying only Donor Panels and Blood Groups
 	 *  
@@ -381,7 +381,6 @@ public class DonorCommunicationsRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	/**
 	 *  should not return donors who will be currently deferred when specifying Date Of Last Donation period
 	 *  
@@ -428,7 +427,6 @@ public class DonorCommunicationsRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	/**
 	 *  should not return donors who will be deferred on date specified in Clinic Date
 	 *  
