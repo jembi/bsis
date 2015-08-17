@@ -1,14 +1,15 @@
 package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.text.ParseException;
 import java.util.Date;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import model.component.Component;
 import model.modificationtracker.RowModificationTracker;
-import model.product.Product;
 import model.usage.ProductUsage;
 import model.user.User;
 import utils.CustomDateFormatter;
@@ -93,8 +94,8 @@ public class ProductUsageBackingForm {
   }
 
   @JsonIgnore
-  public Product getProduct() {
-    return usage.getProduct();
+  public Component getComponent() {
+    return usage.getComponent();
   }
 
   @JsonIgnore
@@ -160,8 +161,8 @@ public class ProductUsageBackingForm {
     usage.setNotes(notes);
   }
 
-  public void setProduct(Product product) {
-    usage.setProduct(product);
+  public void setComponent(Component component) {
+    usage.setComponent(component);
   }
 
   public void setModificationTracker(RowModificationTracker modificationTracker) {
@@ -173,20 +174,20 @@ public class ProductUsageBackingForm {
   }
 
   public String getProductId() {
-    if (usage.getProduct() != null && usage.getProduct().getId() != null)
-      return usage.getProduct().getId().toString();
+    if (usage.getComponent() != null && usage.getComponent().getId() != null)
+      return usage.getComponent().getId().toString();
     else
       return "-1";
   }
 
   public void setProductId(String productId) {
-    Product product;
+    Component component;
     try {
-      product = new Product();
-      product.setId(Long.parseLong(productId));
-      usage.setProduct(product);
+      component = new Component();
+      component.setId(Long.parseLong(productId));
+      usage.setComponent(component);
     } catch (NumberFormatException ex) {
-      usage.setProduct(null);
+      usage.setComponent(null);
       ex.printStackTrace();
     }
   }

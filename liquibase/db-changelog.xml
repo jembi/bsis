@@ -230,15 +230,19 @@
 	</changeSet>
 
 	<!-- For issue 27 [Add 'Record Product' tab to Component Processing] -->
-	<changeSet id="20131107-1844" author="gtlankur">
-		<addColumn tableName="Product">
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20151708-0349" author="gtlankur">
+	    <preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="Component" columnName="componentIdentificationNumber"/></not>
+		</preConditions>
+		<addColumn tableName="Component">
 			<column name="componentIdentificationNumber" type="VARCHAR(30)" defaultValue=""></column>
 		</addColumn>
-		<addColumn tableName="Product_AUD">
+		<addColumn tableName="Component_AUD">
 			<column name="componentIdentificationNumber" type="VARCHAR(30)" defaultValue=""></column>
 		</addColumn>
 		<insert tableName="FormField">
-			<column name="form" value="Product"></column>
+			<column name="form" value="Component"></column>
 			<column name="FIELD" value="componentIdentificationNumber"></column>
 			<column name="defaultDisplayName" value="Component Identification Number"></column>
 			<column name="defaultValue" value=""></column>
@@ -253,7 +257,7 @@
 			<column name="isTimeField" value="0"></column>			
 		</insert>	
 		<insert tableName="FormField">
-			<column name="form" value="Product"></column>
+			<column name="form" value="Component"></column>
 			<column name="FIELD" value="numUnits"></column>
 			<column name="defaultDisplayName" value="Num. Units"></column>
 			<column name="defaultValue" value=""></column>

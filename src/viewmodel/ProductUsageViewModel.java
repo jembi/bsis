@@ -18,7 +18,7 @@ public class ProductUsageViewModel {
 
   @JsonIgnore
   public String getDonationIdentificationNumber() {
-    return productUsage.getProduct().getDonationIdentificationNumber();
+    return productUsage.getComponent().getDonationIdentificationNumber();
   }
 
   public String getHospital() {

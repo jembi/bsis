@@ -9,9 +9,9 @@ import java.util.GregorianCalendar;
 
 import javax.persistence.EntityExistsException;
 
+import model.component.Component;
+import model.component.ProductStatus;
 import model.donation.Donation;
-import model.product.Product;
-import model.product.ProductStatus;
 import model.producttype.ProductType;
 
 import org.junit.Ignore;
@@ -23,16 +23,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import repository.DonationRepository;
-import repository.ProductRepository;
+import repository.ComponentRepository;
 import repository.ProductTypeRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/bsis-servlet.xml")
 @WebAppConfiguration
-public class ProductControllerTest {
+public class ComponentControllerTest {
 	
 	@Autowired
-	private ProductRepository productRepository;
+	private ComponentRepository componentRepository;
 	
 	@Autowired
 	private DonationRepository donationRepository;
@@ -44,9 +44,9 @@ public class ProductControllerTest {
 	@Ignore @Test
 	public void recordNewProductComponentsTest() {
 		
-		 Product savedProduct = null;
+		 Component savedProduct = null;
 		
-				ProductType productType2 = productRepository.findProductTypeBySelectedProductType(1);
+				ProductType productType2 = componentRepository.findProductTypeBySelectedProductType(1);
 	      String donationIdentificationNumber = "D0001";
 	      String status = "QUARANTINED";
 	      long productId = 1L;
@@ -66,7 +66,7 @@ public class ProductControllerTest {
 	      	
 	      	for(int i=1; i <= noOfUnits ; i++){
 	      		try{
-		        	Product product = new Product();
+		        	Component product = new Component();
 		          product.setIsDeleted(false);
 		          product.setComponentIdentificationNumber(createdPackNumber+"-"+i);
 		          Calendar c=new GregorianCalendar();
@@ -85,10 +85,10 @@ public class ProductControllerTest {
 		          donation.setId(donationId);
 		          product.setDonation(donation);
 		          product.setStatus(ProductStatus.QUARANTINED);
-			        productRepository.addProduct(product);
+			        componentRepository.addComponent(product);
 	
 			        // Once product save successfully update selected product status with processed
-			        productRepository.setProductStatusToProcessed(productId);
+			        componentRepository.setProductStatusToProcessed(productId);
 			        
 			      } catch (EntityExistsException ex) {
 			        ex.printStackTrace();
@@ -100,7 +100,7 @@ public class ProductControllerTest {
 	      else{
 	      	
 	      	try{
-		        	Product product = new Product();
+		        	Component product = new Component();
 		          product.setIsDeleted(false);
 		          product.setComponentIdentificationNumber(createdPackNumber);
 
@@ -119,8 +119,8 @@ public class ProductControllerTest {
 		          donation.setId(donationId);
 		          product.setDonation(donation);
 		          product.setStatus(ProductStatus.QUARANTINED);
-			        productRepository.addProduct(product);
-			        productRepository.setProductStatusToProcessed(productId);
+			        componentRepository.addComponent(product);
+			        componentRepository.setProductStatusToProcessed(productId);
 			        
 			      } catch (EntityExistsException ex) {
 			        ex.printStackTrace();

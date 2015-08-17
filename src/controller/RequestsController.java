@@ -11,7 +11,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import model.product.Product;
+import model.component.Component;
 import model.request.Request;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -30,13 +30,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
-import repository.ProductRepository;
+import repository.ComponentRepository;
 import repository.ProductTypeRepository;
 import repository.RequestRepository;
 import repository.RequestTypeRepository;
 import utils.PermissionConstants;
-import viewmodel.MatchingProductViewModel;
-import viewmodel.ProductViewModel;
+import viewmodel.MatchingComponentViewModel;
+import viewmodel.ComponentViewModel;
 import viewmodel.RequestViewModel;
 import backingform.RequestBackingForm;
 import backingform.validator.RequestBackingFormValidator;
@@ -49,7 +49,7 @@ public class RequestsController {
   private RequestRepository requestRepository;
 
   @Autowired
-  private ProductRepository productRepository;
+  private ComponentRepository componentRepository;
 
   @Autowired
   private LocationRepository locationRepository;
@@ -278,10 +278,10 @@ public class RequestsController {
   public  Map<String, Object> listIssuedProductsForRequest(@PathVariable Long id) {
     Map<String, Object> map = new HashMap<String, Object>();
     addEditSelectorOptions(map);
-    List<Product> issuedProducts = requestRepository.getIssuedProductsForRequest(id);
-    List<ProductViewModel> issuedProductViewModels = null;
-    issuedProductViewModels = ProductController.getProductViewModels(issuedProducts);
-    map.put("issuedProducts", issuedProductViewModels);
+    List<Component> issuedComponents = requestRepository.getIssuedComponentsForRequest(id);
+    List<ComponentViewModel> issuedComponentViewModels = null;
+    issuedComponentViewModels = ComponentController.getComponentViewModels(issuedComponents);
+    map.put("issuedProducts", issuedComponentViewModels);
     map.put("productTypeFields", utilController.getFormFieldsForForm("ProductType"));
     return map;
   }
@@ -323,7 +323,7 @@ public class RequestsController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("requestId", id);
-    List<MatchingProductViewModel> products = productRepository.findMatchingProductsForRequest(id);
+    List<MatchingComponentViewModel> products = componentRepository.findMatchingComponentsForRequest(id);
     map.put("compatibilityTestFields", utilController.getFormFieldsForForm("CompatibilityTest"));
     map.put("allProducts", products);
     map.put("labProperties", genericConfigRepository.getConfigProperties("labsetup"));

@@ -210,7 +210,7 @@
         forRequest_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        testedProduct_id bigint,
+        testedComponent_id bigint,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -230,7 +230,7 @@
         forRequest_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        testedProduct_id bigint,
+        testedComponent_id bigint,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
@@ -538,7 +538,7 @@
         unique (bloodTestsOnPlate_id)
     ) ENGINE=InnoDB;
 
-    create table Product (
+    create table Component (
         id bigint not null auto_increment,
         createdOn datetime,
         discardedOn DATETIME,
@@ -554,7 +554,7 @@
         issuedTo_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        parentProduct_id bigint,
+        parentComponent_id bigint,
         productType_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
@@ -567,7 +567,7 @@
         statusChangedOn datetime,
         changedBy_id SMALLINT,
         issuedTo_id bigint,
-        product_id bigint,
+        component_id bigint,
         statusChangeReason_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
@@ -600,7 +600,7 @@
         statusChangedOn datetime,
         changedBy_id SMALLINT,
         issuedTo_id bigint,
-        product_id bigint,
+        component_id bigint,
         statusChangeReason_id SMALLINT,
         primary key (id, REV)
     ) ENGINE=InnoDB;
@@ -670,7 +670,7 @@
         ward varchar(30),
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        product_id bigint,
+        component_id bigint,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -690,11 +690,11 @@
         ward varchar(30),
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        product_id bigint,
+        component_id bigint,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table Product_AUD (
+    create table Component_AUD (
         id bigint not null,
         REV integer not null,
         REVTYPE tinyint,
@@ -712,7 +712,7 @@
         issuedTo_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        parentProduct_id bigint,
+        parentComponent_id bigint,
         productType_id SMALLINT,
         primary key (id, REV)
     ) ENGINE=InnoDB;
@@ -1111,10 +1111,10 @@
         references Request (id);
 
     alter table CompatibilityTest 
-        add index FK92798602EFD1FE7 (testedProduct_id), 
+        add index FK92798602EFD1FE7 (testedComponent_id), 
         add constraint FK92798602EFD1FE7 
-        foreign key (testedProduct_id) 
-        references Product (id);
+        foreign key (testedComponent_id) 
+        references Component (id);
 
     alter table CompatibilityTest 
         add index FK92798602D0AFB367 (lastUpdatedBy_id), 
@@ -1284,39 +1284,39 @@
         foreign key (bloodTestsOnPlate_id) 
         references BloodTestResult (id);
 
-    create index product_expiresOn_index on Product (expiresOn);
+    create index component_expiresOn_index on Component (expiresOn);
 
-    alter table Product 
+    alter table Component 
         add index FK50C664CFA49787C4 (createdBy_id), 
         add constraint FK50C664CFA49787C4 
         foreign key (createdBy_id) 
         references User (id);
 
-    alter table Product 
+    alter table Component 
         add index FK50C664CF994002DF (issuedTo_id), 
         add constraint FK50C664CF994002DF 
         foreign key (issuedTo_id) 
         references Request (id);
 
-    alter table Product 
+    alter table Component 
         add index FK50C664CF32E145A (donation_id), 
         add constraint FK50C664CF32E145A 
         foreign key (donation_id) 
         references Donation (id);
 
-    alter table Product 
+    alter table Component 
         add index FK50C664CF73AC2B90 (productType_id), 
         add constraint FK50C664CF73AC2B90 
         foreign key (productType_id) 
         references ProductType (id);
 
-    alter table Product 
-        add index FK50C664CFD946D0A0 (parentProduct_id), 
+    alter table Component 
+        add index FK50C664CFD946D0A0 (parentComponent_id), 
         add constraint FK50C664CFD946D0A0 
-        foreign key (parentProduct_id) 
-        references Product (id);
+        foreign key (parentComponent_id) 
+        references Component (id);
 
-    alter table Product 
+    alter table Component 
         add index FK50C664CFD0AFB367 (lastUpdatedBy_id), 
         add constraint FK50C664CFD0AFB367 
         foreign key (lastUpdatedBy_id) 
@@ -1335,10 +1335,10 @@
         references ProductStatusChangeReason (id);
 
     alter table ProductStatusChange 
-        add index FKCCE48CB1A8E71476 (product_id), 
+        add index FKCCE48CB1A8E71476 (component_id), 
         add constraint FKCCE48CB1A8E71476 
-        foreign key (product_id) 
-        references Product (id);
+        foreign key (component_id) 
+        references Component (id);
 
     alter table ProductStatusChange 
         add index FKCCE48CB1438D2378 (changedBy_id), 
@@ -1395,10 +1395,10 @@
         references User (id);
 
     alter table ProductUsage 
-        add index FK45B6D212A8E71476 (product_id), 
+        add index FK45B6D212A8E71476 (component_id), 
         add constraint FK45B6D212A8E71476 
-        foreign key (product_id) 
-        references Product (id);
+        foreign key (component_id) 
+        references Component (id);
 
     alter table ProductUsage 
         add index FK45B6D212D0AFB367 (lastUpdatedBy_id), 

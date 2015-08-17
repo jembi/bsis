@@ -1,10 +1,4 @@
-package model.product;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import constraintvalidator.DonationExists;
-import constraintvalidator.ProductTypeExists;
+package model.component;
 
 import java.util.Date;
 import java.util.List;
@@ -40,11 +34,17 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import constraintvalidator.DonationExists;
+import constraintvalidator.ProductTypeExists;
+
 
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class Product implements ModificationTracker {
+public class Component implements ModificationTracker {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -85,21 +85,21 @@ public class Product implements ModificationTracker {
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy="testedProduct", fetch=FetchType.LAZY)
+  @OneToMany(mappedBy="testedComponent", fetch=FetchType.LAZY)
   private List<CompatibilityTest> compatibilityTests;
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy="product", fetch=FetchType.LAZY)
+  @OneToMany(mappedBy="component", fetch=FetchType.LAZY)
   private List<ProductStatusChange> statusChanges;
 
   @Column(length=3)
   private String subdivisionCode;
 
   @OneToOne(optional=true)
-  private Product parentProduct;
+  private Component parentComponent;
 
-  @OneToOne(mappedBy="product")
+  @OneToOne(mappedBy="component")
   private ProductUsage usage;
   
   @Lob
@@ -113,18 +113,18 @@ public class Product implements ModificationTracker {
   @Column(length=20)
   private String componentIdentificationNumber;
   
-  public Product() {
+  public Component() {
     modificationTracker = new RowModificationTracker();
   }
 
-  public void copy(Product product) {
-    assert (this.getId().equals(product.getId()));
-    this.donation = product.donation;
-    this.productType = product.productType;
-    this.createdOn = product.createdOn;
-    this.expiresOn = product.expiresOn;
-    this.notes = product.notes;
-    this.componentIdentificationNumber = product.componentIdentificationNumber;
+  public void copy(Component component) {
+    assert (this.getId().equals(component.getId()));
+    this.donation = component.donation;
+    this.productType = component.productType;
+    this.createdOn = component.createdOn;
+    this.expiresOn = component.expiresOn;
+    this.notes = component.notes;
+    this.componentIdentificationNumber = component.componentIdentificationNumber;
   }
 
   public Long getId() {
@@ -285,12 +285,12 @@ public class Product implements ModificationTracker {
     this.subdivisionCode = subdivisionCode;
   }
 
-  public Product getParentProduct() {
-    return parentProduct;
+  public Component getParentComponent() {
+    return parentComponent;
   }
 
-  public void setParentProduct(Product parentProduct) {
-    this.parentProduct = parentProduct;
+  public void setParentComponent(Component parentComponent) {
+    this.parentComponent = parentComponent;
   }
 
 	public String getComponentIdentificationNumber() {

@@ -1,8 +1,8 @@
 package backingform.validator;
 
-import backingform.ProductBackingForm;
-import backingform.ProductCombinationBackingForm;
-import backingform.RecordProductBackingForm;
+import backingform.ComponentBackingForm;
+import backingform.ComponentCombinationBackingForm;
+import backingform.RecordComponentBackingForm;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -25,14 +25,14 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import utils.CustomDateFormatter;
-import viewmodel.ProductViewModel;
+import viewmodel.ComponentViewModel;
 
-public class ProductBackingFormValidator implements Validator {
+public class ComponentBackingFormValidator implements Validator {
 
   private Validator validator;
   private UtilController utilController;
 
-  public ProductBackingFormValidator(Validator validator, UtilController utilController) {
+  public ComponentBackingFormValidator(Validator validator, UtilController utilController) {
     super();
     this.validator = validator;
     this.utilController = utilController;
@@ -41,10 +41,10 @@ public class ProductBackingFormValidator implements Validator {
   @SuppressWarnings("unchecked")
   @Override
   public boolean supports(Class<?> clazz) {
-    return Arrays.asList(ProductBackingForm.class,
-                         ProductViewModel.class,
-                         ProductCombinationBackingForm.class,
-                         RecordProductBackingForm.class).contains(clazz);
+    return Arrays.asList(ComponentBackingForm.class,
+                         ComponentViewModel.class,
+                         ComponentCombinationBackingForm.class,
+                         RecordComponentBackingForm.class).contains(clazz);
   }
 
   @Override
@@ -52,13 +52,13 @@ public class ProductBackingFormValidator implements Validator {
     if (obj == null || validator == null)
       return;
     //ValidationUtils.invokeValidator(validator, obj, errors);
-    if (obj instanceof ProductBackingForm)
-      validateProductBackingForm((ProductBackingForm) obj, errors);
-    if (obj instanceof ProductCombinationBackingForm)
-      validateProductCombinationBackingForm((ProductCombinationBackingForm) obj, errors);
+    if (obj instanceof ComponentBackingForm)
+      validateComponentBackingForm((ComponentBackingForm) obj, errors);
+    if (obj instanceof ComponentCombinationBackingForm)
+      validateComponentCombinationBackingForm((ComponentCombinationBackingForm) obj, errors);
   }
 
-  private void validateProductBackingForm(ProductBackingForm form, Errors errors) {
+  private void validateComponentBackingForm(ComponentBackingForm form, Errors errors) {
     String createdOn = form.getCreatedOn();
     if (!CustomDateFormatter.isDateTimeStringValid(createdOn))
       errors.rejectValue("product.createdOn", "dateFormat.incorrect",
@@ -70,14 +70,14 @@ public class ProductBackingFormValidator implements Validator {
           CustomDateFormatter.getDateErrorMessage());
 
     updateRelatedEntities(form);
-    utilController.commonFieldChecks(form, "product", errors);
+    utilController.commonFieldChecks(form, "component", errors);
   }
 
-  private void validateProductCombinationBackingForm(ProductCombinationBackingForm form, Errors errors) {
+  private void validateComponentCombinationBackingForm(ComponentCombinationBackingForm form, Errors errors) {
 
     if (StringUtils.isBlank(form.getProductTypeCombination()))
       errors.rejectValue("productTypeCombination", "product.productTypeCombination",
-          "Product type combination should be specified");
+          "Component type combination should be specified");
 
     String createdOn = form.getCreatedOn();
     if (!CustomDateFormatter.isDateTimeStringValid(createdOn))
@@ -114,11 +114,11 @@ public class ProductBackingFormValidator implements Validator {
 
     updateRelatedEntities(form);
 
-    utilController.commonFieldChecks(form, "product", errors);
+    utilController.commonFieldChecks(form, "component", errors);
   }
 
   @SuppressWarnings("unchecked")
-  private void updateRelatedEntities(ProductBackingForm form) {
+  private void updateRelatedEntities(ComponentBackingForm form) {
     Map<String, Object> bean = null;
     try {
       bean = BeanUtils.describe(form);
@@ -134,7 +134,7 @@ public class ProductBackingFormValidator implements Validator {
   }
 
   @SuppressWarnings("unchecked")
-  private void updateRelatedEntities(ProductCombinationBackingForm form) {
+  private void updateRelatedEntities(ComponentCombinationBackingForm form) {
     Map<String, Object> bean = null;
     try {
       bean = BeanUtils.describe(form);

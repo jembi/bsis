@@ -1,7 +1,7 @@
 package controller;
 
 import backingform.DonationBackingForm;
-import backingform.ProductBackingForm;
+import backingform.ComponentBackingForm;
 import backingform.RequestBackingForm;
 
 import java.text.ParseException;
@@ -22,11 +22,11 @@ import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.TTIStatus;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.bloodtesting.rules.DonationField;
+import model.component.Component;
 import model.donation.Donation;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
-import model.product.Product;
 import model.producttype.ProductType;
 import model.request.Request;
 import model.requesttype.RequestType;
@@ -44,7 +44,7 @@ import repository.DonationTypeRepository;
 import repository.DonorRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
-import repository.ProductRepository;
+import repository.ComponentRepository;
 import repository.ProductTypeRepository;
 import repository.RequestRepository;
 import repository.RequestTypeRepository;
@@ -96,7 +96,7 @@ public class CreateDataController {
                                           "Luanshya", "Kasama", "Chipata"};
 
   @Autowired
-  private ProductRepository productRepository;
+  private ComponentRepository componentRepository;
 
   private static final String[] MALE_FIRST_NAMES = new String[] { "Aaron",
       "Abel", "Abraham", "Adam", "Adrian", "Al", "Alan", "Albert",
@@ -467,10 +467,10 @@ public class CreateDataController {
   public void createProducts(int numProducts) {
     List<Donation> donations = donationRepository.getAllDonations();
     List<ProductType> productTypes = productTypeRepository.getAllProductTypes();
-    List<Product> products = new ArrayList<Product>();
+    List<Component> components = new ArrayList<Component>();
     for (int i = 0; i < numProducts; i++) {
       Donation c = donations.get(random.nextInt(donations.size()));
-      Product p = new ProductBackingForm(true).getProduct();
+      Component p = new ComponentBackingForm(true).getComponent();
       p.setDonation(c);
       p.setProductType(productTypes.get(random.nextInt(productTypes.size())));
       Date d = c.getDonationDate();
@@ -480,9 +480,9 @@ public class CreateDataController {
       cal.add(Calendar.DATE, 35);
       p.setExpiresOn(cal.getTime());
       p.setIsDeleted(false);
-      products.add(p);
+      components.add(p);
     }
-    productRepository.addAllProducts(products);
+    componentRepository.addAllComponents(components);
   }
 
   private void addBloodTypingResultsForDonations(List<Donation> donations) {

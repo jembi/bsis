@@ -170,16 +170,16 @@
 	<genericconfig id="14" propertyName="donorHistoryCheckRequired"
 		propertyOwner="donationRequirements" propertyValue="true" />
 	<genericconfig id="15" propertyName="useShortNameForProductTypes"
-		propertyOwner="products" propertyValue="true" />
+		propertyOwner="components" propertyValue="true" />
 	<genericconfig id="16"
 		propertyName="allowPediComponentsFromFirstTimeDonors" propertyOwner="componentSplit"
 		propertyValue="true" />
 	<genericconfig id="17" propertyName="donorRecordRequired"
-		propertyOwner="productReleaseRequirements" propertyValue="true" />
-	<genericconfig id="18" propertyName="allowProductsWithoutDonation"
-		propertyOwner="productReleaseRequirements" propertyValue="true" />
-	<genericconfig id="19" propertyName="allowImportedProducts"
-		propertyOwner="productReleaseRequirements" propertyValue="true" />
+		propertyOwner="componentReleaseRequirements" propertyValue="true" />
+	<genericconfig id="18" propertyName="allowComponentsWithoutDonation"
+		propertyOwner="componentReleaseRequirements" propertyValue="true" />
+	<genericconfig id="19" propertyName="allowImportedComponents"
+		propertyOwner="componentReleaseRequirements" propertyValue="true" />
 	<genericconfig id="20" propertyName="leaveOutDonationsProbability"
 		propertyOwner="createdata" propertyValue="0.10" />
 	<genericconfig id="21" propertyName="incorrectBloodTypeProbability"
@@ -212,7 +212,7 @@
 		propertyOwner="labsetup" propertyValue="true" />
 	<genericconfig id="35" propertyName="donationsTabEnabled"
 		propertyOwner="labsetup" propertyValue="true" />
-	<genericconfig id="36" propertyName="productsTabEnabled"
+	<genericconfig id="36" propertyName="componentsTabEnabled"
 		propertyOwner="labsetup" propertyValue="true" />
 	<genericconfig id="37" propertyName="testResultsTabEnabled"
 		propertyOwner="labsetup" propertyValue="true" />

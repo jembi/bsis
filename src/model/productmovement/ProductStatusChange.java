@@ -14,14 +14,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import model.product.Product;
-import model.product.ProductStatus;
+import model.component.Component;
+import model.component.ProductStatus;
 import model.request.Request;
 import model.user.User;
 
 import org.hibernate.envers.Audited;
 
-import constraintvalidator.ProductExists;
+import constraintvalidator.ComponentExists;
 import constraintvalidator.RequestExists;
 
 
@@ -34,9 +34,9 @@ public class ProductStatusChange {
   @Column(nullable = false)
   private Long id;
 
-  @ProductExists
+  @ComponentExists
   @ManyToOne
-  private Product product;
+  private Component component;
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date statusChangedOn;
@@ -73,12 +73,12 @@ public class ProductStatusChange {
     this.id = id;
   }
 
-  public Product getProduct() {
-    return product;
+  public Component getComponent() {
+    return component;
   }
 
-  public void setProduct(Product product) {
-    this.product = product;
+  public void setComponent(Component component) {
+    this.component = component;
   }
 
   public Date getStatusChangedOn() {

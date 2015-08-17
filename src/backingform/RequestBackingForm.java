@@ -1,17 +1,21 @@
 package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.text.ParseException;
 import java.util.List;
+
+import model.component.Component;
 import model.location.Location;
 import model.modificationtracker.RowModificationTracker;
-import model.product.Product;
 import model.producttype.ProductType;
 import model.request.Request;
 import model.requesttype.RequestType;
 import model.util.BloodGroup;
 import model.util.Gender;
+
 import org.apache.commons.lang3.StringUtils;
+
 import repository.RequestRepository;
 import utils.CustomDateFormatter;
 
@@ -138,8 +142,8 @@ public class RequestBackingForm {
     request.setIsDeleted(isDeleted);
   }
 
-  public List<Product> getIssuedProducts() {
-    return request.getIssuedProducts();
+  public List<Component> getIssuedComponents() {
+    return request.getIssuedComponents();
   }
 
   public int hashCode() {
@@ -158,8 +162,8 @@ public class RequestBackingForm {
   }
 
   @JsonIgnore
-  public void setIssuedProducts(List<Product> issuedProducts) {
-    request.setIssuedProducts(issuedProducts);
+  public void setIssuedComponents(List<Component> issuedComponents) {
+    request.setIssuedComponents(issuedComponents);
   }
 
   public void generateRequestNumber() {

@@ -1,6 +1,7 @@
 package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.text.ParseException;
 import java.util.Date;
 
@@ -9,7 +10,7 @@ import javax.validation.Valid;
 import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
 import model.compatibility.CrossmatchType;
-import model.product.Product;
+import model.component.Component;
 import model.request.Request;
 import model.user.User;
 import utils.CustomDateFormatter;
@@ -96,12 +97,12 @@ public class CompatibilityTestBackingForm {
   }
 
   @JsonIgnore
-  public Product getTestedProduct() {
-    return compatibilityTest.getTestedProduct();
+  public Component getTestedComponent() {
+    return compatibilityTest.getTestedComponent();
   }
 
-  public void setTestedProduct(Product testedProduct) {
-    compatibilityTest.setTestedProduct(testedProduct);
+  public void setTestedComponent(Component testedComponent) {
+    compatibilityTest.setTestedComponent(testedComponent);
   }
 
   public Boolean getTransfusedBefore() {

@@ -1,14 +1,14 @@
 package controller;
 
-import backingform.ProductUsageBackingForm;
-import backingform.validator.UsageBackingFormValidator;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import model.product.Product;
+
 import model.request.Request;
 import model.usage.ProductUsage;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,15 +19,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import repository.ProductRepository;
+
+import repository.ComponentRepository;
 import repository.ProductTypeRepository;
 import repository.RequestRepository;
 import repository.UsageRepository;
 import utils.PermissionConstants;
 import viewmodel.ProductUsageViewModel;
 import viewmodel.RequestViewModel;
+import backingform.ProductUsageBackingForm;
+import backingform.validator.UsageBackingFormValidator;
 
 @RestController
 @RequestMapping("usages")
@@ -40,7 +42,7 @@ public class UsageController {
   private ProductTypeRepository productTypeRepository;
 
   @Autowired
-  private ProductRepository productRepository;
+  private ComponentRepository componentRepository;
   
   @Autowired
   private RequestRepository requestRepository;
@@ -111,13 +113,13 @@ public class UsageController {
 
   @RequestMapping(value="/find/components/{requestNumber}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public  ResponseEntity<Map<String, Object>> findIssuedProductsForRequest(
+  public  ResponseEntity<Map<String, Object>> findIssuedComponentsForRequest(
       @PathVariable String requestNumber) {
     Map<String, Object> map = new HashMap<String, Object>();
     Request req = requestRepository.findRequest(requestNumber);
     map.put("request", new RequestViewModel(req));
-    map.put("issuedProducts", requestRepository.getIssuedProductsForRequest(req.getId()));
-    map.put("productFields", utilController.getFormFieldsForForm("product"));
+    map.put("issuedComponents", requestRepository.getIssuedComponentsForRequest(req.getId()));
+    map.put("componentFields", utilController.getFormFieldsForForm("component"));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 

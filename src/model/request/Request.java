@@ -17,10 +17,10 @@ import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
 import model.compatibility.CompatibilityTest;
+import model.component.Component;
 import model.location.Location;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
-import model.product.Product;
 import model.producttype.ProductType;
 import model.requesttype.RequestType;
 import model.user.User;
@@ -72,7 +72,7 @@ public class Request implements ModificationTracker {
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="issuedTo")
-  private List<Product> issuedProducts;
+  private List<Component> issuedComponents;
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
@@ -273,12 +273,12 @@ public class Request implements ModificationTracker {
     this.isDeleted = isDeleted;
   }
 
-  public List<Product> getIssuedProducts() {
-    return issuedProducts;
+  public List<Component> getIssuedComponents() {
+    return issuedComponents;
   }
 
-  public void setIssuedProducts(List<Product> issuedProducts) {
-    this.issuedProducts = issuedProducts;
+  public void setIssuedComponents(List<Component> issuedComponents) {
+    this.issuedComponents = issuedComponents;
   }
 
   public Date getLastUpdated() {

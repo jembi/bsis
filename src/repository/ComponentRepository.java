@@ -17,15 +17,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PessimisticLockException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import model.bloodtesting.TTIStatus;
 import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
+import model.component.Component;
+import model.component.ProductStatus;
 import model.donation.Donation;
-import model.product.Product;
-import model.product.ProductStatus;
 import model.productmovement.ProductStatusChange;
 import model.productmovement.ProductStatusChangeReason;
 import model.productmovement.ProductStatusChangeReasonCategory;
@@ -35,8 +36,7 @@ import model.producttype.ProductTypeCombination;
 import model.request.Request;
 import model.util.BloodGroup;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,20 +44,19 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import controller.UtilController;
 import repository.bloodtesting.BloodTypingStatus;
 import utils.CustomDateFormatter;
 import viewmodel.DonationViewModel;
-import viewmodel.MatchingProductViewModel;
-import backingform.ProductCombinationBackingForm;
+import viewmodel.MatchingComponentViewModel;
+import backingform.ComponentCombinationBackingForm;
 
-import javax.persistence.PessimisticLockException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.apache.commons.lang3.StringUtils;
+import controller.UtilController;
 
 @Repository
 @Transactional
-public class ProductRepository {
+public class ComponentRepository {
 
   @PersistenceContext
   private EntityManager em;
@@ -76,48 +75,48 @@ public class ProductRepository {
 
   /**
    * some fields like product status are cached internally.
-   * must be called whenever any changes are made to rows related to the product.
+   * must be called whenever any changes are made to rows related to the component.
    * eg. Test result update should update the product status.
-   * @param product
+   * @param component
    */
-  public boolean updateProductInternalFields(Product product) {
-    return updateProductStatus(product);
+  public boolean updateComponentInternalFields(Component component) {
+    return updateComponentStatus(component);
   }
 
-  private boolean updateProductStatus(Product product) {
+  private boolean updateComponentStatus(Component component) {
 
-    // if a product has been explicitly discarded maintain that status.
-    // if the product has been issued do not change its status.
-    // suppose a product from a donation tested as safe was issued
+    // if a component has been explicitly discarded maintain that status.
+    // if the component has been issued do not change its status.
+    // suppose a component from a donation tested as safe was issued
     // then some additional tests were done for some reason and it was
-    // discovered that the product was actually unsafe and it should not
-    // have been issued then it should be easy to track down all products
+    // discovered that the component was actually unsafe and it should not
+    // have been issued then it should be easy to track down all components
     // created from that sample which were issued. By maintaining the status as
-    // issued even if the product is unsafe we can search for all products created
+    // issued even if the component is unsafe we can search for all components created
     // from that donation and then look at which ones were already issued.
     // Conclusion is do not change the product status once it is marked as issued.
-    // Similar reasoning for not changing USED status for a product. It should be
-    // easy to track which used products were made from unsafe donations.
+    // Similar reasoning for not changing USED status for a component. It should be
+    // easy to track which used components were made from unsafe donations.
     // of course if the test results are not available or the donation is known
     // to be unsafe it should not have been issued in the first place.
-    // In exceptional cases an admin can always delete this product and create a new one
+    // In exceptional cases an admin can always delete this component and create a new one
     // if he wants to change the status to a new one.
-    // once a product has been labeled as split it does not exist anymore so we just mark
+    // once a component has been labeled as split it does not exist anymore so we just mark
     // it as SPLIT/PROCESSED. Even if the donation is found to be unsafe later it should not matter
-    // as SPLIT/PROCESSED products are not allowed to be issued
+    // as SPLIT/PROCESSED components are not allowed to be issued
     List<ProductStatus> statusNotToBeChanged =
         Arrays.asList(ProductStatus.DISCARDED, ProductStatus.ISSUED,
             ProductStatus.USED, ProductStatus.SPLIT, ProductStatus.PROCESSED);
 
-    ProductStatus oldProductStatus = product.getStatus();
+    ProductStatus oldProductStatus = component.getStatus();
     
-    // nothing to do if the product has any of these statuses
-    if (product.getStatus() != null && statusNotToBeChanged.contains(product.getStatus()))
+    // nothing to do if the component has any of these statuses
+    if (component.getStatus() != null && statusNotToBeChanged.contains(component.getStatus()))
       return false;
 
-    if (product.getDonation() == null)
+    if (component.getDonation() == null)
       return false;
-    Long donationId = product.getDonation().getId();
+    Long donationId = component.getDonation().getId();
     Donation c = donationRepository.findDonationById(donationId);
     BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();
     TTIStatus ttiStatus = c.getTTIStatus();
@@ -132,7 +131,7 @@ public class ProductRepository {
     // note that expired or unsafe status should override
     // available, quarantined status hence this check is done
     // later in the code
-    if (product.getExpiresOn().before(new Date())) {
+    if (component.getExpiresOn().before(new Date())) {
       newProductStatus = ProductStatus.EXPIRED;
     }
 
@@ -141,54 +140,54 @@ public class ProductRepository {
     }
 
     if (!newProductStatus.equals(oldProductStatus)) {
-      product.setStatus(newProductStatus);
+      component.setStatus(newProductStatus);
       return true;
     }
     return false;
   }
 
-  public Product findProduct(String productNumber) {
-    Product product = null;
+  public Component findComponent(String productNumber) {
+    Component component = null;
     if (productNumber != null && productNumber.length() > 0) {
-      String queryString = "SELECT p FROM Product p WHERE p.productNumber = :productNumber and p.isDeleted= :isDeleted";
-      TypedQuery<Product> query = em.createQuery(queryString, Product.class);
+      String queryString = "SELECT c FROM Component c WHERE c.productNumber = :productNumber and c.isDeleted= :isDeleted";
+      TypedQuery<Component> query = em.createQuery(queryString, Component.class);
       query.setParameter("isDeleted", Boolean.FALSE);
-      List<Product> products = query.setParameter("productNumber",
+      List<Component> components = query.setParameter("productNumber",
           productNumber).getResultList();
-      if (products != null && products.size() > 0) {
-        product = products.get(0);
+      if (components != null && components.size() > 0) {
+        component = components.get(0);
       }
     }
-    return product;
+    return component;
   }
   
-  public List<Product> findAnyProduct(String donationIdentificationNumber, List<Integer> productTypes, List<ProductStatus> status, 
+  public List<Component> findAnyComponent(String donationIdentificationNumber, List<Integer> productTypes, List<ProductStatus> status, 
 		  Date donationDateFrom, Date donationDateTo, Map<String, Object> pagingParams){
-	  	TypedQuery<Product> query;
-	    String queryStr = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.donation WHERE " +     
-	                      "p.isDeleted= :isDeleted ";
+	  	TypedQuery<Component> query;
+	    String queryStr = "SELECT DISTINCT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +     
+	                      "c.isDeleted= :isDeleted ";
 	    
 	    if(status != null && !status.isEmpty()){
-	    	queryStr += "AND p.status IN :status ";
+	    	queryStr += "AND c.status IN :status ";
 	    }	
 	    if(!StringUtils.isBlank(donationIdentificationNumber)){
-	    	queryStr += "AND p.donation.donationIdentificationNumber = :donationIdentificationNumber ";
+	    	queryStr += "AND c.donation.donationIdentificationNumber = :donationIdentificationNumber ";
 	    }
 	    if(productTypes != null && !productTypes.isEmpty()){
-	    	queryStr += "AND p.productType.id IN (:productTypeIds) ";
+	    	queryStr += "AND c.productType.id IN (:productTypeIds) ";
 	    }	    
 	    if(donationDateFrom != null){
-	    	queryStr += "AND p.donation.donationDate >= :donationDateFrom ";
+	    	queryStr += "AND c.donation.donationDate >= :donationDateFrom ";
 	    }
 	    if(donationDateTo != null){
-	    	queryStr += "AND p.donation.donationDate <= :donationDateTo ";
+	    	queryStr += "AND c.donation.donationDate <= :donationDateTo ";
 	    }
 	    
 	    if (pagingParams.containsKey("sortColumn")) {
-	    	queryStr += " ORDER BY p." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
+	    	queryStr += " ORDER BY c." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
 	    }
 	
-	    query = em.createQuery(queryStr, Product.class);
+	    query = em.createQuery(queryStr, Component.class);
 	    query.setParameter("isDeleted", Boolean.FALSE);
 	    
 	    if(status != null && !status.isEmpty()){
@@ -216,25 +215,25 @@ public class ProductRepository {
 	    return query.getResultList();
   }
 
-  public List<Product> findProductByDonationIdentificationNumber(
+  public List<Component> findComponentByDonationIdentificationNumber(
       String donationIdentificationNumber, List<ProductStatus> status, Map<String, Object> pagingParams) {
 
-    TypedQuery<Product> query;
-    String queryStr = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.donation WHERE " +
-                      "p.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
-                      "p.status IN :status AND " +
-                      "p.isDeleted= :isDeleted";
+    TypedQuery<Component> query;
+    String queryStr = "SELECT DISTINCT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +
+                      "c.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
+                      "c.status IN :status AND " +
+                      "c.isDeleted= :isDeleted";
 
-    String queryStrWithoutJoin = "SELECT p FROM Product p WHERE " +
-        "p.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
-        "p.status IN :status AND " +
-        "p.isDeleted= :isDeleted";
+    String queryStrWithoutJoin = "SELECT c FROM Component c WHERE " +
+        "c.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
+        "c.status IN :status AND " +
+        "c.isDeleted= :isDeleted";
 
     if (pagingParams.containsKey("sortColumn")) {
-      queryStr += " ORDER BY p." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
+      queryStr += " ORDER BY c." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
     }
 
-    query = em.createQuery(queryStr, Product.class);
+    query = em.createQuery(queryStr, Component.class);
     query.setParameter("status", status);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
@@ -249,26 +248,26 @@ public class ProductRepository {
     return query.getResultList();
   }
   
-  public List<Product> findProductByProductTypes(
+  public List<Component> findComponentByProductTypes(
       List<Integer> productTypeIds, List<ProductStatus> status,
       Map<String, Object> pagingParams) {
 
-    String queryStr = "SELECT p FROM Product p LEFT JOIN FETCH p.donation WHERE " +
-        "p.productType.id IN (:productTypeIds) AND " +
-        "p.status IN :status AND " +
-        "p.isDeleted= :isDeleted";
+    String queryStr = "SELECT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +
+        "c.productType.id IN (:productTypeIds) AND " +
+        "c.status IN :status AND " +
+        "c.isDeleted= :isDeleted";
 
-    String queryStrWithoutJoin = "SELECT p FROM Product p WHERE " +
-        "p.productType.id IN (:productTypeIds) AND " +
-        "p.status IN :status AND " +
-        "p.isDeleted= :isDeleted";
+    String queryStrWithoutJoin = "SELECT c FROM Component c WHERE " +
+        "c.productType.id IN (:productTypeIds) AND " +
+        "c.status IN :status AND " +
+        "c.isDeleted= :isDeleted";
 
 
     if (pagingParams.containsKey("sortColumn")) {
-      queryStr += " ORDER BY p." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
+      queryStr += " ORDER BY c." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
     }
 
-    TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
+    TypedQuery<Component> query = em.createQuery(queryStr, Component.class);
     query.setParameter("status", status);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("productTypeIds", productTypeIds);
@@ -284,7 +283,7 @@ public class ProductRepository {
   }
 
   private Long getResultCount(String queryStr, Query query) {
-    String countQueryStr = queryStr.replaceFirst("SELECT p", "SELECT COUNT(p)");
+    String countQueryStr = queryStr.replaceFirst("SELECT c", "SELECT COUNT(c)");
     TypedQuery<Long> countQuery = em.createQuery(countQueryStr, Long.class);
     for (Parameter<?> parameter : query.getParameters()) {
       countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
@@ -292,17 +291,17 @@ public class ProductRepository {
     return countQuery.getSingleResult().longValue();
   }
   
-  public List<Product> getAllUnissuedProducts() {
-    String queryString = "SELECT p FROM Product p where p.isDeleted = :isDeleted and p.isIssued= :isIssued";
-    TypedQuery<Product> query = em.createQuery(queryString, Product.class);
+  public List<Component> getAllUnissuedComponents() {
+    String queryString = "SELECT c FROM Component c where c.isDeleted = :isDeleted and c.isIssued= :isIssued";
+    TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("isIssued", Boolean.FALSE);
     return query.getResultList();
   }
 
-  public List<Product> getAllUnissuedThirtyFiveDayProducts() {
-    String queryString = "SELECT p FROM Product p where p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.createdOn > :minDate";
-    TypedQuery<Product> query = em.createQuery(queryString, Product.class);
+  public List<Component> getAllUnissuedThirtyFiveDayComponents() {
+    String queryString = "SELECT c FROM Component c where c.isDeleted = :isDeleted and c.isIssued= :isIssued and c.createdOn > :minDate";
+    TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("isIssued", Boolean.FALSE);
     query.setParameter("minDate", new DateTime(new Date()).minusDays(35)
@@ -310,57 +309,57 @@ public class ProductRepository {
     return query.getResultList();
   }
 
-  public List<Product> getAllProducts() {
-    String queryString = "SELECT p FROM Product p where p.isDeleted = :isDeleted";
-    TypedQuery<Product> query = em.createQuery(queryString, Product.class);
+  public List<Component> getAllComponents() {
+    String queryString = "SELECT c FROM Component c where c.isDeleted = :isDeleted";
+    TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     return query.getResultList();
   }
 
-  public boolean isProductCreated(String donationIdentificationNumber) {
-    String queryString = "SELECT p FROM Product p WHERE p.donationIdentificationNumber = :donationIdentificationNumber and p.isDeleted = :isDeleted";
-    TypedQuery<Product> query = em.createQuery(queryString, Product.class);
+  public boolean isComponentCreated(String donationIdentificationNumber) {
+    String queryString = "SELECT c FROM Component c WHERE c.donationIdentificationNumber = :donationIdentificationNumber and c.isDeleted = :isDeleted";
+    TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
-    List<Product> products = query.setParameter("donationIdentificationNumber",
+    List<Component> components = query.setParameter("donationIdentificationNumber",
         donationIdentificationNumber).getResultList();
-    if (products != null && products.size() > 0) {
+    if (components != null && components.size() > 0) {
       return true;
     }
     return false;
   }
 
-  public void deleteAllProducts() {
-    Query query = em.createQuery("DELETE FROM Product p");
+  public void deleteAllComponents() {
+    Query query = em.createQuery("DELETE FROM Component c");
     query.executeUpdate();
   }
 
-  public List<Product> getAllProducts(String productType) {
-    String queryString = "SELECT p FROM Product p where p.type = :productType and p.isDeleted = :isDeleted";
-    TypedQuery<Product> query = em.createQuery(queryString, Product.class);
+  public List<Component> getAllComponents(String productType) {
+    String queryString = "SELECT c FROM Component c where c.type = :productType and c.isDeleted = :isDeleted";
+    TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("productType", productType);
     return query.getResultList();
   }
 
-  public List<Product> getProducts(Date fromDate, Date toDate) {
-    TypedQuery<Product> query = em
+  public List<Component> getComponents(Date fromDate, Date toDate) {
+    TypedQuery<Component> query = em
         .createQuery(
-            "SELECT p FROM Product p WHERE  p.createdOn >= :fromDate and p.createdOn<= :toDate and p.isDeleted = :isDeleted",
-            Product.class);
+            "SELECT c FROM Component c WHERE  c.createdOn >= :fromDate and c.createdOn<= :toDate and c.isDeleted = :isDeleted",
+            Component.class);
     query.setParameter("fromDate", fromDate);
     query.setParameter("toDate", toDate);
     query.setParameter("isDeleted", Boolean.FALSE);
-    List<Product> products = query.getResultList();
-    if (CollectionUtils.isEmpty(products)) {
-      return new ArrayList<Product>();
+    List<Component> components = query.getResultList();
+    if (CollectionUtils.isEmpty(components)) {
+      return new ArrayList<Component>();
     }
-    return products;
+    return components;
   }
 
-  public List<Product> getAllUnissuedProducts(String productType, String abo,
+  public List<Component> getAllUnissuedComponents(String productType, String abo,
       String rhd) {
-    String queryString = "SELECT p FROM Product p where p.type = :productType and p.abo= :abo and p.rhd= :rhd and p.isDeleted = :isDeleted and p.isIssued= :isIssued";
-    TypedQuery<Product> query = em.createQuery(queryString, Product.class);
+    String queryString = "SELECT c FROM Component c where c.type = :productType and c.abo= :abo and c.rhd= :rhd and c.isDeleted = :isDeleted and c.isIssued= :isIssued";
+    TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("isIssued", Boolean.FALSE);
     query.setParameter("productType", productType);
@@ -369,10 +368,10 @@ public class ProductRepository {
     return query.getResultList();
   }
 
-  public List<Product> getAllUnissuedThirtyFiveDayProducts(String productType,
+  public List<Component> getAllUnissuedThirtyFiveDayComponents(String productType,
       String abo, String rhd) {
-    String queryString = "SELECT p FROM Product p where p.type = :productType and p.abo= :abo and p.rhd= :rhd and p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.createdOn > :minDate";
-    TypedQuery<Product> query = em.createQuery(queryString, Product.class);
+    String queryString = "SELECT c FROM Component c where c.type = :productType and c.abo= :abo and c.rhd= :rhd and c.isDeleted = :isDeleted and c.isIssued= :isIssued and c.createdOn > :minDate";
+    TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("isIssued", Boolean.FALSE);
     query.setParameter("productType", productType);
@@ -384,63 +383,63 @@ public class ProductRepository {
     return query.getResultList();
   }
 
-  public Product findProduct(Long productId) {
-    return em.find(Product.class, productId);
+  public Component findComponent(Long componentId) {
+    return em.find(Component.class, componentId);
   }
 
-  public Product findProductById(Long productId)throws NoResultException{
-    String queryString = "SELECT p FROM Product p LEFT JOIN FETCH p.donation LEFT JOIN FETCH p.issuedTo where p.id = :productId AND p.isDeleted = :isDeleted";
-    TypedQuery<Product> query = em.createQuery(queryString, Product.class);
+  public Component findComponentById(Long componentId)throws NoResultException{
+    String queryString = "SELECT c FROM Component c LEFT JOIN FETCH c.donation LEFT JOIN FETCH c.issuedTo where c.id = :componentId AND c.isDeleted = :isDeleted";
+    TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("productId", productId);
-    Product product = null;
-    product = query.getSingleResult();
-    return product;
+    query.setParameter("componentId", componentId);
+    Component component = null;
+    component = query.getSingleResult();
+    return component;
   }
 
-  public Product updateProduct(Product product) {
-    Product existingProduct = findProductById(product.getId());
-    if (existingProduct == null) {
+  public Component updateComponent(Component component) {
+    Component existingComponent = findComponentById(component.getId());
+    if (existingComponent == null) {
       return null;
     }
-    existingProduct.copy(product);
-    updateProductInternalFields(existingProduct);
-    em.merge(existingProduct);
+    existingComponent.copy(component);
+    updateComponentInternalFields(existingComponent);
+    em.merge(existingComponent);
     em.flush();
-    return existingProduct;
+    return existingComponent;
   }
 
-  public Product addProduct(Product product) {
-    updateProductInternalFields(product);
-    em.persist(product);
+  public Component addComponent(Component component) {
+    updateComponentInternalFields(component);
+    em.persist(component);
     //em.flush();
-    em.refresh(product);
-    return product;
+    em.refresh(component);
+    return component;
   }
 
-  public void deleteProduct(Long productId) throws IllegalArgumentException{
-    Product existingProduct = findProductById(productId);
-    existingProduct.setIsDeleted(Boolean.TRUE);
-    em.merge(existingProduct);
+  public void deleteComponent(Long componentId) throws IllegalArgumentException{
+    Component existingComponent = findComponentById(componentId);
+    existingComponent.setIsDeleted(Boolean.TRUE);
+    em.merge(existingComponent);
     em.flush();
   }
 
-  public List<MatchingProductViewModel> findMatchingProductsForRequest(Long requestId) {
+  public List<MatchingComponentViewModel> findMatchingComponentsForRequest(Long requestId) {
 
     Date today = new Date();
     Request request = requestRepository.findRequestById(requestId);
     
-    TypedQuery<Product> query = em.createQuery(
-                 "SELECT p from Product p LEFT JOIN FETCH p.donation WHERE " +
-                 "p.productType = :productType AND " +
-                 "p.expiresOn >= :today AND " +
-                 "p.status = :status AND " + 
-                 "p.donation.ttiStatus = :ttiStatus AND " +
-                 "((p.donation.bloodAbo = :bloodAbo AND p.donation.bloodRh = :bloodRh) OR " +
-                 "(p.donation.bloodAbo = :bloodAboO AND p.donation.bloodRh = :bloodRhNeg)) AND " +
-                 "p.isDeleted = :isDeleted " +
-                 "ORDER BY p.expiresOn ASC",
-                  Product.class);
+    TypedQuery<Component> query = em.createQuery(
+                 "SELECT c from Component c LEFT JOIN FETCH c.donation WHERE " +
+                 "c.productType = :productType AND " +
+                 "c.expiresOn >= :today AND " +
+                 "c.status = :status AND " + 
+                 "c.donation.ttiStatus = :ttiStatus AND " +
+                 "((c.donation.bloodAbo = :bloodAbo AND c.donation.bloodRh = :bloodRh) OR " +
+                 "(c.donation.bloodAbo = :bloodAboO AND c.donation.bloodRh = :bloodRhNeg)) AND " +
+                 "c.isDeleted = :isDeleted " +
+                 "ORDER BY c.expiresOn ASC",
+                  Component.class);
 
     query.setParameter("productType", request.getProductType());
     query.setParameter("today", today);
@@ -454,47 +453,47 @@ public class ProductRepository {
 
     TypedQuery<CompatibilityTest> crossmatchQuery = em.createQuery(
         "SELECT ct from CompatibilityTest ct where ct.forRequest.id=:forRequestId AND " +
-        "ct.testedProduct.status = :testedProductStatus AND " +
+        "ct.testedComponent.status = :testedComponentStatus AND " +
         "isDeleted=:isDeleted", CompatibilityTest.class);
 
     crossmatchQuery.setParameter("forRequestId", requestId);
-    crossmatchQuery.setParameter("testedProductStatus", ProductStatus.AVAILABLE);
+    crossmatchQuery.setParameter("testedComponentStatus", ProductStatus.AVAILABLE);
     crossmatchQuery.setParameter("isDeleted", false);
 
     List<CompatibilityTest> crossmatchTests = crossmatchQuery.getResultList();
-    List<MatchingProductViewModel> matchingProducts = new ArrayList<MatchingProductViewModel>();
+    List<MatchingComponentViewModel> matchingComponents = new ArrayList<MatchingComponentViewModel>();
 
     Map<Long, CompatibilityTest> crossmatchTestMap = new HashMap<Long, CompatibilityTest>();
     for (CompatibilityTest crossmatchTest : crossmatchTests) {
-      Product product = crossmatchTest.getTestedProduct();
-      if (product == null)
+      Component component = crossmatchTest.getTestedComponent();
+      if (component == null)
         continue;
-      crossmatchTestMap.put(product.getId(), crossmatchTest);
+      crossmatchTestMap.put(component.getId(), crossmatchTest);
       if (!crossmatchTest.getCompatibilityResult().equals(CompatibilityResult.NOT_COMPATIBLE))
-        matchingProducts.add(new MatchingProductViewModel(product, crossmatchTest));
+        matchingComponents.add(new MatchingComponentViewModel(component, crossmatchTest));
     }
 
-    for (Product product : query.getResultList()) {
+    for (Component component : query.getResultList()) {
       System.out.println("here");
-      Long productId = product.getId();
-      if (crossmatchTestMap.containsKey(productId))
+      Long componentId = component.getId();
+      if (crossmatchTestMap.containsKey(componentId))
         continue;
-      matchingProducts.add(new MatchingProductViewModel(product));
+      matchingComponents.add(new MatchingComponentViewModel(component));
     }
 
-    return matchingProducts;
+    return matchingComponents;
   }
   
   public Map<String, Object> generateInventorySummaryFast(List<String> status, List<Long> panelIds) {
     Map<String, Object> inventory = new HashMap<String, Object>();
-    // IMPORTANT: Distinct is necessary to avoid a cartesian product of test results and products from being returned
+    // IMPORTANT: Distinct is necessary to avoid a cartesian product of test results and components from being returned
     // Also LEFT JOIN FETCH prevents the N+1 queries problem associated with Lazy Many-to-One joins
-    TypedQuery<Product> q = em.createQuery(
-                             "SELECT DISTINCT p from Product p " +
-                             "WHERE p.status IN :status AND " +
-                             "p.donation.donorPanel.id IN (:panelIds) AND " +
-                             "p.isDeleted=:isDeleted",
-                             Product.class);
+    TypedQuery<Component> q = em.createQuery(
+                             "SELECT DISTINCT c from Component c " +
+                             "WHERE c.status IN :status AND " +
+                             "c.donation.donorPanel.id IN (:panelIds) AND " +
+                             "c.isDeleted=:isDeleted",
+                             Component.class);
     List<ProductStatus> productStatus = new ArrayList<ProductStatus>();
     for (String s : status) {
       productStatus.add(ProductStatus.lookup(s));
@@ -523,14 +522,14 @@ public class ProductRepository {
     }
 
     DateTime today = new DateTime();
-    for (Product product : q.getResultList()) {
-      String productType = product.getProductType().getProductTypeName();
+    for (Component component : q.getResultList()) {
+      String productType = component.getProductType().getProductTypeName();
       @SuppressWarnings("unchecked")
       Map<String, Map<Long, Long>> inventoryByBloodGroup = (Map<String, Map<Long, Long>>) inventory.get(productType);
       DonationViewModel donation;
-      donation = new DonationViewModel(product.getDonation());
+      donation = new DonationViewModel(component.getDonation());
       Map<Long, Long> numDayMap = inventoryByBloodGroup.get(donation.getBloodGroup());
-      DateTime createdOn = new DateTime(product.getCreatedOn().getTime());
+      DateTime createdOn = new DateTime(component.getCreatedOn().getTime());
       Long age = (long) Days.daysBetween(createdOn, today).getDays();
       // compute window based on age
       age = Math.abs((age / 5) * 5);
@@ -555,33 +554,33 @@ public class ProductRepository {
     return m;
   }
 
-  public void addAllProducts(List<Product> products) {
-    for (Product p : products) {
-      updateProductInternalFields(p);
-      em.persist(p);
+  public void addAllComponents(List<Component> components) {
+    for (Component c : components) {
+      updateComponentInternalFields(c);
+      em.persist(c);
     }
     em.flush();
   }
 
   public void updateQuarantineStatus() {
-    String queryString = "SELECT p FROM Product p LEFT JOIN FETCH p.donation where p.status is NULL AND p.isDeleted = :isDeleted";
-    TypedQuery<Product> query = em.createQuery(queryString, Product.class);
+    String queryString = "SELECT c FROM Component c LEFT JOIN FETCH c.donation where c.status is NULL AND c.isDeleted = :isDeleted";
+    TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
-    List<Product> products = query.getResultList();
-    //System.out.println("number of products to update: " + products.size());
-    for (Product product : products) {
-      updateProductInternalFields(product);
-      em.merge(product);
+    List<Component> components = query.getResultList();
+    //System.out.println("number of components to update: " + components.size());
+    for (Component component : components) {
+      updateComponentInternalFields(component);
+      em.merge(component);
     }
     em.flush();
   }
 
-  public void discardProduct(Long productId,
+  public void discardComponent(Long componentId,
       ProductStatusChangeReason discardReason,
       String discardReasonText) {
-    Product existingProduct = findProductById(productId);
-    existingProduct.setStatus(ProductStatus.DISCARDED);
-    existingProduct.setDiscardedOn(new Date());
+    Component existingComponent = findComponentById(componentId);
+    existingComponent.setStatus(ProductStatus.DISCARDED);
+    existingComponent.setDiscardedOn(new Date());
     ProductStatusChange statusChange = new ProductStatusChange();
     statusChange.setStatusChangeType(ProductStatusChangeType.DISCARDED);
     statusChange.setNewStatus(ProductStatus.DISCARDED);
@@ -589,19 +588,19 @@ public class ProductRepository {
     statusChange.setStatusChangeReason(discardReason);
     statusChange.setStatusChangeReasonText(discardReasonText);
     statusChange.setChangedBy(utilController.getCurrentUser());
-    if (existingProduct.getStatusChanges() == null)
-      existingProduct.setStatusChanges(new ArrayList<ProductStatusChange>());
-    existingProduct.getStatusChanges().add(statusChange);
-    statusChange.setProduct(existingProduct);
+    if (existingComponent.getStatusChanges() == null)
+      existingComponent.setStatusChanges(new ArrayList<ProductStatusChange>());
+    existingComponent.getStatusChanges().add(statusChange);
+    statusChange.setComponent(existingComponent);
     em.persist(statusChange);
-    em.merge(existingProduct);
+    em.merge(existingComponent);
     em.flush();
   }
 
   public void updateExpiryStatus() {
-    String updateExpiryQuery = "UPDATE Product p SET p.status=:status WHERE " +
-                               "p.status=:availableStatus AND " +
-                               "p.expiresOn < :today";
+    String updateExpiryQuery = "UPDATE Component c SET c.status=:status WHERE " +
+                               "c.status=:availableStatus AND " +
+                               "c.expiresOn < :today";
     Query query = em.createQuery(updateExpiryQuery);
     query.setParameter("status", ProductStatus.EXPIRED);
     query.setParameter("availableStatus", ProductStatus.AVAILABLE);
@@ -610,15 +609,15 @@ public class ProductRepository {
     //System.out.println("Number of rows updated: " + numUpdated);
   }
 
-  public List<Product> getProductsFromProductIds(String[] productIds) {
-    List<Product> products = new ArrayList<Product>();
-    for (String productId : productIds) {
-      products.add(findProductById(Long.parseLong(productId)));
+  public List<Component> getComponentsFromComponentIds(String[] componentIds) {
+    List<Component> components = new ArrayList<Component>();
+    for (String componentId : componentIds) {
+      components.add(findComponentById(Long.parseLong(componentId)));
     }
-    return products;
+    return components;
   }
 
-  public Map<String, Map<Long, Long>> findNumberOfDiscardedProducts(
+  public Map<String, Map<Long, Long>> findNumberOfDiscardedComponents(
       Date donationDateFrom, Date donationDateTo, String aggregationCriteria,
       List<String> panels, List<String> bloodGroups) throws ParseException {
 
@@ -637,12 +636,12 @@ public class ProductRepository {
     }
 
     TypedQuery<Object[]> query = em.createQuery(
-        "SELECT count(p), p.donation.donationDate, p.donation.bloodAbo, " +
-        "p.donation.bloodRh FROM Product p WHERE " +
-        "p.donation.donorPanel.id IN (:panelIds) AND " +
-        "p.donation.donationDate BETWEEN :donationDateFrom AND :donationDateTo AND " +
-        "p.status IN (:discardedStatuses) AND " +
-        "(p.isDeleted= :isDeleted) " +
+        "SELECT count(c), c.donation.donationDate, c.donation.bloodAbo, " +
+        "c.donation.bloodRh FROM Component c WHERE " +
+        "c.donation.donorPanel.id IN (:panelIds) AND " +
+        "c.donation.donationDate BETWEEN :donationDateFrom AND :donationDateTo AND " +
+        "c.status IN (:discardedStatuses) AND " +
+        "(c.isDeleted= :isDeleted) " +
         "GROUP BY bloodAbo, bloodRh, donationDate", Object[].class);
 
     query.setParameter("panelIds", panelIds);
@@ -703,7 +702,7 @@ public class ProductRepository {
     return resultMap;
   }
 
-  public Map<String, Map<Long, Long>> findNumberOfIssuedProducts(
+  public Map<String, Map<Long, Long>> findNumberOfIssuedComponents(
       Date donationDateFrom, Date donationDateTo, String aggregationCriteria,
       List<String> panels, List<String> bloodGroups) throws ParseException {
 
@@ -722,12 +721,12 @@ public class ProductRepository {
     }
 
     TypedQuery<Object[]> query = em.createQuery(
-        "SELECT count(p), p.issuedOn, p.donation.bloodAbo, " +
-        "p.donation.bloodRh FROM Product p WHERE " +
-        "p.donation.donorPanel.id IN (:panelIds) AND " +
-        "p.donation.donationDate BETWEEN :donationDateFrom AND :donationDateTo AND " +
-        "p.status=:issuedStatus AND " +
-        "(p.isDeleted= :isDeleted) " +
+        "SELECT count(c), c.issuedOn, c.donation.bloodAbo, " +
+        "c.donation.bloodRh FROM Component c WHERE " +
+        "c.donation.donorPanel.id IN (:panelIds) AND " +
+        "c.donation.donationDate BETWEEN :donationDateFrom AND :donationDateTo AND " +
+        "c.status=:issuedStatus AND " +
+        "(c.isDeleted= :isDeleted) " +
         "GROUP BY bloodAbo, bloodRh, donationDate", Object[].class);
 
     query.setParameter("panelIds", panelIds);
@@ -790,63 +789,63 @@ public class ProductRepository {
     return resultMap;
   }
 
-  public Product findProduct(String donationIdentificationNumber, String productTypeId) {
-    String queryStr = "SELECT p from Product p WHERE " +
-                      "p.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
-                      "p.productType.id = :productTypeId";
-    TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
+  public Component findComponent(String donationIdentificationNumber, String productTypeId) {
+    String queryStr = "SELECT c from Component c WHERE " +
+                      "c.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
+                      "c.productType.id = :productTypeId";
+    TypedQuery<Component> query = em.createQuery(queryStr, Component.class);
     query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
     query.setParameter("productTypeId", Integer.parseInt(productTypeId));
-    Product product = null;
+    Component component = null;
     try {
-      product = query.getSingleResult();
+      component = query.getSingleResult();
     } catch (NoResultException ex) {
       ex.printStackTrace();
     }
-    return product;
+    return component;
   }
 
-  public void returnProduct(Long productId,
+  public void returnComponent(Long componentId,
       ProductStatusChangeReason returnReason, String returnReasonText) {
-    Product existingProduct = findProductById(productId);
-    updateProductStatus(existingProduct);
+    Component existingComponent = findComponentById(componentId);
+    updateComponentStatus(existingComponent);
     ProductStatusChange statusChange = new ProductStatusChange();
     statusChange.setStatusChangedOn(new Date());
     statusChange.setStatusChangeType(ProductStatusChangeType.RETURNED);
     statusChange.setStatusChangeReason(returnReason);
-    statusChange.setNewStatus(existingProduct.getStatus());
+    statusChange.setNewStatus(existingComponent.getStatus());
     statusChange.setStatusChangeReasonText(returnReasonText);
     statusChange.setChangedBy(utilController.getCurrentUser());
-    if (existingProduct.getStatusChanges() == null)
-      existingProduct.setStatusChanges(new ArrayList<ProductStatusChange>());
-    existingProduct.getStatusChanges().add(statusChange);
-    statusChange.setProduct(existingProduct);
+    if (existingComponent.getStatusChanges() == null)
+      existingComponent.setStatusChanges(new ArrayList<ProductStatusChange>());
+    existingComponent.getStatusChanges().add(statusChange);
+    statusChange.setComponent(existingComponent);
     em.persist(statusChange);
-    em.merge(existingProduct);
+    em.merge(existingComponent);
     em.flush();
   }
 
-  public List<ProductStatusChange> getProductStatusChanges(Product product) {
+  public List<ProductStatusChange> getComponentStatusChanges(Component component) {
     String queryStr = "SELECT p FROM ProductStatusChange p WHERE " +
-        "p.product.id=:productId";
+        "p.component.id=:componentId";
     TypedQuery<ProductStatusChange> query = em.createQuery(queryStr, ProductStatusChange.class);
-    query.setParameter("productId", product.getId());
+    query.setParameter("componentId", component.getId());
     List<ProductStatusChange> statusChanges = query.getResultList();
     return statusChanges;
   }
 
-  public List<Product> findProductsByDonationIdentificationNumber(String donationIdentificationNumber) {
-    String queryStr = "SELECT p from Product p WHERE " +
-        "p.donation.donationIdentificationNumber=:donationIdentificationNumber AND p.isDeleted=:isDeleted";
-    TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
+  public List<Component> findComponentsByDonationIdentificationNumber(String donationIdentificationNumber) {
+    String queryStr = "SELECT c from Component c WHERE " +
+        "c.donation.donationIdentificationNumber=:donationIdentificationNumber AND c.isDeleted=:isDeleted";
+    TypedQuery<Component> query = em.createQuery(queryStr, Component.class);
     query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
     query.setParameter("isDeleted", false);
     return query.getResultList();
   }
 
   @SuppressWarnings("unchecked")
-  public List<Product> addProductCombination(ProductCombinationBackingForm form) throws PessimisticLockException, ParseException {
-    List<Product> products = new ArrayList<Product>();
+  public List<Component> addComponentCombination(ComponentCombinationBackingForm form) throws PessimisticLockException, ParseException {
+    List<Component> components = new ArrayList<Component>();
     String expiresOn = form.getExpiresOn();
     ObjectMapper mapper = new ObjectMapper();
 
@@ -860,52 +859,52 @@ public class ProductRepository {
     ProductTypeCombination productTypeCombination;
     productTypeCombination = productTypeRepository.getProductTypeCombinationById(Integer.parseInt(form.getProductTypeCombination()));
     for (ProductType productType : productTypeCombination.getProductTypes()) {
-      Product product = new Product();
-      product.setDonation(form.getDonation());
-      product.setProductType(productType);
-      product.setCreatedOn(form.getProduct().getCreatedOn());
+      Component component = new Component();
+      component.setDonation(form.getDonation());
+      component.setProductType(productType);
+      component.setCreatedOn(form.getComponent().getCreatedOn());
       String expiryDateStr = expiryDateByProductType.get(productType.getId().toString());
-      product.setExpiresOn(CustomDateFormatter.getDateTimeFromString(expiryDateStr));
-      product.setIsDeleted(false);
-      updateProductInternalFields(product);
-      em.persist(product);
+      component.setExpiresOn(CustomDateFormatter.getDateTimeFromString(expiryDateStr));
+      component.setIsDeleted(false);
+      updateComponentInternalFields(component);
+      em.persist(component);
       em.flush();
-      em.refresh(product);
-      products.add(product);
+      em.refresh(component);
+      components.add(component);
     }
 
-    return products;
+    return components;
   }
 
-  public boolean splitProduct(Long productId, Integer numProductsAfterSplitting) {
+  public boolean splitComponent(Long componentId, Integer numComponentsAfterSplitting) {
 
-    Product product = findProduct(productId);
-    if (product == null || product.getStatus().equals(ProductStatus.SPLIT))
+    Component component = findComponent(componentId);
+    if (component == null || component.getStatus().equals(ProductStatus.SPLIT))
       return false;
 
-    ProductType pediProductType = product.getProductType().getPediProductType();
+    ProductType pediProductType = component.getProductType().getPediProductType();
     if (pediProductType == null) {
       return false;
     }
 
     char nextSubdivisionCode = 'A';
-    for (int i = 0; i < numProductsAfterSplitting; ++i) {
-      Product newProduct = new Product();
+    for (int i = 0; i < numComponentsAfterSplitting; ++i) {
+      Component newComponent = new Component();
       // just set the id temporarily before copying all the fields
-      newProduct.setId(productId);
-      newProduct.copy(product);
-      newProduct.setId(null);
-      newProduct.setProductType(pediProductType);
-      newProduct.setSubdivisionCode("" + nextSubdivisionCode);
-      newProduct.setParentProduct(product);
-      newProduct.setIsDeleted(false);
-      updateProductInternalFields(newProduct);
-      em.persist(newProduct);
+      newComponent.setId(componentId);
+      newComponent.copy(component);
+      newComponent.setId(null);
+      newComponent.setProductType(pediProductType);
+      newComponent.setSubdivisionCode("" + nextSubdivisionCode);
+      newComponent.setParentComponent(component);
+      newComponent.setIsDeleted(false);
+      updateComponentInternalFields(newComponent);
+      em.persist(newComponent);
       // Assuming we do not split into more than 26 products this should be fine
       nextSubdivisionCode++;
     }
 
-    product.setStatus(ProductStatus.SPLIT);
+    component.setStatus(ProductStatus.SPLIT);
     ProductStatusChange statusChange = new ProductStatusChange();
     statusChange.setStatusChangeType(ProductStatusChangeType.SPLIT);
     statusChange.setNewStatus(ProductStatus.SPLIT);
@@ -922,12 +921,12 @@ public class ProductRepository {
     statusChange.setStatusChangeReason(productStatusChangeReasons.get(0));
     statusChange.setStatusChangeReasonText("");
     statusChange.setChangedBy(utilController.getCurrentUser());
-    if (product.getStatusChanges() == null)
-      product.setStatusChanges(new ArrayList<ProductStatusChange>());
-    product.getStatusChanges().add(statusChange);
-    statusChange.setProduct(product);
+    if (component.getStatusChanges() == null)
+      component.setStatusChanges(new ArrayList<ProductStatusChange>());
+    component.getStatusChanges().add(statusChange);
+    statusChange.setComponent(component);
     em.persist(statusChange);
-    em.merge(product);
+    em.merge(component);
     return true;
   }
 
@@ -947,13 +946,13 @@ public class ProductRepository {
     return productType;
   }
   
-  public void setProductStatusToProcessed(long productId) throws NoResultException {
-  	 String queryString = "SELECT p FROM Product p where p.id = :productId";
-     TypedQuery<Product> query = em.createQuery(queryString, Product.class);
-     query.setParameter("productId", productId);
-     Product product = null;
-     	product = query.getSingleResult();
-     	product.setStatus(ProductStatus.PROCESSED);
-     	em.merge(product);
+  public void setProductStatusToProcessed(long componentId) throws NoResultException {
+  	 String queryString = "SELECT c FROM Component c where c.id = :componentId";
+     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
+     query.setParameter("componentId", componentId);
+     Component component = null;
+     	component = query.getSingleResult();
+     	component.setStatus(ProductStatus.PROCESSED);
+     	em.merge(component);
   }
 }

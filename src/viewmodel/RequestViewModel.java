@@ -1,9 +1,10 @@
 package viewmodel;
 
 import java.util.List;
+
+import model.component.Component;
 import model.location.Location;
 import model.modificationtracker.RowModificationTracker;
-import model.product.Product;
 import model.request.Request;
 import model.requesttype.RequestType;
 import model.user.User;
@@ -85,8 +86,8 @@ public class RequestViewModel {
     return request.getIsDeleted();
   }
 
-  public List<Product> getIssuedProducts() {
-    return request.getIssuedProducts();
+  public List<Component> getIssuedComponents() {
+    return request.getIssuedComponents();
   }
 
   public int hashCode() {

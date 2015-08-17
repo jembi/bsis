@@ -17,14 +17,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import model.admin.FormField;
 import model.admin.GeneralConfig;
+import model.component.Component;
+import model.component.ProductStatus;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
-import model.product.Product;
-import model.product.ProductStatus;
 import model.productmovement.ProductStatusChangeReason;
 import model.producttype.ProductType;
 import model.request.Request;
@@ -38,7 +38,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.NotReadablePropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import repository.DonationRepository;
@@ -47,7 +46,7 @@ import repository.DonorRepository;
 import repository.FormFieldRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
-import repository.ProductRepository;
+import repository.ComponentRepository;
 import repository.RequestRepository;
 import repository.SequenceNumberRepository;
 import repository.TipsRepository;
@@ -62,7 +61,7 @@ import security.BsisUserDetails;
 import repository.DonationTypeRepository;
 import utils.DonorUtils;
 
-@Component
+@org.springframework.stereotype.Component
 public class UtilController {
   public static final String VERSION_NUMBER = "1.3";
 
@@ -79,7 +78,7 @@ public class UtilController {
   private DonationRepository donationRepository;
 
   @Autowired
-  private ProductRepository productRepository;
+  private ComponentRepository componentRepository;
 
   @Autowired
   private RequestRepository requestRepository;
@@ -383,8 +382,8 @@ public class UtilController {
     return errorMessage;
   }
 
-  public Product findProduct(String donationIdentificationNumber, String productType) {
-    return productRepository.findProduct(donationIdentificationNumber, productType);
+  public Component findComponent(String donationIdentificationNumber, String productType) {
+    return componentRepository.findComponent(donationIdentificationNumber, productType);
   }
 
   public String getNextWorksheetNumber() {
@@ -399,21 +398,21 @@ public class UtilController {
     return requestRepository.findRequestByRequestNumber(requestNumber);
   }
 
-  public Product findProduct(String donationIdentificationNumber, ProductType productType) {
-    List<Product> products = productRepository.findProductsByDonationIdentificationNumber(donationIdentificationNumber);
-    Product matchingProduct = null; 
-    for (Product product : products) {
-      if (product.getProductType().equals(productType)) {
-        if (matchingProduct != null &&
-            matchingProduct.getStatus().equals(ProductStatus.AVAILABLE)) {
+  public Component findComponent(String donationIdentificationNumber, ProductType productType) {
+    List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
+    Component matchingComponent = null; 
+    for (Component component : components) {
+      if (component.getProductType().equals(productType)) {
+        if (matchingComponent != null &&
+            matchingComponent.getStatus().equals(ProductStatus.AVAILABLE)) {
           // multiple products available have the same product type
           // cannot identify uniquely
           return null;
         }
-        matchingProduct = product;
+        matchingComponent = component;
       }
     }
-    return matchingProduct;
+    return matchingComponent;
   }
 
   public boolean doesFieldUseCurrentTime(String formName, String fieldName) {
@@ -556,10 +555,10 @@ public class UtilController {
     return false;
   }
 
-  public Product findProductById(String productId) {
-    Product product = null;
-    product = productRepository.findProductById(Long.parseLong(productId));
-    return product;
+  public Component findComponentById(String productId) {
+    Component component = null;
+    component = componentRepository.findComponentById(Long.parseLong(productId));
+    return component;
   }
 
   public boolean isFieldRequired(String formName, String fieldName) {

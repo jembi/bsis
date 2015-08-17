@@ -19,8 +19,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.product.Product;
-import model.product.ProductStatus;
+import model.component.Component;
+import model.component.ProductStatus;
 import model.productmovement.ProductStatusChange;
 import model.productmovement.ProductStatusChangeType;
 import model.request.Request;
@@ -34,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import controller.UtilController;
+
 import javax.persistence.NonUniqueResultException;
 
 @Repository
@@ -46,7 +47,7 @@ public class RequestRepository {
   private EntityManager em;
 
   @Autowired
-  private ProductRepository productRepository;
+  private ComponentRepository componentRepository;
 
   @Autowired
   private UtilController utilController;
@@ -366,16 +367,16 @@ public class RequestRepository {
     if (request.getNumUnitsIssued() != null)
       numUnitsIssued = request.getNumUnitsIssued();
     for (String productId : productIds) {
-      Product product = em.find(Product.class, Long.parseLong(productId));
+      Component component = em.find(Component.class, Long.parseLong(productId));
       // handle the case where the product, test result has been updated
       // between the time when matching products are searched and selected
       // for issuing
-      if (!canIssueProduct(product, request))
+      if (!canIssueComponent(component, request))
         throw new RuntimeException("Could not issue products");
     }
 
     for (String productId : productIds) {
-      Product product = em.find(Product.class, Long.parseLong(productId));
+      Component component = em.find(Component.class, Long.parseLong(productId));
       // we know these products can be issued now
       // although there is some doubt about the behavior of locks between the check above and now
       Date today = new Date();
@@ -385,13 +386,13 @@ public class RequestRepository {
       productIssue.setStatusChangeType(ProductStatusChangeType.ISSUED);
       productIssue.setChangedBy(utilController.getCurrentUser());
       productIssue.setIssuedTo(request);
-      productIssue.setProduct(product);
+      productIssue.setComponent(component);
       numUnitsIssued++;
-      product.setStatus(ProductStatus.ISSUED);
-      product.setIssuedOn(today);
-      product.setIssuedTo(request);
+      component.setStatus(ProductStatus.ISSUED);
+      component.setIssuedOn(today);
+      component.setIssuedTo(request);
       em.persist(productIssue);
-      em.merge(product);
+      em.merge(component);
     }
 
     em.flush();
@@ -404,30 +405,30 @@ public class RequestRepository {
     em.flush();
   }
 
-  private boolean canIssueProduct(Product product, Request request) {
+  private boolean canIssueComponent(Component component, Request request) {
     // first make sure the product is up-to-date
     // the product may have expired so this update is required
     // we update the expiry date of a product periodically
-    productRepository.updateProductInternalFields(product);
+    componentRepository.updateComponentInternalFields(component);
     String requestedProductType = request.getProductType().getProductTypeName();
-    String productType = product.getProductType().getProductTypeName();
+    String productType = component.getProductType().getProductTypeName();
 
     if (!productType.equals(requestedProductType))
       return false;
     
     // product available or not
-    if (!product.getStatus().equals(ProductStatus.AVAILABLE))
+    if (!component.getStatus().equals(ProductStatus.AVAILABLE))
       return false;
 
-    if (product.getIsDeleted())
+    if (component.getIsDeleted())
       return false;
 
     Date today = new Date();
-    if (product.getExpiresOn().before(today))
+    if (component.getExpiresOn().before(today))
       return false;
     
-    String bloodAbo = product.getDonation().getBloodAbo();
-    String bloodRh = product.getDonation().getBloodRh();
+    String bloodAbo = component.getDonation().getBloodAbo();
+    String bloodRh = component.getDonation().getBloodRh();
 
     boolean canIssue = true;
 
@@ -455,14 +456,14 @@ public class RequestRepository {
     return request;
   }
 
-  public List<Product> getIssuedProductsForRequest(Long requestId) {
-    String queryString = "SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.donation WHERE " +
+  public List<Component> getIssuedComponentsForRequest(Long requestId) {
+    String queryString = "SELECT DISTINCT p FROM Component p LEFT JOIN FETCH p.donation WHERE " +
                          "p.issuedTo.id = :requestId AND p.isDeleted= :isDeleted";
-    TypedQuery<Product> query = em.createQuery(queryString, Product.class);
+    TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("requestId", requestId);
-    List<Product> issuedProducts = query.getResultList();
-    return issuedProducts;
+    List<Component> issuedComponents = query.getResultList();
+    return issuedComponents;
   }
 
   public Map<String, Map<Long, Long>> findNumberOfRequests(Date dateRequestedFrom,

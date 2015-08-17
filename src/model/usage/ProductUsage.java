@@ -13,14 +13,14 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
+import model.component.Component;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
-import model.product.Product;
 import model.user.User;
 
 import org.hibernate.envers.Audited;
 
-import constraintvalidator.ProductExists;
+import constraintvalidator.ComponentExists;
 
 /**
  * We cannot use the name Usage for this class as Usage is
@@ -36,9 +36,9 @@ public class ProductUsage implements ModificationTracker {
   @Column(nullable=false, updatable=false, insertable=false)
   private Long id;
 
-  @ProductExists
+  @ComponentExists
   @OneToOne
-  private Product product;
+  private Component component;
 
   @Column(length=50)
   private String hospital;
@@ -138,8 +138,8 @@ public class ProductUsage implements ModificationTracker {
     return notes;
   }
 
-  public Product getProduct() {
-    return product;
+  public Component getComponent() {
+    return component;
   }
 
   public RowModificationTracker getModificationTracker() {
@@ -178,8 +178,8 @@ public class ProductUsage implements ModificationTracker {
     this.notes = notes;
   }
 
-  public void setProduct(Product product) {
-    this.product = product;
+  public void setComponent(Component component) {
+    this.component = component;
   }
 
   public void setModificationTracker(RowModificationTracker modificationTracker) {
@@ -199,8 +199,8 @@ public class ProductUsage implements ModificationTracker {
   }
 
   public String getDonationIdentificationNumber() {
-    if (product == null || product.getDonation() == null || product.getDonationIdentificationNumber() == null)
+    if (component == null || component.getDonation() == null || component.getDonationIdentificationNumber() == null)
       return "";
-    return product.getDonationIdentificationNumber();
+    return component.getDonationIdentificationNumber();
   }
 }

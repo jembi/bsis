@@ -14,10 +14,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import model.bloodtesting.TTIStatus;
+import model.component.Component;
+import model.component.ProductStatus;
 import model.donation.Donation;
 import model.donation.LotReleaseConstant;
-import model.product.Product;
-import model.product.ProductStatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import repository.DonationRepository;
-import repository.ProductRepository;
+import repository.ComponentRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import utils.PermissionConstants;
 
@@ -43,7 +43,7 @@ public class LotReleaseController {
   private DonationRepository donationRepository;
   
   @Autowired
-  private ProductRepository productRepository;
+  private ComponentRepository componentRepository;
 
 
   @Autowired
@@ -74,11 +74,11 @@ public class LotReleaseController {
         Map<String, Object> componentMap = new HashMap<String, Object>();
 
     Donation donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
-    List<Product> products = productRepository.findProductsByDonationIdentificationNumber(donationIdentificationNumber);
-    List<Map<String, Object>> components = getComponentLabellingStatus(donation, products);
+    List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
+    List<Map<String, Object>> componentStatuses = getComponentLabellingStatus(donation, components);
     
     componentMap.put("donationNumber", donationIdentificationNumber);
-    componentMap.put("components", new HashSet(components));
+    componentMap.put("components", new HashSet(componentStatuses));
     
     return new ResponseEntity (componentMap, HttpStatus.OK);
   }
@@ -88,8 +88,8 @@ public class LotReleaseController {
   public  ResponseEntity<Map<String, Object>> printLabel( @PathVariable Long componentId) {
 	  
 	    Map<String, Object> map = new  HashMap<String, Object>();
-            Product product = productRepository.findProductById(componentId);
-	    Donation donation = product.getDonation();
+            Component component = componentRepository.findComponentById(componentId);
+	    Donation donation = component.getDonation();
 	    
 	    boolean success = false;
 	    
@@ -137,10 +137,10 @@ public class LotReleaseController {
 			        "^BY2,3,82^FT451,538^BCN,,Y,N"+
 			        "^FD>:"+expiryDate+"^FS"+
 			        "^BY3,3,82^FT62,150^BCN,,Y,N"+
-			        "^FD>:"+product.getDonationIdentificationNumber()+"^FS"+
-			        "^FT66,608^A0N,20,21^FH\\^FD"+product.getProductType().getProductTypeName()+"^FS"+
+			        "^FD>:"+component.getDonationIdentificationNumber()+"^FS"+
+			        "^FT66,608^A0N,20,21^FH\\^FD"+component.getProductType().getProductTypeName()+"^FS"+
 			        "^BY3,3,77^FT69,535^BCN,,Y,N"+
-			        "^FD>:"+product.getProductType().getProductTypeNameShort()+"^FS"+
+			        "^FD>:"+component.getProductType().getProductTypeNameShort()+"^FS"+
 			        "^BY2,3,84^FT65,296^BCN,,Y,N"+
 			        "^FD>:"+donationDate+"^FS"+
 			        //inverse+
@@ -258,10 +258,10 @@ public class LotReleaseController {
 	Map<String, Object> map = new  HashMap<String, Object>();
 	boolean success = false;
 	
-     Product product = productRepository.findProductById(componentId);
+     Component component = componentRepository.findComponentById(componentId);
     
     // check to make sure discard label can be printed
- 	if (checkProductForDiscard(product)){
+ 	if (checkComponentForDiscard(component)){
     
  		// discard label can be printed
  		success = true;
@@ -289,7 +289,7 @@ public class LotReleaseController {
 	    		"^FO18,357^GB748,0,8^FS"+
 	    		"^FT52,749^A0N,28,28^FH\\^FDIf found contact the BTS immediately at (000) 000-0000^FS" +
 	    		"^BY2,3,52^FT408,135^BCN,,Y,N" +
-	    		"^FD>:" + product.getDonationIdentificationNumber() + "^FS" +
+	    		"^FD>:" + component.getDonationIdentificationNumber() + "^FS" +
 	    		"^FT88,118^A0N,28,28^FH\\^FD2013/01/01^FS" +
 	    		"^PQ1,0,1,Y^XZ^XA^ID000.GRF^FS^XZ" 
 	    		);
@@ -347,17 +347,17 @@ public class LotReleaseController {
 		return success;
 	}
 	
-	private List<Map<String, Object>> getComponentLabellingStatus(Donation donation, List<Product> products){
+	private List<Map<String, Object>> getComponentLabellingStatus(Donation donation, List<Component> components){
 		
                
            List<Map<String, Object>> productsList= new ArrayList<Map<String, Object>>(); 
 	     if(donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)){
                   Map<String, Object> productStatus = new HashMap<String, Object>();
-    		for(Product product : products){
-    				if(!product.getStatus().equals(ProductStatus.PROCESSED) && !product.getStatus().equals(ProductStatus.SPLIT)){
-	                    productStatus.put("componentId", product.getId());
-	                    productStatus.put("componentName", product.getProductType().getProductTypeName());
-	                    productStatus.put("componentIdentificationNumber", product.getComponentIdentificationNumber());
+    		for(Component component : components){
+    				if(!component.getStatus().equals(ProductStatus.PROCESSED) && !component.getStatus().equals(ProductStatus.SPLIT)){
+	                    productStatus.put("componentId", component.getId());
+	                    productStatus.put("componentName", component.getProductType().getProductTypeName());
+	                    productStatus.put("componentIdentificationNumber", component.getComponentIdentificationNumber());
 	                    productStatus.put("discardPackLabel", true);
 	                    productStatus.put("printPackLabel", false);
 	                    productsList.add(productStatus);
@@ -367,13 +367,13 @@ public class LotReleaseController {
                 return productsList;
     	}
             else {
-                for (Product product : products) {
+                for (Component component : components) {
                 	Map<String, Object> productStatus = new HashMap<String, Object>();
-                	if(!product.getStatus().equals(ProductStatus.PROCESSED) && !product.getStatus().equals(ProductStatus.SPLIT)){
-	                    productStatus.put("componentId", product.getId());
-	                    productStatus.put("componentName", product.getProductType().getProductTypeName());
-	                    productStatus.put("componentIdentificationNumber", product.getComponentIdentificationNumber());
-	                    if (product.getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED)) {
+                	if(!component.getStatus().equals(ProductStatus.PROCESSED) && !component.getStatus().equals(ProductStatus.SPLIT)){
+	                    productStatus.put("componentId", component.getId());
+	                    productStatus.put("componentName", component.getProductType().getProductTypeName());
+	                    productStatus.put("componentIdentificationNumber", component.getComponentIdentificationNumber());
+	                    if (component.getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED)) {
 	                        productStatus.put("discardPackLabel", true);
 	                        productStatus.put("printPackLabel", false);
 	                    } else {
@@ -388,11 +388,11 @@ public class LotReleaseController {
 
     }
         
-    private Boolean checkProductForDiscard(Product product){ 
-	    if(product.getDonation().getTTIStatus().equals(TTIStatus.TTI_UNSAFE))
+    private Boolean checkComponentForDiscard(Component component){ 
+	    if(component.getDonation().getTTIStatus().equals(TTIStatus.TTI_UNSAFE))
 	        return true;
 	    
-	     if (product.getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED)) 
+	     if (component.getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED)) 
 	         return true;
 	     return false;
     }

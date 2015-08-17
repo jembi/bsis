@@ -7,9 +7,9 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import model.component.Component;
+import model.component.ProductStatus;
 import model.donation.Donation;
-import model.product.Product;
-import model.product.ProductStatus;
 import model.producttype.ProductType;
 import model.user.User;
 
@@ -19,13 +19,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import utils.CustomDateFormatter;
 
-public class ProductBackingForm {
+public class ComponentBackingForm {
 
   public static final int ID_LENGTH = 12;
 
   @NotNull
   @Valid
-  private Product product;
+  private Component component;
 
   private String createdOn;
 
@@ -33,28 +33,28 @@ public class ProductBackingForm {
 
   private List<String> productTypes;
 
-  public ProductBackingForm() {
-    setProduct(new Product());
+  public ComponentBackingForm() {
+    setComponent(new Component());
   }
 
-  public ProductBackingForm(boolean autoGenerate) {
-    setProduct(new Product());
+  public ComponentBackingForm(boolean autoGenerate) {
+    setComponent(new Component());
   }
 
-  public ProductBackingForm(Product product) {
-    this.setProduct(product);
+  public ComponentBackingForm(Component component) {
+    this.setComponent(component);
   }
 
   public Long getId() {
-    return product.getId();
+    return component.getId();
   }
 
   public Donation getDonation() {
-    return product.getDonation();
+    return component.getDonation();
   }
 
   public String getProductType() {
-    ProductType productType = product.getProductType();
+    ProductType productType = component.getProductType();
     if (productType == null)
       return "";
     else
@@ -63,56 +63,56 @@ public class ProductBackingForm {
   
   @JsonIgnore
   public Date getLastUpdated() {
-    return product.getLastUpdated();
+    return component.getLastUpdated();
   }
 
   @JsonIgnore
   public Date getCreatedDate() {
-    return product.getCreatedDate();
+    return component.getCreatedDate();
   }
 
   @JsonIgnore
   public User getCreatedBy() {
-    return product.getCreatedBy();
+    return component.getCreatedBy();
   }
 
   @JsonIgnore
   public User getLastUpdatedBy() {
-    return product.getLastUpdatedBy();
+    return component.getLastUpdatedBy();
   }
 
   public String getNotes() {
-    return product.getNotes();
+    return component.getNotes();
   }
 
   public Boolean getIsDeleted() {
-    return product.getIsDeleted();
+    return component.getIsDeleted();
   }
 
   public int hashCode() {
-    return product.hashCode();
+    return component.hashCode();
   }
 
   public void setId(Long id) {
-    product.setId(id);
+    component.setId(id);
   }
 
   public void setDonation(Donation donation) {
-    product.setDonation(donation);
+    component.setDonation(donation);
   }
 
   public void setProductType(String productTypeId) {
     if (StringUtils.isBlank(productTypeId)) {
-      product.setProductType(null);
+      component.setProductType(null);
     }
     else {
       ProductType pt = new ProductType();
       try {
         pt.setId(Integer.parseInt(productTypeId));
-        product.setProductType(pt);
+        component.setProductType(pt);
       } catch (Exception ex) {
         ex.printStackTrace();
-        product.setProductType(null);
+        component.setProductType(null);
       }
     }
   }
@@ -120,65 +120,65 @@ public class ProductBackingForm {
   public String getCreatedOn() {
     if (createdOn != null)
       return createdOn;
-    if (getProduct() == null)
+    if (getComponent() == null)
       return "";
-    return CustomDateFormatter.getDateTimeString(product.getCreatedOn());
+    return CustomDateFormatter.getDateTimeString(component.getCreatedOn());
   }
 
   public String getExpiresOn() {
     if (expiresOn != null)
       return expiresOn;
-    if (getProduct() == null)
+    if (getComponent() == null)
       return "";
-    return CustomDateFormatter.getDateString(product.getExpiresOn());
+    return CustomDateFormatter.getDateString(component.getExpiresOn());
   }
   
   public void setLastUpdated(Date lastUpdated) {
-    product.setLastUpdated(lastUpdated);
+    component.setLastUpdated(lastUpdated);
   }
 
   public void setCreatedDate(Date createdDate) {
-    product.setCreatedDate(createdDate);
+    component.setCreatedDate(createdDate);
   }
 
   public void setCreatedBy(User createdBy) {
-    product.setCreatedBy(createdBy);
+    component.setCreatedBy(createdBy);
   }
 
   public void setLastUpdatedBy(User lastUpdatedBy) {
-    product.setLastUpdatedBy(lastUpdatedBy);
+    component.setLastUpdatedBy(lastUpdatedBy);
   }
 
   public void setNotes(String notes) {
-    product.setNotes(notes);
+    component.setNotes(notes);
   }
 
   public void setIsDeleted(Boolean isDeleted) {
-    product.setIsDeleted(isDeleted);
+    component.setIsDeleted(isDeleted);
   }
 
   public void setCreatedOn(String createdOn) {
     this.createdOn = createdOn;
     try {
-      product.setCreatedOn(CustomDateFormatter.getDateTimeFromString(createdOn));
+      component.setCreatedOn(CustomDateFormatter.getDateTimeFromString(createdOn));
     } catch (ParseException ex) {
       ex.printStackTrace();
-      product.setCreatedOn(null);
+      component.setCreatedOn(null);
     }
   }
 
   public void setExpiresOn(String expiresOn) {
     this.expiresOn = expiresOn;
     try {
-      product.setExpiresOn(CustomDateFormatter.getDateTimeFromString(expiresOn));
+      component.setExpiresOn(CustomDateFormatter.getDateTimeFromString(expiresOn));
     } catch (ParseException ex) {
       ex.printStackTrace();
-      product.setExpiresOn(null);
+      component.setExpiresOn(null);
     }
   }
 
   public String toString() {
-    return product.toString();
+    return component.toString();
   }
 
   public List<String> getProductTypes() {
@@ -190,38 +190,38 @@ public class ProductBackingForm {
   }
 
   public String getDonationIdentificationNumber() {
-    if (product == null || product.getDonation() == null ||
-        product.getDonation().getDonationIdentificationNumber() == null
+    if (component == null || component.getDonation() == null ||
+        component.getDonation().getDonationIdentificationNumber() == null
        )
       return "";
-    return product.getDonation().getDonationIdentificationNumber();
+    return component.getDonation().getDonationIdentificationNumber();
   }
 
   public void setDonationIdentificationNumber(String donationIdentificationNumber) {
     Donation donation = new Donation();
     donation.setDonationIdentificationNumber(donationIdentificationNumber);
-    product.setDonation(donation);
+    component.setDonation(donation);
   }
 
   @JsonIgnore
-  public Product getProduct() {
-    return product;
+  public Component getComponent() {
+    return component;
   }
 
-  public void setProduct(Product product) {
-    this.product = product;
+  public void setComponent(Component component) {
+    this.component = component;
   }
 
   @JsonIgnore
   public String getStatus() {
-    ProductStatus status = product.getStatus();
+    ProductStatus status = component.getStatus();
     if (status == null)
       return "";
     else
-      return product.getStatus().toString();
+      return component.getStatus().toString();
   }
 
   public void setStatus(String status) {
-    product.setStatus(ProductStatus.valueOf(status));
+    component.setStatus(ProductStatus.valueOf(status));
   }
 }

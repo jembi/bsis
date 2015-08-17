@@ -43,7 +43,7 @@ public class UsageRepositoryTest {
 	UsageRepository usageRepository;
 	
 	@Autowired
-	ProductRepository productRepository;
+	ComponentRepository componentRepository;
 	
 	@Autowired
 	private DataSource dataSource;
@@ -128,7 +128,7 @@ public class UsageRepositoryTest {
 	public void testAddUsage() throws Exception {
 		ProductUsage one = new ProductUsage();
 		one.setHospital("Junit hospital");
-		one.setProduct(productRepository.findProduct(6l)); // note: this product is actually discarded
+		one.setComponent(componentRepository.findComponent(6l)); // note: this component is actually discarded
 		one.setUsageDate(new Date());
 		ProductUsage savedOne = usageRepository.addUsage(one);
 		Assert.assertNotNull("Saved ProductUsage has an id", savedOne.getId());

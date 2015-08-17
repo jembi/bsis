@@ -2,7 +2,7 @@ package backingform.validator;
 
 import java.util.Arrays;
 
-import model.product.Product;
+import model.component.Component;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -49,8 +49,8 @@ public class UsageBackingFormValidator implements Validator {
   }
 
   private void updateRelatedEntities(ProductUsageBackingForm form) {
-    Product product = utilController.findProductById(form.getProductId());
-    form.setProduct(product);
+    Component component = utilController.findComponentById(form.getProductId());
+    form.setComponent(component);
   }
 }
 

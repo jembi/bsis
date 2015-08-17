@@ -5,8 +5,8 @@ import utils.CustomDateFormatter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import model.request.Request;
-import model.product.Product;
-import model.product.ProductStatus;
+import model.component.Component;
+import model.component.ProductStatus;
 import model.productmovement.ProductStatusChange;
 import model.productmovement.ProductStatusChangeType;
 import model.productmovement.ProductStatusChangeReason;
@@ -38,8 +38,8 @@ public class ProductStatusChangeViewModel {
 	}
 	
     @JsonIgnore
-    public Product getProduct() {
-	    return productStatusChange.getProduct();
+    public Component getComponent() {
+	    return productStatusChange.getComponent();
 	}
 	
     public String getStatusChangedOn() {

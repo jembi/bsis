@@ -15,7 +15,7 @@ import javax.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ProductTypeExists {
 
-  String message() default "Invalid Product Type specified";
+  String message() default "Invalid Component Type specified";
 
   Class<?>[] groups() default {};
 

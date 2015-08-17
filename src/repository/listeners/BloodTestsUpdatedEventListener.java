@@ -10,10 +10,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import model.bloodtesting.TTIStatus;
+import model.component.Component;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.donor.DonorStatus;
-import model.product.Product;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import repository.ProductRepository;
+import repository.ComponentRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import repository.events.BloodTestsUpdatedEvent;
 import viewmodel.BloodTestingRuleResult;
@@ -34,7 +34,7 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
   private EntityManager em;
 
   @Autowired
-  private ProductRepository productRepository;
+  private ComponentRepository componentRepository;
 
   @Override
   public void onApplicationEvent(BloodTestsUpdatedEvent event) {
@@ -124,15 +124,15 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
   }
 
   private void updateProductStatus(Donation donation) {
-    String queryStr = "SELECT p FROM Product p WHERE " +
+    String queryStr = "SELECT p FROM Component p WHERE " +
         "p.donation.id=:donationId AND p.isDeleted=:isDeleted";
-    TypedQuery<Product> query = em.createQuery(queryStr, Product.class);
+    TypedQuery<Component> query = em.createQuery(queryStr, Component.class);
     query.setParameter("donationId", donation.getId());
     query.setParameter("isDeleted", false);
-    List<Product> products = query.getResultList();
-    for (Product product : products) {
-      if (productRepository.updateProductInternalFields(product)) {
-        em.merge(product);
+    List<Component> components = query.getResultList();
+    for (Component component : components) {
+      if (componentRepository.updateComponentInternalFields(component)) {
+        em.merge(component);
       }
     }
   }

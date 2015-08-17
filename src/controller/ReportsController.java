@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import repository.DonationRepository;
 import repository.LocationRepository;
-import repository.ProductRepository;
+import repository.ComponentRepository;
 import repository.RequestRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import utils.CustomDateFormatter;
@@ -35,7 +35,7 @@ public class ReportsController {
   private DonationRepository donationRepository;
 
   @Autowired
-  private ProductRepository productRepository;
+  private ComponentRepository componentRepository;
 
   @Autowired
   private LocationRepository locationRepository;
@@ -82,7 +82,7 @@ public class ReportsController {
     Map<String, Object> data = null;
 
     try {
-      data = productRepository.generateInventorySummaryFast(productStatuses, centerIdsLong);
+      data = componentRepository.generateInventorySummaryFast(productStatuses, centerIdsLong);
     } catch (Exception ex) {
       ex.printStackTrace();
       response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -260,8 +260,8 @@ public class ReportsController {
       else
         dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
 
-      Map<String, Map<Long, Long>> numDiscardedProducts = productRepository
-          .findNumberOfDiscardedProducts(dateFrom, dateTo,
+      Map<String, Map<Long, Long>> numDiscardedProducts = componentRepository
+          .findNumberOfDiscardedComponents(dateFrom, dateTo,
               aggregationCriteria, panels, bloodGroups);
       // TODO: potential leap year bug here
       Long interval = (long) (24 * 3600 * 1000);
@@ -310,8 +310,8 @@ public class ReportsController {
       else
         dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
 
-      Map<String, Map<Long, Long>> numIssuedProducts = productRepository
-          .findNumberOfIssuedProducts(dateFrom, dateTo,
+      Map<String, Map<Long, Long>> numIssuedProducts = componentRepository
+          .findNumberOfIssuedComponents(dateFrom, dateTo,
               aggregationCriteria, panels, bloodGroups);
       // TODO: potential leap year bug here
       Long interval = (long) (24 * 3600 * 1000);

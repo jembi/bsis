@@ -1,4 +1,4 @@
-package model.product;
+package model.component;
 
 public enum ProductStatus {
 

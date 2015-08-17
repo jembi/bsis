@@ -11,9 +11,9 @@ import java.util.Map;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import model.component.Component;
+import model.component.ProductStatus;
 import model.donation.Donation;
-import model.product.Product;
-import model.product.ProductStatus;
 import model.producttype.ProductTypeCombination;
 import model.user.User;
 
@@ -25,14 +25,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import utils.CustomDateFormatter;
 
-public class ProductCombinationBackingForm {
+public class ComponentCombinationBackingForm {
 
   public static final int ID_LENGTH = 12;
 
   @NotNull
   @Valid
   @JsonIgnore
-  private Product product;
+  private Component component;
 
   private String createdOn;
 
@@ -42,75 +42,75 @@ public class ProductCombinationBackingForm {
 
   Map<String, String> expiresOnByProductTypeId;
   
-  public ProductCombinationBackingForm() {
+  public ComponentCombinationBackingForm() {
     expiresOnByProductTypeId = new HashMap<String, String>();
-    setProduct(new Product());
+    setComponent(new Component());
   }
 
-  public ProductCombinationBackingForm(boolean autoGenerate) {
+  public ComponentCombinationBackingForm(boolean autoGenerate) {
     expiresOnByProductTypeId = new HashMap<String, String>();
-    setProduct(new Product());
+    setComponent(new Component());
   }
 
-  public ProductCombinationBackingForm(Product product) {
-    this.setProduct(product);
+  public ComponentCombinationBackingForm(Component component) {
+    this.setComponent(component);
   }
 
   public Long getId() {
-    return product.getId();
+    return component.getId();
   }
 
   @JsonIgnore
   public Donation getDonation() {
-    return product.getDonation();
+    return component.getDonation();
   }
   
   @JsonIgnore
   public Date getLastUpdated() {
-    return product.getLastUpdated();
+    return component.getLastUpdated();
   }
 
   @JsonIgnore
   public Date getCreatedDate() {
-    return product.getCreatedDate();
+    return component.getCreatedDate();
   }
 
   @JsonIgnore
   public User getCreatedBy() {
-    return product.getCreatedBy();
+    return component.getCreatedBy();
   }
 
   @JsonIgnore
   public User getLastUpdatedBy() {
-    return product.getLastUpdatedBy();
+    return component.getLastUpdatedBy();
   }
 
   public String getNotes() {
-    return product.getNotes();
+    return component.getNotes();
   }
 
   public Boolean getIsDeleted() {
-    return product.getIsDeleted();
+    return component.getIsDeleted();
   }
 
   public int hashCode() {
-    return product.hashCode();
+    return component.hashCode();
   }
 
   public void setId(Long id) {
-    product.setId(id);
+    component.setId(id);
   }
 
   public void setDonation(Donation donation) {
-    product.setDonation(donation);
+    component.setDonation(donation);
   }
 
   public String getCreatedOn() {
     if (createdOn != null)
       return createdOn;
-    if (getProduct() == null)
+    if (getComponent() == null)
       return "";
-    return CustomDateFormatter.getDateTimeString(product.getCreatedOn());
+    return CustomDateFormatter.getDateTimeString(component.getCreatedOn());
   }
 
   public String getExpiresOn() {
@@ -118,36 +118,36 @@ public class ProductCombinationBackingForm {
   }
 
   public void setLastUpdated(Date lastUpdated) {
-    product.setLastUpdated(lastUpdated);
+    component.setLastUpdated(lastUpdated);
   }
 
   public void setCreatedDate(Date createdDate) {
-    product.setCreatedDate(createdDate);
+    component.setCreatedDate(createdDate);
   }
 
   public void setCreatedBy(User createdBy) {
-    product.setCreatedBy(createdBy);
+    component.setCreatedBy(createdBy);
   }
 
   public void setLastUpdatedBy(User lastUpdatedBy) {
-    product.setLastUpdatedBy(lastUpdatedBy);
+    component.setLastUpdatedBy(lastUpdatedBy);
   }
 
   public void setNotes(String notes) {
-    product.setNotes(notes);
+    component.setNotes(notes);
   }
 
   public void setIsDeleted(Boolean isDeleted) {
-    product.setIsDeleted(isDeleted);
+    component.setIsDeleted(isDeleted);
   }
 
   public void setCreatedOn(String createdOn) {
     this.createdOn = createdOn;
     try {
-      product.setCreatedOn(CustomDateFormatter.getDateTimeFromString(createdOn));
+      component.setCreatedOn(CustomDateFormatter.getDateTimeFromString(createdOn));
     } catch (ParseException ex) {
       ex.printStackTrace();
-      product.setCreatedOn(null);
+      component.setCreatedOn(null);
     }
   }
 
@@ -170,41 +170,41 @@ public class ProductCombinationBackingForm {
   }
 
   public String toString() {
-    return product.toString();
+    return component.toString();
   }
 
   public String getDonationIdentificationNumber() {
-    if (product == null || product.getDonation() == null ||
-        product.getDonation().getDonationIdentificationNumber() == null
+    if (component == null || component.getDonation() == null ||
+        component.getDonation().getDonationIdentificationNumber() == null
        )
       return "";
-    return product.getDonation().getDonationIdentificationNumber();
+    return component.getDonation().getDonationIdentificationNumber();
   }
 
   public void setDonationIdentificationNumber(String donationIdentificationNumber) {
     Donation donation = new Donation();
     donation.setDonationIdentificationNumber(donationIdentificationNumber);
-    product.setDonation(donation);
+    component.setDonation(donation);
   }
 
-  public Product getProduct() {
-    return product;
+  public Component getComponent() {
+    return component;
   }
 
-  public void setProduct(Product product) {
-    this.product = product;
+  public void setComponent(Component component) {
+    this.component = component;
   }
 
   public String getStatus() {
-    ProductStatus status = product.getStatus();
+    ProductStatus status = component.getStatus();
     if (status == null)
       return "";
     else
-      return product.getStatus().toString();
+      return component.getStatus().toString();
   }
 
   public void setStatus(String status) {
-    product.setStatus(ProductStatus.valueOf(status));
+    component.setStatus(ProductStatus.valueOf(status));
   }
 
   public String getProductTypeCombination() {

@@ -10,7 +10,7 @@ import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 import model.user.User;
 
-public class RecordProductBackingForm {
+public class RecordComponentBackingForm {
 	
 	@NotBlank
     private String parentComponentId;

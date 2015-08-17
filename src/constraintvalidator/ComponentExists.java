@@ -10,12 +10,12 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 @Documented
-@Constraint(validatedBy = ProductExistsConstraintValidator.class)
+@Constraint(validatedBy = ComponentExistsConstraintValidator.class)
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ProductExists {
+public @interface ComponentExists {
 
-  String message() default "Product does not exist";
+  String message() default "Component does not exist";
 
   Class<?>[] groups() default {};
 

@@ -63,7 +63,7 @@ public class ProductType {
   private Boolean hasBloodGroup;
 
   /**
-   * Pedi Product Type for this product type.
+   * Pedi Component Type for this product type.
    * can be null. This allows us to determine the target type after splitting.
    */
   @OneToOne(optional=true)

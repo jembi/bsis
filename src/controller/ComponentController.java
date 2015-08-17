@@ -14,9 +14,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import model.component.Component;
+import model.component.ProductStatus;
 import model.donation.Donation;
-import model.product.Product;
-import model.product.ProductStatus;
 import model.productmovement.ProductStatusChange;
 import model.productmovement.ProductStatusChangeReason;
 import model.productmovement.ProductStatusChangeReasonCategory;
@@ -39,19 +39,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import repository.ComponentRepository;
 import repository.DonationRepository;
-import repository.ProductRepository;
 import repository.ProductStatusChangeReasonRepository;
 import repository.ProductTypeRepository;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
+import viewmodel.ComponentViewModel;
 import viewmodel.ProductStatusChangeViewModel;
 import viewmodel.ProductTypeCombinationViewModel;
 import viewmodel.ProductTypeViewModel;
-import viewmodel.ProductViewModel;
-import backingform.ProductCombinationBackingForm;
-import backingform.RecordProductBackingForm;
-import backingform.validator.ProductBackingFormValidator;
+import backingform.ComponentCombinationBackingForm;
+import backingform.RecordComponentBackingForm;
+import backingform.validator.ComponentBackingFormValidator;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -59,10 +59,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("components")
-public class ProductController {
+public class ComponentController {
 
   @Autowired
-  private ProductRepository productRepository;
+  private ComponentRepository componentRepository;
   
   @Autowired
   private DonationRepository donationRepository;
@@ -76,12 +76,12 @@ public class ProductController {
   @Autowired
   private UtilController utilController;
   
-  public ProductController() {
+  public ComponentController() {
   }
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new ProductBackingFormValidator(binder.getValidator(), utilController));
+    binder.setValidator(new ComponentBackingFormValidator(binder.getValidator(), utilController));
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -94,7 +94,7 @@ public class ProductController {
   }
 
   public static String getNextPageUrl(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString().replaceFirst("findProduct.html", "search.html");
+    String reqUrl = req.getRequestURL().toString().replaceFirst("findComponent.html", "search.html");
     String queryString = req.getQueryString();   // d=789
     if (queryString != null) {
         reqUrl += "?"+queryString;
@@ -104,15 +104,15 @@ public class ProductController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public   Map<String, Object> productSummaryGenerator(HttpServletRequest request, 
+  public   Map<String, Object> componentSummaryGenerator(HttpServletRequest request, 
       @PathVariable Long id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    Product product = productRepository.findProductById(id);
+    Component component = componentRepository.findComponentById(id);
      
-    ProductViewModel productViewModel = getProductViewModels(Arrays.asList(product)).get(0);
+    ComponentViewModel componentViewModel = getComponentViewModels(Arrays.asList(component)).get(0);
     addEditSelectorOptions(map);
-    map.put("product", productViewModel);
+    map.put("component", componentViewModel);
     map.put("productStatusChangeReasons",
     productStatusChangeReasonRepository.getAllProductStatusChangeReasonsAsMap());
     return map;
@@ -120,7 +120,7 @@ public class ProductController {
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT_INFORMATION+"')")
-  public  Map<String, Object> findProductFormGenerator(HttpServletRequest request) {
+  public  Map<String, Object> findComponentFormGenerator(HttpServletRequest request) {
     Map<String, Object> map = new HashMap<String, Object>();
     addEditSelectorOptions(map);
     List<ProductStatusChangeReason> statusChangeReasons =
@@ -129,20 +129,20 @@ public class ProductController {
     statusChangeReasons =
     productStatusChangeReasonRepository.getProductStatusChangeReasons(ProductStatusChangeReasonCategory.DISCARDED);
     map.put("discardReasons", statusChangeReasons);
-    map.put("findProductByPackNumberForm",  new RecordProductBackingForm());
+    map.put("findComponentByPackNumberForm",  new RecordComponentBackingForm());
     return map;
   }
 
   @RequestMapping(value = "/combination/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public  Map<String, Object> addProductCombinationFormGenerator() {
+  public  Map<String, Object> addComponentCombinationFormGenerator() {
 
-    ProductCombinationBackingForm form = new ProductCombinationBackingForm();
+    ComponentCombinationBackingForm form = new ComponentCombinationBackingForm();
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("addProductCombinationForm", form);
+    map.put("addComponentCombinationForm", form);
 
-    addOptionsForAddProductCombinationForm(map);
+    addOptionsForAddComponentsCombinationForm(map);
     addEditSelectorOptions(map);
 
     return map;
@@ -150,37 +150,37 @@ public class ProductController {
 
   @RequestMapping(value = "/combination", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public  ResponseEntity< Map<String, Object>> addProductCombination(
-      @Valid @RequestBody ProductCombinationBackingForm form) throws ParseException {
+  public  ResponseEntity< Map<String, Object>> addComponentCombination(
+      @Valid @RequestBody ComponentCombinationBackingForm form) throws ParseException {
 
     Map<String, Object> map = new HashMap<String, Object>();
     HttpStatus httpStatus = HttpStatus.CREATED;
     addEditSelectorOptions(map);
    
-      List<Product> savedProducts = null;
-      savedProducts = productRepository.addProductCombination(form);
+      List<Component> savedComponents = null;
+      savedComponents = componentRepository.addComponentCombination(form);
       map.put("hasErrors", false);
-      form = new ProductCombinationBackingForm();
+      form = new ComponentCombinationBackingForm();
    
-      // at least one product should be created, all products should have the same donation number
-      map.put("donationIdentificationNumber", savedProducts.get(0).getDonationIdentificationNumber());
-      map.put("createdProducts", getProductViewModels(savedProducts));
-      List<Product> allProductsForDonation = productRepository.findProductsByDonationIdentificationNumber(savedProducts.get(0).getDonationIdentificationNumber());
-      map.put("allProductsForDonation", getProductViewModels(allProductsForDonation));
-      map.put("addAnotherProductUrl", "addProductCombinationFormGenerator.html");
+      // at least one  should be created, all s should have the same donation number
+      map.put("donationIdentificationNumber", savedComponents.get(0).getDonationIdentificationNumber());
+      map.put("createdComponents", getComponentViewModels(savedComponents));
+      List<Component> allComponentsForDonation = componentRepository.findComponentsByDonationIdentificationNumber(savedComponents.get(0).getDonationIdentificationNumber());
+      map.put("allComponentsForDonation", getComponentViewModels(allComponentsForDonation));
+      map.put("addAnotherComponentUrl", "addComponentCombinationFormGenerator.html");
    
     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
-  private ProductViewModel getProductViewModel(Product product) {
-    return new ProductViewModel(product);
+  private ComponentViewModel getComponentViewModel(Component component) {
+    return new ComponentViewModel(component);
   }
 
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
-    public Map<String, Object> findProductPagination(HttpServletRequest request,
-            @RequestParam(value = "componentNumber", required=false, defaultValue ="") String productNumber,
+    public Map<String, Object> findComponentPagination(HttpServletRequest request,
+            @RequestParam(value = "componentNumber", required=false, defaultValue ="") String componentNumber,
             @RequestParam(value = "donationIdentificationNumber", required=false, defaultValue ="") String donationIdentificationNumber,
             @RequestParam(value = "componentTypes", required=false, defaultValue ="") List<Integer> componentTypeIds,
             @RequestParam(value = "status", required=false, defaultValue ="") List<String> status,
@@ -196,7 +196,7 @@ public class ProductController {
         //pagingParams.put("length", "10");
         pagingParams.put("sortDirection", "asc");
 
-        List<Product> results = new ArrayList<Product>();
+        List<Component> results = new ArrayList<Component>();
         Date dateFrom = null;
         Date dateTo = null;
         
@@ -207,16 +207,16 @@ public class ProductController {
 	        	dateTo = CustomDateFormatter.getDateFromString(donationDateTo);
         }
         
-        results = productRepository.findAnyProduct(
+        results = componentRepository.findAnyComponent(
                 donationIdentificationNumber, componentTypeIds, statusStringToProductStatus(status),
                 dateFrom, dateTo, pagingParams);
 
-        List<ProductViewModel> components = new ArrayList<ProductViewModel>();
+        List<ComponentViewModel> components = new ArrayList<ComponentViewModel>();
         
         if (results != null){
-    	    for(Product product : results){
-    	    	ProductViewModel productViewModel = getProductViewModel(product);
-    	    	components.add(productViewModel);
+    	    for(Component component : results){
+    	    	ComponentViewModel componentViewModel = getComponentViewModel(component);
+    	    	components.add(componentViewModel);
     	    }
         }
 
@@ -234,15 +234,15 @@ public class ProductController {
 	    return productStatusChangeViewModels;
 	}
 
-  public static List<ProductViewModel> getProductViewModels(
-      List<Product> products) {
-    if (products == null)
-      return Arrays.asList(new ProductViewModel[0]);
-    List<ProductViewModel> productViewModels = new ArrayList<ProductViewModel>();
-    for (Product product : products) {
-      productViewModels.add(new ProductViewModel(product));
+  public static List<ComponentViewModel> getComponentViewModels(
+      List<Component> components) {
+    if (components == null)
+      return Arrays.asList(new ComponentViewModel[0]);
+    List<ComponentViewModel> componentViewModels = new ArrayList<ComponentViewModel>();
+    for (Component component : components) {
+      componentViewModels.add(new ComponentViewModel(component));
     }
-    return productViewModels;
+    return componentViewModels;
   }
   
   public static List<ProductTypeViewModel> getProductTypeViewModels(
@@ -258,42 +258,42 @@ public class ProductController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   @PreAuthorize("hasRole('"+PermissionConstants.VOID_COMPONENT+"')")
-  public HttpStatus deleteProduct(
+  public HttpStatus deleteComponent(
       @PathVariable Long id) {
  
-      productRepository.deleteProduct(id);
+      componentRepository.deleteComponent(id);
       return HttpStatus.NO_CONTENT;
   }
 
   @RequestMapping(value = "{id}/discard", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
-  public  ResponseEntity discardProduct(
+  public  ResponseEntity discardComponent(
       @PathVariable Long id,
       @RequestParam(value="discardReasonId") Integer discardReasonId,
       @RequestParam(value="discardReasonText", required = false) String discardReasonText) {
 
       ProductStatusChangeReason statusChangeReason = new ProductStatusChangeReason();
       statusChangeReason.setId(discardReasonId);
-      Donation donation = productRepository.findProductById(id).getDonation();
-      productRepository.discardProduct(id, statusChangeReason, discardReasonText);
+      Donation donation = componentRepository.findComponentById(id).getDonation();
+      componentRepository.discardComponent(id, statusChangeReason, discardReasonText);
       
       Map<String, Object> map = new HashMap<String, Object>();
 	  Map<String, Object> pagingParams = new HashMap<String, Object>();
 	  pagingParams.put("sortColumn", "id");
 	  pagingParams.put("sortDirection", "asc");
-	  List<Product> results = new ArrayList<Product>();
+	  List<Component> results = new ArrayList<Component>();
 	  List<ProductStatus> statusList = Arrays.asList(ProductStatus.values());
 	
-	  results = productRepository.findProductByDonationIdentificationNumber(
+	  results = componentRepository.findComponentByDonationIdentificationNumber(
 	      donation.getDonationIdentificationNumber(), statusList,
 	      pagingParams);
 	
-	  List<ProductViewModel> components = new ArrayList<ProductViewModel>();
+	  List<ComponentViewModel> components = new ArrayList<ComponentViewModel>();
 	
 	  if (results != null){
-	    for(Product product : results){
-	    	ProductViewModel productViewModel = getProductViewModel(product);
-	    	components.add(productViewModel);
+	    for(Component component : results){
+	    	ComponentViewModel componentViewModel = getComponentViewModel(component);
+	    	components.add(componentViewModel);
 	    }
 	  }
 	
@@ -304,12 +304,12 @@ public class ProductController {
 
   @RequestMapping(value = "{id}/split", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public  ResponseEntity discardProduct(
+  public  ResponseEntity discardComponent(
       @PathVariable Long id,
-      @RequestParam("numProductsAfterSplitting") Integer numProductsAfterSplitting) {
+      @RequestParam("numComponentsAfterSplitting") Integer numComponentsAfterSplitting) {
 
       boolean success = true;
-      success = productRepository.splitProduct(id, numProductsAfterSplitting);
+      success = componentRepository.splitComponent(id, numComponentsAfterSplitting);
       if(!success)
           return new ResponseEntity(HttpStatus.BAD_GATEWAY);
       
@@ -318,14 +318,14 @@ public class ProductController {
 
   @RequestMapping(value = "{id}/history", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public  Map<String, Object> viewProductHistory(
+  public  Map<String, Object> viewComponentHistory(
       @PathVariable Long id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    Product product = productRepository.findProductById(id);
-    ProductViewModel productViewModel = getProductViewModel(product);
-    map.put("product", productViewModel);
-    List<ProductStatusChange> productStatusChangeList = productRepository.getProductStatusChanges(product);
+    Component component = componentRepository.findComponentById(id);
+    ComponentViewModel componentViewModel = getComponentViewModel(component);
+    map.put("component", componentViewModel);
+    List<ProductStatusChange> productStatusChangeList = componentRepository.getComponentStatusChanges(component);
     List<ProductStatusChangeViewModel> productStatusChanges = getProductStatusChangeViewModels(productStatusChangeList);
     
     map.put("productStatusChanges", productStatusChanges);
@@ -334,14 +334,14 @@ public class ProductController {
 
   @RequestMapping(value = "{id}/return", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
-  public  HttpStatus returnProduct(
+  public  HttpStatus returnComponent(
       @PathVariable  Long id,
       @RequestParam("returnReasonId") Integer returnReasonId,
       @RequestParam("returnReasonText") String returnReasonText) {
 
       ProductStatusChangeReason statusChangeReason = new ProductStatusChangeReason();
       statusChangeReason.setId(returnReasonId);
-      productRepository.returnProduct(id, statusChangeReason, returnReasonText);
+      componentRepository.returnComponent(id, statusChangeReason, returnReasonText);
 
       return HttpStatus.NO_CONTENT;
   }
@@ -349,11 +349,11 @@ public class ProductController {
   @SuppressWarnings("unchecked")
   @RequestMapping(value = "/donations/{donationNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public Map<String, Object> findProductByPackNumberPagination(HttpServletRequest request, @PathVariable String donationNumber) {
+  public Map<String, Object> findComponentByPackNumberPagination(HttpServletRequest request, @PathVariable String donationNumber) {
 
 	  Map<String, Object> map = new HashMap<String, Object>();
 	  
-	  List<Product> products = Arrays.asList(new Product[0]);
+	  List<Component> components = Arrays.asList(new Component[0]);
 
       Map<String, Object> pagingParams = new HashMap<String, Object>();
       pagingParams.put("sortColumn", "id");
@@ -361,25 +361,25 @@ public class ProductController {
       //pagingParams.put("length", "10");
       pagingParams.put("sortDirection", "asc");
       
-    //Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("product");
+    //Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("component");
 
-    List<Product> results = new ArrayList<Product>();
+    List<Component> results = new ArrayList<Component>();
     List<ProductStatus> status = Arrays.asList(ProductStatus.values());
     
-      results = productRepository.findProductByDonationIdentificationNumber(
+      results = componentRepository.findComponentByDonationIdentificationNumber(
           donationNumber, status,
           pagingParams);
     
-    List<ProductViewModel> components = new ArrayList<ProductViewModel>();
+    List<ComponentViewModel> componentViewModels = new ArrayList<ComponentViewModel>();
     
     if (results != null){
-	    for(Product product : results){
-	    	ProductViewModel productViewModel = getProductViewModel(product);
-	    	components.add(productViewModel);
+	    for(Component component : results){
+	    	ComponentViewModel componentViewModel = getComponentViewModel(component);
+	    	componentViewModels.add(componentViewModel);
 	    }
     }
 
-    map.put("components", components);
+    map.put("components", componentViewModels);
     return map;
   }
   
@@ -394,10 +394,10 @@ public class ProductController {
   
   @RequestMapping(value = "/recordcombinations", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
-  public  ResponseEntity<Map<String, Object>> recordNewProductCombinations(
-       @RequestBody @Valid RecordProductBackingForm form) throws ParseException{
+  public  ResponseEntity<Map<String, Object>> recordNewComponentCombinations(
+       @RequestBody @Valid RecordComponentBackingForm form) throws ParseException{
 
-      Product parentComponent = productRepository.findProductById(Long.valueOf(form.getParentComponentId()));
+      Component parentComponent = componentRepository.findComponentById(Long.valueOf(form.getParentComponentId()));
       Donation donation = parentComponent.getDonation();
       String donationIdentificationNumber = donation.getDonationIdentificationNumber();
       ProductStatus status = parentComponent.getStatus();
@@ -429,31 +429,31 @@ public class ProductController {
 	      int noOfUnits = newComponents.get(pt);
 	      String createdPackNumber = donationIdentificationNumber +"-"+componentTypeCode;
 	      
-	      // Add New product
+	      // Add New component
 	      if(!status.equals(ProductStatus.PROCESSED) && !status.equals(ProductStatus.DISCARDED)){
 		      	
 	      	   for (int i = 1; i <= noOfUnits; i++) {
-	              Product product = new Product();
-	              product.setIsDeleted(false);
+	              Component component = new Component();
+	              component.setIsDeleted(false);
 	              
 	              // if there is more than one unit of the component, append unit number suffix
 	              if(noOfUnits > 1){
-	            	  product.setComponentIdentificationNumber(createdPackNumber + "-0" + i);
+	            	  component.setComponentIdentificationNumber(createdPackNumber + "-0" + i);
 	              }
 	              else {
-	            	  product.setComponentIdentificationNumber(createdPackNumber);
+	            	  component.setComponentIdentificationNumber(createdPackNumber);
 	              }
-		          product.setProductType(pt);
-		          product.setDonation(donation);
-		          product.setParentProduct(parentComponent);
-		          product.setStatus(ProductStatus.QUARANTINED);
-		          product.setCreatedOn(donation.getDonationDate());
+		          component.setProductType(pt);
+		          component.setDonation(donation);
+		          component.setParentComponent(parentComponent);
+		          component.setStatus(ProductStatus.QUARANTINED);
+		          component.setCreatedOn(donation.getDonationDate());
 		          
 			      Calendar cal = Calendar.getInstance();
 			      Date createdOn = cal.getTime(); 
-			      cal.setTime(product.getCreatedOn());
+			      cal.setTime(component.getCreatedOn());
 	                  
-	                      //set product expiry date
+	                      //set component expiry date
 	                      if(pt.getExpiresAfterUnits() == ProductTypeTimeUnits.DAYS)
 	                          cal.add(Calendar.DAY_OF_YEAR, pt.getExpiresAfter());
 	                      else
@@ -464,13 +464,13 @@ public class ProductController {
 	                           cal.add(Calendar.YEAR, pt.getExpiresAfter());
 	
 			      Date expiresOn = cal.getTime();    
-			      product.setCreatedOn(createdOn);
-			      product.setExpiresOn(expiresOn);
+			      component.setCreatedOn(createdOn);
+			      component.setExpiresOn(expiresOn);
 		          
-			      productRepository.addProduct(product);
+			      componentRepository.addComponent(component);
 	
 			      // Set source component status to PROCESSED
-			      productRepository.setProductStatusToProcessed(productId);
+			      componentRepository.setProductStatusToProcessed(productId);
 	      	   }
 	      }
       }
@@ -479,19 +479,19 @@ public class ProductController {
 	Map<String, Object> pagingParams = new HashMap<String, Object>();
 	pagingParams.put("sortColumn", "id");
 	pagingParams.put("sortDirection", "asc");
-	List<Product> results = new ArrayList<Product>();
+	List<Component> results = new ArrayList<Component>();
 	List<ProductStatus> statusList = Arrays.asList(ProductStatus.values());
 	
-	results = productRepository.findProductByDonationIdentificationNumber(
+	results = componentRepository.findComponentByDonationIdentificationNumber(
 	      donation.getDonationIdentificationNumber(), statusList,
 	      pagingParams);
 	
-	List<ProductViewModel> components = new ArrayList<ProductViewModel>();
+	List<ComponentViewModel> components = new ArrayList<ComponentViewModel>();
 	
 	if (results != null){
-	    for(Product product : results){
-	    	ProductViewModel productViewModel = getProductViewModel(product);
-	    	components.add(productViewModel);
+	    for(Component component : results){
+	    	ComponentViewModel componentViewModel = getComponentViewModel(component);
+	    	components.add(componentViewModel);
 	    }
 	}
 	
@@ -502,20 +502,20 @@ public class ProductController {
   
   @RequestMapping(value = "/record/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
-  public  Map<String, Object> getRecordNewProductComponents(HttpServletRequest request,
+  public  Map<String, Object> getRecordNewComponents(HttpServletRequest request,
       @RequestParam(value = "componentTypeNames") List<String> productTypes,
       @RequestParam(value = "donationIdentificationNumber") String donationIdentificationNumber) {
 
   	ProductType productType = null;
   	if(productTypes!= null){
 	  	String productTypeName = productTypes.get(productTypes.size()-1);
-	  	productType = productRepository.findProductTypeByProductTypeName(productTypeName);
+	  	productType = componentRepository.findProductTypeByProductTypeName(productTypeName);
   	}
-  	List<Product> products = Arrays.asList(new Product[0]);
+  	List<Component> components = Arrays.asList(new Component[0]);
   	
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("allProducts", getProductViewModels(products));
-    map.put("nextPageUrl", getNextPageUrlForNewRecordProduct(request,donationIdentificationNumber));
+    map.put("allComponents", getComponentViewModels(components));
+    map.put("nextPageUrl", getNextPageUrlForNewRecordComponent(request,donationIdentificationNumber));
     
     if(productTypes != null){
     	addEditSelectorOptionsForNewRecordByList(map,productType);
@@ -527,7 +527,7 @@ public class ProductController {
     return map;
   }
   
-   private void addOptionsForAddProductCombinationForm(Map<String, Object> m) {
+   private void addOptionsForAddComponentsCombinationForm(Map<String, Object> m) {
     m.put("componentTypes", productTypeRepository.getAllProductTypes());
 
     List<ProductTypeCombination> productTypeCombinations = productTypeRepository.getAllProductTypeCombinations();
@@ -536,14 +536,14 @@ public class ProductController {
     ObjectMapper mapper = new ObjectMapper();
     Map<Integer, String> productTypeCombinationsMap = new HashMap<Integer, String>();
     for (ProductTypeCombination productTypeCombination : productTypeCombinations) {
-      Map<String, String> productExpiryIntervals = new HashMap<String, String>();
+      Map<String, String> componentExpiryIntervals = new HashMap<String, String>();
       for (ProductType productType : productTypeCombination.getProductTypes()) {
         Integer expiryIntervalMinutes = productType.getExpiryIntervalMinutes();
-        productExpiryIntervals.put(productType.getId().toString(), expiryIntervalMinutes.toString());
+        componentExpiryIntervals.put(productType.getId().toString(), expiryIntervalMinutes.toString());
       }
 
       try {
-        productTypeCombinationsMap.put(productTypeCombination.getId(), mapper.writeValueAsString(productExpiryIntervals));
+        productTypeCombinationsMap.put(productTypeCombination.getId(), mapper.writeValueAsString(componentExpiryIntervals));
       } catch (JsonGenerationException e) {
         e.printStackTrace();
       } catch (JsonMappingException e) {
@@ -555,8 +555,8 @@ public class ProductController {
     m.put("componentTypeCombinationsMap", productTypeCombinationsMap);
   }
   
-  public static String getNextPageUrlForRecordProduct(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString().replaceFirst("findProductByPackNumber.html", "findProductByPackNumberPagination.html");
+  public static String getNextPageUrlForRecordComponent(HttpServletRequest req) {
+    String reqUrl = req.getRequestURL().toString().replaceFirst("findComponentByPackNumber.html", "findComponentByPackNumberPagination.html");
     String queryString = req.getQueryString();   // d=789
     if (queryString != null) {
         reqUrl += "?"+queryString;
@@ -575,7 +575,7 @@ public class ProductController {
     m.put("componentTypes", getProductTypeViewModels(productTypeRepository.getAllParentProductTypes()));
   }
   
-  public static String getUrlForNewProduct(HttpServletRequest req,String qString) {
+  public static String getUrlForNewComponent(HttpServletRequest req,String qString) {
     String reqUrl = req.getRequestURL().toString();
     String queryString[] = qString.split("-");   
     if (queryString != null) {
@@ -584,13 +584,13 @@ public class ProductController {
     return reqUrl;
   }
   
-  public static String getNextPageUrlForNewRecordProduct(HttpServletRequest req,String qString) {
+  public static String getNextPageUrlForNewRecordComponent(HttpServletRequest req,String qString) {
   	String reqUrl ="";
   	if(req.getRequestURI().contains("recordnewcomponents")){
-  		reqUrl = req.getRequestURL().toString().replaceFirst("recordNewProductComponents.html", "findProductByPackNumberPagination.html");
+  		reqUrl = req.getRequestURL().toString().replaceFirst("recordNewComponents.html", "findComponentByPackNumberPagination.html");
   	}
   	else{
-  		reqUrl = req.getRequestURL().toString().replaceFirst("getRecordNewProductComponents.html", "findProductByPackNumberPagination.html");
+  		reqUrl = req.getRequestURL().toString().replaceFirst("getRecordNewComponents.html", "findComponentByPackNumberPagination.html");
   	}
     String queryString[] = qString.split("-"); 
     if (queryString != null) {
@@ -602,23 +602,23 @@ public class ProductController {
    /**
    * Datatables on the client side expects a json response for rendering data from the server
    * in jquery datatables. Remember of columns is important and should match the column headings
-   * in recordProductTable.jsp.
+   * in recordComponentTable.jsp.
    */
-  private   Map<String, Object> generateRecordProductTablesMap(List<Product> products, Long totalRecords, Map<String, Map<String, Object>> formFields) {
-    Map<String, Object> productsMap = new HashMap<String, Object>();
-    ArrayList<Object> productList = new ArrayList<Object>();
-    for (ProductViewModel product : getProductViewModels(products)) {
+  private   Map<String, Object> generateRecordComponentTablesMap(List<Component> components, Long totalRecords, Map<String, Map<String, Object>> formFields) {
+    Map<String, Object> componentsMap = new HashMap<String, Object>();
+    ArrayList<Object> componentList = new ArrayList<Object>();
+    for (ComponentViewModel component : getComponentViewModels(components)) {
       List<Object> row = new ArrayList<Object>();
       
-      row.add(product.getId().toString());
-      row.add(product.getDonation().getId());
+      row.add(component.getId().toString());
+      row.add(component.getDonation().getId());
       for (String property : Arrays.asList("productType", "donationIdentificationNumber", "createdOn", "expiresOn", "status", "createdBy")) {
         if (formFields.containsKey(property)) {
           Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
           if (properties.get("hidden").equals(false)) {
             String propertyValue = property;
             try {
-              propertyValue = BeanUtils.getProperty(product, property);
+              propertyValue = BeanUtils.getProperty(component, property);
             } catch (IllegalAccessException e) {
               e.printStackTrace();
             } catch (InvocationTargetException e) {
@@ -627,20 +627,20 @@ public class ProductController {
               e.printStackTrace();
             }
             if (property.equals("productType") &&
-                StringUtils.isNotBlank(product.getSubdivisionCode())) {
-              propertyValue = propertyValue + " (" + product.getSubdivisionCode() + ")";
+                StringUtils.isNotBlank(component.getSubdivisionCode())) {
+              propertyValue = propertyValue + " (" + component.getSubdivisionCode() + ")";
             }
             row.add(propertyValue.toString());
           }
         }
       }
 
-      productList.add(row);
+      componentList.add(row);
     }
-    productsMap.put("aaData", productList);
-    productsMap.put("iTotalRecords", totalRecords);
-    productsMap.put("iTotalDisplayRecords", totalRecords);
-    return productsMap;
+    componentsMap.put("aaData", componentList);
+    componentsMap.put("iTotalRecords", totalRecords);
+    componentsMap.put("iTotalDisplayRecords", totalRecords);
+    return componentsMap;
   }
   
   private List<ProductStatus> statusStringToProductStatus(List<String> statusList) {
