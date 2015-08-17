@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class LoginRepositoryTest {
 	
@@ -78,7 +77,6 @@ public class LoginRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetUser() throws Exception {
 		User superUser = loginRepository.getUser("superuser");
 		Assert.assertNotNull("There is a super user", superUser);
@@ -86,7 +84,6 @@ public class LoginRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetUserUnknown() throws Exception {
 		User unknown = loginRepository.getUser("Dagmar");
 		Assert.assertNull("Unknown user", unknown);

@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class GeneralConfigRepositoryTest {
 	
@@ -80,7 +79,6 @@ public class GeneralConfigRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAll() throws Exception {
 		List<GeneralConfig> all = generalConfigRepository.getAll();
 		Assert.assertNotNull("There are GeneralConfigs", all);
@@ -88,7 +86,6 @@ public class GeneralConfigRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindGeneralConfigById() throws Exception {
 		GeneralConfig one = generalConfigRepository.getGeneralConfigById(1);
 		Assert.assertNotNull("There is a GeneralConfig with id 1", one);
@@ -96,13 +93,11 @@ public class GeneralConfigRepositoryTest {
 	}
 	
 	@Test(expected = javax.persistence.NoResultException.class)
-	@Transactional
 	public void testFindGeneralConfigByIdUnknown() throws Exception {
 		generalConfigRepository.getGeneralConfigById(1111);
 	}
 	
 	@Test
-	@Transactional
 	public void testGetGeneralConfigByName() throws Exception {
 		GeneralConfig bpSystolicMax = generalConfigRepository.getGeneralConfigByName("donation.bpSystolicMax");
 		Assert.assertNotNull("There is a GeneralConfig by that name", bpSystolicMax);
@@ -110,14 +105,12 @@ public class GeneralConfigRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetGeneralConfigByNameUnknown() throws Exception {
 		GeneralConfig junit = generalConfigRepository.getGeneralConfigByName("junit");
 		Assert.assertNull("There is no junit GeneralConfig", junit);
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdate() throws Exception {
 		GeneralConfig generalConfig = generalConfigRepository.getGeneralConfigByName("donation.bpSystolicMax");
 		generalConfig.setValue("255");
@@ -127,7 +120,6 @@ public class GeneralConfigRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateAll() throws Exception {
 		GeneralConfig generalConfig1 = generalConfigRepository.getGeneralConfigByName("donation.bpSystolicMax");
 		generalConfig1.setValue("255");
@@ -144,7 +136,6 @@ public class GeneralConfigRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testSave() throws Exception {
 		GeneralConfig bpSystolicMax = generalConfigRepository.getGeneralConfigByName("donation.bpSystolicMax");
 		GeneralConfig newGeneralConfig = new GeneralConfig();

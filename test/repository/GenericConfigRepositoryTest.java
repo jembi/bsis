@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class GenericConfigRepositoryTest {
 	
@@ -81,7 +80,6 @@ public class GenericConfigRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetConfigProperties() throws Exception {
 		Map<String, String> all = genericConfigRepository.getConfigProperties("labsetup");
 		Assert.assertNotNull("There are GenericConfigs", all);
@@ -91,7 +89,6 @@ public class GenericConfigRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindGenericConfigById() throws Exception {
 		List<String> propertyOwners = new ArrayList<String>();
 		propertyOwners.add("donationRequirements");
@@ -105,7 +102,6 @@ public class GenericConfigRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindGenericConfigByIdUnknown() throws Exception {
 		Map<String, String> all = genericConfigRepository.getConfigProperties("junit");
 		Assert.assertNotNull("Does not return a null list", all);
@@ -113,7 +109,6 @@ public class GenericConfigRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetCurrentBloodTypingContext() throws Exception {
 		BloodTestContext context = genericConfigRepository.getCurrentBloodTypingContext();
 		Assert.assertNotNull("BloodTestContext was found", context);
@@ -121,7 +116,6 @@ public class GenericConfigRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdate() throws Exception {
 		Map<String, String> all = genericConfigRepository.getConfigProperties("labsetup");
 		Assert.assertNotNull("There are GenericConfigs", all);
@@ -135,7 +129,6 @@ public class GenericConfigRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateWorksheetProperties() throws Exception {
 		Map<String, String> all = genericConfigRepository.getConfigProperties("donationsWorksheet");
 		Assert.assertNotNull("There are GenericConfigs", all);

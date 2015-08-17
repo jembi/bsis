@@ -28,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class DonationBatchRepositoryTest {
 	
@@ -87,7 +86,6 @@ public class DonationBatchRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindDonationBatchById() throws Exception {
 		DonationBatch one = donationBatchRepository.findDonationBatchById(1);
 		Assert.assertNotNull("There is a donation batch with the id 1", one);
@@ -95,7 +93,6 @@ public class DonationBatchRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetRecentlyClosedDonationBatches() throws Exception {
 		List<DonationBatch> closed = donationBatchRepository.getRecentlyClosedDonationBatches(5);
 		Assert.assertNotNull("There are recently closed donation batches", closed);
@@ -104,7 +101,6 @@ public class DonationBatchRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindDonationBatchByBatchNumber() throws Exception {
 		DonationBatch one = donationBatchRepository.findDonationBatchByBatchNumber("B0215000000");
 		Assert.assertNotNull("There is a donation batch with the number 'B0215000000'", one);
@@ -112,7 +108,6 @@ public class DonationBatchRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindDonationsInBatch() throws Exception {
 		List<Donation> donations = donationBatchRepository.findDonationsInBatch(1);
 		Assert.assertNotNull("There donations in the batch with id 1", donations);
@@ -120,7 +115,6 @@ public class DonationBatchRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testAddDonationBatches() throws Exception {
 		DonationBatch donationBatch = new DonationBatch();
 		donationBatch.setBatchNumber("JUNIT123");
@@ -139,7 +133,6 @@ public class DonationBatchRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateDonationBatch() throws Exception {
 		DonationBatch one = donationBatchRepository.findDonationBatchByBatchNumber("B0215000000");
 		Assert.assertNotNull("There is a donation batch with the number 'B0215000000'", one);
@@ -151,7 +144,6 @@ public class DonationBatchRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindUnassignedDonationBatches() throws Exception {
 		List<DonationBatch> unassigned = donationBatchRepository.findUnassignedDonationBatches();
 		Assert.assertNotNull("Should not return a null list", unassigned);
@@ -174,7 +166,6 @@ public class DonationBatchRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindDonationBatchByBatchNumberIncludeDeleted() throws Exception {
 		try {
 			donationBatchRepository.findDonationBatchByBatchNumber("B0715000000");
@@ -189,7 +180,6 @@ public class DonationBatchRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindDonationBatches() throws Exception {
 		List<Long> locationIds = new ArrayList<Long>();
 		locationIds.add(1L);

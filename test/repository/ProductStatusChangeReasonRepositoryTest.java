@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class ProductStatusChangeReasonRepositoryTest {
 	
@@ -82,7 +81,6 @@ public class ProductStatusChangeReasonRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAll() throws Exception {
 		List<ProductStatusChangeReason> all = productStatusChangeReasonRepository.getAllProductStatusChangeReasons();
 		Assert.assertNotNull("There are ProductStatusChangeReason", all);
@@ -90,7 +88,6 @@ public class ProductStatusChangeReasonRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetProductStatusChangeReasons() throws Exception {
 		List<ProductStatusChangeReason> all = productStatusChangeReasonRepository
 		        .getProductStatusChangeReasons(ProductStatusChangeReasonCategory.DISCARDED);
@@ -99,7 +96,6 @@ public class ProductStatusChangeReasonRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetProductStatusChangeReasonsNone() throws Exception {
 		List<ProductStatusChangeReason> all = productStatusChangeReasonRepository
 		        .getProductStatusChangeReasons(ProductStatusChangeReasonCategory.ISSUED);
@@ -108,7 +104,6 @@ public class ProductStatusChangeReasonRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetProductStatusChangeReasonById() throws Exception {
 		ProductStatusChangeReason one = productStatusChangeReasonRepository.getProductStatusChangeReasonById(1);
 		Assert.assertNotNull("There is a ProductStatusChangeReason", one);
@@ -117,14 +112,12 @@ public class ProductStatusChangeReasonRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetProductStatusChangeReasonByIdUnknown() throws Exception {
 		ProductStatusChangeReason one = productStatusChangeReasonRepository.getProductStatusChangeReasonById(123);
 		Assert.assertNull("There is no ProductStatusChangeReason", one);
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - getAllProductStatusChangeReasonsAsMap only returns one ProductStatusChangeReason per ProductStatusChangeReasonCategory")
 	public void testGetAllProductStatusChangeReasonsAsMap() throws Exception {
 		Map<ProductStatusChangeReasonCategory, ProductStatusChangeReason> result = productStatusChangeReasonRepository

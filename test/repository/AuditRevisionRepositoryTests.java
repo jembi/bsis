@@ -16,19 +16,17 @@ import model.audit.AuditRevision;
 import model.user.User;
 
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class AuditRevisionRepositoryTests {
         
@@ -42,7 +40,6 @@ public class AuditRevisionRepositoryTests {
     private AuditRevisionRepository auditRevisionRepository;
     
     @Test
-	@Transactional
     public void testFindRecentAuditRevisions_shouldReturnAuditRevisionsOrderedByTimestamp() {
         
         AuditRevision chronologicallyFirstAuditRevision = anAuditRevision()
@@ -71,7 +68,6 @@ public class AuditRevisionRepositoryTests {
     }
     
     @Test
-	@Transactional
     public void testFindAuditRevisionsByUser_shouldReturnAuditRevisionsMatchingSearch() {
         
         User userWithMatchingUsername = aUser()
@@ -129,7 +125,6 @@ public class AuditRevisionRepositoryTests {
     }
 
     @Test
-	@Transactional
     public void testFindAuditRevisionsByUserWithFullName_shouldReturnMatchingAuditRevision() {
 
         User userWithMatchingName = aUser()

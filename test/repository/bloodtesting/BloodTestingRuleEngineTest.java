@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +39,7 @@ import viewmodel.BloodTestingRuleResult;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class BloodTestingRuleEngineTest {
 	
@@ -90,7 +89,6 @@ public class BloodTestingRuleEngineTest {
 	}
 
 	@Test
-	@Transactional
 	public void testBloodTestingRuleEngineWithDonation1() throws Exception {
 		Donation donation = donationRepository.findDonationById(1l);
 		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
@@ -116,7 +114,6 @@ public class BloodTestingRuleEngineTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testBloodTestingRuleEngineWithDonation2() throws Exception {
 		Donation donation = donationRepository.findDonationById(2l);
 		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
@@ -145,7 +142,6 @@ public class BloodTestingRuleEngineTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testBloodTestingRuleEngineWithDonation3() throws Exception {
 		Donation donation = donationRepository.findDonationById(3l);
 		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
@@ -164,7 +160,6 @@ public class BloodTestingRuleEngineTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testBloodTestingRuleEngineWithDonation4() throws Exception {
 		Donation donation = donationRepository.findDonationById(4l);
 		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
@@ -189,7 +184,6 @@ public class BloodTestingRuleEngineTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testBloodTestingRuleEngineWithDonation5() throws Exception {
 		Donation donation = donationRepository.findDonationById(5l);
 		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
@@ -217,7 +211,6 @@ public class BloodTestingRuleEngineTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testBloodTestingRuleEngineWithDonation6() throws Exception {
 		Donation donation = donationRepository.findDonationById(6l);
 		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());

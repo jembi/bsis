@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class WellTypeRepositoryTest {
 	
@@ -80,7 +79,6 @@ public class WellTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAll() throws Exception {
 		List<WellType> all = wellTypeRepository.getAllWellTypes();
 		Assert.assertNotNull("There are WellTypes defined", all);
@@ -88,21 +86,18 @@ public class WellTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testIsWellTypeValid() throws Exception {
 		boolean valid = wellTypeRepository.isWellTypeValid("Sample");
 		Assert.assertTrue("There is a matching WellType", valid);
 	}
 	
 	@Test
-	@Transactional
 	public void testIsWellTypeValidFalse() throws Exception {
 		boolean valid = wellTypeRepository.isWellTypeValid("Junit");
 		Assert.assertFalse("There is no matching WellType", valid);
 	}
 	
 	@Test
-	@Transactional
 	public void testGetWellTypeById() throws Exception {
 		WellType one = wellTypeRepository.getWellTypeById(1);
 		Assert.assertNotNull("There is a WellType defined", one);
@@ -110,14 +105,12 @@ public class WellTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetWellTypeByIdUnknown() throws Exception {
 		WellType one = wellTypeRepository.getWellTypeById(123);
 		Assert.assertNull("There is no WellType defined", one);
 	}
 	
 	@Test
-	@Transactional
 	public void testSaveAllWellTypesUpdate() throws Exception {
 		WellType oldOne = wellTypeRepository.getWellTypeById(1);
 		oldOne.setWellType("oldSample");
@@ -129,7 +122,6 @@ public class WellTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testSaveAllWellTypesAdd() throws Exception {
 		WellType newOne = new WellType();
 		newOne.setRequiresSample(true);

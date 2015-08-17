@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class LocationRepositoryTest {
 	
@@ -80,7 +79,6 @@ public class LocationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllLocations() throws Exception {
 		List<Location> all = locationRepository.getAllLocations();
 		Assert.assertNotNull("There are Locations", all);
@@ -88,7 +86,6 @@ public class LocationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllUsageSites() throws Exception {
 		List<Location> all = locationRepository.getAllUsageSites();
 		Assert.assertNotNull("There are usage site Locations", all);
@@ -96,7 +93,6 @@ public class LocationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllDonorPanels() throws Exception {
 		List<Location> all = locationRepository.getAllDonorPanels();
 		Assert.assertNotNull("There are donor panel Locations", all);
@@ -104,7 +100,6 @@ public class LocationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetLocation() throws Exception {
 		Location one = locationRepository.getLocation(1l);
 		Assert.assertNotNull("There is a Location", one);
@@ -112,13 +107,11 @@ public class LocationRepositoryTest {
 	}
 	
 	@Test(expected = javax.persistence.NoResultException.class)
-	@Transactional
 	public void testGetLocationDeleted() throws Exception {
 		Location one = locationRepository.getLocation(6l);
 	}
 	
 	@Test
-	@Transactional
 	public void testGetLocationByName() throws Exception {
 		Location one = locationRepository.findLocationByName("Maseru");
 		Assert.assertNotNull("There is a Location", one);
@@ -126,13 +119,11 @@ public class LocationRepositoryTest {
 	}
 	
 	@Test(expected = javax.persistence.NoResultException.class)
-	@Transactional
 	public void testGetLocationByNameDeleted() throws Exception {
 		Location one = locationRepository.findLocationByName("Hlotse");
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllUsageSitesAsString() throws Exception {
 		List<String> all = locationRepository.getAllUsageSitesAsString();
 		Assert.assertNotNull("Does not return a null list", all);
@@ -141,7 +132,6 @@ public class LocationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetIDByName() throws Exception {
 		Long id = locationRepository.getIDByName("Maseru");
 		Assert.assertNotNull("There is an ID", id);
@@ -149,7 +139,6 @@ public class LocationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetIDByNameUnknown() throws Exception {
 		Long id = locationRepository.getIDByName("Ada");
 		Assert.assertNotNull("There is an not null ID", id);
@@ -157,7 +146,6 @@ public class LocationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testDeleteAll() throws Exception {
 		locationRepository.deleteAllLocations();
 		List<Location> all = locationRepository.getAllLocations();
@@ -166,7 +154,6 @@ public class LocationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testDeleteLocation() throws Exception {
 		List<Location> all1 = locationRepository.getAllDonorPanels();
 		locationRepository.deleteLocation(1L);
@@ -175,7 +162,6 @@ public class LocationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateLocation() throws Exception {
 		Location one = locationRepository.findLocationByName("Maseru");
 		one.setIsMobileSite(true);
@@ -185,7 +171,6 @@ public class LocationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testSave() throws Exception {
 		Location one = new Location();
 		one.setName("Clara");
@@ -199,7 +184,6 @@ public class LocationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testSaveAll() throws Exception {
 		Location one = new Location();
 		one.setName("Clara");

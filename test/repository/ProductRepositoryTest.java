@@ -38,7 +38,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +48,7 @@ import security.BsisUserDetails;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class ProductRepositoryTest {
 	
@@ -117,7 +116,6 @@ public class ProductRepositoryTest {
 	//addProductCombination
 	
 	@Test
-	@Transactional
 	public void testGetAllProducts() throws Exception {
 		List<Product> all = productRepository.getAllProducts();
 		Assert.assertNotNull("There are Products", all);
@@ -125,7 +123,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetProducts() throws Exception {
 		Date fromDate = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-10");
 		Date toDate = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
@@ -135,7 +132,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetProductsFromProductIds() throws Exception {
 		String[] productIds = new String[] { "1", "2", "4" };
 		List<Product> all = productRepository.getProductsFromProductIds(productIds);
@@ -144,7 +140,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - problem in HSQL: could not resolve property: donationIdentificationNumber of: model.product.Product [SELECT p FROM model.product.Product p WHERE p.donationIdentificationNumber = :donationIdentificationNumber and p.isDeleted = :isDeleted]")
 	public void isProductCreatedFalse() throws Exception {
 		boolean created = productRepository.isProductCreated("4444444");
@@ -152,7 +147,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - problem in HSQL: could not resolve property: donationIdentificationNumber of: model.product.Product [SELECT p FROM model.product.Product p WHERE p.donationIdentificationNumber = :donationIdentificationNumber and p.isDeleted = :isDeleted]")
 	public void isProductCreatedTrue() throws Exception {
 		boolean created = productRepository.isProductCreated("3333333");
@@ -160,7 +154,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - error in HQL: could not resolve property: isIssued of: model.product.Product [SELECT p FROM model.product.Product p where p.isDeleted = :isDeleted and p.isIssued= :isIssued]")
 	public void testGetAllUnissuedProducts() throws Exception {
 		List<Product> all = productRepository.getAllUnissuedProducts();
@@ -169,7 +162,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - error in HQL: could not resolve property: type of: model.product.Product [SELECT p FROM model.product.Product p where p.type = :productType and p.abo= :abo and p.rhd= :rhd and p.isDeleted = :isDeleted and p.isIssued= :isIssued]")
 	public void testGetAllUnissuedProductsAboRhd() throws Exception {
 		List<Product> all = productRepository.getAllUnissuedProducts("PROCESSED", "A", "+");
@@ -178,7 +170,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - error in HQL: could not resolve property: isIssued of: model.product.Product [SELECT p FROM model.product.Product p where p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.createdOn > :minDate]")
 	public void testGetAllUnissuedThirtyFiveDayProducts() throws Exception {
 		List<Product> all = productRepository.getAllUnissuedThirtyFiveDayProducts();
@@ -187,7 +178,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - error in HQL: could not resolve property: type of: model.product.Product [SELECT p FROM model.product.Product p where p.type = :productType and p.abo= :abo and p.rhd= :rhd and p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.createdOn > :minDate]")
 	public void testGetAllUnissuedThirtyFiveDayProductsWithParameters() throws Exception {
 		List<Product> all = productRepository.getAllUnissuedThirtyFiveDayProducts("PROCESSED", "A", "+");
@@ -196,7 +186,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("There appears to be a bug in the HQL: could not resolve property: type of: model.product.Product")
 	public void testGetAllProductsWithProductTypeQUARANTINED() throws Exception {
 		List<Product> all = productRepository.getAllProducts("QUARANTINED");
@@ -205,7 +194,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("There appears to be a bug in the HQL: could not resolve property: type of: model.product.Product")
 	public void testGetAllProductsWithProductTypeEXPIRED() throws Exception {
 		List<Product> all = productRepository.getAllProducts("EXPIRED");
@@ -214,7 +202,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindProductWithId() throws Exception {
 		Product one = productRepository.findProduct(1l);
 		Assert.assertNotNull("There is a Product with id 1", one);
@@ -222,7 +209,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindProductById() throws Exception {
 		Product one = productRepository.findProductById(1l);
 		Assert.assertNotNull("There is a Product with id 1", one);
@@ -230,21 +216,18 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindProductByIdUnknown() throws Exception {
 		Product one = productRepository.findProduct(1111l);
 		Assert.assertNull("There is no Product with id 1111", one);
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("A bug - there is no attribute of Product called productNumber")
 	public void testFindProductByProductNumber() throws Exception {
 		productRepository.findProduct("123");
 	}
 	
 	@Test
-	@Transactional
 	public void testFindProductsByDIN() throws Exception {
 		List<Product> all = productRepository.findProductsByDonationIdentificationNumber("1111111");
 		Assert.assertNotNull("There are Products with DIN 111111", all);
@@ -253,7 +236,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindProductsByDINUnknown() throws Exception {
 		List<Product> all = productRepository.findProductsByDonationIdentificationNumber("1111112");
 		Assert.assertNotNull("Does not return an null", all);
@@ -261,7 +243,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindProductByDINAndProductTypeId() throws Exception {
 		Product one = productRepository.findProduct("1111111", "1");
 		Assert.assertNotNull("There is a Product with DIN 1111111", one);
@@ -269,14 +250,12 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindProductByDINAndProductTypeIdUnknown() throws Exception {
 		Product one = productRepository.findProduct("1111112", "1");
 		Assert.assertNull("There is no a Product with DIN 1111112", one);
 	}
 	
 	@Test
-	@Transactional
 	public void testFindProductByProductTypes() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<ProductStatus> status = new ArrayList<ProductStatus>();
@@ -289,7 +268,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindProductByProductTypesNone() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<ProductStatus> status = new ArrayList<ProductStatus>();
@@ -302,7 +280,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindProductByDINAndStatus() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<ProductStatus> status = new ArrayList<ProductStatus>();
@@ -315,7 +292,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindProductByDINAndStatusNone() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<ProductStatus> status = new ArrayList<ProductStatus>();
@@ -325,7 +301,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindProductByDINAndStatusUnknown() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<ProductStatus> status = new ArrayList<ProductStatus>();
@@ -336,7 +311,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindAnyProductDIN() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<Product> all = productRepository.findAnyProduct("1111111", null, null, null, null, pagingParams);
@@ -346,7 +320,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindAnyProductDINAndStatus() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<ProductStatus> status = new ArrayList<ProductStatus>();
@@ -357,7 +330,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindAnyProductQuarantinedType1() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<ProductStatus> status = new ArrayList<ProductStatus>();
@@ -370,7 +342,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindAnyProductBetweenDates() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		Date start = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-10");
@@ -381,7 +352,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - error in the HQL: could not resolve property: productType of: model.producttype.ProductType [SELECT p FROM model.producttype.ProductType p where p.productType = :productTypeName]")
 	public void testFindProductTypeByProductTypeName() throws Exception {
 		ProductType one = productRepository.findProductTypeByProductTypeName("Whole Blood Single Pack - CPDA");
@@ -390,7 +360,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindProductTypeByProductTypeId() throws Exception {
 		ProductType one = productRepository.findProductTypeBySelectedProductType(1);
 		Assert.assertNotNull("ProductType match", one);
@@ -398,13 +367,11 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test(expected = javax.persistence.NoResultException.class)
-	@Transactional
 	public void testFindProductTypeByProductTypeIdUnknown() throws Exception {
 		productRepository.findProductTypeBySelectedProductType(123);
 	}
 	
 	@Test
-	@Transactional
 	public void testGetProductStatusChanges() throws Exception {
 		Product discardedProduct = productRepository.findProduct(6l);
 		List<ProductStatusChange> changes = productRepository.getProductStatusChanges(discardedProduct);
@@ -414,7 +381,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetProductStatusChangesNone() throws Exception {
 		Product quarantinedProduct = productRepository.findProduct(4l);
 		List<ProductStatusChange> changes = productRepository.getProductStatusChanges(quarantinedProduct);
@@ -423,7 +389,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindNumberOfDiscardedProductsDaily() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-10");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
@@ -446,7 +411,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindNumberOfDiscardedProductsMonthly() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-10");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
@@ -471,7 +435,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindNumberOfDiscardedProductsYearly() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2014-08-10");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
@@ -494,7 +457,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	// FIXME: issue with package dependencies here - ProductRepository uses UtilController to retrieve the logged in user.  
 	public void testDiscardProduct() throws Exception {
 		ProductStatusChangeReason discardReason = productStatusChangeReasonRepository.getProductStatusChangeReasonById(5);
@@ -508,7 +470,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	// FIXME: issue with package dependencies here - ProductRepository uses UtilController to retrieve the logged in user.  
 	public void testReturnProduct() throws Exception {
 		ProductStatusChangeReason returnReason = productStatusChangeReasonRepository.getProductStatusChangeReasonById(7);
@@ -522,7 +483,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	// FIXME: issue with package dependencies here - ProductRepository uses UtilController to retrieve the logged in user.  
 	public void testSplitProduct() throws Exception {
 		boolean split = productRepository.splitProduct(2l, 2);
@@ -539,7 +499,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testSplitProductTwice() throws Exception {
 		productRepository.splitProduct(2l, 1);
 		List<Product> products = productRepository.findProductsByDonationIdentificationNumber("1111111");
@@ -552,14 +511,12 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testSplitProductUnknown() throws Exception {
 		boolean split = productRepository.splitProduct(123l, 2);
 		Assert.assertFalse("Unknown product", split);
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateProduct() throws Exception {
 		Product productToUpdate = productRepository.findProduct(2l);
 		productToUpdate.setComponentIdentificationNumber("junit123");
@@ -569,7 +526,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateExpiryStatus() throws Exception {
 		// create expirable product
 		Product productToExpire = productRepository.findProduct(2l);
@@ -586,7 +542,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testSetProductStatusToProcessed() throws Exception {
 		productRepository.setProductStatusToProcessed(2l);
 		Product processedProduct = productRepository.findProduct(2l);
@@ -594,7 +549,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("It seems impossible to get products in a NULL status - by default it is set to QUARANTINED")
 	public void testUpdateQuarantineStatus() throws Exception {
 		// create product with null status
@@ -627,7 +581,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateProductInternalFieldsProcessed() throws Exception {
 		Product product = productRepository.findProduct(1l);
 		boolean updatedProduct = productRepository.updateProductInternalFields(product);
@@ -635,7 +588,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateProductInternalFieldsDiscarded() throws Exception {
 		Product product = productRepository.findProduct(6l);
 		boolean updatedProductStatus = productRepository.updateProductInternalFields(product);
@@ -643,7 +595,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateProductInternalFieldsIssued() throws Exception {
 		// setup test
 		Product product = productRepository.findProduct(1l);
@@ -654,7 +605,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateProductInternalFieldsUsed() throws Exception {
 		// setup test
 		Product product = productRepository.findProduct(1l);
@@ -665,7 +615,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateProductInternalFieldsSplit() throws Exception {
 		// setup test
 		Product product = productRepository.findProduct(1l);
@@ -676,7 +625,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateProductInternalFieldsQuarantined() throws Exception {
 		// setup test
 		Product product = productRepository.findProduct(4l);
@@ -690,7 +638,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateProductInternalFieldsSafe() throws Exception {
 		// setup test
 		Product product = productRepository.findProduct(4l);
@@ -704,7 +651,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateProductInternalFieldsUnSafe() throws Exception {
 		// setup test
 		Product product = productRepository.findProduct(7l);
@@ -718,7 +664,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - this won't work if there are foreign key references such as ProductStatusChange entries...")
 	public void testDeleteAllProducts() throws Exception {
 		productRepository.deleteAllProducts();
@@ -728,7 +673,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testDeleteProduct() throws Exception {
 		productRepository.deleteProduct(1l);
 		Product deletedProduct = productRepository.findProduct(1l);
@@ -737,7 +681,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testAddProduct() throws Exception {
 		Product newProduct = new Product();
 		Donation newDonation = new Donation();
@@ -762,7 +705,6 @@ public class ProductRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testAddAllProducts() throws Exception {
 		Product newProduct1 = new Product();
 		Donation newDonation1 = new Donation();

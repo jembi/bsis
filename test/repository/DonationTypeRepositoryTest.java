@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class DonationTypeRepositoryTest {
 	
@@ -79,7 +78,6 @@ public class DonationTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAll() throws Exception {
 		List<DonationType> all = donationTypeRepository.getAllDonationTypes();
 		Assert.assertNotNull("There are donation types defined", all);
@@ -87,7 +85,6 @@ public class DonationTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllTrue() throws Exception {
 		List<DonationType> all = donationTypeRepository.getAllDonationTypes(true);
 		Assert.assertNotNull("There are donation types defined", all);
@@ -95,7 +92,6 @@ public class DonationTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllFalse() throws Exception {
 		List<DonationType> all = donationTypeRepository.getAllDonationTypes(false);
 		Assert.assertNotNull("There are donation types defined", all);
@@ -103,7 +99,6 @@ public class DonationTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetDonationTypeById() throws Exception {
 		DonationType one = donationTypeRepository.getDonationTypeById(1);
 		Assert.assertNotNull("There is a donation types with id 1", one);
@@ -111,14 +106,12 @@ public class DonationTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testgetDonationType() throws Exception {
 		DonationType one = donationTypeRepository.getDonationType("Voluntary");
 		Assert.assertNotNull("There is a donation type called Voluntary", one);
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateDonationType() throws Exception {
 		DonationType two = donationTypeRepository.getDonationTypeById(1);
 		Assert.assertNotNull("There is a donationType named 'Voluntary'", two);
@@ -129,7 +122,6 @@ public class DonationTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testSaveDonationType() throws Exception {
 		DonationType toBeSaved = new DonationType();
 		toBeSaved.setDonationType("Junit");

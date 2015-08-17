@@ -27,7 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class ProductTypeRepositoryTest {
 	
@@ -83,7 +82,6 @@ public class ProductTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAll() throws Exception {
 		List<ProductType> all = productTypeRepository.getAllProductTypes();
 		Assert.assertNotNull("There are ProductTypes", all);
@@ -91,7 +89,6 @@ public class ProductTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllProductTypesIncludeDeleted() throws Exception {
 		List<ProductType> all = productTypeRepository.getAllProductTypesIncludeDeleted();
 		Assert.assertNotNull("There are ProductTypes", all);
@@ -99,28 +96,24 @@ public class ProductTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testIsProductTypeValidTrue() throws Exception {
 		boolean valid = productTypeRepository.isProductTypeValid("Whole Blood Single Pack - CPDA");
 		Assert.assertTrue("Is a valid ProductType", valid);
 	}
 	
 	@Test
-	@Transactional
 	public void testIsProductTypeValidFalse() throws Exception {
 		boolean valid = productTypeRepository.isProductTypeValid("Test");
 		Assert.assertFalse("Is not a valid ProductType", valid);
 	}
 	
 	@Test
-	@Transactional
 	public void testIsProductTypeValidDeleted() throws Exception {
 		boolean valid = productTypeRepository.isProductTypeValid("Ignore me");
 		Assert.assertFalse("Is not a valid ProductType", valid);
 	}
 	
 	@Test
-	@Transactional
 	public void testGetProductTypeById() throws Exception {
 		ProductType one = productTypeRepository.getProductTypeById(1);
 		Assert.assertNotNull("There is a ProductType", one);
@@ -128,14 +121,12 @@ public class ProductTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetProductTypeByIdUnknown() throws Exception {
 		ProductType one = productTypeRepository.getProductTypeById(123);
 		Assert.assertNull("There is no ProductType", one);
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug in HSQL: could not resolve property: productType of: model.producttype.ProductType [SELECT pt from model.producttype.ProductType pt where pt.productType=:productTypeName]")
 	public void testGetProductTypeByName() throws Exception {
 		ProductType one = productTypeRepository.getProductTypeByName("Whole Blood Single Pack - CPDA");
@@ -144,7 +135,6 @@ public class ProductTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testDeactivateProductType() throws Exception {
 		productTypeRepository.deactivateProductType(1);
 		ProductType productType = productTypeRepository.getProductTypeById(1); // includes deleted
@@ -153,7 +143,6 @@ public class ProductTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testActivateProductType() throws Exception {
 		productTypeRepository.activateProductType(17);
 		ProductType productType = productTypeRepository.getProductTypeById(17);
@@ -162,7 +151,6 @@ public class ProductTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testSaveComponentType() throws Exception {
 		ProductType productType = new ProductType();
 		productType.setProductTypeName("Junit");
@@ -179,7 +167,6 @@ public class ProductTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateComponentType() throws Exception {
 		ProductType existingProductType = productTypeRepository.getProductTypeById(1);
 		existingProductType.setDescription("Junit");
@@ -189,7 +176,6 @@ public class ProductTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	// FIXME: I am not so sure this method is working as expected as it returns the pediProductType not the parent and
 	// it will fail with a NPE if the ProductType with id=1 does not have a pediProductType defined.
 	public void testGetAllParentProductTypes() throws Exception {
@@ -199,7 +185,6 @@ public class ProductTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	//FIXME: it's not very clear what this method does
 	public void testGetProductTypeByIdList() throws Exception {
 		List<ProductType> all = productTypeRepository.getProductTypeByIdList(1);
@@ -208,7 +193,6 @@ public class ProductTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllProductTypeCombinations() throws Exception {
 		List<ProductTypeCombination> all = productTypeRepository.getAllProductTypeCombinations();
 		Assert.assertNotNull("There are ProductTypeCombination", all);
@@ -216,7 +200,6 @@ public class ProductTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllProductTypeCombinationsIncludeDeleted() throws Exception {
 		List<ProductTypeCombination> all = productTypeRepository.getAllProductTypeCombinationsIncludeDeleted();
 		Assert.assertNotNull("There are ProductTypeCombination", all);
@@ -224,7 +207,6 @@ public class ProductTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetProductTypeCombinationById() throws Exception {
 		ProductTypeCombination one = productTypeRepository.getProductTypeCombinationById(1);
 		Assert.assertNotNull("There is a ProductTypeCombination", one);
@@ -232,13 +214,11 @@ public class ProductTypeRepositoryTest {
 	}
 	
 	@Test(expected = javax.persistence.NoResultException.class)
-	@Transactional
 	public void testGetProductTypeCombinationByIdUnknown() throws Exception {
 		productTypeRepository.getProductTypeCombinationById(123);
 	}
 	
 	@Test
-	@Transactional
 	public void testDeactivateProductTypeCombination() throws Exception {
 		productTypeRepository.deactivateProductTypeCombination(1);
 		ProductTypeCombination one = productTypeRepository.getProductTypeCombinationById(1); // returns deleted entities
@@ -247,7 +227,6 @@ public class ProductTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testActivateProductTypeCombinationUnknown() throws Exception {
 		productTypeRepository.activateProductTypeCombination(11);
 		ProductTypeCombination one = productTypeRepository.getProductTypeCombinationById(11);
@@ -256,7 +235,6 @@ public class ProductTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateComponentTypeCombination() throws Exception {
 		ProductTypeCombination one = productTypeRepository.getProductTypeCombinationById(1);
 		one.setCombinationName("Testing");
@@ -266,7 +244,6 @@ public class ProductTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testSaveComponentTypeCombination() throws Exception {
 		ProductTypeCombination one = new ProductTypeCombination();
 		one.setCombinationName("Testing");
