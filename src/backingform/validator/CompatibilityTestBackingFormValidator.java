@@ -48,11 +48,11 @@ public class CompatibilityTestBackingFormValidator implements Validator {
     }
 
     String requestNumber = form.getRequestNumber();
-    Request productRequest = null;
+    Request componentRequest = null;
     if (requestNumber != null && !requestNumber.isEmpty()) {
       try {
-        productRequest = utilController.findRequestByRequestNumber(requestNumber);
-        form.setForRequest(productRequest);
+        componentRequest = utilController.findRequestByRequestNumber(requestNumber);
+        form.setForRequest(componentRequest);
       } catch (NoResultException ex) {
         form.setForRequest(null);
         ex.printStackTrace();
@@ -62,12 +62,12 @@ public class CompatibilityTestBackingFormValidator implements Validator {
     }
 
     String donationIdentificationNumber = form.getDonationIdentificationNumber();
-    if (StringUtils.isNotBlank(donationIdentificationNumber) && productRequest != null) {
+    if (StringUtils.isNotBlank(donationIdentificationNumber) && componentRequest != null) {
       try {
-        Component testedComponent = utilController.findComponent(donationIdentificationNumber, productRequest.getComponentType());
+        Component testedComponent = utilController.findComponent(donationIdentificationNumber, componentRequest.getComponentType());
         if (testedComponent == null)
           errors.rejectValue("compatibilityTest.testedComponent", "compatibilitytest.testedComponent.notFound",
-              "Component with this donation identification number and product type not found or not available");
+              "Component with this donation identification number and component type not found or not available");
         form.setTestedComponent(testedComponent);
       } catch (NoResultException ex) {
         form.setTestedComponent(null);

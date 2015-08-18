@@ -379,7 +379,7 @@ insert into FormField
  '0', '1',
  '0', '0',
 '0', '0'),
-('Component', 'status', 'Product status', '', 0,
+('Component', 'status', 'Component status', '', 0,
  '0', '0',
  '0', '1',
  '0', '0',
@@ -780,11 +780,11 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("donorBloodGroupMatchRequired", "true", "donationRequirements"),
 ("donorHistoryCheckRequired", "true", "donationRequirements"),
 
-("useShortNameForComponentTypes", "true" ,"products"),
+("useShortNameForComponentTypes", "true" ,"components"),
 
 ("allowPediComponentsFromFirstTimeDonors", "true", "componentSplit"),
 
-("donorRecordRequired", "true", "productReleaseRequirements"),
+("donorRecordRequired", "true", "componentReleaseRequirements"),
 
 ("allowComponentsWithoutDonation", "true", "componentCreationRequirements"),
 ("allowImportedComponents", "true", "componentCreationRequirements");
@@ -823,7 +823,7 @@ insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 insert into GenericConfig (propertyName, propertyValue, propertyOwner) values
 ("donorsTabEnabled", "true", "labsetup"),
 ("donationsTabEnabled", "true", "labsetup"),
-("productsTabEnabled", "true", "labsetup"),
+("componentsTabEnabled", "true", "labsetup"),
 ("testResultsTabEnabled", "true", "labsetup"),
 ("requestsTabEnabled", "true", "labsetup"),
 ("usageTabEnabled", "true", "labsetup"),

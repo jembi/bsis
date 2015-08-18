@@ -1,12 +1,12 @@
 /**
- * Reason - Not used anywhere #[209]
+ * Reason - Not used anywhere #209
  *
 package backingform;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class DiscardedProductsReportBackingForm {
+public class DiscardedComponentsReportBackingForm {
 
   private String donationDateFrom;
   private String donationDateTo;
@@ -15,7 +15,7 @@ public class DiscardedProductsReportBackingForm {
   private List<String> sites;
   private List<String> bloodGroups;
 
-  public DiscardedProductsReportBackingForm() {
+  public DiscardedComponentsReportBackingForm() {
     centers = Arrays.asList(new String[0]);
     sites = Arrays.asList(new String[0]);
     setBloodGroups(Arrays.asList(new String[0]));

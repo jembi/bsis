@@ -68,7 +68,7 @@ public class Request implements ModificationTracker {
   @Index(name="request_bloodRhd_index")
   private String patientBloodRh;
 
-  // fetch type eager to check how many products issued
+  // fetch type eager to check how many components issued
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="issuedTo")

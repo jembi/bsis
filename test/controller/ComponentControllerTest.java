@@ -22,9 +22,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import repository.DonationRepository;
 import repository.ComponentRepository;
 import repository.ComponentTypeRepository;
+import repository.DonationRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/bsis-servlet.xml")
@@ -40,16 +40,16 @@ public class ComponentControllerTest {
 	@Autowired
 	private ComponentTypeRepository componentTypeRepository;
 	
-	// Test case for record new productComponents
+	// Test case for record new componentComponents
 	@Ignore @Test
-	public void recordNewProductComponentsTest() {
+	public void recordNewComponentsTest() {
 		
-		 Component savedProduct = null;
+		 Component savedComponent = null;
 		
 				ComponentType componentType2 = componentRepository.findComponentTypeBySelectedComponentType(1);
 	      String donationIdentificationNumber = "D0001";
 	      String status = "QUARANTINED";
-	      long productId = 1L;
+	      long componentId = 1L;
 	      
 	      if(donationIdentificationNumber.contains("-")){
 	      	donationIdentificationNumber = donationIdentificationNumber.split("-")[0];
@@ -60,35 +60,35 @@ public class ComponentControllerTest {
 	      
 	      String createdPackNumber = donationIdentificationNumber +"-"+sortName;
 	      
-	      // Add New product
+	      // Add New component
 	      if(!status.equalsIgnoreCase("PROCESSED")){
 	      if(noOfUnits > 0 ){
 	      	
 	      	for(int i=1; i <= noOfUnits ; i++){
 	      		try{
-		        	Component product = new Component();
-		          product.setIsDeleted(false);
-		          product.setComponentIdentificationNumber(createdPackNumber+"-"+i);
+		        	Component component = new Component();
+		          component.setIsDeleted(false);
+		          component.setComponentIdentificationNumber(createdPackNumber+"-"+i);
 		          Calendar c=new GregorianCalendar();
 		          System.out.println("after :"+ componentTypeRepository.getComponentTypeById(1).getExpiryIntervalMinutes());
 		          c.add(Calendar.MINUTE, componentTypeRepository.getComponentTypeById(1).getExpiryIntervalMinutes());
 		          Date expiredate=c.getTime();
 		          
 		          
-		          product.setCreatedOn(new Date());
-		          product.setExpiresOn(expiredate);
+		          component.setCreatedOn(new Date());
+		          component.setExpiresOn(expiredate);
 		          ComponentType componentType = new ComponentType();
 		          componentType.setComponentTypeName(componentType2.getComponentTypeName());
 		          componentType.setId(componentType2.getId());
-		          product.setComponentType(componentType);
+		          component.setComponentType(componentType);
 		          Donation donation = new Donation();
 		          donation.setId(donationId);
-		          product.setDonation(donation);
-		          product.setStatus(ComponentStatus.QUARANTINED);
-			        componentRepository.addComponent(product);
+		          component.setDonation(donation);
+		          component.setStatus(ComponentStatus.QUARANTINED);
+			        componentRepository.addComponent(component);
 	
-			        // Once product save successfully update selected product status with processed
-			        componentRepository.setComponentStatusToProcessed(productId);
+			        // Once component save successfully update selected component status with processed
+			        componentRepository.setComponentStatusToProcessed(componentId);
 			        
 			      } catch (EntityExistsException ex) {
 			        ex.printStackTrace();
@@ -100,27 +100,27 @@ public class ComponentControllerTest {
 	      else{
 	      	
 	      	try{
-		        	Component product = new Component();
-		          product.setIsDeleted(false);
-		          product.setComponentIdentificationNumber(createdPackNumber);
+		        	Component component = new Component();
+		          component.setIsDeleted(false);
+		          component.setComponentIdentificationNumber(createdPackNumber);
 
 		          Calendar c=new GregorianCalendar();
 		          System.out.println("after :"+ componentTypeRepository.getComponentTypeById(1).getExpiryIntervalMinutes());
 		          c.add(Calendar.MINUTE, componentTypeRepository.getComponentTypeById(1).getExpiryIntervalMinutes());
 		          Date expiredate=c.getTime();
 		          
-		          product.setCreatedOn(new Date());
-		          product.setExpiresOn(expiredate);
+		          component.setCreatedOn(new Date());
+		          component.setExpiresOn(expiredate);
 		          ComponentType componentType = new ComponentType();
 		          componentType.setComponentTypeName(componentType2.getComponentTypeName());
 		          componentType.setId(componentType2.getId());
-		          product.setComponentType(componentType);
+		          component.setComponentType(componentType);
 		          Donation donation = new Donation();
 		          donation.setId(donationId);
-		          product.setDonation(donation);
-		          product.setStatus(ComponentStatus.QUARANTINED);
-			        componentRepository.addComponent(product);
-			        componentRepository.setComponentStatusToProcessed(productId);
+		          component.setDonation(donation);
+		          component.setStatus(ComponentStatus.QUARANTINED);
+			        componentRepository.addComponent(component);
+			        componentRepository.setComponentStatusToProcessed(componentId);
 			        
 			      } catch (EntityExistsException ex) {
 			        ex.printStackTrace();

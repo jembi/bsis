@@ -61,12 +61,12 @@ public class ComponentBackingFormValidator implements Validator {
   private void validateComponentBackingForm(ComponentBackingForm form, Errors errors) {
     String createdOn = form.getCreatedOn();
     if (!CustomDateFormatter.isDateTimeStringValid(createdOn))
-      errors.rejectValue("product.createdOn", "dateFormat.incorrect",
+      errors.rejectValue("component.createdOn", "dateFormat.incorrect",
           CustomDateFormatter.getDateTimeErrorMessage());
 
     String expiresOn = form.getExpiresOn();
     if (!CustomDateFormatter.isDateStringValid(expiresOn))
-      errors.rejectValue("product.expiresOn", "dateFormat.incorrect",
+      errors.rejectValue("component.expiresOn", "dateFormat.incorrect",
           CustomDateFormatter.getDateErrorMessage());
 
     updateRelatedEntities(form);
@@ -76,12 +76,12 @@ public class ComponentBackingFormValidator implements Validator {
   private void validateComponentCombinationBackingForm(ComponentCombinationBackingForm form, Errors errors) {
 
     if (StringUtils.isBlank(form.getComponentTypeCombination()))
-      errors.rejectValue("componentTypeCombination", "product.componentTypeCombination",
+      errors.rejectValue("componentTypeCombination", "component.componentTypeCombination",
           "Component type combination should be specified");
 
     String createdOn = form.getCreatedOn();
     if (!CustomDateFormatter.isDateTimeStringValid(createdOn))
-      errors.rejectValue("product.createdOn", "dateFormat.incorrect",
+      errors.rejectValue("component.createdOn", "dateFormat.incorrect",
           CustomDateFormatter.getDateTimeErrorMessage());
 
     String expiresOn = form.getExpiresOn();
@@ -94,20 +94,20 @@ public class ComponentBackingFormValidator implements Validator {
       for (String componentTypeId : expiryDateByComponentType.keySet()) {
         String expiryDate = expiryDateByComponentType.get(componentTypeId);
         if (!CustomDateFormatter.isDateTimeStringValid(expiryDate))
-          errors.rejectValue("product.expiresOn", "dateFormat.incorrect",
+          errors.rejectValue("component.expiresOn", "dateFormat.incorrect",
               CustomDateFormatter.getDateErrorMessage());
       }
 
     } catch (JsonParseException e) {
-      errors.rejectValue("product.expiresOn", "dateFormat.incorrect", "Invalid expiry date specified");
+      errors.rejectValue("component.expiresOn", "dateFormat.incorrect", "Invalid expiry date specified");
       // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (JsonMappingException e) {
-      errors.rejectValue("product.expiresOn", "dateFormat.incorrect", "Invalid expiry date specified");
+      errors.rejectValue("component.expiresOn", "dateFormat.incorrect", "Invalid expiry date specified");
       // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (IOException e) {
-      errors.rejectValue("product.expiresOn", "dateFormat.incorrect", "Invalid expiry date specified");
+      errors.rejectValue("component.expiresOn", "dateFormat.incorrect", "Invalid expiry date specified");
       // TODO Auto-generated catch block
       e.printStackTrace();
     }

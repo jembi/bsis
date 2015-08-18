@@ -464,11 +464,11 @@ public class CreateDataController {
     addTTIResultsForDonations(donations);
   }
 
-  public void createProducts(int numProducts) {
+  public void createComponents(int numComponents) {
     List<Donation> donations = donationRepository.getAllDonations();
     List<ComponentType> componentTypes = componentTypeRepository.getAllComponentTypes();
     List<Component> components = new ArrayList<Component>();
-    for (int i = 0; i < numProducts; i++) {
+    for (int i = 0; i < numComponents; i++) {
       Donation c = donations.get(random.nextInt(donations.size()));
       Component p = new ComponentBackingForm(true).getComponent();
       p.setDonation(c);

@@ -54,7 +54,7 @@ public class ReportsController {
   public Map<String, Object> inventoryReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     utilController.addTipsToModel(map, "report.inventory.generate");
-    utilController.addTipsToModel(map, "report.inventory.productinventorychart");
+    utilController.addTipsToModel(map, "report.inventory.componentinventorychart");
     map.put("panels", locationRepository.getAllDonorPanels());
     map.put("model", map);
     return map;
@@ -68,7 +68,7 @@ public class ReportsController {
                   @RequestParam(value="panels") String panels
                   ) {
 
-    List<String> productStatuses = Arrays.asList(status.split("\\|"));
+    List<String> componentStatuses = Arrays.asList(status.split("\\|"));
     List<String> centerIds = Arrays.asList(panels.split("\\|"));
 
     List<Long> centerIdsLong = new ArrayList<Long>();
@@ -82,7 +82,7 @@ public class ReportsController {
     Map<String, Object> data = null;
 
     try {
-      data = componentRepository.generateInventorySummaryFast(productStatuses, centerIdsLong);
+      data = componentRepository.generateInventorySummaryFast(componentStatuses, centerIdsLong);
     } catch (Exception ex) {
       ex.printStackTrace();
       response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -110,9 +110,9 @@ public class ReportsController {
 
   @RequestMapping(value = "/components/discard/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_DISCARDED_REPORTING+"')")
-  public Map<String, Object> discardedProductsReportFormGenerator() {
+  public Map<String, Object> discardedComponentsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
-    utilController.addTipsToModel(map, "report.products.discardedproductsreport");
+    utilController.addTipsToModel(map, "report.components.discardedcomponentsreport");
     map.put("panels", locationRepository.getAllDonorPanels());
     map.put("model", map);
     return map;
@@ -120,9 +120,9 @@ public class ReportsController {
 
   @RequestMapping(value = "/components/issued/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_ISSUED_REPORTING+"')")
-  public Map<String, Object> issuedProductsReportFormGenerator() {
+  public Map<String, Object> issuedComponentsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
-    utilController.addTipsToModel(map, "report.products.issuedproductsreport");
+    utilController.addTipsToModel(map, "report.components.issuedcomponentsreport");
     map.put("panels", locationRepository.getAllDonorPanels());
     return map;
   }
@@ -232,7 +232,7 @@ public class ReportsController {
   @RequestMapping(value = "/components/discard/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_DISCARDED_REPORTING+"')")
   public 
-  ResponseEntity<Map<String, Object>> getDiscardedProductsReport(
+  ResponseEntity<Map<String, Object>> getDiscardedComponentsReport(
           @RequestParam(value = "donationDateFrom", required = false) String donationDateFrom,
           @RequestParam(value = "donationDateTo", required = false) String donationDateTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
@@ -260,7 +260,7 @@ public class ReportsController {
       else
         dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
 
-      Map<String, Map<Long, Long>> numDiscardedProducts = componentRepository
+      Map<String, Map<Long, Long>> numDiscardedComponents = componentRepository
           .findNumberOfDiscardedComponents(dateFrom, dateTo,
               aggregationCriteria, panels, bloodGroups);
       // TODO: potential leap year bug here
@@ -272,7 +272,7 @@ public class ReportsController {
         interval = interval * 365;
   
       map.put("interval", interval);
-      map.put("numDiscardedProducts", numDiscardedProducts);
+      map.put("numDiscardedComponents", numDiscardedComponents);
 
       map.put("donationDateFromUTC", dateFrom.getTime());
       map.put("donationDateToUTC", dateTo.getTime());
@@ -283,7 +283,7 @@ public class ReportsController {
   @RequestMapping(value = "/components/issued/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_ISSUED_REPORTING+"')")
   public 
-  ResponseEntity<Map<String, Object>> getIssuedProductsReport(
+  ResponseEntity<Map<String, Object>> getIssuedComponentsReport(
           @RequestParam(value = "dateIssuedFrom", required = false) String donationDateFrom,
           @RequestParam(value = "dateIssuedTo", required = false) String donationDateTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
@@ -310,7 +310,7 @@ public class ReportsController {
       else
         dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
 
-      Map<String, Map<Long, Long>> numIssuedProducts = componentRepository
+      Map<String, Map<Long, Long>> numIssuedComponents = componentRepository
           .findNumberOfIssuedComponents(dateFrom, dateTo,
               aggregationCriteria, panels, bloodGroups);
       // TODO: potential leap year bug here
@@ -322,7 +322,7 @@ public class ReportsController {
         interval = interval * 365;
   
       map.put("interval", interval);
-      map.put("numIssuedProducts", numIssuedProducts);
+      map.put("numIssuedComponents", numIssuedComponents);
 
       map.put("dateIssuedFromUTC", dateFrom.getTime());
       map.put("dateIssuedToUTC", dateTo.getTime());

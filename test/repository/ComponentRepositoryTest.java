@@ -45,7 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
 import security.BsisUserDetails;
 
 /**
- * Test using DBUnit to test the ProductRepository
+ * Test using DBUnit to test the ComponentRepository
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
@@ -239,7 +239,7 @@ public class ComponentRepositoryTest {
 	@Test
 	@Transactional
 	@Ignore("A bug - there is no attribute of Component called productNumber")
-	public void testFindComponentByProductNumber() throws Exception {
+	public void testFindComponentByComponentNumber() throws Exception {
 		componentRepository.findComponent("123");
 	}
 	
@@ -587,7 +587,7 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	@Transactional
-	public void testSetProductStatusToProcessed() throws Exception {
+	public void testSetComponentStatusToProcessed() throws Exception {
 		componentRepository.setComponentStatusToProcessed(2l);
 		Component processedComponent = componentRepository.findComponent(2l);
 		Assert.assertEquals("Component has been processed", ComponentStatus.PROCESSED, processedComponent.getStatus());
@@ -638,8 +638,8 @@ public class ComponentRepositoryTest {
 	@Transactional
 	public void testUpdateComponentInternalFieldsDiscarded() throws Exception {
 		Component component = componentRepository.findComponent(6l);
-		boolean updatedProductStatus = componentRepository.updateComponentInternalFields(component);
-		Assert.assertFalse("DISCARDED component is not updated", updatedProductStatus);
+		boolean updatedComponentStatus = componentRepository.updateComponentInternalFields(component);
+		Assert.assertFalse("DISCARDED component is not updated", updatedComponentStatus);
 	}
 	
 	@Test
@@ -649,8 +649,8 @@ public class ComponentRepositoryTest {
 		Component component = componentRepository.findComponent(1l);
 		component.setStatus(ComponentStatus.ISSUED);
 		// run test
-		boolean updatedProductStatus = componentRepository.updateComponentInternalFields(component);
-		Assert.assertFalse("ISSUED component is not updated", updatedProductStatus);
+		boolean updatedComponentStatus = componentRepository.updateComponentInternalFields(component);
+		Assert.assertFalse("ISSUED component is not updated", updatedComponentStatus);
 	}
 	
 	@Test
@@ -660,8 +660,8 @@ public class ComponentRepositoryTest {
 		Component component = componentRepository.findComponent(1l);
 		component.setStatus(ComponentStatus.USED);
 		// run test
-		boolean updatedProductStatus = componentRepository.updateComponentInternalFields(component);
-		Assert.assertFalse("USED component is not updated", updatedProductStatus);
+		boolean updatedComponentStatus = componentRepository.updateComponentInternalFields(component);
+		Assert.assertFalse("USED component is not updated", updatedComponentStatus);
 	}
 	
 	@Test
@@ -671,8 +671,8 @@ public class ComponentRepositoryTest {
 		Component component = componentRepository.findComponent(1l);
 		component.setStatus(ComponentStatus.SPLIT);
 		// run test
-		boolean updatedProductStatus = componentRepository.updateComponentInternalFields(component);
-		Assert.assertFalse("SPLIT component is not updated", updatedProductStatus);
+		boolean updatedComponentStatus = componentRepository.updateComponentInternalFields(component);
+		Assert.assertFalse("SPLIT component is not updated", updatedComponentStatus);
 	}
 	
 	@Test
@@ -684,8 +684,8 @@ public class ComponentRepositoryTest {
 		cal.add(Calendar.DAY_OF_YEAR, -10);
 		component.setExpiresOn(cal.getTime());
 		// run test
-		boolean updatedProductStatus = componentRepository.updateComponentInternalFields(component);
-		Assert.assertTrue("QUARANTINED component status is changed", updatedProductStatus);
+		boolean updatedComponentStatus = componentRepository.updateComponentInternalFields(component);
+		Assert.assertTrue("QUARANTINED component status is changed", updatedComponentStatus);
 		Assert.assertEquals("Component status is actually EXPIRED", ComponentStatus.EXPIRED, component.getStatus());
 	}
 	
@@ -698,8 +698,8 @@ public class ComponentRepositoryTest {
 		cal.add(Calendar.DAY_OF_YEAR, 10);
 		component.setExpiresOn(cal.getTime());
 		// run test
-		boolean updatedProductStatus = componentRepository.updateComponentInternalFields(component);
-		Assert.assertTrue("SAFE component status is changed", updatedProductStatus);
+		boolean updatedComponentStatus = componentRepository.updateComponentInternalFields(component);
+		Assert.assertTrue("SAFE component status is changed", updatedComponentStatus);
 		Assert.assertEquals("Component status is actually AVAILABLE", ComponentStatus.AVAILABLE, component.getStatus());
 	}
 	
@@ -712,8 +712,8 @@ public class ComponentRepositoryTest {
 		cal.add(Calendar.DAY_OF_YEAR, 10);
 		component.setExpiresOn(cal.getTime());
 		// run test
-		boolean updatedProductStatus = componentRepository.updateComponentInternalFields(component);
-		Assert.assertTrue("UNSAFE component status is changed", updatedProductStatus);
+		boolean updatedComponentStatus = componentRepository.updateComponentInternalFields(component);
+		Assert.assertTrue("UNSAFE component status is changed", updatedComponentStatus);
 		Assert.assertEquals("Component status is actually UNSAFE", ComponentStatus.UNSAFE, component.getStatus());
 	}
 	

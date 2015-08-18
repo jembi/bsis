@@ -290,7 +290,7 @@ public class UtilController {
 
   public Donor findDonorInForm(Map<String, Object> bean) {
     // IMPORTANT: Validation code just checks if the ID exists.
-    // We still need to store the donation as part of the product.
+    // We still need to store the donation as part of the component.
     String donorId = null;
     if (bean.containsKey("donorIdHidden"))
       donorId = (String) bean.get("donorIdHidden");
@@ -405,7 +405,7 @@ public class UtilController {
       if (component.getComponentType().equals(componentType)) {
         if (matchingComponent != null &&
             matchingComponent.getStatus().equals(ComponentStatus.AVAILABLE)) {
-          // multiple products available have the same product type
+          // multiple components available have the same component type
           // cannot identify uniquely
           return null;
         }
@@ -555,9 +555,9 @@ public class UtilController {
     return false;
   }
 
-  public Component findComponentById(String productId) {
+  public Component findComponentById(String componentId) {
     Component component = null;
-    component = componentRepository.findComponentById(Long.parseLong(productId));
+    component = componentRepository.findComponentById(Long.parseLong(componentId));
     return component;
   }
 

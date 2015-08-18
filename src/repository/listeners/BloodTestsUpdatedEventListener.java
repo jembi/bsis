@@ -123,7 +123,7 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
     }
   }
 
-  private void updateProductStatus(Donation donation) {
+  private void updateComponentStatus(Donation donation) {
     String queryStr = "SELECT p FROM Component p WHERE " +
         "p.donation.id=:donationId AND p.isDeleted=:isDeleted";
     TypedQuery<Component> query = em.createQuery(queryStr, Component.class);
@@ -183,7 +183,7 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
       donation.setBloodTypingStatus(ruleResult.getBloodTypingStatus());
       donation = em.merge(donation);
     }
-    updateProductStatus(donation);
+    updateComponentStatus(donation);
     
     donation.setBloodTypingMatchStatus(ruleResult.getBloodTypingMatchStatus());
 

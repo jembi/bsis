@@ -7,12 +7,12 @@ import org.springframework.stereotype.Component;
 import repository.ComponentRepository;
 
 @Component
-public class ProductQuarantineStatusUpdater implements Runnable {
+public class ComponentQuarantineStatusUpdater implements Runnable {
 
   @Autowired
   ComponentRepository componentRepository;
 
-  public ProductQuarantineStatusUpdater() {
+  public ComponentQuarantineStatusUpdater() {
   }
 
   @Scheduled(fixedDelay=2*3600*1000)

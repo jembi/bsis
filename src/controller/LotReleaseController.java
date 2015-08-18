@@ -1,7 +1,5 @@
 package controller;
 
-import backingform.validator.DonationBackingFormValidator;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,10 +28,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import repository.DonationRepository;
 import repository.ComponentRepository;
+import repository.DonationRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import utils.PermissionConstants;
+import backingform.validator.DonationBackingFormValidator;
 
 @RestController
 @RequestMapping("labels")
@@ -115,7 +114,7 @@ public class LotReleaseController {
 	        String donationDate = df.format(donation.getDonationDate());        	
 	
 	        // TODO: improve calculation of expiry date according to final processed components expiry dates 
-	        // i.e. expiryDate = df.format(donation.getProducts().get(i).getExpiresOn());
+	        // i.e. expiryDate = df.format(donation.getComponents().get(i).getExpiresOn());
 	        // For now, generates expiry date as Donation Date + 35 Days.
 	        String expiryDate = "";
 	    	Calendar c = Calendar.getInstance();
@@ -186,12 +185,12 @@ public class LotReleaseController {
 	    			         "^FT28,194^A0N,29,64^FH\\^FDWHOLE ^FS" +
 	    			         "^FT28,230^A0N,29,64^FH\\^FDBLOOD^FS" +
 	    			         "^FT98,410^A0N,18,19^FH\\^FDVolunteer donor blood donated and processed by the National Blood Service ^FS" +
-	    			         "^FT98,432^A0N,18,19^FH\\^FD                      This product may transmit infectious agents^FS" +
+	    			         "^FT98,432^A0N,18,19^FH\\^FD                      This component may transmit infectious agents^FS" +
 	    			         "^FT599,237^A0N,39,31^FH\\^FD  Rh (D) ^FS" +
 	    			         "^FT106,752^A0N,23,33^FH\\^FDPROPERLY IDENTIFY INTENDED RECIPIENT^FS" +
 	    			         "^FT244,606^A@N,28,31,TT0003M_^FH\\^CI17^F8^FDAffix compatibility label^FS^CI0" +
 	    	    			 "^BY2,3,42^FT285,111^BCN,,Y,N"+
-	    	    			 "^FD>:" + product.getDonationIdentificationNumber() + "^FS"+
+	    	    			 "^FD>:" + component.getDonationIdentificationNumber() + "^FS"+
 	    	    			 inverse +
 	    			         "^PQ1,0,1,Y^XZ"
 	    			         );
@@ -234,7 +233,7 @@ public class LotReleaseController {
 	    				"^FT28,194^A0N,29,64^FH\\^FDWHOLE ^FS"+
 	    				"^FT28,230^A0N,29,64^FH\\^FDBLOOD^FS"+
 	    				"^FT98,410^A0N,18,19^FH\\^FDVolunteer donor blood collected and processed by the National Blood Service ^FS"+
-	    				"^FT98,432^A0N,18,19^FH\\^FD                      This product may transmit infectious agents^FS"+
+	    				"^FT98,432^A0N,18,19^FH\\^FD                      This component may transmit infectious agents^FS"+
 	    				"^FT599,237^A0N,39,31^FH\\^FD  Rh (D) ^FS"+
 	    				"^FT106,752^A0N,23,33^FH\\^FDPROPERLY IDENTIFY INTENDED RECIPIENT^FS"+
 	    				"^FT244,606^A@N,28,31,TT0003M_^FH\\^CI17^F8^FDAffix compatibility label^FS^CI0"+
@@ -266,7 +265,7 @@ public class LotReleaseController {
  		// discard label can be printed
  		success = true;
 	 	//DateFormat df = new SimpleDateFormat("dd/MM/yyyy");        
-	    //String donationDate = df.format(product.getDonation().getDonationDate());        	
+	    //String donationDate = df.format(component.getDonation().getDonationDate());        	
 	
 	    // Generate ZPL label
 	    map.put("labelZPL",	
@@ -313,13 +312,13 @@ public class LotReleaseController {
     	}else if(donation.getDonor()!=null && donation.getDonor().getDonorStatus().equals(LotReleaseConstant.POSITIVE_TTI)){
     		success=false;
     	}
-    	// TODO: improve product & blood test checks, or remove if not relevant
+    	// TODO: improve component & blood test checks, or remove if not relevant
     	/*
-    	else if(donation.getProducts()!=null && !donation.getProducts().isEmpty() && 
-    			(donation.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED) 
-    			|| donation.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_EXPIRED)
-    			|| donation.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_QUARANTINED) 
-    			|| donation.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_SPLIT))){   		
+    	else if(donation.getComponents()!=null && !donation.getComponents().isEmpty() && 
+    			(donation.getComponents().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED) 
+    			|| donation.getComponents().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_EXPIRED)
+    			|| donation.getComponents().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_QUARANTINED) 
+    			|| donation.getComponents().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_SPLIT))){   		
     		success=false;
     	}else if(donation.getBloodTestResults()!=null 
     			&& !donation.getBloodTestResults().isEmpty() 
@@ -350,41 +349,41 @@ public class LotReleaseController {
 	private List<Map<String, Object>> getComponentLabellingStatus(Donation donation, List<Component> components){
 		
                
-           List<Map<String, Object>> productsList= new ArrayList<Map<String, Object>>(); 
+           List<Map<String, Object>> componentsList= new ArrayList<Map<String, Object>>(); 
 	     if(donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)){
-                  Map<String, Object> productStatus = new HashMap<String, Object>();
+                  Map<String, Object> componentStatus = new HashMap<String, Object>();
     		for(Component component : components){
     				if(!component.getStatus().equals(ComponentStatus.PROCESSED) && !component.getStatus().equals(ComponentStatus.SPLIT)){
-	                    productStatus.put("componentId", component.getId());
-	                    productStatus.put("componentName", component.getComponentType().getComponentTypeName());
-	                    productStatus.put("componentIdentificationNumber", component.getComponentIdentificationNumber());
-	                    productStatus.put("discardPackLabel", true);
-	                    productStatus.put("printPackLabel", false);
-	                    productsList.add(productStatus);
+	                    componentStatus.put("componentId", component.getId());
+	                    componentStatus.put("componentName", component.getComponentType().getComponentTypeName());
+	                    componentStatus.put("componentIdentificationNumber", component.getComponentIdentificationNumber());
+	                    componentStatus.put("discardPackLabel", true);
+	                    componentStatus.put("printPackLabel", false);
+	                    componentsList.add(componentStatus);
     				}
                 }
                 
-                return productsList;
+                return componentsList;
     	}
             else {
                 for (Component component : components) {
-                	Map<String, Object> productStatus = new HashMap<String, Object>();
+                	Map<String, Object> componentStatus = new HashMap<String, Object>();
                 	if(!component.getStatus().equals(ComponentStatus.PROCESSED) && !component.getStatus().equals(ComponentStatus.SPLIT)){
-	                    productStatus.put("componentId", component.getId());
-	                    productStatus.put("componentName", component.getComponentType().getComponentTypeName());
-	                    productStatus.put("componentIdentificationNumber", component.getComponentIdentificationNumber());
+	                    componentStatus.put("componentId", component.getId());
+	                    componentStatus.put("componentName", component.getComponentType().getComponentTypeName());
+	                    componentStatus.put("componentIdentificationNumber", component.getComponentIdentificationNumber());
 	                    if (component.getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED)) {
-	                        productStatus.put("discardPackLabel", true);
-	                        productStatus.put("printPackLabel", false);
+	                        componentStatus.put("discardPackLabel", true);
+	                        componentStatus.put("printPackLabel", false);
 	                    } else {
-	                        productStatus.put("discardPackLabel", false);
-	                        productStatus.put("printPackLabel", checkDonationIdentificationNumber(donation));
+	                        componentStatus.put("discardPackLabel", false);
+	                        componentStatus.put("printPackLabel", checkDonationIdentificationNumber(donation));
 	                    }
-	                    productsList.add(productStatus);
+	                    componentsList.add(componentStatus);
                 	}
                 }
             }
-        return productsList;
+        return componentsList;
 
     }
         

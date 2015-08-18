@@ -28,15 +28,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import repository.GenericConfigRepository;
-import repository.LocationRepository;
 import repository.ComponentRepository;
 import repository.ComponentTypeRepository;
+import repository.GenericConfigRepository;
+import repository.LocationRepository;
 import repository.RequestRepository;
 import repository.RequestTypeRepository;
 import utils.PermissionConstants;
-import viewmodel.MatchingComponentViewModel;
 import viewmodel.ComponentViewModel;
+import viewmodel.MatchingComponentViewModel;
 import viewmodel.RequestViewModel;
 import backingform.RequestBackingForm;
 import backingform.validator.RequestBackingFormValidator;
@@ -106,9 +106,9 @@ public class RequestsController {
 
     Map<String, Object> map = new HashMap<String, Object>();
 
-    Request productRequest = requestRepository.findRequestById(id);
+    Request componentRequest = requestRepository.findRequestById(id);
 
-    RequestViewModel requestViewModel = getRequestViewModels(Arrays.asList(productRequest)).get(0);
+    RequestViewModel requestViewModel = getRequestViewModels(Arrays.asList(componentRequest)).get(0);
     map.put("request", requestViewModel);
     return map;
   }
@@ -158,10 +158,10 @@ public class RequestsController {
                         includeSatisfiedRequests, pagingParams);
 
     @SuppressWarnings("unchecked")
-    List<Request> productRequests = (List<Request>) results.get(0);
+    List<Request> componentRequests = (List<Request>) results.get(0);
     Long totalRecords = (Long) results.get(1);
 
-    return generateDatatablesMap(productRequests, totalRecords, formFields);
+    return generateDatatablesMap(componentRequests, totalRecords, formFields);
   }
 
   /**
@@ -204,16 +204,16 @@ public class RequestsController {
    * in jquery datatables. Remember of columns is important and should match the column headings
    * in requestsTable.jsp.
    */
-  private Map<String, Object> generateDatatablesMap(List<Request> productRequests, Long totalRecords, Map<String, Map<String, Object>> formFields) {
+  private Map<String, Object> generateDatatablesMap(List<Request> componentRequests, Long totalRecords, Map<String, Map<String, Object>> formFields) {
     Map<String, Object> donationsMap = new HashMap<String, Object>();
 
     ArrayList<Object> requestList = new ArrayList<Object>();
 
-    for (RequestViewModel productRequest : getRequestViewModels(productRequests)) {
+    for (RequestViewModel componentRequest : getRequestViewModels(componentRequests)) {
 
       List<Object> row = new ArrayList<Object>();
       
-      row.add(productRequest.getId().toString());
+      row.add(componentRequest.getId().toString());
 
       for (String property : Arrays.asList("requestNumber", "patientBloodAbo", "patientBloodRh",
                                            "requestDate", "requiredDate", "componentType",
@@ -223,7 +223,7 @@ public class RequestsController {
           if (properties.get("hidden").equals(false)) {
             String propertyValue = property;
             try {
-              propertyValue = BeanUtils.getProperty(productRequest, property);
+              propertyValue = BeanUtils.getProperty(componentRequest, property);
             } catch (IllegalAccessException e) {
               e.printStackTrace();
             } catch (InvocationTargetException e) {
@@ -262,9 +262,9 @@ public class RequestsController {
     Map<String, Object> map = new HashMap<String, Object>();
 
     Request savedRequest = null;
-    Request productRequest = form.getRequest();
-    productRequest.setIsDeleted(false);
-    savedRequest = requestRepository.addRequest(productRequest);
+    Request componentRequest = form.getRequest();
+    componentRequest.setIsDeleted(false);
+    savedRequest = requestRepository.addRequest(componentRequest);
     map.put("hasErrors", false);
     form = new RequestBackingForm();
     map.put("requestId", savedRequest.getId());
@@ -275,13 +275,13 @@ public class RequestsController {
 
   @RequestMapping(value="{id}/issuedcomponents", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public  Map<String, Object> listIssuedProductsForRequest(@PathVariable Long id) {
+  public  Map<String, Object> listIssuedComponentsForRequest(@PathVariable Long id) {
     Map<String, Object> map = new HashMap<String, Object>();
     addEditSelectorOptions(map);
     List<Component> issuedComponents = requestRepository.getIssuedComponentsForRequest(id);
     List<ComponentViewModel> issuedComponentViewModels = null;
     issuedComponentViewModels = ComponentController.getComponentViewModels(issuedComponents);
-    map.put("issuedProducts", issuedComponentViewModels);
+    map.put("issuedComponents", issuedComponentViewModels);
     map.put("componentTypeFields", utilController.getFormFieldsForForm("ComponentType"));
     return map;
   }
@@ -298,12 +298,12 @@ public class RequestsController {
   }
 
   private List<RequestViewModel> getRequestViewModels(
-      List<Request> productRequests) {
-    if (productRequests == null)
+      List<Request> componentRequests) {
+    if (componentRequests == null)
       return Arrays.asList(new RequestViewModel[0]);
     List<RequestViewModel> requestViewModels = new ArrayList<RequestViewModel>();
-    for (Request productRequest : productRequests) {
-      requestViewModels.add(new RequestViewModel(productRequest));
+    for (Request componentRequest : componentRequests) {
+      requestViewModels.add(new RequestViewModel(componentRequest));
     }
     return requestViewModels;
   }
@@ -318,25 +318,25 @@ public class RequestsController {
 
   @RequestMapping(value = "{id}/matchingcomponents", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.BLOOD_CROSS_MATCH_CHECK+"')")
-  public  Map<String, Object> findMatchingProductsForRequest(
+  public  Map<String, Object> findMatchingComponentsForRequest(
       @PathVariable Long id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("requestId", id);
-    List<MatchingComponentViewModel> products = componentRepository.findMatchingComponentsForRequest(id);
+    List<MatchingComponentViewModel> components = componentRepository.findMatchingComponentsForRequest(id);
     map.put("compatibilityTestFields", utilController.getFormFieldsForForm("CompatibilityTest"));
-    map.put("allProducts", products);
+    map.put("allComponents", components);
     map.put("labProperties", genericConfigRepository.getConfigProperties("labsetup"));
     return map;
   }
 
   @RequestMapping(value = "{id}/issuecomponent", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public  ResponseEntity issueSelectedProducts(
+  public  ResponseEntity issueSelectedComponents(
       @PathVariable Long id,
       @RequestParam String componentName) {
    
-       requestRepository.issueProductsToRequest(id, componentName);
+       requestRepository.issueComponentsToRequest(id, componentName);
        return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 

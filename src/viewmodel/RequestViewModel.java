@@ -14,8 +14,8 @@ import utils.CustomDateFormatter;
 public class RequestViewModel {
   private Request request;
 
-  public RequestViewModel(Request productRequest) {
-    this.request = productRequest;
+  public RequestViewModel(Request componentRequest) {
+    this.request = componentRequest;
   }
 
   public Long getId() {

@@ -6,7 +6,7 @@ package backingform;
 import java.util.Arrays;
 import java.util.List;
 
-public class IssuedProductsReportBackingForm {
+public class IssuedComponentsReportBackingForm {
 
   private String dateIssuedFrom;
   private String dateIssuedTo;
@@ -15,7 +15,7 @@ public class IssuedProductsReportBackingForm {
   private List<String> sites;
   private List<String> bloodGroups;
 
-  public IssuedProductsReportBackingForm() {
+  public IssuedComponentsReportBackingForm() {
     centers = Arrays.asList(new String[0]);
     sites = Arrays.asList(new String[0]);
     setBloodGroups(Arrays.asList(new String[0]));
@@ -69,5 +69,4 @@ public class IssuedProductsReportBackingForm {
     this.bloodGroups = bloodGroups;
   }
 }
-* */
-
+*/

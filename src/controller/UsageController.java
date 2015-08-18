@@ -123,9 +123,9 @@ public class UsageController {
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 
-    @RequestMapping(value = "/forproduct", method = RequestMethod.POST)
+    @RequestMapping(value = "/forcomponent", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
-    public ResponseEntity<Map<String, Object>> addUsageForProduct(
+    public ResponseEntity<Map<String, Object>> addUsageForComponent(
             @Valid @RequestBody ComponentUsageBackingForm form) {
 
         Map<String, Object> map = new HashMap<String, Object>();

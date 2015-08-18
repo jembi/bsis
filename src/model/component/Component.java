@@ -51,7 +51,7 @@ public class Component implements ModificationTracker {
   @Column(nullable = false)
   private Long id;
 
-  // A product may not have a corresponding donation. Some products may be
+  // A component may not have a corresponding donation. Some components may be
   // imported from another location. In such a case the corresponding donation
   // field is allowed to be null.
   @DonationExists
@@ -66,7 +66,7 @@ public class Component implements ModificationTracker {
   private Date createdOn;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Index(name="product_expiresOn_index")
+  @Index(name="component_expiresOn_index")
   private Date expiresOn;
 
   @Temporal(TemporalType.TIMESTAMP)

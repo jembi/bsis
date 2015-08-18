@@ -95,7 +95,7 @@ public class GenericConfigRepositoryTest {
 	public void testFindGenericConfigById() throws Exception {
 		List<String> propertyOwners = new ArrayList<String>();
 		propertyOwners.add("donationRequirements");
-		propertyOwners.add("productReleaseRequirements");
+		propertyOwners.add("componentReleaseRequirements");
 		Map<String, String> all = genericConfigRepository.getConfigProperties(propertyOwners);
 		Assert.assertNotNull("There are GenericConfigs", all);
 		Assert.assertEquals("There are 10 GenericConfig", 10, all.size());

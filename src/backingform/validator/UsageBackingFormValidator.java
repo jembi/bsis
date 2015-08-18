@@ -49,7 +49,7 @@ public class UsageBackingFormValidator implements Validator {
   }
 
   private void updateRelatedEntities(ComponentUsageBackingForm form) {
-    Component component = utilController.findComponentById(form.getProductId());
+    Component component = utilController.findComponentById(form.getComponentId());
     form.setComponent(component);
   }
 }

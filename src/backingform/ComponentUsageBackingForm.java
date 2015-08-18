@@ -173,18 +173,18 @@ public class ComponentUsageBackingForm {
     usage.setIsDeleted(isDeleted);
   }
 
-  public String getProductId() {
+  public String getComponentId() {
     if (usage.getComponent() != null && usage.getComponent().getId() != null)
       return usage.getComponent().getId().toString();
     else
       return "-1";
   }
 
-  public void setProductId(String productId) {
+  public void setComponentId(String componentId) {
     Component component;
     try {
       component = new Component();
-      component.setId(Long.parseLong(productId));
+      component.setId(Long.parseLong(componentId));
       usage.setComponent(component);
     } catch (NumberFormatException ex) {
       usage.setComponent(null);

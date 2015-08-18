@@ -78,10 +78,10 @@ public class RequestRepository {
     return request;
   }
 
-  public Request findRequestWithIssuedProducts(String requestNumber)throws NoResultException, NonUniqueResultException{
+  public Request findRequestWithIssuedComponents(String requestNumber)throws NoResultException, NonUniqueResultException{
     Request request = null;
     if (requestNumber != null && requestNumber.length() > 0) {
-      String queryString = "SELECT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
+      String queryString = "SELECT r FROM Request r LEFT JOIN FETCH r.issuedComponents WHERE " +
           "r.requestNumber = :requestNumber and r.isDeleted= :isDeleted";
       TypedQuery<Request> query = em.createQuery(queryString, Request.class);
       query.setParameter("isDeleted", Boolean.FALSE);
@@ -92,7 +92,7 @@ public class RequestRepository {
   }
 
   public Request findRequestById(Long requestId) throws NoResultException, NonUniqueResultException{
-      String queryString = "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
+      String queryString = "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedComponents WHERE " +
                            "r.id = :requestId and r.isDeleted= :isDeleted";
       TypedQuery<Request> query = em.createQuery(queryString, Request.class);
       query.setParameter("isDeleted", Boolean.FALSE);
@@ -102,7 +102,7 @@ public class RequestRepository {
   }
 
   public ArrayList<Request> getAllRequests() {
-    String queryString = "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
+    String queryString = "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedComponents WHERE " +
                          "r.isDeleted = :isDeleted order by r.dateRequested";
     TypedQuery<Request> query = em.createQuery(queryString, Request.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -248,12 +248,12 @@ public class RequestRepository {
     return uniqueRequestNumber;
   }
 
-  public Request addRequest(Request productRequest) {
-    updateNewRequestFields(productRequest);
-    em.persist(productRequest);
+  public Request addRequest(Request componentRequest) {
+    updateNewRequestFields(componentRequest);
+    em.persist(componentRequest);
     em.flush();
-    em.refresh(productRequest);
-    return productRequest;
+    em.refresh(componentRequest);
+    return componentRequest;
   }
 
   private Date getDateRequestedAfterOrDefault(String requestedAfter) throws ParseException {
@@ -284,11 +284,11 @@ public class RequestRepository {
 
     String queryStr = "";
     if (StringUtils.isNotBlank(requestNumber)) {
-      queryStr = "SELECT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
+      queryStr = "SELECT r FROM Request r LEFT JOIN FETCH r.issuedComponents WHERE " +
                  "r.requestNumber =:requestNumber AND " +
                  "r.isDeleted= :isDeleted";
     } else {
-      queryStr = "SELECT r FROM Request r LEFT JOIN FETCH r.issuedProducts WHERE " +
+      queryStr = "SELECT r FROM Request r LEFT JOIN FETCH r.issuedComponents WHERE " +
           "(r.componentType.id IN (:componentTypeIds) AND " +
           "r.requestSite.id IN (:requestSiteIds)) AND" +
           "(r.requestDate >= :requestedAfter and r.requiredDate <= :requiredBy) AND " +
@@ -331,7 +331,7 @@ public class RequestRepository {
     String countQueryStr = queryStr.replaceFirst("SELECT r", "SELECT COUNT(r)");
     // removing the join fetch is important otherwise Hibernate will complain
     // owner of the fetched association was not present in the select list
-    countQueryStr = countQueryStr.replaceFirst("LEFT JOIN FETCH r.issuedProducts", "");
+    countQueryStr = countQueryStr.replaceFirst("LEFT JOIN FETCH r.issuedComponents", "");
     TypedQuery<Long> countQuery = em.createQuery(countQueryStr, Long.class);
     for (Parameter<?> parameter : query.getParameters()) {
       countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
@@ -357,41 +357,41 @@ public class RequestRepository {
     return existingRequest;
   }
 
-  public void issueProductsToRequest(Long requestId, String productsToIssue) throws RuntimeException {
+  public void issueComponentsToRequest(Long requestId, String componentsToIssue) throws RuntimeException {
     Request request = findRequestById(requestId);
-    productsToIssue = productsToIssue.replaceAll("\"", "");
-    productsToIssue = productsToIssue.replaceAll("\\[", "");
-    productsToIssue = productsToIssue.replaceAll("\\]", "");
-    String[] productIds = productsToIssue.split(",");
+    componentsToIssue = componentsToIssue.replaceAll("\"", "");
+    componentsToIssue = componentsToIssue.replaceAll("\\[", "");
+    componentsToIssue = componentsToIssue.replaceAll("\\]", "");
+    String[] componentIds = componentsToIssue.split(",");
     int numUnitsIssued = 0;
     if (request.getNumUnitsIssued() != null)
       numUnitsIssued = request.getNumUnitsIssued();
-    for (String productId : productIds) {
-      Component component = em.find(Component.class, Long.parseLong(productId));
-      // handle the case where the product, test result has been updated
-      // between the time when matching products are searched and selected
+    for (String componentId : componentIds) {
+      Component component = em.find(Component.class, Long.parseLong(componentId));
+      // handle the case where the component, test result has been updated
+      // between the time when matching components are searched and selected
       // for issuing
       if (!canIssueComponent(component, request))
-        throw new RuntimeException("Could not issue products");
+        throw new RuntimeException("Could not issue components");
     }
 
-    for (String productId : productIds) {
-      Component component = em.find(Component.class, Long.parseLong(productId));
-      // we know these products can be issued now
+    for (String componentId : componentIds) {
+      Component component = em.find(Component.class, Long.parseLong(componentId));
+      // we know these components can be issued now
       // although there is some doubt about the behavior of locks between the check above and now
       Date today = new Date();
-      ComponentStatusChange productIssue = new ComponentStatusChange();
-      productIssue.setNewStatus(ComponentStatus.ISSUED);
-      productIssue.setStatusChangedOn(today);
-      productIssue.setStatusChangeType(ComponentStatusChangeType.ISSUED);
-      productIssue.setChangedBy(utilController.getCurrentUser());
-      productIssue.setIssuedTo(request);
-      productIssue.setComponent(component);
+      ComponentStatusChange componentIssue = new ComponentStatusChange();
+      componentIssue.setNewStatus(ComponentStatus.ISSUED);
+      componentIssue.setStatusChangedOn(today);
+      componentIssue.setStatusChangeType(ComponentStatusChangeType.ISSUED);
+      componentIssue.setChangedBy(utilController.getCurrentUser());
+      componentIssue.setIssuedTo(request);
+      componentIssue.setComponent(component);
       numUnitsIssued++;
       component.setStatus(ComponentStatus.ISSUED);
       component.setIssuedOn(today);
       component.setIssuedTo(request);
-      em.persist(productIssue);
+      em.persist(componentIssue);
       em.merge(component);
     }
 
@@ -406,9 +406,9 @@ public class RequestRepository {
   }
 
   private boolean canIssueComponent(Component component, Request request) {
-    // first make sure the product is up-to-date
-    // the product may have expired so this update is required
-    // we update the expiry date of a product periodically
+    // first make sure the component is up-to-date
+    // the component may have expired so this update is required
+    // we update the expiry date of a component periodically
     componentRepository.updateComponentInternalFields(component);
     String requestedComponentType = request.getComponentType().getComponentTypeName();
     String componentType = component.getComponentType().getComponentTypeName();
@@ -416,7 +416,7 @@ public class RequestRepository {
     if (!componentType.equals(requestedComponentType))
       return false;
     
-    // product available or not
+    // component available or not
     if (!component.getStatus().equals(ComponentStatus.AVAILABLE))
       return false;
 
