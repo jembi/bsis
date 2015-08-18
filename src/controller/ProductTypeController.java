@@ -9,17 +9,16 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
+import backingform.validator.ComponentTypeBackingFormValidator;
 import model.producttype.ProductType;
 import model.producttype.ProductTypeCombination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import repository.ProductTypeRepository;
 import utils.PermissionConstants;
 import viewmodel.ProductTypeCombinationViewModel;
@@ -31,8 +30,16 @@ public class ProductTypeController {
 
   @Autowired
   private ProductTypeRepository productTypeRepository;
+
+  @Autowired
+  private UtilController utilController;
   
   public ProductTypeController() {
+  }
+
+  @InitBinder
+  protected void initBinder(WebDataBinder binder) {
+    binder.setValidator(new ComponentTypeBackingFormValidator(binder.getValidator(), utilController, productTypeRepository));
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -101,9 +108,11 @@ public class ProductTypeController {
 
   @RequestMapping(value="/combinations", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
-  public List<ProductTypeCombinationViewModel> getComponentTypeCombinations() {
+  public ResponseEntity<Map<String, Object>> getComponentTypeCombinations() {
     List<ProductTypeCombination> allProductTypeCombinationsIncludeDeleted = productTypeRepository.getAllProductTypeCombinationsIncludeDeleted();
-    return getProductTypeCombinationViewModels(allProductTypeCombinationsIncludeDeleted);
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("combinations",  getProductTypeCombinationViewModels(allProductTypeCombinationsIncludeDeleted));
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
   @RequestMapping(value="/combinations/{id}", method=RequestMethod.GET)
