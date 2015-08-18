@@ -69,7 +69,7 @@ public class ComponentRepositoryTest {
 	private DataSource dataSource;
 	
 	private IDataSet getDataSet() throws Exception {
-		File file = new File("test/dataset/ProductRepositoryDataset.xml");
+		File file = new File("test/dataset/ComponentRepositoryDataset.xml");
 		return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
 	}
 	
