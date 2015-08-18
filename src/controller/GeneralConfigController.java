@@ -84,6 +84,6 @@ public class GeneralConfigController {
         if (form.getName().equalsIgnoreCase("log.level"))
             LoggerUtil.setLogLevel(configRepository.getGeneralConfigByName("log.level").getValue());
 
-        return new ResponseEntity<GeneralConfigViewModel>(new GeneralConfigViewModel(updatedConfig), HttpStatus.CREATED);
+        return new ResponseEntity<GeneralConfigViewModel>(new GeneralConfigViewModel(updatedConfig), HttpStatus.OK);
     }
 }
