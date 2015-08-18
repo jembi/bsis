@@ -612,7 +612,7 @@
         expiresAfterUnits varchar(30),
         hasBloodGroup boolean,
         isDeleted boolean,
-        componentType varchar(50),
+        componentTypeName varchar(50),
         componentTypeNameShort varchar(30),
         pediComponentType_id SMALLINT,
         primary key (id)
@@ -1412,7 +1412,7 @@
         foreign key (REV) 
         references REVINFO (REV);
 
-    alter table Product_AUD 
+    alter table Component_AUD 
         add index FKA859320DF74E053 (REV), 
         add constraint FKA859320DF74E053 
         foreign key (REV) 
