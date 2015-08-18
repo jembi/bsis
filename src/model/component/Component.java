@@ -26,7 +26,7 @@ import model.donation.Donation;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.request.Request;
-import model.usage.ProductUsage;
+import model.usage.ComponentUsage;
 import model.user.User;
 
 import org.hibernate.annotations.Index;
@@ -100,7 +100,7 @@ public class Component implements ModificationTracker {
   private Component parentComponent;
 
   @OneToOne(mappedBy="component")
-  private ProductUsage usage;
+  private ComponentUsage usage;
   
   @Lob
   private String notes;
@@ -269,11 +269,11 @@ public class Component implements ModificationTracker {
     this.statusChanges = statusChanges;
   }
 
-  public ProductUsage getUsage() {
+  public ComponentUsage getUsage() {
     return usage;
   }
 
-  public void setUsage(ProductUsage usage) {
+  public void setUsage(ComponentUsage usage) {
     this.usage = usage;
   }
 

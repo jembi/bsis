@@ -13,7 +13,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.usage.ProductUsage;
+import model.usage.ComponentUsage;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,35 +24,35 @@ public class UsageRepository {
   @PersistenceContext
   private EntityManager em;
 
-  public void saveUsage(ProductUsage productUsage) {
-    em.persist(productUsage);
+  public void saveUsage(ComponentUsage componentUsage) {
+    em.persist(componentUsage);
     em.flush();
   }
 
-  public ProductUsage findProductUsage(String productNumber) throws NoResultException, NonUniqueResultException{
-      String queryString = "SELECT p FROM ProductUsage p WHERE p.productNumber = :productNumber and p.isDeleted= :isDeleted";
-      TypedQuery<ProductUsage> query = em.createQuery(queryString,
-              ProductUsage.class);
+  public ComponentUsage findComponentUsage(String productNumber) throws NoResultException, NonUniqueResultException{
+      String queryString = "SELECT p FROM ComponentUsage p WHERE p.productNumber = :productNumber and p.isDeleted= :isDeleted";
+      TypedQuery<ComponentUsage> query = em.createQuery(queryString,
+              ComponentUsage.class);
       query.setParameter("isDeleted", Boolean.FALSE);
-      ProductUsage productUsage = query.setParameter("productNumber",
+      ComponentUsage componentUsage = query.setParameter("productNumber",
               productNumber).getSingleResult();
-      return productUsage;
+      return componentUsage;
   }
 
   public void deleteAllUsages() {
-    Query query = em.createQuery("DELETE FROM ProductUsage u");
+    Query query = em.createQuery("DELETE FROM ComponentUsage u");
     query.executeUpdate();
   }
 
-  public List<ProductUsage> findAnyUsageMatching(String productNumber,
+  public List<ComponentUsage> findAnyUsageMatching(String productNumber,
       String dateUsedFrom, String dateUsedTo, List<String> useIndications) throws ParseException {
 
-    TypedQuery<ProductUsage> query = em.createQuery(
-        "SELECT u FROM ProductUsage u WHERE "
+    TypedQuery<ComponentUsage> query = em.createQuery(
+        "SELECT u FROM ComponentUsage u WHERE "
             + "(u.productNumber = :productNumber OR "
             + "u.useIndication IN (:useIndications)) AND "
             + "(u.dateUsed BETWEEN :dateUsedFrom AND " + ":dateUsedTo) AND "
-            + "(u.isDeleted= :isDeleted)", ProductUsage.class);
+            + "(u.isDeleted= :isDeleted)", ComponentUsage.class);
 
     query.setParameter("isDeleted", Boolean.FALSE);
 
@@ -71,33 +71,33 @@ public class UsageRepository {
       query.setParameter("dateUsedTo", to);
    
 
-    List<ProductUsage> resultList = query.getResultList();
+    List<ComponentUsage> resultList = query.getResultList();
     return resultList;
   }
 
-  public ProductUsage findUsageByProductNumber(String productNumber) throws NoResultException, NonUniqueResultException{
-    TypedQuery<ProductUsage> query = em
+  public ComponentUsage findUsageByProductNumber(String productNumber) throws NoResultException, NonUniqueResultException{
+    TypedQuery<ComponentUsage> query = em
         .createQuery(
-            "SELECT u FROM ProductUsage u WHERE u.productNumber = :productNumber and u.isDeleted= :isDeleted",
-            ProductUsage.class);
+            "SELECT u FROM ComponentUsage u WHERE u.productNumber = :productNumber and u.isDeleted= :isDeleted",
+            ComponentUsage.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("productNumber", productNumber);
-    ProductUsage usage = query.getSingleResult();
+    ComponentUsage usage = query.getSingleResult();
     return usage;
   }
 
   public void deleteUsage(String productNumber) {
-    ProductUsage existingUsage = findUsageByProductNumber(productNumber);
+    ComponentUsage existingUsage = findUsageByProductNumber(productNumber);
     existingUsage.setIsDeleted(Boolean.TRUE);
     em.merge(existingUsage);
     em.flush();
   }
 
-  public ProductUsage findUsageById(Long usageId) throws IllegalArgumentException{
-    return em.find(ProductUsage.class, usageId);
+  public ComponentUsage findUsageById(Long usageId) throws IllegalArgumentException{
+    return em.find(ComponentUsage.class, usageId);
   }
 
-  public ProductUsage addUsage(ProductUsage usage) {
+  public ComponentUsage addUsage(ComponentUsage usage) {
     em.persist(usage);
     em.flush();
     em.refresh(usage);

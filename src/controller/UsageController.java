@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import model.request.Request;
-import model.usage.ProductUsage;
+import model.usage.ComponentUsage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,9 +26,9 @@ import repository.ComponentTypeRepository;
 import repository.RequestRepository;
 import repository.UsageRepository;
 import utils.PermissionConstants;
-import viewmodel.ProductUsageViewModel;
+import viewmodel.ComponentUsageViewModel;
 import viewmodel.RequestViewModel;
-import backingform.ProductUsageBackingForm;
+import backingform.ComponentUsageBackingForm;
 import backingform.validator.UsageBackingFormValidator;
 
 @RestController
@@ -71,7 +71,7 @@ public class UsageController {
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public Map<String, Object> addUsageFormGenerator(HttpServletRequest request) {
 
-    ProductUsageBackingForm form = new ProductUsageBackingForm();
+    ComponentUsageBackingForm form = new ComponentUsageBackingForm();
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("addUsageForm", form);
@@ -89,7 +89,7 @@ public class UsageController {
   @RequestMapping( method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
     public ResponseEntity<Map<String, Object>> addUsage(
-            @Valid @RequestBody ProductUsageBackingForm form) {
+            @Valid @RequestBody ComponentUsageBackingForm form) {
 
         Map<String, Object> map = new HashMap<String, Object>();
 
@@ -97,15 +97,15 @@ public class UsageController {
         Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
         map.put("usageFields", formFields);
 
-        ProductUsage savedUsage = null;
-        ProductUsage productUsage = form.getUsage();
-        productUsage.setIsDeleted(false);
-        savedUsage = usageRepository.addUsage(productUsage);
+        ComponentUsage savedUsage = null;
+        ComponentUsage componentUsage = form.getUsage();
+        componentUsage.setIsDeleted(false);
+        savedUsage = usageRepository.addUsage(componentUsage);
         map.put("hasErrors", false);
-        form = new ProductUsageBackingForm();
+        form = new ComponentUsageBackingForm();
 
         map.put("usageId", savedUsage.getId());
-        map.put("usage",  new ProductUsageViewModel(savedUsage));
+        map.put("usage",  new ComponentUsageViewModel(savedUsage));
         map.put("addAnotherUsageUrl", "addUsageFormGenerator.html");
 
         return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
@@ -126,7 +126,7 @@ public class UsageController {
     @RequestMapping(value = "/forproduct", method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
     public ResponseEntity<Map<String, Object>> addUsageForProduct(
-            @Valid @RequestBody ProductUsageBackingForm form) {
+            @Valid @RequestBody ComponentUsageBackingForm form) {
 
         Map<String, Object> map = new HashMap<String, Object>();
         boolean success = false;
@@ -135,16 +135,16 @@ public class UsageController {
         Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
         map.put("usageFields", formFields);
 
-        ProductUsage savedUsage = null;
-        ProductUsage productUsage = form.getUsage();
-        productUsage.setIsDeleted(false);
-        savedUsage = usageRepository.addUsage(productUsage);
+        ComponentUsage savedUsage = null;
+        ComponentUsage componentUsage = form.getUsage();
+        componentUsage.setIsDeleted(false);
+        savedUsage = usageRepository.addUsage(componentUsage);
         map.put("hasErrors", false);
         success = true;
-        form = new ProductUsageBackingForm();
+        form = new ComponentUsageBackingForm();
 
         map.put("usageId", savedUsage.getId());
-        map.put("usage", new ProductUsageViewModel(savedUsage));
+        map.put("usage", new ComponentUsageViewModel(savedUsage));
       
         map.put("success", success);
         return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);

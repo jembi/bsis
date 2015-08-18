@@ -10,34 +10,34 @@ import javax.validation.constraints.NotNull;
 
 import model.component.Component;
 import model.modificationtracker.RowModificationTracker;
-import model.usage.ProductUsage;
+import model.usage.ComponentUsage;
 import model.user.User;
 import utils.CustomDateFormatter;
 
-public class ProductUsageBackingForm {
+public class ComponentUsageBackingForm {
 
   public static final int ID_LENGTH = 12;
 
   @NotNull
   @Valid
-  private ProductUsage usage;
+  private ComponentUsage usage;
 
   private String usageDate;
 
-  public ProductUsageBackingForm() {
-    usage = new ProductUsage();
+  public ComponentUsageBackingForm() {
+    usage = new ComponentUsage();
   }
 
-  public ProductUsageBackingForm(ProductUsage usage) {
+  public ComponentUsageBackingForm(ComponentUsage usage) {
     this.usage = usage;
   }
 
   @JsonIgnore
-  public ProductUsage getUsage() {
+  public ComponentUsage getUsage() {
     return usage;
   }
 
-  public void setUsage(ProductUsage usage) {
+  public void setUsage(ComponentUsage usage) {
     this.usage = usage;
   }
 

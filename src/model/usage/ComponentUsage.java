@@ -29,7 +29,7 @@ import constraintvalidator.ComponentExists;
  */
 @Entity
 @Audited
-public class ProductUsage implements ModificationTracker {
+public class ComponentUsage implements ModificationTracker {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -66,7 +66,7 @@ public class ProductUsage implements ModificationTracker {
   @Column(length=30)
   private String usedBy;
 
-  public ProductUsage() {
+  public ComponentUsage() {
     modificationTracker = new RowModificationTracker();
   }
 

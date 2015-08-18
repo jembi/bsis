@@ -135,17 +135,17 @@
 		isDeleted="false" createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:07:29.0"
 		status="QUARANTINED" donation_id="5" createdBy_id="1"
 		lastUpdatedBy_id="1" componentType_id="6" componentIdentificationNumber="5555555-0011" />
-	<ProductUsage id="1" hospital="Maseru Private Hospital" isDeleted="false"
+	<ComponentUsage id="1" hospital="Maseru Private Hospital" isDeleted="false"
 		createdDate="2015-08-11 09:06:11.0" lastUpdated="2015-08-11 09:06:11.0"
 		notes="" patientName="Lucky" usageDate="2015-08-11 09:06:11.0"
 		useIndication="Operation" usedBy="Dr Brian" ward="W01" createdBy_id="1"
 		lastUpdatedBy_id="1" component_id="1" />
-	<ProductUsage id="2" hospital="Maseru Private Hospital" isDeleted="false"
+	<ComponentUsage id="2" hospital="Maseru Private Hospital" isDeleted="false"
 		createdDate="2015-08-11 09:06:11.0" lastUpdated="2015-08-11 09:06:11.0"
 		notes="" patientName="Victor" usageDate="2015-08-13 09:06:11.0"
 		useIndication="Operation" usedBy="Dr Brian" ward="W03" createdBy_id="1"
 		lastUpdatedBy_id="1" component_id="3" />
-	<ProductUsage id="3" hospital="Maseru Private Hospital" isDeleted="false"
+	<ComponentUsage id="3" hospital="Maseru Private Hospital" isDeleted="false"
 		createdDate="2015-08-11 09:06:11.0" lastUpdated="2015-08-11 09:06:11.0"
 		notes="" patientName="Jenny" usageDate="2015-08-13 09:06:11.0"
 		useIndication="Emergency" usedBy="Dr Brian" ward="ICU" createdBy_id="1"

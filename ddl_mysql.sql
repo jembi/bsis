@@ -656,7 +656,7 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table ProductUsage (
+    create table ComponentUsage (
         id bigint not null auto_increment,
         hospital varchar(50),
         isDeleted boolean,
@@ -674,7 +674,7 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table ProductUsage_AUD (
+    create table ComponentUsage_AUD (
         id bigint not null,
         REV integer not null,
         REVTYPE tinyint,
@@ -1388,25 +1388,25 @@
         foreign key (REV) 
         references REVINFO (REV);
 
-    alter table ProductUsage 
+    alter table ComponentUsage 
         add index FK45B6D212A49787C4 (createdBy_id), 
         add constraint FK45B6D212A49787C4 
         foreign key (createdBy_id) 
         references User (id);
 
-    alter table ProductUsage 
+    alter table ComponentUsage 
         add index FK45B6D212A8E71476 (component_id), 
         add constraint FK45B6D212A8E71476 
         foreign key (component_id) 
         references Component (id);
 
-    alter table ProductUsage 
+    alter table ComponentUsage 
         add index FK45B6D212D0AFB367 (lastUpdatedBy_id), 
         add constraint FK45B6D212D0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
 
-    alter table ProductUsage_AUD 
+    alter table ComponentUsage_AUD 
         add index FKB27A6E3DF74E053 (REV), 
         add constraint FKB27A6E3DF74E053 
         foreign key (REV) 
