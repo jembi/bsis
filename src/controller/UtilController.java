@@ -18,7 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import model.admin.FormField;
 import model.admin.GeneralConfig;
 import model.component.Component;
-import model.component.ProductStatus;
+import model.component.ComponentStatus;
+import model.componentmovement.ComponentStatusChangeReason;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
@@ -26,7 +27,6 @@ import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
-import model.productmovement.ProductStatusChangeReason;
 import model.request.Request;
 import model.user.User;
 import model.user.Role;
@@ -404,7 +404,7 @@ public class UtilController {
     for (Component component : components) {
       if (component.getComponentType().equals(componentType)) {
         if (matchingComponent != null &&
-            matchingComponent.getStatus().equals(ProductStatus.AVAILABLE)) {
+            matchingComponent.getStatus().equals(ComponentStatus.AVAILABLE)) {
           // multiple products available have the same product type
           // cannot identify uniquely
           return null;
@@ -455,11 +455,11 @@ public class UtilController {
     return false;
   }
 
-  public boolean isDuplicateDiscardReason(ProductStatusChangeReason discardReason){
+  public boolean isDuplicateDiscardReason(ComponentStatusChangeReason discardReason){
     String reason = discardReason.getStatusChangeReason();
     if (StringUtils.isBlank(reason))
       return false;
-    ProductStatusChangeReason existingDiscardReason = discardReasonRepository.findDiscardReason(reason);
+    ComponentStatusChangeReason existingDiscardReason = discardReasonRepository.findDiscardReason(reason);
     if (existingDiscardReason != null && !existingDiscardReason.getId().equals(discardReason.getId()))
       return true;
     return false;

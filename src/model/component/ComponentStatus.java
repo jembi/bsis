@@ -1,6 +1,6 @@
 package model.component;
 
-public enum ProductStatus {
+public enum ComponentStatus {
 
   QUARANTINED, AVAILABLE, EXPIRED, ISSUED, SPLIT, USED, UNSAFE, DISCARDED, PROCESSED;
 
@@ -10,13 +10,13 @@ public enum ProductStatus {
    * @param statusStr
    * @return
    */
-  public static ProductStatus lookup(String statusStr) {
-    ProductStatus status = null;
+  public static ComponentStatus lookup(String statusStr) {
+    ComponentStatus status = null;
     try {
-       status = ProductStatus.valueOf(statusStr);
+       status = ComponentStatus.valueOf(statusStr);
     } catch (IllegalArgumentException ex) {
       ex.printStackTrace();
-      status = ProductStatus.QUARANTINED;
+      status = ComponentStatus.QUARANTINED;
     }
     return status;
   }

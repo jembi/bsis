@@ -1,4 +1,4 @@
-package model.productmovement;
+package model.componentmovement;
 
 import java.util.Date;
 
@@ -15,7 +15,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import model.component.Component;
-import model.component.ProductStatus;
+import model.component.ComponentStatus;
 import model.request.Request;
 import model.user.User;
 
@@ -27,7 +27,7 @@ import constraintvalidator.RequestExists;
 
 @Entity
 @Audited
-public class ProductStatusChange {
+public class ComponentStatusChange {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -43,11 +43,11 @@ public class ProductStatusChange {
 
   @Enumerated(EnumType.STRING)
   @Column(length=30)
-  private ProductStatusChangeType statusChangeType;
+  private ComponentStatusChangeType statusChangeType;
   
   @Enumerated(EnumType.STRING)
   @Column(length=30)
-  private ProductStatus newStatus;
+  private ComponentStatus newStatus;
 
   @RequestExists
   @ManyToOne
@@ -60,9 +60,9 @@ public class ProductStatusChange {
   private String statusChangeReasonText;
 
   @ManyToOne
-  private ProductStatusChangeReason statusChangeReason;
+  private ComponentStatusChangeReason statusChangeReason;
 
-  public ProductStatusChange() {
+  public ComponentStatusChange() {
   }
 
   public Long getId() {
@@ -89,11 +89,11 @@ public class ProductStatusChange {
     this.statusChangedOn = statusChangedOn;
   }
 
-  public ProductStatus getNewStatus() {
+  public ComponentStatus getNewStatus() {
     return newStatus;
   }
 
-  public void setNewStatus(ProductStatus newStatus) {
+  public void setNewStatus(ComponentStatus newStatus) {
     this.newStatus = newStatus;
   }
 
@@ -137,19 +137,19 @@ public class ProductStatusChange {
     this.statusChangedOn = issuedOn;
   }
 
-  public ProductStatusChangeReason getStatusChangeReason() {
+  public ComponentStatusChangeReason getStatusChangeReason() {
     return statusChangeReason;
   }
 
-  public void setStatusChangeReason(ProductStatusChangeReason discardReason) {
+  public void setStatusChangeReason(ComponentStatusChangeReason discardReason) {
     this.statusChangeReason = discardReason;
   }
 
-  public ProductStatusChangeType getStatusChangeType() {
+  public ComponentStatusChangeType getStatusChangeType() {
     return statusChangeType;
   }
 
-  public void setStatusChangeType(ProductStatusChangeType statusChangeType) {
+  public void setStatusChangeType(ComponentStatusChangeType statusChangeType) {
     this.statusChangeType = statusChangeType;
   }
 }

@@ -26,7 +26,7 @@ import javax.persistence.TypedQuery;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.TTIStatus;
 import model.component.Component;
-import model.component.ProductStatus;
+import model.component.ComponentStatus;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.donor.Donor;
@@ -348,7 +348,7 @@ public class DonationRepository {
     component.setIsDeleted(false);
     component.setComponentIdentificationNumber(donation.getDonationIdentificationNumber() +"-"+componentType.getComponentTypeNameShort());
     component.setDonation(donation);
-    component.setStatus(ProductStatus.QUARANTINED);
+    component.setStatus(ComponentStatus.QUARANTINED);
     component.setCreatedDate(donation.getCreatedDate());
 
     // set new component creation date to match donation date 

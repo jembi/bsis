@@ -25,14 +25,14 @@ import model.bloodtesting.TTIStatus;
 import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
 import model.component.Component;
-import model.component.ProductStatus;
+import model.component.ComponentStatus;
+import model.componentmovement.ComponentStatusChange;
+import model.componentmovement.ComponentStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeReasonCategory;
+import model.componentmovement.ComponentStatusChangeType;
 import model.componenttype.ComponentType;
 import model.componenttype.ComponentTypeCombination;
 import model.donation.Donation;
-import model.productmovement.ProductStatusChange;
-import model.productmovement.ProductStatusChangeReason;
-import model.productmovement.ProductStatusChangeReasonCategory;
-import model.productmovement.ProductStatusChangeType;
 import model.request.Request;
 import model.util.BloodGroup;
 
@@ -74,9 +74,9 @@ public class ComponentRepository {
   private UtilController utilController;
 
   /**
-   * some fields like product status are cached internally.
+   * some fields like component status are cached internally.
    * must be called whenever any changes are made to rows related to the component.
-   * eg. Test result update should update the product status.
+   * eg. Test result update should update the component status.
    * @param component
    */
   public boolean updateComponentInternalFields(Component component) {
@@ -94,7 +94,7 @@ public class ComponentRepository {
     // created from that sample which were issued. By maintaining the status as
     // issued even if the component is unsafe we can search for all components created
     // from that donation and then look at which ones were already issued.
-    // Conclusion is do not change the product status once it is marked as issued.
+    // Conclusion is do not change the component status once it is marked as issued.
     // Similar reasoning for not changing USED status for a component. It should be
     // easy to track which used components were made from unsafe donations.
     // of course if the test results are not available or the donation is known
@@ -104,11 +104,11 @@ public class ComponentRepository {
     // once a component has been labeled as split it does not exist anymore so we just mark
     // it as SPLIT/PROCESSED. Even if the donation is found to be unsafe later it should not matter
     // as SPLIT/PROCESSED components are not allowed to be issued
-    List<ProductStatus> statusNotToBeChanged =
-        Arrays.asList(ProductStatus.DISCARDED, ProductStatus.ISSUED,
-            ProductStatus.USED, ProductStatus.SPLIT, ProductStatus.PROCESSED);
+    List<ComponentStatus> statusNotToBeChanged =
+        Arrays.asList(ComponentStatus.DISCARDED, ComponentStatus.ISSUED,
+            ComponentStatus.USED, ComponentStatus.SPLIT, ComponentStatus.PROCESSED);
 
-    ProductStatus oldProductStatus = component.getStatus();
+    ComponentStatus oldComponentStatus = component.getStatus();
     
     // nothing to do if the component has any of these statuses
     if (component.getStatus() != null && statusNotToBeChanged.contains(component.getStatus()))
@@ -121,10 +121,10 @@ public class ComponentRepository {
     BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();
     TTIStatus ttiStatus = c.getTTIStatus();
 
-    ProductStatus newProductStatus = ProductStatus.QUARANTINED;
+    ComponentStatus newComponentStatus = ComponentStatus.QUARANTINED;
     if (bloodTypingStatus.equals(BloodTypingStatus.COMPLETE) &&
         ttiStatus.equals(TTIStatus.TTI_SAFE)) {
-      newProductStatus = ProductStatus.AVAILABLE;
+      newComponentStatus = ComponentStatus.AVAILABLE;
     }
 
     // just mark it as expired or unsafe
@@ -132,15 +132,15 @@ public class ComponentRepository {
     // available, quarantined status hence this check is done
     // later in the code
     if (component.getExpiresOn().before(new Date())) {
-      newProductStatus = ProductStatus.EXPIRED;
+      newComponentStatus = ComponentStatus.EXPIRED;
     }
 
     if (ttiStatus.equals(TTIStatus.TTI_UNSAFE)) {
-      newProductStatus = ProductStatus.UNSAFE;
+      newComponentStatus = ComponentStatus.UNSAFE;
     }
 
-    if (!newProductStatus.equals(oldProductStatus)) {
-      component.setStatus(newProductStatus);
+    if (!newComponentStatus.equals(oldComponentStatus)) {
+      component.setStatus(newComponentStatus);
       return true;
     }
     return false;
@@ -161,7 +161,7 @@ public class ComponentRepository {
     return component;
   }
   
-  public List<Component> findAnyComponent(String donationIdentificationNumber, List<Integer> componentTypes, List<ProductStatus> status, 
+  public List<Component> findAnyComponent(String donationIdentificationNumber, List<Integer> componentTypes, List<ComponentStatus> status, 
 		  Date donationDateFrom, Date donationDateTo, Map<String, Object> pagingParams){
 	  	TypedQuery<Component> query;
 	    String queryStr = "SELECT DISTINCT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +     
@@ -216,7 +216,7 @@ public class ComponentRepository {
   }
 
   public List<Component> findComponentByDonationIdentificationNumber(
-      String donationIdentificationNumber, List<ProductStatus> status, Map<String, Object> pagingParams) {
+      String donationIdentificationNumber, List<ComponentStatus> status, Map<String, Object> pagingParams) {
 
     TypedQuery<Component> query;
     String queryStr = "SELECT DISTINCT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +
@@ -249,7 +249,7 @@ public class ComponentRepository {
   }
   
   public List<Component> findComponentByComponentTypes(
-      List<Integer> componentTypeIds, List<ProductStatus> status,
+      List<Integer> componentTypeIds, List<ComponentStatus> status,
       Map<String, Object> pagingParams) {
 
     String queryStr = "SELECT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +
@@ -443,7 +443,7 @@ public class ComponentRepository {
 
     query.setParameter("componentType", request.getComponentType());
     query.setParameter("today", today);
-    query.setParameter("status", ProductStatus.AVAILABLE);
+    query.setParameter("status", ComponentStatus.AVAILABLE);
     query.setParameter("ttiStatus", TTIStatus.TTI_SAFE);
     query.setParameter("bloodAbo", request.getPatientBloodAbo());
     query.setParameter("bloodRh", request.getPatientBloodRh());
@@ -457,7 +457,7 @@ public class ComponentRepository {
         "isDeleted=:isDeleted", CompatibilityTest.class);
 
     crossmatchQuery.setParameter("forRequestId", requestId);
-    crossmatchQuery.setParameter("testedComponentStatus", ProductStatus.AVAILABLE);
+    crossmatchQuery.setParameter("testedComponentStatus", ComponentStatus.AVAILABLE);
     crossmatchQuery.setParameter("isDeleted", false);
 
     List<CompatibilityTest> crossmatchTests = crossmatchQuery.getResultList();
@@ -494,11 +494,11 @@ public class ComponentRepository {
                              "c.donation.donorPanel.id IN (:panelIds) AND " +
                              "c.isDeleted=:isDeleted",
                              Component.class);
-    List<ProductStatus> productStatus = new ArrayList<ProductStatus>();
+    List<ComponentStatus> componentStatus = new ArrayList<ComponentStatus>();
     for (String s : status) {
-      productStatus.add(ProductStatus.lookup(s));
+      componentStatus.add(ComponentStatus.lookup(s));
     }
-    q.setParameter("status", productStatus);
+    q.setParameter("status", componentStatus);
     q.setParameter("panelIds", panelIds);
     q.setParameter("isDeleted", false);
 //    q.setParameter("expiresOn", DateUtils.round(new Date(), Calendar.DATE));
@@ -576,20 +576,20 @@ public class ComponentRepository {
   }
 
   public void discardComponent(Long componentId,
-      ProductStatusChangeReason discardReason,
+      ComponentStatusChangeReason discardReason,
       String discardReasonText) {
     Component existingComponent = findComponentById(componentId);
-    existingComponent.setStatus(ProductStatus.DISCARDED);
+    existingComponent.setStatus(ComponentStatus.DISCARDED);
     existingComponent.setDiscardedOn(new Date());
-    ProductStatusChange statusChange = new ProductStatusChange();
-    statusChange.setStatusChangeType(ProductStatusChangeType.DISCARDED);
-    statusChange.setNewStatus(ProductStatus.DISCARDED);
+    ComponentStatusChange statusChange = new ComponentStatusChange();
+    statusChange.setStatusChangeType(ComponentStatusChangeType.DISCARDED);
+    statusChange.setNewStatus(ComponentStatus.DISCARDED);
     statusChange.setStatusChangedOn(new Date());
     statusChange.setStatusChangeReason(discardReason);
     statusChange.setStatusChangeReasonText(discardReasonText);
     statusChange.setChangedBy(utilController.getCurrentUser());
     if (existingComponent.getStatusChanges() == null)
-      existingComponent.setStatusChanges(new ArrayList<ProductStatusChange>());
+      existingComponent.setStatusChanges(new ArrayList<ComponentStatusChange>());
     existingComponent.getStatusChanges().add(statusChange);
     statusChange.setComponent(existingComponent);
     em.persist(statusChange);
@@ -602,8 +602,8 @@ public class ComponentRepository {
                                "c.status=:availableStatus AND " +
                                "c.expiresOn < :today";
     Query query = em.createQuery(updateExpiryQuery);
-    query.setParameter("status", ProductStatus.EXPIRED);
-    query.setParameter("availableStatus", ProductStatus.AVAILABLE);
+    query.setParameter("status", ComponentStatus.EXPIRED);
+    query.setParameter("availableStatus", ComponentStatus.AVAILABLE);
     query.setParameter("today", new Date());
     int numUpdated = query.executeUpdate();
     //System.out.println("Number of rows updated: " + numUpdated);
@@ -647,9 +647,9 @@ public class ComponentRepository {
     query.setParameter("panelIds", panelIds);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("discardedStatuses",
-                       Arrays.asList(ProductStatus.DISCARDED,
-                                     ProductStatus.UNSAFE,
-                                     ProductStatus.EXPIRED));
+                       Arrays.asList(ComponentStatus.DISCARDED,
+                                     ComponentStatus.UNSAFE,
+                                     ComponentStatus.EXPIRED));
 
     query.setParameter("donationDateFrom", donationDateFrom);
     query.setParameter("donationDateTo", donationDateTo);
@@ -731,7 +731,7 @@ public class ComponentRepository {
 
     query.setParameter("panelIds", panelIds);
     query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("issuedStatus", ProductStatus.ISSUED);
+    query.setParameter("issuedStatus", ComponentStatus.ISSUED);
 
     query.setParameter("donationDateFrom", donationDateFrom);
     query.setParameter("donationDateTo", donationDateTo);
@@ -806,18 +806,18 @@ public class ComponentRepository {
   }
 
   public void returnComponent(Long componentId,
-      ProductStatusChangeReason returnReason, String returnReasonText) {
+      ComponentStatusChangeReason returnReason, String returnReasonText) {
     Component existingComponent = findComponentById(componentId);
     updateComponentStatus(existingComponent);
-    ProductStatusChange statusChange = new ProductStatusChange();
+    ComponentStatusChange statusChange = new ComponentStatusChange();
     statusChange.setStatusChangedOn(new Date());
-    statusChange.setStatusChangeType(ProductStatusChangeType.RETURNED);
+    statusChange.setStatusChangeType(ComponentStatusChangeType.RETURNED);
     statusChange.setStatusChangeReason(returnReason);
     statusChange.setNewStatus(existingComponent.getStatus());
     statusChange.setStatusChangeReasonText(returnReasonText);
     statusChange.setChangedBy(utilController.getCurrentUser());
     if (existingComponent.getStatusChanges() == null)
-      existingComponent.setStatusChanges(new ArrayList<ProductStatusChange>());
+      existingComponent.setStatusChanges(new ArrayList<ComponentStatusChange>());
     existingComponent.getStatusChanges().add(statusChange);
     statusChange.setComponent(existingComponent);
     em.persist(statusChange);
@@ -825,12 +825,12 @@ public class ComponentRepository {
     em.flush();
   }
 
-  public List<ProductStatusChange> getComponentStatusChanges(Component component) {
-    String queryStr = "SELECT p FROM ProductStatusChange p WHERE " +
+  public List<ComponentStatusChange> getComponentStatusChanges(Component component) {
+    String queryStr = "SELECT p FROM ComponentStatusChange p WHERE " +
         "p.component.id=:componentId";
-    TypedQuery<ProductStatusChange> query = em.createQuery(queryStr, ProductStatusChange.class);
+    TypedQuery<ComponentStatusChange> query = em.createQuery(queryStr, ComponentStatusChange.class);
     query.setParameter("componentId", component.getId());
-    List<ProductStatusChange> statusChanges = query.getResultList();
+    List<ComponentStatusChange> statusChanges = query.getResultList();
     return statusChanges;
   }
 
@@ -879,7 +879,7 @@ public class ComponentRepository {
   public boolean splitComponent(Long componentId, Integer numComponentsAfterSplitting) {
 
     Component component = findComponent(componentId);
-    if (component == null || component.getStatus().equals(ProductStatus.SPLIT))
+    if (component == null || component.getStatus().equals(ComponentStatus.SPLIT))
       return false;
 
     ComponentType pediComponentType = component.getComponentType().getPediComponentType();
@@ -900,29 +900,29 @@ public class ComponentRepository {
       newComponent.setIsDeleted(false);
       updateComponentInternalFields(newComponent);
       em.persist(newComponent);
-      // Assuming we do not split into more than 26 products this should be fine
+      // Assuming we do not split into more than 26 components this should be fine
       nextSubdivisionCode++;
     }
 
-    component.setStatus(ProductStatus.SPLIT);
-    ProductStatusChange statusChange = new ProductStatusChange();
-    statusChange.setStatusChangeType(ProductStatusChangeType.SPLIT);
-    statusChange.setNewStatus(ProductStatus.SPLIT);
+    component.setStatus(ComponentStatus.SPLIT);
+    ComponentStatusChange statusChange = new ComponentStatusChange();
+    statusChange.setStatusChangeType(ComponentStatusChangeType.SPLIT);
+    statusChange.setNewStatus(ComponentStatus.SPLIT);
 
-    String queryStr = "SELECT p FROM ProductStatusChangeReason p WHERE " +
+    String queryStr = "SELECT p FROM ComponentStatusChangeReason p WHERE " +
     		"p.category=:category AND p.isDeleted=:isDeleted";
-    TypedQuery<ProductStatusChangeReason> query = em.createQuery(queryStr,
-        ProductStatusChangeReason.class);
-    query.setParameter("category", ProductStatusChangeReasonCategory.SPLIT);
+    TypedQuery<ComponentStatusChangeReason> query = em.createQuery(queryStr,
+        ComponentStatusChangeReason.class);
+    query.setParameter("category", ComponentStatusChangeReasonCategory.SPLIT);
     query.setParameter("isDeleted", false);
-    List<ProductStatusChangeReason> productStatusChangeReasons = query.getResultList();
+    List<ComponentStatusChangeReason> componentStatusChangeReasons = query.getResultList();
     statusChange.setStatusChangedOn(new Date());
-    // expect only one product status change reason
-    statusChange.setStatusChangeReason(productStatusChangeReasons.get(0));
+    // expect only one component status change reason
+    statusChange.setStatusChangeReason(componentStatusChangeReasons.get(0));
     statusChange.setStatusChangeReasonText("");
     statusChange.setChangedBy(utilController.getCurrentUser());
     if (component.getStatusChanges() == null)
-      component.setStatusChanges(new ArrayList<ProductStatusChange>());
+      component.setStatusChanges(new ArrayList<ComponentStatusChange>());
     component.getStatusChanges().add(statusChange);
     statusChange.setComponent(component);
     em.persist(statusChange);
@@ -946,13 +946,13 @@ public class ComponentRepository {
     return componentType;
   }
   
-  public void setProductStatusToProcessed(long componentId) throws NoResultException {
+  public void setComponentStatusToProcessed(long componentId) throws NoResultException {
   	 String queryString = "SELECT c FROM Component c where c.id = :componentId";
      TypedQuery<Component> query = em.createQuery(queryString, Component.class);
      query.setParameter("componentId", componentId);
      Component component = null;
      	component = query.getSingleResult();
-     	component.setStatus(ProductStatus.PROCESSED);
+     	component.setStatus(ComponentStatus.PROCESSED);
      	em.merge(component);
   }
 }

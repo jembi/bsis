@@ -8,7 +8,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import model.component.Component;
-import model.component.ProductStatus;
+import model.component.ComponentStatus;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.user.User;
@@ -214,7 +214,7 @@ public class ComponentBackingForm {
 
   @JsonIgnore
   public String getStatus() {
-    ProductStatus status = component.getStatus();
+    ComponentStatus status = component.getStatus();
     if (status == null)
       return "";
     else
@@ -222,6 +222,6 @@ public class ComponentBackingForm {
   }
 
   public void setStatus(String status) {
-    component.setStatus(ProductStatus.valueOf(status));
+    component.setStatus(ComponentStatus.valueOf(status));
   }
 }

@@ -1,8 +1,9 @@
 package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import model.productmovement.ProductStatusChangeReason;
-import model.productmovement.ProductStatusChangeReasonCategory;
+
+import model.componentmovement.ComponentStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeReasonCategory;
 
 import javax.validation.Valid;
 
@@ -10,14 +11,14 @@ public class DiscardReasonBackingForm {
 
     @Valid
     @JsonIgnore
-    private ProductStatusChangeReason discardReason;
+    private ComponentStatusChangeReason discardReason;
 
     public DiscardReasonBackingForm() {
-        discardReason = new ProductStatusChangeReason();
-        discardReason.setCategory(ProductStatusChangeReasonCategory.DISCARDED);
+        discardReason = new ComponentStatusChangeReason();
+        discardReason.setCategory(ComponentStatusChangeReasonCategory.DISCARDED);
     }
 
-    public ProductStatusChangeReason getDiscardReason() {
+    public ComponentStatusChangeReason getDiscardReason() {
         return discardReason;
     }
 
@@ -29,7 +30,7 @@ public class DiscardReasonBackingForm {
         return discardReason.getId();
     }
 
-    public void setDiscardReason(ProductStatusChangeReason discardReason) {
+    public void setDiscardReason(ComponentStatusChangeReason discardReason) {
         this.discardReason = discardReason;
     }
 

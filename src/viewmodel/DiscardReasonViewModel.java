@@ -1,12 +1,12 @@
 package viewmodel;
 
-import model.productmovement.ProductStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeReason;
 
 public class DiscardReasonViewModel {
 
-    private ProductStatusChangeReason discardReason;
+    private ComponentStatusChangeReason discardReason;
 
-    public DiscardReasonViewModel(ProductStatusChangeReason discardReason) {
+    public DiscardReasonViewModel(ComponentStatusChangeReason discardReason) {
         this.discardReason = discardReason;
     }
 

@@ -1,4 +1,4 @@
-package model.productmovement;
+package model.componentmovement;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +13,7 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-public class ProductStatusChangeReason {
+public class ComponentStatusChangeReason {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,11 +25,11 @@ public class ProductStatusChangeReason {
 
   @Enumerated(EnumType.STRING)
   @Column(length=30)
-  private ProductStatusChangeReasonCategory category;
+  private ComponentStatusChangeReasonCategory category;
 
   private Boolean isDeleted;
 
-  public ProductStatusChangeReason() {
+  public ComponentStatusChangeReason() {
   }
 
   public Integer getId() {
@@ -48,11 +48,11 @@ public class ProductStatusChangeReason {
     this.statusChangeReason = statusChangeReason;
   }
 
-  public ProductStatusChangeReasonCategory getCategory() {
+  public ComponentStatusChangeReasonCategory getCategory() {
     return category;
   }
 
-  public void setCategory(ProductStatusChangeReasonCategory category) {
+  public void setCategory(ComponentStatusChangeReasonCategory category) {
     this.category = category;
   }
 
@@ -64,10 +64,10 @@ public class ProductStatusChangeReason {
     this.isDeleted = isDeleted;
   }
 
-  public void copy(ProductStatusChangeReason productStatusChangeReason){
-    this.setId(productStatusChangeReason.getId());
-    this.setCategory(productStatusChangeReason.getCategory());
-    this.setStatusChangeReason(productStatusChangeReason.getStatusChangeReason());
-    this.setIsDeleted(productStatusChangeReason.getIsDeleted());
+  public void copy(ComponentStatusChangeReason componentStatusChangeReason){
+    this.setId(componentStatusChangeReason.getId());
+    this.setCategory(componentStatusChangeReason.getCategory());
+    this.setStatusChangeReason(componentStatusChangeReason.getStatusChangeReason());
+    this.setIsDeleted(componentStatusChangeReason.getIsDeleted());
   }
 }

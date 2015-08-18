@@ -13,12 +13,12 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import model.component.Component;
-import model.component.ProductStatus;
+import model.component.ComponentStatus;
+import model.componentmovement.ComponentStatusChange;
+import model.componentmovement.ComponentStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeType;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
-import model.productmovement.ProductStatusChange;
-import model.productmovement.ProductStatusChangeReason;
-import model.productmovement.ProductStatusChangeType;
 
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseDataSourceConnection;
@@ -63,7 +63,7 @@ public class ComponentRepositoryTest {
 	UserRepository userRepository;
 	
 	@Autowired
-	ProductStatusChangeReasonRepository productStatusChangeReasonRepository;
+	ComponentStatusChangeReasonRepository componentStatusChangeReasonRepository;
 	
 	@Autowired
 	private DataSource dataSource;
@@ -279,8 +279,8 @@ public class ComponentRepositoryTest {
 	@Transactional
 	public void testFindComponentByComponentTypes() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<ProductStatus> status = new ArrayList<ProductStatus>();
-		status.add(ProductStatus.PROCESSED);
+		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
+		status.add(ComponentStatus.PROCESSED);
 		List<Integer> componentTypeIds = new ArrayList<Integer>();
 		componentTypeIds.add(1);
 		List<Component> all = componentRepository.findComponentByComponentTypes(componentTypeIds, status, pagingParams);
@@ -292,8 +292,8 @@ public class ComponentRepositoryTest {
 	@Transactional
 	public void testFindComponentByComponentTypesNone() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<ProductStatus> status = new ArrayList<ProductStatus>();
-		status.add(ProductStatus.QUARANTINED);
+		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
+		status.add(ComponentStatus.QUARANTINED);
 		List<Integer> componentTypeIds = new ArrayList<Integer>();
 		componentTypeIds.add(1);
 		List<Component> all = componentRepository.findComponentByComponentTypes(componentTypeIds, status, pagingParams);
@@ -305,9 +305,9 @@ public class ComponentRepositoryTest {
 	@Transactional
 	public void testFindComponentByDINAndStatus() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<ProductStatus> status = new ArrayList<ProductStatus>();
-		status.add(ProductStatus.QUARANTINED);
-		status.add(ProductStatus.PROCESSED);
+		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
+		status.add(ComponentStatus.QUARANTINED);
+		status.add(ComponentStatus.PROCESSED);
 		List<Component> all = componentRepository.findComponentByDonationIdentificationNumber("1111111", status, pagingParams);
 		Assert.assertNotNull("There is a Component with DIN 1111111", all);
 		Assert.assertFalse("There is a Component with DIN 1111111", all.isEmpty());
@@ -318,8 +318,8 @@ public class ComponentRepositoryTest {
 	@Transactional
 	public void testFindComponentByDINAndStatusNone() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<ProductStatus> status = new ArrayList<ProductStatus>();
-		status.add(ProductStatus.EXPIRED);
+		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
+		status.add(ComponentStatus.EXPIRED);
 		List<Component> all = componentRepository.findComponentByDonationIdentificationNumber("1111111", status, pagingParams);
 		Assert.assertTrue("There should be 0 components", all.isEmpty());
 	}
@@ -328,9 +328,9 @@ public class ComponentRepositoryTest {
 	@Transactional
 	public void testFindComponentByDINAndStatusUnknown() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<ProductStatus> status = new ArrayList<ProductStatus>();
-		status.add(ProductStatus.QUARANTINED);
-		status.add(ProductStatus.PROCESSED);
+		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
+		status.add(ComponentStatus.QUARANTINED);
+		status.add(ComponentStatus.PROCESSED);
 		List<Component> all = componentRepository.findComponentByDonationIdentificationNumber("1111112", status, pagingParams);
 		Assert.assertTrue("There should be 0 components", all.isEmpty());
 	}
@@ -349,8 +349,8 @@ public class ComponentRepositoryTest {
 	@Transactional
 	public void testFindAnyComponentDINAndStatus() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<ProductStatus> status = new ArrayList<ProductStatus>();
-		status.add(ProductStatus.QUARANTINED);
+		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
+		status.add(ComponentStatus.QUARANTINED);
 		List<Component> all = componentRepository.findAnyComponent("1111111", null, status, null, null, pagingParams);
 		Assert.assertNotNull("There are matching components", all);
 		Assert.assertEquals("There should be 1 components", 1, all.size());
@@ -360,8 +360,8 @@ public class ComponentRepositoryTest {
 	@Transactional
 	public void testFindAnyComponentQuarantinedType1() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<ProductStatus> status = new ArrayList<ProductStatus>();
-		status.add(ProductStatus.QUARANTINED);
+		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
+		status.add(ComponentStatus.QUARANTINED);
 		List<Integer> componentTypeIds = new ArrayList<Integer>();
 		componentTypeIds.add(1);
 		List<Component> all = componentRepository.findAnyComponent(null, componentTypeIds, status, null, null, pagingParams);
@@ -405,21 +405,21 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	@Transactional
-	public void testGetProductStatusChanges() throws Exception {
+	public void testGetComponentStatusChanges() throws Exception {
 		Component discardedComponent = componentRepository.findComponent(6l);
-		List<ProductStatusChange> changes = componentRepository.getComponentStatusChanges(discardedComponent);
+		List<ComponentStatusChange> changes = componentRepository.getComponentStatusChanges(discardedComponent);
 		Assert.assertNotNull("Not empty list", changes);
-		Assert.assertEquals("1 ProductStatusChange", 1, changes.size());
+		Assert.assertEquals("1 ComponentStatusChange", 1, changes.size());
 		Assert.assertEquals("Component was DISCARDED", "DISCARDED", changes.get(0).getNewStatus().toString());
 	}
 	
 	@Test
 	@Transactional
-	public void testGetProductStatusChangesNone() throws Exception {
+	public void testGetComponentStatusChangesNone() throws Exception {
 		Component quarantinedComponent = componentRepository.findComponent(4l);
-		List<ProductStatusChange> changes = componentRepository.getComponentStatusChanges(quarantinedComponent);
+		List<ComponentStatusChange> changes = componentRepository.getComponentStatusChanges(quarantinedComponent);
 		Assert.assertNotNull("Not empty list", changes);
-		Assert.assertTrue("0 ProductStatusChange", changes.isEmpty());
+		Assert.assertTrue("0 ComponentStatusChange", changes.isEmpty());
 	}
 	
 	@Test
@@ -497,13 +497,13 @@ public class ComponentRepositoryTest {
 	@Transactional
 	// FIXME: issue with package dependencies here - ComponentRepository uses UtilController to retrieve the logged in user.  
 	public void testDiscardComponent() throws Exception {
-		ProductStatusChangeReason discardReason = productStatusChangeReasonRepository.getProductStatusChangeReasonById(5);
+		ComponentStatusChangeReason discardReason = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(5);
 		componentRepository.discardComponent(1l, discardReason, "junit");
 		Component component = componentRepository.findComponent(1l);
-		List<ProductStatusChange> changes = componentRepository.getComponentStatusChanges(component);
+		List<ComponentStatusChange> changes = componentRepository.getComponentStatusChanges(component);
 		Assert.assertNotNull("Not empty list", changes);
-		Assert.assertEquals("1 ProductStatusChange", 1, changes.size());
-		Assert.assertEquals("Correct ProductStatusChangeType", ProductStatusChangeType.DISCARDED, changes.get(0)
+		Assert.assertEquals("1 ComponentStatusChange", 1, changes.size());
+		Assert.assertEquals("Correct ComponentStatusChangeType", ComponentStatusChangeType.DISCARDED, changes.get(0)
 		        .getStatusChangeType());
 	}
 	
@@ -511,13 +511,13 @@ public class ComponentRepositoryTest {
 	@Transactional
 	// FIXME: issue with package dependencies here - ComponentRepository uses UtilController to retrieve the logged in user.  
 	public void testReturnComponent() throws Exception {
-		ProductStatusChangeReason returnReason = productStatusChangeReasonRepository.getProductStatusChangeReasonById(7);
+		ComponentStatusChangeReason returnReason = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(7);
 		componentRepository.returnComponent(1l, returnReason, "junit");
 		Component component = componentRepository.findComponent(1l);
-		List<ProductStatusChange> changes = componentRepository.getComponentStatusChanges(component);
+		List<ComponentStatusChange> changes = componentRepository.getComponentStatusChanges(component);
 		Assert.assertNotNull("Not empty list", changes);
-		Assert.assertEquals("1 ProductStatusChange", 1, changes.size());
-		Assert.assertEquals("Correct ProductStatusChangeType", ProductStatusChangeType.RETURNED, changes.get(0)
+		Assert.assertEquals("1 ComponentStatusChange", 1, changes.size());
+		Assert.assertEquals("Correct ComponentStatusChangeType", ComponentStatusChangeType.RETURNED, changes.get(0)
 		        .getStatusChangeType());
 	}
 	
@@ -528,10 +528,10 @@ public class ComponentRepositoryTest {
 		boolean split = componentRepository.splitComponent(2l, 2);
 		Assert.assertTrue("Split was successful", split);
 		Component component = componentRepository.findComponent(2l);
-		Assert.assertEquals("Status is changed to SPLIT", ProductStatus.SPLIT, component.getStatus());
-		List<ProductStatusChange> changes = componentRepository.getComponentStatusChanges(component);
-		Assert.assertEquals("1 ProductStatusChange", 1, changes.size());
-		Assert.assertEquals("Correct ProductStatusChangeType", ProductStatusChangeType.SPLIT, changes.get(0)
+		Assert.assertEquals("Status is changed to SPLIT", ComponentStatus.SPLIT, component.getStatus());
+		List<ComponentStatusChange> changes = componentRepository.getComponentStatusChanges(component);
+		Assert.assertEquals("1 ComponentStatusChange", 1, changes.size());
+		Assert.assertEquals("Correct ComponentStatusChangeType", ComponentStatusChangeType.SPLIT, changes.get(0)
 		        .getStatusChangeType());
 		List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber("1111111");
 		// FIXME: I'm not sure that numComponentsAfterSplitting is correctly named - expected only 1 extra component to be created after the split
@@ -544,7 +544,7 @@ public class ComponentRepositoryTest {
 		componentRepository.splitComponent(2l, 1);
 		List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber("1111111");
 		for (Component p : components) {
-			if (p.getStatus() == ProductStatus.SPLIT) {
+			if (p.getStatus() == ComponentStatus.SPLIT) {
 				boolean split = componentRepository.splitComponent(p.getId(), 1);
 				Assert.assertFalse("Cannot split a component that has already been split", split);
 			}
@@ -576,21 +576,21 @@ public class ComponentRepositoryTest {
 		Calendar today = Calendar.getInstance();
 		today.add(Calendar.DAY_OF_YEAR, -3);
 		componentToExpire.setExpiresOn(today.getTime());
-		componentToExpire.setStatus(ProductStatus.AVAILABLE);
+		componentToExpire.setStatus(ComponentStatus.AVAILABLE);
 		Component expiringComponent = componentRepository.updateComponent(componentToExpire);
 		// run test
 		componentRepository.updateExpiryStatus();
 		// check component has been expired
 		Component expiredComponent = componentRepository.findComponent(expiringComponent.getId());
-		Assert.assertEquals("Component has been expired", ProductStatus.EXPIRED, expiredComponent.getStatus());
+		Assert.assertEquals("Component has been expired", ComponentStatus.EXPIRED, expiredComponent.getStatus());
 	}
 	
 	@Test
 	@Transactional
 	public void testSetProductStatusToProcessed() throws Exception {
-		componentRepository.setProductStatusToProcessed(2l);
+		componentRepository.setComponentStatusToProcessed(2l);
 		Component processedComponent = componentRepository.findComponent(2l);
-		Assert.assertEquals("Component has been processed", ProductStatus.PROCESSED, processedComponent.getStatus());
+		Assert.assertEquals("Component has been processed", ComponentStatus.PROCESSED, processedComponent.getStatus());
 	}
 	
 	@Test
@@ -623,7 +623,7 @@ public class ComponentRepositoryTest {
 		componentRepository.updateQuarantineStatus();
 		// assert that the test was successful
 		Component processedComponent = componentRepository.findComponent(savedComponent.getId());
-		Assert.assertEquals("Component has been QUARANTINED", ProductStatus.QUARANTINED, processedComponent.getStatus());
+		Assert.assertEquals("Component has been QUARANTINED", ComponentStatus.QUARANTINED, processedComponent.getStatus());
 	}
 	
 	@Test
@@ -647,7 +647,7 @@ public class ComponentRepositoryTest {
 	public void testUpdateComponentInternalFieldsIssued() throws Exception {
 		// setup test
 		Component component = componentRepository.findComponent(1l);
-		component.setStatus(ProductStatus.ISSUED);
+		component.setStatus(ComponentStatus.ISSUED);
 		// run test
 		boolean updatedProductStatus = componentRepository.updateComponentInternalFields(component);
 		Assert.assertFalse("ISSUED component is not updated", updatedProductStatus);
@@ -658,7 +658,7 @@ public class ComponentRepositoryTest {
 	public void testUpdateComponentInternalFieldsUsed() throws Exception {
 		// setup test
 		Component component = componentRepository.findComponent(1l);
-		component.setStatus(ProductStatus.USED);
+		component.setStatus(ComponentStatus.USED);
 		// run test
 		boolean updatedProductStatus = componentRepository.updateComponentInternalFields(component);
 		Assert.assertFalse("USED component is not updated", updatedProductStatus);
@@ -669,7 +669,7 @@ public class ComponentRepositoryTest {
 	public void testUpdateComponentInternalFieldsSplit() throws Exception {
 		// setup test
 		Component component = componentRepository.findComponent(1l);
-		component.setStatus(ProductStatus.SPLIT);
+		component.setStatus(ComponentStatus.SPLIT);
 		// run test
 		boolean updatedProductStatus = componentRepository.updateComponentInternalFields(component);
 		Assert.assertFalse("SPLIT component is not updated", updatedProductStatus);
@@ -686,7 +686,7 @@ public class ComponentRepositoryTest {
 		// run test
 		boolean updatedProductStatus = componentRepository.updateComponentInternalFields(component);
 		Assert.assertTrue("QUARANTINED component status is changed", updatedProductStatus);
-		Assert.assertEquals("Component status is actually EXPIRED", ProductStatus.EXPIRED, component.getStatus());
+		Assert.assertEquals("Component status is actually EXPIRED", ComponentStatus.EXPIRED, component.getStatus());
 	}
 	
 	@Test
@@ -700,7 +700,7 @@ public class ComponentRepositoryTest {
 		// run test
 		boolean updatedProductStatus = componentRepository.updateComponentInternalFields(component);
 		Assert.assertTrue("SAFE component status is changed", updatedProductStatus);
-		Assert.assertEquals("Component status is actually AVAILABLE", ProductStatus.AVAILABLE, component.getStatus());
+		Assert.assertEquals("Component status is actually AVAILABLE", ComponentStatus.AVAILABLE, component.getStatus());
 	}
 	
 	@Test
@@ -714,12 +714,12 @@ public class ComponentRepositoryTest {
 		// run test
 		boolean updatedProductStatus = componentRepository.updateComponentInternalFields(component);
 		Assert.assertTrue("UNSAFE component status is changed", updatedProductStatus);
-		Assert.assertEquals("Component status is actually UNSAFE", ProductStatus.UNSAFE, component.getStatus());
+		Assert.assertEquals("Component status is actually UNSAFE", ComponentStatus.UNSAFE, component.getStatus());
 	}
 	
 	@Test
 	@Transactional
-	@Ignore("Bug - this won't work if there are foreign key references such as ProductStatusChange entries...")
+	@Ignore("Bug - this won't work if there are foreign key references such as ComponentStatusChange entries...")
 	public void testDeleteAllComponents() throws Exception {
 		componentRepository.deleteAllComponents();
 		List<Component> all = componentRepository.getAllComponents();

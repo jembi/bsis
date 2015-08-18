@@ -15,14 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import model.component.Component;
-import model.component.ProductStatus;
+import model.component.ComponentStatus;
+import model.componentmovement.ComponentStatusChange;
+import model.componentmovement.ComponentStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeReasonCategory;
 import model.componenttype.ComponentType;
 import model.componenttype.ComponentTypeCombination;
 import model.componenttype.ComponentTypeTimeUnits;
 import model.donation.Donation;
-import model.productmovement.ProductStatusChange;
-import model.productmovement.ProductStatusChangeReason;
-import model.productmovement.ProductStatusChangeReasonCategory;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -42,13 +42,13 @@ import org.springframework.web.bind.annotation.RestController;
 import repository.ComponentRepository;
 import repository.ComponentTypeRepository;
 import repository.DonationRepository;
-import repository.ProductStatusChangeReasonRepository;
+import repository.ComponentStatusChangeReasonRepository;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 import viewmodel.ComponentTypeCombinationViewModel;
 import viewmodel.ComponentTypeViewModel;
 import viewmodel.ComponentViewModel;
-import viewmodel.ProductStatusChangeViewModel;
+import viewmodel.ComponentStatusChangeViewModel;
 import backingform.ComponentCombinationBackingForm;
 import backingform.RecordComponentBackingForm;
 import backingform.validator.ComponentBackingFormValidator;
@@ -68,7 +68,7 @@ public class ComponentController {
   private DonationRepository donationRepository;
 
   @Autowired
-  private ProductStatusChangeReasonRepository productStatusChangeReasonRepository;
+  private ComponentStatusChangeReasonRepository componentStatusChangeReasonRepository;
   
   @Autowired
   private ComponentTypeRepository componentTypeRepository;
@@ -113,8 +113,8 @@ public class ComponentController {
     ComponentViewModel componentViewModel = getComponentViewModels(Arrays.asList(component)).get(0);
     addEditSelectorOptions(map);
     map.put("component", componentViewModel);
-    map.put("productStatusChangeReasons",
-    productStatusChangeReasonRepository.getAllProductStatusChangeReasonsAsMap());
+    map.put("componentStatusChangeReasons",
+    componentStatusChangeReasonRepository.getAllComponentStatusChangeReasonsAsMap());
     return map;
   }
 
@@ -123,11 +123,11 @@ public class ComponentController {
   public  Map<String, Object> findComponentFormGenerator(HttpServletRequest request) {
     Map<String, Object> map = new HashMap<String, Object>();
     addEditSelectorOptions(map);
-    List<ProductStatusChangeReason> statusChangeReasons =
-    productStatusChangeReasonRepository.getProductStatusChangeReasons(ProductStatusChangeReasonCategory.RETURNED);
+    List<ComponentStatusChangeReason> statusChangeReasons =
+    componentStatusChangeReasonRepository.getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.RETURNED);
     map.put("returnReasons", statusChangeReasons);
     statusChangeReasons =
-    productStatusChangeReasonRepository.getProductStatusChangeReasons(ProductStatusChangeReasonCategory.DISCARDED);
+    componentStatusChangeReasonRepository.getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.DISCARDED);
     map.put("discardReasons", statusChangeReasons);
     map.put("findComponentByPackNumberForm",  new RecordComponentBackingForm());
     return map;
@@ -208,7 +208,7 @@ public class ComponentController {
         }
         
         results = componentRepository.findAnyComponent(
-                donationIdentificationNumber, componentTypeIds, statusStringToProductStatus(status),
+                donationIdentificationNumber, componentTypeIds, statusStringToComponentStatus(status),
                 dateFrom, dateTo, pagingParams);
 
         List<ComponentViewModel> components = new ArrayList<ComponentViewModel>();
@@ -224,14 +224,14 @@ public class ComponentController {
         return map;
     }
     
-	public static List<ProductStatusChangeViewModel> getProductStatusChangeViewModels(List<ProductStatusChange> productStatusChanges) {
-	    if (productStatusChanges == null)
-	      return Arrays.asList(new ProductStatusChangeViewModel[0]);
-	    List<ProductStatusChangeViewModel> productStatusChangeViewModels = new ArrayList<ProductStatusChangeViewModel>();
-	    for (ProductStatusChange productStatusChange : productStatusChanges) {
-	    	productStatusChangeViewModels.add(new ProductStatusChangeViewModel(productStatusChange));
+	public static List<ComponentStatusChangeViewModel> getComponentStatusChangeViewModels(List<ComponentStatusChange> componentStatusChanges) {
+	    if (componentStatusChanges == null)
+	      return Arrays.asList(new ComponentStatusChangeViewModel[0]);
+	    List<ComponentStatusChangeViewModel> componentStatusChangeViewModels = new ArrayList<ComponentStatusChangeViewModel>();
+	    for (ComponentStatusChange componentStatusChange : componentStatusChanges) {
+	    	componentStatusChangeViewModels.add(new ComponentStatusChangeViewModel(componentStatusChange));
 	    }
-	    return productStatusChangeViewModels;
+	    return componentStatusChangeViewModels;
 	}
 
   public static List<ComponentViewModel> getComponentViewModels(
@@ -272,7 +272,7 @@ public class ComponentController {
       @RequestParam(value="discardReasonId") Integer discardReasonId,
       @RequestParam(value="discardReasonText", required = false) String discardReasonText) {
 
-      ProductStatusChangeReason statusChangeReason = new ProductStatusChangeReason();
+      ComponentStatusChangeReason statusChangeReason = new ComponentStatusChangeReason();
       statusChangeReason.setId(discardReasonId);
       Donation donation = componentRepository.findComponentById(id).getDonation();
       componentRepository.discardComponent(id, statusChangeReason, discardReasonText);
@@ -282,7 +282,7 @@ public class ComponentController {
 	  pagingParams.put("sortColumn", "id");
 	  pagingParams.put("sortDirection", "asc");
 	  List<Component> results = new ArrayList<Component>();
-	  List<ProductStatus> statusList = Arrays.asList(ProductStatus.values());
+	  List<ComponentStatus> statusList = Arrays.asList(ComponentStatus.values());
 	
 	  results = componentRepository.findComponentByDonationIdentificationNumber(
 	      donation.getDonationIdentificationNumber(), statusList,
@@ -325,10 +325,10 @@ public class ComponentController {
     Component component = componentRepository.findComponentById(id);
     ComponentViewModel componentViewModel = getComponentViewModel(component);
     map.put("component", componentViewModel);
-    List<ProductStatusChange> productStatusChangeList = componentRepository.getComponentStatusChanges(component);
-    List<ProductStatusChangeViewModel> productStatusChanges = getProductStatusChangeViewModels(productStatusChangeList);
+    List<ComponentStatusChange> componentStatusChangeList = componentRepository.getComponentStatusChanges(component);
+    List<ComponentStatusChangeViewModel> componentStatusChanges = getComponentStatusChangeViewModels(componentStatusChangeList);
     
-    map.put("productStatusChanges", productStatusChanges);
+    map.put("componentStatusChanges", componentStatusChanges);
     return map;
   }
 
@@ -339,7 +339,7 @@ public class ComponentController {
       @RequestParam("returnReasonId") Integer returnReasonId,
       @RequestParam("returnReasonText") String returnReasonText) {
 
-      ProductStatusChangeReason statusChangeReason = new ProductStatusChangeReason();
+      ComponentStatusChangeReason statusChangeReason = new ComponentStatusChangeReason();
       statusChangeReason.setId(returnReasonId);
       componentRepository.returnComponent(id, statusChangeReason, returnReasonText);
 
@@ -364,7 +364,7 @@ public class ComponentController {
     //Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("component");
 
     List<Component> results = new ArrayList<Component>();
-    List<ProductStatus> status = Arrays.asList(ProductStatus.values());
+    List<ComponentStatus> status = Arrays.asList(ComponentStatus.values());
     
       results = componentRepository.findComponentByDonationIdentificationNumber(
           donationNumber, status,
@@ -400,11 +400,11 @@ public class ComponentController {
       Component parentComponent = componentRepository.findComponentById(Long.valueOf(form.getParentComponentId()));
       Donation donation = parentComponent.getDonation();
       String donationIdentificationNumber = donation.getDonationIdentificationNumber();
-      ProductStatus status = parentComponent.getStatus();
-      long productId = Long.valueOf(form.getParentComponentId());
+      ComponentStatus status = parentComponent.getStatus();
+      long componentId = Long.valueOf(form.getParentComponentId());
       
       
-      // map of new components, storing product type and num. of units 
+      // map of new components, storing component type and num. of units 
       Map<ComponentType, Integer> newComponents = new HashMap<ComponentType, Integer>();
       
       // iterate over components in combination, adding them to the new components map, along with the num. of units of each component
@@ -430,7 +430,7 @@ public class ComponentController {
 	      String createdPackNumber = donationIdentificationNumber +"-"+componentTypeCode;
 	      
 	      // Add New component
-	      if(!status.equals(ProductStatus.PROCESSED) && !status.equals(ProductStatus.DISCARDED)){
+	      if(!status.equals(ComponentStatus.PROCESSED) && !status.equals(ComponentStatus.DISCARDED)){
 		      	
 	      	   for (int i = 1; i <= noOfUnits; i++) {
 	              Component component = new Component();
@@ -446,7 +446,7 @@ public class ComponentController {
 		          component.setComponentType(pt);
 		          component.setDonation(donation);
 		          component.setParentComponent(parentComponent);
-		          component.setStatus(ProductStatus.QUARANTINED);
+		          component.setStatus(ComponentStatus.QUARANTINED);
 		          component.setCreatedOn(donation.getDonationDate());
 		          
 			      Calendar cal = Calendar.getInstance();
@@ -470,7 +470,7 @@ public class ComponentController {
 			      componentRepository.addComponent(component);
 	
 			      // Set source component status to PROCESSED
-			      componentRepository.setProductStatusToProcessed(productId);
+			      componentRepository.setComponentStatusToProcessed(componentId);
 	      	   }
 	      }
       }
@@ -480,7 +480,7 @@ public class ComponentController {
 	pagingParams.put("sortColumn", "id");
 	pagingParams.put("sortDirection", "asc");
 	List<Component> results = new ArrayList<Component>();
-	List<ProductStatus> statusList = Arrays.asList(ProductStatus.values());
+	List<ComponentStatus> statusList = Arrays.asList(ComponentStatus.values());
 	
 	results = componentRepository.findComponentByDonationIdentificationNumber(
 	      donation.getDonationIdentificationNumber(), statusList,
@@ -643,14 +643,14 @@ public class ComponentController {
     return componentsMap;
   }
   
-  private List<ProductStatus> statusStringToProductStatus(List<String> statusList) {
-    List<ProductStatus> productStatusList = new ArrayList<ProductStatus>();
+  private List<ComponentStatus> statusStringToComponentStatus(List<String> statusList) {
+    List<ComponentStatus> componentStatusList = new ArrayList<ComponentStatus>();
     if (statusList != null) {
       for (String status : statusList) {
-        productStatusList.add(ProductStatus.lookup(status));
+        componentStatusList.add(ComponentStatus.lookup(status));
       }
     }
-    return productStatusList;
+    return componentStatusList;
   }
   
   public  List<ComponentTypeCombinationViewModel> 

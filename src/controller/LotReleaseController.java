@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import model.bloodtesting.TTIStatus;
 import model.component.Component;
-import model.component.ProductStatus;
+import model.component.ComponentStatus;
 import model.donation.Donation;
 import model.donation.LotReleaseConstant;
 
@@ -354,7 +354,7 @@ public class LotReleaseController {
 	     if(donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)){
                   Map<String, Object> productStatus = new HashMap<String, Object>();
     		for(Component component : components){
-    				if(!component.getStatus().equals(ProductStatus.PROCESSED) && !component.getStatus().equals(ProductStatus.SPLIT)){
+    				if(!component.getStatus().equals(ComponentStatus.PROCESSED) && !component.getStatus().equals(ComponentStatus.SPLIT)){
 	                    productStatus.put("componentId", component.getId());
 	                    productStatus.put("componentName", component.getComponentType().getComponentTypeName());
 	                    productStatus.put("componentIdentificationNumber", component.getComponentIdentificationNumber());
@@ -369,7 +369,7 @@ public class LotReleaseController {
             else {
                 for (Component component : components) {
                 	Map<String, Object> productStatus = new HashMap<String, Object>();
-                	if(!component.getStatus().equals(ProductStatus.PROCESSED) && !component.getStatus().equals(ProductStatus.SPLIT)){
+                	if(!component.getStatus().equals(ComponentStatus.PROCESSED) && !component.getStatus().equals(ComponentStatus.SPLIT)){
 	                    productStatus.put("componentId", component.getId());
 	                    productStatus.put("componentName", component.getComponentType().getComponentTypeName());
 	                    productStatus.put("componentIdentificationNumber", component.getComponentIdentificationNumber());

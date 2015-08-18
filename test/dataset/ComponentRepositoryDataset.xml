@@ -135,13 +135,13 @@
 		isDeleted="false" createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:07:29.0"
 		status="QUARANTINED" donation_id="5" createdBy_id="1" lastUpdatedBy_id="1"
 		componentType_id="6" componentIdentificationNumber="5555555-0011" />
-	<ProductStatusChangeReason id="5" category="DISCARDED"
+	<ComponentStatusChangeReason id="5" category="DISCARDED"
 		isDeleted="false" statusChangeReason="Storage Problems" />
-	<ProductStatusChangeReason id="7" category="RETURNED"
+	<ComponentStatusChangeReason id="7" category="RETURNED"
 		isDeleted="false" statusChangeReason="Expired" />
-	<ProductStatusChangeReason id="11" category="SPLIT"
+	<ComponentStatusChangeReason id="11" category="SPLIT"
 		isDeleted="false" statusChangeReason="Split" />
-	<ProductStatusChange id="1" newStatus="DISCARDED"
+	<ComponentStatusChange id="1" newStatus="DISCARDED"
 		statusChangeType="DISCARDED" statusChangedOn="2015-08-11 16:13:00.0"
 		changedBy_id="1" component_id="6" statusChangeReason_id="5" />
 </dataset>

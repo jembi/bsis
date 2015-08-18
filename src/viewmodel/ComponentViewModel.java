@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 import model.component.Component;
-import model.component.ProductStatus;
+import model.component.ComponentStatus;
 import model.donation.Donation;
 import model.user.User;
 
@@ -137,10 +137,10 @@ public class ComponentViewModel {
 
   @JsonIgnore
   public RequestViewModel getIssuedTo() {
-    ProductStatus status = component.getStatus();
+    ComponentStatus status = component.getStatus();
     if (status == null)
       return null;
-    else if (!status.equals(ProductStatus.ISSUED))
+    else if (!status.equals(ComponentStatus.ISSUED))
       return null;
     else
     return new RequestViewModel(component.getIssuedTo());
@@ -165,7 +165,7 @@ public class ComponentViewModel {
   }
 
   public Boolean getStatusAllowsSplitting() {
-    return Arrays.asList(ProductStatus.AVAILABLE, ProductStatus.QUARANTINED)
+    return Arrays.asList(ComponentStatus.AVAILABLE, ComponentStatus.QUARANTINED)
                  .contains(component.getStatus());
   }
   

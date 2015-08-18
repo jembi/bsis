@@ -20,9 +20,9 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import model.component.Component;
-import model.component.ProductStatus;
-import model.productmovement.ProductStatusChange;
-import model.productmovement.ProductStatusChangeType;
+import model.component.ComponentStatus;
+import model.componentmovement.ComponentStatusChange;
+import model.componentmovement.ComponentStatusChangeType;
 import model.request.Request;
 import model.util.BloodGroup;
 
@@ -380,15 +380,15 @@ public class RequestRepository {
       // we know these products can be issued now
       // although there is some doubt about the behavior of locks between the check above and now
       Date today = new Date();
-      ProductStatusChange productIssue = new ProductStatusChange();
-      productIssue.setNewStatus(ProductStatus.ISSUED);
+      ComponentStatusChange productIssue = new ComponentStatusChange();
+      productIssue.setNewStatus(ComponentStatus.ISSUED);
       productIssue.setStatusChangedOn(today);
-      productIssue.setStatusChangeType(ProductStatusChangeType.ISSUED);
+      productIssue.setStatusChangeType(ComponentStatusChangeType.ISSUED);
       productIssue.setChangedBy(utilController.getCurrentUser());
       productIssue.setIssuedTo(request);
       productIssue.setComponent(component);
       numUnitsIssued++;
-      component.setStatus(ProductStatus.ISSUED);
+      component.setStatus(ComponentStatus.ISSUED);
       component.setIssuedOn(today);
       component.setIssuedTo(request);
       em.persist(productIssue);
@@ -417,7 +417,7 @@ public class RequestRepository {
       return false;
     
     // product available or not
-    if (!component.getStatus().equals(ProductStatus.AVAILABLE))
+    if (!component.getStatus().equals(ComponentStatus.AVAILABLE))
       return false;
 
     if (component.getIsDeleted())

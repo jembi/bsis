@@ -12,7 +12,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import model.component.Component;
-import model.component.ProductStatus;
+import model.component.ComponentStatus;
 import model.componenttype.ComponentTypeCombination;
 import model.donation.Donation;
 import model.user.User;
@@ -196,7 +196,7 @@ public class ComponentCombinationBackingForm {
   }
 
   public String getStatus() {
-    ProductStatus status = component.getStatus();
+    ComponentStatus status = component.getStatus();
     if (status == null)
       return "";
     else
@@ -204,7 +204,7 @@ public class ComponentCombinationBackingForm {
   }
 
   public void setStatus(String status) {
-    component.setStatus(ProductStatus.valueOf(status));
+    component.setStatus(ComponentStatus.valueOf(status));
   }
 
   public String getComponentTypeCombination() {

@@ -559,7 +559,7 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table ProductStatusChange (
+    create table ComponentStatusChange (
         id bigint not null auto_increment,
         newStatus varchar(30),
         statusChangeReasonText longtext,
@@ -572,7 +572,7 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table ProductStatusChangeReason (
+    create table ComponentStatusChangeReason (
         id SMALLINT not null auto_increment,
         category varchar(30),
         isDeleted boolean,
@@ -580,7 +580,7 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table ProductStatusChangeReason_AUD (
+    create table ComponentStatusChangeReason_AUD (
         id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
@@ -590,7 +590,7 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table ProductStatusChange_AUD (
+    create table ComponentStatusChange_AUD (
         id bigint not null,
         REV integer not null,
         REVTYPE tinyint,
@@ -1322,37 +1322,37 @@
         foreign key (lastUpdatedBy_id) 
         references User (id);
 
-    alter table ProductStatusChange 
+    alter table ComponentStatusChange 
         add index FKCCE48CB1994002DF (issuedTo_id), 
         add constraint FKCCE48CB1994002DF 
         foreign key (issuedTo_id) 
         references Request (id);
 
-    alter table ProductStatusChange 
+    alter table ComponentStatusChange 
         add index FKCCE48CB18BFC6394 (statusChangeReason_id), 
         add constraint FKCCE48CB18BFC6394 
         foreign key (statusChangeReason_id) 
-        references ProductStatusChangeReason (id);
+        references ComponentStatusChangeReason (id);
 
-    alter table ProductStatusChange 
+    alter table ComponentStatusChange 
         add index FKCCE48CB1A8E71476 (component_id), 
         add constraint FKCCE48CB1A8E71476 
         foreign key (component_id) 
         references Component (id);
 
-    alter table ProductStatusChange 
+    alter table ComponentStatusChange 
         add index FKCCE48CB1438D2378 (changedBy_id), 
         add constraint FKCCE48CB1438D2378 
         foreign key (changedBy_id) 
         references User (id);
 
-    alter table ProductStatusChangeReason_AUD 
+    alter table ComponentStatusChangeReason_AUD 
         add index FKA5ADFDA6DF74E053 (REV), 
         add constraint FKA5ADFDA6DF74E053 
         foreign key (REV) 
         references REVINFO (REV);
 
-    alter table ProductStatusChange_AUD 
+    alter table ComponentStatusChange_AUD 
         add index FK79A8FA02DF74E053 (REV), 
         add constraint FK79A8FA02DF74E053 
         foreign key (REV) 

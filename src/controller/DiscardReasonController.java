@@ -2,7 +2,8 @@ package controller;
 
 import backingform.DiscardReasonBackingForm;
 import backingform.validator.DiscardReasonBackingFormValidator;
-import model.productmovement.ProductStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeReason;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,11 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+
 import repository.DiscardReasonRepository;
 import utils.PermissionConstants;
 import viewmodel.DiscardReasonViewModel;
 
 import javax.validation.Valid;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,9 +53,9 @@ public class DiscardReasonController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
-    public ResponseEntity<ProductStatusChangeReason> getDiscardReasonById(@PathVariable Integer id){
+    public ResponseEntity<ComponentStatusChangeReason> getDiscardReasonById(@PathVariable Integer id){
         Map<String, Object> map = new HashMap<String, Object>();
-        ProductStatusChangeReason discardReason = discardReasonRepository.getDiscardReasonById(id);
+        ComponentStatusChangeReason discardReason = discardReasonRepository.getDiscardReasonById(id);
         map.put("reason", new DiscardReasonViewModel(discardReason));
         return new ResponseEntity(map, HttpStatus.OK);
     }
@@ -60,7 +63,7 @@ public class DiscardReasonController {
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
     public ResponseEntity saveDiscardReason(@Valid @RequestBody DiscardReasonBackingForm formData){
-        ProductStatusChangeReason discardReason = formData.getDiscardReason();
+        ComponentStatusChangeReason discardReason = formData.getDiscardReason();
         discardReason = discardReasonRepository.saveDiscardReason(discardReason);
         return new ResponseEntity(new DiscardReasonViewModel(discardReason), HttpStatus.CREATED);
     }
@@ -69,7 +72,7 @@ public class DiscardReasonController {
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
     public ResponseEntity updateDiscardReason(@Valid @RequestBody DiscardReasonBackingForm formData , @PathVariable Integer id){
         Map<String, Object> map = new HashMap<String, Object>();
-        ProductStatusChangeReason discardReason = formData.getDiscardReason();
+        ComponentStatusChangeReason discardReason = formData.getDiscardReason();
         discardReason.setId(id);
         discardReason = discardReasonRepository.updateDiscardReason(discardReason);
         map.put("reason", new DiscardReasonViewModel(discardReason));
@@ -80,10 +83,10 @@ public class DiscardReasonController {
         m.put("allDiscardReasons", getDiscardReasonViewModels(discardReasonRepository.getAllDiscardReasons()));
     }
 
-    private List<DiscardReasonViewModel> getDiscardReasonViewModels(List<ProductStatusChangeReason> discardReasons){
+    private List<DiscardReasonViewModel> getDiscardReasonViewModels(List<ComponentStatusChangeReason> discardReasons){
 
         List<DiscardReasonViewModel> viewModels = new ArrayList<DiscardReasonViewModel>();
-        for(ProductStatusChangeReason reason : discardReasons){
+        for(ComponentStatusChangeReason reason : discardReasons){
             viewModels.add(new DiscardReasonViewModel(reason));
         }
         return viewModels;

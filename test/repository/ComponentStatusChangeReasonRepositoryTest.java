@@ -7,8 +7,8 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import model.productmovement.ProductStatusChangeReason;
-import model.productmovement.ProductStatusChangeReasonCategory;
+import model.componentmovement.ComponentStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeReasonCategory;
 
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseDataSourceConnection;
@@ -31,22 +31,22 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Test using DBUnit to test the ProductStatusChangeReasonRepository
+ * Test using DBUnit to test the ComponentStatusChangeReasonRepository
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @WebAppConfiguration
-public class ProductStatusChangeReasonRepositoryTest {
+public class ComponentStatusChangeReasonRepositoryTest {
 	
 	@Autowired
-	ProductStatusChangeReasonRepository productStatusChangeReasonRepository;
+	ComponentStatusChangeReasonRepository componentStatusChangeReasonRepository;
 	
 	@Autowired
 	private DataSource dataSource;
 	
 	private IDataSet getDataSet() throws Exception {
-		File file = new File("test/dataset/ProductStatusChangeReasonRepositoryDataset.xml");
+		File file = new File("test/dataset/ComponentStatusChangeReasonRepositoryDataset.xml");
 		return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
 	}
 	
@@ -84,52 +84,52 @@ public class ProductStatusChangeReasonRepositoryTest {
 	@Test
 	@Transactional
 	public void testGetAll() throws Exception {
-		List<ProductStatusChangeReason> all = productStatusChangeReasonRepository.getAllProductStatusChangeReasons();
-		Assert.assertNotNull("There are ProductStatusChangeReason", all);
-		Assert.assertEquals("There are 11 ProductStatusChangeReason", 11, all.size());
+		List<ComponentStatusChangeReason> all = componentStatusChangeReasonRepository.getAllComponentStatusChangeReasons();
+		Assert.assertNotNull("There are ComponentStatusChangeReason", all);
+		Assert.assertEquals("There are 11 ComponentStatusChangeReason", 11, all.size());
 	}
 	
 	@Test
 	@Transactional
-	public void testGetProductStatusChangeReasons() throws Exception {
-		List<ProductStatusChangeReason> all = productStatusChangeReasonRepository
-		        .getProductStatusChangeReasons(ProductStatusChangeReasonCategory.DISCARDED);
-		Assert.assertNotNull("There are DISCARDED ProductStatusChangeReason", all);
-		Assert.assertEquals("There are 6 DISCARDED ProductStatusChangeReason", 6, all.size());
+	public void testGetComponentStatusChangeReasons() throws Exception {
+		List<ComponentStatusChangeReason> all = componentStatusChangeReasonRepository
+		        .getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.DISCARDED);
+		Assert.assertNotNull("There are DISCARDED ComponentStatusChangeReason", all);
+		Assert.assertEquals("There are 6 DISCARDED ComponentStatusChangeReason", 6, all.size());
 	}
 	
 	@Test
 	@Transactional
-	public void testGetProductStatusChangeReasonsNone() throws Exception {
-		List<ProductStatusChangeReason> all = productStatusChangeReasonRepository
-		        .getProductStatusChangeReasons(ProductStatusChangeReasonCategory.ISSUED);
+	public void testGetComponentStatusChangeReasonsNone() throws Exception {
+		List<ComponentStatusChangeReason> all = componentStatusChangeReasonRepository
+		        .getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.ISSUED);
 		Assert.assertNotNull("Doesn't return a null list", all);
-		Assert.assertEquals("There are 0 ISSUED ProductStatusChangeReason", 0, all.size());
+		Assert.assertEquals("There are 0 ISSUED ComponentStatusChangeReason", 0, all.size());
 	}
 	
 	@Test
 	@Transactional
-	public void testGetProductStatusChangeReasonById() throws Exception {
-		ProductStatusChangeReason one = productStatusChangeReasonRepository.getProductStatusChangeReasonById(1);
-		Assert.assertNotNull("There is a ProductStatusChangeReason", one);
-		Assert.assertEquals("ProductStatusChangeReason matches", ProductStatusChangeReasonCategory.DISCARDED,
+	public void testGetComponentStatusChangeReasonById() throws Exception {
+		ComponentStatusChangeReason one = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(1);
+		Assert.assertNotNull("There is a ComponentStatusChangeReason", one);
+		Assert.assertEquals("ComponentStatusChangeReason matches", ComponentStatusChangeReasonCategory.DISCARDED,
 		    one.getCategory());
 	}
 	
 	@Test
 	@Transactional
-	public void testGetProductStatusChangeReasonByIdUnknown() throws Exception {
-		ProductStatusChangeReason one = productStatusChangeReasonRepository.getProductStatusChangeReasonById(123);
-		Assert.assertNull("There is no ProductStatusChangeReason", one);
+	public void testGetComponentStatusChangeReasonByIdUnknown() throws Exception {
+		ComponentStatusChangeReason one = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(123);
+		Assert.assertNull("There is no ComponentStatusChangeReason", one);
 	}
 	
 	@Test
 	@Transactional
-	@Ignore("Bug - getAllProductStatusChangeReasonsAsMap only returns one ProductStatusChangeReason per ProductStatusChangeReasonCategory")
-	public void testGetAllProductStatusChangeReasonsAsMap() throws Exception {
-		Map<ProductStatusChangeReasonCategory, ProductStatusChangeReason> result = productStatusChangeReasonRepository
-		        .getAllProductStatusChangeReasonsAsMap();
+	@Ignore("Bug - getAllComponentStatusChangeReasonsAsMap only returns one ComponentStatusChangeReason per ComponentStatusChangeReasonCategory")
+	public void testGetAllComponentStatusChangeReasonsAsMap() throws Exception {
+		Map<ComponentStatusChangeReasonCategory, ComponentStatusChangeReason> result = componentStatusChangeReasonRepository
+		        .getAllComponentStatusChangeReasonsAsMap();
 		Assert.assertNotNull("Does not return a null map", result);
-		Assert.assertEquals("There are 3 ProductStatusChangeReasonCategory with ProductStatusChangeReason", 3, result.size());
+		Assert.assertEquals("There are 3 ComponentStatusChangeReasonCategory with ComponentStatusChangeReason", 3, result.size());
 	}
 }

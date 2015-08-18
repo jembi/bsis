@@ -10,7 +10,7 @@ import java.util.GregorianCalendar;
 import javax.persistence.EntityExistsException;
 
 import model.component.Component;
-import model.component.ProductStatus;
+import model.component.ComponentStatus;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
 
@@ -84,11 +84,11 @@ public class ComponentControllerTest {
 		          Donation donation = new Donation();
 		          donation.setId(donationId);
 		          product.setDonation(donation);
-		          product.setStatus(ProductStatus.QUARANTINED);
+		          product.setStatus(ComponentStatus.QUARANTINED);
 			        componentRepository.addComponent(product);
 	
 			        // Once product save successfully update selected product status with processed
-			        componentRepository.setProductStatusToProcessed(productId);
+			        componentRepository.setComponentStatusToProcessed(productId);
 			        
 			      } catch (EntityExistsException ex) {
 			        ex.printStackTrace();
@@ -118,9 +118,9 @@ public class ComponentControllerTest {
 		          Donation donation = new Donation();
 		          donation.setId(donationId);
 		          product.setDonation(donation);
-		          product.setStatus(ProductStatus.QUARANTINED);
+		          product.setStatus(ComponentStatus.QUARANTINED);
 			        componentRepository.addComponent(product);
-			        componentRepository.setProductStatusToProcessed(productId);
+			        componentRepository.setComponentStatusToProcessed(productId);
 			        
 			      } catch (EntityExistsException ex) {
 			        ex.printStackTrace();

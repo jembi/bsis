@@ -20,11 +20,11 @@ import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
 import model.compatibility.CompatibilityTest;
+import model.componentmovement.ComponentStatusChange;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
-import model.productmovement.ProductStatusChange;
 import model.request.Request;
 import model.usage.ProductUsage;
 import model.user.User;
@@ -81,7 +81,7 @@ public class Component implements ModificationTracker {
 
   @Enumerated(EnumType.STRING)
   @Column(length=30)
-  private ProductStatus status;
+  private ComponentStatus status;
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
@@ -91,7 +91,7 @@ public class Component implements ModificationTracker {
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="component", fetch=FetchType.LAZY)
-  private List<ProductStatusChange> statusChanges;
+  private List<ComponentStatusChange> statusChanges;
 
   @Column(length=3)
   private String subdivisionCode;
@@ -221,11 +221,11 @@ public class Component implements ModificationTracker {
     return donation.getDonationIdentificationNumber();
   }
 
-  public ProductStatus getStatus() {
+  public ComponentStatus getStatus() {
     return status;
   }
 
-  public void setStatus(ProductStatus status) {
+  public void setStatus(ComponentStatus status) {
     this.status = status;
   }
 
@@ -261,11 +261,11 @@ public class Component implements ModificationTracker {
     this.issuedOn = issuedOn;
   }
 
-  public List<ProductStatusChange> getStatusChanges() {
+  public List<ComponentStatusChange> getStatusChanges() {
     return statusChanges;
   }
 
-  public void setStatusChanges(List<ProductStatusChange> statusChanges) {
+  public void setStatusChanges(List<ComponentStatusChange> statusChanges) {
     this.statusChanges = statusChanges;
   }
 

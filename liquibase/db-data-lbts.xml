@@ -643,63 +643,79 @@
 		</insert>
 	</changeSet>
 	
-	<changeSet id="20131024-1508" author="gtlnikita">
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20140818-0410" author="gtlnikita">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM ComponentStatusChangeReason WHERE statusChangeReason = "Incomplete Donation";
+				]]>
+			</sqlCheck>
+ 		</preConditions>
 		<comment>Add component discard reasons</comment>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Incomplete Donation"/>
 			<column name="category" value="DISCARDED"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Processing Problems"/>
 			<column name="category" value="DISCARDED"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Passed Expiry Dates"/>
 			<column name="category" value="DISCARDED"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Reactive FOR TTIs"/>
 			<column name="category" value="DISCARDED"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Storage Problems"/>
 			<column name="category" value="DISCARDED"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Transport Problems"/>
 			<column name="category" value="DISCARDED"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141202-0950" author="danfuterman">
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20150818-0411" author="danfuterman">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM ComponentStatusChangeReason WHERE statusChangeReason = "Expired";
+				]]>
+			</sqlCheck>
+ 		</preConditions>
 		<comment>Add component return and split reasons</comment>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Expired"/>
 			<column name="category" value="RETURNED"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Not required"/>
 			<column name="category" value="RETURNED"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Incorrect Component Sent"/>
 			<column name="category" value="RETURNED"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Did not crossmatch with patient sample"/>
 			<column name="category" value="RETURNED"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Split"/>
 			<column name="category" value="SPLIT"/>
 			<column name="isDeleted" value="0"/>
