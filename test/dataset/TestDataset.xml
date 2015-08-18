@@ -9,7 +9,7 @@
     <BloodTestResult/>
     <Component/>
 	<ComponentType/>
-	<BloodBagType/>
+	<PackType/>
 	<DonationType/>	
 	<Location/>
 	<Donation/>

@@ -23,13 +23,13 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.TTIStatus;
 import model.component.Component;
 import model.component.ComponentStatus;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.donor.Donor;
+import model.packtype.PackType;
 import model.util.BloodGroup;
 
 import org.apache.commons.lang3.StringUtils;
@@ -98,20 +98,20 @@ public class DonationRepository {
   }
 
   public List<Object> findDonations(
-      String donationIdentificationNumber, List<Integer> bloodBagTypeIds, List<Long> panelIds, String donationDateFrom,
+      String donationIdentificationNumber, List<Integer> packTypeIds, List<Long> panelIds, String donationDateFrom,
       String donationDateTo, boolean includeTestedDonations, Map<String, Object> pagingParams) throws ParseException {
 
     String queryStr = "";
     if (StringUtils.isNotBlank(donationIdentificationNumber)) {
       queryStr = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE " +
                  "c.donationIdentificationNumber = :donationIdentificationNumber AND " +
-                 "c.bloodBagType.id IN :bloodBagTypeIds AND " +
+                 "c.packType.id IN :packTypeIds AND " +
                  "c.donorPanel.id IN :donorPanelIds AND " +
                  "c.donationDate >= :donationDateFrom AND c.donationDate <= :donationDateTo AND " +
                  "c.isDeleted=:isDeleted";
     } else {
       queryStr = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE " +
-          "c.bloodBagType.id IN :bloodBagTypeIds AND " +
+          "c.packType.id IN :packTypeIds AND " +
           "c.donorPanel.id IN :panelIds AND " +
           "c.donationDate >= :donationDateFrom AND c.donationDate <= :donationDateTo AND " +
           "c.isDeleted=:isDeleted";
@@ -136,7 +136,7 @@ public class DonationRepository {
       query.setParameter("ttiStatus", TTIStatus.NOT_DONE);
     }
     
-    query.setParameter("bloodBagTypeIds", bloodBagTypeIds);
+    query.setParameter("packTypeIds", packTypeIds);
     query.setParameter("panelIds", panelIds);
     query.setParameter("donationDateFrom", getDonationDateFromOrDefault(donationDateFrom));
     query.setParameter("donationDateTo", getDonationDateToOrDefault(donationDateTo));
@@ -334,7 +334,7 @@ public class DonationRepository {
     em.refresh(donation);
    
     //Create initial component only if the countAsDonation is true
-    if( donation.getBloodBagType().getCountAsDonation() == true)
+    if( donation.getPackType().getCountAsDonation() == true)
         createInitialComponent(donation);
   
     return donation;
@@ -342,7 +342,7 @@ public class DonationRepository {
   
   public void createInitialComponent(Donation donation){
     
-    ComponentType componentType = donation.getBloodBagType().getComponentType();
+    ComponentType componentType = donation.getPackType().getComponentType();
       
     Component component = new Component();
     component.setIsDeleted(false);
@@ -399,7 +399,7 @@ public class DonationRepository {
           donor.setDateOfFirstDonation(donation.getDonationDate());
       }
        //set dueToDonate
-      BloodBagType packType = donation.getBloodBagType();
+      PackType packType = donation.getPackType();
       int periodBetweenDays = packType.getPeriodBetweenDonations();
       Calendar dueToDonateDate = Calendar.getInstance();
       dueToDonateDate.setTime(donation.getDonationDate());

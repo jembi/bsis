@@ -18,7 +18,6 @@ import java.util.Set;
 
 import model.address.Address;
 import model.address.Contact;
-import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.TTIStatus;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.bloodtesting.rules.DonationField;
@@ -28,6 +27,7 @@ import model.donation.Donation;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
+import model.packtype.PackType;
 import model.request.Request;
 import model.requesttype.RequestType;
 import model.util.Gender;
@@ -38,7 +38,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import repository.BloodBagTypeRepository;
+import repository.PackTypeRepository;
 import repository.DonationRepository;
 import repository.DonationTypeRepository;
 import repository.DonorRepository;
@@ -63,7 +63,7 @@ public class CreateDataController {
   private DonationTypeRepository donorTypeRepository;
 
   @Autowired
-  private BloodBagTypeRepository bloodBagTypeRepository;
+  private PackTypeRepository packTypeRepository;
 
   @Autowired
   private ComponentTypeRepository componentTypeRepository;
@@ -435,13 +435,13 @@ public class CreateDataController {
 
     List<Donation> donations = new ArrayList<Donation>();
 
-    List<BloodBagType> bloodBagTypes = bloodBagTypeRepository.getAllBloodBagTypes();
+    List<PackType> packTypes = packTypeRepository.getAllPackTypes();
     List<String> donationIdentificationNumbers = sequenceNumberRepository.getBatchDonationIdentificationNumbers(numDonations);
     for (int i = 0; i < numDonations; i++) {
       DonationBackingForm donation = new DonationBackingForm();
       donation.setDonationIdentificationNumber(donationIdentificationNumbers.get(i));    
 
-      donation.setPackType(bloodBagTypes.get(Math.abs(random.nextInt()) % bloodBagTypes.size()));
+      donation.setPackType(packTypes.get(Math.abs(random.nextInt()) % packTypes.size()));
 
       String donationDate = CustomDateFormatter.getDateTimeString(getRandomDonationDate());
       donation.setDonationDate(donationDate);

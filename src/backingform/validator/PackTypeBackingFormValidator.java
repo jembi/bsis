@@ -8,8 +8,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import model.bloodbagtype.BloodBagType;
-import repository.BloodBagTypeRepository;
+import model.packtype.PackType;
+import repository.PackTypeRepository;
 import viewmodel.PackTypeViewModel;
 import backingform.PackTypeBackingForm;
 import controller.UtilController;
@@ -18,19 +18,19 @@ public class PackTypeBackingFormValidator implements Validator {
 	
 	private Validator validator;
 	private UtilController utilController;
-	private BloodBagTypeRepository bloodBagTypeRepository;
+	private PackTypeRepository packTypeRepository;
 	
-	public PackTypeBackingFormValidator(Validator validator, UtilController utilController,BloodBagTypeRepository bloodBagTypeRepository) {
+	public PackTypeBackingFormValidator(Validator validator, UtilController utilController,PackTypeRepository packTypeRepository) {
 	    super();
 	    this.validator = validator;
 	    this.utilController = utilController;
-	    this.bloodBagTypeRepository=bloodBagTypeRepository;
+	    this.packTypeRepository=packTypeRepository;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Arrays.asList(PackTypeBackingForm.class, BloodBagType.class, PackTypeViewModel.class).contains(clazz);
+		return Arrays.asList(PackTypeBackingForm.class, PackType.class, PackTypeViewModel.class).contains(clazz);
 	}
 	
 	@Override
@@ -43,7 +43,7 @@ public class PackTypeBackingFormValidator implements Validator {
 		PackTypeBackingForm form = (PackTypeBackingForm) obj; 
     
 	    if (utilController.isDuplicatePackTypeName(form.getPackType())){
-	    	errors.rejectValue("bloodBagType", "400",
+	    	errors.rejectValue("packType", "400",
 	    	          "Pack Type name already exists.");
 	    }
 		

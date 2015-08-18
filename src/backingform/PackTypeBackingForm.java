@@ -1,28 +1,24 @@
 package backingform;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import model.bloodbagtype.BloodBagType;
-import model.componenttype.ComponentType;
-
 import javax.validation.Valid;
 
-import model.admin.DataType;
+import model.componenttype.ComponentType;
+import model.packtype.PackType;
 
 public class PackTypeBackingForm {
 	
 	@Valid
-    private BloodBagType packType;
+    private PackType packType;
 
     public PackTypeBackingForm() {
-    	packType = new BloodBagType();
+    	packType = new PackType();
     }
     
-    public BloodBagType getPackType() {
+    public PackType getPackType() {
         return packType;
     }
 
-    public void setPackType(BloodBagType packType) {
+    public void setPackType(PackType packType) {
         this.packType = packType;
     }
     
@@ -30,12 +26,12 @@ public class PackTypeBackingForm {
         packType.setId(id);
     }
     
-    public void setBloodBagType(String packTypeStr){
-        packType.setBloodBagType(packTypeStr);
+    public void setPackTypeName(String packTypeStr){
+        packType.setPackType(packTypeStr);
     }
     
-    public String getBloodBagType(){
-        return packType.getBloodBagType();
+    public String getPackTypeName(){
+        return packType.getPackType();
     }
     
     public void setComponentType(ComponentType componentType){
