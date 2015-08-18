@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <DataType id="1" dataType="text"/>
+  <DataType id="2" dataType="integer"/>
+  <DataType id="3" dataType="decimal"/>
+  <DataType id="4" dataType="boolean"/>
+  <GeneralConfig id="1" name="donation.bpSystolicMax" value="250" description="Blood Pressure systolic value cannot be more than 250" dataType_id="2"/>
+  <GeneralConfig id="2" name="donation.bpDiastolicMax" value="150" description="Blood Pressure diastolic value cannot be less than 0" dataType_id="2"/>
+  <GeneralConfig id="3" name="donation.daysBetweenDonations" value="56" description="Period between donations is restrcited to 56 days" dataType_id="3"/>
+  <GeneralConfig id="4" name="dateFormat" value="dd/MM/yyyy" description="Global Date Format" dataType_id="1"/>
+  <GeneralConfig id="5" name="dateTimeFormat" value="dd/MM/yyyy hh:mm:ss a" description="Global DateTime Format" dataType_id="1"/>
+  <GeneralConfig id="6" name="timeFormat" value="hh:mm:ss a"
+	description="Global Time Format" dataType_id="1" />
+	<GeneralConfig id="7" name="donation.hbNumericValue"
+		value="true" description="Allow capturing of numeric haemoglobin value"
+		dataType_id="4" />
+	<GeneralConfig id="8" name="donation.hbQualitativeValue"
+		value="false" description="Allow capturing of qualitative haemoglobin value"
+		dataType_id="4" />
+	<GeneralConfig id="9" name="donation.donor.bpSystolicMin"
+		value="70" description="Donation Donor bpSystolicMin" dataType_id="2" />
+	<GeneralConfig id="10" name="donation.donor.bpSystolicMax"
+		value="190" description="Donation Donor bpSystolicMax" dataType_id="2" />
+	<GeneralConfig id="11" name="donation.donor.bpDiastolicMin"
+		value="40" description="Donation Donor bpDiastolicMin" dataType_id="2" />
+	<GeneralConfig id="12" name="donation.donor.bpDiastolicMax"
+		value="100" description="Donation Donor bpDiastolicMax" dataType_id="2" />
+	<GeneralConfig id="13" name="donation.donor.hbMin" value="1"
+		description="Donation Donor hbMin" dataType_id="2" />
+	<GeneralConfig id="14" name="donation.donor.hbMax" value="25"
+		description="Donation Donor hbMax" dataType_id="2" />
+	<GeneralConfig id="15" name="donation.donor.weightMin"
+		value="30" description="Donation Donor weightMin" dataType_id="2" />
+  <GeneralConfig id="16" name="donation.donor.weightMax"
+	value="300" description="Donation Donor weightMax" dataType_id="2" />
+	<GeneralConfig id="17" name="donation.donor.pulseMin"
+		value="30" description="Donation Donor pulseMin" dataType_id="2" />
+	<GeneralConfig id="18" name="donation.donor.pulseMax"
+		value="200" description="Donation Donor pulseMax" dataType_id="2" />
+	<GeneralConfig id="19" name="donation.bpUnit" value="mmHg"
+		description="Donation Blood Pressure Unit" dataType_id="1" />
+	<GeneralConfig id="20" name="donation.hbUnit" value="g/dL"
+		description="Donation HB unit" dataType_id="1" />
+	<GeneralConfig id="21" name="donation.weightUnit" value="kg"
+		description="Donation Weight Unit" dataType_id="1" />
+  <GeneralConfig id="22" name="donation.pulseUnit" value="bpm" description="Donation Pulse Unit" dataType_id="1"/>
+  <GeneralConfig id="23" name="ui.donorsTabEnabled" value="true" description="Donors Tab Enabled" dataType_id="4"/>
+  <GeneralConfig id="24" name="ui.componentsTabEnabled" value="true" description="Components Tab Enabled" dataType_id="4"/>
+  <GeneralConfig id="25" name="ui.testingTabEnabled" value="true" description="Testing Tab Enabled" dataType_id="4"/>
+  <GeneralConfig id="26" name="ui.labellingTabEnabled" value="true" description="Labelling Tab Enabled" dataType_id="4"/>
+  <GeneralConfig id="27" name="ui.inventoryTabEnabled" value="true" description="Inventory Tab Enabled" dataType_id="4"/>
+  <GeneralConfig id="28" name="ui.reportsTabEnabled" value="true" description="Reports Tab Enabled" dataType_id="4"/>
+  <GeneralConfig id="29" name="ui.mobileClinicTabEnabled" value="true" description="Mobile Clinic Tab Enabled" dataType_id="4"/>
+  <GeneralConfig id="30" name="donor.donorNumberFormat" value="%06d" description="Donor Number Format" dataType_id="1"/>
+  <GeneralConfig id="31" name="locale.default" value="en" description="Default Locale" dataType_id="1"/>
+  <GeneralConfig id="32" name="log.level" value="info" description="Log Level" dataType_id="1"/>
+  <GeneralConfig id="33" name="donor.searchMode" value="start_and_end" description="Donor Search Mode" dataType_id="1"/>
+</dataset>

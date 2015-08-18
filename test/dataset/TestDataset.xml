@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <FormField/>
+    <GenericConfig/>
+    <DataType/>
+    <CrossmatchType/>
+    <BloodTest/>
+    <BloodTestingRule/>
+    <BloodTestResult/>
+    <Product/>
+	<ProductType/>
+	<BloodBagType/>
+	<DonationType/>	
+	<Location/>
+	<Donation/>
+	<DonationType/>
+	<DonationBatch/>
+	<TestBatch/>
+	
+	<Contact/>
+	<ContactMethodType/>
+	<Address/>
+	<AddressType/>
+	<PreferredLanguage/>
+	
+	<DeferralReason/>
+	<DonorDeferral/>
+	
+		
+	<Donor/>
+	
+	<IdType/>
+	
+	<ProductStatusChange/>
+	<ProductStatusChangeReason/>
+	<DonorCodeGroup/>
+	<DonorCode/>
+	<DonorDonorCode/>
+	<User/>
+</dataset>

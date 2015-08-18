@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<user id="1" emailId="admin" firstName="admin" isactive="1"
+		isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin" />
+	<Location id="1" isDeleted="false" isDonorPanel="true"
+		isMobileSite="false" isUsageSite="false" name="Maseru" notes="" />
+	<Address id="1" />
+	<Address id="2" />
+	<Address id="3" />
+	<Address id="4" />
+	<Address id="5" />
+	<Contact id="1" />
+	<Contact id="2" />
+	<Contact id="3" />
+	<Contact id="4" />
+	<Contact id="5" />
+	<PreferredLanguage id="1" preferredLanguage="English" />
+	<Donor id="1" birthDate="1979-09-20" bloodAbo="" bloodRh=""
+		dateOfLastDonation="2015-08-11 09:05:56.0" donorHash="0e17076f53dbb49ff3678eee94bb9f70"
+		donorNumber="000001" donorStatus="NORMAL" firstName="John" gender="male"
+		isDeleted="false" lastName="Smith" createdDate="2015-08-11 09:05:10.0"
+		lastUpdated="2015-08-11 09:06:27.0" donorPanel_id="1" createdBy_id="1"
+		lastUpdatedBy_id="1" dateOfFirstDonation="2015-08-11"
+		preferredLanguage_id="1" title="Mr" addressId="1" contactId="1"
+		dueToDonate="2015-11-09" />
+	<Donor id="2" birthDate="1977-08-22" bloodAbo="A" bloodRh="-"
+		dateOfLastDonation="2015-08-11 00:00:00.0" donorNumber="000002"
+		donorStatus="NORMAL" firstName="Raymond" gender="male" isDeleted="false"
+		lastName="Smith" createdDate="2015-08-11 07:53:29.0" lastUpdated="2015-08-11 07:53:57.0"
+		createdBy_id="1" lastUpdatedBy_id="1" dateOfFirstDonation="2015-08-11"
+		preferredLanguage_id="1" title="Mr" addressId="2" contactId="2"
+		dueToDonate="2015-11-09" />
+	<Donor id="3" birthDate="1983-06-03" bloodAbo="O" bloodRh="-"
+		dateOfLastDonation="2015-08-11 00:00:00.0" donorNumber="000003"
+		donorStatus="NORMAL" firstName="Rosemarie" gender="female" isDeleted="false"
+		lastName="Billens" createdDate="2015-08-11 07:53:29.0" lastUpdated="2015-08-11 07:53:57.0"
+		createdBy_id="1" lastUpdatedBy_id="1" dateOfFirstDonation="2015-08-11"
+		preferredLanguage_id="1" title="Mrs" addressId="3" contactId="3"
+		dueToDonate="2015-11-09" />
+	<Donor id="4" birthDate="1983-06-03" bloodAbo="AB" bloodRh="+"
+		dateOfLastDonation="2015-08-11 00:00:00.0" donorNumber="000004"
+		donorStatus="NORMAL" firstName="Carl" gender="male" isDeleted="false"
+		lastName="Lombard" createdDate="2015-08-11 07:53:29.0" lastUpdated="2015-08-11 07:53:57.0"
+		createdBy_id="1" lastUpdatedBy_id="1" dateOfFirstDonation="2015-08-11"
+		preferredLanguage_id="1" title="Mr" addressId="4" contactId="4"
+		dueToDonate="2015-11-09" />
+	<Donor id="5" birthDate="1965-06-03" bloodAbo="AB" bloodRh="+"
+		dateOfLastDonation="2015-08-11 00:00:00.0" donorNumber="000005"
+		donorStatus="NORMAL" firstName="Brendan" gender="male" isDeleted="false"
+		lastName="Fassie" createdDate="2015-08-11 07:53:29.0" lastUpdated="2015-08-11 07:53:57.0"
+		createdBy_id="1" lastUpdatedBy_id="1" dateOfFirstDonation="2015-08-11"
+		preferredLanguage_id="1" title="Mr" addressId="5" contactId="5"
+		dueToDonate="2015-11-09" />
+	<DonationBatch id="1" batchNumber="000000" isDeleted="false"
+		createdDate="2015-08-11 09:05:56.0" lastUpdated="2015-08-11 09:07:10.0"
+		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" donorPanel_id="1" />
+	<ProductType id="1" description="" expiresAfter="35"
+		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+		productTypeName="Whole Blood Single Pack - CPDA" productTypeNameShort="0011" />
+	<ProductType id="14" description="" expiresAfter="35"
+		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+		productTypeName="Packed Red Cells - Paediatric - CPDA"
+		productTypeNameShort="2101" />
+	<ProductType id="6" description="" expiresAfter="35"
+		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+		productTypeName="Whole Blood - CPDA" productTypeNameShort="1001"
+		pediProductType_id="14" />
+	<BloodBagType id="1" bloodBagType="Single" isDeleted="false"
+		productType_id="1" countAsDonation="true" periodBetweenDonations="90" />
+	<DonationType id="1" donationType="Voluntary" isDeleted="false" />
+	<Donation id="1" bloodTypingStatus="NOT_DONE" donationDate="2015-08-11 09:05:56.0"
+		donationIdentificationNumber="1111111" donorWeight="85.00" isDeleted="false"
+		createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:06:27.0"
+		ttiStatus="NOT_DONE" bloodBagType_id="1" donationBatch_id="1"
+		donationType_id="1" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
+		donorPanel_id="1" bleedStartTime="2015-08-11 09:06:11.0" bleedEndTime="2015-08-11 09:16:11.0"
+		bloodTypingMatchStatus="NOT_DONE" />
+	<Donation id="2" bloodTypingStatus="COMPLETE" donationDate="2015-08-11 09:05:56.0"
+		donationIdentificationNumber="22222222" donorWeight="85.00" isDeleted="false"
+		createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:06:27.0"
+		ttiStatus="TTI_SAFE" bloodBagType_id="1" donationBatch_id="1"
+		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
+		donorPanel_id="1" bleedStartTime="2015-08-11 09:06:11.0" bleedEndTime="2015-08-11 09:16:11.0"
+		bloodTypingMatchStatus="MATCH" />
+	<Donation id="3" bloodAbo="AB" bloodRh="+" bloodTypingStatus="COMPLETE"
+		donationDate="2015-08-11 09:05:56.0" donationIdentificationNumber="3333333"
+		donorWeight="55.00" isDeleted="false" createdDate="2015-08-11 09:06:27.0"
+		lastUpdated="2015-08-11 09:06:27.0" ttiStatus="NOT_DONE"
+		bloodBagType_id="1" donationBatch_id="1" donationType_id="1" donor_id="3"
+		createdBy_id="1" lastUpdatedBy_id="1" donorPanel_id="1"
+		bleedStartTime="2015-08-11 09:06:11.0" bleedEndTime="2015-08-11 09:16:11.0"
+		bloodTypingMatchStatus="MATCH" />
+	<Donation id="4" bloodTypingStatus="NOT_DONE" donationDate="2015-08-11 00:00:00.0"
+		donationIdentificationNumber="4444444" extraBloodTypeInformation=""
+		isDeleted="0" createdDate="2015-08-11 07:53:57.0" lastUpdated="2015-08-11 04:43:20.0"
+		ttiStatus="NOT_DONE" bloodBagType_id="1" donationBatch_id="1"
+		donationType_id="1" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
+		donorPanel_id="1" bleedStartTime="2015-08-11 14:53:37.0" bleedEndTime="2015-08-11 14:53:37.0"
+		bloodTypingMatchStatus="NOT_DONE" />
+	<Donation id="5" bloodTypingStatus="NOT_DONE" donationDate="2015-08-11 09:05:56.0"
+		donationIdentificationNumber="55555555" donorWeight="85.00" isDeleted="false"
+		createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:06:27.0"
+		ttiStatus="TTI_UNSAFE" bloodBagType_id="1" donationBatch_id="1"
+		donationType_id="1" donor_id="5" createdBy_id="1" lastUpdatedBy_id="1"
+		donorPanel_id="1" bleedStartTime="2015-08-11 09:06:11.0" bleedEndTime="2015-08-11 09:16:11.0"
+		bloodTypingMatchStatus="NOT_DONE" />
+	<Product id="1" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
+		isDeleted="false" createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:07:29.0"
+		status="PROCESSED" donation_id="1" createdBy_id="1" lastUpdatedBy_id="1"
+		productType_id="1" componentIdentificationNumber="1111111-0011" />
+	<Product id="2" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
+		isDeleted="false" createdDate="2015-08-11 09:07:29.0" lastUpdated="2015-08-11 09:07:29.0"
+		status="QUARANTINED" donation_id="1" createdBy_id="1"
+		lastUpdatedBy_id="1" parentProduct_id="1" productType_id="6"
+		componentIdentificationNumber="1111111-1001" />
+	<Product id="3" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
+		isDeleted="false" createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:07:29.0"
+		status="PROCESSED" donation_id="2" createdBy_id="1" lastUpdatedBy_id="1"
+		productType_id="1" componentIdentificationNumber="2222222-0011" />
+	<Product id="4" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
+		isDeleted="false" createdDate="2015-08-11 09:07:29.0" lastUpdated="2015-08-11 09:07:29.0"
+		status="QUARANTINED" donation_id="2" createdBy_id="1"
+		lastUpdatedBy_id="1" parentProduct_id="3" productType_id="6"
+		componentIdentificationNumber="2222222-1001" />
+	<Product id="5" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
+		isDeleted="false" createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:07:29.0"
+		status="PROCESSED" donation_id="3" createdBy_id="1" lastUpdatedBy_id="1"
+		productType_id="1" componentIdentificationNumber="3333333-0011" />
+	<Product id="6" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
+		discardedOn="2015-08-11 16:13:00.0" isDeleted="false" createdDate="2015-08-11 09:07:29.0"
+		lastUpdated="2015-08-11 09:07:29.0" status="DISCARDED" donation_id="3"
+		createdBy_id="1" lastUpdatedBy_id="1" parentProduct_id="5"
+		productType_id="6" componentIdentificationNumber="3333333-1001" />
+	<Product id="7" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
+		isDeleted="false" createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:07:29.0"
+		status="QUARANTINED" donation_id="5" createdBy_id="1" lastUpdatedBy_id="1"
+		productType_id="6" componentIdentificationNumber="5555555-0011" />
+	<ProductStatusChangeReason id="5" category="DISCARDED"
+		isDeleted="false" statusChangeReason="Storage Problems" />
+	<ProductStatusChangeReason id="7" category="RETURNED"
+		isDeleted="false" statusChangeReason="Expired" />
+	<ProductStatusChangeReason id="11" category="SPLIT"
+		isDeleted="false" statusChangeReason="Split" />
+	<ProductStatusChange id="1" newStatus="DISCARDED"
+		statusChangeType="DISCARDED" statusChangedOn="2015-08-11 16:13:00.0"
+		changedBy_id="1" product_id="6" statusChangeReason_id="5" />
+</dataset>

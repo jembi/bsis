@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<SequenceNumberStore id="1" columnName="donorNumber"
+		lastNumber="3" targetTable="Donor" />
+	<SequenceNumberStore id="2" columnName="batchNumber"
+		lastNumber="2" prefix="B" targetTable="donationBatch" />
+	<SequenceNumberStore id="3" columnName="batchNumber"
+		lastNumber="4" prefix="TB" targetTable="testBatch" />
+	<SequenceNumberStore id="4" columnName="worksheetBatchNumber"
+		lastNumber="1" prefix="W" targetTable="worksheet" />
+	<SequenceNumberStore id="5"
+		columnName="donationIdentificationNumber" lastNumber="3" prefix="C"
+		targetTable="Donation" />
+	<SequenceNumberStore id="6" columnName="requestNumber"
+		lastNumber="5" prefix="R" targetTable="Request" />
+	<SequenceNumberStore id="7" columnName="testNumber"
+	lastNumber="23" prefix="T" targetTable="Test" />
+</dataset>

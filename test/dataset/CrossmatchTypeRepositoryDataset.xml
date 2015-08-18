@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<CrossmatchType id="1" crossmatchType="Saline @ 37 degrees"
+		isDeleted="false" />
+	<CrossmatchType id="2" crossmatchType="Anti Human Globulin"
+		isDeleted="false" />
+</dataset>

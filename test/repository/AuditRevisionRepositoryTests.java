@@ -16,7 +16,6 @@ import model.audit.AuditRevision;
 import model.user.User;
 
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@WebAppConfiguration
 @Transactional
+@WebAppConfiguration
 public class AuditRevisionRepositoryTests {
         
     private static final DateTime END_OF_RANGE = new DateTime().minusDays(1);
@@ -36,10 +35,10 @@ public class AuditRevisionRepositoryTests {
     
     @PersistenceContext
     private EntityManager entityManager;
+    
     @Autowired
     private AuditRevisionRepository auditRevisionRepository;
     
-    @Ignore("Pending changes to old tests in 318")
     @Test
     public void testFindRecentAuditRevisions_shouldReturnAuditRevisionsOrderedByTimestamp() {
         
@@ -68,7 +67,6 @@ public class AuditRevisionRepositoryTests {
         assertThat(returnedAuditRevisions.get(1), is(chronologicallyFirstAuditRevision));
     }
     
-    @Ignore("Pending changes to old tests in 318")
     @Test
     public void testFindAuditRevisionsByUser_shouldReturnAuditRevisionsMatchingSearch() {
         
@@ -126,7 +124,6 @@ public class AuditRevisionRepositoryTests {
         assertThat(returnedAuditRevisions, is(expectedAuditRevisions));
     }
 
-    @Ignore("Pending changes to old tests in 318")
     @Test
     public void testFindAuditRevisionsByUserWithFullName_shouldReturnMatchingAuditRevision() {
 
