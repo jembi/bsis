@@ -253,9 +253,13 @@
 	</changeSet>
 	
 	<!-- Updated (timler): for #294 (refactoring) -->
-	<changeSet id="20150817-1130" author="danfuterman">
+	<changeSet id="20150818-1025" author="danfuterman">
 	    <preConditions onFail="MARK_RAN">
- 		    <not><tableExists tableName="BloodBagType" /></not>
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM BloodBagType WHERE bloodBagType = "Single";
+				]]>
+			</sqlCheck>
  		</preConditions>
 		<comment>add blood bag types</comment>
 		<insert tableName = "BloodBagType">
