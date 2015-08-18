@@ -42,7 +42,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,7 +51,7 @@ import utils.CustomDateFormatter;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class DonorCommunicationsRepositoryTest {
 	
@@ -334,7 +333,6 @@ public class DonorCommunicationsRepositoryTest {
 	}
 
 	@Test
-	@Transactional
 	/**
 	 *  should not return donors who will be currently deferred when specifying only Donor Panels and Blood Groups
 	 *  
@@ -381,7 +379,6 @@ public class DonorCommunicationsRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	/**
 	 *  should not return donors who will be currently deferred when specifying Date Of Last Donation period
 	 *  
@@ -428,7 +425,6 @@ public class DonorCommunicationsRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	/**
 	 *  should not return donors who will be deferred on date specified in Clinic Date
 	 *  

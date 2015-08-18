@@ -31,7 +31,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +41,7 @@ import viewmodel.BloodTestingRuleResult;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class DonationRepositoryTest {
 	
@@ -89,7 +88,6 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindDonationById() throws Exception {
 		Donation donation = donationRepository.findDonationById(1L);
 		Assert.assertNotNull("There is a donation with id 1", donation);
@@ -97,7 +95,6 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindDonationByDIN() throws Exception {
 		Donation donation = donationRepository.findDonationByDonationIdentificationNumber("1234567");
 		Assert.assertNotNull("There is a donation with DIN 1234567", donation);
@@ -105,7 +102,6 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testVerifyDonationIdentificationNumber() throws Exception {
 		Donation donation = donationRepository.verifyDonationIdentificationNumber("1234567");
 		Assert.assertNotNull("There is a donation with DIN 1234567", donation);
@@ -113,7 +109,6 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("This test fails because a javax.persistence.NoResultException is thrown. I believe this is a bug as the method wants to return null")
 	public void testVerifyDonationIdentificationNumberUnknown() throws Exception {
 		Donation donation = donationRepository.verifyDonationIdentificationNumber("999999999");
@@ -121,7 +116,6 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("This test will fail - see above test")
 	public void testVerifyDonationIdentificationNumbers() throws Exception {
 		// this test will fail as soon as one of the DINs in the list is unknown - it will throw an
@@ -129,13 +123,11 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test(expected = javax.persistence.NoResultException.class)
-	@Transactional
 	public void testFindDonationByIdUnknown() throws Exception {
 		donationRepository.findDonationById(123L);
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllDonations() throws Exception {
 		List<Donation> all = donationRepository.getAllDonations();
 		Assert.assertNotNull("There are donations", all);
@@ -143,7 +135,6 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetDonations() throws Exception {
 		Date start = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01");
 		Date end = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-10");
@@ -153,7 +144,6 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetDonationsNone() throws Exception {
 		Date start = new SimpleDateFormat("yyyy-MM-dd").parse("2012-02-01");
 		Date end = new SimpleDateFormat("yyyy-MM-dd").parse("2012-02-10");
@@ -163,7 +153,6 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindNumberOfDonationsDaily() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-10");
@@ -183,7 +172,6 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindNumberOfDonationsMonthly() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-03-10");
@@ -209,7 +197,6 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindNumberOfDonationsYearly() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-10");
@@ -232,7 +219,6 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("findAnyDonationMatching has a bug in the HSQL, so this test fails")
 	public void testFindAnyDonationMatchingDIN() throws Exception {
 		List<Donation> donations = donationRepository.findAnyDonationMatching("1234567", null, null, null, null, null);
@@ -243,7 +229,6 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("findDonations has a bug in the HSQL when querying a DIN with parameter name panelIds/donorPanelIds")
 	public void testFindDonationsDIN() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
@@ -261,7 +246,6 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindDonations() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<Integer> bloodBagTypeIds = new ArrayList<Integer>();
@@ -284,7 +268,6 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFilterDonationsWithBloodTypingResults() throws Exception {
 		List<Donation> donations = new ArrayList<Donation>();
 		donations.add(donationRepository.findDonationById(1L));
@@ -302,7 +285,6 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testAddDonation() throws Exception {
 		Donation newDonation = new Donation();
 		Donation existingDonation = donationRepository.findDonationById(1L);
@@ -321,7 +303,6 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test(expected = javax.persistence.PersistenceException.class)
-	@Transactional
 	public void testAddDonationSameDIN() throws Exception {
 		Donation newDonation = new Donation();
 		Donation existingDonation = donationRepository.findDonationById(1L);
@@ -334,7 +315,6 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testAddAllDonations() throws Exception {
 		Donation newDonation1 = new Donation();
 		Donation existingDonation1 = donationRepository.findDonationById(1L);
@@ -374,7 +354,6 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateDonation() throws Exception {
 		Donation existingDonation = donationRepository.findDonationById(1L);
 		existingDonation.setDonorWeight(new BigDecimal(123));
@@ -384,7 +363,6 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testDeleteDonation() throws Exception {
 		Donation newDonation = new Donation();
 		Donation existingDonation = donationRepository.findDonationById(1L);
@@ -400,7 +378,6 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test(expected = javax.persistence.NoResultException.class)
-	@Transactional
 	public void testDeleteDonationFindByDIN() throws Exception {
 		Donation newDonation = new Donation();
 		Donation existingDonation = donationRepository.findDonationById(1L);

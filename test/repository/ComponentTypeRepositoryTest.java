@@ -27,7 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class ComponentTypeRepositoryTest {
 	
@@ -83,7 +82,6 @@ public class ComponentTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAll() throws Exception {
 		List<ComponentType> all = componentTypeRepository.getAllComponentTypes();
 		Assert.assertNotNull("There are ComponentTypes", all);
@@ -91,7 +89,6 @@ public class ComponentTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllComponentTypesIncludeDeleted() throws Exception {
 		List<ComponentType> all = componentTypeRepository.getAllComponentTypesIncludeDeleted();
 		Assert.assertNotNull("There are ComponentTypes", all);
@@ -99,28 +96,24 @@ public class ComponentTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testIsComponentTypeValidTrue() throws Exception {
 		boolean valid = componentTypeRepository.isComponentTypeValid("Whole Blood Single Pack - CPDA");
 		Assert.assertTrue("Is a valid ComponentType", valid);
 	}
 	
 	@Test
-	@Transactional
 	public void testIsComponentTypeValidFalse() throws Exception {
 		boolean valid = componentTypeRepository.isComponentTypeValid("Test");
 		Assert.assertFalse("Is not a valid ComponentType", valid);
 	}
 	
 	@Test
-	@Transactional
 	public void testIsComponentTypeValidDeleted() throws Exception {
 		boolean valid = componentTypeRepository.isComponentTypeValid("Ignore me");
 		Assert.assertFalse("Is not a valid ComponentType", valid);
 	}
 	
 	@Test
-	@Transactional
 	public void testGetComponentTypeById() throws Exception {
 		ComponentType one = componentTypeRepository.getComponentTypeById(1);
 		Assert.assertNotNull("There is a ComponentType", one);
@@ -135,7 +128,6 @@ public class ComponentTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug in HSQL:  org.hibernate.QueryException: could not resolve property: componentType of: model.componenttype.ComponentType [SELECT p FROM model.componenttype.ComponentType p where p.componentType = :componentTypeName]")
 	public void testGetComponentTypeByName() throws Exception {
 		ComponentType one = componentTypeRepository.getComponentTypeByName("Whole Blood Single Pack - CPDA");
@@ -144,7 +136,6 @@ public class ComponentTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testDeactivateComponentType() throws Exception {
 		componentTypeRepository.deactivateComponentType(1);
 		ComponentType componentType = componentTypeRepository.getComponentTypeById(1); // includes deleted
@@ -153,7 +144,6 @@ public class ComponentTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testActivateComponentType() throws Exception {
 		componentTypeRepository.activateComponentType(17);
 		ComponentType componentType = componentTypeRepository.getComponentTypeById(17);
@@ -162,7 +152,6 @@ public class ComponentTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testSaveComponentType() throws Exception {
 		ComponentType componentType = new ComponentType();
 		componentType.setComponentTypeName("Junit");
@@ -179,7 +168,6 @@ public class ComponentTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateComponentType() throws Exception {
 		ComponentType existingComponentType = componentTypeRepository.getComponentTypeById(1);
 		existingComponentType.setDescription("Junit");
@@ -189,7 +177,6 @@ public class ComponentTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	// FIXME: I am not so sure this method is working as expected as it returns the pediComponentType not the parent and
 	// it will fail with a NPE if the ComponentType with id=1 does not have a pediComponentType defined.
 	public void testGetAllParentComponentTypes() throws Exception {
@@ -199,7 +186,6 @@ public class ComponentTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	//FIXME: it's not very clear what this method does
 	public void testGetComponentTypeByIdList() throws Exception {
 		List<ComponentType> all = componentTypeRepository.getComponentTypeByIdList(1);
@@ -208,7 +194,6 @@ public class ComponentTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllComponentTypeCombinations() throws Exception {
 		List<ComponentTypeCombination> all = componentTypeRepository.getAllComponentTypeCombinations();
 		Assert.assertNotNull("There are ComponentTypeCombination", all);
@@ -216,7 +201,6 @@ public class ComponentTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllComponentTypeCombinationsIncludeDeleted() throws Exception {
 		List<ComponentTypeCombination> all = componentTypeRepository.getAllComponentTypeCombinationsIncludeDeleted();
 		Assert.assertNotNull("There are ComponentTypeCombination", all);
@@ -224,7 +208,6 @@ public class ComponentTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetComponentTypeCombinationById() throws Exception {
 		ComponentTypeCombination one = componentTypeRepository.getComponentTypeCombinationById(1);
 		Assert.assertNotNull("There is a ComponentTypeCombination", one);
@@ -232,13 +215,11 @@ public class ComponentTypeRepositoryTest {
 	}
 	
 	@Test(expected = javax.persistence.NoResultException.class)
-	@Transactional
 	public void testGetComponentTypeCombinationByIdUnknown() throws Exception {
 		componentTypeRepository.getComponentTypeCombinationById(123);
 	}
 	
 	@Test
-	@Transactional
 	public void testDeactivateComponentTypeCombination() throws Exception {
 		componentTypeRepository.deactivateComponentTypeCombination(1);
 		ComponentTypeCombination one = componentTypeRepository.getComponentTypeCombinationById(1); // returns deleted entities
@@ -247,7 +228,6 @@ public class ComponentTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testActivateComponentTypeCombinationUnknown() throws Exception {
 		componentTypeRepository.activateComponentTypeCombination(11);
 		ComponentTypeCombination one = componentTypeRepository.getComponentTypeCombinationById(11);
@@ -256,7 +236,6 @@ public class ComponentTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateComponentTypeCombination() throws Exception {
 		ComponentTypeCombination one = componentTypeRepository.getComponentTypeCombinationById(1);
 		one.setCombinationName("Testing");
@@ -266,7 +245,6 @@ public class ComponentTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testSaveComponentTypeCombination() throws Exception {
 		ComponentTypeCombination one = new ComponentTypeCombination();
 		one.setCombinationName("Testing");

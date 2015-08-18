@@ -29,7 +29,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +39,7 @@ import viewmodel.RoleViewModel;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class RoleRepositoryTest {
 	
@@ -90,7 +89,6 @@ public class RoleRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllPermissions() throws Exception {
 		List<Permission> all = roleRepository.getAllPermissions();
 		Assert.assertNotNull("There are Permissions", all);
@@ -98,7 +96,6 @@ public class RoleRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetRoles() throws Exception {
 		List<RoleViewModel> all = roleRepository.getAllRoles();
 		Assert.assertNotNull("There are Roles", all);
@@ -106,7 +103,6 @@ public class RoleRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindRoleByName() throws Exception {
 		Role superUser = roleRepository.findRoleByName("Super User");
 		Assert.assertNotNull("Role exists", superUser);
@@ -114,7 +110,6 @@ public class RoleRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindRoleDetailById() throws Exception {
 		Role superUser = roleRepository.findRoleDetailById(1l);
 		Assert.assertNotNull("Role exists", superUser);
@@ -122,13 +117,11 @@ public class RoleRepositoryTest {
 	}
 	
 	@Test(expected = javax.persistence.NoResultException.class)
-	@Transactional
 	public void testFindRoleDetailByIdUnknown() throws Exception {
 		roleRepository.findRoleDetailById(123l);
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllPermissionsByName() throws Exception {
 		List<Permission> all = roleRepository.getAllPermissionsByName();
 		Assert.assertNotNull("There are Permissions", all);
@@ -137,7 +130,6 @@ public class RoleRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindPermissionByPermissionId() throws Exception {
 		Permission permission = roleRepository.findPermissionByPermissionId(1);
 		Assert.assertNotNull("Permission exists", permission);
@@ -145,14 +137,12 @@ public class RoleRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindPermissionByPermissionIdUnknown() throws Exception {
 		Permission perm = roleRepository.findPermissionByPermissionId(12345);
 		Assert.assertNull("Permission not found", perm);
 	}
 	
 	@Test
-	@Transactional
 	public void testSave() throws Exception {
 		Role one = new Role();
 		one.setName("New Role");
@@ -175,7 +165,6 @@ public class RoleRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdate() throws Exception {
 		Role one = roleRepository.findRoleDetailById(1l);
 		one.setName("Testing");
@@ -189,7 +178,6 @@ public class RoleRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug? - after the delete, all queries fail due to foreign key reference:  integrity constraint violation: foreign key no action; FK_TC5K40I3KIT8944SYRD366VY1 table: USER_ROLE")
 	public void testDelete() throws Exception {
 		Role one = roleRepository.findRoleDetailById(1l);

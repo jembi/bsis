@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class DataTypeRepositoryTest {
 	
@@ -79,7 +78,6 @@ public class DataTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAll() throws Exception {
 		List<DataType> all = dataTypeRepository.getAll();
 		Assert.assertNotNull("There are data types defined", all);
@@ -87,7 +85,6 @@ public class DataTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetDataTypeByid() throws Exception {
 		DataType dataType = dataTypeRepository.getDataTypeByid(1L);
 		Assert.assertNotNull("DataType with id 1 exists", dataType);

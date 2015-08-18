@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class DiscardReasonRepositoryTest {
 	
@@ -80,7 +79,6 @@ public class DiscardReasonRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAll() throws Exception {
 		List<ComponentStatusChangeReason> all = discardReasonRepository.getAllDiscardReasons();
 		Assert.assertNotNull("There are discard reasons defined", all);
@@ -88,14 +86,12 @@ public class DiscardReasonRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetDiscardReasonById() throws Exception {
 		ComponentStatusChangeReason discardReason = discardReasonRepository.getDiscardReasonById(1);
 		Assert.assertNotNull("Discard reason with id 1 exists", discardReason);
 	}
 	
 	@Test
-	@Transactional
 	public void testFindDeferralReason() throws Exception {
 		ComponentStatusChangeReason reason = discardReasonRepository.findDiscardReason("Incomplete Donation");
 		Assert.assertNotNull("Discard reason exists", reason);
@@ -103,14 +99,12 @@ public class DiscardReasonRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindDeferralReasonUnknown() throws Exception {
 		ComponentStatusChangeReason reason = discardReasonRepository.findDiscardReason("Junit");
 		Assert.assertNull("Discard reason does not exist", reason);
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateDeferralReason() throws Exception {
 		ComponentStatusChangeReason reason = discardReasonRepository.getDiscardReasonById(1);
 		Assert.assertNotNull("Discard reason exists", reason);
@@ -124,7 +118,6 @@ public class DiscardReasonRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testSaveDeferralReason() throws Exception {
 		ComponentStatusChangeReason reason = new ComponentStatusChangeReason();
 		reason.setStatusChangeReason("Junit");

@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class ComponentStatusChangeReasonRepositoryTest {
 	
@@ -82,7 +81,6 @@ public class ComponentStatusChangeReasonRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAll() throws Exception {
 		List<ComponentStatusChangeReason> all = componentStatusChangeReasonRepository.getAllComponentStatusChangeReasons();
 		Assert.assertNotNull("There are ComponentStatusChangeReason", all);
@@ -90,7 +88,6 @@ public class ComponentStatusChangeReasonRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetComponentStatusChangeReasons() throws Exception {
 		List<ComponentStatusChangeReason> all = componentStatusChangeReasonRepository
 		        .getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.DISCARDED);
@@ -99,7 +96,6 @@ public class ComponentStatusChangeReasonRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetComponentStatusChangeReasonsNone() throws Exception {
 		List<ComponentStatusChangeReason> all = componentStatusChangeReasonRepository
 		        .getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.ISSUED);
@@ -108,7 +104,6 @@ public class ComponentStatusChangeReasonRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetComponentStatusChangeReasonById() throws Exception {
 		ComponentStatusChangeReason one = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(1);
 		Assert.assertNotNull("There is a ComponentStatusChangeReason", one);
@@ -117,14 +112,12 @@ public class ComponentStatusChangeReasonRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetComponentStatusChangeReasonByIdUnknown() throws Exception {
 		ComponentStatusChangeReason one = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(123);
 		Assert.assertNull("There is no ComponentStatusChangeReason", one);
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - getAllComponentStatusChangeReasonsAsMap only returns one ComponentStatusChangeReason per ComponentStatusChangeReasonCategory")
 	public void testGetAllComponentStatusChangeReasonsAsMap() throws Exception {
 		Map<ComponentStatusChangeReasonCategory, ComponentStatusChangeReason> result = componentStatusChangeReasonRepository

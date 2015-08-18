@@ -22,7 +22,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class SequenceNumberRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
 	
@@ -78,7 +77,6 @@ public class SequenceNumberRepositoryTest extends AbstractTransactionalJUnit4Spr
 	}
 	
 	@Test
-	@Transactional
 	public void testGetNextDonationIdentificationNumber() throws Exception {
 		String next = sequenceNumberRepository.getNextDonationIdentificationNumber();
 		Assert.assertEquals("next DIN is correct", "C000003", next);
@@ -87,7 +85,6 @@ public class SequenceNumberRepositoryTest extends AbstractTransactionalJUnit4Spr
 	}
 	
 	@Test
-	@Transactional
 	public void testGetNextRequestNumber() throws Exception {
 		String next = sequenceNumberRepository.getNextRequestNumber();
 		Assert.assertEquals("next RequestNumber is correct", "R000005", next);
@@ -96,7 +93,6 @@ public class SequenceNumberRepositoryTest extends AbstractTransactionalJUnit4Spr
 	}
 	
 	@Test
-	@Transactional
 	public void testGetNextDonorNumber() throws Exception {
 		String next = sequenceNumberRepository.getNextDonorNumber();
 		Assert.assertEquals("next DonorNumber is correct", "000003", next);
@@ -105,7 +101,6 @@ public class SequenceNumberRepositoryTest extends AbstractTransactionalJUnit4Spr
 	}
 	
 	@Test
-	@Transactional
 	public void testGetBatchDonationIdentificationNumbers() throws Exception {
 		List<String> next = sequenceNumberRepository.getBatchDonationIdentificationNumbers(25);
 		Assert.assertNotNull("Next batch DINs exist", next);
@@ -115,7 +110,6 @@ public class SequenceNumberRepositoryTest extends AbstractTransactionalJUnit4Spr
 	}
 	
 	@Test
-	@Transactional
 	public void testGetBatchRequestNumbers() throws Exception {
 		List<String> next = sequenceNumberRepository.getBatchRequestNumbers(2);
 		Assert.assertNotNull("Next batch requestNumbers exist", next);
@@ -125,28 +119,24 @@ public class SequenceNumberRepositoryTest extends AbstractTransactionalJUnit4Spr
 	}
 	
 	@Test
-	@Transactional
 	public void testGetSequenceNumber() throws Exception {
 		String next = sequenceNumberRepository.getSequenceNumber("Test", "testNumber");
 		Assert.assertEquals("next test number is correct", "000023", next);
 	}
 	
 	@Test
-	@Transactional
 	public void testGetNextWorksheetBatchNumber() throws Exception {
 		String next = sequenceNumberRepository.getNextWorksheetBatchNumber();
 		Assert.assertEquals("next worksheet batchNumber is correct", "000001", next);
 	}
 	
 	@Test
-	@Transactional
 	public void testGetNextBatchNumber() throws Exception {
 		String next = sequenceNumberRepository.getNextBatchNumber();
 		Assert.assertEquals("next batchNumber is correct", "000002", next);
 	}
 	
 	@Test
-	@Transactional
 	public void testGetNextTestBatchNumber() throws Exception {
 		String next = sequenceNumberRepository.getNextTestBatchNumber();
 		Assert.assertEquals("next test batchNumber is correct", "000000", next);

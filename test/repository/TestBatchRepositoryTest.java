@@ -29,7 +29,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +39,7 @@ import viewmodel.TestBatchViewModel;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class TestBatchRepositoryTest {
 	
@@ -90,7 +89,6 @@ public class TestBatchRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllTestBatches() throws Exception {
 		List<TestBatch> all = testBatchRepository.getAllTestBatch();
 		Assert.assertNotNull("There are TestBatches defined", all);
@@ -98,7 +96,6 @@ public class TestBatchRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindTestBatchById() throws Exception {
 		TestBatch testBatch = testBatchRepository.findTestBatchById(1l);
 		Assert.assertNotNull("TestBatch defined", testBatch);
@@ -106,13 +103,11 @@ public class TestBatchRepositoryTest {
 	}
 	
 	@Test(expected = javax.persistence.NoResultException.class)
-	@Transactional
 	public void testFindTestBatchByIdUnknown() throws Exception {
 		testBatchRepository.findTestBatchById(123l);
 	}
 	
 	@Test
-	@Transactional
 	public void testFindTestBatchesNone() throws Exception {
 		String status = "READY_TO_CLOSE";
 		String createdAfterDate = "2015-07-10 00:00:00";
@@ -125,7 +120,6 @@ public class TestBatchRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindTestBatchesMatchOnDateOnly() throws Exception {
 		String status = "READY_TO_CLOSE";
 		String createdAfterDate = "2015-08-10 00:00:00";
@@ -138,7 +132,6 @@ public class TestBatchRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindTestBatchesMatchOnStatusOnly() throws Exception {
 		String status = "CLOSED";
 		String createdAfterDate = "2015-07-10 00:00:00";
@@ -151,7 +144,6 @@ public class TestBatchRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - sets isDeleted to false instead of true")
 	public void testDeleteTestBatch() throws Exception {
 		testBatchRepository.deleteTestBatch(1l);
@@ -161,7 +153,6 @@ public class TestBatchRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateTestBatch() throws Exception {
 		TestBatch testBatch = testBatchRepository.findTestBatchById(2l);
 		testBatch.setStatus(TestBatchStatus.READY_TO_CLOSE);
@@ -171,7 +162,6 @@ public class TestBatchRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testSaveTestBatch() throws Exception {
 		TestBatch testBatch = new TestBatch();
 		List<DonationBatch> donationBatches = new ArrayList<DonationBatch>();
@@ -188,7 +178,6 @@ public class TestBatchRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetRecentlyClosedTestBatches() throws Exception {
 		List<TestBatch> all = testBatchRepository.getRecentlyClosedTestBatches(1);
 		Assert.assertNotNull("Does not return a null list", all);
@@ -196,7 +185,6 @@ public class TestBatchRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetRecentlyClosedTestBatchesWithLimit() throws Exception {
 		// creating an extra closed batch
 		TestBatch testBatch = testBatchRepository.findTestBatchById(2l);

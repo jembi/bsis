@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class CrossmatchTypeRepositoryTest {
 	
@@ -80,7 +79,6 @@ public class CrossmatchTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllCrossmatchTypes() throws Exception {
 		List<CrossmatchType> all = crossmatchTypeRepository.getAllCrossmatchTypes();
 		Assert.assertNotNull("There are crossmatchtypes defined", all);
@@ -89,14 +87,12 @@ public class CrossmatchTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testIsCrossmatchTypeValid() throws Exception {
 		boolean matched = crossmatchTypeRepository.isCrossmatchTypeValid("Anti Human Globulin");
 		Assert.assertTrue("Crossmatch type called 'Anti Human Globulin' exists", matched);
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("The saveAllCrossmatchTypes method fails with an error: 'detached entity passed to persist'")
 	public void testSaveAllCrossmatchTypes() throws Exception {
 		List<CrossmatchType> all = crossmatchTypeRepository.getAllCrossmatchTypes();

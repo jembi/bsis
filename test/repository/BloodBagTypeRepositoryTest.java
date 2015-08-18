@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class BloodBagTypeRepositoryTest {
 	
@@ -79,7 +78,6 @@ public class BloodBagTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllBloodBagTypes() throws Exception {
 		List<BloodBagType> all = bloodBagTypeRepository.getAllBloodBagTypes();
 		Assert.assertNotNull("There are blood bag types defined", all);
@@ -87,7 +85,6 @@ public class BloodBagTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindBloodBagTypeByName() throws Exception {
 		BloodBagType one = bloodBagTypeRepository.findBloodBagTypeByName("Single");
 		Assert.assertNotNull("There is a blood bag types named 'Single'", one);
@@ -95,7 +92,6 @@ public class BloodBagTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateBloodBagType() throws Exception {
 		BloodBagType two = bloodBagTypeRepository.findBloodBagTypeByName("Double");
 		Assert.assertNotNull("There is a blood bag types named 'Double'", two);
@@ -109,7 +105,6 @@ public class BloodBagTypeRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testSaveBloodBagType() throws Exception {
 		BloodBagType toBeSaved = new BloodBagType();
 		toBeSaved.setBloodBagType("Junit");

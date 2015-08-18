@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class FormFieldRepositoryTest {
 	
@@ -80,7 +79,6 @@ public class FormFieldRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAll() throws Exception {
 		List<FormField> all = formFieldRepository.allFormFields();
 		Assert.assertNotNull("There are FormFields", all);
@@ -88,7 +86,6 @@ public class FormFieldRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindFormFieldById() throws Exception {
 		FormField one = formFieldRepository.findFormFieldById(1l);
 		Assert.assertNotNull("There is a FormField with id 1", one);
@@ -96,14 +93,12 @@ public class FormFieldRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindFormFieldByIdUnknown() throws Exception {
 		FormField one = formFieldRepository.findFormFieldById(1111l);
 		Assert.assertNull("There is no FormField with id 1111", one);
 	}
 	
 	@Test
-	@Transactional
 	public void testGetFormField() throws Exception {
 		FormField donorField = formFieldRepository.getFormField("Donor", "donorNumber");
 		Assert.assertNotNull("There is a donorNumber field for the Donor form", donorField);
@@ -111,14 +106,12 @@ public class FormFieldRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetFormFieldUnknown() throws Exception {
 		FormField donorField = formFieldRepository.getFormField("Donor", "junit");
 		Assert.assertNull("There is no junit field for the Donor form", donorField);
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllDonorForm() throws Exception {
 		List<FormField> all = formFieldRepository.getFormFields("Donor");
 		Assert.assertNotNull("There are FormFields for the Donor Form", all);
@@ -126,7 +119,6 @@ public class FormFieldRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetRequiredFormFieldsDonorForm() throws Exception {
 		List<String> all = formFieldRepository.getRequiredFormFields("Donor");
 		Assert.assertNotNull("There are FormFields for the Donor Form", all);
@@ -135,7 +127,6 @@ public class FormFieldRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetRequiredFormFieldsUnknownForm() throws Exception {
 		List<String> all = formFieldRepository.getRequiredFormFields("Junit");
 		Assert.assertNotNull("There are no FormFields for the unknown Form", all);
@@ -143,7 +134,6 @@ public class FormFieldRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetFieldMaxLengths() throws Exception {
 		Map<String, Integer> maxLengths = formFieldRepository.getFieldMaxLengths("Donor");
 		Assert.assertNotNull("There is a non-null result", maxLengths);
@@ -154,7 +144,6 @@ public class FormFieldRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateFormField() throws Exception {
 		FormField donorField = formFieldRepository.getFormField("Donor", "donorNumber");
 		Assert.assertNotNull("There is a donorNumber field for the Donor form", donorField);

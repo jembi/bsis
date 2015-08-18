@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +34,7 @@ import viewmodel.UserViewModel;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class UserRepositoryTest {
 	
@@ -82,7 +81,6 @@ public class UserRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllUsers() throws Exception {
 		List<UserViewModel> all = userRepository.getAllUsers();
 		Assert.assertNotNull("There are Users defined", all);
@@ -90,7 +88,6 @@ public class UserRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllRoles() throws Exception {
 		List<Role> all = userRepository.getUserRole(new String[] { "1", "2", "3" });
 		Assert.assertNotNull("There are Roles defined", all);
@@ -98,7 +95,6 @@ public class UserRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetAllRolesNull() throws Exception {
 		List<Role> all = userRepository.getUserRole(null);
 		Assert.assertNotNull("There are Roles defined", all);
@@ -106,13 +102,11 @@ public class UserRepositoryTest {
 	}
 	
 	@Test(expected = javax.persistence.NoResultException.class)
-	@Transactional
 	public void testGetAllRolesUnknown() throws Exception {
 		userRepository.getUserRole(new String[] { "123" });
 	}
 	
 	@Test
-	@Transactional
 	public void testFindUserById() throws Exception {
 		User user = userRepository.findUserById(1);
 		Assert.assertNotNull("User is defined", user);
@@ -120,13 +114,11 @@ public class UserRepositoryTest {
 	}
 	
 	@Test(expected = javax.persistence.NoResultException.class)
-	@Transactional
 	public void testFindUserByIdUnknown() throws Exception {
 		userRepository.findUserById(123);
 	}
 	
 	@Test
-	@Transactional
 	public void testAddUser() throws Exception {
 		User user = new User();
 		user.setUsername("tester");
@@ -139,7 +131,6 @@ public class UserRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testDeleteUserById() throws Exception {
 		userRepository.deleteUserById(1); // this is a hard delete
 		List<UserViewModel> all = userRepository.getAllUsers();
@@ -148,14 +139,12 @@ public class UserRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testDeleteUser() throws Exception {
 		userRepository.deleteUser("superuser");
 		// can't assert this is true because all queries ignore deleted users
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateBasicUserInfo() throws Exception {
 		User user = userRepository.findUserById(1);
 		user.setFirstName("Test");
@@ -170,7 +159,6 @@ public class UserRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateBasicUserInfoPassword() throws Exception {
 		User user = userRepository.findUserById(1);
 		user.setPassword("newpassword");
@@ -180,7 +168,6 @@ public class UserRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateLastLogin() throws Exception {
 		User user = userRepository.findUserById(1);
 		userRepository.updateLastLogin(user);

@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class UsageRepositoryTest {
 	
@@ -85,7 +84,6 @@ public class UsageRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindUsageById() throws Exception {
 		ComponentUsage one = usageRepository.findUsageById(1l);
 		Assert.assertNotNull("There is a ComponentUsage", one);
@@ -93,28 +91,24 @@ public class UsageRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - error in HSQL: could not resolve property: productNumber of: model.usage.ComponentUsage")
 	public void testFindComponentUsage() throws Exception {
 		usageRepository.findComponentUsage("1234");
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - error in HSQL: could not resolve property: productNumber of: model.usage.ComponentUsage")
 	public void testFindUsageByProductNumber() throws Exception {
 		usageRepository.findUsageByProductNumber("1234");
 	}
 	
 	@Test
-	@Transactional
 	public void testFindUsageByIdUnknown() throws Exception {
 		ComponentUsage one = usageRepository.findUsageById(123l);
 		Assert.assertNull("There is no ComponentUsage", one);
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateUsage() throws Exception {
 		ComponentUsage one = usageRepository.findUsageById(1l);
 		one.setHospital("Junit hospital");
@@ -124,7 +118,6 @@ public class UsageRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testAddUsage() throws Exception {
 		ComponentUsage one = new ComponentUsage();
 		one.setHospital("Junit hospital");
@@ -138,7 +131,6 @@ public class UsageRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - error in HSQL: could not resolve property: productNumber of: model.usage.ComponentUsage")
 	public void testDeleteUsage() throws Exception {
 		usageRepository.deleteUsage("1234");
@@ -148,7 +140,6 @@ public class UsageRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testDeleteAllUsages() throws Exception {
 		usageRepository.deleteAllUsages();
 		ComponentUsage one = usageRepository.findUsageById(1l);
@@ -156,7 +147,6 @@ public class UsageRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - error in HSQL: could not resolve property: productNumber of: model.usage.ComponentUsage")
 	public void testFindAnyUsageMatching() throws Exception {
 		List<String> usages = new ArrayList<String>();
