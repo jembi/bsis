@@ -7,9 +7,9 @@
 		extraInformation="" isActive="1" markSampleAsUnsafe="0"
 		newInformation="O" pattern="O" pendingTestsIds="" subCategory="BLOODABO" />
 	<BloodTestingRule id="2" bloodTestsIds="1" category="BLOODTYPING"
-		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-		extraInformation="" isActive="1" markSampleAsUnsafe="0"
-		newInformation="A" pattern="A" pendingTestsIds="" subCategory="BLOODABO" />
+	donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
+	extraInformation="" isActive="1" markSampleAsUnsafe="0" newInformation="A"
+	pattern="A" pendingTestsIds="" subCategory="BLOODABO" />
 	<BloodTestingRule id="3" bloodTestsIds="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
 		extraInformation="" isActive="1" markSampleAsUnsafe="0"
