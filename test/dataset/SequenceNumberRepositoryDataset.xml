@@ -1,5 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
+	<DataType id="1" dataType="text"/>
+	<DataType id="2" dataType="integer"/>
+	<DataType id="3" dataType="decimal"/>
+	<DataType id="4" dataType="boolean"/>
+  	<GeneralConfig id="1" name="donor.donorNumberFormat" value="%06d" description="Donor Number Format" dataType_id="1"/>
 	<SequenceNumberStore id="1" columnName="donorNumber"
 		lastNumber="3" targetTable="Donor" />
 	<SequenceNumberStore id="2" columnName="batchNumber"
