@@ -23,7 +23,6 @@ import controller.UtilController;
 
 public class DonationBackingFormValidator implements Validator {
 
-  private Validator validator;
   private UtilController utilController;
   
   public DonationBackingFormValidator(UtilController utilController){
