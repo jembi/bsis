@@ -42,7 +42,7 @@ public class PackTypeBackingFormValidator implements Validator {
 		ValidationUtils.invokeValidator(validator, obj, errors);
 		PackTypeBackingForm form = (PackTypeBackingForm) obj; 
     
-	    if (utilController.isDuplicatePackTypeName(form.getPackType())){
+	    if (utilController.isDuplicatePackTypeName(form.getType())){
 	    	errors.rejectValue("packType", "400",
 	    	          "Pack Type name already exists.");
 	    }

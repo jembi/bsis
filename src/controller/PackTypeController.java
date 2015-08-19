@@ -68,7 +68,7 @@ public class PackTypeController {
 		@RequestMapping(method = RequestMethod.POST)
 		@PreAuthorize("hasRole('" + PermissionConstants.MANAGE_PACK_TYPES + "')")
 		    public ResponseEntity savePackType(@Valid @RequestBody PackTypeBackingForm formData){
-				PackType packType = formData.getPackType();
+				PackType packType = formData.getType();
 		        packType = packTypeRepository.savePackType(packType);
 		        return new ResponseEntity(new PackTypeViewModel(packType), HttpStatus.CREATED);
 		    }
@@ -77,7 +77,7 @@ public class PackTypeController {
 		@PreAuthorize("hasRole('" + PermissionConstants.MANAGE_PACK_TYPES + "')")
 		public ResponseEntity updatePackType(@Valid @RequestBody PackTypeBackingForm formData , @PathVariable Integer id){
 		    Map<String, Object> map = new HashMap<String, Object>();
-		    PackType packType = formData.getPackType();
+		    PackType packType = formData.getType();
 		    packType.setId(id);
 		    packType = packTypeRepository.updatePackType(packType);
 		    map.put("packtype", new PackTypeViewModel(packType));

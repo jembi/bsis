@@ -8,54 +8,54 @@ import model.packtype.PackType;
 public class PackTypeBackingForm {
 	
 	@Valid
-    private PackType packType;
+    private PackType type;
 
     public PackTypeBackingForm() {
-    	packType = new PackType();
+    	type = new PackType();
     }
     
-    public PackType getPackType() {
-        return packType;
+    public PackType getType() {
+        return type;
     }
 
-    public void setPackType(PackType packType) {
-        this.packType = packType;
+    public void setType(PackType packType) {
+        this.type = packType;
     }
     
     public void setId(Integer id){
-        packType.setId(id);
+        type.setId(id);
     }
     
-    public void setPackTypeName(String packTypeStr){
-        packType.setPackType(packTypeStr);
+    public void setPackType(String packTypeStr) {
+        type.setPackType(packTypeStr);
     }
     
-    public String getPackTypeName(){
-        return packType.getPackType();
+    public String getPackType() {
+        return type.getPackType();
     }
     
     public void setComponentType(ComponentType componentType){
-    	packType.setComponentType(componentType);
+    	type.setComponentType(componentType);
     }
     
     public void setCanPool(Boolean canPool){
-        packType.setCanPool(canPool);
+        type.setCanPool(canPool);
     }
     
     public void setCanSplit(Boolean canSplit){
-        packType.setCanSplit(canSplit);
+        type.setCanSplit(canSplit);
     }
     
     public void setIsDeleted(Boolean isDeleted){
-        packType.setIsDeleted(isDeleted);
+        type.setIsDeleted(isDeleted);
     }
     
     public void setCountAsDonation(Boolean countAsDonation){
-        packType.setCountAsDonation(countAsDonation);
+        type.setCountAsDonation(countAsDonation);
     }
     
     public void setPeriodBetweenDonations(Integer periodBetweenDonations){
-        packType.setPeriodBetweenDonations(periodBetweenDonations);
+        type.setPeriodBetweenDonations(periodBetweenDonations);
     }
 
 }
