@@ -53,8 +53,7 @@ public class LotReleaseController {
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new DonationBackingFormValidator(binder.getValidator(),
-                        utilController));
+    binder.setValidator(new DonationBackingFormValidator(utilController));
   }
   
   public static String getUrl(HttpServletRequest req) {
