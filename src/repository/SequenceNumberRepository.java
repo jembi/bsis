@@ -10,6 +10,7 @@ import javax.persistence.TypedQuery;
 
 import model.sequencenumber.SequenceNumberStore;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,9 @@ public class SequenceNumberRepository {
 
   @PersistenceContext
   private EntityManager em;
+
+  @Autowired
+  private GeneralConfigRepository generalConfigRepository;
   
   synchronized public String getNextDonationIdentificationNumber() {
     String queryStr = "SELECT s from SequenceNumberStore s " +
@@ -130,7 +134,8 @@ public class SequenceNumberRepository {
     if (lastNumber == 0){
     	lastNumber ++;
     }
-    String lastNumberStr = String.format("%06d", lastNumber);
+    String donorNumberFormat = generalConfigRepository.getGeneralConfigByName("donor.donorNumberFormat").getValue();
+    String lastNumberStr = String.format(donorNumberFormat, lastNumber);
     String requestNumber = lastNumberStr;
     lastNumber = lastNumber + 1;
     seqNumStore.setLastNumber(lastNumber);
