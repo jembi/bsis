@@ -15,7 +15,7 @@ import javax.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PackTypeExists {
 
-  String message() default "Invalid Blood Bag Type specified";
+  String message() default "Invalid Pack Type specified";
 
   Class<?>[] groups() default {};
 

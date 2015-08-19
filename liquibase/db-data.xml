@@ -164,7 +164,7 @@
 				]]>
 			</sqlCheck>
  		</preConditions>
-		<comment>add blood bag types</comment>
+		<comment>add pack types</comment>
 		<insert tableName = "PackType">
 			<column name="packType" value="Single"/>
 			<column name="isDeleted" value="0"/>

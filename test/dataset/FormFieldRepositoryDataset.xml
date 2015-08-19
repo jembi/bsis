@@ -166,7 +166,7 @@
 		form="Donation" hidden="false" isAutoGeneratable="false" isHidable="true"
 		isRequired="true" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="40" autoGenerate="false" canBeOptional="true"
-		defaultDisplayName="Blood Bag type" defaultValue="Single" field="packType"
+		defaultDisplayName="Pack type" defaultValue="Single" field="packType"
 		form="Donation" hidden="false" isAutoGeneratable="false" isHidable="true"
 		isRequired="true" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="41" autoGenerate="false" canBeOptional="true"
