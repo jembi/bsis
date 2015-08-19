@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
+import utils.LoggerUtil;
+
 
 @RestController
 @RequestMapping("/configurations")
@@ -78,6 +80,10 @@ public class GeneralConfigController {
         form.setId(id);
         updatedConfig = configRepository.update(form.getGeneralConfig());
 
-        return new ResponseEntity<GeneralConfigViewModel>(new GeneralConfigViewModel(updatedConfig), HttpStatus.CREATED);
+        //Update log level if changed
+        if (form.getName().equalsIgnoreCase("log.level"))
+            LoggerUtil.setLogLevel(configRepository.getGeneralConfigByName("log.level").getValue());
+
+        return new ResponseEntity<GeneralConfigViewModel>(new GeneralConfigViewModel(updatedConfig), HttpStatus.OK);
     }
 }
