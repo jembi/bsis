@@ -33,6 +33,10 @@ public class BloodTestBackingForm {
         return bloodTest.getTestName();
     }
 
+    public BloodTestCategory getBloodTestCategory()  {
+        return bloodTest.getCategory();
+    }
+
     public String getTestNameShort() {
         return bloodTest.getTestNameShort();
     }
@@ -70,7 +74,7 @@ public class BloodTestBackingForm {
     }
     
     public void setPositiveResults(String positiveResults){
-        bloodTest.setNegativeResults(positiveResults);
+        bloodTest.setPositiveResults(positiveResults);
     }
     
     public void setRankInCategory(Integer rankInCategory){
