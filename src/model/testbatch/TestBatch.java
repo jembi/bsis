@@ -26,6 +26,8 @@ import model.user.User;
 
 import org.hibernate.envers.Audited;
 
+import service.TestBatchCRUDService;
+
 
 @Entity
 @Audited
@@ -99,6 +101,11 @@ public class TestBatch implements ModificationTracker {
 		return status;
 	}
 
+	/**
+	 * N.B. Updating the status of a test batch should be done via the {@link TestBatchCRUDService}.
+	 * 
+	 * @param status The new {@link TestBatchStatus}
+	 */
 	public void setStatus(TestBatchStatus status) {
 		this.status = status;
 	}
