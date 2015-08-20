@@ -2,84 +2,83 @@ package backingform;
 
 import java.util.List;
 
-import viewmodel.ProductTypeCombinationViewModel;
+import model.componenttype.ComponentType;
+import model.componenttype.ComponentTypeCombination;
+import model.componenttype.ComponentTypeTimeUnits;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import model.producttype.ProductType;
-import model.producttype.ProductTypeCombination;
-import model.producttype.ProductTypeTimeUnits;
 
 public class ComponentTypeBackingForm {
     
 	@JsonIgnore
-    private ProductType productType;
+    private ComponentType componentType;
     
     public ComponentTypeBackingForm(){
-        productType = new ProductType();
+        componentType = new ComponentType();
     }
 
-    public ProductType getProductType() {
-        return productType;
+    public ComponentType getComponentType() {
+        return componentType;
     }
 
-    public void setProductType(ProductType productType) {
-        this.productType = productType;
+    public void setComponentType(ComponentType componentType) {
+        this.componentType = componentType;
     }
     
     public void setId(Integer id){
-        productType.setId(id);
+        componentType.setId(id);
     }
     
-    public void setProductTypeName(String productTypeName){
-        productType.setProductTypeName(productTypeName);
+    public void setComponentTypeName(String componentTypeName){
+        componentType.setComponentTypeName(componentTypeName);
     }
     
-    public void setProductTypeNameShort(String productTypeNameShort){
-        productType.setProductTypeNameShort(productTypeNameShort);
+    public void setComponentTypeNameShort(String componentTypeNameShort){
+        componentType.setComponentTypeNameShort(componentTypeNameShort);
     }
     
     public void setExpiresAfter(Integer expiresAfter){
-        productType.setExpiresAfter(expiresAfter);
+        componentType.setExpiresAfter(expiresAfter);
     }
     
-    public void setExpiresAfterUnits(String productTypeTimeUnits){
-        productType.setExpiresAfterUnits(ProductTypeTimeUnits.valueOf(productTypeTimeUnits));
+    public void setExpiresAfterUnits(String componentTypeTimeUnits){
+        componentType.setExpiresAfterUnits(ComponentTypeTimeUnits.valueOf(componentTypeTimeUnits));
     }
     
     public void setDescription(String description){
-        productType.setDescription(description);
+        componentType.setDescription(description);
     }
     
     public void setHasBloodGroup(Boolean hasBloodGroup){
-        productType.setHasBloodGroup(hasBloodGroup);
+        componentType.setHasBloodGroup(hasBloodGroup);
     }    
     
-    public void setProductTypeCombinations(List<ProductTypeCombination> productTypeCombinations){
-        productType.setProductTypeCombinations(productTypeCombinations);
+    public void setComponentTypeCombinations(List<ComponentTypeCombination> componentTypeCombinations){
+        componentType.setComponentTypeCombinations(componentTypeCombinations);
     }
     
-    public void setProducedProductTypeCombinations(List<ProductTypeCombination> producedProductTypeCombinations){
-    	productType.setProducedProductTypeCombinations(producedProductTypeCombinations);
+    public void setProducedComponentTypeCombinations(List<ComponentTypeCombination> producedComponentTypeCombinations){
+    	componentType.setProducedComponentTypeCombinations(producedComponentTypeCombinations);
     }
     
     public void setHighStorageTemperature(Integer highStorageTemperature) {
-        productType.setHighStorageTemperature(highStorageTemperature);
+        componentType.setHighStorageTemperature(highStorageTemperature);
     }
     
     public void setLowStorageTemperature(Integer lowStorageTemperature) {
-        productType.setLowStorageTemperature(lowStorageTemperature);
+        componentType.setLowStorageTemperature(lowStorageTemperature);
     }
 
     public void setLowTransportTemperature(Integer lowTransportTemperature) {
-        productType.setLowTransportTemperature(lowTransportTemperature);
+        componentType.setLowTransportTemperature(lowTransportTemperature);
     }
 
     public void setHighTransportTemperature(Integer highTransportTemperature) {
-        productType.setHighTransportTemperature(highTransportTemperature);
+        componentType.setHighTransportTemperature(highTransportTemperature);
     }
 
     public void setPreparationInfo(String preparationInfo) {
-        productType.setPreparationInfo(preparationInfo);
+        componentType.setPreparationInfo(preparationInfo);
     }
         
 }

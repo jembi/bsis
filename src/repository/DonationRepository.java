@@ -25,11 +25,11 @@ import javax.persistence.TypedQuery;
 
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.TTIStatus;
+import model.component.Component;
+import model.component.ComponentStatus;
+import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.donor.Donor;
-import model.product.Product;
-import model.product.ProductStatus;
-import model.producttype.ProductType;
 import model.util.BloodGroup;
 
 import org.apache.commons.lang3.StringUtils;
@@ -66,7 +66,7 @@ public class DonationRepository {
   private WorksheetRepository worksheetRepository;
 
   @Autowired
-  private ProductRepository productRepository;
+  private ComponentRepository componentRepository;
   
   public void saveDonation(Donation donation) {
     em.persist(donation);
@@ -342,17 +342,17 @@ public class DonationRepository {
   
   public void createInitialComponent(Donation donation){
     
-    ProductType productType = donation.getBloodBagType().getProductType();
+    ComponentType componentType = donation.getBloodBagType().getComponentType();
       
-    Product product = new Product();
-    product.setIsDeleted(false);
-    product.setComponentIdentificationNumber(donation.getDonationIdentificationNumber() +"-"+productType.getProductTypeNameShort());
-    product.setDonation(donation);
-    product.setStatus(ProductStatus.QUARANTINED);
-    product.setCreatedDate(donation.getCreatedDate());
+    Component component = new Component();
+    component.setIsDeleted(false);
+    component.setComponentIdentificationNumber(donation.getDonationIdentificationNumber() +"-"+componentType.getComponentTypeNameShort());
+    component.setDonation(donation);
+    component.setStatus(ComponentStatus.QUARANTINED);
+    component.setCreatedDate(donation.getCreatedDate());
 
     // set new component creation date to match donation date 
-    product.setCreatedOn(donation.getDonationDate());
+    component.setCreatedOn(donation.getDonationDate());
     // if bleed time is provided, update component creation time to match bleed start time 
     if (donation.getBleedStartTime() != null){
     	Calendar donationDate = Calendar.getInstance();
@@ -363,9 +363,9 @@ public class DonationRepository {
     	donationDate.set(Calendar.MINUTE, bleedTime.get(Calendar.MINUTE));
     	donationDate.set(Calendar.SECOND, bleedTime.get(Calendar.SECOND));
     	donationDate.set(Calendar.MILLISECOND, bleedTime.get(Calendar.MILLISECOND));
-    	product.setCreatedOn(donationDate.getTime());
+    	component.setCreatedOn(donationDate.getTime());
     }
-    product.setCreatedBy(donation.getCreatedBy());
+    component.setCreatedBy(donation.getCreatedBy());
     
     // set cal to donationDate Date 
     Calendar cal = Calendar.getInstance();
@@ -381,13 +381,13 @@ public class DonationRepository {
     cal.set(Calendar.SECOND, bleedStartTime.get(Calendar.SECOND));
     
     // update cal with initial component expiry period
-    cal.add(Calendar.DATE, productType.getExpiresAfter());
+    cal.add(Calendar.DATE, componentType.getExpiresAfter());
     Date expiresOn = cal.getTime();    
 
-    product.setExpiresOn(expiresOn);
-    product.setProductType(productType);
-    em.persist(product);
-    em.refresh(product);
+    component.setExpiresOn(expiresOn);
+    component.setComponentType(componentType);
+    em.persist(component);
+    em.refresh(component);
    
   }
   

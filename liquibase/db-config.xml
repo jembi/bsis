@@ -1846,7 +1846,7 @@
          <column name="name" value="Void Test Outcome"></column>
     </insert>
 
-    <!-- Product Request Permissions -->
+    <!-- Component Request Permissions -->
     <insert tableName="Permission">
          <column name="id" value="77"></column>
          <column name="name" value="Add Request"></column>
@@ -2104,7 +2104,7 @@
        <column name="roles_id" value="14"></column>
     </insert>
 
-    <!-- Product Request Permission Role Mappings -->
+    <!-- Component Request Permission Role Mappings -->
     <!-- Add Request Permission Role  Mappings-->
     <insert tableName="Permission_Role">
        <column name="permissions_id" value="77"></column>

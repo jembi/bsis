@@ -27,13 +27,13 @@ import javax.validation.constraints.NotNull;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
+import model.component.Component;
 import model.donationbatch.DonationBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
-import model.product.Product;
 import model.user.User;
 import model.worksheet.Worksheet;
 
@@ -113,10 +113,10 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
   private BloodBagType bloodBagType;
 
   /**
-   * List of products created from this donation.
+   * List of components created from this donation.
    */
   @OneToMany(mappedBy="donation")
-  private List<Product> products;
+  private List<Component> components;
 
   @NotAudited
   @ManyToMany(mappedBy="donations")
@@ -269,12 +269,12 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     this.setBloodTypingMatchStatus(donation.getBloodTypingMatchStatus());
   }
 
-  public List<Product> getProducts() {
-    return products;
+  public List<Component> getComponents() {
+    return components;
   }
 
-  public void setProducts(List<Product> products) {
-    this.products = products;
+  public void setComponents(List<Component> components) {
+    this.components = components;
   }
 
   public Date getLastUpdated() {

@@ -64,458 +64,499 @@
 	</changeSet>
 	-->
 
-	<changeSet id="20150114-0959" author="danfuterman">
-		<comment>Add product types</comment>
-		<insert tableName = "ProductType">
+    <!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20150817-1154" author="danfuterman">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM ComponentType WHERE componentTypeNameShort = "0011";
+				]]>
+			</sqlCheck>
+ 		</preConditions>
+		<comment>Add component types</comment>
+		<insert tableName = "ComponentType">
 			<column name="id" value="1"/>
-			<column name="productTypeNameShort" value="0011"/>
-			<column name="productTypeName" value="Whole Blood Single Pack - CPDA"/>
+			<column name="componentTypeNameShort" value="0011"/>
+			<column name="componentTypeName" value="Whole Blood Single Pack - CPDA"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
 			<column name="hasBloodGroup" value="1"/>
-			<column name="pediProductType_id" value="NULL"/>
+			<column name="pediComponentType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductType">
+		<insert tableName = "ComponentType">
 			<column name="id" value="2"/>
-			<column name="productTypeNameShort" value="0012"/>
-			<column name="productTypeName" value="Whole Blood Double Pack - CPDA"/>
+			<column name="componentTypeNameShort" value="0012"/>
+			<column name="componentTypeName" value="Whole Blood Double Pack - CPDA"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
 			<column name="hasBloodGroup" value="1"/>
-			<column name="pediProductType_id" value="NULL"/>
+			<column name="pediComponentType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductType">
+		<insert tableName = "ComponentType">
 			<column name="id" value="3"/>
-			<column name="productTypeNameShort" value="0013"/>
-			<column name="productTypeName" value="Whole Blood Triple Pack - CPDA"/>
+			<column name="componentTypeNameShort" value="0013"/>
+			<column name="componentTypeName" value="Whole Blood Triple Pack - CPDA"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
 			<column name="hasBloodGroup" value="1"/>
-			<column name="pediProductType_id" value="NULL"/>
+			<column name="pediComponentType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductType">
+		<insert tableName = "ComponentType">
 			<column name="id" value="4"/>
-			<column name="productTypeNameShort" value="0014"/>
-			<column name="productTypeName" value="Whole Blood Quad Pack - CPDA"/>
+			<column name="componentTypeNameShort" value="0014"/>
+			<column name="componentTypeName" value="Whole Blood Quad Pack - CPDA"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
 			<column name="hasBloodGroup" value="1"/>
-			<column name="pediProductType_id" value="NULL"/>
+			<column name="pediComponentType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductType">
+		<insert tableName = "ComponentType">
 			<column name="id" value="5"/>
-			<column name="productTypeNameShort" value="0021"/>
-			<column name="productTypeName" value="Apheresis"/>
+			<column name="componentTypeNameShort" value="0021"/>
+			<column name="componentTypeName" value="Apheresis"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="5"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
 			<column name="hasBloodGroup" value="1"/>
-			<column name="pediProductType_id" value="NULL"/>
+			<column name="pediComponentType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductType">
+		<insert tableName = "ComponentType">
 			<column name="id" value="6"/>
-			<column name="productTypeNameShort" value="1001"/>
-			<column name="productTypeName" value="Whole Blood - CPDA"/>
+			<column name="componentTypeNameShort" value="1001"/>
+			<column name="componentTypeName" value="Whole Blood - CPDA"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
 			<column name="hasBloodGroup" value="1"/>
-			<column name="pediProductType_id" value="NULL"/>
+			<column name="pediComponentType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductType">
+		<insert tableName = "ComponentType">
 			<column name="id" value="7"/>
-			<column name="productTypeNameShort" value="1005"/>
-			<column name="productTypeName" value="Whole Blood Poor Platelets - CPDA"/>
+			<column name="componentTypeNameShort" value="1005"/>
+			<column name="componentTypeName" value="Whole Blood Poor Platelets - CPDA"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
 			<column name="hasBloodGroup" value="1"/>
-			<column name="pediProductType_id" value="NULL"/>
+			<column name="pediComponentType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductType">
+		<insert tableName = "ComponentType">
 			<column name="id" value="8"/>
-			<column name="productTypeNameShort" value="2001"/>
-			<column name="productTypeName" value="Packed Red Cells - CPDA"/>
+			<column name="componentTypeNameShort" value="2001"/>
+			<column name="componentTypeName" value="Packed Red Cells - CPDA"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
 			<column name="hasBloodGroup" value="1"/>
-			<column name="pediProductType_id" value="NULL"/>
+			<column name="pediComponentType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductType">
+		<insert tableName = "ComponentType">
 			<column name="id" value="9"/>
-			<column name="productTypeNameShort" value="2011"/>
-			<column name="productTypeName" value="Packed Red Cells - SAGM"/>
+			<column name="componentTypeNameShort" value="2011"/>
+			<column name="componentTypeName" value="Packed Red Cells - SAGM"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="42"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
 			<column name="hasBloodGroup" value="1"/>
-			<column name="pediProductType_id" value="NULL"/>
+			<column name="pediComponentType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductType">
+		<insert tableName = "ComponentType">
 			<column name="id" value="10"/>
-			<column name="productTypeNameShort" value="3001"/>
-			<column name="productTypeName" value="Fresh Frozen Plasma - Whole Blood"/>
+			<column name="componentTypeNameShort" value="3001"/>
+			<column name="componentTypeName" value="Fresh Frozen Plasma - Whole Blood"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="365"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
 			<column name="hasBloodGroup" value="1"/>
-			<column name="pediProductType_id" value="NULL"/>
+			<column name="pediComponentType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductType">
+		<insert tableName = "ComponentType">
 			<column name="id" value="11"/>
-			<column name="productTypeNameShort" value="3002"/>
-			<column name="productTypeName" value="Frozen Plasma - Whole Blood"/>
+			<column name="componentTypeNameShort" value="3002"/>
+			<column name="componentTypeName" value="Frozen Plasma - Whole Blood"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="365"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
 			<column name="hasBloodGroup" value="1"/>
-			<column name="pediProductType_id" value="NULL"/>
+			<column name="pediComponentType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductType">
+		<insert tableName = "ComponentType">
 			<column name="id" value="12"/>
-			<column name="productTypeNameShort" value="4001"/>
-			<column name="productTypeName" value="Platelets Concentrate - Whole Blood"/>
+			<column name="componentTypeNameShort" value="4001"/>
+			<column name="componentTypeName" value="Platelets Concentrate - Whole Blood"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="5"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
 			<column name="hasBloodGroup" value="1"/>
-			<column name="pediProductType_id" value="NULL"/>
+			<column name="pediComponentType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductType">
+		<insert tableName = "ComponentType">
 			<column name="id" value="13"/>
-			<column name="productTypeNameShort" value="4011"/>
-			<column name="productTypeName" value="Platelets Concentrate - Whole Blood - 24H"/>
+			<column name="componentTypeNameShort" value="4011"/>
+			<column name="componentTypeName" value="Platelets Concentrate - Whole Blood - 24H"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="1"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
 			<column name="hasBloodGroup" value="1"/>
-			<column name="pediProductType_id" value="NULL"/>
+			<column name="pediComponentType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductType">
+		<insert tableName = "ComponentType">
 			<column name="id" value="14"/>
-			<column name="productTypeNameShort" value="2101"/>
-			<column name="productTypeName" value="Packed Red Cells - Paediatric - CPDA"/>
+			<column name="componentTypeNameShort" value="2101"/>
+			<column name="componentTypeName" value="Packed Red Cells - Paediatric - CPDA"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="35"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
 			<column name="hasBloodGroup" value="1"/>
-			<column name="pediProductType_id" value="NULL"/>
+			<column name="pediComponentType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductType">
+		<insert tableName = "ComponentType">
 			<column name="id" value="15"/>
-			<column name="productTypeNameShort" value="3011"/>
-			<column name="productTypeName" value="Fresh Frozen Plasma - Apheresis"/>
+			<column name="componentTypeNameShort" value="3011"/>
+			<column name="componentTypeName" value="Fresh Frozen Plasma - Apheresis"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="365"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
 			<column name="hasBloodGroup" value="1"/>
-			<column name="pediProductType_id" value="NULL"/>
+			<column name="pediComponentType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductType">
+		<insert tableName = "ComponentType">
 			<column name="id" value="16"/>
-			<column name="productTypeNameShort" value="4021"/>
-			<column name="productTypeName" value="Platelets Concentrate - Apheresis"/>
+			<column name="componentTypeNameShort" value="4021"/>
+			<column name="componentTypeName" value="Platelets Concentrate - Apheresis"/>
 			<column name="description" value=""/>
 			<column name="expiresAfter" value="5"/>
 			<column name="expiresAfterUnits" value="DAYS"/>
 			<column name="hasBloodGroup" value="1"/>
-			<column name="pediProductType_id" value="NULL"/>
+			<column name="pediComponentType_id" value="NULL"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
 	</changeSet>
 	
-	<changeSet id="20150114-1103" author="danfuterman">
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20150818-1025" author="danfuterman">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM BloodBagType WHERE bloodBagType = "Single";
+				]]>
+			</sqlCheck>
+ 		</preConditions>
 		<comment>add blood bag types</comment>
 		<insert tableName = "BloodBagType">
 			<column name="bloodBagType" value="Single"/>
 			<column name="isDeleted" value="0"/>
-			<column name="productType_id" value="1"/>
+			<column name="componentType_id" value="1"/>
 			<column name="countAsDonation" value="1"/>
 			<column name="periodBetweenDonations" value="90"/>
 		</insert>
 		<insert tableName = "BloodBagType">
 			<column name="bloodBagType" value="Double"/>
 			<column name="isDeleted" value="0"/>
-			<column name="productType_id" value="2"/>
+			<column name="componentType_id" value="2"/>
 			<column name="countAsDonation" value="1"/>
 			<column name="periodBetweenDonations" value="90"/>
 		</insert>
 		<insert tableName = "BloodBagType">
 			<column name="bloodBagType" value="Triple"/>
 			<column name="isDeleted" value="0"/>
-			<column name="productType_id" value="3"/>
+			<column name="componentType_id" value="3"/>
 			<column name="countAsDonation" value="1"/>
 			<column name="periodBetweenDonations" value="90"/>
 		</insert>
 		<insert tableName = "BloodBagType">
 			<column name="bloodBagType" value="Quad"/>
 			<column name="isDeleted" value="0"/>
-			<column name="productType_id" value="4"/>
+			<column name="componentType_id" value="4"/>
 			<column name="countAsDonation" value="1"/>
 			<column name="periodBetweenDonations" value="90"/>
 		</insert>
 		<insert tableName = "BloodBagType">
 			<column name="bloodBagType" value="Apheresis"/>
 			<column name="isDeleted" value="0"/>
-			<column name="productType_id" value="5"/>
+			<column name="componentType_id" value="5"/>
 			<column name="countAsDonation" value="1"/>
 			<column name="periodBetweenDonations" value="30"/>
 		</insert>
 		<insert tableName = "BloodBagType">
 			<column name="bloodBagType" value="Dry Pack"/>
 			<column name="isDeleted" value="0"/>
-			<column name="productType_id" value="NULL"/>
+			<column name="componentType_id" value="NULL"/>
 			<column name="countAsDonation" value="0"/>
 			<column name="periodBetweenDonations" value="0"/>
 		</insert>
 		<insert tableName = "BloodBagType">
 			<column name="bloodBagType" value="Test Only"/>
 			<column name="isDeleted" value="0"/>
-			<column name="productType_id" value="NULL"/>
+			<column name="componentType_id" value="NULL"/>
 			<column name="countAsDonation" value="0"/>
 			<column name="periodBetweenDonations" value="0"/>
 		</insert>
 		<insert tableName = "BloodBagType">
 			<column name="bloodBagType" value="Did Not Bleed"/>
 			<column name="isDeleted" value="0"/>
-			<column name="productType_id" value="NULL"/>
+			<column name="componentType_id" value="NULL"/>
 			<column name="countAsDonation" value="0"/>
 			<column name="periodBetweenDonations" value="0"/>
 		</insert>
 	</changeSet>
 
-	
-	<changeSet id="20150115-2132" author="danfuterman">
-		<comment>Add product type combinations</comment>
-		<insert tableName = "ProductTypeCombination">
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20150817-1552" author="danfuterman">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM ComponentTypeCombination WHERE id = 1;
+				]]>
+			</sqlCheck>
+ 		</preConditions>
+		<comment>Add component type combinations</comment>
+		<insert tableName = "ComponentTypeCombination">
 			<column name="id" value="1"/>
 			<column name="combinationName" value="Whole Blood"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination">
+		<insert tableName = "ComponentTypeCombination">
 			<column name="id" value="2"/>
 			<column name="combinationName" value="PRC-CPDA, FFP"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination">
+		<insert tableName = "ComponentTypeCombination">
 			<column name="id" value="3"/>
 			<column name="combinationName" value="PRC-CPDA, FP"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination">
+		<insert tableName = "ComponentTypeCombination">
 			<column name="id" value="4"/>
 			<column name="combinationName" value="WB Poor Platelets, PC-24H"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination">
+		<insert tableName = "ComponentTypeCombination">
 			<column name="id" value="5"/>
 			<column name="combinationName" value="PRC-SAGM, FFP, PC"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination">
+		<insert tableName = "ComponentTypeCombination">
 			<column name="id" value="6"/>
 			<column name="combinationName" value="PRC-SAGM, FFP"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination">
+		<insert tableName = "ComponentTypeCombination">
 			<column name="id" value="7"/>
 			<column name="combinationName" value="PRC-SAGM, FP"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination">
+		<insert tableName = "ComponentTypeCombination">
 			<column name="id" value="8"/>
 			<column name="combinationName" value="3 X PRC-Paed-CPDA, FFP"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination">
+		<insert tableName = "ComponentTypeCombination">
 			<column name="id" value="9"/>
 			<column name="combinationName" value="FFP-Apheresis, PC-Apheresis"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination">
+		<insert tableName = "ComponentTypeCombination">
 			<column name="id" value="10"/>
 			<column name="combinationName" value="FFP Apheresis, 2 X PC-Apheresis"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
 	</changeSet>
 
-	<changeSet id="20150115-2137" author="danfuterman">
-		<comment>Add product type combination mappings</comment>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="1"/>
-			<column name="productTypes_id" value="6"/>
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20150817-1135" author="danfuterman">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM ComponentTypeCombination_ComponentType 
+				where componentTypeCombinations_id = 1 and componentTypes_id = 6;
+				]]>
+			</sqlCheck>
+ 		</preConditions>
+		<comment>Add component type combination mappings</comment>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="1"/>
+			<column name="componentTypes_id" value="6"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="2"/>
-			<column name="productTypes_id" value="8"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="2"/>
+			<column name="componentTypes_id" value="8"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="2"/>
-			<column name="productTypes_id" value="10"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="2"/>
+			<column name="componentTypes_id" value="10"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="3"/>
-			<column name="productTypes_id" value="8"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="3"/>
+			<column name="componentTypes_id" value="8"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="3"/>
-			<column name="productTypes_id" value="11"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="3"/>
+			<column name="componentTypes_id" value="11"/>
 		</insert>
-			<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="4"/>
-			<column name="productTypes_id" value="7"/>
+			<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="4"/>
+			<column name="componentTypes_id" value="7"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="4"/>
-			<column name="productTypes_id" value="13"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="4"/>
+			<column name="componentTypes_id" value="13"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="5"/>
-			<column name="productTypes_id" value="9"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="5"/>
+			<column name="componentTypes_id" value="9"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="5"/>
-			<column name="productTypes_id" value="10"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="5"/>
+			<column name="componentTypes_id" value="10"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="5"/>
-			<column name="productTypes_id" value="12"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="5"/>
+			<column name="componentTypes_id" value="12"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="6"/>
-			<column name="productTypes_id" value="9"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="6"/>
+			<column name="componentTypes_id" value="9"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="6"/>
-			<column name="productTypes_id" value="10"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="6"/>
+			<column name="componentTypes_id" value="10"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="7"/>
-			<column name="productTypes_id" value="9"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="7"/>
+			<column name="componentTypes_id" value="9"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="7"/>
-			<column name="productTypes_id" value="11"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="7"/>
+			<column name="componentTypes_id" value="11"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="8"/>
-			<column name="productTypes_id" value="14"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="8"/>
+			<column name="componentTypes_id" value="14"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="8"/>
-			<column name="productTypes_id" value="14"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="8"/>
+			<column name="componentTypes_id" value="14"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="8"/>
-			<column name="productTypes_id" value="14"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="8"/>
+			<column name="componentTypes_id" value="14"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="8"/>
-			<column name="productTypes_id" value="10"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="8"/>
+			<column name="componentTypes_id" value="10"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="9"/>
-			<column name="productTypes_id" value="15"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="9"/>
+			<column name="componentTypes_id" value="15"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="9"/>
-			<column name="productTypes_id" value="16"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="9"/>
+			<column name="componentTypes_id" value="16"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="10"/>
-			<column name="productTypes_id" value="15"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="10"/>
+			<column name="componentTypes_id" value="15"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="10"/>
-			<column name="productTypes_id" value="16"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="10"/>
+			<column name="componentTypes_id" value="16"/>
 		</insert>
-		<insert tableName = "ProductTypeCombination_ProductType">
-			<column name="productTypeCombinations_id" value="10"/>
-			<column name="productTypes_id" value="16"/>
+		<insert tableName = "ComponentTypeCombination_ComponentType">
+			<column name="componentTypeCombinations_id" value="10"/>
+			<column name="componentTypes_id" value="16"/>
 		</insert>
 	</changeSet>
 	
-	<changeSet id="20150115-2152" author="danfuterman">
-		<comment>Add product type combination rules</comment>
-		<insert tableName = "ProductType_ProductTypeCombination">
-			<column name="sourceProductTypes_id" value="1"/>
-			<column name="producedProductTypeCombinations_id" value="1"/>
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20150817-1140" author="danfuterman">	
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM ComponentType_ComponentTypeCombination 
+				where sourceComponentTypes_id = 1 and producedComponentTypeCombinations_id = 1;
+				]]>
+			</sqlCheck>
+ 		</preConditions>
+		<comment>Add component type combination rules</comment>
+		<insert tableName = "ComponentType_ComponentTypeCombination">
+			<column name="sourceComponentTypes_id" value="1"/>
+			<column name="producedComponentTypeCombinations_id" value="1"/>
 		</insert>
-		<insert tableName = "ProductType_ProductTypeCombination">
-			<column name="sourceProductTypes_id" value="2"/>
-			<column name="producedProductTypeCombinations_id" value="2"/>
+		<insert tableName = "ComponentType_ComponentTypeCombination">
+			<column name="sourceComponentTypes_id" value="2"/>
+			<column name="producedComponentTypeCombinations_id" value="2"/>
 		</insert>
-		<insert tableName = "ProductType_ProductTypeCombination">
-			<column name="sourceProductTypes_id" value="2"/>
-			<column name="producedProductTypeCombinations_id" value="3"/>
+		<insert tableName = "ComponentType_ComponentTypeCombination">
+			<column name="sourceComponentTypes_id" value="2"/>
+			<column name="producedComponentTypeCombinations_id" value="3"/>
 		</insert>
-		<insert tableName = "ProductType_ProductTypeCombination">
-			<column name="sourceProductTypes_id" value="2"/>
-			<column name="producedProductTypeCombinations_id" value="4"/>
+		<insert tableName = "ComponentType_ComponentTypeCombination">
+			<column name="sourceComponentTypes_id" value="2"/>
+			<column name="producedComponentTypeCombinations_id" value="4"/>
 		</insert>
-		<insert tableName = "ProductType_ProductTypeCombination">
-			<column name="sourceProductTypes_id" value="3"/>
-			<column name="producedProductTypeCombinations_id" value="5"/>
+		<insert tableName = "ComponentType_ComponentTypeCombination">
+			<column name="sourceComponentTypes_id" value="3"/>
+			<column name="producedComponentTypeCombinations_id" value="5"/>
 		</insert>
-		<insert tableName = "ProductType_ProductTypeCombination">
-			<column name="sourceProductTypes_id" value="3"/>
-			<column name="producedProductTypeCombinations_id" value="6"/>
+		<insert tableName = "ComponentType_ComponentTypeCombination">
+			<column name="sourceComponentTypes_id" value="3"/>
+			<column name="producedComponentTypeCombinations_id" value="6"/>
 		</insert>
-		<insert tableName = "ProductType_ProductTypeCombination">
-			<column name="sourceProductTypes_id" value="3"/>
-			<column name="producedProductTypeCombinations_id" value="7"/>
+		<insert tableName = "ComponentType_ComponentTypeCombination">
+			<column name="sourceComponentTypes_id" value="3"/>
+			<column name="producedComponentTypeCombinations_id" value="7"/>
 		</insert>
-		<insert tableName = "ProductType_ProductTypeCombination">
-			<column name="sourceProductTypes_id" value="4"/>
-			<column name="producedProductTypeCombinations_id" value="8"/>
+		<insert tableName = "ComponentType_ComponentTypeCombination">
+			<column name="sourceComponentTypes_id" value="4"/>
+			<column name="producedComponentTypeCombinations_id" value="8"/>
 		</insert>
-		<insert tableName = "ProductType_ProductTypeCombination">
-			<column name="sourceProductTypes_id" value="5"/>
-			<column name="producedProductTypeCombinations_id" value="9"/>
+		<insert tableName = "ComponentType_ComponentTypeCombination">
+			<column name="sourceComponentTypes_id" value="5"/>
+			<column name="producedComponentTypeCombinations_id" value="9"/>
 		</insert>
-		<insert tableName = "ProductType_ProductTypeCombination">
-			<column name="sourceProductTypes_id" value="5"/>
-			<column name="producedProductTypeCombinations_id" value="10"/>
+		<insert tableName = "ComponentType_ComponentTypeCombination">
+			<column name="sourceComponentTypes_id" value="5"/>
+			<column name="producedComponentTypeCombinations_id" value="10"/>
 		</insert>
 	</changeSet>
 	
 	<!-- NOT USED FOR BETA-RELEASE
 	<changeSet id="20141117-0931" author="srikanthmalyala">
-		<comment>Add paediatric product type associations</comment>
-		<update tableName="ProductType">
-			<column name="pediProductType_id" value = "5"/>
+		<comment>Add paediatric component type associations</comment>
+		<update tableName="ComponentType">
+			<column name="pediComponentType_id" value = "5"/>
 			<where>id = "1"</where>
 		</update>
-		<update tableName="ProductType">
-			<column name="pediProductType_id" value = "6"/>
+		<update tableName="ComponentType">
+			<column name="pediComponentType_id" value = "6"/>
 			<where>id = "2"</where>
 		</update>
-		<update tableName="ProductType">
-			<column name="pediProductType_id" value = "7"/>
+		<update tableName="ComponentType">
+			<column name="pediComponentType_id" value = "7"/>
 			<where>id = "3"</where>
 		</update>
-		<update tableName="ProductType">
-			<column name="pediProductType_id" value = "8"/>
+		<update tableName="ComponentType">
+			<column name="pediComponentType_id" value = "8"/>
 			<where>id = "4"</where>
 		</update>
 	</changeSet>
@@ -606,63 +647,79 @@
 		</insert>
 	</changeSet>
 	
-	<changeSet id="20131024-1508" author="gtlnikita">
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20140818-0410" author="gtlnikita">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM ComponentStatusChangeReason WHERE statusChangeReason = "Incomplete Donation";
+				]]>
+			</sqlCheck>
+ 		</preConditions>
 		<comment>Add component discard reasons</comment>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Incomplete Donation"/>
 			<column name="category" value="DISCARDED"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Processing Problems"/>
 			<column name="category" value="DISCARDED"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Passed Expiry Dates"/>
 			<column name="category" value="DISCARDED"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Reactive FOR TTIs"/>
 			<column name="category" value="DISCARDED"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Storage Problems"/>
 			<column name="category" value="DISCARDED"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Transport Problems"/>
 			<column name="category" value="DISCARDED"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141202-0950" author="danfuterman">
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20150818-0411" author="danfuterman">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM ComponentStatusChangeReason WHERE statusChangeReason = "Expired";
+				]]>
+			</sqlCheck>
+ 		</preConditions>
 		<comment>Add component return and split reasons</comment>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Expired"/>
 			<column name="category" value="RETURNED"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Not required"/>
 			<column name="category" value="RETURNED"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Incorrect Component Sent"/>
 			<column name="category" value="RETURNED"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Did not crossmatch with patient sample"/>
 			<column name="category" value="RETURNED"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-		<insert tableName="ProductStatusChangeReason">
+		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Split"/>
 			<column name="category" value="SPLIT"/>
 			<column name="isDeleted" value="0"/>
