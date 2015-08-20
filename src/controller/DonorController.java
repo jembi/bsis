@@ -2,6 +2,8 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +17,7 @@ import model.donordeferral.DonorDeferral;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import repository.ContactMethodTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
+import repository.PostDonationCounsellingRepository;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 import viewmodel.DonationViewModel;
@@ -60,6 +64,9 @@ public class DonorController {
   @Autowired
   private ContactMethodTypeRepository contactMethodTypeRepository;
   
+  @Autowired
+  private PostDonationCounsellingRepository postDonationCounsellingRepository;
+  
   public DonorController() {
   }
 
@@ -76,6 +83,24 @@ public class DonorController {
     }
     return reqUrl;
   }
+  
+    @RequestMapping(method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
+    public List<DonorViewModel> findDonors(
+            @RequestParam(value = "flaggedForCounselling", required = true) boolean flaggedForCounselling,
+            @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+            @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate,
+            @RequestParam(value = "donorPanel", required = false) Long donorPanelId) {
+
+        if (flaggedForCounselling) {
+            List<Donor> donors = postDonationCounsellingRepository.findDonorsFlaggedForCounselling(
+                    startDate, endDate, donorPanelId);
+            return getDonorViewModels(donors);
+        }
+
+        // Just return an empty list for now. This could return the full list of donors if needed.
+        return Collections.emptyList();
+    }
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
@@ -305,8 +330,8 @@ public class DonorController {
     m.put("addressTypes", donorRepository.getAllAddressTypes());
   }
  
-  private List<DonorViewModel> getDonorsViewModels(List<Donor> donors) {
-    List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
+  private List<DonorViewModel> getDonorViewModels(List<Donor> donors) {
+    List<DonorViewModel> donorViewModels = new ArrayList<>();
     for (Donor donor : donors) {
       donorViewModels.add(new DonorViewModel(donor));
     }

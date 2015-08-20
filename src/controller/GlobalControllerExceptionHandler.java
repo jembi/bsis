@@ -170,7 +170,7 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("hasErrors", "true");
     errorMap.put("errorMessage", error.getPropertyName() + "with value " +error.getValue() 
             + "is not compatable to" + error.getRequiredType());
-    errorMap.put("userMessage", "Please check thr input with value " + error.getValue() );
+    errorMap.put("userMessage", "Please check the input with value " + error.getValue() );
     errorMap.put("moreInfo", error.getMessage());
     errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
     error.printStackTrace();
@@ -202,13 +202,13 @@ public class GlobalControllerExceptionHandler {
         TypeMismatchException error) {
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
-    errorMap.put("developerMessage", "value '" +error.getValue() 
-            + "' is not compatable to" + error.getRequiredType());
-    errorMap.put("userMessage", "Please check thr input  value '" + error.getValue()+ "'" );
+    errorMap.put("developerMessage", "Value '" +error.getValue() 
+            + "' is not compatable with " + error.getRequiredType());
+    errorMap.put("userMessage", "Please check the input value '" + error.getValue()+ "'" );
     errorMap.put("moreInfo", error.getMessage());
     errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
     error.printStackTrace();
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_GATEWAY);
+    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
   }
   
    /**
