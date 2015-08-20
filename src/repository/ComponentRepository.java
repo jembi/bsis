@@ -146,14 +146,14 @@ public class ComponentRepository {
     return false;
   }
 
-  public Component findComponent(String productNumber) {
+  public Component findComponent(String componentIdentificationNumber) {
     Component component = null;
-    if (productNumber != null && productNumber.length() > 0) {
-      String queryString = "SELECT c FROM Component c WHERE c.productNumber = :productNumber and c.isDeleted= :isDeleted";
+    if (componentIdentificationNumber != null && componentIdentificationNumber.length() > 0) {
+      String queryString = "SELECT c FROM Component c WHERE c.componentIdentificationNumber = :componentIdentificationNumber and c.isDeleted= :isDeleted";
       TypedQuery<Component> query = em.createQuery(queryString, Component.class);
       query.setParameter("isDeleted", Boolean.FALSE);
-      List<Component> components = query.setParameter("productNumber",
-          productNumber).getResultList();
+      List<Component> components = query.setParameter("componentIdentificationNumber",
+    	  componentIdentificationNumber).getResultList();
       if (components != null && components.size() > 0) {
         component = components.get(0);
       }
