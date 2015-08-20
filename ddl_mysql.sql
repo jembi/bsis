@@ -650,7 +650,7 @@
         expiresAfterUnits varchar(30),
         hasBloodGroup boolean,
         isDeleted boolean,
-        componentType varchar(50),
+        componentTypeName varchar(50),
         componentTypeNameShort varchar(30),
         pediComponentType_id SMALLINT,
         primary key (id, REV)
