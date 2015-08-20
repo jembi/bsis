@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import model.admin.DataType;
 import model.admin.GeneralConfig;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+
+import utils.LoggerUtil;
 
 
 @Component
@@ -84,4 +87,13 @@ public class GeneralConfigUpdater {
             System.out.println(error.getMessage());
         }
     }
+
+    @Scheduled(fixedDelay = Integer.MAX_VALUE)
+    public void initializeGeneralConfigs () {
+        //Set the application root log level at startup
+        GeneralConfig generalConfig = generalConfigRepository.getGeneralConfigByName("log.level");
+        LoggerUtil.setLogLevel(generalConfig.getValue());
+    }
+
+
 }
