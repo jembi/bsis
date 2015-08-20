@@ -35,8 +35,8 @@ public class BloodTestBackingFormValidator implements Validator {
         ValidationUtils.rejectIfEmpty(errors, "BloodTest.testName", "testName.empty", "The testName is required");
         ValidationUtils.rejectIfEmpty(errors, "BloodTest.category", "category.empty", "The bloodTestCategory is required");
         ValidationUtils.rejectIfEmpty(errors, "BloodTest.validResults", "validResults.empty", "The validResults is required");
-        ValidationUtils.rejectIfEmpty(errors, "BloodTest.positiveResults", "positiveResults.empty", "The positiveResults is required");
-        ValidationUtils.rejectIfEmpty(errors, "BloodTest.negativeResults", "negativeResults.empty", "The negativeResults is required");
+//        ValidationUtils.rejectIfEmpty(errors, "BloodTest.positiveResults", "positiveResults.empty", "The positiveResults is required");
+//        ValidationUtils.rejectIfEmpty(errors, "BloodTest.negativeResults", "negativeResults.empty", "The negativeResults is required");
         ValidationUtils.rejectIfEmpty(errors, "BloodTest.testNameShort", "testNameShort.empty", "The testNameShort is required");
         ValidationUtils.rejectIfEmpty(errors, "BloodTest.rankInCategory", "rankInCategory.empty", "The rankInCategory is required");
     }
