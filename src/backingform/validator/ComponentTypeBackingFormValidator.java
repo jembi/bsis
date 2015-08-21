@@ -23,8 +23,7 @@ public class ComponentTypeBackingFormValidator  implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return Arrays.asList(ComponentTypeBackingForm.class,
-                ComponentTypeRepository.class).contains(clazz);
+        return Arrays.asList(ComponentTypeBackingForm.class).contains(clazz);
     }
 
     @Override
