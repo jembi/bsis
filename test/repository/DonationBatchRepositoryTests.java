@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -33,6 +34,7 @@ public class DonationBatchRepositoryTests {
     }
 
     @Test
+    @Ignore
     public void testCountOpenDonationBatches_shouldCountOpenAndNotDeletedBatches() {
         // Expected donation batches
         aDonationBatch().buildAndPersist(entityManager);
