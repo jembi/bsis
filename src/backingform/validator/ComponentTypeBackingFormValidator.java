@@ -35,6 +35,8 @@ public class ComponentTypeBackingFormValidator  implements Validator {
         ValidationUtils.rejectIfEmpty(errors, "componentType.expiresAfter", "expiresAfter.empty", "The expiresAfter value is required");
         ValidationUtils.rejectIfEmpty(errors, "componentType.expiresAfterUnits", "expiresAfterUnits.empty", "The expiresAfterUnits value is required");
         ValidationUtils.rejectIfEmpty(errors, "componentType.description", "description.empty", "The description is required");
+        ValidationUtils.rejectIfEmpty(errors, "componentType.hasBloodGroup", "hasBloodGroup.empty", "The Has Blood Group is required");
+        ValidationUtils.rejectIfEmpty(errors, "componentType.producedComponentTypeCombinations", "producedComponentTypeCombinations.empty", "The Produced Component Type Combinations is required");
 
     }
 
