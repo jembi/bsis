@@ -1569,7 +1569,7 @@
 		<insert tableName="GeneralConfig">
 			<column name="name" value="donors.registration.openBatchRequired"></column>
 			<column name="value" value="true"></column>
-			<column name="description" value="Block donor registration when no batches are open"></column>
+			<column name="description" value="Block donor registration when no donation batches are open"></column>
 			<column name="dataType_id" value="4"></column>
 		</insert>
   </changeSet>
