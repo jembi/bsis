@@ -39,7 +39,7 @@ public class ComponentTypeController {
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new ComponentTypeBackingFormValidator(binder.getValidator()));
+    binder.setValidator(new ComponentTypeBackingFormValidator());
   }
 
   public static String getUrl(HttpServletRequest req) {
