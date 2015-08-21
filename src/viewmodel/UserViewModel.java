@@ -57,4 +57,23 @@ public class UserViewModel {
 	}
 	return roleViewModels;
   }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        
+        if (!(other instanceof UserViewModel)) {
+            return false;
+        }
+        
+        UserViewModel userViewModel = (UserViewModel) other;
+        
+        if (user == null) {
+            return userViewModel.user == null;
+        }
+        
+        return user.equals(userViewModel.user);
+    }
 }

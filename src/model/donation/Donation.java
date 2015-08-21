@@ -24,16 +24,16 @@ import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
+import model.component.Component;
 import model.donationbatch.DonationBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
-import model.product.Product;
+import model.packtype.PackType;
 import model.user.User;
 import model.worksheet.Worksheet;
 
@@ -49,7 +49,7 @@ import repository.bloodtesting.BloodTypingStatus;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import constraintvalidator.BloodBagTypeExists;
+import constraintvalidator.PackTypeExists;
 import constraintvalidator.DonationBatchExists;
 import constraintvalidator.DonationTypeExists;
 import constraintvalidator.DonorExists;
@@ -108,15 +108,15 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
   @ManyToOne
   private DonationType donationType;
 
-  @BloodBagTypeExists
+  @PackTypeExists
   @ManyToOne
-  private BloodBagType bloodBagType;
+  private PackType packType;
 
   /**
-   * List of products created from this donation.
+   * List of components created from this donation.
    */
   @OneToMany(mappedBy="donation")
-  private List<Product> products;
+  private List<Component> components;
 
   @NotAudited
   @ManyToMany(mappedBy="donations")
@@ -207,8 +207,8 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     return donationDate;
   }
 
-  public BloodBagType getBloodBagType() {
-    return bloodBagType;
+  public PackType getPackType() {
+    return packType;
   }
 
   public String getNotes() {
@@ -236,8 +236,8 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     this.donationDate = donationDate;
   }
 
-  public void setBloodBagType(BloodBagType bloodBagType) {
-    this.bloodBagType = bloodBagType;
+  public void setPackType(PackType packType) {
+    this.packType = packType;
   }
 
   public void setNotes(String notes) {
@@ -253,7 +253,7 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     this.donationIdentificationNumber = donation.donationIdentificationNumber;
     this.donor = donation.donor;
     this.setDonationType(donation.getDonationType());
-    this.bloodBagType = donation.bloodBagType;
+    this.packType = donation.packType;
     this.donationDate = donation.donationDate;
     this.donationBatch = donation.donationBatch;
     this.notes = donation.notes;
@@ -269,12 +269,12 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     this.setBloodTypingMatchStatus(donation.getBloodTypingMatchStatus());
   }
 
-  public List<Product> getProducts() {
-    return products;
+  public List<Component> getComponents() {
+    return components;
   }
 
-  public void setProducts(List<Product> products) {
-    this.products = products;
+  public void setComponents(List<Component> components) {
+    this.components = components;
   }
 
   public Date getLastUpdated() {

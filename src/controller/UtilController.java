@@ -17,28 +17,27 @@ import javax.servlet.http.HttpServletRequest;
 
 import model.admin.FormField;
 import model.admin.GeneralConfig;
+import model.component.Component;
+import model.component.ComponentStatus;
+import model.componentmovement.ComponentStatusChangeReason;
+import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
-import model.product.Product;
-import model.product.ProductStatus;
-import model.productmovement.ProductStatusChangeReason;
-import model.producttype.ProductType;
+import model.packtype.PackType;
 import model.request.Request;
 import model.user.User;
 import model.user.Role;
 import model.worksheet.Worksheet;
-import model.bloodbagtype.BloodBagType;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.NotReadablePropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import repository.DonationRepository;
@@ -47,7 +46,7 @@ import repository.DonorRepository;
 import repository.FormFieldRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
-import repository.ProductRepository;
+import repository.ComponentRepository;
 import repository.RequestRepository;
 import repository.SequenceNumberRepository;
 import repository.TipsRepository;
@@ -55,14 +54,14 @@ import repository.UserRepository;
 import repository.RoleRepository;
 import repository.WorksheetRepository;
 import repository.GeneralConfigRepository;
-import repository.BloodBagTypeRepository;
+import repository.PackTypeRepository;
 import repository.DeferralReasonRepository;
 import repository.DiscardReasonRepository;
 import security.BsisUserDetails;
 import repository.DonationTypeRepository;
 import utils.DonorUtils;
 
-@Component
+@org.springframework.stereotype.Component
 public class UtilController {
   public static final String VERSION_NUMBER = "1.3";
 
@@ -79,7 +78,7 @@ public class UtilController {
   private DonationRepository donationRepository;
 
   @Autowired
-  private ProductRepository productRepository;
+  private ComponentRepository componentRepository;
 
   @Autowired
   private RequestRepository requestRepository;
@@ -112,7 +111,7 @@ public class UtilController {
   private GeneralConfigRepository generalConfigRepository;
 
   @Autowired
-  private BloodBagTypeRepository bloodBagTypeRepository;
+  private PackTypeRepository packTypeRepository;
 
   @Autowired
   private DiscardReasonRepository discardReasonRepository;
@@ -291,7 +290,7 @@ public class UtilController {
 
   public Donor findDonorInForm(Map<String, Object> bean) {
     // IMPORTANT: Validation code just checks if the ID exists.
-    // We still need to store the donation as part of the product.
+    // We still need to store the donation as part of the component.
     String donorId = null;
     if (bean.containsKey("donorIdHidden"))
       donorId = (String) bean.get("donorIdHidden");
@@ -383,8 +382,8 @@ public class UtilController {
     return errorMessage;
   }
 
-  public Product findProduct(String donationIdentificationNumber, String productType) {
-    return productRepository.findProduct(donationIdentificationNumber, productType);
+  public Component findComponent(String donationIdentificationNumber, String componentType) {
+    return componentRepository.findComponent(donationIdentificationNumber, componentType);
   }
 
   public String getNextWorksheetNumber() {
@@ -399,21 +398,21 @@ public class UtilController {
     return requestRepository.findRequestByRequestNumber(requestNumber);
   }
 
-  public Product findProduct(String donationIdentificationNumber, ProductType productType) {
-    List<Product> products = productRepository.findProductsByDonationIdentificationNumber(donationIdentificationNumber);
-    Product matchingProduct = null; 
-    for (Product product : products) {
-      if (product.getProductType().equals(productType)) {
-        if (matchingProduct != null &&
-            matchingProduct.getStatus().equals(ProductStatus.AVAILABLE)) {
-          // multiple products available have the same product type
+  public Component findComponent(String donationIdentificationNumber, ComponentType componentType) {
+    List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
+    Component matchingComponent = null; 
+    for (Component component : components) {
+      if (component.getComponentType().equals(componentType)) {
+        if (matchingComponent != null &&
+            matchingComponent.getStatus().equals(ComponentStatus.AVAILABLE)) {
+          // multiple components available have the same component type
           // cannot identify uniquely
           return null;
         }
-        matchingProduct = product;
+        matchingComponent = component;
       }
     }
-    return matchingProduct;
+    return matchingComponent;
   }
 
   public boolean doesFieldUseCurrentTime(String formName, String fieldName) {
@@ -456,11 +455,11 @@ public class UtilController {
     return false;
   }
 
-  public boolean isDuplicateDiscardReason(ProductStatusChangeReason discardReason){
+  public boolean isDuplicateDiscardReason(ComponentStatusChangeReason discardReason){
     String reason = discardReason.getStatusChangeReason();
     if (StringUtils.isBlank(reason))
       return false;
-    ProductStatusChangeReason existingDiscardReason = discardReasonRepository.findDiscardReason(reason);
+    ComponentStatusChangeReason existingDiscardReason = discardReasonRepository.findDiscardReason(reason);
     if (existingDiscardReason != null && !existingDiscardReason.getId().equals(discardReason.getId()))
       return true;
     return false;
@@ -486,11 +485,18 @@ public class UtilController {
     return false;
   }
 
-  public boolean isDuplicatePackTypeName(BloodBagType packType) {
-    String packTypeName = packType.getBloodBagType();
+  public String getGeneralConfigValueByName(String generalConfigName){
+    GeneralConfig generalConfig = generalConfigRepository.getGeneralConfigByName(generalConfigName);
+    if (generalConfig != null)
+      return generalConfig.getValue();
+    return "";
+  }
+
+  public boolean isDuplicatePackTypeName(PackType packType) {
+    String packTypeName = packType.getPackType();
     if (StringUtils.isBlank(packTypeName))
       return false;
-    BloodBagType existingPackType = bloodBagTypeRepository.findBloodBagTypeByName(packTypeName);
+    PackType existingPackType = packTypeRepository.findPackTypeByName(packTypeName);
     if (existingPackType != null && !existingPackType.getId().equals(packType.getId()))
       return true;
     return false;
@@ -556,10 +562,10 @@ public class UtilController {
     return false;
   }
 
-  public Product findProductById(String productId) {
-    Product product = null;
-    product = productRepository.findProductById(Long.parseLong(productId));
-    return product;
+  public Component findComponentById(String componentId) {
+    Component component = null;
+    component = componentRepository.findComponentById(Long.parseLong(componentId));
+    return component;
   }
 
   public boolean isFieldRequired(String formName, String fieldName) {

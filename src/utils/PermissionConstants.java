@@ -95,7 +95,7 @@ public class PermissionConstants {
 	public static final String MANAGE_COMPONENT_COMBINATIONS = "Manage Component Combinations";
 	public static final String MANAGE_CROSS_MATCH_TYPES = "Manage Cross Match Types";
 	public static final String MANAGE_BLOOD_TYPING_RULES = "Manage Blood Typing Rules";
-	public static final String MANAGE_BLOOD_BAG_TYPES = "Manage Blood Bag Types";
+	public static final String MANAGE_PACK_TYPES = "Manage Pack Types";
 	public static final String MANAGE_DISCARD_REASONS = "Manage Discard Reasons";
 	public static final String MANAGE_DEFERRAL_REASONS = "Manage Deferral Reasons";
 	public static final String MANAGE_DONOR_CODES = "Manage Donor Codes";
@@ -123,6 +123,9 @@ public class PermissionConstants {
     
 	//General Authenticated Permission
 	public static final String AUTHENTICATED = "Authenticated";
+	
+	// Audit permissions
+	public static final String VIEW_AUDIT_LOG = "View Audit Log";
         
         
 

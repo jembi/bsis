@@ -2,10 +2,12 @@ package backingform.validator;
 
 import backingform.DiscardReasonBackingForm;
 import controller.UtilController;
-import model.productmovement.ProductStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeReason;
+
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
+
 import repository.DiscardReasonRepository;
 import viewmodel.DiscardReasonViewModel;
 
@@ -27,7 +29,7 @@ public class DiscardReasonBackingFormValidator implements Validator {
     @SuppressWarnings("unchecked")
     @Override
     public boolean supports(Class<?> clazz) {
-        return Arrays.asList(DiscardReasonBackingForm.class, ProductStatusChangeReason.class, DiscardReasonViewModel.class).contains(clazz);
+        return Arrays.asList(DiscardReasonBackingForm.class, ComponentStatusChangeReason.class, DiscardReasonViewModel.class).contains(clazz);
     }
 
     @Override

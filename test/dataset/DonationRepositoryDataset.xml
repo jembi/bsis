@@ -1,0 +1,235 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<user id="1" emailId="admin" firstName="admin" isactive="1"
+		isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin" />
+
+	<Contact id="1" />
+	<Contact id="2" />
+	<Contact id="3" />
+	<Contact id="4" />
+	<Contact id="5" />
+	<Contact id="6" />
+	<Address id="1" />
+	<Address id="2" />
+	<Address id="3" />
+	<Address id="4" />
+	<Address id="5" />
+	<Address id="6" />
+	<PreferredLanguage id="1" preferredLanguage="English" />
+
+	<Donor id="1" birthDate="1980-01-12" bloodAbo="O" bloodRh="+"
+		dateOfLastDonation="2015-02-02 00:00:00.0" donorHash="6ce998716e07133336fa7a67c6efca2e"
+		donorNumber="000001" donorStatus="NORMAL" firstName="Sample" gender="male"
+		isDeleted="false" lastName="Donor" createdDate="2015-02-02 03:41:29.0"
+		lastUpdated="2015-02-18 07:51:56.0" notes="" createdBy_id="1"
+		lastUpdatedBy_id="1" dateOfFirstDonation="2015-02-02"
+		preferredLanguage_id="1" title="Mr" addressId="1" contactId="1"
+		dueToDonate="2015-05-03" />
+	<Donor id="2" birthDate="1950-01-12" bloodAbo="A" bloodRh="-"
+		dateOfLastDonation="2015-02-02 00:00:00.0" donorHash="fe5eeb11d9b9c772b44a3daf38de6d39"
+		donorNumber="000002" donorStatus="NORMAL" firstName="John" gender="male"
+		isDeleted="false" lastName="Henry" createdDate="2015-02-18 07:53:29.0"
+		lastUpdated="2015-02-18 07:53:57.0" createdBy_id="1" lastUpdatedBy_id="1"
+		dateOfFirstDonation="2015-02-02" preferredLanguage_id="1" title="Mr"
+		addressId="3" contactId="3" dueToDonate="2015-05-03" />
+	<Donor id="3" birthDate="1976-02-19" bloodAbo="" bloodRh=""
+		dateOfLastDonation="2015-06-26 00:00:00.0" donorHash="11a101ad63921b9db94a476fb4a86bcd"
+		donorNumber="000003" donorStatus="NORMAL" firstName="Donor" gender="female"
+		isDeleted="false" lastName="Five" createdDate="2015-02-09 03:45:49.0"
+		lastUpdated="2015-06-29 05:24:35.0" createdBy_id="1" lastUpdatedBy_id="1"
+		dateOfFirstDonation="2015-06-26" preferredLanguage_id="1" title="Mrs"
+		addressId="2" contactId="2" dueToDonate="2015-09-24" />
+	<Donor id="4" birthDate="1977-08-22" bloodAbo="A" bloodRh="-"
+		dateOfLastDonation="2015-02-02 00:00:00.0" donorNumber="000004"
+		donorStatus="NORMAL" firstName="Raymond" gender="male" isDeleted="false"
+		lastName="Smith" createdDate="2015-02-18 07:53:29.0" lastUpdated="2015-02-18 07:53:57.0"
+		createdBy_id="1" lastUpdatedBy_id="1" dateOfFirstDonation="2015-02-02"
+		preferredLanguage_id="1" title="Mr" addressId="4" contactId="4"
+		dueToDonate="2015-05-03" />
+	<Donor id="5" birthDate="1983-06-03" bloodAbo="O" bloodRh="-"
+		dateOfLastDonation="2015-02-02 00:00:00.0" donorNumber="000005"
+		donorStatus="NORMAL" firstName="Rosemarie" gender="female" isDeleted="false"
+		lastName="Petzold" createdDate="2015-02-18 07:53:29.0" lastUpdated="2015-02-18 07:53:57.0"
+		createdBy_id="1" lastUpdatedBy_id="1" dateOfFirstDonation="2015-02-02"
+		preferredLanguage_id="1" title="Mrs" addressId="5" contactId="5"
+		dueToDonate="2015-05-03" />
+	<Donor id="6" birthDate="1947-11-18" bloodAbo="AB" bloodRh="+"
+		dateOfLastDonation="2015-02-02 00:00:00.0" donorNumber="000006"
+		donorStatus="NORMAL" firstName="Carl" gender="male" isDeleted="false"
+		lastName="Holla" createdDate="2015-02-18 07:53:29.0" lastUpdated="2015-02-18 07:53:57.0"
+		createdBy_id="1" lastUpdatedBy_id="1" dateOfFirstDonation="2015-02-02"
+		preferredLanguage_id="1" title="Mr" addressId="6" contactId="6"
+		dueToDonate="2015-05-03" />
+
+	<DonationType id="1" donationType="Voluntary" isDeleted="false" />
+
+	<ComponentType id="1" description="" expiresAfter="35"
+		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+		componentTypeName="Whole Blood Single Pack - CPDA" componentTypeNameShort="0011" />
+	<ComponentType id="2" description="" expiresAfter="35"
+		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+		componentTypeName="Whole Blood Double Pack - CPDA" componentTypeNameShort="0012" />
+	<ComponentType id="3" description="" expiresAfter="35"
+		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+		componentTypeName="Whole Blood Triple Pack - CPDA" componentTypeNameShort="0013" />
+
+	<PackType id="1" packType="Single" isDeleted="false"
+		componentType_id="1" countAsDonation="true" periodBetweenDonations="90" />
+	<PackType id="2" packType="Double" isDeleted="false"
+		componentType_id="2" countAsDonation="true" periodBetweenDonations="90" />
+	<PackType id="3" packType="Triple" isDeleted="false"
+		componentType_id="3" countAsDonation="true" periodBetweenDonations="90" />
+
+	<Location id="1" isDeleted="false" isDonorPanel="true"
+		isMobileSite="false" isUsageSite="false" name="Maseru" notes="" />
+	<Location id="2" isDeleted="false" isDonorPanel="true"
+		isMobileSite="false" isUsageSite="false" name="Leribe" notes="" />
+	<TestBatch id="1" batchNumber="TB0215000000" isDeleted="false"
+		createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0"
+		status="CLOSED" createdBy_id="1" lastUpdatedBy_id="1" />
+	<TestBatch id="2" batchNumber="TB0415000000" isDeleted="false"
+		createdDate="2015-04-24 04:42:17.0" lastUpdated="2015-04-24 04:42:17.0"
+		status="OPEN" createdBy_id="1" lastUpdatedBy_id="1" />
+	<DonationBatch id="1" batchNumber="B0215000000"
+		isDeleted="false" createdDate="2015-02-02 03:41:09.0" lastUpdated="2015-02-02 03:42:55.0"
+		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" testBatch_id="1"
+		donorPanel_id="1" />
+	<DonationBatch id="2" batchNumber="B0215000001"
+		isDeleted="false" createdDate="2015-02-02 03:43:00.0" lastUpdated="2015-04-24 04:42:09.0"
+		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" testBatch_id="2"
+		donorPanel_id="2" />
+	<DonationBatch id="3" batchNumber="B0615000000"
+		isDeleted="false" createdDate="2015-06-26 03:19:33.0" lastUpdated="2015-06-26 03:19:33.0"
+		createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" donorPanel_id="1" />
+
+	<Donation id="1" bloodAbo="O" bloodPressureSystolic="110"
+		bloodRh="+" bloodTypingStatus="COMPLETE" donationDate="2015-02-02 00:00:00.0"
+		donationIdentificationNumber="1234567" donorWeight="80.00"
+		extraBloodTypeInformation="" haemoglobinCount="15.70" isDeleted="0"
+		createdDate="2015-02-02 03:42:04.0" lastUpdated="2015-02-06 02:09:30.0"
+		ttiStatus="TTI_SAFE" packType_id="3" donationBatch_id="1"
+		donationType_id="1" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
+		bloodPressureDiastolic="80" donorPulse="70" donorPanel_id="1"
+		bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
+		bloodTypingMatchStatus="MATCH" />
+	<Donation id="2" bloodAbo="A" bloodRh="-" bloodTypingStatus="COMPLETE"
+		donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1212129"
+		extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-18 07:53:57.0"
+		lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
+		packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="2"
+		createdBy_id="1" lastUpdatedBy_id="1" donorPanel_id="2"
+		bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
+		bloodTypingMatchStatus="MATCH" />
+	<Donation id="3" bloodTypingStatus="NOT_DONE" donationDate="2015-06-26 00:00:00.0"
+		donationIdentificationNumber="9090908" isDeleted="0"
+		createdDate="2015-06-29 05:24:35.0" lastUpdated="2015-06-29 05:24:35.0"
+		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="3"
+		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
+		donorPanel_id="1" bleedStartTime="1970-01-01 11:24:30.0" bleedEndTime="1970-01-01 11:44:30.0"
+		bloodTypingMatchStatus="NOT_DONE" />
+	<Donation id="4" bloodAbo="A" bloodRh="-" bloodTypingStatus="COMPLETE"
+		donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1412129"
+		extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-02 07:53:57.0"
+		lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
+		packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="4"
+		createdBy_id="1" lastUpdatedBy_id="1" donorPanel_id="2"
+		bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
+		bloodTypingMatchStatus="MATCH" />
+	<Donation id="5" bloodAbo="O" bloodRh="-" bloodTypingStatus="COMPLETE"
+		donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1512129"
+		extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-02 07:53:57.0"
+		lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
+		packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="5"
+		createdBy_id="1" lastUpdatedBy_id="1" donorPanel_id="2"
+		bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
+		bloodTypingMatchStatus="MATCH" />
+	<Donation id="6" bloodAbo="AB" bloodRh="+" bloodTypingStatus="COMPLETE"
+		donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1612129"
+		extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-02 07:53:57.0"
+		lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
+		packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="6"
+		createdBy_id="1" lastUpdatedBy_id="1" donorPanel_id="2"
+		bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
+		bloodTypingMatchStatus="MATCH" />
+
+	<BloodTestingRule id="1" bloodTestsIds="1" category="BLOODTYPING"
+		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
+		extraInformation="" isActive="1" markSampleAsUnsafe="0"
+		newInformation="O" pattern="O" pendingTestsIds="" subCategory="BLOODABO" />
+	<BloodTestingRule id="2" bloodTestsIds="1" category="BLOODTYPING"
+		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
+		extraInformation="" isActive="1" markSampleAsUnsafe="0"
+		newInformation="A" pattern="A" pendingTestsIds="" subCategory="BLOODABO" />
+	<BloodTestingRule id="3" bloodTestsIds="1" category="BLOODTYPING"
+		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
+		extraInformation="" isActive="1" markSampleAsUnsafe="0"
+		newInformation="B" pattern="B" pendingTestsIds="" subCategory="BLOODABO" />
+	<BloodTestingRule id="4" bloodTestsIds="1" category="BLOODTYPING"
+		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
+		extraInformation="" isActive="1" markSampleAsUnsafe="0"
+		newInformation="AB" pattern="AB" pendingTestsIds="" subCategory="BLOODABO" />
+	<BloodTest id="1" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
+		context="RECORD_BLOOD_TYPING_TESTS" isActive="1" isEmptyAllowed="0"
+		negativeResults="" positiveResults="A,B,AB,O" rankInCategory="1"
+		testName="ABO" testNameShort="ABO" validResults="A,B,AB,O" />
+	<BloodTestResult id="1" createdDate="2015-02-06 02:09:23.0"
+		lastUpdated="2015-02-06 02:09:23.0" notes="" result="O"
+		testedOn="2015-02-06 02:09:23.0" bloodTest_id="1" donation_id="1"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="2" createdDate="2015-04-24 04:43:06.0"
+		lastUpdated="2015-04-24 04:43:06.0" notes="" result="A"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" donation_id="2"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+		
+	<DataType id="1" dataType="text"/>
+	<DataType id="2" dataType="integer"/>
+	<DataType id="3" dataType="decimal"/>
+	<DataType id="4" dataType="boolean"/>
+	<GeneralConfig id="1" name="donation.hbNumericValue"
+		value="true" description="Allow capturing of numeric haemoglobin value"
+		dataType_id="4" />
+	<GeneralConfig id="2" name="donation.hbQualitativeValue"
+		value="false" description="Allow capturing of qualitative haemoglobin value"
+		dataType_id="4" />
+	<GeneralConfig id="3" name="donation.donor.bpSystolicMin"
+		value="70" description="Donation Donor bpSystolicMin" dataType_id="2" />
+	<GeneralConfig id="4" name="donation.donor.bpSystolicMax"
+		value="190" description="Donation Donor bpSystolicMax" dataType_id="2" />
+	<GeneralConfig id="5" name="donation.donor.bpDiastolicMin"
+		value="40" description="Donation Donor bpDiastolicMin" dataType_id="2" />
+	<GeneralConfig id="6" name="donation.donor.bpDiastolicMax"
+		value="100" description="Donation Donor bpDiastolicMax" dataType_id="2" />
+	<GeneralConfig id="7" name="donation.donor.hbMin" value="1"
+		description="Donation Donor hbMin" dataType_id="2" />
+	<GeneralConfig id="8" name="donation.donor.hbMax" value="25"
+		description="Donation Donor hbMax" dataType_id="2" />
+	<GeneralConfig id="9" name="donation.donor.weightMin"
+		value="30" description="Donation Donor weightMin" dataType_id="2" />
+	<GeneralConfig id="10" name="donation.donor.weightMax"
+		value="300" description="Donation Donor weightMax" dataType_id="2" />
+	<GeneralConfig id="11" name="donation.donor.pulseMin"
+		value="30" description="Donation Donor pulseMin" dataType_id="2" />
+	<GeneralConfig id="12" name="donation.donor.pulseMax"
+		value="200" description="Donation Donor pulseMax" dataType_id="2" />
+		
+	<GenericConfig id="6" propertyName="ageLimitsEnabled"
+		propertyOwner="donationRequirements" propertyValue="true" />
+	<GenericConfig id="7" propertyName="minimumAge"
+		propertyOwner="donationRequirements" propertyValue="16" />
+	<GenericConfig id="8" propertyName="maximumAge"
+		propertyOwner="donationRequirements" propertyValue="65" />
+	<GenericConfig id="9" propertyName="minimumWeight"
+		propertyOwner="donationRequirements" propertyValue="65" />
+	<GenericConfig id="10" propertyName="donorWeightUnit"
+		propertyOwner="donationRequirements" propertyValue="Kg." />
+	<GenericConfig id="11" propertyName="daysBetweenConsecutiveDonations"
+		propertyOwner="donationRequirements" propertyValue="90" />
+	<GenericConfig id="12" propertyName="donorDeferralCheckRequired"
+		propertyOwner="donationRequirements" propertyValue="true" />
+	<GenericConfig id="13" propertyName="donorBloodGroupMatchRequired"
+		propertyOwner="donationRequirements" propertyValue="true" />
+	<GenericConfig id="14" propertyName="donorHistoryCheckRequired"
+		propertyOwner="donationRequirements" propertyValue="true" />
+	<GenericConfig id="15" propertyName="useShortNameForProductTypes"
+		propertyOwner="products" propertyValue="true" />
+</dataset>

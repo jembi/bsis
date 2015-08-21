@@ -1,7 +1,5 @@
 package controller;
 
-import backingform.validator.DonationBackingFormValidator;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,10 +12,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import model.bloodtesting.TTIStatus;
+import model.component.Component;
+import model.component.ComponentStatus;
 import model.donation.Donation;
 import model.donation.LotReleaseConstant;
-import model.product.Product;
-import model.product.ProductStatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,10 +28,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import repository.ComponentRepository;
 import repository.DonationRepository;
-import repository.ProductRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import utils.PermissionConstants;
+import backingform.validator.DonationBackingFormValidator;
 
 @RestController
 @RequestMapping("labels")
@@ -43,7 +42,7 @@ public class LotReleaseController {
   private DonationRepository donationRepository;
   
   @Autowired
-  private ProductRepository productRepository;
+  private ComponentRepository componentRepository;
 
 
   @Autowired
@@ -54,8 +53,7 @@ public class LotReleaseController {
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new DonationBackingFormValidator(binder.getValidator(),
-                        utilController));
+    binder.setValidator(new DonationBackingFormValidator(utilController));
   }
   
   public static String getUrl(HttpServletRequest req) {
@@ -74,11 +72,11 @@ public class LotReleaseController {
         Map<String, Object> componentMap = new HashMap<String, Object>();
 
     Donation donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
-    List<Product> products = productRepository.findProductsByDonationIdentificationNumber(donationIdentificationNumber);
-    List<Map<String, Object>> components = getComponentLabellingStatus(donation, products);
+    List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
+    List<Map<String, Object>> componentStatuses = getComponentLabellingStatus(donation, components);
     
     componentMap.put("donationNumber", donationIdentificationNumber);
-    componentMap.put("components", new HashSet(components));
+    componentMap.put("components", new HashSet(componentStatuses));
     
     return new ResponseEntity (componentMap, HttpStatus.OK);
   }
@@ -88,8 +86,8 @@ public class LotReleaseController {
   public  ResponseEntity<Map<String, Object>> printLabel( @PathVariable Long componentId) {
 	  
 	    Map<String, Object> map = new  HashMap<String, Object>();
-            Product product = productRepository.findProductById(componentId);
-	    Donation donation = product.getDonation();
+            Component component = componentRepository.findComponentById(componentId);
+	    Donation donation = component.getDonation();
 	    
 	    boolean success = false;
 	    
@@ -115,7 +113,7 @@ public class LotReleaseController {
 	        String donationDate = df.format(donation.getDonationDate());        	
 	
 	        // TODO: improve calculation of expiry date according to final processed components expiry dates 
-	        // i.e. expiryDate = df.format(donation.getProducts().get(i).getExpiresOn());
+	        // i.e. expiryDate = df.format(donation.getComponents().get(i).getExpiresOn());
 	        // For now, generates expiry date as Donation Date + 35 Days.
 	        String expiryDate = "";
 	    	Calendar c = Calendar.getInstance();
@@ -137,10 +135,10 @@ public class LotReleaseController {
 			        "^BY2,3,82^FT451,538^BCN,,Y,N"+
 			        "^FD>:"+expiryDate+"^FS"+
 			        "^BY3,3,82^FT62,150^BCN,,Y,N"+
-			        "^FD>:"+product.getDonationIdentificationNumber()+"^FS"+
-			        "^FT66,608^A0N,20,21^FH\\^FD"+product.getProductType().getProductTypeName()+"^FS"+
+			        "^FD>:"+component.getDonationIdentificationNumber()+"^FS"+
+			        "^FT66,608^A0N,20,21^FH\\^FD"+component.getComponentType().getComponentTypeName()+"^FS"+
 			        "^BY3,3,77^FT69,535^BCN,,Y,N"+
-			        "^FD>:"+product.getProductType().getProductTypeNameShort()+"^FS"+
+			        "^FD>:"+component.getComponentType().getComponentTypeNameShort()+"^FS"+
 			        "^BY2,3,84^FT65,296^BCN,,Y,N"+
 			        "^FD>:"+donationDate+"^FS"+
 			        //inverse+
@@ -186,12 +184,12 @@ public class LotReleaseController {
 	    			         "^FT28,194^A0N,29,64^FH\\^FDWHOLE ^FS" +
 	    			         "^FT28,230^A0N,29,64^FH\\^FDBLOOD^FS" +
 	    			         "^FT98,410^A0N,18,19^FH\\^FDVolunteer donor blood donated and processed by the National Blood Service ^FS" +
-	    			         "^FT98,432^A0N,18,19^FH\\^FD                      This product may transmit infectious agents^FS" +
+	    			         "^FT98,432^A0N,18,19^FH\\^FD                      This component may transmit infectious agents^FS" +
 	    			         "^FT599,237^A0N,39,31^FH\\^FD  Rh (D) ^FS" +
 	    			         "^FT106,752^A0N,23,33^FH\\^FDPROPERLY IDENTIFY INTENDED RECIPIENT^FS" +
 	    			         "^FT244,606^A@N,28,31,TT0003M_^FH\\^CI17^F8^FDAffix compatibility label^FS^CI0" +
 	    	    			 "^BY2,3,42^FT285,111^BCN,,Y,N"+
-	    	    			 "^FD>:" + product.getDonationIdentificationNumber() + "^FS"+
+	    	    			 "^FD>:" + component.getDonationIdentificationNumber() + "^FS"+
 	    	    			 inverse +
 	    			         "^PQ1,0,1,Y^XZ"
 	    			         );
@@ -234,7 +232,7 @@ public class LotReleaseController {
 	    				"^FT28,194^A0N,29,64^FH\\^FDWHOLE ^FS"+
 	    				"^FT28,230^A0N,29,64^FH\\^FDBLOOD^FS"+
 	    				"^FT98,410^A0N,18,19^FH\\^FDVolunteer donor blood collected and processed by the National Blood Service ^FS"+
-	    				"^FT98,432^A0N,18,19^FH\\^FD                      This product may transmit infectious agents^FS"+
+	    				"^FT98,432^A0N,18,19^FH\\^FD                      This component may transmit infectious agents^FS"+
 	    				"^FT599,237^A0N,39,31^FH\\^FD  Rh (D) ^FS"+
 	    				"^FT106,752^A0N,23,33^FH\\^FDPROPERLY IDENTIFY INTENDED RECIPIENT^FS"+
 	    				"^FT244,606^A@N,28,31,TT0003M_^FH\\^CI17^F8^FDAffix compatibility label^FS^CI0"+
@@ -258,15 +256,15 @@ public class LotReleaseController {
 	Map<String, Object> map = new  HashMap<String, Object>();
 	boolean success = false;
 	
-     Product product = productRepository.findProductById(componentId);
+     Component component = componentRepository.findComponentById(componentId);
     
     // check to make sure discard label can be printed
- 	if (checkProductForDiscard(product)){
+ 	if (checkComponentForDiscard(component)){
     
  		// discard label can be printed
  		success = true;
 	 	//DateFormat df = new SimpleDateFormat("dd/MM/yyyy");        
-	    //String donationDate = df.format(product.getDonation().getDonationDate());        	
+	    //String donationDate = df.format(component.getDonation().getDonationDate());        	
 	
 	    // Generate ZPL label
 	    map.put("labelZPL",	
@@ -289,7 +287,7 @@ public class LotReleaseController {
 	    		"^FO18,357^GB748,0,8^FS"+
 	    		"^FT52,749^A0N,28,28^FH\\^FDIf found contact the BTS immediately at (000) 000-0000^FS" +
 	    		"^BY2,3,52^FT408,135^BCN,,Y,N" +
-	    		"^FD>:" + product.getDonationIdentificationNumber() + "^FS" +
+	    		"^FD>:" + component.getDonationIdentificationNumber() + "^FS" +
 	    		"^FT88,118^A0N,28,28^FH\\^FD2013/01/01^FS" +
 	    		"^PQ1,0,1,Y^XZ^XA^ID000.GRF^FS^XZ" 
 	    		);
@@ -313,13 +311,13 @@ public class LotReleaseController {
     	}else if(donation.getDonor()!=null && donation.getDonor().getDonorStatus().equals(LotReleaseConstant.POSITIVE_TTI)){
     		success=false;
     	}
-    	// TODO: improve product & blood test checks, or remove if not relevant
+    	// TODO: improve component & blood test checks, or remove if not relevant
     	/*
-    	else if(donation.getProducts()!=null && !donation.getProducts().isEmpty() && 
-    			(donation.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED) 
-    			|| donation.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_EXPIRED)
-    			|| donation.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_QUARANTINED) 
-    			|| donation.getProducts().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_SPLIT))){   		
+    	else if(donation.getComponents()!=null && !donation.getComponents().isEmpty() && 
+    			(donation.getComponents().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED) 
+    			|| donation.getComponents().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_EXPIRED)
+    			|| donation.getComponents().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_QUARANTINED) 
+    			|| donation.getComponents().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_SPLIT))){   		
     		success=false;
     	}else if(donation.getBloodTestResults()!=null 
     			&& !donation.getBloodTestResults().isEmpty() 
@@ -347,52 +345,52 @@ public class LotReleaseController {
 		return success;
 	}
 	
-	private List<Map<String, Object>> getComponentLabellingStatus(Donation donation, List<Product> products){
+	private List<Map<String, Object>> getComponentLabellingStatus(Donation donation, List<Component> components){
 		
                
-           List<Map<String, Object>> productsList= new ArrayList<Map<String, Object>>(); 
+           List<Map<String, Object>> componentsList= new ArrayList<Map<String, Object>>(); 
 	     if(donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)){
-                  Map<String, Object> productStatus = new HashMap<String, Object>();
-    		for(Product product : products){
-    				if(!product.getStatus().equals(ProductStatus.PROCESSED) && !product.getStatus().equals(ProductStatus.SPLIT)){
-	                    productStatus.put("componentId", product.getId());
-	                    productStatus.put("componentName", product.getProductType().getProductTypeName());
-	                    productStatus.put("componentIdentificationNumber", product.getComponentIdentificationNumber());
-	                    productStatus.put("discardPackLabel", true);
-	                    productStatus.put("printPackLabel", false);
-	                    productsList.add(productStatus);
+                  Map<String, Object> componentStatus = new HashMap<String, Object>();
+    		for(Component component : components){
+    				if(!component.getStatus().equals(ComponentStatus.PROCESSED) && !component.getStatus().equals(ComponentStatus.SPLIT)){
+	                    componentStatus.put("componentId", component.getId());
+	                    componentStatus.put("componentName", component.getComponentType().getComponentTypeName());
+	                    componentStatus.put("componentIdentificationNumber", component.getComponentIdentificationNumber());
+	                    componentStatus.put("discardPackLabel", true);
+	                    componentStatus.put("printPackLabel", false);
+	                    componentsList.add(componentStatus);
     				}
                 }
                 
-                return productsList;
+                return componentsList;
     	}
             else {
-                for (Product product : products) {
-                	Map<String, Object> productStatus = new HashMap<String, Object>();
-                	if(!product.getStatus().equals(ProductStatus.PROCESSED) && !product.getStatus().equals(ProductStatus.SPLIT)){
-	                    productStatus.put("componentId", product.getId());
-	                    productStatus.put("componentName", product.getProductType().getProductTypeName());
-	                    productStatus.put("componentIdentificationNumber", product.getComponentIdentificationNumber());
-	                    if (product.getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED)) {
-	                        productStatus.put("discardPackLabel", true);
-	                        productStatus.put("printPackLabel", false);
+                for (Component component : components) {
+                	Map<String, Object> componentStatus = new HashMap<String, Object>();
+                	if(!component.getStatus().equals(ComponentStatus.PROCESSED) && !component.getStatus().equals(ComponentStatus.SPLIT)){
+	                    componentStatus.put("componentId", component.getId());
+	                    componentStatus.put("componentName", component.getComponentType().getComponentTypeName());
+	                    componentStatus.put("componentIdentificationNumber", component.getComponentIdentificationNumber());
+	                    if (component.getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED)) {
+	                        componentStatus.put("discardPackLabel", true);
+	                        componentStatus.put("printPackLabel", false);
 	                    } else {
-	                        productStatus.put("discardPackLabel", false);
-	                        productStatus.put("printPackLabel", checkDonationIdentificationNumber(donation));
+	                        componentStatus.put("discardPackLabel", false);
+	                        componentStatus.put("printPackLabel", checkDonationIdentificationNumber(donation));
 	                    }
-	                    productsList.add(productStatus);
+	                    componentsList.add(componentStatus);
                 	}
                 }
             }
-        return productsList;
+        return componentsList;
 
     }
         
-    private Boolean checkProductForDiscard(Product product){ 
-	    if(product.getDonation().getTTIStatus().equals(TTIStatus.TTI_UNSAFE))
+    private Boolean checkComponentForDiscard(Component component){ 
+	    if(component.getDonation().getTTIStatus().equals(TTIStatus.TTI_UNSAFE))
 	        return true;
 	    
-	     if (product.getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED)) 
+	     if (component.getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED)) 
 	         return true;
 	     return false;
     }

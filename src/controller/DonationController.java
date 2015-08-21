@@ -10,10 +10,12 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import model.bloodbagtype.BloodBagType;
+
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
 import model.donor.Donor;
+import model.packtype.PackType;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import repository.BloodBagTypeRepository;
+import repository.PackTypeRepository;
 import repository.DonationRepository;
 import repository.DonationTypeRepository;
 import repository.DonorRepository;
@@ -50,7 +52,7 @@ public class DonationController {
   private LocationRepository locationRepository;
 
   @Autowired
-  private BloodBagTypeRepository bloodBagTypeRepository;
+  private PackTypeRepository packTypeRepository;
 
   @Autowired
   private DonationTypeRepository donorTypeRepository;
@@ -66,8 +68,7 @@ public class DonationController {
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new DonationBackingFormValidator(binder.getValidator(),
-                        utilController));
+    binder.setValidator(new DonationBackingFormValidator(utilController));
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -94,7 +95,7 @@ public class DonationController {
       
       row.add(donation.getId().toString());
 
-      for (String property : Arrays.asList("donationIdentificationNumber", "donationDate", "bloodBagType", "donorPanel")) {
+      for (String property : Arrays.asList("donationIdentificationNumber", "donationDate", "packType", "donorPanel")) {
         if (formFields.containsKey(property)) {
           Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
           if (properties.get("hidden").equals(false)) {
@@ -124,7 +125,7 @@ public class DonationController {
   private void addEditSelectorOptions(Map<String, Object> m) {
 	m.put("donorPanels", locationRepository.getAllDonorPanels());
     m.put("donationTypes", donorTypeRepository.getAllDonationTypes());
-    m.put("packTypes", getPackTypeViewModels(bloodBagTypeRepository.getAllBloodBagTypes())); 
+    m.put("packTypes", getPackTypeViewModels(packTypeRepository.getAllPackTypes())); 
     List<Map<String, Object>> haemoglobinLevels = new ArrayList<>();
     for (HaemoglobinLevel value : HaemoglobinLevel.values()) {
         Map<String, Object> haemoglobinLevel = new HashMap<>();
@@ -258,7 +259,7 @@ public class DonationController {
   public  Map<String, Object> findDonationPagination(
      @RequestParam(value = "donationIdentificationNumber", required = false)  String donationIdentificationNumber,
      @RequestParam(value = "panels",required = false)  List<Long> panelIds,
-     @RequestParam(value = "bloodBagTypes",required = false)  List<Integer> bloodBagTypeIds,
+     @RequestParam(value = "packTypes",required = false)  List<Integer> packTypeIds,
      @RequestParam(value = "donationDateFrom", required = false)  String donationDateFrom,
      @RequestParam(value = "donationDateTo", required = false)  String donationDateTo,
      @RequestParam(value = "includeTestedDonations",required = true)  boolean includeTestedDonations)throws  ParseException{
@@ -274,15 +275,10 @@ public class DonationController {
     if (donationIdentificationNumber != null)
       donationIdentificationNumber = donationIdentificationNumber.trim();
 
-
-   /* bloodBagTypeIds.add(-1);
-    centerIds.add((long)-1);
-    siteIds.add((long)-1);*/
-
     List<Object> results;
           results = donationRepository.findDonations(
                   donationIdentificationNumber,
-                  bloodBagTypeIds, panelIds,
+                  packTypeIds, panelIds,
                   donationDateFrom, donationDateTo, includeTestedDonations, pagingParams);
   
     @SuppressWarnings("unchecked")
@@ -292,9 +288,9 @@ public class DonationController {
     return generateDatatablesMap(donations, totalRecords, formFields);
   }
      
-  private List<PackTypeViewModel> getPackTypeViewModels(List<BloodBagType> packTypes){     
+  private List<PackTypeViewModel> getPackTypeViewModels(List<PackType> packTypes){     
        List<PackTypeViewModel> viewModels = new ArrayList<PackTypeViewModel>();
-       for(BloodBagType packtType : packTypes){
+       for(PackType packtType : packTypes){
            viewModels.add(new PackTypeViewModel(packtType));
        }
        return viewModels;

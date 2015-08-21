@@ -1,18 +1,18 @@
 
-    create table BloodBagType (
+    create table PackType (
         id SMALLINT not null auto_increment,
-        bloodBagType varchar(50),
+        packType varchar(50),
         canPool boolean,
         canSplit boolean,
         isDeleted boolean,
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table BloodBagType_AUD (
+    create table PackType_AUD (
         id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
-        bloodBagType varchar(50),
+        packType varchar(50),
         canPool boolean,
         canSplit boolean,
         isDeleted boolean,
@@ -132,7 +132,7 @@
         lastUpdated TIMESTAMP,
         notes longtext,
         ttiStatus varchar(20),
-        bloodBagType_id SMALLINT,
+        packType_id SMALLINT,
         donationBatch_id SMALLINT,
         donationCreatedBy_id SMALLINT,
         donationType_id SMALLINT,
@@ -160,7 +160,7 @@
         lastUpdated TIMESTAMP,
         notes longtext,
         ttiStatus varchar(20),
-        bloodBagType_id SMALLINT,
+        packType_id SMALLINT,
         donationBatch_id SMALLINT,
         donationCreatedBy_id SMALLINT,
         donationType_id SMALLINT,
@@ -210,7 +210,7 @@
         forRequest_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        testedProduct_id bigint,
+        testedComponent_id bigint,
         primary key (id)
     ) ENGINE=InnoDB;
 
@@ -230,7 +230,7 @@
         forRequest_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        testedProduct_id bigint,
+        testedComponent_id bigint,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
@@ -538,7 +538,7 @@
         unique (bloodTestsOnPlate_id)
     ) ENGINE=InnoDB;
 
-    create table Product (
+    create table Component (
         id bigint not null auto_increment,
         createdOn datetime,
         discardedOn DATETIME,
@@ -554,12 +554,12 @@
         issuedTo_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        parentProduct_id bigint,
-        productType_id SMALLINT,
+        parentComponent_id bigint,
+        componentType_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table ProductStatusChange (
+    create table ComponentStatusChange (
         id bigint not null auto_increment,
         newStatus varchar(30),
         statusChangeReasonText longtext,
@@ -567,12 +567,12 @@
         statusChangedOn datetime,
         changedBy_id SMALLINT,
         issuedTo_id bigint,
-        product_id bigint,
+        component_id bigint,
         statusChangeReason_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table ProductStatusChangeReason (
+    create table ComponentStatusChangeReason (
         id SMALLINT not null auto_increment,
         category varchar(30),
         isDeleted boolean,
@@ -580,7 +580,7 @@
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table ProductStatusChangeReason_AUD (
+    create table ComponentStatusChangeReason_AUD (
         id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
@@ -590,7 +590,7 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table ProductStatusChange_AUD (
+    create table ComponentStatusChange_AUD (
         id bigint not null,
         REV integer not null,
         REVTYPE tinyint,
@@ -600,32 +600,32 @@
         statusChangedOn datetime,
         changedBy_id SMALLINT,
         issuedTo_id bigint,
-        product_id bigint,
+        component_id bigint,
         statusChangeReason_id SMALLINT,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table ProductType (
+    create table ComponentType (
         id SMALLINT not null auto_increment,
         description longtext,
         expiresAfter integer,
         expiresAfterUnits varchar(30),
         hasBloodGroup boolean,
         isDeleted boolean,
-        productType varchar(50),
-        productTypeNameShort varchar(30),
-        pediProductType_id SMALLINT,
+        componentTypeName varchar(50),
+        componentTypeNameShort varchar(30),
+        pediComponentType_id SMALLINT,
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table ProductTypeCombination (
+    create table ComponentTypeCombination (
         id SMALLINT not null auto_increment,
         combinationName varchar(300),
         isDeleted boolean,
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table ProductTypeCombination_AUD (
+    create table ComponentTypeCombination_AUD (
         id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
@@ -634,14 +634,14 @@
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table ProductTypeCombination_ProductType (
+    create table ComponentTypeCombination_ComponentType (
     	id SMALLINT not null auto_increment,
-        productTypeCombinations_id SMALLINT not null,
-        productTypes_id SMALLINT not null,
+        componentTypeCombinations_id SMALLINT not null,
+        componentTypes_id SMALLINT not null,
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table ProductType_AUD (
+    create table ComponentType_AUD (
         id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
@@ -650,13 +650,13 @@
         expiresAfterUnits varchar(30),
         hasBloodGroup boolean,
         isDeleted boolean,
-        productType varchar(50),
-        productTypeNameShort varchar(30),
-        pediProductType_id SMALLINT,
+        componentTypeName varchar(50),
+        componentTypeNameShort varchar(30),
+        pediComponentType_id SMALLINT,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table ProductUsage (
+    create table ComponentUsage (
         id bigint not null auto_increment,
         hospital varchar(50),
         isDeleted boolean,
@@ -670,11 +670,11 @@
         ward varchar(30),
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        product_id bigint,
+        component_id bigint,
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table ProductUsage_AUD (
+    create table ComponentUsage_AUD (
         id bigint not null,
         REV integer not null,
         REVTYPE tinyint,
@@ -690,11 +690,11 @@
         ward varchar(30),
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        product_id bigint,
+        component_id bigint,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table Product_AUD (
+    create table Component_AUD (
         id bigint not null,
         REV integer not null,
         REVTYPE tinyint,
@@ -712,15 +712,24 @@
         issuedTo_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        parentProduct_id bigint,
-        productType_id SMALLINT,
+        parentComponent_id bigint,
+        componentType_id SMALLINT,
         primary key (id, REV)
     ) ENGINE=InnoDB;
 
-    create table REVINFO (
-        REV integer not null auto_increment,
-        REVTSTMP bigint,
-        primary key (REV)
+    create table AuditRevision (
+        id integer not null auto_increment,
+        timestamp bigint,
+        username varchar(30),
+        primary key (id)
+    ) ENGINE=InnoDB;
+
+    CREATE TABLE EntityModification (
+        id integer not null auto_increment,
+        auditRevision_id integer not null,
+        revisionType varchar(30) not null,
+        entityName varchar(30) not null,
+        primary key (id)
     ) ENGINE=InnoDB;
 
     create table Request (
@@ -751,7 +760,7 @@
         ward varchar(20),
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        productType_id SMALLINT,
+        componentType_id SMALLINT,
         requestSite_id bigint,
         requestType_id SMALLINT,
         primary key (id)
@@ -805,7 +814,7 @@
         ward varchar(20),
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
-        productType_id SMALLINT,
+        componentType_id SMALLINT,
         requestSite_id bigint,
         requestType_id SMALLINT,
         primary key (id, REV)
@@ -960,11 +969,11 @@
         primary key (worksheets_id, donations_id)
     ) ENGINE=InnoDB;
 
-    alter table BloodBagType_AUD 
-        add index FKE16C6DF9DF74E053 (REV), 
-        add constraint FKE16C6DF9DF74E053 
+    alter table PackType_AUD 
+        add index FK_PACK_TYPE_AUDIT_REVISION (REV), 
+        add constraint FK_PACK_TYPE_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table BloodTestResult 
         add index FK39946CC9A49787C4 (createdBy_id), 
@@ -997,10 +1006,10 @@
         references BloodTest (id);
 
     alter table BloodTest_AUD 
-        add index FKE1FA995DDF74E053 (REV), 
-        add constraint FKE1FA995DDF74E053 
+        add index FK_BLOOD_TEST_AUDIT_REVISION (REV), 
+        add constraint FK_BLOOD_TEST_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table BloodTest_WorksheetType 
         add index FK7A6DA3B518CB61F2 (worksheetTypes_id), 
@@ -1015,16 +1024,16 @@
         references BloodTest (id);
 
     alter table BloodTest_WorksheetType_AUD 
-        add index FK7F06EF06DF74E053 (REV), 
-        add constraint FK7F06EF06DF74E053 
+        add index FK_BLOOD_TEST_WORKSHEET_TYPE_AUDIT_REVISION (REV), 
+        add constraint FK_BLOOD_TEST_WORKSHEET_TYPE_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table BloodTestingRule_AUD 
-        add index FKE99C9FC3DF74E053 (REV), 
-        add constraint FKE99C9FC3DF74E053 
+        add index FK_BLOOD_TESTING_RULE_AUDIT_REVISION (REV), 
+        add constraint FK_BLOOD_TESTING_RULE_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     create index donation_donationDate_index on Donation (donationDate);
 
@@ -1067,16 +1076,16 @@
         references User (id);
 
     alter table Donation 
-        add index FKF0658A331D73927B (bloodBagType_id), 
+        add index FKF0658A331D73927B (packType_id), 
         add constraint FKF0658A331D73927B 
-        foreign key (bloodBagType_id) 
-        references BloodBagType (id);
+        foreign key (packType_id) 
+        references PackType (id);
 
     alter table Donation_AUD 
-        add index FKD18B6684DF74E053 (REV), 
-        add constraint FKD18B6684DF74E053 
+        add index FK_DONATION_AUDIT_REVISION (REV), 
+        add constraint FK_DONATION_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table DonationBatch 
         add index FK227631CA49787C4 (createdBy_id), 
@@ -1091,10 +1100,10 @@
         references User (id);
 
     alter table DonationBatch_AUD 
-        add index FKB74A2EDDF74E053 (REV), 
-        add constraint FKB74A2EDDF74E053 
+        add index FK_DONATION_BATCH_AUDIT_REVISION (REV), 
+        add constraint FK_DONATION_BATCH_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     create index compatibilityTest_crossmatchTestDate_index on CompatibilityTest (compatibililityTestDate);
 
@@ -1111,10 +1120,10 @@
         references Request (id);
 
     alter table CompatibilityTest 
-        add index FK92798602EFD1FE7 (testedProduct_id), 
+        add index FK92798602EFD1FE7 (testedComponent_id), 
         add constraint FK92798602EFD1FE7 
-        foreign key (testedProduct_id) 
-        references Product (id);
+        foreign key (testedComponent_id) 
+        references Component (id);
 
     alter table CompatibilityTest 
         add index FK92798602D0AFB367 (lastUpdatedBy_id), 
@@ -1129,34 +1138,34 @@
         references CrossmatchType (id);
 
     alter table CompatibilityTest_AUD 
-        add index FKE8EE2D3DF74E053 (REV), 
-        add constraint FKE8EE2D3DF74E053 
+        add index FK_COMPATIBILITY_TEST_AUDIT_REVISION (REV), 
+        add constraint FK_COMPATIBILITY_TEST_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table ContactMethodType_AUD 
-        add index FK64A7DC2CDF74E053 (REV), 
-        add constraint FK64A7DC2CDF74E053 
+        add index FK_CONTACT_METHOD_TYPE_AUDIT_REVISION (REV), 
+        add constraint FK_CONTACT_METHOD_TYPE_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table CrossmatchType_AUD 
-        add index FK7FC1C4D0DF74E053 (REV), 
-        add constraint FK7FC1C4D0DF74E053 
+        add index FK_CROSSMATCH_TYPE_AUDIT_REVISION (REV), 
+        add constraint FK_CROSSMATCH_TYPE_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table DeferralReason_AUD 
-        add index FK85449400DF74E053 (REV), 
-        add constraint FK85449400DF74E053 
+        add index FK_DEFERRAL_REASON_AUDIT_REVISION (REV), 
+        add constraint FK_DEFERRAL_REASON_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table DonationType_AUD 
-        add index FK58EF0DDDDF74E053 (REV), 
-        add constraint FK58EF0DDDDF74E053 
+        add index FK_DONATION_TYPE_AUDIT_REVISION (REV), 
+        add constraint FK_DONATION_TYPE_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     create index donor_donorNumber_index on Donor (donorNumber);
 
@@ -1207,22 +1216,22 @@
         references DeferralReason (id);
 
     alter table DonorDeferral_AUD 
-        add index FK17470122DF74E053 (REV), 
-        add constraint FK17470122DF74E053 
+        add index FK_DONOR_DEFERRAL_AUDIT_REVISION (REV), 
+        add constraint FK_DONOR_DEFERRAL_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table Donor_AUD 
-        add index FKEB99F917DF74E053 (REV), 
-        add constraint FKEB99F917DF74E053 
+        add index FK_DONOR_AUDIT_REVISION (REV), 
+        add constraint FK_DONOR_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table Location_AUD 
-        add index FK6563F26DF74E053 (REV), 
-        add constraint FK6563F26DF74E053 
+        add index FK_LOCATION_AUDIT_REVISION (REV), 
+        add constraint FK_LOCATION_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table MachineReading 
         add index FK4CF2E0652531C00D (wellType_id), 
@@ -1237,16 +1246,16 @@
         references PlateSession (id);
 
     alter table MicrotiterPlate_AUD 
-        add index FK45D4695FDF74E053 (REV), 
-        add constraint FK45D4695FDF74E053 
+        add index FK_MICROTITER_PLATE_AUDIT_REVISION (REV), 
+        add constraint FK_MICROTITER_PLATE_AUDIT_REVISION
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table Permission_AUD 
-        add index FK6E934040DF74E053 (REV), 
-        add constraint FK6E934040DF74E053 
+        add index FK_PERMISSION_AUDIT_REVISION (REV), 
+        add constraint FK_PERMISSION_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table Permission_Role 
         add index FK63DCE8E61D2E2631 (roles_id), 
@@ -1261,16 +1270,16 @@
         references Permission (id);
 
     alter table Permission_Role_AUD 
-        add index FKE7FE33B7DF74E053 (REV), 
-        add constraint FKE7FE33B7DF74E053 
+        add index FK_PERMISSION_ROLE_AUDIT_REVISION (REV), 
+        add constraint FK_PERMISSION_ROLE_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table PlateSession_AUD 
-        add index FK79BBDC91DF74E053 (REV), 
-        add constraint FK79BBDC91DF74E053 
+        add index FK_PLATE_SESSION_AUDIT_REVISION (REV), 
+        add constraint FK_PLATE_SESSION_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table PlateSession_BloodTestResult 
         add index FK7A75514AAF35157F (PlateSession_id), 
@@ -1284,139 +1293,139 @@
         foreign key (bloodTestsOnPlate_id) 
         references BloodTestResult (id);
 
-    create index product_expiresOn_index on Product (expiresOn);
+    create index component_expiresOn_index on Component (expiresOn);
 
-    alter table Product 
+    alter table Component 
         add index FK50C664CFA49787C4 (createdBy_id), 
         add constraint FK50C664CFA49787C4 
         foreign key (createdBy_id) 
         references User (id);
 
-    alter table Product 
+    alter table Component 
         add index FK50C664CF994002DF (issuedTo_id), 
         add constraint FK50C664CF994002DF 
         foreign key (issuedTo_id) 
         references Request (id);
 
-    alter table Product 
+    alter table Component 
         add index FK50C664CF32E145A (donation_id), 
         add constraint FK50C664CF32E145A 
         foreign key (donation_id) 
         references Donation (id);
 
-    alter table Product 
-        add index FK50C664CF73AC2B90 (productType_id), 
+    alter table Component 
+        add index FK50C664CF73AC2B90 (componentType_id), 
         add constraint FK50C664CF73AC2B90 
-        foreign key (productType_id) 
-        references ProductType (id);
+        foreign key (componentType_id) 
+        references ComponentType (id);
 
-    alter table Product 
-        add index FK50C664CFD946D0A0 (parentProduct_id), 
+    alter table Component 
+        add index FK50C664CFD946D0A0 (parentComponent_id), 
         add constraint FK50C664CFD946D0A0 
-        foreign key (parentProduct_id) 
-        references Product (id);
+        foreign key (parentComponent_id) 
+        references Component (id);
 
-    alter table Product 
+    alter table Component 
         add index FK50C664CFD0AFB367 (lastUpdatedBy_id), 
         add constraint FK50C664CFD0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
 
-    alter table ProductStatusChange 
+    alter table ComponentStatusChange 
         add index FKCCE48CB1994002DF (issuedTo_id), 
         add constraint FKCCE48CB1994002DF 
         foreign key (issuedTo_id) 
         references Request (id);
 
-    alter table ProductStatusChange 
+    alter table ComponentStatusChange 
         add index FKCCE48CB18BFC6394 (statusChangeReason_id), 
         add constraint FKCCE48CB18BFC6394 
         foreign key (statusChangeReason_id) 
-        references ProductStatusChangeReason (id);
+        references ComponentStatusChangeReason (id);
 
-    alter table ProductStatusChange 
-        add index FKCCE48CB1A8E71476 (product_id), 
+    alter table ComponentStatusChange 
+        add index FKCCE48CB1A8E71476 (component_id), 
         add constraint FKCCE48CB1A8E71476 
-        foreign key (product_id) 
-        references Product (id);
+        foreign key (component_id) 
+        references Component (id);
 
-    alter table ProductStatusChange 
+    alter table ComponentStatusChange 
         add index FKCCE48CB1438D2378 (changedBy_id), 
         add constraint FKCCE48CB1438D2378 
         foreign key (changedBy_id) 
         references User (id);
 
-    alter table ProductStatusChangeReason_AUD 
-        add index FKA5ADFDA6DF74E053 (REV), 
-        add constraint FKA5ADFDA6DF74E053 
+    alter table ComponentStatusChangeReason_AUD 
+        add index FK_COMPONENT_STATUS_CHANGE_REASON_AUDIT_REVISION (REV), 
+        add constraint FK_COMPONENT_STATUS_CHANGE_REASON_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
-    alter table ProductStatusChange_AUD 
-        add index FK79A8FA02DF74E053 (REV), 
-        add constraint FK79A8FA02DF74E053 
+    alter table ComponentStatusChange_AUD 
+        add index FK_COMPONENT_STATUS_CHANGE_AUDIT_REVISION (REV), 
+        add constraint FK_COMPONENT_STATUS_CHANGE_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
-    alter table ProductType 
-        add index FKA8168A93E7CEF4A (pediProductType_id), 
+    alter table ComponentType 
+        add index FKA8168A93E7CEF4A (pediComponentType_id), 
         add constraint FKA8168A93E7CEF4A 
-        foreign key (pediProductType_id) 
-        references ProductType (id);
+        foreign key (pediComponentType_id) 
+        references ComponentType (id);
 
-    alter table ProductTypeCombination_AUD 
-        add index FK61943137DF74E053 (REV), 
-        add constraint FK61943137DF74E053 
+    alter table ComponentTypeCombination_AUD 
+        add index FK_COMPONENT_TYPE_COMBINATION_AUDIT_REVISION (REV), 
+        add constraint FK_COMPONENT_TYPE_COMBINATION_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
-    alter table ProductTypeCombination_ProductType 
-        add index FK3F6704507548F61D (productTypeCombinations_id), 
+    alter table ComponentTypeCombination_ComponentType 
+        add index FK3F6704507548F61D (componentTypeCombinations_id), 
         add constraint FK3F6704507548F61D 
-        foreign key (productTypeCombinations_id) 
-        references ProductTypeCombination (id);
+        foreign key (componentTypeCombinations_id) 
+        references ComponentTypeCombination (id);
 
-    alter table ProductTypeCombination_ProductType 
-        add index FK3F670450EE5B3BAF (productTypes_id), 
+    alter table ComponentTypeCombination_ComponentType 
+        add index FK3F670450EE5B3BAF (componentTypes_id), 
         add constraint FK3F670450EE5B3BAF 
-        foreign key (productTypes_id) 
-        references ProductType (id);
+        foreign key (componentTypes_id) 
+        references ComponentType (id);
 
-    alter table ProductType_AUD 
-        add index FKA50719FADF74E053 (REV), 
-        add constraint FKA50719FADF74E053 
+    alter table ComponentType_AUD 
+        add index FK_COMPONENT_TYPE_AUDIT_REVISION (REV), 
+        add constraint FK_COMPONENT_TYPE_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
-    alter table ProductUsage 
+    alter table ComponentUsage 
         add index FK45B6D212A49787C4 (createdBy_id), 
         add constraint FK45B6D212A49787C4 
         foreign key (createdBy_id) 
         references User (id);
 
-    alter table ProductUsage 
-        add index FK45B6D212A8E71476 (product_id), 
+    alter table ComponentUsage 
+        add index FK45B6D212A8E71476 (component_id), 
         add constraint FK45B6D212A8E71476 
-        foreign key (product_id) 
-        references Product (id);
+        foreign key (component_id) 
+        references Component (id);
 
-    alter table ProductUsage 
+    alter table ComponentUsage 
         add index FK45B6D212D0AFB367 (lastUpdatedBy_id), 
         add constraint FK45B6D212D0AFB367 
         foreign key (lastUpdatedBy_id) 
         references User (id);
 
-    alter table ProductUsage_AUD 
-        add index FKB27A6E3DF74E053 (REV), 
-        add constraint FKB27A6E3DF74E053 
+    alter table ComponentUsage_AUD 
+        add index FK_COMPONENT_USAGE_AUDIT_REVISION (REV), 
+        add constraint FK_COMPONENT_USAGE_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
-    alter table Product_AUD 
-        add index FKA859320DF74E053 (REV), 
-        add constraint FKA859320DF74E053 
+    alter table Component_AUD 
+        add index FK_COMPONENT_AUDIT_REVISION (REV), 
+        add constraint FK_COMPONENT_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     create index request_requiredDate_index on Request (requiredDate);
 
@@ -1441,10 +1450,10 @@
         references Location (id);
 
     alter table Request 
-        add index FKA4878A6F73AC2B90 (productType_id), 
+        add index FKA4878A6F73AC2B90 (componentType_id), 
         add constraint FKA4878A6F73AC2B90 
-        foreign key (productType_id) 
-        references ProductType (id);
+        foreign key (componentType_id) 
+        references ComponentType (id);
 
     alter table Request 
         add index FKA4878A6F537AAD30 (requestType_id), 
@@ -1459,28 +1468,28 @@
         references User (id);
 
     alter table RequestType_AUD 
-        add index FK36989F9ADF74E053 (REV), 
-        add constraint FK36989F9ADF74E053 
+        add index FK_REQUEST_TYPE_AUDIT_REVISION (REV), 
+        add constraint FK_REQUEST_TYPE_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table Request_AUD 
-        add index FKA7FAE8C0DF74E053 (REV), 
-        add constraint FKA7FAE8C0DF74E053 
+        add index FK_REQUEST_AUDIT_REVISION (REV), 
+        add constraint FK_REQUEST_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table Role_AUD 
-        add index FKF3FAE767DF74E053 (REV), 
-        add constraint FKF3FAE767DF74E053 
+        add index FK_ROLE_AUDIT_REVISION (REV), 
+        add constraint FK_ROLE_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table User_AUD 
-        add index FKF3FCA03CDF74E053 (REV), 
-        add constraint FKF3FCA03CDF74E053 
+        add index FK_USER_AUDIT_REVISION (REV), 
+        add constraint FK_USER_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table User_Role 
         add index FK8B9F886A1D2E2631 (roles_id), 
@@ -1495,16 +1504,16 @@
         references User (id);
 
     alter table User_Role_AUD 
-        add index FK269D713BDF74E053 (REV), 
-        add constraint FK269D713BDF74E053 
+        add index FK_USER_ROLE_AUDIT_REVISION (REV), 
+        add constraint FK_USER_ROLE_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table WellType_AUD 
-        add index FKD3033B19DF74E053 (REV), 
-        add constraint FKD3033B19DF74E053 
+        add index FK_WELL_TYPE_AUDIT_REVISION (REV), 
+        add constraint FK_WELL_TYPE_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table Worksheet 
         add index FKB98678CEA49787C4 (createdBy_id), 
@@ -1525,16 +1534,16 @@
         references User (id);
 
     alter table WorksheetType_AUD 
-        add index FK122EBEF9DF74E053 (REV), 
-        add constraint FK122EBEF9DF74E053 
+        add index FK_WORKSHEET_TYPE_AUDIT_REVISION (REV), 
+        add constraint FK_WORKSHEET_TYPE_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table Worksheet_AUD 
-        add index FK2D0D8F9FDF74E053 (REV), 
-        add constraint FK2D0D8F9FDF74E053 
+        add index FK_WORKSHEET_AUDIT_REVISION (REV), 
+        add constraint FK_WORKSHEET_AUDIT_REVISION 
         foreign key (REV) 
-        references REVINFO (REV);
+        references AuditRevision (id);
 
     alter table Worksheet_Donation 
         add index FK1BCDFCC2EA518FDE (worksheets_id), 
