@@ -11,13 +11,6 @@ import java.util.Arrays;
 
 public class BloodTestBackingFormValidator implements Validator {
 
-    private Validator validator;
-
-    public BloodTestBackingFormValidator(Validator validator) {
-        super();
-        this.validator = validator;
-    }
-
     @Override
     public boolean supports(Class<?> clazz) {
         return Arrays.asList(BloodTestBackingForm.class).contains(clazz);
@@ -25,7 +18,6 @@ public class BloodTestBackingFormValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        ValidationUtils.invokeValidator(validator, target, errors);
 
         ValidationUtils.rejectIfEmpty(errors, "BloodTest.testName", "testName.empty", "The testName is required");
         ValidationUtils.rejectIfEmpty(errors, "BloodTest.category", "category.empty", "The bloodTestCategory is required");

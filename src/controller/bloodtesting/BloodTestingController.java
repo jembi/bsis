@@ -32,7 +32,7 @@ public class BloodTestingController {
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(new BloodTestBackingFormValidator(binder.getValidator()));
+        binder.setValidator(new BloodTestBackingFormValidator());
     }
 
   public BloodTestingController() {
