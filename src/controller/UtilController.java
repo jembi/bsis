@@ -485,6 +485,13 @@ public class UtilController {
     return false;
   }
 
+  public String getGeneralConfigValueByName(String generalConfigName){
+    GeneralConfig generalConfig = generalConfigRepository.getGeneralConfigByName(generalConfigName);
+    if (generalConfig != null)
+      return generalConfig.getValue();
+    return "";
+  }
+
   public boolean isDuplicatePackTypeName(PackType packType) {
     String packTypeName = packType.getPackType();
     if (StringUtils.isBlank(packTypeName))

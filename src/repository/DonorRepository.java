@@ -95,6 +95,9 @@ public class DonorRepository {
         Root<Donor> root = cq.from(Donor.class);
         Predicate donorNumberExp = cb.equal(root.<String>get("donorNumber"), donorNumber);
         Predicate firstNameExp, lastNameExp;
+
+        String donorSearchMode = utilController.getGeneralConfigValueByName("donor.searchMode");
+
         if (!usePhraseMatch) {
             firstNameExp = cb.equal(root.<String>get("firstName"), firstName);
             lastNameExp = cb.equal(root.<String>get("lastName"), lastName);
@@ -102,13 +105,23 @@ public class DonorRepository {
             if (firstName.trim().equals("")) {
                 firstNameExp = cb.disjunction();
             } else {
-                firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName + "%");
+                if ("start".equals(donorSearchMode))
+                    firstNameExp = cb.like(root.<String>get("firstName"), firstName + "%");
+                else if ("end".equals(donorSearchMode))
+                    firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName);
+                else
+                    firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName + "%");
             }
 
             if (lastName.trim().equals("")) {
                 lastNameExp = cb.disjunction();
             } else {
-                lastNameExp = cb.like(root.<String>get("lastName"), "%" + lastName + "%");
+                if ("start".equals(donorSearchMode))
+                    lastNameExp = cb.like(root.<String>get("lastName"), lastName + "%");
+                else if ("end".equals(donorSearchMode))
+                    lastNameExp = cb.like(root.<String>get("lastName"), "%" + lastName);
+                else
+                    lastNameExp = cb.like(root.<String>get("lastName"), "%" + lastName + "%");
             }
         }
 

@@ -91,15 +91,17 @@ public class UsageRepositoryTest {
 	}
 	
 	@Test
-	@Ignore("Bug - error in HSQL: could not resolve property: productNumber of: model.usage.ComponentUsage")
 	public void testFindComponentUsage() throws Exception {
-		usageRepository.findComponentUsage("1234");
+		ComponentUsage usage = usageRepository.findComponentUsage("3333333-0011");
+		Assert.assertNotNull("ComponentUsage found", usage);
+		Assert.assertEquals("ComponentUsage correct", Long.valueOf(3), usage.getId());
 	}
 	
 	@Test
-	@Ignore("Bug - error in HSQL: could not resolve property: productNumber of: model.usage.ComponentUsage")
-	public void testFindUsageByProductNumber() throws Exception {
-		usageRepository.findUsageByProductNumber("1234");
+	public void testFindUsageByComponentIdentificationNumber() throws Exception {
+		ComponentUsage usage = usageRepository.findUsageByComponentIdentificationNumber("3333333-0011");
+		Assert.assertNotNull("ComponentUsage found", usage);
+		Assert.assertEquals("ComponentUsage correct", Long.valueOf(3), usage.getId());
 	}
 	
 	@Test
@@ -131,10 +133,9 @@ public class UsageRepositoryTest {
 	}
 	
 	@Test
-	@Ignore("Bug - error in HSQL: could not resolve property: productNumber of: model.usage.ComponentUsage")
 	public void testDeleteUsage() throws Exception {
-		usageRepository.deleteUsage("1234");
-		ComponentUsage one = usageRepository.findUsageById(1l);
+		usageRepository.deleteUsage("3333333-0011");
+		ComponentUsage one = usageRepository.findUsageById(3l);
 		Assert.assertNotNull("There is a ComponentUsage", one);
 		Assert.assertTrue("ComponentUsage is deleted", one.getIsDeleted());
 	}
@@ -147,11 +148,11 @@ public class UsageRepositoryTest {
 	}
 	
 	@Test
-	@Ignore("Bug - error in HSQL: could not resolve property: productNumber of: model.usage.ComponentUsage")
+	@Ignore("Bug - error in HSQL: dateUsed of: model.usage.ComponentUsage [SELECT u FROM model.usage.ComponentUsage u WHERE (u.component.componentIdentificationNumber = :componentIdentificationNumber OR u.useIndication IN (:useIndications)) AND (u.dateUsed BETWEEN :dateUsedFrom AND :dateUsedTo) AND (u.isDeleted= :isDeleted)]")
 	public void testFindAnyUsageMatching() throws Exception {
 		List<String> usages = new ArrayList<String>();
 		usages.add("Operation");
 		usages.add("Emergency");
-		usageRepository.findAnyUsageMatching("1234", "2015-01-01", "2015-10-10", usages);
+		usageRepository.findAnyUsageMatching("3333333-0011", "2015-01-01", "2015-10-10", usages);
 	}
 }

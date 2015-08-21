@@ -238,9 +238,10 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	@Transactional
-	@Ignore("A bug - there is no attribute of Component called productNumber")
 	public void testFindComponentByComponentNumber() throws Exception {
-		componentRepository.findComponent("123");
+		Component component = componentRepository.findComponent("5555555-0011");
+		Assert.assertNotNull("Found Component by componentIdentificationNumber", component);
+		Assert.assertEquals("Found correct Component", Long.valueOf(7), component.getId());
 	}
 	
 	@Test

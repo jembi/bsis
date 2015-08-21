@@ -29,13 +29,13 @@ public class UsageRepository {
     em.flush();
   }
 
-  public ComponentUsage findComponentUsage(String productNumber) throws NoResultException, NonUniqueResultException{
-      String queryString = "SELECT p FROM ComponentUsage p WHERE p.productNumber = :productNumber and p.isDeleted= :isDeleted";
+  public ComponentUsage findComponentUsage(String componentIdentificationNumber) throws NoResultException, NonUniqueResultException{
+      String queryString = "SELECT u FROM ComponentUsage u WHERE u.component.componentIdentificationNumber = :componentIdentificationNumber and u.isDeleted= :isDeleted";
       TypedQuery<ComponentUsage> query = em.createQuery(queryString,
               ComponentUsage.class);
       query.setParameter("isDeleted", Boolean.FALSE);
-      ComponentUsage componentUsage = query.setParameter("productNumber",
-              productNumber).getSingleResult();
+      ComponentUsage componentUsage = query.setParameter("componentIdentificationNumber",
+    	  componentIdentificationNumber).getSingleResult();
       return componentUsage;
   }
 
@@ -44,20 +44,20 @@ public class UsageRepository {
     query.executeUpdate();
   }
 
-  public List<ComponentUsage> findAnyUsageMatching(String productNumber,
+  public List<ComponentUsage> findAnyUsageMatching(String componentIdentificationNumber,
       String dateUsedFrom, String dateUsedTo, List<String> useIndications) throws ParseException {
 
     TypedQuery<ComponentUsage> query = em.createQuery(
         "SELECT u FROM ComponentUsage u WHERE "
-            + "(u.productNumber = :productNumber OR "
+            + "(u.component.componentIdentificationNumber = :componentIdentificationNumber OR "
             + "u.useIndication IN (:useIndications)) AND "
             + "(u.dateUsed BETWEEN :dateUsedFrom AND " + ":dateUsedTo) AND "
             + "(u.isDeleted= :isDeleted)", ComponentUsage.class);
 
     query.setParameter("isDeleted", Boolean.FALSE);
 
-    query.setParameter("productNumber", productNumber == null ? ""
-        : productNumber);
+    query.setParameter("componentIdentificationNumber", componentIdentificationNumber == null ? ""
+        : componentIdentificationNumber);
     query.setParameter("useIndications", useIndications);
 
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -75,19 +75,20 @@ public class UsageRepository {
     return resultList;
   }
 
-  public ComponentUsage findUsageByProductNumber(String productNumber) throws NoResultException, NonUniqueResultException{
-    TypedQuery<ComponentUsage> query = em
-        .createQuery(
-            "SELECT u FROM ComponentUsage u WHERE u.productNumber = :productNumber and u.isDeleted= :isDeleted",
-            ComponentUsage.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("productNumber", productNumber);
-    ComponentUsage usage = query.getSingleResult();
-    return usage;
-  }
+	public ComponentUsage findUsageByComponentIdentificationNumber(String componentIdentificationNumber)
+	    throws NoResultException, NonUniqueResultException {
+		TypedQuery<ComponentUsage> query = em
+		        .createQuery(
+		            "SELECT u FROM ComponentUsage u WHERE u.component.componentIdentificationNumber = :componentIdentificationNumber and u.isDeleted= :isDeleted",
+		            ComponentUsage.class);
+		query.setParameter("isDeleted", Boolean.FALSE);
+		query.setParameter("componentIdentificationNumber", componentIdentificationNumber);
+		ComponentUsage usage = query.getSingleResult();
+		return usage;
+	}
 
-  public void deleteUsage(String productNumber) {
-    ComponentUsage existingUsage = findUsageByProductNumber(productNumber);
+  public void deleteUsage(String componentIdentificationNumber) {
+    ComponentUsage existingUsage = findUsageByComponentIdentificationNumber(componentIdentificationNumber);
     existingUsage.setIsDeleted(Boolean.TRUE);
     em.merge(existingUsage);
     em.flush();
