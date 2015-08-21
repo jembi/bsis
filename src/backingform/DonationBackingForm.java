@@ -11,12 +11,12 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import model.bloodbagtype.BloodBagType;
+import model.component.Component;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.donation.HaemoglobinLevel;
 import model.donationtype.DonationType;
 import model.donor.Donor;
-import model.product.Product;
 import model.location.Location;
 import model.user.User;
 
@@ -423,8 +423,8 @@ public class DonationBackingForm {
     }
     
     @JsonIgnore
-    public List<Product> getProducts() {
-        return donation.getProducts();
+    public List<Component> getComponents() {
+        return donation.getComponents();
     }
     
     @JsonIgnore

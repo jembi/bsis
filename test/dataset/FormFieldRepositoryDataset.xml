@@ -270,91 +270,91 @@
 		isRequired="false" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="64" autoGenerate="false" canBeOptional="false"
 		defaultDisplayName="Donation indentification number" defaultValue=""
-		displayName="DIN" field="donationIdentificationNumber" form="Product"
+		displayName="DIN" field="donationIdentificationNumber" form="Component"
 		hidden="false" isAutoGeneratable="false" isHidable="true" isRequired="true"
 		isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="65" autoGenerate="false" canBeOptional="false"
-		defaultDisplayName="Product Type" defaultValue="" field="productType"
-		form="Product" hidden="false" isAutoGeneratable="false" isHidable="true"
+		defaultDisplayName="Component Type" defaultValue="" field="componentType"
+		form="Component" hidden="false" isAutoGeneratable="false" isHidable="true"
 		isRequired="true" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="66" autoGenerate="false" canBeOptional="false"
 		defaultDisplayName="Creation date" defaultValue="" field="createdOn"
-		form="Product" hidden="false" isAutoGeneratable="false" isHidable="true"
+		form="Component" hidden="false" isAutoGeneratable="false" isHidable="true"
 		isRequired="true" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="67" autoGenerate="false" canBeOptional="true"
 		defaultDisplayName="Expiry date" defaultValue="" field="expiresOn"
-		form="Product" hidden="false" isAutoGeneratable="false" isHidable="false"
+		form="Component" hidden="false" isAutoGeneratable="false" isHidable="false"
 		isRequired="true" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="68" autoGenerate="false" canBeOptional="true"
-		defaultDisplayName="Issue date" defaultValue="" field="issuedOn" form="Product"
+		defaultDisplayName="Issue date" defaultValue="" field="issuedOn" form="Component"
 		hidden="false" isAutoGeneratable="false" isHidable="false" isRequired="false"
 		isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="69" autoGenerate="false" canBeOptional="true"
-		defaultDisplayName="Product status" defaultValue="" field="status"
-		form="Product" hidden="false" isAutoGeneratable="false" isHidable="false"
+		defaultDisplayName="Component status" defaultValue="" field="status"
+		form="Component" hidden="false" isAutoGeneratable="false" isHidable="false"
 		isRequired="false" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="70" autoGenerate="false" canBeOptional="true"
 		defaultDisplayName="Blood group" defaultValue="" field="bloodGroup"
-		form="Product" hidden="false" isAutoGeneratable="false" isHidable="false"
+		form="Component" hidden="false" isAutoGeneratable="false" isHidable="false"
 		isRequired="false" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="71" autoGenerate="false" canBeOptional="true"
-		defaultDisplayName="Age" defaultValue="" field="age" form="Product"
+		defaultDisplayName="Age" defaultValue="" field="age" form="Component"
 		hidden="false" isAutoGeneratable="false" isHidable="false" isRequired="false"
 		isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="72" autoGenerate="false" canBeOptional="true"
 		defaultDisplayName="Discarded on" defaultValue="" field="discardedOn"
-		form="Product" hidden="false" isAutoGeneratable="false" isHidable="false"
+		form="Component" hidden="false" isAutoGeneratable="false" isHidable="false"
 		isRequired="false" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="73" autoGenerate="false" canBeOptional="true"
 		defaultDisplayName="Discarded by" defaultValue="" field="discardedBy"
-		form="Product" hidden="false" isAutoGeneratable="false" isHidable="false"
+		form="Component" hidden="false" isAutoGeneratable="false" isHidable="false"
 		isRequired="false" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="74" autoGenerate="false" canBeOptional="true"
-		defaultDisplayName="Notes" defaultValue="" field="notes" form="Product"
+		defaultDisplayName="Notes" defaultValue="" field="notes" form="Component"
 		hidden="false" isAutoGeneratable="false" isHidable="false" isRequired="false"
 		isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="75" autoGenerate="false" canBeOptional="false"
 		defaultDisplayName="Status change type" defaultValue=""
-		field="statusChangeType" form="Product" hidden="false"
+		field="statusChangeType" form="Component" hidden="false"
 		isAutoGeneratable="false" isHidable="false" isRequired="false"
 		isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="76" autoGenerate="false" canBeOptional="false"
-		defaultDisplayName="Issued to" defaultValue="" field="issuedTo" form="Product"
+		defaultDisplayName="Issued to" defaultValue="" field="issuedTo" form="Component"
 		hidden="false" isAutoGeneratable="false" isHidable="false" isRequired="false"
 		isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="77" autoGenerate="false" canBeOptional="false"
 		defaultDisplayName="Status changed on" defaultValue="" field="statusChangedOn"
-		form="Product" hidden="false" isAutoGeneratable="false" isHidable="false"
+		form="Component" hidden="false" isAutoGeneratable="false" isHidable="false"
 		isRequired="false" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="78" autoGenerate="false" canBeOptional="false"
 		defaultDisplayName="Status changed by" defaultValue="" field="statusChangedBy"
-		form="Product" hidden="false" isAutoGeneratable="false" isHidable="false"
+		form="Component" hidden="false" isAutoGeneratable="false" isHidable="false"
 		isRequired="false" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="79" autoGenerate="false" canBeOptional="false"
 		defaultDisplayName="Status change reason" defaultValue=""
-		field="statusChangeReason" form="Product" hidden="false"
+		field="statusChangeReason" form="Component" hidden="false"
 		isAutoGeneratable="false" isHidable="false" isRequired="false"
 		isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="80" autoGenerate="false" canBeOptional="false"
 		defaultDisplayName="Status change details" defaultValue=""
-		field="statusChangeReasonText" form="Product" hidden="false"
+		field="statusChangeReasonText" form="Component" hidden="false"
 		isAutoGeneratable="false" isHidable="false" isRequired="false"
 		isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="81" autoGenerate="false" canBeOptional="false"
 		defaultDisplayName="Created on" defaultValue="" field="createdDate"
-		form="Product" hidden="false" isAutoGeneratable="false" isHidable="false"
+		form="Component" hidden="false" isAutoGeneratable="false" isHidable="false"
 		isRequired="false" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="82" autoGenerate="false" canBeOptional="false"
 		defaultDisplayName="Created by" defaultValue="" field="createdBy"
-		form="Product" hidden="false" isAutoGeneratable="false" isHidable="false"
+		form="Component" hidden="false" isAutoGeneratable="false" isHidable="false"
 		isRequired="false" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="83" autoGenerate="false" canBeOptional="false"
 		defaultDisplayName="Last modified on" defaultValue="" field="lastUpdatedTime"
-		form="Product" hidden="false" isAutoGeneratable="false" isHidable="false"
+		form="Component" hidden="false" isAutoGeneratable="false" isHidable="false"
 		isRequired="false" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="84" autoGenerate="false" canBeOptional="false"
 		defaultDisplayName="Last modified by" defaultValue="" field="lastUpdatedBy"
-		form="Product" hidden="false" isAutoGeneratable="false" isHidable="false"
+		form="Component" hidden="false" isAutoGeneratable="false" isHidable="false"
 		isRequired="false" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="85" autoGenerate="false" canBeOptional="false"
 		defaultDisplayName="Donation indentification number" defaultValue=""
@@ -399,7 +399,7 @@
 		form="Request" hidden="false" isAutoGeneratable="false" isHidable="false"
 		isRequired="false" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="95" autoGenerate="false" canBeOptional="false"
-		defaultDisplayName="Product type" defaultValue="" field="productType"
+		defaultDisplayName="Component type" defaultValue="" field="componentType"
 		form="Request" hidden="false" isAutoGeneratable="false" isHidable="false"
 		isRequired="true" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="96" autoGenerate="false" canBeOptional="true"
@@ -478,7 +478,7 @@
 		hidden="false" isAutoGeneratable="false" isHidable="false" isRequired="true"
 		isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="114" autoGenerate="false" canBeOptional="false"
-		defaultDisplayName="Product number" defaultValue="" field="requestNumber"
+		defaultDisplayName="Component number" defaultValue="" field="requestNumber"
 		form="CompatibilityTest" hidden="false" isAutoGeneratable="false"
 		isHidable="true" isRequired="true" isTimeField="false" maxLength="0"
 		useCurrentTime="false" />
@@ -532,7 +532,7 @@
 		isHidable="false" isRequired="false" isTimeField="false" maxLength="0"
 		useCurrentTime="false" />
 	<FormField id="125" autoGenerate="false" canBeOptional="false"
-		defaultDisplayName="Product" defaultValue="" field="product" form="Usage"
+		defaultDisplayName="Component" defaultValue="" field="component" form="Usage"
 		hidden="false" isAutoGeneratable="false" isHidable="false" isRequired="true"
 		isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="126" autoGenerate="false" canBeOptional="false"
@@ -541,7 +541,7 @@
 		hidden="false" isAutoGeneratable="false" isHidable="false" isRequired="true"
 		isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="127" autoGenerate="false" canBeOptional="false"
-		defaultDisplayName="Product type" defaultValue="" field="productType"
+		defaultDisplayName="Component type" defaultValue="" field="componentType"
 		form="Usage" hidden="false" isAutoGeneratable="false" isHidable="false"
 		isRequired="true" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="128" autoGenerate="false" canBeOptional="false"
@@ -620,11 +620,11 @@
 		isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="145" autoGenerate="false" canBeOptional="true"
 		defaultDisplayName="Component Identification Number" defaultValue=""
-		field="componentIdentificationNumber" form="Product" hidden="false"
+		field="componentIdentificationNumber" form="Component" hidden="false"
 		isAutoGeneratable="false" isHidable="true" isRequired="false"
 		isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="146" autoGenerate="false" canBeOptional="true"
-		defaultDisplayName="Num. Units" defaultValue="" field="numUnits" form="Product"
+		defaultDisplayName="Num. Units" defaultValue="" field="numUnits" form="Component"
 		hidden="false" isAutoGeneratable="false" isHidable="true" isRequired="false"
 		isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="147" autoGenerate="false" canBeOptional="true"

@@ -8,7 +8,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import model.usage.ProductUsage;
+import model.usage.ComponentUsage;
 
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseDataSourceConnection;
@@ -42,7 +42,7 @@ public class UsageRepositoryTest {
 	UsageRepository usageRepository;
 	
 	@Autowired
-	ProductRepository productRepository;
+	ComponentRepository componentRepository;
 	
 	@Autowired
 	private DataSource dataSource;
@@ -85,73 +85,74 @@ public class UsageRepositoryTest {
 	
 	@Test
 	public void testFindUsageById() throws Exception {
-		ProductUsage one = usageRepository.findUsageById(1l);
-		Assert.assertNotNull("There is a ProductUsage", one);
-		Assert.assertEquals("ProductUsage is correct", "Lucky", one.getPatientName());
+		ComponentUsage one = usageRepository.findUsageById(1l);
+		Assert.assertNotNull("There is a ComponentUsage", one);
+		Assert.assertEquals("ComponentUsage is correct", "Lucky", one.getPatientName());
 	}
 	
 	@Test
-	@Ignore("Bug - error in HSQL: could not resolve property: productNumber of: model.usage.ProductUsage")
-	public void testFindProductUsage() throws Exception {
-		usageRepository.findProductUsage("1234");
+	public void testFindComponentUsage() throws Exception {
+		ComponentUsage usage = usageRepository.findComponentUsage("3333333-0011");
+		Assert.assertNotNull("ComponentUsage found", usage);
+		Assert.assertEquals("ComponentUsage correct", Long.valueOf(3), usage.getId());
 	}
 	
 	@Test
-	@Ignore("Bug - error in HSQL: could not resolve property: productNumber of: model.usage.ProductUsage")
-	public void testFindUsageByProductNumber() throws Exception {
-		usageRepository.findUsageByProductNumber("1234");
+	public void testFindUsageByComponentIdentificationNumber() throws Exception {
+		ComponentUsage usage = usageRepository.findUsageByComponentIdentificationNumber("3333333-0011");
+		Assert.assertNotNull("ComponentUsage found", usage);
+		Assert.assertEquals("ComponentUsage correct", Long.valueOf(3), usage.getId());
 	}
 	
 	@Test
 	public void testFindUsageByIdUnknown() throws Exception {
-		ProductUsage one = usageRepository.findUsageById(123l);
-		Assert.assertNull("There is no ProductUsage", one);
+		ComponentUsage one = usageRepository.findUsageById(123l);
+		Assert.assertNull("There is no ComponentUsage", one);
 	}
 	
 	@Test
 	public void testUpdateUsage() throws Exception {
-		ProductUsage one = usageRepository.findUsageById(1l);
+		ComponentUsage one = usageRepository.findUsageById(1l);
 		one.setHospital("Junit hospital");
 		usageRepository.saveUsage(one);
-		ProductUsage savedOne = usageRepository.findUsageById(1l);
-		Assert.assertEquals("ProductUsage is updated", "Junit hospital", savedOne.getHospital());
+		ComponentUsage savedOne = usageRepository.findUsageById(1l);
+		Assert.assertEquals("ComponentUsage is updated", "Junit hospital", savedOne.getHospital());
 	}
 	
 	@Test
 	public void testAddUsage() throws Exception {
-		ProductUsage one = new ProductUsage();
+		ComponentUsage one = new ComponentUsage();
 		one.setHospital("Junit hospital");
-		one.setProduct(productRepository.findProduct(6l)); // note: this product is actually discarded
+		one.setComponent(componentRepository.findComponent(6l)); // note: this component is actually discarded
 		one.setUsageDate(new Date());
-		ProductUsage savedOne = usageRepository.addUsage(one);
-		Assert.assertNotNull("Saved ProductUsage has an id", savedOne.getId());
-		ProductUsage retrievedOne = usageRepository.findUsageById(savedOne.getId());
-		Assert.assertNotNull("There is a ProductUsage", retrievedOne);
-		Assert.assertEquals("ProductUsage is updated", "Junit hospital", retrievedOne.getHospital());
+		ComponentUsage savedOne = usageRepository.addUsage(one);
+		Assert.assertNotNull("Saved ComponentUsage has an id", savedOne.getId());
+		ComponentUsage retrievedOne = usageRepository.findUsageById(savedOne.getId());
+		Assert.assertNotNull("There is a ComponentUsage", retrievedOne);
+		Assert.assertEquals("ComponentUsage is updated", "Junit hospital", retrievedOne.getHospital());
 	}
 	
 	@Test
-	@Ignore("Bug - error in HSQL: could not resolve property: productNumber of: model.usage.ProductUsage")
 	public void testDeleteUsage() throws Exception {
-		usageRepository.deleteUsage("1234");
-		ProductUsage one = usageRepository.findUsageById(1l);
-		Assert.assertNotNull("There is a ProductUsage", one);
-		Assert.assertTrue("ProductUsage is deleted", one.getIsDeleted());
+		usageRepository.deleteUsage("3333333-0011");
+		ComponentUsage one = usageRepository.findUsageById(3l);
+		Assert.assertNotNull("There is a ComponentUsage", one);
+		Assert.assertTrue("ComponentUsage is deleted", one.getIsDeleted());
 	}
 	
 	@Test
 	public void testDeleteAllUsages() throws Exception {
 		usageRepository.deleteAllUsages();
-		ProductUsage one = usageRepository.findUsageById(1l);
-		Assert.assertNull("There is no ProductUsage", one);
+		ComponentUsage one = usageRepository.findUsageById(1l);
+		Assert.assertNull("There is no ComponentUsage", one);
 	}
 	
 	@Test
-	@Ignore("Bug - error in HSQL: could not resolve property: productNumber of: model.usage.ProductUsage")
+	@Ignore("Bug - error in HSQL: dateUsed of: model.usage.ComponentUsage [SELECT u FROM model.usage.ComponentUsage u WHERE (u.component.componentIdentificationNumber = :componentIdentificationNumber OR u.useIndication IN (:useIndications)) AND (u.dateUsed BETWEEN :dateUsedFrom AND :dateUsedTo) AND (u.isDeleted= :isDeleted)]")
 	public void testFindAnyUsageMatching() throws Exception {
 		List<String> usages = new ArrayList<String>();
 		usages.add("Operation");
 		usages.add("Emergency");
-		usageRepository.findAnyUsageMatching("1234", "2015-01-01", "2015-10-10", usages);
+		usageRepository.findAnyUsageMatching("3333333-0011", "2015-01-01", "2015-10-10", usages);
 	}
 }

@@ -18,9 +18,9 @@ public class PackTypeViewModel {
         return packType.getBloodBagType();
     }
     
-    public ProductTypeViewModel getProductType(){
-        if (packType.getProductType() != null) {
-            return new ProductTypeViewModel(packType.getProductType());
+    public ComponentTypeViewModel getComponentType(){
+        if (packType.getComponentType() != null) {
+            return new ComponentTypeViewModel(packType.getComponentType());
         } else {
             return null;
         }

@@ -1,7 +1,7 @@
 package repository;
-import model.productmovement.ProductStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeReasonCategory;
 
-import model.productmovement.ProductStatusChangeReasonCategory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+
 import java.util.List;
 
 @Repository
@@ -19,39 +20,39 @@ public class DiscardReasonRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public List <ProductStatusChangeReason> getAllDiscardReasons (){
-        TypedQuery <ProductStatusChangeReason> query;
-        query = em.createQuery("SELECT p from ProductStatusChangeReason p WHERE p.category = :category", ProductStatusChangeReason.class);
-        query.setParameter("category", ProductStatusChangeReasonCategory.DISCARDED);
+    public List <ComponentStatusChangeReason> getAllDiscardReasons (){
+        TypedQuery <ComponentStatusChangeReason> query;
+        query = em.createQuery("SELECT p from ComponentStatusChangeReason p WHERE p.category = :category", ComponentStatusChangeReason.class);
+        query.setParameter("category", ComponentStatusChangeReasonCategory.DISCARDED);
         return query.getResultList();
     }
 
-    public ProductStatusChangeReason findDiscardReason(String reason){
-        String queryString = "SELECT p FROM ProductStatusChangeReason p WHERE p.statusChangeReason = :reason AND p.category = :category";
-        TypedQuery<ProductStatusChangeReason> query = em.createQuery(queryString, ProductStatusChangeReason.class);
+    public ComponentStatusChangeReason findDiscardReason(String reason){
+        String queryString = "SELECT p FROM ComponentStatusChangeReason p WHERE p.statusChangeReason = :reason AND p.category = :category";
+        TypedQuery<ComponentStatusChangeReason> query = em.createQuery(queryString, ComponentStatusChangeReason.class);
         query.setParameter("reason", reason);
-        query.setParameter("category", ProductStatusChangeReasonCategory.DISCARDED);
-        ProductStatusChangeReason result = null;
+        query.setParameter("category", ComponentStatusChangeReasonCategory.DISCARDED);
+        ComponentStatusChangeReason result = null;
         try{
             result = query.getSingleResult();
         }catch(NoResultException ex){}
         return result;
     }
 
-    public ProductStatusChangeReason getDiscardReasonById(Integer DiscardReasonId) {
-        TypedQuery<ProductStatusChangeReason> query;
-        query = em.createQuery("SELECT p from ProductStatusChangeReason p " +
-                "where p.id=:id AND p.category= :category", ProductStatusChangeReason.class);
+    public ComponentStatusChangeReason getDiscardReasonById(Integer DiscardReasonId) {
+        TypedQuery<ComponentStatusChangeReason> query;
+        query = em.createQuery("SELECT p from ComponentStatusChangeReason p " +
+                "where p.id=:id AND p.category= :category", ComponentStatusChangeReason.class);
         query.setParameter("id", DiscardReasonId);
-        query.setParameter("category", ProductStatusChangeReasonCategory.DISCARDED);
+        query.setParameter("category", ComponentStatusChangeReasonCategory.DISCARDED);
         if (query.getResultList().size() == 0)
             return null;
         return query.getSingleResult();
     }
 
-    public void saveAllDiscardReasons(List<ProductStatusChangeReason> allDiscardReasons) {
-        for (ProductStatusChangeReason dr: allDiscardReasons) {
-            ProductStatusChangeReason existingDiscardReason = getDiscardReasonById(dr.getId());
+    public void saveAllDiscardReasons(List<ComponentStatusChangeReason> allDiscardReasons) {
+        for (ComponentStatusChangeReason dr: allDiscardReasons) {
+            ComponentStatusChangeReason existingDiscardReason = getDiscardReasonById(dr.getId());
             if (existingDiscardReason != null) {
                 existingDiscardReason.setStatusChangeReason(dr.getStatusChangeReason());
                 em.merge(existingDiscardReason);
@@ -63,14 +64,14 @@ public class DiscardReasonRepository {
         em.flush();
     }
 
-    public ProductStatusChangeReason saveDiscardReason(ProductStatusChangeReason deferralReason){
+    public ComponentStatusChangeReason saveDiscardReason(ComponentStatusChangeReason deferralReason){
         em.persist(deferralReason);
         em.flush();
         return deferralReason;
     }
 
-    public ProductStatusChangeReason updateDiscardReason(ProductStatusChangeReason deferralReason){
-        ProductStatusChangeReason existingDiscardReason = getDiscardReasonById(deferralReason.getId());
+    public ComponentStatusChangeReason updateDiscardReason(ComponentStatusChangeReason deferralReason){
+        ComponentStatusChangeReason existingDiscardReason = getDiscardReasonById(deferralReason.getId());
         if (existingDiscardReason == null) {
             return null;
         }

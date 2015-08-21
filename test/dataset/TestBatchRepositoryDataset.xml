@@ -51,11 +51,11 @@
 	<DonationBatch id="3" batchNumber="000002" isDeleted="false"
 		createdDate="2015-08-12 03:36:07.0" lastUpdated="2015-08-12 03:37:00.0"
 		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" donorPanel_id="1" />
-	<ProductType id="1" description="" expiresAfter="35"
+	<ComponentType id="1" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood Single Pack - CPDA" productTypeNameShort="0011" />
+		componentTypeName="Whole Blood Single Pack - CPDA" componentTypeNameShort="0011" />
 	<BloodBagType id="1" bloodBagType="Single" isDeleted="false"
-		productType_id="1" countAsDonation="true" periodBetweenDonations="90" />
+		componentType_id="1" countAsDonation="true" periodBetweenDonations="90" />
 	<DonationType id="1" donationType="Voluntary" isDeleted="false" />
 	<Donation id="1" bloodTypingStatus="NOT_DONE" donationDate="2015-08-11 09:05:56.0"
 		donationIdentificationNumber="1234567" donorWeight="85.00" isDeleted="false"

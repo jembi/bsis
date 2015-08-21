@@ -1,7 +1,7 @@
 package controller;
 
 import backingform.DonationBackingForm;
-import backingform.ProductBackingForm;
+import backingform.ComponentBackingForm;
 import backingform.RequestBackingForm;
 
 import java.text.ParseException;
@@ -22,12 +22,12 @@ import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.TTIStatus;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.bloodtesting.rules.DonationField;
+import model.component.Component;
+import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
-import model.product.Product;
-import model.producttype.ProductType;
 import model.request.Request;
 import model.requesttype.RequestType;
 import model.util.Gender;
@@ -44,8 +44,8 @@ import repository.DonationTypeRepository;
 import repository.DonorRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
-import repository.ProductRepository;
-import repository.ProductTypeRepository;
+import repository.ComponentRepository;
+import repository.ComponentTypeRepository;
 import repository.RequestRepository;
 import repository.RequestTypeRepository;
 import repository.SequenceNumberRepository;
@@ -66,7 +66,7 @@ public class CreateDataController {
   private BloodBagTypeRepository bloodBagTypeRepository;
 
   @Autowired
-  private ProductTypeRepository productTypeRepository;
+  private ComponentTypeRepository componentTypeRepository;
 
   @Autowired
   private RequestTypeRepository requestTypeRepository;
@@ -96,7 +96,7 @@ public class CreateDataController {
                                           "Luanshya", "Kasama", "Chipata"};
 
   @Autowired
-  private ProductRepository productRepository;
+  private ComponentRepository componentRepository;
 
   private static final String[] MALE_FIRST_NAMES = new String[] { "Aaron",
       "Abel", "Abraham", "Adam", "Adrian", "Al", "Alan", "Albert",
@@ -464,15 +464,15 @@ public class CreateDataController {
     addTTIResultsForDonations(donations);
   }
 
-  public void createProducts(int numProducts) {
+  public void createComponents(int numComponents) {
     List<Donation> donations = donationRepository.getAllDonations();
-    List<ProductType> productTypes = productTypeRepository.getAllProductTypes();
-    List<Product> products = new ArrayList<Product>();
-    for (int i = 0; i < numProducts; i++) {
+    List<ComponentType> componentTypes = componentTypeRepository.getAllComponentTypes();
+    List<Component> components = new ArrayList<Component>();
+    for (int i = 0; i < numComponents; i++) {
       Donation c = donations.get(random.nextInt(donations.size()));
-      Product p = new ProductBackingForm(true).getProduct();
+      Component p = new ComponentBackingForm(true).getComponent();
       p.setDonation(c);
-      p.setProductType(productTypes.get(random.nextInt(productTypes.size())));
+      p.setComponentType(componentTypes.get(random.nextInt(componentTypes.size())));
       Date d = c.getDonationDate();
       p.setCreatedOn(d);
       Calendar cal = Calendar.getInstance();
@@ -480,9 +480,9 @@ public class CreateDataController {
       cal.add(Calendar.DATE, 35);
       p.setExpiresOn(cal.getTime());
       p.setIsDeleted(false);
-      products.add(p);
+      components.add(p);
     }
-    productRepository.addAllProducts(products);
+    componentRepository.addAllComponents(components);
   }
 
   private void addBloodTypingResultsForDonations(List<Donation> donations) {
@@ -720,7 +720,7 @@ public class CreateDataController {
     String[] bloodRhs = { "+", "-"};
 
     List<Location> sites = locationRepository.getAllUsageSites();
-    List<ProductType> productTypes = productTypeRepository.getAllProductTypes();
+    List<ComponentType> componentTypes = componentTypeRepository.getAllComponentTypes();
     List<RequestType> requestTypes = requestTypeRepository.getAllRequestTypes();
 
     List<String> requestNumbers = sequenceNumberRepository.getBatchRequestNumbers(numRequests);
@@ -734,7 +734,7 @@ public class CreateDataController {
       form.setRequestDate(CustomDateFormatter.getDateTimeString(requestDate));
       form.setRequiredDate(CustomDateFormatter.getDateTimeString(requiredDate));
     /** issue - #225 straight object bindings
-      form.setProductType(productTypes.get(random.nextInt(productTypes.size())).getId().toString());
+      form.setComponentType(componentTypes.get(random.nextInt(componentTypes.size())).getId().toString());
       form.setRequestType(requestTypes.get(random.nextInt(requestTypes.size())).getId().toString());
       form.setRequestSite(sites.get(random.nextInt(sites.size())).getId().toString());*/
       form.setNumUnitsRequested(1 + Math.abs(random.nextInt()) % 20);

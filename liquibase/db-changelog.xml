@@ -229,16 +229,20 @@
 		</insert>
 	</changeSet>
 
-	<!-- For issue 27 [Add 'Record Product' tab to Component Processing] -->
-	<changeSet id="20131107-1844" author="gtlankur">
-		<addColumn tableName="Product">
+	<!-- For issue 27 [Add 'Record Component' tab to Component Processing] -->
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20151708-0349" author="gtlankur">
+	    <preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="Component" columnName="componentIdentificationNumber"/></not>
+		</preConditions>
+		<addColumn tableName="Component">
 			<column name="componentIdentificationNumber" type="VARCHAR(30)" defaultValue=""></column>
 		</addColumn>
-		<addColumn tableName="Product_AUD">
+		<addColumn tableName="Component_AUD">
 			<column name="componentIdentificationNumber" type="VARCHAR(30)" defaultValue=""></column>
 		</addColumn>
 		<insert tableName="FormField">
-			<column name="form" value="Product"></column>
+			<column name="form" value="Component"></column>
 			<column name="FIELD" value="componentIdentificationNumber"></column>
 			<column name="defaultDisplayName" value="Component Identification Number"></column>
 			<column name="defaultValue" value=""></column>
@@ -253,7 +257,7 @@
 			<column name="isTimeField" value="0"></column>			
 		</insert>	
 		<insert tableName="FormField">
-			<column name="form" value="Product"></column>
+			<column name="form" value="Component"></column>
 			<column name="FIELD" value="numUnits"></column>
 			<column name="defaultDisplayName" value="Num. Units"></column>
 			<column name="defaultValue" value=""></column>
@@ -1065,57 +1069,73 @@
 	</changeSet>
 
 	<!-- Add Component Storage labelling fields to Component Types #238 -->
-	<changeSet id="20141114-1321" author="srikanthmalyala">
-		<addColumn tableName="ProductType">
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20150817-1000" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+	        <not><columnExists tableName="ComponentType" columnName="lowStorageTemperature"/></not>
+	    </preConditions>
+		<addColumn tableName="ComponentType">
 			 <column name="lowStorageTemperature" type="smallint(6)"></column>
 			 <column name="highStorageTemperature" type="smallint(6)"></column>
 		</addColumn>
 
-			<addColumn tableName="ProductType_AUD">
+			<addColumn tableName="ComponentType_AUD">
 			 <column name="lowStorageTemperature" type="smallint(6)"></column>
 			 <column name="highStorageTemperature" type="smallint(6)"></column>
 		</addColumn>
 	</changeSet>
 
 	<!-- Add Component Transport labelling fields to Component Types #238 -->
-	<changeSet id="20141114-1430" author="srikanthmalyala">
-		<addColumn tableName="ProductType">
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20150817-1005" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+	        <not><columnExists tableName="ComponentType" columnName="lowTransportTemperature"/></not>
+	    </preConditions>
+		<addColumn tableName="ComponentType">
 			 <column name="lowTransportTemperature" type="smallint(6)"></column>
 			 <column name="highTransportTemperature" type="smallint(6)"></column>
 		</addColumn>
 
-		<addColumn tableName="ProductType_AUD">
+		<addColumn tableName="ComponentType_AUD">
 			 <column name="lowTransportTemperature" type="smallint(6)"></column>
 			 <column name="highTransportTemperature" type="smallint(6)"></column>
 		</addColumn>
 	</changeSet>
 
 	<!-- Add Component Preparation labelling fields to Component Types #238 -->
-	<changeSet id="20141114-1435" author="srikanthmalyala">
-		<addColumn tableName="ProductType">
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20150817-1010" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+	        <not><columnExists tableName="ComponentType" columnName="preparationInfo"/></not>
+	    </preConditions>
+		<addColumn tableName="ComponentType">
 			 <column name="preparationInfo" type="text"></column>
 		</addColumn>
 
-			<addColumn tableName="ProductType_AUD">
+			<addColumn tableName="ComponentType_AUD">
 			 <column name="preparationInfo" type="text"></column>
 		</addColumn>
 	</changeSet>
 	
 		<!-- #234 Associate Pack Type with Initial Component Type in Donation -->
-	<changeSet id="20141112-0953" author="srikanthmalyala">
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20150817-1015" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+	        <not><columnExists tableName="BloodBagType" columnName="componentType_id"/></not>
+	    </preConditions>
 		<addColumn tableName="BloodBagType">
-			<column name="productType_id" type="smallint(6)"></column>
+			<column name="componentType_id" type="smallint(6)"></column>
 		</addColumn>
 		<addColumn tableName="BloodBagType_AUD">
-			<column name="productType_id" type="smallint(6)"></column>
+			<column name="componentType_id" type="smallint(6)"></column>
 		</addColumn>
-		<addForeignKeyConstraint baseColumnNames="productType_id"
+		<addForeignKeyConstraint baseColumnNames="componentType_id"
 			baseTableName="BloodBagType"
 			constraintName="fk_packType_componentType"
 			onDelete="CASCADE"
 			onUpdate="RESTRICT"
 			referencedColumnNames="id"
-			referencedTableName="ProductType"
+			referencedTableName="ComponentType"
 		/>
 	</changeSet>
 
@@ -1148,31 +1168,23 @@
 			<column name="dueToDonate" type="date"></column>
 		</addColumn>
 	</changeSet>
-
-	<!-- #234 Refactor productType  to productTypeName -->
-	<changeSet id="20140106-1212" author="srikanthmalyala">
-		<renameColumn columnDataType="VARCHAR(50)"
-			newColumnName="productTypeName"
-			oldColumnName="productType"
-			tableName="ProductType"/>
-		<renameColumn columnDataType="VARCHAR(50)"
-			newColumnName="productTypeName"
-			oldColumnName="productType"
-			tableName="ProductType_AUD"/>
-	</changeSet>
 	
-	<!-- #263 Add ProductTypeCombinationRule table -->
-	<changeSet id="20140115-2055" author="danfuterman">
-		<createTable tableName="ProductType_ProductTypeCombination">
+	<!-- #263 Add ComponentTypeCombinationRule table -->
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20150817-1020" author="danfuterman">
+	    <preConditions onFail="MARK_RAN">
+	        <not><tableExists tableName="ComponentType_ComponentTypeCombination" /></not>
+	    </preConditions>
+		<createTable tableName="ComponentType_ComponentTypeCombination">
 			<column name="id" type="INT" autoIncrement = "true">
 				<constraints primaryKey="true" nullable="false" />
 				
 			</column>
-			<column name="sourceProductTypes_id" type="SMALLINT">
-			<constraints foreignKeyName="pTID_FK" references="ProductType(id)"/>
+			<column name="sourceComponentTypes_id" type="SMALLINT">
+			<constraints foreignKeyName="pTID_FK" references="ComponentType(id)"/>
 			</column> 
-			<column name="producedProductTypeCombinations_id" type="SMALLINT">
-			<constraints foreignKeyName="pTCID_FK" references="ProductTypeCombination(id)"/>
+			<column name="producedComponentTypeCombinations_id" type="SMALLINT">
+			<constraints foreignKeyName="pTCID_FK" references="ComponentTypeCombination(id)"/>
 			</column>
 		</createTable>
 	</changeSet>

@@ -15,16 +15,16 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
+import model.component.Component;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
-import model.product.Product;
 import model.request.Request;
 import model.user.User;
 
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 
-import constraintvalidator.ProductExists;
+import constraintvalidator.ComponentExists;
 import constraintvalidator.RequestExists;
 
 
@@ -41,9 +41,9 @@ public class CompatibilityTest implements ModificationTracker {
   @ManyToOne
   private Request forRequest;
 
-  @ProductExists
+  @ComponentExists
   @ManyToOne
-  private Product testedProduct;
+  private Component testedComponent;
 
   @Temporal(TemporalType.TIMESTAMP)
   @Index(name="compatibilityTest_crossmatchTestDate_index")
@@ -126,12 +126,12 @@ public class CompatibilityTest implements ModificationTracker {
     this.forRequest = forRequest;
   }
 
-  public Product getTestedProduct() {
-    return testedProduct;
+  public Component getTestedComponent() {
+    return testedComponent;
   }
 
-  public void setTestedProduct(Product testedProduct) {
-    this.testedProduct = testedProduct;
+  public void setTestedComponent(Component testedComponent) {
+    this.testedComponent = testedComponent;
   }
 
   public Boolean getTransfusedBefore() {

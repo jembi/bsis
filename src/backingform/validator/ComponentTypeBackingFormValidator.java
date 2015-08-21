@@ -2,31 +2,29 @@ package backingform.validator;
 
 
 import backingform.ComponentTypeBackingForm;
-import controller.UtilController;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-import repository.ProductTypeRepository;
+import repository.ComponentTypeRepository;
+
 
 import java.util.Arrays;
 
 public class ComponentTypeBackingFormValidator  implements Validator {
 
     private Validator validator;
-    private UtilController utilController;
-    private ProductTypeRepository productTypeRepository;
+    private ComponentTypeRepository componentTypeRepository;
 
-    public ComponentTypeBackingFormValidator(Validator validator, UtilController utilController, ProductTypeRepository productTypeRepository){
+    public ComponentTypeBackingFormValidator(Validator validator,  ComponentTypeRepository componentTypeRepository){
         super();
         this.validator = validator;
-        this.utilController = utilController;
-        this.productTypeRepository = productTypeRepository;
+        this.componentTypeRepository = componentTypeRepository;
     }
 
     @Override
     public boolean supports(Class<?> clazz) {
         return Arrays.asList(ComponentTypeBackingForm.class,
-                ProductTypeRepository.class, String.class).contains(clazz);
+                ComponentTypeRepository.class).contains(clazz);
     }
 
     @Override
