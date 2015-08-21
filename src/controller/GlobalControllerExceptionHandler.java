@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -299,6 +300,18 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
     error.printStackTrace();
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
+  }
+  
+  @ExceptionHandler(AccessDeniedException.class)
+  public ResponseEntity<Map<String, Object>> handleAccessDeniedException(AccessDeniedException error) {
+        Map<String, Object> errorMap = new HashMap<String, Object>();
+        errorMap.put("hasErrors", "true");
+        errorMap.put("developerMessage", "Access denied");
+        errorMap.put("userMessage", error.getMessage());
+        errorMap.put("moreInfo", error.getMessage());
+        errorMap.put("errorCode", HttpStatus.FORBIDDEN);
+        error.printStackTrace();
+        return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.FORBIDDEN);
   }
   
 }

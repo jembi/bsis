@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
@@ -20,7 +21,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +45,7 @@ import viewmodel.DonationViewModel;
 import viewmodel.DonorDeferralViewModel;
 import viewmodel.DonorSummaryViewModel;
 import viewmodel.DonorViewModel;
+import viewmodel.PostDonationCounsellingViewModel;
 import backingform.DonorBackingForm;
 import backingform.validator.DonorBackingFormValidator;
 
@@ -93,6 +99,11 @@ public class DonorController {
             @RequestParam(value = "donorPanel", required = false) Long donorPanelId) {
 
         if (flaggedForCounselling) {
+            
+            if (!loggedOnUserHasPermission(PermissionConstants.VIEW_POST_DONATION_COUNSELLING_DONORS)) {
+                throw new AccessDeniedException("You do not have permission to view post donation counselling donors.");
+            }
+            
             List<Donor> donors = postDonationCounsellingRepository.findDonorsFlaggedForCounselling(
                     startDate, endDate, donorPanelId);
             return getDonorViewModels(donors);
@@ -177,6 +188,18 @@ public class DonorController {
     Map<String, Object> map = new HashMap<String, Object>();
     Donor donor = donorRepository.findDonorById(id);
     map.put("allDonations", getDonationViewModels(donor.getDonations()));
+
+    // If the logged on user has permission to view it, include the post donation counselling for the donor
+    if (loggedOnUserHasPermission(PermissionConstants.VIEW_POST_DONATION_COUNSELLING)) {
+
+        PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository
+                .findFlaggedPostDonationCounsellingForDonor(donor);
+        
+        if (postDonationCounselling != null) {
+            map.put("postDonationCounselling", new PostDonationCounsellingViewModel(postDonationCounselling));
+        }
+    }
+
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
 
@@ -375,4 +398,17 @@ public class DonorController {
       }
       return count;
   }
+
+    private boolean loggedOnUserHasPermission(String permission) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return false;
+        }
+        for (GrantedAuthority authority : authentication.getAuthorities()) {
+            if (permission.equals(authority.getAuthority())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
