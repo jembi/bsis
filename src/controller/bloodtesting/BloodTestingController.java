@@ -30,14 +30,9 @@ public class BloodTestingController {
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
 
-
-
-    @Autowired
-    private UtilController utilController;
-
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(new BloodTestBackingFormValidator(binder.getValidator(), utilController));
+        binder.setValidator(new BloodTestBackingFormValidator(binder.getValidator()));
     }
 
   public BloodTestingController() {
