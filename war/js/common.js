@@ -311,8 +311,8 @@ function getSelectedTabs() {
     leftPanelSelectedId = "testResultsTab";
     break;
   case 4:
-    leftPanelSelected = $("#productsTab").tabs("option", "selected");
-    leftPanelSelectedId = "productsTab";
+    leftPanelSelected = $("#componentsTab").tabs("option", "selected");
+    leftPanelSelectedId = "componentsTab";
     break;
   case 5:
     leftPanelSelected = $("#requestsTab").tabs("option", "selected");

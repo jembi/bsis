@@ -1,9 +1,12 @@
 package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import model.bloodbagtype.BloodBagType;
-import model.producttype.ProductType;
+import model.componenttype.ComponentType;
+
 import javax.validation.Valid;
+
 import model.admin.DataType;
 
 public class PackTypeBackingForm {
@@ -35,8 +38,8 @@ public class PackTypeBackingForm {
         return packType.getBloodBagType();
     }
     
-    public void setProductType(ProductType productType){
-    	packType.setProductType(productType);
+    public void setComponentType(ComponentType componentType){
+    	packType.setComponentType(componentType);
     }
     
     public void setCanPool(Boolean canPool){

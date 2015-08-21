@@ -1,8 +1,5 @@
 package controller;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,27 +19,25 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+
 import model.admin.FormField;
 import model.compatibility.CrossmatchType;
-import model.donationtype.DonationType;
 import model.tips.Tips;
+
 import org.apache.http.conn.util.InetAddressUtils;
 import org.apache.log4j.Logger;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import repository.CrossmatchTypeRepository;
 import repository.DonationTypeRepository;
 import repository.FormFieldRepository;
@@ -53,6 +48,10 @@ import repository.TipsRepository;
 import repository.UserRepository;
 import repository.WorksheetTypeRepository;
 import utils.PermissionConstants;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 public class AdminController {
@@ -193,12 +192,12 @@ public class AdminController {
     try {
       Integer numDonors = Integer.parseInt(params.get("numDonors"));
       Integer numDonations = Integer.parseInt(params.get("numDonations"));
-      Integer numProducts = Integer.parseInt(params.get("numProducts"));
+      Integer numComponents = Integer.parseInt(params.get("numComponents"));
       Integer numRequests = Integer.parseInt(params.get("numRequests"));
 
       createDataController.createDonors(numDonors);
       createDataController.createDonationsWithTestResults(numDonations);
-      createDataController.createProducts(numProducts);
+      createDataController.createComponents(numComponents);
       createDataController.createRequests(numRequests);
     }
     catch (Exception ex) {

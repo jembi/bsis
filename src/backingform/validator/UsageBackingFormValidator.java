@@ -2,16 +2,16 @@ package backingform.validator;
 
 import java.util.Arrays;
 
-import model.product.Product;
+import model.component.Component;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import utils.CustomDateFormatter;
-import viewmodel.ProductUsageViewModel;
+import viewmodel.ComponentUsageViewModel;
 import viewmodel.RequestViewModel;
-import backingform.ProductUsageBackingForm;
+import backingform.ComponentUsageBackingForm;
 import controller.UtilController;
 
 public class UsageBackingFormValidator implements Validator {
@@ -28,7 +28,7 @@ public class UsageBackingFormValidator implements Validator {
   @SuppressWarnings("unchecked")
   @Override
   public boolean supports(Class<?> clazz) {
-    return Arrays.asList(ProductUsageBackingForm.class, ProductUsageViewModel.class, RequestViewModel.class).contains(clazz);
+    return Arrays.asList(ComponentUsageBackingForm.class, ComponentUsageViewModel.class, RequestViewModel.class).contains(clazz);
   }
 
   @Override
@@ -36,7 +36,7 @@ public class UsageBackingFormValidator implements Validator {
     if (obj == null || validator == null)
       return;
     ValidationUtils.invokeValidator(validator, obj, errors);
-    ProductUsageBackingForm form = (ProductUsageBackingForm) obj;
+    ComponentUsageBackingForm form = (ComponentUsageBackingForm) obj;
 
     String usageDate = form.getUsageDate();
     if (!CustomDateFormatter.isDateTimeStringValid(usageDate))
@@ -48,9 +48,9 @@ public class UsageBackingFormValidator implements Validator {
     utilController.commonFieldChecks(form, "usage", errors);
   }
 
-  private void updateRelatedEntities(ProductUsageBackingForm form) {
-    Product product = utilController.findProductById(form.getProductId());
-    form.setProduct(product);
+  private void updateRelatedEntities(ComponentUsageBackingForm form) {
+    Component component = utilController.findComponentById(form.getComponentId());
+    form.setComponent(component);
   }
 }
 
