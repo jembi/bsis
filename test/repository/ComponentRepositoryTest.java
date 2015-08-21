@@ -38,7 +38,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +48,7 @@ import security.BsisUserDetails;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@Transactional
 @WebAppConfiguration
 public class ComponentRepositoryTest {
 	
@@ -117,7 +116,6 @@ public class ComponentRepositoryTest {
 	//addComponentCombination
 	
 	@Test
-	@Transactional
 	public void testGetAllComponents() throws Exception {
 		List<Component> all = componentRepository.getAllComponents();
 		Assert.assertNotNull("There are Components", all);
@@ -125,7 +123,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetComponents() throws Exception {
 		Date fromDate = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-10");
 		Date toDate = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
@@ -135,7 +132,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetComponentsFromComponentIds() throws Exception {
 		String[] componentIds = new String[] { "1", "2", "4" };
 		List<Component> all = componentRepository.getComponentsFromComponentIds(componentIds);
@@ -144,7 +140,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - problem in HSQL: could not resolve property: donationIdentificationNumber of: model.component.Component [SELECT c FROM model.component.Component c WHERE c.donationIdentificationNumber = :donationIdentificationNumber and c.isDeleted = :isDeleted]")
 	public void isComponentCreatedFalse() throws Exception {
 		boolean created = componentRepository.isComponentCreated("4444444");
@@ -152,7 +147,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - problem in HSQL: could not resolve property: donationIdentificationNumber of: model.component.Component [SELECT c FROM model.component.Component c WHERE c.donationIdentificationNumber = :donationIdentificationNumber and c.isDeleted = :isDeleted]")
 	public void isComponentCreatedTrue() throws Exception {
 		boolean created = componentRepository.isComponentCreated("3333333");
@@ -160,7 +154,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - error in HQL: could not resolve property: isIssued of: model.component.Component [SELECT c FROM model.component.Component c where c.isDeleted = :isDeleted and c.isIssued= :isIssued]")
 	public void testGetAllUnissuedComponents() throws Exception {
 		List<Component> all = componentRepository.getAllUnissuedComponents();
@@ -169,7 +162,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - error in HQL: could not resolve property: isIssued of: model.component.Component [SELECT c FROM model.component.Component c where c.isDeleted = :isDeleted and c.isIssued= :isIssued]")
 	public void testGetAllUnissuedComponentsAboRhd() throws Exception {
 		List<Component> all = componentRepository.getAllUnissuedComponents("PROCESSED", "A", "+");
@@ -178,7 +170,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - error in HQL: could not resolve property: isIssued of: model.component.Component [SELECT p FROM model.component.Component p where p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.createdOn > :minDate]")
 	public void testGetAllUnissuedThirtyFiveDayComponents() throws Exception {
 		List<Component> all = componentRepository.getAllUnissuedThirtyFiveDayComponents();
@@ -187,7 +178,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - error in HQL: could not resolve property: type of: model.component.Component [SELECT p FROM model.component.Component p where p.type = :componentType and p.abo= :abo and p.rhd= :rhd and p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.createdOn > :minDate]")
 	public void testGetAllUnissuedThirtyFiveDayComponentsWithParameters() throws Exception {
 		List<Component> all = componentRepository.getAllUnissuedThirtyFiveDayComponents("PROCESSED", "A", "+");
@@ -196,7 +186,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("There appears to be a bug in the HQL: could not resolve property: type of: model.component.Component")
 	public void testGetAllComponentsWithComponentTypeQUARANTINED() throws Exception {
 		List<Component> all = componentRepository.getAllComponents("QUARANTINED");
@@ -205,7 +194,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("There appears to be a bug in the HQL: could not resolve property: type of: model.component.Component")
 	public void testGetAllComponentsWithComponentTypeEXPIRED() throws Exception {
 		List<Component> all = componentRepository.getAllComponents("EXPIRED");
@@ -214,7 +202,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindComponentWithId() throws Exception {
 		Component one = componentRepository.findComponent(1l);
 		Assert.assertNotNull("There is a Component with id 1", one);
@@ -222,7 +209,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindComponentById() throws Exception {
 		Component one = componentRepository.findComponentById(1l);
 		Assert.assertNotNull("There is a Component with id 1", one);
@@ -237,7 +223,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindComponentByComponentNumber() throws Exception {
 		Component component = componentRepository.findComponent("5555555-0011");
 		Assert.assertNotNull("Found Component by componentIdentificationNumber", component);
@@ -245,7 +230,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindComponentsByDIN() throws Exception {
 		List<Component> all = componentRepository.findComponentsByDonationIdentificationNumber("1111111");
 		Assert.assertNotNull("There are Components with DIN 111111", all);
@@ -254,7 +238,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindComponentsByDINUnknown() throws Exception {
 		List<Component> all = componentRepository.findComponentsByDonationIdentificationNumber("1111112");
 		Assert.assertNotNull("Does not return an null", all);
@@ -262,7 +245,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindComponentByDINAndComponentTypeId() throws Exception {
 		Component one = componentRepository.findComponent("1111111", "1");
 		Assert.assertNotNull("There is a Component with DIN 1111111", one);
@@ -270,14 +252,12 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindComponentByDINAndComponentTypeIdUnknown() throws Exception {
 		Component one = componentRepository.findComponent("1111112", "1");
 		Assert.assertNull("There is no a Component with DIN 1111112", one);
 	}
 	
 	@Test
-	@Transactional
 	public void testFindComponentByComponentTypes() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
@@ -290,7 +270,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindComponentByComponentTypesNone() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
@@ -303,7 +282,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindComponentByDINAndStatus() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
@@ -316,7 +294,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindComponentByDINAndStatusNone() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
@@ -326,7 +303,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindComponentByDINAndStatusUnknown() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
@@ -337,7 +313,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindAnyComponentDIN() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<Component> all = componentRepository.findAnyComponent("1111111", null, null, null, null, pagingParams);
@@ -347,7 +322,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindAnyComponentDINAndStatus() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
@@ -358,7 +332,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindAnyComponentQuarantinedType1() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
@@ -371,7 +344,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindAnyComponentBetweenDates() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		Date start = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-10");
@@ -382,7 +354,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - error in the HQL:  org.hibernate.QueryException: could not resolve property: componentType of: model.componenttype.ComponentType [SELECT p FROM model.componenttype.ComponentType p where p.componentType = :componentTypeName]")
 	public void testFindComponentTypeByComponentTypeName() throws Exception {
 		ComponentType one = componentRepository.findComponentTypeByComponentTypeName("Whole Blood Single Pack - CPDA");
@@ -391,7 +362,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindComponentTypeByComponentTypeId() throws Exception {
 		ComponentType one = componentRepository.findComponentTypeBySelectedComponentType(1);
 		Assert.assertNotNull("ComponentType match", one);
@@ -405,7 +375,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetComponentStatusChanges() throws Exception {
 		Component discardedComponent = componentRepository.findComponent(6l);
 		List<ComponentStatusChange> changes = componentRepository.getComponentStatusChanges(discardedComponent);
@@ -415,7 +384,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testGetComponentStatusChangesNone() throws Exception {
 		Component quarantinedComponent = componentRepository.findComponent(4l);
 		List<ComponentStatusChange> changes = componentRepository.getComponentStatusChanges(quarantinedComponent);
@@ -424,7 +392,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindNumberOfDiscardedComponentsDaily() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-10");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
@@ -447,7 +414,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindNumberOfDiscardedComponentsMonthly() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-10");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
@@ -472,7 +438,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testFindNumberOfDiscardedComponentsYearly() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2014-08-10");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
@@ -495,7 +460,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	// FIXME: issue with package dependencies here - ComponentRepository uses UtilController to retrieve the logged in user.  
 	public void testDiscardComponent() throws Exception {
 		ComponentStatusChangeReason discardReason = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(5);
@@ -509,7 +473,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	// FIXME: issue with package dependencies here - ComponentRepository uses UtilController to retrieve the logged in user.  
 	public void testReturnComponent() throws Exception {
 		ComponentStatusChangeReason returnReason = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(7);
@@ -523,7 +486,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	// FIXME: issue with package dependencies here - ComponentRepository uses UtilController to retrieve the logged in user.  
 	public void testSplitComponent() throws Exception {
 		boolean split = componentRepository.splitComponent(2l, 2);
@@ -540,7 +502,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testSplitComponentTwice() throws Exception {
 		componentRepository.splitComponent(2l, 1);
 		List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber("1111111");
@@ -553,14 +514,12 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testSplitComponentUnknown() throws Exception {
 		boolean split = componentRepository.splitComponent(123l, 2);
 		Assert.assertFalse("Unknown component", split);
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateComponent() throws Exception {
 		Component componentToUpdate = componentRepository.findComponent(2l);
 		componentToUpdate.setComponentIdentificationNumber("junit123");
@@ -570,7 +529,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateExpiryStatus() throws Exception {
 		// create expirable component
 		Component componentToExpire = componentRepository.findComponent(2l);
@@ -587,7 +545,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testSetComponentStatusToProcessed() throws Exception {
 		componentRepository.setComponentStatusToProcessed(2l);
 		Component processedComponent = componentRepository.findComponent(2l);
@@ -595,7 +552,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("It seems impossible to get components in a NULL status - by default it is set to QUARANTINED")
 	public void testUpdateQuarantineStatus() throws Exception {
 		// create component with null status
@@ -628,7 +584,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateComponentInternalFieldsProcessed() throws Exception {
 		Component component = componentRepository.findComponent(1l);
 		boolean updatedComponent = componentRepository.updateComponentInternalFields(component);
@@ -636,7 +591,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateComponentInternalFieldsDiscarded() throws Exception {
 		Component component = componentRepository.findComponent(6l);
 		boolean updatedComponentStatus = componentRepository.updateComponentInternalFields(component);
@@ -644,7 +598,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateComponentInternalFieldsIssued() throws Exception {
 		// setup test
 		Component component = componentRepository.findComponent(1l);
@@ -655,7 +608,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateComponentInternalFieldsUsed() throws Exception {
 		// setup test
 		Component component = componentRepository.findComponent(1l);
@@ -666,7 +618,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateComponentInternalFieldsSplit() throws Exception {
 		// setup test
 		Component component = componentRepository.findComponent(1l);
@@ -677,7 +628,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateComponentInternalFieldsQuarantined() throws Exception {
 		// setup test
 		Component component = componentRepository.findComponent(4l);
@@ -691,7 +641,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateComponentInternalFieldsSafe() throws Exception {
 		// setup test
 		Component component = componentRepository.findComponent(4l);
@@ -705,7 +654,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testUpdateComponentInternalFieldsUnSafe() throws Exception {
 		// setup test
 		Component component = componentRepository.findComponent(7l);
@@ -719,7 +667,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	@Ignore("Bug - this won't work if there are foreign key references such as ComponentStatusChange entries...")
 	public void testDeleteAllComponents() throws Exception {
 		componentRepository.deleteAllComponents();
@@ -729,7 +676,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testDeleteComponent() throws Exception {
 		componentRepository.deleteComponent(1l);
 		Component deletedComponent = componentRepository.findComponent(1l);
@@ -738,7 +684,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testAddComponent() throws Exception {
 		Component newComponent = new Component();
 		Donation newDonation = new Donation();
@@ -763,7 +708,6 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testAddAllComponents() throws Exception {
 		Component newComponent1 = new Component();
 		Donation newDonation1 = new Donation();

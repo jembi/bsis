@@ -135,4 +135,14 @@ public class DonationBatchRepository {
          return query.getResultList();
       
   }
+  
+  public int countOpenDonationBatches() {
+      return em.createNamedQuery(
+              DonationBatchQueryConstants.NAME_COUNT_DONATION_BATCHES,
+              Number.class)
+              .setParameter("closed", false)
+              .setParameter("deleted", false)
+              .getSingleResult()
+              .intValue();
+  }
 }
