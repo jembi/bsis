@@ -13,12 +13,10 @@ import java.util.Arrays;
 public class ComponentTypeBackingFormValidator  implements Validator {
 
     private Validator validator;
-    private ComponentTypeRepository componentTypeRepository;
 
-    public ComponentTypeBackingFormValidator(Validator validator,  ComponentTypeRepository componentTypeRepository){
+    public ComponentTypeBackingFormValidator(Validator validator){
         super();
         this.validator = validator;
-        this.componentTypeRepository = componentTypeRepository;
     }
 
     @Override
@@ -32,11 +30,11 @@ public class ComponentTypeBackingFormValidator  implements Validator {
         ValidationUtils.invokeValidator(validator, obj, errors);
         ComponentTypeBackingForm form = (ComponentTypeBackingForm) obj;
 
-        ValidationUtils.rejectIfEmpty(errors, "productType.productTypeName", "productTypeName.empty", "The productTypeName is required");
-        ValidationUtils.rejectIfEmpty(errors, "productType.productTypeNameShort", "productTypeNameShort.empty", "The productTypeNameShort is required");
-        ValidationUtils.rejectIfEmpty(errors, "productType.expiresAfter", "expiresAfter.empty", "The expiresAfter value is required");
-        ValidationUtils.rejectIfEmpty(errors, "productType.expiresAfterUnits", "expiresAfterUnits.empty", "The expiresAfterUnits value is required");
-        ValidationUtils.rejectIfEmpty(errors, "productType.description", "description.empty", "The description is required");
+        ValidationUtils.rejectIfEmpty(errors, "componentType.componentTypeName", "componentTypeName.empty", "The componentTypeName is required");
+        ValidationUtils.rejectIfEmpty(errors, "componentType.componentTypeNameShort", "componentTypeNameShort.empty", "The componentTypeNameShort is required");
+        ValidationUtils.rejectIfEmpty(errors, "componentType.expiresAfter", "expiresAfter.empty", "The expiresAfter value is required");
+        ValidationUtils.rejectIfEmpty(errors, "componentType.expiresAfterUnits", "expiresAfterUnits.empty", "The expiresAfterUnits value is required");
+        ValidationUtils.rejectIfEmpty(errors, "componentType.description", "description.empty", "The description is required");
 
     }
 
