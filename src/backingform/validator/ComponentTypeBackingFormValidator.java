@@ -5,7 +5,7 @@ import backingform.ComponentTypeBackingForm;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-import repository.ComponentTypeRepository;
+
 
 
 import java.util.Arrays;
@@ -28,7 +28,7 @@ public class ComponentTypeBackingFormValidator  implements Validator {
     public void validate(Object obj, Errors errors){
 
         ValidationUtils.invokeValidator(validator, obj, errors);
-        ComponentTypeBackingForm form = (ComponentTypeBackingForm) obj;
+
 
         ValidationUtils.rejectIfEmpty(errors, "componentType.componentTypeName", "componentTypeName.empty", "The componentTypeName is required");
         ValidationUtils.rejectIfEmpty(errors, "componentType.componentTypeNameShort", "componentTypeNameShort.empty", "The componentTypeNameShort is required");
