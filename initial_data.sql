@@ -213,7 +213,7 @@ insert into FormField
  '1', '1',
  '0', '0',
  '0', '0'),
-('Donation', 'bloodBagType', 'Blood Bag type', 'Single', 0,
+('Donation', 'packType', 'Pack type', 'Single', 0,
  '0', '1',
  '1', '1',
  '0', '0',

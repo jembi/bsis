@@ -5,16 +5,17 @@
 
 	<!-- Updated (timler): for #293 (refactoring) -->
 	<!-- Updated (timler): for #294 (refactoring) -->
-	<changeSet id="20150818-0506" author="devang">
+	<!-- Updated (timler): for #328 (refactoring) -->
+	<changeSet id="20150818-1237" author="devang">
 	    <preConditions onFail="MARK_RAN">
-		    <not><tableExists tableName="BloodBagType" /></not>
+		    <not><tableExists tableName="BloodTest" /></not>
 		</preConditions>
 		<sqlFile path="./ddl_mysql.sql"/>
 	</changeSet>
 	
 	<!-- Updated (timler): for #293 (refactoring) -->
 	<!-- Updated (timler): for #294 (refactoring) -->
-	<changeSet id="20150818-0600" author="devang">
+	<changeSet id="20150818-1640" author="devang">
 	    <preConditions onFail="MARK_RAN">
 		    <sqlCheck expectedResult="0"> 
 				<![CDATA[

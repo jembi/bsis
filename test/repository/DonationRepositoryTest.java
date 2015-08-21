@@ -232,12 +232,12 @@ public class DonationRepositoryTest {
 	@Ignore("findDonations has a bug in the HSQL when querying a DIN with parameter name panelIds/donorPanelIds")
 	public void testFindDonationsDIN() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<Integer> bloodBagTypeIds = new ArrayList<Integer>();
-		bloodBagTypeIds.add(new Integer(1));
+		List<Integer> packTypeIds = new ArrayList<Integer>();
+		packTypeIds.add(new Integer(1));
 		List<Long> panelIds = new ArrayList<Long>();
 		panelIds.add(new Long(1));
 		panelIds.add(new Long(2));
-		List<Object> donations = donationRepository.findDonations("1234567", bloodBagTypeIds, panelIds, "2015-02-01",
+		List<Object> donations = donationRepository.findDonations("1234567", packTypeIds, panelIds, "2015-02-01",
 		    "2015-02-10", false, pagingParams);
 		Assert.assertNotNull("List is not null", donations);
 		Assert.assertNotNull("1 Donation matches", donations.size());
@@ -248,11 +248,11 @@ public class DonationRepositoryTest {
 	@Test
 	public void testFindDonations() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<Integer> bloodBagTypeIds = new ArrayList<Integer>();
-		bloodBagTypeIds.add(new Integer(1));
+		List<Integer> packTypeIds = new ArrayList<Integer>();
+		packTypeIds.add(new Integer(1));
 		List<Long> panelIds = new ArrayList<Long>();
 		panelIds.add(new Long(2));
-		List<Object> result = donationRepository.findDonations(null, bloodBagTypeIds, panelIds, "01/02/2015", "10/02/2015",
+		List<Object> result = donationRepository.findDonations(null, packTypeIds, panelIds, "01/02/2015", "10/02/2015",
 		    true, pagingParams);
 		Assert.assertNotNull("List is not null", result);
 		ArrayList<Donation> donations = (ArrayList<Donation>) result.get(0);
@@ -262,7 +262,7 @@ public class DonationRepositoryTest {
 		for (Donation donation : donations) {
 			Assert.assertTrue("Donation date before", donation.getDonationDate().before(beforeDate));
 			Assert.assertTrue("Donation date after", donation.getDonationDate().after(afterDate));
-			Assert.assertEquals("BloodBagId matches", new Integer(1), donation.getBloodBagType().getId());
+			Assert.assertEquals("PackTypeId matches", new Integer(1), donation.getPackType().getId());
 			Assert.assertEquals("PanelId matches", new Long(2), donation.getDonationBatch().getDonorPanel().getId());
 		}
 	}
@@ -309,7 +309,7 @@ public class DonationRepositoryTest {
 		newDonation.setId(existingDonation.getId());
 		newDonation.copy(existingDonation);
 		newDonation.setId(null); // don't want to override, just save time with the copy
-		newDonation.getBloodBagType().setCountAsDonation(false);
+		newDonation.getPackType().setCountAsDonation(false);
 		donationRepository.addDonation(newDonation);
 		// should fail because DIN already exists
 	}
@@ -370,7 +370,7 @@ public class DonationRepositoryTest {
 		newDonation.copy(existingDonation);
 		newDonation.setId(null); // don't want to override, just save time with the copy
 		newDonation.setDonationIdentificationNumber("JUNIT1234");
-		newDonation.getBloodBagType().setCountAsDonation(false); // doesn't create an initial component when adding
+		newDonation.getPackType().setCountAsDonation(false); // doesn't create an initial component when adding
 		Donation savedDonation = donationRepository.addDonation(newDonation);
 		donationRepository.deleteDonation(savedDonation.getId());
 		Donation deletedDonation = donationRepository.findDonationByDonationIdentificationNumberIncludeDeleted("JUNIT1234");
@@ -385,7 +385,7 @@ public class DonationRepositoryTest {
 		newDonation.copy(existingDonation);
 		newDonation.setId(null); // don't want to override, just save time with the copy
 		newDonation.setDonationIdentificationNumber("JUNIT12345");
-		newDonation.getBloodBagType().setCountAsDonation(false); // doesn't create an initial component when adding
+		newDonation.getPackType().setCountAsDonation(false); // doesn't create an initial component when adding
 		Donation savedDonation = donationRepository.addDonation(newDonation);
 		donationRepository.deleteDonation(savedDonation.getId());
 		donationRepository.findDonationByDonationIdentificationNumber("JUNIT12345");

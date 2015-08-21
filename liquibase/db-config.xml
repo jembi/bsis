@@ -290,7 +290,7 @@
    </insert>
     <insert tableName="Permission">
        <column name="id" value="49"></column>
-       <column name="name" value="Manage Blood Bag Types"></column>
+       <column name="name" value="Manage Pack Types"></column>
    </insert> 
    <insert tableName="Permission">
        <column name="id" value="50"></column>

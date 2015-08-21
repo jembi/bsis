@@ -1,12 +1,12 @@
 package viewmodel;
 
-import model.bloodbagtype.BloodBagType;
+import model.packtype.PackType;
 
 public class PackTypeViewModel {
     
-    private BloodBagType packType;
+    private PackType packType;
 
-    public PackTypeViewModel(BloodBagType packType) {
+    public PackTypeViewModel(PackType packType) {
         this.packType = packType;
     }
     
@@ -14,8 +14,8 @@ public class PackTypeViewModel {
         return packType.getId();
     }
     
-    public String getBloodBagType(){
-        return packType.getBloodBagType();
+    public String getPackType(){
+        return packType.getPackType();
     }
     
     public ComponentTypeViewModel getComponentType(){
