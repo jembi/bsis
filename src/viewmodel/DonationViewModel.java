@@ -1,13 +1,10 @@
 package viewmodel;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import model.bloodbagtype.BloodBagType;
 import model.component.Component;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
@@ -19,6 +16,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import repository.bloodtesting.BloodTypingStatus;
 import utils.CustomDateFormatter;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class DonationViewModel {
 
@@ -63,10 +62,10 @@ public class DonationViewModel {
   }
 
   public PackTypeViewModel getPackType() {
-      if (donation.getBloodBagType() == null) {
+      if (donation.getPackType() == null) {
           return null;
       }
-      return new PackTypeViewModel(donation.getBloodBagType());
+      return new PackTypeViewModel(donation.getPackType());
   }
 
   public String getNotes() {
@@ -226,12 +225,4 @@ public class DonationViewModel {
   public  LocationViewModel getDonorPanel(){
       return new LocationViewModel(donation.getDonorPanel());
   }
-
-  public PackTypeViewModel getBloodBagType() {
-      if (donation.getBloodBagType() == null) {
-          return null;
-      }
-      return new PackTypeViewModel(donation.getBloodBagType());
-  }
-
 }

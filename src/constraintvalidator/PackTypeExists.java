@@ -10,12 +10,12 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 @Documented
-@Constraint(validatedBy = BloodBagTypeExistsConstraintValidator.class)
+@Constraint(validatedBy = PackTypeExistsConstraintValidator.class)
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface BloodBagTypeExists {
+public @interface PackTypeExists {
 
-  String message() default "Invalid Blood Bag Type specified";
+  String message() default "Invalid Pack Type specified";
 
   Class<?>[] groups() default {};
 

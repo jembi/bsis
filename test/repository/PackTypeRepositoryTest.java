@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import model.bloodbagtype.BloodBagType;
+import model.packtype.PackType;
 
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseDataSourceConnection;
@@ -27,22 +27,22 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Test using DBUnit to test the BloodBagTypeRepository
+ * Test using DBUnit to test the PackTypeRepository
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
 @Transactional
 @WebAppConfiguration
-public class BloodBagTypeRepositoryTest {
+public class PackTypeRepositoryTest {
 	
 	@Autowired
-	BloodBagTypeRepository bloodBagTypeRepository;
+	PackTypeRepository packTypeRepository;
 	
 	@Autowired
 	private DataSource dataSource;
 	
 	private IDataSet getDataSet() throws Exception {
-		File file = new File("test/dataset/BloodBagTypeRepositoryDataset.xml");
+		File file = new File("test/dataset/PackTypeRepositoryDataset.xml");
 		return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
 	}
 	
@@ -78,43 +78,43 @@ public class BloodBagTypeRepositoryTest {
 	}
 	
 	@Test
-	public void testGetAllBloodBagTypes() throws Exception {
-		List<BloodBagType> all = bloodBagTypeRepository.getAllBloodBagTypes();
-		Assert.assertNotNull("There are blood bag types defined", all);
-		Assert.assertEquals("There are 8 blood bag types defined", 8, all.size());
+	public void testGetAllPackTypes() throws Exception {
+		List<PackType> all = packTypeRepository.getAllPackTypes();
+		Assert.assertNotNull("There are pack types defined", all);
+		Assert.assertEquals("There are 8 pack types defined", 8, all.size());
 	}
 	
 	@Test
-	public void testFindBloodBagTypeByName() throws Exception {
-		BloodBagType one = bloodBagTypeRepository.findBloodBagTypeByName("Single");
-		Assert.assertNotNull("There is a blood bag types named 'Single'", one);
-		Assert.assertEquals("There is a blood bag types named 'Single'", "Single", one.getBloodBagType());
+	public void testFindPackTypeByName() throws Exception {
+		PackType one = packTypeRepository.findPackTypeByName("Single");
+		Assert.assertNotNull("There is a pack type named 'Single'", one);
+		Assert.assertEquals("There is a pack type named 'Single'", "Single", one.getPackType());
 	}
 	
 	@Test
-	public void testUpdateBloodBagType() throws Exception {
-		BloodBagType two = bloodBagTypeRepository.findBloodBagTypeByName("Double");
-		Assert.assertNotNull("There is a blood bag types named 'Double'", two);
+	public void testUpdatePackType() throws Exception {
+		PackType two = packTypeRepository.findPackTypeByName("Double");
+		Assert.assertNotNull("There is a pack types named 'Double'", two);
 		two.setCountAsDonation(false);
 		two.setPeriodBetweenDonations(0);
-		bloodBagTypeRepository.updateBloodBagType(two);
-		BloodBagType savedTwo = bloodBagTypeRepository.findBloodBagTypeByName("Double");
-		Assert.assertNotNull("There is a blood bag types named 'Double'", savedTwo);
+		packTypeRepository.updatePackType(two);
+		PackType savedTwo = packTypeRepository.findPackTypeByName("Double");
+		Assert.assertNotNull("There is a pack type named 'Double'", savedTwo);
 		Assert.assertEquals("Is not counted as a donation", false, savedTwo.getCountAsDonation());
 		Assert.assertEquals("0 days between donations", new Integer(0), savedTwo.getPeriodBetweenDonations());
 	}
 	
 	@Test
-	public void testSaveBloodBagType() throws Exception {
-		BloodBagType toBeSaved = new BloodBagType();
-		toBeSaved.setBloodBagType("Junit");
+	public void testSavePackType() throws Exception {
+		PackType toBeSaved = new PackType();
+		toBeSaved.setPackType("Junit");
 		toBeSaved.setPeriodBetweenDonations(123);
 		toBeSaved.setCountAsDonation(true);
 		
-		bloodBagTypeRepository.saveBloodBagType(toBeSaved);
+		packTypeRepository.savePackType(toBeSaved);
 		
-		BloodBagType saved = bloodBagTypeRepository.findBloodBagTypeByName("Junit");
-		Assert.assertNotNull("There is a blood bag types named 'Double'", saved);
+		PackType saved = packTypeRepository.findPackTypeByName("Junit");
+		Assert.assertNotNull("There is a pack type named 'Double'", saved);
 		Assert.assertEquals("Is counted as a donation", true, saved.getCountAsDonation());
 		Assert.assertEquals("123 days between donations", new Integer(123), saved.getPeriodBetweenDonations());
 	}
