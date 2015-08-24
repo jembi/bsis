@@ -187,20 +187,23 @@ public class DonorController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Donor donor = donorRepository.findDonorById(id);
-    map.put("allDonations", getDonationViewModels(donor.getDonations()));
+    
+    List<Donation> donations = donor.getDonations();
 
-    // If the logged on user has permission to view it, include the post donation counselling for the donor
-    if (loggedOnUserHasPermission(PermissionConstants.VIEW_POST_DONATION_COUNSELLING)) {
-
-        PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository
-                .findFlaggedPostDonationCounsellingForDonor(donor);
+    List<DonationViewModel> donationViewModels = new ArrayList<DonationViewModel>();
+    
+    if (donations != null) {
         
-        if (postDonationCounselling != null) {
-            map.put("postDonationCounselling", new PostDonationCounsellingViewModel(postDonationCounselling));
+        boolean canViewPostDonationCounselling = loggedOnUserHasPermission(PermissionConstants.VIEW_POST_DONATION_COUNSELLING);
+        
+        for (Donation donation : donations) {
+          donationViewModels.add(new DonationViewModel(donation, canViewPostDonationCounselling));
         }
     }
 
-    return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
+    map.put("allDonations", donationViewModels);
+
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 
   @RequestMapping(value ="/form", method = RequestMethod.GET)
@@ -377,17 +380,6 @@ public class DonorController {
   private DonationViewModel getDonationViewModel(Donation donation) {
     DonationViewModel donationViewModel = new DonationViewModel(donation);
     return donationViewModel;
-  }
-
-  private List<DonationViewModel> getDonationViewModels(
-      List<Donation> donations) {
-    if (donations == null)
-      return Arrays.asList(new DonationViewModel[0]);
-    List<DonationViewModel> donationViewModels = new ArrayList<DonationViewModel>();
-    for (Donation donation : donations) {
-      donationViewModels.add(new DonationViewModel(donation));
-    }
-    return donationViewModels;
   }
  
   private int getNumberOfDonations(List<Donation> donations){

@@ -4,9 +4,15 @@ import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.PostDonationCounsellingBuilder.aPostDonationCounselling;
 import static helpers.matchers.PostDonationCounsellingMatcher.hasSameStateAsPostDonationCounselling;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+import java.util.Date;
+
+import model.counselling.CounsellingStatus;
 import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 
@@ -41,6 +47,59 @@ public class PostDonationCounsellingCRUDServiceTests {
         verify(postDonationCounsellingRepository).save(argThat(hasSameStateAsPostDonationCounselling(expectedPostDonationCounselling)));
         verifyNoMoreInteractions(postDonationCounsellingRepository);
         assertThat(returnedPostDonationCounselling, hasSameStateAsPostDonationCounselling(expectedPostDonationCounselling));
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testUpdatePostDonationCounsellingWithNoExistingPostDonationCounselling_shouldThrow() {
+        long postDonationCounsellingId = 75;
+        
+        when(postDonationCounsellingRepository.findById(postDonationCounsellingId))
+                .thenReturn(null);
+        
+        postDonationCounsellingCRUDService.updatePostDonationCounselling(postDonationCounsellingId,
+                CounsellingStatus.RECEIVED_COUNSELLING, new Date(), "");
+    }
+    
+    @Test
+    public void testUpdatePostDonationCounselling_shouldUpdateAndReturnPostDonationCounselling() {
+        
+        long postDonationCounsellingId = 75;
+        long donationId = 55;
+        CounsellingStatus counsellingStatus = CounsellingStatus.RECEIVED_COUNSELLING;
+        Date counsellingDate = new Date();
+        String notes = "some notes";
+        
+        PostDonationCounselling existingPostDonationCounselling = aPostDonationCounselling()
+                .withId(postDonationCounsellingId)
+                .thatIsFlaggedForCounselling()
+                .withDonation(aDonation()
+                        .withId(donationId)
+                        .build())
+                .build();
+        
+        PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
+                .withId(postDonationCounsellingId)
+                .thatIsNotFlaggedForCounselling()
+                .withCounsellingStatus(counsellingStatus)
+                .withCounsellingDate(counsellingDate)
+                .withDonation(aDonation()
+                        .withId(donationId)
+                        .withNotes(notes)
+                        .build())
+                .build();
+        
+        when(postDonationCounsellingRepository.findById(postDonationCounsellingId))
+                .thenReturn(existingPostDonationCounselling);
+        when(postDonationCounsellingRepository.update(argThat(hasSameStateAsPostDonationCounselling(expectedPostDonationCounselling))))
+                .thenReturn(expectedPostDonationCounselling);
+        
+        PostDonationCounselling returnedPostDonationCounselling = postDonationCounsellingCRUDService
+                .updatePostDonationCounselling(postDonationCounsellingId, counsellingStatus, counsellingDate, notes);
+
+        verify(postDonationCounsellingRepository).findById(postDonationCounsellingId);
+        verify(postDonationCounsellingRepository).update(argThat(hasSameStateAsPostDonationCounselling(expectedPostDonationCounselling)));
+        verifyNoMoreInteractions(postDonationCounsellingRepository);
+        assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
     }
 
 }

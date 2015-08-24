@@ -23,8 +23,16 @@ public class PostDonationCounsellingRepository {
     @PersistenceContext
     private EntityManager entityManager;
     
+    public PostDonationCounselling findById(long id) {
+        return entityManager.find(PostDonationCounselling.class, id);
+    }
+    
     public void save(PostDonationCounselling postDonationCounselling) {
         entityManager.persist(postDonationCounselling);
+    }
+    
+    public PostDonationCounselling update(PostDonationCounselling postDonationCounselling) {
+        return entityManager.merge(postDonationCounselling);
     }
     
     public List<Donor> findDonorsFlaggedForCounselling(Date startDate, Date endDate, Long donorPanelId) {
@@ -57,19 +65,6 @@ public class PostDonationCounsellingRepository {
             query.setParameter(entry.getKey(), entry.getValue());
         }
         return query.getResultList();
-    }
-    
-    public PostDonationCounselling findFlaggedPostDonationCounsellingForDonor(Donor donor) {
-
-        List<PostDonationCounselling> results = entityManager.createNamedQuery(
-                PostDonationCounsellingNamedQueryConstants.NAME_FIND_FLAGGED_POST_DONATION_COUNSELLING_FOR_DONOR,
-                PostDonationCounselling.class)
-                .setParameter("donor", donor)
-                .setParameter("flaggedForCounselling", true)
-                .setMaxResults(1)
-                .getResultList();
-        
-        return results.size() > 0 ? results.get(0) : null;
     }
 
 }

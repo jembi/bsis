@@ -6,7 +6,6 @@ import static helpers.builders.LocationBuilder.aDonorPanel;
 import static helpers.builders.PostDonationCounsellingBuilder.aPostDonationCounselling;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -16,7 +15,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import model.counselling.PostDonationCounselling;
 import model.donor.Donor;
 import model.location.Location;
 
@@ -244,61 +242,4 @@ public class PostDonationCounsellingRepositoryTests {
         assertThat(returnedDonors, is(expectedDonors));
     }
     
-    @Test
-    public void testFindFlaggedPostDonationCounsellingForDonorWithNoPostDonationCounselling_shouldReturnNull() {
-        
-        Donor donor = aDonor().buildAndPersist(entityManager);
-
-        PostDonationCounselling returnedPostDonationCounselling = postDonationCounsellingRepository
-                .findFlaggedPostDonationCounsellingForDonor(donor);
-
-        assertThat(returnedPostDonationCounselling, is(nullValue()));
-    }
-    
-    @Test
-    public void testFindFlaggedPostDonationCounsellingForDonor_shouldReturnFirstFlaggedPostDonationCounsellingForDonor() {
-        
-        Donor donor = aDonor().build();
-
-        // Excluded by date
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .withDonation(aDonation()
-                        .withDonor(donor)
-                        .withDonationDate(new DateTime().minusDays(3).toDate())
-                        .build())
-                .buildAndPersist(entityManager);
-
-        // Excluded by flag
-        aPostDonationCounselling()
-                .thatIsNotFlaggedForCounselling()
-                .withDonation(aDonation()
-                        .withDonor(donor)
-                        .withDonationDate(new DateTime().minusDays(7).toDate())
-                        .build())
-                .buildAndPersist(entityManager);
-
-        // Excluded by donor
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .withDonation(aDonation()
-                        .withDonor(aDonor().build())
-                        .withDonationDate(new DateTime().minusDays(7).toDate())
-                        .build())
-                .buildAndPersist(entityManager);
-
-        PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .withDonation(aDonation()
-                        .withDonor(donor)
-                        .withDonationDate(new DateTime().minusDays(5).toDate())
-                        .build())
-                .buildAndPersist(entityManager);
-        
-        PostDonationCounselling returnedPostDonationCounselling = postDonationCounsellingRepository
-                .findFlaggedPostDonationCounsellingForDonor(donor);
-
-        assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
-    }
-
 }

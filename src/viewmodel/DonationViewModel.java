@@ -19,12 +19,23 @@ import utils.CustomDateFormatter;
 public class DonationViewModel {
 
   private Donation donation;
+  private boolean includeCounselling;
 
   public DonationViewModel() {
   }
 
   public DonationViewModel(Donation donation) {
+    this(donation, false);
+  }
+
+  /**
+   * @param donation The donation.
+   * @param includeCounselling Whether or not to include the post donation counselling. This should be based on the
+   * VIEW_POST_DONATION_COUNSELLING permission.
+   */
+  public DonationViewModel(Donation donation, boolean includeCounselling) {
     this.donation = donation;
+    this.includeCounselling = includeCounselling;
   }
 
   public void copy(Donation donation) {
@@ -228,6 +239,13 @@ public class DonationViewModel {
           return null;
       }
       return new PackTypeViewModel(donation.getBloodBagType());
+  }
+  
+  public PostDonationCounsellingViewModel getPostDonationCounselling() {
+      if (includeCounselling && donation.getPostDonationCounselling() != null) {
+          return new PostDonationCounsellingViewModel(donation.getPostDonationCounselling());
+      }
+      return null;
   }
 
 }

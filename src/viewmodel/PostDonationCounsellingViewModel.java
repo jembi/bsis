@@ -19,13 +19,6 @@ public class PostDonationCounsellingViewModel {
         return postDonationCounselling.getId();
     }
     
-    public DonationViewModel getDonation() {
-        if (postDonationCounselling.getDonation() == null) {
-            return null;
-        }
-        return new DonationViewModel(postDonationCounselling.getDonation());
-    }
-    
     public boolean isFlaggedForCounselling() {
         return postDonationCounselling.isFlaggedForCounselling();
     }
@@ -40,6 +33,10 @@ public class PostDonationCounsellingViewModel {
             return null;
         }
         return new CounsellingStatusViewModel(postDonationCounselling.getCounsellingStatus());
+    }
+    
+    public String getNotes() {
+        return postDonationCounselling.getDonation().getNotes();
     }
 
 }

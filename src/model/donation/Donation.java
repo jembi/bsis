@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,6 +28,7 @@ import javax.validation.constraints.NotNull;
 import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
+import model.counselling.PostDonationCounselling;
 import model.donationbatch.DonationBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
@@ -184,6 +186,9 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
   @LocationExists
   @NotNull
   private Location donorPanel;
+  
+  @OneToOne(mappedBy = "donation", fetch = FetchType.LAZY)
+  private PostDonationCounselling postDonationCounselling;
 
   public Donation() {
     modificationTracker = new RowModificationTracker();
@@ -492,6 +497,10 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
 
     public void setDonorPanel(Location donorPanel) {
         this.donorPanel = donorPanel;
+    }
+
+    public PostDonationCounselling getPostDonationCounselling() {
+        return postDonationCounselling;
     }
 
     @Override

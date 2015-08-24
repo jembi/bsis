@@ -16,6 +16,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     private Date donationDate;
     private Location donorPanel;
     private TTIStatus ttiStatus;
+    private String notes;
     
     public DonationBuilder withId(Long id) {
         this.id = id;
@@ -41,6 +42,11 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         this.ttiStatus = ttiStatus;
         return this;
     }
+    
+    public DonationBuilder withNotes(String notes) {
+        this.notes = notes;
+        return this;
+    }
 
     @Override
     public Donation build() {
@@ -50,6 +56,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         donation.setDonationDate(donationDate);
         donation.setDonorPanel(donorPanel);
         donation.setTTIStatus(ttiStatus);
+        donation.setNotes(notes);
         return donation;
     }
 

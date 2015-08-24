@@ -1,5 +1,8 @@
 package service;
 
+import java.util.Date;
+
+import model.counselling.CounsellingStatus;
 import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 
@@ -29,6 +32,23 @@ public class PostDonationCounsellingCRUDService {
         postDonationCounselling.setFlaggedForCounselling(true);
         postDonationCounsellingRepository.save(postDonationCounselling);
         return postDonationCounselling;
+    }
+    
+    public PostDonationCounselling updatePostDonationCounselling(long id, CounsellingStatus counsellingStatus,
+            Date counsellingDate, String notes) {
+        
+        PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository.findById(id);
+        
+        if (postDonationCounselling == null) {
+            throw new IllegalArgumentException("Post donation counselling not found for id: " + id);
+        }
+        
+        postDonationCounselling.setFlaggedForCounselling(false);
+        postDonationCounselling.setCounsellingStatus(counsellingStatus);
+        postDonationCounselling.setCounsellingDate(counsellingDate);
+        postDonationCounselling.getDonation().setNotes(notes);
+        
+        return postDonationCounsellingRepository.update(postDonationCounselling);
     }
 
 }
