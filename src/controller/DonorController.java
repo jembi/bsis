@@ -35,10 +35,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import constant.GeneralConfigConstants;
 import repository.ContactMethodTypeRepository;
+import repository.DonationBatchRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
 import repository.PostDonationCounsellingRepository;
+import service.GeneralConfigAccessorService;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 import viewmodel.DonationViewModel;
@@ -72,6 +75,12 @@ public class DonorController {
   
   @Autowired
   private PostDonationCounsellingRepository postDonationCounsellingRepository;
+  
+  @Autowired
+  private DonationBatchRepository donationBatchRepository;
+  
+  @Autowired
+  private GeneralConfigAccessorService generalConfigAccessorService;
   
   public DonorController() {
   }
@@ -224,22 +233,30 @@ public class DonorController {
             ResponseEntity<Map<String, Object>>
             addDonor(@Valid @RequestBody DonorBackingForm form) {
 
-        HttpStatus httpStatus = HttpStatus.CREATED;
         Map<String, Object> map = new HashMap<String, Object>();
-        Donor savedDonor = null;
+        
+        if (!canAddDonors()) {
+            // Donor registration is blocked
+            map.put("hasErrors", true);
+            map.put("developerMessage", "Donor Registration Blocked");
+            map.put("userMessage", "Donor Registration Blocked - No Open Donation Batches");
+            map.put("moreInfo", null);
+            map.put("errorCode", HttpStatus.METHOD_NOT_ALLOWED);
+            return new ResponseEntity<Map<String,Object>>(map, HttpStatus.METHOD_NOT_ALLOWED);
+        }
 
         Donor donor = form.getDonor();
         donor.setIsDeleted(false);
         donor.setContact(form.getContact());
         donor.setAddress(form.getAddress());
         donor.setDonorNumber(utilController.getNextDonorNumber());
-        savedDonor = donorRepository.addDonor(donor);
+        Donor savedDonor = donorRepository.addDonor(donor);
         map.put("hasErrors", false);
 
         map.put("donorId", savedDonor.getId());
         map.put("donor", getDonorsViewModel(donorRepository.findDonorById(savedDonor.getId())));
 
-        return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
@@ -345,6 +362,8 @@ public class DonorController {
     }
 
     map.put("donors", donors);
+    map.put("canAddDonors", canAddDonors());
+    
     return map;
   }
 
@@ -385,10 +404,22 @@ public class DonorController {
   private int getNumberOfDonations(List<Donation> donations){
       int count = 0;
       for(Donation donation :donations){
-          if(donation.getBloodBagType().getCountAsDonation() == true)
+          if(donation.getPackType().getCountAsDonation() == true)
               count = count +1;
       }
       return count;
+  }
+  
+    /**
+     * Check if donor registration is allowed based on the "open batch required" config
+     * and the number of open donation batches.
+     * 
+     * @return true if donor registration is allowed, otherwise false.
+     */
+  private boolean canAddDonors() {
+    boolean openBatchRequired = generalConfigAccessorService.getBooleanValue(
+            GeneralConfigConstants.DONOR_REGISTRATION_OPEN_BATCH_REQUIRED);
+    return !openBatchRequired || donationBatchRepository.countOpenDonationBatches() > 0;
   }
 
     private boolean loggedOnUserHasPermission(String permission) {

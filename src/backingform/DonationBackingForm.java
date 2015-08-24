@@ -10,14 +10,14 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import model.bloodbagtype.BloodBagType;
+import model.component.Component;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.donation.HaemoglobinLevel;
 import model.donationtype.DonationType;
 import model.donor.Donor;
-import model.product.Product;
 import model.location.Location;
+import model.packtype.PackType;
 import model.user.User;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -162,7 +162,7 @@ public class DonationBackingForm {
   }
 
   public String getPackType() {
-    BloodBagType packType = donation.getBloodBagType();
+    PackType packType = donation.getPackType();
     if (packType == null || packType.getId() == null)
       return null;
     else
@@ -228,17 +228,17 @@ public class DonationBackingForm {
   	}
   }
 
-  public void setPackType(BloodBagType packType){
+  public void setPackType(PackType packType){
   	if (packType == null){
-  		donation.setBloodBagType(null);
+  		donation.setPackType(null);
   	}
   	else if (packType.getId() == null){
-  		donation.setBloodBagType(null);
+  		donation.setPackType(null);
   	}
   	else{
-  		BloodBagType bt = new BloodBagType();
+  		PackType bt = new PackType();
   		bt.setId(packType.getId());
-  		donation.setBloodBagType(bt);
+  		donation.setPackType(bt);
   	}
   }
   
@@ -423,8 +423,8 @@ public class DonationBackingForm {
     }
     
     @JsonIgnore
-    public List<Product> getProducts() {
-        return donation.getProducts();
+    public List<Component> getComponents() {
+        return donation.getComponents();
     }
     
     @JsonIgnore
@@ -475,9 +475,4 @@ public class DonationBackingForm {
         }
             
     }
-    
-    public void setBloodBagType(BloodBagType bloodBagType) {
-        donation.setBloodBagType(bloodBagType);
-    }
-
 }

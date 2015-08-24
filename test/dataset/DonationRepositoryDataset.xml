@@ -63,22 +63,22 @@
 
 	<DonationType id="1" donationType="Voluntary" isDeleted="false" />
 
-	<ProductType id="1" description="" expiresAfter="35"
+	<ComponentType id="1" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood Single Pack - CPDA" productTypeNameShort="0011" />
-	<ProductType id="2" description="" expiresAfter="35"
+		componentTypeName="Whole Blood Single Pack - CPDA" componentTypeNameShort="0011" />
+	<ComponentType id="2" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood Double Pack - CPDA" productTypeNameShort="0012" />
-	<ProductType id="3" description="" expiresAfter="35"
+		componentTypeName="Whole Blood Double Pack - CPDA" componentTypeNameShort="0012" />
+	<ComponentType id="3" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood Triple Pack - CPDA" productTypeNameShort="0013" />
+		componentTypeName="Whole Blood Triple Pack - CPDA" componentTypeNameShort="0013" />
 
-	<BloodBagType id="1" bloodBagType="Single" isDeleted="false"
-		productType_id="1" countAsDonation="true" periodBetweenDonations="90" />
-	<BloodBagType id="2" bloodBagType="Double" isDeleted="false"
-		productType_id="2" countAsDonation="true" periodBetweenDonations="90" />
-	<BloodBagType id="3" bloodBagType="Triple" isDeleted="false"
-		productType_id="3" countAsDonation="true" periodBetweenDonations="90" />
+	<PackType id="1" packType="Single" isDeleted="false"
+		componentType_id="1" countAsDonation="true" periodBetweenDonations="90" />
+	<PackType id="2" packType="Double" isDeleted="false"
+		componentType_id="2" countAsDonation="true" periodBetweenDonations="90" />
+	<PackType id="3" packType="Triple" isDeleted="false"
+		componentType_id="3" countAsDonation="true" periodBetweenDonations="90" />
 
 	<Location id="1" isDeleted="false" isDonorPanel="true"
 		isMobileSite="false" isUsageSite="false" name="Maseru" notes="" />
@@ -107,7 +107,7 @@
 		donationIdentificationNumber="1234567" donorWeight="80.00"
 		extraBloodTypeInformation="" haemoglobinCount="15.70" isDeleted="0"
 		createdDate="2015-02-02 03:42:04.0" lastUpdated="2015-02-06 02:09:30.0"
-		ttiStatus="TTI_SAFE" bloodBagType_id="3" donationBatch_id="1"
+		ttiStatus="TTI_SAFE" packType_id="3" donationBatch_id="1"
 		donationType_id="1" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
 		bloodPressureDiastolic="80" donorPulse="70" donorPanel_id="1"
 		bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
@@ -116,14 +116,14 @@
 		donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1212129"
 		extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-18 07:53:57.0"
 		lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
-		bloodBagType_id="1" donationBatch_id="2" donationType_id="1" donor_id="2"
+		packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" donorPanel_id="2"
 		bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
 		bloodTypingMatchStatus="MATCH" />
 	<Donation id="3" bloodTypingStatus="NOT_DONE" donationDate="2015-06-26 00:00:00.0"
 		donationIdentificationNumber="9090908" isDeleted="0"
 		createdDate="2015-06-29 05:24:35.0" lastUpdated="2015-06-29 05:24:35.0"
-		ttiStatus="NOT_DONE" bloodBagType_id="1" donationBatch_id="3"
+		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="3"
 		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
 		donorPanel_id="1" bleedStartTime="1970-01-01 11:24:30.0" bleedEndTime="1970-01-01 11:44:30.0"
 		bloodTypingMatchStatus="NOT_DONE" />
@@ -131,7 +131,7 @@
 		donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1412129"
 		extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-02 07:53:57.0"
 		lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
-		bloodBagType_id="1" donationBatch_id="2" donationType_id="1" donor_id="4"
+		packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="4"
 		createdBy_id="1" lastUpdatedBy_id="1" donorPanel_id="2"
 		bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
 		bloodTypingMatchStatus="MATCH" />
@@ -139,7 +139,7 @@
 		donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1512129"
 		extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-02 07:53:57.0"
 		lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
-		bloodBagType_id="1" donationBatch_id="2" donationType_id="1" donor_id="5"
+		packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="5"
 		createdBy_id="1" lastUpdatedBy_id="1" donorPanel_id="2"
 		bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
 		bloodTypingMatchStatus="MATCH" />
@@ -147,7 +147,7 @@
 		donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1612129"
 		extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-02 07:53:57.0"
 		lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
-		bloodBagType_id="1" donationBatch_id="2" donationType_id="1" donor_id="6"
+		packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="6"
 		createdBy_id="1" lastUpdatedBy_id="1" donorPanel_id="2"
 		bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
 		bloodTypingMatchStatus="MATCH" />

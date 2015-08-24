@@ -1,12 +1,12 @@
 package viewmodel;
 
-import model.bloodbagtype.BloodBagType;
+import model.packtype.PackType;
 
 public class PackTypeViewModel {
     
-    private BloodBagType packType;
+    private PackType packType;
 
-    public PackTypeViewModel(BloodBagType packType) {
+    public PackTypeViewModel(PackType packType) {
         this.packType = packType;
     }
     
@@ -14,13 +14,13 @@ public class PackTypeViewModel {
         return packType.getId();
     }
     
-    public String getBloodBagType(){
-        return packType.getBloodBagType();
+    public String getPackType(){
+        return packType.getPackType();
     }
     
-    public ProductTypeViewModel getProductType(){
-        if (packType.getProductType() != null) {
-            return new ProductTypeViewModel(packType.getProductType());
+    public ComponentTypeViewModel getComponentType(){
+        if (packType.getComponentType() != null) {
+            return new ComponentTypeViewModel(packType.getComponentType());
         } else {
             return null;
         }

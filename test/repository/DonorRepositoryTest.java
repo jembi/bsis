@@ -20,7 +20,6 @@ import java.util.Map;
 
 import javax.persistence.NoResultException;
 import javax.sql.DataSource;
-import javax.transaction.Transactional;
 
 import model.address.Address;
 import model.address.AddressType;
@@ -56,6 +55,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import security.BsisUserDetails;
 import security.LoginUserService;

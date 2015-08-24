@@ -77,8 +77,8 @@ public class CompatibilityTestsController {
     CompatibilityTestBackingForm form = new CompatibilityTestBackingForm();
     m.put("editCompatibilityTestForm", form);
 
-    Request productRequest = requestRepository.findRequestById(requestId);
-    form.setForRequest(productRequest);
+    Request componentRequest = requestRepository.findRequestById(requestId);
+    form.setForRequest(componentRequest);
     return new ResponseEntity<Map<String, Object>>(m, HttpStatus.OK);
 
   }

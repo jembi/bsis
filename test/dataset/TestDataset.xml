@@ -7,9 +7,9 @@
     <BloodTest/>
     <BloodTestingRule/>
     <BloodTestResult/>
-    <Product/>
-	<ProductType/>
-	<BloodBagType/>
+    <Component/>
+	<ComponentType/>
+	<PackType/>
 	<DonationType/>	
 	<Location/>
 	<Donation/>
@@ -31,8 +31,8 @@
 	
 	<IdType/>
 	
-	<ProductStatusChange/>
-	<ProductStatusChangeReason/>
+	<ComponentStatusChange/>
+	<ComponentStatusChangeReason/>
 	<DonorCodeGroup/>
 	<DonorCode/>
 	<DonorDonorCode/>

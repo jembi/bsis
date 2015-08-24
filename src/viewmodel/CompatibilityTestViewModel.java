@@ -5,10 +5,9 @@ import java.util.Date;
 import javax.validation.Valid;
 
 import utils.CustomDateFormatter;
-
 import model.compatibility.CompatibilityTest;
 import model.compatibility.CrossmatchType;
-import model.product.Product;
+import model.component.Component;
 import model.request.Request;
 import model.user.User;
 
@@ -45,8 +44,8 @@ public class CompatibilityTestViewModel {
     return compatibilityTest.getForRequest();
   }
 
-  public Product getTestedProduct() {
-    return compatibilityTest.getTestedProduct();
+  public Component getTestedComponent() {
+    return compatibilityTest.getTestedComponent();
   }
 
   public Boolean getTransfusedBefore() {

@@ -67,76 +67,76 @@
 	<DonationType id="2" donationType="Family" isDeleted="false" />
 	<DonationType id="3" donationType="Autologous" isDeleted="false" />
 	<DonationType id="4" donationType="Other" isDeleted="false" />
-	<ProductType id="1" description="" expiresAfter="35"
+	<ComponentType id="1" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood Single Pack - CPDA" productTypeNameShort="0011" />
-	<ProductType id="2" description="" expiresAfter="35"
+		componentTypeName="Whole Blood Single Pack - CPDA" componentTypeNameShort="0011" />
+	<ComponentType id="2" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood Double Pack - CPDA" productTypeNameShort="0012" />
-	<ProductType id="3" description="" expiresAfter="35"
+		componentTypeName="Whole Blood Double Pack - CPDA" componentTypeNameShort="0012" />
+	<ComponentType id="3" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood Triple Pack - CPDA" productTypeNameShort="0013" />
-	<ProductType id="4" description="" expiresAfter="35"
+		componentTypeName="Whole Blood Triple Pack - CPDA" componentTypeNameShort="0013" />
+	<ComponentType id="4" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood Quad Pack - CPDA" productTypeNameShort="0014" />
-	<ProductType id="5" description="" expiresAfter="5"
+		componentTypeName="Whole Blood Quad Pack - CPDA" componentTypeNameShort="0014" />
+	<ComponentType id="5" description="" expiresAfter="5"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Apheresis" productTypeNameShort="0021" />
-	<ProductType id="6" description="" expiresAfter="35"
+		componentTypeName="Apheresis" componentTypeNameShort="0021" />
+	<ComponentType id="6" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood - CPDA" productTypeNameShort="1001" />
-	<ProductType id="7" description="" expiresAfter="35"
+		componentTypeName="Whole Blood - CPDA" componentTypeNameShort="1001" />
+	<ComponentType id="7" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Whole Blood Poor Platelets - CPDA"
-		productTypeNameShort="1005" />
-	<ProductType id="8" description="" expiresAfter="35"
+		componentTypeName="Whole Blood Poor Platelets - CPDA"
+		componentTypeNameShort="1005" />
+	<ComponentType id="8" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Packed Red Cells - CPDA" productTypeNameShort="2001" />
-	<ProductType id="9" description="" expiresAfter="42"
+		componentTypeName="Packed Red Cells - CPDA" componentTypeNameShort="2001" />
+	<ComponentType id="9" description="" expiresAfter="42"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Packed Red Cells - SAGM" productTypeNameShort="2011" />
-	<ProductType id="10" description="" expiresAfter="365"
+		componentTypeName="Packed Red Cells - SAGM" componentTypeNameShort="2011" />
+	<ComponentType id="10" description="" expiresAfter="365"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Fresh Frozen Plasma - Whole Blood"
-		productTypeNameShort="3001" />
-	<ProductType id="11" description="" expiresAfter="365"
+		componentTypeName="Fresh Frozen Plasma - Whole Blood"
+		componentTypeNameShort="3001" />
+	<ComponentType id="11" description="" expiresAfter="365"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Frozen Plasma - Whole Blood" productTypeNameShort="3002" />
-	<ProductType id="12" description="" expiresAfter="5"
+		componentTypeName="Frozen Plasma - Whole Blood" componentTypeNameShort="3002" />
+	<ComponentType id="12" description="" expiresAfter="5"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Platelets Concentrate - Whole Blood"
-		productTypeNameShort="4001" />
-	<ProductType id="13" description="" expiresAfter="1"
+		componentTypeName="Platelets Concentrate - Whole Blood"
+		componentTypeNameShort="4001" />
+	<ComponentType id="13" description="" expiresAfter="1"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Platelets Concentrate - Whole Blood - 24H"
-		productTypeNameShort="4011" />
-	<ProductType id="14" description="" expiresAfter="35"
+		componentTypeName="Platelets Concentrate - Whole Blood - 24H"
+		componentTypeNameShort="4011" />
+	<ComponentType id="14" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Packed Red Cells - Paediatric - CPDA"
-		productTypeNameShort="2101" />
-	<ProductType id="15" description="" expiresAfter="365"
+		componentTypeName="Packed Red Cells - Paediatric - CPDA"
+		componentTypeNameShort="2101" />
+	<ComponentType id="15" description="" expiresAfter="365"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Fresh Frozen Plasma - Apheresis"
-		productTypeNameShort="3011" />
-	<ProductType id="16" description="" expiresAfter="5"
+		componentTypeName="Fresh Frozen Plasma - Apheresis"
+		componentTypeNameShort="3011" />
+	<ComponentType id="16" description="" expiresAfter="5"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		productTypeName="Platelets Concentrate - Apheresis"
-		productTypeNameShort="4021" />
-	<BloodBagType id="1" bloodBagType="Single" isDeleted="false"
-		productType_id="1" countAsDonation="true" periodBetweenDonations="90" />
-	<BloodBagType id="2" bloodBagType="Double" isDeleted="false"
-		productType_id="2" countAsDonation="true" periodBetweenDonations="90" />
-	<BloodBagType id="3" bloodBagType="Triple" isDeleted="false"
-		productType_id="3" countAsDonation="true" periodBetweenDonations="90" />
-	<BloodBagType id="4" bloodBagType="Quad" isDeleted="false"
-		productType_id="4" countAsDonation="true" periodBetweenDonations="90" />
-	<BloodBagType id="5" bloodBagType="Apheresis" isDeleted="false"
-		productType_id="5" countAsDonation="true" periodBetweenDonations="30" />
-	<BloodBagType id="6" bloodBagType="Dry Pack" isDeleted="false"
+		componentTypeName="Platelets Concentrate - Apheresis"
+		componentTypeNameShort="4021" />
+	<PackType id="1" packType="Single" isDeleted="false"
+		componentType_id="1" countAsDonation="true" periodBetweenDonations="90" />
+	<PackType id="2" packType="Double" isDeleted="false"
+		componentType_id="2" countAsDonation="true" periodBetweenDonations="90" />
+	<PackType id="3" packType="Triple" isDeleted="false"
+		componentType_id="3" countAsDonation="true" periodBetweenDonations="90" />
+	<PackType id="4" packType="Quad" isDeleted="false"
+		componentType_id="4" countAsDonation="true" periodBetweenDonations="90" />
+	<PackType id="5" packType="Apheresis" isDeleted="false"
+		componentType_id="5" countAsDonation="true" periodBetweenDonations="30" />
+	<PackType id="6" packType="Dry Pack" isDeleted="false"
 		countAsDonation="false" periodBetweenDonations="0" />
-	<BloodBagType id="7" bloodBagType="Test Only" isDeleted="false"
+	<PackType id="7" packType="Test Only" isDeleted="false"
 		countAsDonation="false" periodBetweenDonations="0" />
-	<BloodBagType id="8" bloodBagType="Did Not Bleed"
+	<PackType id="8" packType="Did Not Bleed"
 		isDeleted="false" countAsDonation="false" periodBetweenDonations="0" />
 
 	<Donation id="1" bloodAbo="O" bloodPressureSystolic="110"
@@ -144,7 +144,7 @@
 		donationIdentificationNumber="1234567" donorWeight="80.00"
 		extraBloodTypeInformation="" haemoglobinCount="15.70" isDeleted="0"
 		createdDate="2015-02-02 03:42:04.0" lastUpdated="2015-02-06 02:09:30.0"
-		ttiStatus="TTI_SAFE" bloodBagType_id="3" donationBatch_id="1"
+		ttiStatus="TTI_SAFE" packType_id="3" donationBatch_id="1"
 		donationType_id="1" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
 		bloodPressureDiastolic="80" donorPulse="70" donorPanel_id="1"
 		bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
@@ -153,14 +153,14 @@
 		donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1212129"
 		extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-18 07:53:57.0"
 		lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
-		bloodBagType_id="1" donationBatch_id="2" donationType_id="1" donor_id="2"
+		packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" donorPanel_id="2"
 		bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
 		bloodTypingMatchStatus="MATCH" />
 	<Donation id="3" bloodTypingStatus="NOT_DONE" donationDate="2015-06-26 00:00:00.0"
 		donationIdentificationNumber="9090908" isDeleted="0"
 		createdDate="2015-06-29 05:24:35.0" lastUpdated="2015-06-29 05:24:35.0"
-		ttiStatus="NOT_DONE" bloodBagType_id="1" donationBatch_id="3"
+		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="3"
 		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
 		donorPanel_id="1" bleedStartTime="1970-01-01 11:24:30.0" bleedEndTime="1970-01-01 11:44:30.0"
 		bloodTypingMatchStatus="NOT_DONE" />

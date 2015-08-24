@@ -112,12 +112,12 @@
 		idNumber ="123" notes="notes" addressId ="6" contactId ="1"
 		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
 		
-	<bloodbagtype id="1" bloodBagType="Single" canPool=""
- 		canSplit="" isDeleted="0"></bloodbagtype>
- 	<bloodbagtype id="2" bloodBagType="Triple" canPool=""
- 		canSplit="" isDeleted="0"></bloodbagtype>
- 	<bloodbagtype id="3" bloodBagType="Pedi" canPool=""
- 		canSplit="" isDeleted="0"></bloodbagtype>
+	<packtype id="1" packType="Single" canPool=""
+ 		canSplit="" isDeleted="0"></packtype>
+ 	<packtype id="2" packType="Triple" canPool=""
+ 		canSplit="" isDeleted="0"></packtype>
+ 	<packtype id="3" packType="Pedi" canPool=""
+ 		canSplit="" isDeleted="0"></packtype>
 	
 	<donationtype id="1" donationType="Voluntary" isDeleted="0"></donationtype>
  	<donationtype id="2" donationType="Family" isDeleted="0"></donationtype>
@@ -134,7 +134,7 @@
  		donationDate="2014-03-25 00:00:00" donationIdentificationNumber="000001"
  		donorWeight="60.00" extraBloodTypeInformation="" haemoglobinCount="14.00"
  		isDeleted="0" createdDate="2014-03-27 15:00:51" lastUpdated="2014-03-27 15:00:51"
- 		notes="notes" ttiStatus="NOT_DONE" bloodBagType_id="2"
+ 		notes="notes" ttiStatus="NOT_DONE" packType_id="2"
  		donationBatch_id="1" donorPanel_Id = "1"
  		donationCreatedBy_id="1" donationType_id="2" donor_id="1"
  		createdBy_id="1" lastUpdatedBy_id="1" bloodPressureDiastolic="55"
@@ -169,17 +169,17 @@
 		propertyOwner="donationRequirements" propertyValue="true" />
 	<genericconfig id="14" propertyName="donorHistoryCheckRequired"
 		propertyOwner="donationRequirements" propertyValue="true" />
-	<genericconfig id="15" propertyName="useShortNameForProductTypes"
-		propertyOwner="products" propertyValue="true" />
+	<genericconfig id="15" propertyName="useShortNameForComponentTypes"
+		propertyOwner="components" propertyValue="true" />
 	<genericconfig id="16"
 		propertyName="allowPediComponentsFromFirstTimeDonors" propertyOwner="componentSplit"
 		propertyValue="true" />
 	<genericconfig id="17" propertyName="donorRecordRequired"
-		propertyOwner="productReleaseRequirements" propertyValue="true" />
-	<genericconfig id="18" propertyName="allowProductsWithoutDonation"
-		propertyOwner="productReleaseRequirements" propertyValue="true" />
-	<genericconfig id="19" propertyName="allowImportedProducts"
-		propertyOwner="productReleaseRequirements" propertyValue="true" />
+		propertyOwner="componentReleaseRequirements" propertyValue="true" />
+	<genericconfig id="18" propertyName="allowComponentsWithoutDonation"
+		propertyOwner="componentReleaseRequirements" propertyValue="true" />
+	<genericconfig id="19" propertyName="allowImportedComponents"
+		propertyOwner="componentReleaseRequirements" propertyValue="true" />
 	<genericconfig id="20" propertyName="leaveOutDonationsProbability"
 		propertyOwner="createdata" propertyValue="0.10" />
 	<genericconfig id="21" propertyName="incorrectBloodTypeProbability"
@@ -212,7 +212,7 @@
 		propertyOwner="labsetup" propertyValue="true" />
 	<genericconfig id="35" propertyName="donationsTabEnabled"
 		propertyOwner="labsetup" propertyValue="true" />
-	<genericconfig id="36" propertyName="productsTabEnabled"
+	<genericconfig id="36" propertyName="componentsTabEnabled"
 		propertyOwner="labsetup" propertyValue="true" />
 	<genericconfig id="37" propertyName="testResultsTabEnabled"
 		propertyOwner="labsetup" propertyValue="true" />
