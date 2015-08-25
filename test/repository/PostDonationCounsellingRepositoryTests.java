@@ -17,11 +17,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import model.donor.Donor;
+import model.donation.Donation;
 import model.location.Location;
 
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,120 +43,95 @@ public class PostDonationCounsellingRepositoryTests {
     @Autowired
     private PostDonationCounsellingRepository postDonationCounsellingRepository;
     
-    @Ignore
     @Test
     public void testFindDonorsFlaggedForCounsellingWithNoDates_shouldReturnDonorsFlaggedForCounselling() {
 
-        Donor firstExpectedDonor = aDonor().build();
-        Donor secondExpectedDonor = aDonor().build();
-        
-        List<Donor> expectedDonors = Arrays.asList(firstExpectedDonor, secondExpectedDonor);
+        Donation firstExpectedDonation = aDonation().build();
+        Donation secondExpectedDonation = aDonation().build();
+
+        List<Donation> expectedDonations = Arrays.asList(firstExpectedDonation, secondExpectedDonation);
 
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
-                .withDonation(aDonation()
-                        .withDonor(firstExpectedDonor)
-                        .build())
+                .withDonation(firstExpectedDonation)
                 .buildAndPersist(entityManager);
 
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
-                .withDonation(aDonation()
-                        .withDonor(secondExpectedDonor)
-                        .build())
+                .withDonation(secondExpectedDonation)
                 .buildAndPersist(entityManager);
 
-        // Duplicate to test distinct donors
+        // Duplicate to test distinct donations
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
-                .withDonation(aDonation()
-                        .withDonor(firstExpectedDonor)
-                        .build())
+                .withDonation(firstExpectedDonation)
                 .buildAndPersist(entityManager);
         
         // Excluded by flag
         aPostDonationCounselling()
                 .thatIsNotFlaggedForCounselling()
-                .withDonation(aDonation()
-                        .withDonor(aDonor().build())
-                        .build())
+                .withDonation(aDonation().build())
                 .buildAndPersist(entityManager);
         
-        List<Donor> returnedDonors = postDonationCounsellingRepository.findDonorsFlaggedForCounselling(
+        List<Donation> returnedDonations = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
                 NO_START_DATE, NO_END_DATE, NO_DONOR_PANELS);
         
-        assertThat(returnedDonors, is(expectedDonors));
+        assertThat(returnedDonations, is(expectedDonations));
     }
     
-    @Ignore
     @Test
     public void testFindDonorsFlaggedForCounsellingWithDonorPanels_shouldReturnDonorsWithDonationsForDonorPanels() {
-
-        Donor firstExpectedDonor = aDonor().build();
-        Donor secondExpectedDonor = aDonor().build();
-        List<Donor> expectedDonors = Arrays.asList(firstExpectedDonor, secondExpectedDonor);
         
         Location firstDonorPanel = aDonorPanel().buildAndPersist(entityManager);
         Location secondDonorPanel = aDonorPanel().buildAndPersist(entityManager);
         List<Long> donorPanels = Arrays.asList(firstDonorPanel.getId(), secondDonorPanel.getId());
         
+        Donation firstExpectedDonation = aDonation().withDonorPanel(firstDonorPanel).build();
+        Donation secondExpectedDonation = aDonation().withDonorPanel(secondDonorPanel).build();
+        List<Donation> expectedDonations = Arrays.asList(firstExpectedDonation, secondExpectedDonation);
+        
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
-                .withDonation(aDonation()
-                        .withDonor(firstExpectedDonor)
-                        .withDonorPanel(firstDonorPanel)
-                        .build())
+                .withDonation(firstExpectedDonation)
                 .buildAndPersist(entityManager);
 
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
-                .withDonation(aDonation()
-                        .withDonor(secondExpectedDonor)
-                        .withDonorPanel(secondDonorPanel)
-                        .build())
+                .withDonation(secondExpectedDonation)
                 .buildAndPersist(entityManager);
         
         // Excluded by donor panel
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
                 .withDonation(aDonation()
-                        .withDonor(aDonor().build())
                         .withDonorPanel(aDonorPanel().build())
                         .build())
                 .buildAndPersist(entityManager);
         
-        List<Donor> returnedDonors = postDonationCounsellingRepository.findDonorsFlaggedForCounselling(
+        List<Donation> returnedDonations = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
                 NO_START_DATE, NO_END_DATE, new HashSet<>(donorPanels));
         
-        assertThat(returnedDonors, is(expectedDonors));
+        assertThat(returnedDonations, is(expectedDonations));
     }
 
-    @Ignore
     @Test
     public void testFindDonorsFlaggedForCounsellingWithStartDate_shouldReturnDonorsWithDonationsAferStartDate() {
         DateTime startDate = new DateTime().minusDays(7);
 
-        Donor firstExpectedDonor = aDonor().build();
-        Donor secondExpectedDonor = aDonor().build();
-        
-        List<Donor> expectedDonors = Arrays.asList(firstExpectedDonor, secondExpectedDonor);
+        Donation firstExpectedDonation = aDonation().withDonationDate(startDate.toDate()).build();
+        Donation secondExpectedDonation = aDonation().withDonationDate(startDate.plusDays(3).toDate()).build();
+        List<Donation> expectedDonations = Arrays.asList(firstExpectedDonation, secondExpectedDonation);
 
         // Donation on start date
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
-                .withDonation(aDonation()
-                        .withDonor(firstExpectedDonor)
-                        .withDonationDate(startDate.toDate())
-                        .build())
+                .withDonation(firstExpectedDonation)
                 .buildAndPersist(entityManager);
 
         // Donation after start date
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
-                .withDonation(aDonation()
-                        .withDonor(secondExpectedDonor)
-                        .withDonationDate(startDate.plusDays(3).toDate())
-                        .build())
+                .withDonation(secondExpectedDonation)
                 .buildAndPersist(entityManager);
 
         // Excluded by donation before start date
@@ -169,79 +143,64 @@ public class PostDonationCounsellingRepositoryTests {
                         .build())
                 .buildAndPersist(entityManager);
         
-        List<Donor> returnedDonors = postDonationCounsellingRepository.findDonorsFlaggedForCounselling(
+        List<Donation> returnedDonations = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
                 startDate.toDate(), NO_END_DATE, NO_DONOR_PANELS);
         
-        assertThat(returnedDonors, is(expectedDonors));
+        assertThat(returnedDonations, is(expectedDonations));
     }
 
-    @Ignore
     @Test
     public void testFindDonorsFlaggedForCounsellingWithEndDate_shouldReturnDonorsWithDonationsBeforeEndDate() {
         DateTime endDate = new DateTime().minusDays(7);
 
-        Donor firstExpectedDonor = aDonor().build();
-        Donor secondExpectedDonor = aDonor().build();
-        
-        List<Donor> expectedDonors = Arrays.asList(firstExpectedDonor, secondExpectedDonor);
+        Donation firstExpectedDonation = aDonation().withDonationDate(endDate.toDate()).build();
+        Donation secondExpectedDonation = aDonation().withDonationDate(endDate.minusDays(3).toDate()).build();
+        List<Donation> expectedDonations = Arrays.asList(firstExpectedDonation, secondExpectedDonation);
 
         // Donation on end date
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
-                .withDonation(aDonation()
-                        .withDonor(firstExpectedDonor)
-                        .withDonationDate(endDate.toDate())
-                        .build())
+                .withDonation(firstExpectedDonation)
                 .buildAndPersist(entityManager);
 
         // Donation before end date
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
-                .withDonation(aDonation()
-                        .withDonor(secondExpectedDonor)
-                        .withDonationDate(endDate.minusDays(3).toDate())
-                        .build())
+                .withDonation(secondExpectedDonation)
                 .buildAndPersist(entityManager);
 
         // Excluded by donation after end date
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
                 .withDonation(aDonation()
-                        .withDonor(aDonor().build())
                         .withDonationDate(endDate.plusDays(3).toDate())
                         .build())
                 .buildAndPersist(entityManager);
         
-        List<Donor> returnedDonors = postDonationCounsellingRepository.findDonorsFlaggedForCounselling(
+        List<Donation> returnedDonations = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
                 NO_START_DATE, endDate.toDate(), NO_DONOR_PANELS);
         
-        assertThat(returnedDonors, is(expectedDonors));
+        assertThat(returnedDonations, is(expectedDonations));
     }
 
-    @Ignore
     @Test
     public void testFindDonorsFlaggedForCounsellingWithDates_shouldReturnDonorsWithDonationsInDateRange() {
         DateTime startDate = new DateTime().minusDays(14);
         DateTime endDate = new DateTime().minusDays(7);
 
-        Donor firstExpectedDonor = aDonor().build();
-        
-        List<Donor> expectedDonors = Arrays.asList(firstExpectedDonor);
+        Donation expectedDonation = aDonation().withDonationDate(startDate.plusDays(1).toDate()).build();
+        List<Donation> expectedDonations = Arrays.asList(expectedDonation);
 
         // Donation in date range
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
-                .withDonation(aDonation()
-                        .withDonor(firstExpectedDonor)
-                        .withDonationDate(startDate.plusDays(1).toDate())
-                        .build())
+                .withDonation(expectedDonation)
                 .buildAndPersist(entityManager);
 
         // Excluded by donation before start date
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
                 .withDonation(aDonation()
-                        .withDonor(aDonor().build())
                         .withDonationDate(startDate.minusDays(1).toDate())
                         .build())
                 .buildAndPersist(entityManager);
@@ -250,15 +209,14 @@ public class PostDonationCounsellingRepositoryTests {
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
                 .withDonation(aDonation()
-                        .withDonor(aDonor().build())
                         .withDonationDate(endDate.plusDays(1).toDate())
                         .build())
                 .buildAndPersist(entityManager);
         
-        List<Donor> returnedDonors = postDonationCounsellingRepository.findDonorsFlaggedForCounselling(
+        List<Donation> returnedDonations = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
                 startDate.toDate(), endDate.toDate(), NO_DONOR_PANELS);
         
-        assertThat(returnedDonors, is(expectedDonors));
+        assertThat(returnedDonations, is(expectedDonations));
     }
     
 }

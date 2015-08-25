@@ -12,7 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import model.counselling.PostDonationCounselling;
-import model.donor.Donor;
+import model.donation.Donation;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,10 +36,10 @@ public class PostDonationCounsellingRepository {
         return entityManager.merge(postDonationCounselling);
     }
     
-    public List<Donor> findDonorsFlaggedForCounselling(Date startDate, Date endDate, Set<Long> donorPanelIds) {
+    public List<Donation> findDonationsFlaggedForCounselling(Date startDate, Date endDate, Set<Long> donorPanelIds) {
         
         StringBuilder queryBuilder = new StringBuilder()
-                .append("SELECT DISTINCT(pdc.donation.donor) ")
+                .append("SELECT DISTINCT(pdc.donation) ")
                 .append("FROM PostDonationCounselling pdc ")
                 .append("WHERE pdc.flaggedForCounselling = :flaggedForCounselling ");
 
@@ -61,7 +61,7 @@ public class PostDonationCounsellingRepository {
             parameters.put("donorPanelIds", donorPanelIds);
         }
         
-        TypedQuery<Donor> query = entityManager.createQuery(queryBuilder.toString(), Donor.class);
+        TypedQuery<Donation> query = entityManager.createQuery(queryBuilder.toString(), Donation.class);
         for (Entry<String, Object> entry : parameters.entrySet()) {
             query.setParameter(entry.getKey(), entry.getValue());
         }
