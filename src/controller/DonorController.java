@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -105,7 +106,7 @@ public class DonorController {
             @RequestParam(value = "flaggedForCounselling", required = true) boolean flaggedForCounselling,
             @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
             @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate,
-            @RequestParam(value = "donorPanel", required = false) Long donorPanelId) {
+            @RequestParam(value = "donorPanel", required = false) List<Long> donorPanels) {
 
         if (flaggedForCounselling) {
             
@@ -114,7 +115,7 @@ public class DonorController {
             }
             
             List<Donor> donors = postDonationCounsellingRepository.findDonorsFlaggedForCounselling(
-                    startDate, endDate, donorPanelId);
+                    startDate, endDate, donorPanels == null ? null : new HashSet<>(donorPanels));
             return getDonorViewModels(donors);
         }
 

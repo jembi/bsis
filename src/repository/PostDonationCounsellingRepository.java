@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -35,7 +36,7 @@ public class PostDonationCounsellingRepository {
         return entityManager.merge(postDonationCounselling);
     }
     
-    public List<Donor> findDonorsFlaggedForCounselling(Date startDate, Date endDate, Long donorPanelId) {
+    public List<Donor> findDonorsFlaggedForCounselling(Date startDate, Date endDate, Set<Long> donorPanelIds) {
         
         StringBuilder queryBuilder = new StringBuilder()
                 .append("SELECT DISTINCT(pdc.donation.donor) ")
@@ -55,9 +56,9 @@ public class PostDonationCounsellingRepository {
             parameters.put("endDate", endDate);
         }
         
-        if (donorPanelId != null) {
-            queryBuilder.append("AND pdc.donation.donorPanel.id = :donorPanelId ");
-            parameters.put("donorPanelId", donorPanelId);
+        if (donorPanelIds != null && !donorPanelIds.isEmpty()) {
+            queryBuilder.append("AND pdc.donation.donorPanel.id IN :donorPanelIds ");
+            parameters.put("donorPanelIds", donorPanelIds);
         }
         
         TypedQuery<Donor> query = entityManager.createQuery(queryBuilder.toString(), Donor.class);
