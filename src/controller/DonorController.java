@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import constant.GeneralConfigConstants;
@@ -32,6 +33,7 @@ import repository.ContactMethodTypeRepository;
 import repository.DonationBatchRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
+import service.DonorCRUDService;
 import service.GeneralConfigAccessorService;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
@@ -68,6 +70,9 @@ public class DonorController {
   
   @Autowired
   private GeneralConfigAccessorService generalConfigAccessorService;
+  
+  @Autowired
+  private DonorCRUDService donorCRUDService;
   
   public DonorController() {
   }
@@ -223,21 +228,19 @@ public class DonorController {
         donor.setContact(form.getContact());
         donor.setAddress(form.getAddress());
 
-        updatedDonor = donorRepository.updateDonor(donor);
+        updatedDonor = donorRepository.updateDonorDetails(donor);
 
         map.put("donor", getDonorsViewModel(donorRepository.findDonorById(updatedDonor.getId())));
         return new ResponseEntity<Map<String, Object>>(map, httpStatus);
 
     }
 
-  @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-  @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONOR+"')")
-  public 
-  ResponseEntity deleteDonor(
-      @PathVariable Long id) {
-    donorRepository.deleteDonor(id);
-    return  new ResponseEntity(HttpStatus.NO_CONTENT);
-  }
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('" + PermissionConstants.VOID_DONOR + "')")
+    public void deleteDonor(@PathVariable Long id) {
+        donorCRUDService.deleteDonor(id);
+    }
 
   @RequestMapping(value = "{id}/print",method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")

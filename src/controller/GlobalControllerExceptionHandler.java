@@ -91,6 +91,18 @@ public class GlobalControllerExceptionHandler {
     error.printStackTrace();
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
   }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Map<String, Object>> handleIllegalStateException(IllegalStateException error) {
+        Map<String, Object> errorMap = new HashMap<String, Object>();
+        errorMap.put("hasErrors", "true");
+        errorMap.put("developerMessage", error.getMessage());
+        errorMap.put("userMessage", "");
+        errorMap.put("moreInfo", error.getStackTrace()[0]);
+        errorMap.put("errorCode", HttpStatus.CONFLICT);
+        error.printStackTrace();
+        return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.CONFLICT);
+    }
     
  /**
     * Thrown when the application calls Query.uniqueResult() and the query 

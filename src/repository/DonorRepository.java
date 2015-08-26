@@ -64,15 +64,6 @@ public class DonorRepository {
         em.flush();
     }
 
-    public Donor deleteDonor(Long donorId){
-        Donor existingDonor = findDonorById(donorId);
-        existingDonor.setIsDeleted(Boolean.TRUE);
-        em.merge(existingDonor);
-        em.flush();
-        return existingDonor;
-
-    }
-
     public Donor findDonorById(Long donorId) throws NoResultException{
             String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.donations  WHERE d.id = :donorId and d.isDeleted = :isDeleted";
             TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
@@ -202,7 +193,7 @@ public class DonorRepository {
         return donor;
     }
 
-    public Donor updateDonor(Donor donor) {
+    public Donor updateDonorDetails(Donor donor) {
         Donor existingDonor = findDonorById(donor.getId());
         if (existingDonor == null) {
             return null;
@@ -214,6 +205,10 @@ public class DonorRepository {
         em.merge(existingDonor);
         em.flush();
         return existingDonor;
+    }
+    
+    public Donor updateDonor(Donor donor) {
+        return em.merge(donor);
     }
 
     public Donor findDonorByNumber(String donorNumber) throws NoResultException{

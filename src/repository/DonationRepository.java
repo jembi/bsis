@@ -473,6 +473,16 @@ public class DonationRepository {
     }
     return donations;
   }
+  
+    public int countDonationsForDonor(Donor donor) {
+
+        return em.createNamedQuery(
+                DonationNamedQueryConstants.NAME_COUNT_DONATIONS_FOR_DONOR,
+                Number.class)
+                .setParameter("donor", donor)
+                .getSingleResult()
+                .intValue();
+    }
 
   public Map<Long, BloodTestingRuleResult> filterDonationsWithBloodTypingResults(
       Collection<Donation> donations) {

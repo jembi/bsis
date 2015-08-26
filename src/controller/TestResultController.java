@@ -202,7 +202,7 @@ public class TestResultController {
 		donation.setBloodRh(bloodRh);
 		donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
 		
-		Donor updatedDonor = donorRepository.updateDonor(donor);
+		Donor updatedDonor = donorRepository.updateDonorDetails(donor);
 		Donation cs = donationRepository.updateDonation(donation);
 		
 		map.put("donor", getDonorsViewModel(donorRepository.findDonorById(updatedDonor.getId())));
