@@ -284,4 +284,49 @@ public class PostDonationCounsellingRepositoryTests {
         assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
     }
     
+    @Ignore
+    @Test
+    public void testCountFlaggedPostDonationCounsellingsForDonorWithNoPostDonationCounsellings_shouldReturnZero() {
+        
+        Donor donor = aDonor().buildAndPersist(entityManager);
+        
+        int returnedCount = postDonationCounsellingRepository.countFlaggedPostDonationCounsellingsForDonor(donor.getId());
+        
+        assertThat(returnedCount, is(0));
+    }
+    
+    @Ignore
+    @Test
+    public void testCountFlaggedPostDonationCounsellingsForDonor_shouldReturnCorrectCount() {
+        
+        Donor donor = aDonor().build();
+        
+        // Excluded by donor
+        aPostDonationCounselling()
+                .thatIsFlaggedForCounselling()
+                .withDonation(aDonation()
+                        .withDonor(aDonor().build())
+                        .build())
+                .buildAndPersist(entityManager);
+        
+        // Excluded by flag
+        aPostDonationCounselling()
+                .thatIsNotFlaggedForCounselling()
+                .withDonation(aDonation().withDonor(donor).build())
+                .buildAndPersist(entityManager);
+
+        // Expected
+        aPostDonationCounselling()
+                .thatIsFlaggedForCounselling()
+                .withDonation(aDonation().withDonor(donor).build())
+                .buildAndPersist(entityManager);
+        aPostDonationCounselling()
+                .thatIsFlaggedForCounselling()
+                .withDonation(aDonation().withDonor(donor).build())
+                .buildAndPersist(entityManager);
+        
+        int returnedCount = postDonationCounsellingRepository.countFlaggedPostDonationCounsellingsForDonor(donor.getId());
+        
+        assertThat(returnedCount, is(2));
+    }
 }

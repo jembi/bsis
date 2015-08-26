@@ -26,7 +26,9 @@ import constraintvalidator.DonationExists;
 
 @NamedQueries({
     @NamedQuery(name = PostDonationCounsellingNamedQueryConstants.NAME_FIND_FLAGGED_POST_DONATION_COUNSELLING_FOR_DONOR,
-            query = PostDonationCounsellingNamedQueryConstants.QUERY_FIND_FLAGGED_POST_DONATION_COUNSELLING_FOR_DONOR)
+            query = PostDonationCounsellingNamedQueryConstants.QUERY_FIND_FLAGGED_POST_DONATION_COUNSELLING_FOR_DONOR),
+    @NamedQuery(name = PostDonationCounsellingNamedQueryConstants.NAME_COUNT_FLAGGED_POST_DONATION_COUNSELLINGS_FOR_DONOR,
+            query = PostDonationCounsellingNamedQueryConstants.QUERY_COUNT_FLAGGED_POST_DONATION_COUNSELLINGS_FOR_DONOR)
 })
 @Entity
 @Audited

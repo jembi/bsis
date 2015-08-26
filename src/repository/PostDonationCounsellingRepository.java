@@ -79,5 +79,16 @@ public class PostDonationCounsellingRepository {
                 .setMaxResults(1)
                 .getSingleResult();
     }
+    
+    public int countFlaggedPostDonationCounsellingsForDonor(Long donorId) {
+
+        return entityManager.createNamedQuery(
+                PostDonationCounsellingNamedQueryConstants.NAME_COUNT_FLAGGED_POST_DONATION_COUNSELLINGS_FOR_DONOR,
+                Number.class)
+                .setParameter("donorId", donorId)
+                .setParameter("flaggedForCounselling", true)
+                .getSingleResult()
+                .intValue();
+    }
 
 }

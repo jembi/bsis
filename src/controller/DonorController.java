@@ -128,7 +128,11 @@ public class DonorController {
     Donor donor = donorRepository.findDonorById(id);
     List<Donation> donations = donor.getDonations();
     
+    boolean flaggedForCounselling = postDonationCounsellingRepository
+            .countFlaggedPostDonationCounsellingsForDonor(donor.getId()) > 0;
+
     map.put("currentlyDeferred",donorRepository.isCurrentlyDeferred(donor));
+    map.put("flaggedForCounselling", flaggedForCounselling);
     map.put("deferredUntil",CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
     if(donations.size() > 0){
 	    map.put("lastDonation", getDonationViewModel(donations.get(donations.size()-1)));
