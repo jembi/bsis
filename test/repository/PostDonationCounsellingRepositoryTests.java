@@ -228,6 +228,7 @@ public class PostDonationCounsellingRepositoryTests {
         assertThat(returnedDonations, is(expectedDonations));
     }
     
+    @Ignore
     @Test(expected = NoResultException.class)
     public void testFindFlaggedPostDonationCounsellingForDonorWithNoPostDonationCounselling_shouldThrow() {
         
@@ -236,6 +237,7 @@ public class PostDonationCounsellingRepositoryTests {
         postDonationCounsellingRepository.findFlaggedPostDonationCounsellingForDonor(donor.getId());
     }
     
+    @Ignore
     @Test
     public void testFindFlaggedPostDonationCounsellingForDonor_shouldReturnFirstFlaggedPostDonationCounsellingForDonor() {
         
