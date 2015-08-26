@@ -1,4 +1,3 @@
-
 package model.counselling;
 
 import java.util.Date;
@@ -12,8 +11,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import model.donation.Donation;
+import repository.PostDonationCounsellingNamedQueryConstants;
 
 import org.hibernate.envers.Audited;
 
@@ -22,6 +24,10 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import constraintvalidator.DonationExists;
 
+@NamedQueries({
+    @NamedQuery(name = PostDonationCounsellingNamedQueryConstants.NAME_FIND_FLAGGED_POST_DONATION_COUNSELLING_FOR_DONOR,
+            query = PostDonationCounsellingNamedQueryConstants.QUERY_FIND_FLAGGED_POST_DONATION_COUNSELLING_FOR_DONOR)
+})
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")

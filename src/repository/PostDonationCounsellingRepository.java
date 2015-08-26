@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -66,6 +67,17 @@ public class PostDonationCounsellingRepository {
             query.setParameter(entry.getKey(), entry.getValue());
         }
         return query.getResultList();
+    }
+    
+    public PostDonationCounselling findFlaggedPostDonationCounsellingForDonor(Long donorId) throws NoResultException {
+
+        return entityManager.createNamedQuery(
+                PostDonationCounsellingNamedQueryConstants.NAME_FIND_FLAGGED_POST_DONATION_COUNSELLING_FOR_DONOR,
+                PostDonationCounselling.class)
+                .setParameter("donorId", donorId)
+                .setParameter("flaggedForCounselling", true)
+                .setMaxResults(1)
+                .getSingleResult();
     }
 
 }

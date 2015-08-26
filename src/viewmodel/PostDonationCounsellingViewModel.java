@@ -38,5 +38,13 @@ public class PostDonationCounsellingViewModel {
     public String getNotes() {
         return postDonationCounselling.getDonation().getNotes();
     }
+    
+    public DonationViewModel getDonation() {
+        return new DonationViewModel(postDonationCounselling.getDonation());
+    }
+    
+    public DonorViewModel getDonor() {
+        return new DonorViewModel(postDonationCounselling.getDonation().getDonor());
+    }
 
 }

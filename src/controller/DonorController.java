@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
@@ -17,9 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +32,7 @@ import repository.ContactMethodTypeRepository;
 import repository.DonationBatchRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
+import repository.PostDonationCounsellingRepository;
 import service.GeneralConfigAccessorService;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
@@ -41,6 +40,7 @@ import viewmodel.DonationViewModel;
 import viewmodel.DonorDeferralViewModel;
 import viewmodel.DonorSummaryViewModel;
 import viewmodel.DonorViewModel;
+import viewmodel.PostDonationCounsellingViewModel;
 import backingform.DonorBackingForm;
 import backingform.validator.DonorBackingFormValidator;
 
@@ -70,6 +70,9 @@ public class DonorController {
   
   @Autowired
   private GeneralConfigAccessorService generalConfigAccessorService;
+  
+  @Autowired
+  private PostDonationCounsellingRepository postDonationCounsellingRepository;
   
   public DonorController() {
   }
@@ -168,11 +171,8 @@ public class DonorController {
     List<DonationViewModel> donationViewModels = new ArrayList<DonationViewModel>();
     
     if (donations != null) {
-        
-        boolean canViewPostDonationCounselling = loggedOnUserHasPermission(PermissionConstants.VIEW_POST_DONATION_COUNSELLING);
-        
         for (Donation donation : donations) {
-          donationViewModels.add(new DonationViewModel(donation, canViewPostDonationCounselling));
+          donationViewModels.add(new DonationViewModel(donation));
         }
     }
 
@@ -332,6 +332,16 @@ public class DonorController {
     
     return map;
   }
+  
+    @RequestMapping(value = "{id}/postdonationcounselling", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_POST_DONATION_COUNSELLING + "')")
+    public PostDonationCounsellingViewModel getPostDonationCounsellingForDonor(
+            @PathVariable("id") Long donorId) {
+
+        PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository
+                .findFlaggedPostDonationCounsellingForDonor(donorId);
+        return new PostDonationCounsellingViewModel(postDonationCounselling);
+    }
 
     private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("donorPanels", locationRepository.getAllDonorPanels());
@@ -379,17 +389,4 @@ public class DonorController {
             GeneralConfigConstants.DONOR_REGISTRATION_OPEN_BATCH_REQUIRED);
     return !openBatchRequired || donationBatchRepository.countOpenDonationBatches() > 0;
   }
-
-    private boolean loggedOnUserHasPermission(String permission) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
-            return false;
-        }
-        for (GrantedAuthority authority : authentication.getAuthorities()) {
-            if (permission.equals(authority.getAuthority())) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

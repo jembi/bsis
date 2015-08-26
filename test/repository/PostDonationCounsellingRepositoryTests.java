@@ -14,10 +14,13 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
+import model.donor.Donor;
 import model.location.Location;
 
 import org.joda.time.DateTime;
@@ -223,6 +226,60 @@ public class PostDonationCounsellingRepositoryTests {
                 startDate.toDate(), endDate.toDate(), NO_DONOR_PANELS);
         
         assertThat(returnedDonations, is(expectedDonations));
+    }
+    
+    @Test(expected = NoResultException.class)
+    public void testFindFlaggedPostDonationCounsellingForDonorWithNoPostDonationCounselling_shouldThrow() {
+        
+        Donor donor = aDonor().buildAndPersist(entityManager);
+
+        postDonationCounsellingRepository.findFlaggedPostDonationCounsellingForDonor(donor.getId());
+    }
+    
+    @Test
+    public void testFindFlaggedPostDonationCounsellingForDonor_shouldReturnFirstFlaggedPostDonationCounsellingForDonor() {
+        
+        Donor donor = aDonor().build();
+
+        // Excluded by date
+        aPostDonationCounselling()
+                .thatIsFlaggedForCounselling()
+                .withDonation(aDonation()
+                        .withDonor(donor)
+                        .withDonationDate(new DateTime().minusDays(3).toDate())
+                        .build())
+                .buildAndPersist(entityManager);
+
+        // Excluded by flag
+        aPostDonationCounselling()
+                .thatIsNotFlaggedForCounselling()
+                .withDonation(aDonation()
+                        .withDonor(donor)
+                        .withDonationDate(new DateTime().minusDays(7).toDate())
+                        .build())
+                .buildAndPersist(entityManager);
+
+        // Excluded by donor
+        aPostDonationCounselling()
+                .thatIsFlaggedForCounselling()
+                .withDonation(aDonation()
+                        .withDonor(aDonor().build())
+                        .withDonationDate(new DateTime().minusDays(7).toDate())
+                        .build())
+                .buildAndPersist(entityManager);
+
+        PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
+                .thatIsFlaggedForCounselling()
+                .withDonation(aDonation()
+                        .withDonor(donor)
+                        .withDonationDate(new DateTime().minusDays(5).toDate())
+                        .build())
+                .buildAndPersist(entityManager);
+        
+        PostDonationCounselling returnedPostDonationCounselling = postDonationCounsellingRepository
+                .findFlaggedPostDonationCounsellingForDonor(donor.getId());
+
+        assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
     }
     
 }

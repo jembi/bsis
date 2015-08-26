@@ -1,6 +1,5 @@
 package viewmodel;
 
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -22,23 +21,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class DonationViewModel {
 
   private Donation donation;
-  private boolean includeCounselling;
 
   public DonationViewModel() {
   }
 
   public DonationViewModel(Donation donation) {
-    this(donation, false);
-  }
-
-  /**
-   * @param donation The donation.
-   * @param includeCounselling Whether or not to include the post donation counselling. This should be based on the
-   * VIEW_POST_DONATION_COUNSELLING permission.
-   */
-  public DonationViewModel(Donation donation, boolean includeCounselling) {
     this.donation = donation;
-    this.includeCounselling = includeCounselling;
   }
 
   public void copy(Donation donation) {
@@ -51,7 +39,8 @@ public class DonationViewModel {
     return CustomDateFormatter.getDateString(donation.getDonationDate());
   }
 
-  public boolean equals(Object obj) {
+  @Override
+public boolean equals(Object obj) {
     return donation.equals(obj);
   }
 
@@ -91,7 +80,8 @@ public class DonationViewModel {
     return donation.getComponents();
   }
 
-  public int hashCode() {
+  @Override
+public int hashCode() {
     return donation.hashCode();
   }
 
@@ -235,13 +225,6 @@ public class DonationViewModel {
 
   public  LocationViewModel getDonorPanel(){
       return new LocationViewModel(donation.getDonorPanel());
-  }
-  
-  public PostDonationCounsellingViewModel getPostDonationCounselling() {
-      if (includeCounselling && donation.getPostDonationCounselling() != null) {
-          return new PostDonationCounsellingViewModel(donation.getPostDonationCounselling());
-      }
-      return null;
   }
 
 }
