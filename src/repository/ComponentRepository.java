@@ -955,4 +955,9 @@ public class ComponentRepository {
      	component.setStatus(ComponentStatus.PROCESSED);
      	em.merge(component);
   }
+  
+    public int countComponentsForDonation(long donationId) {
+        // TODO
+        return 0;
+    }
 }
