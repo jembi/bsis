@@ -19,7 +19,7 @@ public class DonorCRUDService {
     @Autowired
     private DonorConstraintChecker donorConstraintChecker;
     
-    public void deleteDonor(long donorId) throws NoResultException {
+    public void deleteDonor(long donorId) throws IllegalStateException, NoResultException {
 
         if (!donorConstraintChecker.canDeleteDonor(donorId)) {
             throw new IllegalStateException("Cannot delete donor with constraints");
