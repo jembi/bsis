@@ -956,8 +956,14 @@ public class ComponentRepository {
      	em.merge(component);
   }
   
+    // TODO: Test
     public int countComponentsForDonation(long donationId) {
-        // TODO
-        return 0;
+        return em.createNamedQuery(
+                ComponentNamedQueryConstants.NAME_COUNT_COMPONENTS_FOR_DONATION,
+                Number.class)
+                .setParameter("donationId", donationId)
+                .setParameter("deleted", false)
+                .getSingleResult()
+                .intValue();
     }
 }

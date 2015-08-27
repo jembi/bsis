@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -34,13 +36,18 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
+import repository.ComponentNamedQueryConstants;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import constraintvalidator.ComponentTypeExists;
 import constraintvalidator.DonationExists;
 
-
+@NamedQueries({
+    @NamedQuery(name = ComponentNamedQueryConstants.NAME_COUNT_COMPONENTS_FOR_DONATION,
+            query = ComponentNamedQueryConstants.QUERY_COUNT_COMPONENTS_FOR_DONATION)
+})
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
