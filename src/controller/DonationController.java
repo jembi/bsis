@@ -13,7 +13,6 @@ import javax.validation.Valid;
 
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
-import model.donor.Donor;
 import model.packtype.PackType;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -28,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import repository.PackTypeRepository;
@@ -35,6 +35,7 @@ import repository.DonationRepository;
 import repository.DonationTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
+import service.DonationCRUDService;
 import utils.PermissionConstants;
 import viewmodel.DonationViewModel;
 import viewmodel.PackTypeViewModel;
@@ -62,6 +63,9 @@ public class DonationController {
 
   @Autowired
   private DonorRepository donorRepository;
+  
+  @Autowired
+  private DonationCRUDService donationCRUDService;
   
   public DonationController() {
   }
@@ -204,7 +208,7 @@ public class DonationController {
 	  
       form.setId(id);
       form.setIsDeleted(false);
-      updatedDonation = donationRepository.updateDonation(form.getDonation());
+      updatedDonation = donationRepository.updateDonationDetails(form.getDonation());
             
       map.put("donation", getDonationViewModel(donationRepository.findDonationById(updatedDonation.getId())));
       return new ResponseEntity<Map<String, Object>>(map, httpStatus);
@@ -223,11 +227,10 @@ public class DonationController {
   }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('" + PermissionConstants.VOID_DONATION + "')")
-    public HttpStatus deleteDonation(
-            @PathVariable Long id) {
-        donationRepository.deleteDonation(id);
-        return HttpStatus.OK;
+    public void deleteDonation(@PathVariable Long id) {
+        donationCRUDService.deleteDonation(id);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)

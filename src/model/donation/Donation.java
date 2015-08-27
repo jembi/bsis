@@ -64,7 +64,11 @@ import constraintvalidator.LocationExists;
  */
 @NamedQueries({
     @NamedQuery(name = DonationNamedQueryConstants.NAME_COUNT_DONATIONS_FOR_DONOR,
-            query = DonationNamedQueryConstants.QUERY_COUNT_DONATION_FOR_DONOR)
+            query = DonationNamedQueryConstants.QUERY_COUNT_DONATION_FOR_DONOR),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_ASCENDING_DONATION_DATES_FOR_DONOR,
+            query = DonationNamedQueryConstants.QUERY_FIND_ASCENDING_DONATION_DATES_FOR_DONOR),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_DESCENDING_DONATION_DATES_FOR_DONOR,
+            query = DonationNamedQueryConstants.QUERY_FIND_DESCENDING_DONATION_DATES_FOR_DONOR)
 })
 @Entity
 @Audited

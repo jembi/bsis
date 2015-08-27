@@ -18,14 +18,20 @@ public class DonorMatcher extends TypeSafeMatcher<Donor> {
     @Override
     public void describeTo(Description description) {
         description.appendText("A donor with the following state:")
+                .appendText("\nId: ").appendValue(expected.getId())
                 .appendText("\nDeleted: ").appendValue(expected.getIsDeleted())
-                .appendText("\nNotes: ").appendValue(expected.getNotes());
+                .appendText("\nNotes: ").appendValue(expected.getNotes()) 
+                .appendText("\nDate of First Donation: ").appendValue(expected.getDateOfFirstDonation())
+                .appendText("\nDate of Last Donation: ").appendValue(expected.getDateOfLastDonation());
     }
 
     @Override
     public boolean matchesSafely(Donor actual) {
-        return actual.getIsDeleted() == expected.getIsDeleted() &&
-                Objects.equals(actual.getNotes(), expected.getNotes());
+        return Objects.equals(actual.getId(), expected.getId()) &&
+                Objects.equals(actual.getIsDeleted(), expected.getIsDeleted()) &&
+                Objects.equals(actual.getNotes(), expected.getNotes()) &&
+                Objects.equals(actual.getDateOfFirstDonation(), expected.getDateOfFirstDonation()) &&
+                Objects.equals(actual.getDateOfLastDonation(), expected.getDateOfLastDonation());
     }
     
     public static DonorMatcher hasSameStateAsDonor(Donor expected) {

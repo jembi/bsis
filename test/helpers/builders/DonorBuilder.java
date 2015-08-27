@@ -1,5 +1,7 @@
 package helpers.builders;
 
+import java.util.Date;
+
 import model.donor.Donor;
 
 public class DonorBuilder extends AbstractEntityBuilder<Donor> {
@@ -7,6 +9,8 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
     private Long id;
     private String notes;
     private Boolean deleted;
+    private Date dateOfFirstDonation;
+    private Date dateOfLastDonation;
 
     public DonorBuilder withId(Long id) {
         this.id = id;
@@ -22,6 +26,16 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
         deleted = true;
         return this;
     }
+    
+    public DonorBuilder withDateOfFirstDonation(Date dateOfFirstDonation) {
+        this.dateOfFirstDonation = dateOfFirstDonation;
+        return this;
+    }
+    
+    public DonorBuilder withDateOfLastDonation(Date dateOfLastDonation) {
+        this.dateOfLastDonation = dateOfLastDonation;
+        return this;
+    }
 
     @Override
     public Donor build() {
@@ -29,6 +43,8 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
         donor.setId(id);
         donor.setNotes(notes);
         donor.setIsDeleted(deleted);
+        donor.setDateOfFirstDonation(dateOfFirstDonation);
+        donor.setDateOfLastDonation(dateOfLastDonation);
         return donor;
     }
     

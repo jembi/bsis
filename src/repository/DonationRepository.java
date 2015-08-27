@@ -37,6 +37,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import repository.bloodtesting.BloodTestingRepository;
@@ -73,7 +74,7 @@ public class DonationRepository {
     em.flush();
   }
 
-  public Donation updateDonation(Donation donation) throws NoResultException{
+  public Donation updateDonationDetails(Donation donation) throws NoResultException{
     Donation existingDonation = findDonationById(donation.getId());
     if (existingDonation == null) {
       return null;
@@ -85,8 +86,13 @@ public class DonationRepository {
     em.flush();
     return existingDonation;
   }
+  
+  @Transactional(propagation = Propagation.MANDATORY)
+  public Donation updateDonation(Donation donation) {
+      return em.merge(donation);
+  }
 
-  public Donation findDonationById(Long donationId) {
+  public Donation findDonationById(Long donationId) throws NoResultException {
     String queryString = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE c.id = :donationId and c.isDeleted = :isDeleted";
     TypedQuery<Donation> query = em.createQuery(queryString, Donation.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -184,13 +190,6 @@ public class DonationRepository {
       return new ArrayList<Donation>();
     }
     return donations;
-  }
-
-  public void deleteDonation(Long donationId) {
-    Donation existingDonation = findDonationById(donationId);
-    existingDonation.setIsDeleted(Boolean.TRUE);
-    em.merge(existingDonation);
-    em.flush();
   }
 
   public List<Donation> findAnyDonationMatching(String donationIdentificationNumber,
@@ -484,6 +483,32 @@ public class DonationRepository {
                 .setParameter("deleted", false)
                 .getSingleResult()
                 .intValue();
+    }
+    
+    // TODO: Test
+    public Date findDateOfFirstDonationForDonor(long donorId) {
+        List<Date> results = em.createNamedQuery(
+                DonationNamedQueryConstants.NAME_FIND_ASCENDING_DONATION_DATES_FOR_DONOR,
+                Date.class)
+                .setParameter("donorId", donorId)
+                .setParameter("deleted", false)
+                .setMaxResults(1)
+                .getResultList();
+        
+        return results.isEmpty() ? null : results.get(0);
+    }
+    
+    // TODO: Test
+    public Date findDateOfLastDonationForDonor(long donorId) {
+        List<Date> results = em.createNamedQuery(
+                DonationNamedQueryConstants.NAME_FIND_DESCENDING_DONATION_DATES_FOR_DONOR,
+                Date.class)
+                .setParameter("donorId", donorId)
+                .setParameter("deleted", false)
+                .setMaxResults(1)
+                .getResultList();
+        
+        return results.isEmpty() ? null : results.get(0);
     }
 
   public Map<Long, BloodTestingRuleResult> filterDonationsWithBloodTypingResults(
