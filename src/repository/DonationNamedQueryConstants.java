@@ -7,6 +7,7 @@ public class DonationNamedQueryConstants {
     public static final String QUERY_COUNT_DONATION_FOR_DONOR =
             "SELECT COUNT(d) " +
             "FROM Donation d " +
-            "WHERE d.donor = :donor ";
+            "WHERE d.donor = :donor " +
+            "AND d.isDeleted = :deleted ";
 
 }

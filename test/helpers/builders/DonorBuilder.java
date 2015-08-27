@@ -6,7 +6,7 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
     
     private Long id;
     private String notes;
-    private boolean deleted;
+    private Boolean deleted;
 
     public DonorBuilder withId(Long id) {
         this.id = id;
