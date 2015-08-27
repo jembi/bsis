@@ -8,6 +8,7 @@ public class ComponentNamedQueryConstants {
             "SELECT COUNT(c) " +
             "FROM Component c " +
             "WHERE c.donation.id = :donationId " +
+            "AND c.status = :status " +
             "AND c.isDeleted = :deleted ";
 
 }

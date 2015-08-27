@@ -963,6 +963,7 @@ public class ComponentRepository {
                 Number.class)
                 .setParameter("donationId", donationId)
                 .setParameter("deleted", false)
+                .setParameter("status", ComponentStatus.PROCESSED)
                 .getSingleResult()
                 .intValue();
     }
