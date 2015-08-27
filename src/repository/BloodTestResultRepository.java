@@ -1,5 +1,8 @@
 package repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -7,9 +10,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public class BloodTestResultRepository {
     
+    @PersistenceContext
+    private EntityManager entityManager;
+    
+    // TODO: Test
     public int countBloodTestResultsForDonation(long donationId) {
-        // TODO
-        return 0;
+        return entityManager.createNamedQuery(
+                BloodTestResultNamedQueryConstants.NAME_COUNT_BLOOD_TEST_RESULTS_FOR_DONATION,
+                Number.class)
+                .setParameter("donationId", donationId)
+                .getSingleResult()
+                .intValue();
     }
 
 }
