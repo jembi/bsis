@@ -6,11 +6,13 @@ import model.donor.Donor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import repository.DonationRepository;
 import repository.DonorDeferralRepository;
 import repository.DonorRepository;
 
+@Transactional(readOnly = true)
 @Service
 public class DonorConstraintChecker {
     
