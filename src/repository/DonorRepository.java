@@ -38,6 +38,7 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import utils.DonorUtils;
@@ -207,6 +208,7 @@ public class DonorRepository {
         return existingDonor;
     }
     
+    @Transactional(propagation = Propagation.MANDATORY)
     public Donor updateDonor(Donor donor) {
         return em.merge(donor);
     }
