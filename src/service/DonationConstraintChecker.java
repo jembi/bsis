@@ -35,7 +35,7 @@ public class DonationConstraintChecker {
             return false;
         }
         
-        if (componentRepository.countComponentsForDonation(donationId) > 0) {
+        if (componentRepository.countChangedComponentsForDonation(donationId) > 0) {
             return false;
         }
         

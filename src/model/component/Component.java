@@ -45,8 +45,8 @@ import constraintvalidator.ComponentTypeExists;
 import constraintvalidator.DonationExists;
 
 @NamedQueries({
-    @NamedQuery(name = ComponentNamedQueryConstants.NAME_COUNT_COMPONENTS_FOR_DONATION,
-            query = ComponentNamedQueryConstants.QUERY_COUNT_COMPONENTS_FOR_DONATION)
+    @NamedQuery(name = ComponentNamedQueryConstants.NAME_COUNT_CHANGED_COMPONENTS_FOR_DONATION,
+            query = ComponentNamedQueryConstants.QUERY_COUNT_CHANGED_COMPONENTS_FOR_DONATION)
 })
 @Entity
 @Audited

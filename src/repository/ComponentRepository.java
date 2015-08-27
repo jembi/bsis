@@ -957,13 +957,13 @@ public class ComponentRepository {
   }
   
     // TODO: Test
-    public int countComponentsForDonation(long donationId) {
+    public int countChangedComponentsForDonation(long donationId) {
         return em.createNamedQuery(
-                ComponentNamedQueryConstants.NAME_COUNT_COMPONENTS_FOR_DONATION,
+                ComponentNamedQueryConstants.NAME_COUNT_CHANGED_COMPONENTS_FOR_DONATION,
                 Number.class)
                 .setParameter("donationId", donationId)
                 .setParameter("deleted", false)
-                .setParameter("status", ComponentStatus.PROCESSED)
+                .setParameter("initialStatus", ComponentStatus.QUARANTINED)
                 .getSingleResult()
                 .intValue();
     }
