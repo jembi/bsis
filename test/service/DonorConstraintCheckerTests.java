@@ -3,8 +3,6 @@ package service;
 import static helpers.builders.DonorBuilder.aDonor;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import model.donor.Donor;
 
@@ -41,9 +39,6 @@ public class DonorConstraintCheckerTests {
         
         boolean canDelete = donorConstraintChecker.canDeleteDonor(IRRELEVANT_DONOR_ID);
         
-        verify(donorRepository).findDonorById(IRRELEVANT_DONOR_ID);
-        verifyNoMoreInteractions(donorRepository, donationRepository);
-        
         assertThat(canDelete, is(false));
     }
     
@@ -56,10 +51,6 @@ public class DonorConstraintCheckerTests {
         when(donationRepository.countDonationsForDonor(donorWithDonations)).thenReturn(1);
         
         boolean canDelete = donorConstraintChecker.canDeleteDonor(IRRELEVANT_DONOR_ID);
-
-        verify(donorRepository).findDonorById(IRRELEVANT_DONOR_ID);
-        verify(donationRepository).countDonationsForDonor(donorWithDonations);
-        verifyNoMoreInteractions(donorRepository, donationRepository);
         
         assertThat(canDelete, is(false));
     }
@@ -74,11 +65,6 @@ public class DonorConstraintCheckerTests {
         when(donorReferralRepository.countDonorDeferralsForDonor(donorWithDeferrals)).thenReturn(1);
         
         boolean canDelete = donorConstraintChecker.canDeleteDonor(IRRELEVANT_DONOR_ID);
-
-        verify(donorRepository).findDonorById(IRRELEVANT_DONOR_ID);
-        verify(donationRepository).countDonationsForDonor(donorWithDeferrals);
-        verify(donorReferralRepository).countDonorDeferralsForDonor(donorWithDeferrals);
-        verifyNoMoreInteractions(donorRepository, donationRepository);
         
         assertThat(canDelete, is(false));
     }
@@ -93,11 +79,6 @@ public class DonorConstraintCheckerTests {
         when(donorReferralRepository.countDonorDeferralsForDonor(existingDonor)).thenReturn(0);
         
         boolean canDelete = donorConstraintChecker.canDeleteDonor(IRRELEVANT_DONOR_ID);
-
-        verify(donorRepository).findDonorById(IRRELEVANT_DONOR_ID);
-        verify(donationRepository).countDonationsForDonor(existingDonor);
-        verify(donorReferralRepository).countDonorDeferralsForDonor(existingDonor);
-        verifyNoMoreInteractions(donorRepository, donationRepository);
         
         assertThat(canDelete, is(true));
     }
