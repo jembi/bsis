@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import constant.GeneralConfigConstants;
+import factory.DonorViewModelFactory;
 import repository.ContactMethodTypeRepository;
 import repository.DonationBatchRepository;
 import repository.DonorRepository;
@@ -73,6 +74,9 @@ public class DonorController {
   
   @Autowired
   private DonorCRUDService donorCRUDService;
+  
+  @Autowired
+  private DonorViewModelFactory donorViewModelFactory;
   
   public DonorController() {
   }
@@ -306,10 +310,9 @@ public class DonorController {
     
     List<DonorViewModel> donors = new ArrayList<DonorViewModel>();
     
-    if (results != null){
-	    for(Donor donor : results){
-	    	DonorViewModel donorViewModel = getDonorsViewModel(donor);
-	    	donors.add(donorViewModel);
+    if (results != null) {
+	    for (Donor donor : results) {
+	    	donors.add(donorViewModelFactory.createDonorViewModelWithPermissions(donor));
 	    }
     }
 

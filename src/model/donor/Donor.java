@@ -600,4 +600,13 @@ public void copy(Donor donor) {
         this.dueToDonate = dueToDonate;
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        return other instanceof Donor &&
+                ((Donor) other).id == id;
+    }
+
 }
