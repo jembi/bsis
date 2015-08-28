@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import repository.DonationBatchRepository;
 import repository.SequenceNumberRepository;
 import repository.TestBatchRepository;
+import service.TestBatchCRUDService;
 import utils.PermissionConstants;
 import viewmodel.DonationBatchViewModel;
 import viewmodel.TestBatchViewModel;
@@ -46,6 +47,9 @@ public class TestBatchController {
     
     @Autowired
     private SequenceNumberRepository sequenceNumberRepository;
+    
+    @Autowired
+    private TestBatchCRUDService testBatchCRUDService;
     
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -86,8 +90,7 @@ public class TestBatchController {
     public ResponseEntity updateTestBatch(@PathVariable Long id,
             @RequestBody TestBatchBackingForm form){
         
-        TestBatch testBatch = form.getTestBatch();
-        testBatch = testBatchRepository.updateTestBatch(testBatch);
+        TestBatch testBatch = testBatchCRUDService.updateTestBatchStatus(id, form.getTestBatch().getStatus());
         return new ResponseEntity(new TestBatchViewModel(testBatch), HttpStatus.OK);
         
     }
