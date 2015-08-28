@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import constant.GeneralConfigConstants;
+import factory.DonationViewModelFactory;
 import factory.DonorViewModelFactory;
 import repository.ContactMethodTypeRepository;
 import repository.DonationBatchRepository;
@@ -77,6 +78,9 @@ public class DonorController {
   
   @Autowired
   private DonorViewModelFactory donorViewModelFactory;
+  
+  @Autowired
+  private DonationViewModelFactory donationViewModelFactory;
   
   public DonorController() {
   }
@@ -169,7 +173,7 @@ public class DonorController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Donor donor = donorRepository.findDonorById(id);
-    map.put("allDonations", getDonationViewModels(donor.getDonations()));
+    map.put("allDonations", donationViewModelFactory.createDonationViewModelsWithPermissions(donor.getDonations()));
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
 

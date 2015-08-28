@@ -505,4 +505,13 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
         this.donorPanel = donorPanel;
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        return other instanceof Donation &&
+                ((Donation) other).id == id;
+    }
+
 }
