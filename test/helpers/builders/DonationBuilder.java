@@ -1,11 +1,13 @@
 package helpers.builders;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import helpers.persisters.AbstractEntityPersister;
 import helpers.persisters.DonationPersister;
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
+import model.donation.HaemoglobinLevel;
 import model.donor.Donor;
 import model.location.Location;
 
@@ -16,8 +18,14 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     private Date donationDate;
     private Location donorPanel;
     private TTIStatus ttiStatus;
-    private String notes;
     private Boolean deleted;
+    private Integer donorPulse;
+    private BigDecimal haemoglobinCount;
+    private HaemoglobinLevel haemoglobinLevel;
+    private Integer bloodPressureSystolic;
+    private Integer bloodPressureDiastolic;
+    private BigDecimal donorWeight;
+    private String notes;
     
     public DonationBuilder withId(Long id) {
         this.id = id;
@@ -44,6 +52,36 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         return this;
     }
     
+    public DonationBuilder withDonorPulse(Integer donorPulse) {
+        this.donorPulse = donorPulse;
+        return this;
+    }
+    
+    public DonationBuilder withHaemoglobinCount(BigDecimal haemoglobinCount) {
+        this.haemoglobinCount = haemoglobinCount;
+        return this;
+    }
+    
+    public DonationBuilder withHaemoglobinLevel(HaemoglobinLevel haemoglobinLevel) {
+        this.haemoglobinLevel = haemoglobinLevel;
+        return this;
+    }
+    
+    public DonationBuilder withBloodPressureSystolic(Integer bloodPressureSystolic) {
+        this.bloodPressureSystolic = bloodPressureSystolic;
+        return this;
+    }
+    
+    public DonationBuilder withBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+        this.bloodPressureDiastolic = bloodPressureDiastolic;
+        return this;
+    }
+    
+    public DonationBuilder withDonorWeight(BigDecimal donorWeight) {
+        this.donorWeight = donorWeight;
+        return this;
+    }
+    
     public DonationBuilder withNotes(String notes) {
         this.notes = notes;
         return this;
@@ -62,6 +100,12 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         donation.setDonationDate(donationDate);
         donation.setDonorPanel(donorPanel);
         donation.setTTIStatus(ttiStatus);
+        donation.setDonorPulse(donorPulse);
+        donation.setHaemoglobinCount(haemoglobinCount);
+        donation.setHaemoglobinLevel(haemoglobinLevel);
+        donation.setBloodPressureSystolic(bloodPressureSystolic);
+        donation.setBloodPressureDiastolic(bloodPressureDiastolic);
+        donation.setDonorWeight(donorWeight);
         donation.setNotes(notes);
         donation.setIsDeleted(deleted);
         return donation;

@@ -1,17 +1,21 @@
 package service;
 
+import static helpers.builders.DonationBackingFormBuilder.aDonationBackingForm;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
 import static helpers.matchers.DonationMatcher.hasSameStateAsDonation;
 import static helpers.matchers.DonorMatcher.hasSameStateAsDonor;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import model.donation.Donation;
+import model.donation.HaemoglobinLevel;
 import model.donor.Donor;
 
 import org.joda.time.DateTime;
@@ -23,6 +27,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import repository.DonationRepository;
 import repository.DonorRepository;
+import backingform.DonationBackingForm;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DonationCRUDServiceTests {
@@ -47,9 +52,6 @@ public class DonationCRUDServiceTests {
         when(donationConstraintChecker.canDeletedDonation(IRRELEVANT_DONATION_ID)).thenReturn(false);
 
         donationCRUDService.deleteDonation(IRRELEVANT_DONATION_ID);
-        
-        verify(donationConstraintChecker).canDeletedDonation(IRRELEVANT_DONATION_ID);
-        verifyNoMoreInteractions(donationConstraintChecker, donationRepository, donorRepository);
     }
 
     @Test
@@ -89,12 +91,8 @@ public class DonationCRUDServiceTests {
         donationCRUDService.deleteDonation(IRRELEVANT_DONATION_ID);
         
         // Verify
-        verify(donationConstraintChecker).canDeletedDonation(IRRELEVANT_DONATION_ID);
-        verify(donationRepository).findDonationById(IRRELEVANT_DONATION_ID);
         verify(donationRepository).updateDonation(argThat(hasSameStateAsDonation(expectedDonation)));
-        verify(donationRepository).findDateOfFirstDonationForDonor(IRRELEVANT_DONOR_ID);
         verify(donorRepository).updateDonor(argThat(hasSameStateAsDonor(expectedDonor)));
-        verifyNoMoreInteractions(donationConstraintChecker, donationRepository, donorRepository);
     }
 
     @Test
@@ -134,12 +132,54 @@ public class DonationCRUDServiceTests {
         donationCRUDService.deleteDonation(IRRELEVANT_DONATION_ID);
         
         // Verify
-        verify(donationConstraintChecker).canDeletedDonation(IRRELEVANT_DONATION_ID);
-        verify(donationRepository).findDonationById(IRRELEVANT_DONATION_ID);
         verify(donationRepository).updateDonation(argThat(hasSameStateAsDonation(expectedDonation)));
-        verify(donationRepository).findDateOfLastDonationForDonor(IRRELEVANT_DONOR_ID);
         verify(donorRepository).updateDonor(argThat(hasSameStateAsDonor(expectedDonor)));
-        verifyNoMoreInteractions(donationConstraintChecker, donationRepository, donorRepository);
+    }
+    
+    @Test
+    public void testUpdateDonation_shouldRetrieveAndUpdateDonation() {
+        
+        // Set up fixture
+        Integer irrelevantDonorPulse = 80;
+        BigDecimal irrelevantHaemoglobinCount = new BigDecimal(2);
+        HaemoglobinLevel irrelevantHaemoglobinLevel = HaemoglobinLevel.LOW;
+        Integer irrelevantBloodPressureSystolic = 120;
+        Integer irrelevantBloodPressureDiastolic = 80;
+        BigDecimal irrelevantDonorWeight = new BigDecimal(65);
+        String irrelevantNotes = "some notes";
+
+        Donation existingDonation = aDonation().withId(IRRELEVANT_DONATION_ID).build();
+        DonationBackingForm donationBackingForm = aDonationBackingForm()
+                .withDonorPulse(irrelevantDonorPulse)
+                .withHaemoglobinCount(irrelevantHaemoglobinCount)
+                .withHaemoglobinLevel(irrelevantHaemoglobinLevel)
+                .withBloodPressureSystolic(irrelevantBloodPressureSystolic)
+                .withBloodPressureDiastolic(irrelevantBloodPressureDiastolic)
+                .withDonorWeight(irrelevantDonorWeight)
+                .withNotes(irrelevantNotes)
+                .build();
+        
+        // Set up expectations
+        Donation expectedDonation = aDonation()
+                .withId(IRRELEVANT_DONATION_ID)
+                .withDonorPulse(irrelevantDonorPulse)
+                .withHaemoglobinCount(irrelevantHaemoglobinCount)
+                .withHaemoglobinLevel(irrelevantHaemoglobinLevel)
+                .withBloodPressureSystolic(irrelevantBloodPressureSystolic)
+                .withBloodPressureDiastolic(irrelevantBloodPressureDiastolic)
+                .withDonorWeight(irrelevantDonorWeight)
+                .withNotes(irrelevantNotes)
+                .build();
+        
+        when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
+        when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation)))).thenReturn(expectedDonation);
+        
+        // Exercise SUT
+        Donation returnedDonation = donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
+        
+        // Verify
+        verify(donationRepository).updateDonation(argThat(hasSameStateAsDonation(expectedDonation)));
+        assertThat(returnedDonation, is(expectedDonation));
     }
 
 }

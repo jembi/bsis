@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import backingform.DonationBackingForm;
 import repository.DonationRepository;
 import repository.DonorRepository;
 
@@ -54,6 +55,18 @@ public class DonationCRUDService {
             donor.setDateOfLastDonation(dateOfLastDonation);
             donorRepository.updateDonor(donor);
         }
+    }
+    
+    public Donation updateDonation(long donationId, DonationBackingForm donationBackingForm) {
+        Donation donation = donationRepository.findDonationById(donationId);
+        donation.setDonorPulse(donationBackingForm.getDonorPulse());
+        donation.setHaemoglobinCount(donationBackingForm.getHaemoglobinCount());
+        donation.setHaemoglobinLevel(donationBackingForm.getHaemoglobinLevel());
+        donation.setBloodPressureSystolic(donationBackingForm.getBloodPressureSystolic());
+        donation.setBloodPressureDiastolic(donationBackingForm.getBloodPressureDiastolic());
+        donation.setDonorWeight(donationBackingForm.getDonorWeight());
+        donation.setNotes(donationBackingForm.getNotes());
+        return donationRepository.updateDonation(donation);
     }
 
 }

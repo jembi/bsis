@@ -208,23 +208,18 @@ public class DonationController {
     return donationViewModel;
   }
   
-  @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION+"')")
-  public ResponseEntity<Map<String, Object>>
-  	  updateDonation(@RequestBody  @Valid DonationBackingForm form, @PathVariable Long id) {
-	  
-	  HttpStatus httpStatus = HttpStatus.OK;
-	  Map<String, Object> map = new HashMap<String, Object>();
-	  Donation updatedDonation = null;
-	  
-      form.setId(id);
-      form.setIsDeleted(false);
-      updatedDonation = donationRepository.updateDonationDetails(form.getDonation());
-            
-      map.put("donation", getDonationViewModel(donationRepository.findDonationById(updatedDonation.getId())));
-      return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+    @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONATION + "')")
+    public ResponseEntity<Map<String, Object>> updateDonation(
+            @PathVariable("id") Long donationId,
+            @RequestBody @Valid DonationBackingForm donationBackingForm) {
 
-  }
+        Donation updatedDonation = donationCRUDService.updateDonation(donationId, donationBackingForm);
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("donation", getDonationViewModel(updatedDonation));
+        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    }
 
   private List<DonationViewModel> getDonationViewModels(
       List<Donation> donations) {

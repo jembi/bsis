@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -474,5 +475,10 @@ public class DonationBackingForm {
             donation.setDonorPanel(donorPanel);
         }
             
+    }
+    
+    @JsonIgnore
+    public void setPermissions(Map<String, Boolean> permissions) {
+        // Ignore
     }
 }
