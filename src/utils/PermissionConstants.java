@@ -124,8 +124,15 @@ public class PermissionConstants {
 	//General Authenticated Permission
 	public static final String AUTHENTICATED = "Authenticated";
 	
-	// Audit permissions
+	// Audit Permissions
 	public static final String VIEW_AUDIT_LOG = "View Audit Log";
+	
+	// Post Donation Counselling Permissions
+	public static final String VIEW_POST_DONATION_COUNSELLING_DONORS = "View Post Donation Counselling Donors";
+	public static final String ADD_POST_DONATION_COUNSELLING = "Add Post Donation Counselling";
+	public static final String EDIT_POST_DONATION_COUNSELLING = "Edit Post Donation Counselling";
+	public static final String VIEW_POST_DONATION_COUNSELLING = "View Post Donation Counselling";
+	public static final String VOID_POST_DONATION_COUNSELLING = "Void Post Donation Counselling";
         
         
 

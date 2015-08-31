@@ -1,7 +1,6 @@
 package controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
@@ -35,6 +35,7 @@ import repository.ContactMethodTypeRepository;
 import repository.DonationBatchRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
+import repository.PostDonationCounsellingRepository;
 import service.DonorCRUDService;
 import service.GeneralConfigAccessorService;
 import utils.CustomDateFormatter;
@@ -43,6 +44,7 @@ import viewmodel.DonationViewModel;
 import viewmodel.DonorDeferralViewModel;
 import viewmodel.DonorSummaryViewModel;
 import viewmodel.DonorViewModel;
+import viewmodel.PostDonationCounsellingViewModel;
 import backingform.DonorBackingForm;
 import backingform.validator.DonorBackingFormValidator;
 
@@ -73,6 +75,9 @@ public class DonorController {
   @Autowired
   private GeneralConfigAccessorService generalConfigAccessorService;
   
+  @Autowired
+  private PostDonationCounsellingRepository postDonationCounsellingRepository;
+
   @Autowired
   private DonorCRUDService donorCRUDService;
   
@@ -136,7 +141,11 @@ public class DonorController {
     Donor donor = donorRepository.findDonorById(id);
     List<Donation> donations = donor.getDonations();
     
+    boolean flaggedForCounselling = postDonationCounsellingRepository
+            .countFlaggedPostDonationCounsellingsForDonor(donor.getId()) > 0;
+
     map.put("currentlyDeferred",donorRepository.isCurrentlyDeferred(donor));
+    map.put("flaggedForCounselling", flaggedForCounselling);
     map.put("deferredUntil",CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
     if(donations.size() > 0){
 	    map.put("lastDonation", getDonationViewModel(donations.get(donations.size()-1)));
@@ -325,6 +334,16 @@ public class DonorController {
     
     return map;
   }
+  
+    @RequestMapping(value = "{id}/postdonationcounselling", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_POST_DONATION_COUNSELLING + "')")
+    public PostDonationCounsellingViewModel getPostDonationCounsellingForDonor(
+            @PathVariable("id") Long donorId) {
+
+        PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository
+                .findFlaggedPostDonationCounsellingForDonor(donorId);
+        return new PostDonationCounsellingViewModel(postDonationCounselling);
+    }
 
     private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("donorPanels", locationRepository.getAllDonorPanels());
@@ -332,14 +351,6 @@ public class DonorController {
     m.put("languages", donorRepository.getAllLanguages());
     m.put("idTypes", donorRepository.getAllIdTypes());
     m.put("addressTypes", donorRepository.getAllAddressTypes());
-  }
- 
-  private List<DonorViewModel> getDonorsViewModels(List<Donor> donors) {
-    List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
-    for (Donor donor : donors) {
-      donorViewModels.add(new DonorViewModel(donor));
-    }
-    return donorViewModels;
   }
 
   private List<DonorDeferralViewModel> getDonorDeferralViewModels(List<DonorDeferral> donorDeferrals) {
@@ -358,17 +369,6 @@ public class DonorController {
   private DonationViewModel getDonationViewModel(Donation donation) {
     DonationViewModel donationViewModel = new DonationViewModel(donation);
     return donationViewModel;
-  }
-
-  private List<DonationViewModel> getDonationViewModels(
-      List<Donation> donations) {
-    if (donations == null)
-      return Arrays.asList(new DonationViewModel[0]);
-    List<DonationViewModel> donationViewModels = new ArrayList<DonationViewModel>();
-    for (Donation donation : donations) {
-      donationViewModels.add(new DonationViewModel(donation));
-    }
-    return donationViewModels;
   }
  
   private int getNumberOfDonations(List<Donation> donations){

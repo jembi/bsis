@@ -2,6 +2,8 @@ package helpers.builders;
 
 import java.util.Date;
 
+import helpers.persisters.AbstractEntityPersister;
+import helpers.persisters.DonationPersister;
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donor.Donor;
@@ -63,6 +65,11 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         donation.setNotes(notes);
         donation.setIsDeleted(deleted);
         return donation;
+    }
+
+    @Override
+    public AbstractEntityPersister<Donation> getPersister() {
+        return new DonationPersister();
     }
 
     public static DonationBuilder aDonation() {

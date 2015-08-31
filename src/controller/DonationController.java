@@ -4,7 +4,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -17,8 +20,10 @@ import model.packtype.PackType;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -35,8 +40,11 @@ import repository.DonationRepository;
 import repository.DonationTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
+import repository.PostDonationCounsellingRepository;
 import service.DonationCRUDService;
 import utils.PermissionConstants;
+import utils.PermissionUtils;
+import viewmodel.DonationSummaryViewModel;
 import viewmodel.DonationViewModel;
 import viewmodel.PackTypeViewModel;
 import backingform.DonationBackingForm;
@@ -63,6 +71,9 @@ public class DonationController {
 
   @Autowired
   private DonorRepository donorRepository;
+  
+  @Autowired
+  private PostDonationCounsellingRepository postDonationCounsellingRepository;
   
   @Autowired
   private DonationCRUDService donationCRUDService;
@@ -290,6 +301,37 @@ public class DonationController {
 
     return generateDatatablesMap(donations, totalRecords, formFields);
   }
+  
+    @RequestMapping(value = "/summaries", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
+    public List<DonationSummaryViewModel> getDonationSummaries(
+            @RequestParam(value = "flaggedForCounselling", required = true) boolean flaggedForCounselling,
+            @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+            @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate,
+            @RequestParam(value = "donorPanel", required = false) List<Long> donorPanels) {
+
+        if (flaggedForCounselling) {
+            
+            if (!PermissionUtils.loggedOnUserHasPermission(PermissionConstants.VIEW_POST_DONATION_COUNSELLING_DONORS)) {
+                throw new AccessDeniedException("You do not have permission to view post donation counselling donors.");
+            }
+            
+            List<Donation> donors = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
+                    startDate, endDate, donorPanels == null ? null : new HashSet<>(donorPanels));
+            return createDonationSummaryViewModels(donors);
+        }
+
+        // Just return an empty list for now. This could return the full list of donations if needed.
+        return Collections.emptyList();
+    }
+
+    private List<DonationSummaryViewModel> createDonationSummaryViewModels(List<Donation> donations) {
+        List<DonationSummaryViewModel> donationSummaryViewModels = new ArrayList<>();
+        for (Donation donation : donations) {
+            donationSummaryViewModels.add(new DonationSummaryViewModel(donation));
+        }
+        return donationSummaryViewModels;
+    }
      
   private List<PackTypeViewModel> getPackTypeViewModels(List<PackType> packTypes){     
        List<PackTypeViewModel> viewModels = new ArrayList<PackTypeViewModel>();

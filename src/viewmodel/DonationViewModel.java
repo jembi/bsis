@@ -1,6 +1,5 @@
 package viewmodel;
 
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +41,8 @@ public class DonationViewModel {
     return CustomDateFormatter.getDateString(donation.getDonationDate());
   }
 
-  public boolean equals(Object obj) {
+  @Override
+public boolean equals(Object obj) {
     return donation.equals(obj);
   }
 
@@ -82,7 +82,8 @@ public class DonationViewModel {
     return donation.getComponents();
   }
 
-  public int hashCode() {
+  @Override
+public int hashCode() {
     return donation.hashCode();
   }
 
