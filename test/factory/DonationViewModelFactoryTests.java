@@ -30,14 +30,17 @@ public class DonationViewModelFactoryTests {
     public void testCreateDonationViewModelWithPermissions_shouldReturnViewModelWithCorrectDonationAndPermissions() {
         
         boolean irrelevantCanDeletePermission = true;
+        boolean irrelevantCanUpdatePermission = true;
         Donation donation = aDonation().withId(IRRELEVANT_DONATION_ID).build();
         
         DonationViewModel expectedDonationViewModel = aDonationViewModel()
                 .withDonation(donation)
                 .withPermission("canDelete", irrelevantCanDeletePermission)
+                .withPermission("canUpdateDonationFields", irrelevantCanUpdatePermission)
                 .build();
         
         when(donationConstraintChecker.canDeletedDonation(IRRELEVANT_DONATION_ID)).thenReturn(irrelevantCanDeletePermission);
+        when(donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID)).thenReturn(irrelevantCanUpdatePermission);
         
         DonationViewModel returnedDonationViewModel = donationViewModelFactory.createDonationViewModelWithPermissions(
                 donation);

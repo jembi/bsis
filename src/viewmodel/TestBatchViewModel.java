@@ -1,72 +1,91 @@
-
 package viewmodel;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
-import model.donationbatch.DonationBatch;
-import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
+import utils.DateTimeSerialiser;
 
-import org.hibernate.Hibernate;
-
-import utils.CustomDateFormatter;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class TestBatchViewModel {
-   
-    private TestBatch testBatch;
 
-    public TestBatchViewModel(TestBatch testBatch) {
-        this.testBatch = testBatch;
+    private Long id;
+    private Date createdDate;
+    private Date lastUpdatedDate;
+    private TestBatchStatus status;
+    private String batchNumber;
+    private String notes;
+    private List<DonationBatchViewModel> donationBatchViewModels;
+
+    @JsonSerialize(using = DateTimeSerialiser.class)
+    public Date getCreatedDate() {
+        return createdDate;
     }
-    
-	public String getCreatedDate() {
-		if (testBatch.getCreatedDate() == null)
-		      return "";
-		return CustomDateFormatter.getDateTimeString(testBatch.getCreatedDate());
-	}
-    
-    public Long getId(){
-        return testBatch.getId();
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
-    
-    public TestBatchStatus getStatus(){
-        return testBatch.getStatus();
+
+    public Long getId() {
+        return id;
     }
-    
-    public String getBatchNumber(){
-        return testBatch.getBatchNumber();
+
+    public void setId(Long id) {
+        this.id = id;
     }
-    
-    public Integer getNumSamples(){
-    	Integer count = 0;
-    	for(DonationBatch cb: testBatch.getDonationBatches()){
-    		count += cb.getDonations().size();
-    	}
-    	return count;
+
+    public void setStatus(TestBatchStatus status) {
+        this.status = status;
     }
-    
-    public String getNotes(){
-        return testBatch.getNotes();
+
+    public TestBatchStatus getStatus() {
+        return status;
     }
-    
-    public  List<DonationBatchViewModel> getDonationBatches(){
-        return getDonationBatchViewModels(testBatch.getDonationBatches());
+
+    public String getBatchNumber() {
+        return batchNumber;
     }
-    
-    public static List<DonationBatchViewModel> getDonationBatchViewModels(List<DonationBatch> donationBatches) {
-	    if (donationBatches == null)
-	      return Arrays.asList(new DonationBatchViewModel[0]);
-	    List<DonationBatchViewModel> donationBatchViewModels = new ArrayList<DonationBatchViewModel>();
-	    for (DonationBatch donationBatch : donationBatches) {
-	      donationBatchViewModels.add(new DonationBatchViewModel(donationBatch));
-	    }
-	    return donationBatchViewModels;
-	}
-    
-    public String getLastUpdated() {
-    	return CustomDateFormatter.getDateTimeString(testBatch.getLastUpdated());
+
+    public void setBatchNumber(String batchNumber) {
+        this.batchNumber = batchNumber;
+    }
+
+    public Integer getNumSamples() {
+        if (donationBatchViewModels == null) {
+            return 0;
+        }
+
+        int count = 0;
+        for (DonationBatchViewModel donationBatchViewModel : donationBatchViewModels) {
+            count += donationBatchViewModel.getNumDonations();
+        }
+        return count;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public List<DonationBatchViewModel> getDonationBatches() {
+        return donationBatchViewModels;
+    }
+
+    public void setDonationBatches(List<DonationBatchViewModel> donationBatchViewModels) {
+        this.donationBatchViewModels = donationBatchViewModels;
+    }
+
+    @JsonSerialize(using = DateTimeSerialiser.class)
+    public Date getLastUpdated() {
+        return lastUpdatedDate;
+    }
+
+    public void setLastUpdated(Date lastUpdatedDate) {
+        this.lastUpdatedDate = lastUpdatedDate;
     }
 
 }
