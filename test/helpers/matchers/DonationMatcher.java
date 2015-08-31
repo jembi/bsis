@@ -27,7 +27,10 @@ public class DonationMatcher extends TypeSafeMatcher<Donation> {
                 .appendText("\nBlood Pressure Systolic: ").appendValue(expected.getBloodPressureSystolic())
                 .appendText("\nBlood Pressure Diastolic: ").appendValue(expected.getBloodPressureDiastolic())
                 .appendText("\nDonor Weight: ").appendValue(expected.getDonorWeight())
-                .appendText("\nNotes: ").appendValue(expected.getNotes());
+                .appendText("\nNotes: ").appendValue(expected.getNotes())
+                .appendText("\nPack Type: ").appendValue(expected.getPackType())
+                .appendText("\nBleed Start Time: ").appendValue(expected.getBleedStartTime())
+                .appendText("\nBleed End Time: ").appendValue(expected.getBleedEndTime());
     }
 
     @Override
@@ -41,7 +44,10 @@ public class DonationMatcher extends TypeSafeMatcher<Donation> {
                 Objects.equals(actual.getBloodPressureDiastolic(), expected.getBloodPressureDiastolic()) &&
                 Objects.equals(actual.getDonorWeight(), expected.getDonorWeight()) &&
                 Objects.equals(actual.getNotes(), expected.getNotes()) &&
-                Objects.equals(actual.getDonationDate(), expected.getDonationDate());
+                Objects.equals(actual.getDonationDate(), expected.getDonationDate()) &&
+                Objects.equals(actual.getPackType(), expected.getPackType()) &&
+                Objects.equals(actual.getBleedStartTime(), expected.getBleedStartTime()) &&
+                Objects.equals(actual.getBleedEndTime(), expected.getBleedEndTime());
     }
     
     public static DonationMatcher hasSameStateAsDonation(Donation expected) {

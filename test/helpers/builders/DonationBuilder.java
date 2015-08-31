@@ -10,6 +10,7 @@ import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
 import model.donor.Donor;
 import model.location.Location;
+import model.packtype.PackType;
 
 public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     
@@ -26,6 +27,9 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     private Integer bloodPressureDiastolic;
     private BigDecimal donorWeight;
     private String notes;
+    private PackType packType;
+    private Date bleedStartTime;
+    private Date bleedEndTime;
     
     public DonationBuilder withId(Long id) {
         this.id = id;
@@ -91,6 +95,21 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         deleted = true;
         return this;
     }
+    
+    public DonationBuilder withPackType(PackType packType) {
+        this.packType = packType;
+        return this;
+    }
+    
+    public DonationBuilder withBleedStartTime(Date bleedStartTime) {
+        this.bleedStartTime = bleedStartTime;
+        return this;
+    }
+    
+    public DonationBuilder withBleedEndTime(Date bleedEndTime) {
+        this.bleedEndTime = bleedEndTime;
+        return this;
+    }
 
     @Override
     public Donation build() {
@@ -108,6 +127,9 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         donation.setDonorWeight(donorWeight);
         donation.setNotes(notes);
         donation.setIsDeleted(deleted);
+        donation.setPackType(packType);
+        donation.setBleedStartTime(bleedStartTime);
+        donation.setBleedEndTime(bleedEndTime);
         return donation;
     }
 

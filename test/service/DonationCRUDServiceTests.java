@@ -3,6 +3,7 @@ package service;
 import static helpers.builders.DonationBackingFormBuilder.aDonationBackingForm;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
+import static helpers.builders.PackTypeBuilder.aPackType;
 import static helpers.matchers.DonationMatcher.hasSameStateAsDonation;
 import static helpers.matchers.DonorMatcher.hasSameStateAsDonor;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,6 +18,7 @@ import java.util.Date;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
 import model.donor.Donor;
+import model.packtype.PackType;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -136,6 +138,57 @@ public class DonationCRUDServiceTests {
         verify(donorRepository).updateDonor(argThat(hasSameStateAsDonor(expectedDonor)));
     }
     
+    @Test(expected = IllegalArgumentException.class)
+    public void testUpdateDonationWithUpdatedPackTypeAndCannotUpdate_shouldThrow() {
+        
+        // Set up fixture
+        Donation existingDonation = aDonation().withId(IRRELEVANT_DONATION_ID).build();
+        DonationBackingForm donationBackingForm = aDonationBackingForm()
+                .withPackType(aPackType().withId(7).build())
+                .build();
+
+        // Set up expectations
+        when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
+        when(donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID)).thenReturn(false);
+        
+        // Exercise SUT
+        donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testUpdateDonationWithUpdatedBleedStartTimeAndCannotUpdate_shouldThrow() {
+        
+        // Set up fixture
+        Donation existingDonation = aDonation().withId(IRRELEVANT_DONATION_ID).build();
+        DonationBackingForm donationBackingForm = aDonationBackingForm()
+                .withBleedStartTime(new Date())
+                .build();
+
+        // Set up expectations
+        when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
+        when(donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID)).thenReturn(false);
+        
+        // Exercise SUT
+        donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testUpdateDonationWithUpdatedBleedEndTimeAndCannotUpdate_shouldThrow() {
+        
+        // Set up fixture
+        Donation existingDonation = aDonation().withId(IRRELEVANT_DONATION_ID).build();
+        DonationBackingForm donationBackingForm = aDonationBackingForm()
+                .withBleedEndTime(new Date())
+                .build();
+
+        // Set up expectations
+        when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
+        when(donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID)).thenReturn(false);
+        
+        // Exercise SUT
+        donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
+    }
+    
     @Test
     public void testUpdateDonation_shouldRetrieveAndUpdateDonation() {
         
@@ -147,6 +200,9 @@ public class DonationCRUDServiceTests {
         Integer irrelevantBloodPressureDiastolic = 80;
         BigDecimal irrelevantDonorWeight = new BigDecimal(65);
         String irrelevantNotes = "some notes";
+        PackType irrelevantPackType = aPackType().withId(8).build();
+        Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
+        Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
 
         Donation existingDonation = aDonation().withId(IRRELEVANT_DONATION_ID).build();
         DonationBackingForm donationBackingForm = aDonationBackingForm()
@@ -157,6 +213,9 @@ public class DonationCRUDServiceTests {
                 .withBloodPressureDiastolic(irrelevantBloodPressureDiastolic)
                 .withDonorWeight(irrelevantDonorWeight)
                 .withNotes(irrelevantNotes)
+                .withPackType(irrelevantPackType)
+                .withBleedStartTime(irrelevantBleedStartTime)
+                .withBleedEndTime(irrelevantBleedEndTime)
                 .build();
         
         // Set up expectations
@@ -169,9 +228,13 @@ public class DonationCRUDServiceTests {
                 .withBloodPressureDiastolic(irrelevantBloodPressureDiastolic)
                 .withDonorWeight(irrelevantDonorWeight)
                 .withNotes(irrelevantNotes)
+                .withPackType(irrelevantPackType)
+                .withBleedStartTime(irrelevantBleedStartTime)
+                .withBleedEndTime(irrelevantBleedEndTime)
                 .build();
         
         when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
+        when(donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID)).thenReturn(true);
         when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation)))).thenReturn(expectedDonation);
         
         // Exercise SUT

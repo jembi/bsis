@@ -1,11 +1,18 @@
 package helpers.builders;
 
 import java.math.BigDecimal;
+import java.util.Date;
+
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 
 import model.donation.HaemoglobinLevel;
+import model.packtype.PackType;
 import backingform.DonationBackingForm;
 
 public class DonationBackingFormBuilder extends AbstractBuilder<DonationBackingForm> {
+    
+    private static final DateTimeFormatter ISO_FORMAT = ISODateTimeFormat.dateTime();
 
     private Integer donorPulse;
     private BigDecimal haemoglobinCount;
@@ -14,6 +21,9 @@ public class DonationBackingFormBuilder extends AbstractBuilder<DonationBackingF
     private Integer bloodPressureDiastolic;
     private BigDecimal donorWeight;
     private String notes;
+    private PackType packType;
+    private Date bleedStartTime;
+    private Date bleedEndTime;
     
     public DonationBackingFormBuilder withDonorPulse(Integer donorPulse) {
         this.donorPulse = donorPulse;
@@ -49,6 +59,21 @@ public class DonationBackingFormBuilder extends AbstractBuilder<DonationBackingF
         this.notes = notes;
         return this;
     }
+    
+    public DonationBackingFormBuilder withPackType(PackType packType) {
+        this.packType = packType;
+        return this;
+    }
+    
+    public DonationBackingFormBuilder withBleedStartTime(Date bleedStartTime) {
+        this.bleedStartTime = bleedStartTime;
+        return this;
+    }
+    
+    public DonationBackingFormBuilder withBleedEndTime(Date bleedEndTime) {
+        this.bleedEndTime = bleedEndTime;
+        return this;
+    }
 
     @Override
     public DonationBackingForm build() {
@@ -60,6 +85,13 @@ public class DonationBackingFormBuilder extends AbstractBuilder<DonationBackingF
         donationBackingForm.setBloodPressureDiastolic(bloodPressureDiastolic);
         donationBackingForm.setDonorWeight(donorWeight);
         donationBackingForm.setNotes(notes);
+        donationBackingForm.setPackType(packType);
+        if (bleedStartTime != null) {
+            donationBackingForm.setBleedStartTime(ISO_FORMAT.print(bleedStartTime.getTime()));
+        }
+        if (bleedEndTime != null) {
+            donationBackingForm.setBleedEndTime(ISO_FORMAT.print(bleedEndTime.getTime()));
+        }
         return donationBackingForm;
     }
     

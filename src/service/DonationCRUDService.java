@@ -1,6 +1,7 @@
 package service;
 
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.NoResultException;
 
@@ -59,6 +60,16 @@ public class DonationCRUDService {
     
     public Donation updateDonation(long donationId, DonationBackingForm donationBackingForm) {
         Donation donation = donationRepository.findDonationById(donationId);
+        
+        // Check if pack type or bleed times have been updated
+        boolean donationFieldsUpdated = !Objects.equals(donation.getPackType(), donationBackingForm.getPackType()) ||
+                !Objects.equals(donation.getBleedStartTime(), donationBackingForm.getBleedStartTime()) ||
+                !Objects.equals(donation.getBleedEndTime(), donationBackingForm.getBleedEndTime());
+        
+        if (donationFieldsUpdated && !donationConstraintChecker.canUpdateDonationFields(donationId)) {
+            throw new IllegalArgumentException("Cannot update donation fields");
+        }
+        
         donation.setDonorPulse(donationBackingForm.getDonorPulse());
         donation.setHaemoglobinCount(donationBackingForm.getHaemoglobinCount());
         donation.setHaemoglobinLevel(donationBackingForm.getHaemoglobinLevel());
@@ -66,6 +77,9 @@ public class DonationCRUDService {
         donation.setBloodPressureDiastolic(donationBackingForm.getBloodPressureDiastolic());
         donation.setDonorWeight(donationBackingForm.getDonorWeight());
         donation.setNotes(donationBackingForm.getNotes());
+        donation.setPackType(donationBackingForm.getPackType());
+        donation.setBleedStartTime(donationBackingForm.getBleedStartTime());
+        donation.setBleedEndTime(donationBackingForm.getBleedEndTime());
         return donationRepository.updateDonation(donation);
     }
 

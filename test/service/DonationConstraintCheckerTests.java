@@ -43,9 +43,9 @@ public class DonationConstraintCheckerTests {
     
     @Test
     public void testCanDeleteDonationWithDonationWithBloodTestResults_shouldReturnFalse() {
-        Donation donationWithNotes = aDonation().build();
+        Donation donationWithTestResults = aDonation().build();
         
-        when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(donationWithNotes);
+        when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(donationWithTestResults);
         when(bloodTestResultRepository.countBloodTestResultsForDonation(IRRELEVANT_DONATION_ID)).thenReturn(1);
         
         boolean canDelete = donationConstraintChecker.canDeletedDonation(IRRELEVANT_DONATION_ID);
@@ -55,9 +55,9 @@ public class DonationConstraintCheckerTests {
     
     @Test
     public void testCanDeleteDonationWithDonationWithChangedComponents_shouldReturnFalse() {
-        Donation donationWithNotes = aDonation().build();
+        Donation donationWithChangedComponents = aDonation().build();
         
-        when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(donationWithNotes);
+        when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(donationWithChangedComponents);
         when(bloodTestResultRepository.countBloodTestResultsForDonation(IRRELEVANT_DONATION_ID)).thenReturn(0);
         when(componentRepository.countChangedComponentsForDonation(IRRELEVANT_DONATION_ID)).thenReturn(1);
         
@@ -75,6 +75,38 @@ public class DonationConstraintCheckerTests {
         when(componentRepository.countChangedComponentsForDonation(IRRELEVANT_DONATION_ID)).thenReturn(0);
         
         boolean canDelete = donationConstraintChecker.canDeletedDonation(IRRELEVANT_DONATION_ID);
+        
+        assertThat(canDelete, is(true));
+    }
+    
+    @Test
+    public void testCanUpdateDonationFieldsWithDonationWithBloodTestResults_shouldReturnFalse() {
+        Donation donationWithNotes = aDonation().build();
+        
+        when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(donationWithNotes);
+        when(bloodTestResultRepository.countBloodTestResultsForDonation(IRRELEVANT_DONATION_ID)).thenReturn(1);
+        
+        boolean canDelete = donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID);
+        
+        assertThat(canDelete, is(false));
+    }
+    
+    @Test
+    public void testCanUpdateDonationFieldsWithDonationWithChangedComponents_shouldReturnFalse() {
+        when(bloodTestResultRepository.countBloodTestResultsForDonation(IRRELEVANT_DONATION_ID)).thenReturn(0);
+        when(componentRepository.countChangedComponentsForDonation(IRRELEVANT_DONATION_ID)).thenReturn(1);
+        
+        boolean canDelete = donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID);
+        
+        assertThat(canDelete, is(false));
+    }
+    
+    @Test
+    public void testCanUpdateDonationWithFieldsDonationWithNoConstraints_shouldReturnTrue() {
+        when(bloodTestResultRepository.countBloodTestResultsForDonation(IRRELEVANT_DONATION_ID)).thenReturn(0);
+        when(componentRepository.countChangedComponentsForDonation(IRRELEVANT_DONATION_ID)).thenReturn(0);
+        
+        boolean canDelete = donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID);
         
         assertThat(canDelete, is(true));
     }
