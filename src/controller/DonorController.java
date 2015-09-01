@@ -225,7 +225,7 @@ public class DonorController {
         map.put("hasErrors", false);
 
         map.put("donorId", savedDonor.getId());
-        map.put("donor", getDonorsViewModel(donorRepository.findDonorById(savedDonor.getId())));
+        map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(savedDonor));
 
         return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
     }
