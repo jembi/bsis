@@ -37,7 +37,7 @@ public class DeferralReasonController {
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(new DeferralReasonBackingFormValidator(binder.getValidator(), utilController, deferralReasonRepository));
+        binder.setValidator(new DeferralReasonBackingFormValidator(utilController));
     }
 
     @RequestMapping(method=RequestMethod.GET)

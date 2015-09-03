@@ -22,6 +22,9 @@ public class DeferralReason {
 
   private Boolean isDeleted;
   
+  @Column(nullable = false)
+  private int defaultDuration; // in days
+  
   public Integer getId() {
     return id;
   }
@@ -50,6 +53,15 @@ public class DeferralReason {
     this.id = deferralReason.getId();
     this.reason = deferralReason.getReason();
     this.isDeleted = deferralReason.getIsDeleted();
+    this.defaultDuration = deferralReason.getDefaultDuration();
   }
+
+    public int getDefaultDuration() {
+        return defaultDuration;
+    }
+
+    public void setDefaultDuration(int defaultDuration) {
+        this.defaultDuration = defaultDuration;
+    }
 
 }

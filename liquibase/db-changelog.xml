@@ -1609,5 +1609,21 @@
 			<column name="REVTYPE" type="tinyint(4)"></column>
 		</createTable>
 	</changeSet>
+	
+	<changeSet id="20150903-1118" author="bausmeier">
+	   <comment>Add default duration days to deferral reasons.</comment>
+	
+	   <addColumn tableName="DeferralReason">
+	       <column name="defaultDuration" type="SMALLINT UNSIGNED" defaultValue="0">
+	           <constraints nullable="false" />
+	       </column>
+	   </addColumn>
+
+	   <addColumn tableName="DeferralReason_AUD">
+	       <column name="defaultDuration" type="SMALLINT UNSIGNED" defaultValue="0">
+	           <constraints nullable="false" />
+	       </column>
+	   </addColumn>
+	</changeSet>
 
 </databaseChangeLog>
