@@ -67,13 +67,13 @@
 		idNumber ="123" notes="notes" addressId ="1" contactId ="1"
 		donorPanel_id="1" createdBy_id="1" lastUpdatedBy_id="1" dueToDonate="${yesterday}"/>
 			
-	<deferralreason id="1" isDeleted="0" reason="High risk behaviour" />
-	<deferralreason id="2" isDeleted="0" reason="Low weight" />
-	<deferralreason id="3" isDeleted="0" reason="Low haemoglobin" />
-	<deferralreason id="4" isDeleted="0" reason="Other reasons" />
-	<deferralreason id="5" isDeleted="0" reason="Other medical conditions" />
-	<deferralreason id="6" isDeleted="0" reason="Travel history" />
-	<deferralreason id="7" isDeleted="1" reason="Test Deleted Deferal" />
+	<deferralreason id="1" isDeleted="0" reason="High risk behaviour" defaultDuration="30" />
+	<deferralreason id="2" isDeleted="0" reason="Low weight" defaultDuration="30" />
+	<deferralreason id="3" isDeleted="0" reason="Low haemoglobin" defaultDuration="30" />
+	<deferralreason id="4" isDeleted="0" reason="Other reasons" defaultDuration="30" />
+	<deferralreason id="5" isDeleted="0" reason="Other medical conditions" defaultDuration="30" />
+	<deferralreason id="6" isDeleted="0" reason="Travel history" defaultDuration="30" />
+	<deferralreason id="7" isDeleted="1" reason="Test Deleted Deferal" defaultDuration="30" />
 	
 	<donordeferral id="1" deferralReasonText="" createdDate="${today}"
 		deferredUntil="${sixMonthsAhead}" deferralReason_id="1" createdBy_id="1"
