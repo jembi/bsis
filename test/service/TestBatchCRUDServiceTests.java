@@ -41,6 +41,8 @@ public class TestBatchCRUDServiceTests {
     private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
     @Mock
     private DonorDeferralCRUDService donorDeferralCRUDService;
+    @Mock
+    private ComponentCRUDService componentCRUDService;
     
     @Test
     public void testUpdateTestBatchStatusWithStatusChangeNotToClosed_shouldUpdateTestBatchStatus() {
@@ -168,6 +170,8 @@ public class TestBatchCRUDServiceTests {
         verify(testBatchRepository).updateTestBatch(argThat(hasSameStateAsTestBatch(expectedTestBatch)));
         verify(donorDeferralCRUDService).createAutomatedUnsafeDeferralForDonor(donorWithUnsafeDonation);
         verify(donorDeferralCRUDService, never()).createAutomatedUnsafeDeferralForDonor(donorWithSafeDonation);
+        verify(componentCRUDService).markComponentsBelongingToDonorAsUnsafe(donorWithUnsafeDonation);
+        verify(componentCRUDService, never()).markComponentsBelongingToDonorAsUnsafe(donorWithSafeDonation);
         assertThat(returnedTestBatch, hasSameStateAsTestBatch(expectedTestBatch));
     }
 

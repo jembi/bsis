@@ -33,6 +33,7 @@ import model.componentmovement.ComponentStatusChangeType;
 import model.componenttype.ComponentType;
 import model.componenttype.ComponentTypeCombination;
 import model.donation.Donation;
+import model.donor.Donor;
 import model.request.Request;
 import model.util.BloodGroup;
 
@@ -41,6 +42,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
@@ -955,4 +957,15 @@ public class ComponentRepository {
      	component.setStatus(ComponentStatus.PROCESSED);
      	em.merge(component);
   }
+  
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void updateComponentStatusForDonor(ComponentStatus oldStatus, ComponentStatus newStatus,
+            Donor donor) {
+
+        em.createNamedQuery(ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUS_FOR_DONOR)
+            .setParameter("oldStatus", oldStatus)
+            .setParameter("newStatus", newStatus)
+            .setParameter("donor", donor)
+            .executeUpdate();
+    }
 }

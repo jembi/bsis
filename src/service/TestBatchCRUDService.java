@@ -26,6 +26,8 @@ public class TestBatchCRUDService {
     private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
     @Autowired
     private DonorDeferralCRUDService donorDeferralCRUDService;
+    @Autowired
+    private ComponentCRUDService componentCRUDService;
 
     public void setTestBatchRepository(TestBatchRepository testBatchRepository) {
         this.testBatchRepository = testBatchRepository;
@@ -59,6 +61,9 @@ public class TestBatchCRUDService {
             // Create deferrals for donors who have unsafe donations
             for (Donor donorToDefer : donorsToDefer) {
                 donorDeferralCRUDService.createAutomatedUnsafeDeferralForDonor(donorToDefer);
+
+                // Make sure that components belonging to this donor are marked as unsafe
+                componentCRUDService.markComponentsBelongingToDonorAsUnsafe(donorToDefer);
             }
         }
 
