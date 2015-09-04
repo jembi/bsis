@@ -2,12 +2,22 @@ package model.donordeferral;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
 
+import repository.DeferralReasonNamedQueryConstants;
+
+@NamedQueries({
+    @NamedQuery(name = DeferralReasonNamedQueryConstants.NAME_FIND_DEFERRAL_REASON_BY_TYPE,
+            query = DeferralReasonNamedQueryConstants.QUERY_FIND_DEFERRAL_REASON_BY_TYPE)
+})
 @Entity
 @Audited
 public class DeferralReason {
@@ -24,6 +34,10 @@ public class DeferralReason {
   
   @Column(nullable = false)
   private int defaultDuration; // in days
+  
+  @Column(length = 30, nullable = false)
+  @Enumerated(EnumType.STRING)
+  private DeferralReasonType type = DeferralReasonType.NORMAL;
   
   public Integer getId() {
     return id;
@@ -62,6 +76,14 @@ public class DeferralReason {
 
     public void setDefaultDuration(int defaultDuration) {
         this.defaultDuration = defaultDuration;
+    }
+
+    public DeferralReasonType getType() {
+        return type;
+    }
+
+    public void setType(DeferralReasonType type) {
+        this.type = type;
     }
 
 }

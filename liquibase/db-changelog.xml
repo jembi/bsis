@@ -1625,5 +1625,49 @@
 	       </column>
 	   </addColumn>
 	</changeSet>
+	
+	<changeSet id="20150903-1641" author="bausmeier">
+	   
+	   <addColumn tableName="DonorDeferral">
+	       <column name="deferralType" type="VARCHAR(30)">
+	           <constraints nullable="false" />
+	       </column>
+	   </addColumn>
+	   
+	   <addColumn tableName="DonorDeferral_AUD">
+	       <column name="deferralType" type="VARCHAR(30)">
+	           <constraints nullable="false" />
+	       </column>
+	   </addColumn>
+
+	   <update tableName="DonorDeferral">
+	       <column name="deferralType" value="TEMPORARY" />
+	   </update>
+
+
+	   <addColumn tableName="DeferralReason">
+	       <column name="type" type="VARCHAR(30)">
+	           <constraints nullable="false" />
+	       </column>
+	   </addColumn>
+
+	   <addColumn tableName="DeferralReason_AUD">
+	       <column name="type" type="VARCHAR(30)">
+	           <constraints nullable="false" />
+	       </column>
+	   </addColumn>
+
+	   <update tableName="DeferralReason">
+	       <column name="type" value="NORMAL" />
+	   </update>
+	   
+	   <insert tableName="DeferralReason">
+	       <column name="reason">TTI unsafe</column>
+	       <column name="type">AUTOMATED_TTI_UNSAFE</column>
+	       <column name="defaultDuration">65535</column>
+	       <column name="isDeleted">0</column>
+	   </insert>
+	   
+	</changeSet>
 
 </databaseChangeLog>
