@@ -4,14 +4,12 @@ import java.util.Date;
 
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
-import model.donordeferral.DeferralType;
 import model.donordeferral.DonorDeferral;
 
 public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
     
     private Donor deferredDonor;
     private DeferralReason deferralReason;
-    private DeferralType deferralType;
     private Date deferredUntil;
     private Boolean voided;
 
@@ -22,11 +20,6 @@ public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
 
     public DonorDeferralBuilder withDeferralReason(DeferralReason deferralReason) {
         this.deferralReason = deferralReason;
-        return this;
-    }
-    
-    public DonorDeferralBuilder withDeferralType(DeferralType deferralType) {
-        this.deferralType = deferralType;
         return this;
     }
     
@@ -45,7 +38,6 @@ public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
         DonorDeferral donorDeferral = new DonorDeferral();
         donorDeferral.setDeferredDonor(deferredDonor);
         donorDeferral.setDeferralReason(deferralReason);
-        donorDeferral.setDeferralType(deferralType);
         donorDeferral.setDeferredUntil(deferredUntil);
         donorDeferral.setIsVoided(voided);
         return donorDeferral;

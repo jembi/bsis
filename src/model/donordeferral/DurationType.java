@@ -1,6 +1,6 @@
 package model.donordeferral;
 
-public enum DeferralType {
+public enum DurationType {
     
     TEMPORARY,
     PERMANENT;

@@ -19,6 +19,7 @@ import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.donor.Donor;
+import model.donordeferral.DeferralReasonType;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 
@@ -168,8 +169,10 @@ public class TestBatchCRUDServiceTests {
         verify(postDonationCounsellingCRUDService).createPostDonationCounsellingForDonation(unsafeDonation);
         verify(postDonationCounsellingCRUDService, never()).createPostDonationCounsellingForDonation(safeDonation);
         verify(testBatchRepository).updateTestBatch(argThat(hasSameStateAsTestBatch(expectedTestBatch)));
-        verify(donorDeferralCRUDService).createAutomatedUnsafeDeferralForDonor(donorWithUnsafeDonation);
-        verify(donorDeferralCRUDService, never()).createAutomatedUnsafeDeferralForDonor(donorWithSafeDonation);
+        verify(donorDeferralCRUDService).createDeferralForDonorWithDeferralReasonType(donorWithUnsafeDonation,
+                DeferralReasonType.AUTOMATED_TTI_UNSAFE);
+        verify(donorDeferralCRUDService, never()).createDeferralForDonorWithDeferralReasonType(donorWithSafeDonation,
+                DeferralReasonType.AUTOMATED_TTI_UNSAFE);
         verify(componentCRUDService).markComponentsBelongingToDonorAsUnsafe(donorWithUnsafeDonation);
         verify(componentCRUDService, never()).markComponentsBelongingToDonorAsUnsafe(donorWithSafeDonation);
         assertThat(returnedTestBatch, hasSameStateAsTestBatch(expectedTestBatch));

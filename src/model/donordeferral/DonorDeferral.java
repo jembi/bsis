@@ -13,8 +13,6 @@ import javax.persistence.GenerationType;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -61,10 +59,6 @@ public class DonorDeferral implements ModificationTracker{
   
   @Temporal(TemporalType.DATE)
   private Date voidedDate;
-  
-  @Column(length = 30, nullable = false)
-  @Enumerated(EnumType.STRING)
-  private DeferralType deferralType = DeferralType.TEMPORARY;
   
   @Valid
   private RowModificationTracker modificationTracker;
@@ -186,14 +180,6 @@ public class DonorDeferral implements ModificationTracker{
 	public void setVoidedDate(Date voidedDate) {
 		this.voidedDate = voidedDate;
 	}
-	
-	public DeferralType getDeferralType() {
-        return deferralType;
-    }
-
-    public void setDeferralType(DeferralType deferralType) {
-        this.deferralType = deferralType;
-    }
 
     public void copy(DonorDeferral deferral) {
 	    assert (deferral.getId().equals(this.getId()));

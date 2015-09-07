@@ -5,10 +5,11 @@ import java.util.Date;
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DeferralReasonType;
-import model.donordeferral.DeferralType;
 import model.donordeferral.DonorDeferral;
+import model.donordeferral.DurationType;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,20 +29,27 @@ public class DonorDeferralCRUDService {
     private DonorDeferralRepository donorDeferralRepository;
     @Autowired
     private DeferralReasonRepository deferralReasonRepository;
+    @Autowired
+    private DateGeneratorService dateGeneratorService;
     
-    public DonorDeferral createAutomatedUnsafeDeferralForDonor(Donor donor) {
-        LOGGER.info("Creating automated unsafe deferral for donor: " + donor);
+    public DonorDeferral createDeferralForDonorWithDeferralReasonType(Donor donor, DeferralReasonType deferralReasonType) {
+        LOGGER.info("Creating deferral for donor: " + donor);
+        
+        // Look up deferral reason
+        DeferralReason deferralReason = deferralReasonRepository.findDeferralReasonByType(deferralReasonType);
         
         DonorDeferral donorDeferral = new DonorDeferral();
-        donorDeferral.setDeferralType(DeferralType.PERMANENT);
-        donorDeferral.setDeferredUntil(PERMANENT_DEFERRAL_DATE);
         donorDeferral.setDeferredDonor(donor);
+        donorDeferral.setDeferralReason(deferralReason);
         donorDeferral.setIsVoided(Boolean.FALSE);
         
-        // Set deferral reason
-        DeferralReason deferralReason = deferralReasonRepository.findDeferralReasonByType(
-                DeferralReasonType.AUTOMATED_TTI_UNSAFE);
-        donorDeferral.setDeferralReason(deferralReason);
+        if (deferralReason.getDurationType() == DurationType.PERMANENT) {
+            donorDeferral.setDeferredUntil(PERMANENT_DEFERRAL_DATE);
+        } else {
+            Date now = dateGeneratorService.generateDate();
+            Date deferredUntilDate = new DateTime(now).plusDays(deferralReason.getDefaultDuration()).toDate();
+            donorDeferral.setDeferredUntil(deferredUntilDate);
+        }
         
         donorDeferralRepository.save(donorDeferral);
         return donorDeferral;

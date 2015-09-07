@@ -39,6 +39,10 @@ public class DeferralReason {
   @Enumerated(EnumType.STRING)
   private DeferralReasonType type = DeferralReasonType.NORMAL;
   
+  @Column(length = 30, nullable = false)
+  @Enumerated(EnumType.STRING)
+  private DurationType durationType = DurationType.TEMPORARY;
+  
   public Integer getId() {
     return id;
   }
@@ -68,6 +72,7 @@ public class DeferralReason {
     this.reason = deferralReason.getReason();
     this.isDeleted = deferralReason.getIsDeleted();
     this.defaultDuration = deferralReason.getDefaultDuration();
+    this.durationType = deferralReason.getDurationType();
   }
 
     public int getDefaultDuration() {
@@ -84,6 +89,14 @@ public class DeferralReason {
 
     public void setType(DeferralReasonType type) {
         this.type = type;
+    }
+
+    public DurationType getDurationType() {
+        return durationType;
+    }
+
+    public void setDurationType(DurationType durationType) {
+        this.durationType = durationType;
     }
 
 }

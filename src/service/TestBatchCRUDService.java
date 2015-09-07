@@ -7,6 +7,7 @@ import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.donor.Donor;
+import model.donordeferral.DeferralReasonType;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 
@@ -60,7 +61,8 @@ public class TestBatchCRUDService {
             
             // Create deferrals for donors who have unsafe donations
             for (Donor donorToDefer : donorsToDefer) {
-                donorDeferralCRUDService.createAutomatedUnsafeDeferralForDonor(donorToDefer);
+                donorDeferralCRUDService.createDeferralForDonorWithDeferralReasonType(donorToDefer,
+                        DeferralReasonType.AUTOMATED_TTI_UNSAFE);
 
                 // Make sure that components belonging to this donor are marked as unsafe
                 componentCRUDService.markComponentsBelongingToDonorAsUnsafe(donorToDefer);
