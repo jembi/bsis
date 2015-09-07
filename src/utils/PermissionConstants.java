@@ -133,7 +133,11 @@ public class PermissionConstants {
 	public static final String EDIT_POST_DONATION_COUNSELLING = "Edit Post Donation Counselling";
 	public static final String VIEW_POST_DONATION_COUNSELLING = "View Post Donation Counselling";
 	public static final String VOID_POST_DONATION_COUNSELLING = "Void Post Donation Counselling";
-        
-        
+	
+	// Adverse Event Permissions
+	public static final String ADD_ADVERSE_EVENT_TYPES = "Add Adverse Event Types";
+	public static final String EDIT_ADVERSE_EVENT_TYPES = "Edit Adverse Event Types";
+	public static final String VIEW_ADVERSE_EVENT_TYPES = "View Adverse Event Types";
+	public static final String VOID_ADVERSE_EVENT_TYPES = "Void Adverse Event Types";
 
 }
