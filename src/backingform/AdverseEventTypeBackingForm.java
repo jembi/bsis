@@ -1,22 +1,14 @@
-package viewmodel;
+package backingform;
 
-public class AdverseEventTypeViewModel {
+import javax.validation.constraints.NotNull;
+
+public class AdverseEventTypeBackingForm {
     
     private Long id;
+    @NotNull
     private String name;
     private String description;
     private boolean isDeleted;
-    
-    public AdverseEventTypeViewModel() {
-        // Default constructor
-    }
-    
-    public AdverseEventTypeViewModel(Long id, String name, String description, boolean isDeleted) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.isDeleted = isDeleted;
-    }
 
     public Long getId() {
         return id;
