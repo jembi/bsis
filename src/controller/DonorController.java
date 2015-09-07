@@ -115,8 +115,7 @@ public class DonorController {
       donor = donorRepository.findDonorById(id);
     }
 
-    DonorViewModel donorViewModel = getDonorsViewModel(donor);
-    map.put("donor", donorViewModel);    
+    map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(donor));    
     
       // include donor deferral status
       List<DonorDeferral> donorDeferrals = null;
@@ -247,7 +246,7 @@ public class DonorController {
 
         updatedDonor = donorRepository.updateDonorDetails(donor);
 
-        map.put("donor", getDonorsViewModel(donorRepository.findDonorById(updatedDonor.getId())));
+        map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(updatedDonor));
         return new ResponseEntity<Map<String, Object>>(map, httpStatus);
 
     }
@@ -359,11 +358,6 @@ public class DonorController {
         donorDeferralViewModels.add(new DonorDeferralViewModel(donorDeferral));
     }
     return donorDeferralViewModels;
-  }
-
-  private DonorViewModel getDonorsViewModel(Donor donor) {
-    DonorViewModel donorViewModel = new DonorViewModel(donor);
-    return donorViewModel;
   }
   
   private DonationViewModel getDonationViewModel(Donation donation) {
