@@ -28,18 +28,19 @@ public class DuplicateDonorService {
 		int duplicateCounter = 0;
 		if (donors != null) {
 			List<Donor> potentialDuplicates = new ArrayList<Donor>(donors);
-			for (Donor d1 : donors) {
+			for (int i = 0; i < potentialDuplicates.size(); i++) {
+				Donor d1 = potentialDuplicates.get(i);
 				List<Donor> duplicates = new ArrayList<Donor>();
-				potentialDuplicates.remove(d1); // can't match itself
-				// find the duplicates
-				for (Donor d2 : potentialDuplicates) {
+				// find the duplicates starting from the next element in the list of Donors
+				for (int j = i + 1; j < potentialDuplicates.size(); j++) {
+					Donor d2 = potentialDuplicates.get(j);
 					if (match(d1, d2)) {
 						duplicates.add(d2);
 					}
 				}
 				if (!duplicates.isEmpty()) {
 					duplicateCounter++;
-					// remove the duplicates from the potential list
+					// remove the found duplicates from the potential list
 					for (Donor d3 : duplicates) {
 						potentialDuplicates.remove(d3);
 					}

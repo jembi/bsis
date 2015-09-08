@@ -345,16 +345,18 @@ public class DonorController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		List<Donor> donors = donorRepository.getAllDonors();
-		List<List<Donor>> duplicates = new DuplicateDonorService().findDuplicateDonors(donors);
+		Map<String, List<Donor>> duplicates = new DuplicateDonorService().findDuplicateDonors(donors);
 		
-		List<List<DonorViewModel>> duplicateViewModels = new ArrayList<List<DonorViewModel>>();
-		for (List<Donor> donorList : duplicates) {
+		// convert Donors to DonorViewModels
+		Map<String, List<DonorViewModel>> duplicateViewModels = new HashMap<String, List<DonorViewModel>>();
+		for (String key : duplicates.keySet()) {
+			List<Donor> donorList = duplicates.get(key);
 			List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
 			for (Donor donor : donorList) {
 				DonorViewModel donorViewModel = getDonorsViewModel(donor);
 				donorViewModels.add(donorViewModel);
 			}
-			duplicateViewModels.add(donorViewModels);
+			duplicateViewModels.put(key, donorViewModels);
 		}
 		
 		map.put("duplicates", duplicateViewModels);
