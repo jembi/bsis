@@ -58,7 +58,7 @@ public class DonationBatchBackingFormValidator implements Validator {
 	  errors.rejectValue("donationBatch.donorPanel", "donorPanel.invalid",
 		"Location is not a Donor Panel.");
 	}
-    else if ( form.getId() == null && utilController.findOpenDonationBatches(false, donorPanelIds).size() > 0) {
+    else if ( form.getId() == null && utilController.findOpenDonationBatches(donorPanelIds).size() > 0) {
       errors.rejectValue("donationBatch.donorPanel", "donorPanel.invalid",
               "There is already an open donation batch for that panel.");
     }
