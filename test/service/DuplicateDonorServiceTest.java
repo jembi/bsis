@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import model.donor.Donor;
 import model.util.Gender;
@@ -19,13 +20,13 @@ public class DuplicateDonorServiceTest {
 	
 	@Test
 	public void testFindDuplicateDonorsNull() throws Exception {
-		List<List<Donor>> duplicateDonors = service.findDuplicateDonors(null);
+		Map<String, List<Donor>> duplicateDonors = service.findDuplicateDonors(null);
 		Assert.assertTrue("No matching donors", duplicateDonors.isEmpty());
 	}
 	
 	@Test
 	public void testFindDuplicateDonorsEmpty() throws Exception {
-		List<List<Donor>> duplicateDonors = service.findDuplicateDonors(new ArrayList<Donor>());
+		Map<String, List<Donor>> duplicateDonors = service.findDuplicateDonors(new ArrayList<Donor>());
 		Assert.assertTrue("No matching donors", duplicateDonors.isEmpty());
 	}
 	
@@ -40,9 +41,9 @@ public class DuplicateDonorServiceTest {
 		        .withBirthDate("1978-10-20").build());
 		donors.add(DonorBuilder.aDonor().withFirstName("Nancy").withLastName("Drew").withGender(Gender.female)
 	        .withBirthDate("1964-11-20").build());
-		List<List<Donor>> duplicateDonorsList = service.findDuplicateDonors(donors);
-		Assert.assertEquals("One set of matching donors", 1, duplicateDonorsList.size());
-		List<Donor> duplicateDonors = duplicateDonorsList.get(0);
+		Map<String, List<Donor>> duplicateDonorsMap = service.findDuplicateDonors(donors);
+		Assert.assertEquals("One set of matching donors", 1, duplicateDonorsMap.size());
+		List<Donor> duplicateDonors = duplicateDonorsMap.get("1");
 		Assert.assertEquals("Two matching donors", 2, duplicateDonors.size());
 		Assert.assertEquals("David is matching Donor", "David", duplicateDonors.get(0).getFirstName());
 		Assert.assertEquals("David is matching Donor", "David", duplicateDonors.get(1).getFirstName());
@@ -63,13 +64,13 @@ public class DuplicateDonorServiceTest {
 	        .withBirthDate("1964-11-20").build());
 		donors.add(DonorBuilder.aDonor().withFirstName("Sue").withLastName("Simpson").withGender(Gender.female)
 	        .withBirthDate("1982-02-20").build());
-		List<List<Donor>> duplicateDonorsList = service.findDuplicateDonors(donors);
-		Assert.assertEquals("Two sets of matching donors", 2, duplicateDonorsList.size());
-		List<Donor> duplicateDonors1 = duplicateDonorsList.get(0);
+		Map<String, List<Donor>> duplicateDonorsMap = service.findDuplicateDonors(donors);
+		Assert.assertEquals("Two sets of matching donors", 2, duplicateDonorsMap.size());
+		List<Donor> duplicateDonors1 = duplicateDonorsMap.get("1");
 		Assert.assertEquals("Two matching donors", 2, duplicateDonors1.size());
 		Assert.assertEquals("David is matching Donor", "David", duplicateDonors1.get(0).getFirstName());
 		Assert.assertEquals("David is matching Donor", "David", duplicateDonors1.get(1).getFirstName());
-		List<Donor> duplicateDonors2 = duplicateDonorsList.get(1);
+		List<Donor> duplicateDonors2 = duplicateDonorsMap.get("2");
 		Assert.assertEquals("Two matching donors", 2, duplicateDonors2.size());
 		Assert.assertEquals("Sue is matching Donor", "Sue", duplicateDonors2.get(0).getFirstName());
 		Assert.assertEquals("Sue is matching Donor", "Sue", duplicateDonors2.get(1).getFirstName());

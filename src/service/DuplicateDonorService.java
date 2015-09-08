@@ -3,7 +3,9 @@ package service;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import model.donor.Donor;
 import model.util.Gender;
@@ -19,10 +21,11 @@ public class DuplicateDonorService {
 	 * Identifies the duplicate donors matching on first name, last name, gender and date of birth.
 	 * 
 	 * @param donors List<Donor> list of donors to check
-	 * @return List<List<Donor>> list of duplicate donors found, will not be null or contain nulls
+	 * @return Map<List<Donor>> map of duplicate donors found, will not be null or contain nulls
 	 */
-	public List<List<Donor>> findDuplicateDonors(List<Donor> donors) {
-		List<List<Donor>> duplicateDonors = new ArrayList<List<Donor>>();
+	public Map<String, List<Donor>> findDuplicateDonors(List<Donor> donors) {
+		Map<String, List<Donor>> duplicateDonors = new HashMap<String, List<Donor>>();
+		int duplicateCounter = 0;
 		if (donors != null) {
 			List<Donor> potentialDuplicates = new ArrayList<Donor>(donors);
 			for (Donor d1 : donors) {
@@ -35,13 +38,14 @@ public class DuplicateDonorService {
 					}
 				}
 				if (!duplicates.isEmpty()) {
+					duplicateCounter++;
 					// remove the duplicates from the potential list
 					for (Donor d3 : duplicates) {
 						potentialDuplicates.remove(d3);
 					}
 					// add the new duplicates to the duplicate map
 					duplicates.add(d1);
-					duplicateDonors.add(duplicates);
+					duplicateDonors.put(String.valueOf(duplicateCounter), duplicates);
 				}
 			}
 		}
