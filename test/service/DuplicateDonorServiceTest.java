@@ -64,12 +64,15 @@ public class DuplicateDonorServiceTest {
 	        .withBirthDate("1964-11-20").build());
 		donors.add(DonorBuilder.aDonor().withFirstName("Sue").withLastName("Simpson").withGender(Gender.female)
 	        .withBirthDate("1982-02-20").build());
+		donors.add(DonorBuilder.aDonor().withFirstName("David").withLastName("Smith").withGender(Gender.male)
+	        .withBirthDate("1977-10-20").build());
 		Map<String, List<Donor>> duplicateDonorsMap = service.findDuplicateDonors(donors);
 		Assert.assertEquals("Two sets of matching donors", 2, duplicateDonorsMap.size());
 		List<Donor> duplicateDonors1 = duplicateDonorsMap.get("1");
-		Assert.assertEquals("Two matching donors", 2, duplicateDonors1.size());
+		Assert.assertEquals("Three matching donors", 3, duplicateDonors1.size());
 		Assert.assertEquals("David is matching Donor", "David", duplicateDonors1.get(0).getFirstName());
 		Assert.assertEquals("David is matching Donor", "David", duplicateDonors1.get(1).getFirstName());
+		Assert.assertEquals("David is matching Donor", "David", duplicateDonors1.get(2).getFirstName());
 		List<Donor> duplicateDonors2 = duplicateDonorsMap.get("2");
 		Assert.assertEquals("Two matching donors", 2, duplicateDonors2.size());
 		Assert.assertEquals("Sue is matching Donor", "Sue", duplicateDonors2.get(0).getFirstName());

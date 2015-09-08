@@ -27,12 +27,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import constant.GeneralConfigConstants;
 import repository.ContactMethodTypeRepository;
 import repository.DonationBatchRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
 import repository.PostDonationCounsellingRepository;
+import service.DuplicateDonorService;
 import service.GeneralConfigAccessorService;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
@@ -43,6 +43,7 @@ import viewmodel.DonorViewModel;
 import viewmodel.PostDonationCounsellingViewModel;
 import backingform.DonorBackingForm;
 import backingform.validator.DonorBackingFormValidator;
+import constant.GeneralConfigConstants;
 
 @RestController
 @RequestMapping("donors")
@@ -336,6 +337,29 @@ public class DonorController {
     
     return map;
   }
+  
+	@RequestMapping(value = "/duplicates", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
+	public Map<String, Object> findDuplicateDonors() {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		List<Donor> donors = donorRepository.getAllDonors();
+		List<List<Donor>> duplicates = new DuplicateDonorService().findDuplicateDonors(donors);
+		
+		List<List<DonorViewModel>> duplicateViewModels = new ArrayList<List<DonorViewModel>>();
+		for (List<Donor> donorList : duplicates) {
+			List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
+			for (Donor donor : donorList) {
+				DonorViewModel donorViewModel = getDonorsViewModel(donor);
+				donorViewModels.add(donorViewModel);
+			}
+			duplicateViewModels.add(donorViewModels);
+		}
+		
+		map.put("duplicates", duplicateViewModels);
+		return map;
+	}
   
     @RequestMapping(value = "{id}/postdonationcounselling", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_POST_DONATION_COUNSELLING + "')")
