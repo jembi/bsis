@@ -28,6 +28,11 @@ public class AdverseEventTypeBuilder extends AbstractEntityBuilder<AdverseEventT
         deleted = true;
         return this;
     }
+    
+    public AdverseEventTypeBuilder thatIsNotDeleted() {
+        deleted = false;
+        return this;
+    }
 
     @Override
     public AdverseEventType build() {

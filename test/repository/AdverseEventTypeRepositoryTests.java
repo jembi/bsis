@@ -27,25 +27,17 @@ public class AdverseEventTypeRepositoryTests extends ContextDependentTestSuite {
     private AdverseEventTypeRepository adverseEventTypeRepository;
     
     @Test
-    public void testFindAdverseEventTypeViewModels_shouldReturnViewModelsForNonDeletedAdverseEventTypes() {
+    public void testFindAdverseEventTypeViewModels_shouldReturnViewModelsForAdverseEventTypes() {
         
         String firstExpectedName = "b.name";
         String secondExpectedName = "c.name";
         String firstExpectedDescription = "first.description";
         String secondExpectedDescription = "second.description";
         
-        // Expected
         AdverseEventType secondAdverseEventType = anAdverseEventType()
                 .withName(secondExpectedName)
                 .withDescription(secondExpectedDescription)
                 .buildAndPersist(entityManager);
-        // Excluded by deleted flag
-        anAdverseEventType()
-                .thatIsDeleted()
-                .withName("a.name")
-                .withDescription("a.description")
-                .buildAndPersist(entityManager);
-        // Expected
         AdverseEventType firstAdverseEventType = anAdverseEventType()
                 .withName(firstExpectedName)
                 .withDescription(firstExpectedDescription)
@@ -67,6 +59,19 @@ public class AdverseEventTypeRepositoryTests extends ContextDependentTestSuite {
         assertThat(returnedViewModels.size(), is(2));
         assertThat(returnedViewModels.get(0), hasSameStateAsAdverseEventTypeViewModel(firstExpectedViewModel));
         assertThat(returnedViewModels.get(1), hasSameStateAsAdverseEventTypeViewModel(secondExpectedViewModel));
+    }
+    
+    @Test
+    public void testFindById_shouldReturnCorrectAdverseEventType() {
+        anAdverseEventType().withName("first").buildAndPersist(entityManager);
+        AdverseEventType expectedAdverseEventType = anAdverseEventType()
+                .withName("second")
+                .buildAndPersist(entityManager);
+        anAdverseEventType().withName("third").buildAndPersist(entityManager);
+        
+        AdverseEventType returnedAdverseEventType = adverseEventTypeRepository.findById(expectedAdverseEventType.getId());
+        
+        assertThat(returnedAdverseEventType, is(expectedAdverseEventType));
     }
 
 }

@@ -8,6 +8,7 @@ import model.adverseevent.AdverseEventType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,6 +43,22 @@ public class AdverseEventController {
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_ADVERSE_EVENT_TYPES + "')")
     public List<AdverseEventTypeViewModel> findAdverseEventTypes() {
         return adverseEventTypeRepository.findAdverseEventTypeViewModels();
+    }
+    
+    @RequestMapping(value = "/types/{id}", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_ADVERSE_EVENT_TYPES + "')")
+    public AdverseEventTypeViewModel findAdverseEventTypeById(@PathVariable("id") Long id) {
+        AdverseEventType adverseEventType = adverseEventTypeRepository.findById(id);
+        return adverseEventTypeViewModelFactory.createAdverseEventTypeViewModel(adverseEventType);
+    }
+
+    @RequestMapping(value = "/types/{id}", method = RequestMethod.PUT)
+    @PreAuthorize("hasRole('" + PermissionConstants.EDIT_ADVERSE_EVENT_TYPES + "')")
+    public AdverseEventTypeViewModel updateAdverseEventType(
+            @PathVariable("id") Long id,
+            @Valid @RequestBody AdverseEventTypeBackingForm backingForm) {
+        AdverseEventType adverseEventType = adverseEventTypeCRUDService.updateAdverseEventType(id, backingForm);
+        return adverseEventTypeViewModelFactory.createAdverseEventTypeViewModel(adverseEventType);
     }
 
 }

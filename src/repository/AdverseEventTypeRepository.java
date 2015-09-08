@@ -17,7 +17,10 @@ public class AdverseEventTypeRepository extends AbstractRepository<AdverseEventT
         return entityManager.createNamedQuery(
                 AdverseEventTypeNamedQueryConstants.NAME_FIND_ADVERSE_EVENT_TYPE_VIEW_MODELS,
                 AdverseEventTypeViewModel.class)
-                .setParameter("deleted", false)
                 .getResultList();
+    }
+    
+    public AdverseEventType findById(Long id) {
+        return entityManager.find(AdverseEventType.class, id);
     }
 }
