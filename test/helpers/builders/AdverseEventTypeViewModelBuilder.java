@@ -34,7 +34,7 @@ public class AdverseEventTypeViewModelBuilder {
         viewModel.setId(id);
         viewModel.setName(name);
         viewModel.setDescription(description);
-        viewModel.setDeleted(deleted);
+        viewModel.setIsDeleted(deleted);
         return viewModel;
     }
     

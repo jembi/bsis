@@ -21,7 +21,7 @@ public class AdverseEventTypeViewModelMatcher extends TypeSafeMatcher<AdverseEve
                 .appendText("\nId: ").appendValue(expected.getId())
                 .appendText("\nName: ").appendValue(expected.getName())
                 .appendText("\nDescription: ").appendValue(expected.getDescription())
-                .appendText("\nDeleted: ").appendValue(expected.isDeleted());
+                .appendText("\nDeleted: ").appendValue(expected.getIsDeleted());
     }
 
     @Override
@@ -29,7 +29,7 @@ public class AdverseEventTypeViewModelMatcher extends TypeSafeMatcher<AdverseEve
         return Objects.equals(actual.getId(), expected.getId()) &&
                 Objects.equals(actual.getName(), expected.getName()) &&
                 Objects.equals(actual.getDescription(), expected.getDescription()) &&
-                Objects.equals(actual.isDeleted(), expected.isDeleted());
+                Objects.equals(actual.getIsDeleted(), expected.getIsDeleted());
     }
     
     public static AdverseEventTypeViewModelMatcher hasSameStateAsAdverseEventTypeViewModel(

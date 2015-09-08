@@ -14,7 +14,7 @@ public class AdverseEventTypeViewModelFactory {
         viewModel.setId(adverseEventType.getId());
         viewModel.setName(adverseEventType.getName());
         viewModel.setDescription(adverseEventType.getDescription());
-        viewModel.setDeleted(adverseEventType.isDeleted());
+        viewModel.setIsDeleted(adverseEventType.isDeleted());
         return viewModel;
     }
 

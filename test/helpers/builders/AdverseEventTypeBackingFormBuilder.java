@@ -34,7 +34,7 @@ public class AdverseEventTypeBackingFormBuilder {
         backingForm.setId(id);
         backingForm.setName(name);
         backingForm.setDescription(description);
-        backingForm.setDeleted(deleted);
+        backingForm.setIsDeleted(deleted);
         return backingForm;
     }
     
