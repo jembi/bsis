@@ -4,7 +4,7 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
-import utils.JsonDateSerialiser;
+import utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -43,7 +43,7 @@ public class PostDonationCounsellingBackingForm {
         return counsellingDate;
     }
     
-    @JsonSerialize(using = JsonDateSerialiser.class)
+    @JsonSerialize(using = DateTimeSerialiser.class)
     public void setCounsellingDate(Date counsellingDate) {
         this.counsellingDate = counsellingDate;
     }

@@ -2,7 +2,7 @@ package viewmodel;
 
 import java.util.Date;
 
-import utils.JsonDateSerialiser;
+import utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -20,7 +20,7 @@ public class DonationSummaryViewModel {
         return donation.getDonationIdentificationNumber();
     }
     
-    @JsonSerialize(using = JsonDateSerialiser.class)
+    @JsonSerialize(using = DateTimeSerialiser.class)
     public Date getDonationDate() {
         return donation.getDonationDate();
     }

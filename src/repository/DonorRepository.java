@@ -38,6 +38,7 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import utils.DonorUtils;
@@ -62,15 +63,6 @@ public class DonorRepository {
     public void saveDonor(Donor donor) {
         em.persist(donor);
         em.flush();
-    }
-
-    public Donor deleteDonor(Long donorId){
-        Donor existingDonor = findDonorById(donorId);
-        existingDonor.setIsDeleted(Boolean.TRUE);
-        em.merge(existingDonor);
-        em.flush();
-        return existingDonor;
-
     }
 
     public Donor findDonorById(Long donorId) throws NoResultException{
@@ -202,7 +194,7 @@ public class DonorRepository {
         return donor;
     }
 
-    public Donor updateDonor(Donor donor) {
+    public Donor updateDonorDetails(Donor donor) {
         Donor existingDonor = findDonorById(donor.getId());
         if (existingDonor == null) {
             return null;
@@ -214,6 +206,11 @@ public class DonorRepository {
         em.merge(existingDonor);
         em.flush();
         return existingDonor;
+    }
+    
+    @Transactional(propagation = Propagation.MANDATORY)
+    public Donor updateDonor(Donor donor) {
+        return em.merge(donor);
     }
 
     public Donor findDonorByNumber(String donorNumber) throws NoResultException{

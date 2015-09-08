@@ -1,6 +1,7 @@
 package viewmodel;
 
 import java.util.Date;
+import java.util.Map;
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
@@ -14,11 +15,13 @@ import model.user.User;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import utils.CustomDateFormatter;
 
 @Component
 public class DonorViewModel {
   private Donor donor;
+  private Map<String, Boolean> permissions;
 
   public DonorViewModel() {
   }
@@ -178,6 +181,17 @@ public class DonorViewModel {
      //return donor.getAddressType()!=null?donor.getAddressType().getPreferredAddressType():"";
 	 return donor.getAddressType();
   }
-  
-  
+
+    public Map<String, Boolean> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Map<String, Boolean> permissions) {
+        this.permissions = permissions;
+    }
+    
+    @JsonIgnore
+    public Donor getDonor() {
+        return donor;
+    }
 }

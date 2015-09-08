@@ -25,14 +25,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import constant.GeneralConfigConstants;
+import factory.DonationViewModelFactory;
+import factory.DonorViewModelFactory;
 import repository.ContactMethodTypeRepository;
 import repository.DonationBatchRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
 import repository.PostDonationCounsellingRepository;
+import service.DonorCRUDService;
 import service.GeneralConfigAccessorService;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
@@ -73,6 +77,15 @@ public class DonorController {
   
   @Autowired
   private PostDonationCounsellingRepository postDonationCounsellingRepository;
+
+  @Autowired
+  private DonorCRUDService donorCRUDService;
+  
+  @Autowired
+  private DonorViewModelFactory donorViewModelFactory;
+  
+  @Autowired
+  private DonationViewModelFactory donationViewModelFactory;
   
   public DonorController() {
   }
@@ -102,8 +115,7 @@ public class DonorController {
       donor = donorRepository.findDonorById(id);
     }
 
-    DonorViewModel donorViewModel = getDonorsViewModel(donor);
-    map.put("donor", donorViewModel);    
+    map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(donor));    
     
       // include donor deferral status
       List<DonorDeferral> donorDeferrals = null;
@@ -169,20 +181,8 @@ public class DonorController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Donor donor = donorRepository.findDonorById(id);
-    
-    List<Donation> donations = donor.getDonations();
-
-    List<DonationViewModel> donationViewModels = new ArrayList<DonationViewModel>();
-    
-    if (donations != null) {
-        for (Donation donation : donations) {
-          donationViewModels.add(new DonationViewModel(donation));
-        }
-    }
-
-    map.put("allDonations", donationViewModels);
-
-    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    map.put("allDonations", donationViewModelFactory.createDonationViewModelsWithPermissions(donor.getDonations()));
+    return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
 
   @RequestMapping(value ="/form", method = RequestMethod.GET)
@@ -224,7 +224,7 @@ public class DonorController {
         map.put("hasErrors", false);
 
         map.put("donorId", savedDonor.getId());
-        map.put("donor", getDonorsViewModel(donorRepository.findDonorById(savedDonor.getId())));
+        map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(savedDonor));
 
         return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
     }
@@ -244,21 +244,19 @@ public class DonorController {
         donor.setContact(form.getContact());
         donor.setAddress(form.getAddress());
 
-        updatedDonor = donorRepository.updateDonor(donor);
+        updatedDonor = donorRepository.updateDonorDetails(donor);
 
-        map.put("donor", getDonorsViewModel(donorRepository.findDonorById(updatedDonor.getId())));
+        map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(updatedDonor));
         return new ResponseEntity<Map<String, Object>>(map, httpStatus);
 
     }
 
-  @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-  @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONOR+"')")
-  public 
-  ResponseEntity deleteDonor(
-      @PathVariable Long id) {
-    donorRepository.deleteDonor(id);
-    return  new ResponseEntity(HttpStatus.NO_CONTENT);
-  }
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('" + PermissionConstants.VOID_DONOR + "')")
+    public void deleteDonor(@PathVariable Long id) {
+        donorCRUDService.deleteDonor(id);
+    }
 
   @RequestMapping(value = "{id}/print",method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
@@ -324,10 +322,9 @@ public class DonorController {
     
     List<DonorViewModel> donors = new ArrayList<DonorViewModel>();
     
-    if (results != null){
-	    for(Donor donor : results){
-	    	DonorViewModel donorViewModel = getDonorsViewModel(donor);
-	    	donors.add(donorViewModel);
+    if (results != null) {
+	    for (Donor donor : results) {
+	    	donors.add(donorViewModelFactory.createDonorViewModelWithPermissions(donor));
 	    }
     }
 
@@ -361,11 +358,6 @@ public class DonorController {
         donorDeferralViewModels.add(new DonorDeferralViewModel(donorDeferral));
     }
     return donorDeferralViewModels;
-  }
-
-  private DonorViewModel getDonorsViewModel(Donor donor) {
-    DonorViewModel donorViewModel = new DonorViewModel(donor);
-    return donorViewModel;
   }
   
   private DonationViewModel getDonationViewModel(Donation donation) {
