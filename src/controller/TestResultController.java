@@ -202,8 +202,8 @@ public class TestResultController {
 		donation.setBloodRh(bloodRh);
 		donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
 		
-		Donor updatedDonor = donorRepository.updateDonor(donor);
-		Donation cs = donationRepository.updateDonation(donation);
+		Donor updatedDonor = donorRepository.updateDonorDetails(donor);
+		Donation cs = donationRepository.updateDonationDetails(donation);
 		
 		map.put("donor", getDonorsViewModel(donorRepository.findDonorById(updatedDonor.getId())));
         return new ResponseEntity<Map<String, Object>>(map, httpStatus);

@@ -5,9 +5,7 @@ import helpers.persisters.DefaultPersister;
 
 import javax.persistence.EntityManager;
 
-public abstract class AbstractEntityBuilder<T> {
-    
-    public abstract T build();
+public abstract class AbstractEntityBuilder<T> extends AbstractBuilder<T> {
     
     public AbstractEntityPersister<T> getPersister() {
         return new DefaultPersister<>();

@@ -21,9 +21,11 @@ import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import factory.TestBatchViewModelFactory;
 import viewmodel.TestBatchViewModel;
 
 @Repository
@@ -32,6 +34,9 @@ public class TestBatchRepository {
 
   @PersistenceContext
   private EntityManager em;
+  
+  @Autowired
+  private TestBatchViewModelFactory testBatchViewModelFactory;
 
  
   public TestBatch saveTestBatch(TestBatch testBatch, String testBatchNumber) {
@@ -102,7 +107,7 @@ public class TestBatchRepository {
             List<TestBatchViewModel> viewModels = new ArrayList<TestBatchViewModel>();
         for (TestBatch testBatch : testBatches) {
 
-            viewModels.add(new TestBatchViewModel(testBatch));
+            viewModels.add(testBatchViewModelFactory.createTestBatchViewModel(testBatch));
         }
 
         return viewModels;

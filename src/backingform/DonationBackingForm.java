@@ -1,11 +1,13 @@
 package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -24,6 +26,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import utils.CustomDateFormatter;
+import utils.DateTimeSerialiser;
+import utils.PackTypeSerializer;
 
 public class DonationBackingForm {
 
@@ -37,8 +41,6 @@ public class DonationBackingForm {
   private List<String> centers;
   private List<String> sites;
   private String donationDate;
-  private String bleedStartTime;
-  private String bleedEndTime;
   private String donorNumber;
 
   // setting this to false is required as the use parameters from batch
@@ -78,20 +80,14 @@ public class DonationBackingForm {
     return CustomDateFormatter.getDateTimeString(donation.getDonationDate());
   }
   
-  public String getBleedStartTime() {
-    if (bleedStartTime != null)
-      return bleedStartTime;
-    if (donation == null)
-      return "";
-    return CustomDateFormatter.getDateTimeString(donation.getBleedStartTime());
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public Date getBleedStartTime() {
+      return donation.getBleedStartTime();
   }
   
-  public String getBleedEndTime() {
-    if (bleedEndTime != null)
-      return bleedEndTime;
-    if (donation == null)
-      return "";
-    return CustomDateFormatter.getDateTimeString(donation.getBleedEndTime());
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public Date getBleedEndTime() {
+      return donation.getBleedEndTime();
   }
 
   public String getDonationIdentificationNumber() {
@@ -109,7 +105,6 @@ public class DonationBackingForm {
   }
   
   public void setBleedStartTime(String bleedStartTime) {
-    this.bleedStartTime = bleedStartTime;
     try {
       donation.setBleedStartTime(CustomDateFormatter.getDateTimeFromString(bleedStartTime));
     } catch (ParseException ex) {
@@ -119,7 +114,6 @@ public class DonationBackingForm {
   }
   
   public void setBleedEndTime(String bleedEndTime) {
-    this.bleedEndTime = bleedEndTime;
     try {
       donation.setBleedEndTime(CustomDateFormatter.getDateTimeFromString(bleedEndTime));
     } catch (ParseException ex) {
@@ -161,12 +155,9 @@ public class DonationBackingForm {
       return donationType.getId().toString();
   }
 
-  public String getPackType() {
-    PackType packType = donation.getPackType();
-    if (packType == null || packType.getId() == null)
-      return null;
-    else
-      return packType.getId().toString();
+  @JsonSerialize(using = PackTypeSerializer.class)
+  public PackType getPackType() {
+    return donation.getPackType();
   }
   
   @JsonIgnore
@@ -238,6 +229,7 @@ public class DonationBackingForm {
   	else{
   		PackType bt = new PackType();
   		bt.setId(packType.getId());
+  		bt.setPackType(packType.getPackType());
   		donation.setPackType(bt);
   	}
   }
@@ -474,5 +466,10 @@ public class DonationBackingForm {
             donation.setDonorPanel(donorPanel);
         }
             
+    }
+    
+    @JsonIgnore
+    public void setPermissions(Map<String, Boolean> permissions) {
+        // Ignore
     }
 }

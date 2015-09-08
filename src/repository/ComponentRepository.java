@@ -955,4 +955,16 @@ public class ComponentRepository {
      	component.setStatus(ComponentStatus.PROCESSED);
      	em.merge(component);
   }
+  
+    // TODO: Test
+    public int countChangedComponentsForDonation(long donationId) {
+        return em.createNamedQuery(
+                ComponentNamedQueryConstants.NAME_COUNT_CHANGED_COMPONENTS_FOR_DONATION,
+                Number.class)
+                .setParameter("donationId", donationId)
+                .setParameter("deleted", false)
+                .setParameter("initialStatus", ComponentStatus.QUARANTINED)
+                .getSingleResult()
+                .intValue();
+    }
 }
