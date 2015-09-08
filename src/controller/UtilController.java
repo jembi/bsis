@@ -275,6 +275,10 @@ public class UtilController {
     return locationRepository.getLocation(locationId).getIsDonorPanel();
   }
 
+  public List<DonationBatch> findOpenDonationBatches (Boolean isClosed, List<Long> donorPanelIds){
+    return donationBatchRepository.findDonationBatches(isClosed, donorPanelIds);
+  }
+
   public String getNextDonorNumber() {
     return sequenceNumberRepository.getNextDonorNumber();
   }
