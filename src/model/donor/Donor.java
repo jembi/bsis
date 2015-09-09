@@ -48,6 +48,7 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Index;
+import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
@@ -178,6 +179,7 @@ public class Donor implements ModificationTracker {
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="donor")
+  @Where(clause = "isDeleted = 0")
   private List<Donation> donations;
 
   /**
@@ -598,6 +600,15 @@ public void copy(Donor donor) {
 
     public void setDueToDonate(Date dueToDonate) {
         this.dueToDonate = dueToDonate;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        return other instanceof Donor &&
+                ((Donor) other).id == id;
     }
 
 }

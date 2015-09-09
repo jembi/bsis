@@ -357,37 +357,9 @@ public class DonationRepositoryTest {
 	public void testUpdateDonation() throws Exception {
 		Donation existingDonation = donationRepository.findDonationById(1L);
 		existingDonation.setDonorWeight(new BigDecimal(123));
-		donationRepository.updateDonation(existingDonation);
+		donationRepository.updateDonationDetails(existingDonation);
 		Donation updatedDonation = donationRepository.findDonationById(1L);
 		Assert.assertEquals("donor weight was updataed", new BigDecimal(123), updatedDonation.getDonorWeight());
 	}
 	
-	@Test
-	public void testDeleteDonation() throws Exception {
-		Donation newDonation = new Donation();
-		Donation existingDonation = donationRepository.findDonationById(1L);
-		newDonation.setId(existingDonation.getId());
-		newDonation.copy(existingDonation);
-		newDonation.setId(null); // don't want to override, just save time with the copy
-		newDonation.setDonationIdentificationNumber("JUNIT1234");
-		newDonation.getPackType().setCountAsDonation(false); // doesn't create an initial component when adding
-		Donation savedDonation = donationRepository.addDonation(newDonation);
-		donationRepository.deleteDonation(savedDonation.getId());
-		Donation deletedDonation = donationRepository.findDonationByDonationIdentificationNumberIncludeDeleted("JUNIT1234");
-		Assert.assertTrue("Donation has been deleted", deletedDonation.getIsDeleted());
-	}
-	
-	@Test(expected = javax.persistence.NoResultException.class)
-	public void testDeleteDonationFindByDIN() throws Exception {
-		Donation newDonation = new Donation();
-		Donation existingDonation = donationRepository.findDonationById(1L);
-		newDonation.setId(existingDonation.getId());
-		newDonation.copy(existingDonation);
-		newDonation.setId(null); // don't want to override, just save time with the copy
-		newDonation.setDonationIdentificationNumber("JUNIT12345");
-		newDonation.getPackType().setCountAsDonation(false); // doesn't create an initial component when adding
-		Donation savedDonation = donationRepository.addDonation(newDonation);
-		donationRepository.deleteDonation(savedDonation.getId());
-		donationRepository.findDonationByDonationIdentificationNumber("JUNIT12345");
-	}
 }
