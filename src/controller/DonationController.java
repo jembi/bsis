@@ -4,20 +4,26 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import model.bloodbagtype.BloodBagType;
+
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
-import model.donor.Donor;
+import model.packtype.PackType;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -26,14 +32,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import repository.BloodBagTypeRepository;
+import repository.PackTypeRepository;
 import repository.DonationRepository;
 import repository.DonationTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
+import repository.PostDonationCounsellingRepository;
+import service.DonationCRUDService;
 import utils.PermissionConstants;
+import utils.PermissionUtils;
+import viewmodel.DonationSummaryViewModel;
 import viewmodel.DonationViewModel;
 import viewmodel.PackTypeViewModel;
 import backingform.DonationBackingForm;
@@ -50,7 +61,7 @@ public class DonationController {
   private LocationRepository locationRepository;
 
   @Autowired
-  private BloodBagTypeRepository bloodBagTypeRepository;
+  private PackTypeRepository packTypeRepository;
 
   @Autowired
   private DonationTypeRepository donorTypeRepository;
@@ -60,6 +71,12 @@ public class DonationController {
 
   @Autowired
   private DonorRepository donorRepository;
+  
+  @Autowired
+  private PostDonationCounsellingRepository postDonationCounsellingRepository;
+  
+  @Autowired
+  private DonationCRUDService donationCRUDService;
   
   public DonationController() {
   }
@@ -93,7 +110,7 @@ public class DonationController {
       
       row.add(donation.getId().toString());
 
-      for (String property : Arrays.asList("donationIdentificationNumber", "donationDate", "bloodBagType", "donorPanel")) {
+      for (String property : Arrays.asList("donationIdentificationNumber", "donationDate", "packType", "donorPanel")) {
         if (formFields.containsKey(property)) {
           Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
           if (properties.get("hidden").equals(false)) {
@@ -123,7 +140,7 @@ public class DonationController {
   private void addEditSelectorOptions(Map<String, Object> m) {
 	m.put("donorPanels", locationRepository.getAllDonorPanels());
     m.put("donationTypes", donorTypeRepository.getAllDonationTypes());
-    m.put("packTypes", getPackTypeViewModels(bloodBagTypeRepository.getAllBloodBagTypes())); 
+    m.put("packTypes", getPackTypeViewModels(packTypeRepository.getAllPackTypes())); 
     List<Map<String, Object>> haemoglobinLevels = new ArrayList<>();
     for (HaemoglobinLevel value : HaemoglobinLevel.values()) {
         Map<String, Object> haemoglobinLevel = new HashMap<>();
@@ -191,23 +208,18 @@ public class DonationController {
     return donationViewModel;
   }
   
-  @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION+"')")
-  public ResponseEntity<Map<String, Object>>
-  	  updateDonation(@RequestBody  @Valid DonationBackingForm form, @PathVariable Long id) {
-	  
-	  HttpStatus httpStatus = HttpStatus.OK;
-	  Map<String, Object> map = new HashMap<String, Object>();
-	  Donation updatedDonation = null;
-	  
-      form.setId(id);
-      form.setIsDeleted(false);
-      updatedDonation = donationRepository.updateDonation(form.getDonation());
-            
-      map.put("donation", getDonationViewModel(donationRepository.findDonationById(updatedDonation.getId())));
-      return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+    @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONATION + "')")
+    public ResponseEntity<Map<String, Object>> updateDonation(
+            @PathVariable("id") Long donationId,
+            @RequestBody @Valid DonationBackingForm donationBackingForm) {
 
-  }
+        Donation updatedDonation = donationCRUDService.updateDonation(donationId, donationBackingForm);
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("donation", getDonationViewModel(updatedDonation));
+        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    }
 
   private List<DonationViewModel> getDonationViewModels(
       List<Donation> donations) {
@@ -221,11 +233,10 @@ public class DonationController {
   }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('" + PermissionConstants.VOID_DONATION + "')")
-    public HttpStatus deleteDonation(
-            @PathVariable Long id) {
-        donationRepository.deleteDonation(id);
-        return HttpStatus.OK;
+    public void deleteDonation(@PathVariable Long id) {
+        donationCRUDService.deleteDonation(id);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
@@ -257,7 +268,7 @@ public class DonationController {
   public  Map<String, Object> findDonationPagination(
      @RequestParam(value = "donationIdentificationNumber", required = false)  String donationIdentificationNumber,
      @RequestParam(value = "panels",required = false)  List<Long> panelIds,
-     @RequestParam(value = "bloodBagTypes",required = false)  List<Integer> bloodBagTypeIds,
+     @RequestParam(value = "packTypes",required = false)  List<Integer> packTypeIds,
      @RequestParam(value = "donationDateFrom", required = false)  String donationDateFrom,
      @RequestParam(value = "donationDateTo", required = false)  String donationDateTo,
      @RequestParam(value = "includeTestedDonations",required = true)  boolean includeTestedDonations)throws  ParseException{
@@ -273,15 +284,10 @@ public class DonationController {
     if (donationIdentificationNumber != null)
       donationIdentificationNumber = donationIdentificationNumber.trim();
 
-
-   /* bloodBagTypeIds.add(-1);
-    centerIds.add((long)-1);
-    siteIds.add((long)-1);*/
-
     List<Object> results;
           results = donationRepository.findDonations(
                   donationIdentificationNumber,
-                  bloodBagTypeIds, panelIds,
+                  packTypeIds, panelIds,
                   donationDateFrom, donationDateTo, includeTestedDonations, pagingParams);
   
     @SuppressWarnings("unchecked")
@@ -290,10 +296,41 @@ public class DonationController {
 
     return generateDatatablesMap(donations, totalRecords, formFields);
   }
+  
+    @RequestMapping(value = "/summaries", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
+    public List<DonationSummaryViewModel> getDonationSummaries(
+            @RequestParam(value = "flaggedForCounselling", required = true) boolean flaggedForCounselling,
+            @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+            @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate,
+            @RequestParam(value = "donorPanel", required = false) List<Long> donorPanels) {
+
+        if (flaggedForCounselling) {
+            
+            if (!PermissionUtils.loggedOnUserHasPermission(PermissionConstants.VIEW_POST_DONATION_COUNSELLING_DONORS)) {
+                throw new AccessDeniedException("You do not have permission to view post donation counselling donors.");
+            }
+            
+            List<Donation> donors = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
+                    startDate, endDate, donorPanels == null ? null : new HashSet<>(donorPanels));
+            return createDonationSummaryViewModels(donors);
+        }
+
+        // Just return an empty list for now. This could return the full list of donations if needed.
+        return Collections.emptyList();
+    }
+
+    private List<DonationSummaryViewModel> createDonationSummaryViewModels(List<Donation> donations) {
+        List<DonationSummaryViewModel> donationSummaryViewModels = new ArrayList<>();
+        for (Donation donation : donations) {
+            donationSummaryViewModels.add(new DonationSummaryViewModel(donation));
+        }
+        return donationSummaryViewModels;
+    }
      
-  private List<PackTypeViewModel> getPackTypeViewModels(List<BloodBagType> packTypes){     
+  private List<PackTypeViewModel> getPackTypeViewModels(List<PackType> packTypes){     
        List<PackTypeViewModel> viewModels = new ArrayList<PackTypeViewModel>();
-       for(BloodBagType packtType : packTypes){
+       for(PackType packtType : packTypes){
            viewModels.add(new PackTypeViewModel(packtType));
        }
        return viewModels;

@@ -1,7 +1,6 @@
 package controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
@@ -25,17 +25,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import constant.GeneralConfigConstants;
+import factory.DonationViewModelFactory;
+import factory.DonorViewModelFactory;
 import repository.ContactMethodTypeRepository;
+import repository.DonationBatchRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
+import repository.PostDonationCounsellingRepository;
+import service.DonorCRUDService;
+import service.GeneralConfigAccessorService;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 import viewmodel.DonationViewModel;
 import viewmodel.DonorDeferralViewModel;
 import viewmodel.DonorSummaryViewModel;
 import viewmodel.DonorViewModel;
+import viewmodel.PostDonationCounsellingViewModel;
 import backingform.DonorBackingForm;
 import backingform.validator.DonorBackingFormValidator;
 
@@ -59,6 +68,24 @@ public class DonorController {
 
   @Autowired
   private ContactMethodTypeRepository contactMethodTypeRepository;
+  
+  @Autowired
+  private DonationBatchRepository donationBatchRepository;
+  
+  @Autowired
+  private GeneralConfigAccessorService generalConfigAccessorService;
+  
+  @Autowired
+  private PostDonationCounsellingRepository postDonationCounsellingRepository;
+
+  @Autowired
+  private DonorCRUDService donorCRUDService;
+  
+  @Autowired
+  private DonorViewModelFactory donorViewModelFactory;
+  
+  @Autowired
+  private DonationViewModelFactory donationViewModelFactory;
   
   public DonorController() {
   }
@@ -88,8 +115,7 @@ public class DonorController {
       donor = donorRepository.findDonorById(id);
     }
 
-    DonorViewModel donorViewModel = getDonorsViewModel(donor);
-    map.put("donor", donorViewModel);    
+    map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(donor));    
     
       // include donor deferral status
       List<DonorDeferral> donorDeferrals = null;
@@ -114,7 +140,11 @@ public class DonorController {
     Donor donor = donorRepository.findDonorById(id);
     List<Donation> donations = donor.getDonations();
     
+    boolean flaggedForCounselling = postDonationCounsellingRepository
+            .countFlaggedPostDonationCounsellingsForDonor(donor.getId()) > 0;
+
     map.put("currentlyDeferred",donorRepository.isCurrentlyDeferred(donor));
+    map.put("flaggedForCounselling", flaggedForCounselling);
     map.put("deferredUntil",CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
     if(donations.size() > 0){
 	    map.put("lastDonation", getDonationViewModel(donations.get(donations.size()-1)));
@@ -151,7 +181,7 @@ public class DonorController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Donor donor = donorRepository.findDonorById(id);
-    map.put("allDonations", getDonationViewModels(donor.getDonations()));
+    map.put("allDonations", donationViewModelFactory.createDonationViewModelsWithPermissions(donor.getDonations()));
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
 
@@ -173,22 +203,30 @@ public class DonorController {
             ResponseEntity<Map<String, Object>>
             addDonor(@Valid @RequestBody DonorBackingForm form) {
 
-        HttpStatus httpStatus = HttpStatus.CREATED;
         Map<String, Object> map = new HashMap<String, Object>();
-        Donor savedDonor = null;
+        
+        if (!canAddDonors()) {
+            // Donor registration is blocked
+            map.put("hasErrors", true);
+            map.put("developerMessage", "Donor Registration Blocked");
+            map.put("userMessage", "Donor Registration Blocked - No Open Donation Batches");
+            map.put("moreInfo", null);
+            map.put("errorCode", HttpStatus.METHOD_NOT_ALLOWED);
+            return new ResponseEntity<Map<String,Object>>(map, HttpStatus.METHOD_NOT_ALLOWED);
+        }
 
         Donor donor = form.getDonor();
         donor.setIsDeleted(false);
         donor.setContact(form.getContact());
         donor.setAddress(form.getAddress());
         donor.setDonorNumber(utilController.getNextDonorNumber());
-        savedDonor = donorRepository.addDonor(donor);
+        Donor savedDonor = donorRepository.addDonor(donor);
         map.put("hasErrors", false);
 
         map.put("donorId", savedDonor.getId());
-        map.put("donor", getDonorsViewModel(donorRepository.findDonorById(savedDonor.getId())));
+        map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(savedDonor));
 
-        return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
@@ -206,21 +244,19 @@ public class DonorController {
         donor.setContact(form.getContact());
         donor.setAddress(form.getAddress());
 
-        updatedDonor = donorRepository.updateDonor(donor);
+        updatedDonor = donorRepository.updateDonorDetails(donor);
 
-        map.put("donor", getDonorsViewModel(donorRepository.findDonorById(updatedDonor.getId())));
+        map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(donorRepository.findDonorById(updatedDonor.getId())));
         return new ResponseEntity<Map<String, Object>>(map, httpStatus);
 
     }
 
-  @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-  @PreAuthorize("hasRole('"+PermissionConstants.VOID_DONOR+"')")
-  public 
-  ResponseEntity deleteDonor(
-      @PathVariable Long id) {
-    donorRepository.deleteDonor(id);
-    return  new ResponseEntity(HttpStatus.NO_CONTENT);
-  }
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('" + PermissionConstants.VOID_DONOR + "')")
+    public void deleteDonor(@PathVariable Long id) {
+        donorCRUDService.deleteDonor(id);
+    }
 
   @RequestMapping(value = "{id}/print",method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONOR+"')")
@@ -286,16 +322,27 @@ public class DonorController {
     
     List<DonorViewModel> donors = new ArrayList<DonorViewModel>();
     
-    if (results != null){
-	    for(Donor donor : results){
-	    	DonorViewModel donorViewModel = getDonorsViewModel(donor);
-	    	donors.add(donorViewModel);
+    if (results != null) {
+	    for (Donor donor : results) {
+	    	donors.add(donorViewModelFactory.createDonorViewModelWithPermissions(donor));
 	    }
     }
 
     map.put("donors", donors);
+    map.put("canAddDonors", canAddDonors());
+    
     return map;
   }
+  
+    @RequestMapping(value = "{id}/postdonationcounselling", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_POST_DONATION_COUNSELLING + "')")
+    public PostDonationCounsellingViewModel getPostDonationCounsellingForDonor(
+            @PathVariable("id") Long donorId) {
+
+        PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository
+                .findFlaggedPostDonationCounsellingForDonor(donorId);
+        return new PostDonationCounsellingViewModel(postDonationCounselling);
+    }
 
     private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("donorPanels", locationRepository.getAllDonorPanels());
@@ -303,14 +350,6 @@ public class DonorController {
     m.put("languages", donorRepository.getAllLanguages());
     m.put("idTypes", donorRepository.getAllIdTypes());
     m.put("addressTypes", donorRepository.getAllAddressTypes());
-  }
- 
-  private List<DonorViewModel> getDonorsViewModels(List<Donor> donors) {
-    List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
-    for (Donor donor : donors) {
-      donorViewModels.add(new DonorViewModel(donor));
-    }
-    return donorViewModels;
   }
 
   private List<DonorDeferralViewModel> getDonorDeferralViewModels(List<DonorDeferral> donorDeferrals) {
@@ -320,34 +359,30 @@ public class DonorController {
     }
     return donorDeferralViewModels;
   }
-
-  private DonorViewModel getDonorsViewModel(Donor donor) {
-    DonorViewModel donorViewModel = new DonorViewModel(donor);
-    return donorViewModel;
-  }
   
   private DonationViewModel getDonationViewModel(Donation donation) {
     DonationViewModel donationViewModel = new DonationViewModel(donation);
     return donationViewModel;
   }
-
-  private List<DonationViewModel> getDonationViewModels(
-      List<Donation> donations) {
-    if (donations == null)
-      return Arrays.asList(new DonationViewModel[0]);
-    List<DonationViewModel> donationViewModels = new ArrayList<DonationViewModel>();
-    for (Donation donation : donations) {
-      donationViewModels.add(new DonationViewModel(donation));
-    }
-    return donationViewModels;
-  }
  
   private int getNumberOfDonations(List<Donation> donations){
       int count = 0;
       for(Donation donation :donations){
-          if(donation.getBloodBagType().getCountAsDonation() == true)
+          if(donation.getPackType().getCountAsDonation() == true)
               count = count +1;
       }
       return count;
+  }
+  
+    /**
+     * Check if donor registration is allowed based on the "open batch required" config
+     * and the number of open donation batches.
+     * 
+     * @return true if donor registration is allowed, otherwise false.
+     */
+  private boolean canAddDonors() {
+    boolean openBatchRequired = generalConfigAccessorService.getBooleanValue(
+            GeneralConfigConstants.DONOR_REGISTRATION_OPEN_BATCH_REQUIRED);
+    return !openBatchRequired || donationBatchRepository.countOpenDonationBatches() > 0;
   }
 }

@@ -19,6 +19,11 @@ public class DonorSummaryViewModel {
         // no-args constructor
     }
 
+    /**
+     * Do not remove or change the signature of this method.
+     * 
+     * @see {@link DonorRepository#findDonorSummaryByDonorNumber(String)}
+     */
     public DonorSummaryViewModel(String firstName, String lastName, Gender gender, Date birthDate) {
         this.firstName = firstName;
         this.lastName = lastName;
