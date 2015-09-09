@@ -55,23 +55,22 @@ public class DonationBackingFormValidator implements Validator {
 
     String donationDate = form.getDonationDate();
     if (!CustomDateFormatter.isDateStringValid(donationDate))
-      errors.rejectValue("donation.donationDate", "400",
+      errors.rejectValue("donation.donationDate", "donationDate.incorrect",
           CustomDateFormatter.getDateErrorMessage());
 
     updateRelatedEntities(form);
     inheritParametersFromDonationBatch(form, errors);
     Donor donor = form.getDonor();
     if (donor != null) {
-      String errorMessageDonorAge = utilController.verifyDonorAge(donor.getBirthDate());
-      if (StringUtils.isNotBlank(errorMessageDonorAge))
-        errors.rejectValue("donation.donor", "400", errorMessageDonorAge);
       
       String errorMessageDonorDeferral = utilController.isDonorDeferred(donor);
       if (StringUtils.isNotBlank(errorMessageDonorDeferral))
-        errors.rejectValue("donation.donor", "400", errorMessageDonorDeferral);
+        errors.rejectValue("donation.donor", "donor.invalid", "Do not bleed donor");
       
       if (donor.getDonorStatus().equals(DonorStatus.POSITIVE_TTI))
-        errors.rejectValue("donation.donor", "400", "Donor is not allowed to donate.");
+        errors.rejectValue("donation.donor", "donor.invalid", "Do not bleed donor");
+    } else {
+      errors.rejectValue("donation.donor", "donor.invalid", "Please supply a valid donor");
     }
 
     if(donation.getBleedStartTime() != null || donation.getBleedEndTime() != null){
@@ -80,11 +79,11 @@ public class DonationBackingFormValidator implements Validator {
 
     Location donorPanel = form.getDonation().getDonorPanel();
     if (donorPanel == null) {
-      errors.rejectValue("donation.donorPanel", "400",
+      errors.rejectValue("donation.donorPanel", "donorPanel.empty",
         "Donor Panel is required.");
     } 
     else if (utilController.isDonorPanel(donorPanel.getId()) == false) {
-      errors.rejectValue("donation.donorPanel", "400",
+      errors.rejectValue("donation.donorPanel", "donorPanel.invalid",
     	"Location is not a Donor Panel.");
     } 
 
@@ -98,15 +97,15 @@ public class DonationBackingFormValidator implements Validator {
   
   public void validateBleedTimes(Date bleedStartTime, Date bleedEndTime, Errors errors){
       if(bleedStartTime == null){
-          errors.rejectValue("donation.bleedStartTime", "400", "This is required");
+          errors.rejectValue("donation.bleedStartTime", "bleedStartTime.empty", "This is required");
           return;
       }
       if(bleedEndTime == null){
-          errors.rejectValue("donation.bleedEndTime", "400", "This is required");
+          errors.rejectValue("donation.bleedEndTime", "bleedEndTime.empty", "This is required");
           return;
       }
       if(bleedStartTime.after(bleedEndTime))
-          errors.rejectValue("donation", "400", "Bleed End time should be after start time");
+          errors.rejectValue("donation", "bleedEndTime.outOfRange", "Bleed End time should be after start time");
 
   }
 
@@ -130,15 +129,14 @@ public class DonationBackingFormValidator implements Validator {
     if (bloodPressureSystolic != null || bloodPressureDiastolic != null) {
 
       if (bloodPressureSystolic == null || (bloodPressureSystolic < bloodPressureSystolicMin || bloodPressureSystolic > bloodPressureSystolicMax)){
-        errors.rejectValue("donation.bloodPressureSystolic", "400", "Enter a value between "+ bloodPressureSystolicMin+" to "+ bloodPressureSystolicMax+".");
+        errors.rejectValue("donation.bloodPressureSystolic", "bloodPressureSystolic.outOfRange", "Enter a value between "+ bloodPressureSystolicMin+" to "+ bloodPressureSystolicMax+".");
       }
 
       if (bloodPressureDiastolic == null || (bloodPressureDiastolic < bloodPressureDiastolicMin || bloodPressureDiastolic > bloodPressureDiastolicMax)){
-        errors.rejectValue("donation.bloodPressureDiastolic", "400", "Enter a value between "+ bloodPressureDiastolicMin+" to "+ bloodPressureDiastolicMax+".");
+        errors.rejectValue("donation.bloodPressureDiastolic", "bloodPressureDiastolic.outOfRange", "Enter a value between "+ bloodPressureDiastolicMin+" to "+ bloodPressureDiastolicMax+".");
       }
 
     }
-    return;
 
   }
 
@@ -151,7 +149,7 @@ public class DonationBackingFormValidator implements Validator {
       haemoglobinCount = donationBackingForm.getHaemoglobinCount().intValue();
 
     if (haemoglobinCount != null && (haemoglobinCount < hbMin || haemoglobinCount > hbMax)) {
-        errors.rejectValue("donation.haemoglobinCount", "400", "Enter a value between "+ hbMin + " to " + hbMax);
+        errors.rejectValue("donation.haemoglobinCount", "haemoglobinCount.outOfRange", "Enter a value between "+ hbMin + " to " + hbMax);
     }
   }
 
@@ -166,7 +164,7 @@ public class DonationBackingFormValidator implements Validator {
       weight = donationBackingForm.getDonorWeight().intValue();
 
     if (weight != null && (weight < weightMin || weight > weightMax)){
-        errors.rejectValue("donation.donorWeight", "400", "Enter a value between " + weightMin + " to " + weightMax);
+        errors.rejectValue("donation.donorWeight", "donorWeight.outOfRange", "Enter a value between " + weightMin + " to " + weightMax);
     }
   }
 
@@ -179,7 +177,7 @@ public class DonationBackingFormValidator implements Validator {
       pulse = donationBackingForm.getDonorPulse();
 
     if (pulse != null && (pulse < pulseMin || pulse > pulseMax)){
-        errors.rejectValue("donation.donorPulse", "400", "Enter a value between "+ pulseMin + " to " + pulseMax);
+        errors.rejectValue("donation.donorPulse", "donorPulse.outOfRange", "Enter a value between "+ pulseMin + " to " + pulseMax);
     }
   }
 
@@ -189,8 +187,7 @@ public class DonationBackingFormValidator implements Validator {
     if (form.getUseParametersFromBatch()) {
       DonationBatch donationBatch = form.getDonationBatch();
       if (donationBatch == null) {
-        errors.rejectValue("donation.donationBatch", "400", "Donation batch should be specified");
-        return;
+        errors.rejectValue("donation.donationBatch", "donationBatch.empty", "Donation batch should be specified");
       }
     }
   }
