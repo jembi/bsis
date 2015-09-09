@@ -3,6 +3,7 @@ package backingform.validator;
 import java.util.Arrays;
 
 import model.donordeferral.DeferralReason;
+import model.donordeferral.DurationType;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -38,7 +39,8 @@ public class DeferralReasonBackingFormValidator implements Validator {
             errors.rejectValue("reason", "400", "Deferral Reason already exists.");
         }
         
-        if (form.getDefaultDuration() <= 0) {
+        if (form.getDurationType() != DurationType.PERMANENT && (form.getDefaultDuration() == null ||
+                form.getDefaultDuration() <= 0)) {
             errors.rejectValue("defaultDuration", "400", "Default duration must be a positive number of days");
         }
     }

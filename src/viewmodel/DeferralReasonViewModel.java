@@ -23,7 +23,7 @@ public class DeferralReasonViewModel {
         return deferralReason.getIsDeleted();
     }
 
-    public int getDefaultDuration() {
+    public Integer getDefaultDuration() {
         return deferralReason.getDefaultDuration();
     }
     

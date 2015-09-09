@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 
 import model.donordeferral.DeferralReason;
+import model.donordeferral.DurationType;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -39,6 +40,7 @@ public class DeferralReasonBackingFormValidatorTests {
     public void testValidateWithDeferralReasonBackingFormWithDuplicateDeferralReason_shouldHaveErrors() {
         DeferralReason deferralReason = aDeferralReason().build();
         DeferralReasonBackingForm backingForm = aDeferralReasonBackingForm()
+                .withDurationType(DurationType.TEMPORARY)
                 .withDeferralReason(deferralReason)
                 .withDefaultDuration(1)
                 .build();
@@ -55,9 +57,27 @@ public class DeferralReasonBackingFormValidatorTests {
     }
     
     @Test
+    public void testValidateWithDeferralReasonBackingFormWithPermanentDurationTypeAndNoDuration_shouldHaveNoErrors() {
+        DeferralReason deferralReason = aDeferralReason().build();
+        DeferralReasonBackingForm backingForm = aDeferralReasonBackingForm()
+                .withDurationType(DurationType.PERMANENT)
+                .withDeferralReason(deferralReason)
+                .withDefaultDuration(0)
+                .build();
+        
+        when(utilController.isDuplicateDeferralReason(deferralReason)).thenReturn(false);
+
+        Errors errors = new BindException(backingForm, "deferralReasonBackingForm");
+        validator.validate(backingForm, errors);
+        
+        assertThat(errors.getErrorCount(), is(0));
+    }
+    
+    @Test
     public void testValidateWithDeferralReasonBackingFormWithInvalidDefaultDeferralDays_shouldHaveErrors() {
         DeferralReason deferralReason = aDeferralReason().build();
         DeferralReasonBackingForm backingForm = aDeferralReasonBackingForm()
+                .withDurationType(DurationType.TEMPORARY)
                 .withDeferralReason(deferralReason)
                 .withDefaultDuration(0)
                 .build();
@@ -77,6 +97,7 @@ public class DeferralReasonBackingFormValidatorTests {
     public void testValidateWithValidDeferralReasonBackingForm_shouldHaveNoErrors() {
         DeferralReason deferralReason = aDeferralReason().build();
         DeferralReasonBackingForm backingForm = aDeferralReasonBackingForm()
+                .withDurationType(DurationType.TEMPORARY)
                 .withDeferralReason(deferralReason)
                 .withDefaultDuration(1)
                 .build();

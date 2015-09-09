@@ -1614,15 +1614,11 @@
 	   <comment>Add default duration days to deferral reasons.</comment>
 	
 	   <addColumn tableName="DeferralReason">
-	       <column name="defaultDuration" type="SMALLINT UNSIGNED" defaultValue="0">
-	           <constraints nullable="false" />
-	       </column>
+	       <column name="defaultDuration" type="SMALLINT UNSIGNED" defaultValue="NULL" />
 	   </addColumn>
 
 	   <addColumn tableName="DeferralReason_AUD">
-	       <column name="defaultDuration" type="SMALLINT UNSIGNED" defaultValue="0">
-	           <constraints nullable="false" />
-	       </column>
+	       <column name="defaultDuration" type="SMALLINT UNSIGNED" defaultValue="NULL" />
 	   </addColumn>
 	</changeSet>
 	
@@ -1663,7 +1659,6 @@
 	   <insert tableName="DeferralReason">
 	       <column name="reason">TTI unsafe</column>
 	       <column name="type">AUTOMATED_TTI_UNSAFE</column>
-	       <column name="defaultDuration">65535</column>
 	       <column name="durationType">PERMANENT</column>
 	       <column name="isDeleted">0</column>
 	   </insert>

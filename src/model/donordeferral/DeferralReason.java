@@ -32,8 +32,8 @@ public class DeferralReason {
 
   private Boolean isDeleted;
   
-  @Column(nullable = false)
-  private int defaultDuration; // in days
+  @Column(nullable = true)
+  private Integer defaultDuration; // in days
   
   @Column(length = 30, nullable = false)
   @Enumerated(EnumType.STRING)
@@ -75,11 +75,11 @@ public class DeferralReason {
     this.durationType = deferralReason.getDurationType();
   }
 
-    public int getDefaultDuration() {
+    public Integer getDefaultDuration() {
         return defaultDuration;
     }
 
-    public void setDefaultDuration(int defaultDuration) {
+    public void setDefaultDuration(Integer defaultDuration) {
         this.defaultDuration = defaultDuration;
     }
 
