@@ -44,5 +44,13 @@ public class DeferralReasonBackingForm {
     public void setIsDeleted(Boolean isDeleted){
         deferralReason.setIsDeleted(isDeleted);
     }
+    
+    public int getDefaultDuration() {
+        return deferralReason.getDefaultDuration();
+    }
+    
+    public void setDefaultDuration(int defaultDuration) {
+        deferralReason.setDefaultDuration(defaultDuration);
+    }
 
 }

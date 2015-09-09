@@ -21,4 +21,8 @@ public class DeferralReasonViewModel {
     public Boolean getIsDeleted(){
         return deferralReason.getIsDeleted();
     }
+
+    public int getDefaultDuration() {
+        return deferralReason.getDefaultDuration();
+    }
 }
