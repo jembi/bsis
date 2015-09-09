@@ -1,5 +1,6 @@
 package service;
 
+import static helpers.builders.AdverseEventBuilder.anAdverseEvent;
 import static helpers.builders.DonationBackingFormBuilder.aDonationBackingForm;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
@@ -15,6 +16,7 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import model.adverseevent.AdverseEvent;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
 import model.donor.Donor;
@@ -203,6 +205,7 @@ public class DonationCRUDServiceTests {
         PackType irrelevantPackType = aPackType().withId(8).build();
         Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
         Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
+        AdverseEvent irrelevantAdverseEvent = anAdverseEvent().withId(3L).build();
 
         Donation existingDonation = aDonation().withId(IRRELEVANT_DONATION_ID).build();
         DonationBackingForm donationBackingForm = aDonationBackingForm()
@@ -216,6 +219,7 @@ public class DonationCRUDServiceTests {
                 .withPackType(irrelevantPackType)
                 .withBleedStartTime(irrelevantBleedStartTime)
                 .withBleedEndTime(irrelevantBleedEndTime)
+                .withAdverseEvent(irrelevantAdverseEvent)
                 .build();
         
         // Set up expectations
@@ -231,6 +235,7 @@ public class DonationCRUDServiceTests {
                 .withPackType(irrelevantPackType)
                 .withBleedStartTime(irrelevantBleedStartTime)
                 .withBleedEndTime(irrelevantBleedEndTime)
+                .withAdverseEvent(irrelevantAdverseEvent)
                 .build();
         
         when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);

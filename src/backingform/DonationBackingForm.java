@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import model.adverseevent.AdverseEvent;
 import model.component.Component;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
@@ -471,5 +472,13 @@ public class DonationBackingForm {
     @JsonIgnore
     public void setPermissions(Map<String, Boolean> permissions) {
         // Ignore
+    }
+    
+    public void setAdverseEvent(AdverseEvent adverseEvent) {
+        donation.setAdverseEvent(adverseEvent);
+    }
+    
+    public AdverseEvent getAdverseEvent() {
+        return donation.getAdverseEvent();
     }
 }

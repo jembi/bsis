@@ -23,6 +23,7 @@ public class DonationViewModel {
 
   private Donation donation;
   private Map<String, Boolean> permissions;
+  private AdverseEventViewModel adverseEvent;
 
   public DonationViewModel() {
   }
@@ -240,5 +241,13 @@ public int hashCode() {
     @JsonIgnore
     public Donation getDonation() {
         return donation;
+    }
+
+    public AdverseEventViewModel getAdverseEvent() {
+        return adverseEvent;
+    }
+
+    public void setAdverseEvent(AdverseEventViewModel adverseEvent) {
+        this.adverseEvent = adverseEvent;
     }
 }

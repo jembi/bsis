@@ -80,6 +80,7 @@ public class DonationCRUDService {
         donation.setPackType(donationBackingForm.getPackType());
         donation.setBleedStartTime(donationBackingForm.getBleedStartTime());
         donation.setBleedEndTime(donationBackingForm.getBleedEndTime());
+        donation.setAdverseEvent(donationBackingForm.getAdverseEvent());
         return donationRepository.updateDonation(donation);
     }
 
