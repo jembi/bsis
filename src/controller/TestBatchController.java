@@ -25,9 +25,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import factory.DonationBatchViewModelFactory;
+import factory.TestBatchViewModelFactory;
 import repository.DonationBatchRepository;
 import repository.SequenceNumberRepository;
 import repository.TestBatchRepository;
+import service.TestBatchCRUDService;
 import utils.PermissionConstants;
 import viewmodel.DonationBatchViewModel;
 import viewmodel.TestBatchViewModel;
@@ -47,6 +50,15 @@ public class TestBatchController {
     @Autowired
     private SequenceNumberRepository sequenceNumberRepository;
     
+    @Autowired
+    private TestBatchCRUDService testBatchCRUDService;
+    
+    @Autowired
+    private DonationBatchViewModelFactory donationBatchViewModelFactory;
+    
+    @Autowired
+    private TestBatchViewModelFactory testBatchViewModelFactory;
+    
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
         binder.setValidator(new TestBatchBackingFormValidator(binder.getValidator(), donationBatchRepository));
@@ -64,10 +76,10 @@ public class TestBatchController {
   
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('"+PermissionConstants.ADD_TEST_BATCH+"')")
-    public ResponseEntity addTestBatch(@Valid @RequestBody TestBatchBackingForm form) {
+    public ResponseEntity<TestBatchViewModel> addTestBatch(@Valid @RequestBody TestBatchBackingForm form) {
         
         TestBatch testBatch = testBatchRepository.saveTestBatch(form.getTestBatch(), getNextTestBatchNumber());
-        return new ResponseEntity(new TestBatchViewModel(testBatch), HttpStatus.CREATED);
+        return new ResponseEntity<>(testBatchViewModelFactory.createTestBatchViewModel(testBatch), HttpStatus.CREATED);
     }
     
     @RequestMapping(value = "{id}",  method = RequestMethod.GET)
@@ -76,19 +88,18 @@ public class TestBatchController {
         
         Map<String, Object> map = new HashMap<String, Object>();
         TestBatch testBatch = testBatchRepository.findTestBatchById(id);
-        map.put("testBatch", new TestBatchViewModel(testBatch));
+        map.put("testBatch", testBatchViewModelFactory.createTestBatchViewModel(testBatch));
         return new ResponseEntity(map, HttpStatus.OK);
         
     }
     
     @RequestMapping(value = "{id}",  method = RequestMethod.PUT)
     @PreAuthorize("hasRole('"+PermissionConstants.EDIT_TEST_BATCH+"')")
-    public ResponseEntity updateTestBatch(@PathVariable Long id,
+    public ResponseEntity<TestBatchViewModel> updateTestBatch(@PathVariable Long id,
             @RequestBody TestBatchBackingForm form){
         
-        TestBatch testBatch = form.getTestBatch();
-        testBatch = testBatchRepository.updateTestBatch(testBatch);
-        return new ResponseEntity(new TestBatchViewModel(testBatch), HttpStatus.OK);
+        TestBatch testBatch = testBatchCRUDService.updateTestBatchStatus(id, form.getTestBatch().getStatus());
+        return new ResponseEntity<>(testBatchViewModelFactory.createTestBatchViewModel(testBatch), HttpStatus.OK);
         
     }
 
@@ -137,25 +148,25 @@ public class TestBatchController {
         return sequenceNumberRepository.getNextTestBatchNumber();
     }
     
-    public static List<DonationBatchViewModel> getDonationBatchViewModels(
+    public List<DonationBatchViewModel> getDonationBatchViewModels(
 	      List<DonationBatch> donationBatches) {
 	    if (donationBatches == null)
 	      return Arrays.asList(new DonationBatchViewModel[0]);
 	    List<DonationBatchViewModel> donationBatchViewModels = new ArrayList<DonationBatchViewModel>();
 	    for (DonationBatch donationBatch : donationBatches) {
-	      donationBatchViewModels.add(new DonationBatchViewModel(donationBatch));
+	      donationBatchViewModels.add(donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch));
 	    }
 	    return donationBatchViewModels;
 	}
     
-    public static List<TestBatchViewModel> getTestBatchViewModels(
+    public List<TestBatchViewModel> getTestBatchViewModels(
             List<TestBatch> testBatches) {
         if (testBatches == null) {
             return Arrays.asList(new TestBatchViewModel[0]);
         }
         List<TestBatchViewModel> testBatchViewModels = new ArrayList<TestBatchViewModel>();
         for (TestBatch testBatch : testBatches) {
-            testBatchViewModels.add(new TestBatchViewModel(testBatch));
+            testBatchViewModels.add(testBatchViewModelFactory.createTestBatchViewModel(testBatch));
         }
         return testBatchViewModels;
     }

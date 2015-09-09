@@ -95,7 +95,7 @@ public class PermissionConstants {
 	public static final String MANAGE_COMPONENT_COMBINATIONS = "Manage Component Combinations";
 	public static final String MANAGE_CROSS_MATCH_TYPES = "Manage Cross Match Types";
 	public static final String MANAGE_BLOOD_TYPING_RULES = "Manage Blood Typing Rules";
-	public static final String MANAGE_BLOOD_BAG_TYPES = "Manage Blood Bag Types";
+	public static final String MANAGE_PACK_TYPES = "Manage Pack Types";
 	public static final String MANAGE_DISCARD_REASONS = "Manage Discard Reasons";
 	public static final String MANAGE_DEFERRAL_REASONS = "Manage Deferral Reasons";
 	public static final String MANAGE_DONOR_CODES = "Manage Donor Codes";
@@ -124,8 +124,15 @@ public class PermissionConstants {
 	//General Authenticated Permission
 	public static final String AUTHENTICATED = "Authenticated";
 	
-	// Audit permissions
+	// Audit Permissions
 	public static final String VIEW_AUDIT_LOG = "View Audit Log";
+	
+	// Post Donation Counselling Permissions
+	public static final String VIEW_POST_DONATION_COUNSELLING_DONORS = "View Post Donation Counselling Donors";
+	public static final String ADD_POST_DONATION_COUNSELLING = "Add Post Donation Counselling";
+	public static final String EDIT_POST_DONATION_COUNSELLING = "Edit Post Donation Counselling";
+	public static final String VIEW_POST_DONATION_COUNSELLING = "View Post Donation Counselling";
+	public static final String VOID_POST_DONATION_COUNSELLING = "Void Post Donation Counselling";
         
         
 

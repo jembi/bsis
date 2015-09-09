@@ -1,18 +1,18 @@
 
-    create table BloodBagType (
+    create table PackType (
         id SMALLINT not null auto_increment,
-        bloodBagType varchar(50),
+        packType varchar(50),
         canPool boolean,
         canSplit boolean,
         isDeleted boolean,
         primary key (id)
     ) ENGINE=InnoDB;
 
-    create table BloodBagType_AUD (
+    create table PackType_AUD (
         id SMALLINT not null,
         REV integer not null,
         REVTYPE tinyint,
-        bloodBagType varchar(50),
+        packType varchar(50),
         canPool boolean,
         canSplit boolean,
         isDeleted boolean,
@@ -132,7 +132,7 @@
         lastUpdated TIMESTAMP,
         notes longtext,
         ttiStatus varchar(20),
-        bloodBagType_id SMALLINT,
+        packType_id SMALLINT,
         donationBatch_id SMALLINT,
         donationCreatedBy_id SMALLINT,
         donationType_id SMALLINT,
@@ -160,7 +160,7 @@
         lastUpdated TIMESTAMP,
         notes longtext,
         ttiStatus varchar(20),
-        bloodBagType_id SMALLINT,
+        packType_id SMALLINT,
         donationBatch_id SMALLINT,
         donationCreatedBy_id SMALLINT,
         donationType_id SMALLINT,
@@ -969,9 +969,9 @@
         primary key (worksheets_id, donations_id)
     ) ENGINE=InnoDB;
 
-    alter table BloodBagType_AUD 
-        add index FK_BLOOD_BAG_TYPE_AUDIT_REVISION (REV), 
-        add constraint FK_BLOOD_BAG_TYPE_AUDIT_REVISION 
+    alter table PackType_AUD 
+        add index FK_PACK_TYPE_AUDIT_REVISION (REV), 
+        add constraint FK_PACK_TYPE_AUDIT_REVISION 
         foreign key (REV) 
         references AuditRevision (id);
 
@@ -1076,10 +1076,10 @@
         references User (id);
 
     alter table Donation 
-        add index FKF0658A331D73927B (bloodBagType_id), 
+        add index FKF0658A331D73927B (packType_id), 
         add constraint FKF0658A331D73927B 
-        foreign key (bloodBagType_id) 
-        references BloodBagType (id);
+        foreign key (packType_id) 
+        references PackType (id);
 
     alter table Donation_AUD 
         add index FK_DONATION_AUDIT_REVISION (REV), 

@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -91,6 +92,18 @@ public class GlobalControllerExceptionHandler {
     error.printStackTrace();
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
   }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Map<String, Object>> handleIllegalStateException(IllegalStateException error) {
+        Map<String, Object> errorMap = new HashMap<String, Object>();
+        errorMap.put("hasErrors", "true");
+        errorMap.put("developerMessage", error.getMessage());
+        errorMap.put("userMessage", "");
+        errorMap.put("moreInfo", error.getStackTrace()[0]);
+        errorMap.put("errorCode", HttpStatus.CONFLICT);
+        error.printStackTrace();
+        return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.CONFLICT);
+    }
     
  /**
     * Thrown when the application calls Query.uniqueResult() and the query 
@@ -170,7 +183,7 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("hasErrors", "true");
     errorMap.put("errorMessage", error.getPropertyName() + "with value " +error.getValue() 
             + "is not compatable to" + error.getRequiredType());
-    errorMap.put("userMessage", "Please check thr input with value " + error.getValue() );
+    errorMap.put("userMessage", "Please check the input with value " + error.getValue() );
     errorMap.put("moreInfo", error.getMessage());
     errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
     error.printStackTrace();
@@ -202,13 +215,13 @@ public class GlobalControllerExceptionHandler {
         TypeMismatchException error) {
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
-    errorMap.put("developerMessage", "value '" +error.getValue() 
-            + "' is not compatable to" + error.getRequiredType());
-    errorMap.put("userMessage", "Please check thr input  value '" + error.getValue()+ "'" );
+    errorMap.put("developerMessage", "Value '" +error.getValue() 
+            + "' is not compatable with " + error.getRequiredType());
+    errorMap.put("userMessage", "Please check the input value '" + error.getValue()+ "'" );
     errorMap.put("moreInfo", error.getMessage());
     errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
     error.printStackTrace();
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_GATEWAY);
+    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
   }
   
    /**
@@ -299,6 +312,18 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
     error.printStackTrace();
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
+  }
+  
+  @ExceptionHandler(AccessDeniedException.class)
+  public ResponseEntity<Map<String, Object>> handleAccessDeniedException(AccessDeniedException error) {
+        Map<String, Object> errorMap = new HashMap<String, Object>();
+        errorMap.put("hasErrors", "true");
+        errorMap.put("developerMessage", "Access denied");
+        errorMap.put("userMessage", error.getMessage());
+        errorMap.put("moreInfo", error.getMessage());
+        errorMap.put("errorCode", HttpStatus.FORBIDDEN);
+        error.printStackTrace();
+        return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.FORBIDDEN);
   }
   
 }

@@ -1119,18 +1119,19 @@
 	
 		<!-- #234 Associate Pack Type with Initial Component Type in Donation -->
 	<!-- Updated (timler): for #294 (refactoring) -->
-	<changeSet id="20150817-1015" author="srikanthmalyala">
+	<!-- Updated (timler): for #328 (refactoring) -->
+	<changeSet id="20150818-1238" author="srikanthmalyala">
 	    <preConditions onFail="MARK_RAN">
-	        <not><columnExists tableName="BloodBagType" columnName="componentType_id"/></not>
+	        <not><columnExists tableName="PackType" columnName="componentType_id"/></not>
 	    </preConditions>
-		<addColumn tableName="BloodBagType">
+		<addColumn tableName="PackType">
 			<column name="componentType_id" type="smallint(6)"></column>
 		</addColumn>
-		<addColumn tableName="BloodBagType_AUD">
+		<addColumn tableName="PackType_AUD">
 			<column name="componentType_id" type="smallint(6)"></column>
 		</addColumn>
 		<addForeignKeyConstraint baseColumnNames="componentType_id"
-			baseTableName="BloodBagType"
+			baseTableName="PackType"
 			constraintName="fk_packType_componentType"
 			onDelete="CASCADE"
 			onUpdate="RESTRICT"
@@ -1140,21 +1141,29 @@
 	</changeSet>
 
 	<!-- #236 Incorporate use of countAsDonation field -->
-	<changeSet id="20141112-1255" author="srikanthmalyala">
-		<addColumn tableName="BloodBagType">
+	<!-- Updated (timler): for #328 (refactoring) -->
+	<changeSet id="20150818-1239" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+	        <not><columnExists tableName="PackType" columnName="countAsDonation"/></not>
+	    </preConditions>
+		<addColumn tableName="PackType">
 			<column name="countAsDonation" type="tinyint(1)"></column>
 		</addColumn>
-		<addColumn tableName="BloodBagType_AUD">
+		<addColumn tableName="PackType_AUD">
 			<column name="countAsDonation" type="tinyint(1)"></column>
 		</addColumn>
 	</changeSet>
 
 	<!-- #236 Incorporate use of periodBetweenDonation field -->
-	<changeSet id="20141112-1315" author="srikanthmalyala">
-		<addColumn tableName="BloodBagType">
+	<!-- Updated (timler): for #328 (refactoring) -->
+	<changeSet id="20150818-1240" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+	        <not><columnExists tableName="PackType" columnName="periodBetweenDonations"/></not>
+	    </preConditions>
+		<addColumn tableName="PackType">
 			<column name="periodBetweenDonations" type="smallint(6)"></column>
 		</addColumn>
-		<addColumn tableName="BloodBagType_AUD">
+		<addColumn tableName="PackType_AUD">
 			<column name="periodBetweenDonations" type="smallint(6)"></column>
 		</addColumn>
 	</changeSet>
@@ -1555,6 +1564,50 @@
 		</insert>
 	</changeSet>
 
+	<changeSet id="20150811-1546" author="bausmeier">
+		<comment>Option to block donor registration</comment>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donors.registration.openBatchRequired"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Block donor registration when no donation batches are open"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+  </changeSet>
 
+	<changeSet id="20150817-1523" author="bausmeier">
+		<comment>Add post donation counselling table</comment>
+
+		<createTable tableName="PostDonationCounselling">
+			<column name="id" type="bigint(20)" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="donation_id" type="bigint(20)">
+				<constraints foreignKeyName="FK_POST_DONATION_COUNSELLING_DONATION_ID" references="Donation(id)" />
+			</column>
+			<column name="flaggedForCounselling" type="tinyint(1)">
+				<constraints nullable="false" />
+			</column>
+			<column name="counsellingStatus" type="varchar(30)"></column>
+			<column name="counsellingDate" type="date"></column>
+		</createTable>
+
+		<createTable tableName="PostDonationCounselling_AUD">
+			<column name="id" type="bigint(20)" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="donation_id" type="bigint(20)">
+				<constraints foreignKeyName="FK_POST_DONATION_COUNSELLING_AUD_DONATION_ID" references="Donation(id)" />
+			</column>
+			<column name="flaggedForCounselling" type="tinyint(1)">
+				<constraints nullable="false" />
+			</column>
+			<column name="counsellingStatus" type="varchar(30)"></column>
+			<column name="counsellingDate" type="date"></column>
+			<column name="REV" type="int">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="REVTYPE" type="tinyint(4)"></column>
+		</createTable>
+	</changeSet>
 
 </databaseChangeLog>

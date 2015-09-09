@@ -27,11 +27,11 @@ import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
+import model.packtype.PackType;
 import model.request.Request;
 import model.user.User;
 import model.user.Role;
 import model.worksheet.Worksheet;
-import model.bloodbagtype.BloodBagType;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -54,7 +54,7 @@ import repository.UserRepository;
 import repository.RoleRepository;
 import repository.WorksheetRepository;
 import repository.GeneralConfigRepository;
-import repository.BloodBagTypeRepository;
+import repository.PackTypeRepository;
 import repository.DeferralReasonRepository;
 import repository.DiscardReasonRepository;
 import security.BsisUserDetails;
@@ -111,7 +111,7 @@ public class UtilController {
   private GeneralConfigRepository generalConfigRepository;
 
   @Autowired
-  private BloodBagTypeRepository bloodBagTypeRepository;
+  private PackTypeRepository packTypeRepository;
 
   @Autowired
   private DiscardReasonRepository discardReasonRepository;
@@ -492,11 +492,11 @@ public class UtilController {
     return "";
   }
 
-  public boolean isDuplicatePackTypeName(BloodBagType packType) {
-    String packTypeName = packType.getBloodBagType();
+  public boolean isDuplicatePackTypeName(PackType packType) {
+    String packTypeName = packType.getPackType();
     if (StringUtils.isBlank(packTypeName))
       return false;
-    BloodBagType existingPackType = bloodBagTypeRepository.findBloodBagTypeByName(packTypeName);
+    PackType existingPackType = packTypeRepository.findPackTypeByName(packTypeName);
     if (existingPackType != null && !existingPackType.getId().equals(packType.getId()))
       return true;
     return false;

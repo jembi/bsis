@@ -23,13 +23,13 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.TTIStatus;
 import model.component.Component;
 import model.component.ComponentStatus;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.donor.Donor;
+import model.packtype.PackType;
 import model.util.BloodGroup;
 
 import org.apache.commons.lang3.StringUtils;
@@ -37,6 +37,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import repository.bloodtesting.BloodTestingRepository;
@@ -73,7 +74,7 @@ public class DonationRepository {
     em.flush();
   }
 
-  public Donation updateDonation(Donation donation) throws NoResultException{
+  public Donation updateDonationDetails(Donation donation) throws NoResultException{
     Donation existingDonation = findDonationById(donation.getId());
     if (existingDonation == null) {
       return null;
@@ -85,8 +86,13 @@ public class DonationRepository {
     em.flush();
     return existingDonation;
   }
+  
+  @Transactional(propagation = Propagation.MANDATORY)
+  public Donation updateDonation(Donation donation) {
+      return em.merge(donation);
+  }
 
-  public Donation findDonationById(Long donationId) {
+  public Donation findDonationById(Long donationId) throws NoResultException {
     String queryString = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE c.id = :donationId and c.isDeleted = :isDeleted";
     TypedQuery<Donation> query = em.createQuery(queryString, Donation.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -98,20 +104,20 @@ public class DonationRepository {
   }
 
   public List<Object> findDonations(
-      String donationIdentificationNumber, List<Integer> bloodBagTypeIds, List<Long> panelIds, String donationDateFrom,
+      String donationIdentificationNumber, List<Integer> packTypeIds, List<Long> panelIds, String donationDateFrom,
       String donationDateTo, boolean includeTestedDonations, Map<String, Object> pagingParams) throws ParseException {
 
     String queryStr = "";
     if (StringUtils.isNotBlank(donationIdentificationNumber)) {
       queryStr = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE " +
                  "c.donationIdentificationNumber = :donationIdentificationNumber AND " +
-                 "c.bloodBagType.id IN :bloodBagTypeIds AND " +
+                 "c.packType.id IN :packTypeIds AND " +
                  "c.donorPanel.id IN :donorPanelIds AND " +
                  "c.donationDate >= :donationDateFrom AND c.donationDate <= :donationDateTo AND " +
                  "c.isDeleted=:isDeleted";
     } else {
       queryStr = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE " +
-          "c.bloodBagType.id IN :bloodBagTypeIds AND " +
+          "c.packType.id IN :packTypeIds AND " +
           "c.donorPanel.id IN :panelIds AND " +
           "c.donationDate >= :donationDateFrom AND c.donationDate <= :donationDateTo AND " +
           "c.isDeleted=:isDeleted";
@@ -136,7 +142,7 @@ public class DonationRepository {
       query.setParameter("ttiStatus", TTIStatus.NOT_DONE);
     }
     
-    query.setParameter("bloodBagTypeIds", bloodBagTypeIds);
+    query.setParameter("packTypeIds", packTypeIds);
     query.setParameter("panelIds", panelIds);
     query.setParameter("donationDateFrom", getDonationDateFromOrDefault(donationDateFrom));
     query.setParameter("donationDateTo", getDonationDateToOrDefault(donationDateTo));
@@ -184,13 +190,6 @@ public class DonationRepository {
       return new ArrayList<Donation>();
     }
     return donations;
-  }
-
-  public void deleteDonation(Long donationId) {
-    Donation existingDonation = findDonationById(donationId);
-    existingDonation.setIsDeleted(Boolean.TRUE);
-    em.merge(existingDonation);
-    em.flush();
   }
 
   public List<Donation> findAnyDonationMatching(String donationIdentificationNumber,
@@ -334,7 +333,7 @@ public class DonationRepository {
     em.refresh(donation);
    
     //Create initial component only if the countAsDonation is true
-    if( donation.getBloodBagType().getCountAsDonation() == true)
+    if( donation.getPackType().getCountAsDonation() == true)
         createInitialComponent(donation);
   
     return donation;
@@ -342,7 +341,7 @@ public class DonationRepository {
   
   public void createInitialComponent(Donation donation){
     
-    ComponentType componentType = donation.getBloodBagType().getComponentType();
+    ComponentType componentType = donation.getPackType().getComponentType();
       
     Component component = new Component();
     component.setIsDeleted(false);
@@ -399,7 +398,7 @@ public class DonationRepository {
           donor.setDateOfFirstDonation(donation.getDonationDate());
       }
        //set dueToDonate
-      BloodBagType packType = donation.getBloodBagType();
+      PackType packType = donation.getPackType();
       int periodBetweenDays = packType.getPeriodBetweenDonations();
       Calendar dueToDonateDate = Calendar.getInstance();
       dueToDonateDate.setTime(donation.getDonationDate());
@@ -473,6 +472,44 @@ public class DonationRepository {
     }
     return donations;
   }
+  
+    // TODO: Test
+    public int countDonationsForDonor(Donor donor) {
+
+        return em.createNamedQuery(
+                DonationNamedQueryConstants.NAME_COUNT_DONATIONS_FOR_DONOR,
+                Number.class)
+                .setParameter("donor", donor)
+                .setParameter("deleted", false)
+                .getSingleResult()
+                .intValue();
+    }
+    
+    // TODO: Test
+    public Date findDateOfFirstDonationForDonor(long donorId) {
+        List<Date> results = em.createNamedQuery(
+                DonationNamedQueryConstants.NAME_FIND_ASCENDING_DONATION_DATES_FOR_DONOR,
+                Date.class)
+                .setParameter("donorId", donorId)
+                .setParameter("deleted", false)
+                .setMaxResults(1)
+                .getResultList();
+        
+        return results.isEmpty() ? null : results.get(0);
+    }
+    
+    // TODO: Test
+    public Date findDateOfLastDonationForDonor(long donorId) {
+        List<Date> results = em.createNamedQuery(
+                DonationNamedQueryConstants.NAME_FIND_DESCENDING_DONATION_DATES_FOR_DONOR,
+                Date.class)
+                .setParameter("donorId", donorId)
+                .setParameter("deleted", false)
+                .setMaxResults(1)
+                .getResultList();
+        
+        return results.isEmpty() ? null : results.get(0);
+    }
 
   public Map<Long, BloodTestingRuleResult> filterDonationsWithBloodTypingResults(
       Collection<Donation> donations) {

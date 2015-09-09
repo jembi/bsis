@@ -17,6 +17,8 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -24,7 +26,6 @@ import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import model.bloodbagtype.BloodBagType;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
 import model.component.Component;
@@ -34,6 +35,7 @@ import model.donor.Donor;
 import model.location.Location;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
+import model.packtype.PackType;
 import model.user.User;
 import model.worksheet.Worksheet;
 
@@ -43,13 +45,14 @@ import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Range;
 
+import repository.DonationNamedQueryConstants;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import constraintvalidator.BloodBagTypeExists;
+import constraintvalidator.PackTypeExists;
 import constraintvalidator.DonationBatchExists;
 import constraintvalidator.DonationTypeExists;
 import constraintvalidator.DonorExists;
@@ -59,6 +62,14 @@ import constraintvalidator.LocationExists;
  * A donation of blood
  * @author iamrohitbanga
  */
+@NamedQueries({
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_COUNT_DONATIONS_FOR_DONOR,
+            query = DonationNamedQueryConstants.QUERY_COUNT_DONATION_FOR_DONOR),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_ASCENDING_DONATION_DATES_FOR_DONOR,
+            query = DonationNamedQueryConstants.QUERY_FIND_ASCENDING_DONATION_DATES_FOR_DONOR),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_DESCENDING_DONATION_DATES_FOR_DONOR,
+            query = DonationNamedQueryConstants.QUERY_FIND_DESCENDING_DONATION_DATES_FOR_DONOR)
+})
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
@@ -108,9 +119,9 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
   @ManyToOne
   private DonationType donationType;
 
-  @BloodBagTypeExists
+  @PackTypeExists
   @ManyToOne
-  private BloodBagType bloodBagType;
+  private PackType packType;
 
   /**
    * List of components created from this donation.
@@ -207,8 +218,8 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     return donationDate;
   }
 
-  public BloodBagType getBloodBagType() {
-    return bloodBagType;
+  public PackType getPackType() {
+    return packType;
   }
 
   public String getNotes() {
@@ -236,8 +247,8 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     this.donationDate = donationDate;
   }
 
-  public void setBloodBagType(BloodBagType bloodBagType) {
-    this.bloodBagType = bloodBagType;
+  public void setPackType(PackType packType) {
+    this.packType = packType;
   }
 
   public void setNotes(String notes) {
@@ -253,7 +264,7 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     this.donationIdentificationNumber = donation.donationIdentificationNumber;
     this.donor = donation.donor;
     this.setDonationType(donation.getDonationType());
-    this.bloodBagType = donation.bloodBagType;
+    this.packType = donation.packType;
     this.donationDate = donation.donationDate;
     this.donationBatch = donation.donationBatch;
     this.notes = donation.notes;
@@ -492,6 +503,15 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
 
     public void setDonorPanel(Location donorPanel) {
         this.donorPanel = donorPanel;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        return other instanceof Donation &&
+                ((Donation) other).id == id;
     }
 
 }

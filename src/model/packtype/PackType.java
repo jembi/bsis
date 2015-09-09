@@ -1,4 +1,4 @@
-package model.bloodbagtype;
+package model.packtype;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +15,7 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-public class BloodBagType {
+public class PackType {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,7 +23,7 @@ public class BloodBagType {
   private Integer id;
 
   @Column(length=50)
-  private String bloodBagType;
+  private String packType;
 
   /**
    * TODO: Not using the canSplit, canPool fields for now
@@ -62,7 +62,7 @@ public class BloodBagType {
 
   @Override
   public String toString() {
-    return bloodBagType;
+    return packType;
   }
 
   public Boolean getIsDeleted() {
@@ -73,12 +73,12 @@ public class BloodBagType {
     this.isDeleted = isDeleted;
   }
 
-  public String getBloodBagType() {
-    return bloodBagType;
+  public String getPackType() {
+    return packType;
   }
 
-  public void setBloodBagType(String bloodBagType) {
-    this.bloodBagType = bloodBagType;
+  public void setPackType(String packType) {
+    this.packType = packType;
   }
 
   public Boolean getCanPool() {
@@ -121,12 +121,21 @@ public class BloodBagType {
 	    this.periodBetweenDonations = periodBetweenDonations;
 	}
 	
-	public void copy(BloodBagType bloodBagType) {
-		this.bloodBagType = bloodBagType.getBloodBagType();
-        this.componentType = bloodBagType.getComponentType();
-        this.periodBetweenDonations = bloodBagType.getPeriodBetweenDonations();
-        this.countAsDonation = bloodBagType.getCountAsDonation();
-        this.isDeleted = bloodBagType.getIsDeleted();
+	public void copy(PackType packType) {
+		this.packType = packType.getPackType();
+        this.componentType = packType.getComponentType();
+        this.periodBetweenDonations = packType.getPeriodBetweenDonations();
+        this.countAsDonation = packType.getCountAsDonation();
+        this.isDeleted = packType.getIsDeleted();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        return other instanceof PackType &&
+                ((PackType) other).id == id;
     }
   
   

@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import factory.DonationBatchViewModelFactory;
 import repository.DonationBatchRepository;
 import repository.LocationRepository;
 import utils.PermissionConstants;
@@ -44,6 +45,9 @@ public class DonationBatchController {
 
   @Autowired
   private UtilController utilController;
+  
+  @Autowired
+  private DonationBatchViewModelFactory donationBatchViewModelFactory;
 
   public DonationBatchController() {
   }
@@ -104,7 +108,8 @@ public class DonationBatchController {
         DonationBatch donationBatch = form.getDonationBatch();
         donationBatch.setIsDeleted(false);
         donationBatchRepository.addDonationBatch(donationBatch);
-		return new ResponseEntity<DonationBatchViewModel>(new DonationBatchViewModel(donationBatch), HttpStatus.CREATED);
+		return new ResponseEntity<DonationBatchViewModel>(donationBatchViewModelFactory.createDonationBatchViewModel(
+		        donationBatch), HttpStatus.CREATED);
   }
   
   @RequestMapping(value = "{id}",method = RequestMethod.PUT)
@@ -113,7 +118,8 @@ public class DonationBatchController {
           @RequestBody @Valid DonationBatchBackingForm form){
       
       DonationBatch donationBatch = donationBatchRepository.updateDonationBatch(form.getDonationBatch());
-      return new ResponseEntity<DonationBatchViewModel>(new DonationBatchViewModel(donationBatch), HttpStatus.OK);
+      return new ResponseEntity<DonationBatchViewModel>(donationBatchViewModelFactory.createDonationBatchViewModel(
+              donationBatch), HttpStatus.OK);
   }
 
   @RequestMapping(value = "{id}" ,method = RequestMethod.GET)
@@ -123,7 +129,8 @@ public class DonationBatchController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     DonationBatch  donationBatch = donationBatchRepository.findDonationBatchById(id);
-    DonationBatchViewModel donationBatchViewModel = getDonationBatchViewModel(donationBatch);
+    DonationBatchViewModel donationBatchViewModel = donationBatchViewModelFactory.createDonationBatchViewModel(
+            donationBatch);
     map.put("donationBatch", donationBatchViewModel);
 
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
@@ -145,18 +152,12 @@ public class DonationBatchController {
     m.put("donorPanels", locationRepository.getAllDonorPanels());
   }
 
-  private DonationBatchViewModel getDonationBatchViewModel(DonationBatch donationBatch) {
-    DonationBatchViewModel donationBatchViewModel = new DonationBatchViewModel(donationBatch);
-    return donationBatchViewModel;
-  }
-
-  public static List<DonationBatchViewModel> getDonationBatchViewModels(
-      List<DonationBatch> donationBatches) {
+  private List<DonationBatchViewModel> getDonationBatchViewModels(List<DonationBatch> donationBatches) {
     if (donationBatches == null)
       return Arrays.asList(new DonationBatchViewModel[0]);
     List<DonationBatchViewModel> donationBatchViewModels = new ArrayList<DonationBatchViewModel>();
     for (DonationBatch donationBatch : donationBatches) {
-      donationBatchViewModels.add(new DonationBatchViewModel(donationBatch));
+      donationBatchViewModels.add(donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch));
     }
     return donationBatchViewModels;
   }

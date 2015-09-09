@@ -20,7 +20,6 @@ import java.util.Map;
 
 import javax.persistence.NoResultException;
 import javax.sql.DataSource;
-import javax.transaction.Transactional;
 
 import model.address.Address;
 import model.address.AddressType;
@@ -56,6 +55,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import security.BsisUserDetails;
 import security.LoginUserService;
@@ -154,19 +154,6 @@ public class DonorRepositoryTest {
         assertTrue(
                 "Donor's Id should not zero. Once Donor object should persist,new Id is generated and assigned to Donor.",
                 donorBackingForm.getDonor().getId() == 0 ? false : true);
-    }
-
-    @Test
-    /**
-     * Should delete donor from database deleteDonor(long)
-     */
-    public void deleteDonor_shouldDeleteDonorFromDatabase() {
-        // 3 is Donor's ID.
-        Donor deletedDonor = donorRepository.deleteDonor(3l);
-        assertTrue("Delete operation should complete successfully.",
-                deletedDonor.getIsDeleted());
-        assertTrue("Deleted Donor's id value should be 3.",
-                deletedDonor.getId() == 3 ? true : false);
     }
 
     @Test
@@ -428,7 +415,7 @@ public class DonorRepositoryTest {
         donorBackingForm = new DonorBackingForm(editDonor);
         setBackingUpdateFormValue(donorBackingForm);
         assertNotNull("Donor Object should update.",
-                donorRepository.updateDonor(donorBackingForm.getDonor()));
+                donorRepository.updateDonorDetails(donorBackingForm.getDonor()));
 
     }
 
@@ -443,7 +430,7 @@ public class DonorRepositoryTest {
         editDonor.setId(-1l);
         donorBackingForm = new DonorBackingForm(editDonor);
         setBackingUpdateFormValue(donorBackingForm);
-        donorRepository.updateDonor(donorBackingForm.getDonor());
+        donorRepository.updateDonorDetails(donorBackingForm.getDonor());
     }
 
     @Test

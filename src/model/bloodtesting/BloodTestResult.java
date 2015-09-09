@@ -13,11 +13,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
+import repository.BloodTestResultNamedQueryConstants;
 import model.donation.Donation;
 import model.microtiterplate.MachineReading;
 import model.modificationtracker.ModificationTracker;
@@ -30,6 +33,10 @@ import model.user.User;
  * Always insert a new row. Use testedOn to find the latest test result.
  * @author iamrohitbanga
  */
+@NamedQueries({
+    @NamedQuery(name = BloodTestResultNamedQueryConstants.NAME_COUNT_BLOOD_TEST_RESULTS_FOR_DONATION,
+            query = BloodTestResultNamedQueryConstants.QUERY_COUNT_BLOOD_TEST_RESULTS_FOR_DONATION)
+})
 @Entity
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class BloodTestResult implements ModificationTracker {

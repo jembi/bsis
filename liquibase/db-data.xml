@@ -155,31 +155,32 @@
 	</changeSet>
 	
 	<!-- Updated (timler): for #294 (refactoring) -->
-	<changeSet id="20150817-15:40" author="srikanthmalyala">
+	<!-- Updated (timler): for #328 (refactoring) -->
+	<changeSet id="20150818-1246" author="srikanthmalyala">
 	    <preConditions onFail="MARK_RAN">
 		    <sqlCheck expectedResult="0"> 
 				<![CDATA[
-				SELECT count(*) FROM BloodBagType WHERE bloodBagType = "Single" and componentType_id = 1;
+				SELECT count(*) FROM PackType WHERE packType = "Single" and componentType_id = 1;
 				]]>
 			</sqlCheck>
  		</preConditions>
-		<comment>add blood bag types</comment>
-		<insert tableName = "BloodBagType">
-			<column name="bloodBagType" value="Single"/>
+		<comment>add pack types</comment>
+		<insert tableName = "PackType">
+			<column name="packType" value="Single"/>
 			<column name="isDeleted" value="0"/>
 			<column name="componentType_id" value="1"/>
 			<column name="countAsDonation" value="1"/>
 			<column name="periodBetweenDonations" value="90"/>
 		</insert>
-		<insert tableName = "BloodBagType">
-			<column name="bloodBagType" value="Triple"/>
+		<insert tableName = "PackType">
+			<column name="packType" value="Triple"/>
 			<column name="isDeleted" value="0"/>
 			<column name="componentType_id" value="1"/>
 			<column name="countAsDonation" value="1"/>
 			<column name="periodBetweenDonations" value="90"/>
 		</insert>
-		<insert tableName = "BloodBagType">
-			<column name="bloodBagType" value="Pedi"/>
+		<insert tableName = "PackType">
+			<column name="packType" value="Pedi"/>
 			<column name="isDeleted" value="0"/>
 			<column name="componentType_id" value="1"/>
 			<column name="countAsDonation" value="1"/>
