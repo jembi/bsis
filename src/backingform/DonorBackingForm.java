@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import model.address.Address;
@@ -712,5 +713,10 @@ public class DonorBackingForm {
     
     public void setAddressId(String addressId){
         address.setId(Long.parseLong(addressId));
+    }
+    
+    @JsonIgnore
+    public void setPermissions(Map<String, Boolean> permissions) {
+        // Ignore
     }
 }

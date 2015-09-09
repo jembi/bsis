@@ -8,7 +8,7 @@ import java.util.Set;
 
 import model.audit.EntityModification;
 import model.user.User;
-import utils.JsonDateSerialiser;
+import utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -27,7 +27,7 @@ public class AuditRevisionViewModel {
         this.id = id;
     }
 
-    @JsonSerialize(using = JsonDateSerialiser.class)
+    @JsonSerialize(using = DateTimeSerialiser.class)
     public Date getRevisionDate() {
         return revisionDate;
     }

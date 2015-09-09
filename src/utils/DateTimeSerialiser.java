@@ -8,7 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-public class JsonDateSerialiser extends JsonSerializer<Date> {
+public class DateTimeSerialiser extends JsonSerializer<Date> {
 
     @Override
     public void serialize(Date date, JsonGenerator jsonGenerator, SerializerProvider provider) throws IOException,
