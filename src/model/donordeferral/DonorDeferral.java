@@ -4,12 +4,15 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
+
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -185,8 +188,8 @@ public class DonorDeferral implements ModificationTracker{
 	public void setVoidedDate(Date voidedDate) {
 		this.voidedDate = voidedDate;
 	}
-	
-	public void copy(DonorDeferral deferral) {
+
+    public void copy(DonorDeferral deferral) {
 	    assert (deferral.getId().equals(this.getId()));
 	    setDeferredDonor(deferral.getDeferredDonor());
 	    setDeferredUntil(deferral.getDeferredUntil());

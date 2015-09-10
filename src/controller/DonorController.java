@@ -246,7 +246,7 @@ public class DonorController {
 
         updatedDonor = donorRepository.updateDonorDetails(donor);
 
-        map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(updatedDonor));
+        map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(donorRepository.findDonorById(updatedDonor.getId())));
         return new ResponseEntity<Map<String, Object>>(map, httpStatus);
 
     }
