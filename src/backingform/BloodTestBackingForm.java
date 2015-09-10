@@ -41,6 +41,14 @@ public class BloodTestBackingForm {
         return bloodTest.getTestNameShort();
     }
 
+    public String getValidResults() {
+        return bloodTest.getValidResults();
+    }
+
+    public Integer getRankInCategory() {
+        return bloodTest.getRankInCategory();
+    }
+
     public Integer getNumberOfConfirmatoryTests() {
         return numberOfConfirmatoryTests;
     }
