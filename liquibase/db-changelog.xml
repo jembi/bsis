@@ -1609,5 +1609,65 @@
 			<column name="REVTYPE" type="tinyint(4)"></column>
 		</createTable>
 	</changeSet>
+	
+	<changeSet id="20150903-1118" author="bausmeier">
+	   <comment>Add default duration days to deferral reasons.</comment>
+	
+	   <addColumn tableName="DeferralReason">
+	       <column name="defaultDuration" type="SMALLINT UNSIGNED" defaultValue="NULL" />
+	   </addColumn>
+
+	   <addColumn tableName="DeferralReason_AUD">
+	       <column name="defaultDuration" type="SMALLINT UNSIGNED" defaultValue="NULL" />
+	   </addColumn>
+	</changeSet>
+	
+	<changeSet id="20150907-0917" author="bausmeier">
+		<comment>Add deferral reason durationType column.</comment>
+	   
+	   <addColumn tableName="DeferralReason">
+	       <column name="durationType" type="VARCHAR(30)">
+	           <constraints nullable="false" />
+	       </column>
+	   </addColumn>
+	   
+	   <addColumn tableName="DeferralReason_AUD">
+	       <column name="durationType" type="VARCHAR(30)">
+	           <constraints nullable="false" />
+	       </column>
+	   </addColumn>
+
+		<update tableName="DeferralReason">
+       		<column name="durationType" value="TEMPORARY" />
+   		</update>
+	</changeSet>
+	
+	<changeSet id="20150907-0918" author="bausmeier">
+		<comment>Add Deferral Reason type column and TTI unsafe deferral reason.</comment>
+		
+			<addColumn tableName="DeferralReason">
+		       <column name="type" type="VARCHAR(30)">
+		           <constraints nullable="false" />
+		       </column>
+		   </addColumn>
+	
+		   <addColumn tableName="DeferralReason_AUD">
+		       <column name="type" type="VARCHAR(30)">
+		           <constraints nullable="false" />
+		       </column>
+		   </addColumn>
+	
+		   <update tableName="DeferralReason">
+		       <column name="type" value="NORMAL" />
+		   </update>
+	
+		   <insert tableName="DeferralReason">
+		       <column name="reason">TTI Unsafe</column>
+		       <column name="type">AUTOMATED_TTI_UNSAFE</column>
+		       <column name="durationType">PERMANENT</column>
+		       <column name="isDeleted">0</column>
+		   </insert>
+	   
+	</changeSet>
 
 </databaseChangeLog>
