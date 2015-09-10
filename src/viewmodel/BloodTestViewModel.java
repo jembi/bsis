@@ -85,6 +85,10 @@ public class BloodTestViewModel {
     return rawBloodTest.getIsActive();
   }
 
+  public Boolean getIsDeleted() {
+    return rawBloodTest.getIsDeleted();
+  }
+
   public Integer getRankInCategory() {
     return rawBloodTest.getRankInCategory();
   }

@@ -68,6 +68,10 @@ public class BloodTestBackingForm {
     public void setIsActive(Boolean isActive){
         bloodTest.setIsActive(isActive);
     }
+
+    public void setIsDeleted(Boolean isDeleted){
+        bloodTest.setIsDeleted(isDeleted);
+    }
     
     public void setNegativeResults(String negativeResults){
         bloodTest.setNegativeResults(negativeResults);
