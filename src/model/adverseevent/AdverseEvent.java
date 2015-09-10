@@ -1,5 +1,6 @@
 package model.adverseevent;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,7 +21,7 @@ public class AdverseEvent {
     @Column(nullable = false, updatable = false, insertable = false)
     private Long id;
     
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private AdverseEventType type;
     
     @Lob

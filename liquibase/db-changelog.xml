@@ -1661,7 +1661,7 @@
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="type_id" type="bigint">
-				<constraints nullable="false" foreignKeyName="FK_ADVERSE_EVENT_AUD_ADVERSE_EVENT_TYPE_ID"
+				<constraints nullable="true" foreignKeyName="FK_ADVERSE_EVENT_AUD_ADVERSE_EVENT_TYPE_ID"
                         references="AdverseEventType(id)" />
             </column>
             <column name="comment" type="longtext" />
@@ -1679,10 +1679,7 @@
         </addColumn>
         
         <addColumn tableName="Donation_AUD">
-            <column name="adverseEvent_id" type="bigint">
-				<constraints nullable="true" foreignKeyName="FK_DONATION_AUD_ADVERSE_EVENT_ID"
-                        references="AdverseEvent(id)" />
-            </column>
+            <column name="adverseEvent_id" type="bigint" />
         </addColumn>
     </changeSet>
 

@@ -198,7 +198,7 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
   @NotNull
   private Location donorPanel;
   
-  @OneToOne(optional = true, cascade = CascadeType.ALL)
+  @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true)
   private AdverseEvent adverseEvent;
 
   public Donation() {

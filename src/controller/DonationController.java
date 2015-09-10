@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import factory.DonationViewModelFactory;
 import repository.AdverseEventTypeRepository;
 import repository.PackTypeRepository;
 import repository.DonationRepository;
@@ -81,6 +82,9 @@ public class DonationController {
   
   @Autowired
   private AdverseEventTypeRepository adverseEventTypeRepository;
+  
+  @Autowired
+  private DonationViewModelFactory donationViewModelFactory;
   
   public DonationController() {
   }
@@ -198,13 +202,15 @@ public class DonationController {
       map.put("donationFields", formFields);
       Donation savedDonation = null;
       Donation donation = form.getDonation();
+      
+      donationCRUDService.updateAdverseEventForDonation(donation, form.getAdverseEvent());
 
       savedDonation = donationRepository.addDonation(donation);
       map.put("hasErrors", false);
       form = new DonationBackingForm();
 	
       map.put("donationId", savedDonation.getId());
-      map.put("donation", getDonationViewModel(savedDonation));
+      map.put("donation", donationViewModelFactory.createDonationViewModelWithPermissions(savedDonation));
       return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
 

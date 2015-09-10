@@ -2,39 +2,34 @@ package backingform;
 
 import javax.validation.constraints.NotNull;
 
-import model.adverseevent.AdverseEvent;
-import model.adverseevent.AdverseEventType;
-
 public class AdverseEventBackingForm {
     
-    private AdverseEvent adverseEvent;
-    
-    public AdverseEventBackingForm() {
-        adverseEvent = new AdverseEvent();
-    }
+    private Long id;
+    private AdverseEventTypeBackingForm typeBackingForm;
+    private String comment;
     
     public void setId(Long id) {
-        adverseEvent.setId(id);
+        this.id = id;
     }
     
     public Long getId() {
-        return adverseEvent.getId();
+        return id;
     }
     
     @NotNull
-    public void setType(AdverseEventType type) {
-        adverseEvent.setType(type);
+    public void setType(AdverseEventTypeBackingForm typeBackingForm) {
+        this.typeBackingForm = typeBackingForm;
     }
     
-    public AdverseEventType getType() {
-        return adverseEvent.getType();
+    public AdverseEventTypeBackingForm getType() {
+        return typeBackingForm;
     }
     
     public void setComment(String comment) {
-        adverseEvent.setComment(comment);
+        this.comment = comment;
     }
     
     public String getComment() {
-        return adverseEvent.getComment();
+        return comment;
     }
 }

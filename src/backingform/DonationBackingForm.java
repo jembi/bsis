@@ -12,7 +12,6 @@ import java.util.Map;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import model.adverseevent.AdverseEvent;
 import model.component.Component;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
@@ -43,6 +42,7 @@ public class DonationBackingForm {
   private List<String> sites;
   private String donationDate;
   private String donorNumber;
+  private AdverseEventBackingForm adverseEventBackingForm;
 
   // setting this to false is required as the use parameters from batch
   // may be hidden by the user in which case we will get a null pointer
@@ -474,11 +474,11 @@ public class DonationBackingForm {
         // Ignore
     }
     
-    public void setAdverseEvent(AdverseEvent adverseEvent) {
-        donation.setAdverseEvent(adverseEvent);
+    public void setAdverseEvent(AdverseEventBackingForm adverseEventBackingForm) {
+        this.adverseEventBackingForm = adverseEventBackingForm;
     }
     
-    public AdverseEvent getAdverseEvent() {
-        return donation.getAdverseEvent();
+    public AdverseEventBackingForm getAdverseEvent() {
+        return adverseEventBackingForm;
     }
 }

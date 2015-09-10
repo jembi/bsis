@@ -1,6 +1,8 @@
 package service;
 
+import static helpers.builders.AdverseEventBackingFormBuilder.anAdverseEventBackingForm;
 import static helpers.builders.AdverseEventBuilder.anAdverseEvent;
+import static helpers.builders.AdverseEventTypeBackingFormBuilder.anAdverseEventTypeBackingForm;
 import static helpers.builders.DonationBackingFormBuilder.aDonationBackingForm;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
@@ -31,6 +33,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import repository.DonationRepository;
 import repository.DonorRepository;
+import backingform.AdverseEventBackingForm;
 import backingform.DonationBackingForm;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -205,7 +208,12 @@ public class DonationCRUDServiceTests {
         PackType irrelevantPackType = aPackType().withId(8).build();
         Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
         Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
-        AdverseEvent irrelevantAdverseEvent = anAdverseEvent().withId(3L).build();
+        Long irrelevantAdverseEventTypeId = 8L;
+        AdverseEvent irrelevantAdverseEvent = anAdverseEvent()
+                .build();
+        AdverseEventBackingForm irrelevantAdverseEventBackingForm = anAdverseEventBackingForm()
+                .withType(anAdverseEventTypeBackingForm().withId(irrelevantAdverseEventTypeId).build())
+                .build();
 
         Donation existingDonation = aDonation().withId(IRRELEVANT_DONATION_ID).build();
         DonationBackingForm donationBackingForm = aDonationBackingForm()
@@ -219,7 +227,7 @@ public class DonationCRUDServiceTests {
                 .withPackType(irrelevantPackType)
                 .withBleedStartTime(irrelevantBleedStartTime)
                 .withBleedEndTime(irrelevantBleedEndTime)
-                .withAdverseEvent(irrelevantAdverseEvent)
+                .withAdverseEvent(irrelevantAdverseEventBackingForm)
                 .build();
         
         // Set up expectations
