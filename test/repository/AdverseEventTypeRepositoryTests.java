@@ -73,5 +73,48 @@ public class AdverseEventTypeRepositoryTests extends ContextDependentTestSuite {
         
         assertThat(returnedAdverseEventType, is(expectedAdverseEventType));
     }
+    
+    @Test
+    public void testFindNonDeletedAdverseEventTypeViewModels_shouldReturnViewModelsForNonDeletedAdverseEventTypes() {
+        
+        String firstExpectedName = "b.name";
+        String secondExpectedName = "c.name";
+        String firstExpectedDescription = "first.description";
+        String secondExpectedDescription = "second.description";
+        
+        AdverseEventType secondAdverseEventType = anAdverseEventType()
+                .withName(secondExpectedName)
+                .withDescription(secondExpectedDescription)
+                .buildAndPersist(entityManager);
+        AdverseEventType firstAdverseEventType = anAdverseEventType()
+                .withName(firstExpectedName)
+                .withDescription(firstExpectedDescription)
+                .buildAndPersist(entityManager);
+        
+        // Excluded by deleted flag
+        anAdverseEventType()
+                .thatIsDeleted()
+                .withName("a.name")
+                .withDescription("third description")
+                .build();
+        
+        AdverseEventTypeViewModel firstExpectedViewModel = anAdverseEventTypeViewModel()
+                .withId(firstAdverseEventType.getId())
+                .withName(firstExpectedName)
+                .withDescription(firstExpectedDescription)
+                .build();
+        AdverseEventTypeViewModel secondExpectedViewModel = anAdverseEventTypeViewModel()
+                .withId(secondAdverseEventType.getId())
+                .withName(secondExpectedName)
+                .withDescription(secondExpectedDescription)
+                .build();
+        
+        List<AdverseEventTypeViewModel> returnedViewModels = adverseEventTypeRepository
+                .findNonDeletedAdverseEventTypeViewModels();
+        
+        assertThat(returnedViewModels.size(), is(2));
+        assertThat(returnedViewModels.get(0), hasSameStateAsAdverseEventTypeViewModel(firstExpectedViewModel));
+        assertThat(returnedViewModels.get(1), hasSameStateAsAdverseEventTypeViewModel(secondExpectedViewModel));
+    }
 
 }

@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import repository.AdverseEventTypeRepository;
 import repository.PackTypeRepository;
 import repository.DonationRepository;
 import repository.DonationTypeRepository;
@@ -77,6 +78,9 @@ public class DonationController {
   
   @Autowired
   private DonationCRUDService donationCRUDService;
+  
+  @Autowired
+  private AdverseEventTypeRepository adverseEventTypeRepository;
   
   public DonationController() {
   }
@@ -149,6 +153,7 @@ public class DonationController {
         haemoglobinLevels.add(haemoglobinLevel);
     }
     m.put("haemoglobinLevels", haemoglobinLevels);
+    m.put("adverseEventTypes", adverseEventTypeRepository.findNonDeletedAdverseEventTypeViewModels());
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)

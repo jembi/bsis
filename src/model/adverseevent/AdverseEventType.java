@@ -15,7 +15,9 @@ import repository.constant.AdverseEventTypeNamedQueryConstants;
 
 @NamedQueries({
     @NamedQuery(name = AdverseEventTypeNamedQueryConstants.NAME_FIND_ADVERSE_EVENT_TYPE_VIEW_MODELS,
-            query = AdverseEventTypeNamedQueryConstants.QUERY_FIND_ADVERSE_EVENT_TYPE_VIEW_MODELS)
+            query = AdverseEventTypeNamedQueryConstants.QUERY_FIND_ADVERSE_EVENT_TYPE_VIEW_MODELS),
+    @NamedQuery(name = AdverseEventTypeNamedQueryConstants.NAME_FIND_ADVERSE_EVENT_TYPE_VIEW_MODELS_WITH_DELETED_FLAG,
+            query = AdverseEventTypeNamedQueryConstants.QUERY_FIND_ADVERSE_EVENT_TYPE_VIEW_MODELS_WITH_DELETED_FLAG)
 })
 @Entity
 @Audited
