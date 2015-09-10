@@ -14,6 +14,7 @@ import model.component.ComponentStatus;
 import model.donor.Donor;
 
 import org.junit.Test;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import suites.ContextDependentTestSuite;
@@ -26,6 +27,7 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
     private ComponentRepository componentRepository;
     
     @Test
+    @Ignore
     public void testUpdateComponentStatusForDonor_shouldOnlyUpdateMatchingComponents() {
         ComponentStatus oldStatus = ComponentStatus.AVAILABLE;
         ComponentStatus newStatus = ComponentStatus.UNSAFE;
