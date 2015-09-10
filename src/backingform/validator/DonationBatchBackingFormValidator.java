@@ -50,7 +50,7 @@ public class DonationBatchBackingFormValidator implements Validator {
     Location donorPanel = form.getDonationBatch().getDonorPanel();
     ArrayList<Long> donorPanelIds = new ArrayList<>();
     donorPanelIds.add(donorPanel.getId());
-	if (donorPanel == null) {
+	if (donorPanel.getId() == null) {
 	  errors.rejectValue("donationBatch.donorPanel", "donorPanel.empty",
 	    "Donor Panel is required.");
 	} 
