@@ -2866,4 +2866,61 @@
         </insert>
     </changeSet>
 
+    <changeSet id="20150907-1507" author="bausmeier">
+    
+        <comment>Add adverse event type permissions.</comment>
+
+        <insert tableName="Permission">
+            <column name="id" value="96"></column>
+            <column name="name" value="Add Adverse Event Types"></column>
+        </insert>
+        <insert tableName="Permission_Role">
+            <column name="permissions_id" value="96"></column>
+            <column name="roles_id" value="1"></column>
+        </insert>
+        <insert tableName="Permission_Role">
+            <column name="permissions_id" value="96"></column>
+            <column name="roles_id" value="2"></column>
+        </insert>
+
+        <insert tableName="Permission">
+            <column name="id" value="97"></column>
+            <column name="name" value="Edit Adverse Event Types"></column>
+        </insert>
+        <insert tableName="Permission_Role">
+            <column name="permissions_id" value="97"></column>
+            <column name="roles_id" value="1"></column>
+        </insert>
+        <insert tableName="Permission_Role">
+            <column name="permissions_id" value="97"></column>
+            <column name="roles_id" value="2"></column>
+        </insert>
+
+        <insert tableName="Permission">
+            <column name="id" value="98"></column>
+            <column name="name" value="View Adverse Event Types"></column>
+        </insert>
+        <insert tableName="Permission_Role">
+            <column name="permissions_id" value="98"></column>
+            <column name="roles_id" value="1"></column>
+        </insert>
+        <insert tableName="Permission_Role">
+            <column name="permissions_id" value="98"></column>
+            <column name="roles_id" value="2"></column>
+        </insert>
+
+        <insert tableName="Permission">
+            <column name="id" value="99"></column>
+            <column name="name" value="Void Adverse Event Types"></column>
+        </insert>
+        <insert tableName="Permission_Role">
+            <column name="permissions_id" value="99"></column>
+            <column name="roles_id" value="1"></column>
+        </insert>
+        <insert tableName="Permission_Role">
+            <column name="permissions_id" value="99"></column>
+            <column name="roles_id" value="2"></column>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

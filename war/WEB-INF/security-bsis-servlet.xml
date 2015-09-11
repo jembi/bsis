@@ -219,6 +219,13 @@
     <intercept-url pattern="/postdonationcounsellings/**" access="isAnonymous()" method="OPTIONS"/>
     <intercept-url pattern="/postdonationcounsellings/**" access="isFullyAuthenticated()" />
   </http>
+
+  <http pattern="/adverseevents/**" create-session="never" use-expressions="true">
+    <http-basic />
+    <session-management />
+    <intercept-url pattern="/adverseevents/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/adverseevents/**" access="isFullyAuthenticated()" />
+  </http>
   
   <!-- Enable stateful access to swagger-ui  -->
   <http auto-config="true" use-expressions="true">

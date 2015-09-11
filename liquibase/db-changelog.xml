@@ -1670,4 +1670,37 @@
 	   
 	</changeSet>
 
+    <changeSet id="20150907-1149" author="bausmeier">
+
+        <createTable tableName="AdverseEventType">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="varchar(30)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="UQ_ADVERSE_EVENT_TYPE_NAME" />
+            </column>
+            <column name="description" type="longtext" />
+            <column name="isDeleted" type="tinyint(1)" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <createTable tableName="AdverseEventType_AUD">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="varchar(30)">
+                <constraints nullable="false" />
+            </column>
+            <column name="description" type="longtext" />
+            <column name="isDeleted" type="tinyint(1)" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+            <column name="REV" type="int">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="REVTYPE" type="tinyint(4)"></column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>
