@@ -2,13 +2,13 @@ package service;
 
 import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.DonationBuilder.aDonation;
+import static helpers.builders.DonorBuilder.aDonor;
 import static helpers.builders.TestBatchBuilder.aTestBatch;
 import static helpers.matchers.TestBatchMatcher.hasSameStateAsTestBatch;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
@@ -18,6 +18,8 @@ import java.util.List;
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
+import model.donor.Donor;
+import model.donordeferral.DeferralReasonType;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 
@@ -38,6 +40,10 @@ public class TestBatchCRUDServiceTests {
     private TestBatchRepository testBatchRepository;
     @Mock
     private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
+    @Mock
+    private DonorDeferralCRUDService donorDeferralCRUDService;
+    @Mock
+    private ComponentCRUDService componentCRUDService;
     
     @Test
     public void testUpdateTestBatchStatusWithStatusChangeNotToClosed_shouldUpdateTestBatchStatus() {
@@ -60,9 +66,7 @@ public class TestBatchCRUDServiceTests {
 
         TestBatch returnedTestBatch = testBatchCRUDService.updateTestBatchStatus(testBatchId, newStatus);
         
-        verify(testBatchRepository).findTestBatchById(testBatchId);
         verify(testBatchRepository).updateTestBatch(argThat(hasSameStateAsTestBatch(expectedTestBatch)));
-        verifyNoMoreInteractions(testBatchRepository);
         verifyZeroInteractions(postDonationCounsellingCRUDService);
         assertThat(returnedTestBatch, hasSameStateAsTestBatch(expectedTestBatch));
     }
@@ -88,9 +92,7 @@ public class TestBatchCRUDServiceTests {
 
         TestBatch returnedTestBatch = testBatchCRUDService.updateTestBatchStatus(testBatchId, newStatus);
         
-        verify(testBatchRepository).findTestBatchById(testBatchId);
         verify(testBatchRepository).updateTestBatch(argThat(hasSameStateAsTestBatch(expectedTestBatch)));
-        verifyNoMoreInteractions(testBatchRepository);
         verifyZeroInteractions(postDonationCounsellingCRUDService);
         assertThat(returnedTestBatch, hasSameStateAsTestBatch(expectedTestBatch));
     }
@@ -116,9 +118,7 @@ public class TestBatchCRUDServiceTests {
 
         TestBatch returnedTestBatch = testBatchCRUDService.updateTestBatchStatus(testBatchId, newStatus);
         
-        verify(testBatchRepository).findTestBatchById(testBatchId);
         verify(testBatchRepository).updateTestBatch(argThat(hasSameStateAsTestBatch(expectedTestBatch)));
-        verifyNoMoreInteractions(testBatchRepository);
         verifyZeroInteractions(postDonationCounsellingCRUDService);
         assertThat(returnedTestBatch, hasSameStateAsTestBatch(expectedTestBatch));
     }
@@ -128,8 +128,12 @@ public class TestBatchCRUDServiceTests {
         long testBatchId = 526;
         TestBatchStatus newStatus = TestBatchStatus.CLOSED;
         
+        Donor donorWithUnsafeDonation = aDonor().withId(86L).build();
+        Donor donorWithSafeDonation = aDonor().withId(14L).build();
+        
         Donation unsafeDonation = aDonation()
                 .withId(123L)
+                .withDonor(donorWithUnsafeDonation)
                 .withTTIStatus(TTIStatus.TTI_UNSAFE)
                 .build();
 
@@ -162,11 +166,15 @@ public class TestBatchCRUDServiceTests {
 
         TestBatch returnedTestBatch = testBatchCRUDService.updateTestBatchStatus(testBatchId, newStatus);
         
-        verify(testBatchRepository).findTestBatchById(testBatchId);
         verify(postDonationCounsellingCRUDService).createPostDonationCounsellingForDonation(unsafeDonation);
         verify(postDonationCounsellingCRUDService, never()).createPostDonationCounsellingForDonation(safeDonation);
         verify(testBatchRepository).updateTestBatch(argThat(hasSameStateAsTestBatch(expectedTestBatch)));
-        verifyNoMoreInteractions(testBatchRepository, postDonationCounsellingCRUDService);
+        verify(donorDeferralCRUDService).createDeferralForDonorWithDeferralReasonType(donorWithUnsafeDonation,
+                DeferralReasonType.AUTOMATED_TTI_UNSAFE);
+        verify(donorDeferralCRUDService, never()).createDeferralForDonorWithDeferralReasonType(donorWithSafeDonation,
+                DeferralReasonType.AUTOMATED_TTI_UNSAFE);
+        verify(componentCRUDService).markComponentsBelongingToDonorAsUnsafe(donorWithUnsafeDonation);
+        verify(componentCRUDService, never()).markComponentsBelongingToDonorAsUnsafe(donorWithSafeDonation);
         assertThat(returnedTestBatch, hasSameStateAsTestBatch(expectedTestBatch));
     }
 

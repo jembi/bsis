@@ -239,14 +239,20 @@
 	<genericconfig id="48" propertyName="lotRelease"
 		propertyOwner="labsetup" propertyValue="TRUE" />
 
-	<deferralreason id="1" isDeleted="0" reason="High risk behaviour" />
-	<deferralreason id="2" isDeleted="0" reason="Low weight" />
-	<deferralreason id="3" isDeleted="0" reason="Low haemoglobin" />
-	<deferralreason id="4" isDeleted="0" reason="Other reasons" />
-	<deferralreason id="5" isDeleted="0"
-		reason="Other medical conditions" />
-	<deferralreason id="6" isDeleted="0" reason="Travel history" />
-	<deferralreason id="7" isDeleted="1" reason="Test Deleted Deferal" />
+	<deferralreason id="1" isDeleted="0" reason="High risk behaviour" defaultDuration="30" durationType="TEMPORARY"
+	       type="NORMAL" />
+	<deferralreason id="2" isDeleted="0" reason="Low weight" defaultDuration="30" durationType="TEMPORARY"
+	       type="NORMAL" />
+	<deferralreason id="3" isDeleted="0" reason="Low haemoglobin" defaultDuration="30" durationType="TEMPORARY"
+	       type="NORMAL" />
+	<deferralreason id="4" isDeleted="0" reason="Other reasons" defaultDuration="30" durationType="TEMPORARY"
+	       type="NORMAL" />
+	<deferralreason id="5" isDeleted="0" reason="Other medical conditions" defaultDuration="30" durationType="TEMPORARY"
+	       type="NORMAL" />
+	<deferralreason id="6" isDeleted="0" reason="Travel history" defaultDuration="30" durationType="TEMPORARY"
+	       type="NORMAL" />
+	<deferralreason id="7" isDeleted="1" reason="Test Deleted Deferal" defaultDuration="30" durationType="TEMPORARY"
+	       type="NORMAL" />
 
 	<formfield id="1" autoGenerate="1" canBeOptional="0"
 		defaultDisplayName="Donor #" field="donorNumber" form="donor" hidden="0"
