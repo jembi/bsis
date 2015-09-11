@@ -50,6 +50,7 @@ import viewmodel.DonationSummaryViewModel;
 import viewmodel.DonationViewModel;
 import viewmodel.PackTypeViewModel;
 import backingform.DonationBackingForm;
+import backingform.validator.AdverseEventBackingFormValidator;
 import backingform.validator.DonationBackingFormValidator;
 
 @RestController
@@ -86,12 +87,15 @@ public class DonationController {
   @Autowired
   private DonationViewModelFactory donationViewModelFactory;
   
+  @Autowired
+  private AdverseEventBackingFormValidator adverseEventBackingFormValidator;
+  
   public DonationController() {
   }
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new DonationBackingFormValidator(utilController));
+    binder.setValidator(new DonationBackingFormValidator(utilController, adverseEventBackingFormValidator));
   }
 
   public static String getUrl(HttpServletRequest req) {
