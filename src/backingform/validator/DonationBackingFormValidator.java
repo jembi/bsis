@@ -109,16 +109,10 @@ public class DonationBackingFormValidator implements Validator {
 
   }
 
-  private void validateBloodPressure(DonationBackingForm donationForm, Errors errors) {
+  private void validateBloodPressure(DonationBackingForm donationBackingForm, Errors errors) {
 	  
     Integer bloodPressureSystolic = null;
     Integer bloodPressureDiastolic = null;
-
-    if (donationForm.getBloodPressureSystolic() != null)
-      bloodPressureSystolic = donationForm.getBloodPressureSystolic();
-
-    if (donationForm.getBloodPressureDiastolic() != null)
-      bloodPressureDiastolic = donationForm.getBloodPressureDiastolic();
 
     Integer bloodPressureSystolicMin = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.bpSystolicMin"));
     Integer bloodPressureSystolicMax = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.bpSystolicMax"));
@@ -126,18 +120,21 @@ public class DonationBackingFormValidator implements Validator {
     Integer bloodPressureDiastolicMin = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.bpDiastolicMin"));
     Integer bloodPressureDiastolicMax = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.bpDiastolicMax"));
 
-    if (bloodPressureSystolic != null || bloodPressureDiastolic != null) {
-
-      if (bloodPressureSystolic == null || (bloodPressureSystolic < bloodPressureSystolicMin || bloodPressureSystolic > bloodPressureSystolicMax)){
-        errors.rejectValue("donation.bloodPressureSystolic", "bloodPressureSystolic.outOfRange", "Enter a value between "+ bloodPressureSystolicMin+" to "+ bloodPressureSystolicMax+".");
-      }
-
-      if (bloodPressureDiastolic == null || (bloodPressureDiastolic < bloodPressureDiastolicMin || bloodPressureDiastolic > bloodPressureDiastolicMax)){
-        errors.rejectValue("donation.bloodPressureDiastolic", "bloodPressureDiastolic.outOfRange", "Enter a value between "+ bloodPressureDiastolicMin+" to "+ bloodPressureDiastolicMax+".");
-      }
-
+    if (donationBackingForm.getBloodPressureSystolic() != null) {
+      bloodPressureSystolic = donationBackingForm.getBloodPressureSystolic().intValue();
+      if (bloodPressureSystolic < bloodPressureSystolicMin)
+        errors.rejectValue("donation.bloodPressureSystolic", "bloodPressureSystolic.outOfRange", "BP value should be above " + bloodPressureSystolicMin);
+      if (bloodPressureSystolic > bloodPressureSystolicMax)
+        errors.rejectValue("donation.bloodPressureSystolic", "bloodPressureSystolic.outOfRange", "BP value should be below " + bloodPressureSystolicMax);
     }
 
+    if (donationBackingForm.getBloodPressureDiastolic() != null) {
+      bloodPressureDiastolic = donationBackingForm.getBloodPressureDiastolic().intValue();
+      if (bloodPressureDiastolic < bloodPressureDiastolicMin)
+        errors.rejectValue("donation.bloodPressureDiastolic", "bloodPressureDiastolic.outOfRange", "BP value should be above " + bloodPressureDiastolicMax);
+      if (bloodPressureDiastolic > bloodPressureDiastolicMax)
+        errors.rejectValue("donation.bloodPressureDiastolic", "bloodPressureDiastolic.outOfRange", "BP value should be below " + bloodPressureDiastolicMax);
+    }
   }
 
   private void validateHaemoglobinCount(DonationBackingForm donationBackingForm, Errors errors) {
@@ -145,11 +142,12 @@ public class DonationBackingFormValidator implements Validator {
     Integer hbMin = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.hbMin"));
     Integer hbMax = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.hbMax"));
 
-    if (donationBackingForm.getHaemoglobinCount() != null)
+    if (donationBackingForm.getHaemoglobinCount() != null) {
       haemoglobinCount = donationBackingForm.getHaemoglobinCount().intValue();
-
-    if (haemoglobinCount != null && (haemoglobinCount < hbMin || haemoglobinCount > hbMax)) {
-        errors.rejectValue("donation.haemoglobinCount", "haemoglobinCount.outOfRange", "Enter a value between "+ hbMin + " to " + hbMax);
+      if (haemoglobinCount < hbMin)
+        errors.rejectValue("donation.haemoglobinCount", "haemoglobinCount.outOfRange", "Hb value should be above " + hbMin);
+      if (haemoglobinCount > hbMax)
+        errors.rejectValue("donation.haemoglobinCount", "haemoglobinCount.outOfRange", "Hb value should be below " + hbMax);
     }
   }
 
@@ -158,13 +156,12 @@ public class DonationBackingFormValidator implements Validator {
     Integer weightMin = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.weightMin"));
     Integer weightMax = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.weightMax"));
 
-
-
-    if (donationBackingForm.getDonorWeight() != null)
+    if (donationBackingForm.getDonorWeight() != null) {
       weight = donationBackingForm.getDonorWeight().intValue();
-
-    if (weight != null && (weight < weightMin || weight > weightMax)){
-        errors.rejectValue("donation.donorWeight", "donorWeight.outOfRange", "Enter a value between " + weightMin + " to " + weightMax);
+      if (weight < weightMin)
+        errors.rejectValue("donation.donorWeight", "donorWeight.outOfRange", "Weight value should be above " + weightMin);
+      if (weight > weightMax)
+        errors.rejectValue("donation.donorWeight", "donorWeight.outOfRange", "Weight value should be below " + weightMax);
     }
   }
 
@@ -173,11 +170,12 @@ public class DonationBackingFormValidator implements Validator {
     Integer pulseMin = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.pulseMin"));
     Integer pulseMax = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.pulseMax"));
 
-    if (donationBackingForm.getDonorPulse() != null)
-      pulse = donationBackingForm.getDonorPulse();
-
-    if (pulse != null && (pulse < pulseMin || pulse > pulseMax)){
-        errors.rejectValue("donation.donorPulse", "donorPulse.outOfRange", "Enter a value between "+ pulseMin + " to " + pulseMax);
+    if (donationBackingForm.getDonorPulse() != null) {
+      pulse = donationBackingForm.getDonorPulse().intValue();
+      if (pulse < pulseMin)
+        errors.rejectValue("donation.donorPulse", "donorPulse.outOfRange", "Pulse value should be above " + pulseMin);
+      if (pulse > pulseMax)
+        errors.rejectValue("donation.donorPulse", "donorPulse.outOfRange", "Pulse value should be below " + pulseMax);
     }
   }
 
