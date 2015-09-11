@@ -91,7 +91,7 @@ public class DonationCRUDService {
     
     // TODO: Make this method private once the method for creating a donation is moved into this service.
     public void updateAdverseEventForDonation(Donation donation, AdverseEventBackingForm adverseEventBackingForm) {
-        if (adverseEventBackingForm == null) {
+        if (adverseEventBackingForm == null || adverseEventBackingForm.getType() == null) {
             // Delete the adverse event
             donation.setAdverseEvent(null);
             return;
