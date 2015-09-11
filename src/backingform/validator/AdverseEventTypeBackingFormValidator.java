@@ -29,7 +29,7 @@ public class AdverseEventTypeBackingFormValidator implements Validator {
         List<Long> existingAdverseEventTypeIds = adverseEventTypeRepository.findIdsByName(adverseEventTypeBackingForm.getName());
         for (Long id : existingAdverseEventTypeIds) {
             if (!id.equals(adverseEventTypeBackingForm.getId())) {
-                errors.rejectValue("name", "adverseEventType.duplicateName",
+                errors.rejectValue("name", "adverseEventType.name.duplicate",
                         "There is already an adverse event type with that name");
                 break;
             }
