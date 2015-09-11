@@ -73,5 +73,19 @@ public class AdverseEventTypeRepositoryTests extends ContextDependentTestSuite {
         
         assertThat(returnedAdverseEventType, is(expectedAdverseEventType));
     }
+    
+    @Test
+    public void testFindByName_shouldReturnIdOfMatchingAdverseEventType() {
+        String matchingName = "matching name";
+        anAdverseEventType().withName("no match").buildAndPersist(entityManager);
+        AdverseEventType expectedAdverseEventType = anAdverseEventType()
+                .withName(matchingName)
+                .buildAndPersist(entityManager);
+        
+        List<Long> returnedAdverseEventTypeIds = adverseEventTypeRepository.findIdsByName(matchingName);
+        
+        assertThat(returnedAdverseEventTypeIds.size(), is(1));
+        assertThat(returnedAdverseEventTypeIds.get(0), is(expectedAdverseEventType.getId()));
+    }
 
 }

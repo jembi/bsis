@@ -8,5 +8,13 @@ public class AdverseEventTypeNamedQueryConstants {
             "SELECT NEW viewmodel.AdverseEventTypeViewModel(aet.id, aet.name, aet.description, aet.isDeleted) " +
             "FROM AdverseEventType aet " +
             "ORDER BY aet.name ";
+    
+    public static final String NAME_FIND_ADVERSE_EVENT_TYPE_IDS_BY_NAME =
+            "AdverseEventType.findAdverseEventTypeIdsByName";
+    public static final String QUERY_FIND_ADVERSE_EVENT_TYPE_IDS_BY_NAME =
+            "SELECT aet.id " +
+            "FROM AdverseEventType aet " +
+            "WHERE aet.name = :name ";
+    
 
 }

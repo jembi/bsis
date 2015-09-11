@@ -23,4 +23,12 @@ public class AdverseEventTypeRepository extends AbstractRepository<AdverseEventT
     public AdverseEventType findById(Long id) {
         return entityManager.find(AdverseEventType.class, id);
     }
+    
+    public List<Long> findIdsByName(String name) {
+        return entityManager.createNamedQuery(
+                AdverseEventTypeNamedQueryConstants.NAME_FIND_ADVERSE_EVENT_TYPE_IDS_BY_NAME,
+                Long.class)
+                .setParameter("name", name)
+                .getResultList();
+    }
 }
