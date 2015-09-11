@@ -1677,7 +1677,7 @@
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="name" type="varchar(30)">
-                <constraints nullable="false" />
+                <constraints nullable="false" unique="true" uniqueConstraintName="UQ_ADVERSE_EVENT_TYPE_NAME" />
             </column>
             <column name="description" type="longtext" />
             <column name="isDeleted" type="tinyint(1)" defaultValue="0">
