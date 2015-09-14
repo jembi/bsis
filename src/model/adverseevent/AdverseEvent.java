@@ -9,9 +9,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
 
+import repository.constant.AdverseEventNamedQueryConstants;
+
+@NamedQueries({
+    @NamedQuery(name = AdverseEventNamedQueryConstants.NAME_COUNT_ADVERSE_EVENTS_FOR_DONOR,
+            query = AdverseEventNamedQueryConstants.QUERY_COUNT_ADVERSE_EVENTS_FOR_DONOR)
+})
 @Entity
 @Audited
 public class AdverseEvent {

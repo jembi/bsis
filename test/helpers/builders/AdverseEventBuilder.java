@@ -1,6 +1,8 @@
 package helpers.builders;
 
 import static helpers.builders.AdverseEventTypeBuilder.anAdverseEventType;
+import helpers.persisters.AbstractEntityPersister;
+import helpers.persisters.AdverseEventPersister;
 import model.adverseevent.AdverseEvent;
 import model.adverseevent.AdverseEventType;
 
@@ -34,6 +36,11 @@ public class AdverseEventBuilder extends AbstractEntityBuilder<AdverseEvent> {
         return adverseEvent;
     }
     
+    @Override
+    public AbstractEntityPersister<AdverseEvent> getPersister() {
+        return new AdverseEventPersister();
+    }
+
     public static AdverseEventBuilder anAdverseEvent() {
         return new AdverseEventBuilder();
     }

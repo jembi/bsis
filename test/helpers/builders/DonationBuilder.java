@@ -98,6 +98,11 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         return this;
     }
     
+    public DonationBuilder thatIsNotDeleted() {
+        deleted = false;
+        return this;
+    }
+    
     public DonationBuilder withPackType(PackType packType) {
         this.packType = packType;
         return this;

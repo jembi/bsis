@@ -3,9 +3,11 @@ package helpers.builders;
 import model.adverseevent.AdverseEventType;
 
 public class AdverseEventTypeBuilder extends AbstractEntityBuilder<AdverseEventType> {
+    
+    private static int index = 0;
 
     private Long id;
-    private String name;
+    private String name = "adverse.event.type." + index++;
     private String description;
     private boolean deleted;
     
