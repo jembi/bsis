@@ -35,6 +35,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import factory.DonationViewModelFactory;
+import repository.AdverseEventTypeRepository;
 import repository.PackTypeRepository;
 import repository.DonationRepository;
 import repository.DonationTypeRepository;
@@ -48,6 +50,7 @@ import viewmodel.DonationSummaryViewModel;
 import viewmodel.DonationViewModel;
 import viewmodel.PackTypeViewModel;
 import backingform.DonationBackingForm;
+import backingform.validator.AdverseEventBackingFormValidator;
 import backingform.validator.DonationBackingFormValidator;
 
 @RestController
@@ -78,12 +81,21 @@ public class DonationController {
   @Autowired
   private DonationCRUDService donationCRUDService;
   
+  @Autowired
+  private AdverseEventTypeRepository adverseEventTypeRepository;
+  
+  @Autowired
+  private DonationViewModelFactory donationViewModelFactory;
+  
+  @Autowired
+  private AdverseEventBackingFormValidator adverseEventBackingFormValidator;
+  
   public DonationController() {
   }
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new DonationBackingFormValidator(utilController));
+    binder.setValidator(new DonationBackingFormValidator(utilController, adverseEventBackingFormValidator));
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -149,6 +161,7 @@ public class DonationController {
         haemoglobinLevels.add(haemoglobinLevel);
     }
     m.put("haemoglobinLevels", haemoglobinLevels);
+    m.put("adverseEventTypes", adverseEventTypeRepository.findNonDeletedAdverseEventTypeViewModels());
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
@@ -193,13 +206,15 @@ public class DonationController {
       map.put("donationFields", formFields);
       Donation savedDonation = null;
       Donation donation = form.getDonation();
+      
+      donationCRUDService.updateAdverseEventForDonation(donation, form.getAdverseEvent());
 
       savedDonation = donationRepository.addDonation(donation);
       map.put("hasErrors", false);
       form = new DonationBackingForm();
 	
       map.put("donationId", savedDonation.getId());
-      map.put("donation", getDonationViewModel(savedDonation));
+      map.put("donation", donationViewModelFactory.createDonationViewModelWithPermissions(savedDonation));
       return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
 

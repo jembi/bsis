@@ -5,6 +5,7 @@ import java.util.Date;
 
 import helpers.persisters.AbstractEntityPersister;
 import helpers.persisters.DonationPersister;
+import model.adverseevent.AdverseEvent;
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
@@ -30,6 +31,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     private PackType packType;
     private Date bleedStartTime;
     private Date bleedEndTime;
+    private AdverseEvent adverseEvent;
     
     public DonationBuilder withId(Long id) {
         this.id = id;
@@ -96,6 +98,11 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         return this;
     }
     
+    public DonationBuilder thatIsNotDeleted() {
+        deleted = false;
+        return this;
+    }
+    
     public DonationBuilder withPackType(PackType packType) {
         this.packType = packType;
         return this;
@@ -108,6 +115,11 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     
     public DonationBuilder withBleedEndTime(Date bleedEndTime) {
         this.bleedEndTime = bleedEndTime;
+        return this;
+    }
+
+    public DonationBuilder withAdverseEvent(AdverseEvent adverseEvent) {
+        this.adverseEvent = adverseEvent;
         return this;
     }
 
@@ -130,6 +142,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         donation.setPackType(packType);
         donation.setBleedStartTime(bleedStartTime);
         donation.setBleedEndTime(bleedEndTime);
+        donation.setAdverseEvent(adverseEvent);
         return donation;
     }
 

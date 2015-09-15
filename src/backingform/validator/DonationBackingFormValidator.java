@@ -24,11 +24,14 @@ import controller.UtilController;
 public class DonationBackingFormValidator implements Validator {
 
   private UtilController utilController;
+  private AdverseEventBackingFormValidator adverseEventBackingFormValidator;
   
-  public DonationBackingFormValidator(UtilController utilController){
-	  super();
-	  this.utilController = utilController;
-  }
+    public DonationBackingFormValidator(UtilController utilController,
+            AdverseEventBackingFormValidator adverseEventBackingFormValidator) {
+        super();
+        this.utilController = utilController;
+        this.adverseEventBackingFormValidator = adverseEventBackingFormValidator;
+    }
 
   @SuppressWarnings("unchecked")
   @Override
@@ -92,6 +95,8 @@ public class DonationBackingFormValidator implements Validator {
     validateHaemoglobinCount(form, errors);
     validateWeight(form, errors);
     validatePulse(form, errors);
+    
+    adverseEventBackingFormValidator.validate(form.getAdverseEvent(), errors);
 
     utilController.commonFieldChecks(form, "donation", errors);
   }

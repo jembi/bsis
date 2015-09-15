@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import constant.GeneralConfigConstants;
 import factory.DonationViewModelFactory;
 import factory.DonorViewModelFactory;
+import repository.AdverseEventRepository;
 import repository.ContactMethodTypeRepository;
 import repository.DonationBatchRepository;
 import repository.DonorRepository;
@@ -86,6 +87,9 @@ public class DonorController {
   
   @Autowired
   private DonationViewModelFactory donationViewModelFactory;
+  
+  @Autowired
+  private AdverseEventRepository adverseEventRepository;
   
   public DonorController() {
   }
@@ -151,12 +155,14 @@ public class DonorController {
 	    map.put("dateOfFirstDonation",CustomDateFormatter.getDateString(donations.get(0).getDonationDate()));
 	    map.put("totalDonations",getNumberOfDonations(donations));
 	    map.put("dueToDonate",CustomDateFormatter.getDateString(donor.getDueToDonate()));
+	    map.put("totalAdverseEvents", adverseEventRepository.countAdverseEventsForDonor(donor));
     }
     else {
     	map.put("lastDonation", "");
 	    map.put("dateOfFirstDonation","");
 	    map.put("totalDonations",0);
 	    map.put("dueToDonate","");
+	    map.put("totalAdverseEvents", 0);
     }
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }

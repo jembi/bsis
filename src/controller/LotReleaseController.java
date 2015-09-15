@@ -32,6 +32,7 @@ import repository.ComponentRepository;
 import repository.DonationRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import utils.PermissionConstants;
+import backingform.validator.AdverseEventBackingFormValidator;
 import backingform.validator.DonationBackingFormValidator;
 
 @RestController
@@ -47,13 +48,16 @@ public class LotReleaseController {
 
   @Autowired
   private UtilController utilController;
+  
+  @Autowired
+  private AdverseEventBackingFormValidator adverseEventBackingFormValidator;
 
   public LotReleaseController() {
   }
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new DonationBackingFormValidator(utilController));
+    binder.setValidator(new DonationBackingFormValidator(utilController, adverseEventBackingFormValidator));
   }
   
   public static String getUrl(HttpServletRequest req) {

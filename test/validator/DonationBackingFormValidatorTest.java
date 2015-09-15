@@ -18,7 +18,6 @@ import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
 
 import backingform.DonationBackingForm;
+import backingform.validator.AdverseEventBackingFormValidator;
 import backingform.validator.DonationBackingFormValidator;
 import repository.DonationRepository;
 import controller.UtilController;
@@ -48,6 +48,9 @@ public class DonationBackingFormValidatorTest {
 	
 	@Autowired
 	private UtilController utilController;
+	
+	@Autowired
+	private AdverseEventBackingFormValidator adverseEventBackingFormValidator;
 	
 	private BindException errors;
 	private DonationBackingFormValidator donationBackingFormValidator;
@@ -73,7 +76,8 @@ public class DonationBackingFormValidatorTest {
 		try {
 			IDataSet dataSet = getDataSet();
 			DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
-			donationBackingFormValidator = new DonationBackingFormValidator(utilController);
+			donationBackingFormValidator = new DonationBackingFormValidator(utilController,
+			        adverseEventBackingFormValidator);
 		}
 		finally {
 			connection.close();

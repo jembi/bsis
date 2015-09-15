@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -26,6 +27,7 @@ import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import model.adverseevent.AdverseEvent;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
 import model.component.Component;
@@ -195,6 +197,9 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
   @LocationExists
   @NotNull
   private Location donorPanel;
+  
+  @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true)
+  private AdverseEvent adverseEvent;
 
   public Donation() {
     modificationTracker = new RowModificationTracker();
@@ -503,6 +508,14 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
 
     public void setDonorPanel(Location donorPanel) {
         this.donorPanel = donorPanel;
+    }
+
+    public AdverseEvent getAdverseEvent() {
+        return adverseEvent;
+    }
+
+    public void setAdverseEvent(AdverseEvent adverseEvent) {
+        this.adverseEvent = adverseEvent;
     }
 
     @Override

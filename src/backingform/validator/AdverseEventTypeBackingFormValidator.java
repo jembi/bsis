@@ -23,6 +23,9 @@ public class AdverseEventTypeBackingFormValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
+        if (target == null) {
+            return;
+        }
 
         AdverseEventTypeBackingForm adverseEventTypeBackingForm = (AdverseEventTypeBackingForm) target;
 

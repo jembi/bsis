@@ -1,5 +1,8 @@
 package service;
 
+import static helpers.builders.AdverseEventBackingFormBuilder.anAdverseEventBackingForm;
+import static helpers.builders.AdverseEventBuilder.anAdverseEvent;
+import static helpers.builders.AdverseEventTypeBackingFormBuilder.anAdverseEventTypeBackingForm;
 import static helpers.builders.DonationBackingFormBuilder.aDonationBackingForm;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
@@ -15,6 +18,7 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import model.adverseevent.AdverseEvent;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
 import model.donor.Donor;
@@ -29,6 +33,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import repository.DonationRepository;
 import repository.DonorRepository;
+import backingform.AdverseEventBackingForm;
 import backingform.DonationBackingForm;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -203,6 +208,12 @@ public class DonationCRUDServiceTests {
         PackType irrelevantPackType = aPackType().withId(8).build();
         Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
         Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
+        Long irrelevantAdverseEventTypeId = 8L;
+        AdverseEvent irrelevantAdverseEvent = anAdverseEvent()
+                .build();
+        AdverseEventBackingForm irrelevantAdverseEventBackingForm = anAdverseEventBackingForm()
+                .withType(anAdverseEventTypeBackingForm().withId(irrelevantAdverseEventTypeId).build())
+                .build();
 
         Donation existingDonation = aDonation().withId(IRRELEVANT_DONATION_ID).build();
         DonationBackingForm donationBackingForm = aDonationBackingForm()
@@ -216,6 +227,7 @@ public class DonationCRUDServiceTests {
                 .withPackType(irrelevantPackType)
                 .withBleedStartTime(irrelevantBleedStartTime)
                 .withBleedEndTime(irrelevantBleedEndTime)
+                .withAdverseEvent(irrelevantAdverseEventBackingForm)
                 .build();
         
         // Set up expectations
@@ -231,6 +243,7 @@ public class DonationCRUDServiceTests {
                 .withPackType(irrelevantPackType)
                 .withBleedStartTime(irrelevantBleedStartTime)
                 .withBleedEndTime(irrelevantBleedEndTime)
+                .withAdverseEvent(irrelevantAdverseEvent)
                 .build();
         
         when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);

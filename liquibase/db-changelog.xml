@@ -1702,5 +1702,45 @@
             <column name="REVTYPE" type="tinyint(4)"></column>
         </createTable>
     </changeSet>
+    
+    <changeSet id="20150908-1613" author="bausmeier">
+
+        <createTable tableName="AdverseEvent">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="type_id" type="bigint">
+				<constraints nullable="false" foreignKeyName="FK_ADVERSE_EVENT_ADVERSE_EVENT_TYPE_ID"
+                        references="AdverseEventType(id)" />
+            </column>
+            <column name="comment" type="longtext" />
+        </createTable>
+
+        <createTable tableName="AdverseEvent_AUD">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="type_id" type="bigint">
+				<constraints nullable="true" foreignKeyName="FK_ADVERSE_EVENT_AUD_ADVERSE_EVENT_TYPE_ID"
+                        references="AdverseEventType(id)" />
+            </column>
+            <column name="comment" type="longtext" />
+            <column name="REV" type="int">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="REVTYPE" type="tinyint(4)"></column>
+        </createTable>
+        
+        <addColumn tableName="Donation">
+            <column name="adverseEvent_id" type="bigint">
+				<constraints nullable="true" foreignKeyName="FK_DONATION_ADVERSE_EVENT_ID"
+                        references="AdverseEvent(id)" />
+            </column>
+        </addColumn>
+        
+        <addColumn tableName="Donation_AUD">
+            <column name="adverseEvent_id" type="bigint" />
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>

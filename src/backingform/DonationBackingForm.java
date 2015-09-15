@@ -42,6 +42,7 @@ public class DonationBackingForm {
   private List<String> sites;
   private String donationDate;
   private String donorNumber;
+  private AdverseEventBackingForm adverseEventBackingForm;
 
   // setting this to false is required as the use parameters from batch
   // may be hidden by the user in which case we will get a null pointer
@@ -471,5 +472,13 @@ public class DonationBackingForm {
     @JsonIgnore
     public void setPermissions(Map<String, Boolean> permissions) {
         // Ignore
+    }
+    
+    public void setAdverseEvent(AdverseEventBackingForm adverseEventBackingForm) {
+        this.adverseEventBackingForm = adverseEventBackingForm;
+    }
+    
+    public AdverseEventBackingForm getAdverseEvent() {
+        return adverseEventBackingForm;
     }
 }

@@ -8,6 +8,7 @@ import org.joda.time.format.ISODateTimeFormat;
 
 import model.donation.HaemoglobinLevel;
 import model.packtype.PackType;
+import backingform.AdverseEventBackingForm;
 import backingform.DonationBackingForm;
 
 public class DonationBackingFormBuilder extends AbstractBuilder<DonationBackingForm> {
@@ -24,6 +25,7 @@ public class DonationBackingFormBuilder extends AbstractBuilder<DonationBackingF
     private PackType packType;
     private Date bleedStartTime;
     private Date bleedEndTime;
+    private AdverseEventBackingForm adverseEventBackingForm;
     
     public DonationBackingFormBuilder withDonorPulse(Integer donorPulse) {
         this.donorPulse = donorPulse;
@@ -74,6 +76,11 @@ public class DonationBackingFormBuilder extends AbstractBuilder<DonationBackingF
         this.bleedEndTime = bleedEndTime;
         return this;
     }
+    
+    public DonationBackingFormBuilder withAdverseEvent(AdverseEventBackingForm adverseEventBackingForm) {
+        this.adverseEventBackingForm = adverseEventBackingForm;
+        return this;
+    }
 
     @Override
     public DonationBackingForm build() {
@@ -92,6 +99,7 @@ public class DonationBackingFormBuilder extends AbstractBuilder<DonationBackingF
         if (bleedEndTime != null) {
             donationBackingForm.setBleedEndTime(ISO_FORMAT.print(bleedEndTime.getTime()));
         }
+        donationBackingForm.setAdverseEvent(adverseEventBackingForm);
         return donationBackingForm;
     }
     
