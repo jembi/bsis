@@ -405,6 +405,11 @@ public class BloodTestingRepository {
 			List<Donation> donations = donationBatchRepository.findDonationsInBatch(donationBatchId);
 			
 			for (Donation donation : donations) {
+			    
+			    if (!donation.getPackType().getTestSampleProduced()) {
+                    // This donation did not produce a test sample so skip it
+			        continue;
+			    }
 
 			BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
 					donation, new HashMap<Long, String>());
