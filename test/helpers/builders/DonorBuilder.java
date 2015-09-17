@@ -10,6 +10,7 @@ import model.util.Gender;
 public class DonorBuilder extends AbstractEntityBuilder<Donor> {
     
     private Long id;
+    private String donorNumber;
     private String firstName;
     private String lastName;
     private Gender gender;
@@ -21,6 +22,11 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
 
     public DonorBuilder withId(Long id) {
         this.id = id;
+        return this;
+    }
+    
+    public DonorBuilder withDonorNumber(String donorNumber) {
+        this.donorNumber = donorNumber;
         return this;
     }
     
@@ -74,6 +80,7 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
     public Donor build() {
         Donor donor = new Donor();
         donor.setId(id);
+        donor.setDonorNumber(donorNumber);
         donor.setFirstName(firstName);
         donor.setLastName(lastName);
         donor.setGender(gender);

@@ -25,7 +25,6 @@ public class DuplicateDonorService {
 	 */
 	public Map<String, List<Donor>> findDuplicateDonors(List<Donor> donors) {
 		Map<String, List<Donor>> duplicateDonors = new HashMap<String, List<Donor>>();
-		int duplicateCounter = 0;
 		if (donors != null) {
 			List<Donor> potentialDuplicates = new ArrayList<Donor>(donors);
 			for (int i = 0; i < potentialDuplicates.size(); i++) {
@@ -39,14 +38,13 @@ public class DuplicateDonorService {
 					}
 				}
 				if (!duplicates.isEmpty()) {
-					duplicateCounter++;
 					// remove the found duplicates from the potential list
 					for (Donor d3 : duplicates) {
 						potentialDuplicates.remove(d3);
 					}
 					// add the new duplicates to the duplicate map
 					duplicates.add(d1);
-					duplicateDonors.put(String.valueOf(duplicateCounter), duplicates);
+					duplicateDonors.put(String.valueOf(d1.getDonorNumber()), duplicates);
 				}
 			}
 		}

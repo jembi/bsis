@@ -33,13 +33,13 @@ public class DuplicateDonorServiceTest {
 	@Test
 	public void testFindDuplicateDonorsBasic() throws Exception {
 		List<Donor> donors = new ArrayList<Donor>();
-		donors.add(DonorBuilder.aDonor().withFirstName("David").withLastName("Smith").withGender(Gender.male)
+		donors.add(DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith").withGender(Gender.male)
 		        .withBirthDate("1977-10-20").build());
-		donors.add(DonorBuilder.aDonor().withFirstName("David").withLastName("Smith").withGender(Gender.male)
+		donors.add(DonorBuilder.aDonor().withDonorNumber("2").withFirstName("David").withLastName("Smith").withGender(Gender.male)
 		        .withBirthDate("1977-10-20").build());
-		donors.add(DonorBuilder.aDonor().withFirstName("Jo").withLastName("Smith").withGender(Gender.female)
+		donors.add(DonorBuilder.aDonor().withDonorNumber("3").withFirstName("Jo").withLastName("Smith").withGender(Gender.female)
 		        .withBirthDate("1978-10-20").build());
-		donors.add(DonorBuilder.aDonor().withFirstName("Nancy").withLastName("Drew").withGender(Gender.female)
+		donors.add(DonorBuilder.aDonor().withDonorNumber("4").withFirstName("Nancy").withLastName("Drew").withGender(Gender.female)
 	        .withBirthDate("1964-11-20").build());
 		Map<String, List<Donor>> duplicateDonorsMap = service.findDuplicateDonors(donors);
 		Assert.assertEquals("One set of matching donors", 1, duplicateDonorsMap.size());
@@ -52,19 +52,19 @@ public class DuplicateDonorServiceTest {
 	@Test
 	public void testFindDuplicateDonorsDouble() throws Exception {
 		List<Donor> donors = new ArrayList<Donor>();
-		donors.add(DonorBuilder.aDonor().withFirstName("David").withLastName("Smith").withGender(Gender.male)
+		donors.add(DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith").withGender(Gender.male)
 		        .withBirthDate("1977-10-20").build());
-		donors.add(DonorBuilder.aDonor().withFirstName("David").withLastName("Smith").withGender(Gender.male)
+		donors.add(DonorBuilder.aDonor().withDonorNumber("2").withFirstName("David").withLastName("Smith").withGender(Gender.male)
 		        .withBirthDate("1977-10-20").build());
-		donors.add(DonorBuilder.aDonor().withFirstName("Jo").withLastName("Smith").withGender(Gender.female)
+		donors.add(DonorBuilder.aDonor().withDonorNumber("3").withFirstName("Jo").withLastName("Smith").withGender(Gender.female)
 		        .withBirthDate("1978-10-20").build());
-		donors.add(DonorBuilder.aDonor().withFirstName("Sue").withLastName("Simpson").withGender(Gender.female)
+		donors.add(DonorBuilder.aDonor().withDonorNumber("4").withFirstName("Sue").withLastName("Simpson").withGender(Gender.female)
 	        .withBirthDate("1982-02-20").build());
-		donors.add(DonorBuilder.aDonor().withFirstName("Nancy").withLastName("Drew").withGender(Gender.female)
+		donors.add(DonorBuilder.aDonor().withDonorNumber("5").withFirstName("Nancy").withLastName("Drew").withGender(Gender.female)
 	        .withBirthDate("1964-11-20").build());
-		donors.add(DonorBuilder.aDonor().withFirstName("Sue").withLastName("Simpson").withGender(Gender.female)
+		donors.add(DonorBuilder.aDonor().withDonorNumber("6").withFirstName("Sue").withLastName("Simpson").withGender(Gender.female)
 	        .withBirthDate("1982-02-20").build());
-		donors.add(DonorBuilder.aDonor().withFirstName("David").withLastName("Smith").withGender(Gender.male)
+		donors.add(DonorBuilder.aDonor().withDonorNumber("7").withFirstName("David").withLastName("Smith").withGender(Gender.male)
 	        .withBirthDate("1977-10-20").build());
 		Map<String, List<Donor>> duplicateDonorsMap = service.findDuplicateDonors(donors);
 		Assert.assertEquals("Two sets of matching donors", 2, duplicateDonorsMap.size());
@@ -73,7 +73,7 @@ public class DuplicateDonorServiceTest {
 		Assert.assertEquals("David is matching Donor", "David", duplicateDonors1.get(0).getFirstName());
 		Assert.assertEquals("David is matching Donor", "David", duplicateDonors1.get(1).getFirstName());
 		Assert.assertEquals("David is matching Donor", "David", duplicateDonors1.get(2).getFirstName());
-		List<Donor> duplicateDonors2 = duplicateDonorsMap.get("2");
+		List<Donor> duplicateDonors2 = duplicateDonorsMap.get("4");
 		Assert.assertEquals("Two matching donors", 2, duplicateDonors2.size());
 		Assert.assertEquals("Sue is matching Donor", "Sue", duplicateDonors2.get(0).getFirstName());
 		Assert.assertEquals("Sue is matching Donor", "Sue", duplicateDonors2.get(1).getFirstName());
