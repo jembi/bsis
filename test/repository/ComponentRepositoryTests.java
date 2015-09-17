@@ -27,7 +27,6 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
     private ComponentRepository componentRepository;
     
     @Test
-    @Ignore
     public void testUpdateComponentStatusForDonor_shouldOnlyUpdateMatchingComponents() {
         ComponentStatus oldStatus = ComponentStatus.AVAILABLE;
         ComponentStatus newStatus = ComponentStatus.UNSAFE;

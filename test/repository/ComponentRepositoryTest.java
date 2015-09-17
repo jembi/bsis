@@ -96,6 +96,7 @@ public class ComponentRepositoryTest {
 	public void after() throws Exception {
 		IDatabaseConnection connection = getConnection();
 		try {
+			clearSpringSecurityUser(); // reverse the initiation of the Spring Security user
 			IDataSet dataSet = getDataSet();
 			DatabaseOperation.DELETE_ALL.execute(connection, dataSet);
 		}
@@ -108,6 +109,10 @@ public class ComponentRepositoryTest {
 		BsisUserDetails user = new BsisUserDetails(userRepository.findUserById(1));
 		TestingAuthenticationToken auth = new TestingAuthenticationToken(user, "Credentials");
 		SecurityContextHolder.getContext().setAuthentication(auth);
+	}
+	
+	public void clearSpringSecurityUser() throws Exception {
+		SecurityContextHolder.getContext().setAuthentication(null);
 	}
 	
 	// TODO: test the following methods
