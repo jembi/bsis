@@ -34,7 +34,6 @@ public class DonationBatchRepositoryTests {
     }
 
     @Test
-    @Ignore
     public void testCountOpenDonationBatches_shouldCountOpenAndNotDeletedBatches() {
         // Expected donation batches
         aDonationBatch().buildAndPersist(entityManager);
