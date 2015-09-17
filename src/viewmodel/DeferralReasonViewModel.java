@@ -1,6 +1,7 @@
 package viewmodel;
 
 import model.donordeferral.DeferralReason;
+import model.donordeferral.DurationType;
 
 public class DeferralReasonViewModel {
 
@@ -20,5 +21,13 @@ public class DeferralReasonViewModel {
 
     public Boolean getIsDeleted(){
         return deferralReason.getIsDeleted();
+    }
+
+    public Integer getDefaultDuration() {
+        return deferralReason.getDefaultDuration();
+    }
+    
+    public DurationType getDurationType() {
+        return deferralReason.getDurationType();
     }
 }

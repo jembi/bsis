@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,6 +18,8 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -24,6 +27,7 @@ import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import model.adverseevent.AdverseEvent;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
 import model.component.Component;
@@ -43,6 +47,7 @@ import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Range;
 
+import repository.DonationNamedQueryConstants;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
 
@@ -59,6 +64,14 @@ import constraintvalidator.LocationExists;
  * A donation of blood
  * @author iamrohitbanga
  */
+@NamedQueries({
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_COUNT_DONATIONS_FOR_DONOR,
+            query = DonationNamedQueryConstants.QUERY_COUNT_DONATION_FOR_DONOR),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_ASCENDING_DONATION_DATES_FOR_DONOR,
+            query = DonationNamedQueryConstants.QUERY_FIND_ASCENDING_DONATION_DATES_FOR_DONOR),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_DESCENDING_DONATION_DATES_FOR_DONOR,
+            query = DonationNamedQueryConstants.QUERY_FIND_DESCENDING_DONATION_DATES_FOR_DONOR)
+})
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
@@ -184,6 +197,9 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
   @LocationExists
   @NotNull
   private Location donorPanel;
+  
+  @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true)
+  private AdverseEvent adverseEvent;
 
   public Donation() {
     modificationTracker = new RowModificationTracker();
@@ -492,6 +508,14 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
 
     public void setDonorPanel(Location donorPanel) {
         this.donorPanel = donorPanel;
+    }
+
+    public AdverseEvent getAdverseEvent() {
+        return adverseEvent;
+    }
+
+    public void setAdverseEvent(AdverseEvent adverseEvent) {
+        this.adverseEvent = adverseEvent;
     }
 
     @Override

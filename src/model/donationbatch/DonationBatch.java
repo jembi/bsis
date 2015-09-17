@@ -30,6 +30,7 @@ import model.modificationtracker.RowModificationTracker;
 import model.testbatch.TestBatch;
 import model.user.User;
 
+import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
@@ -57,6 +58,7 @@ public class DonationBatch implements ModificationTracker {
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="donationBatch", fetch = FetchType.EAGER)
+  @Where(clause = "isDeleted = 0")
   private List<Donation> donations = Collections.EMPTY_LIST;
   
   @OneToOne

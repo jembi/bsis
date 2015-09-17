@@ -1,13 +1,17 @@
 package repository;
 
 import model.donordeferral.DeferralReason;
+import model.donordeferral.DeferralReasonType;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+
 import java.util.List;
 
 @Repository
@@ -77,5 +81,16 @@ public class DeferralReasonRepository {
         em.merge(existingDeferralReason);
         em.flush();
         return existingDeferralReason;
+    }
+    
+    public DeferralReason findDeferralReasonByType(DeferralReasonType deferralReasonType)
+            throws NonUniqueResultException, NoResultException {
+
+        return em.createNamedQuery(
+                DeferralReasonNamedQueryConstants.NAME_FIND_DEFERRAL_REASON_BY_TYPE,
+                DeferralReason.class)
+                .setParameter("type", deferralReasonType)
+                .setParameter("deleted", false)
+                .getSingleResult();
     }
 }

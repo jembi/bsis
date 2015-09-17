@@ -3,7 +3,7 @@ package viewmodel;
 import java.util.Date;
 
 import model.counselling.PostDonationCounselling;
-import utils.JsonDateSerialiser;
+import utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -23,7 +23,7 @@ public class PostDonationCounsellingViewModel {
         return postDonationCounselling.isFlaggedForCounselling();
     }
     
-    @JsonSerialize(using = JsonDateSerialiser.class)
+    @JsonSerialize(using = DateTimeSerialiser.class)
     public Date getCounsellingDate() {
         return postDonationCounselling.getCounsellingDate();
     }

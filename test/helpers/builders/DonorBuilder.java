@@ -14,9 +14,33 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
     private String lastName;
     private Gender gender;
     private Date birthDate;
+    private String notes;
+    private Boolean deleted;
+    private Date dateOfFirstDonation;
+    private Date dateOfLastDonation;
 
     public DonorBuilder withId(Long id) {
         this.id = id;
+        return this;
+    }
+    
+    public DonorBuilder withNotes(String notes) {
+        this.notes = notes;
+        return this;
+    }
+    
+    public DonorBuilder thatIsDeleted() {
+        deleted = true;
+        return this;
+    }
+    
+    public DonorBuilder withDateOfFirstDonation(Date dateOfFirstDonation) {
+        this.dateOfFirstDonation = dateOfFirstDonation;
+        return this;
+    }
+    
+    public DonorBuilder withDateOfLastDonation(Date dateOfLastDonation) {
+        this.dateOfLastDonation = dateOfLastDonation;
         return this;
     }
 
@@ -54,6 +78,10 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
         donor.setLastName(lastName);
         donor.setGender(gender);
         donor.setBirthDate(birthDate);
+        donor.setNotes(notes);
+        donor.setIsDeleted(deleted);
+        donor.setDateOfFirstDonation(dateOfFirstDonation);
+        donor.setDateOfLastDonation(dateOfLastDonation);
         return donor;
     }
     

@@ -3,6 +3,7 @@ package viewmodel;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import model.component.Component;
 import model.donation.Donation;
@@ -21,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class DonationViewModel {
 
   private Donation donation;
+  private Map<String, Boolean> permissions;
+  private AdverseEventViewModel adverseEvent;
 
   public DonationViewModel() {
   }
@@ -227,4 +230,24 @@ public int hashCode() {
       return new LocationViewModel(donation.getDonorPanel());
   }
 
+    public Map<String, Boolean> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Map<String, Boolean> permissions) {
+        this.permissions = permissions;
+    }
+    
+    @JsonIgnore
+    public Donation getDonation() {
+        return donation;
+    }
+
+    public AdverseEventViewModel getAdverseEvent() {
+        return adverseEvent;
+    }
+
+    public void setAdverseEvent(AdverseEventViewModel adverseEvent) {
+        this.adverseEvent = adverseEvent;
+    }
 }

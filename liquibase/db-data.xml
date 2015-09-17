@@ -381,26 +381,38 @@
 		<insert tableName="DeferralReason">
 			<column name="reason" value="High risk behaviour"/>
 			<column name="isDeleted" value="0"/>
+			<column name="type" value="NORMAL" />
+			<column name="durationType" value="TEMPORARY" />
 		</insert>
 		<insert tableName="DeferralReason">
 			<column name="reason" value="Low weight"/>
 			<column name="isDeleted" value="0"/>
+			<column name="type" value="NORMAL" />
+			<column name="durationType" value="TEMPORARY" />
 		</insert>
 		<insert tableName="DeferralReason">
 			<column name="reason" value="Low haemoglobin"/>
 			<column name="isDeleted" value="0"/>
+			<column name="type" value="NORMAL" />
+			<column name="durationType" value="TEMPORARY" />
 		</insert>
 		<insert tableName="DeferralReason">
 			<column name="reason" value="Other reasons"/>
 			<column name="isDeleted" value="0"/>
+			<column name="type" value="NORMAL" />
+			<column name="durationType" value="TEMPORARY" />
 		</insert>
 		<insert tableName="DeferralReason">
 			<column name="reason" value="Other medical conditions"/>
 			<column name="isDeleted" value="0"/>
+			<column name="type" value="NORMAL" />
+			<column name="durationType" value="TEMPORARY" />
 		</insert>
 		<insert tableName="DeferralReason">
 			<column name="reason" value="Travel history"/>
 			<column name="isDeleted" value="0"/>
+			<column name="type" value="NORMAL" />
+			<column name="durationType" value="TEMPORARY" />
 		</insert>
 	</changeSet>
 	

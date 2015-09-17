@@ -4,15 +4,20 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
+
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
@@ -22,6 +27,12 @@ import model.user.User;
 
 import org.hibernate.envers.Audited;
 
+import repository.DonorDeferralNamedQueryConstants;
+
+@NamedQueries({
+    @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_COUNT_DONOR_DEFERRALS_FOR_DONOR,
+            query = DonorDeferralNamedQueryConstants.QUERY_COUNT_DONOR_DEFERRALS_FOR_DONOR)
+})
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
@@ -177,8 +188,8 @@ public class DonorDeferral implements ModificationTracker{
 	public void setVoidedDate(Date voidedDate) {
 		this.voidedDate = voidedDate;
 	}
-	
-	public void copy(DonorDeferral deferral) {
+
+    public void copy(DonorDeferral deferral) {
 	    assert (deferral.getId().equals(this.getId()));
 	    setDeferredDonor(deferral.getDeferredDonor());
 	    setDeferredUntil(deferral.getDeferredUntil());
