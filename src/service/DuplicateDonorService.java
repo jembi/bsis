@@ -52,6 +52,24 @@ public class DuplicateDonorService {
 	}
 	
 	/**
+	 * Identifies the donors that are probably a duplicate of the specified donor
+	 * 
+	 * @param donor Donor on which to match
+	 * @param donors List<Donor> list of donors to check
+	 * @return List<Donor> list of suspected duplicate of the specified donor
+	 */
+	public List<Donor> findDuplicateDonors(Donor donor, List<Donor> donors) {
+		List<Donor> duplicates = new ArrayList<Donor>();
+		for (int i = 0; i < donors.size(); i++) {
+			Donor donor2 = donors.get(i);
+			if (match(donor, donor2)) {
+				duplicates.add(donor2);
+			}
+		}
+		return duplicates;
+	}
+	
+	/**
 	 * Determines if two donors are a match. If both Donors are null, then they are matched.
 	 * 
 	 * @param donor1 Donor first donor to match

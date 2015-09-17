@@ -343,6 +343,27 @@ public class DonorController {
   
 	@RequestMapping(value = "/duplicates", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
+	public Map<String, Object> findDuplicateDonors(@RequestParam(value = "donorNumber", required = true) String donorNumber) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		List<Donor> donors = donorRepository.getAllDonors();
+		Donor donor = donorRepository.findDonorByDonorNumber(donorNumber, false);
+		List<Donor> duplicates = new DuplicateDonorService().findDuplicateDonors(donor, donors);
+		
+		// convert Donors to DonorViewModels
+		List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
+		for (Donor d : duplicates) {
+			DonorViewModel donorViewModel = donorViewModelFactory.createDonorViewModelWithPermissions(d);
+			donorViewModels.add(donorViewModel);
+		}
+		
+		map.put("duplicates", donorViewModels);
+		return map;
+	}
+	
+	@RequestMapping(value = "/duplicates/all", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
 	public Map<String, Object> findDuplicateDonors() {
 		
 		Map<String, Object> map = new HashMap<String, Object>();

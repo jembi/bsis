@@ -33,14 +33,14 @@ public class DuplicateDonorServiceTest {
 	@Test
 	public void testFindDuplicateDonorsBasic() throws Exception {
 		List<Donor> donors = new ArrayList<Donor>();
-		donors.add(DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith").withGender(Gender.male)
-		        .withBirthDate("1977-10-20").build());
-		donors.add(DonorBuilder.aDonor().withDonorNumber("2").withFirstName("David").withLastName("Smith").withGender(Gender.male)
-		        .withBirthDate("1977-10-20").build());
-		donors.add(DonorBuilder.aDonor().withDonorNumber("3").withFirstName("Jo").withLastName("Smith").withGender(Gender.female)
-		        .withBirthDate("1978-10-20").build());
-		donors.add(DonorBuilder.aDonor().withDonorNumber("4").withFirstName("Nancy").withLastName("Drew").withGender(Gender.female)
-	        .withBirthDate("1964-11-20").build());
+		donors.add(DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith")
+		        .withGender(Gender.male).withBirthDate("1977-10-20").build());
+		donors.add(DonorBuilder.aDonor().withDonorNumber("2").withFirstName("David").withLastName("Smith")
+		        .withGender(Gender.male).withBirthDate("1977-10-20").build());
+		donors.add(DonorBuilder.aDonor().withDonorNumber("3").withFirstName("Jo").withLastName("Smith")
+		        .withGender(Gender.female).withBirthDate("1978-10-20").build());
+		donors.add(DonorBuilder.aDonor().withDonorNumber("4").withFirstName("Nancy").withLastName("Drew")
+		        .withGender(Gender.female).withBirthDate("1964-11-20").build());
 		Map<String, List<Donor>> duplicateDonorsMap = service.findDuplicateDonors(donors);
 		Assert.assertEquals("One set of matching donors", 1, duplicateDonorsMap.size());
 		List<Donor> duplicateDonors = duplicateDonorsMap.get("1");
@@ -52,20 +52,20 @@ public class DuplicateDonorServiceTest {
 	@Test
 	public void testFindDuplicateDonorsDouble() throws Exception {
 		List<Donor> donors = new ArrayList<Donor>();
-		donors.add(DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith").withGender(Gender.male)
-		        .withBirthDate("1977-10-20").build());
-		donors.add(DonorBuilder.aDonor().withDonorNumber("2").withFirstName("David").withLastName("Smith").withGender(Gender.male)
-		        .withBirthDate("1977-10-20").build());
-		donors.add(DonorBuilder.aDonor().withDonorNumber("3").withFirstName("Jo").withLastName("Smith").withGender(Gender.female)
-		        .withBirthDate("1978-10-20").build());
-		donors.add(DonorBuilder.aDonor().withDonorNumber("4").withFirstName("Sue").withLastName("Simpson").withGender(Gender.female)
-	        .withBirthDate("1982-02-20").build());
-		donors.add(DonorBuilder.aDonor().withDonorNumber("5").withFirstName("Nancy").withLastName("Drew").withGender(Gender.female)
-	        .withBirthDate("1964-11-20").build());
-		donors.add(DonorBuilder.aDonor().withDonorNumber("6").withFirstName("Sue").withLastName("Simpson").withGender(Gender.female)
-	        .withBirthDate("1982-02-20").build());
-		donors.add(DonorBuilder.aDonor().withDonorNumber("7").withFirstName("David").withLastName("Smith").withGender(Gender.male)
-	        .withBirthDate("1977-10-20").build());
+		donors.add(DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith")
+		        .withGender(Gender.male).withBirthDate("1977-10-20").build());
+		donors.add(DonorBuilder.aDonor().withDonorNumber("2").withFirstName("David").withLastName("Smith")
+		        .withGender(Gender.male).withBirthDate("1977-10-20").build());
+		donors.add(DonorBuilder.aDonor().withDonorNumber("3").withFirstName("Jo").withLastName("Smith")
+		        .withGender(Gender.female).withBirthDate("1978-10-20").build());
+		donors.add(DonorBuilder.aDonor().withDonorNumber("4").withFirstName("Sue").withLastName("Simpson")
+		        .withGender(Gender.female).withBirthDate("1982-02-20").build());
+		donors.add(DonorBuilder.aDonor().withDonorNumber("5").withFirstName("Nancy").withLastName("Drew")
+		        .withGender(Gender.female).withBirthDate("1964-11-20").build());
+		donors.add(DonorBuilder.aDonor().withDonorNumber("6").withFirstName("Sue").withLastName("Simpson")
+		        .withGender(Gender.female).withBirthDate("1982-02-20").build());
+		donors.add(DonorBuilder.aDonor().withDonorNumber("7").withFirstName("David").withLastName("Smith")
+		        .withGender(Gender.male).withBirthDate("1977-10-20").build());
 		Map<String, List<Donor>> duplicateDonorsMap = service.findDuplicateDonors(donors);
 		Assert.assertEquals("Two sets of matching donors", 2, duplicateDonorsMap.size());
 		List<Donor> duplicateDonors1 = duplicateDonorsMap.get("1");
@@ -77,6 +77,48 @@ public class DuplicateDonorServiceTest {
 		Assert.assertEquals("Two matching donors", 2, duplicateDonors2.size());
 		Assert.assertEquals("Sue is matching Donor", "Sue", duplicateDonors2.get(0).getFirstName());
 		Assert.assertEquals("Sue is matching Donor", "Sue", duplicateDonors2.get(1).getFirstName());
+	}
+	
+	@Test
+	public void testFindDuplicateDonorsMatchingOneBasic() throws Exception {
+		List<Donor> donors = new ArrayList<Donor>();
+		Donor donor = DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith")
+		        .withGender(Gender.male).withBirthDate("1977-10-20").build();
+		donors.add(donor);
+		donors.add(DonorBuilder.aDonor().withDonorNumber("2").withFirstName("David").withLastName("Smith")
+		        .withGender(Gender.male).withBirthDate("1977-10-20").build());
+		donors.add(DonorBuilder.aDonor().withDonorNumber("3").withFirstName("Jo").withLastName("Smith")
+		        .withGender(Gender.female).withBirthDate("1978-10-20").build());
+		donors.add(DonorBuilder.aDonor().withDonorNumber("4").withFirstName("Nancy").withLastName("Drew")
+		        .withGender(Gender.female).withBirthDate("1964-11-20").build());
+		List<Donor> duplicateDonors = service.findDuplicateDonors(donor, donors);
+		Assert.assertEquals("Two matching donors", 2, duplicateDonors.size());
+		Assert.assertEquals("David is matching Donor", "David", duplicateDonors.get(0).getFirstName());
+		Assert.assertEquals("David is matching Donor", "David", duplicateDonors.get(1).getFirstName());
+	}
+	
+	@Test
+	public void testFindDuplicateMatchingOneDonorsDouble() throws Exception {
+		List<Donor> donors = new ArrayList<Donor>();
+		donors.add(DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith")
+		        .withGender(Gender.male).withBirthDate("1977-10-20").build());
+		donors.add(DonorBuilder.aDonor().withDonorNumber("2").withFirstName("David").withLastName("Smith")
+		        .withGender(Gender.male).withBirthDate("1977-10-20").build());
+		donors.add(DonorBuilder.aDonor().withDonorNumber("3").withFirstName("Jo").withLastName("Smith")
+		        .withGender(Gender.female).withBirthDate("1978-10-20").build());
+		donors.add(DonorBuilder.aDonor().withDonorNumber("4").withFirstName("Sue").withLastName("Simpson")
+		        .withGender(Gender.female).withBirthDate("1982-02-20").build());
+		donors.add(DonorBuilder.aDonor().withDonorNumber("5").withFirstName("Nancy").withLastName("Drew")
+		        .withGender(Gender.female).withBirthDate("1964-11-20").build());
+		Donor donor = DonorBuilder.aDonor().withDonorNumber("6").withFirstName("Sue").withLastName("Simpson")
+		        .withGender(Gender.female).withBirthDate("1982-02-20").build();
+		donors.add(donor);
+		donors.add(DonorBuilder.aDonor().withDonorNumber("7").withFirstName("David").withLastName("Smith")
+		        .withGender(Gender.male).withBirthDate("1977-10-20").build());
+		List<Donor> duplicateDonors = service.findDuplicateDonors(donor, donors);
+		Assert.assertEquals("Two matching donors", 2, duplicateDonors.size());
+		Assert.assertEquals("Sue is matching Donor", "Sue", duplicateDonors.get(0).getFirstName());
+		Assert.assertEquals("Sue is matching Donor", "Sue", duplicateDonors.get(1).getFirstName());
 	}
 	
 	@Test
