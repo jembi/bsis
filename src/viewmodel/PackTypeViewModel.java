@@ -42,6 +42,10 @@ public class PackTypeViewModel {
         return packType.getCountAsDonation();
     }
     
+    public Boolean getTestSampleProduced() {
+        return packType.getTestSampleProduced();
+    }
+    
     public Integer getPeriodBetweenDonations(){
         return packType.getPeriodBetweenDonations();
     }

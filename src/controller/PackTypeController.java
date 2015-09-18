@@ -45,7 +45,7 @@ public class PackTypeController {
 	  
 	  @InitBinder
 	  protected void initBinder(WebDataBinder binder) {
-	    binder.setValidator(new PackTypeBackingFormValidator(binder.getValidator(), utilController, packTypeRepository));
+	    binder.setValidator(new PackTypeBackingFormValidator(binder.getValidator(), utilController));
 	  }
 
 	  	@RequestMapping(method=RequestMethod.GET)

@@ -51,7 +51,13 @@ public class BloodTestingRuleEngine {
 	 *         storedTestResults (what blood typing results are actually stored in the database, a
 	 *         subset of testResults)
 	 */
-	public BloodTestingRuleResult applyBloodTests(Donation donation, Map<Long, String> bloodTestResults) {
+    public BloodTestingRuleResult applyBloodTests(Donation donation, Map<Long, String> bloodTestResults)
+            throws IllegalArgumentException {
+
+        if (!donation.getPackType().getTestSampleProduced()) {
+            throw new IllegalArgumentException("Can't apply blood tests to a donation which does not produce test " +
+                    "samples");
+        }
 		
 		List<BloodTestingRule> rules = bloodTestingRepository.getActiveBloodTestingRules();
 		

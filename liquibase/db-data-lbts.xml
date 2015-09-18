@@ -916,6 +916,20 @@
 			<column name="preferredAddressType" value="Postal Address"></column>
 		</insert>
 	</changeSet>
+    
+    <changeSet id="201509171503" author="bausmeier">
+        
+        <update tableName="PackType">
+            <column name="testSampleProduced" value="1"></column>
+            <where>id != 8</where>
+        </update>
+
+        <update tableName="PackType">
+            <column name="testSampleProduced" value="0"></column>
+            <where>id = 8</where>
+        </update>
+
+    </changeSet>
 
 	
 
