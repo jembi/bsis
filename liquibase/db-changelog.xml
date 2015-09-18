@@ -1743,12 +1743,10 @@
         </addColumn>
     </changeSet>
     
-    <changeSet id="20150914-1149" author="bausmeier">
+    <changeSet id="20150917-1347" author="bausmeier">
 
         <addColumn tableName="PackType">
-            <column name="testSampleProduced" type="tinyint(1)">
-                <constraints nullable="false" />
-            </column>
+            <column name="testSampleProduced" type="tinyint(1)" />
         </addColumn>
 
         <addColumn tableName="PackType_AUD">
