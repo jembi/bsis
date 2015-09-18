@@ -54,6 +54,10 @@ public class PackTypeBackingForm {
         type.setCountAsDonation(countAsDonation);
     }
     
+    public void setTestSampleProduced(Boolean testSampleProduced) {
+        type.setTestSampleProduced(testSampleProduced);
+    }
+    
     public void setPeriodBetweenDonations(Integer periodBetweenDonations){
         type.setPeriodBetweenDonations(periodBetweenDonations);
     }

@@ -40,6 +40,10 @@ public class PackType {
   @NotNull
   private Boolean countAsDonation;
   
+  @NotNull
+  @Column(nullable = false)
+  private Boolean testSampleProduced;
+  
  @AssertTrue(message="Component type should be not null when countAsDonation is set to true")
   private boolean isValid(){
       if(this.countAsDonation == true)
@@ -113,7 +117,15 @@ public class PackType {
        this.countAsDonation = countAsDonation;
   }
 
-	public Integer getPeriodBetweenDonations() {
+    public Boolean getTestSampleProduced() {
+        return testSampleProduced;
+    }
+
+    public void setTestSampleProduced(Boolean testSampleProduced) {
+        this.testSampleProduced = testSampleProduced;
+    }
+
+    public Integer getPeriodBetweenDonations() {
 	    return periodBetweenDonations;
 	}
 	

@@ -1742,5 +1742,18 @@
             <column name="adverseEvent_id" type="bigint" />
         </addColumn>
     </changeSet>
+    
+    <changeSet id="20150914-1149" author="bausmeier">
+
+        <addColumn tableName="PackType">
+            <column name="testSampleProduced" type="tinyint(1)">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+
+        <addColumn tableName="PackType_AUD">
+            <column name="testSampleProduced" type="tinyint(1)" />
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>
