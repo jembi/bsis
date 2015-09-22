@@ -62,9 +62,14 @@ public class TestResultController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Donation c = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
-    BloodTestingRuleResult results =  bloodTestingRepository.getAllTestsStatusForDonation(c.getId());
     map.put("donation", new DonationViewModel(c));
-    map.put("testResults", results);
+    
+    if (c.getPackType().getTestSampleProduced()) {
+        BloodTestingRuleResult results = bloodTestingRepository.getAllTestsStatusForDonation(c.getId());
+        map.put("testResults", results);
+    } else {
+        map.put("testResults", null);
+    }
     return new ResponseEntity(map, HttpStatus.OK);
   }
   

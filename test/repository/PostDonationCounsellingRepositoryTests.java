@@ -46,8 +46,7 @@ public class PostDonationCounsellingRepositoryTests {
     private EntityManager entityManager;
     @Autowired
     private PostDonationCounsellingRepository postDonationCounsellingRepository;
-    
-    @Ignore
+
     @Test
     public void testFindDonorsFlaggedForCounsellingWithNoDates_shouldReturnDonorsFlaggedForCounselling() {
 
@@ -84,7 +83,6 @@ public class PostDonationCounsellingRepositoryTests {
         assertThat(returnedDonations, is(expectedDonations));
     }
     
-    @Ignore
     @Test
     public void testFindDonorsFlaggedForCounsellingWithDonorPanels_shouldReturnDonorsWithDonationsForDonorPanels() {
         
@@ -120,7 +118,6 @@ public class PostDonationCounsellingRepositoryTests {
         assertThat(returnedDonations, is(expectedDonations));
     }
 
-    @Ignore
     @Test
     public void testFindDonorsFlaggedForCounsellingWithStartDate_shouldReturnDonorsWithDonationsAferStartDate() {
         DateTime startDate = new DateTime().minusDays(7);
@@ -156,7 +153,6 @@ public class PostDonationCounsellingRepositoryTests {
         assertThat(returnedDonations, is(expectedDonations));
     }
 
-    @Ignore
     @Test
     public void testFindDonorsFlaggedForCounsellingWithEndDate_shouldReturnDonorsWithDonationsBeforeEndDate() {
         DateTime endDate = new DateTime().minusDays(7);
@@ -191,7 +187,6 @@ public class PostDonationCounsellingRepositoryTests {
         assertThat(returnedDonations, is(expectedDonations));
     }
 
-    @Ignore
     @Test
     public void testFindDonorsFlaggedForCounsellingWithDates_shouldReturnDonorsWithDonationsInDateRange() {
         DateTime startDate = new DateTime().minusDays(14);
@@ -227,8 +222,7 @@ public class PostDonationCounsellingRepositoryTests {
         
         assertThat(returnedDonations, is(expectedDonations));
     }
-    
-    @Ignore
+
     @Test(expected = NoResultException.class)
     public void testFindFlaggedPostDonationCounsellingForDonorWithNoPostDonationCounselling_shouldThrow() {
         
@@ -236,8 +230,7 @@ public class PostDonationCounsellingRepositoryTests {
 
         postDonationCounsellingRepository.findFlaggedPostDonationCounsellingForDonor(donor.getId());
     }
-    
-    @Ignore
+
     @Test
     public void testFindFlaggedPostDonationCounsellingForDonor_shouldReturnFirstFlaggedPostDonationCounsellingForDonor() {
         
@@ -283,8 +276,7 @@ public class PostDonationCounsellingRepositoryTests {
 
         assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
     }
-    
-    @Ignore
+
     @Test
     public void testCountFlaggedPostDonationCounsellingsForDonorWithNoPostDonationCounsellings_shouldReturnZero() {
         
@@ -294,8 +286,7 @@ public class PostDonationCounsellingRepositoryTests {
         
         assertThat(returnedCount, is(0));
     }
-    
-    @Ignore
+
     @Test
     public void testCountFlaggedPostDonationCounsellingsForDonor_shouldReturnCorrectCount() {
         

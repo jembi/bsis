@@ -73,11 +73,11 @@
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Whole Blood Triple Pack - CPDA" componentTypeNameShort="0013" />
 
-	<PackType id="1" packType="Single" isDeleted="false"
+	<PackType id="1" packType="Single" isDeleted="false" testSampleProduced="true"
 		componentType_id="1" countAsDonation="true" periodBetweenDonations="90" />
-	<PackType id="2" packType="Double" isDeleted="false"
+	<PackType id="2" packType="Double" isDeleted="false" testSampleProduced="true"
 		componentType_id="2" countAsDonation="true" periodBetweenDonations="90" />
-	<PackType id="3" packType="Triple" isDeleted="false"
+	<PackType id="3" packType="Triple" isDeleted="false" testSampleProduced="true"
 		componentType_id="3" countAsDonation="true" periodBetweenDonations="90" />
 
 	<Location id="1" isDeleted="false" isDonorPanel="true"

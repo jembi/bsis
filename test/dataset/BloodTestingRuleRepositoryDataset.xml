@@ -232,21 +232,21 @@
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Platelets Concentrate - Apheresis"
 		componentTypeNameShort="4021" />
-	<PackType id="1" packType="Single" isDeleted="false"
+	<PackType id="1" packType="Single" isDeleted="false" testSampleProduced="true"
 		componentType_id="1" countAsDonation="true" periodBetweenDonations="90" />
-	<PackType id="2" packType="Double" isDeleted="false"
+	<PackType id="2" packType="Double" isDeleted="false" testSampleProduced="true"
 		componentType_id="2" countAsDonation="true" periodBetweenDonations="90" />
-	<PackType id="3" packType="Triple" isDeleted="false"
+	<PackType id="3" packType="Triple" isDeleted="false" testSampleProduced="true"
 		componentType_id="3" countAsDonation="true" periodBetweenDonations="90" />
-	<PackType id="4" packType="Quad" isDeleted="false"
+	<PackType id="4" packType="Quad" isDeleted="false" testSampleProduced="true"
 		componentType_id="4" countAsDonation="true" periodBetweenDonations="90" />
-	<PackType id="5" packType="Apheresis" isDeleted="false"
+	<PackType id="5" packType="Apheresis" isDeleted="false" testSampleProduced="true"
 		componentType_id="5" countAsDonation="true" periodBetweenDonations="30" />
-	<PackType id="6" packType="Dry Pack" isDeleted="false"
+	<PackType id="6" packType="Dry Pack" isDeleted="false" testSampleProduced="true"
 		countAsDonation="false" periodBetweenDonations="0" />
-	<PackType id="7" packType="Test Only" isDeleted="false"
+	<PackType id="7" packType="Test Only" isDeleted="false" testSampleProduced="true"
 		countAsDonation="false" periodBetweenDonations="0" />
-	<PackType id="8" packType="Did Not Bleed"
+	<PackType id="8" packType="Did Not Bleed" testSampleProduced="true"
 		isDeleted="false" countAsDonation="false" periodBetweenDonations="0" />
 
 	<Location id="1" isDeleted="false" isDonorPanel="true"
