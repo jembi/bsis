@@ -1759,6 +1759,10 @@
 		<dropIndex indexName="FK3F25E463043805" tableName="Donor"/>
 		<renameColumn tableName="Donor" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
 		<renameColumn tableName="Donor_AUD" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
+		<renameColumn tableName="Donation" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
+		<renameColumn tableName="Donation_AUD" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
+		<renameColumn tableName="DonationBatch" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
+		<renameColumn tableName="DonationBatch_AUD" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
 		<renameColumn tableName="Location" oldColumnName="isDonorPanel" newColumnName="isVenue" columnDataType="boolean"/>
 		<renameColumn tableName="Location_AUD" oldColumnName="isDonorPanel" newColumnName="isVenue" columnDataType="boolean"/>
 		<addForeignKeyConstraint baseColumnNames="venue_id"
