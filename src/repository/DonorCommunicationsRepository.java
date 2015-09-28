@@ -49,7 +49,7 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
   private UtilController utilController;
   			
   public List<Donor> findDonors(
-    		List<Location> donorPanel, String clinicDate,
+    		List<Location> venue, String clinicDate,
     		String lastDonationFromDate, String lastDonationToDate,
     		List<BloodGroup> bloodGroups, boolean anyBloodGroup, boolean noBloodGroup,
     		Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor) throws ParseException {
@@ -61,8 +61,8 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
     	Root<DonorDeferral> rootdonorDeferral = donorDeferral.from(DonorDeferral.class);		
     	
     	List<Predicate> panelPredicates = new ArrayList<Predicate>();
-    	if(donorPanel != null  && !donorPanel.isEmpty()) {
-    	panelPredicates.add(root.get("donorPanel").in(donorPanel));
+    	if(venue != null  && !venue.isEmpty()) {
+    	panelPredicates.add(root.get("venue").in(venue));
     	}
     	
     	if(!StringUtils.isBlank(lastDonationFromDate)) {

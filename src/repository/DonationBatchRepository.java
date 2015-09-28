@@ -26,7 +26,7 @@ public class DonationBatchRepository {
   }
 
   public DonationBatch findDonationBatchByIdEager(Integer batchId) {
-    String queryString = "SELECT distinct b FROM DonationBatch b LEFT JOIN FETCH b.donations LEFT JOIN FETCH b.donorPanel " +
+    String queryString = "SELECT distinct b FROM DonationBatch b LEFT JOIN FETCH b.donations LEFT JOIN FETCH b.venue " +
                          "WHERE b.id = :batchId and b.isDeleted = :isDeleted";
     TypedQuery<DonationBatch> query = em.createQuery(queryString, DonationBatch.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -82,10 +82,10 @@ public class DonationBatchRepository {
   
 
   public List<DonationBatch> findDonationBatches(Boolean isClosed,
-      List<Long> donorPanelIds) {
+      List<Long> venueIds) {
     String queryStr = "SELECT distinct b from DonationBatch b LEFT JOIN FETCH b.donations WHERE b.isDeleted=:isDeleted ";
-    if(!donorPanelIds.isEmpty()){
-    	queryStr += "AND b.donorPanel.id IN (:donorPanelIds) ";
+    if(!venueIds.isEmpty()){
+    	queryStr += "AND b.venue.id IN (:venueIds) ";
     }
     if(isClosed != null){
     	queryStr +=    "AND b.isClosed=:isClosed";
@@ -93,8 +93,8 @@ public class DonationBatchRepository {
     
     TypedQuery<DonationBatch> query = em.createQuery(queryStr, DonationBatch.class);
     query.setParameter("isDeleted", false);
-    if(!donorPanelIds.isEmpty()){
-    	query.setParameter("donorPanelIds", donorPanelIds);
+    if(!venueIds.isEmpty()){
+    	query.setParameter("venueIds", venueIds);
     }
     if(isClosed != null){
     	query.setParameter("isClosed", isClosed);

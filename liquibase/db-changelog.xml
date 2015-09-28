@@ -1020,15 +1020,15 @@
 	<!-- Updated (timler): for #293 (refactoring) -->
 	<changeSet id="20150714-1201" author="srikanthmalyala">
 		<preConditions onFail="MARK_RAN">
-			<not><columnExists tableName="Donation" columnName="donorPanel_id" /></not>
+			<not><columnExists tableName="Donation" columnName="venue_id" /></not>
 		</preConditions>
 		<addColumn tableName="Donation">
-			<column name="donorPanel_id" type="bigint">
+			<column name="venue_id" type="bigint">
 				<constraints foreignKeyName="FK_donation_Location" references="Location(id)"/>
 			</column>
 		</addColumn>
 		<addColumn tableName="Donation_AUD">
-			<column name="donorPanel_id" type="bigint"></column>
+			<column name="venue_id" type="bigint"></column>
 		</addColumn>
 	</changeSet>
 
@@ -1036,15 +1036,15 @@
 	<!-- Updated (timler): for #293 (refactoring) -->
 	<changeSet id="20150716-1058" author="srikanthmalyala">
 	    <preConditions onFail="MARK_RAN">
-		    <not><columnExists tableName="DonationBatch" columnName="donorPanel_id"/></not>
+		    <not><columnExists tableName="DonationBatch" columnName="venue_id"/></not>
 		</preConditions>
 		<addColumn tableName="DonationBatch">
-			<column name="donorPanel_id" type="bigint">
+			<column name="venue_id" type="bigint">
 				<constraints foreignKeyName="FK_DonationBatch_Location" references="Location(id)"/>
 			</column>
 		</addColumn>
 		<addColumn tableName="DonationBatch_AUD">
-			<column name="donorPanel_id" type="bigint"></column>
+			<column name="venue_id" type="bigint"></column>
 		</addColumn>
 	</changeSet>
 

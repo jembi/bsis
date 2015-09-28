@@ -229,7 +229,7 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test
-	@Ignore("findDonations has a bug in the HSQL when querying a DIN with parameter name panelIds/donorPanelIds")
+	@Ignore("findDonations has a bug in the HSQL when querying a DIN with parameter name panelIds/venueIds")
 	public void testFindDonationsDIN() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<Integer> packTypeIds = new ArrayList<Integer>();
@@ -263,7 +263,7 @@ public class DonationRepositoryTest {
 			Assert.assertTrue("Donation date before", donation.getDonationDate().before(beforeDate));
 			Assert.assertTrue("Donation date after", donation.getDonationDate().after(afterDate));
 			Assert.assertEquals("PackTypeId matches", new Integer(1), donation.getPackType().getId());
-			Assert.assertEquals("PanelId matches", new Long(2), donation.getDonationBatch().getDonorPanel().getId());
+			Assert.assertEquals("PanelId matches", new Long(2), donation.getDonationBatch().getVenue().getId());
 		}
 	}
 	
@@ -319,7 +319,7 @@ public class DonationRepositoryTest {
 		Donation newDonation1 = new Donation();
 		Donation existingDonation1 = donationRepository.findDonationById(1L);
 		newDonation1.setDonor(existingDonation1.getDonor());
-		newDonation1.setDonorPanel(existingDonation1.getDonorPanel());
+		newDonation1.setVenue(existingDonation1.getVenue());
 		newDonation1.setDonationIdentificationNumber("JUNIT12345"); // note: doesn't do automatic "createInitialComponent"
 		newDonation1.setIsDeleted(false);
 		Calendar today = Calendar.getInstance();
@@ -332,7 +332,7 @@ public class DonationRepositoryTest {
 		Donation newDonation2 = new Donation();
 		Donation existingDonation2 = donationRepository.findDonationById(2L);
 		newDonation2.setDonor(existingDonation2.getDonor());
-		newDonation2.setDonorPanel(existingDonation2.getDonorPanel());
+		newDonation2.setVenue(existingDonation2.getVenue());
 		newDonation2.setDonationIdentificationNumber("JUNIT123456"); // note: doesn't do automatic "createInitialComponent"
 		newDonation2.setIsDeleted(false);
 		newDonation2.setDonationDate(today.getTime());

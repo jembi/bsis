@@ -124,7 +124,7 @@ public class DonationBatchRepositoryTest {
 		donationBatch.setIsClosed(true);
 		donationBatch.setNotes("Testing 123");
 		Location location = locationRepository.findLocationByName("Maseru");
-		donationBatch.setDonorPanel(location);
+		donationBatch.setVenue(location);
 		donationBatchRepository.addDonationBatch(donationBatch);
 		
 		DonationBatch savedDonationBatch = donationBatchRepository.findDonationBatchByBatchNumber("JUNIT123");

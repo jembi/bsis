@@ -493,7 +493,7 @@ public class ComponentRepository {
     TypedQuery<Component> q = em.createQuery(
                              "SELECT DISTINCT c from Component c " +
                              "WHERE c.status IN :status AND " +
-                             "c.donation.donorPanel.id IN (:panelIds) AND " +
+                             "c.donation.venue.id IN (:panelIds) AND " +
                              "c.isDeleted=:isDeleted",
                              Component.class);
     List<ComponentStatus> componentStatus = new ArrayList<ComponentStatus>();
@@ -640,7 +640,7 @@ public class ComponentRepository {
     TypedQuery<Object[]> query = em.createQuery(
         "SELECT count(c), c.donation.donationDate, c.donation.bloodAbo, " +
         "c.donation.bloodRh FROM Component c WHERE " +
-        "c.donation.donorPanel.id IN (:panelIds) AND " +
+        "c.donation.venue.id IN (:panelIds) AND " +
         "c.donation.donationDate BETWEEN :donationDateFrom AND :donationDateTo AND " +
         "c.status IN (:discardedStatuses) AND " +
         "(c.isDeleted= :isDeleted) " +
@@ -725,7 +725,7 @@ public class ComponentRepository {
     TypedQuery<Object[]> query = em.createQuery(
         "SELECT count(c), c.issuedOn, c.donation.bloodAbo, " +
         "c.donation.bloodRh FROM Component c WHERE " +
-        "c.donation.donorPanel.id IN (:panelIds) AND " +
+        "c.donation.venue.id IN (:panelIds) AND " +
         "c.donation.donationDate BETWEEN :donationDateFrom AND :donationDateTo AND " +
         "c.status=:issuedStatus AND " +
         "(c.isDeleted= :isDeleted) " +

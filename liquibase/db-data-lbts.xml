@@ -570,7 +570,7 @@
 			<column name="name" value="Maseru"/>
 			<column name="isMobileSite" value="0"/>
 			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
+			<column name="isVenue" value="1"/>
 			<column name="isDeleted" value="0"/>
 			<column name="notes" value=""/>
 		</insert>
@@ -578,7 +578,7 @@
 			<column name="name" value="Leribe"/>
 			<column name="isMobileSite" value="0"/>
 			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
+			<column name="isVenue" value="1"/>
 			<column name="isDeleted" value="0"/>
 			<column name="notes" value=""/>
 		</insert>
@@ -586,7 +586,7 @@
 			<column name="name" value="Mohale's Hoek"/>
 			<column name="isMobileSite" value="0"/>
 			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
+			<column name="isVenue" value="1"/>
 			<column name="isDeleted" value="0"/>
 			<column name="notes" value=""/>
 		</insert>

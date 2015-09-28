@@ -38,7 +38,7 @@ public class DonationBatchViewModelFactory {
         donationBatchViewModel.setId(donationBatch.getId());
         donationBatchViewModel.setBatchNumber(donationBatch.getBatchNumber());
         donationBatchViewModel.setIsClosed(donationBatch.getIsClosed());
-        donationBatchViewModel.setDonorPanel(new LocationViewModel(donationBatch.getDonorPanel()));
+        donationBatchViewModel.setVenue(new LocationViewModel(donationBatch.getVenue()));
         donationBatchViewModel.setNotes(donationBatch.getNotes());
 
         // Audit fields

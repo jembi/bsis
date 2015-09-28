@@ -271,12 +271,12 @@ public class UtilController {
     return formField.getAutoGenerate();
   }
 
-  public Boolean isDonorPanel(Long locationId) {
-    return locationRepository.getLocation(locationId).getIsDonorPanel();
+  public Boolean isVenue(Long locationId) {
+    return locationRepository.getLocation(locationId).getIsVenue();
   }
 
-  public List<DonationBatch> findOpenDonationBatches (List<Long> donorPanelIds){
-    return donationBatchRepository.findDonationBatches(false, donorPanelIds);
+  public List<DonationBatch> findOpenDonationBatches (List<Long> venueIds){
+    return donationBatchRepository.findDonationBatches(false, venueIds);
   }
 
   public String getNextDonorNumber() {

@@ -53,12 +53,12 @@ public class LocationBackingForm {
         location.setIsMobileSite(isMobileSite);
     }
     
-    public Boolean getIsDonorPanel(){
-        return location.getIsDonorPanel();
+    public Boolean getIsVenue(){
+        return location.getIsVenue();
     }
     
-    public void setIsDonorPanel(Boolean isDonorPanel){
-        location.setIsDonorPanel(isDonorPanel);
+    public void setIsVenue(Boolean isVenue){
+        location.setIsVenue(isVenue);
     }
     
     public Boolean getIsDeleted(){

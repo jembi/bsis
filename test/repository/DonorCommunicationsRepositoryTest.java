@@ -125,14 +125,14 @@ public class DonorCommunicationsRepositoryTest {
 	/**
 	* should return empty list when no results are found
 	* 
-	* findDonors(List<Location> donorPanel, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
+	* findDonors(List<Location> venue, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
 	* List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor)
 	*/
 	@Test
 	public void findDonors_shouldReturnEmptyListWhenNoResultsFound() throws ParseException {
 		
 		//Set values to use for findDonors() method parameters
-		List<Location> donorPanels = new ArrayList<Location>();
+		List<Location> venues = new ArrayList<Location>();
 		String clinicDate = "";
 		String clinicDateToCheckdeferredDonor = "";
 		String lastDonationFromDate = "";
@@ -146,10 +146,10 @@ public class DonorCommunicationsRepositoryTest {
 		String[] bloodGroupStrArray = { "AB-" };
 		Map<String, Object> pagingParams = createPagingParamsMap();
 
-		donorPanels    =  createDonorPanelList(id);
+		venues    =  createVenueList(id);
 		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
                 assertEquals("List size should be zero, no matching search results.",
-                        0, donorCommunicationsRepository.findDonors(donorPanels,clinicDate, lastDonationFromDate,
+                        0, donorCommunicationsRepository.findDonors(venues,clinicDate, lastDonationFromDate,
                                 lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor).size());
             
 	}
@@ -157,14 +157,14 @@ public class DonorCommunicationsRepositoryTest {
 	/**
 	 * should return list of donors matching specified Donor Panel and Blood Group criteria
 	 * 
-	 * findDonors(List<Location> donorPanel, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
+	 * findDonors(List<Location> venue, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
 	 * List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor)
 	 */
 	@Test
 	public void findDonors_shouldReturnDonorsMatchingGivenCriteria()throws ParseException{
 		
 		//Set values to use for findDonors() method parameters
-		List<Location> donorPanels = new ArrayList<Location>();
+		List<Location> venues = new ArrayList<Location>();
 		String clinicDate = "";
 		String clinicDateToCheckdeferredDonor = "";
 		String lastDonationFromDate = "";
@@ -178,37 +178,37 @@ public class DonorCommunicationsRepositoryTest {
 		String[] bloodGroupStrArray = { "A+","O+" };
 		Map<String, Object> pagingParams = createPagingParamsMap();
 
-		donorPanels    =  createDonorPanelList(id);
+		venues    =  createVenueList(id);
 		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
 		List<Donor> results = new ArrayList<Donor>();
 		
-                results = donorCommunicationsRepository.findDonors(donorPanels, clinicDate, lastDonationFromDate,
+                results = donorCommunicationsRepository.findDonors(venues, clinicDate, lastDonationFromDate,
                         lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
 	    assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, results.size());
 	    
 	    boolean isvalid = true;
 		for(Donor donor:results){
 			if(!((donor.getBloodAbo()+donor.getBloodRh()).equals("O+")  || (donor.getBloodAbo()+donor.getBloodRh()).equals("A+"))
-					&& (donor.getDonorPanel().getId() == 3 || donor.getDonorPanel().getId() == 1))
+					&& (donor.getVenue().getId() == 3 || donor.getVenue().getId() == 1))
 			{
 				isvalid = false;
 				break;
 			}
 		}
-		assertTrue("Donors in list should match the DonorPanel and BloodGroup search criteria used.",isvalid);
+		assertTrue("Donors in list should match the Venue and BloodGroup search criteria used.",isvalid);
 	}
 	
 	/**
 	 * Should return donors who are due to donate on clinicDate
 	 *
-	 * findDonorFromDonorCommunication(List<Location> donorPanel, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
+	 * findDonorFromDonorCommunication(List<Location> venue, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
 	 * List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor)
 	 */
 	@Test
 	public void findDonors_shouldReturnDonorsDueToDonateOnClinicDate() throws ParseException {
 		
 		//Set values to use for findDonors() method parameters
-		List<Location> donorPanels = new ArrayList<Location>();
+		List<Location> venues = new ArrayList<Location>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		//Search with donor panel id 3 and 1
 		long[] id = { 1 , 3 };
@@ -222,12 +222,12 @@ public class DonorCommunicationsRepositoryTest {
 		boolean anyBloodGroup = false;
 		boolean noBloodGroup = false;
 		
-		donorPanels   =  createDonorPanelList(id);
+		venues   =  createVenueList(id);
 		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
 		Map<String, Object> pagingParams = createPagingParamsMap();
 
 		List<Donor> results = new ArrayList<Donor>();
-		results = donorCommunicationsRepository.findDonors(donorPanels, clinicDate, lastDonationFromDate,
+		results = donorCommunicationsRepository.findDonors(venues, clinicDate, lastDonationFromDate,
 				lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
 
 		assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, results.size());
@@ -246,14 +246,14 @@ public class DonorCommunicationsRepositoryTest {
 	/**
 	  * should return donors who donated during Date Of Last Donation period
 	  * 
-	  * findDonorFromDonorCommunication(List<Location> donorPanel, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
+	  * findDonorFromDonorCommunication(List<Location> venue, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
 	  * List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor)
 	 */
 	@Test
 	public void findDonors_shouldReturnDonorsWhoDonatedDuringDateOfLastDonationPeriod() throws ParseException{
 
 		//Set values to use for findDonors() method parameters
-		List<Location> donorPanels = new ArrayList<Location>();
+		List<Location> venues = new ArrayList<Location>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		String clinicDate = "";
 		String clinicDateToCheckdeferredDonor = "";
@@ -269,11 +269,11 @@ public class DonorCommunicationsRepositoryTest {
 		boolean noBloodGroup = false;
 
 		Map<String, Object> pagingParams = createPagingParamsMap();
-		donorPanels    =  createDonorPanelList(id);
+		venues    =  createVenueList(id);
 		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
 		
 		List<Donor> results = new ArrayList<Donor>();
-		results = donorCommunicationsRepository.findDonors(donorPanels,	clinicDate, lastDonationFromDate, lastDonationToDate,
+		results = donorCommunicationsRepository.findDonors(venues,	clinicDate, lastDonationFromDate, lastDonationToDate,
 				bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
 
 		assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, results.size());
@@ -294,13 +294,13 @@ public class DonorCommunicationsRepositoryTest {
 	/**
 	 *  Should not return donors who have been deleted 
 	 *  
-	 * findDonors(List<Location> donorPanel, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
+	 * findDonors(List<Location> venue, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
 	 * List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor)
 	 */
 	public void findDonors_shouldNotReturnDeletedDonors() throws ParseException{
 		
 		//Set values to use for findDonors() method parameters
-		List<Location> donorPanels = new ArrayList<Location>();
+		List<Location> venues = new ArrayList<Location>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		String clinicDate = "";
 		//Search with donor panel id 3 and 1
@@ -315,11 +315,11 @@ public class DonorCommunicationsRepositoryTest {
 		boolean noBloodGroup = false;
 		
 		Map<String, Object> pagingParams = createPagingParamsMap();
-		donorPanels = createDonorPanelList(id);
+		venues = createVenueList(id);
 		bloodGroups = createBloodGroupList(bloodGroupStrArray);
 		//List<Object> results = new ArrayList<Object>();
 
-		List<Donor> donors = donorCommunicationsRepository.findDonors(donorPanels, clinicDate, lastDonationFromDate, 
+		List<Donor> donors = donorCommunicationsRepository.findDonors(venues, clinicDate, lastDonationFromDate,
 				lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDate);		
 		
 		for (Donor donor : donors) {
@@ -336,13 +336,13 @@ public class DonorCommunicationsRepositoryTest {
 	/**
 	 *  should not return donors who will be currently deferred when specifying only Donor Panels and Blood Groups
 	 *  
-	 * findDonors(List<Location> donorPanel, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
+	 * findDonors(List<Location> venue, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
 	 * List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor)
 	 */
 	public void findDonors_shouldNotReturnCurrentlyDeferredDonors() throws ParseException{
 		
 		//Set values to use for findDonors() method parameters
-		List<Location> donorPanels = new ArrayList<Location>();
+		List<Location> venues = new ArrayList<Location>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		String clinicDate = "";
 		//Search with donor panel id 3 and 1
@@ -357,10 +357,10 @@ public class DonorCommunicationsRepositoryTest {
 		boolean noBloodGroup = false;
 		
 		Map<String, Object> pagingParams = createPagingParamsMap();
-		donorPanels = createDonorPanelList(id);
+		venues = createVenueList(id);
 		bloodGroups = createBloodGroupList(bloodGroupStrArray);
 		
-		List<Donor> donors = donorCommunicationsRepository.findDonors(donorPanels, clinicDate, lastDonationFromDate, 
+		List<Donor> donors = donorCommunicationsRepository.findDonors(venues, clinicDate, lastDonationFromDate,
 				lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDate);	
 		
 		assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, donors.size());
@@ -382,13 +382,13 @@ public class DonorCommunicationsRepositoryTest {
 	/**
 	 *  should not return donors who will be currently deferred when specifying Date Of Last Donation period
 	 *  
-	 * findDonors(List<Location> donorPanel, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
+	 * findDonors(List<Location> venue, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
 	 * List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor)
 	 */
 	public void findDonors_shouldNotReturnCurrentlyDeferredDonorsWithLastDonationPeriodSpecified() throws ParseException{
 		
 		//Set values to use for findDonors() method parameters
-		List<Location> donorPanels = new ArrayList<Location>();
+		List<Location> venues = new ArrayList<Location>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		String clinicDate = "";
 		//Search with donor panel id 3 and 1
@@ -403,10 +403,10 @@ public class DonorCommunicationsRepositoryTest {
 		boolean noBloodGroup = false;
 		
 		Map<String, Object> pagingParams = createPagingParamsMap();
-		donorPanels = createDonorPanelList(id);
+		venues = createVenueList(id);
 		bloodGroups = createBloodGroupList(bloodGroupStrArray);
 		
-		List<Donor> donors = donorCommunicationsRepository.findDonors(donorPanels, clinicDate, lastDonationFromDate, 
+		List<Donor> donors = donorCommunicationsRepository.findDonors(venues, clinicDate, lastDonationFromDate,
 				lastDonationToDate,	bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDate);	
 		
 		assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, donors.size());
@@ -428,13 +428,13 @@ public class DonorCommunicationsRepositoryTest {
 	/**
 	 *  should not return donors who will be deferred on date specified in Clinic Date
 	 *  
-	 * findDonors(List<Location> donorPanel, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
+	 * findDonors(List<Location> venue, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
 	 * List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor)
 	 */
 	public void findDonors_shouldNotReturnDonorsDeferredOnClinicDate() throws ParseException{
 		
 		//Set values to use for findDonors() method parameters
-		List<Location> donorPanels = new ArrayList<Location>();
+		List<Location> venues = new ArrayList<Location>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		String clinicDate = CustomDateFormatter.format(DateUtils.addDays(new Date(), (60)));
 		//Search with donor panel id 3 and 1
@@ -448,10 +448,10 @@ public class DonorCommunicationsRepositoryTest {
 		boolean noBloodGroup = false;
 		
 		Map<String, Object> pagingParams = createPagingParamsMap();
-		donorPanels    =  createDonorPanelList(id);
+		venues    =  createVenueList(id);
 		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
 
-		List<Donor> donors = donorCommunicationsRepository.findDonors(donorPanels, clinicDate, lastDonationFromDate, 
+		List<Donor> donors = donorCommunicationsRepository.findDonors(venues, clinicDate, lastDonationFromDate,
 				lastDonationToDate,	bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDate);	
 
 		assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, donors.size());
@@ -485,15 +485,15 @@ public class DonorCommunicationsRepositoryTest {
 		SecurityContextHolder.getContext().setAuthentication(authToken);
 	}
 	
-	private List<Location> createDonorPanelList(long[] id) {
-		List<Location> donorPanel = new ArrayList<Location>();
+	private List<Location> createVenueList(long[] id) {
+		List<Location> venue = new ArrayList<Location>();
 
 		for (long locId : id) {
 			Location location = new Location();
 			location.setId(locId);
-			donorPanel.add(location);
+			venue.add(location);
 		}
-		return donorPanel;
+		return venue;
 	}
 	
 	private List<BloodGroup> createBloodGroupList(String[] bloodGroupStrArray) {
@@ -519,7 +519,7 @@ public class DonorCommunicationsRepositoryTest {
 	}
 	 
 	 private long getDonorListSizeWithoutAnyCriteria() throws ParseException {
-		List<Location> donorPanel = new ArrayList<Location>();
+		List<Location> venue = new ArrayList<Location>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		String clinicDate = "";
 		String clinicDateToCheckdeferredDonor = "";
@@ -530,7 +530,7 @@ public class DonorCommunicationsRepositoryTest {
 		Map<String, Object> pagingParams = createPagingParamsMap();
 
 		List<Donor> results = new ArrayList<Donor>();
-                results = donorCommunicationsRepository.findDonors(donorPanel,
+                results = donorCommunicationsRepository.findDonors(venue,
                         clinicDate, lastDonationFromDate, lastDonationToDate,
                         bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
             

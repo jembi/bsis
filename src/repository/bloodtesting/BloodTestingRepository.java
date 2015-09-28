@@ -882,7 +882,7 @@ public class BloodTestingRepository {
 						"SELECT count(t), d.donationDate, t.bloodTest.testNameShort FROM BloodTestResult t join t.bloodTest bt join t.donation d WHERE "
 								+ "bt.id IN (:ttiTestIds) AND "
 								+ "t.result != :positiveResult AND "
-								+ "d.donorPanel.id IN (:panelIds) AND "
+								+ "d.venue.id IN (:panelIds) AND "
 								+ "d.donationDate BETWEEN :donationDateFrom AND :donationDateTo "
 								+ "GROUP BY bt.testNameShort, d.donationDate",
 						Object[].class);

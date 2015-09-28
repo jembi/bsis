@@ -112,13 +112,13 @@ public class DonationRepository {
       queryStr = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE " +
                  "c.donationIdentificationNumber = :donationIdentificationNumber AND " +
                  "c.packType.id IN :packTypeIds AND " +
-                 "c.donorPanel.id IN :donorPanelIds AND " +
+                 "c.venue.id IN :venueIds AND " +
                  "c.donationDate >= :donationDateFrom AND c.donationDate <= :donationDateTo AND " +
                  "c.isDeleted=:isDeleted";
     } else {
       queryStr = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE " +
           "c.packType.id IN :packTypeIds AND " +
-          "c.donorPanel.id IN :panelIds AND " +
+          "c.venue.id IN :panelIds AND " +
           "c.donationDate >= :donationDateFrom AND c.donationDate <= :donationDateTo AND " +
           "c.isDeleted=:isDeleted";
     }
@@ -257,7 +257,7 @@ public class DonationRepository {
 
     TypedQuery<Object[]> query = em.createQuery(
         "SELECT count(c), c.donationDate, c.bloodAbo, c.bloodRh FROM Donation c WHERE " +
-        "c.donorPanel.id IN (:panelIds) AND " +
+        "c.venue.id IN (:panelIds) AND " +
         "c.donationDate BETWEEN :donationDateFrom AND " +
         ":donationDateTo AND (c.isDeleted= :isDeleted) GROUP BY " +
         "bloodAbo, bloodRh, donationDate", Object[].class);

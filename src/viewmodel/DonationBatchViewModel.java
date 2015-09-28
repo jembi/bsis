@@ -18,7 +18,7 @@ public class DonationBatchViewModel {
     private String createdByUsername;
     private String lastUpdatedByUsername;
     private Boolean closed;
-    private LocationViewModel donorPanel;
+    private LocationViewModel venue;
 
     public DonationBatchViewModel() {
     }
@@ -101,11 +101,11 @@ public class DonationBatchViewModel {
         this.closed = closed;
     }
 
-    public LocationViewModel getDonorPanel() {
-        return donorPanel;
+    public LocationViewModel getVenue() {
+        return venue;
     }
 
-    public void setDonorPanel(LocationViewModel donorPanel) {
-        this.donorPanel = donorPanel;
+    public void setVenue(LocationViewModel venue) {
+        this.venue = venue;
     }
 }

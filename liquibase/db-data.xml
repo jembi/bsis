@@ -286,7 +286,7 @@
 			<column name="name" value="Key North"/>
 			<column name="isMobileSite" value="0"/>
 			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
+			<column name="isVenue" value="1"/>
 			<column name="isDeleted" value="0"/>
 			<column name="notes" value=""/>
 		</insert>
@@ -294,7 +294,7 @@
 			<column name="name" value="Key East"/>
 			<column name="isMobileSite" value="0"/>
 			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
+			<column name="isVenue" value="1"/>
 			<column name="isDeleted" value="0"/>
 			<column name="notes" value=""/>
 		</insert>
@@ -302,7 +302,7 @@
 			<column name="name" value="Key South"/>
 			<column name="isMobileSite" value="0"/>
 			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
+			<column name="isVenue" value="1"/>
 			<column name="isDeleted" value="0"/>
 			<column name="notes" value=""/>
 		</insert>	
@@ -310,7 +310,7 @@
 			<column name="name" value="Key West"/>
 			<column name="isMobileSite" value="0"/>
 			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
+			<column name="isVenue" value="1"/>
 			<column name="isDeleted" value="0"/>
 			<column name="notes" value=""/>
 		</insert>
@@ -318,7 +318,7 @@
 			<column name="name" value="Key Mobile"/>
 			<column name="isMobileSite" value="1"/>
 			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
+			<column name="isVenue" value="1"/>
 			<column name="isDeleted" value="0"/>
 			<column name="notes" value=""/>
 		</insert>
@@ -326,7 +326,7 @@
 			<column name="name" value="General Clinic"/>
 			<column name="isMobileSite" value="0"/>
 			<column name="isUsageSite" value="1"/>
-			<column name="isDonorPanel" value="0"/>
+			<column name="isVenue" value="0"/>
 			<column name="isDeleted" value="0"/>
 			<column name="notes" value=""/>
 		</insert>
@@ -334,7 +334,7 @@
 			<column name="name" value="General Clinic #2"/>
 			<column name="isMobileSite" value="0"/>
 			<column name="isUsageSite" value="1"/>
-			<column name="isDonorPanel" value="0"/>
+			<column name="isVenue" value="0"/>
 			<column name="isDeleted" value="0"/>
 			<column name="notes" value=""/>
 		</insert>	
@@ -342,7 +342,7 @@
 			<column name="name" value="General Clinic #3"/>
 			<column name="isMobileSite" value="0"/>
 			<column name="isUsageSite" value="1"/>
-			<column name="isDonorPanel" value="0"/>
+			<column name="isVenue" value="0"/>
 			<column name="isDeleted" value="0"/>
 			<column name="notes" value=""/>
 		</insert>

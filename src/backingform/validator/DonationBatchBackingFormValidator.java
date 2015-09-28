@@ -47,19 +47,19 @@ public class DonationBatchBackingFormValidator implements Validator {
       errors.rejectValue("donationBatch.batchNumber", "batchNumber.nonunique",
           "There exists a donation batch with the same batch number.");
 
-    Location donorPanel = form.getDonationBatch().getDonorPanel();
-    ArrayList<Long> donorPanelIds = new ArrayList<>();
-    donorPanelIds.add(donorPanel.getId());
-	if (donorPanel.getId() == null) {
-	  errors.rejectValue("donationBatch.donorPanel", "donorPanel.empty",
+    Location venue = form.getDonationBatch().getVenue();
+    ArrayList<Long> venueIds = new ArrayList<>();
+    venueIds.add(venue.getId());
+	if (venue.getId() == null) {
+	  errors.rejectValue("donationBatch.venue", "venue.empty",
 	    "Donor Panel is required.");
 	} 
-	else if (utilController.isDonorPanel(donorPanel.getId()) == false) {
-	  errors.rejectValue("donationBatch.donorPanel", "donorPanel.invalid",
+	else if (utilController.isVenue(venue.getId()) == false) {
+	  errors.rejectValue("donationBatch.venue", "venue.invalid",
 		"Location is not a Donor Panel.");
 	}
-    else if ( form.getId() == null && utilController.findOpenDonationBatches(donorPanelIds).size() > 0) {
-      errors.rejectValue("donationBatch.donorPanel", "donorPanel.openBatch",
+    else if ( form.getId() == null && utilController.findOpenDonationBatches(venueIds).size() > 0) {
+      errors.rejectValue("donationBatch.venue", "venue.openBatch",
               "There is already an open donation batch for that panel.");
     }
 

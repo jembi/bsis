@@ -86,7 +86,7 @@
 		isHidable="true" isRequired="false" isTimeField="false" maxLength="0"
 		useCurrentTime="false" />
 	<FormField id="22" autoGenerate="false" canBeOptional="true"
-		defaultDisplayName="Donor Panel" defaultValue="" field="donorPanel"
+		defaultDisplayName="Donor Panel" defaultValue="" field="venue"
 		form="Donor" hidden="false" isAutoGeneratable="false" isHidable="true"
 		isRequired="false" isTimeField="false" maxLength="0" useCurrentTime="false" />
 	<FormField id="23" autoGenerate="false" canBeOptional="true"

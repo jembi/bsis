@@ -55,7 +55,7 @@ public class ReportsController {
     Map<String, Object> map = new HashMap<String, Object>();
     utilController.addTipsToModel(map, "report.inventory.generate");
     utilController.addTipsToModel(map, "report.inventory.componentinventorychart");
-    map.put("panels", locationRepository.getAllDonorPanels());
+    map.put("panels", locationRepository.getAllVenues());
     map.put("model", map);
     return map;
   }
@@ -95,7 +95,7 @@ public class ReportsController {
   public Map<String, Object> donationsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     utilController.addTipsToModel(map, "report.donations.donationsreport");
-    map.put("panels", locationRepository.getAllDonorPanels());
+    map.put("panels", locationRepository.getAllVenues());
     return map;
   }
 
@@ -113,7 +113,7 @@ public class ReportsController {
   public Map<String, Object> discardedComponentsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     utilController.addTipsToModel(map, "report.components.discardedcomponentsreport");
-    map.put("panels", locationRepository.getAllDonorPanels());
+    map.put("panels", locationRepository.getAllVenues());
     map.put("model", map);
     return map;
   }
@@ -123,7 +123,7 @@ public class ReportsController {
   public Map<String, Object> issuedComponentsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     utilController.addTipsToModel(map, "report.components.issuedcomponentsreport");
-    map.put("panels", locationRepository.getAllDonorPanels());
+    map.put("panels", locationRepository.getAllVenues());
     return map;
   }
 
@@ -343,7 +343,7 @@ public class ReportsController {
   public Map<String, Object> testResultsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("ttiTests", bloodTestingRepository.getTTITests());
-    map.put("panels", locationRepository.getAllDonorPanels());
+    map.put("panels", locationRepository.getAllVenues());
     utilController.addTipsToModel(map, "report.donations.testresultsreport");
     return map;
   }
