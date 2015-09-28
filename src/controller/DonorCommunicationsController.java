@@ -135,17 +135,17 @@ public class DonorCommunicationsController {
         m.put("bloodGroups", BloodGroup.getBloodgroups());
     }
 
-    public List<Location> setLocations(List<String> venues) {
+    public List<Location> setLocations(List<String> locations) {
 
-        List<Location> panels = new ArrayList<Location>();
+        List<Location> venues = new ArrayList<Location>();
 
-        for (String venueId : venues) {
+        for (String venueId : locations) {
             Location l = new Location();
             l.setId(Long.parseLong(venueId));
-            panels.add(l);
+            venues.add(l);
         }
         
-        return panels;
+        return venues;
     }
     
     public List<BloodGroup> setBloodGroups(List<String> bloodGroups) {

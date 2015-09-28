@@ -60,7 +60,7 @@ public class DonationBatchBackingFormValidator implements Validator {
 	}
     else if ( form.getId() == null && utilController.findOpenDonationBatches(venueIds).size() > 0) {
       errors.rejectValue("donationBatch.venue", "venue.openBatch",
-              "There is already an open donation batch for that panel.");
+              "There is already an open donation batch for that venue.");
     }
 
     utilController.commonFieldChecks(form, "donationBatch", errors);

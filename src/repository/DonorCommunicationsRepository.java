@@ -60,27 +60,27 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
     	Root<Donor> root = cq.from(Donor.class);
     	Root<DonorDeferral> rootdonorDeferral = donorDeferral.from(DonorDeferral.class);		
     	
-    	List<Predicate> panelPredicates = new ArrayList<Predicate>();
+    	List<Predicate> venuePredicates = new ArrayList<Predicate>();
     	if(venue != null  && !venue.isEmpty()) {
-    	panelPredicates.add(root.get("venue").in(venue));
+    	venuePredicates.add(root.get("venue").in(venue));
     	}
     	
     	if(!StringUtils.isBlank(lastDonationFromDate)) {
-    			panelPredicates.add(cb.greaterThanOrEqualTo(root.get("dateOfLastDonation").as(Date.class), CustomDateFormatter.parse(lastDonationFromDate)));
+    			venuePredicates.add(cb.greaterThanOrEqualTo(root.get("dateOfLastDonation").as(Date.class), CustomDateFormatter.parse(lastDonationFromDate)));
     				
     	}
     	if(!StringUtils.isBlank(lastDonationToDate)) {
-    			panelPredicates.add(cb.lessThanOrEqualTo(root.get("dateOfLastDonation").as(Date.class), CustomDateFormatter.parse(lastDonationToDate)));
+    			venuePredicates.add(cb.lessThanOrEqualTo(root.get("dateOfLastDonation").as(Date.class), CustomDateFormatter.parse(lastDonationToDate)));
     				
     	}	
     	
     	// If Clinic Date is specified, Donors should not be deferred on that date
     	if(!StringUtils.isBlank(clinicDate)) {
-    			panelPredicates.add(cb.lessThanOrEqualTo(root.get("dueToDonate").as(Date.class), CustomDateFormatter.parse(clinicDate)));				
+    			venuePredicates.add(cb.lessThanOrEqualTo(root.get("dueToDonate").as(Date.class), CustomDateFormatter.parse(clinicDate)));
     			if(!StringUtils.isBlank(clinicDateToCheckdeferredDonor)) {					
     				donorDeferral.select(rootdonorDeferral.get("id").as(Long.class)).where(cb.equal(rootdonorDeferral.get("deferredDonor"), root), 
     				cb.greaterThanOrEqualTo(rootdonorDeferral.get("deferredUntil").as(Date.class), CustomDateFormatter.parse(clinicDateToCheckdeferredDonor) ));
-    				panelPredicates.add(cb.not(cb.exists(donorDeferral)));
+    				venuePredicates.add(cb.not(cb.exists(donorDeferral)));
     			}
     		
     	}
@@ -88,7 +88,7 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
     	else{
     		donorDeferral.select(rootdonorDeferral.get("id").as(Long.class)).where(cb.equal(rootdonorDeferral.get("deferredDonor"), root), 
     		cb.greaterThanOrEqualTo(rootdonorDeferral.get("deferredUntil").as(Date.class), new Date()));
-    		panelPredicates.add(cb.not(cb.exists(donorDeferral)));	
+    		venuePredicates.add(cb.not(cb.exists(donorDeferral)));
     	}
     	
           
@@ -116,10 +116,10 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
             return Collections.emptyList();
         }
         
-        panelPredicates.add(cb.or(bgPredicates.toArray(new Predicate[0])));
+        venuePredicates.add(cb.or(bgPredicates.toArray(new Predicate[0])));
         
-        panelPredicates.add(cb.equal(root.<String> get("isDeleted"), false));
-    	cq.where(panelPredicates.toArray(new Predicate[0]));
+        venuePredicates.add(cb.equal(root.<String> get("isDeleted"), false));
+    	cq.where(venuePredicates.toArray(new Predicate[0]));
 
     	int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
     	int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
@@ -140,7 +140,7 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
 
     	CriteriaQuery<Long> countCriteriaQuery = cb.createQuery(Long.class);
     	Root<Donor> countRoot = countCriteriaQuery.from(Donor.class);
-    	countCriteriaQuery.where(panelPredicates.toArray(new Predicate[0]));
+    	countCriteriaQuery.where(venuePredicates.toArray(new Predicate[0]));
     	countCriteriaQuery.select(cb.countDistinct(countRoot));
     	
     	TypedQuery<Long> countQuery = em.createQuery(countCriteriaQuery);

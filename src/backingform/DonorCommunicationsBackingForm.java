@@ -73,15 +73,15 @@ public class DonorCommunicationsBackingForm {
 			donor.setVenue(null);
 		} else {
 			try {
-				List<Location> panels = new ArrayList<Location>();
+				List<Location> venues = new ArrayList<Location>();
 				String[] venueStr = COMMA_SPLIT_PATTERN.split(venue);
 				for (String venueId : venueStr) {
 					Location l = new Location();
 					l.setId(Long.parseLong(venueId));
-					panels.add(l);
+					venues.add(l);
 					donor.setVenue(l);
 				}
-				venues = panels;
+				venues = venues;
 			} catch (NumberFormatException ex) {
 				ex.printStackTrace();
 				donor.setVenue(null);

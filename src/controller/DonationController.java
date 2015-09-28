@@ -282,7 +282,7 @@ public class DonationController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public  Map<String, Object> findDonationPagination(
      @RequestParam(value = "donationIdentificationNumber", required = false)  String donationIdentificationNumber,
-     @RequestParam(value = "panels",required = false)  List<Long> panelIds,
+     @RequestParam(value = "venues",required = false)  List<Long> venueIds,
      @RequestParam(value = "packTypes",required = false)  List<Integer> packTypeIds,
      @RequestParam(value = "donationDateFrom", required = false)  String donationDateFrom,
      @RequestParam(value = "donationDateTo", required = false)  String donationDateTo,
@@ -302,7 +302,7 @@ public class DonationController {
     List<Object> results;
           results = donationRepository.findDonations(
                   donationIdentificationNumber,
-                  packTypeIds, panelIds,
+                  packTypeIds, venueIds,
                   donationDateFrom, donationDateTo, includeTestedDonations, pagingParams);
   
     @SuppressWarnings("unchecked")

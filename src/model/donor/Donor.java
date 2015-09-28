@@ -155,7 +155,7 @@ public class Donor implements ModificationTracker {
   private String donorHash;
  
   /**
-   * Which panel the donor is registered to
+   * Which venue the donor is registered to
    */
   @LocationExists
   @ManyToOne
