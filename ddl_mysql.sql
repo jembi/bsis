@@ -330,7 +330,7 @@
         nationalID varchar(15),
         notes longtext,
         preferredContactMethod_id SMALLINT,
-        venue_id bigint,
+        donorPanel_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
         primary key (id)
@@ -398,7 +398,7 @@
         nationalID varchar(15),
         notes longtext,
         preferredContactMethod_id SMALLINT,
-        venue_id bigint,
+        donorPanel_id bigint,
         createdBy_id SMALLINT,
         lastUpdatedBy_id SMALLINT,
         primary key (id, REV)
@@ -434,7 +434,7 @@
     create table Location (
         id bigint not null auto_increment,
         isDeleted boolean,
-        isVenue boolean,
+        isDonorPanel boolean,
         isMobileSite boolean,
         isUsageSite boolean,
         name varchar(255),
@@ -447,7 +447,7 @@
         REV integer not null,
         REVTYPE tinyint,
         isDeleted boolean,
-        isVenue boolean,
+        isDonorPanel boolean,
         isMobileSite boolean,
         isUsageSite boolean,
         name varchar(255),
@@ -1180,9 +1180,9 @@
         references User (id);
 
     alter table Donor 
-        add index FK3F25E463043805 (venue_id), 
+        add index FK3F25E463043805 (donorPanel_id),
         add constraint FK3F25E463043805 
-        foreign key (venue_id) 
+        foreign key (donorPanel_id)
         references Location (id);
 
     alter table Donor 

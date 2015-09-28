@@ -1020,15 +1020,15 @@
 	<!-- Updated (timler): for #293 (refactoring) -->
 	<changeSet id="20150714-1201" author="srikanthmalyala">
 		<preConditions onFail="MARK_RAN">
-			<not><columnExists tableName="Donation" columnName="venue_id" /></not>
+			<not><columnExists tableName="Donation" columnName="donorPanel_id" /></not>
 		</preConditions>
 		<addColumn tableName="Donation">
-			<column name="venue_id" type="bigint">
+			<column name="donorPanel_id" type="bigint">
 				<constraints foreignKeyName="FK_donation_Location" references="Location(id)"/>
 			</column>
 		</addColumn>
 		<addColumn tableName="Donation_AUD">
-			<column name="venue_id" type="bigint"></column>
+			<column name="donorPanel_id" type="bigint"></column>
 		</addColumn>
 	</changeSet>
 
@@ -1036,15 +1036,15 @@
 	<!-- Updated (timler): for #293 (refactoring) -->
 	<changeSet id="20150716-1058" author="srikanthmalyala">
 	    <preConditions onFail="MARK_RAN">
-		    <not><columnExists tableName="DonationBatch" columnName="venue_id"/></not>
+		    <not><columnExists tableName="DonationBatch" columnName="donorPanel_id"/></not>
 		</preConditions>
 		<addColumn tableName="DonationBatch">
-			<column name="venue_id" type="bigint">
+			<column name="donorPanel_id" type="bigint">
 				<constraints foreignKeyName="FK_DonationBatch_Location" references="Location(id)"/>
 			</column>
 		</addColumn>
 		<addColumn tableName="DonationBatch_AUD">
-			<column name="venue_id" type="bigint"></column>
+			<column name="donorPanel_id" type="bigint"></column>
 		</addColumn>
 	</changeSet>
 
@@ -1753,5 +1753,20 @@
             <column name="testSampleProduced" type="tinyint(1)" />
         </addColumn>
     </changeSet>
+
+	<changeSet author="debonair" id="20150928-1214">
+		<dropForeignKeyConstraint baseTableName="Donor" constraintName="FK3F25E463043805"/>
+		<dropIndex indexName="FK3F25E463043805" tableName="Donor"/>
+		<renameColumn tableName="Donor" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
+		<renameColumn tableName="Donor_AUD" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
+		<renameColumn tableName="Location" oldColumnName="isDonorPanel" newColumnName="isVenue" columnDataType="boolean"/>
+		<renameColumn tableName="Location_AUD" oldColumnName="isDonorPanel" newColumnName="isVenue" columnDataType="boolean"/>
+		<addForeignKeyConstraint baseColumnNames="venue_id"
+								 baseTableName="Donor"
+								 constraintName="fk_donor_venue"
+								 referencedColumnNames="id"
+								 referencedTableName="Location"/>
+
+	</changeSet>
 
 </databaseChangeLog>
