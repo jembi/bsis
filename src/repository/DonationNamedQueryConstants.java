@@ -34,6 +34,7 @@ public class DonationNamedQueryConstants {
             "SELECT NEW valueobject.CollectedDonationValueObject(d.donationType, d.donor.gender, d.bloodAbo, d.bloodRh, d.donor.donorPanel, COUNT(d)) " +
             "FROM Donation d " +
             "WHERE d.donationDate BETWEEN :startDate AND :endDate " +
+            "AND d.isDeleted = :deleted " +
             "GROUP BY d.donationType, d.donor.gender, d.bloodAbo, d.bloodRh, d.donor.donorPanel ";
 
 }

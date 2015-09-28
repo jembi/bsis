@@ -515,6 +515,7 @@ public class DonationRepository {
                 CollectedDonationValueObject.class)
                 .setParameter("startDate", startDate)
                 .setParameter("endDate", endDate)
+                .setParameter("deleted", false)
                 .getResultList();
     }
 
