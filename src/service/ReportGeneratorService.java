@@ -3,6 +3,7 @@ package service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import model.donationtype.DonationType;
 import model.reporting.Cohort;
 import model.reporting.Comparator;
 import model.reporting.Indicator;
@@ -45,7 +46,8 @@ public class ReportGeneratorService {
             Cohort donationTypeCohort = new Cohort();
             donationTypeCohort.setCategory("Donation Type");
             donationTypeCohort.setComparator(Comparator.EQUALS);
-            donationTypeCohort.setOption(valueObject.getDonationType());
+            DonationType donationType = valueObject.getDonationType();
+            donationTypeCohort.setOption(donationType.getDonationType());
             indicator.addCohort(donationTypeCohort);
 
             Cohort genderCohort = new Cohort();
