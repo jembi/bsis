@@ -1755,7 +1755,7 @@
     </changeSet>
 
 	<changeSet author="debonair" id="20150928-1214">
-		
+		<dropForeignKeyConstraint baseTableName="Donor" constraintName="FK3F25E463043805"/>
 		<renameColumn tableName="Donor" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
 		<renameColumn tableName="Donor_AUD" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
 		<renameColumn tableName="Donation" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
