@@ -95,8 +95,8 @@ public class LocationRepositoryTest {
 	@Test
 	public void testGetAllVenues() throws Exception {
 		List<Location> all = locationRepository.getAllVenues();
-		Assert.assertNotNull("There are donor panel Locations", all);
-		Assert.assertEquals("There are 3 donor panel Locations", 3, all.size());
+		Assert.assertNotNull("There are venue Locations", all);
+		Assert.assertEquals("There are 3 venue Locations", 3, all.size());
 	}
 	
 	@Test

@@ -52,11 +52,11 @@ public class DonationBatchBackingFormValidator implements Validator {
     venueIds.add(venue.getId());
 	if (venue.getId() == null) {
 	  errors.rejectValue("donationBatch.venue", "venue.empty",
-	    "Donor Panel is required.");
+	    "Venue is required.");
 	} 
 	else if (utilController.isVenue(venue.getId()) == false) {
 	  errors.rejectValue("donationBatch.venue", "venue.invalid",
-		"Location is not a Donor Panel.");
+		"Location is not a Venue.");
 	}
     else if ( form.getId() == null && utilController.findOpenDonationBatches(venueIds).size() > 0) {
       errors.rejectValue("donationBatch.venue", "venue.openBatch",

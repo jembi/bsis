@@ -83,11 +83,11 @@ public class DonationBackingFormValidator implements Validator {
     Location venue = form.getDonation().getVenue();
     if (venue == null) {
       errors.rejectValue("donation.venue", "venue.empty",
-        "Donor Panel is required.");
+        "Venue is required.");
     } 
     else if (utilController.isVenue(venue.getId()) == false) {
       errors.rejectValue("donation.venue", "venue.invalid",
-    	"Location is not a Donor Panel.");
+    	"Location is not a Venue.");
     } 
 
     validateBloodPressure(form,errors);

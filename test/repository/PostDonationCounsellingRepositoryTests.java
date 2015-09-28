@@ -40,7 +40,7 @@ public class PostDonationCounsellingRepositoryTests {
     
     private static final Date NO_START_DATE = null;
     private static final Date NO_END_DATE = null;
-    private static final Set<Long> NO_DONOR_PANELS = null;
+    private static final Set<Long> NO_VENUES = null;
     
     @PersistenceContext
     private EntityManager entityManager;
@@ -78,7 +78,7 @@ public class PostDonationCounsellingRepositoryTests {
                 .buildAndPersist(entityManager);
         
         List<Donation> returnedDonations = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
-                NO_START_DATE, NO_END_DATE, NO_DONOR_PANELS);
+                NO_START_DATE, NO_END_DATE, NO_VENUES);
         
         assertThat(returnedDonations, is(expectedDonations));
     }
@@ -104,7 +104,7 @@ public class PostDonationCounsellingRepositoryTests {
                 .withDonation(secondExpectedDonation)
                 .buildAndPersist(entityManager);
         
-        // Excluded by donor panel
+        // Excluded by venue
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
                 .withDonation(aDonation()
@@ -148,7 +148,7 @@ public class PostDonationCounsellingRepositoryTests {
                 .buildAndPersist(entityManager);
         
         List<Donation> returnedDonations = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
-                startDate.toDate(), NO_END_DATE, NO_DONOR_PANELS);
+                startDate.toDate(), NO_END_DATE, NO_VENUES);
         
         assertThat(returnedDonations, is(expectedDonations));
     }
@@ -182,7 +182,7 @@ public class PostDonationCounsellingRepositoryTests {
                 .buildAndPersist(entityManager);
         
         List<Donation> returnedDonations = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
-                NO_START_DATE, endDate.toDate(), NO_DONOR_PANELS);
+                NO_START_DATE, endDate.toDate(), NO_VENUES);
         
         assertThat(returnedDonations, is(expectedDonations));
     }
@@ -218,7 +218,7 @@ public class PostDonationCounsellingRepositoryTests {
                 .buildAndPersist(entityManager);
         
         List<Donation> returnedDonations = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
-                startDate.toDate(), endDate.toDate(), NO_DONOR_PANELS);
+                startDate.toDate(), endDate.toDate(), NO_VENUES);
         
         assertThat(returnedDonations, is(expectedDonations));
     }

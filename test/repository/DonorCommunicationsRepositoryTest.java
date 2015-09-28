@@ -140,7 +140,7 @@ public class DonorCommunicationsRepositoryTest {
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		boolean anyBloodGroup = false ;
 		boolean noBloodGroup = false;
-		//Search with donor panel id 4
+		//Search with venue id 4
 		long[] id = { 4 };
 		//Search with  BloodGroup 'AB-'
 		String[] bloodGroupStrArray = { "AB-" };
@@ -155,7 +155,7 @@ public class DonorCommunicationsRepositoryTest {
 	}
 	
 	/**
-	 * should return list of donors matching specified Donor Panel and Blood Group criteria
+	 * should return list of donors matching specified Venue and Blood Group criteria
 	 * 
 	 * findDonors(List<Location> venue, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
 	 * List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor)
@@ -172,7 +172,7 @@ public class DonorCommunicationsRepositoryTest {
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		boolean anyBloodGroup = false;
 		boolean noBloodGroup = false;
-		//Search with donor panel id 3 and 1
+		//Search with venue id 3 and 1
 		long[] id = { 1 , 3 };
 		//Search with  BloodGroup 'A+' and 'O+'
 		String[] bloodGroupStrArray = { "A+","O+" };
@@ -210,7 +210,7 @@ public class DonorCommunicationsRepositoryTest {
 		//Set values to use for findDonors() method parameters
 		List<Location> venues = new ArrayList<Location>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
-		//Search with donor panel id 3 and 1
+		//Search with venue id 3 and 1
 		long[] id = { 1 , 3 };
 		//Search with  BloodGroup 'A+' and 'O+'
 		String[] bloodGroupStrArray = { "A+","O+" };
@@ -257,7 +257,7 @@ public class DonorCommunicationsRepositoryTest {
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		String clinicDate = "";
 		String clinicDateToCheckdeferredDonor = "";
-		//Search with donor panel id 3 and 1
+		//Search with venue id 3 and 1
 		long[] id = { 1 , 3 };
 		//Search with  BloodGroup 'A+' and 'O+'
 		String[] bloodGroupStrArray = { "A+","O+" };
@@ -303,7 +303,7 @@ public class DonorCommunicationsRepositoryTest {
 		List<Location> venues = new ArrayList<Location>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		String clinicDate = "";
-		//Search with donor panel id 3 and 1
+		//Search with venue id 3 and 1
 		long[] id = { 1 , 3 };
 		//Search with  BloodGroup 'A+' and 'O+'
 		String[] bloodGroupStrArray = { "A+","O+" };
@@ -334,7 +334,7 @@ public class DonorCommunicationsRepositoryTest {
 
 	@Test
 	/**
-	 *  should not return donors who will be currently deferred when specifying only Donor Panels and Blood Groups
+	 *  should not return donors who will be currently deferred when specifying only Venues and Blood Groups
 	 *  
 	 * findDonors(List<Location> venue, String clinicDate, String lastDonationFromDate, String lastDonationToDate,
 	 * List<BloodGroup> bloodGroups, String anyBloodGroup, Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor)
@@ -345,7 +345,7 @@ public class DonorCommunicationsRepositoryTest {
 		List<Location> venues = new ArrayList<Location>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		String clinicDate = "";
-		//Search with donor panel id 3 and 1
+		//Search with venue id 3 and 1
 		long[] id = { 1 , 3 };
 		//Search with  BloodGroup 'A+' and 'O+'
 		String[] bloodGroupStrArray = { "A+","O+" };
@@ -391,7 +391,7 @@ public class DonorCommunicationsRepositoryTest {
 		List<Location> venues = new ArrayList<Location>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		String clinicDate = "";
-		//Search with donor panel id 3 and 1
+		//Search with venue id 3 and 1
 		long[] id = { 1 , 3 };
 		//Search with  BloodGroup 'A+' and 'O+'
 		String[] bloodGroupStrArray = { "A+","O+" };
@@ -437,7 +437,7 @@ public class DonorCommunicationsRepositoryTest {
 		List<Location> venues = new ArrayList<Location>();
 		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
 		String clinicDate = CustomDateFormatter.format(DateUtils.addDays(new Date(), (60)));
-		//Search with donor panel id 3 and 1
+		//Search with venue id 3 and 1
 		long[] id = { 1 , 3 };
 		//Search with  BloodGroup 'A+' and 'O+'
 		String[] bloodGroupStrArray = { "A+","O+" };

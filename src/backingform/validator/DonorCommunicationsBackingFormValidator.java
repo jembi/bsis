@@ -50,7 +50,7 @@ public class DonorCommunicationsBackingFormValidator implements Validator {
 
 		if (venues == null || venues.isEmpty()) {
 			errors.rejectValue("venueErrorMessage","venues.empty",
-					"Select 1 or more Donor Panel(s).");
+					"Select 1 or more Venue(s).");
 		}
 
 		if (bloodGroups == null || bloodGroups.isEmpty()) {

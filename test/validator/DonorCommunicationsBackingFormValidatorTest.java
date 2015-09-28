@@ -52,7 +52,7 @@ public class DonorCommunicationsBackingFormValidatorTest {
 	}
 	
 	/**
-	 *  Should fail if no blood group or donor panel is specified
+	 *  Should fail if no blood group or venue is specified
 	 *  
 	 *  validate donorCommunicationsBackingFormValidator.
 	 
@@ -73,14 +73,14 @@ public class DonorCommunicationsBackingFormValidatorTest {
 		donorCommunicationsBackingFormValidator.validate(donorCommunicationsBackingForm, errors);
 		if(errors.hasErrors())
 		{
-			assertEquals("Validation fails at 2 points - no donor panel selected and no blood group selected",2,errors.getErrorCount());
-			assertNotNull("Validation error exists - no Donor Panel selected", errors.getFieldError("venueErrorMessage"));
+			assertEquals("Validation fails at 2 points - no venue selected and no blood group selected",2,errors.getErrorCount());
+			assertNotNull("Validation error exists - no Venue selected", errors.getFieldError("venueErrorMessage"));
 			assertNotNull("Validation error exists - no Blood Group selected", errors.getFieldError("bloodGroupErrorMessage"));
 		}
 	}
 	
 	/**
-	 *  Should fail if no donor panel specified
+	 *  Should fail if no venue specified
 	 *  
 	 *  validate donorCommunicationsBackingFormValidator.
 	 
@@ -103,8 +103,8 @@ public class DonorCommunicationsBackingFormValidatorTest {
 		donorCommunicationsBackingFormValidator.validate(donorCommunicationsBackingForm, errors);
 		if(errors.hasErrors())
 		{
-			assertEquals("Validation fails at 1 points - no donor panel selected",1,errors.getErrorCount());
-			assertNotNull("Validation error exists - no Donor Panel selected", errors.getFieldError("venueErrorMessage"));
+			assertEquals("Validation fails at 1 points - no venue selected",1,errors.getErrorCount());
+			assertNotNull("Validation error exists - no Venue selected", errors.getFieldError("venueErrorMessage"));
 		}
 	}
 	
@@ -122,7 +122,7 @@ public class DonorCommunicationsBackingFormValidatorTest {
 		String lastDonationFromDate = "";
 		String lastDonationToDate = "";
 		String anyBloodGroup = "false";
-		//Search with donor panel id 3
+		//Search with venue id 3
 		long[] id = { 3 };
 		
 		venues    =  createDonerPanelListForSearch(id);
