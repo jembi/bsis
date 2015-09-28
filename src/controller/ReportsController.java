@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.reporting.Report;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +26,7 @@ import repository.LocationRepository;
 import repository.ComponentRepository;
 import repository.RequestRepository;
 import repository.bloodtesting.BloodTestingRepository;
+import service.ReportGeneratorService;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 
@@ -48,6 +51,9 @@ public class ReportsController {
 
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
+  
+  @Autowired
+  private ReportGeneratorService reportGeneratorService;
   
   @RequestMapping(value = "/inventory/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REPORTING_INFORMATION+"')")
@@ -398,5 +404,13 @@ public class ReportsController {
 
    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
+  
+    @RequestMapping(value = "/collecteddonations/generate", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.DONATIONS_REPORTING + "')")
+    public Report getCollectedDonationsReport(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
+        return reportGeneratorService.generateCollectedDonationsReport(startDate, endDate);
+    }
 
 }

@@ -27,5 +27,13 @@ public class DonationNamedQueryConstants {
             "WHERE d.donor.id = :donorId " +
             "AND d.isDeleted = :deleted " +
             "ORDER BY d.donationDate DESC ";
+    
+    public static final String NAME_FIND_COLLECTED_DONATION_VALUE_OBJECTS_FOR_DATE_RANGE =
+            "Donation.findCollectedDonationValueObjectsForDateRange";
+    public static final String QUERY_FIND_COLLECTED_DONATION_VALUE_OBJECTS_FOR_DATE_RANGE =
+            "SELECT NEW valueobject.CollectedDonationValueObject(d.donationType, d.donor.gender, d.bloodAbo, d.bloodRh, d.donor.donorPanel, COUNT(d)) " +
+            "FROM Donation d " +
+            "WHERE d.donationDate BETWEEN :startDate AND :endDate " +
+            "GROUP BY d.donationType, d.donor.gender, d.bloodAbo, d.bloodRh, d.donor.donorPanel ";
 
 }
