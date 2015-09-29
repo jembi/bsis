@@ -8,10 +8,16 @@ import model.donordeferral.DonorDeferral;
 
 public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
     
+	private Long id;
     private Donor deferredDonor;
     private DeferralReason deferralReason;
     private Date deferredUntil;
     private Boolean voided;
+    
+    public DonorDeferralBuilder withId(Long id) {
+        this.id = id;
+        return this;
+    }
 
     public DonorDeferralBuilder withDeferredDonor(Donor deferredDonor) {
         this.deferredDonor = deferredDonor;
@@ -36,6 +42,7 @@ public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
     @Override
     public DonorDeferral build() {
         DonorDeferral donorDeferral = new DonorDeferral();
+        donorDeferral.setId(id);
         donorDeferral.setDeferredDonor(deferredDonor);
         donorDeferral.setDeferralReason(deferralReason);
         donorDeferral.setDeferredUntil(deferredUntil);

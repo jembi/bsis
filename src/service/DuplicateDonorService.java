@@ -7,7 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import model.donation.Donation;
 import model.donor.Donor;
+import model.donor.DuplicateDonorBackup;
+import model.donordeferral.DonorDeferral;
 import model.util.Gender;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +19,45 @@ import org.apache.commons.lang3.StringUtils;
  * Class that implements an algorithm to identify duplicate Donors.
  */
 public class DuplicateDonorService {
+	
+	public List<DuplicateDonorBackup> mergeDonors(Donor newDonor, List<Donor> donors) {
+		// set donor number for the new donor
+		//newDonor.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());
+		String newDonorNumber = newDonor.getDonorNumber();
+		// combine Donations and Deferrals and create a backup log
+		List<Donation> combinedDonations = new ArrayList<Donation>();
+		List<DonorDeferral> combinedDeferrals = new ArrayList<DonorDeferral>();
+		List<DuplicateDonorBackup> backupLog = new ArrayList<DuplicateDonorBackup>();
+		if (donors != null) {
+			for (Donor donor : donors) {
+				String donorNumber = donor.getDonorNumber(); 
+				List<Donation> donorDonations = donor.getDonations();
+				if (donorDonations != null) {
+					for (Donation donation : donorDonations) {
+						if (donation != null) {
+							combinedDonations.add(donation);
+							backupLog.add(new DuplicateDonorBackup(newDonorNumber, donorNumber, donation.getId(), null));
+						}
+						
+					}
+				}
+				List<DonorDeferral> deferrals = donor.getDeferrals();
+				if (deferrals != null) {
+					for (DonorDeferral deferral : deferrals) {
+						if (deferral != null) {
+							combinedDeferrals.add(deferral);
+							backupLog.add(new DuplicateDonorBackup(newDonorNumber, donorNumber, null, deferral.getId()));
+						}
+					}
+				}
+				donor.setDeferrals(null);
+				donor.setDonations(null);
+			}
+		}
+		newDonor.setDonations(combinedDonations);
+		newDonor.setDeferrals(combinedDeferrals);
+		return backupLog;
+	}
 	
 	/**
 	 * Identifies the duplicate donors matching on first name, last name, gender and date of birth.

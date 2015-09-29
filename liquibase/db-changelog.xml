@@ -1753,5 +1753,29 @@
             <column name="testSampleProduced" type="tinyint(1)" />
         </addColumn>
     </changeSet>
+    
+    <changeSet id="20150922-1408" author="timler">
+        <createTable tableName="DuplicateDonorBackup">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="newDonorNumber" type="varchar(20)">
+				<constraints nullable="false" foreignKeyName="FK_DUPLICATE_DONOR_BACKUP_NEW_DONOR_NUMBER"
+                        references="Donor(donorNumber)" />
+            </column>
+            <column name="mergedDonorNumber" type="varchar(20)">
+				<constraints nullable="false" foreignKeyName="FK_DUPLICATE_DONOR_BACKUP_MERGED_DONOR_NUMBER"
+                        references="Donor(donorNumber)" />
+            </column>
+            <column name="donation_id" type="bigint">
+				<constraints nullable="true" foreignKeyName="FK_DUPLICATE_DONOR_BACKUP_DONATION_ID"
+                        references="Donation(id)" />
+            </column>
+            <column name="donorDeferral_id" type="bigint">
+				<constraints nullable="true" foreignKeyName="FK_DUPLICATE_DONOR_BACKUP_DEFERRAL_ID"
+                        references="DonorDeferral(id)" />
+            </column>
+        </createTable>
+    </changeSet>
 
 </databaseChangeLog>

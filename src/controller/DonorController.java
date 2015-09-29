@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 import model.donor.Donor;
+import model.donor.DuplicateDonorBackup;
 import model.donordeferral.DonorDeferral;
 
 import org.apache.log4j.Logger;
@@ -45,6 +46,7 @@ import viewmodel.DonorSummaryViewModel;
 import viewmodel.DonorViewModel;
 import viewmodel.PostDonationCounsellingViewModel;
 import backingform.DonorBackingForm;
+import backingform.DuplicateDonorsBackingForm;
 import backingform.validator.DonorBackingFormValidator;
 import constant.GeneralConfigConstants;
 import factory.DonationViewModelFactory;
@@ -385,6 +387,36 @@ public class DonorController {
 		
 		map.put("duplicates", duplicateViewModels);
 		return map;
+	}
+	
+	@RequestMapping(value = "/duplicates/merge", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONOR + "')")
+	public ResponseEntity<Map<String, Object>> mergeDuplicateDonors(@RequestParam(value = "donorNumber", required = true) String donorNumber,
+	                                                                @Valid @RequestBody DuplicateDonorsBackingForm form) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		// create new donor
+		Donor newDonor = form.getDonor();
+		newDonor.setIsDeleted(false);
+		newDonor.setContact(form.getContact());
+		newDonor.setAddress(form.getAddress());
+		newDonor.setDonorNumber(utilController.getNextDonorNumber());
+		
+		// get donors to merge
+		List<Donor> donorsToMerge = donorRepository.findDonorsByNumbers(form.getDuplicateDonorNumbers());
+		
+		// complete merge of donors and get a backup log
+		List<DuplicateDonorBackup> backupLogs = new DuplicateDonorService().mergeDonors(newDonor, donorsToMerge);
+		
+		// save new donor and backup logs
+		Donor savedDonor = donorRepository.addMergedDonor(newDonor, backupLogs);
+		map.put("hasErrors", false);
+		
+		map.put("donorId", savedDonor.getId());
+		map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(savedDonor));
+		
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
 	}
   
     @RequestMapping(value = "{id}/postdonationcounselling", method = RequestMethod.GET)

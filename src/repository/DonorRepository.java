@@ -1,7 +1,5 @@
 package repository;
 
-import controller.UtilController;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -25,6 +23,7 @@ import model.address.AddressType;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.donor.DonorStatus;
+import model.donor.DuplicateDonorBackup;
 import model.donorcodes.DonorCode;
 import model.donorcodes.DonorCodeGroup;
 import model.donorcodes.DonorDonorCode;
@@ -43,6 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import utils.DonorUtils;
 import viewmodel.DonorSummaryViewModel;
+import controller.UtilController;
 
 @Repository
 @Transactional
@@ -538,4 +538,20 @@ public class DonorRepository {
                 .getSingleResult();
     }
 
+    public List<Donor> findDonorsByNumbers(List<String> donorNumbers) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
+		Root<Donor> donor = cq.from(Donor.class);
+		cq.select(donor).where(donor.get("donorNumber").in(donorNumbers));
+    	return em.createQuery(cq).getResultList();
+    }
+
+	public Donor addMergedDonor(Donor newDonor, List<DuplicateDonorBackup> backupLogs) {
+		for (DuplicateDonorBackup backupLog : backupLogs) {
+			em.persist(backupLog);
+		}
+		em.persist(newDonor);
+		em.flush();
+		return newDonor;
+	}
 }

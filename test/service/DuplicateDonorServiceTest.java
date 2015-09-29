@@ -1,6 +1,9 @@
 package service;
 
+import helpers.builders.DeferralReasonBuilder;
+import helpers.builders.DonationBuilder;
 import helpers.builders.DonorBuilder;
+import helpers.builders.DonorDeferralBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,7 +11,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import model.donation.Donation;
 import model.donor.Donor;
+import model.donor.DuplicateDonorBackup;
+import model.donordeferral.DeferralReason;
+import model.donordeferral.DeferralReasonType;
+import model.donordeferral.DonorDeferral;
 import model.util.Gender;
 
 import org.junit.Assert;
@@ -119,6 +127,64 @@ public class DuplicateDonorServiceTest {
 		Assert.assertEquals("Two matching donors", 2, duplicateDonors.size());
 		Assert.assertEquals("Sue is matching Donor", "Sue", duplicateDonors.get(0).getFirstName());
 		Assert.assertEquals("Sue is matching Donor", "Sue", duplicateDonors.get(1).getFirstName());
+	}
+	
+	@Test
+	public void testMergeDuplicateDonorsNull() throws Exception {
+		List<DuplicateDonorBackup> backupLogs = service.mergeDonors(new Donor(), null);
+		Assert.assertNotNull("backupLogs returned", backupLogs);
+		Assert.assertEquals("No backups necessary", 0, backupLogs.size());
+	}
+	
+	@Test
+	public void testMergeDuplicateDonorsEmptyList() throws Exception {
+		List<DuplicateDonorBackup> backupLogs = service.mergeDonors(new Donor(), new ArrayList<Donor>());
+		Assert.assertNotNull("backupLogs returned", backupLogs);
+		Assert.assertEquals("No backups necessary", 0, backupLogs.size());
+	}
+	
+	@Test
+	public void testMergeDuplicateDonors() throws Exception {
+		// create donors
+		List<Donor> donors = new ArrayList<Donor>();
+		Donor david1 = DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith")
+		        .withGender(Gender.male).withBirthDate("1977-10-20").build();
+		Donor david2 = DonorBuilder.aDonor().withDonorNumber("2").withFirstName("David").withLastName("Smith")
+		        .withGender(Gender.male).withBirthDate("1977-10-20").build();
+		donors.add(david1);
+		donors.add(david2);
+		
+		// create donations (david1)
+		Donation donation1 = DonationBuilder.aDonation().withId(1l).withDonor(david1).withDonationDate(new Date()).build();
+		Donation donation2 = DonationBuilder.aDonation().withId(2l).withDonor(david1).withDonationDate(new Date()).build();
+		List<Donation> donations = new ArrayList<Donation>();
+		donations.add(donation1);
+		donations.add(donation2);
+		david1.setDonations(donations);
+		
+		// create deferrals (david2)
+		DeferralReason deferralReason1 = DeferralReasonBuilder.aDeferralReason()
+		        .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
+		DonorDeferral deferral1 = DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferredDonor(david2)
+		        .withDeferralReason(deferralReason1).build();
+		List<DonorDeferral> deferrals = new ArrayList<DonorDeferral>();
+		deferrals.add(deferral1);
+		david2.setDeferrals(deferrals);
+		
+		// create new Donor
+		Donor david3 = DonorBuilder.aDonor().withDonorNumber("3").withFirstName("David").withLastName("Smith")
+		        .withGender(Gender.male).withBirthDate("1977-10-20").build();
+		
+		List<DuplicateDonorBackup> backupLogs = service.mergeDonors(david3, donors);
+		Assert.assertNotNull("backupLogs returned", backupLogs);
+		Assert.assertEquals("Donation and Deferral backups necessary", 3, backupLogs.size());
+		Assert.assertTrue("1st DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3","1",1l,null)));
+		Assert.assertTrue("2nd DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3","1",2l,null)));
+		Assert.assertTrue("3rd DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3","2",null,1l)));
+		Assert.assertNull("Donations were moved", david1.getDonations());
+		Assert.assertNull("Deferrals were moved", david2.getDeferrals());
+		Assert.assertEquals("Donations were moved", 2, david3.getDonations().size());
+		Assert.assertEquals("Deferrals were moved", 1, david3.getDeferrals().size());
 	}
 	
 	@Test
