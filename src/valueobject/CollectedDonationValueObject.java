@@ -1,5 +1,6 @@
 package valueobject;
 
+import java.util.Objects;
 import model.donationtype.DonationType;
 import model.location.Location;
 import model.util.Gender;
@@ -13,6 +14,10 @@ public class CollectedDonationValueObject {
     private long count;
     private Location venue;
     
+    public CollectedDonationValueObject() {
+        // Default constructor
+    }
+    
     public CollectedDonationValueObject(DonationType donationType, Gender gender, String bloodAbo, String bloodRh,
             Location venue, long count) {
         this.donationType = donationType;
@@ -22,7 +27,7 @@ public class CollectedDonationValueObject {
         this.venue = venue;
         this.count = count;
     }
-    
+
     public DonationType getDonationType() {
         return donationType;
     }
@@ -69,6 +74,31 @@ public class CollectedDonationValueObject {
     
     public void setCount(long count) {
         this.count = count;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (!(obj instanceof CollectedDonationValueObject)) {
+            return false;
+        }
+        
+        CollectedDonationValueObject other = (CollectedDonationValueObject) obj;
+        
+        return Objects.equals(getDonationType(), other.getDonationType()) &&
+                Objects.equals(getGender(), other.getGender()) &&
+                Objects.equals(getBloodAbo(), other.getBloodAbo()) &&
+                Objects.equals(getBloodRh(), other.getBloodRh()) &&
+                Objects.equals(getCount(), other.getCount()) &&
+                Objects.equals(getVenue(), other.getVenue());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getDonationType(), getGender(), getBloodAbo(), getBloodRh(), getCount(), getVenue());
     }
 
 }

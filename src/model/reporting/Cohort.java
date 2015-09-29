@@ -1,5 +1,7 @@
 package model.reporting;
 
+import java.util.Objects;
+
 public class Cohort {
     
     private String category;
@@ -28,6 +30,28 @@ public class Cohort {
     
     public void setComparator(Comparator comparator) {
         this.comparator = comparator;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        
+        if (!(obj instanceof Cohort)) {
+            return false;
+        }
+        
+        Cohort other = (Cohort) obj;
+        
+        return Objects.equals(getCategory(), other.getCategory()) &&
+                Objects.equals(getOption(), other.getOption()) &&
+                Objects.equals(getComparator(), other.getComparator());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCategory(), getOption(), getComparator());
     }
 
 }
