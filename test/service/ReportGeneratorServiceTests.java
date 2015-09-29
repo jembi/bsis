@@ -19,6 +19,7 @@ import model.util.Gender;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import constant.CohortConstants;
 import repository.DonationRepository;
 import suites.UnitTestSuite;
 import valueobject.CollectedDonationValueObject;
@@ -52,17 +53,17 @@ public class ReportGeneratorServiceTests extends UnitTestSuite {
                     .withEndDate(irrelevantEndDate)
                     .withValue(2L)
                     .withCohort(aCohort()
-                            .withCategory("Donation Type")
+                            .withCategory(CohortConstants.DONATION_TYPE_CATEGORY)
                             .withComparator(Comparator.EQUALS)
                             .withOption("Family")
                             .build())
                     .withCohort(aCohort()
-                            .withCategory("Gender")
+                            .withCategory(CohortConstants.GENDER_CATEGORY)
                             .withComparator(Comparator.EQUALS)
                             .withOption(Gender.female)
                             .build())
                     .withCohort(aCohort()
-                            .withCategory("Blood Type")
+                            .withCategory(CohortConstants.BLOOD_TYPE_CATEGORY)
                             .withComparator(Comparator.EQUALS)
                             .withOption("A+")
                             .build())

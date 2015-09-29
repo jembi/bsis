@@ -10,6 +10,7 @@ import model.reporting.Indicator;
 import model.reporting.Report;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import constant.CohortConstants;
 import repository.DonationRepository;
 import valueobject.CollectedDonationValueObject;
 
@@ -44,20 +45,20 @@ public class ReportGeneratorService {
             indicator.setValue(valueObject.getCount());
             
             Cohort donationTypeCohort = new Cohort();
-            donationTypeCohort.setCategory("Donation Type");
+            donationTypeCohort.setCategory(CohortConstants.DONATION_TYPE_CATEGORY);
             donationTypeCohort.setComparator(Comparator.EQUALS);
             DonationType donationType = valueObject.getDonationType();
             donationTypeCohort.setOption(donationType.getDonationType());
             indicator.addCohort(donationTypeCohort);
 
             Cohort genderCohort = new Cohort();
-            genderCohort.setCategory("Gender");
+            genderCohort.setCategory(CohortConstants.GENDER_CATEGORY);
             genderCohort.setComparator(Comparator.EQUALS);
             genderCohort.setOption(valueObject.getGender());
             indicator.addCohort(genderCohort);
             
             Cohort bloodTypeCohort = new Cohort();
-            bloodTypeCohort.setCategory("Blood Type");
+            bloodTypeCohort.setCategory(CohortConstants.BLOOD_TYPE_CATEGORY);
             bloodTypeCohort.setComparator(Comparator.EQUALS);
             bloodTypeCohort.setOption(valueObject.getBloodAbo() + valueObject.getBloodRh());
             indicator.addCohort(bloodTypeCohort);
