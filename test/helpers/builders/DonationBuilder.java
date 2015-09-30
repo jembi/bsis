@@ -18,7 +18,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     private Long id;
     private Donor donor;
     private Date donationDate;
-    private Location donorPanel;
+    private Location venue;
     private TTIStatus ttiStatus;
     private Boolean deleted;
     private Integer donorPulse;
@@ -51,8 +51,8 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         return this;
     }
     
-    public DonationBuilder withDonorPanel(Location donorPanel) {
-        this.donorPanel = donorPanel;
+    public DonationBuilder withVenue(Location venue) {
+        this.venue = venue;
         return this;
     }
     
@@ -147,7 +147,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         donation.setId(id);
         donation.setDonor(donor);
         donation.setDonationDate(donationDate);
-        donation.setDonorPanel(donorPanel);
+        donation.setVenue(venue);
         donation.setTTIStatus(ttiStatus);
         donation.setDonorPulse(donorPulse);
         donation.setHaemoglobinCount(haemoglobinCount);

@@ -45,12 +45,12 @@ public class DonorCommunicationsBackingFormValidator implements Validator {
 
 		DonorCommunicationsBackingForm form = (DonorCommunicationsBackingForm) obj;
 
-		List<Location> donorPanels = form.getDonorPanels();
+		List<Location> venues = form.getVenues();
 		List<BloodGroup> bloodGroups = form.getBloodGroups();
 
-		if (donorPanels == null || donorPanels.isEmpty()) {
-			errors.rejectValue("donorPanelErrorMessage","donorPanels.empty",
-					"Select 1 or more Donor Panel(s).");
+		if (venues == null || venues.isEmpty()) {
+			errors.rejectValue("venueErrorMessage","venues.empty",
+					"Select 1 or more Venue(s).");
 		}
 
 		if (bloodGroups == null || bloodGroups.isEmpty()) {

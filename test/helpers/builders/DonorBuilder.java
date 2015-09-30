@@ -60,7 +60,7 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
         donor.setIsDeleted(deleted);
         donor.setDateOfFirstDonation(dateOfFirstDonation);
         donor.setDateOfLastDonation(dateOfLastDonation);
-        donor.setDonorPanel(venue);
+        donor.setVenue(venue);
         donor.setGender(gender);
         return donor;
     }

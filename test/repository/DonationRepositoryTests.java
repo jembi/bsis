@@ -4,7 +4,7 @@ import static helpers.builders.CollectedDonationValueObjectBuilder.aCollectedDon
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonationTypeBuilder.aDonationType;
 import static helpers.builders.DonorBuilder.aDonor;
-import static helpers.builders.LocationBuilder.aDonorPanel;
+import static helpers.builders.LocationBuilder.aVenue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import java.util.Arrays;
@@ -33,7 +33,7 @@ public class DonationRepositoryTests extends ContextDependentTestSuite {
         Date irrelevantStartDate = new DateTime().minusDays(7).toDate();
         Date irrelevantEndDate = new DateTime().minusDays(2).toDate();
         
-        Location expectedVenue = aDonorPanel().build();
+        Location expectedVenue = aVenue().build();
         DonationType expectedDonationType = aDonationType().build();
         String expectedBloodAbo = "A";
         String expectedBloodRh = "+";

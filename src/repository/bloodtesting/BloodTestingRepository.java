@@ -876,24 +876,24 @@ public class BloodTestingRepository {
 	public Map<String, Map<Long, Long>> findNumberOfPositiveTests(
 			List<String> ttiTests, Date donationDateFrom,
 			Date donationDateTo, String aggregationCriteria,
-			List<String> panels) throws ParseException {
+			List<String> venues) throws ParseException {
 		TypedQuery<Object[]> query = em
 				.createQuery(
 						"SELECT count(t), d.donationDate, t.bloodTest.testNameShort FROM BloodTestResult t join t.bloodTest bt join t.donation d WHERE "
 								+ "bt.id IN (:ttiTestIds) AND "
 								+ "t.result != :positiveResult AND "
-								+ "d.donorPanel.id IN (:panelIds) AND "
+								+ "d.venue.id IN (:venueIds) AND "
 								+ "d.donationDate BETWEEN :donationDateFrom AND :donationDateTo "
 								+ "GROUP BY bt.testNameShort, d.donationDate",
 						Object[].class);
 
-		List<Long> panelIds = new ArrayList<Long>();
-	    if (panels != null) {
-	      for (String panel : panels) {
-	    	panelIds.add(Long.parseLong(panel));
+		List<Long> venueIds = new ArrayList<Long>();
+	    if (venues != null) {
+	      for (String venue : venues) {
+	    	venueIds.add(Long.parseLong(venue));
 	      }
 	    } else {
-	      panelIds.add((long)-1);
+	      venueIds.add((long)-1);
 	    }
 
 		List<Integer> ttiTestIds = new ArrayList<Integer>();
@@ -905,7 +905,7 @@ public class BloodTestingRepository {
 			ttiTestIds.add(-1);
 		}
 
-		query.setParameter("panelIds", panelIds);
+		query.setParameter("venueIds", venueIds);
 		query.setParameter("ttiTestIds", ttiTestIds);
 		query.setParameter("positiveResult", "+");
 

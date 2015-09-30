@@ -15,8 +15,8 @@ public class DonationPersister extends AbstractEntityPersister<Donation> {
             aDonorPersister().deepPersist(donation.getDonor(), entityManager);
         }
         
-        if (donation.getDonorPanel() != null) {
-            aLocationPersister().deepPersist(donation.getDonorPanel(), entityManager);
+        if (donation.getVenue() != null) {
+            aLocationPersister().deepPersist(donation.getVenue(), entityManager);
         }
         
         if (donation.getAdverseEvent() != null) {

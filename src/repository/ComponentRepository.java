@@ -486,14 +486,14 @@ public class ComponentRepository {
     return matchingComponents;
   }
   
-  public Map<String, Object> generateInventorySummaryFast(List<String> status, List<Long> panelIds) {
+  public Map<String, Object> generateInventorySummaryFast(List<String> status, List<Long> venueIds) {
     Map<String, Object> inventory = new HashMap<String, Object>();
     // IMPORTANT: Distinct is necessary to avoid a cartesian product of test results and components from being returned
     // Also LEFT JOIN FETCH prevents the N+1 queries problem associated with Lazy Many-to-One joins
     TypedQuery<Component> q = em.createQuery(
                              "SELECT DISTINCT c from Component c " +
                              "WHERE c.status IN :status AND " +
-                             "c.donation.donorPanel.id IN (:panelIds) AND " +
+                             "c.donation.venue.id IN (:venueIds) AND " +
                              "c.isDeleted=:isDeleted",
                              Component.class);
     List<ComponentStatus> componentStatus = new ArrayList<ComponentStatus>();
@@ -501,7 +501,7 @@ public class ComponentRepository {
       componentStatus.add(ComponentStatus.lookup(s));
     }
     q.setParameter("status", componentStatus);
-    q.setParameter("panelIds", panelIds);
+    q.setParameter("venueIds", venueIds);
     q.setParameter("isDeleted", false);
 //    q.setParameter("expiresOn", DateUtils.round(new Date(), Calendar.DATE));
 
@@ -621,15 +621,15 @@ public class ComponentRepository {
 
   public Map<String, Map<Long, Long>> findNumberOfDiscardedComponents(
       Date donationDateFrom, Date donationDateTo, String aggregationCriteria,
-      List<String> panels, List<String> bloodGroups) throws ParseException {
+      List<String> venues, List<String> bloodGroups) throws ParseException {
 
-    List<Long> panelIds = new ArrayList<Long>();
-    if (panels != null) {
-      for (String panel : panels) {
-    	panelIds.add(Long.parseLong(panel));
+    List<Long> venueIds = new ArrayList<Long>();
+    if (venues != null) {
+      for (String venue : venues) {
+    	venueIds.add(Long.parseLong(venue));
       }
     } else {
-      panelIds.add((long)-1);
+      venueIds.add((long)-1);
     }
 
     Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long,Long>>();
@@ -640,13 +640,13 @@ public class ComponentRepository {
     TypedQuery<Object[]> query = em.createQuery(
         "SELECT count(c), c.donation.donationDate, c.donation.bloodAbo, " +
         "c.donation.bloodRh FROM Component c WHERE " +
-        "c.donation.donorPanel.id IN (:panelIds) AND " +
+        "c.donation.venue.id IN (:venueIds) AND " +
         "c.donation.donationDate BETWEEN :donationDateFrom AND :donationDateTo AND " +
         "c.status IN (:discardedStatuses) AND " +
         "(c.isDeleted= :isDeleted) " +
         "GROUP BY bloodAbo, bloodRh, donationDate", Object[].class);
 
-    query.setParameter("panelIds", panelIds);
+    query.setParameter("venueIds", venueIds);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("discardedStatuses",
                        Arrays.asList(ComponentStatus.DISCARDED,
@@ -706,15 +706,15 @@ public class ComponentRepository {
 
   public Map<String, Map<Long, Long>> findNumberOfIssuedComponents(
       Date donationDateFrom, Date donationDateTo, String aggregationCriteria,
-      List<String> panels, List<String> bloodGroups) throws ParseException {
+      List<String> venues, List<String> bloodGroups) throws ParseException {
 
-	List<Long> panelIds = new ArrayList<Long>();
-    if (panels != null) {
-      for (String panel : panels) {
-    	panelIds.add(Long.parseLong(panel));
+	List<Long> venueIds = new ArrayList<Long>();
+    if (venues != null) {
+      for (String venue : venues) {
+    	venueIds.add(Long.parseLong(venue));
       }
     } else {
-      panelIds.add((long)-1);
+      venueIds.add((long)-1);
     }
 
     Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long,Long>>();
@@ -725,13 +725,13 @@ public class ComponentRepository {
     TypedQuery<Object[]> query = em.createQuery(
         "SELECT count(c), c.issuedOn, c.donation.bloodAbo, " +
         "c.donation.bloodRh FROM Component c WHERE " +
-        "c.donation.donorPanel.id IN (:panelIds) AND " +
+        "c.donation.venue.id IN (:venueIds) AND " +
         "c.donation.donationDate BETWEEN :donationDateFrom AND :donationDateTo AND " +
         "c.status=:issuedStatus AND " +
         "(c.isDeleted= :isDeleted) " +
         "GROUP BY bloodAbo, bloodRh, donationDate", Object[].class);
 
-    query.setParameter("panelIds", panelIds);
+    query.setParameter("venueIds", venueIds);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("issuedStatus", ComponentStatus.ISSUED);
 

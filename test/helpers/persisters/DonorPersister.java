@@ -9,8 +9,8 @@ public class DonorPersister extends AbstractEntityPersister<Donor> {
     @Override
     public Donor deepPersist(Donor donor, EntityManager entityManager) {
         
-        if (donor.getDonorPanel() != null) {
-            aLocationPersister().deepPersist(donor.getDonorPanel(), entityManager);
+        if (donor.getVenue() != null) {
+            aLocationPersister().deepPersist(donor.getVenue(), entityManager);
         }
         
         return persist(donor, entityManager);

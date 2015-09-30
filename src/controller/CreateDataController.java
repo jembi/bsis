@@ -428,8 +428,8 @@ public class CreateDataController {
   }
 
   void createDonationsWithTestResults(int numDonations) {
-    List<Location> sites = locationRepository.getAllDonorPanels();
-    List<Location> centers = locationRepository.getAllDonorPanels();
+    List<Location> sites = locationRepository.getAllVenues();
+    List<Location> centers = locationRepository.getAllVenues();
     List<Donor> donors = donorRepository.getAllDonors();
     List<DonationType> donationTypes = donorTypeRepository.getAllDonationTypes();
 

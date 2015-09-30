@@ -273,26 +273,26 @@ public class DonorBackingForm {
         return ageFormatCorrect;
     }
     
-    public String getDonorPanel() {
-        Location donorPanel = donor.getDonorPanel();
-        if (donorPanel == null || donorPanel.getId() == null) {
+    public String getVenue() {
+        Location venue = donor.getVenue();
+        if (venue == null || venue.getId() == null) {
             return null;
         }
         
-        return donorPanel.getId().toString();
+        return venue.getId().toString();
     }
     
-    public void setDonorPanel(Location donorPanel) {
-        if (donorPanel == null || donorPanel.getId() == null) {
-            donor.setDonorPanel(null);
+    public void setVenue(Location venue) {
+        if (venue == null || venue.getId() == null) {
+            donor.setVenue(null);
         } else {
             Location l = new Location();
             try {
-                l.setId(donorPanel.getId());
-                donor.setDonorPanel(l);
+                l.setId(venue.getId());
+                donor.setVenue(l);
             } catch (NumberFormatException ex) {
                 ex.printStackTrace();
-                donor.setDonorPanel(null);
+                donor.setVenue(null);
             } 
         }
     }

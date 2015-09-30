@@ -101,7 +101,7 @@ public class DonationRepository {
   }
 
   public List<Object> findDonations(
-      String donationIdentificationNumber, List<Integer> packTypeIds, List<Long> panelIds, String donationDateFrom,
+      String donationIdentificationNumber, List<Integer> packTypeIds, List<Long> venueIds, String donationDateFrom,
       String donationDateTo, boolean includeTestedDonations, Map<String, Object> pagingParams) throws ParseException {
 
     String queryStr = "";
@@ -109,13 +109,13 @@ public class DonationRepository {
       queryStr = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE " +
                  "c.donationIdentificationNumber = :donationIdentificationNumber AND " +
                  "c.packType.id IN :packTypeIds AND " +
-                 "c.donorPanel.id IN :donorPanelIds AND " +
+                 "c.venue.id IN :venueIds AND " +
                  "c.donationDate >= :donationDateFrom AND c.donationDate <= :donationDateTo AND " +
                  "c.isDeleted=:isDeleted";
     } else {
       queryStr = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE " +
           "c.packType.id IN :packTypeIds AND " +
-          "c.donorPanel.id IN :panelIds AND " +
+          "c.venue.id IN :venueIds AND " +
           "c.donationDate >= :donationDateFrom AND c.donationDate <= :donationDateTo AND " +
           "c.isDeleted=:isDeleted";
     }
@@ -140,7 +140,7 @@ public class DonationRepository {
     }
     
     query.setParameter("packTypeIds", packTypeIds);
-    query.setParameter("panelIds", panelIds);
+    query.setParameter("venueIds", venueIds);
     query.setParameter("donationDateFrom", getDonationDateFromOrDefault(donationDateFrom));
     query.setParameter("donationDateTo", getDonationDateToOrDefault(donationDateTo));
              
@@ -236,15 +236,15 @@ public class DonationRepository {
 
   public Map<String, Map<Long, Long>> findNumberOfDonations(Date donationDateFrom,
       Date donationDateTo, String aggregationCriteria,
-      List<String> panels, List<String> bloodGroups)throws ParseException{
+      List<String> venues, List<String> bloodGroups)throws ParseException{
 
-    List<Long> panelIds = new ArrayList<Long>();
-    if (panels != null) {
-      for (String panel : panels) {
-        panelIds.add(Long.parseLong(panel));
+    List<Long> venueIds = new ArrayList<Long>();
+    if (venues != null) {
+      for (String venue : venues) {
+        venueIds.add(Long.parseLong(venue));
       }
     } else {
-    	panelIds.add((long)-1);
+    	venueIds.add((long)-1);
     }
 
     Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long,Long>>();
@@ -254,12 +254,12 @@ public class DonationRepository {
 
     TypedQuery<Object[]> query = em.createQuery(
         "SELECT count(c), c.donationDate, c.bloodAbo, c.bloodRh FROM Donation c WHERE " +
-        "c.donorPanel.id IN (:panelIds) AND " +
+        "c.venue.id IN (:venueIds) AND " +
         "c.donationDate BETWEEN :donationDateFrom AND " +
         ":donationDateTo AND (c.isDeleted= :isDeleted) GROUP BY " +
         "bloodAbo, bloodRh, donationDate", Object[].class);
 
-    query.setParameter("panelIds", panelIds);
+    query.setParameter("venueIds", venueIds);
     query.setParameter("isDeleted", Boolean.FALSE);
 
     query.setParameter("donationDateFrom", donationDateFrom);
