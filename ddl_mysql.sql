@@ -1180,9 +1180,9 @@
         references User (id);
 
     alter table Donor 
-        add index FK3F25E463043805 (donorPanel_id),
+        add index FK3F25E463043805 (donorPanel_id), 
         add constraint FK3F25E463043805 
-        foreign key (donorPanel_id)
+        foreign key (donorPanel_id) 
         references Location (id);
 
     alter table Donor 
