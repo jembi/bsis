@@ -508,7 +508,6 @@ public class DonationRepository {
         return results.isEmpty() ? null : results.get(0);
     }
     
-    // TODO: Test
     public List<CollectedDonationValueObject> findCollectedDonationsReportIndicators(Date startDate, Date endDate) {
         return em.createNamedQuery(
                 DonationNamedQueryConstants.NAME_FIND_COLLECTED_DONATION_VALUE_OBJECTS_FOR_DATE_RANGE,
