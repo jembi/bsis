@@ -108,11 +108,11 @@ public class LocationRepository {
     em.flush();
   }
 
-  public List<Location> getAllDonorPanels() {
+  public List<Location> getAllVenues() {
     TypedQuery<Location> query = em.createQuery(
-        "SELECT l from Location l where l.isDonorPanel=:isDonorPanel and l.isDeleted=:isDeleted",
+        "SELECT l from Location l where l.isVenue=:isVenue and l.isDeleted=:isDeleted",
         Location.class);
-    query.setParameter("isDonorPanel", true);
+    query.setParameter("isVenue", true);
     query.setParameter("isDeleted", false);
     return query.getResultList();
   }

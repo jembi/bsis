@@ -226,8 +226,8 @@ public int hashCode() {
     return "";
   }
 
-  public  LocationViewModel getDonorPanel(){
-      return new LocationViewModel(donation.getDonorPanel());
+  public  LocationViewModel getVenue(){
+      return new LocationViewModel(donation.getVenue());
   }
 
     public Map<String, Boolean> getPermissions() {

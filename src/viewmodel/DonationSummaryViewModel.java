@@ -25,8 +25,8 @@ public class DonationSummaryViewModel {
         return donation.getDonationDate();
     }
     
-    public LocationViewModel getDonorPanel() {
-        return new LocationViewModel(donation.getDonorPanel());
+    public LocationViewModel getVenue() {
+        return new LocationViewModel(donation.getVenue());
     }
     
     public DonorViewModel getDonor() {

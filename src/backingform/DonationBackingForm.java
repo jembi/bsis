@@ -460,11 +460,11 @@ public class DonationBackingForm {
         }
     }
     
-    public void setDonorPanel(Location donorPanel){
-        if(donorPanel == null || donorPanel.getId() == null){
-            donation.setDonorPanel(null);
+    public void setVenue(Location venue){
+        if(venue == null || venue.getId() == null){
+            donation.setVenue(null);
         }else{
-            donation.setDonorPanel(donorPanel);
+            donation.setVenue(venue);
         }
             
     }

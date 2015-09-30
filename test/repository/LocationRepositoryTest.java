@@ -93,10 +93,10 @@ public class LocationRepositoryTest {
 	}
 	
 	@Test
-	public void testGetAllDonorPanels() throws Exception {
-		List<Location> all = locationRepository.getAllDonorPanels();
-		Assert.assertNotNull("There are donor panel Locations", all);
-		Assert.assertEquals("There are 3 donor panel Locations", 3, all.size());
+	public void testGetAllVenues() throws Exception {
+		List<Location> all = locationRepository.getAllVenues();
+		Assert.assertNotNull("There are venue Locations", all);
+		Assert.assertEquals("There are 3 venue Locations", 3, all.size());
 	}
 	
 	@Test
@@ -155,9 +155,9 @@ public class LocationRepositoryTest {
 	
 	@Test
 	public void testDeleteLocation() throws Exception {
-		List<Location> all1 = locationRepository.getAllDonorPanels();
+		List<Location> all1 = locationRepository.getAllVenues();
 		locationRepository.deleteLocation(1L);
-		List<Location> all2 = locationRepository.getAllDonorPanels();
+		List<Location> all2 = locationRepository.getAllVenues();
 		Assert.assertEquals("Location has been deleted", all1.size() - 1, all2.size());
 	}
 	
@@ -177,7 +177,7 @@ public class LocationRepositoryTest {
 		one.setIsDeleted(false);
 		one.setIsMobileSite(true);
 		one.setIsUsageSite(true);
-		one.setIsDonorPanel(false);
+		one.setIsVenue(false);
 		locationRepository.saveLocation(one);
 		Location savedOne = locationRepository.findLocationByName("Clara");
 		Assert.assertEquals("The location is saved", "Clara", savedOne.getName());
@@ -190,7 +190,7 @@ public class LocationRepositoryTest {
 		one.setIsDeleted(false);
 		one.setIsMobileSite(true);
 		one.setIsUsageSite(true);
-		one.setIsDonorPanel(false);
+		one.setIsVenue(false);
 		Location two = locationRepository.findLocationByName("Maseru");
 		two.setNotes("junit");
 		List<Location> locations = new ArrayList<Location>();

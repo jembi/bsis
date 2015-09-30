@@ -23,7 +23,7 @@ public class Location {
 
   private Boolean isMobileSite;
 
-  private Boolean isDonorPanel;
+  private Boolean isVenue;
 
   private Boolean isDeleted;
 
@@ -35,7 +35,7 @@ public class Location {
 
   public void copy(Location location) {
     this.name = location.name;
-    this.isDonorPanel = location.isDonorPanel;
+    this.isVenue = location.isVenue;
     this.isMobileSite = location.isMobileSite;
     this.isUsageSite = location.isUsageSite;
     this.isDeleted = location.isDeleted;
@@ -94,11 +94,11 @@ public class Location {
     return name;
   }
 
-  public Boolean getIsDonorPanel() {
-    return isDonorPanel;
+  public Boolean getIsVenue() {
+    return isVenue;
   }
 
-  public void setIsDonorPanel(Boolean isDonorPanel) {
-    this.isDonorPanel = isDonorPanel;
+  public void setIsVenue(Boolean isVenue) {
+    this.isVenue = isVenue;
   }
 }
