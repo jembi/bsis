@@ -125,7 +125,7 @@ public class DonorCommunicationsBackingFormValidatorTest {
 		//Search with venue id 3
 		long[] id = { 3 };
 		
-		venues    =  createDonerPanelListForSearch(id);
+		venues    =  createVenuesListForSearch(id);
 		DonorCommunicationsBackingForm donorCommunicationsBackingForm = setValueInDonorCommunicationsBackingForm(
 				venues, bloodGroups, clinicDate, lastDonationFromDate,lastDonationToDate, anyBloodGroup);
 		
@@ -153,7 +153,7 @@ public class DonorCommunicationsBackingFormValidatorTest {
 		return donorCommunicationsBackingForm;
 	}
 	
-	private List<Location> createDonerPanelListForSearch(long[] id) {
+	private List<Location> createVenuesListForSearch(long[] id) {
 		List<Location> venue = new ArrayList<Location>();
 
 		for (long locId : id) {
