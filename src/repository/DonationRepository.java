@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -22,7 +21,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-
 import model.bloodtesting.TTIStatus;
 import model.component.Component;
 import model.component.ComponentStatus;
@@ -31,7 +29,6 @@ import model.donation.Donation;
 import model.donor.Donor;
 import model.packtype.PackType;
 import model.util.BloodGroup;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +36,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
 import repository.events.ApplicationContextProvider;
 import repository.events.DonationUpdatedEvent;
+import valueobject.CollectedDonationValueObject;
 import viewmodel.BloodTestingRuleResult;
 
 @Repository
@@ -509,6 +506,16 @@ public class DonationRepository {
                 .getResultList();
         
         return results.isEmpty() ? null : results.get(0);
+    }
+    
+    public List<CollectedDonationValueObject> findCollectedDonationsReportIndicators(Date startDate, Date endDate) {
+        return em.createNamedQuery(
+                DonationNamedQueryConstants.NAME_FIND_COLLECTED_DONATION_VALUE_OBJECTS_FOR_DATE_RANGE,
+                CollectedDonationValueObject.class)
+                .setParameter("startDate", startDate)
+                .setParameter("endDate", endDate)
+                .setParameter("deleted", false)
+                .getResultList();
     }
 
   public Map<Long, BloodTestingRuleResult> filterDonationsWithBloodTypingResults(
