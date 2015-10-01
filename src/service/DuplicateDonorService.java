@@ -9,6 +9,7 @@ import java.util.Map;
 
 import model.donation.Donation;
 import model.donor.Donor;
+import model.donor.DonorStatus;
 import model.donor.DuplicateDonorBackup;
 import model.donordeferral.DonorDeferral;
 import model.util.Gender;
@@ -16,10 +17,18 @@ import model.util.Gender;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Class that implements an algorithm to identify duplicate Donors.
+ * Service that provides functionality in order to identify and merge duplicate Donors
  */
 public class DuplicateDonorService {
 	
+	/**
+	 * Complete the merge of the list of donors by changing the status and moving Donations and
+	 * Deferrals to the specified new donor.
+	 * 
+	 * @param newDonor Donor with the details selected by the user merging
+	 * @param donors List of Donors that are being merged into the newDonor
+	 * @return List of DuplicateDonorBackup records that can be used to rollback a merge
+	 */
 	public List<DuplicateDonorBackup> mergeDonors(Donor newDonor, List<Donor> donors) {
 		// set donor number for the new donor
 		//newDonor.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());
@@ -30,7 +39,8 @@ public class DuplicateDonorService {
 		List<DuplicateDonorBackup> backupLog = new ArrayList<DuplicateDonorBackup>();
 		if (donors != null) {
 			for (Donor donor : donors) {
-				String donorNumber = donor.getDonorNumber(); 
+				donor.setDonorStatus(DonorStatus.MERGED);
+				String donorNumber = donor.getDonorNumber();
 				List<Donation> donorDonations = donor.getDonations();
 				if (donorDonations != null) {
 					for (Donation donation : donorDonations) {

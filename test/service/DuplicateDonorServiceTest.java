@@ -13,6 +13,7 @@ import java.util.Map;
 
 import model.donation.Donation;
 import model.donor.Donor;
+import model.donor.DonorStatus;
 import model.donor.DuplicateDonorBackup;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DeferralReasonType;
@@ -185,6 +186,8 @@ public class DuplicateDonorServiceTest {
 		Assert.assertNull("Deferrals were moved", david2.getDeferrals());
 		Assert.assertEquals("Donations were moved", 2, david3.getDonations().size());
 		Assert.assertEquals("Deferrals were moved", 1, david3.getDeferrals().size());
+		Assert.assertEquals("Donor status was changed", DonorStatus.MERGED, david1.getDonorStatus());
+		Assert.assertEquals("Donor status was changed", DonorStatus.MERGED, david2.getDonorStatus());
 	}
 	
 	@Test
