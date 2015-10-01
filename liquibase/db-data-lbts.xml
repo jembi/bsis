@@ -934,57 +934,46 @@
     <changeSet id="20150922-1100" author="danfuterman">
 		<comment>Add default adverse event types</comment>
 		<insert tableName="AdverseEventType">
-			<column name="id" value="1"></column>
 			<column name="name" value="Haematoma"></column>
 			<column name="description" value="Swelling of clotted blood within the tissues"></column>
 		</insert>
 		<insert tableName="AdverseEventType">
-			<column name="id" value="2"></column>
 			<column name="name" value="Arterial puncture"></column>
 			<column name="description" value="Needle inserted into artery rather than a vein"></column>
 		</insert>
 		<insert tableName="AdverseEventType">
-			<column name="id" value="3"></column>
 			<column name="name" value="Nerve injury"></column>
 			<column name="description" value="An injury to nerve tissue as a result of donating blood"></column>
 		</insert>
 		<insert tableName="AdverseEventType">
-			<column name="id" value="4"></column>
 			<column name="name" value="Thrombophlebitis"></column>
 			<column name="description" value="Inflammation of the vein related to a blood clot"></column>
 		</insert>
 		<insert tableName="AdverseEventType">
-			<column name="id" value="5"></column>
 			<column name="name" value="Allergy"></column>
 			<column name="description" value="Allergic reaction as a result of donating blood"></column>
 		</insert>
 		<insert tableName="AdverseEventType">
-			<column name="id" value="6"></column>
 			<column name="name" value="Vasovagal"></column>
 			<column name="description" value="Fainting as a result of donating blood"></column>
 		</insert>
 		<insert tableName="AdverseEventType">
-			<column name="id" value="7"></column>
 			<column name="name" value="Hyperventilation"></column>
 			<column name="description" value="Hyperventilation as a result of donating blood"></column>
 		</insert>
 		<insert tableName="AdverseEventType">
-			<column name="id" value="8"></column>
 			<column name="name" value="Convulsions"></column>
 			<column name="description" value="Involuntary convulsions as a result of donating blood"></column>
 		</insert>
 		<insert tableName="AdverseEventType">
-			<column name="id" value="9"></column>
 			<column name="name" value="Accident"></column>
 			<column name="description" value="An accident as a result of donating blood"></column>
 		</insert>
 		<insert tableName="AdverseEventType">
-			<column name="id" value="10"></column>
 			<column name="name" value="Nausea"></column>
 			<column name="description" value="Nausea as a result of donating blood"></column>
 		</insert>
 		<insert tableName="AdverseEventType">
-			<column name="id" value="11"></column>
 			<column name="name" value="Other"></column>
 			<column name="description" value="Any other reaction as a result of donating blood"></column>
 		</insert>
