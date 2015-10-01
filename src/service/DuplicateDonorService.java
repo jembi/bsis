@@ -15,11 +15,46 @@ import model.donordeferral.DonorDeferral;
 import model.util.Gender;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import repository.DonorRepository;
+import repository.SequenceNumberRepository;
 
 /**
  * Service that provides functionality in order to identify and merge duplicate Donors
  */
+@Transactional
+@Service
 public class DuplicateDonorService {
+	
+	@Autowired
+	private DonorRepository donorRepository;
+	
+	@Autowired
+	private SequenceNumberRepository sequenceNumberRepository;
+	
+	/**
+	 * Completes the merge of the list of donors and also persists the new donor, the updates to the
+	 * existing donors and the backup logs necessary for restoring merged donors.
+	 * 
+	 * @param newDonor Donor with the details selected by the user merging
+	 * @param donorNumbers List of donorNumbers for the Donors that are being merged into the newDonor
+	 * @return Donor new donor
+	 */
+	public Donor mergeAndSaveDonors(Donor newDonor, List<String> donorNumbers) {
+		// set donor number for the new donor
+		newDonor.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());
+		// get the list of donors to merge
+		List<Donor> donorsToMerge = donorRepository.findDonorsByNumbers(donorNumbers);
+		// do the merge
+		List<DuplicateDonorBackup> backupLogs = mergeDonors(newDonor, donorsToMerge);
+		// save the new donor, the merged donors and the backup logs
+		Donor savedDonor = donorRepository.addMergedDonor(newDonor, donorsToMerge, backupLogs);
+		
+		return savedDonor;
+	}
 	
 	/**
 	 * Complete the merge of the list of donors by changing the status and moving Donations and
@@ -30,8 +65,6 @@ public class DuplicateDonorService {
 	 * @return List of DuplicateDonorBackup records that can be used to rollback a merge
 	 */
 	public List<DuplicateDonorBackup> mergeDonors(Donor newDonor, List<Donor> donors) {
-		// set donor number for the new donor
-		//newDonor.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());
 		String newDonorNumber = newDonor.getDonorNumber();
 		// combine Donations and Deferrals and create a backup log
 		List<Donation> combinedDonations = new ArrayList<Donation>();

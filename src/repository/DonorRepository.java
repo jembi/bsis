@@ -571,13 +571,14 @@ public class DonorRepository {
     }
 
 	public Donor addMergedDonor(Donor newDonor, List<Donor> mergedDonors, List<DuplicateDonorBackup> backupLogs) {
-		for (DuplicateDonorBackup backupLog : backupLogs) {
-			em.persist(backupLog);
-		}
+		updateDonorAutomaticFields(newDonor);
+		em.persist(newDonor);
 		for (Donor donor : mergedDonors) {
 			em.persist(donor);
 		}
-		em.persist(newDonor);
+		for (DuplicateDonorBackup backupLog : backupLogs) {
+			em.persist(backupLog);
+		}
 		em.flush();
 		return newDonor;
 	}

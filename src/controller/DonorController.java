@@ -11,7 +11,6 @@ import javax.validation.Valid;
 import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 import model.donor.Donor;
-import model.donor.DuplicateDonorBackup;
 import model.donordeferral.DonorDeferral;
 
 import org.apache.log4j.Logger;
@@ -93,6 +92,9 @@ public class DonorController {
   
   @Autowired
   private AdverseEventRepository adverseEventRepository;
+  
+  @Autowired
+  private DuplicateDonorService duplicateDonorService;
   
   public DonorController() {
   }
@@ -351,7 +353,7 @@ public class DonorController {
 		
 		List<Donor> donors = donorRepository.getAllDonors();
 		Donor donor = donorRepository.findDonorByDonorNumber(donorNumber, false);
-		List<Donor> duplicates = new DuplicateDonorService().findDuplicateDonors(donor, donors);
+		List<Donor> duplicates = duplicateDonorService.findDuplicateDonors(donor, donors);
 		
 		// convert Donors to DonorViewModels
 		List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
@@ -371,7 +373,7 @@ public class DonorController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		List<Donor> donors = donorRepository.getAllDonors();
-		Map<String, List<Donor>> duplicates = new DuplicateDonorService().findDuplicateDonors(donors);
+		Map<String, List<Donor>> duplicates = duplicateDonorService.findDuplicateDonors(donors);
 		
 		// convert Donors to DonorViewModels
 		Map<String, List<DonorViewModel>> duplicateViewModels = new HashMap<String, List<DonorViewModel>>();
@@ -389,7 +391,7 @@ public class DonorController {
 		return map;
 	}
 	
-	@RequestMapping(value = "/duplicates/merge", method = RequestMethod.GET)
+	@RequestMapping(value = "/duplicates/merge", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONOR + "')")
 	public ResponseEntity<Map<String, Object>> mergeDuplicateDonors(@RequestParam(value = "donorNumber", required = true) String donorNumber,
 	                                                                @Valid @RequestBody DuplicateDonorsBackingForm form) {
@@ -401,18 +403,10 @@ public class DonorController {
 		newDonor.setIsDeleted(false);
 		newDonor.setContact(form.getContact());
 		newDonor.setAddress(form.getAddress());
-		newDonor.setDonorNumber(utilController.getNextDonorNumber());
 		
-		// get donors to merge
-		List<Donor> donorsToMerge = donorRepository.findDonorsByNumbers(form.getDuplicateDonorNumbers());
+		Donor savedDonor = duplicateDonorService.mergeAndSaveDonors(newDonor, form.getDuplicateDonorNumbers());
 		
-		// complete merge of donors and get a backup log
-		List<DuplicateDonorBackup> backupLogs = new DuplicateDonorService().mergeDonors(newDonor, donorsToMerge);
-		
-		// save new donor and backup logs
-		Donor savedDonor = donorRepository.addMergedDonor(newDonor, donorsToMerge, backupLogs);
 		map.put("hasErrors", false);
-		
 		map.put("donorId", savedDonor.getId());
 		map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(savedDonor));
 		

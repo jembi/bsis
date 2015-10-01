@@ -132,7 +132,7 @@ public class DuplicateDonorServiceTest {
 	
 	@Test
 	public void testMergeDuplicateDonorsNull() throws Exception {
-		List<DuplicateDonorBackup> backupLogs = service.mergeDonors(new Donor(), null);
+		List<DuplicateDonorBackup> backupLogs = service.mergeDonors(new Donor(), (List<Donor>)null);
 		Assert.assertNotNull("backupLogs returned", backupLogs);
 		Assert.assertEquals("No backups necessary", 0, backupLogs.size());
 	}

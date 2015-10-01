@@ -28,13 +28,11 @@ public class DuplicateDonorBackup {
 	@Column
 	private String mergedDonorNumber;
 	
-	@Column
+	@Column(name = "donation_id")
 	private Long donationId;
 	
-	@Column
+	@Column(name = "donorDeferral_id")
 	private Long donorDeferralId;
-	
-	// FIXME (?) no reference to DonorCode
 
 	public DuplicateDonorBackup() {
 	    super();
