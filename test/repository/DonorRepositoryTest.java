@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import helpers.builders.DonorBuilder;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -33,6 +34,7 @@ import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.location.Location;
 import model.user.User;
+import model.util.Gender;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.dbunit.database.DatabaseConfig;
@@ -1113,18 +1115,21 @@ public class DonorRepositoryTest {
                 donorRepository.getAllIdTypes().size() > 0);
     }
     
+    @Test
     public void testFindDonorsByNumbersEmptyList() throws Exception {
     	List<Donor> donors = donorRepository.findDonorsByNumbers(new ArrayList<String>());
     	Assert.assertNotNull("Not null list was returned", donors);
     	Assert.assertEquals("No Donors were returned", 0, donors.size());
     }
     
+    @Test
     public void testFindDonorsByNumbersNullList() throws Exception {
     	List<Donor> donors = donorRepository.findDonorsByNumbers(null);
     	Assert.assertNotNull("Not null list was returned", donors);
     	Assert.assertEquals("No Donors were returned", 0, donors.size());
     }
     
+    @Test
     public void testFindDonorsByNumbersDoesntExist() throws Exception {
     	List<String> donorNumbers = new ArrayList<String>();
     	donorNumbers.add("xxxxxx");
@@ -1133,6 +1138,7 @@ public class DonorRepositoryTest {
     	Assert.assertEquals("No Donors were returned", 0, donors.size());
     }
     
+    @Test
     public void testFindDonorsByNumbers() throws Exception {
     	List<String> donorNumbers = new ArrayList<String>();
     	donorNumbers.add("000001");
@@ -1144,11 +1150,14 @@ public class DonorRepositoryTest {
     	Assert.assertEquals("donorNumber matches", "000002", donors.get(1).getDonorNumber());
     }
     
+    @Test
     public void addMergedDonor() throws Exception {
     	List<DuplicateDonorBackup> backupLogs = new ArrayList<DuplicateDonorBackup>();
     	backupLogs.add(new DuplicateDonorBackup("1234567", "000001", 1l, null));
     	backupLogs.add(new DuplicateDonorBackup("1234567", "000001", null, 1l));
     	Donor oldDonor = donorRepository.findDonorByDonorNumber("000001", false);
+    	List<Donor> donorsToMerge = new ArrayList<Donor>();
+    	donorsToMerge.add(oldDonor);
     	Donor newDonor = new Donor();
     	newDonor.setDonorNumber("1234567");
     	newDonor.setFirstName("Merged");
@@ -1157,15 +1166,15 @@ public class DonorRepositoryTest {
     	oldDonor.setDonations(null);
     	newDonor.setDeferrals(oldDonor.getDeferrals());
     	oldDonor.setDeferrals(null);
-    	Donor savedDonor = donorRepository.addMergedDonor(newDonor, backupLogs);
+    	Donor savedDonor = donorRepository.addMergedDonor(newDonor, donorsToMerge, backupLogs);
     	Assert.assertNotNull("Id has been set", savedDonor.getId());
     	Assert.assertNotNull("Donations have been moved", savedDonor.getDonations());
     	Assert.assertEquals("Donations have been moved", 1, savedDonor.getDonations().size());
     	Assert.assertNotNull("Deferrals have been moved", savedDonor.getDeferrals());
-    	Assert.assertEquals("Deferrals have been moved", 1, savedDonor.getDeferrals().size());
+    	Assert.assertEquals("Deferrals have been moved", 3, savedDonor.getDeferrals().size());
     	oldDonor = donorRepository.findDonorByDonorNumber("000001", false);
-    	Assert.assertEquals("Donations have been moved", 0, oldDonor.getDonations().size());
-    	Assert.assertEquals("Deferrals have been moved", 0, oldDonor.getDeferrals().size());
+    	Assert.assertNull("Donations have been moved", oldDonor.getDonations());
+    	Assert.assertNull("Deferrals have been moved", oldDonor.getDeferrals());
     }
     
 //    @Test

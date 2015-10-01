@@ -539,6 +539,9 @@ public class DonorRepository {
     }
 
     public List<Donor> findDonorsByNumbers(List<String> donorNumbers) {
+    	if (donorNumbers == null || donorNumbers.size() == 0) {
+    		return new ArrayList<Donor>();
+    	}
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
 		Root<Donor> donor = cq.from(Donor.class);
@@ -546,9 +549,12 @@ public class DonorRepository {
     	return em.createQuery(cq).getResultList();
     }
 
-	public Donor addMergedDonor(Donor newDonor, List<DuplicateDonorBackup> backupLogs) {
+	public Donor addMergedDonor(Donor newDonor, List<Donor> mergedDonors, List<DuplicateDonorBackup> backupLogs) {
 		for (DuplicateDonorBackup backupLog : backupLogs) {
 			em.persist(backupLog);
+		}
+		for (Donor donor : mergedDonors) {
+			em.persist(donor);
 		}
 		em.persist(newDonor);
 		em.flush();

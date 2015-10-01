@@ -410,7 +410,7 @@ public class DonorController {
 		List<DuplicateDonorBackup> backupLogs = new DuplicateDonorService().mergeDonors(newDonor, donorsToMerge);
 		
 		// save new donor and backup logs
-		Donor savedDonor = donorRepository.addMergedDonor(newDonor, backupLogs);
+		Donor savedDonor = donorRepository.addMergedDonor(newDonor, donorsToMerge, backupLogs);
 		map.put("hasErrors", false);
 		
 		map.put("donorId", savedDonor.getId());
