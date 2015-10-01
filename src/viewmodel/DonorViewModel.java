@@ -130,8 +130,8 @@ public class DonorViewModel {
     return user.getUsername();
   }
   
-  public Location getDonorPanel() {
-    return donor.getDonorPanel();
+  public Location getVenue() {
+    return donor.getVenue();
   }
 
   public String getDateOfLastDonation() {

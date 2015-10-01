@@ -24,7 +24,7 @@ public class DonorCommunicationsBackingForm {
 	private List<BloodGroup> bloodGroups;
         
         @JsonIgnore
-	private List<Location> donorPanels;
+	private List<Location> venues;
 
 	private String clinicDate;
 
@@ -36,9 +36,9 @@ public class DonorCommunicationsBackingForm {
 
 	private boolean createDonorSummaryView;
 
-	private String anyDonorPanel;
+	private String anyVenue;
 
-	private String donorPanelErrorMessage;
+	private String venueErrorMessage;
 
 	private String bloodGroupErrorMessage;
 
@@ -59,32 +59,32 @@ public class DonorCommunicationsBackingForm {
 		return donor.toString();
 	}
 
-	public String getDonorPanel() {
-		Location donorPanel = donor.getDonorPanel();
-		if (donorPanel == null || donorPanel.getId() == null)
+	public String getVenue() {
+		Location venue = donor.getVenue();
+		if (venue == null || venue.getId() == null)
 			return null;
-		return donorPanel.getId().toString();
+		return venue.getId().toString();
 	}
 
 	private static final Pattern COMMA_SPLIT_PATTERN = Pattern.compile(",");
 
-	public void setDonorPanel(String donorPanel) {
-		if (StringUtils.isBlank(donorPanel)) {
-			donor.setDonorPanel(null);
+	public void setVenue(String venue) {
+		if (StringUtils.isBlank(venue)) {
+			donor.setVenue(null);
 		} else {
 			try {
-				List<Location> panels = new ArrayList<Location>();
-				String[] donorPanelStr = COMMA_SPLIT_PATTERN.split(donorPanel);
-				for (String donorPanelId : donorPanelStr) {
+				List<Location> venues = new ArrayList<Location>();
+				String[] venueStr = COMMA_SPLIT_PATTERN.split(venue);
+				for (String venueId : venueStr) {
 					Location l = new Location();
-					l.setId(Long.parseLong(donorPanelId));
-					panels.add(l);
-					donor.setDonorPanel(l);
+					l.setId(Long.parseLong(venueId));
+					venues.add(l);
+					donor.setVenue(l);
 				}
-				donorPanels = panels;
+				venues = venues;
 			} catch (NumberFormatException ex) {
 				ex.printStackTrace();
-				donor.setDonorPanel(null);
+				donor.setVenue(null);
 			}
 		}
 	}
@@ -113,12 +113,12 @@ public class DonorCommunicationsBackingForm {
 		this.lastDonationToDate = lastDonationToDate;
 	}
 
-	public List<Location> getDonorPanels() {
-		return donorPanels;
+	public List<Location> getVenues() {
+		return venues;
 	}
 
-	public void setDonorPanels(List<Location> donorPanels) {
-		this.donorPanels = donorPanels;
+	public void setVenues(List<Location> venues) {
+		this.venues = venues;
 	}
 
 	public String getAnyBloodGroup() {
@@ -148,20 +148,20 @@ public class DonorCommunicationsBackingForm {
 		this.createDonorSummaryView = createDonorSummaryView;
 	}
 
-	public String getAnyDonorPanel() {
-		return anyDonorPanel;
+	public String getAnyVenue() {
+		return anyVenue;
 	}
 
-	public void setAnyDonorPanel(String anyDonorPanel) {
-		this.anyDonorPanel = anyDonorPanel;
+	public void setAnyVenue(String anyVenue) {
+		this.anyVenue = anyVenue;
 	}
 
-	public String getDonorPanelErrorMessage() {
-		return donorPanelErrorMessage;
+	public String getVenueErrorMessage() {
+		return venueErrorMessage;
 	}
 
-	public void setDonorPanelErrorMessage(String donorPanelErrorMessage) {
-		this.donorPanelErrorMessage = donorPanelErrorMessage;
+	public void setVenueErrorMessage(String venueErrorMessage) {
+		this.venueErrorMessage = venueErrorMessage;
 	}
 
 	public String getBloodGroupErrorMessage() {

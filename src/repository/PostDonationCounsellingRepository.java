@@ -37,7 +37,7 @@ public class PostDonationCounsellingRepository {
         return entityManager.merge(postDonationCounselling);
     }
     
-    public List<Donation> findDonationsFlaggedForCounselling(Date startDate, Date endDate, Set<Long> donorPanelIds) {
+    public List<Donation> findDonationsFlaggedForCounselling(Date startDate, Date endDate, Set<Long> venueIds) {
         
         StringBuilder queryBuilder = new StringBuilder()
                 .append("SELECT DISTINCT(pdc.donation) ")
@@ -57,9 +57,9 @@ public class PostDonationCounsellingRepository {
             parameters.put("endDate", endDate);
         }
         
-        if (donorPanelIds != null && !donorPanelIds.isEmpty()) {
-            queryBuilder.append("AND pdc.donation.donorPanel.id IN :donorPanelIds ");
-            parameters.put("donorPanelIds", donorPanelIds);
+        if (venueIds != null && !venueIds.isEmpty()) {
+            queryBuilder.append("AND pdc.donation.venue.id IN :venueIds ");
+            parameters.put("venueIds", venueIds);
         }
         
         TypedQuery<Donation> query = entityManager.createQuery(queryBuilder.toString(), Donation.class);

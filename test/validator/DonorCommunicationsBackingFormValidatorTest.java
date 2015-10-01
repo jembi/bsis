@@ -52,14 +52,14 @@ public class DonorCommunicationsBackingFormValidatorTest {
 	}
 	
 	/**
-	 *  Should fail if no blood group or donor panel is specified
+	 *  Should fail if no blood group or venue is specified
 	 *  
 	 *  validate donorCommunicationsBackingFormValidator.
 	 
 	@Test
-	public void validate_shouldFailIfNoBloodGroupAndDonorPanelSpecified() {
+	public void validate_shouldFailIfNoBloodGroupAndVenueSpecified() {
 		
- 		List<Location> donorPanels = null;
+ 		List<Location> venues = null;
 		List<String> bloodGroups = new ArrayList<String>();
 		String clinicDate = "";
 		String lastDonationFromDate = "";
@@ -67,27 +67,27 @@ public class DonorCommunicationsBackingFormValidatorTest {
 		String anyBloodGroup = "false";
 		
 		DonorCommunicationsBackingForm donorCommunicationsBackingForm = setValueInDonorCommunicationsBackingForm(
-				donorPanels, bloodGroups, clinicDate, lastDonationFromDate,lastDonationToDate, anyBloodGroup);
+				venues, bloodGroups, clinicDate, lastDonationFromDate,lastDonationToDate, anyBloodGroup);
 		
 		errors = new BindException(donorCommunicationsBackingForm, "donorCommunicationsBackingForm");
 		donorCommunicationsBackingFormValidator.validate(donorCommunicationsBackingForm, errors);
 		if(errors.hasErrors())
 		{
-			assertEquals("Validation fails at 2 points - no donor panel selected and no blood group selected",2,errors.getErrorCount());
-			assertNotNull("Validation error exists - no Donor Panel selected", errors.getFieldError("donorPanelErrorMessage"));
+			assertEquals("Validation fails at 2 points - no venue selected and no blood group selected",2,errors.getErrorCount());
+			assertNotNull("Validation error exists - no Venue selected", errors.getFieldError("venueErrorMessage"));
 			assertNotNull("Validation error exists - no Blood Group selected", errors.getFieldError("bloodGroupErrorMessage"));
 		}
 	}
 	
 	/**
-	 *  Should fail if no donor panel specified
+	 *  Should fail if no venue specified
 	 *  
 	 *  validate donorCommunicationsBackingFormValidator.
 	 
 	@Test
-	public void validate_shouldFailIfNoDonorPanelSpecified() {
+	public void validate_shouldFailIfNoVenueSpecified() {
 		
- 		List<Location> donorPanels = null;
+ 		List<Location> venues = null;
 		List<String> bloodGroups = new ArrayList<String>();
 		//Search with  BloodGroup 'O+'
 		bloodGroups.add("O+");
@@ -97,14 +97,14 @@ public class DonorCommunicationsBackingFormValidatorTest {
 		String anyBloodGroup = "false";
 		
 		DonorCommunicationsBackingForm donorCommunicationsBackingForm = setValueInDonorCommunicationsBackingForm(
-				donorPanels, bloodGroups, clinicDate, lastDonationFromDate,lastDonationToDate, anyBloodGroup);
+				venues, bloodGroups, clinicDate, lastDonationFromDate,lastDonationToDate, anyBloodGroup);
 		
 		errors = new BindException(donorCommunicationsBackingForm, "donorCommunicationsBackingForm");
 		donorCommunicationsBackingFormValidator.validate(donorCommunicationsBackingForm, errors);
 		if(errors.hasErrors())
 		{
-			assertEquals("Validation fails at 1 points - no donor panel selected",1,errors.getErrorCount());
-			assertNotNull("Validation error exists - no Donor Panel selected", errors.getFieldError("donorPanelErrorMessage"));
+			assertEquals("Validation fails at 1 points - no venue selected",1,errors.getErrorCount());
+			assertNotNull("Validation error exists - no Venue selected", errors.getFieldError("venueErrorMessage"));
 		}
 	}
 	
@@ -116,18 +116,18 @@ public class DonorCommunicationsBackingFormValidatorTest {
 	@Test
 	public void validate_shouldFailIfNoBloodGroupSpecified() {
 		
- 		List<Location> donorPanels = new ArrayList<Location>();
+ 		List<Location> venues = new ArrayList<Location>();
 		List<String> bloodGroups = new ArrayList<String>();
 		String clinicDate = "";
 		String lastDonationFromDate = "";
 		String lastDonationToDate = "";
 		String anyBloodGroup = "false";
-		//Search with donor panel id 3
+		//Search with venue id 3
 		long[] id = { 3 };
 		
-		donorPanels    =  createDonerPanelListForSearch(id);
+		venues    =  createVenuesListForSearch(id);
 		DonorCommunicationsBackingForm donorCommunicationsBackingForm = setValueInDonorCommunicationsBackingForm(
-				donorPanels, bloodGroups, clinicDate, lastDonationFromDate,lastDonationToDate, anyBloodGroup);
+				venues, bloodGroups, clinicDate, lastDonationFromDate,lastDonationToDate, anyBloodGroup);
 		
 		errors = new BindException(donorCommunicationsBackingForm, "donorCommunicationsBackingForm");
 		donorCommunicationsBackingFormValidator.validate(donorCommunicationsBackingForm, errors);
@@ -139,11 +139,11 @@ public class DonorCommunicationsBackingFormValidatorTest {
 	}
 	
 	
-	private DonorCommunicationsBackingForm setValueInDonorCommunicationsBackingForm(List<Location> donorPanels ,List<String> bloodGroups,
+	private DonorCommunicationsBackingForm setValueInDonorCommunicationsBackingForm(List<Location> venues ,List<String> bloodGroups,
 			String clinicDate ,String lastDonationFromDate ,String lastDonationToDate ,String anyBloodGroup )
 	{
 		DonorCommunicationsBackingForm donorCommunicationsBackingForm = new DonorCommunicationsBackingForm();
-		donorCommunicationsBackingForm.setDonorPanels(donorPanels);
+		donorCommunicationsBackingForm.setVenues(venues);
 		donorCommunicationsBackingForm.setBloodGroups(bloodGroups);
 		donorCommunicationsBackingForm.setClinicDate(clinicDate);
 		donorCommunicationsBackingForm.setLastDonationFromDate(lastDonationFromDate);
@@ -153,15 +153,15 @@ public class DonorCommunicationsBackingFormValidatorTest {
 		return donorCommunicationsBackingForm;
 	}
 	
-	private List<Location> createDonerPanelListForSearch(long[] id) {
-		List<Location> donorPanel = new ArrayList<Location>();
+	private List<Location> createVenuesListForSearch(long[] id) {
+		List<Location> venue = new ArrayList<Location>();
 
 		for (long locId : id) {
 			Location location = new Location();
 			location.setId(locId);
-			donorPanel.add(location);
+			venue.add(location);
 		}
-		return donorPanel;
+		return venue;
 	}
 }
 * */

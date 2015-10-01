@@ -156,13 +156,13 @@ public class DonationRepositoryTest {
 	public void testFindNumberOfDonationsDaily() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-10");
-		List<String> panels = new ArrayList<String>();
-		panels.add("1");
-		panels.add("2");
+		List<String> venues = new ArrayList<String>();
+		venues.add("1");
+		venues.add("2");
 		List<String> bloodGroups = new ArrayList<String>();
 		bloodGroups.add("A-");
 		Map<String, Map<Long, Long>> results = donationRepository.findNumberOfDonations(donationDateFrom, donationDateTo,
-		    "daily", panels, bloodGroups);
+		    "daily", venues, bloodGroups);
 		Assert.assertEquals("One blood type searched", 1, results.size());
 		Map<Long, Long> aResults = results.get("A-");
 		Assert.assertEquals("10 days in the searched period", 10, aResults.size());
@@ -175,16 +175,16 @@ public class DonationRepositoryTest {
 	public void testFindNumberOfDonationsMonthly() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-03-10");
-		List<String> panels = new ArrayList<String>();
-		panels.add("1");
-		panels.add("2");
+		List<String> venues = new ArrayList<String>();
+		venues.add("1");
+		venues.add("2");
 		List<String> bloodGroups = new ArrayList<String>();
 		bloodGroups.add("A-");
 		bloodGroups.add("A+");
 		bloodGroups.add("O-");
 		bloodGroups.add("O+");
 		Map<String, Map<Long, Long>> results = donationRepository.findNumberOfDonations(donationDateFrom, donationDateTo,
-		    "monthly", panels, bloodGroups);
+		    "monthly", venues, bloodGroups);
 		Assert.assertEquals("Four blood type searched", 4, results.size());
 		Date formattedDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/02/2015");
 		Map<Long, Long> aMinusResults = results.get("A-");
@@ -200,14 +200,14 @@ public class DonationRepositoryTest {
 	public void testFindNumberOfDonationsYearly() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-10");
-		List<String> panels = new ArrayList<String>();
-		panels.add("1");
-		panels.add("2");
+		List<String> venues = new ArrayList<String>();
+		venues.add("1");
+		venues.add("2");
 		List<String> bloodGroups = new ArrayList<String>();
 		bloodGroups.add("AB-");
 		bloodGroups.add("AB+");
 		Map<String, Map<Long, Long>> results = donationRepository.findNumberOfDonations(donationDateFrom, donationDateTo,
-		    "yearly", panels, bloodGroups);
+		    "yearly", venues, bloodGroups);
 		Assert.assertEquals("2 blood type searched", 2, results.size());
 		Date formattedDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2015");
 		Map<Long, Long> abMinusResults = results.get("AB-");
@@ -229,15 +229,15 @@ public class DonationRepositoryTest {
 	}
 	
 	@Test
-	@Ignore("findDonations has a bug in the HSQL when querying a DIN with parameter name panelIds/donorPanelIds")
+	@Ignore("findDonations has a bug in the HSQL when querying a DIN with parameter name venueIds/venueIds")
 	public void testFindDonationsDIN() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<Integer> packTypeIds = new ArrayList<Integer>();
 		packTypeIds.add(new Integer(1));
-		List<Long> panelIds = new ArrayList<Long>();
-		panelIds.add(new Long(1));
-		panelIds.add(new Long(2));
-		List<Object> donations = donationRepository.findDonations("1234567", packTypeIds, panelIds, "2015-02-01",
+		List<Long> venueIds = new ArrayList<Long>();
+		venueIds.add(new Long(1));
+		venueIds.add(new Long(2));
+		List<Object> donations = donationRepository.findDonations("1234567", packTypeIds, venueIds, "2015-02-01",
 		    "2015-02-10", false, pagingParams);
 		Assert.assertNotNull("List is not null", donations);
 		Assert.assertNotNull("1 Donation matches", donations.size());
@@ -250,9 +250,9 @@ public class DonationRepositoryTest {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<Integer> packTypeIds = new ArrayList<Integer>();
 		packTypeIds.add(new Integer(1));
-		List<Long> panelIds = new ArrayList<Long>();
-		panelIds.add(new Long(2));
-		List<Object> result = donationRepository.findDonations(null, packTypeIds, panelIds, "01/02/2015", "10/02/2015",
+		List<Long> venueIds = new ArrayList<Long>();
+		venueIds.add(new Long(2));
+		List<Object> result = donationRepository.findDonations(null, packTypeIds, venueIds, "01/02/2015", "10/02/2015",
 		    true, pagingParams);
 		Assert.assertNotNull("List is not null", result);
 		ArrayList<Donation> donations = (ArrayList<Donation>) result.get(0);
@@ -263,7 +263,7 @@ public class DonationRepositoryTest {
 			Assert.assertTrue("Donation date before", donation.getDonationDate().before(beforeDate));
 			Assert.assertTrue("Donation date after", donation.getDonationDate().after(afterDate));
 			Assert.assertEquals("PackTypeId matches", new Integer(1), donation.getPackType().getId());
-			Assert.assertEquals("PanelId matches", new Long(2), donation.getDonationBatch().getDonorPanel().getId());
+			Assert.assertEquals("venueId matches", new Long(2), donation.getDonationBatch().getVenue().getId());
 		}
 	}
 	
@@ -319,7 +319,7 @@ public class DonationRepositoryTest {
 		Donation newDonation1 = new Donation();
 		Donation existingDonation1 = donationRepository.findDonationById(1L);
 		newDonation1.setDonor(existingDonation1.getDonor());
-		newDonation1.setDonorPanel(existingDonation1.getDonorPanel());
+		newDonation1.setVenue(existingDonation1.getVenue());
 		newDonation1.setDonationIdentificationNumber("JUNIT12345"); // note: doesn't do automatic "createInitialComponent"
 		newDonation1.setIsDeleted(false);
 		Calendar today = Calendar.getInstance();
@@ -332,7 +332,7 @@ public class DonationRepositoryTest {
 		Donation newDonation2 = new Donation();
 		Donation existingDonation2 = donationRepository.findDonationById(2L);
 		newDonation2.setDonor(existingDonation2.getDonor());
-		newDonation2.setDonorPanel(existingDonation2.getDonorPanel());
+		newDonation2.setVenue(existingDonation2.getVenue());
 		newDonation2.setDonationIdentificationNumber("JUNIT123456"); // note: doesn't do automatic "createInitialComponent"
 		newDonation2.setIsDeleted(false);
 		newDonation2.setDonationDate(today.getTime());

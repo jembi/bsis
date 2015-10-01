@@ -144,7 +144,7 @@ public class RequestRepository {
     TypedQuery<Request> query = em
         .createQuery(
             "SELECT r FROM Request r, Location L WHERE "
-                + "(L.locationId=r.siteId AND L.isDonorPanel=TRUE) AND "
+                + "(L.locationId=r.siteId AND L.isVenue=TRUE) AND "
                 + "(r.requestNumber = :requestNumber OR L.name IN (:sites) OR "
                 + "r.componentType IN (:componentTypes)) AND (r.status IN (:statuses)) AND "
                 + "((r.dateRequested BETWEEN :dateRequestedFrom AND "
@@ -225,7 +225,7 @@ public class RequestRepository {
   public List<Request> findRequestsNotFulfilled() {
     TypedQuery<Request> query = em.createQuery(
         "SELECT r FROM Request r, Location L WHERE "
-            + "(L.locationId=r.siteId AND L.isDonorPanel=TRUE) AND"
+            + "(L.locationId=r.siteId AND L.isVenue=TRUE) AND"
             + "(r.status NOT IN (:statuses)) AND "
             + "(r.isDeleted= :isDeleted)", Request.class);
 
