@@ -1,7 +1,9 @@
 package model.bloodtesting;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,9 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-
 import model.worksheet.WorksheetType;
-
 import org.hibernate.envers.Audited;
 
 @Entity
@@ -90,6 +90,19 @@ public class BloodTest implements Comparable<BloodTest> {
   public String getValidResults() {
     return validResults;
   }
+
+    /**
+     * Get the valid results for this test as a list. The list cannot be modified since changes to the valid results
+     * must be done by updating the {@link #validResults} string.
+     * 
+     * @return An immutable list of valid results.
+     */
+    public List<String> getValidResultsList() {
+        if (validResults == null || validResults.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return Collections.unmodifiableList(Arrays.asList(validResults.split(",")));
+    }
 
   public String getNegativeResults() {
     return negativeResults;
