@@ -22,7 +22,6 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
     private Date dateOfFirstDonation;
     private Date dateOfLastDonation;
     private Location venue;
-    private Gender gender;
 
     public DonorBuilder withId(Long id) {
         this.id = id;
@@ -74,11 +73,6 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
 		return this;
 	}
 
-	public DonorBuilder withGender(Gender gender) {
-		this.gender = gender;
-		return this;
-	}
-
 	public DonorBuilder withBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 		return this;
@@ -104,7 +98,6 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
         donor.setDateOfFirstDonation(dateOfFirstDonation);
         donor.setDateOfLastDonation(dateOfLastDonation);
         donor.setVenue(venue);
-        donor.setGender(gender);
         return donor;
     }
 
