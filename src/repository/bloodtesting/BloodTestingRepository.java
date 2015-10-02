@@ -175,49 +175,36 @@ public class BloodTestingRepository {
 		return results;
 	}
 	
-	public Map<String, Object> saveBloodTestingResults(
-			Long donationId,
-			Map<Long, String> bloodTypingTestResults,
+	public Map<String, Object> saveBloodTestingResults(Long donationId, Map<Long, String> bloodTypingTestResults,
 			boolean saveIfUninterpretable) {
 
 		Donation donation = new Donation();
 		BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
 		Boolean uninterpretableResults = false;
 		Date testedOn = new Date();
+
 		Map<Long, String> errorMap = validateTestResultValues(donationId, bloodTypingTestResults);
 		if (errorMap.isEmpty()) {
-			Map<Long, String> bloodTestResultsForDonation = bloodTypingTestResults;
-			donation = donationRepository
-					.findDonationById(donationId);
-			ruleResult = ruleEngine.applyBloodTests(
-					donation, bloodTestResultsForDonation);
+			donation = donationRepository.findDonationById(donationId);
+			ruleResult = ruleEngine.applyBloodTests(donation, bloodTypingTestResults);
 
-			if (ruleResult.getAboUninterpretable()
+			if (!saveIfUninterpretable && (ruleResult.getAboUninterpretable()
 					|| ruleResult.getRhUninterpretable()
-					|| ruleResult.getTtiUninterpretable()) {
-				if (saveIfUninterpretable) {
-					saveBloodTestResultsToDatabase(
-							bloodTestResultsForDonation, donation,
-							testedOn, ruleResult);
-				} else {
-					uninterpretableResults = true;
-					errorMap.put(donationId, "Test results are uninterpretable");
-				}
+					|| ruleResult.getTtiUninterpretable())) {
+			    // Saving uninterpretable results is not allowed and at least one result is uninterpretable
+				uninterpretableResults = true;
+				errorMap.put(donationId, "Test results are uninterpretable");
 			} else {
-				saveBloodTestResultsToDatabase(
-						bloodTestResultsForDonation, donation,
-						testedOn, ruleResult);
+				saveBloodTestResultsToDatabase(bloodTypingTestResults, donation, testedOn, ruleResult);
 			}
 			em.flush();
 		}
 
-		Map<String, Object> results = new HashMap<String, Object>();
+		Map<String, Object> results = new HashMap<>();
 		results.put("donation", donation);
 		results.put("bloodTestingResults", ruleResult);
-		results.put("uninterpretableResults",
-				uninterpretableResults);
+		results.put("uninterpretableResults", uninterpretableResults);
 		results.put("errors", errorMap);
-
 		return results;
 	}
 	
