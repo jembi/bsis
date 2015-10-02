@@ -2,9 +2,11 @@ package helpers.builders;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import helpers.persisters.AbstractEntityPersister;
 import helpers.persisters.DonationPersister;
 import model.adverseevent.AdverseEvent;
+import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
@@ -35,6 +37,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     private DonationType donationType;
     private String bloodAbo;
     private String bloodRh;
+    private List<BloodTestResult> bloodTestResults;
     
     public DonationBuilder withId(Long id) {
         this.id = id;
@@ -140,6 +143,11 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         this.bloodRh = bloodRh;
         return this;
     }
+    
+    public DonationBuilder withBloodTestResults(List<BloodTestResult> bloodTestResults) {
+        this.bloodTestResults = bloodTestResults;
+        return this;
+    }
 
     @Override
     public Donation build() {
@@ -164,6 +172,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         donation.setDonationType(donationType);
         donation.setBloodAbo(bloodAbo);
         donation.setBloodRh(bloodRh);
+        donation.setBloodTestResults(bloodTestResults);
         return donation;
     }
 

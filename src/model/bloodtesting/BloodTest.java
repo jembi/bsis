@@ -42,7 +42,7 @@ public class BloodTest implements Comparable<BloodTest> {
   private String negativeResults;
 
   /**
-   * TODO: not used now but will be useful for mapping numeric validResults to '+'.
+   * A comma separated list of results which count as positive.
    */
   private String positiveResults;
 
