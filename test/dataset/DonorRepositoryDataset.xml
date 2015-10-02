@@ -3,9 +3,9 @@
 	<user id="1" emailId="admin" firstName="admin" isactive="1"
 		isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin" />
 
-	<location id="1" name="location 1" isDonorPanel="true" />
-	<location id="2" name="location 2" isDonorPanel="true" />
-	<location id="3" name="location 3" isDonorPanel="true" />
+	<location id="1" name="location 1" isVenue="true" />
+	<location id="2" name="location 2" isVenue="true" />
+	<location id="3" name="location 3" isVenue="true" />
 
 	<contactmethodtype id="1" contactMethodType="None" isDeleted="0" />
 	<contactmethodtype id="2" contactMethodType="Phone" isDeleted="0" />
@@ -70,7 +70,7 @@
 		gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
 		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
 		idNumber ="123" notes="notes" addressId ="1" contactId ="1"
-		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
+		venue_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
 	<donor ID="2" age="50" birthDate="1991-06-10" birthDateEstimated="1"
 		bloodAbo="A" bloodRh="+" callingName="callingName" 
 		dateOfLastDonation="${DateDonorDue}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
@@ -78,7 +78,7 @@
 		gender="male" isDeleted="1" lastName="lastName" middleName="middleName"
 		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
 		idNumber ="123" notes="notes" addressId ="2" contactId ="1"
-		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
+		venue_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
 	<donor ID="3" age="50" birthDate="1991-06-10" birthDateEstimated="1"
 		bloodAbo="A" bloodRh="-" callingName="callingName" 
 		dateOfLastDonation="${DateDonorNotDue}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
@@ -86,7 +86,7 @@
 		gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
 		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
 		idNumber ="123" notes="notes" addressId ="3" contactId ="1"
-		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
+		venue_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
 	<donor ID="4" age="50" birthDate="1991-06-10" birthDateEstimated="1"
 		bloodAbo="AB" bloodRh="+" callingName="callingName"
 		dateOfLastDonation="${DateDonorDue}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
@@ -94,7 +94,7 @@
 		gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
 		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
 		idNumber ="123" notes="notes" addressId ="4" contactId ="1"
-		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
+		venue_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
 	<donor ID="5" age="50" birthDate="1991-06-10" birthDateEstimated="1"
 		bloodAbo="null" bloodRh="null" callingName="callingName" 
                 dateOfLastDonation="${DateDonorNotDue}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
@@ -102,7 +102,7 @@
 		gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
 		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
 		idNumber ="123" notes="notes" addressId ="5" contactId ="1"
-		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
+		venue_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
 	<donor ID="6" age="50" birthDate="1991-06-10" birthDateEstimated="1"
 		bloodAbo="null" bloodRh="null" callingName="callingName" 
 		dateOfLastDonation="${DateDonorDue}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
@@ -110,7 +110,7 @@
 		gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
 		createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
 		idNumber ="123" notes="notes" addressId ="6" contactId ="1"
-		donorPanel_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
+		venue_id="3" createdBy_id="1" lastUpdatedBy_id="1" />
 		
 	<packtype id="1" packType="Single" canPool="" testSampleProduced="true"
  		canSplit="" isDeleted="0"></packtype>
@@ -126,7 +126,7 @@
  	
  	<donationbatch id="1" batchNumber="B0314000000"
  		isDeleted="0" isClosed="0" createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
- 		notes="Notes" donorPanel_Id = "1"
+ 		notes="Notes" venue_Id = "1"
  		createdBy_id="1" lastUpdatedBy_id="1"></donationbatch>
  	
  	<donation id="1" bloodAbo=""
@@ -135,7 +135,7 @@
  		donorWeight="60.00" extraBloodTypeInformation="" haemoglobinCount="14.00"
  		isDeleted="0" createdDate="2014-03-27 15:00:51" lastUpdated="2014-03-27 15:00:51"
  		notes="notes" ttiStatus="NOT_DONE" packType_id="2"
- 		donationBatch_id="1" donorPanel_Id = "1"
+ 		donationBatch_id="1" venue_Id = "1"
  		donationCreatedBy_id="1" donationType_id="2" donor_id="1"
  		createdBy_id="1" lastUpdatedBy_id="1" bloodPressureDiastolic="55"
  		donorPulse="60"></donation>

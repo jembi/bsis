@@ -6,5 +6,36 @@
     <changeSet id="20150917-1505" author="bausmeier">
         <addNotNullConstraint tableName="PackType" columnName="testSampleProduced" columnDataType="tinyint(1)" />
     </changeSet>
+
+
+    <changeSet author="debonair" id="20150928-1214">
+        <dropForeignKeyConstraint baseTableName="Donor" constraintName="FK3F25E463043805"/>
+        <dropForeignKeyConstraint baseTableName="Donation" constraintName="FK_donation_Location"/>
+        <dropForeignKeyConstraint baseTableName="DonationBatch" constraintName="FK_DonationBatch_Location"/>
+        <renameColumn tableName="Donor" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
+        <renameColumn tableName="Donor_AUD" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
+        <renameColumn tableName="Donation" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
+        <renameColumn tableName="Donation_AUD" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
+        <renameColumn tableName="DonationBatch" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
+        <renameColumn tableName="DonationBatch_AUD" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
+        <renameColumn tableName="Location" oldColumnName="isDonorPanel" newColumnName="isVenue" columnDataType="boolean"/>
+        <renameColumn tableName="Location_AUD" oldColumnName="isDonorPanel" newColumnName="isVenue" columnDataType="boolean"/>
+        <addForeignKeyConstraint baseColumnNames="venue_id"
+                                 baseTableName="Donor"
+                                 constraintName="fk_donor_venue"
+                                 referencedColumnNames="id"
+                                 referencedTableName="Location"/>
+        <addForeignKeyConstraint baseColumnNames="venue_id"
+                                 baseTableName="Donation"
+                                 constraintName="FK_donation_Location"
+                                 referencedColumnNames="id"
+                                 referencedTableName="Location"/>
+        <addForeignKeyConstraint baseColumnNames="venue_id"
+                                 baseTableName="DonationBatch"
+                                 constraintName="FK_DonationBatch_Location"
+                                 referencedColumnNames="id"
+                                 referencedTableName="Location"/>
+
+    </changeSet>
     
 </databaseChangeLog>

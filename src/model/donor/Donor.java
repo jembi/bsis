@@ -155,11 +155,11 @@ public class Donor implements ModificationTracker {
   private String donorHash;
  
   /**
-   * Which panel the donor is registered to
+   * Which venue the donor is registered to
    */
   @LocationExists
   @ManyToOne
-  private Location donorPanel;
+  private Location venue;
 
   @Lob
   private String notes;
@@ -361,7 +361,7 @@ public void copy(Donor donor) {
     setBirthDateEstimated(donor.getBirthDateEstimated());
     setNotes(donor.getNotes());
     setGender(donor.getGender());
-    setDonorPanel(donor.getDonorPanel());
+    setVenue(donor.getVenue());
     setPreferredLanguage(donor.getPreferredLanguage());
     setBloodAbo(donor.getBloodAbo());
     setBloodRh(donor.getBloodRh());
@@ -465,12 +465,12 @@ public void copy(Donor donor) {
     this.birthDateInferred = birthDateInferred;
   }
 
-  public Location getDonorPanel() {
-    return donorPanel;
+  public Location getVenue() {
+    return venue;
   }
 
-  public void setDonorPanel(Location donorPanel) {
-    this.donorPanel = donorPanel;
+  public void setVenue(Location venue) {
+    this.venue = venue;
   }
 
   public Date getDateOfLastDonation() {

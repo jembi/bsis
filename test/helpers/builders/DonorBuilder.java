@@ -2,9 +2,11 @@ package helpers.builders;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import helpers.persisters.AbstractEntityPersister;
+import helpers.persisters.DonorPersister;
 import java.util.Date;
-
 import model.donor.Donor;
+import model.location.Location;
 import model.util.Gender;
 
 public class DonorBuilder extends AbstractEntityBuilder<Donor> {
@@ -19,6 +21,8 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
     private Boolean deleted;
     private Date dateOfFirstDonation;
     private Date dateOfLastDonation;
+    private Location venue;
+    private Gender gender;
 
     public DonorBuilder withId(Long id) {
         this.id = id;
@@ -47,6 +51,16 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
     
     public DonorBuilder withDateOfLastDonation(Date dateOfLastDonation) {
         this.dateOfLastDonation = dateOfLastDonation;
+        return this;
+    }
+    
+    public DonorBuilder withVenue(Location venue) {
+        this.venue = venue;
+        return this;
+    }
+    
+    public DonorBuilder withGender(Gender gender) {
+        this.gender = gender;
         return this;
     }
 
@@ -89,7 +103,14 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
         donor.setIsDeleted(deleted);
         donor.setDateOfFirstDonation(dateOfFirstDonation);
         donor.setDateOfLastDonation(dateOfLastDonation);
+        donor.setVenue(venue);
+        donor.setGender(gender);
         return donor;
+    }
+
+    @Override
+    public AbstractEntityPersister<Donor> getPersister() {
+        return new DonorPersister();
     }
     
     public static DonorBuilder aDonor() {

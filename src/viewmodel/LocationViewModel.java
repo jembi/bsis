@@ -38,9 +38,9 @@ public class LocationViewModel {
     return location.getIsMobileSite().toString();
   }
 
-  public String getIsDonorPanel() {
-	if (location.getIsDonorPanel() == null)
+  public String getIsVenue() {
+	if (location.getIsVenue() == null)
 		return ""; 
-    return location.getIsDonorPanel().toString();
+    return location.getIsVenue().toString();
   }
 }

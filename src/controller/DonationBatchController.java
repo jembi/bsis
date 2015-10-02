@@ -71,14 +71,14 @@ public class DonationBatchController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public ResponseEntity<Map<String, Object>> findDonationBatch(HttpServletRequest request,
           @RequestParam(value = "isClosed", required = false) Boolean isClosed,
-          @RequestParam(value = "donorPanels", required = false) List<Long> donorPanels) {
+          @RequestParam(value = "venues", required = false) List<Long> venues) {
 
-	if(donorPanels == null){
-		donorPanels = new ArrayList<Long>();
+	if(venues == null){
+		venues = new ArrayList<Long>();
 	}
 
     List<DonationBatch> donationBatches =
-        donationBatchRepository.findDonationBatches(isClosed, donorPanels);
+        donationBatchRepository.findDonationBatches(isClosed, venues);
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("donationBatches", getDonationBatchViewModels(donationBatches));
@@ -149,7 +149,7 @@ public class DonationBatchController {
     }
   
   private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("donorPanels", locationRepository.getAllDonorPanels());
+    m.put("venues", locationRepository.getAllVenues());
   }
 
   private List<DonationBatchViewModel> getDonationBatchViewModels(List<DonationBatch> donationBatches) {

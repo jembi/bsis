@@ -5,15 +5,15 @@ import model.location.Location;
 public class LocationBuilder extends AbstractEntityBuilder<Location> {
     
     private Long id;
-    private boolean donorPanel;
+    private boolean venue;
     
     public LocationBuilder withId(long id) {
         this.id = id;
         return this;
     }
     
-    public LocationBuilder thatIsDonorPanel() {
-        donorPanel = true;
+    public LocationBuilder thatIsVenue() {
+        venue = true;
         return this;
     }
 
@@ -21,7 +21,7 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
     public Location build() {
         Location location = new Location();
         location.setId(id);
-        location.setIsDonorPanel(donorPanel);
+        location.setIsVenue(venue);
         return location;
     }
     
@@ -29,8 +29,8 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
         return new LocationBuilder();
     }
     
-    public static LocationBuilder aDonorPanel() {
-        return new LocationBuilder().thatIsDonorPanel();
+    public static LocationBuilder aVenue() {
+        return new LocationBuilder().thatIsVenue();
     }
 
 }

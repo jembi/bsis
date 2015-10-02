@@ -122,7 +122,7 @@ public class DonationController {
       
       row.add(donation.getId().toString());
 
-      for (String property : Arrays.asList("donationIdentificationNumber", "donationDate", "packType", "donorPanel")) {
+      for (String property : Arrays.asList("donationIdentificationNumber", "donationDate", "packType", "venue")) {
         if (formFields.containsKey(property)) {
           Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
           if (properties.get("hidden").equals(false)) {
@@ -150,7 +150,7 @@ public class DonationController {
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
-	m.put("donorPanels", locationRepository.getAllDonorPanels());
+	m.put("venues", locationRepository.getAllVenues());
     m.put("donationTypes", donorTypeRepository.getAllDonationTypes());
     m.put("packTypes", getPackTypeViewModels(packTypeRepository.getAllPackTypes())); 
     List<Map<String, Object>> haemoglobinLevels = new ArrayList<>();
@@ -282,7 +282,7 @@ public class DonationController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION+"')")
   public  Map<String, Object> findDonationPagination(
      @RequestParam(value = "donationIdentificationNumber", required = false)  String donationIdentificationNumber,
-     @RequestParam(value = "panels",required = false)  List<Long> panelIds,
+     @RequestParam(value = "venues",required = false)  List<Long> venueIds,
      @RequestParam(value = "packTypes",required = false)  List<Integer> packTypeIds,
      @RequestParam(value = "donationDateFrom", required = false)  String donationDateFrom,
      @RequestParam(value = "donationDateTo", required = false)  String donationDateTo,
@@ -302,7 +302,7 @@ public class DonationController {
     List<Object> results;
           results = donationRepository.findDonations(
                   donationIdentificationNumber,
-                  packTypeIds, panelIds,
+                  packTypeIds, venueIds,
                   donationDateFrom, donationDateTo, includeTestedDonations, pagingParams);
   
     @SuppressWarnings("unchecked")
@@ -318,7 +318,7 @@ public class DonationController {
             @RequestParam(value = "flaggedForCounselling", required = true) boolean flaggedForCounselling,
             @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
             @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate,
-            @RequestParam(value = "donorPanel", required = false) List<Long> donorPanels) {
+            @RequestParam(value = "venue", required = false) List<Long> venues) {
 
         if (flaggedForCounselling) {
             
@@ -327,7 +327,7 @@ public class DonationController {
             }
             
             List<Donation> donors = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
-                    startDate, endDate, donorPanels == null ? null : new HashSet<>(donorPanels));
+                    startDate, endDate, venues == null ? null : new HashSet<>(venues));
             return createDonationSummaryViewModels(donors);
         }
 
