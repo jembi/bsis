@@ -979,4 +979,15 @@
 		</insert>
 	</changeSet>
 
+    <changeSet id="20151005-0925" author="bausmeier">
+        <insert tableName="GeneralConfig">
+            <column name="name"
+                value="donors.deferral.deferWithNegativeConfirmations"></column>
+            <column name="value" value="true"></column>
+            <column name="description"
+                value="Whether or not to defer donors who have a positive test result for which all confirmatory results are negative."></column>
+            <column name="dataType_id" value="4"></column>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

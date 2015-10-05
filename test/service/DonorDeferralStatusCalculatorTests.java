@@ -4,6 +4,7 @@ import static helpers.builders.BloodTestBuilder.aBloodTest;
 import static helpers.builders.BloodTestResultBuilder.aBloodTestResult;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
 import model.bloodtesting.BloodTestResult;
@@ -11,13 +12,17 @@ import model.bloodtesting.BloodTestType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import constant.GeneralConfigConstants;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DonorDeferralStatusCalculatorTests {
 
     @InjectMocks
     private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
+    @Mock
+    private GeneralConfigAccessorService generalConfigAccessorService;
 
     @Test
     public void testShouldDonorBeDeferredWithNonConfirmatoryResult_shouldReturnFalse() {
@@ -30,6 +35,9 @@ public class DonorDeferralStatusCalculatorTests {
                                 .build())
                         .build()
         );
+        
+        when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.DONOR_DEFER_WITH_NEGATIVE_CONFIRMATIONS))
+                .thenReturn(false);
 
         boolean returnedValue = donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults);
 
@@ -47,6 +55,9 @@ public class DonorDeferralStatusCalculatorTests {
                                 .build())
                         .build()
         );
+        
+        when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.DONOR_DEFER_WITH_NEGATIVE_CONFIRMATIONS))
+                .thenReturn(false);
 
         boolean returnedValue = donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults);
 
