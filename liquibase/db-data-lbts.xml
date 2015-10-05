@@ -989,5 +989,127 @@
             <column name="dataType_id" value="4"></column>
         </insert>
     </changeSet>
+    
+    <changeSet id="20151005-1101" author="bausmeier">
+
+        <comment>HIV confirmatory test</comment>
+        <insert tableName="BloodTest">
+            <column name="id" value="29"></column>
+            <column name="bloodTestType" value="CONFIRMATORY_TTI"></column>
+            <column name="category" value="TTI"></column>
+            <column name="context" value="RECORD_TTI_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="isEmptyAllowed" value="0"></column>
+            <column name="negativeResults" value="NEG"></column>
+            <column name="positiveResults" value="POS"></column>
+            <column name="rankInCategory" value="2"></column>
+            <column name="testName" value="HIV Confirmatory 3"></column>
+            <column name="testNameShort" value="HIV Conf 3"></column>
+            <column name="validResults" value="POS,NEG"></column>
+            <column name="isDeleted" value="0"></column>
+        </insert>
+        <insert tableName="BloodTestingRule">
+            <column name="bloodTestsIds" value="29"></column>
+            <column name="category" value="TTI"></column>
+            <column name="donationFieldChanged" value="TTISTATUS"></column>
+            <column name="context" value="RECORD_TTI_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="markSampleAsUnsafe" value="0"></column>
+            <column name="newInformation" value="TTI_UNSAFE"></column>
+            <column name="pattern" value="POS"></column>
+            <column name="subCategory" value="TTI"></column>
+        </insert>
+
+        <comment>HBV confirmatory test</comment>
+        <insert tableName="BloodTest">
+            <column name="id" value="30"></column>
+            <column name="bloodTestType" value="CONFIRMATORY_TTI"></column>
+            <column name="category" value="TTI"></column>
+            <column name="context" value="RECORD_TTI_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="isEmptyAllowed" value="0"></column>
+            <column name="negativeResults" value="NEG"></column>
+            <column name="positiveResults" value="POS"></column>
+            <column name="rankInCategory" value="2"></column>
+            <column name="testName" value="HBV Confirmatory 3"></column>
+            <column name="testNameShort" value="HBV Conf 3"></column>
+            <column name="validResults" value="POS,NEG"></column>
+            <column name="isDeleted" value="0"></column>
+        </insert>
+        <insert tableName="BloodTestingRule">
+            <column name="bloodTestsIds" value="30"></column>
+            <column name="category" value="TTI"></column>
+            <column name="donationFieldChanged" value="TTISTATUS"></column>
+            <column name="context" value="RECORD_TTI_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="markSampleAsUnsafe" value="0"></column>
+            <column name="newInformation" value="TTI_UNSAFE"></column>
+            <column name="pattern" value="POS"></column>
+            <column name="subCategory" value="TTI"></column>
+        </insert>
+
+        <comment>HCV confirmatory test</comment>
+        <insert tableName="BloodTest">
+            <column name="id" value="31"></column>
+            <column name="bloodTestType" value="CONFIRMATORY_TTI"></column>
+            <column name="category" value="TTI"></column>
+            <column name="context" value="RECORD_TTI_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="isEmptyAllowed" value="0"></column>
+            <column name="negativeResults" value="NEG"></column>
+            <column name="positiveResults" value="POS"></column>
+            <column name="rankInCategory" value="2"></column>
+            <column name="testName" value="HCV Confirmatory 3"></column>
+            <column name="testNameShort" value="HCV Conf 3"></column>
+            <column name="validResults" value="POS,NEG"></column>
+            <column name="isDeleted" value="0"></column>
+        </insert>
+        <insert tableName="BloodTestingRule">
+            <column name="bloodTestsIds" value="31"></column>
+            <column name="category" value="TTI"></column>
+            <column name="donationFieldChanged" value="TTISTATUS"></column>
+            <column name="context" value="RECORD_TTI_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="markSampleAsUnsafe" value="0"></column>
+            <column name="newInformation" value="TTI_UNSAFE"></column>
+            <column name="pattern" value="POS"></column>
+            <column name="subCategory" value="TTI"></column>
+        </insert>
+
+        <comment>Syphilis confirmatory test</comment>
+        <insert tableName="BloodTest">
+            <column name="id" value="32"></column>
+            <column name="bloodTestType" value="CONFIRMATORY_TTI"></column>
+            <column name="category" value="TTI"></column>
+            <column name="context" value="RECORD_TTI_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="isEmptyAllowed" value="0"></column>
+            <column name="negativeResults" value="NEG"></column>
+            <column name="positiveResults" value="POS"></column>
+            <column name="rankInCategory" value="2"></column>
+            <column name="testName" value="Syphilis Confirmatory 3"></column>
+            <column name="testNameShort" value="Syphilis Conf 3"></column>
+            <column name="validResults" value="POS,NEG"></column>
+            <column name="isDeleted" value="0"></column>
+        </insert>
+        <insert tableName="BloodTestingRule">
+            <column name="bloodTestsIds" value="32"></column>
+            <column name="category" value="TTI"></column>
+            <column name="donationFieldChanged" value="TTISTATUS"></column>
+            <column name="context" value="RECORD_TTI_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="markSampleAsUnsafe" value="0"></column>
+            <column name="newInformation" value="TTI_UNSAFE"></column>
+            <column name="pattern" value="POS"></column>
+            <column name="subCategory" value="TTI"></column>
+        </insert>
+        
+        <sql>
+            UPDATE BloodTestingRule SET pendingTestsIds = '29' WHERE id IN (9, 10);
+            UPDATE BloodTestingRule SET pendingTestsIds = '30' WHERE id IN (13, 14);
+            UPDATE BloodTestingRule SET pendingTestsIds = '31' WHERE id IN (17, 18);
+            UPDATE BloodTestingRule SET pendingTestsIds = '32' WHERE id IN (21, 22);
+        </sql>
+    </changeSet>
 
 </databaseChangeLog>
