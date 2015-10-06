@@ -400,13 +400,13 @@ public class ComponentRepositoryTest {
 	public void testFindNumberOfDiscardedComponentsDaily() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-10");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
-		List<String> panels = new ArrayList<String>();
-		panels.add("1");
+		List<String> venues = new ArrayList<String>();
+		venues.add("1");
 		List<String> bloodGroups = new ArrayList<String>();
 		bloodGroups.add("AB+");
 		bloodGroups.add("AB-");
 		Map<String, Map<Long, Long>> results = componentRepository.findNumberOfDiscardedComponents(donationDateFrom,
-		    donationDateTo, "daily", panels, bloodGroups);
+		    donationDateTo, "daily", venues, bloodGroups);
 		Assert.assertEquals("2 blood types searched", 2, results.size());
 		Date formattedDate = new SimpleDateFormat("dd/MM/yyyy").parse("11/08/2015");
 		Map<Long, Long> abPlusResults = results.get("AB+");
@@ -422,15 +422,15 @@ public class ComponentRepositoryTest {
 	public void testFindNumberOfDiscardedComponentsMonthly() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-10");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
-		List<String> panels = new ArrayList<String>();
-		panels.add("1");
+		List<String> venues = new ArrayList<String>();
+		venues.add("1");
 		List<String> bloodGroups = new ArrayList<String>();
 		bloodGroups.add("AB+");
 		bloodGroups.add("AB-");
 		bloodGroups.add("O-");
 		bloodGroups.add("O+");
 		Map<String, Map<Long, Long>> results = componentRepository.findNumberOfDiscardedComponents(donationDateFrom,
-		    donationDateTo, "monthly", panels, bloodGroups);
+		    donationDateTo, "monthly", venues, bloodGroups);
 		Assert.assertEquals("4 blood types searched", 4, results.size());
 		Date formattedDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/08/2015");
 		Map<Long, Long> abPlusResults = results.get("AB+");
@@ -446,13 +446,13 @@ public class ComponentRepositoryTest {
 	public void testFindNumberOfDiscardedComponentsYearly() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2014-08-10");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
-		List<String> panels = new ArrayList<String>();
-		panels.add("1");
+		List<String> venues = new ArrayList<String>();
+		venues.add("1");
 		List<String> bloodGroups = new ArrayList<String>();
 		bloodGroups.add("AB-");
 		bloodGroups.add("AB+");
 		Map<String, Map<Long, Long>> results = componentRepository.findNumberOfDiscardedComponents(donationDateFrom,
-		    donationDateTo, "yearly", panels, bloodGroups);
+		    donationDateTo, "yearly", venues, bloodGroups);
 		Assert.assertEquals("2 blood types searched", 2, results.size());
 		Date formattedDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2015");
 		Map<Long, Long> abPlusResults = results.get("AB+");

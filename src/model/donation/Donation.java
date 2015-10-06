@@ -70,7 +70,9 @@ import constraintvalidator.LocationExists;
     @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_ASCENDING_DONATION_DATES_FOR_DONOR,
             query = DonationNamedQueryConstants.QUERY_FIND_ASCENDING_DONATION_DATES_FOR_DONOR),
     @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_DESCENDING_DONATION_DATES_FOR_DONOR,
-            query = DonationNamedQueryConstants.QUERY_FIND_DESCENDING_DONATION_DATES_FOR_DONOR)
+            query = DonationNamedQueryConstants.QUERY_FIND_DESCENDING_DONATION_DATES_FOR_DONOR),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_COLLECTED_DONATION_VALUE_OBJECTS_FOR_DATE_RANGE,
+                query = DonationNamedQueryConstants.QUERY_FIND_COLLECTED_DONATION_VALUE_OBJECTS_FOR_DATE_RANGE)
 })
 @Entity
 @Audited
@@ -196,7 +198,7 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
   @OneToOne
   @LocationExists
   @NotNull
-  private Location donorPanel;
+  private Location venue;
   
   @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true)
   private AdverseEvent adverseEvent;
@@ -279,7 +281,7 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     this.donorWeight=donation.donorWeight;
     this.bloodPressureDiastolic=donation.bloodPressureDiastolic;
     this.bloodPressureSystolic=donation.bloodPressureSystolic;
-    this.donorPanel = donation.getDonorPanel();
+    this.venue = donation.getVenue();
     this.bloodAbo = donation.bloodAbo;
     this.bloodRh = donation.bloodRh;
     this.setBloodTypingMatchStatus(donation.getBloodTypingMatchStatus());
@@ -502,12 +504,12 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
         this.bleedEndTime = bleedEndTime;
     }
 
-    public Location getDonorPanel() {
-        return donorPanel;
+    public Location getVenue() {
+        return venue;
     }
 
-    public void setDonorPanel(Location donorPanel) {
-        this.donorPanel = donorPanel;
+    public void setVenue(Location venue) {
+        this.venue = venue;
     }
 
     public AdverseEvent getAdverseEvent() {

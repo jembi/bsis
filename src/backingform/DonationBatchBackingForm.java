@@ -63,10 +63,10 @@ public class DonationBatchBackingForm {
     donationBatch.setIsClosed(isClosed);
   }
   
-  public void setDonorPanel(Long donorPanelId){
-    Location donorPanel = new Location();
-    donorPanel.setId(donorPanelId);
-    donationBatch.setDonorPanel(donorPanel);
+  public void setVenue(Long venueId){
+    Location venue = new Location();
+    venue.setId(venueId);
+    donationBatch.setVenue(venue);
   }
 
   @JsonIgnore

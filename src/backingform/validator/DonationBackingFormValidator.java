@@ -80,14 +80,14 @@ public class DonationBackingFormValidator implements Validator {
         validateBleedTimes(donation.getBleedStartTime(), donation.getBleedEndTime(), errors);
     }
 
-    Location donorPanel = form.getDonation().getDonorPanel();
-    if (donorPanel == null) {
-      errors.rejectValue("donation.donorPanel", "donorPanel.empty",
-        "Donor Panel is required.");
+    Location venue = form.getDonation().getVenue();
+    if (venue == null) {
+      errors.rejectValue("donation.venue", "venue.empty",
+        "Venue is required.");
     } 
-    else if (utilController.isDonorPanel(donorPanel.getId()) == false) {
-      errors.rejectValue("donation.donorPanel", "donorPanel.invalid",
-    	"Location is not a Donor Panel.");
+    else if (utilController.isVenue(venue.getId()) == false) {
+      errors.rejectValue("donation.venue", "venue.invalid",
+    	"Location is not a Venue.");
     } 
 
     validateBloodPressure(form,errors);

@@ -80,7 +80,7 @@ public class DonorCommunicationsController {
     public @ResponseBody
     Map<String, Object> findDonorCommunicationsPagination(
             @RequestParam(value="bloodGroups",required=false ) List<String> bloodGroups,
-            @RequestParam(value="donorPanels",required=true) List<String> donorPanels,
+            @RequestParam(value="venues",required=true) List<String> venues,
             @RequestParam(value="clinicDate",required=false ) String clinicDate,
             @RequestParam(value="lastDonationFromDate",required=false ) String lastDonationFromDate,
             @RequestParam(value="lastDonationToDate",required=false ) String lastDonationToDate,
@@ -99,7 +99,7 @@ public class DonorCommunicationsController {
         pagingParams.put("sortDirection", "asc");
         
         List<Donor> results = new ArrayList<Donor>();
-        results = donorCommunicationsRepository.findDonors(setLocations(donorPanels), clinicDate, lastDonationFromDate,
+        results = donorCommunicationsRepository.findDonors(setLocations(venues), clinicDate, lastDonationFromDate,
                 lastDonationToDate, setBloodGroups(bloodGroups), anyBloodGroup, noBloodGroup, pagingParams, clinicDate);
         
         List<DonorViewModel> donors = new ArrayList<DonorViewModel>();
@@ -131,21 +131,21 @@ public class DonorCommunicationsController {
 	}
 
     private void addEditSelectorOptions(Map<String, Object> m) {
-        m.put("donorPanels", locationRepository.getAllDonorPanels());
+        m.put("venues", locationRepository.getAllVenues());
         m.put("bloodGroups", BloodGroup.getBloodgroups());
     }
 
-    public List<Location> setLocations(List<String> donorPanels) {
+    public List<Location> setLocations(List<String> locations) {
 
-        List<Location> panels = new ArrayList<Location>();
+        List<Location> venues = new ArrayList<Location>();
 
-        for (String donorPanelId : donorPanels) {
+        for (String venueId : locations) {
             Location l = new Location();
-            l.setId(Long.parseLong(donorPanelId));
-            panels.add(l);
+            l.setId(Long.parseLong(venueId));
+            venues.add(l);
         }
         
-        return panels;
+        return venues;
     }
     
     public List<BloodGroup> setBloodGroups(List<String> bloodGroups) {

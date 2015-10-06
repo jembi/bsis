@@ -64,7 +64,7 @@ public class DonationBatch implements ModificationTracker {
   @OneToOne
   @LocationExists
   @NotNull
-  private Location donorPanel;
+  private Location venue;
   
   
   @ManyToOne
@@ -139,12 +139,12 @@ public class DonationBatch implements ModificationTracker {
      this.testBatch = testBatch;
    }
 
-    public Location getDonorPanel() {
-        return donorPanel;
+    public Location getVenue() {
+        return venue;
     }
 
-    public void setDonorPanel(Location donorPanel) {
-        this.donorPanel = donorPanel;
+    public void setVenue(Location venue) {
+        this.venue = venue;
     }
   
   @Override
@@ -189,7 +189,7 @@ public class DonationBatch implements ModificationTracker {
   
   public void copy(DonationBatch donationBatch){
       this.setNotes(donationBatch.getNotes());
-      this.donorPanel = donationBatch.getDonorPanel();
+      this.venue = donationBatch.getVenue();
   }
 
 

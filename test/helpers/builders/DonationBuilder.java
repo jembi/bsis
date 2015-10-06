@@ -2,13 +2,13 @@ package helpers.builders;
 
 import java.math.BigDecimal;
 import java.util.Date;
-
 import helpers.persisters.AbstractEntityPersister;
 import helpers.persisters.DonationPersister;
 import model.adverseevent.AdverseEvent;
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
+import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
 import model.packtype.PackType;
@@ -18,7 +18,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     private Long id;
     private Donor donor;
     private Date donationDate;
-    private Location donorPanel;
+    private Location venue;
     private TTIStatus ttiStatus;
     private Boolean deleted;
     private Integer donorPulse;
@@ -32,6 +32,9 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     private Date bleedStartTime;
     private Date bleedEndTime;
     private AdverseEvent adverseEvent;
+    private DonationType donationType;
+    private String bloodAbo;
+    private String bloodRh;
     
     public DonationBuilder withId(Long id) {
         this.id = id;
@@ -48,8 +51,8 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         return this;
     }
     
-    public DonationBuilder withDonorPanel(Location donorPanel) {
-        this.donorPanel = donorPanel;
+    public DonationBuilder withVenue(Location venue) {
+        this.venue = venue;
         return this;
     }
     
@@ -122,6 +125,21 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         this.adverseEvent = adverseEvent;
         return this;
     }
+    
+    public DonationBuilder withDonationType(DonationType donationType) {
+        this.donationType = donationType;
+        return this;
+    }
+    
+    public DonationBuilder withBloodAbo(String bloodAbo) {
+        this.bloodAbo = bloodAbo;
+        return this;
+    }
+    
+    public DonationBuilder withBloodRh(String bloodRh) {
+        this.bloodRh = bloodRh;
+        return this;
+    }
 
     @Override
     public Donation build() {
@@ -129,7 +147,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         donation.setId(id);
         donation.setDonor(donor);
         donation.setDonationDate(donationDate);
-        donation.setDonorPanel(donorPanel);
+        donation.setVenue(venue);
         donation.setTTIStatus(ttiStatus);
         donation.setDonorPulse(donorPulse);
         donation.setHaemoglobinCount(haemoglobinCount);
@@ -143,6 +161,9 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         donation.setBleedStartTime(bleedStartTime);
         donation.setBleedEndTime(bleedEndTime);
         donation.setAdverseEvent(adverseEvent);
+        donation.setDonationType(donationType);
+        donation.setBloodAbo(bloodAbo);
+        donation.setBloodRh(bloodRh);
         return donation;
     }
 

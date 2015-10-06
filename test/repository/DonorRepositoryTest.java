@@ -893,7 +893,7 @@ public class DonorRepositoryTest {
         user = new User();
         user.setId(userDbId);
         donorBackingForm.setHomeAddressDistrict("District");
-        donorBackingForm.setDonorPanel(l);
+        donorBackingForm.setVenue(l);
         donorBackingForm.setIdNumber("1111");
         donorBackingForm.setNotes("Notes");
         donorBackingForm.setMobileNumber("9999999999");
@@ -940,7 +940,7 @@ public class DonorRepositoryTest {
         donorBackingForm.setHomeAddressCity("City_update");
         donorBackingForm.setHomeAddressCountry("country_update");
         donorBackingForm.setHomeAddressDistrict("District_update");
-        donorBackingForm.setDonorPanel(l);
+        donorBackingForm.setVenue(l);
         donorBackingForm.setIdNumber("1212");
         donorBackingForm.setNotes("Notes_update");
         donorBackingForm.setMobileNumber("9878787878");
@@ -978,7 +978,7 @@ public class DonorRepositoryTest {
         copyDonor.setCallingName(donor.getCallingName());
         copyDonor.setDateOfLastDonation(donor.getDateOfLastDonation());
         copyDonor.setDonorHash(donor.getDonorHash());
-        copyDonor.setDonorPanel(donor.getDonorPanel());
+        copyDonor.setVenue(donor.getVenue());
         copyDonor.setDonorStatus(donor.getDonorStatus());
         copyDonor.setFirstName(donor.getFirstName());
         copyDonor.setGender(donor.getGender());

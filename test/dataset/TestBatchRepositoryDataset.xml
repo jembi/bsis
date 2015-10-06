@@ -2,7 +2,7 @@
 <dataset>
 	<user id="1" emailId="admin" firstName="admin" isactive="1"
 		isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin" />
-	<Location id="1" isDeleted="false" isDonorPanel="true"
+	<Location id="1" isDeleted="false" isVenue="true"
 		isMobileSite="false" isUsageSite="false" name="Maseru" notes="" />
 	<Address id="1" />
 	<Address id="2" />
@@ -15,7 +15,7 @@
 	dateOfLastDonation="2015-08-11 09:05:56.0" donorHash="0e17076f53dbb49ff3678eee94bb9f70"
 	donorNumber="000001" donorStatus="NORMAL" firstName="John" gender="male"
 	isDeleted="false" lastName="Smith" createdDate="2015-08-11 09:05:10.0"
-	lastUpdated="2015-08-11 09:06:27.0" donorPanel_id="1" createdBy_id="1"
+	lastUpdated="2015-08-11 09:06:27.0" venue_id="1" createdBy_id="1"
 	lastUpdatedBy_id="1" dateOfFirstDonation="2015-08-11"
 	preferredLanguage_id="1" title="Mr" addressId="1" contactId="1"
 	dueToDonate="2015-11-09" />
@@ -23,7 +23,7 @@
 		dateOfLastDonation="2015-08-12 03:36:07.0" donorHash="f87810a12b576c02f517d258210a56bd"
 		donorNumber="000002" donorStatus="NORMAL" firstName="Dagmar" gender="female"
 		isDeleted="false" lastName="Timler" createdDate="2015-08-12 03:35:57.0"
-		lastUpdated="2015-08-12 03:36:37.0" donorPanel_id="1" createdBy_id="1"
+		lastUpdated="2015-08-12 03:36:37.0" venue_id="1" createdBy_id="1"
 		lastUpdatedBy_id="1" dateOfFirstDonation="2015-08-12"
 		preferredLanguage_id="1" title="Ms" addressId="2" contactId="2"
 		dueToDonate="2015-11-10" />
@@ -43,14 +43,14 @@
 	<DonationBatch id="1" batchNumber="000000" isDeleted="false"
 		createdDate="2015-08-11 09:05:56.0" lastUpdated="2015-08-11 09:07:10.0"
 		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" testBatch_id="1"
-		donorPanel_id="1" />
+		venue_id="1" />
 	<DonationBatch id="2" batchNumber="000001" isDeleted="false"
 		createdDate="2015-08-12 03:36:07.0" lastUpdated="2015-08-12 03:37:00.0"
 		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" testBatch_id="2"
-		donorPanel_id="1" />
+		venue_id="1" />
 	<DonationBatch id="3" batchNumber="000002" isDeleted="false"
 		createdDate="2015-08-12 03:36:07.0" lastUpdated="2015-08-12 03:37:00.0"
-		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" donorPanel_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" venue_id="1" />
 	<ComponentType id="1" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Whole Blood Single Pack - CPDA" componentTypeNameShort="0011" />
@@ -62,20 +62,20 @@
 		createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:06:27.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="1"
 		donationType_id="1" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
-		donorPanel_id="1" bleedStartTime="2015-08-11 09:06:11.0" bleedEndTime="2015-08-11 09:16:11.0"
+		venue_id="1" bleedStartTime="2015-08-11 09:06:11.0" bleedEndTime="2015-08-11 09:16:11.0"
 		bloodTypingMatchStatus="NOT_DONE" />
 	<Donation id="2" bloodTypingStatus="NOT_DONE" donationDate="2015-08-12 03:36:07.0"
 		donationIdentificationNumber="2222222" isDeleted="false"
 		createdDate="2015-08-12 03:36:37.0" lastUpdated="2015-08-12 03:36:37.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="2"
 		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
-		donorPanel_id="1" bleedStartTime="2015-08-12 03:36:19.0" bleedEndTime="2015-08-12 03:41:19.0"
+		venue_id="1" bleedStartTime="2015-08-12 03:36:19.0" bleedEndTime="2015-08-12 03:41:19.0"
 		bloodTypingMatchStatus="NOT_DONE" />
 	<Donation id="3" bloodTypingStatus="NOT_DONE" donationDate="2015-06-26 00:00:00.0"
 		donationIdentificationNumber="9090908" isDeleted="0"
 		createdDate="2015-06-29 05:24:35.0" lastUpdated="2015-06-29 05:24:35.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="3"
 		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
-		donorPanel_id="1" bleedStartTime="1970-01-01 11:24:30.0" bleedEndTime="1970-01-01 11:44:30.0"
+		venue_id="1" bleedStartTime="1970-01-01 11:24:30.0" bleedEndTime="1970-01-01 11:44:30.0"
 		bloodTypingMatchStatus="NOT_DONE" />
 </dataset>

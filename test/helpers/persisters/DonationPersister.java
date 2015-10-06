@@ -1,11 +1,10 @@
 package helpers.persisters;
 
+import static helpers.persisters.EntityPersisterFactory.aDonationTypePersister;
 import static helpers.persisters.EntityPersisterFactory.aDonorPersister;
 import static helpers.persisters.EntityPersisterFactory.aLocationPersister;
 import static helpers.persisters.EntityPersisterFactory.anAdverseEventPersister;
-
 import javax.persistence.EntityManager;
-
 import model.donation.Donation;
 
 public class DonationPersister extends AbstractEntityPersister<Donation> {
@@ -16,12 +15,16 @@ public class DonationPersister extends AbstractEntityPersister<Donation> {
             aDonorPersister().deepPersist(donation.getDonor(), entityManager);
         }
         
-        if (donation.getDonorPanel() != null) {
-            aLocationPersister().deepPersist(donation.getDonorPanel(), entityManager);
+        if (donation.getVenue() != null) {
+            aLocationPersister().deepPersist(donation.getVenue(), entityManager);
         }
         
         if (donation.getAdverseEvent() != null) {
             anAdverseEventPersister().deepPersist(donation.getAdverseEvent(), entityManager);
+        }
+        
+        if (donation.getDonationType() != null) {
+            aDonationTypePersister().deepPersist(donation.getDonationType(), entityManager);
         }
         
         return persist(donation, entityManager);
