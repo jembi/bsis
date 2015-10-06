@@ -1,5 +1,6 @@
 package service;
 
+import static helpers.builders.BloodTestBuilder.aBloodTest;
 import static helpers.builders.BloodTestResultBuilder.aBloodTestResult;
 import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.DonationBuilder.aDonation;
@@ -43,6 +44,8 @@ public class TestBatchCRUDServiceTests {
     private ComponentCRUDService componentCRUDService;
     @Mock
     private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
+    @Mock
+    private ComponentStatusCalculator componentStatusCalculator;
     
     @Test
     public void testUpdateTestBatchStatusWithStatusChangeNotToClosed_shouldUpdateTestBatchStatus() {
@@ -170,7 +173,55 @@ public class TestBatchCRUDServiceTests {
     }
     
     @Test
-    public void testUpdateTestBatchStatusWithUnsafeDonationAndDonorNotToBeDeferred_shouldNotCreateDeferralOrUpdateComponents() {
+    public void testUpdateTestBatchStatusWithSafeDonationWithTestsThatDiscardComponents_shouldDiscardComponentsForDonation() {
+        long testBatchId = 526;
+        TestBatchStatus newStatus = TestBatchStatus.CLOSED;
+        
+        List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult()
+                .withId(18L)
+                .withBloodTest(aBloodTest().withId(99).withFlagComponentsForDiscard(true).build())
+                .build());
+
+        Donation safeDonation = aDonation()
+                .withId(22L)
+                .withTTIStatus(TTIStatus.TTI_SAFE)
+                .withBloodTestResults(bloodTestResults)
+                .build();
+        
+        List<DonationBatch> donationBatches = Arrays.asList(
+                aDonationBatch()
+                    .withDonations(Arrays.asList(safeDonation))
+                    .build()
+        );
+
+        TestBatch existingTestBatch = aTestBatch()
+                .withId(testBatchId)
+                .withStatus(TestBatchStatus.READY_TO_CLOSE)
+                .withDonationBatches(donationBatches)
+                .build();
+
+        TestBatch expectedTestBatch = aTestBatch()
+                .withId(testBatchId)
+                .withStatus(newStatus)
+                .withDonationBatches(donationBatches)
+                .build();
+        
+        when(testBatchRepository.findTestBatchById(testBatchId)).thenReturn(existingTestBatch);
+        when(componentStatusCalculator.shouldComponentsBeDiscarded(bloodTestResults)).thenReturn(true);
+        when(testBatchRepository.updateTestBatch(argThat(hasSameStateAsTestBatch(expectedTestBatch))))
+                .thenReturn(expectedTestBatch);
+
+        TestBatch returnedTestBatch = testBatchCRUDService.updateTestBatchStatus(testBatchId, newStatus);
+        
+        verify(testBatchRepository).updateTestBatch(argThat(hasSameStateAsTestBatch(expectedTestBatch)));
+        verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafe(safeDonation);
+        verifyZeroInteractions(postDonationCounsellingCRUDService);
+        verifyZeroInteractions(donorDeferralCRUDService);
+        assertThat(returnedTestBatch, hasSameStateAsTestBatch(expectedTestBatch));
+    }
+    
+    @Test
+    public void testUpdateTestBatchStatusWithUnsafeDonationAndDonorNotToBeDeferred_shouldNotCreateDeferral() {
         long testBatchId = 526;
         TestBatchStatus newStatus = TestBatchStatus.CLOSED;
         
@@ -211,8 +262,8 @@ public class TestBatchCRUDServiceTests {
         TestBatch returnedTestBatch = testBatchCRUDService.updateTestBatchStatus(testBatchId, newStatus);
 
         verify(postDonationCounsellingCRUDService).createPostDonationCounsellingForDonation(unsafeDonation);
+        verify(componentCRUDService).markComponentsBelongingToDonorAsUnsafe(donorWithUnsafeDonation);
         verifyZeroInteractions(donorDeferralCRUDService);
-        verifyZeroInteractions(componentCRUDService);
         verify(testBatchRepository).updateTestBatch(argThat(hasSameStateAsTestBatch(expectedTestBatch)));
         assertThat(returnedTestBatch, hasSameStateAsTestBatch(expectedTestBatch));
     }

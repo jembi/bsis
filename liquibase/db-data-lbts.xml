@@ -1111,5 +1111,30 @@
             UPDATE BloodTestingRule SET pendingTestsIds = '32' WHERE id IN (21, 22);
         </sql>
     </changeSet>
+    
+    <changeSet id="20151006-1200" author="bausmeier">
+    
+        <update tableName="BloodTest">
+            <column name="flagComponentsForDiscard" value="1" type="tinyint(1)"></column>
+            <where>category = 'TTI'</where>
+        </update>
+    
+        <insert tableName="BloodTest">
+            <column name="id" value="33"></column>
+            <column name="bloodTestType" value="BASIC_BLOODTYPING"></column>
+            <column name="category" value="BLOODTYPING"></column>
+            <column name="context" value="RECORD_BLOOD_TYPING_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="isEmptyAllowed" value="0"></column>
+            <column name="negativeResults" value="NEG"></column>
+            <column name="positiveResults" value="POS"></column>
+            <column name="rankInCategory" value="7"></column>
+            <column name="testName" value="Antibody Screen"></column>
+            <column name="testNameShort" value="AbScr"></column>
+            <column name="validResults" value="POS,NEG"></column>
+            <column name="isDeleted" value="0"></column>
+            <column name="flagComponentsForDiscard" value="1"></column>
+        </insert>
+    </changeSet>
 
 </databaseChangeLog>

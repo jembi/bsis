@@ -74,6 +74,12 @@ public class BloodTest implements Comparable<BloodTest> {
   private Boolean isActive;
   
   private Boolean isDeleted;
+  
+    /**
+     * Whether or not to flag associated components for discard when a test has a positive outcome.
+     */
+    @Column(nullable = false)
+    private boolean flagComponentsForDiscard = false;
 
   public Integer getId() {
     return id;
@@ -206,4 +212,12 @@ public void setIsDeleted(Boolean isDeleted) {
   public int compareTo(BloodTest o) {
     return this.id.compareTo(o.id);
   }
+
+    public boolean isFlagComponentsForDiscard() {
+        return flagComponentsForDiscard;
+    }
+
+    public void setFlagComponentsForDiscard(boolean flagComponentsForDiscard) {
+        this.flagComponentsForDiscard = flagComponentsForDiscard;
+    }
 }

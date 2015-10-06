@@ -109,69 +109,69 @@
 	<BloodTest id="1" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
 		context="RECORD_BLOOD_TYPING_TESTS" isActive="1" isEmptyAllowed="0"
 		negativeResults="" positiveResults="A,B,AB,O" rankInCategory="1"
-		testName="ABO" testNameShort="ABO" validResults="A,B,AB,O" />
+		testName="ABO" testNameShort="ABO" validResults="A,B,AB,O" flagComponentsForDiscard="0" />
 	<BloodTest id="2" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
 		context="RECORD_BLOOD_TYPING_TESTS" isActive="1" isEmptyAllowed="0"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="2"
-		testName="Rh" testNameShort="Rh" validResults="POS,NEG" />
+		testName="Rh" testNameShort="Rh" validResults="POS,NEG" flagComponentsForDiscard="0" />
 	<BloodTest id="3" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
 		context="RECORD_BLOOD_TYPING_TESTS" isActive="1" isEmptyAllowed="0"
 		negativeResults="LOW" positiveResults="HIGH" rankInCategory="3"
-		testName="Titre" testNameShort="Titre" validResults="HIGH,LOW" />
+		testName="Titre" testNameShort="Titre" validResults="HIGH,LOW" flagComponentsForDiscard="0" />
 	<BloodTest id="4" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
 		context="RECORD_BLOOD_TYPING_TESTS" isActive="1" isEmptyAllowed="0"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="4"
-		testName="Weak D" testNameShort="Weak D" validResults="POS,NEG" />
+		testName="Weak D" testNameShort="Weak D" validResults="POS,NEG" flagComponentsForDiscard="0" />
 	<BloodTest id="17" bloodTestType="BASIC_TTI" category="TTI"
 		context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
-		testName="HIV" testNameShort="HIV" validResults="POS,NEG" />
+		testName="HIV" testNameShort="HIV" validResults="POS,NEG" flagComponentsForDiscard="0" />
 	<BloodTest id="18" bloodTestType="CONFIRMATORY_TTI" category="TTI"
 		context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
-		testName="HIV Confirmatory 1" testNameShort="HIV Conf 1" validResults="POS,NEG" />
+		testName="HIV Confirmatory 1" testNameShort="HIV Conf 1" validResults="POS,NEG" flagComponentsForDiscard="0" />
 	<BloodTest id="19" bloodTestType="CONFIRMATORY_TTI" category="TTI"
 		context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
-		testName="HIV Confirmatory 2" testNameShort="HIV Conf 2" validResults="POS,NEG" />
+		testName="HIV Confirmatory 2" testNameShort="HIV Conf 2" validResults="POS,NEG" flagComponentsForDiscard="0" />
 	<BloodTest id="20" bloodTestType="BASIC_TTI" category="TTI"
 		context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
-		testName="HBV" testNameShort="HBV" validResults="POS,NEG" />
+		testName="HBV" testNameShort="HBV" validResults="POS,NEG" flagComponentsForDiscard="0" />
 	<BloodTest id="21" bloodTestType="CONFIRMATORY_TTI" category="TTI"
 		context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
-		testName="HBV Confirmatory 1" testNameShort="HBV Conf 1" validResults="POS,NEG" />
+		testName="HBV Confirmatory 1" testNameShort="HBV Conf 1" validResults="POS,NEG" flagComponentsForDiscard="0" />
 	<BloodTest id="22" bloodTestType="CONFIRMATORY_TTI" category="TTI"
 		context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
-		testName="HBV Confirmatory 2" testNameShort="HBV Conf 2" validResults="POS,NEG" />
+		testName="HBV Confirmatory 2" testNameShort="HBV Conf 2" validResults="POS,NEG" flagComponentsForDiscard="0" />
 	<BloodTest id="23" bloodTestType="BASIC_TTI" category="TTI"
 		context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
-		testName="HCV" testNameShort="HCV" validResults="POS,NEG" />
+		testName="HCV" testNameShort="HCV" validResults="POS,NEG" flagComponentsForDiscard="0" />
 	<BloodTest id="24" bloodTestType="CONFIRMATORY_TTI" category="TTI"
 		context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
-		testName="HCV Confirmatory 1" testNameShort="HCV Conf 1" validResults="POS,NEG" />
+		testName="HCV Confirmatory 1" testNameShort="HCV Conf 1" validResults="POS,NEG" flagComponentsForDiscard="0" />
 	<BloodTest id="25" bloodTestType="CONFIRMATORY_TTI" category="TTI"
 		context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
-		testName="HCV Confirmatory 2" testNameShort="HCV Conf 2" validResults="POS,NEG" />
+		testName="HCV Confirmatory 2" testNameShort="HCV Conf 2" validResults="POS,NEG" flagComponentsForDiscard="0" />
 	<BloodTest id="26" bloodTestType="BASIC_TTI" category="TTI"
 		context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
-		testName="Syphilis" testNameShort="Syphilis" validResults="POS,NEG" />
+		testName="Syphilis" testNameShort="Syphilis" validResults="POS,NEG" flagComponentsForDiscard="0" />
 	<BloodTest id="27" bloodTestType="CONFIRMATORY_TTI" category="TTI"
 		context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
 		testName="Syphilis Confirmatory 1" testNameShort="Syphilis Conf 1"
-		validResults="POS,NEG" />
+		validResults="POS,NEG" flagComponentsForDiscard="0" />
 	<BloodTest id="28" bloodTestType="CONFIRMATORY_TTI" category="TTI"
 		context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
 		testName="Syphilis Confirmatory 2" testNameShort="Syphilis Conf 2"
-		validResults="POS,NEG" />
+		validResults="POS,NEG" flagComponentsForDiscard="0" />
 
 	<DonationType id="1" donationType="Voluntary" isDeleted="false" />
 	<DonationType id="2" donationType="Family" isDeleted="false" />

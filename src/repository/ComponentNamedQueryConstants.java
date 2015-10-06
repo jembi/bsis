@@ -27,5 +27,13 @@ public class ComponentNamedQueryConstants {
             "  FROM Donation d " +
             "  WHERE d.donor = :donor " +
             ") ";
+    
+    public static final String NAME_UPDATE_COMPONENT_STATUS_FOR_DONATION =
+            "Component.updateComponentStatusForDonation";
+    public static final String QUERY_UPDATE_COMPONENT_STATUS_FOR_DONATION =
+            "UPDATE Component c " +
+            "SET c.status = :newStatus " +
+            "WHERE c.status = :oldStatus " +
+            "AND c.donation = :donation ";
 
 }
