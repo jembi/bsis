@@ -12,6 +12,7 @@ public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
     private Donor deferredDonor;
     private DeferralReason deferralReason;
     private Date deferredUntil;
+    private Date createdDate;
     private Boolean voided;
     
     public DonorDeferralBuilder withId(Long id) {
@@ -38,6 +39,11 @@ public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
         voided = false;
         return this;
     }
+    
+    public DonorDeferralBuilder withCreatedDate(Date createdDate) {
+    	this.createdDate = createdDate;
+    	return this;
+    }
 
     @Override
     public DonorDeferral build() {
@@ -47,6 +53,7 @@ public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
         donorDeferral.setDeferralReason(deferralReason);
         donorDeferral.setDeferredUntil(deferredUntil);
         donorDeferral.setIsVoided(voided);
+        donorDeferral.setCreatedDate(createdDate);
         return donorDeferral;
     }
     

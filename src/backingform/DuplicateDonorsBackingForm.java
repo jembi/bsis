@@ -2,6 +2,8 @@ package backingform;
 
 import java.util.List;
 
+import model.donor.Donor;
+
 /**
  * BackingForm used to receive data via the API that will result in the specified duplicate donors
  * being merged and a new donor being created as specified.
@@ -9,7 +11,15 @@ import java.util.List;
 public class DuplicateDonorsBackingForm extends DonorBackingForm {
 	
 	List<String> duplicateDonorNumbers;
-	
+
+	public DuplicateDonorsBackingForm() {
+	    super();
+    }
+
+	public DuplicateDonorsBackingForm(Donor donor) {
+	    super(donor);
+    }
+
 	public List<String> getDuplicateDonorNumbers() {
 		return duplicateDonorNumbers;
 	}

@@ -400,6 +400,15 @@ public class DonorRepository {
         query.setParameter("isVoided", Boolean.FALSE);
         return query.getResultList();
     }
+    
+    public List<DonorDeferral> getDonorDeferrals(List<Long> donorIds) throws NoResultException {
+        String queryString = "SELECT d from DonorDeferral d WHERE "
+                + " d.deferredDonor.id in (:donorIds) AND d.isVoided=:isVoided";
+        TypedQuery<DonorDeferral> query = em.createQuery(queryString, DonorDeferral.class);
+        query.setParameter("donorIds", donorIds);
+        query.setParameter("isVoided", Boolean.FALSE);
+        return query.getResultList();
+    }
 
     public boolean isCurrentlyDeferred(List<DonorDeferral> donorDeferrals) {
 

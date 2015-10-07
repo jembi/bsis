@@ -18,10 +18,13 @@ import model.donor.DuplicateDonorBackup;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DeferralReasonType;
 import model.donordeferral.DonorDeferral;
+import model.donordeferral.DurationType;
 import model.util.Gender;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import scala.actors.threadpool.Arrays;
 
 public class DuplicateDonorServiceTest {
 	
@@ -132,7 +135,7 @@ public class DuplicateDonorServiceTest {
 	
 	@Test
 	public void testMergeDuplicateDonorsNull() throws Exception {
-		List<DuplicateDonorBackup> backupLogs = service.mergeDonors(new Donor(), (List<Donor>)null);
+		List<DuplicateDonorBackup> backupLogs = service.mergeDonors(new Donor(), (List<Donor>) null);
 		Assert.assertNotNull("backupLogs returned", backupLogs);
 		Assert.assertEquals("No backups necessary", 0, backupLogs.size());
 	}
@@ -179,9 +182,9 @@ public class DuplicateDonorServiceTest {
 		List<DuplicateDonorBackup> backupLogs = service.mergeDonors(david3, donors);
 		Assert.assertNotNull("backupLogs returned", backupLogs);
 		Assert.assertEquals("Donation and Deferral backups necessary", 3, backupLogs.size());
-		Assert.assertTrue("1st DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3","1",1l,null)));
-		Assert.assertTrue("2nd DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3","1",2l,null)));
-		Assert.assertTrue("3rd DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3","2",null,1l)));
+		Assert.assertTrue("1st DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "1", 1l, null)));
+		Assert.assertTrue("2nd DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "1", 2l, null)));
+		Assert.assertTrue("3rd DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "2", null, 1l)));
 		Assert.assertNull("Donations were moved", david1.getDonations());
 		Assert.assertNull("Deferrals were moved", david2.getDeferrals());
 		Assert.assertEquals("Donations were moved", 2, david3.getDonations().size());
@@ -365,5 +368,57 @@ public class DuplicateDonorServiceTest {
 		Donor d2 = DonorBuilder.aDonor().withFirstName("David").withLastName("Smith").withGender(Gender.male).build();
 		boolean result = service.match(d1, d2);
 		Assert.assertFalse("Donor does not match", result);
+	}
+	
+	@Test
+	public void testGetDonorDeferrals() throws Exception {
+		DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDefaultDuration(1)
+		        .withDurationType(DurationType.PERMANENT).withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
+		
+		Date dd1CreatedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2015-01-01");
+		DonorDeferral dd1 = DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferralReason(deferralReason)
+		        .withDeferredUntil(new Date()).withCreatedDate(dd1CreatedDate).build();
+		
+		Date dd2CreatedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2014-01-01");
+		DonorDeferral dd2 = DonorDeferralBuilder.aDonorDeferral().withId(2l).withDeferralReason(deferralReason)
+		        .withDeferredUntil(new Date()).withCreatedDate(dd2CreatedDate).build();
+		
+		Donor d1 = DonorBuilder.aDonor().withFirstName("David").withLastName("Smith").withGender(Gender.male)
+		        .withBirthDate("1978-10-20").withDeferrals(Arrays.asList(new DonorDeferral[] { dd1 })).build();
+		Donor d2 = DonorBuilder.aDonor().withFirstName("John").withLastName("Smith").withGender(Gender.male)
+		        .withBirthDate("1958-10-20").withDeferrals(Arrays.asList(new DonorDeferral[] { dd2 })).build();
+		
+		List<DonorDeferral> deferrals = service.combineDeferralsAndSortByDate(Arrays.asList(new Donor[] { d1, d2 }));
+		
+		Assert.assertNotNull("List was returned", deferrals);
+		Assert.assertEquals("Correct number of Deferrals in the list", 2, deferrals.size());
+		Assert.assertEquals("Deferrals in the correct order", Long.valueOf(2), deferrals.get(0).getId());
+		Assert.assertEquals("Deferrals in the correct order", Long.valueOf(1), deferrals.get(1).getId());
+	}
+	
+	@Test
+	public void testGetDonorDonations() throws Exception {
+		Donation d1 = DonationBuilder.aDonation().withId(1l)
+		        .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-07-01")).build();
+		Donation d2 = DonationBuilder.aDonation().withId(2l)
+		        .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01")).build();
+		Donation d3 = DonationBuilder.aDonation().withId(3l)
+		        .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-09-01")).build();
+		Donor david = DonorBuilder.aDonor().withFirstName("David").withLastName("Smith").withGender(Gender.male)
+		        .withBirthDate("1978-10-20").withDonations(Arrays.asList(new Donation[] { d1, d2, d3 })).build();
+		
+		Donation d4 = DonationBuilder.aDonation().withId(4l)
+		        .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-05-01")).build();
+		Donor john = DonorBuilder.aDonor().withFirstName("John").withLastName("Smith").withGender(Gender.male)
+		        .withBirthDate("1958-10-20").withDonations(Arrays.asList(new Donation[] { d4 })).build();
+		
+		List<Donation> donations = service.combineDonationsAndSortByDate(Arrays.asList(new Donor[] { david, john }));
+		
+		Assert.assertNotNull("List was returned", donations);
+		Assert.assertEquals("Correct number of Deferrals in the list", 4, donations.size());
+		Assert.assertEquals("Donations in the correct order", Long.valueOf(2), donations.get(0).getId());
+		Assert.assertEquals("Donations in the correct order", Long.valueOf(4), donations.get(1).getId());
+		Assert.assertEquals("Donations in the correct order", Long.valueOf(1), donations.get(2).getId());
+		Assert.assertEquals("Donations in the correct order", Long.valueOf(3), donations.get(3).getId());
 	}
 }

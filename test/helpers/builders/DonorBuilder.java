@@ -6,8 +6,11 @@ import helpers.persisters.DonorPersister;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
+import model.donation.Donation;
 import model.donor.Donor;
+import model.donordeferral.DonorDeferral;
 import model.location.Location;
 import model.util.Gender;
 
@@ -24,6 +27,8 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
     private Date dateOfFirstDonation;
     private Date dateOfLastDonation;
     private Location venue;
+    private List<DonorDeferral> deferrals;
+    private List<Donation> donations;
 
     public DonorBuilder withId(Long id) {
         this.id = id;
@@ -85,6 +90,16 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
 		this.birthDate = sdf.parse(dateOfBirth);
 		return this;
 	}
+	
+	public DonorBuilder withDeferrals(List<DonorDeferral> deferrals) {
+		this.deferrals = deferrals;
+		return this;
+	}
+	
+	public DonorBuilder withDonations(List<Donation> donations) {
+		this.donations = donations;
+		return this;
+	}
 
     @Override
     public Donor build() {
@@ -100,6 +115,8 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
         donor.setDateOfFirstDonation(dateOfFirstDonation);
         donor.setDateOfLastDonation(dateOfLastDonation);
         donor.setVenue(venue);
+        donor.setDeferrals(deferrals);
+        donor.setDonations(donations);
         return donor;
     }
 

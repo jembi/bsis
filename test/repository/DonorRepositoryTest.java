@@ -13,6 +13,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -797,6 +798,18 @@ public class DonorRepositoryTest {
         assertFalse(
                 "Defer donor should not found. Because There is no record into donordeferral table which is match with Donor ID.",
                 donorRepository.isCurrentlyDeferred(listDonorDeferral));
+    }
+    
+    @Test
+    public void testGetDonorDeferrals() {
+		List<DonorDeferral> all = donorRepository.getDonorDeferrals(Arrays.asList(new Long[] { 4l, 6l }));
+		Assert.assertNotNull("List is returned", all);
+		Assert.assertEquals("Three Deferrals for the Donors", 3, all.size());
+		for (DonorDeferral deferral : all) {
+			if (!deferral.getDeferredDonor().getId().equals(4l) && !deferral.getDeferredDonor().getId().equals(6l)) {
+				Assert.fail("Deferral is for Donor with id 4 or 6");
+			}
+		}
     }
 
     @Test
