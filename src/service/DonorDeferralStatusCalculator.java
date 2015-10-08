@@ -39,7 +39,7 @@ public class DonorDeferralStatusCalculator {
         }
 
         // Use the general config to determine whether or not the donor should be deferred
-        return generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.DONOR_DEFER_WITH_NEGATIVE_CONFIRMATIONS);
+        return generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.DEFER_DONORS_WITH_NEG_CONFIRMATORY_OUTCOMES);
     }
 
 }

@@ -982,10 +982,10 @@
     <changeSet id="20151005-0925" author="bausmeier">
         <insert tableName="GeneralConfig">
             <column name="name"
-                value="donors.deferral.deferWithNegativeConfirmations"></column>
+                value="testing.deferDonorsWithNegConfirmatoryOutcomes"></column>
             <column name="value" value="true"></column>
             <column name="description"
-                value="Whether or not to defer donors who have a positive test result for which all confirmatory results are negative."></column>
+                value="Defer donors with a POS TTI test outcome, where all confirmatory outcomes are NEG"></column>
             <column name="dataType_id" value="4"></column>
         </insert>
     </changeSet>
