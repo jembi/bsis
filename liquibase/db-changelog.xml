@@ -1754,4 +1754,17 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20151005-1213" author="bausmeier">
+        <comment>Add missing autoincrement on id column</comment>
+        <addAutoIncrement tableName="BloodTestingRule" columnName="id" columnDataType="smallint(6)" />
+    </changeSet>
+    
+    <changeSet id="20151006-1200" author="bausmeier">
+        <addColumn tableName="BloodTest">
+            <column name="flagComponentsForDiscard" type="tinyint(1)" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

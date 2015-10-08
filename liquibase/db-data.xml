@@ -718,4 +718,15 @@
 		</insert>
 	</changeSet>
 
+    <changeSet id="20151005-0925" author="bausmeier">
+        <insert tableName="GeneralConfig">
+            <column name="name"
+                value="testing.deferDonorsWithNegConfirmatoryOutcomes"></column>
+            <column name="value" value="true"></column>
+            <column name="description"
+                value="Defer donors with a POS TTI test outcome, where all confirmatory outcomes are NEG"></column>
+            <column name="dataType_id" value="4"></column>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

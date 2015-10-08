@@ -1,7 +1,9 @@
 package model.bloodtesting;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,9 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-
 import model.worksheet.WorksheetType;
-
 import org.hibernate.envers.Audited;
 
 @Entity
@@ -42,7 +42,7 @@ public class BloodTest implements Comparable<BloodTest> {
   private String negativeResults;
 
   /**
-   * TODO: not used now but will be useful for mapping numeric validResults to '+'.
+   * A comma separated list of results which count as positive.
    */
   private String positiveResults;
 
@@ -74,6 +74,12 @@ public class BloodTest implements Comparable<BloodTest> {
   private Boolean isActive;
   
   private Boolean isDeleted;
+  
+    /**
+     * Whether or not to flag associated components for discard when a test has a positive outcome.
+     */
+    @Column(nullable = false)
+    private boolean flagComponentsForDiscard = false;
 
   public Integer getId() {
     return id;
@@ -90,6 +96,19 @@ public class BloodTest implements Comparable<BloodTest> {
   public String getValidResults() {
     return validResults;
   }
+
+    /**
+     * Get the valid results for this test as a list. The list cannot be modified since changes to the valid results
+     * must be done by updating the {@link #validResults} string.
+     * 
+     * @return An immutable list of valid results.
+     */
+    public List<String> getValidResultsList() {
+        if (validResults == null || validResults.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return Collections.unmodifiableList(Arrays.asList(validResults.split(",")));
+    }
 
   public String getNegativeResults() {
     return negativeResults;
@@ -193,4 +212,12 @@ public void setIsDeleted(Boolean isDeleted) {
   public int compareTo(BloodTest o) {
     return this.id.compareTo(o.id);
   }
+
+    public boolean isFlagComponentsForDiscard() {
+        return flagComponentsForDiscard;
+    }
+
+    public void setFlagComponentsForDiscard(boolean flagComponentsForDiscard) {
+        this.flagComponentsForDiscard = flagComponentsForDiscard;
+    }
 }

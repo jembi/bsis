@@ -175,80 +175,73 @@ public class BloodTestingRepository {
 		return results;
 	}
 	
-	public Map<String, Object> saveBloodTestingResults(
-			Long donationId,
-			Map<Long, String> bloodTypingTestResults,
+	public Map<String, Object> saveBloodTestingResults(Long donationId, Map<Long, String> bloodTypingTestResults,
 			boolean saveIfUninterpretable) {
 
 		Donation donation = new Donation();
 		BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
 		Boolean uninterpretableResults = false;
 		Date testedOn = new Date();
+
 		Map<Long, String> errorMap = validateTestResultValues(donationId, bloodTypingTestResults);
 		if (errorMap.isEmpty()) {
-			Map<Long, String> bloodTestResultsForDonation = bloodTypingTestResults;
-			donation = donationRepository
-					.findDonationById(donationId);
-			ruleResult = ruleEngine.applyBloodTests(
-					donation, bloodTestResultsForDonation);
+			donation = donationRepository.findDonationById(donationId);
+			ruleResult = ruleEngine.applyBloodTests(donation, bloodTypingTestResults);
 
-			if (ruleResult.getAboUninterpretable()
+			if (!saveIfUninterpretable && (ruleResult.getAboUninterpretable()
 					|| ruleResult.getRhUninterpretable()
-					|| ruleResult.getTtiUninterpretable()) {
-				if (saveIfUninterpretable) {
-					saveBloodTestResultsToDatabase(
-							bloodTestResultsForDonation, donation,
-							testedOn, ruleResult);
-				} else {
-					uninterpretableResults = true;
-					errorMap.put(donationId, "Test results are uninterpretable");
-				}
+					|| ruleResult.getTtiUninterpretable())) {
+			    // Saving uninterpretable results is not allowed and at least one result is uninterpretable
+				uninterpretableResults = true;
+				errorMap.put(donationId, "Test results are uninterpretable");
 			} else {
-				saveBloodTestResultsToDatabase(
-						bloodTestResultsForDonation, donation,
-						testedOn, ruleResult);
+				saveBloodTestResultsToDatabase(bloodTypingTestResults, donation, testedOn, ruleResult);
 			}
 			em.flush();
 		}
 
-		Map<String, Object> results = new HashMap<String, Object>();
+		Map<String, Object> results = new HashMap<>();
 		results.put("donation", donation);
 		results.put("bloodTestingResults", ruleResult);
-		results.put("uninterpretableResults",
-				uninterpretableResults);
+		results.put("uninterpretableResults", uninterpretableResults);
 		results.put("errors", errorMap);
-
 		return results;
 	}
 	
-	public Map<Long, String> validateTestResultValues(Long donationId,
-			Map<Long, String> bloodTypingTestResults) {
+	public Map<Long, String> validateTestResultValues(Long donationId, Map<Long, String> bloodTypingTestResults) {
 
-		Map<String, BloodTest> allBloodTestsMap = new HashMap<String, BloodTest>();
-		for (BloodTest bloodTypingTest : getAllBloodTests()) {
-			allBloodTestsMap.put(bloodTypingTest.getId().toString(),
-					bloodTypingTest);
+	    /**
+	     * Build a map of active blood test ids to the active blood tests.
+	     */
+		Map<String, BloodTest> activeBloodTestsMap = new HashMap<>();
+		for (BloodTest bloodTypingTest : findActiveBloodTests()) {
+			activeBloodTestsMap.put(bloodTypingTest.getId().toString(), bloodTypingTest);
 		}
 
-		Map<Long, String> errorMap = new HashMap<Long, String>();
+		Map<Long, String> errorMap = new HashMap<>();
 
-		Map<Long, String> testsForDonation = bloodTypingTestResults;
-		for (Long testId : testsForDonation.keySet()) {
-			String result = testsForDonation.get(testId);
-			BloodTest test = allBloodTestsMap.get(testId.toString());
-			if (test == null) {
-				addError(errorMap, donationId, testId,
-						"Invalid test");
+		for (Long testId : bloodTypingTestResults.keySet()) {
+
+			BloodTest activeBloodTest = activeBloodTestsMap.get(testId.toString());
+			
+			if (activeBloodTest == null) {
+			    // No active test was found for the provided id
+				errorMap.put(testId, "Invalid test");
+				break;
 			}
-			if (StringUtils.isBlank(result) && !test.getIsEmptyAllowed()) {
-				addError(errorMap, donationId, testId,
-						"No value specified");
+
+			String result = bloodTypingTestResults.get(testId);
+
+			if (!activeBloodTest.getIsEmptyAllowed() && StringUtils.isBlank(result)) {
+			    // Empty results are not allowed for this test and the provided result is empty
+			    errorMap.put(testId, "No value specified");
+			    break;
 			}
-			List<String> validResults = Arrays.asList(test
-					.getValidResults().split(","));
-			if (!validResults.contains(result)) {
-				addError(errorMap, donationId, testId,
-						"Invalid value specified");
+
+			if (!activeBloodTest.getValidResultsList().contains(result)) {
+			    // The provided result is not in the list of valid results
+			    errorMap.put(testId, "Invalid value specified");
+				break;
 			}
 		}
 
@@ -293,7 +286,7 @@ public class BloodTestingRepository {
 			Map<Long, Map<Long, String>> bloodTypingTestResults) {
 
 		Map<String, BloodTest> allBloodTestsMap = new HashMap<String, BloodTest>();
-		for (BloodTest bloodTypingTest : getAllBloodTests()) {
+		for (BloodTest bloodTypingTest : findActiveBloodTests()) {
 			allBloodTestsMap.put(bloodTypingTest.getId().toString(),
 					bloodTypingTest);
 		}
@@ -315,9 +308,7 @@ public class BloodTestingRepository {
 					addErrorToMap(errorMap, donationId, testId,
 							"No value specified");
 				}
-				List<String> validResults = Arrays.asList(test
-						.getValidResults().split(","));
-				if (!validResults.contains(result)) {
+				if (!test.getValidResultsList().contains(result)) {
 					addErrorToMap(errorMap, donationId, testId,
 							"Invalid value specified");
 				}
@@ -331,20 +322,18 @@ public class BloodTestingRepository {
 		if (StringUtils.isBlank(result)) {
 			return false;
 		}
-		List<String> validResults = Arrays.asList(test.getValidResults().split(
-				","));
-		if (!validResults.contains(result)) {
-			return false;
-		}
-		return true;
+		return test.getValidResultsList().contains(result);
 	}
 
-	public List<BloodTest> getAllBloodTests() {
-		String queryStr = "SELECT b FROM BloodTest b WHERE b.isActive=:isActive";
-		TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
-		query.setParameter("isActive", true);
-		List<BloodTest> bloodTests = query.getResultList();
-		return bloodTests;
+	public List<BloodTest> findActiveBloodTests() {
+	    
+	    return em.createQuery(
+	            "SELECT b " +
+	            "FROM BloodTest b " +
+	            "WHERE b.isActive = :isActive ",
+	            BloodTest.class)
+	            .setParameter("isActive", true)
+	            .getResultList();
 	}
 
 	public List<BloodTest> getAllBloodTestsIncludeInactive() {
@@ -362,14 +351,6 @@ public class BloodTestingRepository {
 			errorMap.put(donationId, errorsForDonation);
 		}
 		errorsForDonation.put(testId, errorMessage);
-	}
-	
-	private void addError(Map<Long, String> errorMap,
-			Long donationId, Long testId, String errorMessage) {
-		if (errorMap == null) {
-			errorMap = new HashMap<Long, String>();
-		}
-		errorMap.put(testId, errorMessage);
 	}
 
 	public Map<String, Object> getAllTestsStatusForDonations(
