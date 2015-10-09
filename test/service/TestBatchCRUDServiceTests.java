@@ -8,7 +8,9 @@ import static helpers.builders.DonorBuilder.aDonor;
 import static helpers.builders.TestBatchBuilder.aTestBatch;
 import static helpers.matchers.TestBatchMatcher.hasSameStateAsTestBatch;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -46,9 +48,11 @@ public class TestBatchCRUDServiceTests {
     private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
     @Mock
     private ComponentStatusCalculator componentStatusCalculator;
+    @Mock
+    private TestBatchConstraintChecker testBatchConstraintChecker;
     
     @Test
-    public void testUpdateTestBatchStatusWithStatusChangeNotToClosed_shouldUpdateTestBatchStatus() {
+    public void testUpdateTestBatchStatusWithStatusChangeNotToReleased_shouldUpdateTestBatchStatus() {
         long testBatchId = 526;
         TestBatchStatus newStatus = TestBatchStatus.READY_TO_CLOSE;
 
@@ -78,11 +82,11 @@ public class TestBatchCRUDServiceTests {
     @Test
     public void testUpdateTestBatchStatusWithNoStatusChange_shouldUpdateTestBatchStatus() {
         long testBatchId = 526;
-        TestBatchStatus newStatus = TestBatchStatus.CLOSED;
+        TestBatchStatus newStatus = TestBatchStatus.RELEASED;
 
         TestBatch existingTestBatch = aTestBatch()
                 .withId(testBatchId)
-                .withStatus(TestBatchStatus.CLOSED)
+                .withStatus(TestBatchStatus.RELEASED)
                 .build();
 
         TestBatch expectedTestBatch = aTestBatch()
@@ -106,7 +110,7 @@ public class TestBatchCRUDServiceTests {
     @Test
     public void testUpdateTestBatchStatusWithNoDonationBatches_shouldUpdateTestBatchStatus() {
         long testBatchId = 526;
-        TestBatchStatus newStatus = TestBatchStatus.CLOSED;
+        TestBatchStatus newStatus = TestBatchStatus.RELEASED;
 
         TestBatch existingTestBatch = aTestBatch()
                 .withId(testBatchId)
@@ -131,10 +135,37 @@ public class TestBatchCRUDServiceTests {
         assertThat(returnedTestBatch, hasSameStateAsTestBatch(expectedTestBatch));
     }
     
+    @Test(expected = IllegalStateException.class)
+    public void testUpdateTestBatchStatusWithTestBatchWithConstraints_shouldThrow() {
+        long testBatchId = 526;
+
+        List<DonationBatch> donationBatches = Arrays.asList(
+                aDonationBatch()
+                    .withDonations(Arrays.asList(aDonation().withId(22L).withTTIStatus(TTIStatus.TTI_SAFE).build()))
+                    .build()
+        );
+
+        TestBatch existingTestBatch = aTestBatch()
+                .withId(testBatchId)
+                .withStatus(TestBatchStatus.READY_TO_CLOSE)
+                .withDonationBatches(donationBatches)
+                .build();
+
+        when(testBatchRepository.findTestBatchById(testBatchId)).thenReturn(existingTestBatch);
+        when(testBatchConstraintChecker.canReleaseTestBatch(existingTestBatch)).thenReturn(false);
+
+        testBatchCRUDService.updateTestBatchStatus(testBatchId, TestBatchStatus.RELEASED);
+        
+        verify(testBatchRepository, never()).updateTestBatch(any(TestBatch.class));
+        verifyZeroInteractions(postDonationCounsellingCRUDService);
+        verifyZeroInteractions(donorDeferralCRUDService);
+        verifyZeroInteractions(componentCRUDService);
+    }
+    
     @Test
     public void testUpdateTestBatchStatusWithSafeDonation_shouldOnlyUpdateTestBatch() {
         long testBatchId = 526;
-        TestBatchStatus newStatus = TestBatchStatus.CLOSED;
+        TestBatchStatus newStatus = TestBatchStatus.RELEASED;
 
         Donation safeDonation = aDonation()
                 .withId(22L)
@@ -160,6 +191,7 @@ public class TestBatchCRUDServiceTests {
                 .build();
         
         when(testBatchRepository.findTestBatchById(testBatchId)).thenReturn(existingTestBatch);
+        when(testBatchConstraintChecker.canReleaseTestBatch(existingTestBatch)).thenReturn(true);
         when(testBatchRepository.updateTestBatch(argThat(hasSameStateAsTestBatch(expectedTestBatch))))
                 .thenReturn(expectedTestBatch);
 
@@ -175,7 +207,7 @@ public class TestBatchCRUDServiceTests {
     @Test
     public void testUpdateTestBatchStatusWithSafeDonationWithTestsThatDiscardComponents_shouldDiscardComponentsForDonation() {
         long testBatchId = 526;
-        TestBatchStatus newStatus = TestBatchStatus.CLOSED;
+        TestBatchStatus newStatus = TestBatchStatus.RELEASED;
         
         List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult()
                 .withId(18L)
@@ -207,6 +239,7 @@ public class TestBatchCRUDServiceTests {
                 .build();
         
         when(testBatchRepository.findTestBatchById(testBatchId)).thenReturn(existingTestBatch);
+        when(testBatchConstraintChecker.canReleaseTestBatch(existingTestBatch)).thenReturn(true);
         when(componentStatusCalculator.shouldComponentsBeDiscarded(bloodTestResults)).thenReturn(true);
         when(testBatchRepository.updateTestBatch(argThat(hasSameStateAsTestBatch(expectedTestBatch))))
                 .thenReturn(expectedTestBatch);
@@ -223,7 +256,7 @@ public class TestBatchCRUDServiceTests {
     @Test
     public void testUpdateTestBatchStatusWithUnsafeDonationAndDonorNotToBeDeferred_shouldNotCreateDeferral() {
         long testBatchId = 526;
-        TestBatchStatus newStatus = TestBatchStatus.CLOSED;
+        TestBatchStatus newStatus = TestBatchStatus.RELEASED;
         
         Donor donorWithUnsafeDonation = aDonor().withId(86L).build();
         
@@ -255,6 +288,7 @@ public class TestBatchCRUDServiceTests {
                 .build();
         
         when(testBatchRepository.findTestBatchById(testBatchId)).thenReturn(existingTestBatch);
+        when(testBatchConstraintChecker.canReleaseTestBatch(existingTestBatch)).thenReturn(true);
         when(testBatchRepository.updateTestBatch(argThat(hasSameStateAsTestBatch(expectedTestBatch))))
                 .thenReturn(expectedTestBatch);
         when(donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults)).thenReturn(false);
@@ -271,7 +305,7 @@ public class TestBatchCRUDServiceTests {
     @Test
     public void testUpdateTestBatchStatusWithUnsafeDonationAndDonorToBeDeferred_shouldCreateDeferralAndCounsellingAndUpdateComponents() {
         long testBatchId = 526;
-        TestBatchStatus newStatus = TestBatchStatus.CLOSED;
+        TestBatchStatus newStatus = TestBatchStatus.RELEASED;
         
         Donor donorWithUnsafeDonation = aDonor().withId(86L).build();
         
@@ -303,6 +337,7 @@ public class TestBatchCRUDServiceTests {
                 .build();
         
         when(testBatchRepository.findTestBatchById(testBatchId)).thenReturn(existingTestBatch);
+        when(testBatchConstraintChecker.canReleaseTestBatch(existingTestBatch)).thenReturn(true);
         when(testBatchRepository.updateTestBatch(argThat(hasSameStateAsTestBatch(expectedTestBatch))))
                 .thenReturn(expectedTestBatch);
         when(donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults)).thenReturn(true);
