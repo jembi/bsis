@@ -19,9 +19,15 @@ public class TestBatchViewModelFactory {
     private DonationBatchViewModelFactory donationBatchViewModelFactory;
     @Autowired
     private TestBatchConstraintChecker testBatchConstraintChecker;
-    
-    public TestBatchViewModel createTestBatchViewModel(TestBatch testBatch) {
-        return createTestBatchViewModel(testBatch, false);
+
+    public List<TestBatchViewModel> createTestBatchViewModels(List<TestBatch> testBatches, boolean isTestingSupervisor) {
+        List<TestBatchViewModel> viewModels = new ArrayList<>();
+        
+        for (TestBatch testBatch : testBatches) {
+            viewModels.add(createTestBatchViewModel(testBatch, isTestingSupervisor));
+        }
+        
+        return viewModels;
     }
     
     public TestBatchViewModel createTestBatchViewModel(TestBatch testBatch, boolean isTestingSupervisor) {

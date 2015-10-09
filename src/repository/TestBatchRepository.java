@@ -1,32 +1,19 @@
 package repository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import static java.util.Collections.list;
-
 import java.util.List;
 import java.util.Map;
-
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-
-import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
-
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import factory.TestBatchViewModelFactory;
-import viewmodel.TestBatchViewModel;
 
 @Repository
 @Transactional
@@ -80,7 +67,7 @@ public class TestBatchRepository {
         return em.merge(testBatch);
     }
 
-  public List<TestBatchViewModel> findTestBatches(
+  public List<TestBatch> findTestBatches(
 	      String status, String createdAfterDate,
 	      String createdBeforeDate,Map<String, Object> pagingParams) {
 
@@ -103,14 +90,7 @@ public class TestBatchRepository {
 	    query.setFirstResult(start);
 	    query.setMaxResults(length);
 
-            List<TestBatch> testBatches = query.getResultList();
-            List<TestBatchViewModel> viewModels = new ArrayList<TestBatchViewModel>();
-        for (TestBatch testBatch : testBatches) {
-
-            viewModels.add(testBatchViewModelFactory.createTestBatchViewModel(testBatch));
-        }
-
-        return viewModels;
+        return query.getResultList();
     }
   
   /**

@@ -67,7 +67,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
         when(donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch, true))
                 .thenReturn(donationBatchViewModel);
         
-        TestBatchViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchViewModel(testBatch);
+        TestBatchViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchViewModel(testBatch, false);
         
         assertThat(returnedViewModel, hasSameStateAsTestBatchViewModel(expectedViewModel));
     }
