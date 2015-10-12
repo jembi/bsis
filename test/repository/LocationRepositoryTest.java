@@ -120,9 +120,11 @@ public class LocationRepositoryTest {
 		Assert.assertEquals("The Location matches", "Maseru", one.getName());
 	}
 	
-	@Test(expected = javax.persistence.NoResultException.class)
+	@Test
 	public void testGetLocationByNameDeleted() throws Exception {
 		Location one = locationRepository.findLocationByName("Hlotse");
+		Assert.assertNotNull("There is a Location", one);
+		Assert.assertEquals("The Location matches", "Hlotse", one.getName());
 	}
 	
 	@Test
