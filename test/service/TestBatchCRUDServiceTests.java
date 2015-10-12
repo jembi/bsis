@@ -54,7 +54,7 @@ public class TestBatchCRUDServiceTests {
     @Test
     public void testUpdateTestBatchStatusWithStatusChangeNotToReleased_shouldUpdateTestBatchStatus() {
         long testBatchId = 526;
-        TestBatchStatus newStatus = TestBatchStatus.READY_TO_CLOSE;
+        TestBatchStatus newStatus = TestBatchStatus.RELEASED;
 
         TestBatch existingTestBatch = aTestBatch()
                 .withId(testBatchId)
@@ -95,16 +95,34 @@ public class TestBatchCRUDServiceTests {
                 .build();
         
         when(testBatchRepository.findTestBatchById(testBatchId)).thenReturn(existingTestBatch);
-        when(testBatchRepository.updateTestBatch(argThat(hasSameStateAsTestBatch(expectedTestBatch))))
-                .thenReturn(expectedTestBatch);
 
         TestBatch returnedTestBatch = testBatchCRUDService.updateTestBatchStatus(testBatchId, newStatus);
         
-        verify(testBatchRepository).updateTestBatch(argThat(hasSameStateAsTestBatch(expectedTestBatch)));
+        verify(testBatchRepository, never()).updateTestBatch(any(TestBatch.class));
         verifyZeroInteractions(postDonationCounsellingCRUDService);
         verifyZeroInteractions(donorDeferralCRUDService);
         verifyZeroInteractions(componentCRUDService);
         assertThat(returnedTestBatch, hasSameStateAsTestBatch(expectedTestBatch));
+    }
+    
+    @Test(expected = IllegalStateException.class)
+    public void testUpdateTestBatchStatusToClosedWithOpenTestBatch_shouldThrow() {
+        long testBatchId = 526;
+        TestBatchStatus newStatus = TestBatchStatus.CLOSED;
+
+        TestBatch existingTestBatch = aTestBatch()
+                .withId(testBatchId)
+                .withStatus(TestBatchStatus.OPEN)
+                .build();
+        
+        when(testBatchRepository.findTestBatchById(testBatchId)).thenReturn(existingTestBatch);
+
+        testBatchCRUDService.updateTestBatchStatus(testBatchId, newStatus);
+        
+        verify(testBatchRepository, never()).updateTestBatch(any(TestBatch.class));
+        verifyZeroInteractions(postDonationCounsellingCRUDService);
+        verifyZeroInteractions(donorDeferralCRUDService);
+        verifyZeroInteractions(componentCRUDService);
     }
     
     @Test
@@ -114,7 +132,7 @@ public class TestBatchCRUDServiceTests {
 
         TestBatch existingTestBatch = aTestBatch()
                 .withId(testBatchId)
-                .withStatus(TestBatchStatus.READY_TO_CLOSE)
+                .withStatus(TestBatchStatus.OPEN)
                 .build();
 
         TestBatch expectedTestBatch = aTestBatch()
@@ -147,7 +165,7 @@ public class TestBatchCRUDServiceTests {
 
         TestBatch existingTestBatch = aTestBatch()
                 .withId(testBatchId)
-                .withStatus(TestBatchStatus.READY_TO_CLOSE)
+                .withStatus(TestBatchStatus.OPEN)
                 .withDonationBatches(donationBatches)
                 .build();
 
@@ -180,7 +198,7 @@ public class TestBatchCRUDServiceTests {
 
         TestBatch existingTestBatch = aTestBatch()
                 .withId(testBatchId)
-                .withStatus(TestBatchStatus.READY_TO_CLOSE)
+                .withStatus(TestBatchStatus.OPEN)
                 .withDonationBatches(donationBatches)
                 .build();
 
@@ -228,7 +246,7 @@ public class TestBatchCRUDServiceTests {
 
         TestBatch existingTestBatch = aTestBatch()
                 .withId(testBatchId)
-                .withStatus(TestBatchStatus.READY_TO_CLOSE)
+                .withStatus(TestBatchStatus.OPEN)
                 .withDonationBatches(donationBatches)
                 .build();
 
@@ -277,7 +295,7 @@ public class TestBatchCRUDServiceTests {
 
         TestBatch existingTestBatch = aTestBatch()
                 .withId(testBatchId)
-                .withStatus(TestBatchStatus.READY_TO_CLOSE)
+                .withStatus(TestBatchStatus.OPEN)
                 .withDonationBatches(donationBatches)
                 .build();
 
@@ -326,7 +344,7 @@ public class TestBatchCRUDServiceTests {
 
         TestBatch existingTestBatch = aTestBatch()
                 .withId(testBatchId)
-                .withStatus(TestBatchStatus.READY_TO_CLOSE)
+                .withStatus(TestBatchStatus.OPEN)
                 .withDonationBatches(donationBatches)
                 .build();
 

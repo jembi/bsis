@@ -46,11 +46,18 @@ public class TestBatchCRUDService {
         LOGGER.info("Updating status of test batch " + testBatchId + " to " + newStatus);
         
         TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
+        
+        if (newStatus == testBatch.getStatus()) {
+            // The status is not being changed so return early
+            return testBatch;
+        }
+
+        if (newStatus == TestBatchStatus.CLOSED && testBatch.getStatus() != TestBatchStatus.RELEASED) {
+            throw new IllegalStateException("Only released test batches can be closed");
+        }
 
         // If the test batch status is changing to released and it has donation batches
-        if (newStatus == TestBatchStatus.RELEASED &&
-                testBatch.getStatus() != TestBatchStatus.RELEASED &&
-                testBatch.getDonationBatches() != null) {
+        if (newStatus == TestBatchStatus.RELEASED && testBatch.getDonationBatches() != null) {
             
             if (!testBatchConstraintChecker.canReleaseTestBatch(testBatch)) {
                 throw new IllegalStateException("Test batch cannot be released");

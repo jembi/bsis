@@ -153,10 +153,10 @@ public class TestBatchRepositoryTest {
 	@Test
 	public void testUpdateTestBatch() throws Exception {
 		TestBatch testBatch = testBatchRepository.findTestBatchById(2l);
-		testBatch.setStatus(TestBatchStatus.READY_TO_CLOSE);
+		testBatch.setStatus(TestBatchStatus.RELEASED);
 		testBatchRepository.updateTestBatch(testBatch);
 		TestBatch updatedTestBatch = testBatchRepository.findTestBatchById(2l);
-		Assert.assertEquals("TestBatch status is correct", TestBatchStatus.READY_TO_CLOSE, updatedTestBatch.getStatus());
+		Assert.assertEquals("TestBatch status is correct", TestBatchStatus.RELEASED, updatedTestBatch.getStatus());
 	}
 	
 	@Test
