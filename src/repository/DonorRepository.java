@@ -133,10 +133,8 @@ public class DonorRepository {
         }
         
         Predicate notMerged = cb.not(root.get("donorStatus").in(Arrays.asList(DonorStatus.MERGED)));
-        cb.and(notMerged, exp2);
-
         Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
-        cq.where(cb.and(notDeleted, exp2));
+        cq.where(cb.and(notMerged, cb.and(notDeleted, exp2)));
 
         int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
         int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
@@ -157,7 +155,7 @@ public class DonorRepository {
 
         CriteriaQuery<Long> countCriteriaQuery = cb.createQuery(Long.class);
         Root<Donor> countRoot = countCriteriaQuery.from(Donor.class);
-        countCriteriaQuery.where(cb.and(notDeleted, exp2));
+        countCriteriaQuery.where(cb.and(notMerged, cb.and(notDeleted, exp2)));
         countCriteriaQuery.select(cb.countDistinct(countRoot));
 
         TypedQuery<Long> countQuery = em.createQuery(countCriteriaQuery);
@@ -254,10 +252,9 @@ public class DonorRepository {
             Expression<Boolean> exp = cb.or(donorNumberExp, firstNameExp, lastNameExp);
             
             Predicate notMerged = cb.not(root.get("donorStatus").in(Arrays.asList(DonorStatus.MERGED)));
-            cb.and(notMerged, exp);
-
             Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
-            cq.where(cb.and(notDeleted, exp));
+            cq.where(cb.and(notMerged, cb.and(notDeleted, exp)));
+
             TypedQuery<Donor> query = em.createQuery(cq);
             List<Donor> donors = query.getResultList();
             if (donors != null && donors.size() > 0) {
