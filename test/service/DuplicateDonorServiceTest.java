@@ -412,7 +412,8 @@ public class DuplicateDonorServiceTest {
 		Donor john = DonorBuilder.aDonor().withFirstName("John").withLastName("Smith").withGender(Gender.male)
 		        .withBirthDate("1958-10-20").withDonations(Arrays.asList(new Donation[] { d4 })).build();
 		
-		List<Donation> donations = service.combineDonationsAndSortByDate(Arrays.asList(new Donor[] { david, john }));
+		List<Donation> donations = service.combineDonations(Arrays.asList(new Donor[] { david, john }));
+		donations = service.sortDonationsByDate(donations);
 		
 		Assert.assertNotNull("List was returned", donations);
 		Assert.assertEquals("Correct number of Deferrals in the list", 4, donations.size());

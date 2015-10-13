@@ -62,6 +62,10 @@ public class DuplicateDonorService {
 		List<DuplicateDonorBackup> backupLogs = mergeDonors(newDonor, donorsToMerge);
 		// save the new donor, the merged donors and the backup logs
 		Donor savedDonor = donorRepository.addMergedDonor(newDonor, donorsToMerge, backupLogs);
+		// run the necessary blood tests
+		executeTestsAndUpdate(newDonor, newDonor.getDonations());
+		// persist the updates after the tests
+		savedDonor = donorRepository.updateDonor(savedDonor);
 		
 		return savedDonor;
 	}
@@ -109,6 +113,7 @@ public class DuplicateDonorService {
 				donor.setDonations(null);
 			}
 		}
+		combinedDonations = sortDonationsByDate(combinedDonations);
 		newDonor.setDonations(combinedDonations);
 		newDonor.setDeferrals(combinedDeferrals);
 		return backupLog;
@@ -125,24 +130,13 @@ public class DuplicateDonorService {
 	 * @return List of Donations, in chronological order
 	 */
 	public List<Donation> getAllDonationsToMerge(Donor newDonor, List<String> donorNumbers) {
-		List<Donation> combinedDonations = combineDonationsAndSortByDate(donorRepository.findDonorsByNumbers(donorNumbers));
-		
-		for (Donation donation : combinedDonations) {
-			// analyse the Blood Tests
-			BloodTestingRuleResult ruleResult = bloodTestsService.executeTests(newDonor, donation);
-			// FIXME: note: donation was updated after running the tests (not persisted) - see line 337 of BloodTestingRuleEngine
-			// process test results
-			bloodTestsService.updateDonationWithTestResults(donation, ruleResult);
-			// sets the Donor's donation related attributes
-			donorService.setDonorDateOfFirstDonation(newDonor, donation);
-			donorService.setDonorDateOfLastDonation(newDonor, donation);
-			donorService.setDonorDueToDonate(newDonor, donation);
-		}
-		
+		List<Donation> combinedDonations = combineDonations(donorRepository.findDonorsByNumbers(donorNumbers));
+		combinedDonations = sortDonationsByDate(combinedDonations);
+		executeTestsAndUpdate(newDonor, combinedDonations);
 		return combinedDonations;
 	}
 	
-	protected List<Donation> combineDonationsAndSortByDate(List<Donor> donors) {
+	protected List<Donation> combineDonations(List<Donor> donors) {
 		List<Donation> combinedDonations = new ArrayList<Donation>();
 		if (donors != null) {
 			for (Donor donor : donors) {
@@ -156,7 +150,10 @@ public class DuplicateDonorService {
 				}
 			}
 		}
-		
+		return combinedDonations;
+	}
+	
+	protected List<Donation> sortDonationsByDate(List<Donation> combinedDonations) {
 		// sort donations in chronological order
 		Collections.sort(combinedDonations, new Comparator<Donation>() {
 			
@@ -165,6 +162,20 @@ public class DuplicateDonorService {
 			}
 		});
 		return combinedDonations;
+	}
+	
+	protected void executeTestsAndUpdate(Donor newDonor, List<Donation> combinedDonations) {
+		for (Donation donation : combinedDonations) {
+			// analyse the Blood Tests
+			BloodTestingRuleResult ruleResult = bloodTestsService.executeTests(newDonor, donation);
+			// FIXME: note: donation was updated after running the tests (not persisted) - see line 337 of BloodTestingRuleEngine
+			// process test results
+			bloodTestsService.updateDonationWithTestResults(donation, ruleResult);
+			// sets the Donor's donation related attributes
+			donorService.setDonorDateOfFirstDonation(newDonor, donation);
+			donorService.setDonorDateOfLastDonation(newDonor, donation);
+			donorService.setDonorDueToDonate(newDonor, donation);
+		}
 	}
 	
 	/**
