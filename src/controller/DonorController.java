@@ -28,9 +28,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import constant.GeneralConfigConstants;
-import factory.DonationViewModelFactory;
-import factory.DonorViewModelFactory;
 import repository.AdverseEventRepository;
 import repository.ContactMethodTypeRepository;
 import repository.DonationBatchRepository;
@@ -38,6 +35,7 @@ import repository.DonorRepository;
 import repository.LocationRepository;
 import repository.PostDonationCounsellingRepository;
 import service.DonorCRUDService;
+import service.DuplicateDonorService;
 import service.GeneralConfigAccessorService;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
@@ -47,7 +45,12 @@ import viewmodel.DonorSummaryViewModel;
 import viewmodel.DonorViewModel;
 import viewmodel.PostDonationCounsellingViewModel;
 import backingform.DonorBackingForm;
+import backingform.DuplicateDonorsBackingForm;
 import backingform.validator.DonorBackingFormValidator;
+import constant.GeneralConfigConstants;
+import factory.DonationViewModelFactory;
+import factory.DonorDeferralViewModelFactory;
+import factory.DonorViewModelFactory;
 
 @RestController
 @RequestMapping("donors")
@@ -89,7 +92,13 @@ public class DonorController {
   private DonationViewModelFactory donationViewModelFactory;
   
   @Autowired
+  private DonorDeferralViewModelFactory donorDeferralViewModelFactory;
+  
+  @Autowired
   private AdverseEventRepository adverseEventRepository;
+  
+  @Autowired
+  private DuplicateDonorService duplicateDonorService;
   
   public DonorController() {
   }
@@ -295,7 +304,7 @@ public class DonorController {
         List<DonorDeferral> donorDeferrals = null;
         List<DonorDeferralViewModel> donorDeferralViewModels;
         donorDeferrals = donorRepository.getDonorDeferrals(id);
-        donorDeferralViewModels = getDonorDeferralViewModels(donorDeferrals);
+        donorDeferralViewModels = donorDeferralViewModelFactory.createDonorDeferralViewModels(donorDeferrals);
         map.put("isDonorCurrentlyDeferred", donorRepository.isCurrentlyDeferred(donorDeferrals));
         map.put("allDonorDeferrals", donorDeferralViewModels);
         return map;
@@ -339,6 +348,110 @@ public class DonorController {
     
     return map;
   }
+
+	@RequestMapping(value = "/duplicates", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
+	public Map<String, Object> findDuplicateDonors(@RequestParam(value = "donorNumber", required = true) String donorNumber) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		List<Donor> donors = donorRepository.getAllDonors();
+		Donor donor = donorRepository.findDonorByDonorNumber(donorNumber, false);
+		List<Donor> duplicates = duplicateDonorService.findDuplicateDonors(donor, donors);
+		
+		// convert Donors to DonorViewModels
+		List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
+		for (Donor d : duplicates) {
+			DonorViewModel donorViewModel = donorViewModelFactory.createDonorViewModelWithPermissions(d);
+			donorViewModels.add(donorViewModel);
+		}
+		
+		map.put("duplicates", donorViewModels);
+		return map;
+	}
+	
+	@RequestMapping(value = "/duplicates/all", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
+	public Map<String, Object> findDuplicateDonors() {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		List<Donor> donors = donorRepository.getAllDonors();
+		Map<String, List<Donor>> duplicates = duplicateDonorService.findDuplicateDonors(donors);
+		
+		// convert Donors to DonorViewModels
+		Map<String, List<DonorViewModel>> duplicateViewModels = new HashMap<String, List<DonorViewModel>>();
+		for (String key : duplicates.keySet()) {
+			List<Donor> donorList = duplicates.get(key);
+			List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
+			for (Donor donor : donorList) {
+				DonorViewModel donorViewModel = donorViewModelFactory.createDonorViewModelWithPermissions(donor);
+				donorViewModels.add(donorViewModel);
+			}
+			duplicateViewModels.put(key, donorViewModels);
+		}
+		
+		map.put("duplicates", duplicateViewModels);
+		return map;
+	}
+	
+	@RequestMapping(value = "/duplicates/merge/preview", method = RequestMethod.POST)
+	@PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
+	public Map<String, Object> findDuplicateDonorsDonations(@RequestParam(value = "donorNumber", required = true) String donorNumber,
+	                                                        @Valid @RequestBody DuplicateDonorsBackingForm form) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		// create new donor
+		Donor newDonor = form.getDonor();
+		newDonor.setIsDeleted(false);
+		newDonor.setContact(form.getContact());
+		newDonor.setAddress(form.getAddress());
+		
+		List<String> donorNumbers = form.getDuplicateDonorNumbers();
+		
+		// Get all the Donations, process the Test Results and update necessary newDonor and Donation fields
+		List<Donation> donations = duplicateDonorService.getAllDonationsToMerge(newDonor, donorNumbers);
+		List<DonationViewModel> donationViewModels = donationViewModelFactory
+		        .createDonationViewModelsWithPermissions(donations);
+		
+		// gather all Deferrals
+		List<DonorDeferral> donorDeferrals = duplicateDonorService.getAllDeferralsToMerge(newDonor, donorNumbers);
+		List<DonorDeferralViewModel> donorDeferralViewModels = donorDeferralViewModelFactory
+		        .createDonorDeferralViewModels(donorDeferrals);
+		
+		form = new DuplicateDonorsBackingForm(newDonor);
+		form.setContact(newDonor.getContact());
+		form.setAddress(newDonor.getAddress());
+		
+		map.put("allDonations", donationViewModels);
+		map.put("allDeferrals", donorDeferralViewModels);
+		map.put("mergedDonor", form);
+		
+		return map;
+	}
+	
+	@RequestMapping(value = "/duplicates/merge", method = RequestMethod.POST)
+	@PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONOR + "')")
+	public ResponseEntity<Map<String, Object>> mergeDuplicateDonors(@RequestParam(value = "donorNumber", required = true) String donorNumber,
+	                                                                @Valid @RequestBody DuplicateDonorsBackingForm form) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		// create new donor
+		Donor newDonor = form.getDonor();
+		newDonor.setIsDeleted(false);
+		newDonor.setContact(form.getContact());
+		newDonor.setAddress(form.getAddress());
+		
+		Donor savedDonor = duplicateDonorService.mergeAndSaveDonors(newDonor, form.getDuplicateDonorNumbers());
+		
+		map.put("hasErrors", false);
+		map.put("donorId", savedDonor.getId());
+		map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(savedDonor));
+		
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
+	}
   
     @RequestMapping(value = "{id}/postdonationcounselling", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_POST_DONATION_COUNSELLING + "')")
@@ -356,14 +469,6 @@ public class DonorController {
     m.put("languages", donorRepository.getAllLanguages());
     m.put("idTypes", donorRepository.getAllIdTypes());
     m.put("addressTypes", donorRepository.getAllAddressTypes());
-  }
-
-  private List<DonorDeferralViewModel> getDonorDeferralViewModels(List<DonorDeferral> donorDeferrals) {
-    List<DonorDeferralViewModel> donorDeferralViewModels = new ArrayList<DonorDeferralViewModel>();
-    for (DonorDeferral donorDeferral : donorDeferrals) {
-        donorDeferralViewModels.add(new DonorDeferralViewModel(donorDeferral));
-    }
-    return donorDeferralViewModels;
   }
   
   private DonationViewModel getDonationViewModel(Donation donation) {
