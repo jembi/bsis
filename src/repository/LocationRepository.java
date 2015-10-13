@@ -109,10 +109,10 @@ public class LocationRepository {
 
   public List<Location> getAllVenues() {
     TypedQuery<Location> query = em.createQuery(
-        "SELECT l from Location l where l.isVenue=:isVenue",
+        "SELECT l from Location l where l.isVenue=:isVenue and l.isDeleted=:isDeleted",
         Location.class);
     query.setParameter("isVenue", true);
-
+    query.setParameter("isDeleted", false);
     return query.getResultList();
   }
 
