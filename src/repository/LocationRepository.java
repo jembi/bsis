@@ -33,8 +33,8 @@ public class LocationRepository {
 
   public List<Location> getAllLocations() {
     TypedQuery<Location> query = em
-        .createQuery("SELECT l FROM Location l where l.isDeleted= :isDeleted", Location.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
+        .createQuery("SELECT l FROM Location l", Location.class);
+
     return query.getResultList();
   }
 
@@ -49,9 +49,8 @@ public class LocationRepository {
 
   public Location getLocation(Long selectedLocationId) {
     TypedQuery<Location> query = em.createQuery(
-      "SELECT l FROM Location l where l.id= :locationId and l.isDeleted= :isDeleted",
+      "SELECT l FROM Location l where l.id= :locationId",
       Location.class);
-    query.setParameter("isDeleted", false);
     query.setParameter("locationId", selectedLocationId);
     return query.getSingleResult();
   }
@@ -119,12 +118,14 @@ public class LocationRepository {
 
   public Location findLocationByName(String locationName) throws NoResultException, NonUniqueResultException{
     TypedQuery<Location> query = em.createQuery(
-        "SELECT l FROM Location l where l.name= :locationName and l.isDeleted= :isDeleted",
-        Location.class);
-      query.setParameter("isDeleted", false);
-      query.setParameter("locationName", locationName);
-      Location location = null;
+            "SELECT l FROM Location l where l.name= :locationName",
+            Location.class);
+    query.setParameter("locationName", locationName);
+    Location location = null;
+    try {
       location = query.getSingleResult();
-      return location;
+    } catch (NoResultException ex) {
+    }
+    return location;
   }
 }
