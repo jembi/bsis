@@ -62,6 +62,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
                 .withNotes(IRRELEVANT_NOTES)
                 .withDonationBatches(Arrays.asList(donationBatchViewModel))
                 .withPermission("canRelease", false)
+                .withPermission("canClose", false)
                 .build();
         
         when(donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch, true))
@@ -73,7 +74,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
     }
     
     @Test
-    public void testCreateTestBatchViewModelWithTestingSupervisor_shouldReturnTestBatchViewModelWithTheCorrectState() {
+    public void testCreateTestBatchViewModelWithTestingSupervisorThatCanReleaseTestBatch_shouldReturnTestBatchViewModelWithTheCorrectState() {
         
         TestBatch testBatch = aTestBatch()
                 .withId(IRRELEVANT_ID)
@@ -93,9 +94,43 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
                 .withNotes(IRRELEVANT_NOTES)
                 .withDonationBatches(Collections.<DonationBatchViewModel>emptyList())
                 .withPermission("canRelease", true)
+                .withPermission("canClose", false)
                 .build();
 
         when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(true);
+        when(testBatchConstraintChecker.canCloseTestBatch(testBatch)).thenReturn(false);
+        
+        TestBatchViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchViewModel(testBatch, true);
+        
+        assertThat(returnedViewModel, hasSameStateAsTestBatchViewModel(expectedViewModel));
+    }
+    
+    @Test
+    public void testCreateTestBatchViewModelWithTestingSupervisorThatCanCloseTestBatch_shouldReturnTestBatchViewModelWithTheCorrectState() {
+        
+        TestBatch testBatch = aTestBatch()
+                .withId(IRRELEVANT_ID)
+                .withStatus(IRRELEVANT_STATUS)
+                .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
+                .withCreatedDate(IRRELEVANT_CREATED_DATE)
+                .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
+                .withNotes(IRRELEVANT_NOTES)
+                .build();
+
+        TestBatchViewModel expectedViewModel = aTestBatchViewModel()
+                .withId(IRRELEVANT_ID)
+                .withStatus(IRRELEVANT_STATUS)
+                .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
+                .withCreatedDate(IRRELEVANT_CREATED_DATE)
+                .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
+                .withNotes(IRRELEVANT_NOTES)
+                .withDonationBatches(Collections.<DonationBatchViewModel>emptyList())
+                .withPermission("canRelease", false)
+                .withPermission("canClose", true)
+                .build();
+
+        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(false);
+        when(testBatchConstraintChecker.canCloseTestBatch(testBatch)).thenReturn(true);
         
         TestBatchViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchViewModel(testBatch, true);
         
@@ -123,9 +158,11 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
                 .withNotes(IRRELEVANT_NOTES)
                 .withDonationBatches(Collections.<DonationBatchViewModel>emptyList())
                 .withPermission("canRelease", false)
+                .withPermission("canClose", false)
                 .build();
 
         when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(false);
+        when(testBatchConstraintChecker.canCloseTestBatch(testBatch)).thenReturn(false);
         
         TestBatchViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchViewModel(testBatch, true);
         

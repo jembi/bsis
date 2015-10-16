@@ -56,7 +56,7 @@ public class DonationCRUDServiceTests {
     @Test(expected = IllegalStateException.class)
     public void testDeleteDonationWithConstraints_shouldThrow() {
         
-        when(donationConstraintChecker.canDeletedDonation(IRRELEVANT_DONATION_ID)).thenReturn(false);
+        when(donationConstraintChecker.canDeleteDonation(IRRELEVANT_DONATION_ID)).thenReturn(false);
 
         donationCRUDService.deleteDonation(IRRELEVANT_DONATION_ID);
     }
@@ -90,7 +90,7 @@ public class DonationCRUDServiceTests {
                 .withDateOfLastDonation(IRRELEVANT_DATE_OF_LAST_DONATION)
                 .build();
         
-        when(donationConstraintChecker.canDeletedDonation(IRRELEVANT_DONATION_ID)).thenReturn(true);
+        when(donationConstraintChecker.canDeleteDonation(IRRELEVANT_DONATION_ID)).thenReturn(true);
         when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
         when(donationRepository.findDateOfFirstDonationForDonor(IRRELEVANT_DONOR_ID)).thenReturn(expectedDateOfFirstDonation);
 
@@ -131,7 +131,7 @@ public class DonationCRUDServiceTests {
                 .withDateOfLastDonation(expectedDateOfLastDonation)
                 .build();
         
-        when(donationConstraintChecker.canDeletedDonation(IRRELEVANT_DONATION_ID)).thenReturn(true);
+        when(donationConstraintChecker.canDeleteDonation(IRRELEVANT_DONATION_ID)).thenReturn(true);
         when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
         when(donationRepository.findDateOfLastDonationForDonor(IRRELEVANT_DONOR_ID)).thenReturn(expectedDateOfLastDonation);
 

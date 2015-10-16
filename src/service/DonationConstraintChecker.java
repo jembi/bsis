@@ -1,17 +1,17 @@
 package service;
 
 import javax.persistence.NoResultException;
-
+import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import repository.BloodTestResultRepository;
 import repository.ComponentRepository;
 import repository.DonationRepository;
+import repository.bloodtesting.BloodTypingMatchStatus;
+import repository.bloodtesting.BloodTypingStatus;
 
 @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 @Service
@@ -24,7 +24,7 @@ public class DonationConstraintChecker {
     @Autowired
     private ComponentRepository componentRepository;
     
-    public boolean canDeletedDonation(long donationId) throws NoResultException {
+    public boolean canDeleteDonation(long donationId) throws NoResultException {
 
         Donation donation = donationRepository.findDonationById(donationId);
         
@@ -59,6 +59,17 @@ public class DonationConstraintChecker {
         }
         
         return true;
+    }
+    
+    /**
+     * Test outcome discrepancies: tti tests that require confirmatory testing, blood group serology test outcomes that
+     * are ambiguous, or require a confirmatory outcome.
+     */
+    public boolean donationHasDiscrepancies(Donation donation) {
+        
+        return donation.getTTIStatus() == TTIStatus.NOT_DONE
+                || donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.AMBIGUOUS
+                || donation.getBloodTypingStatus() ==  BloodTypingStatus.PENDING_TESTS;
     }
 
 }

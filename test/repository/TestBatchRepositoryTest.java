@@ -3,9 +3,7 @@ package repository;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -107,38 +105,18 @@ public class TestBatchRepositoryTest {
 	
 	@Test
 	public void testFindTestBatchesNone() throws Exception {
-		String status = "READY_TO_CLOSE";
-		String createdAfterDate = "2015-07-10 00:00:00";
-		String createdBeforeDate = "2015-07-11 23:59:59";
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<TestBatch> testBatches = testBatchRepository.findTestBatches(status, createdAfterDate, createdBeforeDate,
-		        pagingParams);
+		TestBatchStatus status = TestBatchStatus.RELEASED;
+		List<TestBatch> testBatches = testBatchRepository.findTestBatches(status);
 		Assert.assertNotNull("TestBatch not null", testBatches);
 		Assert.assertTrue("TestBatch is empty", testBatches.isEmpty());
 	}
 	
 	@Test
-	public void testFindTestBatchesMatchOnDateOnly() throws Exception {
-		String status = "READY_TO_CLOSE";
-		String createdAfterDate = "2015-08-10 00:00:00";
-		String createdBeforeDate = "2015-08-13 23:59:59";
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<TestBatch> testBatches = testBatchRepository.findTestBatches(status, createdAfterDate, createdBeforeDate,
-		        pagingParams);
-		Assert.assertNotNull("TestBatch not null", testBatches);
-		Assert.assertEquals("TestBatch matched on date", 2, testBatches.size());
-	}
-	
-	@Test
 	public void testFindTestBatchesMatchOnStatusOnly() throws Exception {
-		String status = "CLOSED";
-		String createdAfterDate = "2015-07-10 00:00:00";
-		String createdBeforeDate = "2015-07-11 23:59:59";
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<TestBatch> testBatches = testBatchRepository.findTestBatches(status, createdAfterDate, createdBeforeDate,
-		        pagingParams);
+		TestBatchStatus status = TestBatchStatus.CLOSED;
+		List<TestBatch> testBatches = testBatchRepository.findTestBatches(status);
 		Assert.assertNotNull("TestBatch not null", testBatches);
-		Assert.assertEquals("TestBatch matched on date", 1, testBatches.size());
+		Assert.assertEquals("TestBatch matched on status", 1, testBatches.size());
 	}
 	
 	@Test

@@ -1,7 +1,7 @@
 package helpers.builders;
 
+import java.util.ArrayList;
 import java.util.List;
-
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 
@@ -13,6 +13,14 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
 
     public DonationBatchBuilder withDonations(List<Donation> donations) {
         this.donations = donations;
+        return this;
+    }
+
+    public DonationBatchBuilder withDonation(Donation donation) {
+        if (donations == null) {
+            donations = new ArrayList<>();
+        }
+        donations.add(donation);
         return this;
     }
     

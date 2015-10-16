@@ -1,5 +1,6 @@
 package helpers.builders;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import model.donationbatch.DonationBatch;
@@ -48,6 +49,14 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
     
     public TestBatchBuilder withDonationBatches(List<DonationBatch> donationBatches) {
         this.donationBatches = donationBatches;
+        return this;
+    }
+    
+    public TestBatchBuilder withDonationBatch(DonationBatch donationBatch) {
+        if (donationBatches == null) {
+            donationBatches = new ArrayList<>();
+        }
+        donationBatches.add(donationBatch);
         return this;
     }
 

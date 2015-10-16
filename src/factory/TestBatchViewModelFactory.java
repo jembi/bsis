@@ -52,6 +52,7 @@ public class TestBatchViewModelFactory {
         // Set permissions
         Map<String, Boolean> permissions = new HashMap<>();
         permissions.put("canRelease", isTestingSupervisor && testBatchConstraintChecker.canReleaseTestBatch(testBatch));
+        permissions.put("canClose", isTestingSupervisor && testBatchConstraintChecker.canCloseTestBatch(testBatch));
         testBatchViewModel.setPermissions(permissions);
 
         return testBatchViewModel;

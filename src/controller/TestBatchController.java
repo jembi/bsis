@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import factory.DonationBatchViewModelFactory;
-import factory.TestBatchViewModelFactory;
 import repository.DonationBatchRepository;
 import repository.SequenceNumberRepository;
 import repository.TestBatchRepository;
@@ -33,6 +32,8 @@ import viewmodel.DonationBatchViewModel;
 import viewmodel.TestBatchViewModel;
 import backingform.TestBatchBackingForm;
 import backingform.validator.TestBatchBackingFormValidator;
+import factory.DonationBatchViewModelFactory;
+import factory.TestBatchViewModelFactory;
 
 @RestController
 @RequestMapping("testbatches")
@@ -83,6 +84,7 @@ public class TestBatchController {
     
     @RequestMapping(value = "{id}",  method = RequestMethod.GET)
     @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")
+    @Transactional(readOnly = true)
     public ResponseEntity getTestBatchById(@PathVariable Long id){
         
         Map<String, Object> map = new HashMap<String, Object>();
@@ -104,24 +106,18 @@ public class TestBatchController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")
-    public ResponseEntity findTestBatchPagination(
-            @RequestParam(value = "status", required = false) String status,
-            @RequestParam(value = "createdBeforeDate", required = false) String createdBeforeDate,
-            @RequestParam(value = "createdAfterDate", required = false) String createdAfterDate) {
-
-        Map<String, Object> pagingParams = new HashMap<String, Object>();
-        pagingParams.put("sortColumn", "id");
-        pagingParams.put("sortDirection", "asc");
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_BATCH + "')")
+    @Transactional(readOnly = true)
+    public ResponseEntity<Map<String, Object>> findTestBatchPagination(
+            @RequestParam(required = false) TestBatchStatus status) {
         
-        List<TestBatch> testBatches = testBatchRepository.findTestBatches(status,
-	    		createdAfterDate, createdBeforeDate, pagingParams);
+        List<TestBatch> testBatches = testBatchRepository.findTestBatches(status);
          
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
         map.put("testBatches", testBatchViewModelFactory.createTestBatchViewModels(testBatches, isTestingSupervisor));
 
-        return new ResponseEntity(map, HttpStatus.OK);
+        return new ResponseEntity<>(map, HttpStatus.OK);
 
     }
     
@@ -134,6 +130,7 @@ public class TestBatchController {
     
        @RequestMapping(value = "/recent/{count}" ,method = RequestMethod.GET)
    @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")  
+   @Transactional(readOnly = true)
    public ResponseEntity<Map<String, Object>> getRecentlyClosedTestBatches(
             @PathVariable Integer count) {
         

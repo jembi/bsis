@@ -1,11 +1,9 @@
 package repository;
 
 import java.util.List;
-import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
@@ -67,30 +65,15 @@ public class TestBatchRepository {
         return em.merge(testBatch);
     }
 
-  public List<TestBatch> findTestBatches(
-	      String status, String createdAfterDate,
-	      String createdBeforeDate,Map<String, Object> pagingParams) {
+    public List<TestBatch> findTestBatches(TestBatchStatus status) {
 
-	    String queryStr =  "SELECT * FROM TestBatch where status = :status "
-                    + " or createdDate BETWEEN :createdAfterDate AND :createdBeforeDate";
-	    
-	  
-	    if (pagingParams.containsKey("sortColumn")) {
-	      queryStr += " ORDER BY " + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
-	    }
-            
-           Query query = em.createNativeQuery(queryStr, TestBatch.class);
-	    
-            query.setParameter("status", status);
-            query.setParameter("createdAfterDate", createdAfterDate);
-	    query.setParameter("createdBeforeDate", createdBeforeDate);
-	    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
-	    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
-
-	    query.setFirstResult(start);
-	    query.setMaxResults(length);
-
-        return query.getResultList();
+        return em.createQuery(
+                "SELECT tb " +
+                "FROM TestBatch tb " +
+                "WHERE tb.status = :status ",
+                TestBatch.class)
+                .setParameter("status", status)
+                .getResultList();
     }
   
   /**

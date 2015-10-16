@@ -35,7 +35,7 @@ public class DonationViewModelFactory {
         
         // Populate permissions
         Map<String, Boolean> permissions = new HashMap<>();
-        permissions.put("canDelete", donationConstraintChecker.canDeletedDonation(donation.getId()));
+        permissions.put("canDelete", donationConstraintChecker.canDeleteDonation(donation.getId()));
         permissions.put("canUpdateDonationFields", donationConstraintChecker.canUpdateDonationFields(donation.getId()));
         donationViewModel.setPermissions(permissions);
         
