@@ -1,7 +1,5 @@
 package repository;
 
-import controller.UtilController;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -43,6 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import utils.DonorUtils;
 import viewmodel.DonorSummaryViewModel;
+import controller.UtilController;
 
 @Repository
 @Transactional
@@ -337,36 +336,6 @@ public class DonorRepository {
         return deferral;
     }
 
-    public DonorDeferral updateDeferral(DonorDeferral deferral) {
-    	DonorDeferral existingDeferral = findDeferralById(deferral.getId());
-        if (existingDeferral == null) {
-            return null;
-        }
-        existingDeferral.copy(deferral);
-        em.merge(existingDeferral);
-        em.flush();
-        return existingDeferral;
-    }
-    
-	public DonorDeferral findDeferralById(Long deferralId) throws NoResultException{
-	        String queryString = "SELECT d from DonorDeferral d WHERE "
-		            + " d.id = :deferralId AND d.isVoided=:isVoided";
-		    TypedQuery<DonorDeferral> query = em.createQuery(queryString, DonorDeferral.class);
-	        query.setParameter("deferralId", deferralId);
-	        query.setParameter("isVoided", false);
-	        return query.getSingleResult();
-	}
-
-    public void cancelDeferDonor(Long donorDeferralId) {
-        DonorDeferral donorDeferral = getDonorDeferralsId(donorDeferralId);
-        if (donorDeferral != null) {
-            donorDeferral.setIsVoided(Boolean.TRUE);
-            donorDeferral.setVoidedDate(new Date());
-            donorDeferral.setVoidedBy(utilController.getCurrentUser());
-        }
-        em.persist(donorDeferral);
-    }
-
     public DeferralReason findDeferralReasonById(String deferralReasonId) throws NoResultException{
             String queryString = "SELECT d FROM DeferralReason d WHERE "
                     + "d.id = :deferralReasonId AND d.isDeleted=:isDeleted";
@@ -424,17 +393,6 @@ public class DonorRepository {
             }
         }
         return lastDeferredUntil;
-    }
-
-    public DonorDeferral getDonorDeferralsId(Long donorDeferralsId) {
-        String queryString = "SELECT d from DonorDeferral d WHERE "
-                + " id=:donorDeferralsId";
-        TypedQuery<DonorDeferral> query = em.createQuery(queryString, DonorDeferral.class);
-        query.setParameter("donorDeferralsId", donorDeferralsId);
-        if (query.getResultList().size() > 0) {
-            return query.getSingleResult();
-        }
-        return null;
     }
 
   //Donor Code & Code Group Methods

@@ -1,6 +1,7 @@
 package repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import model.donor.Donor;
@@ -20,6 +21,15 @@ public class DonorDeferralRepository {
     @Transactional(propagation = Propagation.MANDATORY)
     public void save(DonorDeferral donorDeferral) {
         entityManager.persist(donorDeferral);
+    }
+    
+    public DonorDeferral findDonorDeferralById(Long donorDeferralId) throws NoResultException {
+        return entityManager.createNamedQuery(
+            "QUERY_FIND_DONOR_DEFERRAL_BY_ID", 
+            DonorDeferral.class)
+            .setParameter("donorDeferralId", donorDeferralId)
+            .setParameter("voided", false)
+            .getSingleResult();
     }
 
     // TODO: Test

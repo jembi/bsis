@@ -1,18 +1,18 @@
 package backingform;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
+
 import javax.validation.Valid;
+
 import model.donor.Donor;
-import model.donordeferral.DonorDeferral;
 import model.donordeferral.DeferralReason;
-import model.location.Location;
+import model.donordeferral.DonorDeferral;
 import model.user.User;
-import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
 import utils.CustomDateFormatter;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class DeferralBackingForm {
 	
@@ -39,6 +39,10 @@ public class DeferralBackingForm {
     public Long getId() {
         return deferral.getId();
     }
+    
+    public void setId(Long id) {
+        deferral.setId(id);
+      }
     
     @JsonIgnore
     public Date getLastUpdated() {
@@ -144,4 +148,8 @@ public class DeferralBackingForm {
     	}
     }
 
+    @JsonIgnore
+    public void setPermissions(Map<String, Boolean> permissions) {
+        // Ignore
+    }
 }

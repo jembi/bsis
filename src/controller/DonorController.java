@@ -28,9 +28,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import constant.GeneralConfigConstants;
-import factory.DonationViewModelFactory;
-import factory.DonorViewModelFactory;
 import repository.AdverseEventRepository;
 import repository.ContactMethodTypeRepository;
 import repository.DonationBatchRepository;
@@ -48,6 +45,10 @@ import viewmodel.DonorViewModel;
 import viewmodel.PostDonationCounsellingViewModel;
 import backingform.DonorBackingForm;
 import backingform.validator.DonorBackingFormValidator;
+import constant.GeneralConfigConstants;
+import factory.DeferralViewModelFactory;
+import factory.DonationViewModelFactory;
+import factory.DonorViewModelFactory;
 
 @RestController
 @RequestMapping("donors")
@@ -87,6 +88,9 @@ public class DonorController {
   
   @Autowired
   private DonationViewModelFactory donationViewModelFactory;
+  
+  @Autowired
+  private DeferralViewModelFactory deferralViewModelFactory;
   
   @Autowired
   private AdverseEventRepository adverseEventRepository;
@@ -295,7 +299,7 @@ public class DonorController {
         List<DonorDeferral> donorDeferrals = null;
         List<DonorDeferralViewModel> donorDeferralViewModels;
         donorDeferrals = donorRepository.getDonorDeferrals(id);
-        donorDeferralViewModels = getDonorDeferralViewModels(donorDeferrals);
+        donorDeferralViewModels = deferralViewModelFactory.createDonorDeferralViewModels(donorDeferrals);
         map.put("isDonorCurrentlyDeferred", donorRepository.isCurrentlyDeferred(donorDeferrals));
         map.put("allDonorDeferrals", donorDeferralViewModels);
         return map;
@@ -356,14 +360,6 @@ public class DonorController {
     m.put("languages", donorRepository.getAllLanguages());
     m.put("idTypes", donorRepository.getAllIdTypes());
     m.put("addressTypes", donorRepository.getAllAddressTypes());
-  }
-
-  private List<DonorDeferralViewModel> getDonorDeferralViewModels(List<DonorDeferral> donorDeferrals) {
-    List<DonorDeferralViewModel> donorDeferralViewModels = new ArrayList<DonorDeferralViewModel>();
-    for (DonorDeferral donorDeferral : donorDeferrals) {
-        donorDeferralViewModels.add(new DonorDeferralViewModel(donorDeferral));
-    }
-    return donorDeferralViewModels;
   }
   
   private DonationViewModel getDonationViewModel(Donation donation) {
