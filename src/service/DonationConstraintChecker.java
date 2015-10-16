@@ -12,6 +12,7 @@ import repository.ComponentRepository;
 import repository.DonationRepository;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
+import viewmodel.BloodTestingRuleResult;
 
 @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 @Service
@@ -23,6 +24,8 @@ public class DonationConstraintChecker {
     private BloodTestResultRepository bloodTestResultRepository;
     @Autowired
     private ComponentRepository componentRepository;
+    @Autowired
+    private BloodTestsService bloodTestsService;
     
     public boolean canDeleteDonation(long donationId) throws NoResultException {
 
@@ -67,9 +70,28 @@ public class DonationConstraintChecker {
      */
     public boolean donationHasDiscrepancies(Donation donation) {
         
-        return donation.getTTIStatus() == TTIStatus.NOT_DONE
-                || donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.AMBIGUOUS
-                || donation.getBloodTypingStatus() ==  BloodTypingStatus.PENDING_TESTS;
+        BloodTestingRuleResult bloodTestingRuleResult = bloodTestsService.executeTests(donation.getDonor(), donation);
+        
+        if (bloodTestingRuleResult.getPendingTTITestsIds() != null &&
+                bloodTestingRuleResult.getPendingTTITestsIds().size() > 0) {
+            
+            // Donation has pending TTI tests
+            return true;
+        }
+        
+        if (donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.AMBIGUOUS ||
+                donation.getBloodTypingStatus() == BloodTypingStatus.PENDING_TESTS) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public boolean donationHasOutstandingOutcomes(Donation donation) {
+
+        return donation.getTTIStatus() == TTIStatus.NOT_DONE ||
+                donation.getBloodTypingStatus() == BloodTypingStatus.NOT_DONE ||
+                donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NOT_DONE;
     }
 
 }
