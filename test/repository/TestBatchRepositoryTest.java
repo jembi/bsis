@@ -32,8 +32,6 @@ import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import viewmodel.TestBatchViewModel;
-
 /**
  * Test using DBUnit to test the TestBatchRepository
  */
@@ -113,8 +111,8 @@ public class TestBatchRepositoryTest {
 		String createdAfterDate = "2015-07-10 00:00:00";
 		String createdBeforeDate = "2015-07-11 23:59:59";
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<TestBatchViewModel> testBatches = testBatchRepository.findTestBatches(status, createdAfterDate,
-		    createdBeforeDate, pagingParams);
+		List<TestBatch> testBatches = testBatchRepository.findTestBatches(status, createdAfterDate, createdBeforeDate,
+		        pagingParams);
 		Assert.assertNotNull("TestBatch not null", testBatches);
 		Assert.assertTrue("TestBatch is empty", testBatches.isEmpty());
 	}
@@ -125,8 +123,8 @@ public class TestBatchRepositoryTest {
 		String createdAfterDate = "2015-08-10 00:00:00";
 		String createdBeforeDate = "2015-08-13 23:59:59";
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<TestBatchViewModel> testBatches = testBatchRepository.findTestBatches(status, createdAfterDate,
-		    createdBeforeDate, pagingParams);
+		List<TestBatch> testBatches = testBatchRepository.findTestBatches(status, createdAfterDate, createdBeforeDate,
+		        pagingParams);
 		Assert.assertNotNull("TestBatch not null", testBatches);
 		Assert.assertEquals("TestBatch matched on date", 2, testBatches.size());
 	}
@@ -137,8 +135,8 @@ public class TestBatchRepositoryTest {
 		String createdAfterDate = "2015-07-10 00:00:00";
 		String createdBeforeDate = "2015-07-11 23:59:59";
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<TestBatchViewModel> testBatches = testBatchRepository.findTestBatches(status, createdAfterDate,
-		    createdBeforeDate, pagingParams);
+		List<TestBatch> testBatches = testBatchRepository.findTestBatches(status, createdAfterDate, createdBeforeDate,
+		        pagingParams);
 		Assert.assertNotNull("TestBatch not null", testBatches);
 		Assert.assertEquals("TestBatch matched on date", 1, testBatches.size());
 	}
@@ -155,10 +153,10 @@ public class TestBatchRepositoryTest {
 	@Test
 	public void testUpdateTestBatch() throws Exception {
 		TestBatch testBatch = testBatchRepository.findTestBatchById(2l);
-		testBatch.setStatus(TestBatchStatus.READY_TO_CLOSE);
+		testBatch.setStatus(TestBatchStatus.RELEASED);
 		testBatchRepository.updateTestBatch(testBatch);
 		TestBatch updatedTestBatch = testBatchRepository.findTestBatchById(2l);
-		Assert.assertEquals("TestBatch status is correct", TestBatchStatus.READY_TO_CLOSE, updatedTestBatch.getStatus());
+		Assert.assertEquals("TestBatch status is correct", TestBatchStatus.RELEASED, updatedTestBatch.getStatus());
 	}
 	
 	@Test

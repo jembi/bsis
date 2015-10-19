@@ -30,6 +30,8 @@ public class TestBatchCRUDService {
     private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
     @Autowired
     private ComponentStatusCalculator componentStatusCalculator;
+    @Autowired
+    private TestBatchConstraintChecker testBatchConstraintChecker;
 
     public void setTestBatchRepository(TestBatchRepository testBatchRepository) {
         this.testBatchRepository = testBatchRepository;
@@ -44,11 +46,22 @@ public class TestBatchCRUDService {
         LOGGER.info("Updating status of test batch " + testBatchId + " to " + newStatus);
         
         TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
+        
+        if (newStatus == testBatch.getStatus()) {
+            // The status is not being changed so return early
+            return testBatch;
+        }
 
-        // If the test batch status is changing to closed and it has donation batches
-        if (newStatus == TestBatchStatus.CLOSED &&
-                testBatch.getStatus() != TestBatchStatus.CLOSED &&
-                testBatch.getDonationBatches() != null) {
+        if (newStatus == TestBatchStatus.CLOSED && testBatch.getStatus() != TestBatchStatus.RELEASED) {
+            throw new IllegalStateException("Only released test batches can be closed");
+        }
+
+        // If the test batch status is changing to released and it has donation batches
+        if (newStatus == TestBatchStatus.RELEASED && testBatch.getDonationBatches() != null) {
+            
+            if (!testBatchConstraintChecker.canReleaseTestBatch(testBatch)) {
+                throw new IllegalStateException("Test batch cannot be released");
+            }
             
             for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
 
