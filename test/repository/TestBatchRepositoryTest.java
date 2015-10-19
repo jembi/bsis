@@ -3,14 +3,12 @@ package repository;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
 import javax.sql.DataSource;
-
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
-
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseDataSourceConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -106,7 +104,7 @@ public class TestBatchRepositoryTest {
 	@Test
 	public void testFindTestBatchesNone() throws Exception {
 		TestBatchStatus status = TestBatchStatus.RELEASED;
-		List<TestBatch> testBatches = testBatchRepository.findTestBatches(status);
+		List<TestBatch> testBatches = testBatchRepository.findTestBatches(Arrays.asList(status));
 		Assert.assertNotNull("TestBatch not null", testBatches);
 		Assert.assertTrue("TestBatch is empty", testBatches.isEmpty());
 	}
@@ -114,7 +112,7 @@ public class TestBatchRepositoryTest {
 	@Test
 	public void testFindTestBatchesMatchOnStatusOnly() throws Exception {
 		TestBatchStatus status = TestBatchStatus.CLOSED;
-		List<TestBatch> testBatches = testBatchRepository.findTestBatches(status);
+		List<TestBatch> testBatches = testBatchRepository.findTestBatches(Arrays.asList(status));
 		Assert.assertNotNull("TestBatch not null", testBatches);
 		Assert.assertEquals("TestBatch matched on status", 1, testBatches.size());
 	}

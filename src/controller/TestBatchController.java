@@ -109,9 +109,9 @@ public class TestBatchController {
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_BATCH + "')")
     @Transactional(readOnly = true)
     public ResponseEntity<Map<String, Object>> findTestBatchPagination(
-            @RequestParam(required = false) TestBatchStatus status) {
+            @RequestParam(value = "status", required = false) List<TestBatchStatus> statuses) {
         
-        List<TestBatch> testBatches = testBatchRepository.findTestBatches(status);
+        List<TestBatch> testBatches = testBatchRepository.findTestBatches(statuses);
          
         Map<String, Object> map = new HashMap<>();
         boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);

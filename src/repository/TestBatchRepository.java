@@ -65,14 +65,14 @@ public class TestBatchRepository {
         return em.merge(testBatch);
     }
 
-    public List<TestBatch> findTestBatches(TestBatchStatus status) {
+    public List<TestBatch> findTestBatches(List<TestBatchStatus> statuses) {
 
         return em.createQuery(
                 "SELECT tb " +
                 "FROM TestBatch tb " +
-                "WHERE tb.status = :status ",
+                "WHERE tb.status IN :statuses ",
                 TestBatch.class)
-                .setParameter("status", status)
+                .setParameter("statuses", statuses)
                 .getResultList();
     }
   
