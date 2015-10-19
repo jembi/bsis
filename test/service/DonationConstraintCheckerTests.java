@@ -1,6 +1,8 @@
 package service;
 
+import static helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
 import static helpers.builders.DonationBuilder.aDonation;
+import static helpers.builders.DonorBuilder.aDonor;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
@@ -16,6 +18,7 @@ import repository.ComponentRepository;
 import repository.DonationRepository;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
+import viewmodel.BloodTestingRuleResult;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DonationConstraintCheckerTests {
@@ -30,6 +33,8 @@ public class DonationConstraintCheckerTests {
     private BloodTestResultRepository bloodTestResultRepository;
     @Mock
     private ComponentRepository componentRepository;
+    @Mock
+    private BloodTestsService bloodTestsService;
     
     @Test
     public void testCanDeleteDonationWithDonationWithNotes_shouldReturnFalse() {
@@ -120,19 +125,27 @@ public class DonationConstraintCheckerTests {
                 .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
                 .build();
         
+        when(bloodTestsService.executeTests(donation.getDonor(), donation))
+                .thenReturn(aBloodTestingRuleResult().build());
+        
         boolean result = donationConstraintChecker.donationHasDiscrepancies(donation);
         
         assertThat(result, is(false));
     }
     
     @Test
-    public void testDonationHasDiscrepanciesWithNotDoneTTIStatus_shouldReturnTrue() {
+    public void testDonationHasDiscrepanciesWithPendingTTITests_shouldReturnTrue() {
         Donation donation = aDonation()
+                .withDonor(aDonor().build())
                 .withTTIStatus(TTIStatus.NOT_DONE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
                 .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
                 .build();
         
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().withPendingTTITestId("12").build();
+
+        when(bloodTestsService.executeTests(donation.getDonor(), donation)).thenReturn(bloodTestingRuleResult);
+
         boolean result = donationConstraintChecker.donationHasDiscrepancies(donation);
         
         assertThat(result, is(true));
@@ -146,6 +159,9 @@ public class DonationConstraintCheckerTests {
                 .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
                 .build();
         
+        when(bloodTestsService.executeTests(donation.getDonor(), donation))
+                .thenReturn(aBloodTestingRuleResult().build());
+        
         boolean result = donationConstraintChecker.donationHasDiscrepancies(donation);
         
         assertThat(result, is(true));
@@ -158,6 +174,9 @@ public class DonationConstraintCheckerTests {
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
                 .withBloodTyingStatus(BloodTypingStatus.PENDING_TESTS)
                 .build();
+        
+        when(bloodTestsService.executeTests(donation.getDonor(), donation))
+                .thenReturn(aBloodTestingRuleResult().build());
         
         boolean result = donationConstraintChecker.donationHasDiscrepancies(donation);
         

@@ -74,43 +74,16 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
     }
 
     @Test
-    public void testCanReleaseTestBatchWithOutstandingBloodTypingTestResults_shouldReturnFalse() {
+    public void testCanReleaseTestBatchWithOutstandingOutcomes_shouldReturnFalse() {
         
-        List<BloodTestResult> bloodTestResults = Arrays.asList(
-                aBloodTestResult()
-                        .withBloodTest(aBloodTest().withBloodTestType(BloodTestType.BASIC_BLOODTYPING).build())
-                        .withResult(null)
-                        .build()
-        );
-        
-        List<Donation> donations = Arrays.asList(aDonation().withBloodTestResults(bloodTestResults).build());
+        Donation donationWithOutstandingOutcomes = aDonation().build();
         
         TestBatch testBatch = aTestBatch()
                 .withStatus(TestBatchStatus.OPEN)
-                .withDonationBatches(Arrays.asList(aDonationBatch().withDonations(donations).build()))
+                .withDonationBatch(aDonationBatch().withDonation(donationWithOutstandingOutcomes).build())
                 .build();
         
-        boolean result = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
-        
-        assertThat(result, is(false));
-    }
-
-    @Test
-    public void testCanReleaseTestBatchWithOutstandingTTITestResults_shouldReturnFalse() {
-        
-        List<BloodTestResult> bloodTestResults = Arrays.asList(
-                aBloodTestResult()
-                        .withBloodTest(aBloodTest().withBloodTestType(BloodTestType.BASIC_TTI).build())
-                        .withResult(null)
-                        .build()
-        );
-        
-        List<Donation> donations = Arrays.asList(aDonation().withBloodTestResults(bloodTestResults).build());
-        
-        TestBatch testBatch = aTestBatch()
-                .withStatus(TestBatchStatus.OPEN)
-                .withDonationBatches(Arrays.asList(aDonationBatch().withDonations(donations).build()))
-                .build();
+        when(donationConstraintChecker.donationHasOutstandingOutcomes(donationWithOutstandingOutcomes)).thenReturn(true);
         
         boolean result = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
         
