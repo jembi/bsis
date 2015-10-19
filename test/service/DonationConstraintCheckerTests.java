@@ -182,5 +182,81 @@ public class DonationConstraintCheckerTests {
         
         assertThat(result, is(true));
     }
+    
+    @Test
+    public void testDonationHasOutstandinOutcomesWithNotDoneTTIStatus_shouldReturnTrue() {
+        
+        Donation donation = aDonation()
+                .withId(IRRELEVANT_DONATION_ID)
+                .withDonor(aDonor().build())
+                .withTTIStatus(TTIStatus.NOT_DONE)
+                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+                .build();
+        
+        when(bloodTestsService.executeTests(donation.getDonor(), donation))
+                .thenReturn(aBloodTestingRuleResult().build());
+        
+        boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation);
+        
+        assertThat(result, is(true));
+    }
+    
+    @Test
+    public void testDonationHasOutstandinOutcomesWithNotDoneBloodTypingStatus_shouldReturnTrue() {
+        
+        Donation donation = aDonation()
+                .withId(IRRELEVANT_DONATION_ID)
+                .withDonor(aDonor().build())
+                .withTTIStatus(TTIStatus.TTI_SAFE)
+                .withBloodTyingStatus(BloodTypingStatus.NOT_DONE)
+                .withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS)
+                .build();
+        
+        when(bloodTestsService.executeTests(donation.getDonor(), donation))
+                .thenReturn(aBloodTestingRuleResult().build());
+        
+        boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation);
+        
+        assertThat(result, is(true));
+    }
+    
+    @Test
+    public void testDonationHasOutstandinOutcomesWithNotDoneBloodTypingMatchStatus_shouldReturnTrue() {
+        
+        Donation donation = aDonation()
+                .withId(IRRELEVANT_DONATION_ID)
+                .withDonor(aDonor().build())
+                .withTTIStatus(TTIStatus.TTI_UNSAFE)
+                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE)
+                .build();
+        
+        when(bloodTestsService.executeTests(donation.getDonor(), donation))
+                .thenReturn(aBloodTestingRuleResult().build());
+        
+        boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation);
+        
+        assertThat(result, is(true));
+    }
+    
+    @Test
+    public void testDonationHasOutstandinOutcomesWithNoOutstandingOutcomes_shouldReturnFalse() {
+        
+        Donation donation = aDonation()
+                .withId(IRRELEVANT_DONATION_ID)
+                .withDonor(aDonor().build())
+                .withTTIStatus(TTIStatus.TTI_SAFE)
+                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+                .build();
+        
+        when(bloodTestsService.executeTests(donation.getDonor(), donation))
+                .thenReturn(aBloodTestingRuleResult().build());
+        
+        boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation);
+        
+        assertThat(result, is(false));
+    }
 
 }
