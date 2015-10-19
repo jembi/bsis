@@ -31,6 +31,8 @@ public class TestBatchStatusChangeService {
 
     public void handleRelease(TestBatch testBatch) {
         
+        LOGGER.info("Handling release for test batch: " + testBatch);
+        
         if (testBatch.getDonationBatches() == null) {
             // No donation batches so nothing to do
             return;
@@ -40,26 +42,34 @@ public class TestBatchStatusChangeService {
 
             for (Donation donation : donationBatch.getDonations()) {
 
-                if (donationConstraintChecker.donationHasDiscrepancies(donation)) {
-                    LOGGER.info("Skipping donation with discrepancies: " + donation);
-                    continue;
-                }
-
-                if (donation.getTTIStatus() == TTIStatus.TTI_UNSAFE) {
-                    LOGGER.info("Handling donation with unsafe TTI status: " + donation);
-                    postDonationCounsellingCRUDService.createPostDonationCounsellingForDonation(donation);
-                    componentCRUDService.markComponentsBelongingToDonorAsUnsafe(donation.getDonor());
-
-                    if (donorDeferralStatusCalculator.shouldDonorBeDeferred(donation.getBloodTestResults())) {
-                        donorDeferralCRUDService.createDeferralForDonorWithDeferralReasonType(donation.getDonor(),
-                                DeferralReasonType.AUTOMATED_TTI_UNSAFE);
-                    }
-                } else if (componentStatusCalculator.shouldComponentsBeDiscarded(donation.getBloodTestResults())) {
-                    LOGGER.info("Handling donation with components flagged for discard: " + donation);
-                    componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
-                }
+                handleRelease(donation);
             }
         }
+    }
+    
+    public void handleRelease(Donation donation) {
+
+        if (donationConstraintChecker.donationHasDiscrepancies(donation)) {
+            LOGGER.info("Skipping donation with discrepancies: " + donation);
+            return;
+        }
+
+        if (donation.getTTIStatus() == TTIStatus.TTI_UNSAFE) {
+            LOGGER.info("Handling donation with unsafe TTI status: " + donation);
+            postDonationCounsellingCRUDService.createPostDonationCounsellingForDonation(donation);
+            componentCRUDService.markComponentsBelongingToDonorAsUnsafe(donation.getDonor());
+
+            if (donorDeferralStatusCalculator.shouldDonorBeDeferred(donation.getBloodTestResults())) {
+                donorDeferralCRUDService.createDeferralForDonorWithDeferralReasonType(donation.getDonor(),
+                        DeferralReasonType.AUTOMATED_TTI_UNSAFE);
+            }
+        } else if (componentStatusCalculator.shouldComponentsBeDiscarded(donation.getBloodTestResults())) {
+            LOGGER.info("Handling donation with components flagged for discard: " + donation);
+            componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
+        } else {
+            componentCRUDService.updateComponentStatusesForDonation(donation);
+        }
+
     }
 
 }

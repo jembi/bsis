@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import repository.ComponentRepository;
+import repository.DonationRepository;
 
 @Transactional
 @Service
@@ -22,7 +23,9 @@ public class ComponentCRUDService {
 
     @Autowired
     private ComponentRepository componentRepository;
-    
+    @Autowired
+    private DonationRepository donationRepository;
+
     /**
      * Change the status of components belonging to the donor from AVAILABLE to UNSAFE.
      */
@@ -41,6 +44,18 @@ public class ComponentCRUDService {
         LOGGER.info("Marking components as unsafe for donation: " + donation);
         
         componentRepository.updateComponentStatusForDonation(UPDATABLE_STATUSES, ComponentStatus.UNSAFE, donation);
+    }
+    
+    public void updateComponentStatusesForDonation(Donation donation) {
+        
+        LOGGER.info("Updating component statuses for donation: " + donation);
+
+        for (Component component : donation.getComponents()) {
+
+            if (!component.getIsDeleted() && componentRepository.updateComponentInternalFields(component)) {
+                componentRepository.updateComponent(component);
+            }
+        }
     }
 
 }

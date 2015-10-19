@@ -64,7 +64,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     }
     
     @Test
-    public void testHandleReleaseWithoutComponentsToBeDiscarded_shouldDoNothing() {
+    public void testHandleReleaseWithoutComponentsToBeDiscarded_shouldUpdateComponentStatuses() {
         
         List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
         Donation donationWithoutDiscrepancies = aDonation().withBloodTestResults(bloodTestResults).build();
@@ -77,7 +77,8 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         
         testBatchStatusChangeService.handleRelease(testBatch);
         
-        verifyZeroInteractions(postDonationCounsellingCRUDService, donorDeferralCRUDService, componentCRUDService);
+        verify(componentCRUDService).updateComponentStatusesForDonation(donationWithoutDiscrepancies);
+        verifyZeroInteractions(postDonationCounsellingCRUDService, donorDeferralCRUDService);
     }
     
     @Test
