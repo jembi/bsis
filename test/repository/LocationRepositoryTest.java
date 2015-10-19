@@ -82,7 +82,7 @@ public class LocationRepositoryTest {
 	public void testGetAllLocations() throws Exception {
 		List<Location> all = locationRepository.getAllLocations();
 		Assert.assertNotNull("There are Locations", all);
-		Assert.assertEquals("There are 5 Locations", 5, all.size());
+		Assert.assertEquals("There are 7 Locations", 7, all.size());
 	}
 	
 	@Test
@@ -106,9 +106,11 @@ public class LocationRepositoryTest {
 		Assert.assertEquals("The Location matches", "Maseru", one.getName());
 	}
 	
-	@Test(expected = javax.persistence.NoResultException.class)
+	@Test
 	public void testGetLocationDeleted() throws Exception {
 		Location one = locationRepository.getLocation(6l);
+		Assert.assertNotNull("There is a Location", one);
+		Assert.assertEquals("The Location matches", "Leribe Clinic", one.getName());
 	}
 	
 	@Test
@@ -118,9 +120,11 @@ public class LocationRepositoryTest {
 		Assert.assertEquals("The Location matches", "Maseru", one.getName());
 	}
 	
-	@Test(expected = javax.persistence.NoResultException.class)
+	@Test
 	public void testGetLocationByNameDeleted() throws Exception {
 		Location one = locationRepository.findLocationByName("Hlotse");
+		Assert.assertNotNull("There is a Location", one);
+		Assert.assertEquals("The Location matches", "Hlotse", one.getName());
 	}
 	
 	@Test
@@ -157,8 +161,9 @@ public class LocationRepositoryTest {
 	public void testDeleteLocation() throws Exception {
 		List<Location> all1 = locationRepository.getAllVenues();
 		locationRepository.deleteLocation(1L);
-		List<Location> all2 = locationRepository.getAllVenues();
-		Assert.assertEquals("Location has been deleted", all1.size() - 1, all2.size());
+		Location one = locationRepository.getLocation(1L);
+		Assert.assertNotNull("There is a Location", one);
+		Assert.assertEquals("The Location is marked as deleted", true, one.getIsDeleted());
 	}
 	
 	@Test

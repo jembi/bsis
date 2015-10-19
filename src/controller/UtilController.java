@@ -27,6 +27,7 @@ import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
+import model.location.Location;
 import model.packtype.PackType;
 import model.request.Request;
 import model.user.User;
@@ -485,6 +486,16 @@ public class UtilController {
       return false;
     GeneralConfig existingConfig = generalConfigRepository.getGeneralConfigByName(configName);
     if (existingConfig != null && !existingConfig.getId().equals(config.getId()))
+      return true;
+    return false;
+  }
+
+  public boolean isDuplicateLocationName(Location location) {
+    String locationName = location.getName();
+    if (StringUtils.isBlank(locationName))
+      return false;
+    Location existingLocation = locationRepository.findLocationByName(locationName);
+    if (existingLocation != null && !existingLocation.getId().equals(location.getId()))
       return true;
     return false;
   }
