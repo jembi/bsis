@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,7 +25,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import model.adverseevent.AdverseEvent;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
@@ -40,20 +38,16 @@ import model.modificationtracker.RowModificationTracker;
 import model.packtype.PackType;
 import model.user.User;
 import model.worksheet.Worksheet;
-
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Range;
-
 import repository.DonationNamedQueryConstants;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import constraintvalidator.PackTypeExists;
 import constraintvalidator.DonationBatchExists;
 import constraintvalidator.DonationTypeExists;
@@ -208,7 +202,40 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     worksheets = new HashSet<Worksheet>();
   }
 
-  public Long getId() {
+  public Donation(Donation donation) {
+    this();
+    this.id = donation.getId();
+    this.donationIdentificationNumber = donation.getDonationIdentificationNumber();
+    this.donor = donation.getDonor();
+    this.bloodAbo = donation.getBloodAbo();
+    this.bloodRh = donation.getBloodRh();
+    this.extraBloodTypeInformation = donation.getExtraBloodTypeInformation();
+    this.bloodTestResults = donation.getBloodTestResults();
+    this.donationDate = donation.getDonationDate();
+    this.donationType = donation.getDonationType();
+    this.packType = donation.getPackType();
+    this.components = donation.getComponents();
+    this.worksheets = donation.getWorksheets();
+    this.haemoglobinCount = donation.getHaemoglobinCount();
+    this.haemoglobinLevel = donation.getHaemoglobinLevel();
+    this.bloodPressureSystolic = donation.getBloodPressureSystolic();
+    this.bloodPressureDiastolic = donation.getBloodPressureDiastolic();
+    this.donorWeight = donation.getDonorWeight();
+    this.donationCreatedBy = donation.getCreatedBy();
+    this.donationBatch = donation.getDonationBatch();
+    this.notes = donation.getNotes();
+    this.bloodTypingStatus = donation.getBloodTypingStatus();
+    this.bloodTypingMatchStatus = donation.getBloodTypingMatchStatus();
+    this.ttiStatus = donation.getTTIStatus();
+    this.isDeleted = donation.getIsDeleted();
+    this.donorPulse = donation.getDonorPulse();
+    this.bleedStartTime = donation.getBleedStartTime();
+    this.bleedEndTime = donation.getBleedEndTime();
+    this.venue = donation.getVenue();
+    this.adverseEvent = donation.getAdverseEvent();
+}
+
+public Long getId() {
     return id;
   }
 

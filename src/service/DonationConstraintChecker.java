@@ -88,10 +88,16 @@ public class DonationConstraintChecker {
     }
     
     public boolean donationHasOutstandingOutcomes(Donation donation) {
+        
+        // {@link BloodTestsService#updateDonationWithTestResults} has side effects so create a copy of the donation
+        Donation copy = new Donation(donation);
 
-        return donation.getTTIStatus() == TTIStatus.NOT_DONE ||
-                donation.getBloodTypingStatus() == BloodTypingStatus.NOT_DONE ||
-                donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NOT_DONE;
+        BloodTestingRuleResult bloodTestingRuleResult = bloodTestsService.executeTests(copy.getDonor(), copy);
+        bloodTestsService.updateDonationWithTestResults(copy, bloodTestingRuleResult);
+
+        return copy.getTTIStatus() == TTIStatus.NOT_DONE ||
+                copy.getBloodTypingStatus() == BloodTypingStatus.NOT_DONE ||
+                copy.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NOT_DONE;
     }
 
 }

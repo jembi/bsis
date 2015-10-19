@@ -13,6 +13,9 @@ public class TestBatchConstraintChecker {
     @Autowired
     private DonationConstraintChecker donationConstraintChecker;
 
+    /**
+     * A test batch can be released if it is open and none of the donations have outstanding outcomes.
+     */
     public boolean canReleaseTestBatch(TestBatch testBatch) {
 
         if (testBatch.getStatus() != TestBatchStatus.OPEN) {
@@ -36,6 +39,9 @@ public class TestBatchConstraintChecker {
         return true;
     }
     
+    /**
+     * A test batch can be closed if it is released and none of the donations have discrepancies.
+     */
     public boolean canCloseTestBatch(TestBatch testBatch) {
 
         if (testBatch.getStatus() != TestBatchStatus.RELEASED) {
