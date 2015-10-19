@@ -79,8 +79,8 @@ public class DonationConstraintChecker {
             return true;
         }
         
-        if (donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.AMBIGUOUS ||
-                donation.getBloodTypingStatus() == BloodTypingStatus.PENDING_TESTS) {
+        if (donation.getBloodTypingMatchStatus() != BloodTypingMatchStatus.MATCH ||
+                donation.getBloodTypingStatus() != BloodTypingStatus.COMPLETE) {
             return true;
         }
         
