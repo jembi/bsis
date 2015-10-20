@@ -19,8 +19,11 @@ echo "mysql-server-5.6 mysql-server/root_password_again password ${MYSQL_ROOT_PA
 sudo apt-get install --quiet --assume-yes \
   git \
   mysql-server-5.6 \
+  mysql-server-core-5.6 \
   openjdk-7-jdk \
   tomcat7 \
+  tomcat7-common \
+  libtomcat7-java \
   maven
 
 if [ -d "/opt/bsis" ]; then
