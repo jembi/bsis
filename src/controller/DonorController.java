@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
 import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import constant.GeneralConfigConstants;
 import factory.DonationViewModelFactory;
 import factory.DonorViewModelFactory;
@@ -38,6 +34,7 @@ import repository.DonorRepository;
 import repository.LocationRepository;
 import repository.PostDonationCounsellingRepository;
 import service.DonorCRUDService;
+import service.DonorConstraintChecker;
 import service.GeneralConfigAccessorService;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
@@ -90,6 +87,8 @@ public class DonorController {
   
   @Autowired
   private AdverseEventRepository adverseEventRepository;
+  @Autowired
+  private DonorConstraintChecker donorConstraintChecker;
   
   public DonorController() {
   }
@@ -150,6 +149,7 @@ public class DonorController {
     map.put("currentlyDeferred",donorRepository.isCurrentlyDeferred(donor));
     map.put("flaggedForCounselling", flaggedForCounselling);
     map.put("deferredUntil",CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
+	map.put("canDelete", donorConstraintChecker.canDeleteDonor(id));
     if(donations.size() > 0){
 	    map.put("lastDonation", getDonationViewModel(donations.get(donations.size()-1)));
 	    map.put("dateOfFirstDonation",CustomDateFormatter.getDateString(donations.get(0).getDonationDate()));
