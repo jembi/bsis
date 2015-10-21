@@ -48,7 +48,9 @@ import constraintvalidator.DonationExists;
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUS_FOR_DONOR,
             query = ComponentNamedQueryConstants.QUERY_UPDATE_COMPONENT_STATUS_FOR_DONOR),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_COUNT_CHANGED_COMPONENTS_FOR_DONATION,
-            query = ComponentNamedQueryConstants.QUERY_COUNT_CHANGED_COMPONENTS_FOR_DONATION)
+            query = ComponentNamedQueryConstants.QUERY_COUNT_CHANGED_COMPONENTS_FOR_DONATION),
+    @NamedQuery(name = ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUS_FOR_DONATION,
+            query = ComponentNamedQueryConstants.QUERY_UPDATE_COMPONENT_STATUS_FOR_DONATION),
 })
 @Entity
 @Audited

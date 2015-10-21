@@ -1,25 +1,22 @@
 package service;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
-import model.donor.Donor;
 import model.donordeferral.DeferralReasonType;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
-
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import repository.TestBatchRepository;
 
 @Service
 @Transactional
 public class TestBatchCRUDService {
+
+    private static final Logger LOGGER = Logger.getLogger(TestBatchCRUDService.class);
 
     @Autowired
     private TestBatchRepository testBatchRepository;
@@ -29,6 +26,10 @@ public class TestBatchCRUDService {
     private DonorDeferralCRUDService donorDeferralCRUDService;
     @Autowired
     private ComponentCRUDService componentCRUDService;
+    @Autowired
+    private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
+    @Autowired
+    private ComponentStatusCalculator componentStatusCalculator;
 
     public void setTestBatchRepository(TestBatchRepository testBatchRepository) {
         this.testBatchRepository = testBatchRepository;
@@ -39,6 +40,8 @@ public class TestBatchCRUDService {
     }
 
     public TestBatch updateTestBatchStatus(Long testBatchId, TestBatchStatus newStatus) {
+
+        LOGGER.info("Updating status of test batch " + testBatchId + " to " + newStatus);
         
         TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
 
@@ -47,25 +50,32 @@ public class TestBatchCRUDService {
                 testBatch.getStatus() != TestBatchStatus.CLOSED &&
                 testBatch.getDonationBatches() != null) {
             
-            Set<Donor> donorsToDefer = new HashSet<>();
-
-            // Create post donation counselling for all unsafe donations
             for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
+
                 for (Donation donation : donationBatch.getDonations()) {
+                    
                     if (donation.getTTIStatus() == TTIStatus.TTI_UNSAFE) {
+                        
+                        LOGGER.info("Handling donation with unsafe TTI status: " + donation);
+                        
                         postDonationCounsellingCRUDService.createPostDonationCounsellingForDonation(donation);
-                        donorsToDefer.add(donation.getDonor());
+                        
+                        // Flag all components for this donor as unsafe
+                        componentCRUDService.markComponentsBelongingToDonorAsUnsafe(donation.getDonor());
+
+                        if (donorDeferralStatusCalculator.shouldDonorBeDeferred(donation.getBloodTestResults())) {
+
+                            donorDeferralCRUDService.createDeferralForDonorWithDeferralReasonType(donation.getDonor(),
+                                    DeferralReasonType.AUTOMATED_TTI_UNSAFE);
+                        }
+                    } else if (componentStatusCalculator.shouldComponentsBeDiscarded(donation.getBloodTestResults())) {
+
+                        LOGGER.info("Handling donation with components flagged for discard: " + donation);
+
+                        // Flag only components from this donation as unsafe
+                        componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
                     }
                 }
-            }
-            
-            // Create deferrals for donors who have unsafe donations
-            for (Donor donorToDefer : donorsToDefer) {
-                donorDeferralCRUDService.createDeferralForDonorWithDeferralReasonType(donorToDefer,
-                        DeferralReasonType.AUTOMATED_TTI_UNSAFE);
-
-                // Make sure that components belonging to this donor are marked as unsafe
-                componentCRUDService.markComponentsBelongingToDonorAsUnsafe(donorToDefer);
             }
         }
 

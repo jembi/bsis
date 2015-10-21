@@ -3,12 +3,10 @@ package model.donor;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import constraintvalidator.LocationExists;
-
 import java.util.Date;
 import java.util.List;
-
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,7 +26,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
-
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
@@ -43,7 +40,6 @@ import model.modificationtracker.RowModificationTracker;
 import model.preferredlanguage.PreferredLanguage;
 import model.user.User;
 import model.util.Gender;
-
 import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -53,7 +49,6 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Length;
-
 import utils.DonorUtils;
 
 @Entity
@@ -603,12 +598,31 @@ public void copy(Donor donor) {
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (other == this) {
+    public boolean equals(Object obj) {
+        if (obj == this) {
             return true;
         }
-        return other instanceof Donor &&
-                ((Donor) other).id == id;
+        
+        if (!(obj instanceof Donor)) {
+            return false;
+        }
+        
+        if (getId() == null) {
+            // This donor has not been persisted
+            return false;
+        }
+        
+        Donor other = (Donor) obj;
+        
+        return getId().equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        if (getId() == null) {
+            return super.hashCode();
+        }
+        return Objects.hashCode(getId());
     }
 
 }

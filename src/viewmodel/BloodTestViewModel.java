@@ -1,7 +1,6 @@
 package viewmodel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import model.bloodtesting.BloodTest;
@@ -57,7 +56,7 @@ public class BloodTestViewModel {
   */
   
   public List<String> getValidResults() {
-      return Arrays.asList(rawBloodTest.getValidResults().split(","));
+      return rawBloodTest.getValidResultsList();
   }
 
   public String getBloodTestCategory() {

@@ -980,4 +980,15 @@ public class ComponentRepository {
             .setParameter("donor", donor)
             .executeUpdate();
     }
+  
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void updateComponentStatusForDonation(ComponentStatus oldStatus, ComponentStatus newStatus,
+            Donation donation) {
+
+        em.createNamedQuery(ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUS_FOR_DONATION)
+            .setParameter("oldStatus", oldStatus)
+            .setParameter("newStatus", newStatus)
+            .setParameter("donation", donation)
+            .executeUpdate();
+    }
 }
