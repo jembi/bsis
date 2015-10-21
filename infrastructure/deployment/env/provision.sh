@@ -40,8 +40,14 @@ fi
 # Build the war and create the database
 mvn clean install
 
+# Stop tomcat
+sudo service tomcat7 stop
+
+# Remove the deployed version of bsis
+sudo rm -r /var/lib/tomcat7/webapps/{bsis.war,bsis}
+
 # Deploy the war
 sudo cp /opt/bsis/target/bsis.war /var/lib/tomcat7/webapps/
 
 # Restart tomcat
-sudo service tomcat7 restart
+sudo service tomcat7 start
