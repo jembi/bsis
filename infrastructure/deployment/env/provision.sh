@@ -44,7 +44,7 @@ mvn clean install
 sudo service tomcat7 stop
 
 # Remove the deployed version of bsis
-sudo rm -r /var/lib/tomcat7/webapps/{bsis.war,bsis}
+sudo rm -rf /var/lib/tomcat7/webapps/{bsis.war,bsis}
 
 # Deploy the war
 sudo cp /opt/bsis/target/bsis.war /var/lib/tomcat7/webapps/
