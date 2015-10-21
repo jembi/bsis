@@ -23,6 +23,11 @@ public class DonorDeferralRepository {
         entityManager.persist(donorDeferral);
     }
     
+    @Transactional(propagation = Propagation.MANDATORY)
+    public DonorDeferral update(DonorDeferral donorDeferral) {
+        return entityManager.merge(donorDeferral);
+    }
+    
     public DonorDeferral findDonorDeferralById(Long donorDeferralId) throws NoResultException {
         return entityManager.createNamedQuery(
             "QUERY_FIND_DONOR_DEFERRAL_BY_ID", 

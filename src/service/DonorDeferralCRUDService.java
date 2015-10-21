@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import repository.DeferralReasonRepository;
 import repository.DonorDeferralRepository;
+import controller.UtilController;
 
 @Transactional
 @Service
@@ -38,8 +39,8 @@ public class DonorDeferralCRUDService {
     @Autowired
     DeferralConstraintChecker deferralConstraintChecker;
     
-    //@Autowired
-    //private UtilController utilController;
+    @Autowired
+    private UtilController utilController;
     
     public DonorDeferral createDeferralForDonorWithDeferralReasonType(Donor donor, DeferralReasonType deferralReasonType) {
         LOGGER.info("Creating deferral for donor: " + donor);
@@ -80,12 +81,16 @@ public class DonorDeferralCRUDService {
 		}
 		donorDeferral.setIsVoided(Boolean.TRUE);
 		donorDeferral.setVoidedDate(new Date());
-		//donorDeferral.setVoidedBy(utilController.getCurrentUser());
-		donorDeferralRepository.save(donorDeferral);
+		donorDeferral.setVoidedBy(utilController.getCurrentUser());
+		donorDeferralRepository.update(donorDeferral);
 	}
 	
 	public DonorDeferral updateDeferral(DonorDeferral deferral) {
-		donorDeferralRepository.save(deferral);
+		DonorDeferral existingDeferral = donorDeferralRepository.findDonorDeferralById(deferral.getId());
+		existingDeferral.setDeferralReason(deferral.getDeferralReason());
+		existingDeferral.setDeferredUntil(deferral.getDeferredUntil());
+		existingDeferral.setDeferralReasonText(deferral.getDeferralReasonText());
+		donorDeferralRepository.update(existingDeferral);
 		return deferral;
 	}
 	
