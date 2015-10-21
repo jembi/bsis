@@ -1,27 +1,20 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-Vagrant::Config.run do |config|
-	config.vm.box = "precise32"
-	config.vm.box_url = "http://files.vagrantup.com/precise32.box"
+VAGRANTFILE_API_VERSION = "2"
 
-	#config.vm.network :bridged
-	config.vm.network  "hostonly", "192.168.33.10"
-	config.vm.forward_port 80, 8080
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-	config.vm.share_folder "bsis", "/bsis", "../../../"
+  config.vm.box = "ubuntu/trusty64"
 
-	#Install required puppet modules
-	config.vm.provision :shell do |shell|
-  	    shell.inline = "mkdir -p /etc/puppet/modules;
-            puppet module install puppetlabs/mysql;
-            puppet module install puppetlabs/java;
-            puppet module install example42/tomcat;
-            puppet module install maestrodev/maven"
- 	end
+  # Forward the default tomcat port to the host
+  config.vm.network "forwarded_port", guest: 8080, host: 8080
 
-	config.vm.provision :puppet do |puppet|
-		puppet.manifests_path = "./"
-		puppet.manifest_file  = "bsis.pp"
-	end
+  # Increase the amount of memory otherwise mysql won't start
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 2048
+  end
+
+  # Provision the box using the shell script
+  config.vm.provision "shell", path: "provision.sh", privileged: false
 end

@@ -35,6 +35,7 @@ import repository.DonorRepository;
 import repository.LocationRepository;
 import repository.PostDonationCounsellingRepository;
 import service.DonorCRUDService;
+import service.DonorConstraintChecker;
 import service.GeneralConfigAccessorService;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
@@ -94,6 +95,8 @@ public class DonorController {
   
   @Autowired
   private AdverseEventRepository adverseEventRepository;
+  @Autowired
+  private DonorConstraintChecker donorConstraintChecker;
   
   public DonorController() {
   }
@@ -154,6 +157,7 @@ public class DonorController {
     map.put("currentlyDeferred",donorRepository.isCurrentlyDeferred(donor));
     map.put("flaggedForCounselling", flaggedForCounselling);
     map.put("deferredUntil",CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
+	map.put("canDelete", donorConstraintChecker.canDeleteDonor(id));
     if(donations.size() > 0){
 	    map.put("lastDonation", getDonationViewModel(donations.get(donations.size()-1)));
 	    map.put("dateOfFirstDonation",CustomDateFormatter.getDateString(donations.get(0).getDonationDate()));
