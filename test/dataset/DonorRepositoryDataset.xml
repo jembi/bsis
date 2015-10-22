@@ -285,8 +285,6 @@
         
 <!--        <IdNumber id="1" donorId="1" idType="1" idNumber="123"/>-->
 
-	<DonorCodeGroup id ="1" donorCodeGroup = "Test Only"/>
-	<DonorCode id ="1" donorCode = "Test Only" donorCodeGroupId = "1"/>
-	<DonorDonorCode id="1" donorId = "1" donorCodeId = "1"/>
+
 
 </dataset>

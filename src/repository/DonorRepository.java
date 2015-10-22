@@ -1,38 +1,14 @@
 package repository;
 
 import controller.UtilController;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import model.address.AddressType;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.donor.DonorStatus;
-import model.donorcodes.DonorCode;
-import model.donorcodes.DonorCodeGroup;
-import model.donorcodes.DonorDonorCode;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.idtype.IdType;
 import model.preferredlanguage.PreferredLanguage;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -40,9 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import utils.DonorUtils;
 import viewmodel.DonorSummaryViewModel;
+
+import javax.persistence.*;
+import javax.persistence.criteria.*;
+import java.util.*;
 
 @Repository
 @Transactional
@@ -437,84 +416,11 @@ public class DonorRepository {
         return null;
     }
 
-  //Donor Code & Code Group Methods
-    public void saveDonorCodeGroup(DonorCodeGroup donorCodeGroup) {
-        em.persist(donorCodeGroup);
-        em.flush();
 
-    }
-
-    public void saveDonorCode(DonorCode donorCode) {
-
-        em.persist(donorCode);
-        em.flush();
-    }
-
-    public void saveDonorDonorCode(DonorDonorCode donorDonorCode) {
-
-        em.persist(donorDonorCode);
-        em.flush();
-    }
-
-    public List<DonorCodeGroup> findDonorCodeGroupsByDonorId(Long donorId) {
-        Donor donor = em.find(Donor.class, donorId);
-        List<DonorCodeGroup> donorCodeGroups = new ArrayList<DonorCodeGroup>();
-        List<DonorCode> donorCodes = donor.getDonorCodes();
-        DonorCodeGroup donorCodeGroup = null;
-        for (DonorCode donorCode : donorCodes) {
-            donorCodeGroup = donorCode.getDonorCodeGroup();
-            if (!donorCodeGroups.contains(donorCodeGroup)) {
-                donorCodeGroups.add(donorCodeGroup);
-            }
-
-        }
-        return donorCodeGroups;
-
-    }
-
-    public List<DonorCodeGroup> getAllDonorCodeGroups(){
-
-        TypedQuery<DonorCodeGroup> query = em.createQuery(
-                "SELECT dcg FROM DonorCodeGroup dcg", DonorCodeGroup.class);
-        return query.getResultList();
-
-    }
-
-    public List<DonorCode> findDonorCodesbyDonorCodeGroupById(Long id) throws IllegalArgumentException{
-
-        DonorCodeGroup donorCodeGroup = em.find(DonorCodeGroup.class, id);
-        em.flush();
-        return donorCodeGroup.getDonorCodes();
-
-    }
-
-    public List<DonorDonorCode> findDonorDonorCodesOfDonorByDonorId(Long donorId){
-
-        TypedQuery<DonorDonorCode> query = em.createQuery(
-                "SELECT dc FROM DonorDonorCode dc where donorId = :donorId", DonorDonorCode.class);
-        query.setParameter("donorId", em.find(Donor.class, donorId));
-        return query.getResultList();
-    }
-
-    public DonorCode findDonorCodeById(Long id) throws IllegalArgumentException{
-
-        DonorCode donorCode = em.find(DonorCode.class, id);
-        em.flush();
-        return donorCode;
-
-    }
-
-    public Donor deleteDonorCode(Long id) throws IllegalArgumentException {
-        DonorDonorCode donorDonorCode = em.find(DonorDonorCode.class, id);
-        Donor donor = donorDonorCode.getDonor();
-        em.remove(donorDonorCode);
-        em.flush();
-        return donor;
-    }
 
     /**
      * To be used in adding multiple donor numbers
-     * @param idNumber 
+     * @param
      */
    /* public void saveIdNumber(IdNumber idNumber){
         em.persist(idNumber);

@@ -1,38 +1,16 @@
 package repository;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.NoResultException;
-import javax.sql.DataSource;
-
+import backingform.DonorBackingForm;
+import controller.UtilController;
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
 import model.donation.DonationConstants;
 import model.donor.Donor;
-import model.donorcodes.DonorCodeGroup;
-import model.donorcodes.DonorDonorCode;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.location.Location;
 import model.user.User;
-
 import org.apache.commons.lang.time.DateUtils;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseDataSourceConnection;
@@ -56,11 +34,19 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
 import security.BsisUserDetails;
 import security.LoginUserService;
-import backingform.DonorBackingForm;
-import controller.UtilController;
+
+import javax.persistence.NoResultException;
+import javax.sql.DataSource;
+import java.io.File;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
@@ -1001,70 +987,6 @@ public class DonorRepositoryTest {
         SecurityContextHolder.getContext().setAuthentication(authToken);
     }
 
-    @Test
-    /**
-     * Test passes if DonorCodeGroup is saved in database
-     */
-    public void saveDonorCodeGroup_shouldPersist() {
-        DonorCodeGroup donorCodeGroup = new DonorCodeGroup();
-        donorCodeGroup.setDonorCodeGroup("Test Only");
-        donorRepository.saveDonorCodeGroup(donorCodeGroup);
-        assertNotNull("Failed to save DonorCodeGroup object ", donorCodeGroup.getId());
-
-    }
-
-    @Test
-    /**
-     * Test passes if DonorDonorCode is saved in database
-     */
-    public void saveDonorDonorCode_shouldPersist() {
-        DonorDonorCode donorDonorCode = new DonorDonorCode();
-        donorDonorCode.setDonorCode(donorRepository.findDonorCodeById(1l));
-        donorDonorCode.setDonor(donorRepository.findDonorById(5l));
-        donorRepository.saveDonorDonorCode(donorDonorCode);
-        assertNotNull("Failed to save DonorDonorCode object ", donorDonorCode.getId());
-
-    }
-
-    @Test
-    /**
-     * Test passes if donor is assigned with a donor code
-     */
-    public void findDonorCodeById_ShouldReturnNotNull_WhenDonorCodeExisted() {
-        assertNotNull("Failed to find donor code by ID 1", donorRepository.findDonorCodeById(1l));
-    }
-
-    @Test
-    /**
-     * Test will pass if donor code groups exists
-     */
-    public void getAllDonorCodeGroups_ShouldNotReturnEmptyList() {
-        assertTrue("Failed To Load alll donorCodeGroups", !donorRepository.getAllDonorCodeGroups().isEmpty());
-    }
-
-    @Test
-    /**
-     * Test will pass if donor donor code groups assigned to donor
-     */
-    public void findDonorCodeGroupsOfDonor_ShouldNotReturnEmptyList_WhenDonorCodeGroupsExisted() {
-        assertTrue(" Failed To load donorCodeGroups of donor ", !donorRepository.findDonorCodeGroupsByDonorId(1l).isEmpty());
-    }
-
-    @Test
-    /**
-     * Test passes if donor codes assigned to donor
-     */
-    public void findDonorDonorCodesOfDonor_ShouldNotReturnEmptyList_WhenDonorCodesExisted() {
-        assertTrue(" Failed To load sonorCodes of donor ", !donorRepository.findDonorDonorCodesOfDonorByDonorId(1l).isEmpty());
-    }
-
-    @Test
-    /**
-     * Test passes if donor codes assigned to donor
-     */
-    public void deleteDonorCode_ShouldReturnNotNull_WhenDeleted() {
-        assertNotNull("Failed to remove DonorDonorCode of Id 1", donorRepository.deleteDonorCode(1l));
-    }
 
     @Test
     /**

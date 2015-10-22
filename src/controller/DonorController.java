@@ -129,8 +129,7 @@ public class DonorController {
     if(isCurrentlyDeferred){
     	map.put("donorLatestDeferredUntilDate", donorRepository.getLastDonorDeferralDate(id));
     }
-    
-    map.put("donorCodeGroups", donorRepository.findDonorCodeGroupsByDonorId(donor.getId()));
+
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
   
