@@ -2,6 +2,7 @@ package backingform;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -99,4 +100,8 @@ public class DonationBatchBackingForm {
     return donationBatch.getDonations().size();
   }
 
+	@JsonIgnore
+	public void setPermissions(Map<String, Boolean> permissions) {
+		// Ignore
+	}
 }

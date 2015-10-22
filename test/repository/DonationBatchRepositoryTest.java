@@ -93,6 +93,13 @@ public class DonationBatchRepositoryTest {
 	}
 	
 	@Test
+	public void testFindDonationBatchByIdEmpty() throws Exception {
+		DonationBatch five = donationBatchRepository.findDonationBatchById(5);
+		Assert.assertNotNull("There is a donation batch with the id 5", five);
+		Assert.assertEquals("The donation batch has the number 'B0215000005'", "B0215000005", five.getBatchNumber());
+	}
+	
+	@Test
 	public void testGetRecentlyClosedDonationBatches() throws Exception {
 		List<DonationBatch> closed = donationBatchRepository.getRecentlyClosedDonationBatches(5);
 		Assert.assertNotNull("There are recently closed donation batches", closed);

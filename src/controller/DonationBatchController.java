@@ -1,8 +1,5 @@
 package controller;
 
-import backingform.DonationBatchBackingForm;
-import backingform.validator.DonationBatchBackingFormValidator;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,13 +22,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import factory.DonationBatchViewModelFactory;
 import repository.DonationBatchRepository;
 import repository.LocationRepository;
+import service.DonationBatchCRUDService;
 import utils.PermissionConstants;
 import viewmodel.DonationBatchViewModel;
+import backingform.DonationBatchBackingForm;
+import backingform.validator.DonationBatchBackingFormValidator;
+import factory.DonationBatchViewModelFactory;
 
 @RestController
 @RequestMapping("/donationbatches")
@@ -39,6 +40,9 @@ public class DonationBatchController {
 
   @Autowired
   private DonationBatchRepository donationBatchRepository;
+  
+  @Autowired
+  private DonationBatchCRUDService donationBatchCRUDService;
 
   @Autowired
   private LocationRepository locationRepository;
@@ -121,6 +125,13 @@ public class DonationBatchController {
       return new ResponseEntity<DonationBatchViewModel>(donationBatchViewModelFactory.createDonationBatchViewModel(
               donationBatch), HttpStatus.OK);
   }
+  
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasRole('" + PermissionConstants.VOID_DONATION_BATCH + "')")
+	public void deleteDonationBatch(@PathVariable Integer id) {
+		donationBatchCRUDService.deleteDonationBatch(id);
+	}
 
   @RequestMapping(value = "{id}" ,method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
