@@ -1793,15 +1793,15 @@
 			<column name="dataType_id" value="1"></column>
 		</insert>
 		<insert tableName="GeneralConfig">
-			<column name="name" value="ui.address.state.visible"></column>
+			<column name="name" value="ui.address.province.visible"></column>
 			<column name="value" value="true"></column>
-			<column name="description" value="Determines whether state is visible"></column>
+			<column name="description" value="Determines whether province is visible"></column>
 			<column name="dataType_id" value="4"></column>
 		</insert>
 		<insert tableName="GeneralConfig">
-			<column name="name" value="ui.address.state.name"></column>
+			<column name="name" value="ui.address.province.name"></column>
 			<column name="value" value="Province"></column>
-			<column name="description" value="Determines state name"></column>
+			<column name="description" value="Determines province name"></column>
 			<column name="dataType_id" value="1"></column>
 		</insert>
 		<insert tableName="GeneralConfig">
