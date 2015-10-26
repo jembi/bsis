@@ -24,6 +24,11 @@ public class DonationConstraintChecker {
     @Autowired
     private ComponentRepository componentRepository;
     
+    public boolean canAddDonation(long donorId) {
+        // TODO
+        return true;
+    }
+    
     public boolean canDeletedDonation(long donationId) throws NoResultException {
 
         Donation donation = donationRepository.findDonationById(donationId);

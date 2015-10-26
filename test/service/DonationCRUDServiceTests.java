@@ -4,6 +4,7 @@ import static helpers.builders.AdverseEventBackingFormBuilder.anAdverseEventBack
 import static helpers.builders.AdverseEventBuilder.anAdverseEvent;
 import static helpers.builders.AdverseEventTypeBackingFormBuilder.anAdverseEventTypeBackingForm;
 import static helpers.builders.DonationBackingFormBuilder.aDonationBackingForm;
+import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
 import static helpers.builders.PackTypeBuilder.aPackType;
@@ -12,25 +13,24 @@ import static helpers.matchers.DonorMatcher.hasSameStateAsDonor;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import java.math.BigDecimal;
 import java.util.Date;
-
 import model.adverseevent.AdverseEvent;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
+import model.donationbatch.DonationBatch;
 import model.donor.Donor;
 import model.packtype.PackType;
-
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
+import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import repository.DonorRepository;
 import backingform.AdverseEventBackingForm;
@@ -52,6 +52,10 @@ public class DonationCRUDServiceTests {
     private DonationRepository donationRepository;
     @Mock
     private DonorRepository donorRepository;
+    @Mock
+    private DonationBatchRepository donationBatchRepository;
+    @Mock
+    private ComponentCRUDService componentCRUDService;
     
     @Test(expected = IllegalStateException.class)
     public void testDeleteDonationWithConstraints_shouldThrow() {
@@ -256,6 +260,75 @@ public class DonationCRUDServiceTests {
         // Verify
         verify(donationRepository).updateDonation(argThat(hasSameStateAsDonation(expectedDonation)));
         assertThat(returnedDonation, is(expectedDonation));
+    }
+    
+    @Test
+    public void testCreateDonationWithDonationWithoutConstraints_shouldAddDonation() {
+
+        Donation donation = aDonation().build();
+        long donorId = 993L;
+
+        DonationBackingForm backingForm = aDonationBackingForm()
+                .withDonation(donation)
+                .withDonor(aDonor().withId(donorId).build())
+                .build();
+        
+        when(donationConstraintChecker.canAddDonation(donorId)).thenReturn(true);
+
+        Donation returnedDonation = donationCRUDService.createDonation(backingForm);
+        
+        verify(donationRepository).addDonation(donation);
+        verify(componentCRUDService, never()).markComponentsBelongingToDonationAsUnsafe(donation);
+        assertThat(returnedDonation, is(donation));
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateDonationWithDonationWithConstraintsAndNotBackEntry_shouldThrow() {
+
+        Donation donation = aDonation().build();
+        long donorId = 993L;
+        String donationBatchNumber = "000001";
+
+        DonationBackingForm backingForm = aDonationBackingForm()
+                .withDonation(donation)
+                .withDonor(aDonor().withId(donorId).build())
+                .withDonationBatchNumber(donationBatchNumber)
+                .build();
+        
+        DonationBatch donationBatch = aDonationBatch().build();
+        
+        when(donationConstraintChecker.canAddDonation(donorId)).thenReturn(false);
+        when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber)).thenReturn(donationBatch);
+
+        donationCRUDService.createDonation(backingForm);
+        
+        verify(donationRepository, never()).addDonation(donation);
+        verify(componentCRUDService, never()).markComponentsBelongingToDonationAsUnsafe(donation);
+    }
+    
+    @Test
+    public void testCreateDonationWithDonationWithConstraintsAndBackEntry_shouldAddDonationAndDiscardComponents() {
+
+        Donation donation = aDonation().build();
+        long donorId = 993L;
+        String donationBatchNumber = "000001";
+
+        DonationBackingForm backingForm = aDonationBackingForm()
+                .withDonation(donation)
+                .withDonor(aDonor().withId(donorId).build())
+                .withDonationBatchNumber(donationBatchNumber)
+                .build();
+        
+        DonationBatch donationBatch = aDonationBatch().thatIsBackEntry().build();
+        
+        when(donationConstraintChecker.canAddDonation(donorId)).thenReturn(false);
+        when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber)).thenReturn(donationBatch);
+
+        Donation returnedDonation = donationCRUDService.createDonation(backingForm);
+        
+        verify(donationRepository).addDonation(donation);
+        verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafe(donation);
+        assertThat(returnedDonation, is(donation));
     }
 
 }

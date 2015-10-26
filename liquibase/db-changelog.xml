@@ -1767,4 +1767,15 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20151026-1513" author="bausmeier">
+        <addColumn tableName="DonationBatch">
+            <column name="backEntry" type="tinyint(1)" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <addColumn tableName="DonationBatch_AUD">
+            <column name="backEntry" type="tinyint(1)" />
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

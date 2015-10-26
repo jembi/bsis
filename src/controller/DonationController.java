@@ -200,9 +200,7 @@ public class DonationController {
     public ResponseEntity<Map<String, Object>> addDonation(@RequestBody @Valid DonationBackingForm form) {
 
         // Create the donation
-        Donation donation = form.getDonation();
-        donationCRUDService.updateAdverseEventForDonation(donation, form.getAdverseEvent());
-        Donation savedDonation = donationRepository.addDonation(donation);
+        Donation savedDonation = donationCRUDService.createDonation(form);
 
         // Populate the response map
         Map<String, Object> map = new HashMap<>();

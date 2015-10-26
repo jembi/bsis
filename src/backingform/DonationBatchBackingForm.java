@@ -99,4 +99,12 @@ public class DonationBatchBackingForm {
     return donationBatch.getDonations().size();
   }
 
+    public boolean isBackEntry() {
+        return donationBatch.isBackEntry();
+    }
+    
+    public void setBackEntry(boolean backEntry) {
+        donationBatch.setBackEntry(backEntry);
+    }
+
 }
