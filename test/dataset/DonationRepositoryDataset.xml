@@ -211,6 +211,7 @@
 		value="30" description="Donation Donor pulseMin" dataType_id="2" />
 	<GeneralConfig id="12" name="donation.donor.pulseMax"
 		value="200" description="Donation Donor pulseMax" dataType_id="2" />
+	<GeneralConfig id="13" name="components.createInitialComponents" value="false" dataType_id="4" />
 		
 	<GenericConfig id="6" propertyName="ageLimitsEnabled"
 		propertyOwner="donationRequirements" propertyValue="true" />
