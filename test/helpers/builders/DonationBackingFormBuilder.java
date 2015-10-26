@@ -2,11 +2,11 @@ package helpers.builders;
 
 import java.math.BigDecimal;
 import java.util.Date;
-
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
-
+import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
+import model.donor.Donor;
 import model.packtype.PackType;
 import backingform.AdverseEventBackingForm;
 import backingform.DonationBackingForm;
@@ -26,6 +26,12 @@ public class DonationBackingFormBuilder extends AbstractBuilder<DonationBackingF
     private Date bleedStartTime;
     private Date bleedEndTime;
     private AdverseEventBackingForm adverseEventBackingForm;
+
+    private String donationBatchNumber;
+
+    private Donor donor;
+
+    private Donation donation;
     
     public DonationBackingFormBuilder withDonorPulse(Integer donorPulse) {
         this.donorPulse = donorPulse;
@@ -81,6 +87,21 @@ public class DonationBackingFormBuilder extends AbstractBuilder<DonationBackingF
         this.adverseEventBackingForm = adverseEventBackingForm;
         return this;
     }
+    
+    public DonationBackingFormBuilder withDonationBatchNumber(String donationBatchNumber) {
+        this.donationBatchNumber = donationBatchNumber;
+        return this;
+    }
+    
+    public DonationBackingFormBuilder withDonor(Donor donor) {
+        this.donor = donor;
+        return this;
+    }
+
+    public DonationBackingFormBuilder withDonation(Donation donation) {
+        this.donation = donation;
+        return this;
+    }
 
     @Override
     public DonationBackingForm build() {
@@ -100,6 +121,11 @@ public class DonationBackingFormBuilder extends AbstractBuilder<DonationBackingF
             donationBackingForm.setBleedEndTime(ISO_FORMAT.print(bleedEndTime.getTime()));
         }
         donationBackingForm.setAdverseEvent(adverseEventBackingForm);
+        if (donation != null) {
+            donationBackingForm.setDonation(donation);
+        }
+        donationBackingForm.setDonor(donor);
+        donationBackingForm.setDonationBatchNumber(donationBatchNumber);
         return donationBackingForm;
     }
     

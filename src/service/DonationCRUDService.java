@@ -2,20 +2,18 @@ package service;
 
 import java.util.Date;
 import java.util.Objects;
-
 import javax.persistence.NoResultException;
-
 import model.adverseevent.AdverseEvent;
 import model.adverseevent.AdverseEventType;
 import model.donation.Donation;
+import model.donationbatch.DonationBatch;
 import model.donor.Donor;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import backingform.AdverseEventBackingForm;
 import backingform.DonationBackingForm;
+import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import repository.DonorRepository;
 
@@ -31,6 +29,10 @@ public class DonationCRUDService {
     private DonorCRUDService donorCRUDService;
     @Autowired
     private DonorRepository donorRepository;
+    @Autowired
+    private DonationBatchRepository donationBatchRepository;
+    @Autowired
+    private ComponentCRUDService componentCRUDService;
     
     public void deleteDonation(long donationId) throws IllegalStateException, NoResultException {
         
@@ -61,6 +63,34 @@ public class DonationCRUDService {
         }
     }
     
+    public Donation createDonation(DonationBackingForm donationBackingForm) {
+
+        boolean discardComponents = false;
+
+        if (!donationConstraintChecker.canAddDonation(donationBackingForm.getDonor().getId())) {
+        
+            DonationBatch donationBatch = donationBatchRepository.findDonationBatchByBatchNumber(
+                    donationBackingForm.getDonationBatchNumber());
+
+            if (!donationBatch.isBackEntry()) { 
+                throw new IllegalArgumentException("Cannot add donation");
+            }
+
+            // The donation batch is being back entered so allow the donation to be created but discard the components
+            discardComponents = true;
+        }
+        
+        Donation donation = donationBackingForm.getDonation();
+        updateAdverseEventForDonation(donation, donationBackingForm.getAdverseEvent());
+        donationRepository.addDonation(donation);
+        
+        if (discardComponents) {
+            componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
+        }
+        
+        return donation;
+    }
+    
     public Donation updateDonation(long donationId, DonationBackingForm donationBackingForm) {
         Donation donation = donationRepository.findDonationById(donationId);
         
@@ -89,8 +119,7 @@ public class DonationCRUDService {
         return donationRepository.updateDonation(donation);
     }
     
-    // TODO: Make this method private once the method for creating a donation is moved into this service.
-    public void updateAdverseEventForDonation(Donation donation, AdverseEventBackingForm adverseEventBackingForm) {
+    private void updateAdverseEventForDonation(Donation donation, AdverseEventBackingForm adverseEventBackingForm) {
         if (adverseEventBackingForm == null || adverseEventBackingForm.getType() == null) {
             // Delete the adverse event
             donation.setAdverseEvent(null);
