@@ -1775,7 +1775,7 @@
 			<column name="dataType_id" value="4"></column>
 		</insert>
 		<insert tableName="GeneralConfig">
-			<column name="name" value="ui.address.addressLine.name"></column>
+			<column name="name" value="ui.address.addressLine1.name"></column>
 			<column name="value" value="Address"></column>
 			<column name="description" value="Determines address name"></column>
 			<column name="dataType_id" value="1"></column>
