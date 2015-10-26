@@ -1812,7 +1812,7 @@
 		</insert>
 		<insert tableName="GeneralConfig">
 			<column name="name" value="ui.address.districtRegion.name"></column>
-			<column name="value" value="Province"></column>
+			<column name="value" value="District"></column>
 			<column name="description" value="Determines district/region name"></column>
 			<column name="dataType_id" value="1"></column>
 		</insert>
@@ -1836,7 +1836,7 @@
 		</insert>
 		<insert tableName="GeneralConfig">
 			<column name="name" value="ui.address.state.name"></column>
-			<column name="value" value="Province"></column>
+			<column name="value" value="State"></column>
 			<column name="description" value="Determines state name"></column>
 			<column name="dataType_id" value="1"></column>
 		</insert>
