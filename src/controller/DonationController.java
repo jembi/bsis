@@ -195,28 +195,24 @@ public class DonationController {
     return map;
   }
 
-  @RequestMapping( method = RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONATION+"')")
-  public  ResponseEntity<Map<String, Object>> addDonation(
-      @RequestBody @Valid DonationBackingForm form) {
+    @RequestMapping(method = RequestMethod.POST)
+    @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONATION + "')")
+    public ResponseEntity<Map<String, Object>> addDonation(@RequestBody @Valid DonationBackingForm form) {
 
-      Map<String, Object> map = new HashMap<String, Object>();
-      addEditSelectorOptions(map);
-      Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donation");
-      map.put("donationFields", formFields);
-      Donation savedDonation = null;
-      Donation donation = form.getDonation();
-      
-      donationCRUDService.updateAdverseEventForDonation(donation, form.getAdverseEvent());
+        // Create the donation
+        Donation donation = form.getDonation();
+        donationCRUDService.updateAdverseEventForDonation(donation, form.getAdverseEvent());
+        Donation savedDonation = donationRepository.addDonation(donation);
 
-      savedDonation = donationRepository.addDonation(donation);
-      map.put("hasErrors", false);
-      form = new DonationBackingForm();
-	
-      map.put("donationId", savedDonation.getId());
-      map.put("donation", donationViewModelFactory.createDonationViewModelWithPermissions(savedDonation));
-      return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
-  }
+        // Populate the response map
+        Map<String, Object> map = new HashMap<>();
+        addEditSelectorOptions(map);
+        map.put("hasErrors", false);
+        map.put("donationId", savedDonation.getId());
+        map.put("donation", donationViewModelFactory.createDonationViewModelWithPermissions(savedDonation));
+        map.put("donationFields", utilController.getFormFieldsForForm("donation"));
+        return new ResponseEntity<>(map, HttpStatus.CREATED);
+    }
 
   private DonationViewModel getDonationViewModel(Donation donation) {
     DonationViewModel donationViewModel = new DonationViewModel(donation);
