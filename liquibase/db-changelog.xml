@@ -1775,7 +1775,7 @@
 			<column name="dataType_id" value="4"></column>
 		</insert>
 		<insert tableName="GeneralConfig">
-			<column name="name" value="ui.address.addressLine1.name"></column>
+			<column name="name" value="ui.address.addressLine1.displayName"></column>
 			<column name="value" value="Address"></column>
 			<column name="description" value="Determines address name"></column>
 			<column name="dataType_id" value="1"></column>
@@ -1787,7 +1787,7 @@
 			<column name="dataType_id" value="4"></column>
 		</insert>
 		<insert tableName="GeneralConfig">
-			<column name="name" value="ui.address.addressLine2.name"></column>
+			<column name="name" value="ui.address.addressLine2.displayName"></column>
 			<column name="value" value=""></column>
 			<column name="description" value="Determines line address 2 name"></column>
 			<column name="dataType_id" value="1"></column>
@@ -1799,7 +1799,7 @@
 			<column name="dataType_id" value="4"></column>
 		</insert>
 		<insert tableName="GeneralConfig">
-			<column name="name" value="ui.address.cityTownVillage.name"></column>
+			<column name="name" value="ui.address.cityTownVillage.displayName"></column>
 			<column name="value" value="City"></column>
 			<column name="description" value="Determines city name"></column>
 			<column name="dataType_id" value="1"></column>
@@ -1811,7 +1811,7 @@
 			<column name="dataType_id" value="4"></column>
 		</insert>
 		<insert tableName="GeneralConfig">
-			<column name="name" value="ui.address.districtRegion.name"></column>
+			<column name="name" value="ui.address.districtRegion.displayName"></column>
 			<column name="value" value="District"></column>
 			<column name="description" value="Determines district/region name"></column>
 			<column name="dataType_id" value="1"></column>
@@ -1823,7 +1823,7 @@
 			<column name="dataType_id" value="4"></column>
 		</insert>
 		<insert tableName="GeneralConfig">
-			<column name="name" value="ui.address.province.name"></column>
+			<column name="name" value="ui.address.province.displayName"></column>
 			<column name="value" value="Province"></column>
 			<column name="description" value="Determines province name"></column>
 			<column name="dataType_id" value="1"></column>
@@ -1835,7 +1835,7 @@
 			<column name="dataType_id" value="4"></column>
 		</insert>
 		<insert tableName="GeneralConfig">
-			<column name="name" value="ui.address.state.name"></column>
+			<column name="name" value="ui.address.state.displayName"></column>
 			<column name="value" value="State"></column>
 			<column name="description" value="Determines state name"></column>
 			<column name="dataType_id" value="1"></column>
@@ -1847,7 +1847,7 @@
 			<column name="dataType_id" value="4"></column>
 		</insert>
 		<insert tableName="GeneralConfig">
-			<column name="name" value="ui.address.country.name"></column>
+			<column name="name" value="ui.address.country.displayName"></column>
 			<column name="value" value="Country"></column>
 			<column name="description" value="Determines country name"></column>
 			<column name="dataType_id" value="1"></column>
@@ -1859,7 +1859,7 @@
 			<column name="dataType_id" value="4"></column>
 		</insert>
 		<insert tableName="GeneralConfig">
-			<column name="name" value="ui.address.postalCode.name"></column>
+			<column name="name" value="ui.address.postalCode.displayName"></column>
 			<column name="value" value="Postal Code"></column>
 			<column name="description" value="Determines  postal code/ zip code name"></column>
 			<column name="dataType_id" value="1"></column>
