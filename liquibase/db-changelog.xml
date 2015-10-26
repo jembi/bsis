@@ -606,6 +606,17 @@
 		</createTable>
 	</changeSet>
 
+	<!-- Issue 385 Refactor out Donor Code -->
+	<changeSet id="20151026-1145" author="debonair">
+		<dropForeignKeyConstraint baseTableName="DonorDonorCode" constraintName="fk_DonorDonorCode_DonorCode" />
+		<dropForeignKeyConstraint baseTableName="DonorDonorCode" constraintName="fk_DonorDonorCode_Donor" />
+		<dropForeignKeyConstraint baseTableName="DonorCode" constraintName="fk_DonorCode_DonorCodeGroup" />
+		<dropTable tableName="DonorDonorCode" cascadeConstraints="true" />
+		<dropTable tableName="DonorCodeGroup" cascadeConstraints="true" />
+		<dropTable tableName="DonorCode" cascadeConstraints="true" />
+		<dropTable tableName="DonorDonorCode_AUD" cascadeConstraints="true" />
+	</changeSet>
+
 	<!-- For issue 172[Add in additional donor demographic fields] -->
 	<changeSet id="20140504-1341" author="srikanthmalyala">
 		<addColumn tableName="Donor">
