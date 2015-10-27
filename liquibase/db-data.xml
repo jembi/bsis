@@ -729,4 +729,14 @@
         </insert>
     </changeSet>
 
+    <changeSet id="20151023-1015" author="bausmeier">
+        <insert tableName="GeneralConfig">
+            <column name="name" value="components.createInitialComponents"></column>
+            <column name="value" value="true"></column>
+            <column name="description"
+                value="Enable creation of initial components. Can be disabled in the case where components are not managed by the system."></column>
+            <column name="dataType_id" value="4"></column>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>
