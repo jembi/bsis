@@ -1767,4 +1767,13 @@
         </addColumn>
     </changeSet>
 
+	<changeSet id="20151027-1053" author="debonair">
+		<delete tableName="GeneralConfig">
+			<where>id = 1</where>
+		</delete>
+		<delete tableName="GeneralConfig">
+			<where>id = 2</where>
+		</delete>
+	</changeSet>
+
 </databaseChangeLog>
