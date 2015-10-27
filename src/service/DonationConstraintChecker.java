@@ -70,6 +70,10 @@ public class DonationConstraintChecker {
      */
     public boolean donationHasDiscrepancies(Donation donation) {
         
+        if (!donation.getPackType().getTestSampleProduced()) {
+            return false;
+        }
+        
         BloodTestingRuleResult bloodTestingRuleResult = bloodTestsService.executeTests(donation.getDonor(), donation);
         
         if (bloodTestingRuleResult.getPendingTTITestsIds() != null &&
@@ -88,6 +92,10 @@ public class DonationConstraintChecker {
     }
     
     public boolean donationHasOutstandingOutcomes(Donation donation) {
+        
+        if (!donation.getPackType().getTestSampleProduced()) {
+            return false;
+        }
         
         // {@link BloodTestsService#updateDonationWithTestResults} has side effects so create a copy of the donation
         Donation copy = new Donation(donation);

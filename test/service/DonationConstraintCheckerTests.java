@@ -3,6 +3,7 @@ package service;
 import static helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
+import static helpers.builders.PackTypeBuilder.aPackType;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
@@ -118,11 +119,23 @@ public class DonationConstraintCheckerTests {
     }
     
     @Test
+    public void testDonationHasDiscrepanciesWithDonationWithNoTestSample_shouldReturnFalse() {
+        Donation donation = aDonation()
+                .withPackType(aPackType().withTestSampleProduced(false).build())
+                .build();
+        
+        boolean result = donationConstraintChecker.donationHasDiscrepancies(donation);
+        
+        assertThat(result, is(false));
+    }
+    
+    @Test
     public void testDonationHasDiscrepanciesWithNoDiscrepancies_shouldReturnFalse() {
         Donation donation = aDonation()
                 .withTTIStatus(TTIStatus.TTI_SAFE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
                 .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withPackType(aPackType().build())
                 .build();
         
         when(bloodTestsService.executeTests(donation.getDonor(), donation))
@@ -140,6 +153,7 @@ public class DonationConstraintCheckerTests {
                 .withTTIStatus(TTIStatus.NOT_DONE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
                 .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withPackType(aPackType().build())
                 .build();
         
         BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().withPendingTTITestId("12").build();
@@ -157,6 +171,7 @@ public class DonationConstraintCheckerTests {
                 .withTTIStatus(TTIStatus.TTI_SAFE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS)
                 .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withPackType(aPackType().build())
                 .build();
         
         when(bloodTestsService.executeTests(donation.getDonor(), donation))
@@ -173,6 +188,7 @@ public class DonationConstraintCheckerTests {
                 .withTTIStatus(TTIStatus.TTI_SAFE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
                 .withBloodTyingStatus(BloodTypingStatus.PENDING_TESTS)
+                .withPackType(aPackType().build())
                 .build();
         
         when(bloodTestsService.executeTests(donation.getDonor(), donation))
@@ -184,7 +200,18 @@ public class DonationConstraintCheckerTests {
     }
     
     @Test
-    public void testDonationHasOutstandinOutcomesWithNotDoneTTIStatus_shouldReturnTrue() {
+    public void testDonationHasOutstandingOutcomesWithDonationWithNoTestSample_shouldReturnFalse() {
+        Donation donation = aDonation()
+                .withPackType(aPackType().withTestSampleProduced(false).build())
+                .build();
+        
+        boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation);
+        
+        assertThat(result, is(false));
+    }
+    
+    @Test
+    public void testDonationHasOutstandingOutcomesWithNotDoneTTIStatus_shouldReturnTrue() {
         
         Donation donation = aDonation()
                 .withId(IRRELEVANT_DONATION_ID)
@@ -192,6 +219,7 @@ public class DonationConstraintCheckerTests {
                 .withTTIStatus(TTIStatus.NOT_DONE)
                 .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+                .withPackType(aPackType().build())
                 .build();
         
         when(bloodTestsService.executeTests(donation.getDonor(), donation))
@@ -203,7 +231,7 @@ public class DonationConstraintCheckerTests {
     }
     
     @Test
-    public void testDonationHasOutstandinOutcomesWithNotDoneBloodTypingStatus_shouldReturnTrue() {
+    public void testDonationHasOutstandingOutcomesWithNotDoneBloodTypingStatus_shouldReturnTrue() {
         
         Donation donation = aDonation()
                 .withId(IRRELEVANT_DONATION_ID)
@@ -211,6 +239,7 @@ public class DonationConstraintCheckerTests {
                 .withTTIStatus(TTIStatus.TTI_SAFE)
                 .withBloodTyingStatus(BloodTypingStatus.NOT_DONE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS)
+                .withPackType(aPackType().build())
                 .build();
         
         when(bloodTestsService.executeTests(donation.getDonor(), donation))
@@ -222,7 +251,7 @@ public class DonationConstraintCheckerTests {
     }
     
     @Test
-    public void testDonationHasOutstandinOutcomesWithNotDoneBloodTypingMatchStatus_shouldReturnTrue() {
+    public void testDonationHasOutstandingOutcomesWithNotDoneBloodTypingMatchStatus_shouldReturnTrue() {
         
         Donation donation = aDonation()
                 .withId(IRRELEVANT_DONATION_ID)
@@ -230,6 +259,7 @@ public class DonationConstraintCheckerTests {
                 .withTTIStatus(TTIStatus.TTI_UNSAFE)
                 .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE)
+                .withPackType(aPackType().build())
                 .build();
         
         when(bloodTestsService.executeTests(donation.getDonor(), donation))
@@ -241,7 +271,7 @@ public class DonationConstraintCheckerTests {
     }
     
     @Test
-    public void testDonationHasOutstandinOutcomesWithNoOutstandingOutcomes_shouldReturnFalse() {
+    public void testDonationHasOutstandingOutcomesWithNoOutstandingOutcomes_shouldReturnFalse() {
         
         Donation donation = aDonation()
                 .withId(IRRELEVANT_DONATION_ID)
@@ -249,6 +279,7 @@ public class DonationConstraintCheckerTests {
                 .withTTIStatus(TTIStatus.TTI_SAFE)
                 .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+                .withPackType(aPackType().build())
                 .build();
         
         when(bloodTestsService.executeTests(donation.getDonor(), donation))
