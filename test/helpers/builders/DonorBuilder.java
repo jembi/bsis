@@ -10,6 +10,7 @@ import model.util.Gender;
 public class DonorBuilder extends AbstractEntityBuilder<Donor> {
     
     private Long id;
+    private String donorNumber;
     private String notes;
     private Boolean deleted;
     private Date dateOfFirstDonation;
@@ -22,12 +23,22 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
         return this;
     }
     
+    public DonorBuilder withDonorNumber(String donorNumber) {
+        this.donorNumber = donorNumber;
+        return this;
+    }
+    
     public DonorBuilder withNotes(String notes) {
         this.notes = notes;
         return this;
     }
     
     public DonorBuilder thatIsDeleted() {
+        deleted = true;
+        return this;
+    }
+    
+    public DonorBuilder thatIsNotDeleted() {
         deleted = true;
         return this;
     }
@@ -56,6 +67,7 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
     public Donor build() {
         Donor donor = new Donor();
         donor.setId(id);
+        donor.setDonorNumber(donorNumber);
         donor.setNotes(notes);
         donor.setIsDeleted(deleted);
         donor.setDateOfFirstDonation(dateOfFirstDonation);
