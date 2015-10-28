@@ -17,7 +17,6 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import model.donor.Donor;
-import model.donordeferral.DonorDeferral;
 import model.location.Location;
 import model.util.BloodGroup;
 
@@ -363,19 +362,9 @@ public class DonorCommunicationsRepositoryTest {
 		List<Donor> donors = donorCommunicationsRepository.findDonors(venues, clinicDate, lastDonationFromDate,
 				lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDate);	
 		
-		assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, donors.size());
-		
-		boolean isvalid = true;
-		for(Donor donor : donors){			
-			for (DonorDeferral deferral : donor.getDeferrals()){
-				if(deferral.getDeferredUntil().after(new Date())){
-					isvalid = false;
-					break;
-				}
-			}	
-		}
-		assertTrue("Donors in list should not be currently deferred",isvalid);
-		
+		assertEquals("List size should be two", 2, donors.size());
+		assertEquals("List should contain donor matching search criteria", 3, donors.get(0).getId().longValue());
+		assertEquals("List should contain donor matching search criteria", 4, donors.get(1).getId().longValue());
 	}
 	
 	@Test
@@ -409,19 +398,8 @@ public class DonorCommunicationsRepositoryTest {
 		List<Donor> donors = donorCommunicationsRepository.findDonors(venues, clinicDate, lastDonationFromDate,
 				lastDonationToDate,	bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDate);	
 		
-		assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, donors.size());
-		
-		boolean isvalid = true;
-		for(Donor donor : donors){
-			for (DonorDeferral deferral : donor.getDeferrals()){
-				if(deferral.getDeferredUntil().after(new Date())){
-					isvalid = false;
-					break;
-				}
-			}	
-		}
-		assertTrue("Donors in list should not be currently deferred",isvalid);
-		
+		assertEquals("List size should be one", 1, donors.size());
+		assertEquals("List should contain donor matching search criteria", 3, donors.get(0).getId().longValue());
 	}
 	
 	@Test
@@ -454,19 +432,8 @@ public class DonorCommunicationsRepositoryTest {
 		List<Donor> donors = donorCommunicationsRepository.findDonors(venues, clinicDate, lastDonationFromDate,
 				lastDonationToDate,	bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDate);	
 
-		assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, donors.size());
-		
-		boolean isvalid = true;
-		for(Donor donor : donors){
-			for (DonorDeferral deferral : donor.getDeferrals()){
-				if(deferral.getDeferredUntil().after(CustomDateFormatter.parse(clinicDate))){
-					isvalid = false;
-					break;
-				}
-			}	
-		}
-		assertTrue("Donors in list should not be deferred at date of Clinic Date",isvalid);
-		
+		assertEquals("List size should be one", 1, donors.size());
+		assertEquals("List should contain donor matching search criteria", 4, donors.get(0).getId().longValue());
 	}
 	
 	/**
@@ -516,24 +483,5 @@ public class DonorCommunicationsRepositoryTest {
 		pagingParams.put("sortDirection", "asc");
 
 		return pagingParams;
-	}
-	 
-	 private long getDonorListSizeWithoutAnyCriteria() throws ParseException {
-		List<Location> venue = new ArrayList<Location>();
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
-		String clinicDate = "";
-		String clinicDateToCheckdeferredDonor = "";
-		String lastDonationFromDate = "";
-		String lastDonationToDate = "";
-		boolean anyBloodGroup = true;
-		boolean noBloodGroup = false;
-		Map<String, Object> pagingParams = createPagingParamsMap();
-
-		List<Donor> results = new ArrayList<Donor>();
-                results = donorCommunicationsRepository.findDonors(venue,
-                        clinicDate, lastDonationFromDate, lastDonationToDate,
-                        bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
-            
-		return  (long) results.size();
 	}
 }
