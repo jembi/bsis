@@ -44,8 +44,9 @@ public class DonorDeferralRepositoryTests extends ContextDependentTestSuite {
     @Test
     public void testCountCurrentDonorDeferralsForDonor_shouldReturnCorrectCount() {
         
-        Date futureDate = new DateTime().plusDays(3).toDate();
         Date pastDate = new DateTime().minusDays(3).toDate();
+        Date currentDate = new Date();
+        Date futureDate = new DateTime().plusDays(3).toDate();
         
         Donor donor = aDonor().build();
         DeferralReason temporaryDeferralReason = aDeferralReason()
@@ -61,6 +62,12 @@ public class DonorDeferralRepositoryTests extends ContextDependentTestSuite {
         aDonorDeferral()
                 .withDeferralReason(temporaryDeferralReason)
                 .withDeferredUntil(futureDate)
+                .withDeferredDonor(donor)
+                .buildAndPersist(entityManager);
+        // Expected
+        aDonorDeferral()
+                .withDeferralReason(temporaryDeferralReason)
+                .withDeferredUntil(currentDate) // edge case: deferral ending today
                 .withDeferredDonor(donor)
                 .buildAndPersist(entityManager);
         // Expected
