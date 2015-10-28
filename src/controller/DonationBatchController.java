@@ -116,15 +116,16 @@ public class DonationBatchController {
 		        donationBatch), HttpStatus.CREATED);
   }
   
-  @RequestMapping(value = "{id}",method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION_BATCH+"')")
-  public ResponseEntity<DonationBatchViewModel> updateDonationBatch(@PathVariable Long id,
-          @RequestBody @Valid DonationBatchBackingForm form){
-      
-      DonationBatch donationBatch = donationBatchRepository.updateDonationBatch(form.getDonationBatch());
-      return new ResponseEntity<DonationBatchViewModel>(donationBatchViewModelFactory.createDonationBatchViewModel(
-              donationBatch), HttpStatus.OK);
-  }
+	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
+	@PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONATION_BATCH + "')")
+	public ResponseEntity<Map<String, Object>> updateDonationBatch(@PathVariable Long id,
+	                                                               @RequestBody @Valid DonationBatchBackingForm form) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		DonationBatch donationBatch = donationBatchCRUDService.updateDonationBatch(form.getDonationBatch());
+		DonationBatchViewModel viewModel = donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch);
+		map.put("donationBatch", viewModel);
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+	}
   
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)

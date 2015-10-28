@@ -23,9 +23,9 @@ public class DonationBatchConstraintChecker {
     public boolean canDeleteDonationBatch(int donationBatchId) throws NoResultException {
 
         DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
-        
-        // check if any donations have been added
+
         if (donationBatch.getDonations() == null || donationBatch.getDonations().size() == 0) {
+        	// can delete a donation batch if there are no donations in it
         	return true;
         }
         
@@ -40,8 +40,8 @@ public class DonationBatchConstraintChecker {
         	return false;
         }
         
-        // check if any donations have been added
         if (donationBatch.getDonations() == null || donationBatch.getDonations().size() == 0) {
+        	// if there are no donations then it shouldn't be closed it should be deleted
         	return false;
         }
         
@@ -56,9 +56,9 @@ public class DonationBatchConstraintChecker {
         	return false;
         }
 
-        // check if the test batch has been assigned
         TestBatch testBatch = donationBatch.getTestBatch();
         if (testBatch == null) {
+        	// can't re-open a donation batch if it has a test batch
         	return false;
         }
         
