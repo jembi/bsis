@@ -263,7 +263,7 @@ public class DonationCRUDServiceTests {
     }
     
     @Test
-    public void testCreateDonationWithDonationWithoutConstraints_shouldAddDonation() {
+    public void testCreateDonationWithDonationWithEligibleDonor_shouldAddDonation() {
 
         Donation donation = aDonation().build();
         long donorId = 993L;
@@ -273,7 +273,7 @@ public class DonationCRUDServiceTests {
                 .withDonor(aDonor().withId(donorId).build())
                 .build();
         
-        when(donationConstraintChecker.canAddDonation(donorId)).thenReturn(true);
+        when(donationConstraintChecker.isDonorEligibleToDonate(donorId)).thenReturn(true);
 
         Donation returnedDonation = donationCRUDService.createDonation(backingForm);
         
@@ -283,7 +283,7 @@ public class DonationCRUDServiceTests {
     }
     
     @Test(expected = IllegalArgumentException.class)
-    public void testCreateDonationWithDonationWithConstraintsAndNotBackEntry_shouldThrow() {
+    public void testCreateDonationWithDonationWithIneligibleDonorAndNotBackEntry_shouldThrow() {
 
         Donation donation = aDonation().build();
         long donorId = 993L;
@@ -297,7 +297,7 @@ public class DonationCRUDServiceTests {
         
         DonationBatch donationBatch = aDonationBatch().build();
         
-        when(donationConstraintChecker.canAddDonation(donorId)).thenReturn(false);
+        when(donationConstraintChecker.isDonorEligibleToDonate(donorId)).thenReturn(false);
         when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber)).thenReturn(donationBatch);
 
         donationCRUDService.createDonation(backingForm);
@@ -307,7 +307,7 @@ public class DonationCRUDServiceTests {
     }
     
     @Test
-    public void testCreateDonationWithDonationWithConstraintsAndBackEntry_shouldAddDonationAndDiscardComponents() {
+    public void testCreateDonationWithDonationWithIneligibleDonorAndBackEntry_shouldAddDonationAndDiscardComponents() {
 
         Donation donation = aDonation().build();
         long donorId = 993L;
@@ -321,7 +321,7 @@ public class DonationCRUDServiceTests {
         
         DonationBatch donationBatch = aDonationBatch().thatIsBackEntry().build();
         
-        when(donationConstraintChecker.canAddDonation(donorId)).thenReturn(false);
+        when(donationConstraintChecker.isDonorEligibleToDonate(donorId)).thenReturn(false);
         when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber)).thenReturn(donationBatch);
 
         Donation returnedDonation = donationCRUDService.createDonation(backingForm);

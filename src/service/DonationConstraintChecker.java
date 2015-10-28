@@ -1,17 +1,17 @@
 package service;
 
 import javax.persistence.NoResultException;
-
 import model.donation.Donation;
-
+import model.donor.Donor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import repository.BloodTestResultRepository;
 import repository.ComponentRepository;
 import repository.DonationRepository;
+import repository.DonorDeferralRepository;
+import repository.DonorRepository;
 
 @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 @Service
@@ -23,9 +23,23 @@ public class DonationConstraintChecker {
     private BloodTestResultRepository bloodTestResultRepository;
     @Autowired
     private ComponentRepository componentRepository;
+    @Autowired
+    private DonorRepository donorRepository;
+    @Autowired
+    private DonorDeferralRepository donorDeferralRepository;
     
-    public boolean canAddDonation(long donorId) {
-        // TODO
+    // TODO: Test
+    public boolean isDonorEligibleToDonate(long donorId) {
+        
+        Donor donor = donorRepository.findDonorById(donorId);
+        
+        // TODO: Check period between donations.
+
+        // Check if donor is currently deferred
+        if (donorDeferralRepository.countCurrentDonorDeferralsForDonor(donor) > 0) {
+            return false;
+        }
+        
         return true;
     }
     

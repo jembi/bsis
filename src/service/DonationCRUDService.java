@@ -67,7 +67,7 @@ public class DonationCRUDService {
 
         boolean discardComponents = false;
 
-        if (!donationConstraintChecker.canAddDonation(donationBackingForm.getDonor().getId())) {
+        if (!donationConstraintChecker.isDonorEligibleToDonate(donationBackingForm.getDonor().getId())) {
         
             DonationBatch donationBatch = donationBatchRepository.findDonationBatchByBatchNumber(
                     donationBackingForm.getDonationBatchNumber());

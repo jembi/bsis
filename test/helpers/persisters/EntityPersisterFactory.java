@@ -2,6 +2,7 @@ package helpers.persisters;
 
 import helpers.builders.AdverseEventBuilder;
 import helpers.builders.AdverseEventTypeBuilder;
+import helpers.builders.DeferralReasonBuilder;
 import helpers.builders.DonationBuilder;
 import helpers.builders.DonationTypeBuilder;
 import helpers.builders.DonorBuilder;
@@ -11,6 +12,7 @@ import model.adverseevent.AdverseEventType;
 import model.donation.Donation;
 import model.donationtype.DonationType;
 import model.donor.Donor;
+import model.donordeferral.DeferralReason;
 import model.location.Location;
 
 public class EntityPersisterFactory {
@@ -37,6 +39,10 @@ public class EntityPersisterFactory {
     
     public static AbstractEntityPersister<AdverseEventType> anAdverseEventTypePersister() {
         return new AdverseEventTypeBuilder().getPersister();
+    }
+    
+    public static AbstractEntityPersister<DeferralReason> aDeferralReasonPersister() {
+        return new DeferralReasonBuilder().getPersister();
     }
 
 }
