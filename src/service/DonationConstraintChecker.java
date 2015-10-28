@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import repository.BloodTestResultRepository;
 import repository.ComponentRepository;
 import repository.DonationRepository;
-import repository.DonorDeferralRepository;
 import repository.DonorRepository;
 
 @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -26,7 +25,7 @@ public class DonationConstraintChecker {
     @Autowired
     private DonorRepository donorRepository;
     @Autowired
-    private DonorDeferralRepository donorDeferralRepository;
+    private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
     
     // TODO: Test
     public boolean isDonorEligibleToDonate(long donorId) {
@@ -35,8 +34,7 @@ public class DonationConstraintChecker {
         
         // TODO: Check period between donations.
 
-        // Check if donor is currently deferred
-        if (donorDeferralRepository.countCurrentDonorDeferralsForDonor(donor) > 0) {
+        if (donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)) {
             return false;
         }
         

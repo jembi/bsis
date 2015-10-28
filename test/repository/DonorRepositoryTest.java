@@ -755,75 +755,6 @@ public class DonorRepositoryTest {
 
     @Test
     /**
-     * Method should return true isCurrentlyDeferred(List<DonorDeferral>)
-     */
-    public void isCurrentlyDeferred_list_methodShouldReturnTrue() {
-        // 1 is Donor ID
-        List<DonorDeferral> listDonorDeferral = donorRepository
-                .getDonorDeferrals(1l);
-        assertTrue("should return true for donor that currently deferred.",
-                donorRepository.isCurrentlyDeferred(listDonorDeferral));
-
-    }
-
-    @Test
-    /**
-     * Method should return false.Donor Id is exist into donor table
-     * isCurrentlyDeferred(List<DonorDeferral>)
-     */
-    public void isCurrentlyDeferred_List_ShouldReturnFalse() {
-        // 4 is Donor ID
-        List<DonorDeferral> listDonorDeferral = donorRepository
-                .getDonorDeferrals(5l);
-        assertFalse(
-                "should return false for donor that not currently deferred.",
-                donorRepository.isCurrentlyDeferred(listDonorDeferral));
-
-    }
-
-    @Test
-    /**
-     * Method should return false.There is no record exist into donordeferral
-     * which is match with Donor ID. isCurrentlyDeferred(List<DonorDeferral>)
-     */
-    public void isCurrentlyDeferred_List_ShouldReturnFalseMatchingRecordNotFound() {
-        // 6 is Donor ID .
-        List<DonorDeferral> listDonorDeferral = donorRepository
-                .getDonorDeferrals(5l);
-        assertFalse(
-                "Defer donor should not found. Because There is no record into donordeferral table which is match with Donor ID.",
-                donorRepository.isCurrentlyDeferred(listDonorDeferral));
-    }
-
-    @Test
-    /**
-     * Method should return true isCurrentlyDeferred(Donor)
-     */
-    public void isCurrentlyDeferred_Donor__methodShouldReturnTrue() {
-        // 1 is Donor ID
-        Donor donor = donorRepository.findDonorById(1l);
-        assertTrue("should return true for donor that currently deferred.",
-                donorRepository.isCurrentlyDeferred(donor));
-    }
-
-    @Test
-    /**
-     * Method should return false isCurrentlyDeferred(Donor)
-     */
-    public void isCurrentlyDeferred_Donor_methodShouldReturnFalse() {
-        // 4 is Donor ID
-        try {
-            Donor donor = donorRepository.findDonorById(4l);
-            assertFalse(
-                    "should return false for donor not currently deferred.",
-                    donorRepository.isCurrentlyDeferred(donor));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    /**
      * Should return last donor derferral date getLastDonorDeferralDate(long)
      *
      */
@@ -868,7 +799,6 @@ public class DonorRepositoryTest {
      * @param donorBackingForm
      */
     public void setBackingFormValue(DonorBackingForm donorBackingForm) {
-        Date date = new Date();
         Location l = new Location();
         l.setId(Long.parseLong("1"));
         AddressType a = new AddressType();

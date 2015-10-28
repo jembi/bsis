@@ -35,7 +35,6 @@ import model.preferredlanguage.PreferredLanguage;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -384,30 +383,6 @@ public class DonorRepository {
         query.setParameter("donorId", donorId);
         query.setParameter("isVoided", Boolean.FALSE);
         return query.getResultList();
-    }
-
-    public boolean isCurrentlyDeferred(List<DonorDeferral> donorDeferrals) {
-
-        if (donorDeferrals == null) {
-            return false;
-        }
-
-        DateTime dt = new DateTime().toDateMidnight().toDateTime();
-        Date today = new Date(dt.getMillis());
-
-        for (DonorDeferral donorDeferral : donorDeferrals) {
-            Date deferredUntil = donorDeferral.getDeferredUntil();
-            if(deferredUntil.equals(today) || deferredUntil.after(today) && donorDeferral.getIsVoided() != true){
-            	return true;
-            }            
-        }
-
-        return false;
-    }
-
-    public boolean isCurrentlyDeferred(Donor donor) {
-        List<DonorDeferral> donorDeferrals = getDonorDeferrals(donor.getId());
-        return isCurrentlyDeferred(donorDeferrals);
     }
 
     public Date getLastDonorDeferralDate(Long donorId) {
