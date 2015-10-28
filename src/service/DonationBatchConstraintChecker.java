@@ -21,7 +21,6 @@ public class DonationBatchConstraintChecker {
  
     
     public boolean canDeleteDonationBatch(int donationBatchId) throws NoResultException {
-
         DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
 
         if (donationBatch.getDonations() == null || donationBatch.getDonations().size() == 0) {
@@ -30,6 +29,17 @@ public class DonationBatchConstraintChecker {
         }
         
         return false;
+    }
+    
+    public boolean canEditDonationBatch(int donationBatchId) throws NoResultException {
+        DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
+
+        if (donationBatch.getIsClosed() || donationBatch.getIsDeleted()) {
+        	// can't edit a donation batch if it is closed
+        	return false;
+        }
+        
+        return true;
     }
     
     public boolean canCloseDonationBatch(int donationBatchId) {
@@ -57,7 +67,7 @@ public class DonationBatchConstraintChecker {
         }
 
         TestBatch testBatch = donationBatch.getTestBatch();
-        if (testBatch == null) {
+        if (testBatch != null) {
         	// can't re-open a donation batch if it has a test batch
         	return false;
         }
