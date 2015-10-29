@@ -5,10 +5,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.validation.Valid;
+
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +24,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
 import repository.DonationBatchRepository;
 import repository.SequenceNumberRepository;
 import repository.TestBatchRepository;
@@ -121,12 +126,12 @@ public class TestBatchController {
 
     }
     
-    @RequestMapping(method = RequestMethod.DELETE)
-    @PreAuthorize("hasRole('"+PermissionConstants.VOID_TEST_BATCH+"')")
-    public ResponseEntity deleteTestBatchById(Long id){
-        testBatchRepository.deleteTestBatch(id);
-        return  new ResponseEntity(HttpStatus.NO_CONTENT);
-    }
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasRole('" + PermissionConstants.VOID_TEST_BATCH + "')")
+	public void deleteTestBatchById(@PathVariable Long id) {
+		testBatchRepository.deleteTestBatch(id);
+	}
     
        @RequestMapping(value = "/recent/{count}" ,method = RequestMethod.GET)
    @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")  

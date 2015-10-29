@@ -157,4 +157,34 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
         
         assertThat(result, is(false));
     }
+    
+    @Test
+    public void testCanDeleteTestBatchWithNoTestResults_shouldReturnTrue() {
+    	Donation donationWithDiscrepancies = aDonation().build();
+        TestBatch testBatch = aTestBatch()
+                .withStatus(TestBatchStatus.RELEASED)
+                .withDonationBatch(aDonationBatch().withDonation(donationWithDiscrepancies).build())
+                .build();
+        
+        when(donationConstraintChecker.donationHasSavedTestResults(donationWithDiscrepancies)).thenReturn(false);
+        
+        boolean result = testBatchConstraintChecker.canDeleteTestBatch(testBatch);
+        
+        assertThat(result, is(true));
+    }
+    
+    @Test
+    public void testCanDeleteTestBatchWithTestResults_shouldReturnFalse() {
+    	Donation donationWithDiscrepancies = aDonation().build();
+        TestBatch testBatch = aTestBatch()
+                .withStatus(TestBatchStatus.RELEASED)
+                .withDonationBatch(aDonationBatch().withDonation(donationWithDiscrepancies).build())
+                .build();
+        
+        when(donationConstraintChecker.donationHasSavedTestResults(donationWithDiscrepancies)).thenReturn(true);
+        
+        boolean result = testBatchConstraintChecker.canDeleteTestBatch(testBatch);
+        
+        assertThat(result, is(false));
+    }
 }

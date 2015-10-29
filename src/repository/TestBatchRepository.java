@@ -93,7 +93,7 @@ public class TestBatchRepository {
   
   public void deleteTestBatch(Long id){
       TestBatch testBatch = findTestBatchById(id);
-      testBatch.setIsDeleted(false);
+      testBatch.setIsDeleted(true);
       em.merge(testBatch);
   }
   

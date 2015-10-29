@@ -108,4 +108,15 @@ public class DonationConstraintChecker {
                 copy.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NOT_DONE;
     }
 
+	/**
+	 * Determines if there are any blood test results recorded for the specified donation.
+	 * 
+	 * @param donation Donation to check
+	 * @return boolean true if the donation has saved test results, false otherwise
+	 */
+	public boolean donationHasSavedTestResults(Donation donation) {
+		int numberOfTestResults = bloodTestResultRepository.countBloodTestResultsForDonation(donation.getId());
+		return numberOfTestResults > 0;
+	}
+
 }

@@ -39,6 +39,42 @@ public class TestBatchConstraintChecker {
         return true;
     }
     
+	/**
+	 * Determines if a TestBatch can be marked as voided which is any time before a test result is
+	 * recorded for any of the donations in the donation batches.
+	 * 
+	 * @param testBatch TestBatch to check
+	 * @return true if the specified TestBatch can be deleted
+	 */
+	public boolean canDeleteTestBatch(TestBatch testBatch) {
+		if (testBatch.getDonationBatches() != null) {
+			for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
+				for (Donation donation : donationBatch.getDonations()) {
+					if (donationConstraintChecker.donationHasSavedTestResults(donation)) {
+						// test results have been recorded for this donation
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * A Test Batch can be reopened if it has been closed.
+	 */
+	public boolean canReopenTestBatch(TestBatch testBatch) {
+		if (testBatch.getStatus() == TestBatchStatus.CLOSED) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean canEditTestBatch(TestBatch testBatch) {
+		// FIXME:
+		return true;
+	}
+    
     /**
      * A test batch can be closed if it is released and none of the donations have discrepancies.
      */
