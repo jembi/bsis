@@ -8,6 +8,7 @@ import model.adverseevent.AdverseEventType;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.donor.Donor;
+import model.packtype.PackType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import backingform.DonationBackingForm;
 import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import repository.DonorRepository;
+import repository.PackTypeRepository;
 
 @Transactional
 @Service
@@ -33,6 +35,8 @@ public class DonationCRUDService {
     private DonationBatchRepository donationBatchRepository;
     @Autowired
     private ComponentCRUDService componentCRUDService;
+    @Autowired
+    private PackTypeRepository packTypeRepository;
     
     public void deleteDonation(long donationId) throws IllegalStateException, NoResultException {
         
@@ -65,10 +69,13 @@ public class DonationCRUDService {
     
     public Donation createDonation(DonationBackingForm donationBackingForm) {
 
+        Donation donation = donationBackingForm.getDonation();
+        PackType packType = packTypeRepository.getPackTypeById(donation.getPackType().getId());
+
         boolean discardComponents = false;
 
-        // TODO: Check if packType is countAsDonation before checking if donor is eligible
-        if (!donationConstraintChecker.isDonorEligibleToDonate(donationBackingForm.getDonor().getId())) {
+        if (packType.getCountAsDonation() &&
+                !donationConstraintChecker.isDonorEligibleToDonate(donationBackingForm.getDonor().getId())) {
         
             DonationBatch donationBatch = donationBatchRepository.findDonationBatchByBatchNumber(
                     donationBackingForm.getDonationBatchNumber());
@@ -81,7 +88,6 @@ public class DonationCRUDService {
             discardComponents = true;
         }
         
-        Donation donation = donationBackingForm.getDonation();
         updateAdverseEventForDonation(donation, donationBackingForm.getAdverseEvent());
         donationRepository.addDonation(donation);
         

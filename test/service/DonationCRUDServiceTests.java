@@ -33,6 +33,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import repository.DonorRepository;
+import repository.PackTypeRepository;
 import backingform.AdverseEventBackingForm;
 import backingform.DonationBackingForm;
 
@@ -41,6 +42,7 @@ public class DonationCRUDServiceTests {
     
     private static final long IRRELEVANT_DONATION_ID = 2;
     private static final long IRRELEVANT_DONOR_ID = 7;
+    private static final int IRRELEVANT_PACK_TYPE_ID = 5009;
     private static final Date IRRELEVANT_DATE_OF_FIRST_DONATION = new DateTime().minusDays(7).toDate();
     private static final Date IRRELEVANT_DATE_OF_LAST_DONATION = new DateTime().minusDays(2).toDate();
 
@@ -56,6 +58,8 @@ public class DonationCRUDServiceTests {
     private DonationBatchRepository donationBatchRepository;
     @Mock
     private ComponentCRUDService componentCRUDService;
+    @Mock
+    private PackTypeRepository packTypeRepository;
     
     @Test(expected = IllegalStateException.class)
     public void testDeleteDonationWithConstraints_shouldThrow() {
@@ -271,9 +275,36 @@ public class DonationCRUDServiceTests {
         DonationBackingForm backingForm = aDonationBackingForm()
                 .withDonation(donation)
                 .withDonor(aDonor().withId(donorId).build())
+                .withPackType(aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build())
                 .build();
         
+        PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).build();
+        
+        when(packTypeRepository.getPackTypeById(IRRELEVANT_PACK_TYPE_ID)).thenReturn(packTypeThatCountsAsDonation);
         when(donationConstraintChecker.isDonorEligibleToDonate(donorId)).thenReturn(true);
+
+        Donation returnedDonation = donationCRUDService.createDonation(backingForm);
+        
+        verify(donationRepository).addDonation(donation);
+        verify(componentCRUDService, never()).markComponentsBelongingToDonationAsUnsafe(donation);
+        assertThat(returnedDonation, is(donation));
+    }
+    
+    @Test
+    public void testCreateDonationWithDonationWithPackTypeThatDoesNotCountAsDonation_shouldAddDonation() {
+
+        Donation donation = aDonation().build();
+        long donorId = 993L;
+
+        DonationBackingForm backingForm = aDonationBackingForm()
+                .withDonation(donation)
+                .withDonor(aDonor().withId(donorId).build())
+                .withPackType(aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build())
+                .build();
+        
+        PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(false).build();
+        
+        when(packTypeRepository.getPackTypeById(IRRELEVANT_PACK_TYPE_ID)).thenReturn(packTypeThatCountsAsDonation);
 
         Donation returnedDonation = donationCRUDService.createDonation(backingForm);
         
@@ -293,10 +324,14 @@ public class DonationCRUDServiceTests {
                 .withDonation(donation)
                 .withDonor(aDonor().withId(donorId).build())
                 .withDonationBatchNumber(donationBatchNumber)
+                .withPackType(aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build())
                 .build();
         
         DonationBatch donationBatch = aDonationBatch().build();
         
+        PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).build();
+        
+        when(packTypeRepository.getPackTypeById(IRRELEVANT_PACK_TYPE_ID)).thenReturn(packTypeThatCountsAsDonation);
         when(donationConstraintChecker.isDonorEligibleToDonate(donorId)).thenReturn(false);
         when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber)).thenReturn(donationBatch);
 
@@ -317,10 +352,14 @@ public class DonationCRUDServiceTests {
                 .withDonation(donation)
                 .withDonor(aDonor().withId(donorId).build())
                 .withDonationBatchNumber(donationBatchNumber)
+                .withPackType(aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build())
                 .build();
         
         DonationBatch donationBatch = aDonationBatch().thatIsBackEntry().build();
         
+        PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).build();
+        
+        when(packTypeRepository.getPackTypeById(IRRELEVANT_PACK_TYPE_ID)).thenReturn(packTypeThatCountsAsDonation);
         when(donationConstraintChecker.isDonorEligibleToDonate(donorId)).thenReturn(false);
         when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber)).thenReturn(donationBatch);
 

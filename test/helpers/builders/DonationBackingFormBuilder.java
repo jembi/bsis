@@ -106,6 +106,9 @@ public class DonationBackingFormBuilder extends AbstractBuilder<DonationBackingF
     @Override
     public DonationBackingForm build() {
         DonationBackingForm donationBackingForm = new DonationBackingForm();
+        if (donation != null) {
+            donationBackingForm.setDonation(donation);
+        }
         donationBackingForm.setDonorPulse(donorPulse);
         donationBackingForm.setHaemoglobinCount(haemoglobinCount);
         donationBackingForm.setHaemoglobinLevel(haemoglobinLevel);
@@ -121,9 +124,6 @@ public class DonationBackingFormBuilder extends AbstractBuilder<DonationBackingF
             donationBackingForm.setBleedEndTime(ISO_FORMAT.print(bleedEndTime.getTime()));
         }
         donationBackingForm.setAdverseEvent(adverseEventBackingForm);
-        if (donation != null) {
-            donationBackingForm.setDonation(donation);
-        }
         donationBackingForm.setDonor(donor);
         donationBackingForm.setDonationBatchNumber(donationBatchNumber);
         return donationBackingForm;
