@@ -24,13 +24,25 @@ public class TestBatchViewModelFactory {
         List<TestBatchViewModel> viewModels = new ArrayList<>();
         
         for (TestBatch testBatch : testBatches) {
-            viewModels.add(createTestBatchViewModel(testBatch, isTestingSupervisor));
+            viewModels.add(createTestBatchViewModelWithoutPermissions(testBatch, isTestingSupervisor));
         }
         
         return viewModels;
     }
     
     public TestBatchViewModel createTestBatchViewModel(TestBatch testBatch, boolean isTestingSupervisor) {
+        TestBatchViewModel testBatchViewModel = createTestBatchViewModelWithoutPermissions(testBatch, isTestingSupervisor);
+                
+        // Set permissions
+        Map<String, Boolean> permissions = new HashMap<>();
+        permissions.put("canRelease", isTestingSupervisor && testBatchConstraintChecker.canReleaseTestBatch(testBatch));
+        permissions.put("canClose", isTestingSupervisor && testBatchConstraintChecker.canCloseTestBatch(testBatch));
+        testBatchViewModel.setPermissions(permissions);
+
+        return testBatchViewModel;
+    }
+
+    public TestBatchViewModel createTestBatchViewModelWithoutPermissions(TestBatch testBatch, boolean isTestingSupervisor) {
         TestBatchViewModel testBatchViewModel = new TestBatchViewModel();
         testBatchViewModel.setId(testBatch.getId());
         testBatchViewModel.setStatus(testBatch.getStatus());
@@ -48,14 +60,7 @@ public class TestBatchViewModelFactory {
             }
         }
         testBatchViewModel.setDonationBatches(donationBatchViewModels);
-        
-        // Set permissions
-        Map<String, Boolean> permissions = new HashMap<>();
-        permissions.put("canRelease", isTestingSupervisor && testBatchConstraintChecker.canReleaseTestBatch(testBatch));
-        permissions.put("canClose", isTestingSupervisor && testBatchConstraintChecker.canCloseTestBatch(testBatch));
-        testBatchViewModel.setPermissions(permissions);
 
         return testBatchViewModel;
     }
-
 }
