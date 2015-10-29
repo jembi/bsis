@@ -67,6 +67,7 @@ public class DonationCRUDService {
 
         boolean discardComponents = false;
 
+        // TODO: Check if packType is countAsDonation before checking if donor is eligible
         if (!donationConstraintChecker.isDonorEligibleToDonate(donationBackingForm.getDonor().getId())) {
         
             DonationBatch donationBatch = donationBatchRepository.findDonationBatchByBatchNumber(
