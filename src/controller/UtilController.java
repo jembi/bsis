@@ -24,7 +24,6 @@ import model.donationbatch.DonationBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
-import model.donordeferral.DonorDeferral;
 import model.location.Location;
 import model.packtype.PackType;
 import model.request.Request;
@@ -379,12 +378,8 @@ public class UtilController {
     return errorMessage;
   }
 
-    public String isDonorDeferred(Donor donor) {
-        donor = donorRepository.findDonorById(donor.getId());
-        if (donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)) {
-            return "Donor is currently deferred from donations";
-        }
-        return "";
+    public boolean isDonorDeferred(Donor donor) {
+        return donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor);
     }
 
   public Component findComponent(String donationIdentificationNumber, String componentType) {
