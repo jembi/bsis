@@ -2,11 +2,8 @@ package controller;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.validation.Valid;
-
 import model.donordeferral.DonorDeferral;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import repository.DonorRepository;
 import service.DonorDeferralCRUDService;
 import utils.PermissionConstants;
 import viewmodel.DonorDeferralViewModel;
 import backingform.DeferralBackingForm;
 import backingform.EndDeferralBackingForm;
-import factory.DeferralViewModelFactory;
+import factory.DonorDeferralViewModelFactory;
 
 @RestController
 @RequestMapping("deferrals")
@@ -37,7 +33,7 @@ public class DeferralController {
     private DonorDeferralCRUDService donorDeferralCRUDService;
     
     @Autowired
-    private DeferralViewModelFactory deferralViewModelFactory;
+    private DonorDeferralViewModelFactory deferralViewModelFactory;
 
     @RequestMapping(value = "/form", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")

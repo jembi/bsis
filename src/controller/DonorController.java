@@ -49,7 +49,6 @@ import backingform.DonorBackingForm;
 import backingform.DuplicateDonorsBackingForm;
 import backingform.validator.DonorBackingFormValidator;
 import constant.GeneralConfigConstants;
-import factory.DeferralViewModelFactory;
 import factory.DonationViewModelFactory;
 import factory.DonorDeferralViewModelFactory;
 import factory.DonorViewModelFactory;
@@ -95,9 +94,6 @@ public class DonorController {
   
   @Autowired
   private DonorDeferralViewModelFactory donorDeferralViewModelFactory;
-  
-  @Autowired
-  private DeferralViewModelFactory deferralViewModelFactory;
   
   @Autowired
   private AdverseEventRepository adverseEventRepository;
