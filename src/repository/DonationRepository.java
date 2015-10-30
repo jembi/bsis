@@ -36,11 +36,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import constant.GeneralConfigConstants;
 import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
 import repository.events.ApplicationContextProvider;
 import repository.events.DonationUpdatedEvent;
+import service.GeneralConfigAccessorService;
 import valueobject.CollectedDonationValueObject;
 import viewmodel.BloodTestingRuleResult;
 
@@ -65,6 +67,9 @@ public class DonationRepository {
 
   @Autowired
   private ComponentRepository componentRepository;
+  
+  @Autowired
+  private GeneralConfigAccessorService generalConfigAccessorService;
   
   public void saveDonation(Donation donation) {
     em.persist(donation);
@@ -329,14 +334,16 @@ public class DonationRepository {
     
     em.refresh(donation);
    
-    //Create initial component only if the countAsDonation is true
-    if( donation.getPackType().getCountAsDonation() == true)
+    // Create initial component only if the countAsDonation is true and the config option is enabled
+    if (donation.getPackType().getCountAsDonation() &&
+            generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)) {
         createInitialComponent(donation);
+    }
   
     return donation;
   }
   
-  public void createInitialComponent(Donation donation){
+  private void createInitialComponent(Donation donation){
     
     ComponentType componentType = donation.getPackType().getComponentType();
       

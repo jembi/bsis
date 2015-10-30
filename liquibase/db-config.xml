@@ -2947,5 +2947,69 @@
             <column name="roles_id" value="8"></column>
         </insert>
     </changeSet>
+    
+    <!-- Added permission for Merging Donors -->
+    <changeSet id="20151029-1435" author="timler">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM Permission WHERE name = "View Duplicate Donor";
+				]]>
+			</sqlCheck>
+ 		</preConditions>
+ 		<comment>Adding roles for viewing of duplicate donors</comment>
+        <insert tableName="Permission">
+            <column name="id" value="100"></column>
+            <column name="name" value="View Duplicate Donors"></column>
+        </insert>
+        <insert tableName="Permission_Role"> <!-- Super User -->
+            <column name="permissions_id" value="100"></column>
+            <column name="roles_id" value="1"></column>
+        </insert>
+        <insert tableName="Permission_Role"> <!-- Admin -->
+            <column name="permissions_id" value="100"></column>
+            <column name="roles_id" value="2"></column>
+        </insert>
+        <insert tableName="Permission_Role"> <!-- Donor Clinic Supervisor -->
+            <column name="permissions_id" value="100"></column>
+            <column name="roles_id" value="3"></column>
+        </insert>
+        <insert tableName="Permission_Role"> <!-- Medical Officer -->
+            <column name="permissions_id" value="100"></column>
+            <column name="roles_id" value="8"></column>
+        </insert>
+    </changeSet>
+    
+    <!-- Added permission for Merging Donors -->
+    <changeSet id="20151029-1440" author="timler">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM Permission WHERE name = "Merge Donors";
+				]]>
+			</sqlCheck>
+ 		</preConditions>
+ 		<comment>Adding roles for merging of duplicate donors</comment>
+        <insert tableName="Permission">
+            <column name="id" value="101"></column>
+            <column name="name" value="Merge Donors"></column>
+        </insert>
+        <insert tableName="Permission_Role"> <!-- Super User -->
+            <column name="permissions_id" value="101"></column>
+            <column name="roles_id" value="1"></column>
+        </insert>
+        <insert tableName="Permission_Role"> <!-- Admin -->
+            <column name="permissions_id" value="101"></column>
+            <column name="roles_id" value="2"></column>
+        </insert>
+        <insert tableName="Permission_Role"> <!-- Donor Clinic Supervisor -->
+            <column name="permissions_id" value="101"></column>
+            <column name="roles_id" value="3"></column>
+        </insert>
+        <insert tableName="Permission_Role"> <!-- Medical Officer -->
+            <column name="permissions_id" value="101"></column>
+            <column name="roles_id" value="8"></column>
+        </insert>
+    </changeSet>
 
 </databaseChangeLog>
