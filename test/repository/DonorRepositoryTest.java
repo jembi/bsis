@@ -13,6 +13,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +27,8 @@ import model.address.AddressType;
 import model.address.Contact;
 import model.donation.DonationConstants;
 import model.donor.Donor;
+import model.donor.DonorStatus;
+import model.donor.DuplicateDonorBackup;
 import model.donorcodes.DonorCodeGroup;
 import model.donorcodes.DonorDonorCode;
 import model.donordeferral.DeferralReason;
@@ -42,6 +45,7 @@ import org.dbunit.dataset.ReplacementDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,6 +63,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import security.BsisUserDetails;
 import security.LoginUserService;
+import viewmodel.DonorSummaryViewModel;
 import backingform.DonorBackingForm;
 import controller.UtilController;
 
@@ -794,6 +799,18 @@ public class DonorRepositoryTest {
                 "Defer donor should not found. Because There is no record into donordeferral table which is match with Donor ID.",
                 donorRepository.isCurrentlyDeferred(listDonorDeferral));
     }
+    
+    @Test
+    public void testGetDonorDeferrals() {
+		List<DonorDeferral> all = donorRepository.getDonorDeferrals(Arrays.asList(new Long[] { 4l, 6l }));
+		Assert.assertNotNull("List is returned", all);
+		Assert.assertEquals("Three Deferrals for the Donors", 3, all.size());
+		for (DonorDeferral deferral : all) {
+			if (!deferral.getDeferredDonor().getId().equals(4l) && !deferral.getDeferredDonor().getId().equals(6l)) {
+				Assert.fail("Deferral is for Donor with id 4 or 6");
+			}
+		}
+    }
 
     @Test
     /**
@@ -1109,6 +1126,93 @@ public class DonorRepositoryTest {
     public void getAllIdTypes_ShouldReturnNonEmptyList() {
         assertTrue("Expected : ID Type Set  but FOund : Empty Set",
                 donorRepository.getAllIdTypes().size() > 0);
+    }
+    
+    @Test
+    public void testFindDonorsByNumbersEmptyList() throws Exception {
+    	List<Donor> donors = donorRepository.findDonorsByNumbers(new ArrayList<String>());
+    	Assert.assertNotNull("Not null list was returned", donors);
+    	Assert.assertEquals("No Donors were returned", 0, donors.size());
+    }
+    
+    @Test
+    public void testFindDonorsByNumbersNullList() throws Exception {
+    	List<Donor> donors = donorRepository.findDonorsByNumbers(null);
+    	Assert.assertNotNull("Not null list was returned", donors);
+    	Assert.assertEquals("No Donors were returned", 0, donors.size());
+    }
+    
+    @Test
+    public void testFindDonorsByNumbersDoesntExist() throws Exception {
+    	List<String> donorNumbers = new ArrayList<String>();
+    	donorNumbers.add("xxxxxx");
+    	List<Donor> donors = donorRepository.findDonorsByNumbers(donorNumbers);
+    	Assert.assertNotNull("Not null list was returned", donors);
+    	Assert.assertEquals("No Donors were returned", 0, donors.size());
+    }
+    
+    @Test
+    public void testFindDonorsByNumbers() throws Exception {
+    	List<String> donorNumbers = new ArrayList<String>();
+    	donorNumbers.add("000001");
+    	donorNumbers.add("000003");
+    	List<Donor> donors = donorRepository.findDonorsByNumbers(donorNumbers);
+    	Assert.assertNotNull("Not null list was returned", donors);
+    	Assert.assertEquals("Two Donors were returned", 2, donors.size());
+    	Assert.assertEquals("donorNumber matches", "000001", donors.get(0).getDonorNumber());
+    	Assert.assertEquals("donorNumber matches", "000003", donors.get(1).getDonorNumber());
+    }
+    
+    @Test
+    public void addMergedDonor() throws Exception {
+    	List<DuplicateDonorBackup> backupLogs = new ArrayList<DuplicateDonorBackup>();
+    	backupLogs.add(new DuplicateDonorBackup("1234567", "000001", 1l, null));
+    	backupLogs.add(new DuplicateDonorBackup("1234567", "000001", null, 1l));
+    	Donor oldDonor = donorRepository.findDonorByDonorNumber("000001", false);
+    	List<Donor> donorsToMerge = new ArrayList<Donor>();
+    	donorsToMerge.add(oldDonor);
+    	Donor newDonor = new Donor();
+    	newDonor.setDonorNumber("1234567");
+    	newDonor.setFirstName("Merged");
+    	newDonor.setLastName("Donor");
+    	newDonor.setDonations(oldDonor.getDonations());
+    	oldDonor.setDonations(null);
+    	newDonor.setDeferrals(oldDonor.getDeferrals());
+    	oldDonor.setDeferrals(null);
+    	Donor savedDonor = donorRepository.addMergedDonor(newDonor, donorsToMerge, backupLogs);
+    	Assert.assertNotNull("Id has been set", savedDonor.getId());
+    	Assert.assertNotNull("Donations have been moved", savedDonor.getDonations());
+    	Assert.assertEquals("Donations have been moved", 1, savedDonor.getDonations().size());
+    	Assert.assertNotNull("Deferrals have been moved", savedDonor.getDeferrals());
+    	Assert.assertEquals("Deferrals have been moved", 3, savedDonor.getDeferrals().size());
+    	oldDonor = donorRepository.findDonorByDonorNumber("000001", false); // will return all statues
+    	Assert.assertNull("Donations have been moved", oldDonor.getDonations());
+    	Assert.assertNull("Deferrals have been moved", oldDonor.getDeferrals());
+    }
+    
+    @Test
+    public void testFindDonorByNumberExcludeMerged() throws Exception {
+    	Donor donor = donorRepository.findDonorByDonorNumber("000001", false);
+    	donor.setDonorStatus(DonorStatus.MERGED);
+    	donorRepository.saveDonor(donor);
+    	donor = donorRepository.findDonorByDonorNumber("000001", false, new DonorStatus[] { DonorStatus.MERGED });
+    	Assert.assertNull("Donor was not found", donor);
+    }
+    
+    @Test
+    public void testFindDonorSummaryByDonorNumber() throws Exception {
+    	DonorSummaryViewModel donorSummary = donorRepository.findDonorSummaryByDonorNumber("000001");
+    	Assert.assertNotNull("Donor was found", donorSummary);
+    	Assert.assertEquals("Donor was found", "firstName", donorSummary.getFirstName());
+    	
+    }
+    
+    @Test(expected = javax.persistence.NoResultException.class)
+    public void testFindDonorSummaryByDonorNumberMerged() throws Exception {
+    	Donor donor = donorRepository.findDonorByDonorNumber("000001", false);
+    	donor.setDonorStatus(DonorStatus.MERGED);
+    	donorRepository.saveDonor(donor);
+    	DonorSummaryViewModel donorSummary = donorRepository.findDonorSummaryByDonorNumber("000001");
     }
     
 //    @Test
