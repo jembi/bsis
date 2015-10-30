@@ -1,6 +1,7 @@
 package model.donor;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import constraintvalidator.LocationExists;
 import java.util.Date;
@@ -31,6 +32,7 @@ import model.address.Contact;
 import model.address.ContactMethodType;
 import model.donation.Donation;
 import model.donorcodes.DonorCode;
+import model.donordeferral.DonorDeferral;
 import model.idtype.IdType;
 import model.location.Location;
 import model.modificationtracker.ModificationTracker;
@@ -174,6 +176,15 @@ public class Donor implements ModificationTracker {
   @OneToMany(mappedBy="donor")
   @Where(clause = "isDeleted = 0")
   private List<Donation> donations;
+
+  /**
+   * If a donor has been deferred then we can disallow him to donate the next time.
+   */
+  @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+  @OneToMany(mappedBy="deferredDonor")
+  private List<DonorDeferral> deferrals;
+  
 
  @NotAudited
  @ManyToMany(cascade = CascadeType.ALL,targetEntity  = DonorCode.class,fetch = FetchType.EAGER)
@@ -430,6 +441,15 @@ public void copy(Donor donor) {
 
   public void setCallingName(String callingName) {
     this.callingName = callingName;
+  }
+
+  
+  public List<DonorDeferral> getDeferrals() {
+    return deferrals;
+  }
+
+  public void setDeferrals(List<DonorDeferral> deferrals) {
+    this.deferrals = deferrals;
   }
 
   public Date getBirthDateInferred() {
