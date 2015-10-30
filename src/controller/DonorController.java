@@ -374,7 +374,7 @@ public class DonorController {
 	}
 	
 	@RequestMapping(value = "/duplicates/all", method = RequestMethod.GET)
-	@PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
+	@PreAuthorize("hasRole('" + PermissionConstants.VIEW_DUPLICATE_DONORS + "')")
 	public Map<String, Object> findDuplicateDonors() {
 		
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -399,7 +399,7 @@ public class DonorController {
 	}
 	
 	@RequestMapping(value = "/duplicates/merge/preview", method = RequestMethod.POST)
-	@PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
+	@PreAuthorize("hasRole('" + PermissionConstants.MERGE_DONORS + "')")
 	public Map<String, Object> findDuplicateDonorsDonations(@RequestParam(value = "donorNumber", required = true) String donorNumber,
 	                                                        @Valid @RequestBody DuplicateDonorsBackingForm form) {
 		
@@ -435,7 +435,7 @@ public class DonorController {
 	}
 	
 	@RequestMapping(value = "/duplicates/merge", method = RequestMethod.POST)
-	@PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONOR + "')")
+	@PreAuthorize("hasRole('" + PermissionConstants.MERGE_DONORS + "')")
 	public ResponseEntity<Map<String, Object>> mergeDuplicateDonors(@RequestParam(value = "donorNumber", required = true) String donorNumber,
 	                                                                @Valid @RequestBody DuplicateDonorsBackingForm form) {
 		

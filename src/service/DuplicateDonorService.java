@@ -167,7 +167,7 @@ public class DuplicateDonorService {
 	protected void executeTestsAndUpdate(Donor newDonor, List<Donation> combinedDonations) {
 		for (Donation donation : combinedDonations) {
 			// analyse the Blood Tests
-			BloodTestingRuleResult ruleResult = bloodTestsService.executeTests(newDonor, donation);
+			BloodTestingRuleResult ruleResult = bloodTestsService.executeTests(donation);
 			// FIXME: note: donation was updated after running the tests (not persisted) - see line 337 of BloodTestingRuleEngine
 			// process test results
 			bloodTestsService.updateDonationWithTestResults(donation, ruleResult);
