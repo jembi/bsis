@@ -3,6 +3,7 @@ package service;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
 import static org.mockito.Mockito.verify;
+import java.util.Arrays;
 import model.component.ComponentStatus;
 import model.donation.Donation;
 import model.donor.Donor;
@@ -28,8 +29,8 @@ public class ComponentCRUDServiceTests {
         
         componentCRUDService.markComponentsBelongingToDonorAsUnsafe(donor);
         
-        verify(componentRepository).updateComponentStatusForDonor(ComponentStatus.AVAILABLE, ComponentStatus.UNSAFE,
-                donor);
+        verify(componentRepository).updateComponentStatusesForDonor(
+                Arrays.asList(ComponentStatus.AVAILABLE, ComponentStatus.QUARANTINED), ComponentStatus.UNSAFE, donor);
     }
     
     @Test
@@ -38,8 +39,9 @@ public class ComponentCRUDServiceTests {
         Donation donation = aDonation().build();
         
         componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
-        
-        verify(componentRepository).updateComponentStatusForDonation(ComponentStatus.AVAILABLE, ComponentStatus.UNSAFE,
+
+        verify(componentRepository) .updateComponentStatusForDonation(
+                Arrays.asList(ComponentStatus.AVAILABLE, ComponentStatus.QUARANTINED), ComponentStatus.UNSAFE,
                 donation);
     }
 

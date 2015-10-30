@@ -10,11 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
 import javax.persistence.NoResultException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-
 import model.admin.FormField;
 import model.admin.GeneralConfig;
 import model.component.Component;
@@ -26,21 +24,18 @@ import model.donationbatch.DonationBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
-import model.donordeferral.DonorDeferral;
 import model.location.Location;
 import model.packtype.PackType;
 import model.request.Request;
 import model.user.User;
 import model.user.Role;
 import model.worksheet.Worksheet;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.NotReadablePropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.Errors;
-
 import repository.DonationRepository;
 import repository.DonationBatchRepository;
 import repository.DonorRepository;
@@ -59,6 +54,7 @@ import repository.PackTypeRepository;
 import repository.DeferralReasonRepository;
 import repository.DiscardReasonRepository;
 import security.BsisUserDetails;
+import service.DonorDeferralStatusCalculator;
 import repository.DonationTypeRepository;
 import utils.DonorUtils;
 
@@ -122,6 +118,9 @@ public class UtilController {
 
   @Autowired
   private DonationTypeRepository donationTypeRepository;
+  
+  @Autowired
+  private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
 
   public Map<String, Map<String, Object>> getFormFieldsForForm(String formName) {
     List<FormField> formFields = formFieldRepository.getFormFields(formName);
@@ -379,13 +378,9 @@ public class UtilController {
     return errorMessage;
   }
 
-  public String isDonorDeferred(Donor donor) {
-    List<DonorDeferral> donorDeferrals = donorRepository.getDonorDeferrals(donor.getId());
-    String errorMessage = "";
-    if (donorRepository.isCurrentlyDeferred(donorDeferrals))
-      errorMessage = "Donor is currently deferred from donations";
-    return errorMessage;
-  }
+    public boolean isDonorDeferred(Donor donor) {
+        return donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor);
+    }
 
   public Component findComponent(String donationIdentificationNumber, String componentType) {
     return componentRepository.findComponent(donationIdentificationNumber, componentType);

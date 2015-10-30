@@ -6,8 +6,10 @@ import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.BloodTestType;
 import model.bloodtesting.TTIStatus;
+import model.donor.Donor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import repository.DonorDeferralRepository;
 import constant.GeneralConfigConstants;
 
 @Service
@@ -15,6 +17,8 @@ public class DonorDeferralStatusCalculator {
     
     @Autowired
     private GeneralConfigAccessorService generalConfigAccessorService;
+    @Autowired
+    private DonorDeferralRepository donorDeferralRepository;
 
     /**
      * Determine whether or not a donor should be deferred based on the test results of an unsafe donation. It takes
@@ -40,6 +44,10 @@ public class DonorDeferralStatusCalculator {
 
         // Use the general config to determine whether or not the donor should be deferred
         return generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.DEFER_DONORS_WITH_NEG_CONFIRMATORY_OUTCOMES);
+    }
+    
+    public boolean isDonorCurrentlyDeferred(Donor donor) {
+        return donorDeferralRepository.countCurrentDonorDeferralsForDonor(donor) > 0;
     }
 
 }

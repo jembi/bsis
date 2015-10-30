@@ -66,12 +66,10 @@ public class DonationBackingFormValidator implements Validator {
     Donor donor = form.getDonor();
     if (donor != null) {
       
-      String errorMessageDonorDeferral = utilController.isDonorDeferred(donor);
-      if (StringUtils.isNotBlank(errorMessageDonorDeferral))
+      if (!form.getDonationBatch().isBackEntry() && (donor.getDonorStatus().equals(DonorStatus.POSITIVE_TTI) ||
+              utilController.isDonorDeferred(donor))) {
         errors.rejectValue("donation.donor", "donor.invalid", "Do not bleed donor");
-      
-      if (donor.getDonorStatus().equals(DonorStatus.POSITIVE_TTI))
-        errors.rejectValue("donation.donor", "donor.invalid", "Do not bleed donor");
+      }
     } else {
       errors.rejectValue("donation.donor", "donor.invalid", "Please supply a valid donor");
     }
