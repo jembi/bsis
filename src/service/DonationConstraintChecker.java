@@ -74,7 +74,7 @@ public class DonationConstraintChecker {
             return false;
         }
         
-        BloodTestingRuleResult bloodTestingRuleResult = bloodTestsService.executeTests(donation.getDonor(), donation);
+        BloodTestingRuleResult bloodTestingRuleResult = bloodTestsService.executeTests(donation);
         
         if (bloodTestingRuleResult.getPendingTTITestsIds() != null &&
                 bloodTestingRuleResult.getPendingTTITestsIds().size() > 0) {
@@ -100,7 +100,7 @@ public class DonationConstraintChecker {
         // {@link BloodTestsService#updateDonationWithTestResults} has side effects so create a copy of the donation
         Donation copy = new Donation(donation);
 
-        BloodTestingRuleResult bloodTestingRuleResult = bloodTestsService.executeTests(copy.getDonor(), copy);
+        BloodTestingRuleResult bloodTestingRuleResult = bloodTestsService.executeTests(copy);
         bloodTestsService.updateDonationWithTestResults(copy, bloodTestingRuleResult);
 
         return copy.getTTIStatus() == TTIStatus.NOT_DONE ||

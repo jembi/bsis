@@ -138,7 +138,7 @@ public class DonationConstraintCheckerTests {
                 .withPackType(aPackType().build())
                 .build();
         
-        when(bloodTestsService.executeTests(donation.getDonor(), donation))
+        when(bloodTestsService.executeTests(donation))
                 .thenReturn(aBloodTestingRuleResult().build());
         
         boolean result = donationConstraintChecker.donationHasDiscrepancies(donation);
@@ -158,7 +158,7 @@ public class DonationConstraintCheckerTests {
         
         BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().withPendingTTITestId("12").build();
 
-        when(bloodTestsService.executeTests(donation.getDonor(), donation)).thenReturn(bloodTestingRuleResult);
+        when(bloodTestsService.executeTests(donation)).thenReturn(bloodTestingRuleResult);
 
         boolean result = donationConstraintChecker.donationHasDiscrepancies(donation);
         
@@ -174,7 +174,7 @@ public class DonationConstraintCheckerTests {
                 .withPackType(aPackType().build())
                 .build();
         
-        when(bloodTestsService.executeTests(donation.getDonor(), donation))
+        when(bloodTestsService.executeTests(donation))
                 .thenReturn(aBloodTestingRuleResult().build());
         
         boolean result = donationConstraintChecker.donationHasDiscrepancies(donation);
@@ -191,7 +191,7 @@ public class DonationConstraintCheckerTests {
                 .withPackType(aPackType().build())
                 .build();
         
-        when(bloodTestsService.executeTests(donation.getDonor(), donation))
+        when(bloodTestsService.executeTests(donation))
                 .thenReturn(aBloodTestingRuleResult().build());
         
         boolean result = donationConstraintChecker.donationHasDiscrepancies(donation);
@@ -222,7 +222,7 @@ public class DonationConstraintCheckerTests {
                 .withPackType(aPackType().build())
                 .build();
         
-        when(bloodTestsService.executeTests(donation.getDonor(), donation))
+        when(bloodTestsService.executeTests(donation))
                 .thenReturn(aBloodTestingRuleResult().build());
         
         boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation);
@@ -242,7 +242,7 @@ public class DonationConstraintCheckerTests {
                 .withPackType(aPackType().build())
                 .build();
         
-        when(bloodTestsService.executeTests(donation.getDonor(), donation))
+        when(bloodTestsService.executeTests(donation))
                 .thenReturn(aBloodTestingRuleResult().build());
         
         boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation);
@@ -262,7 +262,7 @@ public class DonationConstraintCheckerTests {
                 .withPackType(aPackType().build())
                 .build();
         
-        when(bloodTestsService.executeTests(donation.getDonor(), donation))
+        when(bloodTestsService.executeTests(donation))
                 .thenReturn(aBloodTestingRuleResult().build());
         
         boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation);
@@ -282,7 +282,7 @@ public class DonationConstraintCheckerTests {
                 .withPackType(aPackType().build())
                 .build();
         
-        when(bloodTestsService.executeTests(donation.getDonor(), donation))
+        when(bloodTestsService.executeTests(donation))
                 .thenReturn(aBloodTestingRuleResult().build());
         
         boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation);

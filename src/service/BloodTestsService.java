@@ -37,11 +37,10 @@ public class BloodTestsService {
 	/**
 	 * Executes the BloodTestingRuleEngine with the configured BloodTests and returns the results
 	 * 
-	 * @param donor Donor who made the donation
 	 * @param donation Donation to run the tests on
 	 * @return BloodTestingRuleResult with the results from the tests
 	 */
-	public BloodTestingRuleResult executeTests(Donor donor, Donation donation) {
+	public BloodTestingRuleResult executeTests(Donation donation) {
 		BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForDonation(donation.getId());
 		return ruleResult;
 	}
