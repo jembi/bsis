@@ -2,6 +2,7 @@ package repository;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -20,6 +21,7 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
 import model.donor.Donor;
+import model.donor.DonorStatus;
 import model.donordeferral.DonorDeferral;
 import model.location.Location;
 import model.util.BloodGroup;
@@ -119,6 +121,9 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
         venuePredicates.add(cb.or(bgPredicates.toArray(new Predicate[0])));
         
         venuePredicates.add(cb.equal(root.<String> get("isDeleted"), false));
+        
+        venuePredicates.add(cb.not(root.get("donorStatus").in(Arrays.asList(DonorStatus.MERGED))));
+        
     	cq.where(venuePredicates.toArray(new Predicate[0]));
 
     	int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);

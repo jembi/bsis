@@ -65,4 +65,8 @@ public class DonorDeferralViewModel {
   public String getVoidedDate() {
     return CustomDateFormatter.getDateString(donorDeferral.getVoidedDate());
   }
+  
+  public String getDonorNumber() {
+	  return donorDeferral.getDeferredDonor().getDonorNumber();
+  }
 }
