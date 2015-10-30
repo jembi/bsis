@@ -318,7 +318,8 @@ public class BloodTestingRuleEngine {
 		Donor donor = donation.getDonor();
 		if (donation.getBloodAbo() != null && donation.getBloodRh() != null) {
 			// first time donor - required to enter in confirmatory result
-			if (donor.getBloodAbo().equals("") || donor.getBloodRh().equals("")) {
+			if (donor.getBloodAbo() == null || donor.getBloodAbo().equals("") 
+					|| donor.getBloodRh() == null || donor.getBloodRh().equals("")) {
 				bloodTypingMatchStatus = BloodTypingMatchStatus.NO_MATCH;
 			}
 			// ambiguous result - required to enter in confirmatory result
