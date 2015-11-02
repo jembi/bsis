@@ -157,7 +157,8 @@ public class DuplicateDonorService {
 		// sort donations in chronological order
 		Collections.sort(combinedDonations, new Comparator<Donation>() {
 			
-			public int compare(Donation d1, Donation d2) {
+			@Override
+            public int compare(Donation d1, Donation d2) {
 				return d1.getDonationDate().compareTo(d2.getDonationDate());
 			}
 		});
@@ -208,7 +209,8 @@ public class DuplicateDonorService {
 		// sort donations in chronological order
 		Collections.sort(combinedDeferrals, new Comparator<DonorDeferral>() {
 			
-			public int compare(DonorDeferral d1, DonorDeferral d2) {
+			@Override
+            public int compare(DonorDeferral d1, DonorDeferral d2) {
 				return d1.getCreatedDate().compareTo(d2.getCreatedDate());
 			}
 		});

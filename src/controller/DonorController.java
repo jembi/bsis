@@ -36,6 +36,7 @@ import repository.LocationRepository;
 import repository.PostDonationCounsellingRepository;
 import service.DonorCRUDService;
 import service.DonorConstraintChecker;
+import service.DonorDeferralStatusCalculator;
 import service.DuplicateDonorService;
 import service.GeneralConfigAccessorService;
 import utils.CustomDateFormatter;
@@ -99,6 +100,8 @@ public class DonorController {
   private AdverseEventRepository adverseEventRepository;
   @Autowired
   private DonorConstraintChecker donorConstraintChecker;
+  @Autowired
+  private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
   
   @Autowired
   private DuplicateDonorService duplicateDonorService;
@@ -126,24 +129,16 @@ public class DonorController {
       @PathVariable Long id ) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    Donor donor = null;
-    if (id != null) {
-      donor = donorRepository.findDonorById(id);
-    }
+    Donor donor = donorRepository.findDonorById(id);
 
     map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(donor));    
-    
-      // include donor deferral status
-      List<DonorDeferral> donorDeferrals = null;
-      donorDeferrals = donorRepository.getDonorDeferrals(id);
 
-    Boolean isCurrentlyDeferred = donorRepository.isCurrentlyDeferred(donorDeferrals);
+    Boolean isCurrentlyDeferred = donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor);
     map.put("isDonorCurrentlyDeferred", isCurrentlyDeferred);
     if(isCurrentlyDeferred){
     	map.put("donorLatestDeferredUntilDate", donorRepository.getLastDonorDeferralDate(id));
     }
-    
-    map.put("donorCodeGroups", donorRepository.findDonorCodeGroupsByDonorId(donor.getId()));
+
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
   }
   
@@ -159,7 +154,7 @@ public class DonorController {
     boolean flaggedForCounselling = postDonationCounsellingRepository
             .countFlaggedPostDonationCounsellingsForDonor(donor.getId()) > 0;
 
-    map.put("currentlyDeferred",donorRepository.isCurrentlyDeferred(donor));
+    map.put("currentlyDeferred", donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor));
     map.put("flaggedForCounselling", flaggedForCounselling);
     map.put("deferredUntil",CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
 	map.put("canDelete", donorConstraintChecker.canDeleteDonor(id));
@@ -299,18 +294,16 @@ public class DonorController {
 	return map;
   }
 
-   @RequestMapping(value = "{id}/deferrals" , method = RequestMethod.GET)
+    @RequestMapping(value = "{id}/deferrals", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DEFERRAL + "')")
-    public 
-    Map<String, Object> viewDonorDeferrals(@PathVariable Long id) {
+    public Map<String, Object> viewDonorDeferrals(@PathVariable("id") Long donorId) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        List<DonorDeferral> donorDeferrals = null;
-        List<DonorDeferralViewModel> donorDeferralViewModels;
-        donorDeferrals = donorRepository.getDonorDeferrals(id);
-        donorDeferralViewModels = donorDeferralViewModelFactory.createDonorDeferralViewModels(donorDeferrals);
-        map.put("isDonorCurrentlyDeferred", donorRepository.isCurrentlyDeferred(donorDeferrals));
-        map.put("allDonorDeferrals", donorDeferralViewModels);
+        Donor donor = donorRepository.findDonorById(donorId);
+        List<DonorDeferral> donorDeferrals = donorRepository.getDonorDeferrals(donorId);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("allDonorDeferrals", donorDeferralViewModelFactory.createDonorDeferralViewModels(donorDeferrals));
+        map.put("isDonorCurrentlyDeferred", donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor));
         return map;
     }
     

@@ -971,22 +971,22 @@ public class ComponentRepository {
     }
   
     @Transactional(propagation = Propagation.MANDATORY)
-    public void updateComponentStatusForDonor(ComponentStatus oldStatus, ComponentStatus newStatus,
+    public void updateComponentStatusesForDonor(List<ComponentStatus> oldStatuses, ComponentStatus newStatus,
             Donor donor) {
 
-        em.createNamedQuery(ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUS_FOR_DONOR)
-            .setParameter("oldStatus", oldStatus)
+        em.createNamedQuery(ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUSES_FOR_DONOR)
+            .setParameter("oldStatuses", oldStatuses)
             .setParameter("newStatus", newStatus)
             .setParameter("donor", donor)
             .executeUpdate();
     }
   
     @Transactional(propagation = Propagation.MANDATORY)
-    public void updateComponentStatusForDonation(ComponentStatus oldStatus, ComponentStatus newStatus,
+    public void updateComponentStatusForDonation(List<ComponentStatus> oldStatuses, ComponentStatus newStatus,
             Donation donation) {
 
-        em.createNamedQuery(ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUS_FOR_DONATION)
-            .setParameter("oldStatus", oldStatus)
+        em.createNamedQuery(ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUSES_FOR_DONATION)
+            .setParameter("oldStatuses", oldStatuses)
             .setParameter("newStatus", newStatus)
             .setParameter("donation", donation)
             .executeUpdate();

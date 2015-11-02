@@ -110,9 +110,13 @@ public class DonationBatchBackingForm {
   public Integer getNumDonations() {
     return donationBatch.getDonations().size();
   }
+  
+    public boolean isBackEntry() {
+        return donationBatch.isBackEntry();
+    }
 
-	@JsonIgnore
-	public void setPermissions(Map<String, Boolean> permissions) {
-		// Ignore
-	}
+    public void setBackEntry(boolean backEntry) {
+        donationBatch.setBackEntry(backEntry);
+    }
+
 }

@@ -1791,6 +1791,128 @@
         </addColumn>
     </changeSet>
 
+	<changeSet id="20151021-1307" author="debonair">
+		<comment>UI Related Properties: Address Fields</comment>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.addressLine1.enabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Determines whether address line 1 is visible"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.addressLine1.displayName"></column>
+			<column name="value" value="Address"></column>
+			<column name="description" value="Address line 1 display name"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.addressLine2.enabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Determines whether address line 2 is visible"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.addressLine2.displayName"></column>
+			<column name="value" value=""></column>
+			<column name="description" value="Address line 2 display name"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.cityTownVillage.enabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Determines whether city / town / village is visible"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.cityTownVillage.displayName"></column>
+			<column name="value" value="City"></column>
+			<column name="description" value="City / town / village display name"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.districtRegion.enabled"></column>
+			<column name="value" value="false"></column>
+			<column name="description" value="Determines whether district / region is visible"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.districtRegion.displayName"></column>
+			<column name="value" value="District"></column>
+			<column name="description" value="District / region display name"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.province.enabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Determines whether province is visible"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.province.displayName"></column>
+			<column name="value" value="Province"></column>
+			<column name="description" value="Province display name"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.state.enabled"></column>
+			<column name="value" value="false"></column>
+			<column name="description" value="Determines whether state is visible"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.state.displayName"></column>
+			<column name="value" value="State"></column>
+			<column name="description" value="State display name"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.country.enabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Determines whether country is visible"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.country.displayName"></column>
+			<column name="value" value="Country"></column>
+			<column name="description" value="Country display name"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.postalCode.enabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Determines whether postal / zip code is visible"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.postalCode.displayName"></column>
+			<column name="value" value="Postal Code"></column>
+			<column name="description" value="Postal / zip code display name"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+	</changeSet>
+
+	<changeSet id="20151026-1145" author="debonair">
+		<comment>385 - Refactor out Donor Code</comment>
+		<dropForeignKeyConstraint baseTableName="DonorDonorCode" constraintName="fk_DonorDonorCode_DonorCode" />
+		<dropForeignKeyConstraint baseTableName="DonorDonorCode" constraintName="fk_DonorDonorCode_Donor" />
+		<dropForeignKeyConstraint baseTableName="DonorCode" constraintName="fk_DonorCode_DonorCodeGroup" />
+		<dropTable tableName="DonorDonorCode" cascadeConstraints="true" />
+		<dropTable tableName="DonorCodeGroup" cascadeConstraints="true" />
+		<dropTable tableName="DonorCode" cascadeConstraints="true" />
+		<dropTable tableName="DonorDonorCode_AUD" cascadeConstraints="true" />
+	</changeSet>
+
+    <changeSet id="20151026-1513" author="bausmeier">
+        <addColumn tableName="DonationBatch">
+            <column name="backEntry" type="tinyint(1)" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <addColumn tableName="DonationBatch_AUD">
+            <column name="backEntry" type="tinyint(1)" />
+        </addColumn>
+    </changeSet>
+
 	<changeSet id="20151027-1053" author="debonair">
 		<delete tableName="GeneralConfig">
 			<where>id = 1</where>

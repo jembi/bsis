@@ -1,37 +1,13 @@
 package model.donor;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import constraintvalidator.LocationExists;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.Valid;
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
 import model.address.ContactMethodType;
 import model.donation.Donation;
-import model.donorcodes.DonorCode;
 import model.donordeferral.DonorDeferral;
 import model.idtype.IdType;
 import model.location.Location;
@@ -41,8 +17,6 @@ import model.preferredlanguage.PreferredLanguage;
 import model.user.User;
 import model.util.Gender;
 import org.apache.commons.lang3.text.WordUtils;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Index;
 import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
@@ -50,6 +24,12 @@ import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Length;
 import utils.DonorUtils;
+
+import javax.persistence.*;
+import javax.validation.Valid;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Audited
@@ -186,12 +166,7 @@ public class Donor implements ModificationTracker {
   private List<DonorDeferral> deferrals;
   
 
- @NotAudited
- @ManyToMany(cascade = CascadeType.ALL,targetEntity  = DonorCode.class,fetch = FetchType.EAGER)
- @Fetch(value = FetchMode.SUBSELECT)
- @JoinTable(name="DonorDonorCode", joinColumns = @JoinColumn(name = "donorId"), inverseJoinColumns=
-         @JoinColumn(name="donorCodeId"))
-  private List<DonorCode> donorCodes;
+
  
  @NotAudited
  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
@@ -230,13 +205,6 @@ public class Donor implements ModificationTracker {
  
  private String idNumber;
 
-public List<DonorCode> getDonorCodes() {
-	return donorCodes;
-}
-
-public void setDonorCodes(List<DonorCode> donorCodes) {
-	this.donorCodes = donorCodes;
-}
   
   /**
    * Date of first donation
@@ -361,7 +329,6 @@ public void copy(Donor donor) {
     setBloodAbo(donor.getBloodAbo());
     setBloodRh(donor.getBloodRh());
     this.donorHash = DonorUtils.computeDonorHash(this);
-    this.donorCodes = donor.getDonorCodes();
     setDateOfFirstDonation(donor.getDateOfFirstDonation());
     setIdType(donor.getIdType());
     setAddressType(donor.getAddressType());

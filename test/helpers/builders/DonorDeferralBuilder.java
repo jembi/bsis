@@ -1,7 +1,8 @@
 package helpers.builders;
 
+import helpers.persisters.AbstractEntityPersister;
+import helpers.persisters.DonorDeferralPersister;
 import java.util.Date;
-
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
@@ -35,8 +36,8 @@ public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
         return this;
     }
     
-    public DonorDeferralBuilder thatIsNotVoided() {
-        voided = false;
+    public DonorDeferralBuilder thatIsVoided() {
+        voided = true;
         return this;
     }
     
@@ -52,9 +53,16 @@ public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
         donorDeferral.setDeferredDonor(deferredDonor);
         donorDeferral.setDeferralReason(deferralReason);
         donorDeferral.setDeferredUntil(deferredUntil);
-        donorDeferral.setIsVoided(voided);
+        if (voided != null) {
+            donorDeferral.setIsVoided(voided);
+        }
         donorDeferral.setCreatedDate(createdDate);
         return donorDeferral;
+    }
+
+    @Override
+    public AbstractEntityPersister<DonorDeferral> getPersister() {
+        return new DonorDeferralPersister();
     }
     
     public static DonorDeferralBuilder aDonorDeferral() {

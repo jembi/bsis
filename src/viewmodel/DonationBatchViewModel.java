@@ -20,7 +20,7 @@ public class DonationBatchViewModel {
     private String lastUpdatedByUsername;
     private Boolean closed;
     private LocationViewModel venue;
-    
+    private boolean backEntry;
 	private Map<String, Boolean> permissions;
 
     public DonationBatchViewModel() {
@@ -110,6 +110,14 @@ public class DonationBatchViewModel {
 
     public void setVenue(LocationViewModel venue) {
         this.venue = venue;
+    }
+
+    public boolean isBackEntry() {
+        return backEntry;
+    }
+    
+    public void setBackEntry(boolean backEntry) {
+        this.backEntry = backEntry;
     }
 	
 	public Map<String, Boolean> getPermissions() {
