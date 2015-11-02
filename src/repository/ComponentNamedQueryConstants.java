@@ -16,24 +16,24 @@ public class ComponentNamedQueryConstants {
             // Has status changes
             " OR c.statusChanges IS NOT EMPTY) ";
     
-    public static final String NAME_UPDATE_COMPONENT_STATUS_FOR_DONOR =
-            "Component.updateComponentStatusForDonor";
-    public static final String QUERY_UPDATE_COMPONENT_STATUS_FOR_DONOR =
+    public static final String NAME_UPDATE_COMPONENT_STATUSES_FOR_DONOR =
+            "Component.updateComponentStatusesForDonor";
+    public static final String QUERY_UPDATE_COMPONENT_STATUSES_FOR_DONOR =
             "UPDATE Component c " +
             "SET c.status = :newStatus " +
-            "WHERE c.status = :oldStatus " +
+            "WHERE c.status IN :oldStatuses " +
             "AND c.donation IN (" +
             "  SELECT d " +
             "  FROM Donation d " +
             "  WHERE d.donor = :donor " +
             ") ";
     
-    public static final String NAME_UPDATE_COMPONENT_STATUS_FOR_DONATION =
-            "Component.updateComponentStatusForDonation";
-    public static final String QUERY_UPDATE_COMPONENT_STATUS_FOR_DONATION =
+    public static final String NAME_UPDATE_COMPONENT_STATUSES_FOR_DONATION =
+            "Component.updateComponentStatusesForDonation";
+    public static final String QUERY_UPDATE_COMPONENT_STATUSES_FOR_DONATION =
             "UPDATE Component c " +
             "SET c.status = :newStatus " +
-            "WHERE c.status = :oldStatus " +
+            "WHERE c.status IN :oldStatuses " +
             "AND c.donation = :donation ";
 
 }

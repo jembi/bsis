@@ -24,25 +24,23 @@ import model.donation.Donation;
 import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.donor.DuplicateDonorBackup;
-import model.donorcodes.DonorCode;
-import model.donorcodes.DonorCodeGroup;
-import model.donorcodes.DonorDonorCode;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.idtype.IdType;
 import model.preferredlanguage.PreferredLanguage;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import utils.DonorUtils;
 import viewmodel.DonorSummaryViewModel;
 import controller.UtilController;
+
+import javax.persistence.*;
+import javax.persistence.criteria.*;
+import java.util.*;
 
 @Repository
 @Transactional
@@ -377,30 +375,6 @@ public class DonorRepository {
         return query.getResultList();
     }
 
-    public boolean isCurrentlyDeferred(List<DonorDeferral> donorDeferrals) {
-
-        if (donorDeferrals == null) {
-            return false;
-        }
-
-        DateTime dt = new DateTime().toDateMidnight().toDateTime();
-        Date today = new Date(dt.getMillis());
-
-        for (DonorDeferral donorDeferral : donorDeferrals) {
-            Date deferredUntil = donorDeferral.getDeferredUntil();
-            if(deferredUntil.equals(today) || deferredUntil.after(today) && donorDeferral.getIsVoided() != true){
-            	return true;
-            }            
-        }
-
-        return false;
-    }
-
-    public boolean isCurrentlyDeferred(Donor donor) {
-        List<DonorDeferral> donorDeferrals = getDonorDeferrals(donor.getId());
-        return isCurrentlyDeferred(donorDeferrals);
-    }
-
     public Date getLastDonorDeferralDate(Long donorId) {
         List<DonorDeferral> deferrals = getDonorDeferrals(donorId);
 
@@ -417,84 +391,11 @@ public class DonorRepository {
         return lastDeferredUntil;
     }
 
-  //Donor Code & Code Group Methods
-    public void saveDonorCodeGroup(DonorCodeGroup donorCodeGroup) {
-        em.persist(donorCodeGroup);
-        em.flush();
 
-    }
-
-    public void saveDonorCode(DonorCode donorCode) {
-
-        em.persist(donorCode);
-        em.flush();
-    }
-
-    public void saveDonorDonorCode(DonorDonorCode donorDonorCode) {
-
-        em.persist(donorDonorCode);
-        em.flush();
-    }
-
-    public List<DonorCodeGroup> findDonorCodeGroupsByDonorId(Long donorId) {
-        Donor donor = em.find(Donor.class, donorId);
-        List<DonorCodeGroup> donorCodeGroups = new ArrayList<DonorCodeGroup>();
-        List<DonorCode> donorCodes = donor.getDonorCodes();
-        DonorCodeGroup donorCodeGroup = null;
-        for (DonorCode donorCode : donorCodes) {
-            donorCodeGroup = donorCode.getDonorCodeGroup();
-            if (!donorCodeGroups.contains(donorCodeGroup)) {
-                donorCodeGroups.add(donorCodeGroup);
-            }
-
-        }
-        return donorCodeGroups;
-
-    }
-
-    public List<DonorCodeGroup> getAllDonorCodeGroups(){
-
-        TypedQuery<DonorCodeGroup> query = em.createQuery(
-                "SELECT dcg FROM DonorCodeGroup dcg", DonorCodeGroup.class);
-        return query.getResultList();
-
-    }
-
-    public List<DonorCode> findDonorCodesbyDonorCodeGroupById(Long id) throws IllegalArgumentException{
-
-        DonorCodeGroup donorCodeGroup = em.find(DonorCodeGroup.class, id);
-        em.flush();
-        return donorCodeGroup.getDonorCodes();
-
-    }
-
-    public List<DonorDonorCode> findDonorDonorCodesOfDonorByDonorId(Long donorId){
-
-        TypedQuery<DonorDonorCode> query = em.createQuery(
-                "SELECT dc FROM DonorDonorCode dc where donorId = :donorId", DonorDonorCode.class);
-        query.setParameter("donorId", em.find(Donor.class, donorId));
-        return query.getResultList();
-    }
-
-    public DonorCode findDonorCodeById(Long id) throws IllegalArgumentException{
-
-        DonorCode donorCode = em.find(DonorCode.class, id);
-        em.flush();
-        return donorCode;
-
-    }
-
-    public Donor deleteDonorCode(Long id) throws IllegalArgumentException {
-        DonorDonorCode donorDonorCode = em.find(DonorDonorCode.class, id);
-        Donor donor = donorDonorCode.getDonor();
-        em.remove(donorDonorCode);
-        em.flush();
-        return donor;
-    }
 
     /**
      * To be used in adding multiple donor numbers
-     * @param idNumber 
+     * @param
      */
    /* public void saveIdNumber(IdNumber idNumber){
         em.persist(idNumber);

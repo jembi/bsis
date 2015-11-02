@@ -10,6 +10,7 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     private List<Donation> donations;
     private boolean deleted;
     private boolean closed;
+    private boolean backEntry;
 
     public DonationBatchBuilder withDonations(List<Donation> donations) {
         this.donations = donations;
@@ -25,6 +26,11 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
         closed = true;
         return this;
     }
+    
+    public DonationBatchBuilder thatIsBackEntry() {
+        backEntry = true;
+        return this;
+    }
 
     @Override
     public DonationBatch build() {
@@ -32,6 +38,7 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
         donationBatch.setDonation(donations);
         donationBatch.setIsDeleted(deleted);
         donationBatch.setIsClosed(closed);
+        donationBatch.setBackEntry(backEntry);
         return donationBatch;
     }
     
