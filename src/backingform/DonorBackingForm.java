@@ -1,12 +1,12 @@
 package backingform;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
+
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
+
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
@@ -18,10 +18,13 @@ import model.location.Location;
 import model.preferredlanguage.PreferredLanguage;
 import model.user.User;
 import model.util.Gender;
+
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.DateTime;
+
 import utils.CustomDateFormatter;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class DonorBackingForm {
 
@@ -34,6 +37,10 @@ public class DonorBackingForm {
     private String ageSpecified;
 
     private String dateOfFirstDonation;
+    
+    private String dueToDonate;
+    
+    private String dateOfLastDonation;
 
     @Valid
     private Address address;
@@ -162,16 +169,6 @@ public class DonorBackingForm {
     public void setLastUpdated(Date lastUpDated){
         donor.setLastUpdated(lastUpDated);
     }
-    
-    @JsonIgnore
-    public Date getDateOfLastDonation() {
-	    return donor.getDateOfLastDonation();
-	}
-	
-	public void setDateOfLastDonation(Date dateOfLastDonation) {
-	    donor.setDateOfLastDonation(dateOfLastDonation);
-	}
-
 
     public String getNotes() {
         return donor.getNotes();
@@ -329,7 +326,7 @@ public class DonorBackingForm {
 //        }
         return CustomDateFormatter.getDateString(donor.getDateOfFirstDonation());
     }
-
+    
     public void setDateOfFirstDonation(String dateOfFirstDonation) {
         this.dateOfFirstDonation = dateOfFirstDonation;
         try {
@@ -340,7 +337,36 @@ public class DonorBackingForm {
         }
     }
 
-    public String getBloodAbo() {
+    public String getDateOfLastDonation() {
+	    return CustomDateFormatter.getDateString(donor.getDateOfLastDonation());
+	}
+	
+	public void setDateOfLastDonation(String dateOfLastDonation) {
+		this.dateOfLastDonation = dateOfLastDonation;
+	    try {
+            donor.setDateOfLastDonation(CustomDateFormatter.getDateFromString(dateOfLastDonation));
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+            donor.setDateOfLastDonation(null);
+        }
+	}
+
+    public String getDueToDonate() {
+    	return CustomDateFormatter.getDateString(donor.getDueToDonate());
+    }
+
+	
+    public void setDueToDonate(String dueToDonate) {
+    	this.dueToDonate = dueToDonate;
+        try {
+            donor.setDueToDonate(CustomDateFormatter.getDateFromString(dueToDonate));
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+            donor.setDueToDonate(null);
+        }
+    }
+
+	public String getBloodAbo() {
         if (StringUtils.isBlank(donor.getBloodAbo()) || donor.getBloodAbo() == null) {
             return "";
         } else {

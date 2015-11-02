@@ -23,7 +23,7 @@ sudo apt-get install --quiet --assume-yes \
   tomcat7 \
   maven
 
-if [ -d "/opt/bsis" ]; then
+if [ -d "/opt/bsis/.git" ]; then
   # Checkout the latest version
   cd /opt/bsis
   git fetch

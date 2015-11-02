@@ -5,6 +5,7 @@ import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import java.util.Arrays;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import model.component.Component;
@@ -24,17 +25,18 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
     
     @Test
     public void testUpdateComponentStatusForDonor_shouldOnlyUpdateMatchingComponents() {
-        ComponentStatus oldStatus = ComponentStatus.AVAILABLE;
+        ComponentStatus firstOldStatus = ComponentStatus.AVAILABLE;
+        ComponentStatus secondOldStatus = ComponentStatus.QUARANTINED;
         ComponentStatus newStatus = ComponentStatus.UNSAFE;
         Donor donor = aDonor().build();
         
         Component firstComponentToUpdate = aComponent()
-                .withStatus(oldStatus)
+                .withStatus(firstOldStatus)
                 .withDonation(aDonation().withDonor(donor).build())
                 .buildAndPersist(entityManager);
         
         Component secondComponentToUpdate = aComponent()
-                .withStatus(oldStatus)
+                .withStatus(secondOldStatus)
                 .withDonation(aDonation().withDonor(donor).build())
                 .buildAndPersist(entityManager);
 
@@ -44,13 +46,14 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
                 .buildAndPersist(entityManager);
 
         Component componentExcludedByDonor = aComponent()
-                .withStatus(oldStatus)
+                .withStatus(firstOldStatus)
                 .withDonation(aDonation()
                         .withDonor(aDonor().build())
                         .build())
                 .buildAndPersist(entityManager);
         
-        componentRepository.updateComponentStatusForDonor(oldStatus, newStatus, donor);
+        componentRepository.updateComponentStatusesForDonor(Arrays.asList(firstOldStatus, secondOldStatus), newStatus,
+                donor);
         
         entityManager.refresh(firstComponentToUpdate);
         entityManager.refresh(secondComponentToUpdate);
@@ -60,23 +63,24 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
         assertThat(firstComponentToUpdate.getStatus(), is(newStatus));
         assertThat(secondComponentToUpdate.getStatus(), is(newStatus));
         assertThat(componentExcludedByStatus.getStatus(), is(ComponentStatus.USED));
-        assertThat(componentExcludedByDonor.getStatus(), is(oldStatus));
+        assertThat(componentExcludedByDonor.getStatus(), is(firstOldStatus));
     }
     
     @Test
     public void testUpdateComponentStatusForDonation_shouldOnlyUpdateMatchingComponents() {
-        ComponentStatus oldStatus = ComponentStatus.AVAILABLE;
+        ComponentStatus firstOldStatus = ComponentStatus.AVAILABLE;
+        ComponentStatus secondOldStatus = ComponentStatus.QUARANTINED;
         ComponentStatus newStatus = ComponentStatus.UNSAFE;
         
         Donation donation = aDonation().build();
         
         Component firstComponentToUpdate = aComponent()
-                .withStatus(oldStatus)
+                .withStatus(firstOldStatus)
                 .withDonation(donation)
                 .buildAndPersist(entityManager);
         
         Component secondComponentToUpdate = aComponent()
-                .withStatus(oldStatus)
+                .withStatus(secondOldStatus)
                 .withDonation(donation)
                 .buildAndPersist(entityManager);
         
@@ -85,7 +89,8 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
                 .withDonation(donation)
                 .buildAndPersist(entityManager);
 
-        componentRepository.updateComponentStatusForDonation(oldStatus, newStatus, donation);
+        componentRepository.updateComponentStatusForDonation(Arrays.asList(firstOldStatus, secondOldStatus), newStatus,
+                donation);
 
         entityManager.refresh(firstComponentToUpdate);
         entityManager.refresh(secondComponentToUpdate);

@@ -83,12 +83,12 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(IllegalArgumentException.class)
   public ResponseEntity<Map<String, Object>> handleIllegalArgumentException(
         IllegalArgumentException error) {
-    Map<String, Object> errorMap = new HashMap<String, Object>();
+    Map<String, Object> errorMap = new HashMap<>();
     errorMap.put("hasErrors", "true");
-    errorMap.put("developerMessage",error.getMessage());
-    errorMap.put("userMessage", "");
+    errorMap.put("developerMessage", error.getMessage());
+    errorMap.put("userMessage", error.getMessage());
     errorMap.put("moreInfo",error.getStackTrace()[0]);
-    errorMap.put("errorCode", HttpStatus.NOT_FOUND);
+    errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
     error.printStackTrace();
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
   }
