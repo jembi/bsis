@@ -43,14 +43,14 @@
 	<DonationBatch id="1" batchNumber="000000" isDeleted="false"
 		createdDate="2015-08-11 09:05:56.0" lastUpdated="2015-08-11 09:07:10.0"
 		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" testBatch_id="1"
-		venue_id="1" />
+		venue_id="1" backEntry="false" />
 	<DonationBatch id="2" batchNumber="000001" isDeleted="false"
 		createdDate="2015-08-12 03:36:07.0" lastUpdated="2015-08-12 03:37:00.0"
 		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" testBatch_id="2"
-		venue_id="1" />
+		venue_id="1" backEntry="false" />
 	<DonationBatch id="3" batchNumber="000002" isDeleted="false"
 		createdDate="2015-08-12 03:36:07.0" lastUpdated="2015-08-12 03:37:00.0"
-		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" venue_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" venue_id="1" backEntry="false" />
 	<ComponentType id="1" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Whole Blood Single Pack - CPDA" componentTypeNameShort="0011" />

@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import model.donor.Donor;
+import model.donor.DonorStatus;
 import model.donordeferral.DonorDeferral;
 import model.location.Location;
 import model.util.BloodGroup;
@@ -329,6 +330,20 @@ public class DonorCommunicationsRepositoryTest {
 					donor.getId() == 5 ? true : false);
 			assertFalse("Donors included in the list of donor results should not be marked as deleted.",
 					donor.getIsDeleted());
+		}
+	}
+	
+	@Test
+	public void findDonors_shouldNotReturnMergedDonors() throws ParseException{
+		List<Donor> donors = donorCommunicationsRepository.findDonors(createVenueList(new long[] { 1, 3 }), "", "", "",
+		    createBloodGroupList(new String[] { "A+", "O+" }), false, false, createPagingParamsMap(), "");
+		
+		for (Donor donor : donors) {
+			// Donor with ID=6 is set as status merged
+			assertFalse("Merged Donor should not be included in the list of donor results.", donor.getId() == 6 ? true
+			        : false);
+			assertFalse("Donors included in the list of donor results should not be merged.",
+			    donor.getDonorStatus() == DonorStatus.MERGED);
 		}
 	}
 

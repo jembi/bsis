@@ -77,6 +77,9 @@ public class DonationBatch implements ModificationTracker {
   private String notes;
 
   private RowModificationTracker modificationTracker;
+  
+    @Column(nullable = false)
+    private boolean backEntry;
 
   public DonationBatch() {
     modificationTracker = new RowModificationTracker();
@@ -192,6 +195,12 @@ public class DonationBatch implements ModificationTracker {
       this.venue = donationBatch.getVenue();
   }
 
+    public boolean isBackEntry() {
+        return backEntry;
+    }
 
-  
+    public void setBackEntry(boolean backEntry) {
+        this.backEntry = backEntry;
+    }
+
 }

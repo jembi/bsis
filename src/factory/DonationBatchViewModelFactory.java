@@ -40,6 +40,7 @@ public class DonationBatchViewModelFactory {
         donationBatchViewModel.setIsClosed(donationBatch.getIsClosed());
         donationBatchViewModel.setVenue(new LocationViewModel(donationBatch.getVenue()));
         donationBatchViewModel.setNotes(donationBatch.getNotes());
+        donationBatchViewModel.setBackEntry(donationBatch.isBackEntry());
 
         // Audit fields
         User createdBy = donationBatch.getCreatedBy();

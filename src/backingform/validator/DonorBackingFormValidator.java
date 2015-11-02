@@ -14,6 +14,7 @@ import org.springframework.validation.Validator;
 import utils.CustomDateFormatter;
 import viewmodel.DonorViewModel;
 import backingform.DonorBackingForm;
+import backingform.DuplicateDonorsBackingForm;
 import controller.UtilController;
 
 public class DonorBackingFormValidator implements Validator {
@@ -35,7 +36,8 @@ public class DonorBackingFormValidator implements Validator {
   @SuppressWarnings("unchecked")
   @Override
   public boolean supports(Class<?> clazz) {
-    return Arrays.asList(DonorBackingForm.class, Donor.class, DonorViewModel.class).contains(clazz);
+		return Arrays.asList(DuplicateDonorsBackingForm.class, DonorBackingForm.class, Donor.class, DonorViewModel.class)
+		        .contains(clazz);
   }
 
   @Override
