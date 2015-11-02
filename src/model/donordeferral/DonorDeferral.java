@@ -31,7 +31,9 @@ import repository.DonorDeferralNamedQueryConstants;
 
 @NamedQueries({
     @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_COUNT_DONOR_DEFERRALS_FOR_DONOR,
-            query = DonorDeferralNamedQueryConstants.QUERY_COUNT_DONOR_DEFERRALS_FOR_DONOR)
+            query = DonorDeferralNamedQueryConstants.QUERY_COUNT_DONOR_DEFERRALS_FOR_DONOR),
+    @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR,
+            query = DonorDeferralNamedQueryConstants.QUERY_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR)
 })
 @Entity
 @Audited
@@ -63,7 +65,7 @@ public class DonorDeferral implements ModificationTracker{
   @Lob
   private String deferralReasonText;
   
-  private Boolean isVoided;
+  private Boolean isVoided = Boolean.FALSE;
   
   @Temporal(TemporalType.DATE)
   private Date voidedDate;

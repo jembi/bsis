@@ -50,7 +50,6 @@ public class DonorDeferralCRUDServiceTests {
                 .build();
         
         DonorDeferral expectedDonorDeferral = aDonorDeferral()
-                .thatIsNotVoided()
                 .withDeferredDonor(donor)
                 .withDeferralReason(deferralReason)
                 .withDeferredUntil(DonorDeferralCRUDService.PERMANENT_DEFERRAL_DATE)
@@ -80,7 +79,6 @@ public class DonorDeferralCRUDServiceTests {
                 .build();
         
         DonorDeferral expectedDonorDeferral = aDonorDeferral()
-                .thatIsNotVoided()
                 .withDeferredDonor(donor)
                 .withDeferralReason(deferralReason)
                 .withDeferredUntil(new DateTime(now).plusDays(irrelevantDuration).toDate())
