@@ -37,6 +37,8 @@ public class DonationCRUDService {
     private ComponentCRUDService componentCRUDService;
     @Autowired
     private PackTypeRepository packTypeRepository;
+    @Autowired
+    private DonorConstraintChecker donorConstraintChecker;
     
     public void deleteDonation(long donationId) throws IllegalStateException, NoResultException {
         
@@ -75,7 +77,7 @@ public class DonationCRUDService {
         boolean discardComponents = false;
 
         if (packType.getCountAsDonation() &&
-                !donationConstraintChecker.isDonorEligibleToDonate(donationBackingForm.getDonor().getId())) {
+                !donorConstraintChecker.isDonorEligibleToDonate(donationBackingForm.getDonor().getId())) {
         
             DonationBatch donationBatch = donationBatchRepository.findDonationBatchByBatchNumber(
                     donationBackingForm.getDonationBatchNumber());
