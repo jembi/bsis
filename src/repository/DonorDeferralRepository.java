@@ -1,13 +1,13 @@
 package repository;
 
 import java.util.Date;
-import javax.persistence.EntityManager;
+
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 
 import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
 import model.donordeferral.DurationType;
+
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -15,7 +15,7 @@ public class DonorDeferralRepository extends AbstractRepository<DonorDeferral> {
     
     public DonorDeferral findDonorDeferralById(Long donorDeferralId) throws NoResultException {
         return entityManager.createNamedQuery(
-            "QUERY_FIND_DONOR_DEFERRAL_BY_ID", 
+        	DonorDeferralNamedQueryConstants.NAME_FIND_DONOR_DEFERRAL_BY_ID, 
             DonorDeferral.class)
             .setParameter("donorDeferralId", donorDeferralId)
             .setParameter("voided", false)

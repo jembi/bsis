@@ -20,6 +20,8 @@ public class DonorDeferralNamedQueryConstants {
             "AND (dd.deferralReason.durationType = :permanentDuration " +
             " OR dd.deferredUntil > :currentDate) ";
 
+    public static final String NAME_FIND_DONOR_DEFERRAL_BY_ID =
+            "DonorDeferral.findDonorDeferralsById";
     public static final String QUERY_FIND_DONOR_DEFERRAL_BY_ID = 
             "SELECT dd FROM DonorDeferral dd " + 
             "LEFT JOIN FETCH dd.deferredDonor " +
