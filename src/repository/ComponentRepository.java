@@ -85,6 +85,11 @@ public class ComponentRepository {
     return updateComponentStatus(component);
   }
 
+    /*
+     * FIXME: This method needs comprehensive tests and the allowed status changes should be documented. It would be
+     * best to write tests for the expected behaviours and check that the method handles those rather than basing the
+     * tests on what is currently implemented.
+     */
   private boolean updateComponentStatus(Component component) {
 
     // if a component has been explicitly discarded maintain that status.
@@ -123,9 +128,12 @@ public class ComponentRepository {
     BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();
     TTIStatus ttiStatus = c.getTTIStatus();
 
-    ComponentStatus newComponentStatus = ComponentStatus.QUARANTINED;
+    // Start with the old status if there is one.
+    ComponentStatus newComponentStatus = oldComponentStatus == null ? ComponentStatus.QUARANTINED : oldComponentStatus;
+
     if (bloodTypingStatus.equals(BloodTypingStatus.COMPLETE) &&
-        ttiStatus.equals(TTIStatus.TTI_SAFE)) {
+        ttiStatus.equals(TTIStatus.TTI_SAFE) &&
+        oldComponentStatus != ComponentStatus.UNSAFE) {
       newComponentStatus = ComponentStatus.AVAILABLE;
     }
 
