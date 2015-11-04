@@ -276,7 +276,7 @@ public class UtilController {
   }
 
   public List<DonationBatch> findOpenDonationBatches (List<Long> venueIds){
-    return donationBatchRepository.findDonationBatches(false, venueIds);
+    return donationBatchRepository.findDonationBatches(false, venueIds, null, null);
   }
 
   public String getNextDonorNumber() {

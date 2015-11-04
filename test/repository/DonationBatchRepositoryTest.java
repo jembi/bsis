@@ -183,7 +183,7 @@ public class DonationBatchRepositoryTest {
 	public void testFindDonationBatches() throws Exception {
 		List<Long> locationIds = new ArrayList<Long>();
 		locationIds.add(1L);
-		List<DonationBatch> batches = donationBatchRepository.findDonationBatches(true, locationIds);
+		List<DonationBatch> batches = donationBatchRepository.findDonationBatches(true, locationIds, null, null);
 		Assert.assertNotNull("There are batches in Maseru", batches);
 		Assert.assertEquals("There are 1 donation batches in Maseru", 1, batches.size());
 	}
