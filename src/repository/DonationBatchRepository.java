@@ -89,11 +89,6 @@ public class DonationBatchRepository {
     	queryStr += "AND b.venue.id IN (:venueIds) ";
     }
 
-
-    if(isClosed != null){
-    	queryStr +=    "AND b.isClosed=:isClosed";
-    }
-
     if (startDate != null) {
       queryStr += "AND b.createdDate >= :startDate ";
     }
@@ -102,7 +97,9 @@ public class DonationBatchRepository {
       queryStr += "AND b.createdDate <= :endDate ";
     }
 
-
+    if(isClosed != null){
+    	queryStr +=    "AND b.isClosed=:isClosed";
+    }
     
     TypedQuery<DonationBatch> query = em.createQuery(queryStr, DonationBatch.class);
     query.setParameter("isDeleted", false);
