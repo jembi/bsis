@@ -18,17 +18,17 @@
 	<DonationBatch id="1" batchNumber="B0215000000"
 	isDeleted="false" createdDate="2015-02-02 03:41:09.0" lastUpdated="2015-02-02 03:42:55.0"
 	createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" testBatch_id="1"
-	venue_id="1" />
+	venue_id="1" backEntry="false" />
 	<DonationBatch id="2" batchNumber="B0215000001"
 		isDeleted="false" createdDate="2015-02-02 03:43:00.0" lastUpdated="2015-04-24 04:42:09.0"
 		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" testBatch_id="2"
-		venue_id="2" />
+		venue_id="2" backEntry="false" />
 	<DonationBatch id="3" batchNumber="B0615000000"
 		isDeleted="false" createdDate="2015-06-26 03:19:33.0" lastUpdated="2015-06-26 03:19:33.0"
-		createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="1" backEntry="false" />
 	<DonationBatch id="4" batchNumber="B0715000000"
 		isDeleted="true" createdDate="2015-07-27 04:19:33.0" lastUpdated="2015-07-26 04:19:33.0"
-		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" venue_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" venue_id="1" backEntry="false" />
 
 	<Contact id="1" />
 	<Contact id="2" />

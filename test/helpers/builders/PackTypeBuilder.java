@@ -6,14 +6,26 @@ public class PackTypeBuilder extends AbstractEntityBuilder<PackType> {
     
     private Integer id;
     private Boolean testSampleProduced;
+    private Boolean countAsDonation;
+    private Integer periodBetweenDonations;
 
     public PackTypeBuilder withId(Integer id) {
         this.id = id;
         return this;
     }
-    
+
     public PackTypeBuilder withTestSampleProduced(boolean testSampleProduced) {
         this.testSampleProduced = testSampleProduced;
+        return this;
+    }
+
+    public PackTypeBuilder withCountAsDonation(boolean countAsDonation) {
+        this.countAsDonation = countAsDonation;
+        return this;
+    }
+    
+    public PackTypeBuilder withPeriodBetweenDonations(int periodBetweenDonations) {
+        this.periodBetweenDonations = periodBetweenDonations;
         return this;
     }
 
@@ -24,6 +36,8 @@ public class PackTypeBuilder extends AbstractEntityBuilder<PackType> {
         if (testSampleProduced != null) {
             packType.setTestSampleProduced(testSampleProduced);
         }
+        packType.setCountAsDonation(countAsDonation);
+        packType.setPeriodBetweenDonations(periodBetweenDonations);
         return packType;
     }
     

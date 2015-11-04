@@ -38,21 +38,6 @@ public class DeferralController {
         return map;
     }
 
-    @RequestMapping(value = "{donorId}", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DEFERRAL + "')")
-    public 
-    Map<String, Object> viewDonorDeferrals(@PathVariable Long donorId) {
-
-        Map<String, Object> map = new HashMap<String, Object>();
-        List<DonorDeferral> donorDeferrals = null;
-        List<DonorDeferralViewModel> donorDeferralViewModels;
-        donorDeferrals = donorRepository.getDonorDeferrals(donorId);
-        donorDeferralViewModels = getDonorDeferralViewModels(donorDeferrals);
-        map.put("isDonorCurrentlyDeferred", donorRepository.isCurrentlyDeferred(donorDeferrals));
-        map.put("allDonorDeferrals", donorDeferralViewModels);
-        return map;
-    }
-
     @RequestMapping(method = RequestMethod.POST)
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_DEFERRAL + "')")
     public 
