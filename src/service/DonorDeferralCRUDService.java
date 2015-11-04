@@ -90,8 +90,7 @@ public class DonorDeferralCRUDService {
 		existingDeferral.setDeferralReason(deferral.getDeferralReason());
 		existingDeferral.setDeferredUntil(deferral.getDeferredUntil());
 		existingDeferral.setDeferralReasonText(deferral.getDeferralReasonText());
-		donorDeferralRepository.update(existingDeferral);
-		return deferral;
+		return donorDeferralRepository.update(existingDeferral);
 	}
 	
 	public DonorDeferral endDeferral(Long donorDeferralId, String comment) {
@@ -105,8 +104,7 @@ public class DonorDeferralCRUDService {
 		}
 		appendComment(deferral, comment);
 		deferral.setDeferredUntil(new Date());
-		donorDeferralRepository.save(deferral);
-		return deferral;
+		return donorDeferralRepository.update(deferral);
 	}
 	
 	protected void appendComment(DonorDeferral deferral, String comment) {
