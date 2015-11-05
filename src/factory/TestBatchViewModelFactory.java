@@ -39,6 +39,7 @@ public class TestBatchViewModelFactory {
         permissions.put("canClose", isTestingSupervisor && testBatchConstraintChecker.canCloseTestBatch(testBatch));
         permissions.put("canDelete", isTestingSupervisor && testBatchConstraintChecker.canDeleteTestBatch(testBatch));
         permissions.put("canEdit", isTestingSupervisor && testBatchConstraintChecker.canEditTestBatch(testBatch));
+        permissions.put("canEditDonationBatches", isTestingSupervisor && testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch));
         permissions.put("canReopen", isTestingSupervisor && testBatchConstraintChecker.canReopenTestBatch(testBatch));
         testBatchViewModel.setPermissions(permissions);
 

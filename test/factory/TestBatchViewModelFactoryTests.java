@@ -66,6 +66,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
                 .withPermission("canDelete", false)
                 .withPermission("canEdit", false)
                 .withPermission("canReopen", false)
+                .withPermission("canEditDonationBatches", false)
                 .build();
         
         when(donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch, true))
@@ -101,6 +102,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
                 .withPermission("canDelete", false)
                 .withPermission("canEdit", false)
                 .withPermission("canReopen", false)
+                .withPermission("canEditDonationBatches", false)
                 .build();
 
         when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(true);
@@ -108,6 +110,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
         when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(false);
         when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
         when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
+        when(testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch)).thenReturn(false);
         
         TestBatchViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchViewModel(testBatch, true);
         
@@ -139,6 +142,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
                 .withPermission("canDelete", false)
                 .withPermission("canEdit", false)
                 .withPermission("canReopen", false)
+                .withPermission("canEditDonationBatches", false)
                 .build();
 
         when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(false);
@@ -146,6 +150,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
         when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(false);
         when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
         when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
+        when(testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch)).thenReturn(false);
         
         TestBatchViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchViewModel(testBatch, true);
         
@@ -177,6 +182,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
                 .withPermission("canDelete", false)
                 .withPermission("canEdit", false)
                 .withPermission("canReopen", false)
+                .withPermission("canEditDonationBatches", false)
                 .build();
 
         when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(false);
@@ -184,6 +190,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
         when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(false);
         when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
         when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
+        when(testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch)).thenReturn(false);
         
         TestBatchViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchViewModel(testBatch, true);
         
@@ -215,6 +222,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
                 .withPermission("canDelete", true)
                 .withPermission("canEdit", false)
                 .withPermission("canReopen", false)
+                .withPermission("canEditDonationBatches", false)
                 .build();
 
         when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(false);
@@ -222,6 +230,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
         when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(true);
         when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
         when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
+        when(testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch)).thenReturn(false);
         
         TestBatchViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchViewModel(testBatch, true);
         

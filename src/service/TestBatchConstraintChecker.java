@@ -47,17 +47,7 @@ public class TestBatchConstraintChecker {
 	 * @return true if the specified TestBatch can be deleted
 	 */
 	public boolean canDeleteTestBatch(TestBatch testBatch) {
-		if (testBatch.getDonationBatches() != null) {
-			for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-				for (Donation donation : donationBatch.getDonations()) {
-					if (donationConstraintChecker.donationHasSavedTestResults(donation)) {
-						// test results have been recorded for this donation
-						return false;
-					}
-				}
-			}
-		}
-		return true;
+		return testBatchHasResults(testBatch) == false;
 	}
 	
 	/**
@@ -70,9 +60,22 @@ public class TestBatchConstraintChecker {
 		return false;
 	}
 	
+	/**
+	 * A Test Batch can be edited if it is open
+	 */
 	public boolean canEditTestBatch(TestBatch testBatch) {
-		// FIXME:
-		return true;
+		if (testBatch.getStatus() != TestBatchStatus.CLOSED) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Donation Batches can be added or removed from a Test Batch as long as there aren't any test
+	 * results recorded.
+	 */
+	public boolean canAddOrRemoveDonationBatch(TestBatch testBatch) {
+		return canEditTestBatch(testBatch) && !testBatchHasResults(testBatch);
 	}
     
     /**
@@ -100,4 +103,17 @@ public class TestBatchConstraintChecker {
         return true;
     }
 
+    protected boolean testBatchHasResults(TestBatch testBatch) {
+		if (testBatch.getDonationBatches() != null) {
+			for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
+				for (Donation donation : donationBatch.getDonations()) {
+					if (donationConstraintChecker.donationHasSavedTestResults(donation)) {
+						// test results have been recorded for this donation
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+    }
 }
