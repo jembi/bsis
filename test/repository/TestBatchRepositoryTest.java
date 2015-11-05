@@ -118,12 +118,10 @@ public class TestBatchRepositoryTest {
 	}
 	
 	@Test
-	@Ignore("Bug - sets isDeleted to false instead of true")
 	public void testDeleteTestBatch() throws Exception {
 		testBatchRepository.deleteTestBatch(1l);
 		TestBatch testBatch = testBatchRepository.findTestBatchById(1l);
-		// FIXME: 'isIsDeleted' method name will cause problems with JavaBean parsing
-		Assert.assertTrue("TestBatch is deleted", testBatch.isIsDeleted());
+		Assert.assertTrue("TestBatch is deleted", testBatch.getIsDeleted());
 	}
 	
 	@Test

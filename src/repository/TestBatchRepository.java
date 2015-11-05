@@ -94,6 +94,12 @@ public class TestBatchRepository {
   public void deleteTestBatch(Long id){
       TestBatch testBatch = findTestBatchById(id);
       testBatch.setIsDeleted(true);
+      List<DonationBatch> donationBatches = testBatch.getDonationBatches();
+      if (donationBatches != null) {
+    	  for (DonationBatch donationBatch : donationBatches) {
+    		  donationBatch.setTestBatch(null); // remove association
+    	  }
+      }
       em.merge(testBatch);
   }
   
