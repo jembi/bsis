@@ -197,7 +197,7 @@ public class DonationBatchRepositoryTest {
 		String startDate = "2015-03-02 22:00:00";
 		String endDate = "2015-03-04 22:00:00";
 		List<DonationBatch> batches = donationBatchRepository.findDonationBatches(false, locationIds, df.parse(startDate), df.parse(endDate));
-		Assert.assertNotNull("There are batches in Maseru", batches);
-		Assert.assertEquals("There are 2 donation batch in this date range", 2, batches.size());
+		Assert.assertNotNull("There are batches in this date range", batches);
+		Assert.assertEquals("There are 2 donation batches in this date range", 2, batches.size());
 	}
 }
