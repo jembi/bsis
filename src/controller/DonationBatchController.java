@@ -135,18 +135,7 @@ public class DonationBatchController {
 
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
-  
-   @RequestMapping(value = "/recent/{count}" ,method = RequestMethod.GET)
-   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")  
-   public ResponseEntity<Map<String, Object>> getRecentlyClosedDonationBatches(
-            @PathVariable Integer count) {
-        
-        Map<String, Object> map = new HashMap<String, Object>();   
-        List<DonationBatch> donationBatches = 
-                donationBatchRepository.getRecentlyClosedDonationBatches(count);
-        map.put("donationBatches", getDonationBatchViewModels(donationBatches));
-        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
-    }
+
   
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("venues", locationRepository.getAllVenues());
