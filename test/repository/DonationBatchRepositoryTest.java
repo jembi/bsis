@@ -193,12 +193,11 @@ public class DonationBatchRepositoryTest {
 	@Test
 	public void testFindDonationBatchesWithDates() throws Exception {
 		List<Long> locationIds = new ArrayList<Long>();
-		locationIds.add(1L);
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String startDate = "2015-02-01 22:00:00";
-		String endDate = "2015-02-04 22:00:00";
-		List<DonationBatch> batches = donationBatchRepository.findDonationBatches(true, locationIds, df.parse(startDate), df.parse(endDate));
+		String startDate = "2015-03-02 22:00:00";
+		String endDate = "2015-03-04 22:00:00";
+		List<DonationBatch> batches = donationBatchRepository.findDonationBatches(false, locationIds, df.parse(startDate), df.parse(endDate));
 		Assert.assertNotNull("There are batches in Maseru", batches);
-		Assert.assertEquals("There is 1 donation batch in Maseru", 1, batches.size());
+		Assert.assertEquals("There are 2 donation batch in this date range", 2, batches.size());
 	}
 }

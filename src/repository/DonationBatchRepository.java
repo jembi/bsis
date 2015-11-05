@@ -13,7 +13,7 @@ import javax.persistence.TypedQuery;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 
-import org.apache.commons.lang3.StringUtils;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
