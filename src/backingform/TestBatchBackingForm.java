@@ -1,6 +1,6 @@
 package backingform;
 
-import java.util.Collections;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
+import utils.CustomDateFormatter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -17,8 +18,7 @@ public class TestBatchBackingForm {
     @JsonIgnore
     private TestBatch testBatch;
 
-    @SuppressWarnings("unchecked")
-    private List<Integer> donationBatchIds = Collections.EMPTY_LIST;
+    private List<Integer> donationBatchIds = null;
 
     public TestBatchBackingForm() {
         testBatch = new TestBatch();
@@ -38,6 +38,15 @@ public class TestBatchBackingForm {
 
     public void setStatus(String status) {
         testBatch.setStatus(TestBatchStatus.valueOf(status));
+    }
+    
+    public void setCreatedDate(String createdDate) {
+        try {
+            testBatch.setCreatedDate(CustomDateFormatter.getDateFromString(createdDate));
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+            testBatch.setCreatedDate(null);
+        }
     }
 
     public List<Integer> getDonationBatchIds() {

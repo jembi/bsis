@@ -1,11 +1,19 @@
 package service;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import repository.DonationBatchRepository;
 import repository.TestBatchRepository;
 
 @Service
@@ -21,15 +29,50 @@ public class TestBatchCRUDService {
     @Autowired
     private TestBatchStatusChangeService testBatchStatusChangeService;
 
-    public TestBatch updateTestBatchStatus(Long testBatchId, TestBatchStatus newStatus) {
+    @Autowired
+    private DonationBatchRepository donationBatchRepository;
 
-        LOGGER.info("Updating status of test batch " + testBatchId + " to " + newStatus);
-
+    public TestBatch updateTestBatch(Long testBatchId, TestBatchStatus newStatus, Date newCreatedDate, List<Integer> newDonationBatchIds) {
+    	
         TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
+        
+        if (newStatus != null) {
+        	changeTestBatchStatus(testBatch, newStatus);
+        }
+        
+        if (newCreatedDate != null) {
+        	testBatch.setCreatedDate(newCreatedDate);
+        }
+
+        if (newDonationBatchIds != null) {
+        	// unlink old donation batches
+        	List<Integer> existingDonationBatchIds = new ArrayList<Integer>();
+        	for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
+        		existingDonationBatchIds.add(donationBatch.getId());
+        		if (!newDonationBatchIds.contains(donationBatch.getId())) {
+        			donationBatch.setTestBatch(null);
+        			donationBatchRepository.updateDonationBatch(donationBatch);
+        		}
+        	}
+        	// link new donation batches
+        	for (Integer batchId : newDonationBatchIds) {
+        		if (!existingDonationBatchIds.contains(batchId)) {
+	        		DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(batchId);
+	        		donationBatch.setTestBatch(testBatch);
+	        		donationBatchRepository.updateDonationBatch(donationBatch);
+        		}
+        	}
+        }
+
+        return testBatchRepository.updateTestBatch(testBatch);
+    }
+
+    protected void changeTestBatchStatus(TestBatch testBatch, TestBatchStatus newStatus) {
+    	LOGGER.info("Updating status of test batch " + testBatch.getId() + " to " + newStatus);
 
         if (newStatus == testBatch.getStatus()) {
             // The status is not being changed so return early
-            return testBatch;
+            return;
         }
 
         if (newStatus == TestBatchStatus.RELEASED) {
@@ -47,8 +90,5 @@ public class TestBatchCRUDService {
 
         // Set the new status
         testBatch.setStatus(newStatus);
-
-        return testBatchRepository.updateTestBatch(testBatch);
     }
-
 }

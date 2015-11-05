@@ -104,9 +104,10 @@ public class TestBatchController {
     @PreAuthorize("hasRole('"+PermissionConstants.EDIT_TEST_BATCH+"')")
     public ResponseEntity<TestBatchViewModel> updateTestBatch(@PathVariable Long id,
             @RequestBody TestBatchBackingForm form){
-        
-        TestBatch testBatch = testBatchCRUDService.updateTestBatchStatus(id, form.getTestBatch().getStatus());
-        return new ResponseEntity<>(testBatchViewModelFactory.createTestBatchViewModel(testBatch, true), HttpStatus.OK);
+
+		TestBatch testBatch = testBatchCRUDService.updateTestBatch(id, form.getTestBatch().getStatus(), form.getTestBatch()
+		        .getCreatedDate(), form.getDonationBatchIds());
+		return new ResponseEntity<>(testBatchViewModelFactory.createTestBatchViewModel(testBatch, true), HttpStatus.OK);
         
     }
 

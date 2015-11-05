@@ -7,11 +7,17 @@ import model.donationbatch.DonationBatch;
 
 public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
 
+	private Integer id;
     private List<Donation> donations;
     private boolean deleted;
     private boolean closed;
     private boolean backEntry;
 
+    public DonationBatchBuilder withId(Integer id) {
+        this.id = id;
+        return this;
+    }
+    
     public DonationBatchBuilder withDonations(List<Donation> donations) {
         this.donations = donations;
         return this;
@@ -43,6 +49,7 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     @Override
     public DonationBatch build() {
         DonationBatch donationBatch = new DonationBatch();
+        donationBatch.setId(id);
         donationBatch.setDonation(donations);
         donationBatch.setIsDeleted(deleted);
         donationBatch.setIsClosed(closed);
