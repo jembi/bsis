@@ -184,6 +184,7 @@ public class DonorController {
 
         DonorSummaryViewModel donorSummary = donorRepository.findDonorSummaryByDonorNumber(donorNumber);
         map.put("donor", donorSummary);
+        map.put("eligible", donorConstraintChecker.isDonorEligibleToDonate(donorSummary.getId()));
 
         return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
     }
