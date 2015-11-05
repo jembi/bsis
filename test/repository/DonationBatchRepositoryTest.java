@@ -2,6 +2,8 @@ package repository;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -192,8 +194,11 @@ public class DonationBatchRepositoryTest {
 	public void testFindDonationBatchesWithDates() throws Exception {
 		List<Long> locationIds = new ArrayList<Long>();
 		locationIds.add(1L);
-		List<DonationBatch> batches = donationBatchRepository.findDonationBatches(true, locationIds, new Date(), new Date());
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String startDate = "2015-02-01 22:00:00";
+		String endDate = "2015-02-04 22:00:00";
+		List<DonationBatch> batches = donationBatchRepository.findDonationBatches(true, locationIds, df.parse(startDate), df.parse(endDate));
 		Assert.assertNotNull("There are batches in Maseru", batches);
-		Assert.assertEquals("There are 0 donation batches in Maseru", 0, batches.size());
+		Assert.assertEquals("There is 1 donation batch in Maseru", 1, batches.size());
 	}
 }
