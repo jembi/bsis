@@ -83,7 +83,7 @@ public class DonationCRUDService {
                     donationBackingForm.getDonationBatchNumber());
 
             if (!donationBatch.isBackEntry()) { 
-                throw new IllegalArgumentException("Cannot add donation");
+                throw new IllegalArgumentException("Do not bleed");
             }
 
             // The donation batch is being back entered so allow the donation to be created but discard the components
