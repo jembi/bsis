@@ -45,6 +45,7 @@ public class TestBatchCRUDService {
         }
 
         if (newDonationBatchIds != null) {
+        	List<DonationBatch> newDonationBatches = new ArrayList<DonationBatch>();
         	// unlink old donation batches
         	List<Integer> existingDonationBatchIds = new ArrayList<Integer>();
         	for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
@@ -56,12 +57,14 @@ public class TestBatchCRUDService {
         	}
         	// link new donation batches
         	for (Integer batchId : newDonationBatchIds) {
+        		DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(batchId);
+        		newDonationBatches.add(donationBatch);
         		if (!existingDonationBatchIds.contains(batchId)) {
-	        		DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(batchId);
 	        		donationBatch.setTestBatch(testBatch);
 	        		donationBatchRepository.updateDonationBatch(donationBatch);
         		}
         	}
+        	testBatch.setDonationBatches(newDonationBatches);
         }
 
         return testBatchRepository.updateTestBatch(testBatch);
