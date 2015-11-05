@@ -90,15 +90,15 @@ public class DonationBatchRepository {
     }
 
     if (startDate != null) {
-      queryStr += "AND b.createdDate >= :startDate ";
+      queryStr += "AND b.modificationTracker.createdDate >= :startDate ";
     }
 
     if (endDate != null) {
-      queryStr += "AND b.createdDate <= :endDate ";
+      queryStr += "AND b.modificationTracker.createdDate <= :endDate ";
     }
 
     if(isClosed != null){
-    	queryStr +=    "AND b.isClosed=:isClosed";
+    	queryStr += "AND b.isClosed=:isClosed ";
     }
     
     TypedQuery<DonationBatch> query = em.createQuery(queryStr, DonationBatch.class);

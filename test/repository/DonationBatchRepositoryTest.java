@@ -187,4 +187,13 @@ public class DonationBatchRepositoryTest {
 		Assert.assertNotNull("There are batches in Maseru", batches);
 		Assert.assertEquals("There are 1 donation batches in Maseru", 1, batches.size());
 	}
+
+	@Test
+	public void testFindDonationBatchesWithDates() throws Exception {
+		List<Long> locationIds = new ArrayList<Long>();
+		locationIds.add(1L);
+		List<DonationBatch> batches = donationBatchRepository.findDonationBatches(true, locationIds, new Date(), new Date());
+		Assert.assertNotNull("There are batches in Maseru", batches);
+		Assert.assertEquals("There are 0 donation batches in Maseru", 0, batches.size());
+	}
 }

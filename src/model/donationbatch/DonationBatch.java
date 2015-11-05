@@ -9,18 +9,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import model.donation.Donation;
@@ -75,7 +64,7 @@ public class DonationBatch implements ModificationTracker {
 
   @Lob
   private String notes;
-
+  @Embedded
   private RowModificationTracker modificationTracker;
   
     @Column(nullable = false)
