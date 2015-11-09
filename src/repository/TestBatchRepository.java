@@ -1,12 +1,8 @@
 package repository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 import static java.util.Collections.list;
-
-import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -80,38 +76,58 @@ public class TestBatchRepository {
         return em.merge(testBatch);
     }
 
-  public List<TestBatchViewModel> findTestBatches(
-	      String status, String createdAfterDate,
-	      String createdBeforeDate,Map<String, Object> pagingParams) {
+	public List<TestBatchViewModel> findTestBatches(
+			String status, Date startDate,
+			Date endDate, Map<String, Object> pagingParams) {
 
-	    String queryStr =  "SELECT * FROM TestBatch where status = :status "
-                    + " or createdDate BETWEEN :createdAfterDate AND :createdBeforeDate";
-	    
-	  
-	    if (pagingParams.containsKey("sortColumn")) {
-	      queryStr += " ORDER BY " + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
-	    }
-            
-           Query query = em.createNativeQuery(queryStr, TestBatch.class);
-	    
-            query.setParameter("status", status);
-            query.setParameter("createdAfterDate", createdAfterDate);
-	    query.setParameter("createdBeforeDate", createdBeforeDate);
-	    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
-	    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
+		String queryStr = "SELECT * FROM TestBatch ";
 
-	    query.setFirstResult(start);
-	    query.setMaxResults(length);
+		if (status != null) {
+			queryStr += "WHERE status = :status ";
+		} else {
+			queryStr += "WHERE status is null OR status is not null ";
+		}
 
-            List<TestBatch> testBatches = query.getResultList();
-            List<TestBatchViewModel> viewModels = new ArrayList<TestBatchViewModel>();
-        for (TestBatch testBatch : testBatches) {
+		if (startDate != null) {
+			queryStr += "AND createdDate >= :startDate ";
+		}
 
-            viewModels.add(testBatchViewModelFactory.createTestBatchViewModel(testBatch));
-        }
+		if (endDate != null) {
+			queryStr += "AND createdDate <= :endDate ";
+		}
 
-        return viewModels;
-    }
+		if (pagingParams.containsKey("sortColumn")) {
+			queryStr += " ORDER BY " + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
+		}
+
+		Query query = em.createNativeQuery(queryStr, TestBatch.class);
+
+		if (status != null) {
+			query.setParameter("status", status);
+		}
+
+		if (startDate != null) {
+			query.setParameter("startDate", startDate);
+		}
+		if (endDate != null) {
+			query.setParameter("endDate", endDate);
+		}
+
+		int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
+		int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
+
+		query.setFirstResult(start);
+		query.setMaxResults(length);
+
+		List<TestBatch> testBatches = query.getResultList();
+		List<TestBatchViewModel> viewModels = new ArrayList<>();
+		for (TestBatch testBatch : testBatches) {
+
+			viewModels.add(testBatchViewModelFactory.createTestBatchViewModel(testBatch));
+		}
+
+		return viewModels;
+	}
   
   /**
    * issue - #229 un used method

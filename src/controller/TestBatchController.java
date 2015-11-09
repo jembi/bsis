@@ -1,10 +1,6 @@
 package controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.validation.Valid;
 
@@ -13,6 +9,7 @@ import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -107,15 +104,15 @@ public class TestBatchController {
     @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")
     public ResponseEntity findTestBatchPagination(
             @RequestParam(value = "status", required = false) String status,
-            @RequestParam(value = "createdBeforeDate", required = false) String createdBeforeDate,
-            @RequestParam(value = "createdAfterDate", required = false) String createdAfterDate) {
+            @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+            @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
 
         Map<String, Object> pagingParams = new HashMap<String, Object>();
         pagingParams.put("sortColumn", "id");
         pagingParams.put("sortDirection", "asc");
         
         List<TestBatchViewModel> testBatches = testBatchRepository.findTestBatches(status,
-	    		createdAfterDate, createdBeforeDate, pagingParams);
+                startDate, endDate, pagingParams);
          
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("testBatches", testBatches);
