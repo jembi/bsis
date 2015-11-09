@@ -33,8 +33,5 @@
 	
 	<ComponentStatusChange/>
 	<ComponentStatusChangeReason/>
-	<DonorCodeGroup/>
-	<DonorCode/>
-	<DonorDonorCode/>
 	<User/>
 </dataset>
