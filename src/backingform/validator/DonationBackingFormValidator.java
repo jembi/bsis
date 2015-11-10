@@ -8,7 +8,6 @@ import java.util.Map;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.donor.Donor;
-import model.donor.DonorStatus;
 import model.location.Location;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -64,13 +63,7 @@ public class DonationBackingFormValidator implements Validator {
     updateRelatedEntities(form);
     inheritParametersFromDonationBatch(form, errors);
     Donor donor = form.getDonor();
-    if (donor != null) {
-      
-      if (!form.getDonationBatch().isBackEntry() && (donor.getDonorStatus().equals(DonorStatus.POSITIVE_TTI) ||
-              utilController.isDonorDeferred(donor))) {
-        errors.rejectValue("donation.donor", "donor.invalid", "Do not bleed donor");
-      }
-    } else {
+    if (donor == null) {
       errors.rejectValue("donation.donor", "donor.invalid", "Please supply a valid donor");
     }
 

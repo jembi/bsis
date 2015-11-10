@@ -10,6 +10,7 @@ import model.util.Gender;
  */
 public class DonorSummaryViewModel {
     
+    private long id;
     private String firstName;
     private String lastName;
     private Gender gender;
@@ -24,11 +25,20 @@ public class DonorSummaryViewModel {
      * 
      * @see {@link DonorRepository#findDonorSummaryByDonorNumber(String)}
      */
-    public DonorSummaryViewModel(String firstName, String lastName, Gender gender, Date birthDate) {
+    public DonorSummaryViewModel(long id, String firstName, String lastName, Gender gender, Date birthDate) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
         this.birthDate = birthDate;
+    }
+    
+    public long getId() {
+        return id;
+    }
+    
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
