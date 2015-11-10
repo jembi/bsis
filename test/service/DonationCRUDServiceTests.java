@@ -60,6 +60,8 @@ public class DonationCRUDServiceTests {
     private ComponentCRUDService componentCRUDService;
     @Mock
     private PackTypeRepository packTypeRepository;
+    @Mock
+    private DonorConstraintChecker donorConstraintChecker;
     
     @Test(expected = IllegalStateException.class)
     public void testDeleteDonationWithConstraints_shouldThrow() {
@@ -281,7 +283,7 @@ public class DonationCRUDServiceTests {
         PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).build();
         
         when(packTypeRepository.getPackTypeById(IRRELEVANT_PACK_TYPE_ID)).thenReturn(packTypeThatCountsAsDonation);
-        when(donationConstraintChecker.isDonorEligibleToDonate(donorId)).thenReturn(true);
+        when(donorConstraintChecker.isDonorEligibleToDonate(donorId)).thenReturn(true);
 
         Donation returnedDonation = donationCRUDService.createDonation(backingForm);
         
@@ -332,7 +334,7 @@ public class DonationCRUDServiceTests {
         PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).build();
         
         when(packTypeRepository.getPackTypeById(IRRELEVANT_PACK_TYPE_ID)).thenReturn(packTypeThatCountsAsDonation);
-        when(donationConstraintChecker.isDonorEligibleToDonate(donorId)).thenReturn(false);
+        when(donorConstraintChecker.isDonorEligibleToDonate(donorId)).thenReturn(false);
         when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber)).thenReturn(donationBatch);
 
         donationCRUDService.createDonation(backingForm);
@@ -360,7 +362,7 @@ public class DonationCRUDServiceTests {
         PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).build();
         
         when(packTypeRepository.getPackTypeById(IRRELEVANT_PACK_TYPE_ID)).thenReturn(packTypeThatCountsAsDonation);
-        when(donationConstraintChecker.isDonorEligibleToDonate(donorId)).thenReturn(false);
+        when(donorConstraintChecker.isDonorEligibleToDonate(donorId)).thenReturn(false);
         when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber)).thenReturn(donationBatch);
 
         Donation returnedDonation = donationCRUDService.createDonation(backingForm);

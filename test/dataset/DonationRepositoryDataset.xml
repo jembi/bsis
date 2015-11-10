@@ -111,7 +111,7 @@
 		donationType_id="1" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
 		bloodPressureDiastolic="80" donorPulse="70" venue_id="1"
 		bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
-		bloodTypingMatchStatus="MATCH" />
+		bloodTypingMatchStatus="MATCH" ineligibleDonor="0" />
 	<Donation id="2" bloodAbo="A" bloodRh="-" bloodTypingStatus="COMPLETE"
 		donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1212129"
 		extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-18 07:53:57.0"
@@ -119,14 +119,14 @@
 		packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" venue_id="2"
 		bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
-		bloodTypingMatchStatus="MATCH" />
+		bloodTypingMatchStatus="MATCH" ineligibleDonor="0" />
 	<Donation id="3" bloodTypingStatus="NOT_DONE" donationDate="2015-06-26 00:00:00.0"
 		donationIdentificationNumber="9090908" isDeleted="0"
 		createdDate="2015-06-29 05:24:35.0" lastUpdated="2015-06-29 05:24:35.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="3"
 		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="1" bleedStartTime="1970-01-01 11:24:30.0" bleedEndTime="1970-01-01 11:44:30.0"
-		bloodTypingMatchStatus="NOT_DONE" />
+		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" />
 	<Donation id="4" bloodAbo="A" bloodRh="-" bloodTypingStatus="COMPLETE"
 		donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1412129"
 		extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-02 07:53:57.0"
@@ -134,7 +134,7 @@
 		packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="4"
 		createdBy_id="1" lastUpdatedBy_id="1" venue_id="2"
 		bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
-		bloodTypingMatchStatus="MATCH" />
+		bloodTypingMatchStatus="MATCH" ineligibleDonor="0" />
 	<Donation id="5" bloodAbo="O" bloodRh="-" bloodTypingStatus="COMPLETE"
 		donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1512129"
 		extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-02 07:53:57.0"
@@ -142,7 +142,7 @@
 		packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="5"
 		createdBy_id="1" lastUpdatedBy_id="1" venue_id="2"
 		bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
-		bloodTypingMatchStatus="MATCH" />
+		bloodTypingMatchStatus="MATCH" ineligibleDonor="0" />
 	<Donation id="6" bloodAbo="AB" bloodRh="+" bloodTypingStatus="COMPLETE"
 		donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1612129"
 		extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-02 07:53:57.0"
@@ -150,7 +150,7 @@
 		packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="6"
 		createdBy_id="1" lastUpdatedBy_id="1" venue_id="2"
 		bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
-		bloodTypingMatchStatus="MATCH" />
+		bloodTypingMatchStatus="MATCH" ineligibleDonor="0" />
 
 	<BloodTestingRule id="1" bloodTestsIds="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"

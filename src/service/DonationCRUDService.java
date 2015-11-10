@@ -37,6 +37,8 @@ public class DonationCRUDService {
     private ComponentCRUDService componentCRUDService;
     @Autowired
     private PackTypeRepository packTypeRepository;
+    @Autowired
+    private DonorConstraintChecker donorConstraintChecker;
     
     public void deleteDonation(long donationId) throws IllegalStateException, NoResultException {
         
@@ -75,17 +77,18 @@ public class DonationCRUDService {
         boolean discardComponents = false;
 
         if (packType.getCountAsDonation() &&
-                !donationConstraintChecker.isDonorEligibleToDonate(donationBackingForm.getDonor().getId())) {
+                !donorConstraintChecker.isDonorEligibleToDonate(donationBackingForm.getDonor().getId())) {
         
             DonationBatch donationBatch = donationBatchRepository.findDonationBatchByBatchNumber(
                     donationBackingForm.getDonationBatchNumber());
 
             if (!donationBatch.isBackEntry()) { 
-                throw new IllegalArgumentException("Cannot add donation");
+                throw new IllegalArgumentException("Do not bleed donor");
             }
 
             // The donation batch is being back entered so allow the donation to be created but discard the components
             discardComponents = true;
+            donation.setIneligibleDonor(true);
         }
         
         updateAdverseEventForDonation(donation, donationBackingForm.getAdverseEvent());
