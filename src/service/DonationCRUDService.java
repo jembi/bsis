@@ -88,6 +88,7 @@ public class DonationCRUDService {
 
             // The donation batch is being back entered so allow the donation to be created but discard the components
             discardComponents = true;
+            donation.setIneligibleDonor(true);
         }
         
         updateAdverseEventForDonation(donation, donationBackingForm.getAdverseEvent());
