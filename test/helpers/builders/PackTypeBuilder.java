@@ -5,9 +5,9 @@ import model.packtype.PackType;
 public class PackTypeBuilder extends AbstractEntityBuilder<PackType> {
     
     private Integer id;
-    private Boolean testSampleProduced;
     private Boolean countAsDonation;
     private Integer periodBetweenDonations;
+    private Boolean testSampleProduced;
 
     public PackTypeBuilder withId(Integer id) {
         this.id = id;
@@ -38,6 +38,9 @@ public class PackTypeBuilder extends AbstractEntityBuilder<PackType> {
         }
         packType.setCountAsDonation(countAsDonation);
         packType.setPeriodBetweenDonations(periodBetweenDonations);
+        if (testSampleProduced != null) {
+            packType.setTestSampleProduced(testSampleProduced);
+        }
         return packType;
     }
     

@@ -4,10 +4,7 @@ import javax.persistence.NoResultException;
 
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
-import model.donor.Donor;
-import model.packtype.PackType;
 
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -38,40 +35,6 @@ public class DonationConstraintChecker {
     private DonorRepository donorRepository;
     @Autowired
     private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
-    
-    public boolean isDonorEligibleToDonate(long donorId) {
-        
-        Donor donor = donorRepository.findDonorById(donorId);
-        
-        if (donor.getDonations() != null) {
-
-            for (Donation donation : donor.getDonations()) {
-    
-                PackType packType = donation.getPackType();
-    
-                if (!packType.getCountAsDonation()) {
-                    // Don't check period between donations if it doesn't count as a donation
-                    continue;
-                }
-    
-                // Work out the next allowed donation date
-                DateTime nextDonationDate = new DateTime(donation.getDonationDate())
-                        .plusDays(packType.getPeriodBetweenDonations())
-                        .withTimeAtStartOfDay();
-                
-                // Check if the next allowed donation date is after today
-                if (nextDonationDate.isAfter(new DateTime().withTimeAtStartOfDay())) {
-                    return false;
-                }
-            }
-        }
-
-        if (donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)) {
-            return false;
-        }
-        
-        return true;
-    }
     
     public boolean canDeleteDonation(long donationId) throws NoResultException {
 

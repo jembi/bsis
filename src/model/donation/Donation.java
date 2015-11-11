@@ -196,6 +196,10 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
   
   @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true)
   private AdverseEvent adverseEvent;
+  
+    // If the donor was ineligible when the donation was captured
+    @Column(nullable = false)
+    private boolean ineligibleDonor = false;
 
   public Donation() {
     modificationTracker = new RowModificationTracker();
@@ -554,6 +558,14 @@ public Long getId() {
         }
         return other instanceof Donation &&
                 ((Donation) other).id == id;
+    }
+
+    public boolean isIneligibleDonor() {
+        return ineligibleDonor;
+    }
+
+    public void setIneligibleDonor(boolean ineligibleDonor) {
+        this.ineligibleDonor = ineligibleDonor;
     }
 
 }

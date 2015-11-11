@@ -54,7 +54,6 @@ import repository.PackTypeRepository;
 import repository.DeferralReasonRepository;
 import repository.DiscardReasonRepository;
 import security.BsisUserDetails;
-import service.DonorDeferralStatusCalculator;
 import repository.DonationTypeRepository;
 import utils.DonorUtils;
 
@@ -118,9 +117,6 @@ public class UtilController {
 
   @Autowired
   private DonationTypeRepository donationTypeRepository;
-  
-  @Autowired
-  private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
 
   public Map<String, Map<String, Object>> getFormFieldsForForm(String formName) {
     List<FormField> formFields = formFieldRepository.getFormFields(formName);
@@ -377,10 +373,6 @@ public class UtilController {
     }
     return errorMessage;
   }
-
-    public boolean isDonorDeferred(Donor donor) {
-        return donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor);
-    }
 
   public Component findComponent(String donationIdentificationNumber, String componentType) {
     return componentRepository.findComponent(donationIdentificationNumber, componentType);
