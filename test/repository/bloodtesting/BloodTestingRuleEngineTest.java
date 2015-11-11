@@ -99,7 +99,6 @@ public class BloodTestingRuleEngineTest {
 		Assert.assertEquals("bloodRh is +", "+", result.getBloodRh());
 		Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
 		Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
-		Assert.assertEquals("No pending tti tests", 0, result.getPendingTTITestsIds().size());
 		Map<String, String> tests = result.getAvailableTestResults();
 		Iterator<String> testIts = tests.values().iterator();
 		Assert.assertEquals("Available test result value", "O", testIts.next());
@@ -124,7 +123,6 @@ public class BloodTestingRuleEngineTest {
 		Assert.assertEquals("bloodRh is -", "-", result.getBloodRh());
 		Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
 		Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
-		Assert.assertEquals("No pending tti tests", 0, result.getPendingTTITestsIds().size());
 		Assert.assertEquals("Available Test results", 8, result.getAvailableTestResults().size());
 		Map<String, String> tests = result.getAvailableTestResults();
 		Iterator<String> testIts = tests.values().iterator();
@@ -152,8 +150,67 @@ public class BloodTestingRuleEngineTest {
 		Assert.assertEquals("bloodRh is empty", 0, result.getBloodRh().length());
 		Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
 		Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
-		Assert.assertEquals("No pending tti tests", 0, result.getPendingTTITestsIds().size());
 		Assert.assertEquals("No availale test results", 0, result.getAvailableTestResults().size());
+		Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
+		Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
+		Assert.assertFalse("No TTI Uninterpretable", result.getTtiUninterpretable());
+	}
+	
+	@Test
+	public void testBloodTestingRuleEngineWithDonation3AndTTIResults() throws Exception {
+		Donation donation = donationRepository.findDonationById(3l);
+		Map<Long, String> ttiTests = new HashMap<Long, String>();
+		ttiTests.put(17l, "NEG");
+		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, ttiTests);
+		Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE,
+		    result.getBloodTypingMatchStatus());
+		Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
+		Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE, result.getBloodTypingMatchStatus());
+		Assert.assertEquals("bloodAb is empty", 0, result.getBloodAbo().length());
+		Assert.assertEquals("bloodRh is empty", 0, result.getBloodRh().length());
+		Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
+		Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
+		Assert.assertEquals("1 test result(s)", 1, result.getAvailableTestResults().size());
+		Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
+		Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
+		Assert.assertFalse("No TTI Uninterpretable", result.getTtiUninterpretable());
+	}
+	
+	@Test
+	public void testBloodTestingRuleEngineWithDonation7AndTTIResults() throws Exception {
+		Donation donation = donationRepository.findDonationById(7l);
+		Map<Long, String> ttiTests = new HashMap<Long, String>();
+		ttiTests.put(17l, "NEG");
+		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, ttiTests);
+		Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE,
+		    result.getBloodTypingMatchStatus());
+		Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
+		Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE, result.getBloodTypingMatchStatus());
+		Assert.assertEquals("bloodAb is empty", 0, result.getBloodAbo().length());
+		Assert.assertEquals("bloodRh is empty", 0, result.getBloodRh().length());
+		Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
+		Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
+		Assert.assertEquals("1 test done", 1, result.getAvailableTestResults().size());
+		Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
+		Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
+		Assert.assertFalse("No TTI Uninterpretable", result.getTtiUninterpretable());
+	}
+	
+	@Test
+	public void testBloodTestingRuleEngineWithDonation3AndBloodTestResults() throws Exception {
+		Donation donation = donationRepository.findDonationById(3l);
+		Map<Long, String> ttiTests = new HashMap<Long, String>();
+		ttiTests.put(1l, "A");
+		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, ttiTests);
+		Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE,
+		    result.getBloodTypingMatchStatus());
+		Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
+		Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE, result.getBloodTypingMatchStatus());
+		Assert.assertEquals("bloodAb has a result", 1, result.getBloodAbo().length());
+		Assert.assertEquals("bloodRh is empty", 0, result.getBloodRh().length());
+		Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
+		Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
+		Assert.assertEquals("1 availale test result(s)", 1, result.getAvailableTestResults().size());
 		Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
 		Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
 		Assert.assertFalse("No TTI Uninterpretable", result.getTtiUninterpretable());
