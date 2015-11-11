@@ -121,9 +121,13 @@ public class DonationBatchController {
 	public ResponseEntity<Map<String, Object>> updateDonationBatch(@PathVariable Long id,
 	                                                               @RequestBody @Valid DonationBatchBackingForm form) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		DonationBatch donationBatch = donationBatchCRUDService.updateDonationBatch(form.getDonationBatch());
-		DonationBatchViewModel viewModel = donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch);
-		map.put("donationBatch", viewModel);
+
+		donationBatchCRUDService.updateDonationBatch(form.getDonationBatch());
+		
+		DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(form.getId()); // the donation batch returned by the CRUD service has components which are unnecessary 
+		DonationBatchViewModel donationBatchViewModel = donationBatchViewModelFactory
+		        .createDonationBatchViewModel(donationBatch);
+		map.put("donationBatch", donationBatchViewModel);
 		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 	}
   
