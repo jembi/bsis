@@ -154,6 +154,8 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
 
     BloodTypingStatus oldBloodTypingStatus = donation.getBloodTypingStatus();
     BloodTypingStatus newBloodTypingStatus = ruleResult.getBloodTypingStatus();
+    
+    boolean released = donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED;
 
     if (!newExtraInformation.equals(oldExtraInformation) ||
         !newBloodAbo.equals(oldBloodAbo) ||
@@ -164,12 +166,15 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
       donation.setExtraBloodTypeInformation(newExtraInformation);
       donation.setBloodAbo(newBloodAbo);
       donation.setBloodRh(newBloodRh);
-      donation.setTTIStatus(ruleResult.getTTIStatus());
+      if (released) {
+        // Only update TTI status if the test batch has been released
+        donation.setTTIStatus(ruleResult.getTTIStatus());
+      }
       donation.setBloodTypingStatus(ruleResult.getBloodTypingStatus());
       donation = em.merge(donation);
     }
     
-    if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
+    if (released) {
         testBatchStatusChangeService.handleRelease(donation);
     }
     

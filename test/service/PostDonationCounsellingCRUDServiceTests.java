@@ -6,22 +6,18 @@ import static helpers.matchers.PostDonationCounsellingMatcher.hasSameStateAsPost
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-
 import java.util.Date;
-
 import model.counselling.CounsellingStatus;
 import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
 import repository.PostDonationCounsellingRepository;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -41,12 +37,32 @@ public class PostDonationCounsellingCRUDServiceTests {
                 .withDonation(donation)
                 .build();
         
+        when(postDonationCounsellingRepository.findPostDonationCounsellingForDonation(donation)).thenReturn(null);
+        
         PostDonationCounselling returnedPostDonationCounselling = postDonationCounsellingCRUDService
                 .createPostDonationCounsellingForDonation(donation);
         
         verify(postDonationCounsellingRepository).save(argThat(hasSameStateAsPostDonationCounselling(expectedPostDonationCounselling)));
-        verifyNoMoreInteractions(postDonationCounsellingRepository);
         assertThat(returnedPostDonationCounselling, hasSameStateAsPostDonationCounselling(expectedPostDonationCounselling));
+    }
+    
+    @Test
+    public void testCreatePostDonationCounsellingWithExistingCounselling_shouldReturnExistingCounselling() {
+        Donation donation = aDonation().withId(23L).build();
+        
+        PostDonationCounselling existingPostDonationCounselling = aPostDonationCounselling()
+                .thatIsFlaggedForCounselling()
+                .withDonation(donation)
+                .build();
+        
+        when(postDonationCounsellingRepository.findPostDonationCounsellingForDonation(donation))
+            .thenReturn(existingPostDonationCounselling);
+        
+        PostDonationCounselling returnedPostDonationCounselling = postDonationCounsellingCRUDService
+                .createPostDonationCounsellingForDonation(donation);
+        
+        verify(postDonationCounsellingRepository, never()).save(argThat(hasSameStateAsPostDonationCounselling(existingPostDonationCounselling)));
+        assertThat(returnedPostDonationCounselling, hasSameStateAsPostDonationCounselling(existingPostDonationCounselling));
     }
     
     @Test(expected = IllegalArgumentException.class)
@@ -98,7 +114,6 @@ public class PostDonationCounsellingCRUDServiceTests {
 
         verify(postDonationCounsellingRepository).findById(postDonationCounsellingId);
         verify(postDonationCounsellingRepository).update(argThat(hasSameStateAsPostDonationCounselling(expectedPostDonationCounselling)));
-        verifyNoMoreInteractions(postDonationCounsellingRepository);
         assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
     }
 

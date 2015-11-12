@@ -5,12 +5,15 @@ import static helpers.builders.DonorBuilder.aDonor;
 import static helpers.builders.DonorDeferralBuilder.aDonorDeferral;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DeferralReasonType;
+import model.donordeferral.DonorDeferral;
 import model.donordeferral.DurationType;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -104,6 +107,44 @@ public class DonorDeferralRepositoryTests extends ContextDependentTestSuite {
         int returnedCount = donorDeferralRepository.countCurrentDonorDeferralsForDonor(donor);
         
         assertThat(returnedCount, is(2));
+    }
+    
+    @Test
+    public void testFindDonorDeferralsForDonorByDeferralReason_shouldReturnCorrectResults() {
+
+      Donor donor = aDonor().build();
+      DeferralReason deferralReason = aDeferralReason()
+          .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE)
+          .withDurationType(DurationType.PERMANENT)
+          .build();
+      
+      List<DonorDeferral> expectedDeferrals = Arrays.asList(
+          aDonorDeferral().withDeferredDonor(donor).withDeferralReason(deferralReason).buildAndPersist(entityManager)
+      );
+
+      // Excluded because voided
+      aDonorDeferral()
+          .thatIsVoided()
+          .withDeferredDonor(donor)
+          .withDeferralReason(deferralReason)
+          .buildAndPersist(entityManager);
+      
+      // Excluded by donor
+      aDonorDeferral()
+          .withDeferredDonor(aDonor().build())
+          .withDeferralReason(deferralReason)
+          .buildAndPersist(entityManager);
+
+      // Excluded by deferral reason
+      aDonorDeferral()
+          .withDeferredDonor(donor)
+          .withDeferralReason(aDeferralReason().build())
+          .buildAndPersist(entityManager);
+      
+      List<DonorDeferral> returnedDeferrals = donorDeferralRepository.findDonorDeferralsForDonorByDeferralReason(donor,
+          deferralReason);
+      
+      assertThat(returnedDeferrals, is(expectedDeferrals));
     }
 
 }
