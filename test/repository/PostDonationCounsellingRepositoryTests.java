@@ -6,6 +6,7 @@ import static helpers.builders.LocationBuilder.aVenue;
 import static helpers.builders.PostDonationCounsellingBuilder.aPostDonationCounselling;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
@@ -306,6 +307,17 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
         int returnedCount = postDonationCounsellingRepository.countFlaggedPostDonationCounsellingsForDonor(donor.getId());
         
         assertThat(returnedCount, is(2));
+    }
+
+    @Test
+    public void testFindPostDonationCounsellingForDonationWithNoExistingCounselling_shouldReturnNull() {
+      
+      Donation donation = aDonation().buildAndPersist(entityManager);
+        
+      PostDonationCounselling returnedCounselling = postDonationCounsellingRepository.findPostDonationCounsellingForDonation(
+          donation);
+      
+      assertThat(returnedCounselling, is(nullValue()));
     }
     
     @Test
