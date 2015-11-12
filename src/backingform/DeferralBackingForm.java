@@ -152,4 +152,8 @@ public class DeferralBackingForm {
     public void setPermissions(Map<String, Boolean> permissions) {
         // Ignore
     }
+    
+    public void setDonorNumber(String donorNumber) {
+    	setDeferredDonor(donorNumber);
+    }
 }
