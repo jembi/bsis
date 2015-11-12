@@ -27,6 +27,13 @@ public class PostDonationCounsellingCRUDService {
     public PostDonationCounselling createPostDonationCounsellingForDonation(Donation donation) {
         LOGGER.info("Creating post donation counselling for donation: " + donation);
         
+        PostDonationCounselling existingCounselling = postDonationCounsellingRepository.findPostDonationCounsellingForDonation(
+            donation);
+        if (existingCounselling != null) {
+          // Return existing counselling instead of creating a new PostDonationCounselling
+          return existingCounselling;
+        }
+        
         PostDonationCounselling postDonationCounselling = new PostDonationCounselling();
         postDonationCounselling.setDonation(donation);
         postDonationCounselling.setFlaggedForCounselling(true);
