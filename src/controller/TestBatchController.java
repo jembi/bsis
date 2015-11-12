@@ -127,18 +127,6 @@ public class TestBatchController {
         testBatchRepository.deleteTestBatch(id);
         return  new ResponseEntity(HttpStatus.NO_CONTENT);
     }
-    
-       @RequestMapping(value = "/recent/{count}" ,method = RequestMethod.GET)
-   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")  
-   public ResponseEntity<Map<String, Object>> getRecentlyClosedTestBatches(
-            @PathVariable Integer count) {
-        
-        Map<String, Object> map = new HashMap<String, Object>();   
-        List<TestBatch> testBatches = 
-                testBatchRepository.getRecentlyClosedTestBatches(count);
-        map.put("testBatches", getTestBatchViewModels(testBatches));
-        return new ResponseEntity(map, HttpStatus.OK);
-    }
   
     
     public String getNextTestBatchNumber() {
