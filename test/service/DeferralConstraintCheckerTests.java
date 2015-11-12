@@ -5,6 +5,7 @@ import helpers.builders.DeferralReasonBuilder;
 import helpers.builders.DonorBuilder;
 import helpers.builders.DonorDeferralBuilder;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import model.donor.Donor;
@@ -32,10 +33,11 @@ public class DeferralConstraintCheckerTests {
 	private DonorDeferralRepository deferralRepository;
 	
 	@Test
-    public void testCanDeleteDonorDeferralTrue() {
-    	// create test data
+	public void testCanDeleteDonorDeferral() {
+		// create test data
 		Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
-		DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.PERMANENT).withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
+		DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.PERMANENT)
+		        .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
 		DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1l).withCreatedDate(new Date())
 		        .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferredUntil(new Date()).build();
 		
@@ -43,17 +45,18 @@ public class DeferralConstraintCheckerTests {
 		when(deferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
 		
 		// run test
-    	boolean result = deferralConstraintChecker.canDeleteDonorDeferral(1l);
-    	
-    	// do asserts
-    	Assert.assertFalse("Can not delete an automatic deferral", result);
-    }
+		boolean result = deferralConstraintChecker.canDeleteDonorDeferral(1l);
+		
+		// do asserts
+		Assert.assertFalse("Can not delete an automatic deferral", result);
+	}
 	
 	@Test
-    public void testCanDeleteDonorDeferralTemporaryFalse() {
-    	// create test data
+	public void testCanDeleteDonorDeferralTemporary() {
+		// create test data
 		Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
-		DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY).withType(DeferralReasonType.NORMAL).build();
+		DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY)
+		        .withType(DeferralReasonType.NORMAL).build();
 		DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1l).withCreatedDate(new Date())
 		        .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferredUntil(new Date()).build();
 		
@@ -61,17 +64,18 @@ public class DeferralConstraintCheckerTests {
 		when(deferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
 		
 		// run test
-    	boolean result = deferralConstraintChecker.canDeleteDonorDeferral(1l);
-    	
-    	// do asserts
-    	Assert.assertTrue("Can delete this temporary deferral", result);
-    }
+		boolean result = deferralConstraintChecker.canDeleteDonorDeferral(1l);
+		
+		// do asserts
+		Assert.assertTrue("Can delete this temporary deferral", result);
+	}
 	
 	@Test
-    public void testCanDeleteDonorDeferralPermanentFalse() {
-    	// create test data
+	public void testCanDeleteDonorDeferralPermanent() {
+		// create test data
 		Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
-		DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.PERMANENT).withType(DeferralReasonType.NORMAL).build();
+		DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.PERMANENT)
+		        .withType(DeferralReasonType.NORMAL).build();
 		DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1l).withCreatedDate(new Date())
 		        .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferredUntil(new Date()).build();
 		
@@ -79,9 +83,154 @@ public class DeferralConstraintCheckerTests {
 		when(deferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
 		
 		// run test
-    	boolean result = deferralConstraintChecker.canDeleteDonorDeferral(1l);
-    	
-    	// do asserts
-    	Assert.assertTrue("Can delete this permanent deferral", result);
-    }
+		boolean result = deferralConstraintChecker.canDeleteDonorDeferral(1l);
+		
+		// do asserts
+		Assert.assertTrue("Can delete this permanent deferral", result);
+	}
+	
+	@Test
+	public void testCanEditDonorDeferral() {
+		// create test data
+		Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+		DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.PERMANENT)
+		        .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
+		DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1l).withCreatedDate(new Date())
+		        .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferredUntil(new Date()).build();
+		
+		// set up mocks
+		when(deferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
+		
+		// run test
+		boolean result = deferralConstraintChecker.canEditDonorDeferral(1l);
+		
+		// do asserts
+		Assert.assertFalse("Can not edit an automatic deferral", result);
+	}
+	
+	@Test
+	public void testCanEditDonorDeferralTemporary() {
+		// create test data
+		Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+		DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY)
+		        .withType(DeferralReasonType.NORMAL).build();
+		DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1l).withCreatedDate(new Date())
+		        .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferredUntil(new Date()).build();
+		
+		// set up mocks
+		when(deferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
+		
+		// run test
+		boolean result = deferralConstraintChecker.canEditDonorDeferral(1l);
+		
+		// do asserts
+		Assert.assertTrue("Can edit this temporary deferral", result);
+	}
+	
+	@Test
+	public void testCanEditDonorDeferralPermanent() {
+		// create test data
+		Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+		DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.PERMANENT)
+		        .withType(DeferralReasonType.NORMAL).build();
+		DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1l).withCreatedDate(new Date())
+		        .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferredUntil(new Date()).build();
+		
+		// set up mocks
+		when(deferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
+		
+		// run test
+		boolean result = deferralConstraintChecker.canEditDonorDeferral(1l);
+		
+		// do asserts
+		Assert.assertTrue("Can edit this permanent deferral", result);
+	}
+	
+	@Test
+	public void testCanEndDonorDeferral() {
+		// create test data
+		Calendar deferralEndDate = Calendar.getInstance();
+		deferralEndDate.add(Calendar.DAY_OF_YEAR, 90);
+		Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+		DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.PERMANENT)
+		        .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
+		DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1l).withCreatedDate(new Date())
+		        .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason)
+		        .withDeferredUntil(deferralEndDate.getTime()).build();
+		
+		// set up mocks
+		when(deferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
+		
+		// run test
+		boolean result = deferralConstraintChecker.canEndDonorDeferral(1l);
+		
+		// do asserts
+		Assert.assertFalse("Can not end an automatic deferral", result);
+	}
+	
+	@Test
+	public void testCanEndDonorDeferralTemporary() {
+		// create test data
+		Calendar deferralEndDateCal = Calendar.getInstance();
+		deferralEndDateCal.add(Calendar.DAY_OF_YEAR, 90);
+		Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+		DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY)
+		        .withType(DeferralReasonType.NORMAL).build();
+		DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1l).withCreatedDate(new Date())
+		        .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason)
+		        .withDeferredUntil(deferralEndDateCal.getTime()).build();
+		
+		// set up mocks
+		when(deferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
+		
+		// run test
+		boolean result = deferralConstraintChecker.canEndDonorDeferral(1l);
+		
+		// do asserts
+		Assert.assertTrue("Can end this temporary deferral", result);
+	}
+	
+	@Test
+	public void testCanEndDonorDeferralTemporaryThatsOver() {
+		// create test data
+		Calendar deferralEndDate = Calendar.getInstance();
+		deferralEndDate.add(Calendar.DAY_OF_YEAR, -90);
+		Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+		DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY)
+		        .withType(DeferralReasonType.NORMAL).build();
+		DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1l).withCreatedDate(new Date())
+		        .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason)
+		        .withDeferredUntil(deferralEndDate.getTime()).build();
+		
+		// set up mocks
+		when(deferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
+		
+		// run test
+		boolean result = deferralConstraintChecker.canEndDonorDeferral(1l);
+		
+		// do asserts
+		Assert.assertFalse("Cannot end a deferral that's over", result);
+	}
+	
+	@Test
+	public void testCanEndDonorDeferralPermanent() {
+		// create test data
+		Calendar deferralEndDate = Calendar.getInstance();
+		deferralEndDate.add(Calendar.DAY_OF_YEAR, 90);
+		Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+		DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.PERMANENT)
+		        .withType(DeferralReasonType.NORMAL).build();
+		DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1l).withCreatedDate(new Date())
+		        .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason)
+		        .withDeferredUntil(deferralEndDate.getTime()).build();
+		
+		// set up mocks
+		when(deferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
+		
+		// run test
+		boolean result = deferralConstraintChecker.canEndDonorDeferral(1l);
+		
+		// do asserts
+		Assert.assertTrue("Can end this permanent deferral", result);
+	}
 }

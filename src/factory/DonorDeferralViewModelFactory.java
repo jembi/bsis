@@ -30,6 +30,8 @@ public class DonorDeferralViewModelFactory {
     	// Populate permissions
         Map<String, Boolean> permissions = new HashMap<>();
         permissions.put("canDelete", deferralConstraintChecker.canDeleteDonorDeferral(donorDeferral.getId()));
+        permissions.put("canEdit", deferralConstraintChecker.canEditDonorDeferral(donorDeferral.getId()));
+        permissions.put("canEnd", deferralConstraintChecker.canEndDonorDeferral(donorDeferral.getId()));
         donorDeferralViewModel.setPermissions(permissions);
 
         return donorDeferralViewModel;

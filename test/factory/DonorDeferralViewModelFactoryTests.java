@@ -40,6 +40,8 @@ public class DonorDeferralViewModelFactoryTests {
 
 		// set up mocks
 		when(deferralConstraintChecker.canDeleteDonorDeferral(1L)).thenReturn(true);
+		when(deferralConstraintChecker.canEndDonorDeferral(1L)).thenReturn(true);
+		when(deferralConstraintChecker.canEditDonorDeferral(1L)).thenReturn(true);
 		
 		// run tests
 		DonorDeferralViewModel donorDeferralViewModel = donorDeferralViewModelFactory.createDonorDeferralViewModel(donorDeferral);
@@ -48,10 +50,16 @@ public class DonorDeferralViewModelFactoryTests {
 		Assert.assertNotNull("DonorDeferralViewModel exists", donorDeferralViewModel);
 		Assert.assertEquals("DonorDeferral matches", new Long(1), donorDeferralViewModel.getId());
 		Assert.assertNotNull("Permissions have been defined", donorDeferralViewModel.getPermissions());
-		Assert.assertEquals("Permissions have been defined", 1, donorDeferralViewModel.getPermissions().size());
+		Assert.assertEquals("Permissions have been defined", 3, donorDeferralViewModel.getPermissions().size());
 		Boolean canDelete = donorDeferralViewModel.getPermissions().get("canDelete");
 		Assert.assertNotNull("Permissions have been defined", canDelete);
 		Assert.assertTrue("Permissions have been defined", canDelete);
+		Boolean canEdit = donorDeferralViewModel.getPermissions().get("canEdit");
+		Assert.assertNotNull("Permissions have been defined", canEdit);
+		Assert.assertTrue("Permissions have been defined", canEdit);
+		Boolean canEnd = donorDeferralViewModel.getPermissions().get("canEnd");
+		Assert.assertNotNull("Permissions have been defined", canEnd);
+		Assert.assertTrue("Permissions have been defined", canEnd);
 	}
 	
 	@Test
@@ -72,8 +80,14 @@ public class DonorDeferralViewModelFactoryTests {
 
 		// set up mocks
 		when(deferralConstraintChecker.canDeleteDonorDeferral(1L)).thenReturn(true);
+		when(deferralConstraintChecker.canEditDonorDeferral(1L)).thenReturn(true);
+		when(deferralConstraintChecker.canEndDonorDeferral(1L)).thenReturn(true);
 		when(deferralConstraintChecker.canDeleteDonorDeferral(2L)).thenReturn(true);
+		when(deferralConstraintChecker.canEditDonorDeferral(2L)).thenReturn(true);
+		when(deferralConstraintChecker.canEndDonorDeferral(2L)).thenReturn(true);
 		when(deferralConstraintChecker.canDeleteDonorDeferral(3L)).thenReturn(true);
+		when(deferralConstraintChecker.canEditDonorDeferral(3L)).thenReturn(true);
+		when(deferralConstraintChecker.canEndDonorDeferral(3L)).thenReturn(true);
 		
 		// run tests
 		List<DonorDeferralViewModel> donorDeferralViewModels = donorDeferralViewModelFactory.createDonorDeferralViewModels(donorDeferrals);
@@ -87,7 +101,7 @@ public class DonorDeferralViewModelFactoryTests {
 			Assert.assertNotNull("DonorDeferralViewModel id defined", donorDeferralViewModel.getId());
 			matches[(int)(donorDeferralViewModel.getId()-1)] = true;
 			Assert.assertNotNull("Permissions have been defined", donorDeferralViewModel.getPermissions());
-			Assert.assertEquals("Permissions have been defined", 1, donorDeferralViewModel.getPermissions().size());
+			Assert.assertEquals("Permissions have been defined", 3, donorDeferralViewModel.getPermissions().size());
 			Boolean canDelete = donorDeferralViewModel.getPermissions().get("canDelete");
 			Assert.assertNotNull("Permissions have been defined", canDelete);
 			Assert.assertTrue("Permissions have been defined", canDelete);
