@@ -7,6 +7,8 @@
 		isMobileSite="false" isUsageSite="false" name="Maseru" notes="" />
 	<Location id="2" isDeleted="false" isVenue="true"
 		isMobileSite="false" isUsageSite="false" name="Leribe" notes="" />
+	<Location id="3" isDeleted="false" isVenue="true"
+			  isMobileSite="false" isUsageSite="false" name="Mohale" notes="" />
 
 	<TestBatch id="1" batchNumber="TB0215000000" isDeleted="false"
 		createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0"
@@ -29,6 +31,18 @@
 	<DonationBatch id="4" batchNumber="B0715000000"
 		isDeleted="true" createdDate="2015-07-27 04:19:33.0" lastUpdated="2015-07-26 04:19:33.0"
 		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" venue_id="1" backEntry="false" />
+	<DonationBatch id="5" batchNumber="B061500023"
+	   isDeleted="false" createdDate="2015-03-01 22:00:00.0" lastUpdated="2015-06-26 03:19:33.0"
+	   createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="3" backEntry="false" />
+	<DonationBatch id="6" batchNumber="B0615000024"
+	   isDeleted="false" createdDate="2015-03-04 22:00:00.0" lastUpdated="2015-06-26 03:19:33.0"
+	   createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="3" backEntry="false" />
+	<DonationBatch id="7" batchNumber="B0615000025"
+	   isDeleted="false" createdDate="2015-02-28 03:19:33.0" lastUpdated="2015-06-26 03:19:33.0"
+	   createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="3" backEntry="false" />
+	<DonationBatch id="8" batchNumber="B0615000026"
+	   isDeleted="false" createdDate="2015-03-05 03:19:33.0" lastUpdated="2015-06-26 03:19:33.0"
+	   createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="3" backEntry="false" />
 
 	<Contact id="1" />
 	<Contact id="2" />

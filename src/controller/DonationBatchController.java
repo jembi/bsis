@@ -3,11 +3,7 @@ package controller;
 import backingform.DonationBatchBackingForm;
 import backingform.validator.DonationBatchBackingFormValidator;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -15,6 +11,7 @@ import javax.validation.Valid;
 import model.donationbatch.DonationBatch;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -71,14 +68,17 @@ public class DonationBatchController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public ResponseEntity<Map<String, Object>> findDonationBatch(HttpServletRequest request,
           @RequestParam(value = "isClosed", required = false) Boolean isClosed,
-          @RequestParam(value = "venues", required = false) List<Long> venues) {
+          @RequestParam(value = "venues", required = false) List<Long> venues,
+          @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+          @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate
+  ) {
 
 	if(venues == null){
 		venues = new ArrayList<Long>();
 	}
 
     List<DonationBatch> donationBatches =
-        donationBatchRepository.findDonationBatches(isClosed, venues);
+        donationBatchRepository.findDonationBatches(isClosed, venues, startDate, endDate);
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("donationBatches", getDonationBatchViewModels(donationBatches));
@@ -135,18 +135,7 @@ public class DonationBatchController {
 
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
-  
-   @RequestMapping(value = "/recent/{count}" ,method = RequestMethod.GET)
-   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")  
-   public ResponseEntity<Map<String, Object>> getRecentlyClosedDonationBatches(
-            @PathVariable Integer count) {
-        
-        Map<String, Object> map = new HashMap<String, Object>();   
-        List<DonationBatch> donationBatches = 
-                donationBatchRepository.getRecentlyClosedDonationBatches(count);
-        map.put("donationBatches", getDonationBatchViewModels(donationBatches));
-        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
-    }
+
   
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("venues", locationRepository.getAllVenues());
