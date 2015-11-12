@@ -49,6 +49,11 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
         return this;
     }
     
+    public DonorBuilder thatIsNotDeleted() {
+        deleted = true;
+        return this;
+    }
+    
     public DonorBuilder withDateOfFirstDonation(Date dateOfFirstDonation) {
         this.dateOfFirstDonation = dateOfFirstDonation;
         return this;

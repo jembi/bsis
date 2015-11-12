@@ -2,6 +2,7 @@ package viewmodel;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import utils.DateTimeSerialiser;
 
@@ -20,6 +21,7 @@ public class DonationBatchViewModel {
     private Boolean closed;
     private LocationViewModel venue;
     private boolean backEntry;
+	private Map<String, Boolean> permissions;
 
     public DonationBatchViewModel() {
     }
@@ -117,4 +119,12 @@ public class DonationBatchViewModel {
     public void setBackEntry(boolean backEntry) {
         this.backEntry = backEntry;
     }
+	
+	public Map<String, Boolean> getPermissions() {
+		return permissions;
+	}
+	
+	public void setPermissions(Map<String, Boolean> permissions) {
+		this.permissions = permissions;
+	}
 }
