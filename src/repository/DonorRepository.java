@@ -410,13 +410,15 @@ public class DonorRepository {
     
     public DonorSummaryViewModel findDonorSummaryByDonorNumber(String donorNumber) throws NoResultException {
         return em.createQuery(
-                "SELECT NEW viewmodel.DonorSummaryViewModel(d.firstName, d.lastName, d.gender, d.birthDate) " +
+                "SELECT NEW viewmodel.DonorSummaryViewModel(d.id, d.firstName, d.lastName, d.gender, d.birthDate) " +
                 "FROM Donor d " +
                 "WHERE d.donorNumber = :donorNumber " +
-                "AND d.isDeleted = FALSE " +
-                "AND d.donorStatus not in ('MERGED') ",
+                "AND d.isDeleted = :isDeleted " +
+                "AND d.donorStatus NOT IN :excludedStatuses ",
                 DonorSummaryViewModel.class)
                 .setParameter("donorNumber", donorNumber)
+                .setParameter("isDeleted", false)
+                .setParameter("excludedStatuses", Arrays.asList(DonorStatus.MERGED))
                 .getSingleResult();
     }
 

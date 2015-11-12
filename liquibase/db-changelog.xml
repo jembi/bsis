@@ -1921,5 +1921,16 @@
 			<where>id = 2</where>
 		</delete>
 	</changeSet>
+    
+    <changeSet id="20151110-1024" author="bausmeier">
+        <addColumn tableName="Donation">
+            <column name="ineligibleDonor" type="tinyint(1)" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <addColumn tableName="Donation_AUD">
+            <column name="ineligibleDonor" type="tinyint(1)" />
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>

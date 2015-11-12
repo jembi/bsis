@@ -1,7 +1,9 @@
 package factory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
@@ -10,6 +12,7 @@ import model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import service.DonationBatchConstraintChecker;
 import viewmodel.DonationBatchViewModel;
 import viewmodel.DonationViewModel;
 import viewmodel.LocationViewModel;
@@ -19,9 +22,28 @@ public class DonationBatchViewModelFactory {
     
     @Autowired
     private DonationViewModelFactory donationViewModelFactory;
+    
+    @Autowired
+    private DonationBatchConstraintChecker donationBatchConstraintChecker;
 
+    /**
+     * Create a view model for the given donation batch and add the necessary permissions
+     * 
+     * @param donationBatch DonationBatch to convert
+     * @return DonationBatchViewModel representation of the given DonationBatch
+     */
     public DonationBatchViewModel createDonationBatchViewModel(DonationBatch donationBatch) {
-        return createDonationBatchViewModel(donationBatch, false);
+    	DonationBatchViewModel viewModel = createDonationBatchViewModel(donationBatch, false);
+
+    	// Populate permissions
+        Map<String, Boolean> permissions = new HashMap<>();
+        permissions.put("canDelete", donationBatchConstraintChecker.canDeleteDonationBatch(donationBatch.getId()));
+        permissions.put("canClose", donationBatchConstraintChecker.canCloseDonationBatch(donationBatch.getId()));
+        permissions.put("canReopen", donationBatchConstraintChecker.canReopenDonationBatch(donationBatch.getId()));
+        permissions.put("canEdit", donationBatchConstraintChecker.canEditDonationBatch(donationBatch.getId()));
+        viewModel.setPermissions(permissions);
+
+        return viewModel;
     }
 
     /**
