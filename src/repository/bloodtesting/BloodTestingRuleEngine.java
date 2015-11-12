@@ -22,6 +22,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import viewmodel.BloodTestingRuleResult;
+import factory.BloodTestingRuleResultViewModelFactory;
 
 @Repository
 @Transactional
@@ -31,6 +32,9 @@ public class BloodTestingRuleEngine {
 	
 	@Autowired
 	private BloodTestingRepository bloodTestingRepository;
+	
+	@Autowired
+	private BloodTestingRuleResultViewModelFactory bloodTestingRuleResultViewModelFactory;
 	
 	/**
 	 * Apply blood typing rules to blood typing tests (combination of what is present in the
@@ -110,7 +114,7 @@ public class BloodTestingRuleEngine {
 		// Determine the TTI status
 		setTTIStatus(resultSet);
 		
-		return resultSet.buildBloodTestingRuleResult();
+		return bloodTestingRuleResultViewModelFactory.createBloodTestResultViewModel(resultSet);
 	}
 	
 	/**
@@ -190,6 +194,9 @@ public class BloodTestingRuleEngine {
 								break;
 							case TTI:
 								resultSet.addPendingTtiTestsIds(extraTestId);
+								for (String testId : testIds) {
+									resultSet.addPendingTtiTest(testId, extraTestId);
+								}
 								break;
 							default:
 								LOGGER.warn("Unknown rule subcategory: " + rule.getSubCategory());
@@ -246,10 +253,14 @@ public class BloodTestingRuleEngine {
 			basicTtiTestsNotDone.add(bt.getId());
 		}
 		for (String testId : availableTestResults.keySet()) {
-			System.out.println("available test=" + testId + " result=" + availableTestResults.get(testId));
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("available test=" + testId + " result=" + availableTestResults.get(testId));
+			}
 			basicTtiTestsNotDone.remove(Integer.parseInt(testId));
 		}
-		System.out.println("basicTtiTestsNotDone=" + basicTtiTestsNotDone);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("basicTtiTestsNotDone=" + basicTtiTestsNotDone);
+		}
 		resultSet.setBasicTtiTestsNotDone(basicTtiTestsNotDone);
 	}
 	
