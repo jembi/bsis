@@ -129,7 +129,7 @@
  		notes="Notes" venue_Id = "1"
  		createdBy_id="1" lastUpdatedBy_id="1" backEntry="false" />
  	
- 	<donation id="1" bloodAbo=""
+ 	<Donation id="1" bloodAbo=""
  		bloodPressureSystolic="43" bloodRh="" bloodTypingStatus="NOT_DONE"
  		donationDate="2014-03-25 00:00:00" donationIdentificationNumber="000001"
  		donorWeight="60.00" extraBloodTypeInformation="" haemoglobinCount="14.00"
@@ -138,7 +138,7 @@
  		donationBatch_id="1" venue_Id = "1"
  		donationCreatedBy_id="1" donationType_id="2" donor_id="1"
  		createdBy_id="1" lastUpdatedBy_id="1" bloodPressureDiastolic="55"
- 		donorPulse="60"></donation>
+ 		donorPulse="60" ineligibleDonor="0" />
 
 
 	<genericconfig id="1" propertyName="rowHeight"
