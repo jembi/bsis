@@ -1,6 +1,7 @@
 package repository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -11,6 +12,7 @@ import javax.persistence.TypedQuery;
 
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
+
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,18 +83,32 @@ public class DonationBatchRepository {
   }
   
 
-  public List<DonationBatch> findDonationBatches(Boolean isClosed,
-      List<Long> venueIds) {
+  public List<DonationBatch> findDonationBatches(Boolean isClosed, List<Long> venueIds, Date startDate, Date endDate) {
     String queryStr = "SELECT distinct b from DonationBatch b LEFT JOIN FETCH b.donations WHERE b.isDeleted=:isDeleted ";
     if(!venueIds.isEmpty()){
     	queryStr += "AND b.venue.id IN (:venueIds) ";
     }
+
+    if (startDate != null) {
+      queryStr += "AND b.modificationTracker.createdDate >= :startDate ";
+    }
+
+    if (endDate != null) {
+      queryStr += "AND b.modificationTracker.createdDate <= :endDate ";
+    }
+
     if(isClosed != null){
-    	queryStr +=    "AND b.isClosed=:isClosed";
+    	queryStr += "AND b.isClosed=:isClosed ";
     }
     
     TypedQuery<DonationBatch> query = em.createQuery(queryStr, DonationBatch.class);
     query.setParameter("isDeleted", false);
+    if (startDate != null) {
+      query.setParameter("startDate", startDate);
+    }
+    if (endDate != null) {
+      query.setParameter("endDate", endDate);
+    }
     if(!venueIds.isEmpty()){
     	query.setParameter("venueIds", venueIds);
     }

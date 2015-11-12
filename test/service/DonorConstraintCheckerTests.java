@@ -1,17 +1,19 @@
 package service;
 
+import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
+import static helpers.builders.PackTypeBuilder.aPackType;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
+import java.util.Date;
 import model.donor.Donor;
-
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
 import repository.DonationRepository;
 import repository.DonorDeferralRepository;
 import repository.DonorRepository;
@@ -29,6 +31,8 @@ public class DonorConstraintCheckerTests {
     private DonationRepository donationRepository;
     @Mock
     private DonorDeferralRepository donorReferralRepository;
+    @Mock
+    private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
     
     @Test
     public void testCanDeleteDonorWithDonorWithNotes_shouldReturnFalse() {
@@ -81,5 +85,97 @@ public class DonorConstraintCheckerTests {
         boolean canDelete = donorConstraintChecker.canDeleteDonor(IRRELEVANT_DONOR_ID);
         
         assertThat(canDelete, is(true));
+    }
+    
+    @Test
+    public void testIsDonorEligibleToDonateWithNonDeferredDonorWithoutDonations_shouldReturnTrue() {
+        
+        Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+        
+        when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
+        when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)).thenReturn(false);
+        
+        boolean isEligible = donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID);
+        
+        assertThat(isEligible, is(true));
+    }
+    
+    @Test
+    public void testIsDonorEligibleToDonateWithDeferredDonorWithoutDonations_shouldReturnFalse() {
+        
+        Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+        
+        when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
+        when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)).thenReturn(true);
+        
+        boolean isEligible = donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID);
+        
+        assertThat(isEligible, is(false));
+    }
+    
+    @Test
+    public void testIsDonorEligibleToDonateWithNonDeferredDonorWithDonationNotCountedAsDonation_shouldReturnTrue() {
+        
+        Donor donor = aDonor()
+                .withId(IRRELEVANT_DONOR_ID)
+                .withDonation(aDonation()
+                        .withPackType(aPackType().withCountAsDonation(false).build())
+                        .build())
+                .build();
+        
+        when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
+        when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)).thenReturn(false);
+        
+        boolean isEligible = donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID);
+        
+        assertThat(isEligible, is(true));
+    }
+    
+    @Test
+    public void testIsDonorEligibleToDonateWithNonDeferredDonorWithDonationNotOverlappingPeriod_shouldReturnTrue() {
+        
+        Date previousDonationDate = new DateTime().minusDays(3).toDate();
+        
+        Donor donor = aDonor()
+                .withId(IRRELEVANT_DONOR_ID)
+                .withDonation(aDonation()
+                        .withDonationDate(previousDonationDate)
+                        .withPackType(aPackType()
+                                .withCountAsDonation(true)
+                                .withPeriodBetweenDonations(3)
+                                .build())
+                        .build())
+                .build();
+        
+        when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
+        when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)).thenReturn(false);
+        
+        boolean isEligible = donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID);
+        
+        assertThat(isEligible, is(true));
+    }
+    
+    @Test
+    public void testIsDonorEligibleToDonateWithNonDeferredDonorWithDonationOverlappingPeriod_shouldReturnFalse() {
+        
+        Date previousDonationDate = new DateTime().minusDays(3).toDate();
+        
+        Donor donor = aDonor()
+                .withId(IRRELEVANT_DONOR_ID)
+                .withDonation(aDonation()
+                        .withDonationDate(previousDonationDate)
+                        .withPackType(aPackType()
+                                .withCountAsDonation(true)
+                                .withPeriodBetweenDonations(5)
+                                .build())
+                        .build())
+                .build();
+        
+        when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
+        when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)).thenReturn(false);
+        
+        boolean isEligible = donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID);
+        
+        assertThat(isEligible, is(false));
     }
 }

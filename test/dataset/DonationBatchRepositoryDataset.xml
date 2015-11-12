@@ -7,6 +7,8 @@
 		isMobileSite="false" isUsageSite="false" name="Maseru" notes="" />
 	<Location id="2" isDeleted="false" isVenue="true"
 		isMobileSite="false" isUsageSite="false" name="Leribe" notes="" />
+	<Location id="3" isDeleted="false" isVenue="true"
+			  isMobileSite="false" isUsageSite="false" name="Mohale" notes="" />
 
 	<TestBatch id="1" batchNumber="TB0215000000" isDeleted="false"
 		createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0"
@@ -29,6 +31,18 @@
 	<DonationBatch id="4" batchNumber="B0715000000"
 		isDeleted="true" createdDate="2015-07-27 04:19:33.0" lastUpdated="2015-07-26 04:19:33.0"
 		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" venue_id="1" backEntry="false" />
+	<DonationBatch id="5" batchNumber="B061500023"
+	   isDeleted="false" createdDate="2015-03-01 22:00:00.0" lastUpdated="2015-06-26 03:19:33.0"
+	   createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="3" backEntry="false" />
+	<DonationBatch id="6" batchNumber="B0615000024"
+	   isDeleted="false" createdDate="2015-03-04 22:00:00.0" lastUpdated="2015-06-26 03:19:33.0"
+	   createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="3" backEntry="false" />
+	<DonationBatch id="7" batchNumber="B0615000025"
+	   isDeleted="false" createdDate="2015-02-28 03:19:33.0" lastUpdated="2015-06-26 03:19:33.0"
+	   createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="3" backEntry="false" />
+	<DonationBatch id="8" batchNumber="B0615000026"
+	   isDeleted="false" createdDate="2015-03-05 03:19:33.0" lastUpdated="2015-06-26 03:19:33.0"
+	   createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="3" backEntry="false" />
 
 	<Contact id="1" />
 	<Contact id="2" />
@@ -148,7 +162,7 @@
 		donationType_id="1" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
 		bloodPressureDiastolic="80" donorPulse="70" venue_id="1"
 		bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
-		bloodTypingMatchStatus="MATCH" />
+		bloodTypingMatchStatus="MATCH" ineligibleDonor="0" />
 	<Donation id="2" bloodAbo="A" bloodRh="-" bloodTypingStatus="COMPLETE"
 		donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1212129"
 		extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-18 07:53:57.0"
@@ -156,12 +170,12 @@
 		packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" venue_id="2"
 		bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
-		bloodTypingMatchStatus="MATCH" />
+		bloodTypingMatchStatus="MATCH" ineligibleDonor="0" />
 	<Donation id="3" bloodTypingStatus="NOT_DONE" donationDate="2015-06-26 00:00:00.0"
 		donationIdentificationNumber="9090908" isDeleted="0"
 		createdDate="2015-06-29 05:24:35.0" lastUpdated="2015-06-29 05:24:35.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="3"
 		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="1" bleedStartTime="1970-01-01 11:24:30.0" bleedEndTime="1970-01-01 11:44:30.0"
-		bloodTypingMatchStatus="NOT_DONE" />
+		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" />
 </dataset>
