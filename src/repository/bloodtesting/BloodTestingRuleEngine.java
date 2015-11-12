@@ -194,13 +194,13 @@ public class BloodTestingRuleEngine {
 								break;
 							case TTI:
 								resultSet.addPendingTtiTestsIds(extraTestId);
-								for (String testId : testIds) {
-									resultSet.addPendingTtiTest(testId, extraTestId);
-								}
 								break;
 							default:
 								LOGGER.warn("Unknown rule subcategory: " + rule.getSubCategory());
 								break;
+						}
+						for (String testId : testIds) {
+							resultSet.addPendingTest(testId, extraTestId);
 						}
 					}
 				}

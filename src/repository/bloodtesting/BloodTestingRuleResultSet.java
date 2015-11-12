@@ -62,7 +62,7 @@ public class BloodTestingRuleResultSet {
 	private Set<Integer> basicTtiTestsNotDone = new HashSet<Integer>();
 	
 	/* map of tti tests with pending confirmation tests */
-	private Map<Integer, List<Integer>> pendingTtiTests = new HashMap<Integer, List<Integer>>();
+	private Map<Integer, List<Integer>> pendingTests = new HashMap<Integer, List<Integer>>();
 	
 	/* collection of the various blood typing ABO tests done */
 	private Set<String> bloodAboChanges = new HashSet<String>();
@@ -294,34 +294,34 @@ public class BloodTestingRuleResultSet {
     }
 
 	
-    public Map<Integer, List<Integer>> getPendingTtiTests() {
-    	return pendingTtiTests;
+    public Map<Integer, List<Integer>> getPendingTests() {
+    	return pendingTests;
     }
 
 	
-    public void setPendingTtiTests(Map<Integer, List<Integer>> pendingTtiTests) {
-    	this.pendingTtiTests = pendingTtiTests;
+    public void setPendingTests(Map<Integer, List<Integer>> pendingTests) {
+    	this.pendingTests = pendingTests;
     }
     
-	public void addPendingTtiTest(String ttiTestId, String pendingTtiTestId) {
+	public void addPendingTest(String testId, String pendingTestId) {
 		Integer testInt = null;
 		try {
-			testInt = Integer.valueOf(ttiTestId);
+			testInt = Integer.valueOf(testId);
 		} catch (NumberFormatException e) {
-			LOGGER.warn("Could not parse integer ttiTestId '" + ttiTestId + "'. Skipping this id.", e);
+			LOGGER.warn("Could not parse integer testId '" + testId + "'. Skipping this id.", e);
 		}
 		if (testInt != null) {
-			List<Integer> pendingTests = pendingTtiTests.get(testInt);
-			if (pendingTests == null) {
-				pendingTests = new ArrayList<Integer>();
-				pendingTtiTests.put(testInt, pendingTests);
+			List<Integer> pendingTestsForTest = pendingTests.get(testInt);
+			if (pendingTestsForTest == null) {
+				pendingTestsForTest = new ArrayList<Integer>();
+				pendingTests.put(testInt, pendingTestsForTest);
 			}
 			try {
-				Integer pendingInt = Integer.valueOf(pendingTtiTestId);
-				pendingTests.add(pendingInt);
+				Integer pendingInt = Integer.valueOf(pendingTestId);
+				pendingTestsForTest.add(pendingInt);
 			}
 			catch (NumberFormatException e) {
-				LOGGER.warn("Could not parse integer pendingTtiTestId '" + pendingTtiTestId + "'. Skipping this id.", e);
+				LOGGER.warn("Could not parse integer pendingTtiTestId '" + pendingTestId + "'. Skipping this id.", e);
 			}
 		}
 	}
