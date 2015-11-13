@@ -15,6 +15,7 @@ import model.donationbatch.DonationBatch;
 
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
@@ -75,12 +76,11 @@ public class DonationBatchRepository {
     em.refresh(donationBatch);
   }
   
-  public DonationBatch updateDonationBatch(DonationBatch donationBatch)throws IllegalArgumentException{
-      DonationBatch existingBatch = findDonationBatchById(donationBatch.getId());
-      existingBatch.copy(donationBatch);
-      existingBatch.setIsClosed(donationBatch.getIsClosed());
-      return em.merge(existingBatch);
-  }
+  
+	@Transactional(propagation = Propagation.MANDATORY)
+	public DonationBatch updateDonationBatch(DonationBatch donationBatch) {
+		return em.merge(donationBatch);
+	}
   
 
   public List<DonationBatch> findDonationBatches(Boolean isClosed, List<Long> venueIds, Date startDate, Date endDate) {
