@@ -103,16 +103,11 @@ public class TestBatchController {
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")
     public ResponseEntity findTestBatchPagination(
-            @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "status", required = false) TestBatchStatus status,
             @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
             @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
-
-        Map<String, Object> pagingParams = new HashMap<String, Object>();
-        pagingParams.put("sortColumn", "id");
-        pagingParams.put("sortDirection", "asc");
         
-        List<TestBatchViewModel> testBatches = testBatchRepository.findTestBatches(status,
-                startDate, endDate, pagingParams);
+        List<TestBatchViewModel> testBatches = testBatchRepository.findTestBatches(status,startDate, endDate);
          
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("testBatches", testBatches);

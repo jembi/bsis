@@ -76,31 +76,25 @@ public class TestBatchRepository {
         return em.merge(testBatch);
     }
 
-	public List<TestBatchViewModel> findTestBatches(
-			String status, Date startDate,
-			Date endDate, Map<String, Object> pagingParams) {
+	public List<TestBatchViewModel> findTestBatches(TestBatchStatus status, Date startDate, Date endDate) {
 
-		String queryStr = "SELECT * FROM TestBatch ";
+		String queryStr = "SELECT t FROM TestBatch t ";
 
 		if (status != null) {
-			queryStr += "WHERE status = :status ";
+			queryStr += "WHERE t.status = :status ";
 		} else {
-			queryStr += "WHERE status is null OR status is not null ";
+			queryStr += "WHERE t.status is null OR t.status is not null ";
 		}
 
 		if (startDate != null) {
-			queryStr += "AND createdDate >= :startDate ";
+			queryStr += "AND t.modificationTracker.createdDate >= :startDate ";
 		}
 
 		if (endDate != null) {
-			queryStr += "AND createdDate <= :endDate ";
+			queryStr += "AND t.modificationTracker.createdDate <= :endDate ";
 		}
 
-		if (pagingParams.containsKey("sortColumn")) {
-			queryStr += " ORDER BY " + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
-		}
-
-		Query query = em.createNativeQuery(queryStr, TestBatch.class);
+		TypedQuery<TestBatch> query = em.createQuery(queryStr, TestBatch.class);
 
 		if (status != null) {
 			query.setParameter("status", status);
@@ -112,12 +106,6 @@ public class TestBatchRepository {
 		if (endDate != null) {
 			query.setParameter("endDate", endDate);
 		}
-
-		int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
-		int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
-
-		query.setFirstResult(start);
-		query.setMaxResults(length);
 
 		List<TestBatch> testBatches = query.getResultList();
 		List<TestBatchViewModel> viewModels = new ArrayList<>();

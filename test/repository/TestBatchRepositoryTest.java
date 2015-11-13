@@ -111,39 +111,34 @@ public class TestBatchRepositoryTest {
 	
 	@Test
 	public void testFindTestBatchesNone() throws Exception {
-		String status = "READY_TO_CLOSE";
+		TestBatchStatus status = TestBatchStatus.READY_TO_CLOSE;
 		String createdAfterDate = "2015-07-10 00:00:00";
 		String createdBeforeDate = "2015-07-11 23:59:59";
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<TestBatchViewModel> testBatches = testBatchRepository.findTestBatches(status, df.parse(createdAfterDate),
-				df.parse(createdBeforeDate), pagingParams);
+
+		List<TestBatchViewModel> testBatches = testBatchRepository.findTestBatches(status, df.parse(createdAfterDate),	df.parse(createdBeforeDate));
 		Assert.assertNotNull("TestBatch not null", testBatches);
 		Assert.assertTrue("TestBatch is empty", testBatches.isEmpty());
 	}
 	
 	@Test
 	public void testFindTestBatchesMatchOnDateOnly() throws Exception {
-		String status = null;
+		TestBatchStatus status = null;
 		String createdAfterDate = "2015-08-10 00:00:00";
 		String createdBeforeDate = "2015-08-13 23:59:59";
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
+
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		List<TestBatchViewModel> testBatches = testBatchRepository.findTestBatches(status, df.parse(createdAfterDate),
-				df.parse(createdBeforeDate), pagingParams);
+				df.parse(createdBeforeDate));
 		Assert.assertNotNull("TestBatch not null", testBatches);
 		Assert.assertEquals("TestBatch matched on date", 2, testBatches.size());
 	}
 	
 	@Test
 	public void testFindTestBatchesMatchOnStatusOnly() throws Exception {
-		String status = "CLOSED";
-		String createdAfterDate = "2015-07-10 00:00:00";
-		String createdBeforeDate = "2015-07-11 23:59:59";
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
+		TestBatchStatus status = TestBatchStatus.CLOSED;
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		List<TestBatchViewModel> testBatches = testBatchRepository.findTestBatches(status, null,
-				null, pagingParams);
+		List<TestBatchViewModel> testBatches = testBatchRepository.findTestBatches(status, null,null);
 		Assert.assertNotNull("TestBatch not null", testBatches);
 		Assert.assertEquals("TestBatch matched on date", 1, testBatches.size());
 	}
