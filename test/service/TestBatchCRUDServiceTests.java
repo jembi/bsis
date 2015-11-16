@@ -57,14 +57,15 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     @Test
     public void testUpdateTestBatchStatusWithReleasedStatus_shouldHandleRelease() {
         TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN).build();
+        TestBatch updatedTestBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.RELEASED).build();
         
         when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
         when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(true);
-        when(testBatchRepository.updateTestBatch(testBatch)).thenReturn(testBatch);
+        when(testBatchRepository.updateTestBatch(testBatch)).thenReturn(updatedTestBatch);
         
         TestBatch returnedTestBatch = testBatchCRUDService.updateTestBatchStatus(TEST_BATCH_ID, TestBatchStatus.RELEASED);
         
-        verify(testBatchStatusChangeService).handleRelease(testBatch);
+        verify(testBatchStatusChangeService).handleRelease(updatedTestBatch);
         verify(testBatchRepository).updateTestBatch(testBatch);
         assertThat(returnedTestBatch.getStatus(), is(TestBatchStatus.RELEASED));
     }

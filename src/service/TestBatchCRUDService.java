@@ -32,23 +32,24 @@ public class TestBatchCRUDService {
             return testBatch;
         }
 
-        if (newStatus == TestBatchStatus.RELEASED) {
-
-            if (!testBatchConstraintChecker.canReleaseTestBatch(testBatch)) {
-                throw new IllegalStateException("Test batch cannot be released");
-            }
-
-            testBatchStatusChangeService.handleRelease(testBatch);
-
-        } else if (newStatus == TestBatchStatus.CLOSED && !testBatchConstraintChecker.canCloseTestBatch(testBatch)) {
-
+        if (newStatus == TestBatchStatus.RELEASED && !testBatchConstraintChecker.canReleaseTestBatch(testBatch)) {
+            throw new IllegalStateException("Test batch cannot be released");
+        }
+        
+        if (newStatus == TestBatchStatus.CLOSED && !testBatchConstraintChecker.canCloseTestBatch(testBatch)) {
             throw new IllegalStateException("Only released test batches can be closed");
         }
 
         // Set the new status
         testBatch.setStatus(newStatus);
 
-        return testBatchRepository.updateTestBatch(testBatch);
+        testBatch = testBatchRepository.updateTestBatch(testBatch);
+
+        if (newStatus == TestBatchStatus.RELEASED) {
+            testBatchStatusChangeService.handleRelease(testBatch);
+        }
+            
+        return testBatch;
     }
 
 }
