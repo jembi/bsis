@@ -75,7 +75,7 @@ public class PostDonationCounsellingRepository {
                 PostDonationCounsellingNamedQueryConstants.NAME_FIND_FLAGGED_POST_DONATION_COUNSELLING_FOR_DONOR,
                 PostDonationCounselling.class)
                 .setParameter("donorId", donorId)
-                .setParameter("flaggedForCounselling", true)
+//                .setParameter("flaggedForCounselling", true)
                 .setMaxResults(1)
                 .getSingleResult();
     }

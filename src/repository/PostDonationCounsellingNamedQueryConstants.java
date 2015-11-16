@@ -8,7 +8,7 @@ public class PostDonationCounsellingNamedQueryConstants {
             "SELECT pdc " +
             "FROM PostDonationCounselling pdc " +
             "WHERE pdc.donation.donor.id = :donorId " +
-            "AND pdc.flaggedForCounselling = :flaggedForCounselling " +
+//            "AND pdc.flaggedForCounselling = :flaggedForCounselling " +
             "ORDER BY pdc.donation.donationDate ";
     
     public static final String NAME_COUNT_FLAGGED_POST_DONATION_COUNSELLINGS_FOR_DONOR =
