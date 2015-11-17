@@ -2,7 +2,6 @@ package repository;
 
 import java.util.*;
 
-import static java.util.Collections.list;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -11,10 +10,10 @@ import javax.persistence.TypedQuery;
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import factory.TestBatchViewModelFactory;
+
 
 @Repository
 @Transactional
@@ -23,8 +22,7 @@ public class TestBatchRepository {
   @PersistenceContext
   private EntityManager em;
   
-  @Autowired
-  private TestBatchViewModelFactory testBatchViewModelFactory;
+
 
  
   public TestBatch saveTestBatch(TestBatch testBatch, String testBatchNumber) {
