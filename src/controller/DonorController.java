@@ -458,7 +458,7 @@ public class DonorController {
             @PathVariable("id") Long donorId) {
 
         PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository
-                .findFlaggedPostDonationCounsellingForDonor(donorId);
+                .findPreviouslyFlaggedPostDonationCounsellingForDonor(donorId);
         return new PostDonationCounsellingViewModel(postDonationCounselling);
     }
 

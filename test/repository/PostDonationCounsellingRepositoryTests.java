@@ -24,7 +24,6 @@ import model.donor.Donor;
 import model.location.Location;
 
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -228,54 +227,45 @@ public class PostDonationCounsellingRepositoryTests {
         
         Donor donor = aDonor().buildAndPersist(entityManager);
 
-        postDonationCounsellingRepository.findFlaggedPostDonationCounsellingForDonor(donor.getId());
+        postDonationCounsellingRepository.findPreviouslyFlaggedPostDonationCounsellingForDonor(donor.getId());
     }
 
-//    @Test
-//    public void testFindFlaggedPostDonationCounsellingForDonor_shouldReturnFirstFlaggedPostDonationCounsellingForDonor() {
-//
-//        Donor donor = aDonor().build();
-//
-//        // Excluded by date
-//        aPostDonationCounselling()
-//                .thatIsFlaggedForCounselling()
-//                .withDonation(aDonation()
-//                        .withDonor(donor)
-//                        .withDonationDate(new DateTime().minusDays(3).toDate())
-//                        .build())
-//                .buildAndPersist(entityManager);
-//
-//        // Excluded by flag
-//        aPostDonationCounselling()
-//                .thatIsNotFlaggedForCounselling()
-//                .withDonation(aDonation()
-//                        .withDonor(donor)
-//                        .withDonationDate(new DateTime().minusDays(7).toDate())
-//                        .build())
-//                .buildAndPersist(entityManager);
-//
-//        // Excluded by donor
-//        aPostDonationCounselling()
-//                .thatIsFlaggedForCounselling()
-//                .withDonation(aDonation()
-//                        .withDonor(aDonor().build())
-//                        .withDonationDate(new DateTime().minusDays(7).toDate())
-//                        .build())
-//                .buildAndPersist(entityManager);
-//
-//        PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
-//                .thatIsFlaggedForCounselling()
-//                .withDonation(aDonation()
-//                        .withDonor(donor)
-//                        .withDonationDate(new DateTime().minusDays(5).toDate())
-//                        .build())
-//                .buildAndPersist(entityManager);
-//
-//        PostDonationCounselling returnedPostDonationCounselling = postDonationCounsellingRepository
-//                .findFlaggedPostDonationCounsellingForDonor(donor.getId());
-//
-//        assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
-//    }
+    @Test
+    public void testFindFlaggedPostDonationCounsellingForDonor_shouldReturnFirstFlaggedPostDonationCounsellingForDonor() {
+
+        Donor donor = aDonor().build();
+
+        // Excluded by date
+        aPostDonationCounselling()
+                .thatIsFlaggedForCounselling()
+                .withDonation(aDonation()
+                        .withDonor(donor)
+                        .withDonationDate(new DateTime().minusDays(3).toDate())
+                        .build())
+                .buildAndPersist(entityManager);
+
+        // Excluded by donor
+        aPostDonationCounselling()
+                .thatIsFlaggedForCounselling()
+                .withDonation(aDonation()
+                        .withDonor(aDonor().build())
+                        .withDonationDate(new DateTime().minusDays(7).toDate())
+                        .build())
+                .buildAndPersist(entityManager);
+
+        PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
+                .thatIsFlaggedForCounselling()
+                .withDonation(aDonation()
+                        .withDonor(donor)
+                        .withDonationDate(new DateTime().minusDays(5).toDate())
+                        .build())
+                .buildAndPersist(entityManager);
+
+        PostDonationCounselling returnedPostDonationCounselling = postDonationCounsellingRepository
+                .findPreviouslyFlaggedPostDonationCounsellingForDonor(donor.getId());
+
+        assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
+    }
 
     @Test
     public void testCountFlaggedPostDonationCounsellingsForDonorWithNoPostDonationCounsellings_shouldReturnZero() {

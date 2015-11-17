@@ -69,13 +69,12 @@ public class PostDonationCounsellingRepository {
         return query.getResultList();
     }
     
-    public PostDonationCounselling findFlaggedPostDonationCounsellingForDonor(Long donorId) throws NoResultException {
+    public PostDonationCounselling findPreviouslyFlaggedPostDonationCounsellingForDonor(Long donorId) throws NoResultException {
 
         return entityManager.createNamedQuery(
-                PostDonationCounsellingNamedQueryConstants.NAME_FIND_FLAGGED_POST_DONATION_COUNSELLING_FOR_DONOR,
+                PostDonationCounsellingNamedQueryConstants.NAME_FIND_PREVIOUSLY_FLAGGED_POST_DONATION_COUNSELLING_FOR_DONOR,
                 PostDonationCounselling.class)
                 .setParameter("donorId", donorId)
-//                .setParameter("flaggedForCounselling", true)
                 .setMaxResults(1)
                 .getSingleResult();
     }
