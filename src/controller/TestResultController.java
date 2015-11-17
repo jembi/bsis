@@ -11,6 +11,7 @@ import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.donor.Donor;
 import model.testbatch.TestBatch;
+import model.testbatch.TestBatchStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ import repository.TestBatchRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
+import service.TestBatchStatusChangeService;
 import utils.PermissionConstants;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.DonationViewModel;
@@ -48,6 +50,9 @@ public class TestResultController {
   
   @Autowired
   private DonorRepository donorRepository;
+  
+  @Autowired
+  private TestBatchStatusChangeService testBatchStatusChangeService;
   
   public TestResultController() {
   }
@@ -197,6 +202,10 @@ public class TestResultController {
 		
 		Donor updatedDonor = donorRepository.updateDonorDetails(donor);
 		Donation cs = donationRepository.updateDonationDetails(donation);
+		
+		if (cs.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
+		  testBatchStatusChangeService.handleRelease(cs);
+		}
 		
 		map.put("donor", getDonorsViewModel(donorRepository.findDonorById(updatedDonor.getId())));
         return new ResponseEntity<Map<String, Object>>(map, httpStatus);

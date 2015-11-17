@@ -5,17 +5,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.validation.Valid;
-
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,18 +22,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import factory.DonationBatchViewModelFactory;
-import factory.TestBatchViewModelFactory;
 import repository.DonationBatchRepository;
 import repository.SequenceNumberRepository;
 import repository.TestBatchRepository;
 import service.TestBatchCRUDService;
 import utils.PermissionConstants;
+import utils.PermissionUtils;
 import viewmodel.DonationBatchViewModel;
 import viewmodel.TestBatchViewModel;
 import backingform.TestBatchBackingForm;
 import backingform.validator.TestBatchBackingFormValidator;
+import factory.DonationBatchViewModelFactory;
+import factory.TestBatchViewModelFactory;
 
 @RestController
 @RequestMapping("testbatches")
@@ -79,16 +77,20 @@ public class TestBatchController {
     public ResponseEntity<TestBatchViewModel> addTestBatch(@Valid @RequestBody TestBatchBackingForm form) {
         
         TestBatch testBatch = testBatchRepository.saveTestBatch(form.getTestBatch(), getNextTestBatchNumber());
-        return new ResponseEntity<>(testBatchViewModelFactory.createTestBatchViewModel(testBatch), HttpStatus.CREATED);
+        boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
+        return new ResponseEntity<>(testBatchViewModelFactory.createTestBatchViewModel(testBatch, isTestingSupervisor),
+                HttpStatus.CREATED);
     }
     
     @RequestMapping(value = "{id}",  method = RequestMethod.GET)
     @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")
+    @Transactional(readOnly = true)
     public ResponseEntity getTestBatchById(@PathVariable Long id){
         
         Map<String, Object> map = new HashMap<String, Object>();
         TestBatch testBatch = testBatchRepository.findTestBatchById(id);
-        map.put("testBatch", testBatchViewModelFactory.createTestBatchViewModel(testBatch));
+        boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
+        map.put("testBatch", testBatchViewModelFactory.createTestBatchViewModel(testBatch, isTestingSupervisor));
         return new ResponseEntity(map, HttpStatus.OK);
         
     }
@@ -99,28 +101,23 @@ public class TestBatchController {
             @RequestBody TestBatchBackingForm form){
         
         TestBatch testBatch = testBatchCRUDService.updateTestBatchStatus(id, form.getTestBatch().getStatus());
-        return new ResponseEntity<>(testBatchViewModelFactory.createTestBatchViewModel(testBatch), HttpStatus.OK);
+        return new ResponseEntity<>(testBatchViewModelFactory.createTestBatchViewModel(testBatch, true), HttpStatus.OK);
         
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")
-    public ResponseEntity findTestBatchPagination(
-            @RequestParam(value = "status", required = false) String status,
-            @RequestParam(value = "createdBeforeDate", required = false) String createdBeforeDate,
-            @RequestParam(value = "createdAfterDate", required = false) String createdAfterDate) {
-
-        Map<String, Object> pagingParams = new HashMap<String, Object>();
-        pagingParams.put("sortColumn", "id");
-        pagingParams.put("sortDirection", "asc");
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_BATCH + "')")
+    @Transactional(readOnly = true)
+    public ResponseEntity<Map<String, Object>> findTestBatchPagination(
+            @RequestParam(value = "status", required = false) List<TestBatchStatus> statuses) {
         
-        List<TestBatchViewModel> testBatches = testBatchRepository.findTestBatches(status,
-	    		createdAfterDate, createdBeforeDate, pagingParams);
+        List<TestBatch> testBatches = testBatchRepository.findTestBatches(statuses);
          
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("testBatches", testBatches);
+        Map<String, Object> map = new HashMap<>();
+        boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
+        map.put("testBatches", testBatchViewModelFactory.createTestBatchViewModels(testBatches, isTestingSupervisor));
 
-        return new ResponseEntity(map, HttpStatus.OK);
+        return new ResponseEntity<>(map, HttpStatus.OK);
 
     }
     
@@ -133,14 +130,16 @@ public class TestBatchController {
     
        @RequestMapping(value = "/recent/{count}" ,method = RequestMethod.GET)
    @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")  
+   @Transactional(readOnly = true)
    public ResponseEntity<Map<String, Object>> getRecentlyClosedTestBatches(
             @PathVariable Integer count) {
         
+        List<TestBatch> testBatches = testBatchRepository.getRecentlyClosedTestBatches(count);
+
         Map<String, Object> map = new HashMap<String, Object>();   
-        List<TestBatch> testBatches = 
-                testBatchRepository.getRecentlyClosedTestBatches(count);
-        map.put("testBatches", getTestBatchViewModels(testBatches));
-        return new ResponseEntity(map, HttpStatus.OK);
+        boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
+        map.put("testBatches", testBatchViewModelFactory.createTestBatchViewModels(testBatches, isTestingSupervisor));
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
   
     
@@ -158,18 +157,5 @@ public class TestBatchController {
 	    }
 	    return donationBatchViewModels;
 	}
-    
-    public List<TestBatchViewModel> getTestBatchViewModels(
-            List<TestBatch> testBatches) {
-        if (testBatches == null) {
-            return Arrays.asList(new TestBatchViewModel[0]);
-        }
-        List<TestBatchViewModel> testBatchViewModels = new ArrayList<TestBatchViewModel>();
-        for (TestBatch testBatch : testBatches) {
-            testBatchViewModels.add(testBatchViewModelFactory.createTestBatchViewModel(testBatch));
-        }
-        return testBatchViewModels;
-    }
-
        
 }

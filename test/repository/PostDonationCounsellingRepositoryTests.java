@@ -6,37 +6,25 @@ import static helpers.builders.LocationBuilder.aVenue;
 import static helpers.builders.PostDonationCounsellingBuilder.aPostDonationCounselling;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-
+import static org.hamcrest.Matchers.nullValue;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
-
 import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.location.Location;
-
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import suites.ContextDependentTestSuite;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@WebAppConfiguration
-@Transactional
-public class PostDonationCounsellingRepositoryTests {
+public class PostDonationCounsellingRepositoryTests extends ContextDependentTestSuite {
     
     private static final Date NO_START_DATE = null;
     private static final Date NO_END_DATE = null;
@@ -319,5 +307,37 @@ public class PostDonationCounsellingRepositoryTests {
         int returnedCount = postDonationCounsellingRepository.countFlaggedPostDonationCounsellingsForDonor(donor.getId());
         
         assertThat(returnedCount, is(2));
+    }
+
+    @Test
+    public void testFindPostDonationCounsellingForDonationWithNoExistingCounselling_shouldReturnNull() {
+      
+      Donation donation = aDonation().buildAndPersist(entityManager);
+        
+      PostDonationCounselling returnedCounselling = postDonationCounsellingRepository.findPostDonationCounsellingForDonation(
+          donation);
+      
+      assertThat(returnedCounselling, is(nullValue()));
+    }
+    
+    @Test
+    public void testFindPostDonationCounsellingForDonation_shouldReturnCorrectCounselling() {
+      
+      Donation donation = aDonation().buildAndPersist(entityManager);
+      
+      // Excluded by donation - persisted before expected counselling to check order
+      aPostDonationCounselling().withDonation(aDonation().build()).buildAndPersist(entityManager);
+      
+      PostDonationCounselling expectedCounselling = aPostDonationCounselling()
+          .withDonation(donation)
+          .buildAndPersist(entityManager);
+      
+      // Excluded by donation - persisted after expected counselling to check order
+      aPostDonationCounselling().withDonation(aDonation().build()).buildAndPersist(entityManager);
+      
+      PostDonationCounselling returnedCounselling = postDonationCounsellingRepository.findPostDonationCounsellingForDonation(
+          donation);
+      
+      assertThat(returnedCounselling, is(expectedCounselling));
     }
 }

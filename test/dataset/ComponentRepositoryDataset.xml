@@ -51,9 +51,13 @@
 		createdBy_id="1" lastUpdatedBy_id="1" dateOfFirstDonation="2015-08-11"
 		preferredLanguage_id="1" title="Mr" addressId="5" contactId="5"
 		dueToDonate="2015-11-09" />
+	<TestBatch id="1" batchNumber="000000" isDeleted="false"
+		createdDate="2015-08-11 05:44:40.0" lastUpdated="2015-08-11 05:44:40.0"
+		status="RELEASED" createdBy_id="1" lastUpdatedBy_id="1" />
 	<DonationBatch id="1" batchNumber="000000" isDeleted="false"
 		createdDate="2015-08-11 09:05:56.0" lastUpdated="2015-08-11 09:07:10.0"
-		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" venue_id="1" backEntry="false" />
+		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" venue_id="1" backEntry="false"
+        testBatch_id="1" />
 	<ComponentType id="1" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Whole Blood Single Pack - CPDA" componentTypeNameShort="0011" />

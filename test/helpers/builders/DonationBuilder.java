@@ -3,6 +3,8 @@ package helpers.builders;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import repository.bloodtesting.BloodTypingMatchStatus;
+import repository.bloodtesting.BloodTypingStatus;
 import helpers.persisters.AbstractEntityPersister;
 import helpers.persisters.DonationPersister;
 import model.adverseevent.AdverseEvent;
@@ -38,6 +40,8 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     private String bloodAbo;
     private String bloodRh;
     private List<BloodTestResult> bloodTestResults;
+    private BloodTypingMatchStatus bloodTypingMatchStatus;
+    private BloodTypingStatus bloodTypingStatus;
     
     public DonationBuilder withId(Long id) {
         this.id = id;
@@ -149,6 +153,16 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         return this;
     }
 
+    public DonationBuilder withBloodTypingMatchStatus(BloodTypingMatchStatus bloodTypingMatchStatus) {
+        this.bloodTypingMatchStatus = bloodTypingMatchStatus;
+        return this;
+    }
+
+    public DonationBuilder withBloodTyingStatus(BloodTypingStatus bloodTypingStatus) {
+        this.bloodTypingStatus = bloodTypingStatus;
+        return this;
+    }
+
     @Override
     public Donation build() {
         Donation donation = new Donation();
@@ -173,6 +187,8 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         donation.setBloodAbo(bloodAbo);
         donation.setBloodRh(bloodRh);
         donation.setBloodTestResults(bloodTestResults);
+        donation.setBloodTypingMatchStatus(bloodTypingMatchStatus);
+        donation.setBloodTypingStatus(bloodTypingStatus);
         return donation;
     }
 

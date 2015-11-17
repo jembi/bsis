@@ -18,4 +18,11 @@ public class PostDonationCounsellingNamedQueryConstants {
             "FROM PostDonationCounselling pdc " +
             "WHERE pdc.donation.donor.id = :donorId " +
             "AND pdc.flaggedForCounselling = :flaggedForCounselling ";
+    
+    public static final String NAME_FIND_POST_DONATION_COUNSELLING_FOR_DONATION =
+        "PostDonationCounselling.findPostDonationCounsellingForDonation";
+    public static final String QUERY_FIND_POST_DONATION_COUNSELLING_FOR_DONATION =
+        "SELECT pdc " +
+        "FROM PostDonationCounselling pdc " +
+        "WHERE pdc.donation = :donation ";
 }

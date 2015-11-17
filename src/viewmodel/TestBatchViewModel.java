@@ -2,10 +2,9 @@ package viewmodel;
 
 import java.util.Date;
 import java.util.List;
-
+import java.util.Map;
 import model.testbatch.TestBatchStatus;
 import utils.DateTimeSerialiser;
-
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class TestBatchViewModel {
@@ -17,6 +16,7 @@ public class TestBatchViewModel {
     private String batchNumber;
     private String notes;
     private List<DonationBatchViewModel> donationBatchViewModels;
+    private Map<String, Boolean> permissions;
 
     @JsonSerialize(using = DateTimeSerialiser.class)
     public Date getCreatedDate() {
@@ -86,6 +86,14 @@ public class TestBatchViewModel {
 
     public void setLastUpdated(Date lastUpdatedDate) {
         this.lastUpdatedDate = lastUpdatedDate;
+    }
+
+    public Map<String, Boolean> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Map<String, Boolean> permissions) {
+        this.permissions = permissions;
     }
 
 }

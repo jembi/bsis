@@ -1,32 +1,17 @@
 package repository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import static java.util.Collections.list;
-
 import java.util.List;
-import java.util.Map;
-
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-
-import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
-
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import factory.TestBatchViewModelFactory;
-import viewmodel.TestBatchViewModel;
 
 @Repository
 @Transactional
@@ -80,37 +65,15 @@ public class TestBatchRepository {
         return em.merge(testBatch);
     }
 
-  public List<TestBatchViewModel> findTestBatches(
-	      String status, String createdAfterDate,
-	      String createdBeforeDate,Map<String, Object> pagingParams) {
+    public List<TestBatch> findTestBatches(List<TestBatchStatus> statuses) {
 
-	    String queryStr =  "SELECT * FROM TestBatch where status = :status "
-                    + " or createdDate BETWEEN :createdAfterDate AND :createdBeforeDate";
-	    
-	  
-	    if (pagingParams.containsKey("sortColumn")) {
-	      queryStr += " ORDER BY " + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
-	    }
-            
-           Query query = em.createNativeQuery(queryStr, TestBatch.class);
-	    
-            query.setParameter("status", status);
-            query.setParameter("createdAfterDate", createdAfterDate);
-	    query.setParameter("createdBeforeDate", createdBeforeDate);
-	    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
-	    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
-
-	    query.setFirstResult(start);
-	    query.setMaxResults(length);
-
-            List<TestBatch> testBatches = query.getResultList();
-            List<TestBatchViewModel> viewModels = new ArrayList<TestBatchViewModel>();
-        for (TestBatch testBatch : testBatches) {
-
-            viewModels.add(testBatchViewModelFactory.createTestBatchViewModel(testBatch));
-        }
-
-        return viewModels;
+        return em.createQuery(
+                "SELECT tb " +
+                "FROM TestBatch tb " +
+                "WHERE tb.status IN :statuses ",
+                TestBatch.class)
+                .setParameter("statuses", statuses)
+                .getResultList();
     }
   
   /**
