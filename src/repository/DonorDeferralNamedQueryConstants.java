@@ -29,4 +29,11 @@ public class DonorDeferralNamedQueryConstants {
         "AND dd.deferralReason = :deferralReason " +
         "AND dd.isVoided = :voided ";
 
+    public static final String NAME_FIND_DONOR_DEFERRAL_BY_ID =
+            "DonorDeferral.findDonorDeferralsById";
+    public static final String QUERY_FIND_DONOR_DEFERRAL_BY_ID = 
+            "SELECT dd FROM DonorDeferral dd " + 
+            "LEFT JOIN FETCH dd.deferredDonor " +
+    		"WHERE dd.id = :donorDeferralId " +
+            "AND dd.isVoided = :voided";
 }
