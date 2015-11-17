@@ -120,7 +120,8 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     	final Date createdDate = new SimpleDateFormat("yyyy-MM-dd").parse("2015-10-17");
     	final Date newCreatedDate = new Date();
 
-        TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withCreatedDate(createdDate).build();
+        TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN)
+                .withCreatedDate(createdDate).build();
         
 		final TestBatch expected = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN)
 		        .withCreatedDate(newCreatedDate).build();
