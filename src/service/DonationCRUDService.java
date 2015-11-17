@@ -42,7 +42,7 @@ public class DonationCRUDService {
     
     public void deleteDonation(long donationId) throws IllegalStateException, NoResultException {
         
-        if (!donationConstraintChecker.canDeletedDonation(donationId)) {
+        if (!donationConstraintChecker.canDeleteDonation(donationId)) {
             throw new IllegalStateException("Cannot delete donation with constraints");
         }
         

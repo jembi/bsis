@@ -6,7 +6,7 @@ import model.donordeferral.DurationType;
 
 public class DeferralReasonBuilder extends AbstractEntityBuilder<DeferralReason> {
     
-    private DeferralReasonType type;
+    private DeferralReasonType type = DeferralReasonType.NORMAL;
     private Boolean deleted;
     private DurationType durationType = DurationType.TEMPORARY;
     private Integer defaultDuration;

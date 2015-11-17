@@ -349,46 +349,44 @@ public class LotReleaseController {
 		return success;
 	}
 	
-	private List<Map<String, Object>> getComponentLabellingStatus(Donation donation, List<Component> components){
-		
-               
-           List<Map<String, Object>> componentsList= new ArrayList<Map<String, Object>>(); 
-	     if(donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)){
-                  Map<String, Object> componentStatus = new HashMap<String, Object>();
-    		for(Component component : components){
-    				if(!component.getStatus().equals(ComponentStatus.PROCESSED) && !component.getStatus().equals(ComponentStatus.SPLIT)){
-	                    componentStatus.put("componentId", component.getId());
-	                    componentStatus.put("componentName", component.getComponentType().getComponentTypeName());
-	                    componentStatus.put("componentIdentificationNumber", component.getComponentIdentificationNumber());
-	                    componentStatus.put("discardPackLabel", true);
-	                    componentStatus.put("printPackLabel", false);
-	                    componentsList.add(componentStatus);
-    				}
-                }
-                
-                return componentsList;
-    	}
-            else {
-                for (Component component : components) {
-                	Map<String, Object> componentStatus = new HashMap<String, Object>();
-                	if(!component.getStatus().equals(ComponentStatus.PROCESSED) && !component.getStatus().equals(ComponentStatus.SPLIT)){
-	                    componentStatus.put("componentId", component.getId());
-	                    componentStatus.put("componentName", component.getComponentType().getComponentTypeName());
-	                    componentStatus.put("componentIdentificationNumber", component.getComponentIdentificationNumber());
-	                    if (component.getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED)) {
-	                        componentStatus.put("discardPackLabel", true);
-	                        componentStatus.put("printPackLabel", false);
-	                    } else {
-	                        componentStatus.put("discardPackLabel", false);
-	                        componentStatus.put("printPackLabel", checkDonationIdentificationNumber(donation));
-	                    }
-	                    componentsList.add(componentStatus);
-                	}
-                }
-            }
-        return componentsList;
+	// TODO: Move this method out of the controller and add tests.
+  private List<Map<String, Object>> getComponentLabellingStatus(Donation donation, List<Component> components) {
 
+    List<Map<String, Object>> componentsList = new ArrayList<Map<String, Object>>();
+
+    boolean unsafeDonation = donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE);
+
+    for (Component component : components) {
+      
+      ComponentStatus componentStatus = component.getStatus();
+
+      if (componentStatus.equals(ComponentStatus.PROCESSED) ||
+          componentStatus.equals(ComponentStatus.SPLIT)) {
+        // Don't label processed or split components
+        continue;
+      }
+
+      Map<String, Object> componentLabellingStatus = new HashMap<String, Object>();
+      componentLabellingStatus.put("componentId", component.getId());
+      componentLabellingStatus.put("componentName", component.getComponentType().getComponentTypeName());
+      componentLabellingStatus.put("componentIdentificationNumber", component.getComponentIdentificationNumber());
+
+      if (unsafeDonation || componentStatus.equals(ComponentStatus.UNSAFE) ||
+          componentStatus.toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED)) {
+        // Discard label
+        componentLabellingStatus.put("discardPackLabel", true);
+        componentLabellingStatus.put("printPackLabel", false);
+      } else {
+        // Print label
+        componentLabellingStatus.put("discardPackLabel", false);
+        componentLabellingStatus.put("printPackLabel", checkDonationIdentificationNumber(donation));
+      }
+      
+      componentsList.add(componentLabellingStatus);
     }
+
+    return componentsList;
+  }
         
     private Boolean checkComponentForDiscard(Component component){ 
 	    if(component.getDonation().getTTIStatus().equals(TTIStatus.TTI_UNSAFE))

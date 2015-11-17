@@ -6,23 +6,15 @@ import static java.util.Collections.list;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-
-import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
-
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import factory.TestBatchViewModelFactory;
-import viewmodel.TestBatchViewModel;
 
 @Repository
 @Transactional
@@ -76,12 +68,12 @@ public class TestBatchRepository {
         return em.merge(testBatch);
     }
 
-	public List<TestBatchViewModel> findTestBatches(TestBatchStatus status, Date startDate, Date endDate) {
+	public List<TestBatch> findTestBatches(List<TestBatchStatus> statuses, Date startDate, Date endDate) {
 
 		String queryStr = "SELECT t FROM TestBatch t ";
 
-		if (status != null) {
-			queryStr += "WHERE t.status = :status ";
+		if (statuses != null) {
+			queryStr += "WHERE t.status IN :statuses ";
 		} else {
 			queryStr += "WHERE t.status is null OR t.status is not null ";
 		}
@@ -96,8 +88,8 @@ public class TestBatchRepository {
 
 		TypedQuery<TestBatch> query = em.createQuery(queryStr, TestBatch.class);
 
-		if (status != null) {
-			query.setParameter("status", status);
+		if (statuses != null) {
+			query.setParameter("statuses", statuses);
 		}
 
 		if (startDate != null) {
@@ -107,14 +99,8 @@ public class TestBatchRepository {
 			query.setParameter("endDate", endDate);
 		}
 
-		List<TestBatch> testBatches = query.getResultList();
-		List<TestBatchViewModel> viewModels = new ArrayList<>();
-		for (TestBatch testBatch : testBatches) {
+		return query.getResultList();
 
-			viewModels.add(testBatchViewModelFactory.createTestBatchViewModel(testBatch));
-		}
-
-		return viewModels;
 	}
   
   /**

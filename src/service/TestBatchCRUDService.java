@@ -1,9 +1,5 @@
 package service;
 
-import model.bloodtesting.TTIStatus;
-import model.donation.Donation;
-import model.donationbatch.DonationBatch;
-import model.donordeferral.DeferralReasonType;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 import org.apache.log4j.Logger;
@@ -21,68 +17,39 @@ public class TestBatchCRUDService {
     @Autowired
     private TestBatchRepository testBatchRepository;
     @Autowired
-    private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
+    private TestBatchConstraintChecker testBatchConstraintChecker;
     @Autowired
-    private DonorDeferralCRUDService donorDeferralCRUDService;
-    @Autowired
-    private ComponentCRUDService componentCRUDService;
-    @Autowired
-    private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
-    @Autowired
-    private ComponentStatusCalculator componentStatusCalculator;
-
-    public void setTestBatchRepository(TestBatchRepository testBatchRepository) {
-        this.testBatchRepository = testBatchRepository;
-    }
-
-    public void setPostDonationCounsellingCRUDService(PostDonationCounsellingCRUDService postDonationCounsellingCRUDService) {
-        this.postDonationCounsellingCRUDService = postDonationCounsellingCRUDService;
-    }
+    private TestBatchStatusChangeService testBatchStatusChangeService;
 
     public TestBatch updateTestBatchStatus(Long testBatchId, TestBatchStatus newStatus) {
 
         LOGGER.info("Updating status of test batch " + testBatchId + " to " + newStatus);
-        
+
         TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
 
-        // If the test batch status is changing to closed and it has donation batches
-        if (newStatus == TestBatchStatus.CLOSED &&
-                testBatch.getStatus() != TestBatchStatus.CLOSED &&
-                testBatch.getDonationBatches() != null) {
-            
-            for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
+        if (newStatus == testBatch.getStatus()) {
+            // The status is not being changed so return early
+            return testBatch;
+        }
 
-                for (Donation donation : donationBatch.getDonations()) {
-                    
-                    if (donation.getTTIStatus() == TTIStatus.TTI_UNSAFE) {
-                        
-                        LOGGER.info("Handling donation with unsafe TTI status: " + donation);
-                        
-                        postDonationCounsellingCRUDService.createPostDonationCounsellingForDonation(donation);
-                        
-                        // Flag all components for this donor as unsafe
-                        componentCRUDService.markComponentsBelongingToDonorAsUnsafe(donation.getDonor());
-
-                        if (donorDeferralStatusCalculator.shouldDonorBeDeferred(donation.getBloodTestResults())) {
-
-                            donorDeferralCRUDService.createDeferralForDonorWithDeferralReasonType(donation.getDonor(),
-                                    DeferralReasonType.AUTOMATED_TTI_UNSAFE);
-                        }
-                    } else if (componentStatusCalculator.shouldComponentsBeDiscarded(donation.getBloodTestResults())) {
-
-                        LOGGER.info("Handling donation with components flagged for discard: " + donation);
-
-                        // Flag only components from this donation as unsafe
-                        componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
-                    }
-                }
-            }
+        if (newStatus == TestBatchStatus.RELEASED && !testBatchConstraintChecker.canReleaseTestBatch(testBatch)) {
+            throw new IllegalStateException("Test batch cannot be released");
+        }
+        
+        if (newStatus == TestBatchStatus.CLOSED && !testBatchConstraintChecker.canCloseTestBatch(testBatch)) {
+            throw new IllegalStateException("Only released test batches can be closed");
         }
 
         // Set the new status
         testBatch.setStatus(newStatus);
 
-        return testBatchRepository.updateTestBatch(testBatch);
+        testBatch = testBatchRepository.updateTestBatch(testBatch);
+
+        if (newStatus == TestBatchStatus.RELEASED) {
+            testBatchStatusChangeService.handleRelease(testBatch);
+        }
+            
+        return testBatch;
     }
 
 }

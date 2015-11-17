@@ -6,35 +6,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
 import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
-
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@Transactional
-public class PostDonationCounsellingRepository {
-    
-    @PersistenceContext
-    private EntityManager entityManager;
+public class PostDonationCounsellingRepository extends AbstractRepository<PostDonationCounselling> {
     
     public PostDonationCounselling findById(long id) {
         return entityManager.find(PostDonationCounselling.class, id);
-    }
-    
-    public void save(PostDonationCounselling postDonationCounselling) {
-        entityManager.persist(postDonationCounselling);
-    }
-    
-    public PostDonationCounselling update(PostDonationCounselling postDonationCounselling) {
-        return entityManager.merge(postDonationCounselling);
     }
     
     public List<Donation> findDonationsFlaggedForCounselling(Date startDate, Date endDate, Set<Long> venueIds) {
@@ -89,6 +71,17 @@ public class PostDonationCounsellingRepository {
                 .setParameter("flaggedForCounselling", true)
                 .getSingleResult()
                 .intValue();
+    }
+    
+    public PostDonationCounselling findPostDonationCounsellingForDonation(Donation donation) {
+      
+      List<PostDonationCounselling> postDonationCounsellings = entityManager.createNamedQuery(
+          PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLING_FOR_DONATION,
+          PostDonationCounselling.class)
+          .setParameter("donation", donation)
+          .getResultList();
+      
+      return postDonationCounsellings.size() > 0 ? postDonationCounsellings.get(0) : null;
     }
 
 }
