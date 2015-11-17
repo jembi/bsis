@@ -69,7 +69,7 @@
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Whole Blood - CPDA" componentTypeNameShort="1001"
 		pediComponentType_id="14" />
-	<PackType id="1" packType="Single" isDeleted="false" testSampleProduced="true"
+	<PackType id="1" packType="Single" isDeleted="false" testSampleProduced="false"
 		componentType_id="1" countAsDonation="true" periodBetweenDonations="90" />
 	<DonationType id="1" donationType="Voluntary" isDeleted="false" />
 	<Donation id="1" bloodTypingStatus="NOT_DONE" donationDate="2015-08-11 09:05:56.0"

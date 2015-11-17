@@ -49,6 +49,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import repository.bloodtesting.BloodTypingStatus;
+import service.DonationConstraintChecker;
+import service.DonorConstraintChecker;
 import utils.CustomDateFormatter;
 import viewmodel.DonationViewModel;
 import viewmodel.MatchingComponentViewModel;
@@ -76,6 +78,9 @@ public class ComponentRepository {
 
   @Autowired
   private UtilController utilController;
+  
+  @Autowired
+  private DonationConstraintChecker donationConstraintChecker;
 
   /**
    * some fields like component status are cached internally.
@@ -130,9 +135,11 @@ public class ComponentRepository {
     BloodTypingStatus bloodTypingStatus = donation.getBloodTypingStatus();
 
     TestBatch testBatch = donation.getDonationBatch().getTestBatch();
-    boolean testBatchReleased = testBatch != null && testBatch.getStatus() != TestBatchStatus.OPEN;
-    // If the test batch has not been released yet, then don't use the donation's TTI status
-    TTIStatus ttiStatus = testBatchReleased ? donation.getTTIStatus() : TTIStatus.NOT_DONE;
+    boolean donationReleased = testBatch != null &&
+        testBatch.getStatus() != TestBatchStatus.OPEN &&
+        !donationConstraintChecker.donationHasDiscrepancies(donation);
+    // If the donation has not been released yet, then don't use its TTI status
+    TTIStatus ttiStatus = donationReleased ? donation.getTTIStatus() : TTIStatus.NOT_DONE;
 
     // Start with the old status if there is one.
     ComponentStatus newComponentStatus = oldComponentStatus == null ? ComponentStatus.QUARANTINED : oldComponentStatus;
