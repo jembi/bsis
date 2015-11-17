@@ -23,6 +23,22 @@ public class TestBatchMatcher extends TypeSafeMatcher<TestBatch> {
     }
 
     @Override
+    protected void describeMismatchSafely(TestBatch actual, Description description) {
+      
+        description.appendText("The mismatched fields are:");
+
+        if (!Objects.equals(actual.getId(), expected.getId())) {
+            description.appendText("\nId: actual = ").appendValue(actual.getId())
+                    .appendText(", expected = ").appendValue(expected.getId());
+        }
+        
+        if (actual.getStatus() != expected.getStatus()) {
+            description.appendText("\nStatus: actual = ").appendValue(actual.getStatus())
+                    .appendText(", expected = ").appendValue(expected.getStatus());
+        }
+    }
+
+    @Override
     public boolean matchesSafely(TestBatch actual) {
         return Objects.equals(actual.getId(), expected.getId()) &&
                 actual.getStatus() == expected.getStatus();

@@ -1,31 +1,26 @@
 package service;
 
 import static helpers.builders.TestBatchBuilder.aTestBatch;
+import static helpers.matchers.TestBatchMatcher.hasSameStateAsTestBatch;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.times;
 import helpers.builders.DonationBatchBuilder;
-
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
-
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
 import repository.DonationBatchRepository;
 import repository.TestBatchRepository;
 import scala.actors.threadpool.Arrays;
@@ -71,12 +66,14 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     @Test
     public void testUpdateTestBatchStatusWithReleasedStatus_shouldHandleRelease() {
         TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN).build();
+        TestBatch updatedTestBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.RELEASED).build();
 
         when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(true);
+        when(testBatchRepository.updateTestBatch(testBatch)).thenReturn(updatedTestBatch);
         
         testBatchCRUDService.changeTestBatchStatus(testBatch, TestBatchStatus.RELEASED);
         
-        verify(testBatchStatusChangeService).handleRelease(testBatch);
+        verify(testBatchStatusChangeService).handleRelease(updatedTestBatch);
         assertThat(testBatch.getStatus(), is(TestBatchStatus.RELEASED));
     }
 
@@ -105,30 +102,16 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     @Test
     public void testUpdateTestBatch_shouldUpdateStatus() {
         TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN).build();
+        TestBatch expectedTestBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.RELEASED).build();
         
         when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
         when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(true);
-		when(testBatchRepository.updateTestBatch(testBatch)).thenReturn(testBatch);
+		when(testBatchRepository.updateTestBatch(any(TestBatch.class))).thenReturn(testBatch);
 
 		testBatchCRUDService.updateTestBatch(TEST_BATCH_ID, TestBatchStatus.RELEASED, null, null);
         
+        verify(testBatchRepository, times(2)).updateTestBatch(argThat(hasSameStateAsTestBatch(expectedTestBatch)));
         verify(testBatchStatusChangeService).handleRelease(testBatch);
-        verify(testBatchRepository).updateTestBatch(argThat(new TypeSafeMatcher<TestBatch>() {
-			
-			TestBatch expected = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.RELEASED).build();
-			
-			@Override
-			public void describeTo(Description description) {
-				description.appendText("A test batch with the following state:").appendText("\nId: ")
-				        .appendValue(expected.getId()).appendText("\nStatus: ").appendValue(expected.getStatus());
-			}
-			
-			@Override
-			protected boolean matchesSafely(TestBatch actual) {
-				return Objects.equals(actual.getId(), expected.getId())
-				        && Objects.equals(actual.getStatus(), expected.getStatus());
-			}
-		}));
     }
     
     @Test
@@ -147,20 +130,7 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
 
 		testBatchCRUDService.updateTestBatch(TEST_BATCH_ID, null, newCreatedDate, null);
 
-		verify(testBatchRepository).updateTestBatch(argThat(new TypeSafeMatcher<TestBatch>() {
-			
-			@Override
-			public void describeTo(Description description) {
-				description.appendText("A test batch with the following state:").appendText("\nId: ")
-				        .appendValue(expected.getId()).appendText("\nCreated Date: ").appendValue(expected.getCreatedDate());
-			}
-			
-			@Override
-			protected boolean matchesSafely(TestBatch actual) {
-				return Objects.equals(actual.getId(), expected.getId())
-				        && Objects.equals(actual.getCreatedDate(), expected.getCreatedDate());
-			}
-		}));
+		verify(testBatchRepository).updateTestBatch(argThat(hasSameStateAsTestBatch(expected)));
     }
     
 	@Test

@@ -1,10 +1,9 @@
 package controller;
 
-import backingform.DonationBatchBackingForm;
-import backingform.validator.DonationBatchBackingFormValidator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +14,7 @@ import javax.validation.Valid;
 import model.donationbatch.DonationBatch;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,13 +25,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import factory.DonationBatchViewModelFactory;
 import repository.DonationBatchRepository;
 import repository.LocationRepository;
+import service.DonationBatchCRUDService;
 import utils.PermissionConstants;
 import viewmodel.DonationBatchViewModel;
+import backingform.DonationBatchBackingForm;
+import backingform.validator.DonationBatchBackingFormValidator;
+import factory.DonationBatchViewModelFactory;
 
 @RestController
 @RequestMapping("/donationbatches")
@@ -39,6 +43,9 @@ public class DonationBatchController {
 
   @Autowired
   private DonationBatchRepository donationBatchRepository;
+  
+  @Autowired
+  private DonationBatchCRUDService donationBatchCRUDService;
 
   @Autowired
   private LocationRepository locationRepository;
@@ -71,14 +78,17 @@ public class DonationBatchController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public ResponseEntity<Map<String, Object>> findDonationBatch(HttpServletRequest request,
           @RequestParam(value = "isClosed", required = false) Boolean isClosed,
-          @RequestParam(value = "venues", required = false) List<Long> venues) {
+          @RequestParam(value = "venues", required = false) List<Long> venues,
+          @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+          @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate
+  ) {
 
 	if(venues == null){
 		venues = new ArrayList<Long>();
 	}
 
     List<DonationBatch> donationBatches =
-        donationBatchRepository.findDonationBatches(isClosed, venues);
+        donationBatchRepository.findDonationBatches(isClosed, venues, startDate, endDate);
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("donationBatches", getDonationBatchViewModels(donationBatches));
@@ -112,15 +122,27 @@ public class DonationBatchController {
 		        donationBatch), HttpStatus.CREATED);
   }
   
-  @RequestMapping(value = "{id}",method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_DONATION_BATCH+"')")
-  public ResponseEntity<DonationBatchViewModel> updateDonationBatch(@PathVariable Long id,
-          @RequestBody @Valid DonationBatchBackingForm form){
-      
-      DonationBatch donationBatch = donationBatchRepository.updateDonationBatch(form.getDonationBatch());
-      return new ResponseEntity<DonationBatchViewModel>(donationBatchViewModelFactory.createDonationBatchViewModel(
-              donationBatch), HttpStatus.OK);
-  }
+	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
+	@PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONATION_BATCH + "')")
+	public ResponseEntity<Map<String, Object>> updateDonationBatch(@PathVariable Long id,
+	                                                               @RequestBody @Valid DonationBatchBackingForm form) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		donationBatchCRUDService.updateDonationBatch(form.getDonationBatch());
+		
+		DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(form.getId()); // the donation batch returned by the CRUD service has components which are unnecessary 
+		DonationBatchViewModel donationBatchViewModel = donationBatchViewModelFactory
+		        .createDonationBatchViewModel(donationBatch);
+		map.put("donationBatch", donationBatchViewModel);
+		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+	}
+  
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasRole('" + PermissionConstants.VOID_DONATION_BATCH + "')")
+	public void deleteDonationBatch(@PathVariable Integer id) {
+		donationBatchCRUDService.deleteDonationBatch(id);
+	}
 
   @RequestMapping(value = "{id}" ,method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
@@ -135,18 +157,7 @@ public class DonationBatchController {
 
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
-  
-   @RequestMapping(value = "/recent/{count}" ,method = RequestMethod.GET)
-   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")  
-   public ResponseEntity<Map<String, Object>> getRecentlyClosedDonationBatches(
-            @PathVariable Integer count) {
-        
-        Map<String, Object> map = new HashMap<String, Object>();   
-        List<DonationBatch> donationBatches = 
-                donationBatchRepository.getRecentlyClosedDonationBatches(count);
-        map.put("donationBatches", getDonationBatchViewModels(donationBatches));
-        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
-    }
+
   
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("venues", locationRepository.getAllVenues());

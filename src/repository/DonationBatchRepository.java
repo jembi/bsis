@@ -1,6 +1,7 @@
 package repository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -12,7 +13,9 @@ import javax.persistence.TypedQuery;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 
+
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
@@ -73,26 +76,39 @@ public class DonationBatchRepository {
     em.refresh(donationBatch);
   }
   
-  public DonationBatch updateDonationBatch(DonationBatch donationBatch)throws IllegalArgumentException{
-      DonationBatch existingBatch = findDonationBatchById(donationBatch.getId());
-      existingBatch.copy(donationBatch);
-      existingBatch.setIsClosed(donationBatch.getIsClosed());
-      return em.merge(existingBatch);
-  }
+  
+	@Transactional(propagation = Propagation.MANDATORY)
+	public DonationBatch updateDonationBatch(DonationBatch donationBatch) {
+		return em.merge(donationBatch);
+	}
   
 
-  public List<DonationBatch> findDonationBatches(Boolean isClosed,
-      List<Long> venueIds) {
+  public List<DonationBatch> findDonationBatches(Boolean isClosed, List<Long> venueIds, Date startDate, Date endDate) {
     String queryStr = "SELECT distinct b from DonationBatch b LEFT JOIN FETCH b.donations WHERE b.isDeleted=:isDeleted ";
     if(!venueIds.isEmpty()){
     	queryStr += "AND b.venue.id IN (:venueIds) ";
     }
+
+    if (startDate != null) {
+      queryStr += "AND b.modificationTracker.createdDate >= :startDate ";
+    }
+
+    if (endDate != null) {
+      queryStr += "AND b.modificationTracker.createdDate <= :endDate ";
+    }
+
     if(isClosed != null){
-    	queryStr +=    "AND b.isClosed=:isClosed";
+    	queryStr += "AND b.isClosed=:isClosed ";
     }
     
     TypedQuery<DonationBatch> query = em.createQuery(queryStr, DonationBatch.class);
     query.setParameter("isDeleted", false);
+    if (startDate != null) {
+      query.setParameter("startDate", startDate);
+    }
+    if (endDate != null) {
+      query.setParameter("endDate", endDate);
+    }
     if(!venueIds.isEmpty()){
     	query.setParameter("venueIds", venueIds);
     }

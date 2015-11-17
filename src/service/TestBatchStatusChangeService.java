@@ -9,6 +9,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import repository.DonationRepository;
+import viewmodel.BloodTestingRuleResult;
 
 @Transactional
 @Service
@@ -28,6 +30,10 @@ public class TestBatchStatusChangeService {
     private ComponentStatusCalculator componentStatusCalculator;
     @Autowired
     private DonationConstraintChecker donationConstraintChecker;
+    @Autowired
+    private BloodTestsService bloodTestsService;
+    @Autowired
+    private DonationRepository donationRepository;
 
     public void handleRelease(TestBatch testBatch) {
         
@@ -53,6 +59,11 @@ public class TestBatchStatusChangeService {
             LOGGER.info("Skipping donation with discrepancies: " + donation);
             return;
         }
+      
+        // Execute tests and update the donation with the results
+        BloodTestingRuleResult bloodTestingRuleResult = bloodTestsService.executeTests(donation);
+        bloodTestsService.updateDonationWithTestResults(donation, bloodTestingRuleResult);
+        donation = donationRepository.updateDonation(donation);
 
         if (donation.getTTIStatus() == TTIStatus.TTI_UNSAFE) {
             LOGGER.info("Handling donation with unsafe TTI status: " + donation);

@@ -37,7 +37,7 @@ public class TestBatchCRUDService {
         TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
         
         if (newStatus != null) {
-        	changeTestBatchStatus(testBatch, newStatus);
+        	testBatch = changeTestBatchStatus(testBatch, newStatus);
         }
         
         if (newCreatedDate != null) {
@@ -70,28 +70,31 @@ public class TestBatchCRUDService {
         return testBatchRepository.updateTestBatch(testBatch);
     }
 
-    protected void changeTestBatchStatus(TestBatch testBatch, TestBatchStatus newStatus) {
+    protected TestBatch changeTestBatchStatus(TestBatch testBatch, TestBatchStatus newStatus) {
     	LOGGER.info("Updating status of test batch " + testBatch.getId() + " to " + newStatus);
 
         if (newStatus == testBatch.getStatus()) {
             // The status is not being changed so return early
-            return;
+            return testBatch;
         }
 
-        if (newStatus == TestBatchStatus.RELEASED) {
-
-            if (!testBatchConstraintChecker.canReleaseTestBatch(testBatch)) {
-                throw new IllegalStateException("Test batch cannot be released");
-            }
-
-            testBatchStatusChangeService.handleRelease(testBatch);
-
-        } else if (newStatus == TestBatchStatus.CLOSED && !testBatchConstraintChecker.canCloseTestBatch(testBatch)) {
-
+        if (newStatus == TestBatchStatus.RELEASED && !testBatchConstraintChecker.canReleaseTestBatch(testBatch)) {
+            throw new IllegalStateException("Test batch cannot be released");
+        }
+        
+        if (newStatus == TestBatchStatus.CLOSED && !testBatchConstraintChecker.canCloseTestBatch(testBatch)) {
             throw new IllegalStateException("Only released test batches can be closed");
         }
 
         // Set the new status
         testBatch.setStatus(newStatus);
+
+        testBatch = testBatchRepository.updateTestBatch(testBatch);
+
+        if (newStatus == TestBatchStatus.RELEASED) {
+            testBatchStatusChangeService.handleRelease(testBatch);
+        }
+            
+        return testBatch;
     }
 }

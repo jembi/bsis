@@ -1,10 +1,13 @@
 package backingform;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
+import utils.CustomDateFormatter;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.location.Location;
@@ -74,10 +77,19 @@ public class DonationBatchBackingForm {
     return donationBatch.getLastUpdated();
   }
 
-  @JsonIgnore
-  public Date getCreatedDate() {
-    return donationBatch.getCreatedDate();
-  }
+	public Date getCreatedDate() {
+		return donationBatch.getCreatedDate();
+	}
+
+	public void setCreatedDate(String createdDate) {
+		try {
+			donationBatch.setCreatedDate(CustomDateFormatter.getDateTimeFromString(createdDate));
+		}
+		catch (ParseException ex) {
+			ex.printStackTrace();
+			donationBatch.setCreatedDate(null);
+		}
+	}
 
   @JsonIgnore
   public User getCreatedBy() {
@@ -99,10 +111,15 @@ public class DonationBatchBackingForm {
     return donationBatch.getDonations().size();
   }
 
+	@JsonIgnore
+	public void setPermissions(Map<String, Boolean> permissions) {
+		// Ignore
+	}
+  
     public boolean isBackEntry() {
         return donationBatch.isBackEntry();
     }
-    
+
     public void setBackEntry(boolean backEntry) {
         donationBatch.setBackEntry(backEntry);
     }
