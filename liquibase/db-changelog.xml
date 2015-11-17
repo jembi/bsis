@@ -1933,4 +1933,15 @@
         </addColumn>
     </changeSet>
 
+	<!-- For issue 386 [Add isDeleted field to PostDonationCounselling and PostDonationCounselling_AUD Tables] -->
+	<changeSet id="20151117-1509" author="debonair">
+		<addColumn tableName="PostDonationCounselling">
+			<column name="isDeleted" type="TINYINT(1)" />
+		</addColumn>
+
+		<addColumn tableName="PostDonationCounselling_AUD">
+			<column name="isDeleted" type="TINYINT(1)" />
+		</addColumn>
+	</changeSet>
+
 </databaseChangeLog>

@@ -1,6 +1,7 @@
 package model.counselling;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,8 +14,14 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.validation.Valid;
 
 import model.donation.Donation;
+import model.donationbatch.DonationBatch;
+import model.modificationtracker.ModificationTracker;
+import model.modificationtracker.RowModificationTracker;
+import model.testbatch.TestBatchStatus;
+import model.user.User;
 import repository.PostDonationCounsellingNamedQueryConstants;
 
 import org.hibernate.envers.Audited;
@@ -35,7 +42,7 @@ import constraintvalidator.DonationExists;
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class PostDonationCounselling {
+public class PostDonationCounselling implements ModificationTracker {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -55,6 +62,11 @@ public class PostDonationCounselling {
 
     @Column(nullable = true)
     private Date counsellingDate;
+
+    private Boolean isDeleted;
+
+    @Valid
+    private RowModificationTracker modificationTracker;
 
     public Long getId() {
         return id;
@@ -96,6 +108,14 @@ public class PostDonationCounselling {
         this.counsellingDate = counsellingDate;
     }
 
+    public Boolean isIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -104,5 +124,45 @@ public class PostDonationCounselling {
         return other instanceof PostDonationCounselling &&
                 ((PostDonationCounselling) other).id == id;
     }
+
+    @Override
+    public Date getLastUpdated() {
+        return modificationTracker.getLastUpdated();
+    }
+
+    public Date getCreatedDate() {
+        return modificationTracker.getCreatedDate();
+    }
+
+    @Override
+    public User getCreatedBy() {
+        return modificationTracker.getCreatedBy();
+    }
+
+    @Override
+    public User getLastUpdatedBy() {
+        return modificationTracker.getLastUpdatedBy();
+    }
+
+    @Override
+    public void setLastUpdated(Date lastUpdated) {
+        modificationTracker.setLastUpdated(lastUpdated);
+    }
+
+    @Override
+    public void setCreatedDate(Date createdDate) {
+        modificationTracker.setCreatedDate(createdDate);
+    }
+
+    @Override
+    public void setCreatedBy(User createdBy) {
+        modificationTracker.setCreatedBy(createdBy);
+    }
+
+    @Override
+    public void setLastUpdatedBy(User lastUpdatedBy) {
+        modificationTracker.setLastUpdatedBy(lastUpdatedBy);
+    }
+
 
 }
