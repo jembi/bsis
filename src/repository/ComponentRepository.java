@@ -35,6 +35,8 @@ import model.componenttype.ComponentTypeCombination;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.request.Request;
+import model.testbatch.TestBatch;
+import model.testbatch.TestBatchStatus;
 import model.util.BloodGroup;
 
 import org.apache.commons.lang3.StringUtils;
@@ -124,9 +126,13 @@ public class ComponentRepository {
     if (component.getDonation() == null)
       return false;
     Long donationId = component.getDonation().getId();
-    Donation c = donationRepository.findDonationById(donationId);
-    BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();
-    TTIStatus ttiStatus = c.getTTIStatus();
+    Donation donation = donationRepository.findDonationById(donationId);
+    BloodTypingStatus bloodTypingStatus = donation.getBloodTypingStatus();
+
+    TestBatch testBatch = donation.getDonationBatch().getTestBatch();
+    boolean testBatchReleased = testBatch != null && testBatch.getStatus() != TestBatchStatus.OPEN;
+    // If the test batch has not been released yet, then don't use the donation's TTI status
+    TTIStatus ttiStatus = testBatchReleased ? donation.getTTIStatus() : TTIStatus.NOT_DONE;
 
     // Start with the old status if there is one.
     ComponentStatus newComponentStatus = oldComponentStatus == null ? ComponentStatus.QUARANTINED : oldComponentStatus;

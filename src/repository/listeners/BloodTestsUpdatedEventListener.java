@@ -4,26 +4,23 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
 import model.bloodtesting.TTIStatus;
-import model.component.Component;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.donor.DonorStatus;
-
+import model.testbatch.TestBatchStatus;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import repository.ComponentRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import repository.events.BloodTestsUpdatedEvent;
+import service.TestBatchStatusChangeService;
 import viewmodel.BloodTestingRuleResult;
 
 @Repository
@@ -35,6 +32,8 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
 
   @Autowired
   private ComponentRepository componentRepository;
+  @Autowired
+  private TestBatchStatusChangeService testBatchStatusChangeService;
 
   @Override
   public void onApplicationEvent(BloodTestsUpdatedEvent event) {
@@ -123,20 +122,6 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
     }
   }
 
-  private void updateComponentStatus(Donation donation) {
-    String queryStr = "SELECT p FROM Component p WHERE " +
-        "p.donation.id=:donationId AND p.isDeleted=:isDeleted";
-    TypedQuery<Component> query = em.createQuery(queryStr, Component.class);
-    query.setParameter("donationId", donation.getId());
-    query.setParameter("isDeleted", false);
-    List<Component> components = query.getResultList();
-    for (Component component : components) {
-      if (componentRepository.updateComponentInternalFields(component)) {
-        em.merge(component);
-      }
-    }
-  }
-
   private void updateDonationStatus(BloodTestsUpdatedEvent event) {
 
     Donation donation = event.getDonation();
@@ -183,7 +168,10 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
       donation.setBloodTypingStatus(ruleResult.getBloodTypingStatus());
       donation = em.merge(donation);
     }
-    updateComponentStatus(donation);
+    
+    if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
+        testBatchStatusChangeService.handleRelease(donation);
+    }
     
     donation.setBloodTypingMatchStatus(ruleResult.getBloodTypingMatchStatus());
 
