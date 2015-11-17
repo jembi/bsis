@@ -130,7 +130,7 @@ public class ComponentRepository {
     BloodTypingStatus bloodTypingStatus = donation.getBloodTypingStatus();
 
     TestBatch testBatch = donation.getDonationBatch().getTestBatch();
-    boolean testBatchReleased = testBatch != null && testBatch.getStatus() == TestBatchStatus.RELEASED;
+    boolean testBatchReleased = testBatch != null && testBatch.getStatus() != TestBatchStatus.OPEN;
     // If the test batch has not been released yet, then don't use the donation's TTI status
     TTIStatus ttiStatus = testBatchReleased ? donation.getTTIStatus() : TTIStatus.NOT_DONE;
 
