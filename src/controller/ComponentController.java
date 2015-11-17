@@ -400,7 +400,7 @@ public class ComponentController {
       Component parentComponent = componentRepository.findComponentById(Long.valueOf(form.getParentComponentId()));
       Donation donation = parentComponent.getDonation();
       String donationIdentificationNumber = donation.getDonationIdentificationNumber();
-      ComponentStatus status = parentComponent.getStatus();
+      ComponentStatus parentStatus = parentComponent.getStatus();
       long componentId = Long.valueOf(form.getParentComponentId());
       
       
@@ -423,6 +423,10 @@ public class ComponentController {
     	  }
       }
       
+      // If the parent is unsafe then set new components to unsafe as well
+      ComponentStatus initialComponentStatus = parentStatus == ComponentStatus.UNSAFE ?
+          ComponentStatus.UNSAFE : ComponentStatus.QUARANTINED;
+      
       for(ComponentType pt : newComponents.keySet()){
     	        	      
 	      String componentTypeCode = pt.getComponentTypeNameShort();
@@ -430,7 +434,7 @@ public class ComponentController {
 	      String createdPackNumber = donationIdentificationNumber +"-"+componentTypeCode;
 	      
 	      // Add New component
-	      if(!status.equals(ComponentStatus.PROCESSED) && !status.equals(ComponentStatus.DISCARDED)){
+	      if(!parentStatus.equals(ComponentStatus.PROCESSED) && !parentStatus.equals(ComponentStatus.DISCARDED)){
 		      	
 	      	   for (int i = 1; i <= noOfUnits; i++) {
 	              Component component = new Component();
@@ -446,7 +450,7 @@ public class ComponentController {
 		          component.setComponentType(pt);
 		          component.setDonation(donation);
 		          component.setParentComponent(parentComponent);
-		          component.setStatus(ComponentStatus.QUARANTINED);
+		          component.setStatus(initialComponentStatus);
 		          component.setCreatedOn(donation.getDonationDate());
 		          
 			      Calendar cal = Calendar.getInstance();
