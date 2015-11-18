@@ -1,5 +1,7 @@
 package viewmodel;
 
+import java.util.Map;
+
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import utils.CustomDateFormatter;
@@ -8,6 +10,7 @@ import model.user.User;
 public class DonorDeferralViewModel {
 
   private DonorDeferral donorDeferral;
+  private Map<String, Boolean> permissions;
 
   public DonorDeferralViewModel(DonorDeferral donorDeferral) {
     this.donorDeferral = donorDeferral;
@@ -28,6 +31,14 @@ public class DonorDeferralViewModel {
   public String getDeferralReasonText() {
     return donorDeferral.getDeferralReasonText();
   }
+  
+	public Map<String, Boolean> getPermissions() {
+		return permissions;
+	}
+	
+	public void setPermissions(Map<String, Boolean> permissions) {
+		this.permissions = permissions;
+	}
 
   public String getLastUpdated() {
     return CustomDateFormatter.getDateTimeString(donorDeferral.getLastUpdated());

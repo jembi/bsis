@@ -1,6 +1,8 @@
 package repository;
 
-import java.util.List;
+import java.util.*;
+
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -8,10 +10,10 @@ import javax.persistence.TypedQuery;
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import factory.TestBatchViewModelFactory;
+
 
 @Repository
 @Transactional
@@ -20,8 +22,7 @@ public class TestBatchRepository {
   @PersistenceContext
   private EntityManager em;
   
-  @Autowired
-  private TestBatchViewModelFactory testBatchViewModelFactory;
+
 
  
   public TestBatch saveTestBatch(TestBatch testBatch, String testBatchNumber) {
@@ -65,16 +66,40 @@ public class TestBatchRepository {
         return em.merge(testBatch);
     }
 
-    public List<TestBatch> findTestBatches(List<TestBatchStatus> statuses) {
+	public List<TestBatch> findTestBatches(List<TestBatchStatus> statuses, Date startDate, Date endDate) {
 
-        return em.createQuery(
-                "SELECT tb " +
-                "FROM TestBatch tb " +
-                "WHERE tb.status IN :statuses ",
-                TestBatch.class)
-                .setParameter("statuses", statuses)
-                .getResultList();
-    }
+		String queryStr = "SELECT t FROM TestBatch t ";
+
+		if (statuses != null) {
+			queryStr += "WHERE t.status IN :statuses ";
+		} else {
+			queryStr += "WHERE t.status is null OR t.status is not null ";
+		}
+
+		if (startDate != null) {
+			queryStr += "AND t.modificationTracker.createdDate >= :startDate ";
+		}
+
+		if (endDate != null) {
+			queryStr += "AND t.modificationTracker.createdDate <= :endDate ";
+		}
+
+		TypedQuery<TestBatch> query = em.createQuery(queryStr, TestBatch.class);
+
+		if (statuses != null) {
+			query.setParameter("statuses", statuses);
+		}
+
+		if (startDate != null) {
+			query.setParameter("startDate", startDate);
+		}
+		if (endDate != null) {
+			query.setParameter("endDate", endDate);
+		}
+
+		return query.getResultList();
+
+	}
   
   /**
    * issue - #229 un used method
