@@ -35,10 +35,14 @@ public class TestBatchCRUDService {
     public TestBatch updateTestBatch(Long testBatchId, TestBatchStatus newStatus, Date newCreatedDate, List<Integer> newDonationBatchIds) {
     	
         TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
-        
+                
         if (newStatus != null) {
         	testBatch = changeTestBatchStatus(testBatch, newStatus);
         }
+
+        if (!testBatchConstraintChecker.canEditTestBatch(testBatch)) {
+            throw new IllegalStateException("Test batch cannot be updated");
+        }        
         
         if (newCreatedDate != null) {
         	testBatch.setCreatedDate(newCreatedDate);
@@ -69,6 +73,14 @@ public class TestBatchCRUDService {
 
         return testBatchRepository.updateTestBatch(testBatch);
     }
+    
+    public void deleteTestBatch(Long testBatchId) {
+    	TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
+    	if (!testBatchConstraintChecker.canDeleteTestBatch(testBatch)) {
+    		throw new IllegalStateException("Test batch cannot be deleted");
+    	}
+    	testBatchRepository.deleteTestBatch(testBatchId);
+    }
 
     protected TestBatch changeTestBatchStatus(TestBatch testBatch, TestBatchStatus newStatus) {
     	LOGGER.info("Updating status of test batch " + testBatch.getId() + " to " + newStatus);
@@ -84,6 +96,10 @@ public class TestBatchCRUDService {
         
         if (newStatus == TestBatchStatus.CLOSED && !testBatchConstraintChecker.canCloseTestBatch(testBatch)) {
             throw new IllegalStateException("Only released test batches can be closed");
+        }
+        
+        if (newStatus == TestBatchStatus.OPEN && !testBatchConstraintChecker.canReopenTestBatch(testBatch)) {
+        	throw new IllegalStateException("Only open test batches can be closed");
         }
 
         // Set the new status

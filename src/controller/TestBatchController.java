@@ -133,7 +133,7 @@ public class TestBatchController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@PreAuthorize("hasRole('" + PermissionConstants.VOID_TEST_BATCH + "')")
 	public void deleteTestBatchById(@PathVariable Long id) {
-		testBatchRepository.deleteTestBatch(id);
+		testBatchCRUDService.deleteTestBatch(id);
 	}
     
        @RequestMapping(value = "/recent/{count}" ,method = RequestMethod.GET)

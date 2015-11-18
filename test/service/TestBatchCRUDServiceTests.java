@@ -106,6 +106,7 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
         
         when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
         when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(true);
+        when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(true);
 		when(testBatchRepository.updateTestBatch(any(TestBatch.class))).thenReturn(testBatch);
 
 		testBatchCRUDService.updateTestBatch(TEST_BATCH_ID, TestBatchStatus.RELEASED, null, null);
@@ -128,6 +129,7 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
         
         when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
 		when(testBatchRepository.updateTestBatch(testBatch)).thenReturn(testBatch);
+		when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(true);
 
 		testBatchCRUDService.updateTestBatch(TEST_BATCH_ID, null, newCreatedDate, null);
 
@@ -144,7 +146,7 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
 		        .withDonationBatch(donationBatch2).withStatus(TestBatchStatus.OPEN).build();
 		
 		when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
-		when(testBatchRepository.updateTestBatch(testBatch)).thenReturn(testBatch);
+		when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(true);
 		when(donationBatchRepository.findDonationBatchById(1)).thenReturn(donationBatch1);
 		when(donationBatchRepository.findDonationBatchById(2)).thenReturn(donationBatch2);
 		when(donationBatchRepository.findDonationBatchById(3)).thenReturn(donationBatch3);
@@ -173,4 +175,41 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
 			}
 		}));
 	}
+	
+	@Test(expected = java.lang.IllegalStateException.class)
+	public void testUpdateTestBatch_shouldNotUpdateDonationBatch() {
+		final DonationBatch donationBatch1 = new DonationBatchBuilder().withId(1).build();
+		
+		final TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withDonationBatch(donationBatch1)
+		        .withDonationBatch(donationBatch1).withStatus(TestBatchStatus.OPEN).build();
+		
+		when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
+		when(donationBatchRepository.findDonationBatchById(1)).thenReturn(donationBatch1);
+		when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
+		when(donationBatchRepository.updateDonationBatch(donationBatch1)).thenReturn(donationBatch1);
+		
+		testBatchCRUDService.updateTestBatch(TEST_BATCH_ID, null, null, Arrays.asList(new Integer[] { 1 }));
+	}
+	
+    @Test
+    public void testDeleteTestBatch() {
+        TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN).build();
+        
+		when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
+		when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(true);
+        
+        testBatchCRUDService.deleteTestBatch(TEST_BATCH_ID);
+
+        verify(testBatchRepository, times(1)).deleteTestBatch(TEST_BATCH_ID);
+    }
+    
+    @Test(expected = java.lang.IllegalStateException.class)
+    public void testUnableDeleteTestBatch() {
+        TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN).build();
+        
+		when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
+		when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(false);
+        
+        testBatchCRUDService.deleteTestBatch(TEST_BATCH_ID);
+    }
 }
