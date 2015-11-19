@@ -8,18 +8,23 @@ import static helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.BloodTestType;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
+
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
 import suites.UnitTestSuite;
 
 public class TestBatchConstraintCheckerTests extends UnitTestSuite {
@@ -160,13 +165,13 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
     
     @Test
     public void testCanDeleteTestBatchWithNoTestResults_shouldReturnTrue() {
-    	Donation donationWithDiscrepancies = aDonation().build();
+    	Donation donation = aDonation().build();
         TestBatch testBatch = aTestBatch()
                 .withStatus(TestBatchStatus.RELEASED)
-                .withDonationBatch(aDonationBatch().withDonation(donationWithDiscrepancies).build())
+                .withDonationBatch(aDonationBatch().withDonation(donation).build())
                 .build();
         
-        when(donationConstraintChecker.donationHasSavedTestResults(donationWithDiscrepancies)).thenReturn(false);
+        when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(false);
         
         boolean result = testBatchConstraintChecker.canDeleteTestBatch(testBatch);
         
@@ -175,15 +180,130 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
     
     @Test
     public void testCanDeleteTestBatchWithTestResults_shouldReturnFalse() {
-    	Donation donationWithDiscrepancies = aDonation().build();
+    	Donation donation = aDonation().build();
         TestBatch testBatch = aTestBatch()
                 .withStatus(TestBatchStatus.RELEASED)
-                .withDonationBatch(aDonationBatch().withDonation(donationWithDiscrepancies).build())
+                .withDonationBatch(aDonationBatch().withDonation(donation).build())
                 .build();
         
-        when(donationConstraintChecker.donationHasSavedTestResults(donationWithDiscrepancies)).thenReturn(true);
+        when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(true);
         
         boolean result = testBatchConstraintChecker.canDeleteTestBatch(testBatch);
+        
+        assertThat(result, is(false));
+    }
+    
+    @Test
+    public void testCanAddOrRemoveDonationBatchesWithTestResults_shouldReturnFalse() {
+    	Donation donation = aDonation().build();
+        TestBatch testBatch = aTestBatch()
+                .withStatus(TestBatchStatus.RELEASED)
+                .withDonationBatch(aDonationBatch().withDonation(donation).build())
+                .build();
+        
+        when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(true);
+        
+        boolean result = testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch);
+        
+        assertThat(result, is(false));
+    }
+    
+    @Test
+    public void testCanAddOrRemoveDonationBatchesFromClosedTestBatch_shouldReturnTrue() {
+    	Donation donation = aDonation().build();
+        TestBatch testBatch = aTestBatch()
+                .withStatus(TestBatchStatus.CLOSED)
+                .withDonationBatch(aDonationBatch().withDonation(donation).build())
+                .build();
+        
+        when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(false);
+        
+        boolean result = testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch);
+        
+        assertThat(result, is(false));
+    }
+    
+    @Test
+    public void testCanAddOrRemoveDonationBatchesWithNullTestResults_shouldReturnTrue() {
+    	Donation donation = aDonation().build();
+        TestBatch testBatch = aTestBatch()
+                .withStatus(TestBatchStatus.RELEASED)
+                .build();
+        
+        when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(false);
+        
+        boolean result = testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch);
+        
+        assertThat(result, is(true));
+    }
+    
+    @Test
+    public void testCanAddOrRemoveDonationBatchesWithoutTestResults_shouldReturnTrue() {
+    	Donation donation = aDonation().build();
+        TestBatch testBatch = aTestBatch()
+                .withStatus(TestBatchStatus.RELEASED)
+                .withDonationBatches(new ArrayList<DonationBatch>())
+                .build();
+        
+        when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(false);
+        
+        boolean result = testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch);
+        
+        assertThat(result, is(true));
+    }
+    
+    @Test
+    public void testCanReopenClosedDonationBatches() {
+    	Donation donation = aDonation().build();
+        TestBatch testBatch = aTestBatch()
+                .withStatus(TestBatchStatus.CLOSED)
+                .build();
+        
+        when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(true);
+        
+        boolean result = testBatchConstraintChecker.canReopenTestBatch(testBatch);
+        
+        assertThat(result, is(true));
+    }
+    
+    @Test
+    public void testCanReopenDonationBatches() {
+    	Donation donation = aDonation().build();
+        TestBatch testBatch = aTestBatch()
+                .withStatus(TestBatchStatus.RELEASED)
+                .build();
+        
+        when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(false);
+        
+        boolean result = testBatchConstraintChecker.canReopenTestBatch(testBatch);
+        
+        assertThat(result, is(false));
+    }
+    
+    @Test
+    public void testCanEditDonationBatches() {
+    	Donation donation = aDonation().build();
+        TestBatch testBatch = aTestBatch()
+                .withStatus(TestBatchStatus.RELEASED)
+                .build();
+        
+        when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(false);
+        
+        boolean result = testBatchConstraintChecker.canEditTestBatch(testBatch);
+        
+        assertThat(result, is(true));
+    }
+    
+    @Test
+    public void testCanEditClosedDonationBatches() {
+    	Donation donation = aDonation().build();
+        TestBatch testBatch = aTestBatch()
+                .withStatus(TestBatchStatus.CLOSED)
+                .build();
+        
+        when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(false);
+        
+        boolean result = testBatchConstraintChecker.canEditTestBatch(testBatch);
         
         assertThat(result, is(false));
     }

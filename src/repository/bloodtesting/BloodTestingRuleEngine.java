@@ -327,7 +327,7 @@ public class BloodTestingRuleEngine {
 		BloodTypingMatchStatus bloodTypingMatchStatus = BloodTypingMatchStatus.NOT_DONE;
 		
 		Donor donor = donation.getDonor();
-		if (donation.getBloodAbo() != null && donation.getBloodRh() != null) {
+		if (StringUtils.isNotEmpty(donation.getBloodAbo()) && StringUtils.isNotEmpty(donation.getBloodRh())) {
 			// first time donor - required to enter in confirmatory result
 			if (donor.getBloodAbo() == null || donor.getBloodAbo().equals("") 
 					|| donor.getBloodRh() == null || donor.getBloodRh().equals("")) {
@@ -344,7 +344,6 @@ public class BloodTestingRuleEngine {
 				bloodTypingMatchStatus = BloodTypingMatchStatus.MATCH;
 			}
 		}
-		
 		resultSet.setBloodTypingMatchStatus(bloodTypingMatchStatus);
 		donation.setBloodTypingMatchStatus(bloodTypingMatchStatus);
 	}

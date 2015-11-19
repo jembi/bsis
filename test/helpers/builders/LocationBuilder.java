@@ -6,6 +6,7 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
     
     private Long id;
     private boolean venue;
+    private String name;
     
     public LocationBuilder withId(long id) {
         this.id = id;
@@ -16,11 +17,17 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
         venue = true;
         return this;
     }
+    
+    public LocationBuilder withName(String name) {
+    	this.name = name;
+    	return this;
+    }
 
     @Override
     public Location build() {
         Location location = new Location();
         location.setId(id);
+        location.setName(name);
         location.setIsVenue(venue);
         return location;
     }

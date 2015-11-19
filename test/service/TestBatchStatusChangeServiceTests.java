@@ -1,6 +1,7 @@
 package service;
 
 import static helpers.builders.BloodTestResultBuilder.aBloodTestResult;
+import static helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
 import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
@@ -19,7 +20,9 @@ import model.testbatch.TestBatch;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import repository.DonationRepository;
 import suites.UnitTestSuite;
+import viewmodel.BloodTestingRuleResult;
 
 public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     
@@ -37,6 +40,10 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     private ComponentStatusCalculator componentStatusCalculator;
     @Mock
     private DonationConstraintChecker donationConstraintChecker;
+    @Mock
+    private BloodTestsService bloodTestsService;
+    @Mock
+    private DonationRepository donationRepository;
     
     @Test
     public void testHandleReleaseWithNoDonationBatches_shouldDoNothing() {
@@ -71,12 +78,16 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         TestBatch testBatch = aTestBatch()
                 .withDonationBatch(aDonationBatch().withDonation(donationWithoutDiscrepancies).build())
                 .build();
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
         
         when(donationConstraintChecker.donationHasDiscrepancies(donationWithoutDiscrepancies)).thenReturn(false);
         when(componentStatusCalculator.shouldComponentsBeDiscarded(bloodTestResults)).thenReturn(false);
+        when(bloodTestsService.executeTests(donationWithoutDiscrepancies)).thenReturn(bloodTestingRuleResult);
+        when(donationRepository.updateDonation(donationWithoutDiscrepancies)).thenReturn(donationWithoutDiscrepancies);
         
         testBatchStatusChangeService.handleRelease(testBatch);
         
+        verify(bloodTestsService).updateDonationWithTestResults(donationWithoutDiscrepancies, bloodTestingRuleResult);
         verify(componentCRUDService).updateComponentStatusesForDonation(donationWithoutDiscrepancies);
         verifyZeroInteractions(postDonationCounsellingCRUDService, donorDeferralCRUDService);
     }
@@ -89,13 +100,17 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         TestBatch testBatch = aTestBatch()
                 .withDonationBatch(aDonationBatch().withDonation(donationWithoutDiscrepancies).build())
                 .build();
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
         
         when(donationConstraintChecker.donationHasDiscrepancies(donationWithoutDiscrepancies)).thenReturn(false);
         when(componentStatusCalculator.shouldComponentsBeDiscarded(bloodTestResults)).thenReturn(true);
+        when(bloodTestsService.executeTests(donationWithoutDiscrepancies)).thenReturn(bloodTestingRuleResult);
+        when(donationRepository.updateDonation(donationWithoutDiscrepancies)).thenReturn(donationWithoutDiscrepancies);
         
         testBatchStatusChangeService.handleRelease(testBatch);
         
         verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafe(donationWithoutDiscrepancies);
+        verify(bloodTestsService).updateDonationWithTestResults(donationWithoutDiscrepancies, bloodTestingRuleResult);
         verifyZeroInteractions(postDonationCounsellingCRUDService, donorDeferralCRUDService);
     }
     
@@ -112,14 +127,18 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         TestBatch testBatch = aTestBatch()
                 .withDonationBatch(aDonationBatch().withDonation(unsafeDonation).build())
                 .build();
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
 
         when(donationConstraintChecker.donationHasDiscrepancies(unsafeDonation)).thenReturn(false);
         when(donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults)).thenReturn(false);
+        when(bloodTestsService.executeTests(unsafeDonation)).thenReturn(bloodTestingRuleResult);
+        when(donationRepository.updateDonation(unsafeDonation)).thenReturn(unsafeDonation);
         
         testBatchStatusChangeService.handleRelease(testBatch);
         
         verify(postDonationCounsellingCRUDService).createPostDonationCounsellingForDonation(unsafeDonation);
         verify(componentCRUDService).markComponentsBelongingToDonorAsUnsafe(donor);
+        verify(bloodTestsService).updateDonationWithTestResults(unsafeDonation, bloodTestingRuleResult);
         verifyZeroInteractions(donorDeferralCRUDService);
     }
     
@@ -136,12 +155,16 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         TestBatch testBatch = aTestBatch()
                 .withDonationBatch(aDonationBatch().withDonation(unsafeDonation).build())
                 .build();
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
         
         when(donationConstraintChecker.donationHasDiscrepancies(unsafeDonation)).thenReturn(false);
         when(donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults)).thenReturn(true);
+        when(bloodTestsService.executeTests(unsafeDonation)).thenReturn(bloodTestingRuleResult);
+        when(donationRepository.updateDonation(unsafeDonation)).thenReturn(unsafeDonation);
         
         testBatchStatusChangeService.handleRelease(testBatch);
         
+        verify(bloodTestsService).updateDonationWithTestResults(unsafeDonation, bloodTestingRuleResult);
         verify(donorDeferralCRUDService).createDeferralForDonorWithDeferralReasonType(donor,
                 DeferralReasonType.AUTOMATED_TTI_UNSAFE);
     }

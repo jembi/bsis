@@ -35,6 +35,8 @@ import model.componenttype.ComponentTypeCombination;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.request.Request;
+import model.testbatch.TestBatch;
+import model.testbatch.TestBatchStatus;
 import model.util.BloodGroup;
 
 import org.apache.commons.lang3.StringUtils;
@@ -47,6 +49,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import repository.bloodtesting.BloodTypingStatus;
+import service.DonationConstraintChecker;
+import service.DonorConstraintChecker;
 import utils.CustomDateFormatter;
 import viewmodel.DonationViewModel;
 import viewmodel.MatchingComponentViewModel;
@@ -74,6 +78,9 @@ public class ComponentRepository {
 
   @Autowired
   private UtilController utilController;
+  
+  @Autowired
+  private DonationConstraintChecker donationConstraintChecker;
 
   /**
    * some fields like component status are cached internally.
@@ -124,9 +131,15 @@ public class ComponentRepository {
     if (component.getDonation() == null)
       return false;
     Long donationId = component.getDonation().getId();
-    Donation c = donationRepository.findDonationById(donationId);
-    BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();
-    TTIStatus ttiStatus = c.getTTIStatus();
+    Donation donation = donationRepository.findDonationById(donationId);
+    BloodTypingStatus bloodTypingStatus = donation.getBloodTypingStatus();
+
+    TestBatch testBatch = donation.getDonationBatch().getTestBatch();
+    boolean donationReleased = testBatch != null &&
+        testBatch.getStatus() != TestBatchStatus.OPEN &&
+        !donationConstraintChecker.donationHasDiscrepancies(donation);
+    // If the donation has not been released yet, then don't use its TTI status
+    TTIStatus ttiStatus = donationReleased ? donation.getTTIStatus() : TTIStatus.NOT_DONE;
 
     // Start with the old status if there is one.
     ComponentStatus newComponentStatus = oldComponentStatus == null ? ComponentStatus.QUARANTINED : oldComponentStatus;

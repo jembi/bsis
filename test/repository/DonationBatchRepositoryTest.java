@@ -2,6 +2,8 @@ package repository;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -90,6 +92,13 @@ public class DonationBatchRepositoryTest {
 		DonationBatch one = donationBatchRepository.findDonationBatchById(1);
 		Assert.assertNotNull("There is a donation batch with the id 1", one);
 		Assert.assertEquals("The donation batch has the number 'B0215000000'", "B0215000000", one.getBatchNumber());
+	}
+	
+	@Test
+	public void testFindDonationBatchByIdEmpty() throws Exception {
+		DonationBatch five = donationBatchRepository.findDonationBatchById(5);
+		Assert.assertNotNull("There is a donation batch with the id 5", five);
+		Assert.assertEquals("The donation batch has the number 'B0215000005'", "B0215000005", five.getBatchNumber());
 	}
 	
 	@Test
@@ -183,8 +192,19 @@ public class DonationBatchRepositoryTest {
 	public void testFindDonationBatches() throws Exception {
 		List<Long> locationIds = new ArrayList<Long>();
 		locationIds.add(1L);
-		List<DonationBatch> batches = donationBatchRepository.findDonationBatches(true, locationIds);
+		List<DonationBatch> batches = donationBatchRepository.findDonationBatches(true, locationIds, null, null);
 		Assert.assertNotNull("There are batches in Maseru", batches);
 		Assert.assertEquals("There are 1 donation batches in Maseru", 1, batches.size());
+	}
+
+	@Test
+	public void testFindDonationBatchesWithDates() throws Exception {
+		List<Long> locationIds = new ArrayList<Long>();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String startDate = "2015-03-01 22:00:00";
+		String endDate = "2015-03-04 22:00:00";
+		List<DonationBatch> batches = donationBatchRepository.findDonationBatches(false, locationIds, df.parse(startDate), df.parse(endDate));
+		Assert.assertNotNull("There are batches in this date range", batches);
+		Assert.assertEquals("There are 2 donation batches in this date range", 2, batches.size());
 	}
 }

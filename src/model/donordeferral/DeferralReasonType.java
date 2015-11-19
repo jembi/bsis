@@ -10,5 +10,16 @@ public enum DeferralReasonType {
     
     NORMAL,
     AUTOMATED_TTI_UNSAFE;
-
+	
+	/**
+	 * Determines if a Deferral is automated or not.
+	 * 
+	 * @return boolean true if this DeferralReasonType is automated, false otherwise
+	 */
+	public boolean isAutomatedDeferral() {
+		if (this == AUTOMATED_TTI_UNSAFE) {
+			return true;
+		}
+		return false;
+	}
 }

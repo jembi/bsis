@@ -10,6 +10,7 @@ public class DeferralReasonBuilder extends AbstractEntityBuilder<DeferralReason>
     private Boolean deleted;
     private DurationType durationType = DurationType.TEMPORARY;
     private Integer defaultDuration;
+    private String reason;
 
     public DeferralReasonBuilder withType(DeferralReasonType type) {
         this.type = type;
@@ -35,6 +36,11 @@ public class DeferralReasonBuilder extends AbstractEntityBuilder<DeferralReason>
         this.defaultDuration = defaultDuration;
         return this;
     }
+    
+    public DeferralReasonBuilder withReason(String reason) {
+        this.reason = reason;
+        return this;
+    }
 
     @Override
     public DeferralReason build() {
@@ -43,6 +49,7 @@ public class DeferralReasonBuilder extends AbstractEntityBuilder<DeferralReason>
         deferralReason.setIsDeleted(deleted);
         deferralReason.setDurationType(durationType);
         deferralReason.setDefaultDuration(defaultDuration);
+        deferralReason.setReason(reason);
         return deferralReason;
     }
     

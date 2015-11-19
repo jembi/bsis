@@ -1,31 +1,26 @@
 package service;
 
 import static helpers.builders.TestBatchBuilder.aTestBatch;
+import static helpers.matchers.TestBatchMatcher.hasSameStateAsTestBatch;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.times;
 import helpers.builders.DonationBatchBuilder;
-
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
-
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
 import repository.DonationBatchRepository;
 import repository.TestBatchRepository;
 import scala.actors.threadpool.Arrays;
@@ -71,12 +66,14 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     @Test
     public void testUpdateTestBatchStatusWithReleasedStatus_shouldHandleRelease() {
         TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN).build();
+        TestBatch updatedTestBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.RELEASED).build();
 
         when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(true);
+        when(testBatchRepository.updateTestBatch(testBatch)).thenReturn(updatedTestBatch);
         
         testBatchCRUDService.changeTestBatchStatus(testBatch, TestBatchStatus.RELEASED);
         
-        verify(testBatchStatusChangeService).handleRelease(testBatch);
+        verify(testBatchStatusChangeService).handleRelease(updatedTestBatch);
         assertThat(testBatch.getStatus(), is(TestBatchStatus.RELEASED));
     }
 
@@ -105,30 +102,17 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     @Test
     public void testUpdateTestBatch_shouldUpdateStatus() {
         TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN).build();
+        TestBatch expectedTestBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.RELEASED).build();
         
         when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
         when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(true);
-		when(testBatchRepository.updateTestBatch(testBatch)).thenReturn(testBatch);
+        when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(true);
+		when(testBatchRepository.updateTestBatch(any(TestBatch.class))).thenReturn(testBatch);
 
 		testBatchCRUDService.updateTestBatch(TEST_BATCH_ID, TestBatchStatus.RELEASED, null, null);
         
+        verify(testBatchRepository, times(2)).updateTestBatch(argThat(hasSameStateAsTestBatch(expectedTestBatch)));
         verify(testBatchStatusChangeService).handleRelease(testBatch);
-        verify(testBatchRepository).updateTestBatch(argThat(new TypeSafeMatcher<TestBatch>() {
-			
-			TestBatch expected = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.RELEASED).build();
-			
-			@Override
-			public void describeTo(Description description) {
-				description.appendText("A test batch with the following state:").appendText("\nId: ")
-				        .appendValue(expected.getId()).appendText("\nStatus: ").appendValue(expected.getStatus());
-			}
-			
-			@Override
-			protected boolean matchesSafely(TestBatch actual) {
-				return Objects.equals(actual.getId(), expected.getId())
-				        && Objects.equals(actual.getStatus(), expected.getStatus());
-			}
-		}));
     }
     
     @Test
@@ -137,30 +121,19 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     	final Date createdDate = new SimpleDateFormat("yyyy-MM-dd").parse("2015-10-17");
     	final Date newCreatedDate = new Date();
 
-        TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withCreatedDate(createdDate).build();
+        TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN)
+                .withCreatedDate(createdDate).build();
         
 		final TestBatch expected = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN)
 		        .withCreatedDate(newCreatedDate).build();
         
         when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
 		when(testBatchRepository.updateTestBatch(testBatch)).thenReturn(testBatch);
+		when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(true);
 
 		testBatchCRUDService.updateTestBatch(TEST_BATCH_ID, null, newCreatedDate, null);
 
-		verify(testBatchRepository).updateTestBatch(argThat(new TypeSafeMatcher<TestBatch>() {
-			
-			@Override
-			public void describeTo(Description description) {
-				description.appendText("A test batch with the following state:").appendText("\nId: ")
-				        .appendValue(expected.getId()).appendText("\nCreated Date: ").appendValue(expected.getCreatedDate());
-			}
-			
-			@Override
-			protected boolean matchesSafely(TestBatch actual) {
-				return Objects.equals(actual.getId(), expected.getId())
-				        && Objects.equals(actual.getCreatedDate(), expected.getCreatedDate());
-			}
-		}));
+		verify(testBatchRepository).updateTestBatch(argThat(hasSameStateAsTestBatch(expected)));
     }
     
 	@Test
@@ -173,7 +146,7 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
 		        .withDonationBatch(donationBatch2).withStatus(TestBatchStatus.OPEN).build();
 		
 		when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
-		when(testBatchRepository.updateTestBatch(testBatch)).thenReturn(testBatch);
+		when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(true);
 		when(donationBatchRepository.findDonationBatchById(1)).thenReturn(donationBatch1);
 		when(donationBatchRepository.findDonationBatchById(2)).thenReturn(donationBatch2);
 		when(donationBatchRepository.findDonationBatchById(3)).thenReturn(donationBatch3);
@@ -202,4 +175,41 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
 			}
 		}));
 	}
+	
+	@Test(expected = java.lang.IllegalStateException.class)
+	public void testUpdateTestBatch_shouldNotUpdateDonationBatch() {
+		final DonationBatch donationBatch1 = new DonationBatchBuilder().withId(1).build();
+		
+		final TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withDonationBatch(donationBatch1)
+		        .withDonationBatch(donationBatch1).withStatus(TestBatchStatus.OPEN).build();
+		
+		when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
+		when(donationBatchRepository.findDonationBatchById(1)).thenReturn(donationBatch1);
+		when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
+		when(donationBatchRepository.updateDonationBatch(donationBatch1)).thenReturn(donationBatch1);
+		
+		testBatchCRUDService.updateTestBatch(TEST_BATCH_ID, null, null, Arrays.asList(new Integer[] { 1 }));
+	}
+	
+    @Test
+    public void testDeleteTestBatch() {
+        TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN).build();
+        
+		when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
+		when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(true);
+        
+        testBatchCRUDService.deleteTestBatch(TEST_BATCH_ID);
+
+        verify(testBatchRepository, times(1)).deleteTestBatch(TEST_BATCH_ID);
+    }
+    
+    @Test(expected = java.lang.IllegalStateException.class)
+    public void testUnableDeleteTestBatch() {
+        TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN).build();
+        
+		when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
+		when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(false);
+        
+        testBatchCRUDService.deleteTestBatch(TEST_BATCH_ID);
+    }
 }

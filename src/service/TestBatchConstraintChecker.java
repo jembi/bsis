@@ -24,16 +24,18 @@ public class TestBatchConstraintChecker {
         }
 
         // Check for tests with outstanding test outcomes
-        for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-
-            for (Donation donation : donationBatch.getDonations()) {
-                
-                if (donationConstraintChecker.donationHasOutstandingOutcomes(donation)) {
-                    
-                    // This test has an outstanding outcome
-                    return false;
-                }
-            }
+        if (testBatch.getDonationBatches() != null) {
+	        for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
+	
+	            for (Donation donation : donationBatch.getDonations()) {
+	                
+	                if (donationConstraintChecker.donationHasOutstandingOutcomes(donation)) {
+	                    
+	                    // This test has an outstanding outcome
+	                    return false;
+	                }
+	            }
+	        }
         }
 
         return true;
@@ -88,16 +90,18 @@ public class TestBatchConstraintChecker {
             return false;
         }
         
-        for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-
-            for (Donation donation : donationBatch.getDonations()) {
-
-                if (donationConstraintChecker.donationHasDiscrepancies(donation)) {
-                    
-                    // This donation has discrepancies
-                    return false;
-                }
-            }
+        if (testBatch.getDonationBatches() != null) {
+	        for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
+	
+	            for (Donation donation : donationBatch.getDonations()) {
+	
+	                if (donationConstraintChecker.donationHasDiscrepancies(donation)) {
+	                    
+	                    // This donation has discrepancies
+	                    return false;
+	                }
+	            }
+	        }
         }
 
         return true;
