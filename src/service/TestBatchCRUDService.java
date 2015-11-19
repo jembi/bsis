@@ -35,14 +35,14 @@ public class TestBatchCRUDService {
     public TestBatch updateTestBatch(Long testBatchId, TestBatchStatus newStatus, Date newCreatedDate, List<Integer> newDonationBatchIds) {
     	
         TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
-                
+                        
         if (newStatus != null) {
         	testBatch = changeTestBatchStatus(testBatch, newStatus);
         }
-
-        if (!testBatchConstraintChecker.canEditTestBatch(testBatch)) {
+        
+        if (newStatus != TestBatchStatus.CLOSED && !testBatchConstraintChecker.canEditTestBatch(testBatch)) {
             throw new IllegalStateException("Test batch cannot be updated");
-        }        
+        }
         
         if (newCreatedDate != null) {
         	testBatch.setCreatedDate(newCreatedDate);
