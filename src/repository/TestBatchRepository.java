@@ -68,12 +68,10 @@ public class TestBatchRepository {
 
 	public List<TestBatch> findTestBatches(List<TestBatchStatus> statuses, Date startDate, Date endDate) {
 
-		String queryStr = "SELECT t FROM TestBatch t ";
+		String queryStr = "SELECT t FROM TestBatch t WHERE t.isDeleted = :deleted ";
 
 		if (statuses != null) {
-			queryStr += "WHERE t.status IN :statuses ";
-		} else {
-			queryStr += "WHERE t.status is null OR t.status is not null ";
+			queryStr += "AND t.status IN :statuses ";
 		}
 
 		if (startDate != null) {
@@ -85,6 +83,8 @@ public class TestBatchRepository {
 		}
 
 		TypedQuery<TestBatch> query = em.createQuery(queryStr, TestBatch.class);
+		
+		query.setParameter("deleted", false);
 
 		if (statuses != null) {
 			query.setParameter("statuses", statuses);
@@ -93,6 +93,7 @@ public class TestBatchRepository {
 		if (startDate != null) {
 			query.setParameter("startDate", startDate);
 		}
+
 		if (endDate != null) {
 			query.setParameter("endDate", endDate);
 		}
