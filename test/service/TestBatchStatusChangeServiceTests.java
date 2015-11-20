@@ -5,6 +5,7 @@ import static helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleRe
 import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
+import static helpers.builders.PackTypeBuilder.aPackType;
 import static helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -58,7 +59,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     @Test
     public void testHandleReleaseWithADonationWithDiscrepancies_shouldDoNothing() {
         
-        Donation donationWithDiscrepancies = aDonation().build();
+        Donation donationWithDiscrepancies = aDonation().withPackType(aPackType().build()).build();
         TestBatch testBatch = aTestBatch()
                 .withDonationBatch(aDonationBatch().withDonation(donationWithDiscrepancies).build())
                 .build();
@@ -71,10 +72,30 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     }
     
     @Test
+    public void testHandleReleaseWithDonationWithoutTestSample_shouldDoNothing() {
+        
+        Donation donation = aDonation()
+                .withPackType(aPackType().withTestSampleProduced(false).build())
+                .build();
+        TestBatch testBatch = aTestBatch()
+                .withDonationBatch(aDonationBatch().withDonation(donation).build())
+                .build();
+        
+        when(donationConstraintChecker.donationHasDiscrepancies(donation)).thenReturn(true);
+        
+        testBatchStatusChangeService.handleRelease(testBatch);
+        
+        verifyZeroInteractions(postDonationCounsellingCRUDService, donorDeferralCRUDService, componentCRUDService);
+    }
+    
+    @Test
     public void testHandleReleaseWithoutComponentsToBeDiscarded_shouldUpdateComponentStatuses() {
         
         List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
-        Donation donationWithoutDiscrepancies = aDonation().withBloodTestResults(bloodTestResults).build();
+        Donation donationWithoutDiscrepancies = aDonation()
+                .withBloodTestResults(bloodTestResults)
+                .withPackType(aPackType().build())
+                .build();
         TestBatch testBatch = aTestBatch()
                 .withDonationBatch(aDonationBatch().withDonation(donationWithoutDiscrepancies).build())
                 .build();
@@ -96,7 +117,10 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     public void testHandleReleaseWithComponentsToBeDiscarded_shouldMarkComponentsAsUnsafe() {
         
         List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
-        Donation donationWithoutDiscrepancies = aDonation().withBloodTestResults(bloodTestResults).build();
+        Donation donationWithoutDiscrepancies = aDonation()
+                .withBloodTestResults(bloodTestResults)
+                .withPackType(aPackType().build())
+                .build();
         TestBatch testBatch = aTestBatch()
                 .withDonationBatch(aDonationBatch().withDonation(donationWithoutDiscrepancies).build())
                 .build();
@@ -123,6 +147,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
                 .withTTIStatus(TTIStatus.TTI_UNSAFE)
                 .withDonor(donor)
                 .withBloodTestResults(bloodTestResults)
+                .withPackType(aPackType().build())
                 .build();
         TestBatch testBatch = aTestBatch()
                 .withDonationBatch(aDonationBatch().withDonation(unsafeDonation).build())
@@ -151,6 +176,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
                 .withTTIStatus(TTIStatus.TTI_UNSAFE)
                 .withDonor(donor)
                 .withBloodTestResults(bloodTestResults)
+                .withPackType(aPackType().build())
                 .build();
         TestBatch testBatch = aTestBatch()
                 .withDonationBatch(aDonationBatch().withDonation(unsafeDonation).build())
