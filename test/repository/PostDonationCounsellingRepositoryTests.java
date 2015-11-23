@@ -45,17 +45,20 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
 
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(firstExpectedDonation)
                 .buildAndPersist(entityManager);
 
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(secondExpectedDonation)
                 .buildAndPersist(entityManager);
 
         // Duplicate to test distinct donations
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(firstExpectedDonation)
                 .buildAndPersist(entityManager);
         
@@ -84,17 +87,20 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
         
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(firstExpectedDonation)
                 .buildAndPersist(entityManager);
 
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(secondExpectedDonation)
                 .buildAndPersist(entityManager);
         
         // Excluded by venue
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(aDonation()
                         .withVenue(aVenue().build())
                         .build())
@@ -117,18 +123,21 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
         // Donation on start date
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(firstExpectedDonation)
                 .buildAndPersist(entityManager);
 
         // Donation after start date
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(secondExpectedDonation)
                 .buildAndPersist(entityManager);
 
         // Excluded by donation before start date
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(aDonation()
                         .withDonor(aDonor().build())
                         .withDonationDate(startDate.minusDays(3).toDate())
@@ -152,18 +161,21 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
         // Donation on end date
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(firstExpectedDonation)
                 .buildAndPersist(entityManager);
 
         // Donation before end date
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(secondExpectedDonation)
                 .buildAndPersist(entityManager);
 
         // Excluded by donation after end date
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(aDonation()
                         .withDonationDate(endDate.plusDays(3).toDate())
                         .build())
@@ -186,12 +198,14 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
         // Donation in date range
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(expectedDonation)
                 .buildAndPersist(entityManager);
 
         // Excluded by donation before start date
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(aDonation()
                         .withDonationDate(startDate.minusDays(1).toDate())
                         .build())
@@ -200,6 +214,7 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
         // Excluded by donation after end date
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(aDonation()
                         .withDonationDate(endDate.plusDays(1).toDate())
                         .build())
@@ -227,6 +242,7 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
         // Excluded by date
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(aDonation()
                         .withDonor(donor)
                         .withDonationDate(new DateTime().minusDays(3).toDate())
@@ -236,6 +252,7 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
         // Excluded by donor
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(aDonation()
                         .withDonor(aDonor().build())
                         .withDonationDate(new DateTime().minusDays(7).toDate())
@@ -244,6 +261,7 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
 
         PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(aDonation()
                         .withDonor(donor)
                         .withDonationDate(new DateTime().minusDays(5).toDate())
@@ -274,6 +292,7 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
         // Excluded by donor
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(aDonation()
                         .withDonor(aDonor().build())
                         .build())
@@ -288,10 +307,12 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
         // Expected
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(aDonation().withDonor(donor).build())
                 .buildAndPersist(entityManager);
         aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
                 .withDonation(aDonation().withDonor(donor).build())
                 .buildAndPersist(entityManager);
         

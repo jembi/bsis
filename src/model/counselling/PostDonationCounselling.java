@@ -3,17 +3,7 @@ package model.counselling;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import javax.persistence.*;
 import javax.validation.Valid;
 
 import model.donation.Donation;
@@ -65,8 +55,14 @@ public class PostDonationCounselling implements ModificationTracker {
 
     private Boolean isDeleted;
 
-    @Valid
+    @Embedded
     private RowModificationTracker modificationTracker;
+
+    public PostDonationCounselling () {
+        modificationTracker = new RowModificationTracker();
+    }
+
+
 
     public Long getId() {
         return id;

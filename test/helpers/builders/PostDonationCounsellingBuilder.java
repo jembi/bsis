@@ -16,6 +16,7 @@ public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDo
     private Donation donation = aDonation().build();
     private boolean flaggedForCounselling;
     private CounsellingStatus counsellingStatus;
+    private boolean isDeleted;
     private Date counsellingDate;
     
     public PostDonationCounsellingBuilder withId(Long id) {
@@ -37,6 +38,18 @@ public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDo
         flaggedForCounselling = false;
         return this;
     }
+
+    public PostDonationCounsellingBuilder thatIsDeleted() {
+        isDeleted = true;
+        return this;
+    }
+
+    public PostDonationCounsellingBuilder thatIsNotDeleted() {
+        isDeleted = false;
+        return this;
+    }
+
+
     
     public PostDonationCounsellingBuilder withCounsellingStatus(CounsellingStatus counsellingStatus) {
         this.counsellingStatus = counsellingStatus;
@@ -54,6 +67,7 @@ public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDo
         postDonationCounselling.setId(id);
         postDonationCounselling.setDonation(donation);
         postDonationCounselling.setFlaggedForCounselling(flaggedForCounselling);
+        postDonationCounselling.setIsDeleted(isDeleted);
         postDonationCounselling.setCounsellingStatus(counsellingStatus);
         postDonationCounselling.setCounsellingDate(counsellingDate);
         return postDonationCounselling;
