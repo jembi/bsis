@@ -5,14 +5,19 @@ import static helpers.builders.PostDonationCounsellingBuilder.aPostDonationCouns
 import static helpers.matchers.PostDonationCounsellingMatcher.hasSameStateAsPostDonationCounselling;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.Date;
+
+import controller.UtilController;
+import helpers.builders.UserBuilder;
 import model.counselling.CounsellingStatus;
 import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
+import model.user.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -27,6 +32,8 @@ public class PostDonationCounsellingCRUDServiceTests {
     private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
     @Mock
     private PostDonationCounsellingRepository postDonationCounsellingRepository;
+    @Mock
+    private UtilController utilController;
     
     @Test
     public void testCreatePostDonationCounselling_shouldPersistAndReturnAFlaggedPostDonationCounsellingForDonation() {
@@ -78,45 +85,59 @@ public class PostDonationCounsellingCRUDServiceTests {
                 CounsellingStatus.RECEIVED_COUNSELLING, new Date(), "");
     }
     
-//    @Test
-//    public void testUpdatePostDonationCounselling_shouldUpdateAndReturnPostDonationCounselling() {
-//
-//        long postDonationCounsellingId = 75;
-//        long donationId = 55;
-//        CounsellingStatus counsellingStatus = CounsellingStatus.RECEIVED_COUNSELLING;
-//        Date counsellingDate = new Date();
-//        String notes = "some notes";
-//
-//        PostDonationCounselling existingPostDonationCounselling = aPostDonationCounselling()
-//                .withId(postDonationCounsellingId)
-//                .thatIsFlaggedForCounselling()
-//                .withDonation(aDonation()
-//                        .withId(donationId)
-//                        .build())
-//                .build();
-//
-//        PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
-//                .withId(postDonationCounsellingId)
-//                .thatIsNotFlaggedForCounselling()
-//                .withCounsellingStatus(counsellingStatus)
-//                .withCounsellingDate(counsellingDate)
-//                .withDonation(aDonation()
-//                        .withId(donationId)
-//                        .withNotes(notes)
-//                        .build())
-//                .build();
-//
-//        when(postDonationCounsellingRepository.findById(postDonationCounsellingId))
-//                .thenReturn(existingPostDonationCounselling);
-//        when(postDonationCounsellingRepository.update(argThat(hasSameStateAsPostDonationCounselling(expectedPostDonationCounselling))))
-//                .thenReturn(expectedPostDonationCounselling);
-//
-//        PostDonationCounselling returnedPostDonationCounselling = postDonationCounsellingCRUDService
-//                .updatePostDonationCounselling(postDonationCounsellingId, counsellingStatus, counsellingDate, notes);
-//
-//        verify(postDonationCounsellingRepository).findById(postDonationCounsellingId);
-//        verify(postDonationCounsellingRepository).update(argThat(hasSameStateAsPostDonationCounselling(expectedPostDonationCounselling)));
-//        assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
-//    }
+    @Test
+    public void testUpdatePostDonationCounselling_shouldUpdateAndReturnPostDonationCounselling() {
+
+        long postDonationCounsellingId = 75;
+        long donationId = 55;
+        CounsellingStatus counsellingStatus = CounsellingStatus.RECEIVED_COUNSELLING;
+        Date counsellingDate = new Date();
+        String notes = "some notes";
+
+        User admin = UserBuilder.aUser()
+                .withUsername("admin")
+                .withId(1)
+                .build();
+
+        PostDonationCounselling existingPostDonationCounselling = aPostDonationCounselling()
+                .withId(postDonationCounsellingId)
+                .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
+                .withDonation(aDonation()
+                        .withId(donationId)
+                        .build())
+                .build();
+
+        PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
+                .withId(postDonationCounsellingId)
+                .thatIsNotFlaggedForCounselling()
+                .thatIsNotDeleted()
+                .withCounsellingStatus(counsellingStatus)
+                .withCounsellingDate(counsellingDate)
+                .withDonation(aDonation()
+                        .withId(donationId)
+                        .withNotes(notes)
+                        .build())
+                .build();
+
+        when(utilController.getCurrentUser()).thenReturn(admin);
+
+        when(postDonationCounsellingRepository.findById(postDonationCounsellingId))
+                .thenReturn(existingPostDonationCounselling);
+        when(postDonationCounsellingRepository.update(argThat(hasSameStateAsPostDonationCounselling(expectedPostDonationCounselling))))
+                .thenReturn(expectedPostDonationCounselling);
+
+        PostDonationCounselling returnedPostDonationCounselling = postDonationCounsellingCRUDService
+                .updatePostDonationCounselling(postDonationCounsellingId, counsellingStatus, counsellingDate, notes);
+
+        verify(postDonationCounsellingRepository).findById(postDonationCounsellingId);
+        verify(postDonationCounsellingRepository).update(argThat(hasSameStateAsPostDonationCounselling(expectedPostDonationCounselling)));
+        assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
+
+        returnedPostDonationCounselling = postDonationCounsellingCRUDService
+                .updatePostDonationCounselling(postDonationCounsellingId, counsellingStatus, counsellingDate, notes);
+
+        assertThat(returnedPostDonationCounselling, is(nullValue()));
+    }
 
 }
