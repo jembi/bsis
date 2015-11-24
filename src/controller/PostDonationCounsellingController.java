@@ -59,4 +59,11 @@ public class PostDonationCounsellingController {
         return map;
     }
 
+    @RequestMapping(value = "/flagforcounselling/{id}", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.EDIT_POST_DONATION_COUNSELLING + "')")
+    public PostDonationCounsellingViewModel flagForCounselling( @PathVariable Long id) {
+        PostDonationCounselling postDonationCounselling = postDonationCounsellingCRUDService.flagForCounselling(id);
+        return new PostDonationCounsellingViewModel(postDonationCounselling);
+    }
+
 }

@@ -43,7 +43,8 @@ public class PostDonationCounsellingCRUDService {
 
         PostDonationCounselling postDonationCounselling = new PostDonationCounselling();
         postDonationCounselling.setDonation(donation);
-        postDonationCounselling.setFlaggedForCounselling(true);
+        postDonationCounselling.setFlaggedForCounselling(Boolean.TRUE);
+        postDonationCounselling.setIsDeleted(Boolean.FALSE);
         postDonationCounselling.setCreatedBy(utilController.getCurrentUser());
         postDonationCounsellingRepository.save(postDonationCounselling);
         return postDonationCounselling;
@@ -62,19 +63,22 @@ public class PostDonationCounsellingCRUDService {
             return flagForCounselling(id);
         }
 
-        postDonationCounselling.setFlaggedForCounselling(false);
+        postDonationCounselling.setFlaggedForCounselling(Boolean.FALSE);
         postDonationCounselling.setCounsellingStatus(counsellingStatus);
         postDonationCounselling.setCounsellingDate(counsellingDate);
         postDonationCounselling.getDonation().setNotes(notes);
         postDonationCounselling.setLastUpdated(new Date());
         postDonationCounselling.setLastUpdatedBy(utilController.getCurrentUser());
-        postDonationCounselling.setIsDeleted(false);
+        postDonationCounselling.setIsDeleted(Boolean.FALSE);
         return postDonationCounsellingRepository.update(postDonationCounselling);
     }
 
     public PostDonationCounselling flagForCounselling(long id) {
         PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository.findById(id);
         postDonationCounselling.setFlaggedForCounselling(Boolean.TRUE);
+        postDonationCounselling.setCounsellingDate(null);
+        postDonationCounselling.setCounsellingStatus(null);
+        postDonationCounselling.setIsDeleted(Boolean.FALSE);
         return postDonationCounsellingRepository.update(postDonationCounselling);
     }
 }
