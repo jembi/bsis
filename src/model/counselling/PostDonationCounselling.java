@@ -53,7 +53,8 @@ public class PostDonationCounselling implements ModificationTracker {
     @Column(nullable = true)
     private Date counsellingDate;
 
-    private Boolean isDeleted;
+    @Column(nullable = false)
+    private boolean isDeleted;
 
     @Embedded
     private RowModificationTracker modificationTracker;
