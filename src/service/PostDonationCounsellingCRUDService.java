@@ -37,7 +37,7 @@ public class PostDonationCounsellingCRUDService {
         PostDonationCounselling existingCounselling = postDonationCounsellingRepository.findPostDonationCounsellingForDonation(
             donation);
         if (existingCounselling != null) {
-            LOGGER.info("Returning existing counselling instead of creating a new PostDonationCounselling");
+          // Return existing counselling instead of creating a new PostDonationCounselling
           return existingCounselling;
         }
 
