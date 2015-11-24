@@ -11,7 +11,6 @@ import model.counselling.CounsellingStatus;
 import model.counselling.PostDonationCounselling;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,15 +57,6 @@ public class PostDonationCounsellingController {
         map.put("counsellingStatuses", counsellingStatuses);
         
         return map;
-    }
-
-    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    @PreAuthorize("hasRole('"+PermissionConstants.VOID_POST_DONATION_COUNSELLING+"')")
-    public HttpStatus deletePostDonationCounselling(
-            @PathVariable Long id) {
-
-        postDonationCounsellingCRUDService.deletePostDonationCounselling(id);
-        return HttpStatus.NO_CONTENT;
     }
 
 }
