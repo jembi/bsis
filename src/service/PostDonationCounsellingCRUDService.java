@@ -78,6 +78,7 @@ public class PostDonationCounsellingCRUDService {
         postDonationCounselling.setFlaggedForCounselling(Boolean.TRUE);
         postDonationCounselling.setCounsellingDate(null);
         postDonationCounselling.setCounsellingStatus(null);
+        postDonationCounselling.getDonation().setNotes(null);
         postDonationCounselling.setIsDeleted(Boolean.FALSE);
         return postDonationCounsellingRepository.update(postDonationCounselling);
     }
