@@ -48,10 +48,7 @@ import viewmodel.PostDonationCounsellingViewModel;
 import backingform.DonorBackingForm;
 import backingform.DuplicateDonorsBackingForm;
 import backingform.validator.DonorBackingFormValidator;
-import constant.GeneralConfigConstants;
-import factory.DonationViewModelFactory;
 import factory.DonorDeferralViewModelFactory;
-import factory.DonorViewModelFactory;
 
 @RestController
 @RequestMapping("donors")
@@ -457,7 +454,7 @@ public class DonorController {
             @PathVariable("id") Long donorId) {
 
         PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository
-                .findPreviouslyFlaggedPostDonationCounsellingForDonor(donorId);
+                .findPostDonationCounsellingForDonor(donorId);
         return new PostDonationCounsellingViewModel(postDonationCounselling);
     }
 

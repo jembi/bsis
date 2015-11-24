@@ -1,16 +1,12 @@
 package model.counselling;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 
 import model.donation.Donation;
-import model.donationbatch.DonationBatch;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
-import model.testbatch.TestBatchStatus;
 import model.user.User;
 import repository.PostDonationCounsellingNamedQueryConstants;
 
@@ -22,8 +18,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import constraintvalidator.DonationExists;
 
 @NamedQueries({
-    @NamedQuery(name = PostDonationCounsellingNamedQueryConstants.NAME_FIND_PREVIOUSLY_FLAGGED_POST_DONATION_COUNSELLING_FOR_DONOR,
-            query = PostDonationCounsellingNamedQueryConstants.QUERY_FIND_FLAGGED_POST_DONATION_COUNSELLING_FOR_DONOR),
+    @NamedQuery(name = PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLING_FOR_DONOR,
+            query = PostDonationCounsellingNamedQueryConstants.QUERY_FIND_POST_DONATION_COUNSELLING_FOR_DONOR),
     @NamedQuery(name = PostDonationCounsellingNamedQueryConstants.NAME_COUNT_FLAGGED_POST_DONATION_COUNSELLINGS_FOR_DONOR,
             query = PostDonationCounsellingNamedQueryConstants.QUERY_COUNT_FLAGGED_POST_DONATION_COUNSELLINGS_FOR_DONOR),
     @NamedQuery(name = PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLING_FOR_DONATION,

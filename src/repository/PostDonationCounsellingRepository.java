@@ -54,10 +54,10 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
     return query.getResultList();
   }
 
-  public PostDonationCounselling findPreviouslyFlaggedPostDonationCounsellingForDonor(Long donorId) throws NoResultException {
+  public PostDonationCounselling findPostDonationCounsellingForDonor(Long donorId) throws NoResultException {
 
     return entityManager.createNamedQuery(
-            PostDonationCounsellingNamedQueryConstants.NAME_FIND_PREVIOUSLY_FLAGGED_POST_DONATION_COUNSELLING_FOR_DONOR,
+            PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLING_FOR_DONOR,
             PostDonationCounselling.class)
             .setParameter("donorId", donorId)
             .setParameter("isDeleted", false)

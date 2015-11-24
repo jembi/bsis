@@ -231,7 +231,7 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
         
         Donor donor = aDonor().buildAndPersist(entityManager);
 
-        postDonationCounsellingRepository.findPreviouslyFlaggedPostDonationCounsellingForDonor(donor.getId());
+        postDonationCounsellingRepository.findPostDonationCounsellingForDonor(donor.getId());
     }
 
     @Test
@@ -269,7 +269,7 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
                 .buildAndPersist(entityManager);
 
         PostDonationCounselling returnedPostDonationCounselling = postDonationCounsellingRepository
-                .findPreviouslyFlaggedPostDonationCounsellingForDonor(donor.getId());
+                .findPostDonationCounsellingForDonor(donor.getId());
 
         assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
     }
