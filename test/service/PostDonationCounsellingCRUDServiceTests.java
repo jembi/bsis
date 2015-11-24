@@ -134,10 +134,6 @@ public class PostDonationCounsellingCRUDServiceTests {
         verify(postDonationCounsellingRepository).update(argThat(hasSameStateAsPostDonationCounselling(expectedPostDonationCounselling)));
         assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
 
-        returnedPostDonationCounselling = postDonationCounsellingCRUDService
-                .updatePostDonationCounselling(postDonationCounsellingId, counsellingStatus, counsellingDate, notes);
-
-        assertThat(returnedPostDonationCounselling, is(nullValue()));
     }
 
 }

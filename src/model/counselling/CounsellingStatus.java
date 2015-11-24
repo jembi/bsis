@@ -2,6 +2,7 @@ package model.counselling;
 
 public enum CounsellingStatus {
 
+    FLAG_FOR_COUNSELLING(0, "Flagged For Counselling"),
     RECEIVED_COUNSELLING(1, "Received Counselling"),
     REFUSED_COUNSELLING(2, "Refused Counselling"),
     DID_NOT_RECEIVE_COUNSELLING(3, "Did Not Receive Counselling");

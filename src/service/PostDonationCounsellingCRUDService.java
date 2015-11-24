@@ -44,6 +44,7 @@ public class PostDonationCounsellingCRUDService {
         PostDonationCounselling postDonationCounselling = new PostDonationCounselling();
         postDonationCounselling.setDonation(donation);
         postDonationCounselling.setFlaggedForCounselling(true);
+        postDonationCounselling.setCreatedBy(utilController.getCurrentUser());
         postDonationCounsellingRepository.save(postDonationCounselling);
         return postDonationCounselling;
     }
@@ -57,31 +58,23 @@ public class PostDonationCounsellingCRUDService {
             throw new IllegalArgumentException("Post donation counselling not found for id: " + id);
         }
 
-        if (postDonationCounselling.getCounsellingStatus() == null) {
-            LOGGER.info("is null" + postDonationCounselling.getCounsellingStatus());
-            // If unset do nothing
-        } else {
-            // Otherwise delete
-            deletePostDonationCounselling(id);
-            LOGGER.info("Deleted postDonationCounselling ");
-            postDonationCounselling = createPostDonationCounsellingForDonation(postDonationCounselling.getDonation());
-            LOGGER.info("Created new postDonationCounselling ");
+        if (counsellingStatus == CounsellingStatus.findById(0)) {
+            return flagForCounselling(id);
         }
+
         postDonationCounselling.setFlaggedForCounselling(false);
         postDonationCounselling.setCounsellingStatus(counsellingStatus);
         postDonationCounselling.setCounsellingDate(counsellingDate);
         postDonationCounselling.getDonation().setNotes(notes);
         postDonationCounselling.setLastUpdated(new Date());
         postDonationCounselling.setLastUpdatedBy(utilController.getCurrentUser());
-        postDonationCounselling.setCreatedBy(utilController.getCurrentUser());
         postDonationCounselling.setIsDeleted(false);
         return postDonationCounsellingRepository.update(postDonationCounselling);
     }
 
-    public void deletePostDonationCounselling(long id) {
+    public PostDonationCounselling flagForCounselling(long id) {
         PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository.findById(id);
-        postDonationCounselling.setIsDeleted(true);
-        postDonationCounsellingRepository.update(postDonationCounselling);
+        postDonationCounselling.setFlaggedForCounselling(Boolean.TRUE);
+        return postDonationCounsellingRepository.update(postDonationCounselling);
     }
-
 }
