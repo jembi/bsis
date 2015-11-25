@@ -64,9 +64,12 @@ public class TestBatchController {
     @Autowired
     private TestBatchViewModelFactory testBatchViewModelFactory;
     
+    @Autowired
+    private TestBatchBackingFormValidator testBatchBackingFormValidator;
+    
     @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(new TestBatchBackingFormValidator(binder.getValidator(), donationBatchRepository));
+    public void initBinder(WebDataBinder binder) {
+        binder.addValidators(testBatchBackingFormValidator);
     }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
@@ -105,7 +108,7 @@ public class TestBatchController {
     @RequestMapping(value = "{id}",  method = RequestMethod.PUT)
     @PreAuthorize("hasRole('"+PermissionConstants.EDIT_TEST_BATCH+"')")
     public ResponseEntity<TestBatchViewModel> updateTestBatch(@PathVariable Long id,
-            @RequestBody TestBatchBackingForm form){
+    	@Valid @RequestBody TestBatchBackingForm form){
 
 		TestBatch testBatch = testBatchCRUDService.updateTestBatch(id, form.getTestBatch().getStatus(), form.getTestBatch()
 		        .getCreatedDate(), form.getDonationBatchIds());
