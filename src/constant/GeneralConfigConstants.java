@@ -1,9 +1,16 @@
 package constant;
 
 public class GeneralConfigConstants {
-    
-    public static final String DONOR_REGISTRATION_OPEN_BATCH_REQUIRED = "donors.registration.openBatchRequired";
-    public static final String DEFER_DONORS_WITH_NEG_CONFIRMATORY_OUTCOMES = "testing.deferDonorsWithNegConfirmatoryOutcomes";
-    public static final String CREATE_INITIAL_COMPONENTS = "components.createInitialComponents";
+
+  // Donors
+  public static final String DONOR_REGISTRATION_OPEN_BATCH_REQUIRED = "donors.registration.openBatchRequired";
+  public static final String DONOR_MINIMUM_AGE = "donors.minimumAge";
+  public static final String DONOR_MAXIMUM_AGE = "donors.maximumAge";
+  
+  // Testing
+  public static final String DEFER_DONORS_WITH_NEG_CONFIRMATORY_OUTCOMES = "testing.deferDonorsWithNegConfirmatoryOutcomes";
+  
+  // Components
+  public static final String CREATE_INITIAL_COMPONENTS = "components.createInitialComponents";
 
 }

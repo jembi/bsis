@@ -36,6 +36,7 @@ import org.springframework.beans.NotReadablePropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.Errors;
+import constant.GeneralConfigConstants;
 import repository.DonationRepository;
 import repository.DonationBatchRepository;
 import repository.DonorRepository;
@@ -54,6 +55,7 @@ import repository.PackTypeRepository;
 import repository.DeferralReasonRepository;
 import repository.DiscardReasonRepository;
 import security.BsisUserDetails;
+import service.GeneralConfigAccessorService;
 import repository.DonationTypeRepository;
 import utils.DonorUtils;
 
@@ -117,6 +119,9 @@ public class UtilController {
 
   @Autowired
   private DonationTypeRepository donationTypeRepository;
+  
+  @Autowired
+  private GeneralConfigAccessorService generalConfigAccessorService;
 
   public Map<String, Map<String, Object>> getFormFieldsForForm(String formName) {
     List<FormField> formFields = formFieldRepository.getFormFields(formName);
@@ -355,23 +360,20 @@ public class UtilController {
   }
 
   public String verifyDonorAge(Date birthDate) {
-    Map<String, String> config = getConfigProperty("donationRequirements");
-    String errorMessage = "";
-    if (config.get("ageLimitsEnabled").equals("true")) {
-        Integer minAge = Integer.parseInt(config.get("minimumAge"));
-        Integer maxAge = Integer.parseInt(config.get("maximumAge"));
-        Integer donorAge = DonorUtils.computeDonorAge(birthDate);
-        if (donorAge == null) {
-          errorMessage = "One of donor Date of Birth or Age must be specified";
-        }
-        else {
-          if (donorAge < minAge || donorAge > maxAge) {
-            errorMessage = "Donor age must be between " + minAge + " and " + maxAge + " years.";
-          }
-        }
+    Integer donorAge = DonorUtils.computeDonorAge(birthDate);
 
+    if (donorAge == null) {
+      return "One of donor Date of Birth or Age must be specified";
     }
-    return errorMessage;
+
+    int minAge = generalConfigAccessorService.getIntValue(GeneralConfigConstants.DONOR_MINIMUM_AGE);
+    int maxAge = generalConfigAccessorService.getIntValue(GeneralConfigConstants.DONOR_MAXIMUM_AGE);
+
+    if (donorAge < minAge || donorAge > maxAge) {
+      return "Donor age must be between " + minAge + " and " + maxAge + " years.";
+    }
+
+    return null;
   }
 
   public Component findComponent(String donationIdentificationNumber, String componentType) {

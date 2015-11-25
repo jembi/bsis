@@ -1932,5 +1932,26 @@
             <column name="ineligibleDonor" type="tinyint(1)" />
         </addColumn>
     </changeSet>
+    
+    <changeSet id="20151125-1306" author="bausmeier">
+
+        <delete tableName="GenericConfig">
+            <where>propertyName IN ("minimumAge", "maximumAge", "ageLimitsEnabled")</where>
+        </delete>
+        
+        <insert tableName="GeneralConfig">
+			<column name="name" value="donors.minimumAge"></column>
+			<column name="value" value="16"></column>
+			<column name="description" value="The minimum age of a new donor"></column>
+			<column name="dataType_id" value="2"></column>
+        </insert>
+        
+        <insert tableName="GeneralConfig">
+			<column name="name" value="donors.maximumAge"></column>
+			<column name="value" value="65"></column>
+			<column name="description" value="The maximum age of a new donor"></column>
+			<column name="dataType_id" value="2"></column>
+        </insert>
+    </changeSet>
 
 </databaseChangeLog>
