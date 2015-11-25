@@ -70,7 +70,7 @@ public class PostDonationCounsellingCRUDService {
     }
 
     public PostDonationCounselling flagForCounselling(long id) {
-        PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository.findPostDonationCounsellingForDonor(id);
+        PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository.findById(id);
         postDonationCounselling.setFlaggedForCounselling(Boolean.TRUE);
         postDonationCounselling.setCounsellingDate(null);
         postDonationCounselling.setCounsellingStatus(null);
