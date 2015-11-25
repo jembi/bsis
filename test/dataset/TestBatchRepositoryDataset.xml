@@ -40,6 +40,9 @@
 	<TestBatch id="2" batchNumber="000001" isDeleted="false"
 		createdDate="2015-08-13 05:45:05.0" lastUpdated="2015-08-13 05:45:05.0"
 		status="OPEN" createdBy_id="1" lastUpdatedBy_id="1" />
+	<TestBatch id="3" batchNumber="000002" isDeleted="true"
+		createdDate="2015-07-10 05:45:05.0" lastUpdated="2015-07-10 05:45:05.0"
+		status="RELEASED" createdBy_id="1" lastUpdatedBy_id="1" />
 	<DonationBatch id="1" batchNumber="000000" isDeleted="false"
 		createdDate="2015-08-11 09:05:56.0" lastUpdated="2015-08-11 09:07:10.0"
 		createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" testBatch_id="1"

@@ -35,14 +35,14 @@ public class TestBatchCRUDService {
     public TestBatch updateTestBatch(Long testBatchId, TestBatchStatus newStatus, Date newCreatedDate, List<Integer> newDonationBatchIds) {
     	
         TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
-                
+                        
         if (newStatus != null) {
         	testBatch = changeTestBatchStatus(testBatch, newStatus);
         }
-
-        if (!testBatchConstraintChecker.canEditTestBatch(testBatch)) {
+        
+        if (newStatus != TestBatchStatus.CLOSED && !testBatchConstraintChecker.canEditTestBatch(testBatch)) {
             throw new IllegalStateException("Test batch cannot be updated");
-        }        
+        }
         
         if (newCreatedDate != null) {
         	testBatch.setCreatedDate(newCreatedDate);
@@ -85,12 +85,14 @@ public class TestBatchCRUDService {
     protected TestBatch changeTestBatchStatus(TestBatch testBatch, TestBatchStatus newStatus) {
     	LOGGER.info("Updating status of test batch " + testBatch.getId() + " to " + newStatus);
 
+    	TestBatchStatus oldStatus = testBatch.getStatus();
         if (newStatus == testBatch.getStatus()) {
             // The status is not being changed so return early
             return testBatch;
         }
 
-        if (newStatus == TestBatchStatus.RELEASED && !testBatchConstraintChecker.canReleaseTestBatch(testBatch)) {
+        if (oldStatus == TestBatchStatus.OPEN && newStatus == TestBatchStatus.RELEASED 
+        		&& !testBatchConstraintChecker.canReleaseTestBatch(testBatch)) {
             throw new IllegalStateException("Test batch cannot be released");
         }
         
@@ -99,7 +101,7 @@ public class TestBatchCRUDService {
         }
         
         if (newStatus == TestBatchStatus.OPEN && !testBatchConstraintChecker.canReopenTestBatch(testBatch)) {
-        	throw new IllegalStateException("Only open test batches can be closed");
+        	throw new IllegalStateException("Only closed test batches can be reopened");
         }
 
         // Set the new status
@@ -107,7 +109,7 @@ public class TestBatchCRUDService {
 
         testBatch = testBatchRepository.updateTestBatch(testBatch);
 
-        if (newStatus == TestBatchStatus.RELEASED) {
+        if (oldStatus == TestBatchStatus.OPEN && newStatus == TestBatchStatus.RELEASED) {
             testBatchStatusChangeService.handleRelease(testBatch);
         }
             

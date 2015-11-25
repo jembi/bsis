@@ -54,6 +54,11 @@ public class TestBatchStatusChangeService {
     }
     
     public void handleRelease(Donation donation) {
+      
+        if (!donation.getPackType().getTestSampleProduced()) {
+            LOGGER.debug("Skipping donation without test sample: " + donation);
+            return;
+        }
 
         if (donationConstraintChecker.donationHasDiscrepancies(donation)) {
             LOGGER.info("Skipping donation with discrepancies: " + donation);

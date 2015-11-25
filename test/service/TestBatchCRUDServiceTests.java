@@ -100,6 +100,28 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     }
     
     @Test
+    public void testUpdateTestBatchStatusWithTestBatchThatCanBeReopened_shouldUpdateTestBatch() {
+        TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.CLOSED).build();
+
+        when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(true);
+        
+        testBatchCRUDService.changeTestBatchStatus(testBatch, TestBatchStatus.OPEN);
+
+        assertThat(testBatch.getStatus(), is(TestBatchStatus.OPEN));
+    }
+    
+    @Test(expected = IllegalStateException.class)
+    public void testUpdateTestBatchStatusWithTestBatchThatCannotBeReopend_shouldThrow() {
+        TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.RELEASED).build();
+
+        when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
+        
+        testBatchCRUDService.changeTestBatchStatus(testBatch, TestBatchStatus.OPEN);
+
+        verifyZeroInteractions(testBatchStatusChangeService);
+    }
+    
+    @Test
     public void testUpdateTestBatch_shouldUpdateStatus() {
         TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN).build();
         TestBatch expectedTestBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.RELEASED).build();
@@ -113,6 +135,33 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
         
         verify(testBatchRepository, times(2)).updateTestBatch(argThat(hasSameStateAsTestBatch(expectedTestBatch)));
         verify(testBatchStatusChangeService).handleRelease(testBatch);
+    }
+    
+    @Test(expected = java.lang.IllegalStateException.class)
+    public void testCloseClosedTestBatch_shouldntUpdateStatus() {
+        TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.CLOSED).build();
+        
+        when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
+        when(testBatchConstraintChecker.canCloseTestBatch(testBatch)).thenReturn(false);
+        when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(true);
+
+		testBatchCRUDService.updateTestBatch(TEST_BATCH_ID, TestBatchStatus.RELEASED, null, null);
+    }
+    
+    @Test
+    public void testCloseReleasedTestBatch_shouldUpdateStatus() {
+        TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.CLOSED).build();
+        TestBatch expectedTestBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.RELEASED).build();
+        
+        when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
+        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(true);
+        when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(true);
+        when(testBatchRepository.updateTestBatch(any(TestBatch.class))).thenReturn(testBatch);
+
+		testBatchCRUDService.updateTestBatch(TEST_BATCH_ID, TestBatchStatus.RELEASED, null, null);
+		
+        verify(testBatchRepository, times(2)).updateTestBatch(argThat(hasSameStateAsTestBatch(expectedTestBatch)));
+        verify(testBatchStatusChangeService, times(0)).handleRelease(testBatch);
     }
     
     @Test
