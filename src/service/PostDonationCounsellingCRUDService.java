@@ -59,10 +59,6 @@ public class PostDonationCounsellingCRUDService {
             throw new IllegalArgumentException("Post donation counselling not found for id: " + id);
         }
 
-        if (counsellingStatus == CounsellingStatus.findById(0)) {
-            return flagForCounselling(id);
-        }
-
         postDonationCounselling.setFlaggedForCounselling(Boolean.FALSE);
         postDonationCounselling.setCounsellingStatus(counsellingStatus);
         postDonationCounselling.setCounsellingDate(counsellingDate);
@@ -74,7 +70,7 @@ public class PostDonationCounsellingCRUDService {
     }
 
     public PostDonationCounselling flagForCounselling(long id) {
-        PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository.findById(id);
+        PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository.findPostDonationCounsellingForDonor(id);
         postDonationCounselling.setFlaggedForCounselling(Boolean.TRUE);
         postDonationCounselling.setCounsellingDate(null);
         postDonationCounselling.setCounsellingStatus(null);

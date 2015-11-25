@@ -37,6 +37,10 @@ public class PostDonationCounsellingController {
             @Valid @RequestBody PostDonationCounsellingBackingForm backingForm,
             @PathVariable Long id) {
 
+        if (backingForm.getFlaggedForCounselling()) {
+            return new PostDonationCounsellingViewModel(postDonationCounsellingCRUDService.flagForCounselling(backingForm.getId()));
+        }
+
         PostDonationCounselling postDonationCounselling = postDonationCounsellingCRUDService.updatePostDonationCounselling(
                 backingForm.getId(), backingForm.getCounsellingStatus(), backingForm.getCounsellingDate(),
                 backingForm.getNotes());
@@ -57,13 +61,6 @@ public class PostDonationCounsellingController {
         map.put("counsellingStatuses", counsellingStatuses);
         
         return map;
-    }
-
-    @RequestMapping(value = "/flagforcounselling/{id}", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.EDIT_POST_DONATION_COUNSELLING + "')")
-    public PostDonationCounsellingViewModel flagForCounselling( @PathVariable Long id) {
-        PostDonationCounselling postDonationCounselling = postDonationCounsellingCRUDService.flagForCounselling(id);
-        return new PostDonationCounsellingViewModel(postDonationCounselling);
     }
 
 }
