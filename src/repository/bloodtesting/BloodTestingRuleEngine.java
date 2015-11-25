@@ -85,7 +85,7 @@ public class BloodTestingRuleEngine {
 		}
 		
 		BloodTestingRuleResultSet resultSet = new BloodTestingRuleResultSet(donation, storedTestResults,
-		        availableTestResults, recentTestResults);
+		        availableTestResults, recentTestResults, rules);
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("BloodTestingRuleEngine running for donation with id '" + donation.getId()
 			        + "' and donor with number '" + donation.getDonorNumber() + "' using available test results = "
@@ -198,9 +198,6 @@ public class BloodTestingRuleEngine {
 							default:
 								LOGGER.warn("Unknown rule subcategory: " + rule.getSubCategory());
 								break;
-						}
-						for (String testId : testIds) {
-							resultSet.addPendingTest(testId, extraTestId);
 						}
 					}
 				}

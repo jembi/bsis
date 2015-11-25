@@ -1,7 +1,6 @@
 package repository.bloodtesting;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +8,7 @@ import java.util.Set;
 
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
+import model.bloodtesting.rules.BloodTestingRule;
 import model.donation.Donation;
 
 import org.apache.log4j.Logger;
@@ -23,7 +23,8 @@ import viewmodel.BloodTestingRuleResult;
  */
 public class BloodTestingRuleResultSet {
 	
-	private static final Logger LOGGER = Logger.getLogger(BloodTestingRuleResultSet.class);
+	@SuppressWarnings("unused")
+    private static final Logger LOGGER = Logger.getLogger(BloodTestingRuleResultSet.class);
 	
 	/* the blood donation */
 	private Donation donation;
@@ -61,9 +62,6 @@ public class BloodTestingRuleResultSet {
 	/* collection of the basic TTI tests that weren't done */
 	private Set<Integer> basicTtiTestsNotDone = new HashSet<Integer>();
 	
-	/* map of tti tests with pending confirmation tests */
-	private Map<Integer, List<Integer>> pendingTests = new HashMap<Integer, List<Integer>>();
-	
 	/* collection of the various blood typing ABO tests done */
 	private Set<String> bloodAboChanges = new HashSet<String>();
 	
@@ -85,6 +83,9 @@ public class BloodTestingRuleResultSet {
 	/* collection of the TTI tests that are still outstanding */
 	private List<String> pendingTtiTestsIds = new ArrayList<String>();
 	
+	/* collection of the TTI and Serology tests that have been done */
+	private List<BloodTestingRule> bloodTestingRules = new ArrayList<BloodTestingRule>();
+	
 	/**
 	 * Creates and initialises the BloodTestingRuleResultSet
 	 * 
@@ -92,13 +93,16 @@ public class BloodTestingRuleResultSet {
 	 * @param storedTestResults Map<String, String> of the saved test results
 	 * @param availableTestResults Map<String, String> of the available test results (saved and latest)
 	 * @param recentTestResults Map<Integer, BloodTestResult> of the most recent test results
+	 * @param bloodTestingRules List<BloodTestingRules> of the tests performed
 	 */
 	public BloodTestingRuleResultSet(Donation donation, Map<String, String> storedTestResults,
-	    Map<String, String> availableTestResults, Map<Integer, BloodTestResult> recentTestResults) {
+	    Map<String, String> availableTestResults, Map<Integer, BloodTestResult> recentTestResults,
+	    List<BloodTestingRule> bloodTestingRules) {
 		this.donation = donation;
 		this.storedTestResults = storedTestResults;
 		this.availableTestResults = availableTestResults;
 		this.recentTestResults = recentTestResults;
+		this.bloodTestingRules = bloodTestingRules;
 	}
 	
 	public Donation getDonation() {
@@ -292,37 +296,13 @@ public class BloodTestingRuleResultSet {
     public void setPendingTtiTestsIds(List<String> pendingTtiTestsIds) {
     	this.pendingTtiTestsIds = pendingTtiTestsIds;
     }
-
 	
-    public Map<Integer, List<Integer>> getPendingTests() {
-    	return pendingTests;
+    public List<BloodTestingRule> getBloodTestingRules() {
+    	return bloodTestingRules;
     }
 
 	
-    public void setPendingTests(Map<Integer, List<Integer>> pendingTests) {
-    	this.pendingTests = pendingTests;
+    public void setBloodTestingRules(List<BloodTestingRule> bloodTestingRules) {
+    	this.bloodTestingRules = bloodTestingRules;
     }
-    
-	public void addPendingTest(String testId, String pendingTestId) {
-		Integer testInt = null;
-		try {
-			testInt = Integer.valueOf(testId);
-		} catch (NumberFormatException e) {
-			LOGGER.warn("Could not parse integer testId '" + testId + "'. Skipping this id.", e);
-		}
-		if (testInt != null) {
-			List<Integer> pendingTestsForTest = pendingTests.get(testInt);
-			if (pendingTestsForTest == null) {
-				pendingTestsForTest = new ArrayList<Integer>();
-				pendingTests.put(testInt, pendingTestsForTest);
-			}
-			try {
-				Integer pendingInt = Integer.valueOf(pendingTestId);
-				pendingTestsForTest.add(pendingInt);
-			}
-			catch (NumberFormatException e) {
-				LOGGER.warn("Could not parse integer pendingTtiTestId '" + pendingTestId + "'. Skipping this id.", e);
-			}
-		}
-	}
 }

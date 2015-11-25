@@ -2,10 +2,13 @@ package service;
 
 import java.util.List;
 
+import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
+import model.bloodtesting.rules.BloodTestingRule;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,38 +35,47 @@ public class BloodTestResultConstraintChecker {
 			} else if (!BloodTypingStatus.NOT_DONE.equals(bloodTypingStatus) 
 					&& (BloodTypingMatchStatus.NO_MATCH.equals(bloodTypingMatchStatus) 
 							|| BloodTypingMatchStatus.AMBIGUOUS.equals(bloodTypingMatchStatus))) {
-				// the user will be requested to confirm the blood typing results 
+				// the user will be requested to confirm the blood typing results
 				return true;
-			} else if (bloodTestingRuleResultSet.getPendingAboTestsIds().size() > 0
-					|| bloodTestingRuleResultSet.getPendingRhTestsIds().size() > 0) {
-				// there are pending blood tests 
-				List<Integer> extraTests = bloodTestingRuleResultSet.getPendingTests().get(
-					bloodTestResult.getBloodTest().getId());
-				if (extraTests == null || extraTests.size() == 0) {
-					// if there are no pending serology tests for this test
-					return false;
-				}
-			}
-			else { 
-				// no need for confirmation
-				return false;
+			} else {
+				// at the moment we don't know if there has been a confirmation or not - it isn't recorded
+				// FIXME: implement this ...
+				return true;
 			}
 		} else if (BloodTestCategory.TTI.equals(bloodTestResult.getBloodTest().getCategory())) {
 			if (bloodTestingRuleResultSet.getTtiStatus().equals(TTIStatus.NOT_DONE)) {
 				// return quickly if the status is not done
 				return true;
-			} else if (bloodTestingRuleResultSet.getPendingTtiTestsIds().size() > 0) {
-				List<Integer> extraTests = bloodTestingRuleResultSet.getPendingTests().get(
-					bloodTestResult.getBloodTest().getId());
-				if (extraTests == null || extraTests.size() == 0) {
-					// if there are no pending TTI tests for this TTI test
-					return false;
-				}
 			} else {
-				// there aren't any pending tests
-				return false;
+				// check the pending tests for rule associated with the blood test
+				return !isResultConfirmed(bloodTestingRuleResultSet, bloodTestResult);
 			}
 		}
 		return true;
+	}
+	
+	private boolean isResultConfirmed(BloodTestingRuleResultSet bloodTestingRuleResultSet, BloodTestResult bloodTestResult) {
+		boolean confirmed = false;
+		BloodTest bloodTest = bloodTestResult.getBloodTest();
+		List<BloodTestingRule> rules = bloodTestingRuleResultSet.getBloodTestingRules();
+		for (BloodTestingRule rule : rules) {
+			if (rule.getBloodTestsIds().contains(String.valueOf(bloodTest.getId()))) {
+				if (!StringUtils.isBlank(rule.getPendingTestsIds())) {
+					// go through the pending tests and check if there are any results
+					// if there is a result for a confirmation then this result cannot be edited
+					String[] pendingTestIds = rule.getPendingTestsIds().split(",");
+					for (String pendingTestId : pendingTestIds) {
+						String testResult = bloodTestingRuleResultSet.getAvailableTestResults().get(pendingTestId);
+						if (!StringUtils.isBlank(testResult)) {
+							confirmed = true;
+						}
+					}
+				}
+				if (confirmed) {
+					break;
+				}
+			}
+		}
+		return confirmed;
 	}
 }
