@@ -5,16 +5,16 @@
 
 	<!-- ALWAYS USE A UNIQUE IDENTIFIER of format id="yyyymmdd-hhmm" eg: id="20140225-1815" -->
 	<!-- ALWAYS UPDATE YOUR LOCAL REPO FROM GITHUB AND VERIFY YOUR id IS UNIQUE -->
-	<!-- NEVER DELETE OR MODIFY EXISTING CHANGE SETS - instead add new change sets 
+	<!-- NEVER DELETE OR MODIFY EXISTING CHANGE SETS - instead add new change sets
 		 reversing the previous ones if you need to change or delete info from another changeset-->
 
 	<!-- For issue 62 [Allow for entry of donor haemoglobin count] -->
 	<!-- Updated (timler): for #293 (refactoring) -->
 	<changeSet id="20150714-0900" author="gtldevang">
 	    <preConditions onFail="MARK_RAN">
-		    <sqlCheck expectedResult="0"> 
+		    <sqlCheck expectedResult="0">
 				<![CDATA[
-				SELECT count(*) FROM FormField 
+				SELECT count(*) FROM FormField
 				where form = 'Donation' and field = 'haemoglobinCount';
 				]]>
 			</sqlCheck>
@@ -32,7 +32,7 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimeField" value="0"></column>
 		</insert>
 		<update tableName="Donation">
 			<column name="haemoglobinCount" type="DECIMAL(7,1)" defaultValue="NULL"></column>
@@ -46,9 +46,9 @@
 	<!-- Updated (timler): for #293 (refactoring) -->
 	<changeSet id="20150714-0901" author="gtldevang">
 	    <preConditions onFail="MARK_RAN">
-		    <sqlCheck expectedResult="0"> 
+		    <sqlCheck expectedResult="0">
 				<![CDATA[
-				SELECT count(*) FROM FormField 
+				SELECT count(*) FROM FormField
 				where form = 'Donation' and field = 'donorWeight';
 				]]>
 			</sqlCheck>
@@ -66,7 +66,7 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimeField" value="0"></column>
 		</insert>
 		<update tableName="Donation">
 			<column name="donorWeight" type="DECIMAL(7,1)" defaultValue="NULL"></column>
@@ -75,14 +75,14 @@
 			<column name="donorWeight" type="DECIMAL(7,1)" defaultValue="NULL"></column>
 		</update>
 	</changeSet>
-	
+
 	<!-- For issue 61 [Add donor blood pressure (systolic & diastolic)] -->
 	<!-- Updated (timler): for #293 (refactoring) -->
 	<changeSet id="20150714-0902" author="gtldevang">
 	    <preConditions onFail="MARK_RAN">
-		    <sqlCheck expectedResult="0"> 
+		    <sqlCheck expectedResult="0">
 				<![CDATA[
-				SELECT count(*) FROM FormField 
+				SELECT count(*) FROM FormField
 				where form = 'Donation' and field = 'bloodPressureSystolic';
 				]]>
 			</sqlCheck>
@@ -100,7 +100,7 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>                        
+			<column name="isTimeField" value="0"></column>
 		</insert>
 	</changeSet>
 
@@ -108,9 +108,9 @@
 	<!-- Updated (timler): for #293 (refactoring) -->
 	<changeSet id="20150714-0903" author="gtldevang">
 	    <preConditions onFail="MARK_RAN">
-		    <sqlCheck expectedResult="0"> 
+		    <sqlCheck expectedResult="0">
 				<![CDATA[
-				SELECT count(*) FROM FormField 
+				SELECT count(*) FROM FormField
 				where form = 'Donation' and field = 'bloodPressureDiastolic';
 				]]>
 			</sqlCheck>
@@ -128,10 +128,10 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>                        
+			<column name="isTimeField" value="0"></column>
 		</insert>
 	</changeSet>
-	
+
 	<!-- For issue 61 [Add donor blood pressure (systolic & diastolic)] -->
 	<!-- Updated (timler): for #293 (refactoring) -->
 	<changeSet id="20150714-0904" author="gtldevang">
@@ -159,16 +159,16 @@
 		<renameColumn tableName="Donation_AUD" oldColumnName="bloodPressure" newColumnName="bloodPressureSystolic" columnDataType="int"/>
 		<addColumn tableName="Donation_AUD">
 			<column name="bloodPressureDiastolic" type="int" defaultValue="NULL"></column>
-		</addColumn>                        
+		</addColumn>
 	</changeSet>
-	
+
 	<!-- For issue 70 [Allow for entry of donor pulse] -->
 	<!-- Updated (timler): for #293 (refactoring) -->
 	<changeSet id="20150714-0906" author="gtldevang">
 	    <preConditions onFail="MARK_RAN">
-		    <sqlCheck expectedResult="0"> 
+		    <sqlCheck expectedResult="0">
 				<![CDATA[
-				SELECT count(*) FROM FormField 
+				SELECT count(*) FROM FormField
 				where form = 'Donation' and field = 'donorPulse';
 				]]>
 			</sqlCheck>
@@ -186,7 +186,7 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimeField" value="0"></column>
 		</insert>
 	</changeSet>
 
@@ -201,7 +201,7 @@
 		</addColumn>
 		<addColumn tableName="Donation_AUD">
 			<column name="donorPulse" type="int" defaultValue="NULL"></column>
-		</addColumn>		
+		</addColumn>
 	</changeSet>
 
 	<!-- For issue 39 [Add in Date of first donation field to Donor form] -->
@@ -211,7 +211,7 @@
 		</addColumn>
 		<addColumn tableName="Donor_AUD">
 			<column name="dateOfFirstDonation" type="DATE" defaultValue="NULL"></column>
-		</addColumn>		
+		</addColumn>
 		<insert tableName="FormField">
 			<column name="form" value="Donor"></column>
 			<column name="FIELD" value="dateOfFirstDonation"></column>
@@ -225,7 +225,7 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimeField" value="0"></column>
 		</insert>
 	</changeSet>
 
@@ -254,8 +254,8 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
-		</insert>	
+			<column name="isTimeField" value="0"></column>
+		</insert>
 		<insert tableName="FormField">
 			<column name="form" value="Component"></column>
 			<column name="FIELD" value="numUnits"></column>
@@ -269,10 +269,10 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimeField" value="0"></column>
 		</insert>
 	</changeSet>
-	
+
 	<!-- For issue 102 [Add Request Type 'Bulk Transfer' Flag] -->
 	<changeSet id="20131108-1617" author="gtldevang">
 		<addColumn tableName="RequestType">
@@ -305,7 +305,7 @@
 			<column name="propertyValue" value="true"></column>
 		 </insert>
    </changeSet>
-   
+
    <!-- For issue 58 [Add ability to update Deferrals] -->
 	 <changeSet id="20131125-1517" author="gtldevang">
 		 <addColumn tableName="DonorDeferral">
@@ -317,7 +317,7 @@
 			baseTableName="DonorDeferral" baseColumnNames="voidedBy_id"
 			referencedTableName="User" referencedColumnNames="id"/>
    </changeSet>
-   
+
 	<changeSet id="20131125-1525" author="gtldevang">
 		 <addColumn tableName="DonorDeferral_AUD">
 			<column name="isVoided" type="tinyint(1)" />
@@ -334,12 +334,12 @@
 		 <addColumn tableName="BloodTest">
 			<column name="isDeleted" type="TINYINT(1)" />
 		 </addColumn>
-		 
+
 		 <addColumn tableName="BloodTest_AUD">
 			<column name="isDeleted" type="TINYINT(1)" />
 		 </addColumn>
 	</changeSet>
-   
+
 	<!-- For issue 117 [Configure Role] -->
 	<changeSet id="20131129-1312" author="gtlnikita">
 		<addColumn tableName="Role">
@@ -351,7 +351,7 @@
 			<column name="description" type="longtext"></column>
 		</addColumn>
 	</changeSet>
-	
+
 	<!-- For issue 117 [for issue role management] -->
 	<changeSet id="20140131-1410" author="srikanthmalyala">
 		<insert tableName="FormField">
@@ -367,10 +367,10 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimeField" value="0"></column>
 		</insert>
 		</changeSet>
-		
+
 	<!-- For issue 118[improve admin UI to manage users ] -->
 	<changeSet id="20140203-1608" author="srikanthmalyala">
 		<insert tableName="FormField">
@@ -386,10 +386,10 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimeField" value="0"></column>
 		</insert>
 	</changeSet>
-	
+
 	<!-- For issue 118[improve admin UI to manage users ] -->
 	<changeSet id="20140203-1615" author="srikanthmalyala">
 		<insert tableName="FormField">
@@ -405,9 +405,9 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimeField" value="0"></column>
 		</insert>
-		
+
 		<insert tableName="FormField">
 			<column name="form" value="User"></column>
 			<column name="FIELD" value="lastname"></column>
@@ -421,7 +421,7 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>			
+			<column name="isTimeField" value="0"></column>
 		</insert>
 	</changeSet>
 
@@ -429,9 +429,9 @@
 	<!-- Updated (timler): for #293 (refactoring) -->
 	<changeSet id="20150721-0850" author="srikanthmalyala">
    	    <preConditions onFail="MARK_RAN">
-		    <sqlCheck expectedResult="0"> 
+		    <sqlCheck expectedResult="0">
 				<![CDATA[
-				SELECT count(*) FROM FormField 
+				SELECT count(*) FROM FormField
 				where displayName = 'DIN' and field = 'donationIdentificationNumber';
 				]]>
 			</sqlCheck>
@@ -466,19 +466,19 @@
 			<column name="autoGenerate" value="0"></column>
 			<column name="isAutoGeneratable" value="0"></column>
 			<column name="useCurrentTime" value="0"></column>
-			<column name="isTimeField" value="0"></column>	
-			<column name="displayName" value="BP"></column>		
+			<column name="isTimeField" value="0"></column>
+			<column name="displayName" value="BP"></column>
 		</insert>
 	</changeSet>
-	
-	<!-- For issue 172[Add in additional donor demographic fields] --> 
+
+	<!-- For issue 172[Add in additional donor demographic fields] -->
 	<changeSet id="20140520-1458" author="srikanthmalyala">
 
 		<createTable  tableName="IdType">
 			<column name="id" type="BIGINT" autoIncrement="true">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="idType" type="varchar(255)"/> 
+			<column name="idType" type="varchar(255)"/>
 			<column name="regExp" type="varchar(255)" defaultValue="NULL"/>
 		</createTable>
 
@@ -486,7 +486,7 @@
 			<column name="id" type="BIGINT" autoIncrement="true">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="preferredLanguage" type="varchar(255)"/> 
+			<column name="preferredLanguage" type="varchar(255)"/>
 		</createTable>
 
 		<dropColumn  columnName="address" tableName="Donor"/>
@@ -547,14 +547,14 @@
 			<column name="id" type="BIGINT" autoIncrement = "true">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="donorCodeGroup" type="varchar(255)"/> 
+			<column name="donorCodeGroup" type="varchar(255)"/>
 		</createTable>
-	
+
 		<createTable  tableName="DonorCode">
 			<column name="id" type="BIGINT" autoIncrement="true">
 			<constraints primaryKey="true" nullable="false" />
 			 </column>
-			  <column name="donorCode" type="varchar(255)"/> 
+			  <column name="donorCode" type="varchar(255)"/>
 			 <column name="donorCodeGroupId" type="BIGINT">
 				<constraints  nullable="false" />
 			 </column>
@@ -575,8 +575,8 @@
 			<column name="donorCodeId" type="BIGINT">
 				<constraints  nullable="false" />
 			</column>
-			<column name="createdDate" type="TIMESTAMP"/>
-			<column name="lastUpdated" type="TIMESTAMP"/>
+			<column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+			<column name="lastUpdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
 			<column name="createdBy_id" type="SMALLINT"/>
 			<column name="lastUpdatedBy_id" type="SMALLINT"/>
 		</createTable>
@@ -599,8 +599,8 @@
 				<constraints  primaryKey="true" nullable="false" />
 			</column>
 			<column name="REVTYPE" type="TINYINT"/>
-			<column name="createdDate" type="TIMESTAMP"/>
-			<column name="lastUpdated" type="TIMESTAMP"/>
+			<column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+			<column name="lastUpdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
 			<column name="createdBy_id" type="SMALLINT"/>
 			<column name="lastUpdatedBy_id" type="SMALLINT"/>
 		</createTable>
@@ -625,7 +625,7 @@
 			<column name="id" type="BIGINT" autoIncrement = "true">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="preferredAddressType" type="varchar(255)"/> 
+			<column name="preferredAddressType" type="varchar(255)"/>
 		</createTable>
 
 		<createTable  tableName="Address">
@@ -633,32 +633,32 @@
 				<constraints primaryKey="true" nullable="false" />
 			</column>
 
-			<column name="homeAddressLine1" type="varchar(255)"/> 
-			<column name="homeAddressLine2" type="varchar(255)"/> 
-			<column name="homeAddressCity" type="varchar(255)"/> 
-			<column name="homeAddressProvince" type="varchar(255)"/> 
-			<column name="homeAddressDistrict" type="varchar(255)"/> 
-			<column name="homeAddressState" type="varchar(255)"/> 
-			<column name="homeAddressCountry" type="varchar(255)"/> 
-			<column name="homeAddressZipcode" type="varchar(255)"/> 
+			<column name="homeAddressLine1" type="varchar(255)"/>
+			<column name="homeAddressLine2" type="varchar(255)"/>
+			<column name="homeAddressCity" type="varchar(255)"/>
+			<column name="homeAddressProvince" type="varchar(255)"/>
+			<column name="homeAddressDistrict" type="varchar(255)"/>
+			<column name="homeAddressState" type="varchar(255)"/>
+			<column name="homeAddressCountry" type="varchar(255)"/>
+			<column name="homeAddressZipcode" type="varchar(255)"/>
 
-			<column name="workAddressLine1" type="varchar(255)"/> 
-			<column name="workAddressLine2" type="varchar(255)"/> 
-			<column name="workAddressCity" type="varchar(255)"/> 
-			<column name="workAddressProvince" type="varchar(255)"/> 
-			<column name="workAddressDistrict" type="varchar(255)"/> 
-			<column name="workAddressCountry" type="varchar(255)"/> 
-			<column name="workAddressState" type="varchar(255)"/> 
-			<column name="workAddressZipcode" type="varchar(255)"/> 
+			<column name="workAddressLine1" type="varchar(255)"/>
+			<column name="workAddressLine2" type="varchar(255)"/>
+			<column name="workAddressCity" type="varchar(255)"/>
+			<column name="workAddressProvince" type="varchar(255)"/>
+			<column name="workAddressDistrict" type="varchar(255)"/>
+			<column name="workAddressCountry" type="varchar(255)"/>
+			<column name="workAddressState" type="varchar(255)"/>
+			<column name="workAddressZipcode" type="varchar(255)"/>
 
-			<column name="postalAddressLine1" type="varchar(255)"/> 
-			<column name="postalAddressLine2" type="varchar(255)"/> 
-			<column name="postalAddressCity" type="varchar(255)"/> 
-			<column name="postalAddressProvince" type="varchar(255)"/> 
-			<column name="postalAddressDistrict" type="varchar(255)"/> 
-			<column name="postalAddressCountry" type="varchar(255)"/> 
-			<column name="postalAddressState" type="varchar(255)"/> 
-			<column name="postalAddressZipcode" type="varchar(255)"/> 
+			<column name="postalAddressLine1" type="varchar(255)"/>
+			<column name="postalAddressLine2" type="varchar(255)"/>
+			<column name="postalAddressCity" type="varchar(255)"/>
+			<column name="postalAddressProvince" type="varchar(255)"/>
+			<column name="postalAddressDistrict" type="varchar(255)"/>
+			<column name="postalAddressCountry" type="varchar(255)"/>
+			<column name="postalAddressState" type="varchar(255)"/>
+			<column name="postalAddressZipcode" type="varchar(255)"/>
 		</createTable>
 
 		<dropForeignKeyConstraint baseTableName="Donor" constraintName="FK3F25E46FCE9E976"/>
@@ -668,9 +668,9 @@
 				<constraints primaryKey="true" nullable="false" />
 			</column>
 
-			<column name="mobileNumber" type="varchar(255)"/> 
-			<column name="homeNumber" type="varchar(255)"/> 
-			<column name="workNumber" type="varchar(255)"/> 
+			<column name="mobileNumber" type="varchar(255)"/>
+			<column name="homeNumber" type="varchar(255)"/>
+			<column name="workNumber" type="varchar(255)"/>
 			<column name="email" type="varchar(255)"/>
 		</createTable>
 
@@ -695,10 +695,10 @@
 		<addColumn tableName="Donor">
 			<column name="contactMethodType_id" type="SMALLINT(6)">
 					<constraints foreignKeyName="Contact_ContactType_FK" references="ContactMethodType(id)"/>
-			</column> 
+			</column>
 		</addColumn>
 		<addColumn tableName="Donor">
-			<column name="addressTypeId" type="BIGINT"> 
+			<column name="addressTypeId" type="BIGINT">
 				<constraints foreignKeyName="Address_AddressType_fk" references="AddressType(id)"/>
 			</column>
 		</addColumn>
@@ -957,8 +957,8 @@
 			</column>
 			<column name="batchNumber" type="varchar(20)"></column>
 			<column name="isDeleted" type="tinyint(1)"></column>
-			<column name="createdDate" type="timestamp"></column>
-			<column name="lastUpdated" type="timestamp"></column>
+			<column name="createdDate" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+			<column name="lastUpdated" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
 			<column name="notes" type="longtext"></column>
 			<column name="status" type="varchar(20)"></column>
 			<column name="createdBy_id" type="smallint(6)"></column>
@@ -974,10 +974,10 @@
 		<addColumn tableName="DonationBatch">
 			<column name="testBatch_id" type="smallint(6)"></column>
 		</addColumn>
-		<addForeignKeyConstraint constraintName="testBatch_id_FK" 
-			 referencedTableName="TestBatch" 
-			 baseColumnNames="testBatch_id" 
-			 baseTableName="DonationBatch" 
+		<addForeignKeyConstraint constraintName="testBatch_id_FK"
+			 referencedTableName="TestBatch"
+			 baseColumnNames="testBatch_id"
+			 baseTableName="DonationBatch"
 			 referencedColumnNames="id"/>
 	</changeSet>
 
@@ -989,10 +989,10 @@
 		<addColumn tableName="DonationBatch_AUD">
 				<column name="testBatch_id" type="smallint(6)"></column>
 		</addColumn>
-		<addForeignKeyConstraint constraintName="testBatch_id_aud_FK" 
-			 referencedTableName="TestBatch" 
-			 baseColumnNames="testBatch_id" 
-			 baseTableName="DonationBatch_AUD" 
+		<addForeignKeyConstraint constraintName="testBatch_id_aud_FK"
+			 referencedTableName="TestBatch"
+			 baseColumnNames="testBatch_id"
+			 baseTableName="DonationBatch_AUD"
 			 referencedColumnNames="id"/>
 	</changeSet>
 
@@ -1003,8 +1003,8 @@
 			</column>
 			<column name="batchNumber" type="varchar(20)"></column>
 			<column name="isDeleted" type="tinyint(1)"></column>
-			<column name="createdDate" type="timestamp"></column>
-			<column name="lastUpdated" type="timestamp"></column>
+			<column name="createdDate" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+			<column name="lastUpdated" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
 			<column name="notes" type="longtext"></column>
 			<column name="status" type="varchar(20)"></column>
 			<column name="createdBy_id" type="smallint(6)"></column>
@@ -1116,7 +1116,7 @@
 			 <column name="preparationInfo" type="text"></column>
 		</addColumn>
 	</changeSet>
-	
+
 		<!-- #234 Associate Pack Type with Initial Component Type in Donation -->
 	<!-- Updated (timler): for #294 (refactoring) -->
 	<!-- Updated (timler): for #328 (refactoring) -->
@@ -1177,7 +1177,7 @@
 			<column name="dueToDonate" type="date"></column>
 		</addColumn>
 	</changeSet>
-	
+
 	<!-- #263 Add ComponentTypeCombinationRule table -->
 	<!-- Updated (timler): for #294 (refactoring) -->
 	<changeSet id="20150817-1020" author="danfuterman">
@@ -1187,17 +1187,17 @@
 		<createTable tableName="ComponentType_ComponentTypeCombination">
 			<column name="id" type="INT" autoIncrement = "true">
 				<constraints primaryKey="true" nullable="false" />
-				
+
 			</column>
 			<column name="sourceComponentTypes_id" type="SMALLINT">
 			<constraints foreignKeyName="pTID_FK" references="ComponentType(id)"/>
-			</column> 
+			</column>
 			<column name="producedComponentTypeCombinations_id" type="SMALLINT">
 			<constraints foreignKeyName="pTCID_FK" references="ComponentTypeCombination(id)"/>
 			</column>
 		</createTable>
 	</changeSet>
-	
+
 	<!-- #263 Add bloodTypingMatchStatus field to Donation -->
 	<!-- Updated (timler): for #293 (refactoring) -->
 	<changeSet id="20150714-1204" author="danfuterman">
@@ -1211,7 +1211,7 @@
 			<column name="bloodTypingMatchStatus" type="VARCHAR(20)"></column>
 		</addColumn>
 	</changeSet>
-	
+
 	<!-- Remove sequenceNumberContext field from SequenceNumberStore -->
 	<changeSet id="20150210-1026" author="danfuterman">
 		<dropColumn columnName="sequenceNumberContext" tableName="SequenceNumberStore"/>
@@ -1254,7 +1254,7 @@
 				<constraints foreignKeyName="Config_DataType_FK" references="DataType(id)"/>
 			</column>
 		</createTable>
-		
+
 		<insert tableName="FormField">
 			<column name="form" value="GeneralConfig"></column>
 			<column name="FIELD" value="name"></column>
@@ -1350,14 +1350,14 @@
 		</insert>
 	</changeSet>
 
-	<!-- ##288 change id of BloodTestingRule to smallint as mediumint is not 
+	<!-- ##288 change id of BloodTestingRule to smallint as mediumint is not
 		supported in dbunit and it is unnecessary -->
 	<changeSet id="20150707-2214" author="timler">
 		<comment>Change BloodTestingRule Id to smallint</comment>
 		<modifyDataType columnName="id" newDataType="smallint"
 			tableName="BloodTestingRule" />
 	</changeSet>
-	
+
 	<changeSet id="20150720-1611" author="bausmeier">
 	   <comment>Add password reset column to user</comment>
 	   <addColumn tableName="User">
@@ -1371,7 +1371,7 @@
 	       </column>
 	   </addColumn>
 	</changeSet>
-	
+
 	<changeSet id="20150727-1140" author="bausmeier">
 	   <comment>Add haemoglobin level column to donation</comment>
 	   <addColumn tableName="Donation">
@@ -1609,10 +1609,10 @@
 			<column name="REVTYPE" type="tinyint(4)"></column>
 		</createTable>
 	</changeSet>
-	
+
 	<changeSet id="20150903-1118" author="bausmeier">
 	   <comment>Add default duration days to deferral reasons.</comment>
-	
+
 	   <addColumn tableName="DeferralReason">
 	       <column name="defaultDuration" type="SMALLINT UNSIGNED" defaultValue="NULL" />
 	   </addColumn>
@@ -1621,16 +1621,16 @@
 	       <column name="defaultDuration" type="SMALLINT UNSIGNED" defaultValue="NULL" />
 	   </addColumn>
 	</changeSet>
-	
+
 	<changeSet id="20150907-0917" author="bausmeier">
 		<comment>Add deferral reason durationType column.</comment>
-	   
+
 	   <addColumn tableName="DeferralReason">
 	       <column name="durationType" type="VARCHAR(30)">
 	           <constraints nullable="false" />
 	       </column>
 	   </addColumn>
-	   
+
 	   <addColumn tableName="DeferralReason_AUD">
 	       <column name="durationType" type="VARCHAR(30)">
 	           <constraints nullable="false" />
@@ -1641,33 +1641,33 @@
        		<column name="durationType" value="TEMPORARY" />
    		</update>
 	</changeSet>
-	
+
 	<changeSet id="20150907-0918" author="bausmeier">
 		<comment>Add Deferral Reason type column and TTI unsafe deferral reason.</comment>
-		
+
 			<addColumn tableName="DeferralReason">
 		       <column name="type" type="VARCHAR(30)">
 		           <constraints nullable="false" />
 		       </column>
 		   </addColumn>
-	
+
 		   <addColumn tableName="DeferralReason_AUD">
 		       <column name="type" type="VARCHAR(30)">
 		           <constraints nullable="false" />
 		       </column>
 		   </addColumn>
-	
+
 		   <update tableName="DeferralReason">
 		       <column name="type" value="NORMAL" />
 		   </update>
-	
+
 		   <insert tableName="DeferralReason">
 		       <column name="reason">TTI Unsafe</column>
 		       <column name="type">AUTOMATED_TTI_UNSAFE</column>
 		       <column name="durationType">PERMANENT</column>
 		       <column name="isDeleted">0</column>
 		   </insert>
-	   
+
 	</changeSet>
 
     <changeSet id="20150907-1149" author="bausmeier">
@@ -1702,7 +1702,7 @@
             <column name="REVTYPE" type="tinyint(4)"></column>
         </createTable>
     </changeSet>
-    
+
     <changeSet id="20150908-1613" author="bausmeier">
 
         <createTable tableName="AdverseEvent">
@@ -1730,19 +1730,19 @@
             </column>
             <column name="REVTYPE" type="tinyint(4)"></column>
         </createTable>
-        
+
         <addColumn tableName="Donation">
             <column name="adverseEvent_id" type="bigint">
 				<constraints nullable="true" foreignKeyName="FK_DONATION_ADVERSE_EVENT_ID"
                         references="AdverseEvent(id)" />
             </column>
         </addColumn>
-        
+
         <addColumn tableName="Donation_AUD">
             <column name="adverseEvent_id" type="bigint" />
         </addColumn>
     </changeSet>
-    
+
     <changeSet id="20150917-1347" author="bausmeier">
 
         <addColumn tableName="PackType">
@@ -1753,7 +1753,7 @@
             <column name="testSampleProduced" type="tinyint(1)" />
         </addColumn>
     </changeSet>
-    
+
     <changeSet id="20150922-1408" author="timler">
         <createTable tableName="DuplicateDonorBackup">
             <column name="id" type="bigint" autoIncrement="true">
@@ -1782,7 +1782,7 @@
         <comment>Add missing autoincrement on id column</comment>
         <addAutoIncrement tableName="BloodTestingRule" columnName="id" columnDataType="smallint(6)" />
     </changeSet>
-    
+
     <changeSet id="20151006-1200" author="bausmeier">
         <addColumn tableName="BloodTest">
             <column name="flagComponentsForDiscard" type="tinyint(1)" defaultValue="0">
@@ -1921,7 +1921,7 @@
 			<where>id = 2</where>
 		</delete>
 	</changeSet>
-    
+
     <changeSet id="20151110-1024" author="bausmeier">
         <addColumn tableName="Donation">
             <column name="ineligibleDonor" type="tinyint(1)" defaultValue="0">
