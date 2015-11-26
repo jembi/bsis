@@ -9,6 +9,7 @@ import model.bloodtesting.TTIStatus;
 import model.bloodtesting.rules.BloodTestingRule;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +23,17 @@ import repository.bloodtesting.BloodTypingStatus;
 @Service
 public class BloodTestResultConstraintChecker {
 	
+	@Autowired
+	DonationConstraintChecker donationConstraintChecker;
+
 	/**
 	 * Determines if the BloodTestResult may be edited.
 	 */
-	public boolean canEdit(BloodTestingRuleResultSet bloodTestingRuleResultSet, BloodTestResult bloodTestResult) {
+	public boolean canEdit(BloodTestingRuleResultSet bloodTestingRuleResultSet, BloodTestResult bloodTestResult, Boolean isDonationReleased) {
+		if (isDonationReleased) {
+			// can't edit the results for a donation that is released
+			return false;
+		}
 		if (BloodTestCategory.BLOODTYPING.equals(bloodTestResult.getBloodTest().getCategory())) {
 			BloodTypingStatus bloodTypingStatus = bloodTestingRuleResultSet.getBloodTypingStatus();
 			BloodTypingMatchStatus bloodTypingMatchStatus = bloodTestingRuleResultSet.getBloodTypingMatchStatus();
