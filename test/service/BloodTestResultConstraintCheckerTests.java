@@ -321,6 +321,42 @@ public class BloodTestResultConstraintCheckerTests {
 	}
 	
 	@Test
+	public void testCanEditTTISafeWithOtherRelatedPendingBloodTest() {
+		Donation donation = aDonation().build();
+		BloodTest bloodTest = new BloodTest();
+		bloodTest.setCategory(BloodTestCategory.TTI);
+		bloodTest.setId(1);
+		BloodTestResult bloodTestResult = new BloodTestResult();
+		bloodTestResult.setDonation(donation);
+		bloodTestResult.setBloodTest(bloodTest);
+		bloodTestResult.setResult("OUTCOME");
+		Map<String, String> availableTestResults = new HashMap<String, String>();
+		availableTestResults.put("1", "RESULT");
+		availableTestResults.put("3", "RESULT");
+		BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
+		        new HashMap<String, String>(), availableTestResults, new HashMap<Integer, BloodTestResult>(),
+		        generateTestBloodTestingRules());
+		bloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_SAFE);
+		List<String> pendingTtiTestIds = new ArrayList<String>();
+		pendingTtiTestIds.add("2");
+		bloodTestingRuleResultSet.setPendingTtiTestsIds(pendingTtiTestIds);
+		BloodTestingRule rule1 = new BloodTestingRule();
+		rule1.setBloodTestsIds("1");
+		rule1.setPendingTestsIds("2");
+		BloodTestingRule rule2 = new BloodTestingRule();
+		rule2.setBloodTestsIds("2");
+		rule2.setPendingTestsIds("3");
+		List<BloodTestingRule> rules = new ArrayList<>();
+		rules.add(rule1);
+		rules.add(rule2);
+		bloodTestingRuleResultSet.setBloodTestingRules(rules);
+		
+		boolean canEdit = bloodTestResultConstraintChecker.canEdit(bloodTestingRuleResultSet, bloodTestResult, DONATION_NOT_RELEASED);
+		
+		assertThat(canEdit, is(false));
+	}
+	
+	@Test
 	public void testCanEditReleasedDonationTTITestResult() {
 		Donation donation = aDonation().build();
 		BloodTest bloodTest = new BloodTest();
