@@ -91,14 +91,6 @@ public class DonorBackingFormValidator implements Validator {
 		  if(utilController.isFutureDate(date)){
 			  errors.rejectValue("donor.birthDate", "date.futureDate", "Cannot be a future date");
 		  }
-		  
-		  else{
-			// Verify Donor's age
-			String errorMessage = utilController.verifyDonorAge(date);
-			if (StringUtils.isNotBlank(errorMessage)){
-				errors.rejectValue("donor.birthDate", "age.outOfRange", errorMessage);
-			}
-		  }
     	}
 	  
     }
