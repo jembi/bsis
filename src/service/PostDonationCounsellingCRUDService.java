@@ -46,6 +46,9 @@ public class PostDonationCounsellingCRUDService {
         postDonationCounselling.setFlaggedForCounselling(Boolean.TRUE);
         postDonationCounselling.setIsDeleted(Boolean.FALSE);
         postDonationCounselling.setCreatedBy(utilController.getCurrentUser());
+        postDonationCounselling.setCreatedDate(new Date());
+        postDonationCounselling.setLastUpdated(new Date());
+        postDonationCounselling.setLastUpdatedBy(utilController.getCurrentUser());
         postDonationCounsellingRepository.save(postDonationCounselling);
         return postDonationCounselling;
     }
@@ -76,6 +79,8 @@ public class PostDonationCounsellingCRUDService {
         postDonationCounselling.setCounsellingStatus(null);
         postDonationCounselling.getDonation().setNotes(null);
         postDonationCounselling.setIsDeleted(Boolean.FALSE);
+        postDonationCounselling.setLastUpdated(new Date());
+        postDonationCounselling.setLastUpdatedBy(utilController.getCurrentUser());
         return postDonationCounsellingRepository.update(postDonationCounselling);
     }
 }

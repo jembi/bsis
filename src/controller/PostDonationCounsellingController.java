@@ -38,6 +38,7 @@ public class PostDonationCounsellingController {
             @PathVariable Long id) {
 
         if (backingForm.getFlaggedForCounselling()) {
+            //This is when you wish to clear the current status and re flag for counselling
             return new PostDonationCounsellingViewModel(postDonationCounsellingCRUDService.flagForCounselling(backingForm.getId()));
         }
 
