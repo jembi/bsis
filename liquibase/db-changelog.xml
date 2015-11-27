@@ -1933,6 +1933,14 @@
         </addColumn>
     </changeSet>
     
+	<changeSet id="20151127-0748" author="danfuterman">
+		<comment>Update name of Permanent Deferral Reason</comment>
+		<update tableName="DeferralReason">
+            <column name="reason" value="Test Outcomes" type="varchar(100)"></column>
+            <where>reason = 'TTI Unsafe'</where>
+        </update>
+	</changeSet>
+    
     <changeSet id="20151125-1306" author="bausmeier">
 
         <delete tableName="GenericConfig">
