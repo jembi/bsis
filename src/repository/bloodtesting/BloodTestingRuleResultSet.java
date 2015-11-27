@@ -1,7 +1,6 @@
 package repository.bloodtesting;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -9,8 +8,11 @@ import java.util.Set;
 
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
+import model.bloodtesting.rules.BloodTestingRule;
 import model.donation.Donation;
-import viewmodel.BloodTestResultViewModel;
+
+import org.apache.log4j.Logger;
+
 import viewmodel.BloodTestingRuleResult;
 
 /**
@@ -20,6 +22,9 @@ import viewmodel.BloodTestingRuleResult;
  * @see BloodTestingRuleResult
  */
 public class BloodTestingRuleResultSet {
+	
+	@SuppressWarnings("unused")
+    private static final Logger LOGGER = Logger.getLogger(BloodTestingRuleResultSet.class);
 	
 	/* the blood donation */
 	private Donation donation;
@@ -78,6 +83,9 @@ public class BloodTestingRuleResultSet {
 	/* collection of the TTI tests that are still outstanding */
 	private List<String> pendingTtiTestsIds = new ArrayList<String>();
 	
+	/* collection of the TTI and Serology tests that have been done */
+	private List<BloodTestingRule> bloodTestingRules = new ArrayList<BloodTestingRule>();
+	
 	/**
 	 * Creates and initialises the BloodTestingRuleResultSet
 	 * 
@@ -85,77 +93,16 @@ public class BloodTestingRuleResultSet {
 	 * @param storedTestResults Map<String, String> of the saved test results
 	 * @param availableTestResults Map<String, String> of the available test results (saved and latest)
 	 * @param recentTestResults Map<Integer, BloodTestResult> of the most recent test results
+	 * @param bloodTestingRules List<BloodTestingRules> of the tests performed
 	 */
 	public BloodTestingRuleResultSet(Donation donation, Map<String, String> storedTestResults,
-	    Map<String, String> availableTestResults, Map<Integer, BloodTestResult> recentTestResults) {
+	    Map<String, String> availableTestResults, Map<Integer, BloodTestResult> recentTestResults,
+	    List<BloodTestingRule> bloodTestingRules) {
 		this.donation = donation;
 		this.storedTestResults = storedTestResults;
 		this.availableTestResults = availableTestResults;
 		this.recentTestResults = recentTestResults;
-	}
-	
-	/**
-	 * Generates the BloodTestingRuleResult based on the data collected.
-	 * 
-	 * @return BloodTestingRuleResult
-	 */
-	public BloodTestingRuleResult buildBloodTestingRuleResult() {
-		BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
-		
-		// the blood donation
-		ruleResult.setDonation(donation);
-		
-		// test data in various formats
-		ruleResult.setStoredTestResults(storedTestResults);
-		Map<String, BloodTestResultViewModel> recentTestResultsViewModel = new HashMap<String, BloodTestResultViewModel>();
-		for (Integer testId : recentTestResults.keySet()) {
-			recentTestResultsViewModel.put(testId.toString(), new BloodTestResultViewModel(recentTestResults.get(testId)));
-		}
-		ruleResult.setRecentTestResults(recentTestResultsViewModel);
-		ruleResult.setAvailableTestResults(availableTestResults);
-		
-		// pending tests
-		List<String> pendingBloodTypingTestsIds = new ArrayList<String>();
-		pendingBloodTypingTestsIds.addAll(pendingAboTestsIds);
-		pendingBloodTypingTestsIds.addAll(pendingRhTestsIds);
-		ruleResult.setPendingBloodTypingTestsIds(pendingBloodTypingTestsIds);
-		ruleResult.setPendingTTITestsIds(pendingTtiTestsIds);
-		
-		// blood typing results
-		ruleResult.setBloodTypingMatchStatus(bloodTypingMatchStatus);
-		ruleResult.setBloodTypingStatus(bloodTypingStatus);
-		
-		// determine if there are any uninterpretable results
-		if (bloodAboChanges.isEmpty() && pendingAboTestsIds.isEmpty() && aboUninterpretable) {
-			// there was an attempt to match a rule for blood ABO
-			ruleResult.setAboUninterpretable(true);
-		}
-		if (bloodRhChanges.isEmpty() && pendingRhTestsIds.isEmpty() && rhUninterpretable) {
-			// there was an attempt to match a rule for blood Rh
-			ruleResult.setRhUninterpretable(true);
-		}
-		
-		ruleResult.setAllBloodAboChanges(bloodAboChanges);
-		ruleResult.setAllBloodRhChanges(bloodRhChanges);
-		String bloodAbo = "";
-		if (bloodAboChanges != null && bloodAboChanges.size() == 1) {
-			bloodAbo = bloodAboChanges.iterator().next();
-		}
-		ruleResult.setBloodAbo(bloodAbo);
-		String bloodRh = "";
-		if (bloodRhChanges != null && bloodRhChanges.size() == 1) {
-			bloodRh = bloodRhChanges.iterator().next();
-		}
-		ruleResult.setBloodRh(bloodRh);
-		ruleResult.setExtraInformation(extraInformation);
-		
-		// TTI test information
-		ruleResult.setTTIStatus(ttiStatus);
-		ruleResult.setTTIStatusChanges(ttiStatusChanges);
-		ruleResult.setTTIStatus(ttiStatus);
-		ruleResult.setTtiUninterpretable(false);
-		
-		return ruleResult;
+		this.bloodTestingRules = bloodTestingRules;
 	}
 	
 	public Donation getDonation() {
@@ -210,7 +157,7 @@ public class BloodTestingRuleResultSet {
 		this.ttiStatus = ttiStatus;
 	}
 	
-	public boolean isAboUninterpretable() {
+	public boolean getAboUninterpretable() {
 		return aboUninterpretable;
 	}
 	
@@ -218,7 +165,7 @@ public class BloodTestingRuleResultSet {
 		this.aboUninterpretable = aboUninterpretable;
 	}
 	
-	public boolean isRhUninterpretable() {
+	public boolean getRhUninterpretable() {
 		return rhUninterpretable;
 	}
 	
@@ -226,7 +173,7 @@ public class BloodTestingRuleResultSet {
 		this.rhUninterpretable = rhUninterpretable;
 	}
 	
-	public boolean isTtiUninterpretable() {
+	public boolean getTtiUninterpretable() {
 		return ttiUninterpretable;
 	}
 	
@@ -289,4 +236,73 @@ public class BloodTestingRuleResultSet {
 	public void addPendingTtiTestsIds(String pendingTtiTestsId) {
 		this.pendingTtiTestsIds.add(pendingTtiTestsId);
 	}
+
+	
+    public Map<String, String> getStoredTestResults() {
+    	return storedTestResults;
+    }
+
+	
+    public void setStoredTestResults(Map<String, String> storedTestResults) {
+    	this.storedTestResults = storedTestResults;
+    }
+
+	
+    public Map<String, String> getAvailableTestResults() {
+    	return availableTestResults;
+    }
+
+	
+    public void setAvailableTestResults(Map<String, String> availableTestResults) {
+    	this.availableTestResults = availableTestResults;
+    }
+
+	
+    public void setRecentTestResults(Map<Integer, BloodTestResult> recentTestResults) {
+    	this.recentTestResults = recentTestResults;
+    }
+
+	
+    public void setBloodAboChanges(Set<String> bloodAboChanges) {
+    	this.bloodAboChanges = bloodAboChanges;
+    }
+
+	
+    public void setBloodRhChanges(Set<String> bloodRhChanges) {
+    	this.bloodRhChanges = bloodRhChanges;
+    }
+
+	
+    public void setTtiStatusChanges(Set<String> ttiStatusChanges) {
+    	this.ttiStatusChanges = ttiStatusChanges;
+    }
+
+	
+    public void setExtraInformation(Set<String> extraInformation) {
+    	this.extraInformation = extraInformation;
+    }
+
+	
+    public void setPendingAboTestsIds(List<String> pendingAboTestsIds) {
+    	this.pendingAboTestsIds = pendingAboTestsIds;
+    }
+
+	
+    public void setPendingRhTestsIds(List<String> pendingRhTestsIds) {
+    	this.pendingRhTestsIds = pendingRhTestsIds;
+    }
+
+	
+    public void setPendingTtiTestsIds(List<String> pendingTtiTestsIds) {
+    	this.pendingTtiTestsIds = pendingTtiTestsIds;
+    }
+	
+    public List<BloodTestingRule> getBloodTestingRules() {
+    	return bloodTestingRules;
+    }
+
+	
+    public void setBloodTestingRules(List<BloodTestingRule> bloodTestingRules) {
+    	this.bloodTestingRules = bloodTestingRules;
+    }
 }

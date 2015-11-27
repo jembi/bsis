@@ -4,19 +4,25 @@ import static helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleRe
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
 import static helpers.builders.PackTypeBuilder.aPackType;
+import static helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
+import model.testbatch.TestBatch;
+import model.testbatch.TestBatchStatus;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
 import repository.BloodTestResultRepository;
 import repository.ComponentRepository;
 import repository.DonationRepository;
+import repository.DonorRepository;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
 import viewmodel.BloodTestingRuleResult;
@@ -36,6 +42,10 @@ public class DonationConstraintCheckerTests {
     private ComponentRepository componentRepository;
     @Mock
     private BloodTestsService bloodTestsService;
+    @Mock
+    private DonorRepository donorRepository;
+    @Mock
+    private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
     
     @Test
     public void testCanDeleteDonationWithDonationWithNotes_shouldReturnFalse() {
@@ -200,6 +210,203 @@ public class DonationConstraintCheckerTests {
     }
     
     @Test
+    public void testDonationIsReleasedTestBatchReleasedNoPendingTests_shouldReturnTrue() {
+        Donation donation = aDonation()
+                .withTTIStatus(TTIStatus.TTI_SAFE)
+                .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withPackType(aPackType().build())
+                .build();
+        
+        TestBatch testBatch = aTestBatch()
+        		.withStatus(TestBatchStatus.RELEASED)
+        		.build();
+        
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
+        
+        boolean result = donationConstraintChecker.donationIsReleased(testBatch, donation, bloodTestingRuleResult);
+        
+        assertThat(result, is(true));
+    }
+    
+    @Test
+    public void testDonationIsReleasedTestBatchReleasedNoPendingTests2_shouldReturnTrue() {
+        Donation donation = aDonation()
+                .withTTIStatus(TTIStatus.TTI_SAFE)
+                .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withPackType(aPackType().build())
+                .build();
+        
+        TestBatch testBatch = aTestBatch()
+        		.withStatus(TestBatchStatus.RELEASED)
+        		.build();
+        
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
+        when(bloodTestsService.executeTests(donation)).thenReturn(bloodTestingRuleResult);
+        
+        boolean result = donationConstraintChecker.donationIsReleased(testBatch, donation);
+        
+        assertThat(result, is(true));
+    }
+    
+    @Test
+    public void testDonationIsOpenTestBatchReleasedNoPendingTests_shouldReturnFalse() {
+        Donation donation = aDonation()
+                .withTTIStatus(TTIStatus.TTI_SAFE)
+                .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withPackType(aPackType().build())
+                .build();
+        
+        TestBatch testBatch = aTestBatch()
+        		.withStatus(TestBatchStatus.OPEN)
+        		.build();
+        
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
+        
+        boolean result = donationConstraintChecker.donationIsReleased(testBatch, donation, bloodTestingRuleResult);
+        
+        assertThat(result, is(false));
+    }
+    
+    @Test
+    public void testDonationIsOpenTestBatchReleasedNoPendingTests2_shouldReturnFalse() {
+        Donation donation = aDonation()
+                .withTTIStatus(TTIStatus.TTI_SAFE)
+                .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withPackType(aPackType().build())
+                .build();
+        
+        TestBatch testBatch = aTestBatch()
+        		.withStatus(TestBatchStatus.OPEN)
+        		.build();
+        
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
+        when(bloodTestsService.executeTests(donation)).thenReturn(bloodTestingRuleResult);
+        
+        boolean result = donationConstraintChecker.donationIsReleased(testBatch, donation);
+        
+        assertThat(result, is(false));
+    }
+    
+    @Test
+    public void testDonationIsNullTestBatch_shouldReturnFalse() {
+        Donation donation = aDonation()
+                .withTTIStatus(TTIStatus.TTI_SAFE)
+                .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withPackType(aPackType().build())
+                .build();
+        
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
+        
+        boolean result = donationConstraintChecker.donationIsReleased(null, donation, bloodTestingRuleResult);
+        
+        assertThat(result, is(false));
+    }
+    
+    @Test
+    public void testDonationIsNullTestBatch2_shouldReturnFalse() {
+        Donation donation = aDonation()
+                .withTTIStatus(TTIStatus.TTI_SAFE)
+                .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withPackType(aPackType().build())
+                .build();
+        
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
+        when(bloodTestsService.executeTests(donation)).thenReturn(bloodTestingRuleResult);
+        
+        boolean result = donationConstraintChecker.donationIsReleased(null, donation);
+        
+        assertThat(result, is(false));
+    }
+    
+    @Test
+    public void testDonationIsReleasedTestBatchReleasedPendingTests_shouldReturnFalse() {
+        Donation donation = aDonation()
+                .withTTIStatus(TTIStatus.TTI_SAFE)
+                .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withPackType(aPackType().build())
+                .build();
+        
+        TestBatch testBatch = aTestBatch()
+        		.withStatus(TestBatchStatus.RELEASED)
+        		.build();
+        
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().withPendingTTITestId("12").build();
+        
+        boolean result = donationConstraintChecker.donationIsReleased(testBatch, donation, bloodTestingRuleResult);
+        
+        assertThat(result, is(false));
+    }
+    
+    @Test
+    public void testDonationIsReleasedTestBatchReleasedPendingTests2_shouldReturnFalse() {
+        Donation donation = aDonation()
+                .withTTIStatus(TTIStatus.TTI_SAFE)
+                .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withPackType(aPackType().build())
+                .build();
+        
+        TestBatch testBatch = aTestBatch()
+        		.withStatus(TestBatchStatus.RELEASED)
+        		.build();
+        
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().withPendingTTITestId("12").build();
+        when(bloodTestsService.executeTests(donation)).thenReturn(bloodTestingRuleResult);
+        
+        boolean result = donationConstraintChecker.donationIsReleased(testBatch, donation);
+        
+        assertThat(result, is(false));
+    }
+    
+    @Test
+    public void testDonationIsOpenTestBatchReleasedPendingTests_shouldReturnFalse() {
+        Donation donation = aDonation()
+                .withTTIStatus(TTIStatus.TTI_SAFE)
+                .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withPackType(aPackType().build())
+                .build();
+        
+        TestBatch testBatch = aTestBatch()
+        		.withStatus(TestBatchStatus.OPEN)
+        		.build();
+        
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().withPendingTTITestId("12").build();
+        
+        boolean result = donationConstraintChecker.donationIsReleased(testBatch, donation, bloodTestingRuleResult);
+        
+        assertThat(result, is(false));
+    }
+    
+    @Test
+    public void testDonationIsOpenTestBatchReleasedPendingTests2_shouldReturnFalse() {
+        Donation donation = aDonation()
+                .withTTIStatus(TTIStatus.TTI_SAFE)
+                .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withPackType(aPackType().build())
+                .build();
+        
+        TestBatch testBatch = aTestBatch()
+        		.withStatus(TestBatchStatus.OPEN)
+        		.build();
+        
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().withPendingTTITestId("12").build();
+        when(bloodTestsService.executeTests(donation)).thenReturn(bloodTestingRuleResult);
+        
+        boolean result = donationConstraintChecker.donationIsReleased(testBatch, donation);
+        
+        assertThat(result, is(false));
+    }
+    
+    @Test
     public void testDonationHasOutstandingOutcomesWithDonationWithNoTestSample_shouldReturnFalse() {
         Donation donation = aDonation()
                 .withPackType(aPackType().withTestSampleProduced(false).build())
@@ -288,6 +495,6 @@ public class DonationConstraintCheckerTests {
         boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation);
         
         assertThat(result, is(false));
-    }
 
+    }
 }

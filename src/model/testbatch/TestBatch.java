@@ -81,13 +81,13 @@ public class TestBatch implements ModificationTracker {
 		this.notes = notes;
 	}
 
-        public Boolean isIsDeleted() {
-                return isDeleted;
-        }
-
-        public void setIsDeleted(Boolean isDeleted) {
-                this.isDeleted = isDeleted;
-        }
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+	
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
 
 	public String getBatchNumber() {
 		return batchNumber;

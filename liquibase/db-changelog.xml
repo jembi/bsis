@@ -1932,6 +1932,14 @@
             <column name="ineligibleDonor" type="tinyint(1)" />
         </addColumn>
     </changeSet>
+    
+	<changeSet id="20151127-0748" author="danfuterman">
+		<comment>Update name of Permanent Deferral Reason</comment>
+		<update tableName="DeferralReason">
+            <column name="reason" value="Test Outcomes" type="varchar(100)"></column>
+            <where>reason = 'TTI Unsafe'</where>
+        </update>
+	</changeSet>
 
 	<!-- For issue 386 [Add isDeleted field to PostDonationCounselling and PostDonationCounselling_AUD Tables] -->
 	<changeSet id="20151117-1509" author="debonair">

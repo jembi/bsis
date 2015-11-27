@@ -18,6 +18,11 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     private boolean closed;
     private boolean backEntry;
 
+    public DonationBatchBuilder withId(Integer id) {
+        this.id = id;
+        return this;
+    }
+    
     public DonationBatchBuilder withDonations(List<Donation> donations) {
         this.donations = donations;
         return this;
@@ -39,11 +44,6 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     public DonationBatchBuilder thatIsClosed() {
         closed = true;
         return this;
-    }
-    
-    public DonationBatchBuilder withId(Integer id) {
-    	this.id = id;
-    	return this;
     }
     
     public DonationBatchBuilder withVenue(Location venue) {
