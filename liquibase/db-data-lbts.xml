@@ -1146,5 +1146,33 @@
             <column name="dataType_id" value="4"></column>
         </insert>
     </changeSet>
+    
+    <changeSet id="20151127-0841" author="danfuterman">
+		<comment>Add Deferral Reason default durations</comment>
+		<update tableName="DeferralReason">
+            <column name="defaultDuration" value="365" type="smallint(5)"></column>
+            <where>reason = 'High risk behaviour'</where>
+        </update>
+        <update tableName="DeferralReason">
+            <column name="defaultDuration" value="90" type="smallint(5)"></column>
+            <where>reason = 'Low weight'</where>
+        </update>
+        <update tableName="DeferralReason">
+            <column name="defaultDuration" value="90" type="smallint(5)"></column>
+            <where>reason = 'Low haemoglobin'</where>
+        </update>
+        <update tableName="DeferralReason">
+            <column name="defaultDuration" value="90" type="smallint(5)"></column>
+            <where>reason = 'Other reasons'</where>
+        </update>
+        <update tableName="DeferralReason">
+            <column name="defaultDuration" value="180" type="smallint(5)"></column>
+            <where>reason = 'Other medical conditions'</where>
+        </update>
+        <update tableName="DeferralReason">
+            <column name="defaultDuration" value="90" type="smallint(5)"></column>
+            <where>reason = 'Travel history'</where>
+        </update>
+	</changeSet>
 
 </databaseChangeLog>
