@@ -4,6 +4,8 @@ import javax.persistence.NoResultException;
 
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
+import model.testbatch.TestBatch;
+import model.testbatch.TestBatchStatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -83,8 +85,13 @@ public class DonationConstraintChecker {
             return false;
         }
         
-        BloodTestingRuleResult bloodTestingRuleResult = bloodTestsService.executeTests(donation);
-        
+        return donationHasDiscrepancies(donation, bloodTestsService.executeTests(donation));
+    }
+    
+    /**
+     * @return true if the Donation has any pending TTI tests or requires confirmation of blood typing tests, false otherwise
+     */
+    public boolean donationHasDiscrepancies(Donation donation, BloodTestingRuleResult bloodTestingRuleResult) {
         if (bloodTestingRuleResult.getPendingTTITestsIds() != null &&
                 bloodTestingRuleResult.getPendingTTITestsIds().size() > 0) {
             
@@ -98,6 +105,26 @@ public class DonationConstraintChecker {
         }
         
         return false;
+    }
+    
+    /**
+     * @return true if the Donation has no discrepancies and is in a TestBatch that is either closed or released 
+     */
+    public boolean donationIsReleased(TestBatch testBatch, Donation donation, BloodTestingRuleResult bloodTestingRuleResult) {
+        boolean donationReleased = testBatch != null &&
+                testBatch.getStatus() != TestBatchStatus.OPEN &&
+                !donationHasDiscrepancies(donation, bloodTestingRuleResult);
+        return donationReleased;
+    }
+    
+    /**
+     * @return true if the Donation has no discrepancies and is in a TestBatch that is either closed or released 
+     */
+    public boolean donationIsReleased(TestBatch testBatch, Donation donation) {
+        boolean donationReleased = testBatch != null &&
+                testBatch.getStatus() != TestBatchStatus.OPEN &&
+                !donationHasDiscrepancies(donation);
+        return donationReleased;
     }
     
     public boolean donationHasOutstandingOutcomes(Donation donation) {

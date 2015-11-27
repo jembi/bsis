@@ -1,15 +1,19 @@
 package viewmodel;
 
 import java.util.Date;
+import java.util.Map;
+
 import model.bloodtesting.BloodTestResult;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import viewmodel.BloodTestViewModel;
 import utils.CustomDateFormatter;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BloodTestResultViewModel {
     
 	@JsonIgnore
     private BloodTestResult testResult;
+	
+	private Map<String, Boolean> permissions;
 	
 	public BloodTestResultViewModel(BloodTestResult testResult) {
         this.testResult = testResult;
@@ -52,4 +56,11 @@ public class BloodTestResultViewModel {
 		return testResult.getReagentLotNumber();
 	}
     
+	public Map<String, Boolean> getPermissions() {
+		return permissions;
+	}
+	
+	public void setPermissions(Map<String, Boolean> permissions) {
+		this.permissions = permissions;
+	}
 }
