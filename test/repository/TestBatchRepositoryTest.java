@@ -7,11 +7,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import javax.sql.DataSource;
 
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
+
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseDataSourceConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -21,7 +23,6 @@ import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,12 +138,10 @@ public class TestBatchRepositoryTest {
     }
 
     @Test
-    @Ignore("Bug - sets isDeleted to false instead of true")
     public void testDeleteTestBatch() throws Exception {
         testBatchRepository.deleteTestBatch(1l);
         TestBatch testBatch = testBatchRepository.findTestBatchById(1l);
-        // FIXME: 'isIsDeleted' method name will cause problems with JavaBean parsing
-        Assert.assertTrue("TestBatch is deleted", testBatch.isIsDeleted());
+        Assert.assertTrue("TestBatch is deleted", testBatch.getIsDeleted());
     }
 
     @Test

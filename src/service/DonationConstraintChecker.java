@@ -1,18 +1,23 @@
 package service;
 
 import javax.persistence.NoResultException;
+
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
 import repository.BloodTestResultRepository;
 import repository.ComponentRepository;
 import repository.DonationRepository;
+import repository.DonorRepository;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
 import viewmodel.BloodTestingRuleResult;
+
 
 @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 @Service
@@ -26,6 +31,10 @@ public class DonationConstraintChecker {
     private ComponentRepository componentRepository;
     @Autowired
     private BloodTestsService bloodTestsService;
+    @Autowired
+    private DonorRepository donorRepository;
+    @Autowired
+    private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
     
     public boolean canDeleteDonation(long donationId) throws NoResultException {
 
@@ -107,5 +116,16 @@ public class DonationConstraintChecker {
                 copy.getBloodTypingStatus() == BloodTypingStatus.NOT_DONE ||
                 copy.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NOT_DONE;
     }
+
+	/**
+	 * Determines if there are any blood test results recorded for the specified donation.
+	 * 
+	 * @param donation Donation to check
+	 * @return boolean true if the donation has saved test results, false otherwise
+	 */
+	public boolean donationHasSavedTestResults(Donation donation) {
+		int numberOfTestResults = bloodTestResultRepository.countBloodTestResultsForDonation(donation.getId());
+		return numberOfTestResults > 0;
+	}
 
 }

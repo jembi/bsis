@@ -9,14 +9,17 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
 import repository.BloodTestResultRepository;
 import repository.ComponentRepository;
 import repository.DonationRepository;
+import repository.DonorRepository;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
 import viewmodel.BloodTestingRuleResult;
@@ -36,6 +39,10 @@ public class DonationConstraintCheckerTests {
     private ComponentRepository componentRepository;
     @Mock
     private BloodTestsService bloodTestsService;
+    @Mock
+    private DonorRepository donorRepository;
+    @Mock
+    private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
     
     @Test
     public void testCanDeleteDonationWithDonationWithNotes_shouldReturnFalse() {
@@ -288,6 +295,6 @@ public class DonationConstraintCheckerTests {
         boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation);
         
         assertThat(result, is(false));
-    }
 
+    }
 }
