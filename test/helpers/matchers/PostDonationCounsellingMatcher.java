@@ -32,8 +32,8 @@ public class PostDonationCounsellingMatcher extends TypeSafeMatcher<PostDonation
 
     @Override
     public boolean matchesSafely(PostDonationCounselling actual) {
-        return Objects.equals(
-                actual.getId(), expected.getId()) &&
+
+        return  Objects.equals(actual.getId(), expected.getId()) &&
                 actual.isFlaggedForCounselling() == expected.isFlaggedForCounselling() &&
                 actual.isIsDeleted() == expected.isIsDeleted() &&
                 Objects.equals(actual.getCreatedBy(), expected.getCreatedBy()) &&

@@ -101,11 +101,11 @@ public class PostDonationCounselling implements ModificationTracker {
         this.counsellingDate = counsellingDate;
     }
 
-    public Boolean isIsDeleted() {
+    public boolean isIsDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(Boolean isDeleted) {
+    public void setIsDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 

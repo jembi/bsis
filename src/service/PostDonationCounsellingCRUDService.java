@@ -27,6 +27,9 @@ public class PostDonationCounsellingCRUDService {
     @Autowired
     private UtilController utilController;
 
+    @Autowired
+    private DateGeneratorService dateGeneratorService;
+
     public void setPostDonationCounsellingRepository(PostDonationCounsellingRepository postDonationCounsellingRepository) {
         this.postDonationCounsellingRepository = postDonationCounsellingRepository;
     }
@@ -46,8 +49,8 @@ public class PostDonationCounsellingCRUDService {
         postDonationCounselling.setFlaggedForCounselling(Boolean.TRUE);
         postDonationCounselling.setIsDeleted(Boolean.FALSE);
         postDonationCounselling.setCreatedBy(utilController.getCurrentUser());
-        postDonationCounselling.setCreatedDate(new Date());
-        postDonationCounselling.setLastUpdated(new Date());
+        postDonationCounselling.setCreatedDate(dateGeneratorService.generateDate());
+        postDonationCounselling.setLastUpdated(dateGeneratorService.generateDate());
         postDonationCounselling.setLastUpdatedBy(utilController.getCurrentUser());
         postDonationCounsellingRepository.save(postDonationCounselling);
         return postDonationCounselling;
@@ -66,7 +69,7 @@ public class PostDonationCounsellingCRUDService {
         postDonationCounselling.setCounsellingStatus(counsellingStatus);
         postDonationCounselling.setCounsellingDate(counsellingDate);
         postDonationCounselling.getDonation().setNotes(notes);
-        postDonationCounselling.setLastUpdated(new Date());
+        postDonationCounselling.setLastUpdated(dateGeneratorService.generateDate());
         postDonationCounselling.setLastUpdatedBy(utilController.getCurrentUser());
         postDonationCounselling.setIsDeleted(Boolean.FALSE);
         return postDonationCounsellingRepository.update(postDonationCounselling);
@@ -79,7 +82,7 @@ public class PostDonationCounsellingCRUDService {
         postDonationCounselling.setCounsellingStatus(null);
         postDonationCounselling.getDonation().setNotes(null);
         postDonationCounselling.setIsDeleted(Boolean.FALSE);
-        postDonationCounselling.setLastUpdated(new Date());
+        postDonationCounselling.setLastUpdated(dateGeneratorService.generateDate());
         postDonationCounselling.setLastUpdatedBy(utilController.getCurrentUser());
         return postDonationCounsellingRepository.update(postDonationCounselling);
     }

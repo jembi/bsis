@@ -34,16 +34,35 @@ public class PostDonationCounsellingCRUDServiceTests {
     private PostDonationCounsellingRepository postDonationCounsellingRepository;
     @Mock
     private UtilController utilController;
+    @Mock
+    private DateGeneratorService dateGeneratorService;
     
     @Test
     public void testCreatePostDonationCounselling_shouldPersistAndReturnAFlaggedPostDonationCounsellingForDonation() {
         Donation donation = aDonation().withId(23L).build();
+        Date counsellingDate = new Date();
+
+
+        User admin = UserBuilder.aUser()
+                .withUsername("admin")
+                .withId(1)
+                .build();
         
         PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
+                .withId(null)
                 .thatIsFlaggedForCounselling()
                 .thatIsNotDeleted()
                 .withDonation(donation)
+                .withCreatedBy(admin)
+                .withCreatedDate(counsellingDate)
+                .withLastUpdated(counsellingDate)
+                .withLastUpdatedBy(admin)
+                .withCounsellingStatus(null)
+                .withCounsellingDate(null)
                 .build();
+
+        when(utilController.getCurrentUser()).thenReturn(admin);
+        when(dateGeneratorService.generateDate()).thenReturn(counsellingDate);
         
         when(postDonationCounsellingRepository.findPostDonationCounsellingForDonation(donation)).thenReturn(null);
         
@@ -103,6 +122,10 @@ public class PostDonationCounsellingCRUDServiceTests {
                 .withId(postDonationCounsellingId)
                 .thatIsFlaggedForCounselling()
                 .thatIsNotDeleted()
+                .withCreatedBy(admin)
+                .withLastUpdated(counsellingDate)
+                .withLastUpdatedBy(admin)
+                .withCreatedDate(counsellingDate)
                 .withDonation(aDonation()
                         .withId(donationId)
                         .build())
@@ -112,6 +135,10 @@ public class PostDonationCounsellingCRUDServiceTests {
                 .withId(postDonationCounsellingId)
                 .thatIsNotFlaggedForCounselling()
                 .thatIsNotDeleted()
+                .withCreatedBy(admin)
+                .withLastUpdated(counsellingDate)
+                .withLastUpdatedBy(admin)
+                .withCreatedDate(counsellingDate)
                 .withCounsellingStatus(counsellingStatus)
                 .withCounsellingDate(counsellingDate)
                 .withDonation(aDonation()
@@ -121,6 +148,7 @@ public class PostDonationCounsellingCRUDServiceTests {
                 .build();
 
         when(utilController.getCurrentUser()).thenReturn(admin);
+        when(dateGeneratorService.generateDate()).thenReturn(counsellingDate);
 
         when(postDonationCounsellingRepository.findById(postDonationCounsellingId))
                 .thenReturn(existingPostDonationCounselling);
@@ -134,6 +162,69 @@ public class PostDonationCounsellingCRUDServiceTests {
         verify(postDonationCounsellingRepository).update(argThat(hasSameStateAsPostDonationCounselling(expectedPostDonationCounselling)));
         assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
 
+    }
+
+    @Test
+    public void testFlagForCounselling_shouldFlagForCounsellingAndReturnPostDonationCounselling() {
+        long postDonationCounsellingId = 75;
+        long donationId = 55;
+        CounsellingStatus counsellingStatus = CounsellingStatus.RECEIVED_COUNSELLING;
+        Date counsellingDate = new Date();
+        String notes = "some notes";
+
+        User admin = UserBuilder.aUser()
+                .withUsername("admin")
+                .withId(1)
+                .build();
+
+        PostDonationCounselling existingPostDonationCounselling = aPostDonationCounselling()
+                .withId(postDonationCounsellingId)
+                .thatIsNotFlaggedForCounselling()
+                .thatIsNotDeleted()
+                .withCounsellingStatus(counsellingStatus)
+                .withCounsellingDate(counsellingDate)
+                .withCreatedBy(admin)
+                .withLastUpdated(counsellingDate)
+                .withLastUpdatedBy(admin)
+                .withCreatedDate(counsellingDate)
+                .withDonation(aDonation()
+                        .withId(donationId)
+                        .withNotes(notes)
+                        .build())
+                .build();
+
+        PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
+                .withId(postDonationCounsellingId)
+                .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
+                .withCreatedDate(counsellingDate)
+                .withCreatedBy(admin)
+                .withLastUpdated(counsellingDate)
+                .withLastUpdatedBy(admin)
+                .withCounsellingStatus(null)
+                .withCounsellingDate(null)
+                .withDonation(aDonation()
+                        .withId(donationId)
+                        .withNotes(null)
+                        .build())
+                .build();
+
+        when(utilController.getCurrentUser()).thenReturn(admin);
+
+        when(dateGeneratorService.generateDate()).thenReturn(counsellingDate);
+
+        when(postDonationCounsellingRepository.findById(postDonationCounsellingId))
+                .thenReturn(existingPostDonationCounselling);
+        when(postDonationCounsellingRepository.update(argThat(hasSameStateAsPostDonationCounselling(expectedPostDonationCounselling))))
+                .thenReturn(expectedPostDonationCounselling);
+
+        PostDonationCounselling returnedPostDonationCounselling = postDonationCounsellingCRUDService
+                .flagForCounselling(postDonationCounsellingId);
+
+        verify(postDonationCounsellingRepository).findById(postDonationCounsellingId);
+        verify(postDonationCounsellingRepository).update(argThat(hasSameStateAsPostDonationCounselling(expectedPostDonationCounselling)));
+
+        assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
     }
 
 }

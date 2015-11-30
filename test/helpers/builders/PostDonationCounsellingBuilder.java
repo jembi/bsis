@@ -9,6 +9,7 @@ import helpers.persisters.PostDonationCounsellingPersister;
 import model.counselling.CounsellingStatus;
 import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
+import model.user.User;
 
 public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDonationCounselling> {
     
@@ -18,6 +19,12 @@ public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDo
     private CounsellingStatus counsellingStatus;
     private boolean isDeleted;
     private Date counsellingDate;
+    private Date createdDate;
+    private User createdBy;
+    private Date lastUpdated;
+    private User lastUpdatedBy;
+
+
     
     public PostDonationCounsellingBuilder withId(Long id) {
         this.id = id;
@@ -30,12 +37,12 @@ public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDo
     }
 
     public PostDonationCounsellingBuilder thatIsFlaggedForCounselling() {
-        flaggedForCounselling = true;
+        flaggedForCounselling = Boolean.TRUE;
         return this;
     }
 
     public PostDonationCounsellingBuilder thatIsNotFlaggedForCounselling() {
-        flaggedForCounselling = false;
+        flaggedForCounselling = Boolean.FALSE;
         return this;
     }
 
@@ -49,7 +56,25 @@ public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDo
         return this;
     }
 
+    public PostDonationCounsellingBuilder withCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+        return this;
+    }
 
+    public PostDonationCounsellingBuilder withCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    public PostDonationCounsellingBuilder withLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+        return this;
+    }
+
+    public PostDonationCounsellingBuilder withLastUpdatedBy(User lastUpdatedBy) {
+        this.lastUpdatedBy = lastUpdatedBy;
+        return this;
+    }
     
     public PostDonationCounsellingBuilder withCounsellingStatus(CounsellingStatus counsellingStatus) {
         this.counsellingStatus = counsellingStatus;
@@ -70,6 +95,10 @@ public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDo
         postDonationCounselling.setIsDeleted(isDeleted);
         postDonationCounselling.setCounsellingStatus(counsellingStatus);
         postDonationCounselling.setCounsellingDate(counsellingDate);
+        postDonationCounselling.setCreatedDate(createdDate);
+        postDonationCounselling.setCreatedBy(createdBy);
+        postDonationCounselling.setLastUpdated(lastUpdated);
+        postDonationCounselling.setLastUpdatedBy(lastUpdatedBy);
         return postDonationCounselling;
     }
     
