@@ -193,6 +193,7 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
         DateTime endDate = new DateTime().minusDays(7);
 
         Donation expectedDonation = aDonation().withDonationDate(startDate.plusDays(1).toDate()).build();
+        Donation expectedDonation2 = aDonation().withDonationDate(startDate.plusDays(2).toDate()).build();
         List<Donation> expectedDonations = Arrays.asList(expectedDonation);
 
         // Donation in date range
@@ -200,6 +201,13 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
                 .thatIsFlaggedForCounselling()
                 .thatIsNotDeleted()
                 .withDonation(expectedDonation)
+                .buildAndPersist(entityManager);
+
+        // Excluded by isDeleted
+        aPostDonationCounselling()
+                .thatIsFlaggedForCounselling()
+                .thatIsDeleted()
+                .withDonation(expectedDonation2)
                 .buildAndPersist(entityManager);
 
         // Excluded by donation before start date
@@ -259,6 +267,16 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
                         .build())
                 .buildAndPersist(entityManager);
 
+        // Excluded by isDeleted
+        aPostDonationCounselling()
+                .thatIsFlaggedForCounselling()
+                .thatIsDeleted()
+                .withDonation(aDonation()
+                        .withDonor(donor)
+                        .withDonationDate(new DateTime().minusDays(5).toDate())
+                        .build())
+                .buildAndPersist(entityManager);
+
         PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
                 .thatIsFlaggedForCounselling()
                 .thatIsNotDeleted()
@@ -301,6 +319,13 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
         // Excluded by flag
         aPostDonationCounselling()
                 .thatIsNotFlaggedForCounselling()
+                .withDonation(aDonation().withDonor(donor).build())
+                .buildAndPersist(entityManager);
+
+        // Excluded by isDeleted
+        aPostDonationCounselling()
+                .thatIsFlaggedForCounselling()
+                .thatIsDeleted()
                 .withDonation(aDonation().withDonor(donor).build())
                 .buildAndPersist(entityManager);
 
