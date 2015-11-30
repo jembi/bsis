@@ -110,6 +110,7 @@ public class PostDonationCounsellingCRUDServiceTests {
         long postDonationCounsellingId = 75;
         long donationId = 55;
         CounsellingStatus counsellingStatus = CounsellingStatus.RECEIVED_COUNSELLING;
+        Date existingCounsellingDate = new Date(System.currentTimeMillis()-24*60*60*1000);
         Date counsellingDate = new Date();
         String notes = "some notes";
 
@@ -123,9 +124,9 @@ public class PostDonationCounsellingCRUDServiceTests {
                 .thatIsFlaggedForCounselling()
                 .thatIsNotDeleted()
                 .withCreatedBy(admin)
-                .withLastUpdated(counsellingDate)
+                .withLastUpdated(existingCounsellingDate)
                 .withLastUpdatedBy(admin)
-                .withCreatedDate(counsellingDate)
+                .withCreatedDate(existingCounsellingDate)
                 .withDonation(aDonation()
                         .withId(donationId)
                         .build())
@@ -138,7 +139,7 @@ public class PostDonationCounsellingCRUDServiceTests {
                 .withCreatedBy(admin)
                 .withLastUpdated(counsellingDate)
                 .withLastUpdatedBy(admin)
-                .withCreatedDate(counsellingDate)
+                .withCreatedDate(existingCounsellingDate)
                 .withCounsellingStatus(counsellingStatus)
                 .withCounsellingDate(counsellingDate)
                 .withDonation(aDonation()
