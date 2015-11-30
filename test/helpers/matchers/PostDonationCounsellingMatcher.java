@@ -34,12 +34,12 @@ public class PostDonationCounsellingMatcher extends TypeSafeMatcher<PostDonation
     public boolean matchesSafely(PostDonationCounselling actual) {
 
         return  Objects.equals(actual.getId(), expected.getId()) &&
-                actual.isFlaggedForCounselling() == expected.isFlaggedForCounselling() &&
-                actual.isIsDeleted() == expected.isIsDeleted() &&
+                Objects.equals(actual.isFlaggedForCounselling(), expected.isFlaggedForCounselling()) &&
+                Objects.equals(actual.isIsDeleted(), expected.isIsDeleted()) &&
                 Objects.equals(actual.getCreatedBy(), expected.getCreatedBy()) &&
-                actual.getCreatedDate() == expected.getCreatedDate() &&
+                Objects.equals(actual.getCreatedDate(), expected.getCreatedDate()) &&
                 Objects.equals(actual.getLastUpdatedBy(), expected.getLastUpdatedBy()) &&
-                actual.getLastUpdated() == expected.getLastUpdated() &&
+                Objects.equals(actual.getLastUpdated(), expected.getLastUpdated()) &&
                 Objects.equals(actual.getDonation(), expected.getDonation()) &&
                 Objects.equals(actual.getCounsellingDate(), expected.getCounsellingDate()) &&
                 Objects.equals(actual.getCounsellingStatus(), expected.getCounsellingStatus());
