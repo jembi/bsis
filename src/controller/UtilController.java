@@ -55,7 +55,6 @@ import repository.DeferralReasonRepository;
 import repository.DiscardReasonRepository;
 import security.BsisUserDetails;
 import repository.DonationTypeRepository;
-import utils.DonorUtils;
 
 @org.springframework.stereotype.Component
 public class UtilController {
@@ -352,26 +351,6 @@ public class UtilController {
 	  else{
 		  return false;
 	  }
-  }
-
-  public String verifyDonorAge(Date birthDate) {
-    Map<String, String> config = getConfigProperty("donationRequirements");
-    String errorMessage = "";
-    if (config.get("ageLimitsEnabled").equals("true")) {
-        Integer minAge = Integer.parseInt(config.get("minimumAge"));
-        Integer maxAge = Integer.parseInt(config.get("maximumAge"));
-        Integer donorAge = DonorUtils.computeDonorAge(birthDate);
-        if (donorAge == null) {
-          errorMessage = "One of donor Date of Birth or Age must be specified";
-        }
-        else {
-          if (donorAge < minAge || donorAge > maxAge) {
-            errorMessage = "Donor age must be between " + minAge + " and " + maxAge + " years.";
-          }
-        }
-
-    }
-    return errorMessage;
   }
 
   public Component findComponent(String donationIdentificationNumber, String componentType) {
