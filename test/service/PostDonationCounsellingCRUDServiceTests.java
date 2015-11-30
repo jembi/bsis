@@ -18,6 +18,7 @@ import model.counselling.CounsellingStatus;
 import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 import model.user.User;
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -110,7 +111,7 @@ public class PostDonationCounsellingCRUDServiceTests {
         long postDonationCounsellingId = 75;
         long donationId = 55;
         CounsellingStatus counsellingStatus = CounsellingStatus.RECEIVED_COUNSELLING;
-        Date existingCounsellingDate = new Date(System.currentTimeMillis()-24*60*60*1000);
+        Date existingCounsellingDate = new DateTime().minusDays(1).toDate();
         Date counsellingDate = new Date();
         String notes = "some notes";
 
@@ -119,13 +120,19 @@ public class PostDonationCounsellingCRUDServiceTests {
                 .withId(1)
                 .build();
 
+        User ordinary = UserBuilder.aUser()
+                .withUsername("ordinary")
+                .withId(2)
+                .build();
+
+
         PostDonationCounselling existingPostDonationCounselling = aPostDonationCounselling()
                 .withId(postDonationCounsellingId)
                 .thatIsFlaggedForCounselling()
                 .thatIsNotDeleted()
-                .withCreatedBy(admin)
+                .withCreatedBy(ordinary)
                 .withLastUpdated(existingCounsellingDate)
-                .withLastUpdatedBy(admin)
+                .withLastUpdatedBy(ordinary)
                 .withCreatedDate(existingCounsellingDate)
                 .withDonation(aDonation()
                         .withId(donationId)
@@ -136,7 +143,7 @@ public class PostDonationCounsellingCRUDServiceTests {
                 .withId(postDonationCounsellingId)
                 .thatIsNotFlaggedForCounselling()
                 .thatIsNotDeleted()
-                .withCreatedBy(admin)
+                .withCreatedBy(ordinary)
                 .withLastUpdated(counsellingDate)
                 .withLastUpdatedBy(admin)
                 .withCreatedDate(existingCounsellingDate)
@@ -170,7 +177,7 @@ public class PostDonationCounsellingCRUDServiceTests {
         long postDonationCounsellingId = 75;
         long donationId = 55;
         CounsellingStatus counsellingStatus = CounsellingStatus.RECEIVED_COUNSELLING;
-        Date existingCounsellingDate = new Date(System.currentTimeMillis()-24*60*60*1000);
+        Date existingCounsellingDate = new DateTime().minusDays(1).toDate();
         Date counsellingDate = new Date();
         String notes = "some notes";
 
@@ -179,15 +186,20 @@ public class PostDonationCounsellingCRUDServiceTests {
                 .withId(1)
                 .build();
 
+        User ordinary = UserBuilder.aUser()
+                .withUsername("ordinary")
+                .withId(2)
+                .build();
+
         PostDonationCounselling existingPostDonationCounselling = aPostDonationCounselling()
                 .withId(postDonationCounsellingId)
                 .thatIsNotFlaggedForCounselling()
                 .thatIsNotDeleted()
                 .withCounsellingStatus(counsellingStatus)
                 .withCounsellingDate(existingCounsellingDate)
-                .withCreatedBy(admin)
+                .withCreatedBy(ordinary)
                 .withLastUpdated(existingCounsellingDate)
-                .withLastUpdatedBy(admin)
+                .withLastUpdatedBy(ordinary)
                 .withCreatedDate(existingCounsellingDate)
                 .withDonation(aDonation()
                         .withId(donationId)
@@ -200,7 +212,7 @@ public class PostDonationCounsellingCRUDServiceTests {
                 .thatIsFlaggedForCounselling()
                 .thatIsNotDeleted()
                 .withCreatedDate(existingCounsellingDate)
-                .withCreatedBy(admin)
+                .withCreatedBy(ordinary)
                 .withLastUpdated(counsellingDate)
                 .withLastUpdatedBy(admin)
                 .withCounsellingStatus(null)
