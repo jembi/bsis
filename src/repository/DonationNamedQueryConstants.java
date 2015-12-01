@@ -36,5 +36,14 @@ public class DonationNamedQueryConstants {
             "WHERE d.donationDate BETWEEN :startDate AND :endDate " +
             "AND d.isDeleted = :deleted " +
             "GROUP BY d.donationType, d.donor.gender, d.bloodAbo, d.bloodRh, d.donor.venue ";
+    
+    public static final String NAME_FIND_LATEST_DUE_TO_DONATE_DATE_FOR_DONOR = 
+        "Donation.findLatestDueToDonateDateForDonor";
+    public static final String QUERY_FIND_LATEST_DUE_TO_DONATE_DATE_FOR_DONOR = 
+        "SELECT date_add_days(d.donationDate, d.packType.periodBetweenDonations) AS dueToDonate "
+        + "FROM Donation d "
+        + "WHERE d.donor.id = :donorId "
+        + "AND d.isDeleted = :deleted "
+        + "ORDER BY dueToDonate DESC ";
 
 }

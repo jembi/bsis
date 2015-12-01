@@ -3,6 +3,7 @@ package helpers.persisters;
 import static helpers.persisters.EntityPersisterFactory.aDonationTypePersister;
 import static helpers.persisters.EntityPersisterFactory.aDonorPersister;
 import static helpers.persisters.EntityPersisterFactory.aLocationPersister;
+import static helpers.persisters.EntityPersisterFactory.aPackTypePersister;
 import static helpers.persisters.EntityPersisterFactory.anAdverseEventPersister;
 import javax.persistence.EntityManager;
 import model.donation.Donation;
@@ -25,6 +26,10 @@ public class DonationPersister extends AbstractEntityPersister<Donation> {
         
         if (donation.getDonationType() != null) {
             aDonationTypePersister().deepPersist(donation.getDonationType(), entityManager);
+        }
+        
+        if (donation.getPackType() != null) {
+          aPackTypePersister().deepPersist(donation.getPackType(), entityManager);
         }
         
         return persist(donation, entityManager);

@@ -175,7 +175,7 @@ public class DuplicateDonorService {
 			// sets the Donor's donation related attributes
 			donorService.setDonorDateOfFirstDonation(newDonor, donation);
 			donorService.setDonorDateOfLastDonation(newDonor, donation);
-			donorService.setDonorDueToDonate(newDonor, donation);
+			donorService.setDonorDueToDonate(newDonor);
 		}
 	}
 	

@@ -74,7 +74,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
     <property name="persistenceXmlLocation" value="classpath:/META-INF/persistenceTest.xml"/>
     <property name="jpaProperties">
       <props>
-        <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+        <prop key="hibernate.dialect">dialect.BSISTestDialect</prop>
         <prop key="hibernate.show_sql">false</prop>
         <prop key="javax.persistence.validation.mode">none</prop>
       </props>

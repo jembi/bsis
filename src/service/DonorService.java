@@ -1,14 +1,15 @@
 package service;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import model.donation.Donation;
 import model.donor.Donor;
-import model.packtype.PackType;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import repository.DonationRepository;
 
 /**
  * Service to provide Donor related functionality that doesn't result in CRUD operations
@@ -18,23 +19,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Service
 public class DonorService {
+  
+	@Autowired
+	private DonationRepository donationRepository;
 	
 	/**
-	 * Determines when the Donor is next due to donate given a Donation. NOTE: does not persist the
-	 * changes to the Donor.
+	 * Determines when the Donor is next due to donate based on all of their Donations.
 	 * 
-	 * @param donor Donor who made the specified Donation
-	 * @param donation Donation made by the specified Donor
+	 * @param donor Donor to update
 	 */
-	public void setDonorDueToDonate(Donor donor, Donation donation) {
-		PackType packType = donation.getPackType();
-		int periodBetweenDays = packType.getPeriodBetweenDonations();
-		Calendar dueToDonateDate = Calendar.getInstance();
-		dueToDonateDate.setTime(donation.getDonationDate());
-		dueToDonateDate.add(Calendar.DAY_OF_YEAR, periodBetweenDays);
-		if (donor.getDueToDonate() == null || dueToDonateDate.getTime().after(donor.getDueToDonate())) {
-			donor.setDueToDonate(dueToDonateDate.getTime());
-		}
+	public void setDonorDueToDonate(Donor donor) {
+
+		Date dueToDonateDate = donationRepository.findLatestDueToDonateDateForDonor(donor.getId());
+		donor.setDueToDonate(dueToDonateDate);
 	}
 	
 	/**

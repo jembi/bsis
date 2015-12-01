@@ -39,6 +39,8 @@ public class DonationCRUDService {
     private PackTypeRepository packTypeRepository;
     @Autowired
     private DonorConstraintChecker donorConstraintChecker;
+    @Autowired
+    private DonorService donorService;
     
     public void deleteDonation(long donationId) throws IllegalStateException, NoResultException {
         
@@ -67,6 +69,8 @@ public class DonationCRUDService {
             donor.setDateOfLastDonation(dateOfLastDonation);
             donorRepository.updateDonor(donor);
         }
+        
+        donorService.setDonorDueToDonate(donor);
     }
     
     public Donation createDonation(DonationBackingForm donationBackingForm) {
@@ -105,7 +109,8 @@ public class DonationCRUDService {
         Donation donation = donationRepository.findDonationById(donationId);
         
         // Check if pack type or bleed times have been updated
-        boolean donationFieldsUpdated = !Objects.equals(donation.getPackType(), donationBackingForm.getPackType()) ||
+        boolean packTypeUpdated = !Objects.equals(donation.getPackType(), donationBackingForm.getPackType());
+        boolean donationFieldsUpdated = packTypeUpdated ||
                 !Objects.equals(donation.getBleedStartTime(), donationBackingForm.getBleedStartTime()) ||
                 !Objects.equals(donation.getBleedEndTime(), donationBackingForm.getBleedEndTime());
         
@@ -126,7 +131,13 @@ public class DonationCRUDService {
         
         updateAdverseEventForDonation(donation, donationBackingForm.getAdverseEvent());
         
-        return donationRepository.updateDonation(donation);
+        donation = donationRepository.updateDonation(donation);
+        
+        if (packTypeUpdated) {
+          donorService.setDonorDueToDonate(donation.getDonor());
+        }
+        
+        return donation;
     }
     
     private void updateAdverseEventForDonation(Donation donation, AdverseEventBackingForm adverseEventBackingForm) {
