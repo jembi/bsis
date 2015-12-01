@@ -1962,4 +1962,27 @@
         </insert>
     </changeSet>
 
+	<!-- For issue 386 [Add isDeleted field to PostDonationCounselling and PostDonationCounselling_AUD Tables] -->
+	<changeSet id="20151117-1509" author="debonair">
+		<addColumn tableName="PostDonationCounselling">
+			<column name="isDeleted" type="TINYINT(1)">
+				<constraints nullable="false" />
+			</column>
+			<column name="createdDate" type="TIMESTAMP"/>
+			<column name="lastUpdated" type="TIMESTAMP"/>
+			<column name="createdBy_id" type="SMALLINT"/>
+			<column name="lastUpdatedBy_id" type="SMALLINT"/>
+		</addColumn>
+
+		<addColumn tableName="PostDonationCounselling_AUD">
+			<column name="isDeleted" type="TINYINT(1)">
+				<constraints nullable="false" />
+			</column>
+			<column name="createdDate" type="TIMESTAMP"/>
+			<column name="lastUpdated" type="TIMESTAMP"/>
+			<column name="createdBy_id" type="SMALLINT"/>
+			<column name="lastUpdatedBy_id" type="SMALLINT"/>
+		</addColumn>
+	</changeSet>
+
 </databaseChangeLog>

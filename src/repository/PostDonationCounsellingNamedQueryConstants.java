@@ -2,13 +2,13 @@ package repository;
 
 public class PostDonationCounsellingNamedQueryConstants {
     
-    public static final String NAME_FIND_FLAGGED_POST_DONATION_COUNSELLING_FOR_DONOR =
-            "PostDonationCounselling.findFlaggedPostDonationCounsellingForDonor";
-    public static final String QUERY_FIND_FLAGGED_POST_DONATION_COUNSELLING_FOR_DONOR =
+    public static final String NAME_FIND_POST_DONATION_COUNSELLING_FOR_DONOR =
+            "PostDonationCounselling.findPostDonationCounsellingForDonor";
+    public static final String QUERY_FIND_POST_DONATION_COUNSELLING_FOR_DONOR =
             "SELECT pdc " +
             "FROM PostDonationCounselling pdc " +
             "WHERE pdc.donation.donor.id = :donorId " +
-            "AND pdc.flaggedForCounselling = :flaggedForCounselling " +
+            "AND pdc.isDeleted = :isDeleted " +
             "ORDER BY pdc.donation.donationDate ";
     
     public static final String NAME_COUNT_FLAGGED_POST_DONATION_COUNSELLINGS_FOR_DONOR =
@@ -17,6 +17,7 @@ public class PostDonationCounsellingNamedQueryConstants {
             "SELECT COUNT(pdc) " +
             "FROM PostDonationCounselling pdc " +
             "WHERE pdc.donation.donor.id = :donorId " +
+            "AND pdc.isDeleted = :isDeleted " +
             "AND pdc.flaggedForCounselling = :flaggedForCounselling ";
     
     public static final String NAME_FIND_POST_DONATION_COUNSELLING_FOR_DONATION =
@@ -24,5 +25,6 @@ public class PostDonationCounsellingNamedQueryConstants {
     public static final String QUERY_FIND_POST_DONATION_COUNSELLING_FOR_DONATION =
         "SELECT pdc " +
         "FROM PostDonationCounselling pdc " +
-        "WHERE pdc.donation = :donation ";
+        "WHERE pdc.donation = :donation " +
+        "AND pdc.isDeleted = :isDeleted ";
 }

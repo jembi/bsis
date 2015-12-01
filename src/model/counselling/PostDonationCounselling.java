@@ -2,19 +2,12 @@ package model.counselling;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import javax.persistence.*;
 
 import model.donation.Donation;
+import model.modificationtracker.ModificationTracker;
+import model.modificationtracker.RowModificationTracker;
+import model.user.User;
 import repository.PostDonationCounsellingNamedQueryConstants;
 
 import org.hibernate.envers.Audited;
@@ -25,8 +18,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import constraintvalidator.DonationExists;
 
 @NamedQueries({
-    @NamedQuery(name = PostDonationCounsellingNamedQueryConstants.NAME_FIND_FLAGGED_POST_DONATION_COUNSELLING_FOR_DONOR,
-            query = PostDonationCounsellingNamedQueryConstants.QUERY_FIND_FLAGGED_POST_DONATION_COUNSELLING_FOR_DONOR),
+    @NamedQuery(name = PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLING_FOR_DONOR,
+            query = PostDonationCounsellingNamedQueryConstants.QUERY_FIND_POST_DONATION_COUNSELLING_FOR_DONOR),
     @NamedQuery(name = PostDonationCounsellingNamedQueryConstants.NAME_COUNT_FLAGGED_POST_DONATION_COUNSELLINGS_FOR_DONOR,
             query = PostDonationCounsellingNamedQueryConstants.QUERY_COUNT_FLAGGED_POST_DONATION_COUNSELLINGS_FOR_DONOR),
     @NamedQuery(name = PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLING_FOR_DONATION,
@@ -35,7 +28,7 @@ import constraintvalidator.DonationExists;
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class PostDonationCounselling {
+public class PostDonationCounselling implements ModificationTracker {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -55,6 +48,18 @@ public class PostDonationCounselling {
 
     @Column(nullable = true)
     private Date counsellingDate;
+
+    @Column(nullable = false)
+    private boolean isDeleted;
+
+    @Embedded
+    private RowModificationTracker modificationTracker;
+
+    public PostDonationCounselling () {
+        modificationTracker = new RowModificationTracker();
+    }
+
+
 
     public Long getId() {
         return id;
@@ -96,6 +101,14 @@ public class PostDonationCounselling {
         this.counsellingDate = counsellingDate;
     }
 
+    public boolean isIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -104,5 +117,45 @@ public class PostDonationCounselling {
         return other instanceof PostDonationCounselling &&
                 ((PostDonationCounselling) other).id == id;
     }
+
+    @Override
+    public Date getLastUpdated() {
+        return modificationTracker.getLastUpdated();
+    }
+
+    public Date getCreatedDate() {
+        return modificationTracker.getCreatedDate();
+    }
+
+    @Override
+    public User getCreatedBy() {
+        return modificationTracker.getCreatedBy();
+    }
+
+    @Override
+    public User getLastUpdatedBy() {
+        return modificationTracker.getLastUpdatedBy();
+    }
+
+    @Override
+    public void setLastUpdated(Date lastUpdated) {
+        modificationTracker.setLastUpdated(lastUpdated);
+    }
+
+    @Override
+    public void setCreatedDate(Date createdDate) {
+        modificationTracker.setCreatedDate(createdDate);
+    }
+
+    @Override
+    public void setCreatedBy(User createdBy) {
+        modificationTracker.setCreatedBy(createdBy);
+    }
+
+    @Override
+    public void setLastUpdatedBy(User lastUpdatedBy) {
+        modificationTracker.setLastUpdatedBy(lastUpdatedBy);
+    }
+
 
 }
