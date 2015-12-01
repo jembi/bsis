@@ -155,7 +155,7 @@ public class DonorController {
 
     map.put("currentlyDeferred", donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor));
     map.put("flaggedForCounselling", flaggedForCounselling);
-    map.put("onceFlaggedForCounselling", hasCounselling);
+    map.put("hasCounselling", hasCounselling);
     map.put("deferredUntil",CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
 	  map.put("canDelete", donorConstraintChecker.canDeleteDonor(id));
 	  map.put("isEligible", donorConstraintChecker.isDonorEligibleToDonate(id));
