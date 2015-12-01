@@ -62,6 +62,8 @@ public class DonationCRUDServiceTests {
     private PackTypeRepository packTypeRepository;
     @Mock
     private DonorConstraintChecker donorConstraintChecker;
+    @Mock
+    private DonorService donorService;
     
     @Test(expected = IllegalStateException.class)
     public void testDeleteDonationWithConstraints_shouldThrow() {
@@ -110,6 +112,7 @@ public class DonationCRUDServiceTests {
         // Verify
         verify(donationRepository).updateDonation(argThat(hasSameStateAsDonation(expectedDonation)));
         verify(donorRepository).updateDonor(argThat(hasSameStateAsDonor(expectedDonor)));
+        verify(donorService).setDonorDueToDonate(argThat(hasSameStateAsDonor(expectedDonor)));
     }
 
     @Test
@@ -151,6 +154,7 @@ public class DonationCRUDServiceTests {
         // Verify
         verify(donationRepository).updateDonation(argThat(hasSameStateAsDonation(expectedDonation)));
         verify(donorRepository).updateDonor(argThat(hasSameStateAsDonor(expectedDonor)));
+        verify(donorService).setDonorDueToDonate(argThat(hasSameStateAsDonor(expectedDonor)));
     }
     
     @Test(expected = IllegalArgumentException.class)
@@ -225,7 +229,9 @@ public class DonationCRUDServiceTests {
                 .withType(anAdverseEventTypeBackingForm().withId(irrelevantAdverseEventTypeId).build())
                 .build();
 
-        Donation existingDonation = aDonation().withId(IRRELEVANT_DONATION_ID).build();
+        Donor expectedDonor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+        
+        Donation existingDonation = aDonation().withId(IRRELEVANT_DONATION_ID).withDonor(expectedDonor).build();
         DonationBackingForm donationBackingForm = aDonationBackingForm()
                 .withDonorPulse(irrelevantDonorPulse)
                 .withHaemoglobinCount(irrelevantHaemoglobinCount)
@@ -243,6 +249,7 @@ public class DonationCRUDServiceTests {
         // Set up expectations
         Donation expectedDonation = aDonation()
                 .withId(IRRELEVANT_DONATION_ID)
+                .withDonor(expectedDonor)
                 .withDonorPulse(irrelevantDonorPulse)
                 .withHaemoglobinCount(irrelevantHaemoglobinCount)
                 .withHaemoglobinLevel(irrelevantHaemoglobinLevel)
@@ -265,6 +272,7 @@ public class DonationCRUDServiceTests {
         
         // Verify
         verify(donationRepository).updateDonation(argThat(hasSameStateAsDonation(expectedDonation)));
+        verify(donorService).setDonorDueToDonate(argThat(hasSameStateAsDonor(expectedDonor)));
         assertThat(returnedDonation, is(expectedDonation));
     }
     

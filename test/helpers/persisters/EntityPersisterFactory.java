@@ -7,6 +7,7 @@ import helpers.builders.DonationBuilder;
 import helpers.builders.DonationTypeBuilder;
 import helpers.builders.DonorBuilder;
 import helpers.builders.LocationBuilder;
+import helpers.builders.PackTypeBuilder;
 import model.adverseevent.AdverseEvent;
 import model.adverseevent.AdverseEventType;
 import model.donation.Donation;
@@ -14,6 +15,7 @@ import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.location.Location;
+import model.packtype.PackType;
 
 public class EntityPersisterFactory {
     
@@ -43,6 +45,10 @@ public class EntityPersisterFactory {
     
     public static AbstractEntityPersister<DeferralReason> aDeferralReasonPersister() {
         return new DeferralReasonBuilder().getPersister();
+    }
+    
+    public static AbstractEntityPersister<PackType> aPackTypePersister() {
+      return new PackTypeBuilder().getPersister();
     }
 
 }

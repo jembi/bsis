@@ -524,6 +524,19 @@ public class DonationRepository {
                 .setParameter("deleted", false)
                 .getResultList();
     }
+    
+  public Date findLatestDueToDonateDateForDonor(long donorId) {
+
+    List<Date> results = em.createNamedQuery(
+        DonationNamedQueryConstants.NAME_FIND_LATEST_DUE_TO_DONATE_DATE_FOR_DONOR,
+        Date.class)
+        .setParameter("donorId", donorId)
+        .setParameter("deleted", false)
+        .setMaxResults(1)
+        .getResultList();
+
+    return results.isEmpty() ? null : results.get(0);
+  }
 
   public Map<Long, BloodTestingRuleResult> filterDonationsWithBloodTypingResults(
       Collection<Donation> donations) {
