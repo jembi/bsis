@@ -1,9 +1,6 @@
 package controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.validation.Valid;
 
@@ -36,6 +33,11 @@ public class PostDonationCounsellingController {
     public PostDonationCounsellingViewModel updatePostDonationCounselling(
             @Valid @RequestBody PostDonationCounsellingBackingForm backingForm,
             @PathVariable Long id) {
+
+        if (backingForm.getFlaggedForCounselling()) {
+            //This is when you wish to clear the current status and re flag for counselling
+            return new PostDonationCounsellingViewModel(postDonationCounsellingCRUDService.flagForCounselling(backingForm.getId()));
+        }
 
         PostDonationCounselling postDonationCounselling = postDonationCounsellingCRUDService.updatePostDonationCounselling(
                 backingForm.getId(), backingForm.getCounsellingStatus(), backingForm.getCounsellingDate(),

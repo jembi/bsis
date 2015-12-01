@@ -14,11 +14,12 @@ public class PostDonationCounsellingBackingForm {
     
     @NotNull
     private Long id;
-    @NotNull
+
     private CounsellingStatus counsellingStatus;
-    @NotNull
+
     private Date counsellingDate;
     private String notes;
+    private boolean flaggedForCounselling;
 
     public long getId() {
         return id;
@@ -54,6 +55,14 @@ public class PostDonationCounsellingBackingForm {
     
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public void setFlaggedForCounselling (boolean flaggedForCounselling) {
+        this.flaggedForCounselling = flaggedForCounselling;
+    }
+
+    public boolean getFlaggedForCounselling() {
+        return flaggedForCounselling;
     }
 
 }

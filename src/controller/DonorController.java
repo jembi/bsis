@@ -48,10 +48,7 @@ import viewmodel.PostDonationCounsellingViewModel;
 import backingform.DonorBackingForm;
 import backingform.DuplicateDonorsBackingForm;
 import backingform.validator.DonorBackingFormValidator;
-import constant.GeneralConfigConstants;
-import factory.DonationViewModelFactory;
 import factory.DonorDeferralViewModelFactory;
-import factory.DonorViewModelFactory;
 
 @RestController
 @RequestMapping("donors")
@@ -153,8 +150,12 @@ public class DonorController {
     boolean flaggedForCounselling = postDonationCounsellingRepository
             .countFlaggedPostDonationCounsellingsForDonor(donor.getId()) > 0;
 
+    boolean hasCounselling = postDonationCounsellingRepository
+            .countNotFlaggedPostDonationCounsellingsForDonor(donor.getId()) > 0;
+
     map.put("currentlyDeferred", donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor));
     map.put("flaggedForCounselling", flaggedForCounselling);
+    map.put("hasCounselling", hasCounselling);
     map.put("deferredUntil",CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
 	map.put("canDelete", donorConstraintChecker.canDeleteDonor(id));
 	map.put("isEligible", donorConstraintChecker.isDonorEligibleToDonate(id));
@@ -458,7 +459,7 @@ public class DonorController {
             @PathVariable("id") Long donorId) {
 
         PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository
-                .findFlaggedPostDonationCounsellingForDonor(donorId);
+                .findPostDonationCounsellingForDonor(donorId);
         return new PostDonationCounsellingViewModel(postDonationCounselling);
     }
 
