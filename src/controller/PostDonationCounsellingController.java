@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import repository.PostDonationCounsellingRepository;
 import service.PostDonationCounsellingCRUDService;
 import utils.PermissionConstants;
 import viewmodel.CounsellingStatusViewModel;
@@ -27,6 +28,9 @@ public class PostDonationCounsellingController {
     
     @Autowired
     private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
+
+    @Autowired
+    private PostDonationCounsellingRepository postDonationCounsellingRepository;
     
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.EDIT_POST_DONATION_COUNSELLING + "')")
@@ -36,14 +40,14 @@ public class PostDonationCounsellingController {
 
         if (backingForm.getFlaggedForCounselling()) {
             //This is when you wish to clear the current status and re flag for counselling
-            return new PostDonationCounsellingViewModel(postDonationCounsellingCRUDService.flagForCounselling(backingForm.getId()));
+            return new PostDonationCounsellingViewModel(postDonationCounsellingCRUDService.flagForCounselling(backingForm.getId()), postDonationCounsellingRepository);
         }
 
         PostDonationCounselling postDonationCounselling = postDonationCounsellingCRUDService.updatePostDonationCounselling(
                 backingForm.getId(), backingForm.getCounsellingStatus(), backingForm.getCounsellingDate(),
                 backingForm.getNotes());
         
-        return new PostDonationCounsellingViewModel(postDonationCounselling);
+        return new PostDonationCounsellingViewModel(postDonationCounselling, postDonationCounsellingRepository);
     }
     
     @RequestMapping(value = "/form", method = RequestMethod.GET)

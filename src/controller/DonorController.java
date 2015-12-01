@@ -460,7 +460,7 @@ public class DonorController {
 
         PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository
                 .findPostDonationCounsellingForDonor(donorId);
-        return new PostDonationCounsellingViewModel(postDonationCounselling);
+        return new PostDonationCounsellingViewModel(postDonationCounselling, postDonationCounsellingRepository);
     }
 
     private void addEditSelectorOptions(Map<String, Object> m) {

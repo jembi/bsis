@@ -36,7 +36,7 @@ public class PostDonationCounselling implements ModificationTracker {
     private Long id;
 
     @DonationExists
-    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch=FetchType.EAGER)
     private Donation donation;
 
     @Column(nullable = false)
