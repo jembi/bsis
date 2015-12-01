@@ -1,5 +1,7 @@
 package service;
 
+import static helpers.builders.DonationBatchBuilder.aDonationBatch;
+import static helpers.builders.DonationBuilder.aDonation;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
@@ -92,6 +94,21 @@ public class DonationBatchConstraintCheckerTests {
 		boolean canEdit = donationBatchConstraintChecker.canEditDonationBatch(donationBatchId);
 		
 		assertThat("Cannot edit a deleted DonationBatch", canEdit, is(false));
+	}
+	
+	@Test
+	public void testCanEditDonationBatchWithDonations() {
+		int donationBatchId = 1;
+		DonationBatch donationBatch = aDonationBatch()
+		    .withId(donationBatchId)
+		    .withDonation(aDonation().build())
+		    .build();
+		
+		when(donationBatchRepository.findDonationBatchById(donationBatchId)).thenReturn(donationBatch);
+		
+		boolean canEdit = donationBatchConstraintChecker.canEditDonationBatch(donationBatchId);
+		
+		assertThat("Cannot edit this DonationBatch", canEdit, is(false));
 	}
 	
 	@Test
