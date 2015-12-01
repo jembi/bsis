@@ -347,6 +347,45 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
     }
 
     @Test
+    public void testCountNotFlaggedPostDonationCounsellingsForDonor_shouldReturnCorrectCount () {
+        Donor donor = aDonor().build();
+
+        // Excluded by donor
+        aPostDonationCounselling()
+                .thatIsFlaggedForCounselling()
+                .thatIsNotDeleted()
+                .withDonation(aDonation()
+                        .withDonor(aDonor().build())
+                        .build())
+                .buildAndPersist(entityManager);
+
+        // Excluded by flag
+        aPostDonationCounselling()
+                .thatIsFlaggedForCounselling()
+                .withDonation(aDonation().withDonor(donor).build())
+                .buildAndPersist(entityManager);
+
+        // Excluded by isDeleted
+        aPostDonationCounselling()
+                .thatIsFlaggedForCounselling()
+                .thatIsDeleted()
+                .withDonation(aDonation().withDonor(donor).build())
+                .buildAndPersist(entityManager);
+
+        // Expected
+        aPostDonationCounselling()
+                .thatIsNotFlaggedForCounselling()
+                .thatIsNotDeleted()
+                .withDonation(aDonation().withDonor(donor).build())
+                .buildAndPersist(entityManager);
+
+        int returnedCount = postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(donor.getId());
+
+        assertThat(returnedCount, is(1));
+
+    }
+
+    @Test
     public void testFindPostDonationCounsellingForDonationWithNoExistingCounselling_shouldReturnNull() {
       
       Donation donation = aDonation().buildAndPersist(entityManager);

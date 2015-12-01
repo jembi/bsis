@@ -150,12 +150,12 @@ public class DonorController {
     boolean flaggedForCounselling = postDonationCounsellingRepository
             .countFlaggedPostDonationCounsellingsForDonor(donor.getId()) > 0;
 
-    boolean onceflaggedForCounselling = postDonationCounsellingRepository
-            .onceFlaggedPostDonationCounsellingsForDonor(donor.getId()) > 0;
+    boolean hasCounselling = postDonationCounsellingRepository
+            .countNotFlaggedPostDonationCounsellingsForDonor(donor.getId()) > 0;
 
     map.put("currentlyDeferred", donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor));
     map.put("flaggedForCounselling", flaggedForCounselling);
-    map.put("onceFlaggedForCounselling", onceflaggedForCounselling);
+    map.put("onceFlaggedForCounselling", hasCounselling);
     map.put("deferredUntil",CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
 	  map.put("canDelete", donorConstraintChecker.canDeleteDonor(id));
 	  map.put("isEligible", donorConstraintChecker.isDonorEligibleToDonate(id));

@@ -77,7 +77,7 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
             .intValue();
   }
 
-  public int onceFlaggedPostDonationCounsellingsForDonor(Long donorId) {
+  public int countNotFlaggedPostDonationCounsellingsForDonor(Long donorId) {
 
     return entityManager.createNamedQuery(
             PostDonationCounsellingNamedQueryConstants.NAME_COUNT_FLAGGED_POST_DONATION_COUNSELLINGS_FOR_DONOR,
