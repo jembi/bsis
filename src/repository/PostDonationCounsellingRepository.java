@@ -77,6 +77,18 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
             .intValue();
   }
 
+  public int onceFlaggedPostDonationCounsellingsForDonor(Long donorId) {
+
+    return entityManager.createNamedQuery(
+            PostDonationCounsellingNamedQueryConstants.NAME_COUNT_FLAGGED_POST_DONATION_COUNSELLINGS_FOR_DONOR,
+            Number.class)
+            .setParameter("donorId", donorId)
+            .setParameter("flaggedForCounselling", false)
+            .setParameter("isDeleted", false)
+            .getSingleResult()
+            .intValue();
+  }
+
   public PostDonationCounselling findPostDonationCounsellingForDonation(Donation donation) {
 
     List<PostDonationCounselling> postDonationCounsellings = entityManager.createNamedQuery(
