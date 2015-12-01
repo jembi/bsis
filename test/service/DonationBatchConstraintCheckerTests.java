@@ -10,6 +10,7 @@ import helpers.builders.DonationBuilder;
 import helpers.builders.TestBatchBuilder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import model.donation.Donation;
@@ -97,21 +98,6 @@ public class DonationBatchConstraintCheckerTests {
 	}
 	
 	@Test
-	public void testCanEditDonationBatchWithDonations() {
-		int donationBatchId = 1;
-		DonationBatch donationBatch = aDonationBatch()
-		    .withId(donationBatchId)
-		    .withDonation(aDonation().build())
-		    .build();
-		
-		when(donationBatchRepository.findDonationBatchById(donationBatchId)).thenReturn(donationBatch);
-		
-		boolean canEdit = donationBatchConstraintChecker.canEditDonationBatch(donationBatchId);
-		
-		assertThat("Cannot edit this DonationBatch", canEdit, is(false));
-	}
-	
-	@Test
 	public void testCanEditDonationBatch() {
 		Integer donationBatchId = new Integer(1);
 		DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).build();
@@ -121,6 +107,36 @@ public class DonationBatchConstraintCheckerTests {
 		boolean canEdit = donationBatchConstraintChecker.canEditDonationBatch(donationBatchId);
 		
 		assertThat("Can edit this DonationBatch", canEdit, is(true));
+	}
+	
+	@Test
+	public void testCanEditDonationBatchDateWithDonations() {
+		int donationBatchId = 1;
+		DonationBatch donationBatch = aDonationBatch()
+		    .withId(donationBatchId)
+		    .withDonation(aDonation().build())
+		    .build();
+		
+		when(donationBatchRepository.findDonationBatchById(donationBatchId)).thenReturn(donationBatch);
+		
+		boolean canEdit = donationBatchConstraintChecker.canEditDonationBatchDate(donationBatchId);
+		
+		assertThat("Cannot edit this DonationBatch", canEdit, is(false));
+	}
+	
+	@Test
+	public void testCanEditDonationBatchDateWithoutDonations() {
+		int donationBatchId = 1;
+		DonationBatch donationBatch = aDonationBatch()
+		    .withId(donationBatchId)
+		    .withDonations(Collections.<Donation>emptyList())
+		    .build();
+		
+		when(donationBatchRepository.findDonationBatchById(donationBatchId)).thenReturn(donationBatch);
+		
+		boolean canEdit = donationBatchConstraintChecker.canEditDonationBatchDate(donationBatchId);
+		
+		assertThat("Cannot edit this DonationBatch", canEdit, is(true));
 	}
 	
 	@Test

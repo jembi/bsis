@@ -36,6 +36,7 @@ public class DonationBatchViewModelFactoryTests {
     	when(donationBatchConstraintChecker.canCloseDonationBatch(donationBatchId)).thenReturn(false);
     	when(donationBatchConstraintChecker.canReopenDonationBatch(donationBatchId)).thenReturn(false);
     	when(donationBatchConstraintChecker.canEditDonationBatch(donationBatchId)).thenReturn(false);
+    	when(donationBatchConstraintChecker.canEditDonationBatchDate(donationBatchId)).thenReturn(false);
     	
     	// run tests
     	DonationBatchViewModel viewModel = donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch);
@@ -43,11 +44,12 @@ public class DonationBatchViewModelFactoryTests {
     	// do asserts
     	Assert.assertNotNull("view model was created", viewModel);
     	Assert.assertNotNull("permissions were created", viewModel.getPermissions());
-    	Assert.assertEquals("permissions correct", 4, viewModel.getPermissions().size());
+    	Assert.assertEquals("permissions correct", 5, viewModel.getPermissions().size());
     	assertPermissionEquals(viewModel.getPermissions(), "canDelete", false);
     	assertPermissionEquals(viewModel.getPermissions(), "canClose", false);
     	assertPermissionEquals(viewModel.getPermissions(), "canReopen", false);
     	assertPermissionEquals(viewModel.getPermissions(), "canEdit", false);
+    	assertPermissionEquals(viewModel.getPermissions(), "canEditDate", false);
     }
 
     private void assertPermissionEquals(Map<String, Boolean> permissions, String permissionKey, Boolean permissionValue) {
