@@ -288,7 +288,7 @@ public class DonationCRUDServiceTests {
         
         // Verify
         verify(donationRepository).updateDonation(argThat(hasSameStateAsDonation(expectedDonation)));
-        //verify(donorService).setDonorDueToDonate(argThat(hasSameStateAsDonor(expectedDonor)));
+        verify(donorService).setDonorDueToDonate(argThat(hasSameStateAsDonor(expectedDonor)));
         assertThat(returnedDonation, is(expectedDonation));
     }
     
