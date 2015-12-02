@@ -4,6 +4,7 @@ import java.util.*;
 
 import javax.validation.Valid;
 
+import factory.PostDonationCounsellingViewModelFactory;
 import model.counselling.CounsellingStatus;
 import model.counselling.PostDonationCounselling;
 
@@ -31,6 +32,9 @@ public class PostDonationCounsellingController {
 
     @Autowired
     private PostDonationCounsellingRepository postDonationCounsellingRepository;
+
+    @Autowired
+    private PostDonationCounsellingViewModelFactory postDonationCounsellingViewModelFactory;
     
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.EDIT_POST_DONATION_COUNSELLING + "')")
@@ -40,14 +44,18 @@ public class PostDonationCounsellingController {
 
         if (backingForm.getFlaggedForCounselling()) {
             //This is when you wish to clear the current status and re flag for counselling
-            return new PostDonationCounsellingViewModel(postDonationCounsellingCRUDService.flagForCounselling(backingForm.getId()), postDonationCounsellingRepository);
+            PostDonationCounselling postDonationCounselling = postDonationCounsellingCRUDService
+                    .flagForCounselling(backingForm.getId());
+
+            return  postDonationCounsellingViewModelFactory
+                    .createPostDonationCounsellingViewModel(postDonationCounselling);
         }
 
         PostDonationCounselling postDonationCounselling = postDonationCounsellingCRUDService.updatePostDonationCounselling(
                 backingForm.getId(), backingForm.getCounsellingStatus(), backingForm.getCounsellingDate(),
                 backingForm.getNotes());
         
-        return new PostDonationCounsellingViewModel(postDonationCounselling, postDonationCounsellingRepository);
+        return postDonationCounsellingViewModelFactory.createPostDonationCounsellingViewModel(postDonationCounselling);
     }
     
     @RequestMapping(value = "/form", method = RequestMethod.GET)

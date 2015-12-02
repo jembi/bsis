@@ -1,34 +1,25 @@
 package viewmodel;
 
-import java.util.Date;
-
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import model.counselling.PostDonationCounselling;
-import repository.PostDonationCounsellingRepository;
 import utils.DateTimeSerialiser;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.util.Date;
+import java.util.Map;
 
 public class PostDonationCounsellingViewModel {
 
-    private PostDonationCounsellingRepository postDonationCounsellingRepository;
-    
     private PostDonationCounselling postDonationCounselling;
+
+    private Map<String, Boolean> permissions;
     
-    public PostDonationCounsellingViewModel(PostDonationCounselling postDonationCounselling, PostDonationCounsellingRepository postDonationCounsellingRepository) {
+    public PostDonationCounsellingViewModel(PostDonationCounselling postDonationCounselling) {
         this.postDonationCounselling = postDonationCounselling;
-        this.postDonationCounsellingRepository = postDonationCounsellingRepository;
     }
     
     public long getId() {
         return postDonationCounselling.getId();
     }
-
-    public boolean getHasCounselling() {
-        return postDonationCounsellingRepository
-                .countNotFlaggedPostDonationCounsellingsForDonor(
-                        postDonationCounselling.getDonation().getDonor().getId()) > 0;
-    }
-
     
     public boolean isFlaggedForCounselling() {
         return postDonationCounselling.isFlaggedForCounselling();
@@ -56,6 +47,14 @@ public class PostDonationCounsellingViewModel {
     
     public DonorViewModel getDonor() {
         return new DonorViewModel(postDonationCounselling.getDonation().getDonor());
+    }
+
+    public Map<String, Boolean> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Map<String, Boolean> permissions) {
+        this.permissions = permissions;
     }
 
 }
