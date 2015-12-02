@@ -37,7 +37,7 @@ public class PostDonationCounsellingViewModelFactoryTests extends UnitTestSuite 
             .withId(donorId)
             .withDonation(aDonation().withDonor(aDonor()
                     .withId(donorId).build())
-                    .build()test
+                    .build()
             )
             .thatIsFlaggedForCounselling()
             .build();
