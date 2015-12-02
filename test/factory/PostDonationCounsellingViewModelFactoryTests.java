@@ -28,7 +28,7 @@ public class PostDonationCounsellingViewModelFactoryTests extends UnitTestSuite 
   private PostDonationCounsellingRepository postDonationCounsellingRepository;
 
   @Test
-  public void testCreatePostDonationCounsellingViewModel_shouldReturnViewModelWithCorrectDonorAndPermissions() {
+  public void testCreatePostDonationCounsellingViewModel_shouldReturnViewModelWithCorrectDonorAndPermissionsTrue() {
 
     boolean canResetStatus = true;
     long donorId = 1L;
@@ -48,6 +48,35 @@ public class PostDonationCounsellingViewModelFactoryTests extends UnitTestSuite 
             .build();
 
     when(postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(donorId)).thenReturn(1);
+
+    PostDonationCounsellingViewModel returnedPostDonationCounsellingViewModel = postDonationCounsellingViewModelFactory
+            .createPostDonationCounsellingViewModel(postDonationCounselling);
+
+    assertThat(returnedPostDonationCounsellingViewModel, hasSameStateAsPostDonationCounsellingViewModel(expectedPostDonationCounsellingViewModel));
+
+  }
+
+  @Test
+  public void testCreatePostDonationCounsellingViewModel_shouldReturnViewModelWithCorrectDonorAndPermissionsFalse() {
+
+    boolean canResetStatus = false;
+    long donorId = 1L;
+
+    PostDonationCounselling postDonationCounselling = aPostDonationCounselling()
+            .withId(donorId)
+            .withDonation(aDonation().withDonor(aDonor()
+                    .withId(donorId).build())
+                    .build()
+            )
+            .thatIsFlaggedForCounselling()
+            .build();
+
+    PostDonationCounsellingViewModel expectedPostDonationCounsellingViewModel = aPostDonationCounsellingViewModel()
+            .withPermission("canResetStatus", canResetStatus)
+            .withPostDonationCounselling(postDonationCounselling)
+            .build();
+
+    when(postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(donorId)).thenReturn(0);
 
     PostDonationCounsellingViewModel returnedPostDonationCounsellingViewModel = postDonationCounsellingViewModelFactory
             .createPostDonationCounsellingViewModel(postDonationCounselling);
