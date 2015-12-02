@@ -30,7 +30,7 @@ public class PostDonationCounsellingViewModelFactoryTests extends UnitTestSuite 
   @Test
   public void testCreatePostDonationCounsellingViewModel_shouldReturnViewModelWithCorrectDonorAndPermissionsTrue() {
 
-    boolean canResetStatus = true;
+    boolean canRemoveStatus = true;
     long donorId = 1L;
 
     PostDonationCounselling postDonationCounselling = aPostDonationCounselling()
@@ -43,7 +43,7 @@ public class PostDonationCounsellingViewModelFactoryTests extends UnitTestSuite 
             .build();
 
     PostDonationCounsellingViewModel expectedPostDonationCounsellingViewModel = aPostDonationCounsellingViewModel()
-            .withPermission("canResetStatus", canResetStatus)
+            .withPermission("canRemoveStatus", canRemoveStatus)
             .withPostDonationCounselling(postDonationCounselling)
             .build();
 
@@ -59,7 +59,7 @@ public class PostDonationCounsellingViewModelFactoryTests extends UnitTestSuite 
   @Test
   public void testCreatePostDonationCounsellingViewModel_shouldReturnViewModelWithCorrectDonorAndPermissionsFalse() {
 
-    boolean canResetStatus = false;
+    boolean canRemoveStatus = false;
     long donorId = 1L;
 
     PostDonationCounselling postDonationCounselling = aPostDonationCounselling()
@@ -72,7 +72,7 @@ public class PostDonationCounsellingViewModelFactoryTests extends UnitTestSuite 
             .build();
 
     PostDonationCounsellingViewModel expectedPostDonationCounsellingViewModel = aPostDonationCounsellingViewModel()
-            .withPermission("canResetStatus", canResetStatus)
+            .withPermission("canRemoveStatus", canRemoveStatus)
             .withPostDonationCounselling(postDonationCounselling)
             .build();
 

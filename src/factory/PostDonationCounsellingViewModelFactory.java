@@ -20,10 +20,10 @@ public class PostDonationCounsellingViewModelFactory {
 
     PostDonationCounsellingViewModel viewModel = new PostDonationCounsellingViewModel(postDonationCounselling);
     // Populate permissions
-    boolean canResetStatus = postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(
+    boolean canRemoveStatus = postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(
             postDonationCounselling.getDonation().getDonor().getId()) > 0;
     Map<String, Boolean> permissions = new HashMap<>();
-    permissions.put("canResetStatus", canResetStatus);
+    permissions.put("canRemoveStatus", canRemoveStatus);
     viewModel.setPermissions(permissions);
     return viewModel;
   }
