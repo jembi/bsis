@@ -1,5 +1,6 @@
 package viewmodel;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import model.counselling.PostDonationCounselling;
 import utils.DateTimeSerialiser;
@@ -57,4 +58,8 @@ public class PostDonationCounsellingViewModel {
         this.permissions = permissions;
     }
 
+    @JsonIgnore
+    public PostDonationCounselling getPostDonationCounselling () {
+        return postDonationCounselling;
+    }
 }
