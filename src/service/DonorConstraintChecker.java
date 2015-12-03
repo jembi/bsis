@@ -78,4 +78,9 @@ public class DonorConstraintChecker {
         return true;
     }
 
+    public boolean isDonorDeferred(long donorId) {
+        Donor donor = donorRepository.findDonorById(donorId);
+        return donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor);
+    }
+
 }

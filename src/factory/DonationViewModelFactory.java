@@ -35,12 +35,14 @@ public class DonationViewModelFactory {
     
     public DonationViewModel createDonationViewModelWithPermissions(Donation donation) {
         DonationViewModel donationViewModel = new DonationViewModel(donation);
+
+        boolean canDonate = donorConstraintChecker.isDonorDeferred(donation.getDonor().getId()) ? false : true;
         
         // Populate permissions
         Map<String, Boolean> permissions = new HashMap<>();
         permissions.put("canDelete", donationConstraintChecker.canDeleteDonation(donation.getId()));
         permissions.put("canUpdateDonationFields", donationConstraintChecker.canUpdateDonationFields(donation.getId()));
-        permissions.put("canDonate", donorConstraintChecker.isDonorEligibleToDonate(donation.getDonor().getId()));
+        permissions.put("canDonate", canDonate);
         donationViewModel.setPermissions(permissions);
         
         if (donation.getAdverseEvent() != null) {
