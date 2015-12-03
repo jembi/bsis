@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import service.DonationConstraintChecker;
+import service.DonorConstraintChecker;
 import viewmodel.AdverseEventViewModel;
 import viewmodel.DonationViewModel;
 
@@ -21,13 +22,15 @@ public class DonationViewModelFactory {
     private DonationConstraintChecker donationConstraintChecker;
     @Autowired
     private AdverseEventViewModelFactory adverseEventViewModelFactory;
+    @Autowired
+    private DonorConstraintChecker donorConstraintChecker;
     
     public List<DonationViewModel> createDonationViewModelsWithPermissions(List<Donation> donations) {
-        List<DonationViewModel> donantionViewModels = new ArrayList<>();
+        List<DonationViewModel> donationViewModels = new ArrayList<>();
         for (Donation donation : donations) {
-            donantionViewModels.add(createDonationViewModelWithPermissions(donation));
+            donationViewModels.add(createDonationViewModelWithPermissions(donation));
         }
-        return donantionViewModels;
+        return donationViewModels;
     }
     
     public DonationViewModel createDonationViewModelWithPermissions(Donation donation) {
@@ -37,6 +40,7 @@ public class DonationViewModelFactory {
         Map<String, Boolean> permissions = new HashMap<>();
         permissions.put("canDelete", donationConstraintChecker.canDeleteDonation(donation.getId()));
         permissions.put("canUpdateDonationFields", donationConstraintChecker.canUpdateDonationFields(donation.getId()));
+        permissions.put("canDonate", donorConstraintChecker.isDonorEligibleToDonate(donation.getDonor().getId()));
         donationViewModel.setPermissions(permissions);
         
         if (donation.getAdverseEvent() != null) {

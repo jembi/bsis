@@ -4,6 +4,7 @@ import static helpers.builders.AdverseEventBuilder.anAdverseEvent;
 import static helpers.builders.AdverseEventViewModelBuilder.anAdverseEventViewModel;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonationViewModelBuilder.aDonationViewModel;
+import static helpers.builders.DonorBuilder.aDonor;
 import static helpers.matchers.DonationViewModelMatcher.hasSameStateAsDonationViewModel;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
@@ -17,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import service.DonationConstraintChecker;
+import service.DonorConstraintChecker;
 import viewmodel.AdverseEventViewModel;
 import viewmodel.DonationViewModel;
 
@@ -31,15 +33,20 @@ public class DonationViewModelFactoryTests {
     private DonationConstraintChecker donationConstraintChecker;
     @Mock
     private AdverseEventViewModelFactory adverseEventViewModelFactory;
+    @Mock
+    private DonorConstraintChecker donorConstraintChecker;
     
     @Test
     public void testCreateDonationViewModelWithPermissions_shouldReturnViewModelWithCorrectDonationAndPermissions() {
         
         boolean irrelevantCanDeletePermission = true;
         boolean irrelevantCanUpdatePermission = true;
+        boolean irrelevantCanDonatePermission = true;
+
         Long irrelevantAdverseEventId = 11L;
         AdverseEvent adverseEvent = anAdverseEvent().withId(irrelevantAdverseEventId).build();
         Donation donation = aDonation().withId(IRRELEVANT_DONATION_ID)
+                .withDonor(aDonor().withId(IRRELEVANT_DONATION_ID).build())
                 .withAdverseEvent(adverseEvent)
                 .build();
         
@@ -49,11 +56,13 @@ public class DonationViewModelFactoryTests {
                 .withDonation(donation)
                 .withPermission("canDelete", irrelevantCanDeletePermission)
                 .withPermission("canUpdateDonationFields", irrelevantCanUpdatePermission)
+                .withPermission("canDonate", irrelevantCanDonatePermission)
                 .withAdverseEvent(adverseEventViewModel)
                 .build();
         
         when(donationConstraintChecker.canDeleteDonation(IRRELEVANT_DONATION_ID)).thenReturn(irrelevantCanDeletePermission);
         when(donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID)).thenReturn(irrelevantCanUpdatePermission);
+        when(donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONATION_ID)).thenReturn(irrelevantCanDonatePermission);
         when(adverseEventViewModelFactory.createAdverseEventViewModel(adverseEvent)).thenReturn(adverseEventViewModel);
         
         DonationViewModel returnedDonationViewModel = donationViewModelFactory.createDonationViewModelWithPermissions(
