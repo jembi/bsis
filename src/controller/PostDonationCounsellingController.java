@@ -4,6 +4,7 @@ import java.util.*;
 
 import javax.validation.Valid;
 
+import factory.PostDonationCounsellingViewModelFactory;
 import model.counselling.CounsellingStatus;
 import model.counselling.PostDonationCounselling;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import repository.PostDonationCounsellingRepository;
 import service.PostDonationCounsellingCRUDService;
 import utils.PermissionConstants;
 import viewmodel.CounsellingStatusViewModel;
@@ -27,6 +29,12 @@ public class PostDonationCounsellingController {
     
     @Autowired
     private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
+
+    @Autowired
+    private PostDonationCounsellingRepository postDonationCounsellingRepository;
+
+    @Autowired
+    private PostDonationCounsellingViewModelFactory postDonationCounsellingViewModelFactory;
     
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.EDIT_POST_DONATION_COUNSELLING + "')")
@@ -36,14 +44,18 @@ public class PostDonationCounsellingController {
 
         if (backingForm.getFlaggedForCounselling()) {
             //This is when you wish to clear the current status and re flag for counselling
-            return new PostDonationCounsellingViewModel(postDonationCounsellingCRUDService.flagForCounselling(backingForm.getId()));
+            PostDonationCounselling postDonationCounselling = postDonationCounsellingCRUDService
+                    .flagForCounselling(backingForm.getId());
+
+            return  postDonationCounsellingViewModelFactory
+                    .createPostDonationCounsellingViewModel(postDonationCounselling);
         }
 
         PostDonationCounselling postDonationCounselling = postDonationCounsellingCRUDService.updatePostDonationCounselling(
                 backingForm.getId(), backingForm.getCounsellingStatus(), backingForm.getCounsellingDate(),
                 backingForm.getNotes());
         
-        return new PostDonationCounsellingViewModel(postDonationCounselling);
+        return postDonationCounsellingViewModelFactory.createPostDonationCounsellingViewModel(postDonationCounselling);
     }
     
     @RequestMapping(value = "/form", method = RequestMethod.GET)
