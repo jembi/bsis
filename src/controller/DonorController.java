@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import factory.PostDonationCounsellingViewModelFactory;
 import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 import model.donor.Donor;
@@ -101,6 +103,9 @@ public class DonorController {
   
   @Autowired
   private DuplicateDonorService duplicateDonorService;
+
+  @Autowired
+  PostDonationCounsellingViewModelFactory postDonationCounsellingViewModelFactory;
   
   public DonorController() {
   }
@@ -460,7 +465,8 @@ public class DonorController {
 
         PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository
                 .findPostDonationCounsellingForDonor(donorId);
-        return new PostDonationCounsellingViewModel(postDonationCounselling);
+        return postDonationCounsellingViewModelFactory
+                .createPostDonationCounsellingViewModel(postDonationCounselling);
     }
 
     private void addEditSelectorOptions(Map<String, Object> m) {
