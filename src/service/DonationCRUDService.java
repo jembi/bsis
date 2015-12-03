@@ -122,8 +122,7 @@ public class DonationCRUDService {
 
         if (packType.getCountAsDonation() && !donorConstraintChecker.isDonorEligibleToDonate(donation.getDonor().getId())) {
 
-            DonationBatch donationBatch = donationBatchRepository.findDonationBatchByBatchNumber(
-                    donationBackingForm.getDonationBatchNumber());
+            DonationBatch donationBatch = donation.getDonationBatch();
 
             if (!donationBatch.isBackEntry()) {
                 throw new IllegalArgumentException("Cannot set pack type that produces components");

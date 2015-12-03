@@ -26,6 +26,7 @@ import viewmodel.DonationViewModel;
 public class DonationViewModelFactoryTests {
     
     private static final long IRRELEVANT_DONATION_ID = 89;
+    private static final long IRRELEVANT_DONOR_ID = 89;
 
     @InjectMocks
     private DonationViewModelFactory donationViewModelFactory;
@@ -46,7 +47,7 @@ public class DonationViewModelFactoryTests {
         Long irrelevantAdverseEventId = 11L;
         AdverseEvent adverseEvent = anAdverseEvent().withId(irrelevantAdverseEventId).build();
         Donation donation = aDonation().withId(IRRELEVANT_DONATION_ID)
-                .withDonor(aDonor().withId(IRRELEVANT_DONATION_ID).build())
+                .withDonor(aDonor().withId(IRRELEVANT_DONOR_ID).build())
                 .withAdverseEvent(adverseEvent)
                 .build();
         
@@ -62,7 +63,7 @@ public class DonationViewModelFactoryTests {
         
         when(donationConstraintChecker.canDeleteDonation(IRRELEVANT_DONATION_ID)).thenReturn(irrelevantCanDeletePermission);
         when(donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID)).thenReturn(irrelevantCanUpdatePermission);
-        when(donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONATION_ID)).thenReturn(irrelevantCanDonatePermission);
+        when(donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID)).thenReturn(irrelevantCanDonatePermission);
         when(adverseEventViewModelFactory.createAdverseEventViewModel(adverseEvent)).thenReturn(adverseEventViewModel);
         
         DonationViewModel returnedDonationViewModel = donationViewModelFactory.createDonationViewModelWithPermissions(
