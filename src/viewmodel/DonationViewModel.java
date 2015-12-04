@@ -250,4 +250,12 @@ public int hashCode() {
     public void setAdverseEvent(AdverseEventViewModel adverseEvent) {
         this.adverseEvent = adverseEvent;
     }
+    
+    public boolean isReleased() {
+      return donation.isReleased();
+    }
+    
+    public void setReleased(boolean released) {
+      donation.setReleased(released);
+    }
 }

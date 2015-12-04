@@ -203,6 +203,10 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     @Column(nullable = false)
     private boolean ineligibleDonor = false;
 
+  // If this donation has been released in a test batch
+  @Column(nullable = false)
+  private boolean released = false;
+
   public Donation() {
     modificationTracker = new RowModificationTracker();
     worksheets = new HashSet<Worksheet>();
@@ -568,6 +572,14 @@ public Long getId() {
 
     public void setIneligibleDonor(boolean ineligibleDonor) {
         this.ineligibleDonor = ineligibleDonor;
+    }
+
+    public boolean isReleased() {
+      return released;
+    }
+
+    public void setReleased(boolean released) {
+      this.released = released;
     }
 
 }

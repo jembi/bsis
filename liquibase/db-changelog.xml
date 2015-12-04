@@ -1984,5 +1984,27 @@
 			<column name="lastUpdatedBy_id" type="SMALLINT"/>
 		</addColumn>
 	</changeSet>
+    
+    <changeSet id="201512031635" author="bausmeier">
+
+        <addColumn tableName="Donation">
+            <column name="released" type="TINYINT(1)" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+
+        <addColumn tableName="Donation_AUD">
+            <column name="released" type="TINYINT(1)" defaultValue="0" />
+        </addColumn>
+
+        <!-- Set donations belonging to CLOSED or RELEASED test batches to released -->
+        <sql>
+            UPDATE Donation d
+            JOIN DonationBatch db ON d.donationBatch_id = db.id
+            JOIN TestBatch tb ON db.testBatch_id = tb.id
+            SET d.released = 1
+            WHERE tb.status IN ("CLOSED", "RELEASED");
+        </sql>
+    </changeSet>
 
 </databaseChangeLog>

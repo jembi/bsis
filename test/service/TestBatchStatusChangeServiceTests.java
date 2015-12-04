@@ -7,20 +7,26 @@ import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
 import static helpers.builders.PackTypeBuilder.aPackType;
 import static helpers.builders.TestBatchBuilder.aTestBatch;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
+
 import java.util.Arrays;
 import java.util.List;
+
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.donordeferral.DeferralReasonType;
 import model.testbatch.TestBatch;
+
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
 import repository.DonationRepository;
 import suites.UnitTestSuite;
 import viewmodel.BloodTestingRuleResult;
@@ -111,6 +117,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         verify(bloodTestsService).updateDonationWithTestResults(donationWithoutDiscrepancies, bloodTestingRuleResult);
         verify(componentCRUDService).updateComponentStatusesForDonation(donationWithoutDiscrepancies);
         verifyZeroInteractions(postDonationCounsellingCRUDService, donorDeferralCRUDService);
+        assertThat(donationWithoutDiscrepancies.isReleased(), is(true));
     }
     
     @Test
@@ -136,6 +143,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafe(donationWithoutDiscrepancies);
         verify(bloodTestsService).updateDonationWithTestResults(donationWithoutDiscrepancies, bloodTestingRuleResult);
         verifyZeroInteractions(postDonationCounsellingCRUDService, donorDeferralCRUDService);
+        assertThat(donationWithoutDiscrepancies.isReleased(), is(true));
     }
     
     @Test
@@ -165,6 +173,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         verify(componentCRUDService).markComponentsBelongingToDonorAsUnsafe(donor);
         verify(bloodTestsService).updateDonationWithTestResults(unsafeDonation, bloodTestingRuleResult);
         verifyZeroInteractions(donorDeferralCRUDService);
+        assertThat(unsafeDonation.isReleased(), is(true));
     }
     
     @Test
@@ -193,6 +202,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         verify(bloodTestsService).updateDonationWithTestResults(unsafeDonation, bloodTestingRuleResult);
         verify(donorDeferralCRUDService).createDeferralForDonorWithDeferralReasonType(donor,
                 DeferralReasonType.AUTOMATED_TTI_UNSAFE);
+        assertThat(unsafeDonation.isReleased(), is(true));
     }
 
 }

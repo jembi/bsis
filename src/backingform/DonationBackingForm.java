@@ -481,4 +481,12 @@ public class DonationBackingForm {
     public AdverseEventBackingForm getAdverseEvent() {
         return adverseEventBackingForm;
     }
+    
+    public boolean isReleased() {
+      return donation.isReleased();
+    }
+    
+    public void setReleased(boolean released) {
+      donation.setReleased(released);
+    }
 }
