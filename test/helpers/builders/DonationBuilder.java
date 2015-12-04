@@ -3,6 +3,8 @@ package helpers.builders;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
+import model.donationbatch.DonationBatch;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
 import helpers.persisters.AbstractEntityPersister;
@@ -42,6 +44,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     private List<BloodTestResult> bloodTestResults;
     private BloodTypingMatchStatus bloodTypingMatchStatus;
     private BloodTypingStatus bloodTypingStatus;
+    private DonationBatch donationBatch;
     
     public DonationBuilder withId(Long id) {
         this.id = id;
@@ -50,6 +53,11 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
 
     public DonationBuilder withDonor(Donor donor) {
         this.donor = donor;
+        return this;
+    }
+
+    public DonationBuilder withDonationBatch(DonationBatch donationBatch) {
+        this.donationBatch = donationBatch;
         return this;
     }
     
@@ -189,6 +197,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         donation.setBloodTestResults(bloodTestResults);
         donation.setBloodTypingMatchStatus(bloodTypingMatchStatus);
         donation.setBloodTypingStatus(bloodTypingStatus);
+        donation.setDonationBatch(donationBatch);
         return donation;
     }
 
