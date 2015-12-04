@@ -33,7 +33,6 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
     private static final Date IRRELEVANT_CREATED_DATE = new Date();
     private static final Date IRRELEVANT_LAST_UPDATED_DATE = new Date();
     private static final String IRRELEVANT_NOTES = "some test batch notes";
-    private static final CanReleaseResult CAN_RELEASE = new TestBatchConstraintChecker.CanReleaseResult(true);
     private static final CanReleaseResult CANT_RELEASE = new TestBatchConstraintChecker.CanReleaseResult(false);
     
     @InjectMocks
@@ -76,6 +75,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
                 .withPermission("canEditDonationBatches", false)
                 .build();
         
+        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(CANT_RELEASE);
         when(donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch, true))
                 .thenReturn(donationBatchViewModel);
         
@@ -86,6 +86,8 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
     
     @Test
     public void testCreateTestBatchViewModelWithTestingSupervisorThatCanReleaseTestBatch_shouldReturnTestBatchViewModelWithTheCorrectState() {
+
+        int expectedReadyCount = 2;
         
         TestBatch testBatch = aTestBatch()
                 .withId(IRRELEVANT_ID)
@@ -95,6 +97,8 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
                 .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
                 .withNotes(IRRELEVANT_NOTES)
                 .build();
+        
+        CanReleaseResult canReleaseResult = new CanReleaseResult(true, expectedReadyCount);
 
         TestBatchViewModel expectedViewModel = aTestBatchViewModel()
                 .withId(IRRELEVANT_ID)
@@ -110,9 +114,10 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
                 .withPermission("canEdit", false)
                 .withPermission("canReopen", false)
                 .withPermission("canEditDonationBatches", false)
+                .withReadyForReleaseCount(expectedReadyCount)
                 .build();
 
-        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(CAN_RELEASE);
+        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(canReleaseResult);
         when(testBatchConstraintChecker.canCloseTestBatch(testBatch)).thenReturn(false);
         when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(false);
         when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);

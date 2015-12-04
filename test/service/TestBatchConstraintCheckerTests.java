@@ -54,7 +54,6 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
         
         assertThat(result.canRelease(), is(true));
         assertThat(result.getReadyCount(), is(0));
-        assertThat(result.getTotalCount(), is(0));
     }
 
     @Test
@@ -78,7 +77,6 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
         
         assertThat(result.canRelease(), is(true));
         assertThat(result.getReadyCount(), is(1));
-        assertThat(result.getTotalCount(), is(1));
     }
 
     @Test
@@ -127,7 +125,6 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
         
         assertThat(result.canRelease(), is(true));
         assertThat(result.getReadyCount(), is(1));
-        assertThat(result.getTotalCount(), is(2));
     }
 
     @Test

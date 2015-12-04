@@ -29,7 +29,6 @@ public class TestBatchConstraintChecker {
         }
         
         int readyCount = 0;
-        int totalCount = 0;
 
         // Check for tests with outstanding test outcomes
         if (testBatch.getDonationBatches() != null) {
@@ -42,9 +41,6 @@ public class TestBatchConstraintChecker {
 	                    // Don't consider donations without test samples
 	                    continue;
 	                }
-	              
-	                // Count this donation in the total
-	                totalCount++;
 	                
 	                BloodTestingRuleResult bloodTestingRuleResult = bloodTestsService.executeTests(donation);
 	                
@@ -61,7 +57,7 @@ public class TestBatchConstraintChecker {
 	        }
         }
 
-        return new CanReleaseResult(true, readyCount, totalCount);
+        return new CanReleaseResult(true, readyCount);
     }
     
 	/**
@@ -148,7 +144,6 @@ public class TestBatchConstraintChecker {
     
     private boolean canRelease;
     private int readyCount;
-    private int totalCount;
 
     /**
      * @param canRelease true if the test batch can be released, otherwise false.
@@ -160,12 +155,10 @@ public class TestBatchConstraintChecker {
     /**
      * @param canRelease true if the test batch can be released, otherwise false.
      * @param readyCount The number of donations ready to be released.
-     * @param totalCount The total number of donations.
      */
-    public CanReleaseResult(boolean canRelease, int readyCount, int totalCount) {
+    public CanReleaseResult(boolean canRelease, int readyCount) {
       this.canRelease = canRelease;
       this.readyCount = readyCount;
-      this.totalCount = totalCount;
     }
 
     public int getReadyCount() {
@@ -174,14 +167,6 @@ public class TestBatchConstraintChecker {
 
     public void setReadyCount(int readyCount) {
       this.readyCount = readyCount;
-    }
-
-    public int getTotalCount() {
-      return totalCount;
-    }
-
-    public void setTotalCount(int totalCount) {
-      this.totalCount = totalCount;
     }
 
     public boolean canRelease() {

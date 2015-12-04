@@ -18,6 +18,7 @@ public class TestBatchViewModelBuilder extends AbstractBuilder<TestBatchViewMode
     private String notes;
     private List<DonationBatchViewModel> donationBatches;
     private Map<String, Boolean> permissions;
+    private int readyForReleaseCount;
     
     public TestBatchViewModelBuilder withId(Long id) {
         this.id = id;
@@ -66,6 +67,11 @@ public class TestBatchViewModelBuilder extends AbstractBuilder<TestBatchViewMode
         permissions.put(key, value);
         return this;
     }
+    
+    public TestBatchViewModelBuilder withReadyForReleaseCount(int readyToReleaseCount) {
+        this.readyForReleaseCount = readyToReleaseCount;
+        return this;
+    }
 
     @Override
     public TestBatchViewModel build() {
@@ -78,6 +84,7 @@ public class TestBatchViewModelBuilder extends AbstractBuilder<TestBatchViewMode
         testBatchViewModel.setNotes(notes);
         testBatchViewModel.setDonationBatches(donationBatches);
         testBatchViewModel.setPermissions(permissions);
+        testBatchViewModel.setReadyForReleaseCount(readyForReleaseCount);
         return testBatchViewModel;
     }
     

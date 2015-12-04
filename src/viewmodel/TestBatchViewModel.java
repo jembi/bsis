@@ -17,6 +17,7 @@ public class TestBatchViewModel {
     private String notes;
     private List<DonationBatchViewModel> donationBatchViewModels;
     private Map<String, Boolean> permissions;
+    private int readyForReleaseCount;
 
     @JsonSerialize(using = DateTimeSerialiser.class)
     public Date getCreatedDate() {
@@ -94,6 +95,14 @@ public class TestBatchViewModel {
 
     public void setPermissions(Map<String, Boolean> permissions) {
         this.permissions = permissions;
+    }
+
+    public void setReadyForReleaseCount(int readyForReleaseCount) {
+      this.readyForReleaseCount = readyForReleaseCount;
+    }
+
+    public int getReadyForReleaseCount() {
+      return readyForReleaseCount;
     }
 
 }

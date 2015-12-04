@@ -61,5 +61,9 @@ public class TestBatchBackingForm {
     public Date getLastUpdated() {
       return testBatch.getLastUpdated();
     }
+    
+    public void setReadyForReleaseCount(int count) {
+      // Ignore value
+    }
 
 }
