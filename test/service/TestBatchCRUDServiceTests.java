@@ -11,24 +11,31 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 import helpers.builders.DonationBatchBuilder;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
+
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
 import repository.DonationBatchRepository;
 import repository.TestBatchRepository;
 import scala.actors.threadpool.Arrays;
+import service.TestBatchConstraintChecker.CanReleaseResult;
 import suites.UnitTestSuite;
 
 public class TestBatchCRUDServiceTests extends UnitTestSuite {
     
-    public static final Long TEST_BATCH_ID = 7L;
+    private static final Long TEST_BATCH_ID = 7L;
+    private static final CanReleaseResult CAN_RELEASE = new TestBatchConstraintChecker.CanReleaseResult(true);
+    private static final CanReleaseResult CANT_RELEASE = new TestBatchConstraintChecker.CanReleaseResult(false);
     
     @InjectMocks
     private TestBatchCRUDService testBatchCRUDService;
@@ -55,7 +62,7 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     public void testUpdateTestBatchStatusWithTestBatchThatCannotBeReleased_shouldThrow() {
         TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN).build();
 
-        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(false);
+        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(CANT_RELEASE);
         
         testBatchCRUDService.changeTestBatchStatus(testBatch, TestBatchStatus.RELEASED);
 
@@ -68,7 +75,7 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
         TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN).build();
         TestBatch updatedTestBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.RELEASED).build();
 
-        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(true);
+        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(CAN_RELEASE);
         when(testBatchRepository.updateTestBatch(testBatch)).thenReturn(updatedTestBatch);
         
         testBatchCRUDService.changeTestBatchStatus(testBatch, TestBatchStatus.RELEASED);
@@ -127,7 +134,7 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
         TestBatch expectedTestBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.RELEASED).build();
         
         when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
-        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(true);
+        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(CAN_RELEASE);
         when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(true);
 		when(testBatchRepository.updateTestBatch(any(TestBatch.class))).thenReturn(testBatch);
 
@@ -154,7 +161,7 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
         TestBatch expectedTestBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.RELEASED).build();
         
         when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
-        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(true);
+        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(CAN_RELEASE);
         when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(true);
         when(testBatchRepository.updateTestBatch(any(TestBatch.class))).thenReturn(testBatch);
 

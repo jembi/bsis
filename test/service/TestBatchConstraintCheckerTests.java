@@ -1,9 +1,9 @@
 package service;
 
-import static helpers.builders.BloodTestBuilder.aBloodTest;
-import static helpers.builders.BloodTestResultBuilder.aBloodTestResult;
+import static helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
 import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.DonationBuilder.aDonation;
+import static helpers.builders.PackTypeBuilder.aPackType;
 import static helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -12,10 +12,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
-import model.bloodtesting.BloodTestResult;
-import model.bloodtesting.BloodTestType;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
@@ -25,7 +22,9 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import service.TestBatchConstraintChecker.CanReleaseResult;
 import suites.UnitTestSuite;
+import viewmodel.BloodTestingRuleResult;
 
 public class TestBatchConstraintCheckerTests extends UnitTestSuite {
     
@@ -33,15 +32,17 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
     private TestBatchConstraintChecker testBatchConstraintChecker;
     @Mock
     private DonationConstraintChecker donationConstraintChecker;
+    @Mock
+    private BloodTestsService bloodTestsService;
 
     @Test
     public void testCanReleaseTestBatchWithNonOpenTestBatch_shouldReturnFalse() {
         
         TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.CLOSED).build();
         
-        boolean result = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
+        CanReleaseResult result = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
         
-        assertThat(result, is(false));
+        assertThat(result.canRelease(), is(false));
     }
     
     @Test
@@ -49,60 +50,107 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
         
         TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.OPEN).withDonationBatches(null).build();
         
-        boolean result = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
+        CanReleaseResult result = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
         
-        assertThat(result, is(true));
+        assertThat(result.canRelease(), is(true));
+        assertThat(result.getReadyCount(), is(0));
+        assertThat(result.getTotalCount(), is(0));
     }
 
     @Test
-    public void testCanReleaseTestBatchWithNoOutstandingTestResults_shouldReturnTrue() {
+    public void testCanReleaseTestBatchWithNoOutstandingOutcomes_shouldReturnTrue() {
         
-        List<BloodTestResult> bloodTestResults = Arrays.asList(
-                aBloodTestResult()
-                        .withBloodTest(aBloodTest().withBloodTestType(BloodTestType.BASIC_BLOODTYPING).build())
-                        .withResult("POS")
-                        .build(),
-                aBloodTestResult()
-                        .withBloodTest(aBloodTest().withBloodTestType(BloodTestType.BASIC_TTI).build())
-                        .withResult("NEG")
-                        .build(),
-                aBloodTestResult()
-                        .withBloodTest(aBloodTest().withBloodTestType(BloodTestType.CONFIRMATORY_TTI).build())
-                        .withResult(null)
-                        .build(),
-                aBloodTestResult()
-                        .withBloodTest(aBloodTest().withBloodTestType(BloodTestType.ADVANCED_BLOODTYPING).build())
-                        .withResult("")
-                        .build()
-        );
-        
-        List<Donation> donations = Arrays.asList(aDonation().withBloodTestResults(bloodTestResults).build());
+        Donation donation = aDonation()
+                .withPackType(aPackType().withTestSampleProduced(true).build())
+                .build();
         
         TestBatch testBatch = aTestBatch()
                 .withStatus(TestBatchStatus.OPEN)
-                .withDonationBatches(Arrays.asList(aDonationBatch().withDonations(donations).build()))
+                .withDonationBatches(Arrays.asList(aDonationBatch().withDonation(donation).build()))
                 .build();
         
-        boolean result = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
         
-        assertThat(result, is(true));
+        when(bloodTestsService.executeTests(donation)).thenReturn(bloodTestingRuleResult);
+        when(donationConstraintChecker.donationHasOutstandingOutcomes(donation, bloodTestingRuleResult)).thenReturn(false);
+        
+        CanReleaseResult result = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
+        
+        assertThat(result.canRelease(), is(true));
+        assertThat(result.getReadyCount(), is(1));
+        assertThat(result.getTotalCount(), is(1));
+    }
+
+    @Test
+    public void testCanReleaseTestBatchWithVariousDonations_shouldReturnCorrectCounts() {
+
+        Donation donationWithDiscrepancies = aDonation()
+                .withId(1L)
+                .withPackType(aPackType().withTestSampleProduced(true).build())
+                .build();
+        Donation donationWithoutDiscrepancies = aDonation()
+                .withId(2L)
+                .withPackType(aPackType().withTestSampleProduced(true).build())
+                .build();
+        Donation donationWithoutTestSample = aDonation()
+                .withId(3L)
+                .withPackType(aPackType().withTestSampleProduced(false).build())
+                .build();
+        
+        TestBatch testBatch = aTestBatch()
+                .withStatus(TestBatchStatus.OPEN)
+                .withDonationBatch(aDonationBatch()
+                        .withDonations(Arrays.asList(
+                            donationWithDiscrepancies,
+                            donationWithoutDiscrepancies,
+                            donationWithoutTestSample
+                        ))
+                        .build())
+                .build();
+        
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
+        BloodTestingRuleResult bloodTestingRuleResult2 = aBloodTestingRuleResult().build();
+        
+        when(bloodTestsService.executeTests(donationWithDiscrepancies)).thenReturn(bloodTestingRuleResult);
+        when(donationConstraintChecker.donationHasOutstandingOutcomes(donationWithDiscrepancies, bloodTestingRuleResult))
+                .thenReturn(false);
+        when(donationConstraintChecker.donationHasDiscrepancies(donationWithDiscrepancies, bloodTestingRuleResult))
+                .thenReturn(true);
+
+        when(bloodTestsService.executeTests(donationWithoutDiscrepancies)).thenReturn(bloodTestingRuleResult2);
+        when(donationConstraintChecker.donationHasOutstandingOutcomes(donationWithoutDiscrepancies, bloodTestingRuleResult2))
+                .thenReturn(false);
+        when(donationConstraintChecker.donationHasDiscrepancies(donationWithoutDiscrepancies, bloodTestingRuleResult2))
+                .thenReturn(false);
+        
+        CanReleaseResult result = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
+        
+        assertThat(result.canRelease(), is(true));
+        assertThat(result.getReadyCount(), is(1));
+        assertThat(result.getTotalCount(), is(2));
     }
 
     @Test
     public void testCanReleaseTestBatchWithOutstandingOutcomes_shouldReturnFalse() {
         
-        Donation donationWithOutstandingOutcomes = aDonation().build();
+        Donation donationWithOutstandingOutcomes = aDonation()
+                .withPackType(aPackType().withTestSampleProduced(true).build())
+                .build();
         
         TestBatch testBatch = aTestBatch()
                 .withStatus(TestBatchStatus.OPEN)
                 .withDonationBatch(aDonationBatch().withDonation(donationWithOutstandingOutcomes).build())
                 .build();
         
-        when(donationConstraintChecker.donationHasOutstandingOutcomes(donationWithOutstandingOutcomes)).thenReturn(true);
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
         
-        boolean result = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
+        when(bloodTestsService.executeTests(donationWithOutstandingOutcomes)).thenReturn(bloodTestingRuleResult);
+        when(donationConstraintChecker.donationHasOutstandingOutcomes(donationWithOutstandingOutcomes, bloodTestingRuleResult))
+                .thenReturn(true);
         
-        assertThat(result, is(false));
+        CanReleaseResult result = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
+        
+        assertThat(result.canRelease(), is(false));
     }
     
     @Test

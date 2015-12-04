@@ -6,16 +6,21 @@ import static helpers.builders.TestBatchViewModelBuilder.aTestBatchViewModel;
 import static helpers.matchers.TestBatchViewModelMatcher.hasSameStateAsTestBatchViewModel;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
+
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
 import service.TestBatchConstraintChecker;
+import service.TestBatchConstraintChecker.CanReleaseResult;
 import suites.UnitTestSuite;
 import viewmodel.DonationBatchViewModel;
 import viewmodel.TestBatchViewModel;
@@ -28,6 +33,8 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
     private static final Date IRRELEVANT_CREATED_DATE = new Date();
     private static final Date IRRELEVANT_LAST_UPDATED_DATE = new Date();
     private static final String IRRELEVANT_NOTES = "some test batch notes";
+    private static final CanReleaseResult CAN_RELEASE = new TestBatchConstraintChecker.CanReleaseResult(true);
+    private static final CanReleaseResult CANT_RELEASE = new TestBatchConstraintChecker.CanReleaseResult(false);
     
     @InjectMocks
     private TestBatchViewModelFactory testBatchViewModelFactory;
@@ -105,7 +112,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
                 .withPermission("canEditDonationBatches", false)
                 .build();
 
-        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(true);
+        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(CAN_RELEASE);
         when(testBatchConstraintChecker.canCloseTestBatch(testBatch)).thenReturn(false);
         when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(false);
         when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
@@ -145,7 +152,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
                 .withPermission("canEditDonationBatches", false)
                 .build();
 
-        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(false);
+        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(CANT_RELEASE);
         when(testBatchConstraintChecker.canCloseTestBatch(testBatch)).thenReturn(true);
         when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(false);
         when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
@@ -185,7 +192,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
                 .withPermission("canEditDonationBatches", false)
                 .build();
 
-        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(false);
+        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(CANT_RELEASE);
         when(testBatchConstraintChecker.canCloseTestBatch(testBatch)).thenReturn(false);
         when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(false);
         when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
@@ -225,7 +232,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
                 .withPermission("canEditDonationBatches", false)
                 .build();
 
-        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(false);
+        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(CANT_RELEASE);
         when(testBatchConstraintChecker.canCloseTestBatch(testBatch)).thenReturn(false);
         when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(true);
         when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);

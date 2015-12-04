@@ -92,7 +92,7 @@ public class TestBatchCRUDService {
         }
 
         if (oldStatus == TestBatchStatus.OPEN && newStatus == TestBatchStatus.RELEASED 
-        		&& !testBatchConstraintChecker.canReleaseTestBatch(testBatch)) {
+        		&& !testBatchConstraintChecker.canReleaseTestBatch(testBatch).canRelease()) {
             throw new IllegalStateException("Test batch cannot be released");
         }
         
