@@ -120,7 +120,7 @@ public class DonationCRUDService {
 
         PackType packType = packTypeRepository.getPackTypeById(donationBackingForm.getPackType().getId());
 
-        if (packType.getCountAsDonation() && !donorConstraintChecker.isDonorDeferred(donation.getDonor().getId())) {
+        if (packType.getCountAsDonation() && donorConstraintChecker.isDonorDeferred(donation.getDonor().getId())) {
 
             DonationBatch donationBatch = donation.getDonationBatch();
 
