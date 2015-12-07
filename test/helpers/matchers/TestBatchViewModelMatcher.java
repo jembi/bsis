@@ -23,11 +23,14 @@ public class TestBatchViewModelMatcher extends TypeSafeMatcher<TestBatchViewMode
                 .appendText("\nLast updated date: ").appendValue(expected.getLastUpdated())
                 .appendText("\nNotes: ").appendValue(expected.getNotes())
                 .appendText("\nDonation batches: ").appendValue(expected.getDonationBatches())
-                .appendText("\nPermissions: ").appendValue(expected.getPermissions());
+                .appendText("\nPermissions: ").appendValue(expected.getPermissions())
+                .appendText("\nReady for release count: ").appendValue(expected.getReadyForReleaseCount());
     }
 
     @Override
     protected void describeMismatchSafely(TestBatchViewModel actual, Description description) {
+      
+        description.appendText("The following fields did not match:");
         
         if (!Objects.equals(actual.getId(), expected.getId())) {
             description.appendText("\nId: expected = ").appendValue(expected.getId())
@@ -68,6 +71,11 @@ public class TestBatchViewModelMatcher extends TypeSafeMatcher<TestBatchViewMode
             description.appendText("\nPermissions: expected = ").appendValue(expected.getPermissions())
                     .appendText(", actual = ").appendValue(actual.getPermissions());
         }
+        
+        if (!Objects.equals(actual.getReadyForReleaseCount(), expected.getReadyForReleaseCount())) {
+            description.appendText("\nReady for release count: expected = ").appendValue(expected.getReadyForReleaseCount())
+                    .appendText(", actual = ").appendValue(actual.getReadyForReleaseCount());
+        }
     }
 
     @Override
@@ -79,7 +87,8 @@ public class TestBatchViewModelMatcher extends TypeSafeMatcher<TestBatchViewMode
                 Objects.equals(actual.getLastUpdated(), expected.getLastUpdated()) &&
                 Objects.equals(actual.getNotes(), expected.getNotes()) &&
                 Objects.equals(actual.getDonationBatches(), expected.getDonationBatches()) &&
-                Objects.equals(actual.getPermissions(), expected.getPermissions());
+                Objects.equals(actual.getPermissions(), expected.getPermissions()) &&
+                Objects.equals(actual.getReadyForReleaseCount(), expected.getReadyForReleaseCount());
     }
     
     public static TestBatchViewModelMatcher hasSameStateAsTestBatchViewModel(TestBatchViewModel expected) {

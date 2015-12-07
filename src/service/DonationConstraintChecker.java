@@ -127,7 +127,7 @@ public class DonationConstraintChecker {
         return donationReleased;
     }
     
-    public boolean donationHasOutstandingOutcomes(Donation donation) {
+    public boolean donationHasOutstandingOutcomes(Donation donation, BloodTestingRuleResult bloodTestingRuleResult) {
         
         if (!donation.getPackType().getTestSampleProduced()) {
             return false;
@@ -135,8 +135,6 @@ public class DonationConstraintChecker {
         
         // {@link BloodTestsService#updateDonationWithTestResults} has side effects so create a copy of the donation
         Donation copy = new Donation(donation);
-
-        BloodTestingRuleResult bloodTestingRuleResult = bloodTestsService.executeTests(copy);
         bloodTestsService.updateDonationWithTestResults(copy, bloodTestingRuleResult);
 
         return copy.getTTIStatus() == TTIStatus.NOT_DONE ||
