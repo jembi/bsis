@@ -411,8 +411,10 @@ public class DonationConstraintCheckerTests {
         Donation donation = aDonation()
                 .withPackType(aPackType().withTestSampleProduced(false).build())
                 .build();
+
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
         
-        boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation);
+        boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation, bloodTestingRuleResult);
         
         assertThat(result, is(false));
     }
@@ -428,11 +430,10 @@ public class DonationConstraintCheckerTests {
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
                 .withPackType(aPackType().build())
                 .build();
+
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
         
-        when(bloodTestsService.executeTests(donation))
-                .thenReturn(aBloodTestingRuleResult().build());
-        
-        boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation);
+        boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation, bloodTestingRuleResult);
         
         assertThat(result, is(true));
     }
@@ -448,11 +449,10 @@ public class DonationConstraintCheckerTests {
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS)
                 .withPackType(aPackType().build())
                 .build();
+
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
         
-        when(bloodTestsService.executeTests(donation))
-                .thenReturn(aBloodTestingRuleResult().build());
-        
-        boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation);
+        boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation, bloodTestingRuleResult);
         
         assertThat(result, is(true));
     }
@@ -468,11 +468,10 @@ public class DonationConstraintCheckerTests {
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE)
                 .withPackType(aPackType().build())
                 .build();
+
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
         
-        when(bloodTestsService.executeTests(donation))
-                .thenReturn(aBloodTestingRuleResult().build());
-        
-        boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation);
+        boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation, bloodTestingRuleResult);
         
         assertThat(result, is(true));
     }
@@ -488,11 +487,10 @@ public class DonationConstraintCheckerTests {
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
                 .withPackType(aPackType().build())
                 .build();
+
+        BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
         
-        when(bloodTestsService.executeTests(donation))
-                .thenReturn(aBloodTestingRuleResult().build());
-        
-        boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation);
+        boolean result = donationConstraintChecker.donationHasOutstandingOutcomes(donation, bloodTestingRuleResult);
         
         assertThat(result, is(false));
 

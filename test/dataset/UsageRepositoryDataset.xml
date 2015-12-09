@@ -74,14 +74,14 @@
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="1"
 		donationType_id="1" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="1" bleedStartTime="2015-08-11 09:06:11.0" bleedEndTime="2015-08-11 09:16:11.0"
-		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" />
+		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 	<Donation id="2" bloodTypingStatus="COMPLETE" donationDate="2015-08-11 09:05:56.0"
 		donationIdentificationNumber="22222222" donorWeight="85.00" isDeleted="false"
 		createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:06:27.0"
 		ttiStatus="TTI_SAFE" packType_id="1" donationBatch_id="1"
 		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="1" bleedStartTime="2015-08-11 09:06:11.0" bleedEndTime="2015-08-11 09:16:11.0"
-		bloodTypingMatchStatus="MATCH" ineligibleDonor="0" />
+		bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0" />
 	<Donation id="3" bloodAbo="AB" bloodRh="+" bloodTypingStatus="COMPLETE"
 		donationDate="2015-08-11 09:05:56.0" donationIdentificationNumber="3333333"
 		donorWeight="55.00" isDeleted="false" createdDate="2015-08-11 09:06:27.0"
@@ -89,21 +89,21 @@
 		packType_id="1" donationBatch_id="1" donationType_id="1" donor_id="3"
 		createdBy_id="1" lastUpdatedBy_id="1" venue_id="1"
 		bleedStartTime="2015-08-11 09:06:11.0" bleedEndTime="2015-08-11 09:16:11.0"
-		bloodTypingMatchStatus="MATCH" ineligibleDonor="0" />
+		bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0" />
 	<Donation id="4" bloodTypingStatus="NOT_DONE" donationDate="2015-08-11 00:00:00.0"
 		donationIdentificationNumber="4444444" extraBloodTypeInformation=""
 		isDeleted="0" createdDate="2015-08-11 07:53:57.0" lastUpdated="2015-08-11 04:43:20.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="1"
 		donationType_id="1" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="1" bleedStartTime="2015-08-11 14:53:37.0" bleedEndTime="2015-08-11 14:53:37.0"
-		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" />
+		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 	<Donation id="5" bloodTypingStatus="NOT_DONE" donationDate="2015-08-11 09:05:56.0"
 		donationIdentificationNumber="55555555" donorWeight="85.00" isDeleted="false"
 		createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:06:27.0"
 		ttiStatus="TTI_UNSAFE" packType_id="1" donationBatch_id="1"
 		donationType_id="1" donor_id="5" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="1" bleedStartTime="2015-08-11 09:06:11.0" bleedEndTime="2015-08-11 09:16:11.0"
-		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" />
+		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 	<Component id="1" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
 		isDeleted="false" createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:07:29.0"
 		status="PROCESSED" donation_id="1" createdBy_id="1" lastUpdatedBy_id="1"

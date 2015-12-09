@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import service.TestBatchConstraintChecker;
+import service.TestBatchConstraintChecker.CanReleaseResult;
 import viewmodel.DonationBatchViewModel;
 import viewmodel.TestBatchViewModel;
 
@@ -32,10 +36,18 @@ public class TestBatchViewModelFactory {
     
     public TestBatchViewModel createTestBatchViewModel(TestBatch testBatch, boolean isTestingSupervisor) {
         TestBatchViewModel testBatchViewModel = createTestBatchViewModelWithoutPermissions(testBatch, isTestingSupervisor);
+        
+        // Check if this test batch can be released
+        CanReleaseResult canReleaseResult = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
+        
+        if (canReleaseResult.canRelease()) {
+          // Include the number of donations ready for release
+          testBatchViewModel.setReadyForReleaseCount(canReleaseResult.getReadyCount());
+        }
                 
         // Set permissions
         Map<String, Boolean> permissions = new HashMap<>();
-        permissions.put("canRelease", isTestingSupervisor && testBatchConstraintChecker.canReleaseTestBatch(testBatch));
+        permissions.put("canRelease", isTestingSupervisor && canReleaseResult.canRelease());
         permissions.put("canClose", isTestingSupervisor && testBatchConstraintChecker.canCloseTestBatch(testBatch));
         permissions.put("canDelete", isTestingSupervisor && testBatchConstraintChecker.canDeleteTestBatch(testBatch));
         permissions.put("canEdit", isTestingSupervisor && testBatchConstraintChecker.canEditTestBatch(testBatch));

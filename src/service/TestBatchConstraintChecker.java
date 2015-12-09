@@ -4,41 +4,60 @@ import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import viewmodel.BloodTestingRuleResult;
 
 @Service
 public class TestBatchConstraintChecker {
     
     @Autowired
     private DonationConstraintChecker donationConstraintChecker;
+    @Autowired
+    private BloodTestsService bloodTestsService;
 
     /**
      * A test batch can be released if it is open and none of the donations have outstanding outcomes.
      */
-    public boolean canReleaseTestBatch(TestBatch testBatch) {
-
+    public CanReleaseResult canReleaseTestBatch(TestBatch testBatch) {
+      
         if (testBatch.getStatus() != TestBatchStatus.OPEN) {
             // Only open test batches can be released
-            return false;
+            return new CanReleaseResult(false);
         }
+        
+        int readyCount = 0;
 
         // Check for tests with outstanding test outcomes
         if (testBatch.getDonationBatches() != null) {
+
 	        for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
 	
 	            for (Donation donation : donationBatch.getDonations()) {
+	              
+	                if (!donation.getPackType().getTestSampleProduced()) {
+	                    // Don't consider donations without test samples
+	                    continue;
+	                }
 	                
-	                if (donationConstraintChecker.donationHasOutstandingOutcomes(donation)) {
-	                    
+	                BloodTestingRuleResult bloodTestingRuleResult = bloodTestsService.executeTests(donation);
+	                
+	                if (donationConstraintChecker.donationHasOutstandingOutcomes(donation, bloodTestingRuleResult)) {
 	                    // This test has an outstanding outcome
-	                    return false;
+	                    return new CanReleaseResult(false);
+	                }
+	                
+	                if (!donationConstraintChecker.donationHasDiscrepancies(donation, bloodTestingRuleResult)) {
+                      // This donations is ready to be released
+  	                  readyCount++;
 	                }
 	            }
 	        }
         }
 
-        return true;
+        return new CanReleaseResult(true, readyCount);
     }
     
 	/**
@@ -120,4 +139,42 @@ public class TestBatchConstraintChecker {
 		}
 		return false;
     }
+  
+  public static class CanReleaseResult {
+    
+    private boolean canRelease;
+    private int readyCount;
+
+    /**
+     * @param canRelease true if the test batch can be released, otherwise false.
+     */
+    public CanReleaseResult(boolean canRelease) {
+      this.canRelease = canRelease;
+    }
+
+    /**
+     * @param canRelease true if the test batch can be released, otherwise false.
+     * @param readyCount The number of donations ready to be released.
+     */
+    public CanReleaseResult(boolean canRelease, int readyCount) {
+      this.canRelease = canRelease;
+      this.readyCount = readyCount;
+    }
+
+    public int getReadyCount() {
+      return readyCount;
+    }
+
+    public void setReadyCount(int readyCount) {
+      this.readyCount = readyCount;
+    }
+
+    public boolean canRelease() {
+      return canRelease;
+    }
+
+    public void setCanRelease(boolean canRelease) {
+      this.canRelease = canRelease;
+    }
+  }
 }

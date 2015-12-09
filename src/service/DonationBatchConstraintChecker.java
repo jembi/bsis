@@ -42,6 +42,18 @@ public class DonationBatchConstraintChecker {
         return true;
     }
     
+    public boolean canEditDonationBatchDate(int donationBatchId) throws NoResultException {
+
+        DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
+
+        if (donationBatch.getDonations() != null && !donationBatch.getDonations().isEmpty()) {
+        	// can't edit a donation batch's date if there are donations in it 
+        	return false;
+        }
+        
+        return true;
+    }
+    
     public boolean canCloseDonationBatch(int donationBatchId) {
         DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
         

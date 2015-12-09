@@ -71,5 +71,7 @@
 		countAsDonation="false" periodBetweenDonations="0" />
 	<PackType id="8" packType="Did Not Bleed" testSampleProduced="true"
 		isDeleted="false" countAsDonation="false" periodBetweenDonations="0" />
-	<Donation ineligibleDonor="0" />
+	<PackType id="9" packType="Deleted" testSampleProduced="true"
+			  isDeleted="true" countAsDonation="false" periodBetweenDonations="0" />
+	<Donation ineligibleDonor="0" released="0" />
 </dataset>

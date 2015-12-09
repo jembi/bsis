@@ -64,6 +64,9 @@ public class TestBatchStatusChangeService {
             LOGGER.info("Skipping donation with discrepancies: " + donation);
             return;
         }
+        
+        // Mark this donation as released
+        donation.setReleased(true);
       
         // Execute tests and update the donation with the results
         BloodTestingRuleResult bloodTestingRuleResult = bloodTestsService.executeTests(donation);

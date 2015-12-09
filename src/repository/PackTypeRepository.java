@@ -21,6 +21,12 @@ public class PackTypeRepository {
 
   public List<PackType> getAllPackTypes() {
     TypedQuery<PackType> query;
+    query = em.createQuery("SELECT b from PackType b", PackType.class);
+    return query.getResultList();
+  }
+
+  public List<PackType> getAllEnabledPackTypes() {
+    TypedQuery<PackType> query;
     query = em.createQuery("SELECT b from PackType b where b.isDeleted=:isDeleted", PackType.class);
     query.setParameter("isDeleted", false);
     return query.getResultList();
@@ -40,8 +46,8 @@ public class PackTypeRepository {
   public PackType getPackTypeById(Integer packTypeId) {
     TypedQuery<PackType> query;
     query = em.createQuery("SELECT b from PackType b " +
-            "where b.id=:id AND b.isDeleted=:isDeleted", PackType.class);
-    query.setParameter("isDeleted", false);
+            "where b.id=:id", PackType.class);
+
     query.setParameter("id", packTypeId);
     if (query.getResultList().size() == 0)
       return null;
