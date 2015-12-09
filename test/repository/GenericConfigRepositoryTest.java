@@ -90,7 +90,7 @@ public class GenericConfigRepositoryTest {
 	
 	@Test
 	public void testFindGenericConfigById() throws Exception {
-		List<String> propertyOwners = new ArrayList<String>();
+		List<String> propertyOwners = new ArrayList<>();
 		propertyOwners.add("donationRequirements");
 		propertyOwners.add("componentReleaseRequirements");
 		Map<String, String> all = genericConfigRepository.getConfigProperties(propertyOwners);

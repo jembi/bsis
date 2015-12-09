@@ -209,7 +209,7 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
 
   public Donation() {
     modificationTracker = new RowModificationTracker();
-    worksheets = new HashSet<Worksheet>();
+    worksheets = new HashSet<>();
   }
 
   public Donation(Donation donation) {

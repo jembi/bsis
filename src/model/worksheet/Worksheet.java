@@ -53,7 +53,7 @@ public class Worksheet implements ModificationTracker {
 
   public Worksheet() {
     modificationTracker = new RowModificationTracker();
-    donations = new HashSet<Donation>();
+    donations = new HashSet<>();
   }
 
   public Long getId() {

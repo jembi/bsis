@@ -150,7 +150,7 @@ public class UsageRepositoryTest {
 	@Test
 	@Ignore("Bug - error in HSQL: dateUsed of: model.usage.ComponentUsage [SELECT u FROM model.usage.ComponentUsage u WHERE (u.component.componentIdentificationNumber = :componentIdentificationNumber OR u.useIndication IN (:useIndications)) AND (u.dateUsed BETWEEN :dateUsedFrom AND :dateUsedTo) AND (u.isDeleted= :isDeleted)]")
 	public void testFindAnyUsageMatching() throws Exception {
-		List<String> usages = new ArrayList<String>();
+		List<String> usages = new ArrayList<>();
 		usages.add("Operation");
 		usages.add("Emergency");
 		usageRepository.findAnyUsageMatching("3333333-0011", "2015-01-01", "2015-10-10", usages);

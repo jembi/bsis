@@ -25,10 +25,10 @@ public class UserRole {
     private Long id;
 
     @ManyToMany
-    private List<Role> roles = new ArrayList<Role>();
+    private List<Role> roles = new ArrayList<>();
 
     @ManyToMany
-    private List<User> users = new ArrayList<User>();
+    private List<User> users = new ArrayList<>();
 
     /**
      * @return the roles

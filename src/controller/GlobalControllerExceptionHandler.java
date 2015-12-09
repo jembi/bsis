@@ -31,7 +31,7 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<Map<String, Object>> handleMethodArgumentNotValidException(
         MethodArgumentNotValidException errors) {
-    Map<String, Object> errorMap = new HashMap<String, Object>();
+    Map<String, Object> errorMap = new HashMap<>();
     errorMap.put("hasErrors", "true");
     errorMap.put("developerMessage", "There are validation issues, please provide valid inputs");
     errorMap.put("userMessage", "Please provide valid inputs");
@@ -41,7 +41,7 @@ public class GlobalControllerExceptionHandler {
     for (FieldError error : errors.getBindingResult().getFieldErrors()) {
         errorMap.put(error.getField(), error.getDefaultMessage());
     }
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
   }
   
  /**
@@ -50,14 +50,14 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(PersistenceException.class)
   public ResponseEntity<Map<String, Object>> handlePersistenceException(
         PersistenceException error) {
-    Map<String, Object> errorMap = new HashMap<String, Object>();
+    Map<String, Object> errorMap = new HashMap<>();
     errorMap.put("hasErrors", "true");
     errorMap.put("developerMessage", error.getMessage());
     errorMap.put("userMessage", "");
     errorMap.put("moreInfo","");
     errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
     error.printStackTrace();
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
+    return new ResponseEntity<>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
   }
   
  /**
@@ -67,14 +67,14 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(NoResultException.class)
   public ResponseEntity<Map<String, Object>> handleNoResultException(
         NoResultException error) {
-    Map<String, Object> errorMap = new HashMap<String, Object>();
+    Map<String, Object> errorMap = new HashMap<>();
     errorMap.put("hasErrors", "true");
     errorMap.put("developerMessage",error.getMessage());
     errorMap.put("userMessage", "");
     errorMap.put("moreInfo",error.getStackTrace()[0]);
     errorMap.put("errorCode", HttpStatus.NOT_FOUND);
     error.printStackTrace();
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.NOT_FOUND);
+    return new ResponseEntity<>(errorMap, HttpStatus.NOT_FOUND);
   }
   
  /**
@@ -90,19 +90,19 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("moreInfo",error.getStackTrace()[0]);
     errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
     error.printStackTrace();
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
   }
 
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<Map<String, Object>> handleIllegalStateException(IllegalStateException error) {
-        Map<String, Object> errorMap = new HashMap<String, Object>();
+        Map<String, Object> errorMap = new HashMap<>();
         errorMap.put("hasErrors", "true");
         errorMap.put("developerMessage", error.getMessage());
         errorMap.put("userMessage", "");
         errorMap.put("moreInfo", error.getStackTrace()[0]);
         errorMap.put("errorCode", HttpStatus.CONFLICT);
         error.printStackTrace();
-        return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(errorMap, HttpStatus.CONFLICT);
     }
     
  /**
@@ -112,14 +112,14 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(NonUniqueResultException .class)
   public ResponseEntity<Map<String, Object>> handleNonUniqueResultException (
         NoResultException error) {
-    Map<String, Object> errorMap = new HashMap<String, Object>();
+    Map<String, Object> errorMap = new HashMap<>();
     errorMap.put("hasErrors", "true");
    errorMap.put("developerMessage", "Fetched more than one object/entity but expected only one");
     errorMap.put("userMessage", "");
     errorMap.put("moreInfo",error.getMessage());
     errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
     error.printStackTrace();
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
+    return new ResponseEntity<>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
   }
   
   //Service layer Exceptions
@@ -129,7 +129,7 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
   public ResponseEntity<Map<String, Object>> handleHttpRequestMethodNotSupportedException(
         HttpRequestMethodNotSupportedException error) {
-    Map<String, Object> errorMap = new HashMap<String, Object>();
+    Map<String, Object> errorMap = new HashMap<>();
     errorMap.put("hasErrors", "true");
     errorMap.put("developerMessage", error.getMethod()+ " supports only " + error.getSupportedHttpMethods()
                             + ", change the request type to " + error.getSupportedHttpMethods());
@@ -137,7 +137,7 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("moreInfo", error.getMessage());
     errorMap.put("errorCode", HttpStatus.METHOD_NOT_ALLOWED);
     error.printStackTrace();
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.METHOD_NOT_ALLOWED);
+    return new ResponseEntity<>(errorMap, HttpStatus.METHOD_NOT_ALLOWED);
   }
   
   /**
@@ -146,14 +146,14 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
   public ResponseEntity<Map<String, Object>> handleHttpMediaTypeNotSupportedException(
         HttpMediaTypeNotSupportedException error) {
-    Map<String, Object> errorMap = new HashMap<String, Object>();
+    Map<String, Object> errorMap = new HashMap<>();
     errorMap.put("hasErrors", "true");
     errorMap.put("developerMessage", "the requested content type ["+ error.getContentType() + "] is not supported");
     errorMap.put("userMessage", "");
     errorMap.put("moreInfo", error.getMessage());
     errorMap.put("errorCode", HttpStatus.UNSUPPORTED_MEDIA_TYPE);
     error.printStackTrace();
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+    return new ResponseEntity<>(errorMap, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
   }
   
   /**
@@ -162,7 +162,7 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(MissingServletRequestParameterException.class)
   public ResponseEntity<Map<String, Object>> handleMissingServletRequestParameterException(
         MissingServletRequestParameterException error) {
-    Map<String, Object> errorMap = new HashMap<String, Object>();
+    Map<String, Object> errorMap = new HashMap<>();
     errorMap.put("hasErrors", "true");
     errorMap.put("developerMessage", "the request parameter [" 
             + error.getParameterName()+ "] of type [" +error.getParameterType()+ "]is missing");
@@ -170,7 +170,7 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("moreInfo", error.getMessage());
     errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
     error.printStackTrace();
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
   }
   
   /**
@@ -179,7 +179,7 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(ConversionNotSupportedException.class)
   public ResponseEntity<Map<String, Object>> handleConversionNotSupportedException(
         ConversionNotSupportedException error) {
-    Map<String, Object> errorMap = new HashMap<String, Object>();
+    Map<String, Object> errorMap = new HashMap<>();
     errorMap.put("hasErrors", "true");
     errorMap.put("errorMessage", error.getPropertyName() + "with value " +error.getValue() 
             + "is not compatable to" + error.getRequiredType());
@@ -187,7 +187,7 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("moreInfo", error.getMessage());
     errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
     error.printStackTrace();
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
+    return new ResponseEntity<>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
   }
   
     /**
@@ -197,14 +197,14 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(NumberFormatException.class)
   public ResponseEntity<Map<String, Object>> handleNumberFormatException(
         NumberFormatException error) {
-    Map<String, Object> errorMap = new HashMap<String, Object>();
+    Map<String, Object> errorMap = new HashMap<>();
     errorMap.put("hasErrors", "true");
     errorMap.put("developerMessage", error.getMessage());
     errorMap.put("userMessage", "");
     errorMap.put("moreInfo",error.getStackTrace()[0]);
     errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
     error.printStackTrace();
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
+    return new ResponseEntity<>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
   }
   
   /**
@@ -213,7 +213,7 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(TypeMismatchException.class)
   public ResponseEntity<Map<String, Object>> handleTypeMismatchException(
         TypeMismatchException error) {
-    Map<String, Object> errorMap = new HashMap<String, Object>();
+    Map<String, Object> errorMap = new HashMap<>();
     errorMap.put("hasErrors", "true");
     errorMap.put("developerMessage", "Value '" +error.getValue() 
             + "' is not compatable with " + error.getRequiredType());
@@ -221,7 +221,7 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("moreInfo", error.getMessage());
     errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
     error.printStackTrace();
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
   }
   
    /**
@@ -231,7 +231,7 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(InvalidFormatException.class)
   public ResponseEntity<Map<String, Object>> handleInvalidFormatException(
         InvalidFormatException error) {
-    Map<String, Object> errorMap = new HashMap<String, Object>();
+    Map<String, Object> errorMap = new HashMap<>();
     errorMap.put("hasErrors", "true");
     errorMap.put("developerMessage", 
             error.getValue() +"cannot be converted to "+ error.getTargetType() + 
@@ -240,7 +240,7 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("moreInfo",error.getMessage() );
     errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
     error.printStackTrace();
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
   }
   
   
@@ -255,14 +255,14 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(NullPointerException.class)
   public ResponseEntity<Map<String, Object>> handleNullPointerException(
         NullPointerException error) {
-    Map<String, Object> errorMap = new HashMap<String, Object>();
+    Map<String, Object> errorMap = new HashMap<>();
     errorMap.put("hasErrors", "true");
     errorMap.put("developerMessage", "Null Pointer Exception: " + error.getStackTrace()[0]);
     errorMap.put("userMessage", "");
     errorMap.put("moreInfo", error.getStackTrace()[0]);
     errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
     error.printStackTrace();
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
+    return new ResponseEntity<>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   /**
@@ -271,7 +271,7 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public ResponseEntity<Map<String, Object>> handleHttpMessageNotReadableException(
         HttpMessageNotReadableException error) {
-    Map<String, Object> errorMap = new HashMap<String, Object>();
+    Map<String, Object> errorMap = new HashMap<>();
     errorMap.put("hasErrors", "true");
     errorMap.put("developerMessage", "Error parsing  Json request to corresponding object."
             + " please form the correct JSON String " );
@@ -279,7 +279,7 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("moreInfo", error.getMessage());
     errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
     error.printStackTrace();
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
   }
   
   /**
@@ -288,14 +288,14 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(HttpMessageNotWritableException.class)
   public ResponseEntity<Map<String, Object>> handleHttpMessageNotWritableException(
         HttpMessageNotWritableException error) {
-    Map<String, Object> errorMap = new HashMap<String, Object>();
+    Map<String, Object> errorMap = new HashMap<>();
     errorMap.put("hasErrors", "true");
     errorMap.put("developerMessage", "Error parsing Object  to JSON response");
     errorMap.put("userMessage", "");
     errorMap.put("moreInfo", error.getMessage());
     errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
     error.printStackTrace();
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
+    return new ResponseEntity<>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
   }
   
    /**
@@ -304,26 +304,26 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(ParseException.class)
   public ResponseEntity<Map<String, Object>> handleParseException(
         ParseException error) {
-    Map<String, Object> errorMap = new HashMap<String, Object>();
+    Map<String, Object> errorMap = new HashMap<>();
     errorMap.put("hasErrors", "true");
     errorMap.put("developerMessage", error.getMessage() + "at position " + error.getErrorOffset());
     errorMap.put("userMessage", error.getMessage());
     errorMap.put("moreInfo", error.getMessage());
     errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
     error.printStackTrace();
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
   }
   
   @ExceptionHandler(AccessDeniedException.class)
   public ResponseEntity<Map<String, Object>> handleAccessDeniedException(AccessDeniedException error) {
-        Map<String, Object> errorMap = new HashMap<String, Object>();
+        Map<String, Object> errorMap = new HashMap<>();
         errorMap.put("hasErrors", "true");
         errorMap.put("developerMessage", "Access denied");
         errorMap.put("userMessage", error.getMessage());
         errorMap.put("moreInfo", error.getMessage());
         errorMap.put("errorCode", HttpStatus.FORBIDDEN);
         error.printStackTrace();
-        return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(errorMap, HttpStatus.FORBIDDEN);
   }
   
 }

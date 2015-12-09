@@ -134,7 +134,7 @@ public class DonationBatchRepository {
   
   public List<Donation> findDonationsInBatch(Integer batchId) {
     DonationBatch donationBatch = findDonationBatchByIdEager(batchId);
-    List<Donation> donations = new ArrayList<Donation>();
+    List<Donation> donations = new ArrayList<>();
     for (Donation c : donationBatch.getDonations()) {
     	donations.add(c);
     }

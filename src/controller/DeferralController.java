@@ -40,7 +40,7 @@ public class DeferralController {
     public 
     Map<String, Object> deferDonorFormGenerator() {
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("deferralReasons", donorRepository.getDeferralReasons());
         return map;
     }
@@ -50,7 +50,7 @@ public class DeferralController {
     public 
     Map<String, Object> getDonorDeferrals(@PathVariable Long id) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         DonorDeferral donorDeferral = donorDeferralCRUDService.findDeferralById(id);
         DonorDeferralViewModel donorDeferralViewModel = deferralViewModelFactory.createDonorDeferralViewModel(donorDeferral);
         map.put("deferral", donorDeferralViewModel);
@@ -63,7 +63,7 @@ public class DeferralController {
     ResponseEntity<Map<String, Object>> deferDonor(@Valid @RequestBody DeferralBackingForm form) {
     	
     	HttpStatus httpStatus = HttpStatus.CREATED;
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
     	DonorDeferral savedDeferral = null;
 
     	DonorDeferral deferral = form.getDonorDeferral();
@@ -74,7 +74,7 @@ public class DeferralController {
         map.put("deferralId", savedDeferral.getId());
         map.put("deferral", deferralViewModelFactory.createDonorDeferralViewModel(donorDeferralCRUDService.findDeferralById(savedDeferral.getId())));
 
-        return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+        return new ResponseEntity<>(map, httpStatus);
 
     }
 
@@ -83,7 +83,7 @@ public class DeferralController {
     public ResponseEntity<Map<String, Object>> updateDeferral(@Valid @RequestBody DeferralBackingForm form, @PathVariable Long id) {
 
 		 HttpStatus httpStatus = HttpStatus.OK;
-	     Map<String, Object> map = new HashMap<String, Object>();
+	     Map<String, Object> map = new HashMap<>();
 	     DonorDeferral updatedDeferral = null;
 	     
 	     DonorDeferral deferral = form.getDonorDeferral();
@@ -94,7 +94,7 @@ public class DeferralController {
 	
 	     map.put("deferral", deferralViewModelFactory.createDonorDeferralViewModel(donorDeferralCRUDService.findDeferralById(updatedDeferral.getId())));
 	     
-	     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+	     return new ResponseEntity<>(map, httpStatus);
     }
     
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
@@ -109,11 +109,11 @@ public class DeferralController {
 	public ResponseEntity<Map<String, Object>> endDeferral(@RequestBody EndDeferralBackingForm form, @PathVariable Long id) {
 		
 		HttpStatus httpStatus = HttpStatus.OK;
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		
 		DonorDeferral updatedDeferral = donorDeferralCRUDService.endDeferral(id, form.getComment());
 		map.put("deferral", deferralViewModelFactory.createDonorDeferralViewModel(updatedDeferral));
 		
-		return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+		return new ResponseEntity<>(map, httpStatus);
 	}
 }

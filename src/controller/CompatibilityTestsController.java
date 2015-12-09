@@ -67,7 +67,7 @@ public class CompatibilityTestsController {
   public  ResponseEntity<Map<String, Object>> editCompatibilityTestsFormGenerator(
          @PathVariable String requestId) {
 
-    Map<String, Object> m = new HashMap<String, Object>();
+    Map<String, Object> m = new HashMap<>();
     addEditSelectorOptions(m);
     m.put("crossmatchForRequest", true);
     // to ensure custom field names are displayed in the form
@@ -79,7 +79,7 @@ public class CompatibilityTestsController {
 
     Request componentRequest = requestRepository.findRequestById(requestId);
     form.setForRequest(componentRequest);
-    return new ResponseEntity<Map<String, Object>>(m, HttpStatus.OK);
+    return new ResponseEntity<>(m, HttpStatus.OK);
 
   }
 
@@ -88,7 +88,7 @@ public class CompatibilityTestsController {
   public  ResponseEntity<Map<String, Object>>
         addCompatibilityTest(@Valid @RequestBody CompatibilityTestBackingForm form) {
 
-      Map<String, Object> map = new HashMap<String, Object>();
+      Map<String, Object> map = new HashMap<>();
       addEditSelectorOptions(map);
       CompatibilityTest crossmatchTest = form.getCompatibilityTest();
       crossmatchTest.setIsDeleted(false);
@@ -96,6 +96,6 @@ public class CompatibilityTestsController {
       form = new CompatibilityTestBackingForm();
       map.put("editCompatibilityTestForm", form);
       map.put("existingCompatibilityTest", false);
-      return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+      return new ResponseEntity<>(map, HttpStatus.OK);
   }
 }

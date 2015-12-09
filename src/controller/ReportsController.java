@@ -58,7 +58,7 @@ public class ReportsController {
   @RequestMapping(value = "/inventory/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REPORTING_INFORMATION+"')")
   public Map<String, Object> inventoryReportFormGenerator() {
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     utilController.addTipsToModel(map, "report.inventory.generate");
     utilController.addTipsToModel(map, "report.inventory.componentinventorychart");
     map.put("venues", locationRepository.getAllVenues());
@@ -77,7 +77,7 @@ public class ReportsController {
     List<String> componentStatuses = Arrays.asList(status.split("\\|"));
     List<String> centerIds = Arrays.asList(venues.split("\\|"));
 
-    List<Long> centerIdsLong = new ArrayList<Long>();
+    List<Long> centerIdsLong = new ArrayList<>();
     centerIdsLong.add((long)-1);
     for (String centerId : centerIds) {
       if (centerId.trim().equals(""))
@@ -99,7 +99,7 @@ public class ReportsController {
   @RequestMapping(value = "/donations/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.DONATIONS_REPORTING+"')")
   public Map<String, Object> donationsReportFormGenerator() {
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     utilController.addTipsToModel(map, "report.donations.donationsreport");
     map.put("venues", locationRepository.getAllVenues());
     return map;
@@ -108,7 +108,7 @@ public class ReportsController {
   @RequestMapping(value = "/requests/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.REQUESTS_REPORTING+"')")
   public Map<String, Object> requestsReportFormGenerator() {
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     utilController.addTipsToModel(map, "report.requests.requestsreport");
     map.put("sites", locationRepository.getAllUsageSites());
     return map;
@@ -117,7 +117,7 @@ public class ReportsController {
   @RequestMapping(value = "/components/discard/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_DISCARDED_REPORTING+"')")
   public Map<String, Object> discardedComponentsReportFormGenerator() {
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     utilController.addTipsToModel(map, "report.components.discardedcomponentsreport");
     map.put("venues", locationRepository.getAllVenues());
     map.put("model", map);
@@ -127,7 +127,7 @@ public class ReportsController {
   @RequestMapping(value = "/components/issued/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_ISSUED_REPORTING+"')")
   public Map<String, Object> issuedComponentsReportFormGenerator() {
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     utilController.addTipsToModel(map, "report.components.issuedcomponentsreport");
     map.put("venues", locationRepository.getAllVenues());
     return map;
@@ -145,7 +145,7 @@ public class ReportsController {
 
 
       HttpStatus httpStatus = HttpStatus.OK;
-      Map<String, Object> map = new HashMap<String, Object>();
+      Map<String, Object> map = new HashMap<>();
 
 
       Date dateTo;
@@ -182,7 +182,7 @@ public class ReportsController {
       map.put("donationDateFromUTC", dateFrom.getTime());
       map.put("donationDateToUTC", dateTo.getTime());
 
-    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+    return new ResponseEntity<>(map, httpStatus);
   }
 
   @RequestMapping(value = "/requests/generate", method = RequestMethod.GET)
@@ -196,7 +196,7 @@ public class ReportsController {
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
 
     HttpStatus httpStatus = HttpStatus.OK;
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
 
       Date dateTo;
       if (donationDateTo == null || donationDateTo.equals(""))
@@ -232,7 +232,7 @@ public class ReportsController {
       map.put("dateRequestedFromUTC", dateFrom.getTime());
       map.put("dateRequestedToUTC", dateTo.getTime());
 
-    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+    return new ResponseEntity<>(map, httpStatus);
   }
 
   @RequestMapping(value = "/components/discard/generate", method = RequestMethod.GET)
@@ -246,7 +246,7 @@ public class ReportsController {
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
 
     HttpStatus httpStatus = HttpStatus.OK;
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
 
 
       Date dateTo;
@@ -283,7 +283,7 @@ public class ReportsController {
       map.put("donationDateFromUTC", dateFrom.getTime());
       map.put("donationDateToUTC", dateTo.getTime());
 
-   return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+   return new ResponseEntity<>(map, httpStatus);
   }
 
   @RequestMapping(value = "/components/issued/generate", method = RequestMethod.GET)
@@ -297,7 +297,7 @@ public class ReportsController {
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
 
     HttpStatus httpStatus = HttpStatus.OK;
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
 
       Date dateTo;
       if (donationDateTo == null || donationDateTo.equals(""))
@@ -333,7 +333,7 @@ public class ReportsController {
       map.put("dateIssuedFromUTC", dateFrom.getTime());
       map.put("dateIssuedToUTC", dateTo.getTime());
 
-   return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+   return new ResponseEntity<>(map, httpStatus);
   }
 
   private Date dateSubtract(Date dateTo, int field, int amount) {
@@ -347,7 +347,7 @@ public class ReportsController {
   @RequestMapping(value = "/tti/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.TTI_REPORTING+"')")
   public Map<String, Object> testResultsReportFormGenerator() {
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     map.put("ttiTests", bloodTestingRepository.getTTITests());
     map.put("venues", locationRepository.getAllVenues());
     utilController.addTipsToModel(map, "report.donations.testresultsreport");
@@ -367,7 +367,7 @@ public class ReportsController {
    
 
     HttpStatus httpStatus = HttpStatus.OK;
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
 
       Date dateTo;
       if (dateTestedTo == null || dateTestedTo.equals(""))
@@ -402,7 +402,7 @@ public class ReportsController {
       map.put("dateTestedFromUTC", dateFrom.getTime());
       map.put("dateTestedToUTC", dateTo.getTime());
 
-   return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+   return new ResponseEntity<>(map, httpStatus);
   }
   
     @RequestMapping(value = "/collecteddonations/generate", method = RequestMethod.GET)

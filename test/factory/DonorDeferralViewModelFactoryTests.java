@@ -67,7 +67,7 @@ public class DonorDeferralViewModelFactoryTests {
 		
 		// create test data
 		Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
-		List<DonorDeferral> donorDeferrals = new ArrayList<DonorDeferral>();
+		List<DonorDeferral> donorDeferrals = new ArrayList<>();
 		DonorDeferral donorDeferral1 = DonorDeferralBuilder.aDonorDeferral().withId(1l).withCreatedDate(new Date())
 		        .withDeferredDonor(deferredDonor).withDeferredUntil(new Date()).build();
 		donorDeferrals.add(donorDeferral1);

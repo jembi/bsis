@@ -48,7 +48,7 @@ public class RoleController {
 	@PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
 	public  Map<String, Object> configureRolesFormGenerator(HttpServletRequest request) {
 
-                Map<String, Object> map = new  HashMap<String, Object>();
+                Map<String, Object> map = new HashMap<>();
 		addAllRolesToModel(map);
 		return map;
 	}
@@ -56,7 +56,7 @@ public class RoleController {
 	@RequestMapping(value = "/permissions", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.MANAGE_ROLES+"')")
 	public  Map<String, Object> editRoleFormGenerator() {
-                Map<String, Object> map = new HashMap<String, Object>();
+                Map<String, Object> map = new HashMap<>();
 		addAllPermissionsToModel(map);
 		return map;
 	}
@@ -76,7 +76,7 @@ public class RoleController {
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_ROLES + "')")
     public ResponseEntity getRoleBydId(@PathVariable Long id){
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         Role role =  roleRepository.findRoleDetailById(id);
         map.put("role", new RoleViewModel(role));
         return new ResponseEntity (map, HttpStatus.OK);

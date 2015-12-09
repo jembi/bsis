@@ -189,7 +189,7 @@ public class DonationRepository {
     query.setParameter("toDate", toDate);
     List<Donation> donations = query.getResultList();
     if (donations.isEmpty()) {
-      return new ArrayList<Donation>();
+      return new ArrayList<>();
     }
     return donations;
   }
@@ -243,7 +243,7 @@ public class DonationRepository {
       Date donationDateTo, String aggregationCriteria,
       List<String> venues, List<String> bloodGroups)throws ParseException{
 
-    List<Long> venueIds = new ArrayList<Long>();
+    List<Long> venueIds = new ArrayList<>();
     if (venues != null) {
       for (String venue : venues) {
         venueIds.add(Long.parseLong(venue));
@@ -252,9 +252,9 @@ public class DonationRepository {
     	venueIds.add((long)-1);
     }
 
-    Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long,Long>>();
+    Map<String, Map<Long, Long>> resultMap = new HashMap<>();
     for (String bloodGroup : bloodGroups) {
-      resultMap.put(bloodGroup, new HashMap<Long, Long>());
+      resultMap.put(bloodGroup, new HashMap<>());
     }
 
     TypedQuery<Object[]> query = em.createQuery(
@@ -283,7 +283,7 @@ public class DonationRepository {
     List<Object[]> resultList = query.getResultList();
 
     for (String bloodGroup : bloodGroups) {
-      Map<Long, Long> m = new HashMap<Long, Long>();
+      Map<Long, Long> m = new HashMap<>();
       Calendar gcal = new GregorianCalendar();
       Date lowerDate = resultDateFormat.parse(resultDateFormat.format(donationDateFrom));
       Date upperDate =  resultDateFormat.parse(resultDateFormat.format(donationDateTo));
@@ -461,7 +461,7 @@ public class DonationRepository {
   }
   
   public List<Donation> verifyDonationIdentificationNumbers(List<String> donationIdentificationNumbers) {
-    List<Donation> donations = new ArrayList<Donation>();
+    List<Donation> donations = new ArrayList<>();
     for (String donationIdentificationNumber : donationIdentificationNumbers) {
       if (StringUtils.isBlank(donationIdentificationNumber))
         continue;
@@ -541,7 +541,7 @@ public class DonationRepository {
   public Map<Long, BloodTestingRuleResult> filterDonationsWithBloodTypingResults(
       Collection<Donation> donations) {
     Iterator<Donation> iter = donations.iterator();
-    Map<Long, BloodTestingRuleResult> statusMap = new HashMap<Long, BloodTestingRuleResult>();
+    Map<Long, BloodTestingRuleResult> statusMap = new HashMap<>();
     while (iter.hasNext()) {
       Donation c = iter.next();
       BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();

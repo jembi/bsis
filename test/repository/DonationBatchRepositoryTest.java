@@ -190,7 +190,7 @@ public class DonationBatchRepositoryTest {
 	
 	@Test
 	public void testFindDonationBatches() throws Exception {
-		List<Long> locationIds = new ArrayList<Long>();
+		List<Long> locationIds = new ArrayList<>();
 		locationIds.add(1L);
 		List<DonationBatch> batches = donationBatchRepository.findDonationBatches(true, locationIds, null, null);
 		Assert.assertNotNull("There are batches in Maseru", batches);
@@ -199,7 +199,7 @@ public class DonationBatchRepositoryTest {
 
 	@Test
 	public void testFindDonationBatchesWithDates() throws Exception {
-		List<Long> locationIds = new ArrayList<Long>();
+		List<Long> locationIds = new ArrayList<>();
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String startDate = "2015-03-01 22:00:00";
 		String endDate = "2015-03-04 22:00:00";

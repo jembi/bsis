@@ -147,12 +147,12 @@ public class RoleRepositoryTest {
 		Role one = new Role();
 		one.setName("New Role");
 		one.setDescription("A new role");
-		Set<Permission> permissions = new HashSet<Permission>();
+		Set<Permission> permissions = new HashSet<>();
 		permissions.add(roleRepository.findPermissionByPermissionId(1));
 		permissions.add(roleRepository.findPermissionByPermissionId(3));
 		permissions.add(roleRepository.findPermissionByPermissionId(5));
 		one.setPermissions(permissions);
-		List<User> users = new ArrayList<User>();
+		List<User> users = new ArrayList<>();
 		users.add(userRepository.findUserById(1));
 		users.add(userRepository.findUserById(2));
 		one.setUsers(users);
@@ -181,8 +181,8 @@ public class RoleRepositoryTest {
 	@Ignore("Bug? - after the delete, all queries fail due to foreign key reference:  integrity constraint violation: foreign key no action; FK_TC5K40I3KIT8944SYRD366VY1 table: USER_ROLE")
 	public void testDelete() throws Exception {
 		Role one = roleRepository.findRoleDetailById(1l);
-		one.setPermissions(new HashSet<Permission>());
-		one.setUsers(new ArrayList<User>());
+		one.setPermissions(new HashSet<>());
+		one.setUsers(new ArrayList<>());
 		roleRepository.updateRole(one); // clear out foreign key references
 		roleRepository.deleteRole(1l);
 		List<RoleViewModel> all = roleRepository.getAllRoles();

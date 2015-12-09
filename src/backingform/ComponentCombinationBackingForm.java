@@ -43,12 +43,12 @@ public class ComponentCombinationBackingForm {
   Map<String, String> expiresOnByComponentTypeId;
   
   public ComponentCombinationBackingForm() {
-    expiresOnByComponentTypeId = new HashMap<String, String>();
+    expiresOnByComponentTypeId = new HashMap<>();
     setComponent(new Component());
   }
 
   public ComponentCombinationBackingForm(boolean autoGenerate) {
-    expiresOnByComponentTypeId = new HashMap<String, String>();
+    expiresOnByComponentTypeId = new HashMap<>();
     setComponent(new Component());
   }
 

@@ -9,7 +9,7 @@ public class BloodGroup {
   private String abo;
   private String rh;
 
-  static final private Map<String, BloodGroup> bloodgroups = new LinkedHashMap<String, BloodGroup>();
+  static final private Map<String, BloodGroup> bloodgroups = new LinkedHashMap<>();
   
   static {
 		bloodgroups.put("o+", new BloodGroup("O", "+"));

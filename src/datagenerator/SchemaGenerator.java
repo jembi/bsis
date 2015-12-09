@@ -89,7 +89,7 @@ public class SchemaGenerator {
    */
   @SuppressWarnings("unused")
   private List<Class<?>> getClasses(String packageName) throws Exception {
-    List<Class<?>> classes = new ArrayList<Class<?>>();
+    List<Class<?>> classes = new ArrayList<>();
     File directory = null;
     try {
       ClassLoader cld = Thread.currentThread().getContextClassLoader();
@@ -148,7 +148,7 @@ public class SchemaGenerator {
       ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
       MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
 
-      List<Class<?>> candidates = new ArrayList<Class<?>>();
+      List<Class<?>> candidates = new ArrayList<>();
       String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
                                  resolveBasePackage(basePackage) + "/" + "**/*.class";
       Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);

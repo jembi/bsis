@@ -51,7 +51,7 @@ public class UserViewModel {
   }
   
   public List<RoleViewModel> getRoles() {
-	List<RoleViewModel> roleViewModels = new ArrayList<RoleViewModel>();
+	List<RoleViewModel> roleViewModels = new ArrayList<>();
 	for (Role role : user.getRoles()) {
 		roleViewModels.add(new RoleViewModel(role));
 	}

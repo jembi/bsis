@@ -30,9 +30,9 @@ public class BloodTestingRuleController {
     @RequestMapping(method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TYPING_RULES + "')")
     public ResponseEntity configureBloodTypingTests() {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("bloodTypingTests", bloodTestingRepository.getBloodTypingTests());
-        List<BloodTestingRuleViewModel> rules = new ArrayList<BloodTestingRuleViewModel>();
+        List<BloodTestingRuleViewModel> rules = new ArrayList<>();
         for (BloodTestingRule rule : bloodTestingRepository.getBloodTypingRules(true)) {
             rules.add(new BloodTestingRuleViewModel(rule));
         }
@@ -44,7 +44,7 @@ public class BloodTestingRuleController {
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME + "')")
     public ResponseEntity getBloodTypingRuleSummary(@PathVariable Integer id) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         BloodTestingRuleViewModel bloodTestingRule;
         bloodTestingRule = new BloodTestingRuleViewModel(bloodTestingRepository.getBloodTestingRuleById(id));
         map.put("bloodTypingRule", bloodTestingRule);
@@ -56,7 +56,7 @@ public class BloodTestingRuleController {
     public ResponseEntity saveBloodTypingRule(
             @RequestBody BloodTestingRuleBackingForm form) {
     	
-    	Map<String, Object> map = new HashMap<String, Object>();
+    	Map<String, Object> map = new HashMap<>();
     	BloodTestingRule typingRule = bloodTestingRepository.saveBloodTypingRule(form.getTypingRule());
         map.put("bloodtest", new BloodTestingRuleViewModel(typingRule));
         return new ResponseEntity(map,HttpStatus.CREATED);
@@ -69,7 +69,7 @@ public class BloodTestingRuleController {
     public ResponseEntity updateNewBloodTypingRule(
             @RequestBody BloodTestingRuleBackingForm form, @PathVariable Integer id) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         form.setId(id);
         BloodTestingRule typingRule = form.getTypingRule();
         bloodTestingRepository.updateBloodTypingRule(typingRule);

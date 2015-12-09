@@ -75,7 +75,7 @@ public class BloodTypingController {
   	@RequestMapping(value = "/form", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
 	public Map<String, Object> getBloodTypingForm(HttpServletRequest request) {
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		
 		List<BloodTestViewModel> basicBloodTypingTests = getBasicBloodTypingTests();
 		map.put("basicBloodTypingTests", basicBloodTypingTests);
@@ -87,7 +87,7 @@ public class BloodTypingController {
 	}
   
   public List<BloodTestViewModel> getBasicBloodTypingTests() {
-    List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
+    List<BloodTestViewModel> tests = new ArrayList<>();
     for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
       tests.add(new BloodTestViewModel(rawBloodTest));
     }
@@ -95,7 +95,7 @@ public class BloodTypingController {
   }
 
   public List<BloodTestViewModel> getAdvancedBloodTypingTests() {
-    List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
+    List<BloodTestViewModel> tests = new ArrayList<>();
     for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.ADVANCED_BLOODTYPING)) {
       tests.add(new BloodTestViewModel(rawBloodTest));
     }
@@ -106,7 +106,7 @@ public class BloodTypingController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
   public Map<String, Object> getBloodTypingStatusForDonations(
                         @PathVariable String donationIds) {
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     Map<String, Object> results = bloodTestingRepository.getAllTestsStatusForDonations(Arrays.asList(donationIds.split(",")));
     
     LinkedHashMap<String, Donation> donations = (LinkedHashMap<String, Donation>)results.get("donations");
@@ -122,7 +122,7 @@ public class BloodTypingController {
   private Map<String, DonationViewModel> getDonationViewModels(LinkedHashMap<String, Donation> donations) {
     if (donations == null)
       return null;
-    Map<String, DonationViewModel> donationViewModels = new LinkedHashMap<String, DonationViewModel>();    
+    Map<String, DonationViewModel> donationViewModels = new LinkedHashMap<>();
     for (Map.Entry<String, Donation> entry : donations.entrySet())
     {
         donationViewModels.put(entry.getKey(), new DonationViewModel(entry.getValue()));
@@ -135,7 +135,7 @@ public class BloodTypingController {
   public Map<String, Object> showBloodTypingResultsForDonation(
       @PathVariable Long donationId) {
       
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     Donation donation = donationRepository.findDonationById(donationId);
     BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForDonation(donationId);
     map.put("donation", new DonationViewModel(donation));
@@ -149,11 +149,11 @@ public class BloodTypingController {
   public ResponseEntity<Map<String, Object>> saveAdditionalBloodTypingTests(
       @RequestBody TestResultBackingForm form) {
 
-    Map<String, Object> m = new HashMap<String, Object>();
+    Map<String, Object> m = new HashMap<>();
     HttpStatus httpStatus = HttpStatus.CREATED;
     
-      Map<Long, Map<Long, String>> bloodTypingTestResultsMap = new HashMap<Long, Map<Long,String>>();
-      Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
+      Map<Long, Map<Long, String>> bloodTypingTestResultsMap = new HashMap<>();
+      Map<Long, String> saveTestsDataWithLong = new HashMap<>();
       @SuppressWarnings("unchecked")
       Map<Long, String> saveTestsData = null;
       saveTestsData = form.getTestResults();
@@ -176,7 +176,7 @@ public class BloodTypingController {
           m.put("invalidResults", true);
       }
 
-    return new ResponseEntity<Map<String, Object>>(m, httpStatus);
+    return new ResponseEntity<>(m, httpStatus);
   }
   
 }

@@ -108,7 +108,7 @@ public class BloodTestsService {
 	
 	protected String addNewExtraInformation(String donationExtraInformation, Set<String> extraInformationNewSet) {
 		String newExtraInformation;
-		Set<String> oldExtraInformationSet = new HashSet<String>();
+		Set<String> oldExtraInformationSet = new HashSet<>();
 		if (StringUtils.isNotBlank(donationExtraInformation)) {
 			oldExtraInformationSet.addAll(Arrays.asList(donationExtraInformation.split(",")));
 			extraInformationNewSet.removeAll(oldExtraInformationSet); // remove duplicates

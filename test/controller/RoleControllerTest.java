@@ -72,7 +72,7 @@ public class RoleControllerTest {
 	}
 	
 	private Set<Permission> setPermissionValues(String[] splitPermissionArr) {
-		Set<Permission> permissions = new HashSet<Permission>();
+		Set<Permission> permissions = new HashSet<>();
 		for (String permissionId : splitPermissionArr) {
 			Permission permission = roleRepository
 					.findPermissionByPermissionId(Long.parseLong(permissionId));

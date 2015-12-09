@@ -73,7 +73,7 @@ public class UsageController {
 
     ComponentUsageBackingForm form = new ComponentUsageBackingForm();
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     map.put("addUsageForm", form);
     addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
@@ -91,7 +91,7 @@ public class UsageController {
     public ResponseEntity<Map<String, Object>> addUsage(
             @Valid @RequestBody ComponentUsageBackingForm form) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
 
         addEditSelectorOptions(map);
         Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
@@ -108,19 +108,19 @@ public class UsageController {
         map.put("usage",  new ComponentUsageViewModel(savedUsage));
         map.put("addAnotherUsageUrl", "addUsageFormGenerator.html");
 
-        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
+        return new ResponseEntity<>(map, HttpStatus.CREATED);
   }
 
   @RequestMapping(value="/find/components/{requestNumber}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public  ResponseEntity<Map<String, Object>> findIssuedComponentsForRequest(
       @PathVariable String requestNumber) {
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     Request req = requestRepository.findRequest(requestNumber);
     map.put("request", new RequestViewModel(req));
     map.put("issuedComponents", requestRepository.getIssuedComponentsForRequest(req.getId()));
     map.put("componentFields", utilController.getFormFieldsForForm("component"));
-    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
     @RequestMapping(value = "/forcomponent", method = RequestMethod.POST)
@@ -128,7 +128,7 @@ public class UsageController {
     public ResponseEntity<Map<String, Object>> addUsageForComponent(
             @Valid @RequestBody ComponentUsageBackingForm form) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         boolean success = false;
 
         addEditSelectorOptions(map);
@@ -147,7 +147,7 @@ public class UsageController {
         map.put("usage", new ComponentUsageViewModel(savedUsage));
       
         map.put("success", success);
-        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
+        return new ResponseEntity<>(map, HttpStatus.CREATED);
   }
 
 }

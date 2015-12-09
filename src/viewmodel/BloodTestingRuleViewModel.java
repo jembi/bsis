@@ -18,7 +18,7 @@ public class BloodTestingRuleViewModel {
 
   public BloodTestingRuleViewModel(BloodTestingRule rule) {
     this.rule = rule;
-    patternMap = new HashMap<Integer, String>();
+    patternMap = new HashMap<>();
     List<String> testIds = Arrays.asList(rule.getBloodTestsIds().split(","));
     String pattern = rule.getPattern();
     List<String> testResults = Arrays.asList(pattern.split(","));
@@ -101,7 +101,7 @@ public class BloodTestingRuleViewModel {
   }
   
   public List<Integer> getPendingTestsIds() {
-    List<Integer> pendingTestIds = new ArrayList<Integer>();
+    List<Integer> pendingTestIds = new ArrayList<>();
     if (rule.getPendingTestsIds() == null)
       return pendingTestIds;
     for (String pendingTestId : rule.getPendingTestsIds().split(",")) {

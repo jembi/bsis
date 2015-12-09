@@ -87,7 +87,7 @@ public class DonorCommunicationsRepositoryTest {
 			IDataSet dataSet = getDataSet();
 			
 			Date today = new Date();
-			Map<String, Object> replacements = new HashMap<String, Object>();
+			Map<String, Object> replacements = new HashMap<>();
 			
 			replacements.put("today", today);
 			replacements.put("yesterday", DateUtils.addDays(today, -(1)));
@@ -133,12 +133,12 @@ public class DonorCommunicationsRepositoryTest {
 	public void findDonors_shouldReturnEmptyListWhenNoResultsFound() throws ParseException {
 		
 		//Set values to use for findDonors() method parameters
-		List<Location> venues = new ArrayList<Location>();
+		List<Location> venues = new ArrayList<>();
 		String clinicDate = "";
 		String clinicDateToCheckdeferredDonor = "";
 		String lastDonationFromDate = "";
 		String lastDonationToDate = "";
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
+		List<BloodGroup> bloodGroups = new ArrayList<>();
 		boolean anyBloodGroup = false ;
 		boolean noBloodGroup = false;
 		//Search with venue id 4
@@ -165,12 +165,12 @@ public class DonorCommunicationsRepositoryTest {
 	public void findDonors_shouldReturnDonorsMatchingGivenCriteria()throws ParseException{
 		
 		//Set values to use for findDonors() method parameters
-		List<Location> venues = new ArrayList<Location>();
+		List<Location> venues = new ArrayList<>();
 		String clinicDate = "";
 		String clinicDateToCheckdeferredDonor = "";
 		String lastDonationFromDate = "";
 		String lastDonationToDate = "";
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
+		List<BloodGroup> bloodGroups = new ArrayList<>();
 		boolean anyBloodGroup = false;
 		boolean noBloodGroup = false;
 		//Search with venue id 3 and 1
@@ -181,7 +181,7 @@ public class DonorCommunicationsRepositoryTest {
 
 		venues    =  createVenueList(id);
 		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
-		List<Donor> results = new ArrayList<Donor>();
+		List<Donor> results = new ArrayList<>();
 		
                 results = donorCommunicationsRepository.findDonors(venues, clinicDate, lastDonationFromDate,
                         lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
@@ -209,8 +209,8 @@ public class DonorCommunicationsRepositoryTest {
 	public void findDonors_shouldReturnDonorsDueToDonateOnClinicDate() throws ParseException {
 		
 		//Set values to use for findDonors() method parameters
-		List<Location> venues = new ArrayList<Location>();
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
+		List<Location> venues = new ArrayList<>();
+		List<BloodGroup> bloodGroups = new ArrayList<>();
 		//Search with venue id 3 and 1
 		long[] id = { 1 , 3 };
 		//Search with  BloodGroup 'A+' and 'O+'
@@ -227,7 +227,7 @@ public class DonorCommunicationsRepositoryTest {
 		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
 		Map<String, Object> pagingParams = createPagingParamsMap();
 
-		List<Donor> results = new ArrayList<Donor>();
+		List<Donor> results = new ArrayList<>();
 		results = donorCommunicationsRepository.findDonors(venues, clinicDate, lastDonationFromDate,
 				lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
 
@@ -254,8 +254,8 @@ public class DonorCommunicationsRepositoryTest {
 	public void findDonors_shouldReturnDonorsWhoDonatedDuringDateOfLastDonationPeriod() throws ParseException{
 
 		//Set values to use for findDonors() method parameters
-		List<Location> venues = new ArrayList<Location>();
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
+		List<Location> venues = new ArrayList<>();
+		List<BloodGroup> bloodGroups = new ArrayList<>();
 		String clinicDate = "";
 		String clinicDateToCheckdeferredDonor = "";
 		//Search with venue id 3 and 1
@@ -273,7 +273,7 @@ public class DonorCommunicationsRepositoryTest {
 		venues    =  createVenueList(id);
 		bloodGroups  =  createBloodGroupList(bloodGroupStrArray);
 		
-		List<Donor> results = new ArrayList<Donor>();
+		List<Donor> results = new ArrayList<>();
 		results = donorCommunicationsRepository.findDonors(venues,	clinicDate, lastDonationFromDate, lastDonationToDate,
 				bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
 
@@ -301,8 +301,8 @@ public class DonorCommunicationsRepositoryTest {
 	public void findDonors_shouldNotReturnDeletedDonors() throws ParseException{
 		
 		//Set values to use for findDonors() method parameters
-		List<Location> venues = new ArrayList<Location>();
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
+		List<Location> venues = new ArrayList<>();
+		List<BloodGroup> bloodGroups = new ArrayList<>();
 		String clinicDate = "";
 		//Search with venue id 3 and 1
 		long[] id = { 1 , 3 };
@@ -357,8 +357,8 @@ public class DonorCommunicationsRepositoryTest {
 	public void findDonors_shouldNotReturnCurrentlyDeferredDonors() throws ParseException{
 		
 		//Set values to use for findDonors() method parameters
-		List<Location> venues = new ArrayList<Location>();
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
+		List<Location> venues = new ArrayList<>();
+		List<BloodGroup> bloodGroups = new ArrayList<>();
 		String clinicDate = "";
 		//Search with venue id 3 and 1
 		long[] id = { 1 , 3 };
@@ -403,8 +403,8 @@ public class DonorCommunicationsRepositoryTest {
 	public void findDonors_shouldNotReturnCurrentlyDeferredDonorsWithLastDonationPeriodSpecified() throws ParseException{
 		
 		//Set values to use for findDonors() method parameters
-		List<Location> venues = new ArrayList<Location>();
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
+		List<Location> venues = new ArrayList<>();
+		List<BloodGroup> bloodGroups = new ArrayList<>();
 		String clinicDate = "";
 		//Search with venue id 3 and 1
 		long[] id = { 1 , 3 };
@@ -449,8 +449,8 @@ public class DonorCommunicationsRepositoryTest {
 	public void findDonors_shouldNotReturnDonorsDeferredOnClinicDate() throws ParseException{
 		
 		//Set values to use for findDonors() method parameters
-		List<Location> venues = new ArrayList<Location>();
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
+		List<Location> venues = new ArrayList<>();
+		List<BloodGroup> bloodGroups = new ArrayList<>();
 		String clinicDate = CustomDateFormatter.format(DateUtils.addDays(new Date(), (60)));
 		//Search with venue id 3 and 1
 		long[] id = { 1 , 3 };
@@ -501,7 +501,7 @@ public class DonorCommunicationsRepositoryTest {
 	}
 	
 	private List<Location> createVenueList(long[] id) {
-		List<Location> venue = new ArrayList<Location>();
+		List<Location> venue = new ArrayList<>();
 
 		for (long locId : id) {
 			Location location = new Location();
@@ -512,7 +512,7 @@ public class DonorCommunicationsRepositoryTest {
 	}
 	
 	private List<BloodGroup> createBloodGroupList(String[] bloodGroupStrArray) {
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
+		List<BloodGroup> bloodGroups = new ArrayList<>();
 		for (String bloodGrpStr : bloodGroupStrArray) {
 			BloodGroup bloodGroup = new BloodGroup();
 			bloodGroup = BloodGroup.getBloodgroups().get(bloodGrpStr.toLowerCase());
@@ -523,7 +523,7 @@ public class DonorCommunicationsRepositoryTest {
 	
 	private Map<String, Object> createPagingParamsMap() {
 
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
+		Map<String, Object> pagingParams = new HashMap<>();
 		pagingParams.put("sortColumn", "id");
 		pagingParams.put("start", 0);
 		pagingParams.put("sortColumnId", 0);
@@ -534,8 +534,8 @@ public class DonorCommunicationsRepositoryTest {
 	}
 	 
 	 private long getDonorListSizeWithoutAnyCriteria() throws ParseException {
-		List<Location> venue = new ArrayList<Location>();
-		List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
+		List<Location> venue = new ArrayList<>();
+		List<BloodGroup> bloodGroups = new ArrayList<>();
 		String clinicDate = "";
 		String clinicDateToCheckdeferredDonor = "";
 		String lastDonationFromDate = "";
@@ -544,7 +544,7 @@ public class DonorCommunicationsRepositoryTest {
 		boolean noBloodGroup = false;
 		Map<String, Object> pagingParams = createPagingParamsMap();
 
-		List<Donor> results = new ArrayList<Donor>();
+		List<Donor> results = new ArrayList<>();
                 results = donorCommunicationsRepository.findDonors(venue,
                         clinicDate, lastDonationFromDate, lastDonationToDate,
                         bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);

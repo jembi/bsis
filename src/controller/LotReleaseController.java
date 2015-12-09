@@ -73,7 +73,7 @@ public class LotReleaseController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DISCARDS+"')")
   public ResponseEntity findlotRelease(HttpServletRequest request,
           @PathVariable String donationIdentificationNumber)  {
-        Map<String, Object> componentMap = new HashMap<String, Object>();
+        Map<String, Object> componentMap = new HashMap<>();
 
     Donation donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
     List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
@@ -89,7 +89,7 @@ public class LotReleaseController {
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public  ResponseEntity<Map<String, Object>> printLabel( @PathVariable Long componentId) {
 	  
-	    Map<String, Object> map = new  HashMap<String, Object>();
+	    Map<String, Object> map = new HashMap<>();
             Component component = componentRepository.findComponentById(componentId);
 	    Donation donation = component.getDonation();
 	    
@@ -249,7 +249,7 @@ public class LotReleaseController {
 	    }
 	    
 	    map.put("success", success);
-	    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+	    return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
   @RequestMapping(value = "/print/discardlabel/{componentId}", method = RequestMethod.GET)
@@ -257,7 +257,7 @@ public class LotReleaseController {
   public  ResponseEntity<Map<String, Object>> printDiscard
         (@PathVariable Long componentId) {
 	  
-	Map<String, Object> map = new  HashMap<String, Object>();
+	Map<String, Object> map = new HashMap<>();
 	boolean success = false;
 	
      Component component = componentRepository.findComponentById(componentId);
@@ -300,7 +300,7 @@ public class LotReleaseController {
  	map.put("success",success);
    
     
-     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
 
@@ -352,7 +352,7 @@ public class LotReleaseController {
 	// TODO: Move this method out of the controller and add tests.
   private List<Map<String, Object>> getComponentLabellingStatus(Donation donation, List<Component> components) {
 
-    List<Map<String, Object>> componentsList = new ArrayList<Map<String, Object>>();
+    List<Map<String, Object>> componentsList = new ArrayList<>();
 
     boolean unsafeDonation = donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE);
 
@@ -366,7 +366,7 @@ public class LotReleaseController {
         continue;
       }
 
-      Map<String, Object> componentLabellingStatus = new HashMap<String, Object>();
+      Map<String, Object> componentLabellingStatus = new HashMap<>();
       componentLabellingStatus.put("componentId", component.getId());
       componentLabellingStatus.put("componentName", component.getComponentType().getComponentTypeName());
       componentLabellingStatus.put("componentIdentificationNumber", component.getComponentIdentificationNumber());

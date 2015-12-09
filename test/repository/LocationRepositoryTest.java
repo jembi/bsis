@@ -198,7 +198,7 @@ public class LocationRepositoryTest {
 		one.setIsVenue(false);
 		Location two = locationRepository.findLocationByName("Maseru");
 		two.setNotes("junit");
-		List<Location> locations = new ArrayList<Location>();
+		List<Location> locations = new ArrayList<>();
 		locations.add(one);
 		locations.add(two);
 		locationRepository.saveAllLocations(locations);

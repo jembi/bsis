@@ -97,7 +97,7 @@ public class FormFieldRepository {
     String queryString = "SELECT f.field, f.maxLength FROM FormField f where form=:formName";
     TypedQuery<Object[]> query = em.createQuery(queryString, Object[].class);
     query.setParameter("formName", formName);
-    Map<String, Integer> maxLengths = new HashMap<String, Integer>();
+    Map<String, Integer> maxLengths = new HashMap<>();
     for (Object[] obj : query.getResultList()) {
       maxLengths.put((String)obj[0], (Integer)obj[1]);
     }

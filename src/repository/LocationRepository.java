@@ -72,7 +72,7 @@ public class LocationRepository {
 
   public List<String> getAllUsageSitesAsString() {
     List<Location> locations = getAllUsageSites();
-    List<String> locationNames = new ArrayList<String>();
+    List<String> locationNames = new ArrayList<>();
     for (Location l : locations) {
       if (l.getIsUsageSite())
         locationNames.add(l.getName());

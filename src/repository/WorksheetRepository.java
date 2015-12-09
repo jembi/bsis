@@ -62,12 +62,12 @@ public class WorksheetRepository {
     List<Donation> newDonations = donationQuery.getResultList();
 
     Worksheet worksheet = query.getSingleResult();
-    Set<String> existingDonationIdentificationNumbers = new HashSet<String>();
+    Set<String> existingDonationIdentificationNumbers = new HashSet<>();
     for (Donation c : worksheet.getDonations()) {
       existingDonationIdentificationNumbers.add(c.getDonationIdentificationNumber());
     }
 
-    List<Donation> donations = new ArrayList<Donation>();
+    List<Donation> donations = new ArrayList<>();
     for (Donation c : newDonations) {
       if (existingDonationIdentificationNumbers.contains(c.getDonationIdentificationNumber()))
         continue;
@@ -87,7 +87,7 @@ public class WorksheetRepository {
     if (worksheetTypes == null || worksheetTypes.size() == 0)
       return Arrays.asList(new Worksheet[0]);
 
-    List<Integer> worksheetTypeIds = new ArrayList<Integer>();
+    List<Integer> worksheetTypeIds = new ArrayList<>();
     for (String worksheetTypeIdStr : worksheetTypes) {
       worksheetTypeIds.add(Integer.parseInt(worksheetTypeIdStr));
     }
@@ -169,7 +169,7 @@ public class WorksheetRepository {
     if (query.getResultList().size() == 0)
       return null;
     WorksheetType worksheetType = query.getSingleResult();
-    List<BloodTest> bloodTests = new ArrayList<BloodTest>();
+    List<BloodTest> bloodTests = new ArrayList<>();
     bloodTests.addAll(worksheetType.getBloodTests());
     Collections.sort(bloodTests);
     return bloodTests;

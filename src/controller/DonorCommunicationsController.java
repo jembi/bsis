@@ -58,7 +58,7 @@ public class DonorCommunicationsController {
 
        // DonorCommunicationsBackingForm dbform = new DonorCommunicationsBackingForm();
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
 
         // to ensure custom field names are displayed in the form
         map.put("donorFields", utilController.getFormFieldsForForm("donor"));
@@ -90,19 +90,19 @@ public class DonorCommunicationsController {
        LOGGER.debug("Start DonorCommunicationsController:findDonorCommunicationsPagination");
    //    String eligibleClinicDate = getEligibleDonorDate(clinicDate);
 
-       Map<String, Object> map = new HashMap<String, Object>();
+       Map<String, Object> map = new HashMap<>();
 
-        Map<String, Object> pagingParams = new HashMap<String, Object>();
+        Map<String, Object> pagingParams = new HashMap<>();
         pagingParams.put("sortColumn", "id");
         //pagingParams.put("start", "0");
         //pagingParams.put("length", "10");
         pagingParams.put("sortDirection", "asc");
         
-        List<Donor> results = new ArrayList<Donor>();
+        List<Donor> results = new ArrayList<>();
         results = donorCommunicationsRepository.findDonors(setLocations(venues), clinicDate, lastDonationFromDate,
                 lastDonationToDate, setBloodGroups(bloodGroups), anyBloodGroup, noBloodGroup, pagingParams, clinicDate);
         
-        List<DonorViewModel> donors = new ArrayList<DonorViewModel>();
+        List<DonorViewModel> donors = new ArrayList<>();
         
         if (results != null){
     	    for(Donor donor : results){
@@ -137,7 +137,7 @@ public class DonorCommunicationsController {
 
     public List<Location> setLocations(List<String> locations) {
 
-        List<Location> venues = new ArrayList<Location>();
+        List<Location> venues = new ArrayList<>();
 
         for (String venueId : locations) {
             Location l = new Location();
@@ -153,7 +153,7 @@ public class DonorCommunicationsController {
             return Collections.emptyList();
         }
 
-        List<BloodGroup> bloodGroupsList = new ArrayList<BloodGroup>();
+        List<BloodGroup> bloodGroupsList = new ArrayList<>();
 
         for (String bloodGroup : bloodGroups) {
         	BloodGroup bg = new BloodGroup(bloodGroup);

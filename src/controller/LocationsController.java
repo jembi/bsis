@@ -51,7 +51,7 @@ public class LocationsController {
     public 
     Map<String, Object> configureLocationsFormGenerator(
             HttpServletRequest request, HttpServletResponse response) {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         addAllLocationsToModel(map);
         return map;
     }
@@ -73,7 +73,7 @@ public class LocationsController {
     public 
     ResponseEntity updateLocation(@PathVariable Long id,
             @RequestBody @Valid LocationBackingForm formData) {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         Location location = formData.getLocation();
         Location updatedLocation = locationRepository.updateLocation(id, location);
         map.put("location", new LocationViewModel(updatedLocation));
@@ -86,7 +86,7 @@ public class LocationsController {
     public 
     ResponseEntity getLocationById(@PathVariable Long id) {
         
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         Location location = locationRepository.getLocation(id);
         map.put("location", new LocationViewModel(location));
         return new ResponseEntity(map, HttpStatus.OK);
@@ -105,7 +105,7 @@ public class LocationsController {
   
   private void addAllLocationsToModel(Map<String, Object> model) {
     List<Location> allLocations = locationRepository.getAllLocations();
-    List<LocationViewModel> locations = new ArrayList<LocationViewModel>();
+    List<LocationViewModel> locations = new ArrayList<>();
     for (Location allLocation : allLocations) {
       locations.add(new LocationViewModel(allLocation));
     }

@@ -69,7 +69,7 @@ public class DonationBatchCRUDServiceTest {
 		Location venue1 = new LocationBuilder().withName("Cape Town").buildAndPersist(entityManager);
 		PackType packType = new PackTypeBuilder().withPeriodBetweenDonations(10).buildAndPersist(entityManager);
 
-		List<Donation> donations = new ArrayList<Donation>();
+		List<Donation> donations = new ArrayList<>();
 		Donor donor1 = new DonorBuilder().withDonorNumber("111").withVenue(venue1).thatIsNotDeleted().buildAndPersist(entityManager);
 		donations.add(new DonationBuilder().withDonationDate(date1).withVenue(venue1).withDonor(donor1).withPackType(packType).thatIsNotDeleted().buildAndPersist(entityManager));
 		Donor donor2 = new DonorBuilder().withDonorNumber("112").withVenue(venue1).thatIsNotDeleted().buildAndPersist(entityManager);

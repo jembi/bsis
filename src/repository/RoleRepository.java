@@ -25,7 +25,7 @@ public class RoleRepository {
 	public List<RoleViewModel> getAllRoles() {
 		TypedQuery<Role> query = em.createQuery("FROM Role", Role.class);
 		List<Role> roles = query.getResultList();
-		List<RoleViewModel> roleViewModels = new ArrayList<RoleViewModel>();
+		List<RoleViewModel> roleViewModels = new ArrayList<>();
 		for (Role role : roles) {
 			roleViewModels.add(new RoleViewModel(role));
 		}

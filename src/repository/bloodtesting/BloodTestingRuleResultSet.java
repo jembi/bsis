@@ -60,31 +60,31 @@ public class BloodTestingRuleResultSet {
 	private TTIStatus ttiStatus;
 	
 	/* collection of the basic TTI tests that weren't done */
-	private Set<Integer> basicTtiTestsNotDone = new HashSet<Integer>();
+	private Set<Integer> basicTtiTestsNotDone = new HashSet<>();
 	
 	/* collection of the various blood typing ABO tests done */
-	private Set<String> bloodAboChanges = new HashSet<String>();
+	private Set<String> bloodAboChanges = new HashSet<>();
 	
 	/* collection of the various blood typing Rh tests done */
-	private Set<String> bloodRhChanges = new HashSet<String>();
+	private Set<String> bloodRhChanges = new HashSet<>();
 	
 	/* collection of the various blood typing TTI tests done */
-	private Set<String> ttiStatusChanges = new HashSet<String>();
+	private Set<String> ttiStatusChanges = new HashSet<>();
 	
 	/* collection of the extra and new information provided by the BloodTestingRules */
-	private Set<String> extraInformation = new HashSet<String>();
+	private Set<String> extraInformation = new HashSet<>();
 	
 	/* collection of the ABO tests that are still outstanding */
-	private List<String> pendingAboTestsIds = new ArrayList<String>();
+	private List<String> pendingAboTestsIds = new ArrayList<>();
 	
 	/* collection of the Rh tests that are still outstanding */
-	private List<String> pendingRhTestsIds = new ArrayList<String>();
+	private List<String> pendingRhTestsIds = new ArrayList<>();
 	
 	/* collection of the TTI tests that are still outstanding */
-	private List<String> pendingTtiTestsIds = new ArrayList<String>();
+	private List<String> pendingTtiTestsIds = new ArrayList<>();
 	
 	/* collection of the TTI and Serology tests that have been done */
-	private List<BloodTestingRule> bloodTestingRules = new ArrayList<BloodTestingRule>();
+	private List<BloodTestingRule> bloodTestingRules = new ArrayList<>();
 	
 	/**
 	 * Creates and initialises the BloodTestingRuleResultSet

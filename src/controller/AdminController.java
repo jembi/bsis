@@ -106,7 +106,7 @@ public class AdminController {
   @RequestMapping(value = "/getform", method = RequestMethod.GET)
   public  Map<String, Object> getFormToConfigure(HttpServletRequest request,
           @RequestParam(value="formToConfigure", required=false) String formToConfigure) {
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
 
     map.put("formName", formToConfigure);
     map.put("formFields", formFieldRepository.getFormFields(formToConfigure));
@@ -168,7 +168,7 @@ public class AdminController {
       errMsg = "Internal Server Error";
     }
     
-    Map<String, Object> m = new HashMap<String, Object>();
+    Map<String, Object> m = new HashMap<>();
     m.put("success", success);
     m.put("errMsg", errMsg);
     return m;
@@ -177,7 +177,7 @@ public class AdminController {
   @RequestMapping(value = "/forms", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_FORMS+"')")
   public  Map<String, Object> configureForms() {
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     map.put("model", map);
     return map;
   }
@@ -205,7 +205,7 @@ public class AdminController {
       success = false;
       errMsg = "Internal Server Error";
     }
-    Map<String, Object> m = new HashMap<String, Object>();
+    Map<String, Object> m = new HashMap<>();
     m.put("success", success);
     m.put("errMsg", errMsg);
     return m;
@@ -215,7 +215,7 @@ public class AdminController {
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_TIPS+"')")
   public  Map<String, Object> configureTipsFormGenerator() {
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     addAllTipsToModel(map);
     return map;
   }
@@ -224,7 +224,7 @@ public class AdminController {
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_LAB_SETUP+"')")
   public  Map<String, Object> labSetupFormGenerator() {
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     map.put("labsetup", genericConfigRepository.getConfigProperties("labsetup"));
     return map;
   }
@@ -250,7 +250,7 @@ public class AdminController {
     LOGGER.debug("here");
     LOGGER.debug(params);
     labSetupRepository.updateLabSetup(paramsMap);
-    Map<String, Object> m = new HashMap<String, Object>();
+    Map<String, Object> m = new HashMap<>();
     m.put("success", true);
     return m;
   }
@@ -259,7 +259,7 @@ public class AdminController {
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_CROSS_MATCH_TYPES+"')")
   public  Map<String, Object> configureCrossmatchTypesFormGenerator() {
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     addAllCrossmatchTypesToModel(map);
     return map;
   }
@@ -335,9 +335,9 @@ public class AdminController {
   public  Map<String, Object> configureTips(
       HttpServletRequest request, HttpServletResponse response,
       @RequestParam(value="params") String paramsAsJson) {
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     LOGGER.debug(paramsAsJson);
-    List<Tips> allTips = new ArrayList<Tips>();
+    List<Tips> allTips = new ArrayList<>();
     try {
       @SuppressWarnings("unchecked")
       Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
@@ -365,9 +365,9 @@ public class AdminController {
   public  Map<String, Object> configureCrossmatchTypes(
       HttpServletRequest request, HttpServletResponse response,
       @RequestParam(value="params") String paramsAsJson) {
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     LOGGER.debug(paramsAsJson);
-    List<CrossmatchType> allCrossmatchTypes = new ArrayList<CrossmatchType>();
+    List<CrossmatchType> allCrossmatchTypes = new ArrayList<>();
     try {
       @SuppressWarnings("unchecked")
       Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
@@ -392,7 +392,7 @@ public class AdminController {
 
 
   List<InetAddress> getServerNetworkAddresses() {
-    List<InetAddress> listOfServerAddresses = new ArrayList<InetAddress>();
+    List<InetAddress> listOfServerAddresses = new ArrayList<>();
     Enumeration<NetworkInterface> list;
     try {
         list = NetworkInterface.getNetworkInterfaces();
@@ -418,7 +418,7 @@ public class AdminController {
             }
         }
     } catch (SocketException ex) {
-        return new ArrayList<InetAddress>();
+        return new ArrayList<>();
     }
     return listOfServerAddresses;
   }

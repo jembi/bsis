@@ -76,7 +76,7 @@ public class TestBatchController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TESTING_INFORMATION+"')")
   public ResponseEntity findAndAddTestBatchFormGenerator() {
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     map.put("status", TestBatchStatus.values());
     map.put("donationBatches", getDonationBatchViewModels(donationBatchRepository.findUnassignedDonationBatches()));
     return new ResponseEntity(map, HttpStatus.OK);
@@ -97,7 +97,7 @@ public class TestBatchController {
     @Transactional(readOnly = true)
     public ResponseEntity getTestBatchById(@PathVariable Long id){
         
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         TestBatch testBatch = testBatchRepository.findTestBatchById(id);
         boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
         map.put("testBatch", testBatchViewModelFactory.createTestBatchViewModel(testBatch, isTestingSupervisor));
@@ -147,7 +147,7 @@ public class TestBatchController {
         
         List<TestBatch> testBatches = testBatchRepository.getRecentlyClosedTestBatches(count);
 
-        Map<String, Object> map = new HashMap<String, Object>();   
+        Map<String, Object> map = new HashMap<>();
         boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
         map.put("testBatches", testBatchViewModelFactory.createTestBatchViewModels(testBatches, isTestingSupervisor));
         return new ResponseEntity<>(map, HttpStatus.OK);
@@ -162,7 +162,7 @@ public class TestBatchController {
 	      List<DonationBatch> donationBatches) {
 	    if (donationBatches == null)
 	      return Arrays.asList(new DonationBatchViewModel[0]);
-	    List<DonationBatchViewModel> donationBatchViewModels = new ArrayList<DonationBatchViewModel>();
+	    List<DonationBatchViewModel> donationBatchViewModels = new ArrayList<>();
 	    for (DonationBatch donationBatch : donationBatches) {
 	      donationBatchViewModels.add(donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch));
 	    }

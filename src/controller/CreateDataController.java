@@ -352,7 +352,7 @@ public class CreateDataController {
 
   public void createDonors(int numDonors) {
 
-    List<Donor> donors = new ArrayList<Donor>();
+    List<Donor> donors = new ArrayList<>();
     for (int i = 0; i < numDonors; i++) {
       String firstName = "";
       Gender gender = Gender.male;
@@ -433,7 +433,7 @@ public class CreateDataController {
     List<Donor> donors = donorRepository.getAllDonors();
     List<DonationType> donationTypes = donorTypeRepository.getAllDonationTypes();
 
-    List<Donation> donations = new ArrayList<Donation>();
+    List<Donation> donations = new ArrayList<>();
 
     List<PackType> packTypes = packTypeRepository.getAllPackTypes();
     List<String> donationIdentificationNumbers = sequenceNumberRepository.getBatchDonationIdentificationNumbers(numDonations);
@@ -467,7 +467,7 @@ public class CreateDataController {
   public void createComponents(int numComponents) {
     List<Donation> donations = donationRepository.getAllDonations();
     List<ComponentType> componentTypes = componentTypeRepository.getAllComponentTypes();
-    List<Component> components = new ArrayList<Component>();
+    List<Component> components = new ArrayList<>();
     for (int i = 0; i < numComponents; i++) {
       Donation c = donations.get(random.nextInt(donations.size()));
       Component p = new ComponentBackingForm(true).getComponent();
@@ -487,17 +487,17 @@ public class CreateDataController {
 
   private void addBloodTypingResultsForDonations(List<Donation> donations) {
 
-    Map<String, List<BloodTestingRule>> bloodAboRuleMap = new HashMap<String, List<BloodTestingRule>>();
-    Map<String, List<BloodTestingRule>> bloodRhRuleMap = new HashMap<String, List<BloodTestingRule>>();
+    Map<String, List<BloodTestingRule>> bloodAboRuleMap = new HashMap<>();
+    Map<String, List<BloodTestingRule>> bloodRhRuleMap = new HashMap<>();
     for (BloodTestingRule rule : bloodTestingRepository.getBloodTypingRules(true)) {
       switch (rule.getDonationFieldChanged()) {
         case BLOODABO: if (!bloodAboRuleMap.containsKey(rule.getNewInformation())) {
-                         bloodAboRuleMap.put(rule.getNewInformation(), new ArrayList<BloodTestingRule>());
+                         bloodAboRuleMap.put(rule.getNewInformation(), new ArrayList<>());
                        }
                        bloodAboRuleMap.get(rule.getNewInformation()).add(rule);
                        break;
         case BLOODRH:  if (!bloodRhRuleMap.containsKey(rule.getNewInformation())) {
-                         bloodRhRuleMap.put(rule.getNewInformation(), new ArrayList<BloodTestingRule>());
+                         bloodRhRuleMap.put(rule.getNewInformation(), new ArrayList<>());
                        }
                        bloodRhRuleMap.get(rule.getNewInformation()).add(rule);
                        break;
@@ -509,10 +509,10 @@ public class CreateDataController {
     double leaveOutDonationsPercentage = Double.parseDouble(createDataProperties.get("leaveOutDonationsProbability"));
     double incorrectBloodTypePercentage = Double.parseDouble(createDataProperties.get("incorrectBloodTypeProbability"));
 
-    List<String> aboValues = new ArrayList<String>(bloodAboRuleMap.keySet());
-    List<String> rhValues = new ArrayList<String>(bloodRhRuleMap.keySet());
+    List<String> aboValues = new ArrayList<>(bloodAboRuleMap.keySet());
+    List<String> rhValues = new ArrayList<>(bloodRhRuleMap.keySet());
 
-    Map<Long, Map<Long, String>> testResults = new HashMap<Long, Map<Long,String>>();
+    Map<Long, Map<Long, String>> testResults = new HashMap<>();
 
     Random generator = new Random();
 
@@ -553,7 +553,7 @@ public class CreateDataController {
       BloodTestingRule rhRule = rhRules.get(generator.nextInt(rhRules.size()));
 
       // we know which rule to apply
-      Map<Long, String> testResultsForDonation = new HashMap<Long, String>();
+      Map<Long, String> testResultsForDonation = new HashMap<>();
       testResults.put(donation.getId(), testResultsForDonation);
 
       int index = 0;
@@ -585,16 +585,16 @@ public class CreateDataController {
   @SuppressWarnings("unchecked")
   private void addTTIResultsForDonations(List<Donation> donations) {
 
-    Map<Long, String> donationIdentificationNumberMap = new HashMap<Long, String>();
+    Map<Long, String> donationIdentificationNumberMap = new HashMap<>();
     for (Donation c : donations) {
       donationIdentificationNumberMap.put(c.getId(), c.getDonationIdentificationNumber());
     }
 
-    Map<String, List<BloodTestingRule>> ttiRuleMap = new HashMap<String, List<BloodTestingRule>>();
+    Map<String, List<BloodTestingRule>> ttiRuleMap = new HashMap<>();
     for (BloodTestingRule rule : bloodTestingRepository.getTTIRules(true)) {
       if (rule.getDonationFieldChanged().equals(DonationField.TTISTATUS)) {
         if (!ttiRuleMap.containsKey(rule.getNewInformation())) {
-          ttiRuleMap.put(rule.getNewInformation(), new ArrayList<BloodTestingRule>());
+          ttiRuleMap.put(rule.getNewInformation(), new ArrayList<>());
         }
         ttiRuleMap.get(rule.getNewInformation()).add(rule);
       }
@@ -604,9 +604,9 @@ public class CreateDataController {
     double leaveOutDonationsPercentage = Double.parseDouble(createDataProperties.get("leaveOutDonationsProbability"));
     double unsafePercentage = Double.parseDouble(createDataProperties.get("unsafeProbability"));
 
-    Set<String> allBloodTestsIds = new HashSet<String>();
+    Set<String> allBloodTestsIds = new HashSet<>();
     
-    Map<Long, Map<Long, String>> testResults = new HashMap<Long, Map<Long,String>>();
+    Map<Long, Map<Long, String>> testResults = new HashMap<>();
     Random generator = new Random();
 
     for (Donation donation : donations) {
@@ -632,7 +632,7 @@ public class CreateDataController {
       BloodTestingRule ttiRule = ttiRules.get(generator.nextInt(ttiRules.size()));
 
       // we know which rule to apply
-      Map<Long, String> testResultsForDonation = new HashMap<Long, String>();
+      Map<Long, String> testResultsForDonation = new HashMap<>();
       testResults.put(donation.getId(), testResultsForDonation);
 
       int index = 0;
@@ -675,11 +675,11 @@ public class CreateDataController {
           rowNum = 1;
           colNum = 1;
 
-          ttiPlatesByTest = new HashMap<String, Object>();
+          ttiPlatesByTest = new HashMap<>();
           for (String t : allBloodTestsIds) {
-            Map<String, Map<String, Object>> plateData = new HashMap<String, Map<String,Object>>();
+            Map<String, Map<String, Object>> plateData = new HashMap<>();
             for (int i = 1; i <= maxRows; i++) {
-              Map<String, Object> wellsInRow = new HashMap<String, Object>();
+              Map<String, Object> wellsInRow = new HashMap<>();
               for (int j = 1; j <= maxColumns; j++) {
                 wellsInRow.put(Integer.toString(j), new HashMap<String, String>());
               }
@@ -725,7 +725,7 @@ public class CreateDataController {
 
     List<String> requestNumbers = sequenceNumberRepository.getBatchRequestNumbers(numRequests);
 
-    List<Request> requests = new ArrayList<Request>();
+    List<Request> requests = new ArrayList<>();
     for (int i = 0; i < numRequests; i++) {
       Date requestDate = getRandomRequestDate();
       Date requiredDate = new DateTime(requestDate).plusDays(random.nextInt(21)).toDate();

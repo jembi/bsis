@@ -63,7 +63,7 @@ public class PasswordResetController {
     public ResponseEntity<Map<String, Object>> resetPassword(@Valid @RequestBody PasswordResetBackingForm form) {
         User user = userRepository.findUser(form.getUsername());
         if (user == null) {
-            return new ResponseEntity<Map<String, Object>>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         // Generate a new random alphanumeric password
@@ -80,7 +80,7 @@ public class PasswordResetController {
         message.setText(String.format(passwordResetMessage, newPassword));
         mailSender.send(message);
 
-        return new ResponseEntity<Map<String, Object>>(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 }

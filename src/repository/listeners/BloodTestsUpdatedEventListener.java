@@ -132,7 +132,7 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
     String oldExtraInformation = donation.getExtraBloodTypeInformation();
     String newExtraInformation = donation.getExtraBloodTypeInformation();
 
-    Set<String> oldExtraInformationSet = new HashSet<String>();
+    Set<String> oldExtraInformationSet = new HashSet<>();
     if (StringUtils.isNotBlank(oldExtraInformation)) {
       oldExtraInformationSet.addAll(Arrays.asList(oldExtraInformation.split(",")));
       // extra information is a field to which we add more information

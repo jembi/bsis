@@ -129,7 +129,7 @@ public class DonorController {
   public  ResponseEntity<Map<String, Object>> donorSummaryGenerator(HttpServletRequest request,
       @PathVariable Long id ) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     Donor donor = donorRepository.findDonorById(id);
 
     map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(donor));    
@@ -140,7 +140,7 @@ public class DonorController {
     	map.put("donorLatestDeferredUntilDate", donorRepository.getLastDonorDeferralDate(id));
     }
 
-    return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
   @RequestMapping(value = "/{id}/overview", method = RequestMethod.GET)
@@ -148,7 +148,7 @@ public class DonorController {
   public ResponseEntity<Map<String, Object>> viewDonorOverview(HttpServletRequest request,
       @PathVariable Long id) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     Donor donor = donorRepository.findDonorById(id);
     List<Donation> donations = donor.getDonations();
     
@@ -179,7 +179,7 @@ public class DonorController {
 	    map.put("dueToDonate","");
 	    map.put("totalAdverseEvents", 0);
     }
-    return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
     @RequestMapping(value = "/summaries", method = RequestMethod.GET)
@@ -187,13 +187,13 @@ public class DonorController {
     public ResponseEntity<Map<String, Object>> viewDonorSummary(HttpServletRequest request,
             @RequestParam(value = "donorNumber", required = true) String donorNumber) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
 
         DonorSummaryViewModel donorSummary = donorRepository.findDonorSummaryByDonorNumber(donorNumber);
         map.put("donor", donorSummary);
         map.put("eligible", donorConstraintChecker.isDonorEligibleToDonate(donorSummary.getId()));
 
-        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
   @RequestMapping(value = "/{id}/donations", method = RequestMethod.GET)
@@ -201,17 +201,17 @@ public class DonorController {
   public ResponseEntity<Map<String, Object>> viewDonorHistory(HttpServletRequest request,
       @PathVariable Long id) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     Donor donor = donorRepository.findDonorById(id);
     map.put("allDonations", donationViewModelFactory.createDonationViewModelsWithPermissions(donor.getDonations()));
-    return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @RequestMapping(value ="/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_DONOR+"')")
   public Map<String, Object> addDonorFormGenerator(HttpServletRequest request) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     DonorBackingForm form = new DonorBackingForm();
 
     map.put("addDonorForm", form);
@@ -225,7 +225,7 @@ public class DonorController {
             ResponseEntity<Map<String, Object>>
             addDonor(@Valid @RequestBody DonorBackingForm form) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         
         if (!canAddDonors()) {
             // Donor registration is blocked
@@ -234,7 +234,7 @@ public class DonorController {
             map.put("userMessage", "Donor Registration Blocked - No Open Donation Batches");
             map.put("moreInfo", null);
             map.put("errorCode", HttpStatus.METHOD_NOT_ALLOWED);
-            return new ResponseEntity<Map<String,Object>>(map, HttpStatus.METHOD_NOT_ALLOWED);
+            return new ResponseEntity<>(map, HttpStatus.METHOD_NOT_ALLOWED);
         }
 
         Donor donor = form.getDonor();
@@ -248,7 +248,7 @@ public class DonorController {
         map.put("donorId", savedDonor.getId());
         map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(savedDonor));
 
-        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
+        return new ResponseEntity<>(map, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
@@ -257,7 +257,7 @@ public class DonorController {
             updateDonor(@Valid @RequestBody DonorBackingForm form, @PathVariable Long id) {
 
         HttpStatus httpStatus = HttpStatus.OK;
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         Donor updatedDonor = null;
 
         form.setIsDeleted(false);
@@ -269,7 +269,7 @@ public class DonorController {
         updatedDonor = donorRepository.updateDonorDetails(donor);
 
         map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(donorRepository.findDonorById(updatedDonor.getId())));
-        return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+        return new ResponseEntity<>(map, httpStatus);
 
     }
 
@@ -286,7 +286,7 @@ public class DonorController {
 	  
 	  String donorNumber = donorRepository.findDonorById(id).getDonorNumber();
 	  
-        Map<String, Object> map = new HashMap<String, Object>();	
+        Map<String, Object> map = new HashMap<>();
 	map.put("labelZPL",
 		"^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD30^JUS^LRN^CI0^XZ"+
 		"^XA"+
@@ -325,10 +325,10 @@ public class DonorController {
           @RequestParam(value="usePhraseMatch",required=false) boolean usePhraseMatch,
           @RequestParam(value="donationIdentificationNumber",required=false) String donationIdentificationNumber){
 
-	Map<String, Object> map = new HashMap<String, Object>();
+	Map<String, Object> map = new HashMap<>();
 	  
 	
-	Map<String, Object> pagingParams = new HashMap<String, Object>();
+	Map<String, Object> pagingParams = new HashMap<>();
       
 	  pagingParams.put("sortColumn", "id");
       //pagingParams.put("start", "0");
@@ -336,11 +336,11 @@ public class DonorController {
       pagingParams.put("sortDirection", "asc");
       
     
-    List<Donor> results = new ArrayList<Donor>();
+    List<Donor> results = new ArrayList<>();
     results = donorRepository.findAnyDonor(donorNumber, firstName,
             lastName, pagingParams, usePhraseMatch, donationIdentificationNumber);
     
-    List<DonorViewModel> donors = new ArrayList<DonorViewModel>();
+    List<DonorViewModel> donors = new ArrayList<>();
     
     if (results != null) {
 	    for (Donor donor : results) {
@@ -358,14 +358,14 @@ public class DonorController {
 	@PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
 	public Map<String, Object> findDuplicateDonors(@RequestParam(value = "donorNumber", required = true) String donorNumber) {
 		
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		
 		List<Donor> donors = donorRepository.getAllDonors();
 		Donor donor = donorRepository.findDonorByDonorNumber(donorNumber, false);
 		List<Donor> duplicates = duplicateDonorService.findDuplicateDonors(donor, donors);
 		
 		// convert Donors to DonorViewModels
-		List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
+		List<DonorViewModel> donorViewModels = new ArrayList<>();
 		for (Donor d : duplicates) {
 			DonorViewModel donorViewModel = donorViewModelFactory.createDonorViewModelWithPermissions(d);
 			donorViewModels.add(donorViewModel);
@@ -379,16 +379,16 @@ public class DonorController {
 	@PreAuthorize("hasRole('" + PermissionConstants.VIEW_DUPLICATE_DONORS + "')")
 	public Map<String, Object> findDuplicateDonors() {
 		
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		
 		List<Donor> donors = donorRepository.getAllDonors();
 		Map<String, List<Donor>> duplicates = duplicateDonorService.findDuplicateDonors(donors);
 		
 		// convert Donors to DonorViewModels
-		Map<String, List<DonorViewModel>> duplicateViewModels = new HashMap<String, List<DonorViewModel>>();
+		Map<String, List<DonorViewModel>> duplicateViewModels = new HashMap<>();
 		for (String key : duplicates.keySet()) {
 			List<Donor> donorList = duplicates.get(key);
-			List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
+			List<DonorViewModel> donorViewModels = new ArrayList<>();
 			for (Donor donor : donorList) {
 				DonorViewModel donorViewModel = donorViewModelFactory.createDonorViewModelWithPermissions(donor);
 				donorViewModels.add(donorViewModel);
@@ -405,7 +405,7 @@ public class DonorController {
 	public Map<String, Object> findDuplicateDonorsDonations(@RequestParam(value = "donorNumber", required = true) String donorNumber,
 	                                                        @Valid @RequestBody DuplicateDonorsBackingForm form) {
 		
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		
 		// create new donor
 		Donor newDonor = form.getDonor();
@@ -441,7 +441,7 @@ public class DonorController {
 	public ResponseEntity<Map<String, Object>> mergeDuplicateDonors(@RequestParam(value = "donorNumber", required = true) String donorNumber,
 	                                                                @Valid @RequestBody DuplicateDonorsBackingForm form) {
 		
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		
 		// create new donor
 		Donor newDonor = form.getDonor();
@@ -455,7 +455,7 @@ public class DonorController {
 		map.put("donorId", savedDonor.getId());
 		map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(savedDonor));
 		
-		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
+		return new ResponseEntity<>(map, HttpStatus.CREATED);
 	}
   
     @RequestMapping(value = "{id}/postdonationcounselling", method = RequestMethod.GET)

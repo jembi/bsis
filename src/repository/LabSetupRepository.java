@@ -32,7 +32,7 @@ public class LabSetupRepository {
   
   public void updateLabSetup(Map<String, String> params) {
 
-    Map<String, String> configProperties = new HashMap<String, String>();
+    Map<String, String> configProperties = new HashMap<>();
 
     BloodTypingMechanism bloodTypingMechanism = BloodTypingMechanism.valueOf(params.get("bloodTypingMechanism"));
 

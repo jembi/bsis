@@ -156,7 +156,7 @@ public class TestBatchRepositoryTest {
     @Test
     public void testSaveTestBatch() throws Exception {
         TestBatch testBatch = new TestBatch();
-        List<DonationBatch> donationBatches = new ArrayList<DonationBatch>();
+        List<DonationBatch> donationBatches = new ArrayList<>();
         donationBatches.add(donationBatchRepository.findDonationBatchById(3));
         testBatch.setDonationBatches(donationBatches);
         TestBatch savedTestBatch = testBatchRepository.saveTestBatch(testBatch, "1234567");

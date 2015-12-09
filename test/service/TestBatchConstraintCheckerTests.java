@@ -310,7 +310,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
     	Donation donation = aDonation().build();
         TestBatch testBatch = aTestBatch()
                 .withStatus(TestBatchStatus.RELEASED)
-                .withDonationBatches(new ArrayList<DonationBatch>())
+                .withDonationBatches(new ArrayList<>())
                 .build();
         
         when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(false);

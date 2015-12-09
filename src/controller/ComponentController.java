@@ -107,7 +107,7 @@ public class ComponentController {
   public   Map<String, Object> componentSummaryGenerator(HttpServletRequest request, 
       @PathVariable Long id) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     Component component = componentRepository.findComponentById(id);
      
     ComponentViewModel componentViewModel = getComponentViewModels(Arrays.asList(component)).get(0);
@@ -121,7 +121,7 @@ public class ComponentController {
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT_INFORMATION+"')")
   public  Map<String, Object> findComponentFormGenerator(HttpServletRequest request) {
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     addEditSelectorOptions(map);
     List<ComponentStatusChangeReason> statusChangeReasons =
     componentStatusChangeReasonRepository.getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.RETURNED);
@@ -139,7 +139,7 @@ public class ComponentController {
 
     ComponentCombinationBackingForm form = new ComponentCombinationBackingForm();
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     map.put("addComponentCombinationForm", form);
 
     addOptionsForAddComponentsCombinationForm(map);
@@ -153,7 +153,7 @@ public class ComponentController {
   public  ResponseEntity< Map<String, Object>> addComponentCombination(
       @Valid @RequestBody ComponentCombinationBackingForm form) throws ParseException {
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     HttpStatus httpStatus = HttpStatus.CREATED;
     addEditSelectorOptions(map);
    
@@ -169,7 +169,7 @@ public class ComponentController {
       map.put("allComponentsForDonation", getComponentViewModels(allComponentsForDonation));
       map.put("addAnotherComponentUrl", "addComponentCombinationFormGenerator.html");
    
-    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+    return new ResponseEntity<>(map, httpStatus);
   }
 
   private ComponentViewModel getComponentViewModel(Component component) {
@@ -188,15 +188,15 @@ public class ComponentController {
             @RequestParam(value = "donationDateTo", required=false, defaultValue ="") String donationDateTo) throws ParseException {
 
     	
-    	Map<String, Object> map = new HashMap<String, Object>();    	
+    	Map<String, Object> map = new HashMap<>();
     	
-        Map<String, Object> pagingParams = new HashMap<String, Object>();
+        Map<String, Object> pagingParams = new HashMap<>();
         pagingParams.put("sortColumn", "id");
         //pagingParams.put("start", "0");
         //pagingParams.put("length", "10");
         pagingParams.put("sortDirection", "asc");
 
-        List<Component> results = new ArrayList<Component>();
+        List<Component> results = new ArrayList<>();
         Date dateFrom = null;
         Date dateTo = null;
         
@@ -211,7 +211,7 @@ public class ComponentController {
                 donationIdentificationNumber, componentTypeIds, statusStringToComponentStatus(status),
                 dateFrom, dateTo, pagingParams);
 
-        List<ComponentViewModel> components = new ArrayList<ComponentViewModel>();
+        List<ComponentViewModel> components = new ArrayList<>();
         
         if (results != null){
     	    for(Component component : results){
@@ -227,7 +227,7 @@ public class ComponentController {
 	public static List<ComponentStatusChangeViewModel> getComponentStatusChangeViewModels(List<ComponentStatusChange> componentStatusChanges) {
 	    if (componentStatusChanges == null)
 	      return Arrays.asList(new ComponentStatusChangeViewModel[0]);
-	    List<ComponentStatusChangeViewModel> componentStatusChangeViewModels = new ArrayList<ComponentStatusChangeViewModel>();
+	    List<ComponentStatusChangeViewModel> componentStatusChangeViewModels = new ArrayList<>();
 	    for (ComponentStatusChange componentStatusChange : componentStatusChanges) {
 	    	componentStatusChangeViewModels.add(new ComponentStatusChangeViewModel(componentStatusChange));
 	    }
@@ -238,7 +238,7 @@ public class ComponentController {
       List<Component> components) {
     if (components == null)
       return Arrays.asList(new ComponentViewModel[0]);
-    List<ComponentViewModel> componentViewModels = new ArrayList<ComponentViewModel>();
+    List<ComponentViewModel> componentViewModels = new ArrayList<>();
     for (Component component : components) {
       componentViewModels.add(new ComponentViewModel(component));
     }
@@ -249,7 +249,7 @@ public class ComponentController {
       List<ComponentType> componentTypes) {
     if (componentTypes == null)
       return Arrays.asList(new ComponentTypeViewModel[0]);
-    List<ComponentTypeViewModel> componentTypeViewModels = new ArrayList<ComponentTypeViewModel>();
+    List<ComponentTypeViewModel> componentTypeViewModels = new ArrayList<>();
     for (ComponentType componentType : componentTypes) {
     	componentTypeViewModels.add(new ComponentTypeViewModel(componentType));
     }
@@ -277,18 +277,18 @@ public class ComponentController {
       Donation donation = componentRepository.findComponentById(id).getDonation();
       componentRepository.discardComponent(id, statusChangeReason, discardReasonText);
       
-      Map<String, Object> map = new HashMap<String, Object>();
-	  Map<String, Object> pagingParams = new HashMap<String, Object>();
+      Map<String, Object> map = new HashMap<>();
+	  Map<String, Object> pagingParams = new HashMap<>();
 	  pagingParams.put("sortColumn", "id");
 	  pagingParams.put("sortDirection", "asc");
-	  List<Component> results = new ArrayList<Component>();
+	  List<Component> results = new ArrayList<>();
 	  List<ComponentStatus> statusList = Arrays.asList(ComponentStatus.values());
 	
 	  results = componentRepository.findComponentByDonationIdentificationNumber(
 	      donation.getDonationIdentificationNumber(), statusList,
 	      pagingParams);
 	
-	  List<ComponentViewModel> components = new ArrayList<ComponentViewModel>();
+	  List<ComponentViewModel> components = new ArrayList<>();
 	
 	  if (results != null){
 	    for(Component component : results){
@@ -299,7 +299,7 @@ public class ComponentController {
 	
 	  map.put("components", components);
 	
-	  return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+	  return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @RequestMapping(value = "{id}/split", method = RequestMethod.PUT)
@@ -321,7 +321,7 @@ public class ComponentController {
   public  Map<String, Object> viewComponentHistory(
       @PathVariable Long id) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     Component component = componentRepository.findComponentById(id);
     ComponentViewModel componentViewModel = getComponentViewModel(component);
     map.put("component", componentViewModel);
@@ -351,11 +351,11 @@ public class ComponentController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public Map<String, Object> findComponentByPackNumberPagination(HttpServletRequest request, @PathVariable String donationNumber) {
 
-	  Map<String, Object> map = new HashMap<String, Object>();
+	  Map<String, Object> map = new HashMap<>();
 	  
 	  List<Component> components = Arrays.asList(new Component[0]);
 
-      Map<String, Object> pagingParams = new HashMap<String, Object>();
+      Map<String, Object> pagingParams = new HashMap<>();
       pagingParams.put("sortColumn", "id");
       //pagingParams.put("start", "0");
       //pagingParams.put("length", "10");
@@ -363,14 +363,14 @@ public class ComponentController {
       
     //Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("component");
 
-    List<Component> results = new ArrayList<Component>();
+    List<Component> results = new ArrayList<>();
     List<ComponentStatus> status = Arrays.asList(ComponentStatus.values());
     
       results = componentRepository.findComponentByDonationIdentificationNumber(
           donationNumber, status,
           pagingParams);
     
-    List<ComponentViewModel> componentViewModels = new ArrayList<ComponentViewModel>();
+    List<ComponentViewModel> componentViewModels = new ArrayList<>();
     
     if (results != null){
 	    for(Component component : results){
@@ -386,7 +386,7 @@ public class ComponentController {
   @RequestMapping(value="/combinations", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_COMPONENT+"')")
   public Map<String, Object> getComponentTypeCombinations() {
-	Map<String, Object> map = new HashMap<String, Object>();
+	Map<String, Object> map = new HashMap<>();
     List<ComponentTypeCombination> allComponentTypeCombinationsIncludeDeleted = componentTypeRepository.getAllComponentTypeCombinationsIncludeDeleted();
     map.put("combinations",getComponentTypeCombinationViewModels(allComponentTypeCombinationsIncludeDeleted));
     return map;
@@ -405,7 +405,7 @@ public class ComponentController {
       
       
       // map of new components, storing component type and num. of units 
-      Map<ComponentType, Integer> newComponents = new HashMap<ComponentType, Integer>();
+      Map<ComponentType, Integer> newComponents = new HashMap<>();
       
       // iterate over components in combination, adding them to the new components map, along with the num. of units of each component
       for(ComponentType pt : form.getComponentTypeCombination().getComponentTypes()){    	  
@@ -479,18 +479,18 @@ public class ComponentController {
 	      }
       }
       
-	Map<String, Object> map = new HashMap<String, Object>();
-	Map<String, Object> pagingParams = new HashMap<String, Object>();
+	Map<String, Object> map = new HashMap<>();
+	Map<String, Object> pagingParams = new HashMap<>();
 	pagingParams.put("sortColumn", "id");
 	pagingParams.put("sortDirection", "asc");
-	List<Component> results = new ArrayList<Component>();
+	List<Component> results = new ArrayList<>();
 	List<ComponentStatus> statusList = Arrays.asList(ComponentStatus.values());
 	
 	results = componentRepository.findComponentByDonationIdentificationNumber(
 	      donation.getDonationIdentificationNumber(), statusList,
 	      pagingParams);
 	
-	List<ComponentViewModel> components = new ArrayList<ComponentViewModel>();
+	List<ComponentViewModel> components = new ArrayList<>();
 	
 	if (results != null){
 	    for(Component component : results){
@@ -501,7 +501,7 @@ public class ComponentController {
 	
 	map.put("components", components);
 	
-	return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
+	return new ResponseEntity<>(map, HttpStatus.CREATED);
   }
   
   @RequestMapping(value = "/record/form", method = RequestMethod.GET)
@@ -517,7 +517,7 @@ public class ComponentController {
   	}
   	List<Component> components = Arrays.asList(new Component[0]);
   	
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     map.put("allComponents", getComponentViewModels(components));
     map.put("nextPageUrl", getNextPageUrlForNewRecordComponent(request,donationIdentificationNumber));
     
@@ -538,9 +538,9 @@ public class ComponentController {
     m.put("componentTypeCombinations", componentTypeCombinations);
 
     ObjectMapper mapper = new ObjectMapper();
-    Map<Integer, String> componentTypeCombinationsMap = new HashMap<Integer, String>();
+    Map<Integer, String> componentTypeCombinationsMap = new HashMap<>();
     for (ComponentTypeCombination componentTypeCombination : componentTypeCombinations) {
-      Map<String, String> componentExpiryIntervals = new HashMap<String, String>();
+      Map<String, String> componentExpiryIntervals = new HashMap<>();
       for (ComponentType componentType : componentTypeCombination.getComponentTypes()) {
         Integer expiryIntervalMinutes = componentType.getExpiryIntervalMinutes();
         componentExpiryIntervals.put(componentType.getId().toString(), expiryIntervalMinutes.toString());
@@ -609,10 +609,10 @@ public class ComponentController {
    * in recordComponentTable.jsp.
    */
   private   Map<String, Object> generateRecordComponentTablesMap(List<Component> components, Long totalRecords, Map<String, Map<String, Object>> formFields) {
-    Map<String, Object> componentsMap = new HashMap<String, Object>();
-    ArrayList<Object> componentList = new ArrayList<Object>();
+    Map<String, Object> componentsMap = new HashMap<>();
+    ArrayList<Object> componentList = new ArrayList<>();
     for (ComponentViewModel component : getComponentViewModels(components)) {
-      List<Object> row = new ArrayList<Object>();
+      List<Object> row = new ArrayList<>();
       
       row.add(component.getId().toString());
       row.add(component.getDonation().getId());
@@ -648,7 +648,7 @@ public class ComponentController {
   }
   
   private List<ComponentStatus> statusStringToComponentStatus(List<String> statusList) {
-    List<ComponentStatus> componentStatusList = new ArrayList<ComponentStatus>();
+    List<ComponentStatus> componentStatusList = new ArrayList<>();
     if (statusList != null) {
       for (String status : statusList) {
         componentStatusList.add(ComponentStatus.lookup(status));
@@ -660,7 +660,7 @@ public class ComponentController {
   public  List<ComponentTypeCombinationViewModel> 
 	  getComponentTypeCombinationViewModels(List<ComponentTypeCombination> componentTypeCombinations){
 	List<ComponentTypeCombinationViewModel> componentTypeCombinationViewModels
-	        = new ArrayList<ComponentTypeCombinationViewModel> ();
+	        = new ArrayList<>();
 	for(ComponentTypeCombination componentTypeCombination : componentTypeCombinations)
 	    componentTypeCombinationViewModels.add(new ComponentTypeCombinationViewModel(componentTypeCombination));
 	    

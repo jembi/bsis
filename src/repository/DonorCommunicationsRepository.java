@@ -62,7 +62,7 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
     	Root<Donor> root = cq.from(Donor.class);
     	Root<DonorDeferral> rootdonorDeferral = donorDeferral.from(DonorDeferral.class);		
     	
-    	List<Predicate> venuePredicates = new ArrayList<Predicate>();
+    	List<Predicate> venuePredicates = new ArrayList<>();
     	if(venue != null  && !venue.isEmpty()) {
     	venuePredicates.add(root.get("venue").in(venue));
     	}
@@ -94,7 +94,7 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
     	}
     	
           
-    	List<Predicate> bgPredicates = new ArrayList<Predicate>();
+    	List<Predicate> bgPredicates = new ArrayList<>();
     	
     	// If anyBloodGroup is true then use all blood groups otherwise use the selected blood groups
     	Collection<BloodGroup> selectedBloodGroups = anyBloodGroup ? BloodGroup.getAllBloodGroups() : bloodGroups;
@@ -130,7 +130,7 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
     	int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
 
     	if (pagingParams.containsKey("sortColumn") && pagingParams.containsKey("sortDirection")) {
-    		List<Order> order = new ArrayList<Order>();
+    		List<Order> order = new ArrayList<>();
     		if (pagingParams.get("sortDirection").equals("asc")) {
     			order.add(cb.asc(root.<String> get((String) pagingParams.get("sortColumn"))));
     		} else {

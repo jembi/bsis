@@ -83,7 +83,7 @@ public class ComponentTypeViewModel {
         getComponentTypeCombinationViewModels(List<ComponentTypeCombination> componentTypeCombinations){
       
       List<ComponentTypeCombinationViewModel> componentTypeCombinationViewModels
-              = new ArrayList<ComponentTypeCombinationViewModel> ();
+              = new ArrayList<>();
       for(ComponentTypeCombination componentTypeCombination : componentTypeCombinations)
           componentTypeCombinationViewModels.add(new ComponentTypeCombinationViewModel(componentTypeCombination));
           

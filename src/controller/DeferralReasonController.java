@@ -43,7 +43,7 @@ public class DeferralReasonController {
     @RequestMapping(method=RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DEFERRAL_REASONS + "')")
     public  Map<String, Object> getDeferralReasons() {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         addAllDeferralReasonsToModel(map);
         return map;
     }
@@ -51,7 +51,7 @@ public class DeferralReasonController {
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DEFERRAL_REASONS + "')")
     public ResponseEntity<DeferralReason> getDeferralReasonById(@PathVariable Integer id){
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         DeferralReason deferralReason = deferralReasonRepository.getDeferralReasonById(id);
         map.put("reason", new DeferralReasonViewModel(deferralReason));
         return new ResponseEntity(map, HttpStatus.OK);
@@ -68,7 +68,7 @@ public class DeferralReasonController {
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DEFERRAL_REASONS + "')")
     public ResponseEntity updateDeferralReason(@Valid @RequestBody DeferralReasonBackingForm formData , @PathVariable Integer id){
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         DeferralReason deferralReason = formData.getDeferralReason();
         deferralReason.setId(id);
         deferralReason = deferralReasonRepository.updateDeferralReason(deferralReason);
@@ -82,7 +82,7 @@ public class DeferralReasonController {
 
     private List<DeferralReasonViewModel> getDeferralReasonViewModels(List<DeferralReason> deferralReasons){
 
-        List<DeferralReasonViewModel> viewModels = new ArrayList<DeferralReasonViewModel>();
+        List<DeferralReasonViewModel> viewModels = new ArrayList<>();
         for(DeferralReason reason : deferralReasons){
             viewModels.add(new DeferralReasonViewModel(reason));
         }

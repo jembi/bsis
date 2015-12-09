@@ -61,7 +61,7 @@ public class TestResultController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
   public ResponseEntity findTestResult(@PathVariable String donationIdentificationNumber ) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     Donation c = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
     map.put("donation", new DonationViewModel(c));
     
@@ -79,11 +79,11 @@ public class TestResultController {
   public ResponseEntity findTestResultsForTestBatch(HttpServletRequest request,
 		@RequestParam(value = "testBatch", required = true) Long testBatchId) {
 	  
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		
 		TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
 		List<DonationBatch> donationBatches = testBatch.getDonationBatches();
-		List<Integer> donationBatchIds = new ArrayList<Integer>();
+		List<Integer> donationBatchIds = new ArrayList<>();
 		for(DonationBatch donationBatch : donationBatches){
 			donationBatchIds.add(donationBatch.getId());
 		}
@@ -101,11 +101,11 @@ public class TestResultController {
   public ResponseEntity findTestResultsOverviewForTestBatch(HttpServletRequest request,
 		@RequestParam(value = "testBatch", required = true) Long testBatchId) {
 	  
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		
 		TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
 		List<DonationBatch> donationBatches = testBatch.getDonationBatches();
-		List<Integer> donationBatchIds = new ArrayList<Integer>();
+		List<Integer> donationBatchIds = new ArrayList<>();
 		for(DonationBatch donationBatch : donationBatches){
 			donationBatchIds.add(donationBatch.getId());
 		}
@@ -186,8 +186,8 @@ public class TestResultController {
 		boolean success = true;
 		String errorMessage = "";
 		Map<Long, Map<Long, String>> errorMap = null;
-		Map<String, Object> fieldErrors = new HashMap<String, Object>();
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> fieldErrors = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		//Donation donation = donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
 	
 		Map<String, Object> results = null;
@@ -208,7 +208,7 @@ public class TestResultController {
 		}
 		
 		map.put("donor", getDonorsViewModel(donorRepository.findDonorById(updatedDonor.getId())));
-        return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+        return new ResponseEntity<>(map, httpStatus);
   }
   
   private DonorViewModel getDonorsViewModel(Donor donor) {

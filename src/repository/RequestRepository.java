@@ -106,7 +106,7 @@ public class RequestRepository {
                          "r.isDeleted = :isDeleted order by r.dateRequested";
     TypedQuery<Request> query = em.createQuery(queryString, Request.class);
     query.setParameter("isDeleted", Boolean.FALSE);
-    return new ArrayList<Request>(query.getResultList());
+    return new ArrayList<>(query.getResultList());
   }
 
   public void deleteAllRequests() {
@@ -124,7 +124,7 @@ public class RequestRepository {
     query.setParameter("isDeleted", Boolean.FALSE);
     List<Request> requests = query.getResultList();
     if (CollectionUtils.isEmpty(requests)) {
-      return new ArrayList<Request>();
+      return new ArrayList<>();
     }
     return requests;
   }
@@ -133,7 +133,7 @@ public class RequestRepository {
     String queryString = "SELECT p FROM Request p where p.status = 'pending' or p.status='partiallyFulfilled' and p.isDeleted = :isDeleted order by p.dateRequested";
     TypedQuery<Request> query = em.createQuery(queryString, Request.class);
     query.setParameter("isDeleted", Boolean.FALSE);
-    return new ArrayList<Request>(query.getResultList());
+    return new ArrayList<>(query.getResultList());
   }
 
   public List<Request> findAnyRequestMatching(String requestNumber,
@@ -470,7 +470,7 @@ public class RequestRepository {
       Date dateRequestedTo, String aggregationCriteria,
       List<String> sites, List<String> bloodGroups) throws ParseException{
 
-    List<Long> siteIds = new ArrayList<Long>();
+    List<Long> siteIds = new ArrayList<>();
     if (sites != null) {
       for (String site : sites) {
         siteIds.add(Long.parseLong(site));
@@ -479,9 +479,9 @@ public class RequestRepository {
       siteIds.add((long)-1);
     }
 
-    Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long,Long>>();
+    Map<String, Map<Long, Long>> resultMap = new HashMap<>();
     for (String bloodGroup : bloodGroups) {
-      resultMap.put(bloodGroup, new HashMap<Long, Long>());
+      resultMap.put(bloodGroup, new HashMap<>());
     }
 
     TypedQuery<Object[]> query = em.createQuery(
@@ -510,7 +510,7 @@ public class RequestRepository {
     List<Object[]> resultList = query.getResultList();
 
     for (String bloodGroup : bloodGroups) {
-      Map<Long, Long> m = new HashMap<Long, Long>();
+      Map<Long, Long> m = new HashMap<>();
       Calendar gcal = new GregorianCalendar();
       Date lowerDate = resultDateFormat.parse(resultDateFormat.format(dateRequestedFrom));
       Date upperDate =  resultDateFormat.parse(resultDateFormat.format(dateRequestedTo));

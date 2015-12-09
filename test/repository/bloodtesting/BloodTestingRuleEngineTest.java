@@ -91,7 +91,7 @@ public class BloodTestingRuleEngineTest {
 	@Test
 	public void testBloodTestingRuleEngineWithDonation1() throws Exception {
 		Donation donation = donationRepository.findDonationById(1l);
-		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<>());
 		Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.MATCH,
 		    result.getBloodTypingMatchStatus());
 		Assert.assertEquals("ttiStatus is TTI_SAFE", TTIStatus.TTI_SAFE, result.getTTIStatus());
@@ -115,7 +115,7 @@ public class BloodTestingRuleEngineTest {
 	@Test
 	public void testBloodTestingRuleEngineWithDonation2() throws Exception {
 		Donation donation = donationRepository.findDonationById(2l);
-		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<>());
 		Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.MATCH,
 		    result.getBloodTypingMatchStatus());
 		Assert.assertEquals("ttiStatus is TTI_SAFE", TTIStatus.TTI_SAFE, result.getTTIStatus());
@@ -142,7 +142,7 @@ public class BloodTestingRuleEngineTest {
 	@Test
 	public void testBloodTestingRuleEngineWithDonation3() throws Exception {
 		Donation donation = donationRepository.findDonationById(3l);
-		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<>());
 		Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE,
 		    result.getBloodTypingMatchStatus());
 		Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
@@ -159,7 +159,7 @@ public class BloodTestingRuleEngineTest {
 	@Test
 	public void testBloodTestingRuleEngineWithDonation3AndTTIResults() throws Exception {
 		Donation donation = donationRepository.findDonationById(3l);
-		Map<Long, String> ttiTests = new HashMap<Long, String>();
+		Map<Long, String> ttiTests = new HashMap<>();
 		ttiTests.put(17l, "NEG");
 		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, ttiTests);
 		Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE,
@@ -179,7 +179,7 @@ public class BloodTestingRuleEngineTest {
 	@Test
 	public void testBloodTestingRuleEngineWithDonation7AndTTIResults() throws Exception {
 		Donation donation = donationRepository.findDonationById(7l);
-		Map<Long, String> ttiTests = new HashMap<Long, String>();
+		Map<Long, String> ttiTests = new HashMap<>();
 		ttiTests.put(17l, "NEG");
 		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, ttiTests);
 		Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE,
@@ -199,7 +199,7 @@ public class BloodTestingRuleEngineTest {
 	@Test
 	public void testBloodTestingRuleEngineWithDonation3AndBloodTestResults() throws Exception {
 		Donation donation = donationRepository.findDonationById(3l);
-		Map<Long, String> ttiTests = new HashMap<Long, String>();
+		Map<Long, String> ttiTests = new HashMap<>();
 		ttiTests.put(1l, "A");
 		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, ttiTests);
 		Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE,
@@ -219,7 +219,7 @@ public class BloodTestingRuleEngineTest {
 	@Test
 	public void testBloodTestingRuleEngineWithDonation4() throws Exception {
 		Donation donation = donationRepository.findDonationById(4l);
-		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<>());
 		Assert.assertEquals("bloodTypingMatchStatus is AMBIGUOUS", BloodTypingMatchStatus.AMBIGUOUS,
 		    result.getBloodTypingMatchStatus());
 		Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
@@ -243,7 +243,7 @@ public class BloodTestingRuleEngineTest {
 	@Test
 	public void testBloodTestingRuleEngineWithDonation5() throws Exception {
 		Donation donation = donationRepository.findDonationById(5l);
-		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<>());
 		Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.MATCH,
 		    result.getBloodTypingMatchStatus());
 		Assert.assertEquals("ttiStatus is TTI_UNSAFE", TTIStatus.TTI_UNSAFE, result.getTTIStatus());
@@ -270,7 +270,7 @@ public class BloodTestingRuleEngineTest {
 	@Test
 	public void testBloodTestingRuleEngineWithDonation6() throws Exception {
 		Donation donation = donationRepository.findDonationById(6l);
-		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<>());
 		Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.MATCH,
 		    result.getBloodTypingMatchStatus());
 		Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());

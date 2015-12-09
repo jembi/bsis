@@ -38,7 +38,7 @@ public class ComponentTypeCombinationViewModel {
     }
     
     private List<ComponentTypeViewModel> getComponentTypeViewModels(List<ComponentType> componentTypes) {
-        List<ComponentTypeViewModel> componentTypeViewModels = new ArrayList<ComponentTypeViewModel> ();
+        List<ComponentTypeViewModel> componentTypeViewModels = new ArrayList<>();
         for(ComponentType componentType : componentTypes){
             componentTypeViewModels.add(new ComponentTypeViewModel(componentType));
         }

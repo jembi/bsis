@@ -216,7 +216,7 @@ public class SequenceNumberRepository {
     seqNumStore.setPrefix(prefix);
     }
 
-    List<String> donationIdentificationNumbers = new ArrayList<String>();
+    List<String> donationIdentificationNumbers = new ArrayList<>();
     for (int i = 0; i < numDonations; ++i) {
       String lastNumberStr = String.format("%06d", lastNumber+i);
       // may need a prefix for center where the number is generated
@@ -261,7 +261,7 @@ public class SequenceNumberRepository {
       seqNumStore.setPrefix(prefix);
     }
 
-    List<String> requestNumbers = new ArrayList<String>();
+    List<String> requestNumbers = new ArrayList<>();
     for (int i = 0; i < numRequests; ++i) {
       String lastNumberStr = String.format("%06d", lastNumber+i);
       // may need a prefix for center where the number is generated

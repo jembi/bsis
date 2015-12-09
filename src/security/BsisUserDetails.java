@@ -22,7 +22,7 @@ public class BsisUserDetails implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    List<UserAuthority> userAuthorities = new ArrayList<UserAuthority>();
+    List<UserAuthority> userAuthorities = new ArrayList<>();
     /**
      * Reason for using Permission as Authority object
      * http://stackoverflow.com/questions/6357579/spring-security-with-roles-and-permissions
