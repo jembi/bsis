@@ -152,7 +152,7 @@ public class DonationController {
   private void addEditSelectorOptions(Map<String, Object> m) {
 	m.put("venues", locationRepository.getAllVenues());
     m.put("donationTypes", donorTypeRepository.getAllDonationTypes());
-    m.put("packTypes", getPackTypeViewModels(packTypeRepository.getAllPackTypes())); 
+    m.put("packTypes", getPackTypeViewModels(packTypeRepository.getAllEnabledPackTypes()));
     List<Map<String, Object>> haemoglobinLevels = new ArrayList<>();
     for (HaemoglobinLevel value : HaemoglobinLevel.values()) {
         Map<String, Object> haemoglobinLevel = new HashMap<>();
