@@ -25,7 +25,7 @@ public class PackTypeRepository {
     return query.getResultList();
   }
 
-  public List<PackType> getAllActivePackTypes() {
+  public List<PackType> getAllEnabledPackTypes() {
     TypedQuery<PackType> query;
     query = em.createQuery("SELECT b from PackType b where b.isDeleted=:isDeleted", PackType.class);
     query.setParameter("isDeleted", false);

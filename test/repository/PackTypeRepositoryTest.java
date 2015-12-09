@@ -81,6 +81,13 @@ public class PackTypeRepositoryTest {
 	public void testGetAllPackTypes() throws Exception {
 		List<PackType> all = packTypeRepository.getAllPackTypes();
 		Assert.assertNotNull("There are pack types defined", all);
+		Assert.assertEquals("There are 8 pack types defined", 9, all.size());
+	}
+
+	@Test
+	public void testGetAllEnabledPackTypes() throws Exception {
+		List<PackType> all = packTypeRepository.getAllEnabledPackTypes();
+		Assert.assertNotNull("There are pack types defined", all);
 		Assert.assertEquals("There are 8 pack types defined", 8, all.size());
 	}
 	
