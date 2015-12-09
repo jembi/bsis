@@ -117,6 +117,17 @@ public class DonationCRUDService {
         if (donationFieldsUpdated && !donationConstraintChecker.canUpdateDonationFields(donationId)) {
             throw new IllegalArgumentException("Cannot update donation fields");
         }
+
+        PackType packType = packTypeRepository.getPackTypeById(donationBackingForm.getPackType().getId());
+
+        if (packType.getCountAsDonation() && donorConstraintChecker.isDonorDeferred(donation.getDonor().getId())) {
+
+            DonationBatch donationBatch = donation.getDonationBatch();
+
+            if (!donationBatch.isBackEntry()) {
+                throw new IllegalArgumentException("Cannot set pack type that produces components");
+            }
+        }
         
         donation.setDonorPulse(donationBackingForm.getDonorPulse());
         donation.setHaemoglobinCount(donationBackingForm.getHaemoglobinCount());
