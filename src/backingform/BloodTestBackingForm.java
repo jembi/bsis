@@ -33,8 +33,20 @@ public class BloodTestBackingForm {
         return bloodTest.getTestName();
     }
 
+    public BloodTestCategory getBloodTestCategory()  {
+        return bloodTest.getCategory();
+    }
+
     public String getTestNameShort() {
         return bloodTest.getTestNameShort();
+    }
+
+    public String getValidResults() {
+        return bloodTest.getValidResults();
+    }
+
+    public Integer getRankInCategory() {
+        return bloodTest.getRankInCategory();
     }
 
     public Integer getNumberOfConfirmatoryTests() {
@@ -64,13 +76,17 @@ public class BloodTestBackingForm {
     public void setIsActive(Boolean isActive){
         bloodTest.setIsActive(isActive);
     }
+
+    public void setIsDeleted(Boolean isDeleted){
+        bloodTest.setIsDeleted(isDeleted);
+    }
     
     public void setNegativeResults(String negativeResults){
         bloodTest.setNegativeResults(negativeResults);
     }
     
     public void setPositiveResults(String positiveResults){
-        bloodTest.setNegativeResults(positiveResults);
+        bloodTest.setPositiveResults(positiveResults);
     }
     
     public void setRankInCategory(Integer rankInCategory){

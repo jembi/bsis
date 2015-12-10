@@ -8,16 +8,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
+import backingform.validator.BloodTestBackingFormValidator;
+import controller.UtilController;
 import model.bloodtesting.BloodTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import repository.bloodtesting.BloodTestingRepository;
 import utils.PermissionConstants;
 import viewmodel.BloodTestViewModel;
@@ -28,6 +29,11 @@ public class BloodTestingController {
 
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.setValidator(new BloodTestBackingFormValidator());
+    }
 
   public BloodTestingController() {
   }
@@ -64,8 +70,7 @@ public class BloodTestingController {
 
   @RequestMapping(method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public ResponseEntity saveNewBloodTest(
-      @RequestBody BloodTestBackingForm form) {
+  public ResponseEntity saveNewBloodTest(@Valid @RequestBody BloodTestBackingForm form) {
       BloodTest bloodTest = form.getBloodTest();
       bloodTestingRepository.saveBloodTest(form);
       return new ResponseEntity(new BloodTestViewModel(form.getBloodTest()), HttpStatus.CREATED);
@@ -76,8 +81,8 @@ public class BloodTestingController {
   */
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public ResponseEntity updateBloodTest(@PathVariable Integer id,
-      @RequestBody BloodTestBackingForm backingObject) {
+  public ResponseEntity updateBloodTest(@Valid @RequestBody BloodTestBackingForm backingObject,
+                                        @PathVariable Integer id) {
       Map<String, Object> map = new HashMap<String, Object>();  
       backingObject.setId(id);
       BloodTest bloodTest = bloodTestingRepository.updateBloodTest(backingObject);
