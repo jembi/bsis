@@ -382,10 +382,7 @@ public class AdminController {
         if (!iface.isLoopback() && iface.isUp()) {
           LOGGER.debug("Found non-loopback, up interface:" + iface);
 
-          Iterator<InterfaceAddress> it = iface.getInterfaceAddresses().iterator();
-          while (it.hasNext()) {
-            InterfaceAddress address = it.next();
-
+          for (InterfaceAddress address : iface.getInterfaceAddresses()) {
             LOGGER.debug("Found address: " + address);
 
             if (address == null) continue;

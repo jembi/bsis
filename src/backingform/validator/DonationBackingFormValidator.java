@@ -114,7 +114,7 @@ public class DonationBackingFormValidator implements Validator {
     Integer bloodPressureDiastolicMax = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.bpDiastolicMax"));
 
     if (donationBackingForm.getBloodPressureSystolic() != null) {
-      bloodPressureSystolic = donationBackingForm.getBloodPressureSystolic().intValue();
+      bloodPressureSystolic = donationBackingForm.getBloodPressureSystolic();
       if (bloodPressureSystolic < bloodPressureSystolicMin)
         errors.rejectValue("donation.bloodPressureSystolic", "bloodPressureSystolic.outOfRange", "BP value should be above " + bloodPressureSystolicMin);
       if (bloodPressureSystolic > bloodPressureSystolicMax)
@@ -122,7 +122,7 @@ public class DonationBackingFormValidator implements Validator {
     }
 
     if (donationBackingForm.getBloodPressureDiastolic() != null) {
-      bloodPressureDiastolic = donationBackingForm.getBloodPressureDiastolic().intValue();
+      bloodPressureDiastolic = donationBackingForm.getBloodPressureDiastolic();
       if (bloodPressureDiastolic < bloodPressureDiastolicMin)
         errors.rejectValue("donation.bloodPressureDiastolic", "bloodPressureDiastolic.outOfRange", "BP value should be above " + bloodPressureDiastolicMax);
       if (bloodPressureDiastolic > bloodPressureDiastolicMax)
@@ -164,7 +164,7 @@ public class DonationBackingFormValidator implements Validator {
     Integer pulseMax = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.pulseMax"));
 
     if (donationBackingForm.getDonorPulse() != null) {
-      pulse = donationBackingForm.getDonorPulse().intValue();
+      pulse = donationBackingForm.getDonorPulse();
       if (pulse < pulseMin)
         errors.rejectValue("donation.donorPulse", "donorPulse.outOfRange", "Pulse value should be above " + pulseMin);
       if (pulse > pulseMax)

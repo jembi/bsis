@@ -137,7 +137,7 @@ public class DonorRepository {
     countCriteriaQuery.select(cb.countDistinct(countRoot));
 
     TypedQuery<Long> countQuery = em.createQuery(countCriteriaQuery);
-    Long totalResults = countQuery.getSingleResult().longValue();
+    Long totalResults = countQuery.getSingleResult();
     List<Donor> donorResults = query.getResultList();
     boolean looped = false;
     if (!StringUtils.isBlank(donationIdentificationNumber)) {

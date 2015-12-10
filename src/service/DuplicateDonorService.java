@@ -252,8 +252,7 @@ public class DuplicateDonorService {
    */
   public List<Donor> findDuplicateDonors(Donor donor, List<Donor> donors) {
     List<Donor> duplicates = new ArrayList<>();
-    for (int i = 0; i < donors.size(); i++) {
-      Donor donor2 = donors.get(i);
+    for (Donor donor2 : donors) {
       if (match(donor, donor2)) {
         duplicates.add(donor2);
       }

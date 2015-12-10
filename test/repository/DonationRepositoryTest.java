@@ -223,10 +223,10 @@ public class DonationRepositoryTest {
   public void testFindDonationsDIN() throws Exception {
     Map<String, Object> pagingParams = new HashMap<>();
     List<Integer> packTypeIds = new ArrayList<>();
-    packTypeIds.add(new Integer(1));
+    packTypeIds.add(1);
     List<Long> venueIds = new ArrayList<>();
-    venueIds.add(new Long(1));
-    venueIds.add(new Long(2));
+    venueIds.add(1L);
+    venueIds.add(2L);
     List<Object> donations = donationRepository.findDonations("1234567", packTypeIds, venueIds, "2015-02-01",
             "2015-02-10", false, pagingParams);
     Assert.assertNotNull("List is not null", donations);
@@ -239,9 +239,9 @@ public class DonationRepositoryTest {
   public void testFindDonations() throws Exception {
     Map<String, Object> pagingParams = new HashMap<>();
     List<Integer> packTypeIds = new ArrayList<>();
-    packTypeIds.add(new Integer(1));
+    packTypeIds.add(1);
     List<Long> venueIds = new ArrayList<>();
-    venueIds.add(new Long(2));
+    venueIds.add(2L);
     List<Object> result = donationRepository.findDonations(null, packTypeIds, venueIds, "01/02/2015", "10/02/2015",
             true, pagingParams);
     Assert.assertNotNull("List is not null", result);

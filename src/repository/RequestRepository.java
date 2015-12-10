@@ -318,7 +318,7 @@ public class RequestRepository {
     for (Parameter<?> parameter : query.getParameters()) {
       countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
     }
-    return countQuery.getSingleResult().longValue();
+    return countQuery.getSingleResult();
   }
 
   public void deleteRequest(Long requestId) {

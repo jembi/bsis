@@ -30,11 +30,7 @@ public class DonorConstraintChecker {
   public boolean canDeleteDonor(long donorId) throws NoResultException {
     Donor donor = donorRepository.findDonorById(donorId);
 
-    if (donor.getNotes() != null && !donor.getNotes().isEmpty()) {
-      return false;
-    }
-
-    return donationRepository.countDonationsForDonor(donor) <= 0 && donorDeferralRepository.countDonorDeferralsForDonor(donor) <= 0;
+    return !(donor.getNotes() != null && !donor.getNotes().isEmpty()) && donationRepository.countDonationsForDonor(donor) <= 0 && donorDeferralRepository.countDonorDeferralsForDonor(donor) <= 0;
 
   }
 

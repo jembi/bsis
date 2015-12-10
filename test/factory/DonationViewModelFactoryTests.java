@@ -1,14 +1,5 @@
 package factory;
 
-import static helpers.builders.AdverseEventBuilder.anAdverseEvent;
-import static helpers.builders.AdverseEventViewModelBuilder.anAdverseEventViewModel;
-import static helpers.builders.DonationBatchBuilder.aDonationBatch;
-import static helpers.builders.DonationBuilder.aDonation;
-import static helpers.builders.DonationViewModelBuilder.aDonationViewModel;
-import static helpers.builders.DonorBuilder.aDonor;
-import static helpers.matchers.DonationViewModelMatcher.hasSameStateAsDonationViewModel;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.when;
 import model.adverseevent.AdverseEvent;
 import model.donation.Donation;
 import org.junit.Test;
@@ -23,8 +14,10 @@ import viewmodel.DonationViewModel;
 
 import static helpers.builders.AdverseEventBuilder.anAdverseEvent;
 import static helpers.builders.AdverseEventViewModelBuilder.anAdverseEventViewModel;
+import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonationViewModelBuilder.aDonationViewModel;
+import static helpers.builders.DonorBuilder.aDonor;
 import static helpers.matchers.DonationViewModelMatcher.hasSameStateAsDonationViewModel;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;

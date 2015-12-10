@@ -293,7 +293,7 @@ public class ComponentRepository {
     for (Parameter<?> parameter : query.getParameters()) {
       countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
     }
-    return countQuery.getSingleResult().longValue();
+    return countQuery.getSingleResult();
   }
 
   public List<Component> getAllUnissuedComponents() {

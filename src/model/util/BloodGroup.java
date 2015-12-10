@@ -67,13 +67,17 @@ public class BloodGroup {
       strBuilder.append("Unknown");
     } else {
       strBuilder.append(abo);
-      if (rh.equals("+"))
-        strBuilder.append("+");
-      else if (rh.equals("-"))
-        strBuilder.append("-");
-      else {
-        strBuilder = new StringBuilder();
-        strBuilder.append("Unknown");
+      switch (rh) {
+        case "+":
+          strBuilder.append("+");
+          break;
+        case "-":
+          strBuilder.append("-");
+          break;
+        default:
+          strBuilder = new StringBuilder();
+          strBuilder.append("Unknown");
+          break;
       }
     }
     return strBuilder.toString();

@@ -107,11 +107,11 @@ public class SchemaGenerator {
     }
     if (directory.exists()) {
       String[] files = directory.list();
-      for (int i = 0; i < files.length; i++) {
-        if (files[i].endsWith(".class")) {
+      for (String file : files) {
+        if (file.endsWith(".class")) {
           // removes the .class extension
           classes.add(Class.forName(packageName + '.'
-                  + files[i].substring(0, files[i].length() - 6)));
+                  + file.substring(0, file.length() - 6)));
         }
       }
     } else {
