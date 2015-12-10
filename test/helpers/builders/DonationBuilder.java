@@ -1,5 +1,12 @@
 package helpers.builders;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+import model.donationbatch.DonationBatch;
+import repository.bloodtesting.BloodTypingMatchStatus;
+import repository.bloodtesting.BloodTypingStatus;
 import helpers.persisters.AbstractEntityPersister;
 import helpers.persisters.DonationPersister;
 import model.adverseevent.AdverseEvent;
@@ -43,95 +50,101 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
   private List<BloodTestResult> bloodTestResults;
   private BloodTypingMatchStatus bloodTypingMatchStatus;
   private BloodTypingStatus bloodTypingStatus;
+  private DonationBatch donationBatch;
 
   public static DonationBuilder aDonation() {
     return new DonationBuilder();
   }
 
-  public DonationBuilder withId(Long id) {
-    this.id = id;
-    return this;
-  }
+    public DonationBuilder withId(Long id) {
+        this.id = id;
+        return this;
+    }
 
-  public DonationBuilder withDonor(Donor donor) {
-    this.donor = donor;
-    return this;
-  }
+    public DonationBuilder withDonor(Donor donor) {
+        this.donor = donor;
+        return this;
+    }
 
-  public DonationBuilder withDonationDate(Date donationDate) {
-    this.donationDate = donationDate;
-    return this;
-  }
+    public DonationBuilder withDonationBatch(DonationBatch donationBatch) {
+        this.donationBatch = donationBatch;
+        return this;
+    }
 
-  public DonationBuilder withVenue(Location venue) {
-    this.venue = venue;
-    return this;
-  }
-
-  public DonationBuilder withTTIStatus(TTIStatus ttiStatus) {
-    this.ttiStatus = ttiStatus;
-    return this;
-  }
-
-  public DonationBuilder withDonorPulse(Integer donorPulse) {
-    this.donorPulse = donorPulse;
-    return this;
-  }
-
-  public DonationBuilder withHaemoglobinCount(BigDecimal haemoglobinCount) {
-    this.haemoglobinCount = haemoglobinCount;
-    return this;
-  }
-
-  public DonationBuilder withHaemoglobinLevel(HaemoglobinLevel haemoglobinLevel) {
-    this.haemoglobinLevel = haemoglobinLevel;
-    return this;
-  }
-
-  public DonationBuilder withBloodPressureSystolic(Integer bloodPressureSystolic) {
-    this.bloodPressureSystolic = bloodPressureSystolic;
-    return this;
-  }
-
-  public DonationBuilder withBloodPressureDiastolic(Integer bloodPressureDiastolic) {
-    this.bloodPressureDiastolic = bloodPressureDiastolic;
-    return this;
-  }
-
-  public DonationBuilder withDonorWeight(BigDecimal donorWeight) {
-    this.donorWeight = donorWeight;
-    return this;
-  }
-
-  public DonationBuilder withNotes(String notes) {
-    this.notes = notes;
-    return this;
-  }
-
-  public DonationBuilder thatIsDeleted() {
-    deleted = true;
-    return this;
-  }
-
-  public DonationBuilder thatIsNotDeleted() {
-    deleted = false;
-    return this;
-  }
-
-  public DonationBuilder withPackType(PackType packType) {
-    this.packType = packType;
-    return this;
-  }
-
-  public DonationBuilder withBleedStartTime(Date bleedStartTime) {
-    this.bleedStartTime = bleedStartTime;
-    return this;
-  }
-
-  public DonationBuilder withBleedEndTime(Date bleedEndTime) {
-    this.bleedEndTime = bleedEndTime;
-    return this;
-  }
+    public DonationBuilder withDonationDate(Date donationDate) {
+        this.donationDate = donationDate;
+        return this;
+    }
+    
+    public DonationBuilder withVenue(Location venue) {
+        this.venue = venue;
+        return this;
+    }
+    
+    public DonationBuilder withTTIStatus(TTIStatus ttiStatus) {
+        this.ttiStatus = ttiStatus;
+        return this;
+    }
+    
+    public DonationBuilder withDonorPulse(Integer donorPulse) {
+        this.donorPulse = donorPulse;
+        return this;
+    }
+    
+    public DonationBuilder withHaemoglobinCount(BigDecimal haemoglobinCount) {
+        this.haemoglobinCount = haemoglobinCount;
+        return this;
+    }
+    
+    public DonationBuilder withHaemoglobinLevel(HaemoglobinLevel haemoglobinLevel) {
+        this.haemoglobinLevel = haemoglobinLevel;
+        return this;
+    }
+    
+    public DonationBuilder withBloodPressureSystolic(Integer bloodPressureSystolic) {
+        this.bloodPressureSystolic = bloodPressureSystolic;
+        return this;
+    }
+    
+    public DonationBuilder withBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+        this.bloodPressureDiastolic = bloodPressureDiastolic;
+        return this;
+    }
+    
+    public DonationBuilder withDonorWeight(BigDecimal donorWeight) {
+        this.donorWeight = donorWeight;
+        return this;
+    }
+    
+    public DonationBuilder withNotes(String notes) {
+        this.notes = notes;
+        return this;
+    }
+    
+    public DonationBuilder thatIsDeleted() {
+        deleted = true;
+        return this;
+    }
+    
+    public DonationBuilder thatIsNotDeleted() {
+        deleted = false;
+        return this;
+    }
+    
+    public DonationBuilder withPackType(PackType packType) {
+        this.packType = packType;
+        return this;
+    }
+    
+    public DonationBuilder withBleedStartTime(Date bleedStartTime) {
+        this.bleedStartTime = bleedStartTime;
+        return this;
+    }
+    
+    public DonationBuilder withBleedEndTime(Date bleedEndTime) {
+        this.bleedEndTime = bleedEndTime;
+        return this;
+    }
 
   public DonationBuilder withAdverseEvent(AdverseEvent adverseEvent) {
     this.adverseEvent = adverseEvent;
@@ -168,34 +181,35 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     return this;
   }
 
-  @Override
-  public Donation build() {
-    Donation donation = new Donation();
-    donation.setId(id);
-    donation.setDonor(donor);
-    donation.setDonationDate(donationDate);
-    donation.setVenue(venue);
-    donation.setTTIStatus(ttiStatus);
-    donation.setDonorPulse(donorPulse);
-    donation.setHaemoglobinCount(haemoglobinCount);
-    donation.setHaemoglobinLevel(haemoglobinLevel);
-    donation.setBloodPressureSystolic(bloodPressureSystolic);
-    donation.setBloodPressureDiastolic(bloodPressureDiastolic);
-    donation.setDonorWeight(donorWeight);
-    donation.setNotes(notes);
-    donation.setIsDeleted(deleted);
-    donation.setPackType(packType);
-    donation.setBleedStartTime(bleedStartTime);
-    donation.setBleedEndTime(bleedEndTime);
-    donation.setAdverseEvent(adverseEvent);
-    donation.setDonationType(donationType);
-    donation.setBloodAbo(bloodAbo);
-    donation.setBloodRh(bloodRh);
-    donation.setBloodTestResults(bloodTestResults);
-    donation.setBloodTypingMatchStatus(bloodTypingMatchStatus);
-    donation.setBloodTypingStatus(bloodTypingStatus);
-    return donation;
-  }
+    @Override
+    public Donation build() {
+        Donation donation = new Donation();
+        donation.setId(id);
+        donation.setDonor(donor);
+        donation.setDonationDate(donationDate);
+        donation.setVenue(venue);
+        donation.setTTIStatus(ttiStatus);
+        donation.setDonorPulse(donorPulse);
+        donation.setHaemoglobinCount(haemoglobinCount);
+        donation.setHaemoglobinLevel(haemoglobinLevel);
+        donation.setBloodPressureSystolic(bloodPressureSystolic);
+        donation.setBloodPressureDiastolic(bloodPressureDiastolic);
+        donation.setDonorWeight(donorWeight);
+        donation.setNotes(notes);
+        donation.setIsDeleted(deleted);
+        donation.setPackType(packType);
+        donation.setBleedStartTime(bleedStartTime);
+        donation.setBleedEndTime(bleedEndTime);
+        donation.setAdverseEvent(adverseEvent);
+        donation.setDonationType(donationType);
+        donation.setBloodAbo(bloodAbo);
+        donation.setBloodRh(bloodRh);
+        donation.setBloodTestResults(bloodTestResults);
+        donation.setBloodTypingMatchStatus(bloodTypingMatchStatus);
+        donation.setBloodTypingStatus(bloodTypingStatus);
+        donation.setDonationBatch(donationBatch);
+        return donation;
+    }
 
   @Override
   public AbstractEntityPersister<Donation> getPersister() {

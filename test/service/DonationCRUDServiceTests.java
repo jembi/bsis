@@ -199,84 +199,100 @@ public class DonationCRUDServiceTests {
             .withBleedEndTime(new Date())
             .build();
 
-    // Set up expectations
-    when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
-    when(donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID)).thenReturn(false);
+        // Set up expectations
+        when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
+        when(donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID)).thenReturn(false);
+        
+        // Exercise SUT
+        donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
+    }
+    
+    @Test
+    public void testUpdateDonation_shouldRetrieveAndUpdateDonation() {
+        
+        // Set up fixture
+        Integer irrelevantDonorPulse = 80;
+        BigDecimal irrelevantHaemoglobinCount = new BigDecimal(2);
+        HaemoglobinLevel irrelevantHaemoglobinLevel = HaemoglobinLevel.LOW;
+        Integer irrelevantBloodPressureSystolic = 120;
+        Integer irrelevantBloodPressureDiastolic = 80;
+        BigDecimal irrelevantDonorWeight = new BigDecimal(65);
+        String irrelevantNotes = "some notes";
+        PackType irrelevantPackType = aPackType().withId(IRRELEVANT_PACK_TYPE_ID).withCountAsDonation(true).build();
+        Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
+        Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
+        Long irrelevantAdverseEventTypeId = 8L;
+        AdverseEvent irrelevantAdverseEvent = anAdverseEvent()
+                .build();
+        AdverseEventBackingForm irrelevantAdverseEventBackingForm = anAdverseEventBackingForm()
+                .withType(anAdverseEventTypeBackingForm().withId(irrelevantAdverseEventTypeId).build())
+                .build();
 
-    // Exercise SUT
-    donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
-  }
+        String donationBatchNumber = "000001";
 
-  @Test
-  public void testUpdateDonation_shouldRetrieveAndUpdateDonation() {
+        Donor expectedDonor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
 
-    // Set up fixture
-    Integer irrelevantDonorPulse = 80;
-    BigDecimal irrelevantHaemoglobinCount = new BigDecimal(2);
-    HaemoglobinLevel irrelevantHaemoglobinLevel = HaemoglobinLevel.LOW;
-    Integer irrelevantBloodPressureSystolic = 120;
-    Integer irrelevantBloodPressureDiastolic = 80;
-    BigDecimal irrelevantDonorWeight = new BigDecimal(65);
-    String irrelevantNotes = "some notes";
-    PackType irrelevantPackType = aPackType().withId(8).build();
-    Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
-    Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
-    Long irrelevantAdverseEventTypeId = 8L;
-    AdverseEvent irrelevantAdverseEvent = anAdverseEvent()
-            .build();
-    AdverseEventBackingForm irrelevantAdverseEventBackingForm = anAdverseEventBackingForm()
-            .withType(anAdverseEventTypeBackingForm().withId(irrelevantAdverseEventTypeId).build())
-            .build();
+        DonationBatch donationBatch = aDonationBatch().build();
 
-    Donor expectedDonor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+        Donation existingDonation = aDonation()
+                .withId(IRRELEVANT_DONATION_ID)
+                .withPackType(aPackType().withId(8).withCountAsDonation(true).build())
+                .withDonor(expectedDonor)
+                .build();
 
-    Donation existingDonation = aDonation().withId(IRRELEVANT_DONATION_ID).withDonor(expectedDonor).build();
-    DonationBackingForm donationBackingForm = aDonationBackingForm()
-            .withDonorPulse(irrelevantDonorPulse)
-            .withHaemoglobinCount(irrelevantHaemoglobinCount)
-            .withHaemoglobinLevel(irrelevantHaemoglobinLevel)
-            .withBloodPressureSystolic(irrelevantBloodPressureSystolic)
-            .withBloodPressureDiastolic(irrelevantBloodPressureDiastolic)
-            .withDonorWeight(irrelevantDonorWeight)
-            .withNotes(irrelevantNotes)
-            .withPackType(irrelevantPackType)
-            .withBleedStartTime(irrelevantBleedStartTime)
-            .withBleedEndTime(irrelevantBleedEndTime)
-            .withAdverseEvent(irrelevantAdverseEventBackingForm)
-            .build();
+        DonationBackingForm donationBackingForm = aDonationBackingForm()
+                .withDonor(expectedDonor)
+                .withDonorPulse(irrelevantDonorPulse)
+                .withHaemoglobinCount(irrelevantHaemoglobinCount)
+                .withHaemoglobinLevel(irrelevantHaemoglobinLevel)
+                .withBloodPressureSystolic(irrelevantBloodPressureSystolic)
+                .withBloodPressureDiastolic(irrelevantBloodPressureDiastolic)
+                .withDonorWeight(irrelevantDonorWeight)
+                .withNotes(irrelevantNotes)
+                .withPackType(irrelevantPackType)
+                .withBleedStartTime(irrelevantBleedStartTime)
+                .withBleedEndTime(irrelevantBleedEndTime)
+                .withAdverseEvent(irrelevantAdverseEventBackingForm)
+                .withDonationBatchNumber(donationBatchNumber)
+                .build();
 
-    // Set up expectations
-    Donation expectedDonation = aDonation()
-            .withId(IRRELEVANT_DONATION_ID)
-            .withDonor(expectedDonor)
-            .withDonorPulse(irrelevantDonorPulse)
-            .withHaemoglobinCount(irrelevantHaemoglobinCount)
-            .withHaemoglobinLevel(irrelevantHaemoglobinLevel)
-            .withBloodPressureSystolic(irrelevantBloodPressureSystolic)
-            .withBloodPressureDiastolic(irrelevantBloodPressureDiastolic)
-            .withDonorWeight(irrelevantDonorWeight)
-            .withNotes(irrelevantNotes)
-            .withPackType(irrelevantPackType)
-            .withBleedStartTime(irrelevantBleedStartTime)
-            .withBleedEndTime(irrelevantBleedEndTime)
-            .withAdverseEvent(irrelevantAdverseEvent)
-            .build();
+        // Set up expectations
+        Donation expectedDonation = aDonation()
+                .withId(IRRELEVANT_DONATION_ID)
+                .withDonor(expectedDonor)
+                .withDonorPulse(irrelevantDonorPulse)
+                .withHaemoglobinCount(irrelevantHaemoglobinCount)
+                .withHaemoglobinLevel(irrelevantHaemoglobinLevel)
+                .withBloodPressureSystolic(irrelevantBloodPressureSystolic)
+                .withBloodPressureDiastolic(irrelevantBloodPressureDiastolic)
+                .withDonorWeight(irrelevantDonorWeight)
+                .withNotes(irrelevantNotes)
+                .withPackType(irrelevantPackType)
+                .withBleedStartTime(irrelevantBleedStartTime)
+                .withBleedEndTime(irrelevantBleedEndTime)
+                .withAdverseEvent(irrelevantAdverseEvent)
+                .build();
 
-    when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
-    when(donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID)).thenReturn(true);
-    when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation)))).thenReturn(expectedDonation);
 
-    // Exercise SUT
-    Donation returnedDonation = donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
+        when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
+        when(donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID)).thenReturn(true);
+        when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation)))).thenReturn(expectedDonation);
+        when(packTypeRepository.getPackTypeById(IRRELEVANT_PACK_TYPE_ID)).thenReturn(irrelevantPackType);
+        when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
+        when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(expectedDonor);
 
-    // Verify
-    verify(donationRepository).updateDonation(argThat(hasSameStateAsDonation(expectedDonation)));
-    verify(donorService).setDonorDueToDonate(argThat(hasSameStateAsDonor(expectedDonor)));
-    assertThat(returnedDonation, is(expectedDonation));
-  }
-
-  @Test
-  public void testCreateDonationWithDonationWithEligibleDonor_shouldAddDonation() {
+        
+        // Exercise SUT
+        Donation returnedDonation = donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
+        
+        // Verify
+        verify(donationRepository).updateDonation(argThat(hasSameStateAsDonation(expectedDonation)));
+        verify(donorService).setDonorDueToDonate(argThat(hasSameStateAsDonor(expectedDonor)));
+        assertThat(returnedDonation, is(expectedDonation));
+    }
+    
+    @Test
+    public void testCreateDonationWithDonationWithEligibleDonor_shouldAddDonation() {
 
     Donation donation = aDonation().build();
     long donorId = 993L;
