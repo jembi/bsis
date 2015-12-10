@@ -113,7 +113,7 @@ public class DonationController {
             } catch (NoSuchMethodException e) {
               e.printStackTrace();
             }
-            row.add(propertyValue.toString());
+            row.add(propertyValue);
           }
         }
       }

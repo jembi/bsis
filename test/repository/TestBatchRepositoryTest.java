@@ -91,14 +91,14 @@ public class TestBatchRepositoryTest {
 
   @Test
   public void testFindTestBatchById() throws Exception {
-    TestBatch testBatch = testBatchRepository.findTestBatchById(1l);
+    TestBatch testBatch = testBatchRepository.findTestBatchById(1L);
     Assert.assertNotNull("TestBatch defined", testBatch);
     Assert.assertEquals("TestBatch is correct", "000000", testBatch.getBatchNumber());
   }
 
   @Test(expected = javax.persistence.NoResultException.class)
   public void testFindTestBatchByIdUnknown() throws Exception {
-    testBatchRepository.findTestBatchById(123l);
+    testBatchRepository.findTestBatchById(123L);
   }
 
   @Test
@@ -137,17 +137,17 @@ public class TestBatchRepositoryTest {
 
   @Test
   public void testDeleteTestBatch() throws Exception {
-    testBatchRepository.deleteTestBatch(1l);
-    TestBatch testBatch = testBatchRepository.findTestBatchById(1l);
+    testBatchRepository.deleteTestBatch(1L);
+    TestBatch testBatch = testBatchRepository.findTestBatchById(1L);
     Assert.assertTrue("TestBatch is deleted", testBatch.getIsDeleted());
   }
 
   @Test
   public void testUpdateTestBatch() throws Exception {
-    TestBatch testBatch = testBatchRepository.findTestBatchById(2l);
+    TestBatch testBatch = testBatchRepository.findTestBatchById(2L);
     testBatch.setStatus(TestBatchStatus.RELEASED);
     testBatchRepository.updateTestBatch(testBatch);
-    TestBatch updatedTestBatch = testBatchRepository.findTestBatchById(2l);
+    TestBatch updatedTestBatch = testBatchRepository.findTestBatchById(2L);
     Assert.assertEquals("TestBatch status is correct", TestBatchStatus.RELEASED, updatedTestBatch.getStatus());
   }
 
@@ -177,7 +177,7 @@ public class TestBatchRepositoryTest {
   @Test
   public void testGetRecentlyClosedTestBatchesWithLimit() throws Exception {
     // creating an extra closed batch
-    TestBatch testBatch = testBatchRepository.findTestBatchById(2l);
+    TestBatch testBatch = testBatchRepository.findTestBatchById(2L);
     testBatch.setStatus(TestBatchStatus.CLOSED);
     testBatchRepository.updateTestBatch(testBatch);
     // only get 1 closed test batch now

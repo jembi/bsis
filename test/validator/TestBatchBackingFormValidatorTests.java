@@ -40,7 +40,7 @@ public class TestBatchBackingFormValidatorTests {
   @Test
   public void testValidateUpdateWithUnassignedDonationBatch() {
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(1l);
+    backingForm.setId(1L);
     backingForm.setDonationBatchIds(Arrays.asList(new Integer[]{1, 2}));
     backingForm.setCreatedDate("2015-10-10");
 
@@ -57,11 +57,11 @@ public class TestBatchBackingFormValidatorTests {
   @Test
   public void testValidateUpdateWithDonationBatchAssignedToAnotherBatch() {
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(1l);
+    backingForm.setId(1L);
     backingForm.setDonationBatchIds(Arrays.asList(new Integer[]{1, 2}));
     backingForm.setCreatedDate("2015-10-10");
     TestBatch tb2 = new TestBatch();
-    tb2.setId(2l);
+    tb2.setId(2L);
     Location venue = new Location();
     venue.setName("Test");
     DonationBatch db1 = new DonationBatch();
@@ -82,11 +82,11 @@ public class TestBatchBackingFormValidatorTests {
   @Test
   public void testValidateUpdateWithDonationBatchAssignedToBatch() {
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(1l);
+    backingForm.setId(1L);
     backingForm.setDonationBatchIds(Arrays.asList(new Integer[]{1, 2}));
     backingForm.setCreatedDate("2015-10-10");
     TestBatch tb1 = new TestBatch();
-    tb1.setId(1l);
+    tb1.setId(1L);
     Location venue = new Location();
     venue.setName("Test");
     DonationBatch db1 = new DonationBatch();

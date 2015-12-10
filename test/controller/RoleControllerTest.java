@@ -64,7 +64,7 @@ public class RoleControllerTest {
     role.setPermissions(permissions);
     role.setName("Update role");
     role.setDescription("Update Role For Test");
-    role.setId(1l);
+    role.setId(1L);
     roleRepository.updateRole(role);
   }
 

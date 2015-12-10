@@ -19,10 +19,6 @@ import static helpers.builders.UserBuilder.aUser;
 import static helpers.matchers.UserMatcher.hasSameStateAsUser;
 import static helpers.matchers.UserPasswordMatcher.hasPassword;
 import static org.mockito.AdditionalMatchers.and;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 public class PasswordResetControllerTests {

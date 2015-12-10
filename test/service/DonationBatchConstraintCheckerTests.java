@@ -60,7 +60,7 @@ public class DonationBatchConstraintCheckerTests {
   @Test
   public void testCanDeleteDonationBatchWithDonations() {
     List<Donation> donations = new ArrayList<>();
-    donations.add(new DonationBuilder().withId(1l).build());
+    donations.add(new DonationBuilder().withId(1L).build());
     Integer donationBatchId = new Integer(1);
     DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonations(donations).build();
 
@@ -140,7 +140,7 @@ public class DonationBatchConstraintCheckerTests {
   @Test
   public void testCanCloseDonationBatch() {
     List<Donation> donations = new ArrayList<>();
-    donations.add(new DonationBuilder().withId(1l).build());
+    donations.add(new DonationBuilder().withId(1L).build());
     Integer donationBatchId = new Integer(1);
     DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonations(donations).build();
 
@@ -154,7 +154,7 @@ public class DonationBatchConstraintCheckerTests {
   @Test
   public void testCanCloseClosedDonationBatch() {
     List<Donation> donations = new ArrayList<>();
-    donations.add(new DonationBuilder().withId(1l).build());
+    donations.add(new DonationBuilder().withId(1L).build());
     Integer donationBatchId = new Integer(1);
     DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonations(donations)
             .thatIsClosed().build();
@@ -194,7 +194,7 @@ public class DonationBatchConstraintCheckerTests {
   @Test
   public void testCanReopenDonationBatch() {
     List<Donation> donations = new ArrayList<>();
-    donations.add(new DonationBuilder().withId(1l).build());
+    donations.add(new DonationBuilder().withId(1L).build());
     Integer donationBatchId = new Integer(1);
     DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonations(donations)
             .thatIsClosed().build();
@@ -209,7 +209,7 @@ public class DonationBatchConstraintCheckerTests {
   @Test
   public void testCanReopenDonationBatchWithTestBatch() {
     List<Donation> donations = new ArrayList<>();
-    donations.add(new DonationBuilder().withId(1l).build());
+    donations.add(new DonationBuilder().withId(1L).build());
     TestBatch testBatch = new TestBatchBuilder().build();
     Integer donationBatchId = new Integer(1);
     DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonations(donations)
@@ -225,7 +225,7 @@ public class DonationBatchConstraintCheckerTests {
   @Test
   public void testCanReopenOpenDonationBatch() {
     List<Donation> donations = new ArrayList<>();
-    donations.add(new DonationBuilder().withId(1l).build());
+    donations.add(new DonationBuilder().withId(1L).build());
     Integer donationBatchId = new Integer(1);
     DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonations(donations).build();
 

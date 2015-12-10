@@ -81,7 +81,7 @@ public class UsageRepositoryTest {
 
   @Test
   public void testFindUsageById() throws Exception {
-    ComponentUsage one = usageRepository.findUsageById(1l);
+    ComponentUsage one = usageRepository.findUsageById(1L);
     Assert.assertNotNull("There is a ComponentUsage", one);
     Assert.assertEquals("ComponentUsage is correct", "Lucky", one.getPatientName());
   }
@@ -102,16 +102,16 @@ public class UsageRepositoryTest {
 
   @Test
   public void testFindUsageByIdUnknown() throws Exception {
-    ComponentUsage one = usageRepository.findUsageById(123l);
+    ComponentUsage one = usageRepository.findUsageById(123L);
     Assert.assertNull("There is no ComponentUsage", one);
   }
 
   @Test
   public void testUpdateUsage() throws Exception {
-    ComponentUsage one = usageRepository.findUsageById(1l);
+    ComponentUsage one = usageRepository.findUsageById(1L);
     one.setHospital("Junit hospital");
     usageRepository.saveUsage(one);
-    ComponentUsage savedOne = usageRepository.findUsageById(1l);
+    ComponentUsage savedOne = usageRepository.findUsageById(1L);
     Assert.assertEquals("ComponentUsage is updated", "Junit hospital", savedOne.getHospital());
   }
 
@@ -119,7 +119,7 @@ public class UsageRepositoryTest {
   public void testAddUsage() throws Exception {
     ComponentUsage one = new ComponentUsage();
     one.setHospital("Junit hospital");
-    one.setComponent(componentRepository.findComponent(6l)); // note: this component is actually discarded
+    one.setComponent(componentRepository.findComponent(6L)); // note: this component is actually discarded
     one.setUsageDate(new Date());
     ComponentUsage savedOne = usageRepository.addUsage(one);
     Assert.assertNotNull("Saved ComponentUsage has an id", savedOne.getId());
@@ -131,7 +131,7 @@ public class UsageRepositoryTest {
   @Test
   public void testDeleteUsage() throws Exception {
     usageRepository.deleteUsage("3333333-0011");
-    ComponentUsage one = usageRepository.findUsageById(3l);
+    ComponentUsage one = usageRepository.findUsageById(3L);
     Assert.assertNotNull("There is a ComponentUsage", one);
     Assert.assertTrue("ComponentUsage is deleted", one.getIsDeleted());
   }
@@ -139,7 +139,7 @@ public class UsageRepositoryTest {
   @Test
   public void testDeleteAllUsages() throws Exception {
     usageRepository.deleteAllUsages();
-    ComponentUsage one = usageRepository.findUsageById(1l);
+    ComponentUsage one = usageRepository.findUsageById(1L);
     Assert.assertNull("There is no ComponentUsage", one);
   }
 

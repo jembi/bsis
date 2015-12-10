@@ -204,11 +204,7 @@ public class User implements Serializable {
 
   @Override
   public boolean equals(Object other) {
-    if (other == this) {
-      return true;
-    }
-    return other instanceof User &&
-            ((User) other).id == id;
+    return other == this || other instanceof User && ((User) other).id == id;
   }
 
 }

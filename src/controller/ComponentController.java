@@ -614,7 +614,7 @@ public class ComponentController {
                     StringUtils.isNotBlank(component.getSubdivisionCode())) {
               propertyValue = propertyValue + " (" + component.getSubdivisionCode() + ")";
             }
-            row.add(propertyValue.toString());
+            row.add(propertyValue);
           }
         }
       }

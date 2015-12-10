@@ -97,14 +97,14 @@ public class LocationRepositoryTest {
 
   @Test
   public void testGetLocation() throws Exception {
-    Location one = locationRepository.getLocation(1l);
+    Location one = locationRepository.getLocation(1L);
     Assert.assertNotNull("There is a Location", one);
     Assert.assertEquals("The Location matches", "Maseru", one.getName());
   }
 
   @Test
   public void testGetLocationDeleted() throws Exception {
-    Location one = locationRepository.getLocation(6l);
+    Location one = locationRepository.getLocation(6L);
     Assert.assertNotNull("There is a Location", one);
     Assert.assertEquals("The Location matches", "Leribe Clinic", one.getName());
   }
@@ -166,7 +166,7 @@ public class LocationRepositoryTest {
   public void testUpdateLocation() throws Exception {
     Location one = locationRepository.findLocationByName("Maseru");
     one.setIsMobileSite(true);
-    locationRepository.updateLocation(1l, one);
+    locationRepository.updateLocation(1L, one);
     Location savedOne = locationRepository.findLocationByName("Maseru");
     Assert.assertTrue("The location is saved", savedOne.getIsMobileSite());
   }

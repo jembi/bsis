@@ -140,13 +140,13 @@ public class DonationViewModel {
   public String getBloodAbo() {
     if (donation.getBloodAbo() == null)
       return "";
-    return donation.getBloodAbo().toString();
+    return donation.getBloodAbo();
   }
 
   public String getBloodRh() {
     if (donation.getBloodRh() == null)
       return "";
-    return donation.getBloodRh().toString();
+    return donation.getBloodRh();
   }
 
   public String getExtraBloodTypeInformation() {

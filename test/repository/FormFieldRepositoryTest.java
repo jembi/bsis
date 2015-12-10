@@ -83,14 +83,14 @@ public class FormFieldRepositoryTest {
 
   @Test
   public void testFindFormFieldById() throws Exception {
-    FormField one = formFieldRepository.findFormFieldById(1l);
+    FormField one = formFieldRepository.findFormFieldById(1L);
     Assert.assertNotNull("There is a FormField with id 1", one);
     Assert.assertEquals("The Form field matches what was expected", "Donor", one.getForm());
   }
 
   @Test
   public void testFindFormFieldByIdUnknown() throws Exception {
-    FormField one = formFieldRepository.findFormFieldById(1111l);
+    FormField one = formFieldRepository.findFormFieldById(1111L);
     Assert.assertNull("There is no FormField with id 1111", one);
   }
 

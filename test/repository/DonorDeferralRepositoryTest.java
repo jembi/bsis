@@ -78,19 +78,19 @@ public class DonorDeferralRepositoryTest {
 
   @Test
   public void testGetById() throws Exception {
-    DonorDeferral deferral = donorDeferralRepository.findDonorDeferralById(1l);
+    DonorDeferral deferral = donorDeferralRepository.findDonorDeferralById(1L);
     Assert.assertNotNull("There is a deferral", deferral);
     Assert.assertEquals("Correct deferral returned", "High risk behaviour", deferral.getDeferralReason().getReason());
   }
 
   @Test(expected = javax.persistence.NoResultException.class)
   public void testGetByIdDoesNotExist() throws Exception {
-    donorDeferralRepository.findDonorDeferralById(123l);
+    donorDeferralRepository.findDonorDeferralById(123L);
   }
 
   @Test
   public void testCountDonorDeferralsForDonor() throws Exception {
-    Donor donor = donorRepository.findDonorById(1l);
+    Donor donor = donorRepository.findDonorById(1L);
     int count = donorDeferralRepository.countDonorDeferralsForDonor(donor);
     Assert.assertEquals("Donor has 2 deferrals", 2, count);
   }

@@ -51,12 +51,8 @@ public class AdverseEvent {
 
   @Override
   public boolean equals(Object other) {
-    if (other == this) {
-      return true;
-    }
+    return other == this || other instanceof AdverseEvent && ((AdverseEvent) other).id == id;
 
-    return other instanceof AdverseEvent &&
-            ((AdverseEvent) other).id == id;
   }
 
 }

@@ -137,11 +137,7 @@ public class PackType {
 
   @Override
   public boolean equals(Object other) {
-    if (other == this) {
-      return true;
-    }
-    return other instanceof PackType &&
-            ((PackType) other).id == id;
+    return other == this || other instanceof PackType && ((PackType) other).id == id;
   }
 
 

@@ -538,11 +538,7 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
 
   @Override
   public boolean equals(Object other) {
-    if (other == this) {
-      return true;
-    }
-    return other instanceof Donation &&
-            ((Donation) other).id == id;
+    return other == this || other instanceof Donation && ((Donation) other).id == id;
   }
 
   public boolean isIneligibleDonor() {

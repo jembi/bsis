@@ -21,7 +21,6 @@ import static helpers.builders.PostDonationCounsellingBuilder.aPostDonationCouns
 import static helpers.matchers.PostDonationCounsellingMatcher.hasSameStateAsPostDonationCounselling;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)

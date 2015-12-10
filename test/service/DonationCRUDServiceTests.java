@@ -34,7 +34,6 @@ import static helpers.matchers.DonationMatcher.hasSameStateAsDonation;
 import static helpers.matchers.DonorMatcher.hasSameStateAsDonor;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)

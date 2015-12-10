@@ -79,11 +79,8 @@ public class DonationConstraintChecker {
    */
   public boolean donationHasDiscrepancies(Donation donation) {
 
-    if (!donation.getPackType().getTestSampleProduced()) {
-      return false;
-    }
+    return donation.getPackType().getTestSampleProduced() && donationHasDiscrepancies(donation, bloodTestsService.executeTests(donation));
 
-    return donationHasDiscrepancies(donation, bloodTestsService.executeTests(donation));
   }
 
   /**

@@ -10,7 +10,6 @@ import repository.DonorRepository;
 
 import static helpers.builders.DonorBuilder.aDonor;
 import static helpers.matchers.DonorMatcher.hasSameStateAsDonor;
-import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)

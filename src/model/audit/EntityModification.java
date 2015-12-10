@@ -55,11 +55,7 @@ public class EntityModification {
 
   @Override
   public boolean equals(Object other) {
-    if (other == this) {
-      return true;
-    }
-    return other instanceof EntityModification &&
-            ((EntityModification) other).id == id;
+    return other == this || other instanceof EntityModification && ((EntityModification) other).id == id;
   }
 
 }

@@ -24,6 +24,7 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class DonationBackingForm {
 
@@ -292,7 +293,7 @@ public class DonationBackingForm {
 
   @JsonIgnore
   public void setDonorIdHidden(String donorId) {
-    if (donorId == null || donorId == "") {
+    if (donorId == null || Objects.equals(donorId, "")) {
       donation.setDonor(null);
     } else {
 

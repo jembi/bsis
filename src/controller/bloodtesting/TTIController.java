@@ -252,7 +252,7 @@ public class TTIController {
       uploadPath = path[0];
       String[] tsvFilestr;
 
-      tsvFilestr = tsvFile.getOriginalFilename().toString()
+      tsvFilestr = tsvFile.getOriginalFilename()
               .split(UploadTTIResultConstant.FILE_SPLIT);
       if (StringUtils.isBlank(tsvFilestr.toString()) ||
               !tsvFilestr[1].equals(UploadTTIResultConstant.FILE_EXTENTION)) {

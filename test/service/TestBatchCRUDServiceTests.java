@@ -22,8 +22,6 @@ import static helpers.builders.TestBatchBuilder.aTestBatch;
 import static helpers.matchers.TestBatchMatcher.hasSameStateAsTestBatch;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.*;
 
 public class TestBatchCRUDServiceTests extends UnitTestSuite {
@@ -219,10 +217,7 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
         if (actual.getId().equals(1)) {
           return (actual.getTestBatch() == null);
         }
-        if (actual.getId().equals(3)) {
-          return (actual.getTestBatch() == testBatch);
-        }
-        return false;
+        return actual.getId().equals(3) && (actual.getTestBatch() == testBatch);
       }
     }));
   }

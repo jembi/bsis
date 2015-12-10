@@ -66,7 +66,7 @@ public class BloodGroup {
     if (abo == null) {
       strBuilder.append("Unknown");
     } else {
-      strBuilder.append(abo.toString());
+      strBuilder.append(abo);
       if (rh.equals("+"))
         strBuilder.append("+");
       else if (rh.equals("-"))
@@ -80,10 +80,10 @@ public class BloodGroup {
   }
 
   public String getBloodAbo() {
-    return abo.toString();
+    return abo;
   }
 
   public String getBloodRh() {
-    return rh.toString();
+    return rh;
   }
 }

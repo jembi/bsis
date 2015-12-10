@@ -222,7 +222,7 @@ public class DonorBackingForm {
       DateTime dt2 = new DateTime(new Date());
       int year1 = dt1.year().get();
       int year2 = dt2.year().get();
-      return new Integer(year2 - year1).toString();
+      return Integer.toString(year2 - year1);
     } else {
       return ageSpecified;
     }

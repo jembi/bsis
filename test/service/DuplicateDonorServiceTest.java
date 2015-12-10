@@ -156,8 +156,8 @@ public class DuplicateDonorServiceTest {
     donors.add(david2);
 
     // create donations (david1)
-    Donation donation1 = DonationBuilder.aDonation().withId(1l).withDonor(david1).withDonationDate(new Date()).build();
-    Donation donation2 = DonationBuilder.aDonation().withId(2l).withDonor(david1).withDonationDate(new Date()).build();
+    Donation donation1 = DonationBuilder.aDonation().withId(1L).withDonor(david1).withDonationDate(new Date()).build();
+    Donation donation2 = DonationBuilder.aDonation().withId(2L).withDonor(david1).withDonationDate(new Date()).build();
     List<Donation> donations = new ArrayList<>();
     donations.add(donation1);
     donations.add(donation2);
@@ -166,7 +166,7 @@ public class DuplicateDonorServiceTest {
     // create deferrals (david2)
     DeferralReason deferralReason1 = DeferralReasonBuilder.aDeferralReason()
             .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
-    DonorDeferral deferral1 = DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferredDonor(david2)
+    DonorDeferral deferral1 = DonorDeferralBuilder.aDonorDeferral().withId(1L).withDeferredDonor(david2)
             .withDeferralReason(deferralReason1).build();
     List<DonorDeferral> deferrals = new ArrayList<>();
     deferrals.add(deferral1);
@@ -179,9 +179,9 @@ public class DuplicateDonorServiceTest {
     List<DuplicateDonorBackup> backupLogs = service.mergeDonors(david3, donors);
     Assert.assertNotNull("backupLogs returned", backupLogs);
     Assert.assertEquals("Donation and Deferral backups necessary", 3, backupLogs.size());
-    Assert.assertTrue("1st DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "1", 1l, null)));
-    Assert.assertTrue("2nd DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "1", 2l, null)));
-    Assert.assertTrue("3rd DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "2", null, 1l)));
+    Assert.assertTrue("1st DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "1", 1L, null)));
+    Assert.assertTrue("2nd DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "1", 2L, null)));
+    Assert.assertTrue("3rd DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "2", null, 1L)));
     Assert.assertNull("Donations were moved", david1.getDonations());
     Assert.assertNull("Deferrals were moved", david2.getDeferrals());
     Assert.assertEquals("Donations were moved", 2, david3.getDonations().size());
@@ -373,11 +373,11 @@ public class DuplicateDonorServiceTest {
             .withDurationType(DurationType.PERMANENT).withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
 
     Date dd1CreatedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2015-01-01");
-    DonorDeferral dd1 = DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferralReason(deferralReason)
+    DonorDeferral dd1 = DonorDeferralBuilder.aDonorDeferral().withId(1L).withDeferralReason(deferralReason)
             .withDeferredUntil(new Date()).withCreatedDate(dd1CreatedDate).build();
 
     Date dd2CreatedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2014-01-01");
-    DonorDeferral dd2 = DonorDeferralBuilder.aDonorDeferral().withId(2l).withDeferralReason(deferralReason)
+    DonorDeferral dd2 = DonorDeferralBuilder.aDonorDeferral().withId(2L).withDeferralReason(deferralReason)
             .withDeferredUntil(new Date()).withCreatedDate(dd2CreatedDate).build();
 
     Donor d1 = DonorBuilder.aDonor().withFirstName("David").withLastName("Smith").withGender(Gender.male)
@@ -395,16 +395,16 @@ public class DuplicateDonorServiceTest {
 
   @Test
   public void testGetDonorDonations() throws Exception {
-    Donation d1 = DonationBuilder.aDonation().withId(1l)
+    Donation d1 = DonationBuilder.aDonation().withId(1L)
             .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-07-01")).build();
-    Donation d2 = DonationBuilder.aDonation().withId(2l)
+    Donation d2 = DonationBuilder.aDonation().withId(2L)
             .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01")).build();
-    Donation d3 = DonationBuilder.aDonation().withId(3l)
+    Donation d3 = DonationBuilder.aDonation().withId(3L)
             .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-09-01")).build();
     Donor david = DonorBuilder.aDonor().withFirstName("David").withLastName("Smith").withGender(Gender.male)
             .withBirthDate("1978-10-20").withDonations(Arrays.asList(new Donation[]{d1, d2, d3})).build();
 
-    Donation d4 = DonationBuilder.aDonation().withId(4l)
+    Donation d4 = DonationBuilder.aDonation().withId(4L)
             .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-05-01")).build();
     Donor john = DonorBuilder.aDonor().withFirstName("John").withLastName("Smith").withGender(Gender.male)
             .withBirthDate("1958-10-20").withDonations(Arrays.asList(new Donation[]{d4})).build();

@@ -106,11 +106,7 @@ public class PostDonationCounselling implements ModificationTracker {
 
   @Override
   public boolean equals(Object other) {
-    if (other == this) {
-      return true;
-    }
-    return other instanceof PostDonationCounselling &&
-            ((PostDonationCounselling) other).id == id;
+    return other == this || other instanceof PostDonationCounselling && ((PostDonationCounselling) other).id == id;
   }
 
   @Override

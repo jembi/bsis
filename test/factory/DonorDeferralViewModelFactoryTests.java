@@ -32,8 +32,8 @@ public class DonorDeferralViewModelFactoryTests {
   public void testCreateDonorDeferralViewModel() throws Exception {
 
     // create test data
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
-    DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1l).withCreatedDate(new Date())
+    Donor deferredDonor = DonorBuilder.aDonor().withId(1L).withFirstName("Sample").withLastName("Donor").build();
+    DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1L).withCreatedDate(new Date())
             .withDeferredDonor(deferredDonor).withDeferredUntil(new Date()).build();
 
     // set up mocks
@@ -64,15 +64,15 @@ public class DonorDeferralViewModelFactoryTests {
   public void testCreateDonorDeferralViewModels() throws Exception {
 
     // create test data
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+    Donor deferredDonor = DonorBuilder.aDonor().withId(1L).withFirstName("Sample").withLastName("Donor").build();
     List<DonorDeferral> donorDeferrals = new ArrayList<>();
-    DonorDeferral donorDeferral1 = DonorDeferralBuilder.aDonorDeferral().withId(1l).withCreatedDate(new Date())
+    DonorDeferral donorDeferral1 = DonorDeferralBuilder.aDonorDeferral().withId(1L).withCreatedDate(new Date())
             .withDeferredDonor(deferredDonor).withDeferredUntil(new Date()).build();
     donorDeferrals.add(donorDeferral1);
-    DonorDeferral donorDeferral2 = DonorDeferralBuilder.aDonorDeferral().withId(2l).withCreatedDate(new Date())
+    DonorDeferral donorDeferral2 = DonorDeferralBuilder.aDonorDeferral().withId(2L).withCreatedDate(new Date())
             .withDeferredDonor(deferredDonor).withDeferredUntil(new Date()).build();
     donorDeferrals.add(donorDeferral2);
-    DonorDeferral donorDeferral3 = DonorDeferralBuilder.aDonorDeferral().withId(3l).withCreatedDate(new Date())
+    DonorDeferral donorDeferral3 = DonorDeferralBuilder.aDonorDeferral().withId(3L).withCreatedDate(new Date())
             .withDeferredDonor(deferredDonor).withDeferredUntil(new Date()).build();
     donorDeferrals.add(donorDeferral3);
 

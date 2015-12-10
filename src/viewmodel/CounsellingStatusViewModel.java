@@ -20,11 +20,7 @@ public class CounsellingStatusViewModel {
 
   @Override
   public boolean equals(Object other) {
-    if (other == this) {
-      return true;
-    }
-    return other instanceof CounsellingStatusViewModel &&
-            ((CounsellingStatusViewModel) other).counsellingStatus == counsellingStatus;
+    return other == this || other instanceof CounsellingStatusViewModel && ((CounsellingStatusViewModel) other).counsellingStatus == counsellingStatus;
   }
 
 }

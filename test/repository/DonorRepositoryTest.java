@@ -147,7 +147,7 @@ public class DonorRepositoryTest {
    */
   public void findDonorById_shouldReturnDonor() {
     // 1 is Donor's ID.
-    Donor findDonor = donorRepository.findDonorById(1l);
+    Donor findDonor = donorRepository.findDonorById(1L);
     assertNotNull(
             "Donor Object should not null.Donor Id is exist into Donor's table.",
             findDonor);
@@ -162,7 +162,7 @@ public class DonorRepositoryTest {
   @Test(expected = NoResultException.class)
   public void findDonorById_shouldExpectNoResultException() {
     // 18 ID is not exist into Donor table.
-    donorRepository.findDonorById(18l);
+    donorRepository.findDonorById(18L);
   }
 
 
@@ -172,7 +172,7 @@ public class DonorRepositoryTest {
   @Test(expected = NoResultException.class)
   public void findDonorById_shouldExpectNoResultExceptionWhenDonorIsDeleted() {
     // 2 is Deleted Donor's ID.
-    donorRepository.findDonorById(2l);
+    donorRepository.findDonorById(2L);
   }
 
   @Test
@@ -380,7 +380,7 @@ public class DonorRepositoryTest {
    */
   public void addDonor_shouldPersist() {
     // 1 is Donor's Id.
-    Donor createNewDonorFromExistDonor = donorRepository.findDonorById(1l);
+    Donor createNewDonorFromExistDonor = donorRepository.findDonorById(1L);
     Donor newDonor = this.copyDonor(createNewDonorFromExistDonor);
     // New DonorNumber(000006) which is assigned to Donor Persist Object.
     newDonor.setDonorNumber("000006");
@@ -396,7 +396,7 @@ public class DonorRepositoryTest {
    */
   public void updateDonor_shouldReturnNotNull() {
     // 1 is Donor Id.
-    Donor editDonor = donorRepository.findDonorById(1l);
+    Donor editDonor = donorRepository.findDonorById(1L);
     donorBackingForm = new DonorBackingForm(editDonor);
     setBackingUpdateFormValue(donorBackingForm);
     assertNotNull("Donor Object should update.",
@@ -412,7 +412,7 @@ public class DonorRepositoryTest {
   @Test(expected = NoResultException.class)
   public void updateDonor_shouldExpectNoResultException() {
     Donor editDonor = new Donor();
-    editDonor.setId(-1l);
+    editDonor.setId(-1L);
     donorBackingForm = new DonorBackingForm(editDonor);
     setBackingUpdateFormValue(donorBackingForm);
     donorRepository.updateDonorDetails(donorBackingForm.getDonor());
@@ -674,7 +674,7 @@ public class DonorRepositoryTest {
    */
   public void deferDonor_ShouldPersist() throws ParseException {
     DonorDeferral donorDeferral = new DonorDeferral();
-    donorDeferral.setDeferredDonor(donorRepository.findDonorById(1l));
+    donorDeferral.setDeferredDonor(donorRepository.findDonorById(1L));
     donorDeferral.setDeferredUntil(dateFormat.parse("2015-07-19"));
     donorDeferral.setDeferralReason(donorRepository.findDeferralReasonById("3"));
     donorRepository.deferDonor(donorDeferral);
@@ -716,7 +716,7 @@ public class DonorRepositoryTest {
     // 2 is Donor ID
     assertEquals(
             "Deferral Donor is not found base on donor id so,List size should be zero.",
-            0, donorRepository.getDonorDeferrals(2l).size());
+            0, donorRepository.getDonorDeferrals(2L).size());
 
   }
 
@@ -727,7 +727,7 @@ public class DonorRepositoryTest {
   public void getDonorDeferrals_listSizeShouldNotZero() {
     // 1 is Donor ID
     List<DonorDeferral> listDonorDeferral = donorRepository
-            .getDonorDeferrals(1l);
+            .getDonorDeferrals(1L);
     assertNotSame(
             "Deferral Donor is found base on donor id so,List size should not zero.",
             0, listDonorDeferral.size());
@@ -746,7 +746,7 @@ public class DonorRepositoryTest {
   public void getLastDonorDeferralDate_shouldReturnlastDeferredUntil() {
     // 4 is Donor ID
     Date currentDate = DateUtils.addDays(new Date(), (2));
-    Date date = donorRepository.getLastDonorDeferralDate(6l);
+    Date date = donorRepository.getLastDonorDeferralDate(6L);
     assertNotNull("should return last donor derferral date", date);
     String str = dateFormat.format(date);
     String str_currentDate = dateFormat.format(currentDate);
@@ -924,7 +924,7 @@ public class DonorRepositoryTest {
    */
   public void getDonorAddress_ShouldReturnNotNull() {
     assertNotNull("Expected : Address Type  but Found : NULL",
-            donorRepository.findDonorById(1l).getAddress());
+            donorRepository.findDonorById(1L).getAddress());
   }
 
   @Test
@@ -933,7 +933,7 @@ public class DonorRepositoryTest {
    */
   public void getDonorContact_ShouldReturnNotNull() {
     assertNotNull("Expected : Contact Type but Found : NULL",
-            donorRepository.findDonorById(1l).getContact());
+            donorRepository.findDonorById(1L).getContact());
   }
 
 //    @Test
@@ -1001,8 +1001,8 @@ public class DonorRepositoryTest {
   @Test
   public void addMergedDonor() throws Exception {
     List<DuplicateDonorBackup> backupLogs = new ArrayList<>();
-    backupLogs.add(new DuplicateDonorBackup("1234567", "000001", 1l, null));
-    backupLogs.add(new DuplicateDonorBackup("1234567", "000001", null, 1l));
+    backupLogs.add(new DuplicateDonorBackup("1234567", "000001", 1L, null));
+    backupLogs.add(new DuplicateDonorBackup("1234567", "000001", null, 1L));
     Donor oldDonor = donorRepository.findDonorByDonorNumber("000001", false);
     List<Donor> donorsToMerge = new ArrayList<>();
     donorsToMerge.add(oldDonor);

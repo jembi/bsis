@@ -85,8 +85,8 @@ public class DonorCommunicationsRepository {
     Collection<BloodGroup> selectedBloodGroups = anyBloodGroup ? BloodGroup.getAllBloodGroups() : bloodGroups;
     if (selectedBloodGroups != null) {
       for (BloodGroup bg : selectedBloodGroups) {
-        Expression<Boolean> aboExp = cb.equal(root.<String>get("bloodAbo"), bg.getBloodAbo().toString());
-        Expression<Boolean> rhExp = cb.equal(root.<String>get("bloodRh"), bg.getBloodRh().toString());
+        Expression<Boolean> aboExp = cb.equal(root.<String>get("bloodAbo"), bg.getBloodAbo());
+        Expression<Boolean> rhExp = cb.equal(root.<String>get("bloodRh"), bg.getBloodRh());
         bgPredicates.add(cb.and(aboExp, rhExp));
       }
     }
