@@ -16,17 +16,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.Valid;
 
 import model.ModificationTrackerBaseEntity;
 import model.compatibility.CompatibilityTest;
 import model.componentmovement.ComponentStatusChange;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
-import model.modificationtracker.RowModificationTracker;
 import model.request.Request;
 import model.usage.ComponentUsage;
-import model.user.User;
 
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;

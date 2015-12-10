@@ -4,25 +4,23 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+
+import model.BaseEntity;
 import model.worksheet.WorksheetType;
+
 import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-public class BloodTest implements Comparable<BloodTest> {
+public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable=false, updatable=false, columnDefinition="SMALLINT")
-  private Long id;
+  private static final long serialVersionUID = 1L;
 
   @Column(length=25)
   private String testNameShort;
@@ -81,10 +79,6 @@ public class BloodTest implements Comparable<BloodTest> {
     @Column(nullable = false)
     private boolean flagComponentsForDiscard = false;
 
-  public Long getId() {
-    return id;
-  }
-
   public String getTestNameShort() {
     return testNameShort;
   }
@@ -116,10 +110,6 @@ public class BloodTest implements Comparable<BloodTest> {
 
   public Boolean getIsActive() {
     return isActive;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public void setTestNameShort(String testNameShort) {
@@ -210,7 +200,7 @@ public void setIsDeleted(Boolean isDeleted) {
 
 @Override
   public int compareTo(BloodTest o) {
-    return this.id.compareTo(o.id);
+    return this.getId().compareTo(o.getId());
   }
 
     public boolean isFlagComponentsForDiscard() {

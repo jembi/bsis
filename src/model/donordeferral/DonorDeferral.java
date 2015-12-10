@@ -9,11 +9,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.Valid;
 
 import model.ModificationTrackerBaseEntity;
 import model.donor.Donor;
-import model.modificationtracker.RowModificationTracker;
 import model.user.User;
 
 import org.hibernate.envers.Audited;

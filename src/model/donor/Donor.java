@@ -26,7 +26,6 @@ import model.donation.Donation;
 import model.donordeferral.DonorDeferral;
 import model.idtype.IdType;
 import model.location.Location;
-import model.modificationtracker.RowModificationTracker;
 import model.preferredlanguage.PreferredLanguage;
 import model.util.Gender;
 
