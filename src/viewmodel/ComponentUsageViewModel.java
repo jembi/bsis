@@ -1,8 +1,8 @@
 package viewmodel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import utils.CustomDateFormatter;
 import model.usage.ComponentUsage;
+import utils.CustomDateFormatter;
 
 public class ComponentUsageViewModel {
 

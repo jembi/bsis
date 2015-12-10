@@ -1,924 +1,923 @@
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
-		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
-	<!-- ALWAYS USE A UNIQUE IDENTIFIER of format id="yyyymmdd-hhmm" eg: id="20140225-1815" -->
-	<!-- ALWAYS UPDATE YOUR LOCAL REPO FROM GITHUB AND VERIFY YOUR id IS UNIQUE -->
-	<!-- NEVER DELETE OR MODIFY EXISTING CHANGE SETS - instead add new change sets 
-		 reversing the previous ones if you need to change or delete info from another changeset-->
+    <!-- ALWAYS USE A UNIQUE IDENTIFIER of format id="yyyymmdd-hhmm" eg: id="20140225-1815" -->
+    <!-- ALWAYS UPDATE YOUR LOCAL REPO FROM GITHUB AND VERIFY YOUR id IS UNIQUE -->
+    <!-- NEVER DELETE OR MODIFY EXISTING CHANGE SETS - instead add new change sets
+         reversing the previous ones if you need to change or delete info from another changeset-->
 
-	<changeSet id="20150114-0956" author="danfuterman">
-		<comment>Add donation types</comment>
-		<insert tableName = "DonationType">
-			<column name="donationType" value="Voluntary"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "DonationType">
-			<column name="donationType" value="Family"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "DonationType">
-			<column name="donationType" value="Autologous"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "DonationType">
-			<column name="donationType" value="Other"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-	</changeSet>
+    <changeSet id="20150114-0956" author="danfuterman">
+        <comment>Add donation types</comment>
+        <insert tableName="DonationType">
+            <column name="donationType" value="Voluntary"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="DonationType">
+            <column name="donationType" value="Family"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="DonationType">
+            <column name="donationType" value="Autologous"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="DonationType">
+            <column name="donationType" value="Other"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+    </changeSet>
 
-	<!-- REQUESTS NOT REQUIRED FOR BETA-RELEASE
-	<changeSet id="20150114-0957" author="danfuterman">
-		<comment>Add request types</comment>
-		<insert tableName = "RequestType">
-			<column name="requestType" value="Emergency"/>
-			<column name="description" value="0"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "RequestType">
-			<column name="requestType" value="Group and Save"/>
-			<column name="description" value=""/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "RequestType">
-			<column name="requestType" value="Group and Screen"/>
-			<column name="description" value=""/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "RequestType">
-			<column name="requestType" value="Standard"/>
-			<column name="description" value=""/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "RequestType">
-			<column name="requestType" value="Urgent"/>
-			<column name="description" value=""/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "RequestType">
-			<column name="requestType" value="Elective Surgery"/>
-			<column name="description" value=""/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-	</changeSet>
-	-->
+    <!-- REQUESTS NOT REQUIRED FOR BETA-RELEASE
+    <changeSet id="20150114-0957" author="danfuterman">
+        <comment>Add request types</comment>
+        <insert tableName = "RequestType">
+            <column name="requestType" value="Emergency"/>
+            <column name="description" value="0"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName = "RequestType">
+            <column name="requestType" value="Group and Save"/>
+            <column name="description" value=""/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName = "RequestType">
+            <column name="requestType" value="Group and Screen"/>
+            <column name="description" value=""/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName = "RequestType">
+            <column name="requestType" value="Standard"/>
+            <column name="description" value=""/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName = "RequestType">
+            <column name="requestType" value="Urgent"/>
+            <column name="description" value=""/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName = "RequestType">
+            <column name="requestType" value="Elective Surgery"/>
+            <column name="description" value=""/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+    </changeSet>
+    -->
 
     <!-- Updated (timler): for #294 (refactoring) -->
-	<changeSet id="20150817-1154" author="danfuterman">
-	    <preConditions onFail="MARK_RAN">
-		    <sqlCheck expectedResult="0"> 
-				<![CDATA[
+    <changeSet id="20150817-1154" author="danfuterman">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                <![CDATA[
 				SELECT count(*) FROM ComponentType WHERE componentTypeNameShort = "0011";
 				]]>
-			</sqlCheck>
- 		</preConditions>
-		<comment>Add component types</comment>
-		<insert tableName = "ComponentType">
-			<column name="id" value="1"/>
-			<column name="componentTypeNameShort" value="0011"/>
-			<column name="componentTypeName" value="Whole Blood Single Pack - CPDA"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="35"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="1"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="id" value="2"/>
-			<column name="componentTypeNameShort" value="0012"/>
-			<column name="componentTypeName" value="Whole Blood Double Pack - CPDA"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="35"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="1"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="id" value="3"/>
-			<column name="componentTypeNameShort" value="0013"/>
-			<column name="componentTypeName" value="Whole Blood Triple Pack - CPDA"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="35"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="1"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="id" value="4"/>
-			<column name="componentTypeNameShort" value="0014"/>
-			<column name="componentTypeName" value="Whole Blood Quad Pack - CPDA"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="35"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="1"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="id" value="5"/>
-			<column name="componentTypeNameShort" value="0021"/>
-			<column name="componentTypeName" value="Apheresis"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="5"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="1"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="id" value="6"/>
-			<column name="componentTypeNameShort" value="1001"/>
-			<column name="componentTypeName" value="Whole Blood - CPDA"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="35"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="1"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="id" value="7"/>
-			<column name="componentTypeNameShort" value="1005"/>
-			<column name="componentTypeName" value="Whole Blood Poor Platelets - CPDA"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="35"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="1"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="id" value="8"/>
-			<column name="componentTypeNameShort" value="2001"/>
-			<column name="componentTypeName" value="Packed Red Cells - CPDA"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="35"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="1"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="id" value="9"/>
-			<column name="componentTypeNameShort" value="2011"/>
-			<column name="componentTypeName" value="Packed Red Cells - SAGM"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="42"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="1"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="id" value="10"/>
-			<column name="componentTypeNameShort" value="3001"/>
-			<column name="componentTypeName" value="Fresh Frozen Plasma - Whole Blood"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="365"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="1"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="id" value="11"/>
-			<column name="componentTypeNameShort" value="3002"/>
-			<column name="componentTypeName" value="Frozen Plasma - Whole Blood"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="365"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="1"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="id" value="12"/>
-			<column name="componentTypeNameShort" value="4001"/>
-			<column name="componentTypeName" value="Platelets Concentrate - Whole Blood"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="5"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="1"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="id" value="13"/>
-			<column name="componentTypeNameShort" value="4011"/>
-			<column name="componentTypeName" value="Platelets Concentrate - Whole Blood - 24H"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="1"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="1"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="id" value="14"/>
-			<column name="componentTypeNameShort" value="2101"/>
-			<column name="componentTypeName" value="Packed Red Cells - Paediatric - CPDA"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="35"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="1"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="id" value="15"/>
-			<column name="componentTypeNameShort" value="3011"/>
-			<column name="componentTypeName" value="Fresh Frozen Plasma - Apheresis"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="365"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="1"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="id" value="16"/>
-			<column name="componentTypeNameShort" value="4021"/>
-			<column name="componentTypeName" value="Platelets Concentrate - Apheresis"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="5"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="1"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-	</changeSet>
-	
-	<!-- Updated (timler): for #294 (refactoring) -->
-	<!-- Updated (timler): for #328 (refactoring) -->
-	<changeSet id="20150818-1244" author="danfuterman">
-	    <preConditions onFail="MARK_RAN">
-		    <sqlCheck expectedResult="0"> 
-				<![CDATA[
+            </sqlCheck>
+        </preConditions>
+        <comment>Add component types</comment>
+        <insert tableName="ComponentType">
+            <column name="id" value="1"/>
+            <column name="componentTypeNameShort" value="0011"/>
+            <column name="componentTypeName" value="Whole Blood Single Pack - CPDA"/>
+            <column name="description" value=""/>
+            <column name="expiresAfter" value="35"/>
+            <column name="expiresAfterUnits" value="DAYS"/>
+            <column name="hasBloodGroup" value="1"/>
+            <column name="pediComponentType_id" value="NULL"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentType">
+            <column name="id" value="2"/>
+            <column name="componentTypeNameShort" value="0012"/>
+            <column name="componentTypeName" value="Whole Blood Double Pack - CPDA"/>
+            <column name="description" value=""/>
+            <column name="expiresAfter" value="35"/>
+            <column name="expiresAfterUnits" value="DAYS"/>
+            <column name="hasBloodGroup" value="1"/>
+            <column name="pediComponentType_id" value="NULL"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentType">
+            <column name="id" value="3"/>
+            <column name="componentTypeNameShort" value="0013"/>
+            <column name="componentTypeName" value="Whole Blood Triple Pack - CPDA"/>
+            <column name="description" value=""/>
+            <column name="expiresAfter" value="35"/>
+            <column name="expiresAfterUnits" value="DAYS"/>
+            <column name="hasBloodGroup" value="1"/>
+            <column name="pediComponentType_id" value="NULL"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentType">
+            <column name="id" value="4"/>
+            <column name="componentTypeNameShort" value="0014"/>
+            <column name="componentTypeName" value="Whole Blood Quad Pack - CPDA"/>
+            <column name="description" value=""/>
+            <column name="expiresAfter" value="35"/>
+            <column name="expiresAfterUnits" value="DAYS"/>
+            <column name="hasBloodGroup" value="1"/>
+            <column name="pediComponentType_id" value="NULL"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentType">
+            <column name="id" value="5"/>
+            <column name="componentTypeNameShort" value="0021"/>
+            <column name="componentTypeName" value="Apheresis"/>
+            <column name="description" value=""/>
+            <column name="expiresAfter" value="5"/>
+            <column name="expiresAfterUnits" value="DAYS"/>
+            <column name="hasBloodGroup" value="1"/>
+            <column name="pediComponentType_id" value="NULL"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentType">
+            <column name="id" value="6"/>
+            <column name="componentTypeNameShort" value="1001"/>
+            <column name="componentTypeName" value="Whole Blood - CPDA"/>
+            <column name="description" value=""/>
+            <column name="expiresAfter" value="35"/>
+            <column name="expiresAfterUnits" value="DAYS"/>
+            <column name="hasBloodGroup" value="1"/>
+            <column name="pediComponentType_id" value="NULL"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentType">
+            <column name="id" value="7"/>
+            <column name="componentTypeNameShort" value="1005"/>
+            <column name="componentTypeName" value="Whole Blood Poor Platelets - CPDA"/>
+            <column name="description" value=""/>
+            <column name="expiresAfter" value="35"/>
+            <column name="expiresAfterUnits" value="DAYS"/>
+            <column name="hasBloodGroup" value="1"/>
+            <column name="pediComponentType_id" value="NULL"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentType">
+            <column name="id" value="8"/>
+            <column name="componentTypeNameShort" value="2001"/>
+            <column name="componentTypeName" value="Packed Red Cells - CPDA"/>
+            <column name="description" value=""/>
+            <column name="expiresAfter" value="35"/>
+            <column name="expiresAfterUnits" value="DAYS"/>
+            <column name="hasBloodGroup" value="1"/>
+            <column name="pediComponentType_id" value="NULL"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentType">
+            <column name="id" value="9"/>
+            <column name="componentTypeNameShort" value="2011"/>
+            <column name="componentTypeName" value="Packed Red Cells - SAGM"/>
+            <column name="description" value=""/>
+            <column name="expiresAfter" value="42"/>
+            <column name="expiresAfterUnits" value="DAYS"/>
+            <column name="hasBloodGroup" value="1"/>
+            <column name="pediComponentType_id" value="NULL"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentType">
+            <column name="id" value="10"/>
+            <column name="componentTypeNameShort" value="3001"/>
+            <column name="componentTypeName" value="Fresh Frozen Plasma - Whole Blood"/>
+            <column name="description" value=""/>
+            <column name="expiresAfter" value="365"/>
+            <column name="expiresAfterUnits" value="DAYS"/>
+            <column name="hasBloodGroup" value="1"/>
+            <column name="pediComponentType_id" value="NULL"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentType">
+            <column name="id" value="11"/>
+            <column name="componentTypeNameShort" value="3002"/>
+            <column name="componentTypeName" value="Frozen Plasma - Whole Blood"/>
+            <column name="description" value=""/>
+            <column name="expiresAfter" value="365"/>
+            <column name="expiresAfterUnits" value="DAYS"/>
+            <column name="hasBloodGroup" value="1"/>
+            <column name="pediComponentType_id" value="NULL"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentType">
+            <column name="id" value="12"/>
+            <column name="componentTypeNameShort" value="4001"/>
+            <column name="componentTypeName" value="Platelets Concentrate - Whole Blood"/>
+            <column name="description" value=""/>
+            <column name="expiresAfter" value="5"/>
+            <column name="expiresAfterUnits" value="DAYS"/>
+            <column name="hasBloodGroup" value="1"/>
+            <column name="pediComponentType_id" value="NULL"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentType">
+            <column name="id" value="13"/>
+            <column name="componentTypeNameShort" value="4011"/>
+            <column name="componentTypeName" value="Platelets Concentrate - Whole Blood - 24H"/>
+            <column name="description" value=""/>
+            <column name="expiresAfter" value="1"/>
+            <column name="expiresAfterUnits" value="DAYS"/>
+            <column name="hasBloodGroup" value="1"/>
+            <column name="pediComponentType_id" value="NULL"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentType">
+            <column name="id" value="14"/>
+            <column name="componentTypeNameShort" value="2101"/>
+            <column name="componentTypeName" value="Packed Red Cells - Paediatric - CPDA"/>
+            <column name="description" value=""/>
+            <column name="expiresAfter" value="35"/>
+            <column name="expiresAfterUnits" value="DAYS"/>
+            <column name="hasBloodGroup" value="1"/>
+            <column name="pediComponentType_id" value="NULL"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentType">
+            <column name="id" value="15"/>
+            <column name="componentTypeNameShort" value="3011"/>
+            <column name="componentTypeName" value="Fresh Frozen Plasma - Apheresis"/>
+            <column name="description" value=""/>
+            <column name="expiresAfter" value="365"/>
+            <column name="expiresAfterUnits" value="DAYS"/>
+            <column name="hasBloodGroup" value="1"/>
+            <column name="pediComponentType_id" value="NULL"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentType">
+            <column name="id" value="16"/>
+            <column name="componentTypeNameShort" value="4021"/>
+            <column name="componentTypeName" value="Platelets Concentrate - Apheresis"/>
+            <column name="description" value=""/>
+            <column name="expiresAfter" value="5"/>
+            <column name="expiresAfterUnits" value="DAYS"/>
+            <column name="hasBloodGroup" value="1"/>
+            <column name="pediComponentType_id" value="NULL"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+    </changeSet>
+
+    <!-- Updated (timler): for #294 (refactoring) -->
+    <!-- Updated (timler): for #328 (refactoring) -->
+    <changeSet id="20150818-1244" author="danfuterman">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                <![CDATA[
 				SELECT count(*) FROM PackType WHERE packType = "Single";
 				]]>
-			</sqlCheck>
- 		</preConditions>
-		<comment>add pack types</comment>
-		<insert tableName = "PackType">
-			<column name="packType" value="Single"/>
-			<column name="isDeleted" value="0"/>
-			<column name="componentType_id" value="1"/>
-			<column name="countAsDonation" value="1"/>
-			<column name="periodBetweenDonations" value="90"/>
-		</insert>
-		<insert tableName = "PackType">
-			<column name="packType" value="Double"/>
-			<column name="isDeleted" value="0"/>
-			<column name="componentType_id" value="2"/>
-			<column name="countAsDonation" value="1"/>
-			<column name="periodBetweenDonations" value="90"/>
-		</insert>
-		<insert tableName = "PackType">
-			<column name="packType" value="Triple"/>
-			<column name="isDeleted" value="0"/>
-			<column name="componentType_id" value="3"/>
-			<column name="countAsDonation" value="1"/>
-			<column name="periodBetweenDonations" value="90"/>
-		</insert>
-		<insert tableName = "PackType">
-			<column name="packType" value="Quad"/>
-			<column name="isDeleted" value="0"/>
-			<column name="componentType_id" value="4"/>
-			<column name="countAsDonation" value="1"/>
-			<column name="periodBetweenDonations" value="90"/>
-		</insert>
-		<insert tableName = "PackType">
-			<column name="packType" value="Apheresis"/>
-			<column name="isDeleted" value="0"/>
-			<column name="componentType_id" value="5"/>
-			<column name="countAsDonation" value="1"/>
-			<column name="periodBetweenDonations" value="30"/>
-		</insert>
-		<insert tableName = "PackType">
-			<column name="packType" value="Dry Pack"/>
-			<column name="isDeleted" value="0"/>
-			<column name="componentType_id" value="NULL"/>
-			<column name="countAsDonation" value="0"/>
-			<column name="periodBetweenDonations" value="0"/>
-		</insert>
-		<insert tableName = "PackType">
-			<column name="packType" value="Test Only"/>
-			<column name="isDeleted" value="0"/>
-			<column name="componentType_id" value="NULL"/>
-			<column name="countAsDonation" value="0"/>
-			<column name="periodBetweenDonations" value="0"/>
-		</insert>
-		<insert tableName = "PackType">
-			<column name="packType" value="Did Not Bleed"/>
-			<column name="isDeleted" value="0"/>
-			<column name="componentType_id" value="NULL"/>
-			<column name="countAsDonation" value="0"/>
-			<column name="periodBetweenDonations" value="0"/>
-		</insert>
-	</changeSet>
+            </sqlCheck>
+        </preConditions>
+        <comment>add pack types</comment>
+        <insert tableName="PackType">
+            <column name="packType" value="Single"/>
+            <column name="isDeleted" value="0"/>
+            <column name="componentType_id" value="1"/>
+            <column name="countAsDonation" value="1"/>
+            <column name="periodBetweenDonations" value="90"/>
+        </insert>
+        <insert tableName="PackType">
+            <column name="packType" value="Double"/>
+            <column name="isDeleted" value="0"/>
+            <column name="componentType_id" value="2"/>
+            <column name="countAsDonation" value="1"/>
+            <column name="periodBetweenDonations" value="90"/>
+        </insert>
+        <insert tableName="PackType">
+            <column name="packType" value="Triple"/>
+            <column name="isDeleted" value="0"/>
+            <column name="componentType_id" value="3"/>
+            <column name="countAsDonation" value="1"/>
+            <column name="periodBetweenDonations" value="90"/>
+        </insert>
+        <insert tableName="PackType">
+            <column name="packType" value="Quad"/>
+            <column name="isDeleted" value="0"/>
+            <column name="componentType_id" value="4"/>
+            <column name="countAsDonation" value="1"/>
+            <column name="periodBetweenDonations" value="90"/>
+        </insert>
+        <insert tableName="PackType">
+            <column name="packType" value="Apheresis"/>
+            <column name="isDeleted" value="0"/>
+            <column name="componentType_id" value="5"/>
+            <column name="countAsDonation" value="1"/>
+            <column name="periodBetweenDonations" value="30"/>
+        </insert>
+        <insert tableName="PackType">
+            <column name="packType" value="Dry Pack"/>
+            <column name="isDeleted" value="0"/>
+            <column name="componentType_id" value="NULL"/>
+            <column name="countAsDonation" value="0"/>
+            <column name="periodBetweenDonations" value="0"/>
+        </insert>
+        <insert tableName="PackType">
+            <column name="packType" value="Test Only"/>
+            <column name="isDeleted" value="0"/>
+            <column name="componentType_id" value="NULL"/>
+            <column name="countAsDonation" value="0"/>
+            <column name="periodBetweenDonations" value="0"/>
+        </insert>
+        <insert tableName="PackType">
+            <column name="packType" value="Did Not Bleed"/>
+            <column name="isDeleted" value="0"/>
+            <column name="componentType_id" value="NULL"/>
+            <column name="countAsDonation" value="0"/>
+            <column name="periodBetweenDonations" value="0"/>
+        </insert>
+    </changeSet>
 
-	<!-- Updated (timler): for #294 (refactoring) -->
-	<changeSet id="20150817-1552" author="danfuterman">
-	    <preConditions onFail="MARK_RAN">
-		    <sqlCheck expectedResult="0"> 
-				<![CDATA[
+    <!-- Updated (timler): for #294 (refactoring) -->
+    <changeSet id="20150817-1552" author="danfuterman">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                <![CDATA[
 				SELECT count(*) FROM ComponentTypeCombination WHERE id = 1;
 				]]>
-			</sqlCheck>
- 		</preConditions>
-		<comment>Add component type combinations</comment>
-		<insert tableName = "ComponentTypeCombination">
-			<column name="id" value="1"/>
-			<column name="combinationName" value="Whole Blood"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination">
-			<column name="id" value="2"/>
-			<column name="combinationName" value="PRC-CPDA, FFP"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination">
-			<column name="id" value="3"/>
-			<column name="combinationName" value="PRC-CPDA, FP"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination">
-			<column name="id" value="4"/>
-			<column name="combinationName" value="WB Poor Platelets, PC-24H"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination">
-			<column name="id" value="5"/>
-			<column name="combinationName" value="PRC-SAGM, FFP, PC"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination">
-			<column name="id" value="6"/>
-			<column name="combinationName" value="PRC-SAGM, FFP"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination">
-			<column name="id" value="7"/>
-			<column name="combinationName" value="PRC-SAGM, FP"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination">
-			<column name="id" value="8"/>
-			<column name="combinationName" value="3 X PRC-Paed-CPDA, FFP"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination">
-			<column name="id" value="9"/>
-			<column name="combinationName" value="FFP-Apheresis, PC-Apheresis"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination">
-			<column name="id" value="10"/>
-			<column name="combinationName" value="FFP Apheresis, 2 X PC-Apheresis"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-	</changeSet>
+            </sqlCheck>
+        </preConditions>
+        <comment>Add component type combinations</comment>
+        <insert tableName="ComponentTypeCombination">
+            <column name="id" value="1"/>
+            <column name="combinationName" value="Whole Blood"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination">
+            <column name="id" value="2"/>
+            <column name="combinationName" value="PRC-CPDA, FFP"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination">
+            <column name="id" value="3"/>
+            <column name="combinationName" value="PRC-CPDA, FP"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination">
+            <column name="id" value="4"/>
+            <column name="combinationName" value="WB Poor Platelets, PC-24H"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination">
+            <column name="id" value="5"/>
+            <column name="combinationName" value="PRC-SAGM, FFP, PC"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination">
+            <column name="id" value="6"/>
+            <column name="combinationName" value="PRC-SAGM, FFP"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination">
+            <column name="id" value="7"/>
+            <column name="combinationName" value="PRC-SAGM, FP"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination">
+            <column name="id" value="8"/>
+            <column name="combinationName" value="3 X PRC-Paed-CPDA, FFP"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination">
+            <column name="id" value="9"/>
+            <column name="combinationName" value="FFP-Apheresis, PC-Apheresis"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination">
+            <column name="id" value="10"/>
+            <column name="combinationName" value="FFP Apheresis, 2 X PC-Apheresis"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+    </changeSet>
 
-	<!-- Updated (timler): for #294 (refactoring) -->
-	<changeSet id="20150817-1135" author="danfuterman">
-	    <preConditions onFail="MARK_RAN">
-		    <sqlCheck expectedResult="0"> 
-				<![CDATA[
+    <!-- Updated (timler): for #294 (refactoring) -->
+    <changeSet id="20150817-1135" author="danfuterman">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                <![CDATA[
 				SELECT count(*) FROM ComponentTypeCombination_ComponentType 
 				where componentTypeCombinations_id = 1 and componentTypes_id = 6;
 				]]>
-			</sqlCheck>
- 		</preConditions>
-		<comment>Add component type combination mappings</comment>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="1"/>
-			<column name="componentTypes_id" value="6"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="2"/>
-			<column name="componentTypes_id" value="8"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="2"/>
-			<column name="componentTypes_id" value="10"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="3"/>
-			<column name="componentTypes_id" value="8"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="3"/>
-			<column name="componentTypes_id" value="11"/>
-		</insert>
-			<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="4"/>
-			<column name="componentTypes_id" value="7"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="4"/>
-			<column name="componentTypes_id" value="13"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="5"/>
-			<column name="componentTypes_id" value="9"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="5"/>
-			<column name="componentTypes_id" value="10"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="5"/>
-			<column name="componentTypes_id" value="12"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="6"/>
-			<column name="componentTypes_id" value="9"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="6"/>
-			<column name="componentTypes_id" value="10"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="7"/>
-			<column name="componentTypes_id" value="9"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="7"/>
-			<column name="componentTypes_id" value="11"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="8"/>
-			<column name="componentTypes_id" value="14"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="8"/>
-			<column name="componentTypes_id" value="14"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="8"/>
-			<column name="componentTypes_id" value="14"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="8"/>
-			<column name="componentTypes_id" value="10"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="9"/>
-			<column name="componentTypes_id" value="15"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="9"/>
-			<column name="componentTypes_id" value="16"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="10"/>
-			<column name="componentTypes_id" value="15"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="10"/>
-			<column name="componentTypes_id" value="16"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="10"/>
-			<column name="componentTypes_id" value="16"/>
-		</insert>
-	</changeSet>
-	
-	<!-- Updated (timler): for #294 (refactoring) -->
-	<changeSet id="20150817-1140" author="danfuterman">	
-	    <preConditions onFail="MARK_RAN">
-		    <sqlCheck expectedResult="0"> 
-				<![CDATA[
+            </sqlCheck>
+        </preConditions>
+        <comment>Add component type combination mappings</comment>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="1"/>
+            <column name="componentTypes_id" value="6"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="2"/>
+            <column name="componentTypes_id" value="8"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="2"/>
+            <column name="componentTypes_id" value="10"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="3"/>
+            <column name="componentTypes_id" value="8"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="3"/>
+            <column name="componentTypes_id" value="11"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="4"/>
+            <column name="componentTypes_id" value="7"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="4"/>
+            <column name="componentTypes_id" value="13"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="5"/>
+            <column name="componentTypes_id" value="9"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="5"/>
+            <column name="componentTypes_id" value="10"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="5"/>
+            <column name="componentTypes_id" value="12"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="6"/>
+            <column name="componentTypes_id" value="9"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="6"/>
+            <column name="componentTypes_id" value="10"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="7"/>
+            <column name="componentTypes_id" value="9"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="7"/>
+            <column name="componentTypes_id" value="11"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="8"/>
+            <column name="componentTypes_id" value="14"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="8"/>
+            <column name="componentTypes_id" value="14"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="8"/>
+            <column name="componentTypes_id" value="14"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="8"/>
+            <column name="componentTypes_id" value="10"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="9"/>
+            <column name="componentTypes_id" value="15"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="9"/>
+            <column name="componentTypes_id" value="16"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="10"/>
+            <column name="componentTypes_id" value="15"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="10"/>
+            <column name="componentTypes_id" value="16"/>
+        </insert>
+        <insert tableName="ComponentTypeCombination_ComponentType">
+            <column name="componentTypeCombinations_id" value="10"/>
+            <column name="componentTypes_id" value="16"/>
+        </insert>
+    </changeSet>
+
+    <!-- Updated (timler): for #294 (refactoring) -->
+    <changeSet id="20150817-1140" author="danfuterman">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                <![CDATA[
 				SELECT count(*) FROM ComponentType_ComponentTypeCombination 
 				where sourceComponentTypes_id = 1 and producedComponentTypeCombinations_id = 1;
 				]]>
-			</sqlCheck>
- 		</preConditions>
-		<comment>Add component type combination rules</comment>
-		<insert tableName = "ComponentType_ComponentTypeCombination">
-			<column name="sourceComponentTypes_id" value="1"/>
-			<column name="producedComponentTypeCombinations_id" value="1"/>
-		</insert>
-		<insert tableName = "ComponentType_ComponentTypeCombination">
-			<column name="sourceComponentTypes_id" value="2"/>
-			<column name="producedComponentTypeCombinations_id" value="2"/>
-		</insert>
-		<insert tableName = "ComponentType_ComponentTypeCombination">
-			<column name="sourceComponentTypes_id" value="2"/>
-			<column name="producedComponentTypeCombinations_id" value="3"/>
-		</insert>
-		<insert tableName = "ComponentType_ComponentTypeCombination">
-			<column name="sourceComponentTypes_id" value="2"/>
-			<column name="producedComponentTypeCombinations_id" value="4"/>
-		</insert>
-		<insert tableName = "ComponentType_ComponentTypeCombination">
-			<column name="sourceComponentTypes_id" value="3"/>
-			<column name="producedComponentTypeCombinations_id" value="5"/>
-		</insert>
-		<insert tableName = "ComponentType_ComponentTypeCombination">
-			<column name="sourceComponentTypes_id" value="3"/>
-			<column name="producedComponentTypeCombinations_id" value="6"/>
-		</insert>
-		<insert tableName = "ComponentType_ComponentTypeCombination">
-			<column name="sourceComponentTypes_id" value="3"/>
-			<column name="producedComponentTypeCombinations_id" value="7"/>
-		</insert>
-		<insert tableName = "ComponentType_ComponentTypeCombination">
-			<column name="sourceComponentTypes_id" value="4"/>
-			<column name="producedComponentTypeCombinations_id" value="8"/>
-		</insert>
-		<insert tableName = "ComponentType_ComponentTypeCombination">
-			<column name="sourceComponentTypes_id" value="5"/>
-			<column name="producedComponentTypeCombinations_id" value="9"/>
-		</insert>
-		<insert tableName = "ComponentType_ComponentTypeCombination">
-			<column name="sourceComponentTypes_id" value="5"/>
-			<column name="producedComponentTypeCombinations_id" value="10"/>
-		</insert>
-	</changeSet>
-	
-	<!-- NOT USED FOR BETA-RELEASE
-	<changeSet id="20141117-0931" author="srikanthmalyala">
-		<comment>Add paediatric component type associations</comment>
-		<update tableName="ComponentType">
-			<column name="pediComponentType_id" value = "5"/>
-			<where>id = "1"</where>
-		</update>
-		<update tableName="ComponentType">
-			<column name="pediComponentType_id" value = "6"/>
-			<where>id = "2"</where>
-		</update>
-		<update tableName="ComponentType">
-			<column name="pediComponentType_id" value = "7"/>
-			<where>id = "3"</where>
-		</update>
-		<update tableName="ComponentType">
-			<column name="pediComponentType_id" value = "8"/>
-			<where>id = "4"</where>
-		</update>
-	</changeSet>
-	
-	 -->
+            </sqlCheck>
+        </preConditions>
+        <comment>Add component type combination rules</comment>
+        <insert tableName="ComponentType_ComponentTypeCombination">
+            <column name="sourceComponentTypes_id" value="1"/>
+            <column name="producedComponentTypeCombinations_id" value="1"/>
+        </insert>
+        <insert tableName="ComponentType_ComponentTypeCombination">
+            <column name="sourceComponentTypes_id" value="2"/>
+            <column name="producedComponentTypeCombinations_id" value="2"/>
+        </insert>
+        <insert tableName="ComponentType_ComponentTypeCombination">
+            <column name="sourceComponentTypes_id" value="2"/>
+            <column name="producedComponentTypeCombinations_id" value="3"/>
+        </insert>
+        <insert tableName="ComponentType_ComponentTypeCombination">
+            <column name="sourceComponentTypes_id" value="2"/>
+            <column name="producedComponentTypeCombinations_id" value="4"/>
+        </insert>
+        <insert tableName="ComponentType_ComponentTypeCombination">
+            <column name="sourceComponentTypes_id" value="3"/>
+            <column name="producedComponentTypeCombinations_id" value="5"/>
+        </insert>
+        <insert tableName="ComponentType_ComponentTypeCombination">
+            <column name="sourceComponentTypes_id" value="3"/>
+            <column name="producedComponentTypeCombinations_id" value="6"/>
+        </insert>
+        <insert tableName="ComponentType_ComponentTypeCombination">
+            <column name="sourceComponentTypes_id" value="3"/>
+            <column name="producedComponentTypeCombinations_id" value="7"/>
+        </insert>
+        <insert tableName="ComponentType_ComponentTypeCombination">
+            <column name="sourceComponentTypes_id" value="4"/>
+            <column name="producedComponentTypeCombinations_id" value="8"/>
+        </insert>
+        <insert tableName="ComponentType_ComponentTypeCombination">
+            <column name="sourceComponentTypes_id" value="5"/>
+            <column name="producedComponentTypeCombinations_id" value="9"/>
+        </insert>
+        <insert tableName="ComponentType_ComponentTypeCombination">
+            <column name="sourceComponentTypes_id" value="5"/>
+            <column name="producedComponentTypeCombinations_id" value="10"/>
+        </insert>
+    </changeSet>
 
-	<changeSet id="20150114-1146" author="danfuterman">
-		<comment>Add locations</comment>
-		<insert tableName = "Location">
-			<column name="name" value="Maseru"/>
-			<column name="isMobileSite" value="0"/>
-			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
-			<column name="isDeleted" value="0"/>
-			<column name="notes" value=""/>
-		</insert>
-		<insert tableName = "Location">
-			<column name="name" value="Leribe"/>
-			<column name="isMobileSite" value="0"/>
-			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
-			<column name="isDeleted" value="0"/>
-			<column name="notes" value=""/>
-		</insert>
-		<insert tableName = "Location">
-			<column name="name" value="Mohale's Hoek"/>
-			<column name="isMobileSite" value="0"/>
-			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
-			<column name="isDeleted" value="0"/>
-			<column name="notes" value=""/>
-		</insert>
-	</changeSet>
+    <!-- NOT USED FOR BETA-RELEASE
+    <changeSet id="20141117-0931" author="srikanthmalyala">
+        <comment>Add paediatric component type associations</comment>
+        <update tableName="ComponentType">
+            <column name="pediComponentType_id" value = "5"/>
+            <where>id = "1"</where>
+        </update>
+        <update tableName="ComponentType">
+            <column name="pediComponentType_id" value = "6"/>
+            <where>id = "2"</where>
+        </update>
+        <update tableName="ComponentType">
+            <column name="pediComponentType_id" value = "7"/>
+            <where>id = "3"</where>
+        </update>
+        <update tableName="ComponentType">
+            <column name="pediComponentType_id" value = "8"/>
+            <where>id = "4"</where>
+        </update>
+    </changeSet>
 
-	<changeSet id="20141117-0945" author="srikanthmalyala">
-		<comment>Add contact method types</comment>
-		<insert tableName = "ContactMethodType">
-			<column name="contactMethodType" value="None"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ContactMethodType">
-			<column name="contactMethodType" value="Phone"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ContactMethodType">
-			<column name="contactMethodType" value="SMS"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ContactMethodType">
-			<column name="contactMethodType" value="Email"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ContactMethodType">
-			<column name="contactMethodType" value="Mail"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ContactMethodType">
-			<column name="contactMethodType" value="Do not contact"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-	</changeSet>
-	
-	<changeSet id="20131024-1527" author="gtlnikita">
-		<comment>Add deferral reasons</comment>
-		<insert tableName="DeferralReason">
-			<column name="reason" value="High risk behaviour"/>
-			<column name="isDeleted" value="0"/>
-			<column name="type" value="NORMAL" />
-			<column name="durationType" value="TEMPORARY" />
-		</insert>
-		<insert tableName="DeferralReason">
-			<column name="reason" value="Low weight"/>
-			<column name="isDeleted" value="0"/>
-			<column name="type" value="NORMAL" />
-			<column name="durationType" value="TEMPORARY" />
-		</insert>
-		<insert tableName="DeferralReason">
-			<column name="reason" value="Low haemoglobin"/>
-			<column name="isDeleted" value="0"/>
-			<column name="type" value="NORMAL" />
-			<column name="durationType" value="TEMPORARY" />
-		</insert>
-		<insert tableName="DeferralReason">
-			<column name="reason" value="Other reasons"/>
-			<column name="isDeleted" value="0"/>
-			<column name="type" value="NORMAL" />
-			<column name="durationType" value="TEMPORARY" />
-		</insert>
-		<insert tableName="DeferralReason">
-			<column name="reason" value="Other medical conditions"/>
-			<column name="isDeleted" value="0"/>
-			<column name="type" value="NORMAL" />
-			<column name="durationType" value="TEMPORARY" />
-		</insert>
-		<insert tableName="DeferralReason">
-			<column name="reason" value="Travel history"/>
-			<column name="isDeleted" value="0"/>
-			<column name="type" value="NORMAL" />
-			<column name="durationType" value="TEMPORARY" />
-		</insert>
-	</changeSet>
-	
-	<!-- Updated (timler): for #294 (refactoring) -->
-	<changeSet id="20140818-0410" author="gtlnikita">
-	    <preConditions onFail="MARK_RAN">
-		    <sqlCheck expectedResult="0"> 
-				<![CDATA[
+     -->
+
+    <changeSet id="20150114-1146" author="danfuterman">
+        <comment>Add locations</comment>
+        <insert tableName="Location">
+            <column name="name" value="Maseru"/>
+            <column name="isMobileSite" value="0"/>
+            <column name="isUsageSite" value="0"/>
+            <column name="isDonorPanel" value="1"/>
+            <column name="isDeleted" value="0"/>
+            <column name="notes" value=""/>
+        </insert>
+        <insert tableName="Location">
+            <column name="name" value="Leribe"/>
+            <column name="isMobileSite" value="0"/>
+            <column name="isUsageSite" value="0"/>
+            <column name="isDonorPanel" value="1"/>
+            <column name="isDeleted" value="0"/>
+            <column name="notes" value=""/>
+        </insert>
+        <insert tableName="Location">
+            <column name="name" value="Mohale's Hoek"/>
+            <column name="isMobileSite" value="0"/>
+            <column name="isUsageSite" value="0"/>
+            <column name="isDonorPanel" value="1"/>
+            <column name="isDeleted" value="0"/>
+            <column name="notes" value=""/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20141117-0945" author="srikanthmalyala">
+        <comment>Add contact method types</comment>
+        <insert tableName="ContactMethodType">
+            <column name="contactMethodType" value="None"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ContactMethodType">
+            <column name="contactMethodType" value="Phone"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ContactMethodType">
+            <column name="contactMethodType" value="SMS"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ContactMethodType">
+            <column name="contactMethodType" value="Email"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ContactMethodType">
+            <column name="contactMethodType" value="Mail"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ContactMethodType">
+            <column name="contactMethodType" value="Do not contact"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20131024-1527" author="gtlnikita">
+        <comment>Add deferral reasons</comment>
+        <insert tableName="DeferralReason">
+            <column name="reason" value="High risk behaviour"/>
+            <column name="isDeleted" value="0"/>
+            <column name="type" value="NORMAL"/>
+            <column name="durationType" value="TEMPORARY"/>
+        </insert>
+        <insert tableName="DeferralReason">
+            <column name="reason" value="Low weight"/>
+            <column name="isDeleted" value="0"/>
+            <column name="type" value="NORMAL"/>
+            <column name="durationType" value="TEMPORARY"/>
+        </insert>
+        <insert tableName="DeferralReason">
+            <column name="reason" value="Low haemoglobin"/>
+            <column name="isDeleted" value="0"/>
+            <column name="type" value="NORMAL"/>
+            <column name="durationType" value="TEMPORARY"/>
+        </insert>
+        <insert tableName="DeferralReason">
+            <column name="reason" value="Other reasons"/>
+            <column name="isDeleted" value="0"/>
+            <column name="type" value="NORMAL"/>
+            <column name="durationType" value="TEMPORARY"/>
+        </insert>
+        <insert tableName="DeferralReason">
+            <column name="reason" value="Other medical conditions"/>
+            <column name="isDeleted" value="0"/>
+            <column name="type" value="NORMAL"/>
+            <column name="durationType" value="TEMPORARY"/>
+        </insert>
+        <insert tableName="DeferralReason">
+            <column name="reason" value="Travel history"/>
+            <column name="isDeleted" value="0"/>
+            <column name="type" value="NORMAL"/>
+            <column name="durationType" value="TEMPORARY"/>
+        </insert>
+    </changeSet>
+
+    <!-- Updated (timler): for #294 (refactoring) -->
+    <changeSet id="20140818-0410" author="gtlnikita">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                <![CDATA[
 				SELECT count(*) FROM ComponentStatusChangeReason WHERE statusChangeReason = "Incomplete Donation";
 				]]>
-			</sqlCheck>
- 		</preConditions>
-		<comment>Add component discard reasons</comment>
-		<insert tableName="ComponentStatusChangeReason">
-			<column name="statusChangeReason" value="Incomplete Donation"/>
-			<column name="category" value="DISCARDED"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName="ComponentStatusChangeReason">
-			<column name="statusChangeReason" value="Processing Problems"/>
-			<column name="category" value="DISCARDED"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName="ComponentStatusChangeReason">
-			<column name="statusChangeReason" value="Passed Expiry Dates"/>
-			<column name="category" value="DISCARDED"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName="ComponentStatusChangeReason">
-			<column name="statusChangeReason" value="Reactive FOR TTIs"/>
-			<column name="category" value="DISCARDED"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName="ComponentStatusChangeReason">
-			<column name="statusChangeReason" value="Storage Problems"/>
-			<column name="category" value="DISCARDED"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName="ComponentStatusChangeReason">
-			<column name="statusChangeReason" value="Transport Problems"/>
-			<column name="category" value="DISCARDED"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-	</changeSet>
+            </sqlCheck>
+        </preConditions>
+        <comment>Add component discard reasons</comment>
+        <insert tableName="ComponentStatusChangeReason">
+            <column name="statusChangeReason" value="Incomplete Donation"/>
+            <column name="category" value="DISCARDED"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentStatusChangeReason">
+            <column name="statusChangeReason" value="Processing Problems"/>
+            <column name="category" value="DISCARDED"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentStatusChangeReason">
+            <column name="statusChangeReason" value="Passed Expiry Dates"/>
+            <column name="category" value="DISCARDED"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentStatusChangeReason">
+            <column name="statusChangeReason" value="Reactive FOR TTIs"/>
+            <column name="category" value="DISCARDED"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentStatusChangeReason">
+            <column name="statusChangeReason" value="Storage Problems"/>
+            <column name="category" value="DISCARDED"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentStatusChangeReason">
+            <column name="statusChangeReason" value="Transport Problems"/>
+            <column name="category" value="DISCARDED"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+    </changeSet>
 
-	<!-- Updated (timler): for #294 (refactoring) -->
-	<changeSet id="20150818-0411" author="danfuterman">
-	    <preConditions onFail="MARK_RAN">
-		    <sqlCheck expectedResult="0"> 
-				<![CDATA[
+    <!-- Updated (timler): for #294 (refactoring) -->
+    <changeSet id="20150818-0411" author="danfuterman">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                <![CDATA[
 				SELECT count(*) FROM ComponentStatusChangeReason WHERE statusChangeReason = "Expired";
 				]]>
-			</sqlCheck>
- 		</preConditions>
-		<comment>Add component return and split reasons</comment>
-		<insert tableName="ComponentStatusChangeReason">
-			<column name="statusChangeReason" value="Expired"/>
-			<column name="category" value="RETURNED"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName="ComponentStatusChangeReason">
-			<column name="statusChangeReason" value="Not required"/>
-			<column name="category" value="RETURNED"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName="ComponentStatusChangeReason">
-			<column name="statusChangeReason" value="Incorrect Component Sent"/>
-			<column name="category" value="RETURNED"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName="ComponentStatusChangeReason">
-			<column name="statusChangeReason" value="Did not crossmatch with patient sample"/>
-			<column name="category" value="RETURNED"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName="ComponentStatusChangeReason">
-			<column name="statusChangeReason" value="Split"/>
-			<column name="category" value="SPLIT"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-	</changeSet>
+            </sqlCheck>
+        </preConditions>
+        <comment>Add component return and split reasons</comment>
+        <insert tableName="ComponentStatusChangeReason">
+            <column name="statusChangeReason" value="Expired"/>
+            <column name="category" value="RETURNED"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentStatusChangeReason">
+            <column name="statusChangeReason" value="Not required"/>
+            <column name="category" value="RETURNED"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentStatusChangeReason">
+            <column name="statusChangeReason" value="Incorrect Component Sent"/>
+            <column name="category" value="RETURNED"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentStatusChangeReason">
+            <column name="statusChangeReason" value="Did not crossmatch with patient sample"/>
+            <column name="category" value="RETURNED"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+        <insert tableName="ComponentStatusChangeReason">
+            <column name="statusChangeReason" value="Split"/>
+            <column name="category" value="SPLIT"/>
+            <column name="isDeleted" value="0"/>
+        </insert>
+    </changeSet>
 
-	<changeSet id="20141117-1054" author="srikanthmalyala">
-		<comment>Add preferred languages</comment>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="1"></column>
-			 <column name="preferredLanguage" value="English"></column>
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="2"></column>
-			 <column name="preferredLanguage" value="French"></column> 
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="3"></column>
-			  <column name="preferredLanguage" value="Portuguese"></column>
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="4"></column>
-			 <column name="preferredLanguage" value="Spanish"></column>
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="5"></column>
-			 <column name="preferredLanguage" value="Arabic"></column>
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="6"></column>
-			 <column name="preferredLanguage" value="Berber"></column>
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="7"></column>
-			 <column name="preferredLanguage" value="Amharic"></column>
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="8"></column>
-			 <column name="preferredLanguage" value="Tigrinya"></column>
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="9"></column>
-			 <column name="preferredLanguage" value="Setswana"></column>
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="10"></column>
-			 <column name="preferredLanguage" value="Swahili"></column>
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="11"></column>
-			 <column name="preferredLanguage" value="Comorian"></column>
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="12"></column>
-			 <column name="preferredLanguage" value="Chichewa"></column>
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="13"></column>
-			 <column name="preferredLanguage" value="Kinyarwanda"></column>
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="14"></column>
-			 <column name="preferredLanguage" value="Kirundi"></column>
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="15"></column>
-			 <column name="preferredLanguage" value="Sango"></column>
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="16"></column>
-			 <column name="preferredLanguage" value="Swati"></column>
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="17"></column>
-			 <column name="preferredLanguage" value="Malagasy"></column>
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="18"></column>
-			 <column name="preferredLanguage" value="Seychellois"></column>
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="19"></column>
-			 <column name="preferredLanguage" value="Mauritian"></column>
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="20"></column>
-			 <column name="preferredLanguage" value="Shona"></column>
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="21"></column>
-			 <column name="preferredLanguage" value="Sesotho"></column>
-		</insert>
-		<insert tableName="PreferredLanguage">
-			 <column name="id" value="22"></column>
-			 <column name="preferredLanguage" value="Afrikaans"></column>
-		</insert>
-	</changeSet>
+    <changeSet id="20141117-1054" author="srikanthmalyala">
+        <comment>Add preferred languages</comment>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="1"></column>
+            <column name="preferredLanguage" value="English"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="2"></column>
+            <column name="preferredLanguage" value="French"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="3"></column>
+            <column name="preferredLanguage" value="Portuguese"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="4"></column>
+            <column name="preferredLanguage" value="Spanish"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="5"></column>
+            <column name="preferredLanguage" value="Arabic"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="6"></column>
+            <column name="preferredLanguage" value="Berber"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="7"></column>
+            <column name="preferredLanguage" value="Amharic"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="8"></column>
+            <column name="preferredLanguage" value="Tigrinya"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="9"></column>
+            <column name="preferredLanguage" value="Setswana"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="10"></column>
+            <column name="preferredLanguage" value="Swahili"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="11"></column>
+            <column name="preferredLanguage" value="Comorian"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="12"></column>
+            <column name="preferredLanguage" value="Chichewa"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="13"></column>
+            <column name="preferredLanguage" value="Kinyarwanda"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="14"></column>
+            <column name="preferredLanguage" value="Kirundi"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="15"></column>
+            <column name="preferredLanguage" value="Sango"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="16"></column>
+            <column name="preferredLanguage" value="Swati"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="17"></column>
+            <column name="preferredLanguage" value="Malagasy"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="18"></column>
+            <column name="preferredLanguage" value="Seychellois"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="19"></column>
+            <column name="preferredLanguage" value="Mauritian"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="20"></column>
+            <column name="preferredLanguage" value="Shona"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="21"></column>
+            <column name="preferredLanguage" value="Sesotho"></column>
+        </insert>
+        <insert tableName="PreferredLanguage">
+            <column name="id" value="22"></column>
+            <column name="preferredLanguage" value="Afrikaans"></column>
+        </insert>
+    </changeSet>
 
-	<changeSet id="20141117-1121" author="srikanthmalyala">
-		<comment>Add identity types</comment>
-		<insert tableName="IdType">
-			<column name="id" value="1"></column>
-			<column name="idType" value="National Id"></column>
-		</insert>
-		<insert tableName="IdType">
-			<column name="id" value="2"></column>
-			<column name="idType" value="Passport Number"></column>
-		</insert>
-		<insert tableName="IdType">
-			<column name="id" value="3"></column>
-			<column name="idType" value="License Number"></column>
-		</insert>
-	</changeSet>
+    <changeSet id="20141117-1121" author="srikanthmalyala">
+        <comment>Add identity types</comment>
+        <insert tableName="IdType">
+            <column name="id" value="1"></column>
+            <column name="idType" value="National Id"></column>
+        </insert>
+        <insert tableName="IdType">
+            <column name="id" value="2"></column>
+            <column name="idType" value="Passport Number"></column>
+        </insert>
+        <insert tableName="IdType">
+            <column name="id" value="3"></column>
+            <column name="idType" value="License Number"></column>
+        </insert>
+    </changeSet>
 
-	<!--  NOT USED FOR BETA-RELEASE
-	<changeSet id="20141117-1128" author="srikanthmalyala">
-		<comment>Add donor code groups</comment>
-		<insert tableName="DonorCodeGroup">
-			<column name="id" value="1"></column>
-			<column name="donorCodeGroup" value="Test Only"></column>
-		</insert>
-		<insert tableName="DonorCodeGroup">
-			<column name="id" value="2"></column>
-			<column name="donorCodeGroup" value="Do Not Bleed"></column>
-		</insert>
-	</changeSet>
-	
-	<changeSet id="20141117-1133" author="srikanthmalyala">
-		<comment>Add donor codes</comment>
-		<insert tableName="DonorCode">
-			<column name="id" value="1"></column>
-			<column name="donorCode" value="Blood group antibody"></column>
-			<column name="donorCodeGroupId" value="1"></column>   
-		</insert>
-		<insert tableName="DonorCode">
-			<column name="id" value="2"></column>
-			<column name="donorCode" value="Follow up samples required"></column>
-			<column name="donorCodeGroupId" value="1"></column>   
-		</insert>
-		<insert tableName="DonorCode">
-			<column name="id" value="3"></column>
-			<column name="donorCode" value="Lab query"></column>
-			<column name="donorCodeGroupId" value="1"></column>   
-		</insert>
-		<insert tableName="DonorCode">
-			<column name="id" value="4"></column>
-			<column name="donorCode" value="Biological false positive"></column>
-			<column name="donorCodeGroupId" value="2"></column>   
-		</insert>
-		<insert tableName="DonorCode">
-			<column name="id" value="5"></column>
-			<column name="donorCode" value="For counseling – HCV"></column>
-			<column name="donorCodeGroupId" value="2"></column>   
-		</insert>
-		<insert tableName="DonorCode">
-			<column name="id" value="6"></column>
-			<column name="donorCode" value="For counseling – HIV"></column>
-			<column name="donorCodeGroupId" value="2"></column>   
-		</insert>
-		<insert tableName="DonorCode">
-			<column name="id" value="7"></column>
-			<column name="donorCode" value="TTI Reactive"></column>
-			<column name="donorCodeGroupId" value="2"></column>   
-		</insert>
-	</changeSet>
-	
-	-->
+    <!--  NOT USED FOR BETA-RELEASE
+    <changeSet id="20141117-1128" author="srikanthmalyala">
+        <comment>Add donor code groups</comment>
+        <insert tableName="DonorCodeGroup">
+            <column name="id" value="1"></column>
+            <column name="donorCodeGroup" value="Test Only"></column>
+        </insert>
+        <insert tableName="DonorCodeGroup">
+            <column name="id" value="2"></column>
+            <column name="donorCodeGroup" value="Do Not Bleed"></column>
+        </insert>
+    </changeSet>
 
-	<changeSet id="20141117-1141" author="srikanthmalyala">
-		<comment>Add address types</comment>
-		<insert tableName="AddressType">
-			<column name="id" value="1"></column>
-			<column name="preferredAddressType" value="Home Address"></column>
-		</insert>
-		<insert tableName="AddressType">
-			<column name="id" value="2"></column>
-			<column name="preferredAddressType" value="Work Address"></column>
-		</insert>
-		<insert tableName="AddressType">
-			<column name="id" value="3"></column>
-			<column name="preferredAddressType" value="Postal Address"></column>
-		</insert>
-	</changeSet>
-    
+    <changeSet id="20141117-1133" author="srikanthmalyala">
+        <comment>Add donor codes</comment>
+        <insert tableName="DonorCode">
+            <column name="id" value="1"></column>
+            <column name="donorCode" value="Blood group antibody"></column>
+            <column name="donorCodeGroupId" value="1"></column>
+        </insert>
+        <insert tableName="DonorCode">
+            <column name="id" value="2"></column>
+            <column name="donorCode" value="Follow up samples required"></column>
+            <column name="donorCodeGroupId" value="1"></column>
+        </insert>
+        <insert tableName="DonorCode">
+            <column name="id" value="3"></column>
+            <column name="donorCode" value="Lab query"></column>
+            <column name="donorCodeGroupId" value="1"></column>
+        </insert>
+        <insert tableName="DonorCode">
+            <column name="id" value="4"></column>
+            <column name="donorCode" value="Biological false positive"></column>
+            <column name="donorCodeGroupId" value="2"></column>
+        </insert>
+        <insert tableName="DonorCode">
+            <column name="id" value="5"></column>
+            <column name="donorCode" value="For counseling – HCV"></column>
+            <column name="donorCodeGroupId" value="2"></column>
+        </insert>
+        <insert tableName="DonorCode">
+            <column name="id" value="6"></column>
+            <column name="donorCode" value="For counseling – HIV"></column>
+            <column name="donorCodeGroupId" value="2"></column>
+        </insert>
+        <insert tableName="DonorCode">
+            <column name="id" value="7"></column>
+            <column name="donorCode" value="TTI Reactive"></column>
+            <column name="donorCodeGroupId" value="2"></column>
+        </insert>
+    </changeSet>
+
+    -->
+
+    <changeSet id="20141117-1141" author="srikanthmalyala">
+        <comment>Add address types</comment>
+        <insert tableName="AddressType">
+            <column name="id" value="1"></column>
+            <column name="preferredAddressType" value="Home Address"></column>
+        </insert>
+        <insert tableName="AddressType">
+            <column name="id" value="2"></column>
+            <column name="preferredAddressType" value="Work Address"></column>
+        </insert>
+        <insert tableName="AddressType">
+            <column name="id" value="3"></column>
+            <column name="preferredAddressType" value="Postal Address"></column>
+        </insert>
+    </changeSet>
+
     <changeSet id="201509171503" author="bausmeier">
-        
+
         <update tableName="PackType">
             <column name="testSampleProduced" value="1"></column>
             <where>id != 8</where>
@@ -930,66 +929,66 @@
         </update>
 
     </changeSet>
-    
+
     <changeSet id="20150922-1100" author="danfuterman">
-		<comment>Add default adverse event types</comment>
-		<insert tableName="AdverseEventType">
-			<column name="name" value="Haematoma"></column>
-			<column name="description" value="Swelling of clotted blood within the tissues"></column>
-		</insert>
-		<insert tableName="AdverseEventType">
-			<column name="name" value="Arterial puncture"></column>
-			<column name="description" value="Needle inserted into artery rather than a vein"></column>
-		</insert>
-		<insert tableName="AdverseEventType">
-			<column name="name" value="Nerve injury"></column>
-			<column name="description" value="An injury to nerve tissue as a result of donating blood"></column>
-		</insert>
-		<insert tableName="AdverseEventType">
-			<column name="name" value="Thrombophlebitis"></column>
-			<column name="description" value="Inflammation of the vein related to a blood clot"></column>
-		</insert>
-		<insert tableName="AdverseEventType">
-			<column name="name" value="Allergy"></column>
-			<column name="description" value="Allergic reaction as a result of donating blood"></column>
-		</insert>
-		<insert tableName="AdverseEventType">
-			<column name="name" value="Vasovagal"></column>
-			<column name="description" value="Fainting as a result of donating blood"></column>
-		</insert>
-		<insert tableName="AdverseEventType">
-			<column name="name" value="Hyperventilation"></column>
-			<column name="description" value="Hyperventilation as a result of donating blood"></column>
-		</insert>
-		<insert tableName="AdverseEventType">
-			<column name="name" value="Convulsions"></column>
-			<column name="description" value="Involuntary convulsions as a result of donating blood"></column>
-		</insert>
-		<insert tableName="AdverseEventType">
-			<column name="name" value="Accident"></column>
-			<column name="description" value="An accident as a result of donating blood"></column>
-		</insert>
-		<insert tableName="AdverseEventType">
-			<column name="name" value="Nausea"></column>
-			<column name="description" value="Nausea as a result of donating blood"></column>
-		</insert>
-		<insert tableName="AdverseEventType">
-			<column name="name" value="Other"></column>
-			<column name="description" value="Any other reaction as a result of donating blood"></column>
-		</insert>
-	</changeSet>
+        <comment>Add default adverse event types</comment>
+        <insert tableName="AdverseEventType">
+            <column name="name" value="Haematoma"></column>
+            <column name="description" value="Swelling of clotted blood within the tissues"></column>
+        </insert>
+        <insert tableName="AdverseEventType">
+            <column name="name" value="Arterial puncture"></column>
+            <column name="description" value="Needle inserted into artery rather than a vein"></column>
+        </insert>
+        <insert tableName="AdverseEventType">
+            <column name="name" value="Nerve injury"></column>
+            <column name="description" value="An injury to nerve tissue as a result of donating blood"></column>
+        </insert>
+        <insert tableName="AdverseEventType">
+            <column name="name" value="Thrombophlebitis"></column>
+            <column name="description" value="Inflammation of the vein related to a blood clot"></column>
+        </insert>
+        <insert tableName="AdverseEventType">
+            <column name="name" value="Allergy"></column>
+            <column name="description" value="Allergic reaction as a result of donating blood"></column>
+        </insert>
+        <insert tableName="AdverseEventType">
+            <column name="name" value="Vasovagal"></column>
+            <column name="description" value="Fainting as a result of donating blood"></column>
+        </insert>
+        <insert tableName="AdverseEventType">
+            <column name="name" value="Hyperventilation"></column>
+            <column name="description" value="Hyperventilation as a result of donating blood"></column>
+        </insert>
+        <insert tableName="AdverseEventType">
+            <column name="name" value="Convulsions"></column>
+            <column name="description" value="Involuntary convulsions as a result of donating blood"></column>
+        </insert>
+        <insert tableName="AdverseEventType">
+            <column name="name" value="Accident"></column>
+            <column name="description" value="An accident as a result of donating blood"></column>
+        </insert>
+        <insert tableName="AdverseEventType">
+            <column name="name" value="Nausea"></column>
+            <column name="description" value="Nausea as a result of donating blood"></column>
+        </insert>
+        <insert tableName="AdverseEventType">
+            <column name="name" value="Other"></column>
+            <column name="description" value="Any other reaction as a result of donating blood"></column>
+        </insert>
+    </changeSet>
 
     <changeSet id="20151005-0925" author="bausmeier">
         <insert tableName="GeneralConfig">
             <column name="name"
-                value="testing.deferDonorsWithNegConfirmatoryOutcomes"></column>
+                    value="testing.deferDonorsWithNegConfirmatoryOutcomes"></column>
             <column name="value" value="true"></column>
             <column name="description"
-                value="Defer donors with a POS TTI test outcome, where all confirmatory outcomes are NEG"></column>
+                    value="Defer donors with a POS TTI test outcome, where all confirmatory outcomes are NEG"></column>
             <column name="dataType_id" value="4"></column>
         </insert>
     </changeSet>
-    
+
     <changeSet id="20151005-1101" author="bausmeier">
 
         <comment>HIV confirmatory test</comment>
@@ -1103,7 +1102,7 @@
             <column name="pattern" value="POS"></column>
             <column name="subCategory" value="TTI"></column>
         </insert>
-        
+
         <sql>
             UPDATE BloodTestingRule SET pendingTestsIds = '29' WHERE id IN (9, 10);
             UPDATE BloodTestingRule SET pendingTestsIds = '30' WHERE id IN (13, 14);
@@ -1111,14 +1110,14 @@
             UPDATE BloodTestingRule SET pendingTestsIds = '32' WHERE id IN (21, 22);
         </sql>
     </changeSet>
-    
+
     <changeSet id="20151006-1200" author="bausmeier">
-    
+
         <update tableName="BloodTest">
             <column name="flagComponentsForDiscard" value="1" type="tinyint(1)"></column>
             <where>category = 'TTI'</where>
         </update>
-    
+
         <insert tableName="BloodTest">
             <column name="id" value="33"></column>
             <column name="bloodTestType" value="BASIC_BLOODTYPING"></column>
@@ -1142,14 +1141,14 @@
             <column name="name" value="components.createInitialComponents"></column>
             <column name="value" value="true"></column>
             <column name="description"
-                value="Enable creation of initial components. Can be disabled in the case where components are not managed by the system."></column>
+                    value="Enable creation of initial components. Can be disabled in the case where components are not managed by the system."></column>
             <column name="dataType_id" value="4"></column>
         </insert>
     </changeSet>
-    
+
     <changeSet id="20151127-0841" author="danfuterman">
-		<comment>Add Deferral Reason default durations</comment>
-		<update tableName="DeferralReason">
+        <comment>Add Deferral Reason default durations</comment>
+        <update tableName="DeferralReason">
             <column name="defaultDuration" value="365" type="smallint(5)"></column>
             <where>reason = 'High risk behaviour'</where>
         </update>
@@ -1173,6 +1172,6 @@
             <column name="defaultDuration" value="90" type="smallint(5)"></column>
             <where>reason = 'Travel history'</where>
         </update>
-	</changeSet>
+    </changeSet>
 
 </databaseChangeLog>

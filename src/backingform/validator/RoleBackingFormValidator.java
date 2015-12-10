@@ -1,31 +1,28 @@
 package backingform.validator;
 
-import java.util.Arrays;
+import backingform.RoleBackingForm;
+import controller.UtilController;
 import model.user.Role;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-
 import repository.RoleRepository;
 import viewmodel.RoleViewModel;
-import backingform.RoleBackingForm;
-import controller.UtilController;
+
+import java.util.Arrays;
 
 public class RoleBackingFormValidator implements Validator {
 
   private Validator validator;
   private UtilController utilController;
   private RoleRepository roleRepository;
-  
 
 
-public RoleBackingFormValidator(Validator validator, UtilController utilController,RoleRepository roleRepository) {
+  public RoleBackingFormValidator(Validator validator, UtilController utilController, RoleRepository roleRepository) {
     super();
     this.validator = validator;
     this.utilController = utilController;
-    this.roleRepository=roleRepository;
+    this.roleRepository = roleRepository;
   }
 
   @SuppressWarnings("unchecked")
@@ -36,24 +33,24 @@ public RoleBackingFormValidator(Validator validator, UtilController utilControll
 
   @Override
   public void validate(Object obj, Errors errors) {
-	  
-	 if (obj == null || validator == null)
+
+    if (obj == null || validator == null)
       return;
-    
-	ValidationUtils.invokeValidator(validator, obj, errors);
-	RoleBackingForm form = (RoleBackingForm) obj; 
-    
-    if (utilController.isDuplicateRoleName(form.getRole())){
-    	errors.rejectValue("role.name", "roleName.nonunique",
-    	          "Role name already exists.");
+
+    ValidationUtils.invokeValidator(validator, obj, errors);
+    RoleBackingForm form = (RoleBackingForm) obj;
+
+    if (utilController.isDuplicateRoleName(form.getRole())) {
+      errors.rejectValue("role.name", "roleName.nonunique",
+              "Role name already exists.");
     }
-    
-	if(form.getPermissions().isEmpty()){
-		errors.rejectValue("Role.permissions", "permissions.empty",
-	            "Role must have one or more permissions");
-	}
-	
-	utilController.commonFieldChecks(form, "Role", errors);
-    
-   }
+
+    if (form.getPermissions().isEmpty()) {
+      errors.rejectValue("Role.permissions", "permissions.empty",
+              "Role must have one or more permissions");
+    }
+
+    utilController.commonFieldChecks(form, "Role", errors);
+
+  }
 }

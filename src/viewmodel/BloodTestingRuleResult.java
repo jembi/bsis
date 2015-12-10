@@ -1,18 +1,16 @@
 package viewmodel;
 
+import model.bloodtesting.TTIStatus;
+import model.donation.Donation;
+import repository.bloodtesting.BloodTypingMatchStatus;
+import repository.bloodtesting.BloodTypingStatus;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import model.donation.Donation;
-import model.bloodtesting.BloodTestResult;
-import model.bloodtesting.TTIStatus;
-import repository.bloodtesting.BloodTypingStatus;
-import repository.bloodtesting.BloodTypingMatchStatus;
-import viewmodel.DonationViewModel;
-
 public class BloodTestingRuleResult {
-	
+
   private DonationViewModel donation;
 
   private Set<String> allBloodAboChanges;
@@ -34,7 +32,7 @@ public class BloodTestingRuleResult {
   private Map<String, BloodTestResultViewModel> recentTestResults;
 
   private BloodTypingStatus bloodTypingStatus;
-  
+
   private BloodTypingMatchStatus bloodTypingMatchStatus;
 
   private Map<String, String> storedTestResults;
@@ -54,7 +52,7 @@ public class BloodTestingRuleResult {
 
   public BloodTestingRuleResult() {
   }
-  
+
   public DonationViewModel getDonation() {
     return donation;
   }
@@ -62,7 +60,7 @@ public class BloodTestingRuleResult {
   public void setDonation(Donation donation) {
     this.donation = new DonationViewModel(donation);
   }
-  
+
   public Set<String> getAllBloodAboChanges() {
     return allBloodAboChanges;
   }
@@ -126,7 +124,7 @@ public class BloodTestingRuleResult {
   public void setBloodTypingStatus(BloodTypingStatus bloodTypingStatus) {
     this.bloodTypingStatus = bloodTypingStatus;
   }
-  
+
   public BloodTypingMatchStatus getBloodTypingMatchStatus() {
     return bloodTypingMatchStatus;
   }

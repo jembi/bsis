@@ -1,17 +1,11 @@
 package repository;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-
 import model.requesttype.RequestType;
-
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -26,7 +20,7 @@ public class RequestTypeRepository {
     query.setParameter("isDeleted", false);
     return query.getResultList();
   }
-  
+
   public boolean isRequestTypeValid(String checkRequestType) {
     String queryString = "SELECT r from RequestType r where r.isDeleted=:isDeleted";
     TypedQuery<RequestType> query = em.createQuery(queryString, RequestType.class);
@@ -38,7 +32,7 @@ public class RequestTypeRepository {
     return false;
   }
 
-  public RequestType getRequestTypeById(Integer requestTypeId) throws NoResultException{
+  public RequestType getRequestTypeById(Integer requestTypeId) throws NoResultException {
     TypedQuery<RequestType> query;
     query = em.createQuery("SELECT r from RequestType r " +
             "where r.id=:id AND r.isDeleted=:isDeleted", RequestType.class);
@@ -48,35 +42,36 @@ public class RequestTypeRepository {
       return null;
     return query.getSingleResult();
   }
-/**
- * issue - #209 - Not used anywhere
-  public void saveAllRequestTypes(List<RequestType> allRequestTypes) {
-    for (RequestType rt: allRequestTypes) {
-        RequestType existingRequestType = getRequestTypeById(rt.getId());
-        if (existingRequestType != null) {
-          existingRequestType.setRequestType(rt.getRequestType());
-          existingRequestType.setBulkTransfer(rt.getBulkTransfer());
-          em.merge(existingRequestType);
-        }
-        else {
-          rt.setDescription("");
-          em.persist(rt);
-        }
-    }
-    em.flush();
-  }
-  */
-  
-  public void saveRequestType(RequestType requestType){
-      em.persist(requestType);
-  }
-  
-  public RequestType updateRequestType(RequestType requestType)
-          throws IllegalArgumentException{
-      return  em.merge(requestType);
+
+  /**
+   * issue - #209 - Not used anywhere
+   * public void saveAllRequestTypes(List<RequestType> allRequestTypes) {
+   * for (RequestType rt: allRequestTypes) {
+   * RequestType existingRequestType = getRequestTypeById(rt.getId());
+   * if (existingRequestType != null) {
+   * existingRequestType.setRequestType(rt.getRequestType());
+   * existingRequestType.setBulkTransfer(rt.getBulkTransfer());
+   * em.merge(existingRequestType);
+   * }
+   * else {
+   * rt.setDescription("");
+   * em.persist(rt);
+   * }
+   * }
+   * em.flush();
+   * }
+   */
+
+  public void saveRequestType(RequestType requestType) {
+    em.persist(requestType);
   }
 
-  public RequestType getRequestTypeByName(String requestTypeName)throws NoResultException, NonUniqueResultException {
+  public RequestType updateRequestType(RequestType requestType)
+          throws IllegalArgumentException {
+    return em.merge(requestType);
+  }
+
+  public RequestType getRequestTypeByName(String requestTypeName) throws NoResultException, NonUniqueResultException {
     TypedQuery<RequestType> query;
     query = em.createQuery("SELECT r from RequestType r " +
             "where r.requestType=:requestTypeName AND r.isDeleted=:isDeleted", RequestType.class);

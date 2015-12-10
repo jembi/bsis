@@ -1,17 +1,6 @@
 package datagenerator;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Entity;
-
 import org.hibernate.cfg.Configuration;
-/** Deprecated - But I see no impact auditing
- * import org.hibernate.envers.configuration.AuditConfiguration;
-*/
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -21,6 +10,18 @@ import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.SystemPropertyUtils;
+
+import javax.persistence.Entity;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Deprecated - But I see no impact auditing
+ * import org.hibernate.envers.configuration.AuditConfiguration;
+ */
 
 /**
  * Auto generate schema using hibernate hbm2ddl tool. This will prepare the full
@@ -40,37 +41,23 @@ public class SchemaGenerator {
     cfg.setProperty("hibernate.show_sql", "true");
     cfg.setProperty("hibernate.hbm2ddl.auto", "none");
     cfg.setProperty("hibernate.ejb.event.post-insert",
-        "org.hibernate.ejb.event.EJB3PostInsertEventListener,org.hibernate.envers.event.AuditEventListener");
+            "org.hibernate.ejb.event.EJB3PostInsertEventListener,org.hibernate.envers.event.AuditEventListener");
     cfg.setProperty("hibernate.ejb.event.post-update",
-        "org.hibernate.ejb.event.EJB3PostUpdateEventListener,org.hibernate.envers.event.AuditEventListener");
+            "org.hibernate.ejb.event.EJB3PostUpdateEventListener,org.hibernate.envers.event.AuditEventListener");
     cfg.setProperty("hibernate.ejb.event.post-delete",
-        "org.hibernate.ejb.event.EJB3PostDeleteEventListener,org.hibernate.envers.event.AuditEventListener");
+            "org.hibernate.ejb.event.EJB3PostDeleteEventListener,org.hibernate.envers.event.AuditEventListener");
     cfg.setProperty("hibernate.ejb.event.pre-collection-update",
-        "org.hibernate.envers.event.AuditEventListener");
+            "org.hibernate.envers.event.AuditEventListener");
     cfg.setProperty("hibernate.ejb.event.pre-collection-remove",
-        "org.hibernate.envers.event.AuditEventListener");
+            "org.hibernate.envers.event.AuditEventListener");
     cfg.setProperty("hibernate.ejb.event.post-collection-recreate",
-        "org.hibernate.envers.event.AuditEventListener");
+            "org.hibernate.envers.event.AuditEventListener");
     for (Class<?> clazz : findAllClasses(packageName)) {
       System.out.println("Class: " + clazz);
       cfg.addAnnotatedClass(clazz);
     }
     cfg.buildMappings();
-   // AuditConfiguration.getFor(cfg);
-  }
-
-  /**
-   * Method that actually creates the file.
-   * 
-   * @param dbDialect
-   *          to use
-   */
-  private void generate(Dialect dialect) {
-    cfg.setProperty("hibernate.dialect", dialect.getDialectClass());
-    SchemaExport export = new SchemaExport(cfg);
-    export.setDelimiter(";");
-    export.setOutputFile("ddl_" + dialect.name().toLowerCase() + ".sql");
-    export.execute(true, false, false, true);
+    // AuditConfiguration.getFor(cfg);
   }
 
   /**
@@ -82,10 +69,22 @@ public class SchemaGenerator {
   }
 
   /**
+   * Method that actually creates the file.
+   *
+   * @param dbDialect to use
+   */
+  private void generate(Dialect dialect) {
+    cfg.setProperty("hibernate.dialect", dialect.getDialectClass());
+    SchemaExport export = new SchemaExport(cfg);
+    export.setDelimiter(";");
+    export.setOutputFile("ddl_" + dialect.name().toLowerCase() + ".sql");
+    export.execute(true, false, false, true);
+  }
+
+  /**
    * Utility method used to fetch Class list based on a package name.
-   * 
-   * @param packageName
-   *          (should be the package containing your annotated beans.
+   *
+   * @param packageName (should be the package containing your annotated beans.
    */
   @SuppressWarnings("unused")
   private List<Class<?>> getClasses(String packageName) throws Exception {
@@ -104,7 +103,7 @@ public class SchemaGenerator {
       directory = new File(resource.getFile());
     } catch (NullPointerException x) {
       throw new ClassNotFoundException(packageName + " (" + directory
-          + ") does not appear to be a valid package");
+              + ") does not appear to be a valid package");
     }
     if (directory.exists()) {
       String[] files = directory.list();
@@ -112,7 +111,7 @@ public class SchemaGenerator {
         if (files[i].endsWith(".class")) {
           // removes the .class extension
           classes.add(Class.forName(packageName + '.'
-              + files[i].substring(0, files[i].length() - 6)));
+                  + files[i].substring(0, files[i].length() - 6)));
         }
       }
     } else {
@@ -122,13 +121,50 @@ public class SchemaGenerator {
     return classes;
   }
 
+  private List<Class<?>> findAllClasses(String basePackage)
+          throws IOException, ClassNotFoundException {
+
+    ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
+    MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
+
+    List<Class<?>> candidates = new ArrayList<>();
+    String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
+            resolveBasePackage(basePackage) + "/" + "**/*.class";
+    Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
+    for (Resource resource : resources) {
+      if (resource.isReadable()) {
+        MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
+        if (isCandidate(metadataReader)) {
+          candidates.add(Class.forName(metadataReader.getClassMetadata().getClassName()));
+          System.out.println(metadataReader.getClassMetadata().getClassName());
+        }
+      }
+    }
+    return candidates;
+  }
+
+  private String resolveBasePackage(String basePackage) {
+    return ClassUtils.convertClassNameToResourcePath(SystemPropertyUtils.resolvePlaceholders(basePackage));
+  }
+
+  private boolean isCandidate(MetadataReader metadataReader) throws ClassNotFoundException {
+    try {
+      Class<?> c = Class.forName(metadataReader.getClassMetadata().getClassName());
+      if (c.getAnnotation(Entity.class) != null) {
+        return true;
+      }
+    } catch (Throwable e) {
+    }
+    return false;
+  }
+
   /**
    * Holds the classnames of hibernate dialects for easy reference.
    */
   private static enum Dialect {
     ORACLE("org.hibernate.dialect.Oracle10gDialect"), MYSQL(
-        "org.hibernate.dialect.MySQL5InnoDBDialect"), HSQL(
-        "org.hibernate.dialect.HSQLDialect");
+            "org.hibernate.dialect.MySQL5InnoDBDialect"), HSQL(
+            "org.hibernate.dialect.HSQLDialect");
 
     private String dialectClass;
 
@@ -139,45 +175,5 @@ public class SchemaGenerator {
     public String getDialectClass() {
       return dialectClass;
     }
-  }
-
-
-  private List<Class<?>> findAllClasses(String basePackage)
-      throws IOException, ClassNotFoundException {
-
-      ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
-      MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
-
-      List<Class<?>> candidates = new ArrayList<>();
-      String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
-                                 resolveBasePackage(basePackage) + "/" + "**/*.class";
-      Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
-      for (Resource resource : resources) {
-          if (resource.isReadable()) {
-              MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
-              if (isCandidate(metadataReader)) {
-                  candidates.add(Class.forName(metadataReader.getClassMetadata().getClassName()));
-                  System.out.println(metadataReader.getClassMetadata().getClassName());
-              }
-          }
-      }
-      return candidates;
-  }
-
-  private String resolveBasePackage(String basePackage) {
-      return ClassUtils.convertClassNameToResourcePath(SystemPropertyUtils.resolvePlaceholders(basePackage));
-  }
-
-  private boolean isCandidate(MetadataReader metadataReader) throws ClassNotFoundException
-  {
-      try {
-          Class<?> c = Class.forName(metadataReader.getClassMetadata().getClassName());
-          if (c.getAnnotation(Entity.class) != null) {
-              return true;
-          }
-      }
-      catch(Throwable e){
-      }
-      return false;
   }
 }

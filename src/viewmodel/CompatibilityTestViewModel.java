@@ -1,15 +1,14 @@
 package viewmodel;
 
-import java.util.Date;
-
-import javax.validation.Valid;
-
-import utils.CustomDateFormatter;
 import model.compatibility.CompatibilityTest;
 import model.compatibility.CrossmatchType;
 import model.component.Component;
 import model.request.Request;
 import model.user.User;
+import utils.CustomDateFormatter;
+
+import javax.validation.Valid;
+import java.util.Date;
 
 public class CompatibilityTestViewModel {
 

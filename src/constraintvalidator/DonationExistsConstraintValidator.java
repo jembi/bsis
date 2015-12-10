@@ -1,53 +1,50 @@
 package constraintvalidator;
 
+import model.donation.Donation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import repository.DonationRepository;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import model.donation.Donation;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import repository.DonationRepository;
-
 @Component
 public class DonationExistsConstraintValidator implements
-    ConstraintValidator<DonationExists, Donation> {
+        ConstraintValidator<DonationExists, Donation> {
 
   @Autowired
   private DonationRepository donationRepository;
 
   public DonationExistsConstraintValidator() {
   }
-  
+
   @Override
   public void initialize(DonationExists constraint) {
   }
 
   public boolean isValid(Donation target, ConstraintValidatorContext context) {
 
-   if (target == null)
-     return true;
+    if (target == null)
+      return true;
 
-   try {
+    try {
 
       Donation donation = null;
       if (target.getId() != null) {
         donation = donationRepository.findDonationById(target.getId());
-      }
-      else if (target.getDonationIdentificationNumber() != null) {
+      } else if (target.getDonationIdentificationNumber() != null) {
 
         if (target.getDonationIdentificationNumber().isEmpty())
           return true;
 
-        donation = 
-          donationRepository.findDonationByDonationIdentificationNumber(target.getDonationIdentificationNumber());
+        donation =
+                donationRepository.findDonationByDonationIdentificationNumber(target.getDonationIdentificationNumber());
       }
       if (donation != null) {
         return true;
       }
     } catch (Exception e) {
-       e.printStackTrace();
+      e.printStackTrace();
     }
     return false;
   }

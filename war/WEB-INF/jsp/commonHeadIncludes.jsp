@@ -1,5 +1,4 @@
-
-<link type="text/css" href="css/redmond.custom/redmond.custom.css" rel="stylesheet" media="all" />
+<link type="text/css" href="css/redmond.custom/redmond.custom.css" rel="stylesheet" media="all"/>
 
 <link rel="shortcut icon" href="favicon.ico">
 
@@ -9,5 +8,5 @@
 <script src="js/common.js" type="text/javascript"></script>
 
 
-<link type="text/css" rel="stylesheet" href="css/common.css" media="all" />
-<link type="text/css" rel="stylesheet" href="css/topPanel.css" media="all" />
+<link type="text/css" rel="stylesheet" href="css/common.css" media="all"/>
+<link type="text/css" rel="stylesheet" href="css/topPanel.css" media="all"/>

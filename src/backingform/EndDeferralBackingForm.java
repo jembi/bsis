@@ -2,24 +2,24 @@ package backingform;
 
 
 public class EndDeferralBackingForm {
-	
-	private String comment;
-	
-    public EndDeferralBackingForm() {
-	    super();
-    }
 
-    public EndDeferralBackingForm(String comment) {
-	    super();
-	    this.comment = comment;
-    }
+  private String comment;
 
-	public String getComment() {
-    	return comment;
-    }
+  public EndDeferralBackingForm() {
+    super();
+  }
 
-	
-    public void setComment(String comment) {
-    	this.comment = comment;
-    }
+  public EndDeferralBackingForm(String comment) {
+    super();
+    this.comment = comment;
+  }
+
+  public String getComment() {
+    return comment;
+  }
+
+
+  public void setComment(String comment) {
+    this.comment = comment;
+  }
 }

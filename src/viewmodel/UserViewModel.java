@@ -1,10 +1,10 @@
 package viewmodel;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import model.user.Role;
 import model.user.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserViewModel {
 
@@ -36,44 +36,44 @@ public class UserViewModel {
   public Boolean getIsAdmin() {
     return user.getIsAdmin();
   }
-  
+
   public String getEmailId() {
-      return user.getEmailId();
+    return user.getEmailId();
   }
-  
+
   public Boolean isPasswordReset() {
-      return user.isPasswordReset();
+    return user.isPasswordReset();
   }
 
   @Override
   public String toString() {
     return user.getUsername();
   }
-  
+
   public List<RoleViewModel> getRoles() {
-	List<RoleViewModel> roleViewModels = new ArrayList<>();
-	for (Role role : user.getRoles()) {
-		roleViewModels.add(new RoleViewModel(role));
-	}
-	return roleViewModels;
+    List<RoleViewModel> roleViewModels = new ArrayList<>();
+    for (Role role : user.getRoles()) {
+      roleViewModels.add(new RoleViewModel(role));
+    }
+    return roleViewModels;
   }
 
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        
-        if (!(other instanceof UserViewModel)) {
-            return false;
-        }
-        
-        UserViewModel userViewModel = (UserViewModel) other;
-        
-        if (user == null) {
-            return userViewModel.user == null;
-        }
-        
-        return user.equals(userViewModel.user);
+  @Override
+  public boolean equals(Object other) {
+    if (other == this) {
+      return true;
     }
+
+    if (!(other instanceof UserViewModel)) {
+      return false;
+    }
+
+    UserViewModel userViewModel = (UserViewModel) other;
+
+    if (user == null) {
+      return userViewModel.user == null;
+    }
+
+    return user.equals(userViewModel.user);
+  }
 }

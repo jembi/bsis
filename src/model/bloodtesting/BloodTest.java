@@ -1,19 +1,13 @@
 package model.bloodtesting;
 
+import model.worksheet.WorksheetType;
+import org.hibernate.envers.Audited;
+
+import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import model.worksheet.WorksheetType;
-import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
@@ -21,13 +15,13 @@ public class BloodTest implements Comparable<BloodTest> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable=false, updatable=false, columnDefinition="SMALLINT")
+  @Column(nullable = false, insertable = false, updatable = false, columnDefinition = "SMALLINT")
   private Integer id;
 
-  @Column(length=25)
+  @Column(length = 25)
   private String testNameShort;
 
-  @Column(length=40)
+  @Column(length = 40)
   private String testName;
 
   /**
@@ -49,15 +43,15 @@ public class BloodTest implements Comparable<BloodTest> {
   private Integer rankInCategory;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=30)
+  @Column(length = 30)
   private BloodTestType bloodTestType;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=30)
+  @Column(length = 30)
   private BloodTestCategory category;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=30)
+  @Column(length = 30)
   private BloodTestContext context;
 
   /**
@@ -72,70 +66,70 @@ public class BloodTest implements Comparable<BloodTest> {
   private Boolean isEmptyAllowed;
 
   private Boolean isActive;
-  
+
   private Boolean isDeleted;
-  
-    /**
-     * Whether or not to flag associated components for discard when a test has a positive outcome.
-     */
-    @Column(nullable = false)
-    private boolean flagComponentsForDiscard = false;
+
+  /**
+   * Whether or not to flag associated components for discard when a test has a positive outcome.
+   */
+  @Column(nullable = false)
+  private boolean flagComponentsForDiscard = false;
 
   public Integer getId() {
     return id;
-  }
-
-  public String getTestNameShort() {
-    return testNameShort;
-  }
-
-  public String getTestName() {
-    return testName;
-  }
-
-  public String getValidResults() {
-    return validResults;
-  }
-
-    /**
-     * Get the valid results for this test as a list. The list cannot be modified since changes to the valid results
-     * must be done by updating the {@link #validResults} string.
-     * 
-     * @return An immutable list of valid results.
-     */
-    public List<String> getValidResultsList() {
-        if (validResults == null || validResults.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return Collections.unmodifiableList(Arrays.asList(validResults.split(",")));
-    }
-
-  public String getNegativeResults() {
-    return negativeResults;
-  }
-
-  public Boolean getIsActive() {
-    return isActive;
   }
 
   public void setId(Integer id) {
     this.id = id;
   }
 
+  public String getTestNameShort() {
+    return testNameShort;
+  }
+
   public void setTestNameShort(String testNameShort) {
     this.testNameShort = testNameShort;
+  }
+
+  public String getTestName() {
+    return testName;
   }
 
   public void setTestName(String testName) {
     this.testName = testName;
   }
 
+  public String getValidResults() {
+    return validResults;
+  }
+
   public void setValidResults(String validResults) {
     this.validResults = validResults;
   }
 
+  /**
+   * Get the valid results for this test as a list. The list cannot be modified since changes to the valid results
+   * must be done by updating the {@link #validResults} string.
+   *
+   * @return An immutable list of valid results.
+   */
+  public List<String> getValidResultsList() {
+    if (validResults == null || validResults.isEmpty()) {
+      return Collections.emptyList();
+    }
+    return Collections.unmodifiableList(Arrays.asList(validResults.split(",")));
+  }
+
+  public String getNegativeResults() {
+    return negativeResults;
+  }
+
   public void setNegativeResults(String negativeResults) {
     this.negativeResults = negativeResults;
+  }
+
+  public Boolean getIsActive() {
+    return isActive;
   }
 
   public void setIsActive(Boolean isActive) {
@@ -197,27 +191,26 @@ public class BloodTest implements Comparable<BloodTest> {
   public void setContext(BloodTestContext context) {
     this.context = context;
   }
-  
-  
-  
+
+
   public Boolean getIsDeleted() {
-	return isDeleted;
-}
+    return isDeleted;
+  }
 
-public void setIsDeleted(Boolean isDeleted) {
-	this.isDeleted = isDeleted;
-}
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
 
-@Override
+  @Override
   public int compareTo(BloodTest o) {
     return this.id.compareTo(o.id);
   }
 
-    public boolean isFlagComponentsForDiscard() {
-        return flagComponentsForDiscard;
-    }
+  public boolean isFlagComponentsForDiscard() {
+    return flagComponentsForDiscard;
+  }
 
-    public void setFlagComponentsForDiscard(boolean flagComponentsForDiscard) {
-        this.flagComponentsForDiscard = flagComponentsForDiscard;
-    }
+  public void setFlagComponentsForDiscard(boolean flagComponentsForDiscard) {
+    this.flagComponentsForDiscard = flagComponentsForDiscard;
+  }
 }

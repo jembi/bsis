@@ -1,27 +1,18 @@
 package model.worksheet;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.validation.Valid;
-
 import model.donation.Donation;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
-
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
+
+import javax.persistence.*;
+import javax.validation.Valid;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Audited
@@ -29,10 +20,10 @@ public class Worksheet implements ModificationTracker {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false, updatable=false, insertable=false)
+  @Column(nullable = false, updatable = false, insertable = false)
   private Long id;
 
-  @Column(length=20, unique=true)
+  @Column(length = 20, unique = true)
   private String worksheetNumber;
 
   @ManyToOne
@@ -76,28 +67,28 @@ public class Worksheet implements ModificationTracker {
     return modificationTracker.getLastUpdated();
   }
 
-  public Date getCreatedDate() {
-    return modificationTracker.getCreatedDate();
-  }
-
-  public User getCreatedBy() {
-    return modificationTracker.getCreatedBy();
-  }
-
-  public User getLastUpdatedBy() {
-    return modificationTracker.getLastUpdatedBy();
-  }
-
   public void setLastUpdated(Date lastUpdated) {
     modificationTracker.setLastUpdated(lastUpdated);
+  }
+
+  public Date getCreatedDate() {
+    return modificationTracker.getCreatedDate();
   }
 
   public void setCreatedDate(Date createdDate) {
     modificationTracker.setCreatedDate(createdDate);
   }
 
+  public User getCreatedBy() {
+    return modificationTracker.getCreatedBy();
+  }
+
   public void setCreatedBy(User createdBy) {
     modificationTracker.setCreatedBy(createdBy);
+  }
+
+  public User getLastUpdatedBy() {
+    return modificationTracker.getLastUpdatedBy();
   }
 
   public void setLastUpdatedBy(User lastUpdatedBy) {

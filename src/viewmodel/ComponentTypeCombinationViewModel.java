@@ -1,48 +1,47 @@
 package viewmodel;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import model.componenttype.ComponentType;
 import model.componenttype.ComponentTypeCombination;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ComponentTypeCombinationViewModel {
 
-    public ComponentTypeCombinationViewModel(ComponentTypeCombination componentTypeCombination) {
-        this.componentTypeCombination = componentTypeCombination;
-    }
-    
-    @JsonIgnore
-    private ComponentTypeCombination componentTypeCombination;
+  @JsonIgnore
+  private ComponentTypeCombination componentTypeCombination;
 
-    public ComponentTypeCombination getComponentTypeCombination() {
-        return componentTypeCombination;
-    }
+  public ComponentTypeCombinationViewModel(ComponentTypeCombination componentTypeCombination) {
+    this.componentTypeCombination = componentTypeCombination;
+  }
 
-    public void setComponentTypeCombination(ComponentTypeCombination componentTypeCombination) {
-        this.componentTypeCombination = componentTypeCombination;
+  public ComponentTypeCombination getComponentTypeCombination() {
+    return componentTypeCombination;
+  }
+
+  public void setComponentTypeCombination(ComponentTypeCombination componentTypeCombination) {
+    this.componentTypeCombination = componentTypeCombination;
+  }
+
+  public Integer getId() {
+    return componentTypeCombination.getId();
+  }
+
+  public String getCombinationName() {
+    return componentTypeCombination.getCombinationName();
+  }
+
+  public List<ComponentTypeViewModel> getComponentTypes() {
+    return getComponentTypeViewModels(componentTypeCombination.getComponentTypes());
+  }
+
+  private List<ComponentTypeViewModel> getComponentTypeViewModels(List<ComponentType> componentTypes) {
+    List<ComponentTypeViewModel> componentTypeViewModels = new ArrayList<>();
+    for (ComponentType componentType : componentTypes) {
+      componentTypeViewModels.add(new ComponentTypeViewModel(componentType));
     }
-    
-    public Integer getId(){
-        return componentTypeCombination.getId();
-    }
-    
-    public String getCombinationName(){
-        return componentTypeCombination.getCombinationName();
-    }
-    
-    public List<ComponentTypeViewModel> getComponentTypes(){
-        return getComponentTypeViewModels(componentTypeCombination.getComponentTypes());
-    }
-    
-    private List<ComponentTypeViewModel> getComponentTypeViewModels(List<ComponentType> componentTypes) {
-        List<ComponentTypeViewModel> componentTypeViewModels = new ArrayList<>();
-        for(ComponentType componentType : componentTypes){
-            componentTypeViewModels.add(new ComponentTypeViewModel(componentType));
-        }
-        return componentTypeViewModels;
-    }  
+    return componentTypeViewModels;
+  }
 
 }

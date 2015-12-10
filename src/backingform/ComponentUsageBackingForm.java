@@ -1,18 +1,16 @@
 package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.text.ParseException;
-import java.util.Date;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
 import model.component.Component;
 import model.modificationtracker.RowModificationTracker;
 import model.usage.ComponentUsage;
 import model.user.User;
 import utils.CustomDateFormatter;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.text.ParseException;
+import java.util.Date;
 
 public class ComponentUsageBackingForm {
 
@@ -46,39 +44,75 @@ public class ComponentUsageBackingForm {
     return usage.getLastUpdated();
   }
 
+  public void setLastUpdated(Date lastUpdated) {
+    usage.setLastUpdated(lastUpdated);
+  }
+
   @JsonIgnore
   public Date getCreatedDate() {
     return usage.getCreatedDate();
+  }
+
+  public void setCreatedDate(Date createdDate) {
+    usage.setCreatedDate(createdDate);
   }
 
   @JsonIgnore
   public User getCreatedBy() {
     return usage.getCreatedBy();
   }
-  
+
+  public void setCreatedBy(User createdBy) {
+    usage.setCreatedBy(createdBy);
+  }
+
   @JsonIgnore
   public User getLastUpdatedBy() {
     return usage.getLastUpdatedBy();
+  }
+
+  public void setLastUpdatedBy(User lastUpdatedBy) {
+    usage.setLastUpdatedBy(lastUpdatedBy);
   }
 
   public Long getId() {
     return usage.getId();
   }
 
+  public void setId(Long id) {
+    usage.setId(id);
+  }
+
   public String getHospital() {
     return usage.getHospital();
+  }
+
+  public void setHospital(String hospital) {
+    usage.setHospital(hospital);
   }
 
   public String getPatientName() {
     return usage.getPatientName();
   }
 
+  public void setPatientName(String patientName) {
+    usage.setPatientName(patientName);
+  }
+
   public String getWard() {
     return usage.getWard();
   }
 
+  public void setWard(String ward) {
+    usage.setWard(ward);
+  }
+
   public String getUseIndication() {
     return usage.getUseIndication();
+  }
+
+  public void setUseIndication(String useIndication) {
+    usage.setUseIndication(useIndication);
   }
 
   public String getUsageDate() {
@@ -87,64 +121,6 @@ public class ComponentUsageBackingForm {
     if (usage == null)
       return "";
     return CustomDateFormatter.getDateTimeString(usage.getUsageDate());
-  }
-
-  public String getNotes() {
-    return usage.getNotes();
-  }
-
-  @JsonIgnore
-  public Component getComponent() {
-    return usage.getComponent();
-  }
-
-  @JsonIgnore
-  public RowModificationTracker getModificationTracker() {
-    return usage.getModificationTracker();
-  }
-
-  public Boolean getIsDeleted() {
-    return usage.getIsDeleted();
-  }
-
-  public int hashCode() {
-    return usage.hashCode();
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    usage.setLastUpdated(lastUpdated);
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    usage.setCreatedDate(createdDate);
-  }
-
-  public void setCreatedBy(User createdBy) {
-    usage.setCreatedBy(createdBy);
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    usage.setLastUpdatedBy(lastUpdatedBy);
-  }
-
-  public void setId(Long id) {
-    usage.setId(id);
-  }
-
-  public void setHospital(String hospital) {
-    usage.setHospital(hospital);
-  }
-
-  public void setPatientName(String patientName) {
-    usage.setPatientName(patientName);
-  }
-
-  public void setWard(String ward) {
-    usage.setWard(ward);
-  }
-
-  public void setUseIndication(String useIndication) {
-    usage.setUseIndication(useIndication);
   }
 
   public void setUsageDate(String usageDate) {
@@ -157,20 +133,42 @@ public class ComponentUsageBackingForm {
     }
   }
 
+  public String getNotes() {
+    return usage.getNotes();
+  }
+
   public void setNotes(String notes) {
     usage.setNotes(notes);
+  }
+
+  @JsonIgnore
+  public Component getComponent() {
+    return usage.getComponent();
   }
 
   public void setComponent(Component component) {
     usage.setComponent(component);
   }
 
+  @JsonIgnore
+  public RowModificationTracker getModificationTracker() {
+    return usage.getModificationTracker();
+  }
+
   public void setModificationTracker(RowModificationTracker modificationTracker) {
     usage.setModificationTracker(modificationTracker);
   }
 
+  public Boolean getIsDeleted() {
+    return usage.getIsDeleted();
+  }
+
   public void setIsDeleted(Boolean isDeleted) {
     usage.setIsDeleted(isDeleted);
+  }
+
+  public int hashCode() {
+    return usage.hashCode();
   }
 
   public String getComponentId() {

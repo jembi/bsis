@@ -15,6 +15,10 @@ public class PostDonationCounsellingViewModelMatcher extends TypeSafeMatcher<Pos
     this.expected = expected;
   }
 
+  public static PostDonationCounsellingViewModelMatcher hasSameStateAsPostDonationCounsellingViewModel(PostDonationCounsellingViewModel expected) {
+    return new PostDonationCounsellingViewModelMatcher(expected);
+  }
+
   @Override
   public void describeTo(Description description) {
     description.appendText("A PostDonationCounselling view model with the following state:")
@@ -26,9 +30,5 @@ public class PostDonationCounsellingViewModelMatcher extends TypeSafeMatcher<Pos
   public boolean matchesSafely(PostDonationCounsellingViewModel actual) {
     return Objects.equals(actual.getPostDonationCounselling(), expected.getPostDonationCounselling()) &&
             Objects.equals(actual.getPermissions(), expected.getPermissions());
-  }
-
-  public static PostDonationCounsellingViewModelMatcher hasSameStateAsPostDonationCounsellingViewModel(PostDonationCounsellingViewModel expected) {
-    return new PostDonationCounsellingViewModelMatcher(expected);
   }
 }

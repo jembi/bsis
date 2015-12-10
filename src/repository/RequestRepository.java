@@ -1,31 +1,12 @@
 package repository;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Parameter;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-
+import controller.UtilController;
 import model.component.Component;
 import model.component.ComponentStatus;
 import model.componentmovement.ComponentStatusChange;
 import model.componentmovement.ComponentStatusChangeType;
 import model.request.Request;
 import model.util.BloodGroup;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +14,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import controller.UtilController;
-
-import javax.persistence.NonUniqueResultException;
+import javax.persistence.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Repository
 @Transactional
@@ -51,7 +34,13 @@ public class RequestRepository {
 
   @Autowired
   private UtilController utilController;
-  
+
+  public static String generateUniqueRequestNumber() {
+    String uniqueRequestNumber;
+    uniqueRequestNumber = "R-" + RandomStringUtils.randomNumeric(ID_LENGTH).toUpperCase();
+    return uniqueRequestNumber;
+  }
+
   public void saveRequest(Request request) {
     em.persist(request);
     em.flush();
@@ -65,7 +54,7 @@ public class RequestRepository {
     return existingRequest;
   }
 
-  public Request findRequest(String requestNumber)throws NoResultException, NonUniqueResultException{
+  public Request findRequest(String requestNumber) throws NoResultException, NonUniqueResultException {
     Request request = null;
     if (requestNumber != null && requestNumber.length() > 0) {
       String queryString = "SELECT r FROM Request r WHERE r.requestNumber = :requestNumber and r.isDeleted= :isDeleted";
@@ -73,16 +62,16 @@ public class RequestRepository {
       query.setParameter("isDeleted", Boolean.FALSE);
       query.setParameter("requestNumber", requestNumber);
       request = query.getSingleResult();
-     
+
     }
     return request;
   }
 
-  public Request findRequestWithIssuedComponents(String requestNumber)throws NoResultException, NonUniqueResultException{
+  public Request findRequestWithIssuedComponents(String requestNumber) throws NoResultException, NonUniqueResultException {
     Request request = null;
     if (requestNumber != null && requestNumber.length() > 0) {
       String queryString = "SELECT r FROM Request r LEFT JOIN FETCH r.issuedComponents WHERE " +
-          "r.requestNumber = :requestNumber and r.isDeleted= :isDeleted";
+              "r.requestNumber = :requestNumber and r.isDeleted= :isDeleted";
       TypedQuery<Request> query = em.createQuery(queryString, Request.class);
       query.setParameter("isDeleted", Boolean.FALSE);
       query.setParameter("requestNumber", requestNumber);
@@ -91,19 +80,19 @@ public class RequestRepository {
     return request;
   }
 
-  public Request findRequestById(Long requestId) throws NoResultException, NonUniqueResultException{
-      String queryString = "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedComponents WHERE " +
-                           "r.id = :requestId and r.isDeleted= :isDeleted";
-      TypedQuery<Request> query = em.createQuery(queryString, Request.class);
-      query.setParameter("isDeleted", Boolean.FALSE);
-      Request request = query.setParameter("requestId", requestId)
-          .getSingleResult();
-      return request;
+  public Request findRequestById(Long requestId) throws NoResultException, NonUniqueResultException {
+    String queryString = "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedComponents WHERE " +
+            "r.id = :requestId and r.isDeleted= :isDeleted";
+    TypedQuery<Request> query = em.createQuery(queryString, Request.class);
+    query.setParameter("isDeleted", Boolean.FALSE);
+    Request request = query.setParameter("requestId", requestId)
+            .getSingleResult();
+    return request;
   }
 
   public ArrayList<Request> getAllRequests() {
     String queryString = "SELECT DISTINCT r FROM Request r LEFT JOIN FETCH r.issuedComponents WHERE " +
-                         "r.isDeleted = :isDeleted order by r.dateRequested";
+            "r.isDeleted = :isDeleted order by r.dateRequested";
     TypedQuery<Request> query = em.createQuery(queryString, Request.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     return new ArrayList<>(query.getResultList());
@@ -116,9 +105,9 @@ public class RequestRepository {
 
   public List<Request> getRequests(Date fromDateRequested, Date toDateRequested) {
     TypedQuery<Request> query = em
-        .createQuery(
-            "SELECT r FROM Request r WHERE  r.dateRequested >= :fromDate and r.dateRequested<= :toDate and r.isDeleted = :isDeleted",
-            Request.class);
+            .createQuery(
+                    "SELECT r FROM Request r WHERE  r.dateRequested >= :fromDate and r.dateRequested<= :toDate and r.isDeleted = :isDeleted",
+                    Request.class);
     query.setParameter("fromDate", fromDateRequested);
     query.setParameter("toDate", toDateRequested);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -137,38 +126,38 @@ public class RequestRepository {
   }
 
   public List<Request> findAnyRequestMatching(String requestNumber,
-      String dateRequestedFrom, String dateRequestedTo,
-      String dateRequiredFrom, String dateRequiredTo, List<String> sites,
-      List<String> componentTypes, List<String> statuses) throws ParseException {
+                                              String dateRequestedFrom, String dateRequestedTo,
+                                              String dateRequiredFrom, String dateRequiredTo, List<String> sites,
+                                              List<String> componentTypes, List<String> statuses) throws ParseException {
 
     TypedQuery<Request> query = em
-        .createQuery(
-            "SELECT r FROM Request r, Location L WHERE "
-                + "(L.locationId=r.siteId AND L.isVenue=TRUE) AND "
-                + "(r.requestNumber = :requestNumber OR L.name IN (:sites) OR "
-                + "r.componentType IN (:componentTypes)) AND (r.status IN (:statuses)) AND "
-                + "((r.dateRequested BETWEEN :dateRequestedFrom AND "
-                + ":dateRequestedTo) AND (r.dateRequired BETWEEN "
-                + ":dateRequiredFrom AND " + ":dateRequiredTo)) AND "
-                + "(r.isDeleted= :isDeleted)", Request.class);
+            .createQuery(
+                    "SELECT r FROM Request r, Location L WHERE "
+                            + "(L.locationId=r.siteId AND L.isVenue=TRUE) AND "
+                            + "(r.requestNumber = :requestNumber OR L.name IN (:sites) OR "
+                            + "r.componentType IN (:componentTypes)) AND (r.status IN (:statuses)) AND "
+                            + "((r.dateRequested BETWEEN :dateRequestedFrom AND "
+                            + ":dateRequestedTo) AND (r.dateRequired BETWEEN "
+                            + ":dateRequiredFrom AND " + ":dateRequiredTo)) AND "
+                            + "(r.isDeleted= :isDeleted)", Request.class);
 
     query.setParameter("isDeleted", Boolean.FALSE);
 
     query.setParameter("requestNumber", requestNumber == null ? ""
-        : requestNumber);
+            : requestNumber);
     query.setParameter("sites", sites);
     query.setParameter("componentTypes", componentTypes);
     query.setParameter("statuses", statuses);
 
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-      Date from = (dateRequestedFrom == null || dateRequestedFrom.equals("")) ? dateFormat
-          .parse("31/12/1970") : dateFormat.parse(dateRequestedFrom);
-      query.setParameter("dateRequestedFrom", from);
-      Date to = (dateRequestedTo == null || dateRequestedTo.equals("")) ? dateFormat
-          .parse(dateFormat.format(new Date())) : dateFormat
-          .parse(dateRequestedTo);
-      query.setParameter("dateRequestedTo", to);
-      
+    Date from = (dateRequestedFrom == null || dateRequestedFrom.equals("")) ? dateFormat
+            .parse("31/12/1970") : dateFormat.parse(dateRequestedFrom);
+    query.setParameter("dateRequestedFrom", from);
+    Date to = (dateRequestedTo == null || dateRequestedTo.equals("")) ? dateFormat
+            .parse(dateFormat.format(new Date())) : dateFormat
+            .parse(dateRequestedTo);
+    query.setParameter("dateRequestedTo", to);
+
 /*
       //dupliate code
       Date from = (dateRequiredFrom == null || dateRequiredFrom.equals("")) ? dateFormat
@@ -184,11 +173,11 @@ public class RequestRepository {
     return resultList;
   }
 
-  public Request findRequestByRequestNumber(String requestNumber) throws NoResultException, NonUniqueResultException{
+  public Request findRequestByRequestNumber(String requestNumber) throws NoResultException, NonUniqueResultException {
     TypedQuery<Request> query = em
-        .createQuery(
-            "SELECT r FROM Request r WHERE r.requestNumber = :requestNumber and r.isDeleted= :isDeleted",
-            Request.class);
+            .createQuery(
+                    "SELECT r FROM Request r WHERE r.requestNumber = :requestNumber and r.isDeleted= :isDeleted",
+                    Request.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("requestNumber", requestNumber);
     Request request = null;
@@ -196,11 +185,11 @@ public class RequestRepository {
     return request;
   }
 
-  public Request findRequestByRequestNumberIncludeDeleted(String requestNumber) throws NoResultException, NonUniqueResultException{
+  public Request findRequestByRequestNumberIncludeDeleted(String requestNumber) throws NoResultException, NonUniqueResultException {
     TypedQuery<Request> query = em
-        .createQuery(
-            "SELECT r FROM Request r WHERE r.requestNumber = :requestNumber",
-            Request.class);
+            .createQuery(
+                    "SELECT r FROM Request r WHERE r.requestNumber = :requestNumber",
+                    Request.class);
     query.setParameter("requestNumber", requestNumber);
     Request request = null;
     request = query.getSingleResult();
@@ -209,7 +198,7 @@ public class RequestRepository {
 
   public Request updateOrAddRequest(Request request) {
     Request existingRequest = findRequestByRequestNumber(request
-        .getRequestNumber());
+            .getRequestNumber());
     if (existingRequest == null) {
       request.setIsDeleted(false);
       saveRequest(request);
@@ -224,10 +213,10 @@ public class RequestRepository {
 
   public List<Request> findRequestsNotFulfilled() {
     TypedQuery<Request> query = em.createQuery(
-        "SELECT r FROM Request r, Location L WHERE "
-            + "(L.locationId=r.siteId AND L.isVenue=TRUE) AND"
-            + "(r.status NOT IN (:statuses)) AND "
-            + "(r.isDeleted= :isDeleted)", Request.class);
+            "SELECT r FROM Request r, Location L WHERE "
+                    + "(L.locationId=r.siteId AND L.isVenue=TRUE) AND"
+                    + "(r.status NOT IN (:statuses)) AND "
+                    + "(r.isDeleted= :isDeleted)", Request.class);
 
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("statuses", Arrays.asList("fulfilled"));
@@ -242,12 +231,6 @@ public class RequestRepository {
     em.flush();
   }
 
-  public static String generateUniqueRequestNumber() {
-    String uniqueRequestNumber;
-    uniqueRequestNumber = "R-" + RandomStringUtils.randomNumeric(ID_LENGTH).toUpperCase();
-    return uniqueRequestNumber;
-  }
-
   public Request addRequest(Request componentRequest) {
     updateNewRequestFields(componentRequest);
     em.persist(componentRequest);
@@ -258,41 +241,41 @@ public class RequestRepository {
 
   private Date getDateRequestedAfterOrDefault(String requestedAfter) throws ParseException {
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-      Date from = null;
-      from = (requestedAfter == null || requestedAfter.equals("")) ? dateFormat
-              .parse("31/12/1970") : dateFormat.parse(requestedAfter);
-      return from;
+    Date from = null;
+    from = (requestedAfter == null || requestedAfter.equals("")) ? dateFormat
+            .parse("31/12/1970") : dateFormat.parse(requestedAfter);
+    return from;
   }
 
   private Date getDateRequiredByOrDefault(String dateRequiredBy) throws ParseException {
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Date to = null;
-        if (StringUtils.isBlank(dateRequiredBy)) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date());
-            cal.add(Calendar.DATE, 365);
-            to = cal.getTime();
-        } else {
-            to = dateFormat.parse(dateRequiredBy);
-        }
-    return to ;
+    Date to = null;
+    if (StringUtils.isBlank(dateRequiredBy)) {
+      Calendar cal = Calendar.getInstance();
+      cal.setTime(new Date());
+      cal.add(Calendar.DATE, 365);
+      to = cal.getTime();
+    } else {
+      to = dateFormat.parse(dateRequiredBy);
+    }
+    return to;
   }
 
   public List<Object> findRequests(String requestNumber, List<Integer> componentTypeIds,
-      List<Long> requestSiteIds, String requestedAfter,
-      String requiredBy, Boolean includeSatisfiedRequests, Map<String, Object> pagingParams) throws ParseException  {
+                                   List<Long> requestSiteIds, String requestedAfter,
+                                   String requiredBy, Boolean includeSatisfiedRequests, Map<String, Object> pagingParams) throws ParseException {
 
     String queryStr = "";
     if (StringUtils.isNotBlank(requestNumber)) {
       queryStr = "SELECT r FROM Request r LEFT JOIN FETCH r.issuedComponents WHERE " +
-                 "r.requestNumber =:requestNumber AND " +
-                 "r.isDeleted= :isDeleted";
+              "r.requestNumber =:requestNumber AND " +
+              "r.isDeleted= :isDeleted";
     } else {
       queryStr = "SELECT r FROM Request r LEFT JOIN FETCH r.issuedComponents WHERE " +
-          "(r.componentType.id IN (:componentTypeIds) AND " +
-          "r.requestSite.id IN (:requestSiteIds)) AND" +
-          "(r.requestDate >= :requestedAfter and r.requiredDate <= :requiredBy) AND " +
-          "r.isDeleted= :isDeleted";
+              "(r.componentType.id IN (:componentTypeIds) AND " +
+              "r.requestSite.id IN (:requestSiteIds)) AND" +
+              "(r.requestDate >= :requestedAfter and r.requiredDate <= :requiredBy) AND " +
+              "r.isDeleted= :isDeleted";
       if (!includeSatisfiedRequests)
         queryStr = queryStr + " AND (r.fulfilled = :fulfilled)";
     }
@@ -302,14 +285,13 @@ public class RequestRepository {
     if (pagingParams.containsKey("sortColumn")) {
       queryStr += " ORDER BY r." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
     }
-    
+
     query = em.createQuery(queryStr, Request.class);
     query.setParameter("isDeleted", Boolean.FALSE);
 
     if (StringUtils.isNotBlank(requestNumber)) {
       query.setParameter("requestNumber", requestNumber);
-    }
-    else {
+    } else {
       query.setParameter("componentTypeIds", componentTypeIds);
       query.setParameter("requestSiteIds", requestSiteIds);
       query.setParameter("requestedAfter", getDateRequestedAfterOrDefault(requestedAfter));
@@ -317,7 +299,7 @@ public class RequestRepository {
       if (!includeSatisfiedRequests)
         query.setParameter("fulfilled", Boolean.FALSE);
     }
-    
+
     int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
     int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
 
@@ -337,7 +319,7 @@ public class RequestRepository {
       countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
     }
     return countQuery.getSingleResult().longValue();
-  }  
+  }
 
   public void deleteRequest(Long requestId) {
     Request existingRequest = findRequestById(requestId);
@@ -415,7 +397,7 @@ public class RequestRepository {
 
     if (!componentType.equals(requestedComponentType))
       return false;
-    
+
     // component available or not
     if (!component.getStatus().equals(ComponentStatus.AVAILABLE))
       return false;
@@ -426,14 +408,14 @@ public class RequestRepository {
     Date today = new Date();
     if (component.getExpiresOn().before(today))
       return false;
-    
+
     String bloodAbo = component.getDonation().getBloodAbo();
     String bloodRh = component.getDonation().getBloodRh();
 
     boolean canIssue = true;
 
     String requestedAbo = request.getPatientBloodAbo();
-    String requestedRh = request.getPatientBloodRh(); 
+    String requestedRh = request.getPatientBloodRh();
     if (canIssue && bloodCrossmatch(bloodAbo, bloodRh, requestedAbo, requestedRh)) {
       return true;
     }
@@ -458,7 +440,7 @@ public class RequestRepository {
 
   public List<Component> getIssuedComponentsForRequest(Long requestId) {
     String queryString = "SELECT DISTINCT p FROM Component p LEFT JOIN FETCH p.donation WHERE " +
-                         "p.issuedTo.id = :requestId AND p.isDeleted= :isDeleted";
+            "p.issuedTo.id = :requestId AND p.isDeleted= :isDeleted";
     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("requestId", requestId);
@@ -467,8 +449,8 @@ public class RequestRepository {
   }
 
   public Map<String, Map<Long, Long>> findNumberOfRequests(Date dateRequestedFrom,
-      Date dateRequestedTo, String aggregationCriteria,
-      List<String> sites, List<String> bloodGroups) throws ParseException{
+                                                           Date dateRequestedTo, String aggregationCriteria,
+                                                           List<String> sites, List<String> bloodGroups) throws ParseException {
 
     List<Long> siteIds = new ArrayList<>();
     if (sites != null) {
@@ -476,7 +458,7 @@ public class RequestRepository {
         siteIds.add(Long.parseLong(site));
       }
     } else {
-      siteIds.add((long)-1);
+      siteIds.add((long) -1);
     }
 
     Map<String, Map<Long, Long>> resultMap = new HashMap<>();
@@ -485,11 +467,11 @@ public class RequestRepository {
     }
 
     TypedQuery<Object[]> query = em.createQuery(
-        "SELECT count(r), r.requestDate, r.patientBloodAbo, r.patientBloodRh FROM Request r WHERE " +
-        "r.requestSite.id IN (:siteIds) AND " +
-        "r.requestDate BETWEEN :dateRequestedFrom AND " +
-        ":dateRequestedTo AND (r.isDeleted= :isDeleted) GROUP BY " +
-        "patientBloodAbo, patientBloodRh, requestDate", Object[].class);
+            "SELECT count(r), r.requestDate, r.patientBloodAbo, r.patientBloodRh FROM Request r WHERE " +
+                    "r.requestSite.id IN (:siteIds) AND " +
+                    "r.requestDate BETWEEN :dateRequestedFrom AND " +
+                    ":dateRequestedTo AND (r.isDeleted= :isDeleted) GROUP BY " +
+                    "patientBloodAbo, patientBloodRh, requestDate", Object[].class);
 
     query.setParameter("siteIds", siteIds);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -513,8 +495,8 @@ public class RequestRepository {
       Map<Long, Long> m = new HashMap<>();
       Calendar gcal = new GregorianCalendar();
       Date lowerDate = resultDateFormat.parse(resultDateFormat.format(dateRequestedFrom));
-      Date upperDate =  resultDateFormat.parse(resultDateFormat.format(dateRequestedTo));
-      
+      Date upperDate = resultDateFormat.parse(resultDateFormat.format(dateRequestedTo));
+
       gcal.setTime(lowerDate);
       while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
         m.put(gcal.getTime().getTime(), (long) 0);
@@ -531,14 +513,14 @@ public class RequestRepository {
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)
         continue;
-        Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
-        Long utcTime = formattedDate.getTime();
-        if (m.containsKey(utcTime)) {
-          Long newVal = m.get(utcTime) + (Long) result[0];
-          m.put(utcTime, newVal);
-        } else {
-          m.put(utcTime, (Long) result[0]);
-        }
+      Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
+      Long utcTime = formattedDate.getTime();
+      if (m.containsKey(utcTime)) {
+        Long newVal = m.get(utcTime) + (Long) result[0];
+        m.put(utcTime, newVal);
+      } else {
+        m.put(utcTime, (Long) result[0]);
+      }
     }
     return resultMap;
   }

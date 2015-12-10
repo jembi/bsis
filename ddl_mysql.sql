@@ -1,1561 +1,1635 @@
-
-    create table PackType (
-        id SMALLINT not null auto_increment,
-        packType varchar(50),
-        canPool boolean,
-        canSplit boolean,
-        isDeleted boolean,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table PackType_AUD (
-        id SMALLINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        packType varchar(50),
-        canPool boolean,
-        canSplit boolean,
-        isDeleted boolean,
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table BloodTest (
-        id SMALLINT not null auto_increment,
-        bloodTestType varchar(30),
-        category varchar(30),
-        context varchar(30),
-        isActive boolean,
-        isEmptyAllowed boolean,
-        negativeResults varchar(255),
-        positiveResults varchar(255),
-        rankInCategory integer,
-        testName varchar(40),
-        testNameShort varchar(25),
-        validResults varchar(255),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table BloodTestResult (
-        id bigint not null auto_increment,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        notes longtext,
-        result varchar(10),
-        testedOn datetime,
-        bloodTest_id SMALLINT,
-        donation_id bigint,
-        machineReading_id bigint,
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table BloodTest_AUD (
-        id SMALLINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        bloodTestType varchar(30),
-        category varchar(30),
-        context varchar(30),
-        isActive boolean,
-        isEmptyAllowed boolean,
-        negativeResults varchar(255),
-        positiveResults varchar(255),
-        rankInCategory integer,
-        testName varchar(40),
-        testNameShort varchar(25),
-        validResults varchar(255),
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table BloodTest_WorksheetType (
-        bloodTests_id SMALLINT not null,
-        worksheetTypes_id SMALLINT not null,
-        primary key (bloodTests_id, worksheetTypes_id)
-    ) ENGINE=InnoDB;
-
-    create table BloodTest_WorksheetType_AUD (
-        REV integer not null,
-        bloodTests_id SMALLINT not null,
-        worksheetTypes_id SMALLINT not null,
-        REVTYPE tinyint,
-        primary key (REV, bloodTests_id, worksheetTypes_id)
-    ) ENGINE=InnoDB;
-
-    create table BloodTestingRule (
-        id MEDIUMINT not null auto_increment,
-        bloodTestsIds varchar(200),
-        category varchar(30),
-        donationFieldChanged varchar(12),
-        context varchar(30),
-        extraInformation varchar(30),
-        isActive boolean,
-        markSampleAsUnsafe boolean,
-        newInformation varchar(30),
-        pattern varchar(50),
-        pendingTestsIds varchar(60),
-        subCategory varchar(30),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table BloodTestingRule_AUD (
-        id MEDIUMINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        bloodTestsIds varchar(200),
-        category varchar(30),
-        donationFieldChanged varchar(12),
-        context varchar(30),
-        extraInformation varchar(30),
-        isActive boolean,
-        markSampleAsUnsafe boolean,
-        newInformation varchar(30),
-        pattern varchar(50),
-        pendingTestsIds varchar(60),
-        subCategory varchar(30),
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table Donation (
-        id bigint not null auto_increment,
-        bloodAbo varchar(50),
-        bloodPressure decimal(6,2),
-        bloodRh varchar(50),
-        bloodTypingStatus varchar(20),
-        donationDate datetime,
-        donationIdentificationNumber varchar(20) unique,
-        donorWeight decimal(6,2),
-        extraBloodTypeInformation varchar(150),
-        haemoglobinCount decimal(6,2),
-        isDeleted boolean,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        notes longtext,
-        ttiStatus varchar(20),
-        packType_id SMALLINT,
-        donationBatch_id SMALLINT,
-        donationCreatedBy_id SMALLINT,
-        donationType_id SMALLINT,
-        donor_id bigint,
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table Donation_AUD (
-        id bigint not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        bloodAbo varchar(50),
-        bloodPressure decimal(6,2),
-        bloodRh varchar(50),
-        bloodTypingStatus varchar(20),
-        donationDate datetime,
-        donationIdentificationNumber varchar(20),
-        donorWeight decimal(6,2),
-        extraBloodTypeInformation varchar(150),
-        haemoglobinCount decimal(6,2),
-        isDeleted boolean,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        notes longtext,
-        ttiStatus varchar(20),
-        packType_id SMALLINT,
-        donationBatch_id SMALLINT,
-        donationCreatedBy_id SMALLINT,
-        donationType_id SMALLINT,
-        donor_id bigint,
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table DonationBatch (
-        id SMALLINT not null auto_increment,
-        batchNumber varchar(20) unique,
-        isDeleted boolean not null,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        notes longtext,
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table DonationBatch_AUD (
-        id SMALLINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        batchNumber varchar(20),
-        isDeleted boolean,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        notes longtext,
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table CompatibilityTest (
-        id bigint not null auto_increment,
-        compatibililityTestDate datetime,
-        compatibilityResult varchar(15),
-        isDeleted boolean,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        notes longtext,
-        testedBy varchar(255),
-        transfusedBefore boolean,
-        crossmatchType_id SMALLINT,
-        forRequest_id bigint,
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        testedComponent_id bigint,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table CompatibilityTest_AUD (
-        id bigint not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        compatibililityTestDate datetime,
-        compatibilityResult varchar(15),
-        isDeleted boolean,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        notes longtext,
-        testedBy varchar(255),
-        transfusedBefore boolean,
-        crossmatchType_id SMALLINT,
-        forRequest_id bigint,
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        testedComponent_id bigint,
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table ContactMethodType (
-        id SMALLINT not null auto_increment,
-        contactMethodType varchar(30),
-        isDeleted boolean not null,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table ContactMethodType_AUD (
-        id SMALLINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        contactMethodType varchar(30),
-        isDeleted boolean,
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table CrossmatchType (
-        id SMALLINT not null auto_increment,
-        crossmatchType varchar(255),
-        isDeleted boolean,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table CrossmatchType_AUD (
-        id SMALLINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        crossmatchType varchar(255),
-        isDeleted boolean,
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table DeferralReason (
-        id SMALLINT not null auto_increment,
-        isDeleted boolean,
-        reason varchar(100),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table DeferralReason_AUD (
-        id SMALLINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        isDeleted boolean,
-        reason varchar(100),
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table DonationType (
-        id SMALLINT not null auto_increment,
-        donationType varchar(50),
-        isDeleted boolean,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table DonationType_AUD (
-        id SMALLINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        donationType varchar(50),
-        isDeleted boolean,
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table Donor (
-        id bigint not null auto_increment,
-        age TINYINT,
-        birthDate date,
-        birthDateInferred date,
-        birthDateEstimated boolean,
-        bloodAbo varchar(10),
-        bloodRh varchar(10),
-        callingName varchar(20),
-        address varchar(100),
-        city varchar(25),
-        country varchar(25),
-        district varchar(25),
-        otherPhoneNumber varchar(20),
-        phoneNumber varchar(20),
-        province varchar(25),
-        state varchar(25),
-        zipcode varchar(10),
-        dateOfLastDonation datetime,
-        donorHash varchar(50),
-        donorNumber varchar(20) unique,
-        donorStatus varchar(20),
-        firstName varchar(20),
-        gender varchar(15),
-        isDeleted boolean,
-        lastName varchar(20),
-        middleName varchar(20),
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        nationalID varchar(15),
-        notes longtext,
-        preferredContactMethod_id SMALLINT,
-        donorPanel_id bigint,
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table DonorDeferral (
-        id bigint not null auto_increment,
-        deferredDonor_id bigint,
-        deferralReasonText longtext,
-        deferredUntil date,
-        deferralReason_id SMALLINT,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table DonorDeferral_AUD (
-        id bigint not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        deferredDonor_id bigint,
-        deferralReasonText longtext,
-        deferredUntil date,
-        deferralReason_id SMALLINT,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table Donor_AUD (
-        id bigint not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        age TINYINT,
-        birthDate date,
-        birthDateInferred date,
-        birthDateEstimated boolean,
-        bloodAbo varchar(10),
-        bloodRh varchar(10),
-        callingName varchar(20),
-        address varchar(100),
-        city varchar(25),
-        country varchar(25),
-        district varchar(25),
-        otherPhoneNumber varchar(20),
-        phoneNumber varchar(20),
-        province varchar(25),
-        state varchar(25),
-        zipcode varchar(10),
-        dateOfLastDonation datetime,
-        donorHash varchar(50),
-        donorNumber varchar(20),
-        donorStatus varchar(20),
-        firstName varchar(20),
-        gender varchar(15),
-        isDeleted boolean,
-        lastName varchar(20),
-        middleName varchar(20),
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        nationalID varchar(15),
-        notes longtext,
-        preferredContactMethod_id SMALLINT,
-        donorPanel_id bigint,
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table FormField (
-        id bigint not null auto_increment,
-        autoGenerate boolean,
-        canBeOptional boolean,
-        defaultDisplayName varchar(60),
-        defaultValue longtext,
-        displayName varchar(60),
-        field varchar(30),
-        form varchar(30),
-        hidden boolean,
-        isAutoGeneratable boolean,
-        isHidable boolean,
-        isRequired boolean,
-        isTimeField boolean,
-        maxLength integer,
-        useCurrentTime boolean,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table GenericConfig (
-        id bigint not null auto_increment,
-        propertyName varchar(80),
-        propertyOwner varchar(30),
-        propertyValue varchar(80),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table Location (
-        id bigint not null auto_increment,
-        isDeleted boolean,
-        isDonorPanel boolean,
-        isMobileSite boolean,
-        isUsageSite boolean,
-        name varchar(255),
-        notes longtext,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table Location_AUD (
-        id bigint not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        isDeleted boolean,
-        isDonorPanel boolean,
-        isMobileSite boolean,
-        isUsageSite boolean,
-        name varchar(255),
-        notes longtext,
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table MachineReading (
-        id bigint not null auto_increment,
-        columnNumber SMALLINT,
-        machineReading decimal(7,3),
-        rowNumber SMALLINT,
-        plateSession_id bigint,
-        wellType_id SMALLINT,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table MicrotiterPlate (
-        id SMALLINT not null auto_increment,
-        isDeleted boolean,
-        notes longtext,
-        numColumns SMALLINT,
-        numRows SMALLINT,
-        plateKey varchar(15) unique,
-        plateName varchar(20),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table MicrotiterPlate_AUD (
-        id SMALLINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        isDeleted boolean,
-        notes longtext,
-        numColumns SMALLINT,
-        numRows SMALLINT,
-        plateKey varchar(15),
-        plateName varchar(20),
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table Permission (
-        id bigint not null auto_increment,
-        name varchar(50),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table Permission_AUD (
-        id bigint not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        name varchar(50),
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table Permission_Role (
-        permissions_id bigint not null,
-        roles_id bigint not null
-    ) ENGINE=InnoDB;
-
-    create table Permission_Role_AUD (
-        REV integer not null,
-        permissions_id bigint not null,
-        roles_id bigint not null,
-        REVTYPE tinyint,
-        primary key (REV, permissions_id, roles_id)
-    ) ENGINE=InnoDB;
-
-    create table PlateSession (
-        id bigint not null auto_increment,
-        isDeleted boolean,
-        plateUsedOn datetime,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table PlateSession_AUD (
-        id bigint not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        isDeleted boolean,
-        plateUsedOn datetime,
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table PlateSession_BloodTestResult (
-        PlateSession_id bigint not null,
-        bloodTestsOnPlate_id bigint not null,
-        unique (bloodTestsOnPlate_id)
-    ) ENGINE=InnoDB;
-
-    create table Component (
-        id bigint not null auto_increment,
-        createdOn datetime,
-        discardedOn DATETIME,
-        expiresOn datetime,
-        isDeleted boolean,
-        issuedOn datetime,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        notes longtext,
-        status varchar(30),
-        subdivisionCode varchar(3),
-        donation_id bigint,
-        issuedTo_id bigint,
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        parentComponent_id bigint,
-        componentType_id SMALLINT,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table ComponentStatusChange (
-        id bigint not null auto_increment,
-        newStatus varchar(30),
-        statusChangeReasonText longtext,
-        statusChangeType varchar(30),
-        statusChangedOn datetime,
-        changedBy_id SMALLINT,
-        issuedTo_id bigint,
-        component_id bigint,
-        statusChangeReason_id SMALLINT,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table ComponentStatusChangeReason (
-        id SMALLINT not null auto_increment,
-        category varchar(30),
-        isDeleted boolean,
-        statusChangeReason varchar(100),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table ComponentStatusChangeReason_AUD (
-        id SMALLINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        category varchar(30),
-        isDeleted boolean,
-        statusChangeReason varchar(100),
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table ComponentStatusChange_AUD (
-        id bigint not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        newStatus varchar(30),
-        statusChangeReasonText longtext,
-        statusChangeType varchar(30),
-        statusChangedOn datetime,
-        changedBy_id SMALLINT,
-        issuedTo_id bigint,
-        component_id bigint,
-        statusChangeReason_id SMALLINT,
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table ComponentType (
-        id SMALLINT not null auto_increment,
-        description longtext,
-        expiresAfter integer,
-        expiresAfterUnits varchar(30),
-        hasBloodGroup boolean,
-        isDeleted boolean,
-        componentTypeName varchar(50),
-        componentTypeNameShort varchar(30),
-        pediComponentType_id SMALLINT,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table ComponentTypeCombination (
-        id SMALLINT not null auto_increment,
-        combinationName varchar(300),
-        isDeleted boolean,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table ComponentTypeCombination_AUD (
-        id SMALLINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        combinationName varchar(300),
-        isDeleted boolean,
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table ComponentTypeCombination_ComponentType (
-    	id SMALLINT not null auto_increment,
-        componentTypeCombinations_id SMALLINT not null,
-        componentTypes_id SMALLINT not null,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table ComponentType_AUD (
-        id SMALLINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        description longtext,
-        expiresAfter integer,
-        expiresAfterUnits varchar(30),
-        hasBloodGroup boolean,
-        isDeleted boolean,
-        componentTypeName varchar(50),
-        componentTypeNameShort varchar(30),
-        pediComponentType_id SMALLINT,
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table ComponentUsage (
-        id bigint not null auto_increment,
-        hospital varchar(50),
-        isDeleted boolean,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        notes longtext,
-        patientName varchar(50),
-        usageDate datetime,
-        useIndication varchar(50),
-        usedBy varchar(30),
-        ward varchar(30),
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        component_id bigint,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table ComponentUsage_AUD (
-        id bigint not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        hospital varchar(50),
-        isDeleted boolean,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        notes longtext,
-        patientName varchar(50),
-        usageDate datetime,
-        useIndication varchar(50),
-        usedBy varchar(30),
-        ward varchar(30),
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        component_id bigint,
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table Component_AUD (
-        id bigint not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        createdOn datetime,
-        discardedOn DATETIME,
-        expiresOn datetime,
-        isDeleted boolean,
-        issuedOn datetime,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        notes longtext,
-        status varchar(30),
-        subdivisionCode varchar(3),
-        donation_id bigint,
-        issuedTo_id bigint,
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        parentComponent_id bigint,
-        componentType_id SMALLINT,
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table AuditRevision (
-        id integer not null auto_increment,
-        timestamp bigint,
-        username varchar(30),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    CREATE TABLE EntityModification (
-        id integer not null auto_increment,
-        auditRevision_id integer not null,
-        revisionType varchar(30) not null,
-        entityName varchar(30) not null,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table Request (
-        id bigint not null auto_increment,
-        department varchar(30),
-        fulfilled boolean,
-        hospital varchar(30),
-        indicationForUse varchar(50),
-        isDeleted boolean,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        notes longtext,
-        numUnitsIssued integer,
-        numUnitsRequested integer,
-        patientAge integer,
-        patientBirthDate date,
-        patientBloodAbo varchar(30),
-        patientBloodRh varchar(30),
-        patientDiagnosis varchar(100),
-        patientFirstName varchar(30),
-        patientGender integer,
-        patientLastName varchar(30),
-        patientNumber varchar(30),
-        requestDate datetime,
-        requestNumber varchar(20) unique,
-        requestedBy varchar(30),
-        requiredDate datetime,
-        ward varchar(20),
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        componentType_id SMALLINT,
-        requestSite_id bigint,
-        requestType_id SMALLINT,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table RequestType (
-        id SMALLINT not null auto_increment,
-        description varchar(100),
-        isDeleted boolean,
-        requestType varchar(30),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table RequestType_AUD (
-        id SMALLINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        description varchar(100),
-        isDeleted boolean,
-        requestType varchar(30),
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table Request_AUD (
-        id bigint not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        department varchar(30),
-        fulfilled boolean,
-        hospital varchar(30),
-        indicationForUse varchar(50),
-        isDeleted boolean,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        notes longtext,
-        numUnitsIssued integer,
-        numUnitsRequested integer,
-        patientAge integer,
-        patientBirthDate date,
-        patientBloodAbo varchar(30),
-        patientBloodRh varchar(30),
-        patientDiagnosis varchar(100),
-        patientFirstName varchar(30),
-        patientGender integer,
-        patientLastName varchar(30),
-        patientNumber varchar(30),
-        requestDate datetime,
-        requestNumber varchar(20),
-        requestedBy varchar(30),
-        requiredDate datetime,
-        ward varchar(20),
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        componentType_id SMALLINT,
-        requestSite_id bigint,
-        requestType_id SMALLINT,
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table Role (
-        id bigint not null auto_increment,
-        name varchar(50),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table Role_AUD (
-        id bigint not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        name varchar(50),
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table SequenceNumberStore (
-        id integer not null auto_increment,
-        columnName varchar(50),
-        lastNumber bigint,
-        prefix varchar(5),
-        sequenceNumberContext varchar(5),
-        targetTable varchar(50),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table Tips (
-        tipsKey varchar(255) not null,
-        isDeleted boolean,
-        tipsContent varchar(1000),
-        tipsName varchar(255),
-        primary key (tipsKey)
-    ) ENGINE=InnoDB;
-
-    create table User (
-        id SMALLINT not null auto_increment,
-        emailId varchar(255),
-        firstName varchar(20) not null,
-        isActive boolean,
-        isAdmin boolean,
-        isDeleted boolean,
-        isStaff boolean,
-        lastLogin datetime,
-        lastName varchar(20),
-        notes longtext,
-        password varchar(255) not null,
-        username varchar(30) not null unique,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table User_AUD (
-        id SMALLINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        emailId varchar(255),
-        firstName varchar(20),
-        isActive boolean,
-        isAdmin boolean,
-        isDeleted boolean,
-        isStaff boolean,
-        lastLogin datetime,
-        lastName varchar(20),
-        notes longtext,
-        password varchar(255),
-        username varchar(30),
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table User_Role (
-        users_id SMALLINT not null,
-        roles_id bigint not null
-    ) ENGINE=InnoDB;
-
-    create table User_Role_AUD (
-        REV integer not null,
-        users_id SMALLINT not null,
-        roles_id bigint not null,
-        REVTYPE tinyint,
-        primary key (REV, users_id, roles_id)
-    ) ENGINE=InnoDB;
-
-    create table WellType (
-        id SMALLINT not null auto_increment,
-        isDeleted boolean,
-        requiresSample boolean,
-        wellType varchar(30),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table WellType_AUD (
-        id SMALLINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        isDeleted boolean,
-        requiresSample boolean,
-        wellType varchar(30),
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table Worksheet (
-        id bigint not null auto_increment,
-        isDeleted boolean,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        notes longtext,
-        worksheetNumber varchar(20) unique,
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        worksheetType_id SMALLINT,
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table WorksheetType (
-        id SMALLINT not null auto_increment,
-        context varchar(30),
-        isDeleted boolean,
-        worksheetType varchar(30),
-        primary key (id)
-    ) ENGINE=InnoDB;
-
-    create table WorksheetType_AUD (
-        id SMALLINT not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        context varchar(30),
-        isDeleted boolean,
-        worksheetType varchar(30),
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table Worksheet_AUD (
-        id bigint not null,
-        REV integer not null,
-        REVTYPE tinyint,
-        isDeleted boolean,
-        createdDate TIMESTAMP,
-        lastUpdated TIMESTAMP,
-        notes longtext,
-        worksheetNumber varchar(20),
-        createdBy_id SMALLINT,
-        lastUpdatedBy_id SMALLINT,
-        worksheetType_id SMALLINT,
-        primary key (id, REV)
-    ) ENGINE=InnoDB;
-
-    create table Worksheet_Donation (
-        worksheets_id bigint not null,
-        donations_id bigint not null,
-        primary key (worksheets_id, donations_id)
-    ) ENGINE=InnoDB;
-
-    alter table PackType_AUD 
-        add index FK_PACK_TYPE_AUDIT_REVISION (REV), 
-        add constraint FK_PACK_TYPE_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table BloodTestResult 
-        add index FK39946CC9A49787C4 (createdBy_id), 
-        add constraint FK39946CC9A49787C4 
-        foreign key (createdBy_id) 
-        references User (id);
-
-    alter table BloodTestResult 
-        add index FK39946CC932E145A (donation_id), 
-        add constraint FK39946CC932E145A 
-        foreign key (donation_id) 
-        references Donation (id);
-
-    alter table BloodTestResult 
-        add index FK39946CC9E104121F (machineReading_id), 
-        add constraint FK39946CC9E104121F 
-        foreign key (machineReading_id) 
-        references MachineReading (id);
-
-    alter table BloodTestResult 
-        add index FK39946CC9D0AFB367 (lastUpdatedBy_id), 
-        add constraint FK39946CC9D0AFB367 
-        foreign key (lastUpdatedBy_id) 
-        references User (id);
-
-    alter table BloodTestResult 
-        add index FK39946CC945027987 (bloodTest_id), 
-        add constraint FK39946CC945027987 
-        foreign key (bloodTest_id) 
-        references BloodTest (id);
-
-    alter table BloodTest_AUD 
-        add index FK_BLOOD_TEST_AUDIT_REVISION (REV), 
-        add constraint FK_BLOOD_TEST_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table BloodTest_WorksheetType 
-        add index FK7A6DA3B518CB61F2 (worksheetTypes_id), 
-        add constraint FK7A6DA3B518CB61F2 
-        foreign key (worksheetTypes_id) 
-        references WorksheetType (id);
-
-    alter table BloodTest_WorksheetType 
-        add index FK7A6DA3B5BC5F90CC (bloodTests_id), 
-        add constraint FK7A6DA3B5BC5F90CC 
-        foreign key (bloodTests_id) 
-        references BloodTest (id);
-
-    alter table BloodTest_WorksheetType_AUD 
-        add index FK_BLOOD_TEST_WORKSHEET_TYPE_AUDIT_REVISION (REV), 
-        add constraint FK_BLOOD_TEST_WORKSHEET_TYPE_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table BloodTestingRule_AUD 
-        add index FK_BLOOD_TESTING_RULE_AUDIT_REVISION (REV), 
-        add constraint FK_BLOOD_TESTING_RULE_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    create index donation_donationDate_index on Donation (donationDate);
-
-    create index donation_donationIdentificationNumber_index on Donation (donationIdentificationNumber);
-
-    alter table Donation 
-        add index FKF0658A33A49787C4 (createdBy_id), 
-        add constraint FKF0658A33A49787C4 
-        foreign key (createdBy_id) 
-        references User (id);
-
-    alter table Donation 
-        add index FKF0658A33D04A4456 (donationCreatedBy_id), 
-        add constraint FKF0658A33D04A4456 
-        foreign key (donationCreatedBy_id) 
-        references User (id);
-
-    alter table Donation 
-        add index FKF0658A33E5D4FEA3 (donationBatch_id), 
-        add constraint FKF0658A33E5D4FEA3 
-        foreign key (donationBatch_id) 
-        references DonationBatch (id);
-
-    alter table Donation 
-        add index FKF0658A3359FAB30D (donor_id), 
-        add constraint FKF0658A3359FAB30D 
-        foreign key (donor_id) 
-        references Donor (id);
-
-    alter table Donation 
-        add index FKF0658A338461A8D7 (donationType_id), 
-        add constraint FKF0658A338461A8D7 
-        foreign key (donationType_id) 
-        references DonationType (id);
-
-    alter table Donation 
-        add index FKF0658A33D0AFB367 (lastUpdatedBy_id), 
-        add constraint FKF0658A33D0AFB367 
-        foreign key (lastUpdatedBy_id) 
-        references User (id);
-
-    alter table Donation 
-        add index FKF0658A331D73927B (packType_id), 
-        add constraint FKF0658A331D73927B 
-        foreign key (packType_id) 
-        references PackType (id);
-
-    alter table Donation_AUD 
-        add index FK_DONATION_AUDIT_REVISION (REV), 
-        add constraint FK_DONATION_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table DonationBatch 
-        add index FK227631CA49787C4 (createdBy_id), 
-        add constraint FK227631CA49787C4 
-        foreign key (createdBy_id) 
-        references User (id);
-
-    alter table DonationBatch 
-        add index FK227631CD0AFB367 (lastUpdatedBy_id), 
-        add constraint FK227631CD0AFB367 
-        foreign key (lastUpdatedBy_id) 
-        references User (id);
-
-    alter table DonationBatch_AUD 
-        add index FK_DONATION_BATCH_AUDIT_REVISION (REV), 
-        add constraint FK_DONATION_BATCH_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    create index compatibilityTest_crossmatchTestDate_index on CompatibilityTest (compatibililityTestDate);
-
-    alter table CompatibilityTest 
-        add index FK92798602A49787C4 (createdBy_id), 
-        add constraint FK92798602A49787C4 
-        foreign key (createdBy_id) 
-        references User (id);
-
-    alter table CompatibilityTest 
-        add index FK92798602D4061B9F (forRequest_id), 
-        add constraint FK92798602D4061B9F 
-        foreign key (forRequest_id) 
-        references Request (id);
-
-    alter table CompatibilityTest 
-        add index FK92798602EFD1FE7 (testedComponent_id), 
-        add constraint FK92798602EFD1FE7 
-        foreign key (testedComponent_id) 
-        references Component (id);
-
-    alter table CompatibilityTest 
-        add index FK92798602D0AFB367 (lastUpdatedBy_id), 
-        add constraint FK92798602D0AFB367 
-        foreign key (lastUpdatedBy_id) 
-        references User (id);
-
-    alter table CompatibilityTest 
-        add index FK927986028631CA7D (crossmatchType_id), 
-        add constraint FK927986028631CA7D 
-        foreign key (crossmatchType_id) 
-        references CrossmatchType (id);
-
-    alter table CompatibilityTest_AUD 
-        add index FK_COMPATIBILITY_TEST_AUDIT_REVISION (REV), 
-        add constraint FK_COMPATIBILITY_TEST_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table ContactMethodType_AUD 
-        add index FK_CONTACT_METHOD_TYPE_AUDIT_REVISION (REV), 
-        add constraint FK_CONTACT_METHOD_TYPE_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table CrossmatchType_AUD 
-        add index FK_CROSSMATCH_TYPE_AUDIT_REVISION (REV), 
-        add constraint FK_CROSSMATCH_TYPE_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table DeferralReason_AUD 
-        add index FK_DEFERRAL_REASON_AUDIT_REVISION (REV), 
-        add constraint FK_DEFERRAL_REASON_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table DonationType_AUD 
-        add index FK_DONATION_TYPE_AUDIT_REVISION (REV), 
-        add constraint FK_DONATION_TYPE_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    create index donor_donorNumber_index on Donor (donorNumber);
-
-    create index donor_lastName_index on Donor (lastName);
-
-    create index donor_firstName_index on Donor (firstName);
-
-    alter table Donor 
-        add index FK3F25E46A49787C4 (createdBy_id), 
-        add constraint FK3F25E46A49787C4 
-        foreign key (createdBy_id) 
-        references User (id);
-
-    alter table Donor 
-        add index FK3F25E463043805 (donorPanel_id), 
-        add constraint FK3F25E463043805 
-        foreign key (donorPanel_id) 
-        references Location (id);
-
-    alter table Donor 
-        add index FK3F25E46FCE9E976 (preferredContactMethod_id), 
-        add constraint FK3F25E46FCE9E976 
-        foreign key (preferredContactMethod_id) 
-        references ContactMethodType (id);
-
-    alter table Donor 
-        add index FK3F25E46D0AFB367 (lastUpdatedBy_id), 
-        add constraint FK3F25E46D0AFB367 
-        foreign key (lastUpdatedBy_id) 
-        references User (id);
-
-    alter table DonorDeferral 
-        add index FKC7E323D193E6BEC (deferredDonor_id), 
-        add constraint FKC7E323D193E6BEC 
-        foreign key (deferredDonor_id) 
-        references Donor (id);
-
-    alter table DonorDeferral 
-        add index FKC7E323D1ED3A012D (createdBy_id), 
-        add constraint FKC7E323D1ED3A012D 
-        foreign key (createdBy_id) 
-        references User (id);
-
-    alter table DonorDeferral 
-        add index FKC7E323D1C9CCBBFC (deferralReason_id), 
-        add constraint FKC7E323D1C9CCBBFC 
-        foreign key (deferralReason_id) 
-        references DeferralReason (id);
-
-    alter table DonorDeferral_AUD 
-        add index FK_DONOR_DEFERRAL_AUDIT_REVISION (REV), 
-        add constraint FK_DONOR_DEFERRAL_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table Donor_AUD 
-        add index FK_DONOR_AUDIT_REVISION (REV), 
-        add constraint FK_DONOR_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table Location_AUD 
-        add index FK_LOCATION_AUDIT_REVISION (REV), 
-        add constraint FK_LOCATION_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table MachineReading 
-        add index FK4CF2E0652531C00D (wellType_id), 
-        add constraint FK4CF2E0652531C00D 
-        foreign key (wellType_id) 
-        references WellType (id);
-
-    alter table MachineReading 
-        add index FK4CF2E065AF35157F (plateSession_id), 
-        add constraint FK4CF2E065AF35157F 
-        foreign key (plateSession_id) 
-        references PlateSession (id);
-
-    alter table MicrotiterPlate_AUD 
-        add index FK_MICROTITER_PLATE_AUDIT_REVISION (REV), 
-        add constraint FK_MICROTITER_PLATE_AUDIT_REVISION
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table Permission_AUD 
-        add index FK_PERMISSION_AUDIT_REVISION (REV), 
-        add constraint FK_PERMISSION_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table Permission_Role 
-        add index FK63DCE8E61D2E2631 (roles_id), 
-        add constraint FK63DCE8E61D2E2631 
-        foreign key (roles_id) 
-        references Role (id);
-
-    alter table Permission_Role 
-        add index FK63DCE8E612647DE3 (permissions_id), 
-        add constraint FK63DCE8E612647DE3 
-        foreign key (permissions_id) 
-        references Permission (id);
-
-    alter table Permission_Role_AUD 
-        add index FK_PERMISSION_ROLE_AUDIT_REVISION (REV), 
-        add constraint FK_PERMISSION_ROLE_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table PlateSession_AUD 
-        add index FK_PLATE_SESSION_AUDIT_REVISION (REV), 
-        add constraint FK_PLATE_SESSION_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table PlateSession_BloodTestResult 
-        add index FK7A75514AAF35157F (PlateSession_id), 
-        add constraint FK7A75514AAF35157F 
-        foreign key (PlateSession_id) 
-        references PlateSession (id);
-
-    alter table PlateSession_BloodTestResult 
-        add index FK7A75514A2DA883C0 (bloodTestsOnPlate_id), 
-        add constraint FK7A75514A2DA883C0 
-        foreign key (bloodTestsOnPlate_id) 
-        references BloodTestResult (id);
-
-    create index component_expiresOn_index on Component (expiresOn);
-
-    alter table Component 
-        add index FK50C664CFA49787C4 (createdBy_id), 
-        add constraint FK50C664CFA49787C4 
-        foreign key (createdBy_id) 
-        references User (id);
-
-    alter table Component 
-        add index FK50C664CF994002DF (issuedTo_id), 
-        add constraint FK50C664CF994002DF 
-        foreign key (issuedTo_id) 
-        references Request (id);
-
-    alter table Component 
-        add index FK50C664CF32E145A (donation_id), 
-        add constraint FK50C664CF32E145A 
-        foreign key (donation_id) 
-        references Donation (id);
-
-    alter table Component 
-        add index FK50C664CF73AC2B90 (componentType_id), 
-        add constraint FK50C664CF73AC2B90 
-        foreign key (componentType_id) 
-        references ComponentType (id);
-
-    alter table Component 
-        add index FK50C664CFD946D0A0 (parentComponent_id), 
-        add constraint FK50C664CFD946D0A0 
-        foreign key (parentComponent_id) 
-        references Component (id);
-
-    alter table Component 
-        add index FK50C664CFD0AFB367 (lastUpdatedBy_id), 
-        add constraint FK50C664CFD0AFB367 
-        foreign key (lastUpdatedBy_id) 
-        references User (id);
-
-    alter table ComponentStatusChange 
-        add index FKCCE48CB1994002DF (issuedTo_id), 
-        add constraint FKCCE48CB1994002DF 
-        foreign key (issuedTo_id) 
-        references Request (id);
-
-    alter table ComponentStatusChange 
-        add index FKCCE48CB18BFC6394 (statusChangeReason_id), 
-        add constraint FKCCE48CB18BFC6394 
-        foreign key (statusChangeReason_id) 
-        references ComponentStatusChangeReason (id);
-
-    alter table ComponentStatusChange 
-        add index FKCCE48CB1A8E71476 (component_id), 
-        add constraint FKCCE48CB1A8E71476 
-        foreign key (component_id) 
-        references Component (id);
-
-    alter table ComponentStatusChange 
-        add index FKCCE48CB1438D2378 (changedBy_id), 
-        add constraint FKCCE48CB1438D2378 
-        foreign key (changedBy_id) 
-        references User (id);
-
-    alter table ComponentStatusChangeReason_AUD 
-        add index FK_COMPONENT_STATUS_CHANGE_REASON_AUDIT_REVISION (REV), 
-        add constraint FK_COMPONENT_STATUS_CHANGE_REASON_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table ComponentStatusChange_AUD 
-        add index FK_COMPONENT_STATUS_CHANGE_AUDIT_REVISION (REV), 
-        add constraint FK_COMPONENT_STATUS_CHANGE_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table ComponentType 
-        add index FKA8168A93E7CEF4A (pediComponentType_id), 
-        add constraint FKA8168A93E7CEF4A 
-        foreign key (pediComponentType_id) 
-        references ComponentType (id);
-
-    alter table ComponentTypeCombination_AUD 
-        add index FK_COMPONENT_TYPE_COMBINATION_AUDIT_REVISION (REV), 
-        add constraint FK_COMPONENT_TYPE_COMBINATION_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table ComponentTypeCombination_ComponentType 
-        add index FK3F6704507548F61D (componentTypeCombinations_id), 
-        add constraint FK3F6704507548F61D 
-        foreign key (componentTypeCombinations_id) 
-        references ComponentTypeCombination (id);
-
-    alter table ComponentTypeCombination_ComponentType 
-        add index FK3F670450EE5B3BAF (componentTypes_id), 
-        add constraint FK3F670450EE5B3BAF 
-        foreign key (componentTypes_id) 
-        references ComponentType (id);
-
-    alter table ComponentType_AUD 
-        add index FK_COMPONENT_TYPE_AUDIT_REVISION (REV), 
-        add constraint FK_COMPONENT_TYPE_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table ComponentUsage 
-        add index FK45B6D212A49787C4 (createdBy_id), 
-        add constraint FK45B6D212A49787C4 
-        foreign key (createdBy_id) 
-        references User (id);
-
-    alter table ComponentUsage 
-        add index FK45B6D212A8E71476 (component_id), 
-        add constraint FK45B6D212A8E71476 
-        foreign key (component_id) 
-        references Component (id);
-
-    alter table ComponentUsage 
-        add index FK45B6D212D0AFB367 (lastUpdatedBy_id), 
-        add constraint FK45B6D212D0AFB367 
-        foreign key (lastUpdatedBy_id) 
-        references User (id);
-
-    alter table ComponentUsage_AUD 
-        add index FK_COMPONENT_USAGE_AUDIT_REVISION (REV), 
-        add constraint FK_COMPONENT_USAGE_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table Component_AUD 
-        add index FK_COMPONENT_AUDIT_REVISION (REV), 
-        add constraint FK_COMPONENT_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    create index request_requiredDate_index on Request (requiredDate);
-
-    create index request_requestDate_index on Request (requestDate);
-
-    create index request_bloodRhd_index on Request (patientBloodRh);
-
-    create index request_requestNumber_index on Request (requestNumber);
-
-    create index request_bloodAbo_index on Request (patientBloodAbo);
-
-    alter table Request 
-        add index FKA4878A6FA49787C4 (createdBy_id), 
-        add constraint FKA4878A6FA49787C4 
-        foreign key (createdBy_id) 
-        references User (id);
-
-    alter table Request 
-        add index FKA4878A6F1520E0D (requestSite_id), 
-        add constraint FKA4878A6F1520E0D 
-        foreign key (requestSite_id) 
-        references Location (id);
-
-    alter table Request 
-        add index FKA4878A6F73AC2B90 (componentType_id), 
-        add constraint FKA4878A6F73AC2B90 
-        foreign key (componentType_id) 
-        references ComponentType (id);
-
-    alter table Request 
-        add index FKA4878A6F537AAD30 (requestType_id), 
-        add constraint FKA4878A6F537AAD30 
-        foreign key (requestType_id) 
-        references RequestType (id);
-
-    alter table Request 
-        add index FKA4878A6FD0AFB367 (lastUpdatedBy_id), 
-        add constraint FKA4878A6FD0AFB367 
-        foreign key (lastUpdatedBy_id) 
-        references User (id);
-
-    alter table RequestType_AUD 
-        add index FK_REQUEST_TYPE_AUDIT_REVISION (REV), 
-        add constraint FK_REQUEST_TYPE_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table Request_AUD 
-        add index FK_REQUEST_AUDIT_REVISION (REV), 
-        add constraint FK_REQUEST_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table Role_AUD 
-        add index FK_ROLE_AUDIT_REVISION (REV), 
-        add constraint FK_ROLE_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table User_AUD 
-        add index FK_USER_AUDIT_REVISION (REV), 
-        add constraint FK_USER_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table User_Role 
-        add index FK8B9F886A1D2E2631 (roles_id), 
-        add constraint FK8B9F886A1D2E2631 
-        foreign key (roles_id) 
-        references Role (id);
-
-    alter table User_Role 
-        add index FK8B9F886A1D314A5B (users_id), 
-        add constraint FK8B9F886A1D314A5B 
-        foreign key (users_id) 
-        references User (id);
-
-    alter table User_Role_AUD 
-        add index FK_USER_ROLE_AUDIT_REVISION (REV), 
-        add constraint FK_USER_ROLE_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table WellType_AUD 
-        add index FK_WELL_TYPE_AUDIT_REVISION (REV), 
-        add constraint FK_WELL_TYPE_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table Worksheet 
-        add index FKB98678CEA49787C4 (createdBy_id), 
-        add constraint FKB98678CEA49787C4 
-        foreign key (createdBy_id) 
-        references User (id);
-
-    alter table Worksheet 
-        add index FKB98678CEBC88FBF5 (worksheetType_id), 
-        add constraint FKB98678CEBC88FBF5 
-        foreign key (worksheetType_id) 
-        references WorksheetType (id);
-
-    alter table Worksheet 
-        add index FKB98678CED0AFB367 (lastUpdatedBy_id), 
-        add constraint FKB98678CED0AFB367 
-        foreign key (lastUpdatedBy_id) 
-        references User (id);
-
-    alter table WorksheetType_AUD 
-        add index FK_WORKSHEET_TYPE_AUDIT_REVISION (REV), 
-        add constraint FK_WORKSHEET_TYPE_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table Worksheet_AUD 
-        add index FK_WORKSHEET_AUDIT_REVISION (REV), 
-        add constraint FK_WORKSHEET_AUDIT_REVISION 
-        foreign key (REV) 
-        references AuditRevision (id);
-
-    alter table Worksheet_Donation 
-        add index FK1BCDFCC2EA518FDE (worksheets_id), 
-        add constraint FK1BCDFCC2EA518FDE 
-        foreign key (worksheets_id) 
-        references Worksheet (id);
-
-    alter table Worksheet_Donation
-        add index FK1BCDFCC2C02466CD (donations_id), 
-        add constraint FK1BCDFCC2C02466CD 
-        foreign key (donations_id) 
-        references Donation (id);
+CREATE TABLE PackType (
+  id        SMALLINT NOT NULL AUTO_INCREMENT,
+  packType  VARCHAR(50),
+  canPool   BOOLEAN,
+  canSplit  BOOLEAN,
+  isDeleted BOOLEAN,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE PackType_AUD (
+  id        SMALLINT NOT NULL,
+  REV       INTEGER  NOT NULL,
+  REVTYPE   TINYINT,
+  packType  VARCHAR(50),
+  canPool   BOOLEAN,
+  canSplit  BOOLEAN,
+  isDeleted BOOLEAN,
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE BloodTest (
+  id              SMALLINT NOT NULL AUTO_INCREMENT,
+  bloodTestType   VARCHAR(30),
+  category        VARCHAR(30),
+  context         VARCHAR(30),
+  isActive        BOOLEAN,
+  isEmptyAllowed  BOOLEAN,
+  negativeResults VARCHAR(255),
+  positiveResults VARCHAR(255),
+  rankInCategory  INTEGER,
+  testName        VARCHAR(40),
+  testNameShort   VARCHAR(25),
+  validResults    VARCHAR(255),
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE BloodTestResult (
+  id                BIGINT NOT NULL AUTO_INCREMENT,
+  createdDate       TIMESTAMP,
+  lastUpdated       TIMESTAMP,
+  notes             LONGTEXT,
+  result            VARCHAR(10),
+  testedOn          DATETIME,
+  bloodTest_id      SMALLINT,
+  donation_id       BIGINT,
+  machineReading_id BIGINT,
+  createdBy_id      SMALLINT,
+  lastUpdatedBy_id  SMALLINT,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE BloodTest_AUD (
+  id              SMALLINT NOT NULL,
+  REV             INTEGER  NOT NULL,
+  REVTYPE         TINYINT,
+  bloodTestType   VARCHAR(30),
+  category        VARCHAR(30),
+  context         VARCHAR(30),
+  isActive        BOOLEAN,
+  isEmptyAllowed  BOOLEAN,
+  negativeResults VARCHAR(255),
+  positiveResults VARCHAR(255),
+  rankInCategory  INTEGER,
+  testName        VARCHAR(40),
+  testNameShort   VARCHAR(25),
+  validResults    VARCHAR(255),
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE BloodTest_WorksheetType (
+  bloodTests_id     SMALLINT NOT NULL,
+  worksheetTypes_id SMALLINT NOT NULL,
+  PRIMARY KEY (bloodTests_id, worksheetTypes_id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE BloodTest_WorksheetType_AUD (
+  REV               INTEGER  NOT NULL,
+  bloodTests_id     SMALLINT NOT NULL,
+  worksheetTypes_id SMALLINT NOT NULL,
+  REVTYPE           TINYINT,
+  PRIMARY KEY (REV, bloodTests_id, worksheetTypes_id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE BloodTestingRule (
+  id                   MEDIUMINT NOT NULL AUTO_INCREMENT,
+  bloodTestsIds        VARCHAR(200),
+  category             VARCHAR(30),
+  donationFieldChanged VARCHAR(12),
+  context              VARCHAR(30),
+  extraInformation     VARCHAR(30),
+  isActive             BOOLEAN,
+  markSampleAsUnsafe   BOOLEAN,
+  newInformation       VARCHAR(30),
+  pattern              VARCHAR(50),
+  pendingTestsIds      VARCHAR(60),
+  subCategory          VARCHAR(30),
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE BloodTestingRule_AUD (
+  id                   MEDIUMINT NOT NULL,
+  REV                  INTEGER   NOT NULL,
+  REVTYPE              TINYINT,
+  bloodTestsIds        VARCHAR(200),
+  category             VARCHAR(30),
+  donationFieldChanged VARCHAR(12),
+  context              VARCHAR(30),
+  extraInformation     VARCHAR(30),
+  isActive             BOOLEAN,
+  markSampleAsUnsafe   BOOLEAN,
+  newInformation       VARCHAR(30),
+  pattern              VARCHAR(50),
+  pendingTestsIds      VARCHAR(60),
+  subCategory          VARCHAR(30),
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Donation (
+  id                           BIGINT NOT NULL AUTO_INCREMENT,
+  bloodAbo                     VARCHAR(50),
+  bloodPressure                DECIMAL(6, 2),
+  bloodRh                      VARCHAR(50),
+  bloodTypingStatus            VARCHAR(20),
+  donationDate                 DATETIME,
+  donationIdentificationNumber VARCHAR(20) UNIQUE,
+  donorWeight                  DECIMAL(6, 2),
+  extraBloodTypeInformation    VARCHAR(150),
+  haemoglobinCount             DECIMAL(6, 2),
+  isDeleted                    BOOLEAN,
+  createdDate                  TIMESTAMP,
+  lastUpdated                  TIMESTAMP,
+  notes                        LONGTEXT,
+  ttiStatus                    VARCHAR(20),
+  packType_id                  SMALLINT,
+  donationBatch_id             SMALLINT,
+  donationCreatedBy_id         SMALLINT,
+  donationType_id              SMALLINT,
+  donor_id                     BIGINT,
+  createdBy_id                 SMALLINT,
+  lastUpdatedBy_id             SMALLINT,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Donation_AUD (
+  id                           BIGINT  NOT NULL,
+  REV                          INTEGER NOT NULL,
+  REVTYPE                      TINYINT,
+  bloodAbo                     VARCHAR(50),
+  bloodPressure                DECIMAL(6, 2),
+  bloodRh                      VARCHAR(50),
+  bloodTypingStatus            VARCHAR(20),
+  donationDate                 DATETIME,
+  donationIdentificationNumber VARCHAR(20),
+  donorWeight                  DECIMAL(6, 2),
+  extraBloodTypeInformation    VARCHAR(150),
+  haemoglobinCount             DECIMAL(6, 2),
+  isDeleted                    BOOLEAN,
+  createdDate                  TIMESTAMP,
+  lastUpdated                  TIMESTAMP,
+  notes                        LONGTEXT,
+  ttiStatus                    VARCHAR(20),
+  packType_id                  SMALLINT,
+  donationBatch_id             SMALLINT,
+  donationCreatedBy_id         SMALLINT,
+  donationType_id              SMALLINT,
+  donor_id                     BIGINT,
+  createdBy_id                 SMALLINT,
+  lastUpdatedBy_id             SMALLINT,
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE DonationBatch (
+  id               SMALLINT NOT NULL AUTO_INCREMENT,
+  batchNumber      VARCHAR(20) UNIQUE,
+  isDeleted        BOOLEAN  NOT NULL,
+  createdDate      TIMESTAMP,
+  lastUpdated      TIMESTAMP,
+  notes            LONGTEXT,
+  createdBy_id     SMALLINT,
+  lastUpdatedBy_id SMALLINT,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE DonationBatch_AUD (
+  id               SMALLINT NOT NULL,
+  REV              INTEGER  NOT NULL,
+  REVTYPE          TINYINT,
+  batchNumber      VARCHAR(20),
+  isDeleted        BOOLEAN,
+  createdDate      TIMESTAMP,
+  lastUpdated      TIMESTAMP,
+  notes            LONGTEXT,
+  createdBy_id     SMALLINT,
+  lastUpdatedBy_id SMALLINT,
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE CompatibilityTest (
+  id                      BIGINT NOT NULL AUTO_INCREMENT,
+  compatibililityTestDate DATETIME,
+  compatibilityResult     VARCHAR(15),
+  isDeleted               BOOLEAN,
+  createdDate             TIMESTAMP,
+  lastUpdated             TIMESTAMP,
+  notes                   LONGTEXT,
+  testedBy                VARCHAR(255),
+  transfusedBefore        BOOLEAN,
+  crossmatchType_id       SMALLINT,
+  forRequest_id           BIGINT,
+  createdBy_id            SMALLINT,
+  lastUpdatedBy_id        SMALLINT,
+  testedComponent_id      BIGINT,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE CompatibilityTest_AUD (
+  id                      BIGINT  NOT NULL,
+  REV                     INTEGER NOT NULL,
+  REVTYPE                 TINYINT,
+  compatibililityTestDate DATETIME,
+  compatibilityResult     VARCHAR(15),
+  isDeleted               BOOLEAN,
+  createdDate             TIMESTAMP,
+  lastUpdated             TIMESTAMP,
+  notes                   LONGTEXT,
+  testedBy                VARCHAR(255),
+  transfusedBefore        BOOLEAN,
+  crossmatchType_id       SMALLINT,
+  forRequest_id           BIGINT,
+  createdBy_id            SMALLINT,
+  lastUpdatedBy_id        SMALLINT,
+  testedComponent_id      BIGINT,
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE ContactMethodType (
+  id                SMALLINT NOT NULL AUTO_INCREMENT,
+  contactMethodType VARCHAR(30),
+  isDeleted         BOOLEAN  NOT NULL,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE ContactMethodType_AUD (
+  id                SMALLINT NOT NULL,
+  REV               INTEGER  NOT NULL,
+  REVTYPE           TINYINT,
+  contactMethodType VARCHAR(30),
+  isDeleted         BOOLEAN,
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE CrossmatchType (
+  id             SMALLINT NOT NULL AUTO_INCREMENT,
+  crossmatchType VARCHAR(255),
+  isDeleted      BOOLEAN,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE CrossmatchType_AUD (
+  id             SMALLINT NOT NULL,
+  REV            INTEGER  NOT NULL,
+  REVTYPE        TINYINT,
+  crossmatchType VARCHAR(255),
+  isDeleted      BOOLEAN,
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE DeferralReason (
+  id        SMALLINT NOT NULL AUTO_INCREMENT,
+  isDeleted BOOLEAN,
+  reason    VARCHAR(100),
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE DeferralReason_AUD (
+  id        SMALLINT NOT NULL,
+  REV       INTEGER  NOT NULL,
+  REVTYPE   TINYINT,
+  isDeleted BOOLEAN,
+  reason    VARCHAR(100),
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE DonationType (
+  id           SMALLINT NOT NULL AUTO_INCREMENT,
+  donationType VARCHAR(50),
+  isDeleted    BOOLEAN,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE DonationType_AUD (
+  id           SMALLINT NOT NULL,
+  REV          INTEGER  NOT NULL,
+  REVTYPE      TINYINT,
+  donationType VARCHAR(50),
+  isDeleted    BOOLEAN,
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Donor (
+  id                        BIGINT NOT NULL AUTO_INCREMENT,
+  age                       TINYINT,
+  birthDate                 DATE,
+  birthDateInferred         DATE,
+  birthDateEstimated        BOOLEAN,
+  bloodAbo                  VARCHAR(10),
+  bloodRh                   VARCHAR(10),
+  callingName               VARCHAR(20),
+  address                   VARCHAR(100),
+  city                      VARCHAR(25),
+  country                   VARCHAR(25),
+  district                  VARCHAR(25),
+  otherPhoneNumber          VARCHAR(20),
+  phoneNumber               VARCHAR(20),
+  province                  VARCHAR(25),
+  state                     VARCHAR(25),
+  zipcode                   VARCHAR(10),
+  dateOfLastDonation        DATETIME,
+  donorHash                 VARCHAR(50),
+  donorNumber               VARCHAR(20) UNIQUE,
+  donorStatus               VARCHAR(20),
+  firstName                 VARCHAR(20),
+  gender                    VARCHAR(15),
+  isDeleted                 BOOLEAN,
+  lastName                  VARCHAR(20),
+  middleName                VARCHAR(20),
+  createdDate               TIMESTAMP,
+  lastUpdated               TIMESTAMP,
+  nationalID                VARCHAR(15),
+  notes                     LONGTEXT,
+  preferredContactMethod_id SMALLINT,
+  donorPanel_id             BIGINT,
+  createdBy_id              SMALLINT,
+  lastUpdatedBy_id          SMALLINT,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE DonorDeferral (
+  id                 BIGINT NOT NULL AUTO_INCREMENT,
+  deferredDonor_id   BIGINT,
+  deferralReasonText LONGTEXT,
+  deferredUntil      DATE,
+  deferralReason_id  SMALLINT,
+  createdDate        TIMESTAMP,
+  lastUpdated        TIMESTAMP,
+  createdBy_id       SMALLINT,
+  lastUpdatedBy_id   SMALLINT,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE DonorDeferral_AUD (
+  id                 BIGINT  NOT NULL,
+  REV                INTEGER NOT NULL,
+  REVTYPE            TINYINT,
+  deferredDonor_id   BIGINT,
+  deferralReasonText LONGTEXT,
+  deferredUntil      DATE,
+  deferralReason_id  SMALLINT,
+  createdDate        TIMESTAMP,
+  lastUpdated        TIMESTAMP,
+  createdBy_id       SMALLINT,
+  lastUpdatedBy_id   SMALLINT,
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Donor_AUD (
+  id                        BIGINT  NOT NULL,
+  REV                       INTEGER NOT NULL,
+  REVTYPE                   TINYINT,
+  age                       TINYINT,
+  birthDate                 DATE,
+  birthDateInferred         DATE,
+  birthDateEstimated        BOOLEAN,
+  bloodAbo                  VARCHAR(10),
+  bloodRh                   VARCHAR(10),
+  callingName               VARCHAR(20),
+  address                   VARCHAR(100),
+  city                      VARCHAR(25),
+  country                   VARCHAR(25),
+  district                  VARCHAR(25),
+  otherPhoneNumber          VARCHAR(20),
+  phoneNumber               VARCHAR(20),
+  province                  VARCHAR(25),
+  state                     VARCHAR(25),
+  zipcode                   VARCHAR(10),
+  dateOfLastDonation        DATETIME,
+  donorHash                 VARCHAR(50),
+  donorNumber               VARCHAR(20),
+  donorStatus               VARCHAR(20),
+  firstName                 VARCHAR(20),
+  gender                    VARCHAR(15),
+  isDeleted                 BOOLEAN,
+  lastName                  VARCHAR(20),
+  middleName                VARCHAR(20),
+  createdDate               TIMESTAMP,
+  lastUpdated               TIMESTAMP,
+  nationalID                VARCHAR(15),
+  notes                     LONGTEXT,
+  preferredContactMethod_id SMALLINT,
+  donorPanel_id             BIGINT,
+  createdBy_id              SMALLINT,
+  lastUpdatedBy_id          SMALLINT,
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE FormField (
+  id                 BIGINT NOT NULL AUTO_INCREMENT,
+  autoGenerate       BOOLEAN,
+  canBeOptional      BOOLEAN,
+  defaultDisplayName VARCHAR(60),
+  defaultValue       LONGTEXT,
+  displayName        VARCHAR(60),
+  field              VARCHAR(30),
+  form               VARCHAR(30),
+  hidden             BOOLEAN,
+  isAutoGeneratable  BOOLEAN,
+  isHidable          BOOLEAN,
+  isRequired         BOOLEAN,
+  isTimeField        BOOLEAN,
+  maxLength          INTEGER,
+  useCurrentTime     BOOLEAN,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE GenericConfig (
+  id            BIGINT NOT NULL AUTO_INCREMENT,
+  propertyName  VARCHAR(80),
+  propertyOwner VARCHAR(30),
+  propertyValue VARCHAR(80),
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Location (
+  id           BIGINT NOT NULL AUTO_INCREMENT,
+  isDeleted    BOOLEAN,
+  isDonorPanel BOOLEAN,
+  isMobileSite BOOLEAN,
+  isUsageSite  BOOLEAN,
+  name         VARCHAR(255),
+  notes        LONGTEXT,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Location_AUD (
+  id           BIGINT  NOT NULL,
+  REV          INTEGER NOT NULL,
+  REVTYPE      TINYINT,
+  isDeleted    BOOLEAN,
+  isDonorPanel BOOLEAN,
+  isMobileSite BOOLEAN,
+  isUsageSite  BOOLEAN,
+  name         VARCHAR(255),
+  notes        LONGTEXT,
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE MachineReading (
+  id              BIGINT NOT NULL AUTO_INCREMENT,
+  columnNumber    SMALLINT,
+  machineReading  DECIMAL(7, 3),
+  rowNumber       SMALLINT,
+  plateSession_id BIGINT,
+  wellType_id     SMALLINT,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE MicrotiterPlate (
+  id         SMALLINT NOT NULL AUTO_INCREMENT,
+  isDeleted  BOOLEAN,
+  notes      LONGTEXT,
+  numColumns SMALLINT,
+  numRows    SMALLINT,
+  plateKey   VARCHAR(15) UNIQUE,
+  plateName  VARCHAR(20),
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE MicrotiterPlate_AUD (
+  id         SMALLINT NOT NULL,
+  REV        INTEGER  NOT NULL,
+  REVTYPE    TINYINT,
+  isDeleted  BOOLEAN,
+  notes      LONGTEXT,
+  numColumns SMALLINT,
+  numRows    SMALLINT,
+  plateKey   VARCHAR(15),
+  plateName  VARCHAR(20),
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Permission (
+  id   BIGINT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50),
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Permission_AUD (
+  id      BIGINT  NOT NULL,
+  REV     INTEGER NOT NULL,
+  REVTYPE TINYINT,
+  name    VARCHAR(50),
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Permission_Role (
+  permissions_id BIGINT NOT NULL,
+  roles_id       BIGINT NOT NULL
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Permission_Role_AUD (
+  REV            INTEGER NOT NULL,
+  permissions_id BIGINT  NOT NULL,
+  roles_id       BIGINT  NOT NULL,
+  REVTYPE        TINYINT,
+  PRIMARY KEY (REV, permissions_id, roles_id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE PlateSession (
+  id          BIGINT NOT NULL AUTO_INCREMENT,
+  isDeleted   BOOLEAN,
+  plateUsedOn DATETIME,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE PlateSession_AUD (
+  id          BIGINT  NOT NULL,
+  REV         INTEGER NOT NULL,
+  REVTYPE     TINYINT,
+  isDeleted   BOOLEAN,
+  plateUsedOn DATETIME,
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE PlateSession_BloodTestResult (
+  PlateSession_id      BIGINT NOT NULL,
+  bloodTestsOnPlate_id BIGINT NOT NULL,
+  UNIQUE (bloodTestsOnPlate_id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Component (
+  id                 BIGINT NOT NULL AUTO_INCREMENT,
+  createdOn          DATETIME,
+  discardedOn        DATETIME,
+  expiresOn          DATETIME,
+  isDeleted          BOOLEAN,
+  issuedOn           DATETIME,
+  createdDate        TIMESTAMP,
+  lastUpdated        TIMESTAMP,
+  notes              LONGTEXT,
+  status             VARCHAR(30),
+  subdivisionCode    VARCHAR(3),
+  donation_id        BIGINT,
+  issuedTo_id        BIGINT,
+  createdBy_id       SMALLINT,
+  lastUpdatedBy_id   SMALLINT,
+  parentComponent_id BIGINT,
+  componentType_id   SMALLINT,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE ComponentStatusChange (
+  id                     BIGINT NOT NULL AUTO_INCREMENT,
+  newStatus              VARCHAR(30),
+  statusChangeReasonText LONGTEXT,
+  statusChangeType       VARCHAR(30),
+  statusChangedOn        DATETIME,
+  changedBy_id           SMALLINT,
+  issuedTo_id            BIGINT,
+  component_id           BIGINT,
+  statusChangeReason_id  SMALLINT,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE ComponentStatusChangeReason (
+  id                 SMALLINT NOT NULL AUTO_INCREMENT,
+  category           VARCHAR(30),
+  isDeleted          BOOLEAN,
+  statusChangeReason VARCHAR(100),
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE ComponentStatusChangeReason_AUD (
+  id                 SMALLINT NOT NULL,
+  REV                INTEGER  NOT NULL,
+  REVTYPE            TINYINT,
+  category           VARCHAR(30),
+  isDeleted          BOOLEAN,
+  statusChangeReason VARCHAR(100),
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE ComponentStatusChange_AUD (
+  id                     BIGINT  NOT NULL,
+  REV                    INTEGER NOT NULL,
+  REVTYPE                TINYINT,
+  newStatus              VARCHAR(30),
+  statusChangeReasonText LONGTEXT,
+  statusChangeType       VARCHAR(30),
+  statusChangedOn        DATETIME,
+  changedBy_id           SMALLINT,
+  issuedTo_id            BIGINT,
+  component_id           BIGINT,
+  statusChangeReason_id  SMALLINT,
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE ComponentType (
+  id                     SMALLINT NOT NULL AUTO_INCREMENT,
+  description            LONGTEXT,
+  expiresAfter           INTEGER,
+  expiresAfterUnits      VARCHAR(30),
+  hasBloodGroup          BOOLEAN,
+  isDeleted              BOOLEAN,
+  componentTypeName      VARCHAR(50),
+  componentTypeNameShort VARCHAR(30),
+  pediComponentType_id   SMALLINT,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE ComponentTypeCombination (
+  id              SMALLINT NOT NULL AUTO_INCREMENT,
+  combinationName VARCHAR(300),
+  isDeleted       BOOLEAN,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE ComponentTypeCombination_AUD (
+  id              SMALLINT NOT NULL,
+  REV             INTEGER  NOT NULL,
+  REVTYPE         TINYINT,
+  combinationName VARCHAR(300),
+  isDeleted       BOOLEAN,
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE ComponentTypeCombination_ComponentType (
+  id                           SMALLINT NOT NULL AUTO_INCREMENT,
+  componentTypeCombinations_id SMALLINT NOT NULL,
+  componentTypes_id            SMALLINT NOT NULL,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE ComponentType_AUD (
+  id                     SMALLINT NOT NULL,
+  REV                    INTEGER  NOT NULL,
+  REVTYPE                TINYINT,
+  description            LONGTEXT,
+  expiresAfter           INTEGER,
+  expiresAfterUnits      VARCHAR(30),
+  hasBloodGroup          BOOLEAN,
+  isDeleted              BOOLEAN,
+  componentTypeName      VARCHAR(50),
+  componentTypeNameShort VARCHAR(30),
+  pediComponentType_id   SMALLINT,
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE ComponentUsage (
+  id               BIGINT NOT NULL AUTO_INCREMENT,
+  hospital         VARCHAR(50),
+  isDeleted        BOOLEAN,
+  createdDate      TIMESTAMP,
+  lastUpdated      TIMESTAMP,
+  notes            LONGTEXT,
+  patientName      VARCHAR(50),
+  usageDate        DATETIME,
+  useIndication    VARCHAR(50),
+  usedBy           VARCHAR(30),
+  ward             VARCHAR(30),
+  createdBy_id     SMALLINT,
+  lastUpdatedBy_id SMALLINT,
+  component_id     BIGINT,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE ComponentUsage_AUD (
+  id               BIGINT  NOT NULL,
+  REV              INTEGER NOT NULL,
+  REVTYPE          TINYINT,
+  hospital         VARCHAR(50),
+  isDeleted        BOOLEAN,
+  createdDate      TIMESTAMP,
+  lastUpdated      TIMESTAMP,
+  notes            LONGTEXT,
+  patientName      VARCHAR(50),
+  usageDate        DATETIME,
+  useIndication    VARCHAR(50),
+  usedBy           VARCHAR(30),
+  ward             VARCHAR(30),
+  createdBy_id     SMALLINT,
+  lastUpdatedBy_id SMALLINT,
+  component_id     BIGINT,
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Component_AUD (
+  id                 BIGINT  NOT NULL,
+  REV                INTEGER NOT NULL,
+  REVTYPE            TINYINT,
+  createdOn          DATETIME,
+  discardedOn        DATETIME,
+  expiresOn          DATETIME,
+  isDeleted          BOOLEAN,
+  issuedOn           DATETIME,
+  createdDate        TIMESTAMP,
+  lastUpdated        TIMESTAMP,
+  notes              LONGTEXT,
+  status             VARCHAR(30),
+  subdivisionCode    VARCHAR(3),
+  donation_id        BIGINT,
+  issuedTo_id        BIGINT,
+  createdBy_id       SMALLINT,
+  lastUpdatedBy_id   SMALLINT,
+  parentComponent_id BIGINT,
+  componentType_id   SMALLINT,
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE AuditRevision (
+  id        INTEGER NOT NULL AUTO_INCREMENT,
+  timestamp BIGINT,
+  username  VARCHAR(30),
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE EntityModification (
+  id               INTEGER     NOT NULL AUTO_INCREMENT,
+  auditRevision_id INTEGER     NOT NULL,
+  revisionType     VARCHAR(30) NOT NULL,
+  entityName       VARCHAR(30) NOT NULL,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Request (
+  id                BIGINT NOT NULL AUTO_INCREMENT,
+  department        VARCHAR(30),
+  fulfilled         BOOLEAN,
+  hospital          VARCHAR(30),
+  indicationForUse  VARCHAR(50),
+  isDeleted         BOOLEAN,
+  createdDate       TIMESTAMP,
+  lastUpdated       TIMESTAMP,
+  notes             LONGTEXT,
+  numUnitsIssued    INTEGER,
+  numUnitsRequested INTEGER,
+  patientAge        INTEGER,
+  patientBirthDate  DATE,
+  patientBloodAbo   VARCHAR(30),
+  patientBloodRh    VARCHAR(30),
+  patientDiagnosis  VARCHAR(100),
+  patientFirstName  VARCHAR(30),
+  patientGender     INTEGER,
+  patientLastName   VARCHAR(30),
+  patientNumber     VARCHAR(30),
+  requestDate       DATETIME,
+  requestNumber     VARCHAR(20) UNIQUE,
+  requestedBy       VARCHAR(30),
+  requiredDate      DATETIME,
+  ward              VARCHAR(20),
+  createdBy_id      SMALLINT,
+  lastUpdatedBy_id  SMALLINT,
+  componentType_id  SMALLINT,
+  requestSite_id    BIGINT,
+  requestType_id    SMALLINT,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE RequestType (
+  id          SMALLINT NOT NULL AUTO_INCREMENT,
+  description VARCHAR(100),
+  isDeleted   BOOLEAN,
+  requestType VARCHAR(30),
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE RequestType_AUD (
+  id          SMALLINT NOT NULL,
+  REV         INTEGER  NOT NULL,
+  REVTYPE     TINYINT,
+  description VARCHAR(100),
+  isDeleted   BOOLEAN,
+  requestType VARCHAR(30),
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Request_AUD (
+  id                BIGINT  NOT NULL,
+  REV               INTEGER NOT NULL,
+  REVTYPE           TINYINT,
+  department        VARCHAR(30),
+  fulfilled         BOOLEAN,
+  hospital          VARCHAR(30),
+  indicationForUse  VARCHAR(50),
+  isDeleted         BOOLEAN,
+  createdDate       TIMESTAMP,
+  lastUpdated       TIMESTAMP,
+  notes             LONGTEXT,
+  numUnitsIssued    INTEGER,
+  numUnitsRequested INTEGER,
+  patientAge        INTEGER,
+  patientBirthDate  DATE,
+  patientBloodAbo   VARCHAR(30),
+  patientBloodRh    VARCHAR(30),
+  patientDiagnosis  VARCHAR(100),
+  patientFirstName  VARCHAR(30),
+  patientGender     INTEGER,
+  patientLastName   VARCHAR(30),
+  patientNumber     VARCHAR(30),
+  requestDate       DATETIME,
+  requestNumber     VARCHAR(20),
+  requestedBy       VARCHAR(30),
+  requiredDate      DATETIME,
+  ward              VARCHAR(20),
+  createdBy_id      SMALLINT,
+  lastUpdatedBy_id  SMALLINT,
+  componentType_id  SMALLINT,
+  requestSite_id    BIGINT,
+  requestType_id    SMALLINT,
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Role (
+  id   BIGINT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50),
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Role_AUD (
+  id      BIGINT  NOT NULL,
+  REV     INTEGER NOT NULL,
+  REVTYPE TINYINT,
+  name    VARCHAR(50),
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE SequenceNumberStore (
+  id                    INTEGER NOT NULL AUTO_INCREMENT,
+  columnName            VARCHAR(50),
+  lastNumber            BIGINT,
+  prefix                VARCHAR(5),
+  sequenceNumberContext VARCHAR(5),
+  targetTable           VARCHAR(50),
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Tips (
+  tipsKey     VARCHAR(255) NOT NULL,
+  isDeleted   BOOLEAN,
+  tipsContent VARCHAR(1000),
+  tipsName    VARCHAR(255),
+  PRIMARY KEY (tipsKey)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE User (
+  id        SMALLINT     NOT NULL AUTO_INCREMENT,
+  emailId   VARCHAR(255),
+  firstName VARCHAR(20)  NOT NULL,
+  isActive  BOOLEAN,
+  isAdmin   BOOLEAN,
+  isDeleted BOOLEAN,
+  isStaff   BOOLEAN,
+  lastLogin DATETIME,
+  lastName  VARCHAR(20),
+  notes     LONGTEXT,
+  password  VARCHAR(255) NOT NULL,
+  username  VARCHAR(30)  NOT NULL UNIQUE,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE User_AUD (
+  id        SMALLINT NOT NULL,
+  REV       INTEGER  NOT NULL,
+  REVTYPE   TINYINT,
+  emailId   VARCHAR(255),
+  firstName VARCHAR(20),
+  isActive  BOOLEAN,
+  isAdmin   BOOLEAN,
+  isDeleted BOOLEAN,
+  isStaff   BOOLEAN,
+  lastLogin DATETIME,
+  lastName  VARCHAR(20),
+  notes     LONGTEXT,
+  password  VARCHAR(255),
+  username  VARCHAR(30),
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE User_Role (
+  users_id SMALLINT NOT NULL,
+  roles_id BIGINT   NOT NULL
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE User_Role_AUD (
+  REV      INTEGER  NOT NULL,
+  users_id SMALLINT NOT NULL,
+  roles_id BIGINT   NOT NULL,
+  REVTYPE  TINYINT,
+  PRIMARY KEY (REV, users_id, roles_id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE WellType (
+  id             SMALLINT NOT NULL AUTO_INCREMENT,
+  isDeleted      BOOLEAN,
+  requiresSample BOOLEAN,
+  wellType       VARCHAR(30),
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE WellType_AUD (
+  id             SMALLINT NOT NULL,
+  REV            INTEGER  NOT NULL,
+  REVTYPE        TINYINT,
+  isDeleted      BOOLEAN,
+  requiresSample BOOLEAN,
+  wellType       VARCHAR(30),
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Worksheet (
+  id               BIGINT NOT NULL AUTO_INCREMENT,
+  isDeleted        BOOLEAN,
+  createdDate      TIMESTAMP,
+  lastUpdated      TIMESTAMP,
+  notes            LONGTEXT,
+  worksheetNumber  VARCHAR(20) UNIQUE,
+  createdBy_id     SMALLINT,
+  lastUpdatedBy_id SMALLINT,
+  worksheetType_id SMALLINT,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE WorksheetType (
+  id            SMALLINT NOT NULL AUTO_INCREMENT,
+  context       VARCHAR(30),
+  isDeleted     BOOLEAN,
+  worksheetType VARCHAR(30),
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE WorksheetType_AUD (
+  id            SMALLINT NOT NULL,
+  REV           INTEGER  NOT NULL,
+  REVTYPE       TINYINT,
+  context       VARCHAR(30),
+  isDeleted     BOOLEAN,
+  worksheetType VARCHAR(30),
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Worksheet_AUD (
+  id               BIGINT  NOT NULL,
+  REV              INTEGER NOT NULL,
+  REVTYPE          TINYINT,
+  isDeleted        BOOLEAN,
+  createdDate      TIMESTAMP,
+  lastUpdated      TIMESTAMP,
+  notes            LONGTEXT,
+  worksheetNumber  VARCHAR(20),
+  createdBy_id     SMALLINT,
+  lastUpdatedBy_id SMALLINT,
+  worksheetType_id SMALLINT,
+  PRIMARY KEY (id, REV)
+)
+  ENGINE = InnoDB;
+
+CREATE TABLE Worksheet_Donation (
+  worksheets_id BIGINT NOT NULL,
+  donations_id  BIGINT NOT NULL,
+  PRIMARY KEY (worksheets_id, donations_id)
+)
+  ENGINE = InnoDB;
+
+ALTER TABLE PackType_AUD
+ADD INDEX FK_PACK_TYPE_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_PACK_TYPE_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE BloodTestResult
+ADD INDEX FK39946CC9A49787C4 (createdBy_id),
+ADD CONSTRAINT FK39946CC9A49787C4
+FOREIGN KEY (createdBy_id)
+REFERENCES User (id);
+
+ALTER TABLE BloodTestResult
+ADD INDEX FK39946CC932E145A (donation_id),
+ADD CONSTRAINT FK39946CC932E145A
+FOREIGN KEY (donation_id)
+REFERENCES Donation (id);
+
+ALTER TABLE BloodTestResult
+ADD INDEX FK39946CC9E104121F (machineReading_id),
+ADD CONSTRAINT FK39946CC9E104121F
+FOREIGN KEY (machineReading_id)
+REFERENCES MachineReading (id);
+
+ALTER TABLE BloodTestResult
+ADD INDEX FK39946CC9D0AFB367 (lastUpdatedBy_id),
+ADD CONSTRAINT FK39946CC9D0AFB367
+FOREIGN KEY (lastUpdatedBy_id)
+REFERENCES User (id);
+
+ALTER TABLE BloodTestResult
+ADD INDEX FK39946CC945027987 (bloodTest_id),
+ADD CONSTRAINT FK39946CC945027987
+FOREIGN KEY (bloodTest_id)
+REFERENCES BloodTest (id);
+
+ALTER TABLE BloodTest_AUD
+ADD INDEX FK_BLOOD_TEST_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_BLOOD_TEST_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE BloodTest_WorksheetType
+ADD INDEX FK7A6DA3B518CB61F2 (worksheetTypes_id),
+ADD CONSTRAINT FK7A6DA3B518CB61F2
+FOREIGN KEY (worksheetTypes_id)
+REFERENCES WorksheetType (id);
+
+ALTER TABLE BloodTest_WorksheetType
+ADD INDEX FK7A6DA3B5BC5F90CC (bloodTests_id),
+ADD CONSTRAINT FK7A6DA3B5BC5F90CC
+FOREIGN KEY (bloodTests_id)
+REFERENCES BloodTest (id);
+
+ALTER TABLE BloodTest_WorksheetType_AUD
+ADD INDEX FK_BLOOD_TEST_WORKSHEET_TYPE_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_BLOOD_TEST_WORKSHEET_TYPE_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE BloodTestingRule_AUD
+ADD INDEX FK_BLOOD_TESTING_RULE_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_BLOOD_TESTING_RULE_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+CREATE INDEX donation_donationDate_index ON Donation (donationDate);
+
+CREATE INDEX donation_donationIdentificationNumber_index ON Donation (donationIdentificationNumber);
+
+ALTER TABLE Donation
+ADD INDEX FKF0658A33A49787C4 (createdBy_id),
+ADD CONSTRAINT FKF0658A33A49787C4
+FOREIGN KEY (createdBy_id)
+REFERENCES User (id);
+
+ALTER TABLE Donation
+ADD INDEX FKF0658A33D04A4456 (donationCreatedBy_id),
+ADD CONSTRAINT FKF0658A33D04A4456
+FOREIGN KEY (donationCreatedBy_id)
+REFERENCES User (id);
+
+ALTER TABLE Donation
+ADD INDEX FKF0658A33E5D4FEA3 (donationBatch_id),
+ADD CONSTRAINT FKF0658A33E5D4FEA3
+FOREIGN KEY (donationBatch_id)
+REFERENCES DonationBatch (id);
+
+ALTER TABLE Donation
+ADD INDEX FKF0658A3359FAB30D (donor_id),
+ADD CONSTRAINT FKF0658A3359FAB30D
+FOREIGN KEY (donor_id)
+REFERENCES Donor (id);
+
+ALTER TABLE Donation
+ADD INDEX FKF0658A338461A8D7 (donationType_id),
+ADD CONSTRAINT FKF0658A338461A8D7
+FOREIGN KEY (donationType_id)
+REFERENCES DonationType (id);
+
+ALTER TABLE Donation
+ADD INDEX FKF0658A33D0AFB367 (lastUpdatedBy_id),
+ADD CONSTRAINT FKF0658A33D0AFB367
+FOREIGN KEY (lastUpdatedBy_id)
+REFERENCES User (id);
+
+ALTER TABLE Donation
+ADD INDEX FKF0658A331D73927B (packType_id),
+ADD CONSTRAINT FKF0658A331D73927B
+FOREIGN KEY (packType_id)
+REFERENCES PackType (id);
+
+ALTER TABLE Donation_AUD
+ADD INDEX FK_DONATION_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_DONATION_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE DonationBatch
+ADD INDEX FK227631CA49787C4 (createdBy_id),
+ADD CONSTRAINT FK227631CA49787C4
+FOREIGN KEY (createdBy_id)
+REFERENCES User (id);
+
+ALTER TABLE DonationBatch
+ADD INDEX FK227631CD0AFB367 (lastUpdatedBy_id),
+ADD CONSTRAINT FK227631CD0AFB367
+FOREIGN KEY (lastUpdatedBy_id)
+REFERENCES User (id);
+
+ALTER TABLE DonationBatch_AUD
+ADD INDEX FK_DONATION_BATCH_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_DONATION_BATCH_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+CREATE INDEX compatibilityTest_crossmatchTestDate_index ON CompatibilityTest (compatibililityTestDate);
+
+ALTER TABLE CompatibilityTest
+ADD INDEX FK92798602A49787C4 (createdBy_id),
+ADD CONSTRAINT FK92798602A49787C4
+FOREIGN KEY (createdBy_id)
+REFERENCES User (id);
+
+ALTER TABLE CompatibilityTest
+ADD INDEX FK92798602D4061B9F (forRequest_id),
+ADD CONSTRAINT FK92798602D4061B9F
+FOREIGN KEY (forRequest_id)
+REFERENCES Request (id);
+
+ALTER TABLE CompatibilityTest
+ADD INDEX FK92798602EFD1FE7 (testedComponent_id),
+ADD CONSTRAINT FK92798602EFD1FE7
+FOREIGN KEY (testedComponent_id)
+REFERENCES Component (id);
+
+ALTER TABLE CompatibilityTest
+ADD INDEX FK92798602D0AFB367 (lastUpdatedBy_id),
+ADD CONSTRAINT FK92798602D0AFB367
+FOREIGN KEY (lastUpdatedBy_id)
+REFERENCES User (id);
+
+ALTER TABLE CompatibilityTest
+ADD INDEX FK927986028631CA7D (crossmatchType_id),
+ADD CONSTRAINT FK927986028631CA7D
+FOREIGN KEY (crossmatchType_id)
+REFERENCES CrossmatchType (id);
+
+ALTER TABLE CompatibilityTest_AUD
+ADD INDEX FK_COMPATIBILITY_TEST_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_COMPATIBILITY_TEST_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE ContactMethodType_AUD
+ADD INDEX FK_CONTACT_METHOD_TYPE_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_CONTACT_METHOD_TYPE_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE CrossmatchType_AUD
+ADD INDEX FK_CROSSMATCH_TYPE_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_CROSSMATCH_TYPE_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE DeferralReason_AUD
+ADD INDEX FK_DEFERRAL_REASON_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_DEFERRAL_REASON_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE DonationType_AUD
+ADD INDEX FK_DONATION_TYPE_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_DONATION_TYPE_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+CREATE INDEX donor_donorNumber_index ON Donor (donorNumber);
+
+CREATE INDEX donor_lastName_index ON Donor (lastName);
+
+CREATE INDEX donor_firstName_index ON Donor (firstName);
+
+ALTER TABLE Donor
+ADD INDEX FK3F25E46A49787C4 (createdBy_id),
+ADD CONSTRAINT FK3F25E46A49787C4
+FOREIGN KEY (createdBy_id)
+REFERENCES User (id);
+
+ALTER TABLE Donor
+ADD INDEX FK3F25E463043805 (donorPanel_id),
+ADD CONSTRAINT FK3F25E463043805
+FOREIGN KEY (donorPanel_id)
+REFERENCES Location (id);
+
+ALTER TABLE Donor
+ADD INDEX FK3F25E46FCE9E976 (preferredContactMethod_id),
+ADD CONSTRAINT FK3F25E46FCE9E976
+FOREIGN KEY (preferredContactMethod_id)
+REFERENCES ContactMethodType (id);
+
+ALTER TABLE Donor
+ADD INDEX FK3F25E46D0AFB367 (lastUpdatedBy_id),
+ADD CONSTRAINT FK3F25E46D0AFB367
+FOREIGN KEY (lastUpdatedBy_id)
+REFERENCES User (id);
+
+ALTER TABLE DonorDeferral
+ADD INDEX FKC7E323D193E6BEC (deferredDonor_id),
+ADD CONSTRAINT FKC7E323D193E6BEC
+FOREIGN KEY (deferredDonor_id)
+REFERENCES Donor (id);
+
+ALTER TABLE DonorDeferral
+ADD INDEX FKC7E323D1ED3A012D (createdBy_id),
+ADD CONSTRAINT FKC7E323D1ED3A012D
+FOREIGN KEY (createdBy_id)
+REFERENCES User (id);
+
+ALTER TABLE DonorDeferral
+ADD INDEX FKC7E323D1C9CCBBFC (deferralReason_id),
+ADD CONSTRAINT FKC7E323D1C9CCBBFC
+FOREIGN KEY (deferralReason_id)
+REFERENCES DeferralReason (id);
+
+ALTER TABLE DonorDeferral_AUD
+ADD INDEX FK_DONOR_DEFERRAL_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_DONOR_DEFERRAL_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE Donor_AUD
+ADD INDEX FK_DONOR_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_DONOR_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE Location_AUD
+ADD INDEX FK_LOCATION_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_LOCATION_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE MachineReading
+ADD INDEX FK4CF2E0652531C00D (wellType_id),
+ADD CONSTRAINT FK4CF2E0652531C00D
+FOREIGN KEY (wellType_id)
+REFERENCES WellType (id);
+
+ALTER TABLE MachineReading
+ADD INDEX FK4CF2E065AF35157F (plateSession_id),
+ADD CONSTRAINT FK4CF2E065AF35157F
+FOREIGN KEY (plateSession_id)
+REFERENCES PlateSession (id);
+
+ALTER TABLE MicrotiterPlate_AUD
+ADD INDEX FK_MICROTITER_PLATE_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_MICROTITER_PLATE_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE Permission_AUD
+ADD INDEX FK_PERMISSION_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_PERMISSION_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE Permission_Role
+ADD INDEX FK63DCE8E61D2E2631 (roles_id),
+ADD CONSTRAINT FK63DCE8E61D2E2631
+FOREIGN KEY (roles_id)
+REFERENCES Role (id);
+
+ALTER TABLE Permission_Role
+ADD INDEX FK63DCE8E612647DE3 (permissions_id),
+ADD CONSTRAINT FK63DCE8E612647DE3
+FOREIGN KEY (permissions_id)
+REFERENCES Permission (id);
+
+ALTER TABLE Permission_Role_AUD
+ADD INDEX FK_PERMISSION_ROLE_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_PERMISSION_ROLE_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE PlateSession_AUD
+ADD INDEX FK_PLATE_SESSION_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_PLATE_SESSION_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE PlateSession_BloodTestResult
+ADD INDEX FK7A75514AAF35157F (PlateSession_id),
+ADD CONSTRAINT FK7A75514AAF35157F
+FOREIGN KEY (PlateSession_id)
+REFERENCES PlateSession (id);
+
+ALTER TABLE PlateSession_BloodTestResult
+ADD INDEX FK7A75514A2DA883C0 (bloodTestsOnPlate_id),
+ADD CONSTRAINT FK7A75514A2DA883C0
+FOREIGN KEY (bloodTestsOnPlate_id)
+REFERENCES BloodTestResult (id);
+
+CREATE INDEX component_expiresOn_index ON Component (expiresOn);
+
+ALTER TABLE Component
+ADD INDEX FK50C664CFA49787C4 (createdBy_id),
+ADD CONSTRAINT FK50C664CFA49787C4
+FOREIGN KEY (createdBy_id)
+REFERENCES User (id);
+
+ALTER TABLE Component
+ADD INDEX FK50C664CF994002DF (issuedTo_id),
+ADD CONSTRAINT FK50C664CF994002DF
+FOREIGN KEY (issuedTo_id)
+REFERENCES Request (id);
+
+ALTER TABLE Component
+ADD INDEX FK50C664CF32E145A (donation_id),
+ADD CONSTRAINT FK50C664CF32E145A
+FOREIGN KEY (donation_id)
+REFERENCES Donation (id);
+
+ALTER TABLE Component
+ADD INDEX FK50C664CF73AC2B90 (componentType_id),
+ADD CONSTRAINT FK50C664CF73AC2B90
+FOREIGN KEY (componentType_id)
+REFERENCES ComponentType (id);
+
+ALTER TABLE Component
+ADD INDEX FK50C664CFD946D0A0 (parentComponent_id),
+ADD CONSTRAINT FK50C664CFD946D0A0
+FOREIGN KEY (parentComponent_id)
+REFERENCES Component (id);
+
+ALTER TABLE Component
+ADD INDEX FK50C664CFD0AFB367 (lastUpdatedBy_id),
+ADD CONSTRAINT FK50C664CFD0AFB367
+FOREIGN KEY (lastUpdatedBy_id)
+REFERENCES User (id);
+
+ALTER TABLE ComponentStatusChange
+ADD INDEX FKCCE48CB1994002DF (issuedTo_id),
+ADD CONSTRAINT FKCCE48CB1994002DF
+FOREIGN KEY (issuedTo_id)
+REFERENCES Request (id);
+
+ALTER TABLE ComponentStatusChange
+ADD INDEX FKCCE48CB18BFC6394 (statusChangeReason_id),
+ADD CONSTRAINT FKCCE48CB18BFC6394
+FOREIGN KEY (statusChangeReason_id)
+REFERENCES ComponentStatusChangeReason (id);
+
+ALTER TABLE ComponentStatusChange
+ADD INDEX FKCCE48CB1A8E71476 (component_id),
+ADD CONSTRAINT FKCCE48CB1A8E71476
+FOREIGN KEY (component_id)
+REFERENCES Component (id);
+
+ALTER TABLE ComponentStatusChange
+ADD INDEX FKCCE48CB1438D2378 (changedBy_id),
+ADD CONSTRAINT FKCCE48CB1438D2378
+FOREIGN KEY (changedBy_id)
+REFERENCES User (id);
+
+ALTER TABLE ComponentStatusChangeReason_AUD
+ADD INDEX FK_COMPONENT_STATUS_CHANGE_REASON_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_COMPONENT_STATUS_CHANGE_REASON_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE ComponentStatusChange_AUD
+ADD INDEX FK_COMPONENT_STATUS_CHANGE_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_COMPONENT_STATUS_CHANGE_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE ComponentType
+ADD INDEX FKA8168A93E7CEF4A (pediComponentType_id),
+ADD CONSTRAINT FKA8168A93E7CEF4A
+FOREIGN KEY (pediComponentType_id)
+REFERENCES ComponentType (id);
+
+ALTER TABLE ComponentTypeCombination_AUD
+ADD INDEX FK_COMPONENT_TYPE_COMBINATION_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_COMPONENT_TYPE_COMBINATION_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE ComponentTypeCombination_ComponentType
+ADD INDEX FK3F6704507548F61D (componentTypeCombinations_id),
+ADD CONSTRAINT FK3F6704507548F61D
+FOREIGN KEY (componentTypeCombinations_id)
+REFERENCES ComponentTypeCombination (id);
+
+ALTER TABLE ComponentTypeCombination_ComponentType
+ADD INDEX FK3F670450EE5B3BAF (componentTypes_id),
+ADD CONSTRAINT FK3F670450EE5B3BAF
+FOREIGN KEY (componentTypes_id)
+REFERENCES ComponentType (id);
+
+ALTER TABLE ComponentType_AUD
+ADD INDEX FK_COMPONENT_TYPE_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_COMPONENT_TYPE_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE ComponentUsage
+ADD INDEX FK45B6D212A49787C4 (createdBy_id),
+ADD CONSTRAINT FK45B6D212A49787C4
+FOREIGN KEY (createdBy_id)
+REFERENCES User (id);
+
+ALTER TABLE ComponentUsage
+ADD INDEX FK45B6D212A8E71476 (component_id),
+ADD CONSTRAINT FK45B6D212A8E71476
+FOREIGN KEY (component_id)
+REFERENCES Component (id);
+
+ALTER TABLE ComponentUsage
+ADD INDEX FK45B6D212D0AFB367 (lastUpdatedBy_id),
+ADD CONSTRAINT FK45B6D212D0AFB367
+FOREIGN KEY (lastUpdatedBy_id)
+REFERENCES User (id);
+
+ALTER TABLE ComponentUsage_AUD
+ADD INDEX FK_COMPONENT_USAGE_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_COMPONENT_USAGE_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE Component_AUD
+ADD INDEX FK_COMPONENT_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_COMPONENT_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+CREATE INDEX request_requiredDate_index ON Request (requiredDate);
+
+CREATE INDEX request_requestDate_index ON Request (requestDate);
+
+CREATE INDEX request_bloodRhd_index ON Request (patientBloodRh);
+
+CREATE INDEX request_requestNumber_index ON Request (requestNumber);
+
+CREATE INDEX request_bloodAbo_index ON Request (patientBloodAbo);
+
+ALTER TABLE Request
+ADD INDEX FKA4878A6FA49787C4 (createdBy_id),
+ADD CONSTRAINT FKA4878A6FA49787C4
+FOREIGN KEY (createdBy_id)
+REFERENCES User (id);
+
+ALTER TABLE Request
+ADD INDEX FKA4878A6F1520E0D (requestSite_id),
+ADD CONSTRAINT FKA4878A6F1520E0D
+FOREIGN KEY (requestSite_id)
+REFERENCES Location (id);
+
+ALTER TABLE Request
+ADD INDEX FKA4878A6F73AC2B90 (componentType_id),
+ADD CONSTRAINT FKA4878A6F73AC2B90
+FOREIGN KEY (componentType_id)
+REFERENCES ComponentType (id);
+
+ALTER TABLE Request
+ADD INDEX FKA4878A6F537AAD30 (requestType_id),
+ADD CONSTRAINT FKA4878A6F537AAD30
+FOREIGN KEY (requestType_id)
+REFERENCES RequestType (id);
+
+ALTER TABLE Request
+ADD INDEX FKA4878A6FD0AFB367 (lastUpdatedBy_id),
+ADD CONSTRAINT FKA4878A6FD0AFB367
+FOREIGN KEY (lastUpdatedBy_id)
+REFERENCES User (id);
+
+ALTER TABLE RequestType_AUD
+ADD INDEX FK_REQUEST_TYPE_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_REQUEST_TYPE_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE Request_AUD
+ADD INDEX FK_REQUEST_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_REQUEST_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE Role_AUD
+ADD INDEX FK_ROLE_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_ROLE_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE User_AUD
+ADD INDEX FK_USER_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_USER_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE User_Role
+ADD INDEX FK8B9F886A1D2E2631 (roles_id),
+ADD CONSTRAINT FK8B9F886A1D2E2631
+FOREIGN KEY (roles_id)
+REFERENCES Role (id);
+
+ALTER TABLE User_Role
+ADD INDEX FK8B9F886A1D314A5B (users_id),
+ADD CONSTRAINT FK8B9F886A1D314A5B
+FOREIGN KEY (users_id)
+REFERENCES User (id);
+
+ALTER TABLE User_Role_AUD
+ADD INDEX FK_USER_ROLE_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_USER_ROLE_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE WellType_AUD
+ADD INDEX FK_WELL_TYPE_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_WELL_TYPE_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE Worksheet
+ADD INDEX FKB98678CEA49787C4 (createdBy_id),
+ADD CONSTRAINT FKB98678CEA49787C4
+FOREIGN KEY (createdBy_id)
+REFERENCES User (id);
+
+ALTER TABLE Worksheet
+ADD INDEX FKB98678CEBC88FBF5 (worksheetType_id),
+ADD CONSTRAINT FKB98678CEBC88FBF5
+FOREIGN KEY (worksheetType_id)
+REFERENCES WorksheetType (id);
+
+ALTER TABLE Worksheet
+ADD INDEX FKB98678CED0AFB367 (lastUpdatedBy_id),
+ADD CONSTRAINT FKB98678CED0AFB367
+FOREIGN KEY (lastUpdatedBy_id)
+REFERENCES User (id);
+
+ALTER TABLE WorksheetType_AUD
+ADD INDEX FK_WORKSHEET_TYPE_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_WORKSHEET_TYPE_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE Worksheet_AUD
+ADD INDEX FK_WORKSHEET_AUDIT_REVISION (REV),
+ADD CONSTRAINT FK_WORKSHEET_AUDIT_REVISION
+FOREIGN KEY (REV)
+REFERENCES AuditRevision (id);
+
+ALTER TABLE Worksheet_Donation
+ADD INDEX FK1BCDFCC2EA518FDE (worksheets_id),
+ADD CONSTRAINT FK1BCDFCC2EA518FDE
+FOREIGN KEY (worksheets_id)
+REFERENCES Worksheet (id);
+
+ALTER TABLE Worksheet_Donation
+ADD INDEX FK1BCDFCC2C02466CD (donations_id),
+ADD CONSTRAINT FK1BCDFCC2C02466CD
+FOREIGN KEY (donations_id)
+REFERENCES Donation (id);
         
    
         

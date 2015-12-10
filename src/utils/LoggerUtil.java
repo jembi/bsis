@@ -1,12 +1,11 @@
 package utils;
 
-import javax.servlet.http.HttpServletRequest;
-
 import log4j.BsisLogLevel;
-
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class LoggerUtil {
   static final Logger logger = Logger.getLogger("bsis");
@@ -19,7 +18,7 @@ public class LoggerUtil {
     String urlString = request.getRequestURL().toString();
     String queryString = request.getQueryString();
     urlString += queryString != null && queryString.length() > 0 ? "?"
-        + queryString : "";
+            + queryString : "";
     logger.log(BsisLogLevel.BSIS, urlString);
   }
 

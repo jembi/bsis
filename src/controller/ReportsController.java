@@ -1,16 +1,5 @@
 package controller;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import model.reporting.Report;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,14 +10,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import repository.ComponentRepository;
 import repository.DonationRepository;
 import repository.LocationRepository;
-import repository.ComponentRepository;
 import repository.RequestRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import service.ReportGeneratorService;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.util.*;
 
 @RestController
 @RequestMapping("reports")
@@ -51,12 +45,12 @@ public class ReportsController {
 
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
-  
+
   @Autowired
   private ReportGeneratorService reportGeneratorService;
-  
+
   @RequestMapping(value = "/inventory/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REPORTING_INFORMATION+"')")
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_REPORTING_INFORMATION + "')")
   public Map<String, Object> inventoryReportFormGenerator() {
     Map<String, Object> map = new HashMap<>();
     utilController.addTipsToModel(map, "report.inventory.generate");
@@ -66,19 +60,19 @@ public class ReportsController {
     return map;
   }
 
-  @RequestMapping(value="/inventory/generate", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REPORTING_INFORMATION+"')")
-  public  Map<String, Object> generateInventoryReport(
-                  HttpServletRequest request, HttpServletResponse response,
-                  @RequestParam(value="status") String status,
-                  @RequestParam(value="venues") String venues
-                  ) {
+  @RequestMapping(value = "/inventory/generate", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_REPORTING_INFORMATION + "')")
+  public Map<String, Object> generateInventoryReport(
+          HttpServletRequest request, HttpServletResponse response,
+          @RequestParam(value = "status") String status,
+          @RequestParam(value = "venues") String venues
+  ) {
 
     List<String> componentStatuses = Arrays.asList(status.split("\\|"));
     List<String> centerIds = Arrays.asList(venues.split("\\|"));
 
     List<Long> centerIdsLong = new ArrayList<>();
-    centerIdsLong.add((long)-1);
+    centerIdsLong.add((long) -1);
     for (String centerId : centerIds) {
       if (centerId.trim().equals(""))
         continue;
@@ -95,9 +89,9 @@ public class ReportsController {
     }
     return data;
   }
-  
+
   @RequestMapping(value = "/donations/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.DONATIONS_REPORTING+"')")
+  @PreAuthorize("hasRole('" + PermissionConstants.DONATIONS_REPORTING + "')")
   public Map<String, Object> donationsReportFormGenerator() {
     Map<String, Object> map = new HashMap<>();
     utilController.addTipsToModel(map, "report.donations.donationsreport");
@@ -106,7 +100,7 @@ public class ReportsController {
   }
 
   @RequestMapping(value = "/requests/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.REQUESTS_REPORTING+"')")
+  @PreAuthorize("hasRole('" + PermissionConstants.REQUESTS_REPORTING + "')")
   public Map<String, Object> requestsReportFormGenerator() {
     Map<String, Object> map = new HashMap<>();
     utilController.addTipsToModel(map, "report.requests.requestsreport");
@@ -115,7 +109,7 @@ public class ReportsController {
   }
 
   @RequestMapping(value = "/components/discard/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_DISCARDED_REPORTING+"')")
+  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_DISCARDED_REPORTING + "')")
   public Map<String, Object> discardedComponentsReportFormGenerator() {
     Map<String, Object> map = new HashMap<>();
     utilController.addTipsToModel(map, "report.components.discardedcomponentsreport");
@@ -125,7 +119,7 @@ public class ReportsController {
   }
 
   @RequestMapping(value = "/components/issued/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_ISSUED_REPORTING+"')")
+  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_ISSUED_REPORTING + "')")
   public Map<String, Object> issuedComponentsReportFormGenerator() {
     Map<String, Object> map = new HashMap<>();
     utilController.addTipsToModel(map, "report.components.issuedcomponentsreport");
@@ -134,9 +128,8 @@ public class ReportsController {
   }
 
   @RequestMapping(value = "/donations/generate", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.DONATIONS_REPORTING+"')")
-  public 
-  ResponseEntity<Map<String, Object>> getDonationsReport(
+  @PreAuthorize("hasRole('" + PermissionConstants.DONATIONS_REPORTING + "')")
+  public ResponseEntity<Map<String, Object>> getDonationsReport(
           @RequestParam(value = "donationDateFrom", required = false) String donationDateFrom,
           @RequestParam(value = "donationDateTo", required = false) String donationDateTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
@@ -144,51 +137,50 @@ public class ReportsController {
           @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
 
 
-      HttpStatus httpStatus = HttpStatus.OK;
-      Map<String, Object> map = new HashMap<>();
+    HttpStatus httpStatus = HttpStatus.OK;
+    Map<String, Object> map = new HashMap<>();
 
 
-      Date dateTo;
-      if (donationDateTo == null || donationDateTo.equals(""))
-        dateTo = new Date();
-      else
-        dateTo = CustomDateFormatter.getDateFromString(donationDateTo);
+    Date dateTo;
+    if (donationDateTo == null || donationDateTo.equals(""))
+      dateTo = new Date();
+    else
+      dateTo = CustomDateFormatter.getDateFromString(donationDateTo);
 
-      Calendar gcal = new GregorianCalendar();
-      gcal.setTime(dateTo);
-      gcal.add(Calendar.DATE, 1);
-      dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
+    Calendar gcal = new GregorianCalendar();
+    gcal.setTime(dateTo);
+    gcal.add(Calendar.DATE, 1);
+    dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
 
-      Date dateFrom;
-      if (donationDateFrom == null || donationDateFrom.equals(""))
-        dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
-      else
-        dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
+    Date dateFrom;
+    if (donationDateFrom == null || donationDateFrom.equals(""))
+      dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
+    else
+      dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
 
-      Map<String, Map<Long, Long>> numDonations = donationRepository
-          .findNumberOfDonations(dateFrom, dateTo,
-              aggregationCriteria, venues, bloodGroups);
-      // TODO: potential leap year bug here
-      Long interval = (long) (24 * 3600 * 1000);
-  
-      if (aggregationCriteria.equals("monthly"))
-        interval = interval * 30;
-      else if (aggregationCriteria.equals("yearly"))
-        interval = interval * 365;
-  
-      map.put("interval", interval);
-      map.put("numDonations", numDonations);
+    Map<String, Map<Long, Long>> numDonations = donationRepository
+            .findNumberOfDonations(dateFrom, dateTo,
+                    aggregationCriteria, venues, bloodGroups);
+    // TODO: potential leap year bug here
+    Long interval = (long) (24 * 3600 * 1000);
 
-      map.put("donationDateFromUTC", dateFrom.getTime());
-      map.put("donationDateToUTC", dateTo.getTime());
+    if (aggregationCriteria.equals("monthly"))
+      interval = interval * 30;
+    else if (aggregationCriteria.equals("yearly"))
+      interval = interval * 365;
+
+    map.put("interval", interval);
+    map.put("numDonations", numDonations);
+
+    map.put("donationDateFromUTC", dateFrom.getTime());
+    map.put("donationDateToUTC", dateTo.getTime());
 
     return new ResponseEntity<>(map, httpStatus);
   }
 
   @RequestMapping(value = "/requests/generate", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.REQUESTS_REPORTING+"')")
-  public 
-  ResponseEntity<Map<String, Object>> getRequestsReport(
+  @PreAuthorize("hasRole('" + PermissionConstants.REQUESTS_REPORTING + "')")
+  public ResponseEntity<Map<String, Object>> getRequestsReport(
           @RequestParam(value = "donationDateFrom", required = false) String donationDateFrom,
           @RequestParam(value = "donationDateTo", required = false) String donationDateTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
@@ -198,47 +190,46 @@ public class ReportsController {
     HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<>();
 
-      Date dateTo;
-      if (donationDateTo == null || donationDateTo.equals(""))
-        dateTo = new Date();
-      else
-        dateTo = CustomDateFormatter.getDateFromString(donationDateTo);
+    Date dateTo;
+    if (donationDateTo == null || donationDateTo.equals(""))
+      dateTo = new Date();
+    else
+      dateTo = CustomDateFormatter.getDateFromString(donationDateTo);
 
-      Calendar gcal = new GregorianCalendar();
-      gcal.setTime(dateTo);
-      gcal.add(Calendar.DATE, 1);
-      dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
+    Calendar gcal = new GregorianCalendar();
+    gcal.setTime(dateTo);
+    gcal.add(Calendar.DATE, 1);
+    dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
 
-      Date dateFrom;
-      if (donationDateFrom == null || donationDateFrom.equals(""))
-        dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
-      else
-        dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
+    Date dateFrom;
+    if (donationDateFrom == null || donationDateFrom.equals(""))
+      dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
+    else
+      dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
 
-      Map<String, Map<Long, Long>> numRequests = requestRepository
-          .findNumberOfRequests(dateFrom, dateTo,
-              aggregationCriteria, venues, bloodGroups);
-      // TODO: potential leap year bug here
-      Long interval = (long) (24 * 3600 * 1000);
-  
-      if (aggregationCriteria.equals("monthly"))
-        interval = interval * 30;
-      else if (aggregationCriteria.equals("yearly"))
-        interval = interval * 365;
-  
-      map.put("interval", interval);
-      map.put("numRequests", numRequests);
+    Map<String, Map<Long, Long>> numRequests = requestRepository
+            .findNumberOfRequests(dateFrom, dateTo,
+                    aggregationCriteria, venues, bloodGroups);
+    // TODO: potential leap year bug here
+    Long interval = (long) (24 * 3600 * 1000);
 
-      map.put("dateRequestedFromUTC", dateFrom.getTime());
-      map.put("dateRequestedToUTC", dateTo.getTime());
+    if (aggregationCriteria.equals("monthly"))
+      interval = interval * 30;
+    else if (aggregationCriteria.equals("yearly"))
+      interval = interval * 365;
+
+    map.put("interval", interval);
+    map.put("numRequests", numRequests);
+
+    map.put("dateRequestedFromUTC", dateFrom.getTime());
+    map.put("dateRequestedToUTC", dateTo.getTime());
 
     return new ResponseEntity<>(map, httpStatus);
   }
 
   @RequestMapping(value = "/components/discard/generate", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_DISCARDED_REPORTING+"')")
-  public 
-  ResponseEntity<Map<String, Object>> getDiscardedComponentsReport(
+  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_DISCARDED_REPORTING + "')")
+  public ResponseEntity<Map<String, Object>> getDiscardedComponentsReport(
           @RequestParam(value = "donationDateFrom", required = false) String donationDateFrom,
           @RequestParam(value = "donationDateTo", required = false) String donationDateTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
@@ -249,47 +240,46 @@ public class ReportsController {
     Map<String, Object> map = new HashMap<>();
 
 
-      Date dateTo;
-      if (donationDateTo == null || donationDateTo.equals(""))
-        dateTo = new Date();
-      else
-        dateTo = CustomDateFormatter.getDateFromString(donationDateTo);
+    Date dateTo;
+    if (donationDateTo == null || donationDateTo.equals(""))
+      dateTo = new Date();
+    else
+      dateTo = CustomDateFormatter.getDateFromString(donationDateTo);
 
-      Calendar gcal = new GregorianCalendar();
-      gcal.setTime(dateTo);
-      gcal.add(Calendar.DATE, 1);
-      dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
+    Calendar gcal = new GregorianCalendar();
+    gcal.setTime(dateTo);
+    gcal.add(Calendar.DATE, 1);
+    dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
 
-      Date dateFrom;
-      if (donationDateFrom == null || donationDateFrom.equals(""))
-        dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
-      else
-        dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
+    Date dateFrom;
+    if (donationDateFrom == null || donationDateFrom.equals(""))
+      dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
+    else
+      dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
 
-      Map<String, Map<Long, Long>> numDiscardedComponents = componentRepository
-          .findNumberOfDiscardedComponents(dateFrom, dateTo,
-              aggregationCriteria, venues, bloodGroups);
-      // TODO: potential leap year bug here
-      Long interval = (long) (24 * 3600 * 1000);
-  
-      if (aggregationCriteria.equals("monthly"))
-        interval = interval * 30;
-      else if (aggregationCriteria.equals("yearly"))
-        interval = interval * 365;
-  
-      map.put("interval", interval);
-      map.put("numDiscardedComponents", numDiscardedComponents);
+    Map<String, Map<Long, Long>> numDiscardedComponents = componentRepository
+            .findNumberOfDiscardedComponents(dateFrom, dateTo,
+                    aggregationCriteria, venues, bloodGroups);
+    // TODO: potential leap year bug here
+    Long interval = (long) (24 * 3600 * 1000);
 
-      map.put("donationDateFromUTC", dateFrom.getTime());
-      map.put("donationDateToUTC", dateTo.getTime());
+    if (aggregationCriteria.equals("monthly"))
+      interval = interval * 30;
+    else if (aggregationCriteria.equals("yearly"))
+      interval = interval * 365;
 
-   return new ResponseEntity<>(map, httpStatus);
+    map.put("interval", interval);
+    map.put("numDiscardedComponents", numDiscardedComponents);
+
+    map.put("donationDateFromUTC", dateFrom.getTime());
+    map.put("donationDateToUTC", dateTo.getTime());
+
+    return new ResponseEntity<>(map, httpStatus);
   }
 
   @RequestMapping(value = "/components/issued/generate", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_ISSUED_REPORTING+"')")
-  public 
-  ResponseEntity<Map<String, Object>> getIssuedComponentsReport(
+  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_ISSUED_REPORTING + "')")
+  public ResponseEntity<Map<String, Object>> getIssuedComponentsReport(
           @RequestParam(value = "dateIssuedFrom", required = false) String donationDateFrom,
           @RequestParam(value = "dateIssuedTo", required = false) String donationDateTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
@@ -299,41 +289,41 @@ public class ReportsController {
     HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<>();
 
-      Date dateTo;
-      if (donationDateTo == null || donationDateTo.equals(""))
-        dateTo = new Date();
-      else
-        dateTo = CustomDateFormatter.getDateFromString(donationDateTo);
+    Date dateTo;
+    if (donationDateTo == null || donationDateTo.equals(""))
+      dateTo = new Date();
+    else
+      dateTo = CustomDateFormatter.getDateFromString(donationDateTo);
 
-      Calendar gcal = new GregorianCalendar();
-      gcal.setTime(dateTo);
-      gcal.add(Calendar.DATE, 1);
-      dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
+    Calendar gcal = new GregorianCalendar();
+    gcal.setTime(dateTo);
+    gcal.add(Calendar.DATE, 1);
+    dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
 
-      Date dateFrom;
-      if (donationDateFrom == null || donationDateFrom.equals(""))
-        dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
-      else
-        dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
+    Date dateFrom;
+    if (donationDateFrom == null || donationDateFrom.equals(""))
+      dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
+    else
+      dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
 
-      Map<String, Map<Long, Long>> numIssuedComponents = componentRepository
-          .findNumberOfIssuedComponents(dateFrom, dateTo,
-              aggregationCriteria, venues, bloodGroups);
-      // TODO: potential leap year bug here
-      Long interval = (long) (24 * 3600 * 1000);
-  
-      if (aggregationCriteria.equals("monthly"))
-        interval = interval * 30;
-      else if (aggregationCriteria.equals("yearly"))
-        interval = interval * 365;
-  
-      map.put("interval", interval);
-      map.put("numIssuedComponents", numIssuedComponents);
+    Map<String, Map<Long, Long>> numIssuedComponents = componentRepository
+            .findNumberOfIssuedComponents(dateFrom, dateTo,
+                    aggregationCriteria, venues, bloodGroups);
+    // TODO: potential leap year bug here
+    Long interval = (long) (24 * 3600 * 1000);
 
-      map.put("dateIssuedFromUTC", dateFrom.getTime());
-      map.put("dateIssuedToUTC", dateTo.getTime());
+    if (aggregationCriteria.equals("monthly"))
+      interval = interval * 30;
+    else if (aggregationCriteria.equals("yearly"))
+      interval = interval * 365;
 
-   return new ResponseEntity<>(map, httpStatus);
+    map.put("interval", interval);
+    map.put("numIssuedComponents", numIssuedComponents);
+
+    map.put("dateIssuedFromUTC", dateFrom.getTime());
+    map.put("dateIssuedToUTC", dateTo.getTime());
+
+    return new ResponseEntity<>(map, httpStatus);
   }
 
   private Date dateSubtract(Date dateTo, int field, int amount) {
@@ -343,9 +333,9 @@ public class ReportsController {
     return gcal.getTime();
   }
 
- 
+
   @RequestMapping(value = "/tti/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.TTI_REPORTING+"')")
+  @PreAuthorize("hasRole('" + PermissionConstants.TTI_REPORTING + "')")
   public Map<String, Object> testResultsReportFormGenerator() {
     Map<String, Object> map = new HashMap<>();
     map.put("ttiTests", bloodTestingRepository.getTTITests());
@@ -355,62 +345,60 @@ public class ReportsController {
   }
 
   @RequestMapping(value = "/testresult/generate", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.TTI_REPORTING+"')")
-  public 
-   ResponseEntity<Map<String, Object>> getTestResultsReport(
+  @PreAuthorize("hasRole('" + PermissionConstants.TTI_REPORTING + "')")
+  public ResponseEntity<Map<String, Object>> getTestResultsReport(
           @RequestParam(value = "dateTestedFrom", required = false) String dateTestedFrom,
           @RequestParam(value = "dateTestedTo", required = false) String dateTestedTo,
           @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
           @RequestParam(value = "venues", required = false) List<String> venues,
           @RequestParam(value = "ttiTests", required = false) List<String> ttiTests) throws ParseException {
 
-   
 
     HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<>();
 
-      Date dateTo;
-      if (dateTestedTo == null || dateTestedTo.equals(""))
-        dateTo = new Date();
-      else
-        dateTo = CustomDateFormatter.getDateFromString(dateTestedTo);
-      Calendar gcal = new GregorianCalendar();
-      gcal.setTime(dateTo);
-      gcal.add(Calendar.DATE, 1);
-      dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
-  
-      Date dateFrom;
-      if (dateTestedFrom == null || dateTestedFrom.equals(""))
-        dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
-      else
-        dateFrom = CustomDateFormatter.getDateFromString(dateTestedFrom);
-  
-      Map<String, Map<Long, Long>> numTestResults = bloodTestingRepository
-          .findNumberOfPositiveTests(ttiTests, dateFrom, dateTo,
-              aggregationCriteria, venues);
-  
-      // TODO: potential leap year bug here
-      Long interval = (long) (24 * 3600 * 1000);
-  
-      if (aggregationCriteria.equals("monthly"))
-        interval = interval * 30;
-      else if (aggregationCriteria.equals("yearly"))
-        interval = interval * 365;
-  
-      map.put("interval", interval);
-      map.put("numTestResults", numTestResults);
-      map.put("dateTestedFromUTC", dateFrom.getTime());
-      map.put("dateTestedToUTC", dateTo.getTime());
+    Date dateTo;
+    if (dateTestedTo == null || dateTestedTo.equals(""))
+      dateTo = new Date();
+    else
+      dateTo = CustomDateFormatter.getDateFromString(dateTestedTo);
+    Calendar gcal = new GregorianCalendar();
+    gcal.setTime(dateTo);
+    gcal.add(Calendar.DATE, 1);
+    dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
 
-   return new ResponseEntity<>(map, httpStatus);
+    Date dateFrom;
+    if (dateTestedFrom == null || dateTestedFrom.equals(""))
+      dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
+    else
+      dateFrom = CustomDateFormatter.getDateFromString(dateTestedFrom);
+
+    Map<String, Map<Long, Long>> numTestResults = bloodTestingRepository
+            .findNumberOfPositiveTests(ttiTests, dateFrom, dateTo,
+                    aggregationCriteria, venues);
+
+    // TODO: potential leap year bug here
+    Long interval = (long) (24 * 3600 * 1000);
+
+    if (aggregationCriteria.equals("monthly"))
+      interval = interval * 30;
+    else if (aggregationCriteria.equals("yearly"))
+      interval = interval * 365;
+
+    map.put("interval", interval);
+    map.put("numTestResults", numTestResults);
+    map.put("dateTestedFromUTC", dateFrom.getTime());
+    map.put("dateTestedToUTC", dateTo.getTime());
+
+    return new ResponseEntity<>(map, httpStatus);
   }
-  
-    @RequestMapping(value = "/collecteddonations/generate", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.DONATIONS_REPORTING + "')")
-    public Report getCollectedDonationsReport(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
-        return reportGeneratorService.generateCollectedDonationsReport(startDate, endDate);
-    }
+
+  @RequestMapping(value = "/collecteddonations/generate", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.DONATIONS_REPORTING + "')")
+  public Report getCollectedDonationsReport(
+          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
+    return reportGeneratorService.generateCollectedDonationsReport(startDate, endDate);
+  }
 
 }

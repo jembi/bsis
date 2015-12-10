@@ -1,7 +1,6 @@
 package controller;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -10,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import repository.GenericConfigRepository;
 import repository.LoginRepository;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("login")
@@ -24,7 +25,7 @@ public class LoginController {
   @RequestMapping(method = RequestMethod.GET)
   @ApiIgnore
   public ModelAndView login(HttpServletRequest request,
-      @RequestParam(value="error", required=false) boolean error) {
+                            @RequestParam(value = "error", required = false) boolean error) {
     ModelAndView mv = new ModelAndView("login");
     if (error)
       mv.addObject("login_error", true);

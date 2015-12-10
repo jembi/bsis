@@ -1,7 +1,5 @@
 package viewmodel;
 
-import java.util.List;
-
 import model.component.Component;
 import model.location.Location;
 import model.modificationtracker.RowModificationTracker;
@@ -10,6 +8,8 @@ import model.requesttype.RequestType;
 import model.user.User;
 import model.util.BloodGroup;
 import utils.CustomDateFormatter;
+
+import java.util.List;
 
 public class RequestViewModel {
   private Request request;
@@ -104,7 +104,7 @@ public class RequestViewModel {
 
   public String getPatientBirthDate() {
     if (request.getPatientBirthDate() == null)
-      return ""; 
+      return "";
     return CustomDateFormatter.getDateString(request.getPatientBirthDate());
   }
 

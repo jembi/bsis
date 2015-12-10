@@ -15,7 +15,7 @@ public enum Gender {
 
   @SuppressWarnings("unused")
   private int value;
-  
+
   private Gender(int value) {
     this.value = value;
   }

@@ -1,18 +1,5 @@
 package controller;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import javax.persistence.NoResultException;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import model.admin.FormField;
 import model.admin.GeneralConfig;
 import model.component.Component;
@@ -27,8 +14,8 @@ import model.donordeferral.DeferralReason;
 import model.location.Location;
 import model.packtype.PackType;
 import model.request.Request;
-import model.user.User;
 import model.user.Role;
+import model.user.User;
 import model.worksheet.Worksheet;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -36,25 +23,18 @@ import org.springframework.beans.NotReadablePropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.Errors;
-import repository.DonationRepository;
-import repository.DonationBatchRepository;
-import repository.DonorRepository;
-import repository.FormFieldRepository;
-import repository.GenericConfigRepository;
-import repository.LocationRepository;
-import repository.ComponentRepository;
-import repository.RequestRepository;
-import repository.SequenceNumberRepository;
-import repository.TipsRepository;
-import repository.UserRepository;
-import repository.RoleRepository;
-import repository.WorksheetRepository;
-import repository.GeneralConfigRepository;
-import repository.PackTypeRepository;
-import repository.DeferralReasonRepository;
-import repository.DiscardReasonRepository;
+import repository.*;
 import security.BsisUserDetails;
-import repository.DonationTypeRepository;
+
+import javax.persistence.NoResultException;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 @org.springframework.stereotype.Component
 public class UtilController {
@@ -156,8 +136,8 @@ public class UtilController {
           Object fieldValue = properties.get(field);
           Integer maxLength = maxLengths.get(field);
           if (fieldValue != null && maxLength > 0 &&
-              (fieldValue instanceof String && ((String)fieldValue).length() > maxLength)
-             )
+                  (fieldValue instanceof String && ((String) fieldValue).length() > maxLength)
+                  )
             try {
               errors.rejectValue(formName + "." + field, "fieldLength.error", "Maximum length for this field is " + maxLength);
             } catch (NotReadablePropertyException ex) {
@@ -191,8 +171,8 @@ public class UtilController {
         if (properties.containsKey(requiredField)) {
           Object fieldValue = properties.get(requiredField);
           if (fieldValue == null ||
-              (fieldValue instanceof String && StringUtils.isBlank((String) fieldValue))
-             ) {
+                  (fieldValue instanceof String && StringUtils.isBlank((String) fieldValue))
+                  ) {
             errors.rejectValue(formName + "." + requiredField, "requiredField.error", "This information is required");
           }
         }
@@ -217,7 +197,7 @@ public class UtilController {
     String reqUrl = req.getRequestURL().toString();
     String queryString = req.getQueryString();   // d=789
     if (queryString != null) {
-        reqUrl += "?"+queryString;
+      reqUrl += "?" + queryString;
     }
     return reqUrl;
   }
@@ -230,7 +210,7 @@ public class UtilController {
     while ((line = reader.readLine()) != null) {
       propertyFileContents += line + "\n";
     }
-    prop.load(new StringReader(propertyFileContents.replace("\\","\\\\")));
+    prop.load(new StringReader(propertyFileContents.replace("\\", "\\\\")));
     return prop;
   }
 
@@ -270,7 +250,7 @@ public class UtilController {
     return locationRepository.getLocation(locationId).getIsVenue();
   }
 
-  public List<DonationBatch> findOpenDonationBatches (List<Long> venueIds){
+  public List<DonationBatch> findOpenDonationBatches(List<Long> venueIds) {
     return donationBatchRepository.findDonationBatches(false, venueIds, null, null);
   }
 
@@ -278,9 +258,9 @@ public class UtilController {
     return sequenceNumberRepository.getNextDonorNumber();
   }
 
-  public String getSequenceNumber(String targetTable,String columnName) {
-	    return sequenceNumberRepository.getSequenceNumber(targetTable,columnName);
-	  }
+  public String getSequenceNumber(String targetTable, String columnName) {
+    return sequenceNumberRepository.getSequenceNumber(targetTable, columnName);
+  }
 
 
   public String getNextDonationIdentificationNumber() {
@@ -300,11 +280,10 @@ public class UtilController {
 
     Donor donor = null;
     if (donorId != null && !donorId.isEmpty()) {
-        donor = donorRepository.findDonorById(donorId);
-    }
-    else if (donorNumber != null && !donorNumber.isEmpty()) {
+      donor = donorRepository.findDonorById(donorId);
+    } else if (donorNumber != null && !donorNumber.isEmpty()) {
       try {
-        donor = donorRepository.findDonorByDonorNumber(donorNumber,false);
+        donor = donorRepository.findDonorByDonorNumber(donorNumber, false);
       } catch (NoResultException ex) {
         ex.printStackTrace();
       }
@@ -343,14 +322,13 @@ public class UtilController {
     return donation;
   }
 
-  public boolean isFutureDate(Date date){
-	  Date today = new Date();
-	  if(date.after(today)){
-		  return true;
-	  }
-	  else{
-		  return false;
-	  }
+  public boolean isFutureDate(Date date) {
+    Date today = new Date();
+    if (date.after(today)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public Component findComponent(String donationIdentificationNumber, String componentType) {
@@ -371,11 +349,11 @@ public class UtilController {
 
   public Component findComponent(String donationIdentificationNumber, ComponentType componentType) {
     List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
-    Component matchingComponent = null; 
+    Component matchingComponent = null;
     for (Component component : components) {
       if (component.getComponentType().equals(componentType)) {
         if (matchingComponent != null &&
-            matchingComponent.getStatus().equals(ComponentStatus.AVAILABLE)) {
+                matchingComponent.getStatus().equals(ComponentStatus.AVAILABLE)) {
           // multiple components available have the same component type
           // cannot identify uniquely
           return null;
@@ -401,7 +379,7 @@ public class UtilController {
     String donorNumber = donor.getDonorNumber();
     if (StringUtils.isBlank(donorNumber))
       return false;
-    Donor existingDonor = donorRepository.findDonorByDonorNumber(donorNumber,true);
+    Donor existingDonor = donorRepository.findDonorByDonorNumber(donorNumber, true);
     if (existingDonor != null && !existingDonor.getId().equals(donor.getId()))
       return true;
     return false;
@@ -410,7 +388,7 @@ public class UtilController {
   public boolean donorNumberExists(String donorNumber) {
     if (StringUtils.isBlank(donorNumber))
       return false;
-    Donor existingDonor = donorRepository.findDonorByDonorNumber(donorNumber,true);
+    Donor existingDonor = donorRepository.findDonorByDonorNumber(donorNumber, true);
     if (existingDonor != null && existingDonor.getId() != null)
       return true;
     return false;
@@ -426,7 +404,7 @@ public class UtilController {
     return false;
   }
 
-  public boolean isDuplicateDiscardReason(ComponentStatusChangeReason discardReason){
+  public boolean isDuplicateDiscardReason(ComponentStatusChangeReason discardReason) {
     String reason = discardReason.getStatusChangeReason();
     if (StringUtils.isBlank(reason))
       return false;
@@ -436,7 +414,7 @@ public class UtilController {
     return false;
   }
 
-  public boolean isDuplicateDonationType(DonationType donationType){
+  public boolean isDuplicateDonationType(DonationType donationType) {
     String type = donationType.getDonationType();
     if (StringUtils.isBlank(type))
       return false;
@@ -466,7 +444,7 @@ public class UtilController {
     return false;
   }
 
-  public String getGeneralConfigValueByName(String generalConfigName){
+  public String getGeneralConfigValueByName(String generalConfigName) {
     GeneralConfig generalConfig = generalConfigRepository.getGeneralConfigByName(generalConfigName);
     if (generalConfig != null)
       return generalConfig.getValue();
@@ -492,7 +470,7 @@ public class UtilController {
       return true;
     return false;
   }
-  
+
   public boolean isDuplicateRoleName(Role role) {
     String roleName = role.getName();
     if (StringUtils.isBlank(roleName))
@@ -502,7 +480,7 @@ public class UtilController {
       return true;
     return false;
   }
-  
+
   public boolean isDuplicateUserName(User user) {
     String userName = user.getUsername();
     if (StringUtils.isBlank(userName))
@@ -567,16 +545,16 @@ public class UtilController {
       user = ((BsisUserDetails) principal).getUser();
     return user;
   }
-  
-  public String getUserPassword(Integer id){
-  	User user= userRepository.findUserById(id);
-  	String pwd=null;
-  	if(user!=null)
-  		pwd=user.getPassword();
-  	return pwd;
+
+  public String getUserPassword(Integer id) {
+    User user = userRepository.findUserById(id);
+    String pwd = null;
+    if (user != null)
+      pwd = user.getPassword();
+    return pwd;
   }
-  
+
   void setServletContext(ServletContext servletContext) {
-	  this.servletContext = servletContext;
+    this.servletContext = servletContext;
   }
 }

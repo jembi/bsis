@@ -1,18 +1,13 @@
 package model.admin;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.*;
 
 @Entity
 public class FormField {
 
   public static final String FIELD = "field";
   public static final String DISPLAY_NAME = "displayName";
-  public static final String SHORT_DISPLAY_NAME="shortDisplayName";
+  public static final String SHORT_DISPLAY_NAME = "shortDisplayName";
   public static final String DEFAULT_DISPLAY_NAME = "defaultDisplayName";
   public static final String DEFAULT_VALUE = "defaultValue";
 
@@ -29,22 +24,22 @@ public class FormField {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false, updatable=false, insertable=false)
+  @Column(nullable = false, updatable = false, insertable = false)
   private Long id;
 
-  @Column(length=30)
+  @Column(length = 30)
   private String form;
 
-  @Column(length=30)
+  @Column(length = 30)
   private String field;
 
   /**
-   * User can override default display name with display name. 
+   * User can override default display name with display name.
    */
-  @Column(length=60)
+  @Column(length = 60)
   private String displayName;
 
-  @Column(length=60)
+  @Column(length = 60)
   private String defaultDisplayName;
 
   @Column
@@ -61,7 +56,7 @@ public class FormField {
    * of shown field because by some programming mistake if we ended up storing NULL in the hidden
    * field then the field would still show up in the UI (a somewhat tolerable mistake from a user's
    * point of view) rather than not show up at all (very annoying for users).
-   * Of course in the first place such an error should be allowed in the code.   
+   * Of course in the first place such an error should be allowed in the code.
    */
   private Boolean hidden;
 
@@ -83,56 +78,56 @@ public class FormField {
     return id;
   }
 
-  public String getForm() {
-    return form;
-  }
-
-  public String getField() {
-    return field;
-  }
-
-  public String getDisplayName() {
-    return getDefaultDisplayName();
- }
-  public String getShortDisplayName()
-  {
-	  return displayName;
-  }
-
-  public String getDefaultDisplayName() {
-    return defaultDisplayName;
-  }
-
-  public String getDefaultValue() {
-    return defaultValue;
-  }
-
-  public Boolean getHidden() {
-    return hidden;
-  }
-
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public String getForm() {
+    return form;
   }
 
   public void setForm(String form) {
     this.form = form;
   }
 
+  public String getField() {
+    return field;
+  }
+
   public void setField(String field) {
     this.field = field;
+  }
+
+  public String getDisplayName() {
+    return getDefaultDisplayName();
   }
 
   public void setDisplayName(String displayName) {
     this.displayName = displayName;
   }
 
+  public String getShortDisplayName() {
+    return displayName;
+  }
+
+  public String getDefaultDisplayName() {
+    return defaultDisplayName;
+  }
+
   public void setDefaultDisplayName(String defaultDisplayName) {
     this.defaultDisplayName = defaultDisplayName;
   }
 
+  public String getDefaultValue() {
+    return defaultValue;
+  }
+
   public void setDefaultValue(String defaultValue) {
     this.defaultValue = defaultValue;
+  }
+
+  public Boolean getHidden() {
+    return hidden;
   }
 
   public void setHidden(Boolean hidden) {

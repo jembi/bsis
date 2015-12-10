@@ -15,67 +15,67 @@ import java.util.Arrays;
 
 public class GeneralConfigBackingFormValidator implements Validator {
 
-    private Validator validator;
+  private Validator validator;
 
-    private GeneralConfigRepository configRepository;
+  private GeneralConfigRepository configRepository;
 
-    private UtilController utilController;
+  private UtilController utilController;
 
-    private DataTypeRepository dataTypeRepository;
+  private DataTypeRepository dataTypeRepository;
 
-    public GeneralConfigBackingFormValidator(Validator validator, GeneralConfigRepository configRepository, UtilController utilController, DataTypeRepository dataTypeRepository) {
-        super();
-        this.validator = validator;
-        this.configRepository = configRepository;
-        this.utilController = utilController;
-        this.dataTypeRepository = dataTypeRepository;
+  public GeneralConfigBackingFormValidator(Validator validator, GeneralConfigRepository configRepository, UtilController utilController, DataTypeRepository dataTypeRepository) {
+    super();
+    this.validator = validator;
+    this.configRepository = configRepository;
+    this.utilController = utilController;
+    this.dataTypeRepository = dataTypeRepository;
+  }
+
+  @Override
+  public boolean supports(Class<?> clazz) {
+    return Arrays.asList(GeneralConfigBackingForm.class,
+            GeneralConfig.class, String.class).contains(clazz);
+  }
+
+  @Override
+  public void validate(Object target, Errors errors) {
+    if (target == null || validator == null) {
+      return;
+    }
+    GeneralConfigBackingForm formItem = (GeneralConfigBackingForm) target;
+    DataType dataType = dataTypeRepository.getDataTypeByid(formItem.getDataType().getId());
+
+    EnumDataType enumDataType = EnumDataType.valueOf(dataType.getDatatype().toUpperCase());
+    switch (enumDataType) {
+      case TEXT:
+        // Allow all
+        break;
+      case INTEGER:
+        if (!formItem.getValue().matches("[0-9]+"))
+          errors.rejectValue("value", "400", "Invalid integer value");
+        break;
+      case DECIMAL:
+        if (!formItem.getValue().matches("[0-9]*\\.?[0-9]+"))
+          errors.rejectValue("value", "400", "Invalid decimal value");
+        break;
+      case BOOLEAN:
+        if (!(formItem.getValue().equalsIgnoreCase("true") || formItem.getValue().equalsIgnoreCase("false")))
+          errors.rejectValue("value", "400", "Invalid boolean value");
+        break;
+
     }
 
-    @Override
-    public boolean supports(Class<?> clazz) {
-        return Arrays.asList(GeneralConfigBackingForm.class,
-                GeneralConfig.class, String.class).contains(clazz);
-    }
 
-    @Override
-    public void validate(Object target, Errors errors) {
-        if (target == null || validator == null) {
-            return;
-        }
-        GeneralConfigBackingForm formItem = (GeneralConfigBackingForm) target;
-        DataType dataType = dataTypeRepository.getDataTypeByid(formItem.getDataType().getId());
+    GeneralConfig generalConfig = new GeneralConfig();
+    generalConfig.setId(formItem.getId()); // I would like to get the Id from the url for put requests
+    generalConfig.setName(formItem.getName());
+    generalConfig.setValue(formItem.getValue());
+    generalConfig.setDescription(formItem.getDescription());
+    generalConfig.setDataType(dataType);
 
-        EnumDataType enumDataType = EnumDataType.valueOf(dataType.getDatatype().toUpperCase());
-        switch(enumDataType){
-            case TEXT:
-                // Allow all
-                break;
-            case INTEGER:
-                if (!formItem.getValue().matches("[0-9]+"))
-                    errors.rejectValue("value","400", "Invalid integer value");
-                break;
-            case DECIMAL:
-                if (!formItem.getValue().matches("[0-9]*\\.?[0-9]+"))
-                    errors.rejectValue("value","400", "Invalid decimal value");
-                break;
-            case BOOLEAN:
-                if(!(formItem.getValue().equalsIgnoreCase("true") || formItem.getValue().equalsIgnoreCase("false")))
-                    errors.rejectValue("value","400", "Invalid boolean value");
-                break;
+    if (utilController.isDuplicateGeneralConfigName(generalConfig))
+      errors.rejectValue("name", "400", "Configuration name already exists.");
 
-        }
-
-
-        GeneralConfig generalConfig = new GeneralConfig();
-        generalConfig.setId(formItem.getId()); // I would like to get the Id from the url for put requests
-        generalConfig.setName(formItem.getName());
-        generalConfig.setValue(formItem.getValue());
-        generalConfig.setDescription(formItem.getDescription());
-        generalConfig.setDataType(dataType);
-
-        if (utilController.isDuplicateGeneralConfigName(generalConfig))
-            errors.rejectValue("name", "400", "Configuration name already exists.");
-
-        formItem.setGeneralConfig(generalConfig);
-    }
+    formItem.setGeneralConfig(generalConfig);
+  }
 }

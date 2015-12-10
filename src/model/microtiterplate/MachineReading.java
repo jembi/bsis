@@ -1,39 +1,32 @@
 package model.microtiterplate;
 
-import java.math.BigDecimal;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.WellType;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 public class MachineReading {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable=false, updatable=false)
+  @Column(nullable = false, insertable = false, updatable = false)
   private Long id;
 
   @ManyToOne
   private WellType wellType;
 
-  @Column(precision=7, scale=3)
+  @Column(precision = 7, scale = 3)
   private BigDecimal machineReading;
 
-  @OneToOne(mappedBy="machineReading")
+  @OneToOne(mappedBy = "machineReading")
   private BloodTestResult bloodTestResult;
 
-  @Column(columnDefinition="SMALLINT")
+  @Column(columnDefinition = "SMALLINT")
   private Integer rowNumber;
 
-  @Column(columnDefinition="SMALLINT")
+  @Column(columnDefinition = "SMALLINT")
   private Integer columnNumber;
 
   @ManyToOne

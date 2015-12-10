@@ -1,29 +1,25 @@
 package model.modificationtracker;
 
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import model.user.User;
+
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Hibernate will not be able to generate schema for embedded
  * modificationTracker if we do not implement the interface.
+ *
  * @author iamrohitbanga
  */
 @Embeddable
 public class RowModificationTracker implements ModificationTracker {
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(columnDefinition="TIMESTAMP")
+  @Column(columnDefinition = "TIMESTAMP")
   private Date lastUpdated;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(columnDefinition="TIMESTAMP")
+  @Column(columnDefinition = "TIMESTAMP")
   private Date createdDate;
 
   @ManyToOne
@@ -36,28 +32,28 @@ public class RowModificationTracker implements ModificationTracker {
     return lastUpdated;
   }
 
-  public Date getCreatedDate() {
-    return createdDate;
-  }
-
-  public User getCreatedBy() {
-    return createdBy;
-  }
-
-  public User getLastUpdatedBy() {
-    return lastUpdatedBy;
-  }
-
   public void setLastUpdated(Date lastUpdated) {
     this.lastUpdated = lastUpdated;
+  }
+
+  public Date getCreatedDate() {
+    return createdDate;
   }
 
   public void setCreatedDate(Date createdDate) {
     this.createdDate = createdDate;
   }
 
+  public User getCreatedBy() {
+    return createdBy;
+  }
+
   public void setCreatedBy(User createdBy) {
     this.createdBy = createdBy;
+  }
+
+  public User getLastUpdatedBy() {
+    return lastUpdatedBy;
   }
 
   public void setLastUpdatedBy(User lastUpdatedBy) {

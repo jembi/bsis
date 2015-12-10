@@ -1,36 +1,36 @@
 #login {
-	margin-left: 20%
+    margin-left: 20%
 }
 
 .actionButtonsPanel {
-	margin-left: 30%
+    margin-left: 30%
 }
 
 .loginHeading {
-	color: #6E66B3;
-	font-family: arial;
+    color: #6E66B3;
+    font-family: arial;
 }
 
 .loginButton {
-	margin-left: 295px;
-	margin-bottom: 30px;
+    margin-left: 295px;
+    margin-bottom: 30px;
 }
 
 .loginPanel {
-	margin: 50px -250px 0;
+    margin: 50px -250px 0;
 }
 
 .errorBox {
-	margin: 6px;
-	font-family: 'helvetica';
-	border-color: red;
-	border-style: dotted;
-	border-radius: 5px;
-	padding-left: 8px;
-	padding-right: 5px;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	width: 80%;
+    margin: 6px;
+    font-family: 'helvetica';
+    border-color: red;
+    border-style: dotted;
+    border-radius: 5px;
+    padding-left: 8px;
+    padding-right: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 80%;
 }

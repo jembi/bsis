@@ -1,47 +1,37 @@
 package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import model.component.Component;
+import model.component.ComponentStatus;
+import model.componenttype.ComponentTypeCombination;
+import model.donation.Donation;
+import model.user.User;
+import org.apache.commons.lang3.StringUtils;
+import utils.CustomDateFormatter;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import model.component.Component;
-import model.component.ComponentStatus;
-import model.componenttype.ComponentTypeCombination;
-import model.donation.Donation;
-import model.user.User;
-
-import org.apache.commons.lang3.StringUtils;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import utils.CustomDateFormatter;
-
 public class ComponentCombinationBackingForm {
 
   public static final int ID_LENGTH = 12;
-
+  Map<String, String> expiresOnByComponentTypeId;
   @NotNull
   @Valid
   @JsonIgnore
   private Component component;
-
   private String createdOn;
-
   private String expiresOn;
-
   private ComponentTypeCombination componentTypeCombination;
 
-  Map<String, String> expiresOnByComponentTypeId;
-  
   public ComponentCombinationBackingForm() {
     expiresOnByComponentTypeId = new HashMap<>();
     setComponent(new Component());
@@ -60,14 +50,26 @@ public class ComponentCombinationBackingForm {
     return component.getId();
   }
 
+  public void setId(Long id) {
+    component.setId(id);
+  }
+
   @JsonIgnore
   public Donation getDonation() {
     return component.getDonation();
   }
-  
+
+  public void setDonation(Donation donation) {
+    component.setDonation(donation);
+  }
+
   @JsonIgnore
   public Date getLastUpdated() {
     return component.getLastUpdated();
+  }
+
+  public void setLastUpdated(Date lastUpdated) {
+    component.setLastUpdated(lastUpdated);
   }
 
   @JsonIgnore
@@ -75,9 +77,17 @@ public class ComponentCombinationBackingForm {
     return component.getCreatedDate();
   }
 
+  public void setCreatedDate(Date createdDate) {
+    component.setCreatedDate(createdDate);
+  }
+
   @JsonIgnore
   public User getCreatedBy() {
     return component.getCreatedBy();
+  }
+
+  public void setCreatedBy(User createdBy) {
+    component.setCreatedBy(createdBy);
   }
 
   @JsonIgnore
@@ -85,24 +95,28 @@ public class ComponentCombinationBackingForm {
     return component.getLastUpdatedBy();
   }
 
+  public void setLastUpdatedBy(User lastUpdatedBy) {
+    component.setLastUpdatedBy(lastUpdatedBy);
+  }
+
   public String getNotes() {
     return component.getNotes();
+  }
+
+  public void setNotes(String notes) {
+    component.setNotes(notes);
   }
 
   public Boolean getIsDeleted() {
     return component.getIsDeleted();
   }
 
+  public void setIsDeleted(Boolean isDeleted) {
+    component.setIsDeleted(isDeleted);
+  }
+
   public int hashCode() {
     return component.hashCode();
-  }
-
-  public void setId(Long id) {
-    component.setId(id);
-  }
-
-  public void setDonation(Donation donation) {
-    component.setDonation(donation);
   }
 
   public String getCreatedOn() {
@@ -113,34 +127,6 @@ public class ComponentCombinationBackingForm {
     return CustomDateFormatter.getDateTimeString(component.getCreatedOn());
   }
 
-  public String getExpiresOn() {
-    return expiresOn;
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    component.setLastUpdated(lastUpdated);
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    component.setCreatedDate(createdDate);
-  }
-
-  public void setCreatedBy(User createdBy) {
-    component.setCreatedBy(createdBy);
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    component.setLastUpdatedBy(lastUpdatedBy);
-  }
-
-  public void setNotes(String notes) {
-    component.setNotes(notes);
-  }
-
-  public void setIsDeleted(Boolean isDeleted) {
-    component.setIsDeleted(isDeleted);
-  }
-
   public void setCreatedOn(String createdOn) {
     this.createdOn = createdOn;
     try {
@@ -149,6 +135,10 @@ public class ComponentCombinationBackingForm {
       ex.printStackTrace();
       component.setCreatedOn(null);
     }
+  }
+
+  public String getExpiresOn() {
+    return expiresOn;
   }
 
   @SuppressWarnings("unchecked")
@@ -175,8 +165,8 @@ public class ComponentCombinationBackingForm {
 
   public String getDonationIdentificationNumber() {
     if (component == null || component.getDonation() == null ||
-        component.getDonation().getDonationIdentificationNumber() == null
-       )
+            component.getDonation().getDonationIdentificationNumber() == null
+            )
       return "";
     return component.getDonation().getDonationIdentificationNumber();
   }
@@ -217,8 +207,7 @@ public class ComponentCombinationBackingForm {
   public void setComponentTypeCombination(String componentTypeCombinationId) {
     if (StringUtils.isBlank(componentTypeCombinationId)) {
       componentTypeCombination = null;
-    }
-    else {
+    } else {
       componentTypeCombination = new ComponentTypeCombination();
       try {
         componentTypeCombination.setId(Integer.parseInt(componentTypeCombinationId));

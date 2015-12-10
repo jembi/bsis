@@ -1,75 +1,74 @@
 package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import model.admin.GeneralConfig;
-import javax.validation.Valid;
 import model.admin.DataType;
+import model.admin.GeneralConfig;
+
+import javax.validation.Valid;
 
 
 public class GeneralConfigBackingForm {
 
-    @JsonIgnore
-    private GeneralConfig generalConfig;
+  @JsonIgnore
+  private GeneralConfig generalConfig;
 
-    private String value;
-    private String name;
-    
-    @Valid
-    private DataType dataType;
+  private String value;
+  private String name;
 
-    public GeneralConfigBackingForm(){
-        setGeneralConfig(new GeneralConfig());
-    }
+  @Valid
+  private DataType dataType;
+  private String description;
+  private Integer id;
 
-    public String getDescription() {
-        return description;
-    }
+  public GeneralConfigBackingForm() {
+    setGeneralConfig(new GeneralConfig());
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public Integer getId() {
-        return id;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public GeneralConfig getGeneralConfig() {
-        return generalConfig;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public void setGeneralConfig(GeneralConfig generalConfig) {
-        this.generalConfig = generalConfig;
-    }
+  public GeneralConfig getGeneralConfig() {
+    return generalConfig;
+  }
 
-    private String description;
+  public void setGeneralConfig(GeneralConfig generalConfig) {
+    this.generalConfig = generalConfig;
+  }
 
-    private Integer id;
+  public String getValue() {
+    return this.value;
+  }
 
-    public String getValue() {
-        return this.value;
-    }
+  public void setValue(String value) {
+    this.value = value;
+  }
 
-    public void setValue(String value){
-        this.value = value;
-    }
-    
-    public void setDataType(DataType dataType){
-        this.dataType = dataType;
-    }
+  public DataType getDataType() {
+    return dataType;
+  }
 
-    public DataType getDataType(){
-        return dataType;
-    }
+  public void setDataType(DataType dataType) {
+    this.dataType = dataType;
+  }
 }

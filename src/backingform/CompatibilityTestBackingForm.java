@@ -1,12 +1,6 @@
 package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.text.ParseException;
-import java.util.Date;
-
-import javax.validation.Valid;
-
 import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
 import model.compatibility.CrossmatchType;
@@ -14,6 +8,10 @@ import model.component.Component;
 import model.request.Request;
 import model.user.User;
 import utils.CustomDateFormatter;
+
+import javax.validation.Valid;
+import java.text.ParseException;
+import java.util.Date;
 
 public class CompatibilityTestBackingForm {
 
@@ -33,9 +31,17 @@ public class CompatibilityTestBackingForm {
     return compatibilityTest.getLastUpdated();
   }
 
+  public void setLastUpdated(Date lastUpdated) {
+    compatibilityTest.setLastUpdated(lastUpdated);
+  }
+
   @JsonIgnore
   public Date getCreatedDate() {
     return compatibilityTest.getCreatedDate();
+  }
+
+  public void setCreatedDate(Date createdDate) {
+    compatibilityTest.setCreatedDate(createdDate);
   }
 
   @JsonIgnore
@@ -43,28 +49,20 @@ public class CompatibilityTestBackingForm {
     return compatibilityTest.getCreatedBy();
   }
 
+  public void setCreatedBy(User createdBy) {
+    compatibilityTest.setCreatedBy(createdBy);
+  }
+
   @JsonIgnore
   public User getLastUpdatedBy() {
     return compatibilityTest.getLastUpdatedBy();
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    compatibilityTest.setLastUpdated(lastUpdated);
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    compatibilityTest.setCreatedDate(createdDate);
-  }
-
-  public void setCreatedBy(User createdBy) {
-    compatibilityTest.setCreatedBy(createdBy);
   }
 
   public void setLastUpdatedBy(User lastUpdatedBy) {
     compatibilityTest.setLastUpdatedBy(lastUpdatedBy);
   }
 
-  
+
   public Long getId() {
     return compatibilityTest.getId();
   }
@@ -84,8 +82,8 @@ public class CompatibilityTestBackingForm {
 
   public String getRequestNumber() {
     if (compatibilityTest == null || compatibilityTest.getForRequest() == null ||
-        compatibilityTest.getForRequest().getRequestNumber() == null
-       )
+            compatibilityTest.getForRequest().getRequestNumber() == null
+            )
       return "";
     return compatibilityTest.getForRequest().getRequestNumber();
   }
@@ -135,8 +133,7 @@ public class CompatibilityTestBackingForm {
   public void setCrossmatchType(String crossmatchTypeId) {
     if (crossmatchTypeId == null) {
       compatibilityTest.setCrossmatchType(null);
-    }
-    else {
+    } else {
       CrossmatchType ct = new CrossmatchType();
       ct.setId(Integer.parseInt(crossmatchTypeId));
       compatibilityTest.setCrossmatchType(ct);
@@ -147,16 +144,16 @@ public class CompatibilityTestBackingForm {
     return compatibilityTest.getTestedBy();
   }
 
+  public void setTestedBy(String testedBy) {
+    compatibilityTest.setTestedBy(testedBy);
+  }
+
   public String getCompatibilityTestDate() {
     if (compatiblityTestDate != null)
       return compatiblityTestDate;
     if (compatibilityTest == null)
       return "";
     return CustomDateFormatter.getDateTimeString(compatibilityTest.getCompatibilityTestDate());
-  }
-
-  public void setTestedBy(String testedBy) {
-    compatibilityTest.setTestedBy(testedBy);
   }
 
   public void setCompatibilityTestDate(String compatibilityTestDate) {
@@ -186,11 +183,11 @@ public class CompatibilityTestBackingForm {
     this.compatibilityTest = crossmatchTest;
   }
 
-  public void setDonationIdentificationNumber(String donationIdentificationNumber) {
-    this.donationIdentificationNumber = donationIdentificationNumber;
-  }
-
   public String getDonationIdentificationNumber() {
     return donationIdentificationNumber;
+  }
+
+  public void setDonationIdentificationNumber(String donationIdentificationNumber) {
+    this.donationIdentificationNumber = donationIdentificationNumber;
   }
 }

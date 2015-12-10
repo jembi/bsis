@@ -1,26 +1,26 @@
 package model.util;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Collection;
 
 public class BloodGroup {
 
+  static final private Map<String, BloodGroup> bloodgroups = new LinkedHashMap<>();
+
+  static {
+    bloodgroups.put("o+", new BloodGroup("O", "+"));
+    bloodgroups.put("o-", new BloodGroup("O", "-"));
+    bloodgroups.put("a+", new BloodGroup("A", "+"));
+    bloodgroups.put("a-", new BloodGroup("A", "-"));
+    bloodgroups.put("b+", new BloodGroup("B", "+"));
+    bloodgroups.put("b-", new BloodGroup("B", "-"));
+    bloodgroups.put("ab+", new BloodGroup("AB", "+"));
+    bloodgroups.put("ab-", new BloodGroup("AB", "-"));
+  }
+
   private String abo;
   private String rh;
-
-  static final private Map<String, BloodGroup> bloodgroups = new LinkedHashMap<>();
-  
-  static {
-		bloodgroups.put("o+", new BloodGroup("O", "+"));
-		bloodgroups.put("o-", new BloodGroup("O", "-"));
-		bloodgroups.put("a+", new BloodGroup("A", "+"));
-		bloodgroups.put("a-", new BloodGroup("A", "-"));
-		bloodgroups.put("b+", new BloodGroup("B", "+"));
-		bloodgroups.put("b-", new BloodGroup("B", "-"));  
-		bloodgroups.put("ab+", new BloodGroup("AB", "+"));
-		bloodgroups.put("ab-", new BloodGroup("AB", "-"));   
-  }
 
   public BloodGroup() {
     abo = "";
@@ -32,8 +32,7 @@ public class BloodGroup {
     if (bg == null) {
       abo = "";
       rh = "";
-    }
-    else {
+    } else {
       abo = bg.abo;
       rh = bg.rh;
     }
@@ -49,6 +48,14 @@ public class BloodGroup {
     this.rh = rh;
   }
 
+  public static Map<String, BloodGroup> getBloodgroups() {
+    return bloodgroups;
+  }
+
+  public static Collection<BloodGroup> getAllBloodGroups() {
+    return bloodgroups.values();
+  }
+
   public BloodGroup toBloodGroup(String bloodGroup) {
     return BloodGroup.bloodgroups.get(bloodGroup.toLowerCase());
   }
@@ -58,8 +65,7 @@ public class BloodGroup {
     StringBuilder strBuilder = new StringBuilder();
     if (abo == null) {
       strBuilder.append("Unknown");
-    }
-    else {
+    } else {
       strBuilder.append(abo.toString());
       if (rh.equals("+"))
         strBuilder.append("+");
@@ -79,13 +85,5 @@ public class BloodGroup {
 
   public String getBloodRh() {
     return rh.toString();
-  }
-
-  public static Map<String, BloodGroup> getBloodgroups() {
-	return bloodgroups;
-  }
-  
-  public static Collection<BloodGroup> getAllBloodGroups() {
-	return bloodgroups.values();
   }
 }

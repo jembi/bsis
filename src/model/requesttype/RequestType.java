@@ -1,12 +1,8 @@
 package model.requesttype;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 import org.hibernate.envers.Audited;
+
+import javax.persistence.*;
 
 @Entity
 @Audited
@@ -14,19 +10,19 @@ public class RequestType {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable=false, updatable=false, columnDefinition="SMALLINT")
+  @Column(nullable = false, insertable = false, updatable = false, columnDefinition = "SMALLINT")
   private Integer id;
 
-  @Column(length=30)
+  @Column(length = 30)
   private String requestType;
 
-  @Column(length=100)
+  @Column(length = 100)
   private String description;
 
   private Boolean isDeleted;
-  
+
   private Boolean bulkTransfer;
-  
+
   public Integer getId() {
     return id;
   }
@@ -59,12 +55,12 @@ public class RequestType {
     this.isDeleted = isDeleted;
   }
 
-	public Boolean getBulkTransfer() {
-		return bulkTransfer;
-	}
-	
-	public void setBulkTransfer(Boolean bulkTransfer) {
-		this.bulkTransfer = bulkTransfer;
-	}
-  
+  public Boolean getBulkTransfer() {
+    return bulkTransfer;
+  }
+
+  public void setBulkTransfer(Boolean bulkTransfer) {
+    this.bulkTransfer = bulkTransfer;
+  }
+
 }

@@ -1,21 +1,12 @@
 package model.microtiterplate;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import model.bloodtesting.BloodTestResult;
-
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
 @Audited
 @Entity
@@ -23,7 +14,7 @@ public class PlateSession {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable=false, updatable=false)
+  @Column(nullable = false, insertable = false, updatable = false)
   private Long id;
 
   @Temporal(TemporalType.TIMESTAMP)

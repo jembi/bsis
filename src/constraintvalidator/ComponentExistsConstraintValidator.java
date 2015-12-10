@@ -1,34 +1,32 @@
 package constraintvalidator;
 
+import model.component.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import repository.ComponentRepository;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import model.component.Component;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import repository.ComponentRepository;
-
 @org.springframework.stereotype.Component
 public class ComponentExistsConstraintValidator implements
-    ConstraintValidator<ComponentExists, Component> {
+        ConstraintValidator<ComponentExists, Component> {
 
   @Autowired
   private ComponentRepository componentRepository;
 
   public ComponentExistsConstraintValidator() {
   }
-  
+
   @Override
   public void initialize(ComponentExists constraint) {
   }
 
   public boolean isValid(Component target, ConstraintValidatorContext context) {
 
-   if (target == null)
-     return true;
+    if (target == null)
+      return true;
 
-   try {
+    try {
 
       Component component = null;
 
@@ -39,7 +37,7 @@ public class ComponentExistsConstraintValidator implements
         return true;
       }
     } catch (Exception e) {
-       e.printStackTrace();
+      e.printStackTrace();
     }
     return false;
   }

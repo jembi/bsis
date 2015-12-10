@@ -1,23 +1,20 @@
 package viewmodel;
 
-import java.util.Arrays;
-import java.util.Date;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import model.component.Component;
 import model.component.ComponentStatus;
 import model.donation.Donation;
 import model.user.User;
-
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-
 import utils.CustomDateFormatter;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Arrays;
+import java.util.Date;
 
 public class ComponentViewModel {
 
- @JsonIgnore
+  @JsonIgnore
   private Component component;
 
   public ComponentViewModel() {
@@ -47,7 +44,7 @@ public class ComponentViewModel {
   public ComponentTypeViewModel getComponentType() {
     return new ComponentTypeViewModel(component.getComponentType());
   }
-  
+
   public String getNotes() {
     return component.getNotes();
   }
@@ -58,7 +55,7 @@ public class ComponentViewModel {
 
   public String getCreatedOn() {
     if (component.getCreatedOn() == null)
-      return ""; 
+      return "";
     return CustomDateFormatter.getDateTimeString(component.getCreatedOn());
   }
 
@@ -70,16 +67,16 @@ public class ComponentViewModel {
 
   public String getDonationIdentificationNumber() {
     if (getComponent() == null || getComponent().getDonation() == null ||
-        getComponent().getDonation().getDonationIdentificationNumber() == null
-       )
+            getComponent().getDonation().getDonationIdentificationNumber() == null
+            )
       return "";
     return getComponent().getDonation().getDonationIdentificationNumber();
   }
-  
+
   public String getDonationID() {
     if (getComponent() == null || getComponent().getDonation() == null ||
-        getComponent().getDonation().getId() == null
-       )
+            getComponent().getDonation().getId() == null
+            )
       return "";
     return getComponent().getDonation().getId().toString();
   }
@@ -101,8 +98,7 @@ public class ComponentViewModel {
       DateTime expiresOn = new DateTime(component.getExpiresOn().getTime());
       Long age = (long) Days.daysBetween(expiresOn, new DateTime()).getDays();
       return Math.abs(age) + " days to expire";
-    }
-    else {
+    } else {
       return "Already expired";
     }
   }
@@ -143,7 +139,7 @@ public class ComponentViewModel {
     else if (!status.equals(ComponentStatus.ISSUED))
       return null;
     else
-    return new RequestViewModel(component.getIssuedTo());
+      return new RequestViewModel(component.getIssuedTo());
   }
 
   public String getDiscardedOn() {
@@ -153,8 +149,8 @@ public class ComponentViewModel {
   @JsonIgnore
   public String getBloodGroup() {
     if (component == null || component.getDonation() == null ||
-        component.getDonation().getDonationIdentificationNumber() == null
-       )
+            component.getDonation().getDonationIdentificationNumber() == null
+            )
       return "";
     DonationViewModel donationViewModel = new DonationViewModel(component.getDonation());
     return donationViewModel.getBloodGroup();
@@ -166,11 +162,11 @@ public class ComponentViewModel {
 
   public Boolean getStatusAllowsSplitting() {
     return Arrays.asList(ComponentStatus.AVAILABLE, ComponentStatus.QUARANTINED)
-                 .contains(component.getStatus());
+            .contains(component.getStatus());
   }
-  
+
   public String getComponentIdentificationNumber() {
     return component.getComponentIdentificationNumber();
   }
-  
+
 }

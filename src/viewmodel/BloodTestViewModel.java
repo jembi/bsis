@@ -1,10 +1,11 @@
 package viewmodel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.List;
-import java.util.Set;
 import model.bloodtesting.BloodTest;
 import model.worksheet.WorksheetType;
+
+import java.util.List;
+import java.util.Set;
 
 public class BloodTestViewModel {
 
@@ -54,9 +55,9 @@ public class BloodTestViewModel {
       return  formatValidResults;
   }
   */
-  
+
   public List<String> getValidResults() {
-      return rawBloodTest.getValidResultsList();
+    return rawBloodTest.getValidResultsList();
   }
 
   public String getBloodTestCategory() {
@@ -64,10 +65,12 @@ public class BloodTestViewModel {
     if (rawBloodTest.getCategory() == null)
       return "";
     switch (rawBloodTest.getCategory()) {
-    case BLOODTYPING: category = "BLOODTYPING";
-                      break;
-    case TTI: category = "TTI";
-              break;
+      case BLOODTYPING:
+        category = "BLOODTYPING";
+        break;
+      case TTI:
+        category = "TTI";
+        break;
     }
     return category;
   }
@@ -75,9 +78,9 @@ public class BloodTestViewModel {
   public String getNegativeResults() {
     return rawBloodTest.getNegativeResults();
   }
-  
-  public String getPositiveResults(){
-      return rawBloodTest.getPositiveResults();
+
+  public String getPositiveResults() {
+    return rawBloodTest.getPositiveResults();
   }
 
   public Boolean getIsActive() {

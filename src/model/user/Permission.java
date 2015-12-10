@@ -1,28 +1,22 @@
 package model.user;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.envers.Audited;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-public class Permission implements Serializable{
+public class Permission implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false, updatable=false, insertable=false)
+  @Column(nullable = false, updatable = false, insertable = false)
   private Long id;
 
-  @Column(length=50)
+  @Column(length = 50)
   private String name;
 
   @ManyToMany(mappedBy = "permissions")

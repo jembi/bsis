@@ -3,29 +3,23 @@ package backingform.validator;
 import backingform.ComponentBackingForm;
 import backingform.ComponentCombinationBackingForm;
 import backingform.RecordComponentBackingForm;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import controller.UtilController;
+import model.donation.Donation;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
+import utils.CustomDateFormatter;
+import viewmodel.ComponentViewModel;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
-import model.donation.Donation;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
-import org.springframework.validation.Validator;
-
-import utils.CustomDateFormatter;
-import viewmodel.ComponentViewModel;
 
 public class ComponentBackingFormValidator implements Validator {
 
@@ -42,9 +36,9 @@ public class ComponentBackingFormValidator implements Validator {
   @Override
   public boolean supports(Class<?> clazz) {
     return Arrays.asList(ComponentBackingForm.class,
-                         ComponentViewModel.class,
-                         ComponentCombinationBackingForm.class,
-                         RecordComponentBackingForm.class).contains(clazz);
+            ComponentViewModel.class,
+            ComponentCombinationBackingForm.class,
+            RecordComponentBackingForm.class).contains(clazz);
   }
 
   @Override
@@ -62,12 +56,12 @@ public class ComponentBackingFormValidator implements Validator {
     String createdOn = form.getCreatedOn();
     if (!CustomDateFormatter.isDateTimeStringValid(createdOn))
       errors.rejectValue("component.createdOn", "dateFormat.incorrect",
-          CustomDateFormatter.getDateTimeErrorMessage());
+              CustomDateFormatter.getDateTimeErrorMessage());
 
     String expiresOn = form.getExpiresOn();
     if (!CustomDateFormatter.isDateStringValid(expiresOn))
       errors.rejectValue("component.expiresOn", "dateFormat.incorrect",
-          CustomDateFormatter.getDateErrorMessage());
+              CustomDateFormatter.getDateErrorMessage());
 
     updateRelatedEntities(form);
     utilController.commonFieldChecks(form, "component", errors);
@@ -77,12 +71,12 @@ public class ComponentBackingFormValidator implements Validator {
 
     if (StringUtils.isBlank(form.getComponentTypeCombination()))
       errors.rejectValue("componentTypeCombination", "component.componentTypeCombination",
-          "Component type combination should be specified");
+              "Component type combination should be specified");
 
     String createdOn = form.getCreatedOn();
     if (!CustomDateFormatter.isDateTimeStringValid(createdOn))
       errors.rejectValue("component.createdOn", "dateFormat.incorrect",
-          CustomDateFormatter.getDateTimeErrorMessage());
+              CustomDateFormatter.getDateTimeErrorMessage());
 
     String expiresOn = form.getExpiresOn();
     ObjectMapper mapper = new ObjectMapper();
@@ -95,7 +89,7 @@ public class ComponentBackingFormValidator implements Validator {
         String expiryDate = expiryDateByComponentType.get(componentTypeId);
         if (!CustomDateFormatter.isDateTimeStringValid(expiryDate))
           errors.rejectValue("component.expiresOn", "dateFormat.incorrect",
-              CustomDateFormatter.getDateErrorMessage());
+                  CustomDateFormatter.getDateErrorMessage());
       }
 
     } catch (JsonParseException e) {

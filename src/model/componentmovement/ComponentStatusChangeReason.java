@@ -1,14 +1,8 @@
 package model.componentmovement;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 import org.hibernate.envers.Audited;
+
+import javax.persistence.*;
 
 
 @Entity
@@ -17,14 +11,14 @@ public class ComponentStatusChangeReason {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable=false, updatable=false, columnDefinition="SMALLINT")
+  @Column(nullable = false, insertable = false, updatable = false, columnDefinition = "SMALLINT")
   private Integer id;
 
-  @Column(length=100)
+  @Column(length = 100)
   private String statusChangeReason;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=30)
+  @Column(length = 30)
   private ComponentStatusChangeReasonCategory category;
 
   private Boolean isDeleted;
@@ -64,7 +58,7 @@ public class ComponentStatusChangeReason {
     this.isDeleted = isDeleted;
   }
 
-  public void copy(ComponentStatusChangeReason componentStatusChangeReason){
+  public void copy(ComponentStatusChangeReason componentStatusChangeReason) {
     this.setId(componentStatusChangeReason.getId());
     this.setCategory(componentStatusChangeReason.getCategory());
     this.setStatusChangeReason(componentStatusChangeReason.getStatusChangeReason());

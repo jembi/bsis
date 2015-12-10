@@ -1,20 +1,11 @@
 package model.worksheet;
 
-import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestContext;
-
 import org.hibernate.envers.Audited;
+
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Audited
@@ -22,19 +13,19 @@ public class WorksheetType {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable=false, updatable=false, columnDefinition="SMALLINT")
+  @Column(nullable = false, insertable = false, updatable = false, columnDefinition = "SMALLINT")
   private Integer id;
 
-  @Column(length=30)
+  @Column(length = 30)
   private String worksheetType;
 
-  @ManyToMany(mappedBy="worksheetTypes")
+  @ManyToMany(mappedBy = "worksheetTypes")
   private Set<BloodTest> bloodTests;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=30)
+  @Column(length = 30)
   private BloodTestContext context;
-  
+
   private Boolean isDeleted;
 
   public Integer getId() {
@@ -87,8 +78,7 @@ public class WorksheetType {
     if (o instanceof WorksheetType) {
       WorksheetType wt = (WorksheetType) o;
       return id != null && wt.id != null && id.equals(wt.id);
-    }
-    else {
+    } else {
       return false;
     }
   }

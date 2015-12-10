@@ -1,12 +1,8 @@
 package model.compatibility;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 import org.hibernate.envers.Audited;
+
+import javax.persistence.*;
 
 @Entity
 @Audited
@@ -14,13 +10,13 @@ public class CrossmatchType {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable=false, updatable=false, columnDefinition="SMALLINT")
+  @Column(nullable = false, insertable = false, updatable = false, columnDefinition = "SMALLINT")
   private Integer id;
 
   private String crossmatchType;
 
   private Boolean isDeleted;
-  
+
   public Integer getId() {
     return id;
   }

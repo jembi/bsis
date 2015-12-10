@@ -1,26 +1,9 @@
 package model.component;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.Valid;
-
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import constraintvalidator.ComponentTypeExists;
+import constraintvalidator.DonationExists;
 import model.compatibility.CompatibilityTest;
 import model.componentmovement.ComponentStatusChange;
 import model.componenttype.ComponentType;
@@ -30,31 +13,28 @@ import model.modificationtracker.RowModificationTracker;
 import model.request.Request;
 import model.usage.ComponentUsage;
 import model.user.User;
-
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
-
 import repository.ComponentNamedQueryConstants;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import constraintvalidator.ComponentTypeExists;
-import constraintvalidator.DonationExists;
+import javax.persistence.*;
+import javax.validation.Valid;
+import java.util.Date;
+import java.util.List;
 
 @NamedQueries({
-    @NamedQuery(name = ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUSES_FOR_DONOR,
-            query = ComponentNamedQueryConstants.QUERY_UPDATE_COMPONENT_STATUSES_FOR_DONOR),
-    @NamedQuery(name = ComponentNamedQueryConstants.NAME_COUNT_CHANGED_COMPONENTS_FOR_DONATION,
-            query = ComponentNamedQueryConstants.QUERY_COUNT_CHANGED_COMPONENTS_FOR_DONATION),
-    @NamedQuery(name = ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUSES_FOR_DONATION,
-            query = ComponentNamedQueryConstants.QUERY_UPDATE_COMPONENT_STATUSES_FOR_DONATION),
+        @NamedQuery(name = ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUSES_FOR_DONOR,
+                query = ComponentNamedQueryConstants.QUERY_UPDATE_COMPONENT_STATUSES_FOR_DONOR),
+        @NamedQuery(name = ComponentNamedQueryConstants.NAME_COUNT_CHANGED_COMPONENTS_FOR_DONATION,
+                query = ComponentNamedQueryConstants.QUERY_COUNT_CHANGED_COMPONENTS_FOR_DONATION),
+        @NamedQuery(name = ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUSES_FOR_DONATION,
+                query = ComponentNamedQueryConstants.QUERY_UPDATE_COMPONENT_STATUSES_FOR_DONATION),
 })
 @Entity
 @Audited
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Component implements ModificationTracker {
 
   @Id
@@ -66,7 +46,7 @@ public class Component implements ModificationTracker {
   // imported from another location. In such a case the corresponding donation
   // field is allowed to be null.
   @DonationExists
-  @ManyToOne(optional=true, fetch=FetchType.EAGER)
+  @ManyToOne(optional = true, fetch = FetchType.EAGER)
   private Donation donation;
 
   @ComponentTypeExists
@@ -77,11 +57,11 @@ public class Component implements ModificationTracker {
   private Date createdOn;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Index(name="component_expiresOn_index")
+  @Index(name = "component_expiresOn_index")
   private Date expiresOn;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(columnDefinition="DATETIME")
+  @Column(columnDefinition = "DATETIME")
   private Date discardedOn;
 
   @ManyToOne
@@ -91,28 +71,28 @@ public class Component implements ModificationTracker {
   private Date issuedOn;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=30)
+  @Column(length = 30)
   private ComponentStatus status;
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy="testedComponent", fetch=FetchType.LAZY)
+  @OneToMany(mappedBy = "testedComponent", fetch = FetchType.LAZY)
   private List<CompatibilityTest> compatibilityTests;
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy="component", fetch=FetchType.LAZY)
+  @OneToMany(mappedBy = "component", fetch = FetchType.LAZY)
   private List<ComponentStatusChange> statusChanges;
 
-  @Column(length=3)
+  @Column(length = 3)
   private String subdivisionCode;
 
-  @OneToOne(optional=true)
+  @OneToOne(optional = true)
   private Component parentComponent;
 
-  @OneToOne(mappedBy="component")
+  @OneToOne(mappedBy = "component")
   private ComponentUsage usage;
-  
+
   @Lob
   private String notes;
 
@@ -121,9 +101,9 @@ public class Component implements ModificationTracker {
   @Valid
   private RowModificationTracker modificationTracker;
 
-  @Column(length=20)
+  @Column(length = 20)
   private String componentIdentificationNumber;
-  
+
   public Component() {
     modificationTracker = new RowModificationTracker();
   }
@@ -142,44 +122,44 @@ public class Component implements ModificationTracker {
     return id;
   }
 
-  public Donation getDonation() {
-    return donation;
-  }
-
-  public ComponentType getComponentType() {
-    return componentType;
-  }
-
-  public Date getExpiresOn() {
-    return expiresOn;
-  }
-
-  public String getNotes() {
-    return notes;
-  }
-
-  public Boolean getIsDeleted() {
-    return isDeleted;
-  }
-
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public Donation getDonation() {
+    return donation;
   }
 
   public void setDonation(Donation donation) {
     this.donation = donation;
   }
 
+  public ComponentType getComponentType() {
+    return componentType;
+  }
+
   public void setComponentType(ComponentType componentType) {
     this.componentType = componentType;
+  }
+
+  public Date getExpiresOn() {
+    return expiresOn;
   }
 
   public void setExpiresOn(Date expiresOn) {
     this.expiresOn = expiresOn;
   }
 
+  public String getNotes() {
+    return notes;
+  }
+
   public void setNotes(String notes) {
     this.notes = notes;
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
   }
 
   public void setIsDeleted(Boolean isDeleted) {
@@ -198,28 +178,28 @@ public class Component implements ModificationTracker {
     return modificationTracker.getLastUpdated();
   }
 
-  public Date getCreatedDate() {
-    return modificationTracker.getCreatedDate();
-  }
-
-  public User getCreatedBy() {
-    return modificationTracker.getCreatedBy();
-  }
-
-  public User getLastUpdatedBy() {
-    return modificationTracker.getLastUpdatedBy();
-  }
-
   public void setLastUpdated(Date lastUpdated) {
     modificationTracker.setLastUpdated(lastUpdated);
+  }
+
+  public Date getCreatedDate() {
+    return modificationTracker.getCreatedDate();
   }
 
   public void setCreatedDate(Date createdDate) {
     modificationTracker.setCreatedDate(createdDate);
   }
 
+  public User getCreatedBy() {
+    return modificationTracker.getCreatedBy();
+  }
+
   public void setCreatedBy(User createdBy) {
     modificationTracker.setCreatedBy(createdBy);
+  }
+
+  public User getLastUpdatedBy() {
+    return modificationTracker.getLastUpdatedBy();
   }
 
   public void setLastUpdatedBy(User lastUpdatedBy) {
@@ -304,12 +284,12 @@ public class Component implements ModificationTracker {
     this.parentComponent = parentComponent;
   }
 
-	public String getComponentIdentificationNumber() {
-		return componentIdentificationNumber;
-	}
+  public String getComponentIdentificationNumber() {
+    return componentIdentificationNumber;
+  }
 
-	public void setComponentIdentificationNumber(String componentIdentificationNumber) {
-		this.componentIdentificationNumber = componentIdentificationNumber;
-	}
-  
+  public void setComponentIdentificationNumber(String componentIdentificationNumber) {
+    this.componentIdentificationNumber = componentIdentificationNumber;
+  }
+
 }

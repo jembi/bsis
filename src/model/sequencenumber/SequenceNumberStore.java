@@ -1,26 +1,22 @@
 package model.sequencenumber;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class SequenceNumberStore {
 
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
-  @Column(nullable=false)
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(nullable = false)
   private Integer id;
-  
-  @Column(length=50)
+
+  @Column(length = 50)
   private String targetTable;
 
-  @Column(length=50)
+  @Column(length = 50)
   private String columnName;
 
-  @Column(length=5)
+  @Column(length = 5)
   private String prefix;
 
   private Long lastNumber;

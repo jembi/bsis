@@ -1645,7 +1645,6 @@ body ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operatio
     overflow-y: auto;
 }
 
-
 .model-signature {
     font-family: "Droid Sans", sans-serif;
     font-size: 1em;
@@ -1723,57 +1722,60 @@ body ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operatio
 }
 
 .model-signature .propName {
-  font-weight: bold;
+    font-weight: bold;
 }
+
 .model-signature .propType {
-  color: #5555aa;
+    color: #5555aa;
 }
+
 .model-signature .propOptKey {
-  font-style: italic;
+    font-style: italic;
 }
+
 .model-signature .propOpt {
-  color: #555;
+    color: #555;
 }
 
 pre code {
-  background: none;
+    background: none;
 }
 
 .content pre {
-  font-size: 12px;
-  margin-top: 5px;
-  padding: 5px;
+    font-size: 12px;
+    margin-top: 5px;
+    padding: 5px;
 }
 
 .content > .content-type > div > label {
-  clear: both;
-  display: block;
-  color: #0F6AB4;
-  font-size: 1.1em;
-  margin: 0;
-  padding: 15px 0 5px;
+    clear: both;
+    display: block;
+    color: #0F6AB4;
+    font-size: 1.1em;
+    margin: 0;
+    padding: 15px 0 5px;
 }
 
 .swagger-ui-wrap {
-  max-width: 960px;
-  margin-left: auto;
-  margin-right: auto;
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .icon-btn {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 #message-bar {
-  min-height: 30px;
-  text-align: center;
-  padding-top: 10px;
+    min-height: 30px;
+    text-align: center;
+    padding-top: 10px;
 }
 
 .message-success {
-  color: #89BF04;
+    color: #89BF04;
 }
 
 .message-fail {
-  color: #cc0000;
+    color: #cc0000;
 }

@@ -1,41 +1,42 @@
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
-	<!-- Updated (timler): for #293 (refactoring) -->
-	<!-- Updated (timler): for #294 (refactoring) -->
-	<!-- Updated (timler): for #328 (refactoring) -->
-	<changeSet id="20150818-1237" author="devang">
-	    <preConditions onFail="MARK_RAN">
-		    <not><tableExists tableName="BloodTest" /></not>
-		</preConditions>
-		<sqlFile path="./ddl_mysql.sql"/>
-	</changeSet>
-	
-	<!-- Updated (timler): for #293 (refactoring) -->
-	<!-- Updated (timler): for #294 (refactoring) -->
-	<changeSet id="20150818-1640" author="devang">
-	    <preConditions onFail="MARK_RAN">
-		    <sqlCheck expectedResult="0"> 
-				<![CDATA[
+    <!-- Updated (timler): for #293 (refactoring) -->
+    <!-- Updated (timler): for #294 (refactoring) -->
+    <!-- Updated (timler): for #328 (refactoring) -->
+    <changeSet id="20150818-1237" author="devang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="BloodTest"/>
+            </not>
+        </preConditions>
+        <sqlFile path="./ddl_mysql.sql"/>
+    </changeSet>
+
+    <!-- Updated (timler): for #293 (refactoring) -->
+    <!-- Updated (timler): for #294 (refactoring) -->
+    <changeSet id="20150818-1640" author="devang">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                <![CDATA[
 				SELECT count(*) FROM FormField where form = 'Donor' and field = 'donorNumber';
 				]]>
-			</sqlCheck>
-		</preConditions>
-		<sqlFile path="./initial_data.sql"/>
-	</changeSet>
-	
-	<!-- Updated (timler): for #293 (refactoring) -->
-	<changeSet id="201507121-1237" author="devang">
-	    <preConditions onFail="MARK_RAN">
-		    <sqlCheck expectedResult="0"> 
-				<![CDATA[
+            </sqlCheck>
+        </preConditions>
+        <sqlFile path="./initial_data.sql"/>
+    </changeSet>
+
+    <!-- Updated (timler): for #293 (refactoring) -->
+    <changeSet id="201507121-1237" author="devang">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                <![CDATA[
 				SELECT count(*) FROM MicrotiterPlate where plateKey = 'bloodtyping' and plateName = 'Blood Typing Plate';
 				]]>
-			</sqlCheck>
-		</preConditions>
-		<sqlFile path="./tests-lbts.sql"/>
-	</changeSet>
+            </sqlCheck>
+        </preConditions>
+        <sqlFile path="./tests-lbts.sql"/>
+    </changeSet>
 
 </databaseChangeLog>

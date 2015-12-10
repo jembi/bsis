@@ -1,13 +1,11 @@
 package repository;
 
-import java.util.List;
-
-import javax.persistence.*;
-
 import model.donationtype.DonationType;
-
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -33,13 +31,13 @@ public class DonationTypeRepository {
     return result;
   }
 
-  public  List<DonationType> getAllDonationTypes(){
+  public List<DonationType> getAllDonationTypes() {
     return getAllDonationTypes(false);
   }
 
   public List<DonationType> getAllDonationTypes(Boolean includeDeleted) {
     TypedQuery<DonationType> query;
-    if (includeDeleted){
+    if (includeDeleted) {
       query = em.createQuery("SELECT dt from DonationType dt", DonationType.class);
     } else {
       query = em.createQuery("SELECT dt from DonationType dt where dt.isDeleted=:isDeleted", DonationType.class);
@@ -77,16 +75,16 @@ public class DonationTypeRepository {
   }
   */
 
-  public DonationType saveDonationType(DonationType donationType){
-      em.persist(donationType);
-      em.flush();
-      return donationType;
+  public DonationType saveDonationType(DonationType donationType) {
+    em.persist(donationType);
+    em.flush();
+    return donationType;
   }
 
-  public DonationType updateDonationType(DonationType donationType){
-      em.merge(donationType);
-      em.flush();
-      return donationType;
+  public DonationType updateDonationType(DonationType donationType) {
+    em.merge(donationType);
+    em.flush();
+    return donationType;
   }
 
 }

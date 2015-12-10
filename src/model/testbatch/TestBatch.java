@@ -2,152 +2,139 @@ package model.testbatch;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.OneToMany;
-import javax.validation.Valid;
-import javax.validation.constraints.Size;
-
 import model.donationbatch.DonationBatch;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
-
 import org.hibernate.envers.Audited;
-
 import service.TestBatchCRUDService;
+
+import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
+import java.util.Date;
+import java.util.List;
 
 
 @Entity
 @Audited
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class TestBatch implements ModificationTracker {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(nullable=false)
-	private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(nullable = false)
+  private Long id;
 
-	@Valid
-	private RowModificationTracker modificationTracker;
+  @Valid
+  private RowModificationTracker modificationTracker;
 
-	@Lob
-	private String notes;
+  @Lob
+  private String notes;
 
-	private Boolean isDeleted;
+  private Boolean isDeleted;
 
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(length=20, unique=true)
-	@Size(min=6,max=6)
-	private String batchNumber;
-
-	
-	@Enumerated(EnumType.STRING)
-	@Column(length=20)
-	private TestBatchStatus status;
-        
-        @OneToMany(mappedBy = "testBatch", fetch = FetchType.EAGER)
-        private List<DonationBatch> donationBatches;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(length = 20, unique = true)
+  @Size(min = 6, max = 6)
+  private String batchNumber;
 
 
-	public TestBatch() {
-		modificationTracker = new RowModificationTracker();
-	}
+  @Enumerated(EnumType.STRING)
+  @Column(length = 20)
+  private TestBatchStatus status;
 
-	public Long getId() {
-		return id;
-	}
+  @OneToMany(mappedBy = "testBatch", fetch = FetchType.EAGER)
+  private List<DonationBatch> donationBatches;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
 
-	public String getNotes() {
-		return notes;
-	}
+  public TestBatch() {
+    modificationTracker = new RowModificationTracker();
+  }
 
-	public void setNotes(String notes) {
-		this.notes = notes;
-	}
+  public Long getId() {
+    return id;
+  }
 
-	public Boolean getIsDeleted() {
-		return isDeleted;
-	}
-	
-	public void setIsDeleted(Boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-	public String getBatchNumber() {
-		return batchNumber;
-	}
+  public String getNotes() {
+    return notes;
+  }
 
-	public void setBatchNumber(String batchNumber) {
-		this.batchNumber = batchNumber;
-	}
+  public void setNotes(String notes) {
+    this.notes = notes;
+  }
 
-	public TestBatchStatus getStatus() {
-		return status;
-	}
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
 
-	/**
-	 * N.B. Updating the status of a test batch should be done via the {@link TestBatchCRUDService}.
-	 * 
-	 * @param status The new {@link TestBatchStatus}
-	 */
-	public void setStatus(TestBatchStatus status) {
-		this.status = status;
-	}
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
 
-	public Date getLastUpdated() {
-		return modificationTracker.getLastUpdated();
-	}
+  public String getBatchNumber() {
+    return batchNumber;
+  }
 
-	public Date getCreatedDate() {
-		return modificationTracker.getCreatedDate();
-	}
+  public void setBatchNumber(String batchNumber) {
+    this.batchNumber = batchNumber;
+  }
 
-	public User getCreatedBy() {
-		return modificationTracker.getCreatedBy();
-	}
+  public TestBatchStatus getStatus() {
+    return status;
+  }
 
-	public User getLastUpdatedBy() {
-		return modificationTracker.getLastUpdatedBy();
-	}
+  /**
+   * N.B. Updating the status of a test batch should be done via the {@link TestBatchCRUDService}.
+   *
+   * @param status The new {@link TestBatchStatus}
+   */
+  public void setStatus(TestBatchStatus status) {
+    this.status = status;
+  }
 
-	public void setLastUpdated(Date lastUpdated) {
-		modificationTracker.setLastUpdated(lastUpdated);
-	}
+  public Date getLastUpdated() {
+    return modificationTracker.getLastUpdated();
+  }
 
-	public void setCreatedDate(Date createdDate) {
-		modificationTracker.setCreatedDate(createdDate);
-	}
+  public void setLastUpdated(Date lastUpdated) {
+    modificationTracker.setLastUpdated(lastUpdated);
+  }
 
-	public void setCreatedBy(User createdBy) {
-		modificationTracker.setCreatedBy(createdBy);
-	}
+  public Date getCreatedDate() {
+    return modificationTracker.getCreatedDate();
+  }
 
-	public void setLastUpdatedBy(User lastUpdatedBy) {
-		modificationTracker.setLastUpdatedBy(lastUpdatedBy);
-	}
+  public void setCreatedDate(Date createdDate) {
+    modificationTracker.setCreatedDate(createdDate);
+  }
 
-    public List<DonationBatch> getDonationBatches() {
-            return donationBatches;
-    }
+  public User getCreatedBy() {
+    return modificationTracker.getCreatedBy();
+  }
 
-    public void setDonationBatches(List<DonationBatch> donationBatches) {
-            this.donationBatches = donationBatches;
-    }
+  public void setCreatedBy(User createdBy) {
+    modificationTracker.setCreatedBy(createdBy);
+  }
+
+  public User getLastUpdatedBy() {
+    return modificationTracker.getLastUpdatedBy();
+  }
+
+  public void setLastUpdatedBy(User lastUpdatedBy) {
+    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
+  }
+
+  public List<DonationBatch> getDonationBatches() {
+    return donationBatches;
+  }
+
+  public void setDonationBatches(List<DonationBatch> donationBatches) {
+    this.donationBatches = donationBatches;
+  }
 
 }

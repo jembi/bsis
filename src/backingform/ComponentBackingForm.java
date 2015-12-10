@@ -1,23 +1,19 @@
 package backingform;
 
-import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import model.component.Component;
 import model.component.ComponentStatus;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.user.User;
-
 import org.apache.commons.lang3.StringUtils;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import utils.CustomDateFormatter;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
 
 public class ComponentBackingForm {
 
@@ -49,8 +45,16 @@ public class ComponentBackingForm {
     return component.getId();
   }
 
+  public void setId(Long id) {
+    component.setId(id);
+  }
+
   public Donation getDonation() {
     return component.getDonation();
+  }
+
+  public void setDonation(Donation donation) {
+    component.setDonation(donation);
   }
 
   public String getComponentType() {
@@ -60,52 +64,11 @@ public class ComponentBackingForm {
     else
       return componentType.getId().toString();
   }
-  
-  @JsonIgnore
-  public Date getLastUpdated() {
-    return component.getLastUpdated();
-  }
-
-  @JsonIgnore
-  public Date getCreatedDate() {
-    return component.getCreatedDate();
-  }
-
-  @JsonIgnore
-  public User getCreatedBy() {
-    return component.getCreatedBy();
-  }
-
-  @JsonIgnore
-  public User getLastUpdatedBy() {
-    return component.getLastUpdatedBy();
-  }
-
-  public String getNotes() {
-    return component.getNotes();
-  }
-
-  public Boolean getIsDeleted() {
-    return component.getIsDeleted();
-  }
-
-  public int hashCode() {
-    return component.hashCode();
-  }
-
-  public void setId(Long id) {
-    component.setId(id);
-  }
-
-  public void setDonation(Donation donation) {
-    component.setDonation(donation);
-  }
 
   public void setComponentType(String componentTypeId) {
     if (StringUtils.isBlank(componentTypeId)) {
       component.setComponentType(null);
-    }
-    else {
+    } else {
       ComponentType pt = new ComponentType();
       try {
         pt.setId(Integer.parseInt(componentTypeId));
@@ -117,44 +80,68 @@ public class ComponentBackingForm {
     }
   }
 
-  public String getCreatedOn() {
-    if (createdOn != null)
-      return createdOn;
-    if (getComponent() == null)
-      return "";
-    return CustomDateFormatter.getDateTimeString(component.getCreatedOn());
+  @JsonIgnore
+  public Date getLastUpdated() {
+    return component.getLastUpdated();
   }
 
-  public String getExpiresOn() {
-    if (expiresOn != null)
-      return expiresOn;
-    if (getComponent() == null)
-      return "";
-    return CustomDateFormatter.getDateString(component.getExpiresOn());
-  }
-  
   public void setLastUpdated(Date lastUpdated) {
     component.setLastUpdated(lastUpdated);
+  }
+
+  @JsonIgnore
+  public Date getCreatedDate() {
+    return component.getCreatedDate();
   }
 
   public void setCreatedDate(Date createdDate) {
     component.setCreatedDate(createdDate);
   }
 
+  @JsonIgnore
+  public User getCreatedBy() {
+    return component.getCreatedBy();
+  }
+
   public void setCreatedBy(User createdBy) {
     component.setCreatedBy(createdBy);
+  }
+
+  @JsonIgnore
+  public User getLastUpdatedBy() {
+    return component.getLastUpdatedBy();
   }
 
   public void setLastUpdatedBy(User lastUpdatedBy) {
     component.setLastUpdatedBy(lastUpdatedBy);
   }
 
+  public String getNotes() {
+    return component.getNotes();
+  }
+
   public void setNotes(String notes) {
     component.setNotes(notes);
   }
 
+  public Boolean getIsDeleted() {
+    return component.getIsDeleted();
+  }
+
   public void setIsDeleted(Boolean isDeleted) {
     component.setIsDeleted(isDeleted);
+  }
+
+  public int hashCode() {
+    return component.hashCode();
+  }
+
+  public String getCreatedOn() {
+    if (createdOn != null)
+      return createdOn;
+    if (getComponent() == null)
+      return "";
+    return CustomDateFormatter.getDateTimeString(component.getCreatedOn());
   }
 
   public void setCreatedOn(String createdOn) {
@@ -165,6 +152,14 @@ public class ComponentBackingForm {
       ex.printStackTrace();
       component.setCreatedOn(null);
     }
+  }
+
+  public String getExpiresOn() {
+    if (expiresOn != null)
+      return expiresOn;
+    if (getComponent() == null)
+      return "";
+    return CustomDateFormatter.getDateString(component.getExpiresOn());
   }
 
   public void setExpiresOn(String expiresOn) {
@@ -191,8 +186,8 @@ public class ComponentBackingForm {
 
   public String getDonationIdentificationNumber() {
     if (component == null || component.getDonation() == null ||
-        component.getDonation().getDonationIdentificationNumber() == null
-       )
+            component.getDonation().getDonationIdentificationNumber() == null
+            )
       return "";
     return component.getDonation().getDonationIdentificationNumber();
   }

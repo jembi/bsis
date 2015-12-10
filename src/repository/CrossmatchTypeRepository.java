@@ -1,15 +1,13 @@
 package repository;
 
-import java.util.List;
+import model.compatibility.CrossmatchType;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
-import model.compatibility.CrossmatchType;
-
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -24,7 +22,7 @@ public class CrossmatchTypeRepository {
     query.setParameter("isDeleted", false);
     return query.getResultList();
   }
-  
+
   public boolean isCrossmatchTypeValid(String checkCrossmatchType) {
     String queryString = "SELECT ct from CrossmatchType ct where ct.isDeleted=:isDeleted";
     TypedQuery<CrossmatchType> query = em.createQuery(queryString, CrossmatchType.class);
@@ -48,15 +46,14 @@ public class CrossmatchTypeRepository {
   }
 
   public void saveAllCrossmatchTypes(List<CrossmatchType> allCrossmatchTypes) {
-    for (CrossmatchType ct: allCrossmatchTypes) {
-        CrossmatchType existingCrossmatchType = getCrossmatchTypeById(ct.getId());
-        if (existingCrossmatchType != null) {
-          existingCrossmatchType.setCrossmatchType(ct.getCrossmatchType());
-          em.merge(existingCrossmatchType);
-        }
-        else {
-          em.persist(ct);
-        }
+    for (CrossmatchType ct : allCrossmatchTypes) {
+      CrossmatchType existingCrossmatchType = getCrossmatchTypeById(ct.getId());
+      if (existingCrossmatchType != null) {
+        existingCrossmatchType.setCrossmatchType(ct.getCrossmatchType());
+        em.merge(existingCrossmatchType);
+      } else {
+        em.persist(ct);
+      }
     }
     em.flush();
   }

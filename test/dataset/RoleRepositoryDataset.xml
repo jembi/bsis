@@ -1,34 +1,34 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<Permission id="1" name="View Stuff" />
-	<Permission id="2" name="Add Stuff" />
-	<Permission id="3" name="Edit Stuff" />
-	<Permission id="4" name="Void Stuff" />
-	<Permission id="5" name="New Stuff" />
-	<Role id="1" name="Super User" description="Super User" />
-	<Role id="2" name="Viewer" description="A User that can view stuff" />
-	<Role id="3" name="Editor" description="A User that can edit stuff" />
-	<Permission_Role permissions_id="1" roles_id="1" />
-	<Permission_Role permissions_id="2" roles_id="1" />
-	<Permission_Role permissions_id="3" roles_id="1" />
-	<Permission_Role permissions_id="4" roles_id="1" />
-	<Permission_Role permissions_id="1" roles_id="2" />
-	<Permission_Role permissions_id="1" roles_id="3" />
-	<Permission_Role permissions_id="2" roles_id="3" />
-	<Permission_Role permissions_id="3" roles_id="3" />
-	<User id="1" emailId="xxxx@jembi.org" firstName="Super" isActive="true"
-		isAdmin="true" isDeleted="false" isStaff="true" lastName="User"
-		password="$2a$10$LCm5DaDhgfCdzPecqLVPyemfk6WfmbRduFTwDPPfAdABTLPb9d6c6"
-		username="superuser" passwordReset="false" />
-	<User id="2" emailId="xxxx@jembi.org" firstName="Viewer" isActive="true"
-		isAdmin="true" isDeleted="false" isStaff="true" lastName="User"
-		password="$2a$10$QZ5AfikU7//fZHw8TnnH7uYXLbcupZhK4TbSWk7ig4gI7GieNmnC."
-		username="viewer" passwordReset="false" />
-	<User id="3" emailId="xxxx@jembi.org" firstName="Editor" isActive="true"
-		isAdmin="false" isDeleted="false" isStaff="true" lastName="User"
-		password="$2a$10$iwTXdttOgKbkeMq5NegqmeL1dnZC.G2SrgXyUcM2uB91DKdqefwlK"
-		username="editor" passwordReset="false" />
-	<User_Role users_id="1" roles_id="1" />
-	<User_Role users_id="2" roles_id="2" />
-	<User_Role users_id="3" roles_id="3" />
+    <Permission id="1" name="View Stuff"/>
+    <Permission id="2" name="Add Stuff"/>
+    <Permission id="3" name="Edit Stuff"/>
+    <Permission id="4" name="Void Stuff"/>
+    <Permission id="5" name="New Stuff"/>
+    <Role id="1" name="Super User" description="Super User"/>
+    <Role id="2" name="Viewer" description="A User that can view stuff"/>
+    <Role id="3" name="Editor" description="A User that can edit stuff"/>
+    <Permission_Role permissions_id="1" roles_id="1"/>
+    <Permission_Role permissions_id="2" roles_id="1"/>
+    <Permission_Role permissions_id="3" roles_id="1"/>
+    <Permission_Role permissions_id="4" roles_id="1"/>
+    <Permission_Role permissions_id="1" roles_id="2"/>
+    <Permission_Role permissions_id="1" roles_id="3"/>
+    <Permission_Role permissions_id="2" roles_id="3"/>
+    <Permission_Role permissions_id="3" roles_id="3"/>
+    <User id="1" emailId="xxxx@jembi.org" firstName="Super" isActive="true"
+          isAdmin="true" isDeleted="false" isStaff="true" lastName="User"
+          password="$2a$10$LCm5DaDhgfCdzPecqLVPyemfk6WfmbRduFTwDPPfAdABTLPb9d6c6"
+          username="superuser" passwordReset="false"/>
+    <User id="2" emailId="xxxx@jembi.org" firstName="Viewer" isActive="true"
+          isAdmin="true" isDeleted="false" isStaff="true" lastName="User"
+          password="$2a$10$QZ5AfikU7//fZHw8TnnH7uYXLbcupZhK4TbSWk7ig4gI7GieNmnC."
+          username="viewer" passwordReset="false"/>
+    <User id="3" emailId="xxxx@jembi.org" firstName="Editor" isActive="true"
+          isAdmin="false" isDeleted="false" isStaff="true" lastName="User"
+          password="$2a$10$iwTXdttOgKbkeMq5NegqmeL1dnZC.G2SrgXyUcM2uB91DKdqefwlK"
+          username="editor" passwordReset="false"/>
+    <User_Role users_id="1" roles_id="1"/>
+    <User_Role users_id="2" roles_id="2"/>
+    <User_Role users_id="3" roles_id="3"/>
 </dataset>

@@ -1,42 +1,39 @@
 package constraintvalidator;
 
+import model.request.Request;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import repository.RequestRepository;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import model.request.Request;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import repository.RequestRepository;
-
 @Component
 public class RequestExistsConstraintValidator implements
-    ConstraintValidator<RequestExists, Request> {
+        ConstraintValidator<RequestExists, Request> {
 
   @Autowired
   private RequestRepository requestRepository;
 
   public RequestExistsConstraintValidator() {
   }
-  
+
   @Override
   public void initialize(RequestExists constraint) {
   }
 
   public boolean isValid(Request target, ConstraintValidatorContext context) {
 
-   if (target == null)
-     return true;
+    if (target == null)
+      return true;
 
-   try {
+    try {
 
       Request request = null;
 
       if (target.getId() != null) {
         request = requestRepository.findRequestById(target.getId());
-      }
-      else if (target.getRequestNumber() != null) {
+      } else if (target.getRequestNumber() != null) {
 
         if (target.getRequestNumber().isEmpty())
           return true;
@@ -47,7 +44,7 @@ public class RequestExistsConstraintValidator implements
         return true;
       }
     } catch (Exception e) {
-       e.printStackTrace();
+      e.printStackTrace();
     }
     return false;
   }

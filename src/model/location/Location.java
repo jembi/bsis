@@ -1,13 +1,9 @@
 package model.location;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotBlank;
+
+import javax.persistence.*;
 
 @Entity
 @Audited
@@ -46,44 +42,44 @@ public class Location {
     return name;
   }
 
+  public void setName(String name) {
+    this.name = name;
+  }
+
   public Long getId() {
     return id;
-  }
-
-  public Boolean getIsMobileSite() {
-    return isMobileSite;
-  }
-
-  public Boolean getIsUsageSite() {
-    return isUsageSite;
-  }
-
-  public String getNotes() {
-    return notes;
-  }
-
-  public Boolean getIsDeleted() {
-    return isDeleted;
   }
 
   public void setId(Long id) {
     this.id = id;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public Boolean getIsMobileSite() {
+    return isMobileSite;
   }
 
   public void setIsMobileSite(Boolean mobileSite) {
     isMobileSite = mobileSite;
   }
 
+  public Boolean getIsUsageSite() {
+    return isUsageSite;
+  }
+
   public void setIsUsageSite(Boolean usageSite) {
     isUsageSite = usageSite;
   }
 
+  public String getNotes() {
+    return notes;
+  }
+
   public void setNotes(String notes) {
     this.notes = notes;
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
   }
 
   public void setIsDeleted(Boolean isDeleted) {

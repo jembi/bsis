@@ -1,15 +1,13 @@
 package repository;
 
-import java.util.List;
+import model.user.User;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
-import model.user.User;
-
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -22,7 +20,7 @@ public class LoginRepository {
     TypedQuery<User> query = em.createQuery(queryString, User.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     List<User> users = query.setParameter("username", username)
-        .getResultList();
+            .getResultList();
     if (users == null || users.size() == 0) {
       return null;
     }
