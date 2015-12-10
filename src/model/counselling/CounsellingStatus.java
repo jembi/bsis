@@ -9,7 +9,7 @@ public enum CounsellingStatus {
   private int id;
   private String label;
 
-  private CounsellingStatus(int id, String label) {
+  CounsellingStatus(int id, String label) {
     this.id = id;
     this.label = label;
   }

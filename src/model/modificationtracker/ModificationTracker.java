@@ -6,19 +6,19 @@ import java.util.Date;
 
 public interface ModificationTracker {
 
-  public Date getLastUpdated();
+  Date getLastUpdated();
 
-  public void setLastUpdated(Date lastUpdated);
+  void setLastUpdated(Date lastUpdated);
 
-  public Date getCreatedDate();
+  Date getCreatedDate();
 
-  public void setCreatedDate(Date createdDate);
+  void setCreatedDate(Date createdDate);
 
-  public User getCreatedBy();
+  User getCreatedBy();
 
-  public void setCreatedBy(User createdBy);
+  void setCreatedBy(User createdBy);
 
-  public User getLastUpdatedBy();
+  User getLastUpdatedBy();
 
-  public void setLastUpdatedBy(User lastUpdatedBy);
+  void setLastUpdatedBy(User lastUpdatedBy);
 }

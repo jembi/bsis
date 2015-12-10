@@ -375,7 +375,7 @@ public class AdminController {
       list = NetworkInterface.getNetworkInterfaces();
 
       while (list.hasMoreElements()) {
-        NetworkInterface iface = (NetworkInterface) list.nextElement();
+        NetworkInterface iface = list.nextElement();
 
         if (iface == null) continue;
 
@@ -384,7 +384,7 @@ public class AdminController {
 
           Iterator<InterfaceAddress> it = iface.getInterfaceAddresses().iterator();
           while (it.hasNext()) {
-            InterfaceAddress address = (InterfaceAddress) it.next();
+            InterfaceAddress address = it.next();
 
             LOGGER.debug("Found address: " + address);
 

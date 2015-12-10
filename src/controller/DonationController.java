@@ -101,7 +101,7 @@ public class DonationController {
 
       for (String property : Arrays.asList("donationIdentificationNumber", "donationDate", "packType", "venue")) {
         if (formFields.containsKey(property)) {
-          Map<String, Object> properties = (Map<String, Object>) formFields.get(property);
+          Map<String, Object> properties = formFields.get(property);
           if (properties.get("hidden").equals(false)) {
             String propertyValue = property;
             try {

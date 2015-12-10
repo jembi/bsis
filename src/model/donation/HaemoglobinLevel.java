@@ -8,7 +8,7 @@ public enum HaemoglobinLevel {
 
   private String label;
 
-  private HaemoglobinLevel(String label) {
+  HaemoglobinLevel(String label) {
     this.label = label;
   }
 

@@ -5,11 +5,9 @@ import org.junit.Test;
 
 public class PasswordGenerationServiceTests {
 
-  private PasswordGenerationService passwordGenerationService;
-
   @Test
   public void testGeneratePassword_shouldReturnAnAlphanumericPassword() {
-    passwordGenerationService = new PasswordGenerationService();
+    PasswordGenerationService passwordGenerationService = new PasswordGenerationService();
 
     String password = passwordGenerationService.generatePassword();
 

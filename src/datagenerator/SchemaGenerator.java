@@ -161,14 +161,14 @@ public class SchemaGenerator {
   /**
    * Holds the classnames of hibernate dialects for easy reference.
    */
-  private static enum Dialect {
+  private enum Dialect {
     ORACLE("org.hibernate.dialect.Oracle10gDialect"), MYSQL(
             "org.hibernate.dialect.MySQL5InnoDBDialect"), HSQL(
             "org.hibernate.dialect.HSQLDialect");
 
     private String dialectClass;
 
-    private Dialect(String dialectClass) {
+    Dialect(String dialectClass) {
       this.dialectClass = dialectClass;
     }
 

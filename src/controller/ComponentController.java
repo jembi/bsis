@@ -598,7 +598,7 @@ public class ComponentController {
       row.add(component.getDonation().getId());
       for (String property : Arrays.asList("componentType", "donationIdentificationNumber", "createdOn", "expiresOn", "status", "createdBy")) {
         if (formFields.containsKey(property)) {
-          Map<String, Object> properties = (Map<String, Object>) formFields.get(property);
+          Map<String, Object> properties = formFields.get(property);
           if (properties.get("hidden").equals(false)) {
             String propertyValue = property;
             try {

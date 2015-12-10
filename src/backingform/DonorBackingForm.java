@@ -32,12 +32,6 @@ public class DonorBackingForm {
 
   private String ageSpecified;
 
-  private String dateOfFirstDonation;
-
-  private String dueToDonate;
-
-  private String dateOfLastDonation;
-
   @Valid
   private Address address;
 
@@ -316,7 +310,7 @@ public class DonorBackingForm {
   }
 
   public void setDateOfFirstDonation(String dateOfFirstDonation) {
-    this.dateOfFirstDonation = dateOfFirstDonation;
+    String dateOfFirstDonation1 = dateOfFirstDonation;
     try {
       donor.setDateOfFirstDonation(CustomDateFormatter.getDateFromString(dateOfFirstDonation));
     } catch (ParseException ex) {
@@ -330,7 +324,7 @@ public class DonorBackingForm {
   }
 
   public void setDateOfLastDonation(String dateOfLastDonation) {
-    this.dateOfLastDonation = dateOfLastDonation;
+    String dateOfLastDonation1 = dateOfLastDonation;
     try {
       donor.setDateOfLastDonation(CustomDateFormatter.getDateFromString(dateOfLastDonation));
     } catch (ParseException ex) {
@@ -345,7 +339,7 @@ public class DonorBackingForm {
 
 
   public void setDueToDonate(String dueToDonate) {
-    this.dueToDonate = dueToDonate;
+    String dueToDonate1 = dueToDonate;
     try {
       donor.setDueToDonate(CustomDateFormatter.getDateFromString(dueToDonate));
     } catch (ParseException ex) {

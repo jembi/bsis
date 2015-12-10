@@ -155,7 +155,7 @@ public class RequestsController {
     for (String field : Arrays.asList("requestNumber", "patientBloodAbo", "patientBloodRh",
             "requestDate", "requiredDate", "componentType",
             "numUnitsRequested", "numUnitsIssued", "requestSite")) {
-      Map<String, Object> fieldProperties = (Map<String, Object>) formFields.get(field);
+      Map<String, Object> fieldProperties = formFields.get(field);
       if (fieldProperties.get("hidden").equals(false))
         visibleFields.add(field);
     }
@@ -200,7 +200,7 @@ public class RequestsController {
               "requestDate", "requiredDate", "componentType",
               "numUnitsRequested", "numUnitsIssued", "requestSite")) {
         if (formFields.containsKey(property)) {
-          Map<String, Object> properties = (Map<String, Object>) formFields.get(property);
+          Map<String, Object> properties = formFields.get(property);
           if (properties.get("hidden").equals(false)) {
             String propertyValue = property;
             try {

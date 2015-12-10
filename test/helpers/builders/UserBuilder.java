@@ -10,8 +10,6 @@ public class UserBuilder extends AbstractEntityBuilder<User> {
   private Integer id;
   private String firstName = "Default";
   private String lastName = "User";
-  // Password = "password", rounds = 4
-  private String password = "$2a$04$iA45ovNGD4hhA1puc/a8J.FN8WCMzKft1vdBAgw6o7oe7KBpVVkRS";
 
   public static UserBuilder aUser() {
     return new UserBuilder();
@@ -56,6 +54,7 @@ public class UserBuilder extends AbstractEntityBuilder<User> {
     user.setPasswordReset(passwordReset);
     user.setFirstName(firstName);
     user.setLastName(lastName);
+    String password = "$2a$04$iA45ovNGD4hhA1puc/a8J.FN8WCMzKft1vdBAgw6o7oe7KBpVVkRS";
     user.setPassword(password);
     return user;
   }

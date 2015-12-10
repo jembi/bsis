@@ -66,10 +66,7 @@ public class DonorRepositoryTest {
   DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
   @Autowired
   private UtilController utilController;
-  private User user;
-  private int userDbId = 1;
   private DonorBackingForm donorBackingForm;
-  private Donor donor;
   @Autowired
   private DataSource dataSource;
 
@@ -108,7 +105,7 @@ public class DonorRepositoryTest {
       }
       DatabaseOperation.CLEAN_INSERT.execute(connection, rDataSet);
 
-      donor = new Donor();
+      Donor donor = new Donor();
       donorBackingForm = new DonorBackingForm(donor);
     } finally {
       try {
@@ -195,9 +192,9 @@ public class DonorRepositoryTest {
     setPaginationParam(pagingParams);
 
     assertEquals("List size should be zero, no matching search results.",
-            0, ((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
+            0, donorRepository.findAnyDonor(searchDonorNumber,
                     donorFirstName, donorLastName, pagingParams,
-                    true, donationIdentificationNumber))).size());
+                    true, donationIdentificationNumber).size());
   }
 
   @Test
@@ -214,9 +211,9 @@ public class DonorRepositoryTest {
     Map<String, Object> pagingParams = new HashMap<>();
     setPaginationParam(pagingParams);
 
-    List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
+    List<Donor> listDonors = donorRepository.findAnyDonor(
             searchDonorNumber, donorFirstName, donorLastName,
-            pagingParams, true, donationIdentificationNumber)));
+            pagingParams, true, donationIdentificationNumber);
 
     assertNotSame(
             "List size should not zero.Matching records is found base on firstname.",
@@ -248,9 +245,9 @@ public class DonorRepositoryTest {
     Map<String, Object> pagingParams = new HashMap<>();
     setPaginationParam(pagingParams);
 
-    List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
+    List<Donor> listDonors = donorRepository.findAnyDonor(
             searchDonorNumber, donorFirstName, donorLastName,
-            pagingParams, false, donationIdentificationNumber)));
+            pagingParams, false, donationIdentificationNumber);
 
     assertNotSame(
             "List size should not zero.Matching records is found base on firstname.",
@@ -282,8 +279,8 @@ public class DonorRepositoryTest {
     Map<String, Object> pagingParams = new HashMap<>();
     setPaginationParam(pagingParams);
 
-    List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
-            searchDonorNumber, donorFirstName, donorLastName, pagingParams, true, donationIdentificationNumber)));
+    List<Donor> listDonors = donorRepository.findAnyDonor(
+            searchDonorNumber, donorFirstName, donorLastName, pagingParams, true, donationIdentificationNumber);
 
     assertNotSame(
             "List size should not zero.Matching records is found base on lastname.",
@@ -313,8 +310,8 @@ public class DonorRepositoryTest {
     Map<String, Object> pagingParams = new HashMap<>();
     setPaginationParam(pagingParams);
 
-    List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
-            searchDonorNumber, donorFirstName, donorLastName, pagingParams, true, donationIdentificationNumber));
+    List<Donor> listDonor = donorRepository.findAnyDonor(
+            searchDonorNumber, donorFirstName, donorLastName, pagingParams, true, donationIdentificationNumber);
 
     for (Donor donor : listDonor) {
       // 2 is deleted donor id
@@ -338,9 +335,9 @@ public class DonorRepositoryTest {
     Map<String, Object> pagingParams = new HashMap<>();
     setPaginationParam(pagingParams);
 
-    List<Donor> donorList = (List<Donor>) (donorRepository.findAnyDonor(
+    List<Donor> donorList = donorRepository.findAnyDonor(
             searchDonorNumber, donorFirstName, donorLastName,
-            pagingParams, false, donationIdentificationNumber));
+            pagingParams, false, donationIdentificationNumber);
     assertEquals("Should return a single Donor result", 1, donorList.size());
     boolean isValid = false;
     if (donorList.get(0).getDonorNumber().equals("000001")) {
@@ -804,7 +801,8 @@ public class DonorRepositoryTest {
     donorBackingForm.setHomeAddressCity("City");
     donorBackingForm.setHomeAddressCountry("country");
     donorBackingForm.setHomeAddressLine1("homeAddressLine1");
-    user = new User();
+    User user = new User();
+    int userDbId = 1;
     user.setId(userDbId);
     donorBackingForm.setHomeAddressDistrict("District");
     donorBackingForm.setVenue(l);
@@ -1032,7 +1030,7 @@ public class DonorRepositoryTest {
     Donor donor = donorRepository.findDonorByDonorNumber("000001", false);
     donor.setDonorStatus(DonorStatus.MERGED);
     donorRepository.saveDonor(donor);
-    donor = donorRepository.findDonorByDonorNumber("000001", false, new DonorStatus[]{DonorStatus.MERGED});
+    donor = donorRepository.findDonorByDonorNumber("000001", false, DonorStatus.MERGED);
     Assert.assertNull("Donor was not found", donor);
   }
 

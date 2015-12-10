@@ -11,7 +11,6 @@ import java.util.TimeZone;
 
 public class CustomDateFormatter {
 
-  private static String datePattern = "yyyy-MM-dd";
   private static String dateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
 
   private static DateFormat dateFormat;
@@ -106,6 +105,7 @@ public class CustomDateFormatter {
   }
 
   public static String getDatePattern() {
+    String datePattern = "yyyy-MM-dd";
     return datePattern;
   }
 
