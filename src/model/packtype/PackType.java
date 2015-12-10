@@ -41,9 +41,7 @@ public class PackType {
 
   @AssertTrue(message = "Component type should be not null when countAsDonation is set to true")
   private boolean isValid() {
-    if (this.countAsDonation)
-      return componentType != null;
-    return true;
+    return !this.countAsDonation || componentType != null;
   }
 
   public Integer getId() {

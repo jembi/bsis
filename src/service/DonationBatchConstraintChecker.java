@@ -43,12 +43,8 @@ public class DonationBatchConstraintChecker {
   public boolean canCloseDonationBatch(int donationBatchId) {
     DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
 
-    if (donationBatch.getIsClosed()) {
-      // can't close if it's already closed
-      return false;
-    }
-
-    return !(donationBatch.getDonations() == null || donationBatch.getDonations().size() == 0);
+    // can't close if it's already closed
+    return !donationBatch.getIsClosed() && !(donationBatch.getDonations() == null || donationBatch.getDonations().size() == 0);
 
   }
 

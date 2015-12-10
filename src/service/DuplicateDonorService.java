@@ -281,10 +281,7 @@ public class DuplicateDonorService {
     if (!StringUtils.equalsIgnoreCase(donor1.getLastName(), donor2.getLastName())) {
       return false;
     }
-    if (!equals(donor1.getGender(), donor2.getGender())) {
-      return false;
-    }
-    return equals(donor1.getBirthDate(), donor2.getBirthDate());
+    return equals(donor1.getGender(), donor2.getGender()) && equals(donor1.getBirthDate(), donor2.getBirthDate());
   }
 
   private boolean equals(Gender gender1, Gender gender2) {

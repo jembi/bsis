@@ -34,11 +34,7 @@ public class DonorConstraintChecker {
       return false;
     }
 
-    if (donationRepository.countDonationsForDonor(donor) > 0) {
-      return false;
-    }
-
-    return donorDeferralRepository.countDonorDeferralsForDonor(donor) <= 0;
+    return donationRepository.countDonationsForDonor(donor) <= 0 && donorDeferralRepository.countDonorDeferralsForDonor(donor) <= 0;
 
   }
 

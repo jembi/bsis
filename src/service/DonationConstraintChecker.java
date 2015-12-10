@@ -81,15 +81,8 @@ public class DonationConstraintChecker {
    * @return true if the Donation has any pending TTI tests or requires confirmation of blood typing tests, false otherwise
    */
   public boolean donationHasDiscrepancies(Donation donation, BloodTestingRuleResult bloodTestingRuleResult) {
-    if (bloodTestingRuleResult.getPendingTTITestsIds() != null &&
-            bloodTestingRuleResult.getPendingTTITestsIds().size() > 0) {
-
-      // Donation has pending TTI tests
-      return true;
-    }
-
-    return donation.getBloodTypingMatchStatus() != BloodTypingMatchStatus.MATCH ||
-            donation.getBloodTypingStatus() != BloodTypingStatus.COMPLETE;
+    // Donation has pending TTI tests
+    return bloodTestingRuleResult.getPendingTTITestsIds() != null && bloodTestingRuleResult.getPendingTTITestsIds().size() > 0 || donation.getBloodTypingMatchStatus() != BloodTypingMatchStatus.MATCH || donation.getBloodTypingStatus() != BloodTypingStatus.COMPLETE;
 
   }
 

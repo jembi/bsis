@@ -376,10 +376,8 @@ public class LotReleaseController {
   }
 
   private Boolean checkComponentForDiscard(Component component) {
-    if (component.getDonation().getTTIStatus().equals(TTIStatus.TTI_UNSAFE))
-      return true;
+    return component.getDonation().getTTIStatus().equals(TTIStatus.TTI_UNSAFE) || component.getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED);
 
-    return component.getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED);
   }
 
 }
