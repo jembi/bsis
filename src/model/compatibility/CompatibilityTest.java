@@ -6,15 +6,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
+import model.BaseEntity;
 import model.component.Component;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
@@ -30,12 +28,9 @@ import constraintvalidator.RequestExists;
 
 @Entity
 @Audited
-public class CompatibilityTest implements ModificationTracker {
+public class CompatibilityTest extends BaseEntity implements ModificationTracker {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false)
-  private Long id;
+  private static final long serialVersionUID = 1L;
 
   @RequestExists
   @ManyToOne
@@ -108,14 +103,6 @@ public class CompatibilityTest implements ModificationTracker {
 
   public void setLastUpdatedBy(User lastUpdatedBy) {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public Request getForRequest() {

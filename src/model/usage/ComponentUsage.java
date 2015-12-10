@@ -4,15 +4,13 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
+import model.BaseEntity;
 import model.component.Component;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
@@ -23,18 +21,13 @@ import org.hibernate.envers.Audited;
 import constraintvalidator.ComponentExists;
 
 /**
- * We cannot use the name Usage for this class as Usage is
- * a keyword in MySQL.
- * @author iamrohitbanga
+ * Entity to represent the details of how/where/when a Component from a Donation was used. 
  */
 @Entity
 @Audited
-public class ComponentUsage implements ModificationTracker {
+public class ComponentUsage extends BaseEntity implements ModificationTracker {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false, updatable=false, insertable=false)
-  private Long id;
+  private static final long serialVersionUID = 1L;
 
   @ComponentExists
   @OneToOne
@@ -110,10 +103,6 @@ public class ComponentUsage implements ModificationTracker {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 
-  public Long getId() {
-    return id;
-  }
-
   public String getHospital() {
     return hospital;
   }
@@ -148,10 +137,6 @@ public class ComponentUsage implements ModificationTracker {
 
   public Boolean getIsDeleted() {
     return isDeleted;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public void setHospital(String hospital) {

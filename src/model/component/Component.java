@@ -8,9 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -21,6 +18,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
+import model.BaseEntity;
 import model.compatibility.CompatibilityTest;
 import model.componentmovement.ComponentStatusChange;
 import model.componenttype.ComponentType;
@@ -55,12 +53,9 @@ import constraintvalidator.DonationExists;
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class Component implements ModificationTracker {
+public class Component extends BaseEntity implements ModificationTracker {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false)
-  private Long id;
+  private static final long serialVersionUID = 1L;
 
   // A component may not have a corresponding donation. Some components may be
   // imported from another location. In such a case the corresponding donation
@@ -138,10 +133,6 @@ public class Component implements ModificationTracker {
     this.componentIdentificationNumber = component.componentIdentificationNumber;
   }
 
-  public Long getId() {
-    return id;
-  }
-
   public Donation getDonation() {
     return donation;
   }
@@ -160,10 +151,6 @@ public class Component implements ModificationTracker {
 
   public Boolean getIsDeleted() {
     return isDeleted;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public void setDonation(Donation donation) {

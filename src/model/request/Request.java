@@ -6,9 +6,6 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -16,6 +13,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
+import model.BaseEntity;
 import model.compatibility.CompatibilityTest;
 import model.component.Component;
 import model.componenttype.ComponentType;
@@ -32,19 +30,16 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
-import constraintvalidator.LocationExists;
 import constraintvalidator.ComponentTypeExists;
+import constraintvalidator.LocationExists;
 import constraintvalidator.RequestTypeExists;
 
 
 @Entity
 @Audited
-public class Request implements ModificationTracker {
+public class Request extends BaseEntity implements ModificationTracker {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false, updatable=false, insertable=false)
-  private Long id;
+  private static final long serialVersionUID = 1L;
 
   @Column(length=20, unique=true)
   @Index(name="request_requestNumber_index")
@@ -177,10 +172,6 @@ public class Request implements ModificationTracker {
     this.notes = request.notes;
   }
 
-  public Long getId() {
-    return id;
-  }
-
   public String getRequestNumber() {
     return requestNumber;
   }
@@ -223,10 +214,6 @@ public class Request implements ModificationTracker {
 
   public Boolean getIsDeleted() {
     return isDeleted;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public void setRequestNumber(String requestNumber) {

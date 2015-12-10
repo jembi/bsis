@@ -2,15 +2,26 @@ package model.counselling;
 
 import java.util.Date;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
+import model.BaseEntity;
 import model.donation.Donation;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
-import repository.PostDonationCounsellingNamedQueryConstants;
 
 import org.hibernate.envers.Audited;
+
+import repository.PostDonationCounsellingNamedQueryConstants;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -28,12 +39,9 @@ import constraintvalidator.DonationExists;
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class PostDonationCounselling implements ModificationTracker {
+public class PostDonationCounselling extends BaseEntity implements ModificationTracker {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
-    private Long id;
+  private static final long serialVersionUID = 1L;
 
     @DonationExists
     @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch=FetchType.EAGER)
@@ -57,16 +65,6 @@ public class PostDonationCounselling implements ModificationTracker {
 
     public PostDonationCounselling () {
         modificationTracker = new RowModificationTracker();
-    }
-
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Donation getDonation() {
@@ -110,15 +108,6 @@ public class PostDonationCounselling implements ModificationTracker {
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        return other instanceof PostDonationCounselling &&
-                ((PostDonationCounselling) other).id == id;
-    }
-
-    @Override
     public Date getLastUpdated() {
         return modificationTracker.getLastUpdated();
     }
@@ -156,6 +145,4 @@ public class PostDonationCounselling implements ModificationTracker {
     public void setLastUpdatedBy(User lastUpdatedBy) {
         modificationTracker.setLastUpdatedBy(lastUpdatedBy);
     }
-
-
 }

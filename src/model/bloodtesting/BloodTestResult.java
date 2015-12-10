@@ -1,16 +1,10 @@
 package model.bloodtesting;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -20,18 +14,21 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
-import repository.BloodTestResultNamedQueryConstants;
+import model.BaseEntity;
 import model.donation.Donation;
 import model.microtiterplate.MachineReading;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
+import repository.BloodTestResultNamedQueryConstants;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 /**
  * Stores the result of one blood typing test for one donation.
  * No need to audit this table. NEVER update the entities of this table.
  * Always insert a new row. Use testedOn to find the latest test result.
- * @author iamrohitbanga
  */
 @NamedQueries({
     @NamedQuery(name = BloodTestResultNamedQueryConstants.NAME_COUNT_BLOOD_TEST_RESULTS_FOR_DONATION,
@@ -39,12 +36,9 @@ import model.user.User;
 })
 @Entity
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class BloodTestResult implements ModificationTracker {
+public class BloodTestResult extends BaseEntity implements ModificationTracker {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable=false, updatable=false)
-  private Long id;
+  private static final long serialVersionUID = 1L;
 
   @ManyToOne(cascade = {CascadeType.MERGE})
   private Donation donation;
@@ -60,7 +54,7 @@ public class BloodTestResult implements ModificationTracker {
 
   @OneToOne(cascade = {CascadeType.MERGE})
   private MachineReading machineReading;
-
+  
   @Valid
   private RowModificationTracker modificationTracker;
 
@@ -74,10 +68,6 @@ public class BloodTestResult implements ModificationTracker {
     modificationTracker = new RowModificationTracker();
   }
 
-  public Long getId() {
-    return id;
-  }
-
   public BloodTest getBloodTest() {
     return bloodTest;
   }
@@ -88,10 +78,6 @@ public class BloodTestResult implements ModificationTracker {
 
   public String getNotes() {
     return notes;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public void setBloodTest(BloodTest bloodTest) {

@@ -2,17 +2,13 @@ package model.admin;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
+import model.BaseEntity;
 
 @Entity
-public class GenericConfig {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false)
-  private Long id;
+public class GenericConfig extends BaseEntity {
+  
+  private static final long serialVersionUID = 1L;
 
   @Column(length=80)
   private String propertyName;
@@ -46,13 +42,4 @@ public class GenericConfig {
   public void setPropertyOwner(String owner) {
     this.propertyOwner = owner;
   }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-  
 }

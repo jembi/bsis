@@ -6,14 +6,12 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 
+import model.BaseEntity;
 import model.donation.Donation;
 import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
@@ -25,12 +23,9 @@ import org.hibernate.envers.RelationTargetAuditMode;
 
 @Entity
 @Audited
-public class Worksheet implements ModificationTracker {
+public class Worksheet extends BaseEntity implements ModificationTracker {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false, updatable=false, insertable=false)
-  private Long id;
+  private static final long serialVersionUID = 1L;
 
   @Column(length=20, unique=true)
   private String worksheetNumber;
@@ -54,14 +49,6 @@ public class Worksheet implements ModificationTracker {
   public Worksheet() {
     modificationTracker = new RowModificationTracker();
     donations = new HashSet<Donation>();
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public String getWorksheetNumber() {

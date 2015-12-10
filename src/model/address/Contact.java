@@ -1,21 +1,19 @@
 package model.address;
 
-import java.io.Serializable;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.Pattern;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
 
+import model.BaseEntity;
+
+import org.hibernate.validator.constraints.Email;
+
+/**
+ * Entity that contains the Donor's mobile, home and work telephone number and email address.
+ */
 @Entity
-public class Contact implements Serializable {
+public class Contact extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
     @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
     private String mobileNumber;
@@ -29,13 +27,6 @@ public class Contact implements Serializable {
     @Email
     private String email;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getMobileNumber() {
         return mobileNumber;
@@ -68,30 +59,4 @@ public class Contact implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Contact)) {
-            return false;
-        }
-        Contact other = (Contact) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-    
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public String toString() {
-        return "model.address.Contact[ id=" + id + " ]";
-    }
-
 }

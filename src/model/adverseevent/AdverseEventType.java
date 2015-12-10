@@ -2,17 +2,19 @@ package model.adverseevent;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+
+import model.BaseEntity;
 
 import org.hibernate.envers.Audited;
 
 import repository.constant.AdverseEventTypeNamedQueryConstants;
 
+/**
+ * Entity defining the kind of AdverseEvents (negative reactions) supported in the application.
+ */
 @NamedQueries({
     @NamedQuery(name = AdverseEventTypeNamedQueryConstants.NAME_FIND_ADVERSE_EVENT_TYPE_VIEW_MODELS,
             query = AdverseEventTypeNamedQueryConstants.QUERY_FIND_ADVERSE_EVENT_TYPE_VIEW_MODELS),
@@ -23,14 +25,11 @@ import repository.constant.AdverseEventTypeNamedQueryConstants;
 })
 @Entity
 @Audited
-public class AdverseEventType {
+public class AdverseEventType extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false, updatable = false, insertable = false)
-    private Long id;
+    private static final long serialVersionUID = 1L;
 
-    @Column(nullable = false, unique = true)
+	@Column(nullable = false, unique = true)
     private String name;
 
     @Lob
@@ -39,14 +38,6 @@ public class AdverseEventType {
 
     @Column(nullable = false)
     private boolean isDeleted;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

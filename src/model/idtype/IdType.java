@@ -5,46 +5,23 @@
  */
 package model.idtype;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import org.hibernate.envers.Audited;
+
+import model.BaseEntity;
 
 /**
- *This Model Object represents the IdTypes of donor. 
- * @author srikanth
+ * Entity representing the various types of Donor identification accepted by the application. 
  */
 @Entity
-public class IdType implements Serializable{
+public class IdType extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false, insertable = false, updatable = false)
-    private Long id;
+  private static final long serialVersionUID = 1L;
 
     @Column(length = 20)
     private String idType;
     
     private String regExp; // stores regular Expression To validate Id Numbers  
-    
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
 
     public String getIdType() {
         return idType;
@@ -61,19 +38,4 @@ public class IdType implements Serializable{
     public void setRegExp(String regExp) {
         this.regExp = regExp;
     }
-
-    
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof IdType)) {
-            return false;
-        }
-        IdType other = (IdType) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
 }

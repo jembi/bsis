@@ -6,14 +6,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -25,6 +23,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import model.BaseEntity;
 import model.adverseevent.AdverseEvent;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
@@ -38,21 +38,25 @@ import model.modificationtracker.RowModificationTracker;
 import model.packtype.PackType;
 import model.user.User;
 import model.worksheet.Worksheet;
+
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Range;
+
 import repository.DonationNamedQueryConstants;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import constraintvalidator.PackTypeExists;
+
 import constraintvalidator.DonationBatchExists;
 import constraintvalidator.DonationTypeExists;
 import constraintvalidator.DonorExists;
 import constraintvalidator.LocationExists;
+import constraintvalidator.PackTypeExists;
 
 /**
  * A donation of blood
@@ -73,12 +77,9 @@ import constraintvalidator.LocationExists;
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class Donation implements ModificationTracker, Comparable<Donation> {
+public class Donation extends BaseEntity implements ModificationTracker, Comparable<Donation> {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false)
-  private Long id;
+  private static final long serialVersionUID = 1L;
 
   /**
    * Very common usecase to search for donation by donation identification number.
@@ -214,7 +215,7 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
 
   public Donation(Donation donation) {
     this();
-    this.id = donation.getId();
+    setId(donation.getId());
     this.donationIdentificationNumber = donation.getDonationIdentificationNumber();
     this.donor = donation.getDonor();
     this.bloodAbo = donation.getBloodAbo();
@@ -245,10 +246,6 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     this.adverseEvent = donation.getAdverseEvent();
 }
 
-public Long getId() {
-    return id;
-  }
-
   public String getDonationIdentificationNumber() {
     return donationIdentificationNumber;
   }
@@ -272,10 +269,6 @@ public Long getId() {
 
   public Boolean getIsDeleted() {
     return isDeleted;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public void setDonationIdentificationNumber(String donationIdentificationNumber) {
@@ -377,7 +370,7 @@ public Long getId() {
    */
   @Override
   public int compareTo(Donation c) {
-    Long diff = (this.id - c.id);
+    Long diff = (this.getId() - c.getId());
     if (diff < 0)
       return -1;
     if (diff > 0)
@@ -555,15 +548,6 @@ public Long getId() {
 
     public void setAdverseEvent(AdverseEvent adverseEvent) {
         this.adverseEvent = adverseEvent;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        return other instanceof Donation &&
-                ((Donation) other).id == id;
     }
 
     public boolean isIneligibleDonor() {
