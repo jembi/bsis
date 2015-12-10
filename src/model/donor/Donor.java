@@ -16,9 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.Valid;
 
-import model.BaseEntity;
+import model.ModificationTrackerBaseEntity;
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
@@ -27,10 +26,8 @@ import model.donation.Donation;
 import model.donordeferral.DonorDeferral;
 import model.idtype.IdType;
 import model.location.Location;
-import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.preferredlanguage.PreferredLanguage;
-import model.user.User;
 import model.util.Gender;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -53,7 +50,7 @@ import constraintvalidator.LocationExists;
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class Donor extends BaseEntity implements ModificationTracker {
+public class Donor extends ModificationTrackerBaseEntity {
 
   private static final long serialVersionUID = 1L;
 
@@ -151,9 +148,6 @@ public class Donor extends BaseEntity implements ModificationTracker {
   @Lob
   private String notes;
 
-  @Valid
-  private RowModificationTracker modificationTracker;
-
   @Temporal(TemporalType.TIMESTAMP)
   private Date dateOfLastDonation;
   
@@ -227,7 +221,7 @@ public class Donor extends BaseEntity implements ModificationTracker {
   private Date dueToDonate;
   
   public Donor() {
-    modificationTracker = new RowModificationTracker();
+    super();
   }
 
   public String getDonorNumber() {
@@ -353,38 +347,6 @@ public void copy(Donor donor) {
    
   public void setDonations(List<Donation> donations) {
     this.donations = donations;
-  }
- 
-  public Date getLastUpdated() {
-    return modificationTracker.getLastUpdated();
-  }
-
-  public Date getCreatedDate() {
-    return modificationTracker.getCreatedDate();
-  }
-
-  public User getCreatedBy() {
-    return modificationTracker.getCreatedBy();
-  }
-
-  public User getLastUpdatedBy() {
-    return modificationTracker.getLastUpdatedBy();
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    modificationTracker.setLastUpdated(lastUpdated);
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    modificationTracker.setCreatedDate(createdDate);
-  }
-
-  public void setCreatedBy(User createdBy) {
-    modificationTracker.setCreatedBy(createdBy);
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 
   public String getCallingName() {

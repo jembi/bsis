@@ -18,12 +18,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
-import model.BaseEntity;
+import model.ModificationTrackerBaseEntity;
 import model.compatibility.CompatibilityTest;
 import model.componentmovement.ComponentStatusChange;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
-import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.request.Request;
 import model.usage.ComponentUsage;
@@ -53,7 +52,7 @@ import constraintvalidator.DonationExists;
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class Component extends BaseEntity implements ModificationTracker {
+public class Component extends ModificationTrackerBaseEntity {
 
   private static final long serialVersionUID = 1L;
 
@@ -113,14 +112,11 @@ public class Component extends BaseEntity implements ModificationTracker {
 
   private Boolean isDeleted;
 
-  @Valid
-  private RowModificationTracker modificationTracker;
-
   @Column(length=20)
   private String componentIdentificationNumber;
   
   public Component() {
-    modificationTracker = new RowModificationTracker();
+    super();
   }
 
   public void copy(Component component) {
@@ -179,38 +175,6 @@ public class Component extends BaseEntity implements ModificationTracker {
 
   public void setCreatedOn(Date createdOn) {
     this.createdOn = createdOn;
-  }
-
-  public Date getLastUpdated() {
-    return modificationTracker.getLastUpdated();
-  }
-
-  public Date getCreatedDate() {
-    return modificationTracker.getCreatedDate();
-  }
-
-  public User getCreatedBy() {
-    return modificationTracker.getCreatedBy();
-  }
-
-  public User getLastUpdatedBy() {
-    return modificationTracker.getLastUpdatedBy();
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    modificationTracker.setLastUpdated(lastUpdated);
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    modificationTracker.setCreatedDate(createdDate);
-  }
-
-  public void setCreatedBy(User createdBy) {
-    modificationTracker.setCreatedBy(createdBy);
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 
   public String getDonationIdentificationNumber() {

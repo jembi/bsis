@@ -1,6 +1,5 @@
 package model.worksheet;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,13 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.validation.Valid;
 
-import model.BaseEntity;
+import model.ModificationTrackerBaseEntity;
 import model.donation.Donation;
-import model.modificationtracker.ModificationTracker;
-import model.modificationtracker.RowModificationTracker;
-import model.user.User;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -23,7 +18,7 @@ import org.hibernate.envers.RelationTargetAuditMode;
 
 @Entity
 @Audited
-public class Worksheet extends BaseEntity implements ModificationTracker {
+public class Worksheet extends ModificationTrackerBaseEntity {
 
   private static final long serialVersionUID = 1L;
 
@@ -40,14 +35,11 @@ public class Worksheet extends BaseEntity implements ModificationTracker {
 
   private Boolean isDeleted;
 
-  @Valid
-  private RowModificationTracker modificationTracker;
-
   @Lob
   private String notes;
 
   public Worksheet() {
-    modificationTracker = new RowModificationTracker();
+    super();
     donations = new HashSet<Donation>();
   }
 
@@ -57,38 +49,6 @@ public class Worksheet extends BaseEntity implements ModificationTracker {
 
   public void setWorksheetNumber(String worksheetNumber) {
     this.worksheetNumber = worksheetNumber;
-  }
-
-  public Date getLastUpdated() {
-    return modificationTracker.getLastUpdated();
-  }
-
-  public Date getCreatedDate() {
-    return modificationTracker.getCreatedDate();
-  }
-
-  public User getCreatedBy() {
-    return modificationTracker.getCreatedBy();
-  }
-
-  public User getLastUpdatedBy() {
-    return modificationTracker.getLastUpdatedBy();
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    modificationTracker.setLastUpdated(lastUpdated);
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    modificationTracker.setCreatedDate(createdDate);
-  }
-
-  public void setCreatedBy(User createdBy) {
-    modificationTracker.setCreatedBy(createdBy);
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 
   public Set<Donation> getDonations() {

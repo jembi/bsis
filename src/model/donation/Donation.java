@@ -21,10 +21,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import model.BaseEntity;
+import model.ModificationTrackerBaseEntity;
 import model.adverseevent.AdverseEvent;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
@@ -33,8 +32,6 @@ import model.donationbatch.DonationBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
-import model.modificationtracker.ModificationTracker;
-import model.modificationtracker.RowModificationTracker;
 import model.packtype.PackType;
 import model.user.User;
 import model.worksheet.Worksheet;
@@ -77,7 +74,7 @@ import constraintvalidator.PackTypeExists;
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class Donation extends BaseEntity implements ModificationTracker, Comparable<Donation> {
+public class Donation extends ModificationTrackerBaseEntity implements Comparable<Donation> {
 
   private static final long serialVersionUID = 1L;
 
@@ -166,9 +163,6 @@ public class Donation extends BaseEntity implements ModificationTracker, Compara
   @Lob
   private String notes;
 
-  @Valid
-  private RowModificationTracker modificationTracker;
-
   @Enumerated(EnumType.STRING)
   @Column(length=20)
   private BloodTypingStatus bloodTypingStatus;
@@ -209,7 +203,7 @@ public class Donation extends BaseEntity implements ModificationTracker, Compara
   private boolean released = false;
 
   public Donation() {
-    modificationTracker = new RowModificationTracker();
+    super();
     worksheets = new HashSet<Worksheet>();
   }
 
@@ -323,38 +317,6 @@ public class Donation extends BaseEntity implements ModificationTracker, Compara
 
   public void setComponents(List<Component> components) {
     this.components = components;
-  }
-
-  public Date getLastUpdated() {
-    return modificationTracker.getLastUpdated();
-  }
-
-  public Date getCreatedDate() {
-    return modificationTracker.getCreatedDate();
-  }
-
-  public User getCreatedBy() {
-    return modificationTracker.getCreatedBy();
-  }
-
-  public User getLastUpdatedBy() {
-    return modificationTracker.getLastUpdatedBy();
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    modificationTracker.setLastUpdated(lastUpdated);
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    modificationTracker.setCreatedDate(createdDate);
-  }
-
-  public void setCreatedBy(User createdBy) {
-    modificationTracker.setCreatedBy(createdBy);
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 
   public Set<Worksheet> getWorksheets() {

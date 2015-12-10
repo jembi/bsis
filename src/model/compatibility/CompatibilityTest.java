@@ -10,14 +10,10 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.Valid;
 
-import model.BaseEntity;
+import model.ModificationTrackerBaseEntity;
 import model.component.Component;
-import model.modificationtracker.ModificationTracker;
-import model.modificationtracker.RowModificationTracker;
 import model.request.Request;
-import model.user.User;
 
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
@@ -28,7 +24,7 @@ import constraintvalidator.RequestExists;
 
 @Entity
 @Audited
-public class CompatibilityTest extends BaseEntity implements ModificationTracker {
+public class CompatibilityTest extends ModificationTrackerBaseEntity {
 
   private static final long serialVersionUID = 1L;
 
@@ -65,44 +61,9 @@ public class CompatibilityTest extends BaseEntity implements ModificationTracker
 
   @Lob
   private String notes;
-  
-  @Valid
-  private RowModificationTracker modificationTracker;
 
   public CompatibilityTest() {
-    modificationTracker = new RowModificationTracker();
-  }
-
-  public Date getLastUpdated() {
-    return modificationTracker.getLastUpdated();
-  }
-
-  public Date getCreatedDate() {
-    return modificationTracker.getCreatedDate();
-  }
-
-  public User getCreatedBy() {
-    return modificationTracker.getCreatedBy();
-  }
-
-  public User getLastUpdatedBy() {
-    return modificationTracker.getLastUpdatedBy();
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    modificationTracker.setLastUpdated(lastUpdated);
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    modificationTracker.setCreatedDate(createdDate);
-  }
-
-  public void setCreatedBy(User createdBy) {
-    modificationTracker.setCreatedBy(createdBy);
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
+    super();
   }
 
   public Request getForRequest() {

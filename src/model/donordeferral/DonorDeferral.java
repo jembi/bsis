@@ -11,9 +11,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
-import model.BaseEntity;
+import model.ModificationTrackerBaseEntity;
 import model.donor.Donor;
-import model.modificationtracker.ModificationTracker;
 import model.modificationtracker.RowModificationTracker;
 import model.user.User;
 
@@ -37,7 +36,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class DonorDeferral extends BaseEntity implements ModificationTracker {
+public class DonorDeferral extends ModificationTrackerBaseEntity {
 
   private static final long serialVersionUID = 1L;
 
@@ -66,11 +65,8 @@ public class DonorDeferral extends BaseEntity implements ModificationTracker {
   @Temporal(TemporalType.DATE)
   private Date voidedDate;
   
-  @Valid
-  private RowModificationTracker modificationTracker;
-  
   public DonorDeferral(){
-	modificationTracker = new RowModificationTracker();
+	super();
   }
 
   public Donor getDeferredDonor() {
@@ -103,38 +99,6 @@ public class DonorDeferral extends BaseEntity implements ModificationTracker {
 
   public void setDeferralReasonText(String deferralReasonText) {
     this.deferralReasonText = deferralReasonText;
-  }
-
-  public Date getLastUpdated() {
-    return modificationTracker.getLastUpdated();
-  }
-
-  public Date getCreatedDate() {
-    return modificationTracker.getCreatedDate();
-  }
-
-  public User getCreatedBy() {
-    return modificationTracker.getCreatedBy();
-  }
-
-  public User getLastUpdatedBy() {
-    return modificationTracker.getLastUpdatedBy();
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    modificationTracker.setLastUpdated(lastUpdated);
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    modificationTracker.setCreatedDate(createdDate);
-  }
-
-  public void setCreatedBy(User createdBy) {
-    modificationTracker.setCreatedBy(createdBy);
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
   
 	/**

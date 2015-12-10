@@ -12,14 +12,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.Valid;
 
-import model.BaseEntity;
+import model.ModificationTrackerBaseEntity;
 import model.donation.Donation;
 import model.microtiterplate.MachineReading;
-import model.modificationtracker.ModificationTracker;
-import model.modificationtracker.RowModificationTracker;
-import model.user.User;
 import repository.BloodTestResultNamedQueryConstants;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -36,7 +32,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 })
 @Entity
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class BloodTestResult extends BaseEntity implements ModificationTracker {
+public class BloodTestResult extends ModificationTrackerBaseEntity {
 
   private static final long serialVersionUID = 1L;
 
@@ -54,9 +50,6 @@ public class BloodTestResult extends BaseEntity implements ModificationTracker {
 
   @OneToOne(cascade = {CascadeType.MERGE})
   private MachineReading machineReading;
-  
-  @Valid
-  private RowModificationTracker modificationTracker;
 
   @Lob
   private String notes;
@@ -65,7 +58,7 @@ public class BloodTestResult extends BaseEntity implements ModificationTracker {
   private String reagentLotNumber;
 
   public BloodTestResult() {
-    modificationTracker = new RowModificationTracker();
+    super();
   }
 
   public BloodTest getBloodTest() {
@@ -106,38 +99,6 @@ public class BloodTestResult extends BaseEntity implements ModificationTracker {
 
   public void setTestedOn(Date testedOn) {
     this.testedOn = testedOn;
-  }
-
-  public Date getLastUpdated() {
-    return modificationTracker.getLastUpdated();
-  }
-
-  public Date getCreatedDate() {
-    return modificationTracker.getCreatedDate();
-  }
-
-  public User getCreatedBy() {
-    return modificationTracker.getCreatedBy();
-  }
-
-  public User getLastUpdatedBy() {
-    return modificationTracker.getLastUpdatedBy();
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    modificationTracker.setLastUpdated(lastUpdated);
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    modificationTracker.setCreatedDate(createdDate);
-  }
-
-  public void setCreatedBy(User createdBy) {
-    modificationTracker.setCreatedBy(createdBy);
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 
   public MachineReading getMachineReading() {

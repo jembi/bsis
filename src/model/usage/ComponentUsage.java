@@ -8,13 +8,9 @@ import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.Valid;
 
-import model.BaseEntity;
+import model.ModificationTrackerBaseEntity;
 import model.component.Component;
-import model.modificationtracker.ModificationTracker;
-import model.modificationtracker.RowModificationTracker;
-import model.user.User;
 
 import org.hibernate.envers.Audited;
 
@@ -25,7 +21,7 @@ import constraintvalidator.ComponentExists;
  */
 @Entity
 @Audited
-public class ComponentUsage extends BaseEntity implements ModificationTracker {
+public class ComponentUsage extends ModificationTrackerBaseEntity {
 
   private static final long serialVersionUID = 1L;
 
@@ -51,56 +47,13 @@ public class ComponentUsage extends BaseEntity implements ModificationTracker {
   @Lob
   private String notes;
 
-  @Valid
-  private RowModificationTracker modificationTracker;
-
   private Boolean isDeleted;
 
   @Column(length=30)
   private String usedBy;
 
   public ComponentUsage() {
-    modificationTracker = new RowModificationTracker();
-  }
-
-  @Override
-  public Date getLastUpdated() {
-    return modificationTracker.getLastUpdated();
-  }
-
-  @Override
-  public Date getCreatedDate() {
-    return modificationTracker.getCreatedDate();
-  }
-
-  @Override
-  public User getCreatedBy() {
-    return modificationTracker.getCreatedBy();
-  }
-
-  @Override
-  public User getLastUpdatedBy() {
-    return modificationTracker.getLastUpdatedBy();
-  }
-
-  @Override
-  public void setLastUpdated(Date lastUpdated) {
-    modificationTracker.setLastUpdated(lastUpdated);
-  }
-
-  @Override
-  public void setCreatedDate(Date createdDate) {
-    modificationTracker.setCreatedDate(createdDate);
-  }
-
-  @Override
-  public void setCreatedBy(User createdBy) {
-    modificationTracker.setCreatedBy(createdBy);
-  }
-
-  @Override
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
+    super();
   }
 
   public String getHospital() {
@@ -129,10 +82,6 @@ public class ComponentUsage extends BaseEntity implements ModificationTracker {
 
   public Component getComponent() {
     return component;
-  }
-
-  public RowModificationTracker getModificationTracker() {
-    return modificationTracker;
   }
 
   public Boolean getIsDeleted() {
@@ -165,10 +114,6 @@ public class ComponentUsage extends BaseEntity implements ModificationTracker {
 
   public void setComponent(Component component) {
     this.component = component;
-  }
-
-  public void setModificationTracker(RowModificationTracker modificationTracker) {
-    this.modificationTracker = modificationTracker;
   }
 
   public void setIsDeleted(Boolean isDeleted) {

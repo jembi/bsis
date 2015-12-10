@@ -4,7 +4,6 @@ import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -13,11 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
-import model.BaseEntity;
+import model.ModificationTrackerBaseEntity;
 import model.donation.Donation;
-import model.modificationtracker.ModificationTracker;
-import model.modificationtracker.RowModificationTracker;
-import model.user.User;
 
 import org.hibernate.envers.Audited;
 
@@ -39,7 +35,7 @@ import constraintvalidator.DonationExists;
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class PostDonationCounselling extends BaseEntity implements ModificationTracker {
+public class PostDonationCounselling extends ModificationTrackerBaseEntity {
 
   private static final long serialVersionUID = 1L;
 
@@ -60,11 +56,8 @@ public class PostDonationCounselling extends BaseEntity implements ModificationT
     @Column(nullable = false)
     private boolean isDeleted;
 
-    @Embedded
-    private RowModificationTracker modificationTracker;
-
     public PostDonationCounselling () {
-        modificationTracker = new RowModificationTracker();
+        super();
     }
 
     public Donation getDonation() {
@@ -105,44 +98,5 @@ public class PostDonationCounselling extends BaseEntity implements ModificationT
 
     public void setIsDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
-    }
-
-    @Override
-    public Date getLastUpdated() {
-        return modificationTracker.getLastUpdated();
-    }
-
-    public Date getCreatedDate() {
-        return modificationTracker.getCreatedDate();
-    }
-
-    @Override
-    public User getCreatedBy() {
-        return modificationTracker.getCreatedBy();
-    }
-
-    @Override
-    public User getLastUpdatedBy() {
-        return modificationTracker.getLastUpdatedBy();
-    }
-
-    @Override
-    public void setLastUpdated(Date lastUpdated) {
-        modificationTracker.setLastUpdated(lastUpdated);
-    }
-
-    @Override
-    public void setCreatedDate(Date createdDate) {
-        modificationTracker.setCreatedDate(createdDate);
-    }
-
-    @Override
-    public void setCreatedBy(User createdBy) {
-        modificationTracker.setCreatedBy(createdBy);
-    }
-
-    @Override
-    public void setLastUpdatedBy(User lastUpdatedBy) {
-        modificationTracker.setLastUpdatedBy(lastUpdatedBy);
     }
 }

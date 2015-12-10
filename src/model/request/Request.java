@@ -11,17 +11,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.Valid;
 
-import model.BaseEntity;
+import model.ModificationTrackerBaseEntity;
 import model.compatibility.CompatibilityTest;
 import model.component.Component;
 import model.componenttype.ComponentType;
 import model.location.Location;
-import model.modificationtracker.ModificationTracker;
-import model.modificationtracker.RowModificationTracker;
 import model.requesttype.RequestType;
-import model.user.User;
 import model.util.Gender;
 
 import org.apache.commons.lang3.text.WordUtils;
@@ -37,7 +33,7 @@ import constraintvalidator.RequestTypeExists;
 
 @Entity
 @Audited
-public class Request extends BaseEntity implements ModificationTracker {
+public class Request extends ModificationTrackerBaseEntity {
 
   private static final long serialVersionUID = 1L;
 
@@ -124,9 +120,6 @@ public class Request extends BaseEntity implements ModificationTracker {
   @Lob
   private String notes;
 
-  @Valid
-  private RowModificationTracker modificationTracker;
-
   @ComponentTypeExists
   @ManyToOne
   private ComponentType componentType;
@@ -142,7 +135,7 @@ public class Request extends BaseEntity implements ModificationTracker {
   private Boolean isDeleted;
 
   public Request() {
-    modificationTracker = new RowModificationTracker();
+    super();
     numUnitsIssued = 0;
   }
 
@@ -200,10 +193,6 @@ public class Request extends BaseEntity implements ModificationTracker {
     return notes;
   }
 
-  public RowModificationTracker getModificationTracker() {
-    return modificationTracker;
-  }
-
   public ComponentType getComponentType() {
     return componentType;
   }
@@ -244,10 +233,6 @@ public class Request extends BaseEntity implements ModificationTracker {
     this.notes = notes;
   }
 
-  public void setModificationTracker(RowModificationTracker modificationTracker) {
-    this.modificationTracker = modificationTracker;
-  }
-
   public void setComponentType(ComponentType componentType) {
     this.componentType = componentType;
   }
@@ -266,38 +251,6 @@ public class Request extends BaseEntity implements ModificationTracker {
 
   public void setIssuedComponents(List<Component> issuedComponents) {
     this.issuedComponents = issuedComponents;
-  }
-
-  public Date getLastUpdated() {
-    return modificationTracker.getLastUpdated();
-  }
-
-  public Date getCreatedDate() {
-    return modificationTracker.getCreatedDate();
-  }
-
-  public User getCreatedBy() {
-    return modificationTracker.getCreatedBy();
-  }
-
-  public User getLastUpdatedBy() {
-    return modificationTracker.getLastUpdatedBy();
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    modificationTracker.setLastUpdated(lastUpdated);
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    modificationTracker.setCreatedDate(createdDate);
-  }
-
-  public void setCreatedBy(User createdBy) {
-    modificationTracker.setCreatedBy(createdBy);
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 
   public Boolean getFulfilled() {
