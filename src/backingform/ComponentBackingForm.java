@@ -108,7 +108,7 @@ public class ComponentBackingForm {
     else {
       ComponentType pt = new ComponentType();
       try {
-        pt.setId(Integer.parseInt(componentTypeId));
+        pt.setId(Long.parseLong(componentTypeId));
         component.setComponentType(pt);
       } catch (Exception ex) {
         ex.printStackTrace();

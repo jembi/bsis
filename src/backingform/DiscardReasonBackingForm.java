@@ -26,7 +26,7 @@ public class DiscardReasonBackingForm {
         return discardReason.getStatusChangeReason();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return discardReason.getId();
     }
 
@@ -34,7 +34,7 @@ public class DiscardReasonBackingForm {
         this.discardReason = discardReason;
     }
 
-    public void setId(Integer id){
+    public void setId(Long id){
         discardReason.setId(id);
     }
 

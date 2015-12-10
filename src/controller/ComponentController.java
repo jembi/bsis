@@ -182,7 +182,7 @@ public class ComponentController {
     public Map<String, Object> findComponentPagination(HttpServletRequest request,
             @RequestParam(value = "componentNumber", required=false, defaultValue ="") String componentNumber,
             @RequestParam(value = "donationIdentificationNumber", required=false, defaultValue ="") String donationIdentificationNumber,
-            @RequestParam(value = "componentTypes", required=false, defaultValue ="") List<Integer> componentTypeIds,
+            @RequestParam(value = "componentTypes", required=false, defaultValue ="") List<Long> componentTypeIds,
             @RequestParam(value = "status", required=false, defaultValue ="") List<String> status,
             @RequestParam(value = "donationDateFrom", required=false, defaultValue ="") String donationDateFrom,
             @RequestParam(value = "donationDateTo", required=false, defaultValue ="") String donationDateTo) throws ParseException {
@@ -269,7 +269,7 @@ public class ComponentController {
   @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
   public  ResponseEntity discardComponent(
       @PathVariable Long id,
-      @RequestParam(value="discardReasonId") Integer discardReasonId,
+      @RequestParam(value="discardReasonId") Long discardReasonId,
       @RequestParam(value="discardReasonText", required = false) String discardReasonText) {
 
       ComponentStatusChangeReason statusChangeReason = new ComponentStatusChangeReason();
@@ -336,7 +336,7 @@ public class ComponentController {
   @PreAuthorize("hasRole('"+PermissionConstants.DISCARD_COMPONENT+"')")
   public  HttpStatus returnComponent(
       @PathVariable  Long id,
-      @RequestParam("returnReasonId") Integer returnReasonId,
+      @RequestParam("returnReasonId") Long returnReasonId,
       @RequestParam("returnReasonText") String returnReasonText) {
 
       ComponentStatusChangeReason statusChangeReason = new ComponentStatusChangeReason();
@@ -538,7 +538,7 @@ public class ComponentController {
     m.put("componentTypeCombinations", componentTypeCombinations);
 
     ObjectMapper mapper = new ObjectMapper();
-    Map<Integer, String> componentTypeCombinationsMap = new HashMap<Integer, String>();
+    Map<Long, String> componentTypeCombinationsMap = new HashMap<Long, String>();
     for (ComponentTypeCombination componentTypeCombination : componentTypeCombinations) {
       Map<String, String> componentExpiryIntervals = new HashMap<String, String>();
       for (ComponentType componentType : componentTypeCombination.getComponentTypes()) {

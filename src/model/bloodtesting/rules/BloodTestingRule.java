@@ -20,7 +20,7 @@ public class BloodTestingRule {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(nullable = false, insertable=false, updatable=false, columnDefinition="SMALLINT")
-  private Integer id;
+  private Long id;
 
   /**
    * Comma Separated list of ids of tests which correspond to the pattern.
@@ -63,7 +63,7 @@ public class BloodTestingRule {
 
   private Boolean isActive;
 
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
@@ -87,7 +87,7 @@ public class BloodTestingRule {
     return isActive;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

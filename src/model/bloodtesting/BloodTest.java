@@ -22,7 +22,7 @@ public class BloodTest implements Comparable<BloodTest> {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(nullable = false, insertable=false, updatable=false, columnDefinition="SMALLINT")
-  private Integer id;
+  private Long id;
 
   @Column(length=25)
   private String testNameShort;
@@ -81,7 +81,7 @@ public class BloodTest implements Comparable<BloodTest> {
     @Column(nullable = false)
     private boolean flagComponentsForDiscard = false;
 
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
@@ -118,7 +118,7 @@ public class BloodTest implements Comparable<BloodTest> {
     return isActive;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

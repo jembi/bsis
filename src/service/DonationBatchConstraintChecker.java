@@ -20,7 +20,7 @@ public class DonationBatchConstraintChecker {
     private DonationBatchRepository donationBatchRepository;
  
     
-    public boolean canDeleteDonationBatch(int donationBatchId) throws NoResultException {
+    public boolean canDeleteDonationBatch(Long donationBatchId) throws NoResultException {
         DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
 
         if (donationBatch.getDonations() == null || donationBatch.getDonations().size() == 0) {
@@ -31,7 +31,7 @@ public class DonationBatchConstraintChecker {
         return false;
     }
     
-    public boolean canEditDonationBatch(int donationBatchId) throws NoResultException {
+    public boolean canEditDonationBatch(Long donationBatchId) throws NoResultException {
         DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
 
         if (donationBatch.getIsClosed() || donationBatch.getIsDeleted()) {
@@ -42,7 +42,7 @@ public class DonationBatchConstraintChecker {
         return true;
     }
     
-    public boolean canEditDonationBatchDate(int donationBatchId) throws NoResultException {
+    public boolean canEditDonationBatchDate(Long donationBatchId) throws NoResultException {
 
         DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
 
@@ -54,7 +54,7 @@ public class DonationBatchConstraintChecker {
         return true;
     }
     
-    public boolean canCloseDonationBatch(int donationBatchId) {
+    public boolean canCloseDonationBatch(Long donationBatchId) {
         DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
         
         if (donationBatch.getIsClosed()) {
@@ -70,7 +70,7 @@ public class DonationBatchConstraintChecker {
         return true;
     }
     
-    public boolean canReopenDonationBatch(int donationBatchId) {
+    public boolean canReopenDonationBatch(Long donationBatchId) {
         DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
         
         if (!donationBatch.getIsClosed()) {

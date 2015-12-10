@@ -25,7 +25,7 @@ public class DonationTypeBackingForm {
         return donationType.getDonationType();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return donationType.getId();
     }
 
@@ -33,7 +33,7 @@ public class DonationTypeBackingForm {
         this.donationType = donationType;
     }
 
-    public void setId(Integer id){
+    public void setId(Long id){
         donationType.setId(id);
     }
 

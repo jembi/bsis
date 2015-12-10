@@ -5,12 +5,12 @@ import model.bloodtesting.BloodTestType;
 
 public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
 
-    private Integer id;
+    private Long id;
     private BloodTestType bloodTestType;
     private String positiveResults;
     private boolean flagComponentsForDiscard;
 
-    public BloodTestBuilder withId(Integer id) {
+    public BloodTestBuilder withId(Long id) {
         this.id = id;
         return this;
     }

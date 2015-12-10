@@ -25,7 +25,7 @@ public class ComponentTypeCombinationViewModel {
         this.componentTypeCombination = componentTypeCombination;
     }
     
-    public Integer getId(){
+    public Long getId(){
         return componentTypeCombination.getId();
     }
     

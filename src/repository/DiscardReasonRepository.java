@@ -39,7 +39,7 @@ public class DiscardReasonRepository {
         return result;
     }
 
-    public ComponentStatusChangeReason getDiscardReasonById(Integer DiscardReasonId) {
+    public ComponentStatusChangeReason getDiscardReasonById(Long DiscardReasonId) {
         TypedQuery<ComponentStatusChangeReason> query;
         query = em.createQuery("SELECT p from ComponentStatusChangeReason p " +
                 "where p.id=:id AND p.category= :category", ComponentStatusChangeReason.class);

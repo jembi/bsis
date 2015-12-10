@@ -115,7 +115,7 @@ public class ComponentTypeRepositoryTest {
 	
 	@Test
 	public void testGetComponentTypeById() throws Exception {
-		ComponentType one = componentTypeRepository.getComponentTypeById(1);
+		ComponentType one = componentTypeRepository.getComponentTypeById(1l);
 		Assert.assertNotNull("There is a ComponentType", one);
 		Assert.assertEquals("ComponentType matches", "Whole Blood Single Pack - CPDA", one.getComponentTypeName());
 	}
@@ -123,7 +123,7 @@ public class ComponentTypeRepositoryTest {
 	@Test
 	@Transactional
 	public void testGetComponentTypeByIdUnknown() throws Exception {
-		ComponentType one = componentTypeRepository.getComponentTypeById(123);
+		ComponentType one = componentTypeRepository.getComponentTypeById(123l);
 		Assert.assertNull("There is no ComponentType", one);
 	}
 	
@@ -132,21 +132,21 @@ public class ComponentTypeRepositoryTest {
 	public void testGetComponentTypeByName() throws Exception {
 		ComponentType one = componentTypeRepository.getComponentTypeByName("Whole Blood Single Pack - CPDA");
 		Assert.assertNotNull("There is a ComponentType", one);
-		Assert.assertEquals("ComponentType matches", new Integer(1), one.getId());
+		Assert.assertEquals("ComponentType matches", new Long(1), one.getId());
 	}
 	
 	@Test
 	public void testDeactivateComponentType() throws Exception {
-		componentTypeRepository.deactivateComponentType(1);
-		ComponentType componentType = componentTypeRepository.getComponentTypeById(1); // includes deleted
+		componentTypeRepository.deactivateComponentType(1l);
+		ComponentType componentType = componentTypeRepository.getComponentTypeById(1l); // includes deleted
 		Assert.assertNotNull("ComponentType is found", componentType);
 		Assert.assertTrue("ComponentType is deleted", componentType.getIsDeleted());
 	}
 	
 	@Test
 	public void testActivateComponentType() throws Exception {
-		componentTypeRepository.activateComponentType(17);
-		ComponentType componentType = componentTypeRepository.getComponentTypeById(17);
+		componentTypeRepository.activateComponentType(17l);
+		ComponentType componentType = componentTypeRepository.getComponentTypeById(17l);
 		Assert.assertNotNull("ComponentType is found", componentType);
 		Assert.assertFalse("ComponentType is not deleted", componentType.getIsDeleted());
 	}
@@ -169,10 +169,10 @@ public class ComponentTypeRepositoryTest {
 	
 	@Test
 	public void testUpdateComponentType() throws Exception {
-		ComponentType existingComponentType = componentTypeRepository.getComponentTypeById(1);
+		ComponentType existingComponentType = componentTypeRepository.getComponentTypeById(1l);
 		existingComponentType.setDescription("Junit");
 		componentTypeRepository.updateComponentType(existingComponentType);
-		ComponentType updatedComponentType = componentTypeRepository.getComponentTypeById(1);
+		ComponentType updatedComponentType = componentTypeRepository.getComponentTypeById(1l);
 		Assert.assertEquals("Description has been updated", "Junit", updatedComponentType.getDescription());
 	}
 	
@@ -188,7 +188,7 @@ public class ComponentTypeRepositoryTest {
 	@Test
 	//FIXME: it's not very clear what this method does
 	public void testGetComponentTypeByIdList() throws Exception {
-		List<ComponentType> all = componentTypeRepository.getComponentTypeByIdList(1);
+		List<ComponentType> all = componentTypeRepository.getComponentTypeByIdList(1l);
 		Assert.assertNotNull("There are ComponentTypes", all);
 		Assert.assertEquals("There is 1 Pedi ComponentTypes", 1, all.size());
 	}
@@ -209,38 +209,38 @@ public class ComponentTypeRepositoryTest {
 	
 	@Test
 	public void testGetComponentTypeCombinationById() throws Exception {
-		ComponentTypeCombination one = componentTypeRepository.getComponentTypeCombinationById(1);
+		ComponentTypeCombination one = componentTypeRepository.getComponentTypeCombinationById(1l);
 		Assert.assertNotNull("There is a ComponentTypeCombination", one);
 		Assert.assertEquals("The ComponentTypeCombination matches", "Whole Blood", one.getCombinationName());
 	}
 	
 	@Test(expected = javax.persistence.NoResultException.class)
 	public void testGetComponentTypeCombinationByIdUnknown() throws Exception {
-		componentTypeRepository.getComponentTypeCombinationById(123);
+		componentTypeRepository.getComponentTypeCombinationById(123l);
 	}
 	
 	@Test
 	public void testDeactivateComponentTypeCombination() throws Exception {
-		componentTypeRepository.deactivateComponentTypeCombination(1);
-		ComponentTypeCombination one = componentTypeRepository.getComponentTypeCombinationById(1); // returns deleted entities
+		componentTypeRepository.deactivateComponentTypeCombination(1l);
+		ComponentTypeCombination one = componentTypeRepository.getComponentTypeCombinationById(1l); // returns deleted entities
 		Assert.assertNotNull("There is a ComponentTypeCombination", one);
 		Assert.assertTrue("The ComponentTypeCombination is deleted", one.getIsDeleted());
 	}
 	
 	@Test
 	public void testActivateComponentTypeCombinationUnknown() throws Exception {
-		componentTypeRepository.activateComponentTypeCombination(11);
-		ComponentTypeCombination one = componentTypeRepository.getComponentTypeCombinationById(11);
+		componentTypeRepository.activateComponentTypeCombination(11l);
+		ComponentTypeCombination one = componentTypeRepository.getComponentTypeCombinationById(11l);
 		Assert.assertNotNull("There is a ComponentTypeCombination", one);
 		Assert.assertFalse("The ComponentTypeCombination is not deleted", one.getIsDeleted());
 	}
 	
 	@Test
 	public void testUpdateComponentTypeCombination() throws Exception {
-		ComponentTypeCombination one = componentTypeRepository.getComponentTypeCombinationById(1);
+		ComponentTypeCombination one = componentTypeRepository.getComponentTypeCombinationById(1l);
 		one.setCombinationName("Testing");
 		componentTypeRepository.updateComponentTypeCombination(one);
-		ComponentTypeCombination savedOne = componentTypeRepository.getComponentTypeCombinationById(1);
+		ComponentTypeCombination savedOne = componentTypeRepository.getComponentTypeCombinationById(1l);
 		Assert.assertEquals("ComponentTypeCombination was saved successfully", "Testing", savedOne.getCombinationName());
 	}
 	
@@ -250,7 +250,7 @@ public class ComponentTypeRepositoryTest {
 		one.setCombinationName("Testing");
 		one.setIsDeleted(false);
 		List<ComponentType> componentTypes = new ArrayList<ComponentType>();
-		componentTypes.add(componentTypeRepository.getComponentTypeById(1));
+		componentTypes.add(componentTypeRepository.getComponentTypeById(1l));
 		one.setComponentTypes(componentTypes);
 		componentTypeRepository.saveComponentTypeCombination(one);
 		List<ComponentTypeCombination> all = componentTypeRepository.getAllComponentTypeCombinations();

@@ -42,7 +42,7 @@ public class DonationCRUDServiceTests {
     
     private static final long IRRELEVANT_DONATION_ID = 2;
     private static final long IRRELEVANT_DONOR_ID = 7;
-    private static final int IRRELEVANT_PACK_TYPE_ID = 5009;
+    private static final long IRRELEVANT_PACK_TYPE_ID = 5009;
     private static final Date IRRELEVANT_DATE_OF_FIRST_DONATION = new DateTime().minusDays(7).toDate();
     private static final Date IRRELEVANT_DATE_OF_LAST_DONATION = new DateTime().minusDays(2).toDate();
 
@@ -163,7 +163,7 @@ public class DonationCRUDServiceTests {
         // Set up fixture
         Donation existingDonation = aDonation().withId(IRRELEVANT_DONATION_ID).build();
         DonationBackingForm donationBackingForm = aDonationBackingForm()
-                .withPackType(aPackType().withId(7).build())
+                .withPackType(aPackType().withId(7l).build())
                 .build();
 
         // Set up expectations
@@ -237,7 +237,7 @@ public class DonationCRUDServiceTests {
         
         Donation existingDonation = aDonation()
                 .withId(IRRELEVANT_DONATION_ID)
-                .withPackType(aPackType().withId(8).withCountAsDonation(true).build())
+                .withPackType(aPackType().withId(8l).withCountAsDonation(true).build())
                 .withDonor(expectedDonor)
                 .build();
 

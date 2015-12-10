@@ -153,8 +153,8 @@ public class RoleRepositoryTest {
 		permissions.add(roleRepository.findPermissionByPermissionId(5));
 		one.setPermissions(permissions);
 		List<User> users = new ArrayList<User>();
-		users.add(userRepository.findUserById(1));
-		users.add(userRepository.findUserById(2));
+		users.add(userRepository.findUserById(1l));
+		users.add(userRepository.findUserById(2l));
 		one.setUsers(users);
 		Role savedRole = roleRepository.addRole(one);
 		Role retrievedRole = roleRepository.findRoleDetailById(savedRole.getId());

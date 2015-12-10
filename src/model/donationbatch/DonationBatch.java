@@ -38,7 +38,7 @@ public class DonationBatch implements ModificationTracker {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(nullable=false, columnDefinition="SMALLINT")
-  private Integer id;
+  private Long id;
 
   @Column(length=20, unique=true)
   private String batchNumber;
@@ -74,11 +74,11 @@ public class DonationBatch implements ModificationTracker {
     modificationTracker = new RowModificationTracker();
   }
 
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

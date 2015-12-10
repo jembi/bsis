@@ -87,12 +87,12 @@ public class WorksheetRepository {
     if (worksheetTypes == null || worksheetTypes.size() == 0)
       return Arrays.asList(new Worksheet[0]);
 
-    List<Integer> worksheetTypeIds = new ArrayList<Integer>();
+    List<Long> worksheetTypeIds = new ArrayList<Long>();
     for (String worksheetTypeIdStr : worksheetTypes) {
-      worksheetTypeIds.add(Integer.parseInt(worksheetTypeIdStr));
+      worksheetTypeIds.add(Long.parseLong(worksheetTypeIdStr));
     }
 
-    worksheetTypeIds.add(-1);
+    worksheetTypeIds.add(-1l);
     TypedQuery<Worksheet> query = null;
     if (StringUtils.isBlank(worksheetNumber)) {
       String queryStr = "SELECT DISTINCT w FROM Worksheet w LEFT JOIN FETCH w.donations WHERE " +

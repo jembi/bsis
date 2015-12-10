@@ -28,7 +28,7 @@ public class DonationBatchRepository {
   public DonationBatchRepository() {
   }
 
-  public DonationBatch findDonationBatchByIdEager(Integer batchId) {
+  public DonationBatch findDonationBatchByIdEager(Long batchId) {
     String queryString = "SELECT distinct b FROM DonationBatch b LEFT JOIN FETCH b.donations LEFT JOIN FETCH b.venue " +
                          "WHERE b.id = :batchId and b.isDeleted = :isDeleted";
     TypedQuery<DonationBatch> query = em.createQuery(queryString, DonationBatch.class);
@@ -37,7 +37,7 @@ public class DonationBatchRepository {
     return b;
   }
 
-  public DonationBatch findDonationBatchById(Integer batchId) {
+  public DonationBatch findDonationBatchById(Long batchId) {
     String queryString = "SELECT distinct b FROM DonationBatch b LEFT JOIN FETCH b.donations " +
                          "WHERE b.id = :batchId and b.isDeleted = :isDeleted";
     TypedQuery<DonationBatch> query = em.createQuery(queryString, DonationBatch.class);
@@ -132,7 +132,7 @@ public class DonationBatchRepository {
     return query.getResultList();
   }
   
-  public List<Donation> findDonationsInBatch(Integer batchId) {
+  public List<Donation> findDonationsInBatch(Long batchId) {
     DonationBatch donationBatch = findDonationBatchByIdEager(batchId);
     List<Donation> donations = new ArrayList<Donation>();
     for (Donation c : donationBatch.getDonations()) {

@@ -32,7 +32,7 @@ public class TestBatchCRUDService {
     @Autowired
     private DonationBatchRepository donationBatchRepository;
 
-    public TestBatch updateTestBatch(Long testBatchId, TestBatchStatus newStatus, Date newCreatedDate, List<Integer> newDonationBatchIds) {
+    public TestBatch updateTestBatch(Long testBatchId, TestBatchStatus newStatus, Date newCreatedDate, List<Long> newDonationBatchIds) {
     	
         TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
                         
@@ -51,7 +51,7 @@ public class TestBatchCRUDService {
         if (newDonationBatchIds != null) {
         	List<DonationBatch> newDonationBatches = new ArrayList<DonationBatch>();
         	// unlink old donation batches
-        	List<Integer> existingDonationBatchIds = new ArrayList<Integer>();
+        	List<Long> existingDonationBatchIds = new ArrayList<Long>();
         	for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
         		existingDonationBatchIds.add(donationBatch.getId());
         		if (!newDonationBatchIds.contains(donationBatch.getId())) {
@@ -60,7 +60,7 @@ public class TestBatchCRUDService {
         		}
         	}
         	// link new donation batches
-        	for (Integer batchId : newDonationBatchIds) {
+        	for (Long batchId : newDonationBatchIds) {
         		DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(batchId);
         		newDonationBatches.add(donationBatch);
         		if (!existingDonationBatchIds.contains(batchId)) {

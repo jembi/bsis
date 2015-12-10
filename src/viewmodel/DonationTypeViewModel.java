@@ -10,7 +10,7 @@ public class DonationTypeViewModel {
         this.donationType = donationType;
     }
 
-    public Integer getId(){
+    public Long getId(){
         return donationType.getId();
     }
 

@@ -25,7 +25,7 @@ public class DeferralReason {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(nullable=false, updatable=false, insertable=false, columnDefinition="SMALLINT")
-  private Integer id;
+  private Long id;
 
   @Column(length=100)
   private String reason;
@@ -43,11 +43,11 @@ public class DeferralReason {
   @Enumerated(EnumType.STRING)
   private DurationType durationType = DurationType.TEMPORARY;
   
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

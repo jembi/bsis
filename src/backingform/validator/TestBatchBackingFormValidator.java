@@ -34,10 +34,10 @@ public class TestBatchBackingFormValidator implements Validator {
 
         TestBatchBackingForm form = (TestBatchBackingForm) object;
         TestBatch testBatch = form.getTestBatch();
-        List<Integer> donationBatchIds = form.getDonationBatchIds();
+        List<Long> donationBatchIds = form.getDonationBatchIds();
         List<DonationBatch> donationBatches = new ArrayList<DonationBatch>();
         if (donationBatchIds != null && !donationBatchIds.isEmpty()) {
-            for (Integer donationBatchId : donationBatchIds) {
+            for (Long donationBatchId : donationBatchIds) {
                 DonationBatch db = donationBatchRepository.findDonationBatchById(donationBatchId);
                 if (db.getTestBatch() != null) {
                 	if (testBatch.getId() == null || !testBatch.getId().equals(db.getTestBatch().getId())) {

@@ -4,15 +4,15 @@ import org.hibernate.envers.RevisionType;
 
 public class EntityModificationViewModel {
     
-    private int id;
+    private Long id;
     private RevisionType revisionType;
     private String entityName;
     
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

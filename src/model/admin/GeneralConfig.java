@@ -1,20 +1,21 @@
 package model.admin;
 
+import java.io.Serializable;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.FetchType;
-import javax.persistence.Column;
-import javax.persistence.ManyToOne;
 import javax.persistence.Id;
-import java.io.Serializable;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class GeneralConfig implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     @Column(unique=true)
     private String name;
@@ -25,11 +26,11 @@ public class GeneralConfig implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     private DataType dataType;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

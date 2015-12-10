@@ -1,9 +1,11 @@
 package backingform;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import model.admin.GeneralConfig;
 import javax.validation.Valid;
+
 import model.admin.DataType;
+import model.admin.GeneralConfig;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 public class GeneralConfigBackingForm {
@@ -13,6 +15,8 @@ public class GeneralConfigBackingForm {
 
     private String value;
     private String name;
+    private String description;
+    private Long id;
     
     @Valid
     private DataType dataType;
@@ -37,11 +41,11 @@ public class GeneralConfigBackingForm {
         this.name = name;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -52,10 +56,6 @@ public class GeneralConfigBackingForm {
     public void setGeneralConfig(GeneralConfig generalConfig) {
         this.generalConfig = generalConfig;
     }
-
-    private String description;
-
-    private Integer id;
 
     public String getValue() {
         return this.value;

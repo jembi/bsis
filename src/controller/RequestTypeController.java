@@ -3,7 +3,9 @@ package controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import model.requesttype.RequestType;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import repository.RequestTypeRepository;
 import utils.PermissionConstants;
 
@@ -32,7 +35,7 @@ public class RequestTypeController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_REQUESTS + "')")
-    public ResponseEntity getRequestTypeById(Integer id) {
+    public ResponseEntity getRequestTypeById(Long id) {
 
         Map<String, Object> map = new HashMap<String, Object>();
         RequestType requestType = requestTypesRepository.getRequestTypeById(id);
@@ -52,7 +55,7 @@ public class RequestTypeController {
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_REQUESTS + "')")
     public ResponseEntity updateRequestType(
-            @RequestBody RequestType requestType, @PathVariable Integer id) {
+            @RequestBody RequestType requestType, @PathVariable Long id) {
 
         Map<String, Object> map = new HashMap<String, Object>();
         requestType.setId(id);

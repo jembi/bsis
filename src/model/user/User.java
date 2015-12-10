@@ -1,9 +1,9 @@
 package model.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +14,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.Length;
 
@@ -24,7 +25,7 @@ public class User implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(nullable=false, insertable=false, updatable=false, columnDefinition="SMALLINT")
-  private Integer id;
+  private Long id;
 
   @Column(length=30, unique=true, nullable=false)
   private String username;
@@ -65,7 +66,7 @@ public class User implements Serializable {
   public User() {
   }
 
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
@@ -113,7 +114,7 @@ public class User implements Serializable {
     return isDeleted;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

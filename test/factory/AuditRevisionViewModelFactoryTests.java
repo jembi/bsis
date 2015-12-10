@@ -47,12 +47,12 @@ public class AuditRevisionViewModelFactoryTests {
         
         List<EntityModification> entityModifications = Arrays.asList(
                 anEntityModification()
-                        .withId(88)
+                        .withId(88l)
                         .withRevisionType(RevisionType.MOD)
                         .withEntityName(Donor.class.getSimpleName())
                         .build(),
                 anEntityModification()
-                        .withId(107)
+                        .withId(107l)
                         .withRevisionType(RevisionType.ADD)
                         .withEntityName(Donation.class.getSimpleName())
                         .build()
@@ -66,7 +66,7 @@ public class AuditRevisionViewModelFactoryTests {
                 .build();
 
         User auditRevisionUser = aUser()
-                .withId(56)
+                .withId(56l)
                 .withUsername(irrelevantUsername)
                 .build();
 

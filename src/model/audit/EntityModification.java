@@ -15,7 +15,7 @@ public class EntityModification {
     
     @Id
     @GeneratedValue
-    private int id;
+    private Long id;
     
     @ManyToOne
     private AuditRevision auditRevision;
@@ -27,11 +27,11 @@ public class EntityModification {
     @Column(length = 30, nullable = false)
     private String entityName;
     
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
