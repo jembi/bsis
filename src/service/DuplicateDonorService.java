@@ -175,7 +175,7 @@ public class DuplicateDonorService {
    * Retrieves a list of the Deferrals for the specified Donors.
    *
    * @param newDonor Donor new merged donor
-   * @param donors   List of Donors that are being merged into the newDonor
+   * @param donorNumbers   List of Donors that are being merged into the newDonor
    * @return List of DonorDeferrals, in chronological order
    */
   public List<DonorDeferral> getAllDeferralsToMerge(Donor newDonor, List<String> donorNumbers) {
