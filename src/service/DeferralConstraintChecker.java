@@ -20,23 +20,15 @@ public class DeferralConstraintChecker {
   public boolean canEditDonorDeferral(long donorDeferralId) throws NoResultException {
     DonorDeferral donorDeferral = donorDeferralRepository.findDonorDeferralById(donorDeferralId);
 
-    if (donorDeferral.getDeferralReason().getType().isAutomatedDeferral()) {
-      // not possible to delete an automatic deferral
-      return false;
-    }
+    return !donorDeferral.getDeferralReason().getType().isAutomatedDeferral();
 
-    return true;
   }
 
   public boolean canDeleteDonorDeferral(long donorDeferralId) throws NoResultException {
     DonorDeferral donorDeferral = donorDeferralRepository.findDonorDeferralById(donorDeferralId);
 
-    if (donorDeferral.getDeferralReason().getType().isAutomatedDeferral()) {
-      // not possible to delete and automatic deferral
-      return false;
-    }
+    return !donorDeferral.getDeferralReason().getType().isAutomatedDeferral();
 
-    return true;
   }
 
   public boolean canEndDonorDeferral(long donorDeferralId) throws NoResultException {
@@ -48,12 +40,8 @@ public class DeferralConstraintChecker {
     }
 
     Date today = new Date();
-    if (today.after(donorDeferral.getDeferredUntil())) {
-      // not possible to end a deferral that is already over
-      return false;
-    }
+    return !today.after(donorDeferral.getDeferredUntil());
 
-    return true;
   }
 
 }

@@ -311,7 +311,7 @@ public class DonorCommunicationsRepositoryTest {
       // Donor with ID=5 is set as deleted
       assertFalse(
               "Deleted Donor should not be included in the list of donor results.",
-              donor.getId() == 5 ? true : false);
+              donor.getId() == 5);
       assertFalse("Donors included in the list of donor results should not be marked as deleted.",
               donor.getIsDeleted());
     }
@@ -324,8 +324,7 @@ public class DonorCommunicationsRepositoryTest {
 
     for (Donor donor : donors) {
       // Donor with ID=6 is set as status merged
-      assertFalse("Merged Donor should not be included in the list of donor results.", donor.getId() == 6 ? true
-              : false);
+      assertFalse("Merged Donor should not be included in the list of donor results.", donor.getId() == 6);
       assertFalse("Donors included in the list of donor results should not be merged.",
               donor.getDonorStatus() == DonorStatus.MERGED);
     }

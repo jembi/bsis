@@ -66,27 +66,21 @@ public class TestBatchConstraintChecker {
    * @return true if the specified TestBatch can be deleted
    */
   public boolean canDeleteTestBatch(TestBatch testBatch) {
-    return testBatchHasResults(testBatch) == false;
+    return !testBatchHasResults(testBatch);
   }
 
   /**
    * A Test Batch can be reopened if it has been closed.
    */
   public boolean canReopenTestBatch(TestBatch testBatch) {
-    if (testBatch.getStatus() == TestBatchStatus.CLOSED) {
-      return true;
-    }
-    return false;
+    return testBatch.getStatus() == TestBatchStatus.CLOSED;
   }
 
   /**
    * A Test Batch can be edited if it is open
    */
   public boolean canEditTestBatch(TestBatch testBatch) {
-    if (testBatch.getStatus() != TestBatchStatus.CLOSED) {
-      return true;
-    }
-    return false;
+    return testBatch.getStatus() != TestBatchStatus.CLOSED;
   }
 
   /**

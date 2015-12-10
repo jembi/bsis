@@ -449,7 +449,7 @@ public class DonorController {
   private int getNumberOfDonations(List<Donation> donations) {
     int count = 0;
     for (Donation donation : donations) {
-      if (donation.getPackType().getCountAsDonation() == true)
+      if (donation.getPackType().getCountAsDonation())
         count = count + 1;
     }
     return count;

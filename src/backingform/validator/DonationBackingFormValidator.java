@@ -73,7 +73,7 @@ public class DonationBackingFormValidator implements Validator {
     if (venue == null) {
       errors.rejectValue("donation.venue", "venue.empty",
               "Venue is required.");
-    } else if (utilController.isVenue(venue.getId()) == false) {
+    } else if (!utilController.isVenue(venue.getId())) {
       errors.rejectValue("donation.venue", "venue.invalid",
               "Location is not a Venue.");
     }

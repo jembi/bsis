@@ -51,11 +51,8 @@ public class DonationConstraintChecker {
     }
 
     // Check for processed components
-    if (componentRepository.countChangedComponentsForDonation(donationId) > 0) {
-      return false;
-    }
+    return componentRepository.countChangedComponentsForDonation(donationId) <= 0;
 
-    return true;
   }
 
   public boolean canUpdateDonationFields(long donationId) {
@@ -66,11 +63,8 @@ public class DonationConstraintChecker {
     }
 
     // Check for processed components
-    if (componentRepository.countChangedComponentsForDonation(donationId) > 0) {
-      return false;
-    }
+    return componentRepository.countChangedComponentsForDonation(donationId) <= 0;
 
-    return true;
   }
 
   /**
@@ -94,12 +88,9 @@ public class DonationConstraintChecker {
       return true;
     }
 
-    if (donation.getBloodTypingMatchStatus() != BloodTypingMatchStatus.MATCH ||
-            donation.getBloodTypingStatus() != BloodTypingStatus.COMPLETE) {
-      return true;
-    }
+    return donation.getBloodTypingMatchStatus() != BloodTypingMatchStatus.MATCH ||
+            donation.getBloodTypingStatus() != BloodTypingStatus.COMPLETE;
 
-    return false;
   }
 
   /**

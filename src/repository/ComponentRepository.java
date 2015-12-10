@@ -327,10 +327,7 @@ public class ComponentRepository {
     query.setParameter("isDeleted", Boolean.FALSE);
     List<Component> components = query.setParameter("donationIdentificationNumber",
             donationIdentificationNumber).getResultList();
-    if (components != null && components.size() > 0) {
-      return true;
-    }
-    return false;
+    return components != null && components.size() > 0;
   }
 
   public void deleteAllComponents() {

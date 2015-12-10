@@ -46,10 +46,7 @@ public class DataType implements Serializable {
       return false;
     }
     DataType other = (DataType) object;
-    if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-      return false;
-    }
-    return true;
+    return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
   }
 
   @Override

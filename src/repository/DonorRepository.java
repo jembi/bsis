@@ -152,7 +152,7 @@ public class DonorRepository {
         }
       }
     }
-    if (looped == true) {
+    if (looped) {
       return null;
     }
     //return Arrays.asList(donorResults, totalResults);

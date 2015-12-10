@@ -51,7 +51,7 @@ public class DonationBatchBackingFormValidator implements Validator {
     if (venue.getId() == null) {
       errors.rejectValue("donationBatch.venue", "venue.empty",
               "Venue is required.");
-    } else if (utilController.isVenue(venue.getId()) == false) {
+    } else if (!utilController.isVenue(venue.getId())) {
       errors.rejectValue("donationBatch.venue", "venue.invalid",
               "Location is not a Venue.");
     } else if (form.getId() == null && utilController.findOpenDonationBatches(venueIds).size() > 0) {

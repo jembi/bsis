@@ -138,7 +138,7 @@ public class DonorRepositoryTest {
     donorRepository.saveDonor(donorBackingForm.getDonor());
     assertTrue(
             "Donor's Id should not zero. Once Donor object should persist,new Id is generated and assigned to Donor.",
-            donorBackingForm.getDonor().getId() == 0 ? false : true);
+            donorBackingForm.getDonor().getId() != 0);
   }
 
   @Test
@@ -152,7 +152,7 @@ public class DonorRepositoryTest {
             "Donor Object should not null.Donor Id is exist into Donor's table.",
             findDonor);
     assertTrue("Donor's id value should be 1.",
-            findDonor.getId() == 1 ? true : false);
+            findDonor.getId() == 1);
   }
 
 
@@ -287,11 +287,7 @@ public class DonorRepositoryTest {
             0, listDonors.size());
     boolean isValid = false;
     for (Donor donor : listDonors) {
-      if (donor.getLastName().startsWith("las")) {
-        isValid = true;
-      } else {
-        isValid = false;
-      }
+      isValid = donor.getLastName().startsWith("las");
     }
     assertTrue("Donor's Last Name should be start with 'las'.", isValid);
   }
@@ -317,7 +313,7 @@ public class DonorRepositoryTest {
       // 2 is deleted donor id
       assertFalse(
               "Donor's id 2 is deleted from database. so Deleted Donor should not included in the list.",
-              donor.getId() == 2 ? true : false);
+              donor.getId() == 2);
     }
   }
 
@@ -340,11 +336,7 @@ public class DonorRepositoryTest {
             pagingParams, false, donationIdentificationNumber);
     assertEquals("Should return a single Donor result", 1, donorList.size());
     boolean isValid = false;
-    if (donorList.get(0).getDonorNumber().equals("000001")) {
-      isValid = true;
-    } else {
-      isValid = false;
-    }
+    isValid = donorList.get(0).getDonorNumber().equals("000001");
     assertTrue("Donor with donation matching DIN returned", isValid);
   }
 
@@ -387,7 +379,7 @@ public class DonorRepositoryTest {
     donorRepository.addDonor(newDonor);
     assertTrue(
             "Donor's Id should not zero. Once Donor should persist,new Id is generated and assigned to Donor.",
-            newDonor.getId() == 0 ? false : true);
+            newDonor.getId() != 0);
   }
 
   @Test
@@ -678,7 +670,7 @@ public class DonorRepositoryTest {
     donorDeferral.setDeferredUntil(dateFormat.parse("2015-07-19"));
     donorDeferral.setDeferralReason(donorRepository.findDeferralReasonById("3"));
     donorRepository.deferDonor(donorDeferral);
-    assertTrue("DeferDonor object Should persist.", donorDeferral.getId() != 0 ? true : false);
+    assertTrue("DeferDonor object Should persist.", donorDeferral.getId() != 0);
   }
 
   @Test
@@ -693,7 +685,7 @@ public class DonorRepositoryTest {
     assertNotNull("DeferralReason's object should not null.",
             deferralReason);
     assertTrue("Deferral's Reason Id should be 1.",
-            deferralReason.getId() == 1 ? true : false);
+            deferralReason.getId() == 1);
 
   }
 
@@ -733,7 +725,7 @@ public class DonorRepositoryTest {
             0, listDonorDeferral.size());
     for (DonorDeferral donorDeferral : listDonorDeferral) {
       assertTrue("DonorDeferral's Donor Id should be 1.", donorDeferral
-              .getDeferredDonor().getId() == 1 ? true : false);
+              .getDeferredDonor().getId() == 1);
     }
 
   }

@@ -21,35 +21,23 @@ public class DonationBatchConstraintChecker {
   public boolean canDeleteDonationBatch(int donationBatchId) throws NoResultException {
     DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
 
-    if (donationBatch.getDonations() == null || donationBatch.getDonations().size() == 0) {
-      // can delete a donation batch if there are no donations in it
-      return true;
-    }
+    return donationBatch.getDonations() == null || donationBatch.getDonations().size() == 0;
 
-    return false;
   }
 
   public boolean canEditDonationBatch(int donationBatchId) throws NoResultException {
     DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
 
-    if (donationBatch.getIsClosed() || donationBatch.getIsDeleted()) {
-      // can't edit a donation batch if it is closed
-      return false;
-    }
+    return !(donationBatch.getIsClosed() || donationBatch.getIsDeleted());
 
-    return true;
   }
 
   public boolean canEditDonationBatchDate(int donationBatchId) throws NoResultException {
 
     DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
 
-    if (donationBatch.getDonations() != null && !donationBatch.getDonations().isEmpty()) {
-      // can't edit a donation batch's date if there are donations in it
-      return false;
-    }
+    return !(donationBatch.getDonations() != null && !donationBatch.getDonations().isEmpty());
 
-    return true;
   }
 
   public boolean canCloseDonationBatch(int donationBatchId) {
@@ -60,12 +48,8 @@ public class DonationBatchConstraintChecker {
       return false;
     }
 
-    if (donationBatch.getDonations() == null || donationBatch.getDonations().size() == 0) {
-      // if there are no donations then it shouldn't be closed it should be deleted
-      return false;
-    }
+    return !(donationBatch.getDonations() == null || donationBatch.getDonations().size() == 0);
 
-    return true;
   }
 
   public boolean canReopenDonationBatch(int donationBatchId) {
@@ -77,11 +61,7 @@ public class DonationBatchConstraintChecker {
     }
 
     TestBatch testBatch = donationBatch.getTestBatch();
-    if (testBatch != null) {
-      // can't re-open a donation batch if it has a test batch
-      return false;
-    }
+    return testBatch == null;
 
-    return true;
   }
 }

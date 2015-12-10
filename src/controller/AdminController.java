@@ -109,16 +109,16 @@ public class AdminController {
       String id = params.get("id");
       ff.setId(Long.parseLong(id));
 
-      Boolean hidden = params.get("hidden").equals("true") ? true : false;
+      Boolean hidden = params.get("hidden").equals("true");
       ff.setHidden(hidden);
 
-      Boolean isRequired = params.get("isRequired").equals("true") ? true : false;
+      Boolean isRequired = params.get("isRequired").equals("true");
       ff.setIsRequired(isRequired);
 
-      Boolean autoGenerate = params.get("autoGenerate").equals("true") ? true : false;
+      Boolean autoGenerate = params.get("autoGenerate").equals("true");
       ff.setAutoGenerate(autoGenerate);
 
-      Boolean useCurrentTime = params.get("useCurrentTime").equals("true") ? true : false;
+      Boolean useCurrentTime = params.get("useCurrentTime").equals("true");
       ff.setUseCurrentTime(useCurrentTime);
 
       String displayName = params.get("displayName").trim();

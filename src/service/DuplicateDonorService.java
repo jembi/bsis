@@ -284,17 +284,11 @@ public class DuplicateDonorService {
     if (!equals(donor1.getGender(), donor2.getGender())) {
       return false;
     }
-    if (!equals(donor1.getBirthDate(), donor2.getBirthDate())) {
-      return false;
-    }
-    return true;
+    return equals(donor1.getBirthDate(), donor2.getBirthDate());
   }
 
   private boolean equals(Gender gender1, Gender gender2) {
-    if ((gender1 == null && gender2 == null) || (gender1 != null && gender1.equals(gender2))) {
-      return true;
-    }
-    return false;
+    return (gender1 == null && gender2 == null) || (gender1 != null && gender1.equals(gender2));
   }
 
   private boolean equals(Date dob1, Date dob2) {

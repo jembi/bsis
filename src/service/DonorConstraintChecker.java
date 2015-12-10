@@ -38,11 +38,8 @@ public class DonorConstraintChecker {
       return false;
     }
 
-    if (donorDeferralRepository.countDonorDeferralsForDonor(donor) > 0) {
-      return false;
-    }
+    return donorDeferralRepository.countDonorDeferralsForDonor(donor) <= 0;
 
-    return true;
   }
 
   public boolean isDonorEligibleToDonate(long donorId) {
@@ -72,11 +69,8 @@ public class DonorConstraintChecker {
       }
     }
 
-    if (donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)) {
-      return false;
-    }
+    return !donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor);
 
-    return true;
   }
 
     public boolean isDonorDeferred(long donorId) {
