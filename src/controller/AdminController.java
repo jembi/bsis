@@ -159,7 +159,7 @@ public class AdminController {
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_FORMS + "')")
   public Map<String, Object> configureForms() {
     Map<String, Object> map = new HashMap<>();
-    map.put("model", map);
+//    map.put("model", map);
     return map;
   }
 

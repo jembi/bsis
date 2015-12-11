@@ -56,7 +56,7 @@ public class ReportsController {
     utilController.addTipsToModel(map, "report.inventory.generate");
     utilController.addTipsToModel(map, "report.inventory.componentinventorychart");
     map.put("venues", locationRepository.getAllVenues());
-    map.put("model", map);
+//    map.put("model", map);
     return map;
   }
 
@@ -114,7 +114,7 @@ public class ReportsController {
     Map<String, Object> map = new HashMap<>();
     utilController.addTipsToModel(map, "report.components.discardedcomponentsreport");
     map.put("venues", locationRepository.getAllVenues());
-    map.put("model", map);
+//    map.put("model", map);
     return map;
   }
 
