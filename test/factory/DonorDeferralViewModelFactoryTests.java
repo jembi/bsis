@@ -2,9 +2,9 @@ package factory;
 
 import helpers.builders.DonorBuilder;
 import helpers.builders.DonorDeferralBuilder;
-import junit.framework.Assert;
 import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

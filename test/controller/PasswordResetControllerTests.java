@@ -1,8 +1,9 @@
 package controller;
 
 import backingform.PasswordResetBackingForm;
-import junit.framework.Assert;
+
 import model.user.User;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -96,7 +96,7 @@ public class AdminController {
 
   @RequestMapping(value = "/formfieldchange", method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_FORMS + "')")
-  public Map<String, ? extends Object>
+  public Map<String, ?>
   configureFormFieldChange(@RequestParam Map<String, String> params) {
 
     boolean success = true;
@@ -165,7 +165,7 @@ public class AdminController {
 
   @RequestMapping(value = "/createsampledata", method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DATA_SETUP + "')")
-  public Map<String, ? extends Object> createSampleData(
+  public Map<String, ?> createSampleData(
           @RequestParam Map<String, String> params) {
 
     boolean success = true;

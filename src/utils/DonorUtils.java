@@ -27,7 +27,7 @@ public class DonorUtils {
 
     DateTime t1 = new DateTime(birthDateToUse);
     DateTime t2 = new DateTime(new Date());
-    return Years.yearsBetween(t1.toDateMidnight(), t2.toDateMidnight()).getYears();
+    return Years.yearsBetween(t1.withTimeAtStartOfDay(), t2.withTimeAtStartOfDay()).getYears();
   }
 
   public static Integer computeDonorAge(Date birthDate) {
@@ -37,7 +37,7 @@ public class DonorUtils {
     } else {
       DateTime t1 = new DateTime(birthDate);
       DateTime t2 = new DateTime(new Date());
-      return Years.yearsBetween(t1.toDateMidnight(), t2.toDateMidnight()).getYears();
+      return Years.yearsBetween(t1.withTimeAtStartOfDay(), t2.withTimeAtStartOfDay()).getYears();
     }
   }
 

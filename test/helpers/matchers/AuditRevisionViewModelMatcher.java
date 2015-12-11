@@ -1,7 +1,8 @@
 package helpers.matchers;
 
 import org.hamcrest.Description;
-import org.junit.internal.matchers.TypeSafeMatcher;
+
+import org.hamcrest.TypeSafeMatcher;
 import viewmodel.AuditRevisionViewModel;
 
 import java.util.Objects;

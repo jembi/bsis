@@ -238,7 +238,7 @@ public class DonorBackingForm {
       int age = Integer.parseInt(ageStr);
       DateTime dt = new DateTime(new Date());
       Calendar c = Calendar.getInstance();
-      c.setTime(dt.toDateMidnight().toDate());
+      c.setTime(dt.withTimeAtStartOfDay().toDate());
       c.set(Calendar.MONTH, Calendar.JANUARY);
       c.set(Calendar.DATE, 1);
       c.add(Calendar.YEAR, -age);
