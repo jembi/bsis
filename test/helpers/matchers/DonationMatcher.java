@@ -10,7 +10,7 @@ public class DonationMatcher extends TypeSafeMatcher<Donation> {
 
   private Donation expected;
 
-  public DonationMatcher(Donation expected) {
+  private DonationMatcher(Donation expected) {
     this.expected = expected;
   }
 

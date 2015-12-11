@@ -2,7 +2,7 @@ package backingform;
 
 import java.util.List;
 
-public class FindWorksheetBackingForm {
+class FindWorksheetBackingForm {
 
   private String worksheetNumber;
 

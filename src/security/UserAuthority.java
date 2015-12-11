@@ -3,7 +3,7 @@ package security;
 import model.user.Permission;
 import org.springframework.security.core.GrantedAuthority;
 
-public class UserAuthority implements GrantedAuthority {
+class UserAuthority implements GrantedAuthority {
 
   /**
    *

@@ -129,7 +129,7 @@ public class DonorCommunicationsController {
     m.put("bloodGroups", BloodGroup.getBloodgroups());
   }
 
-  public List<Location> setLocations(List<String> locations) {
+  private List<Location> setLocations(List<String> locations) {
 
     List<Location> venues = new ArrayList<>();
 
@@ -142,7 +142,7 @@ public class DonorCommunicationsController {
     return venues;
   }
 
-  public List<BloodGroup> setBloodGroups(List<String> bloodGroups) {
+  private List<BloodGroup> setBloodGroups(List<String> bloodGroups) {
     if (bloodGroups == null) {
       return Collections.emptyList();
     }

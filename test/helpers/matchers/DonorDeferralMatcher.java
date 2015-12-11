@@ -10,7 +10,7 @@ public class DonorDeferralMatcher extends TypeSafeMatcher<DonorDeferral> {
 
   private DonorDeferral expected;
 
-  public DonorDeferralMatcher(DonorDeferral expected) {
+  private DonorDeferralMatcher(DonorDeferral expected) {
     this.expected = expected;
   }
 

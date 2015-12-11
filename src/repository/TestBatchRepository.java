@@ -30,7 +30,7 @@ public class TestBatchRepository {
     return testBatch;
   }
 
-  public void updateDonationWithTestBatch(TestBatch testBatch) {
+  private void updateDonationWithTestBatch(TestBatch testBatch) {
 
     List<DonationBatch> donationBatches = testBatch.getDonationBatches();
     if (donationBatches != null && !donationBatches.isEmpty()) {

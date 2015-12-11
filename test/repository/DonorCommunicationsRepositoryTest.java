@@ -50,8 +50,8 @@ public class DonorCommunicationsRepositoryTest {
   DonorRepository donorRepository;
   @Autowired
   DonorCommunicationsRepository donorCommunicationsRepository;
-  ApplicationContext applicationContext = null;
-  UserDetailsService userDetailsService;
+  private ApplicationContext applicationContext = null;
+  private UserDetailsService userDetailsService;
   @Autowired
   private DataSource dataSource;
 

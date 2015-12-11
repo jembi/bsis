@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class DuplicateDonorsBackingForm extends DonorBackingForm {
 
-  List<String> duplicateDonorNumbers;
+  private List<String> duplicateDonorNumbers;
 
   public DuplicateDonorsBackingForm() {
     super();

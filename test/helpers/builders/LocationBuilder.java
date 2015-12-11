@@ -21,7 +21,7 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
     return this;
   }
 
-  public LocationBuilder thatIsVenue() {
+  private LocationBuilder thatIsVenue() {
     venue = true;
     return this;
   }

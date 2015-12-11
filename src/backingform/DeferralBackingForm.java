@@ -81,7 +81,7 @@ public class DeferralBackingForm {
     return deferredDonor.getId().toString();
   }
 
-  public void setDeferredDonor(String deferredDonorId) {
+  private void setDeferredDonor(String deferredDonorId) {
     if (deferredDonorId == null) {
       deferral.setDeferredDonor(null);
     } else {

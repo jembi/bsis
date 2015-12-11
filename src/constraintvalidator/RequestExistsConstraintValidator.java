@@ -9,7 +9,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 @Component
-public class RequestExistsConstraintValidator implements
+class RequestExistsConstraintValidator implements
         ConstraintValidator<RequestExists, Request> {
 
   @Autowired

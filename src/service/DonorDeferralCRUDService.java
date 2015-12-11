@@ -117,7 +117,7 @@ public class DonorDeferralCRUDService {
     return donorDeferralRepository.update(deferral);
   }
 
-  protected void appendComment(DonorDeferral deferral, String comment) {
+  void appendComment(DonorDeferral deferral, String comment) {
     if (StringUtils.isEmpty(deferral.getDeferralReasonText())) {
       deferral.setDeferralReasonText(comment);
     } else {

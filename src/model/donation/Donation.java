@@ -343,7 +343,7 @@ public class Donation implements ModificationTracker, Comparable<Donation> {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 
-  public Set<Worksheet> getWorksheets() {
+  private Set<Worksheet> getWorksheets() {
     return worksheets;
   }
 

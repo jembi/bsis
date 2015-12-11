@@ -11,7 +11,7 @@ public class AuditRevisionViewModelMatcher extends TypeSafeMatcher<AuditRevision
 
   private AuditRevisionViewModel expected;
 
-  public AuditRevisionViewModelMatcher(AuditRevisionViewModel expected) {
+  private AuditRevisionViewModelMatcher(AuditRevisionViewModel expected) {
     this.expected = expected;
   }
 

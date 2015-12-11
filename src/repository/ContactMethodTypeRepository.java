@@ -14,6 +14,7 @@ import java.util.List;
 public class ContactMethodTypeRepository {
 
   @PersistenceContext
+  private
   EntityManager em;
 
   public List<ContactMethodType> getAllContactMethodTypes() {

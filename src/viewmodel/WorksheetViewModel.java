@@ -9,7 +9,7 @@ import utils.CustomDateFormatter;
 import java.util.Date;
 import java.util.Set;
 
-public class WorksheetViewModel {
+class WorksheetViewModel {
 
   private Worksheet worksheet;
 

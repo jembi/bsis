@@ -24,7 +24,7 @@ import java.util.*;
 @Transactional
 public class RequestRepository {
 
-  public static final int ID_LENGTH = 12;
+  private static final int ID_LENGTH = 12;
 
   @PersistenceContext
   private EntityManager em;
@@ -41,7 +41,7 @@ public class RequestRepository {
     return uniqueRequestNumber;
   }
 
-  public void saveRequest(Request request) {
+  private void saveRequest(Request request) {
     em.persist(request);
     em.flush();
   }
@@ -526,7 +526,7 @@ public class RequestRepository {
     em.flush();
   }
 
-  public void updateNewRequestFields(Request request) {
+  private void updateNewRequestFields(Request request) {
     if (request.getNumUnitsIssued() == null)
       request.setNumUnitsIssued(0);
     if (request.getNumUnitsIssued() < request.getNumUnitsRequested())

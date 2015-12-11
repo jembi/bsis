@@ -121,7 +121,7 @@ public class UserRepository {
     return roles;
   }
 
-  public Role findRoleById(Long id) throws NoResultException, NonUniqueResultException {
+  private Role findRoleById(Long id) throws NoResultException, NonUniqueResultException {
     if (id == null)
       return null;
     String queryString = "SELECT r FROM Role r WHERE r.id = :roleId";

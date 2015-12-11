@@ -8,7 +8,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 @org.springframework.stereotype.Component
-public class ComponentExistsConstraintValidator implements
+class ComponentExistsConstraintValidator implements
         ConstraintValidator<ComponentExists, Component> {
 
   @Autowired

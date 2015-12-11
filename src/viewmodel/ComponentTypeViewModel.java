@@ -78,7 +78,7 @@ public class ComponentTypeViewModel {
   }
 
   @JsonIgnore
-  public List<ComponentTypeCombinationViewModel>
+  private List<ComponentTypeCombinationViewModel>
   getComponentTypeCombinationViewModels(List<ComponentTypeCombination> componentTypeCombinations) {
 
     List<ComponentTypeCombinationViewModel> componentTypeCombinationViewModels

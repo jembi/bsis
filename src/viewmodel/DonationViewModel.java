@@ -125,7 +125,7 @@ public class DonationViewModel {
     return donation.getDonationBatch().getBatchNumber();
   }
 
-  public String getBloodTypingStatus() {
+  private String getBloodTypingStatus() {
     if (donation.getBloodTypingStatus() == null)
       return "";
     return donation.getBloodTypingStatus().toString();
@@ -137,13 +137,13 @@ public class DonationViewModel {
     return donation.getBloodTypingMatchStatus().toString();
   }
 
-  public String getBloodAbo() {
+  private String getBloodAbo() {
     if (donation.getBloodAbo() == null)
       return "";
     return donation.getBloodAbo();
   }
 
-  public String getBloodRh() {
+  private String getBloodRh() {
     if (donation.getBloodRh() == null)
       return "";
     return donation.getBloodRh();

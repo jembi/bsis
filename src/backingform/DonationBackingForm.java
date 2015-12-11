@@ -28,7 +28,7 @@ import java.util.Objects;
 
 public class DonationBackingForm {
 
-  public static final int ID_LENGTH = 12;
+  private static final int ID_LENGTH = 12;
 
   @NotNull
   @Valid

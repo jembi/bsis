@@ -33,7 +33,7 @@ public class FileUploadUtils {
    * @param imageRootDirectory the image root directory
    * @return the image root directory
    */
-  public static StringBuilder getRootDirectory(String imageRootDirectory) {
+  private static StringBuilder getRootDirectory(String imageRootDirectory) {
     File rootDir = new File(imageRootDirectory);
     mkdirs(rootDir);
     StringBuilder dirStructure = new StringBuilder(imageRootDirectory);
@@ -46,7 +46,7 @@ public class FileUploadUtils {
    *
    * @param dir the dir
    */
-  public static void mkdirs(File dir) {
+  private static void mkdirs(File dir) {
     if (dir == null) {
       return;
     }
@@ -67,8 +67,8 @@ public class FileUploadUtils {
    * @param interval       the interval
    * @param errorMsg       the error msg
    */
-  public static void validateAndWait(AtomicInteger remainingTries,
-                                     long interval, String errorMsg) {
+  private static void validateAndWait(AtomicInteger remainingTries,
+                                      long interval, String errorMsg) {
     if (remainingTries.decrementAndGet() <= 0) {
       LOGGER.error(errorMsg);
     }
@@ -96,7 +96,7 @@ public class FileUploadUtils {
    *
    * @return current date in YearMonthDateHoursMinuteSecond format
    */
-  public static String getCurrentDateAsString() {
+  private static String getCurrentDateAsString() {
     Date currentDate = new Date();
     SimpleDateFormat ft = new SimpleDateFormat("yyyyMMddhhmmss");
     return ft.format(currentDate);

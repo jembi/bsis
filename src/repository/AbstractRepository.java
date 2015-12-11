@@ -10,7 +10,7 @@ import javax.persistence.PersistenceContext;
 public abstract class AbstractRepository<T> {
 
   @PersistenceContext
-  protected EntityManager entityManager;
+  EntityManager entityManager;
 
   @Transactional(propagation = Propagation.MANDATORY)
   public void save(T entity) {

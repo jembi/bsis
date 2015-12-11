@@ -18,7 +18,7 @@ public class Indicator {
   private List<Cohort> cohorts;
 
   @JsonSerialize(using = DateTimeSerialiser.class)
-  public Date getStartDate() {
+  private Date getStartDate() {
     return startDate;
   }
 
@@ -27,7 +27,7 @@ public class Indicator {
   }
 
   @JsonSerialize(using = DateTimeSerialiser.class)
-  public Date getEndDate() {
+  private Date getEndDate() {
     return endDate;
   }
 
@@ -35,7 +35,7 @@ public class Indicator {
     this.endDate = endDate;
   }
 
-  public Object getValue() {
+  private Object getValue() {
     return value;
   }
 
@@ -43,7 +43,7 @@ public class Indicator {
     this.value = value;
   }
 
-  public Location getVenue() {
+  private Location getVenue() {
     return venue;
   }
 
@@ -51,7 +51,7 @@ public class Indicator {
     this.venue = venue;
   }
 
-  public List<Cohort> getCohorts() {
+  private List<Cohort> getCohorts() {
     return cohorts;
   }
 

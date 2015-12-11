@@ -24,7 +24,7 @@ public class ComponentViewModel {
     this.component = component;
   }
 
-  public Component getComponent() {
+  private Component getComponent() {
     return component;
   }
 

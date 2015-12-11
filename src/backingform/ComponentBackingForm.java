@@ -203,7 +203,7 @@ public class ComponentBackingForm {
     return component;
   }
 
-  public void setComponent(Component component) {
+  private void setComponent(Component component) {
     this.component = component;
   }
 

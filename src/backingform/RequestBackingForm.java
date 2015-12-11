@@ -168,7 +168,7 @@ public class RequestBackingForm {
     return request;
   }
 
-  public void setRequest(Request request) {
+  private void setRequest(Request request) {
     this.request = request;
   }
 

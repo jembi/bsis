@@ -18,10 +18,9 @@ import java.util.Map;
 //import com.mysql.jdbc.Security;
 
 @Component
-
 public class EntitySaveListener implements PersistEventListener, MergeEventListener, PreInsertEventListener {
 
-  static final Logger logger = LoggerFactory
+  private static final Logger logger = LoggerFactory
           .getLogger(EntitySaveListener.class);
   private static final long serialVersionUID = 1L;
   @Autowired

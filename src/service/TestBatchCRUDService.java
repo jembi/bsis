@@ -80,7 +80,7 @@ public class TestBatchCRUDService {
     testBatchRepository.deleteTestBatch(testBatchId);
   }
 
-  protected TestBatch changeTestBatchStatus(TestBatch testBatch, TestBatchStatus newStatus) {
+  TestBatch changeTestBatchStatus(TestBatch testBatch, TestBatchStatus newStatus) {
     LOGGER.info("Updating status of test batch " + testBatch.getId() + " to " + newStatus);
 
     TestBatchStatus oldStatus = testBatch.getStatus();

@@ -42,6 +42,7 @@ public class BloodTestingRepository {
           .getLogger(BloodTestingRepository.class);
 
   @PersistenceContext
+  private
   EntityManager em;
 
   @Autowired
@@ -88,7 +89,7 @@ public class BloodTestingRepository {
     return getBloodTestsOfTypes(Arrays.asList(type));
   }
 
-  public List<BloodTest> getBloodTestsOfTypes(List<BloodTestType> types) {
+  private List<BloodTest> getBloodTestsOfTypes(List<BloodTestType> types) {
     String queryStr = "SELECT b FROM BloodTest b WHERE "
             + "b.bloodTestType IN (:types) AND " + "b.isActive=:isActive";
     TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
@@ -186,7 +187,7 @@ public class BloodTestingRepository {
     return results;
   }
 
-  public Map<Long, String> validateTestResultValues(Long donationId, Map<Long, String> bloodTypingTestResults) {
+  private Map<Long, String> validateTestResultValues(Long donationId, Map<Long, String> bloodTypingTestResults) {
 
     /**
      * Build a map of active blood test ids to the active blood tests.
@@ -260,7 +261,7 @@ public class BloodTestingRepository {
     applicationContext.publishEvent(bloodTestsUpdatedEvent);
   }
 
-  public Map<Long, Map<Long, String>> validateTestResultValues(
+  private Map<Long, Map<Long, String>> validateTestResultValues(
           Map<Long, Map<Long, String>> bloodTypingTestResults) {
 
     Map<String, BloodTest> allBloodTestsMap = new HashMap<>();
@@ -300,7 +301,7 @@ public class BloodTestingRepository {
     return !StringUtils.isBlank(result) && test.getValidResultsList().contains(result);
   }
 
-  public List<BloodTest> findActiveBloodTests() {
+  private List<BloodTest> findActiveBloodTests() {
 
     return em.createQuery(
             "SELECT b " +

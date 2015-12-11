@@ -1,6 +1,6 @@
 package tasks;
 
-public class GeneralConfigFile {
+class GeneralConfigFile {
 
 
   private String value;

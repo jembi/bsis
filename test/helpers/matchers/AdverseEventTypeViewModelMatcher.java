@@ -10,7 +10,7 @@ public class AdverseEventTypeViewModelMatcher extends TypeSafeMatcher<AdverseEve
 
   private AdverseEventTypeViewModel expected;
 
-  public AdverseEventTypeViewModelMatcher(AdverseEventTypeViewModel expected) {
+  private AdverseEventTypeViewModelMatcher(AdverseEventTypeViewModel expected) {
     this.expected = expected;
   }
 

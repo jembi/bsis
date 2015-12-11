@@ -63,7 +63,7 @@ public class BloodTypingController {
     return map;
   }
 
-  public List<BloodTestViewModel> getBasicBloodTypingTests() {
+  private List<BloodTestViewModel> getBasicBloodTypingTests() {
     List<BloodTestViewModel> tests = new ArrayList<>();
     for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
       tests.add(new BloodTestViewModel(rawBloodTest));
@@ -71,7 +71,7 @@ public class BloodTypingController {
     return tests;
   }
 
-  public List<BloodTestViewModel> getAdvancedBloodTypingTests() {
+  private List<BloodTestViewModel> getAdvancedBloodTypingTests() {
     List<BloodTestViewModel> tests = new ArrayList<>();
     for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.ADVANCED_BLOODTYPING)) {
       tests.add(new BloodTestViewModel(rawBloodTest));

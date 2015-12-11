@@ -14,22 +14,22 @@ import java.sql.DriverManager;
  * use this class, edit the constants at the top to include the tables you wish to export and
  * provide the access details for the database that will be mined.
  */
-public class DBUnitDatasetGenerator {
+class DBUnitDatasetGenerator {
 
   /* names of the tables that should be exported */
-  static final String[] TABLE_NAMES = {"BloodTestingRule", "BloodTest"};
+  private static final String[] TABLE_NAMES = {"BloodTestingRule", "BloodTest"};
 
   /* the name of the output dataset XML file */
-  static final String OUTPUT_FILENAME = "test/dataset/dataset.xml";
+  private static final String OUTPUT_FILENAME = "test/dataset/dataset.xml";
 
   /* your database access details */
-  static final String DATABASE_USER = "root";
+  private static final String DATABASE_USER = "root";
 
-  static final String DATABASE_PWD = "root";
+  private static final String DATABASE_PWD = "root";
 
-  static final String DATABASE_URL = "jdbc:mysql://localhost:3306/bsis";
+  private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/bsis";
 
-  static final String DATABASE_DRIVER = "com.mysql.jdbc.Driver";
+  private static final String DATABASE_DRIVER = "com.mysql.jdbc.Driver";
 
   public static void main(String[] args) throws Exception {
     // database connection

@@ -60,10 +60,10 @@ public class DonorRepositoryTest {
 
   @Autowired
   DonorRepository donorRepository;
-  String donorBirthdate = null;
-  ApplicationContext applicationContext = null;
-  UserDetailsService userDetailsService;
-  DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+  private String donorBirthdate = null;
+  private ApplicationContext applicationContext = null;
+  private UserDetailsService userDetailsService;
+  private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
   @Autowired
   private UtilController utilController;
   private DonorBackingForm donorBackingForm;

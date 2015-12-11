@@ -1,6 +1,6 @@
 package utils;
 
-public class RoleConstants {
+class RoleConstants {
 
   public static final String ADMIN = "Admin";
   public static final String SUPER_USER = "Super User";

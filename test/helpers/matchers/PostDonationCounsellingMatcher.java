@@ -10,7 +10,7 @@ public class PostDonationCounsellingMatcher extends TypeSafeMatcher<PostDonation
 
   private PostDonationCounselling expected;
 
-  public PostDonationCounsellingMatcher(PostDonationCounselling expected) {
+  private PostDonationCounsellingMatcher(PostDonationCounselling expected) {
     this.expected = expected;
   }
 

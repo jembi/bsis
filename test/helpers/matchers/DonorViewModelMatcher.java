@@ -10,7 +10,7 @@ public class DonorViewModelMatcher extends TypeSafeMatcher<DonorViewModel> {
 
   private DonorViewModel expected;
 
-  public DonorViewModelMatcher(DonorViewModel expected) {
+  private DonorViewModelMatcher(DonorViewModel expected) {
     this.expected = expected;
   }
 

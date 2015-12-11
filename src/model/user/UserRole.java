@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class UserRole {
+class UserRole {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)

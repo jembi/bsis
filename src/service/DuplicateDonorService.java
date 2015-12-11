@@ -128,7 +128,7 @@ public class DuplicateDonorService {
     return combinedDonations;
   }
 
-  protected List<Donation> combineDonations(List<Donor> donors) {
+  List<Donation> combineDonations(List<Donor> donors) {
     List<Donation> combinedDonations = new ArrayList<>();
     if (donors != null) {
       for (Donor donor : donors) {
@@ -145,7 +145,7 @@ public class DuplicateDonorService {
     return combinedDonations;
   }
 
-  protected List<Donation> sortDonationsByDate(List<Donation> combinedDonations) {
+  List<Donation> sortDonationsByDate(List<Donation> combinedDonations) {
     // sort donations in chronological order
     Collections.sort(combinedDonations, new Comparator<Donation>() {
 
@@ -157,7 +157,7 @@ public class DuplicateDonorService {
     return combinedDonations;
   }
 
-  protected void executeTestsAndUpdate(Donor newDonor, List<Donation> combinedDonations) {
+  private void executeTestsAndUpdate(Donor newDonor, List<Donation> combinedDonations) {
     for (Donation donation : combinedDonations) {
       // analyse the Blood Tests
       BloodTestingRuleResult ruleResult = bloodTestsService.executeTests(donation);
@@ -183,7 +183,7 @@ public class DuplicateDonorService {
     return combineDeferralsAndSortByDate(donors);
   }
 
-  protected List<DonorDeferral> combineDeferralsAndSortByDate(List<Donor> donors) {
+  List<DonorDeferral> combineDeferralsAndSortByDate(List<Donor> donors) {
     List<DonorDeferral> combinedDeferrals = new ArrayList<>();
     if (donors != null) {
       for (Donor donor : donors) {

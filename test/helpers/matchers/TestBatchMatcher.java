@@ -10,7 +10,7 @@ public class TestBatchMatcher extends TypeSafeMatcher<TestBatch> {
 
   private TestBatch expected;
 
-  public TestBatchMatcher(TestBatch expected) {
+  private TestBatchMatcher(TestBatch expected) {
     this.expected = expected;
   }
 

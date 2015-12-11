@@ -19,7 +19,7 @@ public class TipsRepository {
   public TipsRepository() {
   }
 
-  public Tips findTipsByKey(String key) {
+  private Tips findTipsByKey(String key) {
     return em.find(Tips.class, key);
   }
 

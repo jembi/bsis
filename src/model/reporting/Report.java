@@ -14,7 +14,7 @@ public class Report {
   private List<Indicator> indicators;
 
   @JsonSerialize(using = DateTimeSerialiser.class)
-  public Date getStartDate() {
+  private Date getStartDate() {
     return startDate;
   }
 
@@ -23,7 +23,7 @@ public class Report {
   }
 
   @JsonSerialize(using = DateTimeSerialiser.class)
-  public Date getEndDate() {
+  private Date getEndDate() {
     return endDate;
   }
 
@@ -31,7 +31,7 @@ public class Report {
     this.endDate = endDate;
   }
 
-  public List<Indicator> getIndicators() {
+  private List<Indicator> getIndicators() {
     return indicators;
   }
 

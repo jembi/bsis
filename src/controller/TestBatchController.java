@@ -139,11 +139,11 @@ public class TestBatchController {
   }
 
 
-  public String getNextTestBatchNumber() {
+  private String getNextTestBatchNumber() {
     return sequenceNumberRepository.getNextTestBatchNumber();
   }
 
-  public List<DonationBatchViewModel> getDonationBatchViewModels(
+  private List<DonationBatchViewModel> getDonationBatchViewModels(
           List<DonationBatch> donationBatches) {
     if (donationBatches == null)
       return Arrays.asList(new DonationBatchViewModel[0]);

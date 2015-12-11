@@ -10,7 +10,7 @@ public class AdverseEventTypeMatcher extends TypeSafeMatcher<AdverseEventType> {
 
   private AdverseEventType expected;
 
-  public AdverseEventTypeMatcher(AdverseEventType expected) {
+  private AdverseEventTypeMatcher(AdverseEventType expected) {
     this.expected = expected;
   }
 

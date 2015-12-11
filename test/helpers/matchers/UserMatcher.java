@@ -9,7 +9,7 @@ public class UserMatcher extends ArgumentMatcher<User> {
 
   private User expected;
 
-  public UserMatcher(User expected) {
+  private UserMatcher(User expected) {
     this.expected = expected;
   }
 

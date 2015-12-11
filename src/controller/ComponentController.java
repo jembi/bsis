@@ -81,7 +81,7 @@ public class ComponentController {
     return reqUrl;
   }
 
-  public static List<ComponentStatusChangeViewModel> getComponentStatusChangeViewModels(List<ComponentStatusChange> componentStatusChanges) {
+  private static List<ComponentStatusChangeViewModel> getComponentStatusChangeViewModels(List<ComponentStatusChange> componentStatusChanges) {
     if (componentStatusChanges == null)
       return Arrays.asList(new ComponentStatusChangeViewModel[0]);
     List<ComponentStatusChangeViewModel> componentStatusChangeViewModels = new ArrayList<>();
@@ -102,7 +102,7 @@ public class ComponentController {
     return componentViewModels;
   }
 
-  public static List<ComponentTypeViewModel> getComponentTypeViewModels(
+  private static List<ComponentTypeViewModel> getComponentTypeViewModels(
           List<ComponentType> componentTypes) {
     if (componentTypes == null)
       return Arrays.asList(new ComponentTypeViewModel[0]);
@@ -131,7 +131,7 @@ public class ComponentController {
     return reqUrl;
   }
 
-  public static String getNextPageUrlForNewRecordComponent(HttpServletRequest req, String qString) {
+  private static String getNextPageUrlForNewRecordComponent(HttpServletRequest req, String qString) {
     String reqUrl = "";
     if (req.getRequestURI().contains("recordnewcomponents")) {
       reqUrl = req.getRequestURL().toString().replaceFirst("recordNewComponents.html", "findComponentByPackNumberPagination.html");
@@ -637,7 +637,7 @@ public class ComponentController {
     return componentStatusList;
   }
 
-  public List<ComponentTypeCombinationViewModel>
+  private List<ComponentTypeCombinationViewModel>
   getComponentTypeCombinationViewModels(List<ComponentTypeCombination> componentTypeCombinations) {
     List<ComponentTypeCombinationViewModel> componentTypeCombinationViewModels
             = new ArrayList<>();

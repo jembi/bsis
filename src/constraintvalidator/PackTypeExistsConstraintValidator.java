@@ -9,7 +9,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 @Component
-public class PackTypeExistsConstraintValidator implements
+class PackTypeExistsConstraintValidator implements
         ConstraintValidator<PackTypeExists, PackType> {
 
   @Autowired

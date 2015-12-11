@@ -37,6 +37,7 @@ public class DonationBatchCRUDServiceTest {
   DonationBatchRepository donationBatchRepository;
 
   @PersistenceContext
+  private
   EntityManager entityManager;
 
   @Test

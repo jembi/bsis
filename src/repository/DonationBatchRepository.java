@@ -16,12 +16,13 @@ import java.util.List;
 public class DonationBatchRepository {
 
   @PersistenceContext
+  private
   EntityManager em;
 
   public DonationBatchRepository() {
   }
 
-  public DonationBatch findDonationBatchByIdEager(Integer batchId) {
+  private DonationBatch findDonationBatchByIdEager(Integer batchId) {
     String queryString = "SELECT distinct b FROM DonationBatch b LEFT JOIN FETCH b.donations LEFT JOIN FETCH b.venue " +
             "WHERE b.id = :batchId and b.isDeleted = :isDeleted";
     TypedQuery<DonationBatch> query = em.createQuery(queryString, DonationBatch.class);

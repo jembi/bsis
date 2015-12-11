@@ -23,7 +23,7 @@ import java.util.Map;
 public class ComponentCombinationBackingForm {
 
   public static final int ID_LENGTH = 12;
-  Map<String, String> expiresOnByComponentTypeId;
+  private Map<String, String> expiresOnByComponentTypeId;
   @NotNull
   @Valid
   @JsonIgnore
@@ -181,7 +181,7 @@ public class ComponentCombinationBackingForm {
     return component;
   }
 
-  public void setComponent(Component component) {
+  private void setComponent(Component component) {
     this.component = component;
   }
 

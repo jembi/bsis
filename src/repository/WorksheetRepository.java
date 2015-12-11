@@ -28,7 +28,7 @@ public class WorksheetRepository {
     return worksheet;
   }
 
-  public Worksheet findWorksheetById(Long worksheetId) {
+  private Worksheet findWorksheetById(Long worksheetId) {
     String queryStr = "SELECT w from Worksheet w WHERE " +
             "w.id=:worksheetId AND w.isDeleted=:isDeleted";
     TypedQuery<Worksheet> query = em.createQuery(queryStr, Worksheet.class);

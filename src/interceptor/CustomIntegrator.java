@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  */
 public class CustomIntegrator implements Integrator {
 
-  static final Logger logger = LoggerFactory.getLogger(CustomIntegrator.class);
+  private static final Logger logger = LoggerFactory.getLogger(CustomIntegrator.class);
 
   @SuppressWarnings("unchecked")
   @Override

@@ -274,7 +274,7 @@ public class CreateDataController {
           "West", "Wheeler", "White", "Wilkerson", "Wilkins", "Williams",
           "Williamson", "Willis", "Wilson", "Wise", "Wolfe", "Wong", "Wood",
           "Woods", "Wright", "Yates", "Young", "Zimmerman"};
-  Random random = new Random();
+  private Random random = new Random();
   @Autowired
   private DonorRepository donorRepository;
   @Autowired

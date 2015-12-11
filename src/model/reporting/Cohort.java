@@ -8,7 +8,7 @@ public class Cohort {
   private Object option;
   private Comparator comparator;
 
-  public String getCategory() {
+  private String getCategory() {
     return category;
   }
 
@@ -16,7 +16,7 @@ public class Cohort {
     this.category = category;
   }
 
-  public Object getOption() {
+  private Object getOption() {
     return option;
   }
 
@@ -24,7 +24,7 @@ public class Cohort {
     this.option = option;
   }
 
-  public Comparator getComparator() {
+  private Comparator getComparator() {
     return comparator;
   }
 

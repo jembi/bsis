@@ -2,7 +2,7 @@ package viewmodel;
 
 import org.hibernate.envers.RevisionType;
 
-public class EntityModificationViewModel {
+class EntityModificationViewModel {
 
   private int id;
   private RevisionType revisionType;

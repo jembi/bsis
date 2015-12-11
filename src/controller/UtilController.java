@@ -126,7 +126,7 @@ public class UtilController {
     checkFieldLengths(form, formName, errors);
   }
 
-  public void checkFieldLengths(Object form, String formName, Errors errors) {
+  private void checkFieldLengths(Object form, String formName, Errors errors) {
     try {
       @SuppressWarnings("unchecked")
       Map<String, Object> properties = BeanUtils.describe(form);
@@ -162,7 +162,7 @@ public class UtilController {
     return formFieldRepository.getFieldMaxLengths(formName);
   }
 
-  public void checkRequiredFields(Object form, String formName, Errors errors) {
+  private void checkRequiredFields(Object form, String formName, Errors errors) {
     try {
       @SuppressWarnings("unchecked")
       Map<String, Object> properties = BeanUtils.describe(form);

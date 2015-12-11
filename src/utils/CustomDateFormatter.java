@@ -39,7 +39,7 @@ public class CustomDateFormatter {
     return date;
   }
 
-  public static boolean isDateEmpty(String dateString) {
+  private static boolean isDateEmpty(String dateString) {
     return (dateString == null || dateString.trim().isEmpty());
   }
 
@@ -104,12 +104,12 @@ public class CustomDateFormatter {
       return getISO8601StringForDate(date);
   }
 
-  public static String getDatePattern() {
+  private static String getDatePattern() {
     String datePattern = "yyyy-MM-dd";
     return datePattern;
   }
 
-  public static String getDateTimePattern() {
+  private static String getDateTimePattern() {
     return dateTimePattern;
   }
 

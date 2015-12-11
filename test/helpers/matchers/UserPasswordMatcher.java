@@ -9,7 +9,7 @@ public class UserPasswordMatcher extends ArgumentMatcher<User> {
 
   private String expectedPassword;
 
-  public UserPasswordMatcher(String expected) {
+  private UserPasswordMatcher(String expected) {
     this.expectedPassword = expected;
   }
 

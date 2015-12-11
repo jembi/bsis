@@ -54,7 +54,7 @@ public class ComponentTypeCombination {
     this.componentTypes = componentTypes;
   }
 
-  public Set<ComponentType> getSourceComponentTypes() {
+  private Set<ComponentType> getSourceComponentTypes() {
     return sourceComponentTypes;
   }
 

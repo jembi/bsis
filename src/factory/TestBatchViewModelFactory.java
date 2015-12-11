@@ -56,7 +56,7 @@ public class TestBatchViewModelFactory {
     return testBatchViewModel;
   }
 
-  public TestBatchViewModel createTestBatchViewModelWithoutPermissions(TestBatch testBatch, boolean isTestingSupervisor) {
+  private TestBatchViewModel createTestBatchViewModelWithoutPermissions(TestBatch testBatch, boolean isTestingSupervisor) {
     TestBatchViewModel testBatchViewModel = new TestBatchViewModel();
     testBatchViewModel.setId(testBatch.getId());
     testBatchViewModel.setStatus(testBatch.getStatus());

@@ -12,7 +12,7 @@ abstract class AbstractApplicationEvent extends ApplicationEvent {
    */
   private static final long serialVersionUID = 1L;
   private String eventId;
-  protected Object eventContext;
+  private Object eventContext;
 
   AbstractApplicationEvent(String eventId, Object eventContext) {
     super(eventId);

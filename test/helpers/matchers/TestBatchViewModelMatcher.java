@@ -10,7 +10,7 @@ public class TestBatchViewModelMatcher extends TypeSafeMatcher<TestBatchViewMode
 
   private TestBatchViewModel expected;
 
-  public TestBatchViewModelMatcher(TestBatchViewModel expected) {
+  private TestBatchViewModelMatcher(TestBatchViewModel expected) {
     this.expected = expected;
   }
 

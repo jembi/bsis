@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @author srikanth
  */
 @Entity
-public class IdNumber implements Serializable {
+class IdNumber implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)

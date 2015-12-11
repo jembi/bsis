@@ -110,7 +110,7 @@ public class FormField {
     return displayName;
   }
 
-  public String getDefaultDisplayName() {
+  private String getDefaultDisplayName() {
     return defaultDisplayName;
   }
 

@@ -118,7 +118,7 @@ public class TestBatchConstraintChecker {
     return true;
   }
 
-  protected boolean testBatchHasResults(TestBatch testBatch) {
+  private boolean testBatchHasResults(TestBatch testBatch) {
     if (testBatch.getDonationBatches() != null) {
       for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
         for (Donation donation : donationBatch.getDonations()) {

@@ -10,7 +10,7 @@ import model.donordeferral.DeferralReason;
 import model.location.Location;
 import model.packtype.PackType;
 
-public class EntityPersisterFactory {
+class EntityPersisterFactory {
 
   public static AbstractEntityPersister<Donor> aDonorPersister() {
     return new DonorBuilder().getPersister();

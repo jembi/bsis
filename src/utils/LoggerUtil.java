@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 public class LoggerUtil {
-  static final Logger logger = Logger.getLogger("bsis");
+  private static final Logger logger = Logger.getLogger("bsis");
 
   static {
     // PropertyConfigurator.configure("classes/log4j.properties");

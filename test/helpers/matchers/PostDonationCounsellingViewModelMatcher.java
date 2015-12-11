@@ -11,7 +11,7 @@ public class PostDonationCounsellingViewModelMatcher extends TypeSafeMatcher<Pos
 
   private PostDonationCounsellingViewModel expected;
 
-  public PostDonationCounsellingViewModelMatcher(PostDonationCounsellingViewModel expected) {
+  private PostDonationCounsellingViewModelMatcher(PostDonationCounsellingViewModel expected) {
     this.expected = expected;
   }
 

@@ -7,7 +7,7 @@ import org.dbunit.dataset.datatype.DefaultDataTypeFactory;
 /**
  * @author devarshi.pandya
  */
-public class HsqldbMappingFile extends DefaultDataTypeFactory {
+class HsqldbMappingFile extends DefaultDataTypeFactory {
 
   public HsqldbMappingFile() {
     System.out.println("HsqldbMappingFile()..............................");

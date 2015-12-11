@@ -9,7 +9,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 @Component
-public class LocationExistsConstraintValidator implements
+class LocationExistsConstraintValidator implements
         ConstraintValidator<LocationExists, Location> {
 
   @Autowired

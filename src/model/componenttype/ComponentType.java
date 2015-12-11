@@ -163,7 +163,7 @@ public class ComponentType {
     return expiresAfter * factor;
   }
 
-  public List<ComponentTypeCombination> getComponentTypeCombinations() {
+  private List<ComponentTypeCombination> getComponentTypeCombinations() {
     return componentTypeCombinations;
   }
 

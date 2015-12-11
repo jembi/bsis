@@ -10,7 +10,7 @@ public class AdverseEventTypeBackingFormMatcher extends TypeSafeMatcher<AdverseE
 
   private AdverseEventTypeBackingForm expected;
 
-  public AdverseEventTypeBackingFormMatcher(AdverseEventTypeBackingForm expected) {
+  private AdverseEventTypeBackingFormMatcher(AdverseEventTypeBackingForm expected) {
     this.expected = expected;
   }
 

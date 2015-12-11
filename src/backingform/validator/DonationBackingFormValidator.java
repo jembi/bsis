@@ -88,7 +88,7 @@ public class DonationBackingFormValidator implements Validator {
     utilController.commonFieldChecks(form, "donation", errors);
   }
 
-  public void validateBleedTimes(Date bleedStartTime, Date bleedEndTime, Errors errors) {
+  private void validateBleedTimes(Date bleedStartTime, Date bleedEndTime, Errors errors) {
     if (bleedStartTime == null) {
       errors.rejectValue("donation.bleedStartTime", "bleedStartTime.empty", "This is required");
       return;

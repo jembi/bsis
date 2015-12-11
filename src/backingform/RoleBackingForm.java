@@ -72,7 +72,7 @@ public class RoleBackingForm {
     return role;
   }
 
-  public void setRole(Role role) {
+  private void setRole(Role role) {
     this.role = role;
   }
 

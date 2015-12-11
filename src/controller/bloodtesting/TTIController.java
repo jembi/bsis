@@ -87,7 +87,7 @@ public class TTIController {
     return map;
   }
 
-  public List<BloodTestViewModel> getBasicTTITests() {
+  private List<BloodTestViewModel> getBasicTTITests() {
     List<BloodTestViewModel> tests = new ArrayList<>();
     for (BloodTest rawBloodTest : bloodTestingRepository
             .getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
@@ -96,7 +96,7 @@ public class TTIController {
     return tests;
   }
 
-  public List<BloodTestViewModel> getConfirmatoryTTITests() {
+  private List<BloodTestViewModel> getConfirmatoryTTITests() {
     List<BloodTestViewModel> tests = new ArrayList<>();
     for (BloodTest rawBloodTest : bloodTestingRepository
             .getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {

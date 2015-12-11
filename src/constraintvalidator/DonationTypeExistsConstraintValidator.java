@@ -9,7 +9,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 @Component
-public class DonationTypeExistsConstraintValidator implements
+class DonationTypeExistsConstraintValidator implements
         ConstraintValidator<DonationTypeExists, DonationType> {
 
   @Autowired
