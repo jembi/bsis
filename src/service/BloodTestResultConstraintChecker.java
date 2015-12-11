@@ -49,9 +49,13 @@ public class BloodTestResultConstraintChecker {
         return true;
       }
     } else if (BloodTestCategory.TTI.equals(bloodTestResult.getBloodTest().getCategory())) {
-      // return quickly if the status is not done
-      return bloodTestingRuleResultSet.getTtiStatus().equals(TTIStatus.NOT_DONE) || !isResultConfirmed(bloodTestingRuleResultSet, bloodTestResult);
-// check the pending tests for rule associated with the blood test
+      if (bloodTestingRuleResultSet.getTtiStatus().equals(TTIStatus.NOT_DONE)) {
+        // return quickly if the status is not done
+        return true;
+      } else {
+        // check the pending tests for rule associated with the blood test
+        return !isResultConfirmed(bloodTestingRuleResultSet, bloodTestResult);
+      }
     }
     return true;
   }
