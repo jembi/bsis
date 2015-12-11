@@ -7,6 +7,7 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 public class LocationBackingFormValidator implements Validator {
 
@@ -22,7 +23,7 @@ public class LocationBackingFormValidator implements Validator {
 
   @Override
   public boolean supports(Class<?> clazz) {
-    return Arrays.asList(LocationBackingForm.class).contains(clazz);
+    return Collections.singletonList(LocationBackingForm.class).contains(clazz);
   }
 
   @Override

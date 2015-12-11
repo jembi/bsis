@@ -63,7 +63,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
 
     TestBatch testBatch = aTestBatch()
             .withStatus(TestBatchStatus.OPEN)
-            .withDonationBatches(Arrays.asList(aDonationBatch().withDonation(donation).build()))
+            .withDonationBatches(Collections.singletonList(aDonationBatch().withDonation(donation).build()))
             .build();
 
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();

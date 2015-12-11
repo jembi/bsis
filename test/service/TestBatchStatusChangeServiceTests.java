@@ -14,6 +14,7 @@ import suites.UnitTestSuite;
 import viewmodel.BloodTestingRuleResult;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static helpers.builders.BloodTestResultBuilder.aBloodTestResult;
@@ -93,7 +94,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   @Test
   public void testHandleReleaseWithoutComponentsToBeDiscarded_shouldUpdateComponentStatuses() {
 
-    List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
+    List<BloodTestResult> bloodTestResults = Collections.singletonList(aBloodTestResult().build());
     Donation donationWithoutDiscrepancies = aDonation()
             .withBloodTestResults(bloodTestResults)
             .withPackType(aPackType().build())
@@ -119,7 +120,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   @Test
   public void testHandleReleaseWithComponentsToBeDiscarded_shouldMarkComponentsAsUnsafe() {
 
-    List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
+    List<BloodTestResult> bloodTestResults = Collections.singletonList(aBloodTestResult().build());
     Donation donationWithoutDiscrepancies = aDonation()
             .withBloodTestResults(bloodTestResults)
             .withPackType(aPackType().build())
@@ -145,7 +146,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   @Test
   public void testHandleReleaseWithUnsafeDonation_shouldCreateCounsellingAndDiscardComponents() {
 
-    List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
+    List<BloodTestResult> bloodTestResults = Collections.singletonList(aBloodTestResult().build());
     Donor donor = aDonor().build();
     Donation unsafeDonation = aDonation()
             .withTTIStatus(TTIStatus.TTI_UNSAFE)
@@ -175,7 +176,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   @Test
   public void testHandleReleaseWithUnsafeDonationAndDonorToBeDeferred_shouldDeferDonor() {
 
-    List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
+    List<BloodTestResult> bloodTestResults = Collections.singletonList(aBloodTestResult().build());
     Donor donor = aDonor().build();
     Donation unsafeDonation = aDonation()
             .withTTIStatus(TTIStatus.TTI_UNSAFE)

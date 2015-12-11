@@ -89,7 +89,7 @@ public class RequestsController {
 
     Request componentRequest = requestRepository.findRequestById(id);
 
-    RequestViewModel requestViewModel = getRequestViewModels(Arrays.asList(componentRequest)).get(0);
+    RequestViewModel requestViewModel = getRequestViewModels(Collections.singletonList(componentRequest)).get(0);
     map.put("request", requestViewModel);
     return map;
   }

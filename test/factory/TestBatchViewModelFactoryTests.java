@@ -51,7 +51,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
             .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
             .withCreatedDate(IRRELEVANT_CREATED_DATE)
             .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
-            .withDonationBatches(Arrays.asList(donationBatch))
+            .withDonationBatches(Collections.singletonList(donationBatch))
             .withNotes(IRRELEVANT_NOTES)
             .build();
 
@@ -64,7 +64,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
             .withCreatedDate(IRRELEVANT_CREATED_DATE)
             .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
             .withNotes(IRRELEVANT_NOTES)
-            .withDonationBatches(Arrays.asList(donationBatchViewModel))
+            .withDonationBatches(Collections.singletonList(donationBatchViewModel))
             .withPermission("canRelease", false)
             .withPermission("canClose", false)
             .withPermission("canDelete", false)

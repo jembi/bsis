@@ -219,7 +219,7 @@ public class RequestRepository {
                     + "(r.isDeleted= :isDeleted)", Request.class);
 
     query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("statuses", Arrays.asList("fulfilled"));
+    query.setParameter("statuses", Collections.singletonList("fulfilled"));
     List<Request> resultList = query.getResultList();
     return resultList;
   }

@@ -28,6 +28,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -108,7 +109,7 @@ public class TestBatchRepositoryTest {
     String createdBeforeDate = "2015-07-11 23:59:59";
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    List<TestBatch> testBatches = testBatchRepository.findTestBatches(Arrays.asList(status),
+    List<TestBatch> testBatches = testBatchRepository.findTestBatches(Collections.singletonList(status),
             df.parse(createdAfterDate), df.parse(createdBeforeDate));
     Assert.assertNotNull("TestBatch not null", testBatches);
     Assert.assertTrue("TestBatch is empty", testBatches.isEmpty());
@@ -130,7 +131,7 @@ public class TestBatchRepositoryTest {
   @Test
   public void testFindTestBatchesMatchOnStatusOnly() throws Exception {
     TestBatchStatus status = TestBatchStatus.CLOSED;
-    List<TestBatch> testBatches = testBatchRepository.findTestBatches(Arrays.asList(status), null, null);
+    List<TestBatch> testBatches = testBatchRepository.findTestBatches(Collections.singletonList(status), null, null);
     Assert.assertNotNull("TestBatch not null", testBatches);
     Assert.assertEquals("TestBatch matched on status", 1, testBatches.size());
   }

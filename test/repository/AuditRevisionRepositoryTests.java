@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -139,7 +140,7 @@ public class AuditRevisionRepositoryTests {
 
     Date dateInRange = START_OF_RANGE.plusDays(1).toDate();
 
-    List<AuditRevision> expectedAuditRevisions = Arrays.asList(
+    List<AuditRevision> expectedAuditRevisions = Collections.singletonList(
             anAuditRevision()
                     .withUsername(userWithMatchingName.getUsername())
                     .withRevisionDate(dateInRange)

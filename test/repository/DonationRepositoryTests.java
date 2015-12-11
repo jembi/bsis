@@ -15,6 +15,7 @@ import valueobject.CollectedDonationValueObject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -85,7 +86,7 @@ public class DonationRepositoryTests extends ContextDependentTestSuite {
             .withBloodRh(expectedBloodRh)
             .buildAndPersist(entityManager);
 
-    List<CollectedDonationValueObject> expectedValueObjects = Arrays.asList(
+    List<CollectedDonationValueObject> expectedValueObjects = Collections.singletonList(
             aCollectedDonationValueObject()
                     .withVenue(expectedVenue)
                     .withDonationType(expectedDonationType)

@@ -50,8 +50,6 @@ public class DonorCommunicationsRepositoryTest {
   DonorRepository donorRepository;
   @Autowired
   DonorCommunicationsRepository donorCommunicationsRepository;
-  private ApplicationContext applicationContext = null;
-  private UserDetailsService userDetailsService;
   @Autowired
   private DataSource dataSource;
 
@@ -472,9 +470,9 @@ public class DonorCommunicationsRepositoryTest {
    * SecurityContextHolder.
    */
   public void userAuthentication() {
-    applicationContext = new ClassPathXmlApplicationContext(
+    ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
             "file:**/security-bsis-servlet.xml");
-    userDetailsService = applicationContext.getBean(LoginUserService.class);
+    UserDetailsService userDetailsService = applicationContext.getBean(LoginUserService.class);
     BsisUserDetails userDetails = (BsisUserDetails) userDetailsService
             .loadUserByUsername("admin");
     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

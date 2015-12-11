@@ -158,7 +158,7 @@ public class ComponentController {
     Map<String, Object> map = new HashMap<>();
     Component component = componentRepository.findComponentById(id);
 
-    ComponentViewModel componentViewModel = getComponentViewModels(Arrays.asList(component)).get(0);
+    ComponentViewModel componentViewModel = getComponentViewModels(Collections.singletonList(component)).get(0);
     addEditSelectorOptions(map);
     map.put("component", componentViewModel);
     map.put("componentStatusChangeReasons",

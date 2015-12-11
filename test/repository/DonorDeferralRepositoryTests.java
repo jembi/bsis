@@ -13,6 +13,7 @@ import suites.ContextDependentTestSuite;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -120,7 +121,7 @@ public class DonorDeferralRepositoryTests extends ContextDependentTestSuite {
             .withDurationType(DurationType.PERMANENT)
             .build();
 
-    List<DonorDeferral> expectedDeferrals = Arrays.asList(
+    List<DonorDeferral> expectedDeferrals = Collections.singletonList(
             aDonorDeferral().withDeferredDonor(donor).withDeferralReason(deferralReason).buildAndPersist(entityManager)
     );
 

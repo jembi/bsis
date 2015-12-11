@@ -107,7 +107,7 @@ public class DonorCommunicationsRepository {
 
     venuePredicates.add(cb.equal(root.<String>get("isDeleted"), false));
 
-    venuePredicates.add(cb.not(root.get("donorStatus").in(Arrays.asList(DonorStatus.MERGED))));
+    venuePredicates.add(cb.not(root.get("donorStatus").in(Collections.singletonList(DonorStatus.MERGED))));
 
     cq.where(venuePredicates.toArray(new Predicate[0]));
 

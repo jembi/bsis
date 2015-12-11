@@ -13,6 +13,7 @@ import suites.UnitTestSuite;
 import valueobject.CollectedDonationValueObject;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class ReportGeneratorServiceTests extends UnitTestSuite {
     Date irrelevantStartDate = new Date();
     Date irrelevantEndDate = new Date();
 
-    List<CollectedDonationValueObject> valueObjects = Arrays.asList(
+    List<CollectedDonationValueObject> valueObjects = Collections.singletonList(
             aCollectedDonationValueObject()
                     .withDonationType(aDonationType().withName("Family").build())
                     .withGender(Gender.female)
@@ -49,7 +50,7 @@ public class ReportGeneratorServiceTests extends UnitTestSuite {
                     .build()
     );
 
-    List<Indicator> expectedIndicators = Arrays.asList(
+    List<Indicator> expectedIndicators = Collections.singletonList(
             anIndicator()
                     .withStartDate(irrelevantStartDate)
                     .withEndDate(irrelevantEndDate)

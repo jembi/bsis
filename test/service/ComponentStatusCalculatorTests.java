@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import suites.UnitTestSuite;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static helpers.builders.BloodTestBuilder.aBloodTest;
@@ -21,7 +22,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   @Test
   public void testShouldComponentsBeDiscardedWithBloodTestNotFlaggedForDiscard_shouldReturnFalse() {
 
-    List<BloodTestResult> bloodTestResults = Arrays.asList(
+    List<BloodTestResult> bloodTestResults = Collections.singletonList(
             aBloodTestResult()
                     .withId(9L)
                     .withResult("POS")
@@ -40,7 +41,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   @Test
   public void testShouldComponentsBeDiscardedWithBloodTestFlaggedForDiscardWithNegativeResult_shouldReturnFalse() {
 
-    List<BloodTestResult> bloodTestResults = Arrays.asList(
+    List<BloodTestResult> bloodTestResults = Collections.singletonList(
             aBloodTestResult()
                     .withId(9L)
                     .withResult("NEG")
@@ -59,7 +60,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   @Test
   public void testShouldComponentsBeDiscardedWithBloodTestFlaggedForDiscardWithPositiveResult_shouldReturnTrue() {
 
-    List<BloodTestResult> bloodTestResults = Arrays.asList(
+    List<BloodTestResult> bloodTestResults = Collections.singletonList(
             aBloodTestResult()
                     .withId(9L)
                     .withResult("POS")

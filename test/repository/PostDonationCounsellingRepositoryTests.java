@@ -192,7 +192,7 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
 
     Donation expectedDonation = aDonation().withDonationDate(startDate.plusDays(1).toDate()).build();
     Donation expectedDonation2 = aDonation().withDonationDate(startDate.plusDays(2).toDate()).build();
-    List<Donation> expectedDonations = Arrays.asList(expectedDonation);
+    List<Donation> expectedDonations = Collections.singletonList(expectedDonation);
 
     // Donation in date range
     aPostDonationCounselling()

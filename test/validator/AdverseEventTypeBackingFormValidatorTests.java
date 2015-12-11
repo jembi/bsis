@@ -12,6 +12,7 @@ import org.springframework.validation.FieldError;
 import repository.AdverseEventTypeRepository;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static helpers.builders.AdverseEventTypeBackingFormBuilder.anAdverseEventTypeBackingForm;
@@ -48,7 +49,7 @@ public class AdverseEventTypeBackingFormValidatorTests {
             .withName(irrelevantName)
             .build();
 
-    when(adverseEventTypeRepository.findIdsByName(irrelevantName)).thenReturn(Arrays.asList(123L));
+    when(adverseEventTypeRepository.findIdsByName(irrelevantName)).thenReturn(Collections.singletonList(123L));
 
     BindException errors = new BindException(backingForm, "AdverseEventType");
     adverseEventTypeBackingFormValidator.validate(backingForm, errors);
@@ -69,7 +70,7 @@ public class AdverseEventTypeBackingFormValidatorTests {
             .withName(irrelevantName)
             .build();
 
-    when(adverseEventTypeRepository.findIdsByName(irrelevantName)).thenReturn(Arrays.asList(irrelevantId));
+    when(adverseEventTypeRepository.findIdsByName(irrelevantName)).thenReturn(Collections.singletonList(irrelevantId));
 
     BindException errors = new BindException(backingForm, "AdverseEventType");
     adverseEventTypeBackingFormValidator.validate(backingForm, errors);

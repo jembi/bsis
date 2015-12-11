@@ -61,8 +61,6 @@ public class DonorRepositoryTest {
   @Autowired
   DonorRepository donorRepository;
   private String donorBirthdate = null;
-  private ApplicationContext applicationContext = null;
-  private UserDetailsService userDetailsService;
   private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
   @Autowired
   private UtilController utilController;
@@ -898,9 +896,9 @@ public class DonorRepositoryTest {
    * SecurityContextHolder.
    */
   public void userAuthentication() {
-    applicationContext = new ClassPathXmlApplicationContext(
+    ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
             "file:**/security-bsis-servlet.xml");
-    userDetailsService = applicationContext.getBean(LoginUserService.class);
+    UserDetailsService userDetailsService = applicationContext.getBean(LoginUserService.class);
     BsisUserDetails userDetails = (BsisUserDetails) userDetailsService
             .loadUserByUsername("admin");
     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

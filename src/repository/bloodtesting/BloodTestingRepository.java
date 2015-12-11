@@ -86,7 +86,7 @@ public class BloodTestingRepository {
   }
 
   public List<BloodTest> getBloodTestsOfType(BloodTestType type) {
-    return getBloodTestsOfTypes(Arrays.asList(type));
+    return getBloodTestsOfTypes(Collections.singletonList(type));
   }
 
   private List<BloodTest> getBloodTestsOfTypes(List<BloodTestType> types) {
@@ -555,7 +555,7 @@ public class BloodTestingRepository {
         bloodTestRuleResultsForDonations
                 .put(donationId, ruleResult);
         BloodTestResult btResult = saveBloodTestResultToDatabase(
-                new Long(ttiTestId),
+                ttiTestId,
                 bloodTestResultsForDonation.get(ttiTestId),
                 donation, testedOn, ruleResult);
         // no need to worry about uninterpretable results here

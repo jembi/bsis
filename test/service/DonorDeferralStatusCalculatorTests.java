@@ -12,6 +12,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import repository.DonorDeferralRepository;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static helpers.builders.BloodTestBuilder.aBloodTest;
@@ -33,7 +34,7 @@ public class DonorDeferralStatusCalculatorTests {
 
   @Test
   public void testShouldDonorBeDeferredWithNonConfirmatoryResult_shouldReturnFalse() {
-    List<BloodTestResult> bloodTestResults = Arrays.asList(
+    List<BloodTestResult> bloodTestResults = Collections.singletonList(
             aBloodTestResult()
                     .withResult("POS")
                     .withBloodTest(aBloodTest()
@@ -53,7 +54,7 @@ public class DonorDeferralStatusCalculatorTests {
 
   @Test
   public void testShouldDonorBeDeferredWithNegativeConfirmatoryResult_shouldReturnFalse() {
-    List<BloodTestResult> bloodTestResults = Arrays.asList(
+    List<BloodTestResult> bloodTestResults = Collections.singletonList(
             aBloodTestResult()
                     .withResult("NEG")
                     .withBloodTest(aBloodTest()
@@ -73,7 +74,7 @@ public class DonorDeferralStatusCalculatorTests {
 
   @Test
   public void testShouldDonorBeDeferredWithPositiveConfirmatoryResult_shouldReturnTrue() {
-    List<BloodTestResult> bloodTestResults = Arrays.asList(
+    List<BloodTestResult> bloodTestResults = Collections.singletonList(
             aBloodTestResult()
                     .withResult("POS")
                     .withBloodTest(aBloodTest()

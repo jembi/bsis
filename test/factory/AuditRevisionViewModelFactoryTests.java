@@ -11,10 +11,7 @@ import org.junit.Test;
 import repository.UserRepository;
 import viewmodel.AuditRevisionViewModel;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 import static helpers.builders.AuditRevisionBuilder.anAuditRevision;
 import static helpers.builders.AuditRevisionViewModelBuilder.anAuditRevisionViewModel;
@@ -75,7 +72,7 @@ public class AuditRevisionViewModelFactoryTests {
 
     // Exercise SUT
     List<AuditRevisionViewModel> returnedViewModels = auditRevisionViewModelFactory
-            .createAuditRevisionViewModels(Arrays.asList(auditRevision));
+            .createAuditRevisionViewModels(Collections.singletonList(auditRevision));
 
     // Verify
     verify(userRepository).findUser(irrelevantUsername);
@@ -105,7 +102,7 @@ public class AuditRevisionViewModelFactoryTests {
 
     // Exercise SUT
     List<AuditRevisionViewModel> returnedViewModels = auditRevisionViewModelFactory
-            .createAuditRevisionViewModels(Arrays.asList(auditRevision));
+            .createAuditRevisionViewModels(Collections.singletonList(auditRevision));
 
     // Verify
     verifyZeroInteractions(userRepository);

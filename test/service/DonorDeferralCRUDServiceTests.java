@@ -96,7 +96,7 @@ public class DonorDeferralCRUDServiceTests {
     when(deferralReasonRepository.findDeferralReasonByType(irrelevantDeferralReasonType))
             .thenReturn(deferralReason);
     when(donorDeferralRepository.findDonorDeferralsForDonorByDeferralReason(donor, deferralReason))
-            .thenReturn(Arrays.asList(expectedDonorDeferral));
+            .thenReturn(Collections.singletonList(expectedDonorDeferral));
 
     DonorDeferral returnedDonorDeferral = donorDeferralCRUDService.createDeferralForDonorWithDeferralReasonType(
             donor, irrelevantDeferralReasonType);
