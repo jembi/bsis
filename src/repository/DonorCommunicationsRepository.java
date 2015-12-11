@@ -103,13 +103,13 @@ public class DonorCommunicationsRepository {
       return Collections.emptyList();
     }
 
-    venuePredicates.add(cb.or(bgPredicates.toArray(new Predicate[0])));
+    venuePredicates.add(cb.or(bgPredicates.toArray(new Predicate[bgPredicates.size()])));
 
     venuePredicates.add(cb.equal(root.<String>get("isDeleted"), false));
 
     venuePredicates.add(cb.not(root.get("donorStatus").in(Collections.singletonList(DonorStatus.MERGED))));
 
-    cq.where(venuePredicates.toArray(new Predicate[0]));
+    cq.where(venuePredicates.toArray(new Predicate[venuePredicates.size()]));
 
     int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
     int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
@@ -130,7 +130,7 @@ public class DonorCommunicationsRepository {
 
     CriteriaQuery<Long> countCriteriaQuery = cb.createQuery(Long.class);
     Root<Donor> countRoot = countCriteriaQuery.from(Donor.class);
-    countCriteriaQuery.where(venuePredicates.toArray(new Predicate[0]));
+    countCriteriaQuery.where(venuePredicates.toArray(new Predicate[venuePredicates.size()]));
     countCriteriaQuery.select(cb.countDistinct(countRoot));
 
     TypedQuery<Long> countQuery = em.createQuery(countCriteriaQuery);
