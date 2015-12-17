@@ -1,22 +1,22 @@
 package model.sequencenumber;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
+import model.BaseEntity;
 
 @Entity
-public class SequenceNumberStore {
+public class SequenceNumberStore extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false)
-  private Integer id;
+  private static final long serialVersionUID = 1L;
 
-  @Column(length = 50)
+  @Column(length=50)
   private String targetTable;
 
-  @Column(length = 50)
+  @Column(length=50)
   private String columnName;
 
-  @Column(length = 5)
+  @Column(length=5)
   private String prefix;
 
   private Long lastNumber;
@@ -43,14 +43,6 @@ public class SequenceNumberStore {
 
   public void setLastNumber(Long lastNumber) {
     this.lastNumber = lastNumber;
-  }
-
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
   }
 
   public String getPrefix() {

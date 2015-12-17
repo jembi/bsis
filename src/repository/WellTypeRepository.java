@@ -34,7 +34,7 @@ public class WellTypeRepository {
     return false;
   }
 
-  public WellType getWellTypeById(Integer id) {
+  public WellType getWellTypeById(Long id) {
     TypedQuery<WellType> query;
     query = em.createQuery("SELECT wt from WellType wt " +
             "where wt.id=:id AND wt.isDeleted=:isDeleted", WellType.class);

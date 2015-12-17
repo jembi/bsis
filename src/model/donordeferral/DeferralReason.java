@@ -1,46 +1,43 @@
 package model.donordeferral;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+
+import model.BaseEntity;
+
 import org.hibernate.envers.Audited;
+
 import repository.DeferralReasonNamedQueryConstants;
 
-import javax.persistence.*;
-
 @NamedQueries({
-        @NamedQuery(name = DeferralReasonNamedQueryConstants.NAME_FIND_DEFERRAL_REASON_BY_TYPE,
-                query = DeferralReasonNamedQueryConstants.QUERY_FIND_DEFERRAL_REASON_BY_TYPE)
+    @NamedQuery(name = DeferralReasonNamedQueryConstants.NAME_FIND_DEFERRAL_REASON_BY_TYPE,
+            query = DeferralReasonNamedQueryConstants.QUERY_FIND_DEFERRAL_REASON_BY_TYPE)
 })
 @Entity
 @Audited
-public class DeferralReason {
+public class DeferralReason extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "SMALLINT")
-  private Integer id;
+  private static final long serialVersionUID = 203754154113421034L;
 
-  @Column(length = 100)
+  @Column(length=100)
   private String reason;
 
   private Boolean isDeleted;
-
+  
   @Column(nullable = true)
   private Integer defaultDuration; // in days
-
+  
   @Column(length = 30, nullable = false)
   @Enumerated(EnumType.STRING)
   private DeferralReasonType type = DeferralReasonType.NORMAL;
-
+  
   @Column(length = 30, nullable = false)
   @Enumerated(EnumType.STRING)
   private DurationType durationType = DurationType.TEMPORARY;
-
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
 
   public String getReason() {
     return reason;
@@ -58,36 +55,36 @@ public class DeferralReason {
     this.isDeleted = isDeleted;
   }
 
-  public void copy(DeferralReason deferralReason) {
-    this.id = deferralReason.getId();
+  public void copy (DeferralReason deferralReason){
+    setId(deferralReason.getId());
     this.reason = deferralReason.getReason();
     this.isDeleted = deferralReason.getIsDeleted();
     this.defaultDuration = deferralReason.getDefaultDuration();
     this.durationType = deferralReason.getDurationType();
   }
 
-  public Integer getDefaultDuration() {
-    return defaultDuration;
-  }
+    public Integer getDefaultDuration() {
+        return defaultDuration;
+    }
 
-  public void setDefaultDuration(Integer defaultDuration) {
-    this.defaultDuration = defaultDuration;
-  }
+    public void setDefaultDuration(Integer defaultDuration) {
+        this.defaultDuration = defaultDuration;
+    }
 
-  public DeferralReasonType getType() {
-    return type;
-  }
+    public DeferralReasonType getType() {
+        return type;
+    }
 
-  public void setType(DeferralReasonType type) {
-    this.type = type;
-  }
+    public void setType(DeferralReasonType type) {
+        this.type = type;
+    }
 
-  public DurationType getDurationType() {
-    return durationType;
-  }
+    public DurationType getDurationType() {
+        return durationType;
+    }
 
-  public void setDurationType(DurationType durationType) {
-    this.durationType = durationType;
-  }
+    public void setDurationType(DurationType durationType) {
+        this.durationType = durationType;
+    }
 
 }

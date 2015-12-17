@@ -1,16 +1,21 @@
 package model.location;
 
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+
+import model.BaseEntity;
+
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.*;
-
+/**
+ * Entity representing a place where Donations can be made and/or used.
+ */
 @Entity
 @Audited
-public class Location {
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+public class Location extends BaseEntity {
+
+  private static final long serialVersionUID = 1L;
 
   @NotBlank
   private String name;
@@ -42,52 +47,40 @@ public class Location {
     return name;
   }
 
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
   public Boolean getIsMobileSite() {
     return isMobileSite;
-  }
-
-  public void setIsMobileSite(Boolean mobileSite) {
-    isMobileSite = mobileSite;
   }
 
   public Boolean getIsUsageSite() {
     return isUsageSite;
   }
 
-  public void setIsUsageSite(Boolean usageSite) {
-    isUsageSite = usageSite;
-  }
-
   public String getNotes() {
     return notes;
-  }
-
-  public void setNotes(String notes) {
-    this.notes = notes;
   }
 
   public Boolean getIsDeleted() {
     return isDeleted;
   }
 
-  public void setIsDeleted(Boolean isDeleted) {
-    this.isDeleted = isDeleted;
+  public void setName(String name) {
+    this.name = name;
   }
 
-  public String toString() {
-    return name;
+  public void setIsMobileSite(Boolean mobileSite) {
+    isMobileSite = mobileSite;
+  }
+
+  public void setIsUsageSite(Boolean usageSite) {
+    isUsageSite = usageSite;
+  }
+
+  public void setNotes(String notes) {
+    this.notes = notes;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
 
   public Boolean getIsVenue() {

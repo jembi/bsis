@@ -42,7 +42,7 @@ public class PackTypeRepository {
     return result;
   }
 
-  public PackType getPackTypeById(Integer packTypeId) {
+  public PackType getPackTypeById(Long packTypeId) {
     TypedQuery<PackType> query;
     query = em.createQuery("SELECT b from PackType b " +
             "where b.id=:id", PackType.class);

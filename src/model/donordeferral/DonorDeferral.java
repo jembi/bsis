@@ -1,37 +1,42 @@
 package model.donordeferral;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import model.donor.Donor;
-import model.modificationtracker.ModificationTracker;
-import model.modificationtracker.RowModificationTracker;
-import model.user.User;
-import org.hibernate.envers.Audited;
-import repository.DonorDeferralNamedQueryConstants;
-
-import javax.persistence.*;
-import javax.validation.Valid;
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import model.BaseModificationTrackerEntity;
+import model.donor.Donor;
+import model.user.User;
+
+import org.hibernate.envers.Audited;
+
+import repository.DonorDeferralNamedQueryConstants;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @NamedQueries({
-        @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_COUNT_DONOR_DEFERRALS_FOR_DONOR,
-                query = DonorDeferralNamedQueryConstants.QUERY_COUNT_DONOR_DEFERRALS_FOR_DONOR),
-        @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_FIND_DONOR_DEFERRAL_BY_ID,
-                query = DonorDeferralNamedQueryConstants.QUERY_FIND_DONOR_DEFERRAL_BY_ID),
-        @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR,
-                query = DonorDeferralNamedQueryConstants.QUERY_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR),
-        @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_FIND_DONOR_DEFERRALS_FOR_DONOR_BY_DEFERRAL_REASON,
-                query = DonorDeferralNamedQueryConstants.QUERY_FIND_DONOR_DEFERRALS_FOR_DONOR_BY_DEFERRAL_REASON)
+    @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_COUNT_DONOR_DEFERRALS_FOR_DONOR,
+            query = DonorDeferralNamedQueryConstants.QUERY_COUNT_DONOR_DEFERRALS_FOR_DONOR),
+    @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_FIND_DONOR_DEFERRAL_BY_ID, 
+            query = DonorDeferralNamedQueryConstants.QUERY_FIND_DONOR_DEFERRAL_BY_ID),
+    @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR,
+            query = DonorDeferralNamedQueryConstants.QUERY_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR),
+    @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_FIND_DONOR_DEFERRALS_FOR_DONOR_BY_DEFERRAL_REASON,
+            query = DonorDeferralNamedQueryConstants.QUERY_FIND_DONOR_DEFERRALS_FOR_DONOR_BY_DEFERRAL_REASON)
 })
 @Entity
 @Audited
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class DonorDeferral implements ModificationTracker {
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+public class DonorDeferral extends BaseModificationTrackerEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, updatable = false, insertable = false)
-  private Long id;
+  private static final long serialVersionUID = 1L;
 
   @ManyToOne
   private Donor deferredDonor;
@@ -46,31 +51,20 @@ public class DonorDeferral implements ModificationTracker {
 
   @ManyToOne
   private DeferralReason deferralReason;
-
+  
   @ManyToOne
   private User voidedBy;
 
   @Lob
   private String deferralReasonText;
-
+  
   private Boolean isVoided = Boolean.FALSE;
-
+  
   @Temporal(TemporalType.DATE)
   private Date voidedDate;
-
-  @Valid
-  private RowModificationTracker modificationTracker;
-
-  public DonorDeferral() {
-    modificationTracker = new RowModificationTracker();
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
+  
+  public DonorDeferral(){
+	super();
   }
 
   public Donor getDeferredDonor() {
@@ -104,90 +98,58 @@ public class DonorDeferral implements ModificationTracker {
   public void setDeferralReasonText(String deferralReasonText) {
     this.deferralReasonText = deferralReasonText;
   }
+  
+	/**
+	 * @return the isVoided
+	 */
+	public Boolean getIsVoided() {
+		return isVoided;
+	}
 
-  public Date getLastUpdated() {
-    return modificationTracker.getLastUpdated();
-  }
+	/**
+	 * @param isVoided the isVoided to set
+	 */
+	public void setIsVoided(Boolean isVoided) {
+		this.isVoided = isVoided;
+	}
 
-  public void setLastUpdated(Date lastUpdated) {
-    modificationTracker.setLastUpdated(lastUpdated);
-  }
+	/**
+	 * @return the voidedBy
+	 */
+	public User getVoidedBy() {
+		return voidedBy;
+	}
 
-  public Date getCreatedDate() {
-    return modificationTracker.getCreatedDate();
-  }
+	/**
+	 * @param voidedBy the voidedBy to set
+	 */
+	public void setVoidedBy(User voidedBy) {
+		this.voidedBy = voidedBy;
+	}
 
-  public void setCreatedDate(Date createdDate) {
-    modificationTracker.setCreatedDate(createdDate);
-  }
+	/**
+	 * @return the voidedDate
+	 */
+	public Date getVoidedDate() {
+		return voidedDate;
+	}
 
-  public User getCreatedBy() {
-    return modificationTracker.getCreatedBy();
-  }
+	/**
+	 * @param voidedDate the voidedDate to set
+	 */
+	public void setVoidedDate(Date voidedDate) {
+		this.voidedDate = voidedDate;
+	}
 
-  public void setCreatedBy(User createdBy) {
-    modificationTracker.setCreatedBy(createdBy);
-  }
-
-  public User getLastUpdatedBy() {
-    return modificationTracker.getLastUpdatedBy();
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
-  }
-
-  /**
-   * @return the isVoided
-   */
-  public Boolean getIsVoided() {
-    return isVoided;
-  }
-
-  /**
-   * @param isVoided the isVoided to set
-   */
-  public void setIsVoided(Boolean isVoided) {
-    this.isVoided = isVoided;
-  }
-
-  /**
-   * @return the voidedBy
-   */
-  public User getVoidedBy() {
-    return voidedBy;
-  }
-
-  /**
-   * @param voidedBy the voidedBy to set
-   */
-  public void setVoidedBy(User voidedBy) {
-    this.voidedBy = voidedBy;
-  }
-
-  /**
-   * @return the voidedDate
-   */
-  public Date getVoidedDate() {
-    return voidedDate;
-  }
-
-  /**
-   * @param voidedDate the voidedDate to set
-   */
-  public void setVoidedDate(Date voidedDate) {
-    this.voidedDate = voidedDate;
-  }
-
-  public void copy(DonorDeferral deferral) {
-    assert (deferral.getId().equals(this.getId()));
-    setDeferredDonor(deferral.getDeferredDonor());
-    setDeferredUntil(deferral.getDeferredUntil());
-    setDeferralReason(deferral.getDeferralReason());
-    setDeferralReasonText(deferral.getDeferralReasonText());
-    setIsVoided(deferral.getIsVoided());
-    setVoidedBy(deferral.getVoidedBy());
-    setVoidedDate(deferral.getVoidedDate());
-  }
-
+    public void copy(DonorDeferral deferral) {
+	    assert (deferral.getId().equals(this.getId()));
+	    setDeferredDonor(deferral.getDeferredDonor());
+	    setDeferredUntil(deferral.getDeferredUntil());
+	    setDeferralReason(deferral.getDeferralReason());
+	    setDeferralReasonText(deferral.getDeferralReasonText());
+	    setIsVoided(deferral.getIsVoided());
+	    setVoidedBy(deferral.getVoidedBy());
+	    setVoidedDate(deferral.getVoidedDate());	   
+	 }
+  
 }

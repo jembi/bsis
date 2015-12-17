@@ -1,35 +1,29 @@
 package model.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+
+import model.BaseEntity;
+
 import org.hibernate.envers.Audited;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Audited
-public class Permission implements Serializable {
+public class Permission extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, updatable = false, insertable = false)
-  private Long id;
+  private static final long serialVersionUID = 1L;
 
-  @Column(length = 50)
+  @Column(length=50)
   private String name;
 
   @ManyToMany(mappedBy = "permissions")
   @JsonIgnore
   private List<Role> roles;
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
 
   public String getName() {
     return name;

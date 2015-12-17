@@ -135,7 +135,7 @@ public class CompatibilityTestBackingForm {
       compatibilityTest.setCrossmatchType(null);
     } else {
       CrossmatchType ct = new CrossmatchType();
-      ct.setId(Integer.parseInt(crossmatchTypeId));
+      ct.setId(Long.parseLong(crossmatchTypeId));
       compatibilityTest.setCrossmatchType(ct);
     }
   }

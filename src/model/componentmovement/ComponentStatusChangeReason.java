@@ -1,37 +1,31 @@
 package model.componentmovement;
 
-import org.hibernate.envers.Audited;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
-import javax.persistence.*;
+import model.BaseEntity;
+
+import org.hibernate.envers.Audited;
 
 
 @Entity
 @Audited
-public class ComponentStatusChangeReason {
+public class ComponentStatusChangeReason extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable = false, updatable = false, columnDefinition = "SMALLINT")
-  private Integer id;
+  private static final long serialVersionUID = 1L;
 
-  @Column(length = 100)
+  @Column(length=100)
   private String statusChangeReason;
 
   @Enumerated(EnumType.STRING)
-  @Column(length = 30)
+  @Column(length=30)
   private ComponentStatusChangeReasonCategory category;
 
   private Boolean isDeleted;
 
   public ComponentStatusChangeReason() {
-  }
-
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
   }
 
   public String getStatusChangeReason() {
@@ -58,7 +52,7 @@ public class ComponentStatusChangeReason {
     this.isDeleted = isDeleted;
   }
 
-  public void copy(ComponentStatusChangeReason componentStatusChangeReason) {
+  public void copy(ComponentStatusChangeReason componentStatusChangeReason){
     this.setId(componentStatusChangeReason.getId());
     this.setCategory(componentStatusChangeReason.getCategory());
     this.setStatusChangeReason(componentStatusChangeReason.getStatusChangeReason());

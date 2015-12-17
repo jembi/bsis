@@ -1,8 +1,23 @@
 package model.donor;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import constraintvalidator.LocationExists;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import model.BaseModificationTrackerEntity;
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
@@ -11,11 +26,11 @@ import model.donation.Donation;
 import model.donordeferral.DonorDeferral;
 import model.idtype.IdType;
 import model.location.Location;
-import model.modificationtracker.ModificationTracker;
-import model.modificationtracker.RowModificationTracker;
 import model.preferredlanguage.PreferredLanguage;
-import model.user.User;
 import model.util.Gender;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.annotations.Index;
 import org.hibernate.annotations.Where;
@@ -23,92 +38,85 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Length;
+
 import utils.DonorUtils;
 
-import javax.persistence.*;
-import javax.validation.Valid;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import constraintvalidator.LocationExists;
 
 @Entity
 @Audited
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class Donor implements ModificationTracker {
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+public class Donor extends BaseModificationTrackerEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, updatable = false, insertable = false)
-  private Long id;
+  private static final long serialVersionUID = 1L;
 
-  /**
-   * Donor Number column should be indexed. It has high selectivity.
-   * Search by donor number is very common usecase. VARCHAR(15) should
-   * be sufficient. Smaller index keys are better. In most cases, this field
-   * will be auto-generated.
+  /** Donor Number column should be indexed. It has high selectivity.
+   *  Search by donor number is very common usecase. VARCHAR(15) should
+   *  be sufficient. Smaller index keys are better. In most cases, this field
+   *  will be auto-generated.
    */
-  @Column(length = 20, unique = true)
-  @Index(name = "donor_donorNumber_index")
-  @Length(max = 20)
+  @Column(length=20, unique=true)
+  @Index(name="donor_donorNumber_index")
+  @Length(max=20)
   private String donorNumber;
 
   /**
-   * Just store the string for the Title. Low selectivity column. No need to
-   * index it.
-   */
-
+	 * Just store the string for the Title. Low selectivity column. No need to
+	 * index it.
+ */
   @Column(length = 15)
-  private String title;
-
-
+  private String  title;
+  
   /**
    * Find donor by first few characters of first name can be made faster with this index.
    */
-  @Column(length = 20)
-  @Index(name = "donor_firstName_index")
-  @Length(max = 20)
+  @Column(length=20)
+  @Index(name="donor_firstName_index")
+  @Length(max=20)
   private String firstName;
 
-  @Length(max = 20)
-  @Column(length = 20)
+  @Length(max=20)
+  @Column(length=20)
   private String middleName;
 
   /**
    * Find donor by first few characters of last name can be made faster with this index.
    */
-  @Length(max = 20)
-  @Index(name = "donor_lastName_index")
-  @Column(length = 20)
+  @Length(max=20)
+  @Index(name="donor_lastName_index")
+  @Column(length=20)
   private String lastName;
 
   /**
    * Some people prefer to be called by a different name. If required this field can be used.
    */
-  @Length(max = 20)
-  @Column(length = 20)
+  @Length(max=20)
+  @Column(length=20)
   private String callingName;
 
   /**
    * Just store the string for the gender. Low selectivity column. No need to index it.
    */
   @Enumerated(EnumType.STRING)
-  @Column(length = 15)
+  @Column(length=15)
   private Gender gender;
 
   /**
    * TODO: Not sure if an index will help here.
    */
-  @Column(length = 10)
+  @Column(length=10)
   private String bloodAbo;
-
-
-  @Column(length = 10)
+  
+  @Column(length=10)
   private String bloodRh;
 
   @Enumerated(EnumType.STRING)
-  @Column(length = 20)
+  @Column(length=20)
   private DonorStatus donorStatus;
-
+  
   /**
    * Do not see a need to search by birthdate so need not add an index here.
    */
@@ -117,18 +125,18 @@ public class Donor implements ModificationTracker {
 
   @Temporal(TemporalType.DATE)
   private Date birthDateInferred;
-
+  
   private Boolean birthDateEstimated;
 
   /**
    * TODO: Not sure if age is used anymore
    */
-  @Column(columnDefinition = "TINYINT")
+  @Column(columnDefinition="TINYINT")
   private Integer age;
 
-  @Column(length = 50)
+  @Column(length=50)
   private String donorHash;
-
+ 
   /**
    * Which venue the donor is registered to
    */
@@ -139,13 +147,9 @@ public class Donor implements ModificationTracker {
   @Lob
   private String notes;
 
-  @Valid
-  private RowModificationTracker modificationTracker;
-
   @Temporal(TemporalType.TIMESTAMP)
   private Date dateOfLastDonation;
-
-
+  
   /**
    * Never delete the rows. Just mark them as deleted.
    */
@@ -153,7 +157,7 @@ public class Donor implements ModificationTracker {
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy = "donor")
+  @OneToMany(mappedBy="donor")
   @Where(clause = "isDeleted = 0")
   private List<Donation> donations;
 
@@ -162,92 +166,105 @@ public class Donor implements ModificationTracker {
    */
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy = "deferredDonor")
+  @OneToMany(mappedBy="deferredDonor")
   private List<DonorDeferral> deferrals;
+ 
+ @NotAudited
+ @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+ @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+ @JoinColumn(name="addressId")
+ private Address address;
+  
+    @NotAudited
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "contactId")
+    private Contact contact;
 
+    @NotAudited
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = true, name = "addressTypeId")
+    private AddressType addressType;
 
-  @NotAudited
-  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  @JoinColumn(name = "addressId")
-  private Address address;
-
-  @NotAudited
-  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-  @JoinColumn(name = "contactId")
-  private Contact contact;
-
-  @NotAudited
-  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(nullable = true, name = "addressTypeId")
-  private AddressType addressType;
-
-  @NotAudited
-  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(nullable = true)
-  private ContactMethodType contactMethodType;
-
+    @NotAudited
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = true)
+    private ContactMethodType contactMethodType;      
+    
 // @NotAudited
 // @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 // @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "donorId")
 // @Fetch(value = FetchMode.SUBSELECT)
 // private List<IdNumber> idNumbers; 
-
-  @ManyToOne(fetch = FetchType.EAGER)
-  @NotAudited
-  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  private IdType idType;
-
-  private String idNumber;
-
+ 
+ @ManyToOne(fetch = FetchType.EAGER)
+ @NotAudited
+ @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+ private IdType idType;
+ 
+ private String idNumber;
 
   /**
    * Date of first donation
    */
   @Temporal(TemporalType.DATE)
   private Date dateOfFirstDonation;
-
-
+  
   @ManyToOne(fetch = FetchType.EAGER)
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  private PreferredLanguage preferredLanguage;
-
+  private PreferredLanguage  preferredLanguage;
+  
   private Date dueToDonate;
-
+  
   public Donor() {
-    modificationTracker = new RowModificationTracker();
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
+    super();
   }
 
   public String getDonorNumber() {
     return donorNumber;
   }
-
-  public void setDonorNumber(String donorNumber) {
-    this.donorNumber = donorNumber;
+  
+    public String getTitle() {
+		return title;
   }
 
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
   public String getFirstName() {
     return firstName;
+  }
+
+  public String getMiddleName() {
+    return middleName;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public Gender getGender() {
+    return gender;
+  }
+
+  public Date getBirthDate() {
+    return birthDate;
+  }
+
+  public String getNotes() {
+    return notes;
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setDonorNumber(String donorNumber) {
+    this.donorNumber = donorNumber;
   }
 
   public void setFirstName(String firstName) {
@@ -256,18 +273,10 @@ public class Donor implements ModificationTracker {
     this.firstName = firstName;
   }
 
-  public String getMiddleName() {
-    return middleName;
-  }
-
   public void setMiddleName(String middleName) {
     if (middleName != null)
-      middleName = WordUtils.capitalize(middleName);
+     middleName = WordUtils.capitalize(middleName);
     this.middleName = middleName;
-  }
-
-  public String getLastName() {
-    return lastName;
   }
 
   public void setLastName(String lastName) {
@@ -276,40 +285,25 @@ public class Donor implements ModificationTracker {
     this.lastName = lastName;
   }
 
-  public Gender getGender() {
-    return gender;
-  }
-
   public void setGender(Gender gender) {
     this.gender = gender;
-  }
-
-  public Date getBirthDate() {
-    return birthDate;
   }
 
   public void setBirthDate(Date birthDate) {
     this.birthDate = birthDate;
   }
 
-  public String getNotes() {
-    return notes;
-  }
-
   public void setNotes(String notes) {
     this.notes = notes;
-  }
-
-  public Boolean getIsDeleted() {
-    return isDeleted;
   }
 
   public void setIsDeleted(Boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
 
+  
 
-  public void copy(Donor donor) {
+public void copy(Donor donor) {
     assert (donor.getId().equals(this.getId()));
     setTitle(donor.getTitle());
     setFirstName(donor.getFirstName());
@@ -333,68 +327,25 @@ public class Donor implements ModificationTracker {
     setIdNumber(donor.getIdNumber());
     setContact(donor.getContact());
     setAddress(donor.getAddress());
+  }
 
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+        .append("hashCode", Integer.toHexString(hashCode()))
+        .append("id", getId())
+        .append("firstName", firstName)
+        .append("lastName", lastName)
+        .append("donorNumber", donorNumber)
+        .build();
   }
 
   public List<Donation> getDonations() {
     return donations;
   }
-
-
+   
   public void setDonations(List<Donation> donations) {
     this.donations = donations;
-  }
-
-
-  public Date getLastUpdated() {
-    return modificationTracker.getLastUpdated();
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    modificationTracker.setLastUpdated(lastUpdated);
-  }
-
-  public Date getCreatedDate() {
-    return modificationTracker.getCreatedDate();
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    modificationTracker.setCreatedDate(createdDate);
-  }
-
-  public User getCreatedBy() {
-    return modificationTracker.getCreatedBy();
-  }
-
-  public void setCreatedBy(User createdBy) {
-    modificationTracker.setCreatedBy(createdBy);
-  }
-
-  public User getLastUpdatedBy() {
-    return modificationTracker.getLastUpdatedBy();
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
-  }
-
-  public String toString() {
-
-    if (id == null)
-      return null;
-
-    if ((firstName == null || firstName.isEmpty()) &&
-            (donorNumber == null || donorNumber.isEmpty())
-            )
-      return id.toString();
-
-    StringBuilder builder = new StringBuilder();
-    builder.append(firstName);
-    if (!lastName.isEmpty())
-      builder.append(" ").append(lastName);
-    builder.append(":").append(donorNumber);
-
-    return builder.toString();
   }
 
   public String getCallingName() {
@@ -404,8 +355,7 @@ public class Donor implements ModificationTracker {
   public void setCallingName(String callingName) {
     this.callingName = callingName;
   }
-
-
+  
   public List<DonorDeferral> getDeferrals() {
     return deferrals;
   }
@@ -462,7 +412,6 @@ public class Donor implements ModificationTracker {
     this.donorStatus = donorStatus;
   }
 
-
   public Integer getAge() {
     return age;
   }
@@ -479,113 +428,82 @@ public class Donor implements ModificationTracker {
     this.donorHash = donorHash;
   }
 
-  public Date getDateOfFirstDonation() {
-    return dateOfFirstDonation;
-  }
+	public Date getDateOfFirstDonation() {
+		return dateOfFirstDonation;
+	}
 
-  public void setDateOfFirstDonation(Date dateOfFirstDonation) {
-    this.dateOfFirstDonation = dateOfFirstDonation;
-  }
-
+	public void setDateOfFirstDonation(Date dateOfFirstDonation) {
+		this.dateOfFirstDonation = dateOfFirstDonation;
+	}
+  
   public Boolean getBirthDateEstimated() {
-    return birthDateEstimated;
+	return birthDateEstimated;
   }
 
   public void setBirthDateEstimated(Boolean birthDateEstimated) {
-    this.birthDateEstimated = birthDateEstimated;
+	this.birthDateEstimated = birthDateEstimated;
   }
 
-  public PreferredLanguage getPreferredLanguage() {
-    return preferredLanguage;
-  }
-
-  public void setPreferredLanguage(PreferredLanguage preferredLanguage) {
-    this.preferredLanguage = preferredLanguage;
-  }
-
-  public Address getAddress() {
-    return address;
-  }
-
-  public void setAddress(Address addresss) {
-    this.address = addresss;
-  }
-
-  public Contact getContact() {
-    return contact;
-  }
-
-  public void setContact(Contact contact) {
-    this.contact = contact;
-  }
-
-  public IdType getIdType() {
-    return idType;
-  }
-
-  public void setIdType(IdType idType) {
-    this.idType = idType;
-  }
-
-  public String getIdNumber() {
-    return idNumber;
-  }
-
-  public void setIdNumber(String idNumber) {
-    this.idNumber = idNumber;
-  }
-
-  public AddressType getAddressType() {
-    return addressType;
-  }
-
-  public void setAddressType(AddressType addressType) {
-    this.addressType = addressType;
-  }
-
-
-  public ContactMethodType getContactMethodType() {
-    return contactMethodType;
-  }
-
-  public void setContactMethodType(ContactMethodType contactMethodType) {
-    this.contactMethodType = contactMethodType;
-  }
-
-  public Date getDueToDonate() {
-    return dueToDonate;
-  }
-
-  public void setDueToDonate(Date dueToDonate) {
-    this.dueToDonate = dueToDonate;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == this) {
-      return true;
+    public PreferredLanguage getPreferredLanguage() {
+        return preferredLanguage;
     }
 
-    if (!(obj instanceof Donor)) {
-      return false;
+    public void setPreferredLanguage(PreferredLanguage preferredLanguage) {
+        this.preferredLanguage = preferredLanguage;
     }
 
-    if (getId() == null) {
-      // This donor has not been persisted
-      return false;
+    public Address getAddress() {
+        return address;
     }
 
-    Donor other = (Donor) obj;
-
-    return getId().equals(other.getId());
-  }
-
-  @Override
-  public int hashCode() {
-    if (getId() == null) {
-      return super.hashCode();
+    public void setAddress(Address addresss) {
+        this.address = addresss;
     }
-    return Objects.hashCode(getId());
-  }
 
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
+
+    public IdType getIdType() {
+        return idType;
+    }
+
+    public void setIdType(IdType idType) {
+        this.idType = idType;
+    }
+
+    public String getIdNumber() {
+        return idNumber;
+    }
+
+    public void setIdNumber(String idNumber) {
+        this.idNumber = idNumber;
+    }
+    public AddressType getAddressType() {
+        return addressType;
+    }
+
+    public void setAddressType(AddressType addressType) {
+        this.addressType = addressType;
+    }
+    
+    public ContactMethodType getContactMethodType() {
+        return contactMethodType;
+    }
+
+    public void setContactMethodType(ContactMethodType contactMethodType) {
+        this.contactMethodType = contactMethodType;
+    }
+
+    public Date getDueToDonate() {
+        return dueToDonate;
+    }
+
+    public void setDueToDonate(Date dueToDonate) {
+        this.dueToDonate = dueToDonate;
+    }
 }

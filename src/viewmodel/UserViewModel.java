@@ -17,7 +17,7 @@ public class UserViewModel {
     this.user = user;
   }
 
-  public Integer getId() {
+  public Long getId() {
     return user.getId();
   }
 

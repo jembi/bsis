@@ -1,6 +1,8 @@
 package backingform;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.text.ParseException;
+import java.util.List;
+
 import model.component.Component;
 import model.componenttype.ComponentType;
 import model.location.Location;
@@ -8,12 +10,13 @@ import model.request.Request;
 import model.requesttype.RequestType;
 import model.util.BloodGroup;
 import model.util.Gender;
+
 import org.apache.commons.lang3.StringUtils;
+
 import repository.RequestRepository;
 import utils.CustomDateFormatter;
 
-import java.text.ParseException;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class RequestBackingForm {
 
@@ -33,7 +36,7 @@ public class RequestBackingForm {
   public Long getId() {
     return request.getId();
   }
-
+  
   public void setId(Long id) {
     request.setId(id);
   }
@@ -42,14 +45,40 @@ public class RequestBackingForm {
     return request.getRequestNumber();
   }
 
-  public void setRequestNumber(String requestNumber) {
-    request.setRequestNumber(requestNumber);
-  }
-
   public String getRequestDate() {
     if (request == null)
       return "";
     return CustomDateFormatter.getDateTimeString(request.getRequestDate());
+  }
+
+  public String getRequiredDate() {
+    if (request == null)
+      return "";
+    return CustomDateFormatter.getDateString(request.getRequiredDate());
+  }
+
+  public Integer getNumUnitsRequested() {
+    return request.getNumUnitsRequested();
+  }
+
+  public String getPatientBloodAbo() {
+    return request.getPatientBloodAbo();
+  }
+
+  public String getPatientBloodRh() {
+    return request.getPatientBloodRh();
+  }
+
+  public String getNotes() {
+    return request.getNotes();
+  }
+
+  public Boolean getIsDeleted() {
+    return request.getIsDeleted();
+  }
+
+  public void setRequestNumber(String requestNumber) {
+    request.setRequestNumber(requestNumber);
   }
 
   public void setRequestDate(String requestDate) {
@@ -61,12 +90,6 @@ public class RequestBackingForm {
     }
   }
 
-  public String getRequiredDate() {
-    if (request == null)
-      return "";
-    return CustomDateFormatter.getDateString(request.getRequiredDate());
-  }
-
   public void setRequiredDate(String requiredDate) {
     try {
       request.setRequiredDate(CustomDateFormatter.getDateFromString(requiredDate));
@@ -76,73 +99,50 @@ public class RequestBackingForm {
     }
   }
 
-  public Integer getNumUnitsRequested() {
-    return request.getNumUnitsRequested();
-  }
-
   public void setNumUnitsRequested(Integer numUnitsRequested) {
     request.setNumUnitsRequested(numUnitsRequested);
-  }
-
-  public String getPatientBloodAbo() {
-    return request.getPatientBloodAbo();
   }
 
   public void setPatientBloodAbo(String bloodAbo) {
     request.setPatientBloodAbo(bloodAbo);
   }
 
-  public String getPatientBloodRh() {
-    return request.getPatientBloodRh();
-  }
-
   public void setPatientBloodRh(String bloodRh) {
     request.setPatientBloodRh(bloodRh);
-  }
-
-  public String getNotes() {
-    return request.getNotes();
   }
 
   public void setNotes(String notes) {
     request.setNotes(notes);
   }
 
-  public Boolean getIsDeleted() {
-    return request.getIsDeleted();
+  public void setRequestType(String requestTypeId) {
+	if (StringUtils.isBlank(requestTypeId)) {
+		request.setRequestType(null);
+	}
+	else {
+		RequestType rt = new RequestType();
+		rt.setId(Long.parseLong(requestTypeId));
+		request.setRequestType(rt);
+	}
+  }
+
+  public void setComponentType(String componentTypeId) {
+	if (StringUtils.isBlank(componentTypeId)) {
+		request.setComponentType(null);
+	}
+	else {
+		ComponentType pt = new ComponentType();
+		pt.setId(Long.parseLong(componentTypeId));
+		request.setComponentType(pt);
+	}
   }
 
   public void setIsDeleted(Boolean isDeleted) {
     request.setIsDeleted(isDeleted);
   }
 
-  public void setRequestType(String requestTypeId) {
-    if (StringUtils.isBlank(requestTypeId)) {
-      request.setRequestType(null);
-    } else {
-      RequestType rt = new RequestType();
-      rt.setId(Integer.parseInt(requestTypeId));
-      request.setRequestType(rt);
-    }
-  }
-
-  public void setComponentType(String componentTypeId) {
-    if (StringUtils.isBlank(componentTypeId)) {
-      request.setComponentType(null);
-    } else {
-      ComponentType pt = new ComponentType();
-      pt.setId(Integer.parseInt(componentTypeId));
-      request.setComponentType(pt);
-    }
-  }
-
   public List<Component> getIssuedComponents() {
     return request.getIssuedComponents();
-  }
-
-  @JsonIgnore
-  public void setIssuedComponents(List<Component> issuedComponents) {
-    request.setIssuedComponents(issuedComponents);
   }
 
   public int hashCode() {
@@ -150,13 +150,19 @@ public class RequestBackingForm {
   }
 
   public void setRequestSite(String requestSite) {
-    if (requestSite == null) {
-      request.setRequestSite(null);
-    } else {
-      Location l = new Location();
-      l.setId(Long.parseLong(requestSite));
-      request.setRequestSite(l);
-    }
+	if (requestSite == null) {
+		request.setRequestSite(null);
+	}
+	else {
+		Location l = new Location();
+		l.setId(Long.parseLong(requestSite));
+		request.setRequestSite(l);
+	}
+  }
+
+  @JsonIgnore
+  public void setIssuedComponents(List<Component> issuedComponents) {
+    request.setIssuedComponents(issuedComponents);
   }
 
   public void generateRequestNumber() {
@@ -168,7 +174,7 @@ public class RequestBackingForm {
     return request;
   }
 
-  private void setRequest(Request request) {
+  public void setRequest(Request request) {
     this.request = request;
   }
 
@@ -232,14 +238,14 @@ public class RequestBackingForm {
     request.setPatientAge(patientAge);
   }
 
-  public String getPatientBloodGroup() {
-    return new BloodGroup(request.getPatientBloodAbo(), request.getPatientBloodRh()).toString();
-  }
-
   public void setPatientBloodGroup(String patientBloodGroupStr) {
     BloodGroup bloodGroup = new BloodGroup(patientBloodGroupStr);
     request.setPatientBloodAbo(bloodGroup.getBloodAbo());
     request.setPatientBloodRh(bloodGroup.getBloodRh());
+  }
+
+  public String getPatientBloodGroup() {
+    return new BloodGroup(request.getPatientBloodAbo(), request.getPatientBloodRh()).toString();
   }
 
   public String getPatientDiagnosis() {

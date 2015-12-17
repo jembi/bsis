@@ -1,92 +1,62 @@
 package model.admin;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+
+import model.BaseEntity;
 
 @Entity
-public class GeneralConfig implements Serializable {
+public class GeneralConfig extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Integer id;
+  private static final long serialVersionUID = 1L;
 
-  @Column(unique = true)
-  private String name;
+    @Column(unique=true)
+    private String name;
 
-  private String value;
-  private String description;
+    private String value;
+    private String description ;
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  private DataType dataType;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private DataType dataType;
 
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getValue() {
-    return value;
-  }
-
-  public void setValue(String value) {
-    this.value = value;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public DataType getDataType() {
-    return dataType;
-  }
-
-  public void setDataType(DataType dataType) {
-    this.dataType = dataType;
-  }
-
-  public void copy(GeneralConfig generalConfig) {
-    this.name = generalConfig.getName();
-    this.description = generalConfig.getDescription();
-    this.value = generalConfig.getValue();
-    this.dataType = generalConfig.getDataType();
-  }
-
-
-  @Override
-  public int hashCode() {
-    int hash = 0;
-    hash += (id != null ? id.hashCode() : 0);
-    return hash;
-  }
-
-  @Override
-  public boolean equals(Object object) {
-    // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof GeneralConfig)) {
-      return false;
+    public String getName() {
+        return name;
     }
-    GeneralConfig other = (GeneralConfig) object;
-    return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
-  }
 
-  @Override
-  public String toString() {
-    return "model.admin.GeneralConfig[ id=" + id + " ]";
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public DataType getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(DataType dataType) {
+        this.dataType = dataType;
+    }
+
+    public void copy(GeneralConfig generalConfig) {
+        this.name = generalConfig.getName();
+        this.description = generalConfig.getDescription();
+        this.value = generalConfig.getValue();
+        this.dataType = generalConfig.getDataType();
+    }
 }

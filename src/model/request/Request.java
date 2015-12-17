@@ -1,103 +1,106 @@
 package model.request;
 
-import constraintvalidator.ComponentTypeExists;
-import constraintvalidator.LocationExists;
-import constraintvalidator.RequestTypeExists;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import model.BaseModificationTrackerEntity;
 import model.compatibility.CompatibilityTest;
 import model.component.Component;
 import model.componenttype.ComponentType;
 import model.location.Location;
-import model.modificationtracker.ModificationTracker;
-import model.modificationtracker.RowModificationTracker;
 import model.requesttype.RequestType;
-import model.user.User;
 import model.util.Gender;
+
 import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
-import javax.persistence.*;
-import javax.validation.Valid;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import constraintvalidator.ComponentTypeExists;
+import constraintvalidator.LocationExists;
+import constraintvalidator.RequestTypeExists;
 
 
 @Entity
 @Audited
-public class Request implements ModificationTracker {
+public class Request extends BaseModificationTrackerEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, updatable = false, insertable = false)
-  private Long id;
+  private static final long serialVersionUID = 1L;
 
-  @Column(length = 20, unique = true)
-  @Index(name = "request_requestNumber_index")
+  @Column(length=20, unique=true)
+  @Index(name="request_requestNumber_index")
   private String requestNumber;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Index(name = "request_requestDate_index")
+  @Index(name="request_requestDate_index")
   private Date requestDate;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Index(name = "request_requiredDate_index")
+  @Index(name="request_requiredDate_index")
   private Date requiredDate;
 
   private Boolean fulfilled;
 
-  @Column(length = 30)
-  @Index(name = "request_bloodAbo_index")
+  @Column(length=30)
+  @Index(name="request_bloodAbo_index")
   private String patientBloodAbo;
 
-  @Column(length = 30)
-  @Index(name = "request_bloodRhd_index")
+  @Column(length=30)
+  @Index(name="request_bloodRhd_index")
   private String patientBloodRh;
 
   // fetch type eager to check how many components issued
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy = "issuedTo")
+  @OneToMany(mappedBy="issuedTo")
   private List<Component> issuedComponents;
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy = "forRequest")
+  @OneToMany(mappedBy="forRequest")
   private Set<CompatibilityTest> crossmatchTests;
-
-  @Column(length = 30)
+  
+  @Column(length=30)
   private String patientNumber;
 
-  @Column(length = 30)
+  @Column(length=30)
   private String patientFirstName;
 
-  @Column(length = 30)
+  @Column(length=30)
   private String patientLastName;
 
   @Temporal(TemporalType.DATE)
   private Date patientBirthDate;
 
-  @Column(length = 50)
+  @Column(length=50)
   private String indicationForUse;
-
+  
   @Column
   private Integer patientAge;
 
   @Column
   private Gender patientGender;
 
-  @Column(length = 100)
+  @Column(length=100)
   private String patientDiagnosis;
 
-  @Column(length = 20)
+  @Column(length=20)
   private String ward;
 
-  @Column(length = 30)
+  @Column(length=30)
   private String hospital;
 
-  @Column(length = 30)
+  @Column(length=30)
   private String department;
 
   /**
@@ -105,7 +108,7 @@ public class Request implements ModificationTracker {
    * The request is coming from a hospital. we should store
    * the name of the doctor requesting it.
    */
-  @Column(length = 30)
+  @Column(length=30)
   private String requestedBy;
 
   @Column
@@ -116,9 +119,6 @@ public class Request implements ModificationTracker {
 
   @Lob
   private String notes;
-
-  @Valid
-  private RowModificationTracker modificationTracker;
 
   @ComponentTypeExists
   @ManyToOne
@@ -135,7 +135,7 @@ public class Request implements ModificationTracker {
   private Boolean isDeleted;
 
   public Request() {
-    modificationTracker = new RowModificationTracker();
+    super();
     numUnitsIssued = 0;
   }
 
@@ -165,96 +165,80 @@ public class Request implements ModificationTracker {
     this.notes = request.notes;
   }
 
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
   public String getRequestNumber() {
     return requestNumber;
-  }
-
-  public void setRequestNumber(String requestNumber) {
-    this.requestNumber = requestNumber;
   }
 
   public Date getRequestDate() {
     return requestDate;
   }
 
-  public void setRequestDate(Date requestDate) {
-    this.requestDate = requestDate;
-  }
-
   public Date getRequiredDate() {
     return requiredDate;
-  }
-
-  public void setRequiredDate(Date requiredDate) {
-    this.requiredDate = requiredDate;
   }
 
   public Integer getNumUnitsRequested() {
     return numUnitsRequested;
   }
 
-  public void setNumUnitsRequested(Integer numUnitsRequested) {
-    this.numUnitsRequested = numUnitsRequested;
-  }
-
   public String getPatientBloodAbo() {
     return patientBloodAbo;
-  }
-
-  public void setPatientBloodAbo(String patientBloodAbo) {
-    this.patientBloodAbo = patientBloodAbo;
   }
 
   public String getPatientBloodRh() {
     return patientBloodRh;
   }
 
-  public void setPatientBloodRh(String patientBloodRhd) {
-    this.patientBloodRh = patientBloodRhd;
-  }
-
   public String getNotes() {
     return notes;
-  }
-
-  public void setNotes(String notes) {
-    this.notes = notes;
-  }
-
-  public RowModificationTracker getModificationTracker() {
-    return modificationTracker;
-  }
-
-  public void setModificationTracker(RowModificationTracker modificationTracker) {
-    this.modificationTracker = modificationTracker;
   }
 
   public ComponentType getComponentType() {
     return componentType;
   }
 
-  public void setComponentType(ComponentType componentType) {
-    this.componentType = componentType;
-  }
-
   public Location getRequestSite() {
     return requestSite;
   }
 
-  public void setRequestSite(Location requestSite) {
-    this.requestSite = requestSite;
-  }
-
   public Boolean getIsDeleted() {
     return isDeleted;
+  }
+
+  public void setRequestNumber(String requestNumber) {
+    this.requestNumber = requestNumber;
+  }
+
+  public void setRequestDate(Date requestDate) {
+    this.requestDate = requestDate;
+  }
+
+  public void setRequiredDate(Date requiredDate) {
+    this.requiredDate = requiredDate;
+  }
+
+  public void setNumUnitsRequested(Integer numUnitsRequested) {
+    this.numUnitsRequested = numUnitsRequested;
+  }
+
+  public void setPatientBloodAbo(String patientBloodAbo) {
+    this.patientBloodAbo = patientBloodAbo;
+  }
+
+  public void setPatientBloodRh(String patientBloodRhd) {
+    this.patientBloodRh = patientBloodRhd;
+  }
+
+  public void setNotes(String notes) {
+    this.notes = notes;
+  }
+
+  public void setComponentType(ComponentType componentType) {
+    this.componentType = componentType;
+  }
+
+  public void setRequestSite(Location requestSite) {
+    this.requestSite = requestSite;
   }
 
   public void setIsDeleted(Boolean isDeleted) {
@@ -267,38 +251,6 @@ public class Request implements ModificationTracker {
 
   public void setIssuedComponents(List<Component> issuedComponents) {
     this.issuedComponents = issuedComponents;
-  }
-
-  public Date getLastUpdated() {
-    return modificationTracker.getLastUpdated();
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    modificationTracker.setLastUpdated(lastUpdated);
-  }
-
-  public Date getCreatedDate() {
-    return modificationTracker.getCreatedDate();
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    modificationTracker.setCreatedDate(createdDate);
-  }
-
-  public User getCreatedBy() {
-    return modificationTracker.getCreatedBy();
-  }
-
-  public void setCreatedBy(User createdBy) {
-    modificationTracker.setCreatedBy(createdBy);
-  }
-
-  public User getLastUpdatedBy() {
-    return modificationTracker.getLastUpdatedBy();
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 
   public Boolean getFulfilled() {

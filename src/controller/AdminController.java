@@ -351,7 +351,7 @@ public class AdminController {
       for (String id : params.keySet()) {
         String crossmatchType = (String) params.get(id);
         CrossmatchType ct = new CrossmatchType();
-        ct.setId(Integer.parseInt(id));
+        ct.setId(Long.parseLong(id));
         ct.setCrossmatchType(crossmatchType);
         ct.setIsDeleted(false);
         allCrossmatchTypes.add(ct);

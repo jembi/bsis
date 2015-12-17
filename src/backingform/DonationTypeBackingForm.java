@@ -1,3 +1,4 @@
+
 package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -8,39 +9,39 @@ import javax.validation.Valid;
 
 public class DonationTypeBackingForm {
 
-  @Valid
-  @JsonIgnore
-  private DonationType donationType;
+    @Valid
+    @JsonIgnore
+    private DonationType donationType;
 
-  public DonationTypeBackingForm() {
-    donationType = new DonationType();
-  }
+    public DonationTypeBackingForm() {
+        donationType = new DonationType();
+    }
 
-  public DonationType getDonationType() {
-    return donationType;
-  }
+    public DonationType getDonationType() {
+        return donationType;
+    }
 
-  public void setDonationType(DonationType donationType) {
-    this.donationType = donationType;
-  }
+    public String getType() {
+        return donationType.getDonationType();
+    }
 
-  public String getType() {
-    return donationType.getDonationType();
-  }
+    public Long getId() {
+        return donationType.getId();
+    }
 
-  public void setType(String donationTypeStr) {
-    donationType.setDonationType(donationTypeStr);
-  }
+    public void setDonationType(DonationType donationType) {
+        this.donationType = donationType;
+    }
 
-  public Integer getId() {
-    return donationType.getId();
-  }
+    public void setId(Long id){
+        donationType.setId(id);
+    }
 
-  public void setId(Integer id) {
-    donationType.setId(id);
-  }
+    public void setType(String donationTypeStr){
+        donationType.setDonationType(donationTypeStr);
+    }
 
-  public void setIsDeleted(Boolean isDeleted) {
-    donationType.setIsDeleted(isDeleted);
-  }
+    public void setIsDeleted(Boolean isDeleted){
+        donationType.setIsDeleted(isDeleted);
+    }
 }

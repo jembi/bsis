@@ -46,7 +46,7 @@ public class DonationTypeRepository {
     return query.getResultList();
   }
 
-  public DonationType getDonationTypeById(Integer donorTypeId) {
+  public DonationType getDonationTypeById(Long donorTypeId) {
     TypedQuery<DonationType> query;
     query = em.createQuery("SELECT d from DonationType d " +
             "where d.id=:id", DonationType.class);

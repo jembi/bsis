@@ -1,21 +1,24 @@
 package model.microtiterplate;
 
-import model.bloodtesting.BloodTestResult;
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
-
-import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import model.BaseEntity;
+import model.bloodtesting.BloodTestResult;
+
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+
 @Audited
 @Entity
-public class PlateSession {
+public class PlateSession extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable = false, updatable = false)
-  private Long id;
+  private static final long serialVersionUID = 1L;
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date plateUsedOn;
@@ -25,14 +28,6 @@ public class PlateSession {
   private List<BloodTestResult> bloodTestsOnPlate;
 
   private Boolean isDeleted;
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
 
   public Date getPlateUsedOn() {
     return plateUsedOn;

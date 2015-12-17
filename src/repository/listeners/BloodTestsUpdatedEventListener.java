@@ -107,10 +107,6 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
     if (donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)) {
       newDonorStatus = DonorStatus.POSITIVE_TTI;
     }
-    if (newBloodAbo == null)
-      newBloodAbo = "";
-    if (newBloodRh == null)
-      newBloodRh = "";
 
     if (!newDonorStatus.equals(oldDonorStatus) ||
             !newBloodAbo.equals(oldBloodAbo) ||

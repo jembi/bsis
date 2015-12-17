@@ -4,21 +4,21 @@ import model.componentmovement.ComponentStatusChangeReason;
 
 public class DiscardReasonViewModel {
 
-  private ComponentStatusChangeReason discardReason;
+    private ComponentStatusChangeReason discardReason;
 
-  public DiscardReasonViewModel(ComponentStatusChangeReason discardReason) {
-    this.discardReason = discardReason;
-  }
+    public DiscardReasonViewModel(ComponentStatusChangeReason discardReason) {
+        this.discardReason = discardReason;
+    }
 
-  public Integer getId() {
-    return discardReason.getId();
-  }
+    public Long getId(){
+        return discardReason.getId();
+    }
 
-  public String getReason() {
-    return discardReason.getStatusChangeReason();
-  }
+    public String getReason(){
+        return discardReason.getStatusChangeReason();
+    }
 
-  public Boolean getIsDeleted() {
-    return discardReason.getIsDeleted();
-  }
+    public Boolean getIsDeleted(){
+        return discardReason.getIsDeleted();
+    }
 }

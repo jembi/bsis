@@ -6,54 +6,27 @@
 
 package model.preferredlanguage;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
+import model.BaseEntity;
 
 /**
- * @author srikanth
+ * Entity that defines the various languages that can be selected as the Donor's preferred language. 
  */
 @Entity
-public class PreferredLanguage {
+public class PreferredLanguage extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable = false, updatable = false)
-  private Long id;
+  private static final long serialVersionUID = 1L;
 
-  @Column(length = 20)
-  private String preferredLanguage;
+    @Column(length=20)
+    private String preferredLanguage;
 
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getPreferredLanguage() {
-    return preferredLanguage;
-  }
-
-  public void setPreferredLanguage(String preferredLanguage) {
-    this.preferredLanguage = preferredLanguage;
-  }
-
-
-  @Override
-  public int hashCode() {
-    int hash = 0;
-    hash += (id != null ? id.hashCode() : 0);
-    return hash;
-  }
-
-  @Override
-  public boolean equals(Object object) {
-    // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof PreferredLanguage)) {
-      return false;
+    public String getPreferredLanguage() {
+        return preferredLanguage;
     }
-    PreferredLanguage other = (PreferredLanguage) object;
-    return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
-  }
 
+    public void setPreferredLanguage(String preferredLanguage) {
+        this.preferredLanguage = preferredLanguage;
+    }
 }

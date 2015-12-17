@@ -1,28 +1,32 @@
 package model.compatibility;
 
-import constraintvalidator.ComponentExists;
-import constraintvalidator.RequestExists;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import model.BaseModificationTrackerEntity;
 import model.component.Component;
-import model.modificationtracker.ModificationTracker;
-import model.modificationtracker.RowModificationTracker;
 import model.request.Request;
-import model.user.User;
+
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 
-import javax.persistence.*;
-import javax.validation.Valid;
-import java.util.Date;
+import constraintvalidator.ComponentExists;
+import constraintvalidator.RequestExists;
 
 
 @Entity
 @Audited
-public class CompatibilityTest implements ModificationTracker {
+public class CompatibilityTest extends BaseModificationTrackerEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false)
-  private Long id;
+  private static final long serialVersionUID = 1L;
 
   @RequestExists
   @ManyToOne
@@ -33,7 +37,7 @@ public class CompatibilityTest implements ModificationTracker {
   private Component testedComponent;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Index(name = "compatibilityTest_crossmatchTestDate_index")
+  @Index(name="compatibilityTest_crossmatchTestDate_index")
   private Date compatibililityTestDate;
 
   /**
@@ -42,7 +46,7 @@ public class CompatibilityTest implements ModificationTracker {
   private Boolean transfusedBefore;
 
   @Enumerated(EnumType.STRING)
-  @Column(length = 15)
+  @Column(length=15)
   private CompatibilityResult compatibilityResult;
 
   @ManyToOne
@@ -58,51 +62,8 @@ public class CompatibilityTest implements ModificationTracker {
   @Lob
   private String notes;
 
-  @Valid
-  private RowModificationTracker modificationTracker;
-
   public CompatibilityTest() {
-    modificationTracker = new RowModificationTracker();
-  }
-
-  public Date getLastUpdated() {
-    return modificationTracker.getLastUpdated();
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    modificationTracker.setLastUpdated(lastUpdated);
-  }
-
-  public Date getCreatedDate() {
-    return modificationTracker.getCreatedDate();
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    modificationTracker.setCreatedDate(createdDate);
-  }
-
-  public User getCreatedBy() {
-    return modificationTracker.getCreatedBy();
-  }
-
-  public void setCreatedBy(User createdBy) {
-    modificationTracker.setCreatedBy(createdBy);
-  }
-
-  public User getLastUpdatedBy() {
-    return modificationTracker.getLastUpdatedBy();
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
+    super();
   }
 
   public Request getForRequest() {

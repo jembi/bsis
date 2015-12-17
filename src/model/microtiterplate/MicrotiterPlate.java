@@ -1,28 +1,29 @@
 package model.microtiterplate;
 
-import org.hibernate.envers.Audited;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Lob;
 
-import javax.persistence.*;
+import model.BaseEntity;
+
+import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-public class MicrotiterPlate {
+public class MicrotiterPlate extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable = false, updatable = false, columnDefinition = "SMALLINT")
-  private Integer id;
+  private static final long serialVersionUID = 1L;
 
-  @Column(length = 15, unique = true)
+  @Column(length=15, unique=true)
   private String plateKey;
-
-  @Column(length = 20)
+  
+  @Column(length=20)
   private String plateName;
 
-  @Column(columnDefinition = "SMALLINT")
+  @Column(columnDefinition="SMALLINT")
   private Integer numRows;
 
-  @Column(columnDefinition = "SMALLINT")
+  @Column(columnDefinition="SMALLINT")
   private Integer numColumns;
 
   @Lob
@@ -30,40 +31,32 @@ public class MicrotiterPlate {
 
   private Boolean isDeleted;
 
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
   public String getPlateName() {
     return plateName;
-  }
-
-  public void setPlateName(String plateName) {
-    this.plateName = plateName;
   }
 
   public Integer getNumRows() {
     return numRows;
   }
 
-  public void setNumRows(Integer numRows) {
-    this.numRows = numRows;
-  }
-
   public Integer getNumColumns() {
     return numColumns;
   }
 
-  public void setNumColumns(Integer numColumns) {
-    this.numColumns = numColumns;
-  }
-
   public String getNotes() {
     return notes;
+  }
+
+  public void setPlateName(String plateName) {
+    this.plateName = plateName;
+  }
+
+  public void setNumRows(Integer numRows) {
+    this.numRows = numRows;
+  }
+
+  public void setNumColumns(Integer numColumns) {
+    this.numColumns = numColumns;
   }
 
   public void setNotes(String notes) {

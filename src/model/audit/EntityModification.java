@@ -1,61 +1,51 @@
 package model.audit;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.ManyToOne;
+
+import model.BaseEntity;
+
 import org.hibernate.envers.RevisionType;
 
-import javax.persistence.*;
-
 @Entity
-public class EntityModification {
+public class EntityModification extends BaseEntity {
 
-  @Id
-  @GeneratedValue
-  private int id;
+  private static final long serialVersionUID = 1L;
 
-  @ManyToOne
-  private AuditRevision auditRevision;
+    @ManyToOne
+    private AuditRevision auditRevision;
+    
+    @Column(length = 30, nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RevisionType revisionType;
+    
+    @Column(length = 30, nullable = false)
+    private String entityName;
 
-  @Column(length = 30, nullable = false)
-  @Enumerated(EnumType.STRING)
-  private RevisionType revisionType;
+    public AuditRevision getAuditRevision() {
+        return auditRevision;
+    }
 
-  @Column(length = 30, nullable = false)
-  private String entityName;
+    public void setAuditRevision(AuditRevision auditRevision) {
+        this.auditRevision = auditRevision;
+    }
 
-  public int getId() {
-    return id;
-  }
+    public RevisionType getRevisionType() {
+        return revisionType;
+    }
 
-  public void setId(int id) {
-    this.id = id;
-  }
+    public void setRevisionType(RevisionType revisionType) {
+        this.revisionType = revisionType;
+    }
 
-  public AuditRevision getAuditRevision() {
-    return auditRevision;
-  }
+    public String getEntityName() {
+        return entityName;
+    }
 
-  public void setAuditRevision(AuditRevision auditRevision) {
-    this.auditRevision = auditRevision;
-  }
-
-  public RevisionType getRevisionType() {
-    return revisionType;
-  }
-
-  public void setRevisionType(RevisionType revisionType) {
-    this.revisionType = revisionType;
-  }
-
-  public String getEntityName() {
-    return entityName;
-  }
-
-  public void setEntityName(String entityName) {
-    this.entityName = entityName;
-  }
-
-  @Override
-  public boolean equals(Object other) {
-    return other == this || other instanceof EntityModification && ((EntityModification) other).id == id;
-  }
-
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
+    }
 }

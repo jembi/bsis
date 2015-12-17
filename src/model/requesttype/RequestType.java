@@ -1,35 +1,27 @@
 package model.requesttype;
 
-import org.hibernate.envers.Audited;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
-import javax.persistence.*;
+import model.BaseEntity;
+
+import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-public class RequestType {
+public class RequestType extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable = false, updatable = false, columnDefinition = "SMALLINT")
-  private Integer id;
+  private static final long serialVersionUID = 1L;
 
-  @Column(length = 30)
+  @Column(length=30)
   private String requestType;
 
-  @Column(length = 100)
+  @Column(length=100)
   private String description;
 
   private Boolean isDeleted;
-
+  
   private Boolean bulkTransfer;
-
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
 
   public String getRequestType() {
     return requestType;
@@ -55,12 +47,11 @@ public class RequestType {
     this.isDeleted = isDeleted;
   }
 
-  public Boolean getBulkTransfer() {
-    return bulkTransfer;
-  }
-
-  public void setBulkTransfer(Boolean bulkTransfer) {
-    this.bulkTransfer = bulkTransfer;
-  }
-
+	public Boolean getBulkTransfer() {
+		return bulkTransfer;
+	}
+	
+	public void setBulkTransfer(Boolean bulkTransfer) {
+		this.bulkTransfer = bulkTransfer;
+	}
 }
