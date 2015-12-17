@@ -26,7 +26,7 @@ import repository.DonorRepository;
 import security.BsisUserDetails;
 import suites.ContextDependentTestSuite;
 
-public class ModificationTrackerBaseEntityTest extends ContextDependentTestSuite {
+public class BaseModificationTrackerEntityTest extends ContextDependentTestSuite {
 
   private static final String ADMIN_USERNAME = "admin";
   private User adminUser;

@@ -17,7 +17,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import model.ModificationTrackerBaseEntity;
+import model.BaseModificationTrackerEntity;
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
@@ -49,7 +49,7 @@ import constraintvalidator.LocationExists;
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class Donor extends ModificationTrackerBaseEntity {
+public class Donor extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 

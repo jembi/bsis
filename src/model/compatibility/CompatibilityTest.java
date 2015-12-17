@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import model.ModificationTrackerBaseEntity;
+import model.BaseModificationTrackerEntity;
 import model.component.Component;
 import model.request.Request;
 
@@ -24,7 +24,7 @@ import constraintvalidator.RequestExists;
 
 @Entity
 @Audited
-public class CompatibilityTest extends ModificationTrackerBaseEntity {
+public class CompatibilityTest extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 

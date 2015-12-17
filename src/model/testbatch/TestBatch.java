@@ -13,7 +13,7 @@ import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
-import model.ModificationTrackerBaseEntity;
+import model.BaseModificationTrackerEntity;
 import model.donationbatch.DonationBatch;
 
 import org.hibernate.envers.Audited;
@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class TestBatch extends ModificationTrackerBaseEntity {
+public class TestBatch extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 

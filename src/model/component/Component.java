@@ -17,7 +17,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import model.ModificationTrackerBaseEntity;
+import model.BaseModificationTrackerEntity;
 import model.compatibility.CompatibilityTest;
 import model.componentmovement.ComponentStatusChange;
 import model.componenttype.ComponentType;
@@ -49,7 +49,7 @@ import constraintvalidator.DonationExists;
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class Component extends ModificationTrackerBaseEntity {
+public class Component extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 

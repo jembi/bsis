@@ -13,7 +13,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import model.ModificationTrackerBaseEntity;
+import model.BaseModificationTrackerEntity;
 import model.donation.Donation;
 import model.microtiterplate.MachineReading;
 import repository.BloodTestResultNamedQueryConstants;
@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 })
 @Entity
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class BloodTestResult extends ModificationTrackerBaseEntity {
+public class BloodTestResult extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 

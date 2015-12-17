@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
-import model.ModificationTrackerBaseEntity;
+import model.BaseModificationTrackerEntity;
 import model.donation.Donation;
 
 import org.hibernate.envers.Audited;
@@ -35,7 +35,7 @@ import constraintvalidator.DonationExists;
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class PostDonationCounselling extends ModificationTrackerBaseEntity {
+public class PostDonationCounselling extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 

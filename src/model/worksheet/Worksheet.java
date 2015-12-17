@@ -9,7 +9,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
-import model.ModificationTrackerBaseEntity;
+import model.BaseModificationTrackerEntity;
 import model.donation.Donation;
 
 import org.hibernate.envers.Audited;
@@ -18,7 +18,7 @@ import org.hibernate.envers.RelationTargetAuditMode;
 
 @Entity
 @Audited
-public class Worksheet extends ModificationTrackerBaseEntity {
+public class Worksheet extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 

@@ -19,13 +19,13 @@ import model.user.User;
 @MappedSuperclass
 @Audited
 @SuppressWarnings("serial")
-public abstract class ModificationTrackerBaseEntity extends BaseEntity implements ModificationTracker {
+public abstract class BaseModificationTrackerEntity extends BaseEntity implements ModificationTracker {
 
   @Valid
   @Embedded
   private RowModificationTracker modificationTracker;
   
-  public ModificationTrackerBaseEntity() {
+  public BaseModificationTrackerEntity() {
     modificationTracker = new RowModificationTracker();
   }
 

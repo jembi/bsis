@@ -10,7 +10,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import model.ModificationTrackerBaseEntity;
+import model.BaseModificationTrackerEntity;
 import model.donor.Donor;
 import model.user.User;
 
@@ -34,7 +34,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class DonorDeferral extends ModificationTrackerBaseEntity {
+public class DonorDeferral extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 

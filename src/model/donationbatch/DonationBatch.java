@@ -14,7 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
-import model.ModificationTrackerBaseEntity;
+import model.BaseModificationTrackerEntity;
 import model.donation.Donation;
 import model.location.Location;
 import model.testbatch.TestBatch;
@@ -38,7 +38,7 @@ import constraintvalidator.LocationExists;
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class DonationBatch extends ModificationTrackerBaseEntity {
+public class DonationBatch extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 

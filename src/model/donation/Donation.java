@@ -23,7 +23,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
-import model.ModificationTrackerBaseEntity;
+import model.BaseModificationTrackerEntity;
 import model.adverseevent.AdverseEvent;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
@@ -74,7 +74,7 @@ import constraintvalidator.PackTypeExists;
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class Donation extends ModificationTrackerBaseEntity implements Comparable<Donation> {
+public class Donation extends BaseModificationTrackerEntity implements Comparable<Donation> {
 
   private static final long serialVersionUID = 1L;
 

@@ -9,7 +9,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import model.ModificationTrackerBaseEntity;
+import model.BaseModificationTrackerEntity;
 import model.component.Component;
 
 import org.hibernate.envers.Audited;
@@ -21,7 +21,7 @@ import constraintvalidator.ComponentExists;
  */
 @Entity
 @Audited
-public class ComponentUsage extends ModificationTrackerBaseEntity {
+public class ComponentUsage extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 

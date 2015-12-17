@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import model.ModificationTrackerBaseEntity;
+import model.BaseModificationTrackerEntity;
 import model.compatibility.CompatibilityTest;
 import model.component.Component;
 import model.componenttype.ComponentType;
@@ -33,7 +33,7 @@ import constraintvalidator.RequestTypeExists;
 
 @Entity
 @Audited
-public class Request extends ModificationTrackerBaseEntity {
+public class Request extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 
