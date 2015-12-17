@@ -114,7 +114,7 @@ public class WellTypeRepositoryTest {
 	public void testSaveAllWellTypesUpdate() throws Exception {
 		WellType oldOne = wellTypeRepository.getWellTypeById(1l);
 		oldOne.setWellType("oldSample");
-		List<WellType> all = new ArrayList<WellType>();
+		List<WellType> all = new ArrayList<>();
 		all.add(oldOne);
 		wellTypeRepository.saveAllWellTypes(all);
 		WellType savedOldOne = wellTypeRepository.getWellTypeById(1l);
@@ -127,7 +127,7 @@ public class WellTypeRepositoryTest {
 		newOne.setRequiresSample(true);
 		newOne.setWellType("Junit");
 		newOne.setIsDeleted(false);
-		List<WellType> all = new ArrayList<WellType>();
+		List<WellType> all = new ArrayList<>();
 		all.add(newOne);
 		wellTypeRepository.saveAllWellTypes(all);
 		List<WellType> allSaved = wellTypeRepository.getAllWellTypes();

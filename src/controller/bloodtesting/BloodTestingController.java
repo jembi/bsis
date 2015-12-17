@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import model.bloodtesting.BloodTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,11 +45,8 @@ public class BloodTestingController {
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
   public  Map<String, Object> configureBloodTests() {
-    Map<String, Object> map = new HashMap<String, Object>();
-    List<BloodTestViewModel> bloodTests = new ArrayList<BloodTestViewModel>();
-    for (BloodTest bt : bloodTestingRepository.getAllBloodTestsIncludeInactive()) {
-      bloodTests.add(new BloodTestViewModel(bt));
-    }
+    Map<String, Object> map = new HashMap<>();
+    List<BloodTestViewModel> bloodTests = bloodTestingRepository.getAllBloodTestsIncludeInactive().stream().map(BloodTestViewModel::new).collect(Collectors.toList());
     map.put("bloodTests", bloodTests);
     return map;
   }
@@ -56,7 +54,7 @@ public class BloodTestingController {
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
   public Map<String, Object> getBloodTestSummary(@PathVariable Long id) {
       
-    Map<String, Object> map = new HashMap<String, Object>();  
+    Map<String, Object> map = new HashMap<>();
     BloodTestViewModel bloodTest = new BloodTestViewModel(bloodTestingRepository.findBloodTestWithWorksheetTypesById(id));
     map.put("bloodTest", bloodTest);
     return map;
@@ -78,7 +76,7 @@ public class BloodTestingController {
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
   public ResponseEntity updateBloodTest(@PathVariable Long id,
       @RequestBody BloodTestBackingForm backingObject) {
-      Map<String, Object> map = new HashMap<String, Object>();  
+      Map<String, Object> map = new HashMap<>();
       backingObject.setId(id);
       BloodTest bloodTest = bloodTestingRepository.updateBloodTest(backingObject);
       map.put("bloodTest", bloodTest);

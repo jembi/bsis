@@ -125,7 +125,7 @@ public class GeneralConfigRepositoryTest {
 		generalConfig1.setValue("255");
 		GeneralConfig generalConfig2 = generalConfigRepository.getGeneralConfigByName("donation.bpDiastolicMax");
 		generalConfig2.setValue("155");
-		List<GeneralConfig> generalConfigs = new ArrayList<GeneralConfig>();
+		List<GeneralConfig> generalConfigs = new ArrayList<>();
 		generalConfigs.add(generalConfig1);
 		generalConfigs.add(generalConfig2);
 		generalConfigRepository.updateAll(generalConfigs);

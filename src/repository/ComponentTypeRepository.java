@@ -98,8 +98,8 @@ public class ComponentTypeRepository {
       ComponentTypeCombination componentTypeCombination) {
       
     String combinationName = componentTypeCombination.getCombinationName();
-    List<ComponentType> componentTypes = new ArrayList<ComponentType>();
-    List<String> combinationNameList = new ArrayList<String>();
+    List<ComponentType> componentTypes = new ArrayList<>();
+    List<String> combinationNameList = new ArrayList<>();
   
     for (ComponentType componentType : componentTypeCombination.getComponentTypes()) {
       componentTypes.add(componentType);
@@ -129,7 +129,7 @@ public class ComponentTypeRepository {
   
   public List<ComponentType> getAllParentComponentTypes() {
     TypedQuery<ComponentType> query;
-    List<ComponentType> componentTypes = new ArrayList<ComponentType>();
+    List<ComponentType> componentTypes = new ArrayList<>();
     query = em.createQuery("SELECT ct from ComponentType ct where ct.isDeleted=:isDeleted AND pediComponentType_id != null AND ct.id!= 1", ComponentType.class);
     query.setParameter("isDeleted", false);
     componentTypes = query.getResultList(); 

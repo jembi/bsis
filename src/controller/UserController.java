@@ -56,7 +56,7 @@ public class UserController {
     public 
     Map<String, Object> configureUsersFormGenerator(HttpServletRequest request) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         addAllUsersToModel(map);
         map.put("roles", roleRepository.getAllRoles());
         return map;
@@ -66,7 +66,7 @@ public class UserController {
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
     public ResponseEntity getRoles() {
         UserBackingForm form = new UserBackingForm();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("roles", roleRepository.getAllRoles());
         return new ResponseEntity(map, HttpStatus.OK);
     }
@@ -74,7 +74,7 @@ public class UserController {
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
     public  ResponseEntity getUserDetails(@PathVariable Long id){
-         Map<String, Object> map = new HashMap<String, Object>();
+         Map<String, Object> map = new HashMap<>();
          User user = userRepository.findUserById(id);
          map.put("user", new UserViewModel(user));
          return new ResponseEntity(map, HttpStatus.OK);
@@ -131,7 +131,7 @@ public class UserController {
             user.setPasswordReset(false);
         }
         userRepository.updateBasicUserInfo(user, modifyPassword);
-        return new ResponseEntity<UserViewModel>(new UserViewModel(user), HttpStatus.OK);
+        return new ResponseEntity<>(new UserViewModel(user), HttpStatus.OK);
     }
     
             

@@ -84,16 +84,16 @@ public class DonationBatchController {
   ) {
 
 	if(venues == null){
-		venues = new ArrayList<Long>();
+		venues = new ArrayList<>();
 	}
 
     List<DonationBatch> donationBatches =
         donationBatchRepository.findDonationBatches(isClosed, venues, startDate, endDate);
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     map.put("donationBatches", getDonationBatchViewModels(donationBatches));
 
-    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
@@ -102,7 +102,7 @@ public class DonationBatchController {
 
     DonationBatchBackingForm form = new DonationBatchBackingForm();
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     map.put("addDonationBatchForm", form);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donationbatch");
     addEditSelectorOptions(map);
@@ -118,15 +118,15 @@ public class DonationBatchController {
         DonationBatch donationBatch = form.getDonationBatch();
         donationBatch.setIsDeleted(false);
         donationBatchRepository.addDonationBatch(donationBatch);
-		return new ResponseEntity<DonationBatchViewModel>(donationBatchViewModelFactory.createDonationBatchViewModel(
-		        donationBatch), HttpStatus.CREATED);
+		return new ResponseEntity<>(donationBatchViewModelFactory.createDonationBatchViewModel(
+            donationBatch), HttpStatus.CREATED);
   }
   
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
 	@PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONATION_BATCH + "')")
 	public ResponseEntity<Map<String, Object>> updateDonationBatch(@PathVariable Long id,
 	                                                               @RequestBody @Valid DonationBatchBackingForm form) {
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 
 		donationBatchCRUDService.updateDonationBatch(form.getDonationBatch());
 		
@@ -134,7 +134,7 @@ public class DonationBatchController {
 		DonationBatchViewModel donationBatchViewModel = donationBatchViewModelFactory
 		        .createDonationBatchViewModel(donationBatch);
 		map.put("donationBatch", donationBatchViewModel);
-		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
   
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
@@ -149,13 +149,13 @@ public class DonationBatchController {
   public ResponseEntity<Map<String, Object>> donationBatchSummaryGenerator(HttpServletRequest request,
       @PathVariable Long id) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     DonationBatch  donationBatch = donationBatchRepository.findDonationBatchById(id);
     DonationBatchViewModel donationBatchViewModel = donationBatchViewModelFactory.createDonationBatchViewModel(
             donationBatch);
     map.put("donationBatch", donationBatchViewModel);
 
-    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   
@@ -166,7 +166,7 @@ public class DonationBatchController {
   private List<DonationBatchViewModel> getDonationBatchViewModels(List<DonationBatch> donationBatches) {
     if (donationBatches == null)
       return Arrays.asList(new DonationBatchViewModel[0]);
-    List<DonationBatchViewModel> donationBatchViewModels = new ArrayList<DonationBatchViewModel>();
+    List<DonationBatchViewModel> donationBatchViewModels = new ArrayList<>();
     for (DonationBatch donationBatch : donationBatches) {
       donationBatchViewModels.add(donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch));
     }

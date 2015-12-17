@@ -371,7 +371,7 @@ public class ComponentRepository {
     query.setParameter("isDeleted", Boolean.FALSE);
     List<Component> components = query.getResultList();
     if (CollectionUtils.isEmpty(components)) {
-      return new ArrayList<Component>();
+      return new ArrayList<>();
     }
     return components;
   }
@@ -481,9 +481,9 @@ public class ComponentRepository {
     crossmatchQuery.setParameter("isDeleted", false);
 
     List<CompatibilityTest> crossmatchTests = crossmatchQuery.getResultList();
-    List<MatchingComponentViewModel> matchingComponents = new ArrayList<MatchingComponentViewModel>();
+    List<MatchingComponentViewModel> matchingComponents = new ArrayList<>();
 
-    Map<Long, CompatibilityTest> crossmatchTestMap = new HashMap<Long, CompatibilityTest>();
+    Map<Long, CompatibilityTest> crossmatchTestMap = new HashMap<>();
     for (CompatibilityTest crossmatchTest : crossmatchTests) {
       Component component = crossmatchTest.getTestedComponent();
       if (component == null)
@@ -505,7 +505,7 @@ public class ComponentRepository {
   }
   
   public Map<String, Object> generateInventorySummaryFast(List<String> status, List<Long> venueIds) {
-    Map<String, Object> inventory = new HashMap<String, Object>();
+    Map<String, Object> inventory = new HashMap<>();
     // IMPORTANT: Distinct is necessary to avoid a cartesian product of test results and components from being returned
     // Also LEFT JOIN FETCH prevents the N+1 queries problem associated with Lazy Many-to-One joins
     TypedQuery<Component> q = em.createQuery(
@@ -514,7 +514,7 @@ public class ComponentRepository {
                              "c.donation.venue.id IN (:venueIds) AND " +
                              "c.isDeleted=:isDeleted",
                              Component.class);
-    List<ComponentStatus> componentStatus = new ArrayList<ComponentStatus>();
+    List<ComponentStatus> componentStatus = new ArrayList<>();
     for (String s : status) {
       componentStatus.add(ComponentStatus.lookup(s));
     }
@@ -526,7 +526,7 @@ public class ComponentRepository {
     TypedQuery<ComponentType> componentTypeQuery = em.createQuery("SELECT pt FROM ComponentType pt", ComponentType.class);
 
     for (ComponentType componentType : componentTypeQuery.getResultList()) {
-      Map<String, Map<Long, Long>> inventoryByBloodGroup = new HashMap<String, Map<Long, Long>>();
+      Map<String, Map<Long, Long>> inventoryByBloodGroup = new HashMap<>();
 
       inventoryByBloodGroup.put("", getMapWithNumDaysWindows());
       inventoryByBloodGroup.put("A+", getMapWithNumDaysWindows());
@@ -563,7 +563,7 @@ public class ComponentRepository {
   }
 
   private Map<Long, Long> getMapWithNumDaysWindows() {
-    Map<Long, Long> m = new HashMap<Long, Long>();
+    Map<Long, Long> m = new HashMap<>();
     m.put((long)0, (long)0); // age < 5 days
     m.put((long)5, (long)0); // 5 <= age < 10 days
     m.put((long)10, (long)0); // 10 <= age < 15 days
@@ -609,7 +609,7 @@ public class ComponentRepository {
     statusChange.setStatusChangeReasonText(discardReasonText);
     statusChange.setChangedBy(utilController.getCurrentUser());
     if (existingComponent.getStatusChanges() == null)
-      existingComponent.setStatusChanges(new ArrayList<ComponentStatusChange>());
+      existingComponent.setStatusChanges(new ArrayList<>());
     existingComponent.getStatusChanges().add(statusChange);
     statusChange.setComponent(existingComponent);
     em.persist(statusChange);
@@ -630,7 +630,7 @@ public class ComponentRepository {
   }
 
   public List<Component> getComponentsFromComponentIds(String[] componentIds) {
-    List<Component> components = new ArrayList<Component>();
+    List<Component> components = new ArrayList<>();
     for (String componentId : componentIds) {
       components.add(findComponentById(Long.parseLong(componentId)));
     }
@@ -641,7 +641,7 @@ public class ComponentRepository {
       Date donationDateFrom, Date donationDateTo, String aggregationCriteria,
       List<String> venues, List<String> bloodGroups) throws ParseException {
 
-    List<Long> venueIds = new ArrayList<Long>();
+    List<Long> venueIds = new ArrayList<>();
     if (venues != null) {
       for (String venue : venues) {
     	venueIds.add(Long.parseLong(venue));
@@ -650,9 +650,9 @@ public class ComponentRepository {
       venueIds.add((long)-1);
     }
 
-    Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long,Long>>();
+    Map<String, Map<Long, Long>> resultMap = new HashMap<>();
     for (String bloodGroup : bloodGroups) {
-      resultMap.put(bloodGroup, new HashMap<Long, Long>());
+      resultMap.put(bloodGroup, new HashMap<>());
     }
 
     TypedQuery<Object[]> query = em.createQuery(
@@ -687,7 +687,7 @@ public class ComponentRepository {
     List<Object[]> resultList = query.getResultList();
 
     for (String bloodGroup : bloodGroups) {
-      Map<Long, Long> m = new HashMap<Long, Long>();
+      Map<Long, Long> m = new HashMap<>();
       Calendar gcal = new GregorianCalendar();
       Date lowerDate =  resultDateFormat.parse(resultDateFormat.format(donationDateFrom));
       Date upperDate =  resultDateFormat.parse(resultDateFormat.format(donationDateTo));
@@ -726,7 +726,7 @@ public class ComponentRepository {
       Date donationDateFrom, Date donationDateTo, String aggregationCriteria,
       List<String> venues, List<String> bloodGroups) throws ParseException {
 
-	List<Long> venueIds = new ArrayList<Long>();
+	List<Long> venueIds = new ArrayList<>();
     if (venues != null) {
       for (String venue : venues) {
     	venueIds.add(Long.parseLong(venue));
@@ -735,9 +735,9 @@ public class ComponentRepository {
       venueIds.add((long)-1);
     }
 
-    Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long,Long>>();
+    Map<String, Map<Long, Long>> resultMap = new HashMap<>();
     for (String bloodGroup : bloodGroups) {
-      resultMap.put(bloodGroup, new HashMap<Long, Long>());
+      resultMap.put(bloodGroup, new HashMap<>());
     }
 
     TypedQuery<Object[]> query = em.createQuery(
@@ -769,7 +769,7 @@ public class ComponentRepository {
     List<Object[]> resultList = query.getResultList();
 
     for (String bloodGroup : bloodGroups) {
-      Map<Long, Long> m = new HashMap<Long, Long>();
+      Map<Long, Long> m = new HashMap<>();
       Calendar gcal = new GregorianCalendar();
       Date lowerDate = null;
       Date upperDate = null;
@@ -837,7 +837,7 @@ public class ComponentRepository {
     statusChange.setStatusChangeReasonText(returnReasonText);
     statusChange.setChangedBy(utilController.getCurrentUser());
     if (existingComponent.getStatusChanges() == null)
-      existingComponent.setStatusChanges(new ArrayList<ComponentStatusChange>());
+      existingComponent.setStatusChanges(new ArrayList<>());
     existingComponent.getStatusChanges().add(statusChange);
     statusChange.setComponent(existingComponent);
     em.persist(statusChange);
@@ -865,7 +865,7 @@ public class ComponentRepository {
 
   @SuppressWarnings("unchecked")
   public List<Component> addComponentCombination(ComponentCombinationBackingForm form) throws PessimisticLockException, ParseException {
-    List<Component> components = new ArrayList<Component>();
+    List<Component> components = new ArrayList<>();
     String expiresOn = form.getExpiresOn();
     ObjectMapper mapper = new ObjectMapper();
 
@@ -942,7 +942,7 @@ public class ComponentRepository {
     statusChange.setStatusChangeReasonText("");
     statusChange.setChangedBy(utilController.getCurrentUser());
     if (component.getStatusChanges() == null)
-      component.setStatusChanges(new ArrayList<ComponentStatusChange>());
+      component.setStatusChanges(new ArrayList<>());
     component.getStatusChanges().add(statusChange);
     statusChange.setComponent(component);
     em.persist(statusChange);

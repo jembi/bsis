@@ -46,7 +46,7 @@ public class DiscardReasonController {
     @RequestMapping(method=RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
     public  Map<String, Object> getDiscardReasons() {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         addAllDiscardReasonsToModel(map);
         return map;
     }
@@ -54,7 +54,7 @@ public class DiscardReasonController {
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
     public ResponseEntity<ComponentStatusChangeReason> getDiscardReasonById(@PathVariable Long id){
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         ComponentStatusChangeReason discardReason = discardReasonRepository.getDiscardReasonById(id);
         map.put("reason", new DiscardReasonViewModel(discardReason));
         return new ResponseEntity(map, HttpStatus.OK);
@@ -71,7 +71,7 @@ public class DiscardReasonController {
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
     public ResponseEntity updateDiscardReason(@Valid @RequestBody DiscardReasonBackingForm formData , @PathVariable Long id){
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         ComponentStatusChangeReason discardReason = formData.getDiscardReason();
         discardReason.setId(id);
         discardReason = discardReasonRepository.updateDiscardReason(discardReason);
@@ -85,7 +85,7 @@ public class DiscardReasonController {
 
     private List<DiscardReasonViewModel> getDiscardReasonViewModels(List<ComponentStatusChangeReason> discardReasons){
 
-        List<DiscardReasonViewModel> viewModels = new ArrayList<DiscardReasonViewModel>();
+        List<DiscardReasonViewModel> viewModels = new ArrayList<>();
         for(ComponentStatusChangeReason reason : discardReasons){
             viewModels.add(new DiscardReasonViewModel(reason));
         }

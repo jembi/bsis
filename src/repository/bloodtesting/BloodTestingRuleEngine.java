@@ -66,8 +66,8 @@ public class BloodTestingRuleEngine {
 		List<BloodTestingRule> rules = bloodTestingRepository.getActiveBloodTestingRules();
 		
 		// Get the latest test results 
-		Map<String, String> storedTestResults = new TreeMap<String, String>();
-		Map<String, String> availableTestResults = new TreeMap<String, String>();
+		Map<String, String> storedTestResults = new TreeMap<>();
+		Map<String, String> availableTestResults = new TreeMap<>();
 		Map<Long, BloodTestResult> recentTestResults = bloodTestingRepository
 		        .getRecentTestResultsForDonation(donation.getId());
 		for (Long testId : recentTestResults.keySet()) {
@@ -245,7 +245,7 @@ public class BloodTestingRuleEngine {
 	 */
 	private void setBasicTtiTestsNotDone(BloodTestingRuleResultSet resultSet, List<BloodTest> basicTTITests,
 	                                     Map<String, String> availableTestResults) {
-		Set<Long> basicTtiTestsNotDone = new HashSet<Long>();
+		Set<Long> basicTtiTestsNotDone = new HashSet<>();
 		for (BloodTest bt : basicTTITests) {
 			basicTtiTestsNotDone.add(bt.getId());
 		}

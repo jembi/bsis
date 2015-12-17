@@ -95,7 +95,7 @@ public class TTIController {
 	@RequestMapping(value = "/form", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	public Map<String, Object> getTTIForm(HttpServletRequest request) {
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		//map.put("ttiFormFields", utilController.getFormFieldsForForm("TTIForm"));
 
 		List<BloodTestViewModel> basicTTITests = getBasicTTITests();
@@ -108,7 +108,7 @@ public class TTIController {
 	}
 
 	public List<BloodTestViewModel> getBasicTTITests() {
-		List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
+		List<BloodTestViewModel> tests = new ArrayList<>();
 		for (BloodTest rawBloodTest : bloodTestingRepository
 				.getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
 			tests.add(new BloodTestViewModel(rawBloodTest));
@@ -117,7 +117,7 @@ public class TTIController {
 	}
 	
 	public List<BloodTestViewModel> getConfirmatoryTTITests() {
-		List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
+		List<BloodTestViewModel> tests = new ArrayList<>();
 		for (BloodTest rawBloodTest : bloodTestingRepository
 				.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
 			tests.add(new BloodTestViewModel(rawBloodTest));
@@ -129,7 +129,7 @@ public class TTIController {
 	@PreAuthorize("hasRole('"+PermissionConstants.VIEW_TTI_OUTCOME+"')")
 	public Map<String, Object> showTTIResultsForDonation(HttpServletRequest request,
 			@PathVariable String donationId) {
-                Map<String, Object> map = new HashMap<String, Object>();
+                Map<String, Object> map = new HashMap<>();
 		donationId = donationId.trim();
 		Long donationIdLong = Long.parseLong(donationId);
 		Donation donation = donationRepository
@@ -151,11 +151,11 @@ public class TTIController {
 			@RequestBody TestResultBackingForm form) {
 
 		HttpStatus httpStatus = HttpStatus.CREATED;
-                Map<String, Object> m = new HashMap<String, Object>();
+                Map<String, Object> m = new HashMap<>();
 
 		
-			Map<Long, Map<Long, String>> ttiTestResultsMap = new HashMap<Long, Map<Long, String>>();
-			Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
+			Map<Long, Map<Long, String>> ttiTestResultsMap = new HashMap<>();
+			Map<Long, String> saveTestsDataWithLong = new HashMap<>();
 			ObjectMapper mapper = new ObjectMapper();
 			Map<Long, String> saveTestsData = form.getTestResults();
 			for (Long testIdStr : saveTestsData.keySet()) {
@@ -173,7 +173,7 @@ public class TTIController {
 			if (errorMap != null && !errorMap.isEmpty())
 				httpStatus = HttpStatus.BAD_REQUEST;
 
-		return new ResponseEntity<Map<String, Object>>(m, httpStatus);
+		return new ResponseEntity<>(m, httpStatus);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -184,7 +184,7 @@ public class TTIController {
 			@RequestParam(value = "ttiTestId") Long ttiTestId,
 			@RequestParam(value = "ttiResults") String ttiResults) {
 
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 
 		ObjectMapper mapper = new ObjectMapper();
 		boolean success = false;
@@ -253,7 +253,7 @@ public class TTIController {
 			throws IOException, ParseException {
 
 		HttpStatus httpStatus = HttpStatus.CREATED;
-                Map<String, Object> map = new HashMap<String, Object>();
+                Map<String, Object> map = new HashMap<>();
 		MultipartFile tsvFile = null;
 		String fileName, uploadPath;
 		boolean success = true;
@@ -264,7 +264,7 @@ public class TTIController {
 				map.put("errorMessage", UploadTTIResultConstant.MESSAGE1);
 				success = false;
 				map.put("success", success);
-				return new ResponseEntity<Map<String, Object>>(map, HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
 			}
 			if (iterator.hasNext()) {
 				tsvFile = request.getFile(iterator.next());
@@ -283,7 +283,7 @@ public class TTIController {
 				map.put("errorMessage",UploadTTIResultConstant.MESSAGE2);
 				success = false;
 				map.put("success", success);
-				return new ResponseEntity<Map<String, Object>>(map, HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
 			}
 			
 			String fileWithExt= FileUploadUtils.splitFilePath(fileName);
@@ -299,7 +299,7 @@ public class TTIController {
                         httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 		
-		return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+		return new ResponseEntity<>(map, httpStatus);
 
 	}
 
@@ -316,8 +316,8 @@ public class TTIController {
 				SimpleDateFormat formatter = new SimpleDateFormat(
 						UploadTTIResultConstant.DATE_FORMAT);
 				String[] next = null;
-				List<TSVFileHeaderName> tSVFileHeaderNameList = new ArrayList<TSVFileHeaderName>();
-				List<TSVFileHeaderName> tSVFailedList = new ArrayList<TSVFileHeaderName>();
+				List<TSVFileHeaderName> tSVFileHeaderNameList = new ArrayList<>();
+				List<TSVFileHeaderName> tSVFailedList = new ArrayList<>();
 
 				TSVFileHeaderName tSVFileHeaderNameObj, tSVFileFailedObj;
 				while ((next = csvReader.readNext()) != null) {

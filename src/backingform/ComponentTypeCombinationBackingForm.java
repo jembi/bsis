@@ -38,7 +38,7 @@ public class ComponentTypeCombinationBackingForm {
     
     public void setComponentTypes(List<Long> componentTypeIds) {
         
-        List<ComponentType> componentTypes = new ArrayList<ComponentType>();
+        List<ComponentType> componentTypes = new ArrayList<>();
         ComponentType componentType = new ComponentType();
         for (Long componentTypeId : componentTypeIds) {
             componentType.setId(componentTypeId);

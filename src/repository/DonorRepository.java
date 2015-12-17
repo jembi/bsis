@@ -138,7 +138,7 @@ public class DonorRepository {
         int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
 
         if (pagingParams.containsKey("sortColumn") && pagingParams.containsKey("sortDirection")) {
-            List<Order> order = new ArrayList<Order>();
+            List<Order> order = new ArrayList<>();
             if (pagingParams.get("sortDirection").equals("asc")) {
                 order.add(cb.asc(root.<String>get((String) pagingParams.get("sortColumn"))));
             } else {
@@ -161,7 +161,7 @@ public class DonorRepository {
         List<Donor> donorResults = query.getResultList();
         boolean looped = false;
         if (!StringUtils.isBlank(donationIdentificationNumber)) {
-            List<Donor> uniqueResult = new ArrayList<Donor>();
+            List<Donor> uniqueResult = new ArrayList<>();
             looped = true;
             for (Donor donor : donorResults) {
                 for (Donation donation : donor.getDonations()) {
@@ -258,7 +258,7 @@ public class DonorRepository {
             if (donors != null && donors.size() > 0) {
                 return donors;
             }
-            return new ArrayList<Donor>();
+            return new ArrayList<>();
    
     }
 
@@ -424,7 +424,7 @@ public class DonorRepository {
 
     public List<Donor> findDonorsByNumbers(List<String> donorNumbers) {
     	if (donorNumbers == null || donorNumbers.size() == 0) {
-    		return new ArrayList<Donor>();
+    		return new ArrayList<>();
     	}
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);

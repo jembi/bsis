@@ -249,7 +249,7 @@ public class ComponentTypeRepositoryTest {
 		ComponentTypeCombination one = new ComponentTypeCombination();
 		one.setCombinationName("Testing");
 		one.setIsDeleted(false);
-		List<ComponentType> componentTypes = new ArrayList<ComponentType>();
+		List<ComponentType> componentTypes = new ArrayList<>();
 		componentTypes.add(componentTypeRepository.getComponentTypeById(1l));
 		one.setComponentTypes(componentTypes);
 		componentTypeRepository.saveComponentTypeCombination(one);

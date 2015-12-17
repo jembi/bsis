@@ -204,7 +204,7 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
 
   public Donation() {
     super();
-    worksheets = new HashSet<Worksheet>();
+    worksheets = new HashSet<>();
   }
 
   public Donation(Donation donation) {

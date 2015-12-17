@@ -41,7 +41,7 @@ public class DonationTypesController {
     @RequestMapping(method=RequestMethod.GET)
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
     public Map<String, Object> configureDonationTypesFormGenerator() {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         addAllDonationTypesToModel(map);
         return map;
     }
@@ -49,7 +49,7 @@ public class DonationTypesController {
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
     public  ResponseEntity getDonationType(@PathVariable Long id) {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         DonationType donationType = donationTypesRepository.getDonationTypeById(id);
         map.put("donationType", new DonationTypeViewModel(donationType));
         return new ResponseEntity(map, HttpStatus.OK);
@@ -66,7 +66,7 @@ public class DonationTypesController {
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
     public  ResponseEntity updateDonationType(@Valid @RequestBody DonationTypeBackingForm form,  @PathVariable Long id) {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         DonationType donationType = form.getDonationType();
         donationType.setId(id);
         donationType = donationTypesRepository.updateDonationType(donationType);
@@ -79,7 +79,7 @@ public class DonationTypesController {
     }
 
     private List<DonationTypeViewModel> getDonationTypeViewModels(List<DonationType> donationTypes){
-        List<DonationTypeViewModel> viewModels = new ArrayList<DonationTypeViewModel>();
+        List<DonationTypeViewModel> viewModels = new ArrayList<>();
         for(DonationType donationType : donationTypes){
             viewModels.add(new DonationTypeViewModel(donationType));
         }

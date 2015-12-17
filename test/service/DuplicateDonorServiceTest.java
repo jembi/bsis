@@ -38,13 +38,13 @@ public class DuplicateDonorServiceTest {
 	
 	@Test
 	public void testFindDuplicateDonorsEmpty() throws Exception {
-		Map<String, List<Donor>> duplicateDonors = service.findDuplicateDonors(new ArrayList<Donor>());
+		Map<String, List<Donor>> duplicateDonors = service.findDuplicateDonors(new ArrayList<>());
 		Assert.assertTrue("No matching donors", duplicateDonors.isEmpty());
 	}
 	
 	@Test
 	public void testFindDuplicateDonorsBasic() throws Exception {
-		List<Donor> donors = new ArrayList<Donor>();
+		List<Donor> donors = new ArrayList<>();
 		donors.add(DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith")
 		        .withGender(Gender.male).withBirthDate("1977-10-20").build());
 		donors.add(DonorBuilder.aDonor().withDonorNumber("2").withFirstName("David").withLastName("Smith")
@@ -63,7 +63,7 @@ public class DuplicateDonorServiceTest {
 	
 	@Test
 	public void testFindDuplicateDonorsDouble() throws Exception {
-		List<Donor> donors = new ArrayList<Donor>();
+		List<Donor> donors = new ArrayList<>();
 		donors.add(DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith")
 		        .withGender(Gender.male).withBirthDate("1977-10-20").build());
 		donors.add(DonorBuilder.aDonor().withDonorNumber("2").withFirstName("David").withLastName("Smith")
@@ -93,7 +93,7 @@ public class DuplicateDonorServiceTest {
 	
 	@Test
 	public void testFindDuplicateDonorsMatchingOneBasic() throws Exception {
-		List<Donor> donors = new ArrayList<Donor>();
+		List<Donor> donors = new ArrayList<>();
 		Donor donor = DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith")
 		        .withGender(Gender.male).withBirthDate("1977-10-20").build();
 		donors.add(donor);
@@ -111,7 +111,7 @@ public class DuplicateDonorServiceTest {
 	
 	@Test
 	public void testFindDuplicateMatchingOneDonorsDouble() throws Exception {
-		List<Donor> donors = new ArrayList<Donor>();
+		List<Donor> donors = new ArrayList<>();
 		donors.add(DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith")
 		        .withGender(Gender.male).withBirthDate("1977-10-20").build());
 		donors.add(DonorBuilder.aDonor().withDonorNumber("2").withFirstName("David").withLastName("Smith")
@@ -142,7 +142,7 @@ public class DuplicateDonorServiceTest {
 	
 	@Test
 	public void testMergeDuplicateDonorsEmptyList() throws Exception {
-		List<DuplicateDonorBackup> backupLogs = service.mergeDonors(new Donor(), new ArrayList<Donor>());
+		List<DuplicateDonorBackup> backupLogs = service.mergeDonors(new Donor(), new ArrayList<>());
 		Assert.assertNotNull("backupLogs returned", backupLogs);
 		Assert.assertEquals("No backups necessary", 0, backupLogs.size());
 	}
@@ -150,7 +150,7 @@ public class DuplicateDonorServiceTest {
 	@Test
 	public void testMergeDuplicateDonors() throws Exception {
 		// create donors
-		List<Donor> donors = new ArrayList<Donor>();
+		List<Donor> donors = new ArrayList<>();
 		Donor david1 = DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith")
 		        .withGender(Gender.male).withBirthDate("1977-10-20").build();
 		Donor david2 = DonorBuilder.aDonor().withDonorNumber("2").withFirstName("David").withLastName("Smith")
@@ -161,7 +161,7 @@ public class DuplicateDonorServiceTest {
 		// create donations (david1)
 		Donation donation1 = DonationBuilder.aDonation().withId(1l).withDonor(david1).withDonationDate(new Date()).build();
 		Donation donation2 = DonationBuilder.aDonation().withId(2l).withDonor(david1).withDonationDate(new Date()).build();
-		List<Donation> donations = new ArrayList<Donation>();
+		List<Donation> donations = new ArrayList<>();
 		donations.add(donation1);
 		donations.add(donation2);
 		david1.setDonations(donations);
@@ -171,7 +171,7 @@ public class DuplicateDonorServiceTest {
 		        .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
 		DonorDeferral deferral1 = DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferredDonor(david2)
 		        .withDeferralReason(deferralReason1).build();
-		List<DonorDeferral> deferrals = new ArrayList<DonorDeferral>();
+		List<DonorDeferral> deferrals = new ArrayList<>();
 		deferrals.add(deferral1);
 		david2.setDeferrals(deferrals);
 		

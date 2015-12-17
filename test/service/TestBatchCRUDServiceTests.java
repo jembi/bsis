@@ -221,14 +221,11 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
 			
 			@Override
 			protected boolean matchesSafely(DonationBatch actual) {
-				if (actual.getId().equals(1l)) {
-					return (actual.getTestBatch() == null);
-				}
-				if (actual.getId().equals(3l)) {
-					return (actual.getTestBatch() == testBatch);
-				}
-				return false;
-			}
+        if (actual.getId().equals(1l)) {
+          return (actual.getTestBatch() == null);
+        }
+        return actual.getId().equals(3l) && (actual.getTestBatch() == testBatch);
+      }
 		}));
 	}
 	

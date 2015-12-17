@@ -264,10 +264,10 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	public void testFindComponentByComponentTypes() throws Exception {
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
+		Map<String, Object> pagingParams = new HashMap<>();
+		List<ComponentStatus> status = new ArrayList<>();
 		status.add(ComponentStatus.PROCESSED);
-		List<Long> componentTypeIds = new ArrayList<Long>();
+		List<Long> componentTypeIds = new ArrayList<>();
 		componentTypeIds.add(1l);
 		List<Component> all = componentRepository.findComponentByComponentTypes(componentTypeIds, status, pagingParams);
 		Assert.assertNotNull("Does not return an null", all);
@@ -276,10 +276,10 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	public void testFindComponentByComponentTypesNone() throws Exception {
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
+		Map<String, Object> pagingParams = new HashMap<>();
+		List<ComponentStatus> status = new ArrayList<>();
 		status.add(ComponentStatus.QUARANTINED);
-		List<Long> componentTypeIds = new ArrayList<Long>();
+		List<Long> componentTypeIds = new ArrayList<>();
 		componentTypeIds.add(1l);
 		List<Component> all = componentRepository.findComponentByComponentTypes(componentTypeIds, status, pagingParams);
 		Assert.assertNotNull("Does not return a null list", all);
@@ -288,8 +288,8 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	public void testFindComponentByDINAndStatus() throws Exception {
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
+		Map<String, Object> pagingParams = new HashMap<>();
+		List<ComponentStatus> status = new ArrayList<>();
 		status.add(ComponentStatus.QUARANTINED);
 		status.add(ComponentStatus.PROCESSED);
 		List<Component> all = componentRepository.findComponentByDonationIdentificationNumber("1111111", status, pagingParams);
@@ -300,8 +300,8 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	public void testFindComponentByDINAndStatusNone() throws Exception {
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
+		Map<String, Object> pagingParams = new HashMap<>();
+		List<ComponentStatus> status = new ArrayList<>();
 		status.add(ComponentStatus.EXPIRED);
 		List<Component> all = componentRepository.findComponentByDonationIdentificationNumber("1111111", status, pagingParams);
 		Assert.assertTrue("There should be 0 components", all.isEmpty());
@@ -309,8 +309,8 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	public void testFindComponentByDINAndStatusUnknown() throws Exception {
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
+		Map<String, Object> pagingParams = new HashMap<>();
+		List<ComponentStatus> status = new ArrayList<>();
 		status.add(ComponentStatus.QUARANTINED);
 		status.add(ComponentStatus.PROCESSED);
 		List<Component> all = componentRepository.findComponentByDonationIdentificationNumber("1111112", status, pagingParams);
@@ -319,7 +319,7 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	public void testFindAnyComponentDIN() throws Exception {
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
+		Map<String, Object> pagingParams = new HashMap<>();
 		List<Component> all = componentRepository.findAnyComponent("1111111", null, null, null, null, pagingParams);
 		Assert.assertNotNull("There is a Component with DIN 1111111", all);
 		Assert.assertFalse("There is a Component with DIN 1111111", all.isEmpty());
@@ -328,8 +328,8 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	public void testFindAnyComponentDINAndStatus() throws Exception {
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
+		Map<String, Object> pagingParams = new HashMap<>();
+		List<ComponentStatus> status = new ArrayList<>();
 		status.add(ComponentStatus.QUARANTINED);
 		List<Component> all = componentRepository.findAnyComponent("1111111", null, status, null, null, pagingParams);
 		Assert.assertNotNull("There are matching components", all);
@@ -338,10 +338,10 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	public void testFindAnyComponentQuarantinedType1() throws Exception {
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
+		Map<String, Object> pagingParams = new HashMap<>();
+		List<ComponentStatus> status = new ArrayList<>();
 		status.add(ComponentStatus.QUARANTINED);
-		List<Long> componentTypeIds = new ArrayList<Long>();
+		List<Long> componentTypeIds = new ArrayList<>();
 		componentTypeIds.add(1l);
 		List<Component> all = componentRepository.findAnyComponent(null, componentTypeIds, status, null, null, pagingParams);
 		Assert.assertNotNull("There aren't matching components", all);
@@ -350,7 +350,7 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	public void testFindAnyComponentBetweenDates() throws Exception {
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
+		Map<String, Object> pagingParams = new HashMap<>();
 		Date start = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-10");
 		Date end = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
 		List<Component> all = componentRepository.findAnyComponent(null, null, null, start, end, pagingParams);
@@ -400,9 +400,9 @@ public class ComponentRepositoryTest {
 	public void testFindNumberOfDiscardedComponentsDaily() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-10");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
-		List<String> venues = new ArrayList<String>();
+		List<String> venues = new ArrayList<>();
 		venues.add("1");
-		List<String> bloodGroups = new ArrayList<String>();
+		List<String> bloodGroups = new ArrayList<>();
 		bloodGroups.add("AB+");
 		bloodGroups.add("AB-");
 		Map<String, Map<Long, Long>> results = componentRepository.findNumberOfDiscardedComponents(donationDateFrom,
@@ -422,9 +422,9 @@ public class ComponentRepositoryTest {
 	public void testFindNumberOfDiscardedComponentsMonthly() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-10");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
-		List<String> venues = new ArrayList<String>();
+		List<String> venues = new ArrayList<>();
 		venues.add("1");
-		List<String> bloodGroups = new ArrayList<String>();
+		List<String> bloodGroups = new ArrayList<>();
 		bloodGroups.add("AB+");
 		bloodGroups.add("AB-");
 		bloodGroups.add("O-");
@@ -446,9 +446,9 @@ public class ComponentRepositoryTest {
 	public void testFindNumberOfDiscardedComponentsYearly() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2014-08-10");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
-		List<String> venues = new ArrayList<String>();
+		List<String> venues = new ArrayList<>();
 		venues.add("1");
-		List<String> bloodGroups = new ArrayList<String>();
+		List<String> bloodGroups = new ArrayList<>();
 		bloodGroups.add("AB-");
 		bloodGroups.add("AB+");
 		Map<String, Map<Long, Long>> results = componentRepository.findNumberOfDiscardedComponents(donationDateFrom,
@@ -749,7 +749,7 @@ public class ComponentRepositoryTest {
 		donationRepository.addDonation(newDonation2);
 		newComponent2.setDonation(newDonation2);
 		
-		List<Component> newComponents = new ArrayList<Component>();
+		List<Component> newComponents = new ArrayList<>();
 		newComponents.add(newComponent1);
 		newComponents.add(newComponent2);
 		componentRepository.addAllComponents(newComponents);

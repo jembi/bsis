@@ -119,10 +119,10 @@ public class UtilController {
 
   public Map<String, Map<String, Object>> getFormFieldsForForm(String formName) {
     List<FormField> formFields = formFieldRepository.getFormFields(formName);
-    Map<String, Map<String, Object>> formFieldMap = new HashMap<String, Map<String, Object>>();
+    Map<String, Map<String, Object>> formFieldMap = new HashMap<>();
 
     for (FormField ff : formFields) {
-      Map<String, Object> fieldProperties = new HashMap<String, Object>();
+      Map<String, Object> fieldProperties = new HashMap<>();
       fieldProperties.put(FormField.DISPLAY_NAME, ff.getDisplayName());
       fieldProperties.put(FormField.SHORT_DISPLAY_NAME, ff.getShortDisplayName());
       fieldProperties.put(FormField.DEFAULT_VALUE, ff.getDefaultValue());
@@ -235,7 +235,7 @@ public class UtilController {
   }
 
   public Map<String, Object> parsePagingParameters(HttpServletRequest request) {
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
+    Map<String, Object> pagingParams = new HashMap<>();
     int numColumns = Integer.parseInt(request.getParameter("iColumns"));
     int sortCol = -1;
     String sortDirection = "asc";

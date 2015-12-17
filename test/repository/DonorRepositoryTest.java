@@ -105,7 +105,7 @@ public class DonorRepositoryTest {
             // Insert Data into database using DonorRepositoryDataset.xml
             IDataSet dataSet = getDataSet();
             Date today = new Date();
-            Map<String, Object> replacements = new HashMap<String, Object>();
+            Map<String, Object> replacements = new HashMap<>();
             replacements.put("DateDonorNotDue", DateUtils.addDays(today,
                     -(DonationConstants.BLOCK_BETWEEN_DONATIONS - 1)));
             replacements.put("DateDonorDue", DateUtils.addDays(today,
@@ -205,7 +205,7 @@ public class DonorRepositoryTest {
         String donorFirstName = "xxx";
         String donorLastName = "";
         String donationIdentificationNumber = "";
-        Map<String, Object> pagingParams = new HashMap<String, Object>();
+        Map<String, Object> pagingParams = new HashMap<>();
         setPaginationParam(pagingParams);
 
         assertEquals("List size should be zero, no matching search results.",
@@ -225,7 +225,7 @@ public class DonorRepositoryTest {
         String donorFirstName = "fir";
         String donorLastName = "";
         String donationIdentificationNumber = "";
-        Map<String, Object> pagingParams = new HashMap<String, Object>();
+        Map<String, Object> pagingParams = new HashMap<>();
         setPaginationParam(pagingParams);
 
         List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
@@ -259,7 +259,7 @@ public class DonorRepositoryTest {
         String donorFirstName = "firstName";
         String donorLastName = "";
         String donationIdentificationNumber = "";
-        Map<String, Object> pagingParams = new HashMap<String, Object>();
+        Map<String, Object> pagingParams = new HashMap<>();
         setPaginationParam(pagingParams);
 
         List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
@@ -293,7 +293,7 @@ public class DonorRepositoryTest {
         String donorFirstName = "";
         String donorLastName = "las";
         String donationIdentificationNumber = "";
-        Map<String, Object> pagingParams = new HashMap<String, Object>();
+        Map<String, Object> pagingParams = new HashMap<>();
         setPaginationParam(pagingParams);
 
         List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
@@ -320,7 +320,7 @@ public class DonorRepositoryTest {
         String donorFirstName = "fir";
         String donorLastName = "";
         String donationIdentificationNumber = "";
-        Map<String, Object> pagingParams = new HashMap<String, Object>();
+        Map<String, Object> pagingParams = new HashMap<>();
         setPaginationParam(pagingParams);
 
         List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
@@ -345,7 +345,7 @@ public class DonorRepositoryTest {
         String donorFirstName = "";
         String donorLastName = "";
         String donationIdentificationNumber = "000001";
-        Map<String, Object> pagingParams = new HashMap<String, Object>();
+        Map<String, Object> pagingParams = new HashMap<>();
         setPaginationParam(pagingParams);
 
         List<Donor> donorList = (List<Donor>) (donorRepository.findAnyDonor(
@@ -566,7 +566,7 @@ public class DonorRepositoryTest {
         DonorBackingForm donorBackingForm = new DonorBackingForm(donor);
         donorBackingForm.setDonorNumber("000007");
         setBackingFormValue(donorBackingForm);
-        List<Donor> listAllDonor = new ArrayList<Donor>();
+        List<Donor> listAllDonor = new ArrayList<>();
         listAllDonor.add(donorBackingForm.getDonor());
         donor = new Donor();
         donorBackingForm = new DonorBackingForm(donor);
@@ -973,7 +973,7 @@ public class DonorRepositoryTest {
     
     @Test
     public void testFindDonorsByNumbersEmptyList() throws Exception {
-    	List<Donor> donors = donorRepository.findDonorsByNumbers(new ArrayList<String>());
+    	List<Donor> donors = donorRepository.findDonorsByNumbers(new ArrayList<>());
     	Assert.assertNotNull("Not null list was returned", donors);
     	Assert.assertEquals("No Donors were returned", 0, donors.size());
     }
@@ -987,7 +987,7 @@ public class DonorRepositoryTest {
     
     @Test
     public void testFindDonorsByNumbersDoesntExist() throws Exception {
-    	List<String> donorNumbers = new ArrayList<String>();
+    	List<String> donorNumbers = new ArrayList<>();
     	donorNumbers.add("xxxxxx");
     	List<Donor> donors = donorRepository.findDonorsByNumbers(donorNumbers);
     	Assert.assertNotNull("Not null list was returned", donors);
@@ -996,7 +996,7 @@ public class DonorRepositoryTest {
     
     @Test
     public void testFindDonorsByNumbers() throws Exception {
-    	List<String> donorNumbers = new ArrayList<String>();
+    	List<String> donorNumbers = new ArrayList<>();
     	donorNumbers.add("000001");
     	donorNumbers.add("000003");
     	List<Donor> donors = donorRepository.findDonorsByNumbers(donorNumbers);
@@ -1008,11 +1008,11 @@ public class DonorRepositoryTest {
     
     @Test
     public void addMergedDonor() throws Exception {
-    	List<DuplicateDonorBackup> backupLogs = new ArrayList<DuplicateDonorBackup>();
+    	List<DuplicateDonorBackup> backupLogs = new ArrayList<>();
     	backupLogs.add(new DuplicateDonorBackup("1234567", "000001", 1l, null));
     	backupLogs.add(new DuplicateDonorBackup("1234567", "000001", null, 1l));
     	Donor oldDonor = donorRepository.findDonorByDonorNumber("000001", false);
-    	List<Donor> donorsToMerge = new ArrayList<Donor>();
+    	List<Donor> donorsToMerge = new ArrayList<>();
     	donorsToMerge.add(oldDonor);
     	Donor newDonor = new Donor();
     	newDonor.setDonorNumber("1234567");

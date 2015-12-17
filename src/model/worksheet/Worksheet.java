@@ -40,7 +40,7 @@ public class Worksheet extends BaseModificationTrackerEntity {
 
   public Worksheet() {
     super();
-    donations = new HashSet<Donation>();
+    donations = new HashSet<>();
   }
 
   public String getWorksheetNumber() {

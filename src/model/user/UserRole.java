@@ -21,10 +21,10 @@ public class UserRole extends BaseEntity {
   private static final long serialVersionUID = 1L;
 
     @ManyToMany
-    private List<Role> roles = new ArrayList<Role>();
+    private List<Role> roles = new ArrayList<>();
 
     @ManyToMany
-    private List<User> users = new ArrayList<User>();
+    private List<User> users = new ArrayList<>();
 
     /**
      * @return the roles

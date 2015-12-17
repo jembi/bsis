@@ -48,7 +48,7 @@ public class DonationBatchConstraintCheckerTests {
 	
 	@Test
 	public void testCanDeleteDonationBatchNoDonationsEmptyList() {
-		List<Donation> donations = new ArrayList<Donation>();
+		List<Donation> donations = new ArrayList<>();
 		Long donationBatchId = new Long(1);
 		DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonations(donations).build();
 		
@@ -61,7 +61,7 @@ public class DonationBatchConstraintCheckerTests {
 	
 	@Test
 	public void testCanDeleteDonationBatchWithDonations() {
-		List<Donation> donations = new ArrayList<Donation>();
+		List<Donation> donations = new ArrayList<>();
 		donations.add(new DonationBuilder().withId(1l).build());
 		Long donationBatchId = new Long(1);
 		DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonations(donations).build();
@@ -141,7 +141,7 @@ public class DonationBatchConstraintCheckerTests {
 	
 	@Test
 	public void testCanCloseDonationBatch() {
-		List<Donation> donations = new ArrayList<Donation>();
+		List<Donation> donations = new ArrayList<>();
 		donations.add(new DonationBuilder().withId(1l).build());
 		Long donationBatchId = new Long(1);
 		DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonations(donations).build();
@@ -155,7 +155,7 @@ public class DonationBatchConstraintCheckerTests {
 	
 	@Test
 	public void testCanCloseClosedDonationBatch() {
-		List<Donation> donations = new ArrayList<Donation>();
+		List<Donation> donations = new ArrayList<>();
 		donations.add(new DonationBuilder().withId(1l).build());
 		Long donationBatchId = new Long(1);
 		DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonations(donations)
@@ -170,7 +170,7 @@ public class DonationBatchConstraintCheckerTests {
 	
 	@Test
 	public void testCanCloseEmptyDonationBatch() {
-		List<Donation> donations = new ArrayList<Donation>();
+		List<Donation> donations = new ArrayList<>();
 		Long donationBatchId = new Long(1);
 		DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonations(donations).build();
 		
@@ -195,7 +195,7 @@ public class DonationBatchConstraintCheckerTests {
 	
 	@Test
 	public void testCanReopenDonationBatch() {
-		List<Donation> donations = new ArrayList<Donation>();
+		List<Donation> donations = new ArrayList<>();
 		donations.add(new DonationBuilder().withId(1l).build());
 		Long donationBatchId = new Long(1);
 		DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonations(donations)
@@ -210,7 +210,7 @@ public class DonationBatchConstraintCheckerTests {
 	
 	@Test
 	public void testCanReopenDonationBatchWithTestBatch() {
-		List<Donation> donations = new ArrayList<Donation>();
+		List<Donation> donations = new ArrayList<>();
 		donations.add(new DonationBuilder().withId(1l).build());
 		TestBatch testBatch = new TestBatchBuilder().build();
 		Long donationBatchId = new Long(1);
@@ -226,7 +226,7 @@ public class DonationBatchConstraintCheckerTests {
 	
 	@Test
 	public void testCanReopenOpenDonationBatch() {
-		List<Donation> donations = new ArrayList<Donation>();
+		List<Donation> donations = new ArrayList<>();
 		donations.add(new DonationBuilder().withId(1l).build());
 		Long donationBatchId = new Long(1);
 		DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonations(donations).build();

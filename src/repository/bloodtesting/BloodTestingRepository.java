@@ -122,9 +122,9 @@ public class BloodTestingRepository {
 			Map<Long, Map<Long, String>> bloodTestResultsMap,
 			boolean saveIfUninterpretable) {
 
-		Map<Long, Donation> donationsMap = new HashMap<Long, Donation>();
-		Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForDonations = new HashMap<Long, BloodTestingRuleResult>();
-		List<Long> donationsWithUninterpretableResults = new ArrayList<Long>();
+		Map<Long, Donation> donationsMap = new HashMap<>();
+		Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForDonations = new HashMap<>();
+		List<Long> donationsWithUninterpretableResults = new ArrayList<>();
 		Date testedOn = new Date();
 		Map<Long, Map<Long, String>> errorMap = validateTestResultValues(bloodTestResultsMap);
 		if (errorMap.isEmpty()) {
@@ -148,7 +148,7 @@ public class BloodTestingRepository {
 								bloodTestResultsForDonation, donation,
 								testedOn, ruleResult);
 					} else {
-						Map<Long, String> uninterpretable = new HashMap<Long, String>();
+						Map<Long, String> uninterpretable = new HashMap<>();
 						donationsWithUninterpretableResults.add(donationId);
 						uninterpretable.put((long) -1,
 								"Test results are uninterpretable");
@@ -164,7 +164,7 @@ public class BloodTestingRepository {
 			em.flush();
 		}
 
-		Map<String, Object> results = new HashMap<String, Object>();
+		Map<String, Object> results = new HashMap<>();
 		results.put("donations", donationsMap);
 		results.put("bloodTestingResults", bloodTestRuleResultsForDonations);
 		results.put("donationsWithUninterpretableResults",
@@ -284,13 +284,13 @@ public class BloodTestingRepository {
 	public Map<Long, Map<Long, String>> validateTestResultValues(
 			Map<Long, Map<Long, String>> bloodTypingTestResults) {
 
-		Map<String, BloodTest> allBloodTestsMap = new HashMap<String, BloodTest>();
+		Map<String, BloodTest> allBloodTestsMap = new HashMap<>();
 		for (BloodTest bloodTypingTest : findActiveBloodTests()) {
 			allBloodTestsMap.put(bloodTypingTest.getId().toString(),
 					bloodTypingTest);
 		}
 
-		Map<Long, Map<Long, String>> errorMap = new HashMap<Long, Map<Long, String>>();
+		Map<Long, Map<Long, String>> errorMap = new HashMap<>();
 
 		for (Long donationId : bloodTypingTestResults.keySet()) {
 			Map<Long, String> testsForDonation = bloodTypingTestResults
@@ -318,10 +318,7 @@ public class BloodTestingRepository {
 	}
 
 	private boolean isResultValidForBloodTest(BloodTest test, String result) {
-		if (StringUtils.isBlank(result)) {
-			return false;
-		}
-		return test.getValidResultsList().contains(result);
+		return !StringUtils.isBlank(result) && test.getValidResultsList().contains(result);
 	}
 
 	public List<BloodTest> findActiveBloodTests() {
@@ -346,7 +343,7 @@ public class BloodTestingRepository {
 			Long donationId, Long testId, String errorMessage) {
 		Map<Long, String> errorsForDonation = errorMap.get(donationId);
 		if (errorsForDonation == null) {
-			errorsForDonation = new HashMap<Long, String>();
+			errorsForDonation = new HashMap<>();
 			errorMap.put(donationId, errorsForDonation);
 		}
 		errorsForDonation.put(testId, errorMessage);
@@ -356,21 +353,21 @@ public class BloodTestingRepository {
 			List<String> donationIds) {
 		// linked hashmap is required to ensure that results are returned in the
 		// same order as inserted
-		Map<Long, Donation> donationsMap = new LinkedHashMap<Long, Donation>();
-		Map<Long, BloodTestingRuleResult> bloodTypingResultsForDonations = new LinkedHashMap<Long, BloodTestingRuleResult>();
+		Map<Long, Donation> donationsMap = new LinkedHashMap<>();
+		Map<Long, BloodTestingRuleResult> bloodTypingResultsForDonations = new LinkedHashMap<>();
 
 		for (String donationIdStr : donationIds) {
 			Long donationId = Long.parseLong(donationIdStr);
 			Donation donation = donationRepository
 					.findDonationById(donationId);
 			BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
-					donation, new HashMap<Long, String>());
+					donation, new HashMap<>());
 			donationsMap.put(donation.getId(), donation);
 			bloodTypingResultsForDonations.put(donation.getId(),
 					ruleResult);
 		}
 
-		Map<String, Object> results = new HashMap<String, Object>();
+		Map<String, Object> results = new HashMap<>();
 		results.put("donations", donationsMap);
 		results.put("bloodTestingResults", bloodTypingResultsForDonations);
 		return results;
@@ -379,7 +376,7 @@ public class BloodTestingRepository {
 	public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatches(
 			List<Long> donationBatchIds) {
 
-		List<BloodTestingRuleResult> bloodTestingRuleResults = new ArrayList<BloodTestingRuleResult>();
+		List<BloodTestingRuleResult> bloodTestingRuleResults = new ArrayList<>();
 
 		for (Long donationBatchId : donationBatchIds) {
 			List<Donation> donations = donationBatchRepository.findDonationsInBatch(donationBatchId);
@@ -392,7 +389,7 @@ public class BloodTestingRepository {
 			    }
 
 			BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
-					donation, new HashMap<Long, String>());
+					donation, new HashMap<>());
 			bloodTestingRuleResults.add(ruleResult);
 			}
 		}
@@ -405,7 +402,7 @@ public class BloodTestingRepository {
 		Donation donation = donationRepository
 				.findDonationById(donationId);
 		return ruleEngine.applyBloodTests(donation,
-				new HashMap<Long, String>());
+						new HashMap<>());
 	}
 
 	public List<BloodTest> getTTITests() {
@@ -436,7 +433,7 @@ public class BloodTestingRepository {
 				BloodTestResult.class);
 		query.setParameter("donationId", donationId);
 		List<BloodTestResult> bloodTestResults = query.getResultList();
-		Map<Long, BloodTestResult> recentBloodTestResults = new HashMap<Long, BloodTestResult>();
+		Map<Long, BloodTestResult> recentBloodTestResults = new HashMap<>();
 		for (BloodTestResult bt : bloodTestResults) {
 			Long bloodTestId = bt.getBloodTest().getId();
 			BloodTestResult existingBloodTestResult = recentBloodTestResults
@@ -471,15 +468,15 @@ public class BloodTestingRepository {
 	public Map<String, Object> saveTTIResultsOnPlate(
 			Map<String, Map<String, Object>> ttiResultsMap, Long ttiTestId) {
 
-		Map<String, Object> results = new HashMap<String, Object>();
-		Map<String, List<String>> errorsByWellNumber = new HashMap<String, List<String>>();
-		Map<String, Long> donationIdByWellNumber = new HashMap<String, Long>();
-		Map<Long, String> errorsByDonationId = new HashMap<Long, String>();
+		Map<String, Object> results = new HashMap<>();
+		Map<String, List<String>> errorsByWellNumber = new HashMap<>();
+		Map<String, Long> donationIdByWellNumber = new HashMap<>();
+		Map<Long, String> errorsByDonationId = new HashMap<>();
 
-		Map<Long, Donation> donationIdMap = new HashMap<Long, Donation>();
+		Map<Long, Donation> donationIdMap = new HashMap<>();
 
-		Map<Long, MachineReading> machineReadingsForDonations = new HashMap<Long, MachineReading>();
-		List<MachineReading> specialMachineReadings = new ArrayList<MachineReading>();
+		Map<Long, MachineReading> machineReadingsForDonations = new HashMap<>();
+		List<MachineReading> specialMachineReadings = new ArrayList<>();
 
 		BloodTest bloodTest = findBloodTestById(ttiTestId);
 
@@ -487,7 +484,7 @@ public class BloodTestingRepository {
 		Date testedOn = new Date();
 		plateSession.setPlateUsedOn(testedOn);
 
-		Map<Long, Map<Long, String>> bloodTestResultsMap = new HashMap<Long, Map<Long, String>>();
+		Map<Long, Map<Long, String>> bloodTestResultsMap = new HashMap<>();
 
 		boolean errorsFound = false;
 
@@ -551,7 +548,7 @@ public class BloodTestingRepository {
 							addErrorToWell(errorsByWellNumber, wellNumber,
 									"Invalid test result specified");
 						}
-						Map<Long, String> resultsForDonation = new HashMap<Long, String>();
+						Map<Long, String> resultsForDonation = new HashMap<>();
 						resultsForDonation.put(ttiTestId, result);
 						bloodTestResultsMap.put(donation.getId(),
 								resultsForDonation);
@@ -564,7 +561,7 @@ public class BloodTestingRepository {
 			}
 		}
 
-		Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForDonations = new HashMap<Long, BloodTestingRuleResult>();
+		Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForDonations = new HashMap<>();
 
 		if (!errorsFound) {
 			em.persist(plateSession);
@@ -610,7 +607,7 @@ public class BloodTestingRepository {
 	private void addErrorToWell(Map<String, List<String>> errorsByWellNumber,
 			String wellNumber, String errorMessage) {
 		if (!errorsByWellNumber.containsKey(wellNumber)) {
-			errorsByWellNumber.put(wellNumber, new ArrayList<String>());
+			errorsByWellNumber.put(wellNumber, new ArrayList<>());
 		}
 		errorsByWellNumber.get(wellNumber).add(errorMessage);
 	}
@@ -742,7 +739,7 @@ public class BloodTestingRepository {
 			Integer numConfirmtatoryTests = 0;
 			if (form.getNumberOfConfirmatoryTests()!=null)
 				numConfirmtatoryTests = form.getNumberOfConfirmatoryTests();
-			List<Long> pendingTestIds = new ArrayList<Long>();
+			List<Long> pendingTestIds = new ArrayList<>();
 			em.persist(bt);
 			em.refresh(bt);
 
@@ -867,7 +864,7 @@ public class BloodTestingRepository {
 								+ "GROUP BY bt.testNameShort, d.donationDate",
 						Object[].class);
 
-		List<Long> venueIds = new ArrayList<Long>();
+		List<Long> venueIds = new ArrayList<>();
 	    if (venues != null) {
 	      for (String venue : venues) {
 	    	venueIds.add(Long.parseLong(venue));
@@ -876,7 +873,7 @@ public class BloodTestingRepository {
 	      venueIds.add((long)-1);
 	    }
 
-		List<Long> ttiTestIds = new ArrayList<Long>();
+		List<Long> ttiTestIds = new ArrayList<>();
 		if (ttiTests != null) {
 			for (String ttiTest : ttiTests) {
 				ttiTestIds.add(Long.parseLong(ttiTest));
@@ -889,13 +886,13 @@ public class BloodTestingRepository {
 		query.setParameter("ttiTestIds", ttiTestIds);
 		query.setParameter("positiveResult", "+");
 
-		Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long, Long>>();
+		Map<String, Map<Long, Long>> resultMap = new HashMap<>();
 		TypedQuery<BloodTest> bloodTestQuery = em.createQuery(
 				"SELECT t FROM BloodTest t WHERE t.id IN :ttiTestIds",
 				BloodTest.class);
 		bloodTestQuery.setParameter("ttiTestIds", ttiTestIds);
 		for (BloodTest bt : bloodTestQuery.getResultList()) {
-			resultMap.put(bt.getTestNameShort(), new HashMap<Long, Long>());
+			resultMap.put(bt.getTestNameShort(), new HashMap<>());
 		}
 
 		query.setParameter("donationDateFrom", donationDateFrom);
@@ -990,11 +987,11 @@ public class BloodTestingRepository {
 				
 				try{
 					
-					Map<Long, Map<Long, String>> bloodTestResultsMap = new HashMap<Long, Map<Long, String>>();
-					Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForDonations = new HashMap<Long, BloodTestingRuleResult>();
+					Map<Long, Map<Long, String>> bloodTestResultsMap = new HashMap<>();
+					Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForDonations = new HashMap<>();
 	
 					BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
-							cs,	new HashMap<Long, String>());
+							cs, new HashMap<>());
 					bloodTestRuleResultsForDonations.put(cs.getId(), ruleResult);
 					
 					saveBloodTestResultToDatabase(Long.valueOf(ts.getAssayNumber()),
