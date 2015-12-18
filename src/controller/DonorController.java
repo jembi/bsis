@@ -138,6 +138,7 @@ public class DonorController {
     map.put("isDonorCurrentlyDeferred", isCurrentlyDeferred);
     if(isCurrentlyDeferred){
     	map.put("donorLatestDeferredUntilDate", donorRepository.getLastDonorDeferralDate(id));
+      map.put("donorLatestDeferral", donorRepository.getLastDonorDeferral(id));
     }
 
     return new ResponseEntity<Map<String, Object>>(map,HttpStatus.OK);
@@ -162,6 +163,7 @@ public class DonorController {
     map.put("flaggedForCounselling", flaggedForCounselling);
     map.put("hasCounselling", hasCounselling);
     map.put("deferredUntil",CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
+    map.put("deferral", donorRepository.getLastDonorDeferral(id));
 	map.put("canDelete", donorConstraintChecker.canDeleteDonor(id));
 	map.put("isEligible", donorConstraintChecker.isDonorEligibleToDonate(id));
 	map.put("birthDate", CustomDateFormatter.getDateString(donor.getBirthDate()));

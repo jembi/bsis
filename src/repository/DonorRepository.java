@@ -391,6 +391,23 @@ public class DonorRepository {
         return lastDeferredUntil;
     }
 
+    public DonorDeferral getLastDonorDeferral(Long donorId) {
+        List<DonorDeferral> deferrals = getDonorDeferrals(donorId);
+
+        if (deferrals == null || deferrals.isEmpty()) {
+            return null;
+        }
+
+        DonorDeferral lastDeferral = deferrals.get(0);
+        Date lastDeferredUntil = lastDeferral.getDeferredUntil();
+        for (DonorDeferral deferral : deferrals) {
+            if (deferral.getDeferredUntil() != null && deferral.getDeferredUntil().after(lastDeferredUntil)) {
+                lastDeferral = deferral;
+            }
+        }
+        return lastDeferral;
+    }
+
 
 
     /**
