@@ -92,7 +92,7 @@ public class WorksheetRepository {
       worksheetTypeIds.add(Long.parseLong(worksheetTypeIdStr));
     }
 
-    worksheetTypeIds.add(-1l);
+    worksheetTypeIds.add(-1L);
     TypedQuery<Worksheet> query = null;
     if (StringUtils.isBlank(worksheetNumber)) {
       String queryStr = "SELECT DISTINCT w FROM Worksheet w LEFT JOIN FETCH w.donations WHERE " +

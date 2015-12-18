@@ -147,12 +147,6 @@ public class ComponentCombinationBackingForm {
     ObjectMapper mapper = new ObjectMapper();
     try {
       expiresOnByComponentTypeId = mapper.readValue(expiresOn, HashMap.class);
-    } catch (JsonParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (JsonMappingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
     } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

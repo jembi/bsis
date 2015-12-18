@@ -108,14 +108,14 @@ public class UserRepositoryTest {
 	
 	@Test
 	public void testFindUserById() throws Exception {
-		User user = userRepository.findUserById(1l);
+		User user = userRepository.findUserById(1L);
 		Assert.assertNotNull("User is defined", user);
 		Assert.assertEquals("User is correct", "superuser", user.getUsername());
 	}
 	
 	@Test(expected = javax.persistence.NoResultException.class)
 	public void testFindUserByIdUnknown() throws Exception {
-		userRepository.findUserById(123l);
+		userRepository.findUserById(123L);
 	}
 	
 	@Test
@@ -132,7 +132,7 @@ public class UserRepositoryTest {
 	
 	@Test
 	public void testDeleteUserById() throws Exception {
-		userRepository.deleteUserById(1l); // this is a hard delete
+		userRepository.deleteUserById(1L); // this is a hard delete
 		List<UserViewModel> all = userRepository.getAllUsers();
 		Assert.assertNotNull("There are Users defined", all);
 		Assert.assertEquals("There are now 15 Users", 15, all.size());
@@ -146,12 +146,12 @@ public class UserRepositoryTest {
 	
 	@Test
 	public void testUpdateBasicUserInfo() throws Exception {
-		User user = userRepository.findUserById(1l);
+		User user = userRepository.findUserById(1L);
 		user.setFirstName("Test");
 		user.setLastName("Tester");
 		user.setEmailId("test@jembi.org");
 		userRepository.updateBasicUserInfo(user, false);
-		User savedUser = userRepository.findUserById(1l);
+		User savedUser = userRepository.findUserById(1L);
 		Assert.assertEquals("FirstName changed", "Test", savedUser.getFirstName());
 		Assert.assertEquals("LastName changed", "Tester", savedUser.getLastName());
 		Assert.assertEquals("Email changed", "test@jembi.org", savedUser.getEmailId());
@@ -160,18 +160,18 @@ public class UserRepositoryTest {
 	
 	@Test
 	public void testUpdateBasicUserInfoPassword() throws Exception {
-		User user = userRepository.findUserById(1l);
+		User user = userRepository.findUserById(1L);
 		user.setPassword("newpassword");
 		userRepository.updateBasicUserInfo(user, true);
-		User savedUser = userRepository.findUserById(1l);
+		User savedUser = userRepository.findUserById(1L);
 		Assert.assertFalse("Password was changed", !user.getPassword().equals(savedUser.getPassword()));
 	}
 	
 	@Test
 	public void testUpdateLastLogin() throws Exception {
-		User user = userRepository.findUserById(1l);
+		User user = userRepository.findUserById(1L);
 		userRepository.updateLastLogin(user);
-		User savedUser = userRepository.findUserById(1l);
+		User savedUser = userRepository.findUserById(1L);
 		Assert.assertFalse("Last login was changed", !user.getLastLogin().equals(savedUser.getLastLogin()));
 	}
 }

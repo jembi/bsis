@@ -28,7 +28,7 @@ public class DonationBatchViewModelFactoryTests {
     @Test
     public void testCreateDonationBatchViewModel() {
     	// set up test data
-    	Long donationBatchId = new Long(1);
+    	Long donationBatchId = 1L;
     	DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).build();
     	
     	// set up mocks

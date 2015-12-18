@@ -77,7 +77,7 @@ public class BloodTestResultConstraintCheckerTests {
 		Donation donation = aDonation().build();
 		BloodTest bloodTest = new BloodTest();
 		bloodTest.setCategory(BloodTestCategory.BLOODTYPING);
-		bloodTest.setId(1l);
+		bloodTest.setId(1L);
 		BloodTestResult bloodTestResult = new BloodTestResult();
 		bloodTestResult.setDonation(donation);
 		bloodTestResult.setBloodTest(bloodTest);
@@ -106,7 +106,7 @@ public class BloodTestResultConstraintCheckerTests {
 		Donation donation = aDonation().build();
 		BloodTest bloodTest = new BloodTest();
 		bloodTest.setCategory(BloodTestCategory.BLOODTYPING);
-		bloodTest.setId(1l);
+		bloodTest.setId(1L);
 		BloodTestResult bloodTestResult = new BloodTestResult();
 		bloodTestResult.setDonation(donation);
 		bloodTestResult.setBloodTest(bloodTest);
@@ -135,7 +135,7 @@ public class BloodTestResultConstraintCheckerTests {
 		Donation donation = aDonation().build();
 		BloodTest bloodTest = new BloodTest();
 		bloodTest.setCategory(BloodTestCategory.BLOODTYPING);
-		bloodTest.setId(1l);
+		bloodTest.setId(1L);
 		BloodTestResult bloodTestResult = new BloodTestResult();
 		bloodTestResult.setDonation(donation);
 		bloodTestResult.setBloodTest(bloodTest);
@@ -164,7 +164,7 @@ public class BloodTestResultConstraintCheckerTests {
 		Donation donation = aDonation().build();
 		BloodTest bloodTest = new BloodTest();
 		bloodTest.setCategory(BloodTestCategory.BLOODTYPING);
-		bloodTest.setId(1l);
+		bloodTest.setId(1L);
 		BloodTestResult bloodTestResult = new BloodTestResult();
 		bloodTestResult.setDonation(donation);
 		bloodTestResult.setBloodTest(bloodTest);
@@ -258,7 +258,7 @@ public class BloodTestResultConstraintCheckerTests {
 		Donation donation = aDonation().build();
 		BloodTest bloodTest = new BloodTest();
 		bloodTest.setCategory(BloodTestCategory.TTI);
-		bloodTest.setId(1l);
+		bloodTest.setId(1L);
 		BloodTestResult bloodTestResult = new BloodTestResult();
 		bloodTestResult.setDonation(donation);
 		bloodTestResult.setBloodTest(bloodTest);
@@ -289,7 +289,7 @@ public class BloodTestResultConstraintCheckerTests {
 		Donation donation = aDonation().build();
 		BloodTest bloodTest = new BloodTest();
 		bloodTest.setCategory(BloodTestCategory.TTI);
-		bloodTest.setId(1l);
+		bloodTest.setId(1L);
 		BloodTestResult bloodTestResult = new BloodTestResult();
 		bloodTestResult.setDonation(donation);
 		bloodTestResult.setBloodTest(bloodTest);
@@ -325,7 +325,7 @@ public class BloodTestResultConstraintCheckerTests {
 		Donation donation = aDonation().build();
 		BloodTest bloodTest = new BloodTest();
 		bloodTest.setCategory(BloodTestCategory.TTI);
-		bloodTest.setId(1l);
+		bloodTest.setId(1L);
 		BloodTestResult bloodTestResult = new BloodTestResult();
 		bloodTestResult.setDonation(donation);
 		bloodTestResult.setBloodTest(bloodTest);
@@ -380,7 +380,7 @@ public class BloodTestResultConstraintCheckerTests {
 		Donation donation = aDonation().build();
 		BloodTest bloodTest = new BloodTest();
 		bloodTest.setCategory(null);
-		bloodTest.setId(1l);
+		bloodTest.setId(1L);
 		BloodTestResult bloodTestResult = new BloodTestResult();
 		bloodTestResult.setDonation(donation);
 		bloodTestResult.setBloodTest(bloodTest);

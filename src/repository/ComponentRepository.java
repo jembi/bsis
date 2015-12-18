@@ -311,7 +311,7 @@ public class ComponentRepository {
     for (Parameter<?> parameter : query.getParameters()) {
       countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
     }
-    return countQuery.getSingleResult().longValue();
+    return countQuery.getSingleResult();
   }
   
   public List<Component> getAllUnissuedComponents() {
@@ -340,7 +340,7 @@ public class ComponentRepository {
   }
 
   public boolean isComponentCreated(String donationIdentificationNumber) {
-    String queryString = "SELECT c FROM Component c WHERE c.donationIdentificationNumber = :donationIdentificationNumber and c.isDeleted = :isDeleted";
+    String queryString = "SELECT c FROM Component c WHERE c.componentIdentificationNumber = :donationIdentificationNumber and c.isDeleted = :isDeleted";
     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     List<Component> components = query.setParameter("donationIdentificationNumber",
@@ -354,10 +354,10 @@ public class ComponentRepository {
   }
 
   public List<Component> getAllComponents(String componentType) {
-    String queryString = "SELECT c FROM Component c where c.type = :componentType and c.isDeleted = :isDeleted";
+    String queryString = "SELECT c FROM Component c where c.componentType = :componentType and c.isDeleted = :isDeleted";
     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("componentType", componentType);
+    query.setParameter("componentType", findComponentTypeByComponentTypeName(componentType).getId());
     return query.getResultList();
   }
 
@@ -378,7 +378,7 @@ public class ComponentRepository {
 
   public List<Component> getAllUnissuedComponents(String componentType, String abo,
       String rhd) {
-    String queryString = "SELECT c FROM Component c where c.type = :componentType and c.abo= :abo and c.rhd= :rhd and c.isDeleted = :isDeleted and c.isIssued= :isIssued";
+    String queryString = "SELECT c FROM Component c where c.componentType = :componentType and c.abo= :abo and c.rhd= :rhd and c.isDeleted = :isDeleted and c.isIssued= :isIssued";
     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("isIssued", Boolean.FALSE);
@@ -390,7 +390,7 @@ public class ComponentRepository {
 
   public List<Component> getAllUnissuedThirtyFiveDayComponents(String componentType,
       String abo, String rhd) {
-    String queryString = "SELECT c FROM Component c where c.type = :componentType and c.abo= :abo and c.rhd= :rhd and c.isDeleted = :isDeleted and c.isIssued= :isIssued and c.createdOn > :minDate";
+    String queryString = "SELECT c FROM Component c where c.componentType = :componentType and c.abo= :abo and c.rhd= :rhd and c.isDeleted = :isDeleted and c.isIssued= :isIssued and c.createdOn > :minDate";
     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("isIssued", Boolean.FALSE);
@@ -959,7 +959,7 @@ public class ComponentRepository {
   }
   
   public ComponentType findComponentTypeByComponentTypeName(String componentTypeName) throws NoResultException{
-    String queryString = "SELECT p FROM ComponentType p where p.componentType = :componentTypeName";
+    String queryString = "SELECT p FROM ComponentType p where p.componentTypeName = :componentTypeName";
     TypedQuery<ComponentType> query = em.createQuery(queryString, ComponentType.class);
     query.setParameter("componentTypeName", componentTypeName);
     ComponentType componentType = componentType = query.getSingleResult();

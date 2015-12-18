@@ -106,7 +106,7 @@ public class ComponentRepositoryTest {
 	}
 	
 	public void initSpringSecurityUser() throws Exception {
-		BsisUserDetails user = new BsisUserDetails(userRepository.findUserById(1l));
+		BsisUserDetails user = new BsisUserDetails(userRepository.findUserById(1L));
 		TestingAuthenticationToken auth = new TestingAuthenticationToken(user, "Credentials");
 		SecurityContextHolder.getContext().setAuthentication(auth);
 	}
@@ -183,7 +183,7 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Ignore("Bug - error in HQL: could not resolve property: type of: model.component.Component [SELECT p FROM model.component.Component p where p.type = :componentType and p.abo= :abo and p.rhd= :rhd and p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.createdOn > :minDate]")
+//	@Ignore("Bug - error in HQL: could not resolve property: type of: model.component.Component [SELECT p FROM model.component.Component p where p.type = :componentType and p.abo= :abo and p.rhd= :rhd and p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.createdOn > :minDate]")
 	public void testGetAllUnissuedThirtyFiveDayComponentsWithParameters() throws Exception {
 		List<Component> all = componentRepository.getAllUnissuedThirtyFiveDayComponents("PROCESSED", "A", "+");
 		Assert.assertNotNull("There are Components", all);
@@ -191,7 +191,7 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Ignore("There appears to be a bug in the HQL: could not resolve property: type of: model.component.Component")
+//	@Ignore("There appears to be a bug in the HQL: could not resolve property: type of: model.component.Component")
 	public void testGetAllComponentsWithComponentTypeQUARANTINED() throws Exception {
 		List<Component> all = componentRepository.getAllComponents("QUARANTINED");
 		Assert.assertNotNull("There are Components", all);
@@ -199,7 +199,7 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Ignore("There appears to be a bug in the HQL: could not resolve property: type of: model.component.Component")
+//	@Ignore("There appears to be a bug in the HQL: could not resolve property: type of: model.component.Component")
 	public void testGetAllComponentsWithComponentTypeEXPIRED() throws Exception {
 		List<Component> all = componentRepository.getAllComponents("EXPIRED");
 		Assert.assertNotNull("There are Components", all);
@@ -208,14 +208,14 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	public void testFindComponentWithId() throws Exception {
-		Component one = componentRepository.findComponent(1l);
+		Component one = componentRepository.findComponent(1L);
 		Assert.assertNotNull("There is a Component with id 1", one);
 		Assert.assertEquals("Component is linked to the correct Donation", "1111111", one.getDonationIdentificationNumber());
 	}
 	
 	@Test
 	public void testFindComponentById() throws Exception {
-		Component one = componentRepository.findComponentById(1l);
+		Component one = componentRepository.findComponentById(1L);
 		Assert.assertNotNull("There is a Component with id 1", one);
 		Assert.assertEquals("Component is linked to the correct Donation", "1111111", one.getDonationIdentificationNumber());
 	}
@@ -223,7 +223,7 @@ public class ComponentRepositoryTest {
 	@Test
 	@Transactional
 	public void testFindComponentByIdUnknown() throws Exception {
-		Component one = componentRepository.findComponent(1111l);
+		Component one = componentRepository.findComponent(1111L);
 		Assert.assertNull("There is no Component with id 1111", one);
 	}
 	
@@ -268,7 +268,7 @@ public class ComponentRepositoryTest {
 		List<ComponentStatus> status = new ArrayList<>();
 		status.add(ComponentStatus.PROCESSED);
 		List<Long> componentTypeIds = new ArrayList<>();
-		componentTypeIds.add(1l);
+		componentTypeIds.add(1L);
 		List<Component> all = componentRepository.findComponentByComponentTypes(componentTypeIds, status, pagingParams);
 		Assert.assertNotNull("Does not return an null", all);
 		Assert.assertEquals("There are 3 'Whole Blood Single Pack - CPDA' Components", 3, all.size());
@@ -280,7 +280,7 @@ public class ComponentRepositoryTest {
 		List<ComponentStatus> status = new ArrayList<>();
 		status.add(ComponentStatus.QUARANTINED);
 		List<Long> componentTypeIds = new ArrayList<>();
-		componentTypeIds.add(1l);
+		componentTypeIds.add(1L);
 		List<Component> all = componentRepository.findComponentByComponentTypes(componentTypeIds, status, pagingParams);
 		Assert.assertNotNull("Does not return a null list", all);
 		Assert.assertTrue("There are no Components", all.isEmpty());
@@ -342,7 +342,7 @@ public class ComponentRepositoryTest {
 		List<ComponentStatus> status = new ArrayList<>();
 		status.add(ComponentStatus.QUARANTINED);
 		List<Long> componentTypeIds = new ArrayList<>();
-		componentTypeIds.add(1l);
+		componentTypeIds.add(1L);
 		List<Component> all = componentRepository.findAnyComponent(null, componentTypeIds, status, null, null, pagingParams);
 		Assert.assertNotNull("There aren't matching components", all);
 		Assert.assertTrue("There should be 0 components", all.isEmpty());
@@ -359,7 +359,7 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-	@Ignore("Bug - error in the HQL:  org.hibernate.QueryException: could not resolve property: componentType of: model.componenttype.ComponentType [SELECT p FROM model.componenttype.ComponentType p where p.componentType = :componentTypeName]")
+//	@Ignore("Bug - error in the HQL:  org.hibernate.QueryException: could not resolve property: componentType of: model.componenttype.ComponentType [SELECT p FROM model.componenttype.ComponentType p where p.componentType = :componentTypeName]")
 	public void testFindComponentTypeByComponentTypeName() throws Exception {
 		ComponentType one = componentRepository.findComponentTypeByComponentTypeName("Whole Blood Single Pack - CPDA");
 		Assert.assertNotNull("ComponentType match", one);
@@ -368,7 +368,7 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	public void testFindComponentTypeByComponentTypeId() throws Exception {
-		ComponentType one = componentRepository.findComponentTypeBySelectedComponentType(1l);
+		ComponentType one = componentRepository.findComponentTypeBySelectedComponentType(1L);
 		Assert.assertNotNull("ComponentType match", one);
 		Assert.assertEquals("ComponentType is correct", "Whole Blood Single Pack - CPDA", one.getComponentTypeName());
 	}
@@ -376,12 +376,12 @@ public class ComponentRepositoryTest {
 	@Test(expected = javax.persistence.NoResultException.class)
 	@Transactional
 	public void testFindComponentTypeByComponentTypeIdUnknown() throws Exception {
-		componentRepository.findComponentTypeBySelectedComponentType(123l);
+		componentRepository.findComponentTypeBySelectedComponentType(123L);
 	}
 	
 	@Test
 	public void testGetComponentStatusChanges() throws Exception {
-		Component discardedComponent = componentRepository.findComponent(6l);
+		Component discardedComponent = componentRepository.findComponent(6L);
 		List<ComponentStatusChange> changes = componentRepository.getComponentStatusChanges(discardedComponent);
 		Assert.assertNotNull("Not empty list", changes);
 		Assert.assertEquals("1 ComponentStatusChange", 1, changes.size());
@@ -390,7 +390,7 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	public void testGetComponentStatusChangesNone() throws Exception {
-		Component quarantinedComponent = componentRepository.findComponent(4l);
+		Component quarantinedComponent = componentRepository.findComponent(4L);
 		List<ComponentStatusChange> changes = componentRepository.getComponentStatusChanges(quarantinedComponent);
 		Assert.assertNotNull("Not empty list", changes);
 		Assert.assertTrue("0 ComponentStatusChange", changes.isEmpty());
@@ -467,9 +467,9 @@ public class ComponentRepositoryTest {
 	@Test
 	// FIXME: issue with package dependencies here - ComponentRepository uses UtilController to retrieve the logged in user.  
 	public void testDiscardComponent() throws Exception {
-		ComponentStatusChangeReason discardReason = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(5l);
-		componentRepository.discardComponent(1l, discardReason, "junit");
-		Component component = componentRepository.findComponent(1l);
+		ComponentStatusChangeReason discardReason = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(5L);
+		componentRepository.discardComponent(1L, discardReason, "junit");
+		Component component = componentRepository.findComponent(1L);
 		List<ComponentStatusChange> changes = componentRepository.getComponentStatusChanges(component);
 		Assert.assertNotNull("Not empty list", changes);
 		Assert.assertEquals("1 ComponentStatusChange", 1, changes.size());
@@ -480,9 +480,9 @@ public class ComponentRepositoryTest {
 	@Test
 	// FIXME: issue with package dependencies here - ComponentRepository uses UtilController to retrieve the logged in user.  
 	public void testReturnComponent() throws Exception {
-		ComponentStatusChangeReason returnReason = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(7l);
-		componentRepository.returnComponent(1l, returnReason, "junit");
-		Component component = componentRepository.findComponent(1l);
+		ComponentStatusChangeReason returnReason = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(7L);
+		componentRepository.returnComponent(1L, returnReason, "junit");
+		Component component = componentRepository.findComponent(1L);
 		List<ComponentStatusChange> changes = componentRepository.getComponentStatusChanges(component);
 		Assert.assertNotNull("Not empty list", changes);
 		Assert.assertEquals("1 ComponentStatusChange", 1, changes.size());
@@ -493,9 +493,9 @@ public class ComponentRepositoryTest {
 	@Test
 	// FIXME: issue with package dependencies here - ComponentRepository uses UtilController to retrieve the logged in user.  
 	public void testSplitComponent() throws Exception {
-		boolean split = componentRepository.splitComponent(2l, 2);
+		boolean split = componentRepository.splitComponent(2L, 2);
 		Assert.assertTrue("Split was successful", split);
-		Component component = componentRepository.findComponent(2l);
+		Component component = componentRepository.findComponent(2L);
 		Assert.assertEquals("Status is changed to SPLIT", ComponentStatus.SPLIT, component.getStatus());
 		List<ComponentStatusChange> changes = componentRepository.getComponentStatusChanges(component);
 		Assert.assertEquals("1 ComponentStatusChange", 1, changes.size());
@@ -508,7 +508,7 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	public void testSplitComponentTwice() throws Exception {
-		componentRepository.splitComponent(2l, 1);
+		componentRepository.splitComponent(2L, 1);
 		List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber("1111111");
 		for (Component p : components) {
 			if (p.getStatus() == ComponentStatus.SPLIT) {
@@ -520,23 +520,23 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	public void testSplitComponentUnknown() throws Exception {
-		boolean split = componentRepository.splitComponent(123l, 2);
+		boolean split = componentRepository.splitComponent(123L, 2);
 		Assert.assertFalse("Unknown component", split);
 	}
 	
 	@Test
 	public void testUpdateComponent() throws Exception {
-		Component componentToUpdate = componentRepository.findComponent(2l);
+		Component componentToUpdate = componentRepository.findComponent(2L);
 		componentToUpdate.setComponentIdentificationNumber("junit123");
 		componentRepository.updateComponent(componentToUpdate);
-		Component updatedComponent = componentRepository.findComponent(2l);
+		Component updatedComponent = componentRepository.findComponent(2L);
 		Assert.assertEquals("Component has been updated", "junit123", updatedComponent.getComponentIdentificationNumber());
 	}
 	
 	@Test
 	public void testUpdateExpiryStatus() throws Exception {
 		// create expirable component
-		Component componentToExpire = componentRepository.findComponent(2l);
+		Component componentToExpire = componentRepository.findComponent(2L);
 		Calendar today = Calendar.getInstance();
 		today.add(Calendar.DAY_OF_YEAR, -3);
 		componentToExpire.setExpiresOn(today.getTime());
@@ -551,8 +551,8 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	public void testSetComponentStatusToProcessed() throws Exception {
-		componentRepository.setComponentStatusToProcessed(2l);
-		Component processedComponent = componentRepository.findComponent(2l);
+		componentRepository.setComponentStatusToProcessed(2L);
+		Component processedComponent = componentRepository.findComponent(2L);
 		Assert.assertEquals("Component has been processed", ComponentStatus.PROCESSED, processedComponent.getStatus());
 	}
 	
@@ -562,7 +562,7 @@ public class ComponentRepositoryTest {
 		// create component with null status
 		Component newComponent = new Component();
 		Donation newDonation = new Donation();
-		Component existingComponent = componentRepository.findComponent(1l);
+		Component existingComponent = componentRepository.findComponent(1L);
 		newComponent.setId(existingComponent.getId());
 		newComponent.copy(existingComponent);
 		newComponent.setId(null); // don't want to override the existing component
@@ -590,14 +590,14 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	public void testUpdateComponentInternalFieldsProcessed() throws Exception {
-		Component component = componentRepository.findComponent(1l);
+		Component component = componentRepository.findComponent(1L);
 		boolean updatedComponent = componentRepository.updateComponentInternalFields(component);
 		Assert.assertFalse("PROCESSED component is not updated", updatedComponent);
 	}
 	
 	@Test
 	public void testUpdateComponentInternalFieldsDiscarded() throws Exception {
-		Component component = componentRepository.findComponent(6l);
+		Component component = componentRepository.findComponent(6L);
 		boolean updatedComponentStatus = componentRepository.updateComponentInternalFields(component);
 		Assert.assertFalse("DISCARDED component is not updated", updatedComponentStatus);
 	}
@@ -605,7 +605,7 @@ public class ComponentRepositoryTest {
 	@Test
 	public void testUpdateComponentInternalFieldsIssued() throws Exception {
 		// setup test
-		Component component = componentRepository.findComponent(1l);
+		Component component = componentRepository.findComponent(1L);
 		component.setStatus(ComponentStatus.ISSUED);
 		// run test
 		boolean updatedComponentStatus = componentRepository.updateComponentInternalFields(component);
@@ -615,7 +615,7 @@ public class ComponentRepositoryTest {
 	@Test
 	public void testUpdateComponentInternalFieldsUsed() throws Exception {
 		// setup test
-		Component component = componentRepository.findComponent(1l);
+		Component component = componentRepository.findComponent(1L);
 		component.setStatus(ComponentStatus.USED);
 		// run test
 		boolean updatedComponentStatus = componentRepository.updateComponentInternalFields(component);
@@ -625,7 +625,7 @@ public class ComponentRepositoryTest {
 	@Test
 	public void testUpdateComponentInternalFieldsSplit() throws Exception {
 		// setup test
-		Component component = componentRepository.findComponent(1l);
+		Component component = componentRepository.findComponent(1L);
 		component.setStatus(ComponentStatus.SPLIT);
 		// run test
 		boolean updatedComponentStatus = componentRepository.updateComponentInternalFields(component);
@@ -635,7 +635,7 @@ public class ComponentRepositoryTest {
 	@Test
 	public void testUpdateComponentInternalFieldsQuarantined() throws Exception {
 		// setup test
-		Component component = componentRepository.findComponent(4l);
+		Component component = componentRepository.findComponent(4L);
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_YEAR, -10);
 		component.setExpiresOn(cal.getTime());
@@ -648,7 +648,7 @@ public class ComponentRepositoryTest {
 	@Test
 	public void testUpdateComponentInternalFieldsSafe() throws Exception {
 		// setup test
-		Component component = componentRepository.findComponent(4l);
+		Component component = componentRepository.findComponent(4L);
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_YEAR, 10);
 		component.setExpiresOn(cal.getTime());
@@ -661,7 +661,7 @@ public class ComponentRepositoryTest {
 	@Test
 	public void testUpdateComponentInternalFieldsUnSafe() throws Exception {
 		// setup test
-		Component component = componentRepository.findComponent(7l);
+		Component component = componentRepository.findComponent(7L);
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_YEAR, 10);
 		component.setExpiresOn(cal.getTime());
@@ -682,8 +682,8 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	public void testDeleteComponent() throws Exception {
-		componentRepository.deleteComponent(1l);
-		Component deletedComponent = componentRepository.findComponent(1l);
+		componentRepository.deleteComponent(1L);
+		Component deletedComponent = componentRepository.findComponent(1L);
 		Assert.assertNotNull("Component isn't actually deleted", deletedComponent);
 		Assert.assertTrue("Component is marked as isDeleted", deletedComponent.getIsDeleted());
 	}
@@ -692,7 +692,7 @@ public class ComponentRepositoryTest {
 	public void testAddComponent() throws Exception {
 		Component newComponent = new Component();
 		Donation newDonation = new Donation();
-		Component existingComponent = componentRepository.findComponent(1l);
+		Component existingComponent = componentRepository.findComponent(1L);
 		newComponent.setId(existingComponent.getId());
 		newComponent.copy(existingComponent);
 		newComponent.setId(null); // don't want to override, just save time with a copy
@@ -716,7 +716,7 @@ public class ComponentRepositoryTest {
 	public void testAddAllComponents() throws Exception {
 		Component newComponent1 = new Component();
 		Donation newDonation1 = new Donation();
-		Component existingComponent1 = componentRepository.findComponent(1l);
+		Component existingComponent1 = componentRepository.findComponent(1L);
 		newComponent1.setId(existingComponent1.getId());
 		newComponent1.copy(existingComponent1);
 		newComponent1.setId(null); // don't want to overwrite the old component
@@ -734,7 +734,7 @@ public class ComponentRepositoryTest {
 		
 		Component newComponent2 = new Component();
 		Donation newDonation2 = new Donation();
-		Component existingComponent2 = componentRepository.findComponent(1l);
+		Component existingComponent2 = componentRepository.findComponent(1L);
 		newComponent2.setId(existingComponent2.getId());
 		newComponent2.copy(existingComponent2);
 		newComponent2.setId(null); // don't want to overwrite the old component

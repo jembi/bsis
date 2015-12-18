@@ -92,14 +92,6 @@ public class ComponentBackingFormValidator implements Validator {
                   CustomDateFormatter.getDateErrorMessage());
       }
 
-    } catch (JsonParseException e) {
-      errors.rejectValue("component.expiresOn", "dateFormat.incorrect", "Invalid expiry date specified");
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (JsonMappingException e) {
-      errors.rejectValue("component.expiresOn", "dateFormat.incorrect", "Invalid expiry date specified");
-      // TODO Auto-generated catch block
-      e.printStackTrace();
     } catch (IOException e) {
       errors.rejectValue("component.expiresOn", "dateFormat.incorrect", "Invalid expiry date specified");
       // TODO Auto-generated catch block
@@ -118,11 +110,7 @@ public class ComponentBackingFormValidator implements Validator {
       bean = BeanUtils.describe(form);
       Donation donation = utilController.findDonationInForm(bean);
       form.setDonation(donation);
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
+    } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
       e.printStackTrace();
     }
   }
@@ -134,11 +122,7 @@ public class ComponentBackingFormValidator implements Validator {
       bean = BeanUtils.describe(form);
       Donation donation = utilController.findDonationInForm(bean);
       form.setDonation(donation);
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
+    } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
       e.printStackTrace();
     }
   }

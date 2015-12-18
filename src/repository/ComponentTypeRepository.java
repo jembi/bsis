@@ -133,7 +133,7 @@ public class ComponentTypeRepository {
     query = em.createQuery("SELECT ct from ComponentType ct where ct.isDeleted=:isDeleted AND pediComponentType_id != null AND ct.id!= 1", ComponentType.class);
     query.setParameter("isDeleted", false);
     componentTypes = query.getResultList(); 
-    componentTypes.add(getComponentTypeByIdList(1l).get(0));
+    componentTypes.add(getComponentTypeByIdList(1L).get(0));
     return componentTypes;
   }
   

@@ -3,13 +3,7 @@ package controller;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -110,7 +104,7 @@ public class ComponentController {
     Map<String, Object> map = new HashMap<>();
     Component component = componentRepository.findComponentById(id);
      
-    ComponentViewModel componentViewModel = getComponentViewModels(Arrays.asList(component)).get(0);
+    ComponentViewModel componentViewModel = getComponentViewModels(Collections.singletonList(component)).get(0);
     addEditSelectorOptions(map);
     map.put("component", componentViewModel);
     map.put("componentStatusChangeReasons",
@@ -548,10 +542,6 @@ public class ComponentController {
 
       try {
         componentTypeCombinationsMap.put(componentTypeCombination.getId(), mapper.writeValueAsString(componentExpiryIntervals));
-      } catch (JsonGenerationException e) {
-        e.printStackTrace();
-      } catch (JsonMappingException e) {
-        e.printStackTrace();
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -623,18 +613,14 @@ public class ComponentController {
             String propertyValue = property;
             try {
               propertyValue = BeanUtils.getProperty(component, property);
-            } catch (IllegalAccessException e) {
-              e.printStackTrace();
-            } catch (InvocationTargetException e) {
-              e.printStackTrace();
-            } catch (NoSuchMethodException e) {
+            } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
               e.printStackTrace();
             }
             if (property.equals("componentType") &&
                 StringUtils.isNotBlank(component.getSubdivisionCode())) {
               propertyValue = propertyValue + " (" + component.getSubdivisionCode() + ")";
             }
-            row.add(propertyValue.toString());
+            row.add(propertyValue);
           }
         }
       }

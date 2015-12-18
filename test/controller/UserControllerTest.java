@@ -40,7 +40,7 @@ public class UserControllerTest {
 	@Ignore @Test
 	public void testUpdateUser() {
 		try{
-			User user = userRepository.findUserById(2l);
+			User user = userRepository.findUserById(2L);
 			user.setLastName("technician");
 			userRepository.updateUser(user, false);
 		}catch(Exception e){

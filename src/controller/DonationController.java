@@ -129,14 +129,10 @@ public class DonationController {
             String propertyValue = property;
             try {
               propertyValue = BeanUtils.getProperty(donation, property);
-            } catch (IllegalAccessException e) {
-              e.printStackTrace();
-            } catch (InvocationTargetException e) {
-              e.printStackTrace();
-            } catch (NoSuchMethodException e) {
+            } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
               e.printStackTrace();
             }
-            row.add(propertyValue.toString());
+            row.add(propertyValue);
           }
         }
       }

@@ -166,13 +166,7 @@ public class UtilController {
             }
         }
       }
-    } catch (IllegalAccessException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
+    } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
@@ -197,13 +191,7 @@ public class UtilController {
           }
         }
       }
-    } catch (IllegalAccessException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
+    } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }

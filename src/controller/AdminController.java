@@ -219,10 +219,6 @@ public class AdminController {
     Map<String, String> paramsMap = null;
     try {
       paramsMap = mapper.readValue(params, HashMap.class);
-    } catch (JsonParseException e) {
-      LOGGER.debug(e.getMessage() + e.getStackTrace());
-    } catch (JsonMappingException e) {
-      LOGGER.debug(e.getMessage() + e.getStackTrace());
     } catch (IOException e) {
       // TODO Auto-generated catch block
       LOGGER.debug(e.getMessage() + e.getStackTrace());
@@ -291,9 +287,7 @@ public class AdminController {
       zipOut.close();
       p.waitFor();
       LOGGER.debug("Exit value: " + p.exitValue());
-    } catch (IOException e) {
-      LOGGER.debug(e.getMessage() + e.getStackTrace());
-    } catch (InterruptedException e) {
+    } catch (IOException | InterruptedException e) {
       LOGGER.debug(e.getMessage() + e.getStackTrace());
     }
   }

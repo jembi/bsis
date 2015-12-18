@@ -2,11 +2,7 @@ package controller;
 
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -108,7 +104,7 @@ public class RequestsController {
 
     Request componentRequest = requestRepository.findRequestById(id);
 
-    RequestViewModel requestViewModel = getRequestViewModels(Arrays.asList(componentRequest)).get(0);
+    RequestViewModel requestViewModel = getRequestViewModels(Collections.singletonList(componentRequest)).get(0);
     map.put("request", requestViewModel);
     return map;
   }
@@ -135,7 +131,7 @@ public class RequestsController {
 
 
     List<Long> componentTypeIds = new ArrayList<>();
-    componentTypeIds.add(-1l);
+    componentTypeIds.add(-1L);
     if (componentTypes != null) {
       for (String componentTypeId : componentTypes) {
         componentTypeIds.add(Long.parseLong(componentTypeId));
@@ -224,14 +220,10 @@ public class RequestsController {
             String propertyValue = property;
             try {
               propertyValue = BeanUtils.getProperty(componentRequest, property);
-            } catch (IllegalAccessException e) {
-              e.printStackTrace();
-            } catch (InvocationTargetException e) {
-              e.printStackTrace();
-            } catch (NoSuchMethodException e) {
+            } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
               e.printStackTrace();
             }
-            row.add(propertyValue.toString());
+            row.add(propertyValue);
           }
         }
       }

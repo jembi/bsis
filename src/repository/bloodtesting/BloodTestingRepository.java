@@ -4,15 +4,7 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -105,7 +97,7 @@ public class BloodTestingRepository {
 	}
 
 	public List<BloodTest> getBloodTestsOfType(BloodTestType type) {
-		return getBloodTestsOfTypes(Arrays.asList(type));
+		return getBloodTestsOfTypes(Collections.singletonList(type));
 	}
 
 	public List<BloodTest> getBloodTestsOfTypes(List<BloodTestType> types) {
@@ -578,7 +570,7 @@ public class BloodTestingRepository {
 				bloodTestRuleResultsForDonations
 						.put(donationId, ruleResult);
 				BloodTestResult btResult = saveBloodTestResultToDatabase(
-						new Long(ttiTestId),
+								ttiTestId,
 						bloodTestResultsForDonation.get(ttiTestId),
 						donation, testedOn, ruleResult);
 				// no need to worry about uninterpretable results here
@@ -776,7 +768,7 @@ public class BloodTestingRepository {
 				confirmatoryBloodTest.setIsActive(true);
 				em.persist(confirmatoryBloodTest);
 				em.refresh(confirmatoryBloodTest);
-				pendingTestIds.add(Long.valueOf(i));
+				pendingTestIds.add((long) i);
 
 				BloodTestingRule confirmatoryTestRule = new BloodTestingRule();
 				confirmatoryTestRule.setBloodTestsIds(""
@@ -879,7 +871,7 @@ public class BloodTestingRepository {
 				ttiTestIds.add(Long.parseLong(ttiTest));
 			}
 		} else {
-			ttiTestIds.add(-1l);
+			ttiTestIds.add(-1L);
 		}
 
 		query.setParameter("venueIds", venueIds);

@@ -164,7 +164,7 @@ public class DonationCRUDServiceTests {
         // Set up fixture
         Donation existingDonation = aDonation().withId(IRRELEVANT_DONATION_ID).build();
         DonationBackingForm donationBackingForm = aDonationBackingForm()
-                .withPackType(aPackType().withId(7l).build())
+                .withPackType(aPackType().withId(7L).build())
                 .build();
 
         // Set up expectations
@@ -242,7 +242,7 @@ public class DonationCRUDServiceTests {
         
         Donation existingDonation = aDonation()
             .withId(IRRELEVANT_DONATION_ID)
-            .withPackType(aPackType().withId(8l).withCountAsDonation(true).build())
+            .withPackType(aPackType().withId(8L).withCountAsDonation(true).build())
             .withDonor(expectedDonor)
             .withAdverseEvent(irrelevantAdverseEvent)
             .build();

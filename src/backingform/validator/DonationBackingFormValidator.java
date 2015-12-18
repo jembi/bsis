@@ -204,13 +204,7 @@ public class DonationBackingFormValidator implements Validator {
       form.setDonor(donor);
       DonationBatch donationBatch = utilController.findDonationBatchInForm(bean);
       form.setDonationBatch(donationBatch);
-    } catch (IllegalAccessException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
+    } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }

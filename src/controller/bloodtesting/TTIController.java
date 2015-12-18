@@ -207,10 +207,6 @@ public class TTIController {
 			map.put("donations", results.get("donations"));
 			map.put("bloodTestingResults",
 					results.get("bloodTestingResults"));
-		} catch (JsonParseException e) {
-			LOGGER.error(e.getMessage() + e.getStackTrace());
-		} catch (JsonMappingException e) {
-			LOGGER.error(e.getMessage() + e.getStackTrace());
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage() + e.getStackTrace());
 		}
@@ -276,7 +272,7 @@ public class TTIController {
 		  uploadPath = path[0];
 		  String[] tsvFilestr;
 	
-			tsvFilestr = tsvFile.getOriginalFilename().toString()
+			tsvFilestr = tsvFile.getOriginalFilename()
 					.split(UploadTTIResultConstant.FILE_SPLIT);
 			if (StringUtils.isBlank(tsvFilestr.toString())	|| 
 					!tsvFilestr[1].equals(UploadTTIResultConstant.FILE_EXTENTION)) {

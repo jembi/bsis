@@ -3,14 +3,7 @@ package repository;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -230,7 +223,7 @@ public class RequestRepository {
             + "(r.isDeleted= :isDeleted)", Request.class);
 
     query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("statuses", Arrays.asList("fulfilled"));
+    query.setParameter("statuses", Collections.singletonList("fulfilled"));
     List<Request> resultList = query.getResultList();
     return resultList;
   }
@@ -336,7 +329,7 @@ public class RequestRepository {
     for (Parameter<?> parameter : query.getParameters()) {
       countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
     }
-    return countQuery.getSingleResult().longValue();
+    return countQuery.getSingleResult();
   }  
 
   public void deleteRequest(Long requestId) {
