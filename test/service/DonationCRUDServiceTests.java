@@ -214,7 +214,7 @@ public class DonationCRUDServiceTests {
         // Set up fixture
         Integer irrelevantDonorPulse = 80;
         BigDecimal irrelevantHaemoglobinCount = new BigDecimal(2);
-        HaemoglobinLevel irrelevantHaemoglobinLevel = HaemoglobinLevel.LOW;
+        HaemoglobinLevel irrelevantHaemoglobinLevel = HaemoglobinLevel.FAIL;
         Integer irrelevantBloodPressureSystolic = 120;
         Integer irrelevantBloodPressureDiastolic = 80;
         BigDecimal irrelevantDonorWeight = new BigDecimal(65);

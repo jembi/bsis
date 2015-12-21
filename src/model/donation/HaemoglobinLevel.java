@@ -2,13 +2,12 @@ package model.donation;
 
 public enum HaemoglobinLevel {
     
-    LOW("Low"),
-    NORMAL("Normal"),
-    HIGH("High");
+    PASS("Pass"),
+    FAIL("Fail");
     
     private String label;
 
-    private HaemoglobinLevel(String label) {
+    HaemoglobinLevel(String label) {
         this.label = label;
     }
 
