@@ -78,7 +78,7 @@ public class DuplicateDonorService {
 	 * @param donors List of Donors that are being merged into the newDonor
 	 * @return List of DuplicateDonorBackup records that can be used to rollback a merge
 	 */
-	public List<DuplicateDonorBackup> mergeDonors(Donor newDonor, List<Donor> donors) {
+	protected List<DuplicateDonorBackup> mergeDonors(Donor newDonor, List<Donor> donors) {
 		String newDonorNumber = newDonor.getDonorNumber();
 		// combine Donations and Deferrals and create a backup log
 		List<Donation> combinedDonations = new ArrayList<Donation>();
@@ -136,7 +136,7 @@ public class DuplicateDonorService {
 		return combinedDonations;
 	}
 	
-	protected List<Donation> combineDonations(List<Donor> donors) {
+	private List<Donation> combineDonations(List<Donor> donors) {
 		List<Donation> combinedDonations = new ArrayList<Donation>();
 		if (donors != null) {
 			for (Donor donor : donors) {
@@ -153,7 +153,7 @@ public class DuplicateDonorService {
 		return combinedDonations;
 	}
 	
-	protected List<Donation> sortDonationsByDate(List<Donation> combinedDonations) {
+	private List<Donation> sortDonationsByDate(List<Donation> combinedDonations) {
 		// sort donations in chronological order
 		Collections.sort(combinedDonations, new Comparator<Donation>() {
 			
@@ -165,7 +165,7 @@ public class DuplicateDonorService {
 		return combinedDonations;
 	}
 	
-	protected void executeTestsAndUpdate(Donor newDonor, List<Donation> combinedDonations) {
+	private void executeTestsAndUpdate(Donor newDonor, List<Donation> combinedDonations) {
 		for (Donation donation : combinedDonations) {
 			// analyse the Blood Tests
 			BloodTestingRuleResult ruleResult = bloodTestsService.executeTests(donation);
@@ -175,7 +175,7 @@ public class DuplicateDonorService {
 			// sets the Donor's donation related attributes
 			donorService.setDonorDateOfFirstDonation(newDonor, donation);
 			donorService.setDonorDateOfLastDonation(newDonor, donation);
-			donorService.setDonorDueToDonate(newDonor);
+			donorService.setDonorDueToDonate(newDonor, donation);
 		}
 	}
 	
@@ -191,7 +191,7 @@ public class DuplicateDonorService {
 		return combineDeferralsAndSortByDate(donors);
 	}
 	
-	protected List<DonorDeferral> combineDeferralsAndSortByDate(List<Donor> donors) {
+	private List<DonorDeferral> combineDeferralsAndSortByDate(List<Donor> donors) {
 		List<DonorDeferral> combinedDeferrals = new ArrayList<DonorDeferral>();
 		if (donors != null) {
 			for (Donor donor : donors) {
