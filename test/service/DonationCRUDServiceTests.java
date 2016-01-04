@@ -7,6 +7,7 @@ import static helpers.builders.DonationBackingFormBuilder.aDonationBackingForm;
 import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
+import static helpers.builders.PostDonationCounsellingBuilder.aPostDonationCounselling;
 import static helpers.builders.PackTypeBuilder.aPackType;
 import static helpers.matchers.DonationMatcher.hasSameStateAsDonation;
 import static helpers.matchers.DonorMatcher.hasSameStateAsDonor;
@@ -19,6 +20,7 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.util.Date;
 import model.adverseevent.AdverseEvent;
+import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
 import model.donationbatch.DonationBatch;
@@ -64,7 +66,9 @@ public class DonationCRUDServiceTests {
     private DonorConstraintChecker donorConstraintChecker;
     @Mock
     private DonorService donorService;
-    
+    @Mock
+    PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
+
     @Test(expected = IllegalStateException.class)
     public void testDeleteDonationWithConstraints_shouldThrow() {
         
@@ -380,6 +384,8 @@ public class DonationCRUDServiceTests {
                 .withDonationBatchNumber(donationBatchNumber)
                 .withPackType(aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build())
                 .build();
+
+        PostDonationCounselling postDonationCounselling = aPostDonationCounselling().build();
         
         DonationBatch donationBatch = aDonationBatch().thatIsBackEntry().build();
         
@@ -388,11 +394,13 @@ public class DonationCRUDServiceTests {
         when(packTypeRepository.getPackTypeById(IRRELEVANT_PACK_TYPE_ID)).thenReturn(packTypeThatCountsAsDonation);
         when(donorConstraintChecker.isDonorEligibleToDonate(donorId)).thenReturn(false);
         when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber)).thenReturn(donationBatch);
+        when(postDonationCounsellingCRUDService.createPostDonationCounsellingForDonation(donation)).thenReturn(postDonationCounselling);
 
         Donation returnedDonation = donationCRUDService.createDonation(backingForm);
         
         verify(donationRepository).addDonation(donation);
         verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafe(donation);
+        verify(postDonationCounsellingCRUDService).createPostDonationCounsellingForDonation(donation);
         assertThat(returnedDonation, is(donation));
     }
 
