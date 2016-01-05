@@ -2006,11 +2006,11 @@
             WHERE tb.status IN ("CLOSED", "RELEASED");
         </sql>
     </changeSet>
-    
-    <changeSet id="20160105-0907" author="timler">
-        <comment>#440 - added missing columns to Donor_AUD</comment>
-		<dropColumn  columnName="address" tableName="Donor_AUD"/>
-		<dropColumn  columnName="phoneNumber" tableName="Donor_AUD"/>
+
+	<changeSet id="20160105-0907" author="timler">
+		<comment>#440 - added missing columns to Donor_AUD</comment>
+		<dropColumn columnName="address" tableName="Donor_AUD" />
+		<dropColumn columnName="phoneNumber" tableName="Donor_AUD" />
 		<addColumn tableName="Donor_AUD">
 			<column name="idType_id" type="BIGINT" defaultValue="NULL"></column>
 			<column name="preferredLanguage_id" type="BIGINT" defaultValue="NULL"></column>
