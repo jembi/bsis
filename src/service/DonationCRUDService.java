@@ -41,7 +41,9 @@ public class DonationCRUDService {
     private DonorConstraintChecker donorConstraintChecker;
     @Autowired
     private DonorService donorService;
-    
+    @Autowired
+    private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
+
     public void deleteDonation(long donationId) throws IllegalStateException, NoResultException {
         
         if (!donationConstraintChecker.canDeleteDonation(donationId)) {
@@ -100,6 +102,8 @@ public class DonationCRUDService {
         
         if (discardComponents) {
             componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
+            //Also flag for counselling
+            postDonationCounsellingCRUDService.createPostDonationCounsellingForDonation(donation);
         }
         
         return donation;
