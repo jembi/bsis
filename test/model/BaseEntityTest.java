@@ -9,6 +9,19 @@ public class BaseEntityTest {
   class TestEntity extends BaseEntity {
     private static final long serialVersionUID = 1L;
   }
+  
+  class AnotherTestEntity extends BaseEntity {
+    private static final long serialVersionUID = 1L;
+  }
+  
+  @Test
+  public void testDifferentEntitiesSameBaseClass() {
+    TestEntity testEntity1 = new TestEntity();
+    testEntity1.setId(123l);
+    AnotherTestEntity testEntity2 = new AnotherTestEntity();
+    testEntity2.setId(123l);
+    Assert.assertFalse("Different objects don't match", testEntity1.equals(testEntity2));
+  }
 
   @Test
   public void testToStringNullId() {
