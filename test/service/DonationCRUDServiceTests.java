@@ -385,7 +385,7 @@ public class DonationCRUDServiceTests {
                 .withPackType(aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build())
                 .build();
 
-        PostDonationCounselling postDonationCounselling = aPostDonationCounselling().build();
+        
         
         DonationBatch donationBatch = aDonationBatch().thatIsBackEntry().build();
         
