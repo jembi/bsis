@@ -403,6 +403,7 @@ public class DonorRepository {
         for (DonorDeferral deferral : deferrals) {
             if (deferral.getDeferredUntil() != null && deferral.getDeferredUntil().after(lastDeferredUntil)) {
                 lastDeferral = deferral;
+                lastDeferredUntil = lastDeferral.getDeferredUntil();
             }
         }
         return lastDeferral;
