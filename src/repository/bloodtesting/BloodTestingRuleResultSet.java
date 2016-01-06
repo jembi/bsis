@@ -36,7 +36,7 @@ public class BloodTestingRuleResultSet {
 	private Map<String, String> availableTestResults;
 	
 	/* only the recent (saved) blood test results */
-	private Map<Integer, BloodTestResult> recentTestResults;
+	private Map<Long, BloodTestResult> recentTestResults;
 	
 	/* indicates that there was no match for an ABO test */
 	private boolean aboUninterpretable = false;
@@ -60,7 +60,7 @@ public class BloodTestingRuleResultSet {
 	private TTIStatus ttiStatus;
 	
 	/* collection of the basic TTI tests that weren't done */
-	private Set<Integer> basicTtiTestsNotDone = new HashSet<Integer>();
+	private Set<Long> basicTtiTestsNotDone = new HashSet<Long>();
 	
 	/* collection of the various blood typing ABO tests done */
 	private Set<String> bloodAboChanges = new HashSet<String>();
@@ -92,11 +92,11 @@ public class BloodTestingRuleResultSet {
 	 * @param donation Donation regarding the blood donation
 	 * @param storedTestResults Map<String, String> of the saved test results
 	 * @param availableTestResults Map<String, String> of the available test results (saved and latest)
-	 * @param recentTestResults Map<Integer, BloodTestResult> of the most recent test results
+	 * @param recentTestResults Map<Long, BloodTestResult> of the most recent test results
 	 * @param bloodTestingRules List<BloodTestingRules> of the tests performed
 	 */
 	public BloodTestingRuleResultSet(Donation donation, Map<String, String> storedTestResults,
-	    Map<String, String> availableTestResults, Map<Integer, BloodTestResult> recentTestResults,
+	    Map<String, String> availableTestResults, Map<Long, BloodTestResult> recentTestResults,
 	    List<BloodTestingRule> bloodTestingRules) {
 		this.donation = donation;
 		this.storedTestResults = storedTestResults;
@@ -113,15 +113,15 @@ public class BloodTestingRuleResultSet {
 		this.donation = donation;
 	}
 	
-	public Map<Integer, BloodTestResult> getRecentTestResults() {
+	public Map<Long, BloodTestResult> getRecentTestResults() {
 		return recentTestResults;
 	}
 	
-	public Set<Integer> getBasicTtiTestsNotDone() {
+	public Set<Long> getBasicTtiTestsNotDone() {
 		return basicTtiTestsNotDone;
 	}
 	
-	public void setBasicTtiTestsNotDone(Set<Integer> basicTtiTestsNotDone) {
+	public void setBasicTtiTestsNotDone(Set<Long> basicTtiTestsNotDone) {
 		this.basicTtiTestsNotDone = basicTtiTestsNotDone;
 	}
 	
@@ -258,7 +258,7 @@ public class BloodTestingRuleResultSet {
     }
 
 	
-    public void setRecentTestResults(Map<Integer, BloodTestResult> recentTestResults) {
+    public void setRecentTestResults(Map<Long, BloodTestResult> recentTestResults) {
     	this.recentTestResults = recentTestResults;
     }
 

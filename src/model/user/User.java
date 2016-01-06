@@ -1,30 +1,26 @@
 package model.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import model.BaseEntity;
+
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Audited
-public class User implements Serializable {
+public class User extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false, insertable=false, updatable=false, columnDefinition="SMALLINT")
-  private Integer id;
+  private static final long serialVersionUID = 1L;
 
   @Column(length=30, unique=true, nullable=false)
   private String username;
@@ -63,10 +59,6 @@ public class User implements Serializable {
   private Date lastLogin;
 
   public User() {
-  }
-
-  public Integer getId() {
-    return id;
   }
 
   public String getUsername() {
@@ -111,10 +103,6 @@ public class User implements Serializable {
 
   public Boolean getIsDeleted() {
     return isDeleted;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
   }
 
   public void setUsername(String username) {
@@ -176,11 +164,6 @@ public class User implements Serializable {
     this.passwordReset = user.isPasswordReset();
   }
 
-  @Override
-  public String toString() {
-    return this.username;
-  }
-
   public List<Role> getRoles() {
     return roles;
   }
@@ -210,14 +193,4 @@ public class User implements Serializable {
     public void setPasswordReset(Boolean passwordReset) {
         this.passwordReset = passwordReset;
     }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        return other instanceof User &&
-                ((User) other).id == id;
-    }
-  
 }

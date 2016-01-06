@@ -89,14 +89,14 @@ public class DonationBatchRepositoryTest {
 	
 	@Test
 	public void testFindDonationBatchById() throws Exception {
-		DonationBatch one = donationBatchRepository.findDonationBatchById(1);
+		DonationBatch one = donationBatchRepository.findDonationBatchById(1l);
 		Assert.assertNotNull("There is a donation batch with the id 1", one);
 		Assert.assertEquals("The donation batch has the number 'B0215000000'", "B0215000000", one.getBatchNumber());
 	}
 	
 	@Test
 	public void testFindDonationBatchByIdEmpty() throws Exception {
-		DonationBatch five = donationBatchRepository.findDonationBatchById(5);
+		DonationBatch five = donationBatchRepository.findDonationBatchById(5l);
 		Assert.assertNotNull("There is a donation batch with the id 5", five);
 		Assert.assertEquals("The donation batch has the number 'B0215000005'", "B0215000005", five.getBatchNumber());
 	}
@@ -118,7 +118,7 @@ public class DonationBatchRepositoryTest {
 	
 	@Test
 	public void testFindDonationsInBatch() throws Exception {
-		List<Donation> donations = donationBatchRepository.findDonationsInBatch(1);
+		List<Donation> donations = donationBatchRepository.findDonationsInBatch(1l);
 		Assert.assertNotNull("There donations in the batch with id 1", donations);
 		Assert.assertEquals("There is 1 donation in the batch with id 1", 1, donations.size());
 	}

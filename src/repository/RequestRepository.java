@@ -278,7 +278,7 @@ public class RequestRepository {
     return to ;
   }
 
-  public List<Object> findRequests(String requestNumber, List<Integer> componentTypeIds,
+  public List<Object> findRequests(String requestNumber, List<Long> componentTypeIds,
       List<Long> requestSiteIds, String requestedAfter,
       String requiredBy, Boolean includeSatisfiedRequests, Map<String, Object> pagingParams) throws ParseException  {
 

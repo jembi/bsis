@@ -277,7 +277,7 @@ public class DonationController {
   public  Map<String, Object> findDonationPagination(
      @RequestParam(value = "donationIdentificationNumber", required = false)  String donationIdentificationNumber,
      @RequestParam(value = "venues",required = false)  List<Long> venueIds,
-     @RequestParam(value = "packTypes",required = false)  List<Integer> packTypeIds,
+     @RequestParam(value = "packTypes",required = false)  List<Long> packTypeIds,
      @RequestParam(value = "donationDateFrom", required = false)  String donationDateFrom,
      @RequestParam(value = "donationDateTo", required = false)  String donationDateTo,
      @RequestParam(value = "includeTestedDonations",required = true)  boolean includeTestedDonations)throws  ParseException{

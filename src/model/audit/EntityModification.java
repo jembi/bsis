@@ -4,19 +4,17 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+
+import model.BaseEntity;
 
 import org.hibernate.envers.RevisionType;
 
 @Entity
-public class EntityModification {
-    
-    @Id
-    @GeneratedValue
-    private int id;
-    
+public class EntityModification extends BaseEntity {
+
+  private static final long serialVersionUID = 1L;
+
     @ManyToOne
     private AuditRevision auditRevision;
     
@@ -26,14 +24,6 @@ public class EntityModification {
     
     @Column(length = 30, nullable = false)
     private String entityName;
-    
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public AuditRevision getAuditRevision() {
         return auditRevision;
@@ -58,14 +48,4 @@ public class EntityModification {
     public void setEntityName(String entityName) {
         this.entityName = entityName;
     }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        return other instanceof EntityModification &&
-                ((EntityModification) other).id == id;
-    }
-    
 }

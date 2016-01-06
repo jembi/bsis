@@ -37,7 +37,7 @@ public class UserBackingForm {
         return getUser().equals(obj);
     }
 
-    public Integer getId() {
+    public Long getId() {
         return getUser().getId();
     }
 
@@ -93,7 +93,7 @@ public class UserBackingForm {
         return getUser().hashCode();
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         getUser().setId(id);
     }
 

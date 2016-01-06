@@ -53,7 +53,7 @@ public class DiscardReasonController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
-    public ResponseEntity<ComponentStatusChangeReason> getDiscardReasonById(@PathVariable Integer id){
+    public ResponseEntity<ComponentStatusChangeReason> getDiscardReasonById(@PathVariable Long id){
         Map<String, Object> map = new HashMap<String, Object>();
         ComponentStatusChangeReason discardReason = discardReasonRepository.getDiscardReasonById(id);
         map.put("reason", new DiscardReasonViewModel(discardReason));
@@ -70,7 +70,7 @@ public class DiscardReasonController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
-    public ResponseEntity updateDiscardReason(@Valid @RequestBody DiscardReasonBackingForm formData , @PathVariable Integer id){
+    public ResponseEntity updateDiscardReason(@Valid @RequestBody DiscardReasonBackingForm formData , @PathVariable Long id){
         Map<String, Object> map = new HashMap<String, Object>();
         ComponentStatusChangeReason discardReason = formData.getDiscardReason();
         discardReason.setId(id);

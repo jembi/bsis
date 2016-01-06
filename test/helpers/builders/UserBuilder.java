@@ -7,13 +7,13 @@ public class UserBuilder extends AbstractEntityBuilder<User> {
     private String emailId;
     private String username = "default.username";
     private boolean passwordReset;
-    private Integer id;
+    private Long id;
     private String firstName = "Default";
     private String lastName = "User";
     // Password = "password", rounds = 4
     private String password = "$2a$04$iA45ovNGD4hhA1puc/a8J.FN8WCMzKft1vdBAgw6o7oe7KBpVVkRS";
 
-    public UserBuilder withId(int id) {
+    public UserBuilder withId(Long id) {
         this.id = id;
         return this;
     }

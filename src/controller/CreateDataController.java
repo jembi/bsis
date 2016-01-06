@@ -681,9 +681,9 @@ public class CreateDataController {
             for (int i = 1; i <= maxRows; i++) {
               Map<String, Object> wellsInRow = new HashMap<String, Object>();
               for (int j = 1; j <= maxColumns; j++) {
-                wellsInRow.put(Integer.toString(j), new HashMap<String, String>());
+                wellsInRow.put(Long.toString(j), new HashMap<String, String>());
               }
-              plateData.put(Integer.toString(i), wellsInRow);
+              plateData.put(Long.toString(i), wellsInRow);
             }
             ttiPlatesByTest.put(t, plateData);
           }

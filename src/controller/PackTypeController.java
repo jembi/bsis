@@ -58,7 +58,7 @@ public class PackTypeController {
 	  
 		@RequestMapping(value = "{id}", method = RequestMethod.GET)
 		@PreAuthorize("hasRole('" + PermissionConstants.MANAGE_PACK_TYPES + "')")
-		public ResponseEntity<PackType> getPackTypeById(@PathVariable Integer id){
+		public ResponseEntity<PackType> getPackTypeById(@PathVariable Long id){
 		    Map<String, Object> map = new HashMap<String, Object>();
 		    PackType packType = packTypeRepository.getPackTypeById(id);
 		    map.put("packtype", new PackTypeViewModel(packType));
@@ -75,7 +75,7 @@ public class PackTypeController {
 		  
 		@RequestMapping(value = "{id}", method = RequestMethod.PUT)
 		@PreAuthorize("hasRole('" + PermissionConstants.MANAGE_PACK_TYPES + "')")
-		public ResponseEntity updatePackType(@Valid @RequestBody PackTypeBackingForm formData , @PathVariable Integer id){
+		public ResponseEntity updatePackType(@Valid @RequestBody PackTypeBackingForm formData , @PathVariable Long id){
 		    Map<String, Object> map = new HashMap<String, Object>();
 		    PackType packType = formData.getType();
 		    packType.setId(id);

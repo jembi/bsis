@@ -4,11 +4,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+
+import model.BaseEntity;
 
 import org.hibernate.envers.Audited;
 
@@ -20,12 +19,9 @@ import repository.DeferralReasonNamedQueryConstants;
 })
 @Entity
 @Audited
-public class DeferralReason {
+public class DeferralReason extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false, updatable=false, insertable=false, columnDefinition="SMALLINT")
-  private Integer id;
+  private static final long serialVersionUID = 203754154113421034L;
 
   @Column(length=100)
   private String reason;
@@ -42,14 +38,6 @@ public class DeferralReason {
   @Column(length = 30, nullable = false)
   @Enumerated(EnumType.STRING)
   private DurationType durationType = DurationType.TEMPORARY;
-  
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
 
   public String getReason() {
     return reason;
@@ -68,7 +56,7 @@ public class DeferralReason {
   }
 
   public void copy (DeferralReason deferralReason){
-    this.id = deferralReason.getId();
+    setId(deferralReason.getId());
     this.reason = deferralReason.getReason();
     this.isDeleted = deferralReason.getIsDeleted();
     this.defaultDuration = deferralReason.getDefaultDuration();

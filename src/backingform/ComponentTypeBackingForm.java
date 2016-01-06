@@ -25,7 +25,7 @@ public class ComponentTypeBackingForm {
         this.componentType = componentType;
     }
     
-    public void setId(Integer id){
+    public void setId(Long id){
         componentType.setId(id);
     }
     

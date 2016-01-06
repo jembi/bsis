@@ -5,26 +5,28 @@ import static helpers.builders.PostDonationCounsellingBuilder.aPostDonationCouns
 import static helpers.matchers.PostDonationCounsellingMatcher.hasSameStateAsPostDonationCounselling;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import helpers.builders.UserBuilder;
+
 import java.util.Date;
 
-import controller.UtilController;
-import helpers.builders.UserBuilder;
 import model.counselling.CounsellingStatus;
 import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 import model.user.User;
+
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
 import repository.PostDonationCounsellingRepository;
+import controller.UtilController;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PostDonationCounsellingCRUDServiceTests {
@@ -46,7 +48,7 @@ public class PostDonationCounsellingCRUDServiceTests {
 
         User admin = UserBuilder.aUser()
                 .withUsername("admin")
-                .withId(1)
+                .withId(1l)
                 .build();
         
         PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
@@ -117,12 +119,12 @@ public class PostDonationCounsellingCRUDServiceTests {
 
         User admin = UserBuilder.aUser()
                 .withUsername("admin")
-                .withId(1)
+                .withId(1l)
                 .build();
 
         User ordinary = UserBuilder.aUser()
                 .withUsername("ordinary")
-                .withId(2)
+                .withId(2l)
                 .build();
 
 
@@ -183,12 +185,12 @@ public class PostDonationCounsellingCRUDServiceTests {
 
         User admin = UserBuilder.aUser()
                 .withUsername("admin")
-                .withId(1)
+                .withId(1l)
                 .build();
 
         User ordinary = UserBuilder.aUser()
                 .withUsername("ordinary")
-                .withId(2)
+                .withId(2l)
                 .build();
 
         PostDonationCounselling existingPostDonationCounselling = aPostDonationCounselling()

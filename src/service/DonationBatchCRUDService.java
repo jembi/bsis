@@ -29,7 +29,7 @@ public class DonationBatchCRUDService {
 	@Autowired
 	private DateGeneratorService dateService;
 	
-	public void deleteDonationBatch(int donationBatchId) throws IllegalStateException, NoResultException {
+	public void deleteDonationBatch(Long donationBatchId) throws IllegalStateException, NoResultException {
 		
 		if (!donationBatchConstraintChecker.canDeleteDonationBatch(donationBatchId)) {
 			throw new IllegalStateException("Cannot delete donation batch with constraints");

@@ -1,9 +1,5 @@
 package model.testbatch;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -13,34 +9,27 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
-import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
+import model.BaseModificationTrackerEntity;
 import model.donationbatch.DonationBatch;
-import model.modificationtracker.ModificationTracker;
-import model.modificationtracker.RowModificationTracker;
-import model.user.User;
 
 import org.hibernate.envers.Audited;
 
 import service.TestBatchCRUDService;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class TestBatch implements ModificationTracker {
+public class TestBatch extends BaseModificationTrackerEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(nullable=false)
-	private Long id;
-
-	@Valid
-	private RowModificationTracker modificationTracker;
+  private static final long serialVersionUID = 1L;
 
 	@Lob
 	private String notes;
@@ -62,15 +51,7 @@ public class TestBatch implements ModificationTracker {
 
 
 	public TestBatch() {
-		modificationTracker = new RowModificationTracker();
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+		super();
 	}
 
 	public String getNotes() {
@@ -108,38 +89,6 @@ public class TestBatch implements ModificationTracker {
 	 */
 	public void setStatus(TestBatchStatus status) {
 		this.status = status;
-	}
-
-	public Date getLastUpdated() {
-		return modificationTracker.getLastUpdated();
-	}
-
-	public Date getCreatedDate() {
-		return modificationTracker.getCreatedDate();
-	}
-
-	public User getCreatedBy() {
-		return modificationTracker.getCreatedBy();
-	}
-
-	public User getLastUpdatedBy() {
-		return modificationTracker.getLastUpdatedBy();
-	}
-
-	public void setLastUpdated(Date lastUpdated) {
-		modificationTracker.setLastUpdated(lastUpdated);
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		modificationTracker.setCreatedDate(createdDate);
-	}
-
-	public void setCreatedBy(User createdBy) {
-		modificationTracker.setCreatedBy(createdBy);
-	}
-
-	public void setLastUpdatedBy(User lastUpdatedBy) {
-		modificationTracker.setLastUpdatedBy(lastUpdatedBy);
 	}
 
     public List<DonationBatch> getDonationBatches() {

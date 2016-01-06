@@ -24,11 +24,11 @@ public class ComponentTypeCombinationBackingForm {
         this.componentTypeCombination = componentTypeCombination;
     }
      
-    public Integer getId() {
+    public Long getId() {
         return componentTypeCombination.getId();
     }
     
-    public void setId(Integer id) {
+    public void setId(Long id) {
         componentTypeCombination.setId(id);
     }
     
@@ -36,11 +36,11 @@ public class ComponentTypeCombinationBackingForm {
         return componentTypeCombination.getComponentTypes();
     }
     
-    public void setComponentTypes(List<Integer> componentTypeIds) {
+    public void setComponentTypes(List<Long> componentTypeIds) {
         
         List<ComponentType> componentTypes = new ArrayList<ComponentType>();
         ComponentType componentType = new ComponentType();
-        for (Integer componentTypeId : componentTypeIds) {
+        for (Long componentTypeId : componentTypeIds) {
             componentType.setId(componentTypeId);
             componentTypes.add(componentType);
         }

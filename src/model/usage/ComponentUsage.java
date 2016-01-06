@@ -4,37 +4,26 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.Valid;
 
+import model.BaseModificationTrackerEntity;
 import model.component.Component;
-import model.modificationtracker.ModificationTracker;
-import model.modificationtracker.RowModificationTracker;
-import model.user.User;
 
 import org.hibernate.envers.Audited;
 
 import constraintvalidator.ComponentExists;
 
 /**
- * We cannot use the name Usage for this class as Usage is
- * a keyword in MySQL.
- * @author iamrohitbanga
+ * Entity to represent the details of how/where/when a Component from a Donation was used. 
  */
 @Entity
 @Audited
-public class ComponentUsage implements ModificationTracker {
+public class ComponentUsage extends BaseModificationTrackerEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false, updatable=false, insertable=false)
-  private Long id;
+  private static final long serialVersionUID = 1L;
 
   @ComponentExists
   @OneToOne
@@ -58,60 +47,13 @@ public class ComponentUsage implements ModificationTracker {
   @Lob
   private String notes;
 
-  @Valid
-  private RowModificationTracker modificationTracker;
-
   private Boolean isDeleted;
 
   @Column(length=30)
   private String usedBy;
 
   public ComponentUsage() {
-    modificationTracker = new RowModificationTracker();
-  }
-
-  @Override
-  public Date getLastUpdated() {
-    return modificationTracker.getLastUpdated();
-  }
-
-  @Override
-  public Date getCreatedDate() {
-    return modificationTracker.getCreatedDate();
-  }
-
-  @Override
-  public User getCreatedBy() {
-    return modificationTracker.getCreatedBy();
-  }
-
-  @Override
-  public User getLastUpdatedBy() {
-    return modificationTracker.getLastUpdatedBy();
-  }
-
-  @Override
-  public void setLastUpdated(Date lastUpdated) {
-    modificationTracker.setLastUpdated(lastUpdated);
-  }
-
-  @Override
-  public void setCreatedDate(Date createdDate) {
-    modificationTracker.setCreatedDate(createdDate);
-  }
-
-  @Override
-  public void setCreatedBy(User createdBy) {
-    modificationTracker.setCreatedBy(createdBy);
-  }
-
-  @Override
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
-  }
-
-  public Long getId() {
-    return id;
+    super();
   }
 
   public String getHospital() {
@@ -142,16 +84,8 @@ public class ComponentUsage implements ModificationTracker {
     return component;
   }
 
-  public RowModificationTracker getModificationTracker() {
-    return modificationTracker;
-  }
-
   public Boolean getIsDeleted() {
     return isDeleted;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public void setHospital(String hospital) {
@@ -180,10 +114,6 @@ public class ComponentUsage implements ModificationTracker {
 
   public void setComponent(Component component) {
     this.component = component;
-  }
-
-  public void setModificationTracker(RowModificationTracker modificationTracker) {
-    this.modificationTracker = modificationTracker;
   }
 
   public void setIsDeleted(Boolean isDeleted) {

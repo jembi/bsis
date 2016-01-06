@@ -568,7 +568,7 @@ public class UtilController {
     return user;
   }
   
-  public String getUserPassword(Integer id){
+  public String getUserPassword(Long id){
   	User user= userRepository.findUserById(id);
   	String pwd=null;
   	if(user!=null)

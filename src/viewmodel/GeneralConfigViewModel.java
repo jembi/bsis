@@ -11,7 +11,7 @@ public class GeneralConfigViewModel {
         this.generalConfig = generalConfig;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return generalConfig.getId();
     }
 

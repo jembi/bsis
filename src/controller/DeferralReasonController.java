@@ -50,7 +50,7 @@ public class DeferralReasonController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DEFERRAL_REASONS + "')")
-    public ResponseEntity<DeferralReason> getDeferralReasonById(@PathVariable Integer id){
+    public ResponseEntity<DeferralReason> getDeferralReasonById(@PathVariable Long id){
         Map<String, Object> map = new HashMap<String, Object>();
         DeferralReason deferralReason = deferralReasonRepository.getDeferralReasonById(id);
         map.put("reason", new DeferralReasonViewModel(deferralReason));
@@ -67,7 +67,7 @@ public class DeferralReasonController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DEFERRAL_REASONS + "')")
-    public ResponseEntity updateDeferralReason(@Valid @RequestBody DeferralReasonBackingForm formData , @PathVariable Integer id){
+    public ResponseEntity updateDeferralReason(@Valid @RequestBody DeferralReasonBackingForm formData , @PathVariable Long id){
         Map<String, Object> map = new HashMap<String, Object>();
         DeferralReason deferralReason = formData.getDeferralReason();
         deferralReason.setId(id);

@@ -99,25 +99,25 @@ public class WellTypeRepositoryTest {
 	
 	@Test
 	public void testGetWellTypeById() throws Exception {
-		WellType one = wellTypeRepository.getWellTypeById(1);
+		WellType one = wellTypeRepository.getWellTypeById(1l);
 		Assert.assertNotNull("There is a WellType defined", one);
 		Assert.assertEquals("WellType is correct", "Sample", one.getWellType());
 	}
 	
 	@Test
 	public void testGetWellTypeByIdUnknown() throws Exception {
-		WellType one = wellTypeRepository.getWellTypeById(123);
+		WellType one = wellTypeRepository.getWellTypeById(123l);
 		Assert.assertNull("There is no WellType defined", one);
 	}
 	
 	@Test
 	public void testSaveAllWellTypesUpdate() throws Exception {
-		WellType oldOne = wellTypeRepository.getWellTypeById(1);
+		WellType oldOne = wellTypeRepository.getWellTypeById(1l);
 		oldOne.setWellType("oldSample");
 		List<WellType> all = new ArrayList<WellType>();
 		all.add(oldOne);
 		wellTypeRepository.saveAllWellTypes(all);
-		WellType savedOldOne = wellTypeRepository.getWellTypeById(1);
+		WellType savedOldOne = wellTypeRepository.getWellTypeById(1l);
 		Assert.assertEquals("WellType is updated", "oldSample", savedOldOne.getWellType());
 	}
 	

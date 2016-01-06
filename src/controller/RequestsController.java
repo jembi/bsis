@@ -134,11 +134,11 @@ public class RequestsController {
       pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
 
-    List<Integer> componentTypeIds = new ArrayList<Integer>();
-    componentTypeIds.add(-1);
+    List<Long> componentTypeIds = new ArrayList<Long>();
+    componentTypeIds.add(-1l);
     if (componentTypes != null) {
       for (String componentTypeId : componentTypes) {
-        componentTypeIds.add(Integer.parseInt(componentTypeId));
+        componentTypeIds.add(Long.parseLong(componentTypeId));
       }
     }
 
