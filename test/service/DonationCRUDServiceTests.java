@@ -394,7 +394,6 @@ public class DonationCRUDServiceTests {
         when(packTypeRepository.getPackTypeById(IRRELEVANT_PACK_TYPE_ID)).thenReturn(packTypeThatCountsAsDonation);
         when(donorConstraintChecker.isDonorEligibleToDonate(donorId)).thenReturn(false);
         when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber)).thenReturn(donationBatch);
-        when(postDonationCounsellingCRUDService.createPostDonationCounsellingForDonation(donation)).thenReturn(postDonationCounselling);
 
         Donation returnedDonation = donationCRUDService.createDonation(backingForm);
         
