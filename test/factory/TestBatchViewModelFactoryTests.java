@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
@@ -28,6 +29,7 @@ import viewmodel.TestBatchViewModel;
 public class TestBatchViewModelFactoryTests extends UnitTestSuite {
 
     private static final Long IRRELEVANT_ID = 4L;
+    private static final Long ANOTHER_IRRELEVANT_ID = 5L;
     private static final TestBatchStatus IRRELEVANT_STATUS = TestBatchStatus.OPEN;
     private static final String IRRELEVANT_BATCH_NUMBER = "1234";
     private static final Date IRRELEVANT_CREATED_DATE = new Date();
@@ -43,7 +45,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
     private TestBatchConstraintChecker testBatchConstraintChecker;
     
     @Test
-    public void testCreateTestBatchViewModelWithDonationBatches_shouldReturnTestBatchViewModelWithTheCorrectState() {
+    public void testCreateTestBatchViewModelsWithDonationBatches_shouldReturnTestBatchViewModelsWithTheCorrectState() {
         
         DonationBatch donationBatch = aDonationBatch().build();
         
@@ -76,12 +78,68 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
                 .build();
         
         when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(CANT_RELEASE);
-        when(donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch, true))
+        when(donationBatchViewModelFactory.createDonationBatchViewModelWithoutDonationPermissions(donationBatch, true))
                 .thenReturn(donationBatchViewModel);
         
         TestBatchViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchViewModel(testBatch, false);
         
         assertThat(returnedViewModel, hasSameStateAsTestBatchViewModel(expectedViewModel));
+    }
+    
+    @Test
+    public void testCreateTestBatchViewModelWithDonationBatches_shouldReturnTestBatchViewModelWithTheCorrectState() {
+        
+        DonationBatch donationBatch = aDonationBatch().build();
+        
+        TestBatch testBatch1 = aTestBatch()
+                .withId(IRRELEVANT_ID)
+                .withStatus(IRRELEVANT_STATUS)
+                .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
+                .withCreatedDate(IRRELEVANT_CREATED_DATE)
+                .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
+                .withDonationBatches(Arrays.asList(donationBatch))
+                .withNotes(IRRELEVANT_NOTES)
+                .build();
+        TestBatch testBatch2 = aTestBatch()
+            .withId(ANOTHER_IRRELEVANT_ID)
+            .withStatus(IRRELEVANT_STATUS)
+            .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
+            .withCreatedDate(IRRELEVANT_CREATED_DATE)
+            .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
+            .withDonationBatches(Arrays.asList(donationBatch))
+            .withNotes(IRRELEVANT_NOTES)
+            .build();
+        List<TestBatch> testBatches = Arrays.asList(new TestBatch[] {testBatch1, testBatch2});
+        
+        DonationBatchViewModel donationBatchViewModel = new DonationBatchViewModel();
+        
+        TestBatchViewModel expectedViewModel1 = aTestBatchViewModel()
+                .withId(IRRELEVANT_ID)
+                .withStatus(IRRELEVANT_STATUS)
+                .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
+                .withCreatedDate(IRRELEVANT_CREATED_DATE)
+                .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
+                .withNotes(IRRELEVANT_NOTES)
+                .withDonationBatches(Arrays.asList(donationBatchViewModel))
+                .build();
+        TestBatchViewModel expectedViewModel2 = aTestBatchViewModel()
+            .withId(ANOTHER_IRRELEVANT_ID)
+            .withStatus(IRRELEVANT_STATUS)
+            .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
+            .withCreatedDate(IRRELEVANT_CREATED_DATE)
+            .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
+            .withNotes(IRRELEVANT_NOTES)
+            .withDonationBatches(Arrays.asList(donationBatchViewModel))
+            .build();
+        
+        when(testBatchConstraintChecker.canReleaseTestBatch(testBatch1)).thenReturn(CANT_RELEASE);
+        when(donationBatchViewModelFactory.createDonationBatchViewModelWithoutDonationPermissions(donationBatch, true))
+                .thenReturn(donationBatchViewModel);
+        
+        List<TestBatchViewModel> returnedViewModels = testBatchViewModelFactory.createTestBatchViewModels(testBatches, false);
+        
+        assertThat(returnedViewModels.get(0), hasSameStateAsTestBatchViewModel(expectedViewModel1));
+        assertThat(returnedViewModels.get(1), hasSameStateAsTestBatchViewModel(expectedViewModel2));
     }
     
     @Test
