@@ -33,11 +33,11 @@ public class DonationBatchBackingForm {
     this.donationBatch = donationBatch;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     donationBatch.setId(id);
   }
   
-  public Integer getId(){
+  public Long getId(){
       return donationBatch.getId();
   }
 

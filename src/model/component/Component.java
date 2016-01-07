@@ -8,9 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -19,17 +16,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.Valid;
 
+import model.BaseModificationTrackerEntity;
 import model.compatibility.CompatibilityTest;
 import model.componentmovement.ComponentStatusChange;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
-import model.modificationtracker.ModificationTracker;
-import model.modificationtracker.RowModificationTracker;
 import model.request.Request;
 import model.usage.ComponentUsage;
-import model.user.User;
 
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
@@ -55,12 +49,9 @@ import constraintvalidator.DonationExists;
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class Component implements ModificationTracker {
+public class Component extends BaseModificationTrackerEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false)
-  private Long id;
+  private static final long serialVersionUID = 1L;
 
   // A component may not have a corresponding donation. Some components may be
   // imported from another location. In such a case the corresponding donation
@@ -118,14 +109,11 @@ public class Component implements ModificationTracker {
 
   private Boolean isDeleted;
 
-  @Valid
-  private RowModificationTracker modificationTracker;
-
   @Column(length=20)
   private String componentIdentificationNumber;
   
   public Component() {
-    modificationTracker = new RowModificationTracker();
+    super();
   }
 
   public void copy(Component component) {
@@ -136,10 +124,6 @@ public class Component implements ModificationTracker {
     this.expiresOn = component.expiresOn;
     this.notes = component.notes;
     this.componentIdentificationNumber = component.componentIdentificationNumber;
-  }
-
-  public Long getId() {
-    return id;
   }
 
   public Donation getDonation() {
@@ -160,10 +144,6 @@ public class Component implements ModificationTracker {
 
   public Boolean getIsDeleted() {
     return isDeleted;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public void setDonation(Donation donation) {
@@ -192,38 +172,6 @@ public class Component implements ModificationTracker {
 
   public void setCreatedOn(Date createdOn) {
     this.createdOn = createdOn;
-  }
-
-  public Date getLastUpdated() {
-    return modificationTracker.getLastUpdated();
-  }
-
-  public Date getCreatedDate() {
-    return modificationTracker.getCreatedDate();
-  }
-
-  public User getCreatedBy() {
-    return modificationTracker.getCreatedBy();
-  }
-
-  public User getLastUpdatedBy() {
-    return modificationTracker.getLastUpdatedBy();
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    modificationTracker.setLastUpdated(lastUpdated);
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    modificationTracker.setCreatedDate(createdDate);
-  }
-
-  public void setCreatedBy(User createdBy) {
-    modificationTracker.setCreatedBy(createdBy);
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
 
   public String getDonationIdentificationNumber() {

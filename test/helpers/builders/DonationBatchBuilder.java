@@ -9,7 +9,7 @@ import model.testbatch.TestBatch;
 
 public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
 
-	private Integer id;
+	private Long id;
 	private String batchNumber;
     private List<Donation> donations;
     private Location venue;
@@ -18,7 +18,7 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     private boolean closed;
     private boolean backEntry;
 
-    public DonationBatchBuilder withId(Integer id) {
+    public DonationBatchBuilder withId(Long id) {
         this.id = id;
         return this;
     }

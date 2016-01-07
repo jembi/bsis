@@ -351,7 +351,7 @@ public class DonorRepository {
             String queryString = "SELECT d FROM DeferralReason d WHERE "
                     + "d.id = :deferralReasonId AND d.isDeleted=:isDeleted";
             TypedQuery<DeferralReason> query = em.createQuery(queryString, DeferralReason.class);
-            query.setParameter("deferralReasonId", Integer.parseInt(deferralReasonId));
+            query.setParameter("deferralReasonId", Long.parseLong(deferralReasonId));
             query.setParameter("isDeleted", false);
             return query.getSingleResult();
      

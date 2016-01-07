@@ -68,9 +68,9 @@ public class BloodTestingRuleEngine {
 		// Get the latest test results 
 		Map<String, String> storedTestResults = new TreeMap<String, String>();
 		Map<String, String> availableTestResults = new TreeMap<String, String>();
-		Map<Integer, BloodTestResult> recentTestResults = bloodTestingRepository
+		Map<Long, BloodTestResult> recentTestResults = bloodTestingRepository
 		        .getRecentTestResultsForDonation(donation.getId());
-		for (Integer testId : recentTestResults.keySet()) {
+		for (Long testId : recentTestResults.keySet()) {
 			BloodTestResult testResult = recentTestResults.get(testId);
 			String testKey = testId.toString();
 			String testValue = testResult.getResult();
@@ -245,7 +245,7 @@ public class BloodTestingRuleEngine {
 	 */
 	private void setBasicTtiTestsNotDone(BloodTestingRuleResultSet resultSet, List<BloodTest> basicTTITests,
 	                                     Map<String, String> availableTestResults) {
-		Set<Integer> basicTtiTestsNotDone = new HashSet<Integer>();
+		Set<Long> basicTtiTestsNotDone = new HashSet<Long>();
 		for (BloodTest bt : basicTTITests) {
 			basicTtiTestsNotDone.add(bt.getId());
 		}
@@ -253,7 +253,7 @@ public class BloodTestingRuleEngine {
 			if (LOGGER.isTraceEnabled()) {
 				LOGGER.trace("available test=" + testId + " result=" + availableTestResults.get(testId));
 			}
-			basicTtiTestsNotDone.remove(Integer.parseInt(testId));
+			basicTtiTestsNotDone.remove(Long.parseLong(testId));
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("basicTtiTestsNotDone=" + basicTtiTestsNotDone);
@@ -363,7 +363,7 @@ public class BloodTestingRuleEngine {
 			}
 		}
 		
-		Set<Integer> basicTtiTestsNotDone = resultSet.getBasicTtiTestsNotDone();
+		Set<Long> basicTtiTestsNotDone = resultSet.getBasicTtiTestsNotDone();
 		if (ttiStatus.equals(TTIStatus.TTI_SAFE) && !basicTtiTestsNotDone.isEmpty()) {
 			// the test has been marked as safe while some basic TTI Tests were not done
 			ttiStatus = TTIStatus.NOT_DONE;

@@ -26,7 +26,7 @@ public class ComponentTypeViewModel {
         this.componentType = componentType;
     }
     
-    public Integer getId(){
+    public Long getId(){
         return componentType.getId();
     }
     

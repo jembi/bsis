@@ -106,7 +106,7 @@ public class DonationRepository {
   }
 
   public List<Object> findDonations(
-      String donationIdentificationNumber, List<Integer> packTypeIds, List<Long> venueIds, String donationDateFrom,
+      String donationIdentificationNumber, List<Long> packTypeIds, List<Long> venueIds, String donationDateFrom,
       String donationDateTo, boolean includeTestedDonations, Map<String, Object> pagingParams) throws ParseException {
 
     String queryStr = "";

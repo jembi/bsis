@@ -1,13 +1,13 @@
 package backingform;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.Locale;
 import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestContext;
 import model.bloodtesting.rules.BloodTestSubCategory;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.bloodtesting.rules.DonationField;
 import scala.actors.threadpool.Arrays;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BloodTestingRuleBackingForm {
 
@@ -26,7 +26,7 @@ public class BloodTestingRuleBackingForm {
         this.typingRule = typingRule;
     }
     
-    public void setId(Integer id){
+    public void setId(Long id){
         typingRule.setId(id);
     }
     

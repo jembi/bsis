@@ -99,7 +99,7 @@ public class CrossmatchTypeRepositoryTest {
 		Assert.assertNotNull("There are crossmatchtypes defined", all);
 		
 		CrossmatchType toBeSaved = new CrossmatchType();
-		toBeSaved.setId(3); // if this isn't set then the entity will not be saved
+		toBeSaved.setId(3l); // if this isn't set then the entity will not be saved
 		toBeSaved.setCrossmatchType("Junit");
 		all.add(toBeSaved);
 		

@@ -41,7 +41,7 @@ public class GeneralConfigRepository {
         em.persist(generalConfig);
     }
 
-    public GeneralConfig getGeneralConfigById(Integer id) {
+    public GeneralConfig getGeneralConfigById(Long id) {
         TypedQuery<GeneralConfig> query = em.createQuery("SELECT gc FROM GeneralConfig gc WHERE gc.id = :id ", GeneralConfig.class);
         query.setParameter("id", id);
         return query.getSingleResult();

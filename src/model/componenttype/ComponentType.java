@@ -1,8 +1,5 @@
 package model.componenttype;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -10,28 +7,28 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 
+import model.BaseEntity;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class ComponentType {
+public class ComponentType extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false, insertable=false, updatable=false, columnDefinition="SMALLINT")
-  private Integer id;
+  private static final long serialVersionUID = 1L;
 
   @Column(length=50)
   private String componentTypeName;
@@ -83,19 +80,6 @@ public class ComponentType {
   private Integer highTransportTemperature;
   
   private String preparationInfo;
-  
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  @Override
-  public String toString() {
-    return componentTypeName;
-  }
 
   public Boolean getIsDeleted() {
     return isDeleted;
@@ -119,10 +103,6 @@ public class ComponentType {
 
   public void setDescription(String description) {
     this.description = description;
-  }
-
-  public boolean equals(ComponentType pt) {
-    return this.id == pt.id;
   }
 
   public String getComponentTypeNameShort() {

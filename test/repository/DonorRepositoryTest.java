@@ -13,7 +13,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -58,19 +57,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
 import security.BsisUserDetails;
 import security.LoginUserService;
-
-import javax.persistence.NoResultException;
-import javax.sql.DataSource;
-import java.io.File;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import static org.junit.Assert.*;
 import viewmodel.DonorSummaryViewModel;
 import backingform.DonorBackingForm;
 import controller.UtilController;
@@ -86,7 +75,7 @@ public class DonorRepositoryTest {
     @Autowired
     DonorRepository donorRepository;
     private User user;
-    private int userDbId = 1;
+    private Long userDbId = 1l;
     private DonorBackingForm donorBackingForm;
     String donorBirthdate = null;
     ApplicationContext applicationContext = null;

@@ -1,13 +1,17 @@
 package helpers.builders;
 
+import helpers.persisters.DefaultPersister;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.EntityManager;
+
 import model.audit.AuditRevision;
 import model.audit.EntityModification;
 
-public class AuditRevisionBuilder extends AbstractEntityBuilder<AuditRevision> {
+public class AuditRevisionBuilder extends AbstractBuilder<AuditRevision> {
     
     private int id;
     private long timestamp;
@@ -45,6 +49,11 @@ public class AuditRevisionBuilder extends AbstractEntityBuilder<AuditRevision> {
         }
         auditRevision.setEntityModifications(entityModifications);
         return auditRevision;
+    }
+    
+    public AuditRevision buildAndPersist(EntityManager entityManager) {
+        AuditRevision auditRevision = build();
+        return new DefaultPersister<AuditRevision>().deepPersist(auditRevision, entityManager);
     }
     
     public static AuditRevisionBuilder anAuditRevision() {

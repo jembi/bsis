@@ -47,7 +47,7 @@ public class ComponentTypeRepository {
     return false;
   }
 
-  public ComponentType getComponentTypeById(Integer id) throws NoResultException, NonUniqueResultException{
+  public ComponentType getComponentTypeById(Long id) throws NoResultException, NonUniqueResultException{
     TypedQuery<ComponentType> query;
     query = em.createQuery("SELECT ct from ComponentType ct " +
             "where ct.id=:id", ComponentType.class);
@@ -57,13 +57,13 @@ public class ComponentTypeRepository {
     return query.getSingleResult();
   }
 
-  public void deactivateComponentType(Integer componentTypeId){
+  public void deactivateComponentType(Long componentTypeId){
     ComponentType componentType = getComponentTypeById(componentTypeId);
     componentType.setIsDeleted(true);
     em.merge(componentType);
   }
 
-  public void activateComponentType(Integer componentTypeId) {
+  public void activateComponentType(Long componentTypeId) {
     ComponentType componentType = getComponentTypeById(componentTypeId);
     componentType.setIsDeleted(false);
     em.merge(componentType);
@@ -85,7 +85,7 @@ public class ComponentTypeRepository {
     return query.getResultList();
   }
 
-  public ComponentTypeCombination getComponentTypeCombinationById(Integer id)
+  public ComponentTypeCombination getComponentTypeCombinationById(Long id)
           throws NoResultException, NonUniqueResultException{
     TypedQuery<ComponentTypeCombination> query;
     query = em.createQuery("SELECT ct from ComponentTypeCombination ct " +
@@ -133,11 +133,11 @@ public class ComponentTypeRepository {
     query = em.createQuery("SELECT ct from ComponentType ct where ct.isDeleted=:isDeleted AND pediComponentType_id != null AND ct.id!= 1", ComponentType.class);
     query.setParameter("isDeleted", false);
     componentTypes = query.getResultList(); 
-    componentTypes.add(getComponentTypeByIdList(1).get(0));
+    componentTypes.add(getComponentTypeByIdList(1l).get(0));
     return componentTypes;
   }
   
-  public List<ComponentType> getComponentTypeByIdList(Integer id) {
+  public List<ComponentType> getComponentTypeByIdList(Long id) {
     TypedQuery<ComponentType> query;
     query = em.createQuery("SELECT ct from ComponentType ct where ct.id IN (SELECT ct1.pediComponentType from ComponentType ct1 WHERE ct1.id=:id) ", ComponentType.class);
     query.setParameter("id", id);
@@ -166,13 +166,13 @@ public class ComponentTypeRepository {
   }
   
   
-  public void deactivateComponentTypeCombination(Integer componentTypeCombinationId) {
+  public void deactivateComponentTypeCombination(Long componentTypeCombinationId) {
     ComponentTypeCombination componentTypeCombination = getComponentTypeCombinationById(componentTypeCombinationId);
     componentTypeCombination.setIsDeleted(true);
     em.merge(componentTypeCombination);
   }
 
-  public void activateComponentTypeCombination(Integer componentTypeCombinationId) {
+  public void activateComponentTypeCombination(Long componentTypeCombinationId) {
     ComponentTypeCombination componentTypeCombination = getComponentTypeCombinationById(componentTypeCombinationId);
     componentTypeCombination.setIsDeleted(false);
     em.merge(componentTypeCombination);

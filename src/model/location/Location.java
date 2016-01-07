@@ -1,20 +1,21 @@
 package model.location;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
+
+import model.BaseEntity;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotBlank;
 
+/**
+ * Entity representing a place where Donations can be made and/or used.
+ */
 @Entity
 @Audited
-public class Location {
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+public class Location extends BaseEntity {
+
+  private static final long serialVersionUID = 1L;
 
   @NotBlank
   private String name;
@@ -46,10 +47,6 @@ public class Location {
     return name;
   }
 
-  public Long getId() {
-    return id;
-  }
-
   public Boolean getIsMobileSite() {
     return isMobileSite;
   }
@@ -64,10 +61,6 @@ public class Location {
 
   public Boolean getIsDeleted() {
     return isDeleted;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public void setName(String name) {
@@ -88,10 +81,6 @@ public class Location {
 
   public void setIsDeleted(Boolean isDeleted) {
     this.isDeleted = isDeleted;
-  }
-
-  public String toString() {
-    return name;
   }
 
   public Boolean getIsVenue() {

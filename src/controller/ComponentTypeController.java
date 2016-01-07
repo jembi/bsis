@@ -59,7 +59,7 @@ public class ComponentTypeController {
   
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_TYPES+"')")
-  public ResponseEntity<Map<String, Object>> getComponentTypeById(@PathVariable Integer id) {
+  public ResponseEntity<Map<String, Object>> getComponentTypeById(@PathVariable Long id) {
 
     Map<String, Object> map = new HashMap<String, Object> ();
     ComponentType componentType = componentTypeRepository.getComponentTypeById(id);
@@ -78,7 +78,7 @@ public class ComponentTypeController {
   @RequestMapping(value="{id}", method=RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_TYPES+"')")
   public  ResponseEntity updateComponentType(@Valid @RequestBody ComponentTypeBackingForm form,
-  @PathVariable Integer id) {
+  @PathVariable Long id) {
 
       ComponentType componentType = form.getComponentType();
       componentType.setId(id);
@@ -88,7 +88,7 @@ public class ComponentTypeController {
 
   @RequestMapping(value="{id}/deactivate", method=RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_TYPES+"')")
-  public  ResponseEntity deactivateComponentType(@PathVariable Integer id) {
+  public  ResponseEntity deactivateComponentType(@PathVariable Long id) {
    
     componentTypeRepository.deactivateComponentType(id);
     return new ResponseEntity(HttpStatus.OK);
@@ -97,7 +97,7 @@ public class ComponentTypeController {
   @RequestMapping(value="{id}/activate", method=RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_TYPES+"')")
   public  ResponseEntity activateComponentType(HttpServletRequest request,
-      @PathVariable Integer id) {
+      @PathVariable Long id) {
 
     componentTypeRepository.activateComponentType(id);
     return new ResponseEntity(HttpStatus.OK);
@@ -113,7 +113,7 @@ public class ComponentTypeController {
   @RequestMapping(value="/combinations/{id}", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
   public  Map<String, Object> getComponentTypeCombination(HttpServletRequest request,
-      @PathVariable Integer id) {
+      @PathVariable Long id) {
 
     Map<String, Object> map = new HashMap<String, Object> ();
     ComponentTypeCombination componentTypeCombination = componentTypeRepository.getComponentTypeCombinationById(id);
@@ -136,7 +136,7 @@ public class ComponentTypeController {
     public 
     ResponseEntity updateComponentTypeCombination(HttpServletResponse response,
             @RequestBody ComponentTypeCombinationBackingForm componentTypeCombinationBackingForm
-            , @PathVariable Integer id) {
+            , @PathVariable Long id) {
        ComponentTypeCombination componentTypeCombination = 
               componentTypeCombinationBackingForm.getComponentTypeCombination();
         componentTypeCombination.setId(id);
@@ -147,7 +147,7 @@ public class ComponentTypeController {
   @RequestMapping(value="/combinations/{id}/deactivate", method=RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
   public ResponseEntity deactivateComponentTypeCombination(
-      @PathVariable Integer id) {
+      @PathVariable Long id) {
 
     componentTypeRepository.deactivateComponentTypeCombination(id);
    return new ResponseEntity(HttpStatus.OK);
@@ -156,7 +156,7 @@ public class ComponentTypeController {
   @RequestMapping(value="/combinations/{id}/activate", method=RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_COMBINATIONS+"')")
   public  ResponseEntity activateComponentTypeCombination(
-      @PathVariable Integer id) {
+      @PathVariable Long id) {
 
      componentTypeRepository.activateComponentTypeCombination(id);
      return new ResponseEntity(HttpStatus.OK);
