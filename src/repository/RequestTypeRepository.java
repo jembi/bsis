@@ -38,7 +38,7 @@ public class RequestTypeRepository {
     return false;
   }
 
-  public RequestType getRequestTypeById(Integer requestTypeId) throws NoResultException{
+  public RequestType getRequestTypeById(Long requestTypeId) throws NoResultException{
     TypedQuery<RequestType> query;
     query = em.createQuery("SELECT r from RequestType r " +
             "where r.id=:id AND r.isDeleted=:isDeleted", RequestType.class);

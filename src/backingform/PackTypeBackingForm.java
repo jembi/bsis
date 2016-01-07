@@ -22,7 +22,7 @@ public class PackTypeBackingForm {
         this.type = packType;
     }
     
-    public void setId(Integer id){
+    public void setId(Long id){
         type.setId(id);
     }
     

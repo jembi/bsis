@@ -1,23 +1,23 @@
 package model.donationbatch;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import constraintvalidator.LocationExists;
-
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
+import model.BaseModificationTrackerEntity;
 import model.donation.Donation;
 import model.location.Location;
-import model.modificationtracker.ModificationTracker;
-import model.modificationtracker.RowModificationTracker;
 import model.testbatch.TestBatch;
-import model.user.User;
 
 import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
@@ -26,6 +26,11 @@ import org.hibernate.envers.RelationTargetAuditMode;
 
 import repository.DonationBatchQueryConstants;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import constraintvalidator.LocationExists;
+
 @NamedQueries({
     @NamedQuery(name = DonationBatchQueryConstants.NAME_COUNT_DONATION_BATCHES,
             query = DonationBatchQueryConstants.QUERY_COUNT_DONATION_BATCHES)
@@ -33,12 +38,9 @@ import repository.DonationBatchQueryConstants;
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class DonationBatch implements ModificationTracker {
+public class DonationBatch extends BaseModificationTrackerEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false, columnDefinition="SMALLINT")
-  private Integer id;
+  private static final long serialVersionUID = 1L;
 
   @Column(length=20, unique=true)
   private String batchNumber;
@@ -64,22 +66,12 @@ public class DonationBatch implements ModificationTracker {
 
   @Lob
   private String notes;
-  @Embedded
-  private RowModificationTracker modificationTracker;
   
     @Column(nullable = false)
     private boolean backEntry;
 
   public DonationBatch() {
-    modificationTracker = new RowModificationTracker();
-  }
-
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
+    super();
   }
 
   public String getBatchNumber() {
@@ -138,46 +130,6 @@ public class DonationBatch implements ModificationTracker {
     public void setVenue(Location venue) {
         this.venue = venue;
     }
-  
-  @Override
-  public Date getLastUpdated() {
-    return modificationTracker.getLastUpdated();
-  }
-
-  @Override
-  public Date getCreatedDate() {
-    return modificationTracker.getCreatedDate();
-  }
-
-  @Override
-  public User getCreatedBy() {
-    return modificationTracker.getCreatedBy();
-  }
-
-  @Override
-  public User getLastUpdatedBy() {
-    return modificationTracker.getLastUpdatedBy();
-  }
-
-  @Override
-  public void setLastUpdated(Date lastUpdated) {
-    modificationTracker.setLastUpdated(lastUpdated);
-  }
-
-  @Override
-  public void setCreatedDate(Date createdDate) {
-    modificationTracker.setCreatedDate(createdDate);
-  }
-
-  @Override
-  public void setCreatedBy(User createdBy) {
-    modificationTracker.setCreatedBy(createdBy);
-  }
-
-  @Override
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
-  }
   
   public void copy(DonationBatch donationBatch){
       this.setNotes(donationBatch.getNotes());

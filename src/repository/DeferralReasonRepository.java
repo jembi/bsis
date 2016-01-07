@@ -42,7 +42,7 @@ public class DeferralReasonRepository {
         return result;
     }
 
-    public DeferralReason getDeferralReasonById(Integer DeferralReasonId) {
+    public DeferralReason getDeferralReasonById(Long DeferralReasonId) {
         TypedQuery<DeferralReason> query;
         query = em.createQuery("SELECT d from DeferralReason d " +
                 "where d.id=:id", DeferralReason.class);

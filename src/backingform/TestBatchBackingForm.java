@@ -18,7 +18,7 @@ public class TestBatchBackingForm {
     @JsonIgnore
     private TestBatch testBatch;
 
-    private List<Integer> donationBatchIds = null;
+    private List<Long> donationBatchIds = null;
 
     public TestBatchBackingForm() {
         testBatch = new TestBatch();
@@ -49,11 +49,11 @@ public class TestBatchBackingForm {
         }
     }
 
-    public List<Integer> getDonationBatchIds() {
+    public List<Long> getDonationBatchIds() {
         return donationBatchIds;
     }
 
-    public void setDonationBatchIds(List<Integer> donationBatchIds) {
+    public void setDonationBatchIds(List<Long> donationBatchIds) {
         this.donationBatchIds = donationBatchIds;
     }
     

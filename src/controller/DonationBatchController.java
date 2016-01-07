@@ -140,14 +140,14 @@ public class DonationBatchController {
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@PreAuthorize("hasRole('" + PermissionConstants.VOID_DONATION_BATCH + "')")
-	public void deleteDonationBatch(@PathVariable Integer id) {
+	public void deleteDonationBatch(@PathVariable Long id) {
 		donationBatchCRUDService.deleteDonationBatch(id);
 	}
 
   @RequestMapping(value = "{id}" ,method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_DONATION_BATCH+"')")
   public ResponseEntity<Map<String, Object>> donationBatchSummaryGenerator(HttpServletRequest request,
-      @PathVariable Integer id) {
+      @PathVariable Long id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     DonationBatch  donationBatch = donationBatchRepository.findDonationBatchById(id);

@@ -182,15 +182,22 @@ public class DuplicateDonorServiceTest {
 		List<DuplicateDonorBackup> backupLogs = service.mergeDonors(david3, donors);
 		Assert.assertNotNull("backupLogs returned", backupLogs);
 		Assert.assertEquals("Donation and Deferral backups necessary", 3, backupLogs.size());
-		Assert.assertTrue("1st DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "1", 1l, null)));
-		Assert.assertTrue("2nd DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "1", 2l, null)));
-		Assert.assertTrue("3rd DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "2", null, 1l)));
+		assertEquals("1st DuplicateDonorBackup", new DuplicateDonorBackup("3", "1", 1l, null), backupLogs.get(0));
+		assertEquals("2nd DuplicateDonorBackup", new DuplicateDonorBackup("3", "1", 2l, null), backupLogs.get(1));
+		assertEquals("3rd DuplicateDonorBackup", new DuplicateDonorBackup("3", "2", null, 1l), backupLogs.get(2));
 		Assert.assertNull("Donations were moved", david1.getDonations());
 		Assert.assertNull("Deferrals were moved", david2.getDeferrals());
 		Assert.assertEquals("Donations were moved", 2, david3.getDonations().size());
 		Assert.assertEquals("Deferrals were moved", 1, david3.getDeferrals().size());
 		Assert.assertEquals("Donor status was changed", DonorStatus.MERGED, david1.getDonorStatus());
 		Assert.assertEquals("Donor status was changed", DonorStatus.MERGED, david2.getDonorStatus());
+	}
+	
+	private void assertEquals(String message, DuplicateDonorBackup expected, DuplicateDonorBackup actual) {
+	  Assert.assertEquals(message, expected.getNewDonorNumber(), actual.getNewDonorNumber());
+	  Assert.assertEquals(message, expected.getMergedDonorNumber(), actual.getMergedDonorNumber());
+	  Assert.assertEquals(message, expected.getDonationId(), actual.getDonationId());
+	  Assert.assertEquals(message, expected.getDonorDeferralId(), actual.getDonorDeferralId());
 	}
 	
 	@Test

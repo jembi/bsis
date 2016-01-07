@@ -1,15 +1,15 @@
 package controller;
 
-import backingform.UserBackingForm;
-import backingform.validator.UserBackingFormValidator;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import model.user.Role;
 import model.user.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +25,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import repository.RoleRepository;
 import repository.UserRepository;
 import utils.PermissionConstants;
 import viewmodel.UserViewModel;
+import backingform.UserBackingForm;
+import backingform.validator.UserBackingFormValidator;
 
 @RestController
 @RequestMapping("/users")
@@ -70,7 +73,7 @@ public class UserController {
     
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
-    public  ResponseEntity getUserDetails(@PathVariable Integer id){
+    public  ResponseEntity getUserDetails(@PathVariable Long id){
          Map<String, Object> map = new HashMap<String, Object>();
          User user = userRepository.findUserById(id);
          map.put("user", new UserViewModel(user));
@@ -96,7 +99,7 @@ public class UserController {
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
     public ResponseEntity updateUser(
             @Valid @RequestBody UserBackingForm form,
-            @PathVariable Integer id) {
+            @PathVariable Long id) {
 
         form.setIsDeleted(false);
         User user = form.getUser();
@@ -141,7 +144,7 @@ public class UserController {
     
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
-    public ResponseEntity deleteUser(@PathVariable Integer id){
+    public ResponseEntity deleteUser(@PathVariable Long id){
         
         userRepository.deleteUserById(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -152,7 +155,7 @@ public class UserController {
         m.put("users", users);
     }
 
-    public String userRole(Integer id) {
+    public String userRole(Long id) {
         String userRole = "";
         User user = userRepository.findUserById(id);
         List<Role> roles = user.getRoles();

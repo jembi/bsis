@@ -23,7 +23,7 @@ public class BloodTestViewModel {
     this.rawBloodTest = rawBloodTest;
   }
 
-  public Integer getId() {
+  public Long getId() {
     return rawBloodTest.getId();
   }
 

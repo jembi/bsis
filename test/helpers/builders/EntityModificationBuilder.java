@@ -6,11 +6,11 @@ import model.audit.EntityModification;
 
 public class EntityModificationBuilder {
     
-    private int id;
+    private Long id;
     private RevisionType revisionType;
     private String entityName;
 
-    public EntityModificationBuilder withId(int id) {
+    public EntityModificationBuilder withId(Long id) {
         this.id = id;
         return this;
     }

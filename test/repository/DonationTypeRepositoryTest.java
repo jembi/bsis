@@ -100,7 +100,7 @@ public class DonationTypeRepositoryTest {
 	
 	@Test
 	public void testGetDonationTypeById() throws Exception {
-		DonationType one = donationTypeRepository.getDonationTypeById(1);
+		DonationType one = donationTypeRepository.getDonationTypeById(1l);
 		Assert.assertNotNull("There is a donation types with id 1", one);
 		Assert.assertEquals("There is a donation type named 'Voluntary'", "Voluntary", one.getDonationType());
 	}
@@ -113,11 +113,11 @@ public class DonationTypeRepositoryTest {
 	
 	@Test
 	public void testUpdateDonationType() throws Exception {
-		DonationType two = donationTypeRepository.getDonationTypeById(1);
+		DonationType two = donationTypeRepository.getDonationTypeById(1l);
 		Assert.assertNotNull("There is a donationType named 'Voluntary'", two);
 		two.setIsDeleted(true);
 		donationTypeRepository.updateDonationType(two);
-		DonationType savedTwo = donationTypeRepository.getDonationTypeById(1);
+		DonationType savedTwo = donationTypeRepository.getDonationTypeById(1l);
 		Assert.assertTrue("donation type is deleted", savedTwo.getIsDeleted());
 	}
 	

@@ -4,22 +4,17 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import model.BaseEntity;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.WellType;
 
 @Entity
-public class MachineReading {
+public class MachineReading extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable=false, updatable=false)
-  private Long id;
+  private static final long serialVersionUID = 1L;
 
   @ManyToOne
   private WellType wellType;
@@ -38,14 +33,6 @@ public class MachineReading {
 
   @ManyToOne
   private PlateSession plateSession;
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
 
   public WellType getWellType() {
     return wellType;

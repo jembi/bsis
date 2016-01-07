@@ -87,7 +87,7 @@ public class DiscardReasonRepositoryTest {
 	
 	@Test
 	public void testGetDiscardReasonById() throws Exception {
-		ComponentStatusChangeReason discardReason = discardReasonRepository.getDiscardReasonById(1);
+		ComponentStatusChangeReason discardReason = discardReasonRepository.getDiscardReasonById(1l);
 		Assert.assertNotNull("Discard reason with id 1 exists", discardReason);
 	}
 	
@@ -106,13 +106,13 @@ public class DiscardReasonRepositoryTest {
 	
 	@Test
 	public void testUpdateDeferralReason() throws Exception {
-		ComponentStatusChangeReason reason = discardReasonRepository.getDiscardReasonById(1);
+		ComponentStatusChangeReason reason = discardReasonRepository.getDiscardReasonById(1l);
 		Assert.assertNotNull("Discard reason exists", reason);
 		
 		reason.setStatusChangeReason("Junit");
 		discardReasonRepository.updateDiscardReason(reason);
 		
-		ComponentStatusChangeReason savedReason = discardReasonRepository.getDiscardReasonById(1);
+		ComponentStatusChangeReason savedReason = discardReasonRepository.getDiscardReasonById(1l);
 		Assert.assertNotNull("Discard reason still exists", savedReason);
 		Assert.assertEquals("Reason has been updated", "Junit", savedReason.getStatusChangeReason());
 	}

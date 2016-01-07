@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class DonationBatchViewModel {
 
-    private Integer id;
+    private Long id;
     private String batchNumber;
     private String notes;
     private List<DonationViewModel> donations;
@@ -26,11 +26,11 @@ public class DonationBatchViewModel {
     public DonationBatchViewModel() {
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

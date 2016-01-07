@@ -184,7 +184,7 @@ public class ComponentRepository {
     return component;
   }
   
-  public List<Component> findAnyComponent(String donationIdentificationNumber, List<Integer> componentTypes, List<ComponentStatus> status, 
+  public List<Component> findAnyComponent(String donationIdentificationNumber, List<Long> componentTypes, List<ComponentStatus> status, 
 		  Date donationDateFrom, Date donationDateTo, Map<String, Object> pagingParams){
 	  	TypedQuery<Component> query;
 	    String queryStr = "SELECT DISTINCT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +     
@@ -272,7 +272,7 @@ public class ComponentRepository {
   }
   
   public List<Component> findComponentByComponentTypes(
-      List<Integer> componentTypeIds, List<ComponentStatus> status,
+      List<Long> componentTypeIds, List<ComponentStatus> status,
       Map<String, Object> pagingParams) {
 
     String queryStr = "SELECT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +
@@ -818,7 +818,7 @@ public class ComponentRepository {
                       "c.componentType.id = :componentTypeId";
     TypedQuery<Component> query = em.createQuery(queryStr, Component.class);
     query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
-    query.setParameter("componentTypeId", Integer.parseInt(componentTypeId));
+    query.setParameter("componentTypeId", Long.parseLong(componentTypeId));
     Component component = null;
     try {
       component = query.getSingleResult();
@@ -880,7 +880,7 @@ public class ComponentRepository {
       }
 
     ComponentTypeCombination componentTypeCombination;
-    componentTypeCombination = componentTypeRepository.getComponentTypeCombinationById(Integer.parseInt(form.getComponentTypeCombination()));
+    componentTypeCombination = componentTypeRepository.getComponentTypeCombinationById(Long.parseLong(form.getComponentTypeCombination()));
     for (ComponentType componentType : componentTypeCombination.getComponentTypes()) {
       Component component = new Component();
       component.setDonation(form.getDonation());
@@ -953,7 +953,7 @@ public class ComponentRepository {
     return true;
   }
 
-  public ComponentType findComponentTypeBySelectedComponentType(int componentTypeId) throws NoResultException{
+  public ComponentType findComponentTypeBySelectedComponentType(Long componentTypeId) throws NoResultException{
     String queryString = "SELECT p FROM ComponentType p where p.id = :componentTypeId";
     TypedQuery<ComponentType> query = em.createQuery(queryString, ComponentType.class);
     query.setParameter("componentTypeId", componentTypeId);

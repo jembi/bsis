@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.donor.Donor;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import repository.DonationRepository;
 import repository.DonorRepository;
 import repository.TestBatchRepository;
@@ -83,7 +87,7 @@ public class TestResultController {
 		
 		TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
 		List<DonationBatch> donationBatches = testBatch.getDonationBatches();
-		List<Integer> donationBatchIds = new ArrayList<Integer>();
+		List<Long> donationBatchIds = new ArrayList<Long>();
 		for(DonationBatch donationBatch : donationBatches){
 			donationBatchIds.add(donationBatch.getId());
 		}
@@ -105,7 +109,7 @@ public class TestResultController {
 		
 		TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
 		List<DonationBatch> donationBatches = testBatch.getDonationBatches();
-		List<Integer> donationBatchIds = new ArrayList<Integer>();
+		List<Long> donationBatchIds = new ArrayList<Long>();
 		for(DonationBatch donationBatch : donationBatches){
 			donationBatchIds.add(donationBatch.getId());
 		}

@@ -48,7 +48,7 @@ public class UserRepository {
       return em.merge(existingUser);
   }
 
-  public User findUserById(Integer id) throws NoResultException, NonUniqueResultException{
+  public User findUserById(Long id) throws NoResultException, NonUniqueResultException{
     if (id == null)
       return null;
     String queryString = "SELECT u FROM User u WHERE u.id = :userId and u.isDeleted = :isDeleted";
@@ -137,7 +137,7 @@ public class UserRepository {
     return query.getSingleResult();
   }
   
-  public void deleteUserById(Integer id)throws NoResultException, IllegalArgumentException{
+  public void deleteUserById(Long id)throws NoResultException, IllegalArgumentException{
       User user = findUserById(id);
       em.remove(user);
       
