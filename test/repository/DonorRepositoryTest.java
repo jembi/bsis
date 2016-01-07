@@ -773,6 +773,42 @@ public class DonorRepositoryTest {
 
     @Test
     /**
+     * Should return only donor deferral when donor has one deferral DonorDeferral getLastDonorDeferral(Long donorId)
+     */
+
+    public void getLastDonorDeferral_shouldReturnOnlyDonorDeferral() {
+        Date latestDeferralDate = DateUtils.addDays(new Date(), (2));
+        DonorDeferral lastDonorDeferral = donorRepository.getLastDonorDeferral(1l);
+        String str = dateFormat.format(lastDonorDeferral.getDeferredUntil());
+        String str_latestDeferralDate = dateFormat.format(latestDeferralDate);
+        assertTrue("Should equal latest deferral Date: "+str_latestDeferralDate  , str.equals(str_latestDeferralDate));
+    }
+
+    @Test
+    /**
+     * Should return last donor deferral DonorDeferral getLastDonorDeferral(Long donorId)
+     */
+
+    public void getLastDonorDeferral_shouldReturnLastDonorDeferral() {
+        Date latestDeferralDate = DateUtils.addDays(new Date(), (2));
+        DonorDeferral lastDonorDeferral = donorRepository.getLastDonorDeferral(6l);
+        String str = dateFormat.format(lastDonorDeferral.getDeferredUntil());
+        String str_latestDeferralDate = dateFormat.format(latestDeferralDate);
+        assertTrue("Should equal latest deferral Date: "+str_latestDeferralDate  , str.equals(str_latestDeferralDate));
+    }
+
+    @Test
+    /**
+     * Should return null when donor has no deferral DonorDeferral getLastDonorDeferral(Long donorId)
+     */
+
+    public void getLastDonorDeferral_shouldReturnNull() {
+        DonorDeferral lastDonorDeferral = donorRepository.getLastDonorDeferral(3l);
+        assertNull("should return null when donor has no deferral", lastDonorDeferral);
+    }
+
+    @Test
+    /**
      * Should return Non EMpty Language List
      */
     public void getAllLanguages_shuouldReturnNonEmptyList() {
