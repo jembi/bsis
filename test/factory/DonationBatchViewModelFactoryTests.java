@@ -70,7 +70,7 @@ public class DonationBatchViewModelFactoryTests {
     // set up test data
     Long donationId = new Long(1);
     Donation donation = new DonationBuilder().withId(donationId).build();
-    Integer donationBatchId = new Integer(1);
+    Long donationBatchId = new Long(1);
     DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonation(donation).build();
     
     // expected data
@@ -110,7 +110,7 @@ public class DonationBatchViewModelFactoryTests {
         .build();
     List<Donation> donations = Arrays.asList(new Donation[] { donation1, donation2 });
     
-    Integer donationBatchId = new Integer(1);
+    Long donationBatchId = new Long(1);
     DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonations(donations).build();
     
     // expected data
@@ -149,7 +149,7 @@ public class DonationBatchViewModelFactoryTests {
     Donation donation = new DonationBuilder().withId(donationId)
         .withPackType(aPackType().withTestSampleProduced(true).build())
         .build();
-    Integer donationBatchId = new Integer(1);
+    Long donationBatchId = new Long(1);
     DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonation(donation).build();
     
     // expected data
