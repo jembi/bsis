@@ -261,7 +261,7 @@ public class DuplicateDonorServiceTest {
 		// create new Donor
 		Donor david3 = DonorBuilder.aDonor().withDonorNumber("3").withFirstName("David").withLastName("Smith")
 		        .withGender(Gender.male).withBirthDate("1977-10-20").build();
-		
+
 		// create outcomes
         BloodTestingRuleResult btrr = BloodTestingRuleResultBuilder.aBloodTestingRuleResult()
             .withBloodAbo("A").withBloodRh("+")
@@ -287,7 +287,7 @@ public class DuplicateDonorServiceTest {
 		Assert.assertEquals("Donor status was changed", DonorStatus.MERGED, david1.getDonorStatus());
 		Assert.assertEquals("Donor status was changed", DonorStatus.MERGED, david2.getDonorStatus());
 	}
-
+	
 	@Test
 	public void testMatchNullDonor() throws Exception {
 		boolean result = service.match(null, null);

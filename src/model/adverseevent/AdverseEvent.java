@@ -4,30 +4,29 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+import model.BaseEntity;
+
 import org.hibernate.envers.Audited;
 
 import repository.constant.AdverseEventNamedQueryConstants;
 
+/**
+ * Entity to store any negative reaction (or adverse event) a Donor might have while making a Donation. 
+ */
 @NamedQueries({
     @NamedQuery(name = AdverseEventNamedQueryConstants.NAME_COUNT_ADVERSE_EVENTS_FOR_DONOR,
             query = AdverseEventNamedQueryConstants.QUERY_COUNT_ADVERSE_EVENTS_FOR_DONOR)
 })
 @Entity
 @Audited
-public class AdverseEvent {
+public class AdverseEvent extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false, updatable = false, insertable = false)
-    private Long id;
+    private static final long serialVersionUID = 1L;
     
     @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private AdverseEventType type;
@@ -35,14 +34,6 @@ public class AdverseEvent {
     @Lob
     @Column
     private String comment;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public AdverseEventType getType() {
         return type;
@@ -59,15 +50,4 @@ public class AdverseEvent {
     public void setComment(String comment) {
         this.comment = comment;
     }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        
-        return other instanceof AdverseEvent &&
-                ((AdverseEvent) other).id == id;
-    }
-
 }

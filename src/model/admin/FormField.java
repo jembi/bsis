@@ -2,13 +2,13 @@ package model.admin;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 
+import model.BaseEntity;
+
 @Entity
-public class FormField {
+public class FormField extends BaseEntity {
+  private static final long serialVersionUID = 1L;
 
   public static final String FIELD = "field";
   public static final String DISPLAY_NAME = "displayName";
@@ -26,11 +26,6 @@ public class FormField {
   public static final String AUTO_GENERATE = "autoGenerate";
   public static final String IS_TIME_FIELD = "isTimeField";
   public static final String USE_CURRENT_TIME = "useCurrentTime";
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false, updatable=false, insertable=false)
-  private Long id;
 
   @Column(length=30)
   private String form;
@@ -79,10 +74,6 @@ public class FormField {
 
   private Boolean isTimeField;
 
-  public Long getId() {
-    return id;
-  }
-
   public String getForm() {
     return form;
   }
@@ -109,10 +100,6 @@ public class FormField {
 
   public Boolean getHidden() {
     return hidden;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public void setForm(String form) {

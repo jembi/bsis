@@ -232,8 +232,8 @@ public class DonationRepositoryTest {
 	@Ignore("findDonations has a bug in the HSQL when querying a DIN with parameter name venueIds/venueIds")
 	public void testFindDonationsDIN() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<Integer> packTypeIds = new ArrayList<Integer>();
-		packTypeIds.add(new Integer(1));
+		List<Long> packTypeIds = new ArrayList<Long>();
+		packTypeIds.add(new Long(1));
 		List<Long> venueIds = new ArrayList<Long>();
 		venueIds.add(new Long(1));
 		venueIds.add(new Long(2));
@@ -248,8 +248,8 @@ public class DonationRepositoryTest {
 	@Test
 	public void testFindDonations() throws Exception {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<Integer> packTypeIds = new ArrayList<Integer>();
-		packTypeIds.add(new Integer(1));
+		List<Long> packTypeIds = new ArrayList<Long>();
+		packTypeIds.add(new Long(1));
 		List<Long> venueIds = new ArrayList<Long>();
 		venueIds.add(new Long(2));
 		List<Object> result = donationRepository.findDonations(null, packTypeIds, venueIds, "01/02/2015", "10/02/2015",
@@ -262,7 +262,7 @@ public class DonationRepositoryTest {
 		for (Donation donation : donations) {
 			Assert.assertTrue("Donation date before", donation.getDonationDate().before(beforeDate));
 			Assert.assertTrue("Donation date after", donation.getDonationDate().after(afterDate));
-			Assert.assertEquals("PackTypeId matches", new Integer(1), donation.getPackType().getId());
+			Assert.assertEquals("PackTypeId matches", new Long(1), donation.getPackType().getId());
 			Assert.assertEquals("venueId matches", new Long(2), donation.getDonationBatch().getVenue().getId());
 		}
 	}

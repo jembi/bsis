@@ -86,7 +86,7 @@ public class DeferralReasonRepositoryTest {
 	
 	@Test
 	public void testGetDeferralReasonById() throws Exception {
-		DeferralReason deferralReason = deferralReasonRepository.getDeferralReasonById(1);
+		DeferralReason deferralReason = deferralReasonRepository.getDeferralReasonById(1l);
 		Assert.assertNotNull("DeferralReason with id 1 exists", deferralReason);
 	}
 	
@@ -105,13 +105,13 @@ public class DeferralReasonRepositoryTest {
 	
 	@Test
 	public void testUpdateDeferralReason() throws Exception {
-		DeferralReason deferralReason = deferralReasonRepository.getDeferralReasonById(1);
+		DeferralReason deferralReason = deferralReasonRepository.getDeferralReasonById(1l);
 		Assert.assertNotNull("DeferralReason exists", deferralReason);
 		
 		deferralReason.setReason("Junit");
 		deferralReasonRepository.updateDeferralReason(deferralReason);
 		
-		DeferralReason savedDeferralReason = deferralReasonRepository.getDeferralReasonById(1);
+		DeferralReason savedDeferralReason = deferralReasonRepository.getDeferralReasonById(1l);
 		Assert.assertNotNull("DeferralReason still exists", savedDeferralReason);
 		Assert.assertEquals("Reason has been updated", "Junit", savedDeferralReason.getReason());
 	}

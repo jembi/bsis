@@ -14,22 +14,22 @@ import org.apache.commons.lang3.StringUtils;
 public class BloodTestingRuleViewModel {
 
   private BloodTestingRule rule;
-  private Map<Integer, String> patternMap;
+  private Map<Long, String> patternMap;
 
   public BloodTestingRuleViewModel(BloodTestingRule rule) {
     this.rule = rule;
-    patternMap = new HashMap<Integer, String>();
+    patternMap = new HashMap<Long, String>();
     List<String> testIds = Arrays.asList(rule.getBloodTestsIds().split(","));
     String pattern = rule.getPattern();
     List<String> testResults = Arrays.asList(pattern.split(","));
     int index = 0;
     for (String testId : testIds) {
-      patternMap.put(Integer.parseInt(testId), testResults.get(index));
+      patternMap.put(Long.parseLong(testId), testResults.get(index));
       index++;
     }
   }
 
-  public Integer getId() {
+  public Long getId() {
     return rule.getId();
   }
 
@@ -96,18 +96,18 @@ public class BloodTestingRuleViewModel {
   }
 
   @JsonIgnore
-  public Map<Integer, String> getPatternMap() {
+  public Map<Long, String> getPatternMap() {
     return patternMap;
   }
   
-  public List<Integer> getPendingTestsIds() {
-    List<Integer> pendingTestIds = new ArrayList<Integer>();
+  public List<Long> getPendingTestsIds() {
+    List<Long> pendingTestIds = new ArrayList<Long>();
     if (rule.getPendingTestsIds() == null)
       return pendingTestIds;
     for (String pendingTestId : rule.getPendingTestsIds().split(",")) {
       if (StringUtils.isBlank(pendingTestId))
         continue;
-      pendingTestIds.add(Integer.parseInt(pendingTestId));
+      pendingTestIds.add(Long.parseLong(pendingTestId));
     }
     return pendingTestIds;
   }

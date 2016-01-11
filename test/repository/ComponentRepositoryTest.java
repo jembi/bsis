@@ -106,7 +106,7 @@ public class ComponentRepositoryTest {
 	}
 	
 	public void initSpringSecurityUser() throws Exception {
-		BsisUserDetails user = new BsisUserDetails(userRepository.findUserById(1));
+		BsisUserDetails user = new BsisUserDetails(userRepository.findUserById(1l));
 		TestingAuthenticationToken auth = new TestingAuthenticationToken(user, "Credentials");
 		SecurityContextHolder.getContext().setAuthentication(auth);
 	}
@@ -267,8 +267,8 @@ public class ComponentRepositoryTest {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
 		status.add(ComponentStatus.PROCESSED);
-		List<Integer> componentTypeIds = new ArrayList<Integer>();
-		componentTypeIds.add(1);
+		List<Long> componentTypeIds = new ArrayList<Long>();
+		componentTypeIds.add(1l);
 		List<Component> all = componentRepository.findComponentByComponentTypes(componentTypeIds, status, pagingParams);
 		Assert.assertNotNull("Does not return an null", all);
 		Assert.assertEquals("There are 3 'Whole Blood Single Pack - CPDA' Components", 3, all.size());
@@ -279,8 +279,8 @@ public class ComponentRepositoryTest {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
 		status.add(ComponentStatus.QUARANTINED);
-		List<Integer> componentTypeIds = new ArrayList<Integer>();
-		componentTypeIds.add(1);
+		List<Long> componentTypeIds = new ArrayList<Long>();
+		componentTypeIds.add(1l);
 		List<Component> all = componentRepository.findComponentByComponentTypes(componentTypeIds, status, pagingParams);
 		Assert.assertNotNull("Does not return a null list", all);
 		Assert.assertTrue("There are no Components", all.isEmpty());
@@ -341,8 +341,8 @@ public class ComponentRepositoryTest {
 		Map<String, Object> pagingParams = new HashMap<String, Object>();
 		List<ComponentStatus> status = new ArrayList<ComponentStatus>();
 		status.add(ComponentStatus.QUARANTINED);
-		List<Integer> componentTypeIds = new ArrayList<Integer>();
-		componentTypeIds.add(1);
+		List<Long> componentTypeIds = new ArrayList<Long>();
+		componentTypeIds.add(1l);
 		List<Component> all = componentRepository.findAnyComponent(null, componentTypeIds, status, null, null, pagingParams);
 		Assert.assertNotNull("There aren't matching components", all);
 		Assert.assertTrue("There should be 0 components", all.isEmpty());
@@ -368,7 +368,7 @@ public class ComponentRepositoryTest {
 	
 	@Test
 	public void testFindComponentTypeByComponentTypeId() throws Exception {
-		ComponentType one = componentRepository.findComponentTypeBySelectedComponentType(1);
+		ComponentType one = componentRepository.findComponentTypeBySelectedComponentType(1l);
 		Assert.assertNotNull("ComponentType match", one);
 		Assert.assertEquals("ComponentType is correct", "Whole Blood Single Pack - CPDA", one.getComponentTypeName());
 	}
@@ -376,7 +376,7 @@ public class ComponentRepositoryTest {
 	@Test(expected = javax.persistence.NoResultException.class)
 	@Transactional
 	public void testFindComponentTypeByComponentTypeIdUnknown() throws Exception {
-		componentRepository.findComponentTypeBySelectedComponentType(123);
+		componentRepository.findComponentTypeBySelectedComponentType(123l);
 	}
 	
 	@Test
@@ -467,7 +467,7 @@ public class ComponentRepositoryTest {
 	@Test
 	// FIXME: issue with package dependencies here - ComponentRepository uses UtilController to retrieve the logged in user.  
 	public void testDiscardComponent() throws Exception {
-		ComponentStatusChangeReason discardReason = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(5);
+		ComponentStatusChangeReason discardReason = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(5l);
 		componentRepository.discardComponent(1l, discardReason, "junit");
 		Component component = componentRepository.findComponent(1l);
 		List<ComponentStatusChange> changes = componentRepository.getComponentStatusChanges(component);
@@ -480,7 +480,7 @@ public class ComponentRepositoryTest {
 	@Test
 	// FIXME: issue with package dependencies here - ComponentRepository uses UtilController to retrieve the logged in user.  
 	public void testReturnComponent() throws Exception {
-		ComponentStatusChangeReason returnReason = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(7);
+		ComponentStatusChangeReason returnReason = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(7l);
 		componentRepository.returnComponent(1l, returnReason, "junit");
 		Component component = componentRepository.findComponent(1l);
 		List<ComponentStatusChange> changes = componentRepository.getComponentStatusChanges(component);

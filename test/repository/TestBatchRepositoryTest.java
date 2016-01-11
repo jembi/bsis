@@ -157,7 +157,7 @@ public class TestBatchRepositoryTest {
     public void testSaveTestBatch() throws Exception {
         TestBatch testBatch = new TestBatch();
         List<DonationBatch> donationBatches = new ArrayList<DonationBatch>();
-        donationBatches.add(donationBatchRepository.findDonationBatchById(3));
+        donationBatches.add(donationBatchRepository.findDonationBatchById(3l));
         testBatch.setDonationBatches(donationBatches);
         TestBatch savedTestBatch = testBatchRepository.saveTestBatch(testBatch, "1234567");
         Assert.assertNotNull("Saved TestBatch has an id", savedTestBatch.getId());
@@ -165,7 +165,7 @@ public class TestBatchRepositoryTest {
         Assert.assertNotNull("Saved TestBatch is found", retrievedTestBatch);
         Assert.assertEquals("TestBatch status is correct", TestBatchStatus.OPEN, retrievedTestBatch.getStatus());
         Assert.assertEquals("TestBatch batchNumber is correct", "1234567", retrievedTestBatch.getBatchNumber());
-        DonationBatch updatedDonationBatch = donationBatchRepository.findDonationBatchById(3);
+        DonationBatch updatedDonationBatch = donationBatchRepository.findDonationBatchById(3l);
         Assert.assertNotNull("DonationBatch was linked to TestBatch", updatedDonationBatch.getTestBatch());
     }
 

@@ -1,7 +1,5 @@
 package repository.bloodtesting;
 
-import backingform.BloodTestBackingForm;
-
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -45,13 +43,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import repository.DonationRepository;
 import repository.DonationBatchRepository;
+import repository.DonationRepository;
 import repository.GenericConfigRepository;
 import repository.WellTypeRepository;
 import repository.events.ApplicationContextProvider;
 import repository.events.BloodTestsUpdatedEvent;
 import viewmodel.BloodTestingRuleResult;
+import backingform.BloodTestBackingForm;
 
 @Repository
 @Transactional
@@ -260,7 +259,7 @@ public class BloodTestingRepository {
 			// difficult
 			// to compare Integer and Long values in the jsp conditionals
 			// specially when iterating through the list of results
-			bloodTest.setId(testId.intValue());
+			bloodTest.setId(testId);
 			btResult.setBloodTest(bloodTest);
 			// not updating the inverse relation which means the
 			// donation.getBloodTypingResults() will not
@@ -378,11 +377,11 @@ public class BloodTestingRepository {
 	}
 	
 	public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatches(
-			List<Integer> donationBatchIds) {
+			List<Long> donationBatchIds) {
 
 		List<BloodTestingRuleResult> bloodTestingRuleResults = new ArrayList<BloodTestingRuleResult>();
 
-		for (Integer donationBatchId : donationBatchIds) {
+		for (Long donationBatchId : donationBatchIds) {
 			List<Donation> donations = donationBatchRepository.findDonationsInBatch(donationBatchId);
 			
 			for (Donation donation : donations) {
@@ -429,7 +428,7 @@ public class BloodTestingRepository {
 		return bloodTestResults;
 	}
 
-	public Map<Integer, BloodTestResult> getRecentTestResultsForDonation(
+	public Map<Long, BloodTestResult> getRecentTestResultsForDonation(
 			Long donationId) {
 		String queryStr = "SELECT bt FROM BloodTestResult bt WHERE "
 				+ "bt.donation.id=:donationId";
@@ -437,9 +436,9 @@ public class BloodTestingRepository {
 				BloodTestResult.class);
 		query.setParameter("donationId", donationId);
 		List<BloodTestResult> bloodTestResults = query.getResultList();
-		Map<Integer, BloodTestResult> recentBloodTestResults = new HashMap<Integer, BloodTestResult>();
+		Map<Long, BloodTestResult> recentBloodTestResults = new HashMap<Long, BloodTestResult>();
 		for (BloodTestResult bt : bloodTestResults) {
-			Integer bloodTestId = bt.getBloodTest().getId();
+			Long bloodTestId = bt.getBloodTest().getId();
 			BloodTestResult existingBloodTestResult = recentBloodTestResults
 					.get(bloodTestId);
 			if (existingBloodTestResult == null) {
@@ -453,7 +452,7 @@ public class BloodTestingRepository {
 		return recentBloodTestResults;
 	}
 
-	public BloodTest findBloodTestById(Integer bloodTestId) {
+	public BloodTest findBloodTestById(Long bloodTestId) {
 		String queryStr = "SELECT bt FROM BloodTest bt WHERE "
 				+ "bt.id=:bloodTestId";
 		TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
@@ -461,7 +460,7 @@ public class BloodTestingRepository {
 		return query.getSingleResult();
 	}
 
-	public BloodTest findBloodTestWithWorksheetTypesById(Integer bloodTestId) {
+	public BloodTest findBloodTestWithWorksheetTypesById(Long bloodTestId) {
 		String queryStr = "SELECT bt FROM BloodTest bt LEFT JOIN FETCH bt.worksheetTypes WHERE "
 				+ "bt.id=:bloodTestId";
 		TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
@@ -482,7 +481,7 @@ public class BloodTestingRepository {
 		Map<Long, MachineReading> machineReadingsForDonations = new HashMap<Long, MachineReading>();
 		List<MachineReading> specialMachineReadings = new ArrayList<MachineReading>();
 
-		BloodTest bloodTest = findBloodTestById(ttiTestId.intValue());
+		BloodTest bloodTest = findBloodTestById(ttiTestId);
 
 		PlateSession plateSession = new PlateSession();
 		Date testedOn = new Date();
@@ -507,7 +506,7 @@ public class BloodTestingRepository {
 					continue;
 
 				// store well type in machine configuration
-				Integer wellTypeId = Integer.parseInt(wellData.get("welltype"));
+				Long wellTypeId = Long.parseLong(wellData.get("welltype"));
 				WellType wellType = wellTypeRepository
 						.getWellTypeById(wellTypeId);
 				machineReading.setWellType(wellType);
@@ -626,7 +625,7 @@ public class BloodTestingRepository {
 		// jsp uses Long for all numbers. Using an integer makes it difficult
 		// to compare Integer and Long values in the jsp conditionals
 		// specially when iterating through the list of results
-		bloodTest.setId(testId.intValue());
+		bloodTest.setId(testId);
 		btResult.setBloodTest(bloodTest);
 		// not updating the inverse relation which means the
 		// donation.getBloodTypingResults() will not
@@ -695,7 +694,7 @@ public class BloodTestingRepository {
 		return query.getResultList();
 	}
 
-	public BloodTestingRule getBloodTestingRuleById(Integer ruleId) {
+	public BloodTestingRule getBloodTestingRuleById(Long ruleId) {
 		String queryStr = "SELECT r from BloodTestingRule r WHERE r.id=:ruleId";
 		TypedQuery<BloodTestingRule> query = em.createQuery(queryStr,
 				BloodTestingRule.class);
@@ -714,7 +713,7 @@ public class BloodTestingRepository {
         return em.merge(bloodTestingRule);
     }
 
-	public void deleteBloodTestingRule(Integer ruleId) {
+	public void deleteBloodTestingRule(Long ruleId) {
 		String queryStr = "UPDATE BloodTestingRule r SET isActive=:isActive WHERE r.id=:ruleId";
 		Query query = em.createQuery(queryStr);
 		query.setParameter("isActive", false);
@@ -743,7 +742,7 @@ public class BloodTestingRepository {
 			Integer numConfirmtatoryTests = 0;
 			if (form.getNumberOfConfirmatoryTests()!=null)
 				numConfirmtatoryTests = form.getNumberOfConfirmatoryTests();
-			List<Integer> pendingTestIds = new ArrayList<Integer>();
+			List<Long> pendingTestIds = new ArrayList<Long>();
 			em.persist(bt);
 			em.refresh(bt);
 
@@ -780,7 +779,7 @@ public class BloodTestingRepository {
 				confirmatoryBloodTest.setIsActive(true);
 				em.persist(confirmatoryBloodTest);
 				em.refresh(confirmatoryBloodTest);
-				pendingTestIds.add(i);
+				pendingTestIds.add(Long.valueOf(i));
 
 				BloodTestingRule confirmatoryTestRule = new BloodTestingRule();
 				confirmatoryTestRule.setBloodTestsIds(""
@@ -827,13 +826,13 @@ public class BloodTestingRepository {
         }
 
 
-	public void deactivateBloodTest(Integer bloodTestId) {
+	public void deactivateBloodTest(Long bloodTestId) {
 		BloodTest bt = findBloodTestById(bloodTestId);
 		bt.setIsActive(false);
 		em.merge(bt);
 	}
 
-	public void activateBloodTest(Integer bloodTestId) {
+	public void activateBloodTest(Long bloodTestId) {
 		BloodTest bt = findBloodTestById(bloodTestId);
 		bt.setIsActive(true);
 		em.merge(bt);
@@ -877,13 +876,13 @@ public class BloodTestingRepository {
 	      venueIds.add((long)-1);
 	    }
 
-		List<Integer> ttiTestIds = new ArrayList<Integer>();
+		List<Long> ttiTestIds = new ArrayList<Long>();
 		if (ttiTests != null) {
 			for (String ttiTest : ttiTests) {
-				ttiTestIds.add(Integer.parseInt(ttiTest));
+				ttiTestIds.add(Long.parseLong(ttiTest));
 			}
 		} else {
-			ttiTestIds.add(-1);
+			ttiTestIds.add(-1l);
 		}
 
 		query.setParameter("venueIds", venueIds);
@@ -973,7 +972,7 @@ public class BloodTestingRepository {
 		return query.getResultList();
 	}
 
-	public User getUser(Integer id) {
+	public User getUser(Long id) {
 		String queryStr = "SELECT u FROM User u WHERE u.id=:id";
 		TypedQuery<User> query = em.createQuery(queryStr, User.class);
 		query.setParameter("id", id);

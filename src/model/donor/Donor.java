@@ -1,8 +1,23 @@
 package model.donor;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import constraintvalidator.LocationExists;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import model.BaseModificationTrackerEntity;
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
@@ -11,11 +26,11 @@ import model.donation.Donation;
 import model.donordeferral.DonorDeferral;
 import model.idtype.IdType;
 import model.location.Location;
-import model.modificationtracker.ModificationTracker;
-import model.modificationtracker.RowModificationTracker;
 import model.preferredlanguage.PreferredLanguage;
-import model.user.User;
 import model.util.Gender;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.annotations.Index;
 import org.hibernate.annotations.Where;
@@ -23,23 +38,20 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Length;
+
 import utils.DonorUtils;
 
-import javax.persistence.*;
-import javax.validation.Valid;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import constraintvalidator.LocationExists;
 
 @Entity
 @Audited
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-public class Donor implements ModificationTracker {
+public class Donor extends BaseModificationTrackerEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false, updatable=false, insertable=false)
-  private Long id;
+  private static final long serialVersionUID = 1L;
 
   /** Donor Number column should be indexed. It has high selectivity.
    *  Search by donor number is very common usecase. VARCHAR(15) should
@@ -55,10 +67,8 @@ public class Donor implements ModificationTracker {
 	 * Just store the string for the Title. Low selectivity column. No need to
 	 * index it.
  */
-
   @Column(length = 15)
   private String  title;
-
   
   /**
    * Find donor by first few characters of first name can be made faster with this index.
@@ -99,8 +109,6 @@ public class Donor implements ModificationTracker {
    */
   @Column(length=10)
   private String bloodAbo;
-
-
   
   @Column(length=10)
   private String bloodRh;
@@ -139,12 +147,8 @@ public class Donor implements ModificationTracker {
   @Lob
   private String notes;
 
-  @Valid
-  private RowModificationTracker modificationTracker;
-
   @Temporal(TemporalType.TIMESTAMP)
   private Date dateOfLastDonation;
-
   
   /**
    * Never delete the rows. Just mark them as deleted.
@@ -164,9 +168,6 @@ public class Donor implements ModificationTracker {
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy="deferredDonor")
   private List<DonorDeferral> deferrals;
-  
-
-
  
  @NotAudited
  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
@@ -205,13 +206,11 @@ public class Donor implements ModificationTracker {
  
  private String idNumber;
 
-  
   /**
    * Date of first donation
    */
   @Temporal(TemporalType.DATE)
   private Date dateOfFirstDonation;
-
   
   @ManyToOne(fetch = FetchType.EAGER)
   @NotAudited
@@ -221,11 +220,7 @@ public class Donor implements ModificationTracker {
   private Date dueToDonate;
   
   public Donor() {
-    modificationTracker = new RowModificationTracker();
-  }
-
-  public Long getId() {
-    return id;
+    super();
   }
 
   public String getDonorNumber() {
@@ -266,10 +261,6 @@ public class Donor implements ModificationTracker {
 
   public Boolean getIsDeleted() {
     return isDeleted;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public void setDonorNumber(String donorNumber) {
@@ -336,70 +327,25 @@ public void copy(Donor donor) {
     setIdNumber(donor.getIdNumber());
     setContact(donor.getContact());
     setAddress(donor.getAddress());
-    
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+        .append("hashCode", Integer.toHexString(hashCode()))
+        .append("id", getId())
+        .append("firstName", firstName)
+        .append("lastName", lastName)
+        .append("donorNumber", donorNumber)
+        .build();
   }
 
   public List<Donation> getDonations() {
     return donations;
   }
-
    
   public void setDonations(List<Donation> donations) {
     this.donations = donations;
-  }
-
-  
- 
- 
-  public Date getLastUpdated() {
-    return modificationTracker.getLastUpdated();
-  }
-
-  public Date getCreatedDate() {
-    return modificationTracker.getCreatedDate();
-  }
-
-  public User getCreatedBy() {
-    return modificationTracker.getCreatedBy();
-  }
-
-  public User getLastUpdatedBy() {
-    return modificationTracker.getLastUpdatedBy();
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    modificationTracker.setLastUpdated(lastUpdated);
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    modificationTracker.setCreatedDate(createdDate);
-  }
-
-  public void setCreatedBy(User createdBy) {
-    modificationTracker.setCreatedBy(createdBy);
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    modificationTracker.setLastUpdatedBy(lastUpdatedBy);
-  }
-
-  public String toString() {
-
-    if (id == null)
-      return null;
-
-    if ((firstName == null || firstName.isEmpty()) &&
-        (donorNumber == null || donorNumber.isEmpty())
-       )
-      return id.toString();
-
-    StringBuilder builder = new StringBuilder();
-    builder.append(firstName);
-    if (!lastName.isEmpty())
-      builder.append(" ").append(lastName);
-    builder.append(":").append(donorNumber);
-
-    return builder.toString();
   }
 
   public String getCallingName() {
@@ -409,7 +355,6 @@ public void copy(Donor donor) {
   public void setCallingName(String callingName) {
     this.callingName = callingName;
   }
-
   
   public List<DonorDeferral> getDeferrals() {
     return deferrals;
@@ -466,7 +411,6 @@ public void copy(Donor donor) {
   public void setDonorStatus(DonorStatus donorStatus) {
     this.donorStatus = donorStatus;
   }
-
 
   public Integer getAge() {
     return age;
@@ -546,7 +490,6 @@ public void copy(Donor donor) {
     public void setAddressType(AddressType addressType) {
         this.addressType = addressType;
     }
-
     
     public ContactMethodType getContactMethodType() {
         return contactMethodType;
@@ -563,33 +506,4 @@ public void copy(Donor donor) {
     public void setDueToDonate(Date dueToDonate) {
         this.dueToDonate = dueToDonate;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        
-        if (!(obj instanceof Donor)) {
-            return false;
-        }
-        
-        if (getId() == null) {
-            // This donor has not been persisted
-            return false;
-        }
-        
-        Donor other = (Donor) obj;
-        
-        return getId().equals(other.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        if (getId() == null) {
-            return super.hashCode();
-        }
-        return Objects.hashCode(getId());
-    }
-
 }

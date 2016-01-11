@@ -42,11 +42,11 @@ public class TestBatchBackingFormValidatorTests {
     public void testValidateUpdateWithUnassignedDonationBatch() {
     	TestBatchBackingForm backingForm = new TestBatchBackingForm();
     	backingForm.setId(1l);
-    	backingForm.setDonationBatchIds(Arrays.asList(new Integer[] {1, 2}));
+    	backingForm.setDonationBatchIds(Arrays.asList(new Long[] {1l, 2l}));
     	backingForm.setCreatedDate("2015-10-10");
         
-        when(donationBatchRepository.findDonationBatchById(1)).thenReturn(new DonationBatch());
-        when(donationBatchRepository.findDonationBatchById(2)).thenReturn(new DonationBatch());
+        when(donationBatchRepository.findDonationBatchById(1l)).thenReturn(new DonationBatch());
+        when(donationBatchRepository.findDonationBatchById(2l)).thenReturn(new DonationBatch());
 
         Errors errors = new BindException(backingForm, "testBatchBackingForm");
         validator.validate(backingForm, errors);
@@ -59,7 +59,7 @@ public class TestBatchBackingFormValidatorTests {
     public void testValidateUpdateWithDonationBatchAssignedToAnotherBatch() {
     	TestBatchBackingForm backingForm = new TestBatchBackingForm();
     	backingForm.setId(1l);
-    	backingForm.setDonationBatchIds(Arrays.asList(new Integer[] {1, 2}));
+    	backingForm.setDonationBatchIds(Arrays.asList(new Long[] {1l, 2l}));
     	backingForm.setCreatedDate("2015-10-10");
     	TestBatch tb2 = new TestBatch();
     	tb2.setId(2l);
@@ -69,8 +69,8 @@ public class TestBatchBackingFormValidatorTests {
     	db1.setTestBatch(tb2);
     	db1.setVenue(venue);
     	
-        when(donationBatchRepository.findDonationBatchById(1)).thenReturn(db1);
-        when(donationBatchRepository.findDonationBatchById(2)).thenReturn(new DonationBatch());
+        when(donationBatchRepository.findDonationBatchById(1l)).thenReturn(db1);
+        when(donationBatchRepository.findDonationBatchById(2l)).thenReturn(new DonationBatch());
 
         Errors errors = new BindException(backingForm, "testBatchBackingForm");
         validator.validate(backingForm, errors);
@@ -84,7 +84,7 @@ public class TestBatchBackingFormValidatorTests {
     public void testValidateUpdateWithDonationBatchAssignedToBatch() {
     	TestBatchBackingForm backingForm = new TestBatchBackingForm();
     	backingForm.setId(1l);
-    	backingForm.setDonationBatchIds(Arrays.asList(new Integer[] {1, 2}));
+    	backingForm.setDonationBatchIds(Arrays.asList(new Long[] {1l, 2l}));
     	backingForm.setCreatedDate("2015-10-10");
     	TestBatch tb1 = new TestBatch();
     	tb1.setId(1l);
@@ -94,8 +94,8 @@ public class TestBatchBackingFormValidatorTests {
     	db1.setTestBatch(tb1);
     	db1.setVenue(venue);
     	
-        when(donationBatchRepository.findDonationBatchById(1)).thenReturn(db1);
-        when(donationBatchRepository.findDonationBatchById(2)).thenReturn(new DonationBatch());
+        when(donationBatchRepository.findDonationBatchById(1l)).thenReturn(db1);
+        when(donationBatchRepository.findDonationBatchById(2l)).thenReturn(new DonationBatch());
 
         Errors errors = new BindException(backingForm, "testBatchBackingForm");
         validator.validate(backingForm, errors);

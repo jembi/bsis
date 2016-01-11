@@ -1,10 +1,13 @@
 package backingform;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
+
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestCategory;
+
 import org.apache.commons.lang3.StringUtils;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BloodTestBackingForm {
 
@@ -21,7 +24,7 @@ public class BloodTestBackingForm {
         return bloodTest;
     }
     
-    public void setId(Integer id){
+    public void setId(Long id){
         bloodTest.setId(id);
     }
 

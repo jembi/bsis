@@ -2,25 +2,20 @@ package model.packtype;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
+import model.BaseEntity;
 import model.componenttype.ComponentType;
 
 import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-public class PackType {
+public class PackType extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable=false, updatable=false, columnDefinition="SMALLINT")
-  private Integer id;
+  private static final long serialVersionUID = 1L;
 
   @Column(length=50)
   private String packType;
@@ -55,19 +50,6 @@ public class PackType {
    }
   
   private Integer periodBetweenDonations;
-  
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  @Override
-  public String toString() {
-    return packType;
-  }
 
   public Boolean getIsDeleted() {
     return isDeleted;
@@ -141,15 +123,4 @@ public class PackType {
         this.isDeleted = packType.getIsDeleted();
         this.testSampleProduced = packType.getTestSampleProduced();
     }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        return other instanceof PackType &&
-                ((PackType) other).id == id;
-    }
-  
-  
 }

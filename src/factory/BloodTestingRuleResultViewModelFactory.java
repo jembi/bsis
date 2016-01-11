@@ -82,7 +82,7 @@ public class BloodTestingRuleResultViewModelFactory {
 		// test data in various formats
 		ruleResult.setStoredTestResults(bloodTestingRuleResultSet.getStoredTestResults());
 		Map<String, BloodTestResultViewModel> recentTestResultsViewModel = new HashMap<String, BloodTestResultViewModel>();
-		for (Integer testId : bloodTestingRuleResultSet.getRecentTestResults().keySet()) {
+		for (Long testId : bloodTestingRuleResultSet.getRecentTestResults().keySet()) {
 			recentTestResultsViewModel.put(testId.toString(), createBloodTestResultViewModel(bloodTestingRuleResultSet, bloodTestingRuleResultSet.getRecentTestResults().get(testId), isDonationReleased));
 		}
 		ruleResult.setRecentTestResults(recentTestResultsViewModel);

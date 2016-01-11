@@ -226,7 +226,7 @@ public class TTIController {
 		map.put("ttiTestId", ttiTestId);
 		map.put("ttiTestResults", ttiResults);
 		map.put("ttiTest",
-				bloodTestingRepository.findBloodTestById(ttiTestId.intValue()));
+				bloodTestingRepository.findBloodTestById(ttiTestId));
 		map.put("ttiConfig",
 				genericConfigRepository.getConfigProperties("ttiWells"));
 		map.put("allWellTypes", wellTypeRepository.getAllWellTypes());
