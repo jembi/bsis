@@ -4,12 +4,12 @@ import model.packtype.PackType;
 
 public class PackTypeBuilder extends AbstractEntityBuilder<PackType> {
     
-    private Integer id;
+    private Long id;
     private Boolean countAsDonation;
     private Integer periodBetweenDonations;
     private Boolean testSampleProduced;
 
-    public PackTypeBuilder withId(Integer id) {
+    public PackTypeBuilder withId(Long id) {
         this.id = id;
         return this;
     }

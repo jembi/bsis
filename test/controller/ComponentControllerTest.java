@@ -44,9 +44,7 @@ public class ComponentControllerTest {
 	@Ignore @Test
 	public void recordNewComponentsTest() {
 		
-		 Component savedComponent = null;
-		
-				ComponentType componentType2 = componentRepository.findComponentTypeBySelectedComponentType(1);
+		  ComponentType componentType2 = componentRepository.findComponentTypeBySelectedComponentType(1l);
 	      String donationIdentificationNumber = "D0001";
 	      String status = "QUARANTINED";
 	      long componentId = 1L;
@@ -70,8 +68,8 @@ public class ComponentControllerTest {
 		          component.setIsDeleted(false);
 		          component.setComponentIdentificationNumber(createdPackNumber+"-"+i);
 		          Calendar c=new GregorianCalendar();
-		          System.out.println("after :"+ componentTypeRepository.getComponentTypeById(1).getExpiryIntervalMinutes());
-		          c.add(Calendar.MINUTE, componentTypeRepository.getComponentTypeById(1).getExpiryIntervalMinutes());
+		          System.out.println("after :"+ componentTypeRepository.getComponentTypeById(1l).getExpiryIntervalMinutes());
+		          c.add(Calendar.MINUTE, componentTypeRepository.getComponentTypeById(1l).getExpiryIntervalMinutes());
 		          Date expiredate=c.getTime();
 		          
 		          
@@ -105,8 +103,8 @@ public class ComponentControllerTest {
 		          component.setComponentIdentificationNumber(createdPackNumber);
 
 		          Calendar c=new GregorianCalendar();
-		          System.out.println("after :"+ componentTypeRepository.getComponentTypeById(1).getExpiryIntervalMinutes());
-		          c.add(Calendar.MINUTE, componentTypeRepository.getComponentTypeById(1).getExpiryIntervalMinutes());
+		          System.out.println("after :"+ componentTypeRepository.getComponentTypeById(1l).getExpiryIntervalMinutes());
+		          c.add(Calendar.MINUTE, componentTypeRepository.getComponentTypeById(1l).getExpiryIntervalMinutes());
 		          Date expiredate=c.getTime();
 		          
 		          component.setCreatedOn(new Date());

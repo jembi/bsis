@@ -11,7 +11,7 @@ public class DeferralReasonViewModel {
         this.deferralReason = deferralReason;
     }
 
-    public Integer getId(){
+    public Long getId(){
         return deferralReason.getId();
     }
 

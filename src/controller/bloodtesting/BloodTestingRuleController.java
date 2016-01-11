@@ -42,7 +42,7 @@ public class BloodTestingRuleController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME + "')")
-    public ResponseEntity getBloodTypingRuleSummary(@PathVariable Integer id) {
+    public ResponseEntity getBloodTypingRuleSummary(@PathVariable Long id) {
 
         Map<String, Object> map = new HashMap<String, Object>();
         BloodTestingRuleViewModel bloodTestingRule;
@@ -67,7 +67,7 @@ public class BloodTestingRuleController {
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTS + "')")
     public ResponseEntity updateNewBloodTypingRule(
-            @RequestBody BloodTestingRuleBackingForm form, @PathVariable Integer id) {
+            @RequestBody BloodTestingRuleBackingForm form, @PathVariable Long id) {
 
         Map<String, Object> map = new HashMap<String, Object>();
         form.setId(id);
@@ -81,7 +81,7 @@ public class BloodTestingRuleController {
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTS + "')")
     public ResponseEntity deleteBloodTypingRule(HttpServletRequest request,
-            @PathVariable Integer id) {
+            @PathVariable Long id) {
 
         bloodTestingRepository.deleteBloodTestingRule(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);

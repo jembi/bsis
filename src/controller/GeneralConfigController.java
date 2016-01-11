@@ -68,13 +68,13 @@ public class GeneralConfigController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_GENERAL_CONFIGS+"')")
-    public ResponseEntity<GeneralConfigViewModel> getGeneralConfig(@PathVariable Integer id) {
+    public ResponseEntity<GeneralConfigViewModel> getGeneralConfig(@PathVariable Long id) {
         return new ResponseEntity<GeneralConfigViewModel>(new GeneralConfigViewModel(configRepository.getGeneralConfigById(id)), HttpStatus.OK);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_GENERAL_CONFIGS+"')")
-    public ResponseEntity<GeneralConfigViewModel> updateGeneralConfig(@RequestBody  @Valid GeneralConfigBackingForm form, @PathVariable Integer id) {
+    public ResponseEntity<GeneralConfigViewModel> updateGeneralConfig(@RequestBody  @Valid GeneralConfigBackingForm form, @PathVariable Long id) {
 
     	GeneralConfig updatedConfig = null;
         form.setId(id);

@@ -1,14 +1,11 @@
 package backingform;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.text.ParseException;
 import java.util.List;
 
 import model.component.Component;
 import model.componenttype.ComponentType;
 import model.location.Location;
-import model.modificationtracker.RowModificationTracker;
 import model.request.Request;
 import model.requesttype.RequestType;
 import model.util.BloodGroup;
@@ -18,6 +15,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import repository.RequestRepository;
 import utils.CustomDateFormatter;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class RequestBackingForm {
 
@@ -122,7 +121,7 @@ public class RequestBackingForm {
 	}
 	else {
 		RequestType rt = new RequestType();
-		rt.setId(Integer.parseInt(requestTypeId));
+		rt.setId(Long.parseLong(requestTypeId));
 		request.setRequestType(rt);
 	}
   }
@@ -133,7 +132,7 @@ public class RequestBackingForm {
 	}
 	else {
 		ComponentType pt = new ComponentType();
-		pt.setId(Integer.parseInt(componentTypeId));
+		pt.setId(Long.parseLong(componentTypeId));
 		request.setComponentType(pt);
 	}
   }

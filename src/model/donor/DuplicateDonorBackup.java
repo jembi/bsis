@@ -2,9 +2,8 @@ package model.donor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
+import model.BaseEntity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -15,12 +14,9 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
  */
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class DuplicateDonorBackup {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(nullable = false, updatable = false, insertable = false)
-	private Long id;
+public class DuplicateDonorBackup extends BaseEntity {
+  
+  private static final long serialVersionUID = 1L;
 	
 	@Column
 	private String newDonorNumber;
@@ -44,14 +40,6 @@ public class DuplicateDonorBackup {
 		this.mergedDonorNumber = mergedDonorId;
 		this.donationId = donationId;
 		this.donorDeferralId = deferralId;
-	}
-
-	public Long getId() {
-		return id;
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
 	}
 	
 	public String getNewDonorNumber() {
@@ -92,7 +80,7 @@ public class DuplicateDonorBackup {
 	    int result = 1;
 	    result = prime * result + ((donorDeferralId == null) ? 0 : donorDeferralId.hashCode());
 	    result = prime * result + ((donationId == null) ? 0 : donationId.hashCode());
-	    result = prime * result + ((id == null) ? 0 : id.hashCode());
+	    result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
 	    result = prime * result + ((mergedDonorNumber == null) ? 0 : mergedDonorNumber.hashCode());
 	    result = prime * result + ((newDonorNumber == null) ? 0 : newDonorNumber.hashCode());
 	    return result;
@@ -117,10 +105,10 @@ public class DuplicateDonorBackup {
 			    return false;
 	    } else if (!donationId.equals(other.donationId))
 		    return false;
-	    if (id == null) {
-		    if (other.id != null)
+	    if (getId() == null) {
+		    if (other.getId() != null)
 			    return false;
-	    } else if (!id.equals(other.id))
+	    } else if (!getId().equals(other.getId()))
 		    return false;
 	    if (mergedDonorNumber == null) {
 		    if (other.mergedDonorNumber != null)

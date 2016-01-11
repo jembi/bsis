@@ -48,7 +48,7 @@ public class DonationTypesController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-    public  ResponseEntity getDonationType(@PathVariable Integer id) {
+    public  ResponseEntity getDonationType(@PathVariable Long id) {
         Map<String, Object> map = new HashMap<String, Object>();
         DonationType donationType = donationTypesRepository.getDonationTypeById(id);
         map.put("donationType", new DonationTypeViewModel(donationType));
@@ -65,7 +65,7 @@ public class DonationTypesController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-    public  ResponseEntity updateDonationType(@Valid @RequestBody DonationTypeBackingForm form,  @PathVariable Integer id) {
+    public  ResponseEntity updateDonationType(@Valid @RequestBody DonationTypeBackingForm form,  @PathVariable Long id) {
         Map<String, Object> map = new HashMap<String, Object>();
         DonationType donationType = form.getDonationType();
         donationType.setId(id);

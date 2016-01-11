@@ -26,7 +26,7 @@ public class DeferralReasonBackingForm {
         return deferralReason.getReason();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return deferralReason.getId();
     }
 
@@ -34,7 +34,7 @@ public class DeferralReasonBackingForm {
         this.deferralReason = deferralReason;
     }
 
-    public void setId(Integer id){
+    public void setId(Long id){
         deferralReason.setId(id);
     }
 

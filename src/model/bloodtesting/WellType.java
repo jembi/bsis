@@ -2,20 +2,16 @@ package model.bloodtesting;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
+import model.BaseEntity;
 
 import org.hibernate.envers.Audited;
 
 @Audited
 @Entity
-public class WellType {
+public class WellType extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable=false, insertable=false, updatable=false, columnDefinition="SMALLINT")
-  private Integer id;
+  private static final long serialVersionUID = 1L;
 
   @Column(length=30)
   private String wellType;
@@ -25,14 +21,6 @@ public class WellType {
   private Boolean isDeleted;
 
   public WellType() {
-  }
-
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
   }
 
   public String getWellType() {

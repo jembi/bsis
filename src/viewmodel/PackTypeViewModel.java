@@ -10,7 +10,7 @@ public class PackTypeViewModel {
         this.packType = packType;
     }
     
-    public Integer getId(){
+    public Long getId(){
         return packType.getId();
     }
     

@@ -2,11 +2,13 @@ package service;
 
 import static helpers.builders.AdverseEventBackingFormBuilder.anAdverseEventBackingForm;
 import static helpers.builders.AdverseEventBuilder.anAdverseEvent;
+import static helpers.builders.AdverseEventTypeBuilder.anAdverseEventType;
 import static helpers.builders.AdverseEventTypeBackingFormBuilder.anAdverseEventTypeBackingForm;
 import static helpers.builders.DonationBackingFormBuilder.aDonationBackingForm;
 import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
+import static helpers.builders.PostDonationCounsellingBuilder.aPostDonationCounselling;
 import static helpers.builders.PackTypeBuilder.aPackType;
 import static helpers.matchers.DonationMatcher.hasSameStateAsDonation;
 import static helpers.matchers.DonorMatcher.hasSameStateAsDonor;
@@ -19,6 +21,7 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.util.Date;
 import model.adverseevent.AdverseEvent;
+import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
 import model.donationbatch.DonationBatch;
@@ -42,7 +45,7 @@ public class DonationCRUDServiceTests {
     
     private static final long IRRELEVANT_DONATION_ID = 2;
     private static final long IRRELEVANT_DONOR_ID = 7;
-    private static final int IRRELEVANT_PACK_TYPE_ID = 5009;
+    private static final long IRRELEVANT_PACK_TYPE_ID = 5009;
     private static final Date IRRELEVANT_DATE_OF_FIRST_DONATION = new DateTime().minusDays(7).toDate();
     private static final Date IRRELEVANT_DATE_OF_LAST_DONATION = new DateTime().minusDays(2).toDate();
 
@@ -64,7 +67,9 @@ public class DonationCRUDServiceTests {
     private DonorConstraintChecker donorConstraintChecker;
     @Mock
     private DonorService donorService;
-    
+    @Mock
+    PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
+
     @Test(expected = IllegalStateException.class)
     public void testDeleteDonationWithConstraints_shouldThrow() {
         
@@ -163,7 +168,7 @@ public class DonationCRUDServiceTests {
         // Set up fixture
         Donation existingDonation = aDonation().withId(IRRELEVANT_DONATION_ID).build();
         DonationBackingForm donationBackingForm = aDonationBackingForm()
-                .withPackType(aPackType().withId(7).build())
+                .withPackType(aPackType().withId(7l).build())
                 .build();
 
         // Set up expectations
@@ -223,10 +228,14 @@ public class DonationCRUDServiceTests {
         Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
         Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
         Long irrelevantAdverseEventTypeId = 8L;
+        Long irrelevantAdverseEventId = 7L;
         AdverseEvent irrelevantAdverseEvent = anAdverseEvent()
+                .withId(irrelevantAdverseEventId)
+                .withType(anAdverseEventType().withId(irrelevantAdverseEventTypeId).build())
                 .build();
         AdverseEventBackingForm irrelevantAdverseEventBackingForm = anAdverseEventBackingForm()
                 .withType(anAdverseEventTypeBackingForm().withId(irrelevantAdverseEventTypeId).build())
+                .withId(irrelevantAdverseEventId)
                 .build();
 
         String donationBatchNumber = "000001";
@@ -236,10 +245,11 @@ public class DonationCRUDServiceTests {
         DonationBatch donationBatch = aDonationBatch().build();
         
         Donation existingDonation = aDonation()
-                .withId(IRRELEVANT_DONATION_ID)
-                .withPackType(aPackType().withId(8).withCountAsDonation(true).build())
-                .withDonor(expectedDonor)
-                .build();
+            .withId(IRRELEVANT_DONATION_ID)
+            .withPackType(aPackType().withId(8l).withCountAsDonation(true).build())
+            .withDonor(expectedDonor)
+            .withAdverseEvent(irrelevantAdverseEvent)
+            .build();
 
         DonationBackingForm donationBackingForm = aDonationBackingForm()
                 .withDonor(expectedDonor)
@@ -380,6 +390,8 @@ public class DonationCRUDServiceTests {
                 .withDonationBatchNumber(donationBatchNumber)
                 .withPackType(aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build())
                 .build();
+
+        
         
         DonationBatch donationBatch = aDonationBatch().thatIsBackEntry().build();
         
@@ -393,6 +405,7 @@ public class DonationCRUDServiceTests {
         
         verify(donationRepository).addDonation(donation);
         verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafe(donation);
+        verify(postDonationCounsellingCRUDService).createPostDonationCounsellingForDonation(donation);
         assertThat(returnedDonation, is(donation));
     }
 

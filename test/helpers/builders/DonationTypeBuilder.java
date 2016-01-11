@@ -4,10 +4,10 @@ import model.donationtype.DonationType;
 
 public class DonationTypeBuilder extends AbstractEntityBuilder<DonationType> {
     
-    private Integer id;
+    private Long id;
     private String name;
 
-    public DonationTypeBuilder withId(Integer id) {
+    public DonationTypeBuilder withId(Long id) {
         this.id = id;
         return this;
     }

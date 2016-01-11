@@ -221,7 +221,7 @@ public class ComponentCombinationBackingForm {
     else {
       componentTypeCombination = new ComponentTypeCombination();
       try {
-        componentTypeCombination.setId(Integer.parseInt(componentTypeCombinationId));
+        componentTypeCombination.setId(Long.parseLong(componentTypeCombinationId));
       } catch (Exception ex) {
         ex.printStackTrace();
       }

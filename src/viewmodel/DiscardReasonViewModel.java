@@ -10,7 +10,7 @@ public class DiscardReasonViewModel {
         this.discardReason = discardReason;
     }
 
-    public Integer getId(){
+    public Long getId(){
         return discardReason.getId();
     }
 

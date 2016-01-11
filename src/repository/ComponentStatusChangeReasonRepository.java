@@ -40,7 +40,7 @@ public class ComponentStatusChangeReasonRepository {
     return query.getResultList();
   }
   
-  public ComponentStatusChangeReason getComponentStatusChangeReasonById(Integer id) {
+  public ComponentStatusChangeReason getComponentStatusChangeReasonById(Long id) {
     TypedQuery<ComponentStatusChangeReason> query;
     query = em.createQuery("SELECT p from ComponentStatusChangeReason p " +
             "where p.id=:id AND p.isDeleted=:isDeleted", ComponentStatusChangeReason.class);

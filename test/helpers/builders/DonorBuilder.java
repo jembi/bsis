@@ -2,13 +2,16 @@ package helpers.builders;
 
 import helpers.persisters.AbstractEntityPersister;
 import helpers.persisters.DonorPersister;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import model.donation.Donation;
 import model.donor.Donor;
+import model.donor.DonorStatus;
 import model.donordeferral.DonorDeferral;
 import model.location.Location;
 import model.util.Gender;
@@ -25,6 +28,7 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
     private Boolean deleted;
     private Date dateOfFirstDonation;
     private Date dateOfLastDonation;
+    private DonorStatus donorStatus;
     private Location venue;
     private List<DonorDeferral> deferrals;
     private List<Donation> donations;
@@ -50,7 +54,7 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
     }
     
     public DonorBuilder thatIsNotDeleted() {
-        deleted = true;
+        deleted = false;
         return this;
     }
     
@@ -63,6 +67,11 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
         this.dateOfLastDonation = dateOfLastDonation;
         return this;
     }
+    
+    public DonorBuilder withDonorStatus(DonorStatus donorStatus) {
+      this.donorStatus = donorStatus;
+      return this;
+  }
     
     public DonorBuilder withVenue(Location venue) {
         this.venue = venue;
@@ -126,6 +135,7 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
         donor.setIsDeleted(deleted);
         donor.setDateOfFirstDonation(dateOfFirstDonation);
         donor.setDateOfLastDonation(dateOfLastDonation);
+        donor.setDonorStatus(donorStatus);
         donor.setVenue(venue);
         donor.setDeferrals(deferrals);
         donor.setDonations(donations);
