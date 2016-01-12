@@ -35,27 +35,6 @@ public class DonorService {
 		donor.setDueToDonate(dueToDonateDate);
 	}
 	
-  /**
-   * Sets the Donor's next due date based on the specified donation.
-   * 
-   * NOTE: If the specified Donation is not the latest Donation, then an invalid "due to donate"
-   * date will be set. This method is used for situations such as Donor Merging when the new Donor
-   * has not yet been persisted.
-   * 
-   * @param donor Donor to update
-   * @param donation Donation latest
-   */
-  public void setDonorDueToDonate(Donor donor, Donation donation) {
-    PackType packType = donation.getPackType();
-    int periodBetweenDays = packType.getPeriodBetweenDonations();
-    Calendar dueToDonateDate = Calendar.getInstance();
-    dueToDonateDate.setTime(donation.getDonationDate());
-    dueToDonateDate.add(Calendar.DAY_OF_YEAR, periodBetweenDays);
-    if (donor.getDueToDonate() == null || dueToDonateDate.getTime().after(donor.getDueToDonate())) {
-      donor.setDueToDonate(dueToDonateDate.getTime());
-    }
-  }
-	
 	/**
 	 * Determines the date of the Donor's first Donation. NOTE: does not persist the changes to the
 	 * Donor.

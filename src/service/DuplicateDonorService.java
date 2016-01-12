@@ -2,6 +2,7 @@ package service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -14,6 +15,7 @@ import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.donor.DuplicateDonorBackup;
 import model.donordeferral.DonorDeferral;
+import model.packtype.PackType;
 import model.util.Gender;
 
 import org.apache.commons.lang3.StringUtils;
@@ -175,9 +177,31 @@ public class DuplicateDonorService {
 			// sets the Donor's donation related attributes
 			donorService.setDonorDateOfFirstDonation(newDonor, donation);
 			donorService.setDonorDateOfLastDonation(newDonor, donation);
-			donorService.setDonorDueToDonate(newDonor, donation);
+			setDonorDueToDonate(newDonor, donation);
 		}
 	}
+	
+  /**
+   * Sets the Donor's next due date based on the specified donation.
+   * 
+   * NOTE: If the specified Donation is not the latest Donation, then an invalid "due to donate"
+   * date will be set.
+   * 
+   * @see DonorService.setDonorDueToDonate(Donor)
+   * 
+   * @param donor Donor to update
+   * @param donation Donation latest
+   */
+  private void setDonorDueToDonate(Donor donor, Donation donation) {
+    PackType packType = donation.getPackType();
+    int periodBetweenDays = packType.getPeriodBetweenDonations();
+    Calendar dueToDonateDate = Calendar.getInstance();
+    dueToDonateDate.setTime(donation.getDonationDate());
+    dueToDonateDate.add(Calendar.DAY_OF_YEAR, periodBetweenDays);
+    if (donor.getDueToDonate() == null || dueToDonateDate.getTime().after(donor.getDueToDonate())) {
+      donor.setDueToDonate(dueToDonateDate.getTime());
+    }
+  }
 	
 	/**
 	 * Retrieves a list of the Deferrals for the specified Donors.

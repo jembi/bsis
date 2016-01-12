@@ -6,9 +6,11 @@ import helpers.builders.DeferralReasonBuilder;
 import helpers.builders.DonationBuilder;
 import helpers.builders.DonorBuilder;
 import helpers.builders.DonorDeferralBuilder;
+import helpers.builders.PackTypeBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ import model.donordeferral.DeferralReason;
 import model.donordeferral.DeferralReasonType;
 import model.donordeferral.DonorDeferral;
 import model.donordeferral.DurationType;
+import model.packtype.PackType;
 import model.util.Gender;
 
 import org.junit.Assert;
@@ -242,8 +245,9 @@ public class DuplicateDonorServiceTest {
 		donors.add(david2);
 		
 		// create donations (david1)
-		Donation donation1 = DonationBuilder.aDonation().withId(1l).withDonor(david1).withDonationDate(new Date()).build();
-		Donation donation2 = DonationBuilder.aDonation().withId(2l).withDonor(david1).withDonationDate(new Date()).build();
+		PackType packType = PackTypeBuilder.aPackType().withPeriodBetweenDonations(90).build();
+		Donation donation1 = DonationBuilder.aDonation().withId(1l).withDonor(david1).withDonationDate(new Date()).withPackType(packType).build();
+		Donation donation2 = DonationBuilder.aDonation().withId(2l).withDonor(david1).withDonationDate(new Date()).withPackType(packType).build();
 		List<Donation> donations = new ArrayList<Donation>();
 		donations.add(donation1);
 		donations.add(donation2);
@@ -518,13 +522,14 @@ public class DuplicateDonorServiceTest {
 	    String donorNumber2 = "1000002";
 	    List<String> donorNumbers = Arrays.asList(new String[] {donorNumber1, donorNumber2});
 	    
-		Donation d1 = DonationBuilder.aDonation().withId(1l)
+	    PackType packType = PackTypeBuilder.aPackType().withPeriodBetweenDonations(90).build();
+		Donation d1 = DonationBuilder.aDonation().withId(1l).withPackType(packType)
 		        .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-07-01")).build();
-		Donation d2 = DonationBuilder.aDonation().withId(2l)
+		Donation d2 = DonationBuilder.aDonation().withId(2l).withPackType(packType)
 		        .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01")).build();
-		Donation d3 = DonationBuilder.aDonation().withId(3l)
+		Donation d3 = DonationBuilder.aDonation().withId(3l).withPackType(packType)
 		        .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-09-01")).build();
-        Donation d4 = DonationBuilder.aDonation().withId(4l)
+        Donation d4 = DonationBuilder.aDonation().withId(4l).withPackType(packType)
             .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-05-01")).build();
 
 		Donor david = DonorBuilder.aDonor().withDonorNumber(donorNumber1).withFirstName("David").withLastName("Smith").withGender(Gender.male)
