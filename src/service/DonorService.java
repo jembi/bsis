@@ -1,9 +1,11 @@
 package service;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import model.donation.Donation;
 import model.donor.Donor;
+import model.packtype.PackType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,6 @@ public class DonorService {
 	 * @param donor Donor to update
 	 */
 	public void setDonorDueToDonate(Donor donor) {
-
 		Date dueToDonateDate = donationRepository.findLatestDueToDonateDateForDonor(donor.getId());
 		donor.setDueToDonate(dueToDonateDate);
 	}

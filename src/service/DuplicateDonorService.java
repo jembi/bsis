@@ -2,6 +2,7 @@ package service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -14,6 +15,7 @@ import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.donor.DuplicateDonorBackup;
 import model.donordeferral.DonorDeferral;
+import model.packtype.PackType;
 import model.util.Gender;
 
 import org.apache.commons.lang3.StringUtils;
@@ -78,7 +80,7 @@ public class DuplicateDonorService {
 	 * @param donors List of Donors that are being merged into the newDonor
 	 * @return List of DuplicateDonorBackup records that can be used to rollback a merge
 	 */
-	public List<DuplicateDonorBackup> mergeDonors(Donor newDonor, List<Donor> donors) {
+	protected List<DuplicateDonorBackup> mergeDonors(Donor newDonor, List<Donor> donors) {
 		String newDonorNumber = newDonor.getDonorNumber();
 		// combine Donations and Deferrals and create a backup log
 		List<Donation> combinedDonations = new ArrayList<Donation>();
@@ -136,7 +138,7 @@ public class DuplicateDonorService {
 		return combinedDonations;
 	}
 	
-	protected List<Donation> combineDonations(List<Donor> donors) {
+	private List<Donation> combineDonations(List<Donor> donors) {
 		List<Donation> combinedDonations = new ArrayList<Donation>();
 		if (donors != null) {
 			for (Donor donor : donors) {
@@ -153,7 +155,7 @@ public class DuplicateDonorService {
 		return combinedDonations;
 	}
 	
-	protected List<Donation> sortDonationsByDate(List<Donation> combinedDonations) {
+	private List<Donation> sortDonationsByDate(List<Donation> combinedDonations) {
 		// sort donations in chronological order
 		Collections.sort(combinedDonations, new Comparator<Donation>() {
 			
@@ -165,7 +167,7 @@ public class DuplicateDonorService {
 		return combinedDonations;
 	}
 	
-	protected void executeTestsAndUpdate(Donor newDonor, List<Donation> combinedDonations) {
+	private void executeTestsAndUpdate(Donor newDonor, List<Donation> combinedDonations) {
 		for (Donation donation : combinedDonations) {
 			// analyse the Blood Tests
 			BloodTestingRuleResult ruleResult = bloodTestsService.executeTests(donation);
@@ -175,9 +177,31 @@ public class DuplicateDonorService {
 			// sets the Donor's donation related attributes
 			donorService.setDonorDateOfFirstDonation(newDonor, donation);
 			donorService.setDonorDateOfLastDonation(newDonor, donation);
-			donorService.setDonorDueToDonate(newDonor);
+			setDonorDueToDonate(newDonor, donation);
 		}
 	}
+	
+  /**
+   * Sets the Donor's next due date based on the specified donation.
+   * 
+   * NOTE: If the specified Donation is not the latest Donation, then an invalid "due to donate"
+   * date will be set.
+   * 
+   * @see DonorService.setDonorDueToDonate(Donor)
+   * 
+   * @param donor Donor to update
+   * @param donation Donation latest
+   */
+  private void setDonorDueToDonate(Donor donor, Donation donation) {
+    PackType packType = donation.getPackType();
+    int periodBetweenDays = packType.getPeriodBetweenDonations();
+    Calendar dueToDonateDate = Calendar.getInstance();
+    dueToDonateDate.setTime(donation.getDonationDate());
+    dueToDonateDate.add(Calendar.DAY_OF_YEAR, periodBetweenDays);
+    if (donor.getDueToDonate() == null || dueToDonateDate.getTime().after(donor.getDueToDonate())) {
+      donor.setDueToDonate(dueToDonateDate.getTime());
+    }
+  }
 	
 	/**
 	 * Retrieves a list of the Deferrals for the specified Donors.
@@ -191,7 +215,7 @@ public class DuplicateDonorService {
 		return combineDeferralsAndSortByDate(donors);
 	}
 	
-	protected List<DonorDeferral> combineDeferralsAndSortByDate(List<Donor> donors) {
+	private List<DonorDeferral> combineDeferralsAndSortByDate(List<Donor> donors) {
 		List<DonorDeferral> combinedDeferrals = new ArrayList<DonorDeferral>();
 		if (donors != null) {
 			for (Donor donor : donors) {

@@ -15,7 +15,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class DonorServiceTest {
-	
+
 	@Test
 	public void testSetDateOfFirstDonation() throws Exception {
 		
