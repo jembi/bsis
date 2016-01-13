@@ -1,46 +1,37 @@
 package backingform.validator;
 
-import java.util.Arrays;
+import java.util.List;
 
 import javax.persistence.NoResultException;
 
-import model.compatibility.CompatibilityTest;
 import model.component.Component;
+import model.component.ComponentStatus;
+import model.componenttype.ComponentType;
 import model.request.Request;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
-import org.springframework.validation.Validator;
 
+import repository.ComponentRepository;
+import repository.RequestRepository;
 import utils.CustomDateFormatter;
-import viewmodel.CompatibilityTestViewModel;
 import backingform.CompatibilityTestBackingForm;
-import controller.UtilController;
 
-public class CompatibilityTestBackingFormValidator implements Validator {
-
-  private Validator validator;
-  private UtilController utilController;
-
-  public CompatibilityTestBackingFormValidator(Validator validator, UtilController utilController) {
-    super();
-    this.validator = validator;
-    this.utilController = utilController;
-  }
-
-  @SuppressWarnings("unchecked")
-  @Override
-  public boolean supports(Class<?> clazz) {
-    return Arrays.asList(CompatibilityTestBackingForm.class, CompatibilityTest.class, CompatibilityTestViewModel.class, CompatibilityTestBackingForm.class).contains(clazz);
-  }
+@org.springframework.stereotype.Component
+public class CompatibilityTestBackingFormValidator extends BaseValidator<CompatibilityTestBackingForm> {
+  
+  private static final Logger LOGGER = Logger.getLogger(CompatibilityTestBackingFormValidator.class);
+  
+  @Autowired
+  private RequestRepository requestRepository;
+  
+  @Autowired
+  private ComponentRepository componentRepository;
 
   @Override
-  public void validate(Object obj, Errors errors) {
-    if (obj == null || validator == null)
-      return;
-    ValidationUtils.invokeValidator(validator, obj, errors);
-    CompatibilityTestBackingForm form = (CompatibilityTestBackingForm) obj;
+  public void validateForm(CompatibilityTestBackingForm form, Errors errors) throws Exception {
     String crossmatchTestDate = form.getCompatibilityTestDate();
     if (!CustomDateFormatter.isDateTimeStringValid(crossmatchTestDate)) {
       errors.rejectValue("compatiblityTest.compatibilityTestDate", "dateFormat.incorrect",
@@ -50,33 +41,50 @@ public class CompatibilityTestBackingFormValidator implements Validator {
     String requestNumber = form.getRequestNumber();
     Request componentRequest = null;
     if (requestNumber != null && !requestNumber.isEmpty()) {
-      try {
-        componentRequest = utilController.findRequestByRequestNumber(requestNumber);
-        form.setForRequest(componentRequest);
-      } catch (NoResultException ex) {
-        form.setForRequest(null);
-        ex.printStackTrace();
-      }
-    } else {
-      form.setForRequest(null);
+      componentRequest = findRequestByRequestNumber(requestNumber);
     }
+    form.setForRequest(componentRequest);
 
     String donationIdentificationNumber = form.getDonationIdentificationNumber();
     if (StringUtils.isNotBlank(donationIdentificationNumber) && componentRequest != null) {
-      try {
-        Component testedComponent = utilController.findComponent(donationIdentificationNumber, componentRequest.getComponentType());
-        if (testedComponent == null)
-          errors.rejectValue("compatibilityTest.testedComponent", "compatibilitytest.testedComponent.notFound",
-              "Component with this donation identification number and component type not found or not available");
-        form.setTestedComponent(testedComponent);
-      } catch (NoResultException ex) {
-        form.setTestedComponent(null);
-        ex.printStackTrace();
-      }
+      Component testedComponent = findComponent(donationIdentificationNumber, componentRequest.getComponentType());
+      if (testedComponent == null)
+        errors.rejectValue("compatibilityTest.testedComponent", "compatibilitytest.testedComponent.notFound",
+            "Component with this donation identification number and component type not found or not available");
+      form.setTestedComponent(testedComponent);
     } else {
       form.setTestedComponent(null);
     }
 
-    utilController.commonFieldChecks(form, "compatibilityTest", errors);
+    commonFieldChecks(form, "compatibilityTest", errors);
+  }
+  
+  private Request findRequestByRequestNumber(String requestNumber) {
+    Request matchingRequest = null;
+    try {
+      matchingRequest = requestRepository.findRequestByRequestNumber(requestNumber);
+    } catch (NoResultException ex) {
+      LOGGER.warn("Could not find Request with requestNumber '" + requestNumber + "'.");
+    }
+    return matchingRequest;
+  }
+  
+  private Component findComponent(String donationIdentificationNumber, ComponentType componentType) {
+    Component matchingComponent = null;
+    try {
+      List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
+      for (Component component : components) {
+        if (component.getComponentType().equals(componentType)) {
+          if (matchingComponent != null && matchingComponent.getStatus().equals(ComponentStatus.AVAILABLE)) {
+            // multiple components available have the same component type - cannot identify uniquely
+            return null;
+          }
+          matchingComponent = component;
+        }
+      }
+    } catch (NoResultException ex) {
+      LOGGER.warn("Could not find Component with donationIdentificationNumber '" + donationIdentificationNumber + "'.");
+    }
+    return matchingComponent;
   }
 }

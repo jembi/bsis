@@ -6,12 +6,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import model.admin.DataType;
 import model.admin.EnumDataType;
 import model.admin.GeneralConfig;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -104,4 +104,39 @@ public class GeneralConfigAccessorServiceTests extends UnitTestSuite {
         assertThat(returnedIntValue, is(intValue));
     }
 
+    @Test
+    public void testGetGeneralConfigValueByName_shouldReturnCorrectValueAsString() {
+      // set up data
+      int intValue = 123;
+      DataType booleanDataType = aDataType().withDataType(EnumDataType.INTEGER.name()).build();
+      GeneralConfig generalConfig = aGeneralConfig()
+              .withDataType(booleanDataType)
+              .withValue(Integer.toString(intValue))
+              .build();
+      
+      // set up mocks
+      when(generalConfigRepository.getGeneralConfigByName("my.int")).thenReturn(generalConfig);
+      
+      // run tests
+      String value = generalConfigAccessorService.getGeneralConfigValueByName("my.int");
+      
+      // do asserts
+      Assert.assertNotNull("value was returned", value);
+      Assert.assertEquals("value is correct", "123",  value);
+    }
+    
+    @Test
+    public void testGetGeneralConfigValueByName_shouldReturnEmptyString() {
+      // set up data
+      
+      // set up mocks
+      when(generalConfigRepository.getGeneralConfigByName("unknown")).thenReturn(null);
+      
+      // run tests
+      String value = generalConfigAccessorService.getGeneralConfigValueByName("unknown");
+      
+      // do asserts
+      Assert.assertNotNull("value was returned", value);
+      Assert.assertEquals("value is correct", "",  value);
+    }
 }

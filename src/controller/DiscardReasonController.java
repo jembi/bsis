@@ -34,13 +34,16 @@ public class DiscardReasonController {
 
     @Autowired
     private UtilController utilController;
+    
+    @Autowired
+    DiscardReasonBackingFormValidator discardReasonBackingFormValidator;
 
     public DiscardReasonController() {
     }
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(new DiscardReasonBackingFormValidator(binder.getValidator(), utilController, discardReasonRepository));
+        binder.setValidator(discardReasonBackingFormValidator);
     }
 
     @RequestMapping(method=RequestMethod.GET)

@@ -40,12 +40,15 @@ public class PackTypeController {
 	  @Autowired
 	  private UtilController utilController;
 	  
+	  @Autowired
+	  private PackTypeBackingFormValidator packTypeBackingFormValidator;
+	  
 	  public PackTypeController() {
 	  }
 	  
 	  @InitBinder
 	  protected void initBinder(WebDataBinder binder) {
-	    binder.setValidator(new PackTypeBackingFormValidator(binder.getValidator(), utilController));
+	    binder.setValidator(packTypeBackingFormValidator);
 	  }
 
 	  	@RequestMapping(method=RequestMethod.GET)

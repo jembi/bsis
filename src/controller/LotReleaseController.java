@@ -50,14 +50,14 @@ public class LotReleaseController {
   private UtilController utilController;
   
   @Autowired
-  private AdverseEventBackingFormValidator adverseEventBackingFormValidator;
+  private DonationBackingFormValidator donationBackingFormValidator;
 
   public LotReleaseController() {
   }
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new DonationBackingFormValidator(utilController, adverseEventBackingFormValidator));
+    binder.setValidator(donationBackingFormValidator);
   }
   
   public static String getUrl(HttpServletRequest req) {

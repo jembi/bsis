@@ -1,47 +1,40 @@
 package backingform.validator;
 
-import backingform.DonationTypeBackingForm;
-import controller.UtilController;
 import model.donationtype.DonationType;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
-import org.springframework.validation.Validator;
+
 import repository.DonationTypeRepository;
-import viewmodel.DonationTypeViewModel;
-import javax.persistence.NonUniqueResultException;
-import java.util.Arrays;
+import backingform.DonationTypeBackingForm;
 
-public class DonationTypeBackingFormValidator implements Validator {
-
-    private Validator validator;
-    private UtilController utilController;
-    private DonationTypeRepository donationTypeRepository;
-
-    public DonationTypeBackingFormValidator(Validator validator, UtilController utilController,DonationTypeRepository donationTypeRepository) {
-        super();
-        this.validator = validator;
-        this.utilController = utilController;
-        this.donationTypeRepository=donationTypeRepository;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public boolean supports(Class<?> clazz) {
-        return Arrays.asList(DonationTypeBackingForm.class, DonationType.class, DonationTypeViewModel.class).contains(clazz);
-    }
+@Component
+public class DonationTypeBackingFormValidator extends BaseValidator<DonationTypeBackingForm> {
+  
+  @Autowired
+  private DonationTypeRepository donationTypeRepository;
 
     @Override
-    public void validate(Object obj, Errors errors) {
-
-        if (obj == null || validator == null)
-            return;
-
-        ValidationUtils.invokeValidator(validator, obj, errors);
-        DonationTypeBackingForm form = (DonationTypeBackingForm) obj;
-
-        if (utilController.isDuplicateDonationType(form.getDonationType())){
+    public void validateForm(DonationTypeBackingForm form, Errors errors) {
+        if (isDuplicateDonationType(form.getDonationType())){
             errors.rejectValue("type", "400",
                     "Donation type already exists.");
         }
     }
+    
+  private boolean isDuplicateDonationType(DonationType donationType) {
+    String type = donationType.getDonationType();
+    if (StringUtils.isBlank(type)) {
+      return false;
+    }
+
+    DonationType existingDonationType = donationTypeRepository.getDonationType(type);
+    if (existingDonationType != null && !existingDonationType.getId().equals(donationType.getId())) {
+      return true;
+    }
+
+    return false;
+  }
 }

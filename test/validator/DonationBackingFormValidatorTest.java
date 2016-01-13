@@ -28,11 +28,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
 
+import repository.DonationRepository;
 import backingform.DonationBackingForm;
 import backingform.validator.AdverseEventBackingFormValidator;
 import backingform.validator.DonationBackingFormValidator;
-import repository.DonationRepository;
-import controller.UtilController;
 
 /**
  * Test using DBUnit to test the Donation BackingForm Validator
@@ -47,12 +46,11 @@ public class DonationBackingFormValidatorTest {
 	DonationRepository donationRepository;
 	
 	@Autowired
-	private UtilController utilController;
-	
-	@Autowired
 	private AdverseEventBackingFormValidator adverseEventBackingFormValidator;
 	
 	private BindException errors;
+	
+	@Autowired
 	private DonationBackingFormValidator donationBackingFormValidator;
 
 	@Autowired
@@ -76,8 +74,6 @@ public class DonationBackingFormValidatorTest {
 		try {
 			IDataSet dataSet = getDataSet();
 			DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
-			donationBackingFormValidator = new DonationBackingFormValidator(utilController,
-			        adverseEventBackingFormValidator);
 		}
 		finally {
 			connection.close();
@@ -115,6 +111,7 @@ public class DonationBackingFormValidatorTest {
 		newDonation.setDonorWeight(new BigDecimal(80.0));
 		newDonation.setHaemoglobinCount(new BigDecimal(15.0));
 		DonationBackingForm donationBackingForm = new DonationBackingForm(newDonation);
+		donationBackingForm.setDonorNumber(newDonation.getDonorNumber());
 		
 		errors = new BindException(donationBackingForm, "donationBackingForm");
 		donationBackingFormValidator.validate(donationBackingForm, errors);
@@ -140,6 +137,7 @@ public class DonationBackingFormValidatorTest {
 		newDonation.setDonorWeight(new BigDecimal(20.0));
 		newDonation.setHaemoglobinCount(new BigDecimal(0.8));
 		DonationBackingForm donationBackingForm = new DonationBackingForm(newDonation);
+		donationBackingForm.setDonorNumber(newDonation.getDonorNumber());
 		
 		errors = new BindException(donationBackingForm, "donationBackingForm");
 		donationBackingFormValidator.validate(donationBackingForm, errors);
@@ -170,6 +168,7 @@ public class DonationBackingFormValidatorTest {
 		newDonation.setDonorWeight(new BigDecimal(400.0));
 		newDonation.setHaemoglobinCount(new BigDecimal(30.0));
 		DonationBackingForm donationBackingForm = new DonationBackingForm(newDonation);
+		donationBackingForm.setDonorNumber(newDonation.getDonorNumber());
 		
 		errors = new BindException(donationBackingForm, "donationBackingForm");
 		donationBackingFormValidator.validate(donationBackingForm, errors);

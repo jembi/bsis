@@ -40,15 +40,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import repository.ComponentRepository;
+import repository.ComponentStatusChangeReasonRepository;
 import repository.ComponentTypeRepository;
 import repository.DonationRepository;
-import repository.ComponentStatusChangeReasonRepository;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
+import viewmodel.ComponentStatusChangeViewModel;
 import viewmodel.ComponentTypeCombinationViewModel;
 import viewmodel.ComponentTypeViewModel;
 import viewmodel.ComponentViewModel;
-import viewmodel.ComponentStatusChangeViewModel;
 import backingform.ComponentCombinationBackingForm;
 import backingform.RecordComponentBackingForm;
 import backingform.validator.ComponentBackingFormValidator;
@@ -74,14 +74,14 @@ public class ComponentController {
   private ComponentTypeRepository componentTypeRepository;
   
   @Autowired
-  private UtilController utilController;
+  private ComponentBackingFormValidator componentBackingFormValidator;
   
   public ComponentController() {
   }
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new ComponentBackingFormValidator(binder.getValidator(), utilController));
+    binder.setValidator(componentBackingFormValidator);
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -360,8 +360,6 @@ public class ComponentController {
       //pagingParams.put("start", "0");
       //pagingParams.put("length", "10");
       pagingParams.put("sortDirection", "asc");
-      
-    //Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("component");
 
     List<Component> results = new ArrayList<Component>();
     List<ComponentStatus> status = Arrays.asList(ComponentStatus.values());

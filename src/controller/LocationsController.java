@@ -1,25 +1,33 @@
 package controller;
 
-import backingform.LocationBackingForm;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import backingform.validator.LocationBackingFormValidator;
 import model.location.Location;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import repository.LocationRepository;
 import utils.PermissionConstants;
 import viewmodel.LocationViewModel;
+import backingform.LocationBackingForm;
+import backingform.validator.LocationBackingFormValidator;
 
 @RestController
 @RequestMapping("locations")
@@ -30,11 +38,14 @@ public class LocationsController {
 
     @Autowired
     private UtilController utilController;
+    
+    @Autowired
+    private LocationBackingFormValidator locationBackingFormValidator;
 
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(new LocationBackingFormValidator(binder.getValidator(), utilController));
+        binder.setValidator(locationBackingFormValidator);
     }
 
   public static String getUrl(HttpServletRequest req) {

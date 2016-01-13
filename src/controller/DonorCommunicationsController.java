@@ -6,10 +6,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
+
 import model.donor.Donor;
 import model.location.Location;
 import model.util.BloodGroup;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,8 +23,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import repository.DonorCommunicationsRepository;
 import repository.LocationRepository;
+import service.FormFieldAccessorService;
 import utils.PermissionConstants;
 import viewmodel.DonorViewModel;
 
@@ -37,7 +42,7 @@ public class DonorCommunicationsController {
     private DonorCommunicationsRepository donorCommunicationsRepository;
 
     @Autowired
-    private UtilController utilController;
+    private FormFieldAccessorService formFieldAccessorService;
 
     @Autowired
     private LocationRepository locationRepository;
@@ -61,7 +66,7 @@ public class DonorCommunicationsController {
         Map<String, Object> map = new HashMap<String, Object>();
 
         // to ensure custom field names are displayed in the form
-        map.put("donorFields", utilController.getFormFieldsForForm("donor"));
+        map.put("donorFields", formFieldAccessorService.getFormFieldsForForm("donor"));
         addEditSelectorOptions(map);
        // map.put("donorCommunicationsForm", dbform);
         return map;

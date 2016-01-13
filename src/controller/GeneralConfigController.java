@@ -1,31 +1,33 @@
 package controller;
 
-import backingform.GeneralConfigBackingForm;
-import backingform.validator.GeneralConfigBackingFormValidator;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
+
 import model.admin.GeneralConfig;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import repository.DataTypeRepository;
 import repository.GeneralConfigRepository;
+import utils.LoggerUtil;
 import utils.PermissionConstants;
 import viewmodel.GeneralConfigViewModel;
-
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
-
-import utils.LoggerUtil;
+import backingform.GeneralConfigBackingForm;
+import backingform.validator.GeneralConfigBackingFormValidator;
 
 
 @RestController
@@ -40,10 +42,13 @@ public class GeneralConfigController {
 
     @Autowired
     private UtilController utilController;
+    
+    @Autowired
+    private GeneralConfigBackingFormValidator generalConfigBackingFormValidator;
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(new GeneralConfigBackingFormValidator(binder.getValidator(), configRepository, utilController, dataTypeRepository));
+        binder.setValidator(generalConfigBackingFormValidator);
     }
 
     @RequestMapping(method = RequestMethod.GET)

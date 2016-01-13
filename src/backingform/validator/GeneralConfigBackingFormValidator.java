@@ -1,48 +1,29 @@
 package backingform.validator;
 
-import backingform.GeneralConfigBackingForm;
-import controller.UtilController;
 import model.admin.DataType;
 import model.admin.EnumDataType;
 import model.admin.GeneralConfig;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
+
 import repository.DataTypeRepository;
 import repository.GeneralConfigRepository;
+import backingform.GeneralConfigBackingForm;
 
-import java.util.Arrays;
+@Component
+public class GeneralConfigBackingFormValidator extends BaseValidator<GeneralConfigBackingForm> {
+  
+  @Autowired
+  private GeneralConfigRepository generalConfigRepository;
 
-
-public class GeneralConfigBackingFormValidator implements Validator {
-
-    private Validator validator;
-
-    private GeneralConfigRepository configRepository;
-
-    private UtilController utilController;
-
-    private DataTypeRepository dataTypeRepository;
-
-    public GeneralConfigBackingFormValidator(Validator validator, GeneralConfigRepository configRepository, UtilController utilController, DataTypeRepository dataTypeRepository) {
-        super();
-        this.validator = validator;
-        this.configRepository = configRepository;
-        this.utilController = utilController;
-        this.dataTypeRepository = dataTypeRepository;
-    }
+  @Autowired
+  private DataTypeRepository dataTypeRepository;
 
     @Override
-    public boolean supports(Class<?> clazz) {
-        return Arrays.asList(GeneralConfigBackingForm.class,
-                GeneralConfig.class, String.class).contains(clazz);
-    }
-
-    @Override
-    public void validate(Object target, Errors errors) {
-        if (target == null || validator == null) {
-            return;
-        }
-        GeneralConfigBackingForm formItem = (GeneralConfigBackingForm) target;
+    public void validateForm(GeneralConfigBackingForm formItem, Errors errors) {
         DataType dataType = dataTypeRepository.getDataTypeByid(formItem.getDataType().getId());
 
         EnumDataType enumDataType = EnumDataType.valueOf(dataType.getDatatype().toUpperCase());
@@ -73,9 +54,23 @@ public class GeneralConfigBackingFormValidator implements Validator {
         generalConfig.setDescription(formItem.getDescription());
         generalConfig.setDataType(dataType);
 
-        if (utilController.isDuplicateGeneralConfigName(generalConfig))
+        if (isDuplicateGeneralConfigName(generalConfig))
             errors.rejectValue("name", "400", "Configuration name already exists.");
 
         formItem.setGeneralConfig(generalConfig);
     }
+    
+  private boolean isDuplicateGeneralConfigName(GeneralConfig config) {
+    String configName = config.getName();
+    if (StringUtils.isBlank(configName)) {
+      return false;
+    }
+
+    GeneralConfig existingConfig = generalConfigRepository.getGeneralConfigByName(configName);
+    if (existingConfig != null && !existingConfig.getId().equals(config.getId())) {
+      return true;
+    }
+
+    return false;
+  }
 }

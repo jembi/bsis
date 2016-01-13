@@ -34,6 +34,7 @@ import repository.GenericConfigRepository;
 import repository.LocationRepository;
 import repository.RequestRepository;
 import repository.RequestTypeRepository;
+import service.FormFieldAccessorService;
 import utils.PermissionConstants;
 import viewmodel.ComponentViewModel;
 import viewmodel.MatchingComponentViewModel;
@@ -64,14 +65,17 @@ public class RequestsController {
   private GenericConfigRepository genericConfigRepository;
 
   @Autowired
-  private UtilController utilController;
+  private FormFieldAccessorService formFieldAccessorService;
+  
+  @Autowired
+  private RequestBackingFormValidator requestBackingFormValidator;
 
   public RequestsController() {
   }
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new RequestBackingFormValidator(binder.getValidator(), utilController));
+    binder.setValidator(requestBackingFormValidator);
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -130,7 +134,7 @@ public class RequestsController {
       pagingParams.put("sortDirection", "asc");
       
       int sortColumnId = (Integer) pagingParams.get("sortColumnId");
-      Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("request");
+      Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("request");
       pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
 
@@ -282,7 +286,7 @@ public class RequestsController {
     List<ComponentViewModel> issuedComponentViewModels = null;
     issuedComponentViewModels = ComponentController.getComponentViewModels(issuedComponents);
     map.put("issuedComponents", issuedComponentViewModels);
-    map.put("componentTypeFields", utilController.getFormFieldsForForm("ComponentType"));
+    map.put("componentTypeFields", formFieldAccessorService.getFormFieldsForForm("ComponentType"));
     return map;
   }
   
@@ -324,7 +328,7 @@ public class RequestsController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("requestId", id);
     List<MatchingComponentViewModel> components = componentRepository.findMatchingComponentsForRequest(id);
-    map.put("compatibilityTestFields", utilController.getFormFieldsForForm("CompatibilityTest"));
+    map.put("compatibilityTestFields", formFieldAccessorService.getFormFieldsForForm("CompatibilityTest"));
     map.put("allComponents", components);
     map.put("labProperties", genericConfigRepository.getConfigProperties("labsetup"));
     return map;

@@ -1,41 +1,25 @@
 package backingform.validator;
 
-import java.util.Arrays;
-
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DurationType;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
-import viewmodel.DeferralReasonViewModel;
+import repository.DeferralReasonRepository;
 import backingform.DeferralReasonBackingForm;
-import controller.UtilController;
 
-public class DeferralReasonBackingFormValidator implements Validator {
-
-    private UtilController utilController;
-
-    public DeferralReasonBackingFormValidator(UtilController utilController) {
-        super();
-        this.utilController = utilController;
-    }
+@Component
+public class DeferralReasonBackingFormValidator extends BaseValidator<DeferralReasonBackingForm> {
+  
+  @Autowired
+  private DeferralReasonRepository deferralReasonRepository;
 
     @Override
-    public boolean supports(Class<?> clazz) {
-        return Arrays.asList(DeferralReasonBackingForm.class, DeferralReason.class, DeferralReasonViewModel.class).contains(clazz);
-    }
-
-    @Override
-    public void validate(Object obj, Errors errors) {
-
-        if (obj == null) {
-            return;
-        }
-
-        DeferralReasonBackingForm form = (DeferralReasonBackingForm) obj;
-
-        if (utilController.isDuplicateDeferralReason(form.getDeferralReason())) {
+    public void validateForm(DeferralReasonBackingForm form, Errors errors) {
+        if (isDuplicateDeferralReason(form.getDeferralReason())) {
             errors.rejectValue("reason", "400", "Deferral Reason already exists.");
         }
         
@@ -44,4 +28,19 @@ public class DeferralReasonBackingFormValidator implements Validator {
             errors.rejectValue("defaultDuration", "400", "Default duration must be a positive number of days");
         }
     }
+    
+
+  private boolean isDuplicateDeferralReason(DeferralReason deferralReason) {
+    String reason = deferralReason.getReason();
+    if (StringUtils.isBlank(reason)) {
+      return false;
+    }
+
+    DeferralReason existingDeferralReason = deferralReasonRepository.findDeferralReason(reason);
+    if (existingDeferralReason != null && !existingDeferralReason.getId().equals(deferralReason.getId())) {
+      return true;
+    }
+
+    return false;
+  }
 }
