@@ -31,9 +31,6 @@ import viewmodel.RoleViewModel;
 public class RoleController {
 
 	@Autowired
-	private UtilController utilController;
-
-	@Autowired
 	private RoleRepository roleRepository;
 	
 	@Autowired

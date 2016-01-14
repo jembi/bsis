@@ -22,7 +22,7 @@ public class AdminControllerTest {
 
     //Controller that is being tested.
     @InjectMocks
-    private UtilController adminController;
+    private AdminController adminController;
     
 	@Ignore @Test
 	public void exampleTest() {

@@ -1,15 +1,18 @@
 package controller;
 
-import com.mangofactory.swagger.annotations.ApiIgnore;
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+
 import repository.GenericConfigRepository;
 import repository.LoginRepository;
+
+import com.mangofactory.swagger.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("login")
@@ -35,8 +38,6 @@ public class LoginController {
   @ApiIgnore
   public ModelAndView welcomePage(HttpServletRequest request) {
     ModelAndView mv = new ModelAndView("welcomePage");
-    // for showing the version number on the home page. see welcomePage.jsp and topPanel.jsp.
-    mv.addObject("versionNumber", UtilController.VERSION_NUMBER);
     mv.addObject("labsetup", genericConfigRepository.getConfigProperties("labsetup"));
     return mv;
   }
