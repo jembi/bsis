@@ -39,9 +39,6 @@ public class GeneralConfigController {
 
     @Autowired
     private DataTypeRepository dataTypeRepository;
-
-    @Autowired
-    private UtilController utilController;
     
     @Autowired
     private GeneralConfigBackingFormValidator generalConfigBackingFormValidator;

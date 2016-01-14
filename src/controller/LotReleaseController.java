@@ -44,10 +44,6 @@ public class LotReleaseController {
   
   @Autowired
   private ComponentRepository componentRepository;
-
-
-  @Autowired
-  private UtilController utilController;
   
   @Autowired
   private DonationBackingFormValidator donationBackingFormValidator;

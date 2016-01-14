@@ -31,9 +31,6 @@ public class DiscardReasonController {
 
     @Autowired
     DiscardReasonRepository discardReasonRepository;
-
-    @Autowired
-    private UtilController utilController;
     
     @Autowired
     DiscardReasonBackingFormValidator discardReasonBackingFormValidator;

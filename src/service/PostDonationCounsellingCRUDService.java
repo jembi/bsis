@@ -2,7 +2,6 @@ package service;
 
 import java.util.Date;
 
-import controller.UtilController;
 import model.counselling.CounsellingStatus;
 import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
@@ -10,9 +9,10 @@ import model.donation.Donation;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
+
 import repository.PostDonationCounsellingRepository;
+import utils.SecurityUtils;
 
 @Service
 @Transactional
@@ -23,9 +23,6 @@ public class PostDonationCounsellingCRUDService {
 
     @Autowired
     private PostDonationCounsellingRepository postDonationCounsellingRepository;
-
-    @Autowired
-    private UtilController utilController;
 
     @Autowired
     private DateGeneratorService dateGeneratorService;
@@ -48,10 +45,10 @@ public class PostDonationCounsellingCRUDService {
         postDonationCounselling.setDonation(donation);
         postDonationCounselling.setFlaggedForCounselling(Boolean.TRUE);
         postDonationCounselling.setIsDeleted(Boolean.FALSE);
-        postDonationCounselling.setCreatedBy(utilController.getCurrentUser());
+        postDonationCounselling.setCreatedBy(SecurityUtils.getCurrentUser());
         postDonationCounselling.setCreatedDate(dateGeneratorService.generateDate());
         postDonationCounselling.setLastUpdated(dateGeneratorService.generateDate());
-        postDonationCounselling.setLastUpdatedBy(utilController.getCurrentUser());
+        postDonationCounselling.setLastUpdatedBy(SecurityUtils.getCurrentUser());
         postDonationCounsellingRepository.save(postDonationCounselling);
         return postDonationCounselling;
     }
@@ -70,7 +67,7 @@ public class PostDonationCounsellingCRUDService {
         postDonationCounselling.setCounsellingDate(counsellingDate);
         postDonationCounselling.getDonation().setNotes(notes);
         postDonationCounselling.setLastUpdated(dateGeneratorService.generateDate());
-        postDonationCounselling.setLastUpdatedBy(utilController.getCurrentUser());
+        postDonationCounselling.setLastUpdatedBy(SecurityUtils.getCurrentUser());
         postDonationCounselling.setIsDeleted(Boolean.FALSE);
         return postDonationCounsellingRepository.update(postDonationCounselling);
     }
@@ -83,7 +80,7 @@ public class PostDonationCounsellingCRUDService {
         postDonationCounselling.getDonation().setNotes(null);
         postDonationCounselling.setIsDeleted(Boolean.FALSE);
         postDonationCounselling.setLastUpdated(dateGeneratorService.generateDate());
-        postDonationCounselling.setLastUpdatedBy(utilController.getCurrentUser());
+        postDonationCounselling.setLastUpdatedBy(SecurityUtils.getCurrentUser());
         return postDonationCounsellingRepository.update(postDonationCounselling);
     }
 }

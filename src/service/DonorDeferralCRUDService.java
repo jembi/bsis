@@ -2,22 +2,26 @@ package service;
 
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
+
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DeferralReasonType;
 import model.donordeferral.DonorDeferral;
 import model.donordeferral.DurationType;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import repository.DeferralReasonRepository;
 import repository.DonorDeferralRepository;
-import controller.UtilController;
+import utils.SecurityUtils;
 
 @Transactional
 @Service
@@ -33,13 +37,8 @@ public class DonorDeferralCRUDService {
     private DeferralReasonRepository deferralReasonRepository;
     @Autowired
     private DateGeneratorService dateGeneratorService;
-    
-
     @Autowired
     DeferralConstraintChecker deferralConstraintChecker;
-    
-    @Autowired
-    private UtilController utilController;
     
     public DonorDeferral createDeferralForDonorWithDeferralReasonType(Donor donor, DeferralReasonType deferralReasonType)
             throws NoResultException, NonUniqueResultException {
@@ -95,7 +94,7 @@ public class DonorDeferralCRUDService {
 		}
 		donorDeferral.setIsVoided(Boolean.TRUE);
 		donorDeferral.setVoidedDate(new Date());
-		donorDeferral.setVoidedBy(utilController.getCurrentUser());
+		donorDeferral.setVoidedBy(SecurityUtils.getCurrentUser());
 		donorDeferralRepository.update(donorDeferral);
 	}
 	

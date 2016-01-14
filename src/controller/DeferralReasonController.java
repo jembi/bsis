@@ -40,9 +40,6 @@ public class DeferralReasonController {
     @Autowired
     DeferralReasonBackingFormValidator deferralReasonBackingFormValidator;
 
-    @Autowired
-    private UtilController utilController;
-
     public DeferralReasonController() {
     }
 

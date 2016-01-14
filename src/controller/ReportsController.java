@@ -52,9 +52,6 @@ public class ReportsController {
   private RequestRepository requestRepository;
 
   @Autowired
-  private UtilController utilController;
-
-  @Autowired
   private BloodTestingRepository bloodTestingRepository;
   
   @Autowired

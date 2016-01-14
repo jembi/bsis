@@ -50,15 +50,13 @@ import org.springframework.util.CollectionUtils;
 
 import repository.bloodtesting.BloodTypingStatus;
 import service.DonationConstraintChecker;
-import service.DonorConstraintChecker;
 import utils.CustomDateFormatter;
+import utils.SecurityUtils;
 import viewmodel.DonationViewModel;
 import viewmodel.MatchingComponentViewModel;
 import backingform.ComponentCombinationBackingForm;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import controller.UtilController;
 
 @Repository
 @Transactional
@@ -75,9 +73,6 @@ public class ComponentRepository {
 
   @Autowired
   private RequestRepository requestRepository;
-
-  @Autowired
-  private UtilController utilController;
   
   @Autowired
   private DonationConstraintChecker donationConstraintChecker;
@@ -610,7 +605,7 @@ public class ComponentRepository {
     statusChange.setStatusChangedOn(new Date());
     statusChange.setStatusChangeReason(discardReason);
     statusChange.setStatusChangeReasonText(discardReasonText);
-    statusChange.setChangedBy(utilController.getCurrentUser());
+    statusChange.setChangedBy(SecurityUtils.getCurrentUser());
     if (existingComponent.getStatusChanges() == null)
       existingComponent.setStatusChanges(new ArrayList<ComponentStatusChange>());
     existingComponent.getStatusChanges().add(statusChange);
@@ -838,7 +833,7 @@ public class ComponentRepository {
     statusChange.setStatusChangeReason(returnReason);
     statusChange.setNewStatus(existingComponent.getStatus());
     statusChange.setStatusChangeReasonText(returnReasonText);
-    statusChange.setChangedBy(utilController.getCurrentUser());
+    statusChange.setChangedBy(SecurityUtils.getCurrentUser());
     if (existingComponent.getStatusChanges() == null)
       existingComponent.setStatusChanges(new ArrayList<ComponentStatusChange>());
     existingComponent.getStatusChanges().add(statusChange);
@@ -943,7 +938,7 @@ public class ComponentRepository {
     // expect only one component status change reason
     statusChange.setStatusChangeReason(componentStatusChangeReasons.get(0));
     statusChange.setStatusChangeReasonText("");
-    statusChange.setChangedBy(utilController.getCurrentUser());
+    statusChange.setChangedBy(SecurityUtils.getCurrentUser());
     if (component.getStatusChanges() == null)
       component.setStatusChanges(new ArrayList<ComponentStatusChange>());
     component.getStatusChanges().add(statusChange);

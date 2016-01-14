@@ -3,13 +3,14 @@
  */
 package controller;
 
-import static org.junit.Assert.*;
-import org.springframework.mock.web.*;
-import org.springframework.test.web.servlet.MockMvc;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Ignore;
+import org.junit.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.web.servlet.MockMvc;
 
 public class AdminControllerTest {
 	
@@ -21,7 +22,7 @@ public class AdminControllerTest {
 
     //Controller that is being tested.
     @InjectMocks
-    private AdminController adminController;
+    private UtilController adminController;
     
 	@Ignore @Test
 	public void exampleTest() {

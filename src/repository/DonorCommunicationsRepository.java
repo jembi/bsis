@@ -33,8 +33,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import controller.UtilController;
-
 @Repository
 @Transactional
 public class DonorCommunicationsRepository {
@@ -46,9 +44,6 @@ private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsReposit
     
   @PersistenceContext
   private EntityManager em;
-
-  @Autowired
-  private UtilController utilController;
   			
   public List<Donor> findDonors(
     		List<Location> venue, String clinicDate,

@@ -35,9 +35,6 @@ public class LocationsController {
 
   @Autowired
   private LocationRepository locationRepository;
-
-    @Autowired
-    private UtilController utilController;
     
     @Autowired
     private LocationBackingFormValidator locationBackingFormValidator;

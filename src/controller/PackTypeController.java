@@ -38,9 +38,6 @@ public class PackTypeController {
 	  PackTypeRepository packTypeRepository;
 	  
 	  @Autowired
-	  private UtilController utilController;
-	  
-	  @Autowired
 	  private PackTypeBackingFormValidator packTypeBackingFormValidator;
 	  
 	  public PackTypeController() {
