@@ -23,58 +23,60 @@ import java.util.Objects;
 @Transactional
 @Service
 public class DonationCRUDService {
+    
+    @Autowired
+    private DonationRepository donationRepository;
+    @Autowired
+    private DonationConstraintChecker donationConstraintChecker;
+    @Autowired
+    private DonorCRUDService donorCRUDService;
+    @Autowired
+    private DonorRepository donorRepository;
+    @Autowired
+    private DonationBatchRepository donationBatchRepository;
+    @Autowired
+    private ComponentCRUDService componentCRUDService;
+    @Autowired
+    private PackTypeRepository packTypeRepository;
+    @Autowired
+    private DonorConstraintChecker donorConstraintChecker;
+    @Autowired
+    private DonorService donorService;
+    @Autowired
+    private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
 
-  @Autowired
-  private DonationRepository donationRepository;
-  @Autowired
-  private DonationConstraintChecker donationConstraintChecker;
-  @Autowired
-  private DonorCRUDService donorCRUDService;
-  @Autowired
-  private DonorRepository donorRepository;
-  @Autowired
-  private DonationBatchRepository donationBatchRepository;
-  @Autowired
-  private ComponentCRUDService componentCRUDService;
-  @Autowired
-  private PackTypeRepository packTypeRepository;
-  @Autowired
-  private DonorConstraintChecker donorConstraintChecker;
-  @Autowired
-  private DonorService donorService;
-
-  public void deleteDonation(long donationId) throws IllegalStateException, NoResultException {
-
-    if (!donationConstraintChecker.canDeleteDonation(donationId)) {
-      throw new IllegalStateException("Cannot delete donation with constraints");
+    public void deleteDonation(long donationId) throws IllegalStateException, NoResultException {
+        
+        if (!donationConstraintChecker.canDeleteDonation(donationId)) {
+            throw new IllegalStateException("Cannot delete donation with constraints");
+        }
+        
+        // Soft delete donation
+        Donation donation = donationRepository.findDonationById(donationId);
+        donation.setIsDeleted(true);
+        donationRepository.updateDonation(donation);
+        
+        Date donationDate = donation.getDonationDate();
+        Donor donor = donation.getDonor();
+        
+        // If this was the donor's first donation
+        if (donationDate.equals(donor.getDateOfFirstDonation())) {
+            Date dateOfFirstDonation = donationRepository.findDateOfFirstDonationForDonor(donor.getId());
+            donor.setDateOfFirstDonation(dateOfFirstDonation);
+            donorRepository.updateDonor(donor);
+        }
+        
+        // If this was the donor's last donation
+        if (donationDate.equals(donor.getDateOfLastDonation())) {
+            Date dateOfLastDonation = donationRepository.findDateOfLastDonationForDonor(donor.getId());
+            donor.setDateOfLastDonation(dateOfLastDonation);
+            donorRepository.updateDonor(donor);
+        }
+        
+        donorService.setDonorDueToDonate(donor);
     }
-
-    // Soft delete donation
-    Donation donation = donationRepository.findDonationById(donationId);
-    donation.setIsDeleted(true);
-    donationRepository.updateDonation(donation);
-
-    Date donationDate = donation.getDonationDate();
-    Donor donor = donation.getDonor();
-
-    // If this was the donor's first donation
-    if (donationDate.equals(donor.getDateOfFirstDonation())) {
-      Date dateOfFirstDonation = donationRepository.findDateOfFirstDonationForDonor(donor.getId());
-      donor.setDateOfFirstDonation(dateOfFirstDonation);
-      donorRepository.updateDonor(donor);
-    }
-
-    // If this was the donor's last donation
-    if (donationDate.equals(donor.getDateOfLastDonation())) {
-      Date dateOfLastDonation = donationRepository.findDateOfLastDonationForDonor(donor.getId());
-      donor.setDateOfLastDonation(dateOfLastDonation);
-      donorRepository.updateDonor(donor);
-    }
-
-    donorService.setDonorDueToDonate(donor);
-  }
-
-  public Donation createDonation(DonationBackingForm donationBackingForm) {
+    
+    public Donation createDonation(DonationBackingForm donationBackingForm) {
 
     Donation donation = donationBackingForm.getDonation();
     PackType packType = packTypeRepository.getPackTypeById(donation.getPackType().getId());
@@ -101,6 +103,8 @@ public class DonationCRUDService {
         
         if (discardComponents) {
             componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
+            //Also flag for counselling
+            postDonationCounsellingCRUDService.createPostDonationCounsellingForDonation(donation);
         }
         
         return donation;

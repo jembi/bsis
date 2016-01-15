@@ -51,7 +51,7 @@ public abstract class BaseEntity implements Serializable {
       return false;
     }
 
-    if (!(obj instanceof BaseEntity)) {
+    if (!(obj.getClass().equals(getClass()))) {
       // This entity has a different type
       return false;
     }

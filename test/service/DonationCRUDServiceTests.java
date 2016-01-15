@@ -8,6 +8,7 @@ import static helpers.builders.DonationBackingFormBuilder.aDonationBackingForm;
 import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
+import static helpers.builders.PostDonationCounsellingBuilder.aPostDonationCounselling;
 import static helpers.builders.PackTypeBuilder.aPackType;
 import static helpers.matchers.DonationMatcher.hasSameStateAsDonation;
 import static helpers.matchers.DonorMatcher.hasSameStateAsDonor;
@@ -20,6 +21,7 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.util.Date;
 import model.adverseevent.AdverseEvent;
+import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
 import model.donationbatch.DonationBatch;
@@ -65,7 +67,9 @@ public class DonationCRUDServiceTests {
     private DonorConstraintChecker donorConstraintChecker;
     @Mock
     private DonorService donorService;
-    
+    @Mock
+    PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
+
     @Test(expected = IllegalStateException.class)
     public void testDeleteDonationWithConstraints_shouldThrow() {
         
@@ -215,7 +219,7 @@ public class DonationCRUDServiceTests {
         // Set up fixture
         Integer irrelevantDonorPulse = 80;
         BigDecimal irrelevantHaemoglobinCount = new BigDecimal(2);
-        HaemoglobinLevel irrelevantHaemoglobinLevel = HaemoglobinLevel.LOW;
+        HaemoglobinLevel irrelevantHaemoglobinLevel = HaemoglobinLevel.FAIL;
         Integer irrelevantBloodPressureSystolic = 120;
         Integer irrelevantBloodPressureDiastolic = 80;
         BigDecimal irrelevantDonorWeight = new BigDecimal(65);
@@ -386,6 +390,8 @@ public class DonationCRUDServiceTests {
                 .withDonationBatchNumber(donationBatchNumber)
                 .withPackType(aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build())
                 .build();
+
+        
         
         DonationBatch donationBatch = aDonationBatch().thatIsBackEntry().build();
         
@@ -399,6 +405,7 @@ public class DonationCRUDServiceTests {
         
         verify(donationRepository).addDonation(donation);
         verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafe(donation);
+        verify(postDonationCounsellingCRUDService).createPostDonationCounsellingForDonation(donation);
         assertThat(returnedDonation, is(donation));
     }
 

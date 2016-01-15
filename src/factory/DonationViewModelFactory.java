@@ -32,7 +32,7 @@ public class DonationViewModelFactory {
     }
 
     public DonationViewModel createDonationViewModelWithPermissions(Donation donation) {
-        DonationViewModel donationViewModel = new DonationViewModel(donation);
+        DonationViewModel donationViewModel = createDonationViewModelWithoutPermissions(donation);
 
         boolean canDonate = !donorConstraintChecker.isDonorDeferred(donation.getDonor().getId());
         boolean isBackEntry = donation.getDonationBatch().isBackEntry();
@@ -44,14 +44,20 @@ public class DonationViewModelFactory {
         permissions.put("canDonate", canDonate);
         permissions.put("isBackEntry", isBackEntry);
         donationViewModel.setPermissions(permissions);
-        
-        if (donation.getAdverseEvent() != null) {
-            AdverseEventViewModel adverseEventViewModel = adverseEventViewModelFactory.createAdverseEventViewModel(
-                    donation.getAdverseEvent());
-            donationViewModel.setAdverseEvent(adverseEventViewModel);
-        }
-        
+
         return donationViewModel;
     }
+
+  public DonationViewModel createDonationViewModelWithoutPermissions(Donation donation) {
+    DonationViewModel donationViewModel = new DonationViewModel(donation);
+
+    if (donation.getAdverseEvent() != null) {
+      AdverseEventViewModel adverseEventViewModel =
+          adverseEventViewModelFactory.createAdverseEventViewModel(donation.getAdverseEvent());
+      donationViewModel.setAdverseEvent(adverseEventViewModel);
+    }
+
+    return donationViewModel;
+  }
 
 }

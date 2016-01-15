@@ -102,8 +102,9 @@ public class DonorController {
 
     Boolean isCurrentlyDeferred = donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor);
     map.put("isDonorCurrentlyDeferred", isCurrentlyDeferred);
-    if (isCurrentlyDeferred) {
-      map.put("donorLatestDeferredUntilDate", donorRepository.getLastDonorDeferralDate(id));
+    if(isCurrentlyDeferred){
+    	map.put("donorLatestDeferredUntilDate", donorRepository.getLastDonorDeferralDate(id));
+      map.put("donorLatestDeferral", donorRepository.getLastDonorDeferral(id));
     }
 
     return new ResponseEntity<>(map, HttpStatus.OK);
@@ -127,22 +128,24 @@ public class DonorController {
     map.put("currentlyDeferred", donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor));
     map.put("flaggedForCounselling", flaggedForCounselling);
     map.put("hasCounselling", hasCounselling);
-    map.put("deferredUntil", CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
-    map.put("canDelete", donorConstraintChecker.canDeleteDonor(id));
-    map.put("isEligible", donorConstraintChecker.isDonorEligibleToDonate(id));
-    map.put("birthDate", CustomDateFormatter.getDateString(donor.getBirthDate()));
-    if (donations.size() > 0) {
-      map.put("lastDonation", getDonationViewModel(donations.get(donations.size() - 1)));
-      map.put("dateOfFirstDonation", CustomDateFormatter.getDateString(donations.get(0).getDonationDate()));
-      map.put("totalDonations", getNumberOfDonations(donations));
-      map.put("dueToDonate", CustomDateFormatter.getDateString(donor.getDueToDonate()));
-      map.put("totalAdverseEvents", adverseEventRepository.countAdverseEventsForDonor(donor));
-    } else {
-      map.put("lastDonation", "");
-      map.put("dateOfFirstDonation", "");
-      map.put("totalDonations", 0);
-      map.put("dueToDonate", "");
-      map.put("totalAdverseEvents", 0);
+    map.put("deferredUntil",CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
+    map.put("deferral", donorRepository.getLastDonorDeferral(id));
+	map.put("canDelete", donorConstraintChecker.canDeleteDonor(id));
+	map.put("isEligible", donorConstraintChecker.isDonorEligibleToDonate(id));
+	map.put("birthDate", CustomDateFormatter.getDateString(donor.getBirthDate()));
+    if(donations.size() > 0){
+	    map.put("lastDonation", getDonationViewModel(donations.get(donations.size()-1)));
+	    map.put("dateOfFirstDonation",CustomDateFormatter.getDateString(donations.get(0).getDonationDate()));
+	    map.put("totalDonations",getNumberOfDonations(donations));
+	    map.put("dueToDonate",CustomDateFormatter.getDateString(donor.getDueToDonate()));
+	    map.put("totalAdverseEvents", adverseEventRepository.countAdverseEventsForDonor(donor));
+    }
+    else {
+    	map.put("lastDonation", "");
+	    map.put("dateOfFirstDonation","");
+	    map.put("totalDonations",0);
+	    map.put("dueToDonate","");
+	    map.put("totalAdverseEvents", 0);
     }
     return new ResponseEntity<>(map, HttpStatus.OK);
   }

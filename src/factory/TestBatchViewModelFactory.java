@@ -65,15 +65,15 @@ public class TestBatchViewModelFactory {
     testBatchViewModel.setLastUpdated(testBatch.getLastUpdated());
     testBatchViewModel.setNotes(testBatch.getNotes());
 
-    // Add all donation batch view models
-    List<DonationBatchViewModel> donationBatchViewModels = new ArrayList<>();
-    if (testBatch.getDonationBatches() != null) {
-      for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-        donationBatchViewModels.add(donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch,
-                true));
-      }
-    }
-    testBatchViewModel.setDonationBatches(donationBatchViewModels);
+        // Add all donation batch view models
+        List<DonationBatchViewModel> donationBatchViewModels = new ArrayList<>();
+        if (testBatch.getDonationBatches() != null) {
+            for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
+                donationBatchViewModels.add(donationBatchViewModelFactory.createDonationBatchViewModelWithoutDonationPermissions(donationBatch,
+                        true));
+            }
+        }
+        testBatchViewModel.setDonationBatches(donationBatchViewModels);
 
     return testBatchViewModel;
   }
