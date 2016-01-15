@@ -183,7 +183,7 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-//	@Ignore("Bug - error in HQL: could not resolve property: type of: model.component.Component [SELECT p FROM model.component.Component p where p.type = :componentType and p.abo= :abo and p.rhd= :rhd and p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.createdOn > :minDate]")
+	@Ignore("Bug - error in HQL: could not resolve property: type of: model.component.Component [SELECT p FROM model.component.Component p where p.type = :componentType and p.abo= :abo and p.rhd= :rhd and p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.createdOn > :minDate]")
 	public void testGetAllUnissuedThirtyFiveDayComponentsWithParameters() throws Exception {
 		List<Component> all = componentRepository.getAllUnissuedThirtyFiveDayComponents("PROCESSED", "A", "+");
 		Assert.assertNotNull("There are Components", all);
@@ -191,7 +191,7 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-//	@Ignore("There appears to be a bug in the HQL: could not resolve property: type of: model.component.Component")
+	@Ignore("There appears to be a bug in the HQL: could not resolve property: type of: model.component.Component")
 	public void testGetAllComponentsWithComponentTypeQUARANTINED() throws Exception {
 		List<Component> all = componentRepository.getAllComponents("QUARANTINED");
 		Assert.assertNotNull("There are Components", all);
@@ -199,7 +199,7 @@ public class ComponentRepositoryTest {
 	}
 	
 	@Test
-//	@Ignore("There appears to be a bug in the HQL: could not resolve property: type of: model.component.Component")
+	@Ignore("There appears to be a bug in the HQL: could not resolve property: type of: model.component.Component")
 	public void testGetAllComponentsWithComponentTypeEXPIRED() throws Exception {
 		List<Component> all = componentRepository.getAllComponents("EXPIRED");
 		Assert.assertNotNull("There are Components", all);
