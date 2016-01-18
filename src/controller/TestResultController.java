@@ -32,6 +32,8 @@ import repository.TestBatchRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
+import scala.collection.parallel.ParSeqLike.Updated;
+import service.BloodTestsService;
 import service.TestBatchStatusChangeService;
 import utils.PermissionConstants;
 import viewmodel.BloodTestingRuleResult;
@@ -57,6 +59,9 @@ public class TestResultController {
   
   @Autowired
   private TestBatchStatusChangeService testBatchStatusChangeService;
+  
+  @Autowired
+  private BloodTestsService bloodTestsService;
   
   public TestResultController() {
   }
@@ -150,34 +155,34 @@ public class TestResultController {
 	
 		return new ResponseEntity(map, HttpStatus.OK);
   }
-  
-    @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Map<String, Object>> saveTestResults(@RequestBody @Valid TestResultBackingForm form) {
 
-        Donation donation = donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
+  @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
+  @RequestMapping(method = RequestMethod.POST)
+  public ResponseEntity<Map<String, Object>> saveTestResults(@RequestBody @Valid TestResultBackingForm form) {
+    HttpStatus responseStatus = HttpStatus.CREATED;
+    Map<String, Object> responseMap = new HashMap<>();
 
-        Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(donation.getId(),
-                form.getTestResults(), true);
-
-        Map<Long, String> errorMap = (Map<Long, String>) results.get("errors");
-
-        Map<String, Object> responseMap = new HashMap<>();
-
-        if (errorMap != null && !errorMap.isEmpty()) {
-            // Errors found
-            responseMap.put("success", false);
-            responseMap.put("errorMap", errorMap);
-            responseMap.put("uninterpretableResults", results.get("uninterpretableResults"));
-            responseMap.put("errorMessage", "There were errors adding tests.");
-            return new ResponseEntity<>(responseMap, HttpStatus.BAD_REQUEST);
-        }
-
+    Donation donation = donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
+    if (donation == null) {
+      responseStatus = HttpStatus.NOT_FOUND;
+    } else {
+      Map<Long, String> testResults = form.getTestResults();
+      Map<Long, String> errors = bloodTestsService.validateTestResultValues(testResults);
+      if (errors.isEmpty()) {
         // No errors
+        BloodTestingRuleResult ruleResult = bloodTestsService.saveBloodTests(donation.getId(), form.getTestResults());
         responseMap.put("success", true);
-        responseMap.put("testresults", results.get("bloodTestingResults"));
-        return new ResponseEntity<>(responseMap, HttpStatus.CREATED);
+        responseMap.put("testresults", ruleResult);
+      } else {
+        // Errors found
+        responseMap.put("success", false);
+        responseMap.put("errorMap", errors);
+        responseMap.put("errorMessage", "There were errors adding tests.");
+        responseStatus = HttpStatus.BAD_REQUEST;
+      }
     }
+    return new ResponseEntity<>(responseMap, responseStatus);
+  }
   
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_TEST_OUTCOME+"')")
   @RequestMapping(value = "/bloodgroupmatches", method = RequestMethod.GET)

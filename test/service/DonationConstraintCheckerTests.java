@@ -144,7 +144,7 @@ public class DonationConstraintCheckerTests {
         Donation donation = aDonation()
                 .withTTIStatus(TTIStatus.TTI_SAFE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
                 .withPackType(aPackType().build())
                 .build();
         
@@ -162,7 +162,7 @@ public class DonationConstraintCheckerTests {
                 .withDonor(aDonor().build())
                 .withTTIStatus(TTIStatus.NOT_DONE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
                 .withPackType(aPackType().build())
                 .build();
         
@@ -180,7 +180,7 @@ public class DonationConstraintCheckerTests {
         Donation donation = aDonation()
                 .withTTIStatus(TTIStatus.TTI_SAFE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS)
-                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
                 .withPackType(aPackType().build())
                 .build();
         
@@ -197,7 +197,7 @@ public class DonationConstraintCheckerTests {
         Donation donation = aDonation()
                 .withTTIStatus(TTIStatus.TTI_SAFE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-                .withBloodTyingStatus(BloodTypingStatus.PENDING_TESTS)
+                .withBloodTypingStatus(BloodTypingStatus.PENDING_TESTS)
                 .withPackType(aPackType().build())
                 .build();
         
@@ -214,7 +214,7 @@ public class DonationConstraintCheckerTests {
         Donation donation = aDonation()
                 .withTTIStatus(TTIStatus.TTI_SAFE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
                 .withPackType(aPackType().build())
                 .build();
         
@@ -234,7 +234,7 @@ public class DonationConstraintCheckerTests {
         Donation donation = aDonation()
                 .withTTIStatus(TTIStatus.TTI_SAFE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
                 .withPackType(aPackType().build())
                 .build();
         
@@ -255,7 +255,7 @@ public class DonationConstraintCheckerTests {
         Donation donation = aDonation()
                 .withTTIStatus(TTIStatus.TTI_SAFE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
                 .withPackType(aPackType().build())
                 .build();
         
@@ -275,7 +275,7 @@ public class DonationConstraintCheckerTests {
         Donation donation = aDonation()
                 .withTTIStatus(TTIStatus.TTI_SAFE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
                 .withPackType(aPackType().build())
                 .build();
         
@@ -296,7 +296,7 @@ public class DonationConstraintCheckerTests {
         Donation donation = aDonation()
                 .withTTIStatus(TTIStatus.TTI_SAFE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
                 .withPackType(aPackType().build())
                 .build();
         
@@ -312,7 +312,7 @@ public class DonationConstraintCheckerTests {
         Donation donation = aDonation()
                 .withTTIStatus(TTIStatus.TTI_SAFE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
                 .withPackType(aPackType().build())
                 .build();
         
@@ -329,7 +329,7 @@ public class DonationConstraintCheckerTests {
         Donation donation = aDonation()
                 .withTTIStatus(TTIStatus.TTI_SAFE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
                 .withPackType(aPackType().build())
                 .build();
         
@@ -349,7 +349,7 @@ public class DonationConstraintCheckerTests {
         Donation donation = aDonation()
                 .withTTIStatus(TTIStatus.TTI_SAFE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
                 .withPackType(aPackType().build())
                 .build();
         
@@ -370,7 +370,7 @@ public class DonationConstraintCheckerTests {
         Donation donation = aDonation()
                 .withTTIStatus(TTIStatus.TTI_SAFE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
                 .withPackType(aPackType().build())
                 .build();
         
@@ -390,7 +390,7 @@ public class DonationConstraintCheckerTests {
         Donation donation = aDonation()
                 .withTTIStatus(TTIStatus.TTI_SAFE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
                 .withPackType(aPackType().build())
                 .build();
         
@@ -426,7 +426,7 @@ public class DonationConstraintCheckerTests {
                 .withId(IRRELEVANT_DONATION_ID)
                 .withDonor(aDonor().build())
                 .withTTIStatus(TTIStatus.NOT_DONE)
-                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
                 .withPackType(aPackType().build())
                 .build();
@@ -445,7 +445,7 @@ public class DonationConstraintCheckerTests {
                 .withId(IRRELEVANT_DONATION_ID)
                 .withDonor(aDonor().build())
                 .withTTIStatus(TTIStatus.TTI_SAFE)
-                .withBloodTyingStatus(BloodTypingStatus.NOT_DONE)
+                .withBloodTypingStatus(BloodTypingStatus.NOT_DONE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS)
                 .withPackType(aPackType().build())
                 .build();
@@ -464,7 +464,7 @@ public class DonationConstraintCheckerTests {
                 .withId(IRRELEVANT_DONATION_ID)
                 .withDonor(aDonor().build())
                 .withTTIStatus(TTIStatus.TTI_UNSAFE)
-                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE)
                 .withPackType(aPackType().build())
                 .build();
@@ -483,7 +483,7 @@ public class DonationConstraintCheckerTests {
                 .withId(IRRELEVANT_DONATION_ID)
                 .withDonor(aDonor().build())
                 .withTTIStatus(TTIStatus.TTI_SAFE)
-                .withBloodTyingStatus(BloodTypingStatus.COMPLETE)
+                .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
                 .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
                 .withPackType(aPackType().build())
                 .build();

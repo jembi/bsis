@@ -1,39 +1,25 @@
 package controller.bloodtesting;
 
-import backingform.TestResultBackingForm;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import controller.UtilController;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
-import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestType;
 import model.donation.Donation;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import repository.DonationRepository;
@@ -143,7 +129,8 @@ public class BloodTypingController {
 
     return map;
   }
-  
+
+  /*
   @RequestMapping(value="/results/additional", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
   public ResponseEntity<Map<String, Object>> saveAdditionalBloodTypingTests(
@@ -178,5 +165,5 @@ public class BloodTypingController {
 
     return new ResponseEntity<Map<String, Object>>(m, httpStatus);
   }
-  
+  */
 }

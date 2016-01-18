@@ -32,10 +32,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -44,18 +42,13 @@ import repository.DonationRepository;
 import repository.GenericConfigRepository;
 import repository.WellTypeRepository;
 import repository.bloodtesting.BloodTestingRepository;
+import service.BloodTestsService;
 import utils.FileUploadUtils;
 import utils.PermissionConstants;
 import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.DonationViewModel;
 import au.com.bytecode.opencsv.CSVReader;
-import backingform.TestResultBackingForm;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import controller.UtilController;
 
 @RestController
@@ -79,6 +72,9 @@ public class TTIController {
 
 	@Autowired
 	private WellTypeRepository wellTypeRepository;
+	
+	@Autowired
+	private BloodTestsService bloodTestsService;
 
 	public TTIController() {
 	}
@@ -143,7 +139,7 @@ public class TTIController {
 
 		return map;
 	}
-
+/*
 	@SuppressWarnings("unchecked")
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	@RequestMapping(value = "/results/additional", method = RequestMethod.POST)
@@ -175,7 +171,8 @@ public class TTIController {
 
 		return new ResponseEntity<Map<String, Object>>(m, httpStatus);
 	}
-
+*/
+/*
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "results/onplate", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
@@ -233,6 +230,7 @@ public class TTIController {
 
 		return map;
 	}
+*/
 
 	/**
          * 
@@ -350,8 +348,7 @@ public class TTIController {
 					}
 				}
 
-				bloodTestingRepository
-						.saveTestResultsToDatabase(tSVFileHeaderNameList);
+				bloodTestsService.saveTestResults(tSVFileHeaderNameList);
 
 				successRows = tSVFileHeaderNameList.size()
 						+ UploadTTIResultConstant.SUCCESS_ROW;

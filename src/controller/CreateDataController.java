@@ -1,56 +1,44 @@
 package controller;
 
-import backingform.DonationBackingForm;
-import backingform.ComponentBackingForm;
-import backingform.RequestBackingForm;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 import model.address.Address;
 import model.address.Contact;
-import model.bloodtesting.TTIStatus;
-import model.bloodtesting.rules.BloodTestingRule;
-import model.bloodtesting.rules.DonationField;
 import model.component.Component;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
-import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
-import model.packtype.PackType;
 import model.request.Request;
 import model.requesttype.RequestType;
 import model.util.Gender;
 
-import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import repository.PackTypeRepository;
+import repository.ComponentRepository;
+import repository.ComponentTypeRepository;
 import repository.DonationRepository;
 import repository.DonationTypeRepository;
 import repository.DonorRepository;
 import repository.GenericConfigRepository;
 import repository.LocationRepository;
-import repository.ComponentRepository;
-import repository.ComponentTypeRepository;
+import repository.PackTypeRepository;
 import repository.RequestRepository;
 import repository.RequestTypeRepository;
 import repository.SequenceNumberRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import utils.CustomDateFormatter;
+import backingform.ComponentBackingForm;
+import backingform.RequestBackingForm;
 
 @RestController
 @RequestMapping("createdata")
@@ -426,7 +414,7 @@ public class CreateDataController {
     Date twoYearsAgo = new DateTime().minusDays(100).toDate();
     return getRandomDate(twoYearsAgo, new Date());
   }
-
+/*
   void createDonationsWithTestResults(int numDonations) {
     List<Location> sites = locationRepository.getAllVenues();
     List<Location> centers = locationRepository.getAllVenues();
@@ -457,13 +445,14 @@ public class CreateDataController {
 
     addTestResultsForDonations(donations);
   }
-
+*/
+/*
   private void addTestResultsForDonations(
       List<Donation> donations) {
     addBloodTypingResultsForDonations(donations);
     addTTIResultsForDonations(donations);
   }
-
+*/
   public void createComponents(int numComponents) {
     List<Donation> donations = donationRepository.getAllDonations();
     List<ComponentType> componentTypes = componentTypeRepository.getAllComponentTypes();
@@ -485,6 +474,7 @@ public class CreateDataController {
     componentRepository.addAllComponents(components);
   }
 
+  /*
   private void addBloodTypingResultsForDonations(List<Donation> donations) {
 
     Map<String, List<BloodTestingRule>> bloodAboRuleMap = new HashMap<String, List<BloodTestingRule>>();
@@ -581,7 +571,8 @@ public class CreateDataController {
 
     bloodTestingRepository.saveBloodTestingResults(testResults, true);
   }
-
+  */
+/*
   @SuppressWarnings("unchecked")
   private void addTTIResultsForDonations(List<Donation> donations) {
 
@@ -713,7 +704,7 @@ public class CreateDataController {
     // if plates not required then the following line should be used in place of the code above
     // bloodTestingRepository.saveBloodTestingResults(testResults, true);
   }
-
+*/
   public void createRequests(int numRequests) {
 
     String[] bloodAbos = { "A", "B", "AB", "O"};
