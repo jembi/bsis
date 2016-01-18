@@ -47,6 +47,11 @@ public class DonationConstraintChecker {
             return false;
         }
         
+        // Check for adverse events
+        if (donation.getAdverseEvent() != null) {
+          return false;
+        }
+        
         // Check for recorded test results
         if (bloodTestResultRepository.countBloodTestResultsForDonation(donationId) > 0) {
             return false;
