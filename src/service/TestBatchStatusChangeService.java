@@ -75,10 +75,11 @@ public class TestBatchStatusChangeService {
 
         if (donation.getTTIStatus() == TTIStatus.TTI_UNSAFE) {
             LOGGER.info("Handling donation with unsafe TTI status: " + donation);
-            postDonationCounsellingCRUDService.createPostDonationCounsellingForDonation(donation);
             componentCRUDService.markComponentsBelongingToDonorAsUnsafe(donation.getDonor());
 
             if (donorDeferralStatusCalculator.shouldDonorBeDeferred(donation.getBloodTestResults())) {
+                LOGGER.info("Deferring donor and referring donor for counselling: " + donation.getDonorNumber());
+                postDonationCounsellingCRUDService.createPostDonationCounsellingForDonation(donation);
                 donorDeferralCRUDService.createDeferralForDonorWithDeferralReasonType(donation.getDonor(),
                         DeferralReasonType.AUTOMATED_TTI_UNSAFE);
             }
