@@ -67,13 +67,19 @@ public abstract class BaseValidator<T> implements Validator {
    * @throws Exception any exceptions that are thrown during validation
    */
   public abstract void validateForm(T form, Errors errors) throws Exception;
+  
+  /**
+   * Specifies the name of the form which is used to retrieve Form configuration and generate error keys 
+   * 
+   * @return String name of the form
+   */
+  public abstract String getFormName();
 
   /**
    * Performs the common field checks which are: 1) checking that the required fields have been
    * filled in 2) checking that the length of the data is within the configured maximums
    * 
    * @param form Object JavaBean containing the form data
-   * @param formName String name of the form (used to retrieve Form configuration)
    * @param errors Errors containing all the errors in the form data
    * 
    * @throws IllegalAccessException if the form has properties that cannot be accessed due to
@@ -81,10 +87,10 @@ public abstract class BaseValidator<T> implements Validator {
    * @throws InvocationTargetException if the form property accessor methods throw an exception
    * @throws NoSuchMethodException if a form accessor method for a property cannot be found
    */
-  protected void commonFieldChecks(Object form, String formName, Errors errors)
+  protected void commonFieldChecks(T form, Errors errors)
       throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-    checkRequiredFields(form, formName, errors);
-    checkFieldLengths(form, formName, errors);
+    checkRequiredFields(form, errors);
+    checkFieldLengths(form, errors);
   }
 
   /**
@@ -92,7 +98,6 @@ public abstract class BaseValidator<T> implements Validator {
    * for each field.
    * 
    * @param form Object JavaBean containing the form data
-   * @param formName String name of the form (used to retrieve Form configuration)
    * @param errors Errors containing all the errors in the form data
    * 
    * @throws IllegalAccessException if the form has properties that cannot be accessed due to
@@ -100,18 +105,18 @@ public abstract class BaseValidator<T> implements Validator {
    * @throws InvocationTargetException if the form property accessor methods throw an exception
    * @throws NoSuchMethodException if a form accessor method for a property cannot be found
    */
-  protected void checkFieldLengths(Object form, String formName, Errors errors)
+  protected void checkFieldLengths(T form, Errors errors)
       throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
     @SuppressWarnings("unchecked")
     Map<String, Object> properties = BeanUtils.describe(form);
-    Map<String, Integer> maxLengths = formFieldRepository.getFieldMaxLengths(formName);
+    Map<String, Integer> maxLengths = formFieldRepository.getFieldMaxLengths(getFormName());
     for (String field : maxLengths.keySet()) {
       if (properties.containsKey(field)) {
         Object fieldValue = properties.get(field);
         Integer maxLength = maxLengths.get(field);
         if (fieldValue != null && maxLength > 0
             && (fieldValue instanceof String && ((String) fieldValue).length() > maxLength))
-          errors.rejectValue(formName + "." + field, "fieldLength.error",
+          errors.rejectValue(getFormName() + "." + field, "fieldLength.error",
               "Maximum length for this field is " + maxLength);
       }
     }
@@ -121,7 +126,6 @@ public abstract class BaseValidator<T> implements Validator {
    * Checks if all the fields configured as required have been captured in the form
    * 
    * @param form Object JavaBean containing the form data
-   * @param formName String name of the form (used to retrieve Form configuration)
    * @param errors Errors containing all the errors in the form data
    * 
    * @throws IllegalAccessException if the form has properties that cannot be accessed due to
@@ -130,15 +134,15 @@ public abstract class BaseValidator<T> implements Validator {
    * @throws NoSuchMethodException if a form accessor method for a property cannot be found
    */
   @SuppressWarnings("unchecked")
-  protected void checkRequiredFields(Object form, String formName, Errors errors)
+  protected void checkRequiredFields(T form, Errors errors)
       throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
     Map<String, Object> properties = BeanUtils.describe(form);
-    List<String> requiredFields = formFieldRepository.getRequiredFormFields(formName);
+    List<String> requiredFields = formFieldRepository.getRequiredFormFields(getFormName());
     for (String requiredField : requiredFields) {
       if (properties.containsKey(requiredField)) {
         Object fieldValue = properties.get(requiredField);
         if (fieldValue == null || (fieldValue instanceof String && StringUtils.isBlank((String) fieldValue))) {
-          errors.rejectValue(formName + "." + requiredField, "requiredField.error",
+          errors.rejectValue(getFormName() + "." + requiredField, "requiredField.error",
               "This information is required");
         }
       }
@@ -152,8 +156,8 @@ public abstract class BaseValidator<T> implements Validator {
    * @param fieldName String name of the field
    * @return boolean true if the field value is generated automatically, false otherwise
    */
-  protected boolean isFieldAutoGenerated(String formName, String fieldName) {
-    FormField formField = formFieldRepository.getFormField(formName, fieldName);
+  protected boolean isFieldAutoGenerated(String fieldName) {
+    FormField formField = formFieldRepository.getFormField(getFormName(), fieldName);
     if (formField == null) {
       return false;
     }
@@ -167,8 +171,8 @@ public abstract class BaseValidator<T> implements Validator {
    * @param fieldName String name of the field
    * @return boolean true if the field value uses the current time, false otherwise
    */
-  protected boolean doesFieldUseCurrentTime(String formName, String fieldName) {
-    FormField formField = formFieldRepository.getFormField(formName, fieldName);
+  protected boolean doesFieldUseCurrentTime(String fieldName) {
+    FormField formField = formFieldRepository.getFormField(getFormName(), fieldName);
     if (formField == null) {
       return false;
     }

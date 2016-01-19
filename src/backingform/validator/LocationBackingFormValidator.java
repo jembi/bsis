@@ -22,6 +22,11 @@ public class LocationBackingFormValidator  extends BaseValidator<LocationBacking
             errors.rejectValue("name", "400", "Location name already exists.");
     }
     
+  @Override
+  public String getFormName() {
+    return "location";
+  }
+    
   private boolean isDuplicateLocationName(Location location) {
     String locationName = location.getName();
     if (StringUtils.isBlank(locationName)) {

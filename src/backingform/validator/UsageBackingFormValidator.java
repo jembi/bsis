@@ -24,7 +24,12 @@ public class UsageBackingFormValidator extends BaseValidator<ComponentUsageBacki
 
     updateRelatedEntities(form);
 
-    commonFieldChecks(form, "usage", errors);
+    commonFieldChecks(form, errors);
+  }
+  
+  @Override
+  public String getFormName() {
+    return "usage";
   }
 
   private void updateRelatedEntities(ComponentUsageBackingForm form) {

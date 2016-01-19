@@ -15,4 +15,8 @@ public class AdverseEventBackingFormValidator extends BaseValidator<AdverseEvent
         }
     }
 
+    @Override
+    public String getFormName() {
+      return "adverseEvent";
+    }
 }

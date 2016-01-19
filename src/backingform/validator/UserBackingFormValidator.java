@@ -23,7 +23,7 @@ public class UserBackingFormValidator extends BaseValidator<UserBackingForm> {
 
     @Override
     public void validateForm(UserBackingForm form, Errors errors) throws Exception {
-        commonFieldChecks(form, "user", errors);
+        commonFieldChecks(form, errors);
         checkUserName(form, errors);
         if (form.getId() != null) {
             // Existing user, so check if password is being changed and validate it
@@ -39,6 +39,11 @@ public class UserBackingFormValidator extends BaseValidator<UserBackingForm> {
 
         checkRoles(form, errors);
     }
+    
+  @Override
+  public String getFormName() {
+    return "user";
+  }
     
     private boolean checkCurrentPassword(UserBackingForm form, Errors errors) {
 

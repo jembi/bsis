@@ -52,7 +52,12 @@ public class ComponentCombinationBackingFormValidator extends BaseValidator<Comp
 
     updateRelatedEntities(form);
 
-    commonFieldChecks(form, "component", errors);
+    commonFieldChecks(form, errors);
+  }
+  
+  @Override
+  public String getFormName() {
+    return "component";
   }
   
   private void updateRelatedEntities(ComponentCombinationBackingForm form) {
@@ -67,5 +72,4 @@ public class ComponentCombinationBackingFormValidator extends BaseValidator<Comp
     }
     form.setDonation(donation);
   }
-
 }

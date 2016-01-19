@@ -23,6 +23,11 @@ public class DiscardReasonBackingFormValidator extends BaseValidator<DiscardReas
         }
     }
     
+    @Override
+    public String getFormName() {
+      return "discardReason";
+    }
+    
   private boolean isDuplicateDiscardReason(ComponentStatusChangeReason discardReason) {
     String reason = discardReason.getStatusChangeReason();
     if (StringUtils.isBlank(reason)) {

@@ -35,8 +35,13 @@ public class ComponentBackingFormValidator extends BaseValidator<ComponentBackin
 
     updateRelatedEntities(form);
 
-    commonFieldChecks(form, "component", errors);
-  } 
+    commonFieldChecks(form, errors);
+  }
+  
+  @Override
+  public String getFormName() {
+    return "component";
+  }
 
   private void updateRelatedEntities(ComponentBackingForm form) {
     Donation donation = null;

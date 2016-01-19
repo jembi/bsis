@@ -60,6 +60,11 @@ public class GeneralConfigBackingFormValidator extends BaseValidator<GeneralConf
         formItem.setGeneralConfig(generalConfig);
     }
     
+  @Override
+  public String getFormName() {
+    return "generalConfig";
+  }
+    
   private boolean isDuplicateGeneralConfigName(GeneralConfig config) {
     String configName = config.getName();
     if (StringUtils.isBlank(configName)) {

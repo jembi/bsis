@@ -29,6 +29,11 @@ public class DeferralReasonBackingFormValidator extends BaseValidator<DeferralRe
         }
     }
     
+    @Override
+    public String getFormName() {
+      return "deferralReason";
+    }
+    
 
   private boolean isDuplicateDeferralReason(DeferralReason deferralReason) {
     String reason = deferralReason.getReason();

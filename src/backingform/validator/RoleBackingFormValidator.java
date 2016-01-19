@@ -29,8 +29,13 @@ public class RoleBackingFormValidator extends BaseValidator<RoleBackingForm> {
 	            "Role must have one or more permissions");
 	}
 	
-	commonFieldChecks(form, "Role", errors);
+	commonFieldChecks(form, errors);
    }
+  
+  @Override
+  public String getFormName() {
+    return "Role";
+  }
   
   private boolean isDuplicateRoleName(Role role) {
     String roleName = role.getName();

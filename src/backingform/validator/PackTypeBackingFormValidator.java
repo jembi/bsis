@@ -28,6 +28,11 @@ public class PackTypeBackingFormValidator extends BaseValidator<PackTypeBackingF
 	    }
 	}
 	
+  @Override
+  public String getFormName() {
+    return "packType";
+  }
+	
   private boolean isDuplicatePackTypeName(PackType packType) {
     String packTypeName = packType.getPackType();
     if (StringUtils.isBlank(packTypeName)) {

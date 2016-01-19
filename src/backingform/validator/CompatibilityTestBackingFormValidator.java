@@ -56,9 +56,14 @@ public class CompatibilityTestBackingFormValidator extends BaseValidator<Compati
       form.setTestedComponent(null);
     }
 
-    commonFieldChecks(form, "compatibilityTest", errors);
+    commonFieldChecks(form, errors);
   }
   
+  @Override
+  public String getFormName() {
+    return "compatibilityTest";
+  }
+
   private Request findRequestByRequestNumber(String requestNumber) {
     Request matchingRequest = null;
     try {

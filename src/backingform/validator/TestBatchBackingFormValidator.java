@@ -38,4 +38,8 @@ public class TestBatchBackingFormValidator extends BaseValidator<TestBatchBackin
         testBatch.setDonationBatches(donationBatches);
     }
 
+  @Override
+  public String getFormName() {
+    return "testBatch";
+  }
 }
