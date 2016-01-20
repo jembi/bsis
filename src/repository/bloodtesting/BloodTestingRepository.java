@@ -87,14 +87,6 @@ public class BloodTestingRepository {
 		return bloodTests;
 	}
 
-	public List<BloodTest> getBloodTTITests() {
-		String queryStr = "SELECT b FROM BloodTest b WHERE b.isActive=:isActive AND b.category=:category";
-		TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
-		query.setParameter("isActive", true);
-		query.setParameter("category", BloodTestCategory.TTI);
-		List<BloodTest> bloodTests = query.getResultList();
-		return bloodTests;
-	}
 
 	public List<BloodTest> getBloodTestsOfType(BloodTestType type) {
 		return getBloodTestsOfTypes(Collections.singletonList(type));

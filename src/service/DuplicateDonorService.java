@@ -1,15 +1,5 @@
 package service;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import model.donation.Donation;
 import model.donor.Donor;
 import model.donor.DonorStatus;
@@ -84,9 +74,9 @@ public class DuplicateDonorService {
 	protected List<DuplicateDonorBackup> mergeDonors(Donor newDonor, List<Donor> donors) {
 		String newDonorNumber = newDonor.getDonorNumber();
 		// combine Donations and Deferrals and create a backup log
-		List<Donation> combinedDonations = new ArrayList<Donation>();
-		List<DonorDeferral> combinedDeferrals = new ArrayList<DonorDeferral>();
-		List<DuplicateDonorBackup> backupLog = new ArrayList<DuplicateDonorBackup>();
+		List<Donation> combinedDonations = new ArrayList<>();
+		List<DonorDeferral> combinedDeferrals = new ArrayList<>();
+		List<DuplicateDonorBackup> backupLog = new ArrayList<>();
 		if (donors != null) {
 			for (Donor donor : donors) {
 				donor.setDonorStatus(DonorStatus.MERGED);
@@ -140,7 +130,7 @@ public class DuplicateDonorService {
 	}
 
 	private List<Donation> combineDonations(List<Donor> donors) {
-		List<Donation> combinedDonations = new ArrayList<Donation>();
+		List<Donation> combinedDonations = new ArrayList<>();
 		if (donors != null) {
 			for (Donor donor : donors) {
 				List<Donation> donorDonations = donor.getDonations();
@@ -217,7 +207,7 @@ public class DuplicateDonorService {
 	}
 
 	private List<DonorDeferral> combineDeferralsAndSortByDate(List<Donor> donors) {
-		List<DonorDeferral> combinedDeferrals = new ArrayList<DonorDeferral>();
+		List<DonorDeferral> combinedDeferrals = new ArrayList<>();
 		if (donors != null) {
 			for (Donor donor : donors) {
 				List<DonorDeferral> donorDeferrals = donor.getDeferrals();
@@ -249,12 +239,12 @@ public class DuplicateDonorService {
 	 * @return Map<List<Donor>> map of duplicate donors found, will not be null or contain nulls
 	 */
 	public Map<String, List<Donor>> findDuplicateDonors(List<Donor> donors) {
-		Map<String, List<Donor>> duplicateDonors = new HashMap<String, List<Donor>>();
+		Map<String, List<Donor>> duplicateDonors = new HashMap<>();
 		if (donors != null) {
-			List<Donor> potentialDuplicates = new ArrayList<Donor>(donors);
+			List<Donor> potentialDuplicates = new ArrayList<>(donors);
 			for (int i = 0; i < potentialDuplicates.size(); i++) {
 				Donor d1 = potentialDuplicates.get(i);
-				List<Donor> duplicates = new ArrayList<Donor>();
+				List<Donor> duplicates = new ArrayList<>();
 				// find the duplicates starting from the next element in the list of Donors
 				for (int j = i + 1; j < potentialDuplicates.size(); j++) {
 					Donor d2 = potentialDuplicates.get(j);
@@ -284,7 +274,7 @@ public class DuplicateDonorService {
 	 * @return List<Donor> list of suspected duplicate of the specified donor
 	 */
 	public List<Donor> findDuplicateDonors(Donor donor, List<Donor> donors) {
-		List<Donor> duplicates = new ArrayList<Donor>();
+		List<Donor> duplicates = new ArrayList<>();
 		for (int i = 0; i < donors.size(); i++) {
 			Donor donor2 = donors.get(i);
 			if (match(donor, donor2)) {

@@ -6,7 +6,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 public class LocationBackingFormValidator implements Validator {

@@ -3,8 +3,6 @@ package backingform.validator;
 import backingform.ComponentBackingForm;
 import backingform.ComponentCombinationBackingForm;
 import backingform.RecordComponentBackingForm;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import controller.UtilController;
 import model.donation.Donation;

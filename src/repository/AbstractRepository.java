@@ -1,8 +1,5 @@
 package repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import model.BaseEntity;
 
 import org.springframework.transaction.annotation.Propagation;

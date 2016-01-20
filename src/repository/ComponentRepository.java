@@ -50,7 +50,6 @@ import org.springframework.util.CollectionUtils;
 
 import repository.bloodtesting.BloodTypingStatus;
 import service.DonationConstraintChecker;
-import service.DonorConstraintChecker;
 import utils.CustomDateFormatter;
 import viewmodel.DonationViewModel;
 import viewmodel.MatchingComponentViewModel;

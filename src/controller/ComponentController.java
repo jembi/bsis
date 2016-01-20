@@ -47,8 +47,6 @@ import backingform.ComponentCombinationBackingForm;
 import backingform.RecordComponentBackingForm;
 import backingform.validator.ComponentBackingFormValidator;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
