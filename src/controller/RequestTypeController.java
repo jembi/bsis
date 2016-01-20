@@ -37,7 +37,7 @@ public class RequestTypeController {
     @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_REQUESTS + "')")
     public ResponseEntity getRequestTypeById(Long id) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         RequestType requestType = requestTypesRepository.getRequestTypeById(id);
         map.put("requestType", requestType);
         return new ResponseEntity(map, HttpStatus.OK);
@@ -57,7 +57,7 @@ public class RequestTypeController {
     public ResponseEntity updateRequestType(
             @RequestBody RequestType requestType, @PathVariable Long id) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         requestType.setId(id);
         requestType = requestTypesRepository.updateRequestType(requestType);
         map.put("requestType", requestType);

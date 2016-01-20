@@ -15,17 +15,25 @@ import java.util.List;
 
 import model.adverseevent.AdverseEvent;
 import model.donation.Donation;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
 import service.DonationConstraintChecker;
 import service.DonorConstraintChecker;
 import viewmodel.AdverseEventViewModel;
 import viewmodel.DonationViewModel;
+
+import static helpers.builders.AdverseEventBuilder.anAdverseEvent;
+import static helpers.builders.AdverseEventViewModelBuilder.anAdverseEventViewModel;
+import static helpers.builders.DonationBatchBuilder.aDonationBatch;
+import static helpers.builders.DonationBuilder.aDonation;
+import static helpers.builders.DonationViewModelBuilder.aDonationViewModel;
+import static helpers.builders.DonorBuilder.aDonor;
+import static helpers.matchers.DonationViewModelMatcher.hasSameStateAsDonationViewModel;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DonationViewModelFactoryTests {

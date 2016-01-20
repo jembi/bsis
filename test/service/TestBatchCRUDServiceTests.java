@@ -194,23 +194,23 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     
 	@Test
 	public void testUpdateTestBatch_shouldUpdateDonationBatch() {
-		final DonationBatch donationBatch1 = new DonationBatchBuilder().withId(1l).build();
-		final DonationBatch donationBatch2 = new DonationBatchBuilder().withId(2l).build();
-		final DonationBatch donationBatch3 = new DonationBatchBuilder().withId(3l).build();
+		final DonationBatch donationBatch1 = new DonationBatchBuilder().withId(1L).build();
+		final DonationBatch donationBatch2 = new DonationBatchBuilder().withId(2L).build();
+		final DonationBatch donationBatch3 = new DonationBatchBuilder().withId(3L).build();
 		
 		final TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withDonationBatch(donationBatch1)
 		        .withDonationBatch(donationBatch2).withStatus(TestBatchStatus.OPEN).build();
 		
 		when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
 		when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(true);
-		when(donationBatchRepository.findDonationBatchById(1l)).thenReturn(donationBatch1);
-		when(donationBatchRepository.findDonationBatchById(2l)).thenReturn(donationBatch2);
-		when(donationBatchRepository.findDonationBatchById(3l)).thenReturn(donationBatch3);
+		when(donationBatchRepository.findDonationBatchById(1L)).thenReturn(donationBatch1);
+		when(donationBatchRepository.findDonationBatchById(2L)).thenReturn(donationBatch2);
+		when(donationBatchRepository.findDonationBatchById(3L)).thenReturn(donationBatch3);
 		when(donationBatchRepository.updateDonationBatch(donationBatch1)).thenReturn(donationBatch1);
 		when(donationBatchRepository.updateDonationBatch(donationBatch2)).thenReturn(donationBatch2);
 		when(donationBatchRepository.updateDonationBatch(donationBatch3)).thenReturn(donationBatch3);
 		
-		testBatchCRUDService.updateTestBatch(TEST_BATCH_ID, null, null, Arrays.asList(new Long[] { 2l, 3l }));
+		testBatchCRUDService.updateTestBatch(TEST_BATCH_ID, null, null, Arrays.asList(new Long[] {2L, 3L}));
 		
 		verify(donationBatchRepository,times(2)).updateDonationBatch(argThat(new TypeSafeMatcher<DonationBatch>() {
 			
@@ -221,30 +221,27 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
 			
 			@Override
 			protected boolean matchesSafely(DonationBatch actual) {
-				if (actual.getId().equals(1l)) {
-					return (actual.getTestBatch() == null);
-				}
-				if (actual.getId().equals(3l)) {
-					return (actual.getTestBatch() == testBatch);
-				}
-				return false;
-			}
+        if (actual.getId().equals(1L)) {
+          return (actual.getTestBatch() == null);
+        }
+        return actual.getId().equals(3L) && (actual.getTestBatch() == testBatch);
+      }
 		}));
 	}
 	
 	@Test(expected = java.lang.IllegalStateException.class)
 	public void testUpdateTestBatch_shouldNotUpdateDonationBatch() {
-		final DonationBatch donationBatch1 = new DonationBatchBuilder().withId(1l).build();
+		final DonationBatch donationBatch1 = new DonationBatchBuilder().withId(1L).build();
 		
 		final TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withDonationBatch(donationBatch1)
 		        .withDonationBatch(donationBatch1).withStatus(TestBatchStatus.OPEN).build();
 		
 		when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
-		when(donationBatchRepository.findDonationBatchById(1l)).thenReturn(donationBatch1);
+		when(donationBatchRepository.findDonationBatchById(1L)).thenReturn(donationBatch1);
 		when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
 		when(donationBatchRepository.updateDonationBatch(donationBatch1)).thenReturn(donationBatch1);
 		
-		testBatchCRUDService.updateTestBatch(TEST_BATCH_ID, null, null, Arrays.asList(new Long[] { 1l }));
+		testBatchCRUDService.updateTestBatch(TEST_BATCH_ID, null, null, Arrays.asList(new Long[] {1L}));
 	}
 	
     @Test

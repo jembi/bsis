@@ -1,8 +1,7 @@
 package service;
 
-import java.util.Date;
-import java.util.Objects;
-import javax.persistence.NoResultException;
+import backingform.AdverseEventBackingForm;
+import backingform.DonationBackingForm;
 import model.adverseevent.AdverseEvent;
 import model.adverseevent.AdverseEventType;
 import model.donation.Donation;
@@ -12,12 +11,14 @@ import model.packtype.PackType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import backingform.AdverseEventBackingForm;
-import backingform.DonationBackingForm;
 import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import repository.DonorRepository;
 import repository.PackTypeRepository;
+
+import javax.persistence.NoResultException;
+import java.util.Date;
+import java.util.Objects;
 
 @Transactional
 @Service
@@ -77,20 +78,20 @@ public class DonationCRUDService {
     
     public Donation createDonation(DonationBackingForm donationBackingForm) {
 
-        Donation donation = donationBackingForm.getDonation();
-        PackType packType = packTypeRepository.getPackTypeById(donation.getPackType().getId());
+    Donation donation = donationBackingForm.getDonation();
+    PackType packType = packTypeRepository.getPackTypeById(donation.getPackType().getId());
 
-        boolean discardComponents = false;
+    boolean discardComponents = false;
 
-        if (packType.getCountAsDonation() &&
-                !donorConstraintChecker.isDonorEligibleToDonate(donationBackingForm.getDonor().getId())) {
-        
-            DonationBatch donationBatch = donationBatchRepository.findDonationBatchByBatchNumber(
-                    donationBackingForm.getDonationBatchNumber());
+    if (packType.getCountAsDonation() &&
+            !donorConstraintChecker.isDonorEligibleToDonate(donationBackingForm.getDonor().getId())) {
 
-            if (!donationBatch.isBackEntry()) { 
-                throw new IllegalArgumentException("Do not bleed donor");
-            }
+      DonationBatch donationBatch = donationBatchRepository.findDonationBatchByBatchNumber(
+              donationBackingForm.getDonationBatchNumber());
+
+      if (!donationBatch.isBackEntry()) {
+        throw new IllegalArgumentException("Do not bleed donor");
+      }
 
             // The donation batch is being back entered so allow the donation to be created but discard the components
             discardComponents = true;
@@ -132,7 +133,7 @@ public class DonationCRUDService {
                 throw new IllegalArgumentException("Cannot set pack type that produces components");
             }
         }
-        
+
         donation.setDonorPulse(donationBackingForm.getDonorPulse());
         donation.setHaemoglobinCount(donationBackingForm.getHaemoglobinCount());
         donation.setHaemoglobinLevel(donationBackingForm.getHaemoglobinLevel());
@@ -162,21 +163,21 @@ public class DonationCRUDService {
             return;
         }
 
-        // Get the existing adverse event or create a new one
-        AdverseEvent adverseEvent = donation.getAdverseEvent();
-        if (adverseEvent == null) {
-            adverseEvent = new AdverseEvent();
-        }
-        
-        // Create an adverse event type with the correct id
-        AdverseEventType adverseEventType = new AdverseEventType();
-        adverseEventType.setId(adverseEventBackingForm.getType().getId());
-        
-        // Update the fields
-        adverseEvent.setType(adverseEventType);
-        adverseEvent.setComment(adverseEventBackingForm.getComment());
-
-        donation.setAdverseEvent(adverseEvent);
+    // Get the existing adverse event or create a new one
+    AdverseEvent adverseEvent = donation.getAdverseEvent();
+    if (adverseEvent == null) {
+      adverseEvent = new AdverseEvent();
     }
+
+    // Create an adverse event type with the correct id
+    AdverseEventType adverseEventType = new AdverseEventType();
+    adverseEventType.setId(adverseEventBackingForm.getType().getId());
+
+    // Update the fields
+    adverseEvent.setType(adverseEventType);
+    adverseEvent.setComment(adverseEventBackingForm.getComment());
+
+    donation.setAdverseEvent(adverseEvent);
+  }
 
 }

@@ -1,19 +1,17 @@
 package repository;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import model.admin.FormField;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
-import model.admin.FormField;
-
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 @Transactional
@@ -71,7 +69,7 @@ public class FormFieldRepository {
       return null;
     }
   }
-  
+
   public List<FormField> getFormFields(String formName) {
     try {
       String queryString = "SELECT f FROM FormField f where form=:formName";
@@ -90,16 +88,16 @@ public class FormFieldRepository {
     query.setParameter("formName", formName);
     query.setParameter("isRequired", true);
     query.setParameter("hidden", false);
-    return query.getResultList();    
+    return query.getResultList();
   }
 
   public Map<String, Integer> getFieldMaxLengths(String formName) {
     String queryString = "SELECT f.field, f.maxLength FROM FormField f where form=:formName";
     TypedQuery<Object[]> query = em.createQuery(queryString, Object[].class);
     query.setParameter("formName", formName);
-    Map<String, Integer> maxLengths = new HashMap<String, Integer>();
+    Map<String, Integer> maxLengths = new HashMap<>();
     for (Object[] obj : query.getResultList()) {
-      maxLengths.put((String)obj[0], (Integer)obj[1]);
+      maxLengths.put((String) obj[0], (Integer) obj[1]);
     }
     return maxLengths;
   }

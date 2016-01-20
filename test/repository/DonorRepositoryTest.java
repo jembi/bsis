@@ -75,7 +75,7 @@ public class DonorRepositoryTest {
     @Autowired
     DonorRepository donorRepository;
     private User user;
-    private Long userDbId = 1l;
+    private Long userDbId = 1L;
     private DonorBackingForm donorBackingForm;
     String donorBirthdate = null;
     ApplicationContext applicationContext = null;
@@ -105,7 +105,7 @@ public class DonorRepositoryTest {
             // Insert Data into database using DonorRepositoryDataset.xml
             IDataSet dataSet = getDataSet();
             Date today = new Date();
-            Map<String, Object> replacements = new HashMap<String, Object>();
+            Map<String, Object> replacements = new HashMap<>();
             replacements.put("DateDonorNotDue", DateUtils.addDays(today,
                     -(DonationConstants.BLOCK_BETWEEN_DONATIONS - 1)));
             replacements.put("DateDonorDue", DateUtils.addDays(today,
@@ -155,7 +155,7 @@ public class DonorRepositoryTest {
         donorRepository.saveDonor(donorBackingForm.getDonor());
         assertTrue(
                 "Donor's Id should not zero. Once Donor object should persist,new Id is generated and assigned to Donor.",
-                donorBackingForm.getDonor().getId() == 0 ? false : true);
+                donorBackingForm.getDonor().getId() != 0);
     }
 
     @Test
@@ -164,12 +164,12 @@ public class DonorRepositoryTest {
      */
     public void findDonorById_shouldReturnDonor() {
         // 1 is Donor's ID.
-        Donor findDonor = donorRepository.findDonorById(1l);
+        Donor findDonor = donorRepository.findDonorById(1L);
         assertNotNull(
                 "Donor Object should not null.Donor Id is exist into Donor's table.",
                 findDonor);
         assertTrue("Donor's id value should be 1.",
-                findDonor.getId() == 1 ? true : false);
+                findDonor.getId() == 1);
     }
 
     
@@ -179,7 +179,7 @@ public class DonorRepositoryTest {
     @Test(expected = NoResultException.class)
     public void findDonorById_shouldExpectNoResultException() {
         // 18 ID is not exist into Donor table.
-        donorRepository.findDonorById(18l);
+        donorRepository.findDonorById(18L);
     }
 
     
@@ -189,7 +189,7 @@ public class DonorRepositoryTest {
     @Test(expected = NoResultException.class)
     public void findDonorById_shouldExpectNoResultExceptionWhenDonorIsDeleted() {
         // 2 is Deleted Donor's ID.
-        donorRepository.findDonorById(2l);
+        donorRepository.findDonorById(2L);
     }
 
     @Test
@@ -205,7 +205,7 @@ public class DonorRepositoryTest {
         String donorFirstName = "xxx";
         String donorLastName = "";
         String donationIdentificationNumber = "";
-        Map<String, Object> pagingParams = new HashMap<String, Object>();
+        Map<String, Object> pagingParams = new HashMap<>();
         setPaginationParam(pagingParams);
 
         assertEquals("List size should be zero, no matching search results.",
@@ -225,7 +225,7 @@ public class DonorRepositoryTest {
         String donorFirstName = "fir";
         String donorLastName = "";
         String donationIdentificationNumber = "";
-        Map<String, Object> pagingParams = new HashMap<String, Object>();
+        Map<String, Object> pagingParams = new HashMap<>();
         setPaginationParam(pagingParams);
 
         List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
@@ -259,7 +259,7 @@ public class DonorRepositoryTest {
         String donorFirstName = "firstName";
         String donorLastName = "";
         String donationIdentificationNumber = "";
-        Map<String, Object> pagingParams = new HashMap<String, Object>();
+        Map<String, Object> pagingParams = new HashMap<>();
         setPaginationParam(pagingParams);
 
         List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
@@ -293,7 +293,7 @@ public class DonorRepositoryTest {
         String donorFirstName = "";
         String donorLastName = "las";
         String donationIdentificationNumber = "";
-        Map<String, Object> pagingParams = new HashMap<String, Object>();
+        Map<String, Object> pagingParams = new HashMap<>();
         setPaginationParam(pagingParams);
 
         List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
@@ -304,11 +304,7 @@ public class DonorRepositoryTest {
                 0, listDonors.size());
         boolean isValid = false;
         for (Donor donor : listDonors) {
-            if (donor.getLastName().startsWith("las")) {
-                isValid = true;
-            } else {
-                isValid = false;
-            }
+            isValid = donor.getLastName().startsWith("las");
         }
         assertTrue("Donor's Last Name should be start with 'las'.", isValid);
     }
@@ -324,7 +320,7 @@ public class DonorRepositoryTest {
         String donorFirstName = "fir";
         String donorLastName = "";
         String donationIdentificationNumber = "";
-        Map<String, Object> pagingParams = new HashMap<String, Object>();
+        Map<String, Object> pagingParams = new HashMap<>();
         setPaginationParam(pagingParams);
 
         List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
@@ -334,7 +330,7 @@ public class DonorRepositoryTest {
             // 2 is deleted donor id
             assertFalse(
                     "Donor's id 2 is deleted from database. so Deleted Donor should not included in the list.",
-                    donor.getId() == 2 ? true : false);
+                    donor.getId() == 2);
         }
     }
 
@@ -349,7 +345,7 @@ public class DonorRepositoryTest {
         String donorFirstName = "";
         String donorLastName = "";
         String donationIdentificationNumber = "000001";
-        Map<String, Object> pagingParams = new HashMap<String, Object>();
+        Map<String, Object> pagingParams = new HashMap<>();
         setPaginationParam(pagingParams);
 
         List<Donor> donorList = (List<Donor>) (donorRepository.findAnyDonor(
@@ -357,11 +353,7 @@ public class DonorRepositoryTest {
                 pagingParams, false, donationIdentificationNumber));
         assertEquals("Should return a single Donor result", 1, donorList.size());
         boolean isValid = false;
-        if (donorList.get(0).getDonorNumber().equals("000001")) {
-            isValid = true;
-        } else {
-            isValid = false;
-        }
+        isValid = donorList.get(0).getDonorNumber().equals("000001");
         assertTrue("Donor with donation matching DIN returned", isValid);
     }
 
@@ -397,14 +389,14 @@ public class DonorRepositoryTest {
      */
     public void addDonor_shouldPersist() {
         // 1 is Donor's Id.
-        Donor createNewDonorFromExistDonor = donorRepository.findDonorById(1l);
+        Donor createNewDonorFromExistDonor = donorRepository.findDonorById(1L);
         Donor newDonor = this.copyDonor(createNewDonorFromExistDonor);
         // New DonorNumber(000006) which is assigned to Donor Persist Object.
         newDonor.setDonorNumber("000006");
         donorRepository.addDonor(newDonor);
         assertTrue(
                 "Donor's Id should not zero. Once Donor should persist,new Id is generated and assigned to Donor.",
-                newDonor.getId() == 0 ? false : true);
+                newDonor.getId() != 0);
     }
 
     @Test
@@ -413,7 +405,7 @@ public class DonorRepositoryTest {
      */
     public void updateDonor_shouldReturnNotNull() {
         // 1 is Donor Id.
-        Donor editDonor = donorRepository.findDonorById(1l);
+        Donor editDonor = donorRepository.findDonorById(1L);
         donorBackingForm = new DonorBackingForm(editDonor);
         setBackingUpdateFormValue(donorBackingForm);
         assertNotNull("Donor Object should update.",
@@ -429,7 +421,7 @@ public class DonorRepositoryTest {
     @Test(expected = NoResultException.class)
     public void updateDonor_shouldExpectNoResultException() {
         Donor editDonor = new Donor();
-        editDonor.setId(-1l);
+        editDonor.setId(-1L);
         donorBackingForm = new DonorBackingForm(editDonor);
         setBackingUpdateFormValue(donorBackingForm);
         donorRepository.updateDonorDetails(donorBackingForm.getDonor());
@@ -574,7 +566,7 @@ public class DonorRepositoryTest {
         DonorBackingForm donorBackingForm = new DonorBackingForm(donor);
         donorBackingForm.setDonorNumber("000007");
         setBackingFormValue(donorBackingForm);
-        List<Donor> listAllDonor = new ArrayList<Donor>();
+        List<Donor> listAllDonor = new ArrayList<>();
         listAllDonor.add(donorBackingForm.getDonor());
         donor = new Donor();
         donorBackingForm = new DonorBackingForm(donor);
@@ -691,11 +683,11 @@ public class DonorRepositoryTest {
      */
     public void deferDonor_ShouldPersist() throws ParseException {
     	DonorDeferral donorDeferral = new DonorDeferral();
-    	donorDeferral.setDeferredDonor(donorRepository.findDonorById(1l));
+    	donorDeferral.setDeferredDonor(donorRepository.findDonorById(1L));
     	donorDeferral.setDeferredUntil(dateFormat.parse("2015-07-19"));
     	donorDeferral.setDeferralReason(donorRepository.findDeferralReasonById("3"));
         donorRepository.deferDonor(donorDeferral);
-        assertTrue("DeferDonor object Should persist.", donorDeferral.getId() != 0 ? true : false);
+        assertTrue("DeferDonor object Should persist.", donorDeferral.getId() != 0);
     }
 
     @Test
@@ -710,7 +702,7 @@ public class DonorRepositoryTest {
         assertNotNull("DeferralReason's object should not null.",
                 deferralReason);
         assertTrue("Deferral's Reason Id should be 1.",
-                deferralReason.getId() == 1 ? true : false);
+                deferralReason.getId() == 1);
 
     }
 
@@ -733,7 +725,7 @@ public class DonorRepositoryTest {
         // 2 is Donor ID
         assertEquals(
                 "Deferral Donor is not found base on donor id so,List size should be zero.",
-                0, donorRepository.getDonorDeferrals(2l).size());
+                0, donorRepository.getDonorDeferrals(2L).size());
 
     }
 
@@ -744,13 +736,13 @@ public class DonorRepositoryTest {
     public void getDonorDeferrals_listSizeShouldNotZero() {
         // 1 is Donor ID
         List<DonorDeferral> listDonorDeferral = donorRepository
-                .getDonorDeferrals(1l);
+                .getDonorDeferrals(1L);
         assertNotSame(
                 "Deferral Donor is found base on donor id so,List size should not zero.",
                 0, listDonorDeferral.size());
         for (DonorDeferral donorDeferral : listDonorDeferral) {
             assertTrue("DonorDeferral's Donor Id should be 1.", donorDeferral
-                    .getDeferredDonor().getId() == 1 ? true : false);
+                    .getDeferredDonor().getId() == 1);
         }
 
     }
@@ -763,7 +755,7 @@ public class DonorRepositoryTest {
     public void getLastDonorDeferralDate_shouldReturnlastDeferredUntil() {
         // 4 is Donor ID
         Date currentDate = DateUtils.addDays(new Date(), (2));
-        Date date = donorRepository.getLastDonorDeferralDate(6l);
+        Date date = donorRepository.getLastDonorDeferralDate(6L);
         assertNotNull("should return last donor derferral date", date);
         String str = dateFormat.format(date);
         String str_currentDate = dateFormat.format(currentDate);
@@ -976,7 +968,7 @@ public class DonorRepositoryTest {
      */
     public void getDonorAddress_ShouldReturnNotNull() {
         assertNotNull("Expected : Address Type  but Found : NULL",
-                donorRepository.findDonorById(1l).getAddress());
+                donorRepository.findDonorById(1L).getAddress());
     }
 
     @Test
@@ -985,7 +977,7 @@ public class DonorRepositoryTest {
      */
     public void getDonorContact_ShouldReturnNotNull() {
         assertNotNull("Expected : Contact Type but Found : NULL",
-                donorRepository.findDonorById(1l).getContact());
+                donorRepository.findDonorById(1L).getContact());
     }
 
 //    @Test
@@ -1017,7 +1009,7 @@ public class DonorRepositoryTest {
     
     @Test
     public void testFindDonorsByNumbersEmptyList() throws Exception {
-    	List<Donor> donors = donorRepository.findDonorsByNumbers(new ArrayList<String>());
+    	List<Donor> donors = donorRepository.findDonorsByNumbers(new ArrayList<>());
     	Assert.assertNotNull("Not null list was returned", donors);
     	Assert.assertEquals("No Donors were returned", 0, donors.size());
     }
@@ -1031,7 +1023,7 @@ public class DonorRepositoryTest {
     
     @Test
     public void testFindDonorsByNumbersDoesntExist() throws Exception {
-    	List<String> donorNumbers = new ArrayList<String>();
+    	List<String> donorNumbers = new ArrayList<>();
     	donorNumbers.add("xxxxxx");
     	List<Donor> donors = donorRepository.findDonorsByNumbers(donorNumbers);
     	Assert.assertNotNull("Not null list was returned", donors);
@@ -1040,7 +1032,7 @@ public class DonorRepositoryTest {
     
     @Test
     public void testFindDonorsByNumbers() throws Exception {
-    	List<String> donorNumbers = new ArrayList<String>();
+    	List<String> donorNumbers = new ArrayList<>();
     	donorNumbers.add("000001");
     	donorNumbers.add("000003");
     	List<Donor> donors = donorRepository.findDonorsByNumbers(donorNumbers);
@@ -1052,11 +1044,11 @@ public class DonorRepositoryTest {
     
     @Test
     public void addMergedDonor() throws Exception {
-    	List<DuplicateDonorBackup> backupLogs = new ArrayList<DuplicateDonorBackup>();
-    	backupLogs.add(new DuplicateDonorBackup("1234567", "000001", 1l, null));
-    	backupLogs.add(new DuplicateDonorBackup("1234567", "000001", null, 1l));
+    	List<DuplicateDonorBackup> backupLogs = new ArrayList<>();
+    	backupLogs.add(new DuplicateDonorBackup("1234567", "000001", 1L, null));
+    	backupLogs.add(new DuplicateDonorBackup("1234567", "000001", null, 1L));
     	Donor oldDonor = donorRepository.findDonorByDonorNumber("000001", false);
-    	List<Donor> donorsToMerge = new ArrayList<Donor>();
+    	List<Donor> donorsToMerge = new ArrayList<>();
     	donorsToMerge.add(oldDonor);
     	Donor newDonor = new Donor();
     	newDonor.setDonorNumber("1234567");

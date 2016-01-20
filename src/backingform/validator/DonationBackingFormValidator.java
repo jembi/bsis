@@ -1,44 +1,42 @@
 package backingform.validator;
 
+import backingform.DonationBackingForm;
+import controller.UtilController;
+import model.donation.Donation;
+import model.donationbatch.DonationBatch;
+import model.donor.Donor;
+import model.location.Location;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
+import utils.CustomDateFormatter;
+import viewmodel.DonationViewModel;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
-import model.donation.Donation;
-import model.donationbatch.DonationBatch;
-import model.donor.Donor;
-import model.location.Location;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
-
-import utils.CustomDateFormatter;
-import viewmodel.DonationViewModel;
-import backingform.DonationBackingForm;
-import controller.UtilController;
-
 public class DonationBackingFormValidator implements Validator {
 
   private UtilController utilController;
   private AdverseEventBackingFormValidator adverseEventBackingFormValidator;
-  
-    public DonationBackingFormValidator(UtilController utilController,
-            AdverseEventBackingFormValidator adverseEventBackingFormValidator) {
-        super();
-        this.utilController = utilController;
-        this.adverseEventBackingFormValidator = adverseEventBackingFormValidator;
-    }
+
+  public DonationBackingFormValidator(UtilController utilController,
+                                      AdverseEventBackingFormValidator adverseEventBackingFormValidator) {
+    super();
+    this.utilController = utilController;
+    this.adverseEventBackingFormValidator = adverseEventBackingFormValidator;
+  }
 
   @SuppressWarnings("unchecked")
   @Override
   public boolean supports(Class<?> clazz) {
     return Arrays.asList(DonationBackingForm.class,
-                         Donation.class,
-                         DonationViewModel.class
-                         ).contains(clazz);
+            Donation.class,
+            DonationViewModel.class
+    ).contains(clazz);
   }
 
   @Override
@@ -53,12 +51,12 @@ public class DonationBackingFormValidator implements Validator {
     Donation donation = form.getDonation();
     if (utilController.isDuplicateDonationIdentificationNumber(donation))
       errors.rejectValue("donation.donationIdentificationNumber", "donationIdentificationNumber.nonunique",
-          "There exists a donation with the same donation identification number.");
+              "There exists a donation with the same donation identification number.");
 
     String donationDate = form.getDonationDate();
     if (!CustomDateFormatter.isDateStringValid(donationDate))
       errors.rejectValue("donation.donationDate", "donationDate.incorrect",
-          CustomDateFormatter.getDateErrorMessage());
+              CustomDateFormatter.getDateErrorMessage());
 
     updateRelatedEntities(form);
     inheritParametersFromDonationBatch(form, errors);
@@ -67,46 +65,45 @@ public class DonationBackingFormValidator implements Validator {
       errors.rejectValue("donation.donor", "donor.invalid", "Please supply a valid donor");
     }
 
-    if(donation.getBleedStartTime() != null || donation.getBleedEndTime() != null){
-        validateBleedTimes(donation.getBleedStartTime(), donation.getBleedEndTime(), errors);
+    if (donation.getBleedStartTime() != null || donation.getBleedEndTime() != null) {
+      validateBleedTimes(donation.getBleedStartTime(), donation.getBleedEndTime(), errors);
     }
 
     Location venue = form.getDonation().getVenue();
     if (venue == null) {
       errors.rejectValue("donation.venue", "venue.empty",
-        "Venue is required.");
-    } 
-    else if (utilController.isVenue(venue.getId()) == false) {
+              "Venue is required.");
+    } else if (!utilController.isVenue(venue.getId())) {
       errors.rejectValue("donation.venue", "venue.invalid",
-    	"Location is not a Venue.");
-    } 
+              "Location is not a Venue.");
+    }
 
-    validateBloodPressure(form,errors);
+    validateBloodPressure(form, errors);
     validateHaemoglobinCount(form, errors);
     validateWeight(form, errors);
     validatePulse(form, errors);
-    
+
     adverseEventBackingFormValidator.validate(form.getAdverseEvent(), errors);
 
     utilController.commonFieldChecks(form, "donation", errors);
   }
-  
-  public void validateBleedTimes(Date bleedStartTime, Date bleedEndTime, Errors errors){
-      if(bleedStartTime == null){
-          errors.rejectValue("donation.bleedStartTime", "bleedStartTime.empty", "This is required");
-          return;
-      }
-      if(bleedEndTime == null){
-          errors.rejectValue("donation.bleedEndTime", "bleedEndTime.empty", "This is required");
-          return;
-      }
-      if(bleedStartTime.after(bleedEndTime))
-          errors.rejectValue("donation", "bleedEndTime.outOfRange", "Bleed End time should be after start time");
+
+  private void validateBleedTimes(Date bleedStartTime, Date bleedEndTime, Errors errors) {
+    if (bleedStartTime == null) {
+      errors.rejectValue("donation.bleedStartTime", "bleedStartTime.empty", "This is required");
+      return;
+    }
+    if (bleedEndTime == null) {
+      errors.rejectValue("donation.bleedEndTime", "bleedEndTime.empty", "This is required");
+      return;
+    }
+    if (bleedStartTime.after(bleedEndTime))
+      errors.rejectValue("donation", "bleedEndTime.outOfRange", "Bleed End time should be after start time");
 
   }
 
   private void validateBloodPressure(DonationBackingForm donationBackingForm, Errors errors) {
-	  
+
     Integer bloodPressureSystolic = null;
     Integer bloodPressureDiastolic = null;
 
@@ -117,7 +114,7 @@ public class DonationBackingFormValidator implements Validator {
     Integer bloodPressureDiastolicMax = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.bpDiastolicMax"));
 
     if (donationBackingForm.getBloodPressureSystolic() != null) {
-      bloodPressureSystolic = donationBackingForm.getBloodPressureSystolic().intValue();
+      bloodPressureSystolic = donationBackingForm.getBloodPressureSystolic();
       if (bloodPressureSystolic < bloodPressureSystolicMin)
         errors.rejectValue("donation.bloodPressureSystolic", "bloodPressureSystolic.outOfRange", "BP value should be above " + bloodPressureSystolicMin);
       if (bloodPressureSystolic > bloodPressureSystolicMax)
@@ -125,7 +122,7 @@ public class DonationBackingFormValidator implements Validator {
     }
 
     if (donationBackingForm.getBloodPressureDiastolic() != null) {
-      bloodPressureDiastolic = donationBackingForm.getBloodPressureDiastolic().intValue();
+      bloodPressureDiastolic = donationBackingForm.getBloodPressureDiastolic();
       if (bloodPressureDiastolic < bloodPressureDiastolicMin)
         errors.rejectValue("donation.bloodPressureDiastolic", "bloodPressureDiastolic.outOfRange", "BP value should be above " + bloodPressureDiastolicMax);
       if (bloodPressureDiastolic > bloodPressureDiastolicMax)
@@ -147,7 +144,7 @@ public class DonationBackingFormValidator implements Validator {
     }
   }
 
-  private void validateWeight (DonationBackingForm donationBackingForm, Errors errors) {
+  private void validateWeight(DonationBackingForm donationBackingForm, Errors errors) {
     Integer weight = null;
     Integer weightMin = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.weightMin"));
     Integer weightMax = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.weightMax"));
@@ -161,13 +158,13 @@ public class DonationBackingFormValidator implements Validator {
     }
   }
 
-  private void validatePulse (DonationBackingForm donationBackingForm, Errors errors) {
+  private void validatePulse(DonationBackingForm donationBackingForm, Errors errors) {
     Integer pulse = null;
     Integer pulseMin = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.pulseMin"));
     Integer pulseMax = Integer.parseInt(utilController.getGeneralConfigValueByName("donation.donor.pulseMax"));
 
     if (donationBackingForm.getDonorPulse() != null) {
-      pulse = donationBackingForm.getDonorPulse().intValue();
+      pulse = donationBackingForm.getDonorPulse();
       if (pulse < pulseMin)
         errors.rejectValue("donation.donorPulse", "donorPulse.outOfRange", "Pulse value should be above " + pulseMin);
       if (pulse > pulseMax)
@@ -177,7 +174,7 @@ public class DonationBackingFormValidator implements Validator {
 
 
   private void inheritParametersFromDonationBatch(
-      DonationBackingForm form, Errors errors) {
+          DonationBackingForm form, Errors errors) {
     if (form.getUseParametersFromBatch()) {
       DonationBatch donationBatch = form.getDonationBatch();
       if (donationBatch == null) {
@@ -188,15 +185,14 @@ public class DonationBackingFormValidator implements Validator {
 
   private void updateAutoGeneratedFields(DonationBackingForm form) {
     if (StringUtils.isBlank(form.getDonationIdentificationNumber()) &&
-        utilController.isFieldAutoGenerated("donation", "donationIdentificationNumber")) {
+            utilController.isFieldAutoGenerated("donation", "donationIdentificationNumber")) {
       form.setDonationIdentificationNumber(utilController.getNextDonationIdentificationNumber());
     }
     if (StringUtils.isBlank(form.getDonationDate()) &&
-        utilController.doesFieldUseCurrentTime("donation", "donationDate")) {
+            utilController.doesFieldUseCurrentTime("donation", "donationDate")) {
       form.getDonation().setDonationDate(new Date());
     }
   }
-  
 
 
   @SuppressWarnings("unchecked")
@@ -208,13 +204,7 @@ public class DonationBackingFormValidator implements Validator {
       form.setDonor(donor);
       DonationBatch donationBatch = utilController.findDonationBatchInForm(bean);
       form.setDonationBatch(donationBatch);
-    } catch (IllegalAccessException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
+    } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }

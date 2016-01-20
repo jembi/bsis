@@ -112,13 +112,13 @@ public class DonationController {
    * in jquery datatables. Remember of columns is important and should match the column headings
    */
   private Map<String, Object> generateDatatablesMap(List<Donation> donations, Long totalRecords, Map<String, Map<String, Object>> formFields) {
-    Map<String, Object> donationsMap = new HashMap<String, Object>();
+    Map<String, Object> donationsMap = new HashMap<>();
 
-    ArrayList<Object> donationList = new ArrayList<Object>();
+    ArrayList<Object> donationList = new ArrayList<>();
 
     for (DonationViewModel donation : getDonationViewModels(donations)) {
 
-      List<Object> row = new ArrayList<Object>();
+      List<Object> row = new ArrayList<>();
       
       row.add(donation.getId().toString());
 
@@ -129,14 +129,10 @@ public class DonationController {
             String propertyValue = property;
             try {
               propertyValue = BeanUtils.getProperty(donation, property);
-            } catch (IllegalAccessException e) {
-              e.printStackTrace();
-            } catch (InvocationTargetException e) {
-              e.printStackTrace();
-            } catch (NoSuchMethodException e) {
+            } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
               e.printStackTrace();
             }
-            row.add(propertyValue.toString());
+            row.add(propertyValue);
           }
         }
       }
@@ -170,7 +166,7 @@ public class DonationController {
 
     DonationBackingForm form = new DonationBackingForm();
 
-    Map<String, Object> map = new  HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     map.put("addDonationForm", form);
     addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donation");
@@ -186,7 +182,7 @@ public class DonationController {
 
     Donation donation = donationRepository.findDonationById(id);
     DonationBackingForm form = new DonationBackingForm(donation);
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     map.put("editDonationForm", form);
     addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donation");
@@ -225,16 +221,16 @@ public class DonationController {
 
         Donation updatedDonation = donationCRUDService.updateDonation(donationId, donationBackingForm);
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("donation", getDonationViewModel(updatedDonation));
-        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
   private List<DonationViewModel> getDonationViewModels(
       List<Donation> donations) {
     if (donations == null)
       return Arrays.asList(new DonationViewModel[0]);
-    List<DonationViewModel> donationViewModels = new ArrayList<DonationViewModel>();
+    List<DonationViewModel> donationViewModels = new ArrayList<>();
     for (Donation donation : donations) {
       donationViewModels.add(new DonationViewModel(donation));
     }
@@ -253,7 +249,7 @@ public class DonationController {
     public Map<String, Object> donationSummaryGenerator(
             @PathVariable Long id) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
 
         Donation donation = null;
         if (id != null) {
@@ -282,7 +278,7 @@ public class DonationController {
      @RequestParam(value = "donationDateTo", required = false)  String donationDateTo,
      @RequestParam(value = "includeTestedDonations",required = true)  boolean includeTestedDonations)throws  ParseException{
    
-      Map<String, Object> pagingParams = new HashMap<String, Object>();
+      Map<String, Object> pagingParams = new HashMap<>();
       pagingParams.put("sortColumn", "id");
 //      pagingParams.put("start", "0");
 //      pagingParams.put("length", "10");
@@ -338,7 +334,7 @@ public class DonationController {
     }
      
   private List<PackTypeViewModel> getPackTypeViewModels(List<PackType> packTypes){     
-       List<PackTypeViewModel> viewModels = new ArrayList<PackTypeViewModel>();
+       List<PackTypeViewModel> viewModels = new ArrayList<>();
        for(PackType packtType : packTypes){
            viewModels.add(new PackTypeViewModel(packtType));
        }

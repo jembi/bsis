@@ -35,7 +35,7 @@ public class TestBatchBackingFormValidator implements Validator {
         TestBatchBackingForm form = (TestBatchBackingForm) object;
         TestBatch testBatch = form.getTestBatch();
         List<Long> donationBatchIds = form.getDonationBatchIds();
-        List<DonationBatch> donationBatches = new ArrayList<DonationBatch>();
+        List<DonationBatch> donationBatches = new ArrayList<>();
         if (donationBatchIds != null && !donationBatchIds.isEmpty()) {
             for (Long donationBatchId : donationBatchIds) {
                 DonationBatch db = donationBatchRepository.findDonationBatchById(donationBatchId);

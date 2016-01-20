@@ -6,39 +6,38 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import java.util.Collections;
 
-import java.util.Arrays;
+public class LocationBackingFormValidator implements Validator {
 
-public class LocationBackingFormValidator  implements Validator {
+  private Validator validator;
 
-    private Validator validator;
+  private UtilController utilController;
 
-    private UtilController utilController;
+  public LocationBackingFormValidator(Validator validator, UtilController utilController) {
+    super();
+    this.validator = validator;
+    this.utilController = utilController;
+  }
 
-    public LocationBackingFormValidator(Validator validator, UtilController utilController) {
-        super();
-        this.validator = validator;
-        this.utilController = utilController;
+  @Override
+  public boolean supports(Class<?> clazz) {
+    return Collections.singletonList(LocationBackingForm.class).contains(clazz);
+  }
+
+  @Override
+  public void validate(Object target, Errors errors) {
+    if (target == null || validator == null) {
+      return;
     }
 
-    @Override
-    public boolean supports (Class<?> clazz) {
-        return Arrays.asList(LocationBackingForm.class).contains(clazz);
-    }
+    ValidationUtils.invokeValidator(validator, target, errors);
 
-    @Override
-    public void validate(Object target, Errors errors) {
-        if (target == null || validator == null) {
-            return;
-        }
+    LocationBackingForm form = (LocationBackingForm) target;
 
-        ValidationUtils.invokeValidator(validator, target, errors);
-
-        LocationBackingForm form = (LocationBackingForm) target;
-
-        if (utilController.isDuplicateLocationName(form.getLocation()))
-            errors.rejectValue("name", "400", "Location name already exists.");
-    }
+    if (utilController.isDuplicateLocationName(form.getLocation()))
+      errors.rejectValue("name", "400", "Location name already exists.");
+  }
 
 
 }

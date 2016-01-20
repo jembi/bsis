@@ -1,12 +1,5 @@
 package repository.listeners;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donor.Donor;
@@ -22,6 +15,14 @@ import repository.bloodtesting.BloodTypingStatus;
 import repository.events.BloodTestsUpdatedEvent;
 import service.TestBatchStatusChangeService;
 import viewmodel.BloodTestingRuleResult;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Repository
 @Transactional
@@ -62,7 +63,7 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
       newBloodRh = "";
 
     String queryStr = "SELECT c FROM Donation c WHERE " +
-        "c.donor.id=:donorId AND c.isDeleted=:isDeleted";
+            "c.donor.id=:donorId AND c.isDeleted=:isDeleted";
     TypedQuery<Donation> query = em.createQuery(queryStr, Donation.class);
 
     query.setParameter("donorId", donor.getId());
@@ -106,15 +107,11 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
     if (donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)) {
       newDonorStatus = DonorStatus.POSITIVE_TTI;
     }
-    if (newBloodAbo == null)
-      newBloodAbo = "";
-    if (newBloodRh == null)
-      newBloodRh = "";
 
     if (!newDonorStatus.equals(oldDonorStatus) ||
-        !newBloodAbo.equals(oldBloodAbo) ||
-        !newBloodRh.equals(oldBloodRh)
-        ) {
+            !newBloodAbo.equals(oldBloodAbo) ||
+            !newBloodRh.equals(oldBloodRh)
+            ) {
       donor.setBloodAbo(newBloodAbo);
       donor.setBloodRh(newBloodRh);
       donor.setDonorStatus(newDonorStatus);
@@ -132,15 +129,14 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
     String oldExtraInformation = donation.getExtraBloodTypeInformation();
     String newExtraInformation = donation.getExtraBloodTypeInformation();
 
-    Set<String> oldExtraInformationSet = new HashSet<String>();
+    Set<String> oldExtraInformationSet = new HashSet<>();
     if (StringUtils.isNotBlank(oldExtraInformation)) {
       oldExtraInformationSet.addAll(Arrays.asList(oldExtraInformation.split(",")));
       // extra information is a field to which we add more information
       // do not store duplicate information in this field
       extraInformationNewSet.removeAll(oldExtraInformationSet);
       newExtraInformation = oldExtraInformation + StringUtils.join(extraInformationNewSet, ",");
-    }
-    else {
+    } else {
       newExtraInformation = StringUtils.join(extraInformationNewSet, ",");
     }
 
@@ -156,11 +152,11 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
     BloodTypingStatus newBloodTypingStatus = ruleResult.getBloodTypingStatus();
 
     if (!newExtraInformation.equals(oldExtraInformation) ||
-        !newBloodAbo.equals(oldBloodAbo) ||
-        !newBloodRh.equals(oldBloodRh) ||
-        !newTtiStatus.equals(oldTtiStatus) ||
-        !newBloodTypingStatus.equals(oldBloodTypingStatus)
-        ) {
+            !newBloodAbo.equals(oldBloodAbo) ||
+            !newBloodRh.equals(oldBloodRh) ||
+            !newTtiStatus.equals(oldTtiStatus) ||
+            !newBloodTypingStatus.equals(oldBloodTypingStatus)
+            ) {
       donation.setExtraBloodTypeInformation(newExtraInformation);
       donation.setBloodAbo(newBloodAbo);
       donation.setBloodRh(newBloodRh);
@@ -168,11 +164,11 @@ public class BloodTestsUpdatedEventListener implements ApplicationListener<Blood
       donation.setBloodTypingStatus(ruleResult.getBloodTypingStatus());
       donation = em.merge(donation);
     }
-    
+
     if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
-        testBatchStatusChangeService.handleRelease(donation);
+      testBatchStatusChangeService.handleRelease(donation);
     }
-    
+
     donation.setBloodTypingMatchStatus(ruleResult.getBloodTypingMatchStatus());
 
   }

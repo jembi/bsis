@@ -11,8 +11,8 @@ public enum HaemoglobinLevel {
         this.label = label;
     }
 
-    public String getLabel() {
-        return label;
-    }
+  public String getLabel() {
+    return label;
+  }
 
 }

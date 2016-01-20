@@ -1,22 +1,19 @@
 package backingform.validator;
 
-import java.util.Arrays;
-
-import javax.persistence.NoResultException;
-
+import backingform.CompatibilityTestBackingForm;
+import controller.UtilController;
 import model.compatibility.CompatibilityTest;
 import model.component.Component;
 import model.request.Request;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-
 import utils.CustomDateFormatter;
 import viewmodel.CompatibilityTestViewModel;
-import backingform.CompatibilityTestBackingForm;
-import controller.UtilController;
+
+import javax.persistence.NoResultException;
+import java.util.Arrays;
 
 public class CompatibilityTestBackingFormValidator implements Validator {
 
@@ -44,7 +41,7 @@ public class CompatibilityTestBackingFormValidator implements Validator {
     String crossmatchTestDate = form.getCompatibilityTestDate();
     if (!CustomDateFormatter.isDateTimeStringValid(crossmatchTestDate)) {
       errors.rejectValue("compatiblityTest.compatibilityTestDate", "dateFormat.incorrect",
-          CustomDateFormatter.getDateTimeErrorMessage());
+              CustomDateFormatter.getDateTimeErrorMessage());
     }
 
     String requestNumber = form.getRequestNumber();
@@ -67,7 +64,7 @@ public class CompatibilityTestBackingFormValidator implements Validator {
         Component testedComponent = utilController.findComponent(donationIdentificationNumber, componentRequest.getComponentType());
         if (testedComponent == null)
           errors.rejectValue("compatibilityTest.testedComponent", "compatibilitytest.testedComponent.notFound",
-              "Component with this donation identification number and component type not found or not available");
+                  "Component with this donation identification number and component type not found or not available");
         form.setTestedComponent(testedComponent);
       } catch (NoResultException ex) {
         form.setTestedComponent(null);

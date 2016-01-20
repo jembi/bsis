@@ -1,24 +1,5 @@
 package repository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import model.address.AddressType;
 import model.donation.Donation;
 import model.donor.Donor;
@@ -67,7 +48,7 @@ public class DonorRepository {
             String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.donations WHERE d.id = :donorId and d.isDeleted = :isDeleted and d.donorStatus not in :donorStatus";
             TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
             query.setParameter("isDeleted", Boolean.FALSE);
-            query.setParameter("donorStatus", Arrays.asList(DonorStatus.MERGED));
+            query.setParameter("donorStatus", Collections.singletonList(DonorStatus.MERGED));
             return query.setParameter("donorId", donorId).getSingleResult();
     
     }
@@ -130,7 +111,7 @@ public class DonorRepository {
             exp2 = cb.and(exp2, lastNameExp);
         }
         
-        Predicate notMerged = cb.not(root.get("donorStatus").in(Arrays.asList(DonorStatus.MERGED)));
+        Predicate notMerged = cb.not(root.get("donorStatus").in(Collections.singletonList(DonorStatus.MERGED)));
         Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
         cq.where(cb.and(notMerged, cb.and(notDeleted, exp2)));
 
@@ -138,7 +119,7 @@ public class DonorRepository {
         int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
 
         if (pagingParams.containsKey("sortColumn") && pagingParams.containsKey("sortDirection")) {
-            List<Order> order = new ArrayList<Order>();
+            List<Order> order = new ArrayList<>();
             if (pagingParams.get("sortDirection").equals("asc")) {
                 order.add(cb.asc(root.<String>get((String) pagingParams.get("sortColumn"))));
             } else {
@@ -157,11 +138,11 @@ public class DonorRepository {
         countCriteriaQuery.select(cb.countDistinct(countRoot));
 
         TypedQuery<Long> countQuery = em.createQuery(countCriteriaQuery);
-        Long totalResults = countQuery.getSingleResult().longValue();
+        Long totalResults = countQuery.getSingleResult();
         List<Donor> donorResults = query.getResultList();
         boolean looped = false;
         if (!StringUtils.isBlank(donationIdentificationNumber)) {
-            List<Donor> uniqueResult = new ArrayList<Donor>();
+            List<Donor> uniqueResult = new ArrayList<>();
             looped = true;
             for (Donor donor : donorResults) {
                 for (Donation donation : donor.getDonations()) {
@@ -172,7 +153,7 @@ public class DonorRepository {
                 }
             }
         }
-        if (looped == true) {
+        if (looped) {
             return null;
         }
         //return Arrays.asList(donorResults, totalResults);
@@ -184,7 +165,7 @@ public class DonorRepository {
         TypedQuery<Donor> query = em.createQuery(
                 "SELECT d FROM Donor d WHERE d.isDeleted = :isDeleted and d.donorStatus not in :donorStatus", Donor.class);
         query.setParameter("isDeleted", Boolean.FALSE);
-        query.setParameter("donorStatus", Arrays.asList(DonorStatus.MERGED));
+        query.setParameter("donorStatus", Collections.singletonList(DonorStatus.MERGED));
         return query.getResultList();
     }
 
@@ -218,7 +199,7 @@ public class DonorRepository {
             String queryString = "SELECT d FROM Donor d WHERE d.donorNumber = :donorNumber and d.isDeleted = :isDeleted and d.donorStatus not in :donorStatus";
             TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
             query.setParameter("isDeleted", Boolean.FALSE);
-            query.setParameter("donorStatus", Arrays.asList(DonorStatus.MERGED));
+            query.setParameter("donorStatus", Collections.singletonList(DonorStatus.MERGED));
             return query.setParameter("donorNumber", donorNumber).getSingleResult();
     }
 
@@ -249,7 +230,7 @@ public class DonorRepository {
             }
             Expression<Boolean> exp = cb.or(donorNumberExp, firstNameExp, lastNameExp);
             
-            Predicate notMerged = cb.not(root.get("donorStatus").in(Arrays.asList(DonorStatus.MERGED)));
+            Predicate notMerged = cb.not(root.get("donorStatus").in(Collections.singletonList(DonorStatus.MERGED)));
             Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
             cq.where(cb.and(notMerged, cb.and(notDeleted, exp)));
 
@@ -258,7 +239,7 @@ public class DonorRepository {
             if (donors != null && donors.size() > 0) {
                 return donors;
             }
-            return new ArrayList<Donor>();
+            return new ArrayList<>();
    
     }
 
@@ -436,13 +417,13 @@ public class DonorRepository {
                 DonorSummaryViewModel.class)
                 .setParameter("donorNumber", donorNumber)
                 .setParameter("isDeleted", false)
-                .setParameter("excludedStatuses", Arrays.asList(DonorStatus.MERGED))
+                .setParameter("excludedStatuses", Collections.singletonList(DonorStatus.MERGED))
                 .getSingleResult();
     }
 
     public List<Donor> findDonorsByNumbers(List<String> donorNumbers) {
     	if (donorNumbers == null || donorNumbers.size() == 0) {
-    		return new ArrayList<Donor>();
+    		return new ArrayList<>();
     	}
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
@@ -450,7 +431,7 @@ public class DonorRepository {
 		
 		Predicate inDonorNumbers = donor.get("donorNumber").in(donorNumbers);
 		Predicate notDeleted = cb.equal(donor.<String>get("isDeleted"), false);
-		Predicate notMerged = cb.not(donor.get("donorStatus").in(Arrays.asList(DonorStatus.MERGED)));
+		Predicate notMerged = cb.not(donor.get("donorStatus").in(Collections.singletonList(DonorStatus.MERGED)));
 		
 		cq.select(donor).where(cb.and(inDonorNumbers, notMerged, notDeleted));
     	return em.createQuery(cq).getResultList();

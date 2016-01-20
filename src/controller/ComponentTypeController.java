@@ -51,20 +51,20 @@ public class ComponentTypeController {
   @RequestMapping( method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_TYPES+"')")
   public  ResponseEntity<Map<String, Object>>  getComponentTypes() {
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     List<ComponentType> componentTypes = componentTypeRepository.getAllComponentTypesIncludeDeleted();
     map.put("componentTypes", getComponentTypeViewModels(componentTypes));
-    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_COMPONENT_TYPES+"')")
   public ResponseEntity<Map<String, Object>> getComponentTypeById(@PathVariable Long id) {
 
-    Map<String, Object> map = new HashMap<String, Object> ();
+    Map<String, Object> map = new HashMap<>();
     ComponentType componentType = componentTypeRepository.getComponentTypeById(id);
     map.put("componentType", new ComponentTypeViewModel(componentType));
-    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @RequestMapping(method=RequestMethod.POST)
@@ -115,7 +115,7 @@ public class ComponentTypeController {
   public  Map<String, Object> getComponentTypeCombination(HttpServletRequest request,
       @PathVariable Long id) {
 
-    Map<String, Object> map = new HashMap<String, Object> ();
+    Map<String, Object> map = new HashMap<>();
     ComponentTypeCombination componentTypeCombination = componentTypeRepository.getComponentTypeCombinationById(id);
     map.put("componentTypeCombination", new ComponentTypeCombinationViewModel(componentTypeCombination));
     return map;
@@ -164,7 +164,7 @@ public class ComponentTypeController {
   
   private List<ComponentTypeViewModel> getComponentTypeViewModels(List<ComponentType> componentTypes){
       
-      List<ComponentTypeViewModel> componentTypeViewModels = new ArrayList<ComponentTypeViewModel> ();
+      List<ComponentTypeViewModel> componentTypeViewModels = new ArrayList<>();
       for(ComponentType componentType : componentTypes)
           componentTypeViewModels.add(new ComponentTypeViewModel(componentType));
           
@@ -176,7 +176,7 @@ public class ComponentTypeController {
         getComponentTypeCombinationViewModels(List<ComponentTypeCombination> componentTypeCombinations){
       
       List<ComponentTypeCombinationViewModel> componentTypeCombinationViewModels
-              = new ArrayList<ComponentTypeCombinationViewModel> ();
+              = new ArrayList<>();
       for(ComponentTypeCombination componentTypeCombination : componentTypeCombinations)
           componentTypeCombinationViewModels.add(new ComponentTypeCombinationViewModel(componentTypeCombination));
           

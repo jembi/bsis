@@ -57,7 +57,7 @@ public class ComponentStatusChangeReasonRepository {
         ComponentStatusChangeReason.class);
     query.setParameter("isDeleted", false);
     Map<ComponentStatusChangeReasonCategory, ComponentStatusChangeReason> statusChangeReasonMap =
-        new HashMap<ComponentStatusChangeReasonCategory, ComponentStatusChangeReason>();
+            new HashMap<>();
     for (ComponentStatusChangeReason statusChangeReason : query.getResultList()) {
       statusChangeReasonMap.put(statusChangeReason.getCategory(), statusChangeReason);
     }

@@ -105,7 +105,7 @@ public class ComponentStatusChangeReasonRepositoryTest {
 	
 	@Test
 	public void testGetComponentStatusChangeReasonById() throws Exception {
-		ComponentStatusChangeReason one = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(1l);
+		ComponentStatusChangeReason one = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(1L);
 		Assert.assertNotNull("There is a ComponentStatusChangeReason", one);
 		Assert.assertEquals("ComponentStatusChangeReason matches", ComponentStatusChangeReasonCategory.DISCARDED,
 		    one.getCategory());
@@ -113,7 +113,7 @@ public class ComponentStatusChangeReasonRepositoryTest {
 	
 	@Test
 	public void testGetComponentStatusChangeReasonByIdUnknown() throws Exception {
-		ComponentStatusChangeReason one = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(123l);
+		ComponentStatusChangeReason one = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(123L);
 		Assert.assertNull("There is no ComponentStatusChangeReason", one);
 	}
 	

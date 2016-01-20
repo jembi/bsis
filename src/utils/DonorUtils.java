@@ -1,21 +1,19 @@
 package utils;
 
+import model.donor.Donor;
+import org.joda.time.DateTime;
+import org.joda.time.Years;
+import org.springframework.stereotype.Component;
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 
-import model.donor.Donor;
-
-import org.joda.time.DateTime;
-import org.joda.time.Years;
-import org.springframework.stereotype.Component;
-
-
 @Component
 public class DonorUtils {
-  
+
   public static Integer computeDonorAge(Donor donor) {
     Date birthDate = donor.getBirthDate();
     Date birthDateInferred = donor.getBirthDateInferred();
@@ -29,20 +27,19 @@ public class DonorUtils {
 
     DateTime t1 = new DateTime(birthDateToUse);
     DateTime t2 = new DateTime(new Date());
-    return Years.yearsBetween(t1.toDateMidnight(), t2.toDateMidnight()).getYears();
+    return Years.yearsBetween(t1.withTimeAtStartOfDay(), t2.withTimeAtStartOfDay()).getYears();
   }
-  
+
   public static Integer computeDonorAge(Date birthDate) {
 
-	    if (birthDate == null){
-	    	return null;
-	    }
-	    else{
-		    DateTime t1 = new DateTime(birthDate);
-		    DateTime t2 = new DateTime(new Date());
-		    return Years.yearsBetween(t1.toDateMidnight(), t2.toDateMidnight()).getYears();
-	    }
-	  }
+    if (birthDate == null) {
+      return null;
+    } else {
+      DateTime t1 = new DateTime(birthDate);
+      DateTime t2 = new DateTime(new Date());
+      return Years.yearsBetween(t1.withTimeAtStartOfDay(), t2.withTimeAtStartOfDay()).getYears();
+    }
+  }
 
   public static String computeDonorHash(Donor donor) {
     String firstName = donor.getFirstName();

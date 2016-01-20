@@ -1,19 +1,17 @@
 package factory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import model.donation.Donation;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import service.DonationConstraintChecker;
 import service.DonorConstraintChecker;
 import viewmodel.AdverseEventViewModel;
 import viewmodel.DonationViewModel;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class DonationViewModelFactory {
@@ -24,7 +22,7 @@ public class DonationViewModelFactory {
     private AdverseEventViewModelFactory adverseEventViewModelFactory;
     @Autowired
     private DonorConstraintChecker donorConstraintChecker;
-    
+
     public List<DonationViewModel> createDonationViewModelsWithPermissions(List<Donation> donations) {
         List<DonationViewModel> donationViewModels = new ArrayList<>();
         for (Donation donation : donations) {
@@ -32,13 +30,13 @@ public class DonationViewModelFactory {
         }
         return donationViewModels;
     }
-    
+
     public DonationViewModel createDonationViewModelWithPermissions(Donation donation) {
         DonationViewModel donationViewModel = createDonationViewModelWithoutPermissions(donation);
 
         boolean canDonate = !donorConstraintChecker.isDonorDeferred(donation.getDonor().getId());
         boolean isBackEntry = donation.getDonationBatch().isBackEntry();
-        
+
         // Populate permissions
         Map<String, Boolean> permissions = new HashMap<>();
         permissions.put("canDelete", donationConstraintChecker.canDeleteDonation(donation.getId()));

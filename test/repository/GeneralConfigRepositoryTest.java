@@ -87,14 +87,14 @@ public class GeneralConfigRepositoryTest {
 	
 	@Test
 	public void testFindGeneralConfigById() throws Exception {
-		GeneralConfig one = generalConfigRepository.getGeneralConfigById(1l);
+		GeneralConfig one = generalConfigRepository.getGeneralConfigById(1L);
 		Assert.assertNotNull("There is a GeneralConfig with id 1", one);
 		Assert.assertEquals("The GeneralConfig matches what was expected", "donation.bpSystolicMax", one.getName());
 	}
 	
 	@Test(expected = javax.persistence.NoResultException.class)
 	public void testFindGeneralConfigByIdUnknown() throws Exception {
-		generalConfigRepository.getGeneralConfigById(1111l);
+		generalConfigRepository.getGeneralConfigById(1111L);
 	}
 	
 	@Test
@@ -125,7 +125,7 @@ public class GeneralConfigRepositoryTest {
 		generalConfig1.setValue("255");
 		GeneralConfig generalConfig2 = generalConfigRepository.getGeneralConfigByName("donation.bpDiastolicMax");
 		generalConfig2.setValue("155");
-		List<GeneralConfig> generalConfigs = new ArrayList<GeneralConfig>();
+		List<GeneralConfig> generalConfigs = new ArrayList<>();
 		generalConfigs.add(generalConfig1);
 		generalConfigs.add(generalConfig2);
 		generalConfigRepository.updateAll(generalConfigs);

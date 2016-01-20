@@ -1,15 +1,14 @@
 package security;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import model.user.Permission;
 import model.user.Role;
 import model.user.User;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class BsisUserDetails implements UserDetails {
 
@@ -22,7 +21,7 @@ public class BsisUserDetails implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    List<UserAuthority> userAuthorities = new ArrayList<UserAuthority>();
+    List<UserAuthority> userAuthorities = new ArrayList<>();
     /**
      * Reason for using Permission as Authority object
      * http://stackoverflow.com/questions/6357579/spring-security-with-roles-and-permissions

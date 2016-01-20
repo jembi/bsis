@@ -1,18 +1,15 @@
 package repository.listeners;
 
-import java.util.Date;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import model.donation.Donation;
 import model.donor.Donor;
-
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import repository.events.DonationUpdatedEvent;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.Date;
 
 @Repository
 @Transactional
@@ -20,7 +17,7 @@ public class DonationUpdatedEventListener implements ApplicationListener<Donatio
 
   @PersistenceContext
   private EntityManager em;
-  
+
   @Override
   public void onApplicationEvent(DonationUpdatedEvent event) {
     updateDonor(event);

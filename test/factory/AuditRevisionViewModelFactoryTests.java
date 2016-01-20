@@ -13,10 +13,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 import model.audit.AuditRevision;
 import model.audit.EntityModification;
@@ -47,12 +44,12 @@ public class AuditRevisionViewModelFactoryTests {
         
         List<EntityModification> entityModifications = Arrays.asList(
                 anEntityModification()
-                        .withId(88l)
+                        .withId(88L)
                         .withRevisionType(RevisionType.MOD)
                         .withEntityName(Donor.class.getSimpleName())
                         .build(),
                 anEntityModification()
-                        .withId(107l)
+                        .withId(107L)
                         .withRevisionType(RevisionType.ADD)
                         .withEntityName(Donation.class.getSimpleName())
                         .build()
@@ -66,7 +63,7 @@ public class AuditRevisionViewModelFactoryTests {
                 .build();
 
         User auditRevisionUser = aUser()
-                .withId(56l)
+                .withId(56L)
                 .withUsername(irrelevantUsername)
                 .build();
 
@@ -81,7 +78,7 @@ public class AuditRevisionViewModelFactoryTests {
         
         // Exercise SUT
         List<AuditRevisionViewModel> returnedViewModels = auditRevisionViewModelFactory
-                .createAuditRevisionViewModels(Arrays.asList(auditRevision));
+                .createAuditRevisionViewModels(Collections.singletonList(auditRevision));
         
         // Verify
         verify(userRepository).findUser(irrelevantUsername);
@@ -111,7 +108,7 @@ public class AuditRevisionViewModelFactoryTests {
 
         // Exercise SUT
         List<AuditRevisionViewModel> returnedViewModels = auditRevisionViewModelFactory
-                .createAuditRevisionViewModels(Arrays.asList(auditRevision));
+                .createAuditRevisionViewModels(Collections.singletonList(auditRevision));
         
         // Verify
         verifyZeroInteractions(userRepository);

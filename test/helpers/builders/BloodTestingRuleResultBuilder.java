@@ -1,5 +1,7 @@
 package helpers.builders;
 
+import viewmodel.BloodTestingRuleResult;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,22 +16,22 @@ public class BloodTestingRuleResultBuilder extends AbstractBuilder<BloodTestingR
     private TTIStatus ttiStatus;
     private BloodTypingStatus bloodTypingStatus;
     private List<String> pendingTTITestsIds;
-    
+
     public BloodTestingRuleResultBuilder withBloodAbo(String bloodAbo) {
       this.bloodAbo = bloodAbo;
       return this;
     }
-    
+
     public BloodTestingRuleResultBuilder withBloodRh(String bloodRh) {
       this.bloodRh = bloodRh;
       return this;
     }
-    
+
     public BloodTestingRuleResultBuilder withTTIStatus(TTIStatus ttiStatus) {
       this.ttiStatus = ttiStatus;
       return this;
     }
-    
+
     public BloodTestingRuleResultBuilder withBloodTypingStatus(BloodTypingStatus bloodTypingStatus) {
       this.bloodTypingStatus = bloodTypingStatus;
       return this;

@@ -1,5 +1,13 @@
 package factory;
 
+import model.counselling.PostDonationCounselling;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import repository.PostDonationCounsellingRepository;
+import suites.UnitTestSuite;
+import viewmodel.PostDonationCounsellingViewModel;
+
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
 import static helpers.builders.PostDonationCounsellingBuilder.aPostDonationCounselling;
@@ -7,16 +15,6 @@ import static helpers.builders.PostDonationCounsellingViewModelBuilder.aPostDona
 import static helpers.matchers.PostDonationCounsellingViewModelMatcher.hasSameStateAsPostDonationCounsellingViewModel;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
-
-import model.counselling.PostDonationCounselling;
-import org.junit.Test;
-
-import org.mockito.InjectMocks;
-
-import org.mockito.Mock;
-import repository.PostDonationCounsellingRepository;
-import suites.UnitTestSuite;
-import viewmodel.PostDonationCounsellingViewModel;
 
 
 public class PostDonationCounsellingViewModelFactoryTests extends UnitTestSuite {

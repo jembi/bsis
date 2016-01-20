@@ -44,7 +44,7 @@ public class ComponentControllerTest {
 	@Ignore @Test
 	public void recordNewComponentsTest() {
 		
-		  ComponentType componentType2 = componentRepository.findComponentTypeBySelectedComponentType(1l);
+		  ComponentType componentType2 = componentRepository.findComponentTypeBySelectedComponentType(1L);
 	      String donationIdentificationNumber = "D0001";
 	      String status = "QUARANTINED";
 	      long componentId = 1L;
@@ -68,8 +68,8 @@ public class ComponentControllerTest {
 		          component.setIsDeleted(false);
 		          component.setComponentIdentificationNumber(createdPackNumber+"-"+i);
 		          Calendar c=new GregorianCalendar();
-		          System.out.println("after :"+ componentTypeRepository.getComponentTypeById(1l).getExpiryIntervalMinutes());
-		          c.add(Calendar.MINUTE, componentTypeRepository.getComponentTypeById(1l).getExpiryIntervalMinutes());
+		          System.out.println("after :"+ componentTypeRepository.getComponentTypeById(1L).getExpiryIntervalMinutes());
+		          c.add(Calendar.MINUTE, componentTypeRepository.getComponentTypeById(1L).getExpiryIntervalMinutes());
 		          Date expiredate=c.getTime();
 		          
 		          
@@ -88,8 +88,6 @@ public class ComponentControllerTest {
 			        // Once component save successfully update selected component status with processed
 			        componentRepository.setComponentStatusToProcessed(componentId);
 			        
-			      } catch (EntityExistsException ex) {
-			        ex.printStackTrace();
 			      } catch (Exception ex) {
 			        ex.printStackTrace();
 			      }
@@ -103,8 +101,8 @@ public class ComponentControllerTest {
 		          component.setComponentIdentificationNumber(createdPackNumber);
 
 		          Calendar c=new GregorianCalendar();
-		          System.out.println("after :"+ componentTypeRepository.getComponentTypeById(1l).getExpiryIntervalMinutes());
-		          c.add(Calendar.MINUTE, componentTypeRepository.getComponentTypeById(1l).getExpiryIntervalMinutes());
+		          System.out.println("after :"+ componentTypeRepository.getComponentTypeById(1L).getExpiryIntervalMinutes());
+		          c.add(Calendar.MINUTE, componentTypeRepository.getComponentTypeById(1L).getExpiryIntervalMinutes());
 		          Date expiredate=c.getTime();
 		          
 		          component.setCreatedOn(new Date());
@@ -120,8 +118,6 @@ public class ComponentControllerTest {
 			        componentRepository.addComponent(component);
 			        componentRepository.setComponentStatusToProcessed(componentId);
 			        
-			      } catch (EntityExistsException ex) {
-			        ex.printStackTrace();
 			      } catch (Exception ex) {
 			        ex.printStackTrace();
 			      }

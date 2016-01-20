@@ -49,9 +49,9 @@ public class TestBatchCRUDService {
         }
 
         if (newDonationBatchIds != null) {
-        	List<DonationBatch> newDonationBatches = new ArrayList<DonationBatch>();
+        	List<DonationBatch> newDonationBatches = new ArrayList<>();
         	// unlink old donation batches
-        	List<Long> existingDonationBatchIds = new ArrayList<Long>();
+        	List<Long> existingDonationBatchIds = new ArrayList<>();
         	for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
         		existingDonationBatchIds.add(donationBatch.getId());
         		if (!newDonationBatchIds.contains(donationBatch.getId())) {

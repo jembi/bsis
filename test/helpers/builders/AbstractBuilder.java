@@ -1,7 +1,7 @@
 package helpers.builders;
 
-public abstract class AbstractBuilder<T> {
-    
-    public abstract T build();
+abstract class AbstractBuilder<T> {
+
+  protected abstract T build();
 
 }

@@ -1,21 +1,21 @@
 package helpers.persisters;
 
-import static helpers.persisters.EntityPersisterFactory.aDonationPersister;
+import model.counselling.PostDonationCounselling;
 
 import javax.persistence.EntityManager;
 
-import model.counselling.PostDonationCounselling;
+import static helpers.persisters.EntityPersisterFactory.aDonationPersister;
 
 public class PostDonationCounsellingPersister extends AbstractEntityPersister<PostDonationCounselling> {
 
-    @Override
-    public PostDonationCounselling deepPersist(PostDonationCounselling postDonationCounselling, EntityManager entityManager) {
-        
-        if (postDonationCounselling.getDonation() != null) {
-            aDonationPersister().deepPersist(postDonationCounselling.getDonation(), entityManager);
-        }
-        
-        return persist(postDonationCounselling, entityManager);
+  @Override
+  public PostDonationCounselling deepPersist(PostDonationCounselling postDonationCounselling, EntityManager entityManager) {
+
+    if (postDonationCounselling.getDonation() != null) {
+      aDonationPersister().deepPersist(postDonationCounselling.getDonation(), entityManager);
     }
+
+    return persist(postDonationCounselling, entityManager);
+  }
 
 }

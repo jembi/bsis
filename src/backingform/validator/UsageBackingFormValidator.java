@@ -1,18 +1,16 @@
 package backingform.validator;
 
-import java.util.Arrays;
-
+import backingform.ComponentUsageBackingForm;
+import controller.UtilController;
 import model.component.Component;
-
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-
 import utils.CustomDateFormatter;
 import viewmodel.ComponentUsageViewModel;
 import viewmodel.RequestViewModel;
-import backingform.ComponentUsageBackingForm;
-import controller.UtilController;
+
+import java.util.Arrays;
 
 public class UsageBackingFormValidator implements Validator {
 
@@ -41,7 +39,7 @@ public class UsageBackingFormValidator implements Validator {
     String usageDate = form.getUsageDate();
     if (!CustomDateFormatter.isDateTimeStringValid(usageDate))
       errors.rejectValue("usage.usageDate", "dateFormat.incorrect",
-          CustomDateFormatter.getDateTimeErrorMessage());
+              CustomDateFormatter.getDateTimeErrorMessage());
 
     updateRelatedEntities(form);
 

@@ -2,17 +2,15 @@ package service;
 
 import helpers.builders.DonationBuilder;
 import helpers.builders.DonorBuilder;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import model.donation.Donation;
 import model.donor.Donor;
 import model.packtype.PackType;
 import model.util.Gender;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DonorServiceTest {
 

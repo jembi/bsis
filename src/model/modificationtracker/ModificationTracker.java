@@ -1,24 +1,24 @@
 package model.modificationtracker;
 
-import java.util.Date;
-
 import model.user.User;
+
+import java.util.Date;
 
 public interface ModificationTracker {
 
-  public Date getLastUpdated();
+  Date getLastUpdated();
 
-  public Date getCreatedDate();
+  void setLastUpdated(Date lastUpdated);
 
-  public User getCreatedBy();
+  Date getCreatedDate();
 
-  public User getLastUpdatedBy();
+  void setCreatedDate(Date createdDate);
 
-  public void setLastUpdated(Date lastUpdated);
+  User getCreatedBy();
 
-  public void setCreatedDate(Date createdDate);
+  void setCreatedBy(User createdBy);
 
-  public void setCreatedBy(User createdBy);
+  User getLastUpdatedBy();
 
-  public void setLastUpdatedBy(User lastUpdatedBy);
+  void setLastUpdatedBy(User lastUpdatedBy);
 }

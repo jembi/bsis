@@ -1,20 +1,5 @@
 package repository;
 
-import static helpers.builders.DonationBuilder.aDonation;
-import static helpers.builders.DonorBuilder.aDonor;
-import static helpers.builders.LocationBuilder.aVenue;
-import static helpers.builders.PostDonationCounsellingBuilder.aPostDonationCounselling;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 import model.donor.Donor;
@@ -24,396 +9,409 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import suites.ContextDependentTestSuite;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import java.util.*;
+
+import static helpers.builders.DonationBuilder.aDonation;
+import static helpers.builders.DonorBuilder.aDonor;
+import static helpers.builders.LocationBuilder.aVenue;
+import static helpers.builders.PostDonationCounsellingBuilder.aPostDonationCounselling;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+
 public class PostDonationCounsellingRepositoryTests extends ContextDependentTestSuite {
-    
-    private static final Date NO_START_DATE = null;
-    private static final Date NO_END_DATE = null;
-    private static final Set<Long> NO_VENUES = null;
-    
-    @PersistenceContext
-    private EntityManager entityManager;
-    @Autowired
-    private PostDonationCounsellingRepository postDonationCounsellingRepository;
 
-    @Test
-    public void testFindDonorsFlaggedForCounsellingWithNoDates_shouldReturnDonorsFlaggedForCounselling() {
+  private static final Date NO_START_DATE = null;
+  private static final Date NO_END_DATE = null;
+  private static final Set<Long> NO_VENUES = null;
 
-        Donation firstExpectedDonation = aDonation().build();
-        Donation secondExpectedDonation = aDonation().build();
+  @PersistenceContext
+  private EntityManager entityManager;
+  @Autowired
+  private PostDonationCounsellingRepository postDonationCounsellingRepository;
 
-        List<Donation> expectedDonations = Arrays.asList(firstExpectedDonation, secondExpectedDonation);
+  @Test
+  public void testFindDonorsFlaggedForCounsellingWithNoDates_shouldReturnDonorsFlaggedForCounselling() {
 
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(firstExpectedDonation)
-                .buildAndPersist(entityManager);
+    Donation firstExpectedDonation = aDonation().build();
+    Donation secondExpectedDonation = aDonation().build();
 
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(secondExpectedDonation)
-                .buildAndPersist(entityManager);
+    List<Donation> expectedDonations = Arrays.asList(firstExpectedDonation, secondExpectedDonation);
 
-        // Duplicate to test distinct donations
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(firstExpectedDonation)
-                .buildAndPersist(entityManager);
-        
-        // Excluded by flag
-        aPostDonationCounselling()
-                .thatIsNotFlaggedForCounselling()
-                .withDonation(aDonation().build())
-                .buildAndPersist(entityManager);
-        
-        List<Donation> returnedDonations = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
-                NO_START_DATE, NO_END_DATE, NO_VENUES);
-        
-        assertThat(returnedDonations, is(expectedDonations));
-    }
-    
-    @Test
-    public void testFindDonorsFlaggedForCounsellingWithVenues_shouldReturnDonorsWithDonationsForVenues() {
-        
-        Location firstVenue = aVenue().buildAndPersist(entityManager);
-        Location secondVenue = aVenue().buildAndPersist(entityManager);
-        List<Long> venues = Arrays.asList(firstVenue.getId(), secondVenue.getId());
-        
-        Donation firstExpectedDonation = aDonation().withVenue(firstVenue).build();
-        Donation secondExpectedDonation = aDonation().withVenue(secondVenue).build();
-        List<Donation> expectedDonations = Arrays.asList(firstExpectedDonation, secondExpectedDonation);
-        
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(firstExpectedDonation)
-                .buildAndPersist(entityManager);
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(firstExpectedDonation)
+            .buildAndPersist(entityManager);
 
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(secondExpectedDonation)
-                .buildAndPersist(entityManager);
-        
-        // Excluded by venue
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(aDonation()
-                        .withVenue(aVenue().build())
-                        .build())
-                .buildAndPersist(entityManager);
-        
-        List<Donation> returnedDonations = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
-                NO_START_DATE, NO_END_DATE, new HashSet<>(venues));
-        
-        assertThat(returnedDonations, is(expectedDonations));
-    }
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(secondExpectedDonation)
+            .buildAndPersist(entityManager);
 
-    @Test
-    public void testFindDonorsFlaggedForCounsellingWithStartDate_shouldReturnDonorsWithDonationsAferStartDate() {
-        DateTime startDate = new DateTime().minusDays(7);
+    // Duplicate to test distinct donations
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(firstExpectedDonation)
+            .buildAndPersist(entityManager);
 
-        Donation firstExpectedDonation = aDonation().withDonationDate(startDate.toDate()).build();
-        Donation secondExpectedDonation = aDonation().withDonationDate(startDate.plusDays(3).toDate()).build();
-        List<Donation> expectedDonations = Arrays.asList(firstExpectedDonation, secondExpectedDonation);
+    // Excluded by flag
+    aPostDonationCounselling()
+            .thatIsNotFlaggedForCounselling()
+            .withDonation(aDonation().build())
+            .buildAndPersist(entityManager);
 
-        // Donation on start date
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(firstExpectedDonation)
-                .buildAndPersist(entityManager);
+    List<Donation> returnedDonations = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
+            NO_START_DATE, NO_END_DATE, NO_VENUES);
 
-        // Donation after start date
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(secondExpectedDonation)
-                .buildAndPersist(entityManager);
+    assertThat(returnedDonations, is(expectedDonations));
+  }
 
-        // Excluded by donation before start date
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(aDonation()
-                        .withDonor(aDonor().build())
-                        .withDonationDate(startDate.minusDays(3).toDate())
-                        .build())
-                .buildAndPersist(entityManager);
-        
-        List<Donation> returnedDonations = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
-                startDate.toDate(), NO_END_DATE, NO_VENUES);
-        
-        assertThat(returnedDonations, is(expectedDonations));
-    }
+  @Test
+  public void testFindDonorsFlaggedForCounsellingWithVenues_shouldReturnDonorsWithDonationsForVenues() {
 
-    @Test
-    public void testFindDonorsFlaggedForCounsellingWithEndDate_shouldReturnDonorsWithDonationsBeforeEndDate() {
-        DateTime endDate = new DateTime().minusDays(7);
+    Location firstVenue = aVenue().buildAndPersist(entityManager);
+    Location secondVenue = aVenue().buildAndPersist(entityManager);
+    List<Long> venues = Arrays.asList(firstVenue.getId(), secondVenue.getId());
 
-        Donation firstExpectedDonation = aDonation().withDonationDate(endDate.toDate()).build();
-        Donation secondExpectedDonation = aDonation().withDonationDate(endDate.minusDays(3).toDate()).build();
-        List<Donation> expectedDonations = Arrays.asList(firstExpectedDonation, secondExpectedDonation);
+    Donation firstExpectedDonation = aDonation().withVenue(firstVenue).build();
+    Donation secondExpectedDonation = aDonation().withVenue(secondVenue).build();
+    List<Donation> expectedDonations = Arrays.asList(firstExpectedDonation, secondExpectedDonation);
 
-        // Donation on end date
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(firstExpectedDonation)
-                .buildAndPersist(entityManager);
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(firstExpectedDonation)
+            .buildAndPersist(entityManager);
 
-        // Donation before end date
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(secondExpectedDonation)
-                .buildAndPersist(entityManager);
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(secondExpectedDonation)
+            .buildAndPersist(entityManager);
 
-        // Excluded by donation after end date
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(aDonation()
-                        .withDonationDate(endDate.plusDays(3).toDate())
-                        .build())
-                .buildAndPersist(entityManager);
-        
-        List<Donation> returnedDonations = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
-                NO_START_DATE, endDate.toDate(), NO_VENUES);
-        
-        assertThat(returnedDonations, is(expectedDonations));
-    }
+    // Excluded by venue
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(aDonation()
+                    .withVenue(aVenue().build())
+                    .build())
+            .buildAndPersist(entityManager);
 
-    @Test
-    public void testFindDonorsFlaggedForCounsellingWithDates_shouldReturnDonorsWithDonationsInDateRange() {
-        DateTime startDate = new DateTime().minusDays(14);
-        DateTime endDate = new DateTime().minusDays(7);
+    List<Donation> returnedDonations = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
+            NO_START_DATE, NO_END_DATE, new HashSet<>(venues));
 
-        Donation expectedDonation = aDonation().withDonationDate(startDate.plusDays(1).toDate()).build();
-        Donation expectedDonation2 = aDonation().withDonationDate(startDate.plusDays(2).toDate()).build();
-        List<Donation> expectedDonations = Arrays.asList(expectedDonation);
+    assertThat(returnedDonations, is(expectedDonations));
+  }
 
-        // Donation in date range
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(expectedDonation)
-                .buildAndPersist(entityManager);
+  @Test
+  public void testFindDonorsFlaggedForCounsellingWithStartDate_shouldReturnDonorsWithDonationsAferStartDate() {
+    DateTime startDate = new DateTime().minusDays(7);
 
-        // Excluded by isDeleted
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsDeleted()
-                .withDonation(expectedDonation2)
-                .buildAndPersist(entityManager);
+    Donation firstExpectedDonation = aDonation().withDonationDate(startDate.toDate()).build();
+    Donation secondExpectedDonation = aDonation().withDonationDate(startDate.plusDays(3).toDate()).build();
+    List<Donation> expectedDonations = Arrays.asList(firstExpectedDonation, secondExpectedDonation);
 
-        // Excluded by donation before start date
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(aDonation()
-                        .withDonationDate(startDate.minusDays(1).toDate())
-                        .build())
-                .buildAndPersist(entityManager);
+    // Donation on start date
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(firstExpectedDonation)
+            .buildAndPersist(entityManager);
 
-        // Excluded by donation after end date
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(aDonation()
-                        .withDonationDate(endDate.plusDays(1).toDate())
-                        .build())
-                .buildAndPersist(entityManager);
-        
-        List<Donation> returnedDonations = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
-                startDate.toDate(), endDate.toDate(), NO_VENUES);
-        
-        assertThat(returnedDonations, is(expectedDonations));
-    }
+    // Donation after start date
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(secondExpectedDonation)
+            .buildAndPersist(entityManager);
 
-    @Test(expected = NoResultException.class)
-    public void testFindFlaggedPostDonationCounsellingForDonorWithNoPostDonationCounselling_shouldThrow() {
-        
-        Donor donor = aDonor().buildAndPersist(entityManager);
+    // Excluded by donation before start date
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(aDonation()
+                    .withDonor(aDonor().build())
+                    .withDonationDate(startDate.minusDays(3).toDate())
+                    .build())
+            .buildAndPersist(entityManager);
 
-        postDonationCounsellingRepository.findPostDonationCounsellingForDonor(donor.getId());
-    }
+    List<Donation> returnedDonations = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
+            startDate.toDate(), NO_END_DATE, NO_VENUES);
 
-    @Test
-    public void testFindFlaggedPostDonationCounsellingForDonor_shouldReturnFirstFlaggedPostDonationCounsellingForDonor() {
+    assertThat(returnedDonations, is(expectedDonations));
+  }
 
-        Donor donor = aDonor().build();
+  @Test
+  public void testFindDonorsFlaggedForCounsellingWithEndDate_shouldReturnDonorsWithDonationsBeforeEndDate() {
+    DateTime endDate = new DateTime().minusDays(7);
 
-        // Excluded by date
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(aDonation()
-                        .withDonor(donor)
-                        .withDonationDate(new DateTime().minusDays(3).toDate())
-                        .build())
-                .buildAndPersist(entityManager);
+    Donation firstExpectedDonation = aDonation().withDonationDate(endDate.toDate()).build();
+    Donation secondExpectedDonation = aDonation().withDonationDate(endDate.minusDays(3).toDate()).build();
+    List<Donation> expectedDonations = Arrays.asList(firstExpectedDonation, secondExpectedDonation);
 
-        // Excluded by donor
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(aDonation()
-                        .withDonor(aDonor().build())
-                        .withDonationDate(new DateTime().minusDays(7).toDate())
-                        .build())
-                .buildAndPersist(entityManager);
+    // Donation on end date
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(firstExpectedDonation)
+            .buildAndPersist(entityManager);
 
-        // Excluded by isDeleted
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsDeleted()
-                .withDonation(aDonation()
-                        .withDonor(donor)
-                        .withDonationDate(new DateTime().minusDays(5).toDate())
-                        .build())
-                .buildAndPersist(entityManager);
+    // Donation before end date
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(secondExpectedDonation)
+            .buildAndPersist(entityManager);
 
-        PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(aDonation()
-                        .withDonor(donor)
-                        .withDonationDate(new DateTime().minusDays(5).toDate())
-                        .build())
-                .buildAndPersist(entityManager);
+    // Excluded by donation after end date
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(aDonation()
+                    .withDonationDate(endDate.plusDays(3).toDate())
+                    .build())
+            .buildAndPersist(entityManager);
 
-        PostDonationCounselling returnedPostDonationCounselling = postDonationCounsellingRepository
-                .findPostDonationCounsellingForDonor(donor.getId());
+    List<Donation> returnedDonations = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
+            NO_START_DATE, endDate.toDate(), NO_VENUES);
 
-        assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
-    }
+    assertThat(returnedDonations, is(expectedDonations));
+  }
 
-    @Test
-    public void testCountFlaggedPostDonationCounsellingsForDonorWithNoPostDonationCounsellings_shouldReturnZero() {
-        
-        Donor donor = aDonor().buildAndPersist(entityManager);
-        
-        int returnedCount = postDonationCounsellingRepository.countFlaggedPostDonationCounsellingsForDonor(donor.getId());
-        
-        assertThat(returnedCount, is(0));
-    }
+  @Test
+  public void testFindDonorsFlaggedForCounsellingWithDates_shouldReturnDonorsWithDonationsInDateRange() {
+    DateTime startDate = new DateTime().minusDays(14);
+    DateTime endDate = new DateTime().minusDays(7);
 
-    @Test
-    public void testCountFlaggedPostDonationCounsellingsForDonor_shouldReturnCorrectCount() {
-        
-        Donor donor = aDonor().build();
-        
-        // Excluded by donor
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(aDonation()
-                        .withDonor(aDonor().build())
-                        .build())
-                .buildAndPersist(entityManager);
-        
-        // Excluded by flag
-        aPostDonationCounselling()
-                .thatIsNotFlaggedForCounselling()
-                .withDonation(aDonation().withDonor(donor).build())
-                .buildAndPersist(entityManager);
+    Donation expectedDonation = aDonation().withDonationDate(startDate.plusDays(1).toDate()).build();
+    Donation expectedDonation2 = aDonation().withDonationDate(startDate.plusDays(2).toDate()).build();
+    List<Donation> expectedDonations = Collections.singletonList(expectedDonation);
 
-        // Excluded by isDeleted
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsDeleted()
-                .withDonation(aDonation().withDonor(donor).build())
-                .buildAndPersist(entityManager);
+    // Donation in date range
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(expectedDonation)
+            .buildAndPersist(entityManager);
 
-        // Expected
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(aDonation().withDonor(donor).build())
-                .buildAndPersist(entityManager);
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(aDonation().withDonor(donor).build())
-                .buildAndPersist(entityManager);
-        
-        int returnedCount = postDonationCounsellingRepository.countFlaggedPostDonationCounsellingsForDonor(donor.getId());
-        
-        assertThat(returnedCount, is(2));
-    }
+    // Excluded by isDeleted
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsDeleted()
+            .withDonation(expectedDonation2)
+            .buildAndPersist(entityManager);
 
-    @Test
-    public void testCountNotFlaggedPostDonationCounsellingsForDonor_shouldReturnCorrectCount () {
-        Donor donor = aDonor().build();
+    // Excluded by donation before start date
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(aDonation()
+                    .withDonationDate(startDate.minusDays(1).toDate())
+                    .build())
+            .buildAndPersist(entityManager);
 
-        // Excluded by donor
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(aDonation()
-                        .withDonor(aDonor().build())
-                        .build())
-                .buildAndPersist(entityManager);
+    // Excluded by donation after end date
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(aDonation()
+                    .withDonationDate(endDate.plusDays(1).toDate())
+                    .build())
+            .buildAndPersist(entityManager);
 
-        // Excluded by flag
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .withDonation(aDonation().withDonor(donor).build())
-                .buildAndPersist(entityManager);
+    List<Donation> returnedDonations = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
+            startDate.toDate(), endDate.toDate(), NO_VENUES);
 
-        // Excluded by isDeleted
-        aPostDonationCounselling()
-                .thatIsFlaggedForCounselling()
-                .thatIsDeleted()
-                .withDonation(aDonation().withDonor(donor).build())
-                .buildAndPersist(entityManager);
+    assertThat(returnedDonations, is(expectedDonations));
+  }
 
-        // Expected
-        aPostDonationCounselling()
-                .thatIsNotFlaggedForCounselling()
-                .thatIsNotDeleted()
-                .withDonation(aDonation().withDonor(donor).build())
-                .buildAndPersist(entityManager);
+  @Test(expected = NoResultException.class)
+  public void testFindFlaggedPostDonationCounsellingForDonorWithNoPostDonationCounselling_shouldThrow() {
 
-        int returnedCount = postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(donor.getId());
+    Donor donor = aDonor().buildAndPersist(entityManager);
 
-        assertThat(returnedCount, is(1));
+    postDonationCounsellingRepository.findPostDonationCounsellingForDonor(donor.getId());
+  }
 
-    }
+  @Test
+  public void testFindFlaggedPostDonationCounsellingForDonor_shouldReturnFirstFlaggedPostDonationCounsellingForDonor() {
 
-    @Test
-    public void testFindPostDonationCounsellingForDonationWithNoExistingCounselling_shouldReturnNull() {
-      
-      Donation donation = aDonation().buildAndPersist(entityManager);
-        
-      PostDonationCounselling returnedCounselling = postDonationCounsellingRepository.findPostDonationCounsellingForDonation(
-          donation);
-      
-      assertThat(returnedCounselling, is(nullValue()));
-    }
-    
-    @Test
-    public void testFindPostDonationCounsellingForDonation_shouldReturnCorrectCounselling() {
-      
-      Donation donation = aDonation().buildAndPersist(entityManager);
-      
-      // Excluded by donation - persisted before expected counselling to check order
-      aPostDonationCounselling().withDonation(aDonation().build()).buildAndPersist(entityManager);
-      
-      PostDonationCounselling expectedCounselling = aPostDonationCounselling()
-          .withDonation(donation)
-          .buildAndPersist(entityManager);
-      
-      // Excluded by donation - persisted after expected counselling to check order
-      aPostDonationCounselling().withDonation(aDonation().build()).buildAndPersist(entityManager);
-      
-      PostDonationCounselling returnedCounselling = postDonationCounsellingRepository.findPostDonationCounsellingForDonation(
-          donation);
-      
-      assertThat(returnedCounselling, is(expectedCounselling));
-    }
+    Donor donor = aDonor().build();
+
+    // Excluded by date
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(aDonation()
+                    .withDonor(donor)
+                    .withDonationDate(new DateTime().minusDays(3).toDate())
+                    .build())
+            .buildAndPersist(entityManager);
+
+    // Excluded by donor
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(aDonation()
+                    .withDonor(aDonor().build())
+                    .withDonationDate(new DateTime().minusDays(7).toDate())
+                    .build())
+            .buildAndPersist(entityManager);
+
+    // Excluded by isDeleted
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsDeleted()
+            .withDonation(aDonation()
+                    .withDonor(donor)
+                    .withDonationDate(new DateTime().minusDays(5).toDate())
+                    .build())
+            .buildAndPersist(entityManager);
+
+    PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(aDonation()
+                    .withDonor(donor)
+                    .withDonationDate(new DateTime().minusDays(5).toDate())
+                    .build())
+            .buildAndPersist(entityManager);
+
+    PostDonationCounselling returnedPostDonationCounselling = postDonationCounsellingRepository
+            .findPostDonationCounsellingForDonor(donor.getId());
+
+    assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
+  }
+
+  @Test
+  public void testCountFlaggedPostDonationCounsellingsForDonorWithNoPostDonationCounsellings_shouldReturnZero() {
+
+    Donor donor = aDonor().buildAndPersist(entityManager);
+
+    int returnedCount = postDonationCounsellingRepository.countFlaggedPostDonationCounsellingsForDonor(donor.getId());
+
+    assertThat(returnedCount, is(0));
+  }
+
+  @Test
+  public void testCountFlaggedPostDonationCounsellingsForDonor_shouldReturnCorrectCount() {
+
+    Donor donor = aDonor().build();
+
+    // Excluded by donor
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(aDonation()
+                    .withDonor(aDonor().build())
+                    .build())
+            .buildAndPersist(entityManager);
+
+    // Excluded by flag
+    aPostDonationCounselling()
+            .thatIsNotFlaggedForCounselling()
+            .withDonation(aDonation().withDonor(donor).build())
+            .buildAndPersist(entityManager);
+
+    // Excluded by isDeleted
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsDeleted()
+            .withDonation(aDonation().withDonor(donor).build())
+            .buildAndPersist(entityManager);
+
+    // Expected
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(aDonation().withDonor(donor).build())
+            .buildAndPersist(entityManager);
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(aDonation().withDonor(donor).build())
+            .buildAndPersist(entityManager);
+
+    int returnedCount = postDonationCounsellingRepository.countFlaggedPostDonationCounsellingsForDonor(donor.getId());
+
+    assertThat(returnedCount, is(2));
+  }
+
+  @Test
+  public void testCountNotFlaggedPostDonationCounsellingsForDonor_shouldReturnCorrectCount() {
+    Donor donor = aDonor().build();
+
+    // Excluded by donor
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(aDonation()
+                    .withDonor(aDonor().build())
+                    .build())
+            .buildAndPersist(entityManager);
+
+    // Excluded by flag
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .withDonation(aDonation().withDonor(donor).build())
+            .buildAndPersist(entityManager);
+
+    // Excluded by isDeleted
+    aPostDonationCounselling()
+            .thatIsFlaggedForCounselling()
+            .thatIsDeleted()
+            .withDonation(aDonation().withDonor(donor).build())
+            .buildAndPersist(entityManager);
+
+    // Expected
+    aPostDonationCounselling()
+            .thatIsNotFlaggedForCounselling()
+            .thatIsNotDeleted()
+            .withDonation(aDonation().withDonor(donor).build())
+            .buildAndPersist(entityManager);
+
+    int returnedCount = postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(donor.getId());
+
+    assertThat(returnedCount, is(1));
+
+  }
+
+  @Test
+  public void testFindPostDonationCounsellingForDonationWithNoExistingCounselling_shouldReturnNull() {
+
+    Donation donation = aDonation().buildAndPersist(entityManager);
+
+    PostDonationCounselling returnedCounselling = postDonationCounsellingRepository.findPostDonationCounsellingForDonation(
+            donation);
+
+    assertThat(returnedCounselling, is(nullValue()));
+  }
+
+  @Test
+  public void testFindPostDonationCounsellingForDonation_shouldReturnCorrectCounselling() {
+
+    Donation donation = aDonation().buildAndPersist(entityManager);
+
+    // Excluded by donation - persisted before expected counselling to check order
+    aPostDonationCounselling().withDonation(aDonation().build()).buildAndPersist(entityManager);
+
+    PostDonationCounselling expectedCounselling = aPostDonationCounselling()
+            .withDonation(donation)
+            .buildAndPersist(entityManager);
+
+    // Excluded by donation - persisted after expected counselling to check order
+    aPostDonationCounselling().withDonation(aDonation().build()).buildAndPersist(entityManager);
+
+    PostDonationCounselling returnedCounselling = postDonationCounsellingRepository.findPostDonationCounsellingForDonation(
+            donation);
+
+    assertThat(returnedCounselling, is(expectedCounselling));
+  }
 }

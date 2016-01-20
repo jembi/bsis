@@ -3,33 +3,33 @@ package backingform;
 import java.util.Map;
 
 public class TestResultBackingForm {
-    
-    private String donationIdentificationNumber; 
-    private Map<Long, String> testResults;
-    private boolean saveUninterpretableResults;
 
-    public String getDonationIdentificationNumber() {
-        return donationIdentificationNumber;
-    }
+  private String donationIdentificationNumber;
+  private Map<Long, String> testResults;
+  private boolean saveUninterpretableResults;
 
-    public void setDonationIdentificationNumber(String donationIdentificationNumber) {
-        this.donationIdentificationNumber = donationIdentificationNumber;
-    }
+  public String getDonationIdentificationNumber() {
+    return donationIdentificationNumber;
+  }
 
-    public Map<Long, String> getTestResults() {
-        return testResults;
-    }
+  public void setDonationIdentificationNumber(String donationIdentificationNumber) {
+    this.donationIdentificationNumber = donationIdentificationNumber;
+  }
 
-    public void setTestResults(Map<Long, String> testResults) {
-        this.testResults = testResults;
-    }
+  public Map<Long, String> getTestResults() {
+    return testResults;
+  }
 
-    public boolean getSaveUninterpretableResults() {
-        return saveUninterpretableResults;
-    }
+  public void setTestResults(Map<Long, String> testResults) {
+    this.testResults = testResults;
+  }
 
-    public void setSaveUninterpretableResults(boolean saveUninterpretableResults) {
-        this.saveUninterpretableResults = saveUninterpretableResults;
-    }
-  
+  public boolean getSaveUninterpretableResults() {
+    return saveUninterpretableResults;
+  }
+
+  public void setSaveUninterpretableResults(boolean saveUninterpretableResults) {
+    this.saveUninterpretableResults = saveUninterpretableResults;
+  }
+
 }

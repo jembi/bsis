@@ -1,3 +1,3 @@
 <script>
-	window.location = "api.html";
+    window.location = "api.html";
 </script>

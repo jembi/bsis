@@ -41,11 +41,8 @@ public class PackType extends BaseEntity {
   
  @AssertTrue(message="Component type should be not null when countAsDonation is set to true")
   private boolean isValid(){
-      if(this.countAsDonation == true)
-          if(componentType != null)
-              return true;
-          else 
-              return false;
+      if(this.countAsDonation)
+        return componentType != null;
   return true;
    }
   

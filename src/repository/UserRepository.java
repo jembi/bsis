@@ -84,7 +84,7 @@ public class UserRepository {
         .createQuery("SELECT u FROM User u where u.isDeleted= :isDeleted", User.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     List<User> users = query.getResultList();
-    List<UserViewModel> userViewModels = new ArrayList<UserViewModel>();
+    List<UserViewModel> userViewModels = new ArrayList<>();
     for (User user : users) {
       userViewModels.add(new UserViewModel(user));
     }
@@ -116,7 +116,7 @@ public class UserRepository {
   
 	public List<Role> getUserRole(String []str) {
 		Role role=null;
-		List<Role> roles=new ArrayList<Role>();
+		List<Role> roles= new ArrayList<>();
   	if(str!=null){
   		for(String s:str){
   			if(s!= null && !s.isEmpty()){

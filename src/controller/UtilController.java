@@ -119,10 +119,10 @@ public class UtilController {
 
   public Map<String, Map<String, Object>> getFormFieldsForForm(String formName) {
     List<FormField> formFields = formFieldRepository.getFormFields(formName);
-    Map<String, Map<String, Object>> formFieldMap = new HashMap<String, Map<String, Object>>();
+    Map<String, Map<String, Object>> formFieldMap = new HashMap<>();
 
     for (FormField ff : formFields) {
-      Map<String, Object> fieldProperties = new HashMap<String, Object>();
+      Map<String, Object> fieldProperties = new HashMap<>();
       fieldProperties.put(FormField.DISPLAY_NAME, ff.getDisplayName());
       fieldProperties.put(FormField.SHORT_DISPLAY_NAME, ff.getShortDisplayName());
       fieldProperties.put(FormField.DEFAULT_VALUE, ff.getDefaultValue());
@@ -166,13 +166,7 @@ public class UtilController {
             }
         }
       }
-    } catch (IllegalAccessException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
+    } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
@@ -197,13 +191,7 @@ public class UtilController {
           }
         }
       }
-    } catch (IllegalAccessException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
+    } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
@@ -235,7 +223,7 @@ public class UtilController {
   }
 
   public Map<String, Object> parsePagingParameters(HttpServletRequest request) {
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
+    Map<String, Object> pagingParams = new HashMap<>();
     int numColumns = Integer.parseInt(request.getParameter("iColumns"));
     int sortCol = -1;
     String sortDirection = "asc";
@@ -345,12 +333,7 @@ public class UtilController {
 
   public boolean isFutureDate(Date date){
 	  Date today = new Date();
-	  if(date.after(today)){
-		  return true;
-	  }
-	  else{
-		  return false;
-	  }
+    return date.after(today);
   }
 
   public Component findComponent(String donationIdentificationNumber, String componentType) {
@@ -402,18 +385,14 @@ public class UtilController {
     if (StringUtils.isBlank(donorNumber))
       return false;
     Donor existingDonor = donorRepository.findDonorByDonorNumber(donorNumber,true);
-    if (existingDonor != null && !existingDonor.getId().equals(donor.getId()))
-      return true;
-    return false;
+    return existingDonor != null && !existingDonor.getId().equals(donor.getId());
   }
 
   public boolean donorNumberExists(String donorNumber) {
     if (StringUtils.isBlank(donorNumber))
       return false;
     Donor existingDonor = donorRepository.findDonorByDonorNumber(donorNumber,true);
-    if (existingDonor != null && existingDonor.getId() != null)
-      return true;
-    return false;
+    return existingDonor != null && existingDonor.getId() != null;
   }
 
   public boolean isDuplicateDonationIdentificationNumber(Donation donation) {
@@ -421,9 +400,7 @@ public class UtilController {
     if (StringUtils.isBlank(donationIdentificationNumber))
       return false;
     Donation existingDonation = donationRepository.findDonationByDonationIdentificationNumberIncludeDeleted(donationIdentificationNumber);
-    if (existingDonation != null && !existingDonation.getId().equals(donation.getId()))
-      return true;
-    return false;
+    return existingDonation != null && !existingDonation.getId().equals(donation.getId());
   }
 
   public boolean isDuplicateDiscardReason(ComponentStatusChangeReason discardReason){
@@ -431,9 +408,7 @@ public class UtilController {
     if (StringUtils.isBlank(reason))
       return false;
     ComponentStatusChangeReason existingDiscardReason = discardReasonRepository.findDiscardReason(reason);
-    if (existingDiscardReason != null && !existingDiscardReason.getId().equals(discardReason.getId()))
-      return true;
-    return false;
+    return existingDiscardReason != null && !existingDiscardReason.getId().equals(discardReason.getId());
   }
 
   public boolean isDuplicateDonationType(DonationType donationType){
@@ -441,9 +416,7 @@ public class UtilController {
     if (StringUtils.isBlank(type))
       return false;
     DonationType existingDonationType = donationTypeRepository.getDonationType(type);
-    if (existingDonationType != null && !existingDonationType.getId().equals(donationType.getId()))
-      return true;
-    return false;
+    return existingDonationType != null && !existingDonationType.getId().equals(donationType.getId());
   }
 
   public boolean isDuplicateGeneralConfigName(GeneralConfig config) {
@@ -451,9 +424,7 @@ public class UtilController {
     if (StringUtils.isBlank(configName))
       return false;
     GeneralConfig existingConfig = generalConfigRepository.getGeneralConfigByName(configName);
-    if (existingConfig != null && !existingConfig.getId().equals(config.getId()))
-      return true;
-    return false;
+    return existingConfig != null && !existingConfig.getId().equals(config.getId());
   }
 
   public boolean isDuplicateLocationName(Location location) {
@@ -461,9 +432,7 @@ public class UtilController {
     if (StringUtils.isBlank(locationName))
       return false;
     Location existingLocation = locationRepository.findLocationByName(locationName);
-    if (existingLocation != null && !existingLocation.getId().equals(location.getId()))
-      return true;
-    return false;
+    return existingLocation != null && !existingLocation.getId().equals(location.getId());
   }
 
   public String getGeneralConfigValueByName(String generalConfigName){
@@ -478,9 +447,7 @@ public class UtilController {
     if (StringUtils.isBlank(packTypeName))
       return false;
     PackType existingPackType = packTypeRepository.findPackTypeByName(packTypeName);
-    if (existingPackType != null && !existingPackType.getId().equals(packType.getId()))
-      return true;
-    return false;
+    return existingPackType != null && !existingPackType.getId().equals(packType.getId());
   }
 
   public boolean isDuplicateDeferralReason(DeferralReason deferralReason) {
@@ -488,9 +455,7 @@ public class UtilController {
     if (StringUtils.isBlank(reason))
       return false;
     DeferralReason existingDeferralReason = deferralReasonRepository.findDeferralReason(reason);
-    if (existingDeferralReason != null && !existingDeferralReason.getId().equals(deferralReason.getId()))
-      return true;
-    return false;
+    return existingDeferralReason != null && !existingDeferralReason.getId().equals(deferralReason.getId());
   }
   
   public boolean isDuplicateRoleName(Role role) {
@@ -498,9 +463,7 @@ public class UtilController {
     if (StringUtils.isBlank(roleName))
       return false;
     Role existingRole = roleRepository.findRoleByName(roleName);
-    if (existingRole != null && !existingRole.getId().equals(role.getId()))
-      return true;
-    return false;
+    return existingRole != null && !existingRole.getId().equals(role.getId());
   }
   
   public boolean isDuplicateUserName(User user) {
@@ -508,9 +471,7 @@ public class UtilController {
     if (StringUtils.isBlank(userName))
       return false;
     User existingUser = userRepository.findUser(userName);
-    if (existingUser != null && !existingUser.getId().equals(user.getId()))
-      return true;
-    return false;
+    return existingUser != null && !existingUser.getId().equals(user.getId());
   }
 
   public boolean isDuplicateRequestNumber(Request request) {
@@ -518,9 +479,7 @@ public class UtilController {
     if (StringUtils.isBlank(requestNumber))
       return false;
     Request existingRequest = requestRepository.findRequestByRequestNumberIncludeDeleted(requestNumber);
-    if (existingRequest != null && !existingRequest.getId().equals(request.getId()))
-      return true;
-    return false;
+    return existingRequest != null && !existingRequest.getId().equals(request.getId());
   }
 
   public boolean isDuplicateDonationBatchNumber(DonationBatch donationBatch) {
@@ -528,9 +487,7 @@ public class UtilController {
     if (StringUtils.isBlank(batchNumber))
       return false;
     DonationBatch existingDonationBatch = donationBatchRepository.findDonationBatchByBatchNumberIncludeDeleted(batchNumber);
-    if (existingDonationBatch != null && !existingDonationBatch.getId().equals(donationBatch.getId()))
-      return true;
-    return false;
+    return existingDonationBatch != null && !existingDonationBatch.getId().equals(donationBatch.getId());
   }
 
   public boolean isDuplicateWorksheetNumber(Worksheet worksheet) {
@@ -538,9 +495,7 @@ public class UtilController {
     if (StringUtils.isBlank(worksheetNumber))
       return false;
     Worksheet existingWorksheet = worksheetRepository.findWorksheetByWorksheetNumberIncludeDeleted(worksheetNumber);
-    if (existingWorksheet != null && !existingWorksheet.getId().equals(worksheet.getId()))
-      return true;
-    return false;
+    return existingWorksheet != null && !existingWorksheet.getId().equals(worksheet.getId());
   }
 
   public Component findComponentById(String componentId) {

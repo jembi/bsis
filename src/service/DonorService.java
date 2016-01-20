@@ -1,21 +1,18 @@
 package service;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import model.donation.Donation;
 import model.donor.Donor;
-import model.packtype.PackType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import repository.DonationRepository;
+
+import java.util.Date;
 
 /**
  * Service to provide Donor related functionality that doesn't result in CRUD operations
- * 
+ *
  * @see DonorCRUDService
  */
 @Transactional

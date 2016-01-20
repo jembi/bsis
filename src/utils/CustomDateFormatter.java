@@ -1,18 +1,18 @@
 package utils;
 
+import org.joda.time.DateTime;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
-import org.joda.time.DateTime;
 
 public class CustomDateFormatter {
 
-  private static String datePattern = "yyyy-MM-dd";
   private static String dateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
-  
+
   private static DateFormat dateFormat;
   private static DateFormat dateTimeFormat;
 
@@ -39,7 +39,7 @@ public class CustomDateFormatter {
     return date;
   }
 
-  public static boolean isDateEmpty(String dateString) {
+  private static boolean isDateEmpty(String dateString) {
     return (dateString == null || dateString.trim().isEmpty());
   }
 
@@ -74,7 +74,7 @@ public class CustomDateFormatter {
     }
     return valid;
   }
-  
+
   public static String getDateErrorMessage() {
     return "Invalid Date specified.";
   }
@@ -96,7 +96,7 @@ public class CustomDateFormatter {
     else
       return getISO8601StringForDate(date);
   }
-  
+
   public static String getTimeString(Date date) {
     if (date == null)
       return "";
@@ -104,20 +104,21 @@ public class CustomDateFormatter {
       return getISO8601StringForDate(date);
   }
 
-  public static String getDatePattern() {
+  private static String getDatePattern() {
+    String datePattern = "yyyy-MM-dd";
     return datePattern;
   }
 
-  public static String getDateTimePattern() {
+  private static String getDateTimePattern() {
     return dateTimePattern;
   }
 
-  public static String format(Date date){
-	  return getDateString(date);
+  public static String format(Date date) {
+    return getDateString(date);
   }
-  
-  public static Date parse(String dateStr) throws ParseException{
-	  return getDateFromString(dateStr);
+
+  public static Date parse(String dateStr) throws ParseException {
+    return getDateFromString(dateStr);
   }
 
   private static String getISO8601StringForDate(Date date) {

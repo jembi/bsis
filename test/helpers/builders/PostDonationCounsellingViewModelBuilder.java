@@ -1,16 +1,19 @@
 package helpers.builders;
 
-import java.util.HashMap;
-import java.util.Map;
-
-
 import model.counselling.PostDonationCounselling;
 import viewmodel.PostDonationCounsellingViewModel;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class PostDonationCounsellingViewModelBuilder extends AbstractBuilder<PostDonationCounsellingViewModel> {
 
   private PostDonationCounselling postDonationCounselling;
   private Map<String, Boolean> permissions;
+
+  public static PostDonationCounsellingViewModelBuilder aPostDonationCounsellingViewModel() {
+    return new PostDonationCounsellingViewModelBuilder();
+  }
 
   public PostDonationCounsellingViewModelBuilder withPostDonationCounselling(PostDonationCounselling postDonationCounselling) {
     this.postDonationCounselling = postDonationCounselling;
@@ -30,10 +33,6 @@ public class PostDonationCounsellingViewModelBuilder extends AbstractBuilder<Pos
     PostDonationCounsellingViewModel postDonationCounsellingViewModel = new PostDonationCounsellingViewModel(postDonationCounselling);
     postDonationCounsellingViewModel.setPermissions(permissions);
     return postDonationCounsellingViewModel;
-  }
-
-  public static PostDonationCounsellingViewModelBuilder aPostDonationCounsellingViewModel() {
-    return new PostDonationCounsellingViewModelBuilder();
   }
 
 }

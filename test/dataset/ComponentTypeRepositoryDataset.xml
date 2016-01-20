@@ -1,84 +1,84 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<ComponentTypeCombination id="1" combinationName="Whole Blood"
-		isDeleted="false" />
-	<ComponentTypeCombination id="2" combinationName="PRC-CPDA, FFP"
-		isDeleted="false" />
-	<ComponentTypeCombination id="3" combinationName="PRC-CPDA, FP"
-		isDeleted="false" />
-	<ComponentTypeCombination id="4"
-		combinationName="WB Poor Platelets, PC-24H" isDeleted="false" />
-	<ComponentTypeCombination id="5" combinationName="PRC-SAGM, FFP, PC"
-		isDeleted="false" />
-	<ComponentTypeCombination id="6" combinationName="PRC-SAGM, FFP"
-		isDeleted="false" />
-	<ComponentTypeCombination id="7" combinationName="PRC-SAGM, FP"
-		isDeleted="false" />
-	<ComponentTypeCombination id="8"
-		combinationName="3 X PRC-Paed-CPDA, FFP" isDeleted="false" />
-	<ComponentTypeCombination id="9"
-		combinationName="FFP-Apheresis, PC-Apheresis" isDeleted="false" />
-	<ComponentTypeCombination id="10"
-	combinationName="FFP Apheresis, 2 X PC-Apheresis" isDeleted="false" />
-	<ComponentTypeCombination id="11" combinationName="Ignore me"
-		isDeleted="true" />
-	<ComponentType id="14" description="" expiresAfter="35"
-		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		componentTypeName="Packed Red Cells - Paediatric - CPDA"
-		componentTypeNameShort="2101" />
-	<ComponentType id="1" description="" expiresAfter="35"
-		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		componentTypeName="Whole Blood Single Pack - CPDA" componentTypeNameShort="0011"
-		pediComponentType_id="14" />
-	<ComponentType id="2" description="" expiresAfter="35"
-		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		componentTypeName="Whole Blood Double Pack - CPDA" componentTypeNameShort="0012" />
-	<ComponentType id="3" description="" expiresAfter="35"
-		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		componentTypeName="Whole Blood Triple Pack - CPDA" componentTypeNameShort="0013" />
-	<ComponentType id="4" description="" expiresAfter="35"
-		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		componentTypeName="Whole Blood Quad Pack - CPDA" componentTypeNameShort="0014" />
-	<ComponentType id="5" description="" expiresAfter="5"
-		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		componentTypeName="Apheresis" componentTypeNameShort="0021" />
-	<ComponentType id="6" description="" expiresAfter="35"
-		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		componentTypeName="Whole Blood - CPDA" componentTypeNameShort="1001" />
-	<ComponentType id="7" description="" expiresAfter="35"
-		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		componentTypeName="Whole Blood Poor Platelets - CPDA"
-		componentTypeNameShort="1005" />
-	<ComponentType id="8" description="" expiresAfter="35"
-		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		componentTypeName="Packed Red Cells - CPDA" componentTypeNameShort="2001" />
-	<ComponentType id="9" description="" expiresAfter="42"
-		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		componentTypeName="Packed Red Cells - SAGM" componentTypeNameShort="2011" />
-	<ComponentType id="10" description="" expiresAfter="365"
-		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		componentTypeName="Fresh Frozen Plasma - Whole Blood"
-		componentTypeNameShort="3001" />
-	<ComponentType id="11" description="" expiresAfter="365"
-		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		componentTypeName="Frozen Plasma - Whole Blood" componentTypeNameShort="3002" />
-	<ComponentType id="12" description="" expiresAfter="5"
-		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		componentTypeName="Platelets Concentrate - Whole Blood"
-		componentTypeNameShort="4001" />
-	<ComponentType id="13" description="" expiresAfter="1"
-		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		componentTypeName="Platelets Concentrate - Whole Blood - 24H"
-		componentTypeNameShort="4011" />
-	<ComponentType id="15" description="" expiresAfter="365"
-		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		componentTypeName="Fresh Frozen Plasma - Apheresis"
-		componentTypeNameShort="3011" />
-	<ComponentType id="16" description="" expiresAfter="5"
-		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-		componentTypeName="Platelets Concentrate - Apheresis"
-		componentTypeNameShort="4021" />
-	<ComponentType id="17" description="" expiresAfter="5"
-		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="true"
-		componentTypeName="Ignore me" componentTypeNameShort="911" />
+    <ComponentTypeCombination id="1" combinationName="Whole Blood"
+                              isDeleted="false"/>
+    <ComponentTypeCombination id="2" combinationName="PRC-CPDA, FFP"
+                              isDeleted="false"/>
+    <ComponentTypeCombination id="3" combinationName="PRC-CPDA, FP"
+                              isDeleted="false"/>
+    <ComponentTypeCombination id="4"
+                              combinationName="WB Poor Platelets, PC-24H" isDeleted="false"/>
+    <ComponentTypeCombination id="5" combinationName="PRC-SAGM, FFP, PC"
+                              isDeleted="false"/>
+    <ComponentTypeCombination id="6" combinationName="PRC-SAGM, FFP"
+                              isDeleted="false"/>
+    <ComponentTypeCombination id="7" combinationName="PRC-SAGM, FP"
+                              isDeleted="false"/>
+    <ComponentTypeCombination id="8"
+                              combinationName="3 X PRC-Paed-CPDA, FFP" isDeleted="false"/>
+    <ComponentTypeCombination id="9"
+                              combinationName="FFP-Apheresis, PC-Apheresis" isDeleted="false"/>
+    <ComponentTypeCombination id="10"
+                              combinationName="FFP Apheresis, 2 X PC-Apheresis" isDeleted="false"/>
+    <ComponentTypeCombination id="11" combinationName="Ignore me"
+                              isDeleted="true"/>
+    <ComponentType id="14" description="" expiresAfter="35"
+                   expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+                   componentTypeName="Packed Red Cells - Paediatric - CPDA"
+                   componentTypeNameShort="2101"/>
+    <ComponentType id="1" description="" expiresAfter="35"
+                   expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+                   componentTypeName="Whole Blood Single Pack - CPDA" componentTypeNameShort="0011"
+                   pediComponentType_id="14"/>
+    <ComponentType id="2" description="" expiresAfter="35"
+                   expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+                   componentTypeName="Whole Blood Double Pack - CPDA" componentTypeNameShort="0012"/>
+    <ComponentType id="3" description="" expiresAfter="35"
+                   expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+                   componentTypeName="Whole Blood Triple Pack - CPDA" componentTypeNameShort="0013"/>
+    <ComponentType id="4" description="" expiresAfter="35"
+                   expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+                   componentTypeName="Whole Blood Quad Pack - CPDA" componentTypeNameShort="0014"/>
+    <ComponentType id="5" description="" expiresAfter="5"
+                   expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+                   componentTypeName="Apheresis" componentTypeNameShort="0021"/>
+    <ComponentType id="6" description="" expiresAfter="35"
+                   expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+                   componentTypeName="Whole Blood - CPDA" componentTypeNameShort="1001"/>
+    <ComponentType id="7" description="" expiresAfter="35"
+                   expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+                   componentTypeName="Whole Blood Poor Platelets - CPDA"
+                   componentTypeNameShort="1005"/>
+    <ComponentType id="8" description="" expiresAfter="35"
+                   expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+                   componentTypeName="Packed Red Cells - CPDA" componentTypeNameShort="2001"/>
+    <ComponentType id="9" description="" expiresAfter="42"
+                   expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+                   componentTypeName="Packed Red Cells - SAGM" componentTypeNameShort="2011"/>
+    <ComponentType id="10" description="" expiresAfter="365"
+                   expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+                   componentTypeName="Fresh Frozen Plasma - Whole Blood"
+                   componentTypeNameShort="3001"/>
+    <ComponentType id="11" description="" expiresAfter="365"
+                   expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+                   componentTypeName="Frozen Plasma - Whole Blood" componentTypeNameShort="3002"/>
+    <ComponentType id="12" description="" expiresAfter="5"
+                   expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+                   componentTypeName="Platelets Concentrate - Whole Blood"
+                   componentTypeNameShort="4001"/>
+    <ComponentType id="13" description="" expiresAfter="1"
+                   expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+                   componentTypeName="Platelets Concentrate - Whole Blood - 24H"
+                   componentTypeNameShort="4011"/>
+    <ComponentType id="15" description="" expiresAfter="365"
+                   expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+                   componentTypeName="Fresh Frozen Plasma - Apheresis"
+                   componentTypeNameShort="3011"/>
+    <ComponentType id="16" description="" expiresAfter="5"
+                   expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
+                   componentTypeName="Platelets Concentrate - Apheresis"
+                   componentTypeNameShort="4021"/>
+    <ComponentType id="17" description="" expiresAfter="5"
+                   expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="true"
+                   componentTypeName="Ignore me" componentTypeNameShort="911"/>
 </dataset>

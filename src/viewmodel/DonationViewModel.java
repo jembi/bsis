@@ -1,23 +1,20 @@
 package viewmodel;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import model.component.Component;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.user.User;
-
 import org.apache.commons.lang3.StringUtils;
-
 import repository.bloodtesting.BloodTypingStatus;
 import utils.CustomDateFormatter;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class DonationViewModel {
 
@@ -43,7 +40,7 @@ public class DonationViewModel {
   }
 
   @Override
-public boolean equals(Object obj) {
+  public boolean equals(Object obj) {
     return donation.equals(obj);
   }
 
@@ -65,10 +62,10 @@ public boolean equals(Object obj) {
   }
 
   public PackTypeViewModel getPackType() {
-      if (donation.getPackType() == null) {
-          return null;
-      }
-      return new PackTypeViewModel(donation.getPackType());
+    if (donation.getPackType() == null) {
+      return null;
+    }
+    return new PackTypeViewModel(donation.getPackType());
   }
 
   public String getNotes() {
@@ -84,14 +81,14 @@ public boolean equals(Object obj) {
   }
 
   @Override
-public int hashCode() {
+  public int hashCode() {
     return donation.hashCode();
   }
 
   public String getDonorNumber() {
-   if (donation.getDonor() == null)
-     return "";
-   return donation.getDonor().getDonorNumber();
+    if (donation.getDonor() == null)
+      return "";
+    return donation.getDonor().getDonorNumber();
   }
 
   public String getLastUpdated() {
@@ -128,28 +125,28 @@ public int hashCode() {
     return donation.getDonationBatch().getBatchNumber();
   }
 
-  public String getBloodTypingStatus() {
+  private String getBloodTypingStatus() {
     if (donation.getBloodTypingStatus() == null)
       return "";
     return donation.getBloodTypingStatus().toString();
   }
-  
+
   public String getBloodTypingMatchStatus() {
     if (donation.getBloodTypingMatchStatus() == null)
       return "";
     return donation.getBloodTypingMatchStatus().toString();
   }
 
-  public String getBloodAbo() {
+  private String getBloodAbo() {
     if (donation.getBloodAbo() == null)
       return "";
-    return donation.getBloodAbo().toString();
+    return donation.getBloodAbo();
   }
 
-  public String getBloodRh() {
+  private String getBloodRh() {
     if (donation.getBloodRh() == null)
       return "";
-    return donation.getBloodRh().toString();
+    return donation.getBloodRh();
   }
 
   public String getExtraBloodTypeInformation() {
@@ -167,35 +164,35 @@ public int hashCode() {
   }
 
   public BigDecimal getHaemoglobinCount() {
-		return donation.getHaemoglobinCount();
-	}
-	
+    return donation.getHaemoglobinCount();
+  }
+
   public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
-		donation.setHaemoglobinCount(haemoglobinCount);
-	}
+    donation.setHaemoglobinCount(haemoglobinCount);
+  }
 
   public HaemoglobinLevel getHaemoglobinLevel() {
-      return donation.getHaemoglobinLevel();
+    return donation.getHaemoglobinLevel();
   }
 
   public BigDecimal getDonorWeight() {
-		return donation.getDonorWeight();
-	}
+    return donation.getDonorWeight();
+  }
 
   public void setDonorWeight(BigDecimal donorWeight) {
-		donation.setDonorWeight(donorWeight);
-	}
+    donation.setDonorWeight(donorWeight);
+  }
 
-  public Integer  getDonorPulse() {
-		return donation.getDonorPulse();
-	}
+  public Integer getDonorPulse() {
+    return donation.getDonorPulse();
+  }
 
   public void setDonorPulse(Integer donorPulse) {
-		donation.setDonorPulse(donorPulse);
+    donation.setDonorPulse(donorPulse);
   }
 
   public Integer getBloodPressureSystolic() {
-    return  donation.getBloodPressureSystolic();
+    return donation.getBloodPressureSystolic();
   }
 
   public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
@@ -209,11 +206,11 @@ public int hashCode() {
   public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
     donation.setBloodPressureDiastolic(bloodPressureDiastolic);
   }
-    
+
   public String getBleedStartTime() {
     Date bleedStartTime = donation.getBleedStartTime();
     if (bleedStartTime != null) {
-        return CustomDateFormatter.getTimeString(bleedStartTime);
+      return CustomDateFormatter.getTimeString(bleedStartTime);
     }
     return "";
   }
@@ -221,41 +218,41 @@ public int hashCode() {
   public String getBleedEndTime() {
     Date bleedEndTime = donation.getBleedEndTime();
     if (bleedEndTime != null) {
-        return CustomDateFormatter.getTimeString(bleedEndTime);
+      return CustomDateFormatter.getTimeString(bleedEndTime);
     }
     return "";
   }
 
-  public  LocationViewModel getVenue(){
-      return new LocationViewModel(donation.getVenue());
+  public LocationViewModel getVenue() {
+    return new LocationViewModel(donation.getVenue());
   }
 
-    public Map<String, Boolean> getPermissions() {
-        return permissions;
-    }
+  public Map<String, Boolean> getPermissions() {
+    return permissions;
+  }
 
-    public void setPermissions(Map<String, Boolean> permissions) {
-        this.permissions = permissions;
-    }
-    
-    @JsonIgnore
-    public Donation getDonation() {
-        return donation;
-    }
+  public void setPermissions(Map<String, Boolean> permissions) {
+    this.permissions = permissions;
+  }
 
-    public AdverseEventViewModel getAdverseEvent() {
-        return adverseEvent;
-    }
+  @JsonIgnore
+  public Donation getDonation() {
+    return donation;
+  }
 
-    public void setAdverseEvent(AdverseEventViewModel adverseEvent) {
-        this.adverseEvent = adverseEvent;
-    }
-    
-    public boolean isReleased() {
-      return donation.isReleased();
-    }
-    
-    public void setReleased(boolean released) {
-      donation.setReleased(released);
-    }
+  public AdverseEventViewModel getAdverseEvent() {
+    return adverseEvent;
+  }
+
+  public void setAdverseEvent(AdverseEventViewModel adverseEvent) {
+    this.adverseEvent = adverseEvent;
+  }
+
+  public boolean isReleased() {
+    return donation.isReleased();
+  }
+
+  public void setReleased(boolean released) {
+    donation.setReleased(released);
+  }
 }

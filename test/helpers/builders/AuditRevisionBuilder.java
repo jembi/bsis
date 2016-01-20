@@ -55,7 +55,7 @@ public class AuditRevisionBuilder extends AbstractBuilder<AuditRevision> {
         AuditRevision auditRevision = build();
         return new DefaultPersister<AuditRevision>().deepPersist(auditRevision, entityManager);
     }
-    
+
     public static AuditRevisionBuilder anAuditRevision() {
         return new AuditRevisionBuilder();
     }

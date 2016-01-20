@@ -1,79 +1,79 @@
 package backingform;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.List;
-import java.util.Set;
-import javax.validation.Valid;
 import model.user.Permission;
 import model.user.Role;
 import model.user.User;
 
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Set;
+
 public class RoleBackingForm {
 
-    @Valid
-    @JsonIgnore
-    private Role role;
+  @Valid
+  @JsonIgnore
+  private Role role;
 
-    public RoleBackingForm() {
-        setRole(new Role());
-    }
+  public RoleBackingForm() {
+    setRole(new Role());
+  }
 
-    public RoleBackingForm(Role role) {
-        this.setRole(role);
-    }
+  public RoleBackingForm(Role role) {
+    this.setRole(role);
+  }
 
-    public boolean equals(Object obj) {
-        return role.equals(obj);
-    }
+  public boolean equals(Object obj) {
+    return role.equals(obj);
+  }
 
-    public Long getId() {
-        return role.getId();
-    }
+  public Long getId() {
+    return role.getId();
+  }
 
-    public String getName() {
-        return role.getName();
-    }
+  public void setId(Long id) {
+    role.setId(id);
+  }
 
-    @JsonIgnore
-    public List<User> getUsers() {
-        return role.getUsers();
-    }
+  public String getName() {
+    return role.getName();
+  }
 
-    public Set<Permission> getPermissions() {
-        return role.getPermissions();
-    }
+  public void setName(String name) {
+    role.setName(name);
+  }
 
-    public String getDescription() {
-        return role.getDescription();
-    }
+  @JsonIgnore
+  public List<User> getUsers() {
+    return role.getUsers();
+  }
 
-    public Role getRole() {
-        return role;
-    }
+  public void setUsers(List<User> users) {
+    role.setUsers(users);
+  }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
+  public Set<Permission> getPermissions() {
+    return role.getPermissions();
+  }
 
-    public void setId(Long id) {
-        role.setId(id);
-    }
+  public void setPermissions(Set<Permission> permissions) {
+    role.setPermissions(permissions);
+  }
 
-    public void setName(String name) {
-        role.setName(name);
-    }
+  public String getDescription() {
+    return role.getDescription();
+  }
 
-    public void setUsers(List<User> users) {
-        role.setUsers(users);
-    }
+  public void setDescription(String description) {
+    role.setDescription(description);
+  }
 
-    public void setPermissions(Set<Permission> permissions) {
-        role.setPermissions(permissions);
-    }
+  public Role getRole() {
+    return role;
+  }
 
-    public void setDescription(String description) {
-        role.setDescription(description);
-    }
+  private void setRole(Role role) {
+    this.role = role;
+  }
 
 }

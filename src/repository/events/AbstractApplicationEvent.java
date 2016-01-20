@@ -1,20 +1,20 @@
 package repository.events;
 
-import java.util.Map;
-
 import org.springframework.context.ApplicationEvent;
+
+import java.util.Map;
 
 
 abstract class AbstractApplicationEvent extends ApplicationEvent {
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
-  protected String eventId;
-  protected Object eventContext;
+  private String eventId;
+  private Object eventContext;
 
-  public AbstractApplicationEvent(String eventId, Object eventContext) {
+  AbstractApplicationEvent(String eventId, Object eventContext) {
     super(eventId);
     this.eventId = eventId;
     this.eventContext = eventContext;
@@ -28,10 +28,10 @@ abstract class AbstractApplicationEvent extends ApplicationEvent {
     return eventContext;
   }
 
-  public Object getContextParams(String paramName){
-    if(eventContext == null || !(eventContext instanceof Map)) {
-        return null;
+  public Object getContextParams(String paramName) {
+    if (eventContext == null || !(eventContext instanceof Map)) {
+      return null;
     }
-    return ((Map)eventContext).get(paramName);
+    return ((Map) eventContext).get(paramName);
   }
 }

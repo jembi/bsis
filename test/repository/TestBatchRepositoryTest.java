@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -93,14 +94,14 @@ public class TestBatchRepositoryTest {
 
     @Test
     public void testFindTestBatchById() throws Exception {
-        TestBatch testBatch = testBatchRepository.findTestBatchById(1l);
+        TestBatch testBatch = testBatchRepository.findTestBatchById(1L);
         Assert.assertNotNull("TestBatch defined", testBatch);
         Assert.assertEquals("TestBatch is correct", "000000", testBatch.getBatchNumber());
     }
 
     @Test(expected = javax.persistence.NoResultException.class)
     public void testFindTestBatchByIdUnknown() throws Exception {
-        testBatchRepository.findTestBatchById(123l);
+        testBatchRepository.findTestBatchById(123L);
     }
 
     @Test
@@ -110,7 +111,7 @@ public class TestBatchRepositoryTest {
         String createdBeforeDate = "2015-07-11 23:59:59";
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        List<TestBatch> testBatches = testBatchRepository.findTestBatches(Arrays.asList(status),
+        List<TestBatch> testBatches = testBatchRepository.findTestBatches(Collections.singletonList(status),
                 df.parse(createdAfterDate), df.parse(createdBeforeDate));
         Assert.assertNotNull("TestBatch not null", testBatches);
         Assert.assertTrue("TestBatch is empty", testBatches.isEmpty());
@@ -132,32 +133,32 @@ public class TestBatchRepositoryTest {
     @Test
     public void testFindTestBatchesMatchOnStatusOnly() throws Exception {
         TestBatchStatus status = TestBatchStatus.CLOSED;
-        List<TestBatch> testBatches = testBatchRepository.findTestBatches(Arrays.asList(status), null, null);
+        List<TestBatch> testBatches = testBatchRepository.findTestBatches(Collections.singletonList(status), null, null);
         Assert.assertNotNull("TestBatch not null", testBatches);
         Assert.assertEquals("TestBatch matched on status", 1, testBatches.size());
     }
 
     @Test
     public void testDeleteTestBatch() throws Exception {
-        testBatchRepository.deleteTestBatch(1l);
-        TestBatch testBatch = testBatchRepository.findTestBatchById(1l);
+        testBatchRepository.deleteTestBatch(1L);
+        TestBatch testBatch = testBatchRepository.findTestBatchById(1L);
         Assert.assertTrue("TestBatch is deleted", testBatch.getIsDeleted());
     }
 
     @Test
     public void testUpdateTestBatch() throws Exception {
-        TestBatch testBatch = testBatchRepository.findTestBatchById(2l);
+        TestBatch testBatch = testBatchRepository.findTestBatchById(2L);
         testBatch.setStatus(TestBatchStatus.RELEASED);
         testBatchRepository.updateTestBatch(testBatch);
-        TestBatch updatedTestBatch = testBatchRepository.findTestBatchById(2l);
+        TestBatch updatedTestBatch = testBatchRepository.findTestBatchById(2L);
         Assert.assertEquals("TestBatch status is correct", TestBatchStatus.RELEASED, updatedTestBatch.getStatus());
     }
 
     @Test
     public void testSaveTestBatch() throws Exception {
         TestBatch testBatch = new TestBatch();
-        List<DonationBatch> donationBatches = new ArrayList<DonationBatch>();
-        donationBatches.add(donationBatchRepository.findDonationBatchById(3l));
+        List<DonationBatch> donationBatches = new ArrayList<>();
+        donationBatches.add(donationBatchRepository.findDonationBatchById(3L));
         testBatch.setDonationBatches(donationBatches);
         TestBatch savedTestBatch = testBatchRepository.saveTestBatch(testBatch, "1234567");
         Assert.assertNotNull("Saved TestBatch has an id", savedTestBatch.getId());
@@ -165,7 +166,7 @@ public class TestBatchRepositoryTest {
         Assert.assertNotNull("Saved TestBatch is found", retrievedTestBatch);
         Assert.assertEquals("TestBatch status is correct", TestBatchStatus.OPEN, retrievedTestBatch.getStatus());
         Assert.assertEquals("TestBatch batchNumber is correct", "1234567", retrievedTestBatch.getBatchNumber());
-        DonationBatch updatedDonationBatch = donationBatchRepository.findDonationBatchById(3l);
+        DonationBatch updatedDonationBatch = donationBatchRepository.findDonationBatchById(3L);
         Assert.assertNotNull("DonationBatch was linked to TestBatch", updatedDonationBatch.getTestBatch());
     }
 
@@ -179,7 +180,7 @@ public class TestBatchRepositoryTest {
     @Test
     public void testGetRecentlyClosedTestBatchesWithLimit() throws Exception {
         // creating an extra closed batch
-        TestBatch testBatch = testBatchRepository.findTestBatchById(2l);
+        TestBatch testBatch = testBatchRepository.findTestBatchById(2L);
         testBatch.setStatus(TestBatchStatus.CLOSED);
         testBatchRepository.updateTestBatch(testBatch);
         // only get 1 closed test batch now

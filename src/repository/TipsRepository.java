@@ -1,15 +1,13 @@
 package repository;
 
-import java.util.List;
+import model.tips.Tips;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
-import model.tips.Tips;
-
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -21,7 +19,7 @@ public class TipsRepository {
   public TipsRepository() {
   }
 
-  public Tips findTipsByKey(String key) {
+  private Tips findTipsByKey(String key) {
     return em.find(Tips.class, key);
   }
 
@@ -40,11 +38,10 @@ public class TipsRepository {
   }
 
   public void saveAllTips(List<Tips> allTips) {
-    for (Tips tips: allTips) {
+    for (Tips tips : allTips) {
       if (tips.getTipsKey() == null) {
         em.persist(tips);
-      }
-      else {
+      } else {
         Tips existingTips = em.find(Tips.class, tips.getTipsKey());
         if (existingTips != null) {
           existingTips.setTipsContent(tips.getTipsContent());
@@ -57,7 +54,7 @@ public class TipsRepository {
 
   public List<Tips> getAllTips() {
     TypedQuery<Tips> query = em
-        .createQuery("SELECT t FROM Tips t", Tips.class);
+            .createQuery("SELECT t FROM Tips t", Tips.class);
     return query.getResultList();
   }
 }

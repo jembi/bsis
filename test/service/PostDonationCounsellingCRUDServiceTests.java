@@ -48,7 +48,7 @@ public class PostDonationCounsellingCRUDServiceTests {
 
         User admin = UserBuilder.aUser()
                 .withUsername("admin")
-                .withId(1l)
+                .withId(1L)
                 .build();
         
         PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
@@ -119,12 +119,12 @@ public class PostDonationCounsellingCRUDServiceTests {
 
         User admin = UserBuilder.aUser()
                 .withUsername("admin")
-                .withId(1l)
+                .withId(1L)
                 .build();
 
         User ordinary = UserBuilder.aUser()
                 .withUsername("ordinary")
-                .withId(2l)
+                .withId(2L)
                 .build();
 
 
@@ -185,12 +185,12 @@ public class PostDonationCounsellingCRUDServiceTests {
 
         User admin = UserBuilder.aUser()
                 .withUsername("admin")
-                .withId(1l)
+                .withId(1L)
                 .build();
 
         User ordinary = UserBuilder.aUser()
                 .withUsername("ordinary")
-                .withId(2l)
+                .withId(2L)
                 .build();
 
         PostDonationCounselling existingPostDonationCounselling = aPostDonationCounselling()

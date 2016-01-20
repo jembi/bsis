@@ -156,10 +156,10 @@ public class DonationRepositoryTest {
 	public void testFindNumberOfDonationsDaily() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-10");
-		List<String> venues = new ArrayList<String>();
+		List<String> venues = new ArrayList<>();
 		venues.add("1");
 		venues.add("2");
-		List<String> bloodGroups = new ArrayList<String>();
+		List<String> bloodGroups = new ArrayList<>();
 		bloodGroups.add("A-");
 		Map<String, Map<Long, Long>> results = donationRepository.findNumberOfDonations(donationDateFrom, donationDateTo,
 		    "daily", venues, bloodGroups);
@@ -175,10 +175,10 @@ public class DonationRepositoryTest {
 	public void testFindNumberOfDonationsMonthly() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-03-10");
-		List<String> venues = new ArrayList<String>();
+		List<String> venues = new ArrayList<>();
 		venues.add("1");
 		venues.add("2");
-		List<String> bloodGroups = new ArrayList<String>();
+		List<String> bloodGroups = new ArrayList<>();
 		bloodGroups.add("A-");
 		bloodGroups.add("A+");
 		bloodGroups.add("O-");
@@ -200,10 +200,10 @@ public class DonationRepositoryTest {
 	public void testFindNumberOfDonationsYearly() throws Exception {
 		Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01");
 		Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-10");
-		List<String> venues = new ArrayList<String>();
+		List<String> venues = new ArrayList<>();
 		venues.add("1");
 		venues.add("2");
-		List<String> bloodGroups = new ArrayList<String>();
+		List<String> bloodGroups = new ArrayList<>();
 		bloodGroups.add("AB-");
 		bloodGroups.add("AB+");
 		Map<String, Map<Long, Long>> results = donationRepository.findNumberOfDonations(donationDateFrom, donationDateTo,
@@ -231,12 +231,12 @@ public class DonationRepositoryTest {
 	@Test
 	@Ignore("findDonations has a bug in the HSQL when querying a DIN with parameter name venueIds/venueIds")
 	public void testFindDonationsDIN() throws Exception {
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<Long> packTypeIds = new ArrayList<Long>();
-		packTypeIds.add(new Long(1));
-		List<Long> venueIds = new ArrayList<Long>();
-		venueIds.add(new Long(1));
-		venueIds.add(new Long(2));
+		Map<String, Object> pagingParams = new HashMap<>();
+		List<Long> packTypeIds = new ArrayList<>();
+		packTypeIds.add(1L);
+		List<Long> venueIds = new ArrayList<>();
+		venueIds.add(1L);
+		venueIds.add(2L);
 		List<Object> donations = donationRepository.findDonations("1234567", packTypeIds, venueIds, "2015-02-01",
 		    "2015-02-10", false, pagingParams);
 		Assert.assertNotNull("List is not null", donations);
@@ -247,11 +247,11 @@ public class DonationRepositoryTest {
 	
 	@Test
 	public void testFindDonations() throws Exception {
-		Map<String, Object> pagingParams = new HashMap<String, Object>();
-		List<Long> packTypeIds = new ArrayList<Long>();
-		packTypeIds.add(new Long(1));
-		List<Long> venueIds = new ArrayList<Long>();
-		venueIds.add(new Long(2));
+		Map<String, Object> pagingParams = new HashMap<>();
+		List<Long> packTypeIds = new ArrayList<>();
+		packTypeIds.add(1L);
+		List<Long> venueIds = new ArrayList<>();
+		venueIds.add(2L);
 		List<Object> result = donationRepository.findDonations(null, packTypeIds, venueIds, "01/02/2015", "10/02/2015",
 		    true, pagingParams);
 		Assert.assertNotNull("List is not null", result);
@@ -269,7 +269,7 @@ public class DonationRepositoryTest {
 	
 	@Test
 	public void testFilterDonationsWithBloodTypingResults() throws Exception {
-		List<Donation> donations = new ArrayList<Donation>();
+		List<Donation> donations = new ArrayList<>();
 		donations.add(donationRepository.findDonationById(1L));
 		donations.add(donationRepository.findDonationById(2L));
 		donations.add(donationRepository.findDonationById(3L));
@@ -341,7 +341,7 @@ public class DonationRepositoryTest {
 		today.add(Calendar.MINUTE, -15);
 		newDonation2.setBleedStartTime(today.getTime());
 		
-		List<Donation> newDonations = new ArrayList<Donation>();
+		List<Donation> newDonations = new ArrayList<>();
 		newDonations.add(newDonation1);
 		newDonations.add(newDonation2);
 		newDonations = donationRepository.addAllDonations(newDonations);

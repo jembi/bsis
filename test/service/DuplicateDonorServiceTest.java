@@ -46,16 +46,16 @@ public class DuplicateDonorServiceTest {
 	
     @InjectMocks
 	private DuplicateDonorService service;
-    
+
     @Mock
     private DonorRepository donorRepository;
-    
+
     @Mock
     private SequenceNumberRepository sequenceNumberRepository;
-    
+
     @Mock
     private BloodTestsService bloodTestsService;
-    
+
     @Mock
     private DonorService donorService;
 	
@@ -67,13 +67,13 @@ public class DuplicateDonorServiceTest {
 
 	@Test
 	public void testFindDuplicateDonorsEmpty() throws Exception {
-		Map<String, List<Donor>> duplicateDonors = service.findDuplicateDonors(new ArrayList<Donor>());
+		Map<String, List<Donor>> duplicateDonors = service.findDuplicateDonors(new ArrayList<>());
 		Assert.assertTrue("No matching donors", duplicateDonors.isEmpty());
 	}
 
 	@Test
 	public void testFindDuplicateDonorsBasic() throws Exception {
-		List<Donor> donors = new ArrayList<Donor>();
+		List<Donor> donors = new ArrayList<>();
 		donors.add(DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith")
 		        .withGender(Gender.male).withBirthDate("1977-10-20").build());
 		donors.add(DonorBuilder.aDonor().withDonorNumber("2").withFirstName("David").withLastName("Smith")
@@ -92,7 +92,7 @@ public class DuplicateDonorServiceTest {
 
 	@Test
 	public void testFindDuplicateDonorsDouble() throws Exception {
-		List<Donor> donors = new ArrayList<Donor>();
+		List<Donor> donors = new ArrayList<>();
 		donors.add(DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith")
 		        .withGender(Gender.male).withBirthDate("1977-10-20").build());
 		donors.add(DonorBuilder.aDonor().withDonorNumber("2").withFirstName("David").withLastName("Smith")
@@ -122,7 +122,7 @@ public class DuplicateDonorServiceTest {
 
 	@Test
 	public void testFindDuplicateDonorsMatchingOneBasic() throws Exception {
-		List<Donor> donors = new ArrayList<Donor>();
+		List<Donor> donors = new ArrayList<>();
 		Donor donor = DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith")
 		        .withGender(Gender.male).withBirthDate("1977-10-20").build();
 		donors.add(donor);
@@ -140,7 +140,7 @@ public class DuplicateDonorServiceTest {
 	
 	@Test
 	public void testFindDuplicateMatchingOneDonorsDouble() throws Exception {
-		List<Donor> donors = new ArrayList<Donor>();
+		List<Donor> donors = new ArrayList<>();
 		donors.add(DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith")
 		        .withGender(Gender.male).withBirthDate("1977-10-20").build());
 		donors.add(DonorBuilder.aDonor().withDonorNumber("2").withFirstName("David").withLastName("Smith")
@@ -171,7 +171,7 @@ public class DuplicateDonorServiceTest {
 
 	@Test
 	public void testMergeDuplicateDonorsEmptyList() throws Exception {
-		List<DuplicateDonorBackup> backupLogs = service.mergeDonors(new Donor(), new ArrayList<Donor>());
+		List<DuplicateDonorBackup> backupLogs = service.mergeDonors(new Donor(), new ArrayList<>());
 		Assert.assertNotNull("backupLogs returned", backupLogs);
 		Assert.assertEquals("No backups necessary", 0, backupLogs.size());
 	}
@@ -182,7 +182,7 @@ public class DuplicateDonorServiceTest {
         String donorNumber1 = "1";
         String donorNumber2 = "2";
         List<String> donorNumbers = Arrays.asList(new String[] {donorNumber1, donorNumber2});
-        
+
         List<Donor> donors = new ArrayList<Donor>();
         Donor david1 = DonorBuilder.aDonor().withDonorNumber(donorNumber1).withFirstName("David").withLastName("Smith")
                 .withGender(Gender.male).withBirthDate("1977-10-20").build();
@@ -190,7 +190,7 @@ public class DuplicateDonorServiceTest {
                 .withGender(Gender.male).withBirthDate("1977-10-20").build();
         donors.add(david1);
         donors.add(david2);
-        
+
         // create donations (david1)
         Donation donation1 = DonationBuilder.aDonation().withId(1l).withDonor(david1).withDonationDate(new Date()).build();
         Donation donation2 = DonationBuilder.aDonation().withId(2l).withDonor(david1).withDonationDate(new Date()).build();
@@ -198,7 +198,7 @@ public class DuplicateDonorServiceTest {
         donations.add(donation1);
         donations.add(donation2);
         david1.setDonations(donations);
-        
+
         // create deferrals (david2)
         DeferralReason deferralReason1 = DeferralReasonBuilder.aDeferralReason()
                 .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
@@ -207,11 +207,11 @@ public class DuplicateDonorServiceTest {
         List<DonorDeferral> deferrals = new ArrayList<DonorDeferral>();
         deferrals.add(deferral1);
         david2.setDeferrals(deferrals);
-        
+
         // create new Donor
         Donor david3 = DonorBuilder.aDonor().withDonorNumber("3").withFirstName("David").withLastName("Smith")
                 .withGender(Gender.male).withBirthDate("1977-10-20").build();
-        
+
         // run test
         List<DuplicateDonorBackup> backupLogs = service.mergeDonors(david3, donors);
 
@@ -235,7 +235,7 @@ public class DuplicateDonorServiceTest {
 	    String donorNumber1 = "1";
 	    String donorNumber2 = "2";
 	    List<String> donorNumbers = Arrays.asList(new String[] {donorNumber1, donorNumber2});
-	    
+
 		List<Donor> donors = new ArrayList<Donor>();
 		Donor david1 = DonorBuilder.aDonor().withDonorNumber(donorNumber1).withFirstName("David").withLastName("Smith")
 		        .withGender(Gender.male).withBirthDate("1977-10-20").build();
@@ -243,7 +243,7 @@ public class DuplicateDonorServiceTest {
 		        .withGender(Gender.male).withBirthDate("1977-10-20").build();
 		donors.add(david1);
 		donors.add(david2);
-		
+
 		// create donations (david1)
 		PackType packType = PackTypeBuilder.aPackType().withPeriodBetweenDonations(90).build();
 		Donation donation1 = DonationBuilder.aDonation().withId(1l).withDonor(david1).withDonationDate(new Date()).withPackType(packType).build();
@@ -252,7 +252,7 @@ public class DuplicateDonorServiceTest {
 		donations.add(donation1);
 		donations.add(donation2);
 		david1.setDonations(donations);
-		
+
 		// create deferrals (david2)
 		DeferralReason deferralReason1 = DeferralReasonBuilder.aDeferralReason()
 		        .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
@@ -261,7 +261,7 @@ public class DuplicateDonorServiceTest {
 		List<DonorDeferral> deferrals = new ArrayList<DonorDeferral>();
 		deferrals.add(deferral1);
 		david2.setDeferrals(deferrals);
-		
+
 		// create new Donor
 		Donor david3 = DonorBuilder.aDonor().withDonorNumber("3").withFirstName("David").withLastName("Smith")
 		        .withGender(Gender.male).withBirthDate("1977-10-20").build();
@@ -271,7 +271,7 @@ public class DuplicateDonorServiceTest {
             .withBloodAbo("A").withBloodRh("+")
             .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
             .build();
-		
+
 		// set up mocks
 		when(sequenceNumberRepository.getNextDonorNumber()).thenReturn("1234");
 		when(donorRepository.findDonorsByNumbers(donorNumbers)).thenReturn(donors);
@@ -279,7 +279,7 @@ public class DuplicateDonorServiceTest {
 		when(bloodTestsService.executeTests(donation1)).thenReturn(btrr);
 		when(bloodTestsService.executeTests(donation2)).thenReturn(btrr);
 		when(donorRepository.updateDonor(david3)).thenReturn(david3);
-		
+
 		// run test
 		david3 = service.mergeAndSaveDonors(david3, donorNumbers);
 
@@ -521,7 +521,7 @@ public class DuplicateDonorServiceTest {
 	    String donorNumber1 = "1000001";
 	    String donorNumber2 = "1000002";
 	    List<String> donorNumbers = Arrays.asList(new String[] {donorNumber1, donorNumber2});
-	    
+
 	    PackType packType = PackTypeBuilder.aPackType().withPeriodBetweenDonations(90).build();
 		Donation d1 = DonationBuilder.aDonation().withId(1l).withPackType(packType)
 		        .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-07-01")).build();
@@ -534,26 +534,26 @@ public class DuplicateDonorServiceTest {
 
 		Donor david = DonorBuilder.aDonor().withDonorNumber(donorNumber1).withFirstName("David").withLastName("Smith").withGender(Gender.male)
 		        .withBirthDate("1978-10-20").withDonations(Arrays.asList(new Donation[] { d1, d2, d3 })).build();
-		
+
 		Donor john = DonorBuilder.aDonor().withDonorNumber(donorNumber2).withFirstName("John").withLastName("Smith").withGender(Gender.male)
 		        .withBirthDate("1958-10-20").withDonations(Arrays.asList(new Donation[] { d4 })).build();
 		
 		List<Donor> donors = Arrays.asList(new Donor[] { david, john });
-		
+
 		BloodTestingRuleResult btrr = BloodTestingRuleResultBuilder.aBloodTestingRuleResult()
 		    .withBloodAbo("A").withBloodRh("+")
 		    .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
 		    .build();
-		
+
       // setup mocks
       when(donorRepository.findDonorsByNumbers(donorNumbers)).thenReturn(donors);
       when(bloodTestsService.executeTests(d1)).thenReturn(btrr);
       when(bloodTestsService.executeTests(d2)).thenReturn(btrr);
       when(bloodTestsService.executeTests(d3)).thenReturn(btrr);
       when(bloodTestsService.executeTests(d4)).thenReturn(btrr);
-      
+
       List<Donation> donations = service.getAllDonationsToMerge(new Donor(), donorNumbers);
-      
+
       Assert.assertNotNull("List was returned", donations);
       Assert.assertEquals("Correct number of Deferrals in the list", 4, donations.size());
       Assert.assertEquals("Donations in the correct order", Long.valueOf(2), donations.get(0).getId());

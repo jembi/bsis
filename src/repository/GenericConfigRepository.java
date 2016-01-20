@@ -1,19 +1,17 @@
 package repository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import model.admin.ConfigPropertyConstants;
+import model.admin.GenericConfig;
+import model.bloodtesting.BloodTestContext;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
-import model.admin.ConfigPropertyConstants;
-import model.admin.GenericConfig;
-import model.bloodtesting.BloodTestContext;
-
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 @Transactional
@@ -21,9 +19,9 @@ public class GenericConfigRepository {
 
   @PersistenceContext
   private EntityManager em;
-  
+
   public Map<String, String> getConfigProperties(List<String> propertyOwners) {
-    Map<String, String> configProperties = new HashMap<String, String>();
+    Map<String, String> configProperties = new HashMap<>();
     String queryStr = "SELECT c FROM GenericConfig c WHERE c.propertyOwner IN :propertyOwners";
     TypedQuery<GenericConfig> query = em.createQuery(queryStr, GenericConfig.class);
     query.setParameter("propertyOwners", propertyOwners);
@@ -51,7 +49,7 @@ public class GenericConfigRepository {
   }
 
   public Map<String, String> getConfigProperties(String propertyOwner) {
-    Map<String, String> configProperties = new HashMap<String, String>();
+    Map<String, String> configProperties = new HashMap<>();
     String queryStr = "SELECT c FROM GenericConfig c WHERE c.propertyOwner = :propertyOwner";
     TypedQuery<GenericConfig> query = em.createQuery(queryStr, GenericConfig.class);
     query.setParameter("propertyOwner", propertyOwner);

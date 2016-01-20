@@ -1,54 +1,42 @@
 package backingform;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import model.component.Component;
+import model.component.ComponentStatus;
+import model.componenttype.ComponentTypeCombination;
+import model.donation.Donation;
+import model.user.User;
+import org.apache.commons.lang3.StringUtils;
+import utils.CustomDateFormatter;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import model.component.Component;
-import model.component.ComponentStatus;
-import model.componenttype.ComponentTypeCombination;
-import model.donation.Donation;
-import model.user.User;
-
-import org.apache.commons.lang3.StringUtils;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import utils.CustomDateFormatter;
-
 public class ComponentCombinationBackingForm {
 
   public static final int ID_LENGTH = 12;
-
+  private Map<String, String> expiresOnByComponentTypeId;
   @NotNull
   @Valid
   @JsonIgnore
   private Component component;
-
   private String createdOn;
-
   private String expiresOn;
-
   private ComponentTypeCombination componentTypeCombination;
 
-  Map<String, String> expiresOnByComponentTypeId;
-  
   public ComponentCombinationBackingForm() {
-    expiresOnByComponentTypeId = new HashMap<String, String>();
+    expiresOnByComponentTypeId = new HashMap<>();
     setComponent(new Component());
   }
 
   public ComponentCombinationBackingForm(boolean autoGenerate) {
-    expiresOnByComponentTypeId = new HashMap<String, String>();
+    expiresOnByComponentTypeId = new HashMap<>();
     setComponent(new Component());
   }
 
@@ -60,14 +48,26 @@ public class ComponentCombinationBackingForm {
     return component.getId();
   }
 
+  public void setId(Long id) {
+    component.setId(id);
+  }
+
   @JsonIgnore
   public Donation getDonation() {
     return component.getDonation();
   }
-  
+
+  public void setDonation(Donation donation) {
+    component.setDonation(donation);
+  }
+
   @JsonIgnore
   public Date getLastUpdated() {
     return component.getLastUpdated();
+  }
+
+  public void setLastUpdated(Date lastUpdated) {
+    component.setLastUpdated(lastUpdated);
   }
 
   @JsonIgnore
@@ -75,9 +75,17 @@ public class ComponentCombinationBackingForm {
     return component.getCreatedDate();
   }
 
+  public void setCreatedDate(Date createdDate) {
+    component.setCreatedDate(createdDate);
+  }
+
   @JsonIgnore
   public User getCreatedBy() {
     return component.getCreatedBy();
+  }
+
+  public void setCreatedBy(User createdBy) {
+    component.setCreatedBy(createdBy);
   }
 
   @JsonIgnore
@@ -85,24 +93,28 @@ public class ComponentCombinationBackingForm {
     return component.getLastUpdatedBy();
   }
 
+  public void setLastUpdatedBy(User lastUpdatedBy) {
+    component.setLastUpdatedBy(lastUpdatedBy);
+  }
+
   public String getNotes() {
     return component.getNotes();
+  }
+
+  public void setNotes(String notes) {
+    component.setNotes(notes);
   }
 
   public Boolean getIsDeleted() {
     return component.getIsDeleted();
   }
 
+  public void setIsDeleted(Boolean isDeleted) {
+    component.setIsDeleted(isDeleted);
+  }
+
   public int hashCode() {
     return component.hashCode();
-  }
-
-  public void setId(Long id) {
-    component.setId(id);
-  }
-
-  public void setDonation(Donation donation) {
-    component.setDonation(donation);
   }
 
   public String getCreatedOn() {
@@ -111,34 +123,6 @@ public class ComponentCombinationBackingForm {
     if (getComponent() == null)
       return "";
     return CustomDateFormatter.getDateTimeString(component.getCreatedOn());
-  }
-
-  public String getExpiresOn() {
-    return expiresOn;
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    component.setLastUpdated(lastUpdated);
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    component.setCreatedDate(createdDate);
-  }
-
-  public void setCreatedBy(User createdBy) {
-    component.setCreatedBy(createdBy);
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    component.setLastUpdatedBy(lastUpdatedBy);
-  }
-
-  public void setNotes(String notes) {
-    component.setNotes(notes);
-  }
-
-  public void setIsDeleted(Boolean isDeleted) {
-    component.setIsDeleted(isDeleted);
   }
 
   public void setCreatedOn(String createdOn) {
@@ -151,18 +135,16 @@ public class ComponentCombinationBackingForm {
     }
   }
 
+  public String getExpiresOn() {
+    return expiresOn;
+  }
+
   @SuppressWarnings("unchecked")
   public void setExpiresOn(String expiresOn) {
     this.expiresOn = expiresOn;
     ObjectMapper mapper = new ObjectMapper();
     try {
       expiresOnByComponentTypeId = mapper.readValue(expiresOn, HashMap.class);
-    } catch (JsonParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (JsonMappingException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
     } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -175,8 +157,8 @@ public class ComponentCombinationBackingForm {
 
   public String getDonationIdentificationNumber() {
     if (component == null || component.getDonation() == null ||
-        component.getDonation().getDonationIdentificationNumber() == null
-       )
+            component.getDonation().getDonationIdentificationNumber() == null
+            )
       return "";
     return component.getDonation().getDonationIdentificationNumber();
   }
@@ -191,7 +173,7 @@ public class ComponentCombinationBackingForm {
     return component;
   }
 
-  public void setComponent(Component component) {
+  private void setComponent(Component component) {
     this.component = component;
   }
 
@@ -217,8 +199,7 @@ public class ComponentCombinationBackingForm {
   public void setComponentTypeCombination(String componentTypeCombinationId) {
     if (StringUtils.isBlank(componentTypeCombinationId)) {
       componentTypeCombination = null;
-    }
-    else {
+    } else {
       componentTypeCombination = new ComponentTypeCombination();
       try {
         componentTypeCombination.setId(Long.parseLong(componentTypeCombinationId));

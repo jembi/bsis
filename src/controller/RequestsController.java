@@ -2,11 +2,7 @@ package controller;
 
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -104,11 +100,11 @@ public class RequestsController {
   public  Map<String, Object> requestSummaryGenerator(HttpServletRequest request,
       @PathVariable Long id) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
 
     Request componentRequest = requestRepository.findRequestById(id);
 
-    RequestViewModel requestViewModel = getRequestViewModels(Arrays.asList(componentRequest)).get(0);
+    RequestViewModel requestViewModel = getRequestViewModels(Collections.singletonList(componentRequest)).get(0);
     map.put("request", requestViewModel);
     return map;
   }
@@ -123,7 +119,7 @@ public class RequestsController {
           @RequestParam(value = "componentTypes", required = false) List<String> componentTypes,
           @RequestParam(value = "includeSatisfiedRequests", required = false) Boolean includeSatisfiedRequests) throws ParseException {
 
-      Map<String, Object> pagingParams = new HashMap<String, Object>();
+      Map<String, Object> pagingParams = new HashMap<>();
       pagingParams.put("sortColumn", "id");
       pagingParams.put("start", "0");
       pagingParams.put("length", "10");
@@ -134,15 +130,15 @@ public class RequestsController {
       pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
 
-    List<Long> componentTypeIds = new ArrayList<Long>();
-    componentTypeIds.add(-1l);
+    List<Long> componentTypeIds = new ArrayList<>();
+    componentTypeIds.add(-1L);
     if (componentTypes != null) {
       for (String componentTypeId : componentTypes) {
         componentTypeIds.add(Long.parseLong(componentTypeId));
       }
     }
 
-    List<Long> siteIds = new ArrayList<Long>();
+    List<Long> siteIds = new ArrayList<>();
     // add an invalid ID so that hibernate does not throw an exception
     siteIds.add((long)-1);
     if (requestSites != null) {
@@ -169,7 +165,7 @@ public class RequestsController {
    */
   private String getSortingColumn(int columnId, Map<String, Map<String, Object>> formFields) {
 
-    List<String> visibleFields = new ArrayList<String>();
+    List<String> visibleFields = new ArrayList<>();
     visibleFields.add("id");
     for (String field : Arrays.asList("requestNumber", "patientBloodAbo","patientBloodRh",
                                       "requestDate", "requiredDate", "componentType",
@@ -179,7 +175,7 @@ public class RequestsController {
         visibleFields.add(field);
     }
 
-    Map<String, String> sortColumnMap = new HashMap<String, String>();
+    Map<String, String> sortColumnMap = new HashMap<>();
     sortColumnMap.put("id", "id");
     sortColumnMap.put("requestNumber", "requestNumber");
     sortColumnMap.put("patientBloodAbo", "patientBloodAbo");
@@ -205,13 +201,13 @@ public class RequestsController {
    * in requestsTable.jsp.
    */
   private Map<String, Object> generateDatatablesMap(List<Request> componentRequests, Long totalRecords, Map<String, Map<String, Object>> formFields) {
-    Map<String, Object> donationsMap = new HashMap<String, Object>();
+    Map<String, Object> donationsMap = new HashMap<>();
 
-    ArrayList<Object> requestList = new ArrayList<Object>();
+    ArrayList<Object> requestList = new ArrayList<>();
 
     for (RequestViewModel componentRequest : getRequestViewModels(componentRequests)) {
 
-      List<Object> row = new ArrayList<Object>();
+      List<Object> row = new ArrayList<>();
       
       row.add(componentRequest.getId().toString());
 
@@ -224,14 +220,10 @@ public class RequestsController {
             String propertyValue = property;
             try {
               propertyValue = BeanUtils.getProperty(componentRequest, property);
-            } catch (IllegalAccessException e) {
-              e.printStackTrace();
-            } catch (InvocationTargetException e) {
-              e.printStackTrace();
-            } catch (NoSuchMethodException e) {
+            } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
               e.printStackTrace();
             }
-            row.add(propertyValue.toString());
+            row.add(propertyValue);
           }
         }
       }
@@ -248,7 +240,7 @@ public class RequestsController {
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_REQUEST+"')")
   public  Map<String, Object> addRequestFormGenerator(HttpServletRequest request) {
     RequestBackingForm form = new RequestBackingForm();
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     map.put("addRequestForm", form);
     addEditSelectorOptions(map);
     return map;
@@ -259,7 +251,7 @@ public class RequestsController {
   public ResponseEntity<Map<String, Object>> addRequest(@Valid @RequestBody RequestBackingForm form) {
 
     HttpStatus httpStatus = HttpStatus.CREATED;
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
 
     Request savedRequest = null;
     Request componentRequest = form.getRequest();
@@ -270,13 +262,13 @@ public class RequestsController {
     map.put("requestId", savedRequest.getId());
     map.put("request", new RequestViewModel(savedRequest));
     map.put("addAnotherRequestUrl", "addRequestFormGenerator.html");
-    return new ResponseEntity < Map<String, Object> > (map, httpStatus);
+    return new ResponseEntity<>(map, httpStatus);
   }
 
   @RequestMapping(value="{id}/issuedcomponents", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
   public  Map<String, Object> listIssuedComponentsForRequest(@PathVariable Long id) {
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     addEditSelectorOptions(map);
     List<Component> issuedComponents = requestRepository.getIssuedComponentsForRequest(id);
     List<ComponentViewModel> issuedComponentViewModels = null;
@@ -301,7 +293,7 @@ public class RequestsController {
       List<Request> componentRequests) {
     if (componentRequests == null)
       return Arrays.asList(new RequestViewModel[0]);
-    List<RequestViewModel> requestViewModels = new ArrayList<RequestViewModel>();
+    List<RequestViewModel> requestViewModels = new ArrayList<>();
     for (Request componentRequest : componentRequests) {
       requestViewModels.add(new RequestViewModel(componentRequest));
     }
@@ -321,7 +313,7 @@ public class RequestsController {
   public  Map<String, Object> findMatchingComponentsForRequest(
       @PathVariable Long id) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     map.put("requestId", id);
     List<MatchingComponentViewModel> components = componentRepository.findMatchingComponentsForRequest(id);
     map.put("compatibilityTestFields", utilController.getFormFieldsForForm("CompatibilityTest"));

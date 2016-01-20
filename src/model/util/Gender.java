@@ -13,10 +13,7 @@ public enum Gender {
 
   not_known(0), male(1), female(2), not_applicable(9);
 
-  @SuppressWarnings("unused")
-  private int value;
-  
-  private Gender(int value) {
-    this.value = value;
+  Gender(int value) {
+    int value1 = value;
   }
 }

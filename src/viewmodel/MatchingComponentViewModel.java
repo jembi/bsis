@@ -17,7 +17,7 @@ public class MatchingComponentViewModel {
   }
 
   public MatchingComponentViewModel(Component component,
-      CompatibilityTest crossmatchTest) {
+                                    CompatibilityTest crossmatchTest) {
     this.component = component;
     this.componentViewModel = new ComponentViewModel(this.component);
     this.compatibilityTest = crossmatchTest;

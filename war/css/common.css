@@ -1,822 +1,824 @@
 body {
-	background-color: #DADDEB;
-	font-family: Tahoma, Arial, Sans-Serif
+    background-color: #DADDEB;
+    font-family: Tahoma, Arial, Sans-Serif
 }
 
 label {
-	margin-top: 5px;
-	margin-bottom: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 input {
-	border: 2px solid #dadada;
-	border-radius: 7px;
-	font-size: 20px;
-	margin-left: 10px;
-	margin-top: 5px;
-	margin-bottom: 5px;
-	margin-right: 5px;
-	padding-left: 5px;
+    border: 2px solid #dadada;
+    border-radius: 7px;
+    font-size: 20px;
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    padding-left: 5px;
 }
 
 textarea {
-	border: 2px solid #dadada;
-	border-radius: 7px;
-	font-size: 20px;
-	margin-left: 10px;
-	margin-top: 5px;
-	margin-bottom: 5px;
-	margin-right: 5px;
-	padding-left: 5px;
+    border: 2px solid #dadada;
+    border-radius: 7px;
+    font-size: 20px;
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    padding-left: 5px;
 }
 
 select {
-	border: 2px solid #dadada;
-	border-radius: 7px;
-	font-size: 20px;
-	margin-left: 14px;
-	margin-top: 5px;
-	margin-bottom: 5px;
-	margin-right: 5px;
-	padding-left: 5px;
+    border: 2px solid #dadada;
+    border-radius: 7px;
+    font-size: 20px;
+    margin-left: 14px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    padding-left: 5px;
 }
 
 input:focus {
-	outline: none;
-	border-color: #9ecaed;
-	box-shadow: 0 0 10px #9ecaed;
+    outline: none;
+    border-color: #9ecaed;
+    box-shadow: 0 0 10px #9ecaed;
 }
 
 textarea:focus {
-	outline: none;
-	border-color: #9ecaed;
-	box-shadow: 0 0 10px #9ecaed;
+    outline: none;
+    border-color: #9ecaed;
+    box-shadow: 0 0 10px #9ecaed;
 }
 
 select:focus {
-	outline: none;
-	border-color: #9ecaed;
-	box-shadow: 0 0 15px #9ecaed;
+    outline: none;
+    border-color: #9ecaed;
+    box-shadow: 0 0 15px #9ecaed;
 }
 
 .firstTimeConfigDiv {
-	border: 2px solid #8eb2b2;
-	border-radius: 6px;
-	padding-left: 30px;
-	padding-top: 30px;
-	padding-bottom: 30px;
-	margin-top: 20px;
-	margin-bottom: 20px;
-	margin-left: 20px;
-	margin-right: 20px;
-	position: relative;
+    border: 2px solid #8eb2b2;
+    border-radius: 6px;
+    padding-left: 30px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    position: relative;
 }
 
 .formDiv {
-	padding-left: 10px;
-	padding-top: 5px;
-	padding-bottom: 50px;
-	padding-right: 10px;
-	margin-top: 10px;
-	margin-bottom: 20px;
-	position: relative;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 50px;
+    padding-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    position: relative;
 }
 
 .editFormDiv {
-	padding-left: 10px;
-	padding-top: 5px;
-	padding-bottom: 5px;
-	margin-top: 10px;
-	position: relative;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 10px;
+    position: relative;
 }
 
 .adminConfigureFormDiv {
-	border: 2px solid #8eb2b2;
-	border-radius: 6px;
-	padding-left: 30px;
-	padding-right: 30px;
-	padding-top: 5px;
-	padding-bottom: 5px;
-	margin-top: 10px;
-	position: relative;
+    border: 2px solid #8eb2b2;
+    border-radius: 6px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 10px;
+    position: relative;
 }
 
 .ui-datepicker {
-	width: 17em;
-	padding: .2em .2em 0;
-	z-index: 9999 !important;
+    width: 17em;
+    padding: .2em .2em 0;
+    z-index: 9999 !important;
 }
 
 .ui-button {
-	border-radius: 3px;
-	padding: 0;
+    border-radius: 3px;
+    padding: 0;
 }
 
 .dataTables_length > label > select {
-	margin: 1px;
+    margin: 1px;
 }
 
 .mainContent {
-	background-color: white;
-	margin: 0 auto;
-	overflow: hidden;
-	position: relative;
-	padding: 0px;
-	border-bottom: 2px solid #ccc;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	margin-left: 10px;
-	margin-right: 10px;
+    background-color: white;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    padding: 0px;
+    border-bottom: 2px solid #ccc;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
 
-	/*width: 1100px;*/
-	margin-top: 3px;
-	margin-bottom: 3px;
+    /*width: 1100px;*/
+    margin-top: 3px;
+    margin-bottom: 3px;
 }
 
 .headingPanel {
-	display: block;
-	color: black;
-	clear: both;
-	background-color: #B3C6E6;
-	padding: 10px 5px;
-	margin-top: 20px;
-	font-size: 1.3em;
+    display: block;
+    color: black;
+    clear: both;
+    background-color: #B3C6E6;
+    padding: 10px 5px;
+    margin-top: 20px;
+    font-size: 1.3em;
 }
 
 .message {
-	padding: 25px 5px 0 10px;
-	color: red;
+    padding: 25px 5px 0 10px;
+    color: red;
 }
 
 h2 {
-	color: #4D5479;
-	font-family: arial;
+    color: #4D5479;
+    font-family: arial;
 }
 
 .infoMessage {
-	padding-right: 3px;
-	color: #4253A7;
-	margin-top: 21px;
-	font-family: arial;
+    padding-right: 3px;
+    color: #4253A7;
+    margin-top: 21px;
+    font-family: arial;
 }
 
 .actionButtonsPanel {
-	clear: both;
+    clear: both;
 }
 
 .actionButtonsPanel input {
-	margin: 20px 10px 10px;
+    margin: 20px 10px 10px;
 }
 
 .inputFieldRow {
-	margin: 25px 0 10px;
+    margin: 25px 0 10px;
 }
 
 .inputFieldRow select {
-	width: 205px;
+    width: 205px;
 }
 
 .inputFieldRow label {
-	display: block;
-	float: left;
-	width: 150px;
-	margin: 5px 0 0 15px;
-	text-align: left;
+    display: block;
+    float: left;
+    width: 150px;
+    margin: 5px 0 0 15px;
+    text-align: left;
 }
 
 .inputFieldRow input[type="button"] {
-	margin-left: 10px;
+    margin-left: 10px;
 }
 
-.inputFieldRow input[type="text"],input[type="password"] {
-	width: 205px;
+.inputFieldRow input[type="text"], input[type="password"] {
+    width: 205px;
 }
 
 .subHeading {
-	clear: both;
-	margin: 0 0 15px;
+    clear: both;
+    margin: 0 0 15px;
 }
 
 .subHeading p {
-	display: inline;
-	padding: 5px;
-	background-color: #add8e6;
-	font-size: 1.1em
+    display: inline;
+    padding: 5px;
+    background-color: #add8e6;
+    font-size: 1.1em
 }
 
 .expandButton {
-	float: left;
-	margin-top: 0px;
+    float: left;
+    margin-top: 0px;
 }
 
-input[type="button"],input[type="submit"],input[type="reset"] {
-	color: #000000;
-	padding: 5px;
+input[type="button"], input[type="submit"], input[type="reset"] {
+    color: #000000;
+    padding: 5px;
 }
+
 .leftAlignedPanel {
-	float: left;
-	margin: 0 25px;
-	padding-top: 5px;
-	width: 70%;
+    float: left;
+    margin: 0 25px;
+    padding-top: 5px;
+    width: 70%;
 }
 
 .rightPanel {
-	float: right;
-	width: 200px;
-	margin: 40px 24px 0 0;
-	border: thin solid #000000;
-	background-color: #B3C6E6
+    float: right;
+    width: 200px;
+    margin: 40px 24px 0 0;
+    border: thin solid #000000;
+    background-color: #B3C6E6
 }
 
 .rightPanel p {
-	padding: 5px;
+    padding: 5px;
 }
 
 .tipsTitle {
-	padding: 5px;
-	text-align: center;
-	font-weight: bold;
-	clear: both;
+    padding: 5px;
+    text-align: center;
+    font-weight: bold;
+    clear: both;
 }
 
 .link {
-	color: blue;
-	cursor: pointer;
-	text-decoration: underline;
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 .radioButtonsList {
-	display: inline;
-	margin: 0 5px 5px 0px;
+    display: inline;
+    margin: 0 5px 5px 0px;
 }
 
 .radioLabel {
-	margin-right: 10px;
+    margin-right: 10px;
 }
 
 .radioButtonsList label {
-	display: inline;
-	float: none;
-	margin: 0 5px;
+    display: inline;
+    float: none;
+    margin: 0 5px;
 }
 
 .collapsibleHeadingPanel {
-	margin-top: 40px;
-	width: 30%;
-	cursor: pointer;
+    margin-top: 40px;
+    width: 30%;
+    cursor: pointer;
 }
 
 .collapsibleHeadingPanel p img {
-	height: 15px;
-	padding: 8px 5px;
-	width: 15px;
+    height: 15px;
+    padding: 8px 5px;
+    width: 15px;
 }
 
 .collapsibleHeadingPanelText {
-	height: 30px;
-	background-color: #B3C6E6;
-	padding-top: 6px;
-	font-size: 1.2em;
+    height: 30px;
+    background-color: #B3C6E6;
+    padding-top: 6px;
+    font-size: 1.2em;
 }
 
 .leftPanelTabs {
-	position: absolute;
-	padding: 0 35px 0 46px;
-	margin-top: 75px;
-	height: 2000px;
-	border-right: thin solid #BAB6B8;
-	width: 76px;
+    position: absolute;
+    padding: 0 35px 0 46px;
+    margin-top: 75px;
+    height: 2000px;
+    border-right: thin solid #BAB6B8;
+    width: 76px;
 }
 
 .tabbedPanel {
-	padding: 5px 5px;
-	clear: both;
+    padding: 5px 5px;
+    clear: both;
 }
 
 .leftPanelTabs li:hover {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .leftPanelTabs li {
-	color: #336699;
-	margin: 35px 0;
-	list-style: none outside none;
-	text-decoration: none;
+    color: #336699;
+    margin: 35px 0;
+    list-style: none outside none;
+    text-decoration: none;
 }
 
 .leftPanelTabs a {
-	color: #336699;
-	text-decoration: none;
+    color: #336699;
+    text-decoration: none;
 }
 
 .leftPanelTabs li.selectedTab {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 .leftPanelTabs li.selectedTab a {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 .checkboxList {
-	display: inline;
-	margin: 0px;
+    display: inline;
+    margin: 0px;
 }
 
 .checkboxLabel {
-	margin-right: 10px;
+    margin-right: 10px;
 }
 
 .checkboxList label {
-	display: inline;
-	float: none;
-	margin: 0px;
+    display: inline;
+    float: none;
+    margin: 0px;
 }
 
 .formHeading label {
-	margin-bottom: 10px;
-	font-weight: bold;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
 .leftColumn {
-	float: left;
-	width: 60%;
+    float: left;
+    width: 60%;
 }
 
 .rightColumn {
-	float: left;
-	margin: 50px 0 0 120px;
-	width: 20%;
+    float: left;
+    margin: 50px 0 0 120px;
+    width: 20%;
 }
 
 .bottomPanel {
-	text-align: center;
+    text-align: center;
 }
 
 .bottomPanel a, a:visited, .bottomPanelText {
-	padding-top: 30px;
-	padding-right: 30px;
-	text-decoration: underline;
+    padding-top: 30px;
+    padding-right: 30px;
+    text-decoration: underline;
 }
 
 .showTips {
-	float: right;
-	margin: 15px -100px 0 0;
-	width: 200px;
-	display: none;
+    float: right;
+    margin: 15px -100px 0 0;
+    width: 200px;
+    display: none;
 }
 
 .hideTips {
-	float: right;
-	padding: 10px;
+    float: right;
+    padding: 10px;
 }
 
-tr > td
-{
-  padding-bottom: 0em;
+tr > td {
+    padding-bottom: 0em;
 }
 
 .donorTableTest {
-	width: 60%;
+    width: 60%;
 }
 
-.highlight { background-color: yellow }
+.highlight {
+    background-color: yellow
+}
 
 .inPageEditDiv {
-	
+
 }
 
-.two{
-  background-color: #e6e6e6;
-  background-repeat: no-repeat;
-  background: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), color-stop(25%, #ffffff), to(#e6e6e6)); !important
-  background: -webkit-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
-  background: -moz-linear-gradient(top, #ffffff, #ffffff 25%, #e6e6e6);
-  background: -ms-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
-  background: -o-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
-  background: linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+.two {
+    background-color: #e6e6e6;
+    background-repeat: no-repeat;
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), color-stop(25%, #ffffff), to(#e6e6e6));
+!important background: -webkit-linear-gradient(#ffffff, #ffffff 25 %, #e6e6e6);
+    background: -moz-linear-gradient(top, #ffffff, #ffffff 25%, #e6e6e6);
+    background: -ms-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+    background: -o-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+    background: linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
 }
 
 .commentsInputBox {
-	height: 65px;
-	width: 300px;
-	align: top;
-	resize: none;
+    height: 65px;
+    width: 300px;
+    align: top;
+    resize: none;
 }
 
 .formFormatClass {
-	margin-top: 15px;
-	margin-bottom: 15px;
-	margin-left: 10px;
-	margin-right: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: 10px;
+    margin-right: 15px;
 }
 
 .formFormatClass > div {
-	position: relative;
-	margin-top: 6px;
+    position: relative;
+    margin-top: 6px;
 }
 
 .formFormatClass > div > label {
-	width: 150px;
-	display: inline-block;
-	padding-top: 0;
-	margin-left: 15px;
-	margin-right: 10px;
+    width: 150px;
+    display: inline-block;
+    padding-top: 0;
+    margin-left: 15px;
+    margin-right: 10px;
 }
 
 .formFormatClass > div > .labelForTextArea {
-	position: relative;
-	bottom: 40px;
+    position: relative;
+    bottom: 40px;
 }
 
 .formFormatClass > div > input {
-	width: 220px;
-	display: inline-block;
+    width: 220px;
+    display: inline-block;
 }
 
 .formFormatClass > div > button {
-	width: auto;
-	margin-left: 10px;
-	display: inline-block;
+    width: auto;
+    margin-left: 10px;
+    display: inline-block;
 }
 
 .formFormatClass > div > .ui-multiselect {
-	width: 220px;
-	margin-left: 10px;
-	display: inline-block;
-	font-size: 0.9em;
+    width: 220px;
+    margin-left: 10px;
+    display: inline-block;
+    font-size: 0.9em;
 }
 
 .formFormatClass > div > textarea {
-	width: 240px;
-	display: inline-block;
-	height: 65px;
-	resize: none;
+    width: 240px;
+    display: inline-block;
+    height: 65px;
+    resize: none;
 }
 
 .formFormatClass > div > .checkBoxInForm {
-	width: 20px;
-	display: inline-block;
+    width: 20px;
+    display: inline-block;
 }
 
 .formError {
-	color: red;
+    color: red;
 }
 
 .ui-tabs .ui-tabs-nav {
-	font-size: 0.87em;
+    font-size: 0.87em;
 }
 
 .ui-tabs .ui-tabs-panel {
-	padding: 0;
+    padding: 0;
 }
 
 .ui-autocomplete-loading {
-  background: white url('images/ajax-loader.gif') right center no-repeat;
+    background: white url('images/ajax-loader.gif') right center no-repeat;
 }
 
 .ColVis {
-	float: right;
-	margin-bottom: 1em;
+    float: right;
+    margin-bottom: 1em;
 }
 
 .ui-autocomplete {
-	max-height: 200px;
-	overflow-y: auto;
-	/* prevent horizontal scrollbar */
-	overflow-x: hidden;
+    max-height: 200px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
 }
 
 #preloader {
-	display: none;
+    display: none;
 }
 
 .breadCrumb {
-	margin-top: 10px;
+    margin-top: 10px;
 }
 
 .breadCrumbText {
-	font-weight: bold;
-	color: #3459CC;
-	font-style: italic;
-	text-decoration: underline;
-	cursor: pointer;
+    font-weight: bold;
+    color: #3459CC;
+    font-style: italic;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .editRowDiv {
-	margin-top: 50px;
-	background-color: #e5ebee;
-	border: 2px solid #8eb2b2;
-	border-radius: 6px;
-	position: relative;
+    margin-top: 50px;
+    background-color: #e5ebee;
+    border: 2px solid #8eb2b2;
+    border-radius: 6px;
+    position: relative;
 }
 
 .rowEditButton {
-	margin-top: 8px;
-	margin-bottom: 8px;
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 .closeButton {
-	font-size: 18px;
-	font-weight: bold;
-	text-align: right;
-	background-color: red;
-	color: white;
-	font-family: cursive;
-	position: absolute;
-	right: 3px;
-	top: 3px;
-	cursor: pointer;
-	z-index: 100;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: right;
+    background-color: red;
+    color: white;
+    font-family: cursive;
+    position: absolute;
+    right: 3px;
+    top: 3px;
+    cursor: pointer;
+    z-index: 100;
 }
 
 .summaryPageButtonSection {
-	right: 3px;
-	top: 3px;
-	cursor: pointer;
-	z-index: 100;
+    right: 3px;
+    top: 3px;
+    cursor: pointer;
+    z-index: 100;
 }
 
 .hidableDiv {
-	display: inline-block;
+    display: inline-block;
 }
 
 .reportMessage {
-	margin: 20px;
-	margin-top: 0;
+    margin: 20px;
+    margin-top: 0;
 }
 
 .hide_class {
-	display: none;
+    display: none;
 }
 
 .tipsBox {
-	margin: 3px;
-	font-family: 'helvetica';
-	background: #edea81;
-	border-color: red;
-	border-style: dotted;
-	border-radius: 5px;
-	padding-left: 8px;
-	padding-right: 5px;
-	padding-top: 3px;
-	padding-bottom: 3px;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	width: 80%;
+    margin: 3px;
+    font-family: 'helvetica';
+    background: #edea81;
+    border-color: red;
+    border-style: dotted;
+    border-radius: 5px;
+    padding-left: 8px;
+    padding-right: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 80%;
 }
 
 .worksheetTable {
-	 border: 1pt solid #000000;
-	 border-collapse: separate;
-	 border-spacing: 0;
-	 font-size: 11pt;
-	 width: 100%;
+    border: 1pt solid #000000;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 11pt;
+    width: 100%;
 }
 
 .worksheetTable > tbody > tr > td {
-	 border: 1pt solid #000000;
-	 border-collapse: separate;
-	 border-spacing: 0;
-	 font-size: 8pt;
-	 margin: 1px;
-	 padding: 3px;
+    border: 1pt solid #000000;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 8pt;
+    margin: 1px;
+    padding: 3px;
 }
 
 .worksheetTable > thead > tr > th {
-	 border: 1pt solid #000000;
-	 border-collapse: separate;
-	 border-spacing: 0;
-	 margin: 1px;
-	 font-size: 8pt;
-	 padding: 3px;
+    border: 1pt solid #000000;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1px;
+    font-size: 8pt;
+    padding: 3px;
 }
 
 .inlineInput {
-	margin: 0;
-	padding	0;
-	width: 100px;
+    margin: 0;
+    padding 0;
+    width: 100px;
 }
 
 .whiteBackgroundClass {
-	background: white;
+    background: white;
 }
 
 .noHighlight > tbody > tr.odd {
-	background: white;
-	border: 1px solid #1075A1;
-	border-collapse: separate;
-	border-spacing: 1px;
-	margin: 1px;
-  font-size: 9pt;
-	margin: 1px;
+    background: white;
+    border: 1px solid #1075A1;
+    border-collapse: separate;
+    border-spacing: 1px;
+    margin: 1px;
+    font-size: 9pt;
+    margin: 1px;
 }
 
 .noHighlight > tbody > tr.even {
-	background: white;
-	border: 1px solid #1075A1;
-	border-collapse: separate;
-	border-spacing: 1px;
-	margin: 1px;
-	font-size: 9pt;
-	margin: 1px;
+    background: white;
+    border: 1px solid #1075A1;
+    border-collapse: separate;
+    border-spacing: 1px;
+    margin: 1px;
+    font-size: 9pt;
+    margin: 1px;
 }
 
 .noHighlight > tbody > tr.odd:hover {
-	background: white;
-	border: 1pt solid #1075A1;
-	border-collapse: separate;
-	border-spacing: 0;
-  font-size: 9pt;
-	margin: 1px;
+    background: white;
+    border: 1pt solid #1075A1;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 9pt;
+    margin: 1px;
 }
 
 .noHighlight > tbody > tr.even:hover {
-	background: white;
-	border: black;
-	border: 1pt solid #1075A1;
-	border-collapse: separate;
-	border-spacing: 0;
-  font-size: 9pt;
-	margin: 1px;
+    background: white;
+    border: black;
+    border: 1pt solid #1075A1;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 9pt;
+    margin: 1px;
 }
 
 .dataTables_paginate {
-	margin-top: 20px;
-	margin-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .savedStatusText {
-	color: #75706f;
-	font-style: italic;
+    color: #75706f;
+    font-style: italic;
 }
 
 .ui-button-text {
-	font-size: 0.9em;
+    font-size: 0.9em;
 }
 
 .errorBox {
-	margin: 6px;
-	font-family: 'helvetica';
-	border-color: red;
-	border-style: dotted;
-	border-radius: 5px;
-	padding-left: 8px;
-	padding-right: 5px;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	width: 80%;
+    margin: 6px;
+    font-family: 'helvetica';
+    border-color: red;
+    border-style: dotted;
+    border-radius: 5px;
+    padding-left: 8px;
+    padding-right: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 80%;
 }
 
 .errorText {
-	display:inline-block;
-	position: relative;
-	bottom: 8px;
-	left: 10px;
-	color: #C20000;
-	font-size: 16px; 
+    display: inline-block;
+    position: relative;
+    bottom: 8px;
+    left: 10px;
+    color: #C20000;
+    font-size: 16px;
 }
 
 .warningBox {
-	margin: 6px;
-	font-family: 'helvetica';
-	background: #edea81;
-	border-color: red;
-	border-style: dotted;
-	border-radius: 5px;
-	padding-left: 8px;
-	padding-right: 5px;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	width: 80%;
+    margin: 6px;
+    font-family: 'helvetica';
+    background: #edea81;
+    border-color: red;
+    border-style: dotted;
+    border-radius: 5px;
+    padding-left: 8px;
+    padding-right: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 80%;
 }
 
 .warningText {
-	display:inline-block;
-	position: relative;
-	bottom: 8px;
-	left: 10px;
-	color: #C20000;
-	font-size: 16px; 
+    display: inline-block;
+    position: relative;
+    bottom: 8px;
+    left: 10px;
+    color: #C20000;
+    font-size: 16px;
 }
 
 .successBox {
-	margin: 6px;
-	font-family: 'helvetica';
-	background: #edea81;
-	border-color: red;
-	border-style: dotted;
-	border-radius: 5px;
-	padding-left: 8px;
-	padding-right: 5px;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	width: 80%;
+    margin: 6px;
+    font-family: 'helvetica';
+    background: #edea81;
+    border-color: red;
+    border-style: dotted;
+    border-radius: 5px;
+    padding-left: 8px;
+    padding-right: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 80%;
 }
 
 .successText {
-	position: relative;
-	bottom: 10px;
-	font-size: 16px; 
+    position: relative;
+    bottom: 10px;
+    font-size: 16px;
 }
 
 .titerPlateWell {
-	width: 50px;
-	height: 50px;
-	border-radius: 25px;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
 }
 
 .wellBox {
-	display: inline-block;
-	background: rgb(241, 219, 255);
-	margin-bottom: 3px;
+    display: inline-block;
+    background: rgb(241, 219, 255);
+    margin-bottom: 3px;
 }
 
 .wellBoxHeader {
-	display: inline-block;
-	background: white;
-	border: none;
-	margin-bottom: 3px;
+    display: inline-block;
+    background: white;
+    border: none;
+    margin-bottom: 3px;
 }
 
 .wellWithData {
-	background-color: rgb(0, 100, 44);
-	border-color: transparent;
-	color: white;
+    background-color: rgb(0, 100, 44);
+    border-color: transparent;
+    color: white;
 }
 
 .wellWithInvalidData {
-	background-color: rgb(0, 100, 44);
-	border-color: red;
-	color: white;
+    background-color: rgb(0, 100, 44);
+    border-color: red;
+    color: white;
 }
 
 .bloodTypingForCollectionSection {
-	background-color: rgb(212, 228, 227);
-	border-radius: 10px;
-	margin: 30px;
-	padding: 10px;
-	border: solid 2px rgb(53, 99, 105);
+    background-color: rgb(212, 228, 227);
+    border-radius: 10px;
+    margin: 30px;
+    padding: 10px;
+    border: solid 2px rgb(53, 99, 105);
 }
 
 .collectionSummaryForTestingSection {
-	background-color: rgb(212, 228, 227);
-	border-radius: 10px;
-	margin: 30px;
-	padding: 10px;
-	border: solid 2px rgb(53, 99, 105);
+    background-color: rgb(212, 228, 227);
+    border-radius: 10px;
+    margin: 30px;
+    padding: 10px;
+    border: solid 2px rgb(53, 99, 105);
 }
 
 .ttiForCollectionSection {
-	background-color: rgb(212, 228, 227);
-	border-radius: 10px;
-	margin: 30px;
-	padding: 10px;
-	border: solid 2px rgb(53, 99, 105);
+    background-color: rgb(212, 228, 227);
+    border-radius: 10px;
+    margin: 30px;
+    padding: 10px;
+    border: solid 2px rgb(53, 99, 105);
 }
 
 .simpleTable {
-	 border: 1px solid #8B8B8B;
-	 border-collapse: separate;
-	 border-spacing: 0;
-	 font-size: 11pt;
-	 width: 100%;
+    border: 1px solid #8B8B8B;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 11pt;
+    width: 100%;
 }
 
 .simpleTable > tbody > tr > td {
-	 border: 1px solid #8B8B8B;
-	 border-collapse: separate;
-	 border-spacing: 0;
-	 font-size: 11pt;
-	 margin: 1px;
-	 padding: 3px;
+    border: 1px solid #8B8B8B;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 11pt;
+    margin: 1px;
+    padding: 3px;
 }
 
 .simpleTable > thead > tr > th {
-	 border: 1px solid #8B8B8B;
-	 border-collapse: separate;
-	 border-spacing: 0;
-	 margin: 1px;
-	 font-size: 11pt;
-	 padding: 3px;
+    border: 1px solid #8B8B8B;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1px;
+    font-size: 11pt;
+    padding: 3px;
 }
 
 .wellDetails {
-	border: 1px solid #7688A5;
-	border-radius: 5px;
-	width: 500px;
-	margin-left: 45px;
-	background: rgb(212, 228, 227);
+    border: 1px solid #7688A5;
+    border-radius: 5px;
+    width: 500px;
+    margin-left: 45px;
+    background: rgb(212, 228, 227);
 }
 
 .machineReadingText {
-	color: #6a6a6a;
-	font-size: 0.6em;
-	vertical-align: middle;
-	margin-left: 15px;
+    color: #6a6a6a;
+    font-size: 0.6em;
+    vertical-align: middle;
+    margin-left: 15px;
 }
