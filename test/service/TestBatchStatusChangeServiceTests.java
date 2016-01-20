@@ -147,7 +147,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     }
     
     @Test
-    public void testHandleReleaseWithUnsafeDonation_shouldCreateCounsellingAndDiscardComponents() {
+    public void testHandleReleaseWithUnsafeDonation_shouldDiscardComponents() {
         
         List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
         Donor donor = aDonor().build();
@@ -169,7 +169,6 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         
         testBatchStatusChangeService.handleRelease(testBatch);
         
-        verify(postDonationCounsellingCRUDService).createPostDonationCounsellingForDonation(unsafeDonation);
         verify(componentCRUDService).markComponentsBelongingToDonorAsUnsafe(donor);
         verify(bloodTestsService).updateDonationWithTestResults(unsafeDonation, bloodTestingRuleResult);
         verifyZeroInteractions(donorDeferralCRUDService);
@@ -177,7 +176,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     }
     
     @Test
-    public void testHandleReleaseWithUnsafeDonationAndDonorToBeDeferred_shouldDeferDonor() {
+    public void testHandleReleaseWithUnsafeDonationAndDonorToBeDeferred_shouldDeferDonorAndCreateCounsellingReferral() {
         
         List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
         Donor donor = aDonor().build();
@@ -200,6 +199,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         testBatchStatusChangeService.handleRelease(testBatch);
         
         verify(bloodTestsService).updateDonationWithTestResults(unsafeDonation, bloodTestingRuleResult);
+        verify(postDonationCounsellingCRUDService).createPostDonationCounsellingForDonation(unsafeDonation);
         verify(donorDeferralCRUDService).createDeferralForDonorWithDeferralReasonType(donor,
                 DeferralReasonType.AUTOMATED_TTI_UNSAFE);
         assertThat(unsafeDonation.isReleased(), is(true));
