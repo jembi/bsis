@@ -10,6 +10,7 @@ import model.admin.FormField;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,8 @@ import repository.FormFieldRepository;
  */
 @Component
 public abstract class BaseValidator<T> implements Validator {
+  
+  private static final Logger LOGGER = Logger.getLogger(BaseValidator.class);
 
   @Autowired
   private FormFieldRepository formFieldRepository;
@@ -42,6 +45,8 @@ public abstract class BaseValidator<T> implements Validator {
   @SuppressWarnings("unchecked")
   @Override
   public void validate(Object target, Errors errors) {
+    LOGGER.debug("Start validation for "+getFormName());
+
     if (target == null) {
       return;
     }
@@ -51,8 +56,11 @@ public abstract class BaseValidator<T> implements Validator {
     try {
       validateForm(backingForm, errors);
     } catch (Exception e) {
+      LOGGER.error(e.getMessage(), e);
       throw new BaseValidatorRuntimeException("Exception while validating form: "
-          + ReflectionToStringBuilder.toString(backingForm), e);
+          + ReflectionToStringBuilder.toString(backingForm), errors, e);
+    } finally {
+      LOGGER.debug("End validator for "+getFormName() + " with errors " + errors);
     }
   }
 
