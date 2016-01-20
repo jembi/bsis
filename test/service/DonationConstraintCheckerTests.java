@@ -8,6 +8,7 @@ import static helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
+import helpers.builders.AdverseEventBuilder;
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.testbatch.TestBatch;
@@ -52,6 +53,17 @@ public class DonationConstraintCheckerTests {
         Donation donationWithNotes = aDonation().withNotes("irrelevant.notes").build();
         
         when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(donationWithNotes);
+        
+        boolean canDelete = donationConstraintChecker.canDeleteDonation(IRRELEVANT_DONATION_ID);
+        
+        assertThat(canDelete, is(false));
+    }
+    
+    @Test
+    public void testCanDeleteDonationWithAdverseEvent_shouldReturnFalse() {
+        Donation donationWithAdverseEvents = aDonation().withAdverseEvent(AdverseEventBuilder.anAdverseEvent().build()).build();
+        
+        when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(donationWithAdverseEvents);
         
         boolean canDelete = donationConstraintChecker.canDeleteDonation(IRRELEVANT_DONATION_ID);
         

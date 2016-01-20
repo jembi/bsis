@@ -35,13 +35,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import factory.DonationViewModelFactory;
 import repository.AdverseEventTypeRepository;
-import repository.PackTypeRepository;
 import repository.DonationRepository;
 import repository.DonationTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
+import repository.PackTypeRepository;
 import repository.PostDonationCounsellingRepository;
 import service.DonationCRUDService;
 import utils.PermissionConstants;
@@ -52,6 +51,7 @@ import viewmodel.PackTypeViewModel;
 import backingform.DonationBackingForm;
 import backingform.validator.AdverseEventBackingFormValidator;
 import backingform.validator.DonationBackingFormValidator;
+import factory.DonationViewModelFactory;
 
 @RestController
 @RequestMapping("/donations")
@@ -211,11 +211,6 @@ public class DonationController {
         map.put("donationFields", utilController.getFormFieldsForForm("donation"));
         return new ResponseEntity<>(map, HttpStatus.CREATED);
     }
-
-  private DonationViewModel getDonationViewModel(Donation donation) {
-    DonationViewModel donationViewModel = new DonationViewModel(donation);
-    return donationViewModel;
-  }
   
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONATION + "')")
@@ -226,7 +221,7 @@ public class DonationController {
         Donation updatedDonation = donationCRUDService.updateDonation(donationId, donationBackingForm);
 
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("donation", getDonationViewModel(updatedDonation));
+        map.put("donation", donationViewModelFactory.createDonationViewModelWithPermissions(updatedDonation));
         return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
     }
 
@@ -265,7 +260,7 @@ public class DonationController {
             }
         }
 
-        DonationViewModel donationViewModel = getDonationViewModel(donation);
+        DonationViewModel donationViewModel = new DonationViewModel(donation);
         map.put("donation", donationViewModel);
 
       
