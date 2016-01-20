@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import repository.DonationBatchRepository;
+import repository.LocationRepository;
 import repository.SequenceNumberRepository;
 import backingform.DonationBatchBackingForm;
 
@@ -20,6 +21,9 @@ public class DonationBatchBackingFormValidator extends BaseValidator<DonationBat
   
   @Autowired
   private DonationBatchRepository donationBatchRepository;
+  
+  @Autowired
+  private LocationRepository locationRepository;
   
   @Autowired
   private SequenceNumberRepository sequenceNumberRepository;
@@ -38,6 +42,7 @@ public class DonationBatchBackingFormValidator extends BaseValidator<DonationBat
 	    "Venue is required.");
 	} 
 	else {
+	  venue = locationRepository.getLocation(venue.getId());
       ArrayList<Long> venueIds = new ArrayList<>();
       venueIds.add(venue.getId());
 	  if (venue.getIsVenue() == false) {

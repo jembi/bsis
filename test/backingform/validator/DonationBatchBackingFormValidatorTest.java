@@ -26,6 +26,7 @@ import org.springframework.validation.MapBindingResult;
 
 import repository.DonationBatchRepository;
 import repository.FormFieldRepository;
+import repository.LocationRepository;
 import repository.SequenceNumberRepository;
 import backingform.DonationBatchBackingForm;
 
@@ -38,6 +39,8 @@ public class DonationBatchBackingFormValidatorTest {
   private DonationBatchRepository donationBatchRepository;
   @Mock
   private SequenceNumberRepository sequenceNumberRepository;
+  @Mock
+  private LocationRepository locationRepository;
   @Mock
   FormFieldRepository formFieldRepository;
   
@@ -64,6 +67,7 @@ public class DonationBatchBackingFormValidatorTest {
     when(donationBatchRepository.findDonationBatches(false, Arrays.asList(new Long[] {1l}), null, null)).thenReturn(donationBatches);
     when(formFieldRepository.getRequiredFormFields("donationBatch")).thenReturn(Arrays.asList(new String[] {}));
     when(formFieldRepository.getFieldMaxLengths("donationBatch")).thenReturn(new HashMap<String, Integer>());
+    when(locationRepository.getLocation(venue.getId())).thenReturn(venue);
     
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donationBatch");
@@ -95,6 +99,7 @@ public class DonationBatchBackingFormValidatorTest {
     when(donationBatchRepository.findDonationBatches(false, Arrays.asList(new Long[] {1l}), null, null)).thenReturn(donationBatches);
     when(formFieldRepository.getRequiredFormFields("donationBatch")).thenReturn(Arrays.asList(new String[] {}));
     when(formFieldRepository.getFieldMaxLengths("donationBatch")).thenReturn(new HashMap<String, Integer>());
+    when(locationRepository.getLocation(venue.getId())).thenReturn(venue);
     
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donationBatch");
@@ -125,6 +130,7 @@ public class DonationBatchBackingFormValidatorTest {
     when(donationBatchRepository.findDonationBatches(false, Arrays.asList(new Long[] {1l}), null, null)).thenReturn(donationBatches);
     when(formFieldRepository.getRequiredFormFields("donationBatch")).thenReturn(Arrays.asList(new String[] {}));
     when(formFieldRepository.getFieldMaxLengths("donationBatch")).thenReturn(new HashMap<String, Integer>());
+    when(locationRepository.getLocation(venue.getId())).thenReturn(venue);
     
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donationBatch");
@@ -158,6 +164,7 @@ public class DonationBatchBackingFormValidatorTest {
     when(donationBatchRepository.findDonationBatches(false, Arrays.asList(new Long[] {1l}), null, null)).thenReturn(donationBatches);
     when(formFieldRepository.getRequiredFormFields("donationBatch")).thenReturn(Arrays.asList(new String[] {}));
     when(formFieldRepository.getFieldMaxLengths("donationBatch")).thenReturn(new HashMap<String, Integer>());
+    when(locationRepository.getLocation(venue.getId())).thenReturn(venue);
     
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donationBatch");
@@ -254,6 +261,7 @@ public class DonationBatchBackingFormValidatorTest {
     when(donationBatchRepository.findDonationBatches(false, Arrays.asList(new Long[] {1l}), null, null)).thenReturn(donationBatches);
     when(formFieldRepository.getRequiredFormFields("donationBatch")).thenReturn(Arrays.asList(new String[] {}));
     when(formFieldRepository.getFieldMaxLengths("donationBatch")).thenReturn(new HashMap<String, Integer>());
+    when(locationRepository.getLocation(venue.getId())).thenReturn(venue);
     
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donationBatch");
@@ -285,6 +293,7 @@ public class DonationBatchBackingFormValidatorTest {
     when(donationBatchRepository.findDonationBatches(false, Arrays.asList(new Long[] {1l}), null, null)).thenReturn(donationBatches);
     when(formFieldRepository.getRequiredFormFields("donationBatch")).thenReturn(Arrays.asList(new String[] {}));
     when(formFieldRepository.getFieldMaxLengths("donationBatch")).thenReturn(new HashMap<String, Integer>());
+    when(locationRepository.getLocation(venue.getId())).thenReturn(venue);
     
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donationBatch");
