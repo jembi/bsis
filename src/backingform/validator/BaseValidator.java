@@ -52,29 +52,19 @@ public abstract class BaseValidator<T> implements Validator {
     }
 
     T backingForm = (T) target;
-
-    try {
-      validateForm(backingForm, errors);
-    } catch (Exception e) {
-      LOGGER.error(e.getMessage(), e);
-      throw new BaseValidatorRuntimeException("Exception while validating form: "
-          + ReflectionToStringBuilder.toString(backingForm), errors, e);
-    } finally {
-      LOGGER.debug("End validator for "+getFormName() + " with errors " + errors);
-    }
+    validateForm(backingForm, errors);
+      
+    LOGGER.debug("End validator for "+getFormName() + " with errors " + errors);
   }
 
   /**
    * Method to override in order to use BaseValidator and add custom validations. This method is
-   * called by the validator and any Exceptions that are thrown will be caught and re-thrown as a
-   * RuntimeException.
+   * called by the BaseValidator.
    * 
    * @param form T JavaBean with form data
    * @param errors Errors containing any validator errors
-   * 
-   * @throws Exception any exceptions that are thrown during validation
    */
-  public abstract void validateForm(T form, Errors errors) throws Exception;
+  public abstract void validateForm(T form, Errors errors);
   
   /**
    * Specifies the name of the form which is used to retrieve Form configuration and generate error keys 
@@ -90,15 +80,17 @@ public abstract class BaseValidator<T> implements Validator {
    * @param form Object JavaBean containing the form data
    * @param errors Errors containing all the errors in the form data
    * 
-   * @throws IllegalAccessException if the form has properties that cannot be accessed due to
-   *         permissions
-   * @throws InvocationTargetException if the form property accessor methods throw an exception
-   * @throws NoSuchMethodException if a form accessor method for a property cannot be found
+   * @throws BaseValidatorRuntimeException if there are exceptions that occur while inspecting the form properties.
    */
-  protected void commonFieldChecks(T form, Errors errors)
-      throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-    checkRequiredFields(form, errors);
-    checkFieldLengths(form, errors);
+  protected void commonFieldChecks(T form, Errors errors)  {
+    try {
+      checkRequiredFields(form, errors);
+      checkFieldLengths(form, errors);
+    } catch (Exception e) {
+      LOGGER.error(e.getMessage(), e);
+      throw new BaseValidatorRuntimeException("Exception while validating form: "
+          + ReflectionToStringBuilder.toString(form), errors, e);
+    }
   }
 
   /**

@@ -17,7 +17,7 @@ public class RoleBackingFormValidator extends BaseValidator<RoleBackingForm> {
   private RoleRepository roleRepository;
 
   @Override
-  public void validateForm(RoleBackingForm form, Errors errors) throws Exception {
+  public void validateForm(RoleBackingForm form, Errors errors) {
     
     if (isDuplicateRoleName(form.getRole())){
     	errors.rejectValue("role.name", "roleName.nonunique",

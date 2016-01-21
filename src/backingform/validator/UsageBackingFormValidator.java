@@ -16,7 +16,7 @@ public class UsageBackingFormValidator extends BaseValidator<ComponentUsageBacki
   private ComponentRepository componentRepository;
   
   @Override
-  public void validateForm(ComponentUsageBackingForm form, Errors errors) throws Exception {
+  public void validateForm(ComponentUsageBackingForm form, Errors errors) {
     String usageDate = form.getUsageDate();
     if (!CustomDateFormatter.isDateTimeStringValid(usageDate))
       errors.rejectValue("usage.usageDate", "dateFormat.incorrect",

@@ -24,7 +24,7 @@ public class RequestBackingFormValidator extends BaseValidator<RequestBackingFor
   private SequenceNumberRepository sequenceNumberRepository;
 
   @Override
-  public void validateForm(RequestBackingForm form, Errors errors) throws Exception {
+  public void validateForm(RequestBackingForm form, Errors errors) {
     String requestDate = form.getRequestDate();
     if (!CustomDateFormatter.isDateTimeStringValid(requestDate)) {
       errors.rejectValue("request.requestDate", "dateFormat.incorrect",

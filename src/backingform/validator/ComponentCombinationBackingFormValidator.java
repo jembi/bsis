@@ -1,5 +1,6 @@
 package backingform.validator;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public class ComponentCombinationBackingFormValidator extends BaseValidator<Comp
   DonationRepository donationRepository;
 
   @Override
-  public void validateForm(ComponentCombinationBackingForm form, Errors errors) throws Exception {
+  public void validateForm(ComponentCombinationBackingForm form, Errors errors) {
 
     if (StringUtils.isBlank(form.getComponentTypeCombination()))
       errors.rejectValue("componentTypeCombination", "component.componentTypeCombination",
@@ -41,13 +42,17 @@ public class ComponentCombinationBackingFormValidator extends BaseValidator<Comp
     String expiresOn = form.getExpiresOn();
     ObjectMapper mapper = new ObjectMapper();
 
-    @SuppressWarnings("unchecked")
-    Map<String, String> expiryDateByComponentType = mapper.readValue(expiresOn, HashMap.class);
-    for (String componentTypeId : expiryDateByComponentType.keySet()) {
-      String expiryDate = expiryDateByComponentType.get(componentTypeId);
-      if (!CustomDateFormatter.isDateTimeStringValid(expiryDate))
-        errors.rejectValue("component.expiresOn", "dateFormat.incorrect",
-            CustomDateFormatter.getDateErrorMessage());
+    try {
+      @SuppressWarnings("unchecked")
+      Map<String, String> expiryDateByComponentType = mapper.readValue(expiresOn, HashMap.class);
+      for (String componentTypeId : expiryDateByComponentType.keySet()) {
+        String expiryDate = expiryDateByComponentType.get(componentTypeId);
+        if (!CustomDateFormatter.isDateTimeStringValid(expiryDate))
+          errors.rejectValue("component.expiresOn", "dateFormat.incorrect",
+              CustomDateFormatter.getDateErrorMessage());
+      }
+    } catch (IOException e) {
+      LOGGER.error("Exception while checking component.expiresOn '" + expiresOn + "'. Error: "+e.getMessage(), e);
     }
 
     updateRelatedEntities(form);

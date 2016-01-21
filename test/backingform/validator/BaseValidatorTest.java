@@ -3,6 +3,7 @@ package backingform.validator;
 import static org.mockito.Mockito.when;
 import helpers.builders.FormFieldBuilder;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -251,7 +252,12 @@ public class BaseValidatorTest {
   public void testValidateException() throws Exception {
     class TestValidator extends BaseValidator<Donor> {
       @Override
-      public void validateForm(Donor form, Errors errors) throws Exception {
+      public void validateForm(Donor form, Errors errors) {
+        commonFieldChecks(form, errors);
+      }
+      @Override
+      protected void checkRequiredFields(Donor form, Errors errors)
+          throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         throw new NoSuchMethodException("test");
       }
       @Override

@@ -22,7 +22,7 @@ public class ComponentBackingFormValidator extends BaseValidator<ComponentBackin
   DonationRepository donationRepository;
 
   @Override
-  public void validateForm(ComponentBackingForm form, Errors errors) throws Exception {
+  public void validateForm(ComponentBackingForm form, Errors errors) {
     String createdOn = form.getCreatedOn();
     if (!CustomDateFormatter.isDateTimeStringValid(createdOn))
       errors.rejectValue("component.createdOn", "dateFormat.incorrect",

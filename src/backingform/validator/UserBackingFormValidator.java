@@ -22,7 +22,7 @@ public class UserBackingFormValidator extends BaseValidator<UserBackingForm> {
   private UserRepository userRepository;
 
     @Override
-    public void validateForm(UserBackingForm form, Errors errors) throws Exception {
+    public void validateForm(UserBackingForm form, Errors errors) {
         commonFieldChecks(form, errors);
         checkUserName(form, errors);
         if (form.getId() != null) {

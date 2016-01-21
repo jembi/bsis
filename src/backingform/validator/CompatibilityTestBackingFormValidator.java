@@ -31,7 +31,7 @@ public class CompatibilityTestBackingFormValidator extends BaseValidator<Compati
   private ComponentRepository componentRepository;
 
   @Override
-  public void validateForm(CompatibilityTestBackingForm form, Errors errors) throws Exception {
+  public void validateForm(CompatibilityTestBackingForm form, Errors errors) {
     String crossmatchTestDate = form.getCompatibilityTestDate();
     if (!CustomDateFormatter.isDateTimeStringValid(crossmatchTestDate)) {
       errors.rejectValue("compatiblityTest.compatibilityTestDate", "dateFormat.incorrect",
