@@ -45,6 +45,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     private BloodTypingMatchStatus bloodTypingMatchStatus;
     private BloodTypingStatus bloodTypingStatus;
     private DonationBatch donationBatch;
+    private String extraBloodTypeInformation;
     
     public DonationBuilder withId(Long id) {
         this.id = id;
@@ -166,10 +167,15 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         return this;
     }
 
-    public DonationBuilder withBloodTyingStatus(BloodTypingStatus bloodTypingStatus) {
+    public DonationBuilder withBloodTypingStatus(BloodTypingStatus bloodTypingStatus) {
         this.bloodTypingStatus = bloodTypingStatus;
         return this;
     }
+    
+  public DonationBuilder withExtraBloodTypeInformation(String extraBloodTypeInformation) {
+    this.extraBloodTypeInformation = extraBloodTypeInformation;
+    return this;
+  }
 
     @Override
     public Donation build() {
@@ -198,6 +204,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         donation.setBloodTypingMatchStatus(bloodTypingMatchStatus);
         donation.setBloodTypingStatus(bloodTypingStatus);
         donation.setDonationBatch(donationBatch);
+        donation.setExtraBloodTypeInformation(extraBloodTypeInformation);
         return donation;
     }
 
