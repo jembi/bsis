@@ -1,23 +1,24 @@
 package helpers.builders;
 
+import helpers.persisters.AbstractEntityPersister;
+import helpers.persisters.DonationPersister;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import model.donationbatch.DonationBatch;
-import repository.bloodtesting.BloodTypingMatchStatus;
-import repository.bloodtesting.BloodTypingStatus;
-import helpers.persisters.AbstractEntityPersister;
-import helpers.persisters.DonationPersister;
 import model.adverseevent.AdverseEvent;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
+import model.donationbatch.DonationBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
 import model.packtype.PackType;
+import repository.bloodtesting.BloodTypingMatchStatus;
+import repository.bloodtesting.BloodTypingStatus;
 
 public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     
@@ -45,6 +46,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     private BloodTypingMatchStatus bloodTypingMatchStatus;
     private BloodTypingStatus bloodTypingStatus;
     private DonationBatch donationBatch;
+    private String extraBloodTypeInformation;
     
     public DonationBuilder withId(Long id) {
         this.id = id;
@@ -166,10 +168,15 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         return this;
     }
 
-    public DonationBuilder withBloodTyingStatus(BloodTypingStatus bloodTypingStatus) {
+    public DonationBuilder withBloodTypingStatus(BloodTypingStatus bloodTypingStatus) {
         this.bloodTypingStatus = bloodTypingStatus;
         return this;
     }
+    
+    public DonationBuilder withExtraBloodTypeInformation(String extraBloodTypeInformation) {
+      this.extraBloodTypeInformation = extraBloodTypeInformation;
+      return this;
+  }
 
     @Override
     public Donation build() {
@@ -198,6 +205,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         donation.setBloodTypingMatchStatus(bloodTypingMatchStatus);
         donation.setBloodTypingStatus(bloodTypingStatus);
         donation.setDonationBatch(donationBatch);
+        donation.setExtraBloodTypeInformation(extraBloodTypeInformation);
         return donation;
     }
 

@@ -2,8 +2,10 @@ package helpers.builders;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import model.bloodtesting.TTIStatus;
+import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
 import viewmodel.BloodTestingRuleResult;
 
@@ -13,7 +15,9 @@ public class BloodTestingRuleResultBuilder extends AbstractBuilder<BloodTestingR
     private String bloodRh;
     private TTIStatus ttiStatus;
     private BloodTypingStatus bloodTypingStatus;
+    private BloodTypingMatchStatus bloodTypingMatchStatus;
     private List<String> pendingTTITestsIds;
+    private Set<String> extraInformation;
     
     public BloodTestingRuleResultBuilder withBloodAbo(String bloodAbo) {
       this.bloodAbo = bloodAbo;
@@ -35,6 +39,16 @@ public class BloodTestingRuleResultBuilder extends AbstractBuilder<BloodTestingR
       return this;
     }
     
+    public BloodTestingRuleResultBuilder withBloodTypingMatchStatus(BloodTypingMatchStatus bloodTypingMatchStatus) {
+      this.bloodTypingMatchStatus = bloodTypingMatchStatus;
+      return this;
+    }
+    
+    public BloodTestingRuleResultBuilder withExtraInformation(Set<String> extraInformation) {
+      this.extraInformation = extraInformation;
+      return this;
+    }
+    
     public BloodTestingRuleResultBuilder withPendingTTITestId(String pendingTTITestId) {
         if (pendingTTITestsIds == null) {
             pendingTTITestsIds =  new ArrayList<>();
@@ -50,7 +64,9 @@ public class BloodTestingRuleResultBuilder extends AbstractBuilder<BloodTestingR
         bloodTestingRuleResult.setBloodRh(bloodRh);
         bloodTestingRuleResult.setTTIStatus(ttiStatus);
         bloodTestingRuleResult.setBloodTypingStatus(bloodTypingStatus);
+        bloodTestingRuleResult.setBloodTypingMatchStatus(bloodTypingMatchStatus);
         bloodTestingRuleResult.setPendingTTITestsIds(pendingTTITestsIds);
+        bloodTestingRuleResult.setExtraInformation(extraInformation);
         return bloodTestingRuleResult;
     }
     

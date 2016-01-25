@@ -341,6 +341,11 @@ public class BloodTestingRuleEngine {
 				bloodTypingMatchStatus = BloodTypingMatchStatus.MATCH;
 			}
 		}
+		
+		if (LOGGER.isInfoEnabled()) {
+		  LOGGER.info("donation " + donation.getId() + " for donor " + donor.getId() + " has bloodTypingMatchStatus of "+bloodTypingMatchStatus);
+		  LOGGER.info("donor Abo/Rh = " + donor.getBloodAbo()+donor.getBloodRh()+" donation Abo/Rh = " + donation.getBloodAbo()+donation.getBloodRh());
+		}
 		resultSet.setBloodTypingMatchStatus(bloodTypingMatchStatus);
 		donation.setBloodTypingMatchStatus(bloodTypingMatchStatus);
 	}

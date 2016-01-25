@@ -182,6 +182,7 @@ public class AdminController {
     return map;
   }
 
+  /*
   @RequestMapping(value="/createsampledata", method=RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DATA_SETUP+"')")
   public  Map<String, ? extends Object> createSampleData(
@@ -210,6 +211,7 @@ public class AdminController {
     m.put("errMsg", errMsg);
     return m;
   }
+  */
 
   @RequestMapping(value="/tipsform", method=RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_TIPS+"')")

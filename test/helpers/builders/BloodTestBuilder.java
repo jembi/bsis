@@ -8,6 +8,8 @@ public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
     private Long id;
     private BloodTestType bloodTestType;
     private String positiveResults;
+    private String validResults;
+    private Boolean isEmptyAllowed;
     private boolean flagComponentsForDiscard;
 
     public BloodTestBuilder withId(Long id) {
@@ -25,6 +27,16 @@ public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
         return this;
     }
     
+    public BloodTestBuilder withValidResults(String validResults) {
+      this.validResults = validResults;
+      return this;
+    }
+    
+    public BloodTestBuilder withIsEmptyAllowed(Boolean isEmptyAllowed) {
+      this.isEmptyAllowed = isEmptyAllowed;
+      return this;
+    }
+    
     public BloodTestBuilder withFlagComponentsForDiscard(boolean flagComponentsForDiscard) {
         this.flagComponentsForDiscard = flagComponentsForDiscard;
         return this;
@@ -36,6 +48,8 @@ public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
         bloodTest.setId(id);
         bloodTest.setBloodTestType(bloodTestType);
         bloodTest.setPositiveResults(positiveResults);
+        bloodTest.setValidResults(validResults);
+        bloodTest.setIsEmptyAllowed(isEmptyAllowed);
         bloodTest.setFlagComponentsForDiscard(flagComponentsForDiscard);
         return bloodTest;
     }

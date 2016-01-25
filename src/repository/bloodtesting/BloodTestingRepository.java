@@ -1,6 +1,5 @@
 package repository.bloodtesting;
 
-import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,22 +23,16 @@ import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestContext;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.BloodTestType;
-import model.bloodtesting.TSVFileHeaderName;
 import model.bloodtesting.TTIStatus;
-import model.bloodtesting.WellType;
 import model.bloodtesting.rules.BloodTestSubCategory;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.bloodtesting.rules.DonationField;
 import model.donation.Donation;
-import model.microtiterplate.MachineReading;
-import model.microtiterplate.MicrotiterPlate;
-import model.microtiterplate.PlateSession;
 import model.user.User;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,8 +40,6 @@ import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import repository.GenericConfigRepository;
 import repository.WellTypeRepository;
-import repository.events.ApplicationContextProvider;
-import repository.events.BloodTestsUpdatedEvent;
 import viewmodel.BloodTestingRuleResult;
 import backingform.BloodTestBackingForm;
 
@@ -76,7 +67,7 @@ public class BloodTestingRepository {
 
 	@Autowired
 	private GenericConfigRepository genericConfigRepository;
-
+/*
 	public MicrotiterPlate getPlate(String plateKey) {
 		String queryStr = "SELECT p from MicrotiterPlate p "
 				+ "WHERE p.plateKey=:plateKey";
@@ -85,7 +76,7 @@ public class BloodTestingRepository {
 		query.setParameter("plateKey", plateKey);
 		return query.getSingleResult();
 	}
-
+*/
 	public List<BloodTest> getBloodTypingTests() {
 		String queryStr = "SELECT b FROM BloodTest b WHERE b.isActive=:isActive AND b.category=:category";
 		TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
@@ -94,6 +85,7 @@ public class BloodTestingRepository {
 		List<BloodTest> bloodTests = query.getResultList();
 		return bloodTests;
 	}
+
 
 	public List<BloodTest> getBloodTTITests() {
 		String queryStr = "SELECT b FROM BloodTest b WHERE b.isActive=:isActive AND b.category=:category";
@@ -117,211 +109,14 @@ public class BloodTestingRepository {
 		List<BloodTest> bloodTests = query.getResultList();
 		return bloodTests;
 	}
-
-	public Map<String, Object> saveBloodTestingResults(
-			Map<Long, Map<Long, String>> bloodTestResultsMap,
-			boolean saveIfUninterpretable) {
-
-		Map<Long, Donation> donationsMap = new HashMap<Long, Donation>();
-		Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForDonations = new HashMap<Long, BloodTestingRuleResult>();
-		List<Long> donationsWithUninterpretableResults = new ArrayList<Long>();
-		Date testedOn = new Date();
-		Map<Long, Map<Long, String>> errorMap = validateTestResultValues(bloodTestResultsMap);
-		if (errorMap.isEmpty()) {
-			for (Long donationId : bloodTestResultsMap.keySet()) {
-				Map<Long, String> bloodTestResultsForDonation = bloodTestResultsMap
-						.get(donationId);
-				Donation donation = donationRepository
-						.findDonationById(donationId);
-				BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
-						donation, bloodTestResultsForDonation);
-				donationsMap.put(donation.getId(),
-						donation);
-				bloodTestRuleResultsForDonations.put(donation.getId(),
-						ruleResult);
-
-				if (ruleResult.getAboUninterpretable()
-						|| ruleResult.getRhUninterpretable()
-						|| ruleResult.getTtiUninterpretable()) {
-					if (saveIfUninterpretable) {
-						saveBloodTestResultsToDatabase(
-								bloodTestResultsForDonation, donation,
-								testedOn, ruleResult);
-					} else {
-						Map<Long, String> uninterpretable = new HashMap<Long, String>();
-						donationsWithUninterpretableResults.add(donationId);
-						uninterpretable.put((long) -1,
-								"Test results are uninterpretable");
-						errorMap.put(donationId, uninterpretable);
-					}
-				} else {
-					saveBloodTestResultsToDatabase(
-							bloodTestResultsForDonation, donation,
-							testedOn, ruleResult);
-				}
-
-			}
-			em.flush();
-		}
-
-		Map<String, Object> results = new HashMap<String, Object>();
-		results.put("donations", donationsMap);
-		results.put("bloodTestingResults", bloodTestRuleResultsForDonations);
-		results.put("donationsWithUninterpretableResults",
-				donationsWithUninterpretableResults);
-		results.put("errors", errorMap);
-
-		return results;
-	}
 	
-	public Map<String, Object> saveBloodTestingResults(Long donationId, Map<Long, String> bloodTypingTestResults,
-			boolean saveIfUninterpretable) {
-
-		Donation donation = new Donation();
-		BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
-		Boolean uninterpretableResults = false;
-		Date testedOn = new Date();
-
-		Map<Long, String> errorMap = validateTestResultValues(donationId, bloodTypingTestResults);
-		if (errorMap.isEmpty()) {
-			donation = donationRepository.findDonationById(donationId);
-			ruleResult = ruleEngine.applyBloodTests(donation, bloodTypingTestResults);
-
-			if (!saveIfUninterpretable && (ruleResult.getAboUninterpretable()
-					|| ruleResult.getRhUninterpretable()
-					|| ruleResult.getTtiUninterpretable())) {
-			    // Saving uninterpretable results is not allowed and at least one result is uninterpretable
-				uninterpretableResults = true;
-				errorMap.put(donationId, "Test results are uninterpretable");
-			} else {
-				saveBloodTestResultsToDatabase(bloodTypingTestResults, donation, testedOn, ruleResult);
-			}
-			em.flush();
-		}
-
-		Map<String, Object> results = new HashMap<>();
-		results.put("donation", donation);
-		results.put("bloodTestingResults", ruleResult);
-		results.put("uninterpretableResults", uninterpretableResults);
-		results.put("errors", errorMap);
-		return results;
-	}
-	
-	public Map<Long, String> validateTestResultValues(Long donationId, Map<Long, String> bloodTypingTestResults) {
-
-	    /**
-	     * Build a map of active blood test ids to the active blood tests.
-	     */
-		Map<String, BloodTest> activeBloodTestsMap = new HashMap<>();
-		for (BloodTest bloodTypingTest : findActiveBloodTests()) {
-			activeBloodTestsMap.put(bloodTypingTest.getId().toString(), bloodTypingTest);
-		}
-
-		Map<Long, String> errorMap = new HashMap<>();
-
-		for (Long testId : bloodTypingTestResults.keySet()) {
-
-			BloodTest activeBloodTest = activeBloodTestsMap.get(testId.toString());
-			
-			if (activeBloodTest == null) {
-			    // No active test was found for the provided id
-				errorMap.put(testId, "Invalid test");
-				break;
-			}
-
-			String result = bloodTypingTestResults.get(testId);
-
-			if (!activeBloodTest.getIsEmptyAllowed() && StringUtils.isBlank(result)) {
-			    // Empty results are not allowed for this test and the provided result is empty
-			    errorMap.put(testId, "No value specified");
-			    break;
-			}
-
-			if (!activeBloodTest.getValidResultsList().contains(result)) {
-			    // The provided result is not in the list of valid results
-			    errorMap.put(testId, "Invalid value specified");
-				break;
-			}
-		}
-
-		return errorMap;
-	}
-	
-	private void saveBloodTestResultsToDatabase(
+	public void saveBloodTestResultsToDatabase(
 			Map<Long, String> bloodTestResultsForDonation,
 			Donation donation, Date testedOn,
 			BloodTestingRuleResult ruleResult) {
 		for (Long testId : bloodTestResultsForDonation.keySet()) {
-			BloodTestResult btResult = new BloodTestResult();
-			BloodTest bloodTest = new BloodTest();
-			// the only reason we are using Long in the parameter is that
-			// jsp uses Long for all numbers. Using an integer makes it
-			// difficult
-			// to compare Integer and Long values in the jsp conditionals
-			// specially when iterating through the list of results
-			bloodTest.setId(testId);
-			btResult.setBloodTest(bloodTest);
-			// not updating the inverse relation which means the
-			// donation.getBloodTypingResults() will not
-			// contain this result
-			btResult.setDonation(donation);
-			btResult.setTestedOn(testedOn);
-			btResult.setNotes("");
-			btResult.setResult(bloodTestResultsForDonation.get(testId));
-			em.persist(btResult);
+		  saveBloodTestResultToDatabase(testId, bloodTestResultsForDonation.get(testId), donation, testedOn, ruleResult);
 		}
-
-		ApplicationContext applicationContext = ApplicationContextProvider
-				.getApplicationContext();
-		BloodTestsUpdatedEvent bloodTestsUpdatedEvent;
-		bloodTestsUpdatedEvent = new BloodTestsUpdatedEvent("10",
-				Arrays.asList(donation, ruleResult));
-		bloodTestsUpdatedEvent.setDonation(donation);
-		bloodTestsUpdatedEvent.setBloodTestingRuleResult(ruleResult);
-		applicationContext.publishEvent(bloodTestsUpdatedEvent);
-	}
-
-	public Map<Long, Map<Long, String>> validateTestResultValues(
-			Map<Long, Map<Long, String>> bloodTypingTestResults) {
-
-		Map<String, BloodTest> allBloodTestsMap = new HashMap<String, BloodTest>();
-		for (BloodTest bloodTypingTest : findActiveBloodTests()) {
-			allBloodTestsMap.put(bloodTypingTest.getId().toString(),
-					bloodTypingTest);
-		}
-
-		Map<Long, Map<Long, String>> errorMap = new HashMap<Long, Map<Long, String>>();
-
-		for (Long donationId : bloodTypingTestResults.keySet()) {
-			Map<Long, String> testsForDonation = bloodTypingTestResults
-					.get(donationId);
-			for (Long testId : testsForDonation.keySet()) {
-				String result = testsForDonation.get(testId);
-				BloodTest test = allBloodTestsMap.get(testId.toString());
-				if (test == null) {
-					addErrorToMap(errorMap, donationId, testId,
-							"Invalid test");
-					continue;
-				}
-				if (StringUtils.isBlank(result) && !test.getIsEmptyAllowed()) {
-					addErrorToMap(errorMap, donationId, testId,
-							"No value specified");
-				}
-				if (!test.getValidResultsList().contains(result)) {
-					addErrorToMap(errorMap, donationId, testId,
-							"Invalid value specified");
-				}
-			}
-		}
-
-		return errorMap;
-	}
-
-	private boolean isResultValidForBloodTest(BloodTest test, String result) {
-		if (StringUtils.isBlank(result)) {
-			return false;
-		}
-		return test.getValidResultsList().contains(result);
 	}
 
 	public List<BloodTest> findActiveBloodTests() {
@@ -340,16 +135,6 @@ public class BloodTestingRepository {
 		TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
 		List<BloodTest> bloodTests = query.getResultList();
 		return bloodTests;
-	}
-
-	private void addErrorToMap(Map<Long, Map<Long, String>> errorMap,
-			Long donationId, Long testId, String errorMessage) {
-		Map<Long, String> errorsForDonation = errorMap.get(donationId);
-		if (errorsForDonation == null) {
-			errorsForDonation = new HashMap<Long, String>();
-			errorMap.put(donationId, errorsForDonation);
-		}
-		errorsForDonation.put(testId, errorMessage);
 	}
 
 	public Map<String, Object> getAllTestsStatusForDonations(
@@ -416,7 +201,7 @@ public class BloodTestingRepository {
 		List<BloodTest> bloodTests = query.getResultList();
 		return bloodTests;
 	}
-	
+
 	public List<BloodTestResult> getBloodTestResultsForDonation(
 			Long donationId) {
 		String queryStr = "SELECT bt FROM BloodTestResult bt WHERE "
@@ -468,6 +253,7 @@ public class BloodTestingRepository {
 		return query.getSingleResult();
 	}
 
+/*
 	public Map<String, Object> saveTTIResultsOnPlate(
 			Map<String, Map<String, Object>> ttiResultsMap, Long ttiTestId) {
 
@@ -614,36 +400,22 @@ public class BloodTestingRepository {
 		}
 		errorsByWellNumber.get(wellNumber).add(errorMessage);
 	}
+*/
 
-	private BloodTestResult saveBloodTestResultToDatabase(Long testId,
+	public BloodTestResult saveBloodTestResultToDatabase(Long testId,
 			String testResult, Donation donation, Date testedOn,
 			BloodTestingRuleResult ruleResult) {
 
 		BloodTestResult btResult = new BloodTestResult();
 		BloodTest bloodTest = new BloodTest();
-		// the only reason we are using Long in the parameter is that
-		// jsp uses Long for all numbers. Using an integer makes it difficult
-		// to compare Integer and Long values in the jsp conditionals
-		// specially when iterating through the list of results
 		bloodTest.setId(testId);
 		btResult.setBloodTest(bloodTest);
-		// not updating the inverse relation which means the
-		// donation.getBloodTypingResults() will not
-		// contain this result
 		btResult.setDonation(donation);
 		btResult.setTestedOn(testedOn);
 		btResult.setNotes("");
 		btResult.setResult(testResult);
 		em.persist(btResult);
 		em.refresh(btResult);
-		ApplicationContext applicationContext = ApplicationContextProvider
-				.getApplicationContext();
-		BloodTestsUpdatedEvent bloodTestsUpdatedEvent;
-		bloodTestsUpdatedEvent = new BloodTestsUpdatedEvent("10",
-				Arrays.asList(donation, ruleResult));
-		bloodTestsUpdatedEvent.setDonation(donation);
-		bloodTestsUpdatedEvent.setBloodTestingRuleResult(ruleResult);
-		applicationContext.publishEvent(bloodTestsUpdatedEvent);
 		return btResult;
 	}
 
@@ -978,36 +750,5 @@ public class BloodTestingRepository {
 		query.setParameter("id", id);
 		User user = query.getSingleResult();
 		return user;
-	}
-
-	public void saveTestResultsToDatabase(
-			List<TSVFileHeaderName> tSVFileHeaderNameList) {
-		for (TSVFileHeaderName ts : tSVFileHeaderNameList) {
-			
-			Donation cs = donationRepository
-					.findDonationByDonationIdentificationNumber(ts.getSID());
-			if (cs != null){
-				
-				try{
-					
-					Map<Long, Map<Long, String>> bloodTestResultsMap = new HashMap<Long, Map<Long, String>>();
-					Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForDonations = new HashMap<Long, BloodTestingRuleResult>();
-	
-					BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
-							cs,	new HashMap<Long, String>());
-					bloodTestRuleResultsForDonations.put(cs.getId(), ruleResult);
-					
-					saveBloodTestResultToDatabase(Long.valueOf(ts.getAssayNumber()),
-							ts.getInterpretation(), cs, ts.getCompleted(), ruleResult);
-				
-				}
-				catch(Exception ex){
-					System.out.println("Cannot save TTI Test Result to DB");
-			    	ex.printStackTrace();
-				}
-				
-			}
-			
-		}
 	}
 }
