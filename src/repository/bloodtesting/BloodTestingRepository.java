@@ -36,7 +36,6 @@ import model.donation.Donation;
 import model.microtiterplate.MachineReading;
 import model.microtiterplate.MicrotiterPlate;
 import model.microtiterplate.PlateSession;
-import model.user.User;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -90,15 +89,6 @@ public class BloodTestingRepository {
 		TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
 		query.setParameter("isActive", true);
 		query.setParameter("category", BloodTestCategory.BLOODTYPING);
-		List<BloodTest> bloodTests = query.getResultList();
-		return bloodTests;
-	}
-
-	public List<BloodTest> getBloodTTITests() {
-		String queryStr = "SELECT b FROM BloodTest b WHERE b.isActive=:isActive AND b.category=:category";
-		TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
-		query.setParameter("isActive", true);
-		query.setParameter("category", BloodTestCategory.TTI);
 		List<BloodTest> bloodTests = query.getResultList();
 		return bloodTests;
 	}
@@ -170,39 +160,6 @@ public class BloodTestingRepository {
 				donationsWithUninterpretableResults);
 		results.put("errors", errorMap);
 
-		return results;
-	}
-	
-	public Map<String, Object> saveBloodTestingResults(Long donationId, Map<Long, String> bloodTypingTestResults,
-			boolean saveIfUninterpretable) {
-
-		Donation donation = new Donation();
-		BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
-		Boolean uninterpretableResults = false;
-		Date testedOn = new Date();
-
-		Map<Long, String> errorMap = validateTestResultValues(donationId, bloodTypingTestResults);
-		if (errorMap.isEmpty()) {
-			donation = donationRepository.findDonationById(donationId);
-			ruleResult = ruleEngine.applyBloodTests(donation, bloodTypingTestResults);
-
-			if (!saveIfUninterpretable && (ruleResult.getAboUninterpretable()
-					|| ruleResult.getRhUninterpretable()
-					|| ruleResult.getTtiUninterpretable())) {
-			    // Saving uninterpretable results is not allowed and at least one result is uninterpretable
-				uninterpretableResults = true;
-				errorMap.put(donationId, "Test results are uninterpretable");
-			} else {
-				saveBloodTestResultsToDatabase(bloodTypingTestResults, donation, testedOn, ruleResult);
-			}
-			em.flush();
-		}
-
-		Map<String, Object> results = new HashMap<>();
-		results.put("donation", donation);
-		results.put("bloodTestingResults", ruleResult);
-		results.put("uninterpretableResults", uninterpretableResults);
-		results.put("errors", errorMap);
 		return results;
 	}
 	
@@ -420,17 +377,6 @@ public class BloodTestingRepository {
 		query.setParameter("category", BloodTestCategory.TTI);
 		List<BloodTest> bloodTests = query.getResultList();
 		return bloodTests;
-	}
-	
-	public List<BloodTestResult> getBloodTestResultsForDonation(
-			Long donationId) {
-		String queryStr = "SELECT bt FROM BloodTestResult bt WHERE "
-				+ "bt.donation.id=:donationId";
-		TypedQuery<BloodTestResult> query = em.createQuery(queryStr,
-				BloodTestResult.class);
-		query.setParameter("donationId", donationId);
-		List<BloodTestResult> bloodTestResults = query.getResultList();
-		return bloodTestResults;
 	}
 
 	public Map<Long, BloodTestResult> getRecentTestResultsForDonation(
@@ -670,10 +616,6 @@ public class BloodTestingRepository {
 		query.setParameter("isActive", false);
 		query.setParameter("context", context);
 		query.executeUpdate();
-	}
-
-	public List<BloodTestingRule> getAllBloodTypingRules() {
-		return getBloodTypingRules(false);
 	}
 
 	public List<BloodTestingRule> getBloodTypingRules(boolean onlyActiveRules) {
@@ -969,14 +911,6 @@ public class BloodTestingRepository {
 		TypedQuery<BloodTestingRule> query = em.createQuery(queryStr, BloodTestingRule.class);
 		query.setParameter("isActive", true);
 		return query.getResultList();
-	}
-
-	public User getUser(Long id) {
-		String queryStr = "SELECT u FROM User u WHERE u.id=:id";
-		TypedQuery<User> query = em.createQuery(queryStr, User.class);
-		query.setParameter("id", id);
-		User user = query.getSingleResult();
-		return user;
 	}
 
 	public void saveTestResultsToDatabase(
