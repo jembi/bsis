@@ -3,6 +3,7 @@ package backingform.validator;
 import model.componentmovement.ComponentStatusChangeReason;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
@@ -12,6 +13,7 @@ import backingform.DiscardReasonBackingForm;
 @Component
 public class DiscardReasonBackingFormValidator extends BaseValidator<DiscardReasonBackingForm> {
 
+    @Autowired
     private DiscardReasonRepository discardReasonRepository;
 
     @Override
