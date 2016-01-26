@@ -38,24 +38,32 @@ public class DonationConstraintChecker {
 
   public boolean canDeleteDonation(long donationId) throws NoResultException {
 
-    Donation donation = donationRepository.findDonationById(donationId);
+        Donation donation = donationRepository.findDonationById(donationId);
+        
+        // Check for comments
+        if (donation.getNotes() != null && !donation.getNotes().isEmpty()) {
+            return false;
+        }
+        
+        // Check for adverse events
+        if (donation.getAdverseEvent() != null) {
+          return false;
+        }
 
-    // Check for comments
-    if (donation.getNotes() != null && !donation.getNotes().isEmpty()) {
-      return false;
+        // Check for recorded test results
+        if (bloodTestResultRepository.countBloodTestResultsForDonation(donationId) > 0) {
+            return false;
+        }
+        
+        // Check for processed components
+        if (componentRepository.countChangedComponentsForDonation(donationId) > 0) {
+            return false;
+        }
+        
+        return true;
     }
-
-    // Check for recorded test results
-    if (bloodTestResultRepository.countBloodTestResultsForDonation(donationId) > 0) {
-      return false;
-    }
-
-    // Check for processed components
-    return componentRepository.countChangedComponentsForDonation(donationId) <= 0;
-
-  }
-
-  public boolean canUpdateDonationFields(long donationId) {
+    
+    public boolean canUpdateDonationFields(long donationId) {
 
     // Check for recorded test results
     if (bloodTestResultRepository.countBloodTestResultsForDonation(donationId) > 0) {

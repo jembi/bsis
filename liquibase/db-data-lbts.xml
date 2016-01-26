@@ -1203,4 +1203,23 @@
 		</update>
 	</changeSet>
 
+	<changeSet id="20160121-1424" author="debonair">
+		<update tableName="Donation">
+			<column name="haemoglobinLevel" value="FAIL" type="varchar(20)"></column>
+			<where>haemoglobinLevel = 'Fail'</where>
+		</update>
+		<update tableName="Donation">
+			<column name="haemoglobinLevel" value="PASS" type="varchar(20)"></column>
+			<where>haemoglobinLevel = 'Pass'</where>
+		</update>
+		<update tableName="Donation_AUD">
+			<column name="haemoglobinLevel" value="FAIL" type="varchar(20)"></column>
+			<where>haemoglobinLevel = 'Fail'</where>
+		</update>
+		<update tableName="Donation_AUD">
+			<column name="haemoglobinLevel" value="PASS" type="varchar(20)"></column>
+			<where>haemoglobinLevel = 'Pass'</where>
+		</update>
+	</changeSet>
+
 </databaseChangeLog>
