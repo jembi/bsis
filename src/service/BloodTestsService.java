@@ -1,24 +1,21 @@
 package service;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
-import model.bloodtesting.TTIStatus;
 import model.component.Component;
 import model.donation.Donation;
-import model.donor.Donor;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import repository.ComponentRepository;
+import repository.DonationRepository;
 import repository.bloodtesting.BloodTestingRepository;
-import repository.bloodtesting.BloodTypingStatus;
+import repository.bloodtesting.BloodTestingRuleEngine;
 import viewmodel.BloodTestingRuleResult;
 
 /**
@@ -34,6 +31,12 @@ public class BloodTestsService {
 	@Autowired
 	BloodTestingRepository bloodTestingRepository;
 	
+  @Autowired
+  private DonationRepository donationRepository;
+
+  @Autowired
+  private BloodTestingRuleEngine ruleEngine;
+	
 	/**
 	 * Executes the BloodTestingRuleEngine with the configured BloodTests and returns the results
 	 * 
@@ -45,47 +48,48 @@ public class BloodTestsService {
 		return ruleResult;
 	}
 	
-	/**
-	 * Updates the specified Donation given the results from the BloodTests. Updates include blood
-	 * grouping, extra information, TTI status and blood typing statuses.
-	 * 
-	 * @param donation Donation on which the tests were run
-	 * @param ruleResult BloodTestingRuleResult containing the results from the tests
-	 * @return boolean, true if the Donation was updated
-	 */
-	public boolean updateDonationWithTestResults(Donation donation, BloodTestingRuleResult ruleResult) {
-		boolean donationUpdated = false;
-		
-		String oldExtraInformation = donation.getExtraBloodTypeInformation();
-		String newExtraInformation = addNewExtraInformation(oldExtraInformation, ruleResult.getExtraInformation());
-		
-		String oldBloodAbo = donation.getBloodAbo();
-		String newBloodAbo = ruleResult.getBloodAbo();
-		
-		String oldBloodRh = donation.getBloodRh();
-		String newBloodRh = ruleResult.getBloodRh();
-		
-		TTIStatus oldTtiStatus = donation.getTTIStatus();
-		TTIStatus newTtiStatus = ruleResult.getTTIStatus();
-		
-		BloodTypingStatus oldBloodTypingStatus = donation.getBloodTypingStatus();
-		BloodTypingStatus newBloodTypingStatus = ruleResult.getBloodTypingStatus();
-		
-		if (!newExtraInformation.equals(oldExtraInformation) || !newBloodAbo.equals(oldBloodAbo)
-		        || !newBloodRh.equals(oldBloodRh) || !newTtiStatus.equals(oldTtiStatus)
-		        || !newBloodTypingStatus.equals(oldBloodTypingStatus)) {
-			donation.setExtraBloodTypeInformation(newExtraInformation);
-			donation.setBloodAbo(newBloodAbo);
-			donation.setBloodRh(newBloodRh);
-			donation.setTTIStatus(ruleResult.getTTIStatus());
-			donation.setBloodTypingStatus(ruleResult.getBloodTypingStatus());
-			
-			donationUpdated = true;
-		}
-		donation.setBloodTypingMatchStatus(ruleResult.getBloodTypingMatchStatus());
-		
-		return donationUpdated;
-	}
+	  
+  /**
+   * Validate the test results to ensure that the test results comply with the BloodTests configured
+   * 
+   * @param bloodTypingTestResults Map<Long, String> containing String results mapped to BloodTest identifiers
+   * @return Map<Long, String> of errors mapped to BloodTest identifiers
+   */
+  public Map<Long, String> validateTestResultValues(Map<Long, String> bloodTypingTestResults) {
+    // FIXME: this method should be in this service but due to the many references in BloodTestingRepository, it was not moved
+    return bloodTestingRepository.validateTestResultValues(null, bloodTypingTestResults);
+  }
+	
+  /**
+   * Saves the BloodTest results and updates the Donation (bloodAbo/Rh and statuses)
+   * 
+   * @param donationId Long identifier of the donation that should be updated with new test results
+   * @param bloodTestResults Map of test results
+   * @return BloodTestingRuleResult containing the results of the Blood Test Rules Engine
+   */
+  public BloodTestingRuleResult saveBloodTests(Long donationId, Map<Long, String> bloodTestResults) {
+    Donation donation = donationRepository.findDonationById(donationId);
+    // FIXME: rules engine will not provide the correct BloodTyping statuses because the Donation passed in has the wrong Abo/Rh (see FIXME below)
+    BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(donation, bloodTestResults);
+    bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult);
+    // FIXME: run the ruleEngine a 2nd time to use the correct Abo/Rh for the donation
+    ruleResult = ruleEngine.applyBloodTests(donation, bloodTestResults);
+    donationRepository.saveDonation(donation);
+    return ruleResult;
+  }
+	
+  /**
+   * Updates the specified Donation given the results from the BloodTests. Updates include blood
+   * grouping, extra information, TTI status and blood typing statuses.
+   * 
+   * @param donation Donation on which the tests were run
+   * @param ruleResult BloodTestingRuleResult containing the results from the tests
+   * @return boolean, true if the Donation was updated
+   */
+  public boolean updateDonationWithTestResults(Donation donation, BloodTestingRuleResult ruleResult) {
+    // FIXME: this method should be in this service but it has too many references in BloodTestingRepository
+    return bloodTestingRepository.updateDonationWithTestResults(donation, ruleResult);
+  }
 	
 	/**
 	 * Updates Components as a result of Blood Tests being done on a Donation. The updates include
@@ -105,17 +109,8 @@ public class BloodTestsService {
 			}
 		}
 	}
-	
-	protected String addNewExtraInformation(String donationExtraInformation, Set<String> extraInformationNewSet) {
-		String newExtraInformation;
-		Set<String> oldExtraInformationSet = new HashSet<String>();
-		if (StringUtils.isNotBlank(donationExtraInformation)) {
-			oldExtraInformationSet.addAll(Arrays.asList(donationExtraInformation.split(",")));
-			extraInformationNewSet.removeAll(oldExtraInformationSet); // remove duplicates
-			newExtraInformation = donationExtraInformation + StringUtils.join(extraInformationNewSet, ",");
-		} else {
-			newExtraInformation = StringUtils.join(extraInformationNewSet, ",");
-		}
-		return newExtraInformation;
-	}
+
+  protected void setBloodTestingRepository(BloodTestingRepository bloodTestingRepository) {
+    this.bloodTestingRepository = bloodTestingRepository;
+  }
 }

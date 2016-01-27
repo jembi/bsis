@@ -10,9 +10,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -34,12 +36,10 @@ import model.donation.Donation;
 import model.microtiterplate.MachineReading;
 import model.microtiterplate.MicrotiterPlate;
 import model.microtiterplate.PlateSession;
-import model.user.User;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,8 +47,6 @@ import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import repository.GenericConfigRepository;
 import repository.WellTypeRepository;
-import repository.events.ApplicationContextProvider;
-import repository.events.BloodTestsUpdatedEvent;
 import viewmodel.BloodTestingRuleResult;
 import backingform.BloodTestBackingForm;
 
@@ -91,15 +89,6 @@ public class BloodTestingRepository {
 		TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
 		query.setParameter("isActive", true);
 		query.setParameter("category", BloodTestCategory.BLOODTYPING);
-		List<BloodTest> bloodTests = query.getResultList();
-		return bloodTests;
-	}
-
-	public List<BloodTest> getBloodTTITests() {
-		String queryStr = "SELECT b FROM BloodTest b WHERE b.isActive=:isActive AND b.category=:category";
-		TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
-		query.setParameter("isActive", true);
-		query.setParameter("category", BloodTestCategory.TTI);
 		List<BloodTest> bloodTests = query.getResultList();
 		return bloodTests;
 	}
@@ -174,39 +163,10 @@ public class BloodTestingRepository {
 		return results;
 	}
 	
-	public Map<String, Object> saveBloodTestingResults(Long donationId, Map<Long, String> bloodTypingTestResults,
-			boolean saveIfUninterpretable) {
-
-		Donation donation = new Donation();
-		BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
-		Boolean uninterpretableResults = false;
-		Date testedOn = new Date();
-
-		Map<Long, String> errorMap = validateTestResultValues(donationId, bloodTypingTestResults);
-		if (errorMap.isEmpty()) {
-			donation = donationRepository.findDonationById(donationId);
-			ruleResult = ruleEngine.applyBloodTests(donation, bloodTypingTestResults);
-
-			if (!saveIfUninterpretable && (ruleResult.getAboUninterpretable()
-					|| ruleResult.getRhUninterpretable()
-					|| ruleResult.getTtiUninterpretable())) {
-			    // Saving uninterpretable results is not allowed and at least one result is uninterpretable
-				uninterpretableResults = true;
-				errorMap.put(donationId, "Test results are uninterpretable");
-			} else {
-				saveBloodTestResultsToDatabase(bloodTypingTestResults, donation, testedOn, ruleResult);
-			}
-			em.flush();
-		}
-
-		Map<String, Object> results = new HashMap<>();
-		results.put("donation", donation);
-		results.put("bloodTestingResults", ruleResult);
-		results.put("uninterpretableResults", uninterpretableResults);
-		results.put("errors", errorMap);
-		return results;
-	}
-	
+	/**
+	 * FIXME: This method should be in BloodTestsService, but due to references in this repository, it was not moved
+	 * FIXME: param donationId is not used
+	 */
 	public Map<Long, String> validateTestResultValues(Long donationId, Map<Long, String> bloodTypingTestResults) {
 
 	    /**
@@ -247,7 +207,15 @@ public class BloodTestingRepository {
 		return errorMap;
 	}
 	
-	private void saveBloodTestResultsToDatabase(
+	/**
+	 * Save the BloodTestingRuleResult and update the Donation blood ABO/Rh and blood typing statuses 
+	 * 
+	 * @param bloodTestResultsForDonation Map of test results with the BloodTest identifier as the key
+	 * @param donation Donation associated with the test results
+	 * @param testedOn Date the tests were done
+	 * @param ruleResult BloodTestingRuleResult from the BloodTestingRulesEngine
+	 */
+	public void saveBloodTestResultsToDatabase(
 			Map<Long, String> bloodTestResultsForDonation,
 			Donation donation, Date testedOn,
 			BloodTestingRuleResult ruleResult) {
@@ -271,14 +239,8 @@ public class BloodTestingRepository {
 			em.persist(btResult);
 		}
 
-		ApplicationContext applicationContext = ApplicationContextProvider
-				.getApplicationContext();
-		BloodTestsUpdatedEvent bloodTestsUpdatedEvent;
-		bloodTestsUpdatedEvent = new BloodTestsUpdatedEvent("10",
-				Arrays.asList(donation, ruleResult));
-		bloodTestsUpdatedEvent.setDonation(donation);
-		bloodTestsUpdatedEvent.setBloodTestingRuleResult(ruleResult);
-		applicationContext.publishEvent(bloodTestsUpdatedEvent);
+		updateDonationWithTestResults(donation, ruleResult);
+		em.persist(donation);
 	}
 
 	public Map<Long, Map<Long, String>> validateTestResultValues(
@@ -415,17 +377,6 @@ public class BloodTestingRepository {
 		query.setParameter("category", BloodTestCategory.TTI);
 		List<BloodTest> bloodTests = query.getResultList();
 		return bloodTests;
-	}
-	
-	public List<BloodTestResult> getBloodTestResultsForDonation(
-			Long donationId) {
-		String queryStr = "SELECT bt FROM BloodTestResult bt WHERE "
-				+ "bt.donation.id=:donationId";
-		TypedQuery<BloodTestResult> query = em.createQuery(queryStr,
-				BloodTestResult.class);
-		query.setParameter("donationId", donationId);
-		List<BloodTestResult> bloodTestResults = query.getResultList();
-		return bloodTestResults;
 	}
 
 	public Map<Long, BloodTestResult> getRecentTestResultsForDonation(
@@ -636,14 +587,8 @@ public class BloodTestingRepository {
 		btResult.setResult(testResult);
 		em.persist(btResult);
 		em.refresh(btResult);
-		ApplicationContext applicationContext = ApplicationContextProvider
-				.getApplicationContext();
-		BloodTestsUpdatedEvent bloodTestsUpdatedEvent;
-		bloodTestsUpdatedEvent = new BloodTestsUpdatedEvent("10",
-				Arrays.asList(donation, ruleResult));
-		bloodTestsUpdatedEvent.setDonation(donation);
-		bloodTestsUpdatedEvent.setBloodTestingRuleResult(ruleResult);
-		applicationContext.publishEvent(bloodTestsUpdatedEvent);
+		updateDonationWithTestResults(donation, ruleResult);
+        em.persist(donation);
 		return btResult;
 	}
 
@@ -671,10 +616,6 @@ public class BloodTestingRepository {
 		query.setParameter("isActive", false);
 		query.setParameter("context", context);
 		query.executeUpdate();
-	}
-
-	public List<BloodTestingRule> getAllBloodTypingRules() {
-		return getBloodTypingRules(false);
 	}
 
 	public List<BloodTestingRule> getBloodTypingRules(boolean onlyActiveRules) {
@@ -972,14 +913,6 @@ public class BloodTestingRepository {
 		return query.getResultList();
 	}
 
-	public User getUser(Long id) {
-		String queryStr = "SELECT u FROM User u WHERE u.id=:id";
-		TypedQuery<User> query = em.createQuery(queryStr, User.class);
-		query.setParameter("id", id);
-		User user = query.getSingleResult();
-		return user;
-	}
-
 	public void saveTestResultsToDatabase(
 			List<TSVFileHeaderName> tSVFileHeaderNameList) {
 		for (TSVFileHeaderName ts : tSVFileHeaderNameList) {
@@ -1010,4 +943,66 @@ public class BloodTestingRepository {
 			
 		}
 	}
+	
+    /**
+     * FIXME: this method belongs in the BloodTestsService and has replaced the BloodTestsUpdatedEvent
+     * Because there are many references in this repository class, to minimise changes, it was added here.
+     */
+    public boolean updateDonationWithTestResults(Donation donation, BloodTestingRuleResult ruleResult) {
+        boolean donationUpdated = false;
+        
+        String oldExtraInformation = donation.getExtraBloodTypeInformation();
+        String newExtraInformation = addNewExtraInformation(oldExtraInformation, ruleResult.getExtraInformation());
+        
+        String oldBloodAbo = donation.getBloodAbo();
+        String newBloodAbo = ruleResult.getBloodAbo();
+        
+        String oldBloodRh = donation.getBloodRh();
+        String newBloodRh = ruleResult.getBloodRh();
+        
+        TTIStatus oldTtiStatus = donation.getTTIStatus();
+        TTIStatus newTtiStatus = ruleResult.getTTIStatus();
+        
+        BloodTypingStatus oldBloodTypingStatus = donation.getBloodTypingStatus();
+        BloodTypingStatus newBloodTypingStatus = ruleResult.getBloodTypingStatus();
+        
+        if (!newExtraInformation.equals(oldExtraInformation) || !newBloodAbo.equals(oldBloodAbo)
+                || !newBloodRh.equals(oldBloodRh) || !newTtiStatus.equals(oldTtiStatus)
+                || !newBloodTypingStatus.equals(oldBloodTypingStatus)) {
+            donation.setExtraBloodTypeInformation(newExtraInformation);
+            donation.setBloodAbo(newBloodAbo);
+            donation.setBloodRh(newBloodRh);
+            donation.setTTIStatus(ruleResult.getTTIStatus());
+            donation.setBloodTypingStatus(ruleResult.getBloodTypingStatus());
+            
+            donationUpdated = true;
+        }
+        
+        if (LOGGER.isInfoEnabled()) {
+          LOGGER.info("Updating Donation '" + donation.getId() + "' with Abo/Rh="
+              + donation.getBloodAbo() + donation.getBloodRh() + " TTIStatus="
+              + donation.getTTIStatus() + " BloodTypingStatus=" + donation.getBloodTypingStatus()
+              + " " + donation.getBloodTypingMatchStatus());
+        }
+
+        donation.setBloodTypingMatchStatus(ruleResult.getBloodTypingMatchStatus());
+        
+        return donationUpdated;
+    }
+    
+    /**
+     * FIXME: this method also belongs in the BloodTestsService (see above updateDonationWithTestResults)
+     */
+    protected String addNewExtraInformation(String donationExtraInformation, Set<String> extraInformationNewSet) {
+      String newExtraInformation;
+      Set<String> oldExtraInformationSet = new HashSet<String>();
+      if (StringUtils.isNotBlank(donationExtraInformation)) {
+          oldExtraInformationSet.addAll(Arrays.asList(donationExtraInformation.split(",")));
+          extraInformationNewSet.removeAll(oldExtraInformationSet); // remove duplicates
+          newExtraInformation = donationExtraInformation + StringUtils.join(extraInformationNewSet, ",");
+      } else {
+          newExtraInformation = StringUtils.join(extraInformationNewSet, ",");
+      }
+      return newExtraInformation;
+  }
 }

@@ -165,7 +165,6 @@ public class BloodTypingController {
       Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResultsMap, form.getSaveUninterpretableResults());
       @SuppressWarnings("unchecked")
       Map<Long, Object> errorMap = (Map<Long, Object>) results.get("errors");
-      System.out.println(errorMap);
       if (errorMap != null && !errorMap.isEmpty()) {
         httpStatus = HttpStatus.BAD_REQUEST;
         @SuppressWarnings("unchecked")
