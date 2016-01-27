@@ -2020,5 +2020,12 @@
 			<column name="addressTypeId" type="BIGINT"></column>
 		</addColumn>
 	</changeSet>
+	
+	<changeSet id="20160127-1000" author="timler">
+		<comment>BSIS-358 - Add double-entry column for BloodTestResult</comment>
+		<addColumn tableName="BloodTestResult">
+			<column name="doubleEntry" type="TINYINT(1)" defaultValue="0"></column>
+		</addColumn>
+	</changeSet>
 
 </databaseChangeLog>
