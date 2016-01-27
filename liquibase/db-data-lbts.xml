@@ -1222,5 +1222,43 @@
 			<where>haemoglobinLevel = 'Pass'</where>
 		</update>
 	</changeSet>
+	
+    <changeSet id="20160127-1210" author="timler">
+        <comment>Add Blood Abo/Rh repeat tests</comment>
+        <insert tableName="BloodTest">
+            <column name="id" value="34"></column>
+            <column name="bloodTestType" value="REPEAT_BLOODTYPING"></column>
+            <column name="category" value="BLOODTYPING"></column>
+            <column name="context" value="RECORD_BLOOD_TYPING_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="isEmptyAllowed" value="0"></column>
+            <column name="negativeResults" value=""></column>
+            <column name="positiveResults" value="A,B,AB,O"></column>
+            <column name="rankInCategory" value="1"></column>
+            <column name="testName" value="ABO Repeat 1"></column>
+            <column name="testNameShort" value="ABO Repeat 1"></column>
+            <column name="validResults" value="A,B,AB,O"></column>
+            <column name="isDeleted" value="0"></column>
+        </insert>
+        <insert tableName="BloodTest">
+            <column name="id" value="35"></column>
+            <column name="bloodTestType" value="REPEAT_BLOODTYPING"></column>
+            <column name="category" value="BLOODTYPING"></column>
+            <column name="context" value="RECORD_BLOOD_TYPING_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="isEmptyAllowed" value="0"></column>
+            <column name="negativeResults" value="NEG"></column>
+            <column name="positiveResults" value="POS"></column>
+            <column name="rankInCategory" value="1"></column>
+            <column name="testName" value="Rh Repeat 1"></column>
+            <column name="testNameShort" value="Rh Repeat 1"></column>
+            <column name="validResults" value="POS,NEG"></column>
+            <column name="isDeleted" value="0"></column>
+        </insert>
+        <sql>
+            UPDATE BloodTestingRule SET pendingTestsIds = '34' WHERE id in ('1','2','3','4');
+            UPDATE BloodTestingRule SET pendingTestsIds = '35' WHERE id in ('5', '6');
+        </sql>
+    </changeSet>
 
 </databaseChangeLog>
