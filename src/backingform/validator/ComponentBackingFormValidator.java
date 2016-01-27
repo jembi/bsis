@@ -33,7 +33,11 @@ public class ComponentBackingFormValidator extends BaseValidator<ComponentBackin
       errors.rejectValue("component.expiresOn", "dateFormat.incorrect",
           CustomDateFormatter.getDateErrorMessage());
 
-    updateRelatedEntities(form);
+    Donation donation = findDonation(form.getDonationIdentificationNumber());
+    form.setDonation(donation);
+    if (donation == null) {
+      errors.rejectValue("component.donationIdentificationNumber", "donation.invalid", "Please specify a valid donation");
+    }
 
     commonFieldChecks(form, errors);
   }
@@ -43,9 +47,8 @@ public class ComponentBackingFormValidator extends BaseValidator<ComponentBackin
     return "component";
   }
 
-  private void updateRelatedEntities(ComponentBackingForm form) {
+  private Donation findDonation(String donationIdentificationNumber) {
     Donation donation = null;
-    String donationIdentificationNumber = form.getDonationIdentificationNumber();
     if (StringUtils.isNotBlank(donationIdentificationNumber)) {
       try {
         donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
@@ -53,6 +56,6 @@ public class ComponentBackingFormValidator extends BaseValidator<ComponentBackin
         LOGGER.warn("Could not find donation with donationIdentificationNumber of '" + donationIdentificationNumber + "' . Error: " + ex.getMessage());
       }
     }
-    form.setDonation(donation);
+    return donation;
   }
 }

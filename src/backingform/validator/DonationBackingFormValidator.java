@@ -61,12 +61,21 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
       errors.rejectValue("donation.donationDate", "donationDate.incorrect",
           CustomDateFormatter.getDateErrorMessage());
 
-    updateRelatedEntities(form);
-    inheritParametersFromDonationBatch(form, errors);
-    Donor donor = form.getDonor();
+    // set donor
+    Donor donor = findDonor(form.getDonorNumber());
+    form.setDonor(donor);
     if (donor == null) {
       errors.rejectValue("donation.donor", "donor.invalid", "Please supply a valid donor");
     }
+    
+    // set donation batch
+    DonationBatch donationBatch = findDonationBatch(form.getDonationBatchNumber());
+    form.setDonationBatch(donationBatch);
+    if (donationBatch == null) {
+      errors.rejectValue("donation.donationBatch", "donationBatch.invalid", "Please supply a valid donation batch");
+    }
+    
+    inheritParametersFromDonationBatch(form, errors);
 
     if(donation.getBleedStartTime() != null || donation.getBleedEndTime() != null){
         validateBleedTimes(donation.getBleedStartTime(), donation.getBleedEndTime(), errors);
@@ -203,9 +212,19 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
     }
   }
 
-  private void updateRelatedEntities(DonationBackingForm form) {
-    // set donor
-    String donorNumber = form.getDonorNumber();
+  private DonationBatch findDonationBatch(String batchNumber) {
+    DonationBatch donationBatch = null;
+    if (StringUtils.isNotBlank(batchNumber)) {
+      try {
+        donationBatch = donationBatchRepository.findDonationBatchByBatchNumber(batchNumber);
+      } catch (NoResultException ex) {
+        LOGGER.warn("Could not find Donation with batchNumber '" + batchNumber + "'. Error: " + ex.getMessage());
+      }
+    }
+    return donationBatch;
+  }
+  
+  private Donor findDonor(String donorNumber) {
     Donor donor = null;
     if (donorNumber != null && !donorNumber.isEmpty()) {
       try {
@@ -214,18 +233,7 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
         LOGGER.warn("Could not find Donor with donorNumber '" + donorNumber + "'. Error: " + ex.getMessage());
       }
     }
-    form.setDonor(donor);
-    // set donation batch
-    String batchNumber = form.getDonationBatchNumber();
-    DonationBatch donationBatch = null;
-    if (StringUtils.isNotBlank(batchNumber)) {
-      try {
-        donationBatch = donationBatchRepository.findDonationBatchByBatchNumber(batchNumber);
-      } catch (NoResultException ex) {
-        LOGGER.warn("Could not find Donor with donorNumber '" + donorNumber + "'. Error: " + ex.getMessage());
-      }
-    }
-    form.setDonationBatch(donationBatch);
+    return donor;
   }
   
   private boolean isDuplicateDonationIdentificationNumber(Donation donation) {

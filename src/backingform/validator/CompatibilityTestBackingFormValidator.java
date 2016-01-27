@@ -44,6 +44,10 @@ public class CompatibilityTestBackingFormValidator extends BaseValidator<Compati
       componentRequest = findRequestByRequestNumber(requestNumber);
     }
     form.setForRequest(componentRequest);
+    if (componentRequest == null) {
+      errors.rejectValue("compatibilityTest.requestNumber", "compatibilitytest.request.notFound",
+          "Request with this request number not found or not available");
+    }
 
     String donationIdentificationNumber = form.getDonationIdentificationNumber();
     if (StringUtils.isNotBlank(donationIdentificationNumber) && componentRequest != null) {

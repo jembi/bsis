@@ -180,4 +180,23 @@ public class DonationBackingFormValidatorTest {
 		Assert.assertNotNull("donation.haemoglobinCount value should be above accepted range", errors.getFieldError("donation.haemoglobinCount"));
 	}
 	
+    @Test
+    public void testAddDonationUnknownDonor() throws Exception {
+        DonationBackingForm donationBackingForm = new DonationBackingForm();
+        donationBackingForm.setDonorNumber("TEST123");
+        
+        errors = new BindException(donationBackingForm, "donationBackingForm");
+        donationBackingFormValidator.validate(donationBackingForm, errors);
+        Assert.assertNotNull("donation.donor", errors.getFieldError("donation.donor"));
+    }
+    
+    @Test
+    public void testAddDonationUnknownDonationBatch() throws Exception {
+        DonationBackingForm donationBackingForm = new DonationBackingForm();
+        donationBackingForm.setDonationBatchNumber("TEST123");
+        
+        errors = new BindException(donationBackingForm, "donationBackingForm");
+        donationBackingFormValidator.validate(donationBackingForm, errors);
+        Assert.assertNotNull("donation.donationBatch", errors.getFieldError("donation.donationBatch"));
+    }
 }

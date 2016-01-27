@@ -25,6 +25,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     private Donor donor;
     private Date donationDate;
     private Location venue;
+    private String donationIdentificationNumber;
     private TTIStatus ttiStatus;
     private Boolean deleted;
     private Integer donorPulse;
@@ -70,6 +71,11 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         this.venue = venue;
         return this;
     }
+    
+    public DonationBuilder withDonationIdentificationNumber(String donationIdentificationNumber) {
+      this.donationIdentificationNumber = donationIdentificationNumber;
+      return this;
+  }
     
     public DonationBuilder withTTIStatus(TTIStatus ttiStatus) {
         this.ttiStatus = ttiStatus;
@@ -178,6 +184,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
         donation.setDonor(donor);
         donation.setDonationDate(donationDate);
         donation.setVenue(venue);
+        donation.setDonationIdentificationNumber(donationIdentificationNumber);
         donation.setTTIStatus(ttiStatus);
         donation.setDonorPulse(donorPulse);
         donation.setHaemoglobinCount(haemoglobinCount);
