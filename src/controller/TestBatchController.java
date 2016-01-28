@@ -74,12 +74,12 @@ public class TestBatchController {
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TESTING_INFORMATION+"')")
-  public ResponseEntity findAndAddTestBatchFormGenerator() {
+  public ResponseEntity<Map<String, Object>> findAndAddTestBatchFormGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("status", TestBatchStatus.values());
     map.put("donationBatches", getDonationBatchViewModels(donationBatchRepository.findUnassignedDonationBatches()));
-    return new ResponseEntity(map, HttpStatus.OK);
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
     @RequestMapping(method = RequestMethod.POST)
@@ -95,13 +95,13 @@ public class TestBatchController {
     @RequestMapping(value = "{id}",  method = RequestMethod.GET)
     @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")
     @Transactional(readOnly = true)
-    public ResponseEntity getTestBatchById(@PathVariable Long id){
+    public ResponseEntity<Map<String, Object>> getTestBatchById(@PathVariable Long id){
         
         Map<String, Object> map = new HashMap<String, Object>();
         TestBatch testBatch = testBatchRepository.findTestBatchById(id);
         boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
         map.put("testBatch", testBatchViewModelFactory.createTestBatchViewModel(testBatch, isTestingSupervisor));
-        return new ResponseEntity(map, HttpStatus.OK);
+        return new ResponseEntity<>(map, HttpStatus.OK);
         
     }
     
@@ -117,7 +117,7 @@ public class TestBatchController {
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")
-    public ResponseEntity findTestBatchPagination(
+    public ResponseEntity<Map<String, Object>> findTestBatchPagination(
             @RequestParam(value = "status", required = false) List<TestBatchStatus> statuses ,
             @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
             @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
