@@ -1223,55 +1223,67 @@
 		</update>
 	</changeSet>
 	
-    <changeSet id="20160126-1453" author="timler">
+    <changeSet id="20160127-0846" author="timler">
         <comment>Rename Conf 1, Conf 2 and Conf 3 BloodTests</comment>
         <update tableName="BloodTest">
+            <column name="testName" value="HIV Repeat 1" type="varchar(25)"></column>
             <column name="testNameShort" value="HIV Repeat 1" type="varchar(25)"></column>
-            <where>testNameShort = 'HIV Conf 1'</where>
+            <where>id = 18</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="HIV Repeat 2" type="varchar(25)"></column>
             <column name="testNameShort" value="HIV Repeat 2" type="varchar(25)"></column>
-            <where>testNameShort = 'HIV Conf 2'</where>
+            <where>id = 19</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="HIV Confirmatory" type="varchar(25)"></column>
             <column name="testNameShort" value="HIV Conf" type="varchar(25)"></column>
-            <where>testNameShort = 'HIV Conf 3'</where>
+            <where>id = 29</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="HBV Repeat 1" type="varchar(25)"></column>
             <column name="testNameShort" value="HBV Repeat 1" type="varchar(25)"></column>
-            <where>testNameShort = 'HBV Conf 1'</where>
+            <where>id = 21</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="HBV Repeat 2" type="varchar(25)"></column>
             <column name="testNameShort" value="HBV Repeat 2" type="varchar(25)"></column>
-            <where>testNameShort = 'HBV Conf 2'</where>
+            <where>id = 22</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="HBV Confirmatory" type="varchar(25)"></column>
             <column name="testNameShort" value="HBV Conf" type="varchar(25)"></column>
-            <where>testNameShort = 'HBV Conf 3'</where>
+            <where>id = 30</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="HCV Repeat 1" type="varchar(25)"></column>
             <column name="testNameShort" value="HCV Repeat 1" type="varchar(25)"></column>
-            <where>testNameShort = 'HCV Conf 1'</where>
+            <where>id = 24</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="HCV Repeat 2" type="varchar(25)"></column>
             <column name="testNameShort" value="HCV Repeat 2" type="varchar(25)"></column>
-            <where>testNameShort = 'HCV Conf 2'</where>
+            <where>id = 25</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="HCV Confirmatory" type="varchar(25)"></column>
             <column name="testNameShort" value="HCV Conf" type="varchar(25)"></column>
-            <where>testNameShort = 'HCV Conf 3'</where>
+            <where>id = 31</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="Syphilis Repeat 1" type="varchar(25)"></column>
             <column name="testNameShort" value="Syphilis Repeat 1" type="varchar(25)"></column>
-            <where>testNameShort = 'Syphilis Conf 1'</where>
+            <where>id = 27</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="Syphilis Repeat 2" type="varchar(25)"></column>
             <column name="testNameShort" value="Syphilis Repeat 2" type="varchar(25)"></column>
-            <where>testNameShort = 'Syphilis Conf 2'</where>
+            <where>id = 28</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="Syphilis Confirmatory" type="varchar(25)"></column>
             <column name="testNameShort" value="Syphilis Conf" type="varchar(25)"></column>
-            <where>testNameShort = 'Syphilis Conf 3'</where>
+            <where>id = 32</where>
         </update>
     </changeSet>
 
