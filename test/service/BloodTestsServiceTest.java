@@ -376,7 +376,7 @@ public class BloodTestsServiceTest {
     
     // do asserts
     String updatedExtraInformation = donation.getExtraBloodTypeInformation();
-    Assert.assertEquals("Extra information set correctly", "test3test1,test2", updatedExtraInformation);
+    Assert.assertTrue("Extra information set correctly", "test3test1,test2".equals(updatedExtraInformation) || "test3test2,test1".equals(updatedExtraInformation));
   }
   
   @Test
