@@ -1,16 +1,18 @@
 package repository;
 
-import model.sequencenumber.SequenceNumberStore;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.ArrayList;
-import java.util.List;
+
+import model.sequencenumber.SequenceNumberStore;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
@@ -24,14 +26,14 @@ public class SequenceNumberRepository {
 
   synchronized public String getNextDonationIdentificationNumber() {
     String queryStr = "SELECT s from SequenceNumberStore s " +
-            "where s.targetTable=:targetTable AND " +
-            " s.columnName=:columnName";
+                      "where s.targetTable=:targetTable AND " +
+                      " s.columnName=:columnName";
     TypedQuery<SequenceNumberStore> query = em.createQuery(queryStr, SequenceNumberStore.class);
     query.setParameter("targetTable", "Donation");
     query.setParameter("columnName", "donationIdentificationNumber");
 
     SequenceNumberStore seqNumStore = null;
-    Long lastNumber = (long) 0;
+    Long lastNumber = (long)0;
     String prefix;
     boolean valuePresentInTable = true;
     try {
@@ -65,14 +67,14 @@ public class SequenceNumberRepository {
 
   synchronized public String getNextRequestNumber() {
     String queryStr = "SELECT s from SequenceNumberStore s " +
-            "where s.targetTable=:targetTable AND " +
-            " s.columnName=:columnName";
+                      "where s.targetTable=:targetTable AND " +
+                      " s.columnName=:columnName";
     TypedQuery<SequenceNumberStore> query = em.createQuery(queryStr, SequenceNumberStore.class);
     query.setParameter("targetTable", "Request");
     query.setParameter("columnName", "requestNumber");
 
     SequenceNumberStore seqNumStore = null;
-    Long lastNumber = (long) 0;
+    Long lastNumber = (long)0;
     String prefix;
     boolean valuePresentInTable = true;
     try {
@@ -105,34 +107,36 @@ public class SequenceNumberRepository {
   }
 
   synchronized public String getNextDonorNumber() {
-    String queryStr = "SELECT s from SequenceNumberStore s " +
-            "where s.targetTable=:targetTable AND " +
-            " s.columnName=:columnName";
+        String queryStr = "SELECT s from SequenceNumberStore s " +
+                "where s.targetTable=:targetTable AND " +
+                " s.columnName=:columnName";
     TypedQuery<SequenceNumberStore> query = em.createQuery(queryStr, SequenceNumberStore.class);
     query.setParameter("targetTable", "Donor");
     query.setParameter("columnName", "donorNumber");
 
     SequenceNumberStore seqNumStore = null;
-    Long lastNumber = (long) 0;
+    Long lastNumber = (long)0;
     String prefix;
     boolean valuePresentInTable = true;
     try {
-      seqNumStore = query.getSingleResult();
-      lastNumber = seqNumStore.getLastNumber();
-      //prefix = seqNumStore.getPrefix();
+    seqNumStore = query.getSingleResult();
+    lastNumber = seqNumStore.getLastNumber();
+    //prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
-      //ex.printStackTrace();
-      valuePresentInTable = false;
-      seqNumStore = new SequenceNumberStore();
-      seqNumStore.setTargetTable("Donor");
-      seqNumStore.setColumnName("donorNumber");
+    //ex.printStackTrace();
+    valuePresentInTable = false;
+    seqNumStore = new SequenceNumberStore();
+    seqNumStore.setTargetTable("Donor");
+    seqNumStore.setColumnName("donorNumber");
     }
 
 
-    if (lastNumber == 0) {
-      lastNumber++;
+    if (lastNumber == 0){
+    	lastNumber ++;
     }
     String donorNumberFormat = generalConfigRepository.getGeneralConfigByName("donor.donorNumberFormat").getValue();
+    String lastNumberStr = String.format(donorNumberFormat, lastNumber);
+    String requestNumber = lastNumberStr;
     lastNumber = lastNumber + 1;
     seqNumStore.setLastNumber(lastNumber);
     if (valuePresentInTable) {
@@ -142,76 +146,79 @@ public class SequenceNumberRepository {
     }
 
     em.flush();
-    return String.format(donorNumberFormat, lastNumber);
+    return requestNumber;
   }
 
 
-  synchronized public String getSequenceNumber(String targetTable, String columnName) {
-    String queryStr = "SELECT s from SequenceNumberStore s " +
-            "where s.targetTable=:targetTable AND " +
-            " s.columnName=:columnName ";
-    TypedQuery<SequenceNumberStore> query = em.createQuery(queryStr, SequenceNumberStore.class);
-    query.setParameter("targetTable", targetTable);
-    query.setParameter("columnName", columnName);
+  synchronized public String getSequenceNumber(String targetTable,String columnName) {
+      String queryStr = "SELECT s from SequenceNumberStore s " +
+              "where s.targetTable=:targetTable AND " +
+              " s.columnName=:columnName " ;
+  TypedQuery<SequenceNumberStore> query = em.createQuery(queryStr, SequenceNumberStore.class);
+  query.setParameter("targetTable", targetTable);
+  query.setParameter("columnName", columnName);
 
-    SequenceNumberStore seqNumStore = null;
-    Long lastNumber = (long) 0;
-
-
-    try {
-      seqNumStore = query.getSingleResult();
-      lastNumber = seqNumStore.getLastNumber();
-
-    } catch (NoResultException ex) {
-      //ex.printStackTrace();
-
-      seqNumStore = new SequenceNumberStore();
-      seqNumStore.setTargetTable("Donor");
-      seqNumStore.setColumnName("donorNumber");
+  SequenceNumberStore seqNumStore = null;
+  Long lastNumber = (long)0;
 
 
-    }
+  try {
+  seqNumStore = query.getSingleResult();
+  lastNumber = seqNumStore.getLastNumber();
+
+  } catch (NoResultException ex) {
+  //ex.printStackTrace();
+
+  seqNumStore = new SequenceNumberStore();
+  seqNumStore.setTargetTable("Donor");
+  seqNumStore.setColumnName("donorNumber");
 
 
-    if (lastNumber == 0) {
-      lastNumber++;
-    }
-
-
-    em.flush();
-    return String.format("%06d", lastNumber);
   }
+
+
+  if (lastNumber == 0){
+  	lastNumber ++;
+  }
+  String lastNumberStr = String.format("%06d", lastNumber);
+
+  String requestNumber = lastNumberStr;
+
+
+   em.flush();
+  return requestNumber;
+}
 
 
   synchronized public List<String> getBatchDonationIdentificationNumbers(int numDonations) {
     String queryStr = "SELECT s from SequenceNumberStore s " +
-            "where s.targetTable=:targetTable AND " +
-            " s.columnName=:columnName";
+        "where s.targetTable=:targetTable AND " +
+        " s.columnName=:columnName";
     TypedQuery<SequenceNumberStore> query = em.createQuery(queryStr, SequenceNumberStore.class);
     query.setParameter("targetTable", "Donation");
     query.setParameter("columnName", "donationIdentificationNumber");
 
     SequenceNumberStore seqNumStore = null;
-    Long lastNumber = (long) 0;
+    Long lastNumber = (long)0;
     String prefix;
     boolean valuePresentInTable = true;
     try {
-      seqNumStore = query.getSingleResult();
-      lastNumber = seqNumStore.getLastNumber();
-      prefix = seqNumStore.getPrefix();
+    seqNumStore = query.getSingleResult();
+    lastNumber = seqNumStore.getLastNumber();
+    prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
-      //ex.printStackTrace();
-      valuePresentInTable = false;
-      prefix = "C";
-      seqNumStore = new SequenceNumberStore();
-      seqNumStore.setTargetTable("Donation");
-      seqNumStore.setColumnName("donationIdentificationNumber");
-      seqNumStore.setPrefix(prefix);
+    //ex.printStackTrace();
+    valuePresentInTable = false;
+    prefix = "C";
+    seqNumStore = new SequenceNumberStore();
+    seqNumStore.setTargetTable("Donation");
+    seqNumStore.setColumnName("donationIdentificationNumber");
+    seqNumStore.setPrefix(prefix);
     }
 
-    List<String> donationIdentificationNumbers = new ArrayList<>();
+    List<String> donationIdentificationNumbers = new ArrayList<String>();
     for (int i = 0; i < numDonations; ++i) {
-      String lastNumberStr = String.format("%06d", lastNumber + i);
+      String lastNumberStr = String.format("%06d", lastNumber+i);
       // may need a prefix for center where the number is generated
       String donationIdentificationNumber = prefix + lastNumberStr;
       donationIdentificationNumbers.add(donationIdentificationNumber);
@@ -219,9 +226,9 @@ public class SequenceNumberRepository {
     lastNumber = lastNumber + numDonations;
     seqNumStore.setLastNumber(lastNumber);
     if (valuePresentInTable) {
-      em.merge(seqNumStore);
+    em.merge(seqNumStore);
     } else {
-      em.persist(seqNumStore);
+    em.persist(seqNumStore);
     }
 
     em.flush();
@@ -230,14 +237,14 @@ public class SequenceNumberRepository {
 
   synchronized public List<String> getBatchRequestNumbers(int numRequests) {
     String queryStr = "SELECT s from SequenceNumberStore s " +
-            "where s.targetTable=:targetTable AND " +
-            " s.columnName=:columnName";
+                      "where s.targetTable=:targetTable AND " +
+                      " s.columnName=:columnName";
     TypedQuery<SequenceNumberStore> query = em.createQuery(queryStr, SequenceNumberStore.class);
     query.setParameter("targetTable", "Request");
     query.setParameter("columnName", "requestNumber");
 
     SequenceNumberStore seqNumStore = null;
-    Long lastNumber = (long) 0;
+    Long lastNumber = (long)0;
     String prefix;
     boolean valuePresentInTable = true;
     try {
@@ -254,9 +261,9 @@ public class SequenceNumberRepository {
       seqNumStore.setPrefix(prefix);
     }
 
-    List<String> requestNumbers = new ArrayList<>();
+    List<String> requestNumbers = new ArrayList<String>();
     for (int i = 0; i < numRequests; ++i) {
-      String lastNumberStr = String.format("%06d", lastNumber + i);
+      String lastNumberStr = String.format("%06d", lastNumber+i);
       // may need a prefix for center where the number is generated
       String requestNumber = prefix + lastNumberStr;
       requestNumbers.add(requestNumber);
@@ -275,10 +282,10 @@ public class SequenceNumberRepository {
 
   private String getNextNumber(String targetTable, String columnName, String numberPrefix) {
     String queryStr = "SELECT s from SequenceNumberStore s "
-            + "where s.targetTable=:targetTable AND "
-            + " s.columnName=:columnName";
+        + "where s.targetTable=:targetTable AND "
+        + " s.columnName=:columnName";
     TypedQuery<SequenceNumberStore> query = em.createQuery(queryStr,
-            SequenceNumberStore.class);
+        SequenceNumberStore.class);
     query.setParameter("targetTable", targetTable);
     query.setParameter("columnName", columnName);
 
@@ -300,7 +307,9 @@ public class SequenceNumberRepository {
       seqNumStore.setPrefix(prefix);
     }
 
+    String lastNumberStr = String.format("%06d", lastNumber);
     // may need a prefix for center where the number is generated
+    String nextNumber = lastNumberStr;
     lastNumber = lastNumber + 1;
     seqNumStore.setLastNumber(lastNumber);
     if (valuePresentInTable) {
@@ -310,7 +319,7 @@ public class SequenceNumberRepository {
     }
 
     em.flush();
-    return String.format("%06d", lastNumber);
+    return nextNumber;
   }
 
   synchronized public String getNextWorksheetBatchNumber() {
@@ -322,6 +331,6 @@ public class SequenceNumberRepository {
   }
 
   synchronized public String getNextTestBatchNumber() {
-    return getNextNumber("testbatch", "batchNumber", "TB");
+     return getNextNumber("testbatch", "batchNumber", "TB");
   }
 }
