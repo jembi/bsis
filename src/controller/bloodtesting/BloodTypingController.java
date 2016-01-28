@@ -127,30 +127,29 @@ public class BloodTypingController {
 
     Map<String, Object> m = new HashMap<>();
     HttpStatus httpStatus = HttpStatus.CREATED;
-
-    Map<Long, Map<Long, String>> bloodTypingTestResultsMap = new HashMap<>();
-    Map<Long, String> saveTestsDataWithLong = new HashMap<>();
-    @SuppressWarnings("unchecked")
-    Map<Long, String> saveTestsData = null;
-    saveTestsData = form.getTestResults();
-    Donation donation = donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
-    for (Long testIdStr : saveTestsData.keySet()) {
-      saveTestsDataWithLong.put(testIdStr, saveTestsData.get(testIdStr));
-    }
-    bloodTypingTestResultsMap.put(donation.getId(), saveTestsDataWithLong);
-    Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResultsMap, form.getSaveUninterpretableResults());
-    @SuppressWarnings("unchecked")
-    Map<Long, Object> errorMap = (Map<Long, Object>) results.get("errors");
-    System.out.println(errorMap);
-    if (errorMap != null && !errorMap.isEmpty()) {
-      httpStatus = HttpStatus.BAD_REQUEST;
+    
+      Map<Long, Map<Long, String>> bloodTypingTestResultsMap = new HashMap<Long, Map<Long,String>>();
+      Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
       @SuppressWarnings("unchecked")
-      Map<Long, String> errorsForDonation = (Map<Long, String>) errorMap.get(donation.getId());
-      if (errorsForDonation != null && errorsForDonation.size() == 1 && errorsForDonation.containsKey((long) -1))
-        m.put("uninterpretable", true);
-      else
-        m.put("invalidResults", true);
-    }
+      Map<Long, String> saveTestsData = null;
+      saveTestsData = form.getTestResults();
+       Donation donation = donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
+      for (Long testIdStr : saveTestsData.keySet()) {
+        saveTestsDataWithLong.put(testIdStr, saveTestsData.get(testIdStr));
+      }
+      bloodTypingTestResultsMap.put(donation.getId(), saveTestsDataWithLong);
+      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResultsMap, form.getSaveUninterpretableResults());
+      @SuppressWarnings("unchecked")
+      Map<Long, Object> errorMap = (Map<Long, Object>) results.get("errors");
+      if (errorMap != null && !errorMap.isEmpty()) {
+        httpStatus = HttpStatus.BAD_REQUEST;
+        @SuppressWarnings("unchecked")
+        Map<Long, String> errorsForDonation = (Map<Long, String>) errorMap.get(donation.getId());
+        if (errorsForDonation != null && errorsForDonation.size() == 1 && errorsForDonation.containsKey((long)-1))
+          m.put("uninterpretable", true);
+        else
+          m.put("invalidResults", true);
+      }
 
     return new ResponseEntity<>(m, httpStatus);
   }

@@ -766,5 +766,57 @@
             <where>reason = 'Travel history'</where>
         </update>
 	</changeSet>
+	
+    <changeSet id="20160126-1453" author="timler">
+        <comment>Rename Conf 1, Conf 2 and Conf 3 BloodTests</comment>
+        <update tableName="BloodTest">
+            <column name="testNameShort" value="HIV Repeat 1" type="varchar(25)"></column>
+            <where>testNameShort = 'HIV Conf 1'</where>
+        </update>
+        <update tableName="BloodTest">
+            <column name="testNameShort" value="HIV Repeat 2" type="varchar(25)"></column>
+            <where>testNameShort = 'HIV Conf 2'</where>
+        </update>
+        <update tableName="BloodTest">
+            <column name="testNameShort" value="HIV Conf" type="varchar(25)"></column>
+            <where>testNameShort = 'HIV Conf 3'</where>
+        </update>
+        <update tableName="BloodTest">
+            <column name="testNameShort" value="HBV Repeat 1" type="varchar(25)"></column>
+            <where>testNameShort = 'HBV Conf 1'</where>
+        </update>
+        <update tableName="BloodTest">
+            <column name="testNameShort" value="HBV Repeat 2" type="varchar(25)"></column>
+            <where>testNameShort = 'HBV Conf 2'</where>
+        </update>
+        <update tableName="BloodTest">
+            <column name="testNameShort" value="HBV Conf" type="varchar(25)"></column>
+            <where>testNameShort = 'HBV Conf 3'</where>
+        </update>
+        <update tableName="BloodTest">
+            <column name="testNameShort" value="HCV Repeat 1" type="varchar(25)"></column>
+            <where>testNameShort = 'HCV Conf 1'</where>
+        </update>
+        <update tableName="BloodTest">
+            <column name="testNameShort" value="HCV Repeat 2" type="varchar(25)"></column>
+            <where>testNameShort = 'HCV Conf 2'</where>
+        </update>
+        <update tableName="BloodTest">
+            <column name="testNameShort" value="HCV Conf" type="varchar(25)"></column>
+            <where>testNameShort = 'HCV Conf 3'</where>
+        </update>
+        <update tableName="BloodTest">
+            <column name="testNameShort" value="Syphilis Repeat 1" type="varchar(25)"></column>
+            <where>testNameShort = 'Syphilis Conf 1'</where>
+        </update>
+        <update tableName="BloodTest">
+            <column name="testNameShort" value="Syphilis Repeat 2" type="varchar(25)"></column>
+            <where>testNameShort = 'Syphilis Conf 2'</where>
+        </update>
+        <update tableName="BloodTest">
+            <column name="testNameShort" value="Syphilis Conf" type="varchar(25)"></column>
+            <where>testNameShort = 'Syphilis Conf 3'</where>
+        </update>
+    </changeSet>
 
 </databaseChangeLog>
