@@ -67,7 +67,7 @@ public class TestResultController {
 
   @RequestMapping(value = "{donationIdentificationNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
-  public ResponseEntity findTestResult(@PathVariable String donationIdentificationNumber ) {
+  public ResponseEntity<Map<String, Object>> findTestResult(@PathVariable String donationIdentificationNumber ) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Donation c = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
@@ -79,12 +79,12 @@ public class TestResultController {
     } else {
         map.put("testResults", null);
     }
-    return new ResponseEntity(map, HttpStatus.OK);
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
-  public ResponseEntity findTestResultsForTestBatch(HttpServletRequest request,
+  public ResponseEntity<Map<String, Object>> findTestResultsForTestBatch(HttpServletRequest request,
 		@RequestParam(value = "testBatch", required = true) Long testBatchId) {
 	  
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -101,12 +101,12 @@ public class TestResultController {
 	
 		map.put("testResults", ruleResults);
 	
-		return new ResponseEntity(map, HttpStatus.OK);
+		return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
   @RequestMapping(value = "/overview", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
-  public ResponseEntity findTestResultsOverviewForTestBatch(HttpServletRequest request,
+  public ResponseEntity<Map<String, Object>> findTestResultsOverviewForTestBatch(HttpServletRequest request,
 		@RequestParam(value = "testBatch", required = true) Long testBatchId) {
 	  
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -152,7 +152,7 @@ public class TestResultController {
 		map.put("basicTTIComplete", basicTTIComplete);
 		map.put("pendingBloodTypingMatchTests", pendingBloodTypingMatchTests);
 	
-		return new ResponseEntity(map, HttpStatus.OK);
+		return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
     @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
@@ -192,15 +192,8 @@ public class TestResultController {
 		  @RequestParam(value = "bloodRh", required = true) String bloodRh) {
 	  
 		HttpStatus httpStatus = HttpStatus.CREATED;        
-		boolean success = true;
-		String errorMessage = "";
-		Map<Long, Map<Long, String>> errorMap = null;
-		Map<String, Object> fieldErrors = new HashMap<String, Object>();
 		Map<String, Object> map = new HashMap<String, Object>();
-		//Donation donation = donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
-	
-		Map<String, Object> results = null;
-		
+
 		Donation donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
 		Donor donor = donation.getDonor();
 		donor.setBloodAbo(bloodAbo);
