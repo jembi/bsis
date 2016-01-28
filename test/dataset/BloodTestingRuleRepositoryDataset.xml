@@ -5,27 +5,27 @@
 	<BloodTestingRule id="1" bloodTestsIds="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
 		extraInformation="" isActive="1" markSampleAsUnsafe="0"
-		newInformation="O" pattern="O" pendingTestsIds="" subCategory="BLOODABO" />
+		newInformation="O" pattern="O" pendingTestsIds="29" subCategory="BLOODABO" />
 	<BloodTestingRule id="2" bloodTestsIds="1" category="BLOODTYPING"
 	donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
 	extraInformation="" isActive="1" markSampleAsUnsafe="0" newInformation="A"
-	pattern="A" pendingTestsIds="" subCategory="BLOODABO" />
+	pattern="A" pendingTestsIds="29" subCategory="BLOODABO" />
 	<BloodTestingRule id="3" bloodTestsIds="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
 		extraInformation="" isActive="1" markSampleAsUnsafe="0"
-		newInformation="B" pattern="B" pendingTestsIds="" subCategory="BLOODABO" />
+		newInformation="B" pattern="B" pendingTestsIds="29" subCategory="BLOODABO" />
 	<BloodTestingRule id="4" bloodTestsIds="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
 		extraInformation="" isActive="1" markSampleAsUnsafe="0"
-		newInformation="AB" pattern="AB" pendingTestsIds="" subCategory="BLOODABO" />
+		newInformation="AB" pattern="AB" pendingTestsIds="29" subCategory="BLOODABO" />
 	<BloodTestingRule id="5" bloodTestsIds="2" category="BLOODTYPING"
 		donationFieldChanged="BLOODRH" context="RECORD_BLOOD_TYPING_TESTS"
 		extraInformation="" isActive="1" markSampleAsUnsafe="0"
-		newInformation="+" pattern="POS" pendingTestsIds="" subCategory="BLOODRH" />
+		newInformation="+" pattern="POS" pendingTestsIds="30" subCategory="BLOODRH" />
 	<BloodTestingRule id="6" bloodTestsIds="2" category="BLOODTYPING"
 		donationFieldChanged="BLOODRH" context="RECORD_BLOOD_TYPING_TESTS"
 		extraInformation="" isActive="1" markSampleAsUnsafe="0"
-		newInformation="-" pattern="NEG" pendingTestsIds="" subCategory="BLOODRH" />
+		newInformation="-" pattern="NEG" pendingTestsIds="30" subCategory="BLOODRH" />
 	<BloodTestingRule id="7" bloodTestsIds="17" category="TTI"
 		donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
 		extraInformation="" isActive="1" markSampleAsUnsafe="0"
@@ -172,6 +172,16 @@
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
 		testName="Syphilis Confirmatory 2" testNameShort="Syphilis Conf 2"
 		validResults="POS,NEG" flagComponentsForDiscard="0" />
+	<BloodTest id="29" bloodTestType="REPEAT_BLOODTYPING" category="BLOODTYPING"
+		context="RECORD_BLOOD_TYPING_TESTS" isActive="1" isEmptyAllowed="0"
+		negativeResults="" positiveResults="A,B,AB,O" rankInCategory="1"
+		testName="ABO Repeat 1" testNameShort="ABO Repeat 1"
+		validResults="A,B,AB,O" flagComponentsForDiscard="0" />
+	<BloodTest id="30" bloodTestType="REPEAT_BLOODTYPING" category="BLOODTYPING"
+		context="RECORD_BLOOD_TYPING_TESTS" isActive="1" isEmptyAllowed="0"
+		negativeResults="NEG" positiveResults="POS" rankInCategory="2"
+		testName="Rh Repeat 1" testNameShort="Rh Repeat 1"
+		validResults="POS,NEG" flagComponentsForDiscard="0" />
 
 	<DonationType id="1" donationType="Voluntary" isDeleted="false" />
 	<DonationType id="2" donationType="Family" isDeleted="false" />
@@ -274,11 +284,7 @@
 		createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="1" backEntry="false" />
 
 	<Contact id="1" />
-	<Contact id="2" />
-	<Contact id="3" />
 	<Address id="1" />
-	<Address id="2" />
-	<Address id="3" />
 	<PreferredLanguage id="1" preferredLanguage="English" />
 
 	<Donor id="1" birthDate="1980-01-12" bloodAbo="O" bloodRh="+"
@@ -295,7 +301,7 @@
 		isDeleted="false" lastName="Five" createdDate="2015-02-09 03:45:49.0"
 		lastUpdated="2015-06-29 05:24:35.0" venue_id="1" createdBy_id="1"
 		lastUpdatedBy_id="1" dateOfFirstDonation="2015-06-26"
-		preferredLanguage_id="1" title="Mrs" addressId="2" contactId="2"
+		preferredLanguage_id="1" title="Mrs" addressId="1" contactId="1"
 		dueToDonate="2015-09-24" />
 	<Donor id="2" birthDate="1950-01-12" bloodAbo="A" bloodRh="-"
 		dateOfLastDonation="2015-02-02 00:00:00.0" donorHash="fe5eeb11d9b9c772b44a3daf38de6d39"
@@ -303,8 +309,24 @@
 		isDeleted="false" lastName="Henry" createdDate="2015-02-18 07:53:29.0"
 		lastUpdated="2015-02-18 07:53:57.0" venue_id="1" createdBy_id="1"
 		lastUpdatedBy_id="1" dateOfFirstDonation="2015-02-02"
-		preferredLanguage_id="1" title="Mr" addressId="3" contactId="3"
+		preferredLanguage_id="1" title="Mr" addressId="1" contactId="1"
 		dueToDonate="2015-05-03" />
+	<Donor id="4" birthDate="1977-12-19" bloodAbo="" bloodRh=""
+		dateOfLastDonation="2016-01-26 00:00:00.0" donorHash="11a101ad63921b9db94a346fb4a86bcd"
+		donorNumber="000004" donorStatus="NORMAL" firstName="Donor" gender="female"
+		isDeleted="false" lastName="Four" createdDate="2016-01-26 03:45:49.0"
+		lastUpdated="2016-01-26 05:24:35.0" venue_id="1" createdBy_id="1"
+		lastUpdatedBy_id="1" dateOfFirstDonation="2016-01-26"
+		preferredLanguage_id="1" title="Ms" addressId="1" contactId="1"
+		dueToDonate="2016-04-26" />
+	<Donor id="5" birthDate="1978-12-19" bloodAbo="" bloodRh=""
+		dateOfLastDonation="2016-01-26 00:00:00.0" donorHash="11a101ad62321b9db94a476fb4a86bcd"
+		donorNumber="000005" donorStatus="NORMAL" firstName="Donor" gender="female"
+		isDeleted="false" lastName="Five" createdDate="2016-01-26 03:45:49.0"
+		lastUpdated="2016-01-26 05:24:35.0" venue_id="1" createdBy_id="1"
+		lastUpdatedBy_id="1" dateOfFirstDonation="2016-01-26"
+		preferredLanguage_id="1" title="Ms" addressId="1" contactId="1"
+		dueToDonate="2016-04-26" />
 
 	<Donation id="1" bloodAbo="O"
 		bloodPressureSystolic="110" bloodRh="+" bloodTypingStatus="COMPLETE"
@@ -361,6 +383,26 @@
 		packType_id="1" donationBatch_id="1" donationType_id="1" donor_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" venue_id="2" bleedStartTime="1970-01-01 14:53:37.0"
 		bleedEndTime="1970-01-01 14:53:37.0" ineligibleDonor="0" released="0" />
+	<Donation id="8" bloodAbo="O"
+		bloodPressureSystolic="110" bloodRh="-" bloodTypingStatus="NO_MATCH"
+		donationDate="2016-01-26 00:00:00.0" donationIdentificationNumber="2345678"
+		donorWeight="50.00" extraBloodTypeInformation="" haemoglobinCount="15.70"
+		isDeleted="0" createdDate="2016-01-26 03:42:04.0" lastUpdated="2016-01-26 02:09:30.0"
+		ttiStatus="TTI_SAFE" packType_id="3" donationBatch_id="1"
+		donationType_id="1" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
+		bloodPressureDiastolic="80" donorPulse="70" venue_id="1"
+		bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
+		bloodTypingMatchStatus="NO_MATCH" ineligibleDonor="0" released="0" />
+	<Donation id="9" bloodAbo="O"
+		bloodPressureSystolic="110" bloodRh="-" bloodTypingStatus="NO_MATCH"
+		donationDate="2016-01-26 00:00:00.0" donationIdentificationNumber="3456789"
+		donorWeight="50.00" extraBloodTypeInformation="" haemoglobinCount="15.70"
+		isDeleted="0" createdDate="2016-01-26 03:42:04.0" lastUpdated="2016-01-26 02:09:30.0"
+		ttiStatus="TTI_SAFE" packType_id="3" donationBatch_id="1"
+		donationType_id="1" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
+		bloodPressureDiastolic="80" donorPulse="70" venue_id="1"
+		bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
+		bloodTypingMatchStatus="NO_MATCH" ineligibleDonor="0" released="0" />
 
 	<BloodTestResult id="1" createdDate="2015-02-06 02:09:13.0"
 		lastUpdated="2015-02-06 02:09:13.0" notes="" result="NEG"
@@ -501,6 +543,30 @@
 	<BloodTestResult id="36" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="?"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="17" donation_id="6"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="37" createdDate="2016-01-26 02:09:23.0"
+		lastUpdated="2016-01-26 02:09:23.0" notes="" result="O"
+		testedOn="2016-01-26 02:09:23.0" bloodTest_id="1" donation_id="8"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="38" createdDate="2016-01-26 02:09:13.0"
+		lastUpdated="2016-01-26 02:09:13.0" notes="" result="NEG"
+		testedOn="2016-01-26 02:09:13.0" bloodTest_id="2" donation_id="8"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="39" createdDate="2016-01-26 02:09:23.0"
+		lastUpdated="2016-01-26 02:09:23.0" notes="" result="O"
+		testedOn="2016-01-26 02:09:23.0" bloodTest_id="1" donation_id="9"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="40" createdDate="2016-01-26 02:09:13.0"
+		lastUpdated="2016-01-26 02:09:13.0" notes="" result="NEG"
+		testedOn="2016-01-26 02:09:13.0" bloodTest_id="2" donation_id="9"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="41" createdDate="2016-01-26 02:09:23.0"
+		lastUpdated="2016-01-26 02:09:23.0" notes="" result="O"
+		testedOn="2016-01-26 02:09:23.0" bloodTest_id="29" donation_id="9"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="42" createdDate="2016-01-26 02:09:13.0"
+		lastUpdated="2016-01-26 02:09:13.0" notes="" result="NEG"
+		testedOn="2016-01-26 02:09:13.0" bloodTest_id="30" donation_id="9"
 		createdBy_id="1" lastUpdatedBy_id="1" />
 
 	<Component id="1" createdOn="2015-02-02 10:26:36.0" expiresOn="2015-03-09 10:26:36.0"

@@ -38,7 +38,7 @@ public class BloodTestingRuleResultViewModelFactory {
 		List<String> pendingBloodTypingTestsIds = new ArrayList<String>();
 		pendingBloodTypingTestsIds.addAll(bloodTestingRuleResultSet.getPendingAboTestsIds());
 		pendingBloodTypingTestsIds.addAll(bloodTestingRuleResultSet.getPendingRhTestsIds());
-		ruleResult.setPendingBloodTypingTestsIds(bloodTestingRuleResultSet.getPendingAboTestsIds());
+		ruleResult.setPendingBloodTypingTestsIds(pendingBloodTypingTestsIds);
 		ruleResult.setPendingTTITestsIds(bloodTestingRuleResultSet.getPendingTtiTestsIds());
 		
 		// blood typing results

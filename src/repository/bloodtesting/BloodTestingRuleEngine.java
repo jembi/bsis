@@ -103,10 +103,13 @@ public class BloodTestingRuleEngine {
 		
 		// Determine the blood status based on ABO/Rh tests
 		setBloodMatchStatus(resultSet);
-		
+
 		// Check ABO/Rh results against donor's ABO/Rh
 		setBloodTypingMatchStatus(resultSet, donation);
 		
+		// Determine if the pending Blood ABO/Rh tests are required
+		updatePendingAboRhTests(resultSet);
+
 		// Determine if there are missing required basic blood TTI tests
 		List<BloodTest> basicTTITests = bloodTestingRepository.getBasicTTITests();
 		setBasicTtiTestsNotDone(resultSet, basicTTITests, availableTestResults);
@@ -306,7 +309,7 @@ public class BloodTestingRuleEngine {
 		if (numRhChanges == 0 && numPendingRhTests > 0) {
 			bloodTypingStatus = BloodTypingStatus.PENDING_TESTS;
 		}
-		if (numAboChanges == 1 && numRhChanges == 1) {
+		if (numAboChanges == 1 && numRhChanges == 1 && numPendingAboTests == 0 && numPendingRhTests == 0) {
 			bloodTypingStatus = BloodTypingStatus.COMPLETE;
 		}
 		
@@ -350,6 +353,26 @@ public class BloodTestingRuleEngine {
 		resultSet.setBloodTypingMatchStatus(bloodTypingMatchStatus);
 		donation.setBloodTypingMatchStatus(bloodTypingMatchStatus);
 	}
+
+  /**
+   * Clear pending ABO and Rh tests if the donor is not a first time donor.
+   * 
+   * @param resultSet BloodTestingRuleResultSet that contains the processed test results.
+   */
+  private void updatePendingAboRhTests(BloodTestingRuleResultSet resultSet) {
+    if (!resultSet.getPendingAboTestsIds().isEmpty() || !resultSet.getPendingRhTestsIds().isEmpty()) {
+      if (resultSet.getBloodTypingMatchStatus() != BloodTypingMatchStatus.NO_MATCH) {
+        if (LOGGER.isInfoEnabled()) {
+          LOGGER.info("Donor " + resultSet.getDonation().getDonor().getId()
+              + " is not a first time donor, so pending ABO tests ("
+              + resultSet.getPendingAboTestsIds().size() + ") and pending Rh tests ("
+              + resultSet.getPendingRhTestsIds().size() + ") are not required.");
+        }
+        resultSet.getPendingAboTestsIds().clear();
+        resultSet.getPendingRhTestsIds().clear();
+      }
+    }
+  }
 	
 	/**
 	 * Check the TTI status and determine if it is safe or not. Result will be stored in the

@@ -155,7 +155,7 @@ public class BloodTestingRuleEngineTest {
 		Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
 		Assert.assertFalse("No TTI Uninterpretable", result.getTtiUninterpretable());
 	}
-	
+
 	@Test
 	public void testBloodTestingRuleEngineWithDonation3AndTTIResults() throws Exception {
 		Donation donation = donationRepository.findDonationById(3l);
@@ -288,5 +288,35 @@ public class BloodTestingRuleEngineTest {
 		Assert.assertTrue("RH Uninterpretable", result.getRhUninterpretable());
 		// TTI Uninterpretable is always set to false - is this a bug?
 		//Assert.assertTrue("TTI Uninterpretable", result.getTtiUninterpretable());
+	}
+	
+	@Test
+	public void testBloodTestingRuleEngineWithDonation8() throws Exception {
+	  // donation 8 is for a 1st time donor who has only had initial outcomes entered for ABO/Rh
+	  Donation donation = donationRepository.findDonationById(8l);
+	  BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+	  Assert.assertEquals("bloodTypingMatchStatus is set", BloodTypingMatchStatus.NO_MATCH, result.getBloodTypingMatchStatus());
+	  Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.NO_MATCH, result.getBloodTypingStatus());
+	  Assert.assertEquals("bloodAb is set", "O", result.getBloodAbo());
+	  Assert.assertEquals("bloodRh is set", "-", result.getBloodRh());
+	  Assert.assertEquals("Pending blood typing tests", 2, result.getPendingBloodTypingTestsIds().size());
+	  Assert.assertEquals("Availale test results", 2, result.getAvailableTestResults().size());
+	  Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
+	  Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
+	}
+
+	@Test
+	public void testBloodTestingRuleEngineWithDonation9() throws Exception {
+	  // donation 9 is for a 1st time donor who has had initial and repeat outcomes entered for ABO/Rh
+	  Donation donation = donationRepository.findDonationById(9l);
+	  BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+	  Assert.assertEquals("bloodTypingMatchStatus is set", BloodTypingMatchStatus.NO_MATCH, result.getBloodTypingMatchStatus());
+	  Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.COMPLETE, result.getBloodTypingStatus());
+	  Assert.assertEquals("bloodAb is set", "O", result.getBloodAbo());
+	  Assert.assertEquals("bloodRh is set", "-", result.getBloodRh());
+	  Assert.assertEquals("Pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
+	  Assert.assertEquals("Availale test results", 4, result.getAvailableTestResults().size());
+	  Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
+	  Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
 	}
 }
