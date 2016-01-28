@@ -33,8 +33,7 @@ public class DonationBatchRepository {
                          "WHERE b.id = :batchId and b.isDeleted = :isDeleted";
     TypedQuery<DonationBatch> query = em.createQuery(queryString, DonationBatch.class);
     query.setParameter("isDeleted", Boolean.FALSE);
-    DonationBatch b = query.setParameter("batchId", batchId).getSingleResult();
-    return b;
+    return query.setParameter("batchId", batchId).getSingleResult();
   }
 
   public DonationBatch findDonationBatchById(Long batchId) {

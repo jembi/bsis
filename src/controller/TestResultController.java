@@ -216,8 +216,7 @@ public class TestResultController {
   }
   
   private DonorViewModel getDonorsViewModel(Donor donor) {
-    DonorViewModel donorViewModel = new DonorViewModel(donor);
-    return donorViewModel;
+		return new DonorViewModel(donor);
   }
 
 }

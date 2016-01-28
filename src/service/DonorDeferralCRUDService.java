@@ -76,8 +76,7 @@ public class DonorDeferralCRUDService {
   }
 
   public DonorDeferral findDeferralById(Long donorDeferralId) throws IllegalStateException, NoResultException {
-    DonorDeferral donorDeferral = donorDeferralRepository.findDonorDeferralById(donorDeferralId);
-    return donorDeferral;
+    return donorDeferralRepository.findDonorDeferralById(donorDeferralId);
   }
 
   public void deleteDeferral(Long donorDeferralId) throws IllegalStateException, NoResultException {

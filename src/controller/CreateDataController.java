@@ -371,8 +371,7 @@ public class CreateDataController {
       if (randomOffset > diff / 2 && random.nextBoolean())
         break;
     }
-    Date date = new Date(decFrom + randomOffset);
-    return date;
+    return new Date(decFrom + randomOffset);
   }
 
   private Date getRandomDonationDate() {

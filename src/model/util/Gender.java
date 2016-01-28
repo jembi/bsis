@@ -14,6 +14,5 @@ public enum Gender {
   not_known(0), male(1), female(2), not_applicable(9);
 
   Gender(int value) {
-    int value1 = value;
   }
 }

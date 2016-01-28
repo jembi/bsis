@@ -216,18 +216,15 @@ public class DonationRepository {
 
     query.setParameter("centers", centers);
 
-    List<Donation> resultList = query.getResultList();
-    return resultList;
+    return query.getResultList();
   }
 
   private Date getDonationDateFromOrDefault(String donationDateFrom) throws ParseException{
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    Date from = 
-             (donationDateFrom == null || donationDateFrom.equals("")) ? dateFormat
-                          .parse("31/12/1970") : dateFormat.parse(donationDateFrom);
-              
- 
-    return from;      
+
+
+    return (donationDateFrom == null || donationDateFrom.equals("")) ? dateFormat
+                 .parse("31/12/1970") : dateFormat.parse(donationDateFrom);
   }
 
   private Date getDonationDateToOrDefault(String donationDateTo) throws ParseException{

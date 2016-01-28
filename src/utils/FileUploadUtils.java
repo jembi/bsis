@@ -87,8 +87,7 @@ public class FileUploadUtils {
    */
   public static String splitFilePath(String fileName) {
     String[] getFileName = fileName.split(UploadTTIResultConstant.TSV_FILE_EXTENTION);
-    String fileNameWithExt = getFileName[0] + getCurrentDateAsString() + UploadTTIResultConstant.TSV_FILE_EXTENTION;
-    return fileNameWithExt;
+    return getFileName[0] + getCurrentDateAsString() + UploadTTIResultConstant.TSV_FILE_EXTENTION;
   }
 
   /**

@@ -445,8 +445,7 @@ public class DonorController {
   }
 
   private DonationViewModel getDonationViewModel(Donation donation) {
-    DonationViewModel donationViewModel = new DonationViewModel(donation);
-    return donationViewModel;
+    return new DonationViewModel(donation);
   }
 
   private int getNumberOfDonations(List<Donation> donations) {

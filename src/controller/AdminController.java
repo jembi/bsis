@@ -156,9 +156,8 @@ public class AdminController {
   @RequestMapping(value = "/forms", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_FORMS + "')")
   public Map<String, Object> configureForms() {
-    Map<String, Object> map = new HashMap<>();
-//    map.put("model", map);
-    return map;
+    //    map.put("model", map);
+    return new HashMap<>();
   }
 
   @RequestMapping(value = "/createsampledata", method = RequestMethod.POST)

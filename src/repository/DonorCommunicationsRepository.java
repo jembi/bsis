@@ -93,8 +93,8 @@ public class DonorCommunicationsRepository {
 
     // If noBloodGroup is true then include donors with no blood group
     if (noBloodGroup) {
-      Expression<String> bloodAbo = root.<String>get("bloodAbo");
-      Expression<String> bloodRh = root.<String>get("bloodRh");
+      Expression<String> bloodAbo = root.get("bloodAbo");
+      Expression<String> bloodRh = root.get("bloodRh");
       Expression<Boolean> aboExpression = cb.or(cb.isNull(bloodAbo), cb.equal(bloodAbo, ""));
       Expression<Boolean> rhExpression = cb.or(cb.isNull(bloodRh), cb.equal(bloodRh, ""));
       bgPredicates.add(cb.and(aboExpression, rhExpression));
@@ -133,11 +133,7 @@ public class DonorCommunicationsRepository {
     countCriteriaQuery.where(venuePredicates.toArray(new Predicate[venuePredicates.size()]));
     countCriteriaQuery.select(cb.countDistinct(countRoot));
 
-    TypedQuery<Long> countQuery = em.createQuery(countCriteriaQuery);
-
-    List<Donor> donorResults = query.getResultList();
-
-    return donorResults;
+    return query.getResultList();
   }
 
 }

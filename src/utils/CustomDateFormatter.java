@@ -105,8 +105,7 @@ public class CustomDateFormatter {
   }
 
   private static String getDatePattern() {
-    String datePattern = "yyyy-MM-dd";
-    return datePattern;
+    return "yyyy-MM-dd";
   }
 
   private static String getDateTimePattern() {

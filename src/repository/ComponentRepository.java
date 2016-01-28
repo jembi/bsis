@@ -849,8 +849,7 @@ public class ComponentRepository {
         "p.component.id=:componentId";
     TypedQuery<ComponentStatusChange> query = em.createQuery(queryStr, ComponentStatusChange.class);
     query.setParameter("componentId", component.getId());
-    List<ComponentStatusChange> statusChanges = query.getResultList();
-    return statusChanges;
+    return query.getResultList();
   }
 
   public List<Component> findComponentsByDonationIdentificationNumber(String donationIdentificationNumber) {
@@ -953,16 +952,14 @@ public class ComponentRepository {
     String queryString = "SELECT p FROM ComponentType p where p.id = :componentTypeId";
     TypedQuery<ComponentType> query = em.createQuery(queryString, ComponentType.class);
     query.setParameter("componentTypeId", componentTypeId);
-    ComponentType componentType =  componentType = query.getSingleResult();
-    return componentType;
+    return query.getSingleResult();
   }
   
   public ComponentType findComponentTypeByComponentTypeName(String componentTypeName) throws NoResultException{
     String queryString = "SELECT p FROM ComponentType p where p.componentTypeName = :componentTypeName";
     TypedQuery<ComponentType> query = em.createQuery(queryString, ComponentType.class);
     query.setParameter("componentTypeName", componentTypeName);
-    ComponentType componentType = componentType = query.getSingleResult();
-    return componentType;
+    return query.getSingleResult();
   }
   
   public void setComponentStatusToProcessed(long componentId) throws NoResultException {

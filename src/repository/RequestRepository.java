@@ -89,9 +89,8 @@ public class RequestRepository {
                            "r.id = :requestId and r.isDeleted= :isDeleted";
       TypedQuery<Request> query = em.createQuery(queryString, Request.class);
       query.setParameter("isDeleted", Boolean.FALSE);
-      Request request = query.setParameter("requestId", requestId)
-          .getSingleResult();
-      return request;
+    return query.setParameter("requestId", requestId)
+        .getSingleResult();
   }
 
   public ArrayList<Request> getAllRequests() {
@@ -173,8 +172,7 @@ public class RequestRepository {
       query.setParameter("dateRequiredTo", to);
 */
 
-    List<Request> resultList = query.getResultList();
-    return resultList;
+    return query.getResultList();
   }
 
   public Request findRequestByRequestNumber(String requestNumber) throws NoResultException, NonUniqueResultException{
@@ -224,8 +222,7 @@ public class RequestRepository {
 
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("statuses", Collections.singletonList("fulfilled"));
-    List<Request> resultList = query.getResultList();
-    return resultList;
+    return query.getResultList();
   }
 
   public void deleteRequest(String requestNumber) {
@@ -448,8 +445,7 @@ public class RequestRepository {
     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("requestId", requestId);
-    List<Component> issuedComponents = query.getResultList();
-    return issuedComponents;
+    return query.getResultList();
   }
 
   public Map<String, Map<Long, Long>> findNumberOfRequests(Date dateRequestedFrom,

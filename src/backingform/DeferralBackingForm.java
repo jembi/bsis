@@ -30,7 +30,7 @@ public class DeferralBackingForm {
     return deferral;
   }
 
-  public boolean equals(Object obj) {
+  public boolean equals(DonorDeferral obj) {
     return deferral.equals(obj);
   }
 

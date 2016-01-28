@@ -37,8 +37,7 @@ public class BloodTestsService {
    * @return BloodTestingRuleResult with the results from the tests
    */
   public BloodTestingRuleResult executeTests(Donation donation) {
-    BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForDonation(donation.getId());
-    return ruleResult;
+    return bloodTestingRepository.getAllTestsStatusForDonation(donation.getId());
   }
 
   /**

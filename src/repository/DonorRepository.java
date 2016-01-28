@@ -78,22 +78,22 @@ public class DonorRepository {
                 firstNameExp = cb.disjunction();
             } else {
                 if ("start".equals(donorSearchMode))
-                    firstNameExp = cb.like(root.<String>get("firstName"), firstName + "%");
+                    firstNameExp = cb.like(root.get("firstName"), firstName + "%");
                 else if ("end".equals(donorSearchMode))
-                    firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName);
+                    firstNameExp = cb.like(root.get("firstName"), "%" + firstName);
                 else
-                    firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName + "%");
+                    firstNameExp = cb.like(root.get("firstName"), "%" + firstName + "%");
             }
 
             if (lastName.trim().equals("")) {
                 lastNameExp = cb.disjunction();
             } else {
                 if ("start".equals(donorSearchMode))
-                    lastNameExp = cb.like(root.<String>get("lastName"), lastName + "%");
+                    lastNameExp = cb.like(root.get("lastName"), lastName + "%");
                 else if ("end".equals(donorSearchMode))
-                    lastNameExp = cb.like(root.<String>get("lastName"), "%" + lastName);
+                    lastNameExp = cb.like(root.get("lastName"), "%" + lastName);
                 else
-                    lastNameExp = cb.like(root.<String>get("lastName"), "%" + lastName + "%");
+                    lastNameExp = cb.like(root.get("lastName"), "%" + lastName + "%");
             }
         }
 
@@ -214,19 +214,19 @@ public class DonorRepository {
             CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
             Root<Donor> root = cq.from(Donor.class);
 
-            Predicate donorNumberExp = cb.like(root.<String>get("donorNumber"), term + "%");
+            Predicate donorNumberExp = cb.like(root.get("donorNumber"), term + "%");
             Predicate firstNameExp;
             if (term.equals("")) {
                 firstNameExp = cb.disjunction();
             } else {
-                firstNameExp = cb.like(root.<String>get("firstName"), term + "%");
+                firstNameExp = cb.like(root.get("firstName"), term + "%");
             }
 
             Predicate lastNameExp;
             if (term.equals("")) {
                 lastNameExp = cb.disjunction();
             } else {
-                lastNameExp = cb.like(root.<String>get("lastName"), term + "%");
+                lastNameExp = cb.like(root.get("lastName"), term + "%");
             }
             Expression<Boolean> exp = cb.or(donorNumberExp, firstNameExp, lastNameExp);
             

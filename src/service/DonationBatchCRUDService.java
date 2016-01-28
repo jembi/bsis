@@ -68,8 +68,7 @@ public class DonationBatchCRUDService {
 		existingDonationBatch.setCreatedDate(donationBatch.getCreatedDate());
 		
 		// persist the changes
-		DonationBatch updatedDonationBatch = donationBatchRepository.updateDonationBatch(existingDonationBatch);
-		
-		return updatedDonationBatch;
+
+		return donationBatchRepository.updateDonationBatch(existingDonationBatch);
 	}
 }

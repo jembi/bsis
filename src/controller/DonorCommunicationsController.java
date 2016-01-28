@@ -120,8 +120,7 @@ public class DonorCommunicationsController {
   }
 
   private DonorViewModel getDonorsViewModel(Donor donor) {
-    DonorViewModel donorViewModel = new DonorViewModel(donor);
-    return donorViewModel;
+    return new DonorViewModel(donor);
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {

@@ -83,8 +83,7 @@ public class BloodTestingRepository {
 		TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
 		query.setParameter("isActive", true);
 		query.setParameter("category", BloodTestCategory.BLOODTYPING);
-		List<BloodTest> bloodTests = query.getResultList();
-		return bloodTests;
+		return query.getResultList();
 	}
 
 
@@ -98,8 +97,7 @@ public class BloodTestingRepository {
 		TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
 		query.setParameter("types", types);
 		query.setParameter("isActive", true);
-		List<BloodTest> bloodTests = query.getResultList();
-		return bloodTests;
+		return query.getResultList();
 	}
 
 	public Map<String, Object> saveBloodTestingResults(
@@ -319,8 +317,7 @@ public class BloodTestingRepository {
 	public List<BloodTest> getAllBloodTestsIncludeInactive() {
 		String queryStr = "SELECT b FROM BloodTest b";
 		TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
-		List<BloodTest> bloodTests = query.getResultList();
-		return bloodTests;
+		return query.getResultList();
 	}
 
 	private void addErrorToMap(Map<Long, Map<Long, String>> errorMap,
@@ -394,8 +391,7 @@ public class BloodTestingRepository {
 		TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
 		query.setParameter("isActive", true);
 		query.setParameter("category", BloodTestCategory.TTI);
-		List<BloodTest> bloodTests = query.getResultList();
-		return bloodTests;
+		return query.getResultList();
 	}
 	
 	public List<BloodTestResult> getBloodTestResultsForDonation(
@@ -405,8 +401,7 @@ public class BloodTestingRepository {
 		TypedQuery<BloodTestResult> query = em.createQuery(queryStr,
 				BloodTestResult.class);
 		query.setParameter("donationId", donationId);
-		List<BloodTestResult> bloodTestResults = query.getResultList();
-		return bloodTestResults;
+		return query.getResultList();
 	}
 
 	public Map<Long, BloodTestResult> getRecentTestResultsForDonation(
@@ -937,8 +932,7 @@ public class BloodTestingRepository {
 		query.setParameter("isActive", true);
 		query.setParameter("bloodTestType", BloodTestType.BASIC_TTI);
 		query.setParameter("category", BloodTestCategory.TTI);
-		List<BloodTest> bloodTests = query.getResultList();
-		return bloodTests;
+		return query.getResultList();
 	}
 	
 	/**
@@ -957,8 +951,7 @@ public class BloodTestingRepository {
 		String queryStr = "SELECT u FROM User u WHERE u.id=:id";
 		TypedQuery<User> query = em.createQuery(queryStr, User.class);
 		query.setParameter("id", id);
-		User user = query.getSingleResult();
-		return user;
+		return query.getSingleResult();
 	}
 
 	public void saveTestResultsToDatabase(

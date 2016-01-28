@@ -55,8 +55,7 @@ public class TestBatchRepository {
     TypedQuery<TestBatch> query = em.createQuery(
             "SELECT t FROM TestBatch t WHERE t.id = :id", TestBatch.class);
     query.setParameter("id", id);
-    TestBatch testBatch = query.getSingleResult();
-    return testBatch;
+    return query.getSingleResult();
   }
 
   public TestBatch updateTestBatch(TestBatch testBatch) {

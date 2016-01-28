@@ -27,9 +27,8 @@ public class UsageRepository {
     TypedQuery<ComponentUsage> query = em.createQuery(queryString,
             ComponentUsage.class);
     query.setParameter("isDeleted", Boolean.FALSE);
-    ComponentUsage componentUsage = query.setParameter("componentIdentificationNumber",
+    return query.setParameter("componentIdentificationNumber",
             componentIdentificationNumber).getSingleResult();
-    return componentUsage;
   }
 
   public void deleteAllUsages() {
@@ -64,8 +63,7 @@ public class UsageRepository {
     query.setParameter("dateUsedTo", to);
 
 
-    List<ComponentUsage> resultList = query.getResultList();
-    return resultList;
+    return query.getResultList();
   }
 
   public ComponentUsage findUsageByComponentIdentificationNumber(String componentIdentificationNumber)
@@ -76,8 +74,7 @@ public class UsageRepository {
                     ComponentUsage.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("componentIdentificationNumber", componentIdentificationNumber);
-    ComponentUsage usage = query.getSingleResult();
-    return usage;
+    return query.getSingleResult();
   }
 
   public void deleteUsage(String componentIdentificationNumber) {

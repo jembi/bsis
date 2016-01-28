@@ -53,15 +53,13 @@ public class RoleRepository {
   public List<Permission> getAllPermissions() {
     TypedQuery<Permission> query = em.createQuery("FROM Permission",
             Permission.class);
-    List<Permission> permission = query.getResultList();
-    return permission;
+    return query.getResultList();
   }
 
   public List<Permission> getAllPermissionsByName() {
     TypedQuery<Permission> query = em.createQuery("FROM Permission ORDER BY name ASC",
             Permission.class);
-    List<Permission> permission = query.getResultList();
-    return permission;
+    return query.getResultList();
   }
 
   public Role updateRole(Role role) {

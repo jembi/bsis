@@ -133,8 +133,6 @@ public class SequenceNumberRepository {
       lastNumber++;
     }
     String donorNumberFormat = generalConfigRepository.getGeneralConfigByName("donor.donorNumberFormat").getValue();
-    String lastNumberStr = String.format(donorNumberFormat, lastNumber);
-    String requestNumber = lastNumberStr;
     lastNumber = lastNumber + 1;
     seqNumStore.setLastNumber(lastNumber);
     if (valuePresentInTable) {
@@ -144,7 +142,7 @@ public class SequenceNumberRepository {
     }
 
     em.flush();
-    return requestNumber;
+    return String.format(donorNumberFormat, lastNumber);
   }
 
 
@@ -178,13 +176,10 @@ public class SequenceNumberRepository {
     if (lastNumber == 0) {
       lastNumber++;
     }
-    String lastNumberStr = String.format("%06d", lastNumber);
-
-    String requestNumber = lastNumberStr;
 
 
     em.flush();
-    return requestNumber;
+    return String.format("%06d", lastNumber);
   }
 
 
@@ -305,9 +300,7 @@ public class SequenceNumberRepository {
       seqNumStore.setPrefix(prefix);
     }
 
-    String lastNumberStr = String.format("%06d", lastNumber);
     // may need a prefix for center where the number is generated
-    String nextNumber = lastNumberStr;
     lastNumber = lastNumber + 1;
     seqNumStore.setLastNumber(lastNumber);
     if (valuePresentInTable) {
@@ -317,7 +310,7 @@ public class SequenceNumberRepository {
     }
 
     em.flush();
-    return nextNumber;
+    return String.format("%06d", lastNumber);
   }
 
   synchronized public String getNextWorksheetBatchNumber() {

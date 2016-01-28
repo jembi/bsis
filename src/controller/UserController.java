@@ -176,8 +176,7 @@ public class UserController {
     
     private String getHashedPassword(String rawPassword) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String hashedPassword = passwordEncoder.encode(rawPassword);
-        return hashedPassword;
+        return passwordEncoder.encode(rawPassword);
     }
 
 }
