@@ -101,8 +101,8 @@ public class TTIController {
 		List<BloodTestViewModel> basicTTITests = getBasicTTITests();
 		map.put("basicTTITests", basicTTITests);
 		
-		List<BloodTestViewModel> confirmatoryTTITests = getConfirmatoryTTITests();
-		map.put("confirmatoryTTITests", confirmatoryTTITests);
+		List<BloodTestViewModel> pendingTTITests = getConfirmatoryTTITests();
+		map.put("pendingTTITests", pendingTTITests);
 
 		return map;
 	}
