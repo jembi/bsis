@@ -1,49 +1,25 @@
 package backingform.validator;
 
-import java.util.Arrays;
 import model.user.Role;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
-import org.springframework.validation.Validator;
 
 import repository.RoleRepository;
-import viewmodel.RoleViewModel;
 import backingform.RoleBackingForm;
-import controller.UtilController;
 
-public class RoleBackingFormValidator implements Validator {
-
-  private Validator validator;
-  private UtilController utilController;
-  private RoleRepository roleRepository;
+@Component
+public class RoleBackingFormValidator extends BaseValidator<RoleBackingForm> {
   
-
-
-public RoleBackingFormValidator(Validator validator, UtilController utilController,RoleRepository roleRepository) {
-    super();
-    this.validator = validator;
-    this.utilController = utilController;
-    this.roleRepository=roleRepository;
-  }
-
-  @SuppressWarnings("unchecked")
-  @Override
-  public boolean supports(Class<?> clazz) {
-    return Arrays.asList(RoleBackingForm.class, Role.class, RoleViewModel.class).contains(clazz);
-  }
+  @Autowired
+  private RoleRepository roleRepository;
 
   @Override
-  public void validate(Object obj, Errors errors) {
-	  
-	 if (obj == null || validator == null)
-      return;
+  public void validateForm(RoleBackingForm form, Errors errors) {
     
-	ValidationUtils.invokeValidator(validator, obj, errors);
-	RoleBackingForm form = (RoleBackingForm) obj; 
-    
-    if (utilController.isDuplicateRoleName(form.getRole())){
+    if (isDuplicateRoleName(form.getRole())){
     	errors.rejectValue("role.name", "roleName.nonunique",
     	          "Role name already exists.");
     }
@@ -53,7 +29,25 @@ public RoleBackingFormValidator(Validator validator, UtilController utilControll
 	            "Role must have one or more permissions");
 	}
 	
-	utilController.commonFieldChecks(form, "Role", errors);
-    
+	commonFieldChecks(form, errors);
    }
+  
+  @Override
+  public String getFormName() {
+    return "Role";
+  }
+  
+  private boolean isDuplicateRoleName(Role role) {
+    String roleName = role.getName();
+    if (StringUtils.isBlank(roleName)) {
+      return false;
+    }
+
+    Role existingRole = roleRepository.findRoleByName(roleName);
+    if (existingRole != null && !existingRole.getId().equals(role.getId())) {
+      return true;
+    }
+
+    return false;
+  }
 }

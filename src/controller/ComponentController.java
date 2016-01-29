@@ -40,18 +40,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import repository.ComponentRepository;
+import repository.ComponentStatusChangeReasonRepository;
 import repository.ComponentTypeRepository;
 import repository.DonationRepository;
-import repository.ComponentStatusChangeReasonRepository;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
+import viewmodel.ComponentStatusChangeViewModel;
 import viewmodel.ComponentTypeCombinationViewModel;
 import viewmodel.ComponentTypeViewModel;
 import viewmodel.ComponentViewModel;
-import viewmodel.ComponentStatusChangeViewModel;
 import backingform.ComponentCombinationBackingForm;
 import backingform.RecordComponentBackingForm;
-import backingform.validator.ComponentBackingFormValidator;
+import backingform.validator.ComponentCombinationBackingFormValidator;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -74,14 +74,14 @@ public class ComponentController {
   private ComponentTypeRepository componentTypeRepository;
   
   @Autowired
-  private UtilController utilController;
+  private ComponentCombinationBackingFormValidator componentCombinationBackingFormValidator;
   
   public ComponentController() {
   }
 
-  @InitBinder
+  @InitBinder("componentCombinationForm")
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new ComponentBackingFormValidator(binder.getValidator(), utilController));
+    binder.setValidator(componentCombinationBackingFormValidator);
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -151,16 +151,16 @@ public class ComponentController {
   @RequestMapping(value = "/combination", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public  ResponseEntity< Map<String, Object>> addComponentCombination(
-      @Valid @RequestBody ComponentCombinationBackingForm form) throws ParseException {
+      @Valid @RequestBody ComponentCombinationBackingForm componentCombinationForm) throws ParseException {
 
     Map<String, Object> map = new HashMap<String, Object>();
     HttpStatus httpStatus = HttpStatus.CREATED;
     addEditSelectorOptions(map);
    
       List<Component> savedComponents = null;
-      savedComponents = componentRepository.addComponentCombination(form);
+      savedComponents = componentRepository.addComponentCombination(componentCombinationForm);
       map.put("hasErrors", false);
-      form = new ComponentCombinationBackingForm();
+      componentCombinationForm = new ComponentCombinationBackingForm();
    
       // at least one  should be created, all s should have the same donation number
       map.put("donationIdentificationNumber", savedComponents.get(0).getDonationIdentificationNumber());
@@ -360,8 +360,6 @@ public class ComponentController {
       //pagingParams.put("start", "0");
       //pagingParams.put("length", "10");
       pagingParams.put("sortDirection", "asc");
-      
-    //Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("component");
 
     List<Component> results = new ArrayList<Component>();
     List<ComponentStatus> status = Arrays.asList(ComponentStatus.values());
@@ -395,20 +393,20 @@ public class ComponentController {
   @RequestMapping(value = "/recordcombinations", method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_COMPONENT+"')")
   public  ResponseEntity<Map<String, Object>> recordNewComponentCombinations(
-       @RequestBody @Valid RecordComponentBackingForm form) throws ParseException{
+       @RequestBody RecordComponentBackingForm recordComponentForm) throws ParseException{
 
-      Component parentComponent = componentRepository.findComponentById(Long.valueOf(form.getParentComponentId()));
+      Component parentComponent = componentRepository.findComponentById(Long.valueOf(recordComponentForm.getParentComponentId()));
       Donation donation = parentComponent.getDonation();
       String donationIdentificationNumber = donation.getDonationIdentificationNumber();
       ComponentStatus parentStatus = parentComponent.getStatus();
-      long componentId = Long.valueOf(form.getParentComponentId());
+      long componentId = Long.valueOf(recordComponentForm.getParentComponentId());
       
       
       // map of new components, storing component type and num. of units 
       Map<ComponentType, Integer> newComponents = new HashMap<ComponentType, Integer>();
       
       // iterate over components in combination, adding them to the new components map, along with the num. of units of each component
-      for(ComponentType pt : form.getComponentTypeCombination().getComponentTypes()){    	  
+      for(ComponentType pt : recordComponentForm.getComponentTypeCombination().getComponentTypes()){    	  
     	  boolean check = false;
     	  for(ComponentType ptm : newComponents.keySet()){  
     		  if(pt.getId() == ptm.getId()){

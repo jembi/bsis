@@ -62,7 +62,6 @@ import security.BsisUserDetails;
 import security.LoginUserService;
 import viewmodel.DonorSummaryViewModel;
 import backingform.DonorBackingForm;
-import controller.UtilController;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
@@ -70,8 +69,6 @@ import controller.UtilController;
 @Transactional
 public class DonorRepositoryTest {
 
-    @Autowired
-    private UtilController utilController;
     @Autowired
     DonorRepository donorRepository;
     private User user;

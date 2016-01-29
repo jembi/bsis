@@ -9,9 +9,12 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import model.reporting.Report;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -21,10 +24,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import repository.DonationRepository;
 import repository.LocationRepository;
 import repository.ComponentRepository;
 import repository.RequestRepository;
+import repository.TipsRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import service.ReportGeneratorService;
 import utils.CustomDateFormatter;
@@ -47,20 +52,20 @@ public class ReportsController {
   private RequestRepository requestRepository;
 
   @Autowired
-  private UtilController utilController;
-
-  @Autowired
   private BloodTestingRepository bloodTestingRepository;
   
   @Autowired
   private ReportGeneratorService reportGeneratorService;
   
+  @Autowired
+  private TipsRepository tipsRepository;
+  
   @RequestMapping(value = "/inventory/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REPORTING_INFORMATION+"')")
   public Map<String, Object> inventoryReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
-    utilController.addTipsToModel(map, "report.inventory.generate");
-    utilController.addTipsToModel(map, "report.inventory.componentinventorychart");
+    map.put("report.inventory.generate", tipsRepository.getTipsContent("report.inventory.generate"));
+    map.put("report.inventory.componentinventorychart", tipsRepository.getTipsContent("report.inventory.componentinventorychart"));
     map.put("venues", locationRepository.getAllVenues());
     map.put("model", map);
     return map;
@@ -100,7 +105,7 @@ public class ReportsController {
   @PreAuthorize("hasRole('"+PermissionConstants.DONATIONS_REPORTING+"')")
   public Map<String, Object> donationsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
-    utilController.addTipsToModel(map, "report.donations.donationsreport");
+    map.put("report.donations.donationsreport", tipsRepository.getTipsContent("report.donations.donationsreport"));
     map.put("venues", locationRepository.getAllVenues());
     return map;
   }
@@ -109,7 +114,7 @@ public class ReportsController {
   @PreAuthorize("hasRole('"+PermissionConstants.REQUESTS_REPORTING+"')")
   public Map<String, Object> requestsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
-    utilController.addTipsToModel(map, "report.requests.requestsreport");
+    map.put("report.requests.requestsreport", tipsRepository.getTipsContent("report.requests.requestsreport"));
     map.put("sites", locationRepository.getAllUsageSites());
     return map;
   }
@@ -118,7 +123,7 @@ public class ReportsController {
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_DISCARDED_REPORTING+"')")
   public Map<String, Object> discardedComponentsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
-    utilController.addTipsToModel(map, "report.components.discardedcomponentsreport");
+    map.put("report.components.discardedcomponentsreport", tipsRepository.getTipsContent("report.components.discardedcomponentsreport"));
     map.put("venues", locationRepository.getAllVenues());
     map.put("model", map);
     return map;
@@ -128,7 +133,7 @@ public class ReportsController {
   @PreAuthorize("hasRole('"+PermissionConstants.COMPONENTS_ISSUED_REPORTING+"')")
   public Map<String, Object> issuedComponentsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
-    utilController.addTipsToModel(map, "report.components.issuedcomponentsreport");
+    map.put("report.components.issuedcomponentsreport", tipsRepository.getTipsContent("report.components.issuedcomponentsreport"));
     map.put("venues", locationRepository.getAllVenues());
     return map;
   }
@@ -350,7 +355,7 @@ public class ReportsController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("ttiTests", bloodTestingRepository.getTTITests());
     map.put("venues", locationRepository.getAllVenues());
-    utilController.addTipsToModel(map, "report.donations.testresultsreport");
+    map.put("report.donations.testresultsreport", tipsRepository.getTipsContent("report.donations.testresultsreport"));
     return map;
   }
 

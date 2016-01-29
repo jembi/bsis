@@ -31,17 +31,17 @@ import viewmodel.RoleViewModel;
 public class RoleController {
 
 	@Autowired
-	private UtilController utilController;
-
-	@Autowired
 	private RoleRepository roleRepository;
+	
+	@Autowired
+	private RoleBackingFormValidator roleBackingFormValidator;
 	
 	public RoleController() {
 	}
 	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
-	  binder.setValidator(new RoleBackingFormValidator(binder.getValidator(), utilController,roleRepository));
+	  binder.setValidator(roleBackingFormValidator);
 	}
 
         @RequestMapping(method = RequestMethod.GET)

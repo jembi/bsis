@@ -1,13 +1,14 @@
 package controller;
 
-import backingform.CompatibilityTestBackingForm;
-import backingform.validator.CompatibilityTestBackingFormValidator;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import model.compatibility.CompatibilityTest;
 import model.request.Request;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +20,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import repository.CompatibilityTestRepository;
 import repository.CrossmatchTypeRepository;
 import repository.RequestRepository;
+import repository.TipsRepository;
+import service.FormFieldAccessorService;
 import utils.PermissionConstants;
+import backingform.CompatibilityTestBackingForm;
+import backingform.validator.CompatibilityTestBackingFormValidator;
 
 @RestController
 @RequestMapping("compatibility")
@@ -38,14 +44,20 @@ public class CompatibilityTestsController {
   private CrossmatchTypeRepository crossmatchTypeRepository;
   
   @Autowired
-  private UtilController utilController;
+  private FormFieldAccessorService formFieldAccessorService;
+  
+  @Autowired
+  private CompatibilityTestBackingFormValidator compatibilityTestBackingFormValidator;
+  
+  @Autowired
+  private TipsRepository tipsRepository;
 
   public CompatibilityTestsController() {
   }
 
   @InitBinder
-  protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new CompatibilityTestBackingFormValidator(binder.getValidator(), utilController));
+  public void initBinder(WebDataBinder binder) {
+      binder.addValidators(compatibilityTestBackingFormValidator);
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -59,7 +71,7 @@ public class CompatibilityTestsController {
 
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("crossmatchTypes", crossmatchTypeRepository.getAllCrossmatchTypes());
-    utilController.addTipsToModel(m, "requests.addcompatibilityresult");
+    m.put("requests.addcompatibilityresult", tipsRepository.getTipsContent("requests.addcompatibilityresult"));
   }
 
   @RequestMapping(value="{requestId}/edit/form", method=RequestMethod.GET)
@@ -71,7 +83,7 @@ public class CompatibilityTestsController {
     addEditSelectorOptions(m);
     m.put("crossmatchForRequest", true);
     // to ensure custom field names are displayed in the form
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("CompatibilityTest");
+    Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("CompatibilityTest");
     m.put("compatibilityTestFields", formFields);
 
     CompatibilityTestBackingForm form = new CompatibilityTestBackingForm();

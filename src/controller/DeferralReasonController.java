@@ -1,24 +1,32 @@
 package controller;
 
-import backingform.DeferralReasonBackingForm;
-import backingform.validator.DeferralReasonBackingFormValidator;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
+
 import model.donordeferral.DeferralReason;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import repository.DeferralReasonRepository;
 import utils.PermissionConstants;
 import viewmodel.DeferralReasonViewModel;
-
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import backingform.DeferralReasonBackingForm;
+import backingform.validator.DeferralReasonBackingFormValidator;
 
 @RestController
 @RequestMapping("deferralreasons")
@@ -28,16 +36,16 @@ public class DeferralReasonController {
 
     @Autowired
     DeferralReasonRepository deferralReasonRepository;
-
+    
     @Autowired
-    private UtilController utilController;
+    DeferralReasonBackingFormValidator deferralReasonBackingFormValidator;
 
     public DeferralReasonController() {
     }
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(new DeferralReasonBackingFormValidator(utilController));
+        binder.setValidator(deferralReasonBackingFormValidator);
     }
 
     @RequestMapping(method=RequestMethod.GET)
