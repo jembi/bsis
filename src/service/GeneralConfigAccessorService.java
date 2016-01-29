@@ -50,4 +50,17 @@ public class GeneralConfigAccessorService {
         return EnumDataType.valueOf(dataType.getDatatype().toUpperCase());
     }
 
+  /**
+   * Retrieves a setting from General Config
+   * 
+   * @param generalConfigName String name of the property
+   * @return String value of the general config property, or empty string if property cannot be found
+   */
+  public String getGeneralConfigValueByName(String generalConfigName) {
+    GeneralConfig generalConfig = generalConfigRepository.getGeneralConfigByName(generalConfigName);
+    if (generalConfig != null) {
+      return generalConfig.getValue();
+    }
+    return "";
+  }
 }

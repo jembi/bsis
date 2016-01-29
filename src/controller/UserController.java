@@ -41,14 +41,14 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
-    private UtilController utilController;
-
-    @Autowired
     private RoleRepository roleRepository;
+    
+  @Autowired
+  private UserBackingFormValidator userBackingFormValidator;
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(new UserBackingFormValidator(binder.getValidator(), utilController, userRepository));
+        binder.setValidator(userBackingFormValidator);
     }
 
     @RequestMapping(method = RequestMethod.GET)

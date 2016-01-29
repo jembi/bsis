@@ -1,25 +1,32 @@
 package controller;
 
-import backingform.DonationTypeBackingForm;
-import backingform.validator.DonationTypeBackingFormValidator;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
+
 import model.donationtype.DonationType;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import repository.DonationTypeRepository;
 import utils.PermissionConstants;
-import javax.validation.Valid;
-
-import org.apache.log4j.Logger;
 import viewmodel.DonationTypeViewModel;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import backingform.DonationTypeBackingForm;
+import backingform.validator.DonationTypeBackingFormValidator;
 
 @RestController
 @RequestMapping("donationtypes")
@@ -29,13 +36,13 @@ public class DonationTypesController {
 
     @Autowired
     DonationTypeRepository donationTypesRepository;
-
+    
     @Autowired
-    private UtilController utilController;
+    private DonationTypeBackingFormValidator donationTypeBackingFormValidator;
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(new DonationTypeBackingFormValidator(binder.getValidator(), utilController, donationTypesRepository));
+        binder.setValidator(donationTypeBackingFormValidator);
     }
 
     @RequestMapping(method=RequestMethod.GET)

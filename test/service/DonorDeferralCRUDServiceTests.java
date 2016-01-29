@@ -19,12 +19,14 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DeferralReasonType;
 import model.donordeferral.DonorDeferral;
 import model.donordeferral.DurationType;
 import model.user.User;
+
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,9 +34,12 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.security.authentication.TestingAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import repository.DeferralReasonRepository;
 import repository.DonorDeferralRepository;
-import controller.UtilController;
+import security.BsisUserDetails;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DonorDeferralCRUDServiceTests {
@@ -49,8 +54,6 @@ public class DonorDeferralCRUDServiceTests {
     private DateGeneratorService dateGeneratorService;
     @Mock
     private DeferralConstraintChecker deferralConstraintChecker;
-    @Mock
-    private UtilController utilController;
     
     @Test
     public void testCreateDeferralForDonorWithDeferralReasonTypeWithPermanentDeferralReason_shouldCreateAndPersistDonorDeferral() {
@@ -171,7 +174,7 @@ public class DonorDeferralCRUDServiceTests {
 		// set up mocks
 		when(donorDeferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
 		when(deferralConstraintChecker.canDeleteDonorDeferral(1L)).thenReturn(true);
-		when(utilController.getCurrentUser()).thenReturn(admin);
+		setSecurityUser(admin);
 		
 		// run tests
 		donorDeferralCRUDService.deleteDeferral(1l);
@@ -196,7 +199,7 @@ public class DonorDeferralCRUDServiceTests {
 		// set up mocks
 		when(donorDeferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
 		when(deferralConstraintChecker.canDeleteDonorDeferral(1L)).thenReturn(false);
-		when(utilController.getCurrentUser()).thenReturn(admin);
+		setSecurityUser(admin);
 		
 		// run tests
 		donorDeferralCRUDService.deleteDeferral(1l);
@@ -298,4 +301,10 @@ public class DonorDeferralCRUDServiceTests {
 		donorDeferralCRUDService.appendComment(deferral, "world");
 		Assert.assertEquals("Comment updated", "hello. world", deferral.getDeferralReasonText());
 	}
+	
+  private void setSecurityUser(User user) {
+    BsisUserDetails bsisUser = new BsisUserDetails(user);
+    TestingAuthenticationToken auth = new TestingAuthenticationToken(bsisUser, "Credentials");
+    SecurityContextHolder.getContext().setAuthentication(auth);
+  }
 }

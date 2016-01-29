@@ -5,8 +5,14 @@ import model.admin.GeneralConfig;
 
 public class GeneralConfigBuilder extends AbstractEntityBuilder<GeneralConfig> {
     
+  private Long id;
     private DataType dataType;
     private String value;
+    
+  public GeneralConfigBuilder withId(Long id) {
+    this.id = id;
+    return this;
+  }
 
     public GeneralConfigBuilder withDataType(DataType dataType) {
         this.dataType = dataType;
@@ -21,6 +27,7 @@ public class GeneralConfigBuilder extends AbstractEntityBuilder<GeneralConfig> {
     @Override
     public GeneralConfig build() {
         GeneralConfig generalConfig = new GeneralConfig();
+        generalConfig.setId(id);
         generalConfig.setDataType(dataType);
         generalConfig.setValue(value);
         return generalConfig;
