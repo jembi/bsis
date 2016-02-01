@@ -1,28 +1,18 @@
 package controller.bloodtesting;
 
-import backingform.TestResultBackingForm;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
-import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestType;
 import model.donation.Donation;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +21,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import repository.DonationRepository;
@@ -41,6 +30,7 @@ import utils.PermissionConstants;
 import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.DonationViewModel;
+import backingform.TestResultBackingForm;
 
 @RestController
 @RequestMapping("bloodgroupingtests")
@@ -56,15 +46,6 @@ public class BloodTypingController {
   private BloodTestingRepository bloodTestingRepository;
 
   public BloodTypingController() {
-  }
-
-  public static String getUrl(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString();
-    String queryString = req.getQueryString();   // d=789
-    if (queryString != null) {
-        reqUrl += "?"+queryString;
-    }
-    return reqUrl;
   }
   
   	@RequestMapping(value = "/form", method = RequestMethod.GET)
@@ -104,6 +85,7 @@ public class BloodTypingController {
     Map<String, Object> map = new HashMap<String, Object>();
     Map<String, Object> results = bloodTestingRepository.getAllTestsStatusForDonations(Arrays.asList(donationIds.split(",")));
     
+    @SuppressWarnings("unchecked")
     LinkedHashMap<String, Donation> donations = (LinkedHashMap<String, Donation>)results.get("donations");
 
     // depend on the getBloodTypingTestStatus() method to return donations, blood typing output as
@@ -149,9 +131,7 @@ public class BloodTypingController {
     
       Map<Long, Map<Long, String>> bloodTypingTestResultsMap = new HashMap<Long, Map<Long,String>>();
       Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
-      @SuppressWarnings("unchecked")
-      Map<Long, String> saveTestsData = null;
-      saveTestsData = form.getTestResults();
+      Map<Long, String> saveTestsData = form.getTestResults();
        Donation donation = donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
       for (Long testIdStr : saveTestsData.keySet()) {
         saveTestsDataWithLong.put(testIdStr, saveTestsData.get(testIdStr));
