@@ -100,15 +100,15 @@ public class BloodTestingRuleEngine {
 		// Determine how many blood typing tests were done
 		List<BloodTest> bloodTypingTests = bloodTestingRepository.getBloodTypingTests();
 		setBloodTypingTestsDone(resultSet, bloodTypingTests, availableTestResults);
-		
-		// Determine the blood status based on ABO/Rh tests
-		setBloodMatchStatus(resultSet);
 
 		// Check ABO/Rh results against donor's ABO/Rh
 		setBloodTypingMatchStatus(resultSet, donation);
 		
 		// Determine if the pending Blood ABO/Rh tests are required
 		updatePendingAboRhTests(resultSet);
+		
+        // Determine the blood status based on ABO/Rh tests
+        setBloodMatchStatus(resultSet);
 
 		// Determine if there are missing required basic blood TTI tests
 		List<BloodTest> basicTTITests = bloodTestingRepository.getBasicTTITests();

@@ -329,23 +329,23 @@
 		dueToDonate="2016-04-26" />
 
 	<Donation id="1" bloodAbo="O"
-		bloodPressureSystolic="110" bloodRh="+" bloodTypingStatus="COMPLETE"
+		bloodPressureSystolic="110" bloodRh="+" bloodTypingStatus="NOT_DONE"
 		donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1234567"
 		donorWeight="80.00" extraBloodTypeInformation="" haemoglobinCount="15.70"
 		isDeleted="0" createdDate="2015-02-02 03:42:04.0" lastUpdated="2015-02-06 02:09:30.0"
-		ttiStatus="TTI_SAFE" packType_id="3" donationBatch_id="1"
+		ttiStatus="NOT_DONE" packType_id="3" donationBatch_id="1"
 		donationType_id="1" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
 		bloodPressureDiastolic="80" donorPulse="70" venue_id="1"
 		bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
-		bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0" />
+		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 	<Donation id="2" bloodAbo="A" bloodRh="-"
-		bloodTypingStatus="COMPLETE" donationDate="2015-02-02 00:00:00.0"
+		bloodTypingStatus="NOT_DONE" donationDate="2015-02-02 00:00:00.0"
 		donationIdentificationNumber="1212129" extraBloodTypeInformation="" isDeleted="0"
 		createdDate="2015-02-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
-		ttiStatus="TTI_SAFE" packType_id="1" donationBatch_id="2"
+		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="2"
 		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
-		bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0" />
+		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 	<Donation id="3" bloodAbo="" bloodRh="" bloodTypingStatus="NOT_DONE"
 		donationDate="2015-06-26 00:00:00.0" donationIdentificationNumber="9090908"
 		isDeleted="0" createdDate="2015-06-29 05:24:35.0" lastUpdated="2015-06-29 05:24:35.0"
@@ -360,23 +360,23 @@
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="1"
 		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
-		bloodTypingMatchStatus="AMBIGUOUS" ineligibleDonor="0" released="0" />
+		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 	<Donation id="5" bloodAbo="A" bloodRh="-"
-		bloodTypingStatus="COMPLETE" donationDate="2015-04-04 00:00:00.0"
+		bloodTypingStatus="NOT_DONE" donationDate="2015-04-04 00:00:00.0"
 		donationIdentificationNumber="124124" extraBloodTypeInformation="" isDeleted="0"
 		createdDate="2015-04-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
-		ttiStatus="TTI_UNSAFE" packType_id="1" donationBatch_id="1"
+		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="1"
 		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
-		bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0" />
-	<Donation id="6" bloodAbo="A" bloodRh="-"
-		bloodTypingStatus="COMPLETE" donationDate="2015-04-05 00:00:00.0"
+		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
+	<Donation id="6" bloodAbo="" bloodRh=""
+		bloodTypingStatus="NOT_DONE" donationDate="2015-04-05 00:00:00.0"
 		donationIdentificationNumber="125125" extraBloodTypeInformation="" isDeleted="0"
 		createdDate="2015-04-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
-		ttiStatus="TTI_SAFE" packType_id="1" donationBatch_id="1"
+		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="1"
 		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
-		bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0" />
+		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 	<Donation id="7" bloodAbo="" bloodRh="" donationDate="2015-04-05 00:00:00.0"
 		donationIdentificationNumber="126126" extraBloodTypeInformation=""
 		isDeleted="0" createdDate="2015-04-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
@@ -384,25 +384,25 @@
 		createdBy_id="1" lastUpdatedBy_id="1" venue_id="2" bleedStartTime="1970-01-01 14:53:37.0"
 		bleedEndTime="1970-01-01 14:53:37.0" ineligibleDonor="0" released="0" />
 	<Donation id="8" bloodAbo="O"
-		bloodPressureSystolic="110" bloodRh="-" bloodTypingStatus="NO_MATCH"
+		bloodPressureSystolic="110" bloodRh="-" bloodTypingStatus="NOT_DONE"
 		donationDate="2016-01-26 00:00:00.0" donationIdentificationNumber="2345678"
 		donorWeight="50.00" extraBloodTypeInformation="" haemoglobinCount="15.70"
 		isDeleted="0" createdDate="2016-01-26 03:42:04.0" lastUpdated="2016-01-26 02:09:30.0"
-		ttiStatus="TTI_SAFE" packType_id="3" donationBatch_id="1"
+		ttiStatus="NOT_DONE" packType_id="3" donationBatch_id="1"
 		donationType_id="1" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
 		bloodPressureDiastolic="80" donorPulse="70" venue_id="1"
 		bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
-		bloodTypingMatchStatus="NO_MATCH" ineligibleDonor="0" released="0" />
+		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 	<Donation id="9" bloodAbo="O"
-		bloodPressureSystolic="110" bloodRh="-" bloodTypingStatus="NO_MATCH"
+		bloodPressureSystolic="110" bloodRh="-" bloodTypingStatus="NOT_DONE"
 		donationDate="2016-01-26 00:00:00.0" donationIdentificationNumber="3456789"
 		donorWeight="50.00" extraBloodTypeInformation="" haemoglobinCount="15.70"
 		isDeleted="0" createdDate="2016-01-26 03:42:04.0" lastUpdated="2016-01-26 02:09:30.0"
-		ttiStatus="TTI_SAFE" packType_id="3" donationBatch_id="1"
+		ttiStatus="NOT_DONE" packType_id="3" donationBatch_id="1"
 		donationType_id="1" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
 		bloodPressureDiastolic="80" donorPulse="70" venue_id="1"
 		bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
-		bloodTypingMatchStatus="NO_MATCH" ineligibleDonor="0" released="0" />
+		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 
 	<BloodTestResult id="1" createdDate="2015-02-06 02:09:13.0"
 		lastUpdated="2015-02-06 02:09:13.0" notes="" result="NEG"
