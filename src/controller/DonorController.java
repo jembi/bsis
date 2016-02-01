@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import factory.PostDonationCounsellingViewModelFactory;
 import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,15 +27,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import constant.GeneralConfigConstants;
-import factory.DonationViewModelFactory;
-import factory.DonorViewModelFactory;
+
 import repository.AdverseEventRepository;
 import repository.ContactMethodTypeRepository;
 import repository.DonationBatchRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
 import repository.PostDonationCounsellingRepository;
+import repository.SequenceNumberRepository;
 import service.DonorCRUDService;
 import service.DonorConstraintChecker;
 import service.DonorDeferralStatusCalculator;
@@ -50,7 +50,11 @@ import viewmodel.PostDonationCounsellingViewModel;
 import backingform.DonorBackingForm;
 import backingform.DuplicateDonorsBackingForm;
 import backingform.validator.DonorBackingFormValidator;
+import constant.GeneralConfigConstants;
+import factory.DonationViewModelFactory;
 import factory.DonorDeferralViewModelFactory;
+import factory.DonorViewModelFactory;
+import factory.PostDonationCounsellingViewModelFactory;
 
 @RestController
 @RequestMapping("donors")
@@ -65,7 +69,7 @@ public class DonorController {
   private DonorRepository donorRepository;
 
   @Autowired
-  private UtilController utilController;
+  private SequenceNumberRepository sequenceNumberRepository;
 
   @Autowired
   private LocationRepository locationRepository;
@@ -107,12 +111,15 @@ public class DonorController {
   @Autowired
   PostDonationCounsellingViewModelFactory postDonationCounsellingViewModelFactory;
   
+  @Autowired
+  private DonorBackingFormValidator donorBackingFormValidator;
+  
   public DonorController() {
   }
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new DonorBackingFormValidator(binder.getValidator(), utilController));
+    binder.setValidator(donorBackingFormValidator);
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -243,7 +250,7 @@ public class DonorController {
         donor.setIsDeleted(false);
         donor.setContact(form.getContact());
         donor.setAddress(form.getAddress());
-        donor.setDonorNumber(utilController.getNextDonorNumber());
+        donor.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());
         Donor savedDonor = donorRepository.addDonor(donor);
         map.put("hasErrors", false);
 

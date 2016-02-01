@@ -1,8 +1,11 @@
 package controller;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
@@ -90,9 +93,6 @@ public class AdminController {
 
   @Autowired
   LabSetupRepository labSetupRepository;
-  
-  @Autowired
-  UtilController utilController;
   
   public static String getUrl(HttpServletRequest req) {
     String reqUrl = req.getRequestURL().toString();
@@ -278,7 +278,7 @@ public class AdminController {
     LOGGER.debug("Writing backup to " + fullFileName);
 
     try {
-      Properties prop = utilController.getDatabaseProperties();
+      Properties prop = getDatabaseProperties();
       String mysqldumpPath = (String) prop.get("dbbackup.mysqldumppath");
       String username = (String) prop.get("dbbackup.username");
       String password = (String) prop.get("dbbackup.password");
@@ -421,6 +421,18 @@ public class AdminController {
         return new ArrayList<InetAddress>();
     }
     return listOfServerAddresses;
+  }
+  
+  private Properties getDatabaseProperties() throws IOException {
+    Properties prop = new Properties();
+    BufferedReader reader = new BufferedReader(new InputStreamReader(servletContext.getResourceAsStream("/WEB-INF/classes/database.properties")));
+    String propertyFileContents = "";
+    String line;
+    while ((line = reader.readLine()) != null) {
+      propertyFileContents += line + "\n";
+    }
+    prop.load(new StringReader(propertyFileContents.replace("\\","\\\\")));
+    return prop;
   }
 }
 

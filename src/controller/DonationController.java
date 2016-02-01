@@ -43,6 +43,7 @@ import repository.LocationRepository;
 import repository.PackTypeRepository;
 import repository.PostDonationCounsellingRepository;
 import service.DonationCRUDService;
+import service.FormFieldAccessorService;
 import utils.PermissionConstants;
 import utils.PermissionUtils;
 import viewmodel.DonationSummaryViewModel;
@@ -70,7 +71,7 @@ public class DonationController {
   private DonationTypeRepository donorTypeRepository;
 
   @Autowired
-  private UtilController utilController;
+  private FormFieldAccessorService formFieldAccessorService;
 
   @Autowired
   private DonorRepository donorRepository;
@@ -90,12 +91,15 @@ public class DonationController {
   @Autowired
   private AdverseEventBackingFormValidator adverseEventBackingFormValidator;
   
+  @Autowired
+  private DonationBackingFormValidator donationBackingFormValidator;
+  
   public DonationController() {
   }
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new DonationBackingFormValidator(utilController, adverseEventBackingFormValidator));
+    binder.setValidator(donationBackingFormValidator);
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -173,7 +177,7 @@ public class DonationController {
     Map<String, Object> map = new  HashMap<String, Object>();
     map.put("addDonationForm", form);
     addEditSelectorOptions(map);
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donation");
+    Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("donation");
     // to ensure custom field names are displayed in the form
     map.put("donationFields", formFields);
     return map;
@@ -189,7 +193,7 @@ public class DonationController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("editDonationForm", form);
     addEditSelectorOptions(map);
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donation");
+    Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("donation");
     // to ensure custom field names are displayed in the form
     map.put("donationFields", formFields);
     return map;
@@ -208,7 +212,7 @@ public class DonationController {
         map.put("hasErrors", false);
         map.put("donationId", savedDonation.getId());
         map.put("donation", donationViewModelFactory.createDonationViewModelWithPermissions(savedDonation));
-        map.put("donationFields", utilController.getFormFieldsForForm("donation"));
+        map.put("donationFields", formFieldAccessorService.getFormFieldsForForm("donation"));
         return new ResponseEntity<>(map, HttpStatus.CREATED);
     }
   
@@ -283,7 +287,7 @@ public class DonationController {
 //      pagingParams.put("length", "10");
       pagingParams.put("sortDirection", "asc");
       
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("Donation");
+    Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("Donation");
   
     if (donationIdentificationNumber != null)
       donationIdentificationNumber = donationIdentificationNumber.trim();

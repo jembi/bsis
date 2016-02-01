@@ -6,8 +6,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import controller.UtilController;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,9 +45,6 @@ import viewmodel.DonationViewModel;
 @RestController
 @RequestMapping("bloodgroupingtests")
 public class BloodTypingController {
-
-  @Autowired
-  private UtilController utilController;
 
   @Autowired
   private DonationRepository donationRepository;

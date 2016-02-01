@@ -25,6 +25,7 @@ import repository.ComponentRepository;
 import repository.ComponentTypeRepository;
 import repository.RequestRepository;
 import repository.UsageRepository;
+import service.FormFieldAccessorService;
 import utils.PermissionConstants;
 import viewmodel.ComponentUsageViewModel;
 import viewmodel.RequestViewModel;
@@ -48,14 +49,17 @@ public class UsageController {
   private RequestRepository requestRepository;
 
   @Autowired
-  private UtilController utilController;
+  private FormFieldAccessorService formFieldAccessorService;
+  
+  @Autowired
+  UsageBackingFormValidator usageBackingFormValidator;
 
   public UsageController() {
   }
   
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new UsageBackingFormValidator(binder.getValidator(), utilController));
+    binder.setValidator(usageBackingFormValidator);
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -76,7 +80,7 @@ public class UsageController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("addUsageForm", form);
     addEditSelectorOptions(map);
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
+    Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("usage");
     // to ensure custom field names are displayed in the form
     map.put("usageFields", formFields);
     return map;
@@ -94,7 +98,7 @@ public class UsageController {
         Map<String, Object> map = new HashMap<String, Object>();
 
         addEditSelectorOptions(map);
-        Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
+        Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("usage");
         map.put("usageFields", formFields);
 
         ComponentUsage savedUsage = null;
@@ -119,7 +123,7 @@ public class UsageController {
     Request req = requestRepository.findRequest(requestNumber);
     map.put("request", new RequestViewModel(req));
     map.put("issuedComponents", requestRepository.getIssuedComponentsForRequest(req.getId()));
-    map.put("componentFields", utilController.getFormFieldsForForm("component"));
+    map.put("componentFields", formFieldAccessorService.getFormFieldsForForm("component"));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 
@@ -132,7 +136,7 @@ public class UsageController {
         boolean success = false;
 
         addEditSelectorOptions(map);
-        Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("usage");
+        Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("usage");
         map.put("usageFields", formFields);
 
         ComponentUsage savedUsage = null;

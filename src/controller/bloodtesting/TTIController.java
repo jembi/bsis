@@ -56,16 +56,11 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import controller.UtilController;
-
 @RestController
 @RequestMapping("ttitests")
 public class TTIController {
 
 	private static final Logger LOGGER = Logger.getLogger(TTIController.class);
-	
-	@Autowired
-	private UtilController utilController;
 
 	@Autowired
 	private DonationRepository donationRepository;
@@ -96,13 +91,12 @@ public class TTIController {
 	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
 	public Map<String, Object> getTTIForm(HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		//map.put("ttiFormFields", utilController.getFormFieldsForForm("TTIForm"));
 
 		List<BloodTestViewModel> basicTTITests = getBasicTTITests();
 		map.put("basicTTITests", basicTTITests);
 		
-		List<BloodTestViewModel> confirmatoryTTITests = getConfirmatoryTTITests();
-		map.put("confirmatoryTTITests", confirmatoryTTITests);
+		List<BloodTestViewModel> pendingTTITests = getConfirmatoryTTITests();
+		map.put("pendingTTITests", pendingTTITests);
 
 		return map;
 	}

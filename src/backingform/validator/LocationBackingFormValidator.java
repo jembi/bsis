@@ -1,44 +1,43 @@
 package backingform.validator;
 
-import backingform.LocationBackingForm;
-import controller.UtilController;
+import model.location.Location;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
-import org.springframework.validation.Validator;
 
+import repository.LocationRepository;
+import backingform.LocationBackingForm;
 
-import java.util.Arrays;
-
-public class LocationBackingFormValidator  implements Validator {
-
-    private Validator validator;
-
-    private UtilController utilController;
-
-    public LocationBackingFormValidator(Validator validator, UtilController utilController) {
-        super();
-        this.validator = validator;
-        this.utilController = utilController;
-    }
+@Component
+public class LocationBackingFormValidator  extends BaseValidator<LocationBackingForm> {
+  
+  @Autowired
+  private LocationRepository locationRepository;
 
     @Override
-    public boolean supports (Class<?> clazz) {
-        return Arrays.asList(LocationBackingForm.class).contains(clazz);
-    }
-
-    @Override
-    public void validate(Object target, Errors errors) {
-        if (target == null || validator == null) {
-            return;
-        }
-
-        ValidationUtils.invokeValidator(validator, target, errors);
-
-        LocationBackingForm form = (LocationBackingForm) target;
-
-        if (utilController.isDuplicateLocationName(form.getLocation()))
+    public void validateForm(LocationBackingForm form, Errors errors) {
+        if (isDuplicateLocationName(form.getLocation()))
             errors.rejectValue("name", "400", "Location name already exists.");
     }
+    
+  @Override
+  public String getFormName() {
+    return "location";
+  }
+    
+  private boolean isDuplicateLocationName(Location location) {
+    String locationName = location.getName();
+    if (StringUtils.isBlank(locationName)) {
+      return false;
+    }
 
+    Location existingLocation = locationRepository.findLocationByName(locationName);
+    if (existingLocation != null && !existingLocation.getId().equals(location.getId())) {
+      return true;
+    }
 
+    return false;
+  }
 }

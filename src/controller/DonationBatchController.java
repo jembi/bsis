@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import repository.DonationBatchRepository;
 import repository.LocationRepository;
 import service.DonationBatchCRUDService;
+import service.FormFieldAccessorService;
 import utils.PermissionConstants;
 import viewmodel.DonationBatchViewModel;
 import backingform.DonationBatchBackingForm;
@@ -51,27 +52,20 @@ public class DonationBatchController {
   private LocationRepository locationRepository;
 
   @Autowired
-  private UtilController utilController;
+  private FormFieldAccessorService formFieldAccessorService;
   
   @Autowired
   private DonationBatchViewModelFactory donationBatchViewModelFactory;
+  
+  @Autowired
+  DonationBatchBackingFormValidator donationBatchBackingFormValidator;
 
   public DonationBatchController() {
   }
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(new DonationBatchBackingFormValidator(binder.getValidator(),
-                        utilController));
-  }
-
-  public static String getUrl(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString();
-    String queryString = req.getQueryString();   // d=789
-    if (queryString != null) {
-        reqUrl += "?"+queryString;
-    }
-    return reqUrl;
+    binder.setValidator(donationBatchBackingFormValidator);
   }
 
   @RequestMapping(value = "/search", method = RequestMethod.GET)
@@ -104,7 +98,7 @@ public class DonationBatchController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("addDonationBatchForm", form);
-    Map<String, Map<String, Object>> formFields = utilController.getFormFieldsForForm("donationbatch");
+    Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("donationbatch");
     addEditSelectorOptions(map);
     // to ensure custom field names are displayed in the form
     map.put("donationBatchFields", formFields);

@@ -1,12 +1,14 @@
 package controller;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceException;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
@@ -22,8 +24,14 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import backingform.validator.BaseValidatorRuntimeException;
+
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+
 @ControllerAdvice
 public class GlobalControllerExceptionHandler {
+  
+  private static final Logger LOGGER = Logger.getLogger(GlobalControllerExceptionHandler.class);
 
  /**
   * Exception to be thrown when validation on an argument annotated with @Valid fails.
@@ -43,6 +51,25 @@ public class GlobalControllerExceptionHandler {
     }
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
   }
+  
+  /**
+   * Exception that is thrown when a Validator encounters an unhandled Exception
+   */
+   @ExceptionHandler(BaseValidatorRuntimeException.class)
+   public ResponseEntity<Map<String, Object>> handleBaseValidatorRuntimeException(
+       BaseValidatorRuntimeException e) {
+     LOGGER.error(e.getMessage(), e);
+     Map<String, Object> errorMap = new HashMap<String, Object>();
+     errorMap.put("hasErrors", "true");
+     errorMap.put("developerMessage", "There are validation issues, please provide valid inputs");
+     errorMap.put("userMessage", "Please provide valid inputs");
+     errorMap.put("moreInfo", e.getMessage());
+     errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
+     for (FieldError error : e.getErrors().getFieldErrors()) {
+         errorMap.put(error.getField(), error.getDefaultMessage());
+     }
+     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
+   }
   
  /**
   * thrown at flush or commit time for detached entities 

@@ -28,19 +28,17 @@ import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.idtype.IdType;
 import model.preferredlanguage.PreferredLanguage;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import service.GeneralConfigAccessorService;
 import utils.DonorUtils;
 import viewmodel.DonorSummaryViewModel;
-import controller.UtilController;
-
-import javax.persistence.*;
-import javax.persistence.criteria.*;
-import java.util.*;
 
 @Repository
 @Transactional
@@ -56,7 +54,7 @@ public class DonorRepository {
     private EntityManager em;
 
     @Autowired
-    private UtilController utilController;
+    private GeneralConfigAccessorService generalConfigAccessorService;
 
     public void saveDonor(Donor donor) {
         em.persist(donor);
@@ -87,7 +85,7 @@ public class DonorRepository {
         Predicate donorNumberExp = cb.equal(root.<String>get("donorNumber"), donorNumber);
         Predicate firstNameExp, lastNameExp;
 
-        String donorSearchMode = utilController.getGeneralConfigValueByName("donor.searchMode");
+        String donorSearchMode = generalConfigAccessorService.getGeneralConfigValueByName("donor.searchMode");
 
         if (!usePhraseMatch) {
             firstNameExp = cb.equal(root.<String>get("firstName"), firstName);

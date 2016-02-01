@@ -1,54 +1,29 @@
 package backingform.validator;
 
-import java.util.Arrays;
-
 import model.user.User;
 
-import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
-import org.springframework.validation.Validator;
-
-import repository.UserRepository;
-import security.UserAuthority;
-import utils.PermissionConstants;
-import viewmodel.UserViewModel;
-import backingform.UserBackingForm;
-import controller.UtilController;
-
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
 
-public class UserBackingFormValidator implements Validator {
+import repository.UserRepository;
+import utils.PermissionConstants;
+import backingform.UserBackingForm;
 
-    private Validator validator;
-    private UtilController utilController;
-    private UserRepository userRepository;
-
-    public UserBackingFormValidator(Validator validator, UtilController utilController, UserRepository userRepository) {
-        super();
-        this.validator = validator;
-        this.utilController = utilController;
-        this.userRepository = userRepository;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public boolean supports(Class<?> clazz) {
-        return Arrays.asList(UserBackingForm.class, User.class, UserViewModel.class).contains(clazz);
-    }
+@Component
+public class UserBackingFormValidator extends BaseValidator<UserBackingForm> {
+  
+  @Autowired
+  private UserRepository userRepository;
 
     @Override
-    public void validate(Object obj, Errors errors) {
-        if (obj == null || validator == null) {
-            return;
-        }
-        ValidationUtils.invokeValidator(validator, obj, errors);
-        UserBackingForm form = (UserBackingForm) obj;
-        utilController.commonFieldChecks(form, "user", errors);
+    public void validateForm(UserBackingForm form, Errors errors) {
+        commonFieldChecks(form, errors);
         checkUserName(form, errors);
         if (form.getId() != null) {
             // Existing user, so check if password is being changed and validate it
@@ -64,6 +39,11 @@ public class UserBackingFormValidator implements Validator {
 
         checkRoles(form, errors);
     }
+    
+  @Override
+  public String getFormName() {
+    return "user";
+  }
     
     private boolean checkCurrentPassword(UserBackingForm form, Errors errors) {
 
@@ -100,9 +80,8 @@ public class UserBackingFormValidator implements Validator {
 
         boolean flag = false;
         String userName = form.getUser().getUsername();
-        User existingUser = null;
 
-        if (utilController.isDuplicateUserName(form.getUser())) {
+        if (isDuplicateUserName(form.getUser())) {
             errors.rejectValue("user.username", "userName.nonunique", "Username already exists.");
         }
 
@@ -148,4 +127,18 @@ public class UserBackingFormValidator implements Validator {
         }
         return false;
     }
+    
+  private boolean isDuplicateUserName(User user) {
+    String userName = user.getUsername();
+    if (StringUtils.isBlank(userName)) {
+      return false;
+    }
+
+    User existingUser = userRepository.findUser(userName);
+    if (existingUser != null && !existingUser.getId().equals(user.getId())) {
+      return true;
+    }
+
+    return false;
+  }
 }

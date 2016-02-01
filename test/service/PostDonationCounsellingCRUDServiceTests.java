@@ -24,9 +24,11 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.security.authentication.TestingAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import repository.PostDonationCounsellingRepository;
-import controller.UtilController;
+import security.BsisUserDetails;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PostDonationCounsellingCRUDServiceTests {
@@ -35,8 +37,6 @@ public class PostDonationCounsellingCRUDServiceTests {
     private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
     @Mock
     private PostDonationCounsellingRepository postDonationCounsellingRepository;
-    @Mock
-    private UtilController utilController;
     @Mock
     private DateGeneratorService dateGeneratorService;
     
@@ -64,7 +64,8 @@ public class PostDonationCounsellingCRUDServiceTests {
                 .withCounsellingDate(null)
                 .build();
 
-        when(utilController.getCurrentUser()).thenReturn(admin);
+        setSecurityUser(admin);
+
         when(dateGeneratorService.generateDate()).thenReturn(counsellingDate);
         
         when(postDonationCounsellingRepository.findPostDonationCounsellingForDonation(donation)).thenReturn(null);
@@ -157,7 +158,8 @@ public class PostDonationCounsellingCRUDServiceTests {
                         .build())
                 .build();
 
-        when(utilController.getCurrentUser()).thenReturn(admin);
+        setSecurityUser(admin);
+
         when(dateGeneratorService.generateDate()).thenReturn(counsellingDate);
 
         when(postDonationCounsellingRepository.findById(postDonationCounsellingId))
@@ -225,7 +227,7 @@ public class PostDonationCounsellingCRUDServiceTests {
                         .build())
                 .build();
 
-        when(utilController.getCurrentUser()).thenReturn(admin);
+        setSecurityUser(admin);
 
         when(dateGeneratorService.generateDate()).thenReturn(counsellingDate);
 
@@ -243,4 +245,9 @@ public class PostDonationCounsellingCRUDServiceTests {
         assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
     }
 
+  private void setSecurityUser(User user) {
+    BsisUserDetails bsisUser = new BsisUserDetails(user);
+    TestingAuthenticationToken auth = new TestingAuthenticationToken(bsisUser, "Credentials");
+    SecurityContextHolder.getContext().setAuthentication(auth);
+  }
 }

@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -33,9 +34,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import controller.UtilController;
-
-import javax.persistence.NonUniqueResultException;
+import utils.SecurityUtils;
 
 @Repository
 @Transactional
@@ -48,9 +47,6 @@ public class RequestRepository {
 
   @Autowired
   private ComponentRepository componentRepository;
-
-  @Autowired
-  private UtilController utilController;
   
   public void saveRequest(Request request) {
     em.persist(request);
@@ -384,7 +380,7 @@ public class RequestRepository {
       componentIssue.setNewStatus(ComponentStatus.ISSUED);
       componentIssue.setStatusChangedOn(today);
       componentIssue.setStatusChangeType(ComponentStatusChangeType.ISSUED);
-      componentIssue.setChangedBy(utilController.getCurrentUser());
+      componentIssue.setChangedBy(SecurityUtils.getCurrentUser());
       componentIssue.setIssuedTo(request);
       componentIssue.setComponent(component);
       numUnitsIssued++;
