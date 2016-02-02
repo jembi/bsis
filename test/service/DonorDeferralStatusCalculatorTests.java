@@ -41,7 +41,7 @@ public class DonorDeferralStatusCalculatorTests {
                         .build()
         );
         
-        when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.DEFER_DONORS_WITH_NEG_CONFIRMATORY_OUTCOMES))
+        when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.DEFER_DONORS_WITH_NEG_REPEAT_OUTCOMES))
                 .thenReturn(false);
 
         boolean returnedValue = donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults);
@@ -61,7 +61,7 @@ public class DonorDeferralStatusCalculatorTests {
                         .build()
         );
         
-        when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.DEFER_DONORS_WITH_NEG_CONFIRMATORY_OUTCOMES))
+        when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.DEFER_DONORS_WITH_NEG_REPEAT_OUTCOMES))
                 .thenReturn(false);
 
         boolean returnedValue = donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults);
