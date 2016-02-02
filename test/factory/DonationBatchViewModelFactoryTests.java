@@ -109,7 +109,7 @@ public class DonationBatchViewModelFactoryTests {
     Donation donation2 = aDonation().withId(donation2Id)
         .withPackType(aPackType().withTestSampleProduced(false).build())
         .build();
-    List<Donation> donations = Arrays.asList(new Donation[]{donation1, donation2});
+    List<Donation> donations = Arrays.asList(donation1, donation2);
 
     Long donationBatchId = 1L;
     DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonations(donations).build();

@@ -1073,7 +1073,7 @@ public class DonorRepositoryTest {
     Donor donor = donorRepository.findDonorByDonorNumber("000001", false);
     donor.setDonorStatus(DonorStatus.MERGED);
     donorRepository.saveDonor(donor);
-    donor = donorRepository.findDonorByDonorNumber("000001", false, new DonorStatus[]{DonorStatus.MERGED});
+    donor = donorRepository.findDonorByDonorNumber("000001", false, DonorStatus.MERGED);
     Assert.assertNull("Donor was not found", donor);
   }
 

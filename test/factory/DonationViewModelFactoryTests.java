@@ -95,7 +95,7 @@ public class DonationViewModelFactoryTests {
         .withDonor(aDonor().withId(ANOTHER_IRRELEVANT_DONOR_ID).build())
         .withDonationBatch(aDonationBatch().build())
         .build();
-    List<Donation> donations = Arrays.asList(new Donation[]{donation1, donation2});
+    List<Donation> donations = Arrays.asList(donation1, donation2);
 
     AdverseEventViewModel adverseEventViewModel = anAdverseEventViewModel().withId(irrelevantAdverseEventId).build();
 

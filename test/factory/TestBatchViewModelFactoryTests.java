@@ -108,7 +108,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
         .withDonationBatches(Arrays.asList(donationBatch))
         .withNotes(IRRELEVANT_NOTES)
         .build();
-    List<TestBatch> testBatches = Arrays.asList(new TestBatch[]{testBatch1, testBatch2});
+    List<TestBatch> testBatches = Arrays.asList(testBatch1, testBatch2);
 
     DonationBatchViewModel donationBatchViewModel = new DonationBatchViewModel();
 
