@@ -12,7 +12,6 @@ import suites.ContextDependentTestSuite;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;

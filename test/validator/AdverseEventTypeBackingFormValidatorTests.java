@@ -11,7 +11,6 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import repository.AdverseEventTypeRepository;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

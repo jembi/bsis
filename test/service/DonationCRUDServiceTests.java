@@ -8,7 +8,6 @@ import static helpers.builders.DonationBackingFormBuilder.aDonationBackingForm;
 import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
-import static helpers.builders.PostDonationCounsellingBuilder.aPostDonationCounselling;
 import static helpers.builders.PackTypeBuilder.aPackType;
 import static helpers.matchers.DonationMatcher.hasSameStateAsDonation;
 import static helpers.matchers.DonorMatcher.hasSameStateAsDonor;
@@ -23,7 +22,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import model.adverseevent.AdverseEvent;
-import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
 import model.donationbatch.DonationBatch;

@@ -1,7 +1,5 @@
 package helpers.builders;
 
-import viewmodel.BloodTestingRuleResult;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;

@@ -7,8 +7,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import javax.persistence.EntityExistsException;
-
 import model.component.Component;
 import model.component.ComponentStatus;
 import model.componenttype.ComponentType;

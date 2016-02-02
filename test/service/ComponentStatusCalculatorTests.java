@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import suites.UnitTestSuite;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

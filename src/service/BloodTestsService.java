@@ -1,10 +1,7 @@
 package service;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
-
-import javax.transaction.Transactional;
 
 import model.component.Component;
 import model.donation.Donation;
@@ -18,10 +15,7 @@ import repository.bloodtesting.BloodTestingRuleEngine;
 import viewmodel.BloodTestingRuleResult;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Service for BloodTest related business logic/workflow

@@ -1,15 +1,5 @@
 package factory;
 
-import static helpers.builders.DonationBatchBuilder.aDonationBatch;
-import static helpers.builders.TestBatchBuilder.aTestBatch;
-import static helpers.builders.TestBatchViewModelBuilder.aTestBatchViewModel;
-import static helpers.matchers.TestBatchViewModelMatcher.hasSameStateAsTestBatchViewModel;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import model.donationbatch.DonationBatch;
