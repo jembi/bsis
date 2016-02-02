@@ -1286,5 +1286,13 @@
             <where>id = 32</where>
         </update>
     </changeSet>
+    
+    <changeSet id="20160202-1133" author="bausmeier">
+        <update tableName="GeneralConfig">
+            <column name="name" value="testing.deferDonorsWithNegRepeatOutcomes" type="varchar(255)"></column>
+            <column name="description" value="Defer donors with a POS TTI test outcome, where all repeat outcomes are NEG" type="varchar(255)"></column>
+            <where>name = "testing.deferDonorsWithNegConfirmatoryOutcomes"</where>
+        </update>
+    </changeSet>
 
 </databaseChangeLog>

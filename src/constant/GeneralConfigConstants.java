@@ -8,7 +8,7 @@ public class GeneralConfigConstants {
   public static final String DONOR_MAXIMUM_AGE = "donors.maximumAge";
   
   // Testing
-  public static final String DEFER_DONORS_WITH_NEG_CONFIRMATORY_OUTCOMES = "testing.deferDonorsWithNegConfirmatoryOutcomes";
+  public static final String DEFER_DONORS_WITH_NEG_REPEAT_OUTCOMES = "testing.deferDonorsWithNegRepeatOutcomes";
   
   // Components
   public static final String CREATE_INITIAL_COMPONENTS = "components.createInitialComponents";
