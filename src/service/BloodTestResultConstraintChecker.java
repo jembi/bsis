@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import repository.bloodtesting.BloodTestingRuleResultSet;
-import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
 
 
@@ -36,19 +35,11 @@ public class BloodTestResultConstraintChecker {
 		}
 		if (BloodTestCategory.BLOODTYPING.equals(bloodTestResult.getBloodTest().getCategory())) {
 			BloodTypingStatus bloodTypingStatus = bloodTestingRuleResultSet.getBloodTypingStatus();
-			BloodTypingMatchStatus bloodTypingMatchStatus = bloodTestingRuleResultSet.getBloodTypingMatchStatus();
-			if (!BloodTypingStatus.COMPLETE.equals(bloodTypingStatus)) {
-				// can edit if the blood typing status is not complete
-				return true;
-			} else if (!BloodTypingStatus.NOT_DONE.equals(bloodTypingStatus) 
-					&& (BloodTypingMatchStatus.NO_MATCH.equals(bloodTypingMatchStatus) 
-							|| BloodTypingMatchStatus.AMBIGUOUS.equals(bloodTypingMatchStatus))) {
-				// the user will be requested to confirm the blood typing results
-				return true;
+			if (BloodTypingStatus.NOT_DONE.equals(bloodTypingStatus)) {
+			  return true;
 			} else {
-				// at the moment we don't know if there has been a confirmation or not - it isn't recorded
-				// FIXME: implement this ...
-				return true;
+			  // check the pending tests for rule associated with the blood test
+              return !isResultConfirmed(bloodTestingRuleResultSet, bloodTestResult);
 			}
 		} else if (BloodTestCategory.TTI.equals(bloodTestResult.getBloodTest().getCategory())) {
 			if (bloodTestingRuleResultSet.getTtiStatus().equals(TTIStatus.NOT_DONE)) {
