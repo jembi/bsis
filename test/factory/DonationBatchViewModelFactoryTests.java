@@ -69,9 +69,9 @@ public class DonationBatchViewModelFactoryTests {
   @Test
   public void testCreateDonationBatchViewModelWithDonations() {
     // set up test data
-    Long donationId = new Long(1);
+    Long donationId = 1L;
     Donation donation = new DonationBuilder().withId(donationId).build();
-    Long donationBatchId = new Long(1);
+    Long donationBatchId = 1L;
     DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonation(donation).build();
 
     // expected data
@@ -101,17 +101,17 @@ public class DonationBatchViewModelFactoryTests {
   @Test
   public void testCreateDonationBatchViewModelWithDonationsThatHaveNoSampleProduced() {
     // set up test data
-    Long donation1Id = new Long(1);
+    Long donation1Id = 1L;
     Donation donation1 = aDonation().withId(donation1Id)
         .withPackType(aPackType().withTestSampleProduced(true).build())
         .build();
-    Long donation2Id = new Long(2);
+    Long donation2Id = 2L;
     Donation donation2 = aDonation().withId(donation2Id)
         .withPackType(aPackType().withTestSampleProduced(false).build())
         .build();
     List<Donation> donations = Arrays.asList(new Donation[]{donation1, donation2});
 
-    Long donationBatchId = new Long(1);
+    Long donationBatchId = 1L;
     DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonations(donations).build();
 
     // expected data
@@ -146,11 +146,11 @@ public class DonationBatchViewModelFactoryTests {
   @Test
   public void testCreateDonationBatchViewModelWithDonationsButNoDonationPermissions() {
     // set up test data
-    Long donationId = new Long(1);
+    Long donationId = 1L;
     Donation donation = new DonationBuilder().withId(donationId)
         .withPackType(aPackType().withTestSampleProduced(true).build())
         .build();
-    Long donationBatchId = new Long(1);
+    Long donationBatchId = 1L;
     DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonation(donation).build();
 
     // expected data
