@@ -184,7 +184,7 @@ public class DuplicateDonorServiceTest {
     String donorNumber2 = "2";
     List<String> donorNumbers = Arrays.asList(new String[]{donorNumber1, donorNumber2});
 
-    List<Donor> donors = new ArrayList<Donor>();
+    List<Donor> donors = new ArrayList<>();
     Donor david1 = DonorBuilder.aDonor().withDonorNumber(donorNumber1).withFirstName("David").withLastName("Smith")
         .withGender(Gender.male).withBirthDate("1977-10-20").build();
     Donor david2 = DonorBuilder.aDonor().withDonorNumber(donorNumber2).withFirstName("David").withLastName("Smith")
@@ -195,7 +195,7 @@ public class DuplicateDonorServiceTest {
     // create donations (david1)
     Donation donation1 = DonationBuilder.aDonation().withId(1l).withDonor(david1).withDonationDate(new Date()).build();
     Donation donation2 = DonationBuilder.aDonation().withId(2l).withDonor(david1).withDonationDate(new Date()).build();
-    List<Donation> donations = new ArrayList<Donation>();
+    List<Donation> donations = new ArrayList<>();
     donations.add(donation1);
     donations.add(donation2);
     david1.setDonations(donations);
@@ -205,7 +205,7 @@ public class DuplicateDonorServiceTest {
         .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
     DonorDeferral deferral1 = DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferredDonor(david2)
         .withDeferralReason(deferralReason1).build();
-    List<DonorDeferral> deferrals = new ArrayList<DonorDeferral>();
+    List<DonorDeferral> deferrals = new ArrayList<>();
     deferrals.add(deferral1);
     david2.setDeferrals(deferrals);
 
@@ -237,7 +237,7 @@ public class DuplicateDonorServiceTest {
     String donorNumber2 = "2";
     List<String> donorNumbers = Arrays.asList(new String[]{donorNumber1, donorNumber2});
 
-    List<Donor> donors = new ArrayList<Donor>();
+    List<Donor> donors = new ArrayList<>();
     Donor david1 = DonorBuilder.aDonor().withDonorNumber(donorNumber1).withFirstName("David").withLastName("Smith")
         .withGender(Gender.male).withBirthDate("1977-10-20").build();
     Donor david2 = DonorBuilder.aDonor().withDonorNumber(donorNumber2).withFirstName("David").withLastName("Smith")
@@ -249,7 +249,7 @@ public class DuplicateDonorServiceTest {
     PackType packType = PackTypeBuilder.aPackType().withPeriodBetweenDonations(90).build();
     Donation donation1 = DonationBuilder.aDonation().withId(1l).withDonor(david1).withDonationDate(new Date()).withPackType(packType).build();
     Donation donation2 = DonationBuilder.aDonation().withId(2l).withDonor(david1).withDonationDate(new Date()).withPackType(packType).build();
-    List<Donation> donations = new ArrayList<Donation>();
+    List<Donation> donations = new ArrayList<>();
     donations.add(donation1);
     donations.add(donation2);
     david1.setDonations(donations);
@@ -259,7 +259,7 @@ public class DuplicateDonorServiceTest {
         .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
     DonorDeferral deferral1 = DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferredDonor(david2)
         .withDeferralReason(deferralReason1).build();
-    List<DonorDeferral> deferrals = new ArrayList<DonorDeferral>();
+    List<DonorDeferral> deferrals = new ArrayList<>();
     deferrals.add(deferral1);
     david2.setDeferrals(deferrals);
 

@@ -128,8 +128,8 @@ public class BloodTypingController {
     Map<String, Object> m = new HashMap<>();
     HttpStatus httpStatus = HttpStatus.CREATED;
 
-    Map<Long, Map<Long, String>> bloodTypingTestResultsMap = new HashMap<Long, Map<Long, String>>();
-    Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
+    Map<Long, Map<Long, String>> bloodTypingTestResultsMap = new HashMap<>();
+    Map<Long, String> saveTestsDataWithLong = new HashMap<>();
     @SuppressWarnings("unchecked")
     Map<Long, String> saveTestsData = null;
     saveTestsData = form.getTestResults();
