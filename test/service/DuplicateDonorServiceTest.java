@@ -193,8 +193,8 @@ public class DuplicateDonorServiceTest {
     donors.add(david2);
 
     // create donations (david1)
-    Donation donation1 = DonationBuilder.aDonation().withId(1l).withDonor(david1).withDonationDate(new Date()).build();
-    Donation donation2 = DonationBuilder.aDonation().withId(2l).withDonor(david1).withDonationDate(new Date()).build();
+    Donation donation1 = DonationBuilder.aDonation().withId(1L).withDonor(david1).withDonationDate(new Date()).build();
+    Donation donation2 = DonationBuilder.aDonation().withId(2L).withDonor(david1).withDonationDate(new Date()).build();
     List<Donation> donations = new ArrayList<>();
     donations.add(donation1);
     donations.add(donation2);
@@ -203,7 +203,7 @@ public class DuplicateDonorServiceTest {
     // create deferrals (david2)
     DeferralReason deferralReason1 = DeferralReasonBuilder.aDeferralReason()
         .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
-    DonorDeferral deferral1 = DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferredDonor(david2)
+    DonorDeferral deferral1 = DonorDeferralBuilder.aDonorDeferral().withId(1L).withDeferredDonor(david2)
         .withDeferralReason(deferralReason1).build();
     List<DonorDeferral> deferrals = new ArrayList<>();
     deferrals.add(deferral1);
@@ -219,9 +219,9 @@ public class DuplicateDonorServiceTest {
     // verify test
     Assert.assertNotNull("backupLogs returned", backupLogs);
     Assert.assertEquals("Donation and Deferral backups necessary", 3, backupLogs.size());
-    Assert.assertTrue("1st DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "1", 1l, null)));
-    Assert.assertTrue("2nd DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "1", 2l, null)));
-    Assert.assertTrue("3rd DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "2", null, 1l)));
+    Assert.assertTrue("1st DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "1", 1L, null)));
+    Assert.assertTrue("2nd DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "1", 2L, null)));
+    Assert.assertTrue("3rd DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "2", null, 1L)));
     Assert.assertNull("Donations were moved", david1.getDonations());
     Assert.assertNull("Deferrals were moved", david2.getDeferrals());
     Assert.assertEquals("Donations were moved", 2, david3.getDonations().size());
@@ -247,8 +247,8 @@ public class DuplicateDonorServiceTest {
 
     // create donations (david1)
     PackType packType = PackTypeBuilder.aPackType().withPeriodBetweenDonations(90).build();
-    Donation donation1 = DonationBuilder.aDonation().withId(1l).withDonor(david1).withDonationDate(new Date()).withPackType(packType).build();
-    Donation donation2 = DonationBuilder.aDonation().withId(2l).withDonor(david1).withDonationDate(new Date()).withPackType(packType).build();
+    Donation donation1 = DonationBuilder.aDonation().withId(1L).withDonor(david1).withDonationDate(new Date()).withPackType(packType).build();
+    Donation donation2 = DonationBuilder.aDonation().withId(2L).withDonor(david1).withDonationDate(new Date()).withPackType(packType).build();
     List<Donation> donations = new ArrayList<>();
     donations.add(donation1);
     donations.add(donation2);
@@ -257,7 +257,7 @@ public class DuplicateDonorServiceTest {
     // create deferrals (david2)
     DeferralReason deferralReason1 = DeferralReasonBuilder.aDeferralReason()
         .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
-    DonorDeferral deferral1 = DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferredDonor(david2)
+    DonorDeferral deferral1 = DonorDeferralBuilder.aDonorDeferral().withId(1L).withDeferredDonor(david2)
         .withDeferralReason(deferralReason1).build();
     List<DonorDeferral> deferrals = new ArrayList<>();
     deferrals.add(deferral1);
@@ -484,12 +484,12 @@ public class DuplicateDonorServiceTest {
 
     Date dd1CreatedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2015-01-01");
     DonorDeferral dd1 =
-        DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferralReason(deferralReason)
+        DonorDeferralBuilder.aDonorDeferral().withId(1L).withDeferralReason(deferralReason)
             .withDeferredUntil(new Date()).withCreatedDate(dd1CreatedDate).build();
 
     Date dd2CreatedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2014-01-01");
     DonorDeferral dd2 =
-        DonorDeferralBuilder.aDonorDeferral().withId(2l).withDeferralReason(deferralReason)
+        DonorDeferralBuilder.aDonorDeferral().withId(2L).withDeferralReason(deferralReason)
             .withDeferredUntil(new Date()).withCreatedDate(dd2CreatedDate).build();
 
     Donor d1 =
@@ -524,13 +524,13 @@ public class DuplicateDonorServiceTest {
     List<String> donorNumbers = Arrays.asList(new String[]{donorNumber1, donorNumber2});
 
     PackType packType = PackTypeBuilder.aPackType().withPeriodBetweenDonations(90).build();
-    Donation d1 = DonationBuilder.aDonation().withId(1l).withPackType(packType)
+    Donation d1 = DonationBuilder.aDonation().withId(1L).withPackType(packType)
         .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-07-01")).build();
-    Donation d2 = DonationBuilder.aDonation().withId(2l).withPackType(packType)
+    Donation d2 = DonationBuilder.aDonation().withId(2L).withPackType(packType)
         .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01")).build();
-    Donation d3 = DonationBuilder.aDonation().withId(3l).withPackType(packType)
+    Donation d3 = DonationBuilder.aDonation().withId(3L).withPackType(packType)
         .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-09-01")).build();
-    Donation d4 = DonationBuilder.aDonation().withId(4l).withPackType(packType)
+    Donation d4 = DonationBuilder.aDonation().withId(4L).withPackType(packType)
         .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-05-01")).build();
 
     Donor david = DonorBuilder.aDonor().withDonorNumber(donorNumber1).withFirstName("David").withLastName("Smith").withGender(Gender.male)

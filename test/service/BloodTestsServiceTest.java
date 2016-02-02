@@ -66,7 +66,7 @@ public class BloodTestsServiceTest {
   public void testUpdateDonationWithTestResultsNotUpdated() throws Exception {
     // set up data
     Donation donation = DonationBuilder.aDonation()
-        .withId(1l)
+        .withId(1L)
         .withBloodAbo("A")
         .withBloodRh("+")
         .withTTIStatus(TTIStatus.TTI_SAFE)
@@ -95,7 +95,7 @@ public class BloodTestsServiceTest {
   public void testUpdateDonationWithTestResultsUpdatedBloodAbo() throws Exception {
     // set up data
     Donation donation = DonationBuilder.aDonation()
-        .withId(1l)
+        .withId(1L)
         .withBloodRh("+")
         .withTTIStatus(TTIStatus.NOT_DONE)
         .withBloodTypingStatus(BloodTypingStatus.NOT_DONE)
@@ -122,7 +122,7 @@ public class BloodTestsServiceTest {
   public void testUpdateDonationWithTestResultsUpdatedBloodRh() throws Exception {
     // set up data
     Donation donation = DonationBuilder.aDonation()
-        .withId(1l)
+        .withId(1L)
         .withBloodAbo("A")
         .withTTIStatus(TTIStatus.NOT_DONE)
         .withBloodTypingStatus(BloodTypingStatus.NOT_DONE)
@@ -150,7 +150,7 @@ public class BloodTestsServiceTest {
   public void testUpdateDonationWithTestResultsUpdatedTTISafe() throws Exception {
     // set up data
     Donation donation = DonationBuilder.aDonation()
-        .withId(1l)
+        .withId(1L)
         .withBloodAbo("A")
         .withBloodRh("+")
         .withTTIStatus(TTIStatus.NOT_DONE)
@@ -179,7 +179,7 @@ public class BloodTestsServiceTest {
   public void testUpdateDonationWithTestResultsUpdatedBloodTypingStatus() throws Exception {
     // set up data
     Donation donation = DonationBuilder.aDonation()
-        .withId(1l)
+        .withId(1L)
         .withBloodAbo("A")
         .withBloodRh("+")
         .withTTIStatus(TTIStatus.TTI_SAFE)
@@ -208,7 +208,7 @@ public class BloodTestsServiceTest {
   public void testUpdateDonationWithTestResultsUpdatedBloodTypingMatchStatus() throws Exception {
     // set up data
     Donation donation = DonationBuilder.aDonation()
-        .withId(1l)
+        .withId(1L)
         .withBloodAbo("A")
         .withBloodRh("+")
         .withTTIStatus(TTIStatus.TTI_SAFE)
@@ -237,7 +237,7 @@ public class BloodTestsServiceTest {
   public void testUpdateDonationWithTestResultsUpdatedNotTTISafe() throws Exception {
     // set up data
     Donation donation = DonationBuilder.aDonation()
-        .withId(1l)
+        .withId(1L)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
@@ -264,7 +264,7 @@ public class BloodTestsServiceTest {
   public void testAddNewExtraInformationNone() throws Exception {
     // set up data   
     Donation donation = DonationBuilder.aDonation()
-        .withId(1l)
+        .withId(1L)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
@@ -294,7 +294,7 @@ public class BloodTestsServiceTest {
   public void testAddNewExtraInformationOne() throws Exception {
     // set up data
     Donation donation = DonationBuilder.aDonation()
-        .withId(1l)
+        .withId(1L)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
@@ -323,7 +323,7 @@ public class BloodTestsServiceTest {
   public void testAddNewExtraInformationTwo() throws Exception {
     // set up data
     Donation donation = DonationBuilder.aDonation()
-        .withId(1l)
+        .withId(1L)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
@@ -353,7 +353,7 @@ public class BloodTestsServiceTest {
   public void testAddNewExtraInformationThree() throws Exception {
     // set up data
     Donation donation = DonationBuilder.aDonation()
-        .withId(1l)
+        .withId(1L)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
@@ -384,12 +384,12 @@ public class BloodTestsServiceTest {
   public void testValidateTestResultValuesValidResult() throws Exception {
     // set up data
     Map<Long, String> bloodTypingTestResults = new HashMap<>();
-    bloodTypingTestResults.put(1l, "A"); // invalid result
-    bloodTypingTestResults.put(2l, "POS"); // invalid result
+    bloodTypingTestResults.put(1L, "A"); // invalid result
+    bloodTypingTestResults.put(2L, "POS"); // invalid result
 
     List<BloodTest> tests = new ArrayList<>();
-    tests.add(BloodTestBuilder.aBloodTest().withId(1l).withValidResults("A,B,AB,O").withIsEmptyAllowed(true).build());
-    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,NEG").withIsEmptyAllowed(true).build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(1L).withValidResults("A,B,AB,O").withIsEmptyAllowed(true).build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(2L).withValidResults("POS,NEG").withIsEmptyAllowed(true).build());
 
     // set up mocks
     //when(bloodTestingRepository.findActiveBloodTests()).thenReturn(tests);
@@ -409,12 +409,12 @@ public class BloodTestsServiceTest {
   public void testValidateTestResultValuesInvalidResult() throws Exception {
     // set up data
     Map<Long, String> bloodTypingTestResults = new HashMap<>();
-    bloodTypingTestResults.put(1l, "G"); // invalid result
-    bloodTypingTestResults.put(2l, "FALSE"); // invalid result
+    bloodTypingTestResults.put(1L, "G"); // invalid result
+    bloodTypingTestResults.put(2L, "FALSE"); // invalid result
 
     List<BloodTest> tests = new ArrayList<>();
-    tests.add(BloodTestBuilder.aBloodTest().withId(1l).withValidResults("A,B,AB,O").withIsEmptyAllowed(true).build());
-    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,NEG").withIsEmptyAllowed(true).build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(1L).withValidResults("A,B,AB,O").withIsEmptyAllowed(true).build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(2L).withValidResults("POS,NEG").withIsEmptyAllowed(true).build());
 
     // set up mocks
     //when(bloodTestingRepository.findActiveBloodTests()).thenReturn(tests);
@@ -428,7 +428,7 @@ public class BloodTestsServiceTest {
     // do asserts
     Assert.assertNotNull("Results returned", errorMap);
     Assert.assertEquals("errors found", 1, errorMap.size()); // note: stops after 1st error encountered
-    Assert.assertEquals("error message correct", "Invalid value specified", errorMap.get(1l));
+    Assert.assertEquals("error message correct", "Invalid value specified", errorMap.get(1L));
   }
 
   @Test
@@ -437,8 +437,8 @@ public class BloodTestsServiceTest {
     Map<Long, String> bloodTypingTestResults = new HashMap<>();
 
     List<BloodTest> tests = new ArrayList<>();
-    tests.add(BloodTestBuilder.aBloodTest().withId(1l).withValidResults("A,B,AB,O").withIsEmptyAllowed(true).build());
-    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,NEG").withIsEmptyAllowed(true).build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(1L).withValidResults("A,B,AB,O").withIsEmptyAllowed(true).build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(2L).withValidResults("POS,NEG").withIsEmptyAllowed(true).build());
 
     // set up mocks
     //when(bloodTestingRepository.findActiveBloodTests()).thenReturn(tests);
@@ -458,11 +458,11 @@ public class BloodTestsServiceTest {
   public void testValidateTestResultValuesNoValueSpecified() throws Exception {
     // set up data
     Map<Long, String> bloodTypingTestResults = new HashMap<>();
-    bloodTypingTestResults.put(2l, "");
+    bloodTypingTestResults.put(2L, "");
 
     List<BloodTest> tests = new ArrayList<>();
-    tests.add(BloodTestBuilder.aBloodTest().withId(1l).withValidResults("A,B,AB,O").withIsEmptyAllowed(false).build());
-    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,NEG").withIsEmptyAllowed(false).build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(1L).withValidResults("A,B,AB,O").withIsEmptyAllowed(false).build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(2L).withValidResults("POS,NEG").withIsEmptyAllowed(false).build());
 
     // set up mocks
     //when(bloodTestingRepository.findActiveBloodTests()).thenReturn(tests);
@@ -476,18 +476,18 @@ public class BloodTestsServiceTest {
     // do asserts
     Assert.assertNotNull("Results returned", errorMap);
     Assert.assertEquals("errors found", 1, errorMap.size());
-    Assert.assertEquals("error message correct", "No value specified", errorMap.get(2l));
+    Assert.assertEquals("error message correct", "No value specified", errorMap.get(2L));
   }
 
   @Test
   public void testValidateTestResultValuesNoValueSpecifiedEmptyAllowed() throws Exception {
     // set up data
     Map<Long, String> bloodTypingTestResults = new HashMap<>();
-    bloodTypingTestResults.put(2l, "");
+    bloodTypingTestResults.put(2L, "");
 
     List<BloodTest> tests = new ArrayList<>();
     // FIXME: had to force an empty string into the valid results
-    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,,NEG").withIsEmptyAllowed(true).build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(2L).withValidResults("POS,,NEG").withIsEmptyAllowed(true).build());
 
     // set up mocks
     //when(bloodTestingRepository.findActiveBloodTests()).thenReturn(tests);
@@ -507,10 +507,10 @@ public class BloodTestsServiceTest {
   public void testValidateTestResultValuesInvalidTest() throws Exception {
     // set up data
     Map<Long, String> bloodTypingTestResults = new HashMap<>();
-    bloodTypingTestResults.put(123l, "FALSE");
+    bloodTypingTestResults.put(123L, "FALSE");
 
     List<BloodTest> tests = new ArrayList<>();
-    tests.add(BloodTestBuilder.aBloodTest().withId(1l).build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(1L).build());
 
     // set up mocks
     //when(bloodTestingRepository.findActiveBloodTests()).thenReturn(tests);
@@ -524,7 +524,7 @@ public class BloodTestsServiceTest {
     // check asserts
     Assert.assertNotNull("Results returned", errorMap);
     Assert.assertEquals("errors found", 1, errorMap.size());
-    Assert.assertEquals("error message correct", "Invalid test", errorMap.get(123l));
+    Assert.assertEquals("error message correct", "Invalid test", errorMap.get(123L));
   }
 
 
@@ -532,14 +532,14 @@ public class BloodTestsServiceTest {
   public void testSaveBloodTestingResults() throws Exception {
     // set up data
     Donation donation = DonationBuilder.aDonation()
-        .withId(1l)
+        .withId(1L)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .build();
 
     Map<Long, String> bloodTestResults = new HashMap<>();
-    bloodTestResults.put(1l, "AB");
+    bloodTestResults.put(1L, "AB");
 
     BloodTestingRuleResult ruleResult = BloodTestingRuleResultBuilder.aBloodTestingRuleResult()
         .withBloodAbo("AB")

@@ -17,9 +17,9 @@ public class BaseEntityTest {
   @Test
   public void testDifferentEntitiesSameBaseClass() {
     TestEntity testEntity1 = new TestEntity();
-    testEntity1.setId(123l);
+    testEntity1.setId(123L);
     AnotherTestEntity testEntity2 = new AnotherTestEntity();
-    testEntity2.setId(123l);
+    testEntity2.setId(123L);
     Assert.assertFalse("Different objects don't match", testEntity1.equals(testEntity2));
   }
 
