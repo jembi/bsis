@@ -315,42 +315,42 @@ public class BloodTestingRuleEngine {
 		resultSet.setBloodTypingStatus(bloodTypingStatus);
 	}
 	
-	private BloodTypingMatchStatus getBloodTypingMatchStatusForFirstTimeDonor(BloodTestingRuleResultSet resultSet) {
-		
-		Map<String, String> availableTestResults = resultSet.getAvailableTestResults();
-		List<BloodTest> repeatBloodtypingTests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING);
-		
-		for (BloodTest repeatBloodTypingTest : repeatBloodtypingTests) {
-				
-			for (BloodTestingRule bloodTestingRule : resultSet.getBloodTestingRules()) {
-				
-				// Find which tests came before this one
-				List<String> pendingTestIds = bloodTestingRule.getPendingTestsIds();
-				if (pendingTestIds.contains(Long.toString(repeatBloodTypingTest.getId()))) {
+  private BloodTypingMatchStatus getBloodTypingMatchStatusForFirstTimeDonor(BloodTestingRuleResultSet resultSet) {
 
-					// Compare the result of the repeat test to each of the previous tests
-					for (String bloodTestId : bloodTestingRule.getBloodTestsIds()) {
+    Map<String, String> availableTestResults = resultSet.getAvailableTestResults();
+    List<BloodTest> repeatBloodtypingTests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING);
 
-						String repeatResult = availableTestResults.get(Long.toString(repeatBloodTypingTest.getId()));
-						
-						if (repeatResult == null) {
-							// There is a missing repeat result
-							return BloodTypingMatchStatus.NO_MATCH;
-						}
+    for (BloodTest repeatBloodTypingTest : repeatBloodtypingTests) {
 
-						String initialResult = availableTestResults.get(bloodTestId);
-						if (!repeatResult.equals(initialResult)) {
-							// There is a repeat result which does not match the initial result
-							return BloodTypingMatchStatus.AMBIGUOUS;
-						}
-					}
-				}
-			}
-		}
-		
-		// There were no missing or mismatched results
-		return BloodTypingMatchStatus.MATCH;
-	}
+      for (BloodTestingRule bloodTestingRule : resultSet.getBloodTestingRules()) {
+
+        // Find which tests came before this one
+        List<String> pendingTestIds = bloodTestingRule.getPendingTestsIds();
+        if (pendingTestIds.contains(Long.toString(repeatBloodTypingTest.getId()))) {
+
+          String repeatResult = availableTestResults.get(Long.toString(repeatBloodTypingTest.getId()));
+
+          if (repeatResult == null) {
+            // There is a missing repeat result
+            return BloodTypingMatchStatus.NO_MATCH;
+          }
+
+          // Compare the result of the repeat test to each of the previous tests
+          for (String bloodTestId : bloodTestingRule.getBloodTestsIds()) {
+
+            String initialResult = availableTestResults.get(bloodTestId);
+            if (!repeatResult.equals(initialResult)) {
+              // There is a repeat result which does not match the initial result
+              return BloodTypingMatchStatus.AMBIGUOUS;
+            }
+          }
+        }
+      }
+    }
+
+    // There were no missing or mismatched results
+    return BloodTypingMatchStatus.MATCH;
+  }
 	
 	/**
 	 * Check ABO/Rh results against donor's ABO/Rh and saves the BloodTypingMatchStatus result in

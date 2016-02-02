@@ -403,6 +403,26 @@
 		bloodPressureDiastolic="80" donorPulse="70" venue_id="1"
 		bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
 		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
+	<Donation id="10" bloodAbo="O"
+		bloodPressureSystolic="110" bloodRh="-" bloodTypingStatus="NOT_DONE"
+		donationDate="2016-01-26 00:00:00.0" donationIdentificationNumber="4567890"
+		donorWeight="50.00" extraBloodTypeInformation="" haemoglobinCount="15.70"
+		isDeleted="0" createdDate="2016-01-26 03:42:04.0" lastUpdated="2016-01-26 02:09:30.0"
+		ttiStatus="NOT_DONE" packType_id="3" donationBatch_id="1"
+		donationType_id="1" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
+		bloodPressureDiastolic="80" donorPulse="70" venue_id="1"
+		bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
+		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
+	<Donation id="11" bloodAbo="O"
+		bloodPressureSystolic="110" bloodRh="-" bloodTypingStatus="NOT_DONE"
+		donationDate="2016-01-26 00:00:00.0" donationIdentificationNumber="5678901"
+		donorWeight="50.00" extraBloodTypeInformation="" haemoglobinCount="15.70"
+		isDeleted="0" createdDate="2016-01-26 03:42:04.0" lastUpdated="2016-01-26 02:09:30.0"
+		ttiStatus="NOT_DONE" packType_id="3" donationBatch_id="1"
+		donationType_id="1" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
+		bloodPressureDiastolic="80" donorPulse="70" venue_id="1"
+		bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
+		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 
 	<BloodTestResult id="1" createdDate="2015-02-06 02:09:13.0"
 		lastUpdated="2015-02-06 02:09:13.0" notes="" result="NEG"
@@ -567,6 +587,30 @@
 	<BloodTestResult id="42" createdDate="2016-01-26 02:09:13.0"
 		lastUpdated="2016-01-26 02:09:13.0" notes="" result="NEG"
 		testedOn="2016-01-26 02:09:13.0" bloodTest_id="30" donation_id="9"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="43" createdDate="2016-01-26 02:09:23.0"
+		lastUpdated="2016-01-26 02:09:23.0" notes="" result="O"
+		testedOn="2016-01-26 02:09:23.0" bloodTest_id="1" donation_id="10"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="44" createdDate="2016-01-26 02:09:13.0"
+		lastUpdated="2016-01-26 02:09:13.0" notes="" result="NEG"
+		testedOn="2016-01-26 02:09:13.0" bloodTest_id="2" donation_id="10"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="45" createdDate="2016-01-26 02:09:23.0"
+		lastUpdated="2016-01-26 02:09:23.0" notes="" result="O"
+		testedOn="2016-01-26 02:09:23.0" bloodTest_id="1" donation_id="11"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="46" createdDate="2016-01-26 02:09:13.0"
+		lastUpdated="2016-01-26 02:09:13.0" notes="" result="NEG"
+		testedOn="2016-01-26 02:09:13.0" bloodTest_id="2" donation_id="11"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="47" createdDate="2016-01-26 02:09:23.0"
+		lastUpdated="2016-01-26 02:09:23.0" notes="" result="O"
+		testedOn="2016-01-26 02:09:23.0" bloodTest_id="29" donation_id="11"
+		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="48" createdDate="2016-01-26 02:09:13.0"
+		lastUpdated="2016-01-26 02:09:13.0" notes="" result="POS"
+		testedOn="2016-01-26 02:09:13.0" bloodTest_id="30" donation_id="11"
 		createdBy_id="1" lastUpdatedBy_id="1" />
 
 	<Component id="1" createdOn="2015-02-02 10:26:36.0" expiresOn="2015-03-09 10:26:36.0"

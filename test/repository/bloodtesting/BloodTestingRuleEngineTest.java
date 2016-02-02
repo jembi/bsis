@@ -296,7 +296,37 @@ public class BloodTestingRuleEngineTest {
 	  // donation 9 is for a 1st time donor who has had initial and repeat outcomes entered for ABO/Rh
 	  Donation donation = donationRepository.findDonationById(9l);
 	  BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+	  Assert.assertEquals("bloodTypingMatchStatus is set", BloodTypingMatchStatus.MATCH, result.getBloodTypingMatchStatus());
+	  Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.COMPLETE, result.getBloodTypingStatus());
+	  Assert.assertEquals("bloodAb is set", "O", result.getBloodAbo());
+	  Assert.assertEquals("bloodRh is set", "-", result.getBloodRh());
+	  Assert.assertEquals("Pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
+	  Assert.assertEquals("Availale test results", 4, result.getAvailableTestResults().size());
+	  Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
+	  Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
+	}
+
+	@Test
+	public void testBloodTestingRuleEngineWithDonation10_1stTimeDonorInitialAndNoRepeat() throws Exception {
+	  // donation 10 is for a 1st time donor who has had initial, but no repeat outcomes entered for ABO/Rh
+	  Donation donation = donationRepository.findDonationById(10l);
+	  BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
 	  Assert.assertEquals("bloodTypingMatchStatus is set", BloodTypingMatchStatus.NO_MATCH, result.getBloodTypingMatchStatus());
+	  Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.NO_MATCH, result.getBloodTypingStatus());
+	  Assert.assertEquals("bloodAb is set", "O", result.getBloodAbo());
+	  Assert.assertEquals("bloodRh is set", "-", result.getBloodRh());
+	  Assert.assertEquals("Pending blood typing tests", 2, result.getPendingBloodTypingTestsIds().size());
+	  Assert.assertEquals("Availale test results", 2, result.getAvailableTestResults().size());
+	  Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
+	  Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
+	}
+
+	@Test
+	public void testBloodTestingRuleEngineWithDonation11_1stTimeDonorInitialAndMismatchedRepeat() throws Exception {
+	  // donation 11 is for a 1st time donor who has had initial and repeat outcomes entered for ABO/Rh, but the repeat outcome does not match
+	  Donation donation = donationRepository.findDonationById(11l);
+	  BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+	  Assert.assertEquals("bloodTypingMatchStatus is set", BloodTypingMatchStatus.AMBIGUOUS, result.getBloodTypingMatchStatus());
 	  Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.COMPLETE, result.getBloodTypingStatus());
 	  Assert.assertEquals("bloodAb is set", "O", result.getBloodAbo());
 	  Assert.assertEquals("bloodRh is set", "-", result.getBloodRh());
