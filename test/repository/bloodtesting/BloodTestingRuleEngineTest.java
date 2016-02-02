@@ -21,15 +21,11 @@ import org.dbunit.operation.DatabaseOperation;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import repository.DonationRepository;
+import suites.ContextDependentTestSuite;
 import viewmodel.BloodTestingRuleResult;
 
 /**
@@ -37,11 +33,7 @@ import viewmodel.BloodTestingRuleResult;
  * BloodTestingRuleRepositoryDataset.xml which contains all the data used in the tests. Below is
  * some commented out code that can be used to generate XML files from the database.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@Transactional
-@WebAppConfiguration
-public class BloodTestingRuleEngineTest {
+public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
 	
 	@Autowired
 	BloodTestingRuleEngine bloodTestingRuleEngine;

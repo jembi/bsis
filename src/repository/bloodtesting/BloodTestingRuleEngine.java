@@ -322,18 +322,19 @@ public class BloodTestingRuleEngine {
 
     for (BloodTest repeatBloodTypingTest : repeatBloodtypingTests) {
 
+      String repeatBloodTypingTestId = Long.toString(repeatBloodTypingTest.getId());
+      String repeatResult = availableTestResults.get(repeatBloodTypingTestId);
+
+      if (repeatResult == null) {
+        // There is a missing repeat result
+        return BloodTypingMatchStatus.NO_MATCH;
+      }
+
       for (BloodTestingRule bloodTestingRule : resultSet.getBloodTestingRules()) {
 
-        // Find which tests came before this one
+        // Find which tests resulted in the repeat test
         List<String> pendingTestIds = bloodTestingRule.getPendingTestsIds();
-        if (pendingTestIds.contains(Long.toString(repeatBloodTypingTest.getId()))) {
-
-          String repeatResult = availableTestResults.get(Long.toString(repeatBloodTypingTest.getId()));
-
-          if (repeatResult == null) {
-            // There is a missing repeat result
-            return BloodTypingMatchStatus.NO_MATCH;
-          }
+        if (pendingTestIds.contains(repeatBloodTypingTestId)) {
 
           // Compare the result of the repeat test to each of the previous tests
           for (String bloodTestId : bloodTestingRule.getBloodTestsIds()) {
@@ -365,8 +366,7 @@ public class BloodTestingRuleEngine {
 		Donor donor = donation.getDonor();
 		if (StringUtils.isNotEmpty(donation.getBloodAbo()) && StringUtils.isNotEmpty(donation.getBloodRh())) {
 			// first time donor - required to enter in confirmatory result
-			if (donor.getBloodAbo() == null || donor.getBloodAbo().equals("") 
-					|| donor.getBloodRh() == null || donor.getBloodRh().equals("")) {
+			if (StringUtils.isEmpty(donor.getBloodAbo()) || StringUtils.isEmpty(donor.getBloodRh())) {
 				bloodTypingMatchStatus = getBloodTypingMatchStatusForFirstTimeDonor(resultSet);
 			}
 			// ambiguous result - required to enter in confirmatory result
