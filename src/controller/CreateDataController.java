@@ -558,7 +558,7 @@ public class CreateDataController {
 
       int index = 0;
       String[] patternResults = aboRule.getPattern().split(",");
-      for (String testId : aboRule.getBloodTestsIds().split(",")) {
+      for (String testId : aboRule.getBloodTestsIds()) {
         if (StringUtils.isBlank(testId) ||
             index >= patternResults.length ||
             StringUtils.isBlank(patternResults[index]))
@@ -569,7 +569,7 @@ public class CreateDataController {
 
       index = 0;
       patternResults = rhRule.getPattern().split(",");
-      for (String testId : rhRule.getBloodTestsIds().split(",")) {
+      for (String testId : rhRule.getBloodTestsIds()) {
         if (StringUtils.isBlank(testId) ||
             index >= patternResults.length ||
             StringUtils.isBlank(patternResults[index]))
@@ -637,7 +637,7 @@ public class CreateDataController {
 
       int index = 0;
       String[] patternResults = ttiRule.getPattern().split(",");
-      for (String testId : ttiRule.getBloodTestsIds().split(",")) {
+      for (String testId : ttiRule.getBloodTestsIds()) {
         if (StringUtils.isBlank(testId) ||
             index >= patternResults.length ||
             StringUtils.isBlank(patternResults[index]))

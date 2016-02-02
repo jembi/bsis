@@ -1,5 +1,9 @@
 package model.bloodtesting.rules;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -58,8 +62,11 @@ public class BloodTestingRule extends BaseEntity {
 
   private Boolean isActive;
 
-  public String getBloodTestsIds() {
-    return bloodTestsIds;
+  public List<String> getBloodTestsIds() {
+	if (bloodTestsIds == null || bloodTestsIds.equals("")) {
+	  return new ArrayList<String>(0);
+	}
+    return Arrays.asList(bloodTestsIds.split(","));
   }
 
   public String getPattern() {
@@ -130,8 +137,11 @@ public class BloodTestingRule extends BaseEntity {
     this.category = category;
   }
 
-  public String getPendingTestsIds() {
-    return pendingTestsIds;
+  public List<String> getPendingTestsIds() {
+	if (pendingTestsIds == null || pendingTestsIds.equals("")) {
+	  return new ArrayList<String>(0);
+	}
+    return Arrays.asList(pendingTestsIds.split(","));
   }
 
   public void setPendingTestsIds(String pendingTestsIds) {

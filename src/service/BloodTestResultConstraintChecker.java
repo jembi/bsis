@@ -3,7 +3,6 @@ package service;
 import java.util.List;
 import java.util.Map;
 
-import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
@@ -73,23 +72,20 @@ public class BloodTestResultConstraintChecker {
 	private boolean isResultConfirmed(List<BloodTestingRule> rules, Map<String, String> availableTestResults, String bloodTestId) {
 		for (BloodTestingRule rule : rules) {
 			if (rule.getBloodTestsIds().contains(bloodTestId)) {
-				if (!StringUtils.isBlank(rule.getPendingTestsIds())) {
-					// go through the pending tests and check if there are any results
-					// if there is a result for a confirmation then this result cannot be edited
-					String[] pendingTestIds = rule.getPendingTestsIds().split(",");
-					for (String pendingTestId : pendingTestIds) {
-						String testResult = availableTestResults.get(pendingTestId);
-						if (StringUtils.isBlank(testResult)) {
-							// no result for this pending test, check if it has any pending tests
-							boolean confirmed = isResultConfirmed(rules, availableTestResults, pendingTestId);
-							if (confirmed) {
-								// if one of the results for this pending test has been confirmed, then exit
-								return true;
-							}
-						} else {
-							// a result has been entered for a pending test, so exit
+				// go through the pending tests and check if there are any results
+				// if there is a result for a confirmation then this result cannot be edited
+				for (String pendingTestId : rule.getPendingTestsIds()) {
+					String testResult = availableTestResults.get(pendingTestId);
+					if (StringUtils.isBlank(testResult)) {
+						// no result for this pending test, check if it has any pending tests
+						boolean confirmed = isResultConfirmed(rules, availableTestResults, pendingTestId);
+						if (confirmed) {
+							// if one of the results for this pending test has been confirmed, then exit
 							return true;
 						}
+					} else {
+						// a result has been entered for a pending test, so exit
+						return true;
 					}
 				}
 			}

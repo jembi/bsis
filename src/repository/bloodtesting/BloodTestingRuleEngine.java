@@ -9,6 +9,7 @@ import java.util.TreeMap;
 
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestResult;
+import model.bloodtesting.BloodTestType;
 import model.bloodtesting.TTIStatus;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.bloodtesting.rules.DonationField;
@@ -133,7 +134,7 @@ public class BloodTestingRuleEngine {
 		boolean patternMatch = true;
 		boolean atLeastOneResultFoundForPattern = false;
 		List<String> pattern = Arrays.asList(rule.getPattern().split(","));
-		List<String> testIds = Arrays.asList(rule.getBloodTestsIds().split(","));
+		List<String> testIds = rule.getBloodTestsIds();
 		for (int i = 0, n = testIds.size(); i < n; i++) {
 			String testId = testIds.get(i);
 			String expectedResult = pattern.get(i);
@@ -185,23 +186,21 @@ public class BloodTestingRuleEngine {
 				resultSet.addExtraInformation(rule.getExtraInformation());
 			
 			// find extra tests for ABO
-			if (StringUtils.isNotBlank(rule.getPendingTestsIds())) {
-				for (String extraTestId : rule.getPendingTestsIds().split(",")) {
-					if (!availableTestResults.containsKey(extraTestId)) {
-						switch (rule.getSubCategory()) {
-							case BLOODABO:
-								resultSet.addPendingAboTestsIds(extraTestId);
-								break;
-							case BLOODRH:
-								resultSet.addPendingRhTestsIds(extraTestId);
-								break;
-							case TTI:
-								resultSet.addPendingTtiTestsIds(extraTestId);
-								break;
-							default:
-								LOGGER.warn("Unknown rule subcategory: " + rule.getSubCategory());
-								break;
-						}
+			for (String extraTestId : rule.getPendingTestsIds()) {
+				if (!availableTestResults.containsKey(extraTestId)) {
+					switch (rule.getSubCategory()) {
+						case BLOODABO:
+							resultSet.addPendingAboTestsIds(extraTestId);
+							break;
+						case BLOODRH:
+							resultSet.addPendingRhTestsIds(extraTestId);
+							break;
+						case TTI:
+							resultSet.addPendingTtiTestsIds(extraTestId);
+							break;
+						default:
+							LOGGER.warn("Unknown rule subcategory: " + rule.getSubCategory());
+							break;
 					}
 				}
 			}
@@ -316,6 +315,43 @@ public class BloodTestingRuleEngine {
 		resultSet.setBloodTypingStatus(bloodTypingStatus);
 	}
 	
+	private BloodTypingMatchStatus getBloodTypingMatchStatusForFirstTimeDonor(BloodTestingRuleResultSet resultSet) {
+		
+		Map<String, String> availableTestResults = resultSet.getAvailableTestResults();
+		List<BloodTest> repeatBloodtypingTests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING);
+		
+		for (BloodTest repeatBloodTypingTest : repeatBloodtypingTests) {
+				
+			for (BloodTestingRule bloodTestingRule : resultSet.getBloodTestingRules()) {
+				
+				// Find which tests came before this one
+				List<String> pendingTestIds = bloodTestingRule.getPendingTestsIds();
+				if (pendingTestIds.contains(Long.toString(repeatBloodTypingTest.getId()))) {
+
+					// Compare the result of the repeat test to each of the previous tests
+					for (String bloodTestId : bloodTestingRule.getBloodTestsIds()) {
+
+						String repeatResult = availableTestResults.get(Long.toString(repeatBloodTypingTest.getId()));
+						
+						if (repeatResult == null) {
+							// There is a missing repeat result
+							return BloodTypingMatchStatus.NO_MATCH;
+						}
+
+						String initialResult = availableTestResults.get(bloodTestId);
+						if (!repeatResult.equals(initialResult)) {
+							// There is a repeat result which does not match the initial result
+							return BloodTypingMatchStatus.AMBIGUOUS;
+						}
+					}
+				}
+			}
+		}
+		
+		// There were no missing or mismatched results
+		return BloodTypingMatchStatus.MATCH;
+	}
+	
 	/**
 	 * Check ABO/Rh results against donor's ABO/Rh and saves the BloodTypingMatchStatus result in
 	 * the resultSet
@@ -331,7 +367,7 @@ public class BloodTestingRuleEngine {
 			// first time donor - required to enter in confirmatory result
 			if (donor.getBloodAbo() == null || donor.getBloodAbo().equals("") 
 					|| donor.getBloodRh() == null || donor.getBloodRh().equals("")) {
-				bloodTypingMatchStatus = BloodTypingMatchStatus.NO_MATCH;
+				bloodTypingMatchStatus = getBloodTypingMatchStatusForFirstTimeDonor(resultSet);
 			}
 			// ambiguous result - required to enter in confirmatory result
 			else if ((!donor.getBloodAbo().equals("") && !donor.getBloodAbo().equals(donation.getBloodAbo()))
