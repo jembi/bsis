@@ -33,9 +33,9 @@ public class DonorViewModelFactoryTests {
     Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
 
     DonorViewModel expectedDonorViewModel = aDonorViewModel()
-            .withDonor(donor)
-            .withPermission("canDelete", irrelevantCanDeletePermission)
-            .build();
+        .withDonor(donor)
+        .withPermission("canDelete", irrelevantCanDeletePermission)
+        .build();
 
     when(donorConstraintChecker.canDeleteDonor(IRRELEVANT_DONOR_ID)).thenReturn(irrelevantCanDeletePermission);
 

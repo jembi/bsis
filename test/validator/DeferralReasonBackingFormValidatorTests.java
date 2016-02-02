@@ -38,10 +38,10 @@ public class DeferralReasonBackingFormValidatorTests {
   public void testValidateWithDeferralReasonBackingFormWithDuplicateDeferralReason_shouldHaveErrors() {
     DeferralReason deferralReason = aDeferralReason().build();
     DeferralReasonBackingForm backingForm = aDeferralReasonBackingForm()
-            .withDurationType(DurationType.TEMPORARY)
-            .withDeferralReason(deferralReason)
-            .withDefaultDuration(1)
-            .build();
+        .withDurationType(DurationType.TEMPORARY)
+        .withDeferralReason(deferralReason)
+        .withDefaultDuration(1)
+        .build();
 
     when(utilController.isDuplicateDeferralReason(deferralReason)).thenReturn(true);
 
@@ -58,10 +58,10 @@ public class DeferralReasonBackingFormValidatorTests {
   public void testValidateWithDeferralReasonBackingFormWithPermanentDurationTypeAndNoDuration_shouldHaveNoErrors() {
     DeferralReason deferralReason = aDeferralReason().build();
     DeferralReasonBackingForm backingForm = aDeferralReasonBackingForm()
-            .withDurationType(DurationType.PERMANENT)
-            .withDeferralReason(deferralReason)
-            .withDefaultDuration(0)
-            .build();
+        .withDurationType(DurationType.PERMANENT)
+        .withDeferralReason(deferralReason)
+        .withDefaultDuration(0)
+        .build();
 
     when(utilController.isDuplicateDeferralReason(deferralReason)).thenReturn(false);
 
@@ -75,10 +75,10 @@ public class DeferralReasonBackingFormValidatorTests {
   public void testValidateWithDeferralReasonBackingFormWithInvalidDefaultDeferralDays_shouldHaveErrors() {
     DeferralReason deferralReason = aDeferralReason().build();
     DeferralReasonBackingForm backingForm = aDeferralReasonBackingForm()
-            .withDurationType(DurationType.TEMPORARY)
-            .withDeferralReason(deferralReason)
-            .withDefaultDuration(0)
-            .build();
+        .withDurationType(DurationType.TEMPORARY)
+        .withDeferralReason(deferralReason)
+        .withDefaultDuration(0)
+        .build();
 
     when(utilController.isDuplicateDeferralReason(deferralReason)).thenReturn(false);
 
@@ -95,10 +95,10 @@ public class DeferralReasonBackingFormValidatorTests {
   public void testValidateWithValidDeferralReasonBackingForm_shouldHaveNoErrors() {
     DeferralReason deferralReason = aDeferralReason().build();
     DeferralReasonBackingForm backingForm = aDeferralReasonBackingForm()
-            .withDurationType(DurationType.TEMPORARY)
-            .withDeferralReason(deferralReason)
-            .withDefaultDuration(1)
-            .build();
+        .withDurationType(DurationType.TEMPORARY)
+        .withDeferralReason(deferralReason)
+        .withDefaultDuration(1)
+        .build();
 
     when(utilController.isDuplicateDeferralReason(deferralReason)).thenReturn(false);
 

@@ -48,7 +48,7 @@ public class UserBackingFormValidator implements Validator {
     if (form.getId() != null) {
       // Existing user, so check if password is being changed and validate it
       boolean skipCurrentPasswordCheck = form.getCurrentPassword() == null &&
-              (canManageUsers() || isOwnPasswordReset(form));
+          (canManageUsers() || isOwnPasswordReset(form));
       if (form.isModifyPassword() && (skipCurrentPasswordCheck || checkCurrentPassword(form, errors))) {
         comparePassword(form, errors);
       }
@@ -111,7 +111,7 @@ public class UserBackingFormValidator implements Validator {
 
     if (flag && userName.length() > 0) {
       errors.rejectValue("user.username", "user.incorrect",
-              "Username invalid. Use only alphanumeric characters, underscore (_), hyphen (-), and period (.).");
+          "Username invalid. Use only alphanumeric characters, underscore (_), hyphen (-), and period (.).");
     }
 
   }

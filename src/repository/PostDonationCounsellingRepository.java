@@ -19,10 +19,10 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
   public List<Donation> findDonationsFlaggedForCounselling(Date startDate, Date endDate, Set<Long> venueIds) {
 
     StringBuilder queryBuilder = new StringBuilder()
-            .append("SELECT DISTINCT(pdc.donation) ")
-            .append("FROM PostDonationCounselling pdc ")
-            .append("WHERE pdc.flaggedForCounselling = :flaggedForCounselling ")
-            .append("AND pdc.isDeleted = :isDeleted ");
+        .append("SELECT DISTINCT(pdc.donation) ")
+        .append("FROM PostDonationCounselling pdc ")
+        .append("WHERE pdc.flaggedForCounselling = :flaggedForCounselling ")
+        .append("AND pdc.isDeleted = :isDeleted ");
 
     Map<String, Object> parameters = new HashMap<>();
     parameters.put("flaggedForCounselling", true);
@@ -53,46 +53,46 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
   public PostDonationCounselling findPostDonationCounsellingForDonor(Long donorId) throws NoResultException {
 
     return entityManager.createNamedQuery(
-            PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLING_FOR_DONOR,
-            PostDonationCounselling.class)
-            .setParameter("donorId", donorId)
-            .setParameter("isDeleted", false)
-            .setMaxResults(1)
-            .getSingleResult();
+        PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLING_FOR_DONOR,
+        PostDonationCounselling.class)
+        .setParameter("donorId", donorId)
+        .setParameter("isDeleted", false)
+        .setMaxResults(1)
+        .getSingleResult();
   }
 
   public int countFlaggedPostDonationCounsellingsForDonor(Long donorId) {
 
     return entityManager.createNamedQuery(
-            PostDonationCounsellingNamedQueryConstants.NAME_COUNT_FLAGGED_POST_DONATION_COUNSELLINGS_FOR_DONOR,
-            Number.class)
-            .setParameter("donorId", donorId)
-            .setParameter("flaggedForCounselling", true)
-            .setParameter("isDeleted", false)
-            .getSingleResult()
-            .intValue();
+        PostDonationCounsellingNamedQueryConstants.NAME_COUNT_FLAGGED_POST_DONATION_COUNSELLINGS_FOR_DONOR,
+        Number.class)
+        .setParameter("donorId", donorId)
+        .setParameter("flaggedForCounselling", true)
+        .setParameter("isDeleted", false)
+        .getSingleResult()
+        .intValue();
   }
 
   public int countNotFlaggedPostDonationCounsellingsForDonor(Long donorId) {
 
     return entityManager.createNamedQuery(
-            PostDonationCounsellingNamedQueryConstants.NAME_COUNT_FLAGGED_POST_DONATION_COUNSELLINGS_FOR_DONOR,
-            Number.class)
-            .setParameter("donorId", donorId)
-            .setParameter("flaggedForCounselling", false)
-            .setParameter("isDeleted", false)
-            .getSingleResult()
-            .intValue();
+        PostDonationCounsellingNamedQueryConstants.NAME_COUNT_FLAGGED_POST_DONATION_COUNSELLINGS_FOR_DONOR,
+        Number.class)
+        .setParameter("donorId", donorId)
+        .setParameter("flaggedForCounselling", false)
+        .setParameter("isDeleted", false)
+        .getSingleResult()
+        .intValue();
   }
 
   public PostDonationCounselling findPostDonationCounsellingForDonation(Donation donation) {
 
     List<PostDonationCounselling> postDonationCounsellings = entityManager.createNamedQuery(
-            PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLING_FOR_DONATION,
-            PostDonationCounselling.class)
-            .setParameter("donation", donation)
-            .setParameter("isDeleted", false)
-            .getResultList();
+        PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLING_FOR_DONATION,
+        PostDonationCounselling.class)
+        .setParameter("donation", donation)
+        .setParameter("isDeleted", false)
+        .getResultList();
 
     return postDonationCounsellings.size() > 0 ? postDonationCounsellings.get(0) : null;
   }

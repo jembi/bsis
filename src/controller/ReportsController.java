@@ -63,9 +63,9 @@ public class ReportsController {
   @RequestMapping(value = "/inventory/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_REPORTING_INFORMATION + "')")
   public Map<String, Object> generateInventoryReport(
-          HttpServletRequest request, HttpServletResponse response,
-          @RequestParam(value = "status") String status,
-          @RequestParam(value = "venues") String venues
+      HttpServletRequest request, HttpServletResponse response,
+      @RequestParam(value = "status") String status,
+      @RequestParam(value = "venues") String venues
   ) {
 
     List<String> componentStatuses = Arrays.asList(status.split("\\|"));
@@ -130,11 +130,11 @@ public class ReportsController {
   @RequestMapping(value = "/donations/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.DONATIONS_REPORTING + "')")
   public ResponseEntity<Map<String, Object>> getDonationsReport(
-          @RequestParam(value = "donationDateFrom", required = false) String donationDateFrom,
-          @RequestParam(value = "donationDateTo", required = false) String donationDateTo,
-          @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
-          @RequestParam(value = "venues", required = false) List<String> venues,
-          @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
+      @RequestParam(value = "donationDateFrom", required = false) String donationDateFrom,
+      @RequestParam(value = "donationDateTo", required = false) String donationDateTo,
+      @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
+      @RequestParam(value = "venues", required = false) List<String> venues,
+      @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
 
 
     HttpStatus httpStatus = HttpStatus.OK;
@@ -159,8 +159,8 @@ public class ReportsController {
       dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
 
     Map<String, Map<Long, Long>> numDonations = donationRepository
-            .findNumberOfDonations(dateFrom, dateTo,
-                    aggregationCriteria, venues, bloodGroups);
+        .findNumberOfDonations(dateFrom, dateTo,
+            aggregationCriteria, venues, bloodGroups);
     // TODO: potential leap year bug here
     Long interval = (long) (24 * 3600 * 1000);
 
@@ -181,11 +181,11 @@ public class ReportsController {
   @RequestMapping(value = "/requests/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.REQUESTS_REPORTING + "')")
   public ResponseEntity<Map<String, Object>> getRequestsReport(
-          @RequestParam(value = "donationDateFrom", required = false) String donationDateFrom,
-          @RequestParam(value = "donationDateTo", required = false) String donationDateTo,
-          @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
-          @RequestParam(value = "venues", required = false) List<String> venues,
-          @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
+      @RequestParam(value = "donationDateFrom", required = false) String donationDateFrom,
+      @RequestParam(value = "donationDateTo", required = false) String donationDateTo,
+      @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
+      @RequestParam(value = "venues", required = false) List<String> venues,
+      @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
 
     HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<>();
@@ -208,8 +208,8 @@ public class ReportsController {
       dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
 
     Map<String, Map<Long, Long>> numRequests = requestRepository
-            .findNumberOfRequests(dateFrom, dateTo,
-                    aggregationCriteria, venues, bloodGroups);
+        .findNumberOfRequests(dateFrom, dateTo,
+            aggregationCriteria, venues, bloodGroups);
     // TODO: potential leap year bug here
     Long interval = (long) (24 * 3600 * 1000);
 
@@ -230,11 +230,11 @@ public class ReportsController {
   @RequestMapping(value = "/components/discard/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_DISCARDED_REPORTING + "')")
   public ResponseEntity<Map<String, Object>> getDiscardedComponentsReport(
-          @RequestParam(value = "donationDateFrom", required = false) String donationDateFrom,
-          @RequestParam(value = "donationDateTo", required = false) String donationDateTo,
-          @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
-          @RequestParam(value = "venues", required = false) List<String> venues,
-          @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
+      @RequestParam(value = "donationDateFrom", required = false) String donationDateFrom,
+      @RequestParam(value = "donationDateTo", required = false) String donationDateTo,
+      @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
+      @RequestParam(value = "venues", required = false) List<String> venues,
+      @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
 
     HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<>();
@@ -258,8 +258,8 @@ public class ReportsController {
       dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
 
     Map<String, Map<Long, Long>> numDiscardedComponents = componentRepository
-            .findNumberOfDiscardedComponents(dateFrom, dateTo,
-                    aggregationCriteria, venues, bloodGroups);
+        .findNumberOfDiscardedComponents(dateFrom, dateTo,
+            aggregationCriteria, venues, bloodGroups);
     // TODO: potential leap year bug here
     Long interval = (long) (24 * 3600 * 1000);
 
@@ -280,11 +280,11 @@ public class ReportsController {
   @RequestMapping(value = "/components/issued/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_ISSUED_REPORTING + "')")
   public ResponseEntity<Map<String, Object>> getIssuedComponentsReport(
-          @RequestParam(value = "dateIssuedFrom", required = false) String donationDateFrom,
-          @RequestParam(value = "dateIssuedTo", required = false) String donationDateTo,
-          @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
-          @RequestParam(value = "venues", required = false) List<String> venues,
-          @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
+      @RequestParam(value = "dateIssuedFrom", required = false) String donationDateFrom,
+      @RequestParam(value = "dateIssuedTo", required = false) String donationDateTo,
+      @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
+      @RequestParam(value = "venues", required = false) List<String> venues,
+      @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
 
     HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<>();
@@ -307,8 +307,8 @@ public class ReportsController {
       dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
 
     Map<String, Map<Long, Long>> numIssuedComponents = componentRepository
-            .findNumberOfIssuedComponents(dateFrom, dateTo,
-                    aggregationCriteria, venues, bloodGroups);
+        .findNumberOfIssuedComponents(dateFrom, dateTo,
+            aggregationCriteria, venues, bloodGroups);
     // TODO: potential leap year bug here
     Long interval = (long) (24 * 3600 * 1000);
 
@@ -347,11 +347,11 @@ public class ReportsController {
   @RequestMapping(value = "/testresult/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.TTI_REPORTING + "')")
   public ResponseEntity<Map<String, Object>> getTestResultsReport(
-          @RequestParam(value = "dateTestedFrom", required = false) String dateTestedFrom,
-          @RequestParam(value = "dateTestedTo", required = false) String dateTestedTo,
-          @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
-          @RequestParam(value = "venues", required = false) List<String> venues,
-          @RequestParam(value = "ttiTests", required = false) List<String> ttiTests) throws ParseException {
+      @RequestParam(value = "dateTestedFrom", required = false) String dateTestedFrom,
+      @RequestParam(value = "dateTestedTo", required = false) String dateTestedTo,
+      @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
+      @RequestParam(value = "venues", required = false) List<String> venues,
+      @RequestParam(value = "ttiTests", required = false) List<String> ttiTests) throws ParseException {
 
 
     HttpStatus httpStatus = HttpStatus.OK;
@@ -374,8 +374,8 @@ public class ReportsController {
       dateFrom = CustomDateFormatter.getDateFromString(dateTestedFrom);
 
     Map<String, Map<Long, Long>> numTestResults = bloodTestingRepository
-            .findNumberOfPositiveTests(ttiTests, dateFrom, dateTo,
-                    aggregationCriteria, venues);
+        .findNumberOfPositiveTests(ttiTests, dateFrom, dateTo,
+            aggregationCriteria, venues);
 
     // TODO: potential leap year bug here
     Long interval = (long) (24 * 3600 * 1000);
@@ -396,8 +396,8 @@ public class ReportsController {
   @RequestMapping(value = "/collecteddonations/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.DONATIONS_REPORTING + "')")
   public Report getCollectedDonationsReport(
-          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
-          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
     return reportGeneratorService.generateCollectedDonationsReport(startDate, endDate);
   }
 

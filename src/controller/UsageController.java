@@ -81,7 +81,7 @@ public class UsageController {
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
   public ResponseEntity<Map<String, Object>> addUsage(
-          @Valid @RequestBody ComponentUsageBackingForm form) {
+      @Valid @RequestBody ComponentUsageBackingForm form) {
 
     Map<String, Object> map = new HashMap<>();
 
@@ -106,7 +106,7 @@ public class UsageController {
   @RequestMapping(value = "/find/components/{requestNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
   public ResponseEntity<Map<String, Object>> findIssuedComponentsForRequest(
-          @PathVariable String requestNumber) {
+      @PathVariable String requestNumber) {
     Map<String, Object> map = new HashMap<>();
     Request req = requestRepository.findRequest(requestNumber);
     map.put("request", new RequestViewModel(req));
@@ -118,7 +118,7 @@ public class UsageController {
   @RequestMapping(value = "/forcomponent", method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
   public ResponseEntity<Map<String, Object>> addUsageForComponent(
-          @Valid @RequestBody ComponentUsageBackingForm form) {
+      @Valid @RequestBody ComponentUsageBackingForm form) {
 
     Map<String, Object> map = new HashMap<>();
     boolean success = false;

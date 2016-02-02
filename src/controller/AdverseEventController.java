@@ -57,8 +57,8 @@ public class AdverseEventController {
   @RequestMapping(value = "/types/{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_ADVERSE_EVENT_TYPES + "')")
   public AdverseEventTypeViewModel updateAdverseEventType(
-          @PathVariable("id") Long id,
-          @Valid @RequestBody AdverseEventTypeBackingForm backingForm) {
+      @PathVariable("id") Long id,
+      @Valid @RequestBody AdverseEventTypeBackingForm backingForm) {
     AdverseEventType adverseEventType = adverseEventTypeCRUDService.updateAdverseEventType(id, backingForm);
     return adverseEventTypeViewModelFactory.createAdverseEventTypeViewModel(adverseEventType);
   }

@@ -32,58 +32,58 @@ import utils.LoggerUtil;
 @RequestMapping("/configurations")
 public class GeneralConfigController {
 
-    @Autowired
-    private GeneralConfigRepository configRepository;
+  @Autowired
+  private GeneralConfigRepository configRepository;
 
-    @Autowired
-    private DataTypeRepository dataTypeRepository;
+  @Autowired
+  private DataTypeRepository dataTypeRepository;
 
-    @Autowired
-    private UtilController utilController;
+  @Autowired
+  private UtilController utilController;
 
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(new GeneralConfigBackingFormValidator(binder.getValidator(), configRepository, utilController, dataTypeRepository));
+  @InitBinder
+  protected void initBinder(WebDataBinder binder) {
+    binder.setValidator(new GeneralConfigBackingFormValidator(binder.getValidator(), configRepository, utilController, dataTypeRepository));
+  }
+
+  @RequestMapping(method = RequestMethod.GET)
+  // no @PreAuthorize() - allow anonymous access to GET list of general configs
+  public ResponseEntity<Map<String, Object>> generalConfigGenerator() {
+
+    Map<String, Object> map = new HashMap<>();
+    List<GeneralConfigViewModel> configs = new ArrayList<>();
+    for (GeneralConfig config : configRepository.getAll()) {
+      configs.add(new GeneralConfigViewModel(config));
     }
+    map.put("configurations", configs);
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
 
-    @RequestMapping(method = RequestMethod.GET)
-    // no @PreAuthorize() - allow anonymous access to GET list of general configs
-    public ResponseEntity<Map<String, Object>> generalConfigGenerator() {
-    	
-    	Map<String, Object> map = new HashMap<>();
-        List<GeneralConfigViewModel> configs = new ArrayList<>();
-        for (GeneralConfig config : configRepository.getAll()) {
-            configs.add(new GeneralConfigViewModel(config));
-        }
-        map.put("configurations", configs);
-        return new ResponseEntity<>(map, HttpStatus.OK);
-    }
+  @RequestMapping(method = RequestMethod.POST)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_GENERAL_CONFIGS + "')")
+  public ResponseEntity<GeneralConfigViewModel> addGeneralConfig(@RequestBody @Valid GeneralConfigBackingForm form) {
+    configRepository.save(form.getGeneralConfig());
+    return new ResponseEntity<>(new GeneralConfigViewModel(configRepository.getGeneralConfigByName(form.getName())), HttpStatus.CREATED);
+  }
 
-    @RequestMapping(method = RequestMethod.POST)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_GENERAL_CONFIGS + "')")
-    public ResponseEntity<GeneralConfigViewModel> addGeneralConfig(@RequestBody @Valid GeneralConfigBackingForm form) {
-        configRepository.save(form.getGeneralConfig());
-        return new ResponseEntity<>(new GeneralConfigViewModel(configRepository.getGeneralConfigByName(form.getName())), HttpStatus.CREATED);
-    }
+  @RequestMapping(value = "{id}", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_GENERAL_CONFIGS + "')")
+  public ResponseEntity<GeneralConfigViewModel> getGeneralConfig(@PathVariable Long id) {
+    return new ResponseEntity<>(new GeneralConfigViewModel(configRepository.getGeneralConfigById(id)), HttpStatus.OK);
+  }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_GENERAL_CONFIGS+"')")
-    public ResponseEntity<GeneralConfigViewModel> getGeneralConfig(@PathVariable Long id) {
-        return new ResponseEntity<>(new GeneralConfigViewModel(configRepository.getGeneralConfigById(id)), HttpStatus.OK);
-    }
+  @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_GENERAL_CONFIGS + "')")
+  public ResponseEntity<GeneralConfigViewModel> updateGeneralConfig(@RequestBody @Valid GeneralConfigBackingForm form, @PathVariable Long id) {
 
-    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_GENERAL_CONFIGS+"')")
-    public ResponseEntity<GeneralConfigViewModel> updateGeneralConfig(@RequestBody  @Valid GeneralConfigBackingForm form, @PathVariable Long id) {
+    GeneralConfig updatedConfig = null;
+    form.setId(id);
+    updatedConfig = configRepository.update(form.getGeneralConfig());
 
-    	GeneralConfig updatedConfig = null;
-        form.setId(id);
-        updatedConfig = configRepository.update(form.getGeneralConfig());
+    //Update log level if changed
+    if (form.getName().equalsIgnoreCase("log.level"))
+      LoggerUtil.setLogLevel(configRepository.getGeneralConfigByName("log.level").getValue());
 
-        //Update log level if changed
-        if (form.getName().equalsIgnoreCase("log.level"))
-            LoggerUtil.setLogLevel(configRepository.getGeneralConfigByName("log.level").getValue());
-
-        return new ResponseEntity<>(new GeneralConfigViewModel(updatedConfig), HttpStatus.OK);
-    }
+    return new ResponseEntity<>(new GeneralConfigViewModel(updatedConfig), HttpStatus.OK);
+  }
 }

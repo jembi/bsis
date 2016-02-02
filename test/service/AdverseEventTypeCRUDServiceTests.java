@@ -31,15 +31,15 @@ public class AdverseEventTypeCRUDServiceTests {
     String irrelevantDescription = "irrelevant description";
 
     AdverseEventTypeBackingForm backingForm = anAdverseEventTypeBackingForm()
-            .thatIsDeleted()
-            .withName(irrelevantName)
-            .withDescription(irrelevantDescription)
-            .build();
+        .thatIsDeleted()
+        .withName(irrelevantName)
+        .withDescription(irrelevantDescription)
+        .build();
     AdverseEventType expectedAdverseEventType = anAdverseEventType()
-            .thatIsDeleted()
-            .withName(irrelevantName)
-            .withDescription(irrelevantDescription)
-            .build();
+        .thatIsDeleted()
+        .withName(irrelevantName)
+        .withDescription(irrelevantDescription)
+        .build();
 
     AdverseEventType returnedAdverseEventType = adverseEventTypeCRUDService.createAdverseEventType(backingForm);
 
@@ -54,30 +54,30 @@ public class AdverseEventTypeCRUDServiceTests {
     String irrelevantDescription = "irrelevant description";
 
     AdverseEventTypeBackingForm backingForm = anAdverseEventTypeBackingForm()
-            .thatIsDeleted()
-            .withId(irrelevantId)
-            .withName(irrelevantName)
-            .withDescription(irrelevantDescription)
-            .build();
+        .thatIsDeleted()
+        .withId(irrelevantId)
+        .withName(irrelevantName)
+        .withDescription(irrelevantDescription)
+        .build();
     AdverseEventType existingAdverseEventType = anAdverseEventType()
-            .thatIsNotDeleted()
-            .withId(irrelevantId)
-            .withName("old name")
-            .withDescription("old description")
-            .build();
+        .thatIsNotDeleted()
+        .withId(irrelevantId)
+        .withName("old name")
+        .withDescription("old description")
+        .build();
     AdverseEventType expectedAdverseEventType = anAdverseEventType()
-            .thatIsDeleted()
-            .withId(irrelevantId)
-            .withName(irrelevantName)
-            .withDescription(irrelevantDescription)
-            .build();
+        .thatIsDeleted()
+        .withId(irrelevantId)
+        .withName(irrelevantName)
+        .withDescription(irrelevantDescription)
+        .build();
 
     when(adverseEventTypeRepository.findById(irrelevantId)).thenReturn(existingAdverseEventType);
     when(adverseEventTypeRepository.update(argThat(hasSameStateAsAdverseEventType(expectedAdverseEventType))))
-            .thenReturn(expectedAdverseEventType);
+        .thenReturn(expectedAdverseEventType);
 
     AdverseEventType returnedAdverseEventType = adverseEventTypeCRUDService.updateAdverseEventType(irrelevantId,
-            backingForm);
+        backingForm);
 
     verify(adverseEventTypeRepository).update(argThat(hasSameStateAsAdverseEventType(expectedAdverseEventType)));
     assertThat(returnedAdverseEventType, hasSameStateAsAdverseEventType(expectedAdverseEventType));

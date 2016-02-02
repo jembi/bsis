@@ -45,9 +45,9 @@ public class AdverseEventTypeBackingFormValidatorTests {
 
     String irrelevantName = "name";
     AdverseEventTypeBackingForm backingForm = anAdverseEventTypeBackingForm()
-            .withId(86L)
-            .withName(irrelevantName)
-            .build();
+        .withId(86L)
+        .withName(irrelevantName)
+        .build();
 
     when(adverseEventTypeRepository.findIdsByName(irrelevantName)).thenReturn(Collections.singletonList(123L));
 
@@ -66,9 +66,9 @@ public class AdverseEventTypeBackingFormValidatorTests {
     Long irrelevantId = 74L;
     String irrelevantName = "name";
     AdverseEventTypeBackingForm backingForm = anAdverseEventTypeBackingForm()
-            .withId(irrelevantId)
-            .withName(irrelevantName)
-            .build();
+        .withId(irrelevantId)
+        .withName(irrelevantName)
+        .build();
 
     when(adverseEventTypeRepository.findIdsByName(irrelevantName)).thenReturn(Collections.singletonList(irrelevantId));
 

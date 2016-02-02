@@ -10,10 +10,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @NamedQueries({
-        @NamedQuery(name = AuditRevisionNamedQueryConstants.NAME_FIND_AUDIT_REVISIONS,
-                query = AuditRevisionNamedQueryConstants.QUERY_FIND_AUDIT_REVISIONS),
-        @NamedQuery(name = AuditRevisionNamedQueryConstants.NAME_FIND_AUDIT_REVISIONS_BY_USER,
-                query = AuditRevisionNamedQueryConstants.QUERY_FIND_AUDIT_REVISIONS_BY_USER)
+    @NamedQuery(name = AuditRevisionNamedQueryConstants.NAME_FIND_AUDIT_REVISIONS,
+        query = AuditRevisionNamedQueryConstants.QUERY_FIND_AUDIT_REVISIONS),
+    @NamedQuery(name = AuditRevisionNamedQueryConstants.NAME_FIND_AUDIT_REVISIONS_BY_USER,
+        query = AuditRevisionNamedQueryConstants.QUERY_FIND_AUDIT_REVISIONS_BY_USER)
 })
 @Entity
 @RevisionEntity(AuditRevisionListener.class)

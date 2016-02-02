@@ -38,83 +38,81 @@ import repository.bloodtesting.BloodTestingRepository;
 @Transactional
 @WebAppConfiguration
 public class BloodTestingRepositoryTest {
-	
-	@Autowired
-	BloodTestingRepository bloodTestingRepository;
-	
-	@Autowired
-	private DataSource dataSource;
-	
-	private IDataSet getDataSet() throws Exception {
-		File file = new File("test/dataset/BloodTestingRepositoryDataset.xml");
-		return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
-	}
-	
-	private IDatabaseConnection getConnection() throws SQLException {
-		IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
-		DatabaseConfig config = connection.getConfig();
-		config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
-		return connection;
-	}
-	
-	@Before
-	public void init() throws Exception {
-		IDatabaseConnection connection = getConnection();
-		try {
-			IDataSet dataSet = getDataSet();
-			DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
-		}
-		finally {
-			connection.close();
-		}
-	}
-	
-	@AfterTransaction
-	public void after() throws Exception {
-		IDatabaseConnection connection = getConnection();
-		try {
-			IDataSet dataSet = getDataSet();
-			DatabaseOperation.DELETE_ALL.execute(connection, dataSet);
-		}
-		finally {
-			connection.close();
-		}
-	}
-	
-	@Test
-	public void testGetBloodTypingTests() throws Exception {
-	  List<BloodTest> bloodTests = bloodTestingRepository.getBloodTypingTests();
-	  Assert.assertNotNull("Blood tests exist", bloodTests);
-	  Assert.assertFalse("Blood tests exist", bloodTests.isEmpty());
-	  for (BloodTest bt : bloodTests) {
-	    Assert.assertEquals("Only blood typing tests are returned", BloodTestCategory.BLOODTYPING, bt.getCategory());
-	  }
-	}
-	
-    @Test
-    public void testGetTtiTests() throws Exception {
-      List<BloodTest> bloodTests = bloodTestingRepository.getTTITests();
-      Assert.assertNotNull("Blood tests exist", bloodTests);
-      Assert.assertFalse("Blood tests exist", bloodTests.isEmpty());
-      for (BloodTest bt : bloodTests) {
-        Assert.assertEquals("Only TTI tests are returned", BloodTestCategory.TTI, bt.getCategory());
-      }
+
+  @Autowired
+  BloodTestingRepository bloodTestingRepository;
+
+  @Autowired
+  private DataSource dataSource;
+
+  private IDataSet getDataSet() throws Exception {
+    File file = new File("test/dataset/BloodTestingRepositoryDataset.xml");
+    return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
+  }
+
+  private IDatabaseConnection getConnection() throws SQLException {
+    IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
+    DatabaseConfig config = connection.getConfig();
+    config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
+    return connection;
+  }
+
+  @Before
+  public void init() throws Exception {
+    IDatabaseConnection connection = getConnection();
+    try {
+      IDataSet dataSet = getDataSet();
+      DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
+    } finally {
+      connection.close();
     }
-    
-    @Test
-    public void testGetTestsOfTypeAdvancedBloodTyping() throws Exception {
-      List<BloodTest> bloodTests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.ADVANCED_BLOODTYPING);
-      Assert.assertNotNull("Blood tests exist", bloodTests);
-      Assert.assertTrue("Blood tests exist", bloodTests.isEmpty()); 
+  }
+
+  @AfterTransaction
+  public void after() throws Exception {
+    IDatabaseConnection connection = getConnection();
+    try {
+      IDataSet dataSet = getDataSet();
+      DatabaseOperation.DELETE_ALL.execute(connection, dataSet);
+    } finally {
+      connection.close();
     }
-    
-    @Test
-    public void testGetTestsOfTypeBasicBloodTyping() throws Exception {
-      List<BloodTest> bloodTests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING);
-      Assert.assertNotNull("Blood tests exist", bloodTests);
-      Assert.assertFalse("Blood tests exist", bloodTests.isEmpty());
-      for (BloodTest bt : bloodTests) {
-        Assert.assertEquals("Only advanced blood typing tests are returned", BloodTestType.BASIC_BLOODTYPING, bt.getBloodTestType());
-      }   
+  }
+
+  @Test
+  public void testGetBloodTypingTests() throws Exception {
+    List<BloodTest> bloodTests = bloodTestingRepository.getBloodTypingTests();
+    Assert.assertNotNull("Blood tests exist", bloodTests);
+    Assert.assertFalse("Blood tests exist", bloodTests.isEmpty());
+    for (BloodTest bt : bloodTests) {
+      Assert.assertEquals("Only blood typing tests are returned", BloodTestCategory.BLOODTYPING, bt.getCategory());
     }
+  }
+
+  @Test
+  public void testGetTtiTests() throws Exception {
+    List<BloodTest> bloodTests = bloodTestingRepository.getTTITests();
+    Assert.assertNotNull("Blood tests exist", bloodTests);
+    Assert.assertFalse("Blood tests exist", bloodTests.isEmpty());
+    for (BloodTest bt : bloodTests) {
+      Assert.assertEquals("Only TTI tests are returned", BloodTestCategory.TTI, bt.getCategory());
+    }
+  }
+
+  @Test
+  public void testGetTestsOfTypeAdvancedBloodTyping() throws Exception {
+    List<BloodTest> bloodTests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.ADVANCED_BLOODTYPING);
+    Assert.assertNotNull("Blood tests exist", bloodTests);
+    Assert.assertTrue("Blood tests exist", bloodTests.isEmpty());
+  }
+
+  @Test
+  public void testGetTestsOfTypeBasicBloodTyping() throws Exception {
+    List<BloodTest> bloodTests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING);
+    Assert.assertNotNull("Blood tests exist", bloodTests);
+    Assert.assertFalse("Blood tests exist", bloodTests.isEmpty());
+    for (BloodTest bt : bloodTests) {
+      Assert.assertEquals("Only advanced blood typing tests are returned", BloodTestType.BASIC_BLOODTYPING, bt.getBloodTestType());
+    }
+  }
 }

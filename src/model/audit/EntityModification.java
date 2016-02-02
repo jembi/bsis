@@ -15,37 +15,37 @@ public class EntityModification extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 
-    @ManyToOne
-    private AuditRevision auditRevision;
-    
-    @Column(length = 30, nullable = false)
-    @Enumerated(EnumType.STRING)
-    private RevisionType revisionType;
-    
-    @Column(length = 30, nullable = false)
-    private String entityName;
+  @ManyToOne
+  private AuditRevision auditRevision;
 
-    public AuditRevision getAuditRevision() {
-        return auditRevision;
-    }
+  @Column(length = 30, nullable = false)
+  @Enumerated(EnumType.STRING)
+  private RevisionType revisionType;
 
-    public void setAuditRevision(AuditRevision auditRevision) {
-        this.auditRevision = auditRevision;
-    }
+  @Column(length = 30, nullable = false)
+  private String entityName;
 
-    public RevisionType getRevisionType() {
-        return revisionType;
-    }
+  public AuditRevision getAuditRevision() {
+    return auditRevision;
+  }
 
-    public void setRevisionType(RevisionType revisionType) {
-        this.revisionType = revisionType;
-    }
+  public void setAuditRevision(AuditRevision auditRevision) {
+    this.auditRevision = auditRevision;
+  }
 
-    public String getEntityName() {
-        return entityName;
-    }
+  public RevisionType getRevisionType() {
+    return revisionType;
+  }
 
-    public void setEntityName(String entityName) {
-        this.entityName = entityName;
-    }
+  public void setRevisionType(RevisionType revisionType) {
+    this.revisionType = revisionType;
+  }
+
+  public String getEntityName() {
+    return entityName;
+  }
+
+  public void setEntityName(String entityName) {
+    this.entityName = entityName;
+  }
 }

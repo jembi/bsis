@@ -17,7 +17,7 @@ import org.hibernate.envers.Audited;
 import constraintvalidator.ComponentExists;
 
 /**
- * Entity to represent the details of how/where/when a Component from a Donation was used. 
+ * Entity to represent the details of how/where/when a Component from a Donation was used.
  */
 @Entity
 @Audited
@@ -29,16 +29,16 @@ public class ComponentUsage extends BaseModificationTrackerEntity {
   @OneToOne
   private Component component;
 
-  @Column(length=50)
+  @Column(length = 50)
   private String hospital;
 
-  @Column(length=50)
+  @Column(length = 50)
   private String patientName;
 
-  @Column(length=30)
+  @Column(length = 30)
   private String ward;
 
-  @Column(length=50)
+  @Column(length = 50)
   private String useIndication;
 
   @Temporal(TemporalType.TIMESTAMP)
@@ -49,7 +49,7 @@ public class ComponentUsage extends BaseModificationTrackerEntity {
 
   private Boolean isDeleted;
 
-  @Column(length=30)
+  @Column(length = 30)
   private String usedBy;
 
   public ComponentUsage() {

@@ -10,7 +10,7 @@ import javax.validation.ConstraintValidatorContext;
 
 @Component
 class DonationExistsConstraintValidator implements
-        ConstraintValidator<DonationExists, Donation> {
+    ConstraintValidator<DonationExists, Donation> {
 
   @Autowired
   private DonationRepository donationRepository;
@@ -38,7 +38,7 @@ class DonationExistsConstraintValidator implements
           return true;
 
         donation =
-                donationRepository.findDonationByDonationIdentificationNumber(target.getDonationIdentificationNumber());
+            donationRepository.findDonationByDonationIdentificationNumber(target.getDonationIdentificationNumber());
       }
       if (donation != null) {
         return true;

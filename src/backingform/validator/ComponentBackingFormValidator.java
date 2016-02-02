@@ -34,9 +34,9 @@ public class ComponentBackingFormValidator implements Validator {
   @Override
   public boolean supports(Class<?> clazz) {
     return Arrays.asList(ComponentBackingForm.class,
-            ComponentViewModel.class,
-            ComponentCombinationBackingForm.class,
-            RecordComponentBackingForm.class).contains(clazz);
+        ComponentViewModel.class,
+        ComponentCombinationBackingForm.class,
+        RecordComponentBackingForm.class).contains(clazz);
   }
 
   @Override
@@ -54,12 +54,12 @@ public class ComponentBackingFormValidator implements Validator {
     String createdOn = form.getCreatedOn();
     if (!CustomDateFormatter.isDateTimeStringValid(createdOn))
       errors.rejectValue("component.createdOn", "dateFormat.incorrect",
-              CustomDateFormatter.getDateTimeErrorMessage());
+          CustomDateFormatter.getDateTimeErrorMessage());
 
     String expiresOn = form.getExpiresOn();
     if (!CustomDateFormatter.isDateStringValid(expiresOn))
       errors.rejectValue("component.expiresOn", "dateFormat.incorrect",
-              CustomDateFormatter.getDateErrorMessage());
+          CustomDateFormatter.getDateErrorMessage());
 
     updateRelatedEntities(form);
     utilController.commonFieldChecks(form, "component", errors);
@@ -69,12 +69,12 @@ public class ComponentBackingFormValidator implements Validator {
 
     if (StringUtils.isBlank(form.getComponentTypeCombination()))
       errors.rejectValue("componentTypeCombination", "component.componentTypeCombination",
-              "Component type combination should be specified");
+          "Component type combination should be specified");
 
     String createdOn = form.getCreatedOn();
     if (!CustomDateFormatter.isDateTimeStringValid(createdOn))
       errors.rejectValue("component.createdOn", "dateFormat.incorrect",
-              CustomDateFormatter.getDateTimeErrorMessage());
+          CustomDateFormatter.getDateTimeErrorMessage());
 
     String expiresOn = form.getExpiresOn();
     ObjectMapper mapper = new ObjectMapper();
@@ -87,7 +87,7 @@ public class ComponentBackingFormValidator implements Validator {
         String expiryDate = expiryDateByComponentType.get(componentTypeId);
         if (!CustomDateFormatter.isDateTimeStringValid(expiryDate))
           errors.rejectValue("component.expiresOn", "dateFormat.incorrect",
-                  CustomDateFormatter.getDateErrorMessage());
+              CustomDateFormatter.getDateErrorMessage());
       }
 
     } catch (IOException e) {

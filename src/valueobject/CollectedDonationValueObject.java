@@ -90,11 +90,11 @@ public class CollectedDonationValueObject {
     CollectedDonationValueObject other = (CollectedDonationValueObject) obj;
 
     return Objects.equals(getDonationType(), other.getDonationType()) &&
-            Objects.equals(getGender(), other.getGender()) &&
-            Objects.equals(getBloodAbo(), other.getBloodAbo()) &&
-            Objects.equals(getBloodRh(), other.getBloodRh()) &&
-            Objects.equals(getCount(), other.getCount()) &&
-            Objects.equals(getVenue(), other.getVenue());
+        Objects.equals(getGender(), other.getGender()) &&
+        Objects.equals(getBloodAbo(), other.getBloodAbo()) &&
+        Objects.equals(getBloodRh(), other.getBloodRh()) &&
+        Objects.equals(getCount(), other.getCount()) &&
+        Objects.equals(getVenue(), other.getVenue());
   }
 
   @Override

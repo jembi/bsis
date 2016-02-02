@@ -55,23 +55,23 @@ public class DonorDeferralCRUDServiceTests {
     DeferralReasonType irrelevantDeferralReasonType = DeferralReasonType.AUTOMATED_TTI_UNSAFE;
     Donor donor = aDonor().build();
     DeferralReason deferralReason = aDeferralReason()
-            .withType(irrelevantDeferralReasonType)
-            .withDurationType(DurationType.PERMANENT)
-            .build();
+        .withType(irrelevantDeferralReasonType)
+        .withDurationType(DurationType.PERMANENT)
+        .build();
 
     DonorDeferral expectedDonorDeferral = aDonorDeferral()
-            .withDeferredDonor(donor)
-            .withDeferralReason(deferralReason)
-            .withDeferredUntil(DonorDeferralCRUDService.PERMANENT_DEFERRAL_DATE)
-            .build();
+        .withDeferredDonor(donor)
+        .withDeferralReason(deferralReason)
+        .withDeferredUntil(DonorDeferralCRUDService.PERMANENT_DEFERRAL_DATE)
+        .build();
 
     when(deferralReasonRepository.findDeferralReasonByType(irrelevantDeferralReasonType))
-            .thenReturn(deferralReason);
+        .thenReturn(deferralReason);
     when(donorDeferralRepository.findDonorDeferralsForDonorByDeferralReason(donor, deferralReason))
-            .thenReturn(Collections.<DonorDeferral>emptyList());
+        .thenReturn(Collections.<DonorDeferral>emptyList());
 
     DonorDeferral returnedDonorDeferral = donorDeferralCRUDService.createDeferralForDonorWithDeferralReasonType(
-            donor, irrelevantDeferralReasonType);
+        donor, irrelevantDeferralReasonType);
 
     verify(donorDeferralRepository).save(argThat(hasSameStateAsDonorDeferral(expectedDonorDeferral)));
     assertThat(returnedDonorDeferral, hasSameStateAsDonorDeferral(expectedDonorDeferral));
@@ -83,23 +83,23 @@ public class DonorDeferralCRUDServiceTests {
     DeferralReasonType irrelevantDeferralReasonType = DeferralReasonType.AUTOMATED_TTI_UNSAFE;
     Donor donor = aDonor().build();
     DeferralReason deferralReason = aDeferralReason()
-            .withType(irrelevantDeferralReasonType)
-            .withDurationType(DurationType.PERMANENT)
-            .build();
+        .withType(irrelevantDeferralReasonType)
+        .withDurationType(DurationType.PERMANENT)
+        .build();
 
     DonorDeferral expectedDonorDeferral = aDonorDeferral()
-            .withDeferredDonor(donor)
-            .withDeferralReason(deferralReason)
-            .withDeferredUntil(DonorDeferralCRUDService.PERMANENT_DEFERRAL_DATE)
-            .build();
+        .withDeferredDonor(donor)
+        .withDeferralReason(deferralReason)
+        .withDeferredUntil(DonorDeferralCRUDService.PERMANENT_DEFERRAL_DATE)
+        .build();
 
     when(deferralReasonRepository.findDeferralReasonByType(irrelevantDeferralReasonType))
-            .thenReturn(deferralReason);
+        .thenReturn(deferralReason);
     when(donorDeferralRepository.findDonorDeferralsForDonorByDeferralReason(donor, deferralReason))
-            .thenReturn(Collections.singletonList(expectedDonorDeferral));
+        .thenReturn(Collections.singletonList(expectedDonorDeferral));
 
     DonorDeferral returnedDonorDeferral = donorDeferralCRUDService.createDeferralForDonorWithDeferralReasonType(
-            donor, irrelevantDeferralReasonType);
+        donor, irrelevantDeferralReasonType);
 
     verify(donorDeferralRepository, never()).save(any(DonorDeferral.class));
     assertThat(returnedDonorDeferral, hasSameStateAsDonorDeferral(expectedDonorDeferral));
@@ -113,23 +113,23 @@ public class DonorDeferralCRUDServiceTests {
     Date now = new Date();
     Donor donor = aDonor().build();
     DeferralReason deferralReason = aDeferralReason()
-            .withType(irrelevantDeferralReasonType)
-            .withDurationType(DurationType.TEMPORARY)
-            .withDefaultDuration(irrelevantDuration)
-            .build();
+        .withType(irrelevantDeferralReasonType)
+        .withDurationType(DurationType.TEMPORARY)
+        .withDefaultDuration(irrelevantDuration)
+        .build();
 
     DonorDeferral expectedDonorDeferral = aDonorDeferral()
-            .withDeferredDonor(donor)
-            .withDeferralReason(deferralReason)
-            .withDeferredUntil(new DateTime(now).plusDays(irrelevantDuration).toDate())
-            .build();
+        .withDeferredDonor(donor)
+        .withDeferralReason(deferralReason)
+        .withDeferredUntil(new DateTime(now).plusDays(irrelevantDuration).toDate())
+        .build();
 
     when(deferralReasonRepository.findDeferralReasonByType(irrelevantDeferralReasonType))
-            .thenReturn(deferralReason);
+        .thenReturn(deferralReason);
     when(dateGeneratorService.generateDate()).thenReturn(now);
 
     DonorDeferral returnedDonorDeferral = donorDeferralCRUDService.createDeferralForDonorWithDeferralReasonType(
-            donor, irrelevantDeferralReasonType);
+        donor, irrelevantDeferralReasonType);
 
     verify(donorDeferralRepository).save(argThat(hasSameStateAsDonorDeferral(expectedDonorDeferral)));
     assertThat(returnedDonorDeferral, hasSameStateAsDonorDeferral(expectedDonorDeferral));
@@ -140,9 +140,9 @@ public class DonorDeferralCRUDServiceTests {
     // create test data
     Donor deferredDonor = DonorBuilder.aDonor().withId(1L).withFirstName("Sample").withLastName("Donor").build();
     DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY)
-            .withType(DeferralReasonType.NORMAL).build();
+        .withType(DeferralReasonType.NORMAL).build();
     DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1L).withCreatedDate(new Date())
-            .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferredUntil(new Date()).build();
+        .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferredUntil(new Date()).build();
 
     // set up mocks
     when(donorDeferralRepository.findDonorDeferralById(1L)).thenReturn(donorDeferral);
@@ -161,9 +161,9 @@ public class DonorDeferralCRUDServiceTests {
     User admin = UserBuilder.aUser().withUsername("admin").build();
     Donor deferredDonor = DonorBuilder.aDonor().withId(1L).withFirstName("Sample").withLastName("Donor").build();
     DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY)
-            .withType(DeferralReasonType.NORMAL).build();
+        .withType(DeferralReasonType.NORMAL).build();
     DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1L).withCreatedDate(new Date())
-            .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferredUntil(new Date()).build();
+        .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferredUntil(new Date()).build();
 
     // set up mocks
     when(donorDeferralRepository.findDonorDeferralById(1L)).thenReturn(donorDeferral);
@@ -186,9 +186,9 @@ public class DonorDeferralCRUDServiceTests {
     User admin = UserBuilder.aUser().withUsername("admin").build();
     Donor deferredDonor = DonorBuilder.aDonor().withId(1L).withFirstName("Sample").withLastName("Donor").build();
     DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY)
-            .withType(DeferralReasonType.NORMAL).build();
+        .withType(DeferralReasonType.NORMAL).build();
     DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1L).withCreatedDate(new Date())
-            .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferredUntil(new Date()).build();
+        .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferredUntil(new Date()).build();
 
     // set up mocks
     when(donorDeferralRepository.findDonorDeferralById(1L)).thenReturn(donorDeferral);
@@ -204,16 +204,16 @@ public class DonorDeferralCRUDServiceTests {
     // create test data
     Donor deferredDonor = DonorBuilder.aDonor().withId(1L).withFirstName("Sample").withLastName("Donor").build();
     DeferralReason originalDeferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY)
-            .withType(DeferralReasonType.NORMAL).withReason("test1").build();
+        .withType(DeferralReasonType.NORMAL).withReason("test1").build();
     Date createdDate = new Date();
     DonorDeferral originalDonorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1L).withCreatedDate(createdDate)
-            .withDeferredDonor(deferredDonor).withDeferralReason(originalDeferralReason).withDeferredUntil(new Date()).build();
+        .withDeferredDonor(deferredDonor).withDeferralReason(originalDeferralReason).withDeferredUntil(new Date()).build();
 
     Date newDeferredUntil = new SimpleDateFormat("yyyy-MM-dd").parse("2020-10-20");
     DeferralReason updatedDeferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.PERMANENT)
-            .withType(DeferralReasonType.NORMAL).withReason("test2").build();
+        .withType(DeferralReasonType.NORMAL).withReason("test2").build();
     DonorDeferral updatedDonorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1L).withCreatedDate(createdDate)
-            .withDeferredDonor(deferredDonor).withDeferralReason(updatedDeferralReason).withDeferralReasonText("hello").withDeferredUntil(newDeferredUntil).build();
+        .withDeferredDonor(deferredDonor).withDeferralReason(updatedDeferralReason).withDeferralReasonText("hello").withDeferredUntil(newDeferredUntil).build();
 
     // set up mocks
     when(donorDeferralRepository.findDonorDeferralById(1L)).thenReturn(originalDonorDeferral);
@@ -233,9 +233,9 @@ public class DonorDeferralCRUDServiceTests {
     Donor deferredDonor = DonorBuilder.aDonor().withId(1L).withFirstName("Sample").withLastName("Donor").build();
     Date newDeferredUntil = new SimpleDateFormat("yyyy-MM-dd").parse("2020-10-20");
     DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.PERMANENT)
-            .withType(DeferralReasonType.NORMAL).withReason("test2").build();
+        .withType(DeferralReasonType.NORMAL).withReason("test2").build();
     DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1L).withCreatedDate(new Date())
-            .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferralReasonText("hello").withDeferredUntil(newDeferredUntil).build();
+        .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferralReasonText("hello").withDeferredUntil(newDeferredUntil).build();
 
     // set up mocks
     when(donorDeferralRepository.findDonorDeferralById(1L)).thenReturn(donorDeferral);
@@ -255,9 +255,9 @@ public class DonorDeferralCRUDServiceTests {
     Donor deferredDonor = DonorBuilder.aDonor().withId(1L).withFirstName("Sample").withLastName("Donor").build();
     Date newDeferredUntil = new SimpleDateFormat("yyyy-MM-dd").parse("2020-10-20");
     DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.PERMANENT)
-            .withType(DeferralReasonType.NORMAL).withReason("test2").build();
+        .withType(DeferralReasonType.NORMAL).withReason("test2").build();
     DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1L).withCreatedDate(new Date())
-            .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferralReasonText("hello").withDeferredUntil(newDeferredUntil).build();
+        .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferralReasonText("hello").withDeferredUntil(newDeferredUntil).build();
 
     // set up mocks
     when(donorDeferralRepository.findDonorDeferralById(1L)).thenReturn(donorDeferral);

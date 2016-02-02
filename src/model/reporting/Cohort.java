@@ -45,8 +45,8 @@ public class Cohort {
     Cohort other = (Cohort) obj;
 
     return Objects.equals(getCategory(), other.getCategory()) &&
-            Objects.equals(getOption(), other.getOption()) &&
-            Objects.equals(getComparator(), other.getComparator());
+        Objects.equals(getOption(), other.getOption()) &&
+        Objects.equals(getComparator(), other.getComparator());
   }
 
   @Override

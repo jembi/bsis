@@ -157,8 +157,8 @@ public class ComponentCombinationBackingForm {
 
   public String getDonationIdentificationNumber() {
     if (component == null || component.getDonation() == null ||
-            component.getDonation().getDonationIdentificationNumber() == null
-            )
+        component.getDonation().getDonationIdentificationNumber() == null
+        )
       return "";
     return component.getDonation().getDonationIdentificationNumber();
   }

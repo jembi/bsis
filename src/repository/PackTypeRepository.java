@@ -45,7 +45,7 @@ public class PackTypeRepository {
   public PackType getPackTypeById(Long packTypeId) {
     TypedQuery<PackType> query;
     query = em.createQuery("SELECT b from PackType b " +
-            "where b.id=:id", PackType.class);
+        "where b.id=:id", PackType.class);
 
     query.setParameter("id", packTypeId);
     if (query.getResultList().size() == 0)

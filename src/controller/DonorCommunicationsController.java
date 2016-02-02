@@ -65,7 +65,7 @@ public class DonorCommunicationsController {
   public
   @ResponseBody
   Map<String, Object> donorCommunicationsFormGenerator(
-          HttpServletRequest request) {
+      HttpServletRequest request) {
 
     // DonorCommunicationsBackingForm dbform = new DonorCommunicationsBackingForm();
 
@@ -82,13 +82,13 @@ public class DonorCommunicationsController {
   public
   @ResponseBody
   Map<String, Object> findDonorCommunicationsPagination(
-          @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups,
-          @RequestParam(value = "venues", required = true) List<String> venues,
-          @RequestParam(value = "clinicDate", required = false) String clinicDate,
-          @RequestParam(value = "lastDonationFromDate", required = false) String lastDonationFromDate,
-          @RequestParam(value = "lastDonationToDate", required = false) String lastDonationToDate,
-          @RequestParam(value = "anyBloodGroup", required = false) boolean anyBloodGroup,
-          @RequestParam(value = "noBloodGroup", required = false) boolean noBloodGroup) throws ParseException {
+      @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups,
+      @RequestParam(value = "venues", required = true) List<String> venues,
+      @RequestParam(value = "clinicDate", required = false) String clinicDate,
+      @RequestParam(value = "lastDonationFromDate", required = false) String lastDonationFromDate,
+      @RequestParam(value = "lastDonationToDate", required = false) String lastDonationToDate,
+      @RequestParam(value = "anyBloodGroup", required = false) boolean anyBloodGroup,
+      @RequestParam(value = "noBloodGroup", required = false) boolean noBloodGroup) throws ParseException {
 
     LOGGER.debug("Start DonorCommunicationsController:findDonorCommunicationsPagination");
     //    String eligibleClinicDate = getEligibleDonorDate(clinicDate);
@@ -103,7 +103,7 @@ public class DonorCommunicationsController {
 
     List<Donor> results = new ArrayList<>();
     results = donorCommunicationsRepository.findDonors(setLocations(venues), clinicDate, lastDonationFromDate,
-            lastDonationToDate, setBloodGroups(bloodGroups), anyBloodGroup, noBloodGroup, pagingParams, clinicDate);
+        lastDonationToDate, setBloodGroups(bloodGroups), anyBloodGroup, noBloodGroup, pagingParams, clinicDate);
 
     List<DonorViewModel> donors = new ArrayList<>();
 

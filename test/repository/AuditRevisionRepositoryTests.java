@@ -42,24 +42,24 @@ public class AuditRevisionRepositoryTests {
   public void testFindRecentAuditRevisions_shouldReturnAuditRevisionsOrderedByTimestamp() {
 
     AuditRevision chronologicallyFirstAuditRevision = anAuditRevision()
-            .withRevisionDate(START_OF_RANGE.plusDays(1).toDate())
-            .buildAndPersist(entityManager);
+        .withRevisionDate(START_OF_RANGE.plusDays(1).toDate())
+        .buildAndPersist(entityManager);
     AuditRevision chronologicallySecondAuditRevision = anAuditRevision()
-            .withRevisionDate(START_OF_RANGE.plusDays(3).toDate())
-            .buildAndPersist(entityManager);
+        .withRevisionDate(START_OF_RANGE.plusDays(3).toDate())
+        .buildAndPersist(entityManager);
 
     // Excluded by date before start of range
     anAuditRevision()
-            .withRevisionDate(START_OF_RANGE.minusDays(1).toDate())
-            .buildAndPersist(entityManager);
+        .withRevisionDate(START_OF_RANGE.minusDays(1).toDate())
+        .buildAndPersist(entityManager);
 
     // Excluded by date after end of range
     anAuditRevision()
-            .withRevisionDate(END_OF_RANGE.plusDays(1).toDate())
-            .buildAndPersist(entityManager);
+        .withRevisionDate(END_OF_RANGE.plusDays(1).toDate())
+        .buildAndPersist(entityManager);
 
     List<AuditRevision> returnedAuditRevisions = auditRevisionRepository.findAuditRevisions(
-            START_OF_RANGE.toDate(), END_OF_RANGE.toDate());
+        START_OF_RANGE.toDate(), END_OF_RANGE.toDate());
 
     assertThat(returnedAuditRevisions.size(), is(2));
     assertThat(returnedAuditRevisions.get(0), is(chronologicallySecondAuditRevision));
@@ -70,55 +70,55 @@ public class AuditRevisionRepositoryTests {
   public void testFindAuditRevisionsByUser_shouldReturnAuditRevisionsMatchingSearch() {
 
     User userWithMatchingUsername = aUser()
-            .withUsername("username.that.matches")
-            .buildAndPersist(entityManager);
+        .withUsername("username.that.matches")
+        .buildAndPersist(entityManager);
     User userWithMatchingFirstName = aUser()
-            .withUsername("irrelevant.username.1")
-            .withFirstName("matching")
-            .buildAndPersist(entityManager);
+        .withUsername("irrelevant.username.1")
+        .withFirstName("matching")
+        .buildAndPersist(entityManager);
     User userWithMatchingLastName = aUser()
-            .withUsername("irrelevant.username.2")
-            .withLastName("doesMatch")
-            .buildAndPersist(entityManager);
+        .withUsername("irrelevant.username.2")
+        .withLastName("doesMatch")
+        .buildAndPersist(entityManager);
     User userWithNoMatches = aUser().buildAndPersist(entityManager);
 
     Date dateInRange = START_OF_RANGE.plusDays(1).toDate();
 
     List<AuditRevision> expectedAuditRevisions = Arrays.asList(
-            anAuditRevision()
-                    .withUsername(userWithMatchingUsername.getUsername())
-                    .withRevisionDate(dateInRange)
-                    .buildAndPersist(entityManager),
-            anAuditRevision()
-                    .withUsername(userWithMatchingFirstName.getUsername())
-                    .withRevisionDate(dateInRange)
-                    .buildAndPersist(entityManager),
-            anAuditRevision()
-                    .withUsername(userWithMatchingLastName.getUsername())
-                    .withRevisionDate(dateInRange)
-                    .buildAndPersist(entityManager)
+        anAuditRevision()
+            .withUsername(userWithMatchingUsername.getUsername())
+            .withRevisionDate(dateInRange)
+            .buildAndPersist(entityManager),
+        anAuditRevision()
+            .withUsername(userWithMatchingFirstName.getUsername())
+            .withRevisionDate(dateInRange)
+            .buildAndPersist(entityManager),
+        anAuditRevision()
+            .withUsername(userWithMatchingLastName.getUsername())
+            .withRevisionDate(dateInRange)
+            .buildAndPersist(entityManager)
     );
 
     // Excluded by user
     anAuditRevision()
-            .withUsername(userWithNoMatches.getUsername())
-            .withRevisionDate(dateInRange)
-            .buildAndPersist(entityManager);
+        .withUsername(userWithNoMatches.getUsername())
+        .withRevisionDate(dateInRange)
+        .buildAndPersist(entityManager);
 
     // Excluded by date before start of range
     anAuditRevision()
-            .withUsername(userWithNoMatches.getUsername())
-            .withRevisionDate(START_OF_RANGE.minusDays(1).toDate())
-            .buildAndPersist(entityManager);
+        .withUsername(userWithNoMatches.getUsername())
+        .withRevisionDate(START_OF_RANGE.minusDays(1).toDate())
+        .buildAndPersist(entityManager);
 
     // Excluded by date after end of range
     anAuditRevision()
-            .withUsername(userWithNoMatches.getUsername())
-            .withRevisionDate(END_OF_RANGE.plusDays(1).toDate())
-            .buildAndPersist(entityManager);
+        .withUsername(userWithNoMatches.getUsername())
+        .withRevisionDate(END_OF_RANGE.plusDays(1).toDate())
+        .buildAndPersist(entityManager);
 
     List<AuditRevision> returnedAuditRevisions = auditRevisionRepository.findAuditRevisionsByUser(
-            "matcH", START_OF_RANGE.toDate(), END_OF_RANGE.toDate());
+        "matcH", START_OF_RANGE.toDate(), END_OF_RANGE.toDate());
 
     assertThat(returnedAuditRevisions, is(expectedAuditRevisions));
   }
@@ -127,34 +127,34 @@ public class AuditRevisionRepositoryTests {
   public void testFindAuditRevisionsByUserWithFullName_shouldReturnMatchingAuditRevision() {
 
     User userWithMatchingName = aUser()
-            .withUsername("irrelevant.username.1")
-            .withFirstName("Test")
-            .withLastName("User")
-            .buildAndPersist(entityManager);
+        .withUsername("irrelevant.username.1")
+        .withFirstName("Test")
+        .withLastName("User")
+        .buildAndPersist(entityManager);
 
     User userWithNonMatchingName = aUser()
-            .withUsername("irrelevant.username.2")
-            .withFirstName("Test")
-            .withLastName("Abuser")
-            .buildAndPersist(entityManager);
+        .withUsername("irrelevant.username.2")
+        .withFirstName("Test")
+        .withLastName("Abuser")
+        .buildAndPersist(entityManager);
 
     Date dateInRange = START_OF_RANGE.plusDays(1).toDate();
 
     List<AuditRevision> expectedAuditRevisions = Collections.singletonList(
-            anAuditRevision()
-                    .withUsername(userWithMatchingName.getUsername())
-                    .withRevisionDate(dateInRange)
-                    .buildAndPersist(entityManager)
+        anAuditRevision()
+            .withUsername(userWithMatchingName.getUsername())
+            .withRevisionDate(dateInRange)
+            .buildAndPersist(entityManager)
     );
 
     // Excluded by user
     anAuditRevision()
-            .withUsername(userWithNonMatchingName.getUsername())
-            .withRevisionDate(dateInRange)
-            .buildAndPersist(entityManager);
+        .withUsername(userWithNonMatchingName.getUsername())
+        .withRevisionDate(dateInRange)
+        .buildAndPersist(entityManager);
 
     List<AuditRevision> returnedAuditRevisions = auditRevisionRepository.findAuditRevisionsByUser(
-            "Test User", START_OF_RANGE.toDate(), END_OF_RANGE.toDate());
+        "Test User", START_OF_RANGE.toDate(), END_OF_RANGE.toDate());
 
     assertThat(returnedAuditRevisions, is(expectedAuditRevisions));
   }

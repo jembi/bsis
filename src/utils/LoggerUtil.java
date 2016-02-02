@@ -18,7 +18,7 @@ public class LoggerUtil {
     String urlString = request.getRequestURL().toString();
     String queryString = request.getQueryString();
     urlString += queryString != null && queryString.length() > 0 ? "?"
-            + queryString : "";
+        + queryString : "";
     logger.log(BsisLogLevel.BSIS, urlString);
   }
 

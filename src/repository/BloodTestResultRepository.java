@@ -16,11 +16,11 @@ public class BloodTestResultRepository {
   // TODO: Test
   public int countBloodTestResultsForDonation(long donationId) {
     return entityManager.createNamedQuery(
-            BloodTestResultNamedQueryConstants.NAME_COUNT_BLOOD_TEST_RESULTS_FOR_DONATION,
-            Number.class)
-            .setParameter("donationId", donationId)
-            .getSingleResult()
-            .intValue();
+        BloodTestResultNamedQueryConstants.NAME_COUNT_BLOOD_TEST_RESULTS_FOR_DONATION,
+        Number.class)
+        .setParameter("donationId", donationId)
+        .getSingleResult()
+        .intValue();
   }
 
 }

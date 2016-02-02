@@ -36,11 +36,11 @@ public class ComponentStatusChange extends BaseEntity {
   private Date statusChangedOn;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=30)
+  @Column(length = 30)
   private ComponentStatusChangeType statusChangeType;
-  
+
   @Enumerated(EnumType.STRING)
-  @Column(length=30)
+  @Column(length = 30)
   private ComponentStatus newStatus;
 
   @RequestExists

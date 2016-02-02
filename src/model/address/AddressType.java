@@ -15,16 +15,16 @@ import model.BaseEntity;
  */
 @Entity
 public class AddressType extends BaseEntity {
-    private static final long serialVersionUID = 1L;
-    
-    private String preferredAddressType;
+  private static final long serialVersionUID = 1L;
+
+  private String preferredAddressType;
 
 
-    public String getPreferredAddressType() {
-        return preferredAddressType;
-    }
+  public String getPreferredAddressType() {
+    return preferredAddressType;
+  }
 
-    public void setPreferredAddressType(String preferredAddressType) {
-        this.preferredAddressType = preferredAddressType;
-    }
+  public void setPreferredAddressType(String preferredAddressType) {
+    this.preferredAddressType = preferredAddressType;
+  }
 }

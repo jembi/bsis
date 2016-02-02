@@ -38,7 +38,7 @@ public class DonorDeferralCRUDService {
   private UtilController utilController;
 
   public DonorDeferral createDeferralForDonorWithDeferralReasonType(Donor donor, DeferralReasonType deferralReasonType)
-          throws NoResultException, NonUniqueResultException {
+      throws NoResultException, NonUniqueResultException {
 
     LOGGER.info("Creating deferral for donor: " + donor);
 
@@ -50,7 +50,7 @@ public class DonorDeferralCRUDService {
     if (permanentDeferral) {
 
       List<DonorDeferral> donorDeferrals = donorDeferralRepository.findDonorDeferralsForDonorByDeferralReason(
-              donor, deferralReason);
+          donor, deferralReason);
 
       if (donorDeferrals.size() > 0) {
         // The donor already has a permanent deferral of this type so return it
@@ -86,7 +86,7 @@ public class DonorDeferralCRUDService {
     DonorDeferral donorDeferral = findDeferralById(donorDeferralId);
     if (donorDeferral == null) {
       throw new IllegalStateException("DonorDeferral with id " + donorDeferralId
-              + " does not exist (or has already been deleted).");
+          + " does not exist (or has already been deleted).");
     }
     donorDeferral.setIsVoided(Boolean.TRUE);
     donorDeferral.setVoidedDate(new Date());
@@ -109,7 +109,7 @@ public class DonorDeferralCRUDService {
     DonorDeferral deferral = findDeferralById(donorDeferralId);
     if (deferral == null) {
       throw new IllegalStateException("DonorDeferral with id " + donorDeferralId
-              + " does not exist (or has already been deleted).");
+          + " does not exist (or has already been deleted).");
     }
     appendComment(deferral, comment);
     deferral.setDeferredUntil(new Date());

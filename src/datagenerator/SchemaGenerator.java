@@ -41,17 +41,17 @@ public class SchemaGenerator {
     cfg.setProperty("hibernate.show_sql", "true");
     cfg.setProperty("hibernate.hbm2ddl.auto", "none");
     cfg.setProperty("hibernate.ejb.event.post-insert",
-            "org.hibernate.ejb.event.EJB3PostInsertEventListener,org.hibernate.envers.event.AuditEventListener");
+        "org.hibernate.ejb.event.EJB3PostInsertEventListener,org.hibernate.envers.event.AuditEventListener");
     cfg.setProperty("hibernate.ejb.event.post-update",
-            "org.hibernate.ejb.event.EJB3PostUpdateEventListener,org.hibernate.envers.event.AuditEventListener");
+        "org.hibernate.ejb.event.EJB3PostUpdateEventListener,org.hibernate.envers.event.AuditEventListener");
     cfg.setProperty("hibernate.ejb.event.post-delete",
-            "org.hibernate.ejb.event.EJB3PostDeleteEventListener,org.hibernate.envers.event.AuditEventListener");
+        "org.hibernate.ejb.event.EJB3PostDeleteEventListener,org.hibernate.envers.event.AuditEventListener");
     cfg.setProperty("hibernate.ejb.event.pre-collection-update",
-            "org.hibernate.envers.event.AuditEventListener");
+        "org.hibernate.envers.event.AuditEventListener");
     cfg.setProperty("hibernate.ejb.event.pre-collection-remove",
-            "org.hibernate.envers.event.AuditEventListener");
+        "org.hibernate.envers.event.AuditEventListener");
     cfg.setProperty("hibernate.ejb.event.post-collection-recreate",
-            "org.hibernate.envers.event.AuditEventListener");
+        "org.hibernate.envers.event.AuditEventListener");
     for (Class<?> clazz : findAllClasses(packageName)) {
       System.out.println("Class: " + clazz);
       cfg.addAnnotatedClass(clazz);
@@ -103,7 +103,7 @@ public class SchemaGenerator {
       directory = new File(resource.getFile());
     } catch (NullPointerException x) {
       throw new ClassNotFoundException(packageName + " (" + directory
-              + ") does not appear to be a valid package");
+          + ") does not appear to be a valid package");
     }
     if (directory.exists()) {
       String[] files = directory.list();
@@ -111,7 +111,7 @@ public class SchemaGenerator {
         if (file.endsWith(".class")) {
           // removes the .class extension
           classes.add(Class.forName(packageName + '.'
-                  + file.substring(0, file.length() - 6)));
+              + file.substring(0, file.length() - 6)));
         }
       }
     } else {
@@ -122,14 +122,14 @@ public class SchemaGenerator {
   }
 
   private List<Class<?>> findAllClasses(String basePackage)
-          throws IOException, ClassNotFoundException {
+      throws IOException, ClassNotFoundException {
 
     ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
     MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
 
     List<Class<?>> candidates = new ArrayList<>();
     String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
-            resolveBasePackage(basePackage) + "/" + "**/*.class";
+        resolveBasePackage(basePackage) + "/" + "**/*.class";
     Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
     for (Resource resource : resources) {
       if (resource.isReadable()) {
@@ -163,8 +163,8 @@ public class SchemaGenerator {
    */
   private enum Dialect {
     ORACLE("org.hibernate.dialect.Oracle10gDialect"), MYSQL(
-            "org.hibernate.dialect.MySQL5InnoDBDialect"), HSQL(
-            "org.hibernate.dialect.HSQLDialect");
+        "org.hibernate.dialect.MySQL5InnoDBDialect"), HSQL(
+        "org.hibernate.dialect.HSQLDialect");
 
     private String dialectClass;
 

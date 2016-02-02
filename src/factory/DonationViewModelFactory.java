@@ -15,38 +15,38 @@ import java.util.Map;
 
 @Service
 public class DonationViewModelFactory {
-    
-    @Autowired
-    private DonationConstraintChecker donationConstraintChecker;
-    @Autowired
-    private AdverseEventViewModelFactory adverseEventViewModelFactory;
-    @Autowired
-    private DonorConstraintChecker donorConstraintChecker;
 
-    public List<DonationViewModel> createDonationViewModelsWithPermissions(List<Donation> donations) {
-        List<DonationViewModel> donationViewModels = new ArrayList<>();
-        for (Donation donation : donations) {
-            donationViewModels.add(createDonationViewModelWithPermissions(donation));
-        }
-        return donationViewModels;
+  @Autowired
+  private DonationConstraintChecker donationConstraintChecker;
+  @Autowired
+  private AdverseEventViewModelFactory adverseEventViewModelFactory;
+  @Autowired
+  private DonorConstraintChecker donorConstraintChecker;
+
+  public List<DonationViewModel> createDonationViewModelsWithPermissions(List<Donation> donations) {
+    List<DonationViewModel> donationViewModels = new ArrayList<>();
+    for (Donation donation : donations) {
+      donationViewModels.add(createDonationViewModelWithPermissions(donation));
     }
+    return donationViewModels;
+  }
 
-    public DonationViewModel createDonationViewModelWithPermissions(Donation donation) {
-        DonationViewModel donationViewModel = createDonationViewModelWithoutPermissions(donation);
+  public DonationViewModel createDonationViewModelWithPermissions(Donation donation) {
+    DonationViewModel donationViewModel = createDonationViewModelWithoutPermissions(donation);
 
-        boolean canDonate = !donorConstraintChecker.isDonorDeferred(donation.getDonor().getId());
-        boolean isBackEntry = donation.getDonationBatch().isBackEntry();
+    boolean canDonate = !donorConstraintChecker.isDonorDeferred(donation.getDonor().getId());
+    boolean isBackEntry = donation.getDonationBatch().isBackEntry();
 
-        // Populate permissions
-        Map<String, Boolean> permissions = new HashMap<>();
-        permissions.put("canDelete", donationConstraintChecker.canDeleteDonation(donation.getId()));
-        permissions.put("canUpdateDonationFields", donationConstraintChecker.canUpdateDonationFields(donation.getId()));
-        permissions.put("canDonate", canDonate);
-        permissions.put("isBackEntry", isBackEntry);
-        donationViewModel.setPermissions(permissions);
+    // Populate permissions
+    Map<String, Boolean> permissions = new HashMap<>();
+    permissions.put("canDelete", donationConstraintChecker.canDeleteDonation(donation.getId()));
+    permissions.put("canUpdateDonationFields", donationConstraintChecker.canUpdateDonationFields(donation.getId()));
+    permissions.put("canDonate", canDonate);
+    permissions.put("isBackEntry", isBackEntry);
+    donationViewModel.setPermissions(permissions);
 
-        return donationViewModel;
-    }
+    return donationViewModel;
+  }
 
   public DonationViewModel createDonationViewModelWithoutPermissions(Donation donation) {
     DonationViewModel donationViewModel = new DonationViewModel(donation);

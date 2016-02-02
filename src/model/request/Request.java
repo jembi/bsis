@@ -37,70 +37,70 @@ public class Request extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length=20, unique=true)
-  @Index(name="request_requestNumber_index")
+  @Column(length = 20, unique = true)
+  @Index(name = "request_requestNumber_index")
   private String requestNumber;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Index(name="request_requestDate_index")
+  @Index(name = "request_requestDate_index")
   private Date requestDate;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Index(name="request_requiredDate_index")
+  @Index(name = "request_requiredDate_index")
   private Date requiredDate;
 
   private Boolean fulfilled;
 
-  @Column(length=30)
-  @Index(name="request_bloodAbo_index")
+  @Column(length = 30)
+  @Index(name = "request_bloodAbo_index")
   private String patientBloodAbo;
 
-  @Column(length=30)
-  @Index(name="request_bloodRhd_index")
+  @Column(length = 30)
+  @Index(name = "request_bloodRhd_index")
   private String patientBloodRh;
 
   // fetch type eager to check how many components issued
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy="issuedTo")
+  @OneToMany(mappedBy = "issuedTo")
   private List<Component> issuedComponents;
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy="forRequest")
+  @OneToMany(mappedBy = "forRequest")
   private Set<CompatibilityTest> crossmatchTests;
-  
-  @Column(length=30)
+
+  @Column(length = 30)
   private String patientNumber;
 
-  @Column(length=30)
+  @Column(length = 30)
   private String patientFirstName;
 
-  @Column(length=30)
+  @Column(length = 30)
   private String patientLastName;
 
   @Temporal(TemporalType.DATE)
   private Date patientBirthDate;
 
-  @Column(length=50)
+  @Column(length = 50)
   private String indicationForUse;
-  
+
   @Column
   private Integer patientAge;
 
   @Column
   private Gender patientGender;
 
-  @Column(length=100)
+  @Column(length = 100)
   private String patientDiagnosis;
 
-  @Column(length=20)
+  @Column(length = 20)
   private String ward;
 
-  @Column(length=30)
+  @Column(length = 30)
   private String hospital;
 
-  @Column(length=30)
+  @Column(length = 30)
   private String department;
 
   /**
@@ -108,7 +108,7 @@ public class Request extends BaseModificationTrackerEntity {
    * The request is coming from a hospital. we should store
    * the name of the doctor requesting it.
    */
-  @Column(length=30)
+  @Column(length = 30)
   private String requestedBy;
 
   @Column

@@ -67,16 +67,16 @@ public class ComponentViewModel {
 
   public String getDonationIdentificationNumber() {
     if (getComponent() == null || getComponent().getDonation() == null ||
-            getComponent().getDonation().getDonationIdentificationNumber() == null
-            )
+        getComponent().getDonation().getDonationIdentificationNumber() == null
+        )
       return "";
     return getComponent().getDonation().getDonationIdentificationNumber();
   }
 
   public String getDonationID() {
     if (getComponent() == null || getComponent().getDonation() == null ||
-            getComponent().getDonation().getId() == null
-            )
+        getComponent().getDonation().getId() == null
+        )
       return "";
     return getComponent().getDonation().getId().toString();
   }
@@ -149,8 +149,8 @@ public class ComponentViewModel {
   @JsonIgnore
   public String getBloodGroup() {
     if (component == null || component.getDonation() == null ||
-            component.getDonation().getDonationIdentificationNumber() == null
-            )
+        component.getDonation().getDonationIdentificationNumber() == null
+        )
       return "";
     DonationViewModel donationViewModel = new DonationViewModel(component.getDonation());
     return donationViewModel.getBloodGroup();
@@ -162,7 +162,7 @@ public class ComponentViewModel {
 
   public Boolean getStatusAllowsSplitting() {
     return Arrays.asList(ComponentStatus.AVAILABLE, ComponentStatus.QUARANTINED)
-            .contains(component.getStatus());
+        .contains(component.getStatus());
   }
 
   public String getComponentIdentificationNumber() {

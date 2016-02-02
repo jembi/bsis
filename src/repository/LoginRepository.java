@@ -20,7 +20,7 @@ public class LoginRepository {
     TypedQuery<User> query = em.createQuery(queryString, User.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     List<User> users = query.setParameter("username", username)
-            .getResultList();
+        .getResultList();
     if (users == null || users.size() == 0) {
       return null;
     }

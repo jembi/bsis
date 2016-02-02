@@ -28,10 +28,10 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
  */
 @NamedQueries({
     @NamedQuery(name = BloodTestResultNamedQueryConstants.NAME_COUNT_BLOOD_TEST_RESULTS_FOR_DONATION,
-            query = BloodTestResultNamedQueryConstants.QUERY_COUNT_BLOOD_TEST_RESULTS_FOR_DONATION)
+        query = BloodTestResultNamedQueryConstants.QUERY_COUNT_BLOOD_TEST_RESULTS_FOR_DONATION)
 })
 @Entity
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class BloodTestResult extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
@@ -42,7 +42,7 @@ public class BloodTestResult extends BaseModificationTrackerEntity {
   @ManyToOne(cascade = {CascadeType.MERGE})
   private BloodTest bloodTest;
 
-  @Column(length=10)
+  @Column(length = 10)
   private String result;
 
   @Temporal(TemporalType.TIMESTAMP)
@@ -53,8 +53,8 @@ public class BloodTestResult extends BaseModificationTrackerEntity {
 
   @Lob
   private String notes;
-    
-  @Column(length=20)
+
+  @Column(length = 20)
   private String reagentLotNumber;
 
   public BloodTestResult() {
@@ -109,11 +109,11 @@ public class BloodTestResult extends BaseModificationTrackerEntity {
     this.machineReading = machineReading;
   }
 
-	public String getReagentLotNumber() {
-		return reagentLotNumber;
-	}
+  public String getReagentLotNumber() {
+    return reagentLotNumber;
+  }
 
-	public void setReagentLotNumber(String reagentLotNumber) {
-		this.reagentLotNumber = reagentLotNumber;
-	}
+  public void setReagentLotNumber(String reagentLotNumber) {
+    this.reagentLotNumber = reagentLotNumber;
+  }
 }

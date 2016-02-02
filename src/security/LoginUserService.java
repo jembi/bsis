@@ -16,7 +16,7 @@ public class LoginUserService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username)
-          throws UsernameNotFoundException {
+      throws UsernameNotFoundException {
 
     // http://stackoverflow.com/questions/16455348/autowired-dependency-injection-with-spring-security
     if (userRepository == null) {

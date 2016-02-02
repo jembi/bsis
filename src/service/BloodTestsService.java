@@ -29,29 +29,29 @@ import java.util.Set;
 @Transactional
 @Service
 public class BloodTestsService {
-	
-	@Autowired
-	ComponentRepository componentRepository;
-	
-	@Autowired
-	BloodTestingRepository bloodTestingRepository;
-	
+
+  @Autowired
+  ComponentRepository componentRepository;
+
+  @Autowired
+  BloodTestingRepository bloodTestingRepository;
+
   @Autowired
   private DonationRepository donationRepository;
 
   @Autowired
   private BloodTestingRuleEngine ruleEngine;
 
-	/**
-	 * Executes the BloodTestingRuleEngine with the configured BloodTests and returns the results
-	 *
-	 * @param donation Donation to run the tests on
-	 * @return BloodTestingRuleResult with the results from the tests
-	 */
-	public BloodTestingRuleResult executeTests(Donation donation) {
-		BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForDonation(donation.getId());
-		return ruleResult;
-	}
+  /**
+   * Executes the BloodTestingRuleEngine with the configured BloodTests and returns the results
+   *
+   * @param donation Donation to run the tests on
+   * @return BloodTestingRuleResult with the results from the tests
+   */
+  public BloodTestingRuleResult executeTests(Donation donation) {
+    BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForDonation(donation.getId());
+    return ruleResult;
+  }
 
 
   /**
@@ -68,7 +68,7 @@ public class BloodTestsService {
   /**
    * Saves the BloodTest results and updates the Donation (bloodAbo/Rh and statuses)
    *
-   * @param donationId Long identifier of the donation that should be updated with new test results
+   * @param donationId       Long identifier of the donation that should be updated with new test results
    * @param bloodTestResults Map of test results
    * @return BloodTestingRuleResult containing the results of the Blood Test Rules Engine
    */
@@ -87,7 +87,7 @@ public class BloodTestsService {
    * Updates the specified Donation given the results from the BloodTests. Updates include blood
    * grouping, extra information, TTI status and blood typing statuses.
    *
-   * @param donation Donation on which the tests were run
+   * @param donation   Donation on which the tests were run
    * @param ruleResult BloodTestingRuleResult containing the results from the tests
    * @return boolean, true if the Donation was updated
    */
@@ -96,24 +96,24 @@ public class BloodTestsService {
     return bloodTestingRepository.updateDonationWithTestResults(donation, ruleResult);
   }
 
-	/**
-	 * Updates Components as a result of Blood Tests being done on a Donation. The updates include
-	 * the Component Status - and should result in Components being discarded if a Donation is
-	 * marked as TTI_UNSAFE.
-	 *
-	 * @param donation Donation on which the tests were run
-	 * @param ruleResult BloodTestingRuleResult results from the Blood Tests.
-	 */
-	public void updateComponentsWithTestResults(Donation donation, BloodTestingRuleResult ruleResult) {
-		List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber(donation
-		        .getDonationIdentificationNumber());
-		if (components != null) {
-			for (Component component : components) {
-				// FIXME: this method should be in this service, but it has too many references in ComponentRepository
-				componentRepository.updateComponentInternalFields(component);
-			}
-		}
-	}
+  /**
+   * Updates Components as a result of Blood Tests being done on a Donation. The updates include
+   * the Component Status - and should result in Components being discarded if a Donation is
+   * marked as TTI_UNSAFE.
+   *
+   * @param donation   Donation on which the tests were run
+   * @param ruleResult BloodTestingRuleResult results from the Blood Tests.
+   */
+  public void updateComponentsWithTestResults(Donation donation, BloodTestingRuleResult ruleResult) {
+    List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber(donation
+        .getDonationIdentificationNumber());
+    if (components != null) {
+      for (Component component : components) {
+        // FIXME: this method should be in this service, but it has too many references in ComponentRepository
+        componentRepository.updateComponentInternalFields(component);
+      }
+    }
+  }
 
   protected void setBloodTestingRepository(BloodTestingRepository bloodTestingRepository) {
     this.bloodTestingRepository = bloodTestingRepository;

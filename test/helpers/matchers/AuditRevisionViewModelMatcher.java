@@ -22,18 +22,18 @@ public class AuditRevisionViewModelMatcher extends TypeSafeMatcher<AuditRevision
   @Override
   public void describeTo(Description description) {
     description.appendText("An AuditRevisionViewModel with the following state:")
-            .appendText("\nId: ").appendValue(expected.getId())
-            .appendText("\nRevision date: ").appendValue(expected.getRevisionDate())
-            .appendText("\nUser: ").appendValue(expected.getUser())
-            .appendText("\nEntity revisions: ").appendValue(expected.getEntityModifications());
+        .appendText("\nId: ").appendValue(expected.getId())
+        .appendText("\nRevision date: ").appendValue(expected.getRevisionDate())
+        .appendText("\nUser: ").appendValue(expected.getUser())
+        .appendText("\nEntity revisions: ").appendValue(expected.getEntityModifications());
   }
 
   @Override
   public boolean matchesSafely(AuditRevisionViewModel actual) {
     return Objects.equals(actual.getId(), expected.getId()) &&
-            Objects.equals(actual.getRevisionDate(), expected.getRevisionDate()) &&
-            Objects.equals(actual.getUser(), expected.getUser()) &&
-            Objects.equals(actual.getEntityModifications(), expected.getEntityModifications());
+        Objects.equals(actual.getRevisionDate(), expected.getRevisionDate()) &&
+        Objects.equals(actual.getUser(), expected.getUser()) &&
+        Objects.equals(actual.getEntityModifications(), expected.getEntityModifications());
   }
 
 }

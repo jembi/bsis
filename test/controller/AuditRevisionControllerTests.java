@@ -32,12 +32,12 @@ public class AuditRevisionControllerTests {
     setUpFixture();
 
     List<AuditRevision> auditRevisions = Arrays.asList(
-            anAuditRevision().withId(1).build(),
-            anAuditRevision().withId(2).build()
+        anAuditRevision().withId(1).build(),
+        anAuditRevision().withId(2).build()
     );
     List<AuditRevisionViewModel> auditRevisionViewModels = Arrays.asList(
-            anAuditRevisionViewModel().withId(1).build(),
-            anAuditRevisionViewModel().withId(2).build()
+        anAuditRevisionViewModel().withId(1).build(),
+        anAuditRevisionViewModel().withId(2).build()
     );
 
     when(auditRevisionRepository.findAuditRevisions(IRRELEVANT_START_DATE, IRRELEVANT_END_DATE)).thenReturn(auditRevisions);
@@ -45,7 +45,7 @@ public class AuditRevisionControllerTests {
 
     // Exercise SUT
     List<AuditRevisionViewModel> returnedAuditRevisionViewModels = auditRevisionController.getAuditRevisions(null,
-            IRRELEVANT_START_DATE, IRRELEVANT_END_DATE);
+        IRRELEVANT_START_DATE, IRRELEVANT_END_DATE);
 
     // Verify
     verify(auditRevisionRepository).findAuditRevisions(IRRELEVANT_START_DATE, IRRELEVANT_END_DATE);
@@ -62,23 +62,23 @@ public class AuditRevisionControllerTests {
     setUpFixture();
 
     List<AuditRevision> auditRevisions = Arrays.asList(
-            anAuditRevision().withId(1).build(),
-            anAuditRevision().withId(2).build()
+        anAuditRevision().withId(1).build(),
+        anAuditRevision().withId(2).build()
     );
     List<AuditRevisionViewModel> auditRevisionViewModels = Arrays.asList(
-            anAuditRevisionViewModel().withId(1).build(),
-            anAuditRevisionViewModel().withId(2).build()
+        anAuditRevisionViewModel().withId(1).build(),
+        anAuditRevisionViewModel().withId(2).build()
     );
 
     String searchParam = "search";
 
     when(auditRevisionRepository.findAuditRevisionsByUser(searchParam, IRRELEVANT_START_DATE, IRRELEVANT_END_DATE))
-            .thenReturn(auditRevisions);
+        .thenReturn(auditRevisions);
     when(auditRevisionViewModelFactory.createAuditRevisionViewModels(auditRevisions)).thenReturn(auditRevisionViewModels);
 
     // Exercise SUT
     List<AuditRevisionViewModel> returnedAuditRevisionViewModels = auditRevisionController.getAuditRevisions(
-            searchParam, IRRELEVANT_START_DATE, IRRELEVANT_END_DATE);
+        searchParam, IRRELEVANT_START_DATE, IRRELEVANT_END_DATE);
 
     // Verify
     verify(auditRevisionRepository).findAuditRevisionsByUser(searchParam, IRRELEVANT_START_DATE, IRRELEVANT_END_DATE);

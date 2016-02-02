@@ -23,14 +23,14 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentsBeDiscardedWithBloodTestNotFlaggedForDiscard_shouldReturnFalse() {
 
     List<BloodTestResult> bloodTestResults = Collections.singletonList(
-            aBloodTestResult()
-                    .withId(9L)
-                    .withResult("POS")
-                    .withBloodTest(aBloodTest()
-                            .withFlagComponentsForDiscard(false)
-                            .withPositiveResults("POS,+")
-                            .build())
-                    .build()
+        aBloodTestResult()
+            .withId(9L)
+            .withResult("POS")
+            .withBloodTest(aBloodTest()
+                .withFlagComponentsForDiscard(false)
+                .withPositiveResults("POS,+")
+                .build())
+            .build()
     );
 
     boolean result = componentStatusCalculator.shouldComponentsBeDiscarded(bloodTestResults);
@@ -42,14 +42,14 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentsBeDiscardedWithBloodTestFlaggedForDiscardWithNegativeResult_shouldReturnFalse() {
 
     List<BloodTestResult> bloodTestResults = Collections.singletonList(
-            aBloodTestResult()
-                    .withId(9L)
-                    .withResult("NEG")
-                    .withBloodTest(aBloodTest()
-                            .withFlagComponentsForDiscard(true)
-                            .withPositiveResults("POS,+")
-                            .build())
-                    .build()
+        aBloodTestResult()
+            .withId(9L)
+            .withResult("NEG")
+            .withBloodTest(aBloodTest()
+                .withFlagComponentsForDiscard(true)
+                .withPositiveResults("POS,+")
+                .build())
+            .build()
     );
 
     boolean result = componentStatusCalculator.shouldComponentsBeDiscarded(bloodTestResults);
@@ -61,14 +61,14 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentsBeDiscardedWithBloodTestFlaggedForDiscardWithPositiveResult_shouldReturnTrue() {
 
     List<BloodTestResult> bloodTestResults = Collections.singletonList(
-            aBloodTestResult()
-                    .withId(9L)
-                    .withResult("POS")
-                    .withBloodTest(aBloodTest()
-                            .withFlagComponentsForDiscard(true)
-                            .withPositiveResults("POS,+")
-                            .build())
-                    .build()
+        aBloodTestResult()
+            .withId(9L)
+            .withResult("POS")
+            .withBloodTest(aBloodTest()
+                .withFlagComponentsForDiscard(true)
+                .withPositiveResults("POS,+")
+                .build())
+            .build()
     );
 
     boolean result = componentStatusCalculator.shouldComponentsBeDiscarded(bloodTestResults);

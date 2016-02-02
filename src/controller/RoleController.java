@@ -58,7 +58,7 @@ public class RoleController {
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_ROLES + "')")
   public ResponseEntity updateRole(
-          @Valid @RequestBody RoleBackingForm form, @PathVariable Long id) {
+      @Valid @RequestBody RoleBackingForm form, @PathVariable Long id) {
 
     Role updatedRole = null;
     form.setId(id);
@@ -80,7 +80,7 @@ public class RoleController {
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_ROLES + "')")
   public ResponseEntity addRole(
-          @Valid @RequestBody RoleBackingForm form) {
+      @Valid @RequestBody RoleBackingForm form) {
 
     Role role = new Role();
     role.setName(form.getName());

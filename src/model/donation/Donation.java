@@ -57,23 +57,24 @@ import constraintvalidator.PackTypeExists;
 
 /**
  * A donation of blood
+ *
  * @author iamrohitbanga
  */
 @NamedQueries({
     @NamedQuery(name = DonationNamedQueryConstants.NAME_COUNT_DONATIONS_FOR_DONOR,
-            query = DonationNamedQueryConstants.QUERY_COUNT_DONATION_FOR_DONOR),
+        query = DonationNamedQueryConstants.QUERY_COUNT_DONATION_FOR_DONOR),
     @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_ASCENDING_DONATION_DATES_FOR_DONOR,
-            query = DonationNamedQueryConstants.QUERY_FIND_ASCENDING_DONATION_DATES_FOR_DONOR),
+        query = DonationNamedQueryConstants.QUERY_FIND_ASCENDING_DONATION_DATES_FOR_DONOR),
     @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_DESCENDING_DONATION_DATES_FOR_DONOR,
-            query = DonationNamedQueryConstants.QUERY_FIND_DESCENDING_DONATION_DATES_FOR_DONOR),
+        query = DonationNamedQueryConstants.QUERY_FIND_DESCENDING_DONATION_DATES_FOR_DONOR),
     @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_COLLECTED_DONATION_VALUE_OBJECTS_FOR_DATE_RANGE,
-                query = DonationNamedQueryConstants.QUERY_FIND_COLLECTED_DONATION_VALUE_OBJECTS_FOR_DATE_RANGE),
+        query = DonationNamedQueryConstants.QUERY_FIND_COLLECTED_DONATION_VALUE_OBJECTS_FOR_DATE_RANGE),
     @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_LATEST_DUE_TO_DONATE_DATE_FOR_DONOR,
-                query = DonationNamedQueryConstants.QUERY_FIND_LATEST_DUE_TO_DONATE_DATE_FOR_DONOR)
+        query = DonationNamedQueryConstants.QUERY_FIND_LATEST_DUE_TO_DONATE_DATE_FOR_DONOR)
 })
 @Entity
 @Audited
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Donation extends BaseModificationTrackerEntity implements Comparable<Donation> {
 
   private static final long serialVersionUID = 1L;
@@ -82,35 +83,34 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
    * Very common usecase to search for donation by donation identification number.
    * In most cases the donation numbers will be preprinted labels.
    */
-  @Column(length=20, unique=true)
-  @Index(name="donation_donationIdentificationNumber_index")
+  @Column(length = 20, unique = true)
+  @Index(name = "donation_donationIdentificationNumber_index")
   private String donationIdentificationNumber;
 
   @DonorExists
   @ManyToOne
   private Donor donor;
 
-  @Column(length=50)
+  @Column(length = 50)
   private String bloodAbo;
 
-  @Column(length=50)
+  @Column(length = 50)
   private String bloodRh;
 
-  @Column(length=150)
+  @Column(length = 150)
   private String extraBloodTypeInformation;
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy="donation")
+  @OneToMany(mappedBy = "donation")
   private List<BloodTestResult> bloodTestResults;
-
 
 
   /**
    * Index to find donations done between date ranges.
    */
   @Temporal(TemporalType.TIMESTAMP)
-  @Index(name="donation_donationDate_index")
+  @Index(name = "donation_donationDate_index")
   private Date donationDate;
 
   @DonationTypeExists
@@ -124,79 +124,79 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   /**
    * List of components created from this donation.
    */
-  @OneToMany(mappedBy="donation")
+  @OneToMany(mappedBy = "donation")
   private List<Component> components;
 
   @NotAudited
-  @ManyToMany(mappedBy="donations")
+  @ManyToMany(mappedBy = "donations")
   private Set<Worksheet> worksheets;
 
   @Range(min = 0, max = 30)
   private BigDecimal haemoglobinCount;
-  
+
   @Enumerated(EnumType.STRING)
   @Column(length = 20)
   private HaemoglobinLevel haemoglobinLevel;
 
-  @Column(name="bloodPressureSystolic")
+  @Column(name = "bloodPressureSystolic")
   @Range(min = 0, max = 250)
   private Integer bloodPressureSystolic;
-  
-  @Column(name="bloodPressureDiastolic")
+
+  @Column(name = "bloodPressureDiastolic")
   @Range(min = 0, max = 150)
   private Integer bloodPressureDiastolic;
 
   /**
    * Limit the number of bytes required to store.
    */
-  
+
   @Range(min = 0, max = 300)
   private BigDecimal donorWeight;
 
-  @ManyToOne(optional=true)
+  @ManyToOne(optional = true)
   private User donationCreatedBy;
 
   @DonationBatchExists
-  @ManyToOne(optional=true)
+  @ManyToOne(optional = true)
   private DonationBatch donationBatch;
 
   @Lob
   private String notes;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=20)
+  @Column(length = 20)
   private BloodTypingStatus bloodTypingStatus;
-  
+
   @Enumerated(EnumType.STRING)
-  @Column(length=20)
+  @Column(length = 20)
   private BloodTypingMatchStatus bloodTypingMatchStatus;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=20)
+  @Column(length = 20)
   private TTIStatus ttiStatus;
 
   private Boolean isDeleted;
-  
-  @Range(min =0 ,max = 290)
+
+  @Range(min = 0, max = 290)
   private Integer donorPulse;
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date bleedStartTime;
 
-  @Temporal(TemporalType.TIMESTAMP) 
+  @Temporal(TemporalType.TIMESTAMP)
   private Date bleedEndTime;
 
   @OneToOne
   @LocationExists
   @NotNull
   private Location venue;
-  
+
   @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true)
   private AdverseEvent adverseEvent;
-  
-    // If the donor was ineligible when the donation was captured
-    @Column(nullable = false)
-    private boolean ineligibleDonor = false;
+
+  // If the donor was ineligible when the donation was captured
+  @Column(nullable = false)
+  private boolean ineligibleDonor = false;
 
   // If this donation has been released in a test batch
   @Column(nullable = false)
@@ -238,7 +238,7 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
     this.bleedEndTime = donation.getBleedEndTime();
     this.venue = donation.getVenue();
     this.adverseEvent = donation.getAdverseEvent();
-}
+  }
 
   public String getDonationIdentificationNumber() {
     return donationIdentificationNumber;
@@ -299,12 +299,12 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
     this.donationDate = donation.donationDate;
     this.donationBatch = donation.donationBatch;
     this.notes = donation.notes;
-    this.haemoglobinCount=donation.haemoglobinCount;
+    this.haemoglobinCount = donation.haemoglobinCount;
     this.haemoglobinLevel = donation.haemoglobinLevel;
     this.donorPulse = donation.donorPulse;
-    this.donorWeight=donation.donorWeight;
-    this.bloodPressureDiastolic=donation.bloodPressureDiastolic;
-    this.bloodPressureSystolic=donation.bloodPressureSystolic;
+    this.donorWeight = donation.donorWeight;
+    this.bloodPressureDiastolic = donation.bloodPressureDiastolic;
+    this.bloodPressureSystolic = donation.bloodPressureSystolic;
     this.venue = donation.getVenue();
     this.bloodAbo = donation.bloodAbo;
     this.bloodRh = donation.bloodRh;
@@ -355,27 +355,27 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
     this.haemoglobinCount = haemoglobinCount;
   }
-  
-    public HaemoglobinLevel getHaemoglobinLevel() {
-        return haemoglobinLevel;
-    }
 
-    public void setHaemoglobinLevel(HaemoglobinLevel haemoglobinLevel) {
-        this.haemoglobinLevel = haemoglobinLevel;
-    }
+  public HaemoglobinLevel getHaemoglobinLevel() {
+    return haemoglobinLevel;
+  }
+
+  public void setHaemoglobinLevel(HaemoglobinLevel haemoglobinLevel) {
+    this.haemoglobinLevel = haemoglobinLevel;
+  }
 
   public Integer getBloodPressureSystolic() {
-		return bloodPressureSystolic;
-	}
+    return bloodPressureSystolic;
+  }
 
   public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
-		this.bloodPressureSystolic = bloodPressureSystolic;
-	}
+    this.bloodPressureSystolic = bloodPressureSystolic;
+  }
 
   public BigDecimal getDonorWeight() {
     return donorWeight;
   }
-  
+
   public void setDonorWeight(BigDecimal donorWeight) {
     this.donorWeight = donorWeight;
   }
@@ -431,7 +431,7 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   public void setBloodTypingStatus(BloodTypingStatus bloodTypingStatus) {
     this.bloodTypingStatus = bloodTypingStatus;
   }
-  
+
   public BloodTypingMatchStatus getBloodTypingMatchStatus() {
     return bloodTypingMatchStatus;
   }
@@ -457,75 +457,75 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   }
 
   public Integer getBloodPressureDiastolic() {
-		return bloodPressureDiastolic;
-	}
+    return bloodPressureDiastolic;
+  }
 
-	public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
-		this.bloodPressureDiastolic = bloodPressureDiastolic;
-	}
+  public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+    this.bloodPressureDiastolic = bloodPressureDiastolic;
+  }
 
-	public String getExtraBloodTypeInformation() {
+  public String getExtraBloodTypeInformation() {
     return extraBloodTypeInformation;
   }
 
-    public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
-        this.extraBloodTypeInformation = extraBloodTypeInformation;
-    }
+  public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
+    this.extraBloodTypeInformation = extraBloodTypeInformation;
+  }
 
-    public Integer getDonorPulse() {
-        return donorPulse;
-    }
+  public Integer getDonorPulse() {
+    return donorPulse;
+  }
 
-    public void setDonorPulse(Integer donorPulse) {
-        this.donorPulse = donorPulse;
-    }
+  public void setDonorPulse(Integer donorPulse) {
+    this.donorPulse = donorPulse;
+  }
 
-    public Date getBleedStartTime() {
-        return bleedStartTime;
-    }
+  public Date getBleedStartTime() {
+    return bleedStartTime;
+  }
 
-    public void setBleedStartTime(Date bleedStartTime) {
-        this.bleedStartTime = bleedStartTime;
-    }
+  public void setBleedStartTime(Date bleedStartTime) {
+    this.bleedStartTime = bleedStartTime;
+  }
 
-    public Date getBleedEndTime() {
-        return bleedEndTime;
-    }
+  public Date getBleedEndTime() {
+    return bleedEndTime;
+  }
 
-    public void setBleedEndTime(Date bleedEndTime) {
-        this.bleedEndTime = bleedEndTime;
-    }
+  public void setBleedEndTime(Date bleedEndTime) {
+    this.bleedEndTime = bleedEndTime;
+  }
 
-    public Location getVenue() {
-        return venue;
-    }
+  public Location getVenue() {
+    return venue;
+  }
 
-    public void setVenue(Location venue) {
-        this.venue = venue;
-    }
+  public void setVenue(Location venue) {
+    this.venue = venue;
+  }
 
-    public AdverseEvent getAdverseEvent() {
-        return adverseEvent;
-    }
+  public AdverseEvent getAdverseEvent() {
+    return adverseEvent;
+  }
 
-    public void setAdverseEvent(AdverseEvent adverseEvent) {
-        this.adverseEvent = adverseEvent;
-    }
+  public void setAdverseEvent(AdverseEvent adverseEvent) {
+    this.adverseEvent = adverseEvent;
+  }
 
-    public boolean isIneligibleDonor() {
-        return ineligibleDonor;
-    }
+  public boolean isIneligibleDonor() {
+    return ineligibleDonor;
+  }
 
-    public void setIneligibleDonor(boolean ineligibleDonor) {
-        this.ineligibleDonor = ineligibleDonor;
-    }
+  public void setIneligibleDonor(boolean ineligibleDonor) {
+    this.ineligibleDonor = ineligibleDonor;
+  }
 
-    public boolean isReleased() {
-      return released;
-    }
+  public boolean isReleased() {
+    return released;
+  }
 
-    public void setReleased(boolean released) {
-      this.released = released;
-    }
+  public void setReleased(boolean released) {
+    this.released = released;
+  }
 
 }

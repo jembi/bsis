@@ -42,12 +42,12 @@ public class RoleBackingFormValidator implements Validator {
 
     if (utilController.isDuplicateRoleName(form.getRole())) {
       errors.rejectValue("role.name", "roleName.nonunique",
-              "Role name already exists.");
+          "Role name already exists.");
     }
 
     if (form.getPermissions().isEmpty()) {
       errors.rejectValue("Role.permissions", "permissions.empty",
-              "Role must have one or more permissions");
+          "Role must have one or more permissions");
     }
 
     utilController.commonFieldChecks(form, "Role", errors);

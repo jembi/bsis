@@ -61,7 +61,7 @@ public class CompatibilityTestsController {
   @RequestMapping(value = "{requestId}/edit/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.BLOOD_CROSS_MATCH_CHECK + "')")
   public ResponseEntity<Map<String, Object>> editCompatibilityTestsFormGenerator(
-          @PathVariable String requestId) {
+      @PathVariable String requestId) {
 
     Map<String, Object> m = new HashMap<>();
     addEditSelectorOptions(m);

@@ -39,8 +39,8 @@ public class BloodTestResultConstraintChecker {
         // can edit if the blood typing status is not complete
         return true;
       } else if (!BloodTypingStatus.NOT_DONE.equals(bloodTypingStatus)
-              && (BloodTypingMatchStatus.NO_MATCH.equals(bloodTypingMatchStatus)
-              || BloodTypingMatchStatus.AMBIGUOUS.equals(bloodTypingMatchStatus))) {
+          && (BloodTypingMatchStatus.NO_MATCH.equals(bloodTypingMatchStatus)
+          || BloodTypingMatchStatus.AMBIGUOUS.equals(bloodTypingMatchStatus))) {
         // the user will be requested to confirm the blood typing results
         return true;
       } else {
@@ -62,9 +62,9 @@ public class BloodTestResultConstraintChecker {
 
   private boolean isResultConfirmed(BloodTestingRuleResultSet bloodTestingRuleResultSet, BloodTestResult bloodTestResult) {
     return isResultConfirmed(
-            bloodTestingRuleResultSet.getBloodTestingRules(),
-            bloodTestingRuleResultSet.getAvailableTestResults(),
-            String.valueOf(bloodTestResult.getBloodTest().getId()));
+        bloodTestingRuleResultSet.getBloodTestingRules(),
+        bloodTestingRuleResultSet.getAvailableTestResults(),
+        String.valueOf(bloodTestResult.getBloodTest().getId()));
   }
 
   private boolean isResultConfirmed(List<BloodTestingRule> rules, Map<String, String> availableTestResults, String bloodTestId) {

@@ -21,7 +21,7 @@ import java.util.Map;
 public class EntitySaveListener implements PersistEventListener, MergeEventListener, PreInsertEventListener {
 
   private static final Logger logger = LoggerFactory
-          .getLogger(EntitySaveListener.class);
+      .getLogger(EntitySaveListener.class);
   private static final long serialVersionUID = 1L;
   @Autowired
   private LocalEntityManagerFactoryBean entityManagerFactory;
@@ -32,13 +32,13 @@ public class EntitySaveListener implements PersistEventListener, MergeEventListe
 
   public void onPersist(PersistEvent event) throws HibernateException {
     if (SecurityContextHolder.getContext() != null
-            && SecurityContextHolder.getContext().getAuthentication() != null) {
+        && SecurityContextHolder.getContext().getAuthentication() != null) {
       Object principal = SecurityContextHolder.getContext()
-              .getAuthentication().getPrincipal();
+          .getAuthentication().getPrincipal();
       if (principal != null && principal instanceof BsisUserDetails) {
         User user = ((BsisUserDetails) principal).getUser();
         if (event.getObject() instanceof ModificationTracker &&
-                user != null) {
+            user != null) {
           ModificationTracker entity = (ModificationTracker) event.getObject();
           entity.setCreatedDate(new Date());
           entity.setCreatedBy(user);
@@ -52,22 +52,22 @@ public class EntitySaveListener implements PersistEventListener, MergeEventListe
   @SuppressWarnings("rawtypes")
   @Override
   public void onPersist(PersistEvent event, Map arg1)
-          throws HibernateException {
+      throws HibernateException {
     // TODO Auto-generated method stub
   }
 
   @Override
   public void onMerge(MergeEvent event) throws HibernateException {
     if (SecurityContextHolder.getContext() != null
-            && SecurityContextHolder.getContext().getAuthentication() != null) {
+        && SecurityContextHolder.getContext().getAuthentication() != null) {
       Object principal = SecurityContextHolder.getContext()
-              .getAuthentication().getPrincipal();
+          .getAuthentication().getPrincipal();
       if (principal != null && principal instanceof BsisUserDetails) {
         User user = ((BsisUserDetails) principal).getUser();
         if (event.getEntity() instanceof ModificationTracker
-                && user != null) {
+            && user != null) {
           ModificationTracker entity = (ModificationTracker) event
-                  .getEntity();
+              .getEntity();
           entity.setLastUpdated(new Date());
           entity.setLastUpdatedBy(user);
         }

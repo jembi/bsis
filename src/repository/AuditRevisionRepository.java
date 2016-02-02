@@ -18,21 +18,21 @@ public class AuditRevisionRepository {
 
   public List<AuditRevision> findAuditRevisions(Date startDate, Date endDate) {
     return entityManager.createNamedQuery(
-            AuditRevisionNamedQueryConstants.NAME_FIND_AUDIT_REVISIONS,
-            AuditRevision.class)
-            .setParameter("startTimestamp", startDate.getTime())
-            .setParameter("endTimestamp", endDate.getTime())
-            .getResultList();
+        AuditRevisionNamedQueryConstants.NAME_FIND_AUDIT_REVISIONS,
+        AuditRevision.class)
+        .setParameter("startTimestamp", startDate.getTime())
+        .setParameter("endTimestamp", endDate.getTime())
+        .getResultList();
   }
 
   public List<AuditRevision> findAuditRevisionsByUser(String search, Date startDate, Date endDate) {
     return entityManager.createNamedQuery(
-            AuditRevisionNamedQueryConstants.NAME_FIND_AUDIT_REVISIONS_BY_USER,
-            AuditRevision.class)
-            .setParameter("search", "%" + search.toLowerCase() + "%")
-            .setParameter("startTimestamp", startDate.getTime())
-            .setParameter("endTimestamp", endDate.getTime())
-            .getResultList();
+        AuditRevisionNamedQueryConstants.NAME_FIND_AUDIT_REVISIONS_BY_USER,
+        AuditRevision.class)
+        .setParameter("search", "%" + search.toLowerCase() + "%")
+        .setParameter("startTimestamp", startDate.getTime())
+        .setParameter("endTimestamp", endDate.getTime())
+        .getResultList();
   }
 
 }

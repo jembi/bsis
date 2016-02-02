@@ -32,7 +32,7 @@ public class ComponentCRUDServiceTests {
     componentCRUDService.markComponentsBelongingToDonorAsUnsafe(donor);
 
     verify(componentRepository).updateComponentStatusesForDonor(
-            Arrays.asList(ComponentStatus.AVAILABLE, ComponentStatus.QUARANTINED), ComponentStatus.UNSAFE, donor);
+        Arrays.asList(ComponentStatus.AVAILABLE, ComponentStatus.QUARANTINED), ComponentStatus.UNSAFE, donor);
   }
 
   @Test
@@ -43,8 +43,8 @@ public class ComponentCRUDServiceTests {
     componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
 
     verify(componentRepository).updateComponentStatusForDonation(
-            Arrays.asList(ComponentStatus.AVAILABLE, ComponentStatus.QUARANTINED), ComponentStatus.UNSAFE,
-            donation);
+        Arrays.asList(ComponentStatus.AVAILABLE, ComponentStatus.QUARANTINED), ComponentStatus.UNSAFE,
+        donation);
   }
 
 }

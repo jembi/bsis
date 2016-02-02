@@ -45,20 +45,20 @@ public class RoleRepository {
 
     String queryString = "SELECT r FROM Role r WHERE r.id = :roleId";
     TypedQuery<Role> query = em.createQuery(queryString, Role.class)
-            .setMaxResults(1);
+        .setMaxResults(1);
     query.setParameter("roleId", id);
     return query.getSingleResult();
   }
 
   public List<Permission> getAllPermissions() {
     TypedQuery<Permission> query = em.createQuery("FROM Permission",
-            Permission.class);
+        Permission.class);
     return query.getResultList();
   }
 
   public List<Permission> getAllPermissionsByName() {
     TypedQuery<Permission> query = em.createQuery("FROM Permission ORDER BY name ASC",
-            Permission.class);
+        Permission.class);
     return query.getResultList();
   }
 
@@ -90,7 +90,7 @@ public class RoleRepository {
   public Permission findPermissionByPermissionId(long permissionId) {
     // TODO Auto-generated method stub
     TypedQuery<Permission> query = em.createQuery("Select p FROM Permission p where p.id = :permissionId",
-            Permission.class).setMaxResults(1);
+        Permission.class).setMaxResults(1);
     query.setParameter("permissionId", permissionId);
     List<Permission> permission = query.getResultList();
     return permission.isEmpty() ? null : permission.get(0);

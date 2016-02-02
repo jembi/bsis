@@ -34,7 +34,7 @@ public class GeneralConfigBackingFormValidator implements Validator {
   @Override
   public boolean supports(Class<?> clazz) {
     return Arrays.asList(GeneralConfigBackingForm.class,
-            GeneralConfig.class, String.class).contains(clazz);
+        GeneralConfig.class, String.class).contains(clazz);
   }
 
   @Override

@@ -33,7 +33,7 @@ public class ReportGeneratorService {
     report.setEndDate(endDate);
 
     List<CollectedDonationValueObject> valueObjects = donationRepository.findCollectedDonationsReportIndicators(
-            startDate, endDate);
+        startDate, endDate);
 
     List<Indicator> indicators = new ArrayList<>(valueObjects.size());
 

@@ -10,7 +10,7 @@ import javax.validation.ConstraintValidatorContext;
 
 @Component
 class DonationTypeExistsConstraintValidator implements
-        ConstraintValidator<DonationTypeExists, DonationType> {
+    ConstraintValidator<DonationTypeExists, DonationType> {
 
   @Autowired
   private DonationTypeRepository donorTypeRepository;

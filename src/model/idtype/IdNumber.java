@@ -20,39 +20,39 @@ public class IdNumber extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 
-  
-    @ManyToOne(targetEntity = Donor.class)
-    @JoinColumn(name="donorId",nullable= false)
-    private Donor donorId;
+
+  @ManyToOne(targetEntity = Donor.class)
+  @JoinColumn(name = "donorId", nullable = false)
+  private Donor donorId;
 
 
-    @ManyToOne(targetEntity = IdType.class)
-    @JoinColumn(name="idType",nullable= false)
-    private IdType  idType;
+  @ManyToOne(targetEntity = IdType.class)
+  @JoinColumn(name = "idType", nullable = false)
+  private IdType idType;
 
-    private String idNumber;
+  private String idNumber;
 
-    public String getIdNumber() {
-        return idNumber;
-    }
+  public String getIdNumber() {
+    return idNumber;
+  }
 
-    public void setIdNumber(String idNumber) {
-        this.idNumber = idNumber;
-    }
+  public void setIdNumber(String idNumber) {
+    this.idNumber = idNumber;
+  }
 
-    public Donor getDonorId() {
-        return donorId;
-    }
+  public Donor getDonorId() {
+    return donorId;
+  }
 
-    public void setDonorId(Donor donorId) {
-        this.donorId = donorId;
-    }
+  public void setDonorId(Donor donorId) {
+    this.donorId = donorId;
+  }
 
-    public IdType getIdType() {
-        return idType;
-    }
+  public IdType getIdType() {
+    return idType;
+  }
 
-    public void setIdType(IdType idType) {
-        this.idType = idType;
-    }
+  public void setIdType(IdType idType) {
+    this.idType = idType;
+  }
 }

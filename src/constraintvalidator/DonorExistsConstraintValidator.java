@@ -10,7 +10,7 @@ import javax.validation.ConstraintValidatorContext;
 
 @Component
 class DonorExistsConstraintValidator implements
-        ConstraintValidator<DonorExists, Donor> {
+    ConstraintValidator<DonorExists, Donor> {
 
   @Autowired
   private DonorRepository donorRepository;
@@ -38,7 +38,7 @@ class DonorExistsConstraintValidator implements
           return true;
 
         donor =
-                donorRepository.findDonorByDonorNumber(target.getDonorNumber(), false);
+            donorRepository.findDonorByDonorNumber(target.getDonorNumber(), false);
       }
       if (donor != null) {
         return true;

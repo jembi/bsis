@@ -18,7 +18,7 @@ public class Permission extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length=50)
+  @Column(length = 50)
   private String name;
 
   @ManyToMany(mappedBy = "permissions")

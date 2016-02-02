@@ -38,7 +38,7 @@ public class DeferralReasonBackingFormValidator implements Validator {
     }
 
     if (form.getDurationType() != DurationType.PERMANENT && (form.getDefaultDuration() == null ||
-            form.getDefaultDuration() <= 0)) {
+        form.getDefaultDuration() <= 0)) {
       errors.rejectValue("defaultDuration", "400", "Default duration must be a positive number of days");
     }
   }

@@ -10,7 +10,7 @@ import javax.validation.ConstraintValidatorContext;
 
 @Component
 class DonationBatchExistsConstraintValidator implements
-        ConstraintValidator<DonationBatchExists, DonationBatch> {
+    ConstraintValidator<DonationBatchExists, DonationBatch> {
 
   @Autowired
   private DonationBatchRepository donationBatchRepository;
@@ -38,7 +38,7 @@ class DonationBatchExistsConstraintValidator implements
           return true;
 
         donationBatch =
-                donationBatchRepository.findDonationBatchByBatchNumber(target.getBatchNumber());
+            donationBatchRepository.findDonationBatchByBatchNumber(target.getBatchNumber());
       }
       if (donationBatch != null) {
         return true;

@@ -74,7 +74,7 @@ public class DonationBackingFormValidatorTest {
       IDataSet dataSet = getDataSet();
       DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
       donationBackingFormValidator = new DonationBackingFormValidator(utilController,
-              adverseEventBackingFormValidator);
+          adverseEventBackingFormValidator);
     } finally {
       connection.close();
     }

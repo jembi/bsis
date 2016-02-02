@@ -63,17 +63,17 @@ public class PasswordResetControllerTests {
     User existingUser = aUser().withEmailId(expectedEmailId).build();
 
     SimpleMailMessage expectedMessage = aSimpleMailMessage()
-            .withTo(expectedEmailId)
-            .withSubject("BSIS Password reset")
-            .withText("Your password has been reset to \"" + expectedPassword +
-                    "\". You will be required to change it next time you log in.")
-            .build();
+        .withTo(expectedEmailId)
+        .withSubject("BSIS Password reset")
+        .withText("Your password has been reset to \"" + expectedPassword +
+            "\". You will be required to change it next time you log in.")
+        .build();
 
     // Set up expectations
     User expectedUser = aUser()
-            .withEmailId(expectedEmailId)
-            .withPasswordReset()
-            .build();
+        .withEmailId(expectedEmailId)
+        .withPasswordReset()
+        .build();
 
     when(userRepository.findUser(expectedUsername)).thenReturn(existingUser);
     when(passwordGenerationService.generatePassword()).thenReturn(expectedPassword);

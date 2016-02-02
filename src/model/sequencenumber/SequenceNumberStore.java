@@ -10,13 +10,13 @@ public class SequenceNumberStore extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length=50)
+  @Column(length = 50)
   private String targetTable;
 
-  @Column(length=50)
+  @Column(length = 50)
   private String columnName;
 
-  @Column(length=5)
+  @Column(length = 5)
   private String prefix;
 
   private Long lastNumber;

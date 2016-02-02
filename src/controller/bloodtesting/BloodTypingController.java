@@ -82,7 +82,7 @@ public class BloodTypingController {
   @RequestMapping(value = "/batchresults/{donationIds}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME + "')")
   public Map<String, Object> getBloodTypingStatusForDonations(
-          @PathVariable String donationIds) {
+      @PathVariable String donationIds) {
     Map<String, Object> map = new HashMap<>();
     Map<String, Object> results = bloodTestingRepository.getAllTestsStatusForDonations(Arrays.asList(donationIds.split(",")));
 
@@ -109,7 +109,7 @@ public class BloodTypingController {
   @RequestMapping(value = "/results/{donationId}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME + "')")
   public Map<String, Object> showBloodTypingResultsForDonation(
-          @PathVariable Long donationId) {
+      @PathVariable Long donationId) {
 
     Map<String, Object> map = new HashMap<>();
     Donation donation = donationRepository.findDonationById(donationId);
@@ -123,33 +123,33 @@ public class BloodTypingController {
   @RequestMapping(value = "/results/additional", method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_BLOOD_TYPING_OUTCOME + "')")
   public ResponseEntity<Map<String, Object>> saveAdditionalBloodTypingTests(
-          @RequestBody TestResultBackingForm form) {
+      @RequestBody TestResultBackingForm form) {
 
     Map<String, Object> m = new HashMap<>();
     HttpStatus httpStatus = HttpStatus.CREATED;
-    
-      Map<Long, Map<Long, String>> bloodTypingTestResultsMap = new HashMap<Long, Map<Long,String>>();
-      Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
+
+    Map<Long, Map<Long, String>> bloodTypingTestResultsMap = new HashMap<Long, Map<Long, String>>();
+    Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
+    @SuppressWarnings("unchecked")
+    Map<Long, String> saveTestsData = null;
+    saveTestsData = form.getTestResults();
+    Donation donation = donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
+    for (Long testIdStr : saveTestsData.keySet()) {
+      saveTestsDataWithLong.put(testIdStr, saveTestsData.get(testIdStr));
+    }
+    bloodTypingTestResultsMap.put(donation.getId(), saveTestsDataWithLong);
+    Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResultsMap, form.getSaveUninterpretableResults());
+    @SuppressWarnings("unchecked")
+    Map<Long, Object> errorMap = (Map<Long, Object>) results.get("errors");
+    if (errorMap != null && !errorMap.isEmpty()) {
+      httpStatus = HttpStatus.BAD_REQUEST;
       @SuppressWarnings("unchecked")
-      Map<Long, String> saveTestsData = null;
-      saveTestsData = form.getTestResults();
-       Donation donation = donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
-      for (Long testIdStr : saveTestsData.keySet()) {
-        saveTestsDataWithLong.put(testIdStr, saveTestsData.get(testIdStr));
-      }
-      bloodTypingTestResultsMap.put(donation.getId(), saveTestsDataWithLong);
-      Map<String, Object> results = bloodTestingRepository.saveBloodTestingResults(bloodTypingTestResultsMap, form.getSaveUninterpretableResults());
-      @SuppressWarnings("unchecked")
-      Map<Long, Object> errorMap = (Map<Long, Object>) results.get("errors");
-      if (errorMap != null && !errorMap.isEmpty()) {
-        httpStatus = HttpStatus.BAD_REQUEST;
-        @SuppressWarnings("unchecked")
-        Map<Long, String> errorsForDonation = (Map<Long, String>) errorMap.get(donation.getId());
-        if (errorsForDonation != null && errorsForDonation.size() == 1 && errorsForDonation.containsKey((long)-1))
-          m.put("uninterpretable", true);
-        else
-          m.put("invalidResults", true);
-      }
+      Map<Long, String> errorsForDonation = (Map<Long, String>) errorMap.get(donation.getId());
+      if (errorsForDonation != null && errorsForDonation.size() == 1 && errorsForDonation.containsKey((long) -1))
+        m.put("uninterpretable", true);
+      else
+        m.put("invalidResults", true);
+    }
 
     return new ResponseEntity<>(m, httpStatus);
   }

@@ -26,7 +26,7 @@ public class UserMatcher extends ArgumentMatcher<User> {
     User actual = (User) object;
 
     return Objects.equals(actual.getEmailId(), expected.getEmailId())
-            && Objects.equals(actual.isPasswordReset(), expected.isPasswordReset());
+        && Objects.equals(actual.isPasswordReset(), expected.isPasswordReset());
   }
 
 }

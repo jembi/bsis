@@ -22,13 +22,13 @@ public class PostDonationCounsellingViewModelMatcher extends TypeSafeMatcher<Pos
   @Override
   public void describeTo(Description description) {
     description.appendText("A PostDonationCounselling view model with the following state:")
-            .appendText("\nPostDonationCounselling: ").appendValue(expected.getPostDonationCounselling())
-            .appendText("\nPermissions: ").appendValue(expected.getPermissions());
+        .appendText("\nPostDonationCounselling: ").appendValue(expected.getPostDonationCounselling())
+        .appendText("\nPermissions: ").appendValue(expected.getPermissions());
   }
 
   @Override
   public boolean matchesSafely(PostDonationCounsellingViewModel actual) {
     return Objects.equals(actual.getPostDonationCounselling(), expected.getPostDonationCounselling()) &&
-            Objects.equals(actual.getPermissions(), expected.getPermissions());
+        Objects.equals(actual.getPermissions(), expected.getPermissions());
   }
 }

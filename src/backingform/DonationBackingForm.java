@@ -253,7 +253,7 @@ public class DonationBackingForm {
   public void generateDonationIdentificationNumber() {
     String uniqueDonationNumber;
     uniqueDonationNumber = "C-" +
-            RandomStringUtils.randomNumeric(ID_LENGTH).toUpperCase();
+        RandomStringUtils.randomNumeric(ID_LENGTH).toUpperCase();
     donation.setDonationIdentificationNumber(uniqueDonationNumber);
   }
 
@@ -267,8 +267,8 @@ public class DonationBackingForm {
 
   public String getDonationBatchNumber() {
     if (donation == null || donation.getDonationBatch() == null ||
-            donation.getDonationBatch().getBatchNumber() == null
-            )
+        donation.getDonationBatch().getBatchNumber() == null
+        )
       return "";
     return donation.getDonationBatch().getBatchNumber();
   }

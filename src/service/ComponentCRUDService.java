@@ -20,7 +20,7 @@ public class ComponentCRUDService {
 
   private static final Logger LOGGER = Logger.getLogger(ComponentCRUDService.class);
   private static final List<ComponentStatus> UPDATABLE_STATUSES = Arrays.asList(ComponentStatus.AVAILABLE,
-          ComponentStatus.QUARANTINED);
+      ComponentStatus.QUARANTINED);
 
   @Autowired
   private ComponentRepository componentRepository;

@@ -41,7 +41,7 @@ public class CompatibilityTestBackingFormValidator implements Validator {
     String crossmatchTestDate = form.getCompatibilityTestDate();
     if (!CustomDateFormatter.isDateTimeStringValid(crossmatchTestDate)) {
       errors.rejectValue("compatiblityTest.compatibilityTestDate", "dateFormat.incorrect",
-              CustomDateFormatter.getDateTimeErrorMessage());
+          CustomDateFormatter.getDateTimeErrorMessage());
     }
 
     String requestNumber = form.getRequestNumber();
@@ -64,7 +64,7 @@ public class CompatibilityTestBackingFormValidator implements Validator {
         Component testedComponent = utilController.findComponent(donationIdentificationNumber, componentRequest.getComponentType());
         if (testedComponent == null)
           errors.rejectValue("compatibilityTest.testedComponent", "compatibilitytest.testedComponent.notFound",
-                  "Component with this donation identification number and component type not found or not available");
+              "Component with this donation identification number and component type not found or not available");
         form.setTestedComponent(testedComponent);
       } catch (NoResultException ex) {
         form.setTestedComponent(null);

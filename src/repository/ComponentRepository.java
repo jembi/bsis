@@ -77,7 +77,7 @@ public class ComponentRepository {
 
   @Autowired
   private UtilController utilController;
-  
+
   @Autowired
   private DonationConstraintChecker donationConstraintChecker;
 
@@ -85,17 +85,18 @@ public class ComponentRepository {
    * some fields like component status are cached internally.
    * must be called whenever any changes are made to rows related to the component.
    * eg. Test result update should update the component status.
+   *
    * @param component
    */
   public boolean updateComponentInternalFields(Component component) {
     return updateComponentStatus(component);
   }
 
-    /*
-     * FIXME: This method needs comprehensive tests and the allowed status changes should be documented. It would be
-     * best to write tests for the expected behaviours and check that the method handles those rather than basing the
-     * tests on what is currently implemented.
-     */
+  /*
+   * FIXME: This method needs comprehensive tests and the allowed status changes should be documented. It would be
+   * best to write tests for the expected behaviours and check that the method handles those rather than basing the
+   * tests on what is currently implemented.
+   */
   private boolean updateComponentStatus(Component component) {
 
     // if a component has been explicitly discarded maintain that status.
@@ -122,7 +123,7 @@ public class ComponentRepository {
             ComponentStatus.USED, ComponentStatus.SPLIT, ComponentStatus.PROCESSED);
 
     ComponentStatus oldComponentStatus = component.getStatus();
-    
+
     // nothing to do if the component has any of these statuses
     if (component.getStatus() != null && statusNotToBeChanged.contains(component.getStatus()))
       return false;
@@ -175,66 +176,66 @@ public class ComponentRepository {
       TypedQuery<Component> query = em.createQuery(queryString, Component.class);
       query.setParameter("isDeleted", Boolean.FALSE);
       List<Component> components = query.setParameter("componentIdentificationNumber",
-    	  componentIdentificationNumber).getResultList();
+          componentIdentificationNumber).getResultList();
       if (components != null && components.size() > 0) {
         component = components.get(0);
       }
     }
     return component;
   }
-  
-  public List<Component> findAnyComponent(String donationIdentificationNumber, List<Long> componentTypes, List<ComponentStatus> status, 
-		  Date donationDateFrom, Date donationDateTo, Map<String, Object> pagingParams){
-	  	TypedQuery<Component> query;
-	    String queryStr = "SELECT DISTINCT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +     
-	                      "c.isDeleted= :isDeleted ";
-	    
-	    if(status != null && !status.isEmpty()){
-	    	queryStr += "AND c.status IN :status ";
-	    }	
-	    if(!StringUtils.isBlank(donationIdentificationNumber)){
-	    	queryStr += "AND c.donation.donationIdentificationNumber = :donationIdentificationNumber ";
-	    }
-	    if(componentTypes != null && !componentTypes.isEmpty()){
-	    	queryStr += "AND c.componentType.id IN (:componentTypeIds) ";
-	    }	    
-	    if(donationDateFrom != null){
-	    	queryStr += "AND c.donation.donationDate >= :donationDateFrom ";
-	    }
-	    if(donationDateTo != null){
-	    	queryStr += "AND c.donation.donationDate <= :donationDateTo ";
-	    }
-	    
-	    if (pagingParams.containsKey("sortColumn")) {
-	    	queryStr += " ORDER BY c." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
-	    }
-	
-	    query = em.createQuery(queryStr, Component.class);
-	    query.setParameter("isDeleted", Boolean.FALSE);
-	    
-	    if(status != null && !status.isEmpty()){
-	    	query.setParameter("status", status);
-	    }
-	    if(!StringUtils.isBlank(donationIdentificationNumber)){
-	    	query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
-	    }
-	    if (componentTypes != null && !componentTypes.isEmpty()) {
-	    	query.setParameter("componentTypeIds", componentTypes);
-	    }
-	    if(donationDateFrom != null){
-	    	query.setParameter("donationDateFrom", donationDateFrom);
-	    }
-	    if(donationDateTo != null){
-	    	query.setParameter("donationDateTo", donationDateTo);
-	    }
-	
-	    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
-	    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
-	
-	    query.setFirstResult(start);
-	    query.setMaxResults(length);
-	    
-	    return query.getResultList();
+
+  public List<Component> findAnyComponent(String donationIdentificationNumber, List<Long> componentTypes, List<ComponentStatus> status,
+                                          Date donationDateFrom, Date donationDateTo, Map<String, Object> pagingParams) {
+    TypedQuery<Component> query;
+    String queryStr = "SELECT DISTINCT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +
+        "c.isDeleted= :isDeleted ";
+
+    if (status != null && !status.isEmpty()) {
+      queryStr += "AND c.status IN :status ";
+    }
+    if (!StringUtils.isBlank(donationIdentificationNumber)) {
+      queryStr += "AND c.donation.donationIdentificationNumber = :donationIdentificationNumber ";
+    }
+    if (componentTypes != null && !componentTypes.isEmpty()) {
+      queryStr += "AND c.componentType.id IN (:componentTypeIds) ";
+    }
+    if (donationDateFrom != null) {
+      queryStr += "AND c.donation.donationDate >= :donationDateFrom ";
+    }
+    if (donationDateTo != null) {
+      queryStr += "AND c.donation.donationDate <= :donationDateTo ";
+    }
+
+    if (pagingParams.containsKey("sortColumn")) {
+      queryStr += " ORDER BY c." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
+    }
+
+    query = em.createQuery(queryStr, Component.class);
+    query.setParameter("isDeleted", Boolean.FALSE);
+
+    if (status != null && !status.isEmpty()) {
+      query.setParameter("status", status);
+    }
+    if (!StringUtils.isBlank(donationIdentificationNumber)) {
+      query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
+    }
+    if (componentTypes != null && !componentTypes.isEmpty()) {
+      query.setParameter("componentTypeIds", componentTypes);
+    }
+    if (donationDateFrom != null) {
+      query.setParameter("donationDateFrom", donationDateFrom);
+    }
+    if (donationDateTo != null) {
+      query.setParameter("donationDateTo", donationDateTo);
+    }
+
+    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
+    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
+
+    query.setFirstResult(start);
+    query.setMaxResults(length);
+
+    return query.getResultList();
   }
 
   public List<Component> findComponentByDonationIdentificationNumber(
@@ -242,9 +243,9 @@ public class ComponentRepository {
 
     TypedQuery<Component> query;
     String queryStr = "SELECT DISTINCT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +
-                      "c.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
-                      "c.status IN :status AND " +
-                      "c.isDeleted= :isDeleted";
+        "c.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
+        "c.status IN :status AND " +
+        "c.isDeleted= :isDeleted";
 
     String queryStrWithoutJoin = "SELECT c FROM Component c WHERE " +
         "c.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
@@ -269,7 +270,7 @@ public class ComponentRepository {
     //return Arrays.asList(query.getResultList(), getResultCount(queryStrWithoutJoin, query));
     return query.getResultList();
   }
-  
+
   public List<Component> findComponentByComponentTypes(
       List<Long> componentTypeIds, List<ComponentStatus> status,
       Map<String, Object> pagingParams) {
@@ -312,7 +313,7 @@ public class ComponentRepository {
     }
     return countQuery.getSingleResult();
   }
-  
+
   public List<Component> getAllUnissuedComponents() {
     String queryString = "SELECT c FROM Component c where c.isDeleted = :isDeleted and c.isIssued= :isIssued";
     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
@@ -376,7 +377,7 @@ public class ComponentRepository {
   }
 
   public List<Component> getAllUnissuedComponents(String componentType, String abo,
-      String rhd) {
+                                                  String rhd) {
     String queryString = "SELECT c FROM Component c where c.componentType = :componentType and c.abo= :abo and c.rhd= :rhd and c.isDeleted = :isDeleted and c.isIssued= :isIssued";
     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -388,7 +389,7 @@ public class ComponentRepository {
   }
 
   public List<Component> getAllUnissuedThirtyFiveDayComponents(String componentType,
-      String abo, String rhd) {
+                                                               String abo, String rhd) {
     String queryString = "SELECT c FROM Component c where c.componentType = :componentType and c.abo= :abo and c.rhd= :rhd and c.isDeleted = :isDeleted and c.isIssued= :isIssued and c.createdOn > :minDate";
     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -406,7 +407,7 @@ public class ComponentRepository {
     return em.find(Component.class, componentId);
   }
 
-  public Component findComponentById(Long componentId)throws NoResultException{
+  public Component findComponentById(Long componentId) throws NoResultException {
     String queryString = "SELECT c FROM Component c LEFT JOIN FETCH c.donation LEFT JOIN FETCH c.issuedTo where c.id = :componentId AND c.isDeleted = :isDeleted";
     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -436,7 +437,7 @@ public class ComponentRepository {
     return component;
   }
 
-  public void deleteComponent(Long componentId) throws IllegalArgumentException{
+  public void deleteComponent(Long componentId) throws IllegalArgumentException {
     Component existingComponent = findComponentById(componentId);
     existingComponent.setIsDeleted(Boolean.TRUE);
     em.merge(existingComponent);
@@ -447,18 +448,18 @@ public class ComponentRepository {
 
     Date today = new Date();
     Request request = requestRepository.findRequestById(requestId);
-    
+
     TypedQuery<Component> query = em.createQuery(
-                 "SELECT c from Component c LEFT JOIN FETCH c.donation WHERE " +
-                 "c.componentType = :componentType AND " +
-                 "c.expiresOn >= :today AND " +
-                 "c.status = :status AND " + 
-                 "c.donation.ttiStatus = :ttiStatus AND " +
-                 "((c.donation.bloodAbo = :bloodAbo AND c.donation.bloodRh = :bloodRh) OR " +
-                 "(c.donation.bloodAbo = :bloodAboO AND c.donation.bloodRh = :bloodRhNeg)) AND " +
-                 "c.isDeleted = :isDeleted " +
-                 "ORDER BY c.expiresOn ASC",
-                  Component.class);
+        "SELECT c from Component c LEFT JOIN FETCH c.donation WHERE " +
+            "c.componentType = :componentType AND " +
+            "c.expiresOn >= :today AND " +
+            "c.status = :status AND " +
+            "c.donation.ttiStatus = :ttiStatus AND " +
+            "((c.donation.bloodAbo = :bloodAbo AND c.donation.bloodRh = :bloodRh) OR " +
+            "(c.donation.bloodAbo = :bloodAboO AND c.donation.bloodRh = :bloodRhNeg)) AND " +
+            "c.isDeleted = :isDeleted " +
+            "ORDER BY c.expiresOn ASC",
+        Component.class);
 
     query.setParameter("componentType", request.getComponentType());
     query.setParameter("today", today);
@@ -472,8 +473,8 @@ public class ComponentRepository {
 
     TypedQuery<CompatibilityTest> crossmatchQuery = em.createQuery(
         "SELECT ct from CompatibilityTest ct where ct.forRequest.id=:forRequestId AND " +
-        "ct.testedComponent.status = :testedComponentStatus AND " +
-        "isDeleted=:isDeleted", CompatibilityTest.class);
+            "ct.testedComponent.status = :testedComponentStatus AND " +
+            "isDeleted=:isDeleted", CompatibilityTest.class);
 
     crossmatchQuery.setParameter("forRequestId", requestId);
     crossmatchQuery.setParameter("testedComponentStatus", ComponentStatus.AVAILABLE);
@@ -502,17 +503,17 @@ public class ComponentRepository {
 
     return matchingComponents;
   }
-  
+
   public Map<String, Object> generateInventorySummaryFast(List<String> status, List<Long> venueIds) {
     Map<String, Object> inventory = new HashMap<>();
     // IMPORTANT: Distinct is necessary to avoid a cartesian product of test results and components from being returned
     // Also LEFT JOIN FETCH prevents the N+1 queries problem associated with Lazy Many-to-One joins
     TypedQuery<Component> q = em.createQuery(
-                             "SELECT DISTINCT c from Component c " +
-                             "WHERE c.status IN :status AND " +
-                             "c.donation.venue.id IN (:venueIds) AND " +
-                             "c.isDeleted=:isDeleted",
-                             Component.class);
+        "SELECT DISTINCT c from Component c " +
+            "WHERE c.status IN :status AND " +
+            "c.donation.venue.id IN (:venueIds) AND " +
+            "c.isDeleted=:isDeleted",
+        Component.class);
     List<ComponentStatus> componentStatus = new ArrayList<>();
     for (String s : status) {
       componentStatus.add(ComponentStatus.lookup(s));
@@ -555,21 +556,21 @@ public class ComponentRepository {
       if (age > 30)
         age = (long) 30;
       Long count = numDayMap.get(age);
-      numDayMap.put(age, count+1);
+      numDayMap.put(age, count + 1);
     }
-    
+
     return inventory;
   }
 
   private Map<Long, Long> getMapWithNumDaysWindows() {
     Map<Long, Long> m = new HashMap<>();
-    m.put((long)0, (long)0); // age < 5 days
-    m.put((long)5, (long)0); // 5 <= age < 10 days
-    m.put((long)10, (long)0); // 10 <= age < 15 days
-    m.put((long)15, (long)0); // 15 <= age < 20 days
-    m.put((long)20, (long)0); // 20 <= age < 25 days
-    m.put((long)25, (long)0); // 25 <= age < 30 days
-    m.put((long)30, (long)0); // age > 30 days
+    m.put((long) 0, (long) 0); // age < 5 days
+    m.put((long) 5, (long) 0); // 5 <= age < 10 days
+    m.put((long) 10, (long) 0); // 10 <= age < 15 days
+    m.put((long) 15, (long) 0); // 15 <= age < 20 days
+    m.put((long) 20, (long) 0); // 20 <= age < 25 days
+    m.put((long) 25, (long) 0); // 25 <= age < 30 days
+    m.put((long) 30, (long) 0); // age > 30 days
     return m;
   }
 
@@ -595,8 +596,8 @@ public class ComponentRepository {
   }
 
   public void discardComponent(Long componentId,
-      ComponentStatusChangeReason discardReason,
-      String discardReasonText) {
+                               ComponentStatusChangeReason discardReason,
+                               String discardReasonText) {
     Component existingComponent = findComponentById(componentId);
     existingComponent.setStatus(ComponentStatus.DISCARDED);
     existingComponent.setDiscardedOn(new Date());
@@ -618,8 +619,8 @@ public class ComponentRepository {
 
   public void updateExpiryStatus() {
     String updateExpiryQuery = "UPDATE Component c SET c.status=:status WHERE " +
-                               "c.status=:availableStatus AND " +
-                               "c.expiresOn < :today";
+        "c.status=:availableStatus AND " +
+        "c.expiresOn < :today";
     Query query = em.createQuery(updateExpiryQuery);
     query.setParameter("status", ComponentStatus.EXPIRED);
     query.setParameter("availableStatus", ComponentStatus.AVAILABLE);
@@ -643,10 +644,10 @@ public class ComponentRepository {
     List<Long> venueIds = new ArrayList<>();
     if (venues != null) {
       for (String venue : venues) {
-    	venueIds.add(Long.parseLong(venue));
+        venueIds.add(Long.parseLong(venue));
       }
     } else {
-      venueIds.add((long)-1);
+      venueIds.add((long) -1);
     }
 
     Map<String, Map<Long, Long>> resultMap = new HashMap<>();
@@ -656,19 +657,19 @@ public class ComponentRepository {
 
     TypedQuery<Object[]> query = em.createQuery(
         "SELECT count(c), c.donation.donationDate, c.donation.bloodAbo, " +
-        "c.donation.bloodRh FROM Component c WHERE " +
-        "c.donation.venue.id IN (:venueIds) AND " +
-        "c.donation.donationDate BETWEEN :donationDateFrom AND :donationDateTo AND " +
-        "c.status IN (:discardedStatuses) AND " +
-        "(c.isDeleted= :isDeleted) " +
-        "GROUP BY bloodAbo, bloodRh, donationDate", Object[].class);
+            "c.donation.bloodRh FROM Component c WHERE " +
+            "c.donation.venue.id IN (:venueIds) AND " +
+            "c.donation.donationDate BETWEEN :donationDateFrom AND :donationDateTo AND " +
+            "c.status IN (:discardedStatuses) AND " +
+            "(c.isDeleted= :isDeleted) " +
+            "GROUP BY bloodAbo, bloodRh, donationDate", Object[].class);
 
     query.setParameter("venueIds", venueIds);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("discardedStatuses",
-                       Arrays.asList(ComponentStatus.DISCARDED,
-                                     ComponentStatus.UNSAFE,
-                                     ComponentStatus.EXPIRED));
+        Arrays.asList(ComponentStatus.DISCARDED,
+            ComponentStatus.UNSAFE,
+            ComponentStatus.EXPIRED));
 
     query.setParameter("donationDateFrom", donationDateFrom);
     query.setParameter("donationDateTo", donationDateTo);
@@ -688,8 +689,8 @@ public class ComponentRepository {
     for (String bloodGroup : bloodGroups) {
       Map<Long, Long> m = new HashMap<>();
       Calendar gcal = new GregorianCalendar();
-      Date lowerDate =  resultDateFormat.parse(resultDateFormat.format(donationDateFrom));
-      Date upperDate =  resultDateFormat.parse(resultDateFormat.format(donationDateTo));
+      Date lowerDate = resultDateFormat.parse(resultDateFormat.format(donationDateFrom));
+      Date upperDate = resultDateFormat.parse(resultDateFormat.format(donationDateTo));
       gcal.setTime(lowerDate);
       while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
         m.put(gcal.getTime().getTime(), (long) 0);
@@ -706,16 +707,16 @@ public class ComponentRepository {
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)
         continue;
- 
-        Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
-        Long utcTime = formattedDate.getTime();
-        if (m.containsKey(utcTime)) {
-          Long newVal = m.get(utcTime) + (Long) result[0];
-          m.put(utcTime, newVal);
-        } else {
-          m.put(utcTime, (Long) result[0]);
-        }
-      
+
+      Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
+      Long utcTime = formattedDate.getTime();
+      if (m.containsKey(utcTime)) {
+        Long newVal = m.get(utcTime) + (Long) result[0];
+        m.put(utcTime, newVal);
+      } else {
+        m.put(utcTime, (Long) result[0]);
+      }
+
     }
 
     return resultMap;
@@ -725,13 +726,13 @@ public class ComponentRepository {
       Date donationDateFrom, Date donationDateTo, String aggregationCriteria,
       List<String> venues, List<String> bloodGroups) throws ParseException {
 
-	List<Long> venueIds = new ArrayList<>();
+    List<Long> venueIds = new ArrayList<>();
     if (venues != null) {
       for (String venue : venues) {
-    	venueIds.add(Long.parseLong(venue));
+        venueIds.add(Long.parseLong(venue));
       }
     } else {
-      venueIds.add((long)-1);
+      venueIds.add((long) -1);
     }
 
     Map<String, Map<Long, Long>> resultMap = new HashMap<>();
@@ -741,12 +742,12 @@ public class ComponentRepository {
 
     TypedQuery<Object[]> query = em.createQuery(
         "SELECT count(c), c.issuedOn, c.donation.bloodAbo, " +
-        "c.donation.bloodRh FROM Component c WHERE " +
-        "c.donation.venue.id IN (:venueIds) AND " +
-        "c.donation.donationDate BETWEEN :donationDateFrom AND :donationDateTo AND " +
-        "c.status=:issuedStatus AND " +
-        "(c.isDeleted= :isDeleted) " +
-        "GROUP BY bloodAbo, bloodRh, donationDate", Object[].class);
+            "c.donation.bloodRh FROM Component c WHERE " +
+            "c.donation.venue.id IN (:venueIds) AND " +
+            "c.donation.donationDate BETWEEN :donationDateFrom AND :donationDateTo AND " +
+            "c.status=:issuedStatus AND " +
+            "(c.isDeleted= :isDeleted) " +
+            "GROUP BY bloodAbo, bloodRh, donationDate", Object[].class);
 
     query.setParameter("venueIds", venueIds);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -794,15 +795,15 @@ public class ComponentRepository {
       Map<Long, Long> m = resultMap.get(bloodGroup.toString());
       if (m == null)
         continue;
-        Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
-        Long utcTime = formattedDate.getTime();
-        if (m.containsKey(utcTime)) {
-          Long newVal = m.get(utcTime) + (Long) result[0];
-          m.put(utcTime, newVal);
-        } else {
-          m.put(utcTime, (Long) result[0]);
-        }
-  
+      Date formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
+      Long utcTime = formattedDate.getTime();
+      if (m.containsKey(utcTime)) {
+        Long newVal = m.get(utcTime) + (Long) result[0];
+        m.put(utcTime, newVal);
+      } else {
+        m.put(utcTime, (Long) result[0]);
+      }
+
     }
 
     return resultMap;
@@ -810,8 +811,8 @@ public class ComponentRepository {
 
   public Component findComponent(String donationIdentificationNumber, String componentTypeId) {
     String queryStr = "SELECT c from Component c WHERE " +
-                      "c.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
-                      "c.componentType.id = :componentTypeId";
+        "c.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
+        "c.componentType.id = :componentTypeId";
     TypedQuery<Component> query = em.createQuery(queryStr, Component.class);
     query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
     query.setParameter("componentTypeId", Long.parseLong(componentTypeId));
@@ -825,7 +826,7 @@ public class ComponentRepository {
   }
 
   public void returnComponent(Long componentId,
-      ComponentStatusChangeReason returnReason, String returnReasonText) {
+                              ComponentStatusChangeReason returnReason, String returnReasonText) {
     Component existingComponent = findComponentById(componentId);
     updateComponentStatus(existingComponent);
     ComponentStatusChange statusChange = new ComponentStatusChange();
@@ -868,11 +869,11 @@ public class ComponentRepository {
     ObjectMapper mapper = new ObjectMapper();
 
     Map<String, String> expiryDateByComponentType = null;
-      try {
-          expiryDateByComponentType = mapper.readValue(expiresOn, HashMap.class);
-      } catch (IOException ex) {
-          ex.printStackTrace();
-      }
+    try {
+      expiryDateByComponentType = mapper.readValue(expiresOn, HashMap.class);
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
 
     ComponentTypeCombination componentTypeCombination;
     componentTypeCombination = componentTypeRepository.getComponentTypeCombinationById(Long.parseLong(form.getComponentTypeCombination()));
@@ -928,7 +929,7 @@ public class ComponentRepository {
     statusChange.setNewStatus(ComponentStatus.SPLIT);
 
     String queryStr = "SELECT p FROM ComponentStatusChangeReason p WHERE " +
-    		"p.category=:category AND p.isDeleted=:isDeleted";
+        "p.category=:category AND p.isDeleted=:isDeleted";
     TypedQuery<ComponentStatusChangeReason> query = em.createQuery(queryStr,
         ComponentStatusChangeReason.class);
     query.setParameter("category", ComponentStatusChangeReasonCategory.SPLIT);
@@ -948,61 +949,61 @@ public class ComponentRepository {
     return true;
   }
 
-  public ComponentType findComponentTypeBySelectedComponentType(Long componentTypeId) throws NoResultException{
+  public ComponentType findComponentTypeBySelectedComponentType(Long componentTypeId) throws NoResultException {
     String queryString = "SELECT p FROM ComponentType p where p.id = :componentTypeId";
     TypedQuery<ComponentType> query = em.createQuery(queryString, ComponentType.class);
     query.setParameter("componentTypeId", componentTypeId);
     return query.getSingleResult();
   }
-  
-  public ComponentType findComponentTypeByComponentTypeName(String componentTypeName) throws NoResultException{
+
+  public ComponentType findComponentTypeByComponentTypeName(String componentTypeName) throws NoResultException {
     String queryString = "SELECT p FROM ComponentType p where p.componentTypeName = :componentTypeName";
     TypedQuery<ComponentType> query = em.createQuery(queryString, ComponentType.class);
     query.setParameter("componentTypeName", componentTypeName);
     return query.getSingleResult();
   }
-  
+
   public void setComponentStatusToProcessed(long componentId) throws NoResultException {
-  	 String queryString = "SELECT c FROM Component c where c.id = :componentId";
-     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
-     query.setParameter("componentId", componentId);
-     Component component = null;
-     	component = query.getSingleResult();
-     	component.setStatus(ComponentStatus.PROCESSED);
-     	em.merge(component);
+    String queryString = "SELECT c FROM Component c where c.id = :componentId";
+    TypedQuery<Component> query = em.createQuery(queryString, Component.class);
+    query.setParameter("componentId", componentId);
+    Component component = null;
+    component = query.getSingleResult();
+    component.setStatus(ComponentStatus.PROCESSED);
+    em.merge(component);
   }
-  
-    // TODO: Test
-    public int countChangedComponentsForDonation(long donationId) {
-        return em.createNamedQuery(
-                ComponentNamedQueryConstants.NAME_COUNT_CHANGED_COMPONENTS_FOR_DONATION,
-                Number.class)
-                .setParameter("donationId", donationId)
-                .setParameter("deleted", false)
-                .setParameter("initialStatus", ComponentStatus.QUARANTINED)
-                .getSingleResult()
-                .intValue();
-    }
-  
-    @Transactional(propagation = Propagation.MANDATORY)
-    public void updateComponentStatusesForDonor(List<ComponentStatus> oldStatuses, ComponentStatus newStatus,
-            Donor donor) {
 
-        em.createNamedQuery(ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUSES_FOR_DONOR)
-            .setParameter("oldStatuses", oldStatuses)
-            .setParameter("newStatus", newStatus)
-            .setParameter("donor", donor)
-            .executeUpdate();
-    }
-  
-    @Transactional(propagation = Propagation.MANDATORY)
-    public void updateComponentStatusForDonation(List<ComponentStatus> oldStatuses, ComponentStatus newStatus,
-            Donation donation) {
+  // TODO: Test
+  public int countChangedComponentsForDonation(long donationId) {
+    return em.createNamedQuery(
+        ComponentNamedQueryConstants.NAME_COUNT_CHANGED_COMPONENTS_FOR_DONATION,
+        Number.class)
+        .setParameter("donationId", donationId)
+        .setParameter("deleted", false)
+        .setParameter("initialStatus", ComponentStatus.QUARANTINED)
+        .getSingleResult()
+        .intValue();
+  }
 
-        em.createNamedQuery(ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUSES_FOR_DONATION)
-            .setParameter("oldStatuses", oldStatuses)
-            .setParameter("newStatus", newStatus)
-            .setParameter("donation", donation)
-            .executeUpdate();
-    }
+  @Transactional(propagation = Propagation.MANDATORY)
+  public void updateComponentStatusesForDonor(List<ComponentStatus> oldStatuses, ComponentStatus newStatus,
+                                              Donor donor) {
+
+    em.createNamedQuery(ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUSES_FOR_DONOR)
+        .setParameter("oldStatuses", oldStatuses)
+        .setParameter("newStatus", newStatus)
+        .setParameter("donor", donor)
+        .executeUpdate();
+  }
+
+  @Transactional(propagation = Propagation.MANDATORY)
+  public void updateComponentStatusForDonation(List<ComponentStatus> oldStatuses, ComponentStatus newStatus,
+                                               Donation donation) {
+
+    em.createNamedQuery(ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUSES_FOR_DONATION)
+        .setParameter("oldStatuses", oldStatuses)
+        .setParameter("newStatus", newStatus)
+        .setParameter("donation", donation)
+        .executeUpdate();
+  }
 }

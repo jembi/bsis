@@ -33,29 +33,29 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
     Donor donor = aDonor().build();
 
     Component firstComponentToUpdate = aComponent()
-            .withStatus(firstOldStatus)
-            .withDonation(aDonation().withDonor(donor).build())
-            .buildAndPersist(entityManager);
+        .withStatus(firstOldStatus)
+        .withDonation(aDonation().withDonor(donor).build())
+        .buildAndPersist(entityManager);
 
     Component secondComponentToUpdate = aComponent()
-            .withStatus(secondOldStatus)
-            .withDonation(aDonation().withDonor(donor).build())
-            .buildAndPersist(entityManager);
+        .withStatus(secondOldStatus)
+        .withDonation(aDonation().withDonor(donor).build())
+        .buildAndPersist(entityManager);
 
     Component componentExcludedByStatus = aComponent()
-            .withStatus(ComponentStatus.USED)
-            .withDonation(aDonation().withDonor(donor).build())
-            .buildAndPersist(entityManager);
+        .withStatus(ComponentStatus.USED)
+        .withDonation(aDonation().withDonor(donor).build())
+        .buildAndPersist(entityManager);
 
     Component componentExcludedByDonor = aComponent()
-            .withStatus(firstOldStatus)
-            .withDonation(aDonation()
-                    .withDonor(aDonor().build())
-                    .build())
-            .buildAndPersist(entityManager);
+        .withStatus(firstOldStatus)
+        .withDonation(aDonation()
+            .withDonor(aDonor().build())
+            .build())
+        .buildAndPersist(entityManager);
 
     componentRepository.updateComponentStatusesForDonor(Arrays.asList(firstOldStatus, secondOldStatus), newStatus,
-            donor);
+        donor);
 
     entityManager.refresh(firstComponentToUpdate);
     entityManager.refresh(secondComponentToUpdate);
@@ -77,22 +77,22 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
     Donation donation = aDonation().build();
 
     Component firstComponentToUpdate = aComponent()
-            .withStatus(firstOldStatus)
-            .withDonation(donation)
-            .buildAndPersist(entityManager);
+        .withStatus(firstOldStatus)
+        .withDonation(donation)
+        .buildAndPersist(entityManager);
 
     Component secondComponentToUpdate = aComponent()
-            .withStatus(secondOldStatus)
-            .withDonation(donation)
-            .buildAndPersist(entityManager);
+        .withStatus(secondOldStatus)
+        .withDonation(donation)
+        .buildAndPersist(entityManager);
 
     Component componentExcludedByStatus = aComponent()
-            .withStatus(ComponentStatus.USED)
-            .withDonation(donation)
-            .buildAndPersist(entityManager);
+        .withStatus(ComponentStatus.USED)
+        .withDonation(donation)
+        .buildAndPersist(entityManager);
 
     componentRepository.updateComponentStatusForDonation(Arrays.asList(firstOldStatus, secondOldStatus), newStatus,
-            donation);
+        donation);
 
     entityManager.refresh(firstComponentToUpdate);
     entityManager.refresh(secondComponentToUpdate);

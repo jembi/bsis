@@ -74,7 +74,7 @@ public class TestBatchController {
     TestBatch testBatch = testBatchRepository.saveTestBatch(form.getTestBatch(), getNextTestBatchNumber());
     boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
     return new ResponseEntity<>(testBatchViewModelFactory.createTestBatchViewModel(testBatch, isTestingSupervisor),
-            HttpStatus.CREATED);
+        HttpStatus.CREATED);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
@@ -96,16 +96,16 @@ public class TestBatchController {
                                                             @Valid @RequestBody TestBatchBackingForm form) {
 
     TestBatch testBatch = testBatchCRUDService.updateTestBatch(id, form.getTestBatch().getStatus(), form.getTestBatch()
-            .getCreatedDate(), form.getDonationBatchIds());
+        .getCreatedDate(), form.getDonationBatchIds());
     return new ResponseEntity<>(testBatchViewModelFactory.createTestBatchViewModel(testBatch, true), HttpStatus.OK);
   }
 
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_BATCH + "')")
   public ResponseEntity findTestBatchPagination(
-          @RequestParam(value = "status", required = false) List<TestBatchStatus> statuses,
-          @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
-          @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
+      @RequestParam(value = "status", required = false) List<TestBatchStatus> statuses,
+      @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+      @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
 
     List<TestBatch> testBatches = testBatchRepository.findTestBatches(statuses, startDate, endDate);
 
@@ -128,7 +128,7 @@ public class TestBatchController {
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_BATCH + "')")
   @Transactional(readOnly = true)
   public ResponseEntity<Map<String, Object>> getRecentlyClosedTestBatches(
-          @PathVariable Integer count) {
+      @PathVariable Integer count) {
 
     List<TestBatch> testBatches = testBatchRepository.getRecentlyClosedTestBatches(count);
 
@@ -144,7 +144,7 @@ public class TestBatchController {
   }
 
   private List<DonationBatchViewModel> getDonationBatchViewModels(
-          List<DonationBatch> donationBatches) {
+      List<DonationBatch> donationBatches) {
     if (donationBatches == null)
       return Arrays.asList(new DonationBatchViewModel[0]);
     List<DonationBatchViewModel> donationBatchViewModels = new ArrayList<>();

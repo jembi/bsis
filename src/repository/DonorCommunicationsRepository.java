@@ -36,10 +36,10 @@ public class DonorCommunicationsRepository {
   private UtilController utilController;
 
   public List<Donor> findDonors(
-          List<Location> venue, String clinicDate,
-          String lastDonationFromDate, String lastDonationToDate,
-          List<BloodGroup> bloodGroups, boolean anyBloodGroup, boolean noBloodGroup,
-          Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor) throws ParseException {
+      List<Location> venue, String clinicDate,
+      String lastDonationFromDate, String lastDonationToDate,
+      List<BloodGroup> bloodGroups, boolean anyBloodGroup, boolean noBloodGroup,
+      Map<String, Object> pagingParams, String clinicDateToCheckdeferredDonor) throws ParseException {
 
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
@@ -66,7 +66,7 @@ public class DonorCommunicationsRepository {
       venuePredicates.add(cb.lessThanOrEqualTo(root.get("dueToDonate").as(Date.class), CustomDateFormatter.parse(clinicDate)));
       if (!StringUtils.isBlank(clinicDateToCheckdeferredDonor)) {
         donorDeferral.select(rootdonorDeferral.get("id").as(Long.class)).where(cb.equal(rootdonorDeferral.get("deferredDonor"), root),
-                cb.greaterThanOrEqualTo(rootdonorDeferral.get("deferredUntil").as(Date.class), CustomDateFormatter.parse(clinicDateToCheckdeferredDonor)));
+            cb.greaterThanOrEqualTo(rootdonorDeferral.get("deferredUntil").as(Date.class), CustomDateFormatter.parse(clinicDateToCheckdeferredDonor)));
         venuePredicates.add(cb.not(cb.exists(donorDeferral)));
       }
 
@@ -74,7 +74,7 @@ public class DonorCommunicationsRepository {
     // If Clinic Date is not specified, Donors should not be currently deferred
     else {
       donorDeferral.select(rootdonorDeferral.get("id").as(Long.class)).where(cb.equal(rootdonorDeferral.get("deferredDonor"), root),
-              cb.greaterThanOrEqualTo(rootdonorDeferral.get("deferredUntil").as(Date.class), new Date()));
+          cb.greaterThanOrEqualTo(rootdonorDeferral.get("deferredUntil").as(Date.class), new Date()));
       venuePredicates.add(cb.not(cb.exists(donorDeferral)));
     }
 

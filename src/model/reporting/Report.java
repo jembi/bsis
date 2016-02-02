@@ -52,8 +52,8 @@ public class Report {
     Report other = (Report) obj;
 
     return Objects.equals(getStartDate(), other.getStartDate()) &&
-            Objects.equals(getEndDate(), other.getEndDate()) &&
-            Objects.equals(getIndicators(), other.getIndicators());
+        Objects.equals(getEndDate(), other.getEndDate()) &&
+        Objects.equals(getIndicators(), other.getIndicators());
   }
 
   @Override

@@ -163,7 +163,7 @@ public class AdminController {
   @RequestMapping(value = "/createsampledata", method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DATA_SETUP + "')")
   public Map<String, ?> createSampleData(
-          @RequestParam Map<String, String> params) {
+      @RequestParam Map<String, String> params) {
 
     boolean success = true;
     String errMsg = "";
@@ -240,7 +240,7 @@ public class AdminController {
   @RequestMapping(value = "/backupdata", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BACKUP_DATA + "')")
   public void backupData(
-          HttpServletRequest request, HttpServletResponse response) {
+      HttpServletRequest request, HttpServletResponse response) {
 
     DateFormat dateFormat = new SimpleDateFormat("MM_dd_yyyy_HH_mm_ss");
 
@@ -263,8 +263,8 @@ public class AdminController {
       LOGGER.debug(dbname);
 
       ProcessBuilder pb = new ProcessBuilder(mysqldumpPath,
-              "--single-transaction",
-              "-u", username, "-p" + password, dbname);
+          "--single-transaction",
+          "-u", username, "-p" + password, dbname);
 
       pb.redirectErrorStream(true); // equivalent of 2>&1
       Process p = pb.start();
@@ -301,8 +301,8 @@ public class AdminController {
   @RequestMapping(value = "/tips", method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_TIPS + "')")
   public Map<String, Object> configureTips(
-          HttpServletRequest request, HttpServletResponse response,
-          @RequestParam(value = "params") String paramsAsJson) {
+      HttpServletRequest request, HttpServletResponse response,
+      @RequestParam(value = "params") String paramsAsJson) {
     Map<String, Object> map = new HashMap<>();
     LOGGER.debug(paramsAsJson);
     List<Tips> allTips = new ArrayList<>();
@@ -331,8 +331,8 @@ public class AdminController {
   @RequestMapping(value = "/crossmatchtypes", method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_CROSS_MATCH_TYPES + "')")
   public Map<String, Object> configureCrossmatchTypes(
-          HttpServletRequest request, HttpServletResponse response,
-          @RequestParam(value = "params") String paramsAsJson) {
+      HttpServletRequest request, HttpServletResponse response,
+      @RequestParam(value = "params") String paramsAsJson) {
     Map<String, Object> map = new HashMap<>();
     LOGGER.debug(paramsAsJson);
     List<CrossmatchType> allCrossmatchTypes = new ArrayList<>();

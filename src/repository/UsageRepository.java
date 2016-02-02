@@ -25,10 +25,10 @@ public class UsageRepository {
   public ComponentUsage findComponentUsage(String componentIdentificationNumber) throws NoResultException, NonUniqueResultException {
     String queryString = "SELECT u FROM ComponentUsage u WHERE u.component.componentIdentificationNumber = :componentIdentificationNumber and u.isDeleted= :isDeleted";
     TypedQuery<ComponentUsage> query = em.createQuery(queryString,
-            ComponentUsage.class);
+        ComponentUsage.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     return query.setParameter("componentIdentificationNumber",
-            componentIdentificationNumber).getSingleResult();
+        componentIdentificationNumber).getSingleResult();
   }
 
   public void deleteAllUsages() {
@@ -40,26 +40,26 @@ public class UsageRepository {
                                                    String dateUsedFrom, String dateUsedTo, List<String> useIndications) throws ParseException {
 
     TypedQuery<ComponentUsage> query = em.createQuery(
-            "SELECT u FROM ComponentUsage u WHERE "
-                    + "(u.component.componentIdentificationNumber = :componentIdentificationNumber OR "
-                    + "u.useIndication IN (:useIndications)) AND "
-                    + "(u.dateUsed BETWEEN :dateUsedFrom AND " + ":dateUsedTo) AND "
-                    + "(u.isDeleted= :isDeleted)", ComponentUsage.class);
+        "SELECT u FROM ComponentUsage u WHERE "
+            + "(u.component.componentIdentificationNumber = :componentIdentificationNumber OR "
+            + "u.useIndication IN (:useIndications)) AND "
+            + "(u.dateUsed BETWEEN :dateUsedFrom AND " + ":dateUsedTo) AND "
+            + "(u.isDeleted= :isDeleted)", ComponentUsage.class);
 
     query.setParameter("isDeleted", Boolean.FALSE);
 
     query.setParameter("componentIdentificationNumber", componentIdentificationNumber == null ? ""
-            : componentIdentificationNumber);
+        : componentIdentificationNumber);
     query.setParameter("useIndications", useIndications);
 
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     Date from = (dateUsedFrom == null || dateUsedFrom.equals("")) ? dateFormat
-            .parse("31/12/1970") : dateFormat.parse(dateUsedFrom);
+        .parse("31/12/1970") : dateFormat.parse(dateUsedFrom);
 
     query.setParameter("dateUsedFrom", from);
 
     Date to = (dateUsedTo == null || dateUsedTo.equals("")) ? dateFormat
-            .parse(dateFormat.format(new Date())) : dateFormat.parse(dateUsedTo);
+        .parse(dateFormat.format(new Date())) : dateFormat.parse(dateUsedTo);
     query.setParameter("dateUsedTo", to);
 
 
@@ -67,11 +67,11 @@ public class UsageRepository {
   }
 
   public ComponentUsage findUsageByComponentIdentificationNumber(String componentIdentificationNumber)
-          throws NoResultException, NonUniqueResultException {
+      throws NoResultException, NonUniqueResultException {
     TypedQuery<ComponentUsage> query = em
-            .createQuery(
-                    "SELECT u FROM ComponentUsage u WHERE u.component.componentIdentificationNumber = :componentIdentificationNumber and u.isDeleted= :isDeleted",
-                    ComponentUsage.class);
+        .createQuery(
+            "SELECT u FROM ComponentUsage u WHERE u.component.componentIdentificationNumber = :componentIdentificationNumber and u.isDeleted= :isDeleted",
+            ComponentUsage.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("componentIdentificationNumber", componentIdentificationNumber);
     return query.getSingleResult();

@@ -15,7 +15,7 @@ public class AdverseEventTypeViewModelMatcher extends TypeSafeMatcher<AdverseEve
   }
 
   public static AdverseEventTypeViewModelMatcher hasSameStateAsAdverseEventTypeViewModel(
-          AdverseEventTypeViewModel expected) {
+      AdverseEventTypeViewModel expected) {
 
     return new AdverseEventTypeViewModelMatcher(expected);
   }
@@ -23,18 +23,18 @@ public class AdverseEventTypeViewModelMatcher extends TypeSafeMatcher<AdverseEve
   @Override
   public void describeTo(Description description) {
     description.appendText("An adverse event type view model with the following state:")
-            .appendText("\nId: ").appendValue(expected.getId())
-            .appendText("\nName: ").appendValue(expected.getName())
-            .appendText("\nDescription: ").appendValue(expected.getDescription())
-            .appendText("\nDeleted: ").appendValue(expected.getIsDeleted());
+        .appendText("\nId: ").appendValue(expected.getId())
+        .appendText("\nName: ").appendValue(expected.getName())
+        .appendText("\nDescription: ").appendValue(expected.getDescription())
+        .appendText("\nDeleted: ").appendValue(expected.getIsDeleted());
   }
 
   @Override
   public boolean matchesSafely(AdverseEventTypeViewModel actual) {
     return Objects.equals(actual.getId(), expected.getId()) &&
-            Objects.equals(actual.getName(), expected.getName()) &&
-            Objects.equals(actual.getDescription(), expected.getDescription()) &&
-            Objects.equals(actual.getIsDeleted(), expected.getIsDeleted());
+        Objects.equals(actual.getName(), expected.getName()) &&
+        Objects.equals(actual.getDescription(), expected.getDescription()) &&
+        Objects.equals(actual.getIsDeleted(), expected.getIsDeleted());
   }
 
 }

@@ -79,10 +79,10 @@ public class Indicator {
     Indicator other = (Indicator) obj;
 
     return Objects.equals(getStartDate(), other.getStartDate()) &&
-            Objects.equals(getEndDate(), other.getEndDate()) &&
-            Objects.equals(getValue(), other.getValue()) &&
-            Objects.equals(getVenue(), other.getVenue()) &&
-            Objects.equals(getCohorts(), other.getCohorts());
+        Objects.equals(getEndDate(), other.getEndDate()) &&
+        Objects.equals(getValue(), other.getValue()) &&
+        Objects.equals(getVenue(), other.getVenue()) &&
+        Objects.equals(getCohorts(), other.getCohorts());
   }
 
   @Override

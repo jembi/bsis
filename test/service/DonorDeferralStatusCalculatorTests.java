@@ -35,17 +35,17 @@ public class DonorDeferralStatusCalculatorTests {
   @Test
   public void testShouldDonorBeDeferredWithNonConfirmatoryResult_shouldReturnFalse() {
     List<BloodTestResult> bloodTestResults = Collections.singletonList(
-            aBloodTestResult()
-                    .withResult("POS")
-                    .withBloodTest(aBloodTest()
-                            .withBloodTestType(BloodTestType.BASIC_TTI)
-                            .withPositiveResults("POS,+")
-                            .build())
-                    .build()
+        aBloodTestResult()
+            .withResult("POS")
+            .withBloodTest(aBloodTest()
+                .withBloodTestType(BloodTestType.BASIC_TTI)
+                .withPositiveResults("POS,+")
+                .build())
+            .build()
     );
 
     when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.DEFER_DONORS_WITH_NEG_CONFIRMATORY_OUTCOMES))
-            .thenReturn(false);
+        .thenReturn(false);
 
     boolean returnedValue = donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults);
 
@@ -55,17 +55,17 @@ public class DonorDeferralStatusCalculatorTests {
   @Test
   public void testShouldDonorBeDeferredWithNegativeConfirmatoryResult_shouldReturnFalse() {
     List<BloodTestResult> bloodTestResults = Collections.singletonList(
-            aBloodTestResult()
-                    .withResult("NEG")
-                    .withBloodTest(aBloodTest()
-                            .withBloodTestType(BloodTestType.CONFIRMATORY_TTI)
-                            .withPositiveResults("POS,+")
-                            .build())
-                    .build()
+        aBloodTestResult()
+            .withResult("NEG")
+            .withBloodTest(aBloodTest()
+                .withBloodTestType(BloodTestType.CONFIRMATORY_TTI)
+                .withPositiveResults("POS,+")
+                .build())
+            .build()
     );
 
     when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.DEFER_DONORS_WITH_NEG_CONFIRMATORY_OUTCOMES))
-            .thenReturn(false);
+        .thenReturn(false);
 
     boolean returnedValue = donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults);
 
@@ -75,13 +75,13 @@ public class DonorDeferralStatusCalculatorTests {
   @Test
   public void testShouldDonorBeDeferredWithPositiveConfirmatoryResult_shouldReturnTrue() {
     List<BloodTestResult> bloodTestResults = Collections.singletonList(
-            aBloodTestResult()
-                    .withResult("POS")
-                    .withBloodTest(aBloodTest()
-                            .withBloodTestType(BloodTestType.CONFIRMATORY_TTI)
-                            .withPositiveResults("POS,+")
-                            .build())
-                    .build()
+        aBloodTestResult()
+            .withResult("POS")
+            .withBloodTest(aBloodTest()
+                .withBloodTestType(BloodTestType.CONFIRMATORY_TTI)
+                .withPositiveResults("POS,+")
+                .build())
+            .build()
     );
 
     boolean returnedValue = donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults);

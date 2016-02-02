@@ -32,13 +32,13 @@ public class DeferralReasonRepositoryTests extends ContextDependentTestSuite {
     DeferralReasonType type = DeferralReasonType.AUTOMATED_TTI_UNSAFE;
 
     aDeferralReason()
-            .thatIsNotDeleted()
-            .withType(type)
-            .buildAndPersist(entityManager);
+        .thatIsNotDeleted()
+        .withType(type)
+        .buildAndPersist(entityManager);
     aDeferralReason()
-            .thatIsNotDeleted()
-            .withType(type)
-            .buildAndPersist(entityManager);
+        .thatIsNotDeleted()
+        .withType(type)
+        .buildAndPersist(entityManager);
 
     deferralReasonRepository.findDeferralReasonByType(type);
   }
@@ -49,20 +49,20 @@ public class DeferralReasonRepositoryTests extends ContextDependentTestSuite {
 
     // Excluded by deleted flag
     aDeferralReason()
-            .thatIsDeleted()
-            .withType(type)
-            .buildAndPersist(entityManager);
+        .thatIsDeleted()
+        .withType(type)
+        .buildAndPersist(entityManager);
 
     // Excluded by type
     aDeferralReason()
-            .thatIsNotDeleted()
-            .withType(DeferralReasonType.NORMAL)
-            .buildAndPersist(entityManager);
+        .thatIsNotDeleted()
+        .withType(DeferralReasonType.NORMAL)
+        .buildAndPersist(entityManager);
 
     DeferralReason expectedDeferralReason = aDeferralReason()
-            .thatIsNotDeleted()
-            .withType(type)
-            .buildAndPersist(entityManager);
+        .thatIsNotDeleted()
+        .withType(type)
+        .buildAndPersist(entityManager);
 
     DeferralReason returnedDeferralReason = deferralReasonRepository.findDeferralReasonByType(type);
 

@@ -81,7 +81,7 @@ public class GenericConfigRepositoryTest {
     Assert.assertNotNull("There are GenericConfigs", all);
     Assert.assertEquals("There are 22 labsetup GenericConfig", 22, all.size());
     Assert.assertTrue("The labsetup GenericConfig contains crossmatchProcedure",
-            all.keySet().contains("crossmatchProcedure"));
+        all.keySet().contains("crossmatchProcedure"));
   }
 
   @Test
@@ -94,7 +94,7 @@ public class GenericConfigRepositoryTest {
     Assert.assertEquals("There are 10 GenericConfig", 10, all.size());
     Assert.assertTrue("The GenericConfig contains donorRecordRequired", all.keySet().contains("donorRecordRequired"));
     Assert.assertTrue("The GenericConfig contains daysBetweenConsecutiveDonations",
-            all.keySet().contains("daysBetweenConsecutiveDonations"));
+        all.keySet().contains("daysBetweenConsecutiveDonations"));
   }
 
   @Test

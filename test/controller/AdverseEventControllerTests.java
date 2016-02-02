@@ -43,16 +43,16 @@ public class AdverseEventControllerTests {
   public void testFindAdverseEventTypes_shouldDelegateToAdverseEventTypeRepository() {
 
     List<AdverseEventTypeViewModel> expectedViewModels = Arrays.asList(
-            anAdverseEventTypeViewModel()
-                    .withId(7L)
-                    .withName("irrelevant.name")
-                    .withDescription("irrelevant.description")
-                    .build(),
-            anAdverseEventTypeViewModel()
-                    .withId(86L)
-                    .withName("another.irrelevant.name")
-                    .withDescription("another.irrelevant.description")
-                    .build()
+        anAdverseEventTypeViewModel()
+            .withId(7L)
+            .withName("irrelevant.name")
+            .withDescription("irrelevant.description")
+            .build(),
+        anAdverseEventTypeViewModel()
+            .withId(86L)
+            .withName("another.irrelevant.name")
+            .withDescription("another.irrelevant.description")
+            .build()
     );
 
     when(adverseEventTypeRepository.findAdverseEventTypeViewModels()).thenReturn(expectedViewModels);
@@ -69,28 +69,28 @@ public class AdverseEventControllerTests {
     String irrelevantDescription = "test description";
 
     AdverseEventTypeBackingForm backingForm = anAdverseEventTypeBackingForm()
-            .withName(irrelevantName)
-            .withDescription(irrelevantDescription)
-            .build();
+        .withName(irrelevantName)
+        .withDescription(irrelevantDescription)
+        .build();
 
     AdverseEventType adverseEventType = anAdverseEventType()
-            .withId(irrelevantId)
-            .withName(irrelevantName)
-            .withDescription(irrelevantDescription)
-            .build();
+        .withId(irrelevantId)
+        .withName(irrelevantName)
+        .withDescription(irrelevantDescription)
+        .build();
 
     AdverseEventTypeViewModel expectedViewModel = anAdverseEventTypeViewModel()
-            .withId(irrelevantId)
-            .withName(irrelevantName)
-            .withDescription(irrelevantDescription)
-            .build();
+        .withId(irrelevantId)
+        .withName(irrelevantName)
+        .withDescription(irrelevantDescription)
+        .build();
 
     when(adverseEventTypeCRUDService
-            .createAdverseEventType(argThat(hasSameStateAsAdverseEventTypeBackingForm(backingForm))))
-            .thenReturn(adverseEventType);
+        .createAdverseEventType(argThat(hasSameStateAsAdverseEventTypeBackingForm(backingForm))))
+        .thenReturn(adverseEventType);
     when(adverseEventTypeViewModelFactory
-            .createAdverseEventTypeViewModel(argThat(hasSameStateAsAdverseEventType(adverseEventType))))
-            .thenReturn(expectedViewModel);
+        .createAdverseEventTypeViewModel(argThat(hasSameStateAsAdverseEventType(adverseEventType))))
+        .thenReturn(expectedViewModel);
 
     AdverseEventTypeViewModel returnedViewModel = adverseEventController.createAdverseEventType(backingForm);
 
@@ -104,31 +104,31 @@ public class AdverseEventControllerTests {
     String irrelevantDescription = "test description";
 
     AdverseEventTypeBackingForm backingForm = anAdverseEventTypeBackingForm()
-            .withId(irrelevantId)
-            .withName(irrelevantName)
-            .withDescription(irrelevantDescription)
-            .build();
+        .withId(irrelevantId)
+        .withName(irrelevantName)
+        .withDescription(irrelevantDescription)
+        .build();
     AdverseEventType updatedAdverseEventType = anAdverseEventType()
-            .withId(irrelevantId)
-            .withName(irrelevantName)
-            .withDescription(irrelevantDescription)
-            .build();
+        .withId(irrelevantId)
+        .withName(irrelevantName)
+        .withDescription(irrelevantDescription)
+        .build();
     AdverseEventTypeViewModel expectedViewModel = anAdverseEventTypeViewModel()
-            .withId(irrelevantId)
-            .withName(irrelevantName)
-            .withDescription(irrelevantDescription)
-            .build();
+        .withId(irrelevantId)
+        .withName(irrelevantName)
+        .withDescription(irrelevantDescription)
+        .build();
 
     when(adverseEventTypeCRUDService
-            .updateAdverseEventType(eq(irrelevantId), argThat(hasSameStateAsAdverseEventTypeBackingForm(backingForm))))
-            .thenReturn(updatedAdverseEventType);
+        .updateAdverseEventType(eq(irrelevantId), argThat(hasSameStateAsAdverseEventTypeBackingForm(backingForm))))
+        .thenReturn(updatedAdverseEventType);
 
     when(adverseEventTypeViewModelFactory
-            .createAdverseEventTypeViewModel(argThat(hasSameStateAsAdverseEventType(updatedAdverseEventType))))
-            .thenReturn(expectedViewModel);
+        .createAdverseEventTypeViewModel(argThat(hasSameStateAsAdverseEventType(updatedAdverseEventType))))
+        .thenReturn(expectedViewModel);
 
     AdverseEventTypeViewModel returnedViewModel = adverseEventController.updateAdverseEventType(irrelevantId,
-            backingForm);
+        backingForm);
 
     assertThat(returnedViewModel, hasSameStateAsAdverseEventTypeViewModel(expectedViewModel));
   }
@@ -140,21 +140,21 @@ public class AdverseEventControllerTests {
     String irrelevantDescription = "test description";
 
     AdverseEventType adverseEventType = anAdverseEventType()
-            .withId(irrelevantId)
-            .withName(irrelevantName)
-            .withDescription(irrelevantDescription)
-            .build();
+        .withId(irrelevantId)
+        .withName(irrelevantName)
+        .withDescription(irrelevantDescription)
+        .build();
 
     AdverseEventTypeViewModel expectedViewModel = anAdverseEventTypeViewModel()
-            .withId(irrelevantId)
-            .withName(irrelevantName)
-            .withDescription(irrelevantDescription)
-            .build();
+        .withId(irrelevantId)
+        .withName(irrelevantName)
+        .withDescription(irrelevantDescription)
+        .build();
 
     when(adverseEventTypeRepository.findById(irrelevantId)).thenReturn(adverseEventType);
     when(adverseEventTypeViewModelFactory
-            .createAdverseEventTypeViewModel(argThat(hasSameStateAsAdverseEventType(adverseEventType))))
-            .thenReturn(expectedViewModel);
+        .createAdverseEventTypeViewModel(argThat(hasSameStateAsAdverseEventType(adverseEventType))))
+        .thenReturn(expectedViewModel);
 
     AdverseEventTypeViewModel returnedViewModel = adverseEventController.findAdverseEventTypeById(irrelevantId);
 

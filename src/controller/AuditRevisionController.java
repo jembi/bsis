@@ -36,9 +36,9 @@ public class AuditRevisionController {
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_AUDIT_LOG + "')")
   public List<AuditRevisionViewModel> getAuditRevisions(
-          @RequestParam(required = false) String search,
-          @RequestParam(required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
-          @RequestParam(required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
+      @RequestParam(required = false) String search,
+      @RequestParam(required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+      @RequestParam(required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
 
     List<AuditRevision> auditRevisions;
     if (search == null) {

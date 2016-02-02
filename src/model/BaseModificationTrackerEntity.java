@@ -14,6 +14,7 @@ import model.user.User;
 
 /**
  * Extension of the BaseEntity class that adds tracking information to every instance of the entity.
+ *
  * @see model.modificationtracker.RowModificationTracker
  */
 @MappedSuperclass
@@ -24,7 +25,7 @@ public abstract class BaseModificationTrackerEntity extends BaseEntity implement
   @Valid
   @Embedded
   private RowModificationTracker modificationTracker;
-  
+
   public BaseModificationTrackerEntity() {
     modificationTracker = new RowModificationTracker();
   }
@@ -68,11 +69,11 @@ public abstract class BaseModificationTrackerEntity extends BaseEntity implement
   public void setLastUpdatedBy(User lastUpdatedBy) {
     modificationTracker.setLastUpdatedBy(lastUpdatedBy);
   }
-  
+
   public RowModificationTracker getModificationTracker() {
     return modificationTracker;
   }
-  
+
   public void setModificationTracker(RowModificationTracker modificationTracker) {
     this.modificationTracker = modificationTracker;
   }

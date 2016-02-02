@@ -54,7 +54,7 @@ public class TipsRepository {
 
   public List<Tips> getAllTips() {
     TypedQuery<Tips> query = em
-            .createQuery("SELECT t FROM Tips t", Tips.class);
+        .createQuery("SELECT t FROM Tips t", Tips.class);
     return query.getResultList();
   }
 }

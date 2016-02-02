@@ -22,10 +22,10 @@ public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length=25)
+  @Column(length = 25)
   private String testNameShort;
 
-  @Column(length=40)
+  @Column(length = 40)
   private String testName;
 
   /**
@@ -47,15 +47,15 @@ public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
   private Integer rankInCategory;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=30)
+  @Column(length = 30)
   private BloodTestType bloodTestType;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=30)
+  @Column(length = 30)
   private BloodTestCategory category;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=30)
+  @Column(length = 30)
   private BloodTestContext context;
 
   /**
@@ -70,14 +70,14 @@ public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
   private Boolean isEmptyAllowed;
 
   private Boolean isActive;
-  
+
   private Boolean isDeleted;
-  
-    /**
-     * Whether or not to flag associated components for discard when a test has a positive outcome.
-     */
-    @Column(nullable = false)
-    private boolean flagComponentsForDiscard = false;
+
+  /**
+   * Whether or not to flag associated components for discard when a test has a positive outcome.
+   */
+  @Column(nullable = false)
+  private boolean flagComponentsForDiscard = false;
 
   public String getTestNameShort() {
     return testNameShort;
@@ -91,18 +91,18 @@ public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
     return validResults;
   }
 
-    /**
-     * Get the valid results for this test as a list. The list cannot be modified since changes to the valid results
-     * must be done by updating the {@link #validResults} string.
-     * 
-     * @return An immutable list of valid results.
-     */
-    public List<String> getValidResultsList() {
-        if (validResults == null || validResults.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return Collections.unmodifiableList(Arrays.asList(validResults.split(",")));
+  /**
+   * Get the valid results for this test as a list. The list cannot be modified since changes to the valid results
+   * must be done by updating the {@link #validResults} string.
+   *
+   * @return An immutable list of valid results.
+   */
+  public List<String> getValidResultsList() {
+    if (validResults == null || validResults.isEmpty()) {
+      return Collections.emptyList();
     }
+    return Collections.unmodifiableList(Arrays.asList(validResults.split(",")));
+  }
 
   public String getNegativeResults() {
     return negativeResults;
@@ -187,27 +187,26 @@ public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
   public void setContext(BloodTestContext context) {
     this.context = context;
   }
-  
-  
-  
+
+
   public Boolean getIsDeleted() {
-	return isDeleted;
-}
+    return isDeleted;
+  }
 
-public void setIsDeleted(Boolean isDeleted) {
-	this.isDeleted = isDeleted;
-}
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
 
-@Override
+  @Override
   public int compareTo(BloodTest o) {
     return this.getId().compareTo(o.getId());
   }
 
-    public boolean isFlagComponentsForDiscard() {
-        return flagComponentsForDiscard;
-    }
+  public boolean isFlagComponentsForDiscard() {
+    return flagComponentsForDiscard;
+  }
 
-    public void setFlagComponentsForDiscard(boolean flagComponentsForDiscard) {
-        this.flagComponentsForDiscard = flagComponentsForDiscard;
-    }
+  public void setFlagComponentsForDiscard(boolean flagComponentsForDiscard) {
+    this.flagComponentsForDiscard = flagComponentsForDiscard;
+  }
 }

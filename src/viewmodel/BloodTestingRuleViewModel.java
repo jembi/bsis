@@ -1,11 +1,13 @@
 package viewmodel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestContext;
 import model.bloodtesting.rules.BloodTestingRule;
@@ -44,16 +46,21 @@ public class BloodTestingRuleViewModel {
   public String getDonationFieldChanged() {
     String donationField = "";
     switch (rule.getDonationFieldChanged()) {
-    case BLOODABO:  donationField = "Blood ABO";
-                    break;
-    case BLOODRH:   donationField = "Blood Rh";
-                    break;
-    case EXTRA:     donationField = "Extra Info";
-                    break;
-    case NOCHANGE:  donationField = "No Change";
-                    break;
-    case TTISTATUS: donationField = "TTI Status";
-                    break;
+      case BLOODABO:
+        donationField = "Blood ABO";
+        break;
+      case BLOODRH:
+        donationField = "Blood Rh";
+        break;
+      case EXTRA:
+        donationField = "Extra Info";
+        break;
+      case NOCHANGE:
+        donationField = "No Change";
+        break;
+      case TTISTATUS:
+        donationField = "TTI Status";
+        break;
     }
     return donationField;
   }
@@ -85,12 +92,15 @@ public class BloodTestingRuleViewModel {
   public String getSubCategory() {
     String subCategory = "";
     switch (rule.getSubCategory()) {
-    case BLOODABO: subCategory = "Blood ABO";
-                   break;
-    case BLOODRH:  subCategory = "Blood Rh";
-                   break;
-    case TTI:      subCategory = "TTI";
-                   break;
+      case BLOODABO:
+        subCategory = "Blood ABO";
+        break;
+      case BLOODRH:
+        subCategory = "Blood Rh";
+        break;
+      case TTI:
+        subCategory = "TTI";
+        break;
     }
     return subCategory;
   }
@@ -99,7 +109,7 @@ public class BloodTestingRuleViewModel {
   public Map<Long, String> getPatternMap() {
     return patternMap;
   }
-  
+
   public List<Long> getPendingTestsIds() {
     List<Long> pendingTestIds = new ArrayList<>();
     if (rule.getPendingTestsIds() == null)

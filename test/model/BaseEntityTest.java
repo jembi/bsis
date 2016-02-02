@@ -9,11 +9,11 @@ public class BaseEntityTest {
   class TestEntity extends BaseEntity {
     private static final long serialVersionUID = 1L;
   }
-  
+
   class AnotherTestEntity extends BaseEntity {
     private static final long serialVersionUID = 1L;
   }
-  
+
   @Test
   public void testDifferentEntitiesSameBaseClass() {
     TestEntity testEntity1 = new TestEntity();

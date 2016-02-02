@@ -82,7 +82,7 @@ public class LabSetupRepository {
     }
 
     if (configProperties.get("ttiWorksheets").equals("false") &&
-            configProperties.get("bloodTypingWorksheets").equals("false")) {
+        configProperties.get("bloodTypingWorksheets").equals("false")) {
       configProperties.put("useWorksheets", "false");
     } else {
       configProperties.put("useWorksheets", "true");

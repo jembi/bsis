@@ -47,8 +47,8 @@ public class AdverseEventBackingFormValidatorTests {
   @Test
   public void testValidateWithValidBackingForm_shouldHaveNoErrors() {
     AdverseEventBackingForm adverseEventBackingForm = anAdverseEventBackingForm()
-            .withType(anAdverseEventTypeBackingForm().build())
-            .build();
+        .withType(anAdverseEventTypeBackingForm().build())
+        .build();
 
     BindException errors = new BindException(adverseEventBackingForm, "AdverseEventBackingForm");
     adverseEventBackingFormValidator.validate(adverseEventBackingForm, errors);

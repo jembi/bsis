@@ -48,7 +48,7 @@ public class LocationsController {
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
   public Map<String, Object> configureLocationsFormGenerator(
-          HttpServletRequest request, HttpServletResponse response) {
+      HttpServletRequest request, HttpServletResponse response) {
     Map<String, Object> map = new HashMap<>();
     addAllLocationsToModel(map);
     return map;
@@ -57,7 +57,7 @@ public class LocationsController {
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
   public ResponseEntity addLocation(
-          @RequestBody @Valid LocationBackingForm formData) {
+      @RequestBody @Valid LocationBackingForm formData) {
     Location location = formData.getLocation();
     location.setIsDeleted(false);
     locationRepository.saveLocation(location);

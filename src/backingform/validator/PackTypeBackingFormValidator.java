@@ -38,7 +38,7 @@ public class PackTypeBackingFormValidator implements Validator {
 
     if (!form.getType().getTestSampleProduced() && form.getType().getCountAsDonation()) {
       errors.rejectValue("type.countAsDonation", "countAsDonation.notAllowed", "Pack types that don't produce " +
-              "a test sample cannot be counted as a donation");
+          "a test sample cannot be counted as a donation");
     }
 
     if (utilController.isDuplicatePackTypeName(form.getType())) {

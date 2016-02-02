@@ -21,14 +21,14 @@ public class DonorViewModelMatcher extends TypeSafeMatcher<DonorViewModel> {
   @Override
   public void describeTo(Description description) {
     description.appendText("A donor view model with the following state:")
-            .appendText("\nDonor: ").appendValue(expected.getDonor())
-            .appendText("\nPermissions: ").appendValue(expected.getPermissions());
+        .appendText("\nDonor: ").appendValue(expected.getDonor())
+        .appendText("\nPermissions: ").appendValue(expected.getPermissions());
   }
 
   @Override
   public boolean matchesSafely(DonorViewModel actual) {
     return Objects.equals(actual.getDonor(), expected.getDonor()) &&
-            Objects.equals(actual.getPermissions(), expected.getPermissions());
+        Objects.equals(actual.getPermissions(), expected.getPermissions());
   }
 
 }

@@ -56,9 +56,9 @@ public class GeneralConfigAccessorServiceTests extends UnitTestSuite {
   private void testGetBooleanValue_shouldReturnSameBooleanValue(boolean booleanValue) {
     DataType booleanDataType = aDataType().withDataType(EnumDataType.BOOLEAN.name()).build();
     GeneralConfig generalConfig = aGeneralConfig()
-            .withDataType(booleanDataType)
-            .withValue(Boolean.toString(booleanValue))
-            .build();
+        .withDataType(booleanDataType)
+        .withValue(Boolean.toString(booleanValue))
+        .build();
 
     when(generalConfigRepository.getGeneralConfigByName(anyString())).thenReturn(generalConfig);
 
@@ -90,9 +90,9 @@ public class GeneralConfigAccessorServiceTests extends UnitTestSuite {
     int intValue = 123;
     DataType booleanDataType = aDataType().withDataType(EnumDataType.INTEGER.name()).build();
     GeneralConfig generalConfig = aGeneralConfig()
-            .withDataType(booleanDataType)
-            .withValue(Integer.toString(intValue))
-            .build();
+        .withDataType(booleanDataType)
+        .withValue(Integer.toString(intValue))
+        .build();
 
     when(generalConfigRepository.getGeneralConfigByName(anyString())).thenReturn(generalConfig);
 

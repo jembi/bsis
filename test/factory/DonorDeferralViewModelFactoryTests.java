@@ -34,7 +34,7 @@ public class DonorDeferralViewModelFactoryTests {
     // create test data
     Donor deferredDonor = DonorBuilder.aDonor().withId(1L).withFirstName("Sample").withLastName("Donor").build();
     DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1L).withCreatedDate(new Date())
-            .withDeferredDonor(deferredDonor).withDeferredUntil(new Date()).build();
+        .withDeferredDonor(deferredDonor).withDeferredUntil(new Date()).build();
 
     // set up mocks
     when(deferralConstraintChecker.canDeleteDonorDeferral(1L)).thenReturn(true);
@@ -67,13 +67,13 @@ public class DonorDeferralViewModelFactoryTests {
     Donor deferredDonor = DonorBuilder.aDonor().withId(1L).withFirstName("Sample").withLastName("Donor").build();
     List<DonorDeferral> donorDeferrals = new ArrayList<>();
     DonorDeferral donorDeferral1 = DonorDeferralBuilder.aDonorDeferral().withId(1L).withCreatedDate(new Date())
-            .withDeferredDonor(deferredDonor).withDeferredUntil(new Date()).build();
+        .withDeferredDonor(deferredDonor).withDeferredUntil(new Date()).build();
     donorDeferrals.add(donorDeferral1);
     DonorDeferral donorDeferral2 = DonorDeferralBuilder.aDonorDeferral().withId(2L).withCreatedDate(new Date())
-            .withDeferredDonor(deferredDonor).withDeferredUntil(new Date()).build();
+        .withDeferredDonor(deferredDonor).withDeferredUntil(new Date()).build();
     donorDeferrals.add(donorDeferral2);
     DonorDeferral donorDeferral3 = DonorDeferralBuilder.aDonorDeferral().withId(3L).withCreatedDate(new Date())
-            .withDeferredDonor(deferredDonor).withDeferredUntil(new Date()).build();
+        .withDeferredDonor(deferredDonor).withDeferredUntil(new Date()).build();
     donorDeferrals.add(donorDeferral3);
 
     // set up mocks

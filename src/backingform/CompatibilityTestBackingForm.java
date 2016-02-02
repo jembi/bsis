@@ -82,8 +82,8 @@ public class CompatibilityTestBackingForm {
 
   public String getRequestNumber() {
     if (compatibilityTest == null || compatibilityTest.getForRequest() == null ||
-            compatibilityTest.getForRequest().getRequestNumber() == null
-            )
+        compatibilityTest.getForRequest().getRequestNumber() == null
+        )
       return "";
     return compatibilityTest.getForRequest().getRequestNumber();
   }

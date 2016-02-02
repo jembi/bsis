@@ -13,14 +13,14 @@ public class RequestType extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length=30)
+  @Column(length = 30)
   private String requestType;
 
-  @Column(length=100)
+  @Column(length = 100)
   private String description;
 
   private Boolean isDeleted;
-  
+
   private Boolean bulkTransfer;
 
   public String getRequestType() {
@@ -47,11 +47,11 @@ public class RequestType extends BaseEntity {
     this.isDeleted = isDeleted;
   }
 
-	public Boolean getBulkTransfer() {
-		return bulkTransfer;
-	}
-	
-	public void setBulkTransfer(Boolean bulkTransfer) {
-		this.bulkTransfer = bulkTransfer;
-	}
+  public Boolean getBulkTransfer() {
+    return bulkTransfer;
+  }
+
+  public void setBulkTransfer(Boolean bulkTransfer) {
+    this.bulkTransfer = bulkTransfer;
+  }
 }

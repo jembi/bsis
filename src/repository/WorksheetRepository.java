@@ -163,7 +163,7 @@ public class WorksheetRepository {
   public List<BloodTest> getBloodTestsInWorksheet(Worksheet worksheet) {
     TypedQuery<WorksheetType> query;
     query = em.createQuery("SELECT wt from WorksheetType wt LEFT JOIN FETCH wt.bloodTests " +
-            "WHERE wt.id=:id AND wt.isDeleted=:isDeleted", WorksheetType.class);
+        "WHERE wt.id=:id AND wt.isDeleted=:isDeleted", WorksheetType.class);
     query.setParameter("isDeleted", false);
     query.setParameter("id", worksheet.getWorksheetType().getId());
     if (query.getResultList().size() == 0)

@@ -39,7 +39,7 @@ public class UsageBackingFormValidator implements Validator {
     String usageDate = form.getUsageDate();
     if (!CustomDateFormatter.isDateTimeStringValid(usageDate))
       errors.rejectValue("usage.usageDate", "dateFormat.incorrect",
-              CustomDateFormatter.getDateTimeErrorMessage());
+          CustomDateFormatter.getDateTimeErrorMessage());
 
     updateRelatedEntities(form);
 

@@ -38,32 +38,32 @@ public class DonationConstraintChecker {
 
   public boolean canDeleteDonation(long donationId) throws NoResultException {
 
-        Donation donation = donationRepository.findDonationById(donationId);
-        
-        // Check for comments
-        if (donation.getNotes() != null && !donation.getNotes().isEmpty()) {
-            return false;
-        }
-        
-        // Check for adverse events
-        if (donation.getAdverseEvent() != null) {
-          return false;
-        }
+    Donation donation = donationRepository.findDonationById(donationId);
 
-        // Check for recorded test results
-        if (bloodTestResultRepository.countBloodTestResultsForDonation(donationId) > 0) {
-            return false;
-        }
-        
-        // Check for processed components
-        if (componentRepository.countChangedComponentsForDonation(donationId) > 0) {
-            return false;
-        }
-        
-        return true;
+    // Check for comments
+    if (donation.getNotes() != null && !donation.getNotes().isEmpty()) {
+      return false;
     }
-    
-    public boolean canUpdateDonationFields(long donationId) {
+
+    // Check for adverse events
+    if (donation.getAdverseEvent() != null) {
+      return false;
+    }
+
+    // Check for recorded test results
+    if (bloodTestResultRepository.countBloodTestResultsForDonation(donationId) > 0) {
+      return false;
+    }
+
+    // Check for processed components
+    if (componentRepository.countChangedComponentsForDonation(donationId) > 0) {
+      return false;
+    }
+
+    return true;
+  }
+
+  public boolean canUpdateDonationFields(long donationId) {
 
     // Check for recorded test results
     if (bloodTestResultRepository.countBloodTestResultsForDonation(donationId) > 0) {
@@ -99,8 +99,8 @@ public class DonationConstraintChecker {
    */
   public boolean donationIsReleased(TestBatch testBatch, Donation donation, BloodTestingRuleResult bloodTestingRuleResult) {
     return testBatch != null &&
-            testBatch.getStatus() != TestBatchStatus.OPEN &&
-            !donationHasDiscrepancies(donation, bloodTestingRuleResult);
+        testBatch.getStatus() != TestBatchStatus.OPEN &&
+        !donationHasDiscrepancies(donation, bloodTestingRuleResult);
   }
 
   /**
@@ -108,8 +108,8 @@ public class DonationConstraintChecker {
    */
   public boolean donationIsReleased(TestBatch testBatch, Donation donation) {
     return testBatch != null &&
-            testBatch.getStatus() != TestBatchStatus.OPEN &&
-            !donationHasDiscrepancies(donation);
+        testBatch.getStatus() != TestBatchStatus.OPEN &&
+        !donationHasDiscrepancies(donation);
   }
 
   public boolean donationHasOutstandingOutcomes(Donation donation, BloodTestingRuleResult bloodTestingRuleResult) {
@@ -123,8 +123,8 @@ public class DonationConstraintChecker {
     bloodTestsService.updateDonationWithTestResults(copy, bloodTestingRuleResult);
 
     return copy.getTTIStatus() == TTIStatus.NOT_DONE ||
-            copy.getBloodTypingStatus() == BloodTypingStatus.NOT_DONE ||
-            copy.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NOT_DONE;
+        copy.getBloodTypingStatus() == BloodTypingStatus.NOT_DONE ||
+        copy.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NOT_DONE;
   }
 
   /**

@@ -56,56 +56,56 @@ public class DonorDeferralRepositoryTests extends ContextDependentTestSuite {
 
     Donor donor = aDonor().build();
     DeferralReason temporaryDeferralReason = aDeferralReason()
-            .withType(DeferralReasonType.NORMAL)
-            .withDurationType(DurationType.TEMPORARY)
-            .build();
+        .withType(DeferralReasonType.NORMAL)
+        .withDurationType(DurationType.TEMPORARY)
+        .build();
     DeferralReason permanentDeferralReason = aDeferralReason()
-            .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE)
-            .withDurationType(DurationType.PERMANENT)
-            .build();
+        .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE)
+        .withDurationType(DurationType.PERMANENT)
+        .build();
 
     // Expected
     aDonorDeferral()
-            .withDeferralReason(temporaryDeferralReason)
-            .withDeferredUntil(futureDate)
-            .withDeferredDonor(donor)
-            .buildAndPersist(entityManager);
+        .withDeferralReason(temporaryDeferralReason)
+        .withDeferredUntil(futureDate)
+        .withDeferredDonor(donor)
+        .buildAndPersist(entityManager);
     // Expected
     aDonorDeferral()
-            .withDeferralReason(temporaryDeferralReason)
-            .withDeferredUntil(currentDate) // edge case: deferral ending today
-            .withDeferredDonor(donor)
-            .buildAndPersist(entityManager);
+        .withDeferralReason(temporaryDeferralReason)
+        .withDeferredUntil(currentDate) // edge case: deferral ending today
+        .withDeferredDonor(donor)
+        .buildAndPersist(entityManager);
     // Expected
     aDonorDeferral()
-            .withDeferralReason(permanentDeferralReason)
-            .withDeferredDonor(donor)
-            .buildAndPersist(entityManager);
+        .withDeferralReason(permanentDeferralReason)
+        .withDeferredDonor(donor)
+        .buildAndPersist(entityManager);
     // Excluded by past deferred until date
     aDonorDeferral()
-            .withDeferralReason(temporaryDeferralReason)
-            .withDeferredUntil(pastDate)
-            .withDeferredDonor(donor)
-            .buildAndPersist(entityManager);
+        .withDeferralReason(temporaryDeferralReason)
+        .withDeferredUntil(pastDate)
+        .withDeferredDonor(donor)
+        .buildAndPersist(entityManager);
     // Excluded because voided
     aDonorDeferral()
-            .thatIsVoided()
-            .withDeferralReason(temporaryDeferralReason)
-            .withDeferredUntil(futureDate)
-            .withDeferredDonor(donor)
-            .buildAndPersist(entityManager);
+        .thatIsVoided()
+        .withDeferralReason(temporaryDeferralReason)
+        .withDeferredUntil(futureDate)
+        .withDeferredDonor(donor)
+        .buildAndPersist(entityManager);
     // Excluded because voided
     aDonorDeferral()
-            .thatIsVoided()
-            .withDeferralReason(permanentDeferralReason)
-            .withDeferredDonor(donor)
-            .buildAndPersist(entityManager);
+        .thatIsVoided()
+        .withDeferralReason(permanentDeferralReason)
+        .withDeferredDonor(donor)
+        .buildAndPersist(entityManager);
     // Excluded by donor
     aDonorDeferral()
-            .withDeferralReason(temporaryDeferralReason)
-            .withDeferredUntil(futureDate)
-            .withDeferredDonor(aDonor().build())
-            .buildAndPersist(entityManager);
+        .withDeferralReason(temporaryDeferralReason)
+        .withDeferredUntil(futureDate)
+        .withDeferredDonor(aDonor().build())
+        .buildAndPersist(entityManager);
 
     int returnedCount = donorDeferralRepository.countCurrentDonorDeferralsForDonor(donor);
 
@@ -117,35 +117,35 @@ public class DonorDeferralRepositoryTests extends ContextDependentTestSuite {
 
     Donor donor = aDonor().build();
     DeferralReason deferralReason = aDeferralReason()
-            .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE)
-            .withDurationType(DurationType.PERMANENT)
-            .build();
+        .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE)
+        .withDurationType(DurationType.PERMANENT)
+        .build();
 
     List<DonorDeferral> expectedDeferrals = Collections.singletonList(
-            aDonorDeferral().withDeferredDonor(donor).withDeferralReason(deferralReason).buildAndPersist(entityManager)
+        aDonorDeferral().withDeferredDonor(donor).withDeferralReason(deferralReason).buildAndPersist(entityManager)
     );
 
     // Excluded because voided
     aDonorDeferral()
-            .thatIsVoided()
-            .withDeferredDonor(donor)
-            .withDeferralReason(deferralReason)
-            .buildAndPersist(entityManager);
+        .thatIsVoided()
+        .withDeferredDonor(donor)
+        .withDeferralReason(deferralReason)
+        .buildAndPersist(entityManager);
 
     // Excluded by donor
     aDonorDeferral()
-            .withDeferredDonor(aDonor().build())
-            .withDeferralReason(deferralReason)
-            .buildAndPersist(entityManager);
+        .withDeferredDonor(aDonor().build())
+        .withDeferralReason(deferralReason)
+        .buildAndPersist(entityManager);
 
     // Excluded by deferral reason
     aDonorDeferral()
-            .withDeferredDonor(donor)
-            .withDeferralReason(aDeferralReason().build())
-            .buildAndPersist(entityManager);
+        .withDeferredDonor(donor)
+        .withDeferralReason(aDeferralReason().build())
+        .buildAndPersist(entityManager);
 
     List<DonorDeferral> returnedDeferrals = donorDeferralRepository.findDonorDeferralsForDonorByDeferralReason(donor,
-            deferralReason);
+        deferralReason);
 
     assertThat(returnedDeferrals, is(expectedDeferrals));
   }

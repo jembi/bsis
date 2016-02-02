@@ -45,15 +45,15 @@ public class TestBatchRepository {
 
   public List<TestBatch> getAllTestBatch() {
     TypedQuery<TestBatch> query = em.createQuery(
-            "SELECT t FROM TestBatch t WHERE t.isDeleted= :isDeleted",
-            TestBatch.class);
+        "SELECT t FROM TestBatch t WHERE t.isDeleted= :isDeleted",
+        TestBatch.class);
     query.setParameter("isDeleted", false);
     return query.getResultList();
   }
 
   public TestBatch findTestBatchById(Long id) throws NoResultException {
     TypedQuery<TestBatch> query = em.createQuery(
-            "SELECT t FROM TestBatch t WHERE t.id = :id", TestBatch.class);
+        "SELECT t FROM TestBatch t WHERE t.id = :id", TestBatch.class);
     query.setParameter("id", id);
     return query.getSingleResult();
   }
@@ -127,7 +127,7 @@ public class TestBatchRepository {
 
   public List<TestBatch> getRecentlyClosedTestBatches(Integer numOfResults) {
     String queryStr = "SELECT tb FROM TestBatch tb "
-            + "WHERE status = :status  ORDER BY lastUpdated DESC";
+        + "WHERE status = :status  ORDER BY lastUpdated DESC";
     TypedQuery<TestBatch> query = em.createQuery(queryStr, TestBatch.class);
     query.setParameter("status", TestBatchStatus.CLOSED);
     query.setMaxResults(numOfResults);

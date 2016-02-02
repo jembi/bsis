@@ -10,7 +10,7 @@ import javax.validation.ConstraintValidatorContext;
 
 @Component
 class RequestTypeExistsConstraintValidator implements
-        ConstraintValidator<RequestTypeExists, RequestType> {
+    ConstraintValidator<RequestTypeExists, RequestType> {
 
   @Autowired
   private RequestTypeRepository requestTypeRepository;

@@ -86,7 +86,7 @@ public class DonorCommunicationsRepositoryTest {
       ReplacementDataSet rDataSet = new ReplacementDataSet(dataSet);
       for (String key : replacements.keySet()) {
         rDataSet.addReplacementObject("${" + key + "}",
-                replacements.get(key));
+            replacements.get(key));
       }
       DatabaseOperation.CLEAN_INSERT.execute(connection, rDataSet);
     } finally {
@@ -135,8 +135,8 @@ public class DonorCommunicationsRepositoryTest {
     venues = createVenueList(id);
     bloodGroups = createBloodGroupList(bloodGroupStrArray);
     assertEquals("List size should be zero, no matching search results.",
-            0, donorCommunicationsRepository.findDonors(venues, clinicDate, lastDonationFromDate,
-                    lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor).size());
+        0, donorCommunicationsRepository.findDonors(venues, clinicDate, lastDonationFromDate,
+            lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor).size());
 
   }
 
@@ -169,13 +169,13 @@ public class DonorCommunicationsRepositoryTest {
     List<Donor> results = new ArrayList<>();
 
     results = donorCommunicationsRepository.findDonors(venues, clinicDate, lastDonationFromDate,
-            lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
+        lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
     assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, results.size());
 
     boolean isvalid = true;
     for (Donor donor : results) {
       if (!((donor.getBloodAbo() + donor.getBloodRh()).equals("O+") || (donor.getBloodAbo() + donor.getBloodRh()).equals("A+"))
-              && (donor.getVenue().getId() == 3 || donor.getVenue().getId() == 1)) {
+          && (donor.getVenue().getId() == 3 || donor.getVenue().getId() == 1)) {
         isvalid = false;
         break;
       }
@@ -213,7 +213,7 @@ public class DonorCommunicationsRepositoryTest {
 
     List<Donor> results = new ArrayList<>();
     results = donorCommunicationsRepository.findDonors(venues, clinicDate, lastDonationFromDate,
-            lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
+        lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
 
     assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, results.size());
 
@@ -258,14 +258,14 @@ public class DonorCommunicationsRepositoryTest {
 
     List<Donor> results = new ArrayList<>();
     results = donorCommunicationsRepository.findDonors(venues, clinicDate, lastDonationFromDate, lastDonationToDate,
-            bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
+        bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
 
     assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, results.size());
 
     boolean isvalid = true;
     for (Donor donor : results) {
       if (donor.getDateOfLastDonation().after(CustomDateFormatter.parse(lastDonationToDate))
-              || donor.getDateOfLastDonation().before(CustomDateFormatter.parse(lastDonationFromDate))) {
+          || donor.getDateOfLastDonation().before(CustomDateFormatter.parse(lastDonationFromDate))) {
         isvalid = false;
         break;
       }
@@ -303,28 +303,28 @@ public class DonorCommunicationsRepositoryTest {
     //List<Object> results = new ArrayList<Object>();
 
     List<Donor> donors = donorCommunicationsRepository.findDonors(venues, clinicDate, lastDonationFromDate,
-            lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDate);
+        lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDate);
 
     for (Donor donor : donors) {
       // Donor with ID=5 is set as deleted
       assertFalse(
-              "Deleted Donor should not be included in the list of donor results.",
-              donor.getId() == 5);
+          "Deleted Donor should not be included in the list of donor results.",
+          donor.getId() == 5);
       assertFalse("Donors included in the list of donor results should not be marked as deleted.",
-              donor.getIsDeleted());
+          donor.getIsDeleted());
     }
   }
 
   @Test
   public void findDonors_shouldNotReturnMergedDonors() throws ParseException {
     List<Donor> donors = donorCommunicationsRepository.findDonors(createVenueList(new long[]{1, 3}), "", "", "",
-            createBloodGroupList(new String[]{"A+", "O+"}), false, false, createPagingParamsMap(), "");
+        createBloodGroupList(new String[]{"A+", "O+"}), false, false, createPagingParamsMap(), "");
 
     for (Donor donor : donors) {
       // Donor with ID=6 is set as status merged
       assertFalse("Merged Donor should not be included in the list of donor results.", donor.getId() == 6);
       assertFalse("Donors included in the list of donor results should not be merged.",
-              donor.getDonorStatus() == DonorStatus.MERGED);
+          donor.getDonorStatus() == DonorStatus.MERGED);
     }
   }
 
@@ -357,7 +357,7 @@ public class DonorCommunicationsRepositoryTest {
     bloodGroups = createBloodGroupList(bloodGroupStrArray);
 
     List<Donor> donors = donorCommunicationsRepository.findDonors(venues, clinicDate, lastDonationFromDate,
-            lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDate);
+        lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDate);
 
     assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, donors.size());
 
@@ -403,7 +403,7 @@ public class DonorCommunicationsRepositoryTest {
     bloodGroups = createBloodGroupList(bloodGroupStrArray);
 
     List<Donor> donors = donorCommunicationsRepository.findDonors(venues, clinicDate, lastDonationFromDate,
-            lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDate);
+        lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDate);
 
     assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, donors.size());
 
@@ -448,7 +448,7 @@ public class DonorCommunicationsRepositoryTest {
     bloodGroups = createBloodGroupList(bloodGroupStrArray);
 
     List<Donor> donors = donorCommunicationsRepository.findDonors(venues, clinicDate, lastDonationFromDate,
-            lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDate);
+        lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDate);
 
     assertNotSame("List size should be greater than zero, with donors matching search criteria.", 0, donors.size());
 
@@ -471,13 +471,13 @@ public class DonorCommunicationsRepositoryTest {
    */
   public void userAuthentication() {
     ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
-            "file:**/security-bsis-servlet.xml");
+        "file:**/security-bsis-servlet.xml");
     UserDetailsService userDetailsService = applicationContext.getBean(LoginUserService.class);
     BsisUserDetails userDetails = (BsisUserDetails) userDetailsService
-            .loadUserByUsername("admin");
+        .loadUserByUsername("admin");
     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-            userDetails, userDetails.getPassword(),
-            userDetails.getAuthorities());
+        userDetails, userDetails.getPassword(),
+        userDetails.getAuthorities());
     SecurityContextHolder.getContext().setAuthentication(authToken);
   }
 
@@ -527,8 +527,8 @@ public class DonorCommunicationsRepositoryTest {
 
     List<Donor> results = new ArrayList<>();
     results = donorCommunicationsRepository.findDonors(venue,
-            clinicDate, lastDonationFromDate, lastDonationToDate,
-            bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
+        clinicDate, lastDonationFromDate, lastDonationToDate,
+        bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
 
     return (long) results.size();
   }

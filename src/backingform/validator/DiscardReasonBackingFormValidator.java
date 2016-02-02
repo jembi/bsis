@@ -41,7 +41,7 @@ public class DiscardReasonBackingFormValidator implements Validator {
 
     if (utilController.isDuplicateDiscardReason(form.getDiscardReason())) {
       errors.rejectValue("reason", "400",
-              "Discard Reason already exists.");
+          "Discard Reason already exists.");
     }
 
 

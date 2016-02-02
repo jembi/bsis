@@ -48,57 +48,57 @@ public class DonationRepositoryTests extends ContextDependentTestSuite {
 
     // Expected
     aDonation()
-            .thatIsNotDeleted()
-            .withDonationDate(irrelevantStartDate)
-            .withDonor(aDonor().withGender(expectedGender).withVenue(expectedVenue).build())
-            .withDonationType(expectedDonationType)
-            .withBloodAbo(expectedBloodAbo)
-            .withBloodRh(expectedBloodRh)
-            .buildAndPersist(entityManager);
+        .thatIsNotDeleted()
+        .withDonationDate(irrelevantStartDate)
+        .withDonor(aDonor().withGender(expectedGender).withVenue(expectedVenue).build())
+        .withDonationType(expectedDonationType)
+        .withBloodAbo(expectedBloodAbo)
+        .withBloodRh(expectedBloodRh)
+        .buildAndPersist(entityManager);
 
     // Expected
     aDonation()
-            .thatIsNotDeleted()
-            .withDonationDate(irrelevantEndDate)
-            .withDonor(aDonor().withGender(expectedGender).withVenue(expectedVenue).build())
-            .withDonationType(expectedDonationType)
-            .withBloodAbo(expectedBloodAbo)
-            .withBloodRh(expectedBloodRh)
-            .buildAndPersist(entityManager);
+        .thatIsNotDeleted()
+        .withDonationDate(irrelevantEndDate)
+        .withDonor(aDonor().withGender(expectedGender).withVenue(expectedVenue).build())
+        .withDonationType(expectedDonationType)
+        .withBloodAbo(expectedBloodAbo)
+        .withBloodRh(expectedBloodRh)
+        .buildAndPersist(entityManager);
 
     // Excluded by date
     aDonation()
-            .thatIsNotDeleted()
-            .withDonationDate(new Date())
-            .withDonor(aDonor().withGender(expectedGender).withVenue(expectedVenue).build())
-            .withDonationType(expectedDonationType)
-            .withBloodAbo(expectedBloodAbo)
-            .withBloodRh(expectedBloodRh)
-            .buildAndPersist(entityManager);
+        .thatIsNotDeleted()
+        .withDonationDate(new Date())
+        .withDonor(aDonor().withGender(expectedGender).withVenue(expectedVenue).build())
+        .withDonationType(expectedDonationType)
+        .withBloodAbo(expectedBloodAbo)
+        .withBloodRh(expectedBloodRh)
+        .buildAndPersist(entityManager);
 
     // Excluded by deleted
     aDonation()
-            .thatIsDeleted()
-            .withDonationDate(irrelevantStartDate)
-            .withDonor(aDonor().withGender(expectedGender).withVenue(expectedVenue).build())
-            .withDonationType(expectedDonationType)
-            .withBloodAbo(expectedBloodAbo)
-            .withBloodRh(expectedBloodRh)
-            .buildAndPersist(entityManager);
+        .thatIsDeleted()
+        .withDonationDate(irrelevantStartDate)
+        .withDonor(aDonor().withGender(expectedGender).withVenue(expectedVenue).build())
+        .withDonationType(expectedDonationType)
+        .withBloodAbo(expectedBloodAbo)
+        .withBloodRh(expectedBloodRh)
+        .buildAndPersist(entityManager);
 
     List<CollectedDonationValueObject> expectedValueObjects = Collections.singletonList(
-            aCollectedDonationValueObject()
-                    .withVenue(expectedVenue)
-                    .withDonationType(expectedDonationType)
-                    .withGender(expectedGender)
-                    .withBloodAbo(expectedBloodAbo)
-                    .withBloodRh(expectedBloodRh)
-                    .withCount(2)
-                    .build()
+        aCollectedDonationValueObject()
+            .withVenue(expectedVenue)
+            .withDonationType(expectedDonationType)
+            .withGender(expectedGender)
+            .withBloodAbo(expectedBloodAbo)
+            .withBloodRh(expectedBloodRh)
+            .withCount(2)
+            .build()
     );
 
     List<CollectedDonationValueObject> returnedValueObjects = donationRepository.findCollectedDonationsReportIndicators(
-            irrelevantStartDate, irrelevantEndDate);
+        irrelevantStartDate, irrelevantEndDate);
 
     assertThat(returnedValueObjects, is(expectedValueObjects));
   }
@@ -122,43 +122,43 @@ public class DonationRepositoryTests extends ContextDependentTestSuite {
 
     // Expected: donationDate + longPeriodBetweenDonations
     aDonation()
-            .thatIsNotDeleted()
-            .withDonor(donor)
-            .withDonationDate(donationDate)
-            .withPackType(longPeriodPackType)
-            .buildAndPersist(entityManager);
+        .thatIsNotDeleted()
+        .withDonor(donor)
+        .withDonationDate(donationDate)
+        .withPackType(longPeriodPackType)
+        .buildAndPersist(entityManager);
 
     // Excluded by earlier due to donate date
     aDonation()
-            .thatIsNotDeleted()
-            .withDonor(donor)
-            .withDonationDate(earlierDonationDate)
-            .withPackType(longPeriodPackType)
-            .buildAndPersist(entityManager);
+        .thatIsNotDeleted()
+        .withDonor(donor)
+        .withDonationDate(earlierDonationDate)
+        .withPackType(longPeriodPackType)
+        .buildAndPersist(entityManager);
 
     // Excluded by earlier due to donate date
     aDonation()
-            .thatIsNotDeleted()
-            .withDonor(donor)
-            .withDonationDate(laterDonationDate)
-            .withPackType(shortPeriodPackType)
-            .buildAndPersist(entityManager);
+        .thatIsNotDeleted()
+        .withDonor(donor)
+        .withDonationDate(laterDonationDate)
+        .withPackType(shortPeriodPackType)
+        .buildAndPersist(entityManager);
 
     // Excluded by deleted
     aDonation()
-            .thatIsDeleted()
-            .withDonor(donor)
-            .withDonationDate(laterDonationDate)
-            .withPackType(longPeriodPackType)
-            .buildAndPersist(entityManager);
+        .thatIsDeleted()
+        .withDonor(donor)
+        .withDonationDate(laterDonationDate)
+        .withPackType(longPeriodPackType)
+        .buildAndPersist(entityManager);
 
     // Excluded by donor
     aDonation()
-            .thatIsNotDeleted()
-            .withDonor(aDonor().build())
-            .withDonationDate(laterDonationDate)
-            .withPackType(longPeriodPackType)
-            .buildAndPersist(entityManager);
+        .thatIsNotDeleted()
+        .withDonor(aDonor().build())
+        .withDonationDate(laterDonationDate)
+        .withPackType(longPeriodPackType)
+        .buildAndPersist(entityManager);
 
     Date returnedDueToDonateDate = donationRepository.findLatestDueToDonateDateForDonor(donor.getId());
 

@@ -15,25 +15,25 @@ public class AdverseEventTypeBackingFormMatcher extends TypeSafeMatcher<AdverseE
   }
 
   public static AdverseEventTypeBackingFormMatcher hasSameStateAsAdverseEventTypeBackingForm(
-          AdverseEventTypeBackingForm expected) {
+      AdverseEventTypeBackingForm expected) {
     return new AdverseEventTypeBackingFormMatcher(expected);
   }
 
   @Override
   public void describeTo(Description description) {
     description.appendText("An adverse event type with the following state:")
-            .appendText("\nId: ").appendValue(expected.getId())
-            .appendText("\nName: ").appendValue(expected.getName())
-            .appendText("\nDescription: ").appendValue(expected.getDescription())
-            .appendText("\nDeleted: ").appendValue(expected.getIsDeleted());
+        .appendText("\nId: ").appendValue(expected.getId())
+        .appendText("\nName: ").appendValue(expected.getName())
+        .appendText("\nDescription: ").appendValue(expected.getDescription())
+        .appendText("\nDeleted: ").appendValue(expected.getIsDeleted());
   }
 
   @Override
   public boolean matchesSafely(AdverseEventTypeBackingForm actual) {
     return Objects.equals(actual.getId(), expected.getId()) &&
-            Objects.equals(actual.getName(), expected.getName()) &&
-            Objects.equals(actual.getDescription(), expected.getDescription()) &&
-            Objects.equals(actual.getIsDeleted(), expected.getIsDeleted());
+        Objects.equals(actual.getName(), expected.getName()) &&
+        Objects.equals(actual.getDescription(), expected.getDescription()) &&
+        Objects.equals(actual.getIsDeleted(), expected.getIsDeleted());
   }
 
 }

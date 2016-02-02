@@ -25,21 +25,21 @@ public class AdverseEventTypeViewModelFactoryTests {
     String irrelevantDescription = "description";
 
     AdverseEventType adverseEventType = anAdverseEventType()
-            .thatIsDeleted()
-            .withId(irrelevantId)
-            .withName(irrelevantName)
-            .withDescription(irrelevantDescription)
-            .build();
+        .thatIsDeleted()
+        .withId(irrelevantId)
+        .withName(irrelevantName)
+        .withDescription(irrelevantDescription)
+        .build();
 
     AdverseEventTypeViewModel expectedViewModel = anAdverseEventTypeViewModel()
-            .thatIsDeleted()
-            .withId(irrelevantId)
-            .withName(irrelevantName)
-            .withDescription(irrelevantDescription)
-            .build();
+        .thatIsDeleted()
+        .withId(irrelevantId)
+        .withName(irrelevantName)
+        .withDescription(irrelevantDescription)
+        .build();
 
     AdverseEventTypeViewModel returnedViewModel = adverseEventTypeViewModelFactory.createAdverseEventTypeViewModel(
-            adverseEventType);
+        adverseEventType);
 
     assertThat(returnedViewModel, hasSameStateAsAdverseEventTypeViewModel(expectedViewModel));
   }

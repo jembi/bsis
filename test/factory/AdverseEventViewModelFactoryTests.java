@@ -35,23 +35,23 @@ public class AdverseEventViewModelFactoryTests {
 
     AdverseEventType adverseEventType = anAdverseEventType().withId(irrelevantAdverseEventTypeId).build();
     AdverseEvent adverseEvent = anAdverseEvent()
-            .withId(irrelevantAdverseEventId)
-            .withType(adverseEventType)
-            .withComment(irrelevantComment)
-            .build();
+        .withId(irrelevantAdverseEventId)
+        .withType(adverseEventType)
+        .withComment(irrelevantComment)
+        .build();
 
     AdverseEventTypeViewModel adverseEventTypeViewModel = anAdverseEventTypeViewModel().build();
     AdverseEventViewModel expectedAdverseEventViewModel = anAdverseEventViewModel()
-            .withId(irrelevantAdverseEventId)
-            .withType(adverseEventTypeViewModel)
-            .withComment(irrelevantComment)
-            .build();
+        .withId(irrelevantAdverseEventId)
+        .withType(adverseEventTypeViewModel)
+        .withComment(irrelevantComment)
+        .build();
 
     when(adverseEventTypeViewModelFactory.createAdverseEventTypeViewModel(adverseEventType))
-            .thenReturn(adverseEventTypeViewModel);
+        .thenReturn(adverseEventTypeViewModel);
 
     AdverseEventViewModel returnedAdverseEventViewModel = adverseEventViewModelFactory.createAdverseEventViewModel(
-            adverseEvent);
+        adverseEvent);
 
     assertThat(returnedAdverseEventViewModel, hasSameStateAsAdverseEventViewModel(expectedAdverseEventViewModel));
   }

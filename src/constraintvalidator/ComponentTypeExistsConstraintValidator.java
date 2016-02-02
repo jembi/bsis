@@ -10,7 +10,7 @@ import javax.validation.ConstraintValidatorContext;
 
 @Component
 class ComponentTypeExistsConstraintValidator implements
-        ConstraintValidator<ComponentTypeExists, ComponentType> {
+    ConstraintValidator<ComponentTypeExists, ComponentType> {
 
   @Autowired
   private ComponentTypeRepository componentTypeRepository;

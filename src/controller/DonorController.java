@@ -102,8 +102,8 @@ public class DonorController {
 
     Boolean isCurrentlyDeferred = donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor);
     map.put("isDonorCurrentlyDeferred", isCurrentlyDeferred);
-    if(isCurrentlyDeferred){
-    	map.put("donorLatestDeferredUntilDate", donorRepository.getLastDonorDeferralDate(id));
+    if (isCurrentlyDeferred) {
+      map.put("donorLatestDeferredUntilDate", donorRepository.getLastDonorDeferralDate(id));
       map.put("donorLatestDeferral", donorRepository.getLastDonorDeferral(id));
     }
 
@@ -120,32 +120,31 @@ public class DonorController {
     List<Donation> donations = donor.getDonations();
 
     boolean flaggedForCounselling = postDonationCounsellingRepository
-            .countFlaggedPostDonationCounsellingsForDonor(donor.getId()) > 0;
+        .countFlaggedPostDonationCounsellingsForDonor(donor.getId()) > 0;
 
     boolean hasCounselling = postDonationCounsellingRepository
-            .countNotFlaggedPostDonationCounsellingsForDonor(donor.getId()) > 0;
+        .countNotFlaggedPostDonationCounsellingsForDonor(donor.getId()) > 0;
 
     map.put("currentlyDeferred", donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor));
     map.put("flaggedForCounselling", flaggedForCounselling);
     map.put("hasCounselling", hasCounselling);
-    map.put("deferredUntil",CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
+    map.put("deferredUntil", CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
     map.put("deferral", donorRepository.getLastDonorDeferral(id));
-	map.put("canDelete", donorConstraintChecker.canDeleteDonor(id));
-	map.put("isEligible", donorConstraintChecker.isDonorEligibleToDonate(id));
-	map.put("birthDate", CustomDateFormatter.getDateString(donor.getBirthDate()));
-    if(donations.size() > 0){
-	    map.put("lastDonation", getDonationViewModel(donations.get(donations.size()-1)));
-	    map.put("dateOfFirstDonation",CustomDateFormatter.getDateString(donations.get(0).getDonationDate()));
-	    map.put("totalDonations",getNumberOfDonations(donations));
-	    map.put("dueToDonate",CustomDateFormatter.getDateString(donor.getDueToDonate()));
-	    map.put("totalAdverseEvents", adverseEventRepository.countAdverseEventsForDonor(donor));
-    }
-    else {
-    	map.put("lastDonation", "");
-	    map.put("dateOfFirstDonation","");
-	    map.put("totalDonations",0);
-	    map.put("dueToDonate","");
-	    map.put("totalAdverseEvents", 0);
+    map.put("canDelete", donorConstraintChecker.canDeleteDonor(id));
+    map.put("isEligible", donorConstraintChecker.isDonorEligibleToDonate(id));
+    map.put("birthDate", CustomDateFormatter.getDateString(donor.getBirthDate()));
+    if (donations.size() > 0) {
+      map.put("lastDonation", getDonationViewModel(donations.get(donations.size() - 1)));
+      map.put("dateOfFirstDonation", CustomDateFormatter.getDateString(donations.get(0).getDonationDate()));
+      map.put("totalDonations", getNumberOfDonations(donations));
+      map.put("dueToDonate", CustomDateFormatter.getDateString(donor.getDueToDonate()));
+      map.put("totalAdverseEvents", adverseEventRepository.countAdverseEventsForDonor(donor));
+    } else {
+      map.put("lastDonation", "");
+      map.put("dateOfFirstDonation", "");
+      map.put("totalDonations", 0);
+      map.put("dueToDonate", "");
+      map.put("totalAdverseEvents", 0);
     }
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
@@ -255,15 +254,15 @@ public class DonorController {
 
     Map<String, Object> map = new HashMap<>();
     map.put("labelZPL",
-            "^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD30^JUS^LRN^CI0^XZ" +
-                    "^XA" +
-                    "^MMT" +
-                    "^PW360" +
-                    "^LL0120" +
-                    "^LS0" +
-                    "^BY2,3,52^FT63,69^BCN,,Y,N" +
-                    "^FD>:" + donorNumber + "^FS" +
-                    "^PQ1,0,1,Y^XZ"
+        "^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD30^JUS^LRN^CI0^XZ" +
+            "^XA" +
+            "^MMT" +
+            "^PW360" +
+            "^LL0120" +
+            "^LS0" +
+            "^BY2,3,52^FT63,69^BCN,,Y,N" +
+            "^FD>:" + donorNumber + "^FS" +
+            "^PQ1,0,1,Y^XZ"
     );
 
     return map;
@@ -286,11 +285,11 @@ public class DonorController {
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
   public Map<String, Object> findDonors(
-          @RequestParam(value = "firstName", required = false, defaultValue = "") String firstName,
-          @RequestParam(value = "lastName", required = false, defaultValue = "") String lastName,
-          @RequestParam(value = "donorNumber", required = false) String donorNumber,
-          @RequestParam(value = "usePhraseMatch", required = false) boolean usePhraseMatch,
-          @RequestParam(value = "donationIdentificationNumber", required = false) String donationIdentificationNumber) {
+      @RequestParam(value = "firstName", required = false, defaultValue = "") String firstName,
+      @RequestParam(value = "lastName", required = false, defaultValue = "") String lastName,
+      @RequestParam(value = "donorNumber", required = false) String donorNumber,
+      @RequestParam(value = "usePhraseMatch", required = false) boolean usePhraseMatch,
+      @RequestParam(value = "donationIdentificationNumber", required = false) String donationIdentificationNumber) {
 
     Map<String, Object> map = new HashMap<>();
 
@@ -305,7 +304,7 @@ public class DonorController {
 
     List<Donor> results = new ArrayList<>();
     results = donorRepository.findAnyDonor(donorNumber, firstName,
-            lastName, pagingParams, usePhraseMatch, donationIdentificationNumber);
+        lastName, pagingParams, usePhraseMatch, donationIdentificationNumber);
 
     List<DonorViewModel> donors = new ArrayList<>();
 
@@ -385,12 +384,12 @@ public class DonorController {
     // Get all the Donations, process the Test Results and update necessary newDonor and Donation fields
     List<Donation> donations = duplicateDonorService.getAllDonationsToMerge(newDonor, donorNumbers);
     List<DonationViewModel> donationViewModels = donationViewModelFactory
-            .createDonationViewModelsWithPermissions(donations);
+        .createDonationViewModelsWithPermissions(donations);
 
     // gather all Deferrals
     List<DonorDeferral> donorDeferrals = duplicateDonorService.getAllDeferralsToMerge(newDonor, donorNumbers);
     List<DonorDeferralViewModel> donorDeferralViewModels = donorDeferralViewModelFactory
-            .createDonorDeferralViewModels(donorDeferrals);
+        .createDonorDeferralViewModels(donorDeferrals);
 
     form = new DuplicateDonorsBackingForm(newDonor);
     form.setContact(newDonor.getContact());
@@ -428,12 +427,12 @@ public class DonorController {
   @RequestMapping(value = "{id}/postdonationcounselling", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_POST_DONATION_COUNSELLING + "')")
   public PostDonationCounsellingViewModel getPostDonationCounsellingForDonor(
-          @PathVariable("id") Long donorId) {
+      @PathVariable("id") Long donorId) {
 
     PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository
-            .findPostDonationCounsellingForDonor(donorId);
+        .findPostDonationCounsellingForDonor(donorId);
     return postDonationCounsellingViewModelFactory
-            .createPostDonationCounsellingViewModel(postDonationCounselling);
+        .createPostDonationCounsellingViewModel(postDonationCounselling);
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
@@ -465,7 +464,7 @@ public class DonorController {
    */
   private boolean canAddDonors() {
     boolean openBatchRequired = generalConfigAccessorService.getBooleanValue(
-            GeneralConfigConstants.DONOR_REGISTRATION_OPEN_BATCH_REQUIRED);
+        GeneralConfigConstants.DONOR_REGISTRATION_OPEN_BATCH_REQUIRED);
     return !openBatchRequired || donationBatchRepository.countOpenDonationBatches() > 0;
   }
 }

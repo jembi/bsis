@@ -51,8 +51,8 @@ public class DonorConstraintChecker {
 
         // Work out the next allowed donation date
         DateTime nextDonationDate = new DateTime(donation.getDonationDate())
-                .plusDays(packType.getPeriodBetweenDonations())
-                .withTimeAtStartOfDay();
+            .plusDays(packType.getPeriodBetweenDonations())
+            .withTimeAtStartOfDay();
 
         // Check if the next allowed donation date is after today
         if (nextDonationDate.isAfter(new DateTime().withTimeAtStartOfDay())) {
@@ -65,9 +65,9 @@ public class DonorConstraintChecker {
 
   }
 
-    public boolean isDonorDeferred(long donorId) {
-        Donor donor = donorRepository.findDonorById(donorId);
-        return donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor);
-    }
+  public boolean isDonorDeferred(long donorId) {
+    Donor donor = donorRepository.findDonorById(donorId);
+    return donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor);
+  }
 
 }

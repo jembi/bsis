@@ -28,37 +28,37 @@ public class AdverseEventRepositoryTests extends ContextDependentTestSuite {
 
     // Expected
     aDonation()
-            .thatIsNotDeleted()
-            .withDonor(donor)
-            .withAdverseEvent(anAdverseEvent().build())
-            .buildAndPersist(entityManager);
+        .thatIsNotDeleted()
+        .withDonor(donor)
+        .withAdverseEvent(anAdverseEvent().build())
+        .buildAndPersist(entityManager);
 
     // Excluded by donor
     aDonation()
-            .thatIsNotDeleted()
-            .withDonor(aDonor().build())
-            .withAdverseEvent(anAdverseEvent().build())
-            .buildAndPersist(entityManager);
+        .thatIsNotDeleted()
+        .withDonor(aDonor().build())
+        .withAdverseEvent(anAdverseEvent().build())
+        .buildAndPersist(entityManager);
 
     // Excluded by no adverse event
     aDonation()
-            .thatIsNotDeleted()
-            .withDonor(donor)
-            .buildAndPersist(entityManager);
+        .thatIsNotDeleted()
+        .withDonor(donor)
+        .buildAndPersist(entityManager);
 
     // Excluded by deleted flag
     aDonation()
-            .thatIsDeleted()
-            .withDonor(donor)
-            .withAdverseEvent(anAdverseEvent().build())
-            .buildAndPersist(entityManager);
+        .thatIsDeleted()
+        .withDonor(donor)
+        .withAdverseEvent(anAdverseEvent().build())
+        .buildAndPersist(entityManager);
 
     // Expected
     aDonation()
-            .thatIsNotDeleted()
-            .withDonor(donor)
-            .withAdverseEvent(anAdverseEvent().build())
-            .buildAndPersist(entityManager);
+        .thatIsNotDeleted()
+        .withDonor(donor)
+        .withAdverseEvent(anAdverseEvent().build())
+        .buildAndPersist(entityManager);
 
     int returnedCount = adverseEventRepository.countAdverseEventsForDonor(donor);
 

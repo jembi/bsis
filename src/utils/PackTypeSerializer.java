@@ -12,7 +12,7 @@ public class PackTypeSerializer extends JsonSerializer<PackType> {
 
   @Override
   public void serialize(PackType packType, JsonGenerator jsonGenerator, SerializerProvider provider)
-          throws IOException, JsonProcessingException {
+      throws IOException, JsonProcessingException {
 
     if (packType == null || packType.getId() == null) {
       jsonGenerator.writeNull();

@@ -35,28 +35,28 @@ public class PostDonationCounsellingController {
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_POST_DONATION_COUNSELLING + "')")
   public PostDonationCounsellingViewModel updatePostDonationCounselling(
-          @Valid @RequestBody PostDonationCounsellingBackingForm backingForm,
-          @PathVariable Long id) {
+      @Valid @RequestBody PostDonationCounsellingBackingForm backingForm,
+      @PathVariable Long id) {
 
     if (backingForm.getFlaggedForCounselling()) {
       //This is when you wish to clear the current status and re flag for counselling
       PostDonationCounselling postDonationCounselling = postDonationCounsellingCRUDService
-              .flagForCounselling(backingForm.getId());
+          .flagForCounselling(backingForm.getId());
 
       return postDonationCounsellingViewModelFactory
-              .createPostDonationCounsellingViewModel(postDonationCounselling);
+          .createPostDonationCounsellingViewModel(postDonationCounselling);
     }
 
     PostDonationCounselling postDonationCounselling = postDonationCounsellingCRUDService.updatePostDonationCounselling(
-            backingForm.getId(), backingForm.getCounsellingStatus(), backingForm.getCounsellingDate(),
-            backingForm.getNotes());
+        backingForm.getId(), backingForm.getCounsellingStatus(), backingForm.getCounsellingDate(),
+        backingForm.getNotes());
 
     return postDonationCounsellingViewModelFactory.createPostDonationCounsellingViewModel(postDonationCounselling);
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasAnyRole('" + PermissionConstants.ADD_POST_DONATION_COUNSELLING + "', '" +
-          PermissionConstants.EDIT_POST_DONATION_COUNSELLING + "')")
+      PermissionConstants.EDIT_POST_DONATION_COUNSELLING + "')")
   public Map<String, Object> getPostDonationCounsellingForm() {
     Map<String, Object> map = new HashMap<>();
 

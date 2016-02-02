@@ -9,7 +9,7 @@ public class BSISDialect extends MySQL5InnoDBDialect {
   public BSISDialect() {
     super();
     registerFunction("date_add_days", new SQLFunctionTemplate(StandardBasicTypes.DATE,
-            "?1 + INTERVAL ?2 DAY"));
+        "?1 + INTERVAL ?2 DAY"));
   }
 
 }

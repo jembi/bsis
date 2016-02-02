@@ -10,7 +10,7 @@ public class BSISTestDialect extends HSQLDialect {
     super();
     // FIXME: This function is broken.
     registerFunction("date_add_days", new SQLFunctionTemplate(StandardBasicTypes.DATE,
-            "?1 + INTERVAL DAY(?2)"));
+        "?1 + INTERVAL DAY(?2)"));
   }
 
 }
