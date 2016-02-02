@@ -32,6 +32,8 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
     private Location venue;
     private List<DonorDeferral> deferrals;
     private List<Donation> donations;
+    private String bloodAbo;
+    private String bloodRh;
 
     public DonorBuilder withId(Long id) {
         this.id = id;
@@ -121,6 +123,16 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
         donations.add(donation);
         return this;
     }
+    
+    public DonorBuilder withBloodAbo(String bloodAbo) {
+      this.bloodAbo = bloodAbo;
+      return this;
+    }
+    
+    public DonorBuilder withBloodRh(String bloodRh) {
+      this.bloodRh = bloodRh;
+      return this;
+    }
 
     @Override
     public Donor build() {
@@ -139,6 +151,8 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
         donor.setVenue(venue);
         donor.setDeferrals(deferrals);
         donor.setDonations(donations);
+        donor.setBloodAbo(bloodAbo);
+        donor.setBloodRh(bloodRh);
         return donor;
     }
 

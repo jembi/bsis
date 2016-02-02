@@ -3,6 +3,7 @@ package service;
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
+import model.donor.Donor;
 import model.donordeferral.DeferralReasonType;
 import model.testbatch.TestBatch;
 import org.apache.log4j.Logger;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import repository.DonationRepository;
+import repository.DonorRepository;
 import viewmodel.BloodTestingRuleResult;
 
 @Transactional
@@ -34,6 +36,8 @@ public class TestBatchStatusChangeService {
     private BloodTestsService bloodTestsService;
     @Autowired
     private DonationRepository donationRepository;
+    @Autowired
+    private DonorRepository donorRepository;
 
     public void handleRelease(TestBatch testBatch) {
         
@@ -72,6 +76,12 @@ public class TestBatchStatusChangeService {
         BloodTestingRuleResult bloodTestingRuleResult = bloodTestsService.executeTests(donation);
         bloodTestsService.updateDonationWithTestResults(donation, bloodTestingRuleResult);
         donation = donationRepository.updateDonation(donation);
+        
+        // Update the donor's Abo/Rh values to match the donation
+        Donor donor = donation.getDonor();
+        donor.setBloodAbo(donation.getBloodAbo());
+        donor.setBloodRh(donation.getBloodRh());
+        donorRepository.saveDonor(donor);
 
         if (donation.getTTIStatus() == TTIStatus.TTI_UNSAFE) {
             LOGGER.info("Handling donation with unsafe TTI status: " + donation);
