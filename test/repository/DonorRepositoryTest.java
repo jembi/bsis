@@ -208,9 +208,9 @@ public class DonorRepositoryTest {
     setPaginationParam(pagingParams);
 
     assertEquals("List size should be zero, no matching search results.",
-        0, ((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
+        0, donorRepository.findAnyDonor(searchDonorNumber,
             donorFirstName, donorLastName, pagingParams,
-            true, donationIdentificationNumber))).size());
+            true, donationIdentificationNumber).size());
   }
 
   @Test
@@ -227,9 +227,9 @@ public class DonorRepositoryTest {
     Map<String, Object> pagingParams = new HashMap<>();
     setPaginationParam(pagingParams);
 
-    List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
+    List<Donor> listDonors = donorRepository.findAnyDonor(
         searchDonorNumber, donorFirstName, donorLastName,
-        pagingParams, true, donationIdentificationNumber)));
+        pagingParams, true, donationIdentificationNumber);
 
     assertNotSame(
         "List size should not zero.Matching records is found base on firstname.",
@@ -261,9 +261,9 @@ public class DonorRepositoryTest {
     Map<String, Object> pagingParams = new HashMap<>();
     setPaginationParam(pagingParams);
 
-    List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
+    List<Donor> listDonors = donorRepository.findAnyDonor(
         searchDonorNumber, donorFirstName, donorLastName,
-        pagingParams, false, donationIdentificationNumber)));
+        pagingParams, false, donationIdentificationNumber);
 
     assertNotSame(
         "List size should not zero.Matching records is found base on firstname.",
@@ -295,8 +295,8 @@ public class DonorRepositoryTest {
     Map<String, Object> pagingParams = new HashMap<>();
     setPaginationParam(pagingParams);
 
-    List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
-        searchDonorNumber, donorFirstName, donorLastName, pagingParams, true, donationIdentificationNumber)));
+    List<Donor> listDonors = donorRepository.findAnyDonor(
+        searchDonorNumber, donorFirstName, donorLastName, pagingParams, true, donationIdentificationNumber);
 
     assertNotSame(
         "List size should not zero.Matching records is found base on lastname.",
@@ -322,8 +322,8 @@ public class DonorRepositoryTest {
     Map<String, Object> pagingParams = new HashMap<>();
     setPaginationParam(pagingParams);
 
-    List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
-        searchDonorNumber, donorFirstName, donorLastName, pagingParams, true, donationIdentificationNumber));
+    List<Donor> listDonor = donorRepository.findAnyDonor(
+        searchDonorNumber, donorFirstName, donorLastName, pagingParams, true, donationIdentificationNumber);
 
     for (Donor donor : listDonor) {
       // 2 is deleted donor id
@@ -347,9 +347,9 @@ public class DonorRepositoryTest {
     Map<String, Object> pagingParams = new HashMap<>();
     setPaginationParam(pagingParams);
 
-    List<Donor> donorList = (List<Donor>) (donorRepository.findAnyDonor(
+    List<Donor> donorList = donorRepository.findAnyDonor(
         searchDonorNumber, donorFirstName, donorLastName,
-        pagingParams, false, donationIdentificationNumber));
+        pagingParams, false, donationIdentificationNumber);
     assertEquals("Should return a single Donor result", 1, donorList.size());
     boolean isValid = false;
     isValid = donorList.get(0).getDonorNumber().equals("000001");

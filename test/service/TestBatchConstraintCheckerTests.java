@@ -176,7 +176,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
 
     TestBatch testBatch = aTestBatch()
         .withStatus(TestBatchStatus.RELEASED)
-        .withDonationBatches(Collections.<DonationBatch>emptyList())
+        .withDonationBatches(Collections.emptyList())
         .build();
 
     boolean result = testBatchConstraintChecker.canCloseTestBatch(testBatch);
@@ -189,7 +189,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
 
     TestBatch testBatch = aTestBatch()
         .withStatus(TestBatchStatus.RELEASED)
-        .withDonationBatch(aDonationBatch().withDonations(Collections.<Donation>emptyList()).build())
+        .withDonationBatch(aDonationBatch().withDonations(Collections.emptyList()).build())
         .build();
 
     boolean result = testBatchConstraintChecker.canCloseTestBatch(testBatch);

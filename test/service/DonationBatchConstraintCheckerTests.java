@@ -130,7 +130,7 @@ public class DonationBatchConstraintCheckerTests {
     Long donationBatchId = 1L;
     DonationBatch donationBatch = aDonationBatch()
         .withId(donationBatchId)
-        .withDonations(Collections.<Donation>emptyList())
+        .withDonations(Collections.emptyList())
         .build();
 
     when(donationBatchRepository.findDonationBatchById(donationBatchId)).thenReturn(donationBatch);
