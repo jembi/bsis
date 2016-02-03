@@ -3,6 +3,7 @@ package suites;
 import java.sql.SQLException;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
@@ -28,31 +29,51 @@ import org.springframework.transaction.annotation.Transactional;
 import repository.UserRepository;
 import security.BsisUserDetails;
 
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/applicationContextTest.xml")
 @Transactional
 @WebAppConfiguration
+/**
+ * Super class for DBUnit tests that handles loading of the dataset into the database and loading a user into the 
+ * Spring Security Context.
+ */
 public abstract class DBUnitContextDependentTestSuite {
   
-  protected static final String ADMIN_USERNAME = "admin";
-  protected User adminUser;
+  protected User loggedInUser;
   
   @PersistenceContext
   protected EntityManager entityManager;
   
   @Autowired
-  UserRepository userRepository;
+  protected UserRepository userRepository;
     
   @Autowired
   private DataSource dataSource;
-  
-  protected abstract IDataSet getDataSet() throws Exception;
 
-  private IDatabaseConnection getConnection() throws SQLException {
-    IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
-    DatabaseConfig config = connection.getConfig();
-    config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
-    return connection;
+  /**
+   * Implement and specify which Dataset XML file should be loaded into the database.
+   * 
+   * @return IDataSet
+   * @throws Exception
+   */
+  protected abstract IDataSet getDataSet() throws Exception;
+  
+  /**
+   * 
+   * Auto generated method comment
+   * 
+   * @return
+   * @throws Exception
+   */
+  protected User getLoggedInUser() throws Exception {
+    User user;
+    try {
+      user = userRepository.findUserById(1l);
+    } catch (NoResultException e) {
+      throw new RuntimeException("Could not find a user with id '1'. Please add a user to the DBUnit dataset XML or override `getLoggedInUser`.", e);
+    }
+    return user;
   }
 
   @Before
@@ -79,14 +100,23 @@ public abstract class DBUnitContextDependentTestSuite {
     }
   }
   
-  public void initSpringSecurityUser() throws Exception {
-    BsisUserDetails user = new BsisUserDetails(userRepository.findUserById(1l));
-    TestingAuthenticationToken auth = new TestingAuthenticationToken(user, "Credentials");
-    SecurityContextHolder.getContext().setAuthentication(auth);
+  private IDatabaseConnection getConnection() throws SQLException {
+    IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
+    DatabaseConfig config = connection.getConfig();
+    config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
+    return connection;
+  }
+  
+  private void initSpringSecurityUser() throws Exception {
+    User user = getLoggedInUser();
+    if (user != null) {
+      BsisUserDetails bsisUser = new BsisUserDetails(getLoggedInUser());
+      TestingAuthenticationToken auth = new TestingAuthenticationToken(bsisUser, "Credentials");
+      SecurityContextHolder.getContext().setAuthentication(auth);
+    }
   }
 
-  public void clearSpringSecurityUser() throws Exception {
+  private void clearSpringSecurityUser() throws Exception {
     SecurityContextHolder.getContext().setAuthentication(null);
   }
-
 }
