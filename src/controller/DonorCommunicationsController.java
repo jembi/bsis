@@ -61,8 +61,6 @@ public class DonorCommunicationsController {
     Map<String, Object> donorCommunicationsFormGenerator(
             HttpServletRequest request) {
 
-       // DonorCommunicationsBackingForm dbform = new DonorCommunicationsBackingForm();
-
         Map<String, Object> map = new HashMap<String, Object>();
 
         // to ensure custom field names are displayed in the form
