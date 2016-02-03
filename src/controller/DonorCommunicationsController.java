@@ -80,6 +80,7 @@ public class DonorCommunicationsController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
     public @ResponseBody
     Map<String, Object> findDonorCommunicationsPagination(
             @RequestParam(value="bloodGroups",required=false ) List<String> bloodGroups,
