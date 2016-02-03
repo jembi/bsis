@@ -2,6 +2,8 @@ package viewmodel;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
+
 import utils.CustomDateFormatter;
 import model.util.Gender;
 
@@ -85,16 +87,15 @@ public class MobileClinicLookUpDonorViewModel {
         this.birthDate = birthDate;
     }
     
-    public String getBloodAbo() {
-        return bloodAbo;
+    public String getBloodType() {
+        if (StringUtils.isBlank(bloodAbo) || StringUtils.isBlank(bloodRh))
+          return "";
+        else
+          return bloodAbo + bloodRh;
     }
     
     public void setBloodAbo(String bloodAbo) {
         this.bloodAbo = bloodAbo;
-    }
-    
-    public String getBloodRh() {
-        return bloodRh;
     }
     
     public void setBloodRh(String bloodRh) {
