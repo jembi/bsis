@@ -7,24 +7,27 @@ import static helpers.builders.PostDonationCounsellingBuilder.aPostDonationCouns
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.persistence.EntityManager;
+
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
+
 import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.location.Location;
+
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import suites.ContextDependentTestSuite;
 
-public class PostDonationCounsellingRepositoryTests extends ContextDependentTestSuite {
+import suites.SecurityContextDependentTestSuite;
+
+public class PostDonationCounsellingRepositoryTests extends SecurityContextDependentTestSuite {
     
     private static final Date NO_START_DATE = null;
     private static final Date NO_END_DATE = null;

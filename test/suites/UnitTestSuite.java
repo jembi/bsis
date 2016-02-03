@@ -15,12 +15,15 @@ import security.BsisUserDetails;
 @RunWith(MockitoJUnitRunner.class)
 public abstract class UnitTestSuite {
   
-  protected User admin;
+  protected static final Long USER_ID = 1L;
+  protected static final String USERNAME = "admin";
+
+  protected User loggedInUser;
 
   @Before
   public void init() throws Exception {
-    admin = UserBuilder.aUser().withId(1L).withUsername("admin").build();
-    setSecurityUser(admin);
+    loggedInUser = UserBuilder.aUser().withId(USER_ID).withUsername(USERNAME).build();
+    setSecurityUser(loggedInUser);
   }
   
   protected void setSecurityUser(User user, String... authorities) {

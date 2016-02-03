@@ -5,22 +5,24 @@ import static helpers.builders.DonorBuilder.aDonor;
 import static helpers.builders.DonorDeferralBuilder.aDonorDeferral;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DeferralReasonType;
 import model.donordeferral.DonorDeferral;
 import model.donordeferral.DurationType;
+
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import suites.ContextDependentTestSuite;
 
-public class DonorDeferralRepositoryTests extends ContextDependentTestSuite {
+import suites.SecurityContextDependentTestSuite;
+
+public class DonorDeferralRepositoryTests extends SecurityContextDependentTestSuite {
     
     @Autowired
     private DonorDeferralRepository donorDeferralRepository;
