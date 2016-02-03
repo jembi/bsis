@@ -21,33 +21,33 @@ import org.springframework.transaction.annotation.Transactional;
 @WebAppConfiguration
 @Transactional
 public class DonationBatchRepositoryTests {
-    
-    @Autowired
-    private DonationBatchRepository donationBatchRepository;
-    @PersistenceContext
-    private EntityManager entityManager;
-    
-    @Test
-    public void testCountOpenDonationBatchesWithNoDonationBatches_shouldReturnZero() {
-        int returnedCount = donationBatchRepository.countOpenDonationBatches();
-        assertThat(returnedCount, is(0));
-    }
 
-    @Test
-    public void testCountOpenDonationBatches_shouldCountOpenAndNotDeletedBatches() {
-        // Expected donation batches
-        aDonationBatch().buildAndPersist(entityManager);
-        aDonationBatch().buildAndPersist(entityManager);
-        
-        // Excluded by closed flag
-        aDonationBatch().thatIsClosed().buildAndPersist(entityManager);
-        
-        // Excluded by deleted flag
-        aDonationBatch().thatIsDeleted().buildAndPersist(entityManager);
-        
-        int returnedCount = donationBatchRepository.countOpenDonationBatches();
+  @Autowired
+  private DonationBatchRepository donationBatchRepository;
+  @PersistenceContext
+  private EntityManager entityManager;
 
-        assertThat(returnedCount, is(2));
-    }
+  @Test
+  public void testCountOpenDonationBatchesWithNoDonationBatches_shouldReturnZero() {
+    int returnedCount = donationBatchRepository.countOpenDonationBatches();
+    assertThat(returnedCount, is(0));
+  }
+
+  @Test
+  public void testCountOpenDonationBatches_shouldCountOpenAndNotDeletedBatches() {
+    // Expected donation batches
+    aDonationBatch().buildAndPersist(entityManager);
+    aDonationBatch().buildAndPersist(entityManager);
+
+    // Excluded by closed flag
+    aDonationBatch().thatIsClosed().buildAndPersist(entityManager);
+
+    // Excluded by deleted flag
+    aDonationBatch().thatIsDeleted().buildAndPersist(entityManager);
+
+    int returnedCount = donationBatchRepository.countOpenDonationBatches();
+
+    assertThat(returnedCount, is(2));
+  }
 
 }

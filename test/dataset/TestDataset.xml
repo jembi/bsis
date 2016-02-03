@@ -8,30 +8,30 @@
     <BloodTestingRule/>
     <BloodTestResult/>
     <Component/>
-	<ComponentType/>
-	<PackType/>
-	<DonationType/>	
-	<Location/>
-	<Donation/>
-	<DonationType/>
-	<DonationBatch/>
-	<TestBatch/>
-	
-	<Contact/>
-	<ContactMethodType/>
-	<Address/>
-	<AddressType/>
-	<PreferredLanguage/>
-	
-	<DeferralReason/>
-	<DonorDeferral/>
-	
-		
-	<Donor/>
-	
-	<IdType/>
-	
-	<ComponentStatusChange/>
-	<ComponentStatusChangeReason/>
-	<User/>
+    <ComponentType/>
+    <PackType/>
+    <DonationType/>
+    <Location/>
+    <Donation/>
+    <DonationType/>
+    <DonationBatch/>
+    <TestBatch/>
+
+    <Contact/>
+    <ContactMethodType/>
+    <Address/>
+    <AddressType/>
+    <PreferredLanguage/>
+
+    <DeferralReason/>
+    <DonorDeferral/>
+
+
+    <Donor/>
+
+    <IdType/>
+
+    <ComponentStatusChange/>
+    <ComponentStatusChangeReason/>
+    <User/>
 </dataset>

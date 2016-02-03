@@ -25,24 +25,24 @@ import backingform.DonationBackingForm;
 
 @Component
 public class DonationBackingFormValidator extends BaseValidator<DonationBackingForm> {
-  
+
   private static final Logger LOGGER = Logger.getLogger(DonationBackingFormValidator.class);
-  
+
   @Autowired
   private DonorRepository donorRepository;
-  
+
   @Autowired
   private DonationRepository donationRepository;
-  
+
   @Autowired
   private DonationBatchRepository donationBatchRepository;
-  
+
   @Autowired
   private SequenceNumberRepository sequenceNumberRepository;
-  
+
   @Autowired
   AdverseEventBackingFormValidator adverseEventBackingFormValidator;
-  
+
   @Autowired
   private GeneralConfigAccessorService generalConfigAccessorService;
 
@@ -67,61 +67,60 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
     if (donor == null) {
       errors.rejectValue("donation.donor", "donor.invalid", "Please supply a valid donor");
     }
-    
+
     // set donation batch
     DonationBatch donationBatch = findDonationBatch(form.getDonationBatchNumber());
     form.setDonationBatch(donationBatch);
     if (donationBatch == null) {
       errors.rejectValue("donation.donationBatch", "donationBatch.invalid", "Please supply a valid donation batch");
     }
-    
+
     inheritParametersFromDonationBatch(form, errors);
 
-    if(donation.getBleedStartTime() != null || donation.getBleedEndTime() != null){
-        validateBleedTimes(donation.getBleedStartTime(), donation.getBleedEndTime(), errors);
+    if (donation.getBleedStartTime() != null || donation.getBleedEndTime() != null) {
+      validateBleedTimes(donation.getBleedStartTime(), donation.getBleedEndTime(), errors);
     }
 
     Location venue = form.getDonation().getVenue();
     if (venue == null) {
       errors.rejectValue("donation.venue", "venue.empty",
-        "Venue is required.");
-    } 
-    else if (venue.getIsVenue() == false) {
+          "Venue is required.");
+    } else if (venue.getIsVenue() == false) {
       errors.rejectValue("donation.venue", "venue.invalid",
-    	"Location is not a Venue.");
-    } 
+          "Location is not a Venue.");
+    }
 
-    validateBloodPressure(form,errors);
+    validateBloodPressure(form, errors);
     validateHaemoglobinCount(form, errors);
     validateWeight(form, errors);
     validatePulse(form, errors);
-    
+
     adverseEventBackingFormValidator.validate(form.getAdverseEvent(), errors);
 
     commonFieldChecks(form, errors);
   }
-  
+
   @Override
   public String getFormName() {
     return "donation";
   }
-  
-  private void validateBleedTimes(Date bleedStartTime, Date bleedEndTime, Errors errors){
-      if(bleedStartTime == null){
-          errors.rejectValue("donation.bleedStartTime", "bleedStartTime.empty", "This is required");
-          return;
-      }
-      if(bleedEndTime == null){
-          errors.rejectValue("donation.bleedEndTime", "bleedEndTime.empty", "This is required");
-          return;
-      }
-      if(bleedStartTime.after(bleedEndTime))
-          errors.rejectValue("donation", "bleedEndTime.outOfRange", "Bleed End time should be after start time");
+
+  private void validateBleedTimes(Date bleedStartTime, Date bleedEndTime, Errors errors) {
+    if (bleedStartTime == null) {
+      errors.rejectValue("donation.bleedStartTime", "bleedStartTime.empty", "This is required");
+      return;
+    }
+    if (bleedEndTime == null) {
+      errors.rejectValue("donation.bleedEndTime", "bleedEndTime.empty", "This is required");
+      return;
+    }
+    if (bleedStartTime.after(bleedEndTime))
+      errors.rejectValue("donation", "bleedEndTime.outOfRange", "Bleed End time should be after start time");
 
   }
 
   private void validateBloodPressure(DonationBackingForm donationBackingForm, Errors errors) {
-	  
+
     Integer bloodPressureSystolic = null;
     Integer bloodPressureDiastolic = null;
 
@@ -162,7 +161,7 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
     }
   }
 
-  private void validateWeight (DonationBackingForm donationBackingForm, Errors errors) {
+  private void validateWeight(DonationBackingForm donationBackingForm, Errors errors) {
     Integer weight = null;
     Integer weightMin = Integer.parseInt(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.weightMin"));
     Integer weightMax = Integer.parseInt(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.weightMax"));
@@ -176,7 +175,7 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
     }
   }
 
-  private void validatePulse (DonationBackingForm donationBackingForm, Errors errors) {
+  private void validatePulse(DonationBackingForm donationBackingForm, Errors errors) {
     Integer pulse = null;
     Integer pulseMin = Integer.parseInt(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.pulseMin"));
     Integer pulseMax = Integer.parseInt(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.pulseMax"));
@@ -223,7 +222,7 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
     }
     return donationBatch;
   }
-  
+
   private Donor findDonor(String donorNumber) {
     Donor donor = null;
     if (donorNumber != null && !donorNumber.isEmpty()) {
@@ -235,7 +234,7 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
     }
     return donor;
   }
-  
+
   private boolean isDuplicateDonationIdentificationNumber(Donation donation) {
     String donationIdentificationNumber = donation.getDonationIdentificationNumber();
     if (StringUtils.isBlank(donationIdentificationNumber)) {

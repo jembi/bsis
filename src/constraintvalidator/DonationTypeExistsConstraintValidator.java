@@ -19,23 +19,23 @@ public class DonationTypeExistsConstraintValidator implements
 
   public DonationTypeExistsConstraintValidator() {
   }
-  
+
   @Override
   public void initialize(DonationTypeExists constraint) {
   }
 
   public boolean isValid(DonationType target, ConstraintValidatorContext context) {
 
-   if (target == null)
-     return true;
+    if (target == null)
+      return true;
 
-   try {
-    if (donorTypeRepository.getDonationTypeById(target.getId()) != null)
-     return true;
-   } catch (Exception e) {
-    e.printStackTrace();
-   }
-   return false;
+    try {
+      if (donorTypeRepository.getDonationTypeById(target.getId()) != null)
+        return true;
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return false;
   }
 
   public void getDonorTypeRepository(DonationTypeRepository donorTypeRepository) {

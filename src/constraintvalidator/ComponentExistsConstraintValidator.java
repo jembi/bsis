@@ -18,17 +18,17 @@ public class ComponentExistsConstraintValidator implements
 
   public ComponentExistsConstraintValidator() {
   }
-  
+
   @Override
   public void initialize(ComponentExists constraint) {
   }
 
   public boolean isValid(Component target, ConstraintValidatorContext context) {
 
-   if (target == null)
-     return true;
+    if (target == null)
+      return true;
 
-   try {
+    try {
 
       Component component = null;
 
@@ -39,7 +39,7 @@ public class ComponentExistsConstraintValidator implements
         return true;
       }
     } catch (Exception e) {
-       e.printStackTrace();
+      e.printStackTrace();
     }
     return false;
   }

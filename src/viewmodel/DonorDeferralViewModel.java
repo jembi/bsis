@@ -31,14 +31,14 @@ public class DonorDeferralViewModel {
   public String getDeferralReasonText() {
     return donorDeferral.getDeferralReasonText();
   }
-  
-	public Map<String, Boolean> getPermissions() {
-		return permissions;
-	}
-	
-	public void setPermissions(Map<String, Boolean> permissions) {
-		this.permissions = permissions;
-	}
+
+  public Map<String, Boolean> getPermissions() {
+    return permissions;
+  }
+
+  public void setPermissions(Map<String, Boolean> permissions) {
+    this.permissions = permissions;
+  }
 
   public String getLastUpdated() {
     return CustomDateFormatter.getDateTimeString(donorDeferral.getLastUpdated());
@@ -61,12 +61,12 @@ public class DonorDeferralViewModel {
       return "";
     return user.getUsername();
   }
-  
+
   public String getVoidedDate() {
     return CustomDateFormatter.getDateString(donorDeferral.getVoidedDate());
   }
-  
+
   public String getDonorNumber() {
-	  return donorDeferral.getDeferredDonor().getDonorNumber();
+    return donorDeferral.getDeferredDonor().getDonorNumber();
   }
 }

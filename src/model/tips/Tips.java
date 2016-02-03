@@ -8,17 +8,17 @@ import javax.persistence.Id;
 public class Tips {
 
   @Id
-  @Column(nullable=false, updatable=false, insertable=false)
+  @Column(nullable = false, updatable = false, insertable = false)
   private String tipsKey;
 
   @Column
   private String tipsName;
 
-  @Column(length=1000)
+  @Column(length = 1000)
   private String tipsContent;
 
   private Boolean isDeleted;
-  
+
   public String getTipsKey() {
     return tipsKey;
   }

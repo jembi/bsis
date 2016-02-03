@@ -49,7 +49,9 @@ import utils.PermissionConstants;
 import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.DonationViewModel;
+
 import au.com.bytecode.opencsv.CSVReader;
+
 import backingform.TestResultBackingForm;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -60,324 +62,318 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequestMapping("ttitests")
 public class TTIController {
 
-	private static final Logger LOGGER = Logger.getLogger(TTIController.class);
+  private static final Logger LOGGER = Logger.getLogger(TTIController.class);
 
-	@Autowired
-	private DonationRepository donationRepository;
+  @Autowired
+  private DonationRepository donationRepository;
 
 
-	@Autowired
-	private GenericConfigRepository genericConfigRepository;
+  @Autowired
+  private GenericConfigRepository genericConfigRepository;
 
-	@Autowired
-	private BloodTestingRepository bloodTestingRepository;
+  @Autowired
+  private BloodTestingRepository bloodTestingRepository;
 
-	@Autowired
-	private WellTypeRepository wellTypeRepository;
+  @Autowired
+  private WellTypeRepository wellTypeRepository;
 
-	public TTIController() {
-	}
+  public TTIController() {
+  }
 
-	public static String getUrl(HttpServletRequest req) {
-		String reqUrl = req.getRequestURL().toString();
-		String queryString = req.getQueryString(); // d=789
-		if (queryString != null) {
-			reqUrl += "?" + queryString;
-		}
-		return reqUrl;
-	}
+  public static String getUrl(HttpServletRequest req) {
+    String reqUrl = req.getRequestURL().toString();
+    String queryString = req.getQueryString(); // d=789
+    if (queryString != null) {
+      reqUrl += "?" + queryString;
+    }
+    return reqUrl;
+  }
 
-	@RequestMapping(value = "/form", method = RequestMethod.GET)
-	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	public Map<String, Object> getTTIForm(HttpServletRequest request) {
-		Map<String, Object> map = new HashMap<String, Object>();
+  @RequestMapping(value = "/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.ADD_TTI_OUTCOME + "')")
+  public Map<String, Object> getTTIForm(HttpServletRequest request) {
+    Map<String, Object> map = new HashMap<String, Object>();
 
-		List<BloodTestViewModel> basicTTITests = getBasicTTITests();
-		map.put("basicTTITests", basicTTITests);
-		
-		List<BloodTestViewModel> pendingTTITests = getConfirmatoryTTITests();
-		map.put("pendingTTITests", pendingTTITests);
+    List<BloodTestViewModel> basicTTITests = getBasicTTITests();
+    map.put("basicTTITests", basicTTITests);
 
-		return map;
-	}
+    List<BloodTestViewModel> pendingTTITests = getConfirmatoryTTITests();
+    map.put("pendingTTITests", pendingTTITests);
 
-	public List<BloodTestViewModel> getBasicTTITests() {
-		List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
-		for (BloodTest rawBloodTest : bloodTestingRepository
-				.getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
-			tests.add(new BloodTestViewModel(rawBloodTest));
-		}
-		return tests;
-	}
-	
-	public List<BloodTestViewModel> getConfirmatoryTTITests() {
-		List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
-		for (BloodTest rawBloodTest : bloodTestingRepository
-				.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
-			tests.add(new BloodTestViewModel(rawBloodTest));
-		}
-		return tests;
-	}
+    return map;
+  }
 
-	@RequestMapping(value = "/results/{donationId}", method = RequestMethod.GET)
-	@PreAuthorize("hasRole('"+PermissionConstants.VIEW_TTI_OUTCOME+"')")
-	public Map<String, Object> showTTIResultsForDonation(HttpServletRequest request,
-			@PathVariable String donationId) {
-                Map<String, Object> map = new HashMap<String, Object>();
-		donationId = donationId.trim();
-		Long donationIdLong = Long.parseLong(donationId);
-		Donation donation = donationRepository
-				.findDonationById(donationIdLong);
-		// using test status to find existing test results and determine pending
-		// tests
-		BloodTestingRuleResult ruleResult = bloodTestingRepository
-				.getAllTestsStatusForDonation(donationIdLong);
-		map.put("donation", new DonationViewModel(donation));
-		map.put("overview", ruleResult);
+  public List<BloodTestViewModel> getBasicTTITests() {
+    List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
+    for (BloodTest rawBloodTest : bloodTestingRepository
+        .getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
+      tests.add(new BloodTestViewModel(rawBloodTest));
+    }
+    return tests;
+  }
 
-		return map;
-	}
+  public List<BloodTestViewModel> getConfirmatoryTTITests() {
+    List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
+    for (BloodTest rawBloodTest : bloodTestingRepository
+        .getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
+      tests.add(new BloodTestViewModel(rawBloodTest));
+    }
+    return tests;
+  }
 
-	@SuppressWarnings("unchecked")
-	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	@RequestMapping(value = "/results/additional", method = RequestMethod.POST)
-	public ResponseEntity<Map<String, Object>> saveAdditionalTTITests(
-			@RequestBody TestResultBackingForm form) {
+  @RequestMapping(value = "/results/{donationId}", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TTI_OUTCOME + "')")
+  public Map<String, Object> showTTIResultsForDonation(HttpServletRequest request,
+                                                       @PathVariable String donationId) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    donationId = donationId.trim();
+    Long donationIdLong = Long.parseLong(donationId);
+    Donation donation = donationRepository
+        .findDonationById(donationIdLong);
+    // using test status to find existing test results and determine pending
+    // tests
+    BloodTestingRuleResult ruleResult = bloodTestingRepository
+        .getAllTestsStatusForDonation(donationIdLong);
+    map.put("donation", new DonationViewModel(donation));
+    map.put("overview", ruleResult);
 
-		HttpStatus httpStatus = HttpStatus.CREATED;
-                Map<String, Object> m = new HashMap<String, Object>();
+    return map;
+  }
 
-		
-			Map<Long, Map<Long, String>> ttiTestResultsMap = new HashMap<Long, Map<Long, String>>();
-			Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
-			ObjectMapper mapper = new ObjectMapper();
-			Map<Long, String> saveTestsData = form.getTestResults();
-			for (Long testIdStr : saveTestsData.keySet()) {
-				saveTestsDataWithLong.put(testIdStr,
-						saveTestsData.get(testIdStr));
-			}
-                        Donation donation = 
-                                donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
-			ttiTestResultsMap.put(donation.getId(),
-					saveTestsDataWithLong);
-			Map<String, Object> results = bloodTestingRepository
-					.saveBloodTestingResults(ttiTestResultsMap, true);
-			Map<String, Object> errorMap = (Map<String, Object>) results
-					.get("errors");
-			if (errorMap != null && !errorMap.isEmpty())
-				httpStatus = HttpStatus.BAD_REQUEST;
+  @SuppressWarnings("unchecked")
+  @PreAuthorize("hasRole('" + PermissionConstants.ADD_TTI_OUTCOME + "')")
+  @RequestMapping(value = "/results/additional", method = RequestMethod.POST)
+  public ResponseEntity<Map<String, Object>> saveAdditionalTTITests(
+      @RequestBody TestResultBackingForm form) {
 
-		return new ResponseEntity<Map<String, Object>>(m, httpStatus);
-	}
+    HttpStatus httpStatus = HttpStatus.CREATED;
+    Map<String, Object> m = new HashMap<String, Object>();
 
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "results/onplate", method = RequestMethod.POST)
-	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	public Map<String, Object> saveTTIResultsOnPlate(HttpServletRequest request,
-			HttpServletResponse response,
-			@RequestParam(value = "ttiTestId") Long ttiTestId,
-			@RequestParam(value = "ttiResults") String ttiResults) {
 
-		Map<String, Object> map = new HashMap<String, Object>();
+    Map<Long, Map<Long, String>> ttiTestResultsMap = new HashMap<Long, Map<Long, String>>();
+    Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
+    ObjectMapper mapper = new ObjectMapper();
+    Map<Long, String> saveTestsData = form.getTestResults();
+    for (Long testIdStr : saveTestsData.keySet()) {
+      saveTestsDataWithLong.put(testIdStr,
+          saveTestsData.get(testIdStr));
+    }
+    Donation donation =
+        donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
+    ttiTestResultsMap.put(donation.getId(),
+        saveTestsDataWithLong);
+    Map<String, Object> results = bloodTestingRepository
+        .saveBloodTestingResults(ttiTestResultsMap, true);
+    Map<String, Object> errorMap = (Map<String, Object>) results
+        .get("errors");
+    if (errorMap != null && !errorMap.isEmpty())
+      httpStatus = HttpStatus.BAD_REQUEST;
 
-		ObjectMapper mapper = new ObjectMapper();
-		boolean success = false;
-		try {
-			Map<String, Map<String, Object>> ttiResultsMap = mapper.readValue(
-					ttiResults, HashMap.class);
-			Map<String, Object> results = bloodTestingRepository
-					.saveTTIResultsOnPlate(ttiResultsMap, ttiTestId);
-			if (results.get("errorsFound").equals(false))
-				success = true;
+    return new ResponseEntity<Map<String, Object>>(m, httpStatus);
+  }
 
-			map.put("errorsByWellNumber",
-					results.get("errorsByWellNumber"));
-			map.put("errorsByWellNumberAsJSON", mapper
-					.writeValueAsString(results.get("errorsByWellNumber")));
-			map.put("errorsByWellNumber",
-					results.get("errorsByWellNumber"));
-			map.put("errorsByWellNumberAsJSON", mapper
-					.writeValueAsString(results.get("errorsByWellNumber")));
-			map.put("donations", results.get("donations"));
-			map.put("bloodTestingResults",
-					results.get("bloodTestingResults"));
-		} catch (JsonParseException e) {
-			LOGGER.error(e.getMessage() + e.getStackTrace());
-		} catch (JsonMappingException e) {
-			LOGGER.error(e.getMessage() + e.getStackTrace());
-		} catch (IOException e) {
-			LOGGER.error(e.getMessage() + e.getStackTrace());
-		}
+  @SuppressWarnings("unchecked")
+  @RequestMapping(value = "results/onplate", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('" + PermissionConstants.ADD_TTI_OUTCOME + "')")
+  public Map<String, Object> saveTTIResultsOnPlate(HttpServletRequest request,
+                                                   HttpServletResponse response,
+                                                   @RequestParam(value = "ttiTestId") Long ttiTestId,
+                                                   @RequestParam(value = "ttiResults") String ttiResults) {
 
-		map.put("success", success);
-		if (!success) {
-			map.put("errorMessage",
-					"Please correct the errors on the highlighted wells before proceeding.");
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-		}
+    Map<String, Object> map = new HashMap<String, Object>();
 
-		map.put("plate", bloodTestingRepository.getPlate("tti"));
-		map.put("ttiTestId", ttiTestId);
-		map.put("ttiTestResults", ttiResults);
-		map.put("ttiTest",
-				bloodTestingRepository.findBloodTestById(ttiTestId));
-		map.put("ttiConfig",
-				genericConfigRepository.getConfigProperties("ttiWells"));
-		map.put("allWellTypes", wellTypeRepository.getAllWellTypes());
+    ObjectMapper mapper = new ObjectMapper();
+    boolean success = false;
+    try {
+      Map<String, Map<String, Object>> ttiResultsMap = mapper.readValue(
+          ttiResults, HashMap.class);
+      Map<String, Object> results = bloodTestingRepository
+          .saveTTIResultsOnPlate(ttiResultsMap, ttiTestId);
+      if (results.get("errorsFound").equals(false))
+        success = true;
 
-		return map;
-	}
+      map.put("errorsByWellNumber",
+          results.get("errorsByWellNumber"));
+      map.put("errorsByWellNumberAsJSON", mapper
+          .writeValueAsString(results.get("errorsByWellNumber")));
+      map.put("errorsByWellNumber",
+          results.get("errorsByWellNumber"));
+      map.put("errorsByWellNumberAsJSON", mapper
+          .writeValueAsString(results.get("errorsByWellNumber")));
+      map.put("donations", results.get("donations"));
+      map.put("bloodTestingResults",
+          results.get("bloodTestingResults"));
+    } catch (JsonParseException e) {
+      LOGGER.error(e.getMessage() + e.getStackTrace());
+    } catch (JsonMappingException e) {
+      LOGGER.error(e.getMessage() + e.getStackTrace());
+    } catch (IOException e) {
+      LOGGER.error(e.getMessage() + e.getStackTrace());
+    }
 
-	/**
-         * 
-         *  
-         *
-        @RequestMapping(value = "/uploadTTIResultsFormGenerator", method = RequestMethod.GET)
-	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	public ModelAndView uploadTTIResultsFormGenerator(HttpServletRequest request) {
-		ModelAndView map = new ModelAndView("bloodtesting/uploadTTIResults");
-		return map;
-	}
-        * */
+    map.put("success", success);
+    if (!success) {
+      map.put("errorMessage",
+          "Please correct the errors on the highlighted wells before proceeding.");
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
 
-	@RequestMapping(value = "results/upload", method = RequestMethod.POST)
-	@PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')")
-	public ResponseEntity<Map<String, Object>> uploadTTIResultsGenerator(
-			MultipartHttpServletRequest request, HttpServletResponse response)
-			throws IOException, ParseException {
+    map.put("plate", bloodTestingRepository.getPlate("tti"));
+    map.put("ttiTestId", ttiTestId);
+    map.put("ttiTestResults", ttiResults);
+    map.put("ttiTest",
+        bloodTestingRepository.findBloodTestById(ttiTestId));
+    map.put("ttiConfig",
+        genericConfigRepository.getConfigProperties("ttiWells"));
+    map.put("allWellTypes", wellTypeRepository.getAllWellTypes());
 
-		HttpStatus httpStatus = HttpStatus.CREATED;
-                Map<String, Object> map = new HashMap<String, Object>();
-		MultipartFile tsvFile = null;
-		String fileName, uploadPath;
-		boolean success = true;
-		
-		try{
-			Iterator<String> iterator = request.getFileNames();
-			if (!iterator.hasNext()) {
-				map.put("errorMessage", UploadTTIResultConstant.MESSAGE1);
-				success = false;
-				map.put("success", success);
-				return new ResponseEntity<Map<String, Object>>(map, HttpStatus.BAD_REQUEST);
-			}
-			if (iterator.hasNext()) {
-				tsvFile = request.getFile(iterator.next());
-			}
-					
-			fileName = tsvFile.getOriginalFilename();			
-			String getFullRealPath = request.getSession().getServletContext().getRealPath("/");
-		  String[] path=getFullRealPath.split(".metadata");
-		  uploadPath = path[0];
-		  String[] tsvFilestr;
-	
-			tsvFilestr = tsvFile.getOriginalFilename().toString()
-					.split(UploadTTIResultConstant.FILE_SPLIT);
-			if (StringUtils.isBlank(tsvFilestr.toString())	|| 
-					!tsvFilestr[1].equals(UploadTTIResultConstant.FILE_EXTENTION)) {
-				map.put("errorMessage",UploadTTIResultConstant.MESSAGE2);
-				success = false;
-				map.put("success", success);
-				return new ResponseEntity<Map<String, Object>>(map, HttpStatus.BAD_REQUEST);
-			}
-			
-			String fileWithExt= FileUploadUtils.splitFilePath(fileName);
-			writeTSVFile(fileWithExt, uploadPath, tsvFile);
-			String file = uploadPath + fileWithExt;
-			readTSVToDB(request, map, tsvFilestr, file);
-			map.put("success", success);
-		}	
-		catch (Exception ex){
-			ex.printStackTrace();
-			success = false;
-			map.put("success", success);
-                        httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-		}
-		
-		return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+    return map;
+  }
 
-	}
+  /**
+   * @RequestMapping(value = "/uploadTTIResultsFormGenerator", method = RequestMethod.GET)
+   * @PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')") public ModelAndView
+   * uploadTTIResultsFormGenerator(HttpServletRequest request) { ModelAndView map = new
+   * ModelAndView("bloodtesting/uploadTTIResults"); return map; }
+   */
 
-	private void readTSVToDB(MultipartHttpServletRequest request,
-			Map<String, Object> map, String[] tsvFilestr, String file)
-			throws IOException, ParseException {
-		CSVReader csvReader;
-		String successRows;
-		String failedRows;
-		if (StringUtils.isNotBlank(tsvFilestr.toString())) {
+  @RequestMapping(value = "results/upload", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('" + PermissionConstants.ADD_TTI_OUTCOME + "')")
+  public ResponseEntity<Map<String, Object>> uploadTTIResultsGenerator(
+      MultipartHttpServletRequest request, HttpServletResponse response)
+      throws IOException, ParseException {
 
-			try {
-				csvReader = new CSVReader(new FileReader(file), '\t', '\'', 1);
-				SimpleDateFormat formatter = new SimpleDateFormat(
-						UploadTTIResultConstant.DATE_FORMAT);
-				String[] next = null;
-				List<TSVFileHeaderName> tSVFileHeaderNameList = new ArrayList<TSVFileHeaderName>();
-				List<TSVFileHeaderName> tSVFailedList = new ArrayList<TSVFileHeaderName>();
+    HttpStatus httpStatus = HttpStatus.CREATED;
+    Map<String, Object> map = new HashMap<String, Object>();
+    MultipartFile tsvFile = null;
+    String fileName, uploadPath;
+    boolean success = true;
 
-				TSVFileHeaderName tSVFileHeaderNameObj, tSVFileFailedObj;
-				while ((next = csvReader.readNext()) != null) {
-					if(next.length > 1){
-						tSVFileHeaderNameObj = new TSVFileHeaderName();
-						tSVFileFailedObj = new TSVFileHeaderName();
-						if (next[1] == null || next[6] == null || next[8] == null
-								|| next[9] == null || next[16] == null
-								|| next[18] == null || next[20] == null) {
-							tSVFileFailedObj = new TSVFileHeaderName();
-							tSVFailedList.add(tSVFileFailedObj);
-						} else {
-							tSVFileHeaderNameObj = new TSVFileHeaderName();
-							//tSVFileHeaderNameObj.setSID(Long.valueOf(next[1].trim()));
-							tSVFileHeaderNameObj.setSID(next[1].trim());
-							tSVFileHeaderNameObj.setAssayNumber(Integer
-									.valueOf(next[6]));
-							tSVFileHeaderNameObj.setResult(BigDecimal
-									.valueOf(Double.valueOf(next[8].trim())));
-							tSVFileHeaderNameObj.setInterpretation(next[9]);
-							tSVFileHeaderNameObj.setCompleted(formatter
-									.parse(next[16]));
-							tSVFileHeaderNameObj.setOperatorID(Integer
-									.parseInt(next[18].trim()));
-							tSVFileHeaderNameObj.setReagentLotNumber(next[20]);
-							tSVFileHeaderNameList.add(tSVFileHeaderNameObj);
-							
-						}
-						
-					}
-				}
+    try {
+      Iterator<String> iterator = request.getFileNames();
+      if (!iterator.hasNext()) {
+        map.put("errorMessage", UploadTTIResultConstant.MESSAGE1);
+        success = false;
+        map.put("success", success);
+        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.BAD_REQUEST);
+      }
+      if (iterator.hasNext()) {
+        tsvFile = request.getFile(iterator.next());
+      }
 
-				bloodTestingRepository
-						.saveTestResultsToDatabase(tSVFileHeaderNameList);
+      fileName = tsvFile.getOriginalFilename();
+      String getFullRealPath = request.getSession().getServletContext().getRealPath("/");
+      String[] path = getFullRealPath.split(".metadata");
+      uploadPath = path[0];
+      String[] tsvFilestr;
 
-				successRows = tSVFileHeaderNameList.size()
-						+ UploadTTIResultConstant.SUCCESS_ROW;
-				failedRows = tSVFailedList.size()
-						+ UploadTTIResultConstant.FAIL_ROW;
-				map.put("SuccessRows", successRows);
-				map.put("FailedRows", failedRows);
-			} catch (FileNotFoundException e) {
-				LOGGER.error("File Not Found:" + e);
-			}
-		}
+      tsvFilestr = tsvFile.getOriginalFilename().toString()
+          .split(UploadTTIResultConstant.FILE_SPLIT);
+      if (StringUtils.isBlank(tsvFilestr.toString()) ||
+          !tsvFilestr[1].equals(UploadTTIResultConstant.FILE_EXTENTION)) {
+        map.put("errorMessage", UploadTTIResultConstant.MESSAGE2);
+        success = false;
+        map.put("success", success);
+        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.BAD_REQUEST);
+      }
 
-	}
+      String fileWithExt = FileUploadUtils.splitFilePath(fileName);
+      writeTSVFile(fileWithExt, uploadPath, tsvFile);
+      String file = uploadPath + fileWithExt;
+      readTSVToDB(request, map, tsvFilestr, file);
+      map.put("success", success);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      success = false;
+      map.put("success", success);
+      httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+    }
 
-	 private void writeTSVFile(String fileName, String uploadPath,
-		   MultipartFile tsvFile) {
-		  InputStream inputStream;
-		  OutputStream outputStream;
-		  try {
-		   inputStream = tsvFile.getInputStream();
-		   File newFile = new File(uploadPath + fileName);
-		   if (!newFile.exists()) {
-		    newFile.createNewFile();
-		   }
-		   outputStream = new FileOutputStream(newFile);
-		   int read = 0;
-		   byte[] bytes = new byte[1024];
-		   while ((read = inputStream.read(bytes)) != -1) {
-		    outputStream.write(bytes, 0, read);
-		   }
-		  } catch (IOException e) {
-		   LOGGER.error("Error occurred while writing to disk: " + e);
-		  }
-		 }	 	 	 
+    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
+
+  }
+
+  private void readTSVToDB(MultipartHttpServletRequest request,
+                           Map<String, Object> map, String[] tsvFilestr, String file)
+      throws IOException, ParseException {
+    CSVReader csvReader;
+    String successRows;
+    String failedRows;
+    if (StringUtils.isNotBlank(tsvFilestr.toString())) {
+
+      try {
+        csvReader = new CSVReader(new FileReader(file), '\t', '\'', 1);
+        SimpleDateFormat formatter = new SimpleDateFormat(
+            UploadTTIResultConstant.DATE_FORMAT);
+        String[] next = null;
+        List<TSVFileHeaderName> tSVFileHeaderNameList = new ArrayList<TSVFileHeaderName>();
+        List<TSVFileHeaderName> tSVFailedList = new ArrayList<TSVFileHeaderName>();
+
+        TSVFileHeaderName tSVFileHeaderNameObj, tSVFileFailedObj;
+        while ((next = csvReader.readNext()) != null) {
+          if (next.length > 1) {
+            tSVFileHeaderNameObj = new TSVFileHeaderName();
+            tSVFileFailedObj = new TSVFileHeaderName();
+            if (next[1] == null || next[6] == null || next[8] == null
+                || next[9] == null || next[16] == null
+                || next[18] == null || next[20] == null) {
+              tSVFileFailedObj = new TSVFileHeaderName();
+              tSVFailedList.add(tSVFileFailedObj);
+            } else {
+              tSVFileHeaderNameObj = new TSVFileHeaderName();
+              //tSVFileHeaderNameObj.setSID(Long.valueOf(next[1].trim()));
+              tSVFileHeaderNameObj.setSID(next[1].trim());
+              tSVFileHeaderNameObj.setAssayNumber(Integer
+                  .valueOf(next[6]));
+              tSVFileHeaderNameObj.setResult(BigDecimal
+                  .valueOf(Double.valueOf(next[8].trim())));
+              tSVFileHeaderNameObj.setInterpretation(next[9]);
+              tSVFileHeaderNameObj.setCompleted(formatter
+                  .parse(next[16]));
+              tSVFileHeaderNameObj.setOperatorID(Integer
+                  .parseInt(next[18].trim()));
+              tSVFileHeaderNameObj.setReagentLotNumber(next[20]);
+              tSVFileHeaderNameList.add(tSVFileHeaderNameObj);
+
+            }
+
+          }
+        }
+
+        bloodTestingRepository
+            .saveTestResultsToDatabase(tSVFileHeaderNameList);
+
+        successRows = tSVFileHeaderNameList.size()
+            + UploadTTIResultConstant.SUCCESS_ROW;
+        failedRows = tSVFailedList.size()
+            + UploadTTIResultConstant.FAIL_ROW;
+        map.put("SuccessRows", successRows);
+        map.put("FailedRows", failedRows);
+      } catch (FileNotFoundException e) {
+        LOGGER.error("File Not Found:" + e);
+      }
+    }
+
+  }
+
+  private void writeTSVFile(String fileName, String uploadPath,
+                            MultipartFile tsvFile) {
+    InputStream inputStream;
+    OutputStream outputStream;
+    try {
+      inputStream = tsvFile.getInputStream();
+      File newFile = new File(uploadPath + fileName);
+      if (!newFile.exists()) {
+        newFile.createNewFile();
+      }
+      outputStream = new FileOutputStream(newFile);
+      int read = 0;
+      byte[] bytes = new byte[1024];
+      while ((read = inputStream.read(bytes)) != -1) {
+        outputStream.write(bytes, 0, read);
+      }
+    } catch (IOException e) {
+      LOGGER.error("Error occurred while writing to disk: " + e);
+    }
+  }
 }

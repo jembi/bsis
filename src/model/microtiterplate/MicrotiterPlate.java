@@ -14,16 +14,16 @@ public class MicrotiterPlate extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length=15, unique=true)
+  @Column(length = 15, unique = true)
   private String plateKey;
-  
-  @Column(length=20)
+
+  @Column(length = 20)
   private String plateName;
 
-  @Column(columnDefinition="SMALLINT")
+  @Column(columnDefinition = "SMALLINT")
   private Integer numRows;
 
-  @Column(columnDefinition="SMALLINT")
+  @Column(columnDefinition = "SMALLINT")
   private Integer numColumns;
 
   @Lob

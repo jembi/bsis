@@ -15,9 +15,9 @@ import backingform.ComponentBackingForm;
 
 @org.springframework.stereotype.Component
 public class ComponentBackingFormValidator extends BaseValidator<ComponentBackingForm> {
-  
+
   private static final Logger LOGGER = Logger.getLogger(ComponentBackingFormValidator.class);
-  
+
   @Autowired
   DonationRepository donationRepository;
 
@@ -41,7 +41,7 @@ public class ComponentBackingFormValidator extends BaseValidator<ComponentBackin
 
     commonFieldChecks(form, errors);
   }
-  
+
   @Override
   public String getFormName() {
     return "component";

@@ -33,31 +33,31 @@ import constraintvalidator.LocationExists;
 
 @NamedQueries({
     @NamedQuery(name = DonationBatchQueryConstants.NAME_COUNT_DONATION_BATCHES,
-            query = DonationBatchQueryConstants.QUERY_COUNT_DONATION_BATCHES)
+        query = DonationBatchQueryConstants.QUERY_COUNT_DONATION_BATCHES)
 })
 @Entity
 @Audited
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class DonationBatch extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length=20, unique=true)
+  @Column(length = 20, unique = true)
   private String batchNumber;
 
   @SuppressWarnings("unchecked")
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy="donationBatch", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "donationBatch", fetch = FetchType.EAGER)
   @Where(clause = "isDeleted = 0")
   private List<Donation> donations = Collections.EMPTY_LIST;
-  
+
   @OneToOne
   @LocationExists
   @NotNull
   private Location venue;
-  
-  
+
+
   @ManyToOne
   private TestBatch testBatch;
 
@@ -66,9 +66,9 @@ public class DonationBatch extends BaseModificationTrackerEntity {
 
   @Lob
   private String notes;
-  
-    @Column(nullable = false)
-    private boolean backEntry;
+
+  @Column(nullable = false)
+  private boolean backEntry;
 
   public DonationBatch() {
     super();
@@ -105,7 +105,7 @@ public class DonationBatch extends BaseModificationTrackerEntity {
   public void setIsDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
-  
+
   public boolean getIsClosed() {
     return isClosed;
   }
@@ -114,34 +114,34 @@ public class DonationBatch extends BaseModificationTrackerEntity {
     this.isClosed = isClosed;
   }
 
-  
+
   public TestBatch getTestBatch() {
-     return testBatch;
-   }
-
-  public void setTestBatch(TestBatch testBatch) {
-     this.testBatch = testBatch;
-   }
-
-    public Location getVenue() {
-        return venue;
-    }
-
-    public void setVenue(Location venue) {
-        this.venue = venue;
-    }
-  
-  public void copy(DonationBatch donationBatch){
-      this.setNotes(donationBatch.getNotes());
-      this.venue = donationBatch.getVenue();
+    return testBatch;
   }
 
-    public boolean isBackEntry() {
-        return backEntry;
-    }
+  public void setTestBatch(TestBatch testBatch) {
+    this.testBatch = testBatch;
+  }
 
-    public void setBackEntry(boolean backEntry) {
-        this.backEntry = backEntry;
-    }
+  public Location getVenue() {
+    return venue;
+  }
+
+  public void setVenue(Location venue) {
+    this.venue = venue;
+  }
+
+  public void copy(DonationBatch donationBatch) {
+    this.setNotes(donationBatch.getNotes());
+    this.venue = donationBatch.getVenue();
+  }
+
+  public boolean isBackEntry() {
+    return backEntry;
+  }
+
+  public void setBackEntry(boolean backEntry) {
+    this.backEntry = backEntry;
+  }
 
 }

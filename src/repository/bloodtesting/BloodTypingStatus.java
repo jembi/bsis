@@ -6,6 +6,6 @@ public enum BloodTypingStatus {
   public static BloodTypingStatus fromObject(Object status) {
     if (status == null || !(status instanceof BloodTypingStatus))
       return NO_MATCH;
-    return (BloodTypingStatus)status;
+    return (BloodTypingStatus) status;
   }
 }

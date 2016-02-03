@@ -1,8 +1,10 @@
 package factory;
 
 import model.counselling.PostDonationCounselling;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import repository.PostDonationCounsellingRepository;
 import viewmodel.PostDonationCounsellingViewModel;
 
@@ -16,12 +18,12 @@ public class PostDonationCounsellingViewModelFactory {
   private PostDonationCounsellingRepository postDonationCounsellingRepository;
 
   public PostDonationCounsellingViewModel createPostDonationCounsellingViewModel(
-          PostDonationCounselling postDonationCounselling) {
+      PostDonationCounselling postDonationCounselling) {
 
     PostDonationCounsellingViewModel viewModel = new PostDonationCounsellingViewModel(postDonationCounselling);
     // Populate permissions
     boolean canRemoveStatus = postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(
-            postDonationCounselling.getDonation().getDonor().getId()) > 0;
+        postDonationCounselling.getDonation().getDonor().getId()) > 0;
     Map<String, Boolean> permissions = new HashMap<>();
     permissions.put("canRemoveStatus", canRemoveStatus);
     viewModel.setPermissions(permissions);

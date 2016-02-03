@@ -6,123 +6,116 @@ import java.util.Date;
 
 public class TSVFileHeaderName {
 
-	private String SID;
-	
-	private Integer assayNumber;
+  private String SID;
 
-	private BigDecimal result;
+  private Integer assayNumber;
 
-	private String interpretation;
+  private BigDecimal result;
 
-	private Date completed;
+  private String interpretation;
 
-	private Integer operatorID;
+  private Date completed;
 
-	private String reagentLotNumber;
+  private Integer operatorID;
 
-	/**
-	 * @return the sID
-	 */
-	public String getSID() {
-		return SID;
-	}
+  private String reagentLotNumber;
 
-	/**
-	 * @param sID
-	 *            the sID to set
-	 */
-	public void setSID(String sID) {
-		SID = sID;
-	}
+  /**
+   * @return the sID
+   */
+  public String getSID() {
+    return SID;
+  }
 
-	/**
-	 * @return the assayNumber
-	 */
-	public Integer getAssayNumber() {
-		return assayNumber;
-	}
+  /**
+   * @param sID the sID to set
+   */
+  public void setSID(String sID) {
+    SID = sID;
+  }
 
-	/**
-	 * @param assayNumber
-	 *            the assayNumber to set
-	 */
-	public void setAssayNumber(Integer assayNumber) {
-		this.assayNumber = assayNumber;
-	}
+  /**
+   * @return the assayNumber
+   */
+  public Integer getAssayNumber() {
+    return assayNumber;
+  }
 
-	/**
-	 * @return the result
-	 */
-	public BigDecimal getResult() {
-		return result;
-	}
+  /**
+   * @param assayNumber the assayNumber to set
+   */
+  public void setAssayNumber(Integer assayNumber) {
+    this.assayNumber = assayNumber;
+  }
 
-	/**
-	 * @param result
-	 *            the result to set
-	 */
-	public void setResult(BigDecimal result) {
-		this.result = result;
-	}
+  /**
+   * @return the result
+   */
+  public BigDecimal getResult() {
+    return result;
+  }
 
-	/**
-	 * @return the interpretation
-	 */
-	public String getInterpretation() {
-		return interpretation;
-	}
+  /**
+   * @param result the result to set
+   */
+  public void setResult(BigDecimal result) {
+    this.result = result;
+  }
 
-	/**
-	 * @param interpretation
-	 *            the interpretation to set
-	 */
-	public void setInterpretation(String interpretation) {
-		this.interpretation = interpretation;
-	}
+  /**
+   * @return the interpretation
+   */
+  public String getInterpretation() {
+    return interpretation;
+  }
 
-	/**
-	 * @return the completed
-	 */
-	public Date getCompleted() {
-		return completed;
-	}
+  /**
+   * @param interpretation the interpretation to set
+   */
+  public void setInterpretation(String interpretation) {
+    this.interpretation = interpretation;
+  }
 
-	/**
-	 * @param completed
-	 *            the completed to set
-	 */
-	public void setCompleted(Date completed) {
-		this.completed = completed;
-	}
+  /**
+   * @return the completed
+   */
+  public Date getCompleted() {
+    return completed;
+  }
 
-	/**
-	 * @return the operatorID
-	 */
-	public Integer getOperatorID() {
-		return operatorID;
-	}
+  /**
+   * @param completed the completed to set
+   */
+  public void setCompleted(Date completed) {
+    this.completed = completed;
+  }
 
-	/**
-	 * @param operatorID
-	 *            the operatorID to set
-	 */
-	public void setOperatorID(Integer operatorID) {
-		this.operatorID = operatorID;
-	}
+  /**
+   * @return the operatorID
+   */
+  public Integer getOperatorID() {
+    return operatorID;
+  }
 
-	/**
-	 * @return the reagentLotNumber
-	 */
-	public String getReagentLotNumber() {
-		return reagentLotNumber;
-	}
+  /**
+   * @param operatorID the operatorID to set
+   */
+  public void setOperatorID(Integer operatorID) {
+    this.operatorID = operatorID;
+  }
 
-	/**
-	 * @param reagentLotNumber
-	 *            the reagentLotNumber to set
-	 */
-	public void setReagentLotNumber(String reagentLotNumber) {
-		this.reagentLotNumber = reagentLotNumber;
-	}
+  /**
+   * @return the reagentLotNumber
+   */
+  public String getReagentLotNumber() {
+    return reagentLotNumber;
+  }
+
+  /**
+   * @param reagentLotNumber the reagentLotNumber to set
+   */
+  public void setReagentLotNumber(String reagentLotNumber) {
+    this.reagentLotNumber = reagentLotNumber;
+  }
 
 }

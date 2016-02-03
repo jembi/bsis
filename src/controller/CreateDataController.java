@@ -70,7 +70,7 @@ public class CreateDataController {
 
   @Autowired
   private RequestTypeRepository requestTypeRepository;
-  
+
   @Autowired
   private LocationRepository locationRepository;
 
@@ -92,13 +92,13 @@ public class CreateDataController {
   Random random = new Random();
 
   private static final String[] cities = {"Lusaka", "Ndola", "Kitwe", "Kabwe",
-                                          "Chingola", "Livingstone",
-                                          "Luanshya", "Kasama", "Chipata"};
+      "Chingola", "Livingstone",
+      "Luanshya", "Kasama", "Chipata"};
 
   @Autowired
   private ComponentRepository componentRepository;
 
-  private static final String[] MALE_FIRST_NAMES = new String[] { "Aaron",
+  private static final String[] MALE_FIRST_NAMES = new String[]{"Aaron",
       "Abel", "Abraham", "Adam", "Adrian", "Al", "Alan", "Albert",
       "Alberto", "Alejandro", "Alex", "Alexander", "Alfonso", "Alfred",
       "Alfredo", "Allan", "Allen", "Alonzo", "Alton", "Alvin", "Amos",
@@ -174,9 +174,9 @@ public class CreateDataController {
       "Tyler", "Tyrone", "Van", "Vernon", "Victor", "Vincent", "Virgil",
       "Wade", "Wallace", "Walter", "Warren", "Wayne", "Wendell",
       "Wesley", "Wilbert", "Wilbur", "Wilfred", "Willard", "William",
-      "Willie", "Willis", "Wilson", "Winston", "Wm", "Woodrow", "Zachary" };
+      "Willie", "Willis", "Wilson", "Winston", "Wm", "Woodrow", "Zachary"};
 
-  private static final String[] FEMALE_FIRST_NAMES = new String[] { "Ada",
+  private static final String[] FEMALE_FIRST_NAMES = new String[]{"Ada",
       "Adrienne", "Agnes", "Alberta", "Alexandra", "Alexis", "Alice",
       "Alicia", "Alison", "Allison", "Alma", "Alyssa", "Amanda", "Amber",
       "Amelia", "Amy", "Ana", "Andrea", "Angel", "Angela", "Angelica",
@@ -254,8 +254,8 @@ public class CreateDataController {
       "Verna", "Veronica", "Vicki", "Vickie", "Vicky", "Victoria",
       "Viola", "Violet", "Virginia", "Vivian", "Wanda", "Wendy",
       "Whitney", "Willie", "Wilma", "Winifred", "Yolanda", "Yvette",
-      "Yvonne" };
-  private static final String[] LAST_NAMES = new String[] { "Abbott",
+      "Yvonne"};
+  private static final String[] LAST_NAMES = new String[]{"Abbott",
       "Adams", "Adkins", "Aguilar", "Alexander", "Allen", "Allison",
       "Alvarado", "Alvarez", "Anderson", "Andrews", "Armstrong",
       "Arnold", "Atkins", "Austin", "Bailey", "Baker", "Baldwin", "Ball",
@@ -334,21 +334,17 @@ public class CreateDataController {
       "Watts", "Weaver", "Webb", "Weber", "Webster", "Welch", "Wells",
       "West", "Wheeler", "White", "Wilkerson", "Wilkins", "Williams",
       "Williamson", "Willis", "Wilson", "Wise", "Wolfe", "Wong", "Wood",
-      "Woods", "Wright", "Yates", "Young", "Zimmerman" };
+      "Woods", "Wright", "Yates", "Young", "Zimmerman"};
 
   /**
-   * 
    * #209 - method do nothing
    *
-  @RequestMapping("/admin-createData")
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DATA_SETUP+"')")
-  @Deprecated
-  public ModelAndView createDataPage(HttpServletRequest request) {
-
-    ModelAndView modelAndView = new ModelAndView("createData");
-    return modelAndView;
-  }
-  */
+   * @RequestMapping("/admin-createData")
+   * @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DATA_SETUP+"')")
+   * @Deprecated public ModelAndView createDataPage(HttpServletRequest request) {
+   *
+   * ModelAndView modelAndView = new ModelAndView("createData"); return modelAndView; }
+   */
 
   public void createDonors(int numDonors) {
 
@@ -406,7 +402,7 @@ public class CreateDataController {
     long randomOffset = 0;
     while (true) {
       randomOffset = random.nextLong() % diff;
-      if (randomOffset > diff/2 && random.nextBoolean())
+      if (randomOffset > diff / 2 && random.nextBoolean())
         break;
     }
     Date date = new Date(decFrom + randomOffset);
@@ -439,7 +435,7 @@ public class CreateDataController {
     List<String> donationIdentificationNumbers = sequenceNumberRepository.getBatchDonationIdentificationNumbers(numDonations);
     for (int i = 0; i < numDonations; i++) {
       DonationBackingForm donation = new DonationBackingForm();
-      donation.setDonationIdentificationNumber(donationIdentificationNumbers.get(i));    
+      donation.setDonationIdentificationNumber(donationIdentificationNumbers.get(i));
 
       donation.setPackType(packTypes.get(Math.abs(random.nextInt()) % packTypes.size()));
 
@@ -491,16 +487,18 @@ public class CreateDataController {
     Map<String, List<BloodTestingRule>> bloodRhRuleMap = new HashMap<String, List<BloodTestingRule>>();
     for (BloodTestingRule rule : bloodTestingRepository.getBloodTypingRules(true)) {
       switch (rule.getDonationFieldChanged()) {
-        case BLOODABO: if (!bloodAboRuleMap.containsKey(rule.getNewInformation())) {
-                         bloodAboRuleMap.put(rule.getNewInformation(), new ArrayList<BloodTestingRule>());
-                       }
-                       bloodAboRuleMap.get(rule.getNewInformation()).add(rule);
-                       break;
-        case BLOODRH:  if (!bloodRhRuleMap.containsKey(rule.getNewInformation())) {
-                         bloodRhRuleMap.put(rule.getNewInformation(), new ArrayList<BloodTestingRule>());
-                       }
-                       bloodRhRuleMap.get(rule.getNewInformation()).add(rule);
-                       break;
+        case BLOODABO:
+          if (!bloodAboRuleMap.containsKey(rule.getNewInformation())) {
+            bloodAboRuleMap.put(rule.getNewInformation(), new ArrayList<BloodTestingRule>());
+          }
+          bloodAboRuleMap.get(rule.getNewInformation()).add(rule);
+          break;
+        case BLOODRH:
+          if (!bloodRhRuleMap.containsKey(rule.getNewInformation())) {
+            bloodRhRuleMap.put(rule.getNewInformation(), new ArrayList<BloodTestingRule>());
+          }
+          bloodRhRuleMap.get(rule.getNewInformation()).add(rule);
+          break;
       }
     }
 
@@ -512,7 +510,7 @@ public class CreateDataController {
     List<String> aboValues = new ArrayList<String>(bloodAboRuleMap.keySet());
     List<String> rhValues = new ArrayList<String>(bloodRhRuleMap.keySet());
 
-    Map<Long, Map<Long, String>> testResults = new HashMap<Long, Map<Long,String>>();
+    Map<Long, Map<Long, String>> testResults = new HashMap<Long, Map<Long, String>>();
 
     Random generator = new Random();
 
@@ -605,8 +603,8 @@ public class CreateDataController {
     double unsafePercentage = Double.parseDouble(createDataProperties.get("unsafeProbability"));
 
     Set<String> allBloodTestsIds = new HashSet<String>();
-    
-    Map<Long, Map<Long, String>> testResults = new HashMap<Long, Map<Long,String>>();
+
+    Map<Long, Map<Long, String>> testResults = new HashMap<Long, Map<Long, String>>();
     Random generator = new Random();
 
     for (Donation donation : donations) {
@@ -617,7 +615,7 @@ public class CreateDataController {
       }
 
       TTIStatus ttiStatus = TTIStatus.TTI_SAFE;
-      
+
       if (Math.random() < unsafePercentage) {
         // with a small probability choose a different blood group
         ttiStatus = TTIStatus.TTI_UNSAFE;
@@ -677,7 +675,7 @@ public class CreateDataController {
 
           ttiPlatesByTest = new HashMap<String, Object>();
           for (String t : allBloodTestsIds) {
-            Map<String, Map<String, Object>> plateData = new HashMap<String, Map<String,Object>>();
+            Map<String, Map<String, Object>> plateData = new HashMap<String, Map<String, Object>>();
             for (int i = 1; i <= maxRows; i++) {
               Map<String, Object> wellsInRow = new HashMap<String, Object>();
               for (int j = 1; j <= maxColumns; j++) {
@@ -687,12 +685,11 @@ public class CreateDataController {
             }
             ttiPlatesByTest.put(t, plateData);
           }
-        }
-        else if (rowNum == maxRows) {
+        } else if (rowNum == maxRows) {
           rowNum = 1;
           colNum++;
         }
-        
+
         Map<String, Map<String, Object>> plate = (Map<String, Map<String, Object>>) ttiPlatesByTest.get(testId.toString());
 
         Map<String, String> wellData = (Map<String, String>) plate.get(rowNum.toString()).get(colNum.toString());
@@ -716,8 +713,8 @@ public class CreateDataController {
 
   public void createRequests(int numRequests) {
 
-    String[] bloodAbos = { "A", "B", "AB", "O"};
-    String[] bloodRhs = { "+", "-"};
+    String[] bloodAbos = {"A", "B", "AB", "O"};
+    String[] bloodRhs = {"+", "-"};
 
     List<Location> sites = locationRepository.getAllUsageSites();
     List<ComponentType> componentTypes = componentTypeRepository.getAllComponentTypes();
@@ -733,10 +730,10 @@ public class CreateDataController {
       form.setRequestNumber(requestNumbers.get(i));
       form.setRequestDate(CustomDateFormatter.getDateTimeString(requestDate));
       form.setRequiredDate(CustomDateFormatter.getDateTimeString(requiredDate));
-    /** issue - #225 straight object bindings
-      form.setComponentType(componentTypes.get(random.nextInt(componentTypes.size())).getId().toString());
-      form.setRequestType(requestTypes.get(random.nextInt(requestTypes.size())).getId().toString());
-      form.setRequestSite(sites.get(random.nextInt(sites.size())).getId().toString());*/
+      /** issue - #225 straight object bindings
+       form.setComponentType(componentTypes.get(random.nextInt(componentTypes.size())).getId().toString());
+       form.setRequestType(requestTypes.get(random.nextInt(requestTypes.size())).getId().toString());
+       form.setRequestSite(sites.get(random.nextInt(sites.size())).getId().toString());*/
       form.setNumUnitsRequested(1 + Math.abs(random.nextInt()) % 20);
       form.setIsDeleted(false);
       form.setFulfilled(false);

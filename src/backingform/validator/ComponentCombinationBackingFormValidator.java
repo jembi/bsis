@@ -21,9 +21,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @org.springframework.stereotype.Component
 public class ComponentCombinationBackingFormValidator extends BaseValidator<ComponentCombinationBackingForm> {
-  
+
   private static final Logger LOGGER = Logger.getLogger(ComponentCombinationBackingFormValidator.class);
-  
+
   @Autowired
   DonationRepository donationRepository;
 
@@ -52,7 +52,7 @@ public class ComponentCombinationBackingFormValidator extends BaseValidator<Comp
               CustomDateFormatter.getDateErrorMessage());
       }
     } catch (IOException e) {
-      LOGGER.error("Exception while checking component.expiresOn '" + expiresOn + "'. Error: "+e.getMessage(), e);
+      LOGGER.error("Exception while checking component.expiresOn '" + expiresOn + "'. Error: " + e.getMessage(), e);
       errors.rejectValue("component.expiresOn", "dateFormat.incorrect", "Invalid expiry date specified");
     }
 
@@ -64,12 +64,12 @@ public class ComponentCombinationBackingFormValidator extends BaseValidator<Comp
 
     commonFieldChecks(form, errors);
   }
-  
+
   @Override
   public String getFormName() {
     return "component";
   }
-  
+
   private Donation findDonation(String donationIdentificationNumber) {
     Donation donation = null;
     if (StringUtils.isNotBlank(donationIdentificationNumber)) {

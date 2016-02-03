@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 import org.hibernate.cfg.Configuration;
 /** Deprecated - But I see no impact auditing
  * import org.hibernate.envers.configuration.AuditConfiguration;
-*/
+ */
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -23,13 +23,10 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.SystemPropertyUtils;
 
 /**
- * Auto generate schema using hibernate hbm2ddl tool. This will prepare the full
- * schema for a fresh installation of BSIS.
- * The schema changes for the update need to be worked out manually.
- * Source:
- * http://jandrewthompson.blogspot.com/2009/10/how-to-generate-ddl-scripts-from.html
- * More information:
- * http://stackoverflow.com/questions/438146/hibernate-hbm2ddl-auto-possible-values-and-what-they-do
+ * Auto generate schema using hibernate hbm2ddl tool. This will prepare the full schema for a fresh
+ * installation of BSIS. The schema changes for the update need to be worked out manually. Source:
+ * http://jandrewthompson.blogspot.com/2009/10/how-to-generate-ddl-scripts-from.html More
+ * information: http://stackoverflow.com/questions/438146/hibernate-hbm2ddl-auto-possible-values-and-what-they-do
  */
 public class SchemaGenerator {
 
@@ -56,14 +53,13 @@ public class SchemaGenerator {
       cfg.addAnnotatedClass(clazz);
     }
     cfg.buildMappings();
-   // AuditConfiguration.getFor(cfg);
+    // AuditConfiguration.getFor(cfg);
   }
 
   /**
    * Method that actually creates the file.
-   * 
-   * @param dbDialect
-   *          to use
+   *
+   * @param dbDialect to use
    */
   private void generate(Dialect dialect) {
     cfg.setProperty("hibernate.dialect", dialect.getDialectClass());
@@ -83,9 +79,8 @@ public class SchemaGenerator {
 
   /**
    * Utility method used to fetch Class list based on a package name.
-   * 
-   * @param packageName
-   *          (should be the package containing your annotated beans.
+   *
+   * @param packageName (should be the package containing your annotated beans.
    */
   @SuppressWarnings("unused")
   private List<Class<?>> getClasses(String packageName) throws Exception {
@@ -145,39 +140,37 @@ public class SchemaGenerator {
   private List<Class<?>> findAllClasses(String basePackage)
       throws IOException, ClassNotFoundException {
 
-      ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
-      MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
+    ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
+    MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
 
-      List<Class<?>> candidates = new ArrayList<Class<?>>();
-      String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
-                                 resolveBasePackage(basePackage) + "/" + "**/*.class";
-      Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
-      for (Resource resource : resources) {
-          if (resource.isReadable()) {
-              MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
-              if (isCandidate(metadataReader)) {
-                  candidates.add(Class.forName(metadataReader.getClassMetadata().getClassName()));
-                  System.out.println(metadataReader.getClassMetadata().getClassName());
-              }
-          }
+    List<Class<?>> candidates = new ArrayList<Class<?>>();
+    String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
+        resolveBasePackage(basePackage) + "/" + "**/*.class";
+    Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
+    for (Resource resource : resources) {
+      if (resource.isReadable()) {
+        MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
+        if (isCandidate(metadataReader)) {
+          candidates.add(Class.forName(metadataReader.getClassMetadata().getClassName()));
+          System.out.println(metadataReader.getClassMetadata().getClassName());
+        }
       }
-      return candidates;
+    }
+    return candidates;
   }
 
   private String resolveBasePackage(String basePackage) {
-      return ClassUtils.convertClassNameToResourcePath(SystemPropertyUtils.resolvePlaceholders(basePackage));
+    return ClassUtils.convertClassNameToResourcePath(SystemPropertyUtils.resolvePlaceholders(basePackage));
   }
 
-  private boolean isCandidate(MetadataReader metadataReader) throws ClassNotFoundException
-  {
-      try {
-          Class<?> c = Class.forName(metadataReader.getClassMetadata().getClassName());
-          if (c.getAnnotation(Entity.class) != null) {
-              return true;
-          }
+  private boolean isCandidate(MetadataReader metadataReader) throws ClassNotFoundException {
+    try {
+      Class<?> c = Class.forName(metadataReader.getClassMetadata().getClassName());
+      if (c.getAnnotation(Entity.class) != null) {
+        return true;
       }
-      catch(Throwable e){
-      }
-      return false;
+    } catch (Throwable e) {
+    }
+    return false;
   }
 }

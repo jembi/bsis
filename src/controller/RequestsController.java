@@ -66,7 +66,7 @@ public class RequestsController {
 
   @Autowired
   private FormFieldAccessorService formFieldAccessorService;
-  
+
   @Autowired
   private RequestBackingFormValidator requestBackingFormValidator;
 
@@ -82,17 +82,17 @@ public class RequestsController {
     String reqUrl = req.getRequestURL().toString();
     String queryString = req.getQueryString();   // d=789
     if (queryString != null) {
-        reqUrl += "?"+queryString;
+      reqUrl += "?" + queryString;
     }
     return reqUrl;
   }
 
-  
+
   private String getNextPageUrl(HttpServletRequest request) {
     String reqUrl = request.getRequestURL().toString().replaceFirst("findRequest.html", "findRequestPagination.html");
     String queryString = request.getQueryString();   // d=789
     if (queryString != null) {
-        reqUrl += "?"+queryString;
+      reqUrl += "?" + queryString;
     }
     return reqUrl;
   }
@@ -104,9 +104,9 @@ public class RequestsController {
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REQUEST+"')")
-  public  Map<String, Object> requestSummaryGenerator(HttpServletRequest request,
-      @PathVariable Long id) {
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_REQUEST + "')")
+  public Map<String, Object> requestSummaryGenerator(HttpServletRequest request,
+                                                     @PathVariable Long id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
 
@@ -116,26 +116,26 @@ public class RequestsController {
     map.put("request", requestViewModel);
     return map;
   }
- 
-  @RequestMapping(value = "/search", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_REQUEST+"')")
-  public  Map<String, Object> findRequestPagination(
-          @RequestParam(value = "requestNumber", required = false) String requestNumber,
-          @RequestParam(value = "requestedAfter", required = false) String requestedAfter,
-          @RequestParam(value = "requiredBy", required = false) String requiredBy,
-          @RequestParam(value = "requestSites", required = false) List<String> requestSites,
-          @RequestParam(value = "componentTypes", required = false) List<String> componentTypes,
-          @RequestParam(value = "includeSatisfiedRequests", required = false) Boolean includeSatisfiedRequests) throws ParseException {
 
-      Map<String, Object> pagingParams = new HashMap<String, Object>();
-      pagingParams.put("sortColumn", "id");
-      pagingParams.put("start", "0");
-      pagingParams.put("length", "10");
-      pagingParams.put("sortDirection", "asc");
-      
-      int sortColumnId = (Integer) pagingParams.get("sortColumnId");
-      Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("request");
-      pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
+  @RequestMapping(value = "/search", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_REQUEST + "')")
+  public Map<String, Object> findRequestPagination(
+      @RequestParam(value = "requestNumber", required = false) String requestNumber,
+      @RequestParam(value = "requestedAfter", required = false) String requestedAfter,
+      @RequestParam(value = "requiredBy", required = false) String requiredBy,
+      @RequestParam(value = "requestSites", required = false) List<String> requestSites,
+      @RequestParam(value = "componentTypes", required = false) List<String> componentTypes,
+      @RequestParam(value = "includeSatisfiedRequests", required = false) Boolean includeSatisfiedRequests) throws ParseException {
+
+    Map<String, Object> pagingParams = new HashMap<String, Object>();
+    pagingParams.put("sortColumn", "id");
+    pagingParams.put("start", "0");
+    pagingParams.put("length", "10");
+    pagingParams.put("sortDirection", "asc");
+
+    int sortColumnId = (Integer) pagingParams.get("sortColumnId");
+    Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("request");
+    pagingParams.put("sortColumn", getSortingColumn(sortColumnId, formFields));
 
 
     List<Long> componentTypeIds = new ArrayList<Long>();
@@ -148,7 +148,7 @@ public class RequestsController {
 
     List<Long> siteIds = new ArrayList<Long>();
     // add an invalid ID so that hibernate does not throw an exception
-    siteIds.add((long)-1);
+    siteIds.add((long) -1);
     if (requestSites != null) {
       for (String siteId : requestSites) {
         siteIds.add(Long.parseLong(siteId));
@@ -156,10 +156,10 @@ public class RequestsController {
     }
 
     List<Object> results = requestRepository.findRequests(
-                        requestNumber,
-                        componentTypeIds, siteIds,
-                        requestedAfter, requiredBy,
-                        includeSatisfiedRequests, pagingParams);
+        requestNumber,
+        componentTypeIds, siteIds,
+        requestedAfter, requiredBy,
+        includeSatisfiedRequests, pagingParams);
 
     @SuppressWarnings("unchecked")
     List<Request> componentRequests = (List<Request>) results.get(0);
@@ -175,9 +175,9 @@ public class RequestsController {
 
     List<String> visibleFields = new ArrayList<String>();
     visibleFields.add("id");
-    for (String field : Arrays.asList("requestNumber", "patientBloodAbo","patientBloodRh",
-                                      "requestDate", "requiredDate", "componentType",
-                                      "numUnitsRequested", "numUnitsIssued", "requestSite")) {
+    for (String field : Arrays.asList("requestNumber", "patientBloodAbo", "patientBloodRh",
+        "requestDate", "requiredDate", "componentType",
+        "numUnitsRequested", "numUnitsIssued", "requestSite")) {
       Map<String, Object> fieldProperties = (Map<String, Object>) formFields.get(field);
       if (fieldProperties.get("hidden").equals(false))
         visibleFields.add(field);
@@ -204,9 +204,9 @@ public class RequestsController {
   }
 
   /**
-   * Datatables on the client side expects a json response for rendering data from the server
-   * in jquery datatables. Remember of columns is important and should match the column headings
-   * in requestsTable.jsp.
+   * Datatables on the client side expects a json response for rendering data from the server in
+   * jquery datatables. Remember of columns is important and should match the column headings in
+   * requestsTable.jsp.
    */
   private Map<String, Object> generateDatatablesMap(List<Request> componentRequests, Long totalRecords, Map<String, Map<String, Object>> formFields) {
     Map<String, Object> donationsMap = new HashMap<String, Object>();
@@ -216,14 +216,14 @@ public class RequestsController {
     for (RequestViewModel componentRequest : getRequestViewModels(componentRequests)) {
 
       List<Object> row = new ArrayList<Object>();
-      
+
       row.add(componentRequest.getId().toString());
 
       for (String property : Arrays.asList("requestNumber", "patientBloodAbo", "patientBloodRh",
-                                           "requestDate", "requiredDate", "componentType",
-                                           "numUnitsRequested", "numUnitsIssued", "requestSite")) {
+          "requestDate", "requiredDate", "componentType",
+          "numUnitsRequested", "numUnitsIssued", "requestSite")) {
         if (formFields.containsKey(property)) {
-          Map<String, Object> properties = (Map<String, Object>)formFields.get(property);
+          Map<String, Object> properties = (Map<String, Object>) formFields.get(property);
           if (properties.get("hidden").equals(false)) {
             String propertyValue = property;
             try {
@@ -249,17 +249,17 @@ public class RequestsController {
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.ADD_REQUEST+"')")
-  public  Map<String, Object> addRequestFormGenerator(HttpServletRequest request) {
+  @PreAuthorize("hasRole('" + PermissionConstants.ADD_REQUEST + "')")
+  public Map<String, Object> addRequestFormGenerator(HttpServletRequest request) {
     RequestBackingForm form = new RequestBackingForm();
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("addRequestForm", form);
     addEditSelectorOptions(map);
     return map;
   }
- 
+
   @RequestMapping(method = RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.ADD_REQUEST+"')")
+  @PreAuthorize("hasRole('" + PermissionConstants.ADD_REQUEST + "')")
   public ResponseEntity<Map<String, Object>> addRequest(@Valid @RequestBody RequestBackingForm form) {
 
     HttpStatus httpStatus = HttpStatus.CREATED;
@@ -274,12 +274,12 @@ public class RequestsController {
     map.put("requestId", savedRequest.getId());
     map.put("request", new RequestViewModel(savedRequest));
     map.put("addAnotherRequestUrl", "addRequestFormGenerator.html");
-    return new ResponseEntity < Map<String, Object> > (map, httpStatus);
+    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
-  @RequestMapping(value="{id}/issuedcomponents", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public  Map<String, Object> listIssuedComponentsForRequest(@PathVariable Long id) {
+  @RequestMapping(value = "{id}/issuedcomponents", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
+  public Map<String, Object> listIssuedComponentsForRequest(@PathVariable Long id) {
     Map<String, Object> map = new HashMap<String, Object>();
     addEditSelectorOptions(map);
     List<Component> issuedComponents = requestRepository.getIssuedComponentsForRequest(id);
@@ -289,16 +289,16 @@ public class RequestsController {
     map.put("componentTypeFields", formFieldAccessorService.getFormFieldsForForm("ComponentType"));
     return map;
   }
-  
-  @RequestMapping(value = "{id}",method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_REQUEST+"')")
-  public  ResponseEntity updateRequest(@Valid @RequestBody RequestBackingForm form,
-          @PathVariable Long id) {
 
-      form.setId(id);
-      form.setIsDeleted(false);
-      Request request = requestRepository.updateRequest(form.getRequest());
-      return new ResponseEntity(new RequestViewModel(request), HttpStatus.OK);
+  @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('" + PermissionConstants.EDIT_REQUEST + "')")
+  public ResponseEntity updateRequest(@Valid @RequestBody RequestBackingForm form,
+                                      @PathVariable Long id) {
+
+    form.setId(id);
+    form.setIsDeleted(false);
+    Request request = requestRepository.updateRequest(form.getRequest());
+    return new ResponseEntity(new RequestViewModel(request), HttpStatus.OK);
   }
 
   private List<RequestViewModel> getRequestViewModels(
@@ -313,16 +313,15 @@ public class RequestsController {
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-  public 
-  ResponseEntity deleteRequest(
+  public ResponseEntity deleteRequest(
       @RequestParam("id") Long id) {
     requestRepository.deleteRequest(id);
-     return new ResponseEntity(HttpStatus.NO_CONTENT);
+    return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
   @RequestMapping(value = "{id}/matchingcomponents", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.BLOOD_CROSS_MATCH_CHECK+"')")
-  public  Map<String, Object> findMatchingComponentsForRequest(
+  @PreAuthorize("hasRole('" + PermissionConstants.BLOOD_CROSS_MATCH_CHECK + "')")
+  public Map<String, Object> findMatchingComponentsForRequest(
       @PathVariable Long id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
@@ -335,13 +334,13 @@ public class RequestsController {
   }
 
   @RequestMapping(value = "{id}/issuecomponent", method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public  ResponseEntity issueSelectedComponents(
+  @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
+  public ResponseEntity issueSelectedComponents(
       @PathVariable Long id,
       @RequestParam String componentName) {
-   
-       requestRepository.issueComponentsToRequest(id, componentName);
-       return new ResponseEntity(HttpStatus.NO_CONTENT);
+
+    requestRepository.issueComponentsToRequest(id, componentName);
+    return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
 }

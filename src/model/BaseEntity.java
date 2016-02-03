@@ -22,7 +22,7 @@ public abstract class BaseEntity implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(nullable = false, insertable=false, updatable=false)
+  @Column(nullable = false, insertable = false, updatable = false)
   private Long id;
 
   public Long getId() {

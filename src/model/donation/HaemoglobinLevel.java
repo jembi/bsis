@@ -1,18 +1,18 @@
 package model.donation;
 
 public enum HaemoglobinLevel {
-    
-    PASS("Pass"),
-    FAIL("Fail");
-    
-    private String label;
 
-    HaemoglobinLevel(String label) {
-        this.label = label;
-    }
+  PASS("Pass"),
+  FAIL("Fail");
 
-    public String getLabel() {
-        return label;
-    }
+  private String label;
+
+  HaemoglobinLevel(String label) {
+    this.label = label;
+  }
+
+  public String getLabel() {
+    return label;
+  }
 
 }

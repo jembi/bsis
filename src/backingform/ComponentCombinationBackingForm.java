@@ -41,7 +41,7 @@ public class ComponentCombinationBackingForm {
   private ComponentTypeCombination componentTypeCombination;
 
   Map<String, String> expiresOnByComponentTypeId;
-  
+
   public ComponentCombinationBackingForm() {
     expiresOnByComponentTypeId = new HashMap<String, String>();
     setComponent(new Component());
@@ -64,7 +64,7 @@ public class ComponentCombinationBackingForm {
   public Donation getDonation() {
     return component.getDonation();
   }
-  
+
   @JsonIgnore
   public Date getLastUpdated() {
     return component.getLastUpdated();
@@ -176,7 +176,7 @@ public class ComponentCombinationBackingForm {
   public String getDonationIdentificationNumber() {
     if (component == null || component.getDonation() == null ||
         component.getDonation().getDonationIdentificationNumber() == null
-       )
+        )
       return "";
     return component.getDonation().getDonationIdentificationNumber();
   }
@@ -217,8 +217,7 @@ public class ComponentCombinationBackingForm {
   public void setComponentTypeCombination(String componentTypeCombinationId) {
     if (StringUtils.isBlank(componentTypeCombinationId)) {
       componentTypeCombination = null;
-    }
-    else {
+    } else {
       componentTypeCombination = new ComponentTypeCombination();
       try {
         componentTypeCombination.setId(Long.parseLong(componentTypeCombinationId));

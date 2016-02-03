@@ -1,5 +1,5 @@
 package model.testbatch;
 
 public enum TestBatchStatus {
-	OPEN, RELEASED, CLOSED;
+  OPEN, RELEASED, CLOSED;
 }

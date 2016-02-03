@@ -9,22 +9,22 @@ import model.donor.Donor;
  * being merged and a new donor being created as specified.
  */
 public class DuplicateDonorsBackingForm extends DonorBackingForm {
-	
-	List<String> duplicateDonorNumbers;
 
-	public DuplicateDonorsBackingForm() {
-	    super();
-    }
+  List<String> duplicateDonorNumbers;
 
-	public DuplicateDonorsBackingForm(Donor donor) {
-	    super(donor);
-    }
+  public DuplicateDonorsBackingForm() {
+    super();
+  }
 
-	public List<String> getDuplicateDonorNumbers() {
-		return duplicateDonorNumbers;
-	}
-	
-	public void setDuplicateDonorNumbers(List<String> duplicateDonorNumbers) {
-		this.duplicateDonorNumbers = duplicateDonorNumbers;
-	}
+  public DuplicateDonorsBackingForm(Donor donor) {
+    super(donor);
+  }
+
+  public List<String> getDuplicateDonorNumbers() {
+    return duplicateDonorNumbers;
+  }
+
+  public void setDuplicateDonorNumbers(List<String> duplicateDonorNumbers) {
+    this.duplicateDonorNumbers = duplicateDonorNumbers;
+  }
 }

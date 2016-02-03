@@ -28,7 +28,7 @@ public class WorksheetTypeRepository {
   public WorksheetType getWorksheetTypeById(Long id) {
     TypedQuery<WorksheetType> query;
     query = em.createQuery("SELECT wt from WorksheetType wt " +
-            "where wt.id=:id AND wt.isDeleted=:isDeleted", WorksheetType.class);
+        "where wt.id=:id AND wt.isDeleted=:isDeleted", WorksheetType.class);
     query.setParameter("isDeleted", false);
     query.setParameter("id", id);
     if (query.getResultList().size() == 0)

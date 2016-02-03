@@ -55,7 +55,7 @@ public class ComponentUsageBackingForm {
   public User getCreatedBy() {
     return usage.getCreatedBy();
   }
-  
+
   @JsonIgnore
   public User getLastUpdatedBy() {
     return usage.getLastUpdatedBy();

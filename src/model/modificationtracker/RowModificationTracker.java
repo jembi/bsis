@@ -11,19 +11,20 @@ import javax.persistence.TemporalType;
 import model.user.User;
 
 /**
- * Hibernate will not be able to generate schema for embedded
- * modificationTracker if we do not implement the interface.
+ * Hibernate will not be able to generate schema for embedded modificationTracker if we do not
+ * implement the interface.
+ *
  * @author iamrohitbanga
  */
 @Embeddable
 public class RowModificationTracker implements ModificationTracker {
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(columnDefinition="TIMESTAMP")
+  @Column(columnDefinition = "TIMESTAMP")
   private Date lastUpdated;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(columnDefinition="TIMESTAMP")
+  @Column(columnDefinition = "TIMESTAMP")
   private Date createdDate;
 
   @ManyToOne

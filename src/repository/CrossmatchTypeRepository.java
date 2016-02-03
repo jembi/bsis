@@ -24,7 +24,7 @@ public class CrossmatchTypeRepository {
     query.setParameter("isDeleted", false);
     return query.getResultList();
   }
-  
+
   public boolean isCrossmatchTypeValid(String checkCrossmatchType) {
     String queryString = "SELECT ct from CrossmatchType ct where ct.isDeleted=:isDeleted";
     TypedQuery<CrossmatchType> query = em.createQuery(queryString, CrossmatchType.class);
@@ -39,7 +39,7 @@ public class CrossmatchTypeRepository {
   public CrossmatchType getCrossmatchTypeById(Long requestTypeId) {
     TypedQuery<CrossmatchType> query;
     query = em.createQuery("SELECT ct from CrossmatchType ct " +
-            "where ct.id=:id AND ct.isDeleted=:isDeleted", CrossmatchType.class);
+        "where ct.id=:id AND ct.isDeleted=:isDeleted", CrossmatchType.class);
     query.setParameter("isDeleted", false);
     query.setParameter("id", requestTypeId);
     if (query.getResultList().size() == 0)
@@ -48,15 +48,14 @@ public class CrossmatchTypeRepository {
   }
 
   public void saveAllCrossmatchTypes(List<CrossmatchType> allCrossmatchTypes) {
-    for (CrossmatchType ct: allCrossmatchTypes) {
-        CrossmatchType existingCrossmatchType = getCrossmatchTypeById(ct.getId());
-        if (existingCrossmatchType != null) {
-          existingCrossmatchType.setCrossmatchType(ct.getCrossmatchType());
-          em.merge(existingCrossmatchType);
-        }
-        else {
-          em.persist(ct);
-        }
+    for (CrossmatchType ct : allCrossmatchTypes) {
+      CrossmatchType existingCrossmatchType = getCrossmatchTypeById(ct.getId());
+      if (existingCrossmatchType != null) {
+        existingCrossmatchType.setCrossmatchType(ct.getCrossmatchType());
+        em.merge(existingCrossmatchType);
+      } else {
+        em.persist(ct);
+      }
     }
     em.flush();
   }

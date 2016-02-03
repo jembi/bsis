@@ -26,77 +26,77 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Audited
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class TestBatch extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 
-	@Lob
-	private String notes;
+  @Lob
+  private String notes;
 
-	private Boolean isDeleted;
+  private Boolean isDeleted;
 
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(length=20, unique=true)
-	@Size(min=6,max=6)
-	private String batchNumber;
-
-	
-	@Enumerated(EnumType.STRING)
-	@Column(length=20)
-	private TestBatchStatus status;
-        
-        @OneToMany(mappedBy = "testBatch", fetch = FetchType.EAGER)
-        private List<DonationBatch> donationBatches;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(length = 20, unique = true)
+  @Size(min = 6, max = 6)
+  private String batchNumber;
 
 
-	public TestBatch() {
-		super();
-	}
+  @Enumerated(EnumType.STRING)
+  @Column(length = 20)
+  private TestBatchStatus status;
 
-	public String getNotes() {
-		return notes;
-	}
+  @OneToMany(mappedBy = "testBatch", fetch = FetchType.EAGER)
+  private List<DonationBatch> donationBatches;
 
-	public void setNotes(String notes) {
-		this.notes = notes;
-	}
 
-	public Boolean getIsDeleted() {
-		return isDeleted;
-	}
-	
-	public void setIsDeleted(Boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
+  public TestBatch() {
+    super();
+  }
 
-	public String getBatchNumber() {
-		return batchNumber;
-	}
+  public String getNotes() {
+    return notes;
+  }
 
-	public void setBatchNumber(String batchNumber) {
-		this.batchNumber = batchNumber;
-	}
+  public void setNotes(String notes) {
+    this.notes = notes;
+  }
 
-	public TestBatchStatus getStatus() {
-		return status;
-	}
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
 
-	/**
-	 * N.B. Updating the status of a test batch should be done via the {@link TestBatchCRUDService}.
-	 * 
-	 * @param status The new {@link TestBatchStatus}
-	 */
-	public void setStatus(TestBatchStatus status) {
-		this.status = status;
-	}
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
 
-    public List<DonationBatch> getDonationBatches() {
-            return donationBatches;
-    }
+  public String getBatchNumber() {
+    return batchNumber;
+  }
 
-    public void setDonationBatches(List<DonationBatch> donationBatches) {
-            this.donationBatches = donationBatches;
-    }
+  public void setBatchNumber(String batchNumber) {
+    this.batchNumber = batchNumber;
+  }
+
+  public TestBatchStatus getStatus() {
+    return status;
+  }
+
+  /**
+   * N.B. Updating the status of a test batch should be done via the {@link TestBatchCRUDService}.
+   *
+   * @param status The new {@link TestBatchStatus}
+   */
+  public void setStatus(TestBatchStatus status) {
+    this.status = status;
+  }
+
+  public List<DonationBatch> getDonationBatches() {
+    return donationBatches;
+  }
+
+  public void setDonationBatches(List<DonationBatch> donationBatches) {
+    this.donationBatches = donationBatches;
+  }
 
 }

@@ -31,22 +31,23 @@ public class PackTypeRepository {
     query.setParameter("isDeleted", false);
     return query.getResultList();
   }
-  
-  public PackType findPackTypeByName(String packType){
-	String queryString = "SELECT b FROM PackType b WHERE b.packType = :packTypeName";
-	TypedQuery<PackType> query = em.createQuery(queryString, PackType.class);
-	query.setParameter("packTypeName", packType);
-	PackType result = null;
-      try{
-    	  result = query.getSingleResult();
-      }catch(NoResultException ex){}
-      return result;
+
+  public PackType findPackTypeByName(String packType) {
+    String queryString = "SELECT b FROM PackType b WHERE b.packType = :packTypeName";
+    TypedQuery<PackType> query = em.createQuery(queryString, PackType.class);
+    query.setParameter("packTypeName", packType);
+    PackType result = null;
+    try {
+      result = query.getSingleResult();
+    } catch (NoResultException ex) {
+    }
+    return result;
   }
 
   public PackType getPackTypeById(Long packTypeId) {
     TypedQuery<PackType> query;
     query = em.createQuery("SELECT b from PackType b " +
-            "where b.id=:id", PackType.class);
+        "where b.id=:id", PackType.class);
 
     query.setParameter("id", packTypeId);
     if (query.getResultList().size() == 0)
@@ -55,33 +56,32 @@ public class PackTypeRepository {
   }
 
   public void saveAllPackTypes(List<PackType> allPackTypes) {
-      for (PackType bt: allPackTypes) {
-        PackType existingPackType = getPackTypeById(bt.getId());
-        if (existingPackType != null) {
-          existingPackType.setPackType(bt.getPackType());
-          em.merge(existingPackType);
-        }
-        else {
-          em.persist(bt);
-        }
+    for (PackType bt : allPackTypes) {
+      PackType existingPackType = getPackTypeById(bt.getId());
+      if (existingPackType != null) {
+        existingPackType.setPackType(bt.getPackType());
+        em.merge(existingPackType);
+      } else {
+        em.persist(bt);
+      }
     }
     em.flush();
   }
-  
-  public PackType savePackType(PackType packType){
-      em.persist(packType);
-      em.flush();
-      return packType;
+
+  public PackType savePackType(PackType packType) {
+    em.persist(packType);
+    em.flush();
+    return packType;
   }
-  
-  public PackType updatePackType(PackType packType){
-	  PackType existingPackType = getPackTypeById(packType.getId());
-      if (existingPackType == null) {
-          return null;
-      }
-      existingPackType.copy(packType);
-      em.merge(existingPackType);
-      em.flush();
-      return existingPackType;
+
+  public PackType updatePackType(PackType packType) {
+    PackType existingPackType = getPackTypeById(packType.getId());
+    if (existingPackType == null) {
+      return null;
+    }
+    existingPackType.copy(packType);
+    em.merge(existingPackType);
+    em.flush();
+    return existingPackType;
   }
 }

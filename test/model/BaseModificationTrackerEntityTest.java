@@ -1,6 +1,7 @@
 package model;
 
 import static helpers.builders.DonorBuilder.aDonor;
+
 import helpers.builders.UserBuilder;
 
 import java.text.SimpleDateFormat;

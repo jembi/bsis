@@ -33,59 +33,57 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @WebAppConfiguration
 public class LoginRepositoryTest {
-	
-	@Autowired
-	LoginRepository loginRepository;
-	
-	@Autowired
-	private DataSource dataSource;
-	
-	private IDataSet getDataSet() throws Exception {
-		File file = new File("test/dataset/LoginRepositoryDataset.xml");
-		return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
-	}
-	
-	private IDatabaseConnection getConnection() throws SQLException {
-		IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
-		DatabaseConfig config = connection.getConfig();
-		config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
-		return connection;
-	}
-	
-	@Before
-	public void init() throws Exception {
-		IDatabaseConnection connection = getConnection();
-		try {
-			IDataSet dataSet = getDataSet();
-			DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
-		}
-		finally {
-			connection.close();
-		}
-	}
-	
-	@AfterTransaction
-	public void after() throws Exception {
-		IDatabaseConnection connection = getConnection();
-		try {
-			IDataSet dataSet = getDataSet();
-			DatabaseOperation.DELETE_ALL.execute(connection, dataSet);
-		}
-		finally {
-			connection.close();
-		}
-	}
-	
-	@Test
-	public void testGetUser() throws Exception {
-		User superUser = loginRepository.getUser("superuser");
-		Assert.assertNotNull("There is a super user", superUser);
-		Assert.assertEquals("The users name is correct", "Super", superUser.getFirstName());
-	}
-	
-	@Test
-	public void testGetUserUnknown() throws Exception {
-		User unknown = loginRepository.getUser("Dagmar");
-		Assert.assertNull("Unknown user", unknown);
-	}
+
+  @Autowired
+  LoginRepository loginRepository;
+
+  @Autowired
+  private DataSource dataSource;
+
+  private IDataSet getDataSet() throws Exception {
+    File file = new File("test/dataset/LoginRepositoryDataset.xml");
+    return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
+  }
+
+  private IDatabaseConnection getConnection() throws SQLException {
+    IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
+    DatabaseConfig config = connection.getConfig();
+    config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
+    return connection;
+  }
+
+  @Before
+  public void init() throws Exception {
+    IDatabaseConnection connection = getConnection();
+    try {
+      IDataSet dataSet = getDataSet();
+      DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
+    } finally {
+      connection.close();
+    }
+  }
+
+  @AfterTransaction
+  public void after() throws Exception {
+    IDatabaseConnection connection = getConnection();
+    try {
+      IDataSet dataSet = getDataSet();
+      DatabaseOperation.DELETE_ALL.execute(connection, dataSet);
+    } finally {
+      connection.close();
+    }
+  }
+
+  @Test
+  public void testGetUser() throws Exception {
+    User superUser = loginRepository.getUser("superuser");
+    Assert.assertNotNull("There is a super user", superUser);
+    Assert.assertEquals("The users name is correct", "Super", superUser.getFirstName());
+  }
+
+  @Test
+  public void testGetUserUnknown() throws Exception {
+    User unknown = loginRepository.getUser("Dagmar");
+    Assert.assertNull("Unknown user", unknown);
+  }
 }

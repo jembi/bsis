@@ -36,9 +36,9 @@ public class DonationBatchBackingForm {
   public void setId(Long id) {
     donationBatch.setId(id);
   }
-  
-  public Long getId(){
-      return donationBatch.getId();
+
+  public Long getId() {
+    return donationBatch.getId();
   }
 
   public String getBatchNumber() {
@@ -57,7 +57,7 @@ public class DonationBatchBackingForm {
   public void setNotes(String notes) {
     donationBatch.setNotes(notes);
   }
-  
+
   public Boolean getIsClosed() {
     return donationBatch.getIsClosed();
   }
@@ -65,8 +65,8 @@ public class DonationBatchBackingForm {
   public void setIsClosed(Boolean isClosed) {
     donationBatch.setIsClosed(isClosed);
   }
-  
-  public void setVenue(Long venueId){
+
+  public void setVenue(Long venueId) {
     Location venue = new Location();
     venue.setId(venueId);
     donationBatch.setVenue(venue);
@@ -77,19 +77,18 @@ public class DonationBatchBackingForm {
     return donationBatch.getLastUpdated();
   }
 
-	public Date getCreatedDate() {
-		return donationBatch.getCreatedDate();
-	}
+  public Date getCreatedDate() {
+    return donationBatch.getCreatedDate();
+  }
 
-	public void setCreatedDate(String createdDate) {
-		try {
-			donationBatch.setCreatedDate(CustomDateFormatter.getDateTimeFromString(createdDate));
-		}
-		catch (ParseException ex) {
-			ex.printStackTrace();
-			donationBatch.setCreatedDate(null);
-		}
-	}
+  public void setCreatedDate(String createdDate) {
+    try {
+      donationBatch.setCreatedDate(CustomDateFormatter.getDateTimeFromString(createdDate));
+    } catch (ParseException ex) {
+      ex.printStackTrace();
+      donationBatch.setCreatedDate(null);
+    }
+  }
 
   @JsonIgnore
   public User getCreatedBy() {
@@ -100,28 +99,28 @@ public class DonationBatchBackingForm {
   public User getLastUpdatedBy() {
     return donationBatch.getLastUpdatedBy();
   }
-  
+
   @JsonIgnore
   public List<Donation> getDonations() {
     return donationBatch.getDonations();
   }
-  
+
   @JsonIgnore
   public Integer getNumDonations() {
     return donationBatch.getDonations().size();
   }
 
-	@JsonIgnore
-	public void setPermissions(Map<String, Boolean> permissions) {
-		// Ignore
-	}
-  
-    public boolean isBackEntry() {
-        return donationBatch.isBackEntry();
-    }
+  @JsonIgnore
+  public void setPermissions(Map<String, Boolean> permissions) {
+    // Ignore
+  }
 
-    public void setBackEntry(boolean backEntry) {
-        donationBatch.setBackEntry(backEntry);
-    }
+  public boolean isBackEntry() {
+    return donationBatch.isBackEntry();
+  }
+
+  public void setBackEntry(boolean backEntry) {
+    donationBatch.setBackEntry(backEntry);
+  }
 
 }
