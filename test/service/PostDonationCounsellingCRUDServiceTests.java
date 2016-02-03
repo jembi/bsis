@@ -20,18 +20,13 @@ import model.user.User;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.security.authentication.TestingAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import repository.PostDonationCounsellingRepository;
-import security.BsisUserDetails;
+import suites.UnitTestSuite;
 
-@RunWith(MockitoJUnitRunner.class)
-public class PostDonationCounsellingCRUDServiceTests {
+public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
     
     @InjectMocks
     private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
@@ -44,12 +39,6 @@ public class PostDonationCounsellingCRUDServiceTests {
     public void testCreatePostDonationCounselling_shouldPersistAndReturnAFlaggedPostDonationCounsellingForDonation() {
         Donation donation = aDonation().withId(23L).build();
         Date counsellingDate = new Date();
-
-
-        User admin = UserBuilder.aUser()
-                .withUsername("admin")
-                .withId(1l)
-                .build();
         
         PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
                 .withId(null)
@@ -63,8 +52,6 @@ public class PostDonationCounsellingCRUDServiceTests {
                 .withCounsellingStatus(null)
                 .withCounsellingDate(null)
                 .build();
-
-        setSecurityUser(admin);
 
         when(dateGeneratorService.generateDate()).thenReturn(counsellingDate);
         
@@ -118,11 +105,6 @@ public class PostDonationCounsellingCRUDServiceTests {
         Date counsellingDate = new Date();
         String notes = "some notes";
 
-        User admin = UserBuilder.aUser()
-                .withUsername("admin")
-                .withId(1l)
-                .build();
-
         User ordinary = UserBuilder.aUser()
                 .withUsername("ordinary")
                 .withId(2l)
@@ -158,8 +140,6 @@ public class PostDonationCounsellingCRUDServiceTests {
                         .build())
                 .build();
 
-        setSecurityUser(admin);
-
         when(dateGeneratorService.generateDate()).thenReturn(counsellingDate);
 
         when(postDonationCounsellingRepository.findById(postDonationCounsellingId))
@@ -184,11 +164,6 @@ public class PostDonationCounsellingCRUDServiceTests {
         Date existingCounsellingDate = new DateTime().minusDays(1).toDate();
         Date counsellingDate = new Date();
         String notes = "some notes";
-
-        User admin = UserBuilder.aUser()
-                .withUsername("admin")
-                .withId(1l)
-                .build();
 
         User ordinary = UserBuilder.aUser()
                 .withUsername("ordinary")
@@ -227,8 +202,6 @@ public class PostDonationCounsellingCRUDServiceTests {
                         .build())
                 .build();
 
-        setSecurityUser(admin);
-
         when(dateGeneratorService.generateDate()).thenReturn(counsellingDate);
 
         when(postDonationCounsellingRepository.findById(postDonationCounsellingId))
@@ -244,10 +217,4 @@ public class PostDonationCounsellingCRUDServiceTests {
 
         assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
     }
-
-  private void setSecurityUser(User user) {
-    BsisUserDetails bsisUser = new BsisUserDetails(user);
-    TestingAuthenticationToken auth = new TestingAuthenticationToken(bsisUser, "Credentials");
-    SecurityContextHolder.getContext().setAuthentication(auth);
-  }
 }

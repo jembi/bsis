@@ -18,9 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import suites.ContextDependentTestSuite;
 
 public class DeferralReasonRepositoryTests extends ContextDependentTestSuite {
-    
-    @PersistenceContext
-    private EntityManager entityManager;
+
     @Autowired
     private DeferralReasonRepository deferralReasonRepository;
     

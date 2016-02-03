@@ -17,9 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import suites.ContextDependentTestSuite;
 
 public class ComponentRepositoryTests extends ContextDependentTestSuite {
-    
-    @PersistenceContext
-    private EntityManager entityManager;
+
     @Autowired
     private ComponentRepository componentRepository;
     

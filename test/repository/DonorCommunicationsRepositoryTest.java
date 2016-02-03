@@ -36,9 +36,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -46,8 +43,6 @@ import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import security.BsisUserDetails;
-import security.LoginUserService;
 import utils.CustomDateFormatter;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -482,22 +477,6 @@ public class DonorCommunicationsRepositoryTest {
 		}
 		assertTrue("Donors in list should not be deferred at date of Clinic Date",isvalid);
 		
-	}
-	
-	/**
-	 * UserPassword,BsisUserDetails(Principal) and authority detail store into
-	 * SecurityContextHolder.
-	 */
-	public void userAuthentication() {
-		applicationContext = new ClassPathXmlApplicationContext(
-				"file:**/security-bsis-servlet.xml");
-		userDetailsService = applicationContext.getBean(LoginUserService.class);
-		BsisUserDetails userDetails = (BsisUserDetails) userDetailsService
-				.loadUserByUsername("admin");
-		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-				userDetails, userDetails.getPassword(),
-				userDetails.getAuthorities());
-		SecurityContextHolder.getContext().setAuthentication(authToken);
 	}
 	
 	private List<Location> createVenueList(long[] id) {

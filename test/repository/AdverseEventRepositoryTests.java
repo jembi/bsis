@@ -17,9 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import suites.ContextDependentTestSuite;
 
 public class AdverseEventRepositoryTests extends ContextDependentTestSuite {
-    
-    @PersistenceContext
-    private EntityManager entityManager;
+
     @Autowired
     private AdverseEventRepository adverseEventRepository;
     

@@ -20,9 +20,7 @@ import suites.ContextDependentTestSuite;
 import viewmodel.AdverseEventTypeViewModel;
 
 public class AdverseEventTypeRepositoryTests extends ContextDependentTestSuite {
-    
-    @PersistenceContext
-    private EntityManager entityManager;
+
     @Autowired
     private AdverseEventTypeRepository adverseEventTypeRepository;
     

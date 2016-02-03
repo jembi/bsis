@@ -31,9 +31,7 @@ import suites.ContextDependentTestSuite;
 import valueobject.CollectedDonationValueObject;
 
 public class DonationRepositoryTests extends ContextDependentTestSuite {
-    
-    @PersistenceContext
-    private EntityManager entityManager;
+
     @Autowired
     private DonationRepository donationRepository;
     

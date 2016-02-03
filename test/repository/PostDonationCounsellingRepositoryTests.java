@@ -29,9 +29,7 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
     private static final Date NO_START_DATE = null;
     private static final Date NO_END_DATE = null;
     private static final Set<Long> NO_VENUES = null;
-    
-    @PersistenceContext
-    private EntityManager entityManager;
+
     @Autowired
     private PostDonationCounsellingRepository postDonationCounsellingRepository;
 

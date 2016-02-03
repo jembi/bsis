@@ -950,23 +950,6 @@ public class DonorRepositoryTest {
         return copyDonor;
     }
 
-    /**
-     * UserPassword,BsisUserDetails(Principal) and authority detail store into
-     * SecurityContextHolder.
-     */
-    public void userAuthentication() {
-        applicationContext = new ClassPathXmlApplicationContext(
-                "file:**/security-bsis-servlet.xml");
-        userDetailsService = applicationContext.getBean(LoginUserService.class);
-        BsisUserDetails userDetails = (BsisUserDetails) userDetailsService
-                .loadUserByUsername("admin");
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                userDetails, userDetails.getPassword(),
-                userDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authToken);
-    }
-
-
     @Test
     /**
      * Test passes on retrieving address of donor

@@ -24,8 +24,6 @@ public class DonorDeferralRepositoryTests extends ContextDependentTestSuite {
     
     @Autowired
     private DonorDeferralRepository donorDeferralRepository;
-    @PersistenceContext
-    private EntityManager entityManager;
     
     @Test
     public void testCountDonorDeferralsForDonor_shouldReturnCorrectCount() {

@@ -28,36 +28,11 @@ import suites.ContextDependentTestSuite;
 
 public class BaseModificationTrackerEntityTest extends ContextDependentTestSuite {
 
-  private static final String ADMIN_USERNAME = "admin";
-  private User adminUser;
-
   @PersistenceContext
   private EntityManager entityManager;
 
   @Autowired
   private DonorRepository donorRepository;
-
-  @Before
-  public void init() throws Exception {
-    initSpringSecurityUser();
-  }
-
-  @AfterTransaction
-  public void after() throws Exception {
-    clearSpringSecurityUser(); // reverse the initiation of the Spring Security user
-  }
-
-  public void initSpringSecurityUser() throws Exception {
-    User adminUser =
-        UserBuilder.aUser().withUsername(ADMIN_USERNAME).buildAndPersist(entityManager);
-    BsisUserDetails user = new BsisUserDetails(adminUser);
-    TestingAuthenticationToken auth = new TestingAuthenticationToken(user, "Credentials");
-    SecurityContextHolder.getContext().setAuthentication(auth);
-  }
-
-  public void clearSpringSecurityUser() throws Exception {
-    SecurityContextHolder.getContext().setAuthentication(null);
-  }
 
   @Test
   public void testPersistDonor() throws Exception {
