@@ -3,12 +3,12 @@ package suites;
 import helpers.builders.UserBuilder;
 import model.user.User;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.transaction.AfterTransaction;
 
 import security.BsisUserDetails;
 
@@ -32,7 +32,7 @@ public abstract class UnitTestSuite {
     SecurityContextHolder.getContext().setAuthentication(auth);
   }
 
-  @AfterTransaction
+  @After
   public void after() throws Exception {
       clearSpringSecurityUser(); // reverse the initiation of the Spring Security user
   }
