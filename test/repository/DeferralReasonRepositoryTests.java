@@ -4,10 +4,8 @@ import static helpers.builders.DeferralReasonBuilder.aDeferralReason;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
-import javax.persistence.PersistenceContext;
 
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DeferralReasonType;

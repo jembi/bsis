@@ -5,10 +5,6 @@ import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import model.donor.Donor;
 
 import org.junit.Test;

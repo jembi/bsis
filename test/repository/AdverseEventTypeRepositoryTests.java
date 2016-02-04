@@ -8,9 +8,6 @@ import static org.hamcrest.Matchers.is;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import model.adverseevent.AdverseEventType;
 
 import org.junit.Test;
