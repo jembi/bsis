@@ -89,7 +89,7 @@ public class MobileClinicControllerTests {
     clinicDonorsViewModels.add(new MobileClinicLookUpDonorViewModel(donor1));
     clinicDonorsViewModels.add(new MobileClinicLookUpDonorViewModel(donor2));
 
-    when(mobileClinicRepository.lookUp(1L)).thenReturn(clinicDonors);
+    when(mobileClinicRepository.findMobileClinicDonorsByVenue(1L)).thenReturn(clinicDonors);
     when(mobileClinicDonorViewModelFactory.createMobileClinicDonorViewModels(clinicDonors, clinicDate)).thenReturn(clinicDonorsViewModels);
 
     ResponseEntity<Map<String, Object>> response = mobileClinicController.mobileClinicLookUp(1L, clinicDate);

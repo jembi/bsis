@@ -27,7 +27,7 @@ private static final Logger LOGGER = Logger.getLogger(MobileClinicRepository.cla
   @PersistenceContext
   private EntityManager em;
   
-  public List<MobileClinicDonor> lookUp(Long venueId) throws NoResultException {
+  public List<MobileClinicDonor> findMobileClinicDonorsByVenue(Long venueId) throws NoResultException {
       return em.createQuery(
               "SELECT d FROM MobileClinicDonor d " +
               "WHERE d.venue.id = :venueId " +

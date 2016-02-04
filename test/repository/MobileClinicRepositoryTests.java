@@ -67,7 +67,7 @@ public class MobileClinicRepositoryTests extends ContextDependentTestSuite {
         .thatIsNotDeleted()
         .buildAndPersist(entityManager);
     
-    List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.lookUp(venue.getId());
+    List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.findMobileClinicDonorsByVenue(venue.getId());
 
     assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonors.size(), is(3));
     // check sorting
@@ -107,7 +107,7 @@ public class MobileClinicRepositoryTests extends ContextDependentTestSuite {
         .thatIsDeleted()
         .buildAndPersist(entityManager);
     
-    List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.lookUp(venue.getId());
+    List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.findMobileClinicDonorsByVenue(venue.getId());
 
     assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonors.size(), is(1));
     Assert.assertFalse("Deleted MobileClinicDonor not returned", mobileClinicDonors.contains(donor2));
@@ -141,7 +141,7 @@ public class MobileClinicRepositoryTests extends ContextDependentTestSuite {
         .thatIsNotDeleted()
         .buildAndPersist(entityManager);
     
-    List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.lookUp(venue.getId());
+    List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.findMobileClinicDonorsByVenue(venue.getId());
 
     assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonors.size(), is(1));
     Assert.assertFalse("Deleted MobileClinicDonor not returned", mobileClinicDonors.contains(donor2));
@@ -178,7 +178,7 @@ public class MobileClinicRepositoryTests extends ContextDependentTestSuite {
         .thatIsNotDeleted()
         .buildAndPersist(entityManager);
     
-    List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.lookUp(venue1.getId());
+    List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.findMobileClinicDonorsByVenue(venue1.getId());
 
     assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonors.size(), is(1));
     for (MobileClinicDonor d : mobileClinicDonors) {

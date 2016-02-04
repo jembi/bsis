@@ -72,7 +72,7 @@ public class MobileClinicController {
 
        Map<String, Object> map = new HashMap<String, Object>();
         
-       List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.lookUp(venueId);
+       List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.findMobileClinicDonorsByVenue(venueId);
        List<MobileClinicLookUpDonorViewModel> donors = mobileClinicDonorViewModelFactory.createMobileClinicDonorViewModels(mobileClinicDonors, clinicDate);
        
        map.put("donors", donors);
