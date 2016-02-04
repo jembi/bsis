@@ -219,25 +219,39 @@ public class BloodTestingRepository {
 			Map<Long, String> bloodTestResultsForDonation,
 			Donation donation, Date testedOn,
 			BloodTestingRuleResult ruleResult) {
+		
+		Map<Long, BloodTestResult> mostRecentTestResults = getRecentTestResultsForDonation(donation.getId());
+		
+		// if the blood test result is being edited, update the existing one and set doubleEntryRequired to true.
 		for (Long testId : bloodTestResultsForDonation.keySet()) {
-			BloodTestResult btResult = new BloodTestResult();
-			BloodTest bloodTest = new BloodTest();
-			// the only reason we are using Long in the parameter is that
-			// jsp uses Long for all numbers. Using an integer makes it
-			// difficult
-			// to compare Integer and Long values in the jsp conditionals
-			// specially when iterating through the list of results
-			bloodTest.setId(testId);
-			btResult.setBloodTest(bloodTest);
-			// not updating the inverse relation which means the
-			// donation.getBloodTypingResults() will not
-			// contain this result
-			btResult.setDonation(donation);
-			btResult.setTestedOn(testedOn);
-			btResult.setNotes("");
-			btResult.setResult(bloodTestResultsForDonation.get(testId));
-			btResult.setDoubleEntryRequired(true);
-			em.persist(btResult);
+			
+			BloodTestResult btResult = mostRecentTestResults.get(testId);
+			if (btResult == null) {
+				btResult = new BloodTestResult();
+				BloodTest bloodTest = new BloodTest();
+				// the only reason we are using Long in the parameter is that
+				// jsp uses Long for all numbers. Using an integer makes it
+				// difficult
+				// to compare Integer and Long values in the jsp conditionals
+				// specially when iterating through the list of results
+				bloodTest.setId(testId);
+				btResult.setBloodTest(bloodTest);
+				// not updating the inverse relation which means the
+				// donation.getBloodTypingResults() will not
+				// contain this result
+				btResult.setDonation(donation);
+				btResult.setTestedOn(testedOn);
+				btResult.setNotes("");
+				btResult.setResult(bloodTestResultsForDonation.get(testId));
+				btResult.setDoubleEntryRequired(true);	
+				
+			} else {
+				if (!bloodTestResultsForDonation.get(testId).equals(btResult.getResult())) {
+					btResult.setResult(bloodTestResultsForDonation.get(testId));
+					btResult.setDoubleEntryRequired(true);
+				}
+			}
+			em.persist(btResult);			
 		}
 
 		updateDonationWithTestResults(donation, ruleResult);
@@ -571,26 +585,39 @@ public class BloodTestingRepository {
 			String testResult, Donation donation, Date testedOn,
 			BloodTestingRuleResult ruleResult) {
 
-		BloodTestResult btResult = new BloodTestResult();
-		BloodTest bloodTest = new BloodTest();
-		// the only reason we are using Long in the parameter is that
-		// jsp uses Long for all numbers. Using an integer makes it difficult
-		// to compare Integer and Long values in the jsp conditionals
-		// specially when iterating through the list of results
-		bloodTest.setId(testId);
-		btResult.setBloodTest(bloodTest);
-		// not updating the inverse relation which means the
-		// donation.getBloodTypingResults() will not
-		// contain this result
-		btResult.setDonation(donation);
-		btResult.setTestedOn(testedOn);
-		btResult.setNotes("");
-		btResult.setResult(testResult);
-		btResult.setDoubleEntryRequired(true);
-		em.persist(btResult);
+		Map<Long, BloodTestResult> mostRecentTestResults = getRecentTestResultsForDonation(donation.getId());
+
+		// if the blood test result is being edited, update the existing one and set doubleEntryRequired to true.
+		BloodTestResult btResult = mostRecentTestResults.get(testId);
+		if (btResult == null) {
+			btResult = new BloodTestResult();
+			BloodTest bloodTest = new BloodTest();
+			// the only reason we are using Long in the parameter is that
+			// jsp uses Long for all numbers. Using an integer makes it
+			// difficult
+			// to compare Integer and Long values in the jsp conditionals
+			// specially when iterating through the list of results
+			bloodTest.setId(testId);
+			btResult.setBloodTest(bloodTest);
+			// not updating the inverse relation which means the
+			// donation.getBloodTypingResults() will not
+			// contain this result
+			btResult.setDonation(donation);
+			btResult.setTestedOn(testedOn);
+			btResult.setNotes("");
+			btResult.setResult(testResult);
+			btResult.setDoubleEntryRequired(true);	
+
+		} else {
+			if (!testResult.equals(btResult.getResult())) {
+				btResult.setResult(testResult);
+				btResult.setDoubleEntryRequired(true);
+			}
+		}
+		em.persist(btResult);			
 		em.refresh(btResult);
 		updateDonationWithTestResults(donation, ruleResult);
-        em.persist(donation);
+		em.persist(donation);
 		return btResult;
 	}
 
