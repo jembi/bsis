@@ -1,7 +1,5 @@
 package viewmodel;
 
-import java.util.Date;
-
 import model.donor.MobileClinicDonor;
 import model.util.Gender;
 
@@ -34,25 +32,13 @@ public class MobileClinicLookUpDonorViewModel {
     public String getDonorNumber() {
       return mobileClinicDonor.getDonorNumber();
     }
-    
-    public void setDonorNumber(String donorNumber) {
-      mobileClinicDonor.setDonorNumber(donorNumber);
-    }
 
     public String getFirstName() {
       return mobileClinicDonor.getFirstName();
     }
 
-    public void setFirstName(String firstName) {
-      mobileClinicDonor.setFirstName(firstName);
-    }
-
     public String getLastName() {
       return mobileClinicDonor.getLastName();
-    }
-
-    public void setLastName(String lastName) {
-      mobileClinicDonor.setLastName(lastName);
     }
 
     public String getGender() {
@@ -60,16 +46,8 @@ public class MobileClinicLookUpDonorViewModel {
       return gender == null ? "" : gender.name();
     }
 
-    public void setGender(Gender gender) {
-      mobileClinicDonor.setGender(gender);
-    }
-
     public String getBirthDate() {
       return CustomDateFormatter.getDateString(mobileClinicDonor.getBirthDate());
-    }
-
-    public void setBirthDate(Date birthDate) {
-      mobileClinicDonor.setBirthDate(birthDate);
     }
     
     public String getBloodType() {
@@ -79,14 +57,6 @@ public class MobileClinicLookUpDonorViewModel {
           return "";
         else
           return bloodAbo + bloodRh;
-    }
-    
-    public void setBloodAbo(String bloodAbo) {
-      mobileClinicDonor.setBloodAbo(bloodAbo);
-    }
-    
-    public void setBloodRh(String bloodRh) {
-      mobileClinicDonor.setBloodRh(bloodRh);
     }
     
     public Boolean getEligibility() {

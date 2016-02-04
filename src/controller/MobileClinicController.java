@@ -1,18 +1,15 @@
 package controller;
 
-import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import model.donor.MobileClinicDonor;
-import model.location.Location;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,9 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import repository.LocationRepository;
 import repository.MobileClinicRepository;
-import service.DonorConstraintChecker;
-import service.FormFieldAccessorService;
-import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 import viewmodel.MobileClinicLookUpDonorViewModel;
 import factory.MobileClinicDonorViewModelFactory;
@@ -47,13 +41,7 @@ public class MobileClinicController {
     private MobileClinicRepository mobileClinicRepository;
 
     @Autowired
-    private FormFieldAccessorService formFieldAccessorService;
-
-    @Autowired
     private LocationRepository locationRepository;
-    
-    @Autowired
-    private DonorConstraintChecker donorConstraintChecker;
     
     @Autowired
     private MobileClinicDonorViewModelFactory mobileClinicDonorViewModelFactory;
@@ -67,8 +55,7 @@ public class MobileClinicController {
     @RequestMapping(value = "/form", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
     public @ResponseBody
-    Map<String, Object> mobileClinicLookUpFormGenerator(
-            HttpServletRequest request) {
+    Map<String, Object> mobileClinicLookUpFormGenerator() {
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("venues", locationRepository.getAllVenues());
@@ -79,25 +66,17 @@ public class MobileClinicController {
     @RequestMapping(value = "/lookup", method = RequestMethod.GET)
     @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
     public @ResponseBody ResponseEntity<Map<String, Object>> mobileClinicLookUp(
-            @RequestParam(value="venue",required=true) String venue,
-            @RequestParam(value="clinicDate",required=true ) String clinicDate) throws ParseException{
+            @RequestParam(value="venueId",required=true) Long venueId,
+            @RequestParam(value="clinicDate",required=true) 
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date clinicDate) {
 
        Map<String, Object> map = new HashMap<String, Object>();
+        
+       List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.lookUp(venueId);
+       List<MobileClinicLookUpDonorViewModel> donors = mobileClinicDonorViewModelFactory.createMobileClinicDonorViewModels(mobileClinicDonors, clinicDate);
        
-       List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.lookUp(setLocation(venue));
-       List<MobileClinicLookUpDonorViewModel> donors = mobileClinicDonorViewModelFactory.createMobileClinicDonorViewModels(mobileClinicDonors);
-  	   for (MobileClinicLookUpDonorViewModel donor : donors) {
-  	     donor.setEligibility(donorConstraintChecker.isDonorEligibleToDonateOnDate(donor.getId(), CustomDateFormatter.parse(clinicDate)));
-  	   }
        map.put("donors", donors);
-        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);        
-    }
-    
-    public Location setLocation(String location) {
 
-        Location l = new Location();
-        l.setId(Long.parseLong(location));
-        return l;
+       return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);        
     }
-
 }
