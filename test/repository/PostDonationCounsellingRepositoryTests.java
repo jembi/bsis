@@ -25,9 +25,9 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import suites.SecurityContextDependentTestSuite;
+import suites.ContextDependentTestSuite;
 
-public class PostDonationCounsellingRepositoryTests extends SecurityContextDependentTestSuite {
+public class PostDonationCounsellingRepositoryTests extends ContextDependentTestSuite {
     
     private static final Date NO_START_DATE = null;
     private static final Date NO_END_DATE = null;

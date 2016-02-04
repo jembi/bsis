@@ -1,35 +1,22 @@
 package model;
 
 import static helpers.builders.DonorBuilder.aDonor;
-import helpers.builders.UserBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.modificationtracker.RowModificationTracker;
-import model.user.User;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.TestingAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.transaction.AfterTransaction;
 
 import repository.DonorRepository;
-import security.BsisUserDetails;
-import suites.ContextDependentTestSuite;
+import suites.SecurityContextDependentTestSuite;
 
-public class BaseModificationTrackerEntityTest extends ContextDependentTestSuite {
-
-  @PersistenceContext
-  private EntityManager entityManager;
+public class BaseModificationTrackerEntityTest extends SecurityContextDependentTestSuite {
 
   @Autowired
   private DonorRepository donorRepository;
@@ -41,7 +28,7 @@ public class BaseModificationTrackerEntityTest extends ContextDependentTestSuite
 
     assertDateEquals("Created date has been set", new Date(), donor.getCreatedDate());
     Assert.assertNotNull("Created by has been set", donor.getCreatedBy());
-    Assert.assertEquals("Created by has been set", ADMIN_USERNAME, donor.getCreatedBy()
+    Assert.assertEquals("Created by has been set", USERNAME, donor.getCreatedBy()
         .getUsername());
     Assert.assertEquals("Updated same as created", donor.getCreatedDate(), donor.getLastUpdated());
     Assert.assertEquals("Updated same as created", donor.getCreatedBy(), donor.getLastUpdatedBy());
@@ -62,7 +49,7 @@ public class BaseModificationTrackerEntityTest extends ContextDependentTestSuite
     Assert.assertEquals("Created date is the same", newCreatedDate, updatedDonor.getCreatedDate());
     assertDateEquals("Updated date has been set", new Date(), donor.getLastUpdated());
     Assert.assertNotNull("Updated by has been set", donor.getLastUpdatedBy());
-    Assert.assertEquals("Updated by has been set", ADMIN_USERNAME, donor.getLastUpdatedBy()
+    Assert.assertEquals("Updated by has been set", USERNAME, donor.getLastUpdatedBy()
         .getUsername());
   }
 
@@ -73,7 +60,7 @@ public class BaseModificationTrackerEntityTest extends ContextDependentTestSuite
     RowModificationTracker tracker = new RowModificationTracker();
     Date newCreatedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2015-10-20 09:17");
     tracker.setCreatedDate(newCreatedDate);
-    tracker.setCreatedBy(adminUser);
+    tracker.setCreatedBy(loggedInUser);
     donor.setModificationTracker(tracker);
 
     Donor updatedDonor = donorRepository.updateDonor(donor);

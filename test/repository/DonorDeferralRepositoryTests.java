@@ -20,9 +20,9 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import suites.SecurityContextDependentTestSuite;
+import suites.ContextDependentTestSuite;
 
-public class DonorDeferralRepositoryTests extends SecurityContextDependentTestSuite {
+public class DonorDeferralRepositoryTests extends ContextDependentTestSuite {
     
     @Autowired
     private DonorDeferralRepository donorDeferralRepository;
