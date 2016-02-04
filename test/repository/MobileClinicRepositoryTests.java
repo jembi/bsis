@@ -38,8 +38,8 @@ public class MobileClinicRepositoryTests extends ContextDependentTestSuite {
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     MobileClinicDonorBuilder.aMobileClinicDonor()
         .withDonorNumber("D1")
-        .withFirstName("Test")
-        .withLastName("DonorOne")
+        .withFirstName("Clara")
+        .withLastName("Donor")
         .withBirthDate(sdf.parse("20/02/1975"))
         .withGender(Gender.female)
         .withDonorStatus(DonorStatus.NORMAL)
@@ -48,10 +48,20 @@ public class MobileClinicRepositoryTests extends ContextDependentTestSuite {
         .buildAndPersist(entityManager);
     MobileClinicDonorBuilder.aMobileClinicDonor()
         .withDonorNumber("D2")
-        .withFirstName("Test")
-        .withLastName("DonorTwo")
+        .withFirstName("Bobby")
+        .withLastName("ADonor")
         .withBirthDate(sdf.parse("5/12/1982"))
         .withGender(Gender.male)
+        .withDonorStatus(DonorStatus.NORMAL)
+        .withVenue(venue)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+      MobileClinicDonorBuilder.aMobileClinicDonor()
+        .withDonorNumber("D3")
+        .withFirstName("Abigail")
+        .withLastName("Donor")
+        .withBirthDate(sdf.parse("10/10/1985"))
+        .withGender(Gender.female)
         .withDonorStatus(DonorStatus.NORMAL)
         .withVenue(venue)
         .thatIsNotDeleted()
@@ -59,7 +69,14 @@ public class MobileClinicRepositoryTests extends ContextDependentTestSuite {
     
     List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.lookUp(venue.getId());
 
-    assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonors.size(), is(2));
+    assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonors.size(), is(3));
+    // check sorting
+    MobileClinicDonor returnedDonor1 = mobileClinicDonors.get(0);
+    Assert.assertEquals("MobileClinicDonor sorting is correct", "D2", returnedDonor1.getDonorNumber());
+    MobileClinicDonor returnedDonor2 = mobileClinicDonors.get(1);
+    Assert.assertEquals("MobileClinicDonor sorting is correct", "D3", returnedDonor2.getDonorNumber());
+    MobileClinicDonor returnedDonor3 = mobileClinicDonors.get(2);
+    Assert.assertEquals("MobileClinicDonor sorting is correct", "D1", returnedDonor3.getDonorNumber());
   }
 
   @Test

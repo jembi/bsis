@@ -32,7 +32,8 @@ private static final Logger LOGGER = Logger.getLogger(MobileClinicRepository.cla
               "SELECT d FROM MobileClinicDonor d " +
               "WHERE d.venue.id = :venueId " +
               "AND d.isDeleted = :isDeleted " +
-              "AND d.donorStatus NOT IN :excludedStatuses ",
+              "AND d.donorStatus NOT IN :excludedStatuses " +
+              "ORDER BY d.lastName asc, d.firstName asc",
               MobileClinicDonor.class)
               .setParameter("venueId", venueId)
               .setParameter("isDeleted", false)
