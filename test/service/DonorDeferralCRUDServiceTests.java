@@ -172,7 +172,7 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
 		
 		// asserts
 		Assert.assertTrue("Deferral was deleted", donorDeferral.getIsVoided());
-		Assert.assertEquals("Deferral was deleted by", admin.getUsername(), donorDeferral.getVoidedBy().getUsername());
+		Assert.assertEquals("Deferral was deleted by", loggedInUser.getUsername(), donorDeferral.getVoidedBy().getUsername());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Assert.assertEquals("Deferral was deleted when", sdf.format(new Date()), sdf.format(donorDeferral.getVoidedDate()));
 	}
