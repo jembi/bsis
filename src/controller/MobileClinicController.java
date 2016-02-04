@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import model.donor.MobileClinicDonor;
 import model.location.Location;
 
 import org.apache.log4j.Logger;
@@ -23,13 +24,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import repository.MobileClinicRepository;
 import repository.LocationRepository;
+import repository.MobileClinicRepository;
 import service.DonorConstraintChecker;
 import service.FormFieldAccessorService;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 import viewmodel.MobileClinicLookUpDonorViewModel;
+import factory.MobileClinicDonorViewModelFactory;
 
 @RestController
 @RequestMapping("mobileclinic")
@@ -38,7 +40,9 @@ public class MobileClinicController {
     /**
      * The Constant LOGGER.
      */
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = Logger.getLogger(MobileClinicController.class);
+    
     @Autowired
     private MobileClinicRepository mobileClinicRepository;
 
@@ -50,6 +54,9 @@ public class MobileClinicController {
     
     @Autowired
     private DonorConstraintChecker donorConstraintChecker;
+    
+    @Autowired
+    private MobileClinicDonorViewModelFactory mobileClinicDonorViewModelFactory;
 
     public MobileClinicController() {
     }
@@ -76,19 +83,14 @@ public class MobileClinicController {
             @RequestParam(value="clinicDate",required=true ) String clinicDate) throws ParseException{
 
        Map<String, Object> map = new HashMap<String, Object>();
-        
-        List<MobileClinicLookUpDonorViewModel> donors = new ArrayList<MobileClinicLookUpDonorViewModel>();
-        donors = mobileClinicRepository.lookUp(setLocation(venue));
-                
-        if (donors != null){
-    	    for(MobileClinicLookUpDonorViewModel donor : donors){
-    	    	donor.setEligibility(donorConstraintChecker.isDonorEligibleToDonateOnDate(donor.getId(), CustomDateFormatter.parse(clinicDate)));
-    	    }
-        }
-
-        map.put("donors", donors);
-        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);        
        
+       List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.lookUp(setLocation(venue));
+       List<MobileClinicLookUpDonorViewModel> donors = mobileClinicDonorViewModelFactory.createMobileClinicDonorViewModels(mobileClinicDonors);
+  	   for (MobileClinicLookUpDonorViewModel donor : donors) {
+  	     donor.setEligibility(donorConstraintChecker.isDonorEligibleToDonateOnDate(donor.getId(), CustomDateFormatter.parse(clinicDate)));
+  	   }
+       map.put("donors", donors);
+        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);        
     }
     
     public Location setLocation(String location) {

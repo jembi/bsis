@@ -8,8 +8,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import model.donor.DonorStatus;
+import model.donor.MobileClinicDonor;
 import model.location.Location;
-import viewmodel.MobileClinicLookUpDonorViewModel;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
@@ -22,19 +22,19 @@ public class MobileClinicRepository {
 /**
  * The Constant LOGGER.
 */
+@SuppressWarnings("unused")
 private static final Logger LOGGER = Logger.getLogger(MobileClinicRepository.class);
     
   @PersistenceContext
   private EntityManager em;
   
-  public List<MobileClinicLookUpDonorViewModel> lookUp(Location venue) throws NoResultException {
+  public List<MobileClinicDonor> lookUp(Location venue) throws NoResultException {
       return em.createQuery(
-              "SELECT NEW viewmodel.MobileClinicLookUpDonorViewModel(d.id, d.donorNumber, d.firstName, d.lastName, d.gender, d.birthDate, d.bloodAbo, d.bloodRh) " +
-              "FROM Donor d " +
+              "SELECT d FROM MobileClinicDonor d " +
               "WHERE d.venue = :venue " +
               "AND d.isDeleted = :isDeleted " +
               "AND d.donorStatus NOT IN :excludedStatuses ",
-              MobileClinicLookUpDonorViewModel.class)
+              MobileClinicDonor.class)
               .setParameter("venue", venue)
               .setParameter("isDeleted", false)
               .setParameter("excludedStatuses", Arrays.asList(DonorStatus.MERGED))

@@ -2,92 +2,79 @@ package viewmodel;
 
 import java.util.Date;
 
+import model.donor.MobileClinicDonor;
+import model.util.Gender;
+
 import org.apache.commons.lang3.StringUtils;
 
 import utils.CustomDateFormatter;
-import model.util.Gender;
 
 public class MobileClinicLookUpDonorViewModel {
 
-    private long id;
-    private String donorNumber;
-    private String firstName;
-    private String lastName;
-    private Gender gender;
-    private Date birthDate;
-    private String bloodAbo;
-    private String bloodRh;
+    private MobileClinicDonor mobileClinicDonor;
+
     private Boolean eligibility;
     
     public MobileClinicLookUpDonorViewModel() {
-        // no-args constructor
+      mobileClinicDonor = new MobileClinicDonor();
     }
 
-    /**
-     * Do not remove or change the signature of this method.
-     * 
-     * @see {@link DonorRepository#findDonorSummaryByDonorNumber(String)}
-     */
-    public MobileClinicLookUpDonorViewModel(long id, String donorNumber, String firstName, String lastName, Gender gender, Date birthDate, String bloodAbo, String bloodRh) {
-        this.id = id;
-        this.donorNumber = donorNumber;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.gender = gender;
-        this.birthDate = birthDate;
-        this.bloodAbo = bloodAbo;
-        this.bloodRh = bloodRh;
+    public MobileClinicLookUpDonorViewModel(MobileClinicDonor mobileClinicDonor) {
+      this.mobileClinicDonor = mobileClinicDonor;
     }
     
     public long getId() {
-        return id;
+      return mobileClinicDonor.getId();
     }
     
     public void setId(long id) {
-        this.id = id;
+      mobileClinicDonor.setId(id);
     }
     
     public String getDonorNumber() {
-        return donorNumber;
+      return mobileClinicDonor.getDonorNumber();
     }
     
     public void setDonorNumber(String donorNumber) {
-        this.donorNumber = donorNumber;
+      mobileClinicDonor.setDonorNumber(donorNumber);
     }
 
     public String getFirstName() {
-        return firstName;
+      return mobileClinicDonor.getFirstName();
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+      mobileClinicDonor.setFirstName(firstName);
     }
 
     public String getLastName() {
-        return lastName;
+      return mobileClinicDonor.getLastName();
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+      mobileClinicDonor.setLastName(lastName);
     }
 
     public String getGender() {
-        return gender == null ? "" : gender.name();
+      Gender gender = mobileClinicDonor.getGender();
+      return gender == null ? "" : gender.name();
     }
 
     public void setGender(Gender gender) {
-        this.gender = gender;
+      mobileClinicDonor.setGender(gender);
     }
 
     public String getBirthDate() {
-        return CustomDateFormatter.getDateString(birthDate);
+      return CustomDateFormatter.getDateString(mobileClinicDonor.getBirthDate());
     }
 
     public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
+      mobileClinicDonor.setBirthDate(birthDate);
     }
     
     public String getBloodType() {
+      String bloodAbo = mobileClinicDonor.getBloodAbo();
+      String bloodRh = mobileClinicDonor.getBloodRh();
         if (StringUtils.isBlank(bloodAbo) || StringUtils.isBlank(bloodRh))
           return "";
         else
@@ -95,11 +82,11 @@ public class MobileClinicLookUpDonorViewModel {
     }
     
     public void setBloodAbo(String bloodAbo) {
-        this.bloodAbo = bloodAbo;
+      mobileClinicDonor.setBloodAbo(bloodAbo);
     }
     
     public void setBloodRh(String bloodRh) {
-        this.bloodRh = bloodRh;
+      mobileClinicDonor.setBloodRh(bloodRh);
     }
     
     public Boolean getEligibility() {
@@ -109,6 +96,4 @@ public class MobileClinicLookUpDonorViewModel {
     public void setEligibility(Boolean eligibility) {
         this.eligibility = eligibility;
     }
-    
-
 }
