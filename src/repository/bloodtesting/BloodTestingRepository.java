@@ -208,7 +208,7 @@ public class BloodTestingRepository {
 	}
 	
 	/**
-	 * Save the BloodTestingRuleResult and update the Donation blood ABO/Rh and blood typing statuses 
+	 * Save the BloodTestingRuleResult and update the Donation blood ABO/Rh and blood typing statuses
 	 * 
 	 * @param bloodTestResultsForDonation Map of test results with the BloodTest identifier as the key
 	 * @param donation Donation associated with the test results
@@ -236,6 +236,7 @@ public class BloodTestingRepository {
 			btResult.setTestedOn(testedOn);
 			btResult.setNotes("");
 			btResult.setResult(bloodTestResultsForDonation.get(testId));
+			btResult.setDoubleEntryRequired(true);
 			em.persist(btResult);
 		}
 
@@ -585,6 +586,7 @@ public class BloodTestingRepository {
 		btResult.setTestedOn(testedOn);
 		btResult.setNotes("");
 		btResult.setResult(testResult);
+		btResult.setDoubleEntryRequired(true);
 		em.persist(btResult);
 		em.refresh(btResult);
 		updateDonationWithTestResults(donation, ruleResult);
@@ -671,7 +673,8 @@ public class BloodTestingRepository {
 //		bt.setValidResults("+,-");
 		bt.setRankInCategory(1);
 		bt.setIsActive(true);
-                BloodTestCategory category = bt.getCategory();
+		
+        BloodTestCategory category = bt.getCategory();
 		if (category.equals(BloodTestCategory.BLOODTYPING)) {
 			bt.setBloodTestType(BloodTestType.ADVANCED_BLOODTYPING);
 			bt.setContext(genericConfigRepository

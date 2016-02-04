@@ -56,6 +56,8 @@ public class BloodTestResult extends BaseModificationTrackerEntity {
     
   @Column(length=20)
   private String reagentLotNumber;
+  
+  private Boolean doubleEntryRequired;
 
   public BloodTestResult() {
     super();
@@ -106,14 +108,24 @@ public class BloodTestResult extends BaseModificationTrackerEntity {
   }
 
   public void setMachineReading(MachineReading machineReading) {
-    this.machineReading = machineReading;
+	  this.machineReading = machineReading;
   }
 
-	public String getReagentLotNumber() {
-		return reagentLotNumber;
-	}
+  public String getReagentLotNumber() {
+	  return reagentLotNumber;
+  }
 
-	public void setReagentLotNumber(String reagentLotNumber) {
-		this.reagentLotNumber = reagentLotNumber;
-	}
+  public void setReagentLotNumber(String reagentLotNumber) {
+	  this.reagentLotNumber = reagentLotNumber;
+  }
+
+  public Boolean getDoubleEntryRequired() {
+	  return doubleEntryRequired;
+  }
+
+  public void setDoubleEntryRequired(Boolean doubleEntryRequired) {
+	  this.doubleEntryRequired = doubleEntryRequired;
+  }
+
+
 }

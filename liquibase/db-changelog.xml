@@ -2020,5 +2020,17 @@
 			<column name="addressTypeId" type="BIGINT"></column>
 		</addColumn>
 	</changeSet>
+	
+	<changeSet id="20160127-1000" author="timler">
+		<comment>BSIS-358 - Add double-entry column for BloodTestResult</comment>
+		<addColumn tableName="BloodTestResult">
+			<column name="doubleEntry" type="TINYINT(1)" defaultValue="0"></column>
+		</addColumn>
+	</changeSet>
+	
+	<changeSet id="20160203-1422" author="lauravignoli">		
+		<comment>BSIS-358 - Rename doubleEntry to doubleEntryRequired for BloodTestResult</comment>
+		<renameColumn tableName="BloodTestResult" oldColumnName="doubleEntry" newColumnName="doubleEntryRequired" columnDataType="TINYINT(1)"/>
+	</changeSet>
 
 </databaseChangeLog>
