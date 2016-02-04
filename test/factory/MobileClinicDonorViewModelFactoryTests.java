@@ -18,6 +18,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import utils.CustomDateFormatter;
 import viewmodel.MobileClinicLookUpDonorViewModel;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -46,7 +47,7 @@ public class MobileClinicDonorViewModelFactoryTests {
     Assert.assertEquals("Donor number", "D1", returnedViewModel.getDonorNumber());
     Assert.assertEquals("Donor first name", "Test", returnedViewModel.getFirstName());
     Assert.assertEquals("Donor last name", "DonorOne", returnedViewModel.getLastName());
-    Assert.assertEquals("Donor birth date", "1975-02-19T22:00:00.000Z", returnedViewModel.getBirthDate());
+    Assert.assertEquals("Donor birth date", CustomDateFormatter.getDateString(donor.getBirthDate()), returnedViewModel.getBirthDate());
     Assert.assertEquals("Donor gender", "female", returnedViewModel.getGender());
   }
   
