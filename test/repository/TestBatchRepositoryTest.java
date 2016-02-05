@@ -1,45 +1,28 @@
 package repository;
 
 import java.io.File;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.sql.DataSource;
-
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 
-import org.dbunit.database.DatabaseConfig;
-import org.dbunit.database.DatabaseDataSourceConnection;
-import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
-import org.dbunit.operation.DatabaseOperation;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
+
+import suites.DBUnitContextDependentTestSuite;
 
 /**
  * Test using DBUnit to test the TestBatchRepository
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@Transactional
-@WebAppConfiguration
-public class TestBatchRepositoryTest {
+public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
 
     @Autowired
     TestBatchRepository testBatchRepository;
@@ -47,41 +30,10 @@ public class TestBatchRepositoryTest {
     @Autowired
     DonationBatchRepository donationBatchRepository;
 
-    @Autowired
-    private DataSource dataSource;
-
-    private IDataSet getDataSet() throws Exception {
+    @Override
+    protected IDataSet getDataSet() throws Exception {
         File file = new File("test/dataset/TestBatchRepositoryDataset.xml");
         return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
-    }
-
-    private IDatabaseConnection getConnection() throws SQLException {
-        IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
-        DatabaseConfig config = connection.getConfig();
-        config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
-        return connection;
-    }
-
-    @Before
-    public void init() throws Exception {
-        IDatabaseConnection connection = getConnection();
-        try {
-            IDataSet dataSet = getDataSet();
-            DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
-        } finally {
-            connection.close();
-        }
-    }
-
-    @AfterTransaction
-    public void after() throws Exception {
-        IDatabaseConnection connection = getConnection();
-        try {
-            IDataSet dataSet = getDataSet();
-            DatabaseOperation.DELETE_ALL.execute(connection, dataSet);
-        } finally {
-            connection.close();
-        }
     }
 
     @Test

@@ -9,8 +9,8 @@ import java.util.Set;
 import model.user.Permission;
 import model.user.Role;
 
-import org.junit.Test;
 import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +20,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import repository.RoleRepository;
-import controller.RoleController;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "file:**/bsis-servlet.xml")
 @WebAppConfiguration
-
+@Transactional
 public class RoleControllerTest {
 	
 	@SuppressWarnings("unused")

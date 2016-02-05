@@ -5,21 +5,21 @@ import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+
 import java.util.Arrays;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+
 import model.component.Component;
 import model.component.ComponentStatus;
 import model.donation.Donation;
 import model.donor.Donor;
+
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import suites.ContextDependentTestSuite;
 
 public class ComponentRepositoryTests extends ContextDependentTestSuite {
-    
-    @PersistenceContext
-    private EntityManager entityManager;
+
     @Autowired
     private ComponentRepository componentRepository;
     
