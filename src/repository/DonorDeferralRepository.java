@@ -45,6 +45,19 @@ public class DonorDeferralRepository extends AbstractRepository<DonorDeferral> {
                 .getSingleResult()
                 .intValue();
     }
+    
+    public int countDonorDeferralsForDonorOnDate(Donor donor, Date date) {
+
+        return entityManager.createNamedQuery(
+                DonorDeferralNamedQueryConstants.NAME_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR,
+                Number.class)
+                .setParameter("donor", donor)
+                .setParameter("voided", false)
+                .setParameter("permanentDuration", DurationType.PERMANENT)
+                .setParameter("currentDate", date)
+                .getSingleResult()
+                .intValue();
+    }
 
     public List<DonorDeferral> findDonorDeferralsForDonorByDeferralReason(Donor donor, DeferralReason deferralReason) {
 

@@ -1,6 +1,7 @@
 package service;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestResult;
@@ -43,11 +44,15 @@ public class DonorDeferralStatusCalculator {
         }
 
         // Use the general config to determine whether or not the donor should be deferred
-        return generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.DEFER_DONORS_WITH_NEG_CONFIRMATORY_OUTCOMES);
+        return generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.DEFER_DONORS_WITH_NEG_REPEAT_OUTCOMES);
     }
     
     public boolean isDonorCurrentlyDeferred(Donor donor) {
         return donorDeferralRepository.countCurrentDonorDeferralsForDonor(donor) > 0;
+    }
+    
+    public boolean isDonorDeferredOnDate(Donor donor, Date date) {
+        return donorDeferralRepository.countDonorDeferralsForDonorOnDate(donor, date) > 0;
     }
 
 }

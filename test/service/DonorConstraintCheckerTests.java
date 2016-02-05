@@ -206,4 +206,116 @@ public class DonorConstraintCheckerTests {
         boolean isDonorDeferred = donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID);
         assertThat(isDonorDeferred, is(false));
     }
+    
+    @Test
+    public void testIsDonorEligibleToDonateTodayWithNonDeferredDonorWithRecentDonation_shouldReturnFalse() {
+        
+        Date previousDonationDate = new DateTime().minusDays(3).toDate();
+        Date mobileClinicDate = new Date();
+        
+        Donor donor = aDonor()
+                .withId(IRRELEVANT_DONOR_ID)
+                .withDonation(aDonation()
+                        .withDonationDate(previousDonationDate)
+                        .withPackType(aPackType()
+                                .withCountAsDonation(true)
+                                .withPeriodBetweenDonations(5)
+                                .build())
+                        .build())
+                .build();
+        
+        when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
+        when(donorDeferralStatusCalculator.isDonorDeferredOnDate(donor, mobileClinicDate)).thenReturn(false);
+        
+        boolean isEligible = donorConstraintChecker.isDonorEligibleToDonateOnDate(IRRELEVANT_DONOR_ID, mobileClinicDate);
+        
+        assertThat(isEligible, is(false));
+    }
+    
+    @Test
+    public void testIsDonorEligibleToDonateNextWeekWithNonDeferredDonorWithRecentDonation_shouldReturnTrue() {
+        
+        Date previousDonationDate = new DateTime().minusDays(3).toDate();
+        Date futureMobileClinicDate = new DateTime().plusDays(7).toDate();
+        
+        Donor donor = aDonor()
+                .withId(IRRELEVANT_DONOR_ID)
+                .withDonation(aDonation()
+                        .withDonationDate(previousDonationDate)
+                        .withPackType(aPackType()
+                                .withCountAsDonation(true)
+                                .withPeriodBetweenDonations(5)
+                                .build())
+                        .build())
+                .build();
+        
+        when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
+        when(donorDeferralStatusCalculator.isDonorDeferredOnDate(donor, futureMobileClinicDate)).thenReturn(false);
+        
+        boolean isEligible = donorConstraintChecker.isDonorEligibleToDonateOnDate(IRRELEVANT_DONOR_ID, futureMobileClinicDate);
+        
+        assertThat(isEligible, is(true));
+    }
+    
+    @Test
+    public void testIsDonorEligibleToDonateNextWeekWithDeferredDonorWithRecentDonation_shouldReturnFalse() {
+        
+        Date previousDonationDate = new DateTime().minusDays(3).toDate();
+        Date futureMobileClinicDate = new DateTime().plusDays(7).toDate();
+        
+        Donor donor = aDonor()
+                .withId(IRRELEVANT_DONOR_ID)
+                .withDonation(aDonation()
+                        .withDonationDate(previousDonationDate)
+                        .withPackType(aPackType()
+                                .withCountAsDonation(true)
+                                .withPeriodBetweenDonations(5)
+                                .build())
+                        .build())
+                .build();
+        
+        when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
+        when(donorDeferralStatusCalculator.isDonorDeferredOnDate(donor, futureMobileClinicDate)).thenReturn(true);
+        
+        boolean isEligible = donorConstraintChecker.isDonorEligibleToDonateOnDate(IRRELEVANT_DONOR_ID, futureMobileClinicDate);
+        
+        assertThat(isEligible, is(false));
+    }
+    
+    @Test
+    public void testIsDonorEligibleToDonateNextWeekWithNonDeferredDonorWithNoDonation_shouldReturnTrue() {
+        
+        Date futureMobileClinicDate = new DateTime().plusDays(7).toDate();
+        
+        Donor donor = aDonor()
+                .withId(IRRELEVANT_DONOR_ID)
+                .build();
+        
+        when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
+        when(donorDeferralStatusCalculator.isDonorDeferredOnDate(donor, futureMobileClinicDate)).thenReturn(false);
+        
+        boolean isEligible = donorConstraintChecker.isDonorEligibleToDonateOnDate(IRRELEVANT_DONOR_ID, futureMobileClinicDate);
+        
+        assertThat(isEligible, is(true));
+    }
+    
+    @Test
+    public void testIsDonorEligibleToDonateNextWeekWithNonDeferredDonorWithDonationNotCountedAsDonation_shouldReturnTrue() {
+        
+        Date futureMobileClinicDate = new DateTime().plusDays(7).toDate();
+
+        Donor donor = aDonor()
+                .withId(IRRELEVANT_DONOR_ID)
+                .withDonation(aDonation()
+                        .withPackType(aPackType().withCountAsDonation(false).build())
+                        .build())
+                .build();
+        
+        when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
+        when(donorDeferralStatusCalculator.isDonorDeferredOnDate(donor, futureMobileClinicDate)).thenReturn(false);
+        
+        boolean isEligible = donorConstraintChecker.isDonorEligibleToDonateOnDate(IRRELEVANT_DONOR_ID, futureMobileClinicDate);
+        
+        assertThat(isEligible, is(true));
+    }
 }
