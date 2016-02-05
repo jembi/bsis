@@ -11,9 +11,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DeferralReasonType;
@@ -30,8 +27,6 @@ public class DonorDeferralRepositoryTests extends ContextDependentTestSuite {
     
     @Autowired
     private DonorDeferralRepository donorDeferralRepository;
-    @PersistenceContext
-    private EntityManager entityManager;
     
     @Test
     public void testCountDonorDeferralsForDonor_shouldReturnCorrectCount() {
