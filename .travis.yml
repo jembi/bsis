@@ -6,6 +6,10 @@ branches:
     - master
     - develop
 
+before_script:
+  - echo $JAVA_OPTS
+  - ps aux
+
 before_install:
   - echo "USE mysql;\nUPDATE user SET password=PASSWORD('root') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
   - mysql -e 'create database bsis;'
