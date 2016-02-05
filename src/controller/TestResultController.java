@@ -109,8 +109,6 @@ public class TestResultController {
   public ResponseEntity<Map<String, Object>> findTestResultsOverviewForTestBatch(HttpServletRequest request,
 		@RequestParam(value = "testBatch", required = true) Long testBatchId) {
 	  
-		Map<String, Object> map = new HashMap<String, Object>();
-		
 		TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
 		List<DonationBatch> donationBatches = testBatch.getDonationBatches();
 		List<Long> donationBatchIds = new ArrayList<Long>();
@@ -126,6 +124,7 @@ public class TestResultController {
 	    Boolean basicBloodTypingComplete = true;
 	    Boolean basicTTIComplete = true;
 	    Boolean pendingBloodTypingMatchTests = false;
+	    boolean pendingBloodTypingConfirmations = false;
 	    
 	    for(BloodTestingRuleResult result : ruleResults){
 	    	if(!result.getBloodTypingStatus().equals(BloodTypingStatus.COMPLETE)){
@@ -140,17 +139,23 @@ public class TestResultController {
 	    	if(result.getPendingTTITestsIds().size() > 0){
 	    		pendingTTITests = true;
 	    	}
-	    	if(!result.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE) && (result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.NO_MATCH) ||
-	    	   result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS))	){
-	    		pendingBloodTypingMatchTests = true;
+	    	if(!result.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE)
+	    	    && (result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.NO_MATCH)
+	    	        || result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.MATCH))) {
+	    	  pendingBloodTypingMatchTests = true;
+	    	}
+	    	if (result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS)) {
+	    	  pendingBloodTypingConfirmations = true;
 	    	}
 	    }
 	
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("pendingBloodTypingTests", pendingBloodTypingTests);
 		map.put("pendingTTITests", pendingTTITests);
 		map.put("basicBloodTypingComplete", basicBloodTypingComplete);
 		map.put("basicTTIComplete", basicTTIComplete);
 		map.put("pendingBloodTypingMatchTests", pendingBloodTypingMatchTests);
+		map.put("pendingBloodTypingConfirmations", pendingBloodTypingConfirmations);
 	
 		return new ResponseEntity<>(map, HttpStatus.OK);
   }
