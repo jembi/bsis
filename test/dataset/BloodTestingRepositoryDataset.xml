@@ -361,6 +361,12 @@
 		packType_id="1" donationBatch_id="1" donationType_id="1" donor_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" venue_id="2" bleedStartTime="1970-01-01 14:53:37.0"
 		bleedEndTime="1970-01-01 14:53:37.0" ineligibleDonor="0" released="0" />
+	<Donation id="8" bloodAbo="" bloodRh="" donationDate="2015-04-05 00:00:00.0"
+		donationIdentificationNumber="127127" extraBloodTypeInformation=""
+		isDeleted="0" createdDate="2016-02-04 07:53:57.0" lastUpdated="2016-02-04 07:53:57.0"
+		packType_id="1" donationBatch_id="1" donationType_id="1" donor_id="2"
+		createdBy_id="1" lastUpdatedBy_id="1" venue_id="2" bleedStartTime="1970-01-01 14:53:37.0"
+		bleedEndTime="1970-01-01 14:53:37.0" ineligibleDonor="0" released="0" />
 
 	<BloodTestResult id="1" createdDate="2015-02-06 02:09:13.0"
 		lastUpdated="2015-02-06 02:09:13.0" notes="" result="NEG"
@@ -502,6 +508,22 @@
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="?"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="17" donation_id="6"
 		createdBy_id="1" lastUpdatedBy_id="1" />
+	<BloodTestResult id="37" createdDate="2016-02-05 09:17:06.0"
+		lastUpdated="2016-02-05 09:17:06.0" notes="" result="NEG"
+		testedOn="2016-02-05 09:17:06.0" bloodTest_id="17" donation_id="8"
+		createdBy_id="1" lastUpdatedBy_id="1" doubleEntryRequired="false"/>
+	<BloodTestResult id="38" createdDate="2016-02-05 09:17:06.0"
+		lastUpdated="2016-02-05 09:17:06.0" notes="" result="NEG"
+		testedOn="2016-02-05 09:17:06.0" bloodTest_id="20" donation_id="8"
+		createdBy_id="1" lastUpdatedBy_id="1" doubleEntryRequired="false"/>
+	<BloodTestResult id="39" createdDate="2016-02-05 09:17:06.0"
+		lastUpdated="2016-02-05 09:17:06.0" notes="" result="NEG"
+		testedOn="2016-02-05 09:17:06.0" bloodTest_id="23" donation_id="8"
+		createdBy_id="1" lastUpdatedBy_id="1" doubleEntryRequired="false"/>
+	<BloodTestResult id="40" createdDate="2016-02-05 09:17:06.0"
+		lastUpdated="2016-02-05 09:17:06.0" notes="" result="NEG"
+		testedOn="2016-02-05 09:17:06.0" bloodTest_id="26" donation_id="8"
+		createdBy_id="1" lastUpdatedBy_id="1" doubleEntryRequired="false"/>
 
 	<Component id="1" createdOn="2015-02-02 10:26:36.0" expiresOn="2015-03-09 10:26:36.0"
 		isDeleted="false" createdDate="2015-02-02 03:42:04.0" lastUpdated="2015-02-02 03:42:32.0"
