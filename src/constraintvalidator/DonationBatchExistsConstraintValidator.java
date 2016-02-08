@@ -19,7 +19,7 @@ public class DonationBatchExistsConstraintValidator implements
 
   public DonationBatchExistsConstraintValidator() {
   }
-  
+
   @Override
   public void initialize(DonationBatchExists constraint) {
   }
@@ -31,25 +31,24 @@ public class DonationBatchExistsConstraintValidator implements
 
     try {
 
-       DonationBatch donationBatch = null;
-       if (target.getId() != null) {
-         donationBatch = donationBatchRepository.findDonationBatchById(target.getId());
-       }
-       else if (target.getBatchNumber() != null) {
+      DonationBatch donationBatch = null;
+      if (target.getId() != null) {
+        donationBatch = donationBatchRepository.findDonationBatchById(target.getId());
+      } else if (target.getBatchNumber() != null) {
 
-         if (target.getBatchNumber().isEmpty())
-           return true;
+        if (target.getBatchNumber().isEmpty())
+          return true;
 
-         donationBatch = 
-           donationBatchRepository.findDonationBatchByBatchNumber(target.getBatchNumber());
-       }
-       if (donationBatch != null) {
-         return true;
-       }
-     } catch (Exception e) {
-        e.printStackTrace();
-     }
-     return false;
+        donationBatch =
+            donationBatchRepository.findDonationBatchByBatchNumber(target.getBatchNumber());
+      }
+      if (donationBatch != null) {
+        return true;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return false;
   }
 
   public void setDonorRepository(DonationBatchRepository donationBatchRepository) {

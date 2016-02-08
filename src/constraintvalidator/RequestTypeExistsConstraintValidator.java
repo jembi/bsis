@@ -19,23 +19,23 @@ public class RequestTypeExistsConstraintValidator implements
 
   public RequestTypeExistsConstraintValidator() {
   }
-  
+
   @Override
   public void initialize(RequestTypeExists constraint) {
   }
 
   public boolean isValid(RequestType target, ConstraintValidatorContext context) {
 
-   if (target == null)
-     return true;
-
-   try {
-    if (requestTypeRepository.getRequestTypeById(target.getId()) != null)
+    if (target == null)
       return true;
-   } catch (Exception e) {
-    e.printStackTrace();
-   }
-   return false;
+
+    try {
+      if (requestTypeRepository.getRequestTypeById(target.getId()) != null)
+        return true;
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return false;
   }
 
   public void setRequestTypeRepository(RequestTypeRepository requestTypeRepository) {

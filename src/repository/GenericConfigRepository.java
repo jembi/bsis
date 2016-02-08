@@ -21,7 +21,7 @@ public class GenericConfigRepository {
 
   @PersistenceContext
   private EntityManager em;
-  
+
   public Map<String, String> getConfigProperties(List<String> propertyOwners) {
     Map<String, String> configProperties = new HashMap<String, String>();
     String queryStr = "SELECT c FROM GenericConfig c WHERE c.propertyOwner IN :propertyOwners";

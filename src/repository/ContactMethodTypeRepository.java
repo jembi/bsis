@@ -17,16 +17,16 @@ public class ContactMethodTypeRepository {
 
   @PersistenceContext
   EntityManager em;
-  
+
   public List<ContactMethodType> getAllContactMethodTypes() {
     TypedQuery<ContactMethodType> query;
     query = em.createQuery("SELECT c from ContactMethodType c where c.isDeleted=:isDeleted", ContactMethodType.class);
     query.setParameter("isDeleted", false);
     return query.getResultList();
   }
-  
-  public void saveContactMethod(ContactMethodType contactMethodType){
-	  em.persist(contactMethodType);
-	    em.flush();
+
+  public void saveContactMethod(ContactMethodType contactMethodType) {
+    em.persist(contactMethodType);
+    em.flush();
   }
 }

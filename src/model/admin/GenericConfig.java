@@ -7,16 +7,16 @@ import model.BaseEntity;
 
 @Entity
 public class GenericConfig extends BaseEntity {
-  
+
   private static final long serialVersionUID = 1L;
 
-  @Column(length=80)
+  @Column(length = 80)
   private String propertyName;
 
-  @Column(length=80)
+  @Column(length = 80)
   private String propertyValue;
 
-  @Column(length=30)
+  @Column(length = 30)
   private String propertyOwner;
 
   public String getPropertyName() {

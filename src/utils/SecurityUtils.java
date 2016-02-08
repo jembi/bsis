@@ -13,7 +13,7 @@ public class SecurityUtils {
 
   /**
    * Find the currently authenticated user
-   * 
+   *
    * @return User that is logged in, null if no user can be found
    */
   public static User getCurrentUser() {

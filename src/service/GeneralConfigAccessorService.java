@@ -11,50 +11,51 @@ import repository.GeneralConfigRepository;
 
 @Service
 public class GeneralConfigAccessorService {
-    
-    @Autowired
-    private GeneralConfigRepository generalConfigRepository;
-    
-    public void setGeneralConfigRepository(GeneralConfigRepository generalConfigRepository) {
-        this.generalConfigRepository = generalConfigRepository;
+
+  @Autowired
+  private GeneralConfigRepository generalConfigRepository;
+
+  public void setGeneralConfigRepository(GeneralConfigRepository generalConfigRepository) {
+    this.generalConfigRepository = generalConfigRepository;
+  }
+
+  public boolean getBooleanValue(String name) {
+
+    GeneralConfig generalConfig = getGeneralConfigOfType(name, EnumDataType.BOOLEAN);
+    return Boolean.toString(true).equalsIgnoreCase(generalConfig.getValue());
+  }
+
+  public int getIntValue(String name) {
+
+    GeneralConfig generalConfig = getGeneralConfigOfType(name, EnumDataType.INTEGER);
+    return Integer.parseInt(generalConfig.getValue());
+  }
+
+  private GeneralConfig getGeneralConfigOfType(String name, EnumDataType enumDataType) {
+
+    GeneralConfig generalConfig = generalConfigRepository.getGeneralConfigByName(name);
+
+    if (generalConfig == null) {
+      throw new IllegalArgumentException("General config \"" + name + "\" not found.");
     }
 
-    public boolean getBooleanValue(String name) {
-        
-        GeneralConfig generalConfig = getGeneralConfigOfType(name, EnumDataType.BOOLEAN);
-        return Boolean.toString(true).equalsIgnoreCase(generalConfig.getValue());
+    if (getEnumDataType(generalConfig.getDataType()) != enumDataType) {
+      throw new IllegalArgumentException("General config \"" + name + "\" is not \"" + enumDataType + "\" type.");
     }
-    
-    public int getIntValue(String name) {
-      
-        GeneralConfig generalConfig = getGeneralConfigOfType(name, EnumDataType.INTEGER);
-        return Integer.parseInt(generalConfig.getValue());
-    }
-    
-    private GeneralConfig getGeneralConfigOfType(String name, EnumDataType enumDataType) {
 
-        GeneralConfig generalConfig = generalConfigRepository.getGeneralConfigByName(name);
-        
-        if (generalConfig == null) {
-            throw new IllegalArgumentException("General config \"" + name + "\" not found.");
-        }
+    return generalConfig;
+  }
 
-        if (getEnumDataType(generalConfig.getDataType()) != enumDataType) {
-            throw new IllegalArgumentException("General config \"" + name + "\" is not \"" + enumDataType + "\" type.");
-        }
-        
-        return generalConfig;
-    }
-    
-    private EnumDataType getEnumDataType(DataType dataType) {
-        return EnumDataType.valueOf(dataType.getDatatype().toUpperCase());
-    }
+  private EnumDataType getEnumDataType(DataType dataType) {
+    return EnumDataType.valueOf(dataType.getDatatype().toUpperCase());
+  }
 
   /**
    * Retrieves a setting from General Config
-   * 
+   *
    * @param generalConfigName String name of the property
-   * @return String value of the general config property, or empty string if property cannot be found
+   * @return String value of the general config property, or empty string if property cannot be
+   * found
    */
   public String getGeneralConfigValueByName(String generalConfigName) {
     GeneralConfig generalConfig = generalConfigRepository.getGeneralConfigByName(generalConfigName);

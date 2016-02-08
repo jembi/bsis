@@ -1,6 +1,7 @@
 package controller;
 
 import static org.mockito.Mockito.when;
+
 import helpers.builders.LocationBuilder;
 import helpers.builders.MobileClinicDonorBuilder;
 
@@ -84,7 +85,7 @@ public class MobileClinicControllerTests {
     List<MobileClinicDonor> clinicDonors = new ArrayList<>();
     clinicDonors.add(donor1);
     clinicDonors.add(donor2);
-    
+
     List<MobileClinicLookUpDonorViewModel> clinicDonorsViewModels = new ArrayList<>();
     clinicDonorsViewModels.add(new MobileClinicLookUpDonorViewModel(donor1));
     clinicDonorsViewModels.add(new MobileClinicLookUpDonorViewModel(donor2));

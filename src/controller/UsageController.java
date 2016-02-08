@@ -44,19 +44,19 @@ public class UsageController {
 
   @Autowired
   private ComponentRepository componentRepository;
-  
+
   @Autowired
   private RequestRepository requestRepository;
 
   @Autowired
   private FormFieldAccessorService formFieldAccessorService;
-  
+
   @Autowired
   UsageBackingFormValidator usageBackingFormValidator;
 
   public UsageController() {
   }
-  
+
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(usageBackingFormValidator);
@@ -66,13 +66,13 @@ public class UsageController {
     String reqUrl = req.getRequestURL().toString();
     String queryString = req.getQueryString();   // d=789
     if (queryString != null) {
-        reqUrl += "?"+queryString;
+      reqUrl += "?" + queryString;
     }
     return reqUrl;
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
+  @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
   public Map<String, Object> addUsageFormGenerator(HttpServletRequest request) {
 
     ComponentUsageBackingForm form = new ComponentUsageBackingForm();
@@ -90,34 +90,34 @@ public class UsageController {
     m.put("componentTypes", componentTypeRepository.getAllComponentTypes());
   }
 
-  @RequestMapping( method = RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-    public ResponseEntity<Map<String, Object>> addUsage(
-            @Valid @RequestBody ComponentUsageBackingForm form) {
+  @RequestMapping(method = RequestMethod.POST)
+  @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
+  public ResponseEntity<Map<String, Object>> addUsage(
+      @Valid @RequestBody ComponentUsageBackingForm form) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<String, Object>();
 
-        addEditSelectorOptions(map);
-        Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("usage");
-        map.put("usageFields", formFields);
+    addEditSelectorOptions(map);
+    Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("usage");
+    map.put("usageFields", formFields);
 
-        ComponentUsage savedUsage = null;
-        ComponentUsage componentUsage = form.getUsage();
-        componentUsage.setIsDeleted(false);
-        savedUsage = usageRepository.addUsage(componentUsage);
-        map.put("hasErrors", false);
-        form = new ComponentUsageBackingForm();
+    ComponentUsage savedUsage = null;
+    ComponentUsage componentUsage = form.getUsage();
+    componentUsage.setIsDeleted(false);
+    savedUsage = usageRepository.addUsage(componentUsage);
+    map.put("hasErrors", false);
+    form = new ComponentUsageBackingForm();
 
-        map.put("usageId", savedUsage.getId());
-        map.put("usage",  new ComponentUsageViewModel(savedUsage));
-        map.put("addAnotherUsageUrl", "addUsageFormGenerator.html");
+    map.put("usageId", savedUsage.getId());
+    map.put("usage", new ComponentUsageViewModel(savedUsage));
+    map.put("addAnotherUsageUrl", "addUsageFormGenerator.html");
 
-        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
 
-  @RequestMapping(value="/find/components/{requestNumber}", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.ISSUE_COMPONENT+"')")
-  public  ResponseEntity<Map<String, Object>> findIssuedComponentsForRequest(
+  @RequestMapping(value = "/find/components/{requestNumber}", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
+  public ResponseEntity<Map<String, Object>> findIssuedComponentsForRequest(
       @PathVariable String requestNumber) {
     Map<String, Object> map = new HashMap<String, Object>();
     Request req = requestRepository.findRequest(requestNumber);
@@ -127,31 +127,31 @@ public class UsageController {
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 
-    @RequestMapping(value = "/forcomponent", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
-    public ResponseEntity<Map<String, Object>> addUsageForComponent(
-            @Valid @RequestBody ComponentUsageBackingForm form) {
+  @RequestMapping(value = "/forcomponent", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
+  public ResponseEntity<Map<String, Object>> addUsageForComponent(
+      @Valid @RequestBody ComponentUsageBackingForm form) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        boolean success = false;
+    Map<String, Object> map = new HashMap<String, Object>();
+    boolean success = false;
 
-        addEditSelectorOptions(map);
-        Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("usage");
-        map.put("usageFields", formFields);
+    addEditSelectorOptions(map);
+    Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("usage");
+    map.put("usageFields", formFields);
 
-        ComponentUsage savedUsage = null;
-        ComponentUsage componentUsage = form.getUsage();
-        componentUsage.setIsDeleted(false);
-        savedUsage = usageRepository.addUsage(componentUsage);
-        map.put("hasErrors", false);
-        success = true;
-        form = new ComponentUsageBackingForm();
+    ComponentUsage savedUsage = null;
+    ComponentUsage componentUsage = form.getUsage();
+    componentUsage.setIsDeleted(false);
+    savedUsage = usageRepository.addUsage(componentUsage);
+    map.put("hasErrors", false);
+    success = true;
+    form = new ComponentUsageBackingForm();
 
-        map.put("usageId", savedUsage.getId());
-        map.put("usage", new ComponentUsageViewModel(savedUsage));
-      
-        map.put("success", success);
-        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
+    map.put("usageId", savedUsage.getId());
+    map.put("usage", new ComponentUsageViewModel(savedUsage));
+
+    map.put("success", success);
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
 
 }

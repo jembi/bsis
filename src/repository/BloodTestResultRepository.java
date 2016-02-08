@@ -9,18 +9,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @Repository
 public class BloodTestResultRepository {
-    
-    @PersistenceContext
-    private EntityManager entityManager;
-    
-    // TODO: Test
-    public int countBloodTestResultsForDonation(long donationId) {
-        return entityManager.createNamedQuery(
-                BloodTestResultNamedQueryConstants.NAME_COUNT_BLOOD_TEST_RESULTS_FOR_DONATION,
-                Number.class)
-                .setParameter("donationId", donationId)
-                .getSingleResult()
-                .intValue();
-    }
+
+  @PersistenceContext
+  private EntityManager entityManager;
+
+  // TODO: Test
+  public int countBloodTestResultsForDonation(long donationId) {
+    return entityManager.createNamedQuery(
+        BloodTestResultNamedQueryConstants.NAME_COUNT_BLOOD_TEST_RESULTS_FOR_DONATION,
+        Number.class)
+        .setParameter("donationId", donationId)
+        .getSingleResult()
+        .intValue();
+  }
 
 }

@@ -11,15 +11,15 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 public class PackTypeSerializer extends JsonSerializer<PackType> {
 
-    @Override
-    public void serialize(PackType packType, JsonGenerator jsonGenerator, SerializerProvider provider)
-            throws IOException, JsonProcessingException {
+  @Override
+  public void serialize(PackType packType, JsonGenerator jsonGenerator, SerializerProvider provider)
+      throws IOException, JsonProcessingException {
 
-        if (packType == null || packType.getId() == null) {
-          jsonGenerator.writeNull();
-          return;
-        }
-
-        jsonGenerator.writeString(packType.getId().toString());
+    if (packType == null || packType.getId() == null) {
+      jsonGenerator.writeNull();
+      return;
     }
+
+    jsonGenerator.writeString(packType.getId().toString());
+  }
 }

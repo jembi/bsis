@@ -37,7 +37,7 @@ public class CompatibilityTest extends BaseModificationTrackerEntity {
   private Component testedComponent;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Index(name="compatibilityTest_crossmatchTestDate_index")
+  @Index(name = "compatibilityTest_crossmatchTestDate_index")
   private Date compatibililityTestDate;
 
   /**
@@ -46,7 +46,7 @@ public class CompatibilityTest extends BaseModificationTrackerEntity {
   private Boolean transfusedBefore;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=15)
+  @Column(length = 15)
   private CompatibilityResult compatibilityResult;
 
   @ManyToOne

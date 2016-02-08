@@ -1,15 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<DeferralReason id="1" isDeleted="false" reason="High risk behaviour" defaultDuration="30" durationType="TEMPORARY"
-	       type="NORMAL" />
-	<DeferralReason id="2" isDeleted="false" reason="Low weight" defaultDuration="30" durationType="TEMPORARY"
-	       type="NORMAL" />
-	<DeferralReason id="3" isDeleted="false" reason="Low haemoglobin" defaultDuration="30" durationType="TEMPORARY"
-	       type="NORMAL" />
-	<DeferralReason id="4" isDeleted="false" reason="Other reasons" defaultDuration="30" durationType="TEMPORARY"
-	       type="NORMAL" />
-	<DeferralReason id="5" isDeleted="false" reason="Other medical conditions" defaultDuration="30"
-	       durationType="TEMPORARY" type="NORMAL" />
-	<DeferralReason id="6" isDeleted="false" reason="Travel history" defaultDuration="30" durationType="TEMPORARY"
-	       type="NORMAL" />
+    <DeferralReason id="1" isDeleted="false" reason="High risk behaviour" defaultDuration="30"
+                    durationType="TEMPORARY"
+                    type="NORMAL"/>
+    <DeferralReason id="2" isDeleted="false" reason="Low weight" defaultDuration="30"
+                    durationType="TEMPORARY"
+                    type="NORMAL"/>
+    <DeferralReason id="3" isDeleted="false" reason="Low haemoglobin" defaultDuration="30"
+                    durationType="TEMPORARY"
+                    type="NORMAL"/>
+    <DeferralReason id="4" isDeleted="false" reason="Other reasons" defaultDuration="30"
+                    durationType="TEMPORARY"
+                    type="NORMAL"/>
+    <DeferralReason id="5" isDeleted="false" reason="Other medical conditions" defaultDuration="30"
+                    durationType="TEMPORARY" type="NORMAL"/>
+    <DeferralReason id="6" isDeleted="false" reason="Travel history" defaultDuration="30"
+                    durationType="TEMPORARY"
+                    type="NORMAL"/>
 </dataset>

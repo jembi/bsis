@@ -33,17 +33,17 @@ public class ComponentStatusChangeReasonRepository {
       ComponentStatusChangeReasonCategory category) {
     TypedQuery<ComponentStatusChangeReason> query;
     query = em.createQuery("SELECT p from ComponentStatusChangeReason p where " +
-        "p.category=:category AND p.isDeleted=:isDeleted",
+            "p.category=:category AND p.isDeleted=:isDeleted",
         ComponentStatusChangeReason.class);
     query.setParameter("isDeleted", false);
     query.setParameter("category", category);
     return query.getResultList();
   }
-  
+
   public ComponentStatusChangeReason getComponentStatusChangeReasonById(Long id) {
     TypedQuery<ComponentStatusChangeReason> query;
     query = em.createQuery("SELECT p from ComponentStatusChangeReason p " +
-            "where p.id=:id AND p.isDeleted=:isDeleted", ComponentStatusChangeReason.class);
+        "where p.id=:id AND p.isDeleted=:isDeleted", ComponentStatusChangeReason.class);
     query.setParameter("isDeleted", false);
     query.setParameter("id", id);
     if (query.getResultList().size() == 0)

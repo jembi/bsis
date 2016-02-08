@@ -19,16 +19,16 @@ public class MachineReading extends BaseEntity {
   @ManyToOne
   private WellType wellType;
 
-  @Column(precision=7, scale=3)
+  @Column(precision = 7, scale = 3)
   private BigDecimal machineReading;
 
-  @OneToOne(mappedBy="machineReading")
+  @OneToOne(mappedBy = "machineReading")
   private BloodTestResult bloodTestResult;
 
-  @Column(columnDefinition="SMALLINT")
+  @Column(columnDefinition = "SMALLINT")
   private Integer rowNumber;
 
-  @Column(columnDefinition="SMALLINT")
+  @Column(columnDefinition = "SMALLINT")
   private Integer columnNumber;
 
   @ManyToOne

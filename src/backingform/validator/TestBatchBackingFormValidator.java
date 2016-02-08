@@ -16,27 +16,27 @@ import backingform.TestBatchBackingForm;
 @Component
 public class TestBatchBackingFormValidator extends BaseValidator<TestBatchBackingForm> {
 
-	@Autowired
-    private DonationBatchRepository donationBatchRepository;
+  @Autowired
+  private DonationBatchRepository donationBatchRepository;
 
-    @Override
-    public void validateForm(TestBatchBackingForm form, Errors errors) {
-        TestBatch testBatch = form.getTestBatch();
-        List<Long> donationBatchIds = form.getDonationBatchIds();
-        List<DonationBatch> donationBatches = new ArrayList<DonationBatch>();
-        if (donationBatchIds != null && !donationBatchIds.isEmpty()) {
-            for (Long donationBatchId : donationBatchIds) {
-                DonationBatch db = donationBatchRepository.findDonationBatchById(donationBatchId);
-                if (db.getTestBatch() != null) {
-                	if (testBatch.getId() == null || !testBatch.getId().equals(db.getTestBatch().getId())) {
-                		errors.rejectValue("donationBatchIds", "", "Donation batch at " + db.getVenue().getName() + " from " + db.getCreatedDate() + " is already in a test batch.");
-                	}
-                }
-                donationBatches.add(db);
-            }
+  @Override
+  public void validateForm(TestBatchBackingForm form, Errors errors) {
+    TestBatch testBatch = form.getTestBatch();
+    List<Long> donationBatchIds = form.getDonationBatchIds();
+    List<DonationBatch> donationBatches = new ArrayList<DonationBatch>();
+    if (donationBatchIds != null && !donationBatchIds.isEmpty()) {
+      for (Long donationBatchId : donationBatchIds) {
+        DonationBatch db = donationBatchRepository.findDonationBatchById(donationBatchId);
+        if (db.getTestBatch() != null) {
+          if (testBatch.getId() == null || !testBatch.getId().equals(db.getTestBatch().getId())) {
+            errors.rejectValue("donationBatchIds", "", "Donation batch at " + db.getVenue().getName() + " from " + db.getCreatedDate() + " is already in a test batch.");
+          }
         }
-        testBatch.setDonationBatches(donationBatches);
+        donationBatches.add(db);
+      }
     }
+    testBatch.setDonationBatches(donationBatches);
+  }
 
   @Override
   public String getFormName() {

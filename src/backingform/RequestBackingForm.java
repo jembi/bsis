@@ -36,7 +36,7 @@ public class RequestBackingForm {
   public Long getId() {
     return request.getId();
   }
-  
+
   public void setId(Long id) {
     request.setId(id);
   }
@@ -116,25 +116,23 @@ public class RequestBackingForm {
   }
 
   public void setRequestType(String requestTypeId) {
-	if (StringUtils.isBlank(requestTypeId)) {
-		request.setRequestType(null);
-	}
-	else {
-		RequestType rt = new RequestType();
-		rt.setId(Long.parseLong(requestTypeId));
-		request.setRequestType(rt);
-	}
+    if (StringUtils.isBlank(requestTypeId)) {
+      request.setRequestType(null);
+    } else {
+      RequestType rt = new RequestType();
+      rt.setId(Long.parseLong(requestTypeId));
+      request.setRequestType(rt);
+    }
   }
 
   public void setComponentType(String componentTypeId) {
-	if (StringUtils.isBlank(componentTypeId)) {
-		request.setComponentType(null);
-	}
-	else {
-		ComponentType pt = new ComponentType();
-		pt.setId(Long.parseLong(componentTypeId));
-		request.setComponentType(pt);
-	}
+    if (StringUtils.isBlank(componentTypeId)) {
+      request.setComponentType(null);
+    } else {
+      ComponentType pt = new ComponentType();
+      pt.setId(Long.parseLong(componentTypeId));
+      request.setComponentType(pt);
+    }
   }
 
   public void setIsDeleted(Boolean isDeleted) {
@@ -150,14 +148,13 @@ public class RequestBackingForm {
   }
 
   public void setRequestSite(String requestSite) {
-	if (requestSite == null) {
-		request.setRequestSite(null);
-	}
-	else {
-		Location l = new Location();
-		l.setId(Long.parseLong(requestSite));
-		request.setRequestSite(l);
-	}
+    if (requestSite == null) {
+      request.setRequestSite(null);
+    } else {
+      Location l = new Location();
+      l.setId(Long.parseLong(requestSite));
+      request.setRequestSite(l);
+    }
   }
 
   @JsonIgnore

@@ -58,7 +58,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 public class AdminController {
-	
+
   private static final Logger LOGGER = Logger.getLogger(AdminController.class);
 
   @Autowired
@@ -87,25 +87,25 @@ public class AdminController {
 
   @Autowired
   GenericConfigRepository genericConfigRepository;
-  
+
   @Autowired
   ServletContext servletContext;
 
   @Autowired
   LabSetupRepository labSetupRepository;
-  
+
   public static String getUrl(HttpServletRequest req) {
     String reqUrl = req.getRequestURL().toString();
     String queryString = req.getQueryString();   // d=789
     if (queryString != null) {
-        reqUrl += "?"+queryString;
+      reqUrl += "?" + queryString;
     }
     return reqUrl;
   }
 
   @RequestMapping(value = "/getform", method = RequestMethod.GET)
-  public  Map<String, Object> getFormToConfigure(HttpServletRequest request,
-          @RequestParam(value="formToConfigure", required=false) String formToConfigure) {
+  public Map<String, Object> getFormToConfigure(HttpServletRequest request,
+                                                @RequestParam(value = "formToConfigure", required = false) String formToConfigure) {
     Map<String, Object> map = new HashMap<String, Object>();
 
     map.put("formName", formToConfigure);
@@ -113,10 +113,10 @@ public class AdminController {
     return map;
   }
 
-  @RequestMapping(value="/formfieldchange", method=RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_FORMS+"')")
-  public  Map<String, ? extends Object>
-    configureFormFieldChange(@RequestParam Map<String, String> params) {
+  @RequestMapping(value = "/formfieldchange", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_FORMS + "')")
+  public Map<String, ? extends Object>
+  configureFormFieldChange(@RequestParam Map<String, String> params) {
 
     boolean success = true;
     String errMsg = "";
@@ -163,11 +163,11 @@ public class AdminController {
         errMsg = "Internal Server Error";
       }
     } catch (Exception ex) {
-    	LOGGER.debug(ex.getMessage() + ex.getStackTrace());
+      LOGGER.debug(ex.getMessage() + ex.getStackTrace());
       success = false;
       errMsg = "Internal Server Error";
     }
-    
+
     Map<String, Object> m = new HashMap<String, Object>();
     m.put("success", success);
     m.put("errMsg", errMsg);
@@ -175,17 +175,17 @@ public class AdminController {
   }
 
   @RequestMapping(value = "/forms", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_FORMS+"')")
-  public  Map<String, Object> configureForms() {
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_FORMS + "')")
+  public Map<String, Object> configureForms() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("model", map);
     return map;
   }
 
-  @RequestMapping(value="/createsampledata", method=RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DATA_SETUP+"')")
-  public  Map<String, ? extends Object> createSampleData(
-                @RequestParam Map<String, String> params) {
+  @RequestMapping(value = "/createsampledata", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DATA_SETUP + "')")
+  public Map<String, ? extends Object> createSampleData(
+      @RequestParam Map<String, String> params) {
 
     boolean success = true;
     String errMsg = "";
@@ -199,9 +199,8 @@ public class AdminController {
       createDataController.createDonationsWithTestResults(numDonations);
       createDataController.createComponents(numComponents);
       createDataController.createRequests(numRequests);
-    }
-    catch (Exception ex) {
-    	LOGGER.debug(ex.getMessage() + ex.getStackTrace());
+    } catch (Exception ex) {
+      LOGGER.debug(ex.getMessage() + ex.getStackTrace());
       success = false;
       errMsg = "Internal Server Error";
     }
@@ -211,18 +210,18 @@ public class AdminController {
     return m;
   }
 
-  @RequestMapping(value="/tipsform", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_TIPS+"')")
-  public  Map<String, Object> configureTipsFormGenerator() {
+  @RequestMapping(value = "/tipsform", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_TIPS + "')")
+  public Map<String, Object> configureTipsFormGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
     addAllTipsToModel(map);
     return map;
   }
 
-  @RequestMapping(value="/labsetuppage", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_LAB_SETUP+"')")
-  public  Map<String, Object> labSetupFormGenerator() {
+  @RequestMapping(value = "/labsetuppage", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_LAB_SETUP + "')")
+  public Map<String, Object> labSetupFormGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("labsetup", genericConfigRepository.getConfigProperties("labsetup"));
@@ -230,10 +229,10 @@ public class AdminController {
   }
 
   @SuppressWarnings("unchecked")
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_LAB_SETUP+"')")
-  @RequestMapping(value="/updateLabSetup", method=RequestMethod.POST)
-  public  Map<String, Object> updateLabSetup(HttpServletRequest request,
-      @RequestParam(value="labSetupParams") String params) {
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_LAB_SETUP + "')")
+  @RequestMapping(value = "/updateLabSetup", method = RequestMethod.POST)
+  public Map<String, Object> updateLabSetup(HttpServletRequest request,
+                                            @RequestParam(value = "labSetupParams") String params) {
 
     ObjectMapper mapper = new ObjectMapper();
     Map<String, String> paramsMap = null;
@@ -255,17 +254,17 @@ public class AdminController {
     return m;
   }
 
-  @RequestMapping(value="/crossmatchtypes", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_CROSS_MATCH_TYPES+"')")
-  public  Map<String, Object> configureCrossmatchTypesFormGenerator() {
+  @RequestMapping(value = "/crossmatchtypes", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_CROSS_MATCH_TYPES + "')")
+  public Map<String, Object> configureCrossmatchTypesFormGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
     addAllCrossmatchTypesToModel(map);
     return map;
   }
 
-  @RequestMapping(value="/backupdata", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BACKUP_DATA+"')")
+  @RequestMapping(value = "/backupdata", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BACKUP_DATA + "')")
   public void backupData(
       HttpServletRequest request, HttpServletResponse response) {
 
@@ -290,8 +289,8 @@ public class AdminController {
       LOGGER.debug(dbname);
 
       ProcessBuilder pb = new ProcessBuilder(mysqldumpPath,
-                    "--single-transaction",
-                    "-u", username, "-p" + password, dbname);
+          "--single-transaction",
+          "-u", username, "-p" + password, dbname);
 
       pb.redirectErrorStream(true); // equivalent of 2>&1
       Process p = pb.start();
@@ -304,7 +303,7 @@ public class AdminController {
 
       ZipOutputStream zipOut = new ZipOutputStream(response.getOutputStream());
       zipOut.putNextEntry(new ZipEntry(fileName + ".sql"));
-      
+
       IOUtils.copy(buf, zipOut);
 
       zipOut.finish();
@@ -317,9 +316,6 @@ public class AdminController {
       LOGGER.debug(e.getMessage() + e.getStackTrace());
     }
   }
-  
-
-
 
 
   private void addAllCrossmatchTypesToModel(Map<String, Object> m) {
@@ -331,17 +327,17 @@ public class AdminController {
   }
 
   @RequestMapping(value = "/tips", method = RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_TIPS+"')") 
-  public  Map<String, Object> configureTips(
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_TIPS + "')")
+  public Map<String, Object> configureTips(
       HttpServletRequest request, HttpServletResponse response,
-      @RequestParam(value="params") String paramsAsJson) {
+      @RequestParam(value = "params") String paramsAsJson) {
     Map<String, Object> map = new HashMap<String, Object>();
     LOGGER.debug(paramsAsJson);
     List<Tips> allTips = new ArrayList<Tips>();
     try {
       @SuppressWarnings("unchecked")
       Map<String, Object> params = new ObjectMapper().readValue(paramsAsJson, HashMap.class);
-      
+
       for (String tipsKey : params.keySet()) {
         String tipsContent = (String) params.get(tipsKey);
         Tips tips = new Tips();
@@ -352,19 +348,19 @@ public class AdminController {
       tipsRepository.saveAllTips(allTips);
       LOGGER.debug(params);
     } catch (Exception ex) {
-    	LOGGER.debug(ex.getMessage() + ex.getStackTrace());
+      LOGGER.debug(ex.getMessage() + ex.getStackTrace());
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
 
     addAllTipsToModel(map);
     return map;
-  } 
+  }
 
   @RequestMapping(value = "/crossmatchtypes", method = RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_CROSS_MATCH_TYPES+"')")
-  public  Map<String, Object> configureCrossmatchTypes(
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_CROSS_MATCH_TYPES + "')")
+  public Map<String, Object> configureCrossmatchTypes(
       HttpServletRequest request, HttpServletResponse response,
-      @RequestParam(value="params") String paramsAsJson) {
+      @RequestParam(value = "params") String paramsAsJson) {
     Map<String, Object> map = new HashMap<String, Object>();
     LOGGER.debug(paramsAsJson);
     List<CrossmatchType> allCrossmatchTypes = new ArrayList<CrossmatchType>();
@@ -395,34 +391,34 @@ public class AdminController {
     List<InetAddress> listOfServerAddresses = new ArrayList<InetAddress>();
     Enumeration<NetworkInterface> list;
     try {
-        list = NetworkInterface.getNetworkInterfaces();
+      list = NetworkInterface.getNetworkInterfaces();
 
-        while(list.hasMoreElements()) {
-            NetworkInterface iface = (NetworkInterface) list.nextElement();
+      while (list.hasMoreElements()) {
+        NetworkInterface iface = (NetworkInterface) list.nextElement();
 
-            if(iface == null) continue;
+        if (iface == null) continue;
 
-            if(!iface.isLoopback() && iface.isUp()) {
-                LOGGER.debug("Found non-loopback, up interface:" + iface);
+        if (!iface.isLoopback() && iface.isUp()) {
+          LOGGER.debug("Found non-loopback, up interface:" + iface);
 
-                Iterator<InterfaceAddress> it = iface.getInterfaceAddresses().iterator();
-                while (it.hasNext()) {
-                    InterfaceAddress address = (InterfaceAddress) it.next();
+          Iterator<InterfaceAddress> it = iface.getInterfaceAddresses().iterator();
+          while (it.hasNext()) {
+            InterfaceAddress address = (InterfaceAddress) it.next();
 
-                    LOGGER.debug("Found address: " + address);
+            LOGGER.debug("Found address: " + address);
 
-                    if(address == null) continue;
-                    if (InetAddressUtils.isIPv4Address(address.getAddress().getHostAddress()))
-                        listOfServerAddresses.add(address.getAddress());
-                }
-            }
+            if (address == null) continue;
+            if (InetAddressUtils.isIPv4Address(address.getAddress().getHostAddress()))
+              listOfServerAddresses.add(address.getAddress());
+          }
         }
+      }
     } catch (SocketException ex) {
-        return new ArrayList<InetAddress>();
+      return new ArrayList<InetAddress>();
     }
     return listOfServerAddresses;
   }
-  
+
   private Properties getDatabaseProperties() throws IOException {
     Properties prop = new Properties();
     BufferedReader reader = new BufferedReader(new InputStreamReader(servletContext.getResourceAsStream("/WEB-INF/classes/database.properties")));
@@ -431,7 +427,7 @@ public class AdminController {
     while ((line = reader.readLine()) != null) {
       propertyFileContents += line + "\n";
     }
-    prop.load(new StringReader(propertyFileContents.replace("\\","\\\\")));
+    prop.load(new StringReader(propertyFileContents.replace("\\", "\\\\")));
     return prop;
   }
 }

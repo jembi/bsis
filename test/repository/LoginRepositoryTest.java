@@ -16,26 +16,26 @@ import suites.DBUnitContextDependentTestSuite;
  * Test using DBUnit to test the LoginRepository
  */
 public class LoginRepositoryTest extends DBUnitContextDependentTestSuite {
-	
-	@Autowired
-	LoginRepository loginRepository;
 
-	@Override
-	protected IDataSet getDataSet() throws Exception {
-		File file = new File("test/dataset/LoginRepositoryDataset.xml");
-		return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
-	}
+  @Autowired
+  LoginRepository loginRepository;
 
-	@Test
-	public void testGetUser() throws Exception {
-		User superUser = loginRepository.getUser("superuser");
-		Assert.assertNotNull("There is a super user", superUser);
-		Assert.assertEquals("The users name is correct", "Super", superUser.getFirstName());
-	}
-	
-	@Test
-	public void testGetUserUnknown() throws Exception {
-		User unknown = loginRepository.getUser("Dagmar");
-		Assert.assertNull("Unknown user", unknown);
-	}
+  @Override
+  protected IDataSet getDataSet() throws Exception {
+    File file = new File("test/dataset/LoginRepositoryDataset.xml");
+    return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
+  }
+
+  @Test
+  public void testGetUser() throws Exception {
+    User superUser = loginRepository.getUser("superuser");
+    Assert.assertNotNull("There is a super user", superUser);
+    Assert.assertEquals("The users name is correct", "Super", superUser.getFirstName());
+  }
+
+  @Test
+  public void testGetUserUnknown() throws Exception {
+    User unknown = loginRepository.getUser("Dagmar");
+    Assert.assertNull("Unknown user", unknown);
+  }
 }

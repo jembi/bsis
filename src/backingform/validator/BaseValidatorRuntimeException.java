@@ -9,7 +9,7 @@ import org.springframework.validation.ObjectError;
 public class BaseValidatorRuntimeException extends RuntimeException {
 
   private static final long serialVersionUID = 1L;
-  
+
   private Errors errors;
 
   public BaseValidatorRuntimeException(String message, Errors errors, Throwable cause) {
@@ -20,7 +20,7 @@ public class BaseValidatorRuntimeException extends RuntimeException {
   public BaseValidatorRuntimeException(Throwable cause) {
     super(cause);
   }
-  
+
   /**
    * Return the results of the failed validation.
    */

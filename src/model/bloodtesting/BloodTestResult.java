@@ -22,16 +22,16 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 /**
- * Stores the result of one blood typing test for one donation.
- * No need to audit this table. NEVER update the entities of this table.
- * Always insert a new row. Use testedOn to find the latest test result.
+ * Stores the result of one blood typing test for one donation. No need to audit this table. NEVER
+ * update the entities of this table. Always insert a new row. Use testedOn to find the latest test
+ * result.
  */
 @NamedQueries({
     @NamedQuery(name = BloodTestResultNamedQueryConstants.NAME_COUNT_BLOOD_TEST_RESULTS_FOR_DONATION,
-            query = BloodTestResultNamedQueryConstants.QUERY_COUNT_BLOOD_TEST_RESULTS_FOR_DONATION)
+        query = BloodTestResultNamedQueryConstants.QUERY_COUNT_BLOOD_TEST_RESULTS_FOR_DONATION)
 })
 @Entity
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class BloodTestResult extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
@@ -42,7 +42,7 @@ public class BloodTestResult extends BaseModificationTrackerEntity {
   @ManyToOne(cascade = {CascadeType.MERGE})
   private BloodTest bloodTest;
 
-  @Column(length=10)
+  @Column(length = 10)
   private String result;
 
   @Temporal(TemporalType.TIMESTAMP)
@@ -53,8 +53,8 @@ public class BloodTestResult extends BaseModificationTrackerEntity {
 
   @Lob
   private String notes;
-    
-  @Column(length=20)
+
+  @Column(length = 20)
   private String reagentLotNumber;
   
   private Boolean doubleEntryRequired;

@@ -19,22 +19,22 @@ public class PackTypeExistsConstraintValidator implements
 
   public PackTypeExistsConstraintValidator() {
   }
-  
+
   @Override
   public void initialize(PackTypeExists constraint) {
   }
 
   public boolean isValid(PackType target, ConstraintValidatorContext context) {
 
-   if (target == null)
-     return true;
-
-   try {
-    if (packTypeRepository.getPackTypeById(target.getId()) != null)
+    if (target == null)
       return true;
-   } catch (Exception e) {
-    e.printStackTrace();
-   }
-   return false;
+
+    try {
+      if (packTypeRepository.getPackTypeById(target.getId()) != null)
+        return true;
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return false;
   }
 }

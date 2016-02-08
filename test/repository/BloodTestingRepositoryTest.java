@@ -50,24 +50,24 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     for (BloodTest bt : bloodTests) {
       Assert.assertEquals("Only blood typing tests are returned", BloodTestCategory.BLOODTYPING, bt.getCategory());
     }
-    }
+  }
 
-    @Test
-    public void testGetTtiTests() throws Exception {
-      List<BloodTest> bloodTests = bloodTestingRepository.getTTITests();
-      Assert.assertNotNull("Blood tests exist", bloodTests);
-      Assert.assertFalse("Blood tests exist", bloodTests.isEmpty());
-      for (BloodTest bt : bloodTests) {
-        Assert.assertEquals("Only TTI tests are returned", BloodTestCategory.TTI, bt.getCategory());
-      }
+  @Test
+  public void testGetTtiTests() throws Exception {
+    List<BloodTest> bloodTests = bloodTestingRepository.getTTITests();
+    Assert.assertNotNull("Blood tests exist", bloodTests);
+    Assert.assertFalse("Blood tests exist", bloodTests.isEmpty());
+    for (BloodTest bt : bloodTests) {
+      Assert.assertEquals("Only TTI tests are returned", BloodTestCategory.TTI, bt.getCategory());
     }
+  }
 
   @Test
   public void testGetTestsOfTypeAdvancedBloodTyping() throws Exception {
     List<BloodTest> bloodTests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.ADVANCED_BLOODTYPING);
     Assert.assertNotNull("Blood tests exist", bloodTests);
     Assert.assertTrue("Blood tests exist", bloodTests.isEmpty());
-    }
+  }
 
   @Test
   public void testGetTestsOfTypeBasicBloodTyping() throws Exception {
@@ -75,10 +75,10 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     Assert.assertNotNull("Blood tests exist", bloodTests);
     Assert.assertFalse("Blood tests exist", bloodTests.isEmpty());
     for (BloodTest bt : bloodTests) {
-      Assert.assertEquals("Only advanced blood typing tests are returned", BloodTestType.BASIC_BLOODTYPING,
-          bt.getBloodTestType());
+      Assert.assertEquals("Only advanced blood typing tests are returned", BloodTestType.BASIC_BLOODTYPING, bt.getBloodTestType());
+      bt.getBloodTestType();
     }
-    }
+  }
 
   @Test
   public void testDoubleEntryRequiredAfterTTIEdit() throws Exception {

@@ -64,7 +64,7 @@ public class CompatibilityTestBackingForm {
     compatibilityTest.setLastUpdatedBy(lastUpdatedBy);
   }
 
-  
+
   public Long getId() {
     return compatibilityTest.getId();
   }
@@ -85,7 +85,7 @@ public class CompatibilityTestBackingForm {
   public String getRequestNumber() {
     if (compatibilityTest == null || compatibilityTest.getForRequest() == null ||
         compatibilityTest.getForRequest().getRequestNumber() == null
-       )
+        )
       return "";
     return compatibilityTest.getForRequest().getRequestNumber();
   }
@@ -135,8 +135,7 @@ public class CompatibilityTestBackingForm {
   public void setCrossmatchType(String crossmatchTypeId) {
     if (crossmatchTypeId == null) {
       compatibilityTest.setCrossmatchType(null);
-    }
-    else {
+    } else {
       CrossmatchType ct = new CrossmatchType();
       ct.setId(Long.parseLong(crossmatchTypeId));
       compatibilityTest.setCrossmatchType(ct);

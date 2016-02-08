@@ -40,15 +40,15 @@ import constraintvalidator.DonationExists;
 
 @NamedQueries({
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUSES_FOR_DONOR,
-            query = ComponentNamedQueryConstants.QUERY_UPDATE_COMPONENT_STATUSES_FOR_DONOR),
+        query = ComponentNamedQueryConstants.QUERY_UPDATE_COMPONENT_STATUSES_FOR_DONOR),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_COUNT_CHANGED_COMPONENTS_FOR_DONATION,
-            query = ComponentNamedQueryConstants.QUERY_COUNT_CHANGED_COMPONENTS_FOR_DONATION),
+        query = ComponentNamedQueryConstants.QUERY_COUNT_CHANGED_COMPONENTS_FOR_DONATION),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUSES_FOR_DONATION,
-            query = ComponentNamedQueryConstants.QUERY_UPDATE_COMPONENT_STATUSES_FOR_DONATION),
+        query = ComponentNamedQueryConstants.QUERY_UPDATE_COMPONENT_STATUSES_FOR_DONATION),
 })
 @Entity
 @Audited
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Component extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
@@ -57,7 +57,7 @@ public class Component extends BaseModificationTrackerEntity {
   // imported from another location. In such a case the corresponding donation
   // field is allowed to be null.
   @DonationExists
-  @ManyToOne(optional=true, fetch=FetchType.EAGER)
+  @ManyToOne(optional = true, fetch = FetchType.EAGER)
   private Donation donation;
 
   @ComponentTypeExists
@@ -68,11 +68,11 @@ public class Component extends BaseModificationTrackerEntity {
   private Date createdOn;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Index(name="component_expiresOn_index")
+  @Index(name = "component_expiresOn_index")
   private Date expiresOn;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(columnDefinition="DATETIME")
+  @Column(columnDefinition = "DATETIME")
   private Date discardedOn;
 
   @ManyToOne
@@ -82,36 +82,36 @@ public class Component extends BaseModificationTrackerEntity {
   private Date issuedOn;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=30)
+  @Column(length = 30)
   private ComponentStatus status;
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy="testedComponent", fetch=FetchType.LAZY)
+  @OneToMany(mappedBy = "testedComponent", fetch = FetchType.LAZY)
   private List<CompatibilityTest> compatibilityTests;
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy="component", fetch=FetchType.LAZY)
+  @OneToMany(mappedBy = "component", fetch = FetchType.LAZY)
   private List<ComponentStatusChange> statusChanges;
 
-  @Column(length=3)
+  @Column(length = 3)
   private String subdivisionCode;
 
-  @OneToOne(optional=true)
+  @OneToOne(optional = true)
   private Component parentComponent;
 
-  @OneToOne(mappedBy="component")
+  @OneToOne(mappedBy = "component")
   private ComponentUsage usage;
-  
+
   @Lob
   private String notes;
 
   private Boolean isDeleted;
 
-  @Column(length=20)
+  @Column(length = 20)
   private String componentIdentificationNumber;
-  
+
   public Component() {
     super();
   }
@@ -252,12 +252,12 @@ public class Component extends BaseModificationTrackerEntity {
     this.parentComponent = parentComponent;
   }
 
-	public String getComponentIdentificationNumber() {
-		return componentIdentificationNumber;
-	}
+  public String getComponentIdentificationNumber() {
+    return componentIdentificationNumber;
+  }
 
-	public void setComponentIdentificationNumber(String componentIdentificationNumber) {
-		this.componentIdentificationNumber = componentIdentificationNumber;
-	}
-  
+  public void setComponentIdentificationNumber(String componentIdentificationNumber) {
+    this.componentIdentificationNumber = componentIdentificationNumber;
+  }
+
 }

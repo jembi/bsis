@@ -40,11 +40,10 @@ public class TipsRepository {
   }
 
   public void saveAllTips(List<Tips> allTips) {
-    for (Tips tips: allTips) {
+    for (Tips tips : allTips) {
       if (tips.getTipsKey() == null) {
         em.persist(tips);
-      }
-      else {
+      } else {
         Tips existingTips = em.find(Tips.class, tips.getTipsKey());
         if (existingTips != null) {
           existingTips.setTipsContent(tips.getTipsContent());

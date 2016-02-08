@@ -32,99 +32,99 @@ import repository.UserRepository;
 import viewmodel.AuditRevisionViewModel;
 
 public class AuditRevisionViewModelFactoryTests {
-    
-    private AuditRevisionViewModelFactory auditRevisionViewModelFactory;
-    private UserRepository userRepository;
-    
-    @Test
-    public void testCreateAuditRevisionViewModels_shouldCreateAuditRevisionViewModelWithTheCorrectState() {
-        // Set up fixture
-        setUpFixture();
-        
-        String irrelevantUsername = "irrelevant.username";
-        int irrelevantAuditRevisionId = 78;
-        Date irrelevantRevisionDate = new DateTime().minusDays(7).toDate();
-        
-        List<EntityModification> entityModifications = Arrays.asList(
-                anEntityModification()
-                        .withId(88l)
-                        .withRevisionType(RevisionType.MOD)
-                        .withEntityName(Donor.class.getSimpleName())
-                        .build(),
-                anEntityModification()
-                        .withId(107l)
-                        .withRevisionType(RevisionType.ADD)
-                        .withEntityName(Donation.class.getSimpleName())
-                        .build()
-        );
 
-        AuditRevision auditRevision = anAuditRevision()
-                .withId(irrelevantAuditRevisionId)
-                .withRevisionDate(irrelevantRevisionDate)
-                .withUsername(irrelevantUsername)
-                .withEntityModifications(new HashSet<>(entityModifications))
-                .build();
+  private AuditRevisionViewModelFactory auditRevisionViewModelFactory;
+  private UserRepository userRepository;
 
-        User auditRevisionUser = aUser()
-                .withId(56l)
-                .withUsername(irrelevantUsername)
-                .build();
+  @Test
+  public void testCreateAuditRevisionViewModels_shouldCreateAuditRevisionViewModelWithTheCorrectState() {
+    // Set up fixture
+    setUpFixture();
 
-        AuditRevisionViewModel expectedViewModel = anAuditRevisionViewModel()
-                .withId(irrelevantAuditRevisionId)
-                .withRevisionDate(irrelevantRevisionDate)
-                .withUser(auditRevisionUser)
-                .withEntityModifications(new HashSet<>(entityModifications))
-                .build();
-        
-        when(userRepository.findUser(irrelevantUsername)).thenReturn(auditRevisionUser);
-        
-        // Exercise SUT
-        List<AuditRevisionViewModel> returnedViewModels = auditRevisionViewModelFactory
-                .createAuditRevisionViewModels(Arrays.asList(auditRevision));
-        
-        // Verify
-        verify(userRepository).findUser(irrelevantUsername);
-        verifyNoMoreInteractions(userRepository);
-        
-        assertThat(returnedViewModels.size(), is(1));
-        assertThat(returnedViewModels.get(0), hasSameStateAsAuditRevisionViewModel(expectedViewModel));
-    }
-    
-    @Test
-    public void testCreateAuditRevisionViewModelsWithAuditRevisionWithNoUsername_shouldCreateAuditRevisionViewModelWithNoUser() {
-        // Set up fixture
-        setUpFixture();
-        
-        int irrelevantAuditRevisionId = 3;
-        Date irrelevantRevisionDate = new DateTime().minusDays(4).toDate();
+    String irrelevantUsername = "irrelevant.username";
+    int irrelevantAuditRevisionId = 78;
+    Date irrelevantRevisionDate = new DateTime().minusDays(7).toDate();
 
-        AuditRevisionViewModel expectedViewModel = anAuditRevisionViewModel()
-                .withId(irrelevantAuditRevisionId)
-                .withRevisionDate(irrelevantRevisionDate)
-                .build();
+    List<EntityModification> entityModifications = Arrays.asList(
+        anEntityModification()
+            .withId(88l)
+            .withRevisionType(RevisionType.MOD)
+            .withEntityName(Donor.class.getSimpleName())
+            .build(),
+        anEntityModification()
+            .withId(107l)
+            .withRevisionType(RevisionType.ADD)
+            .withEntityName(Donation.class.getSimpleName())
+            .build()
+    );
 
-        AuditRevision auditRevision = anAuditRevision()
-                .withId(irrelevantAuditRevisionId)
-                .withRevisionDate(irrelevantRevisionDate)
-                .build();
+    AuditRevision auditRevision = anAuditRevision()
+        .withId(irrelevantAuditRevisionId)
+        .withRevisionDate(irrelevantRevisionDate)
+        .withUsername(irrelevantUsername)
+        .withEntityModifications(new HashSet<>(entityModifications))
+        .build();
 
-        // Exercise SUT
-        List<AuditRevisionViewModel> returnedViewModels = auditRevisionViewModelFactory
-                .createAuditRevisionViewModels(Arrays.asList(auditRevision));
-        
-        // Verify
-        verifyZeroInteractions(userRepository);
-        
-        assertThat(returnedViewModels.size(), is(1));
-        assertThat(returnedViewModels.get(0), hasSameStateAsAuditRevisionViewModel(expectedViewModel));
-    }
-    
-    private void setUpFixture() {
-        userRepository = mock(UserRepository.class);
+    User auditRevisionUser = aUser()
+        .withId(56l)
+        .withUsername(irrelevantUsername)
+        .build();
 
-        auditRevisionViewModelFactory = new AuditRevisionViewModelFactory();
-        auditRevisionViewModelFactory.setUserRepository(userRepository);
-    }
+    AuditRevisionViewModel expectedViewModel = anAuditRevisionViewModel()
+        .withId(irrelevantAuditRevisionId)
+        .withRevisionDate(irrelevantRevisionDate)
+        .withUser(auditRevisionUser)
+        .withEntityModifications(new HashSet<>(entityModifications))
+        .build();
+
+    when(userRepository.findUser(irrelevantUsername)).thenReturn(auditRevisionUser);
+
+    // Exercise SUT
+    List<AuditRevisionViewModel> returnedViewModels = auditRevisionViewModelFactory
+        .createAuditRevisionViewModels(Arrays.asList(auditRevision));
+
+    // Verify
+    verify(userRepository).findUser(irrelevantUsername);
+    verifyNoMoreInteractions(userRepository);
+
+    assertThat(returnedViewModels.size(), is(1));
+    assertThat(returnedViewModels.get(0), hasSameStateAsAuditRevisionViewModel(expectedViewModel));
+  }
+
+  @Test
+  public void testCreateAuditRevisionViewModelsWithAuditRevisionWithNoUsername_shouldCreateAuditRevisionViewModelWithNoUser() {
+    // Set up fixture
+    setUpFixture();
+
+    int irrelevantAuditRevisionId = 3;
+    Date irrelevantRevisionDate = new DateTime().minusDays(4).toDate();
+
+    AuditRevisionViewModel expectedViewModel = anAuditRevisionViewModel()
+        .withId(irrelevantAuditRevisionId)
+        .withRevisionDate(irrelevantRevisionDate)
+        .build();
+
+    AuditRevision auditRevision = anAuditRevision()
+        .withId(irrelevantAuditRevisionId)
+        .withRevisionDate(irrelevantRevisionDate)
+        .build();
+
+    // Exercise SUT
+    List<AuditRevisionViewModel> returnedViewModels = auditRevisionViewModelFactory
+        .createAuditRevisionViewModels(Arrays.asList(auditRevision));
+
+    // Verify
+    verifyZeroInteractions(userRepository);
+
+    assertThat(returnedViewModels.size(), is(1));
+    assertThat(returnedViewModels.get(0), hasSameStateAsAuditRevisionViewModel(expectedViewModel));
+  }
+
+  private void setUpFixture() {
+    userRepository = mock(UserRepository.class);
+
+    auditRevisionViewModelFactory = new AuditRevisionViewModelFactory();
+    auditRevisionViewModelFactory.setUserRepository(userRepository);
+  }
 
 }

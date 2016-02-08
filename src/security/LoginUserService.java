@@ -22,7 +22,7 @@ public class LoginUserService implements UserDetailsService {
 
     // http://stackoverflow.com/questions/16455348/autowired-dependency-injection-with-spring-security
     if (userRepository == null) {
-      ApplicationContext context = ApplicationContextProvider.getApplicationContext(); 
+      ApplicationContext context = ApplicationContextProvider.getApplicationContext();
       userRepository = context.getBean(UserRepository.class);
     }
 

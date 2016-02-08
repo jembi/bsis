@@ -11,10 +11,10 @@ import backingform.ComponentUsageBackingForm;
 
 @org.springframework.stereotype.Component
 public class UsageBackingFormValidator extends BaseValidator<ComponentUsageBackingForm> {
-  
+
   @Autowired
   private ComponentRepository componentRepository;
-  
+
   @Override
   public void validateForm(ComponentUsageBackingForm form, Errors errors) {
     String usageDate = form.getUsageDate();
@@ -26,7 +26,7 @@ public class UsageBackingFormValidator extends BaseValidator<ComponentUsageBacki
 
     commonFieldChecks(form, errors);
   }
-  
+
   @Override
   public String getFormName() {
     return "usage";

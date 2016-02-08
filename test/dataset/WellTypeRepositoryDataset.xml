@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<WellType id="1" isDeleted="false" requiresSample="true"
-		wellType="Sample" />
-	<WellType id="2" isDeleted="false" requiresSample="false"
-		wellType="Blank" />
-	<WellType id="3" isDeleted="false" requiresSample="false"
-		wellType="Negative control" />
-	<WellType id="4" isDeleted="false" requiresSample="false"
-		wellType="Positive control" />
+    <WellType id="1" isDeleted="false" requiresSample="true"
+              wellType="Sample"/>
+    <WellType id="2" isDeleted="false" requiresSample="false"
+              wellType="Blank"/>
+    <WellType id="3" isDeleted="false" requiresSample="false"
+              wellType="Negative control"/>
+    <WellType id="4" isDeleted="false" requiresSample="false"
+              wellType="Positive control"/>
 </dataset>

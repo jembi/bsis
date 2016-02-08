@@ -12,31 +12,31 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public class AuditRevisionListener implements EntityTrackingRevisionListener {
 
-    @Override
-    public void newRevision(Object revisionEntity) {
+  @Override
+  public void newRevision(Object revisionEntity) {
 
-        AuditRevision auditRevision = (AuditRevision) revisionEntity;
+    AuditRevision auditRevision = (AuditRevision) revisionEntity;
 
-        // Store the username of the user making the revision
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            auditRevision.setUsername(authentication.getName());
-        }
+    // Store the username of the user making the revision
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null) {
+      auditRevision.setUsername(authentication.getName());
     }
+  }
 
-    @SuppressWarnings("rawtypes")
-    @Override
-    public void entityChanged(Class entityClass, String entityName, Serializable entityId, RevisionType revisionType,
-            Object revisionEntity) {
+  @SuppressWarnings("rawtypes")
+  @Override
+  public void entityChanged(Class entityClass, String entityName, Serializable entityId, RevisionType revisionType,
+                            Object revisionEntity) {
 
-        AuditRevision auditRevision = (AuditRevision) revisionEntity;
+    AuditRevision auditRevision = (AuditRevision) revisionEntity;
 
-        EntityModification entityModification = new EntityModification();
-        entityModification.setAuditRevision(auditRevision);
-        entityModification.setRevisionType(revisionType);
-        entityModification.setEntityName(entityClass.getSimpleName());
+    EntityModification entityModification = new EntityModification();
+    entityModification.setAuditRevision(auditRevision);
+    entityModification.setRevisionType(revisionType);
+    entityModification.setEntityName(entityClass.getSimpleName());
 
-        auditRevision.addEntityModification(entityModification);
-    }
+    auditRevision.addEntityModification(entityModification);
+  }
 
 }

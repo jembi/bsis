@@ -16,11 +16,11 @@ public class ComponentStatusChangeReason extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length=100)
+  @Column(length = 100)
   private String statusChangeReason;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=30)
+  @Column(length = 30)
   private ComponentStatusChangeReasonCategory category;
 
   private Boolean isDeleted;
@@ -52,7 +52,7 @@ public class ComponentStatusChangeReason extends BaseEntity {
     this.isDeleted = isDeleted;
   }
 
-  public void copy(ComponentStatusChangeReason componentStatusChangeReason){
+  public void copy(ComponentStatusChangeReason componentStatusChangeReason) {
     this.setId(componentStatusChangeReason.getId());
     this.setCategory(componentStatusChangeReason.getCategory());
     this.setStatusChangeReason(componentStatusChangeReason.getStatusChangeReason());

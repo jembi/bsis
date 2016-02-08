@@ -17,7 +17,7 @@ public class PackType extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length=50)
+  @Column(length = 50)
   private String packType;
 
   /**
@@ -28,27 +28,27 @@ public class PackType extends BaseEntity {
   private Boolean canPool;
 
   private Boolean isDeleted;
-  
+
   @ManyToOne
   private ComponentType componentType;
-  
+
   @NotNull
   private Boolean countAsDonation;
-  
+
   @NotNull
   @Column(nullable = false)
   private Boolean testSampleProduced = Boolean.TRUE;
-  
- @AssertTrue(message="Component type should be not null when countAsDonation is set to true")
-  private boolean isValid(){
-      if(this.countAsDonation == true)
-          if(componentType != null)
-              return true;
-          else 
-              return false;
-  return true;
-   }
-  
+
+  @AssertTrue(message = "Component type should be not null when countAsDonation is set to true")
+  private boolean isValid() {
+    if (this.countAsDonation == true)
+      if (componentType != null)
+        return true;
+      else
+        return false;
+    return true;
+  }
+
   private Integer periodBetweenDonations;
 
   public Boolean getIsDeleted() {
@@ -84,43 +84,43 @@ public class PackType extends BaseEntity {
   }
 
   public ComponentType getComponentType() {
-      return componentType;
+    return componentType;
   }
 
   public void setComponentType(ComponentType componentType) {
-      this.componentType = componentType;
+    this.componentType = componentType;
   }
 
   public Boolean getCountAsDonation() {
-       return countAsDonation;
+    return countAsDonation;
   }
 
   public void setCountAsDonation(Boolean countAsDonation) {
-       this.countAsDonation = countAsDonation;
+    this.countAsDonation = countAsDonation;
   }
 
-    public Boolean getTestSampleProduced() {
-        return testSampleProduced;
-    }
+  public Boolean getTestSampleProduced() {
+    return testSampleProduced;
+  }
 
-    public void setTestSampleProduced(Boolean testSampleProduced) {
-        this.testSampleProduced = testSampleProduced;
-    }
+  public void setTestSampleProduced(Boolean testSampleProduced) {
+    this.testSampleProduced = testSampleProduced;
+  }
 
-    public Integer getPeriodBetweenDonations() {
-	    return periodBetweenDonations;
-	}
-	
-	public void setPeriodBetweenDonations(Integer periodBetweenDonations) {
-	    this.periodBetweenDonations = periodBetweenDonations;
-	}
-	
-	public void copy(PackType packType) {
-		this.packType = packType.getPackType();
-        this.componentType = packType.getComponentType();
-        this.periodBetweenDonations = packType.getPeriodBetweenDonations();
-        this.countAsDonation = packType.getCountAsDonation();
-        this.isDeleted = packType.getIsDeleted();
-        this.testSampleProduced = packType.getTestSampleProduced();
-    }
+  public Integer getPeriodBetweenDonations() {
+    return periodBetweenDonations;
+  }
+
+  public void setPeriodBetweenDonations(Integer periodBetweenDonations) {
+    this.periodBetweenDonations = periodBetweenDonations;
+  }
+
+  public void copy(PackType packType) {
+    this.packType = packType.getPackType();
+    this.componentType = packType.getComponentType();
+    this.periodBetweenDonations = packType.getPeriodBetweenDonations();
+    this.countAsDonation = packType.getCountAsDonation();
+    this.isDeleted = packType.getIsDeleted();
+    this.testSampleProduced = packType.getTestSampleProduced();
+  }
 }

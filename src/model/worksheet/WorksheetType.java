@@ -20,16 +20,16 @@ public class WorksheetType extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length=30)
+  @Column(length = 30)
   private String worksheetType;
 
-  @ManyToMany(mappedBy="worksheetTypes")
+  @ManyToMany(mappedBy = "worksheetTypes")
   private Set<BloodTest> bloodTests;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=30)
+  @Column(length = 30)
   private BloodTestContext context;
-  
+
   private Boolean isDeleted;
 
   public String getWorksheetType() {

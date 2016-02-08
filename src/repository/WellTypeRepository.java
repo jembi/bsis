@@ -24,7 +24,7 @@ public class WellTypeRepository {
     query.setParameter("isDeleted", false);
     return query.getResultList();
   }
-  
+
   public boolean isWellTypeValid(String checkWellType) {
     String queryString = "SELECT w from WellType w where w.isDeleted=:isDeleted";
     TypedQuery<WellType> query = em.createQuery(queryString, WellType.class);
@@ -39,7 +39,7 @@ public class WellTypeRepository {
   public WellType getWellTypeById(Long id) {
     TypedQuery<WellType> query;
     query = em.createQuery("SELECT wt from WellType wt " +
-            "where wt.id=:id AND wt.isDeleted=:isDeleted", WellType.class);
+        "where wt.id=:id AND wt.isDeleted=:isDeleted", WellType.class);
     query.setParameter("isDeleted", false);
     query.setParameter("id", id);
     if (query.getResultList().size() == 0)
@@ -48,16 +48,15 @@ public class WellTypeRepository {
   }
 
   public void saveAllWellTypes(List<WellType> allWellTypes) {
-    for (WellType wt: allWellTypes) {
-        WellType existingWellType;
-        existingWellType = getWellTypeById(wt.getId());
-        if (existingWellType != null) {
-          existingWellType.setWellType(wt.getWellType());
-          em.merge(existingWellType);
-        }
-        else {
-          em.persist(wt);
-        }
+    for (WellType wt : allWellTypes) {
+      WellType existingWellType;
+      existingWellType = getWellTypeById(wt.getId());
+      if (existingWellType != null) {
+        existingWellType.setWellType(wt.getWellType());
+        em.merge(existingWellType);
+      } else {
+        em.persist(wt);
+      }
     }
     em.flush();
   }

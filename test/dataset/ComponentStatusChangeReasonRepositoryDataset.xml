@@ -1,29 +1,30 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<ComponentStatusChangeReason id="1" category="DISCARDED"
-		isDeleted="false" statusChangeReason="Incomplete Donation" />
-	<ComponentStatusChangeReason id="2" category="DISCARDED"
-		isDeleted="false" statusChangeReason="Processing Problems" />
-	<ComponentStatusChangeReason id="3" category="DISCARDED"
-		isDeleted="false" statusChangeReason="Passed Expiry Dates" />
-	<ComponentStatusChangeReason id="4" category="DISCARDED"
-		isDeleted="false" statusChangeReason="Reactive FOR TTIs" />
-	<ComponentStatusChangeReason id="5" category="DISCARDED"
-		isDeleted="false" statusChangeReason="Storage Problems" />
-	<ComponentStatusChangeReason id="6" category="DISCARDED"
-		isDeleted="false" statusChangeReason="Transport Problems" />
-	<ComponentStatusChangeReason id="7" category="RETURNED"
-		isDeleted="false" statusChangeReason="Expired" />
-	<ComponentStatusChangeReason id="8" category="RETURNED"
-	isDeleted="false" statusChangeReason="Not required" />
-	<ComponentStatusChangeReason id="9" category="RETURNED"
-		isDeleted="false" statusChangeReason="Incorrect Component Sent" />
-	<ComponentStatusChangeReason id="10" category="RETURNED"
-		isDeleted="false" statusChangeReason="Did not crossmatch with patient sample" />
-	<ComponentStatusChangeReason id="11" category="SPLIT"
-		isDeleted="false" statusChangeReason="Split" />
-	<ComponentStatusChangeReason id="13" category="SPLIT"
-		isDeleted="true" statusChangeReason="Ignore" />
-	<ComponentStatusChangeReason id="14" category="DISCARDED"
-		isDeleted="true" statusChangeReason="Ignore" />
+    <ComponentStatusChangeReason id="1" category="DISCARDED"
+                                 isDeleted="false" statusChangeReason="Incomplete Donation"/>
+    <ComponentStatusChangeReason id="2" category="DISCARDED"
+                                 isDeleted="false" statusChangeReason="Processing Problems"/>
+    <ComponentStatusChangeReason id="3" category="DISCARDED"
+                                 isDeleted="false" statusChangeReason="Passed Expiry Dates"/>
+    <ComponentStatusChangeReason id="4" category="DISCARDED"
+                                 isDeleted="false" statusChangeReason="Reactive FOR TTIs"/>
+    <ComponentStatusChangeReason id="5" category="DISCARDED"
+                                 isDeleted="false" statusChangeReason="Storage Problems"/>
+    <ComponentStatusChangeReason id="6" category="DISCARDED"
+                                 isDeleted="false" statusChangeReason="Transport Problems"/>
+    <ComponentStatusChangeReason id="7" category="RETURNED"
+                                 isDeleted="false" statusChangeReason="Expired"/>
+    <ComponentStatusChangeReason id="8" category="RETURNED"
+                                 isDeleted="false" statusChangeReason="Not required"/>
+    <ComponentStatusChangeReason id="9" category="RETURNED"
+                                 isDeleted="false" statusChangeReason="Incorrect Component Sent"/>
+    <ComponentStatusChangeReason id="10" category="RETURNED"
+                                 isDeleted="false"
+                                 statusChangeReason="Did not crossmatch with patient sample"/>
+    <ComponentStatusChangeReason id="11" category="SPLIT"
+                                 isDeleted="false" statusChangeReason="Split"/>
+    <ComponentStatusChangeReason id="13" category="SPLIT"
+                                 isDeleted="true" statusChangeReason="Ignore"/>
+    <ComponentStatusChangeReason id="14" category="DISCARDED"
+                                 isDeleted="true" statusChangeReason="Ignore"/>
 </dataset>

@@ -32,64 +32,64 @@ import backingform.validator.DonationTypeBackingFormValidator;
 @RequestMapping("donationtypes")
 public class DonationTypesController {
 
-    private static final Logger LOGGER = Logger.getLogger(DonationTypesController.class);
+  private static final Logger LOGGER = Logger.getLogger(DonationTypesController.class);
 
-    @Autowired
-    DonationTypeRepository donationTypesRepository;
-    
-    @Autowired
-    private DonationTypeBackingFormValidator donationTypeBackingFormValidator;
+  @Autowired
+  DonationTypeRepository donationTypesRepository;
 
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(donationTypeBackingFormValidator);
+  @Autowired
+  private DonationTypeBackingFormValidator donationTypeBackingFormValidator;
+
+  @InitBinder
+  protected void initBinder(WebDataBinder binder) {
+    binder.setValidator(donationTypeBackingFormValidator);
+  }
+
+  @RequestMapping(method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_TYPES + "')")
+  public Map<String, Object> configureDonationTypesFormGenerator() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    addAllDonationTypesToModel(map);
+    return map;
+  }
+
+  @RequestMapping(value = "{id}", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_TYPES + "')")
+  public ResponseEntity getDonationType(@PathVariable Long id) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    DonationType donationType = donationTypesRepository.getDonationTypeById(id);
+    map.put("donationType", new DonationTypeViewModel(donationType));
+    return new ResponseEntity(map, HttpStatus.OK);
+
+  }
+
+  @RequestMapping(method = RequestMethod.POST)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_TYPES + "')")
+  public ResponseEntity saveDonationType(@Valid @RequestBody DonationTypeBackingForm form) {
+    DonationType donationType = donationTypesRepository.saveDonationType(form.getDonationType());
+    return new ResponseEntity(new DonationTypeViewModel(donationType), HttpStatus.CREATED);
+  }
+
+  @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_TYPES + "')")
+  public ResponseEntity updateDonationType(@Valid @RequestBody DonationTypeBackingForm form, @PathVariable Long id) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    DonationType donationType = form.getDonationType();
+    donationType.setId(id);
+    donationType = donationTypesRepository.updateDonationType(donationType);
+    map.put("donationType", new DonationTypeViewModel(donationType));
+    return new ResponseEntity(map, HttpStatus.OK);
+  }
+
+  private void addAllDonationTypesToModel(Map<String, Object> m) {
+    m.put("allDonationTypes", getDonationTypeViewModels(donationTypesRepository.getAllDonationTypes(true)));
+  }
+
+  private List<DonationTypeViewModel> getDonationTypeViewModels(List<DonationType> donationTypes) {
+    List<DonationTypeViewModel> viewModels = new ArrayList<DonationTypeViewModel>();
+    for (DonationType donationType : donationTypes) {
+      viewModels.add(new DonationTypeViewModel(donationType));
     }
-
-    @RequestMapping(method=RequestMethod.GET)
-    @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-    public Map<String, Object> configureDonationTypesFormGenerator() {
-        Map<String, Object> map = new HashMap<String, Object>();
-        addAllDonationTypesToModel(map);
-        return map;
-    }
-
-    @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-    public  ResponseEntity getDonationType(@PathVariable Long id) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        DonationType donationType = donationTypesRepository.getDonationTypeById(id);
-        map.put("donationType", new DonationTypeViewModel(donationType));
-        return new ResponseEntity(map, HttpStatus.OK);
-
-    }
-
-    @RequestMapping(method = RequestMethod.POST)
-    @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-    public  ResponseEntity saveDonationType(@Valid @RequestBody DonationTypeBackingForm form) {
-        DonationType donationType = donationTypesRepository.saveDonationType(form.getDonationType());
-        return new ResponseEntity(new DonationTypeViewModel(donationType), HttpStatus.CREATED);
-    }
-
-    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_DONATION_TYPES+"')")
-    public  ResponseEntity updateDonationType(@Valid @RequestBody DonationTypeBackingForm form,  @PathVariable Long id) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        DonationType donationType = form.getDonationType();
-        donationType.setId(id);
-        donationType = donationTypesRepository.updateDonationType(donationType);
-        map.put("donationType", new DonationTypeViewModel(donationType));
-        return new ResponseEntity(map, HttpStatus.OK);
-    }
-
-    private void addAllDonationTypesToModel(Map<String, Object> m) {
-        m.put("allDonationTypes", getDonationTypeViewModels(donationTypesRepository.getAllDonationTypes(true)));
-    }
-
-    private List<DonationTypeViewModel> getDonationTypeViewModels(List<DonationType> donationTypes){
-        List<DonationTypeViewModel> viewModels = new ArrayList<DonationTypeViewModel>();
-        for(DonationType donationType : donationTypes){
-            viewModels.add(new DonationTypeViewModel(donationType));
-        }
-        return viewModels;
-    }
+    return viewModels;
+  }
 }

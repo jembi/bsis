@@ -20,7 +20,7 @@ public class DonationUpdatedEventListener implements ApplicationListener<Donatio
 
   @PersistenceContext
   private EntityManager em;
-  
+
   @Override
   public void onApplicationEvent(DonationUpdatedEvent event) {
     updateDonor(event);

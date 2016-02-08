@@ -13,50 +13,50 @@ import org.hibernate.validator.constraints.Email;
 @Entity
 public class Contact extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
-    private String mobileNumber;
-    
-    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
-    private String homeNumber;
-    
-    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
-    private String workNumber;
-    
-    @Email
-    private String email;
+  @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
+  private String mobileNumber;
+
+  @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
+  private String homeNumber;
+
+  @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
+  private String workNumber;
+
+  @Email
+  private String email;
 
 
-    public String getMobileNumber() {
-        return mobileNumber;
-    }
+  public String getMobileNumber() {
+    return mobileNumber;
+  }
 
-    public void setMobileNumber(String mobileNumber) {
-        this.mobileNumber = mobileNumber;
-    }
+  public void setMobileNumber(String mobileNumber) {
+    this.mobileNumber = mobileNumber;
+  }
 
-    public String getHomeNumber() {
-        return homeNumber;
-    }
+  public String getHomeNumber() {
+    return homeNumber;
+  }
 
-    public void setHomeNumber(String homeNumber) {
-        this.homeNumber = homeNumber;
-    }
+  public void setHomeNumber(String homeNumber) {
+    this.homeNumber = homeNumber;
+  }
 
-    public String getWorkNumber() {
-        return workNumber;
-    }
+  public String getWorkNumber() {
+    return workNumber;
+  }
 
-    public void setWorkNumber(String workNumber) {
-        this.workNumber = workNumber;
-    }
+  public void setWorkNumber(String workNumber) {
+    this.workNumber = workNumber;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 }

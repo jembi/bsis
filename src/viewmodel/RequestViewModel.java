@@ -104,7 +104,7 @@ public class RequestViewModel {
 
   public String getPatientBirthDate() {
     if (request.getPatientBirthDate() == null)
-      return ""; 
+      return "";
     return CustomDateFormatter.getDateString(request.getPatientBirthDate());
   }
 

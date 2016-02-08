@@ -49,8 +49,8 @@ public class LocationRepository {
 
   public Location getLocation(Long selectedLocationId) {
     TypedQuery<Location> query = em.createQuery(
-      "SELECT l FROM Location l where l.id= :locationId",
-      Location.class);
+        "SELECT l FROM Location l where l.id= :locationId",
+        Location.class);
     query.setParameter("locationId", selectedLocationId);
     return query.getSingleResult();
   }
@@ -94,8 +94,7 @@ public class LocationRepository {
       if (location.getId() == null) {
         location.setIsDeleted(false);
         em.persist(location);
-      }
-      else {
+      } else {
         Location existingLocation = em.find(Location.class, location.getId());
         if (existingLocation != null) {
           existingLocation.setIsDeleted(false);
@@ -116,10 +115,10 @@ public class LocationRepository {
     return query.getResultList();
   }
 
-  public Location findLocationByName(String locationName) throws NoResultException, NonUniqueResultException{
+  public Location findLocationByName(String locationName) throws NoResultException, NonUniqueResultException {
     TypedQuery<Location> query = em.createQuery(
-            "SELECT l FROM Location l where l.name= :locationName",
-            Location.class);
+        "SELECT l FROM Location l where l.name= :locationName",
+        Location.class);
     query.setParameter("locationName", locationName);
     Location location = null;
     try {

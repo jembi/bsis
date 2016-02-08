@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<DonationType id="1" donationType="Voluntary" isDeleted="false" />
-	<DonationType id="2" donationType="Family" isDeleted="false" />
-	<DonationType id="3" donationType="Autologous" isDeleted="false" />
-	<DonationType id="4" donationType="Other" isDeleted="false" />
-	<DonationType id="5" donationType="Rubbish" isDeleted="true" />
+    <DonationType id="1" donationType="Voluntary" isDeleted="false"/>
+    <DonationType id="2" donationType="Family" isDeleted="false"/>
+    <DonationType id="3" donationType="Autologous" isDeleted="false"/>
+    <DonationType id="4" donationType="Other" isDeleted="false"/>
+    <DonationType id="5" donationType="Rubbish" isDeleted="true"/>
 </dataset>
