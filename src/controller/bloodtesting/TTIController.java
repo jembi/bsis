@@ -230,13 +230,6 @@ public class TTIController {
     return map;
   }
 
-  /**
-   * @RequestMapping(value = "/uploadTTIResultsFormGenerator", method = RequestMethod.GET)
-   * @PreAuthorize("hasRole('"+PermissionConstants.ADD_TTI_OUTCOME+"')") public ModelAndView
-   * uploadTTIResultsFormGenerator(HttpServletRequest request) { ModelAndView map = new
-   * ModelAndView("bloodtesting/uploadTTIResults"); return map; }
-   */
-
   @RequestMapping(value = "results/upload", method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TTI_OUTCOME + "')")
   public ResponseEntity<Map<String, Object>> uploadTTIResultsGenerator(

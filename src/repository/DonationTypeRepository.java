@@ -58,25 +58,6 @@ public class DonationTypeRepository {
     return query.getSingleResult();
   }
 
- /*
-  issue - #209 - Not used anywhere
-  *
-  public void saveAllDonationTypes(List<DonationType> allDonationTypes) {
-    for (DonationType dt: allDonationTypes) {
-      if (dt.getId() == null)
-        em.persist(dt);
-      else {
-        DonationType existingDonationType = getDonationTypeById(dt.getId());
-        if (existingDonationType != null) {
-          existingDonationType.setDonationType(dt.getDonationType());
-          em.merge(existingDonationType);
-        }
-      }
-      em.flush();
-    }
-  }
-  */
-
   public DonationType saveDonationType(DonationType donationType) {
     em.persist(donationType);
     em.flush();

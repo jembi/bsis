@@ -49,15 +49,6 @@ public class RequestTypeRepository {
     return query.getSingleResult();
   }
 
-  /**
-   * issue - #209 - Not used anywhere public void saveAllRequestTypes(List<RequestType>
-   * allRequestTypes) { for (RequestType rt: allRequestTypes) { RequestType existingRequestType =
-   * getRequestTypeById(rt.getId()); if (existingRequestType != null) {
-   * existingRequestType.setRequestType(rt.getRequestType()); existingRequestType.setBulkTransfer(rt.getBulkTransfer());
-   * em.merge(existingRequestType); } else { rt.setDescription(""); em.persist(rt); } } em.flush();
-   * }
-   */
-
   public void saveRequestType(RequestType requestType) {
     em.persist(requestType);
   }

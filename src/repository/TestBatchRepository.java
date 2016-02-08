@@ -101,16 +101,6 @@ public class TestBatchRepository {
 
   }
 
-  /**
-   * issue - #229 un used method private Long getResultCount(String queryStr, Query query) { String
-   * countQueryStr = queryStr.replaceFirst("SELECT c", "SELECT COUNT(c)"); // removing the join
-   * fetch is important otherwise Hibernate will complain // owner of the fetched association was
-   * not present in the select list countQueryStr = countQueryStr.replaceFirst("LEFT JOIN FETCH
-   * c.testBatch", ""); TypedQuery<Long> countQuery = em.createQuery(countQueryStr, Long.class); for
-   * (Parameter<?> parameter : query.getParameters()) { countQuery.setParameter(parameter.getName(),
-   * query.getParameterValue(parameter)); } return countQuery.getSingleResult().longValue(); }
-   */
-
   public void deleteTestBatch(Long id) {
     TestBatch testBatch = findTestBatchById(id);
     testBatch.setIsDeleted(true);
