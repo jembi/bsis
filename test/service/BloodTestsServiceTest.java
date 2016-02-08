@@ -2,9 +2,6 @@ package service;
 
 
 import static org.mockito.Mockito.when;
-import helpers.builders.BloodTestBuilder;
-import helpers.builders.BloodTestingRuleResultBuilder;
-import helpers.builders.DonationBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,10 +13,6 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import model.bloodtesting.BloodTest;
-import model.bloodtesting.TTIStatus;
-import model.donation.Donation;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +21,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import helpers.builders.BloodTestBuilder;
+import helpers.builders.BloodTestResultBuilder;
+import helpers.builders.BloodTestingRuleResultBuilder;
+import helpers.builders.DonationBuilder;
+import model.bloodtesting.BloodTest;
+import model.bloodtesting.BloodTestResult;
+import model.bloodtesting.TTIStatus;
+import model.donation.Donation;
 import repository.DonationRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTestingRuleEngine;
@@ -539,6 +540,9 @@ public class BloodTestsServiceTest {
 
     Map<Long, String> bloodTestResults = new HashMap<>();
     bloodTestResults.put(1l, "AB");
+    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(17l).build();
+    List<BloodTestResult> bloodTestResultList = new ArrayList<>();
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1l).withBloodTest(bloodTest).build());
     
     BloodTestingRuleResult ruleResult = BloodTestingRuleResultBuilder.aBloodTestingRuleResult()
         .withBloodAbo("AB")
@@ -552,7 +556,11 @@ public class BloodTestsServiceTest {
     // set up mocks
     when(donationRepository.findDonationById(donation.getId())).thenReturn(donation);
     when(ruleEngine.applyBloodTests(donation, bloodTestResults)).thenReturn(ruleResult);
-    
+    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE " + "bt.donation.id=:donationId",
+        BloodTestResult.class)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
+    when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
+
     // run test
     BloodTestingRuleResult returnedRuleResult = service.saveBloodTests(donation.getId(), bloodTestResults);
     
