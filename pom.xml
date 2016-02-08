@@ -51,7 +51,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.12</version>
                 <configuration>
-                    <runOrder>alphabetical</runOrder>
                     <includes>
                         <include>**/*Tests.java</include>
                         <include>**/*Test.java</include>
