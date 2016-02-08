@@ -6,9 +6,6 @@ import static helpers.builders.DonorBuilder.aDonor;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import model.donor.Donor;
 
 import org.junit.Test;
@@ -18,8 +15,6 @@ import suites.ContextDependentTestSuite;
 
 public class AdverseEventRepositoryTests extends ContextDependentTestSuite {
 
-  @PersistenceContext
-  private EntityManager entityManager;
   @Autowired
   private AdverseEventRepository adverseEventRepository;
 

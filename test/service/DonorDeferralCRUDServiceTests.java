@@ -14,7 +14,6 @@ import static org.mockito.Mockito.when;
 import helpers.builders.DeferralReasonBuilder;
 import helpers.builders.DonorBuilder;
 import helpers.builders.DonorDeferralBuilder;
-import helpers.builders.UserBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -26,24 +25,18 @@ import model.donordeferral.DeferralReason;
 import model.donordeferral.DeferralReasonType;
 import model.donordeferral.DonorDeferral;
 import model.donordeferral.DurationType;
-import model.user.User;
 
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.security.authentication.TestingAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import repository.DeferralReasonRepository;
 import repository.DonorDeferralRepository;
-import security.BsisUserDetails;
+import suites.UnitTestSuite;
 
-@RunWith(MockitoJUnitRunner.class)
-public class DonorDeferralCRUDServiceTests {
+public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
 
   @InjectMocks
   private DonorDeferralCRUDService donorDeferralCRUDService;
@@ -165,7 +158,6 @@ public class DonorDeferralCRUDServiceTests {
   @Test
   public void testDeleteDeferral() throws Exception {
     // create test data
-    User admin = UserBuilder.aUser().withUsername("admin").build();
     Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
     DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY)
         .withType(DeferralReasonType.NORMAL).build();
@@ -175,14 +167,13 @@ public class DonorDeferralCRUDServiceTests {
     // set up mocks
     when(donorDeferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
     when(deferralConstraintChecker.canDeleteDonorDeferral(1L)).thenReturn(true);
-    setSecurityUser(admin);
 
     // run tests
     donorDeferralCRUDService.deleteDeferral(1l);
 
     // asserts
     Assert.assertTrue("Deferral was deleted", donorDeferral.getIsVoided());
-    Assert.assertEquals("Deferral was deleted by", admin.getUsername(), donorDeferral.getVoidedBy().getUsername());
+    Assert.assertEquals("Deferral was deleted by", loggedInUser.getUsername(), donorDeferral.getVoidedBy().getUsername());
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Assert.assertEquals("Deferral was deleted when", sdf.format(new Date()), sdf.format(donorDeferral.getVoidedDate()));
   }
@@ -190,7 +181,6 @@ public class DonorDeferralCRUDServiceTests {
   @Test(expected = java.lang.IllegalStateException.class)
   public void testDeleteDeferralWithConstraints() throws Exception {
     // create test data
-    User admin = UserBuilder.aUser().withUsername("admin").build();
     Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
     DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY)
         .withType(DeferralReasonType.NORMAL).build();
@@ -200,7 +190,6 @@ public class DonorDeferralCRUDServiceTests {
     // set up mocks
     when(donorDeferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
     when(deferralConstraintChecker.canDeleteDonorDeferral(1L)).thenReturn(false);
-    setSecurityUser(admin);
 
     // run tests
     donorDeferralCRUDService.deleteDeferral(1l);
@@ -301,11 +290,5 @@ public class DonorDeferralCRUDServiceTests {
     DonorDeferral deferral = DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferralReasonText("hello. ").build();
     donorDeferralCRUDService.appendComment(deferral, "world");
     Assert.assertEquals("Comment updated", "hello. world", deferral.getDeferralReasonText());
-  }
-
-  private void setSecurityUser(User user) {
-    BsisUserDetails bsisUser = new BsisUserDetails(user);
-    TestingAuthenticationToken auth = new TestingAuthenticationToken(bsisUser, "Credentials");
-    SecurityContextHolder.getContext().setAuthentication(auth);
   }
 }

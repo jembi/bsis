@@ -14,9 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 
 import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
@@ -35,8 +33,6 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
   private static final Date NO_END_DATE = null;
   private static final Set<Long> NO_VENUES = null;
 
-  @PersistenceContext
-  private EntityManager entityManager;
   @Autowired
   private PostDonationCounsellingRepository postDonationCounsellingRepository;
 

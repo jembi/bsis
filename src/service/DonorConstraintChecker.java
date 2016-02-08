@@ -2,6 +2,8 @@ package service;
 
 import javax.persistence.NoResultException;
 
+import java.util.Date;
+
 import model.donation.Donation;
 import model.donor.Donor;
 import model.packtype.PackType;
@@ -84,6 +86,40 @@ public class DonorConstraintChecker {
   public boolean isDonorDeferred(long donorId) {
     Donor donor = donorRepository.findDonorById(donorId);
     return donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor);
+  }
+
+  public boolean isDonorEligibleToDonateOnDate(long donorId, Date date) {
+
+    Donor donor = donorRepository.findDonorById(donorId);
+
+    if (donor.getDonations() != null) {
+
+      for (Donation donation : donor.getDonations()) {
+
+        PackType packType = donation.getPackType();
+
+        if (!packType.getCountAsDonation()) {
+          // Don't check period between donations if it doesn't count as a donation
+          continue;
+        }
+
+        // Work out the next allowed donation date
+        DateTime nextDonationDate = new DateTime(donation.getDonationDate())
+            .plusDays(packType.getPeriodBetweenDonations())
+            .withTimeAtStartOfDay();
+
+        // Check if the next allowed donation date is after the specified date
+        if (nextDonationDate.isAfter(new DateTime(date).withTimeAtStartOfDay())) {
+          return false;
+        }
+      }
+    }
+
+    if (donorDeferralStatusCalculator.isDonorDeferredOnDate(donor, date)) {
+      return false;
+    }
+
+    return true;
   }
 
 }

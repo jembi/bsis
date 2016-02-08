@@ -8,7 +8,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.NoResultException;
-import javax.sql.DataSource;
 
 import model.address.Address;
 import model.address.AddressType;
@@ -34,40 +32,21 @@ import model.location.Location;
 import model.user.User;
 
 import org.apache.commons.lang.time.DateUtils;
-import org.dbunit.database.DatabaseConfig;
-import org.dbunit.database.DatabaseDataSourceConnection;
-import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ReplacementDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
-import org.dbunit.operation.DatabaseOperation;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
-import security.BsisUserDetails;
-import security.LoginUserService;
+import suites.DBUnitContextDependentTestSuite;
 import viewmodel.DonorSummaryViewModel;
 import backingform.DonorBackingForm;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@WebAppConfiguration
-@Transactional
-public class DonorRepositoryTest {
+public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Autowired
   DonorRepository donorRepository;
@@ -78,65 +57,35 @@ public class DonorRepositoryTest {
   ApplicationContext applicationContext = null;
   UserDetailsService userDetailsService;
   private Donor donor;
-  @Autowired
-  private DataSource dataSource;
 
   DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-  private IDataSet getDataSet() throws Exception {
+  @Override
+  protected IDataSet getDataSet() throws Exception {
     File file = new File("test/dataset/DonorRepositoryDataset.xml");
-    return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
-  }
+    IDataSet dataSet = new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
+    Date today = new Date();
+    Map<String, Object> replacements = new HashMap<String, Object>();
+    replacements.put("DateDonorNotDue", DateUtils.addDays(today,
+        -(DonationConstants.BLOCK_BETWEEN_DONATIONS - 1)));
+    replacements.put("DateDonorDue", DateUtils.addDays(today,
+        -(DonationConstants.BLOCK_BETWEEN_DONATIONS + 1)));
 
-  private IDatabaseConnection getConnection() throws Exception {
-    IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
-    DatabaseConfig config = connection.getConfig();
-    config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
-    return connection;
+    replacements.put("DateDeferredOn", DateUtils.addDays(today, -(2)));
+    replacements.put("DateDeferredUnit", DateUtils.addDays(today, (2)));
+
+    ReplacementDataSet rDataSet = new ReplacementDataSet(dataSet);
+    for (String key : replacements.keySet()) {
+      rDataSet.addReplacementObject("${" + key + "}",
+          replacements.get(key));
+    }
+    return rDataSet;
   }
 
   @Before
-  public void init() throws Exception {
-    IDatabaseConnection connection = getConnection();
-    try {
-      // Insert Data into database using DonorRepositoryDataset.xml
-      IDataSet dataSet = getDataSet();
-      Date today = new Date();
-      Map<String, Object> replacements = new HashMap<String, Object>();
-      replacements.put("DateDonorNotDue", DateUtils.addDays(today,
-          -(DonationConstants.BLOCK_BETWEEN_DONATIONS - 1)));
-      replacements.put("DateDonorDue", DateUtils.addDays(today,
-          -(DonationConstants.BLOCK_BETWEEN_DONATIONS + 1)));
-
-      replacements.put("DateDeferredOn", DateUtils.addDays(today, -(2)));
-      replacements.put("DateDeferredUnit", DateUtils.addDays(today, (2)));
-
-      ReplacementDataSet rDataSet = new ReplacementDataSet(dataSet);
-      for (String key : replacements.keySet()) {
-        rDataSet.addReplacementObject("${" + key + "}",
-            replacements.get(key));
-      }
-      DatabaseOperation.CLEAN_INSERT.execute(connection, rDataSet);
-
-      donor = new Donor();
-      donorBackingForm = new DonorBackingForm(donor);
-    } finally {
-      try {
-        connection.close();
-      } catch (SQLException e) {
-      }
-    }
-  }
-
-  @AfterTransaction
-  public void after() throws Exception {
-    IDatabaseConnection connection = getConnection();
-    try {
-      IDataSet dataSet = getDataSet();
-      DatabaseOperation.DELETE_ALL.execute(connection, dataSet);
-    } finally {
-      connection.close();
-    }
+  public void createDonorForm() {
+    donor = new Donor();
+    donorBackingForm = new DonorBackingForm(donor);
   }
 
   @Test
@@ -942,22 +891,6 @@ public class DonorRepositoryTest {
     copyDonor.setNotes(donor.getNotes());
     return copyDonor;
   }
-
-  /**
-   * UserPassword,BsisUserDetails(Principal) and authority detail store into SecurityContextHolder.
-   */
-  public void userAuthentication() {
-    applicationContext = new ClassPathXmlApplicationContext(
-        "file:**/security-bsis-servlet.xml");
-    userDetailsService = applicationContext.getBean(LoginUserService.class);
-    BsisUserDetails userDetails = (BsisUserDetails) userDetailsService
-        .loadUserByUsername("admin");
-    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-        userDetails, userDetails.getPassword(),
-        userDetails.getAuthorities());
-    SecurityContextHolder.getContext().setAuthentication(authToken);
-  }
-
 
   @Test
   /**

@@ -10,27 +10,20 @@ import java.util.HashMap;
 import model.user.Role;
 import model.user.User;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.security.authentication.TestingAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
 import repository.FormFieldRepository;
 import repository.UserRepository;
-import security.BsisUserDetails;
+import suites.UnitTestSuite;
 import utils.PermissionConstants;
 import backingform.UserBackingForm;
 
-@RunWith(MockitoJUnitRunner.class)
-public class UserBackingFormValidatorTest {
+public class UserBackingFormValidatorTest extends UnitTestSuite {
 
   @InjectMocks
   UserBackingFormValidator validator;
@@ -39,27 +32,11 @@ public class UserBackingFormValidatorTest {
   @Mock
   FormFieldRepository formFieldRepository;
 
-  @Before
-  public void init() throws Exception {
-    setSecurityUser();
-  }
-
-  public void setSecurityUser(String... authorities) {
-    BsisUserDetails user = new BsisUserDetails(UserBuilder.aUser().withId(1l).withUsername("admin").build());
-    TestingAuthenticationToken auth = new TestingAuthenticationToken(user, "Credentials", authorities);
-    SecurityContextHolder.getContext().setAuthentication(auth);
-  }
-
-  @After
-  public void teardown() throws Exception {
-    SecurityContextHolder.getContext().setAuthentication(null);
-  }
-
   @Test
   public void testDuplicateUserName() throws Exception {
     // set up data
     UserBackingForm form = new UserBackingForm();
-    form.setUsername("admin");
+    form.setUsername(USERNAME);
     form.setPassword("password");
     form.setConfirmPassword("password");
     form.setRoles(Arrays.asList(new Role[]{new Role()}));
@@ -67,8 +44,7 @@ public class UserBackingFormValidatorTest {
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    User adminUser = UserBuilder.aUser().withId(1l).withUsername("admin").build();
-    when(userRepository.findUser("admin")).thenReturn(adminUser);
+    when(userRepository.findUser(USERNAME)).thenReturn(loggedInUser);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
@@ -91,7 +67,7 @@ public class UserBackingFormValidatorTest {
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    when(userRepository.findUser("admin")).thenReturn(null);
+    when(userRepository.findUser(USERNAME)).thenReturn(null);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
@@ -114,7 +90,7 @@ public class UserBackingFormValidatorTest {
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    when(userRepository.findUser("admin")).thenReturn(null);
+    when(userRepository.findUser(USERNAME)).thenReturn(null);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
@@ -137,7 +113,7 @@ public class UserBackingFormValidatorTest {
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    when(userRepository.findUser("admin")).thenReturn(null);
+    when(userRepository.findUser(USERNAME)).thenReturn(null);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
@@ -152,7 +128,7 @@ public class UserBackingFormValidatorTest {
   public void testValidUserName() throws Exception {
     // set up data
     UserBackingForm form = new UserBackingForm();
-    form.setUsername("admin");
+    form.setUsername(USERNAME);
     form.setPassword("password");
     form.setConfirmPassword("password");
     form.setRoles(Arrays.asList(new Role[]{new Role()}));
@@ -160,7 +136,7 @@ public class UserBackingFormValidatorTest {
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    when(userRepository.findUser("admin")).thenReturn(null);
+    when(userRepository.findUser(USERNAME)).thenReturn(null);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
@@ -174,7 +150,7 @@ public class UserBackingFormValidatorTest {
   public void testInvalidRoles() throws Exception {
     // set up data
     UserBackingForm form = new UserBackingForm();
-    form.setUsername("admin");
+    form.setUsername(USERNAME);
     form.setPassword("password");
     form.setConfirmPassword("password");
     form.setRoles(Arrays.asList(new Role[]{}));
@@ -182,7 +158,7 @@ public class UserBackingFormValidatorTest {
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    when(userRepository.findUser("admin")).thenReturn(null);
+    when(userRepository.findUser(USERNAME)).thenReturn(null);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
@@ -197,7 +173,7 @@ public class UserBackingFormValidatorTest {
   public void testPasswordDontMatch() throws Exception {
     // set up data
     UserBackingForm form = new UserBackingForm();
-    form.setUsername("admin");
+    form.setUsername(USERNAME);
     form.setPassword("password1");
     form.setConfirmPassword("password2");
     form.setRoles(Arrays.asList(new Role[]{new Role()}));
@@ -205,7 +181,7 @@ public class UserBackingFormValidatorTest {
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    when(userRepository.findUser("admin")).thenReturn(null);
+    when(userRepository.findUser(USERNAME)).thenReturn(null);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
@@ -220,7 +196,7 @@ public class UserBackingFormValidatorTest {
   public void testPasswordEmpty1() throws Exception {
     // set up data
     UserBackingForm form = new UserBackingForm();
-    form.setUsername("admin");
+    form.setUsername(USERNAME);
     form.setPassword("");
     form.setConfirmPassword("password2");
     form.setRoles(Arrays.asList(new Role[]{new Role()}));
@@ -228,7 +204,7 @@ public class UserBackingFormValidatorTest {
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    when(userRepository.findUser("admin")).thenReturn(null);
+    when(userRepository.findUser(USERNAME)).thenReturn(null);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
@@ -243,7 +219,7 @@ public class UserBackingFormValidatorTest {
   public void testPasswordEmpty2() throws Exception {
     // set up data
     UserBackingForm form = new UserBackingForm();
-    form.setUsername("admin");
+    form.setUsername(USERNAME);
     form.setPassword("password1");
     form.setConfirmPassword("");
     form.setRoles(Arrays.asList(new Role[]{new Role()}));
@@ -251,7 +227,7 @@ public class UserBackingFormValidatorTest {
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    when(userRepository.findUser("admin")).thenReturn(null);
+    when(userRepository.findUser(USERNAME)).thenReturn(null);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
@@ -266,8 +242,8 @@ public class UserBackingFormValidatorTest {
   public void testUpdateNoPasswordChange() throws Exception {
     // set up data
     UserBackingForm form = new UserBackingForm();
-    form.setId(1l);
-    form.setUsername("admin");
+    form.setId(USER_ID);
+    form.setUsername(USERNAME);
     form.setRoles(Arrays.asList(new Role[]{new Role()}));
 
     // set up mocks
@@ -286,24 +262,24 @@ public class UserBackingFormValidatorTest {
   public void testUpdateWithOwnPasswordChange() throws Exception {
     // set up data
     UserBackingForm form = new UserBackingForm();
-    form.setId(1l);
-    form.setUsername("admin");
+    form.setId(USER_ID);
+    form.setUsername(USERNAME);
     form.setCurrentPassword("password");
     form.setPassword("newPassword");
     form.setConfirmPassword("newPassword");
     form.setRoles(Arrays.asList(new Role[]{new Role()}));
     form.setModifyPassword(true);
 
-    User adminUser = UserBuilder.aUser()
-        .withId(1l)
-        .withUsername("admin")
+    User anotherAdminUser = UserBuilder.aUser()
+        .withId(2l)
+        .withUsername("aadmin")
         .withPasswordReset()
         .build();
 
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    when(userRepository.findUserById(1l)).thenReturn(adminUser);
+    when(userRepository.findUserById(USER_ID)).thenReturn(anotherAdminUser);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
@@ -317,24 +293,24 @@ public class UserBackingFormValidatorTest {
   public void testUpdateWithOwnPasswordChangeInvalidCurrentPassword() throws Exception {
     // set up data
     UserBackingForm form = new UserBackingForm();
-    form.setId(1l);
-    form.setUsername("admin");
+    form.setId(USER_ID);
+    form.setUsername(USERNAME);
     form.setCurrentPassword("oldpassword");
     form.setPassword("newPassword");
     form.setConfirmPassword("newPassword");
     form.setRoles(Arrays.asList(new Role[]{new Role()}));
     form.setModifyPassword(true);
 
-    User adminUser = UserBuilder.aUser()
-        .withId(1l)
-        .withUsername("admin")
+    User anotherAdminUser = UserBuilder.aUser()
+        .withId(2l)
+        .withUsername("aadmin")
         .withPasswordReset()
         .build();
 
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    when(userRepository.findUserById(1l)).thenReturn(adminUser);
+    when(userRepository.findUserById(USER_ID)).thenReturn(anotherAdminUser);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
@@ -349,24 +325,24 @@ public class UserBackingFormValidatorTest {
   public void testUpdateWithOwnPasswordChangeNullCurrentPassword() throws Exception {
     // set up data
     UserBackingForm form = new UserBackingForm();
-    form.setId(1l);
-    form.setUsername("admin");
+    form.setId(USER_ID);
+    form.setUsername(USERNAME);
     form.setCurrentPassword(null);
     form.setPassword("newPassword");
     form.setConfirmPassword("newPassword");
     form.setRoles(Arrays.asList(new Role[]{new Role()}));
     form.setModifyPassword(true);
 
-    User adminUser = UserBuilder.aUser()
-        .withId(1l)
-        .withUsername("admin")
+    User anotherAdminUser = UserBuilder.aUser()
+        .withId(2l)
+        .withUsername("aadmin")
         .withPasswordReset()
         .build();
 
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    when(userRepository.findUserById(1l)).thenReturn(adminUser);
+    when(userRepository.findUserById(USER_ID)).thenReturn(anotherAdminUser);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
@@ -381,24 +357,24 @@ public class UserBackingFormValidatorTest {
   public void testUpdateWithOwnPasswordChangeNewPasswordMismatch() throws Exception {
     // set up data
     UserBackingForm form = new UserBackingForm();
-    form.setId(1l);
-    form.setUsername("admin");
+    form.setId(USER_ID);
+    form.setUsername(USERNAME);
     form.setCurrentPassword("password");
     form.setPassword("newPassword1");
     form.setConfirmPassword("newPassword2");
     form.setRoles(Arrays.asList(new Role[]{new Role()}));
     form.setModifyPassword(true);
 
-    User adminUser = UserBuilder.aUser()
-        .withId(1l)
-        .withUsername("admin")
+    User anotherAdminUser = UserBuilder.aUser()
+        .withId(2l)
+        .withUsername("aadmin")
         .withPasswordReset()
         .build();
 
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    when(userRepository.findUserById(1l)).thenReturn(adminUser);
+    when(userRepository.findUserById(USER_ID)).thenReturn(anotherAdminUser);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
@@ -420,18 +396,13 @@ public class UserBackingFormValidatorTest {
     form.setRoles(Arrays.asList(new Role[]{new Role()}));
     form.setModifyPassword(true);
 
-    User adminUser = UserBuilder.aUser()
-        .withId(1l)
-        .withUsername("admin")
-        .build();
-
     // set up security
-    setSecurityUser(PermissionConstants.MANAGE_ROLES, PermissionConstants.MANAGE_USERS);
+    setSecurityUser(loggedInUser, PermissionConstants.MANAGE_ROLES, PermissionConstants.MANAGE_USERS);
 
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    when(userRepository.findUserById(1l)).thenReturn(adminUser);
+    when(userRepository.findUserById(USER_ID)).thenReturn(loggedInUser);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");

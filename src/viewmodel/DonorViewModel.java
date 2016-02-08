@@ -106,7 +106,7 @@ public class DonorViewModel {
 
   public PreferredLanguage getPreferredLanguage() {
     /*if (donor.getPreferredLanguage() == null ||
-	        donor.getPreferredLanguage().getPreferredLanguage() == null)
+          donor.getPreferredLanguage().getPreferredLanguage() == null)
 	      return "";
 	  else
 	  		return donor.getPreferredLanguage().getPreferredLanguage();

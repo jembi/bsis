@@ -13,9 +13,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
@@ -32,8 +29,6 @@ import valueobject.CollectedDonationValueObject;
 
 public class DonationRepositoryTests extends ContextDependentTestSuite {
 
-  @PersistenceContext
-  private EntityManager entityManager;
   @Autowired
   private DonationRepository donationRepository;
 

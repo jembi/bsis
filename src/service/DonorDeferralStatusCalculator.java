@@ -1,6 +1,7 @@
 package service;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import model.bloodtesting.BloodTest;
@@ -52,6 +53,10 @@ public class DonorDeferralStatusCalculator {
 
   public boolean isDonorCurrentlyDeferred(Donor donor) {
     return donorDeferralRepository.countCurrentDonorDeferralsForDonor(donor) > 0;
+  }
+
+  public boolean isDonorDeferredOnDate(Donor donor, Date date) {
+    return donorDeferralRepository.countDonorDeferralsForDonorOnDate(donor, date) > 0;
   }
 
 }

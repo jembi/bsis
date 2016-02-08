@@ -152,7 +152,7 @@ public class LotReleaseController {
 			         
 	    	
 	    	/* OLD ZPL CODE    	
-	    	map.put("labelZPL",
+        map.put("labelZPL",
 	    			         "^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD15^JUS^LRN^CI0^XZ" +
 	    			         "^XA" +
 	    			         "^MMT" +

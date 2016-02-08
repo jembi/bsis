@@ -22,21 +22,12 @@ import model.packtype.PackType;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import repository.DonationBatchRepository;
+import suites.ContextDependentTestSuite;
 
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@Transactional
-@WebAppConfiguration
-public class DonationBatchCRUDServiceTest {
+public class DonationBatchCRUDServiceTest extends ContextDependentTestSuite {
 
   @Autowired
   DonationBatchCRUDService donationBatchCRUDService;

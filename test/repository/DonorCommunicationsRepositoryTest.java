@@ -6,15 +6,12 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.sql.DataSource;
 
 import model.donor.Donor;
 import model.donor.DonorStatus;
@@ -23,43 +20,21 @@ import model.location.Location;
 import model.util.BloodGroup;
 
 import org.apache.commons.lang.time.DateUtils;
-import org.dbunit.database.DatabaseConfig;
-import org.dbunit.database.DatabaseDataSourceConnection;
-import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ReplacementDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
-import org.dbunit.operation.DatabaseOperation;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
-import security.BsisUserDetails;
-import security.LoginUserService;
+import suites.DBUnitContextDependentTestSuite;
 import utils.CustomDateFormatter;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@Transactional
-@WebAppConfiguration
-public class DonorCommunicationsRepositoryTest {
+public class DonorCommunicationsRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Autowired
   DonorRepository donorRepository;
-  @Autowired
-  private DataSource dataSource;
 
   @Autowired
   DonorCommunicationsRepository donorCommunicationsRepository;
@@ -67,59 +42,27 @@ public class DonorCommunicationsRepositoryTest {
   ApplicationContext applicationContext = null;
   UserDetailsService userDetailsService;
 
-  private IDataSet getDataSet() throws Exception {
+  @Override
+  protected IDataSet getDataSet() throws Exception {
     File file = new File("test/dataset/DonorCommunicationsRepositoryDataset.xml");
-    return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
-  }
+    IDataSet dataSet = new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
+    Date today = new Date();
+    Map<String, Object> replacements = new HashMap<String, Object>();
 
-  private IDatabaseConnection getConnection() throws SQLException {
-    IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
-    DatabaseConfig config = connection.getConfig();
-    config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
-    return connection;
-  }
+    replacements.put("today", today);
+    replacements.put("yesterday", DateUtils.addDays(today, -(1)));
+    replacements.put("twoWeeksAgo", DateUtils.addDays(today, -(14)));
+    replacements.put("oneMonthAgo", DateUtils.addDays(today, -(30)));
+    replacements.put("threeMonthsAgo", DateUtils.addDays(today, -(90)));
+    replacements.put("threeMonthsAhead", DateUtils.addDays(today, (90)));
+    replacements.put("sixMonthsAhead", DateUtils.addDays(today, (180)));
 
-  @Before
-  public void init() throws Exception {
-    IDatabaseConnection connection = getConnection();
-    try {
-      // Insert Data into database using DonorCommunicationsRepositoryDataset.xml
-      IDataSet dataSet = getDataSet();
-
-      Date today = new Date();
-      Map<String, Object> replacements = new HashMap<String, Object>();
-
-      replacements.put("today", today);
-      replacements.put("yesterday", DateUtils.addDays(today, -(1)));
-      replacements.put("twoWeeksAgo", DateUtils.addDays(today, -(14)));
-      replacements.put("oneMonthAgo", DateUtils.addDays(today, -(30)));
-      replacements.put("threeMonthsAgo", DateUtils.addDays(today, -(90)));
-      replacements.put("threeMonthsAhead", DateUtils.addDays(today, (90)));
-      replacements.put("sixMonthsAhead", DateUtils.addDays(today, (180)));
-
-      ReplacementDataSet rDataSet = new ReplacementDataSet(dataSet);
-      for (String key : replacements.keySet()) {
-        rDataSet.addReplacementObject("${" + key + "}",
-            replacements.get(key));
-      }
-      DatabaseOperation.CLEAN_INSERT.execute(connection, rDataSet);
-    } finally {
-      try {
-        connection.close();
-      } catch (SQLException e) {
-      }
+    ReplacementDataSet rDataSet = new ReplacementDataSet(dataSet);
+    for (String key : replacements.keySet()) {
+      rDataSet.addReplacementObject("${" + key + "}",
+          replacements.get(key));
     }
-  }
-
-  @AfterTransaction
-  public void after() throws Exception {
-    IDatabaseConnection connection = getConnection();
-    try {
-      IDataSet dataSet = getDataSet();
-      DatabaseOperation.DELETE_ALL.execute(connection, dataSet);
-    } finally {
-      connection.close();
-    }
+    return rDataSet;
   }
 
   /**
@@ -482,21 +425,6 @@ public class DonorCommunicationsRepositoryTest {
     }
     assertTrue("Donors in list should not be deferred at date of Clinic Date", isvalid);
 
-  }
-
-  /**
-   * UserPassword,BsisUserDetails(Principal) and authority detail store into SecurityContextHolder.
-   */
-  public void userAuthentication() {
-    applicationContext = new ClassPathXmlApplicationContext(
-        "file:**/security-bsis-servlet.xml");
-    userDetailsService = applicationContext.getBean(LoginUserService.class);
-    BsisUserDetails userDetails = (BsisUserDetails) userDetailsService
-        .loadUserByUsername("admin");
-    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-        userDetails, userDetails.getPassword(),
-        userDetails.getAuthorities());
-    SecurityContextHolder.getContext().setAuthentication(authToken);
   }
 
   private List<Location> createVenueList(long[] id) {

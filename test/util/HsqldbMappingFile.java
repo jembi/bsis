@@ -19,7 +19,7 @@ public class HsqldbMappingFile extends DefaultDataTypeFactory {
   @Override
   public DataType createDataType(int sqlType, String sqlTypeName) throws DataTypeException {
        /*
-		 if ("SMALLINT".equals(sqlTypeName)) {
+     if ("SMALLINT".equals(sqlTypeName)) {
 	            return DataType.BOOLEAN;
 	        }
 	       */

@@ -8,9 +8,6 @@ import static org.hamcrest.Matchers.is;
 
 import java.util.Arrays;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import model.component.Component;
 import model.component.ComponentStatus;
 import model.donation.Donation;
@@ -23,8 +20,6 @@ import suites.ContextDependentTestSuite;
 
 public class ComponentRepositoryTests extends ContextDependentTestSuite {
 
-  @PersistenceContext
-  private EntityManager entityManager;
   @Autowired
   private ComponentRepository componentRepository;
 

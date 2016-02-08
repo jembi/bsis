@@ -62,8 +62,6 @@ public class DonorCommunicationsController {
   Map<String, Object> donorCommunicationsFormGenerator(
       HttpServletRequest request) {
 
-    // DonorCommunicationsBackingForm dbform = new DonorCommunicationsBackingForm();
-
     Map<String, Object> map = new HashMap<String, Object>();
 
     // to ensure custom field names are displayed in the form
@@ -83,6 +81,7 @@ public class DonorCommunicationsController {
   }
 
   @RequestMapping(value = "/search", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
   public
   @ResponseBody
   Map<String, Object> findDonorCommunicationsPagination(

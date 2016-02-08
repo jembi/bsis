@@ -8,12 +8,14 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.BloodTestType;
 import model.donor.Donor;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -114,4 +116,16 @@ public class DonorDeferralStatusCalculatorTests {
     assertThat(returnedValue, is(false));
   }
 
+  @Test
+  public void testIsDonorDeferredWithNoCurrentDeferralsOnDate_shouldReturnFalse() {
+
+    Date futureMobileClinicDate = new DateTime().plusDays(7).toDate();
+    Donor donor = aDonor().build();
+
+    when(donorDeferralRepository.countDonorDeferralsForDonorOnDate(donor, futureMobileClinicDate)).thenReturn(0);
+
+    boolean returnedValue = donorDeferralStatusCalculator.isDonorDeferredOnDate(donor, futureMobileClinicDate);
+
+    assertThat(returnedValue, is(false));
+  }
 }
