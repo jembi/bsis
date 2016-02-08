@@ -123,7 +123,6 @@ public class TestResultController {
 	    Boolean pendingTTITests = false;
 	    Boolean basicBloodTypingComplete = true;
 	    Boolean basicTTIComplete = true;
-	    Boolean pendingBloodTypingMatchTests = false;
 	    boolean pendingBloodTypingConfirmations = false;
 	    
 	    for(BloodTestingRuleResult result : ruleResults){
@@ -139,12 +138,8 @@ public class TestResultController {
 	    	if(result.getPendingTTITestsIds().size() > 0){
 	    		pendingTTITests = true;
 	    	}
-	    	if(!result.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE)
-	    	    && (result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.NO_MATCH)
-	    	        || result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.MATCH))) {
-	    	  pendingBloodTypingMatchTests = true;
-	    	}
 	    	if (result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS)) {
+	    	  // A confirmation is required to resolve the ambiguous result.
 	    	  pendingBloodTypingConfirmations = true;
 	    	}
 	    }
@@ -154,7 +149,6 @@ public class TestResultController {
 		map.put("pendingTTITests", pendingTTITests);
 		map.put("basicBloodTypingComplete", basicBloodTypingComplete);
 		map.put("basicTTIComplete", basicTTIComplete);
-		map.put("pendingBloodTypingMatchTests", pendingBloodTypingMatchTests);
 		map.put("pendingBloodTypingConfirmations", pendingBloodTypingConfirmations);
 	
 		return new ResponseEntity<>(map, HttpStatus.OK);
