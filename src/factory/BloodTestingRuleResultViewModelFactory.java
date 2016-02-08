@@ -5,13 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import model.bloodtesting.BloodTestResult;
-import model.donation.Donation;
-import model.testbatch.TestBatch;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import model.bloodtesting.BloodTestResult;
+import model.donation.Donation;
+import model.testbatch.TestBatch;
 import repository.bloodtesting.BloodTestingRuleResultSet;
 import service.BloodTestResultConstraintChecker;
 import service.DonationConstraintChecker;
@@ -40,6 +39,7 @@ public class BloodTestingRuleResultViewModelFactory {
 		pendingBloodTypingTestsIds.addAll(bloodTestingRuleResultSet.getPendingRhTestsIds());
 		ruleResult.setPendingBloodTypingTestsIds(bloodTestingRuleResultSet.getPendingAboTestsIds());
 		ruleResult.setPendingTTITestsIds(bloodTestingRuleResultSet.getPendingTtiTestsIds());
+    ruleResult.setPendingDoubleEntryTtiTestIds(bloodTestingRuleResultSet.getPendingDoubleEntryTtiTestIds());
 		
 		// blood typing results
 		ruleResult.setBloodTypingMatchStatus(bloodTestingRuleResultSet.getBloodTypingMatchStatus());

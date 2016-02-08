@@ -8,13 +8,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import model.bloodtesting.TTIStatus;
-import model.donation.Donation;
-import model.donationbatch.DonationBatch;
-import model.donor.Donor;
-import model.testbatch.TestBatch;
-import model.testbatch.TestBatchStatus;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +19,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import backingform.TestResultBackingForm;
+import model.bloodtesting.TTIStatus;
+import model.donation.Donation;
+import model.donationbatch.DonationBatch;
+import model.donor.Donor;
+import model.testbatch.TestBatch;
+import model.testbatch.TestBatchStatus;
 import repository.DonationRepository;
 import repository.DonorRepository;
 import repository.TestBatchRepository;
@@ -38,7 +38,6 @@ import utils.PermissionConstants;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.DonationViewModel;
 import viewmodel.DonorViewModel;
-import backingform.TestResultBackingForm;
 
 @RestController
 @RequestMapping("testresults")
@@ -126,7 +125,8 @@ public class TestResultController {
 	    Boolean basicBloodTypingComplete = true;
 	    Boolean basicTTIComplete = true;
 	    Boolean pendingBloodTypingMatchTests = false;
-	    
+    Boolean pendingDoubleEntryTTITests = false;
+
 	    for(BloodTestingRuleResult result : ruleResults){
 	    	if(!result.getBloodTypingStatus().equals(BloodTypingStatus.COMPLETE)){
 	    		basicBloodTypingComplete = false;
@@ -143,6 +143,9 @@ public class TestResultController {
 	    	if(!result.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE) && (result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.NO_MATCH) ||
 	    	   result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS))	){
 	    		pendingBloodTypingMatchTests = true;
+      }
+      if (result.getPendingDoubleEntryTtiTestIds().size() > 0) {
+        pendingDoubleEntryTTITests = true;
 	    	}
 	    }
 	
@@ -151,7 +154,8 @@ public class TestResultController {
 		map.put("basicBloodTypingComplete", basicBloodTypingComplete);
 		map.put("basicTTIComplete", basicTTIComplete);
 		map.put("pendingBloodTypingMatchTests", pendingBloodTypingMatchTests);
-	
+    map.put("pendingDoubleEntryTTITests", pendingDoubleEntryTTITests);
+
 		return new ResponseEntity(map, HttpStatus.OK);
   }
   
