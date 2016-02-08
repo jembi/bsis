@@ -11,24 +11,24 @@ import backingform.AdverseEventTypeBackingForm;
 
 @Component
 public class AdverseEventTypeBackingFormValidator extends BaseValidator<AdverseEventTypeBackingForm> {
-    
-    @Autowired
-    private AdverseEventTypeRepository adverseEventTypeRepository;
 
-    @Override
-    public void validateForm(AdverseEventTypeBackingForm adverseEventTypeBackingForm, Errors errors) {
-        List<Long> existingAdverseEventTypeIds = adverseEventTypeRepository.findIdsByName(adverseEventTypeBackingForm.getName());
-        for (Long id : existingAdverseEventTypeIds) {
-            if (!id.equals(adverseEventTypeBackingForm.getId())) {
-                errors.rejectValue("name", "adverseEventType.name.duplicate",
-                        "There is already an adverse event type with that name");
-                break;
-            }
-        }
-    }
+  @Autowired
+  private AdverseEventTypeRepository adverseEventTypeRepository;
 
-    @Override
-    public String getFormName() {
-      return "adverseEventType";
+  @Override
+  public void validateForm(AdverseEventTypeBackingForm adverseEventTypeBackingForm, Errors errors) {
+    List<Long> existingAdverseEventTypeIds = adverseEventTypeRepository.findIdsByName(adverseEventTypeBackingForm.getName());
+    for (Long id : existingAdverseEventTypeIds) {
+      if (!id.equals(adverseEventTypeBackingForm.getId())) {
+        errors.rejectValue("name", "adverseEventType.name.duplicate",
+            "There is already an adverse event type with that name");
+        break;
+      }
     }
+  }
+
+  @Override
+  public String getFormName() {
+    return "adverseEventType";
+  }
 }

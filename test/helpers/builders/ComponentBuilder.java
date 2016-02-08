@@ -7,35 +7,35 @@ import model.component.ComponentStatus;
 import model.donation.Donation;
 
 public class ComponentBuilder extends AbstractEntityBuilder<Component> {
-    
-    private ComponentStatus status;
-    private Donation donation;
 
-    public ComponentBuilder withStatus(ComponentStatus status) {
-        this.status = status;
-        return this;
-    }
-    
-    public ComponentBuilder withDonation(Donation donation) {
-        this.donation = donation;
-        return this;
-    }
+  private ComponentStatus status;
+  private Donation donation;
 
-    @Override
-    public Component build() {
-        Component component = new Component();
-        component.setStatus(status);
-        component.setDonation(donation);
-        return component;
-    }
-    
-    @Override
-    public AbstractEntityPersister<Component> getPersister() {
-        return new ComponentPersister();
-    }
+  public ComponentBuilder withStatus(ComponentStatus status) {
+    this.status = status;
+    return this;
+  }
 
-    public static ComponentBuilder aComponent() {
-        return new ComponentBuilder();
-    }
+  public ComponentBuilder withDonation(Donation donation) {
+    this.donation = donation;
+    return this;
+  }
+
+  @Override
+  public Component build() {
+    Component component = new Component();
+    component.setStatus(status);
+    component.setDonation(donation);
+    return component;
+  }
+
+  @Override
+  public AbstractEntityPersister<Component> getPersister() {
+    return new ComponentPersister();
+  }
+
+  public static ComponentBuilder aComponent() {
+    return new ComponentBuilder();
+  }
 
 }

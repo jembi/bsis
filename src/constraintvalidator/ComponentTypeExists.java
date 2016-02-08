@@ -11,7 +11,7 @@ import javax.validation.Payload;
 
 @Documented
 @Constraint(validatedBy = ComponentTypeExistsConstraintValidator.class)
-@Target({ ElementType.FIELD })
+@Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ComponentTypeExists {
 

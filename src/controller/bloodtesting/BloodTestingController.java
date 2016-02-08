@@ -1,14 +1,17 @@
 package controller.bloodtesting;
 
 
-
 import backingform.BloodTestBackingForm;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
+
 import model.bloodtesting.BloodTest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import repository.bloodtesting.BloodTestingRepository;
 import utils.PermissionConstants;
 import viewmodel.BloodTestViewModel;
@@ -36,14 +40,14 @@ public class BloodTestingController {
     String reqUrl = req.getRequestURL().toString();
     String queryString = req.getQueryString();   // d=789
     if (queryString != null) {
-        reqUrl += "?"+queryString;
+      reqUrl += "?" + queryString;
     }
     return reqUrl;
   }
-  
+
   @RequestMapping(method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
-  public  Map<String, Object> configureBloodTests() {
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTS + "')")
+  public Map<String, Object> configureBloodTests() {
     Map<String, Object> map = new HashMap<String, Object>();
     List<BloodTestViewModel> bloodTests = new ArrayList<BloodTestViewModel>();
     for (BloodTest bt : bloodTestingRepository.getAllBloodTestsIncludeInactive()) {
@@ -52,51 +56,52 @@ public class BloodTestingController {
     map.put("bloodTests", bloodTests);
     return map;
   }
-  @RequestMapping(value = "{id}", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
+
+  @RequestMapping(value = "{id}", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
   public Map<String, Object> getBloodTestSummary(@PathVariable Long id) {
-      
-    Map<String, Object> map = new HashMap<String, Object>();  
+
+    Map<String, Object> map = new HashMap<String, Object>();
     BloodTestViewModel bloodTest = new BloodTestViewModel(bloodTestingRepository.findBloodTestWithWorksheetTypesById(id));
     map.put("bloodTest", bloodTest);
     return map;
   }
 
-  @RequestMapping(method=RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
+  @RequestMapping(method = RequestMethod.POST)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTS + "')")
   public ResponseEntity saveNewBloodTest(
       @RequestBody BloodTestBackingForm form) {
-      BloodTest bloodTest = form.getBloodTest();
-      bloodTestingRepository.saveBloodTest(form);
-      return new ResponseEntity(new BloodTestViewModel(form.getBloodTest()), HttpStatus.CREATED);
+    BloodTest bloodTest = form.getBloodTest();
+    bloodTestingRepository.saveBloodTest(form);
+    return new ResponseEntity(new BloodTestViewModel(form.getBloodTest()), HttpStatus.CREATED);
   }
-  
- /**
-  * TODO - To be improved
-  */
+
+  /**
+   * TODO - To be improved
+   */
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTS + "')")
   public ResponseEntity updateBloodTest(@PathVariable Long id,
-      @RequestBody BloodTestBackingForm backingObject) {
-      Map<String, Object> map = new HashMap<String, Object>();  
-      backingObject.setId(id);
-      BloodTest bloodTest = bloodTestingRepository.updateBloodTest(backingObject);
-      map.put("bloodTest", bloodTest);
-      return new ResponseEntity(map, HttpStatus.OK);
+                                        @RequestBody BloodTestBackingForm backingObject) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    backingObject.setId(id);
+    BloodTest bloodTest = bloodTestingRepository.updateBloodTest(backingObject);
+    map.put("bloodTest", bloodTest);
+    return new ResponseEntity(map, HttpStatus.OK);
   }
-  
-  @RequestMapping(value="{id}/deactivate", method=RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
+
+  @RequestMapping(value = "{id}/deactivate", method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTS + "')")
   public ResponseEntity deactivateBloodTest(@PathVariable Long id) {
     bloodTestingRepository.deactivateBloodTest(id);
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
-  @RequestMapping(value="{id}/activate", method=RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.MANAGE_BLOOD_TESTS+"')")
+  @RequestMapping(value = "{id}/activate", method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTS + "')")
   public ResponseEntity activateBloodTest(@PathVariable Long id) {
 
-   
+
     bloodTestingRepository.activateBloodTest(id);
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }

@@ -5,7 +5,7 @@ import org.apache.log4j.Level;
 public class BsisLogLevel extends Level {
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
   public static final int BSIS_INT = WARN_INT + 100;

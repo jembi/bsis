@@ -15,7 +15,7 @@ import repository.DeferralReasonNamedQueryConstants;
 
 @NamedQueries({
     @NamedQuery(name = DeferralReasonNamedQueryConstants.NAME_FIND_DEFERRAL_REASON_BY_TYPE,
-            query = DeferralReasonNamedQueryConstants.QUERY_FIND_DEFERRAL_REASON_BY_TYPE)
+        query = DeferralReasonNamedQueryConstants.QUERY_FIND_DEFERRAL_REASON_BY_TYPE)
 })
 @Entity
 @Audited
@@ -23,18 +23,18 @@ public class DeferralReason extends BaseEntity {
 
   private static final long serialVersionUID = 203754154113421034L;
 
-  @Column(length=100)
+  @Column(length = 100)
   private String reason;
 
   private Boolean isDeleted;
-  
+
   @Column(nullable = true)
   private Integer defaultDuration; // in days
-  
+
   @Column(length = 30, nullable = false)
   @Enumerated(EnumType.STRING)
   private DeferralReasonType type = DeferralReasonType.NORMAL;
-  
+
   @Column(length = 30, nullable = false)
   @Enumerated(EnumType.STRING)
   private DurationType durationType = DurationType.TEMPORARY;
@@ -55,7 +55,7 @@ public class DeferralReason extends BaseEntity {
     this.isDeleted = isDeleted;
   }
 
-  public void copy (DeferralReason deferralReason){
+  public void copy(DeferralReason deferralReason) {
     setId(deferralReason.getId());
     this.reason = deferralReason.getReason();
     this.isDeleted = deferralReason.getIsDeleted();
@@ -63,28 +63,28 @@ public class DeferralReason extends BaseEntity {
     this.durationType = deferralReason.getDurationType();
   }
 
-    public Integer getDefaultDuration() {
-        return defaultDuration;
-    }
+  public Integer getDefaultDuration() {
+    return defaultDuration;
+  }
 
-    public void setDefaultDuration(Integer defaultDuration) {
-        this.defaultDuration = defaultDuration;
-    }
+  public void setDefaultDuration(Integer defaultDuration) {
+    this.defaultDuration = defaultDuration;
+  }
 
-    public DeferralReasonType getType() {
-        return type;
-    }
+  public DeferralReasonType getType() {
+    return type;
+  }
 
-    public void setType(DeferralReasonType type) {
-        this.type = type;
-    }
+  public void setType(DeferralReasonType type) {
+    this.type = type;
+  }
 
-    public DurationType getDurationType() {
-        return durationType;
-    }
+  public DurationType getDurationType() {
+    return durationType;
+  }
 
-    public void setDurationType(DurationType durationType) {
-        this.durationType = durationType;
-    }
+  public void setDurationType(DurationType durationType) {
+    this.durationType = durationType;
+  }
 
 }

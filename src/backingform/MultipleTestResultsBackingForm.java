@@ -7,7 +7,7 @@ public class MultipleTestResultsBackingForm {
   String testedOn;
   String donationIdentificationNumber;
   List<String> testResults;
-  
+
   public MultipleTestResultsBackingForm() {
   }
 

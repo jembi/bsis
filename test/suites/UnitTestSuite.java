@@ -14,7 +14,7 @@ import security.BsisUserDetails;
 
 @RunWith(MockitoJUnitRunner.class)
 public abstract class UnitTestSuite {
-  
+
   protected static final Long USER_ID = 1L;
   protected static final String USERNAME = "admin";
 
@@ -25,7 +25,7 @@ public abstract class UnitTestSuite {
     loggedInUser = UserBuilder.aUser().withId(USER_ID).withUsername(USERNAME).build();
     setSecurityUser(loggedInUser);
   }
-  
+
   protected void setSecurityUser(User user, String... authorities) {
     BsisUserDetails bsisUser = new BsisUserDetails(user);
     TestingAuthenticationToken auth = new TestingAuthenticationToken(bsisUser, "Credentials", authorities);
@@ -34,10 +34,10 @@ public abstract class UnitTestSuite {
 
   @After
   public void after() throws Exception {
-      clearSpringSecurityUser(); // reverse the initiation of the Spring Security user
+    clearSpringSecurityUser(); // reverse the initiation of the Spring Security user
   }
-    
+
   public void clearSpringSecurityUser() throws Exception {
-      SecurityContextHolder.getContext().setAuthentication(null);
+    SecurityContextHolder.getContext().setAuthentication(null);
   }
 }

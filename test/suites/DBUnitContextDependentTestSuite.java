@@ -39,32 +39,27 @@ import security.BsisUserDetails;
  * Spring Security Context.
  */
 public abstract class DBUnitContextDependentTestSuite {
-  
+
   protected User loggedInUser;
-  
+
   @PersistenceContext
   protected EntityManager entityManager;
-  
+
   @Autowired
   protected UserRepository userRepository;
-    
+
   @Autowired
   private DataSource dataSource;
 
   /**
    * Implement and specify which Dataset XML file should be loaded into the database.
-   * 
+   *
    * @return IDataSet
-   * @throws Exception
    */
   protected abstract IDataSet getDataSet() throws Exception;
-  
+
   /**
-   * 
    * Auto generated method comment
-   * 
-   * @return
-   * @throws Exception
    */
   protected User getLoggedInUser() throws Exception {
     User user;
@@ -99,14 +94,14 @@ public abstract class DBUnitContextDependentTestSuite {
       connection.close();
     }
   }
-  
+
   private IDatabaseConnection getConnection() throws SQLException {
     IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
     DatabaseConfig config = connection.getConfig();
     config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
     return connection;
   }
-  
+
   private void initSpringSecurityUser() throws Exception {
     User user = getLoggedInUser();
     if (user != null) {

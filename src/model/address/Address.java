@@ -11,229 +11,229 @@ import model.BaseEntity;
 @Entity
 public class Address extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    private String homeAddressLine1;
-    private String homeAddressLine2;
-    private String homeAddressCity;
-    private String homeAddressProvince;
-    private String homeAddressDistrict;
-    private String homeAddressCountry;
-    private String homeAddressState;
-    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
-    private String homeAddressZipcode;
-    
-    private String workAddressLine1;
-    private String workAddressLine2;
-    private String workAddressCity;
-    private String workAddressProvince;
-    private String workAddressDistrict;
-    private String workAddressCountry;
-    private String workAddressState;
-    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
-    private String workAddressZipcode;
+  private String homeAddressLine1;
+  private String homeAddressLine2;
+  private String homeAddressCity;
+  private String homeAddressProvince;
+  private String homeAddressDistrict;
+  private String homeAddressCountry;
+  private String homeAddressState;
+  @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
+  private String homeAddressZipcode;
 
-    private String postalAddressLine1;
-    private String postalAddressLine2;
-    private String postalAddressCity;
-    private String postalAddressProvince;
-    private String postalAddressDistrict;
-    private String postalAddressCountry;
-    private String postalAddressState;
-    @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
-    private String postalAddressZipcode;
+  private String workAddressLine1;
+  private String workAddressLine2;
+  private String workAddressCity;
+  private String workAddressProvince;
+  private String workAddressDistrict;
+  private String workAddressCountry;
+  private String workAddressState;
+  @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
+  private String workAddressZipcode;
 
-    public String getHomeAddressLine1() {
-        return homeAddressLine1;
-    }
+  private String postalAddressLine1;
+  private String postalAddressLine2;
+  private String postalAddressCity;
+  private String postalAddressProvince;
+  private String postalAddressDistrict;
+  private String postalAddressCountry;
+  private String postalAddressState;
+  @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
+  private String postalAddressZipcode;
 
-    public void setHomeAddressLine1(String homeAddressLine1) {
-        this.homeAddressLine1 = homeAddressLine1;
-    }
+  public String getHomeAddressLine1() {
+    return homeAddressLine1;
+  }
 
-    public String getHomeAddressLine2() {
-        return homeAddressLine2;
-    }
+  public void setHomeAddressLine1(String homeAddressLine1) {
+    this.homeAddressLine1 = homeAddressLine1;
+  }
 
-    public void setHomeAddressLine2(String homeAddressLine2) {
-        this.homeAddressLine2 = homeAddressLine2;
-    }
+  public String getHomeAddressLine2() {
+    return homeAddressLine2;
+  }
 
-    public String getHomeAddressCity() {
-        return homeAddressCity;
-    }
+  public void setHomeAddressLine2(String homeAddressLine2) {
+    this.homeAddressLine2 = homeAddressLine2;
+  }
 
-    public void setHomeAddressCity(String homeAddressCity) {
-        this.homeAddressCity = homeAddressCity;
-    }
+  public String getHomeAddressCity() {
+    return homeAddressCity;
+  }
 
-    public String getHomeAddressProvince() {
-        return homeAddressProvince;
-    }
+  public void setHomeAddressCity(String homeAddressCity) {
+    this.homeAddressCity = homeAddressCity;
+  }
 
-    public void setHomeAddressProvince(String homeAddressProvince) {
-        this.homeAddressProvince = homeAddressProvince;
-    }
+  public String getHomeAddressProvince() {
+    return homeAddressProvince;
+  }
 
-    public String getHomeAddressDistrict() {
-        return homeAddressDistrict;
-    }
+  public void setHomeAddressProvince(String homeAddressProvince) {
+    this.homeAddressProvince = homeAddressProvince;
+  }
 
-    public void setHomeAddressDistrict(String homeAddressDistrict) {
-        this.homeAddressDistrict = homeAddressDistrict;
-    }
+  public String getHomeAddressDistrict() {
+    return homeAddressDistrict;
+  }
 
-    public String getHomeAddressCountry() {
-        return homeAddressCountry;
-    }
+  public void setHomeAddressDistrict(String homeAddressDistrict) {
+    this.homeAddressDistrict = homeAddressDistrict;
+  }
 
-    public void setHomeAddressCountry(String homeAddressCountry) {
-        this.homeAddressCountry = homeAddressCountry;
-    }
+  public String getHomeAddressCountry() {
+    return homeAddressCountry;
+  }
 
-    public String getHomeAddressState() {
-        return homeAddressState;
-    }
+  public void setHomeAddressCountry(String homeAddressCountry) {
+    this.homeAddressCountry = homeAddressCountry;
+  }
 
-    public void setHomeAddressState(String homeAddressState) {
-        this.homeAddressState = homeAddressState;
-    }
+  public String getHomeAddressState() {
+    return homeAddressState;
+  }
 
-    public String getHomeAddressZipcode() {
-        return homeAddressZipcode;
-    }
+  public void setHomeAddressState(String homeAddressState) {
+    this.homeAddressState = homeAddressState;
+  }
 
-    public void setHomeAddressZipcode(String homeAddressZipcode) {
-        this.homeAddressZipcode = homeAddressZipcode;
-    }
+  public String getHomeAddressZipcode() {
+    return homeAddressZipcode;
+  }
 
-    public String getPostalAddressLine1() {
-        return postalAddressLine1;
-    }
+  public void setHomeAddressZipcode(String homeAddressZipcode) {
+    this.homeAddressZipcode = homeAddressZipcode;
+  }
 
-    public void setPostalAddressLine1(String postalAddressLine1) {
-        this.postalAddressLine1 = postalAddressLine1;
-    }
+  public String getPostalAddressLine1() {
+    return postalAddressLine1;
+  }
 
-    public String getPostalAddressLine2() {
-        return postalAddressLine2;
-    }
+  public void setPostalAddressLine1(String postalAddressLine1) {
+    this.postalAddressLine1 = postalAddressLine1;
+  }
 
-    public void setPostalAddressLine2(String postalAddressLine2) {
-        this.postalAddressLine2 = postalAddressLine2;
-    }
+  public String getPostalAddressLine2() {
+    return postalAddressLine2;
+  }
 
-  
-    public String getWorkAddressCity() {
-        return workAddressCity;
-    }
+  public void setPostalAddressLine2(String postalAddressLine2) {
+    this.postalAddressLine2 = postalAddressLine2;
+  }
 
-    public void setWorkAddressCity(String workAddressCity) {
-        this.workAddressCity = workAddressCity;
-    }
 
-    public String getWorkAddressProvince() {
-        return workAddressProvince;
-    }
+  public String getWorkAddressCity() {
+    return workAddressCity;
+  }
 
-    public void setWorkAddressProvince(String workAddressProvince) {
-        this.workAddressProvince = workAddressProvince;
-    }
+  public void setWorkAddressCity(String workAddressCity) {
+    this.workAddressCity = workAddressCity;
+  }
 
-    public String getWorkAddressDistrict() {
-        return workAddressDistrict;
-    }
+  public String getWorkAddressProvince() {
+    return workAddressProvince;
+  }
 
-    public void setWorkAddressDistrict(String workAddressDistrict) {
-        this.workAddressDistrict = workAddressDistrict;
-    }
+  public void setWorkAddressProvince(String workAddressProvince) {
+    this.workAddressProvince = workAddressProvince;
+  }
 
-    public String getWorkAddressCountry() {
-        return workAddressCountry;
-    }
+  public String getWorkAddressDistrict() {
+    return workAddressDistrict;
+  }
 
-    public void setWorkAddressCountry(String workAddressCountry) {
-        this.workAddressCountry = workAddressCountry;
-    }
+  public void setWorkAddressDistrict(String workAddressDistrict) {
+    this.workAddressDistrict = workAddressDistrict;
+  }
 
-    public String getWorkAddressState() {
-        return workAddressState;
-    }
+  public String getWorkAddressCountry() {
+    return workAddressCountry;
+  }
 
-    public void setWorkAddressState(String workAddressState) {
-        this.workAddressState = workAddressState;
-    }
+  public void setWorkAddressCountry(String workAddressCountry) {
+    this.workAddressCountry = workAddressCountry;
+  }
 
-    public String getWorkAddressZipcode() {
-        return workAddressZipcode;
-    }
+  public String getWorkAddressState() {
+    return workAddressState;
+  }
 
-    public void setWorkAddressZipcode(String workAddressZipcode) {
-        this.workAddressZipcode = workAddressZipcode;
-    }
+  public void setWorkAddressState(String workAddressState) {
+    this.workAddressState = workAddressState;
+  }
 
-    public String getWorkAddressLine1() {
-        return workAddressLine1;
-    }
+  public String getWorkAddressZipcode() {
+    return workAddressZipcode;
+  }
 
-    public void setWorkAddressLine1(String workAddressLine1) {
-        this.workAddressLine1 = workAddressLine1;
-    }
+  public void setWorkAddressZipcode(String workAddressZipcode) {
+    this.workAddressZipcode = workAddressZipcode;
+  }
 
-    public String getWorkAddressLine2() {
-        return workAddressLine2;
-    }
+  public String getWorkAddressLine1() {
+    return workAddressLine1;
+  }
 
-    public void setWorkAddressLine2(String workAddressLine2) {
-        this.workAddressLine2 = workAddressLine2;
-    }
+  public void setWorkAddressLine1(String workAddressLine1) {
+    this.workAddressLine1 = workAddressLine1;
+  }
 
-  
-    public String getPostalAddressCity() {
-        return postalAddressCity;
-    }
+  public String getWorkAddressLine2() {
+    return workAddressLine2;
+  }
 
-    public void setPostalAddressCity(String postalAddressCity) {
-        this.postalAddressCity = postalAddressCity;
-    }
+  public void setWorkAddressLine2(String workAddressLine2) {
+    this.workAddressLine2 = workAddressLine2;
+  }
 
-    public String getPostalAddressProvince() {
-        return postalAddressProvince;
-    }
 
-    public void setPostalAddressProvince(String postalAddressProvince) {
-        this.postalAddressProvince = postalAddressProvince;
-    }
+  public String getPostalAddressCity() {
+    return postalAddressCity;
+  }
 
-    public String getPostalAddressDistrict() {
-        return postalAddressDistrict;
-    }
+  public void setPostalAddressCity(String postalAddressCity) {
+    this.postalAddressCity = postalAddressCity;
+  }
 
-    public void setPostalAddressDistrict(String postalAddressDistrict) {
-        this.postalAddressDistrict = postalAddressDistrict;
-    }
+  public String getPostalAddressProvince() {
+    return postalAddressProvince;
+  }
 
-    public String getPostalAddressCountry() {
-        return postalAddressCountry;
-    }
+  public void setPostalAddressProvince(String postalAddressProvince) {
+    this.postalAddressProvince = postalAddressProvince;
+  }
 
-    public void setPostalAddressCountry(String postalAddressCountry) {
-        this.postalAddressCountry = postalAddressCountry;
-    }
+  public String getPostalAddressDistrict() {
+    return postalAddressDistrict;
+  }
 
-    public String getPostalAddressState() {
-        return postalAddressState;
-    }
+  public void setPostalAddressDistrict(String postalAddressDistrict) {
+    this.postalAddressDistrict = postalAddressDistrict;
+  }
 
-    public void setPostalAddressState(String postalAddressState) {
-        this.postalAddressState = postalAddressState;
-    }
+  public String getPostalAddressCountry() {
+    return postalAddressCountry;
+  }
 
-    public String getPostalAddressZipcode() {
-        return postalAddressZipcode;
-    }
+  public void setPostalAddressCountry(String postalAddressCountry) {
+    this.postalAddressCountry = postalAddressCountry;
+  }
 
-    public void setPostalAddressZipcode(String postalAddressZipcode) {
-        this.postalAddressZipcode = postalAddressZipcode;
-    }
+  public String getPostalAddressState() {
+    return postalAddressState;
+  }
+
+  public void setPostalAddressState(String postalAddressState) {
+    this.postalAddressState = postalAddressState;
+  }
+
+  public String getPostalAddressZipcode() {
+    return postalAddressZipcode;
+  }
+
+  public void setPostalAddressZipcode(String postalAddressZipcode) {
+    this.postalAddressZipcode = postalAddressZipcode;
+  }
 }

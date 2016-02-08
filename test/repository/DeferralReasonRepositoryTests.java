@@ -17,54 +17,54 @@ import suites.ContextDependentTestSuite;
 
 public class DeferralReasonRepositoryTests extends ContextDependentTestSuite {
 
-    @Autowired
-    private DeferralReasonRepository deferralReasonRepository;
-    
-    @Test(expected = NoResultException.class)
-    public void testFindDeferralReasonByTypeWithNoMatchingDeferralReasons_shouldThrow() {
-        deferralReasonRepository.findDeferralReasonByType(DeferralReasonType.AUTOMATED_TTI_UNSAFE);
-    }
-    
-    @Test(expected = NonUniqueResultException.class)
-    public void testFindDeferralReasonByTypeWithMultipleMatchingDeferralReasons_shouldThrow() {
-        DeferralReasonType type = DeferralReasonType.AUTOMATED_TTI_UNSAFE;
-        
-        aDeferralReason()
-                .thatIsNotDeleted()
-                .withType(type)
-                .buildAndPersist(entityManager);
-        aDeferralReason()
-                .thatIsNotDeleted()
-                .withType(type)
-                .buildAndPersist(entityManager);
-        
-        deferralReasonRepository.findDeferralReasonByType(type);
-    }
-    
-    @Test
-    public void testFindDeferralReasonByType_shouldReturnNonDeletedDeferralReasonsMatchingType() {
-        DeferralReasonType type = DeferralReasonType.AUTOMATED_TTI_UNSAFE;
-        
-        // Excluded by deleted flag
-        aDeferralReason()
-                .thatIsDeleted()
-                .withType(type)
-                .buildAndPersist(entityManager);
+  @Autowired
+  private DeferralReasonRepository deferralReasonRepository;
 
-        // Excluded by type
-        aDeferralReason()
-                .thatIsNotDeleted()
-                .withType(DeferralReasonType.NORMAL)
-                .buildAndPersist(entityManager);
+  @Test(expected = NoResultException.class)
+  public void testFindDeferralReasonByTypeWithNoMatchingDeferralReasons_shouldThrow() {
+    deferralReasonRepository.findDeferralReasonByType(DeferralReasonType.AUTOMATED_TTI_UNSAFE);
+  }
 
-        DeferralReason expectedDeferralReason = aDeferralReason()
-                .thatIsNotDeleted()
-                .withType(type)
-                .buildAndPersist(entityManager);
+  @Test(expected = NonUniqueResultException.class)
+  public void testFindDeferralReasonByTypeWithMultipleMatchingDeferralReasons_shouldThrow() {
+    DeferralReasonType type = DeferralReasonType.AUTOMATED_TTI_UNSAFE;
 
-        DeferralReason returnedDeferralReason = deferralReasonRepository.findDeferralReasonByType(type);
-        
-        assertThat(returnedDeferralReason, is(expectedDeferralReason));
-    }
+    aDeferralReason()
+        .thatIsNotDeleted()
+        .withType(type)
+        .buildAndPersist(entityManager);
+    aDeferralReason()
+        .thatIsNotDeleted()
+        .withType(type)
+        .buildAndPersist(entityManager);
+
+    deferralReasonRepository.findDeferralReasonByType(type);
+  }
+
+  @Test
+  public void testFindDeferralReasonByType_shouldReturnNonDeletedDeferralReasonsMatchingType() {
+    DeferralReasonType type = DeferralReasonType.AUTOMATED_TTI_UNSAFE;
+
+    // Excluded by deleted flag
+    aDeferralReason()
+        .thatIsDeleted()
+        .withType(type)
+        .buildAndPersist(entityManager);
+
+    // Excluded by type
+    aDeferralReason()
+        .thatIsNotDeleted()
+        .withType(DeferralReasonType.NORMAL)
+        .buildAndPersist(entityManager);
+
+    DeferralReason expectedDeferralReason = aDeferralReason()
+        .thatIsNotDeleted()
+        .withType(type)
+        .buildAndPersist(entityManager);
+
+    DeferralReason returnedDeferralReason = deferralReasonRepository.findDeferralReasonByType(type);
+
+    assertThat(returnedDeferralReason, is(expectedDeferralReason));
+  }
 
 }

@@ -60,7 +60,7 @@ public class ComponentBackingForm {
     else
       return componentType.getId().toString();
   }
-  
+
   @JsonIgnore
   public Date getLastUpdated() {
     return component.getLastUpdated();
@@ -104,8 +104,7 @@ public class ComponentBackingForm {
   public void setComponentType(String componentTypeId) {
     if (StringUtils.isBlank(componentTypeId)) {
       component.setComponentType(null);
-    }
-    else {
+    } else {
       ComponentType pt = new ComponentType();
       try {
         pt.setId(Long.parseLong(componentTypeId));
@@ -132,7 +131,7 @@ public class ComponentBackingForm {
       return "";
     return CustomDateFormatter.getDateString(component.getExpiresOn());
   }
-  
+
   public void setLastUpdated(Date lastUpdated) {
     component.setLastUpdated(lastUpdated);
   }
@@ -192,7 +191,7 @@ public class ComponentBackingForm {
   public String getDonationIdentificationNumber() {
     if (component == null || component.getDonation() == null ||
         component.getDonation().getDonationIdentificationNumber() == null
-       )
+        )
       return "";
     return component.getDonation().getDonationIdentificationNumber();
   }

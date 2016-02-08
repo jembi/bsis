@@ -16,47 +16,47 @@ import repository.DonorDeferralRepository;
 @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 @Service
 public class DeferralConstraintChecker {
-	
-	@Autowired
-	private DonorDeferralRepository donorDeferralRepository;
-	
-	public boolean canEditDonorDeferral(long donorDeferralId) throws NoResultException {
-		DonorDeferral donorDeferral = donorDeferralRepository.findDonorDeferralById(donorDeferralId);
-		
-		if (donorDeferral.getDeferralReason().getType().isAutomatedDeferral()) {
-			// not possible to delete an automatic deferral
-			return false;
-		}
-		
-		return true;
-	}
-	
-	public boolean canDeleteDonorDeferral(long donorDeferralId) throws NoResultException {
-		DonorDeferral donorDeferral = donorDeferralRepository.findDonorDeferralById(donorDeferralId);
-		
-		if (donorDeferral.getDeferralReason().getType().isAutomatedDeferral()) {
-			// not possible to delete and automatic deferral
-			return false;
-		}
-		
-		return true;
-	}
-	
-	public boolean canEndDonorDeferral(long donorDeferralId) throws NoResultException {
-		DonorDeferral donorDeferral = donorDeferralRepository.findDonorDeferralById(donorDeferralId);
-		
-		if (donorDeferral.getDeferralReason().getType().isAutomatedDeferral()) {
-			// not possible to end an automatic deferral
-			return false;
-		}
-		
-		Date today = new Date();
-		if (today.after(donorDeferral.getDeferredUntil())) {
-			// not possible to end a deferral that is already over
-			return false;
-		}
-		
-		return true;
-	}
-	
+
+  @Autowired
+  private DonorDeferralRepository donorDeferralRepository;
+
+  public boolean canEditDonorDeferral(long donorDeferralId) throws NoResultException {
+    DonorDeferral donorDeferral = donorDeferralRepository.findDonorDeferralById(donorDeferralId);
+
+    if (donorDeferral.getDeferralReason().getType().isAutomatedDeferral()) {
+      // not possible to delete an automatic deferral
+      return false;
+    }
+
+    return true;
+  }
+
+  public boolean canDeleteDonorDeferral(long donorDeferralId) throws NoResultException {
+    DonorDeferral donorDeferral = donorDeferralRepository.findDonorDeferralById(donorDeferralId);
+
+    if (donorDeferral.getDeferralReason().getType().isAutomatedDeferral()) {
+      // not possible to delete and automatic deferral
+      return false;
+    }
+
+    return true;
+  }
+
+  public boolean canEndDonorDeferral(long donorDeferralId) throws NoResultException {
+    DonorDeferral donorDeferral = donorDeferralRepository.findDonorDeferralById(donorDeferralId);
+
+    if (donorDeferral.getDeferralReason().getType().isAutomatedDeferral()) {
+      // not possible to end an automatic deferral
+      return false;
+    }
+
+    Date today = new Date();
+    if (today.after(donorDeferral.getDeferredUntil())) {
+      // not possible to end a deferral that is already over
+      return false;
+    }
+
+    return true;
+  }
+
 }

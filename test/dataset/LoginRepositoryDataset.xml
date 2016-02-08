@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<User id="1" emailId="xxxx@jembi.org" firstName="Super" isActive="true"
-		isAdmin="true" isDeleted="false" isStaff="true" lastName="User"
-		password="$2a$10$LCm5DaDhgfCdzPecqLVPyemfk6WfmbRduFTwDPPfAdABTLPb9d6c6"
-		username="superuser" passwordReset="false" />
+    <User id="1" emailId="xxxx@jembi.org" firstName="Super" isActive="true"
+          isAdmin="true" isDeleted="false" isStaff="true" lastName="User"
+          password="$2a$10$LCm5DaDhgfCdzPecqLVPyemfk6WfmbRduFTwDPPfAdABTLPb9d6c6"
+          username="superuser" passwordReset="false"/>
 </dataset>

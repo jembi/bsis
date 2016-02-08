@@ -21,12 +21,12 @@ import backingform.CompatibilityTestBackingForm;
 
 @org.springframework.stereotype.Component
 public class CompatibilityTestBackingFormValidator extends BaseValidator<CompatibilityTestBackingForm> {
-  
+
   private static final Logger LOGGER = Logger.getLogger(CompatibilityTestBackingFormValidator.class);
-  
+
   @Autowired
   private RequestRepository requestRepository;
-  
+
   @Autowired
   private ComponentRepository componentRepository;
 
@@ -62,7 +62,7 @@ public class CompatibilityTestBackingFormValidator extends BaseValidator<Compati
 
     commonFieldChecks(form, errors);
   }
-  
+
   @Override
   public String getFormName() {
     return "compatibilityTest";
@@ -77,7 +77,7 @@ public class CompatibilityTestBackingFormValidator extends BaseValidator<Compati
     }
     return matchingRequest;
   }
-  
+
   private Component findComponent(String donationIdentificationNumber, ComponentType componentType) {
     Component matchingComponent = null;
     try {

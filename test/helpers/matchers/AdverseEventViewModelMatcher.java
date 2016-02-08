@@ -8,30 +8,30 @@ import org.hamcrest.TypeSafeMatcher;
 import viewmodel.AdverseEventViewModel;
 
 public class AdverseEventViewModelMatcher extends TypeSafeMatcher<AdverseEventViewModel> {
-    
-    private AdverseEventViewModel expected;
 
-    public AdverseEventViewModelMatcher(AdverseEventViewModel expected) {
-        this.expected = expected;
-    }
+  private AdverseEventViewModel expected;
 
-    @Override
-    public void describeTo(Description description) {
-        description.appendText("An adverse event view model with the following state:")
-                .appendText("\nId: ").appendValue(expected.getId())
-                .appendText("\nType: ").appendValue(expected.getType())
-                .appendText("\nComment: ").appendValue(expected.getComment());
-    }
+  public AdverseEventViewModelMatcher(AdverseEventViewModel expected) {
+    this.expected = expected;
+  }
 
-    @Override
-    public boolean matchesSafely(AdverseEventViewModel actual) {
-        return Objects.equals(actual.getId(), expected.getId()) &&
-                Objects.equals(actual.getType(), expected.getType()) &&
-                Objects.equals(actual.getComment(), expected.getComment());
-    }
-    
-    public static AdverseEventViewModelMatcher hasSameStateAsAdverseEventViewModel(AdverseEventViewModel expected) {
-        return new AdverseEventViewModelMatcher(expected);
-    }
+  @Override
+  public void describeTo(Description description) {
+    description.appendText("An adverse event view model with the following state:")
+        .appendText("\nId: ").appendValue(expected.getId())
+        .appendText("\nType: ").appendValue(expected.getType())
+        .appendText("\nComment: ").appendValue(expected.getComment());
+  }
+
+  @Override
+  public boolean matchesSafely(AdverseEventViewModel actual) {
+    return Objects.equals(actual.getId(), expected.getId()) &&
+        Objects.equals(actual.getType(), expected.getType()) &&
+        Objects.equals(actual.getComment(), expected.getComment());
+  }
+
+  public static AdverseEventViewModelMatcher hasSameStateAsAdverseEventViewModel(AdverseEventViewModel expected) {
+    return new AdverseEventViewModelMatcher(expected);
+  }
 
 }

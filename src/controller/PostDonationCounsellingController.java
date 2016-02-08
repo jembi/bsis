@@ -26,51 +26,51 @@ import backingform.PostDonationCounsellingBackingForm;
 @RestController
 @RequestMapping("/postdonationcounsellings")
 public class PostDonationCounsellingController {
-    
-    @Autowired
-    private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
 
-    @Autowired
-    private PostDonationCounsellingRepository postDonationCounsellingRepository;
+  @Autowired
+  private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
 
-    @Autowired
-    private PostDonationCounsellingViewModelFactory postDonationCounsellingViewModelFactory;
-    
-    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    @PreAuthorize("hasRole('" + PermissionConstants.EDIT_POST_DONATION_COUNSELLING + "')")
-    public PostDonationCounsellingViewModel updatePostDonationCounselling(
-            @Valid @RequestBody PostDonationCounsellingBackingForm backingForm,
-            @PathVariable Long id) {
+  @Autowired
+  private PostDonationCounsellingRepository postDonationCounsellingRepository;
 
-        if (backingForm.getFlaggedForCounselling()) {
-            //This is when you wish to clear the current status and re flag for counselling
-            PostDonationCounselling postDonationCounselling = postDonationCounsellingCRUDService
-                    .flagForCounselling(backingForm.getId());
+  @Autowired
+  private PostDonationCounsellingViewModelFactory postDonationCounsellingViewModelFactory;
 
-            return  postDonationCounsellingViewModelFactory
-                    .createPostDonationCounsellingViewModel(postDonationCounselling);
-        }
+  @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('" + PermissionConstants.EDIT_POST_DONATION_COUNSELLING + "')")
+  public PostDonationCounsellingViewModel updatePostDonationCounselling(
+      @Valid @RequestBody PostDonationCounsellingBackingForm backingForm,
+      @PathVariable Long id) {
 
-        PostDonationCounselling postDonationCounselling = postDonationCounsellingCRUDService.updatePostDonationCounselling(
-                backingForm.getId(), backingForm.getCounsellingStatus(), backingForm.getCounsellingDate(),
-                backingForm.getNotes());
-        
-        return postDonationCounsellingViewModelFactory.createPostDonationCounsellingViewModel(postDonationCounselling);
+    if (backingForm.getFlaggedForCounselling()) {
+      //This is when you wish to clear the current status and re flag for counselling
+      PostDonationCounselling postDonationCounselling = postDonationCounsellingCRUDService
+          .flagForCounselling(backingForm.getId());
+
+      return postDonationCounsellingViewModelFactory
+          .createPostDonationCounsellingViewModel(postDonationCounselling);
     }
-    
-    @RequestMapping(value = "/form", method = RequestMethod.GET)
-    @PreAuthorize("hasAnyRole('" + PermissionConstants.ADD_POST_DONATION_COUNSELLING + "', '" +
-            PermissionConstants.EDIT_POST_DONATION_COUNSELLING + "')")
-    public Map<String, Object> getPostDonationCounsellingForm() {
-        Map<String, Object> map = new HashMap<>();
-        
-        List<CounsellingStatusViewModel> counsellingStatuses = new ArrayList<>();
-        for (CounsellingStatus counsellingStatus : CounsellingStatus.values()) {
-            counsellingStatuses.add(new CounsellingStatusViewModel(counsellingStatus));
-        }
-        map.put("counsellingStatuses", counsellingStatuses);
-        
-        return map;
+
+    PostDonationCounselling postDonationCounselling = postDonationCounsellingCRUDService.updatePostDonationCounselling(
+        backingForm.getId(), backingForm.getCounsellingStatus(), backingForm.getCounsellingDate(),
+        backingForm.getNotes());
+
+    return postDonationCounsellingViewModelFactory.createPostDonationCounsellingViewModel(postDonationCounselling);
+  }
+
+  @RequestMapping(value = "/form", method = RequestMethod.GET)
+  @PreAuthorize("hasAnyRole('" + PermissionConstants.ADD_POST_DONATION_COUNSELLING + "', '" +
+      PermissionConstants.EDIT_POST_DONATION_COUNSELLING + "')")
+  public Map<String, Object> getPostDonationCounsellingForm() {
+    Map<String, Object> map = new HashMap<>();
+
+    List<CounsellingStatusViewModel> counsellingStatuses = new ArrayList<>();
+    for (CounsellingStatus counsellingStatus : CounsellingStatus.values()) {
+      counsellingStatuses.add(new CounsellingStatusViewModel(counsellingStatus));
     }
+    map.put("counsellingStatuses", counsellingStatuses);
+
+    return map;
+  }
 
 }

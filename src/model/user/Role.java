@@ -21,55 +21,55 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Audited
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Role extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 
-	@Column(length = 50)
-	private String name;
+  @Column(length = 50)
+  private String name;
 
-	@ManyToMany(mappedBy = "roles")
-        @JsonIgnore
-	private List<User> users;
+  @ManyToMany(mappedBy = "roles")
+  @JsonIgnore
+  private List<User> users;
 
-	
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "Permission_Role", joinColumns = { @JoinColumn(name = "roles_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "permissions_id", referencedColumnName = "id") })
-        private Set<Permission> permissions;
 
-	@Lob
-	private String description;
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "Permission_Role", joinColumns = {@JoinColumn(name = "roles_id", referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "permissions_id", referencedColumnName = "id")})
+  private Set<Permission> permissions;
 
-	public String getName() {
-		return name;
-	}
+  @Lob
+  private String description;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public List<User> getUsers() {
-		return users;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public void setUsers(List<User> users) {
-		this.users = users;
-	}
+  public List<User> getUsers() {
+    return users;
+  }
 
-	public Set<Permission> getPermissions() {
-		return permissions;
-	}
+  public void setUsers(List<User> users) {
+    this.users = users;
+  }
 
-	public void setPermissions(Set<Permission> permissions) {
-		this.permissions = permissions;
-	}
+  public Set<Permission> getPermissions() {
+    return permissions;
+  }
 
-	public String getDescription() {
-		return description;
-	}
+  public void setPermissions(Set<Permission> permissions) {
+    this.permissions = permissions;
+  }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
 }

@@ -1,54 +1,99 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <User id="1" emailId="xxxx@jembi.org" firstName="Super" isActive="true" isAdmin="true" isDeleted="false" isStaff="true" lastName="User" password="$2a$10$LCm5DaDhgfCdzPecqLVPyemfk6WfmbRduFTwDPPfAdABTLPb9d6c6" username="superuser" passwordReset="false"/>
-  <User id="2" emailId="xxxx@jembi.org" firstName="Administrator" isActive="true" isAdmin="true" isDeleted="false" isStaff="true" lastName="" password="$2a$10$QZ5AfikU7//fZHw8TnnH7uYXLbcupZhK4TbSWk7ig4gI7GieNmnC." username="administrator" passwordReset="false"/>
-  <User id="3" emailId="xxxx@jembi.org" firstName="Donor Clinic" isActive="true" isAdmin="false" isDeleted="false" isStaff="true" lastName="Supervisor" password="$2a$10$iwTXdttOgKbkeMq5NegqmeL1dnZC.G2SrgXyUcM2uB91DKdqefwlK" username="donorclinicsupervisor" passwordReset="false"/>
-  <User id="4" emailId="xxxx@jembi.org" firstName="Donor Clinic" isActive="true" isAdmin="false" isDeleted="false" isStaff="true" lastName="Staff" password="$2a$10$ar6Wj.Clf/BDJOdlr.aRzerFBNt12JkGzaoP6IlSx5L2cKpIloRlO" username="donorclinicstaff" passwordReset="false"/>
-  <User id="5" emailId="xxxx@jembi.org" firstName="Donor Comms" isActive="true" isAdmin="false" isDeleted="false" isStaff="true" lastName="Staff" password="$2a$10$5NfvkBo2dVOoacIHdQTcQe/1C7StepQ21SJ.18gm7G6LMTzuRpUSu" username="donorcommunicationsstaff" passwordReset="false"/>
-  <User id="6" emailId="xxxx@jembi.org" firstName="Donor Couns" isActive="true" isAdmin="false" isDeleted="false" isStaff="true" lastName="Staff" password="$2a$10$PLMaoepFRavcRsIbcwPlSuwhHnnKLFkZATrXkXlRDf/xsLzjvB1b." username="donorcounsellingstaff" passwordReset="false"/>
-  <User id="7" emailId="xxxx@jembi.org" firstName="Data Entry" isActive="true" isAdmin="false" isDeleted="false" isStaff="true" lastName="Clerk" password="$2a$10$56YwOM5naFLA69mQFOnUuumD/6EVcdLDtWfwVtZ.Jl3wJF1odwIoa" username="dataentryclerk" passwordReset="false"/>
-  <User id="8" emailId="xxxx@jembi.org" firstName="Medical" isActive="true" isAdmin="false" isDeleted="false" isStaff="true" lastName="Officer" password="$2a$10$Yay3jHhcc48quPNvlEFhEOMm9CcTS3zUa2Aa315VwhGz350E1PoRS" username="medicalofficer" passwordReset="false"/>
-  <User id="9" emailId="xxxx@jembi.org" firstName="Component" isActive="true" isAdmin="false" isDeleted="false" isStaff="true" lastName="Supervisor" password="$2a$10$AJZzwZhO6cpiFafXThsarOLGt8KPck9vlVGBqwmm7GkWtaQiFOJGG" username="componentsupervisor" passwordReset="false"/>
-  <User id="10" emailId="xxxx@jembi.org" firstName="Component" isActive="true" isAdmin="false" isDeleted="false" isStaff="true" lastName="Staff" password="$2a$10$7t4VGWlSKku8pEGnbsQXruFcoo.Ekfp8LO4axRJyse8WY.dITEf12" username="componentstaff" passwordReset="false"/>
-  <User id="11" emailId="xxxx@jembi.org" firstName="TTI Testing" isActive="true" isAdmin="false" isDeleted="false" isStaff="true" lastName="Supervisor" password="$2a$10$fK3y5DzBYMGIo3KMkK9z7e.5QUvJrxokqDDfVTbQGALiOcCxgT.Mu" username="ttitestingsupervisor" passwordReset="false"/>
-  <User id="12" emailId="xxxx@jembi.org" firstName="TTI Testing" isActive="true" isAdmin="false" isDeleted="false" isStaff="true" lastName="Staff" password="$2a$10$AFmIxt24zmKVKsthJdjPdeGymGmVFYMA1FbbY9tmEZL5XzPXunety" username="ttitestingstaff" passwordReset="false"/>
-  <User id="13" emailId="xxxx@jembi.org" firstName="Serology" isActive="true" isAdmin="false" isDeleted="false" isStaff="true" lastName="Supervisor" password="$2a$10$U/Ms/YP3g3lv1rkQ4AFBWefLxmQBM6D4sP2TKUCar2SVPGiTqUFDu" username="serologysupervisor" passwordReset="false"/>
-  <User id="14" emailId="xxxx@jembi.org" firstName="Serology" isActive="true" isAdmin="false" isDeleted="false" isStaff="true" lastName="Staff" password="$2a$10$cIOYMi3Zglj.w5enfhcIUOChXvXFMYxjMexCgoXFrOLNBV0H8bDLC" username="serologystaff" passwordReset="false"/>
-  <User id="15" emailId="xxxx@jembi.org" firstName="Inventory" isActive="true" isAdmin="false" isDeleted="false" isStaff="true" lastName="Staff" password="$2a$10$fymzp94ex44miYJMFQspXO2RwTT5ZXjybFxzuC2F7eIDWYu/Def8e" username="inventorystaff" passwordReset="false"/>
-  <User id="16" emailId="xxxx@jembi.org" firstName="Blood Bank"
-	isActive="true" isAdmin="false" isDeleted="false" isStaff="true"
-	lastName="Staff" password="$2a$10$l6oa.rSWP6WO32Kqn2YCCO3EiELvFsKZdaPIKuFDMKexAgkr6isSS"
-	username="bloodbankstaff" passwordReset="false" />
-	<Role id="1" name="Super User" description="Super User" />
-  <Role id="2" name="Admin" description="Admin User"/>
-  <Role id="3" name="Donor Clinic Supervisor" description="Donor Clinic Supervisor "/>
-  <Role id="4" name="Donor Clinic Staff" description="Donor Clinic Staff"/>
-  <Role id="5" name="Donor Communications Staff" description="Donor Communications Staff"/>
-  <Role id="6" name="Donor Counselling Staff" description="Donor Counselling Staff"/>
-  <Role id="7" name="Data Entry Clerk" description="Data Entry Clerk"/>
-  <Role id="8" name="Medical Officer" description="Medical Officer"/>
-  <Role id="9" name="Component Supervisor" description="Component Supervisor"/>
-  <Role id="10" name="Component Staff" description="Component Staff"/>
-  <Role id="11" name="TTI Testing Supervisor" description="TTI Testing Supervisor"/>
-  <Role id="12" name="TTI Testing Staff" description="TTI Testing Staff"/>
-  <Role id="13" name="Serology Supervisor" description="Serology Supervisor"/>
-  <Role id="14" name="Serology Staff" description="Serology Staff"/>
-  <Role id="15" name="Inventory Staff" description="Inventory Staff"/>
-  <Role id="16" name="Blood Bank Staff" description="Blood Bank Staff"/>
-  <User_Role users_id="1" roles_id="1"/>
-  <User_Role users_id="2" roles_id="2"/>
-  <User_Role users_id="3" roles_id="3"/>
-  <User_Role users_id="4" roles_id="4"/>
-  <User_Role users_id="5" roles_id="5"/>
-  <User_Role users_id="6" roles_id="6"/>
-  <User_Role users_id="7" roles_id="7"/>
-  <User_Role users_id="8" roles_id="8"/>
-  <User_Role users_id="9" roles_id="9"/>
-  <User_Role users_id="10" roles_id="10"/>
-  <User_Role users_id="11" roles_id="11"/>
-  <User_Role users_id="12" roles_id="12"/>
-  <User_Role users_id="13" roles_id="13"/>
-  <User_Role users_id="14" roles_id="14"/>
-  <User_Role users_id="15" roles_id="15"/>
-  <User_Role users_id="16" roles_id="16"/>
+    <User id="1" emailId="xxxx@jembi.org" firstName="Super" isActive="true" isAdmin="true"
+          isDeleted="false" isStaff="true" lastName="User"
+          password="$2a$10$LCm5DaDhgfCdzPecqLVPyemfk6WfmbRduFTwDPPfAdABTLPb9d6c6"
+          username="superuser" passwordReset="false"/>
+    <User id="2" emailId="xxxx@jembi.org" firstName="Administrator" isActive="true" isAdmin="true"
+          isDeleted="false" isStaff="true" lastName=""
+          password="$2a$10$QZ5AfikU7//fZHw8TnnH7uYXLbcupZhK4TbSWk7ig4gI7GieNmnC."
+          username="administrator" passwordReset="false"/>
+    <User id="3" emailId="xxxx@jembi.org" firstName="Donor Clinic" isActive="true" isAdmin="false"
+          isDeleted="false" isStaff="true" lastName="Supervisor"
+          password="$2a$10$iwTXdttOgKbkeMq5NegqmeL1dnZC.G2SrgXyUcM2uB91DKdqefwlK"
+          username="donorclinicsupervisor" passwordReset="false"/>
+    <User id="4" emailId="xxxx@jembi.org" firstName="Donor Clinic" isActive="true" isAdmin="false"
+          isDeleted="false" isStaff="true" lastName="Staff"
+          password="$2a$10$ar6Wj.Clf/BDJOdlr.aRzerFBNt12JkGzaoP6IlSx5L2cKpIloRlO"
+          username="donorclinicstaff" passwordReset="false"/>
+    <User id="5" emailId="xxxx@jembi.org" firstName="Donor Comms" isActive="true" isAdmin="false"
+          isDeleted="false" isStaff="true" lastName="Staff"
+          password="$2a$10$5NfvkBo2dVOoacIHdQTcQe/1C7StepQ21SJ.18gm7G6LMTzuRpUSu"
+          username="donorcommunicationsstaff" passwordReset="false"/>
+    <User id="6" emailId="xxxx@jembi.org" firstName="Donor Couns" isActive="true" isAdmin="false"
+          isDeleted="false" isStaff="true" lastName="Staff"
+          password="$2a$10$PLMaoepFRavcRsIbcwPlSuwhHnnKLFkZATrXkXlRDf/xsLzjvB1b."
+          username="donorcounsellingstaff" passwordReset="false"/>
+    <User id="7" emailId="xxxx@jembi.org" firstName="Data Entry" isActive="true" isAdmin="false"
+          isDeleted="false" isStaff="true" lastName="Clerk"
+          password="$2a$10$56YwOM5naFLA69mQFOnUuumD/6EVcdLDtWfwVtZ.Jl3wJF1odwIoa"
+          username="dataentryclerk" passwordReset="false"/>
+    <User id="8" emailId="xxxx@jembi.org" firstName="Medical" isActive="true" isAdmin="false"
+          isDeleted="false" isStaff="true" lastName="Officer"
+          password="$2a$10$Yay3jHhcc48quPNvlEFhEOMm9CcTS3zUa2Aa315VwhGz350E1PoRS"
+          username="medicalofficer" passwordReset="false"/>
+    <User id="9" emailId="xxxx@jembi.org" firstName="Component" isActive="true" isAdmin="false"
+          isDeleted="false" isStaff="true" lastName="Supervisor"
+          password="$2a$10$AJZzwZhO6cpiFafXThsarOLGt8KPck9vlVGBqwmm7GkWtaQiFOJGG"
+          username="componentsupervisor" passwordReset="false"/>
+    <User id="10" emailId="xxxx@jembi.org" firstName="Component" isActive="true" isAdmin="false"
+          isDeleted="false" isStaff="true" lastName="Staff"
+          password="$2a$10$7t4VGWlSKku8pEGnbsQXruFcoo.Ekfp8LO4axRJyse8WY.dITEf12"
+          username="componentstaff" passwordReset="false"/>
+    <User id="11" emailId="xxxx@jembi.org" firstName="TTI Testing" isActive="true" isAdmin="false"
+          isDeleted="false" isStaff="true" lastName="Supervisor"
+          password="$2a$10$fK3y5DzBYMGIo3KMkK9z7e.5QUvJrxokqDDfVTbQGALiOcCxgT.Mu"
+          username="ttitestingsupervisor" passwordReset="false"/>
+    <User id="12" emailId="xxxx@jembi.org" firstName="TTI Testing" isActive="true" isAdmin="false"
+          isDeleted="false" isStaff="true" lastName="Staff"
+          password="$2a$10$AFmIxt24zmKVKsthJdjPdeGymGmVFYMA1FbbY9tmEZL5XzPXunety"
+          username="ttitestingstaff" passwordReset="false"/>
+    <User id="13" emailId="xxxx@jembi.org" firstName="Serology" isActive="true" isAdmin="false"
+          isDeleted="false" isStaff="true" lastName="Supervisor"
+          password="$2a$10$U/Ms/YP3g3lv1rkQ4AFBWefLxmQBM6D4sP2TKUCar2SVPGiTqUFDu"
+          username="serologysupervisor" passwordReset="false"/>
+    <User id="14" emailId="xxxx@jembi.org" firstName="Serology" isActive="true" isAdmin="false"
+          isDeleted="false" isStaff="true" lastName="Staff"
+          password="$2a$10$cIOYMi3Zglj.w5enfhcIUOChXvXFMYxjMexCgoXFrOLNBV0H8bDLC"
+          username="serologystaff" passwordReset="false"/>
+    <User id="15" emailId="xxxx@jembi.org" firstName="Inventory" isActive="true" isAdmin="false"
+          isDeleted="false" isStaff="true" lastName="Staff"
+          password="$2a$10$fymzp94ex44miYJMFQspXO2RwTT5ZXjybFxzuC2F7eIDWYu/Def8e"
+          username="inventorystaff" passwordReset="false"/>
+    <User id="16" emailId="xxxx@jembi.org" firstName="Blood Bank"
+          isActive="true" isAdmin="false" isDeleted="false" isStaff="true"
+          lastName="Staff" password="$2a$10$l6oa.rSWP6WO32Kqn2YCCO3EiELvFsKZdaPIKuFDMKexAgkr6isSS"
+          username="bloodbankstaff" passwordReset="false"/>
+    <Role id="1" name="Super User" description="Super User"/>
+    <Role id="2" name="Admin" description="Admin User"/>
+    <Role id="3" name="Donor Clinic Supervisor" description="Donor Clinic Supervisor "/>
+    <Role id="4" name="Donor Clinic Staff" description="Donor Clinic Staff"/>
+    <Role id="5" name="Donor Communications Staff" description="Donor Communications Staff"/>
+    <Role id="6" name="Donor Counselling Staff" description="Donor Counselling Staff"/>
+    <Role id="7" name="Data Entry Clerk" description="Data Entry Clerk"/>
+    <Role id="8" name="Medical Officer" description="Medical Officer"/>
+    <Role id="9" name="Component Supervisor" description="Component Supervisor"/>
+    <Role id="10" name="Component Staff" description="Component Staff"/>
+    <Role id="11" name="TTI Testing Supervisor" description="TTI Testing Supervisor"/>
+    <Role id="12" name="TTI Testing Staff" description="TTI Testing Staff"/>
+    <Role id="13" name="Serology Supervisor" description="Serology Supervisor"/>
+    <Role id="14" name="Serology Staff" description="Serology Staff"/>
+    <Role id="15" name="Inventory Staff" description="Inventory Staff"/>
+    <Role id="16" name="Blood Bank Staff" description="Blood Bank Staff"/>
+    <User_Role users_id="1" roles_id="1"/>
+    <User_Role users_id="2" roles_id="2"/>
+    <User_Role users_id="3" roles_id="3"/>
+    <User_Role users_id="4" roles_id="4"/>
+    <User_Role users_id="5" roles_id="5"/>
+    <User_Role users_id="6" roles_id="6"/>
+    <User_Role users_id="7" roles_id="7"/>
+    <User_Role users_id="8" roles_id="8"/>
+    <User_Role users_id="9" roles_id="9"/>
+    <User_Role users_id="10" roles_id="10"/>
+    <User_Role users_id="11" roles_id="11"/>
+    <User_Role users_id="12" roles_id="12"/>
+    <User_Role users_id="13" roles_id="13"/>
+    <User_Role users_id="14" roles_id="14"/>
+    <User_Role users_id="15" roles_id="15"/>
+    <User_Role users_id="16" roles_id="16"/>
 </dataset>

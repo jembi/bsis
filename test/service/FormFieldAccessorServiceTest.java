@@ -1,6 +1,7 @@
 package service;
 
 import static org.mockito.Mockito.when;
+
 import helpers.builders.FormFieldBuilder;
 
 import java.util.List;
@@ -21,7 +22,7 @@ import scala.actors.threadpool.Arrays;
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
 public class FormFieldAccessorServiceTest {
-  
+
   @InjectMocks
   FormFieldAccessorService formFieldAccessorService;
   @Mock
@@ -40,14 +41,14 @@ public class FormFieldAccessorServiceTest {
         .withField("lastName")
         .withDefaultDisplayName("Last Name")
         .build();
-    List<FormField> formFields = Arrays.asList(new FormField[] { formField1, formField2 });
-    
+    List<FormField> formFields = Arrays.asList(new FormField[]{formField1, formField2});
+
     // set up mocks
     when(formFieldRepository.getFormFields("Donor")).thenReturn(formFields);
-    
+
     // run test
     Map<String, Map<String, Object>> fields = formFieldAccessorService.getFormFieldsForForm("Donor");
-    
+
     // asserts
     Assert.assertEquals("Two fields returned", 2, fields.size());
     Map<String, Object> firstNameFields = fields.get("firstName");

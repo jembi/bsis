@@ -20,40 +20,40 @@ import repository.AuditRevisionNamedQueryConstants;
 
 @NamedQueries({
     @NamedQuery(name = AuditRevisionNamedQueryConstants.NAME_FIND_AUDIT_REVISIONS,
-            query = AuditRevisionNamedQueryConstants.QUERY_FIND_AUDIT_REVISIONS),
+        query = AuditRevisionNamedQueryConstants.QUERY_FIND_AUDIT_REVISIONS),
     @NamedQuery(name = AuditRevisionNamedQueryConstants.NAME_FIND_AUDIT_REVISIONS_BY_USER,
-            query = AuditRevisionNamedQueryConstants.QUERY_FIND_AUDIT_REVISIONS_BY_USER)
+        query = AuditRevisionNamedQueryConstants.QUERY_FIND_AUDIT_REVISIONS_BY_USER)
 })
 @Entity
 @RevisionEntity(AuditRevisionListener.class)
 public class AuditRevision extends DefaultRevisionEntity {
 
-    private static final long serialVersionUID = -8340597018519102447L;
+  private static final long serialVersionUID = -8340597018519102447L;
 
-    @Column(length = 30)
-    private String username;
-    
-    @OneToMany(mappedBy = "auditRevision", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
-    private Set<EntityModification> entityModifications = new HashSet<>();
+  @Column(length = 30)
+  private String username;
 
-    public String getUsername() {
-        return username;
-    }
+  @OneToMany(mappedBy = "auditRevision", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+  private Set<EntityModification> entityModifications = new HashSet<>();
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public Set<EntityModification> getEntityModifications() {
-        return entityModifications;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    public void setEntityModifications(Set<EntityModification> entityModifications) {
-        this.entityModifications = entityModifications;
-    }
-    
-    public boolean addEntityModification(EntityModification entityModification) {
-        return entityModifications.add(entityModification);
-    }
+  public Set<EntityModification> getEntityModifications() {
+    return entityModifications;
+  }
+
+  public void setEntityModifications(Set<EntityModification> entityModifications) {
+    this.entityModifications = entityModifications;
+  }
+
+  public boolean addEntityModification(EntityModification entityModification) {
+    return entityModifications.add(entityModification);
+  }
 
 }

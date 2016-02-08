@@ -13,23 +13,23 @@ import backingform.DiscardReasonBackingForm;
 @Component
 public class DiscardReasonBackingFormValidator extends BaseValidator<DiscardReasonBackingForm> {
 
-    @Autowired
-    private DiscardReasonRepository discardReasonRepository;
+  @Autowired
+  private DiscardReasonRepository discardReasonRepository;
 
-    @Override
-    public void validateForm(DiscardReasonBackingForm form, Errors errors) {
+  @Override
+  public void validateForm(DiscardReasonBackingForm form, Errors errors) {
 
-        if (isDuplicateDiscardReason(form.getDiscardReason())){
-            errors.rejectValue("reason", "400",
-                    "Discard Reason already exists.");
-        }
+    if (isDuplicateDiscardReason(form.getDiscardReason())) {
+      errors.rejectValue("reason", "400",
+          "Discard Reason already exists.");
     }
-    
-    @Override
-    public String getFormName() {
-      return "discardReason";
-    }
-    
+  }
+
+  @Override
+  public String getFormName() {
+    return "discardReason";
+  }
+
   private boolean isDuplicateDiscardReason(ComponentStatusChangeReason discardReason) {
     String reason = discardReason.getStatusChangeReason();
     if (StringUtils.isBlank(reason)) {

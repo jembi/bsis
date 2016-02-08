@@ -13,22 +13,22 @@ import repository.DonorRepository;
 @Transactional
 @Service
 public class DonorCRUDService {
-    
-    @Autowired
-    private DonorRepository donorRepository;
-    @Autowired
-    private DonorConstraintChecker donorConstraintChecker;
-    
-    public void deleteDonor(long donorId) throws IllegalStateException, NoResultException {
 
-        if (!donorConstraintChecker.canDeleteDonor(donorId)) {
-            throw new IllegalStateException("Cannot delete donor with constraints");
-        }
-        
-        // Soft delete the donor
-        Donor donor = donorRepository.findDonorById(donorId);
-        donor.setIsDeleted(true);
-        donorRepository.updateDonor(donor);
+  @Autowired
+  private DonorRepository donorRepository;
+  @Autowired
+  private DonorConstraintChecker donorConstraintChecker;
+
+  public void deleteDonor(long donorId) throws IllegalStateException, NoResultException {
+
+    if (!donorConstraintChecker.canDeleteDonor(donorId)) {
+      throw new IllegalStateException("Cannot delete donor with constraints");
     }
+
+    // Soft delete the donor
+    Donor donor = donorRepository.findDonorById(donorId);
+    donor.setIsDeleted(true);
+    donorRepository.updateDonor(donor);
+  }
 
 }

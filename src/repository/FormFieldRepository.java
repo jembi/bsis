@@ -71,7 +71,7 @@ public class FormFieldRepository {
       return null;
     }
   }
-  
+
   public List<FormField> getFormFields(String formName) {
     try {
       String queryString = "SELECT f FROM FormField f where form=:formName";
@@ -90,7 +90,7 @@ public class FormFieldRepository {
     query.setParameter("formName", formName);
     query.setParameter("isRequired", true);
     query.setParameter("hidden", false);
-    return query.getResultList();    
+    return query.getResultList();
   }
 
   public Map<String, Integer> getFieldMaxLengths(String formName) {
@@ -99,7 +99,7 @@ public class FormFieldRepository {
     query.setParameter("formName", formName);
     Map<String, Integer> maxLengths = new HashMap<String, Integer>();
     for (Object[] obj : query.getResultList()) {
-      maxLengths.put((String)obj[0], (Integer)obj[1]);
+      maxLengths.put((String) obj[0], (Integer) obj[1]);
     }
     return maxLengths;
   }

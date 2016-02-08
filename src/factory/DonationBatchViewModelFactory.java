@@ -19,68 +19,67 @@ import viewmodel.LocationViewModel;
 
 @Service
 public class DonationBatchViewModelFactory {
-    
-    @Autowired
-    private DonationViewModelFactory donationViewModelFactory;
-    
-    @Autowired
-    private DonationBatchConstraintChecker donationBatchConstraintChecker;
 
-    /**
-     * Create a view model for the given donation batch and add the necessary permissions
-     * 
-     * @param donationBatch DonationBatch to convert
-     * @return DonationBatchViewModel representation of the given DonationBatch
-     */
-    public DonationBatchViewModel createDonationBatchViewModel(DonationBatch donationBatch) {
-    	DonationBatchViewModel viewModel = createDonationBatchViewModel(donationBatch, false);
+  @Autowired
+  private DonationViewModelFactory donationViewModelFactory;
 
-    	// Populate permissions
-        Map<String, Boolean> permissions = new HashMap<>();
-        permissions.put("canDelete", donationBatchConstraintChecker.canDeleteDonationBatch(donationBatch.getId()));
-        permissions.put("canClose", donationBatchConstraintChecker.canCloseDonationBatch(donationBatch.getId()));
-        permissions.put("canReopen", donationBatchConstraintChecker.canReopenDonationBatch(donationBatch.getId()));
-        permissions.put("canEdit", donationBatchConstraintChecker.canEditDonationBatch(donationBatch.getId()));
-        permissions.put("canEditDate", donationBatchConstraintChecker.canEditDonationBatchDate(donationBatch.getId()));
-        viewModel.setPermissions(permissions);
+  @Autowired
+  private DonationBatchConstraintChecker donationBatchConstraintChecker;
 
-        return viewModel;
-    }
+  /**
+   * Create a view model for the given donation batch and add the necessary permissions
+   *
+   * @param donationBatch DonationBatch to convert
+   * @return DonationBatchViewModel representation of the given DonationBatch
+   */
+  public DonationBatchViewModel createDonationBatchViewModel(DonationBatch donationBatch) {
+    DonationBatchViewModel viewModel = createDonationBatchViewModel(donationBatch, false);
 
-    /**
-     * Create a view model for the given donation batch, optionally excluding donations with a pack type that does not
-     * produce a test sample.
-     * 
-     * @param donationBatch The donation batch.
-     * @param excludeDonationsWithoutTestSamples Whether or not to exclude donations without test samples.
-     * @return The populated view model.
-     */
-    public DonationBatchViewModel createDonationBatchViewModel(DonationBatch donationBatch,
-            boolean excludeDonationsWithoutTestSamples) {
-        DonationBatchViewModel donationBatchViewModel = createDonationBatchViewModelWithoutDonations(donationBatch);
-        donationBatchViewModel.setDonations(createDonationViewModels(donationBatch, excludeDonationsWithoutTestSamples, true));
-        return donationBatchViewModel;
-    }
+    // Populate permissions
+    Map<String, Boolean> permissions = new HashMap<>();
+    permissions.put("canDelete", donationBatchConstraintChecker.canDeleteDonationBatch(donationBatch.getId()));
+    permissions.put("canClose", donationBatchConstraintChecker.canCloseDonationBatch(donationBatch.getId()));
+    permissions.put("canReopen", donationBatchConstraintChecker.canReopenDonationBatch(donationBatch.getId()));
+    permissions.put("canEdit", donationBatchConstraintChecker.canEditDonationBatch(donationBatch.getId()));
+    permissions.put("canEditDate", donationBatchConstraintChecker.canEditDonationBatchDate(donationBatch.getId()));
+    viewModel.setPermissions(permissions);
 
-    /**
-     * Create a view model for the given donation batch but without permissions for the donations.
-     * 
-     * @param donationBatch The donation batch.
-     * @param excludeDonationsWithoutTestSamples Whether or not to exclude donations without test samples.
-     * @return The populated view model.
-     */
-    public DonationBatchViewModel createDonationBatchViewModelWithoutDonationPermissions(DonationBatch donationBatch,
-            boolean excludeDonationsWithoutTestSamples) {
-        DonationBatchViewModel donationBatchViewModel = createDonationBatchViewModelWithoutDonations(donationBatch);
-        donationBatchViewModel.setDonations(createDonationViewModels(donationBatch, excludeDonationsWithoutTestSamples, false));
-        return donationBatchViewModel;
-    }    
+    return viewModel;
+  }
+
+  /**
+   * Create a view model for the given donation batch, optionally excluding donations with a pack
+   * type that does not produce a test sample.
+   *
+   * @param donationBatch                      The donation batch.
+   * @param excludeDonationsWithoutTestSamples Whether or not to exclude donations without test
+   *                                           samples.
+   * @return The populated view model.
+   */
+  public DonationBatchViewModel createDonationBatchViewModel(DonationBatch donationBatch,
+                                                             boolean excludeDonationsWithoutTestSamples) {
+    DonationBatchViewModel donationBatchViewModel = createDonationBatchViewModelWithoutDonations(donationBatch);
+    donationBatchViewModel.setDonations(createDonationViewModels(donationBatch, excludeDonationsWithoutTestSamples, true));
+    return donationBatchViewModel;
+  }
+
+  /**
+   * Create a view model for the given donation batch but without permissions for the donations.
+   *
+   * @param donationBatch                      The donation batch.
+   * @param excludeDonationsWithoutTestSamples Whether or not to exclude donations without test
+   *                                           samples.
+   * @return The populated view model.
+   */
+  public DonationBatchViewModel createDonationBatchViewModelWithoutDonationPermissions(DonationBatch donationBatch,
+                                                                                       boolean excludeDonationsWithoutTestSamples) {
+    DonationBatchViewModel donationBatchViewModel = createDonationBatchViewModelWithoutDonations(donationBatch);
+    donationBatchViewModel.setDonations(createDonationViewModels(donationBatch, excludeDonationsWithoutTestSamples, false));
+    return donationBatchViewModel;
+  }
 
   /**
    * Create a DonationBatchViewModel without Donations and without permissions
-   * 
-   * @param donationBatch
-   * @return
    */
   public DonationBatchViewModel createDonationBatchViewModelWithoutDonations(DonationBatch donationBatch) {
     DonationBatchViewModel donationBatchViewModel = new DonationBatchViewModel();
@@ -102,21 +101,21 @@ public class DonationBatchViewModelFactory {
 
     return donationBatchViewModel;
   }
-  
+
   private List<DonationViewModel> createDonationViewModels(DonationBatch donationBatch, boolean excludeDonationsWithoutTestSamples, boolean withDonationPermissions) {
     List<DonationViewModel> donationViewModels = new ArrayList<>();
     if (donationBatch.getDonations() != null) {
-        for (Donation donation : donationBatch.getDonations()) {
-            if (excludeDonationsWithoutTestSamples && !donation.getPackType().getTestSampleProduced()) {
-                // This donation did not produce a test sample so skip it
-                continue;
-            }
-            if (withDonationPermissions) {
-              donationViewModels.add(donationViewModelFactory.createDonationViewModelWithPermissions(donation));
-            } else {
-              donationViewModels.add(donationViewModelFactory.createDonationViewModelWithoutPermissions(donation));
-            }
+      for (Donation donation : donationBatch.getDonations()) {
+        if (excludeDonationsWithoutTestSamples && !donation.getPackType().getTestSampleProduced()) {
+          // This donation did not produce a test sample so skip it
+          continue;
         }
+        if (withDonationPermissions) {
+          donationViewModels.add(donationViewModelFactory.createDonationViewModelWithPermissions(donation));
+        } else {
+          donationViewModels.add(donationViewModelFactory.createDonationViewModelWithoutPermissions(donation));
+        }
+      }
     }
     return donationViewModels;
   }

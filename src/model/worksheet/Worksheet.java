@@ -22,7 +22,7 @@ public class Worksheet extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length=20, unique=true)
+  @Column(length = 20, unique = true)
   private String worksheetNumber;
 
   @ManyToOne

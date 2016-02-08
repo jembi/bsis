@@ -9,29 +9,29 @@ import model.user.Role;
 
 public class RoleViewModel {
 
-	private Role role;
+  private Role role;
 
-	public RoleViewModel() {
-	}
+  public RoleViewModel() {
+  }
 
-	public RoleViewModel(Role role) {
-		this.role = role;
-	}
+  public RoleViewModel(Role role) {
+    this.role = role;
+  }
 
-	public Long getId() {
-		return role.getId();
-	}
+  public Long getId() {
+    return role.getId();
+  }
 
-	public String getName() {
-		return role.getName();
-	}
+  public String getName() {
+    return role.getName();
+  }
 
-	public Set<Permission> getPermissions() {
-		return role.getPermissions();
-	}
-	
-	public String getDescription() {
-		return role.getDescription();
-	}
-       
+  public Set<Permission> getPermissions() {
+    return role.getPermissions();
+  }
+
+  public String getDescription() {
+    return role.getDescription();
+  }
+
 }

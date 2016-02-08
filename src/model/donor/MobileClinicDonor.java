@@ -26,50 +26,50 @@ import constraintvalidator.LocationExists;
 
 @Entity
 @Audited
-@Table(name = "Donor", 
-indexes = {
-    @Index(name = "donor_donorNumber_index", columnList = "id", unique = true),
-    @Index(name = "donor_firstName_index", columnList = "firstName", unique = false),
-    @Index(name = "donor_lastName_index", columnList = "lastName", unique = false)
-})
+@Table(name = "Donor",
+    indexes = {
+        @Index(name = "donor_donorNumber_index", columnList = "id", unique = true),
+        @Index(name = "donor_firstName_index", columnList = "firstName", unique = false),
+        @Index(name = "donor_lastName_index", columnList = "lastName", unique = false)
+    })
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class MobileClinicDonor extends BaseModificationTrackerEntity {
-  
+
   private static final long serialVersionUID = 1L;
 
-  @Column(length=20, unique=true)
-  @Length(max=20)
+  @Column(length = 20, unique = true)
+  @Length(max = 20)
   private String donorNumber;
-  
-  @Column(length=20)
-  @Length(max=20)
+
+  @Column(length = 20)
+  @Length(max = 20)
   private String firstName;
 
-  @Length(max=20)
-  @Column(length=20)
+  @Length(max = 20)
+  @Column(length = 20)
   private String lastName;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=15)
+  @Column(length = 15)
   private Gender gender;
 
-  @Column(length=10)
+  @Column(length = 10)
   private String bloodAbo;
-  
-  @Column(length=10)
+
+  @Column(length = 10)
   private String bloodRh;
-  
+
   @Enumerated(EnumType.STRING)
-  @Column(length=20)
+  @Column(length = 20)
   private DonorStatus donorStatus;
-  
+
   @Temporal(TemporalType.DATE)
   private Date birthDate;
 
   @LocationExists
   @ManyToOne
   private Location venue;
-  
+
   private Boolean isDeleted;
 
   public String getDonorNumber() {

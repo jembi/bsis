@@ -19,68 +19,68 @@ import utils.SecurityUtils;
 
 public class PostDonationCounsellingCRUDService {
 
-    private static final Logger LOGGER = Logger.getLogger(PostDonationCounsellingCRUDService.class);
+  private static final Logger LOGGER = Logger.getLogger(PostDonationCounsellingCRUDService.class);
 
-    @Autowired
-    private PostDonationCounsellingRepository postDonationCounsellingRepository;
+  @Autowired
+  private PostDonationCounsellingRepository postDonationCounsellingRepository;
 
-    @Autowired
-    private DateGeneratorService dateGeneratorService;
+  @Autowired
+  private DateGeneratorService dateGeneratorService;
 
-    public void setPostDonationCounsellingRepository(PostDonationCounsellingRepository postDonationCounsellingRepository) {
-        this.postDonationCounsellingRepository = postDonationCounsellingRepository;
+  public void setPostDonationCounsellingRepository(PostDonationCounsellingRepository postDonationCounsellingRepository) {
+    this.postDonationCounsellingRepository = postDonationCounsellingRepository;
+  }
+
+  public PostDonationCounselling createPostDonationCounsellingForDonation(Donation donation) {
+    LOGGER.info("Creating post donation counselling for donation: " + donation);
+
+    PostDonationCounselling existingCounselling = postDonationCounsellingRepository.findPostDonationCounsellingForDonation(
+        donation);
+    if (existingCounselling != null) {
+      // Return existing counselling instead of creating a new PostDonationCounselling
+      return existingCounselling;
     }
 
-    public PostDonationCounselling createPostDonationCounsellingForDonation(Donation donation) {
-        LOGGER.info("Creating post donation counselling for donation: " + donation);
+    PostDonationCounselling postDonationCounselling = new PostDonationCounselling();
+    postDonationCounselling.setDonation(donation);
+    postDonationCounselling.setFlaggedForCounselling(Boolean.TRUE);
+    postDonationCounselling.setIsDeleted(Boolean.FALSE);
+    postDonationCounselling.setCreatedBy(SecurityUtils.getCurrentUser());
+    postDonationCounselling.setCreatedDate(dateGeneratorService.generateDate());
+    postDonationCounselling.setLastUpdated(dateGeneratorService.generateDate());
+    postDonationCounselling.setLastUpdatedBy(SecurityUtils.getCurrentUser());
+    postDonationCounsellingRepository.save(postDonationCounselling);
+    return postDonationCounselling;
+  }
 
-        PostDonationCounselling existingCounselling = postDonationCounsellingRepository.findPostDonationCounsellingForDonation(
-            donation);
-        if (existingCounselling != null) {
-          // Return existing counselling instead of creating a new PostDonationCounselling
-          return existingCounselling;
-        }
+  public PostDonationCounselling updatePostDonationCounselling(long id, CounsellingStatus counsellingStatus,
+                                                               Date counsellingDate, String notes) {
 
-        PostDonationCounselling postDonationCounselling = new PostDonationCounselling();
-        postDonationCounselling.setDonation(donation);
-        postDonationCounselling.setFlaggedForCounselling(Boolean.TRUE);
-        postDonationCounselling.setIsDeleted(Boolean.FALSE);
-        postDonationCounselling.setCreatedBy(SecurityUtils.getCurrentUser());
-        postDonationCounselling.setCreatedDate(dateGeneratorService.generateDate());
-        postDonationCounselling.setLastUpdated(dateGeneratorService.generateDate());
-        postDonationCounselling.setLastUpdatedBy(SecurityUtils.getCurrentUser());
-        postDonationCounsellingRepository.save(postDonationCounselling);
-        return postDonationCounselling;
+    PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository.findById(id);
+
+    if (postDonationCounselling == null) {
+      throw new IllegalArgumentException("Post donation counselling not found for id: " + id);
     }
 
-    public PostDonationCounselling updatePostDonationCounselling(long id, CounsellingStatus counsellingStatus,
-            Date counsellingDate, String notes) {
+    postDonationCounselling.setFlaggedForCounselling(Boolean.FALSE);
+    postDonationCounselling.setCounsellingStatus(counsellingStatus);
+    postDonationCounselling.setCounsellingDate(counsellingDate);
+    postDonationCounselling.getDonation().setNotes(notes);
+    postDonationCounselling.setLastUpdated(dateGeneratorService.generateDate());
+    postDonationCounselling.setLastUpdatedBy(SecurityUtils.getCurrentUser());
+    postDonationCounselling.setIsDeleted(Boolean.FALSE);
+    return postDonationCounsellingRepository.update(postDonationCounselling);
+  }
 
-        PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository.findById(id);
-
-        if (postDonationCounselling == null) {
-            throw new IllegalArgumentException("Post donation counselling not found for id: " + id);
-        }
-
-        postDonationCounselling.setFlaggedForCounselling(Boolean.FALSE);
-        postDonationCounselling.setCounsellingStatus(counsellingStatus);
-        postDonationCounselling.setCounsellingDate(counsellingDate);
-        postDonationCounselling.getDonation().setNotes(notes);
-        postDonationCounselling.setLastUpdated(dateGeneratorService.generateDate());
-        postDonationCounselling.setLastUpdatedBy(SecurityUtils.getCurrentUser());
-        postDonationCounselling.setIsDeleted(Boolean.FALSE);
-        return postDonationCounsellingRepository.update(postDonationCounselling);
-    }
-
-    public PostDonationCounselling flagForCounselling(long id) {
-        PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository.findById(id);
-        postDonationCounselling.setFlaggedForCounselling(Boolean.TRUE);
-        postDonationCounselling.setCounsellingDate(null);
-        postDonationCounselling.setCounsellingStatus(null);
-        postDonationCounselling.getDonation().setNotes(null);
-        postDonationCounselling.setIsDeleted(Boolean.FALSE);
-        postDonationCounselling.setLastUpdated(dateGeneratorService.generateDate());
-        postDonationCounselling.setLastUpdatedBy(SecurityUtils.getCurrentUser());
-        return postDonationCounsellingRepository.update(postDonationCounselling);
-    }
+  public PostDonationCounselling flagForCounselling(long id) {
+    PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository.findById(id);
+    postDonationCounselling.setFlaggedForCounselling(Boolean.TRUE);
+    postDonationCounselling.setCounsellingDate(null);
+    postDonationCounselling.setCounsellingStatus(null);
+    postDonationCounselling.getDonation().setNotes(null);
+    postDonationCounselling.setIsDeleted(Boolean.FALSE);
+    postDonationCounselling.setLastUpdated(dateGeneratorService.generateDate());
+    postDonationCounselling.setLastUpdatedBy(SecurityUtils.getCurrentUser());
+    return postDonationCounsellingRepository.update(postDonationCounselling);
+  }
 }
