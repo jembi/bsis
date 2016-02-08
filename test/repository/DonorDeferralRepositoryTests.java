@@ -5,27 +5,28 @@ import static helpers.builders.DonorBuilder.aDonor;
 import static helpers.builders.DonorDeferralBuilder.aDonorDeferral;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DeferralReasonType;
 import model.donordeferral.DonorDeferral;
 import model.donordeferral.DurationType;
+
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import suites.ContextDependentTestSuite;
 
 public class DonorDeferralRepositoryTests extends ContextDependentTestSuite {
     
     @Autowired
     private DonorDeferralRepository donorDeferralRepository;
-    @PersistenceContext
-    private EntityManager entityManager;
     
     @Test
     public void testCountDonorDeferralsForDonor_shouldReturnCorrectCount() {
@@ -147,4 +148,58 @@ public class DonorDeferralRepositoryTests extends ContextDependentTestSuite {
       assertThat(returnedDeferrals, is(expectedDeferrals));
     }
 
+    @Test
+    public void testCountDonorDeferralsForDonorOnDate_shouldReturnCorrectResults() {
+
+      Donor donor = aDonor().build();
+      DeferralReason permanentDeferralReason = aDeferralReason()
+          .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE)
+          .withDurationType(DurationType.PERMANENT)
+          .build();
+      DeferralReason temporaryDeferralReason = aDeferralReason()
+          .withType(DeferralReasonType.NORMAL)
+          .withDurationType(DurationType.TEMPORARY)
+          .withDefaultDuration(10)
+          .build();
+
+      // current deferral #1
+      aDonorDeferral()
+          .withDeferredDonor(donor)
+          .withDeferralReason(permanentDeferralReason)
+          .buildAndPersist(entityManager);
+      
+      // current deferral #2
+      Calendar cal = Calendar.getInstance();
+      cal.add(Calendar.DAY_OF_MONTH, 30);
+      aDonorDeferral()
+          .withDeferredDonor(donor)
+          .withDeferralReason(temporaryDeferralReason)
+          .withDeferredUntil(cal.getTime())
+          .buildAndPersist(entityManager);
+      
+      // Excluded because no longer valid
+      cal.add(Calendar.DAY_OF_MONTH, -100);
+      aDonorDeferral()
+          .withDeferredDonor(donor)
+          .withDeferralReason(temporaryDeferralReason)
+          .withDeferredUntil(cal.getTime())
+          .buildAndPersist(entityManager);
+
+      // Excluded because voided
+      aDonorDeferral()
+          .thatIsVoided()
+          .withDeferredDonor(donor)
+          .withDeferralReason(permanentDeferralReason)
+          .buildAndPersist(entityManager);
+      
+      // Excluded by donor
+      aDonorDeferral()
+          .withDeferredDonor(aDonor().build())
+          .withDeferralReason(permanentDeferralReason)
+          .buildAndPersist(entityManager);
+
+      
+      int numberOfDeferrals = donorDeferralRepository.countDonorDeferralsForDonorOnDate(donor, new Date());
+      assertThat(numberOfDeferrals, is(2));
+    }
 }
