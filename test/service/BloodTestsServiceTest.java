@@ -560,6 +560,10 @@ public class BloodTestsServiceTest {
         BloodTestResult.class)).thenReturn(typedQuery);
     when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
+    when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
+        .thenReturn(typedQuery);
+    when(typedQuery.setParameter("bloodTestId", 17)).thenReturn(typedQuery);
+    when(typedQuery.getSingleResult()).thenReturn(bloodTest);
 
     // run test
     BloodTestingRuleResult returnedRuleResult = service.saveBloodTests(donation.getId(), bloodTestResults);
