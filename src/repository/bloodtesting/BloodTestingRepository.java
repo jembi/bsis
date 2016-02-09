@@ -378,7 +378,7 @@ public class BloodTestingRepository {
   }
 
   public List<BloodTestingRuleResult> getAllTestsRequiringDoubleEntryForDonationBatches(List<Long> donationBatchIds) {
-    List<BloodTestingRuleResult> requiresDoubleEntry = null;
+    List<BloodTestingRuleResult> requiresDoubleEntry = new ArrayList<BloodTestingRuleResult>();
     for (BloodTestingRuleResult result : getAllTestsStatusForDonationBatches(donationBatchIds)) {
       if (result.getPendingDoubleEntryTtiTestIds().size() > 0){
         requiresDoubleEntry.add(result);
