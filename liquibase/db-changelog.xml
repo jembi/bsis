@@ -2032,5 +2032,10 @@
 		<comment>BSIS-358 - Rename doubleEntry to doubleEntryRequired for BloodTestResult</comment>
 		<renameColumn tableName="BloodTestResult" oldColumnName="doubleEntry" newColumnName="doubleEntryRequired" columnDataType="TINYINT(1)"/>
 	</changeSet>
+	
+	<changeSet id="20160209-1312" author="lauravignoli">		
+		<comment>BSIS-403 - Rename doubleEntryRequired to reEntryRequired for BloodTestResult</comment>
+		<renameColumn tableName="BloodTestResult" oldColumnName="doubleEntryRequired" newColumnName="reEntryRequired" columnDataType="TINYINT(1)"/>
+	</changeSet>
 
 </databaseChangeLog>

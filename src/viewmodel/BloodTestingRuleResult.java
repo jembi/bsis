@@ -50,7 +50,7 @@ public class BloodTestingRuleResult {
 
   private boolean ttiUninterpretable;
 
-  private List<String> pendingDoubleEntryTtiTestIds;
+  private List<String> pendingReEntryTtiTestIds;
 
   public BloodTestingRuleResult() {
   }
@@ -199,12 +199,12 @@ public class BloodTestingRuleResult {
     this.recentTestResults = recentTestResults;
   }
 
-  public List<String> getPendingDoubleEntryTtiTestIds() {
-    return pendingDoubleEntryTtiTestIds;
+  public List<String> getPendingReEntryTtiTestIds() {
+    return pendingReEntryTtiTestIds;
   }
 
-  public void setPendingDoubleEntryTtiTestIds(List<String> pendingDoubleEntryTtiTestIds) {
-    this.pendingDoubleEntryTtiTestIds = pendingDoubleEntryTtiTestIds;
+  public void setPendingReEntryTtiTestIds(List<String> pendingReEntryTtiTestIds) {
+    this.pendingReEntryTtiTestIds = pendingReEntryTtiTestIds;
   }
 
 

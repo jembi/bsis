@@ -13,13 +13,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import model.BaseModificationTrackerEntity;
 import model.donation.Donation;
 import model.microtiterplate.MachineReading;
 import repository.BloodTestResultNamedQueryConstants;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 /**
  * Stores the result of one blood typing test for one donation. No need to audit this table. NEVER
@@ -57,7 +57,7 @@ public class BloodTestResult extends BaseModificationTrackerEntity {
   @Column(length = 20)
   private String reagentLotNumber;
 
-  private Boolean doubleEntryRequired;
+  private Boolean reEntryRequired;
 
   public BloodTestResult() {
     super();
@@ -119,12 +119,12 @@ public class BloodTestResult extends BaseModificationTrackerEntity {
     this.reagentLotNumber = reagentLotNumber;
   }
 
-  public Boolean getDoubleEntryRequired() {
-    return doubleEntryRequired;
+  public Boolean getReEntryRequired() {
+    return reEntryRequired;
   }
 
-  public void setDoubleEntryRequired(Boolean doubleEntryRequired) {
-    this.doubleEntryRequired = doubleEntryRequired;
+  public void setReEntryRequired(Boolean reEntryRequired) {
+    this.reEntryRequired = reEntryRequired;
   }
 
 

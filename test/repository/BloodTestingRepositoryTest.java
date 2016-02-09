@@ -81,9 +81,9 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
   }
 
   @Test
-  public void testDoubleEntryRequiredAfterTTIEdit() throws Exception {
+  public void testReEntryRequiredAfterTTIEdit() throws Exception {
 
-    // Update test 17 to POS and check that the doubleEntryRequired field is updated to true only
+    // Update test 17 to POS and check that the reEntryRequired field is updated to true only
     // for that test. All tests are NEG to start with.
     Donation donation = donationRepository.findDonationById(8l);
     Map<Long, String> stringResults = new HashMap<Long, String>();
@@ -105,10 +105,9 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
       BloodTestResult result = (BloodTestResult) newResults.get(key);
       if (result.getBloodTest().getCategory().equals(BloodTestCategory.TTI)) {
         if (result.getBloodTest().getId() == 17) {
-          Assert.assertEquals("Field doubleEntryRequired is set to true for test 17", true,
-              result.getDoubleEntryRequired());
+          Assert.assertEquals("Field reEntryRequired is set to true for test 17", true, result.getReEntryRequired());
         } else {
-          Assert.assertEquals("Field doubleEntryRequired is false", false, result.getDoubleEntryRequired());
+          Assert.assertEquals("Field reEntryRequired is false", false, result.getReEntryRequired());
         }
       }
     }

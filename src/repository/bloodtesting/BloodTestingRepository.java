@@ -233,7 +233,7 @@ public class BloodTestingRepository {
       Date testedOn, BloodTestingRuleResult ruleResult) {
 
     Map<Long, BloodTestResult> mostRecentTestResults = getRecentTestResultsForDonation(donation.getId());
-    // if the blood test result is being edited, update the existing one and set doubleEntryRequired
+    // if the blood test result is being edited, update the existing one and set reEntryRequired
     // to true.
     BloodTestResult btResult = mostRecentTestResults.get(testId);
     btResult = updateOrCreateBloodTestResult(btResult, testId, testResult, donation, testedOn);
@@ -248,7 +248,6 @@ public class BloodTestingRepository {
     if (btResult == null) {
       btResult = new BloodTestResult();
       BloodTest bloodTest = findBloodTestById(testId);
-      bloodTest.setId(testId);
       btResult.setBloodTest(bloodTest);
       // not updating the inverse relation which means the
       // donation.getBloodTypingResults() will not
@@ -257,12 +256,12 @@ public class BloodTestingRepository {
       btResult.setTestedOn(testedOn);
       btResult.setNotes("");
       btResult.setResult(testResult);
-      btResult.setDoubleEntryRequired(true);
+      btResult.setReEntryRequired(true);
 
     } else {
       if (!testResult.equals(btResult.getResult())) {
         btResult.setResult(testResult);
-        btResult.setDoubleEntryRequired(true);
+        btResult.setReEntryRequired(true);
       }
     }
     em.persist(btResult);
@@ -388,14 +387,14 @@ public class BloodTestingRepository {
     return bloodTestingRuleResults;
   }
 
-  public List<BloodTestingRuleResult> getAllTestsRequiringDoubleEntryForDonationBatches(List<Long> donationBatchIds) {
-    List<BloodTestingRuleResult> requiresDoubleEntry = new ArrayList<BloodTestingRuleResult>();
+  public List<BloodTestingRuleResult> getAllTestsRequiringReEntryForDonationBatches(List<Long> donationBatchIds) {
+    List<BloodTestingRuleResult> requiresReEntry = new ArrayList<BloodTestingRuleResult>();
     for (BloodTestingRuleResult result : getAllTestsStatusForDonationBatches(donationBatchIds)) {
-      if (result.getPendingDoubleEntryTtiTestIds().size() > 0){
-        requiresDoubleEntry.add(result);
+      if (result.getPendingReEntryTtiTestIds().size() > 0) {
+        requiresReEntry.add(result);
       }
     }
-    return requiresDoubleEntry;
+    return requiresReEntry;
   }
 
   public BloodTestingRuleResult getAllTestsStatusForDonation(

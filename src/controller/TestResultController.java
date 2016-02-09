@@ -103,9 +103,10 @@ public class TestResultController {
     return new ResponseEntity(map, HttpStatus.OK);
   }
 
-  @RequestMapping(value = "/requiresdoubleentry", method = RequestMethod.GET)
+  @RequestMapping(value = "/requiresreentry", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
-  public ResponseEntity findTestResultsForTestBatchThatRequireDoubleEntry(@RequestParam(value = "testBatch", required = true) Long testBatchId) {
+  public ResponseEntity findTestResultsForTestBatchThatRequireReEntry(
+      @RequestParam(value = "testBatch", required = true) Long testBatchId) {
 
     Map<String, Object> map = new HashMap<>();
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
@@ -116,7 +117,7 @@ public class TestResultController {
     }
 
     List<BloodTestingRuleResult> ruleResults =
-        bloodTestingRepository.getAllTestsRequiringDoubleEntryForDonationBatches(donationBatchIds);
+        bloodTestingRepository.getAllTestsRequiringReEntryForDonationBatches(donationBatchIds);
     map.put("testResults", ruleResults);
 
     return new ResponseEntity(map, HttpStatus.OK);
@@ -144,7 +145,7 @@ public class TestResultController {
     Boolean basicBloodTypingComplete = true;
     Boolean basicTTIComplete = true;
     Boolean pendingBloodTypingMatchTests = false;
-    Boolean pendingDoubleEntryTTITests = false;
+    Boolean pendingReEntryTTITests = false;
 
     for (BloodTestingRuleResult result : ruleResults) {
       if (!result.getBloodTypingStatus().equals(BloodTypingStatus.COMPLETE)) {
@@ -164,8 +165,8 @@ public class TestResultController {
           || result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS))) {
         pendingBloodTypingMatchTests = true;
       }
-      if (result.getPendingDoubleEntryTtiTestIds().size() > 0) {
-        pendingDoubleEntryTTITests = true;
+      if (result.getPendingReEntryTtiTestIds().size() > 0) {
+        pendingReEntryTTITests = true;
       }
     }
 
@@ -174,7 +175,7 @@ public class TestResultController {
     map.put("basicBloodTypingComplete", basicBloodTypingComplete);
     map.put("basicTTIComplete", basicTTIComplete);
     map.put("pendingBloodTypingMatchTests", pendingBloodTypingMatchTests);
-    map.put("pendingDoubleEntryTTITests", pendingDoubleEntryTTITests);
+    map.put("pendingReEntryTTITests", pendingReEntryTTITests);
 
     return new ResponseEntity(map, HttpStatus.OK);
   }

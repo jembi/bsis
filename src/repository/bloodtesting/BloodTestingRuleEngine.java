@@ -7,6 +7,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import factory.BloodTestingRuleResultViewModelFactory;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestResult;
@@ -15,15 +22,7 @@ import model.bloodtesting.rules.BloodTestingRule;
 import model.bloodtesting.rules.DonationField;
 import model.donation.Donation;
 import model.donor.Donor;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 import viewmodel.BloodTestingRuleResult;
-import factory.BloodTestingRuleResultViewModelFactory;
 
 @Repository
 @Transactional
@@ -114,8 +113,8 @@ public class BloodTestingRuleEngine {
     // Determine the TTI status
     setTTIStatus(resultSet);
 
-    // Determine the TTI tests that still require double entry
-    setPendingDoubleEntryTtiTests(resultSet);
+    // Determine the TTI tests that still require re-entry
+    setPendingReEntryTtiTests(resultSet);
 
     return bloodTestingRuleResultViewModelFactory.createBloodTestResultViewModel(resultSet);
   }
@@ -125,13 +124,13 @@ public class BloodTestingRuleEngine {
    *
    * @param resultSet the new pending double entry tti tests
    */
-  private void setPendingDoubleEntryTtiTests(BloodTestingRuleResultSet resultSet) {
+  private void setPendingReEntryTtiTests(BloodTestingRuleResultSet resultSet) {
     Map<Long, BloodTestResult> results = resultSet.getRecentTestResults();
     for (Long testId : results.keySet()) {
       BloodTestResult testResult = results.get(testId);
       if (testResult.getBloodTest().getCategory().equals(BloodTestCategory.TTI)
-          && testResult.getDoubleEntryRequired().equals(true)) {
-        resultSet.addPendingDoubleEntryTtiTestIds(testId.toString());
+          && testResult.getReEntryRequired().equals(true)) {
+        resultSet.addPendingReEntryTtiTestIds(testId.toString());
       }
     }
   }

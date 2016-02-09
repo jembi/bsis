@@ -85,8 +85,8 @@ public class BloodTestingRuleResultSet {
   /* collection of the TTI and Serology tests that have been done */
   private List<BloodTestingRule> bloodTestingRules = new ArrayList<BloodTestingRule>();
 
-  /* collection of the TTI tests that still require double entry */
-  private List<String> pendingDoubleEntryTtiTestIds = new ArrayList<String>();
+  /* collection of the TTI tests that still require re entry */
+  private List<String> pendingReEntryTtiTestIds = new ArrayList<String>();
 
   /**
    * Creates and initialises the BloodTestingRuleResultSet
@@ -240,8 +240,8 @@ public class BloodTestingRuleResultSet {
     this.pendingTtiTestsIds.add(pendingTtiTestsId);
   }
 
-  public void addPendingDoubleEntryTtiTestIds(String pendingDoubleEntryTtiTestId) {
-    this.pendingDoubleEntryTtiTestIds.add(pendingDoubleEntryTtiTestId);
+  public void addPendingReEntryTtiTestIds(String pendingReEntryTtiTestId) {
+    this.pendingReEntryTtiTestIds.add(pendingReEntryTtiTestId);
   }
 
   public Map<String, String> getStoredTestResults() {
@@ -312,12 +312,12 @@ public class BloodTestingRuleResultSet {
     this.bloodTestingRules = bloodTestingRules;
   }
 
-  public List<String> getPendingDoubleEntryTtiTestIds() {
-    return pendingDoubleEntryTtiTestIds;
+  public List<String> getPendingReEntryTtiTestIds() {
+    return pendingReEntryTtiTestIds;
   }
 
-  public void setPendingDoubleEntryTtiTestIds(List<String> pendingDoubleEntryTtiTestIds) {
-    this.pendingDoubleEntryTtiTestIds = pendingDoubleEntryTtiTestIds;
+  public void setPendingReEntryTtiTestIds(List<String> pendingReEntryTtiTestIds) {
+    this.pendingReEntryTtiTestIds = pendingReEntryTtiTestIds;
   }
 
 
