@@ -19,40 +19,40 @@ import viewmodel.BloodTestingRuleResult;
 
 @Service
 public class BloodTestingRuleResultViewModelFactory {
-	
-	@Autowired
-	BloodTestResultConstraintChecker bloodTestResultConstraintChecker;
-	
-	@Autowired
-	DonationConstraintChecker donationConstraintChecker;
 
-    public BloodTestingRuleResult createBloodTestResultViewModel(BloodTestingRuleResultSet bloodTestingRuleResultSet) {
-		BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
-		
-		// the blood donation
-		Donation donation = bloodTestingRuleResultSet.getDonation();
-		ruleResult.setDonation(donation);
-		
-		// pending tests
-		List<String> pendingBloodTypingTestsIds = new ArrayList<String>();
-		pendingBloodTypingTestsIds.addAll(bloodTestingRuleResultSet.getPendingAboTestsIds());
-		pendingBloodTypingTestsIds.addAll(bloodTestingRuleResultSet.getPendingRhTestsIds());
-		ruleResult.setPendingBloodTypingTestsIds(bloodTestingRuleResultSet.getPendingAboTestsIds());
-		ruleResult.setPendingTTITestsIds(bloodTestingRuleResultSet.getPendingTtiTestsIds());
+  @Autowired
+  BloodTestResultConstraintChecker bloodTestResultConstraintChecker;
+
+  @Autowired
+  DonationConstraintChecker donationConstraintChecker;
+
+  public BloodTestingRuleResult createBloodTestResultViewModel(BloodTestingRuleResultSet bloodTestingRuleResultSet) {
+    BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+
+    // the blood donation
+    Donation donation = bloodTestingRuleResultSet.getDonation();
+    ruleResult.setDonation(donation);
+
+    // pending tests
+    List<String> pendingBloodTypingTestsIds = new ArrayList<String>();
+    pendingBloodTypingTestsIds.addAll(bloodTestingRuleResultSet.getPendingAboTestsIds());
+    pendingBloodTypingTestsIds.addAll(bloodTestingRuleResultSet.getPendingRhTestsIds());
+    ruleResult.setPendingBloodTypingTestsIds(bloodTestingRuleResultSet.getPendingAboTestsIds());
+    ruleResult.setPendingTTITestsIds(bloodTestingRuleResultSet.getPendingTtiTestsIds());
     ruleResult.setPendingDoubleEntryTtiTestIds(bloodTestingRuleResultSet.getPendingDoubleEntryTtiTestIds());
-		
-		// blood typing results
-		ruleResult.setBloodTypingMatchStatus(bloodTestingRuleResultSet.getBloodTypingMatchStatus());
-		ruleResult.setBloodTypingStatus(bloodTestingRuleResultSet.getBloodTypingStatus());
-		
-		// determine if there are any uninterpretable results
-		if (bloodTestingRuleResultSet.getBloodAboChanges().isEmpty() && bloodTestingRuleResultSet.getPendingAboTestsIds().isEmpty() && bloodTestingRuleResultSet.getAboUninterpretable()) {
-			// there was an attempt to match a rule for blood ABO
-			ruleResult.setAboUninterpretable(true);
-		}
-		if (bloodTestingRuleResultSet.getBloodRhChanges().isEmpty() && bloodTestingRuleResultSet.getPendingRhTestsIds().isEmpty() && bloodTestingRuleResultSet.getRhUninterpretable()) {
-			// there was an attempt to match a rule for blood Rh
-			ruleResult.setRhUninterpretable(true);
+
+    // blood typing results
+    ruleResult.setBloodTypingMatchStatus(bloodTestingRuleResultSet.getBloodTypingMatchStatus());
+    ruleResult.setBloodTypingStatus(bloodTestingRuleResultSet.getBloodTypingStatus());
+
+    // determine if there are any uninterpretable results
+    if (bloodTestingRuleResultSet.getBloodAboChanges().isEmpty() && bloodTestingRuleResultSet.getPendingAboTestsIds().isEmpty() && bloodTestingRuleResultSet.getAboUninterpretable()) {
+      // there was an attempt to match a rule for blood ABO
+      ruleResult.setAboUninterpretable(true);
+    }
+    if (bloodTestingRuleResultSet.getBloodRhChanges().isEmpty() && bloodTestingRuleResultSet.getPendingRhTestsIds().isEmpty() && bloodTestingRuleResultSet.getRhUninterpretable()) {
+      // there was an attempt to match a rule for blood Rh
+      ruleResult.setRhUninterpretable(true);
     }
 
     ruleResult.setAllBloodAboChanges(bloodTestingRuleResultSet.getBloodAboChanges());

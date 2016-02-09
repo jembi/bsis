@@ -61,7 +61,8 @@ public class TestResultController {
   @Autowired
   private BloodTestsService bloodTestsService;
 
-  public TestResultController() {}
+  public TestResultController() {
+  }
 
   @RequestMapping(value = "{donationIdentificationNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
@@ -83,7 +84,7 @@ public class TestResultController {
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
   public ResponseEntity findTestResultsForTestBatch(HttpServletRequest request,
-      @RequestParam(value = "testBatch", required = true) Long testBatchId) {
+                                                    @RequestParam(value = "testBatch", required = true) Long testBatchId) {
 
     Map<String, Object> map = new HashMap<String, Object>();
 
@@ -105,7 +106,7 @@ public class TestResultController {
   @RequestMapping(value = "/overview", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
   public ResponseEntity findTestResultsOverviewForTestBatch(HttpServletRequest request,
-      @RequestParam(value = "testBatch", required = true) Long testBatchId) {
+                                                            @RequestParam(value = "testBatch", required = true) Long testBatchId) {
 
     Map<String, Object> map = new HashMap<String, Object>();
 
@@ -141,7 +142,7 @@ public class TestResultController {
       }
       if (!result.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE)
           && (result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.NO_MATCH)
-              || result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS))) {
+          || result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS))) {
         pendingBloodTypingMatchTests = true;
       }
       if (result.getPendingDoubleEntryTtiTestIds().size() > 0) {

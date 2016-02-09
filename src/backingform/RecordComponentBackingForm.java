@@ -47,7 +47,7 @@ public class RecordComponentBackingForm {
   }
 
 	/*
-	public String getChildComponentTypeId() {
+  public String getChildComponentTypeId() {
         return childComponentTypeId;
     }
 	
