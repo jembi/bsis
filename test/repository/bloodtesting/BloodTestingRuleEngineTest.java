@@ -184,7 +184,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
 		Assert.assertEquals("bloodAb has a result", 1, result.getBloodAbo().length());
 		Assert.assertEquals("bloodRh is empty", 0, result.getBloodRh().length());
 		Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
-		Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
+		Assert.assertEquals("No pending blood typing tests", 1, result.getPendingBloodTypingTestsIds().size());
 		Assert.assertEquals("1 available test result(s)", 1, result.getAvailableTestResults().size());
 		Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
 		Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
