@@ -377,6 +377,16 @@ public class BloodTestingRepository {
     return bloodTestingRuleResults;
   }
 
+  public List<BloodTestingRuleResult> getAllTestsRequiringDoubleEntryForDonationBatches(List<Long> donationBatchIds) {
+    List<BloodTestingRuleResult> requiresDoubleEntry = null;
+    for (BloodTestingRuleResult result : getAllTestsStatusForDonationBatches(donationBatchIds)) {
+      if (result.getPendingDoubleEntryTtiTestIds().size() > 0){
+        requiresDoubleEntry.add(result);
+      }
+    }
+    return requiresDoubleEntry;
+  }
+
   public BloodTestingRuleResult getAllTestsStatusForDonation(
       Long donationId) {
     Donation donation = donationRepository
