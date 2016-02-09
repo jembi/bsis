@@ -98,7 +98,7 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     ruleResult.setTTIStatus(TTIStatus.TTI_SAFE);
     ruleResult.setExtraInformation(new HashSet<String>());
-    bloodTestingRepository.saveBloodTestResultsToDatabase(stringResults, donation, new Date(), ruleResult);
+    bloodTestingRepository.saveBloodTestResultsToDatabase(stringResults, donation, new Date(), ruleResult, false);
 
     Map<Long, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
     for (Long key : newResults.keySet()) {
@@ -111,5 +111,61 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
         }
       }
     }
+  }
+  
+  
+  @Test
+  public void testReEntrySequences() throws Exception {
+    Donation donation = donationRepository.findDonationById(8l);
+    Map<Long, String> testResults = new HashMap<Long, String>();
+    BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+    ruleResult.setBloodAbo("A");
+    ruleResult.setBloodRh("+");
+    ruleResult.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+    ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
+    ruleResult.setTTIStatus(TTIStatus.TTI_SAFE);
+    ruleResult.setExtraInformation(new HashSet<String>());
+    
+    // #1: re-entry should be required
+    testResults.put(17L, "POS");
+    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
+    Map<Long, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    Assert.assertTrue("Double entry required", newResults.get(17L).getReEntryRequired());
+    
+    // #2: edited initial result, re-entry still required
+    testResults.put(17L, "NEG");
+    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
+    newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    Assert.assertTrue("Double entry still required", newResults.get(17L).getReEntryRequired());
+    
+    // #3:  re-entry of last result
+    testResults.put(17L, "NEG");
+    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
+    newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    Assert.assertFalse("Double entry no longer required", newResults.get(17L).getReEntryRequired());
+    
+    // #4:  edited initial result, but no change in outcome
+    testResults.put(17L, "NEG");
+    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
+    newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    Assert.assertFalse("Double entry not required", newResults.get(17L).getReEntryRequired());
+    
+    // #4:  edited initial result, but there is now a change
+    testResults.put(17L, "POS");
+    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
+    newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    Assert.assertTrue("Double entry now required", newResults.get(17L).getReEntryRequired());
+    
+    // #5:  edited initial result, but there is no change in outcome
+    testResults.put(17L, "POS");
+    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
+    newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    Assert.assertTrue("Double entry still required", newResults.get(17L).getReEntryRequired());
+    
+    // #6:  re-entry done with a different result
+    testResults.put(17L, "NEG");
+    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
+    newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    Assert.assertFalse("Double entry no longer required", newResults.get(17L).getReEntryRequired());
   }
 }

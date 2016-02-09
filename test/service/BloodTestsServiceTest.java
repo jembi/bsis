@@ -566,7 +566,7 @@ public class BloodTestsServiceTest {
     when(typedQuery.getSingleResult()).thenReturn(bloodTest);
 
     // run test
-    BloodTestingRuleResult returnedRuleResult = service.saveBloodTests(donation.getId(), bloodTestResults);
+    BloodTestingRuleResult returnedRuleResult = service.saveBloodTests(donation.getId(), bloodTestResults, false);
 
     // check asserts
     Assert.assertNotNull("ruleResult returned", returnedRuleResult);

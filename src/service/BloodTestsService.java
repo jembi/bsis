@@ -68,13 +68,14 @@ public class BloodTestsService {
    * @param donationId       Long identifier of the donation that should be updated with new test
    *                         results
    * @param bloodTestResults Map of test results
+   * @param reEntry          boolean true if the results are the re-entry and false if the results are first entry
    * @return BloodTestingRuleResult containing the results of the Blood Test Rules Engine
    */
-  public BloodTestingRuleResult saveBloodTests(Long donationId, Map<Long, String> bloodTestResults) {
+  public BloodTestingRuleResult saveBloodTests(Long donationId, Map<Long, String> bloodTestResults, boolean reEntry) {
     Donation donation = donationRepository.findDonationById(donationId);
     // FIXME: rules engine will not provide the correct BloodTyping statuses because the Donation passed in has the wrong Abo/Rh (see FIXME below)
     BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(donation, bloodTestResults);
-    bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult);
+    bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
     // FIXME: run the ruleEngine a 2nd time to use the correct Abo/Rh for the donation
     ruleResult = ruleEngine.applyBloodTests(donation, bloodTestResults);
     donationRepository.saveDonation(donation);

@@ -182,7 +182,9 @@ public class TestResultController {
 
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
   @RequestMapping(method = RequestMethod.POST)
-  public ResponseEntity<Map<String, Object>> saveTestResults(@RequestBody @Valid TestResultBackingForm form) {
+  public ResponseEntity<Map<String, Object>> saveTestResults(
+      @RequestBody @Valid TestResultBackingForm form,
+      @RequestParam(value = "reEntry", required = false, defaultValue = "false") boolean reEntry) {
 
     HttpStatus responseStatus = HttpStatus.CREATED;
     Map<String, Object> responseMap = new HashMap<>();
@@ -195,7 +197,7 @@ public class TestResultController {
       Map<Long, String> errors = bloodTestsService.validateTestResultValues(testResults);
       if (errors.isEmpty()) {
         // No errors
-        BloodTestingRuleResult ruleResult = bloodTestsService.saveBloodTests(donation.getId(), form.getTestResults());
+        BloodTestingRuleResult ruleResult = bloodTestsService.saveBloodTests(donation.getId(), form.getTestResults(), reEntry);
         responseMap.put("success", true);
         responseMap.put("testresults", ruleResult);
       } else {
