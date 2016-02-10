@@ -134,7 +134,7 @@ public class BloodTestingRepository {
           if (saveIfUninterpretable) {
             saveBloodTestResultsToDatabase(
                 bloodTestResultsForDonation, donation,
-                testedOn, ruleResult);
+                testedOn, ruleResult, false);
           } else {
             Map<Long, String> uninterpretable = new HashMap<Long, String>();
             donationsWithUninterpretableResults.add(donationId);
@@ -145,7 +145,7 @@ public class BloodTestingRepository {
         } else {
           saveBloodTestResultsToDatabase(
               bloodTestResultsForDonation, donation,
-              testedOn, ruleResult);
+              testedOn, ruleResult, false);
         }
 
       }
@@ -214,36 +214,38 @@ public class BloodTestingRepository {
    * @param donation                    Donation associated with the test results
    * @param testedOn                    Date the tests were done
    * @param ruleResult                  BloodTestingRuleResult from the BloodTestingRulesEngine
+   * @param reEntry                     boolean true if the results are the re-entry and false if the results are first entry
    */
   public void saveBloodTestResultsToDatabase(
       Map<Long, String> bloodTestResultsForDonation,
       Donation donation, Date testedOn,
-      BloodTestingRuleResult ruleResult) {
+      BloodTestingRuleResult ruleResult,
+      boolean reEntry) {
 
     Map<Long, BloodTestResult> mostRecentTestResults = getRecentTestResultsForDonation(donation.getId());
     for (Long testId : bloodTestResultsForDonation.keySet()) {
       BloodTestResult btResult = mostRecentTestResults.get(testId);
-      updateOrCreateBloodTestResult(btResult, testId, bloodTestResultsForDonation.get(testId), donation, testedOn);
+      updateOrCreateBloodTestResult(btResult, testId, bloodTestResultsForDonation.get(testId), donation, testedOn, reEntry);
     }
     updateDonationWithTestResults(donation, ruleResult);
     em.persist(donation);
   }
-
+  
   private BloodTestResult saveBloodTestResultToDatabase(Long testId, String testResult, Donation donation,
-      Date testedOn, BloodTestingRuleResult ruleResult) {
+      Date testedOn, BloodTestingRuleResult ruleResult, boolean reEntry) {
 
     Map<Long, BloodTestResult> mostRecentTestResults = getRecentTestResultsForDonation(donation.getId());
     // if the blood test result is being edited, update the existing one and set reEntryRequired
     // to true.
     BloodTestResult btResult = mostRecentTestResults.get(testId);
-    btResult = updateOrCreateBloodTestResult(btResult, testId, testResult, donation, testedOn);
+    btResult = updateOrCreateBloodTestResult(btResult, testId, testResult, donation, testedOn, reEntry);
     updateDonationWithTestResults(donation, ruleResult);
     em.persist(donation);
     return btResult;
   }
 
   private BloodTestResult updateOrCreateBloodTestResult(BloodTestResult btResult, Long testId, String testResult,
-      Donation donation, Date testedOn) {
+      Donation donation, Date testedOn, boolean reEntry) {
 
     if (btResult == null) {
       btResult = new BloodTestResult();
@@ -256,12 +258,18 @@ public class BloodTestingRepository {
       btResult.setTestedOn(testedOn);
       btResult.setNotes("");
       btResult.setResult(testResult);
+      // re-entry is always required for the first test result entry
       btResult.setReEntryRequired(true);
-
     } else {
       if (!testResult.equals(btResult.getResult())) {
         btResult.setResult(testResult);
-        btResult.setReEntryRequired(true);
+        // re-entry is only required if the initial test result is being modified
+        btResult.setReEntryRequired(!reEntry);
+      } else {
+        // only clear the re-entry required flag if the update is a re-entry
+        if (btResult.getReEntryRequired() && reEntry) { 
+          btResult.setReEntryRequired(false);
+        }
       }
     }
     em.persist(btResult);
@@ -559,7 +567,7 @@ public class BloodTestingRepository {
         BloodTestResult btResult = saveBloodTestResultToDatabase(
             new Long(ttiTestId),
             bloodTestResultsForDonation.get(ttiTestId),
-            donation, testedOn, ruleResult);
+            donation, testedOn, ruleResult, false);
         // no need to worry about uninterpretable results here
         btResult.setMachineReading(machineReading);
         // bidirectional relationship with blood test result as the
@@ -929,7 +937,7 @@ public class BloodTestingRepository {
           bloodTestRuleResultsForDonations.put(cs.getId(), ruleResult);
 
           saveBloodTestResultToDatabase(Long.valueOf(ts.getAssayNumber()),
-              ts.getInterpretation(), cs, ts.getCompleted(), ruleResult);
+              ts.getInterpretation(), cs, ts.getCompleted(), ruleResult, false);
 
         } catch (Exception ex) {
           System.out.println("Cannot save TTI Test Result to DB");
