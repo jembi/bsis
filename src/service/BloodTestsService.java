@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 
 import model.component.Component;
 import model.donation.Donation;
+import model.testbatch.TestBatchStatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,9 @@ public class BloodTestsService {
 
   @Autowired
   private BloodTestingRuleEngine ruleEngine;
+  
+  @Autowired
+  private TestBatchStatusChangeService testBatchStatusChangeService;
 
   /**
    * Executes the BloodTestingRuleEngine with the configured BloodTests and returns the results
@@ -73,12 +77,15 @@ public class BloodTestsService {
    */
   public BloodTestingRuleResult saveBloodTests(Long donationId, Map<Long, String> bloodTestResults, boolean reEntry) {
     Donation donation = donationRepository.findDonationById(donationId);
-    // FIXME: rules engine will not provide the correct BloodTyping statuses because the Donation passed in has the wrong Abo/Rh (see FIXME below)
     BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(donation, bloodTestResults);
     bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
-    // FIXME: run the ruleEngine a 2nd time to use the correct Abo/Rh for the donation
+    // Note: Rules engine will only provide the correct BloodTyping statuses on the 2nd execution because the 
+    // Donation Abo/Rh is only updated after the 1st execution
     ruleResult = ruleEngine.applyBloodTests(donation, bloodTestResults);
     donationRepository.saveDonation(donation);
+    if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
+      testBatchStatusChangeService.handleRelease(donation);
+    }
     return ruleResult;
   }
 
