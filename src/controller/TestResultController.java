@@ -103,26 +103,6 @@ public class TestResultController {
     return new ResponseEntity(map, HttpStatus.OK);
   }
 
-  @RequestMapping(value = "/requiresreentry", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
-  public ResponseEntity findTestResultsForTestBatchThatRequireReEntry(
-      @RequestParam(value = "testBatch", required = true) Long testBatchId) {
-
-    Map<String, Object> map = new HashMap<>();
-    TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
-    List<DonationBatch> donationBatches = testBatch.getDonationBatches();
-    List<Long> donationBatchIds = new ArrayList<>();
-    for (DonationBatch donationBatch : donationBatches) {
-      donationBatchIds.add(donationBatch.getId());
-    }
-
-    List<BloodTestingRuleResult> ruleResults =
-        bloodTestingRepository.getAllTestsRequiringReEntryForDonationBatches(donationBatchIds);
-    map.put("testResults", ruleResults);
-
-    return new ResponseEntity(map, HttpStatus.OK);
-  }
-
   @RequestMapping(value = "/overview", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
   public ResponseEntity findTestResultsOverviewForTestBatch(HttpServletRequest request,

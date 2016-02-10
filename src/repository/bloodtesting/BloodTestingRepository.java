@@ -387,16 +387,6 @@ public class BloodTestingRepository {
     return bloodTestingRuleResults;
   }
 
-  public List<BloodTestingRuleResult> getAllTestsRequiringReEntryForDonationBatches(List<Long> donationBatchIds) {
-    List<BloodTestingRuleResult> requiresReEntry = new ArrayList<BloodTestingRuleResult>();
-    for (BloodTestingRuleResult result : getAllTestsStatusForDonationBatches(donationBatchIds)) {
-      if (result.getPendingReEntryTtiTestIds().size() > 0) {
-        requiresReEntry.add(result);
-      }
-    }
-    return requiresReEntry;
-  }
-
   public BloodTestingRuleResult getAllTestsStatusForDonation(
       Long donationId) {
     Donation donation = donationRepository
