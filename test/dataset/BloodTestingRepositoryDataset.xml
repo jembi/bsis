@@ -387,7 +387,7 @@
 		isDeleted="0" createdDate="2016-02-04 07:53:57.0" lastUpdated="2016-02-04 07:53:57.0"
 		packType_id="1" donationBatch_id="1" donationType_id="1" donor_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" venue_id="2" bleedStartTime="1970-01-01 14:53:37.0"
-		bleedEndTime="1970-01-01 14:53:37.0" ineligibleDonor="0" released="0" />
+		bleedEndTime="1970-01-01 14:53:37.0" ineligibleDonor="0" released="0" ttiStatus="NOT_DONE"/>
 
 	<BloodTestResult id="1" createdDate="2015-02-06 02:09:13.0"
 		lastUpdated="2015-02-06 02:09:13.0" notes="" result="NEG"

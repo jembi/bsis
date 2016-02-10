@@ -227,8 +227,10 @@ public class BloodTestingRepository {
       BloodTestResult btResult = mostRecentTestResults.get(testId);
       updateOrCreateBloodTestResult(btResult, testId, bloodTestResultsForDonation.get(testId), donation, testedOn, reEntry);
     }
-    updateDonationWithTestResults(donation, ruleResult);
-    em.persist(donation);
+    if (reEntry) {
+      updateDonationWithTestResults(donation, ruleResult);
+      em.persist(donation);
+    }
   }
   
   private BloodTestResult saveBloodTestResultToDatabase(Long testId, String testResult, Donation donation,
@@ -239,8 +241,10 @@ public class BloodTestingRepository {
     // to true.
     BloodTestResult btResult = mostRecentTestResults.get(testId);
     btResult = updateOrCreateBloodTestResult(btResult, testId, testResult, donation, testedOn, reEntry);
-    updateDonationWithTestResults(donation, ruleResult);
-    em.persist(donation);
+    if (reEntry) {
+      updateDonationWithTestResults(donation, ruleResult);
+      em.persist(donation);
+    }
     return btResult;
   }
 

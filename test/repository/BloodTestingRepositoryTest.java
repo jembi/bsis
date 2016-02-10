@@ -130,42 +130,68 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     testResults.put(17L, "POS");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
     Map<Long, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
-    Assert.assertTrue("Double entry required", newResults.get(17L).getReEntryRequired());
+    Assert.assertTrue("Re-entry required", newResults.get(17L).getReEntryRequired());
     
     // #2: edited initial result, re-entry still required
     testResults.put(17L, "NEG");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
     newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
-    Assert.assertTrue("Double entry still required", newResults.get(17L).getReEntryRequired());
+    Assert.assertTrue("Re-entry still required", newResults.get(17L).getReEntryRequired());
     
     // #3:  re-entry of last result
     testResults.put(17L, "NEG");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
     newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
-    Assert.assertFalse("Double entry no longer required", newResults.get(17L).getReEntryRequired());
+    Assert.assertFalse("Re-entry no longer required", newResults.get(17L).getReEntryRequired());
     
     // #4:  edited initial result, but no change in outcome
     testResults.put(17L, "NEG");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
     newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
-    Assert.assertFalse("Double entry not required", newResults.get(17L).getReEntryRequired());
+    Assert.assertFalse("Re-entry not required", newResults.get(17L).getReEntryRequired());
     
     // #4:  edited initial result, but there is now a change
     testResults.put(17L, "POS");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
     newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
-    Assert.assertTrue("Double entry now required", newResults.get(17L).getReEntryRequired());
+    Assert.assertTrue("Re-entry now required", newResults.get(17L).getReEntryRequired());
     
     // #5:  edited initial result, but there is no change in outcome
     testResults.put(17L, "POS");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
     newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
-    Assert.assertTrue("Double entry still required", newResults.get(17L).getReEntryRequired());
+    Assert.assertTrue("Re-entry still required", newResults.get(17L).getReEntryRequired());
     
     // #6:  re-entry done with a different result
     testResults.put(17L, "NEG");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
     newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
-    Assert.assertFalse("Double entry no longer required", newResults.get(17L).getReEntryRequired());
+    Assert.assertFalse("Re-entry no longer required", newResults.get(17L).getReEntryRequired());
+  }
+
+  @Test
+  public void testDonationTTIStatusUpdateOnlyOnReEntry() throws Exception {
+    Donation donation = donationRepository.findDonationById(8l);
+    Map<Long, String> testResults = new HashMap<Long, String>();
+    BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+    ruleResult.setBloodAbo("A");
+    ruleResult.setBloodRh("+");
+    ruleResult.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+    ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
+    ruleResult.setTTIStatus(TTIStatus.TTI_UNSAFE);
+    ruleResult.setExtraInformation(new HashSet<String>());
+
+    testResults.put(17L, "POS");
+    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
+    donation = donationRepository.findDonationById(8l);
+    Assert.assertTrue("Re-entry is false, so tti status remains as NOT_DONE",
+        donation.getTTIStatus().equals(TTIStatus.NOT_DONE));
+
+    testResults.put(17L, "POS");
+    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
+    donation = donationRepository.findDonationById(8l);
+    Assert.assertTrue("Re-entry is true, so tti status is updated to TTI_UNSAFE",
+        donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE));
+
   }
 }

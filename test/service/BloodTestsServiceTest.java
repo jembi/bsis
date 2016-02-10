@@ -2,12 +2,6 @@ package service;
 
 
 import static org.mockito.Mockito.when;
-import helpers.builders.BloodTestBuilder;
-import helpers.builders.BloodTestResultBuilder;
-import helpers.builders.BloodTestingRuleResultBuilder;
-import helpers.builders.DonationBatchBuilder;
-import helpers.builders.DonationBuilder;
-import helpers.builders.TestBatchBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,14 +13,6 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import model.bloodtesting.BloodTest;
-import model.bloodtesting.BloodTestResult;
-import model.bloodtesting.TTIStatus;
-import model.donation.Donation;
-import model.donationbatch.DonationBatch;
-import model.testbatch.TestBatch;
-import model.testbatch.TestBatchStatus;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,6 +22,19 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import helpers.builders.BloodTestBuilder;
+import helpers.builders.BloodTestResultBuilder;
+import helpers.builders.BloodTestingRuleResultBuilder;
+import helpers.builders.DonationBatchBuilder;
+import helpers.builders.DonationBuilder;
+import helpers.builders.TestBatchBuilder;
+import model.bloodtesting.BloodTest;
+import model.bloodtesting.BloodTestResult;
+import model.bloodtesting.TTIStatus;
+import model.donation.Donation;
+import model.donationbatch.DonationBatch;
+import model.testbatch.TestBatch;
+import model.testbatch.TestBatchStatus;
 import repository.DonationRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTestingRuleEngine;
@@ -578,7 +577,7 @@ public class BloodTestsServiceTest {
     when(typedQuery.getSingleResult()).thenReturn(bloodTest);
 
     // run test
-    BloodTestingRuleResult returnedRuleResult = service.saveBloodTests(donation.getId(), bloodTestResults, false);
+    BloodTestingRuleResult returnedRuleResult = service.saveBloodTests(donation.getId(), bloodTestResults, true);
 
     // check asserts
     Assert.assertNotNull("ruleResult returned", returnedRuleResult);
@@ -627,7 +626,7 @@ public class BloodTestsServiceTest {
     when(typedQuery.getSingleResult()).thenReturn(bloodTest);
 
     // run test
-    BloodTestingRuleResult returnedRuleResult = service.saveBloodTests(donation.getId(), bloodTestResults, false);
+    BloodTestingRuleResult returnedRuleResult = service.saveBloodTests(donation.getId(), bloodTestResults, true);
 
     // check asserts
     Assert.assertNotNull("ruleResult returned", returnedRuleResult);
