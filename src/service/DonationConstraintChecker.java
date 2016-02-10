@@ -104,7 +104,8 @@ public class DonationConstraintChecker {
             return true;
         }
         
-        if (donation.getBloodTypingMatchStatus() != BloodTypingMatchStatus.MATCH ||
+        if (!(donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.MATCH
+            || donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.RESOLVED) ||
                 donation.getBloodTypingStatus() != BloodTypingStatus.COMPLETE) {
             return true;
         }

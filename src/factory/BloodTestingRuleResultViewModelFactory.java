@@ -57,12 +57,12 @@ public class BloodTestingRuleResultViewModelFactory {
 		
 		ruleResult.setAllBloodAboChanges(bloodTestingRuleResultSet.getBloodAboChanges());
 		ruleResult.setAllBloodRhChanges(bloodTestingRuleResultSet.getBloodRhChanges());
-		String bloodAbo = "";
+		String bloodAbo = donation.getBloodAbo();
 		if (bloodTestingRuleResultSet.getBloodAboChanges() != null && bloodTestingRuleResultSet.getBloodAboChanges().size() == 1) {
 			bloodAbo = bloodTestingRuleResultSet.getBloodAboChanges().iterator().next();
 		}
 		ruleResult.setBloodAbo(bloodAbo);
-		String bloodRh = "";
+		String bloodRh = donation.getBloodRh();
 		if (bloodTestingRuleResultSet.getBloodRhChanges() != null && bloodTestingRuleResultSet.getBloodRhChanges().size() == 1) {
 			bloodRh = bloodTestingRuleResultSet.getBloodRhChanges().iterator().next();
 		}

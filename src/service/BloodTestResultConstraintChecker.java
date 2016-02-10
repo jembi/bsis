@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import repository.bloodtesting.BloodTestingRuleResultSet;
+import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
 
 
@@ -37,6 +38,10 @@ public class BloodTestResultConstraintChecker {
 			BloodTypingStatus bloodTypingStatus = bloodTestingRuleResultSet.getBloodTypingStatus();
 			if (BloodTypingStatus.NOT_DONE.equals(bloodTypingStatus)) {
 			  return true;
+			} else if (BloodTypingMatchStatus.RESOLVED.equals(bloodTestingRuleResultSet.getBloodTypingMatchStatus())) {
+			  // No blood test results can be edited if the blood typing match status is RESOLVED
+			  // FIXME: Allow Titre, Weak D, AbScr etc. tests to be edited even if the status is resolved
+			  return false;
 			} else {
 			  // check the pending tests for rule associated with the blood test
               return !isResultConfirmed(bloodTestingRuleResultSet, bloodTestResult);

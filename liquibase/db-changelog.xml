@@ -2020,5 +2020,12 @@
 			<column name="addressTypeId" type="BIGINT"></column>
 		</addColumn>
 	</changeSet>
+ 
+  <changeSet id="20160210-1543" author="bausmeier">
+    <update tableName="Donation">
+      <column name="bloodTypingStatus" value="PENDING_TESTS" type="VARCHAR(20)"></column>
+      <where>bloodTypingStatus IN ("AMBIGUOUS", "NO_MATCH")</where>
+    </update>
+  </changeSet>
 
 </databaseChangeLog>

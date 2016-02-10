@@ -326,8 +326,6 @@ public class LotReleaseController {
     	}
     	*/
     	else if(donation.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE) 
-    			|| donation.getBloodTypingStatus().equals(BloodTypingStatus.AMBIGUOUS)
-    			|| donation.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE)
     			|| donation.getBloodTypingStatus().equals(BloodTypingStatus.PENDING_TESTS)
     			){
     		success = false;

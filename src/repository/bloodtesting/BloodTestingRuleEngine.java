@@ -11,6 +11,7 @@ import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.BloodTestType;
 import model.bloodtesting.TTIStatus;
+import model.bloodtesting.rules.BloodTestSubCategory;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.bloodtesting.rules.DonationField;
 import model.donation.Donation;
@@ -95,7 +96,15 @@ public class BloodTestingRuleEngine {
 		
 		// Go through each rule and see if the pattern matches the available result and tally the TTI, ABO, RH results
 		for (BloodTestingRule rule : rules) {
-			processRule(rule, resultSet, availableTestResults);
+
+          if (donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.RESOLVED
+              && (rule.getSubCategory() == BloodTestSubCategory.BLOODABO
+                  || rule.getSubCategory() == BloodTestSubCategory.BLOODRH)) {
+            // Don't process the rule if it is for blood typing and the blood typing is resolved
+            continue;
+          }
+
+          processRule(rule, resultSet, availableTestResults);
 		}
 		
 		// Determine how many blood typing tests were done
@@ -289,27 +298,18 @@ public class BloodTestingRuleEngine {
 	 * @param resultSet BloodTestingRuleResultSet that contains the processed test results.
 	 */
 	private void setBloodMatchStatus(BloodTestingRuleResultSet resultSet) {
-		// Determine the blood status based on ABO/Rh tests results
-		BloodTypingStatus bloodTypingStatus = BloodTypingStatus.NOT_DONE;
-		
-		if (resultSet.getNumBloodTypingTests() > 0) {
-			bloodTypingStatus = BloodTypingStatus.NO_MATCH;
-		}
-		int numAboChanges = resultSet.getBloodAboChanges().size();
-		int numRhChanges = resultSet.getBloodRhChanges().size();
-		if (numAboChanges > 1 || numRhChanges > 1) {
-			bloodTypingStatus = BloodTypingStatus.AMBIGUOUS;
-		}
+
+		BloodTypingStatus bloodTypingStatus = BloodTypingStatus.COMPLETE;
+
 		int numPendingAboTests = resultSet.getPendingAboTestsIds().size();
-		if (numAboChanges == 0 && numPendingAboTests > 0) {
-			bloodTypingStatus = BloodTypingStatus.PENDING_TESTS;
-		}
 		int numPendingRhTests = resultSet.getPendingRhTestsIds().size();
-		if (numRhChanges == 0 && numPendingRhTests > 0) {
-			bloodTypingStatus = BloodTypingStatus.PENDING_TESTS;
-		}
-		if (numAboChanges == 1 && numRhChanges == 1 && numPendingAboTests == 0 && numPendingRhTests == 0) {
-			bloodTypingStatus = BloodTypingStatus.COMPLETE;
+		
+		if (numPendingAboTests > 0 || numPendingRhTests > 0) {
+		  // There are pending tests
+		  bloodTypingStatus = BloodTypingStatus.PENDING_TESTS;
+		} else if (resultSet.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NOT_DONE) {
+		  // There are no pending tests and the blood typing match has not been done
+		  bloodTypingStatus = BloodTypingStatus.NOT_DONE;
 		}
 		
 		resultSet.setBloodTypingStatus(bloodTypingStatus);
@@ -364,22 +364,26 @@ public class BloodTestingRuleEngine {
 		BloodTypingMatchStatus bloodTypingMatchStatus = BloodTypingMatchStatus.NOT_DONE;
 		
 		Donor donor = donation.getDonor();
-		if (StringUtils.isNotEmpty(donation.getBloodAbo()) && StringUtils.isNotEmpty(donation.getBloodRh())) {
-			// first time donor - required to enter in confirmatory result
-			if (StringUtils.isEmpty(donor.getBloodAbo()) || StringUtils.isEmpty(donor.getBloodRh())) {
-				bloodTypingMatchStatus = getBloodTypingMatchStatusForFirstTimeDonor(resultSet);
-			}
-			// ambiguous result - required to enter in confirmatory result
-			else if ((!donor.getBloodAbo().equals("") && !donor.getBloodAbo().equals(donation.getBloodAbo()))
-			        || (!donor.getBloodRh().equals("") && !donor.getBloodRh().equals(donation.getBloodRh()))) {
-				bloodTypingMatchStatus = BloodTypingMatchStatus.AMBIGUOUS;
-			}
-			// blood Abo/Rh matches
-			else if ((!donor.getBloodAbo().equals("") && donor.getBloodAbo().equals(donation.getBloodAbo()))
-			        && (!donor.getBloodRh().equals("") && donor.getBloodRh().equals(donation.getBloodRh()))) {
-				bloodTypingMatchStatus = BloodTypingMatchStatus.MATCH;
-			}
-		}
+		
+        if (donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.RESOLVED) {
+          // The Abo/Rh values have already been confirmed so keep the status as MATCH
+          bloodTypingMatchStatus = BloodTypingMatchStatus.RESOLVED;
+        } else if (StringUtils.isNotEmpty(donation.getBloodAbo()) && StringUtils.isNotEmpty(donation.getBloodRh())) {
+
+          if (StringUtils.isEmpty(donor.getBloodAbo()) || StringUtils.isEmpty(donor.getBloodRh())) {
+            // first time donor - required to enter in confirmatory result
+            bloodTypingMatchStatus = getBloodTypingMatchStatusForFirstTimeDonor(resultSet);
+          } else {
+
+            if (donor.getBloodAbo().equals(donation.getBloodAbo()) && donor.getBloodRh().equals(donation.getBloodRh())) {
+              // blood Abo/Rh matches
+              bloodTypingMatchStatus = BloodTypingMatchStatus.MATCH;
+            } else {
+              // ambiguous result - required to enter in confirmatory result
+              bloodTypingMatchStatus = BloodTypingMatchStatus.AMBIGUOUS;
+            }
+          }
+        }
 		
         if (LOGGER.isInfoEnabled()) {
           LOGGER.info("donation " + donation.getId() + " for donor " + donor.getId() + " has bloodTypingMatchStatus of " + bloodTypingMatchStatus);
@@ -387,7 +391,6 @@ public class BloodTestingRuleEngine {
         }
 		
 		resultSet.setBloodTypingMatchStatus(bloodTypingMatchStatus);
-		donation.setBloodTypingMatchStatus(bloodTypingMatchStatus);
 	}
 
   /**

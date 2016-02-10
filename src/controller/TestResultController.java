@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import repository.DonationRepository;
-import repository.DonorRepository;
 import repository.TestBatchRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingMatchStatus;
@@ -52,9 +51,6 @@ public class TestResultController {
   
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
-  
-  @Autowired
-  private DonorRepository donorRepository;
   
   @Autowired
   private TestBatchStatusChangeService testBatchStatusChangeService;
@@ -194,21 +190,17 @@ public class TestResultController {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		Donation donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
-		Donor donor = donation.getDonor();
-		donor.setBloodAbo(bloodAbo);
-		donor.setBloodRh(bloodRh);
 		donation.setBloodAbo(bloodAbo);
 		donation.setBloodRh(bloodRh);
-		donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
+		donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.RESOLVED);
 		
-		Donor updatedDonor = donorRepository.updateDonorDetails(donor);
 		Donation cs = donationRepository.updateDonationDetails(donation);
 		
 		if (cs.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
 		  testBatchStatusChangeService.handleRelease(cs);
 		}
 		
-		map.put("donor", getDonorsViewModel(donorRepository.findDonorById(updatedDonor.getId())));
+		map.put("donor", getDonorsViewModel(cs.getDonor()));
         return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
   

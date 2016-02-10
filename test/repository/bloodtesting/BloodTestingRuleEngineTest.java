@@ -179,7 +179,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
 		ttiTests.put(1l, "A");
 		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, ttiTests);
 		Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE, result.getBloodTypingMatchStatus());
-		Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.NO_MATCH, result.getBloodTypingStatus());
+		Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.PENDING_TESTS, result.getBloodTypingStatus());
 		Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
 		Assert.assertEquals("bloodAb has a result", 1, result.getBloodAbo().length());
 		Assert.assertEquals("bloodRh is empty", 0, result.getBloodRh().length());
@@ -250,7 +250,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
 		Donation donation = donationRepository.findDonationById(6l);
 		BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
 		Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.NOT_DONE, result.getBloodTypingMatchStatus());
-		Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.NO_MATCH, result.getBloodTypingStatus());
+		Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.NOT_DONE, result.getBloodTypingStatus());
 		Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
 		Assert.assertEquals("bloodAb is unknown", "", result.getBloodAbo());
 		Assert.assertEquals("bloodRh is unknown", "", result.getBloodRh());
@@ -274,7 +274,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
 	  Donation donation = donationRepository.findDonationById(8l);
 	  BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
 	  Assert.assertEquals("bloodTypingMatchStatus is set", BloodTypingMatchStatus.NO_MATCH, result.getBloodTypingMatchStatus());
-	  Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.NO_MATCH, result.getBloodTypingStatus());
+	  Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.PENDING_TESTS, result.getBloodTypingStatus());
 	  Assert.assertEquals("bloodAb is set", "O", result.getBloodAbo());
 	  Assert.assertEquals("bloodRh is set", "-", result.getBloodRh());
 	  Assert.assertEquals("Pending blood typing tests", 2, result.getPendingBloodTypingTestsIds().size());
@@ -304,7 +304,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
 	  Donation donation = donationRepository.findDonationById(10l);
 	  BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
 	  Assert.assertEquals("bloodTypingMatchStatus is set", BloodTypingMatchStatus.NO_MATCH, result.getBloodTypingMatchStatus());
-	  Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.NO_MATCH, result.getBloodTypingStatus());
+	  Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.PENDING_TESTS, result.getBloodTypingStatus());
 	  Assert.assertEquals("bloodAb is set", "O", result.getBloodAbo());
 	  Assert.assertEquals("bloodRh is set", "-", result.getBloodRh());
 	  Assert.assertEquals("Pending blood typing tests", 2, result.getPendingBloodTypingTestsIds().size());
