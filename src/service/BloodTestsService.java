@@ -7,13 +7,12 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
-import model.component.Component;
-import model.donation.Donation;
-import model.testbatch.TestBatchStatus;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import model.component.Component;
+import model.donation.Donation;
+import model.testbatch.TestBatchStatus;
 import repository.ComponentRepository;
 import repository.DonationRepository;
 import repository.bloodtesting.BloodTestingRepository;
@@ -90,7 +89,7 @@ public class BloodTestsService {
     //  - the results needing re-entry can only be determined after they are persisted (pendingReEntryTtiTestIds)
     ruleResult = ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults);
     donationRepository.saveDonation(donation);
-    if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
+    if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED && reEntry) {
       testBatchStatusChangeService.handleRelease(donation);
     }
     return ruleResult;
