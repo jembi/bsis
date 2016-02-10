@@ -287,4 +287,30 @@ public class BloodTestingRuleEngineTest {
     // TTI Uninterpretable is always set to false - is this a bug?
     //Assert.assertTrue("TTI Uninterpretable", result.getTtiUninterpretable());
   }
+  
+  @Test
+  public void testBloodTestingRuleEngineWithDonation12_TTIUnsafeAndFirstEntry() throws Exception {
+    Donation donation = donationRepository.findDonationById(12l);
+    BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+    Assert.assertEquals("TTIStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
+    Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
+  }
+  
+  @Test
+  public void testBloodTestingRuleEngineWithDonation12_TTIUnsafeAndFirstEntryAndPendingReEntry() throws Exception {
+    Donation donation = donationRepository.findDonationById(12l);
+    Map<Long, String> newTtiTestResults = new HashMap<>();
+    newTtiTestResults.put(17L, "POS");
+    BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, newTtiTestResults);
+    Assert.assertEquals("TTIStatus is NOT_DONE", TTIStatus.TTI_UNSAFE, result.getTTIStatus());
+    Assert.assertEquals("No pending TTI tests", 2, result.getPendingTTITestsIds().size());
+  }
+  
+  @Test
+  public void testBloodTestingRuleEngineWithDonation13_TTIUnsafeAndReEntry() throws Exception {
+    Donation donation = donationRepository.findDonationById(13l);
+    BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+    Assert.assertEquals("TTIStatus is TTI_UNSAFE", TTIStatus.TTI_UNSAFE, result.getTTIStatus());
+    Assert.assertEquals("Pending TTI tests", 2, result.getPendingTTITestsIds().size());
+  }
 }

@@ -44,15 +44,16 @@ public class BloodTestingRuleEngine {
    * @param bloodTestResults map of blood typing test id to result. Only character allowed in the
    *                         result. multiple characters should be mapped to negative/positive
    *                         (TODO) Assume validation of results already done.
-   * @return Result of applying the rules. The following values should be present in the map -
-   * bloodAbo (what changes should be made to blood abo after applying these rules) - bloodRh (what
-   * changes should be made to blood rh), extra (extra information that should be added to the blood
-   * type like weak A), - pendingTests (comma separated list of blood typing tests that must be done
-   * to determine the blood type), - testResults (map of blood typing test id to blood typing test
-   * either stored or those passed to this function or those already stored in the database), -
-   * bloodTypingStatus (enum BloodTypingStatus indicates if complete typing information is
-   * available), - storedTestResults (what blood typing results are actually stored in the database,
-   * a subset of testResults)
+   * @return Result of applying the rules. The following values should be present in the map 
+   *  - bloodAbo (what changes should be made to blood abo after applying these rules)
+   *  - bloodRh (what changes should be made to blood rh), extra (extra information that should be added 
+   *    to the blood type like weak A), 
+   *  - pendingTests (comma separated list of blood typing tests that must be done to determine the blood
+   *    type), - testResults (map of blood typing test id to blood typing test either stored or those 
+   *    passed to this function or those already stored in the database), 
+   *  - bloodTypingStatus (enum BloodTypingStatus indicates if complete typing information is available), 
+   *  - storedTestResults (what blood typing results are actually stored in the database, a subset of 
+   *    testResults)
    */
   public BloodTestingRuleResult applyBloodTests(Donation donation, Map<Long, String> bloodTestResults)
       throws IllegalArgumentException {
@@ -71,10 +72,12 @@ public class BloodTestingRuleEngine {
         .getRecentTestResultsForDonation(donation.getId());
     for (Long testId : recentTestResults.keySet()) {
       BloodTestResult testResult = recentTestResults.get(testId);
-      String testKey = testId.toString();
-      String testValue = testResult.getResult();
-      storedTestResults.put(testKey, testValue);
-      availableTestResults.put(testKey, testValue);
+      if (!testResult.getReEntryRequired()) {
+        String testKey = testId.toString();
+        String testValue = testResult.getResult();
+        storedTestResults.put(testKey, testValue);
+        availableTestResults.put(testKey, testValue);
+      }
     }
 
     // Overwrite the existing blood  and (where necessary) with the new bloodTestResults provided (as a parameter)
@@ -330,6 +333,10 @@ public class BloodTestingRuleEngine {
     if (numAboChanges == 1 && numRhChanges == 1) {
       bloodTypingStatus = BloodTypingStatus.COMPLETE;
     }
+    
+    if (LOGGER.isInfoEnabled()) {
+      LOGGER.info("donation " + resultSet.getDonation().getId() + " for donor " + resultSet.getDonation().getDonor().getId() + " has BloodTypingStatus of " + bloodTypingStatus);
+    }
 
     resultSet.setBloodTypingStatus(bloodTypingStatus);
   }
@@ -364,7 +371,7 @@ public class BloodTestingRuleEngine {
     }
 
     if (LOGGER.isInfoEnabled()) {
-      LOGGER.info("donation " + donation.getId() + " for donor " + donor.getId() + " has bloodTypingMatchStatus of " + bloodTypingMatchStatus);
+      LOGGER.info("donation " + donation.getId() + " for donor " + donor.getId() + " has BloodTypingMatchStatus of " + bloodTypingMatchStatus);
       LOGGER.info("donor Abo/Rh = " + donor.getBloodAbo() + donor.getBloodRh() + " donation Abo/Rh = " + donation.getBloodAbo() + donation.getBloodRh());
     }
 
@@ -394,6 +401,10 @@ public class BloodTestingRuleEngine {
     if (ttiStatus.equals(TTIStatus.TTI_SAFE) && !basicTtiTestsNotDone.isEmpty()) {
       // the test has been marked as safe while some basic TTI Tests were not done
       ttiStatus = TTIStatus.NOT_DONE;
+    }
+    
+    if (LOGGER.isInfoEnabled()) {
+      LOGGER.info("donation " + resultSet.getDonation().getId() + " for donor " + resultSet.getDonation().getDonor().getId() + " has TTIStatus of " + ttiStatus);
     }
 
     resultSet.setTtiStatus(ttiStatus);

@@ -1,6 +1,7 @@
 package service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -77,11 +78,17 @@ public class BloodTestsService {
    */
   public BloodTestingRuleResult saveBloodTests(Long donationId, Map<Long, String> bloodTestResults, boolean reEntry) {
     Donation donation = donationRepository.findDonationById(donationId);
-    BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(donation, bloodTestResults);
+    Map<Long, String> reEnteredBloodTestResults = bloodTestResults;
+    if (!reEntry) {
+      // only outcomes that have been entered twice will be considered by the rules engine
+      reEnteredBloodTestResults = new HashMap<>();
+    }
+    BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults);
     bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
-    // Note: Rules engine will only provide the correct BloodTyping statuses on the 2nd execution because the 
-    // Donation Abo/Rh is only updated after the 1st execution
-    ruleResult = ruleEngine.applyBloodTests(donation, bloodTestResults);
+    // Note: Rules engine will only provide the correct BloodTyping statuses on the 2nd execution because:
+    //  - the Donation Abo/Rh is only updated after the 1st execution
+    //  - the results needing re-entry can only be determined after they are persisted (pendingReEntryTtiTestIds)
+    ruleResult = ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults);
     donationRepository.saveDonation(donation);
     if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
       testBatchStatusChangeService.handleRelease(donation);
