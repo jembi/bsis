@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -944,6 +945,22 @@ public class BloodTestingRepository {
 		}
 	}
 	
+	/**
+	 * Compare two strings and check that they are either both empty, or they are equal.
+	 * 
+	 * @param first First string
+	 * @param second First string
+	 * @return true if they are empty or equal, otherwise false.
+	 */
+	private boolean bothEmptyOrEquals(String first, String second) {
+	  
+	  if (StringUtils.isEmpty(first)) {
+	    return StringUtils.isEmpty(second);
+	  }
+	  
+	  return first.equals(second);
+	}
+	
     /**
      * FIXME: this method belongs in the BloodTestsService and has replaced the BloodTestsUpdatedEvent
      * Because there are many references in this repository class, to minimise changes, it was added here.
@@ -966,14 +983,19 @@ public class BloodTestingRepository {
         BloodTypingStatus oldBloodTypingStatus = donation.getBloodTypingStatus();
         BloodTypingStatus newBloodTypingStatus = ruleResult.getBloodTypingStatus();
         
-        if (!newExtraInformation.equals(oldExtraInformation) || !newBloodAbo.equals(oldBloodAbo)
-                || !newBloodRh.equals(oldBloodRh) || !newTtiStatus.equals(oldTtiStatus)
-                || !newBloodTypingStatus.equals(oldBloodTypingStatus)) {
+        BloodTypingMatchStatus oldBloodTypingMatchStatus = donation.getBloodTypingMatchStatus();
+        BloodTypingMatchStatus newBloodTypingMatchStatus = ruleResult.getBloodTypingMatchStatus();
+        
+        if (!bothEmptyOrEquals(newExtraInformation, oldExtraInformation) || !bothEmptyOrEquals(newBloodAbo, oldBloodAbo)
+                || !bothEmptyOrEquals(newBloodRh, oldBloodRh) || !Objects.equals(newTtiStatus, oldTtiStatus)
+                || !Objects.equals(newBloodTypingStatus, oldBloodTypingStatus)
+                || !Objects.equals(oldBloodTypingMatchStatus, newBloodTypingMatchStatus)) {
             donation.setExtraBloodTypeInformation(newExtraInformation);
             donation.setBloodAbo(newBloodAbo);
             donation.setBloodRh(newBloodRh);
             donation.setTTIStatus(ruleResult.getTTIStatus());
             donation.setBloodTypingStatus(ruleResult.getBloodTypingStatus());
+            donation.setBloodTypingMatchStatus(ruleResult.getBloodTypingMatchStatus());
             
             donationUpdated = true;
         }
@@ -984,8 +1006,6 @@ public class BloodTestingRepository {
               + donation.getTTIStatus() + " BloodTypingStatus=" + donation.getBloodTypingStatus()
               + " " + donation.getBloodTypingMatchStatus());
         }
-
-        donation.setBloodTypingMatchStatus(ruleResult.getBloodTypingMatchStatus());
         
         return donationUpdated;
     }
