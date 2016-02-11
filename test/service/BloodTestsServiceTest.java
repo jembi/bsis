@@ -680,4 +680,45 @@ public class BloodTestsServiceTest {
     // check asserts
     Mockito.verify(ruleEngine, Mockito.times(2)).applyBloodTests(donation, new HashMap<Long, String>());
   }
+
+  @Test
+  public void testDontAllowDonationReleaseIfReEntryPending() throws Exception {
+    // set up data
+    TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.RELEASED).build();
+    DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
+    Donation donation = DonationBuilder.aDonation().withId(1l).withTTIStatus(TTIStatus.TTI_SAFE)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE).withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+        .withDonationBatch(donationBatch).build();
+
+    Map<Long, String> bloodTestResults = new HashMap<>();
+    bloodTestResults.put(1l, "AB");
+    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(17l).build();
+    List<BloodTestResult> bloodTestResultList = new ArrayList<>();
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1l).withBloodTest(bloodTest).build());
+
+    BloodTestingRuleResult ruleResult = BloodTestingRuleResultBuilder.aBloodTestingRuleResult().withBloodAbo("AB")
+        .withBloodRh("+").withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withExtraInformation(new HashSet<String>()).build();
+
+    // set up mocks
+    when(donationRepository.findDonationById(donation.getId())).thenReturn(donation);
+    when(ruleEngine.applyBloodTests(donation, bloodTestResults)).thenReturn(ruleResult);
+    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE " + "bt.donation.id=:donationId",
+        BloodTestResult.class)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
+    when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
+    when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
+        .thenReturn(typedQuery);
+    when(typedQuery.setParameter("bloodTestId", 17)).thenReturn(typedQuery);
+    when(typedQuery.getSingleResult()).thenReturn(bloodTest);
+
+    // run test with re-entry = false
+    service.saveBloodTests(donation.getId(), bloodTestResults, false);
+    Mockito.verify(testBatchStatusChangeService, Mockito.never()).handleRelease(donation);
+
+    // run test with re-entry = true
+    service.saveBloodTests(donation.getId(), bloodTestResults, true);
+    Mockito.verify(testBatchStatusChangeService).handleRelease(donation);
+
+  }
 }
