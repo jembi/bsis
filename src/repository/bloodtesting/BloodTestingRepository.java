@@ -262,8 +262,9 @@ public class BloodTestingRepository {
       btResult.setTestedOn(testedOn);
       btResult.setNotes("");
       btResult.setResult(testResult);
-      // re-entry is always required for the first test result entry
-      btResult.setReEntryRequired(true);
+      // re-entry is not always required for initial tests, depends on the implementation, and it's
+      // controlled from the frontend
+      btResult.setReEntryRequired(!reEntry);
     } else {
       if (!testResult.equals(btResult.getResult())) {
         btResult.setResult(testResult);
