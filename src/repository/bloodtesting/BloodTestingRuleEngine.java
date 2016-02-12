@@ -117,23 +117,23 @@ public class BloodTestingRuleEngine {
     setTTIStatus(resultSet);
 
     // Determine the TTI tests that still require re-entry
-    setPendingReEntryTtiTests(resultSet);
+    setReEntryRequiredTTITests(resultSet);
 
     return bloodTestingRuleResultViewModelFactory.createBloodTestResultViewModel(resultSet);
   }
 
   /**
-   * Sets the list of tti tests that are pending double entry.
+   * Sets the list of tti tests that require re-entry.
    *
-   * @param resultSet the new pending double entry tti tests
+   * @param resultSet the re entry required tti tests
    */
-  private void setPendingReEntryTtiTests(BloodTestingRuleResultSet resultSet) {
+  private void setReEntryRequiredTTITests(BloodTestingRuleResultSet resultSet) {
     Map<Long, BloodTestResult> results = resultSet.getRecentTestResults();
     for (Long testId : results.keySet()) {
       BloodTestResult testResult = results.get(testId);
       if (testResult.getBloodTest().getCategory().equals(BloodTestCategory.TTI)
           && testResult.getReEntryRequired().equals(true)) {
-        resultSet.addPendingReEntryTtiTestIds(testId.toString());
+        resultSet.addReEntryRequiredTTITestIds(testId.toString());
       }
     }
   }
