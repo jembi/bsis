@@ -70,7 +70,10 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   @Test
   public void testHandleReleaseWithADonationWithDiscrepancies_shouldDoNothing() {
 
-    Donation donationWithDiscrepancies = aDonation().withPackType(aPackType().build()).build();
+    Donation donationWithDiscrepancies = aDonation()
+        .withDonor(aDonor().build())
+        .withPackType(aPackType().build())
+        .build();
     TestBatch testBatch = aTestBatch()
         .withDonationBatch(aDonationBatch().withDonation(donationWithDiscrepancies).build())
         .build();
@@ -86,6 +89,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   public void testHandleReleaseWithDonationWithoutTestSample_shouldDoNothing() {
 
     Donation donation = aDonation()
+        .withDonor(aDonor().build())
         .withPackType(aPackType().withTestSampleProduced(false).build())
         .build();
     TestBatch testBatch = aTestBatch()
