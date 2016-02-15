@@ -23,17 +23,17 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @NamedQueries({
     @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_COUNT_DONOR_DEFERRALS_FOR_DONOR,
-            query = DonorDeferralNamedQueryConstants.QUERY_COUNT_DONOR_DEFERRALS_FOR_DONOR),
-    @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_FIND_DONOR_DEFERRAL_BY_ID, 
-            query = DonorDeferralNamedQueryConstants.QUERY_FIND_DONOR_DEFERRAL_BY_ID),
+        query = DonorDeferralNamedQueryConstants.QUERY_COUNT_DONOR_DEFERRALS_FOR_DONOR),
+    @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_FIND_DONOR_DEFERRAL_BY_ID,
+        query = DonorDeferralNamedQueryConstants.QUERY_FIND_DONOR_DEFERRAL_BY_ID),
     @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR,
-            query = DonorDeferralNamedQueryConstants.QUERY_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR),
+        query = DonorDeferralNamedQueryConstants.QUERY_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR),
     @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_FIND_DONOR_DEFERRALS_FOR_DONOR_BY_DEFERRAL_REASON,
-            query = DonorDeferralNamedQueryConstants.QUERY_FIND_DONOR_DEFERRALS_FOR_DONOR_BY_DEFERRAL_REASON)
+        query = DonorDeferralNamedQueryConstants.QUERY_FIND_DONOR_DEFERRALS_FOR_DONOR_BY_DEFERRAL_REASON)
 })
 @Entity
 @Audited
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class DonorDeferral extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
@@ -51,20 +51,20 @@ public class DonorDeferral extends BaseModificationTrackerEntity {
 
   @ManyToOne
   private DeferralReason deferralReason;
-  
+
   @ManyToOne
   private User voidedBy;
 
   @Lob
   private String deferralReasonText;
-  
+
   private Boolean isVoided = Boolean.FALSE;
-  
+
   @Temporal(TemporalType.DATE)
   private Date voidedDate;
-  
-  public DonorDeferral(){
-	super();
+
+  public DonorDeferral() {
+    super();
   }
 
   public Donor getDeferredDonor() {
@@ -98,58 +98,58 @@ public class DonorDeferral extends BaseModificationTrackerEntity {
   public void setDeferralReasonText(String deferralReasonText) {
     this.deferralReasonText = deferralReasonText;
   }
-  
-	/**
-	 * @return the isVoided
-	 */
-	public Boolean getIsVoided() {
-		return isVoided;
-	}
 
-	/**
-	 * @param isVoided the isVoided to set
-	 */
-	public void setIsVoided(Boolean isVoided) {
-		this.isVoided = isVoided;
-	}
+  /**
+   * @return the isVoided
+   */
+  public Boolean getIsVoided() {
+    return isVoided;
+  }
 
-	/**
-	 * @return the voidedBy
-	 */
-	public User getVoidedBy() {
-		return voidedBy;
-	}
+  /**
+   * @param isVoided the isVoided to set
+   */
+  public void setIsVoided(Boolean isVoided) {
+    this.isVoided = isVoided;
+  }
 
-	/**
-	 * @param voidedBy the voidedBy to set
-	 */
-	public void setVoidedBy(User voidedBy) {
-		this.voidedBy = voidedBy;
-	}
+  /**
+   * @return the voidedBy
+   */
+  public User getVoidedBy() {
+    return voidedBy;
+  }
 
-	/**
-	 * @return the voidedDate
-	 */
-	public Date getVoidedDate() {
-		return voidedDate;
-	}
+  /**
+   * @param voidedBy the voidedBy to set
+   */
+  public void setVoidedBy(User voidedBy) {
+    this.voidedBy = voidedBy;
+  }
 
-	/**
-	 * @param voidedDate the voidedDate to set
-	 */
-	public void setVoidedDate(Date voidedDate) {
-		this.voidedDate = voidedDate;
-	}
+  /**
+   * @return the voidedDate
+   */
+  public Date getVoidedDate() {
+    return voidedDate;
+  }
 
-    public void copy(DonorDeferral deferral) {
-	    assert (deferral.getId().equals(this.getId()));
-	    setDeferredDonor(deferral.getDeferredDonor());
-	    setDeferredUntil(deferral.getDeferredUntil());
-	    setDeferralReason(deferral.getDeferralReason());
-	    setDeferralReasonText(deferral.getDeferralReasonText());
-	    setIsVoided(deferral.getIsVoided());
-	    setVoidedBy(deferral.getVoidedBy());
-	    setVoidedDate(deferral.getVoidedDate());	   
-	 }
-  
+  /**
+   * @param voidedDate the voidedDate to set
+   */
+  public void setVoidedDate(Date voidedDate) {
+    this.voidedDate = voidedDate;
+  }
+
+  public void copy(DonorDeferral deferral) {
+    assert (deferral.getId().equals(this.getId()));
+    setDeferredDonor(deferral.getDeferredDonor());
+    setDeferredUntil(deferral.getDeferredUntil());
+    setDeferralReason(deferral.getDeferralReason());
+    setDeferralReasonText(deferral.getDeferralReasonText());
+    setIsVoided(deferral.getIsVoided());
+    setVoidedBy(deferral.getVoidedBy());
+    setVoidedDate(deferral.getVoidedDate());
+  }
+
 }

@@ -1,6 +1,7 @@
 package backingform.validator;
 
 import static org.mockito.Mockito.when;
+
 import helpers.builders.PackTypeBuilder;
 
 import java.util.HashMap;
@@ -29,7 +30,7 @@ public class PackTypeBackingFormValidatorTest {
   private PackTypeRepository packTypeRepository;
   @Mock
   FormFieldRepository formFieldRepository;
-  
+
   @Test
   public void testValid() throws Exception {
     // set up data
@@ -38,21 +39,21 @@ public class PackTypeBackingFormValidatorTest {
         .withCountAsDonation(true)
         .withTestSampleProduced(true)
         .build();
-    
+
     PackTypeBackingForm form = new PackTypeBackingForm();
     form.setType(packType);
-    
+
     // set up mocks
     when(packTypeRepository.findPackTypeByName("PACKTYPE")).thenReturn(null);
-    
+
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "packType");
     packTypeBackingFormValidator.validate(form, errors);
-    
+
     // check asserts
     Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
   }
-  
+
   @Test
   public void testValidUpdate() throws Exception {
     // set up data
@@ -62,21 +63,21 @@ public class PackTypeBackingFormValidatorTest {
         .withCountAsDonation(true)
         .withTestSampleProduced(true)
         .build();
-    
+
     PackTypeBackingForm form = new PackTypeBackingForm();
     form.setType(packType);
-    
+
     // set up mocks
     when(packTypeRepository.findPackTypeByName("PACKTYPE")).thenReturn(packType);
-    
+
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "packType");
     packTypeBackingFormValidator.validate(form, errors);
-    
+
     // check asserts
     Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
   }
-  
+
   @Test
   public void testValidBlankPackType() throws Exception {
     // set up data
@@ -86,18 +87,18 @@ public class PackTypeBackingFormValidatorTest {
         .withCountAsDonation(true)
         .withTestSampleProduced(true)
         .build();
-    
+
     PackTypeBackingForm form = new PackTypeBackingForm();
     form.setType(packType);
-    
+
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "packType");
     packTypeBackingFormValidator.validate(form, errors);
-    
+
     // check asserts
     Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
   }
-  
+
   @Test
   public void testInvalidDuplicate() throws Exception {
     // set up data
@@ -107,26 +108,26 @@ public class PackTypeBackingFormValidatorTest {
         .withCountAsDonation(true)
         .withTestSampleProduced(true)
         .build();
-    
+
     PackType duplicate = PackTypeBuilder.aPackType()
         .withId(2l)
         .build();
-    
+
     PackTypeBackingForm form = new PackTypeBackingForm();
     form.setType(packType);
-    
+
     // set up mocks
     when(packTypeRepository.findPackTypeByName("PACKTYPE")).thenReturn(duplicate);
-    
+
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "packType");
     packTypeBackingFormValidator.validate(form, errors);
-    
+
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
     Assert.assertNotNull("Error: packtype exists", errors.getFieldError("type.packType"));
   }
-  
+
   @Test
   public void testInvalidNoTestSampleDonation() throws Exception {
     // set up data
@@ -136,17 +137,17 @@ public class PackTypeBackingFormValidatorTest {
         .withCountAsDonation(true)
         .withTestSampleProduced(false)
         .build();
-    
+
     PackTypeBackingForm form = new PackTypeBackingForm();
     form.setType(packType);
-    
+
     // set up mocks
     when(packTypeRepository.findPackTypeByName("PACKTYPE")).thenReturn(null);
-    
+
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "packType");
     packTypeBackingFormValidator.validate(form, errors);
-    
+
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
     Assert.assertNotNull("Error: can't count as donation if no test sample produced", errors.getFieldError("type.countAsDonation"));

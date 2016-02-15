@@ -15,7 +15,7 @@ public class ComponentQuarantineStatusUpdater implements Runnable {
   public ComponentQuarantineStatusUpdater() {
   }
 
-  @Scheduled(fixedDelay=2*3600*1000)
+  @Scheduled(fixedDelay = 2 * 3600 * 1000)
   public void run() {
     componentRepository.updateQuarantineStatus();
   }

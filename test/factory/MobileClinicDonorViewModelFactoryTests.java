@@ -1,6 +1,7 @@
 package factory;
 
 import static org.mockito.Mockito.when;
+
 import helpers.builders.LocationBuilder;
 import helpers.builders.MobileClinicDonorBuilder;
 
@@ -51,11 +52,11 @@ public class MobileClinicDonorViewModelFactoryTests {
         .build();
 
     Date mobileClinicDate = new Date();
-    
+
     when(donorConstraintChecker.isDonorEligibleToDonateOnDate(donor.getId(), mobileClinicDate)).thenReturn(true);
-    
+
     MobileClinicLookUpDonorViewModel returnedViewModel = mobileClinicDonorModelFactory.createMobileClinicDonorViewModel(donor, mobileClinicDate);
-    
+
     Assert.assertNotNull("view model returned", returnedViewModel);
     Assert.assertEquals("Donor number", "D1", returnedViewModel.getDonorNumber());
     Assert.assertEquals("Donor first name", "Test", returnedViewModel.getFirstName());
@@ -64,7 +65,7 @@ public class MobileClinicDonorViewModelFactoryTests {
     Assert.assertEquals("Donor gender", "female", returnedViewModel.getGender());
     Assert.assertTrue("Donor eligible", returnedViewModel.getEligibility());
   }
-  
+
   @Test
   public void testCreateMobileClinicDonors() throws Exception {
     Location venue = LocationBuilder.aLocation().withName("test").build();
@@ -95,20 +96,20 @@ public class MobileClinicDonorViewModelFactoryTests {
     List<MobileClinicDonor> donors = new ArrayList<>();
     donors.add(donor1);
     donors.add(donor2);
-    
+
     Date mobileClinicDate = new Date();
-    
+
     when(donorConstraintChecker.isDonorEligibleToDonateOnDate(1L, mobileClinicDate)).thenReturn(true);
     when(donorConstraintChecker.isDonorEligibleToDonateOnDate(2L, mobileClinicDate)).thenReturn(true);
-    
+
     List<MobileClinicLookUpDonorViewModel> returnedViewModels = mobileClinicDonorModelFactory.createMobileClinicDonorViewModels(donors, mobileClinicDate);
-    
+
     Assert.assertNotNull("view models returned", returnedViewModels);
     Assert.assertEquals("correct number of view models", 2, returnedViewModels.size());
   }
-  
+
   @Test
-  public void testCreateMobileClinicDonorsNull() throws Exception {    
+  public void testCreateMobileClinicDonorsNull() throws Exception {
     List<MobileClinicLookUpDonorViewModel> returnedViewModels = mobileClinicDonorModelFactory.createMobileClinicDonorViewModels(null, new Date());
     Assert.assertNotNull("view models returned", returnedViewModels);
     Assert.assertEquals("correct number of view models", 0, returnedViewModels.size());

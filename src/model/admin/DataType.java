@@ -10,15 +10,15 @@ import model.BaseEntity;
 @Entity
 public class DataType extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private String datatype;
+  private String datatype;
 
-    public String getDatatype() {
-        return datatype;
-    }
+  public String getDatatype() {
+    return datatype;
+  }
 
-    public void setDatatype(String datatype) {
-        this.datatype = datatype;
-    }
+  public void setDatatype(String datatype) {
+    this.datatype = datatype;
+  }
 }

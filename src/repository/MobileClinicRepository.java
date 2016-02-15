@@ -18,28 +18,28 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class MobileClinicRepository {
 
-/**
- * The Constant LOGGER.
-*/
-@SuppressWarnings("unused")
-private static final Logger LOGGER = Logger.getLogger(MobileClinicRepository.class);
-    
+  /**
+   * The Constant LOGGER.
+   */
+  @SuppressWarnings("unused")
+  private static final Logger LOGGER = Logger.getLogger(MobileClinicRepository.class);
+
   @PersistenceContext
   private EntityManager em;
-  
+
   public List<MobileClinicDonor> findMobileClinicDonorsByVenue(Long venueId) throws NoResultException {
-      return em.createQuery(
-              "SELECT d FROM MobileClinicDonor d " +
-              "WHERE d.venue.id = :venueId " +
-              "AND d.isDeleted = :isDeleted " +
-              "AND d.donorStatus NOT IN :excludedStatuses " +
-              "ORDER BY d.lastName asc, d.firstName asc",
-              MobileClinicDonor.class)
-              .setParameter("venueId", venueId)
-              .setParameter("isDeleted", false)
-              .setParameter("excludedStatuses", Arrays.asList(DonorStatus.MERGED))
-              .getResultList();
+    return em.createQuery(
+        "SELECT d FROM MobileClinicDonor d " +
+            "WHERE d.venue.id = :venueId " +
+            "AND d.isDeleted = :isDeleted " +
+            "AND d.donorStatus NOT IN :excludedStatuses " +
+            "ORDER BY d.lastName asc, d.firstName asc",
+        MobileClinicDonor.class)
+        .setParameter("venueId", venueId)
+        .setParameter("isDeleted", false)
+        .setParameter("excludedStatuses", Arrays.asList(DonorStatus.MERGED))
+        .getResultList();
   }
-  
+
 }
 

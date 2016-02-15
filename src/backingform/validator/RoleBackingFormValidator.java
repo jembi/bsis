@@ -12,31 +12,31 @@ import backingform.RoleBackingForm;
 
 @Component
 public class RoleBackingFormValidator extends BaseValidator<RoleBackingForm> {
-  
+
   @Autowired
   private RoleRepository roleRepository;
 
   @Override
   public void validateForm(RoleBackingForm form, Errors errors) {
-    
-    if (isDuplicateRoleName(form.getRole())){
-    	errors.rejectValue("role.name", "roleName.nonunique",
-    	          "Role name already exists.");
+
+    if (isDuplicateRoleName(form.getRole())) {
+      errors.rejectValue("role.name", "roleName.nonunique",
+          "Role name already exists.");
     }
-    
-	if(form.getPermissions().isEmpty()){
-		errors.rejectValue("Role.permissions", "permissions.empty",
-	            "Role must have one or more permissions");
-	}
-	
-	commonFieldChecks(form, errors);
-   }
-  
+
+    if (form.getPermissions().isEmpty()) {
+      errors.rejectValue("Role.permissions", "permissions.empty",
+          "Role must have one or more permissions");
+    }
+
+    commonFieldChecks(form, errors);
+  }
+
   @Override
   public String getFormName() {
     return "Role";
   }
-  
+
   private boolean isDuplicateRoleName(Role role) {
     String roleName = role.getName();
     if (StringUtils.isBlank(roleName)) {

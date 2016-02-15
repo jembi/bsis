@@ -22,22 +22,22 @@ public class User extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length=30, unique=true, nullable=false)
+  @Column(length = 30, unique = true, nullable = false)
   private String username;
 
-  @Column(length=255, nullable=false)
+  @Column(length = 255, nullable = false)
   private String password;
-  
+
   @Column
   private Boolean passwordReset = Boolean.FALSE;
 
-  @Column(length=15, nullable=false)
+  @Column(length = 15, nullable = false)
   private String firstName;
-  @Column(length=15)
+  @Column(length = 15)
   private String lastName;
 
-  @Length(max=255)
-  @Column(length=255)
+  @Length(max = 255)
+  @Column(length = 255)
   private String emailId;
 
   private Boolean isStaff;
@@ -46,12 +46,12 @@ public class User extends BaseEntity {
 
   private Boolean isDeleted;
 
-  @ManyToMany(fetch=FetchType.EAGER)
+  @ManyToMany(fetch = FetchType.EAGER)
   private List<Role> roles;
-  
-  @ManyToMany(mappedBy="users")
+
+  @ManyToMany(mappedBy = "users")
   private List<UserRole> userRole;
-  
+
   @Lob
   private String notes;
 
@@ -172,25 +172,25 @@ public class User extends BaseEntity {
     this.roles = roles;
   }
 
-	/**
-	 * @return the userRole
-	 */
-	public List<UserRole> getUserRole() {
-		return userRole;
-	}
+  /**
+   * @return the userRole
+   */
+  public List<UserRole> getUserRole() {
+    return userRole;
+  }
 
-	/**
-	 * @param userRole the userRole to set
-	 */
-	public void setUserRole(List<UserRole> userRole) {
-		this.userRole = userRole;
-	}
+  /**
+   * @param userRole the userRole to set
+   */
+  public void setUserRole(List<UserRole> userRole) {
+    this.userRole = userRole;
+  }
 
-    public Boolean isPasswordReset() {
-        return passwordReset;
-    }
+  public Boolean isPasswordReset() {
+    return passwordReset;
+  }
 
-    public void setPasswordReset(Boolean passwordReset) {
-        this.passwordReset = passwordReset;
-    }
+  public void setPasswordReset(Boolean passwordReset) {
+    this.passwordReset = passwordReset;
+  }
 }

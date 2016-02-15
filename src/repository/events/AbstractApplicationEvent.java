@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationEvent;
 abstract class AbstractApplicationEvent extends ApplicationEvent {
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
   protected String eventId;
@@ -28,10 +28,10 @@ abstract class AbstractApplicationEvent extends ApplicationEvent {
     return eventContext;
   }
 
-  public Object getContextParams(String paramName){
-    if(eventContext == null || !(eventContext instanceof Map)) {
-        return null;
+  public Object getContextParams(String paramName) {
+    if (eventContext == null || !(eventContext instanceof Map)) {
+      return null;
     }
-    return ((Map)eventContext).get(paramName);
+    return ((Map) eventContext).get(paramName);
   }
 }

@@ -89,10 +89,10 @@ public class BloodTypingController {
     return tests;
   }
 
-  @RequestMapping(value="/batchresults/{donationIds}", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
+  @RequestMapping(value = "/batchresults/{donationIds}", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME + "')")
   public Map<String, Object> getBloodTypingStatusForDonations(
-                        @PathVariable String donationIds) {
+      @PathVariable String donationIds) {
     Map<String, Object> map = new HashMap<String, Object>();
     Map<String, Object> results = bloodTestingRepository.getAllTestsStatusForDonations(Arrays.asList(donationIds.split(",")));
     
@@ -106,23 +106,22 @@ public class BloodTypingController {
     map.put("success", true);
     return map;
   }
-  
+
   private Map<String, DonationViewModel> getDonationViewModels(LinkedHashMap<String, Donation> donations) {
     if (donations == null)
       return null;
-    Map<String, DonationViewModel> donationViewModels = new LinkedHashMap<String, DonationViewModel>();    
-    for (Map.Entry<String, Donation> entry : donations.entrySet())
-    {
-        donationViewModels.put(entry.getKey(), new DonationViewModel(entry.getValue()));
+    Map<String, DonationViewModel> donationViewModels = new LinkedHashMap<String, DonationViewModel>();
+    for (Map.Entry<String, Donation> entry : donations.entrySet()) {
+      donationViewModels.put(entry.getKey(), new DonationViewModel(entry.getValue()));
     }
     return donationViewModels;
   }
 
-  @RequestMapping(value="/results/{donationId}", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME+"')")
+  @RequestMapping(value = "/results/{donationId}", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME + "')")
   public Map<String, Object> showBloodTypingResultsForDonation(
       @PathVariable Long donationId) {
-      
+
     Map<String, Object> map = new HashMap<String, Object>();
     Donation donation = donationRepository.findDonationById(donationId);
     BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForDonation(donationId);
@@ -131,9 +130,9 @@ public class BloodTypingController {
 
     return map;
   }
-  
-  @RequestMapping(value="/results/additional", method=RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.ADD_BLOOD_TYPING_OUTCOME+"')")
+
+  @RequestMapping(value = "/results/additional", method = RequestMethod.POST)
+  @PreAuthorize("hasRole('" + PermissionConstants.ADD_BLOOD_TYPING_OUTCOME + "')")
   public ResponseEntity<Map<String, Object>> saveAdditionalBloodTypingTests(
       @RequestBody TestResultBackingForm form) {
 
@@ -163,5 +162,5 @@ public class BloodTypingController {
 
     return new ResponseEntity<Map<String, Object>>(m, httpStatus);
   }
-  
+
 }

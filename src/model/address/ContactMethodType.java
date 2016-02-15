@@ -11,7 +11,7 @@ public class ContactMethodType extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length=30)
+  @Column(length = 30)
   private String contactMethodType;
 
   private boolean isDeleted;

@@ -21,33 +21,33 @@ import factory.AuditRevisionViewModelFactory;
 @RestController
 @RequestMapping("auditrevisions")
 public class AuditRevisionController {
-    
-    @Autowired
-    private AuditRevisionRepository auditRevisionRepository;
-    @Autowired
-    private AuditRevisionViewModelFactory auditRevisionViewModelFactory;
 
-    public void setAuditRevisionRepository(AuditRevisionRepository auditRevisionRepository) {
-        this.auditRevisionRepository = auditRevisionRepository;
+  @Autowired
+  private AuditRevisionRepository auditRevisionRepository;
+  @Autowired
+  private AuditRevisionViewModelFactory auditRevisionViewModelFactory;
+
+  public void setAuditRevisionRepository(AuditRevisionRepository auditRevisionRepository) {
+    this.auditRevisionRepository = auditRevisionRepository;
+  }
+
+  public void setAuditRevisionViewModelFactory(AuditRevisionViewModelFactory auditRevisionViewModelFactory) {
+    this.auditRevisionViewModelFactory = auditRevisionViewModelFactory;
+  }
+
+  @RequestMapping(method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_AUDIT_LOG + "')")
+  public List<AuditRevisionViewModel> getAuditRevisions(
+      @RequestParam(required = false) String search,
+      @RequestParam(required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+      @RequestParam(required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
+
+    List<AuditRevision> auditRevisions;
+    if (search == null) {
+      auditRevisions = auditRevisionRepository.findAuditRevisions(startDate, endDate);
+    } else {
+      auditRevisions = auditRevisionRepository.findAuditRevisionsByUser(search, startDate, endDate);
     }
-
-    public void setAuditRevisionViewModelFactory(AuditRevisionViewModelFactory auditRevisionViewModelFactory) {
-        this.auditRevisionViewModelFactory = auditRevisionViewModelFactory;
-    }
-
-    @RequestMapping(method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_AUDIT_LOG + "')")
-    public List<AuditRevisionViewModel> getAuditRevisions(
-            @RequestParam(required = false) String search,
-            @RequestParam(required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
-            @RequestParam(required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
-
-        List<AuditRevision> auditRevisions;
-        if (search == null) {
-            auditRevisions = auditRevisionRepository.findAuditRevisions(startDate, endDate);
-        } else {
-            auditRevisions = auditRevisionRepository.findAuditRevisionsByUser(search, startDate, endDate);
-        }
-        return auditRevisionViewModelFactory.createAuditRevisionViewModels(auditRevisions);
-    }
+    return auditRevisionViewModelFactory.createAuditRevisionViewModels(auditRevisions);
+  }
 }

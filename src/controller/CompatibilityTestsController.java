@@ -42,13 +42,13 @@ public class CompatibilityTestsController {
 
   @Autowired
   private CrossmatchTypeRepository crossmatchTypeRepository;
-  
+
   @Autowired
   private FormFieldAccessorService formFieldAccessorService;
-  
+
   @Autowired
   private CompatibilityTestBackingFormValidator compatibilityTestBackingFormValidator;
-  
+
   @Autowired
   private TipsRepository tipsRepository;
 
@@ -57,14 +57,14 @@ public class CompatibilityTestsController {
 
   @InitBinder
   public void initBinder(WebDataBinder binder) {
-      binder.addValidators(compatibilityTestBackingFormValidator);
+    binder.addValidators(compatibilityTestBackingFormValidator);
   }
 
   public static String getUrl(HttpServletRequest req) {
     String reqUrl = req.getRequestURL().toString();
     String queryString = req.getQueryString();   // d=789
     if (queryString != null) {
-        reqUrl += "?"+queryString;
+      reqUrl += "?" + queryString;
     }
     return reqUrl;
   }
@@ -74,10 +74,10 @@ public class CompatibilityTestsController {
     m.put("requests.addcompatibilityresult", tipsRepository.getTipsContent("requests.addcompatibilityresult"));
   }
 
-  @RequestMapping(value="{requestId}/edit/form", method=RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.BLOOD_CROSS_MATCH_CHECK+"')")
-  public  ResponseEntity<Map<String, Object>> editCompatibilityTestsFormGenerator(
-         @PathVariable String requestId) {
+  @RequestMapping(value = "{requestId}/edit/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.BLOOD_CROSS_MATCH_CHECK + "')")
+  public ResponseEntity<Map<String, Object>> editCompatibilityTestsFormGenerator(
+      @PathVariable String requestId) {
 
     Map<String, Object> m = new HashMap<String, Object>();
     addEditSelectorOptions(m);
@@ -96,18 +96,18 @@ public class CompatibilityTestsController {
   }
 
   @RequestMapping(method = RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.BLOOD_CROSS_MATCH_CHECK+"')")
-  public  ResponseEntity<Map<String, Object>>
-        addCompatibilityTest(@Valid @RequestBody CompatibilityTestBackingForm form) {
+  @PreAuthorize("hasRole('" + PermissionConstants.BLOOD_CROSS_MATCH_CHECK + "')")
+  public ResponseEntity<Map<String, Object>>
+  addCompatibilityTest(@Valid @RequestBody CompatibilityTestBackingForm form) {
 
-      Map<String, Object> map = new HashMap<String, Object>();
-      addEditSelectorOptions(map);
-      CompatibilityTest crossmatchTest = form.getCompatibilityTest();
-      crossmatchTest.setIsDeleted(false);
-      compatibilityTestRepository.addCompatibilityTest(crossmatchTest);
-      form = new CompatibilityTestBackingForm();
-      map.put("editCompatibilityTestForm", form);
-      map.put("existingCompatibilityTest", false);
-      return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    Map<String, Object> map = new HashMap<String, Object>();
+    addEditSelectorOptions(map);
+    CompatibilityTest crossmatchTest = form.getCompatibilityTest();
+    crossmatchTest.setIsDeleted(false);
+    compatibilityTestRepository.addCompatibilityTest(crossmatchTest);
+    form = new CompatibilityTestBackingForm();
+    map.put("editCompatibilityTestForm", form);
+    map.put("existingCompatibilityTest", false);
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 }

@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class PasswordGenerationService {
 
-    public String generatePassword() {
-        return RandomStringUtils.randomAlphanumeric(16);
-    }
+  public String generatePassword() {
+    return RandomStringUtils.randomAlphanumeric(16);
+  }
 
 }

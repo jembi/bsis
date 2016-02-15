@@ -27,69 +27,69 @@ import java.util.Map;
 @RequestMapping("discardreasons")
 public class DiscardReasonController {
 
-    private static final Logger LOGGER = Logger.getLogger(DiscardReasonController.class);
+  private static final Logger LOGGER = Logger.getLogger(DiscardReasonController.class);
 
-    @Autowired
-    DiscardReasonRepository discardReasonRepository;
-    
-    @Autowired
-    DiscardReasonBackingFormValidator discardReasonBackingFormValidator;
+  @Autowired
+  DiscardReasonRepository discardReasonRepository;
 
-    public DiscardReasonController() {
+  @Autowired
+  DiscardReasonBackingFormValidator discardReasonBackingFormValidator;
+
+  public DiscardReasonController() {
+  }
+
+  @InitBinder
+  protected void initBinder(WebDataBinder binder) {
+    binder.setValidator(discardReasonBackingFormValidator);
+  }
+
+  @RequestMapping(method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
+  public Map<String, Object> getDiscardReasons() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    addAllDiscardReasonsToModel(map);
+    return map;
+  }
+
+  @RequestMapping(value = "{id}", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
+  public ResponseEntity<ComponentStatusChangeReason> getDiscardReasonById(@PathVariable Long id) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    ComponentStatusChangeReason discardReason = discardReasonRepository.getDiscardReasonById(id);
+    map.put("reason", new DiscardReasonViewModel(discardReason));
+    return new ResponseEntity(map, HttpStatus.OK);
+  }
+
+  @RequestMapping(method = RequestMethod.POST)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
+  public ResponseEntity saveDiscardReason(@Valid @RequestBody DiscardReasonBackingForm formData) {
+    ComponentStatusChangeReason discardReason = formData.getDiscardReason();
+    discardReason = discardReasonRepository.saveDiscardReason(discardReason);
+    return new ResponseEntity(new DiscardReasonViewModel(discardReason), HttpStatus.CREATED);
+  }
+
+  @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
+  public ResponseEntity updateDiscardReason(@Valid @RequestBody DiscardReasonBackingForm formData, @PathVariable Long id) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    ComponentStatusChangeReason discardReason = formData.getDiscardReason();
+    discardReason.setId(id);
+    discardReason = discardReasonRepository.updateDiscardReason(discardReason);
+    map.put("reason", new DiscardReasonViewModel(discardReason));
+    return new ResponseEntity(map, HttpStatus.OK);
+  }
+
+  private void addAllDiscardReasonsToModel(Map<String, Object> m) {
+    m.put("allDiscardReasons", getDiscardReasonViewModels(discardReasonRepository.getAllDiscardReasons()));
+  }
+
+  private List<DiscardReasonViewModel> getDiscardReasonViewModels(List<ComponentStatusChangeReason> discardReasons) {
+
+    List<DiscardReasonViewModel> viewModels = new ArrayList<DiscardReasonViewModel>();
+    for (ComponentStatusChangeReason reason : discardReasons) {
+      viewModels.add(new DiscardReasonViewModel(reason));
     }
-
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(discardReasonBackingFormValidator);
-    }
-
-    @RequestMapping(method=RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
-    public  Map<String, Object> getDiscardReasons() {
-        Map<String, Object> map = new HashMap<String, Object>();
-        addAllDiscardReasonsToModel(map);
-        return map;
-    }
-
-    @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
-    public ResponseEntity<ComponentStatusChangeReason> getDiscardReasonById(@PathVariable Long id){
-        Map<String, Object> map = new HashMap<String, Object>();
-        ComponentStatusChangeReason discardReason = discardReasonRepository.getDiscardReasonById(id);
-        map.put("reason", new DiscardReasonViewModel(discardReason));
-        return new ResponseEntity(map, HttpStatus.OK);
-    }
-
-    @RequestMapping(method = RequestMethod.POST)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
-    public ResponseEntity saveDiscardReason(@Valid @RequestBody DiscardReasonBackingForm formData){
-        ComponentStatusChangeReason discardReason = formData.getDiscardReason();
-        discardReason = discardReasonRepository.saveDiscardReason(discardReason);
-        return new ResponseEntity(new DiscardReasonViewModel(discardReason), HttpStatus.CREATED);
-    }
-
-    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
-    public ResponseEntity updateDiscardReason(@Valid @RequestBody DiscardReasonBackingForm formData , @PathVariable Long id){
-        Map<String, Object> map = new HashMap<String, Object>();
-        ComponentStatusChangeReason discardReason = formData.getDiscardReason();
-        discardReason.setId(id);
-        discardReason = discardReasonRepository.updateDiscardReason(discardReason);
-        map.put("reason", new DiscardReasonViewModel(discardReason));
-        return new ResponseEntity(map, HttpStatus.OK);
-    }
-
-    private void addAllDiscardReasonsToModel(Map<String, Object> m) {
-        m.put("allDiscardReasons", getDiscardReasonViewModels(discardReasonRepository.getAllDiscardReasons()));
-    }
-
-    private List<DiscardReasonViewModel> getDiscardReasonViewModels(List<ComponentStatusChangeReason> discardReasons){
-
-        List<DiscardReasonViewModel> viewModels = new ArrayList<DiscardReasonViewModel>();
-        for(ComponentStatusChangeReason reason : discardReasons){
-            viewModels.add(new DiscardReasonViewModel(reason));
-        }
-        return viewModels;
-    }
+    return viewModels;
+  }
 
 }

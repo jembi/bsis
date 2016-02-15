@@ -9,16 +9,16 @@ import viewmodel.AdverseEventViewModel;
 
 @Service
 public class AdverseEventViewModelFactory {
-    
-    @Autowired
-    private AdverseEventTypeViewModelFactory adverseEventTypeViewModelFactory;
-    
-    public AdverseEventViewModel createAdverseEventViewModel(AdverseEvent adverseEvent) {
-        AdverseEventViewModel viewModel = new AdverseEventViewModel();
-        viewModel.setId(adverseEvent.getId());
-        viewModel.setType(adverseEventTypeViewModelFactory.createAdverseEventTypeViewModel(adverseEvent.getType()));
-        viewModel.setComment(adverseEvent.getComment());
-        return viewModel;
-    }
+
+  @Autowired
+  private AdverseEventTypeViewModelFactory adverseEventTypeViewModelFactory;
+
+  public AdverseEventViewModel createAdverseEventViewModel(AdverseEvent adverseEvent) {
+    AdverseEventViewModel viewModel = new AdverseEventViewModel();
+    viewModel.setId(adverseEvent.getId());
+    viewModel.setType(adverseEventTypeViewModelFactory.createAdverseEventTypeViewModel(adverseEvent.getType()));
+    viewModel.setComment(adverseEvent.getComment());
+    return viewModel;
+  }
 
 }

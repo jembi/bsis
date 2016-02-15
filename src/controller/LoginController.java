@@ -27,7 +27,7 @@ public class LoginController {
   @RequestMapping(method = RequestMethod.GET)
   @ApiIgnore
   public ModelAndView login(HttpServletRequest request,
-      @RequestParam(value="error", required=false) boolean error) {
+                            @RequestParam(value = "error", required = false) boolean error) {
     ModelAndView mv = new ModelAndView("login");
     if (error)
       mv.addObject("login_error", true);

@@ -48,16 +48,16 @@ public class TestResultController {
 
   @Autowired
   private TestBatchRepository testBatchRepository;
-  
+
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
   
   @Autowired
   private TestBatchStatusChangeService testBatchStatusChangeService;
-  
+
   @Autowired
   private BloodTestsService bloodTestsService;
-  
+
   public TestResultController() {
   }
 
@@ -68,18 +68,18 @@ public class TestResultController {
     Map<String, Object> map = new HashMap<String, Object>();
     Donation c = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
     map.put("donation", new DonationViewModel(c));
-    
+
     if (c.getPackType().getTestSampleProduced()) {
-        BloodTestingRuleResult results = bloodTestingRepository.getAllTestsStatusForDonation(c.getId());
-        map.put("testResults", results);
+      BloodTestingRuleResult results = bloodTestingRepository.getAllTestsStatusForDonation(c.getId());
+      map.put("testResults", results);
     } else {
-        map.put("testResults", null);
+      map.put("testResults", null);
     }
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
-  
+
   @RequestMapping(value = "/search", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
   public ResponseEntity<Map<String, Object>> findTestResultsForTestBatch(HttpServletRequest request,
 		@RequestParam(value = "testBatch", required = true) Long testBatchId) {
 	  
@@ -99,9 +99,9 @@ public class TestResultController {
 	
 		return new ResponseEntity<>(map, HttpStatus.OK);
   }
-  
+
   @RequestMapping(value = "/overview", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
   public ResponseEntity<Map<String, Object>> findTestResultsOverviewForTestBatch(HttpServletRequest request,
 		@RequestParam(value = "testBatch", required = true) Long testBatchId) {
 	  
@@ -149,37 +149,37 @@ public class TestResultController {
 	
 		return new ResponseEntity<>(map, HttpStatus.OK);
   }
-  
-    @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Map<String, Object>> saveTestResults(@RequestBody @Valid TestResultBackingForm form) {
 
-      HttpStatus responseStatus = HttpStatus.CREATED;
-      Map<String, Object> responseMap = new HashMap<>();
+  @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
+  @RequestMapping(method = RequestMethod.POST)
+  public ResponseEntity<Map<String, Object>> saveTestResults(@RequestBody @Valid TestResultBackingForm form) {
 
-      Donation donation = donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
-      if (donation == null) {
-        responseStatus = HttpStatus.NOT_FOUND;
+    HttpStatus responseStatus = HttpStatus.CREATED;
+    Map<String, Object> responseMap = new HashMap<>();
+
+    Donation donation = donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
+    if (donation == null) {
+      responseStatus = HttpStatus.NOT_FOUND;
+    } else {
+      Map<Long, String> testResults = form.getTestResults();
+      Map<Long, String> errors = bloodTestsService.validateTestResultValues(testResults);
+      if (errors.isEmpty()) {
+        // No errors
+        BloodTestingRuleResult ruleResult = bloodTestsService.saveBloodTests(donation.getId(), form.getTestResults());
+        responseMap.put("success", true);
+        responseMap.put("testresults", ruleResult);
       } else {
-        Map<Long, String> testResults = form.getTestResults();
-        Map<Long, String> errors = bloodTestsService.validateTestResultValues(testResults);
-        if (errors.isEmpty()) {
-          // No errors
-          BloodTestingRuleResult ruleResult = bloodTestsService.saveBloodTests(donation.getId(), form.getTestResults());
-          responseMap.put("success", true);
-          responseMap.put("testresults", ruleResult);
-        } else {
-          // Errors found
-          responseMap.put("success", false);
-          responseMap.put("errorMap", errors);
-          responseMap.put("errorMessage", "There were errors adding tests.");
-          responseStatus = HttpStatus.BAD_REQUEST;
-        }
+        // Errors found
+        responseMap.put("success", false);
+        responseMap.put("errorMap", errors);
+        responseMap.put("errorMessage", "There were errors adding tests.");
+        responseStatus = HttpStatus.BAD_REQUEST;
       }
-      return new ResponseEntity<>(responseMap, responseStatus);
     }
-  
-  @PreAuthorize("hasRole('"+PermissionConstants.ADD_TEST_OUTCOME+"')")
+    return new ResponseEntity<>(responseMap, responseStatus);
+  }
+
+  @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
   @RequestMapping(value = "/bloodgroupmatches", method = RequestMethod.GET)
   public ResponseEntity<Map<String, Object>> saveBloodGroupMatchTestResults(
 		  @RequestParam(value = "donationIdentificationNumber", required = true) String donationIdentificationNumber,
@@ -203,7 +203,7 @@ public class TestResultController {
 		map.put("donor", getDonorsViewModel(cs.getDonor()));
         return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
-  
+
   private DonorViewModel getDonorsViewModel(Donor donor) {
     DonorViewModel donorViewModel = new DonorViewModel(donor);
     return donorViewModel;

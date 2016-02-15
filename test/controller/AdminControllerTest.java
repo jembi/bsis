@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package controller;
 
@@ -13,20 +13,21 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
 public class AdminControllerTest {
-	
-	private MockHttpServletRequest request;
-    private MockHttpServletResponse response;
-    private MockMvc mockMvc;
-    
-    // Use @Mock annotation to specify Mock objects
 
-    //Controller that is being tested.
-    @InjectMocks
-    private AdminController adminController;
-    
-	@Ignore @Test
-	public void exampleTest() {
-    	assertEquals("10 x 5 must be 50", 50, 10*5);
-	}
+  private MockHttpServletRequest request;
+  private MockHttpServletResponse response;
+  private MockMvc mockMvc;
+
+  // Use @Mock annotation to specify Mock objects
+
+  //Controller that is being tested.
+  @InjectMocks
+  private AdminController adminController;
+
+  @Ignore
+  @Test
+  public void exampleTest() {
+    assertEquals("10 x 5 must be 50", 50, 10 * 5);
+  }
 
 }

@@ -2,6 +2,7 @@ package repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+
 import helpers.builders.MobileClinicDonorBuilder;
 import helpers.builders.LocationBuilder;
 
@@ -31,7 +32,7 @@ public class MobileClinicRepositoryTests extends ContextDependentTestSuite {
 
   @Test
   public void testMobileClinicDonorsCanBeFound() throws Exception {
-    
+
     Location venue = LocationBuilder.aLocation()
         .withName("test")
         .buildAndPersist(entityManager);
@@ -56,7 +57,7 @@ public class MobileClinicRepositoryTests extends ContextDependentTestSuite {
         .withVenue(venue)
         .thatIsNotDeleted()
         .buildAndPersist(entityManager);
-      MobileClinicDonorBuilder.aMobileClinicDonor()
+    MobileClinicDonorBuilder.aMobileClinicDonor()
         .withDonorNumber("D3")
         .withFirstName("Abigail")
         .withLastName("Donor")
@@ -66,7 +67,7 @@ public class MobileClinicRepositoryTests extends ContextDependentTestSuite {
         .withVenue(venue)
         .thatIsNotDeleted()
         .buildAndPersist(entityManager);
-    
+
     List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.findMobileClinicDonorsByVenue(venue.getId());
 
     assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonors.size(), is(3));
@@ -81,7 +82,7 @@ public class MobileClinicRepositoryTests extends ContextDependentTestSuite {
 
   @Test
   public void testDeletedMobileClinicDonorsAreNotReturned() throws Exception {
-    
+
     Location venue = LocationBuilder.aLocation()
         .withName("test")
         .buildAndPersist(entityManager);
@@ -106,16 +107,16 @@ public class MobileClinicRepositoryTests extends ContextDependentTestSuite {
         .withVenue(venue)
         .thatIsDeleted()
         .buildAndPersist(entityManager);
-    
+
     List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.findMobileClinicDonorsByVenue(venue.getId());
 
     assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonors.size(), is(1));
     Assert.assertFalse("Deleted MobileClinicDonor not returned", mobileClinicDonors.contains(donor2));
   }
-  
+
   @Test
   public void testMergedMobileClinicDonorsAreNotReturned() throws Exception {
-    
+
     Location venue = LocationBuilder.aLocation()
         .withName("test")
         .buildAndPersist(entityManager);
@@ -140,16 +141,16 @@ public class MobileClinicRepositoryTests extends ContextDependentTestSuite {
         .withVenue(venue)
         .thatIsNotDeleted()
         .buildAndPersist(entityManager);
-    
+
     List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.findMobileClinicDonorsByVenue(venue.getId());
 
     assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonors.size(), is(1));
     Assert.assertFalse("Deleted MobileClinicDonor not returned", mobileClinicDonors.contains(donor2));
   }
-  
+
   @Test
   public void testMobileClinicDonorsAreInCorrectVenue() throws Exception {
-    
+
     Location venue1 = LocationBuilder.aLocation()
         .withName("test1")
         .buildAndPersist(entityManager);
@@ -177,7 +178,7 @@ public class MobileClinicRepositoryTests extends ContextDependentTestSuite {
         .withVenue(venue2)
         .thatIsNotDeleted()
         .buildAndPersist(entityManager);
-    
+
     List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.findMobileClinicDonorsByVenue(venue1.getId());
 
     assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonors.size(), is(1));

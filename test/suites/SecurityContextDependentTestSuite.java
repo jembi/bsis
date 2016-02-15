@@ -11,10 +11,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import security.BsisUserDetails;
 
 public abstract class SecurityContextDependentTestSuite extends ContextDependentTestSuite {
-  
+
   protected static final String USERNAME = "admin";
   protected User loggedInUser;
-  
+
   @Before
   public void init() throws Exception {
     initSpringSecurityUser();

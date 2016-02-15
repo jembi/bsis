@@ -26,96 +26,96 @@ import backingform.validator.DeferralReasonBackingFormValidator;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DeferralReasonBackingFormValidatorTests {
-    @InjectMocks
-    private DeferralReasonBackingFormValidator validator;
-    @Mock
-    private DeferralReasonRepository deferralReasonRepository;
-    
-    @Test
-    public void testValidateWithDeferralReasonBackingFormWithDuplicateDeferralReason_shouldHaveErrors() {
-        DeferralReason deferralReason = aDeferralReason()
-            .withId(1l)
-            .withReason("test")
-            .build();
-        DeferralReason deferralReasonDuplicate = aDeferralReason()
-            .withId(2l)
-            .withReason("test")
-            .build();
-        DeferralReasonBackingForm backingForm = aDeferralReasonBackingForm()
-                .withDurationType(DurationType.TEMPORARY)
-                .withDeferralReason(deferralReason)
-                .withDefaultDuration(1)
-                .build();
-        
-        when(deferralReasonRepository.findDeferralReason("test")).thenReturn(deferralReasonDuplicate);
+  @InjectMocks
+  private DeferralReasonBackingFormValidator validator;
+  @Mock
+  private DeferralReasonRepository deferralReasonRepository;
 
-        Errors errors = new BindException(backingForm, "deferralReasonBackingForm");
-        validator.validate(backingForm, errors);
-        
-        assertThat(errors.getErrorCount(), is(1));
-        List<FieldError> fieldErrors = errors.getFieldErrors("reason");
-        assertThat(fieldErrors.size(), is(1));
-        assertThat(fieldErrors.get(0).getDefaultMessage(), is("Deferral Reason already exists."));
-    }
-    
-    @Test
-    public void testValidateWithDeferralReasonBackingFormWithPermanentDurationTypeAndNoDuration_shouldHaveNoErrors() {
-      DeferralReason deferralReason = aDeferralReason()
-          .withReason("test")
-          .build();
-        DeferralReasonBackingForm backingForm = aDeferralReasonBackingForm()
-                .withDurationType(DurationType.PERMANENT)
-                .withDeferralReason(deferralReason)
-                .withDefaultDuration(0)
-                .build();
-        
-        when(deferralReasonRepository.findDeferralReason("test")).thenReturn(null);
+  @Test
+  public void testValidateWithDeferralReasonBackingFormWithDuplicateDeferralReason_shouldHaveErrors() {
+    DeferralReason deferralReason = aDeferralReason()
+        .withId(1l)
+        .withReason("test")
+        .build();
+    DeferralReason deferralReasonDuplicate = aDeferralReason()
+        .withId(2l)
+        .withReason("test")
+        .build();
+    DeferralReasonBackingForm backingForm = aDeferralReasonBackingForm()
+        .withDurationType(DurationType.TEMPORARY)
+        .withDeferralReason(deferralReason)
+        .withDefaultDuration(1)
+        .build();
 
-        Errors errors = new BindException(backingForm, "deferralReasonBackingForm");
-        validator.validate(backingForm, errors);
-        
-        assertThat(errors.getErrorCount(), is(0));
-    }
-    
-    @Test
-    public void testValidateWithDeferralReasonBackingFormWithInvalidDefaultDeferralDays_shouldHaveErrors() {
-      DeferralReason deferralReason = aDeferralReason()
-          .withReason("test")
-          .build();
-        DeferralReasonBackingForm backingForm = aDeferralReasonBackingForm()
-                .withDurationType(DurationType.TEMPORARY)
-                .withDeferralReason(deferralReason)
-                .withDefaultDuration(0)
-                .build();
-        
-        when(deferralReasonRepository.findDeferralReason("test")).thenReturn(null);
+    when(deferralReasonRepository.findDeferralReason("test")).thenReturn(deferralReasonDuplicate);
 
-        Errors errors = new BindException(backingForm, "deferralReasonBackingForm");
-        validator.validate(backingForm, errors);
-        
-        assertThat(errors.getErrorCount(), is(1));
-        List<FieldError> fieldErrors = errors.getFieldErrors("defaultDuration");
-        assertThat(fieldErrors.size(), is(1));
-        assertThat(fieldErrors.get(0).getDefaultMessage(), is("Default duration must be a positive number of days"));
-    }
-    
-    @Test
-    public void testValidateWithValidDeferralReasonBackingForm_shouldHaveNoErrors() {
-      DeferralReason deferralReason = aDeferralReason()
-          .withReason("test")
-          .build();
-        DeferralReasonBackingForm backingForm = aDeferralReasonBackingForm()
-                .withDurationType(DurationType.TEMPORARY)
-                .withDeferralReason(deferralReason)
-                .withDefaultDuration(1)
-                .build();
-        
-        when(deferralReasonRepository.findDeferralReason("test")).thenReturn(null);
+    Errors errors = new BindException(backingForm, "deferralReasonBackingForm");
+    validator.validate(backingForm, errors);
 
-        Errors errors = new BindException(backingForm, "deferralReasonBackingForm");
-        validator.validate(backingForm, errors);
-        
-        assertThat(errors.getErrorCount(), is(0));
-    }
+    assertThat(errors.getErrorCount(), is(1));
+    List<FieldError> fieldErrors = errors.getFieldErrors("reason");
+    assertThat(fieldErrors.size(), is(1));
+    assertThat(fieldErrors.get(0).getDefaultMessage(), is("Deferral Reason already exists."));
+  }
+
+  @Test
+  public void testValidateWithDeferralReasonBackingFormWithPermanentDurationTypeAndNoDuration_shouldHaveNoErrors() {
+    DeferralReason deferralReason = aDeferralReason()
+        .withReason("test")
+        .build();
+    DeferralReasonBackingForm backingForm = aDeferralReasonBackingForm()
+        .withDurationType(DurationType.PERMANENT)
+        .withDeferralReason(deferralReason)
+        .withDefaultDuration(0)
+        .build();
+
+    when(deferralReasonRepository.findDeferralReason("test")).thenReturn(null);
+
+    Errors errors = new BindException(backingForm, "deferralReasonBackingForm");
+    validator.validate(backingForm, errors);
+
+    assertThat(errors.getErrorCount(), is(0));
+  }
+
+  @Test
+  public void testValidateWithDeferralReasonBackingFormWithInvalidDefaultDeferralDays_shouldHaveErrors() {
+    DeferralReason deferralReason = aDeferralReason()
+        .withReason("test")
+        .build();
+    DeferralReasonBackingForm backingForm = aDeferralReasonBackingForm()
+        .withDurationType(DurationType.TEMPORARY)
+        .withDeferralReason(deferralReason)
+        .withDefaultDuration(0)
+        .build();
+
+    when(deferralReasonRepository.findDeferralReason("test")).thenReturn(null);
+
+    Errors errors = new BindException(backingForm, "deferralReasonBackingForm");
+    validator.validate(backingForm, errors);
+
+    assertThat(errors.getErrorCount(), is(1));
+    List<FieldError> fieldErrors = errors.getFieldErrors("defaultDuration");
+    assertThat(fieldErrors.size(), is(1));
+    assertThat(fieldErrors.get(0).getDefaultMessage(), is("Default duration must be a positive number of days"));
+  }
+
+  @Test
+  public void testValidateWithValidDeferralReasonBackingForm_shouldHaveNoErrors() {
+    DeferralReason deferralReason = aDeferralReason()
+        .withReason("test")
+        .build();
+    DeferralReasonBackingForm backingForm = aDeferralReasonBackingForm()
+        .withDurationType(DurationType.TEMPORARY)
+        .withDeferralReason(deferralReason)
+        .withDefaultDuration(1)
+        .build();
+
+    when(deferralReasonRepository.findDeferralReason("test")).thenReturn(null);
+
+    Errors errors = new BindException(backingForm, "deferralReasonBackingForm");
+    validator.validate(backingForm, errors);
+
+    assertThat(errors.getErrorCount(), is(0));
+  }
 
 }

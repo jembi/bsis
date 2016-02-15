@@ -10,16 +10,16 @@ public class BloodGroup {
   private String rh;
 
   static final private Map<String, BloodGroup> bloodgroups = new LinkedHashMap<String, BloodGroup>();
-  
+
   static {
-		bloodgroups.put("o+", new BloodGroup("O", "+"));
-		bloodgroups.put("o-", new BloodGroup("O", "-"));
-		bloodgroups.put("a+", new BloodGroup("A", "+"));
-		bloodgroups.put("a-", new BloodGroup("A", "-"));
-		bloodgroups.put("b+", new BloodGroup("B", "+"));
-		bloodgroups.put("b-", new BloodGroup("B", "-"));  
-		bloodgroups.put("ab+", new BloodGroup("AB", "+"));
-		bloodgroups.put("ab-", new BloodGroup("AB", "-"));   
+    bloodgroups.put("o+", new BloodGroup("O", "+"));
+    bloodgroups.put("o-", new BloodGroup("O", "-"));
+    bloodgroups.put("a+", new BloodGroup("A", "+"));
+    bloodgroups.put("a-", new BloodGroup("A", "-"));
+    bloodgroups.put("b+", new BloodGroup("B", "+"));
+    bloodgroups.put("b-", new BloodGroup("B", "-"));
+    bloodgroups.put("ab+", new BloodGroup("AB", "+"));
+    bloodgroups.put("ab-", new BloodGroup("AB", "-"));
   }
 
   public BloodGroup() {
@@ -32,8 +32,7 @@ public class BloodGroup {
     if (bg == null) {
       abo = "";
       rh = "";
-    }
-    else {
+    } else {
       abo = bg.abo;
       rh = bg.rh;
     }
@@ -58,8 +57,7 @@ public class BloodGroup {
     StringBuilder strBuilder = new StringBuilder();
     if (abo == null) {
       strBuilder.append("Unknown");
-    }
-    else {
+    } else {
       strBuilder.append(abo.toString());
       if (rh.equals("+"))
         strBuilder.append("+");
@@ -82,10 +80,10 @@ public class BloodGroup {
   }
 
   public static Map<String, BloodGroup> getBloodgroups() {
-	return bloodgroups;
+    return bloodgroups;
   }
-  
+
   public static Collection<BloodGroup> getAllBloodGroups() {
-	return bloodgroups.values();
+    return bloodgroups.values();
   }
 }

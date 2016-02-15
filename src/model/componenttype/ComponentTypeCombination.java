@@ -21,25 +21,25 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Audited
 @Entity
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class ComponentTypeCombination extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length=300)
+  @Column(length = 300)
   private String combinationName;
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @ManyToMany(fetch=FetchType.EAGER)
+  @ManyToMany(fetch = FetchType.EAGER)
   @Fetch(FetchMode.SELECT)
   private List<ComponentType> componentTypes;
-  
+
   @NotAudited
-  @ManyToMany(mappedBy="producedComponentTypeCombinations", fetch = FetchType.EAGER)
+  @ManyToMany(mappedBy = "producedComponentTypeCombinations", fetch = FetchType.EAGER)
   @Fetch(FetchMode.SELECT)
   private Set<ComponentType> sourceComponentTypes;
-  
+
   private Boolean isDeleted;
 
   public List<ComponentType> getComponentTypes() {
@@ -49,7 +49,7 @@ public class ComponentTypeCombination extends BaseEntity {
   public void setComponentTypes(List<ComponentType> componentTypes) {
     this.componentTypes = componentTypes;
   }
-  
+
   public Set<ComponentType> getSourceComponentTypes() {
     return sourceComponentTypes;
   }
@@ -73,12 +73,12 @@ public class ComponentTypeCombination extends BaseEntity {
   public void setIsDeleted(Boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
-  
-  public void copy(ComponentTypeCombination componentTypeCombination){
-  	this.componentTypes = componentTypeCombination.getComponentTypes();
-  	this.sourceComponentTypes = componentTypeCombination.getSourceComponentTypes();
-  	this.combinationName = componentTypeCombination.getCombinationName();
-  	this.isDeleted = componentTypeCombination.getIsDeleted();
+
+  public void copy(ComponentTypeCombination componentTypeCombination) {
+    this.componentTypes = componentTypeCombination.getComponentTypes();
+    this.sourceComponentTypes = componentTypeCombination.getSourceComponentTypes();
+    this.combinationName = componentTypeCombination.getCombinationName();
+    this.isDeleted = componentTypeCombination.getIsDeleted();
   }
 
 }

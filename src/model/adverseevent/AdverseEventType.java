@@ -17,49 +17,49 @@ import repository.constant.AdverseEventTypeNamedQueryConstants;
  */
 @NamedQueries({
     @NamedQuery(name = AdverseEventTypeNamedQueryConstants.NAME_FIND_ADVERSE_EVENT_TYPE_VIEW_MODELS,
-            query = AdverseEventTypeNamedQueryConstants.QUERY_FIND_ADVERSE_EVENT_TYPE_VIEW_MODELS),
+        query = AdverseEventTypeNamedQueryConstants.QUERY_FIND_ADVERSE_EVENT_TYPE_VIEW_MODELS),
     @NamedQuery(name = AdverseEventTypeNamedQueryConstants.NAME_FIND_ADVERSE_EVENT_TYPE_IDS_BY_NAME,
-            query = AdverseEventTypeNamedQueryConstants.QUERY_FIND_ADVERSE_EVENT_TYPE_IDS_BY_NAME),
+        query = AdverseEventTypeNamedQueryConstants.QUERY_FIND_ADVERSE_EVENT_TYPE_IDS_BY_NAME),
     @NamedQuery(name = AdverseEventTypeNamedQueryConstants.NAME_FIND_ADVERSE_EVENT_TYPE_VIEW_MODELS_WITH_DELETED_FLAG,
-            query = AdverseEventTypeNamedQueryConstants.QUERY_FIND_ADVERSE_EVENT_TYPE_VIEW_MODELS_WITH_DELETED_FLAG)
+        query = AdverseEventTypeNamedQueryConstants.QUERY_FIND_ADVERSE_EVENT_TYPE_VIEW_MODELS_WITH_DELETED_FLAG)
 })
 @Entity
 @Audited
 public class AdverseEventType extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@Column(nullable = false, unique = true)
-    private String name;
+  @Column(nullable = false, unique = true)
+  private String name;
 
-    @Lob
-    @Column(nullable = true)
-    private String description;
+  @Lob
+  @Column(nullable = true)
+  private String description;
 
-    @Column(nullable = false)
-    private boolean isDeleted;
+  @Column(nullable = false)
+  private boolean isDeleted;
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public boolean isDeleted() {
-        return isDeleted;
-    }
+  public boolean isDeleted() {
+    return isDeleted;
+  }
 
-    public void setDeleted(boolean isDeleted) {
-        this.isDeleted = isDeleted;
-    }
+  public void setDeleted(boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
 }

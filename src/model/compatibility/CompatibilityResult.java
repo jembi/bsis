@@ -7,7 +7,7 @@ public enum CompatibilityResult {
   public static CompatibilityResult lookup(String compatibilityResultStr) {
     CompatibilityResult compatibilityResult = null;
     try {
-       compatibilityResult = CompatibilityResult.valueOf(compatibilityResultStr);
+      compatibilityResult = CompatibilityResult.valueOf(compatibilityResultStr);
     } catch (IllegalArgumentException ex) {
       ex.printStackTrace();
       compatibilityResult = null;

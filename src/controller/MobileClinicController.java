@@ -31,52 +31,56 @@ import factory.MobileClinicDonorViewModelFactory;
 @RequestMapping("mobileclinic")
 public class MobileClinicController {
 
-    /**
-     * The Constant LOGGER.
-     */
-    @SuppressWarnings("unused")
-    private static final Logger LOGGER = Logger.getLogger(MobileClinicController.class);
-    
-    @Autowired
-    private MobileClinicRepository mobileClinicRepository;
+  /**
+   * The Constant LOGGER.
+   */
+  @SuppressWarnings("unused")
+  private static final Logger LOGGER = Logger.getLogger(MobileClinicController.class);
 
-    @Autowired
-    private LocationRepository locationRepository;
-    
-    @Autowired
-    private MobileClinicDonorViewModelFactory mobileClinicDonorViewModelFactory;
+  @Autowired
+  private MobileClinicRepository mobileClinicRepository;
 
-    public MobileClinicController() {
-    }
+  @Autowired
+  private LocationRepository locationRepository;
 
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) {}
-    
-    @RequestMapping(value = "/form", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
-    public @ResponseBody
-    Map<String, Object> mobileClinicLookUpFormGenerator() {
+  @Autowired
+  private MobileClinicDonorViewModelFactory mobileClinicDonorViewModelFactory;
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("venues", locationRepository.getAllVenues());
-        return map;
-    }
+  public MobileClinicController() {
+  }
+
+  @InitBinder
+  protected void initBinder(WebDataBinder binder) {
+  }
+
+  @RequestMapping(value = "/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
+  public
+  @ResponseBody
+  Map<String, Object> mobileClinicLookUpFormGenerator() {
+
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("venues", locationRepository.getAllVenues());
+    return map;
+  }
 
 
-    @RequestMapping(value = "/lookup", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
-    public @ResponseBody ResponseEntity<Map<String, Object>> mobileClinicLookUp(
-            @RequestParam(value="venueId",required=true) Long venueId,
-            @RequestParam(value="clinicDate",required=true) 
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date clinicDate) {
+  @RequestMapping(value = "/lookup", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
+  public
+  @ResponseBody
+  ResponseEntity<Map<String, Object>> mobileClinicLookUp(
+      @RequestParam(value = "venueId", required = true) Long venueId,
+      @RequestParam(value = "clinicDate", required = true)
+      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date clinicDate) {
 
-       Map<String, Object> map = new HashMap<String, Object>();
-        
-       List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.findMobileClinicDonorsByVenue(venueId);
-       List<MobileClinicLookUpDonorViewModel> donors = mobileClinicDonorViewModelFactory.createMobileClinicDonorViewModels(mobileClinicDonors, clinicDate);
-       
-       map.put("donors", donors);
+    Map<String, Object> map = new HashMap<String, Object>();
 
-       return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);        
-    }
+    List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.findMobileClinicDonorsByVenue(venueId);
+    List<MobileClinicLookUpDonorViewModel> donors = mobileClinicDonorViewModelFactory.createMobileClinicDonorViewModels(mobileClinicDonors, clinicDate);
+
+    map.put("donors", donors);
+
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+  }
 }

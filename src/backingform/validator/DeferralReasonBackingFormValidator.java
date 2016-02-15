@@ -13,27 +13,27 @@ import backingform.DeferralReasonBackingForm;
 
 @Component
 public class DeferralReasonBackingFormValidator extends BaseValidator<DeferralReasonBackingForm> {
-  
+
   @Autowired
   private DeferralReasonRepository deferralReasonRepository;
 
-    @Override
-    public void validateForm(DeferralReasonBackingForm form, Errors errors) {
-        if (isDuplicateDeferralReason(form.getDeferralReason())) {
-            errors.rejectValue("reason", "400", "Deferral Reason already exists.");
-        }
-        
-        if (form.getDurationType() != DurationType.PERMANENT && (form.getDefaultDuration() == null ||
-                form.getDefaultDuration() <= 0)) {
-            errors.rejectValue("defaultDuration", "400", "Default duration must be a positive number of days");
-        }
+  @Override
+  public void validateForm(DeferralReasonBackingForm form, Errors errors) {
+    if (isDuplicateDeferralReason(form.getDeferralReason())) {
+      errors.rejectValue("reason", "400", "Deferral Reason already exists.");
     }
-    
-    @Override
-    public String getFormName() {
-      return "deferralReason";
+
+    if (form.getDurationType() != DurationType.PERMANENT && (form.getDefaultDuration() == null ||
+        form.getDefaultDuration() <= 0)) {
+      errors.rejectValue("defaultDuration", "400", "Default duration must be a positive number of days");
     }
-    
+  }
+
+  @Override
+  public String getFormName() {
+    return "deferralReason";
+  }
+
 
   private boolean isDuplicateDeferralReason(DeferralReason deferralReason) {
     String reason = deferralReason.getReason();

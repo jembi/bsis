@@ -10,10 +10,10 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 public class DateTimeSerialiser extends JsonSerializer<Date> {
 
-    @Override
-    public void serialize(Date date, JsonGenerator jsonGenerator, SerializerProvider provider) throws IOException,
-            JsonProcessingException {
-        jsonGenerator.writeString(CustomDateFormatter.getDateTimeString(date));
-    }
+  @Override
+  public void serialize(Date date, JsonGenerator jsonGenerator, SerializerProvider provider) throws IOException,
+      JsonProcessingException {
+    jsonGenerator.writeString(CustomDateFormatter.getDateTimeString(date));
+  }
 
 }

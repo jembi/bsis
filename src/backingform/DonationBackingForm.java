@@ -80,15 +80,15 @@ public class DonationBackingForm {
       return "";
     return CustomDateFormatter.getDateTimeString(donation.getDonationDate());
   }
-  
+
   @JsonSerialize(using = DateTimeSerialiser.class)
   public Date getBleedStartTime() {
-      return donation.getBleedStartTime();
+    return donation.getBleedStartTime();
   }
-  
+
   @JsonSerialize(using = DateTimeSerialiser.class)
   public Date getBleedEndTime() {
-      return donation.getBleedEndTime();
+    return donation.getBleedEndTime();
   }
 
   public String getDonationIdentificationNumber() {
@@ -104,7 +104,7 @@ public class DonationBackingForm {
       donation.setDonationDate(null);
     }
   }
-  
+
   public void setBleedStartTime(String bleedStartTime) {
     try {
       donation.setBleedStartTime(CustomDateFormatter.getDateTimeFromString(bleedStartTime));
@@ -113,7 +113,7 @@ public class DonationBackingForm {
       donation.setBleedStartTime(null);
     }
   }
-  
+
   public void setBleedEndTime(String bleedEndTime) {
     try {
       donation.setBleedEndTime(CustomDateFormatter.getDateTimeFromString(bleedEndTime));
@@ -122,7 +122,7 @@ public class DonationBackingForm {
       donation.setBleedEndTime(null);
     }
   }
-	  
+
   public void setDonation(Donation donation) {
     this.donation = donation;
   }
@@ -160,7 +160,7 @@ public class DonationBackingForm {
   public PackType getPackType() {
     return donation.getPackType();
   }
-  
+
   @JsonIgnore
   public Date getLastUpdated() {
     return donation.getLastUpdated();
@@ -204,37 +204,33 @@ public class DonationBackingForm {
   public void setDonor(Donor donor) {
     donation.setDonor(donor);
   }
-  
- 
-  public void setDonationType(DonationType donationType){
-  	if (donationType == null){
-  		donation.setDonationType(null);
-  	}
-  	else if (donationType.getId() == null){
-  		donation.setDonationType(null);
-  	}
-  	else{
-  		DonationType dt = new DonationType();
-  		dt.setId(donationType.getId());
-  		donation.setDonationType(dt);
-  	}
+
+
+  public void setDonationType(DonationType donationType) {
+    if (donationType == null) {
+      donation.setDonationType(null);
+    } else if (donationType.getId() == null) {
+      donation.setDonationType(null);
+    } else {
+      DonationType dt = new DonationType();
+      dt.setId(donationType.getId());
+      donation.setDonationType(dt);
+    }
   }
 
-  public void setPackType(PackType packType){
-  	if (packType == null){
-  		donation.setPackType(null);
-  	}
-  	else if (packType.getId() == null){
-  		donation.setPackType(null);
-  	}
-  	else{
-  		PackType bt = new PackType();
-  		bt.setId(packType.getId());
-  		bt.setPackType(packType.getPackType());
-  		donation.setPackType(bt);
-  	}
+  public void setPackType(PackType packType) {
+    if (packType == null) {
+      donation.setPackType(null);
+    } else if (packType.getId() == null) {
+      donation.setPackType(null);
+    } else {
+      PackType bt = new PackType();
+      bt.setId(packType.getId());
+      bt.setPackType(packType.getPackType());
+      donation.setPackType(bt);
+    }
   }
-  
+
   public void setLastUpdated(Date lastUpdated) {
     donation.setLastUpdated(lastUpdated);
   }
@@ -262,7 +258,7 @@ public class DonationBackingForm {
   public void generateDonationIdentificationNumber() {
     String uniqueDonationNumber;
     uniqueDonationNumber = "C-" +
-                        RandomStringUtils.randomNumeric(ID_LENGTH).toUpperCase();
+        RandomStringUtils.randomNumeric(ID_LENGTH).toUpperCase();
     donation.setDonationIdentificationNumber(uniqueDonationNumber);
   }
 
@@ -273,15 +269,15 @@ public class DonationBackingForm {
   public String getDonationBatchNumber() {
     if (donation == null || donation.getDonationBatch() == null ||
         donation.getDonationBatch().getBatchNumber() == null
-       )
+        )
       return "";
     return donation.getDonationBatch().getBatchNumber();
   }
 
   public void setDonorNumber(String donorNumber) {
-	this.donorNumber = donorNumber;
+    this.donorNumber = donorNumber;
   }
-  
+
   public void setDonationBatchNumber(String donationBatchNumber) {
     if (StringUtils.isNotBlank(donationBatchNumber)) {
       DonationBatch donationBatch = new DonationBatch();
@@ -302,11 +298,10 @@ public class DonationBackingForm {
 
   @JsonIgnore
   public void setDonorIdHidden(String donorId) {
-    if (donorId == null || donorId=="") {
+    if (donorId == null || donorId == "") {
       donation.setDonor(null);
-    }
-    else {
-      
+    } else {
+
       try {
         Donor d = new Donor();
         d.setId(Long.parseLong(donorId));
@@ -335,158 +330,158 @@ public class DonationBackingForm {
     this.useParametersFromBatch = useParametersFromBatch;
   }
 
-    public BigDecimal getDonorWeight() {
-        return donation.getDonorWeight();
+  public BigDecimal getDonorWeight() {
+    return donation.getDonorWeight();
+  }
+
+  public void setDonorWeight(BigDecimal donorWeight) {
+    donation.setDonorWeight(donorWeight);
+  }
+
+  public BigDecimal getHaemoglobinCount() {
+    return donation.getHaemoglobinCount();
+  }
+
+  public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
+    donation.setHaemoglobinCount(haemoglobinCount);
+  }
+
+  public HaemoglobinLevel getHaemoglobinLevel() {
+    return donation.getHaemoglobinLevel();
+  }
+
+  public void setHaemoglobinLevel(HaemoglobinLevel haemoglobinLevel) {
+    donation.setHaemoglobinLevel(haemoglobinLevel);
+  }
+
+  public Integer getDonorPulse() {
+    return donation.getDonorPulse();
+  }
+
+  public void setDonorPulse(Integer donorPulse) {
+    donation.setDonorPulse(donorPulse);
+  }
+
+  public Integer getBloodPressureSystolic() {
+    return donation.getBloodPressureSystolic();
+  }
+
+  public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
+    donation.setBloodPressureSystolic(bloodPressureSystolic);
+  }
+
+  public Integer getBloodPressureDiastolic() {
+    return donation.getBloodPressureDiastolic();
+  }
+
+  public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+    donation.setBloodPressureDiastolic(bloodPressureDiastolic);
+  }
+
+  public String getExtraBloodTypeInformation() {
+    return donation.getExtraBloodTypeInformation();
+  }
+
+  public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
+    donation.setExtraBloodTypeInformation(extraBloodTypeInformation);
+  }
+
+  @JsonIgnore
+  public String getTTIStatus() {
+    if (donation.getTTIStatus() != null)
+      return donation.getTTIStatus().toString();
+    else
+      return "";
+  }
+
+  @JsonIgnore
+  public String getBloodTypingStatus() {
+    if (donation.getBloodTypingStatus() != null)
+      return donation.getBloodTypingStatus().toString();
+    else
+      return "";
+  }
+
+  @JsonIgnore
+  public String getBloodTypingMatchStatus() {
+    if (donation.getBloodTypingMatchStatus() != null)
+      return donation.getBloodTypingMatchStatus().toString();
+    else
+      return "";
+  }
+
+  @JsonIgnore
+  public List<Component> getComponents() {
+    return donation.getComponents();
+  }
+
+  @JsonIgnore
+  public String getBloodGroup() {
+    if (StringUtils.isBlank(donation.getBloodAbo()) || StringUtils.isBlank(donation.getBloodRh()))
+      return "";
+    else
+      return donation.getBloodAbo() + donation.getBloodRh();
+  }
+
+  public String getBloodAbo() {
+    if (StringUtils.isBlank(donation.getBloodAbo()) || donation.getBloodAbo() == null) {
+      return "";
+    } else {
+      return donation.getBloodAbo();
+    }
+  }
+
+  public void setBloodAbo(String bloodAbo) {
+    if (StringUtils.isBlank(bloodAbo)) {
+      donation.setBloodAbo(null);
+    } else {
+      donation.setBloodAbo(bloodAbo);
+    }
+  }
+
+  public String getBloodRh() {
+    if (StringUtils.isBlank(donation.getBloodRh()) || donation.getBloodRh() == null) {
+      return "";
+    } else {
+      return donation.getBloodRh();
+    }
+  }
+
+  public void setBloodRh(String bloodRh) {
+    if (StringUtils.isBlank(bloodRh)) {
+      donation.setBloodRh(null);
+    } else {
+      donation.setBloodRh(bloodRh);
+    }
+  }
+
+  public void setVenue(Location venue) {
+    if (venue == null || venue.getId() == null) {
+      donation.setVenue(null);
+    } else {
+      donation.setVenue(venue);
     }
 
-    public void setDonorWeight(BigDecimal donorWeight) {
-        donation.setDonorWeight(donorWeight);
-    }
+  }
 
-    public BigDecimal getHaemoglobinCount() {
-        return donation.getHaemoglobinCount();
-    }
+  @JsonIgnore
+  public void setPermissions(Map<String, Boolean> permissions) {
+    // Ignore
+  }
 
-    public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
-        donation.setHaemoglobinCount(haemoglobinCount);
-    }
+  public void setAdverseEvent(AdverseEventBackingForm adverseEventBackingForm) {
+    this.adverseEventBackingForm = adverseEventBackingForm;
+  }
 
-    public HaemoglobinLevel getHaemoglobinLevel() {
-        return donation.getHaemoglobinLevel();
-    }
+  public AdverseEventBackingForm getAdverseEvent() {
+    return adverseEventBackingForm;
+  }
 
-    public void setHaemoglobinLevel(HaemoglobinLevel haemoglobinLevel) {
-        donation.setHaemoglobinLevel(haemoglobinLevel);
-    }
+  public boolean isReleased() {
+    return donation.isReleased();
+  }
 
-    public Integer getDonorPulse() {
-        return donation.getDonorPulse();
-    }
-    
-    public void setDonorPulse(Integer donorPulse) {
-        donation.setDonorPulse(donorPulse);
-    }
-    
-    public Integer getBloodPressureSystolic() {
-        return donation.getBloodPressureSystolic();
-    }
-    
-    public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
-        donation.setBloodPressureSystolic(bloodPressureSystolic);
-    }
-    
-    public Integer getBloodPressureDiastolic() {
-        return donation.getBloodPressureDiastolic();
-    }
-    
-    public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
-        donation.setBloodPressureDiastolic(bloodPressureDiastolic);
-    }
-    
-    public String getExtraBloodTypeInformation() {
-        return donation.getExtraBloodTypeInformation();
-    }
-
-    public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
-        donation.setExtraBloodTypeInformation(extraBloodTypeInformation);
-    }
-    
-    @JsonIgnore
-    public String getTTIStatus() {
-	    if(donation.getTTIStatus()!=null)
-	    	return donation.getTTIStatus().toString();
-	    else
-	        return "";
-	}
-    
-    @JsonIgnore
-    public String getBloodTypingStatus() {
-        if(donation.getBloodTypingStatus()!=null)
-	    	return donation.getBloodTypingStatus().toString();
-	    else
-	        return "";
-    }
-    
-    @JsonIgnore
-    public String getBloodTypingMatchStatus() {
-        if(donation.getBloodTypingMatchStatus()!=null)
-	    	return donation.getBloodTypingMatchStatus().toString();
-	    else
-	        return "";
-    }
-    
-    @JsonIgnore
-    public List<Component> getComponents() {
-        return donation.getComponents();
-    }
-    
-    @JsonIgnore
-    public String getBloodGroup() {
-	    if (StringUtils.isBlank(donation.getBloodAbo()) || StringUtils.isBlank(donation.getBloodRh()))
-	      return "";
-	    else
-	      return donation.getBloodAbo() + donation.getBloodRh();
-	}
-  
-    public String getBloodAbo() {
-        if (StringUtils.isBlank(donation.getBloodAbo()) || donation.getBloodAbo() == null) {
-            return "";
-        } else {
-            return donation.getBloodAbo();
-        }
-    }
-
-    public void setBloodAbo(String bloodAbo) {
-        if (StringUtils.isBlank(bloodAbo)) {
-        	donation.setBloodAbo(null);
-        } else {
-        	donation.setBloodAbo(bloodAbo);
-        }
-    }
-
-    public String getBloodRh() {
-        if (StringUtils.isBlank(donation.getBloodRh()) || donation.getBloodRh() == null) {
-            return "";
-        } else {
-            return donation.getBloodRh();
-        }
-    }
-
-    public void setBloodRh(String bloodRh) {
-        if (StringUtils.isBlank(bloodRh)) {
-        	donation.setBloodRh(null);
-        } else {
-        	donation.setBloodRh(bloodRh);
-        }
-    }
-    
-    public void setVenue(Location venue){
-        if(venue == null || venue.getId() == null){
-            donation.setVenue(null);
-        }else{
-            donation.setVenue(venue);
-        }
-            
-    }
-    
-    @JsonIgnore
-    public void setPermissions(Map<String, Boolean> permissions) {
-        // Ignore
-    }
-    
-    public void setAdverseEvent(AdverseEventBackingForm adverseEventBackingForm) {
-        this.adverseEventBackingForm = adverseEventBackingForm;
-    }
-    
-    public AdverseEventBackingForm getAdverseEvent() {
-        return adverseEventBackingForm;
-    }
-    
-    public boolean isReleased() {
-      return donation.isReleased();
-    }
-    
-    public void setReleased(boolean released) {
-      donation.setReleased(released);
-    }
+  public void setReleased(boolean released) {
+    donation.setReleased(released);
+  }
 }

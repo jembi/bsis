@@ -24,35 +24,35 @@ public class BloodTestingRule extends BaseEntity {
   /**
    * Comma Separated list of ids of tests which correspond to the pattern.
    */
-  @Column(length=200)
+  @Column(length = 200)
   private String bloodTestsIds;
 
-  @Column(length=50)
+  @Column(length = 50)
   private String pattern;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=12)
+  @Column(length = 12)
   private DonationField donationFieldChanged;
 
-  @Column(length=30)
+  @Column(length = 30)
   private String newInformation;
 
-  @Column(length=30)
+  @Column(length = 30)
   private String extraInformation;
 
-  @Column(length=60)
+  @Column(length = 60)
   private String pendingTestsIds;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=30)
+  @Column(length = 30)
   private BloodTestCategory category;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=30)
+  @Column(length = 30)
   private BloodTestSubCategory subCategory;
 
   @Enumerated(EnumType.STRING)
-  @Column(length=30)
+  @Column(length = 30)
   private BloodTestContext context;
 
   /**
