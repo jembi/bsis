@@ -8,9 +8,6 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import model.bloodtesting.TTIStatus;
-import model.donation.Donation;
-
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseDataSourceConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -29,6 +26,8 @@ import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import model.bloodtesting.TTIStatus;
+import model.donation.Donation;
 import repository.DonationRepository;
 import viewmodel.BloodTestingRuleResult;
 
@@ -312,5 +311,14 @@ public class BloodTestingRuleEngineTest {
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("TTIStatus is TTI_UNSAFE", TTIStatus.TTI_UNSAFE, result.getTTIStatus());
     Assert.assertEquals("Pending TTI tests", 2, result.getPendingTTITestsIds().size());
+  }
+
+  @Test
+  public void testBloodTestingRuleEngineTTIReEntryRequiredList() throws Exception {
+    Donation donation = donationRepository.findDonationById(14l);
+    Map<Long, String> testResults = new HashMap<Long, String>();
+    testResults.put(17L, "POS");
+    BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, testResults);
+    Assert.assertEquals("Re-entry required TTI tests", 1, result.getReEntryRequiredTTITestIds().size());
   }
 }
