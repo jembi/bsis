@@ -647,8 +647,11 @@ public class BloodTestsServiceTest {
         .withDonationBatch(donationBatch)
         .build();
 
-    Map<Long, String> bloodTestResults = new HashMap<>();
+    Map<Long, String> bloodTestResults = new HashMap<>(); // tests passed to the 'saveBloodTests' service method
     bloodTestResults.put(1l, "AB");
+    
+    Map<Long, String> reEnteredBloodTestResults = new HashMap<>(); // tests passed to the rules engine
+    
     BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(17l).build();
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
     bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1l).withBloodTest(bloodTest).build());
@@ -664,7 +667,7 @@ public class BloodTestsServiceTest {
 
     // set up mocks
     when(donationRepository.findDonationById(donation.getId())).thenReturn(donation);
-    when(ruleEngine.applyBloodTests(donation, new HashMap<Long, String>())).thenReturn(ruleResult).thenReturn(ruleResult);
+    when(ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults)).thenReturn(ruleResult).thenReturn(ruleResult);
     when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE " + "bt.donation.id=:donationId",
         BloodTestResult.class)).thenReturn(typedQuery);
     when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
@@ -678,7 +681,7 @@ public class BloodTestsServiceTest {
     service.saveBloodTests(donation.getId(), bloodTestResults, false);
 
     // check asserts
-    Mockito.verify(ruleEngine, Mockito.times(2)).applyBloodTests(donation, new HashMap<Long, String>());
+    Mockito.verify(ruleEngine, Mockito.times(2)).applyBloodTests(donation, reEnteredBloodTestResults);
   }
 
   @Test
