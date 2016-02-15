@@ -321,4 +321,14 @@ public class BloodTestingRuleEngineTest {
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, testResults);
     Assert.assertEquals("Re-entry required TTI tests", 1, result.getReEntryRequiredTTITestIds().size());
   }
+
+  @Test
+  public void testBloodTestingRuleEngineBloodTypingReEntryRequiredList() throws Exception {
+    Donation donation = donationRepository.findDonationById(14l);
+    Map<Long, String> testResults = new HashMap<Long, String>();
+    testResults.put(1L, "A");
+    BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, testResults);
+    Assert.assertEquals("Re-entry required blood typing tests", 1,
+        result.getReEntryRequiredBloodTypingTestIds().size());
+  }
 }
