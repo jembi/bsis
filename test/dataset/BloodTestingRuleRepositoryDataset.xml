@@ -404,6 +404,14 @@
 		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
 		ineligibleDonor="0" released="0" />
+	<Donation id="14" bloodAbo="" bloodRh="" bloodTypingStatus="NOT_DONE"
+		bloodTypingMatchStatus="NOT_DONE" donationDate="2016-04-05 00:00:00.0"
+		donationIdentificationNumber="126426" extraBloodTypeInformation=""
+		isDeleted="0" createdDate="2016-04-18 07:53:57.0" lastUpdated="2016-04-24 04:43:20.0"
+		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="1"
+		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
+		venue_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
+		ineligibleDonor="0" released="0" />
 
 	<BloodTestResult id="1" createdDate="2015-02-06 02:09:13.0"
 		lastUpdated="2015-02-06 02:09:13.0" notes="" result="NEG"
@@ -553,6 +561,10 @@
 		lastUpdated="2016-04-24 04:42:49.0" notes="" result="POS"
 		testedOn="2016-04-24 04:42:49.0" bloodTest_id="17" donation_id="13"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
+	<BloodTestResult id="51" createdDate="2016-04-24 04:42:49.0"
+		lastUpdated="2016-04-24 04:42:49.0" notes="" result="POS"
+		testedOn="2016-04-24 04:42:49.0" bloodTest_id="17" donation_id="14"
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="true"/>
 
     <Component id="1" createdOn="2015-02-02 10:26:36.0" expiresOn="2015-03-09 10:26:36.0"
                isDeleted="false" createdDate="2015-02-02 03:42:04.0"
