@@ -200,6 +200,8 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     Donation donation = donationRepository.findDonationById(9l);
     Map<Long, String> testResults = new HashMap<Long, String>();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+    ruleResult.setBloodAbo("A");
+    ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     ruleResult.setTTIStatus(TTIStatus.NOT_DONE);
@@ -217,6 +219,8 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     Donation donation = donationRepository.findDonationById(9l);
     Map<Long, String> testResults = new HashMap<Long, String>();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+    ruleResult.setBloodAbo("A");
+    ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     ruleResult.setTTIStatus(TTIStatus.NOT_DONE);
