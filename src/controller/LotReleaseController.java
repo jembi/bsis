@@ -68,7 +68,7 @@ public class LotReleaseController {
   @RequestMapping(value = "/status/{donationIdentificationNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DISCARDS + "')")
   public ResponseEntity findlotRelease(HttpServletRequest request,
-                                       @PathVariable String donationIdentificationNumber) {
+      @PathVariable String donationIdentificationNumber) {
     Map<String, Object> componentMap = new HashMap<String, Object>();
 
     Donation donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
@@ -147,11 +147,11 @@ public class LotReleaseController {
               "^FT62,204^A0N,17,38^FH\\^FDDate Bled^FS" +
               "^FT65,387^A0N,20,24^FH\\^FDNot intended for actual use^FS" +
               "^PQ1,0,1,Y^XZ"
-      );
+          );
 
-			         
-	    	
-	    	/* OLD ZPL CODE    	
+
+
+      /* OLD ZPL CODE    	
         map.put("labelZPL",
 	    			         "^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD15^JUS^LRN^CI0^XZ" +
 	    			         "^XA" +
@@ -192,13 +192,13 @@ public class LotReleaseController {
 	    	    			 inverse +
 	    			         "^PQ1,0,1,Y^XZ"
 	    			         );
-	    	
-	    	*/
-	    	
-	    		
-	    
-	    	
-	    	/*
+
+       */
+
+
+
+
+      /*
 	    	// Generate ZPL label
 	    	map.addObject("labelZPL",		
 	    		"${^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD30^JUS^LRN^CI0^XZ"+
@@ -240,7 +240,7 @@ public class LotReleaseController {
 	    				//inverse +
 	    				"^PQ1,0,1,Y^XZ}$"
 	    		);
-	    		*/
+       */
     }
 
     map.put("success", success);
@@ -250,7 +250,7 @@ public class LotReleaseController {
   @RequestMapping(value = "/print/discardlabel/{componentId}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
   public ResponseEntity<Map<String, Object>> printDiscard
-      (@PathVariable Long componentId) {
+  (@PathVariable Long componentId) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     boolean success = false;
@@ -289,7 +289,7 @@ public class LotReleaseController {
               "^FD>:" + component.getDonationIdentificationNumber() + "^FS" +
               "^FT88,118^A0N,28,28^FH\\^FD2013/01/01^FS" +
               "^PQ1,0,1,Y^XZ^XA^ID000.GRF^FS^XZ"
-      );
+          );
     }
 
     map.put("success", success);
@@ -311,7 +311,7 @@ public class LotReleaseController {
         success = false;
       }
       // TODO: improve component & blood test checks, or remove if not relevant
-    	/*
+      /*
     	else if(donation.getComponents()!=null && !donation.getComponents().isEmpty() && 
     			(donation.getComponents().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED) 
     			|| donation.getComponents().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_EXPIRED)
@@ -323,18 +323,18 @@ public class LotReleaseController {
     			&& !donation.getBloodTestResults().get(0).getBloodTest().getPositiveResults().equals(LotReleaseConstant.POSITIVE_BLOOD)){
     		success=false;
     	}
-    	*/
-    	else if(donation.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE) 
-    			|| donation.getBloodTypingStatus().equals(BloodTypingStatus.PENDING_TESTS)
-    			){
-    		success = false;
-    	}
-    	// TODO: improve deferrals check - should only flag donors that are CURRENTLY deferred 
-    	/*else if(donation.getDonor().getDeferrals()!=null 
+       */
+      else if(donation.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE) 
+          || donation.getBloodTypingStatus().equals(BloodTypingStatus.PENDING_TESTS)
+          ){
+        success = false;
+      }
+      // TODO: improve deferrals check - should only flag donors that are CURRENTLY deferred 
+      /*else if(donation.getDonor().getDeferrals()!=null 
     			&& ! donation.getDonor().getDeferrals().isEmpty()){
     		success=false;
     	}
-    	*/
+       */
 
     } else {
       success = false;

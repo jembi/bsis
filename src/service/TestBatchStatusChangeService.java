@@ -38,8 +38,8 @@ public class TestBatchStatusChangeService {
   private BloodTestsService bloodTestsService;
   @Autowired
   private DonationRepository donationRepository;
-    @Autowired
-    private DonorRepository donorRepository;
+  @Autowired
+  private DonorRepository donorRepository;
 
   public void handleRelease(TestBatch testBatch) {
 
@@ -60,12 +60,12 @@ public class TestBatchStatusChangeService {
   }
 
   public void handleRelease(Donation donation) {
-        
-        // Update the donor's Abo/Rh values to match the donation
-        Donor donor = donation.getDonor();
-        donor.setBloodAbo(donation.getBloodAbo());
-        donor.setBloodRh(donation.getBloodRh());
-        donorRepository.saveDonor(donor);
+
+    // Update the donor's Abo/Rh values to match the donation
+    Donor donor = donation.getDonor();
+    donor.setBloodAbo(donation.getBloodAbo());
+    donor.setBloodRh(donation.getBloodRh());
+    donorRepository.saveDonor(donor);
 
     if (!donation.getPackType().getTestSampleProduced()) {
       LOGGER.debug("Skipping donation without test sample: " + donation);
