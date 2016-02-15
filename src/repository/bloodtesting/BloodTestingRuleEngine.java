@@ -170,11 +170,9 @@ public class BloodTestingRuleEngine {
     }
 
     if (patternMatch) {
-      if (LOGGER.isDebugEnabled()) {
-        LOGGER.debug("Pattern matched for rule with id '" + rule.getId() + "' and subcategory '"
-            + rule.getSubCategory() + "'.");
-      }
       if (LOGGER.isTraceEnabled()) {
+        LOGGER.trace("Pattern matched for rule with id '" + rule.getId() + "' and subcategory '"
+            + rule.getSubCategory() + "'.");
         LOGGER.trace("Test ids: " + rule.getBloodTestsIds());
         LOGGER.trace("pattern: " + rule.getPattern());
         LOGGER.trace("Donation field changed: " + rule.getDonationFieldChanged());
@@ -225,11 +223,9 @@ public class BloodTestingRuleEngine {
         }
       }
     } else {
-      if (LOGGER.isDebugEnabled()) {
-        LOGGER.debug("Pattern NOT matched for rule with id '" + rule.getId()
-            + "' and at least one result was found for pattern: " + atLeastOneResultFoundForPattern);
-      }
       if (LOGGER.isTraceEnabled()) {
+        LOGGER.trace("Pattern NOT matched for rule with id '" + rule.getId()
+            + "' and at least one result was found for pattern: " + atLeastOneResultFoundForPattern);
         LOGGER.trace("Test ids: " + rule.getBloodTestsIds());
         LOGGER.trace("pattern: " + rule.getPattern());
         LOGGER.trace("Donation field changed: " + rule.getDonationFieldChanged());
@@ -334,8 +330,8 @@ public class BloodTestingRuleEngine {
       bloodTypingStatus = BloodTypingStatus.COMPLETE;
     }
     
-    if (LOGGER.isInfoEnabled()) {
-      LOGGER.info("donation " + resultSet.getDonation().getId() + " for donor " + resultSet.getDonation().getDonor().getId() + " has BloodTypingStatus of " + bloodTypingStatus);
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("donation " + resultSet.getDonation().getId() + " for donor " + resultSet.getDonation().getDonor().getId() + " has BloodTypingStatus of " + bloodTypingStatus);
     }
 
     resultSet.setBloodTypingStatus(bloodTypingStatus);
@@ -370,9 +366,9 @@ public class BloodTestingRuleEngine {
       }
     }
 
-    if (LOGGER.isInfoEnabled()) {
-      LOGGER.info("donation " + donation.getId() + " for donor " + donor.getId() + " has BloodTypingMatchStatus of " + bloodTypingMatchStatus);
-      LOGGER.info("donor Abo/Rh = " + donor.getBloodAbo() + donor.getBloodRh() + " donation Abo/Rh = " + donation.getBloodAbo() + donation.getBloodRh());
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("donation " + donation.getId() + " for donor " + donor.getId() + " has BloodTypingMatchStatus of " + bloodTypingMatchStatus);
+      LOGGER.debug("donor Abo/Rh = " + donor.getBloodAbo() + donor.getBloodRh() + " donation Abo/Rh = " + donation.getBloodAbo() + donation.getBloodRh());
     }
 
     resultSet.setBloodTypingMatchStatus(bloodTypingMatchStatus);
@@ -403,8 +399,8 @@ public class BloodTestingRuleEngine {
       ttiStatus = TTIStatus.NOT_DONE;
     }
     
-    if (LOGGER.isInfoEnabled()) {
-      LOGGER.info("donation " + resultSet.getDonation().getId() + " for donor " + resultSet.getDonation().getDonor().getId() + " has TTIStatus of " + ttiStatus);
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("donation " + resultSet.getDonation().getId() + " for donor " + resultSet.getDonation().getDonor().getId() + " has TTIStatus of " + ttiStatus);
     }
 
     resultSet.setTtiStatus(ttiStatus);
