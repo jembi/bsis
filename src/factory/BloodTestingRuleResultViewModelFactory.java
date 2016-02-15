@@ -42,6 +42,7 @@ public class BloodTestingRuleResultViewModelFactory {
 
     // re-entry required tests
     ruleResult.setReEntryRequiredTTITestIds(bloodTestingRuleResultSet.getReEntryRequiredTTITestIds());
+    ruleResult.setReEntryRequiredBloodTypingTestIds(bloodTestingRuleResultSet.getReEntryRequiredBloodTypingTestIds());
 
     // blood typing results
     ruleResult.setBloodTypingMatchStatus(bloodTestingRuleResultSet.getBloodTypingMatchStatus());

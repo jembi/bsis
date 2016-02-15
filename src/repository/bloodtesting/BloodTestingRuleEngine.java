@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import factory.BloodTestingRuleResultViewModelFactory;
 import model.bloodtesting.BloodTest;
-import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestResult;
+import model.bloodtesting.BloodTestType;
 import model.bloodtesting.TTIStatus;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.bloodtesting.rules.DonationField;
@@ -116,24 +116,27 @@ public class BloodTestingRuleEngine {
     // Determine the TTI status
     setTTIStatus(resultSet);
 
-    // Determine the TTI tests that still require re-entry
-    setReEntryRequiredTTITests(resultSet);
+    // Determine the tests that still require re-entry
+    setReEntryRequiredTests(resultSet);
 
     return bloodTestingRuleResultViewModelFactory.createBloodTestResultViewModel(resultSet);
   }
 
   /**
-   * Sets the list of tti tests that require re-entry.
+   * Sets the list of tests that require re-entry.
    *
-   * @param resultSet the re entry required tti tests
+   * @param resultSet the re entry required tests
    */
-  private void setReEntryRequiredTTITests(BloodTestingRuleResultSet resultSet) {
+  private void setReEntryRequiredTests(BloodTestingRuleResultSet resultSet) {
     Map<Long, BloodTestResult> results = resultSet.getRecentTestResults();
     for (Long testId : results.keySet()) {
       BloodTestResult testResult = results.get(testId);
-      if (testResult.getBloodTest().getCategory().equals(BloodTestCategory.TTI)
-          && testResult.getReEntryRequired().equals(true)) {
-        resultSet.addReEntryRequiredTTITestIds(testId.toString());
+      if (testResult.getReEntryRequired().equals(true)) {
+        if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
+          resultSet.addReEntryRequiredTTITestIds(testId.toString());
+        } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_BLOODTYPING)) {
+          resultSet.addReEntryRequiredBloodTypingTestIds(testId.toString());
+        }
       }
     }
   }

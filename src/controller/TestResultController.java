@@ -126,6 +126,7 @@ public class TestResultController {
     Boolean basicTTIComplete = true;
     Boolean pendingBloodTypingMatchTests = false;
     Boolean reEntryRequiredTTITests = false;
+    Boolean reEntryRequiredBloodTypingTests = false;
 
     for (BloodTestingRuleResult result : ruleResults) {
       if (!result.getBloodTypingStatus().equals(BloodTypingStatus.COMPLETE)) {
@@ -148,6 +149,9 @@ public class TestResultController {
       if (result.getReEntryRequiredTTITestIds().size() > 0) {
         reEntryRequiredTTITests = true;
       }
+      if (result.getReEntryRequiredBloodTypingTestIds().size() > 0) {
+        reEntryRequiredBloodTypingTests = true;
+      }
     }
 
     map.put("pendingBloodTypingTests", pendingBloodTypingTests);
@@ -156,6 +160,7 @@ public class TestResultController {
     map.put("basicTTIComplete", basicTTIComplete);
     map.put("pendingBloodTypingMatchTests", pendingBloodTypingMatchTests);
     map.put("reEntryRequiredTTITests", reEntryRequiredTTITests);
+    map.put("reEntryRequiredBloodTypingTests", reEntryRequiredBloodTypingTests);
 
     return new ResponseEntity(map, HttpStatus.OK);
   }

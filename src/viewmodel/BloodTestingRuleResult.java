@@ -51,6 +51,8 @@ public class BloodTestingRuleResult {
   private boolean ttiUninterpretable;
 
   private List<String> reEntryRequiredTTITestIds;
+  
+  private List<String> reEntryRequiredBloodTypingTestIds;
 
   public BloodTestingRuleResult() {
   }
@@ -205,6 +207,14 @@ public class BloodTestingRuleResult {
 
   public void setReEntryRequiredTTITestIds(List<String> reEntryRequiredTTITestIds) {
     this.reEntryRequiredTTITestIds = reEntryRequiredTTITestIds;
+  }
+
+  public List<String> getReEntryRequiredBloodTypingTestIds() {
+    return reEntryRequiredBloodTypingTestIds;
+  }
+
+  public void setReEntryRequiredBloodTypingTestIds(List<String> reEntryRequiredBloodTypingTestIds) {
+    this.reEntryRequiredBloodTypingTestIds = reEntryRequiredBloodTypingTestIds;
   }
 
 }
