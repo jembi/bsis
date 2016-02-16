@@ -77,7 +77,7 @@ public class BloodTestsService {
     bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult);
     // FIXME: run the ruleEngine a 2nd time to use the correct Abo/Rh for the donation
     ruleResult = ruleEngine.applyBloodTests(donation, bloodTestResults);
-    donationRepository.saveDonation(donation);
+    bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult);
     return ruleResult;
   }
 

@@ -20,9 +20,11 @@ public class DonorMatcher extends TypeSafeMatcher<Donor> {
     description.appendText("A donor with the following state:")
         .appendText("\nId: ").appendValue(expected.getId())
         .appendText("\nDeleted: ").appendValue(expected.getIsDeleted())
-        .appendText("\nNotes: ").appendValue(expected.getNotes())
+        .appendText("\nNotes: ").appendValue(expected.getNotes()) 
         .appendText("\nDate of First Donation: ").appendValue(expected.getDateOfFirstDonation())
-        .appendText("\nDate of Last Donation: ").appendValue(expected.getDateOfLastDonation());
+        .appendText("\nDate of Last Donation: ").appendValue(expected.getDateOfLastDonation())
+        .appendText("\nBlood Abo: ").appendValue(expected.getBloodAbo())
+        .appendText("\nBlood Rh: ").appendValue(expected.getBloodRh());
   }
 
   @Override
@@ -31,7 +33,9 @@ public class DonorMatcher extends TypeSafeMatcher<Donor> {
         Objects.equals(actual.getIsDeleted(), expected.getIsDeleted()) &&
         Objects.equals(actual.getNotes(), expected.getNotes()) &&
         Objects.equals(actual.getDateOfFirstDonation(), expected.getDateOfFirstDonation()) &&
-        Objects.equals(actual.getDateOfLastDonation(), expected.getDateOfLastDonation());
+        Objects.equals(actual.getDateOfLastDonation(), expected.getDateOfLastDonation()) &&
+        Objects.equals(actual.getBloodAbo(), expected.getBloodAbo()) &&
+        Objects.equals(actual.getBloodRh(), expected.getBloodRh());
   }
 
   public static DonorMatcher hasSameStateAsDonor(Donor expected) {

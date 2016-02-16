@@ -3,6 +3,7 @@ package service;
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
+import model.donor.Donor;
 import model.donordeferral.DeferralReasonType;
 import model.testbatch.TestBatch;
 
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import repository.DonationRepository;
+import repository.DonorRepository;
 import viewmodel.BloodTestingRuleResult;
 
 @Transactional
@@ -36,6 +38,8 @@ public class TestBatchStatusChangeService {
   private BloodTestsService bloodTestsService;
   @Autowired
   private DonationRepository donationRepository;
+  @Autowired
+  private DonorRepository donorRepository;
 
   public void handleRelease(TestBatch testBatch) {
 
@@ -56,6 +60,12 @@ public class TestBatchStatusChangeService {
   }
 
   public void handleRelease(Donation donation) {
+
+    // Update the donor's Abo/Rh values to match the donation
+    Donor donor = donation.getDonor();
+    donor.setBloodAbo(donation.getBloodAbo());
+    donor.setBloodRh(donation.getBloodRh());
+    donorRepository.saveDonor(donor);
 
     if (!donation.getPackType().getTestSampleProduced()) {
       LOGGER.debug("Skipping donation without test sample: " + donation);

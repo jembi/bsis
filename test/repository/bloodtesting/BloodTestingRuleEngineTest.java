@@ -21,15 +21,11 @@ import org.dbunit.operation.DatabaseOperation;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import repository.DonationRepository;
+import suites.ContextDependentTestSuite;
 import viewmodel.BloodTestingRuleResult;
 
 /**
@@ -37,11 +33,7 @@ import viewmodel.BloodTestingRuleResult;
  * BloodTestingRuleRepositoryDataset.xml which contains all the data used in the tests. Below is
  * some commented out code that can be used to generate XML files from the database.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@Transactional
-@WebAppConfiguration
-public class BloodTestingRuleEngineTest {
+public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
 
   @Autowired
   BloodTestingRuleEngine bloodTestingRuleEngine;
@@ -70,7 +62,8 @@ public class BloodTestingRuleEngineTest {
     try {
       IDataSet dataSet = getDataSet();
       DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
-    } finally {
+    }
+    finally {
       connection.close();
     }
   }
@@ -81,17 +74,19 @@ public class BloodTestingRuleEngineTest {
     try {
       IDataSet dataSet = getDataSet();
       DatabaseOperation.DELETE_ALL.execute(connection, dataSet);
-    } finally {
+    }
+    finally {
       connection.close();
     }
   }
 
   @Test
-  public void testBloodTestingRuleEngineWithDonation1() throws Exception {
+  public void testBloodTestingRuleEngineWithDonation1_RepeatDonorCompleteTTISafe() throws Exception {
+    // Donation 1 (donor 1) is for a repeat donor with matching blood tests and TTI safe tests
     Donation donation = donationRepository.findDonationById(1l);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
-    Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.MATCH,
-        result.getBloodTypingMatchStatus());
+    Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.MATCH, result.getBloodTypingMatchStatus());
+    Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.COMPLETE, result.getBloodTypingStatus());
     Assert.assertEquals("ttiStatus is TTI_SAFE", TTIStatus.TTI_SAFE, result.getTTIStatus());
     Assert.assertEquals("bloodAb is O", "O", result.getBloodAbo());
     Assert.assertEquals("bloodRh is +", "+", result.getBloodRh());
@@ -111,11 +106,12 @@ public class BloodTestingRuleEngineTest {
   }
 
   @Test
-  public void testBloodTestingRuleEngineWithDonation2() throws Exception {
+  public void testBloodTestingRuleEngineWithDonation2_RepeatDonorCompleteTTISafe() throws Exception {
+    // Donation 2 (donor 2) is for a repeat donor with matching blood tests and all TTI tests are safe 
     Donation donation = donationRepository.findDonationById(2l);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
-    Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.MATCH,
-        result.getBloodTypingMatchStatus());
+    Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.MATCH, result.getBloodTypingMatchStatus());
+    Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.COMPLETE, result.getBloodTypingStatus());
     Assert.assertEquals("ttiStatus is TTI_SAFE", TTIStatus.TTI_SAFE, result.getTTIStatus());
     Assert.assertEquals("bloodAb is A", "A", result.getBloodAbo());
     Assert.assertEquals("bloodRh is -", "-", result.getBloodRh());
@@ -138,11 +134,12 @@ public class BloodTestingRuleEngineTest {
   }
 
   @Test
-  public void testBloodTestingRuleEngineWithDonation3() throws Exception {
+  public void testBloodTestingRuleEngineWithDonation3_RepeatDonorWithNoTestResults() throws Exception {
+    // Donation 3 (donor 3) is for a repeat donor with no stored test results
     Donation donation = donationRepository.findDonationById(3l);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
-    Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE,
-        result.getBloodTypingMatchStatus());
+    Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE, result.getBloodTypingMatchStatus());
+    Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.NOT_DONE, result.getBloodTypingStatus());
     Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
     Assert.assertEquals("bloodAb is empty", 0, result.getBloodAbo().length());
     Assert.assertEquals("bloodRh is empty", 0, result.getBloodRh().length());
@@ -155,15 +152,15 @@ public class BloodTestingRuleEngineTest {
   }
 
   @Test
-  public void testBloodTestingRuleEngineWithDonation3AndTTIResults() throws Exception {
+  public void testBloodTestingRuleEngineWithDonation3_RepeatDonorWithAdditionalTTIResults() throws Exception {
+    // Donation 3 (donor 3) is for a repeat donor with no stored test results
     Donation donation = donationRepository.findDonationById(3l);
     Map<Long, String> ttiTests = new HashMap<Long, String>();
     ttiTests.put(17l, "NEG");
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, ttiTests);
-    Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE,
-        result.getBloodTypingMatchStatus());
-    Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
     Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE, result.getBloodTypingMatchStatus());
+    Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.NOT_DONE, result.getBloodTypingStatus());
+    Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
     Assert.assertEquals("bloodAb is empty", 0, result.getBloodAbo().length());
     Assert.assertEquals("bloodRh is empty", 0, result.getBloodRh().length());
     Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
@@ -175,51 +172,32 @@ public class BloodTestingRuleEngineTest {
   }
 
   @Test
-  public void testBloodTestingRuleEngineWithDonation7AndTTIResults() throws Exception {
-    Donation donation = donationRepository.findDonationById(7l);
-    Map<Long, String> ttiTests = new HashMap<Long, String>();
-    ttiTests.put(17l, "NEG");
-    BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, ttiTests);
-    Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE,
-        result.getBloodTypingMatchStatus());
-    Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
-    Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE, result.getBloodTypingMatchStatus());
-    Assert.assertEquals("bloodAb is empty", 0, result.getBloodAbo().length());
-    Assert.assertEquals("bloodRh is empty", 0, result.getBloodRh().length());
-    Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
-    Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
-    Assert.assertEquals("1 test done", 1, result.getAvailableTestResults().size());
-    Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
-    Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
-    Assert.assertFalse("No TTI Uninterpretable", result.getTtiUninterpretable());
-  }
-
-  @Test
-  public void testBloodTestingRuleEngineWithDonation3AndBloodTestResults() throws Exception {
+  public void testBloodTestingRuleEngineWithDonation3AndBloodTestResults_RepeatDonorWithAdditionalABOTestResults() throws Exception {
+    // Donation 3 (donor 3) is for a repeat donor and doesn't have any test results recorded
     Donation donation = donationRepository.findDonationById(3l);
     Map<Long, String> ttiTests = new HashMap<Long, String>();
     ttiTests.put(1l, "A");
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, ttiTests);
-    Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE,
-        result.getBloodTypingMatchStatus());
-    Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
     Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE, result.getBloodTypingMatchStatus());
+    Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.PENDING_TESTS, result.getBloodTypingStatus());
+    Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
     Assert.assertEquals("bloodAb has a result", 1, result.getBloodAbo().length());
     Assert.assertEquals("bloodRh is empty", 0, result.getBloodRh().length());
     Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
-    Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
-    Assert.assertEquals("1 availale test result(s)", 1, result.getAvailableTestResults().size());
+    Assert.assertEquals("No pending blood typing tests", 1, result.getPendingBloodTypingTestsIds().size());
+    Assert.assertEquals("1 available test result(s)", 1, result.getAvailableTestResults().size());
     Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
     Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
     Assert.assertFalse("No TTI Uninterpretable", result.getTtiUninterpretable());
   }
 
   @Test
-  public void testBloodTestingRuleEngineWithDonation4() throws Exception {
+  public void testBloodTestingRuleEngineWithDonation4_RepeatDonorAmbiguousBloodTyping() throws Exception {
+    // Donation 4 (donor d) is for a repeat donor with an mismatching serology outcome and no TTI tests done
     Donation donation = donationRepository.findDonationById(4l);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
-    Assert.assertEquals("bloodTypingMatchStatus is AMBIGUOUS", BloodTypingMatchStatus.AMBIGUOUS,
-        result.getBloodTypingMatchStatus());
+    Assert.assertEquals("bloodTypingMatchStatus is AMBIGUOUS", BloodTypingMatchStatus.AMBIGUOUS, result.getBloodTypingMatchStatus());
+    Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.COMPLETE, result.getBloodTypingStatus());
     Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
     Assert.assertEquals("bloodAb is B", "B", result.getBloodAbo());
     Assert.assertEquals("bloodRh is +", "+", result.getBloodRh());
@@ -239,11 +217,12 @@ public class BloodTestingRuleEngineTest {
   }
 
   @Test
-  public void testBloodTestingRuleEngineWithDonation5() throws Exception {
+  public void testBloodTestingRuleEngineWithDonation5_RepeatDonorTTIUnsafe() throws Exception {
+    // Donation 5 (donor 2) is for a repeat donor with a donation matching ABO/Rh and one POS TTI test
     Donation donation = donationRepository.findDonationById(5l);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
-    Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.MATCH,
-        result.getBloodTypingMatchStatus());
+    Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.MATCH, result.getBloodTypingMatchStatus());
+    Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.COMPLETE, result.getBloodTypingStatus());
     Assert.assertEquals("ttiStatus is TTI_UNSAFE", TTIStatus.TTI_UNSAFE, result.getTTIStatus());
     Assert.assertEquals("bloodAb is A", "A", result.getBloodAbo());
     Assert.assertEquals("bloodRh is -", "-", result.getBloodRh());
@@ -266,11 +245,12 @@ public class BloodTestingRuleEngineTest {
   }
 
   @Test
-  public void testBloodTestingRuleEngineWithDonation6() throws Exception {
+  public void testBloodTestingRuleEngineWithDonation6_RepeatDonorUninterpretableABORHAndNoTTITests() throws Exception {
+    // donation 6 (donor 2) is for a repeat donor. the ABO test result is invalid and there are no TTI tests 
     Donation donation = donationRepository.findDonationById(6l);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
-    Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.MATCH,
-        result.getBloodTypingMatchStatus());
+    Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.NOT_DONE, result.getBloodTypingMatchStatus());
+    Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.NOT_DONE, result.getBloodTypingStatus());
     Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
     Assert.assertEquals("bloodAb is unknown", "", result.getBloodAbo());
     Assert.assertEquals("bloodRh is unknown", "", result.getBloodRh());
@@ -286,5 +266,65 @@ public class BloodTestingRuleEngineTest {
     Assert.assertTrue("RH Uninterpretable", result.getRhUninterpretable());
     // TTI Uninterpretable is always set to false - is this a bug?
     //Assert.assertTrue("TTI Uninterpretable", result.getTtiUninterpretable());
+  }
+
+  @Test
+  public void testBloodTestingRuleEngineWithDonation8_1stTimeDonorInitial() throws Exception {
+    // donation 8 is for a 1st time donor who has only had initial outcomes entered for ABO/Rh
+    Donation donation = donationRepository.findDonationById(8l);
+    BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+    Assert.assertEquals("bloodTypingMatchStatus is set", BloodTypingMatchStatus.NO_MATCH, result.getBloodTypingMatchStatus());
+    Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.PENDING_TESTS, result.getBloodTypingStatus());
+    Assert.assertEquals("bloodAb is set", "O", result.getBloodAbo());
+    Assert.assertEquals("bloodRh is set", "-", result.getBloodRh());
+    Assert.assertEquals("Pending blood typing tests", 2, result.getPendingBloodTypingTestsIds().size());
+    Assert.assertEquals("Availale test results", 2, result.getAvailableTestResults().size());
+    Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
+    Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
+  }
+
+  @Test
+  public void testBloodTestingRuleEngineWithDonation9_1stTimeDonorInitialAndRepeat() throws Exception {
+    // donation 9 is for a 1st time donor who has had initial and repeat outcomes entered for ABO/Rh
+    Donation donation = donationRepository.findDonationById(9l);
+    BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+    Assert.assertEquals("bloodTypingMatchStatus is set", BloodTypingMatchStatus.MATCH, result.getBloodTypingMatchStatus());
+    Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.COMPLETE, result.getBloodTypingStatus());
+    Assert.assertEquals("bloodAb is set", "O", result.getBloodAbo());
+    Assert.assertEquals("bloodRh is set", "-", result.getBloodRh());
+    Assert.assertEquals("Pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
+    Assert.assertEquals("Availale test results", 4, result.getAvailableTestResults().size());
+    Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
+    Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
+  }
+
+  @Test
+  public void testBloodTestingRuleEngineWithDonation10_1stTimeDonorInitialAndNoRepeat() throws Exception {
+    // donation 10 is for a 1st time donor who has had initial, but no repeat outcomes entered for ABO/Rh
+    Donation donation = donationRepository.findDonationById(10l);
+    BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+    Assert.assertEquals("bloodTypingMatchStatus is set", BloodTypingMatchStatus.NO_MATCH, result.getBloodTypingMatchStatus());
+    Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.PENDING_TESTS, result.getBloodTypingStatus());
+    Assert.assertEquals("bloodAb is set", "O", result.getBloodAbo());
+    Assert.assertEquals("bloodRh is set", "-", result.getBloodRh());
+    Assert.assertEquals("Pending blood typing tests", 2, result.getPendingBloodTypingTestsIds().size());
+    Assert.assertEquals("Availale test results", 2, result.getAvailableTestResults().size());
+    Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
+    Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
+  }
+
+  @Test
+  public void testBloodTestingRuleEngineWithDonation11_1stTimeDonorInitialAndMismatchedRepeat() throws Exception {
+    // donation 11 is for a 1st time donor who has had initial and repeat outcomes entered for ABO/Rh, but the repeat outcome does not match
+    Donation donation = donationRepository.findDonationById(11l);
+    BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+    Assert.assertEquals("bloodTypingMatchStatus is set", BloodTypingMatchStatus.AMBIGUOUS, result.getBloodTypingMatchStatus());
+    Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.COMPLETE, result.getBloodTypingStatus());
+    Assert.assertEquals("bloodAb is set", "O", result.getBloodAbo());
+    Assert.assertEquals("bloodRh is set", "-", result.getBloodRh());
+    Assert.assertEquals("Pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
+    Assert.assertEquals("Availale test results", 4, result.getAvailableTestResults().size());
+    Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
+    Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
   }
 }
