@@ -194,4 +194,47 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
         donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE));
 
   }
+
+  @Test
+  public void testDonationBloodTypingStatusUpdateOnReEntryFalse() throws Exception {
+    Donation donation = donationRepository.findDonationById(8l);
+    Map<Long, String> testResults = new HashMap<Long, String>();
+    BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+    ruleResult.setBloodAbo("A");
+    ruleResult.setBloodRh("+");
+    ruleResult.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+    ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
+    ruleResult.setTTIStatus(TTIStatus.TTI_UNSAFE);
+    ruleResult.setExtraInformation(new HashSet<String>());
+
+    testResults.put(1L, "A");
+    testResults.put(2L, "+");
+    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
+    donation = donationRepository.findDonationById(8l);
+    System.out.println();
+    Assert.assertTrue("Re-entry is false, so Abo and Rh remain empty",
+        donation.getBloodAbo().equals("") && donation.getBloodRh().equals(""));
+
+  }
+
+  @Test
+  public void testDonationBloodTypingStatusUpdateOnReEntryTrue() throws Exception {
+    Donation donation = donationRepository.findDonationById(8l);
+    Map<Long, String> testResults = new HashMap<Long, String>();
+    BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+    ruleResult.setBloodAbo("A");
+    ruleResult.setBloodRh("+");
+    ruleResult.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+    ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
+    ruleResult.setTTIStatus(TTIStatus.TTI_UNSAFE);
+    ruleResult.setExtraInformation(new HashSet<String>());
+
+    testResults.put(1L, "A");
+    testResults.put(2L, "+");
+    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
+    donation = donationRepository.findDonationById(8l);
+    Assert.assertTrue("Re-entry is true, so Abo and Rh are updated to A+",
+        donation.getBloodAbo().equals("A") && donation.getBloodRh().equals("+"));
+
+  }
 }
