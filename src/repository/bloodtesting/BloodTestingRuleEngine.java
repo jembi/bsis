@@ -124,6 +124,8 @@ public class BloodTestingRuleEngine {
 
   /**
    * Sets the list of tests that require re-entry.
+   * 
+   * Note that only stored test outcomes will be added.
    *
    * @param resultSet the re entry required tests
    */
