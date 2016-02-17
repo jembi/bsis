@@ -7,6 +7,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import factory.BloodTestingRuleResultViewModelFactory;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.BloodTestType;
@@ -16,15 +23,7 @@ import model.bloodtesting.rules.BloodTestingRule;
 import model.bloodtesting.rules.DonationField;
 import model.donation.Donation;
 import model.donor.Donor;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 import viewmodel.BloodTestingRuleResult;
-import factory.BloodTestingRuleResultViewModelFactory;
 
 @Repository
 @Transactional
@@ -39,23 +38,23 @@ public class BloodTestingRuleEngine {
   private BloodTestingRuleResultViewModelFactory bloodTestingRuleResultViewModelFactory;
 
   /**
-   * Apply blood typing rules to blood typing tests (combination of what is present in the
-   * database and those passed as parameter.
-   * 
-   * @param donation Blood Typing results for which collection
+   * Apply blood typing rules to blood typing tests (combination of what is present in the database
+   * and those passed as parameter.
+   *
+   * @param donation         Blood Typing results for which collection
    * @param bloodTestResults map of blood typing test id to result. Only character allowed in the
-   *            result. multiple characters should be mapped to negative/positive (TODO) Assume
-   *            validation of results already done.
-   * @return Result of applying the rules. The following values should be present in the map
-   *         bloodAbo (what changes should be made to blood abo after applying these rules),\
-   *         bloodRh (what changes should be made to blood rh), extra (extra information that
-   *         should be added to the blood type like weak A), pendingTests (comma separated list of
-   *         blood typing tests that must be done to determine the blood type), testResults (map
-   *         of blood typing test id to blood typing test either stored or those passed to this
-   *         function or those already stored in the database), bloodTypingStatus (enum
-   *         BloodTypingStatus indicates if complete typing information is available),
-   *         storedTestResults (what blood typing results are actually stored in the database, a
-   *         subset of testResults)
+   *                         result. multiple characters should be mapped to negative/positive
+   *                         (TODO) Assume validation of results already done.
+   * @return Result of applying the rules. The following values should be present in the map 
+   *  - bloodAbo (what changes should be made to blood abo after applying these rules)
+   *  - bloodRh (what changes should be made to blood rh), extra (extra information that should be added 
+   *    to the blood type like weak A), 
+   *  - pendingTests (comma separated list of blood typing tests that must be done to determine the blood
+   *    type), - testResults (map of blood typing test id to blood typing test either stored or those 
+   *    passed to this function or those already stored in the database), 
+   *  - bloodTypingStatus (enum BloodTypingStatus indicates if complete typing information is available), 
+   *  - storedTestResults (what blood typing results are actually stored in the database, a subset of 
+   *    testResults)
    */
   public BloodTestingRuleResult applyBloodTests(Donation donation, Map<Long, String> bloodTestResults)
       throws IllegalArgumentException {
@@ -67,17 +66,19 @@ public class BloodTestingRuleEngine {
 
     List<BloodTestingRule> rules = bloodTestingRepository.getActiveBloodTestingRules();
 
-    // Get the latest test results 
+    // Get the latest test results
     Map<String, String> storedTestResults = new TreeMap<String, String>();
     Map<String, String> availableTestResults = new TreeMap<String, String>();
     Map<Long, BloodTestResult> recentTestResults = bloodTestingRepository
         .getRecentTestResultsForDonation(donation.getId());
     for (Long testId : recentTestResults.keySet()) {
       BloodTestResult testResult = recentTestResults.get(testId);
-      String testKey = testId.toString();
-      String testValue = testResult.getResult();
-      storedTestResults.put(testKey, testValue);
-      availableTestResults.put(testKey, testValue);
+      if (!testResult.getReEntryRequired()) {
+        String testKey = testId.toString();
+        String testValue = testResult.getResult();
+        storedTestResults.put(testKey, testValue);
+        availableTestResults.put(testKey, testValue);
+      }
     }
 
     // Overwrite the existing blood  and (where necessary) with the new bloodTestResults provided (as a parameter)
@@ -90,8 +91,8 @@ public class BloodTestingRuleEngine {
         availableTestResults, recentTestResults, rules);
     if (LOGGER.isInfoEnabled()) {
       LOGGER.info("BloodTestingRuleEngine running for donation with id '" + donation.getId()
-      + "' and donor with number '" + donation.getDonorNumber() + "' using available test results = "
-      + availableTestResults);
+          + "' and donor with number '" + donation.getDonorNumber() + "' using available test results = "
+          + availableTestResults);
     }
 
     // Go through each rule and see if the pattern matches the available result and tally the TTI, ABO, RH results
@@ -127,7 +128,31 @@ public class BloodTestingRuleEngine {
     // Determine the TTI status
     setTTIStatus(resultSet);
 
+    // Determine the tests that still require re-entry
+    setReEntryRequiredTests(resultSet);
+
     return bloodTestingRuleResultViewModelFactory.createBloodTestResultViewModel(resultSet);
+  }
+
+  /**
+   * Sets the list of tests that require re-entry.
+   * 
+   * Note that only stored test outcomes will be added.
+   *
+   * @param resultSet the re entry required tests
+   */
+  private void setReEntryRequiredTests(BloodTestingRuleResultSet resultSet) {
+    Map<Long, BloodTestResult> results = resultSet.getRecentTestResults();
+    for (Long testId : results.keySet()) {
+      BloodTestResult testResult = results.get(testId);
+      if (testResult.getReEntryRequired().equals(true)) {
+        if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
+          resultSet.addReEntryRequiredTTITestIds(testId.toString());
+        } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_BLOODTYPING)) {
+          resultSet.addReEntryRequiredBloodTypingTestIds(testId.toString());
+        }
+      }
+    }
   }
 
   /**
@@ -161,11 +186,9 @@ public class BloodTestingRuleEngine {
     }
 
     if (patternMatch) {
-      if (LOGGER.isDebugEnabled()) {
-        LOGGER.debug("Pattern matched for rule with id '" + rule.getId() + "' and subcategory '"
-            + rule.getSubCategory() + "'.");
-      }
       if (LOGGER.isTraceEnabled()) {
+        LOGGER.trace("Pattern matched for rule with id '" + rule.getId() + "' and subcategory '"
+            + rule.getSubCategory() + "'.");
         LOGGER.trace("Test ids: " + rule.getBloodTestsIds());
         LOGGER.trace("pattern: " + rule.getPattern());
         LOGGER.trace("Donation field changed: " + rule.getDonationFieldChanged());
@@ -214,11 +237,9 @@ public class BloodTestingRuleEngine {
         }
       }
     } else {
-      if (LOGGER.isDebugEnabled()) {
-        LOGGER.debug("Pattern NOT matched for rule with id '" + rule.getId()
-        + "' and at least one result was found for pattern: " + atLeastOneResultFoundForPattern);
-      }
       if (LOGGER.isTraceEnabled()) {
+        LOGGER.trace("Pattern NOT matched for rule with id '" + rule.getId()
+            + "' and at least one result was found for pattern: " + atLeastOneResultFoundForPattern);
         LOGGER.trace("Test ids: " + rule.getBloodTestsIds());
         LOGGER.trace("pattern: " + rule.getPattern());
         LOGGER.trace("Donation field changed: " + rule.getDonationFieldChanged());
@@ -311,6 +332,10 @@ public class BloodTestingRuleEngine {
       // There are no pending tests and the blood typing match has not been done
       bloodTypingStatus = BloodTypingStatus.NOT_DONE;
     }
+    
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("donation " + resultSet.getDonation().getId() + " for donor " + resultSet.getDonation().getDonor().getId() + " has BloodTypingStatus of " + bloodTypingStatus);
+    }
 
     resultSet.setBloodTypingStatus(bloodTypingStatus);
   }
@@ -385,9 +410,9 @@ public class BloodTestingRuleEngine {
       }
     }
 
-    if (LOGGER.isInfoEnabled()) {
-      LOGGER.info("donation " + donation.getId() + " for donor " + donor.getId() + " has bloodTypingMatchStatus of " + bloodTypingMatchStatus);
-      LOGGER.info("donor Abo/Rh = " + donor.getBloodAbo() + donor.getBloodRh() + " donation Abo/Rh = " + donation.getBloodAbo() + donation.getBloodRh());
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("donation " + donation.getId() + " for donor " + donor.getId() + " has BloodTypingMatchStatus of " + bloodTypingMatchStatus);
+      LOGGER.debug("donor Abo/Rh = " + donor.getBloodAbo() + donor.getBloodRh() + " donation Abo/Rh = " + donation.getBloodAbo() + donation.getBloodRh());
     }
 
     resultSet.setBloodTypingMatchStatus(bloodTypingMatchStatus);
@@ -436,6 +461,10 @@ public class BloodTestingRuleEngine {
     if (ttiStatus.equals(TTIStatus.TTI_SAFE) && !basicTtiTestsNotDone.isEmpty()) {
       // the test has been marked as safe while some basic TTI Tests were not done
       ttiStatus = TTIStatus.NOT_DONE;
+    }
+    
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("donation " + resultSet.getDonation().getId() + " for donor " + resultSet.getDonation().getDonor().getId() + " has TTIStatus of " + ttiStatus);
     }
 
     resultSet.setTtiStatus(ttiStatus);

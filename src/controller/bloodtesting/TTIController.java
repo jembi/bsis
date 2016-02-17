@@ -32,7 +32,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,10 +48,7 @@ import utils.PermissionConstants;
 import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.DonationViewModel;
-
 import au.com.bytecode.opencsv.CSVReader;
-
-import backingform.TestResultBackingForm;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -67,7 +63,6 @@ public class TTIController {
   @Autowired
   private DonationRepository donationRepository;
 
-
   @Autowired
   private GenericConfigRepository genericConfigRepository;
 
@@ -78,15 +73,6 @@ public class TTIController {
   private WellTypeRepository wellTypeRepository;
 
   public TTIController() {
-  }
-
-  public static String getUrl(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString();
-    String queryString = req.getQueryString(); // d=789
-    if (queryString != null) {
-      reqUrl += "?" + queryString;
-    }
-    return reqUrl;
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
@@ -138,38 +124,6 @@ public class TTIController {
     map.put("overview", ruleResult);
 
     return map;
-  }
-
-  @SuppressWarnings("unchecked")
-  @PreAuthorize("hasRole('" + PermissionConstants.ADD_TTI_OUTCOME + "')")
-  @RequestMapping(value = "/results/additional", method = RequestMethod.POST)
-  public ResponseEntity<Map<String, Object>> saveAdditionalTTITests(
-      @RequestBody TestResultBackingForm form) {
-
-    HttpStatus httpStatus = HttpStatus.CREATED;
-    Map<String, Object> m = new HashMap<String, Object>();
-
-
-    Map<Long, Map<Long, String>> ttiTestResultsMap = new HashMap<Long, Map<Long, String>>();
-    Map<Long, String> saveTestsDataWithLong = new HashMap<Long, String>();
-    ObjectMapper mapper = new ObjectMapper();
-    Map<Long, String> saveTestsData = form.getTestResults();
-    for (Long testIdStr : saveTestsData.keySet()) {
-      saveTestsDataWithLong.put(testIdStr,
-          saveTestsData.get(testIdStr));
-    }
-    Donation donation =
-        donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
-    ttiTestResultsMap.put(donation.getId(),
-        saveTestsDataWithLong);
-    Map<String, Object> results = bloodTestingRepository
-        .saveBloodTestingResults(ttiTestResultsMap, true);
-    Map<String, Object> errorMap = (Map<String, Object>) results
-        .get("errors");
-    if (errorMap != null && !errorMap.isEmpty())
-      httpStatus = HttpStatus.BAD_REQUEST;
-
-    return new ResponseEntity<Map<String, Object>>(m, httpStatus);
   }
 
   @SuppressWarnings("unchecked")

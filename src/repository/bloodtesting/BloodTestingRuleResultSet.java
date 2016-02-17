@@ -6,13 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.donation.Donation;
-
-import org.apache.log4j.Logger;
-
 import viewmodel.BloodTestingRuleResult;
 
 /**
@@ -85,6 +84,12 @@ public class BloodTestingRuleResultSet {
 
   /* collection of the TTI and Serology tests that have been done */
   private List<BloodTestingRule> bloodTestingRules = new ArrayList<BloodTestingRule>();
+
+  /* collection of the TTI tests that still require re entry */
+  private List<String> reEntryRequiredTTITestIds = new ArrayList<String>();
+
+  /* collection of the Serology tests that still require re entry */
+  private List<String> reEntryRequiredBloodTypingTestIds = new ArrayList<String>();
 
   /**
    * Creates and initialises the BloodTestingRuleResultSet
@@ -238,6 +243,13 @@ public class BloodTestingRuleResultSet {
     this.pendingTtiTestsIds.add(pendingTtiTestsId);
   }
 
+  public void addReEntryRequiredTTITestIds(String reEntryRequiredTTITestIds) {
+    this.reEntryRequiredTTITestIds.add(reEntryRequiredTTITestIds);
+  }
+
+  public void addReEntryRequiredBloodTypingTestIds(String reEntryRequiredBloodTypingTestIds) {
+    this.reEntryRequiredBloodTypingTestIds.add(reEntryRequiredBloodTypingTestIds);
+  }
 
   public Map<String, String> getStoredTestResults() {
     return storedTestResults;
@@ -306,4 +318,21 @@ public class BloodTestingRuleResultSet {
   public void setBloodTestingRules(List<BloodTestingRule> bloodTestingRules) {
     this.bloodTestingRules = bloodTestingRules;
   }
+
+  public List<String> getReEntryRequiredTTITestIds() {
+    return reEntryRequiredTTITestIds;
+  }
+
+  public void setReEntryRequiredTTITestIds(List<String> reEntryRequiredTTITestIds) {
+    this.reEntryRequiredTTITestIds = reEntryRequiredTTITestIds;
+  }
+
+  public List<String> getReEntryRequiredBloodTypingTestIds() {
+    return reEntryRequiredBloodTypingTestIds;
+  }
+
+  public void setReEntryRequiredBloodTypingTestIds(List<String> reEntryRequiredBloodTypingTestIds) {
+    this.reEntryRequiredBloodTypingTestIds = reEntryRequiredBloodTypingTestIds;
+  }
+
 }

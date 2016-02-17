@@ -1,17 +1,18 @@
 package service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.transaction.Transactional;
 
-import model.component.Component;
-import model.donation.Donation;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import model.component.Component;
+import model.donation.Donation;
+import model.testbatch.TestBatchStatus;
 import repository.ComponentRepository;
 import repository.DonationRepository;
 import repository.bloodtesting.BloodTestingRepository;
@@ -36,6 +37,9 @@ public class BloodTestsService {
 
   @Autowired
   private BloodTestingRuleEngine ruleEngine;
+  
+  @Autowired
+  private TestBatchStatusChangeService testBatchStatusChangeService;
 
   /**
    * Executes the BloodTestingRuleEngine with the configured BloodTests and returns the results
@@ -68,16 +72,26 @@ public class BloodTestsService {
    * @param donationId       Long identifier of the donation that should be updated with new test
    *                         results
    * @param bloodTestResults Map of test results
+   * @param reEntry          boolean true if the results are the re-entry and false if the results are first entry
    * @return BloodTestingRuleResult containing the results of the Blood Test Rules Engine
    */
-  public BloodTestingRuleResult saveBloodTests(Long donationId, Map<Long, String> bloodTestResults) {
+  public BloodTestingRuleResult saveBloodTests(Long donationId, Map<Long, String> bloodTestResults, boolean reEntry) {
     Donation donation = donationRepository.findDonationById(donationId);
-    // FIXME: rules engine will not provide the correct BloodTyping statuses because the Donation passed in has the wrong Abo/Rh (see FIXME below)
-    BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(donation, bloodTestResults);
-    bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult);
-    // FIXME: run the ruleEngine a 2nd time to use the correct Abo/Rh for the donation
-    ruleResult = ruleEngine.applyBloodTests(donation, bloodTestResults);
-    bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult);
+    Map<Long, String> reEnteredBloodTestResults = bloodTestResults;
+    if (!reEntry) {
+      // only outcomes that have been entered twice will be considered by the rules engine
+      reEnteredBloodTestResults = new HashMap<>();
+    }
+    BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults);
+    bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
+    // Note: Rules engine will only provide the correct BloodTyping statuses on the 2nd execution because:
+    //  - the Donation Abo/Rh is only updated after the 1st execution
+    //  - the results needing re-entry can only be determined after they are persisted (pendingReEntryTtiTestIds)
+    ruleResult = ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults);
+    bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
+    if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED && reEntry) {
+      testBatchStatusChangeService.handleRelease(donation);
+    }
     return ruleResult;
   }
 

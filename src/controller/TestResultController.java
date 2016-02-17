@@ -8,13 +8,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import model.bloodtesting.TTIStatus;
-import model.donation.Donation;
-import model.donationbatch.DonationBatch;
-import model.donor.Donor;
-import model.testbatch.TestBatch;
-import model.testbatch.TestBatchStatus;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +19,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import backingform.TestResultBackingForm;
+import model.bloodtesting.TTIStatus;
+import model.donation.Donation;
+import model.donationbatch.DonationBatch;
+import model.donor.Donor;
+import model.testbatch.TestBatch;
+import model.testbatch.TestBatchStatus;
 import repository.DonationRepository;
 import repository.TestBatchRepository;
 import repository.bloodtesting.BloodTestingRepository;
@@ -37,7 +37,6 @@ import utils.PermissionConstants;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.DonationViewModel;
 import viewmodel.DonorViewModel;
-import backingform.TestResultBackingForm;
 
 @RestController
 @RequestMapping("testresults")
@@ -62,7 +61,7 @@ public class TestResultController {
   }
 
   @RequestMapping(value = "{donationIdentificationNumber}", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
   public ResponseEntity<Map<String, Object>> findTestResult(@PathVariable String donationIdentificationNumber ) {
 
     Map<String, Object> map = new HashMap<String, Object>();
@@ -88,7 +87,7 @@ public class TestResultController {
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     List<DonationBatch> donationBatches = testBatch.getDonationBatches();
     List<Long> donationBatchIds = new ArrayList<Long>();
-    for(DonationBatch donationBatch : donationBatches){
+    for (DonationBatch donationBatch : donationBatches) {
       donationBatchIds.add(donationBatch.getId());
     }
 
@@ -108,7 +107,7 @@ public class TestResultController {
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     List<DonationBatch> donationBatches = testBatch.getDonationBatches();
     List<Long> donationBatchIds = new ArrayList<Long>();
-    for(DonationBatch donationBatch : donationBatches){
+    for (DonationBatch donationBatch : donationBatches) {
       donationBatchIds.add(donationBatch.getId());
     }
 
@@ -119,20 +118,34 @@ public class TestResultController {
     Boolean pendingTTITests = false;
     Boolean basicBloodTypingComplete = true;
     Boolean basicTTIComplete = true;
+    Boolean pendingBloodTypingMatchTests = false;
+    Boolean reEntryRequiredTTITests = false;
+    Boolean reEntryRequiredBloodTypingTests = false;
     boolean pendingBloodTypingConfirmations = false;
 
-    for(BloodTestingRuleResult result : ruleResults){
-      if(!result.getBloodTypingStatus().equals(BloodTypingStatus.COMPLETE)){
+    for (BloodTestingRuleResult result : ruleResults) {
+      if (!result.getBloodTypingStatus().equals(BloodTypingStatus.COMPLETE)) {
         basicBloodTypingComplete = false;
       }
-      if(result.getTTIStatus().equals(TTIStatus.NOT_DONE)){
+      if (result.getTTIStatus().equals(TTIStatus.NOT_DONE)) {
         basicTTIComplete = false;
       }
-      if(result.getPendingBloodTypingTestsIds().size() > 0){
+      if (result.getPendingBloodTypingTestsIds().size() > 0) {
         pendingBloodTypingTests = true;
       }
-      if(result.getPendingTTITestsIds().size() > 0){
+      if (result.getPendingTTITestsIds().size() > 0) {
         pendingTTITests = true;
+      }
+      if (!result.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE)
+          && (result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.NO_MATCH)
+          || result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS))) {
+        pendingBloodTypingMatchTests = true;
+      }
+      if (result.getReEntryRequiredTTITestIds().size() > 0) {
+        reEntryRequiredTTITests = true;
+      }
+      if (result.getReEntryRequiredBloodTypingTestIds().size() > 0) {
+        reEntryRequiredBloodTypingTests = true;
       }
       if (result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS)) {
         // A confirmation is required to resolve the ambiguous result.
@@ -145,6 +158,9 @@ public class TestResultController {
     map.put("pendingTTITests", pendingTTITests);
     map.put("basicBloodTypingComplete", basicBloodTypingComplete);
     map.put("basicTTIComplete", basicTTIComplete);
+    map.put("pendingBloodTypingMatchTests", pendingBloodTypingMatchTests);
+    map.put("reEntryRequiredTTITests", reEntryRequiredTTITests);
+    map.put("reEntryRequiredBloodTypingTests", reEntryRequiredBloodTypingTests);
     map.put("pendingBloodTypingConfirmations", pendingBloodTypingConfirmations);
 
     return new ResponseEntity<>(map, HttpStatus.OK);
@@ -152,7 +168,9 @@ public class TestResultController {
 
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
   @RequestMapping(method = RequestMethod.POST)
-  public ResponseEntity<Map<String, Object>> saveTestResults(@RequestBody @Valid TestResultBackingForm form) {
+  public ResponseEntity<Map<String, Object>> saveTestResults(
+      @RequestBody @Valid TestResultBackingForm form,
+      @RequestParam(value = "reEntry", required = false, defaultValue = "false") boolean reEntry) {
 
     HttpStatus responseStatus = HttpStatus.CREATED;
     Map<String, Object> responseMap = new HashMap<>();
@@ -165,7 +183,7 @@ public class TestResultController {
       Map<Long, String> errors = bloodTestsService.validateTestResultValues(testResults);
       if (errors.isEmpty()) {
         // No errors
-        BloodTestingRuleResult ruleResult = bloodTestsService.saveBloodTests(donation.getId(), form.getTestResults());
+        BloodTestingRuleResult ruleResult = bloodTestsService.saveBloodTests(donation.getId(), form.getTestResults(), reEntry);
         responseMap.put("success", true);
         responseMap.put("testresults", ruleResult);
       } else {
@@ -186,7 +204,7 @@ public class TestResultController {
       @RequestParam(value = "bloodAbo", required = true) String bloodAbo,
       @RequestParam(value = "bloodRh", required = true) String bloodRh) {
 
-    HttpStatus httpStatus = HttpStatus.CREATED;        
+    HttpStatus httpStatus = HttpStatus.CREATED;
     Map<String, Object> map = new HashMap<String, Object>();
 
     Donation donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);

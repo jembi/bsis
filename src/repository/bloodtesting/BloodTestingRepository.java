@@ -22,6 +22,13 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import backingform.BloodTestBackingForm;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestContext;
@@ -37,19 +44,11 @@ import model.donation.Donation;
 import model.microtiterplate.MachineReading;
 import model.microtiterplate.MicrotiterPlate;
 import model.microtiterplate.PlateSession;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import repository.GenericConfigRepository;
 import repository.WellTypeRepository;
 import viewmodel.BloodTestingRuleResult;
-import backingform.BloodTestBackingForm;
 
 @Repository
 @Transactional
@@ -64,7 +63,7 @@ public class BloodTestingRepository {
   private DonationRepository donationRepository;
 
   @Autowired
-  private DonationBatchRepository donationBatchRepository;	
+  private DonationBatchRepository donationBatchRepository;
 
   @Autowired
   private BloodTestingRuleEngine ruleEngine;
@@ -135,7 +134,7 @@ public class BloodTestingRepository {
           if (saveIfUninterpretable) {
             saveBloodTestResultsToDatabase(
                 bloodTestResultsForDonation, donation,
-                testedOn, ruleResult);
+                testedOn, ruleResult, false);
           } else {
             Map<Long, String> uninterpretable = new HashMap<Long, String>();
             donationsWithUninterpretableResults.add(donationId);
@@ -146,7 +145,7 @@ public class BloodTestingRepository {
         } else {
           saveBloodTestResultsToDatabase(
               bloodTestResultsForDonation, donation,
-              testedOn, ruleResult);
+              testedOn, ruleResult, false);
         }
 
       }
@@ -208,26 +207,53 @@ public class BloodTestingRepository {
   }
 
   /**
-   * Save the BloodTestingRuleResult and update the Donation blood ABO/Rh and blood typing statuses 
-   * 
-   * @param bloodTestResultsForDonation Map of test results with the BloodTest identifier as the key
-   * @param donation Donation associated with the test results
-   * @param testedOn Date the tests were done
-   * @param ruleResult BloodTestingRuleResult from the BloodTestingRulesEngine
+   * Save the BloodTestingRuleResult and update the Donation blood ABO/Rh and blood typing statuses
+   *
+   * @param bloodTestResultsForDonation Map of test results with the BloodTest identifier as the
+   *                                    key
+   * @param donation                    Donation associated with the test results
+   * @param testedOn                    Date the tests were done
+   * @param ruleResult                  BloodTestingRuleResult from the BloodTestingRulesEngine
+   * @param reEntry                     boolean true if the results are the re-entry and false if the results are first entry
    */
   public void saveBloodTestResultsToDatabase(
       Map<Long, String> bloodTestResultsForDonation,
       Donation donation, Date testedOn,
-      BloodTestingRuleResult ruleResult) {
+      BloodTestingRuleResult ruleResult,
+      boolean reEntry) {
+
+    Map<Long, BloodTestResult> mostRecentTestResults = getRecentTestResultsForDonation(donation.getId());
     for (Long testId : bloodTestResultsForDonation.keySet()) {
-      BloodTestResult btResult = new BloodTestResult();
-      BloodTest bloodTest = new BloodTest();
-      // the only reason we are using Long in the parameter is that
-      // jsp uses Long for all numbers. Using an integer makes it
-      // difficult
-      // to compare Integer and Long values in the jsp conditionals
-      // specially when iterating through the list of results
-      bloodTest.setId(testId);
+      BloodTestResult btResult = mostRecentTestResults.get(testId);
+      updateOrCreateBloodTestResult(btResult, testId, bloodTestResultsForDonation.get(testId), donation, testedOn, reEntry);
+    }
+    if (reEntry) {
+      updateDonationWithTestResults(donation, ruleResult);
+      em.persist(donation);
+    }
+  }
+  
+  private BloodTestResult saveBloodTestResultToDatabase(Long testId, String testResult, Donation donation,
+      Date testedOn, BloodTestingRuleResult ruleResult, boolean reEntry) {
+
+    Map<Long, BloodTestResult> mostRecentTestResults = getRecentTestResultsForDonation(donation.getId());
+    // if the blood test result is being edited, update the existing one and set reEntryRequired
+    // to true.
+    BloodTestResult btResult = mostRecentTestResults.get(testId);
+    btResult = updateOrCreateBloodTestResult(btResult, testId, testResult, donation, testedOn, reEntry);
+    if (reEntry) {
+      updateDonationWithTestResults(donation, ruleResult);
+      em.persist(donation);
+    }
+    return btResult;
+  }
+
+  private BloodTestResult updateOrCreateBloodTestResult(BloodTestResult btResult, Long testId, String testResult,
+      Donation donation, Date testedOn, boolean reEntry) {
+
+    if (btResult == null) {
+      btResult = new BloodTestResult();
+      BloodTest bloodTest = findBloodTestById(testId);
       btResult.setBloodTest(bloodTest);
       // not updating the inverse relation which means the
       // donation.getBloodTypingResults() will not
@@ -235,12 +261,24 @@ public class BloodTestingRepository {
       btResult.setDonation(donation);
       btResult.setTestedOn(testedOn);
       btResult.setNotes("");
-      btResult.setResult(bloodTestResultsForDonation.get(testId));
-      em.persist(btResult);
+      btResult.setResult(testResult);
+      // re-entry is not always required for initial tests, depends on the implementation, and it's
+      // controlled from the frontend
+      btResult.setReEntryRequired(!reEntry);
+    } else {
+      if (!testResult.equals(btResult.getResult())) {
+        btResult.setResult(testResult);
+        // re-entry is only required if the initial test result is being modified
+        btResult.setReEntryRequired(!reEntry);
+      } else {
+        // only clear the re-entry required flag if the update is a re-entry
+        if (btResult.getReEntryRequired() && reEntry) { 
+          btResult.setReEntryRequired(false);
+        }
+      }
     }
-
-    updateDonationWithTestResults(donation, ruleResult);
-    em.persist(donation);
+    em.persist(btResult);
+    return btResult;
   }
 
   public Map<Long, Map<Long, String>> validateTestResultValues(
@@ -530,11 +568,11 @@ public class BloodTestingRepository {
         BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
             donation, bloodTestResultsForDonation);
         bloodTestRuleResultsForDonations
-        .put(donationId, ruleResult);
+            .put(donationId, ruleResult);
         BloodTestResult btResult = saveBloodTestResultToDatabase(
             new Long(ttiTestId),
             bloodTestResultsForDonation.get(ttiTestId),
-            donation, testedOn, ruleResult);
+            donation, testedOn, ruleResult, false);
         // no need to worry about uninterpretable results here
         btResult.setMachineReading(machineReading);
         // bidirectional relationship with blood test result as the
@@ -564,32 +602,6 @@ public class BloodTestingRepository {
       errorsByWellNumber.put(wellNumber, new ArrayList<String>());
     }
     errorsByWellNumber.get(wellNumber).add(errorMessage);
-  }
-
-  private BloodTestResult saveBloodTestResultToDatabase(Long testId,
-      String testResult, Donation donation, Date testedOn,
-      BloodTestingRuleResult ruleResult) {
-
-    BloodTestResult btResult = new BloodTestResult();
-    BloodTest bloodTest = new BloodTest();
-    // the only reason we are using Long in the parameter is that
-    // jsp uses Long for all numbers. Using an integer makes it difficult
-    // to compare Integer and Long values in the jsp conditionals
-    // specially when iterating through the list of results
-    bloodTest.setId(testId);
-    btResult.setBloodTest(bloodTest);
-    // not updating the inverse relation which means the
-    // donation.getBloodTypingResults() will not
-    // contain this result
-    btResult.setDonation(donation);
-    btResult.setTestedOn(testedOn);
-    btResult.setNotes("");
-    btResult.setResult(testResult);
-    em.persist(btResult);
-    em.refresh(btResult);
-    updateDonationWithTestResults(donation, ruleResult);
-    em.persist(donation);
-    return btResult;
   }
 
   public void activateTests(BloodTestContext context) {
@@ -650,7 +662,7 @@ public class BloodTestingRepository {
     return bloodTestingRule;
   }
 
-  public BloodTestingRule updateBloodTypingRule(BloodTestingRule bloodTestingRule){
+  public BloodTestingRule updateBloodTypingRule(BloodTestingRule bloodTestingRule) {
     return em.merge(bloodTestingRule);
   }
 
@@ -681,7 +693,7 @@ public class BloodTestingRepository {
       bt.setBloodTestType(BloodTestType.BASIC_TTI);
       bt.setContext(BloodTestContext.RECORD_TTI_TESTS);
       Integer numConfirmtatoryTests = 0;
-      if (form.getNumberOfConfirmatoryTests()!=null)
+      if (form.getNumberOfConfirmatoryTests() != null)
         numConfirmtatoryTests = form.getNumberOfConfirmatoryTests();
       List<Long> pendingTestIds = new ArrayList<Long>();
       em.persist(bt);
@@ -709,9 +721,9 @@ public class BloodTestingRepository {
             + " Conf " + i);
         confirmatoryBloodTest.setCategory(category);
         confirmatoryBloodTest
-        .setBloodTestType(BloodTestType.CONFIRMATORY_TTI);
+            .setBloodTestType(BloodTestType.CONFIRMATORY_TTI);
         confirmatoryBloodTest
-        .setContext(BloodTestContext.RECORD_TTI_TESTS);
+            .setContext(BloodTestContext.RECORD_TTI_TESTS);
         confirmatoryBloodTest.setIsEmptyAllowed(false);
         confirmatoryBloodTest.setNegativeResults("");
         confirmatoryBloodTest.setPositiveResults("");
@@ -727,12 +739,12 @@ public class BloodTestingRepository {
             + confirmatoryBloodTest.getId());
         confirmatoryTestRule.setPattern("+");
         confirmatoryTestRule
-        .setDonationFieldChanged(DonationField.TTISTATUS);
+            .setDonationFieldChanged(DonationField.TTISTATUS);
         confirmatoryTestRule.setNewInformation(TTIStatus.TTI_UNSAFE
             .toString());
         confirmatoryTestRule.setExtraInformation("");
         confirmatoryTestRule
-        .setContext(BloodTestContext.RECORD_TTI_TESTS);
+            .setContext(BloodTestContext.RECORD_TTI_TESTS);
         confirmatoryTestRule.setCategory(BloodTestCategory.TTI);
         confirmatoryTestRule.setSubCategory(BloodTestSubCategory.TTI);
         confirmatoryTestRule.setPendingTestsIds("");
@@ -759,8 +771,7 @@ public class BloodTestingRepository {
   }
 
   /**
-   * TODO - To be improved
-   * issue - #225
+   * TODO - To be improved issue - #225
    */
   public BloodTest updateBloodTest(BloodTestBackingForm backingObject){
     return em.merge(backingObject.getBloodTest());
@@ -778,7 +789,6 @@ public class BloodTestingRepository {
     bt.setIsActive(true);
     em.merge(bt);
   }
-
 
 
   public List<BloodTestingRule> getTTIRules(boolean onlyActiveRules) {
@@ -806,7 +816,7 @@ public class BloodTestingRepository {
                 + "d.venue.id IN (:venueIds) AND "
                 + "d.donationDate BETWEEN :donationDateFrom AND :donationDateTo "
                 + "GROUP BY bt.testNameShort, d.donationDate",
-                Object[].class);
+            Object[].class);
 
     List<Long> venueIds = new ArrayList<Long>();
     if (venues != null) {
@@ -814,7 +824,7 @@ public class BloodTestingRepository {
         venueIds.add(Long.parseLong(venue));
       }
     } else {
-      venueIds.add((long)-1);
+      venueIds.add((long) -1);
     }
 
     List<Long> ttiTestIds = new ArrayList<Long>();
@@ -856,9 +866,9 @@ public class BloodTestingRepository {
     List<Object[]> resultList = query.getResultList();
 
     Calendar gcal = new GregorianCalendar();
-    Date lowerDate =  resultDateFormat.parse(resultDateFormat
+    Date lowerDate = resultDateFormat.parse(resultDateFormat
         .format(donationDateFrom));
-    Date upperDate =  resultDateFormat.parse(resultDateFormat
+    Date upperDate = resultDateFormat.parse(resultDateFormat
         .format(donationDateTo));
 
     // initialize the counter map storing (date, count) for each blood test
@@ -919,22 +929,21 @@ public class BloodTestingRepository {
 
       Donation cs = donationRepository
           .findDonationByDonationIdentificationNumber(ts.getSID());
-      if (cs != null){
+      if (cs != null) {
 
-        try{
+        try {
 
           Map<Long, Map<Long, String>> bloodTestResultsMap = new HashMap<Long, Map<Long, String>>();
           Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForDonations = new HashMap<Long, BloodTestingRuleResult>();
 
           BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
-              cs,	new HashMap<Long, String>());
+              cs, new HashMap<Long, String>());
           bloodTestRuleResultsForDonations.put(cs.getId(), ruleResult);
 
           saveBloodTestResultToDatabase(Long.valueOf(ts.getAssayNumber()),
-              ts.getInterpretation(), cs, ts.getCompleted(), ruleResult);
+              ts.getInterpretation(), cs, ts.getCompleted(), ruleResult, false);
 
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
           System.out.println("Cannot save TTI Test Result to DB");
           ex.printStackTrace();
         }
