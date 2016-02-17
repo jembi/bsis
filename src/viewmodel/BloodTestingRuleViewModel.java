@@ -22,7 +22,7 @@ public class BloodTestingRuleViewModel {
   public BloodTestingRuleViewModel(BloodTestingRule rule) {
     this.rule = rule;
     patternMap = new HashMap<Long, String>();
-    List<String> testIds = Arrays.asList(rule.getBloodTestsIds().split(","));
+    List<String> testIds = rule.getBloodTestsIds();
     String pattern = rule.getPattern();
     List<String> testResults = Arrays.asList(pattern.split(","));
     int index = 0;
@@ -37,7 +37,8 @@ public class BloodTestingRuleViewModel {
   }
 
   public String getBloodTestsIds() {
-    return rule.getBloodTestsIds();
+    // TODO: Switch to String.join(",", list) after upgrading to Java 8.
+    return StringUtils.join(rule.getBloodTestsIds(), ",");
   }
 
   public String getPattern() {
@@ -113,9 +114,7 @@ public class BloodTestingRuleViewModel {
 
   public List<Long> getPendingTestsIds() {
     List<Long> pendingTestIds = new ArrayList<Long>();
-    if (rule.getPendingTestsIds() == null)
-      return pendingTestIds;
-    for (String pendingTestId : rule.getPendingTestsIds().split(",")) {
+    for (String pendingTestId : rule.getPendingTestsIds()) {
       if (StringUtils.isBlank(pendingTestId))
         continue;
       pendingTestIds.add(Long.parseLong(pendingTestId));

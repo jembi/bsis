@@ -73,17 +73,17 @@ public class TestBatchController {
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TESTING_INFORMATION + "')")
-  public ResponseEntity findAndAddTestBatchFormGenerator() {
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TESTING_INFORMATION+"')")
+  public ResponseEntity<Map<String, Object>> findAndAddTestBatchFormGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("status", TestBatchStatus.values());
     map.put("donationBatches", getDonationBatchViewModels(donationBatchRepository.findUnassignedDonationBatches()));
-    return new ResponseEntity(map, HttpStatus.OK);
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @RequestMapping(method = RequestMethod.POST)
-  @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_BATCH + "')")
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_TEST_BATCH+"')")
   public ResponseEntity<TestBatchViewModel> addTestBatch(@Valid @RequestBody TestBatchBackingForm form) {
 
     TestBatch testBatch = testBatchRepository.saveTestBatch(form.getTestBatch(), getNextTestBatchNumber());
@@ -92,23 +92,23 @@ public class TestBatchController {
         HttpStatus.CREATED);
   }
 
-  @RequestMapping(value = "{id}", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_BATCH + "')")
+  @RequestMapping(value = "{id}",  method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")
   @Transactional(readOnly = true)
-  public ResponseEntity getTestBatchById(@PathVariable Long id) {
+  public ResponseEntity<Map<String, Object>> getTestBatchById(@PathVariable Long id){
 
     Map<String, Object> map = new HashMap<String, Object>();
     TestBatch testBatch = testBatchRepository.findTestBatchById(id);
     boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
     map.put("testBatch", testBatchViewModelFactory.createTestBatchViewModel(testBatch, isTestingSupervisor));
-    return new ResponseEntity(map, HttpStatus.OK);
+    return new ResponseEntity<>(map, HttpStatus.OK);
 
   }
 
-  @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('" + PermissionConstants.EDIT_TEST_BATCH + "')")
+  @RequestMapping(value = "{id}",  method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_TEST_BATCH+"')")
   public ResponseEntity<TestBatchViewModel> updateTestBatch(@PathVariable Long id,
-                                                            @Valid @RequestBody TestBatchBackingForm form) {
+      @Valid @RequestBody TestBatchBackingForm form){
 
     TestBatch testBatch = testBatchCRUDService.updateTestBatch(id, form.getTestBatch().getStatus(), form.getTestBatch()
         .getCreatedDate(), form.getDonationBatchIds());
@@ -116,9 +116,9 @@ public class TestBatchController {
   }
 
   @RequestMapping(value = "/search", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_BATCH + "')")
-  public ResponseEntity findTestBatchPagination(
-      @RequestParam(value = "status", required = false) List<TestBatchStatus> statuses,
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")
+  public ResponseEntity<Map<String, Object>> findTestBatchPagination(
+      @RequestParam(value = "status", required = false) List<TestBatchStatus> statuses ,
       @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
 
@@ -139,15 +139,15 @@ public class TestBatchController {
     testBatchCRUDService.deleteTestBatch(id);
   }
 
-  @RequestMapping(value = "/recent/{count}", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_BATCH + "')")
+  @RequestMapping(value = "/recent/{count}" ,method = RequestMethod.GET)
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")  
   @Transactional(readOnly = true)
   public ResponseEntity<Map<String, Object>> getRecentlyClosedTestBatches(
       @PathVariable Integer count) {
 
     List<TestBatch> testBatches = testBatchRepository.getRecentlyClosedTestBatches(count);
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<String, Object>();   
     boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
     map.put("testBatches", testBatchViewModelFactory.createTestBatchViewModels(testBatches, isTestingSupervisor));
     return new ResponseEntity<>(map, HttpStatus.OK);

@@ -27,7 +27,6 @@ import model.donor.Donor;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 import repository.DonationRepository;
-import repository.DonorRepository;
 import repository.TestBatchRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingMatchStatus;
@@ -53,9 +52,6 @@ public class TestResultController {
   private BloodTestingRepository bloodTestingRepository;
 
   @Autowired
-  private DonorRepository donorRepository;
-
-  @Autowired
   private TestBatchStatusChangeService testBatchStatusChangeService;
 
   @Autowired
@@ -65,8 +61,8 @@ public class TestResultController {
   }
 
   @RequestMapping(value = "{donationIdentificationNumber}", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
-  public ResponseEntity findTestResult(@PathVariable String donationIdentificationNumber) {
+  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
+  public ResponseEntity<Map<String, Object>> findTestResult(@PathVariable String donationIdentificationNumber ) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Donation c = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
@@ -78,20 +74,20 @@ public class TestResultController {
     } else {
       map.put("testResults", null);
     }
-    return new ResponseEntity(map, HttpStatus.OK);
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
-  public ResponseEntity findTestResultsForTestBatch(HttpServletRequest request,
-                                                    @RequestParam(value = "testBatch", required = true) Long testBatchId) {
+  public ResponseEntity<Map<String, Object>> findTestResultsForTestBatch(HttpServletRequest request,
+      @RequestParam(value = "testBatch", required = true) Long testBatchId) {
 
     Map<String, Object> map = new HashMap<String, Object>();
 
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     List<DonationBatch> donationBatches = testBatch.getDonationBatches();
     List<Long> donationBatchIds = new ArrayList<Long>();
-    for (DonationBatch donationBatch : donationBatches) {
+    for(DonationBatch donationBatch : donationBatches){
       donationBatchIds.add(donationBatch.getId());
     }
 
@@ -100,20 +96,18 @@ public class TestResultController {
 
     map.put("testResults", ruleResults);
 
-    return new ResponseEntity(map, HttpStatus.OK);
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @RequestMapping(value = "/overview", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
-  public ResponseEntity findTestResultsOverviewForTestBatch(HttpServletRequest request,
-                                                            @RequestParam(value = "testBatch", required = true) Long testBatchId) {
-
-    Map<String, Object> map = new HashMap<String, Object>();
+  public ResponseEntity<Map<String, Object>> findTestResultsOverviewForTestBatch(HttpServletRequest request,
+      @RequestParam(value = "testBatch", required = true) Long testBatchId) {
 
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     List<DonationBatch> donationBatches = testBatch.getDonationBatches();
     List<Long> donationBatchIds = new ArrayList<Long>();
-    for (DonationBatch donationBatch : donationBatches) {
+    for(DonationBatch donationBatch : donationBatches){
       donationBatchIds.add(donationBatch.getId());
     }
 
@@ -126,18 +120,19 @@ public class TestResultController {
     Boolean basicTTIComplete = true;
     Boolean pendingBloodTypingMatchTests = false;
     Boolean reEntryRequiredTTITests = false;
+    boolean pendingBloodTypingConfirmations = false;
 
-    for (BloodTestingRuleResult result : ruleResults) {
-      if (!result.getBloodTypingStatus().equals(BloodTypingStatus.COMPLETE)) {
+    for(BloodTestingRuleResult result : ruleResults){
+      if(!result.getBloodTypingStatus().equals(BloodTypingStatus.COMPLETE)){
         basicBloodTypingComplete = false;
       }
-      if (result.getTTIStatus().equals(TTIStatus.NOT_DONE)) {
+      if(result.getTTIStatus().equals(TTIStatus.NOT_DONE)){
         basicTTIComplete = false;
       }
-      if (result.getPendingBloodTypingTestsIds().size() > 0) {
+      if(result.getPendingBloodTypingTestsIds().size() > 0){
         pendingBloodTypingTests = true;
       }
-      if (result.getPendingTTITestsIds().size() > 0) {
+      if(result.getPendingTTITestsIds().size() > 0){
         pendingTTITests = true;
       }
       if (!result.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE)
@@ -148,16 +143,22 @@ public class TestResultController {
       if (result.getReEntryRequiredTTITestIds().size() > 0) {
         reEntryRequiredTTITests = true;
       }
+      if (result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS)) {
+        // A confirmation is required to resolve the ambiguous result.
+        pendingBloodTypingConfirmations = true;
+      }
     }
 
+    Map<String, Object> map = new HashMap<String, Object>();
     map.put("pendingBloodTypingTests", pendingBloodTypingTests);
     map.put("pendingTTITests", pendingTTITests);
     map.put("basicBloodTypingComplete", basicBloodTypingComplete);
     map.put("basicTTIComplete", basicTTIComplete);
     map.put("pendingBloodTypingMatchTests", pendingBloodTypingMatchTests);
     map.put("reEntryRequiredTTITests", reEntryRequiredTTITests);
+    map.put("pendingBloodTypingConfirmations", pendingBloodTypingConfirmations);
 
-    return new ResponseEntity(map, HttpStatus.OK);
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
@@ -199,32 +200,20 @@ public class TestResultController {
       @RequestParam(value = "bloodRh", required = true) String bloodRh) {
 
     HttpStatus httpStatus = HttpStatus.CREATED;
-    boolean success = true;
-    String errorMessage = "";
-    Map<Long, Map<Long, String>> errorMap = null;
-    Map<String, Object> fieldErrors = new HashMap<String, Object>();
     Map<String, Object> map = new HashMap<String, Object>();
-    // Donation donation =
-    // donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
-
-    Map<String, Object> results = null;
 
     Donation donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
-    Donor donor = donation.getDonor();
-    donor.setBloodAbo(bloodAbo);
-    donor.setBloodRh(bloodRh);
     donation.setBloodAbo(bloodAbo);
     donation.setBloodRh(bloodRh);
-    donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
+    donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.RESOLVED);
 
-    Donor updatedDonor = donorRepository.updateDonorDetails(donor);
     Donation cs = donationRepository.updateDonationDetails(donation);
 
     if (cs.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
       testBatchStatusChangeService.handleRelease(cs);
     }
 
-    map.put("donor", getDonorsViewModel(donorRepository.findDonorById(updatedDonor.getId())));
+    map.put("donor", getDonorsViewModel(cs.getDonor()));
     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 

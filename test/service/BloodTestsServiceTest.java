@@ -198,7 +198,7 @@ public class BloodTestsServiceTest {
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setBloodAbo("A");
     ruleResult.setBloodRh("+");
-    ruleResult.setBloodTypingStatus(BloodTypingStatus.AMBIGUOUS);
+    ruleResult.setBloodTypingStatus(BloodTypingStatus.PENDING_TESTS);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     ruleResult.setTTIStatus(TTIStatus.TTI_SAFE);
     ruleResult.setExtraInformation(new HashSet<String>());
@@ -210,7 +210,7 @@ public class BloodTestsServiceTest {
 
     // do asserts
     Assert.assertTrue("Donation updated", updated);
-    Assert.assertEquals("BloodTypingStatus set", BloodTypingStatus.AMBIGUOUS, donation.getBloodTypingStatus());
+    Assert.assertEquals("BloodTypingStatus set", BloodTypingStatus.PENDING_TESTS, donation.getBloodTypingStatus());
   }
 
   @Test
