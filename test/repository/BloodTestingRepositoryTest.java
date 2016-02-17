@@ -237,4 +237,42 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
         donation.getBloodAbo().equals("A") && donation.getBloodRh().equals("+"));
 
   }
+
+    @Test
+  public void testBloodTestResultCreationReEntryImplemented() throws Exception {
+    Donation donation = donationRepository.findDonationById(9l);
+    Map<Long, String> testResults = new HashMap<Long, String>();
+    BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+    ruleResult.setBloodAbo("A");
+    ruleResult.setBloodRh("+");
+    ruleResult.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+    ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
+    ruleResult.setTTIStatus(TTIStatus.NOT_DONE);
+    ruleResult.setExtraInformation(new HashSet<String>());
+
+    // reEntry is implemented so, on creation, send reEntry as false:
+    testResults.put(17L, "POS");
+    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
+    Map<Long, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    Assert.assertTrue("Re-entry is required", newResults.get(17L).getReEntryRequired());
+  }
+
+  @Test
+  public void testBloodTestResultCreationReEntryNotImplemented() throws Exception {
+    Donation donation = donationRepository.findDonationById(9l);
+    Map<Long, String> testResults = new HashMap<Long, String>();
+    BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+    ruleResult.setBloodAbo("A");
+    ruleResult.setBloodRh("+");
+    ruleResult.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+    ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
+    ruleResult.setTTIStatus(TTIStatus.NOT_DONE);
+    ruleResult.setExtraInformation(new HashSet<String>());
+
+    // reEntry is not implemented so, on creation send reEntry as true:
+    testResults.put(17L, "POS");
+    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
+    Map<Long, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    Assert.assertFalse("Re-entry is not required", newResults.get(17L).getReEntryRequired());
+  }
 }

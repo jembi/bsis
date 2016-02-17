@@ -88,7 +88,7 @@ public class BloodTestsService {
     //  - the Donation Abo/Rh is only updated after the 1st execution
     //  - the results needing re-entry can only be determined after they are persisted (pendingReEntryTtiTestIds)
     ruleResult = ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults);
-    donationRepository.saveDonation(donation);
+    bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
     if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED && reEntry) {
       testBatchStatusChangeService.handleRelease(donation);
     }

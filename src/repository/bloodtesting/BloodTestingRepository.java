@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -53,8 +54,7 @@ import viewmodel.BloodTestingRuleResult;
 @Transactional
 public class BloodTestingRepository {
 
-  private static final Logger LOGGER = Logger
-      .getLogger(BloodTestingRepository.class);
+  private static final Logger LOGGER = Logger.getLogger(BloodTestingRepository.class);
 
   @PersistenceContext
   EntityManager em;
@@ -163,8 +163,8 @@ public class BloodTestingRepository {
   }
 
   /**
-   * FIXME: This method should be in BloodTestsService, but due to references in this repository, it
-   * was not moved FIXME: param donationId is not used
+   * FIXME: This method should be in BloodTestsService, but due to references in this repository, it was not moved
+   * FIXME: param donationId is not used
    */
   public Map<Long, String> validateTestResultValues(Long donationId, Map<Long, String> bloodTypingTestResults) {
 
@@ -330,7 +330,7 @@ public class BloodTestingRepository {
         "SELECT b " +
             "FROM BloodTest b " +
             "WHERE b.isActive = :isActive ",
-        BloodTest.class)
+            BloodTest.class)
         .setParameter("isActive", true)
         .getResultList();
   }
@@ -343,7 +343,7 @@ public class BloodTestingRepository {
   }
 
   private void addErrorToMap(Map<Long, Map<Long, String>> errorMap,
-                             Long donationId, Long testId, String errorMessage) {
+      Long donationId, Long testId, String errorMessage) {
     Map<Long, String> errorsForDonation = errorMap.get(donationId);
     if (errorsForDonation == null) {
       errorsForDonation = new HashMap<Long, String>();
@@ -489,7 +489,7 @@ public class BloodTestingRepository {
         MachineReading machineReading = new MachineReading();
         @SuppressWarnings("unchecked")
         Map<String, String> wellData = (Map<String, String>) rowData
-            .get(colNum);
+        .get(colNum);
 
         if (wellData.isEmpty())
           continue;
@@ -597,7 +597,7 @@ public class BloodTestingRepository {
   }
 
   private void addErrorToWell(Map<String, List<String>> errorsByWellNumber,
-                              String wellNumber, String errorMessage) {
+      String wellNumber, String errorMessage) {
     if (!errorsByWellNumber.containsKey(wellNumber)) {
       errorsByWellNumber.put(wellNumber, new ArrayList<String>());
     }
@@ -678,9 +678,9 @@ public class BloodTestingRepository {
   public void saveBloodTest(BloodTestBackingForm form) {
     BloodTest bt = form.getBloodTest();
     bt.setIsEmptyAllowed(false);
-//		bt.setNegativeResults("");
-//		bt.setPositiveResults("");
-//		bt.setValidResults("+,-");
+    //		bt.setNegativeResults("");
+    //		bt.setPositiveResults("");
+    //		bt.setValidResults("+,-");
     bt.setRankInCategory(1);
     bt.setIsActive(true);
     BloodTestCategory category = bt.getCategory();
@@ -773,7 +773,7 @@ public class BloodTestingRepository {
   /**
    * TODO - To be improved issue - #225
    */
-  public BloodTest updateBloodTest(BloodTestBackingForm backingObject) {
+  public BloodTest updateBloodTest(BloodTestBackingForm backingObject){
     return em.merge(backingObject.getBloodTest());
   }
 
@@ -914,8 +914,7 @@ public class BloodTestingRepository {
   /**
    * Retrieve a full list of the active Blood Testing Rules.
    *
-   * @return List<BloodTestingRule> list of rules, should not be null although this is not
-   * guaranteed
+   * @return List<BloodTestingRule> list of rules, should not be null although this is not guaranteed
    */
   public List<BloodTestingRule> getActiveBloodTestingRules() {
     String queryStr = "SELECT r FROM BloodTestingRule r WHERE isActive=:isActive";
@@ -955,9 +954,24 @@ public class BloodTestingRepository {
   }
 
   /**
+   * Compare two strings and check that they are either both empty, or they are equal.
+   * 
+   * @param first First string
+   * @param second First string
+   * @return true if they are empty or equal, otherwise false.
+   */
+  private boolean bothEmptyOrEquals(String first, String second) {
+
+    if (StringUtils.isEmpty(first)) {
+      return StringUtils.isEmpty(second);
+    }
+
+    return first.equals(second);
+  }
+
+  /**
    * FIXME: this method belongs in the BloodTestsService and has replaced the BloodTestsUpdatedEvent
-   * Because there are many references in this repository class, to minimise changes, it was added
-   * here.
+   * Because there are many references in this repository class, to minimise changes, it was added here.
    */
   public boolean updateDonationWithTestResults(Donation donation, BloodTestingRuleResult ruleResult) {
     boolean donationUpdated = false;
@@ -977,14 +991,19 @@ public class BloodTestingRepository {
     BloodTypingStatus oldBloodTypingStatus = donation.getBloodTypingStatus();
     BloodTypingStatus newBloodTypingStatus = ruleResult.getBloodTypingStatus();
 
-    if (!newExtraInformation.equals(oldExtraInformation) || !newBloodAbo.equals(oldBloodAbo)
-        || !newBloodRh.equals(oldBloodRh) || !newTtiStatus.equals(oldTtiStatus)
-        || !newBloodTypingStatus.equals(oldBloodTypingStatus)) {
+    BloodTypingMatchStatus oldBloodTypingMatchStatus = donation.getBloodTypingMatchStatus();
+    BloodTypingMatchStatus newBloodTypingMatchStatus = ruleResult.getBloodTypingMatchStatus();
+
+    if (!bothEmptyOrEquals(newExtraInformation, oldExtraInformation) || !bothEmptyOrEquals(newBloodAbo, oldBloodAbo)
+        || !bothEmptyOrEquals(newBloodRh, oldBloodRh) || !Objects.equals(newTtiStatus, oldTtiStatus)
+        || !Objects.equals(newBloodTypingStatus, oldBloodTypingStatus)
+        || !Objects.equals(oldBloodTypingMatchStatus, newBloodTypingMatchStatus)) {
       donation.setExtraBloodTypeInformation(newExtraInformation);
       donation.setBloodAbo(newBloodAbo);
       donation.setBloodRh(newBloodRh);
       donation.setTTIStatus(ruleResult.getTTIStatus());
       donation.setBloodTypingStatus(ruleResult.getBloodTypingStatus());
+      donation.setBloodTypingMatchStatus(ruleResult.getBloodTypingMatchStatus());
 
       donationUpdated = true;
     }
@@ -996,14 +1015,11 @@ public class BloodTestingRepository {
           + " " + donation.getBloodTypingMatchStatus());
     }
 
-    donation.setBloodTypingMatchStatus(ruleResult.getBloodTypingMatchStatus());
-
     return donationUpdated;
   }
 
   /**
-   * FIXME: this method also belongs in the BloodTestsService (see above
-   * updateDonationWithTestResults)
+   * FIXME: this method also belongs in the BloodTestsService (see above updateDonationWithTestResults)
    */
   protected String addNewExtraInformation(String donationExtraInformation, Set<String> extraInformationNewSet) {
     String newExtraInformation;

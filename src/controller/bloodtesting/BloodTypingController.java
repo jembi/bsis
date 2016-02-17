@@ -25,6 +25,7 @@ import utils.PermissionConstants;
 import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.DonationViewModel;
+import backingform.TestResultBackingForm;
 
 @RestController
 @RequestMapping("bloodgroupingtests")
@@ -53,6 +54,9 @@ public class BloodTypingController {
     List<BloodTestViewModel> advancedBloodTypingTests = getAdvancedBloodTypingTests();
     map.put("advancedBloodTypingTests", advancedBloodTypingTests);
 
+    List<BloodTestViewModel> repeatBloodTypingTests = getRepeatBloodTypingTests();
+    map.put("repeatBloodTypingTests", repeatBloodTypingTests);
+
     return map;
   }
 
@@ -67,6 +71,14 @@ public class BloodTypingController {
   private List<BloodTestViewModel> getAdvancedBloodTypingTests() {
     List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
     for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.ADVANCED_BLOODTYPING)) {
+      tests.add(new BloodTestViewModel(rawBloodTest));
+    }
+    return tests;
+  }
+
+  public List<BloodTestViewModel> getRepeatBloodTypingTests() {
+    List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
+    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)) {
       tests.add(new BloodTestViewModel(rawBloodTest));
     }
     return tests;
