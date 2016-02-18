@@ -83,7 +83,8 @@ public class TestResultController {
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
   public ResponseEntity<Map<String, Object>> findTestResultsForTestBatch(HttpServletRequest request,
-      @RequestParam(value = "testBatch", required = true) Long testBatchId) {
+      @RequestParam(value = "testBatch", required = true) Long testBatchId,
+      @RequestParam(value = "bloodTestType", required = false) BloodTestType bloodTestType) {
 
     Map<String, Object> map = new HashMap<String, Object>();
 
@@ -94,8 +95,13 @@ public class TestResultController {
       donationBatchIds.add(donationBatch.getId());
     }
 
-    List<BloodTestingRuleResult> ruleResults =
-        bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds);
+    List<BloodTestingRuleResult> ruleResults;
+    if (bloodTestType == null) {
+      ruleResults = bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds);
+    } else {
+      ruleResults =
+          bloodTestingRepository.getAllTestsStatusForDonationBatchesByBloodTestType(donationBatchIds, bloodTestType);
+    }
 
     map.put("testResults", ruleResults);
 

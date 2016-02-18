@@ -48,6 +48,7 @@ import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import repository.GenericConfigRepository;
 import repository.WellTypeRepository;
+import viewmodel.BloodTestResultViewModel;
 import viewmodel.BloodTestingRuleResult;
 
 @Repository
@@ -396,6 +397,28 @@ public class BloodTestingRepository {
         bloodTestingRuleResults.add(ruleResult);
       }
     }
+
+    return bloodTestingRuleResults;
+  }
+
+  public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatchesByBloodTestType(List<Long> donationBatchIds,
+      BloodTestType bloodTestType) {
+
+    List<BloodTestingRuleResult> bloodTestingRuleResults = getAllTestsStatusForDonationBatches(donationBatchIds);
+    List<BloodTestingRuleResult> filteredRuleResults = new ArrayList<BloodTestingRuleResult>();
+    for (BloodTestingRuleResult result : bloodTestingRuleResults) {
+      Map<String, BloodTestResultViewModel> modelMap = result.getRecentTestResults();
+      Map<String, BloodTestResultViewModel> filteredModelMap = new HashMap<String, BloodTestResultViewModel>();
+      for (String key : modelMap.keySet()) {
+        BloodTestResultViewModel model = modelMap.get(key);
+        if (model.getTestResult().getBloodTest().getBloodTestType().equals(bloodTestType)) {
+          filteredModelMap.put(key, model);
+        }
+      }
+      result.setRecentTestResults(filteredModelMap);
+      filteredRuleResults.add(result);
+    }
+    bloodTestingRuleResults = filteredRuleResults;
 
     return bloodTestingRuleResults;
   }

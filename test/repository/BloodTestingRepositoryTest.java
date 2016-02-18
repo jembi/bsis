@@ -1,6 +1,7 @@
 package repository;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -231,6 +232,20 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
     Map<Long, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
     Assert.assertFalse("Re-entry is not required", newResults.get(17L).getReEntryRequired());
+  }
+
+  @Test
+  public void testGetTestResultsForDonationBatchesByBloodTestType() {
+    ArrayList<Long> donationBatchIds = new ArrayList<Long>();
+    donationBatchIds.add(2l);
+    List<BloodTestingRuleResult> results = bloodTestingRepository
+        .getAllTestsStatusForDonationBatchesByBloodTestType(donationBatchIds,
+        BloodTestType.BASIC_TTI);
+
+    // donation id = 2 is the only donation in batch id = 2
+    BloodTestingRuleResult result = results.get(0);
+    Assert.assertTrue("Number of tests of type BASIC_TTI for donation batch 2 is 4",
+        result.getRecentTestResults().size() == 4);
   }
 
 }
