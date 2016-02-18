@@ -147,8 +147,11 @@ public class TestResultController {
         // A confirmation is required to resolve the ambiguous result.
         pendingBloodTypingConfirmations = true;
       }
-      Map<BloodTestType, Boolean> reEntryRequiredTestsMap = calculateReEntryRequiredTests(result);
-      reEntryRequiredTTITests = reEntryRequiredTestsMap.get(BloodTestType.BASIC_TTI);
+      Map<BloodTestType, Boolean> reEntryRequiredTestsMap = calculateReEntryRequiredTestsForDonation(result);
+      // only update reEntryRequired booleans if they are currently false
+      if (reEntryRequiredTTITests == false) {
+        reEntryRequiredTTITests = reEntryRequiredTestsMap.get(BloodTestType.BASIC_TTI);
+      }
     }
 
     Map<String, Object> map = new HashMap<String, Object>();
@@ -163,7 +166,7 @@ public class TestResultController {
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
-  private Map<BloodTestType, Boolean> calculateReEntryRequiredTests(BloodTestingRuleResult ruleResult) {
+  private Map<BloodTestType, Boolean> calculateReEntryRequiredTestsForDonation(BloodTestingRuleResult ruleResult) {
 
     Map<BloodTestType, Boolean> reEntryRequiredTestsMap = new HashMap<BloodTestType, Boolean>();
     reEntryRequiredTestsMap.put(BloodTestType.BASIC_TTI, false);
