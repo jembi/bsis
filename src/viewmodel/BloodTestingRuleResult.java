@@ -50,8 +50,6 @@ public class BloodTestingRuleResult {
 
   private boolean ttiUninterpretable;
 
-  private List<String> reEntryRequiredTTITestIds;
-
   public BloodTestingRuleResult() {
   }
 
@@ -197,14 +195,6 @@ public class BloodTestingRuleResult {
 
   public void setRecentTestResults(Map<String, BloodTestResultViewModel> recentTestResults) {
     this.recentTestResults = recentTestResults;
-  }
-
-  public List<String> getReEntryRequiredTTITestIds() {
-    return reEntryRequiredTTITestIds;
-  }
-
-  public void setReEntryRequiredTTITestIds(List<String> reEntryRequiredTTITestIds) {
-    this.reEntryRequiredTTITestIds = reEntryRequiredTTITestIds;
   }
 
 }

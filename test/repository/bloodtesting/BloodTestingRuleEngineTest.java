@@ -2,6 +2,7 @@ package repository.bloodtesting;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -21,10 +22,13 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.transaction.AfterTransaction;
 
+import model.bloodtesting.BloodTestResult;
+import model.bloodtesting.BloodTestType;
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import repository.DonationRepository;
 import suites.ContextDependentTestSuite;
+import viewmodel.BloodTestResultViewModel;
 import viewmodel.BloodTestingRuleResult;
 
 /**
@@ -272,7 +276,18 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Map<Long, String> testResults = new HashMap<Long, String>();
     testResults.put(17L, "POS");
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, testResults);
-    Assert.assertEquals("Re-entry required TTI tests", 1, result.getReEntryRequiredTTITestIds().size());
+
+    ArrayList<Long> reEntryRequiredTTITestIds = new ArrayList<>();
+    Map<String, BloodTestResultViewModel> resultViewModelMap = result.getRecentTestResults();
+    for (String key : resultViewModelMap.keySet()) {
+      BloodTestResultViewModel model = resultViewModelMap.get(key);
+      BloodTestResult testResult = model.getTestResult();
+      if (testResult.getReEntryRequired().equals(true)
+          && testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
+        reEntryRequiredTTITestIds.add(testResult.getBloodTest().getId());
+      }
+    }
+    Assert.assertEquals("Re-entry required TTI tests", 1, reEntryRequiredTTITestIds.size());
   }
 
   @Test

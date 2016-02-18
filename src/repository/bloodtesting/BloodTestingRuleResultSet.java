@@ -85,9 +85,6 @@ public class BloodTestingRuleResultSet {
   /* collection of the TTI and Serology tests that have been done */
   private List<BloodTestingRule> bloodTestingRules = new ArrayList<BloodTestingRule>();
 
-  /* collection of the TTI tests that still require re entry */
-  private List<String> reEntryRequiredTTITestIds = new ArrayList<String>();
-
   /**
    * Creates and initialises the BloodTestingRuleResultSet
    *
@@ -240,10 +237,6 @@ public class BloodTestingRuleResultSet {
     this.pendingTtiTestsIds.add(pendingTtiTestsId);
   }
 
-  public void addReEntryRequiredTTITestIds(String reEntryRequiredTTITestIds) {
-    this.reEntryRequiredTTITestIds.add(reEntryRequiredTTITestIds);
-  }
-
   public Map<String, String> getStoredTestResults() {
     return storedTestResults;
   }
@@ -310,14 +303,6 @@ public class BloodTestingRuleResultSet {
 
   public void setBloodTestingRules(List<BloodTestingRule> bloodTestingRules) {
     this.bloodTestingRules = bloodTestingRules;
-  }
-
-  public List<String> getReEntryRequiredTTITestIds() {
-    return reEntryRequiredTTITestIds;
-  }
-
-  public void setReEntryRequiredTTITestIds(List<String> reEntryRequiredTTITestIds) {
-    this.reEntryRequiredTTITestIds = reEntryRequiredTTITestIds;
   }
 
 }

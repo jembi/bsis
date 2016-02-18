@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import backingform.TestResultBackingForm;
+import model.bloodtesting.BloodTestResult;
+import model.bloodtesting.BloodTestType;
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
@@ -34,6 +36,7 @@ import repository.bloodtesting.BloodTypingStatus;
 import service.BloodTestsService;
 import service.TestBatchStatusChangeService;
 import utils.PermissionConstants;
+import viewmodel.BloodTestResultViewModel;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.DonationViewModel;
 import viewmodel.DonorViewModel;
@@ -140,13 +143,12 @@ public class TestResultController {
           || result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS))) {
         pendingBloodTypingMatchTests = true;
       }
-      if (result.getReEntryRequiredTTITestIds().size() > 0) {
-        reEntryRequiredTTITests = true;
-      }
       if (result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS)) {
         // A confirmation is required to resolve the ambiguous result.
         pendingBloodTypingConfirmations = true;
       }
+      Map<BloodTestType, Boolean> reEntryRequiredTestsMap = calculateReEntryRequiredTests(result);
+      reEntryRequiredTTITests = reEntryRequiredTestsMap.get(BloodTestType.BASIC_TTI);
     }
 
     Map<String, Object> map = new HashMap<String, Object>();
@@ -159,6 +161,24 @@ public class TestResultController {
     map.put("pendingBloodTypingConfirmations", pendingBloodTypingConfirmations);
 
     return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+
+  private Map<BloodTestType, Boolean> calculateReEntryRequiredTests(BloodTestingRuleResult ruleResult) {
+
+    Map<BloodTestType, Boolean> reEntryRequiredTestsMap = new HashMap<BloodTestType, Boolean>();
+    reEntryRequiredTestsMap.put(BloodTestType.BASIC_TTI, false);
+    Map<String, BloodTestResultViewModel> resultViewModelMap = ruleResult.getRecentTestResults();
+    for (String key : resultViewModelMap.keySet()) {
+      BloodTestResultViewModel model = resultViewModelMap.get(key);
+      BloodTestResult testResult = model.getTestResult();
+      if (testResult.getReEntryRequired().equals(true)) {
+        if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
+          reEntryRequiredTestsMap.put(BloodTestType.BASIC_TTI, true);
+        }
+        // add other test types as reEntry gets implemented for them
+      }
+    }
+    return reEntryRequiredTestsMap;
   }
 
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")

@@ -84,9 +84,8 @@ public class BloodTestsService {
     }
     BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults);
     bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
-    // Note: Rules engine will only provide the correct BloodTyping statuses on the 2nd execution because:
-    //  - the Donation Abo/Rh is only updated after the 1st execution
-    //  - the results needing re-entry can only be determined after they are persisted (pendingReEntryTtiTestIds)
+    // Note: Rules engine will only provide the correct BloodTyping statuses on the 2nd execution
+    // because the Donation Abo/Rh is only updated after the 1st execution
     ruleResult = ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults);
     bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
     if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED && reEntry) {
