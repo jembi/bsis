@@ -36,6 +36,14 @@ public class DonorDeferralRepositoryTest extends DBUnitContextDependentTestSuite
     Assert.assertNotNull("There is a deferral", deferral);
     Assert.assertEquals("Correct deferral returned", "High risk behaviour", deferral.getDeferralReason().getReason());
   }
+  
+  @Test
+  public void testGetById_VenueSetCorrectly() throws Exception {
+    DonorDeferral deferral = donorDeferralRepository.findDonorDeferralById(1l);
+    Assert.assertNotNull("There is a deferral", deferral);
+    Assert.assertNotNull("There is a venue", deferral.getVenue());
+    Assert.assertEquals("Correct venue returned", "location 1", deferral.getVenue().getName());
+  }
 
   @Test(expected = javax.persistence.NoResultException.class)
   public void testGetByIdDoesNotExist() throws Exception {
@@ -48,5 +56,4 @@ public class DonorDeferralRepositoryTest extends DBUnitContextDependentTestSuite
     int count = donorDeferralRepository.countDonorDeferralsForDonor(donor);
     Assert.assertEquals("Donor has 2 deferrals", 2, count);
   }
-
 }
