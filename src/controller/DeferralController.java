@@ -5,12 +5,15 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import backingform.validator.DeferralBackingFormValidator;
 import model.donordeferral.DonorDeferral;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +45,14 @@ public class DeferralController {
 
   @Autowired
   private LocationRepository locationRepository;
+
+  @Autowired
+  private DeferralBackingFormValidator deferralBackingFormValidator;
+
+  @InitBinder
+  protected void initBinder(WebDataBinder binder) {
+    binder.setValidator(deferralBackingFormValidator);
+  }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")

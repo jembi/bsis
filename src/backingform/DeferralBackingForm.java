@@ -163,4 +163,8 @@ public class DeferralBackingForm {
     venue.setId(Long.parseLong(venueId));
     deferral.setVenue(venue);
   }
+
+  public Location getVenue() {
+    return deferral.getVenue();
+  }
 }
