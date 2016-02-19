@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
+import model.location.Location;
 import model.user.User;
 import utils.CustomDateFormatter;
 
@@ -155,5 +156,11 @@ public class DeferralBackingForm {
 
   public void setDonorNumber(String donorNumber) {
     setDeferredDonor(donorNumber);
+  }
+
+  public void setVenue(String venueId) {
+    Location venue = new Location();
+    venue.setId(Long.parseLong(venueId));
+    deferral.setVenue(venue);
   }
 }
