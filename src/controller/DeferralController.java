@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import repository.DonorRepository;
+import repository.LocationRepository;
 import service.DonorDeferralCRUDService;
 import utils.PermissionConstants;
 import viewmodel.DonorDeferralViewModel;
@@ -39,12 +40,16 @@ public class DeferralController {
   @Autowired
   private DonorDeferralViewModelFactory deferralViewModelFactory;
 
+  @Autowired
+  private LocationRepository locationRepository;
+
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
   public Map<String, Object> deferDonorFormGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("deferralReasons", donorRepository.getDeferralReasons());
+    map.put("venues", locationRepository.getAllVenues());
     return map;
   }
 
