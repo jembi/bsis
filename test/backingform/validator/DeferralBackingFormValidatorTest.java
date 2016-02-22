@@ -2,10 +2,8 @@ package backingform.validator;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 
-import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
@@ -13,12 +11,11 @@ import java.util.HashMap;
 
 import backingform.DeferralBackingForm;
 import model.donordeferral.DeferralReason;
+import suites.UnitTestSuite;
 
 import static helpers.builders.DeferralReasonBuilder.aDeferralReason;
 
-
-@RunWith(MockitoJUnitRunner.class)
-public class DeferralBackingFormValidatorTest {
+public class DeferralBackingFormValidatorTest extends UnitTestSuite {
   @InjectMocks
   DeferralBackingFormValidator deferralBackingFormValidator;
 
