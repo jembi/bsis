@@ -20,6 +20,7 @@ public class DeferralBackingForm {
   @Valid
   @JsonIgnore
   private DonorDeferral deferral;
+  private Long venueId;
 
   public DeferralBackingForm() {
     deferral = new DonorDeferral();
@@ -159,12 +160,13 @@ public class DeferralBackingForm {
   }
 
   public void setVenueId(Long venueId) {
+    this.venueId = venueId;
     Location venue = new Location();
     venue.setId(venueId);
     deferral.setVenue(venue);
   }
 
   public Long getVenueId() {
-    return deferral.getVenue().getId();
+    return venueId;
   }
 }

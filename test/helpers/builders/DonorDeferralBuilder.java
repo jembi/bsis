@@ -8,6 +8,7 @@ import java.util.Date;
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
+import model.location.Location;
 
 public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
 
@@ -18,6 +19,7 @@ public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
   private Date createdDate;
   private Boolean voided;
   private String deferralReasonText;
+  private Location venue;
 
   public DonorDeferralBuilder withId(Long id) {
     this.id = id;
@@ -54,6 +56,11 @@ public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
     return this;
   }
 
+  public DonorDeferralBuilder withVenue(Location venue) {
+    this.venue = venue;
+    return this;
+  }
+
   @Override
   public DonorDeferral build() {
     DonorDeferral donorDeferral = new DonorDeferral();
@@ -61,6 +68,7 @@ public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
     donorDeferral.setDeferredDonor(deferredDonor);
     donorDeferral.setDeferralReason(deferralReason);
     donorDeferral.setDeferredUntil(deferredUntil);
+    donorDeferral.setVenue(venue);
     if (voided != null) {
       donorDeferral.setIsVoided(voided);
     }
