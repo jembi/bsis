@@ -11,6 +11,7 @@ import model.donordeferral.DeferralReason;
 import model.donordeferral.DeferralReasonType;
 import model.donordeferral.DonorDeferral;
 import model.donordeferral.DurationType;
+import model.location.Location;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -40,10 +41,10 @@ public class DonorDeferralCRUDService {
   @Autowired
   DeferralConstraintChecker deferralConstraintChecker;
 
-  public DonorDeferral createDeferralForDonorWithDeferralReasonType(Donor donor, DeferralReasonType deferralReasonType)
+  public DonorDeferral createDeferralForDonorWithVenueAndDeferralReasonType(Donor donor, Location venue, DeferralReasonType deferralReasonType)
       throws NoResultException, NonUniqueResultException {
 
-    LOGGER.info("Creating deferral for donor: " + donor);
+    LOGGER.info("Creating deferral for donor: " + donor + " at venue " + venue);
 
     // Look up deferral reason
     DeferralReason deferralReason = deferralReasonRepository.findDeferralReasonByType(deferralReasonType);
@@ -62,6 +63,7 @@ public class DonorDeferralCRUDService {
     }
 
     DonorDeferral donorDeferral = new DonorDeferral();
+    donorDeferral.setVenue(venue);
     donorDeferral.setDeferredDonor(donor);
     donorDeferral.setDeferralReason(deferralReason);
     donorDeferral.setIsVoided(Boolean.FALSE);
