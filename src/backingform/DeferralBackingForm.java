@@ -158,13 +158,13 @@ public class DeferralBackingForm {
     setDeferredDonor(donorNumber);
   }
 
-  public void setVenue(String venueId) {
+  public void setVenueId(Long venueId) {
     Location venue = new Location();
-    venue.setId(Long.parseLong(venueId));
+    venue.setId(venueId);
     deferral.setVenue(venue);
   }
 
-  public Location getVenue() {
-    return deferral.getVenue();
+  public Long getVenueId() {
+    return deferral.getVenue().getId();
   }
 }

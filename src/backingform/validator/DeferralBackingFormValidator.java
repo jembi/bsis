@@ -10,8 +10,8 @@ public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingF
 
   @Override
   public void validateForm(DeferralBackingForm form, Errors errors) {
-    if (form.getVenue() == null) {
-      errors.rejectValue("venue", "deferral.venue.required", "Deferral venue is required");
+    if (form.getVenueId() == null) {
+      errors.rejectValue("venue", "deferral.venueId.required", "Deferral venueId is required");
     }
   }
 
