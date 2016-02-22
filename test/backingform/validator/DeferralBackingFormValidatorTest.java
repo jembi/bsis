@@ -38,4 +38,15 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
     Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
   }
 
+  @Test
+  public void testInValid() throws Exception {
+    DeferralBackingForm deferralBackingForm = new DeferralBackingForm();
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "deferral");
+    deferralBackingFormValidator.validate(deferralBackingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("No errors exist", 1, errors.getErrorCount());
+  }
+
 }
