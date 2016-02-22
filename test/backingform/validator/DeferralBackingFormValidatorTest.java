@@ -11,9 +11,11 @@ import java.util.HashMap;
 
 import backingform.DeferralBackingForm;
 import model.donordeferral.DeferralReason;
+import model.location.Location;
 import suites.UnitTestSuite;
 
 import static helpers.builders.DeferralReasonBuilder.aDeferralReason;
+import static helpers.builders.LocationBuilder.aLocation;
 
 public class DeferralBackingFormValidatorTest extends UnitTestSuite {
   @InjectMocks
@@ -22,10 +24,11 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
   @Test
   public void testValid() throws Exception {
     DeferralReason deferralReason = aDeferralReason().withId(1L).build();
+    Location venue = aLocation().withId(1L).build();
 
     DeferralBackingForm deferralBackingForm = new DeferralBackingForm();
     deferralBackingForm.setDeferralReason(deferralReason);
-    deferralBackingForm.setVenueId(1L);
+    deferralBackingForm.setVenue(venue);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "deferral");
