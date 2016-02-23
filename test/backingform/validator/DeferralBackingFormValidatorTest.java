@@ -48,7 +48,7 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
   }
 
   @Test
-  public void testInValidVenue() throws Exception {
+  public void testInvalidVenueDoesNotExist() throws Exception {
     DeferralReason deferralReason = aDeferralReason().withId(1L).build();
     Location venue = aLocation().withId(1L).build();
 
@@ -63,18 +63,20 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
     deferralBackingFormValidator.validate(deferralBackingForm, errors);
 
     // check asserts
-    Assert.assertEquals("No errors exist", 1, errors.getErrorCount());
+    Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
+    Assert.assertNotNull("Error on venue", errors.getFieldError("venue"));
   }
 
   @Test
-  public void testInValid() throws Exception {
+  public void testInvalidVenueNotSpecified() throws Exception {
     DeferralBackingForm deferralBackingForm = new DeferralBackingForm();
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "deferral");
     deferralBackingFormValidator.validate(deferralBackingForm, errors);
 
     // check asserts
-    Assert.assertEquals("No errors exist", 1, errors.getErrorCount());
+    Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
+    Assert.assertNotNull("Error on venue", errors.getFieldError("venue"));
   }
 
 }
