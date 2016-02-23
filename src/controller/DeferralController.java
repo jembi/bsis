@@ -49,7 +49,7 @@ public class DeferralController {
   @Autowired
   private DeferralBackingFormValidator deferralBackingFormValidator;
 
-  @InitBinder
+  @InitBinder("deferralBackingForm")
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(deferralBackingFormValidator);
   }
@@ -77,13 +77,13 @@ public class DeferralController {
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_DEFERRAL + "')")
-  public ResponseEntity<Map<String, Object>> deferDonor(@Valid @RequestBody DeferralBackingForm form) {
+  public ResponseEntity<Map<String, Object>> deferDonor(@Valid @RequestBody DeferralBackingForm deferralBackingForm) {
 
     HttpStatus httpStatus = HttpStatus.CREATED;
     Map<String, Object> map = new HashMap<String, Object>();
     DonorDeferral savedDeferral = null;
 
-    DonorDeferral deferral = form.getDonorDeferral();
+    DonorDeferral deferral = deferralBackingForm.getDonorDeferral();
     deferral.setIsVoided(false);
     savedDeferral = donorRepository.deferDonor(deferral);
     map.put("hasErrors", false);
@@ -97,13 +97,13 @@ public class DeferralController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DEFERRAL + "')")
-  public ResponseEntity<Map<String, Object>> updateDeferral(@Valid @RequestBody DeferralBackingForm form, @PathVariable Long id) {
+  public ResponseEntity<Map<String, Object>> updateDeferral(@Valid @RequestBody DeferralBackingForm deferralBackingForm, @PathVariable Long id) {
 
     HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<String, Object>();
     DonorDeferral updatedDeferral = null;
 
-    DonorDeferral deferral = form.getDonorDeferral();
+    DonorDeferral deferral = deferralBackingForm.getDonorDeferral();
     deferral.setIsVoided(false);
     deferral.setId(id);
 
@@ -123,12 +123,12 @@ public class DeferralController {
 
   @RequestMapping(value = "{id}/end", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DEFERRAL + "')")
-  public ResponseEntity<Map<String, Object>> endDeferral(@RequestBody EndDeferralBackingForm form, @PathVariable Long id) {
+  public ResponseEntity<Map<String, Object>> endDeferral(@RequestBody EndDeferralBackingForm endDeferralBackingForm, @PathVariable Long id) {
 
     HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<String, Object>();
 
-    DonorDeferral updatedDeferral = donorDeferralCRUDService.endDeferral(id, form.getComment());
+    DonorDeferral updatedDeferral = donorDeferralCRUDService.endDeferral(id, endDeferralBackingForm.getComment());
     map.put("deferral", deferralViewModelFactory.createDonorDeferralViewModel(updatedDeferral));
 
     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
