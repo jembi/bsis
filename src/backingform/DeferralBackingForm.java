@@ -159,7 +159,13 @@ public class DeferralBackingForm {
   }
 
   public void setVenue(Location venue) {
-    deferral.setVenue(venue);
+    if (venue == null || venue.getId() == null) {
+      deferral.setVenue(null);
+    } else {
+      Location location = new Location();
+      location.setId(venue.getId());
+      deferral.setVenue(location);       
+    }
   }
 
   public Location getVenue() {
