@@ -8,13 +8,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import model.bloodtesting.TTIStatus;
-import model.donation.Donation;
-import model.donationbatch.DonationBatch;
-import model.donor.Donor;
-import model.testbatch.TestBatch;
-import model.testbatch.TestBatchStatus;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +19,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import backingform.TestResultBackingForm;
+import model.bloodtesting.BloodTestResult;
+import model.bloodtesting.BloodTestType;
+import model.bloodtesting.TTIStatus;
+import model.donation.Donation;
+import model.donationbatch.DonationBatch;
+import model.donor.Donor;
+import model.testbatch.TestBatch;
+import model.testbatch.TestBatchStatus;
 import repository.DonationRepository;
 import repository.TestBatchRepository;
 import repository.bloodtesting.BloodTestingRepository;
@@ -34,10 +36,10 @@ import repository.bloodtesting.BloodTypingStatus;
 import service.BloodTestsService;
 import service.TestBatchStatusChangeService;
 import utils.PermissionConstants;
+import viewmodel.BloodTestResultViewModel;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.DonationViewModel;
 import viewmodel.DonorViewModel;
-import backingform.TestResultBackingForm;
 
 @RestController
 @RequestMapping("testresults")
@@ -81,7 +83,8 @@ public class TestResultController {
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
   public ResponseEntity<Map<String, Object>> findTestResultsForTestBatch(HttpServletRequest request,
-      @RequestParam(value = "testBatch", required = true) Long testBatchId) {
+      @RequestParam(value = "testBatch", required = true) Long testBatchId,
+      @RequestParam(value = "bloodTestType", required = false) BloodTestType bloodTestType) {
 
     Map<String, Object> map = new HashMap<String, Object>();
 
@@ -92,8 +95,13 @@ public class TestResultController {
       donationBatchIds.add(donationBatch.getId());
     }
 
-    List<BloodTestingRuleResult> ruleResults =
-        bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds);
+    List<BloodTestingRuleResult> ruleResults;
+    if (bloodTestType == null) {
+      ruleResults = bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds);
+    } else {
+      ruleResults =
+          bloodTestingRepository.getAllTestsStatusForDonationBatchesByBloodTestType(donationBatchIds, bloodTestType);
+    }
 
     map.put("testResults", ruleResults);
 
@@ -119,7 +127,10 @@ public class TestResultController {
     Boolean pendingTTITests = false;
     Boolean basicBloodTypingComplete = true;
     Boolean basicTTIComplete = true;
+    Boolean pendingBloodTypingMatchTests = false;
+    Boolean reEntryRequiredTTITests = false;
     boolean pendingBloodTypingConfirmations = false;
+    Boolean reEntryRequiredBloodTypingTests = false;
 
     for(BloodTestingRuleResult result : ruleResults){
       if(!result.getBloodTypingStatus().equals(BloodTypingStatus.COMPLETE)){
@@ -134,9 +145,21 @@ public class TestResultController {
       if(result.getPendingTTITestsIds().size() > 0){
         pendingTTITests = true;
       }
+      if (!result.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE)
+          && (result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.NO_MATCH)
+          || result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS))) {
+        pendingBloodTypingMatchTests = true;
+      }
       if (result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS)) {
         // A confirmation is required to resolve the ambiguous result.
         pendingBloodTypingConfirmations = true;
+      }
+      Map<BloodTestType, Boolean> reEntryRequiredTestsMap = calculateReEntryRequiredTestsForDonation(result);
+      if (reEntryRequiredTestsMap.get(BloodTestType.BASIC_TTI)) {
+        reEntryRequiredTTITests = true;
+      }
+      if (reEntryRequiredTestsMap.get(BloodTestType.BASIC_BLOODTYPING)) {
+        reEntryRequiredBloodTypingTests = true;
       }
     }
 
@@ -145,14 +168,41 @@ public class TestResultController {
     map.put("pendingTTITests", pendingTTITests);
     map.put("basicBloodTypingComplete", basicBloodTypingComplete);
     map.put("basicTTIComplete", basicTTIComplete);
+    map.put("pendingBloodTypingMatchTests", pendingBloodTypingMatchTests);
+    map.put("reEntryRequiredTTITests", reEntryRequiredTTITests);
     map.put("pendingBloodTypingConfirmations", pendingBloodTypingConfirmations);
+    map.put("reEntryRequiredBloodTypingTests", reEntryRequiredBloodTypingTests);
 
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
+  private Map<BloodTestType, Boolean> calculateReEntryRequiredTestsForDonation(BloodTestingRuleResult ruleResult) {
+
+    Map<BloodTestType, Boolean> reEntryRequiredTestsMap = new HashMap<BloodTestType, Boolean>();
+    reEntryRequiredTestsMap.put(BloodTestType.BASIC_TTI, false);
+    reEntryRequiredTestsMap.put(BloodTestType.BASIC_BLOODTYPING, false);
+    Map<String, BloodTestResultViewModel> resultViewModelMap = ruleResult.getRecentTestResults();
+    for (String key : resultViewModelMap.keySet()) {
+      BloodTestResultViewModel model = resultViewModelMap.get(key);
+      BloodTestResult testResult = model.getTestResult();
+      if (testResult.getReEntryRequired().equals(true)) {
+        if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
+          reEntryRequiredTestsMap.put(BloodTestType.BASIC_TTI, true);
+        }
+        if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_BLOODTYPING)) {
+          reEntryRequiredTestsMap.put(BloodTestType.BASIC_BLOODTYPING, true);
+        }
+        // add other test types as reEntry gets implemented for them
+      }
+    }
+    return reEntryRequiredTestsMap;
+  }
+
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
   @RequestMapping(method = RequestMethod.POST)
-  public ResponseEntity<Map<String, Object>> saveTestResults(@RequestBody @Valid TestResultBackingForm form) {
+  public ResponseEntity<Map<String, Object>> saveTestResults(
+      @RequestBody @Valid TestResultBackingForm form,
+      @RequestParam(value = "reEntry", required = false, defaultValue = "false") boolean reEntry) {
 
     HttpStatus responseStatus = HttpStatus.CREATED;
     Map<String, Object> responseMap = new HashMap<>();
@@ -165,7 +215,7 @@ public class TestResultController {
       Map<Long, String> errors = bloodTestsService.validateTestResultValues(testResults);
       if (errors.isEmpty()) {
         // No errors
-        BloodTestingRuleResult ruleResult = bloodTestsService.saveBloodTests(donation.getId(), form.getTestResults());
+        BloodTestingRuleResult ruleResult = bloodTestsService.saveBloodTests(donation.getId(), form.getTestResults(), reEntry);
         responseMap.put("success", true);
         responseMap.put("testresults", ruleResult);
       } else {
@@ -186,7 +236,7 @@ public class TestResultController {
       @RequestParam(value = "bloodAbo", required = true) String bloodAbo,
       @RequestParam(value = "bloodRh", required = true) String bloodRh) {
 
-    HttpStatus httpStatus = HttpStatus.CREATED;        
+    HttpStatus httpStatus = HttpStatus.CREATED;
     Map<String, Object> map = new HashMap<String, Object>();
 
     Donation donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);

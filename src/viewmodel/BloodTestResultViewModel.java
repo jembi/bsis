@@ -35,6 +35,10 @@ public class BloodTestResultViewModel {
     return new BloodTestViewModel(testResult.getBloodTest());
   }
 
+  public Boolean getReEntryRequired () {
+    return testResult.getReEntryRequired();
+  }
+
   public String getNotes() {
     return testResult.getNotes();
   }
