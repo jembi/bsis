@@ -818,5 +818,12 @@
             <where>testNameShort = 'Syphilis Conf 3'</where>
         </update>
     </changeSet>
+    
+    <changeSet id="20160218-0901" author="timler">
+        <comment>Add NT (NOT-TESTED) as a valid option for confirmatory blood tests</comment>
+        <sql>
+            UPDATE BloodTest SET validResults = 'POS,NEG,NT' WHERE id in (29,30,31,32);
+        </sql>
+    </changeSet>
 
 </databaseChangeLog>
