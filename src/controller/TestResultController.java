@@ -130,6 +130,7 @@ public class TestResultController {
     Boolean pendingBloodTypingMatchTests = false;
     Boolean reEntryRequiredTTITests = false;
     boolean pendingBloodTypingConfirmations = false;
+    Boolean reEntryRequiredBloodTypingTests = false;
 
     for(BloodTestingRuleResult result : ruleResults){
       if(!result.getBloodTypingStatus().equals(BloodTypingStatus.COMPLETE)){
@@ -154,9 +155,11 @@ public class TestResultController {
         pendingBloodTypingConfirmations = true;
       }
       Map<BloodTestType, Boolean> reEntryRequiredTestsMap = calculateReEntryRequiredTestsForDonation(result);
-      // only update reEntryRequired booleans if they are currently false
-      if (reEntryRequiredTTITests == false) {
-        reEntryRequiredTTITests = reEntryRequiredTestsMap.get(BloodTestType.BASIC_TTI);
+      if (reEntryRequiredTestsMap.get(BloodTestType.BASIC_TTI)) {
+        reEntryRequiredTTITests = true;
+      }
+      if (reEntryRequiredTestsMap.get(BloodTestType.BASIC_BLOODTYPING)) {
+        reEntryRequiredBloodTypingTests = true;
       }
     }
 
@@ -168,6 +171,7 @@ public class TestResultController {
     map.put("pendingBloodTypingMatchTests", pendingBloodTypingMatchTests);
     map.put("reEntryRequiredTTITests", reEntryRequiredTTITests);
     map.put("pendingBloodTypingConfirmations", pendingBloodTypingConfirmations);
+    map.put("reEntryRequiredBloodTypingTests", reEntryRequiredBloodTypingTests);
 
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
@@ -176,6 +180,7 @@ public class TestResultController {
 
     Map<BloodTestType, Boolean> reEntryRequiredTestsMap = new HashMap<BloodTestType, Boolean>();
     reEntryRequiredTestsMap.put(BloodTestType.BASIC_TTI, false);
+    reEntryRequiredTestsMap.put(BloodTestType.BASIC_BLOODTYPING, false);
     Map<String, BloodTestResultViewModel> resultViewModelMap = ruleResult.getRecentTestResults();
     for (String key : resultViewModelMap.keySet()) {
       BloodTestResultViewModel model = resultViewModelMap.get(key);
@@ -183,6 +188,9 @@ public class TestResultController {
       if (testResult.getReEntryRequired().equals(true)) {
         if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
           reEntryRequiredTestsMap.put(BloodTestType.BASIC_TTI, true);
+        }
+        if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_BLOODTYPING)) {
+          reEntryRequiredTestsMap.put(BloodTestType.BASIC_BLOODTYPING, true);
         }
         // add other test types as reEntry gets implemented for them
       }
