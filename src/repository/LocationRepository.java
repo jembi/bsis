@@ -127,17 +127,4 @@ public class LocationRepository {
     }
     return location;
   }
-
-  public Location findById(Long id) {
-    TypedQuery<Location> query = em.createQuery(
-        "SELECT l FROM Location l where l.id= :id",
-        Location.class);
-    query.setParameter("id", id);
-    Location location = null;
-    try {
-      location = query.getSingleResult();
-    } catch (NoResultException ex) {
-    }
-    return location;
-  }
 }
