@@ -111,7 +111,7 @@ public class DeferralBackingForm {
     return deferralReason.getId().toString();
   }
 
-  // FIXME: getter does not match setter. Since only the identifier is used, it would be best to use a Long 
+  // FIXME: getter does not match setter. 
   public void setDeferralReason(DeferralReason deferralReason) {
     if (deferralReason == null || deferralReason.getId() == null) {
       deferral.setDeferralReason(null);
