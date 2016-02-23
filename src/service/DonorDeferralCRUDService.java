@@ -105,6 +105,7 @@ public class DonorDeferralCRUDService {
     existingDeferral.setDeferralReason(deferral.getDeferralReason());
     existingDeferral.setDeferredUntil(deferral.getDeferredUntil());
     existingDeferral.setDeferralReasonText(deferral.getDeferralReasonText());
+    existingDeferral.setVenue(deferral.getVenue());
     return donorDeferralRepository.update(existingDeferral);
   }
 
