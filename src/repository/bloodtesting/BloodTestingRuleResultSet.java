@@ -6,13 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.donation.Donation;
-
-import org.apache.log4j.Logger;
-
 import viewmodel.BloodTestingRuleResult;
 
 /**
@@ -238,7 +237,6 @@ public class BloodTestingRuleResultSet {
     this.pendingTtiTestsIds.add(pendingTtiTestsId);
   }
 
-
   public Map<String, String> getStoredTestResults() {
     return storedTestResults;
   }
@@ -306,4 +304,5 @@ public class BloodTestingRuleResultSet {
   public void setBloodTestingRules(List<BloodTestingRule> bloodTestingRules) {
     this.bloodTestingRules = bloodTestingRules;
   }
+
 }

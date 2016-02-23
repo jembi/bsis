@@ -4,12 +4,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import model.donation.Donation;
-import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
-import repository.bloodtesting.BloodTypingStatus;
+import model.donation.Donation;
 import repository.bloodtesting.BloodTypingMatchStatus;
-import viewmodel.DonationViewModel;
+import repository.bloodtesting.BloodTypingStatus;
 
 public class BloodTestingRuleResult {
 
@@ -198,4 +196,5 @@ public class BloodTestingRuleResult {
   public void setRecentTestResults(Map<String, BloodTestResultViewModel> recentTestResults) {
     this.recentTestResults = recentTestResults;
   }
+
 }

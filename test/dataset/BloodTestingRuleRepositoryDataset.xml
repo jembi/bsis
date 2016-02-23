@@ -423,195 +423,231 @@
 		bloodPressureDiastolic="80" donorPulse="70" venue_id="1"
 		bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
 		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
+	<Donation id="12" bloodAbo="" bloodRh="" bloodTypingStatus="NOT_DONE"
+		bloodTypingMatchStatus="NOT_DONE" donationDate="2016-04-05 00:00:00.0"
+		donationIdentificationNumber="126226" extraBloodTypeInformation=""
+		isDeleted="0" createdDate="2016-04-18 07:53:57.0" lastUpdated="2016-04-24 04:43:20.0"
+		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="1"
+		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
+		venue_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
+		ineligibleDonor="0" released="0" />
+	<Donation id="13" bloodAbo="" bloodRh="" bloodTypingStatus="NOT_DONE"
+		bloodTypingMatchStatus="NOT_DONE" donationDate="2016-04-05 00:00:00.0"
+		donationIdentificationNumber="126326" extraBloodTypeInformation=""
+		isDeleted="0" createdDate="2016-04-18 07:53:57.0" lastUpdated="2016-04-24 04:43:20.0"
+		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="1"
+		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
+		venue_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
+		ineligibleDonor="0" released="0" />
+	<Donation id="14" bloodAbo="" bloodRh="" bloodTypingStatus="NOT_DONE"
+		bloodTypingMatchStatus="NOT_DONE" donationDate="2016-04-05 00:00:00.0"
+		donationIdentificationNumber="126426" extraBloodTypeInformation=""
+		isDeleted="0" createdDate="2016-04-18 07:53:57.0" lastUpdated="2016-04-24 04:43:20.0"
+		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="1"
+		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
+		venue_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
+		ineligibleDonor="0" released="0" />
 
 	<BloodTestResult id="1" createdDate="2015-02-06 02:09:13.0"
 		lastUpdated="2015-02-06 02:09:13.0" notes="" result="NEG"
 		testedOn="2015-02-06 02:09:13.0" bloodTest_id="17" donation_id="1"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="2" createdDate="2015-02-06 02:09:13.0"
 		lastUpdated="2015-02-06 02:09:13.0" notes="" result="NEG"
 		testedOn="2015-02-06 02:09:13.0" bloodTest_id="20" donation_id="1"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="3" createdDate="2015-02-06 02:09:13.0"
 		lastUpdated="2015-02-06 02:09:13.0" notes="" result="NEG"
 		testedOn="2015-02-06 02:09:13.0" bloodTest_id="23" donation_id="1"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="4" createdDate="2015-02-06 02:09:13.0"
 		lastUpdated="2015-02-06 02:09:13.0" notes="" result="NEG"
 		testedOn="2015-02-06 02:09:13.0" bloodTest_id="26" donation_id="1"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="5" createdDate="2015-02-06 02:09:23.0"
 		lastUpdated="2015-02-06 02:09:23.0" notes="" result="O"
 		testedOn="2015-02-06 02:09:23.0" bloodTest_id="1" donation_id="1"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="6" createdDate="2015-02-06 02:09:23.0"
 		lastUpdated="2015-02-06 02:09:23.0" notes="" result="POS"
 		testedOn="2015-02-06 02:09:23.0" bloodTest_id="2" donation_id="1"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="7" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:42:49.0" bloodTest_id="17" donation_id="2"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="8" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:42:49.0" bloodTest_id="20" donation_id="2"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="9" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:42:49.0" bloodTest_id="23" donation_id="2"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="10" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:42:49.0" bloodTest_id="26" donation_id="2"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="11" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="A"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" donation_id="2"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="12" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="2" donation_id="2"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="13" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="LOW"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="3" donation_id="2"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="14" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="4" donation_id="2"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="15" createdDate="2015-06-24 06:39:25.0"
 		lastUpdated="2015-06-24 06:39:25.0" notes="" result="NEG"
 		testedOn="2015-06-24 06:39:25.0" bloodTest_id="17" donation_id="2"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="16" createdDate="2015-06-24 06:39:25.0"
 		lastUpdated="2015-06-24 06:39:25.0" notes="" result="NEG"
 		testedOn="2015-06-24 06:39:25.0" bloodTest_id="20" donation_id="2"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="17" createdDate="2015-06-24 06:39:25.0"
 		lastUpdated="2015-06-24 06:39:25.0" notes="" result="NEG"
 		testedOn="2015-06-24 06:39:25.0" bloodTest_id="23" donation_id="2"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="18" createdDate="2015-06-24 06:39:25.0"
 		lastUpdated="2015-06-24 06:39:25.0" notes="" result="NEG"
 		testedOn="2015-06-24 06:39:25.0" bloodTest_id="26" donation_id="2"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="19" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="B"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" donation_id="4"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="20" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="POS"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="2" donation_id="4"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="21" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="LOW"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="3" donation_id="4"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="22" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="4" donation_id="4"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="23" createdDate="2015-06-24 06:39:25.0"
 		lastUpdated="2015-06-24 06:39:25.0" notes="" result="NEG"
 		testedOn="2015-06-24 06:39:25.0" bloodTest_id="17" donation_id="4"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="24" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:30:49.0" bloodTest_id="17" donation_id="5"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="25" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:42:49.0" bloodTest_id="20" donation_id="5"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="26" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:42:49.0" bloodTest_id="23" donation_id="5"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="27" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:42:49.0" bloodTest_id="26" donation_id="5"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="28" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="A"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" donation_id="5"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="29" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="2" donation_id="5"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="30" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="LOW"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="3" donation_id="5"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="31" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="4" donation_id="5"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="32" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="POS"
 		testedOn="2015-04-24 04:42:49.0" bloodTest_id="17" donation_id="5"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="33" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="Z"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" donation_id="6"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="35" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="-"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="2" donation_id="6"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="36" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="?"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="17" donation_id="6"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestResult id="37" createdDate="2016-01-26 02:09:23.0"
 		lastUpdated="2016-01-26 02:09:23.0" notes="" result="O"
 		testedOn="2016-01-26 02:09:23.0" bloodTest_id="1" donation_id="8"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1"  reEntryRequired="false"/>
 	<BloodTestResult id="38" createdDate="2016-01-26 02:09:13.0"
 		lastUpdated="2016-01-26 02:09:13.0" notes="" result="NEG"
 		testedOn="2016-01-26 02:09:13.0" bloodTest_id="2" donation_id="8"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1"  reEntryRequired="false"/>
 	<BloodTestResult id="39" createdDate="2016-01-26 02:09:23.0"
 		lastUpdated="2016-01-26 02:09:23.0" notes="" result="O"
 		testedOn="2016-01-26 02:09:23.0" bloodTest_id="1" donation_id="9"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1"  reEntryRequired="false"/>
 	<BloodTestResult id="40" createdDate="2016-01-26 02:09:13.0"
 		lastUpdated="2016-01-26 02:09:13.0" notes="" result="NEG"
 		testedOn="2016-01-26 02:09:13.0" bloodTest_id="2" donation_id="9"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1"  reEntryRequired="false"/>
 	<BloodTestResult id="41" createdDate="2016-01-26 02:09:23.0"
 		lastUpdated="2016-01-26 02:09:23.0" notes="" result="O"
 		testedOn="2016-01-26 02:09:23.0" bloodTest_id="29" donation_id="9"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1"  reEntryRequired="false"/>
 	<BloodTestResult id="42" createdDate="2016-01-26 02:09:13.0"
 		lastUpdated="2016-01-26 02:09:13.0" notes="" result="NEG"
 		testedOn="2016-01-26 02:09:13.0" bloodTest_id="30" donation_id="9"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1"  reEntryRequired="false"/>
 	<BloodTestResult id="43" createdDate="2016-01-26 02:09:23.0"
 		lastUpdated="2016-01-26 02:09:23.0" notes="" result="O"
 		testedOn="2016-01-26 02:09:23.0" bloodTest_id="1" donation_id="10"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1"  reEntryRequired="false"/>
 	<BloodTestResult id="44" createdDate="2016-01-26 02:09:13.0"
 		lastUpdated="2016-01-26 02:09:13.0" notes="" result="NEG"
 		testedOn="2016-01-26 02:09:13.0" bloodTest_id="2" donation_id="10"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1"  reEntryRequired="false"/>
 	<BloodTestResult id="45" createdDate="2016-01-26 02:09:23.0"
 		lastUpdated="2016-01-26 02:09:23.0" notes="" result="O"
 		testedOn="2016-01-26 02:09:23.0" bloodTest_id="1" donation_id="11"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1"  reEntryRequired="false"/>
 	<BloodTestResult id="46" createdDate="2016-01-26 02:09:13.0"
 		lastUpdated="2016-01-26 02:09:13.0" notes="" result="NEG"
 		testedOn="2016-01-26 02:09:13.0" bloodTest_id="2" donation_id="11"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1"  reEntryRequired="false"/>
 	<BloodTestResult id="47" createdDate="2016-01-26 02:09:23.0"
 		lastUpdated="2016-01-26 02:09:23.0" notes="" result="O"
 		testedOn="2016-01-26 02:09:23.0" bloodTest_id="29" donation_id="11"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1"  reEntryRequired="false"/>
 	<BloodTestResult id="48" createdDate="2016-01-26 02:09:13.0"
 		lastUpdated="2016-01-26 02:09:13.0" notes="" result="POS"
 		testedOn="2016-01-26 02:09:13.0" bloodTest_id="30" donation_id="11"
-		createdBy_id="1" lastUpdatedBy_id="1" />
+		createdBy_id="1" lastUpdatedBy_id="1"  reEntryRequired="false"/>
+	<BloodTestResult id="49" createdDate="2016-04-24 04:42:49.0"
+		lastUpdated="2016-04-24 04:42:49.0" notes="" result="POS"
+		testedOn="2016-04-24 04:42:49.0" bloodTest_id="17" donation_id="12"
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="true"/>
+	<BloodTestResult id="50" createdDate="2016-04-24 04:42:49.0"
+		lastUpdated="2016-04-24 04:42:49.0" notes="" result="POS"
+		testedOn="2016-04-24 04:42:49.0" bloodTest_id="17" donation_id="13"
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
+	<BloodTestResult id="51" createdDate="2016-04-24 04:42:49.0"
+		lastUpdated="2016-04-24 04:42:49.0" notes="" result="POS"
+		testedOn="2016-04-24 04:42:49.0" bloodTest_id="17" donation_id="14"
+		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="true"/>
 
 	<Component id="1" createdOn="2015-02-02 10:26:36.0" expiresOn="2015-03-09 10:26:36.0"
 		isDeleted="false" createdDate="2015-02-02 03:42:04.0" lastUpdated="2015-02-02 03:42:32.0"

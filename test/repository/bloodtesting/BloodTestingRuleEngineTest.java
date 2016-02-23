@@ -2,14 +2,12 @@ package repository.bloodtesting;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import javax.sql.DataSource;
-
-import model.bloodtesting.TTIStatus;
-import model.donation.Donation;
 
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseDataSourceConnection;
@@ -24,8 +22,13 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.transaction.AfterTransaction;
 
+import model.bloodtesting.BloodTestResult;
+import model.bloodtesting.BloodTestType;
+import model.bloodtesting.TTIStatus;
+import model.donation.Donation;
 import repository.DonationRepository;
 import suites.ContextDependentTestSuite;
+import viewmodel.BloodTestResultViewModel;
 import viewmodel.BloodTestingRuleResult;
 
 /**
@@ -62,8 +65,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     try {
       IDataSet dataSet = getDataSet();
       DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
-    }
-    finally {
+    } finally {
       connection.close();
     }
   }
@@ -269,6 +271,26 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
   }
 
   @Test
+  public void testBloodTestingRuleEngineTTIReEntryRequiredList() throws Exception {
+    Donation donation = donationRepository.findDonationById(14l);
+    Map<Long, String> testResults = new HashMap<Long, String>();
+    testResults.put(17L, "POS");
+    BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, testResults);
+
+    ArrayList<Long> reEntryRequiredTTITestIds = new ArrayList<>();
+    Map<String, BloodTestResultViewModel> resultViewModelMap = result.getRecentTestResults();
+    for (String key : resultViewModelMap.keySet()) {
+      BloodTestResultViewModel model = resultViewModelMap.get(key);
+      BloodTestResult testResult = model.getTestResult();
+      if (testResult.getReEntryRequired().equals(true)
+          && testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
+        reEntryRequiredTTITestIds.add(testResult.getBloodTest().getId());
+      }
+    }
+    Assert.assertEquals("Re-entry required TTI tests", 1, reEntryRequiredTTITestIds.size());
+  }
+
+  @Test
   public void testBloodTestingRuleEngineWithDonation8_1stTimeDonorInitial() throws Exception {
     // donation 8 is for a 1st time donor who has only had initial outcomes entered for ABO/Rh
     Donation donation = donationRepository.findDonationById(8l);
@@ -326,5 +348,31 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("Availale test results", 4, result.getAvailableTestResults().size());
     Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
     Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
+  }
+
+  @Test
+  public void testBloodTestingRuleEngineWithDonation12_TTIUnsafeAndFirstEntry() throws Exception {
+    Donation donation = donationRepository.findDonationById(12l);
+    BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+    Assert.assertEquals("TTIStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
+    Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
+  }
+  
+  @Test
+  public void testBloodTestingRuleEngineWithDonation12_TTIUnsafeAndFirstEntryAndPendingReEntry() throws Exception {
+    Donation donation = donationRepository.findDonationById(12l);
+    Map<Long, String> newTtiTestResults = new HashMap<>();
+    newTtiTestResults.put(17L, "POS");
+    BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, newTtiTestResults);
+    Assert.assertEquals("TTIStatus is NOT_DONE", TTIStatus.TTI_UNSAFE, result.getTTIStatus());
+    Assert.assertEquals("No pending TTI tests", 2, result.getPendingTTITestsIds().size());
+  }
+  
+  @Test
+  public void testBloodTestingRuleEngineWithDonation13_TTIUnsafeAndReEntry() throws Exception {
+    Donation donation = donationRepository.findDonationById(13l);
+    BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+    Assert.assertEquals("TTIStatus is TTI_UNSAFE", TTIStatus.TTI_UNSAFE, result.getTTIStatus());
+    Assert.assertEquals("Pending TTI tests", 2, result.getPendingTTITestsIds().size());
   }
 }

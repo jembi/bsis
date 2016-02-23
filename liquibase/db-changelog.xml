@@ -2020,6 +2020,23 @@
 			<column name="addressTypeId" type="BIGINT"></column>
 		</addColumn>
 	</changeSet>
+	
+	<changeSet id="20160127-1000" author="timler">
+		<comment>BSIS-358 - Add double-entry column for BloodTestResult</comment>
+		<addColumn tableName="BloodTestResult">
+			<column name="doubleEntry" type="TINYINT(1)" defaultValue="0"></column>
+		</addColumn>
+	</changeSet>
+	
+	<changeSet id="20160203-1422" author="lauravignoli">		
+		<comment>BSIS-358 - Rename doubleEntry to doubleEntryRequired for BloodTestResult</comment>
+		<renameColumn tableName="BloodTestResult" oldColumnName="doubleEntry" newColumnName="doubleEntryRequired" columnDataType="TINYINT(1)"/>
+	</changeSet>
+	
+	<changeSet id="20160209-1312" author="lauravignoli">		
+		<comment>BSIS-403 - Rename doubleEntryRequired to reEntryRequired for BloodTestResult</comment>
+		<renameColumn tableName="BloodTestResult" oldColumnName="doubleEntryRequired" newColumnName="reEntryRequired" columnDataType="TINYINT(1)"/>
+	</changeSet>
  
   <changeSet id="20160210-1543" author="bausmeier">
     <update tableName="Donation">
