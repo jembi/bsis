@@ -5,13 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import model.bloodtesting.BloodTestResult;
-import model.donation.Donation;
-import model.testbatch.TestBatch;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import model.bloodtesting.BloodTestResult;
+import model.donation.Donation;
+import model.testbatch.TestBatch;
 import repository.bloodtesting.BloodTestingRuleResultSet;
 import service.BloodTestResultConstraintChecker;
 import service.DonationConstraintChecker;
