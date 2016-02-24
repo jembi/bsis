@@ -10,10 +10,10 @@ import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import helpers.builders.DeferralReasonBuilder;
 import helpers.builders.DonorBuilder;
 import helpers.builders.DonorDeferralBuilder;
+import helpers.builders.LocationBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -25,6 +25,7 @@ import model.donordeferral.DeferralReason;
 import model.donordeferral.DeferralReasonType;
 import model.donordeferral.DonorDeferral;
 import model.donordeferral.DurationType;
+import model.location.Location;
 
 import org.joda.time.DateTime;
 import org.junit.Assert;
@@ -52,6 +53,7 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testCreateDeferralForDonorWithDeferralReasonTypeWithPermanentDeferralReason_shouldCreateAndPersistDonorDeferral() {
 
+    Location irrelevantVenue = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
     DeferralReasonType irrelevantDeferralReasonType = DeferralReasonType.AUTOMATED_TTI_UNSAFE;
     Donor donor = aDonor().build();
     DeferralReason deferralReason = aDeferralReason()
@@ -70,8 +72,8 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
     when(donorDeferralRepository.findDonorDeferralsForDonorByDeferralReason(donor, deferralReason))
         .thenReturn(Collections.<DonorDeferral>emptyList());
 
-    DonorDeferral returnedDonorDeferral = donorDeferralCRUDService.createDeferralForDonorWithDeferralReasonType(
-        donor, irrelevantDeferralReasonType);
+    DonorDeferral returnedDonorDeferral = donorDeferralCRUDService.createDeferralForDonorWithVenueAndDeferralReasonType(
+        donor, irrelevantVenue, irrelevantDeferralReasonType);
 
     verify(donorDeferralRepository).save(argThat(hasSameStateAsDonorDeferral(expectedDonorDeferral)));
     assertThat(returnedDonorDeferral, hasSameStateAsDonorDeferral(expectedDonorDeferral));
@@ -80,6 +82,7 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testCreateDeferralForDonorWithDeferralReasonTypeWithPermanentDeferralReasonAndExistingDeferral_shouldReturnExistingDonorDeferral() {
 
+    Location irrelevantVenue = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
     DeferralReasonType irrelevantDeferralReasonType = DeferralReasonType.AUTOMATED_TTI_UNSAFE;
     Donor donor = aDonor().build();
     DeferralReason deferralReason = aDeferralReason()
@@ -98,8 +101,8 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
     when(donorDeferralRepository.findDonorDeferralsForDonorByDeferralReason(donor, deferralReason))
         .thenReturn(Arrays.asList(expectedDonorDeferral));
 
-    DonorDeferral returnedDonorDeferral = donorDeferralCRUDService.createDeferralForDonorWithDeferralReasonType(
-        donor, irrelevantDeferralReasonType);
+    DonorDeferral returnedDonorDeferral = donorDeferralCRUDService.createDeferralForDonorWithVenueAndDeferralReasonType(
+        donor, irrelevantVenue, irrelevantDeferralReasonType);
 
     verify(donorDeferralRepository, never()).save(any(DonorDeferral.class));
     assertThat(returnedDonorDeferral, hasSameStateAsDonorDeferral(expectedDonorDeferral));
@@ -108,6 +111,7 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testCreateDeferralForDonorWithDeferralReasonTypeWithTemporaryDeferralReason_shouldCreateAndPersistDonorDeferral() {
 
+    Location irrelevantVenue = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
     DeferralReasonType irrelevantDeferralReasonType = DeferralReasonType.AUTOMATED_TTI_UNSAFE;
     int irrelevantDuration = 7;
     Date now = new Date();
@@ -128,8 +132,8 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
         .thenReturn(deferralReason);
     when(dateGeneratorService.generateDate()).thenReturn(now);
 
-    DonorDeferral returnedDonorDeferral = donorDeferralCRUDService.createDeferralForDonorWithDeferralReasonType(
-        donor, irrelevantDeferralReasonType);
+    DonorDeferral returnedDonorDeferral = donorDeferralCRUDService.createDeferralForDonorWithVenueAndDeferralReasonType(
+        donor, irrelevantVenue, irrelevantDeferralReasonType);
 
     verify(donorDeferralRepository).save(argThat(hasSameStateAsDonorDeferral(expectedDonorDeferral)));
     assertThat(returnedDonorDeferral, hasSameStateAsDonorDeferral(expectedDonorDeferral));

@@ -92,7 +92,7 @@ public class TestBatchStatusChangeService {
       if (donorDeferralStatusCalculator.shouldDonorBeDeferred(donation.getBloodTestResults())) {
         LOGGER.info("Deferring donor and referring donor for counselling: " + donation.getDonorNumber());
         postDonationCounsellingCRUDService.createPostDonationCounsellingForDonation(donation);
-        donorDeferralCRUDService.createDeferralForDonorWithDeferralReasonType(donation.getDonor(),
+        donorDeferralCRUDService.createDeferralForDonorWithVenueAndDeferralReasonType(donor, donation.getVenue(),
             DeferralReasonType.AUTOMATED_TTI_UNSAFE);
       }
     } else if (componentStatusCalculator.shouldComponentsBeDiscarded(donation.getBloodTestResults())) {

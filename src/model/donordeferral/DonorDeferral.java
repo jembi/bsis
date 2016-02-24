@@ -12,6 +12,7 @@ import javax.persistence.TemporalType;
 
 import model.BaseModificationTrackerEntity;
 import model.donor.Donor;
+import model.location.Location;
 import model.user.User;
 
 import org.hibernate.envers.Audited;
@@ -51,6 +52,9 @@ public class DonorDeferral extends BaseModificationTrackerEntity {
 
   @ManyToOne
   private DeferralReason deferralReason;
+  
+  @ManyToOne
+  private Location venue;
 
   @ManyToOne
   private User voidedBy;
@@ -97,6 +101,14 @@ public class DonorDeferral extends BaseModificationTrackerEntity {
 
   public void setDeferralReasonText(String deferralReasonText) {
     this.deferralReasonText = deferralReasonText;
+  }
+
+  public Location getVenue() {
+    return venue;
+  }
+
+  public void setVenue(Location venue) {
+    this.venue = venue;
   }
 
   /**

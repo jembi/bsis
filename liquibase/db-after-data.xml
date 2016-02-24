@@ -38,4 +38,42 @@
 
     </changeSet>
     
+	<!-- Adding column 'venue_id' to DonorDeferral -->
+	<changeSet id="20160219-1448" author="timler">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="DonorDeferral" columnName="venue_id" />
+			</not>
+		</preConditions>
+		<comment>Adding column venue_id to DonorDeferral</comment>
+		<addColumn tableName="DonorDeferral">
+			<column name="venue_id" type="bigint(20)"></column>
+		</addColumn>
+		<addColumn tableName="DonorDeferral_AUD">
+			<column name="venue_id" type="bigint(20)"></column>
+		</addColumn>
+	</changeSet>
+	<changeSet id="20160219-1447" author="timler">
+		<comment>Migrate existing data and set venue_id to Donors venue</comment>
+		<sql>
+			UPDATE DonorDeferral dd
+			JOIN Donor d ON dd.deferredDonor_id = d.id
+			SET dd.venue_id = d.venue_id
+			where dd.venue_id is null;
+		</sql>
+	</changeSet>
+	<changeSet id="20160219-1452" author="timler">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<foreignKeyConstraintExists foreignKeyName="fk_DonorDeferral_Location" />
+			</not>
+		</preConditions>
+		<comment>Adding foreign key constraints for DonorDeferral venue_id</comment>
+		<addNotNullConstraint columnName="venue_id"
+			tableName="DonorDeferral" columnDataType="bigint(20)" />
+		<addForeignKeyConstraint constraintName="fk_DonorDeferral_Location"
+			baseColumnNames="venue_id" baseTableName="DonorDeferral"
+			referencedColumnNames="id" referencedTableName="Location" />
+	</changeSet>
+    
 </databaseChangeLog>

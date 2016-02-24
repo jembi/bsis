@@ -4,6 +4,7 @@ import java.util.Map;
 
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
+import model.location.Location;
 import utils.CustomDateFormatter;
 import model.user.User;
 
@@ -68,5 +69,9 @@ public class DonorDeferralViewModel {
 
   public String getDonorNumber() {
     return donorDeferral.getDeferredDonor().getDonorNumber();
+  }
+
+  public Location getVenue() {
+    return donorDeferral.getVenue();
   }
 }

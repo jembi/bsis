@@ -14,6 +14,7 @@ import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
+import helpers.builders.LocationBuilder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +24,7 @@ import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.donordeferral.DeferralReasonType;
+import model.location.Location;
 import model.testbatch.TestBatch;
 
 import org.junit.Test;
@@ -209,6 +211,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   @Test
   public void testHandleReleaseWithUnsafeDonationAndDonorToBeDeferred_shouldDeferDonorAndCreateCounsellingReferral() {
 
+    Location location = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
     List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
     String bloodAbo = "O";
     String bloodRh = "+";
@@ -216,6 +219,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     Donor expectedDonor = aDonor().withBloodAbo(bloodAbo).withBloodRh(bloodRh).build();
     Donation unsafeDonation = aDonation()
         .withTTIStatus(TTIStatus.TTI_UNSAFE)
+        .withVenue(location)
         .withDonor(donor)
         .withBloodTestResults(bloodTestResults)
         .withPackType(aPackType().build())
@@ -236,7 +240,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
 
     verify(bloodTestsService).updateDonationWithTestResults(unsafeDonation, bloodTestingRuleResult);
     verify(postDonationCounsellingCRUDService).createPostDonationCounsellingForDonation(unsafeDonation);
-    verify(donorDeferralCRUDService).createDeferralForDonorWithDeferralReasonType(donor,
+    verify(donorDeferralCRUDService).createDeferralForDonorWithVenueAndDeferralReasonType(donor, location,
         DeferralReasonType.AUTOMATED_TTI_UNSAFE);
     verify(donorRepository).saveDonor(argThat(hasSameStateAsDonor(expectedDonor)));
     assertThat(unsafeDonation.isReleased(), is(true));
