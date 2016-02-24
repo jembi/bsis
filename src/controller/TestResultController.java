@@ -131,6 +131,7 @@ public class TestResultController {
     Boolean reEntryRequiredTTITests = false;
     boolean pendingBloodTypingConfirmations = false;
     Boolean reEntryRequiredBloodTypingTests = false;
+    Boolean reEntryRequiredPendingBloodTypingTests = false;
     Boolean reEntryRequiredPendingTTITests = false;
 
     for(BloodTestingRuleResult result : ruleResults){
@@ -162,6 +163,9 @@ public class TestResultController {
       if (reEntryRequiredTestsMap.get(BloodTestType.BASIC_BLOODTYPING)) {
         reEntryRequiredBloodTypingTests = true;
       }
+      if (reEntryRequiredTestsMap.get(BloodTestType.REPEAT_BLOODTYPING)) {
+        reEntryRequiredPendingBloodTypingTests = true;
+      }
       if (reEntryRequiredTestsMap.get(BloodTestType.CONFIRMATORY_TTI)) {
         reEntryRequiredPendingTTITests = true;
       }
@@ -176,6 +180,7 @@ public class TestResultController {
     map.put("reEntryRequiredTTITests", reEntryRequiredTTITests);
     map.put("pendingBloodTypingConfirmations", pendingBloodTypingConfirmations);
     map.put("reEntryRequiredBloodTypingTests", reEntryRequiredBloodTypingTests);
+    map.put("reEntryRequiredPendingBloodTypingTests", reEntryRequiredPendingBloodTypingTests);
     map.put("reEntryRequiredPendingTTITests", reEntryRequiredPendingTTITests);
 
     return new ResponseEntity<>(map, HttpStatus.OK);
@@ -186,6 +191,7 @@ public class TestResultController {
     Map<BloodTestType, Boolean> reEntryRequiredTestsMap = new HashMap<BloodTestType, Boolean>();
     reEntryRequiredTestsMap.put(BloodTestType.BASIC_TTI, false);
     reEntryRequiredTestsMap.put(BloodTestType.BASIC_BLOODTYPING, false);
+    reEntryRequiredTestsMap.put(BloodTestType.REPEAT_BLOODTYPING, false);
     reEntryRequiredTestsMap.put(BloodTestType.CONFIRMATORY_TTI, false);
     Map<String, BloodTestResultViewModel> resultViewModelMap = ruleResult.getRecentTestResults();
     for (String key : resultViewModelMap.keySet()) {
@@ -196,6 +202,8 @@ public class TestResultController {
           reEntryRequiredTestsMap.put(BloodTestType.BASIC_TTI, true);
         } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_BLOODTYPING)) {
           reEntryRequiredTestsMap.put(BloodTestType.BASIC_BLOODTYPING, true);
+        } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_BLOODTYPING)) {
+          reEntryRequiredTestsMap.put(BloodTestType.REPEAT_BLOODTYPING, true);
         } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.CONFIRMATORY_TTI)) {
           reEntryRequiredTestsMap.put(BloodTestType.CONFIRMATORY_TTI, true);
         }
