@@ -76,20 +76,6 @@ public class UserRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
-  public void testDeleteUserById() throws Exception {
-    userRepository.deleteUserById(1l); // this is a hard delete
-    List<UserViewModel> all = userRepository.getAllUsers();
-    Assert.assertNotNull("There are Users defined", all);
-    Assert.assertEquals("There are now 15 Users", 15, all.size());
-  }
-
-  @Test
-  public void testDeleteUser() throws Exception {
-    userRepository.deleteUser("superuser");
-    // can't assert this is true because all queries ignore deleted users
-  }
-
-  @Test
   public void testUpdateBasicUserInfo() throws Exception {
     User user = userRepository.findUserById(1l);
     user.setFirstName("Test");

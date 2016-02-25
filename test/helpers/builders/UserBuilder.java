@@ -12,6 +12,7 @@ public class UserBuilder extends AbstractEntityBuilder<User> {
   private String lastName = "User";
   // Password = "password", rounds = 4
   private String password = "$2a$04$iA45ovNGD4hhA1puc/a8J.FN8WCMzKft1vdBAgw6o7oe7KBpVVkRS";
+  private Boolean isDeleted;
 
   public UserBuilder withId(Long id) {
     this.id = id;
@@ -43,6 +44,16 @@ public class UserBuilder extends AbstractEntityBuilder<User> {
     return this;
   }
 
+  public UserBuilder thatIsDeleted() {
+    isDeleted = true;
+    return this;
+  }
+
+  public UserBuilder thatIsNotDeleted() {
+    isDeleted = false;
+    return this;
+  }
+
   @Override
   public User build() {
     User user = new User();
@@ -53,6 +64,7 @@ public class UserBuilder extends AbstractEntityBuilder<User> {
     user.setFirstName(firstName);
     user.setLastName(lastName);
     user.setPassword(password);
+    user.setIsDeleted(isDeleted);
     return user;
   }
 

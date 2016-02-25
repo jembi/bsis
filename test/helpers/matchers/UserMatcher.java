@@ -4,9 +4,10 @@ import java.util.Objects;
 
 import model.user.User;
 
-import org.mockito.ArgumentMatcher;
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
 
-public class UserMatcher extends ArgumentMatcher<User> {
+public class UserMatcher extends TypeSafeMatcher<User> {
 
   private User expected;
 
@@ -15,14 +16,19 @@ public class UserMatcher extends ArgumentMatcher<User> {
   }
 
   @Override
-  public boolean matches(Object object) {
-    if (!(object instanceof User)) {
-      return false;
-    }
+  public void describeTo(Description description) {
+    description.appendText("A user with the following state:")
+        .appendText("\nId: ").appendValue(expected.getId())
+        .appendText("\nDeleted: ").appendValue(expected.getIsDeleted())
+        .appendText("\nEmail Id: ").appendValue(expected.getEmailId())
+        .appendText("\nPassword Reset: ").appendValue(expected.isPasswordReset());
+  }
 
-    User actual = (User) object;
-
-    return Objects.equals(actual.getEmailId(), expected.getEmailId())
+  @Override
+  protected boolean matchesSafely(User actual) {
+    return Objects.equals(actual.getId(), expected.getId())
+        && Objects.equals(actual.getIsDeleted(), expected.getIsDeleted())
+        && Objects.equals(actual.getEmailId(), expected.getEmailId())
         && Objects.equals(actual.isPasswordReset(), expected.isPasswordReset());
   }
 

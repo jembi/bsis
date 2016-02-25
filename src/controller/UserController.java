@@ -24,10 +24,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import repository.RoleRepository;
 import repository.UserRepository;
+import service.UserCRUDService;
 import utils.PermissionConstants;
 import viewmodel.UserViewModel;
 import backingform.UserBackingForm;
@@ -45,6 +47,9 @@ public class UserController {
 
   @Autowired
   private UserBackingFormValidator userBackingFormValidator;
+
+  @Autowired
+  private UserCRUDService userCRUDService;
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
@@ -143,10 +148,9 @@ public class UserController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
-  public ResponseEntity deleteUser(@PathVariable Long id) {
-
-    userRepository.deleteUserById(id);
-    return new ResponseEntity(HttpStatus.NO_CONTENT);
+  @ResponseStatus(value = HttpStatus.NO_CONTENT)
+  public void deleteUser(@PathVariable Long id) {
+    userCRUDService.deleteUser(id);
   }
 
   private void addAllUsersToModel(Map<String, Object> m) {
