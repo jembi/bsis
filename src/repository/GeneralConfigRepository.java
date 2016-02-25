@@ -8,10 +8,14 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import model.admin.GeneralConfig;
+import service.GeneralConfigAccessorService;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * @see GeneralConfigAccessorService
+ */
 @Repository
 @Transactional
 public class GeneralConfigRepository {

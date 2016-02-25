@@ -25,6 +25,17 @@ public class GeneralConfigAccessorService {
     return Boolean.toString(true).equalsIgnoreCase(generalConfig.getValue());
   }
 
+  public boolean getBooleanValue(String name, boolean defaultValue) {
+
+    GeneralConfig generalConfig = getGeneralConfigOfTypeOrNull(name, EnumDataType.BOOLEAN);
+    
+    if (generalConfig == null) {
+      return defaultValue;
+    }
+    
+    return Boolean.toString(true).equalsIgnoreCase(generalConfig.getValue());
+  }
+
   public int getIntValue(String name) {
 
     GeneralConfig generalConfig = getGeneralConfigOfType(name, EnumDataType.INTEGER);
@@ -32,11 +43,21 @@ public class GeneralConfigAccessorService {
   }
 
   private GeneralConfig getGeneralConfigOfType(String name, EnumDataType enumDataType) {
+    GeneralConfig generalConfig = getGeneralConfigOfTypeOrNull(name, enumDataType);
+    
+    if (generalConfig == null) {
+      throw new IllegalArgumentException("General config \"" + name + "\" not found.");
+    }
+    
+    return generalConfig;
+  }
+  
+  private GeneralConfig getGeneralConfigOfTypeOrNull(String name, EnumDataType enumDataType) {
 
     GeneralConfig generalConfig = generalConfigRepository.getGeneralConfigByName(name);
 
     if (generalConfig == null) {
-      throw new IllegalArgumentException("General config \"" + name + "\" not found.");
+      return null;
     }
 
     if (getEnumDataType(generalConfig.getDataType()) != enumDataType) {
