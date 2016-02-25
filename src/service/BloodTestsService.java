@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import constant.GeneralConfigConstants;
 import model.component.Component;
 import model.donation.Donation;
 import model.testbatch.TestBatchStatus;
@@ -40,6 +41,9 @@ public class BloodTestsService {
   
   @Autowired
   private TestBatchStatusChangeService testBatchStatusChangeService;
+  
+  @Autowired
+  private GeneralConfigAccessorService generalConfigAccessorService;
 
   /**
    * Executes the BloodTestingRuleEngine with the configured BloodTests and returns the results
@@ -78,6 +82,13 @@ public class BloodTestsService {
   public BloodTestingRuleResult saveBloodTests(Long donationId, Map<Long, String> bloodTestResults, boolean reEntry) {
     Donation donation = donationRepository.findDonationById(donationId);
     Map<Long, String> reEnteredBloodTestResults = bloodTestResults;
+    
+    if (!reEntry && !generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.TESTING_RE_ENTRY_REQUIRED, true)) {
+      // This is not re-entry, but re-entry is not required, so just set reEntry to true
+      // The result of this is that no blood test results will be marked as requiring re-entry
+      reEntry = true;
+    }
+    
     if (!reEntry) {
       // only outcomes that have been entered twice will be considered by the rules engine
       reEnteredBloodTestResults = new HashMap<>();

@@ -22,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import constant.GeneralConfigConstants;
 import helpers.builders.BloodTestBuilder;
 import helpers.builders.BloodTestResultBuilder;
 import helpers.builders.BloodTestingRuleResultBuilder;
@@ -65,6 +66,9 @@ public class BloodTestsServiceTest {
   
   @Mock
   TestBatchStatusChangeService testBatchStatusChangeService;
+  
+  @Mock
+  private GeneralConfigAccessorService generalConfigAccessorService;
 
   @Before
   public void setup() {
@@ -676,6 +680,7 @@ public class BloodTestsServiceTest {
         .thenReturn(typedQuery);
     when(typedQuery.setParameter("bloodTestId", 17)).thenReturn(typedQuery);
     when(typedQuery.getSingleResult()).thenReturn(bloodTest);
+    when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.TESTING_RE_ENTRY_REQUIRED, true)).thenReturn(true);
 
     // run test
     service.saveBloodTests(donation.getId(), bloodTestResults, false);
@@ -714,6 +719,7 @@ public class BloodTestsServiceTest {
         .thenReturn(typedQuery);
     when(typedQuery.setParameter("bloodTestId", 17)).thenReturn(typedQuery);
     when(typedQuery.getSingleResult()).thenReturn(bloodTest);
+    when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.TESTING_RE_ENTRY_REQUIRED, true)).thenReturn(true);
 
     // run test with re-entry = false
     service.saveBloodTests(donation.getId(), bloodTestResults, false);
