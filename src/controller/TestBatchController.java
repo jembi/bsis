@@ -171,6 +171,9 @@ public class TestBatchController {
     }
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("donations", donationSummaryViewModels);
+    map.put("testBatchCreatedDate", testBatch.getCreatedDate());
+    map.put("donationsNumber", donationSummaryViewModels.size());
+
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
