@@ -20,7 +20,7 @@ import viewmodel.UserViewModel;
 
 @Repository
 @Transactional
-public class UserRepository {
+public class UserRepository extends AbstractRepository<User> {
 
   @PersistenceContext
   private EntityManager em;
@@ -56,13 +56,6 @@ public class UserRepository {
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("userId", id);
     return query.getSingleResult();
-  }
-
-  public void deleteUser(String username) throws IllegalArgumentException {
-    User existingUser = findUser(username);
-    existingUser.setIsDeleted(Boolean.TRUE);
-    em.merge(existingUser);
-    em.flush();
   }
 
   public User findUser(String username) {
@@ -135,11 +128,5 @@ public class UserRepository {
     TypedQuery<Role> query = em.createQuery(queryString, Role.class);
     query.setParameter("roleId", id);
     return query.getSingleResult();
-  }
-
-  public void deleteUserById(Long id) throws NoResultException, IllegalArgumentException {
-    User user = findUserById(id);
-    em.remove(user);
-
   }
 }
