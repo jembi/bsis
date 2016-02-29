@@ -70,6 +70,33 @@ public class GeneralConfigAccessorServiceTests extends UnitTestSuite {
     verify(generalConfigRepository).getGeneralConfigByName(IRRELEVANT_CONFIG_NAME);
     assertThat(returnedBooleanValue, is(booleanValue));
   }
+  
+  @Test
+  public void testGetBooleanValueWithDefault_shouldReturnDefaultValue() {
+    
+    boolean defaultValue = true;
+
+    boolean returnedBooleanValue = generalConfigAccessorService.getBooleanValue(IRRELEVANT_CONFIG_NAME, defaultValue);
+
+    assertThat(returnedBooleanValue, is(defaultValue));
+  }
+  
+  @Test
+  public void testGetBooleanValueWithDefaultAndExistingGeneralConfig_shouldReturnGeneralConfigValue() {
+    
+    boolean booleanValue = false;
+    DataType booleanDataType = aDataType().withDataType(EnumDataType.BOOLEAN.name()).build();
+    GeneralConfig generalConfig = aGeneralConfig()
+        .withDataType(booleanDataType)
+        .withValue(Boolean.toString(booleanValue))
+        .build();
+
+    when(generalConfigRepository.getGeneralConfigByName(IRRELEVANT_CONFIG_NAME)).thenReturn(generalConfig);
+    
+    boolean returnedBooleanValue = generalConfigAccessorService.getBooleanValue(IRRELEVANT_CONFIG_NAME, true);
+
+    assertThat(returnedBooleanValue, is(booleanValue));
+  }
 
   @Test(expected = IllegalArgumentException.class)
   public void testGetIntValueWithMissingGeneralConfig_shouldThrow() {

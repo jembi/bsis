@@ -9,6 +9,7 @@ public class GeneralConfigConstants {
 
   // Testing
   public static final String DEFER_DONORS_WITH_NEG_REPEAT_OUTCOMES = "testing.deferDonorsWithNegRepeatOutcomes";
+  public static final String TESTING_RE_ENTRY_REQUIRED = "testing.reEntryRequired";
 
   // Components
   public static final String CREATE_INITIAL_COMPONENTS = "components.createInitialComponents";
