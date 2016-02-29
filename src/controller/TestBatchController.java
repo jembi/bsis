@@ -38,6 +38,7 @@ import repository.SequenceNumberRepository;
 import repository.TestBatchRepository;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import service.TestBatchCRUDService;
+import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 import utils.PermissionUtils;
 import viewmodel.DonationBatchViewModel;
@@ -171,8 +172,8 @@ public class TestBatchController {
     }
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("donations", donationSummaryViewModels);
-    map.put("testBatchCreatedDate", testBatch.getCreatedDate());
-    map.put("donationsNumber", donationSummaryViewModels.size());
+    map.put("testBatchCreatedDate", CustomDateFormatter.format(testBatch.getCreatedDate()));
+    map.put("numberOfDonations", donationSummaryViewModels.size());
 
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
