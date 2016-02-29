@@ -16,18 +16,9 @@ public class DonationSummaryViewModel {
 
   private Donation donation;
 
-  public DonationSummaryViewModel(Donation donation) {
-    this.donation = donation;
-  }
-
-  public DonationSummaryViewModel(Donation donation, boolean includeTestResults, boolean includeVenueInfo,
-      boolean includeDonorInfo) {
+  public DonationSummaryViewModel(Donation donation, boolean includeVenueInfo, boolean includeDonorInfo) {
     this.includeDonorInfo = includeDonorInfo;
     this.includeVenueInfo = includeVenueInfo;
-
-    if (includeTestResults == false) {
-      donation.setBloodTestResults(null);
-    }
     this.donation = donation;
   }
 

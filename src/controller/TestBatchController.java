@@ -28,8 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 import backingform.TestBatchBackingForm;
 import backingform.validator.TestBatchBackingFormValidator;
 import factory.DonationBatchViewModelFactory;
+import factory.DonationSummaryViewModelFactory;
 import factory.TestBatchViewModelFactory;
-import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
@@ -162,14 +162,8 @@ public class TestBatchController {
       @RequestParam(value = "bloodTypingMatchStatus", required = false) BloodTypingMatchStatus bloodTypingMatchStatus) {
 
     TestBatch testBatch = testBatchRepository.findTestBatchById(id);
-    List<DonationSummaryViewModel> donationSummaryViewModels = new ArrayList<>();
-    for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-      for (Donation donation : donationBatch.getDonations()) {
-        if (bloodTypingMatchStatus == null || donation.getBloodTypingMatchStatus().equals(bloodTypingMatchStatus)) {
-          donationSummaryViewModels.add(new DonationSummaryViewModel(donation, false, false, false));
-        }
-      }
-    }
+    List<DonationSummaryViewModel> donationSummaryViewModels =
+        DonationSummaryViewModelFactory.createDonationSummaryViewModels(testBatch, bloodTypingMatchStatus);
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("donations", donationSummaryViewModels);
     map.put("testBatchCreatedDate", CustomDateFormatter.format(testBatch.getCreatedDate()));
