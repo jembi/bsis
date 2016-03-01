@@ -16,52 +16,38 @@ public class DonationSummaryViewModelFactory {
 
 
   /**
-   * Creates a list of DonationSummaryViewModel objects from a testBatch.
+   * Creates a list of DonationSummaryViewModel objects from a test batch, with the option of
+   * filtering by blood typing match status if the bloodTypingMatchStatus parameter is not null.
    *
    * @param testBatch the test batch
    * @param bloodTypingMatchStatus the blood typing match status
    * @return the list< donation summary view model>
    */
-  public static List<DonationSummaryViewModel> createDonationSummaryViewModels(TestBatch testBatch,
-      BloodTypingMatchStatus bloodTypingMatchStatus) {
+  public static List<DonationSummaryViewModel> createDonationSummaryViewModels(
+      TestBatch testBatch, BloodTypingMatchStatus bloodTypingMatchStatus) {
     List<DonationSummaryViewModel> donationSummaryViewModels = new ArrayList<>();
     for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-      donationSummaryViewModels =
-          addToList(donationSummaryViewModels, donationBatch.getDonations(), bloodTypingMatchStatus, false, false);
+      for (Donation donation : donationBatch.getDonations()) {
+        if (bloodTypingMatchStatus == null || donation.getBloodTypingMatchStatus().equals(bloodTypingMatchStatus)) {
+          donationSummaryViewModels.add(new DonationSummaryViewModel(donation));
+        }
+      }
     }
     return donationSummaryViewModels;
   }
 
 
   /**
-   * Creates a list of DonationSummaryViewModel objects from a list of donations.
+   * Creates a list of DonationSummaryViewModel objects from a list of donations. The models are a
+   * full summary, which means they include venue and donor info.
    *
    * @param donations the donations
    * @return the list< donation summary view model>
    */
-  public static List<DonationSummaryViewModel> createDonationSummaryViewModels(List<Donation> donations) {
+  public static List<DonationSummaryViewModel> createFullDonationSummaryViewModels(List<Donation> donations) {
     List<DonationSummaryViewModel> donationSummaryViewModels = new ArrayList<>();
-    donationSummaryViewModels = addToList(donationSummaryViewModels, donations, null, true, true);
-    return donationSummaryViewModels;
-  }
-
-  /**
-   * Adds the to list.
-   *
-   * @param donationSummaryViewModels the donation summary view models
-   * @param donations the donations
-   * @param bloodTypingMatchStatus the blood typing match status
-   * @param includeVenueInfo the include venue info
-   * @param includeDonorInfo the include donor info
-   * @return the list
-   */
-  private static List<DonationSummaryViewModel> addToList(List<DonationSummaryViewModel> donationSummaryViewModels,
-      List<Donation> donations, BloodTypingMatchStatus bloodTypingMatchStatus, boolean includeVenueInfo,
-      boolean includeDonorInfo) {
     for (Donation donation : donations) {
-      if (bloodTypingMatchStatus == null || donation.getBloodTypingMatchStatus().equals(bloodTypingMatchStatus)) {
-        donationSummaryViewModels.add(new DonationSummaryViewModel(donation, includeVenueInfo, includeDonorInfo));
-      }
+      donationSummaryViewModels.add(new DonationSummaryViewModel(donation, true, true));
     }
     return donationSummaryViewModels;
   }

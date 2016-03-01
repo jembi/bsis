@@ -57,7 +57,7 @@ public class DonationSummaryViewModelFactoryTests {
     donations.add(d3);
     donations.add(d4);
     List<DonationSummaryViewModel> donationModels =
-        DonationSummaryViewModelFactory.createDonationSummaryViewModels(donations);
+        DonationSummaryViewModelFactory.createFullDonationSummaryViewModels(donations);
 
     System.out.println(donationModels);
 

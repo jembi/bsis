@@ -321,7 +321,7 @@ public class DonationController {
 
       List<Donation> donors = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
           startDate, endDate, venues == null ? null : new HashSet<>(venues));
-      return DonationSummaryViewModelFactory.createDonationSummaryViewModels(donors);
+      return DonationSummaryViewModelFactory.createFullDonationSummaryViewModels(donors);
     }
 
     // Just return an empty list for now. This could return the full list of donations if needed.
