@@ -1340,4 +1340,43 @@
         </sql>
     </changeSet>
 
+	<!-- fix foreign key bug (originated in db-fix-ids.xml) -->
+	<changeSet id="20160301-1124" author="timler">
+		<preConditions onFail="MARK_RAN">
+			<changeSetExecuted id="20151209-1510" author="timler" changeLogFile="./liquibase/db-fix-ids.xml" />
+		</preConditions>
+		<comment>Fix foreign key reference BloodTest_WorksheetType - BloodTest</comment>
+		<dropForeignKeyConstraint baseTableName="BloodTest_WorksheetType"
+			constraintName="fk_BloodTest_WorksheetType_worksheetTypes_id" />
+		<addForeignKeyConstraint constraintName="fk_BloodTest_WorksheetType_worksheetTypes_id"
+			baseColumnNames="worksheetTypes_id" baseTableName="BloodTest_WorksheetType"
+			referencedColumnNames="id" referencedTableName="WorksheetType" />
+	</changeSet>
+
+	<!-- delete Weak D test -->
+	<changeSet id="20160301-0925" author="timler">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM BloodTest WHERE testNameShort = 'Weak D';
+				]]>
+				</sqlCheck>
+			</not>
+		</preConditions>
+		<comment>Remove Weak D test (and delete all results)</comment>
+		<!-- hard delete the test results -->
+		<sql>
+			DELETE FROM BloodTestResult WHERE bloodTest_id = (SELECT id from
+			BloodTest where testNameShort = 'Weak D');
+		</sql>
+		<delete tableName="BloodTest_WorksheetType">
+			<where>bloodTests_id = (SELECT id from BloodTest where testNameShort = 'Weak D')</where>
+		</delete>
+		<!-- finally ... delete the Weak D test -->
+		<delete tableName="BloodTest">
+			<where>testNameShort = 'Weak D'</where>
+		</delete>
+	</changeSet>
+
 </databaseChangeLog>

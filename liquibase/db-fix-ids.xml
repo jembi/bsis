@@ -723,7 +723,10 @@
     	    referencedColumnNames="id" referencedTableName="WellType"/>
 	</changeSet>
 
-	<changeSet id="20151209-1510" author="timler">
+	<changeSet id="20160301-1221" author="timler">
+		<preConditions onFail="MARK_RAN">
+			<not><changeSetExecuted id="20151209-1510" author="timler" changeLogFile="./liquibase/db-fix-ids.xml" /></not>
+		</preConditions>
 		<comment>Change WorksheetType id</comment>
 	    <!-- drop foreign key constraints -->
 	    <dropForeignKeyConstraint baseTableName="Worksheet" constraintName="FKB98678CEBC88FBF5"/>
@@ -754,7 +757,7 @@
     	<addForeignKeyConstraint
     	    constraintName="fk_BloodTest_WorksheetType_worksheetTypes_id" 
     	    baseColumnNames="worksheetTypes_id" baseTableName="BloodTest_WorksheetType"
-    	    referencedColumnNames="id" referencedTableName="BloodTest"/>
+    	    referencedColumnNames="id" referencedTableName="WorksheetType"/>
 	</changeSet>
 
 	<changeSet id="20151209-2130" author="timler">
