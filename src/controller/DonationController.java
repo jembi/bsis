@@ -14,10 +14,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import model.donation.Donation;
-import model.donation.HaemoglobinLevel;
-import model.packtype.PackType;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,6 +31,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import backingform.DonationBackingForm;
+import backingform.validator.AdverseEventBackingFormValidator;
+import backingform.validator.DonationBackingFormValidator;
+import factory.DonationSummaryViewModelFactory;
+import factory.DonationViewModelFactory;
+import model.donation.Donation;
+import model.donation.HaemoglobinLevel;
+import model.packtype.PackType;
 import repository.AdverseEventTypeRepository;
 import repository.DonationRepository;
 import repository.DonationTypeRepository;
@@ -49,10 +53,6 @@ import utils.PermissionUtils;
 import viewmodel.DonationSummaryViewModel;
 import viewmodel.DonationViewModel;
 import viewmodel.PackTypeViewModel;
-import backingform.DonationBackingForm;
-import backingform.validator.AdverseEventBackingFormValidator;
-import backingform.validator.DonationBackingFormValidator;
-import factory.DonationViewModelFactory;
 
 @RestController
 @RequestMapping("/donations")
@@ -93,6 +93,9 @@ public class DonationController {
 
   @Autowired
   private DonationBackingFormValidator donationBackingFormValidator;
+
+  @Autowired
+  private DonationSummaryViewModelFactory donationSummaryViewModelFactory;
 
   public DonationController() {
   }
@@ -321,19 +324,11 @@ public class DonationController {
 
       List<Donation> donors = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
           startDate, endDate, venues == null ? null : new HashSet<>(venues));
-      return createDonationSummaryViewModels(donors);
+      return donationSummaryViewModelFactory.createFullDonationSummaryViewModels(donors);
     }
 
     // Just return an empty list for now. This could return the full list of donations if needed.
     return Collections.emptyList();
-  }
-
-  private List<DonationSummaryViewModel> createDonationSummaryViewModels(List<Donation> donations) {
-    List<DonationSummaryViewModel> donationSummaryViewModels = new ArrayList<>();
-    for (Donation donation : donations) {
-      donationSummaryViewModels.add(new DonationSummaryViewModel(donation));
-    }
-    return donationSummaryViewModels;
   }
 
   private List<PackTypeViewModel> getPackTypeViewModels(List<PackType> packTypes) {
