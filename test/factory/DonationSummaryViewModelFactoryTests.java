@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import helpers.builders.DonationBatchBuilder;
@@ -19,7 +20,10 @@ import viewmodel.DonationSummaryViewModel;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DonationSummaryViewModelFactoryTests {
-  
+
+  @InjectMocks
+  private DonationSummaryViewModelFactory donationSummaryViewModelFactory;
+
   @Test
   public void testCreateDonationSummaryViewModels_fromTestBatch_onlyAmbiguous() {
     
@@ -38,7 +42,7 @@ public class DonationSummaryViewModelFactoryTests {
     TestBatch testBatch =
         TestBatchBuilder.aTestBatch().withDonationBatch(donationBatch1).withDonationBatch(donationBatch2).build();
     List<DonationSummaryViewModel> donationModels =
-        DonationSummaryViewModelFactory.createDonationSummaryViewModels(testBatch, BloodTypingMatchStatus.AMBIGUOUS);
+        donationSummaryViewModelFactory.createDonationSummaryViewModels(testBatch, BloodTypingMatchStatus.AMBIGUOUS);
 
     Assert.assertTrue("2 ambiguous donations on the test batch", donationModels.size() == 2);
 
@@ -57,9 +61,7 @@ public class DonationSummaryViewModelFactoryTests {
     donations.add(d3);
     donations.add(d4);
     List<DonationSummaryViewModel> donationModels =
-        DonationSummaryViewModelFactory.createFullDonationSummaryViewModels(donations);
-
-    System.out.println(donationModels);
+        donationSummaryViewModelFactory.createFullDonationSummaryViewModels(donations);
 
     Assert.assertTrue("4 donations", donationModels.size() == 4);
     

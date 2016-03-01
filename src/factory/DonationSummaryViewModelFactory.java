@@ -3,6 +3,8 @@ package factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
@@ -12,6 +14,7 @@ import viewmodel.DonationSummaryViewModel;
 /**
  * A factory for creating DonationSummaryViewModel objects.
  */
+@Service
 public class DonationSummaryViewModelFactory {
 
 
@@ -23,7 +26,7 @@ public class DonationSummaryViewModelFactory {
    * @param bloodTypingMatchStatus the blood typing match status
    * @return the list< donation summary view model>
    */
-  public static List<DonationSummaryViewModel> createDonationSummaryViewModels(
+  public List<DonationSummaryViewModel> createDonationSummaryViewModels(
       TestBatch testBatch, BloodTypingMatchStatus bloodTypingMatchStatus) {
     List<DonationSummaryViewModel> donationSummaryViewModels = new ArrayList<>();
     for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
@@ -44,7 +47,7 @@ public class DonationSummaryViewModelFactory {
    * @param donations the donations
    * @return the list< donation summary view model>
    */
-  public static List<DonationSummaryViewModel> createFullDonationSummaryViewModels(List<Donation> donations) {
+  public List<DonationSummaryViewModel> createFullDonationSummaryViewModels(List<Donation> donations) {
     List<DonationSummaryViewModel> donationSummaryViewModels = new ArrayList<>();
     for (Donation donation : donations) {
       donationSummaryViewModels.add(new DonationSummaryViewModel(donation, true, true));

@@ -94,6 +94,9 @@ public class DonationController {
   @Autowired
   private DonationBackingFormValidator donationBackingFormValidator;
 
+  @Autowired
+  private DonationSummaryViewModelFactory donationSummaryViewModelFactory;
+
   public DonationController() {
   }
 
@@ -321,7 +324,7 @@ public class DonationController {
 
       List<Donation> donors = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
           startDate, endDate, venues == null ? null : new HashSet<>(venues));
-      return DonationSummaryViewModelFactory.createFullDonationSummaryViewModels(donors);
+      return donationSummaryViewModelFactory.createFullDonationSummaryViewModels(donors);
     }
 
     // Just return an empty list for now. This could return the full list of donations if needed.

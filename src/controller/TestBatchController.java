@@ -70,6 +70,9 @@ public class TestBatchController {
   @Autowired
   private TestBatchBackingFormValidator testBatchBackingFormValidator;
 
+  @Autowired
+  private DonationSummaryViewModelFactory donationSummaryViewModelFactory;
+
   @InitBinder
   public void initBinder(WebDataBinder binder) {
     binder.addValidators(testBatchBackingFormValidator);
@@ -163,7 +166,7 @@ public class TestBatchController {
 
     TestBatch testBatch = testBatchRepository.findTestBatchById(id);
     List<DonationSummaryViewModel> donationSummaryViewModels =
-        DonationSummaryViewModelFactory.createDonationSummaryViewModels(testBatch, bloodTypingMatchStatus);
+        donationSummaryViewModelFactory.createDonationSummaryViewModels(testBatch, bloodTypingMatchStatus);
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("donations", donationSummaryViewModels);
     map.put("testBatchCreatedDate", CustomDateFormatter.format(testBatch.getCreatedDate()));
