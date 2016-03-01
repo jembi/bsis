@@ -9,10 +9,6 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import model.donationbatch.DonationBatch;
-import model.testbatch.TestBatch;
-import model.testbatch.TestBatchStatus;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -29,18 +25,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import repository.DonationBatchRepository;
-import repository.SequenceNumberRepository;
-import repository.TestBatchRepository;
-import service.TestBatchCRUDService;
-import utils.PermissionConstants;
-import utils.PermissionUtils;
-import viewmodel.DonationBatchViewModel;
-import viewmodel.TestBatchViewModel;
 import backingform.TestBatchBackingForm;
 import backingform.validator.TestBatchBackingFormValidator;
 import factory.DonationBatchViewModelFactory;
+import factory.DonationSummaryViewModelFactory;
 import factory.TestBatchViewModelFactory;
+import model.donationbatch.DonationBatch;
+import model.testbatch.TestBatch;
+import model.testbatch.TestBatchStatus;
+import repository.DonationBatchRepository;
+import repository.SequenceNumberRepository;
+import repository.TestBatchRepository;
+import repository.bloodtesting.BloodTypingMatchStatus;
+import service.TestBatchCRUDService;
+import utils.CustomDateFormatter;
+import utils.PermissionConstants;
+import utils.PermissionUtils;
+import viewmodel.DonationBatchViewModel;
+import viewmodel.DonationSummaryViewModel;
+import viewmodel.TestBatchViewModel;
 
 @RestController
 @RequestMapping("testbatches")
@@ -66,6 +69,9 @@ public class TestBatchController {
 
   @Autowired
   private TestBatchBackingFormValidator testBatchBackingFormValidator;
+
+  @Autowired
+  private DonationSummaryViewModelFactory donationSummaryViewModelFactory;
 
   @InitBinder
   public void initBinder(WebDataBinder binder) {
@@ -153,6 +159,21 @@ public class TestBatchController {
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
+  @RequestMapping(value = "/{id}/donations", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TESTING_INFORMATION + "')")
+  public ResponseEntity<Map<String, Object>> getDonationsForTestBatch(@PathVariable Long id,
+      @RequestParam(value = "bloodTypingMatchStatus", required = false) BloodTypingMatchStatus bloodTypingMatchStatus) {
+
+    TestBatch testBatch = testBatchRepository.findTestBatchById(id);
+    List<DonationSummaryViewModel> donationSummaryViewModels =
+        donationSummaryViewModelFactory.createDonationSummaryViewModels(testBatch, bloodTypingMatchStatus);
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("donations", donationSummaryViewModels);
+    map.put("testBatchCreatedDate", CustomDateFormatter.format(testBatch.getCreatedDate()));
+    map.put("numberOfDonations", donationSummaryViewModels.size());
+
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
 
   public String getNextTestBatchNumber() {
     return sequenceNumberRepository.getNextTestBatchNumber();
