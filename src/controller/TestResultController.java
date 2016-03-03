@@ -32,6 +32,7 @@ import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
 import service.BloodTestsService;
+import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 import viewmodel.BloodTestResultViewModel;
 import viewmodel.BloodTestingRuleResult;
@@ -80,12 +81,13 @@ public class TestResultController {
       @RequestParam(value = "bloodTestType", required = false) BloodTestType bloodTestType) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-
+    int numberOfDonations = 0;
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     List<DonationBatch> donationBatches = testBatch.getDonationBatches();
     List<Long> donationBatchIds = new ArrayList<Long>();
     for(DonationBatch donationBatch : donationBatches){
       donationBatchIds.add(donationBatch.getId());
+      numberOfDonations += donationBatch.getDonations().size();
     }
 
     List<BloodTestingRuleResult> ruleResults;
@@ -97,6 +99,8 @@ public class TestResultController {
     }
 
     map.put("testResults", ruleResults);
+    map.put("testBatchCreatedDate", CustomDateFormatter.format(testBatch.getCreatedDate()));
+    map.put("numberOfDonations", numberOfDonations);
 
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
