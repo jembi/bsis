@@ -99,7 +99,8 @@ public class BloodTestingRuleEngine {
     // Go through each rule and see if the pattern matches the available result and tally the TTI, ABO, RH results
     for (BloodTestingRule rule : rules) {
 
-      if (donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.RESOLVED
+      if (donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.RESOLVED 
+          || donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NO_TYPE_DETERMINED
           && (rule.getSubCategory() == BloodTestSubCategory.BLOODABO
           || rule.getSubCategory() == BloodTestSubCategory.BLOODRH)) {
         // Don't process the rule if it is for blood typing and the blood typing is resolved
@@ -370,6 +371,9 @@ public class BloodTestingRuleEngine {
     if (donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.RESOLVED) {
       // The Abo/Rh values have already been confirmed so keep the status as MATCH
       bloodTypingMatchStatus = BloodTypingMatchStatus.RESOLVED;
+    } if (donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NO_TYPE_DETERMINED) {
+      // The ABO/Rh values cannot be determined so do nothing and keep this status
+      bloodTypingMatchStatus = BloodTypingMatchStatus.NO_TYPE_DETERMINED;
     } else if (StringUtils.isNotEmpty(donation.getBloodAbo()) && StringUtils.isNotEmpty(donation.getBloodRh())) {
 
       if (StringUtils.isEmpty(donor.getBloodAbo()) || StringUtils.isEmpty(donor.getBloodRh())) {
