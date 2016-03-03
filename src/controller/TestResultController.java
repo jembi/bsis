@@ -25,21 +25,17 @@ import model.bloodtesting.BloodTestType;
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
-import model.donor.Donor;
 import model.testbatch.TestBatch;
-import model.testbatch.TestBatchStatus;
 import repository.DonationRepository;
 import repository.TestBatchRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
 import service.BloodTestsService;
-import service.TestBatchStatusChangeService;
 import utils.PermissionConstants;
 import viewmodel.BloodTestResultViewModel;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.DonationViewModel;
-import viewmodel.DonorViewModel;
 
 @RestController
 @RequestMapping("testresults")
@@ -53,9 +49,6 @@ public class TestResultController {
 
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
-
-  @Autowired
-  private TestBatchStatusChangeService testBatchStatusChangeService;
 
   @Autowired
   private BloodTestsService bloodTestsService;
@@ -241,36 +234,6 @@ public class TestResultController {
       }
     }
     return new ResponseEntity<>(responseMap, responseStatus);
-  }
-
-  @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
-  @RequestMapping(value = "/bloodgroupmatches", method = RequestMethod.GET)
-  public ResponseEntity<Map<String, Object>> saveBloodGroupMatchTestResults(
-      @RequestParam(value = "donationIdentificationNumber", required = true) String donationIdentificationNumber,
-      @RequestParam(value = "bloodAbo", required = true) String bloodAbo,
-      @RequestParam(value = "bloodRh", required = true) String bloodRh) {
-
-    HttpStatus httpStatus = HttpStatus.CREATED;
-    Map<String, Object> map = new HashMap<String, Object>();
-
-    Donation donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
-    donation.setBloodAbo(bloodAbo);
-    donation.setBloodRh(bloodRh);
-    donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.RESOLVED);
-
-    Donation cs = donationRepository.updateDonationDetails(donation);
-
-    if (cs.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
-      testBatchStatusChangeService.handleRelease(cs);
-    }
-
-    map.put("donor", getDonorsViewModel(cs.getDonor()));
-    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
-  }
-
-  private DonorViewModel getDonorsViewModel(Donor donor) {
-    DonorViewModel donorViewModel = new DonorViewModel(donor);
-    return donorViewModel;
   }
 
 }
