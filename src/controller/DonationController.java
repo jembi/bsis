@@ -213,10 +213,10 @@ public class DonationController {
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONATION + "')")
-  public ResponseEntity<Map<String, Object>> addDonation(@RequestBody @Valid DonationBackingForm form) {
+  public ResponseEntity<Map<String, Object>> addDonation(@RequestBody @Valid DonationBackingForm donationBackingForm) {
 
     // Create the donation
-    Donation savedDonation = donationCRUDService.createDonation(form);
+    Donation savedDonation = donationCRUDService.createDonation(donationBackingForm);
 
     // Populate the response map
     Map<String, Object> map = new HashMap<>();
