@@ -13,7 +13,9 @@ public class BloodTypingResolutionBackingFormValidator extends BaseValidator<Blo
   @Override
   public void validateForm(BloodTypingResolutionBackingForm form, Errors errors) {
 
-    if (form.getStatus().equals(FinalBloodTypingMatchStatus.RESOLVED)) {
+    if (form.getStatus() == null) {
+      errors.rejectValue("status", "bloodTypingResolution.status.required");
+    } else if (form.getStatus().equals(FinalBloodTypingMatchStatus.RESOLVED)) {
       if (StringUtils.isEmpty(form.getBloodAbo())) {
         errors.rejectValue("bloodAbo", "bloodTypingResolution.bloodAbo.required");
       }
