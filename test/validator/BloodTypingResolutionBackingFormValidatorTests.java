@@ -11,6 +11,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 
 import backingform.BloodTypingResolutionBackingForm;
+import backingform.BloodTypingResolutionBackingForm.FinalBloodTypingMatchStatus;
 import backingform.validator.BloodTypingResolutionBackingFormValidator;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -22,7 +23,7 @@ public class BloodTypingResolutionBackingFormValidatorTests {
   @Test
   public void testValidateEmptyFields() {
     BloodTypingResolutionBackingForm backingForm = new BloodTypingResolutionBackingForm();
-    backingForm.setResolved(true);
+    backingForm.setStatus(FinalBloodTypingMatchStatus.RESOLVED);
     backingForm.setBloodAbo(null);
     backingForm.setBloodRh(null);
 

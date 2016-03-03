@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import backingform.BloodTypingResolutionBackingForm;
+import backingform.BloodTypingResolutionBackingForm.FinalBloodTypingMatchStatus;
 import backingform.DonationBackingForm;
 import backingform.validator.BloodTypingResolutionBackingFormValidator;
 import backingform.validator.DonationBackingFormValidator;
@@ -354,8 +355,8 @@ public class DonationController {
       @RequestBody @Valid BloodTypingResolutionBackingForm bloodTypingResolutionBackingForm) {
 
     Donation donation = donationRepository.findDonationById(id);
-    boolean bloodTypingResolved = bloodTypingResolutionBackingForm.getResolved();
-    if (bloodTypingResolved) {
+    FinalBloodTypingMatchStatus status = bloodTypingResolutionBackingForm.getStatus();
+    if (status.equals(FinalBloodTypingMatchStatus.RESOLVED)) {
       donation.setBloodAbo(bloodTypingResolutionBackingForm.getBloodAbo());
       donation.setBloodRh(bloodTypingResolutionBackingForm.getBloodRh());
       donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.RESOLVED);
@@ -363,10 +364,10 @@ public class DonationController {
       donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
     }
 
-    Donation cs = donationRepository.updateDonationDetails(donation);
+    donation = donationRepository.updateDonationDetails(donation);
 
-    if (cs.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
-      testBatchStatusChangeService.handleRelease(cs);
+    if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
+      testBatchStatusChangeService.handleRelease(donation);
     }
   }
 

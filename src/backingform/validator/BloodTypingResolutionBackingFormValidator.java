@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import backingform.BloodTypingResolutionBackingForm;
+import backingform.BloodTypingResolutionBackingForm.FinalBloodTypingMatchStatus;
 
 @Component
 public class BloodTypingResolutionBackingFormValidator extends BaseValidator<BloodTypingResolutionBackingForm> {
@@ -12,9 +13,7 @@ public class BloodTypingResolutionBackingFormValidator extends BaseValidator<Blo
   @Override
   public void validateForm(BloodTypingResolutionBackingForm form, Errors errors) {
 
-    if (form.getResolved() == null) {
-      errors.rejectValue("resolved", "bloodTypingResolution.resolved.required");
-    } else if (form.getResolved()) {
+    if (form.getStatus().equals(FinalBloodTypingMatchStatus.RESOLVED)) {
       if (StringUtils.isEmpty(form.getBloodAbo())) {
         errors.rejectValue("bloodAbo", "bloodTypingResolution.bloodAbo.required");
       }
@@ -22,7 +21,6 @@ public class BloodTypingResolutionBackingFormValidator extends BaseValidator<Blo
         errors.rejectValue("bloodRh", "bloodTypingResolution.bloodRh.required");
       }
     }
-
   }
 
   @Override

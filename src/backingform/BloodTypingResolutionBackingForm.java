@@ -6,10 +6,14 @@ public class BloodTypingResolutionBackingForm {
 
   private String bloodRh;
 
-  private Boolean resolved;
+  private FinalBloodTypingMatchStatus status;
 
   public BloodTypingResolutionBackingForm() {
     super();
+  }
+
+  public enum FinalBloodTypingMatchStatus {
+    RESOLVED, NO_TYPE_DETERMINED;
   }
 
   public String getBloodAbo() {
@@ -28,14 +32,12 @@ public class BloodTypingResolutionBackingForm {
     this.bloodRh = bloodRh;
   }
 
-  public Boolean getResolved() {
-    return resolved;
+  public FinalBloodTypingMatchStatus getStatus() {
+    return status;
   }
 
-  public void setResolved(Boolean resolved) {
-    this.resolved = resolved;
+  public void setStatus(FinalBloodTypingMatchStatus status) {
+    this.status = status;
   }
-
-
 
 }
