@@ -7,16 +7,15 @@ import model.admin.DataType;
 import model.admin.GeneralConfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.Resource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import repository.DataTypeRepository;
 import repository.GeneralConfigRepository;
 
-import javax.servlet.ServletContext;
-
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
@@ -27,7 +26,7 @@ import utils.LoggerUtil;
 public class GeneralConfigUpdater {
 
   @Autowired
-  private ServletContext servletContext;
+  private ApplicationContext servletContext;
 
   @Autowired
   private GeneralConfigRepository generalConfigRepository;
@@ -42,9 +41,9 @@ public class GeneralConfigUpdater {
   @Scheduled(fixedDelay = Integer.MAX_VALUE)
   public void applyCustomConfigsFromJSON() throws IOException {
     try {
-      InputStream configPath = servletContext.getResourceAsStream("/WEB-INF/classes/general-configs.json");
-      if (configPath != null) {
-        Reader reader = new InputStreamReader(configPath, "UTF-8");
+      Resource resource = servletContext.getResource("/WEB-INF/classes/general-configs.json");
+      if (resource.exists()) {
+        Reader reader = new InputStreamReader(resource.getInputStream(), "UTF-8");
         Gson gson = new Gson();
         GeneralConfigFile[] generalConfigsArray = gson.fromJson(reader, GeneralConfigFile[].class);
         if (generalConfigsArray != null) {

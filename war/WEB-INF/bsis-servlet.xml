@@ -45,6 +45,7 @@
       </mvc:message-converters>
   </mvc:annotation-driven>
 
+  <context:component-scan base-package="bsis" />
   <context:component-scan base-package="controller" />
   <context:component-scan base-package="repository" />
   <context:component-scan base-package="model" />
