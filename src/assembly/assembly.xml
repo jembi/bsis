@@ -33,11 +33,10 @@
   <dependencySet>
    <unpack>true</unpack>
    <scope>runtime</scope>
-   <useStrictFiltering>true</useStrictFiltering>
    <unpackOptions>
     <excludes>
-     <exclude>**/spring.handlers</exclude>
-     <exclude>**/spring.schemas</exclude>
+     <exclude>META-INF/spring.handlers</exclude>
+     <exclude>META-INF/spring.schemas</exclude>
     </excludes>
    </unpackOptions>
   </dependencySet>
