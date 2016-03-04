@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DataImporter {
-
+  
   public static void main(String[] args) throws EncryptedDocumentException, InvalidFormatException, IOException {
     
     if (args.length != 1) {
@@ -28,7 +28,14 @@ public class DataImporter {
     
     // Import the data
     DataImportService importService = applicationContext.getBean(DataImportService.class);
-    importService.importData(workbook);
+    
+    try {
+      importService.importData(workbook);
+    } catch (Exception e) {
+      System.err.println("Import failed");
+      e.printStackTrace();
+      System.exit(1);
+    }
     
     // Close the application context
     applicationContext.close();
