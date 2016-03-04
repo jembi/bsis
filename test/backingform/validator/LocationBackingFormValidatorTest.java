@@ -2,11 +2,7 @@ package backingform.validator;
 
 import static org.mockito.Mockito.when;
 
-import helpers.builders.LocationBuilder;
-
 import java.util.HashMap;
-
-import model.location.Location;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,9 +13,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
+import backingform.LocationBackingForm;
+import helpers.builders.LocationBuilder;
+import model.location.Location;
 import repository.FormFieldRepository;
 import repository.LocationRepository;
-import backingform.LocationBackingForm;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LocationBackingFormValidatorTest {
@@ -36,6 +34,7 @@ public class LocationBackingFormValidatorTest {
     // set up data
     Location location = LocationBuilder.aLocation()
         .withName("LOCATION")
+        .thatIsVenue()
         .build();
 
     LocationBackingForm form = new LocationBackingForm();
@@ -58,6 +57,7 @@ public class LocationBackingFormValidatorTest {
     Location location = LocationBuilder.aLocation()
         .withId(1l)
         .withName("LOCATION")
+        .thatIsVenue()
         .build();
 
     LocationBackingForm form = new LocationBackingForm();
@@ -75,11 +75,12 @@ public class LocationBackingFormValidatorTest {
   }
 
   @Test
-  public void testValidBlankName() throws Exception {
+  public void testInvalidBlankName() throws Exception {
     // set up data
     Location location = LocationBuilder.aLocation()
         .withId(1l)
         .withName("")
+        .thatIsVenue()
         .build();
 
     LocationBackingForm form = new LocationBackingForm();
@@ -90,7 +91,8 @@ public class LocationBackingFormValidatorTest {
     locationBackingFormValidator.validate(form, errors);
 
     // check asserts
-    Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
+    Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
+    Assert.assertNotNull("Error: Invalid blank name", errors.getFieldError("name"));
   }
 
   @Test
@@ -99,11 +101,13 @@ public class LocationBackingFormValidatorTest {
     Location location = LocationBuilder.aLocation()
         .withId(1l)
         .withName("LOCATION")
+        .thatIsVenue()
         .build();
 
     Location duplicate = LocationBuilder.aLocation()
         .withId(2l)
         .withName("LOCATION")
+        .thatIsVenue()
         .build();
 
     LocationBackingForm form = new LocationBackingForm();
@@ -119,5 +123,21 @@ public class LocationBackingFormValidatorTest {
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
     Assert.assertNotNull("Error: location exists", errors.getFieldError("name"));
+  }
+
+  @Test
+  public void testNoLocationTypesSpecified() throws Exception {
+    // set up data
+    Location location = LocationBuilder.aLocation().withId(1l).withName("LOCATION").build();
+
+    LocationBackingForm form = new LocationBackingForm();
+    form.setLocation(location);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "location");
+    locationBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
   }
 }

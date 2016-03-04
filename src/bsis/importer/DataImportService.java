@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
+import org.springframework.validation.ObjectError;
 
 import backingform.LocationBackingForm;
 import backingform.validator.LocationBackingFormValidator;
@@ -86,13 +87,22 @@ public class DataImportService {
       locationBackingFormValidator.validate(locationBackingForm, errors);
       
       if (errors.hasErrors()) {
-        throw new IllegalArgumentException("Invalid location: " + locationBackingForm.getName());
+        System.out.println("Invalid location on row " + (row.getRowNum() + 1) + ". " + getErrorsString(errors));
+        throw new IllegalArgumentException("Invalid location");
       }
       
       locationRepository.saveLocation(locationBackingForm.getLocation());
     }
     
     System.out.println("Imported " + locationCount + " location(s)");
+  }
+
+  private String getErrorsString(BindException errors) {
+    String errorsStr = "Errors:";
+    for (ObjectError error : errors.getAllErrors()) {
+      errorsStr = errorsStr + "\n\t" + error.getDefaultMessage();
+    }
+    return errorsStr;
   }
 
 }

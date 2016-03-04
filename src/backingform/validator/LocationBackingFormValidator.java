@@ -1,14 +1,13 @@
 package backingform.validator;
 
-import model.location.Location;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
-import repository.LocationRepository;
 import backingform.LocationBackingForm;
+import model.location.Location;
+import repository.LocationRepository;
 
 @Component
 public class LocationBackingFormValidator extends BaseValidator<LocationBackingForm> {
@@ -18,8 +17,16 @@ public class LocationBackingFormValidator extends BaseValidator<LocationBackingF
 
   @Override
   public void validateForm(LocationBackingForm form, Errors errors) {
-    if (isDuplicateLocationName(form.getLocation()))
+    if (StringUtils.isEmpty(form.getName())) {
+      errors.rejectValue("name", "400", "Location name cannot be empty.");
+    } else if (isDuplicateLocationName(form.getLocation())) {
       errors.rejectValue("name", "400", "Location name already exists.");
+    }
+    if (!form.getIsUsageSite() && !form.getIsVenue() && !form.getIsMobilesite()) {
+      errors.reject("400",
+          "Location type must be usage site, venue or mobile site, but all of them are false for this location.");
+    }
+
   }
 
   @Override
@@ -28,16 +35,10 @@ public class LocationBackingFormValidator extends BaseValidator<LocationBackingF
   }
 
   private boolean isDuplicateLocationName(Location location) {
-    String locationName = location.getName();
-    if (StringUtils.isBlank(locationName)) {
-      return false;
-    }
-
-    Location existingLocation = locationRepository.findLocationByName(locationName);
+    Location existingLocation = locationRepository.findLocationByName(location.getName());
     if (existingLocation != null && !existingLocation.getId().equals(location.getId())) {
       return true;
     }
-
     return false;
   }
 }
