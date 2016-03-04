@@ -31,7 +31,7 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     Workbook workbook = WorkbookFactory.create(fileInputStream);
     
     // Exercise SUT
-    dataImportService.importData(workbook);
+    dataImportService.importData(workbook, false);
     
     // Verify
     Location firstLocation = findLocationByName("First");

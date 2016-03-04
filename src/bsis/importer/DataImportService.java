@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
@@ -16,6 +17,7 @@ import repository.LocationRepository;
 
 @Transactional
 @Service
+@Scope("prototype")
 public class DataImportService {
   
   @Autowired
@@ -23,10 +25,16 @@ public class DataImportService {
   @Autowired
   private LocationRepository locationRepository;
 
-  public void importData(Workbook workbook) {
-    System.out.println("Import started");
+  private boolean validationOnly;
+
+  public void importData(Workbook workbook, boolean validationOnly) {
+
+    this.validationOnly = validationOnly;
+    String action = validationOnly ? "Validation" : "Import";
+
+    System.out.println(action + " started");
     importLocationData(workbook.getSheet("Locations"));
-    System.out.println("Import completed");
+    System.out.println(action + " completed");
   }
   
   private void importLocationData(Sheet sheet) {
@@ -90,11 +98,20 @@ public class DataImportService {
         System.out.println("Invalid location on row " + (row.getRowNum() + 1) + ". " + getErrorsString(errors));
         throw new IllegalArgumentException("Invalid location");
       }
-      
-      locationRepository.saveLocation(locationBackingForm.getLocation());
+
+      // Only save if validationOnly is false
+      if (!validationOnly) {
+        locationRepository.saveLocation(locationBackingForm.getLocation());
+      }
     }
-    
-    System.out.println("Imported " + locationCount + " location(s)");
+
+
+    if (validationOnly) {
+      System.out.println("Validated " + locationCount + " location(s)");
+    } else {
+      System.out.println("Imported " + locationCount + " location(s)");
+    }
+
   }
 
   private String getErrorsString(BindException errors) {

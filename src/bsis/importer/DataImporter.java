@@ -14,9 +14,27 @@ import org.springframework.stereotype.Component;
 public class DataImporter {
   
   public static void main(String[] args) throws EncryptedDocumentException, InvalidFormatException, IOException {
-    
-    if (args.length != 1) {
-      throw new IllegalArgumentException("A single argument must be provided for the path to the spreadsheet");
+
+    // Validate arguments
+    String errorInUsageMessage =
+        "\n\nUsage: \n\njava -jar bsis-bin.jar path_to_spreadsheet boolean_validation_only\n"
+            + "path_to_spreadsheet: Is the path to the spreadsheet where the import data is included. This argument is required.\n\n"
+            + "boolean_validation_only: Must be true or false. This argument is optional, and it's false by default.\n";
+
+    if (args.length == 0 || args.length > 2) {
+      System.out.println(errorInUsageMessage);
+      System.exit(1);
+    }
+    boolean validationOnly = false;
+    if (args[1] != null) {
+      if (args[1].equalsIgnoreCase("true")) {
+        validationOnly = true;
+      } else if (args[1].equalsIgnoreCase("false")) {
+        validationOnly = false;
+      } else {
+        System.out.println(errorInUsageMessage);
+        System.exit(1);
+      }
     }
     
     // Read in the spreadsheet
@@ -30,9 +48,10 @@ public class DataImporter {
     DataImportService importService = applicationContext.getBean(DataImportService.class);
     
     try {
-      importService.importData(workbook);
+      importService.importData(workbook, validationOnly);
     } catch (Exception e) {
-      System.err.println("Import failed");
+      String action = validationOnly ? "Validation" : "Import";
+      System.err.println(action + " failed");
       e.printStackTrace();
       System.exit(1);
     }
