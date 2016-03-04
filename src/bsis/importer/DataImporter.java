@@ -26,7 +26,7 @@ public class DataImporter {
       System.exit(1);
     }
     boolean validationOnly = false;
-    if (args[1] != null) {
+    if (args.length == 2) {
       if (args[1].equalsIgnoreCase("true")) {
         validationOnly = true;
       } else if (args[1].equalsIgnoreCase("false")) {
