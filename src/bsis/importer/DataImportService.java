@@ -52,7 +52,7 @@ public class DataImportService {
         
         switch (header.getStringCellValue()) {
           
-          case "Name":
+          case "name":
             locationBackingForm.setName(cell.getStringCellValue());
             break;
             
@@ -72,7 +72,7 @@ public class DataImportService {
             locationBackingForm.setIsDeleted(cell.getBooleanCellValue());
             break;
             
-          case "Notes":
+          case "notes":
             locationBackingForm.setNotes(cell.getStringCellValue());
             break;
           
