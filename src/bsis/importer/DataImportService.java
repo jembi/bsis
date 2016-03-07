@@ -171,6 +171,7 @@ public class DataImportService {
         switch (header.getStringCellValue()) {
 
           case "externalDonorId":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             externalDonorId = cell.getStringCellValue();
             break;
 
@@ -207,6 +208,7 @@ public class DataImportService {
             break;
 
           case "age":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             donorBackingForm.setAge(cell.getStringCellValue());
             break;
 
@@ -235,14 +237,17 @@ public class DataImportService {
             break;
 
           case "mobileNumber":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             donorBackingForm.setMobileNumber(cell.getStringCellValue());
             break;
 
           case "homeNumber":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             donorBackingForm.setHomeNumber(cell.getStringCellValue());
             break;
 
           case "workNumber":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             donorBackingForm.setWorkNumber(cell.getStringCellValue());
             break;
 
@@ -283,6 +288,7 @@ public class DataImportService {
             break;
 
           case "homeAddressZipcode":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             donorBackingForm.setHomeAddressZipcode(cell.getStringCellValue());
             break;
 
@@ -315,6 +321,7 @@ public class DataImportService {
             break;
 
           case "workAddressZipcode":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             donorBackingForm.setworkAddressZipcode(cell.getStringCellValue());
             break;
 
@@ -347,6 +354,7 @@ public class DataImportService {
             break;
 
           case "postalAddressZipcode":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             donorBackingForm.setPostalAddressZipcode(cell.getStringCellValue());
             break;
 
