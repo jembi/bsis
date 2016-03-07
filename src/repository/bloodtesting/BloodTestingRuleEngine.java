@@ -371,7 +371,7 @@ public class BloodTestingRuleEngine {
     if (donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.RESOLVED) {
       // The Abo/Rh values have already been confirmed so keep the status as MATCH
       bloodTypingMatchStatus = BloodTypingMatchStatus.RESOLVED;
-    } if (donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NO_TYPE_DETERMINED) {
+    } else if (donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NO_TYPE_DETERMINED) {
       // The ABO/Rh values cannot be determined so do nothing and keep this status
       bloodTypingMatchStatus = BloodTypingMatchStatus.NO_TYPE_DETERMINED;
     } else if (StringUtils.isNotEmpty(donation.getBloodAbo()) && StringUtils.isNotEmpty(donation.getBloodRh())) {
