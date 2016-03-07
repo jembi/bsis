@@ -1,5 +1,10 @@
 package bsis.importer;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -9,11 +14,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import backingform.DonorBackingForm;
 import backingform.LocationBackingForm;
@@ -164,6 +166,7 @@ public class DataImportService {
       }
 
       DonorBackingForm donorBackingForm = new DonorBackingForm();
+      BindException errors = new BindException(donorBackingForm, "DonorBackingForm");
 
       for (Cell cell : row) {
         Cell header = headers.getCell(cell.getColumnIndex());
@@ -229,11 +232,24 @@ public class DataImportService {
             break;
 
           case "idType":
-            donorBackingForm.setIdType(idTypeCache.get(cell.getStringCellValue()));
+            if (StringUtils.isNotEmpty(cell.getStringCellValue())) {
+              IdType idType = idTypeCache.get(cell.getStringCellValue());
+              if (idType == null) {
+                errors.rejectValue("donor.idType", "idType.invalid", "Invalid idType");
+              }
+              donorBackingForm.setIdType(idType);
+            }
             break;
 
           case "preferredContactType":
-            donorBackingForm.setContactMethodType(contactMethodTypeCache.get(cell.getStringCellValue()));
+            if (StringUtils.isNotEmpty(cell.getStringCellValue())) {
+              ContactMethodType contactMethodType = contactMethodTypeCache.get(cell.getStringCellValue());
+              if (contactMethodType == null) {
+                errors.rejectValue("donor.contactMethodType", "contactMethodType.invalid",
+                    "Invalid preferredContactType");
+              }
+              donorBackingForm.setContactMethodType(contactMethodType);
+            }
             break;
 
           case "mobileNumber":
@@ -256,7 +272,14 @@ public class DataImportService {
             break;
 
           case "preferredAddressType":
-            donorBackingForm.setPreferredAddressType(addressTypeCache.get(cell.getStringCellValue()));
+            if (StringUtils.isNotEmpty(cell.getStringCellValue())) {
+              AddressType preferredAddressType = addressTypeCache.get(cell.getStringCellValue());
+              if (preferredAddressType == null) {
+                errors.rejectValue("donor.addressType", "addressType.invalid",
+                    "Invalid preferredAddressType");
+              }
+              donorBackingForm.setPreferredAddressType(preferredAddressType);
+            }
             break;
 
           case "homeAddressLine1":
@@ -364,7 +387,6 @@ public class DataImportService {
         }
       }
 
-      BindException errors = new BindException(donorBackingForm, "DonorBackingForm");
       donorBackingFormValidator.validate(donorBackingForm, errors);
 
       if (errors.hasErrors()) {
@@ -373,7 +395,6 @@ public class DataImportService {
       }
 
     }
-
 
     if (validationOnly) {
       System.out.println("Validated " + donorCount + " location(s)");
@@ -429,9 +450,13 @@ public class DataImportService {
   }
 
   private String getErrorsString(BindException errors) {
-    String errorsStr = "Errors:";
+    String errorsStr = errors.getAllErrors().size() + " errors:";
     for (ObjectError error : errors.getAllErrors()) {
-      errorsStr = errorsStr + "\n\t" + error.getDefaultMessage();
+      String fieldError = "";
+      if (error instanceof FieldError) {
+        fieldError = "Error in field " + ((FieldError) error).getField() + ": ";
+      }
+      errorsStr = errorsStr + "\n\t" + fieldError + error.getDefaultMessage();
     }
     return errorsStr;
   }

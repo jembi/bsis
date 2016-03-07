@@ -64,8 +64,8 @@ public class DonorBackingForm {
   public void setBirthDate(String birthDate) {
     try {
       donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
-    } catch (ParseException ex) {
-      ex.printStackTrace();
+    } catch (Exception ex) {
+      // ex.printStackTrace();
       donor.setBirthDate(null);
     }
   }
@@ -196,7 +196,11 @@ public class DonorBackingForm {
   }
 
   public void setGender(String gender) {
-    donor.setGender(Gender.valueOf(gender));
+    try {
+      donor.setGender(Gender.valueOf(gender));
+    } catch (Exception e) {
+      donor.setGender(null);
+    }
   }
 
   public void setBirthDateEstimated(Boolean birthDateEstimated) {
