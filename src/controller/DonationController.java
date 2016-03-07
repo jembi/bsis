@@ -31,23 +31,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import backingform.BloodTypingResolutionBackingForm;
 import backingform.DonationBackingForm;
-import backingform.validator.AdverseEventBackingFormValidator;
+import backingform.validator.BloodTypingResolutionBackingFormValidator;
 import backingform.validator.DonationBackingFormValidator;
 import factory.DonationSummaryViewModelFactory;
 import factory.DonationViewModelFactory;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
 import model.packtype.PackType;
+import model.testbatch.TestBatchStatus;
 import repository.AdverseEventTypeRepository;
 import repository.DonationRepository;
 import repository.DonationTypeRepository;
-import repository.DonorRepository;
 import repository.LocationRepository;
 import repository.PackTypeRepository;
 import repository.PostDonationCounsellingRepository;
+import repository.bloodtesting.BloodTypingMatchStatus;
 import service.DonationCRUDService;
 import service.FormFieldAccessorService;
+import service.TestBatchStatusChangeService;
 import utils.PermissionConstants;
 import utils.PermissionUtils;
 import viewmodel.DonationSummaryViewModel;
@@ -74,9 +77,6 @@ public class DonationController {
   private FormFieldAccessorService formFieldAccessorService;
 
   @Autowired
-  private DonorRepository donorRepository;
-
-  @Autowired
   private PostDonationCounsellingRepository postDonationCounsellingRepository;
 
   @Autowired
@@ -89,20 +89,28 @@ public class DonationController {
   private DonationViewModelFactory donationViewModelFactory;
 
   @Autowired
-  private AdverseEventBackingFormValidator adverseEventBackingFormValidator;
-
-  @Autowired
   private DonationBackingFormValidator donationBackingFormValidator;
 
   @Autowired
   private DonationSummaryViewModelFactory donationSummaryViewModelFactory;
 
+  @Autowired
+  private TestBatchStatusChangeService testBatchStatusChangeService;
+
+  @Autowired
+  private BloodTypingResolutionBackingFormValidator bloodTypingResolutionBackingFormValidator;
+
   public DonationController() {
   }
 
-  @InitBinder
-  protected void initBinder(WebDataBinder binder) {
+  @InitBinder("donationBackingForm")
+  protected void initDonationFormBinder(WebDataBinder binder) {
     binder.setValidator(donationBackingFormValidator);
+  }
+
+  @InitBinder("bloodTypingResolutionBackingForm")
+  protected void initResolutionBinder(WebDataBinder binder) {
+    binder.setValidator(bloodTypingResolutionBackingFormValidator);
   }
 
   public static String getUrl(HttpServletRequest req) {
@@ -204,10 +212,10 @@ public class DonationController {
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONATION + "')")
-  public ResponseEntity<Map<String, Object>> addDonation(@RequestBody @Valid DonationBackingForm form) {
+  public ResponseEntity<Map<String, Object>> addDonation(@RequestBody @Valid DonationBackingForm donationBackingForm) {
 
     // Create the donation
-    Donation savedDonation = donationCRUDService.createDonation(form);
+    Donation savedDonation = donationCRUDService.createDonation(donationBackingForm);
 
     // Populate the response map
     Map<String, Object> map = new HashMap<>();
@@ -338,4 +346,27 @@ public class DonationController {
     }
     return viewModels;
   }
+
+  @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONATION + "')")
+  @RequestMapping(value = "{id}/bloodTypingResolution", method = RequestMethod.PUT)
+  public void saveBloodTypingResolution(
+      @PathVariable(value = "id") Long id,
+      @RequestBody @Valid BloodTypingResolutionBackingForm bloodTypingResolutionBackingForm) {
+
+    Donation donation = donationRepository.findDonationById(id);
+    if (bloodTypingResolutionBackingForm.getStatus().equals(BloodTypingMatchStatus.RESOLVED)) {
+      donation.setBloodAbo(bloodTypingResolutionBackingForm.getBloodAbo());
+      donation.setBloodRh(bloodTypingResolutionBackingForm.getBloodRh());
+      donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.RESOLVED);
+    } else {
+      donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
+    }
+
+    donation = donationRepository.updateDonationDetails(donation);
+
+    if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
+      testBatchStatusChangeService.handleRelease(donation);
+    }
+  }
+
 }
