@@ -189,6 +189,57 @@ public class DonationConstraintCheckerTests {
   }
 
   @Test
+  public void testDonationHasDiscrepanciesWithNoTypeDeterminedBloodTypingMatchStatus_shouldReturnFalse() {
+    Donation donation = aDonation()
+        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withPackType(aPackType().build())
+        .build();
+
+    when(bloodTestsService.executeTests(donation))
+        .thenReturn(aBloodTestingRuleResult().build());
+
+    boolean result = donationConstraintChecker.donationHasDiscrepancies(donation);
+
+    assertThat(result, is(false));
+  }
+
+  @Test
+  public void testDonationHasDiscrepanciesWithMatchBloodTypingMatchStatus_shouldReturnFalse() {
+    Donation donation = aDonation()
+        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withPackType(aPackType().build())
+        .build();
+
+    when(bloodTestsService.executeTests(donation))
+        .thenReturn(aBloodTestingRuleResult().build());
+
+    boolean result = donationConstraintChecker.donationHasDiscrepancies(donation);
+
+    assertThat(result, is(false));
+  }
+
+  @Test
+  public void testDonationHasDiscrepanciesWithResolvedBloodTypingMatchStatus_shouldReturnFalse() {
+    Donation donation = aDonation()
+        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.RESOLVED)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withPackType(aPackType().build())
+        .build();
+
+    when(bloodTestsService.executeTests(donation))
+        .thenReturn(aBloodTestingRuleResult().build());
+
+    boolean result = donationConstraintChecker.donationHasDiscrepancies(donation);
+
+    assertThat(result, is(false));
+  }
+
+  @Test
   public void testDonationHasDiscrepanciesWithAmbiguousBloodTypingMatchStatus_shouldReturnTrue() {
     Donation donation = aDonation()
         .withTTIStatus(TTIStatus.TTI_SAFE)
