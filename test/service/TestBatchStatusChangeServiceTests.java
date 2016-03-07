@@ -121,6 +121,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         .withPackType(aPackType().build())
         .withBloodAbo(bloodAbo)
         .withBloodRh(bloodRh)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE)
         .build();
     TestBatch testBatch = aTestBatch()
         .withDonationBatch(aDonationBatch().withDonation(donationWithoutDiscrepancies).build())
