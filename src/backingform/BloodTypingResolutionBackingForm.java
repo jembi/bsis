@@ -1,12 +1,14 @@
 package backingform;
 
+import repository.bloodtesting.BloodTypingMatchStatus;
+
 public class BloodTypingResolutionBackingForm {
 
   private String bloodAbo;
 
   private String bloodRh;
 
-  private String status;
+  private BloodTypingMatchStatus status;
 
   public BloodTypingResolutionBackingForm() {
     super();
@@ -28,11 +30,11 @@ public class BloodTypingResolutionBackingForm {
     this.bloodRh = bloodRh;
   }
 
-  public String getStatus() {
+  public BloodTypingMatchStatus getStatus() {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(BloodTypingMatchStatus status) {
     this.status = status;
   }
 

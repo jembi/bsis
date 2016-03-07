@@ -354,7 +354,7 @@ public class DonationController {
       @RequestBody @Valid BloodTypingResolutionBackingForm bloodTypingResolutionBackingForm) {
 
     Donation donation = donationRepository.findDonationById(id);
-    if (bloodTypingResolutionBackingForm.getStatus().equals("RESOLVED")) {
+    if (bloodTypingResolutionBackingForm.getStatus().equals(BloodTypingMatchStatus.RESOLVED)) {
       donation.setBloodAbo(bloodTypingResolutionBackingForm.getBloodAbo());
       donation.setBloodRh(bloodTypingResolutionBackingForm.getBloodRh());
       donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.RESOLVED);

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import backingform.BloodTypingResolutionBackingForm;
+import repository.bloodtesting.BloodTypingMatchStatus;
 
 @Component
 public class BloodTypingResolutionBackingFormValidator extends BaseValidator<BloodTypingResolutionBackingForm> {
@@ -14,10 +15,11 @@ public class BloodTypingResolutionBackingFormValidator extends BaseValidator<Blo
 
     if (form.getStatus() == null) {
       errors.rejectValue("status", "bloodTypingResolution.status.required");
-    } else if (!form.getStatus().equals("RESOLVED") && !form.getStatus().equals("NO_TYPE_DETERMINED")) {
-      errors.rejectValue("status", "bloodTypingResolution.status.invalid",
-          "Status can be RESOLVED or NO_TYPE_DETERMINED only");
-    } else if (form.getStatus().equals("RESOLVED")) {
+    } else if (!form.getStatus().equals(BloodTypingMatchStatus.RESOLVED)
+        && !form.getStatus().equals(BloodTypingMatchStatus.NO_TYPE_DETERMINED)) {
+      errors.rejectValue("status", "bloodTypingResolution.status.invalid", "Only valid statuses are: "
+          + BloodTypingMatchStatus.RESOLVED + " and " + BloodTypingMatchStatus.NO_TYPE_DETERMINED);
+    } else if (form.getStatus().equals(BloodTypingMatchStatus.RESOLVED)) {
       if (StringUtils.isEmpty(form.getBloodAbo())) {
         errors.rejectValue("bloodAbo", "bloodTypingResolution.bloodAbo.required");
       }
