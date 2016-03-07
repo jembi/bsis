@@ -385,4 +385,13 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertTrue("Blood ABO not set", StringUtils.isBlank(result.getBloodAbo()));
     Assert.assertTrue("Blood Rh not set", StringUtils.isBlank(result.getBloodRh()));
   }
+  
+  @Test
+  public void testBloodTestingRuleEngineWithDonation16_BloodTypingMatchStatusResolved() throws Exception {
+    Donation donation = donationRepository.findDonationById(16l);
+    BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+    Assert.assertEquals("BloodTypingMatchStatus is RESOLVED", BloodTypingMatchStatus.RESOLVED, result.getBloodTypingMatchStatus());
+    Assert.assertEquals("Blood ABO not set", "A", result.getBloodAbo());
+    Assert.assertEquals("Blood Rh not set", "+", result.getBloodRh());
+  }
 }
