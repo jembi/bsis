@@ -11,8 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import backingform.LocationBackingForm;
+import backingform.validator.DonorBackingFormValidator;
 import backingform.validator.LocationBackingFormValidator;
+import model.location.Location;
+import repository.DonorRepository;
 import repository.LocationRepository;
 
 @Transactional
@@ -24,17 +31,27 @@ public class DataImportService {
   private LocationBackingFormValidator locationBackingFormValidator;
   @Autowired
   private LocationRepository locationRepository;
+  @Autowired
+  private DonorBackingFormValidator donorBackingFormValidator;
+  @Autowired
+  private DonorRepository donorRepository;
+
 
   private boolean validationOnly;
+
 
   public void importData(Workbook workbook, boolean validationOnly) {
 
     this.validationOnly = validationOnly;
     String action = validationOnly ? "Validation" : "Import";
 
-    System.out.println(action + " started");
+    System.out.println(action + " of Locations started");
     importLocationData(workbook.getSheet("Locations"));
-    System.out.println(action + " completed");
+    System.out.println(action + " of Locations completed");
+
+    System.out.println(action + " of Donors started");
+    importDonorData(workbook.getSheet("Donors"));
+    System.out.println(action + " of Donors completed");
   }
   
   private void importLocationData(Sheet sheet) {
@@ -112,6 +129,19 @@ public class DataImportService {
       System.out.println("Imported " + locationCount + " location(s)");
     }
 
+  }
+
+  private void importDonorData(Sheet sheet) {
+    Map<String, Location> locationCache = buildLocationCache();
+  }
+
+  private Map<String, Location> buildLocationCache () {
+    Map<String, Location>  locationCache = new HashMap<>();
+    List<Location> locations = locationRepository.getAllLocations();
+    for (Location location : locations) {
+      locationCache.put(location.getName(), location);
+    }
+    return locationCache;
   }
 
   private String getErrorsString(BindException errors) {
