@@ -7,6 +7,11 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
@@ -18,13 +23,7 @@ import model.location.Location;
 import model.preferredlanguage.PreferredLanguage;
 import model.user.User;
 import model.util.Gender;
-
-import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-
 import utils.CustomDateFormatter;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class DonorBackingForm {
 
@@ -35,12 +34,6 @@ public class DonorBackingForm {
   private Boolean ageFormatCorrect;
 
   private String ageSpecified;
-
-  private String dateOfFirstDonation;
-
-  private String dueToDonate;
-
-  private String dateOfLastDonation;
 
   @Valid
   private Address address;
@@ -76,11 +69,6 @@ public class DonorBackingForm {
       donor.setBirthDate(null);
     }
   }
-
-//
-//    public DonorViewModel getDonorViewModel() {
-//        return new DonorViewModel(donor);
-//    }
 
   public Donor getDonor() {
     return donor;
@@ -313,17 +301,10 @@ public class DonorBackingForm {
   }
 
   public String getDateOfFirstDonation() {
-//        if (dateOfFirstDonation != null) { // Issue in editing form because of this lines 
-//            return dateOfFirstDonation;
-//        }
-//        if (dateOfFirstDonation == null) {
-//            return "";
-//        }
     return CustomDateFormatter.getDateString(donor.getDateOfFirstDonation());
   }
 
   public void setDateOfFirstDonation(String dateOfFirstDonation) {
-    this.dateOfFirstDonation = dateOfFirstDonation;
     try {
       donor.setDateOfFirstDonation(CustomDateFormatter.getDateFromString(dateOfFirstDonation));
     } catch (ParseException ex) {
@@ -337,7 +318,6 @@ public class DonorBackingForm {
   }
 
   public void setDateOfLastDonation(String dateOfLastDonation) {
-    this.dateOfLastDonation = dateOfLastDonation;
     try {
       donor.setDateOfLastDonation(CustomDateFormatter.getDateFromString(dateOfLastDonation));
     } catch (ParseException ex) {
@@ -352,7 +332,6 @@ public class DonorBackingForm {
 
 
   public void setDueToDonate(String dueToDonate) {
-    this.dueToDonate = dueToDonate;
     try {
       donor.setDueToDonate(CustomDateFormatter.getDateFromString(dueToDonate));
     } catch (ParseException ex) {
