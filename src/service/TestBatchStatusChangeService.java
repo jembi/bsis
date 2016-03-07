@@ -1,17 +1,16 @@
 package service;
 
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.donor.Donor;
 import model.donordeferral.DeferralReasonType;
 import model.testbatch.TestBatch;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import repository.DonationRepository;
 import repository.DonorRepository;
 import repository.bloodtesting.BloodTypingMatchStatus;
@@ -103,6 +102,11 @@ public class TestBatchStatusChangeService {
     } else if (componentStatusCalculator.shouldComponentsBeDiscarded(donation.getBloodTestResults())) {
       LOGGER.info("Handling donation with components flagged for discard: " + donation);
       componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
+
+    } else if (donation.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.NO_TYPE_DETERMINED)) {
+      LOGGER.info("Handling donation with NO_TYPE_DETERMINED bloodTypingMatchStatus: " + donation);
+      componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
+
     } else {
       componentCRUDService.updateComponentStatusesForDonation(donation);
     }
