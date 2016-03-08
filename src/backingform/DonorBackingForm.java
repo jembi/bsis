@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import model.address.Address;
 import model.address.AddressType;
@@ -24,6 +25,7 @@ import model.preferredlanguage.PreferredLanguage;
 import model.user.User;
 import model.util.Gender;
 import utils.CustomDateFormatter;
+import utils.DateTimeSerialiser;
 
 public class DonorBackingForm {
 
@@ -68,6 +70,11 @@ public class DonorBackingForm {
       // ex.printStackTrace();
       donor.setBirthDate(null);
     }
+  }
+
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public void setBirthDate(Date birthDate) {
+    donor.setBirthDate(birthDate);
   }
 
   public Donor getDonor() {

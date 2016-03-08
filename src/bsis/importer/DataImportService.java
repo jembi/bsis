@@ -207,7 +207,7 @@ public class DataImportService {
             break;
 
           case "birthDate":
-            donorBackingForm.setBirthDate(cell.getStringCellValue());
+            donorBackingForm.setBirthDate(cell.getDateCellValue());
             break;
 
           case "age":
@@ -239,6 +239,11 @@ public class DataImportService {
               }
               donorBackingForm.setIdType(idType);
             }
+            break;
+
+          case "idNumber":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            donorBackingForm.setIdNumber(cell.getStringCellValue());
             break;
 
           case "preferredContactType":
