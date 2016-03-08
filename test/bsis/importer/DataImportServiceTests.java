@@ -52,6 +52,9 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     PreferredLanguage english = new PreferredLanguage();
     english.setPreferredLanguage("English");
     entityManager.persist(english);
+    PreferredLanguage afrikaans = new PreferredLanguage();
+    afrikaans.setPreferredLanguage("Afrikaans");
+    entityManager.persist(afrikaans);
     GeneralConfig donorNumberGeneralConfig = new GeneralConfig();
     donorNumberGeneralConfig.setName("donor.donorNumberFormat");
     donorNumberGeneralConfig.setValue("%06d");
@@ -153,7 +156,7 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     assertThat("Title matches", secondDonor.getTitle(), equalTo("Mrs"));
     assertThat("Calling name matches", secondDonor.getCallingName(), equalTo("Janey"));
     assertThat("Gender matches", secondDonor.getGender(), equalTo(Gender.female));
-    assertThat("Preferred Language matches", secondDonor.getPreferredLanguage().getPreferredLanguage(), equalTo("English"));
+    assertThat("Preferred Language matches", secondDonor.getPreferredLanguage().getPreferredLanguage(), equalTo("Afrikaans"));
     assertThat("BirthDate matches", CustomDateFormatter.format(secondDonor.getBirthDate()), equalTo("1972-10-03"));
     assertThat("BloodAbo matches", secondDonor.getBloodAbo(), equalTo("B"));
     assertThat("BloodRh matches", secondDonor.getBloodRh(), equalTo("+"));
