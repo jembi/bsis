@@ -211,10 +211,8 @@ public class DataImportService {
             try {
               donorBackingForm.setBirthDate(cell.getDateCellValue());
             } catch (IllegalStateException e) {
-                errors.rejectValue("donor.birthDate", "birthDate.invalid", "Invalid birthDate");
+              errors.rejectValue("donor.birthDate", "birthDate.invalid", "Invalid birthDate");
             }
-
-
             break;
 
           case "age":
@@ -409,9 +407,9 @@ public class DataImportService {
     }
 
     if (validationOnly) {
-      System.out.println("Validated " + donorCount + " location(s)");
+      System.out.println("Validated " + donorCount + " donor(s)");
     } else {
-      System.out.println("Imported " + donorCount + " location(s)");
+      System.out.println("Imported " + donorCount + " donor(s)");
     }
 
   }
