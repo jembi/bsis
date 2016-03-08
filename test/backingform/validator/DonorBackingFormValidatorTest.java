@@ -2,15 +2,11 @@ package backingform.validator;
 
 import static org.mockito.Mockito.when;
 
-import helpers.builders.FormFieldBuilder;
-
-import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
-
-import model.admin.FormField;
-import model.donor.Donor;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,10 +17,16 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
+import backingform.DonorBackingForm;
+import helpers.builders.FormFieldBuilder;
+import helpers.builders.LocationBuilder;
+import model.admin.FormField;
+import model.donor.Donor;
+import model.preferredlanguage.PreferredLanguage;
 import repository.DonorRepository;
 import repository.FormFieldRepository;
 import repository.SequenceNumberRepository;
-import backingform.DonorBackingForm;
+import utils.CustomDateFormatter;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DonorBackingFormValidatorTest {
@@ -38,25 +40,36 @@ public class DonorBackingFormValidatorTest {
   @Mock
   FormFieldRepository formFieldRepository;
 
+  private final String[] requiredFields =
+      new String[] {"birthDate", "donorNumber", "firstName", "lastName", "gender", "venue", "preferredLanguage"};
+
+  private DonorBackingForm getBaseDonorBackingForm() throws ParseException {
+    PreferredLanguage preferredLanguage = new PreferredLanguage();
+    preferredLanguage.setId(1l);
+    preferredLanguage.setPreferredLanguage("English");
+    Date validBirthDate = CustomDateFormatter.getDateFromString("1977-10-20");
+    DonorBackingForm donorForm = new DonorBackingForm();
+    donorForm.setId(1l);
+    donorForm.setBirthDate(validBirthDate);
+    donorForm.setDonorNumber("DIN123");
+    donorForm.setFirstName("First");
+    donorForm.setLastName("Last");
+    donorForm.setGender("female");
+    donorForm.setVenue(LocationBuilder.aVenue().withId(1l).withName("Venue").build());
+    donorForm.setPreferredLanguage(preferredLanguage);
+    return donorForm;
+  }
+
   @Test
   public void testValid() throws Exception {
     // set up data
-    DonorBackingForm donorForm = new DonorBackingForm();
-    donorForm.setBirthDate("1977-10-20");
-    donorForm.setBloodAbo("AB");
-    donorForm.setBloodRh("+");
-
-    FormField donorNumberFormField = FormFieldBuilder.aFormField().withAutoGenerate(true).build();
+    DonorBackingForm donorForm = getBaseDonorBackingForm();
 
     // set up mocks
-    when(formFieldRepository.getFormField("donor", "donorNumber")).thenReturn(donorNumberFormField);
-    when(sequenceNumberRepository.getSequenceNumber("Donor", "donorNumber")).thenReturn("DIN123");
-    when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
-    when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    when(donorRepository.findDonorByDonorNumber("DIN123", true)).thenReturn(null);
+    when(formFieldRepository.getRequiredFormFields("donor")).thenReturn(Arrays.asList(requiredFields));
 
     // run test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donor");
     donorBackingFormValidator.validate(donorForm, errors);
 
     // check asserts
@@ -66,24 +79,17 @@ public class DonorBackingFormValidatorTest {
   @Test
   public void testIsDuplicateDonorNumber1() throws Exception {
     // set up data
-    DonorBackingForm donorForm = new DonorBackingForm();
-    donorForm.setId(1l);
-    donorForm.setDonorNumber("DIN123");
-    donorForm.setBirthDate("1977-10-20");
-    donorForm.setBloodAbo("AB");
-    donorForm.setBloodRh("+");
+    DonorBackingForm donorForm = getBaseDonorBackingForm();
 
     Donor donor = new Donor();
     donor.setId(2l);
 
     // set up mocks
-    when(sequenceNumberRepository.getSequenceNumber("Donor", "donorNumber")).thenReturn("DIN123");
-    when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
-    when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
+    when(formFieldRepository.getRequiredFormFields("donor")).thenReturn(Arrays.asList(requiredFields));
     when(donorRepository.findDonorByDonorNumber("DIN123", true)).thenReturn(donor);
 
     // run test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donor");
     donorBackingFormValidator.validate(donorForm, errors);
 
     // check asserts
@@ -94,10 +100,8 @@ public class DonorBackingFormValidatorTest {
   @Test
   public void testIsDuplicateDonorNumber2() throws Exception {
     // set up data
-    DonorBackingForm donorForm = new DonorBackingForm();
-    donorForm.setBirthDate("1977-10-20");
-    donorForm.setBloodAbo("AB");
-    donorForm.setBloodRh("+");
+    DonorBackingForm donorForm = getBaseDonorBackingForm();
+    donorForm.setDonorNumber("");
 
     Donor donor = new Donor();
     donor.setId(2l);
@@ -107,12 +111,11 @@ public class DonorBackingFormValidatorTest {
     // set up mocks
     when(formFieldRepository.getFormField("donor", "donorNumber")).thenReturn(donorNumberFormField);
     when(sequenceNumberRepository.getSequenceNumber("Donor", "donorNumber")).thenReturn("DIN123");
-    when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
-    when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
+    when(formFieldRepository.getRequiredFormFields("donor")).thenReturn(Arrays.asList(requiredFields));
     when(donorRepository.findDonorByDonorNumber("DIN123", true)).thenReturn(donor);
 
     // run test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donor");
     donorBackingFormValidator.validate(donorForm, errors);
 
     // check asserts
@@ -123,22 +126,14 @@ public class DonorBackingFormValidatorTest {
   @Test
   public void testInvalidAge() throws Exception {
     // set up data
-    DonorBackingForm donorForm = new DonorBackingForm();
+    DonorBackingForm donorForm = getBaseDonorBackingForm();
     donorForm.setAge("age");
-    donorForm.setBloodAbo("AB");
-    donorForm.setBloodRh("+");
-
-    FormField donorNumberFormField = FormFieldBuilder.aFormField().withAutoGenerate(true).build();
 
     // set up mocks
-    when(formFieldRepository.getFormField("donor", "donorNumber")).thenReturn(donorNumberFormField);
-    when(sequenceNumberRepository.getSequenceNumber("Donor", "donorNumber")).thenReturn("DIN123");
-    when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
-    when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    when(donorRepository.findDonorByDonorNumber("DIN123", true)).thenReturn(null);
+    when(formFieldRepository.getRequiredFormFields("donor")).thenReturn(Arrays.asList(requiredFields));
 
     // run test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donor");
     donorBackingFormValidator.validate(donorForm, errors);
 
     // check asserts
@@ -149,22 +144,14 @@ public class DonorBackingFormValidatorTest {
   @Test
   public void testValidAge() throws Exception {
     // set up data
-    DonorBackingForm donorForm = new DonorBackingForm();
+    DonorBackingForm donorForm = getBaseDonorBackingForm();
     donorForm.setAge("18");
-    donorForm.setBloodAbo("AB");
-    donorForm.setBloodRh("+");
-
-    FormField donorNumberFormField = FormFieldBuilder.aFormField().withAutoGenerate(true).build();
 
     // set up mocks
-    when(formFieldRepository.getFormField("donor", "donorNumber")).thenReturn(donorNumberFormField);
-    when(sequenceNumberRepository.getSequenceNumber("Donor", "donorNumber")).thenReturn("DIN123");
-    when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
-    when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    when(donorRepository.findDonorByDonorNumber("DIN123", true)).thenReturn(null);
+    when(formFieldRepository.getRequiredFormFields("donor")).thenReturn(Arrays.asList(requiredFields));
 
     // run test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donor");
     donorBackingFormValidator.validate(donorForm, errors);
 
     // check asserts
@@ -174,24 +161,17 @@ public class DonorBackingFormValidatorTest {
   @Test
   public void testFutureBirthDate() throws Exception {
     // set up data
-    DonorBackingForm donorForm = new DonorBackingForm();
     Calendar cal = Calendar.getInstance();
     cal.add(Calendar.MONTH, 1);
-    donorForm.setBirthDate(new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
-    donorForm.setBloodAbo("AB");
-    donorForm.setBloodRh("+");
-
-    FormField donorNumberFormField = FormFieldBuilder.aFormField().withAutoGenerate(true).build();
+    Date futureBirthDate = cal.getTime();
+    DonorBackingForm donorForm = getBaseDonorBackingForm();
+    donorForm.setBirthDate(futureBirthDate);
 
     // set up mocks
-    when(formFieldRepository.getFormField("donor", "donorNumber")).thenReturn(donorNumberFormField);
-    when(sequenceNumberRepository.getSequenceNumber("Donor", "donorNumber")).thenReturn("DIN123");
-    when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
-    when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    when(donorRepository.findDonorByDonorNumber("DIN123", true)).thenReturn(null);
+    when(formFieldRepository.getRequiredFormFields("donor")).thenReturn(Arrays.asList(requiredFields));
 
     // run test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donor");
     donorBackingFormValidator.validate(donorForm, errors);
 
     // check asserts
@@ -200,49 +180,16 @@ public class DonorBackingFormValidatorTest {
   }
 
   @Test
-  public void testInvalidFormatBirthDate() throws Exception {
-    // set up data
-    DonorBackingForm donorForm = new DonorBackingForm();
-    donorForm.setBirthDate("1234");
-    donorForm.setBloodAbo("AB");
-    donorForm.setBloodRh("+");
-
-    FormField donorNumberFormField = FormFieldBuilder.aFormField().withAutoGenerate(true).build();
-
-    // set up mocks
-    when(formFieldRepository.getFormField("donor", "donorNumber")).thenReturn(donorNumberFormField);
-    when(sequenceNumberRepository.getSequenceNumber("Donor", "donorNumber")).thenReturn("DIN123");
-    when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
-    when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    when(donorRepository.findDonorByDonorNumber("DIN123", true)).thenReturn(null);
-
-    // run test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
-    donorBackingFormValidator.validate(donorForm, errors);
-
-    // check asserts
-    Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
-    // NOTE: this is because invalid format birth dates are handled in the backing form
-  }
-
-  @Test
   public void testInvalidBloodGroupRh() throws Exception {
     // set up data
-    DonorBackingForm donorForm = new DonorBackingForm();
-    donorForm.setBirthDate("1977-10-20");
+    DonorBackingForm donorForm = getBaseDonorBackingForm();
     donorForm.setBloodAbo("AB");
 
-    FormField donorNumberFormField = FormFieldBuilder.aFormField().withAutoGenerate(true).build();
-
     // set up mocks
-    when(formFieldRepository.getFormField("donor", "donorNumber")).thenReturn(donorNumberFormField);
-    when(sequenceNumberRepository.getSequenceNumber("Donor", "donorNumber")).thenReturn("DIN123");
-    when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
-    when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    when(donorRepository.findDonorByDonorNumber("DIN123", true)).thenReturn(null);
+    when(formFieldRepository.getRequiredFormFields("donor")).thenReturn(Arrays.asList(requiredFields));
 
     // run test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donor");
     donorBackingFormValidator.validate(donorForm, errors);
 
     // check asserts
@@ -253,25 +200,45 @@ public class DonorBackingFormValidatorTest {
   @Test
   public void testInvalidBloodGroupABO() throws Exception {
     // set up data
-    DonorBackingForm donorForm = new DonorBackingForm();
-    donorForm.setBirthDate("1977-10-20");
+    DonorBackingForm donorForm = getBaseDonorBackingForm();
     donorForm.setBloodRh("+");
 
-    FormField donorNumberFormField = FormFieldBuilder.aFormField().withAutoGenerate(true).build();
-
     // set up mocks
-    when(formFieldRepository.getFormField("donor", "donorNumber")).thenReturn(donorNumberFormField);
-    when(sequenceNumberRepository.getSequenceNumber("Donor", "donorNumber")).thenReturn("DIN123");
-    when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
-    when(formFieldRepository.getFieldMaxLengths("user")).thenReturn(new HashMap<String, Integer>());
-    when(donorRepository.findDonorByDonorNumber("DIN123", true)).thenReturn(null);
+    when(formFieldRepository.getRequiredFormFields("donor")).thenReturn(Arrays.asList(requiredFields));
 
     // run test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "user");
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donor");
     donorBackingFormValidator.validate(donorForm, errors);
 
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
     Assert.assertNotNull("Error: blood ABO not set", errors.getFieldError("donor.bloodAbo"));
   }
+
+  @Test
+  public void testInvalidFieldLengthUsingCommonFieldChecks() throws Exception {
+    // set up data
+    DonorBackingForm donorForm = getBaseDonorBackingForm();
+    donorForm.setMiddleName("012345678912345678901");
+
+    // set up max lengths
+    HashMap<String, Integer> maxLengthFields = new HashMap<String, Integer>();
+    maxLengthFields.put("firstName", 20);
+    maxLengthFields.put("lastName", 20);
+    maxLengthFields.put("middleName", 20);
+
+    // set up mocks
+    when(formFieldRepository.getRequiredFormFields("donor")).thenReturn(Arrays.asList(requiredFields));
+    when(formFieldRepository.getFieldMaxLengths("donor")).thenReturn(maxLengthFields);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donor");
+    donorBackingFormValidator.validate(donorForm, errors);
+
+    // check asserts
+    Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
+    Assert.assertNotNull("Error: middleName length is more than 20", errors.getFieldError("donor.middleName"));
+  }
+
+
 }
