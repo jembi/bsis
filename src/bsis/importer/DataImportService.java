@@ -24,10 +24,10 @@ import backingform.validator.LocationBackingFormValidator;
 import model.address.AddressType;
 import model.address.ContactMethodType;
 import model.donor.Donor;
-import model.donor.DonorStatus;
 import model.idtype.IdType;
 import model.location.Location;
 import model.preferredlanguage.PreferredLanguage;
+import model.util.Gender;
 import repository.ContactMethodTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
@@ -204,7 +204,16 @@ public class DataImportService {
             break;
 
           case "gender":
-            donorBackingForm.setGender(cell.getStringCellValue());
+            String genderStr = cell.getStringCellValue();
+            Gender gender = null;
+            if (StringUtils.isNotEmpty(genderStr)) {
+              try {
+                gender = Gender.valueOf(genderStr);
+              } catch (Exception e) {
+                errors.rejectValue("donor.gender", "gender.invalid", "Invalid gender");
+              }
+            }
+            donorBackingForm.setGender(gender);
             break;
 
           case "preferredLanguage":

@@ -113,11 +113,8 @@ public class DonorBackingForm {
     return donor.getBirthDateEstimated();
   }
 
-  public String getGender() {
-    if (donor == null || donor.getGender() == null) {
-      return null;
-    }
-    return donor.getGender().toString();
+  public Gender getGender() {
+    return donor.getGender();
   }
 
   @JsonIgnore
@@ -193,12 +190,8 @@ public class DonorBackingForm {
     donor.setCallingName(callingName);
   }
 
-  public void setGender(String gender) {
-    try {
-      donor.setGender(Gender.valueOf(gender));
-    } catch (Exception e) {
-      donor.setGender(null);
-    }
+  public void setGender(Gender gender) {
+    donor.setGender(gender);
   }
 
   public void setBirthDateEstimated(Boolean birthDateEstimated) {

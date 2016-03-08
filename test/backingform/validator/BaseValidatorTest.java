@@ -22,6 +22,7 @@ import backingform.DonorBackingForm;
 import helpers.builders.FormFieldBuilder;
 import model.admin.FormField;
 import model.donor.Donor;
+import model.util.Gender;
 import repository.FormFieldRepository;
 import utils.CustomDateFormatter;
 
@@ -42,7 +43,7 @@ public class BaseValidatorTest {
     donor.setLastName("Donor");
     donor.setCallingName("test");
     donor.setMiddleName("");
-    donor.setGender("female");
+    donor.setGender(Gender.female);
 
     Map<String, Integer> maxLengths = new HashMap<>();
     maxLengths.put("firstName", 10);

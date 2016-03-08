@@ -42,6 +42,7 @@ import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.location.Location;
 import model.user.User;
+import model.util.Gender;
 import suites.DBUnitContextDependentTestSuite;
 import utils.CustomDateFormatter;
 import viewmodel.DonorSummaryViewModel;
@@ -792,7 +793,7 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     donorBackingForm.setMiddleName("middlename");
     donorBackingForm.setLastName("lastname");
     donorBackingForm.setIsDeleted(false);
-    donorBackingForm.setGender("male");
+    donorBackingForm.setGender(Gender.male);
     donorBackingForm.setCallingName("CallingName");
     donorBackingForm.setHomeAddressCity("City");
     donorBackingForm.setHomeAddressCountry("country");
@@ -840,7 +841,7 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     donorBackingForm.setMiddleName("middlename_update");
     donorBackingForm.setLastName("lastname_update");
     donorBackingForm.setIsDeleted(false);
-    donorBackingForm.setGender("female");
+    donorBackingForm.setGender(Gender.female);
     donorBackingForm.setCallingName("CallingName_update");
     donorBackingForm.setHomeAddressCity("City_update");
     donorBackingForm.setHomeAddressCountry("country_update");

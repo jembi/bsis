@@ -23,6 +23,7 @@ import helpers.builders.LocationBuilder;
 import model.admin.FormField;
 import model.donor.Donor;
 import model.preferredlanguage.PreferredLanguage;
+import model.util.Gender;
 import repository.DonorRepository;
 import repository.FormFieldRepository;
 import repository.SequenceNumberRepository;
@@ -54,7 +55,7 @@ public class DonorBackingFormValidatorTest {
     donorForm.setDonorNumber("DIN123");
     donorForm.setFirstName("First");
     donorForm.setLastName("Last");
-    donorForm.setGender("female");
+    donorForm.setGender(Gender.female);
     donorForm.setVenue(LocationBuilder.aVenue().withId(1l).withName("Venue").build());
     donorForm.setPreferredLanguage(preferredLanguage);
     return donorForm;
