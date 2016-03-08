@@ -53,7 +53,7 @@ public class DataImportService {
   @Autowired
   private ContactMethodTypeRepository contactMethodTypeRepository;
 
-  private Map<String, String> externalDonorIdToDonorNumber = new HashMap<>();
+  private Map<String, Long> externalDonorIdToBsisId = new HashMap<>();
 
   private boolean validationOnly;
 
@@ -413,7 +413,7 @@ public class DataImportService {
         donor.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());
         donorRepository.saveDonor(donor);
         // cache new donorNumber
-        externalDonorIdToDonorNumber.put(externalDonorId, donor.getDonorNumber());
+        externalDonorIdToBsisId.put(externalDonorId, donor.getId());
       }
 
     }
