@@ -75,5 +75,11 @@
 			baseColumnNames="venue_id" baseTableName="DonorDeferral"
 			referencedColumnNames="id" referencedTableName="Location" />
 	</changeSet>
+	
+	<changeSet id="20160308-1210" author="timler">
+	    <comment>Adding defaults to Donor table</comment>
+	    <addDefaultValue tableName="Donor" columnName="donorStatus" columnDataType="varchar(20)" defaultValue="NORMAL"/>
+	    <addDefaultValue tableName="Donor" columnName="isDeleted" columnDataType="tinyint(1)" defaultValue="0"/>
+	</changeSet>
     
 </databaseChangeLog>

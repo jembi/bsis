@@ -7,7 +7,6 @@ import java.util.Map;
 import model.address.AddressType;
 import model.address.ContactMethodType;
 import model.donor.Donor;
-import model.donor.DonorStatus;
 import model.idtype.IdType;
 import model.location.Location;
 import model.preferredlanguage.PreferredLanguage;
@@ -408,8 +407,6 @@ public class DataImportService {
       if (!validationOnly) {
         // only save if validationOnly is false
         Donor donor = donorBackingForm.getDonor();
-        donor.setDonorStatus(DonorStatus.NORMAL);
-        donor.setIsDeleted(false);
         donor.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());
         donorRepository.saveDonor(donor);
         // cache new donorNumber

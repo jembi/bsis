@@ -11,9 +11,9 @@ import java.io.IOException;
 
 import model.address.AddressType;
 import model.address.ContactMethodType;
-import model.admin.FormField;
 import model.admin.GeneralConfig;
 import model.donor.Donor;
+import model.donor.DonorStatus;
 import model.idtype.IdType;
 import model.location.Location;
 import model.preferredlanguage.PreferredLanguage;
@@ -113,6 +113,8 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     Donor secondDonor = findDonorByName("Jane", "Doe");
     
     // first Donor
+    assertThat("Donor status is correct", firstDonor.getDonorStatus(), equalTo(DonorStatus.NORMAL));
+    assertThat("Donor is not deleted", firstDonor.getIsDeleted(), equalTo(Boolean.FALSE));
     assertThat("Middle name matches", firstDonor.getMiddleName(), equalTo("John"));
     assertThat("Title matches", firstDonor.getTitle(), equalTo("Mr"));
     assertThat("Calling name matches", firstDonor.getCallingName(), equalTo("Dave"));

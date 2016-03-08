@@ -114,7 +114,7 @@ public class Donor extends BaseModificationTrackerEntity {
 
   @Enumerated(EnumType.STRING)
   @Column(length = 20)
-  private DonorStatus donorStatus;
+  private DonorStatus donorStatus = DonorStatus.NORMAL;
 
   /**
    * Do not see a need to search by birthdate so need not add an index here.
@@ -152,7 +152,7 @@ public class Donor extends BaseModificationTrackerEntity {
   /**
    * Never delete the rows. Just mark them as deleted.
    */
-  private Boolean isDeleted;
+  private Boolean isDeleted = Boolean.FALSE;
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
