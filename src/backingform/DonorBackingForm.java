@@ -258,7 +258,7 @@ public class DonorBackingForm {
       ageFormatCorrect = true;
     } catch (NumberFormatException ex) {
       ageFormatCorrect = false;
-      donor.setBirthDate(null);
+      donor.setBirthDateInferred(null);
     }
   }
 
