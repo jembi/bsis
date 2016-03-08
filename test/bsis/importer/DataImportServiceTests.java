@@ -8,6 +8,7 @@ import helpers.builders.FormFieldBuilder;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 import model.address.AddressType;
 import model.address.ContactMethodType;
@@ -28,7 +29,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import suites.ContextDependentTestSuite;
-import utils.CustomDateFormatter;
 
 public class DataImportServiceTests extends ContextDependentTestSuite {
   
@@ -64,9 +64,13 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     FormFieldBuilder.aFormField().withForm("donor").withField("donorNumber")
         .withAutoGenerate(true).withMaxLength(15)
         .buildAndPersist(entityManager);
+    entityManager.flush();
     
     // Exercise SUT
     dataImportService.importData(workbook, false);
+    
+    // Ensure stale entities are cleared
+    entityManager.clear();
   }
 
   @Test
@@ -118,9 +122,9 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     assertThat("Middle name matches", firstDonor.getMiddleName(), equalTo("John"));
     assertThat("Title matches", firstDonor.getTitle(), equalTo("Mr"));
     assertThat("Calling name matches", firstDonor.getCallingName(), equalTo("Dave"));
-    assertThat("Gender matches", firstDonor.getGender(), equalTo(Gender.male));
+    assertThat("Gender matches", firstDonor.getGender(), equalTo(Gender.male));    
     assertThat("Preferred Language matches", firstDonor.getPreferredLanguage().getPreferredLanguage(), equalTo("English"));
-    assertThat("BirthDate matches", CustomDateFormatter.format(firstDonor.getBirthDate()), equalTo("1982-12-03"));
+    assertThat("BirthDate matches", new SimpleDateFormat("yyyy-MM-dd").format(firstDonor.getBirthDate()), equalTo("1982-12-03"));
     assertThat("BloodAbo matches", firstDonor.getBloodAbo(), equalTo("A"));
     assertThat("BloodRh matches", firstDonor.getBloodRh(), equalTo("+"));
     assertThat("Notes matches", firstDonor.getNotes(), equalTo("Imported Donor"));
@@ -145,7 +149,7 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     assertThat("Work address line 2 matches", firstDonor.getAddress().getWorkAddressLine2(), equalTo("Westlake Drive"));
     assertThat("Work address city matches", firstDonor.getAddress().getWorkAddressCity(), equalTo("Westlake"));
     assertThat("Work address province matches", firstDonor.getAddress().getWorkAddressProvince(), equalTo("Western Cape"));
-    assertThat("Work address district matches", firstDonor.getAddress().getWorkAddressDistrict(), equalTo("Gardens"));
+    assertThat("Work address district matches", firstDonor.getAddress().getWorkAddressDistrict(), equalTo("Cape Town"));
     assertThat("Work address state matches", firstDonor.getAddress().getWorkAddressState(), equalTo("Western Cape"));
     assertThat("Work address country matches", firstDonor.getAddress().getWorkAddressCountry(), equalTo("South Africa"));
     assertThat("Work address zipcode matches", firstDonor.getAddress().getWorkAddressZipcode(), equalTo("8001"));
@@ -153,7 +157,7 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     assertThat("Postal address line 2 matches", firstDonor.getAddress().getPostalAddressLine2(), equalTo("The Post Office"));
     assertThat("Postal address city matches", firstDonor.getAddress().getPostalAddressCity(), equalTo("Vlaeberg"));
     assertThat("Postal address province matches", firstDonor.getAddress().getPostalAddressProvince(), equalTo("Western Cape"));
-    assertThat("Postal address district matches", firstDonor.getAddress().getPostalAddressDistrict(), equalTo("Gardens"));
+    assertThat("Postal address district matches", firstDonor.getAddress().getPostalAddressDistrict(), equalTo("Cape Town"));
     assertThat("Postal address state matches", firstDonor.getAddress().getPostalAddressState(), equalTo("Western Cape"));
     assertThat("Postal address country matches", firstDonor.getAddress().getPostalAddressCountry(), equalTo("South Africa"));
     assertThat("Postal address zipcode matches", firstDonor.getAddress().getPostalAddressZipcode(), equalTo("8018"));
@@ -164,7 +168,7 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     assertThat("Calling name matches", secondDonor.getCallingName(), equalTo("Janey"));
     assertThat("Gender matches", secondDonor.getGender(), equalTo(Gender.female));
     assertThat("Preferred Language matches", secondDonor.getPreferredLanguage().getPreferredLanguage(), equalTo("Afrikaans"));
-    assertThat("BirthDate matches", CustomDateFormatter.format(secondDonor.getBirthDate()), equalTo("1972-10-03"));
+    assertThat("BirthDate matches", new SimpleDateFormat("yyyy-MM-dd").format(secondDonor.getBirthDate()), equalTo("1972-10-03"));
     assertThat("BloodAbo matches", secondDonor.getBloodAbo(), equalTo("B"));
     assertThat("BloodRh matches", secondDonor.getBloodRh(), equalTo("+"));
     assertThat("Venue matches", secondDonor.getVenue().getName(), equalTo("Second"));
