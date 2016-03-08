@@ -19,18 +19,6 @@ import java.util.Map;
 
 import javax.persistence.NoResultException;
 
-import model.address.Address;
-import model.address.AddressType;
-import model.address.Contact;
-import model.donation.DonationConstants;
-import model.donor.Donor;
-import model.donor.DonorStatus;
-import model.donor.DuplicateDonorBackup;
-import model.donordeferral.DeferralReason;
-import model.donordeferral.DonorDeferral;
-import model.location.Location;
-import model.user.User;
-
 import org.apache.commons.lang.time.DateUtils;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ReplacementDataSet;
@@ -42,9 +30,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import suites.DBUnitContextDependentTestSuite;
-import viewmodel.DonorSummaryViewModel;
 import backingform.DonorBackingForm;
+import model.address.Address;
+import model.address.AddressType;
+import model.address.Contact;
+import model.donation.DonationConstants;
+import model.donor.Donor;
+import model.donor.DonorStatus;
+import model.donor.DuplicateDonorBackup;
+import model.donordeferral.DeferralReason;
+import model.donordeferral.DonorDeferral;
+import model.location.Location;
+import model.user.User;
+import suites.DBUnitContextDependentTestSuite;
+import utils.CustomDateFormatter;
+import viewmodel.DonorSummaryViewModel;
 
 public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
 
@@ -53,7 +53,7 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
   private User user;
   private Long userDbId = 1l;
   private DonorBackingForm donorBackingForm;
-  String donorBirthdate = null;
+  Date donorBirthdate = null;
   ApplicationContext applicationContext = null;
   UserDetailsService userDetailsService;
   private Donor donor;
@@ -92,7 +92,7 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
   /**
    * Should fail when donor is missing required fields. saveDonor(Donor)
    */
-  public void saveDonor_shouldPersist() {
+  public void saveDonor_shouldPersist() throws ParseException {
     donorBackingForm = new DonorBackingForm();
     setBackingFormValue(donorBackingForm);
     // New DonorNumber(000005) which is assigned to Donor Persist Object
@@ -514,7 +514,7 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    * Should create new Donors from existing Donor objects
    * addAllDonors(List<Donor>)
    */
-  public void addAllDonors_listDonorsShouldPersist() {
+  public void addAllDonors_listDonorsShouldPersist() throws ParseException {
     Donor donor = new Donor();
     DonorBackingForm donorBackingForm = new DonorBackingForm(donor);
     donorBackingForm.setDonorNumber("000007");
@@ -523,14 +523,14 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     listAllDonor.add(donorBackingForm.getDonor());
     donor = new Donor();
     donorBackingForm = new DonorBackingForm(donor);
-    donorBirthdate = "1991-06-11";
+    donorBirthdate = CustomDateFormatter.getDateFromString("1991-06-11");
     donorBackingForm.setBirthDate(donorBirthdate);
     donorBackingForm.setDonorNumber("000008");
     setBackingFormValue(donorBackingForm);
     listAllDonor.add(donorBackingForm.getDonor());
     donor = new Donor();
     donorBackingForm = new DonorBackingForm(donor);
-    donorBirthdate = "1991-06-12";
+    donorBirthdate = CustomDateFormatter.getDateFromString("1991-06-12");
     donorBackingForm.setBirthDate(donorBirthdate);
     donorBackingForm.setDonorNumber("000009");
     setBackingFormValue(donorBackingForm);
@@ -776,13 +776,15 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
 
   /**
    * Called when insert new record into table.
+   * 
+   * @throws ParseException
    */
-  public void setBackingFormValue(DonorBackingForm donorBackingForm) {
+  public void setBackingFormValue(DonorBackingForm donorBackingForm) throws ParseException {
     Location l = new Location();
     l.setId(Long.parseLong("1"));
     AddressType a = new AddressType();
     a.setId(Long.parseLong("1"));
-    donorBirthdate = "1991-06-11";
+    donorBirthdate = CustomDateFormatter.getDateFromString("1991-06-11");
     donorBackingForm.setAddress(new Address());
     donorBackingForm.setContact(new Contact());
     donorBackingForm.setHomeAddressLine1("myaddress");

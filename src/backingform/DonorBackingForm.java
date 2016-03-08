@@ -59,17 +59,8 @@ public class DonorBackingForm {
     return donor.getDonorStatus();
   }
 
-  public String getBirthDate() {
-    return CustomDateFormatter.getDateString(donor.getBirthDate());
-  }
-
-  public void setBirthDate(String birthDate) {
-    try {
-      donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
-    } catch (Exception ex) {
-      // ex.printStackTrace();
-      donor.setBirthDate(null);
-    }
+  public Date getBirthDate() {
+    return donor.getBirthDate();
   }
 
   @JsonSerialize(using = DateTimeSerialiser.class)

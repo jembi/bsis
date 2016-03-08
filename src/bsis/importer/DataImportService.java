@@ -4,13 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import model.address.AddressType;
-import model.address.ContactMethodType;
-import model.donor.Donor;
-import model.idtype.IdType;
-import model.location.Location;
-import model.preferredlanguage.PreferredLanguage;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -18,21 +11,27 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.jms.IllegalStateException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
-import repository.ContactMethodTypeRepository;
-import repository.DonorRepository;
-import repository.LocationRepository;
-import repository.SequenceNumberRepository;
 import backingform.DonorBackingForm;
 import backingform.LocationBackingForm;
 import backingform.validator.DonorBackingFormValidator;
 import backingform.validator.LocationBackingFormValidator;
+import model.address.AddressType;
+import model.address.ContactMethodType;
+import model.donor.Donor;
+import model.donor.DonorStatus;
+import model.idtype.IdType;
+import model.location.Location;
+import model.preferredlanguage.PreferredLanguage;
+import repository.ContactMethodTypeRepository;
+import repository.DonorRepository;
+import repository.LocationRepository;
+import repository.SequenceNumberRepository;
 
 @Transactional
 @Service

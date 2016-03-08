@@ -11,7 +11,6 @@ import backingform.DonorBackingForm;
 import model.donor.Donor;
 import repository.DonorRepository;
 import repository.SequenceNumberRepository;
-import utils.CustomDateFormatter;
 
 @Component
 public class DonorBackingFormValidator extends BaseValidator<DonorBackingForm> {
@@ -49,19 +48,9 @@ public class DonorBackingFormValidator extends BaseValidator<DonorBackingForm> {
   }
 
   private void validateBirthDate(DonorBackingForm form, Errors errors) {
-
-    String birthDate = form.getBirthDate();
-
-    try {
-      if (StringUtils.isNotEmpty(birthDate)) {
-        Date date = CustomDateFormatter.getDateFromString(birthDate);
-        // verify Birthdate is not in the future
-        if (isFutureDate(date)) {
-          errors.rejectValue("donor.birthDate", "date.futureDate", "Cannot be a future date");
-        }
-      }
-    } catch (Exception e) {
-      errors.rejectValue("donor.birthDate", "dateFormat.incorrect", CustomDateFormatter.getDateErrorMessage());
+    Date birthDate = form.getBirthDate();
+    if (birthDate != null && isFutureDate(birthDate)) {
+      errors.rejectValue("donor.birthDate", "date.futureDate", "Cannot be a future date");
     }
   }
 
