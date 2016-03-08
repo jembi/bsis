@@ -220,11 +220,6 @@ public class DataImportService {
             }
             break;
 
-          case "age":
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-            donorBackingForm.setAge(cell.getStringCellValue());
-            break;
-
           case "bloodAbo":
             donorBackingForm.setBloodAbo(cell.getStringCellValue());
             break;
