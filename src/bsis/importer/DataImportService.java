@@ -407,8 +407,10 @@ public class DataImportService {
       if (!validationOnly) {
         // only save if validationOnly is false
         Donor donor = donorBackingForm.getDonor();
+        donor.setContact(donorBackingForm.getContact());
+        donor.setAddress(donorBackingForm.getAddress());
         donor.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());
-        donorRepository.saveDonor(donor);
+        donorRepository.addDonor(donor);
         // cache new donorNumber
         externalDonorIdToBsisId.put(externalDonorId, donor.getId());
       }
