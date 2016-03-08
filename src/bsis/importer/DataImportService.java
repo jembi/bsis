@@ -4,6 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import model.address.AddressType;
+import model.address.ContactMethodType;
+import model.donor.Donor;
+import model.idtype.IdType;
+import model.location.Location;
+import model.preferredlanguage.PreferredLanguage;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -18,18 +25,14 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
+import repository.ContactMethodTypeRepository;
+import repository.DonorRepository;
+import repository.LocationRepository;
+import repository.SequenceNumberRepository;
 import backingform.DonorBackingForm;
 import backingform.LocationBackingForm;
 import backingform.validator.DonorBackingFormValidator;
 import backingform.validator.LocationBackingFormValidator;
-import model.address.AddressType;
-import model.address.ContactMethodType;
-import model.idtype.IdType;
-import model.location.Location;
-import model.preferredlanguage.PreferredLanguage;
-import repository.ContactMethodTypeRepository;
-import repository.DonorRepository;
-import repository.LocationRepository;
 
 @Transactional
 @Service
@@ -45,9 +48,11 @@ public class DataImportService {
   @Autowired
   private DonorRepository donorRepository;
   @Autowired
+  private SequenceNumberRepository sequenceNumberRepository;
+  @Autowired
   private ContactMethodTypeRepository contactMethodTypeRepository;
 
-
+  private Map<String, String> externalDonorIdToDonorNumber = new HashMap<>();
 
   private boolean validationOnly;
 
@@ -402,6 +407,15 @@ public class DataImportService {
       if (errors.hasErrors()) {
         System.out.println("Invalid donor on row " + (row.getRowNum() + 1) + ". " + getErrorsString(errors));
         throw new IllegalArgumentException("Invalid donor");
+      }
+      
+      if (!validationOnly) {
+        // only save if validationOnly is false
+        Donor donor = donorBackingForm.getDonor();
+        donor.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());
+        donorRepository.saveDonor(donor);
+        // cache new donorNumber
+        externalDonorIdToDonorNumber.put(externalDonorId, donor.getDonorNumber());
       }
 
     }

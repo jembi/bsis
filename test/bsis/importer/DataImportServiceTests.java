@@ -7,10 +7,10 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.List;
 
 import model.address.AddressType;
 import model.address.ContactMethodType;
+import model.admin.GeneralConfig;
 import model.donor.Donor;
 import model.idtype.IdType;
 import model.location.Location;
@@ -54,6 +54,10 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     PreferredLanguage english = new PreferredLanguage();
     english.setPreferredLanguage("English");
     entityManager.persist(english);
+    GeneralConfig donorNumberGeneralConfig = new GeneralConfig();
+    donorNumberGeneralConfig.setName("donor.donorNumberFormat");
+    donorNumberGeneralConfig.setValue("%06d");
+    entityManager.persist(donorNumberGeneralConfig);
     
     // Exercise SUT
     dataImportService.importData(workbook, false);
