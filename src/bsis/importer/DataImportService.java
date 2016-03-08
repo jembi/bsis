@@ -11,6 +11,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.jms.IllegalStateException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
@@ -207,7 +208,13 @@ public class DataImportService {
             break;
 
           case "birthDate":
-            donorBackingForm.setBirthDate(cell.getDateCellValue());
+            try {
+              donorBackingForm.setBirthDate(cell.getDateCellValue());
+            } catch (IllegalStateException e) {
+                errors.rejectValue("donor.birthDate", "birthDate.invalid", "Invalid birthDate");
+            }
+
+
             break;
 
           case "age":
