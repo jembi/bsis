@@ -23,14 +23,20 @@ import backingform.validator.DonorBackingFormValidator;
 import backingform.validator.LocationBackingFormValidator;
 import model.address.AddressType;
 import model.address.ContactMethodType;
+import model.adverseevent.AdverseEventType;
+import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.idtype.IdType;
 import model.location.Location;
+import model.packtype.PackType;
 import model.preferredlanguage.PreferredLanguage;
 import model.util.Gender;
+import repository.AdverseEventTypeRepository;
 import repository.ContactMethodTypeRepository;
+import repository.DonationTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
+import repository.PackTypeRepository;
 import repository.SequenceNumberRepository;
 
 @Transactional
@@ -50,6 +56,12 @@ public class DataImportService {
   private SequenceNumberRepository sequenceNumberRepository;
   @Autowired
   private ContactMethodTypeRepository contactMethodTypeRepository;
+  @Autowired
+  private DonationTypeRepository donationTypeRepository;
+  @Autowired
+  private PackTypeRepository packTypeRepository;
+  @Autowired
+  private AdverseEventTypeRepository adverseEventTypeRepository;
 
   private Map<String, Long> externalDonorIdToBsisId = new HashMap<>();
 
@@ -68,6 +80,10 @@ public class DataImportService {
     System.out.println(action + " of Donors started");
     importDonorData(workbook.getSheet("Donors"));
     System.out.println(action + " of Donors completed");
+
+    System.out.println(action + " of Donations started");
+    importDonationsData(workbook.getSheet("Donations"));
+    System.out.println(action + " of Donations completed");
   }
   
   private void importLocationData(Sheet sheet) {
@@ -431,6 +447,41 @@ public class DataImportService {
       System.out.println("Imported " + donorCount + " donor(s)");
     }
 
+  }
+
+  private void importDonationsData(Sheet sheet) {
+    Map<String, Location> locationCache = buildLocationCache();
+    Map<String, DonationType> donationTypeCache = buildDonationTypeCache();
+    Map<String, PackType> packTypeCache = buildPackTypeCache();
+    Map<String, AdverseEventType> adverseEventTypeCache = buildAdverseEventTypeCache();
+
+  }
+
+  private Map<String, AdverseEventType> buildAdverseEventTypeCache() {
+    Map<String, AdverseEventType> adverseEventTypeCache = new HashMap<>();
+    List<AdverseEventType> adverseEventTypes = adverseEventTypeRepository.getAllAdverseEventTypes();
+    for (AdverseEventType adverseEventType : adverseEventTypes) {
+      adverseEventTypeCache.put(adverseEventType.getName(), adverseEventType);
+    }
+    return adverseEventTypeCache;
+  }
+
+  private Map<String, PackType> buildPackTypeCache() {
+    Map<String, PackType> packTypeCache = new HashMap<>();
+    List<PackType> packTypes = packTypeRepository.getAllEnabledPackTypes();
+    for (PackType packType : packTypes) {
+      packTypeCache.put(packType.getPackType(), packType);
+    }
+    return packTypeCache;
+  }
+
+  private Map<String, DonationType> buildDonationTypeCache() {
+    Map<String, DonationType> donationTypeCache = new HashMap<>();
+    List<DonationType> donationTypes = donationTypeRepository.getAllDonationTypes();
+    for (DonationType donationType : donationTypes) {
+      donationTypeCache.put(donationType.getDonationType(), donationType);
+    }
+    return donationTypeCache;
   }
 
   private Map<String, Location> buildLocationCache () {

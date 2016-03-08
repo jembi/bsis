@@ -2,10 +2,11 @@ package repository;
 
 import java.util.List;
 
-import model.adverseevent.AdverseEventType;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 
+import model.adverseevent.AdverseEventType;
 import repository.constant.AdverseEventTypeNamedQueryConstants;
 import viewmodel.AdverseEventTypeViewModel;
 
@@ -39,5 +40,11 @@ public class AdverseEventTypeRepository extends AbstractRepository<AdverseEventT
         AdverseEventTypeViewModel.class)
         .setParameter("deleted", false)
         .getResultList();
+  }
+
+  public List<AdverseEventType> getAllAdverseEventTypes() {
+    TypedQuery<AdverseEventType> query;
+    query = entityManager.createQuery("SELECT a from AdverseEventType a", AdverseEventType.class);
+    return query.getResultList();
   }
 }
