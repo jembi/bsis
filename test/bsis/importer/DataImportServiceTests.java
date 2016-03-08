@@ -4,12 +4,14 @@ import static helpers.builders.LocationBuilder.aLocation;
 import static helpers.matchers.LocationMatcher.hasSameStateAsLocation;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
+import helpers.builders.FormFieldBuilder;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 
 import model.address.AddressType;
 import model.address.ContactMethodType;
+import model.admin.FormField;
 import model.admin.GeneralConfig;
 import model.donor.Donor;
 import model.idtype.IdType;
@@ -59,6 +61,9 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     donorNumberGeneralConfig.setName("donor.donorNumberFormat");
     donorNumberGeneralConfig.setValue("%06d");
     entityManager.persist(donorNumberGeneralConfig);
+    FormFieldBuilder.aFormField().withForm("donor").withField("donorNumber")
+        .withAutoGenerate(true).withMaxLength(15)
+        .buildAndPersist(entityManager);
     
     // Exercise SUT
     dataImportService.importData(workbook, false);
