@@ -607,7 +607,9 @@ public class DataImportService {
       }
 
       Donor currentDonor = externalDonorIdToBsisId.get(externalDonorId);
-      donationBackingForm.setDonorNumber(currentDonor.getDonorNumber());
+      if (currentDonor != null) {
+        donationBackingForm.setDonorNumber(currentDonor.getDonorNumber());
+      }
 
       donationBackingFormValidator.validate(donationBackingForm, errors);
 
