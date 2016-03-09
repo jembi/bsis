@@ -43,8 +43,8 @@ public class AdverseEventTypeRepository extends AbstractRepository<AdverseEventT
   }
 
   public List<AdverseEventType> getAllAdverseEventTypes() {
-    TypedQuery<AdverseEventType> query;
-    query = entityManager.createQuery("SELECT a from AdverseEventType a", AdverseEventType.class);
+    TypedQuery<AdverseEventType> query =
+        entityManager.createQuery("SELECT a from AdverseEventType a", AdverseEventType.class);
     return query.getResultList();
   }
 }
