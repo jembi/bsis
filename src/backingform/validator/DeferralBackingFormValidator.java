@@ -8,7 +8,9 @@ import org.springframework.validation.Errors;
 import javax.persistence.NoResultException;
 
 import backingform.DeferralBackingForm;
+import model.donor.Donor;
 import model.location.Location;
+import repository.DonorRepository;
 import repository.LocationRepository;
 
 @Component
@@ -18,6 +20,8 @@ public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingF
 
   @Autowired
   private LocationRepository locationRepository;
+  @Autowired
+  private DonorRepository donorRepository;
 
   @Override
   public void validateForm(DeferralBackingForm form, Errors errors) {
@@ -42,6 +46,20 @@ public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingF
     
     if (form.getDeferredUntil() == null) {
       errors.rejectValue("deferredUntil", "deferral.deferredUntil.required", "Deferred until is required");
+    }
+    
+    if (form.getDeferredDonor() == null) {
+      errors.rejectValue("deferredDonor", "deferral.deferredDonor.required", "Deferred donor is required");
+    } else {
+      Donor deferredDonor = null;
+      try {
+        deferredDonor = donorRepository.findDonorById(form.getDeferredDonor());
+      } catch (NoResultException nre) {
+        LOGGER.warn("Donor not found for id: " + form.getDeferredDonor());
+      }
+      if (deferredDonor == null) {
+        errors.rejectValue("deferredDonor", "deferral.deferredDonor.required", "Deferred donor does not exist");
+      }
     }
   }
 
