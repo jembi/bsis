@@ -7,6 +7,12 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
@@ -18,13 +24,8 @@ import model.location.Location;
 import model.preferredlanguage.PreferredLanguage;
 import model.user.User;
 import model.util.Gender;
-
-import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-
 import utils.CustomDateFormatter;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import utils.DateTimeSerialiser;
 
 public class DonorBackingForm {
 
@@ -35,12 +36,6 @@ public class DonorBackingForm {
   private Boolean ageFormatCorrect;
 
   private String ageSpecified;
-
-  private String dateOfFirstDonation;
-
-  private String dueToDonate;
-
-  private String dateOfLastDonation;
 
   @Valid
   private Address address;
@@ -64,23 +59,14 @@ public class DonorBackingForm {
     return donor.getDonorStatus();
   }
 
-  public String getBirthDate() {
-    return CustomDateFormatter.getDateString(donor.getBirthDate());
+  public Date getBirthDate() {
+    return donor.getBirthDate();
   }
 
-  public void setBirthDate(String birthDate) {
-    try {
-      donor.setBirthDate(CustomDateFormatter.getDateFromString(birthDate));
-    } catch (ParseException ex) {
-      ex.printStackTrace();
-      donor.setBirthDate(null);
-    }
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public void setBirthDate(Date birthDate) {
+    donor.setBirthDate(birthDate);
   }
-
-//
-//    public DonorViewModel getDonorViewModel() {
-//        return new DonorViewModel(donor);
-//    }
 
   public Donor getDonor() {
     return donor;
@@ -127,11 +113,8 @@ public class DonorBackingForm {
     return donor.getBirthDateEstimated();
   }
 
-  public String getGender() {
-    if (donor == null || donor.getGender() == null) {
-      return null;
-    }
-    return donor.getGender().toString();
+  public Gender getGender() {
+    return donor.getGender();
   }
 
   @JsonIgnore
@@ -207,8 +190,8 @@ public class DonorBackingForm {
     donor.setCallingName(callingName);
   }
 
-  public void setGender(String gender) {
-    donor.setGender(Gender.valueOf(gender));
+  public void setGender(Gender gender) {
+    donor.setGender(gender);
   }
 
   public void setBirthDateEstimated(Boolean birthDateEstimated) {
@@ -259,7 +242,7 @@ public class DonorBackingForm {
       ageFormatCorrect = true;
     } catch (NumberFormatException ex) {
       ageFormatCorrect = false;
-      donor.setBirthDate(null);
+      donor.setBirthDateInferred(null);
     }
   }
 
@@ -313,17 +296,10 @@ public class DonorBackingForm {
   }
 
   public String getDateOfFirstDonation() {
-//        if (dateOfFirstDonation != null) { // Issue in editing form because of this lines 
-//            return dateOfFirstDonation;
-//        }
-//        if (dateOfFirstDonation == null) {
-//            return "";
-//        }
     return CustomDateFormatter.getDateString(donor.getDateOfFirstDonation());
   }
 
   public void setDateOfFirstDonation(String dateOfFirstDonation) {
-    this.dateOfFirstDonation = dateOfFirstDonation;
     try {
       donor.setDateOfFirstDonation(CustomDateFormatter.getDateFromString(dateOfFirstDonation));
     } catch (ParseException ex) {
@@ -337,7 +313,6 @@ public class DonorBackingForm {
   }
 
   public void setDateOfLastDonation(String dateOfLastDonation) {
-    this.dateOfLastDonation = dateOfLastDonation;
     try {
       donor.setDateOfLastDonation(CustomDateFormatter.getDateFromString(dateOfLastDonation));
     } catch (ParseException ex) {
@@ -352,7 +327,6 @@ public class DonorBackingForm {
 
 
   public void setDueToDonate(String dueToDonate) {
-    this.dueToDonate = dueToDonate;
     try {
       donor.setDueToDonate(CustomDateFormatter.getDateFromString(dueToDonate));
     } catch (ParseException ex) {

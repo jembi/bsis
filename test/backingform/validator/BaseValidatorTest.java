@@ -2,17 +2,12 @@ package backingform.validator;
 
 import static org.mockito.Mockito.when;
 
-import helpers.builders.FormFieldBuilder;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import model.admin.FormField;
-import model.donor.Donor;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,8 +18,13 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
-import repository.FormFieldRepository;
 import backingform.DonorBackingForm;
+import helpers.builders.FormFieldBuilder;
+import model.admin.FormField;
+import model.donor.Donor;
+import model.util.Gender;
+import repository.FormFieldRepository;
+import utils.CustomDateFormatter;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BaseValidatorTest {
@@ -43,7 +43,7 @@ public class BaseValidatorTest {
     donor.setLastName("Donor");
     donor.setCallingName("test");
     donor.setMiddleName("");
-    donor.setGender("female");
+    donor.setGender(Gender.female);
 
     Map<String, Integer> maxLengths = new HashMap<>();
     maxLengths.put("firstName", 10);
@@ -97,7 +97,7 @@ public class BaseValidatorTest {
     donor.setLastName("Donor");
     donor.setCallingName("test");
     donor.setMiddleName("");
-    donor.setBirthDate("1977-10-20");
+    donor.setBirthDate(CustomDateFormatter.getDateFromString("1977-10-20"));
 
     List<String> requiredValues = Arrays.asList(new String[]{"firstName", "lastName", "birthDate", "test"});
 
