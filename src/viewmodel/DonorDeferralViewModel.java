@@ -74,4 +74,9 @@ public class DonorDeferralViewModel {
   public Location getVenue() {
     return donorDeferral.getVenue();
   }
+  
+  // FIXME: The name of this method is misleading, but it is made to match the backing form.
+  public Long getDeferredDonor() {
+    return donorDeferral.getDeferredDonor().getId();
+  }
 }
