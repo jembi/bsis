@@ -61,7 +61,6 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
     validateDonationType(form, errors);
     validateBloodPressure(form, errors);
     validateHaemoglobinCount(form, errors);
-    validateHaemoglobinLevel(form, errors);
     validateWeight(form, errors);
     validatePulse(form, errors);
 
@@ -121,18 +120,6 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
         errors.rejectValue("donation.haemoglobinCount", "haemoglobinCount.outOfRange", "Hb value should be above " + hbMin);
       if (haemoglobinCount > hbMax)
         errors.rejectValue("donation.haemoglobinCount", "haemoglobinCount.outOfRange", "Hb value should be below " + hbMax);
-    } else {
-      Boolean captureHBNumeric = generalConfigAccessorService.getBooleanValue("donation.hbNumericValue", false);
-      if (captureHBNumeric) {
-        errors.rejectValue("donation.haemoglobinCount", "haemoglobinCount.empty", "This is required");
-      }
-    }
-  }
-  
-  private void validateHaemoglobinLevel(DonationBackingForm donationBackingForm, Errors errors) {
-    Boolean captureHBQualitative = generalConfigAccessorService.getBooleanValue("donation.hbQualitativeValue", false);
-    if (captureHBQualitative && donationBackingForm.getHaemoglobinLevel() == null) {
-      errors.rejectValue("donation.haemoglobinLevel", "haemoglobinLevel.empty", "This is required");
     }
   }
 

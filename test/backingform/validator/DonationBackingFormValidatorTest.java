@@ -459,46 +459,6 @@ public class DonationBackingFormValidatorTest {
   }
   
   @Test
-  public void testInvalidHaemoglobinCountNotDefined() throws Exception {
-    // set up data
-    DonationBackingForm form = createBasicBackingForm();
-    form.setHaemoglobinCount(null);
-
-    // set up mocks
-    when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
-    when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    mockGeneralConfigAndFormFields();
-
-    // run test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donation");
-    donationBackingFormValidator.validate(form, errors);
-
-    // check asserts
-    Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error on field haemoglobinCount", errors.getFieldError("donation.haemoglobinCount"));
-  }
-  
-  @Test
-  public void testInvalidHaemoglobinLevelNotDefined() throws Exception {
-    // set up data
-    DonationBackingForm form = createBasicBackingForm();
-    form.setHaemoglobinLevel(null);
-
-    // set up mocks
-    when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
-    when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    mockGeneralConfigAndFormFields();
-
-    // run test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donation");
-    donationBackingFormValidator.validate(form, errors);
-
-    // check asserts
-    Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error on field haemoglobinLevel", errors.getFieldError("donation.haemoglobinLevel"));
-  }
-  
-  @Test
   public void testInvalidDonorWeightAbove() throws Exception {
     // set up data
     DonationBackingForm form = createBasicBackingForm();
@@ -622,14 +582,7 @@ public class DonationBackingFormValidatorTest {
         .withUseCurrentTime(true).build());
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(generalConfigAccessorService.getBooleanValue("donation.hbNumericValue", false)).thenReturn(false);
-    when(generalConfigAccessorService.getBooleanValue("donation.hbQualitativeValue", false)).thenReturn(false);
-    when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.weightMin")).thenReturn("30");
-    when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.weightMax")).thenReturn("300");
-    when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.pulseMin")).thenReturn("30");
-    when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.pulseMax")).thenReturn("200");
-    when(formFieldRepository.getRequiredFormFields("donation")).thenReturn(new ArrayList<String>());
-    when(formFieldRepository.getFieldMaxLengths("donation")).thenReturn(new HashMap<String, Integer>());    
+    mockGeneralConfigAndFormFields();    
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donation");
@@ -649,8 +602,6 @@ public class DonationBackingFormValidatorTest {
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.bpDiastolicMax")).thenReturn("100");
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.hbMin")).thenReturn("1");
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.hbMax")).thenReturn("25");
-    when(generalConfigAccessorService.getBooleanValue("donation.hbNumericValue", false)).thenReturn(true);
-    when(generalConfigAccessorService.getBooleanValue("donation.hbQualitativeValue", false)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.weightMin")).thenReturn("30");
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.weightMax")).thenReturn("300");
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.pulseMin")).thenReturn("30");
