@@ -39,6 +39,10 @@ public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingF
         errors.rejectValue("venue", "deferral.venue.required", "Venue does not exist");
       }
     }
+    
+    if (form.getDeferredUntil() == null) {
+      errors.rejectValue("deferredUntil", "deferral.deferredUntil.required", "Deferred until is required");
+    }
   }
 
   @Override
