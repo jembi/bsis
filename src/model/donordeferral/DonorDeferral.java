@@ -45,11 +45,6 @@ public class DonorDeferral extends BaseModificationTrackerEntity {
   @Temporal(TemporalType.DATE)
   private Date deferredUntil;
 
-  /*
-  @ManyToOne
-  private User createdBy;
-  */
-
   @ManyToOne
   private DeferralReason deferralReason;
   

@@ -13,12 +13,19 @@ import repository.LocationRepository;
 
 @Component
 public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingForm> {
-  @Autowired
-  LocationRepository locationRepository;
+
   private static final Logger LOGGER = Logger.getLogger(DeferralBackingFormValidator.class);
+
+  @Autowired
+  private LocationRepository locationRepository;
 
   @Override
   public void validateForm(DeferralBackingForm form, Errors errors) {
+    
+    if (form.getDeferralReason() == null) {
+      errors.rejectValue("deferralReason", "deferral.deferralReason.required", "Deferral reason is required");
+    }
+    
     if (form.getVenue() == null) {
       errors.rejectValue("venue", "deferral.venue.required", "Venue is required");
     } else {
