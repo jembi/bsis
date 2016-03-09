@@ -120,10 +120,10 @@ public class DonationBackingFormBuilder extends AbstractBuilder<DonationBackingF
     donationBackingForm.setNotes(notes);
     donationBackingForm.setPackType(packType);
     if (bleedStartTime != null) {
-      donationBackingForm.setBleedStartTime(ISO_FORMAT.print(bleedStartTime.getTime()));
+      donationBackingForm.setBleedStartTime(bleedStartTime);
     }
     if (bleedEndTime != null) {
-      donationBackingForm.setBleedEndTime(ISO_FORMAT.print(bleedEndTime.getTime()));
+      donationBackingForm.setBleedEndTime(bleedEndTime);
     }
     donationBackingForm.setAdverseEvent(adverseEventBackingForm);
     donationBackingForm.setDonor(donor);

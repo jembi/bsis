@@ -501,15 +501,15 @@ public class DataImportService {
             break;
 
           case "venue":
-            donationBackingForm.setVenue(locationCache.get(cell.getBooleanCellValue()));
+            donationBackingForm.setVenue(locationCache.get(cell.getStringCellValue()));
             break;
 
           case "donationType":
-            donationBackingForm.setDonationType(donationTypeCache.get(cell.getBooleanCellValue()));
+            donationBackingForm.setDonationType(donationTypeCache.get(cell.getStringCellValue()));
             break;
 
           case "packType":
-            donationBackingForm.setPackType(packTypeCache.get(cell.getBooleanCellValue()));
+            donationBackingForm.setPackType(packTypeCache.get(cell.getStringCellValue()));
             break;
 
           case "donationDate":
@@ -521,11 +521,11 @@ public class DataImportService {
             break;
 
           case "bleedStartTime":
-            donationBackingForm.setBleedStartTime(cell.getStringCellValue());
+            donationBackingForm.setBleedStartTime(cell.getDateCellValue());
             break;
 
           case "bleedEndTime":
-            donationBackingForm.setBleedEndTime(cell.getStringCellValue());
+            donationBackingForm.setBleedEndTime(cell.getDateCellValue());
             break;
 
           case "donorWeight":
@@ -548,7 +548,6 @@ public class DataImportService {
             break;
 
           case "haemoglobinCount":
-            cell.setCellType(Cell.CELL_TYPE_STRING);
             donationBackingForm.setHaemoglobinCount(BigDecimal.valueOf(cell.getNumericCellValue()));
             break;
 

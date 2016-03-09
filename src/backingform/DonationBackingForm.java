@@ -24,6 +24,7 @@ import model.user.User;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 
 import utils.CustomDateFormatter;
 import utils.DateTimeSerialiser;
@@ -95,38 +96,48 @@ public class DonationBackingForm {
     return donation.getDonationIdentificationNumber();
   }
 
-  public void setDonationDate(String donationDate) {
-    this.donationDate = donationDate;
-    try {
-      donation.setDonationDate(CustomDateFormatter.getDateFromString(donationDate));
-    } catch (ParseException ex) {
-      ex.printStackTrace();
-      donation.setDonationDate(null);
-    }
-  }
+//  public void setDonationDate(String donationDate) {
+//    this.donationDate = donationDate;
+//    try {
+//      donation.setDonationDate(CustomDateFormatter.getDateFromString(donationDate));
+//    } catch (ParseException ex) {
+//      ex.printStackTrace();
+//      donation.setDonationDate(null);
+//    }
+//  }
 
   @JsonSerialize(using = DateTimeSerialiser.class)
   public void setDonationDate(Date donationDate) {
     donation.setDonationDate(donationDate);
   }
 
-  public void setBleedStartTime(String bleedStartTime) {
-    try {
-      donation.setBleedStartTime(CustomDateFormatter.getDateTimeFromString(bleedStartTime));
-    } catch (ParseException ex) {
-      ex.printStackTrace();
-      donation.setBleedStartTime(null);
-    }
+//  public void setBleedStartTime(String bleedStartTime) {
+//    try {
+//      donation.setBleedStartTime(CustomDateFormatter.getDateTimeFromString(bleedStartTime));
+//    } catch (ParseException ex) {
+//      ex.printStackTrace();
+//      donation.setBleedStartTime(null);
+//    }
+//  }
+
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public void setBleedStartTime(Date date) {
+    donation.setBleedStartTime(date);
   }
 
-  public void setBleedEndTime(String bleedEndTime) {
-    try {
-      donation.setBleedEndTime(CustomDateFormatter.getDateTimeFromString(bleedEndTime));
-    } catch (ParseException ex) {
-      ex.printStackTrace();
-      donation.setBleedEndTime(null);
-    }
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public void setBleedEndTime(Date date) {
+    donation.setBleedEndTime(date);
   }
+
+//  public void setBleedEndTime(String bleedEndTime) {
+//    try {
+//      donation.setBleedEndTime(CustomDateFormatter.getDateTimeFromString(bleedEndTime));
+//    } catch (ParseException ex) {
+//      ex.printStackTrace();
+//      donation.setBleedEndTime(null);
+//    }
+//  }
 
   public void setDonation(Donation donation) {
     this.donation = donation;
