@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -23,6 +24,7 @@ import backingform.AdverseEventTypeBackingForm;
 import backingform.DonationBackingForm;
 import backingform.DonorBackingForm;
 import backingform.LocationBackingForm;
+import backingform.validator.DonationBackingFormValidator;
 import backingform.validator.DonorBackingFormValidator;
 import backingform.validator.LocationBackingFormValidator;
 import model.address.AddressType;
@@ -67,8 +69,10 @@ public class DataImportService {
   private PackTypeRepository packTypeRepository;
   @Autowired
   private AdverseEventTypeRepository adverseEventTypeRepository;
+  @Autowired
+  private DonationBackingFormValidator donationBackingFormValidator;
 
-  private Map<String, Long> externalDonorIdToBsisId = new HashMap<>();
+  private Map<String, Donor> externalDonorIdToBsisId = new HashMap<>();
 
   private boolean validationOnly;
 
@@ -441,7 +445,7 @@ public class DataImportService {
         donor.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());
         donorRepository.addDonor(donor);
         // cache new donorNumber
-        externalDonorIdToBsisId.put(externalDonorId, donor.getId());
+        externalDonorIdToBsisId.put(externalDonorId, donor);
       }
 
     }
@@ -565,7 +569,7 @@ public class DataImportService {
           case "adverseEventType":
             AdverseEventType adverseEventType = adverseEventTypeCache.get(cell.getStringCellValue());
             if (adverseEventType == null) {
-              errors.rejectValue("adverseEvent.type", "adverseEventType.invalid", "Invalid adverseEventType");
+              errors.rejectValue("donation.adverseEvent.type", "type.invalid", "Invalid adverseEventType");
               break;
             }
             adverseEventTypeBackingForm = new AdverseEventTypeBackingForm();
@@ -600,6 +604,16 @@ public class DataImportService {
         adverseEventBackingForm.setType(adverseEventTypeBackingForm);
         adverseEventBackingForm.setComment(adverseEventComment);
         donationBackingForm.setAdverseEvent(adverseEventBackingForm);
+      }
+
+      Donor currentDonor = externalDonorIdToBsisId.get(externalDonorId);
+      donationBackingForm.setDonorNumber(currentDonor.getDonorNumber());
+
+      donationBackingFormValidator.validate(donationBackingForm, errors);
+
+      if (errors.hasErrors()) {
+        System.out.println("Invalid donation on row " + (row.getRowNum() + 1) + ". " + getErrorsString(errors));
+        throw new IllegalArgumentException("Invalid donation");
       }
     }
 

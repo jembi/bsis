@@ -4,6 +4,8 @@ import static helpers.builders.LocationBuilder.aLocation;
 import static helpers.matchers.LocationMatcher.hasSameStateAsLocation;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
+
+import helpers.builders.AdverseEventTypeBuilder;
 import helpers.builders.FormFieldBuilder;
 
 import java.io.FileInputStream;
@@ -57,15 +59,72 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     PreferredLanguage afrikaans = new PreferredLanguage();
     afrikaans.setPreferredLanguage("Afrikaans");
     entityManager.persist(afrikaans);
+
     GeneralConfig donorNumberGeneralConfig = new GeneralConfig();
     donorNumberGeneralConfig.setName("donor.donorNumberFormat");
     donorNumberGeneralConfig.setValue("%06d");
     entityManager.persist(donorNumberGeneralConfig);
+
+    GeneralConfig bpSystolicMinConfig = new GeneralConfig();
+    bpSystolicMinConfig.setName("donation.donor.bpSystolicMin");
+    bpSystolicMinConfig.setValue("10");
+    entityManager.persist(bpSystolicMinConfig);
+
+    GeneralConfig bpSystolicMaxConfig = new GeneralConfig();
+    bpSystolicMaxConfig.setName("donation.donor.bpSystolicMax");
+    bpSystolicMaxConfig.setValue("200");
+    entityManager.persist(bpSystolicMaxConfig);
+
+    GeneralConfig bpDiastolicMinConfig = new GeneralConfig();
+    bpDiastolicMinConfig.setName("donation.donor.bpDiastolicMin");
+    bpDiastolicMinConfig.setValue("10");
+    entityManager.persist(bpDiastolicMinConfig);
+
+    GeneralConfig bpDiastolicMaxConfig = new GeneralConfig();
+    bpDiastolicMaxConfig.setName("donation.donor.bpDiastolicMax");
+    bpDiastolicMaxConfig.setValue("90");
+    entityManager.persist(bpDiastolicMaxConfig);
+
+    GeneralConfig hbMinConfig = new GeneralConfig();
+    hbMinConfig.setName("donation.donor.hbMin");
+    hbMinConfig.setValue("1");
+    entityManager.persist(hbMinConfig);
+
+    GeneralConfig hbMaxConfig = new GeneralConfig();
+    hbMaxConfig.setName("donation.donor.hbMax");
+    hbMaxConfig.setValue("90");
+    entityManager.persist(hbMaxConfig);
+
+    GeneralConfig weightMinConfig = new GeneralConfig();
+    weightMinConfig.setName("donation.donor.weightMin");
+    weightMinConfig.setValue("10");
+    entityManager.persist(weightMinConfig);
+
+    GeneralConfig weightMaxConfig = new GeneralConfig();
+    weightMaxConfig.setName("donation.donor.weightMax");
+    weightMaxConfig.setValue("90");
+    entityManager.persist(weightMaxConfig);
+
+    GeneralConfig pulseMinConfig = new GeneralConfig();
+    pulseMinConfig.setName("donation.donor.pulseMin");
+    pulseMinConfig.setValue("10");
+    entityManager.persist(pulseMinConfig);
+
+    GeneralConfig pulseMaxConfig = new GeneralConfig();
+    pulseMaxConfig.setName("donation.donor.pulseMax");
+    pulseMaxConfig.setValue("90");
+    entityManager.persist(pulseMaxConfig);
+
     FormFieldBuilder.aFormField().withForm("donor").withField("donorNumber")
         .withAutoGenerate(true).withMaxLength(15)
         .buildAndPersist(entityManager);
     entityManager.flush();
-    
+
+    AdverseEventTypeBuilder.anAdverseEventType().withName("Haematoma")
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+    entityManager.flush();
+
     // Exercise SUT
     dataImportService.importData(workbook, false);
     
