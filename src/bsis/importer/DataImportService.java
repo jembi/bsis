@@ -482,8 +482,6 @@ public class DataImportService {
       AdverseEventTypeBackingForm adverseEventTypeBackingForm = null;
       String adverseEventComment = null;
 
-
-
       for (Cell cell : row) {
 
         Cell header = headers.getCell(cell.getColumnIndex());
@@ -516,7 +514,7 @@ public class DataImportService {
             try {
               donationBackingForm.setDonationDate(cell.getDateCellValue());
             } catch (IllegalStateException e) {
-              errors.rejectValue("donor.donationDate", "donationDate.invalid", "Invalid donationDate");
+              errors.rejectValue("donation.donationDate", "donationDate.invalid", "Invalid donationDate");
             }
             break;
 
@@ -558,7 +556,7 @@ public class DataImportService {
               try {
                 haemoglobinLevel = HaemoglobinLevel.valueOf(haemoglobinLevelStr);
               } catch (Exception e) {
-                errors.rejectValue("donor.haemoglobinLevel", "haemoglobinLevel.invalid", "Invalid haemoglobinLevel");
+                errors.rejectValue("donation.haemoglobinLevel", "haemoglobinLevel.invalid", "Invalid haemoglobinLevel");
               }
             }
             donationBackingForm.setHaemoglobinLevel(haemoglobinLevel);
