@@ -105,6 +105,11 @@ public class DonationBackingForm {
     }
   }
 
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public void setDonationDate(Date donationDate) {
+    donation.setDonationDate(donationDate);
+  }
+
   public void setBleedStartTime(String bleedStartTime) {
     try {
       donation.setBleedStartTime(CustomDateFormatter.getDateTimeFromString(bleedStartTime));

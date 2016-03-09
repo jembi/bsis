@@ -1,5 +1,6 @@
 package bsis.importer;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,9 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
+import backingform.AdverseEventBackingForm;
+import backingform.AdverseEventTypeBackingForm;
+import backingform.DonationBackingForm;
 import backingform.DonorBackingForm;
 import backingform.LocationBackingForm;
 import backingform.validator.DonorBackingFormValidator;
@@ -24,6 +28,7 @@ import backingform.validator.LocationBackingFormValidator;
 import model.address.AddressType;
 import model.address.ContactMethodType;
 import model.adverseevent.AdverseEventType;
+import model.donation.HaemoglobinLevel;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.idtype.IdType;
@@ -454,6 +459,152 @@ public class DataImportService {
     Map<String, DonationType> donationTypeCache = buildDonationTypeCache();
     Map<String, PackType> packTypeCache = buildPackTypeCache();
     Map<String, AdverseEventType> adverseEventTypeCache = buildAdverseEventTypeCache();
+
+    // Keep a reference to the row containing the headers
+    Row headers = null;
+
+    int donationCount = 0;
+
+    for (Row row : sheet) {
+
+      String externalDonorId = null;
+
+      if (headers == null) {
+        headers = row;
+        continue;
+      } else {
+        donationCount += 1;
+      }
+
+      DonationBackingForm donationBackingForm = new DonationBackingForm();
+      BindException errors = new BindException(donationBackingForm, "DonationBackingForm");
+
+      AdverseEventTypeBackingForm adverseEventTypeBackingForm = null;
+      String adverseEventComment = null;
+
+
+
+      for (Cell cell : row) {
+
+        Cell header = headers.getCell(cell.getColumnIndex());
+
+        switch (header.getStringCellValue()) {
+
+          case "externalDonorId":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            externalDonorId = cell.getStringCellValue();
+            break;
+
+          case "donationIdentificationNumber":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            donationBackingForm.setDonationIdentificationNumber(cell.getStringCellValue());
+            break;
+
+          case "venue":
+            donationBackingForm.setVenue(locationCache.get(cell.getBooleanCellValue()));
+            break;
+
+          case "donationType":
+            donationBackingForm.setDonationType(donationTypeCache.get(cell.getBooleanCellValue()));
+            break;
+
+          case "packType":
+            donationBackingForm.setPackType(packTypeCache.get(cell.getBooleanCellValue()));
+            break;
+
+          case "donationDate":
+            try {
+              donationBackingForm.setDonationDate(cell.getDateCellValue());
+            } catch (IllegalStateException e) {
+              errors.rejectValue("donor.donationDate", "donationDate.invalid", "Invalid donationDate");
+            }
+            break;
+
+          case "bleedStartTime":
+            donationBackingForm.setBleedStartTime(cell.getStringCellValue());
+            break;
+
+          case "bleedEndTime":
+            donationBackingForm.setBleedEndTime(cell.getStringCellValue());
+            break;
+
+          case "donorWeight":
+            donationBackingForm.setDonorWeight(BigDecimal.valueOf(cell.getNumericCellValue()));
+            break;
+
+          case "bloodPressureSystolic":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            donationBackingForm.setBloodPressureSystolic(Integer.valueOf(cell.getStringCellValue()));
+            break;
+
+          case "bloodPressureDiastolic":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            donationBackingForm.setBloodPressureDiastolic(Integer.valueOf(cell.getStringCellValue()));
+            break;
+
+          case "donorPulse":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            donationBackingForm.setDonorPulse(Integer.valueOf(cell.getStringCellValue()));
+            break;
+
+          case "haemoglobinCount":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            donationBackingForm.setHaemoglobinCount(BigDecimal.valueOf(cell.getNumericCellValue()));
+            break;
+
+          case "haemoglobinLevel":
+            String haemoglobinLevelStr = cell.getStringCellValue();
+            HaemoglobinLevel haemoglobinLevel = null;
+            if (StringUtils.isNotEmpty(haemoglobinLevelStr)) {
+              try {
+                haemoglobinLevel = HaemoglobinLevel.valueOf(haemoglobinLevelStr);
+              } catch (Exception e) {
+                errors.rejectValue("donor.haemoglobinLevel", "haemoglobinLevel.invalid", "Invalid haemoglobinLevel");
+              }
+            }
+            donationBackingForm.setHaemoglobinLevel(haemoglobinLevel);
+            break;
+
+          case "adverseEventType":
+            AdverseEventType adverseEventType = adverseEventTypeCache.get(cell.getStringCellValue());
+            if (adverseEventType == null) {
+              errors.rejectValue("adverseEvent.adverseEventType", "adverseEventType.invalid", "Invalid adverseEventType");
+              break;
+            }
+            adverseEventTypeBackingForm = new AdverseEventTypeBackingForm();
+            adverseEventTypeBackingForm.setId(adverseEventType.getId());
+            break;
+
+          case "adverseEventComment":
+            adverseEventComment = cell.getStringCellValue();
+            break;
+
+
+          case "bloodAbo":
+            donationBackingForm.setBloodAbo(cell.getStringCellValue());
+            break;
+
+          case "bloodRh":
+            donationBackingForm.setBloodRh(cell.getStringCellValue());
+            break;
+
+          case "setNotes":
+            donationBackingForm.setNotes(cell.getStringCellValue());
+            break;
+
+          default:
+            System.out.println("Unknown donation column: " + header.getStringCellValue());
+            break;
+        }
+      }
+
+      if (adverseEventTypeBackingForm != null) {
+        AdverseEventBackingForm adverseEventBackingForm = new AdverseEventBackingForm();
+        adverseEventBackingForm.setType(adverseEventTypeBackingForm);
+        adverseEventBackingForm.setComment(adverseEventComment);
+        donationBackingForm.setAdverseEvent(adverseEventBackingForm);
+      }
+    }
 
   }
 
