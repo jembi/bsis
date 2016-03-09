@@ -2,8 +2,6 @@ package repository;
 
 import java.util.List;
 
-import javax.persistence.TypedQuery;
-
 import org.springframework.stereotype.Repository;
 
 import model.adverseevent.AdverseEventType;
@@ -43,8 +41,6 @@ public class AdverseEventTypeRepository extends AbstractRepository<AdverseEventT
   }
 
   public List<AdverseEventType> getAllAdverseEventTypes() {
-    TypedQuery<AdverseEventType> query =
-        entityManager.createQuery("SELECT a from AdverseEventType a", AdverseEventType.class);
-    return query.getResultList();
+    return entityManager.createQuery("SELECT a from AdverseEventType a", AdverseEventType.class).getResultList();
   }
 }
