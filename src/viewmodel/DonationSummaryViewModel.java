@@ -46,6 +46,10 @@ public class DonationSummaryViewModel {
     this.donation = donation;
   }
 
+  public Long getId() {
+    return donation.getId();
+  }
+
   /**
    * Gets the donation identification number.
    *

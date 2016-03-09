@@ -42,6 +42,9 @@ public class BloodTestResultConstraintChecker {
         // No blood test results can be edited if the blood typing match status is RESOLVED
         // FIXME: Allow Titre, Weak D, AbScr etc. tests to be edited even if the status is resolved
         return false;
+      }  else if (BloodTypingMatchStatus.NO_TYPE_DETERMINED.equals(bloodTestingRuleResultSet.getBloodTypingMatchStatus())) {
+        // No blood test results can be edited if the blood typing match status is NO_TYPE_DETERMINED
+        return false;
       } else {
         // check the pending tests for rule associated with the blood test
         return !isResultConfirmed(bloodTestingRuleResultSet, bloodTestResult);

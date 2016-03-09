@@ -208,6 +208,25 @@ public class BloodTestResultConstraintCheckerTests {
   }
 
   @Test
+  public void testCanEditNoTypeDeterminedBloodTest() {
+    Donation donation = aDonation().build();
+    BloodTest bloodTest = new BloodTest();
+    bloodTest.setCategory(BloodTestCategory.BLOODTYPING);
+    BloodTestResult bloodTestResult = new BloodTestResult();
+    bloodTestResult.setDonation(donation);
+    bloodTestResult.setBloodTest(bloodTest);
+    BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
+        new HashMap<String, String>(), new HashMap<String, String>(), new HashMap<Long, BloodTestResult>(),
+        new ArrayList<BloodTestingRule>());
+    bloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
+    bloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
+
+    boolean canEdit = bloodTestResultConstraintChecker.canEdit(bloodTestingRuleResultSet, bloodTestResult, DONATION_NOT_RELEASED);
+
+    assertThat(canEdit, is(false));
+  }
+
+  @Test
   public void testCanEditReleasedDonationBloodTypingTestResult() {
     Donation donation = aDonation().build();
     BloodTest bloodTest = new BloodTest();
