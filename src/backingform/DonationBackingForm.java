@@ -1,10 +1,6 @@
 package backingform;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -14,41 +10,31 @@ import javax.validation.constraints.NotNull;
 
 import model.component.Component;
 import model.donation.Donation;
-import model.donationbatch.DonationBatch;
 import model.donation.HaemoglobinLevel;
+import model.donationbatch.DonationBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
 import model.packtype.PackType;
 import model.user.User;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
 
-import utils.CustomDateFormatter;
 import utils.DateTimeSerialiser;
 import utils.PackTypeSerializer;
 
-public class DonationBackingForm {
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-  public static final int ID_LENGTH = 12;
+public class DonationBackingForm {
 
   @NotNull
   @Valid
   @JsonIgnore
   private Donation donation;
 
-  private List<String> centers;
-  private List<String> sites;
-  private String donationDate;
   private String donorNumber;
   private AdverseEventBackingForm adverseEventBackingForm;
-
-  // setting this to false is required as the use parameters from batch
-  // may be hidden by the user in which case we will get a null pointer
-  // exception
-  private Boolean useParametersFromBatch = false;
 
   public DonationBackingForm() {
     donation = new Donation();
@@ -66,20 +52,8 @@ public class DonationBackingForm {
     return donation;
   }
 
-  public List<String> getCenters() {
-    return centers;
-  }
-
-  public List<String> getSites() {
-    return sites;
-  }
-
-  public String getDonationDate() {
-    if (donationDate != null)
-      return donationDate;
-    if (donation == null)
-      return "";
-    return CustomDateFormatter.getDateTimeString(donation.getDonationDate());
+  public Date getDonationDate() {
+    return donation.getDonationDate();
   }
 
   @JsonSerialize(using = DateTimeSerialiser.class)
@@ -96,59 +70,23 @@ public class DonationBackingForm {
     return donation.getDonationIdentificationNumber();
   }
 
-//  public void setDonationDate(String donationDate) {
-//    this.donationDate = donationDate;
-//    try {
-//      donation.setDonationDate(CustomDateFormatter.getDateFromString(donationDate));
-//    } catch (ParseException ex) {
-//      ex.printStackTrace();
-//      donation.setDonationDate(null);
-//    }
-//  }
-
   @JsonSerialize(using = DateTimeSerialiser.class)
   public void setDonationDate(Date donationDate) {
     donation.setDonationDate(donationDate);
   }
 
-//  public void setBleedStartTime(String bleedStartTime) {
-//    try {
-//      donation.setBleedStartTime(CustomDateFormatter.getDateTimeFromString(bleedStartTime));
-//    } catch (ParseException ex) {
-//      ex.printStackTrace();
-//      donation.setBleedStartTime(null);
-//    }
-//  }
-
   @JsonSerialize(using = DateTimeSerialiser.class)
-  public void setBleedStartTime(Date date) {
-    donation.setBleedStartTime(date);
+  public void setBleedStartTime(Date bleedStartTime) {
+    donation.setBleedStartTime(bleedStartTime);
   }
 
   @JsonSerialize(using = DateTimeSerialiser.class)
-  public void setBleedEndTime(Date date) {
-    donation.setBleedEndTime(date);
+  public void setBleedEndTime(Date bleedEndTime) {
+    donation.setBleedEndTime(bleedEndTime);
   }
-
-//  public void setBleedEndTime(String bleedEndTime) {
-//    try {
-//      donation.setBleedEndTime(CustomDateFormatter.getDateTimeFromString(bleedEndTime));
-//    } catch (ParseException ex) {
-//      ex.printStackTrace();
-//      donation.setBleedEndTime(null);
-//    }
-//  }
 
   public void setDonation(Donation donation) {
     this.donation = donation;
-  }
-
-  public void setCenters(List<String> centers) {
-    this.centers = centers;
-  }
-
-  public void setSites(List<String> sites) {
-    this.sites = sites;
   }
 
   public boolean equals(Object obj) {
@@ -162,7 +100,6 @@ public class DonationBackingForm {
   public Donor getDonor() {
     return donation.getDonor();
   }
-
 
   public String getDonationType() {
     DonationType donationType = donation.getDonationType();
@@ -221,7 +158,6 @@ public class DonationBackingForm {
     donation.setDonor(donor);
   }
 
-
   public void setDonationType(DonationType donationType) {
     if (donationType == null) {
       donation.setDonationType(null);
@@ -271,22 +207,15 @@ public class DonationBackingForm {
     donation.setIsDeleted(isDeleted);
   }
 
-  public void generateDonationIdentificationNumber() {
-    String uniqueDonationNumber;
-    uniqueDonationNumber = "C-" +
-        RandomStringUtils.randomNumeric(ID_LENGTH).toUpperCase();
-    donation.setDonationIdentificationNumber(uniqueDonationNumber);
-  }
-
   public String getDonorNumber() {
     return donorNumber;
   }
 
   public String getDonationBatchNumber() {
     if (donation == null || donation.getDonationBatch() == null ||
-        donation.getDonationBatch().getBatchNumber() == null
-        )
+        donation.getDonationBatch().getBatchNumber() == null) {
       return "";
+    }
     return donation.getDonationBatch().getBatchNumber();
   }
 
@@ -303,47 +232,12 @@ public class DonationBackingForm {
   }
 
   @JsonIgnore
-  public String getDonorIdHidden() {
-    if (donation == null)
-      return null;
-    Donor donor = donation.getDonor();
-    if (donor == null || donor.getId() == null)
-      return null;
-    return donor.getId().toString();
-  }
-
-  @JsonIgnore
-  public void setDonorIdHidden(String donorId) {
-    if (donorId == null || donorId == "") {
-      donation.setDonor(null);
-    } else {
-
-      try {
-        Donor d = new Donor();
-        d.setId(Long.parseLong(donorId));
-        donation.setDonor(d);
-      } catch (NumberFormatException ex) {
-        ex.printStackTrace();
-        donation.setDonor(null);
-      }
-    }
-  }
-
-  @JsonIgnore
   public DonationBatch getDonationBatch() {
     return donation.getDonationBatch();
   }
 
   public void setDonationBatch(DonationBatch donationBatch) {
     donation.setDonationBatch(donationBatch);
-  }
-
-  public Boolean getUseParametersFromBatch() {
-    return useParametersFromBatch;
-  }
-
-  public void setUseParametersFromBatch(Boolean useParametersFromBatch) {
-    this.useParametersFromBatch = useParametersFromBatch;
   }
 
   public BigDecimal getDonorWeight() {
