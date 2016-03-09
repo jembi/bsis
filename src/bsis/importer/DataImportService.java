@@ -587,7 +587,7 @@ public class DataImportService {
             donationBackingForm.setBloodRh(cell.getStringCellValue());
             break;
 
-          case "setNotes":
+          case "notes":
             donationBackingForm.setNotes(cell.getStringCellValue());
             break;
 
