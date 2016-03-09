@@ -567,7 +567,7 @@ public class DataImportService {
           case "adverseEventType":
             AdverseEventType adverseEventType = adverseEventTypeCache.get(cell.getStringCellValue());
             if (adverseEventType == null) {
-              //errors.rejectValue("adverseEvent.adverseEventType", "adverseEventType.invalid", "Invalid adverseEventType");
+              errors.rejectValue("adverseEvent.type", "adverseEventType.invalid", "Invalid adverseEventType");
               break;
             }
             adverseEventTypeBackingForm = new AdverseEventTypeBackingForm();
