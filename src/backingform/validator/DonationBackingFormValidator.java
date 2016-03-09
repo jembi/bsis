@@ -6,8 +6,10 @@ import javax.persistence.NoResultException;
 
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
+import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
+import model.packtype.PackType;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -55,8 +57,11 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
     validateDonor(form, errors);
     validateDonationBatch(form, errors);
     validateVenue(form, errors);
+    validatePackType(form, errors);
+    validateDonationType(form, errors);
     validateBloodPressure(form, errors);
     validateHaemoglobinCount(form, errors);
+    validateHaemoglobinLevel(form, errors);
     validateWeight(form, errors);
     validatePulse(form, errors);
 
@@ -73,32 +78,23 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
   private void validateDonationBleedTimes(DonationBackingForm donationBackingForm, Errors errors) {
     Date bleedStartTime = donationBackingForm.getBleedStartTime();
     Date bleedEndTime = donationBackingForm.getBleedEndTime();
-    if (bleedStartTime == null && bleedEndTime != null) {
-      errors.rejectValue("donation.bleedStartTime", "bleedStartTime.empty", "This is required");
-      return;
-    }
-    if (bleedEndTime == null && bleedStartTime != null) {
-      errors.rejectValue("donation.bleedEndTime", "bleedEndTime.empty", "This is required");
-      return;
-    }
-    if (bleedStartTime != null && bleedEndTime != null && bleedStartTime.after(bleedEndTime)) {
+    if (bleedStartTime == null || bleedEndTime == null) {
+      if (bleedStartTime == null) {
+        errors.rejectValue("donation.bleedStartTime", "bleedStartTime.empty", "This is required");
+      }
+      if (bleedEndTime == null) {
+        errors.rejectValue("donation.bleedEndTime", "bleedEndTime.empty", "This is required");
+      } 
+    } else if (bleedStartTime != null && bleedEndTime != null && bleedStartTime.after(bleedEndTime)) {
       errors.rejectValue("donation", "bleedEndTime.outOfRange", "Bleed End time should be after start time");
     }
   }
 
   private void validateBloodPressure(DonationBackingForm donationBackingForm, Errors errors) {
-
-    Integer bloodPressureSystolic = null;
-    Integer bloodPressureDiastolic = null;
-
-    Integer bloodPressureSystolicMin = Integer.parseInt(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.bpSystolicMin"));
-    Integer bloodPressureSystolicMax = Integer.parseInt(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.bpSystolicMax"));
-
-    Integer bloodPressureDiastolicMin = Integer.parseInt(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.bpDiastolicMin"));
-    Integer bloodPressureDiastolicMax = Integer.parseInt(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.bpDiastolicMax"));
-
     if (donationBackingForm.getBloodPressureSystolic() != null) {
-      bloodPressureSystolic = donationBackingForm.getBloodPressureSystolic().intValue();
+      Integer bloodPressureSystolicMin = Integer.parseInt(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.bpSystolicMin"));
+      Integer bloodPressureSystolicMax = Integer.parseInt(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.bpSystolicMax"));
+      Integer bloodPressureSystolic = donationBackingForm.getBloodPressureSystolic().intValue();
       if (bloodPressureSystolic < bloodPressureSystolicMin)
         errors.rejectValue("donation.bloodPressureSystolic", "bloodPressureSystolic.outOfRange", "BP value should be above " + bloodPressureSystolicMin);
       if (bloodPressureSystolic > bloodPressureSystolicMax)
@@ -106,7 +102,9 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
     }
 
     if (donationBackingForm.getBloodPressureDiastolic() != null) {
-      bloodPressureDiastolic = donationBackingForm.getBloodPressureDiastolic().intValue();
+      Integer bloodPressureDiastolicMin = Integer.parseInt(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.bpDiastolicMin"));
+      Integer bloodPressureDiastolicMax = Integer.parseInt(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.bpDiastolicMax"));
+      Integer bloodPressureDiastolic = donationBackingForm.getBloodPressureDiastolic().intValue();
       if (bloodPressureDiastolic < bloodPressureDiastolicMin)
         errors.rejectValue("donation.bloodPressureDiastolic", "bloodPressureDiastolic.outOfRange", "BP value should be above " + bloodPressureDiastolicMax);
       if (bloodPressureDiastolic > bloodPressureDiastolicMax)
@@ -115,16 +113,26 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
   }
 
   private void validateHaemoglobinCount(DonationBackingForm donationBackingForm, Errors errors) {
-    Integer haemoglobinCount = null;
-    Integer hbMin = Integer.parseInt(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.hbMin"));
-    Integer hbMax = Integer.parseInt(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.hbMax"));
-
     if (donationBackingForm.getHaemoglobinCount() != null) {
-      haemoglobinCount = donationBackingForm.getHaemoglobinCount().intValue();
+      Integer hbMin = Integer.parseInt(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.hbMin"));
+      Integer hbMax = Integer.parseInt(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.hbMax"));
+      Integer haemoglobinCount = donationBackingForm.getHaemoglobinCount().intValue();
       if (haemoglobinCount < hbMin)
         errors.rejectValue("donation.haemoglobinCount", "haemoglobinCount.outOfRange", "Hb value should be above " + hbMin);
       if (haemoglobinCount > hbMax)
         errors.rejectValue("donation.haemoglobinCount", "haemoglobinCount.outOfRange", "Hb value should be below " + hbMax);
+    } else {
+      Boolean captureHBNumeric = generalConfigAccessorService.getBooleanValue("donation.hbNumericValue", false);
+      if (captureHBNumeric) {
+        errors.rejectValue("donation.haemoglobinCount", "haemoglobinCount.empty", "This is required");
+      }
+    }
+  }
+  
+  private void validateHaemoglobinLevel(DonationBackingForm donationBackingForm, Errors errors) {
+    Boolean captureHBQualitative = generalConfigAccessorService.getBooleanValue("donation.hbQualitativeValue", false);
+    if (captureHBQualitative && donationBackingForm.getHaemoglobinLevel() == null) {
+      errors.rejectValue("donation.haemoglobinLevel", "haemoglobinLevel.empty", "This is required");
     }
   }
 
@@ -188,6 +196,20 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
       errors.rejectValue("donation.venue", "venue.empty", "Venue is required.");
     } else if (venue.getIsVenue() == false) {
       errors.rejectValue("donation.venue", "venue.invalid", "Location is not a Venue.");
+    }
+  }
+  
+  private void validatePackType(DonationBackingForm form, Errors errors) {
+    PackType packType = form.getDonation().getPackType();
+    if (packType == null) {
+      errors.rejectValue("donation.packType", "packType.empty", "PackType is required.");
+    }
+  }
+  
+  private void validateDonationType(DonationBackingForm form, Errors errors) {
+    DonationType donationType = form.getDonation().getDonationType();
+    if (donationType == null) {
+      errors.rejectValue("donation.donationType", "donationType.empty", "DonationType is required.");
     }
   }
 
