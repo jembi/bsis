@@ -49,7 +49,7 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     email.setContactMethodType("Email");
     entityManager.persist(email);
     AddressType home = new AddressType();
-    home.setPreferredAddressType("Home");
+    home.setPreferredAddressType("Home Address");
     entityManager.persist(home);
     PreferredLanguage english = new PreferredLanguage();
     english.setPreferredLanguage("English");
