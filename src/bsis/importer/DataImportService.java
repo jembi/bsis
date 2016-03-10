@@ -2,6 +2,7 @@ package bsis.importer;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,9 +94,13 @@ public class DataImportService {
     this.validationOnly = validationOnly;
     action = validationOnly ? "Validated" : "Imported";
     
+    System.out.println("Started import at " + new Date());
+
     importLocationData(workbook.getSheet("Locations"));
     importDonorData(workbook.getSheet("Donors"));
     importDonationsData(workbook.getSheet("Donations"));
+    
+    System.out.println("Finished import at " + new Date());
     
     if (this.validationOnly) {
       throw new RollbackException();
@@ -121,7 +126,6 @@ public class DataImportService {
         continue;
       }
       
-      displayProgressMessage(action + " " + locationCount + " out of " + (sheet.getLastRowNum()-1) + " locations(s)");
       locationCount += 1;
         
       LocationBackingForm locationBackingForm = new LocationBackingForm();
@@ -160,6 +164,8 @@ public class DataImportService {
             System.out.println("Unknown location column: " + header.getStringCellValue());
             break;
         }
+        
+        displayProgressMessage(action + " " + locationCount + " out of " + sheet.getLastRowNum() + " locations(s)");
       }
       
       BindException errors = new BindException(locationBackingForm, "LocationBackingForm");
@@ -196,7 +202,6 @@ public class DataImportService {
         continue;
       }
       
-      displayProgressMessage(action + " " + donorCount + " out of " + (sheet.getLastRowNum()-1) + " donor(s)");
       donorCount += 1;
 
       DonorBackingForm donorBackingForm = new DonorBackingForm();
@@ -432,6 +437,8 @@ public class DataImportService {
             System.out.println("Unknown donor column: " + header.getStringCellValue());
             break;
         }
+        
+        displayProgressMessage(action + " " + donorCount + " out of " + sheet.getLastRowNum() + " donor(s)");
       }
 
       donorBackingFormValidator.validate(donorBackingForm, errors);
@@ -476,7 +483,6 @@ public class DataImportService {
         continue;
       }
       
-      displayProgressMessage(action + " " + donationCount + " out of " + (sheet.getLastRowNum()-1) + " donations(s)");
       donationCount += 1;
 
       DonationBackingForm donationBackingForm = new DonationBackingForm();
@@ -599,6 +605,8 @@ public class DataImportService {
             System.out.println("Unknown donation column: " + header.getStringCellValue());
             break;
         }
+        
+        displayProgressMessage(action + " " + donationCount + " out of " + sheet.getLastRowNum() + " donations(s)");
       }
 
       // Set adverse event if present
