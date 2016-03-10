@@ -7,21 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import model.address.AddressType;
-import model.address.ContactMethodType;
-import model.adverseevent.AdverseEvent;
-import model.adverseevent.AdverseEventType;
-import model.donation.Donation;
-import model.donation.HaemoglobinLevel;
-import model.donationbatch.DonationBatch;
-import model.donationtype.DonationType;
-import model.donor.Donor;
-import model.idtype.IdType;
-import model.location.Location;
-import model.packtype.PackType;
-import model.preferredlanguage.PreferredLanguage;
-import model.util.Gender;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -35,6 +20,27 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
+import backingform.AdverseEventBackingForm;
+import backingform.AdverseEventTypeBackingForm;
+import backingform.DonationBackingForm;
+import backingform.DonorBackingForm;
+import backingform.LocationBackingForm;
+import backingform.validator.DonationBackingFormValidator;
+import backingform.validator.DonorBackingFormValidator;
+import backingform.validator.LocationBackingFormValidator;
+import model.address.AddressType;
+import model.address.ContactMethodType;
+import model.adverseevent.AdverseEventType;
+import model.donation.Donation;
+import model.donation.HaemoglobinLevel;
+import model.donationbatch.DonationBatch;
+import model.donationtype.DonationType;
+import model.donor.Donor;
+import model.idtype.IdType;
+import model.location.Location;
+import model.packtype.PackType;
+import model.preferredlanguage.PreferredLanguage;
+import model.util.Gender;
 import repository.AdverseEventTypeRepository;
 import repository.ContactMethodTypeRepository;
 import repository.DonationBatchRepository;
@@ -45,14 +51,7 @@ import repository.LocationRepository;
 import repository.PackTypeRepository;
 import repository.SequenceNumberRepository;
 import repository.bloodtesting.BloodTypingStatus;
-import backingform.AdverseEventBackingForm;
-import backingform.AdverseEventTypeBackingForm;
-import backingform.DonationBackingForm;
-import backingform.DonorBackingForm;
-import backingform.LocationBackingForm;
-import backingform.validator.DonationBackingFormValidator;
-import backingform.validator.DonorBackingFormValidator;
-import backingform.validator.LocationBackingFormValidator;
+import service.DonationCRUDService;
 
 @Transactional
 @Service
@@ -83,6 +82,8 @@ public class DataImportService {
   private DonationRepository donationRepository;
   @Autowired
   private DonationBatchRepository donationBatchRepository;
+  @Autowired
+  private DonationCRUDService donationCRUDService;
 
   private Map<String, Donor> externalDonorIdToBsisId = new HashMap<>();
 
@@ -638,9 +639,7 @@ public class DataImportService {
       }
 
       // Save donation
-      Donation donation = donationBackingForm.getDonation();
-      updateAdverseEventForDonation(donation, donationBackingForm.getAdverseEvent());
-      donationRepository.addDonation(donation);
+      Donation donation = donationCRUDService.createDonation(donationBackingForm);
 
       // Set bloodTypingStatus COMPLETE if bloodAbo and bloodRh are not empty
       if (StringUtils.isNotEmpty(donation.getBloodAbo()) && StringUtils.isNotEmpty(donation.getBloodRh())) {
@@ -752,30 +751,6 @@ public class DataImportService {
       errorsStr = errorsStr + "\n\t" + fieldError + error.getDefaultMessage();
     }
     return errorsStr;
-  }
-
-  private void updateAdverseEventForDonation(Donation donation, AdverseEventBackingForm adverseEventBackingForm) {
-    if (adverseEventBackingForm == null || adverseEventBackingForm.getType() == null) {
-      // Delete the adverse event
-      donation.setAdverseEvent(null);
-      return;
-    }
-
-    // Get the existing adverse event or create a new one
-    AdverseEvent adverseEvent = donation.getAdverseEvent();
-    if (adverseEvent == null) {
-      adverseEvent = new AdverseEvent();
-    }
-
-    // Create an adverse event type with the correct id
-    AdverseEventType adverseEventType = new AdverseEventType();
-    adverseEventType.setId(adverseEventBackingForm.getType().getId());
-
-    // Update the fields
-    adverseEvent.setType(adverseEventType);
-    adverseEvent.setComment(adverseEventBackingForm.getComment());
-
-    donation.setAdverseEvent(adverseEvent);
   }
 
   private void displayProgressMessage(String progressMessage) {
