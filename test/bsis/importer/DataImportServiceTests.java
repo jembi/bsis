@@ -4,17 +4,24 @@ import static helpers.builders.LocationBuilder.aLocation;
 import static helpers.matchers.LocationMatcher.hasSameStateAsLocation;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
-
 import helpers.builders.AdverseEventTypeBuilder;
+import helpers.builders.DonationTypeBuilder;
 import helpers.builders.FormFieldBuilder;
+import helpers.builders.PackTypeBuilder;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 
 import model.address.AddressType;
 import model.address.ContactMethodType;
+import model.admin.DataType;
 import model.admin.GeneralConfig;
+import model.componenttype.ComponentType;
+import model.componenttype.ComponentTypeTimeUnits;
+import model.donation.Donation;
+import model.donation.HaemoglobinLevel;
 import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.idtype.IdType;
@@ -26,7 +33,6 @@ import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -37,13 +43,27 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
   @Autowired
   private DataImportService dataImportService;
   
-  @Before
-  public void setUpTest() throws EncryptedDocumentException, InvalidFormatException, IOException {
-    // Set up fixture
+  @Test
+  public void testDataImport() throws EncryptedDocumentException, InvalidFormatException, IOException {
+    // Set up fixture and data
     FileInputStream fileInputStream = new FileInputStream("test/fixtures/BSIS-import.xlsx");
     Workbook workbook = WorkbookFactory.create(fileInputStream);
+    createSupportingTestData();
+
+    // Exercise SUT
+    dataImportService.importData(workbook, false);
     
-    // Set up test date (Donor)
+    // Ensure stale entities are cleared
+    entityManager.clear();
+    
+    // Assert data is correct
+    assertImportLocationData_shouldCreateLocationsFromSpreadsheet();
+    assertImportDonorData_shouldCreateDonorsFromSpreadsheet();
+    assertImportDonationData_shouldCreateDonationsFromSpreadsheet();
+  }
+  
+  private void createSupportingTestData() {
+    // Setup test data for Donor
     IdType nationalId = new IdType();
     nationalId.setIdType("National Id");
     entityManager.persist(nationalId);
@@ -60,6 +80,7 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     afrikaans.setPreferredLanguage("Afrikaans");
     entityManager.persist(afrikaans);
 
+    // Setup Donor and Donation related configuration
     GeneralConfig donorNumberGeneralConfig = new GeneralConfig();
     donorNumberGeneralConfig.setName("donor.donorNumberFormat");
     donorNumberGeneralConfig.setValue("%06d");
@@ -114,26 +135,40 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     pulseMaxConfig.setName("donation.donor.pulseMax");
     pulseMaxConfig.setValue("90");
     entityManager.persist(pulseMaxConfig);
+    
+    DataType booleanDataType = new DataType();
+    booleanDataType.setDatatype("boolean");
+    entityManager.persist(booleanDataType);
+    GeneralConfig createInitialComponentsConfig = new GeneralConfig();
+    createInitialComponentsConfig.setName("components.createInitialComponents");
+    createInitialComponentsConfig.setValue("true");
+    createInitialComponentsConfig.setDataType(booleanDataType);
+    entityManager.persist(createInitialComponentsConfig);
 
     FormFieldBuilder.aFormField().withForm("donor").withField("donorNumber")
         .withAutoGenerate(true).withMaxLength(15)
         .buildAndPersist(entityManager);
     entityManager.flush();
 
+    // set up test data (Donation)
+    ComponentType componentType = new ComponentType();
+    componentType.setComponentTypeNameShort("0011");
+    componentType.setExpiresAfter(35);
+    componentType.setExpiresAfterUnits(ComponentTypeTimeUnits.DAYS);
+    entityManager.persist(componentType);
+    PackTypeBuilder.aPackType().withPackType("Single").withCountAsDonation(true).withTestSampleProduced(true)
+        .withPeriodBetweenDonations(90).withComponentType(componentType)
+        .thatIsNotDeleted().buildAndPersist(entityManager);
+    DonationTypeBuilder.aDonationType().withName("Voluntary").thatIsNotDeleted().buildAndPersist(entityManager);
     AdverseEventTypeBuilder.anAdverseEventType().withName("Haematoma")
         .thatIsNotDeleted()
         .buildAndPersist(entityManager);
-    entityManager.flush();
 
-    // Exercise SUT
-    dataImportService.importData(workbook, false);
-    
-    // Ensure stale entities are cleared
-    entityManager.clear();
+    // Synchronize entities to the database before running the test
+    entityManager.flush();
   }
 
-  @Test
-  public void testImportLocationData_shouldCreateLocationsFromSpreadsheet() {
+  private void assertImportLocationData_shouldCreateLocationsFromSpreadsheet() {
     // Verify
     Location firstLocation = findLocationByName("First");
     Location secondLocation = findLocationByName("Second");
@@ -167,8 +202,7 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
         .getSingleResult();
   }
 
-  @Test
-  public void testImportDonorData_shouldCreateDonorsFromSpreadsheet()
+  private void assertImportDonorData_shouldCreateDonorsFromSpreadsheet()
       throws EncryptedDocumentException, InvalidFormatException, IOException {
    
     // Verify
@@ -238,6 +272,37 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     return entityManager.createQuery("SELECT d FROM Donor d WHERE d.firstName = :firstName and d.lastName = :lastName", Donor.class)
         .setParameter("firstName", firstName)
         .setParameter("lastName", lastName)
+        .getSingleResult();
+  }
+
+  private void assertImportDonationData_shouldCreateDonationsFromSpreadsheet()
+      throws EncryptedDocumentException, InvalidFormatException, IOException {
+    Donation firstDonation = findDonationByDonationIdentificationNumber("32434");
+
+    assertThat("venue is set", firstDonation.getVenue().getName(), equalTo("First"));
+    assertThat("donationType is set", firstDonation.getDonationType().getDonationType(), equalTo("Voluntary"));
+    assertThat("packType is set", firstDonation.getPackType().getPackType(), equalTo("Single"));
+    SimpleDateFormat dateSdf = new SimpleDateFormat("yyyy-MM-dd");
+    assertThat("donationDate is set", dateSdf.format(firstDonation.getDonationDate()), equalTo("2016-03-03"));
+    SimpleDateFormat timeSdf = new SimpleDateFormat("HH:mm");
+    assertThat("bleedStartTime is set", timeSdf.format(firstDonation.getBleedStartTime()), equalTo("09:00"));
+    assertThat("bleedEndTime is set", timeSdf.format(firstDonation.getBleedEndTime()), equalTo("09:09"));
+    assertThat("donorWeight is set", firstDonation.getDonorWeight(), equalTo(BigDecimal.valueOf(89)));
+    assertThat("bloodPressureSystolic is set", firstDonation.getBloodPressureSystolic(), equalTo(Integer.valueOf(113)));
+    assertThat("bloodPressureDiastolic is set", firstDonation.getBloodPressureDiastolic(), equalTo(Integer.valueOf(56)));
+    assertThat("donorPulse is set", firstDonation.getDonorPulse(), equalTo(Integer.valueOf(30)));
+    assertThat("haemoglobinCount is set", firstDonation.getHaemoglobinCount(), equalTo(BigDecimal.valueOf(23)));
+    assertThat("haemoglobinLevel is set", firstDonation.getHaemoglobinLevel(), equalTo(HaemoglobinLevel.PASS));
+    assertThat("adverseEventType is set", firstDonation.getAdverseEvent().getType().getName(), equalTo("Haematoma"));
+    assertThat("adverseEventComment is set", firstDonation.getAdverseEvent().getComment(), equalTo("bla"));
+    assertThat("bloodAbo is set", firstDonation.getBloodAbo(), equalTo("O"));
+    assertThat("bloodRh is set", firstDonation.getBloodRh(), equalTo("+"));
+    assertThat("notes is set", firstDonation.getNotes(), equalTo("Notes"));
+  }
+  
+  private Donation findDonationByDonationIdentificationNumber(String din) {
+    return entityManager.createQuery("SELECT d FROM Donation d WHERE d.donationIdentificationNumber = :din", Donation.class)
+        .setParameter("din", din)
         .getSingleResult();
   }
 }
