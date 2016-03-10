@@ -15,6 +15,7 @@ import model.address.ContactMethodType;
 import model.admin.GeneralConfig;
 import model.donor.Donor;
 import model.donor.DonorStatus;
+import model.donordeferral.DeferralReason;
 import model.idtype.IdType;
 import model.location.Location;
 import model.preferredlanguage.PreferredLanguage;
@@ -61,6 +62,11 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     donorNumberGeneralConfig.setName("donor.donorNumberFormat");
     donorNumberGeneralConfig.setValue("%06d");
     entityManager.persist(donorNumberGeneralConfig);
+
+    DeferralReason deferralReason = new DeferralReason();
+    deferralReason.setReason("Low weight");
+    entityManager.persist(deferralReason);
+
     FormFieldBuilder.aFormField().withForm("donor").withField("donorNumber")
         .withAutoGenerate(true).withMaxLength(15)
         .buildAndPersist(entityManager);

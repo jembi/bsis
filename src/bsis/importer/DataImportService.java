@@ -17,8 +17,10 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
+import backingform.DeferralBackingForm;
 import backingform.DonorBackingForm;
 import backingform.LocationBackingForm;
+import backingform.validator.DeferralBackingFormValidator;
 import backingform.validator.DonorBackingFormValidator;
 import backingform.validator.LocationBackingFormValidator;
 import model.address.AddressType;
@@ -54,6 +56,8 @@ public class DataImportService {
   private ContactMethodTypeRepository contactMethodTypeRepository;
   @Autowired
   private DeferralReasonRepository deferralReasonRepository;
+  @Autowired
+  private DeferralBackingFormValidator deferralBackingFormValidator;
 
   private Map<String, Long> externalDonorIdToBsisId = new HashMap<>();
 
@@ -441,9 +445,77 @@ public class DataImportService {
 
   }
 
-  public void importDeferralData (Sheet sheet) {
+  public void importDeferralData(Sheet sheet) {
     Map<String, DeferralReason> deferralReasonCache = buildDeferralReasonCache();
+    Map<String, Location> locationCache = buildLocationCache();
 
+    // Keep a reference to the row containing the headers
+    Row headers = null;
+
+    int deferralCount = 0;
+
+    for (Row row : sheet) {
+
+      Long donorId = null;
+      String externalDonorId = null;
+
+      if (headers == null) {
+        headers = row;
+        continue;
+      } else {
+        deferralCount += 1;
+      }
+
+      DeferralBackingForm deferralBackingForm = new DeferralBackingForm();
+      BindException errors = new BindException(deferralBackingForm, "DeferralBackingForm");
+
+      for (Cell cell : row) {
+        Cell header = headers.getCell(cell.getColumnIndex());
+
+        switch (header.getStringCellValue()) {
+          case "externalDonorId":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            externalDonorId = cell.getStringCellValue();
+            donorId = externalDonorIdToBsisId.get(externalDonorId);
+            break;
+
+          case "venue":
+            deferralBackingForm.setVenue(locationCache.get(cell.getStringCellValue()));
+            break;
+
+          case "deferralReason":
+            deferralBackingForm.setDeferralReason(deferralReasonCache.get(cell.getStringCellValue()));
+            break;
+
+          case "deferralReasonText":
+            deferralBackingForm.setDeferralReasonText(cell.getStringCellValue());
+            break;
+
+          case "createdDate":
+            deferralBackingForm.setCreatedDate(cell.getDateCellValue());
+            break;
+
+          case "deferredUntil":
+            deferralBackingForm.setDeferredUntil(cell.getDateCellValue());
+            break;
+
+          default:
+            System.out.println("Unknown deferral column: " + header.getStringCellValue());
+            break;
+        }
+
+        if (donorId != null) {
+          deferralBackingForm.setDeferredDonor(donorId);
+        }
+      }
+
+      deferralBackingFormValidator.validateForm(deferralBackingForm, errors);
+
+      if (errors.hasErrors()) {
+        System.out.println("Invalid deferral on row " + (row.getRowNum() + 1) + ". " + getErrorsString(errors));
+        throw new IllegalArgumentException("Invalid deferral");
+      }
+    }
   }
 
   private Map<String, Location> buildLocationCache () {

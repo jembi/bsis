@@ -84,6 +84,11 @@ public class DeferralBackingForm {
     return deferredDonor.getId();
   }
 
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public void setCreatedDate(Date createdDate) {
+    deferral.setCreatedDate(createdDate);
+  }
+
   public void setDeferredDonor(Long deferredDonorId) {
     if (deferredDonorId == null) {
       deferral.setDeferredDonor(null);
