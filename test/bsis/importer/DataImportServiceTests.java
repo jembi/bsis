@@ -11,7 +11,6 @@ import helpers.builders.PackTypeBuilder;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 
 import model.address.AddressType;
@@ -287,11 +286,11 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     SimpleDateFormat timeSdf = new SimpleDateFormat("HH:mm");
     assertThat("bleedStartTime is set", timeSdf.format(firstDonation.getBleedStartTime()), equalTo("09:00"));
     assertThat("bleedEndTime is set", timeSdf.format(firstDonation.getBleedEndTime()), equalTo("09:09"));
-    assertThat("donorWeight is set", firstDonation.getDonorWeight(), equalTo(BigDecimal.valueOf(89)));
+    assertThat("donorWeight is set", firstDonation.getDonorWeight().toString(), equalTo("89.00"));
     assertThat("bloodPressureSystolic is set", firstDonation.getBloodPressureSystolic(), equalTo(Integer.valueOf(113)));
     assertThat("bloodPressureDiastolic is set", firstDonation.getBloodPressureDiastolic(), equalTo(Integer.valueOf(56)));
     assertThat("donorPulse is set", firstDonation.getDonorPulse(), equalTo(Integer.valueOf(30)));
-    assertThat("haemoglobinCount is set", firstDonation.getHaemoglobinCount(), equalTo(BigDecimal.valueOf(23)));
+    assertThat("haemoglobinCount is set", firstDonation.getHaemoglobinCount().toString(), equalTo("23.00"));
     assertThat("haemoglobinLevel is set", firstDonation.getHaemoglobinLevel(), equalTo(HaemoglobinLevel.PASS));
     assertThat("adverseEventType is set", firstDonation.getAdverseEvent().getType().getName(), equalTo("Haematoma"));
     assertThat("adverseEventComment is set", firstDonation.getAdverseEvent().getComment(), equalTo("bla"));
