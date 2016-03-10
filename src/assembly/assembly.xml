@@ -28,6 +28,10 @@
    <source>war/WEB-INF/web.xml</source>
    <outputDirectory>/</outputDirectory>
   </file>
+  <file>
+   <source>war/WEB-INF/classes/log4j.properties</source>
+   <outputDirectory>/</outputDirectory>
+  </file>
  </files>
  <dependencySets>
   <dependencySet>
