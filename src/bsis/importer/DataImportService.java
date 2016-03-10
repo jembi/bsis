@@ -24,11 +24,13 @@ import backingform.validator.LocationBackingFormValidator;
 import model.address.AddressType;
 import model.address.ContactMethodType;
 import model.donor.Donor;
+import model.donordeferral.DeferralReason;
 import model.idtype.IdType;
 import model.location.Location;
 import model.preferredlanguage.PreferredLanguage;
 import model.util.Gender;
 import repository.ContactMethodTypeRepository;
+import repository.DeferralReasonRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
 import repository.SequenceNumberRepository;
@@ -50,6 +52,8 @@ public class DataImportService {
   private SequenceNumberRepository sequenceNumberRepository;
   @Autowired
   private ContactMethodTypeRepository contactMethodTypeRepository;
+  @Autowired
+  private DeferralReasonRepository deferralReasonRepository;
 
   private Map<String, Long> externalDonorIdToBsisId = new HashMap<>();
 
@@ -68,6 +72,10 @@ public class DataImportService {
     System.out.println(action + " of Donors started");
     importDonorData(workbook.getSheet("Donors"));
     System.out.println(action + " of Donors completed");
+
+    System.out.println(action + " of Deferrals started");
+    importDeferralData(workbook.getSheet("Deferrals"));
+    System.out.println(action + " of Deferrals completed");
   }
   
   private void importLocationData(Sheet sheet) {
@@ -433,6 +441,11 @@ public class DataImportService {
 
   }
 
+  public void importDeferralData (Sheet sheet) {
+    Map<String, DeferralReason> deferralReasonCache = buildDeferralReasonCache();
+
+  }
+
   private Map<String, Location> buildLocationCache () {
     Map<String, Location>  locationCache = new HashMap<>();
     List<Location> locations = locationRepository.getAllLocations();
@@ -477,6 +490,17 @@ public class DataImportService {
     }
     return addressTypeMap;
   }
+
+  private Map<String, DeferralReason> buildDeferralReasonCache() {
+    Map<java.lang.String, DeferralReason>  deferralReasonMap = new HashMap<>();
+    List<DeferralReason> deferralReasons = deferralReasonRepository.getAllDeferralReasons();
+    for (DeferralReason deferralReason : deferralReasons) {
+      deferralReasonMap.put(deferralReason.getReason(), deferralReason);
+    }
+    return deferralReasonMap;
+  }
+
+
 
   private String getErrorsString(BindException errors) {
     String errorsStr = errors.getAllErrors().size() + " errors:";
