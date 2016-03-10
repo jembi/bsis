@@ -474,7 +474,7 @@ public class DataImportService {
   }
 
   private Map<String, ContactMethodType> buildContactMethodTypeCache() {
-    Map<java.lang.String, ContactMethodType>  contactMethodTypeMap = new HashMap<>();
+    Map<String, ContactMethodType>  contactMethodTypeMap = new HashMap<>();
     List<ContactMethodType> contactMethodTypes = contactMethodTypeRepository.getAllContactMethodTypes();
     for (ContactMethodType contactMethodType : contactMethodTypes) {
       contactMethodTypeMap.put(contactMethodType.getContactMethodType(), contactMethodType);
@@ -483,7 +483,7 @@ public class DataImportService {
   }
 
   private Map<String, AddressType> buildAddressTypeCache() {
-    Map<java.lang.String, AddressType>  addressTypeMap = new HashMap<>();
+    Map<String, AddressType>  addressTypeMap = new HashMap<>();
     List<AddressType> addressTypes = donorRepository.getAllAddressTypes();
     for (AddressType addressType : addressTypes) {
       addressTypeMap.put(addressType.getPreferredAddressType(), addressType);
@@ -492,15 +492,13 @@ public class DataImportService {
   }
 
   private Map<String, DeferralReason> buildDeferralReasonCache() {
-    Map<java.lang.String, DeferralReason>  deferralReasonMap = new HashMap<>();
+    Map<String, DeferralReason>  deferralReasonMap = new HashMap<>();
     List<DeferralReason> deferralReasons = deferralReasonRepository.getAllDeferralReasons();
     for (DeferralReason deferralReason : deferralReasons) {
       deferralReasonMap.put(deferralReason.getReason(), deferralReason);
     }
     return deferralReasonMap;
   }
-
-
 
   private String getErrorsString(BindException errors) {
     String errorsStr = errors.getAllErrors().size() + " errors:";
