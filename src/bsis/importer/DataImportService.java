@@ -165,9 +165,9 @@ public class DataImportService {
             System.out.println("Unknown location column: " + header.getStringCellValue());
             break;
         }
-        
-        displayProgressMessage(action + " " + locationCount + " out of " + sheet.getLastRowNum() + " locations(s)");
       }
+      
+      displayProgressMessage(action + " " + locationCount + " out of " + sheet.getLastRowNum() + " locations(s)");
       
       BindException errors = new BindException(locationBackingForm, "LocationBackingForm");
       locationBackingFormValidator.validate(locationBackingForm, errors);
@@ -438,9 +438,9 @@ public class DataImportService {
             System.out.println("Unknown donor column: " + header.getStringCellValue());
             break;
         }
-        
-        displayProgressMessage(action + " " + donorCount + " out of " + sheet.getLastRowNum() + " donor(s)");
       }
+      
+      displayProgressMessage(action + " " + donorCount + " out of " + sheet.getLastRowNum() + " donor(s)");
 
       donorBackingFormValidator.validate(donorBackingForm, errors);
 
@@ -606,9 +606,9 @@ public class DataImportService {
             System.out.println("Unknown donation column: " + header.getStringCellValue());
             break;
         }
-        
-        displayProgressMessage(action + " " + donationCount + " out of " + sheet.getLastRowNum() + " donations(s)");
       }
+      
+      displayProgressMessage(action + " " + donationCount + " out of " + sheet.getLastRowNum() + " donations(s)");
 
       // Set adverse event if present
       if (adverseEventTypeBackingForm != null) {
