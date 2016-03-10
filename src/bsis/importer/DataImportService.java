@@ -492,11 +492,19 @@ public class DataImportService {
             break;
 
           case "createdDate":
-            deferralBackingForm.setCreatedDate(cell.getDateCellValue());
+            try {
+              deferralBackingForm.setCreatedDate(cell.getDateCellValue());
+            } catch (IllegalStateException e) {
+              errors.rejectValue("donation.createdDate", "createdDate.invalid", "Invalid createdDate");
+            }
             break;
 
           case "deferredUntil":
-            deferralBackingForm.setDeferredUntil(cell.getDateCellValue());
+            try {
+              deferralBackingForm.setDeferredUntil(cell.getDateCellValue());
+            } catch (IllegalStateException e) {
+              errors.rejectValue("deferral.deferredUntil", "deferredUntil.invalid", "Invalid deferredUntil");
+            }
             break;
 
           default:
