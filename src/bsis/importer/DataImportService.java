@@ -5,8 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import model.address.AddressType;
+import model.address.ContactMethodType;
+import model.adverseevent.AdverseEventType;
+import model.donation.HaemoglobinLevel;
+import model.donationtype.DonationType;
+import model.donor.Donor;
+import model.idtype.IdType;
+import model.location.Location;
+import model.packtype.PackType;
+import model.preferredlanguage.PreferredLanguage;
+import model.util.Gender;
+
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.SystemUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -19,6 +30,13 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
+import repository.AdverseEventTypeRepository;
+import repository.ContactMethodTypeRepository;
+import repository.DonationTypeRepository;
+import repository.DonorRepository;
+import repository.LocationRepository;
+import repository.PackTypeRepository;
+import repository.SequenceNumberRepository;
 import backingform.AdverseEventBackingForm;
 import backingform.AdverseEventTypeBackingForm;
 import backingform.DonationBackingForm;
@@ -27,24 +45,6 @@ import backingform.LocationBackingForm;
 import backingform.validator.DonationBackingFormValidator;
 import backingform.validator.DonorBackingFormValidator;
 import backingform.validator.LocationBackingFormValidator;
-import model.address.AddressType;
-import model.address.ContactMethodType;
-import model.adverseevent.AdverseEventType;
-import model.donation.HaemoglobinLevel;
-import model.donationtype.DonationType;
-import model.donor.Donor;
-import model.idtype.IdType;
-import model.location.Location;
-import model.packtype.PackType;
-import model.preferredlanguage.PreferredLanguage;
-import model.util.Gender;
-import repository.AdverseEventTypeRepository;
-import repository.ContactMethodTypeRepository;
-import repository.DonationTypeRepository;
-import repository.DonorRepository;
-import repository.LocationRepository;
-import repository.PackTypeRepository;
-import repository.SequenceNumberRepository;
 
 @Transactional
 @Service
@@ -93,7 +93,16 @@ public class DataImportService {
     System.out.println(action + " of Donations started");
     importDonationsData(workbook.getSheet("Donations"));
     System.out.println(action + " of Donations completed");
+    
+    if (this.validationOnly) {
+      throw new RollbackException();
+    }
   }
+  
+  /**
+   * Exception class to handle rollbacks for validation only executions
+   */
+  class RollbackException extends RuntimeException { private static final long serialVersionUID = 1L; }
   
   private void importLocationData(Sheet sheet) {
     
@@ -157,10 +166,7 @@ public class DataImportService {
         throw new IllegalArgumentException("Invalid location");
       }
 
-      // Only save if validationOnly is false
-      if (!validationOnly) {
-        locationRepository.saveLocation(locationBackingForm.getLocation());
-      }
+      locationRepository.saveLocation(locationBackingForm.getLocation());
     }
 
 
@@ -437,16 +443,15 @@ public class DataImportService {
         throw new IllegalArgumentException("Invalid donor");
       }
       
-      if (!validationOnly) {
-        // only save if validationOnly is false
-        Donor donor = donorBackingForm.getDonor();
-        donor.setContact(donorBackingForm.getContact());
-        donor.setAddress(donorBackingForm.getAddress());
-        donor.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());
-        donorRepository.addDonor(donor);
-        // cache new donorNumber
-        externalDonorIdToBsisId.put(externalDonorId, donor);
-      }
+      // Save donation
+      Donor donor = donorBackingForm.getDonor();
+      donor.setContact(donorBackingForm.getContact());
+      donor.setAddress(donorBackingForm.getAddress());
+      donor.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());
+      donorRepository.addDonor(donor);
+      
+      // Cache new donor identifier
+      externalDonorIdToBsisId.put(externalDonorId, donor);
 
     }
 

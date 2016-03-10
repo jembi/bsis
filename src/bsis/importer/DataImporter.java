@@ -3,6 +3,8 @@ package bsis.importer;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import javax.transaction.RollbackException;
+
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -49,6 +51,8 @@ public class DataImporter {
     
     try {
       importService.importData(workbook, validationOnly);
+    } catch (DataImportService.RollbackException e) {
+      // ignore this
     } catch (Exception e) {
       String action = validationOnly ? "Validation" : "Import";
       System.err.println(action + " failed");
