@@ -491,7 +491,6 @@ public class ComponentRepository {
     }
 
     for (Component component : query.getResultList()) {
-      System.out.println("here");
       Long componentId = component.getId();
       if (crossmatchTestMap.containsKey(componentId))
         continue;

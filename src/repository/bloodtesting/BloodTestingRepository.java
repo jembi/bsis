@@ -910,7 +910,6 @@ public class BloodTestingRepository {
       Date d = (Date) result[1];
       Date formattedDate = resultDateFormat.parse(resultDateFormat
           .format(d));
-      System.out.println(formattedDate);
       Long utcTime = formattedDate.getTime();
       Map<Long, Long> m = resultMap.get(result[2]);
       if (m.containsKey(utcTime)) {
@@ -967,8 +966,7 @@ public class BloodTestingRepository {
               ts.getInterpretation(), cs, ts.getCompleted(), ruleResult, false);
 
         } catch (Exception ex) {
-          System.out.println("Cannot save TTI Test Result to DB");
-          ex.printStackTrace();
+          LOGGER.fatal("Cannot save TTI Test Result to DB", ex);
         }
 
       }

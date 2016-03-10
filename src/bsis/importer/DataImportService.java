@@ -6,27 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindException;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
-
-import backingform.AdverseEventBackingForm;
-import backingform.AdverseEventTypeBackingForm;
-import backingform.DonationBackingForm;
-import backingform.DonorBackingForm;
-import backingform.LocationBackingForm;
-import backingform.validator.DonationBackingFormValidator;
-import backingform.validator.DonorBackingFormValidator;
-import backingform.validator.LocationBackingFormValidator;
 import model.address.AddressType;
 import model.address.ContactMethodType;
 import model.adverseevent.AdverseEvent;
@@ -41,6 +20,20 @@ import model.location.Location;
 import model.packtype.PackType;
 import model.preferredlanguage.PreferredLanguage;
 import model.util.Gender;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+
 import repository.AdverseEventTypeRepository;
 import repository.ContactMethodTypeRepository;
 import repository.DonationBatchRepository;
@@ -51,6 +44,14 @@ import repository.LocationRepository;
 import repository.PackTypeRepository;
 import repository.SequenceNumberRepository;
 import repository.bloodtesting.BloodTypingStatus;
+import backingform.AdverseEventBackingForm;
+import backingform.AdverseEventTypeBackingForm;
+import backingform.DonationBackingForm;
+import backingform.DonorBackingForm;
+import backingform.LocationBackingForm;
+import backingform.validator.DonationBackingFormValidator;
+import backingform.validator.DonorBackingFormValidator;
+import backingform.validator.LocationBackingFormValidator;
 
 @Transactional
 @Service
@@ -85,23 +86,16 @@ public class DataImportService {
   private Map<String, Donor> externalDonorIdToBsisId = new HashMap<>();
 
   private boolean validationOnly;
+  private String action;
+
 
   public void importData(Workbook workbook, boolean validationOnly) {
-
     this.validationOnly = validationOnly;
-    String action = validationOnly ? "Validation" : "Import";
-
-    System.out.println(action + " of Locations started");
+    action = validationOnly ? "Validated" : "Imported";
+    
     importLocationData(workbook.getSheet("Locations"));
-    System.out.println(action + " of Locations completed");
-
-    System.out.println(action + " of Donors started");
     importDonorData(workbook.getSheet("Donors"));
-    System.out.println(action + " of Donors completed");
-
-    System.out.println(action + " of Donations started");
     importDonationsData(workbook.getSheet("Donations"));
-    System.out.println(action + " of Donations completed");
     
     if (this.validationOnly) {
       throw new RollbackException();
@@ -127,6 +121,7 @@ public class DataImportService {
         continue;
       }
       
+      displayProgressMessage(action + " " + locationCount + " out of " + (sheet.getLastRowNum()-1) + " locations(s)");
       locationCount += 1;
         
       LocationBackingForm locationBackingForm = new LocationBackingForm();
@@ -177,13 +172,7 @@ public class DataImportService {
 
       locationRepository.saveLocation(locationBackingForm.getLocation());
     }
-
-    if (validationOnly) {
-      System.out.println("Validated " + locationCount + " location(s)");
-    } else {
-      System.out.println("Imported " + locationCount + " location(s)");
-    }
-
+    System.out.println(); // clear logging
   }
 
   private void importDonorData(Sheet sheet) {
@@ -205,9 +194,10 @@ public class DataImportService {
       if (headers == null) {
         headers = row;
         continue;
-      } else {
-        donorCount += 1;
       }
+      
+      displayProgressMessage(action + " " + donorCount + " out of " + (sheet.getLastRowNum()-1) + " donor(s)");
+      donorCount += 1;
 
       DonorBackingForm donorBackingForm = new DonorBackingForm();
       BindException errors = new BindException(donorBackingForm, "DonorBackingForm");
@@ -462,13 +452,7 @@ public class DataImportService {
       externalDonorIdToBsisId.put(externalDonorId, donor);
 
     }
-
-    if (validationOnly) {
-      System.out.println("Validated " + donorCount + " donor(s)");
-    } else {
-      System.out.println("Imported " + donorCount + " donor(s)");
-    }
-
+    System.out.println(); // clear logging
   }
 
   private void importDonationsData(Sheet sheet) {
@@ -490,9 +474,10 @@ public class DataImportService {
       if (headers == null) {
         headers = row;
         continue;
-      } else {
-        donationCount += 1;
       }
+      
+      displayProgressMessage(action + " " + donationCount + " out of " + (sheet.getLastRowNum()-1) + " donations(s)");
+      donationCount += 1;
 
       DonationBackingForm donationBackingForm = new DonationBackingForm();
       BindException errors = new BindException(donationBackingForm, "DonationBackingForm");
@@ -655,12 +640,7 @@ public class DataImportService {
         donationRepository.saveDonation(donation);
       }
     }
-
-    if (validationOnly) {
-      System.out.println("Validated " + donationCount + " donation(s)");
-    } else {
-      System.out.println("Imported " + donationCount + " donation(s)");
-    }
+    System.out.println(); // clear logging
   }
 
   private DonationBatch getDonationBatch(Map<String, DonationBatch> donationBatches, String donationDate,
@@ -790,4 +770,11 @@ public class DataImportService {
     donation.setAdverseEvent(adverseEvent);
   }
 
+  private void displayProgressMessage(String progressMessage) {
+    try {
+      System.out.write((progressMessage+"\r").getBytes());
+    } catch (Exception e) {
+      // just ignore
+    }
+  }
 }
