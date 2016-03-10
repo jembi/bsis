@@ -35,9 +35,9 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import suites.ContextDependentTestSuite;
+import suites.SecurityContextDependentTestSuite;
 
-public class DataImportServiceTests extends ContextDependentTestSuite {
+public class DataImportServiceTests extends SecurityContextDependentTestSuite {
   
   @Autowired
   private DataImportService dataImportService;
