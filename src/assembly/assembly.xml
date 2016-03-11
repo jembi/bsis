@@ -41,6 +41,7 @@
     <excludes>
      <exclude>META-INF/spring.handlers</exclude>
      <exclude>META-INF/spring.schemas</exclude>
+     <exclude>META-INF/services/org.hibernate.integrator.spi.Integrator</exclude>
     </excludes>
    </unpackOptions>
   </dependencySet>
