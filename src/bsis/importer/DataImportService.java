@@ -14,6 +14,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
@@ -40,6 +42,7 @@ import model.idtype.IdType;
 import model.location.Location;
 import model.packtype.PackType;
 import model.preferredlanguage.PreferredLanguage;
+import model.user.User;
 import model.util.Gender;
 import repository.AdverseEventTypeRepository;
 import repository.ContactMethodTypeRepository;
@@ -50,7 +53,9 @@ import repository.DonorRepository;
 import repository.LocationRepository;
 import repository.PackTypeRepository;
 import repository.SequenceNumberRepository;
+import repository.UserRepository;
 import repository.bloodtesting.BloodTypingStatus;
+import security.BsisUserDetails;
 import service.DonationCRUDService;
 
 @Transactional
@@ -84,6 +89,8 @@ public class DataImportService {
   private DonationBatchRepository donationBatchRepository;
   @Autowired
   private DonationCRUDService donationCRUDService;
+  @Autowired
+  private UserRepository userRepository;
 
   private Map<String, Donor> externalDonorIdToBsisId = new HashMap<>();
 
@@ -91,10 +98,12 @@ public class DataImportService {
   private String action;
 
 
-  public void importData(Workbook workbook, boolean validationOnly) {
+  public void importData(Workbook workbook, String username, boolean validationOnly) {
     this.validationOnly = validationOnly;
     action = validationOnly ? "Validated" : "Imported";
     
+    initSpringSecurityUser(username);
+
     System.out.println("Started import at " + new Date());
 
     importLocationData(workbook.getSheet("Locations"));
@@ -108,6 +117,18 @@ public class DataImportService {
     }
   }
   
+  private void initSpringSecurityUser(String username) {
+
+    User user = userRepository.findUser(username);
+    if (user == null) {
+      throw new IllegalArgumentException("Invalid user: " + username);
+    }
+    BsisUserDetails bsisUser = new BsisUserDetails(user);
+    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(bsisUser, "Credentials");
+    SecurityContextHolder.getContext().setAuthentication(auth);
+
+  }
+
   /**
    * Exception class to handle rollbacks for validation only executions
    */

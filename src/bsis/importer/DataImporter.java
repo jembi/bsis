@@ -3,8 +3,6 @@ package bsis.importer;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import javax.transaction.RollbackException;
-
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -19,19 +17,20 @@ public class DataImporter {
 
     // Validate arguments
     String errorInUsageMessage =
-        "\n\nUsage: \n\njava -jar bsis-bin.jar path_to_spreadsheet boolean_validation_only\n"
-            + "path_to_spreadsheet: Is the path to the spreadsheet where the import data is included. This argument is required.\n\n"
+        "\n\nUsage: \n\njava -jar bsis-bin.jar path_to_spreadsheet boolean_validation_only\n\n"
+        + "path_to_spreadsheet: Is the path to the spreadsheet where the import data is included. This argument is required.\n"
+        + "username: User for auditing purposes. This argument is required.\n"
             + "boolean_validation_only: Must be true or false. This argument is optional, and it's false by default.\n";
 
-    if (args.length == 0 || args.length > 2) {
+    if (args.length < 2 || args.length > 3) {
       System.out.println(errorInUsageMessage);
       System.exit(1);
     }
     boolean validationOnly = false;
-    if (args.length == 2) {
-      if (args[1].equalsIgnoreCase("true")) {
+    if (args.length == 3) {
+      if (args[2].equalsIgnoreCase("true")) {
         validationOnly = true;
-      } else if (args[1].equalsIgnoreCase("false")) {
+      } else if (args[2].equalsIgnoreCase("false")) {
         validationOnly = false;
       } else {
         System.out.println(errorInUsageMessage);
@@ -50,7 +49,7 @@ public class DataImporter {
     DataImportService importService = applicationContext.getBean(DataImportService.class);
     
     try {
-      importService.importData(workbook, validationOnly);
+      importService.importData(workbook, args[1], validationOnly);
     } catch (DataImportService.RollbackException e) {
       // ignore this
     } catch (Exception e) {
