@@ -495,7 +495,7 @@ public class DataImportService {
             try {
               deferralBackingForm.setCreatedDate(cell.getDateCellValue());
             } catch (IllegalStateException e) {
-              errors.rejectValue("donation.createdDate", "createdDate.invalid", "Invalid createdDate");
+              errors.rejectValue("deferral.createdDate", "createdDate.invalid", "Invalid createdDate");
             }
             break;
 
