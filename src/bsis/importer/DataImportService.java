@@ -495,7 +495,7 @@ public class DataImportService {
             try {
               deferralBackingForm.setCreatedDate(cell.getDateCellValue());
             } catch (IllegalStateException e) {
-              errors.rejectValue("deferral.createdDate", "createdDate.invalid", "Invalid createdDate");
+              errors.rejectValue("donorDeferral.createdDate", "createdDate.invalid", "Invalid createdDate");
             }
             break;
 
@@ -503,7 +503,7 @@ public class DataImportService {
             try {
               deferralBackingForm.setDeferredUntil(cell.getDateCellValue());
             } catch (IllegalStateException e) {
-              errors.rejectValue("deferral.deferredUntil", "deferredUntil.invalid", "Invalid deferredUntil");
+              errors.rejectValue("donorDeferral.deferredUntil", "deferredUntil.invalid", "Invalid deferredUntil");
             }
             break;
 
@@ -522,6 +522,13 @@ public class DataImportService {
       if (errors.hasErrors()) {
         System.out.println("Invalid deferral on row " + (row.getRowNum() + 1) + ". " + getErrorsString(errors));
         throw new IllegalArgumentException("Invalid deferral");
+      }
+
+      if (!validationOnly) {
+        // only save if validationOnly is false
+        Donor donor = new Donor();
+        donor.setId(donorId);
+        donorRepository.deferDonor(deferralBackingForm.getDonorDeferral());
       }
     }
   }

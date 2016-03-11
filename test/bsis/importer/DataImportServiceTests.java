@@ -50,7 +50,7 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     email.setContactMethodType("Email");
     entityManager.persist(email);
     AddressType home = new AddressType();
-    home.setPreferredAddressType("Home");
+    home.setPreferredAddressType("Home Address");
     entityManager.persist(home);
     PreferredLanguage english = new PreferredLanguage();
     english.setPreferredLanguage("English");
@@ -142,7 +142,7 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     assertThat("Home number matches", firstDonor.getContact().getHomeNumber(), equalTo("0214615177"));
     assertThat("Work number matches", firstDonor.getContact().getWorkNumber(), equalTo("0217010939"));
     assertThat("Email matches", firstDonor.getContact().getEmail(), equalTo("dave@email.com"));
-    assertThat("Preferred Address Type matches", firstDonor.getAddressType().getPreferredAddressType(), equalTo("Home"));
+    assertThat("Preferred Address Type matches", firstDonor.getAddressType().getPreferredAddressType(), equalTo("Home Address"));
     assertThat("Home address line 1 matches", firstDonor.getAddress().getHomeAddressLine1(), equalTo("1 Appartment House"));
     assertThat("Home address line 2 matches", firstDonor.getAddress().getHomeAddressLine2(), equalTo("123 Street"));
     assertThat("Home address city matches", firstDonor.getAddress().getHomeAddressCity(), equalTo("Cape Town"));
