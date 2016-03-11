@@ -4,15 +4,23 @@ import static helpers.builders.LocationBuilder.aLocation;
 import static helpers.matchers.LocationMatcher.hasSameStateAsLocation;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
-import helpers.builders.AdverseEventTypeBuilder;
-import helpers.builders.DonationTypeBuilder;
-import helpers.builders.FormFieldBuilder;
-import helpers.builders.PackTypeBuilder;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import helpers.builders.AdverseEventTypeBuilder;
+import helpers.builders.DonationTypeBuilder;
+import helpers.builders.FormFieldBuilder;
+import helpers.builders.PackTypeBuilder;
+import helpers.builders.UserBuilder;
 import model.address.AddressType;
 import model.address.ContactMethodType;
 import model.admin.DataType;
@@ -27,17 +35,9 @@ import model.idtype.IdType;
 import model.location.Location;
 import model.preferredlanguage.PreferredLanguage;
 import model.util.Gender;
+import suites.ContextDependentTestSuite;
 
-import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import suites.SecurityContextDependentTestSuite;
-
-public class DataImportServiceTests extends SecurityContextDependentTestSuite {
+public class DataImportServiceTests extends ContextDependentTestSuite {
   
   @Autowired
   private DataImportService dataImportService;
@@ -50,7 +50,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     createSupportingTestData();
 
     // Exercise SUT
-    dataImportService.importData(workbook, false);
+    dataImportService.importData(workbook, "superuser", false);
     
     // Ensure stale entities are cleared
     entityManager.clear();
@@ -62,6 +62,9 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
   }
   
   private void createSupportingTestData() {
+    // Setup user
+    UserBuilder.aUser().withUsername("superuser").thatIsNotDeleted().buildAndPersist(entityManager);
+
     // Setup test data for Donor
     IdType nationalId = new IdType();
     nationalId.setIdType("National Id");
