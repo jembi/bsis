@@ -1,27 +1,13 @@
 package backingform.validator;
 
 import static org.mockito.Mockito.when;
-import helpers.builders.DonationBatchBuilder;
-import helpers.builders.DonationBuilder;
-import helpers.builders.DonationTypeBuilder;
-import helpers.builders.DonorBuilder;
-import helpers.builders.FormFieldBuilder;
-import helpers.builders.LocationBuilder;
-import helpers.builders.PackTypeBuilder;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-
-import model.donation.Donation;
-import model.donation.HaemoglobinLevel;
-import model.donationbatch.DonationBatch;
-import model.donationtype.DonationType;
-import model.donor.Donor;
-import model.location.Location;
-import model.packtype.PackType;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,13 +18,27 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
+import backingform.DonationBackingForm;
+import helpers.builders.DonationBatchBuilder;
+import helpers.builders.DonationBuilder;
+import helpers.builders.DonationTypeBuilder;
+import helpers.builders.DonorBuilder;
+import helpers.builders.FormFieldBuilder;
+import helpers.builders.LocationBuilder;
+import helpers.builders.PackTypeBuilder;
+import model.donation.Donation;
+import model.donation.HaemoglobinLevel;
+import model.donationbatch.DonationBatch;
+import model.donationtype.DonationType;
+import model.donor.Donor;
+import model.location.Location;
+import model.packtype.PackType;
 import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import repository.DonorRepository;
 import repository.FormFieldRepository;
 import repository.SequenceNumberRepository;
 import service.GeneralConfigAccessorService;
-import backingform.DonationBackingForm;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DonationBackingFormValidatorTest {
@@ -606,7 +606,7 @@ public class DonationBackingFormValidatorTest {
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.weightMax")).thenReturn("300");
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.pulseMin")).thenReturn("30");
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.pulseMax")).thenReturn("200");
-    when(formFieldRepository.getRequiredFormFields("donation")).thenReturn(new ArrayList<String>());
+    when(formFieldRepository.getRequiredFormFields("donation")).thenReturn(Arrays.asList(new String[] {"packType", "donationType"}));
     when(formFieldRepository.getFieldMaxLengths("donation")).thenReturn(new HashMap<String, Integer>());    
   }
   
