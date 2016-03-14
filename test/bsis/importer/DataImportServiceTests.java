@@ -4,23 +4,18 @@ import static helpers.builders.LocationBuilder.aLocation;
 import static helpers.matchers.LocationMatcher.hasSameStateAsLocation;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-
-import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.IsNot.not;
 import helpers.builders.AdverseEventTypeBuilder;
 import helpers.builders.DonationTypeBuilder;
 import helpers.builders.FormFieldBuilder;
 import helpers.builders.PackTypeBuilder;
 import helpers.builders.UserBuilder;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+
 import model.address.AddressType;
 import model.address.ContactMethodType;
 import model.admin.DataType;
@@ -29,12 +24,21 @@ import model.componenttype.ComponentType;
 import model.componenttype.ComponentTypeTimeUnits;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
+import model.donationbatch.DonationBatch;
 import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.idtype.IdType;
 import model.location.Location;
 import model.preferredlanguage.PreferredLanguage;
 import model.util.Gender;
+
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import suites.ContextDependentTestSuite;
 
 public class DataImportServiceTests extends ContextDependentTestSuite {
@@ -300,6 +304,23 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     assertThat("bloodAbo is set", firstDonation.getBloodAbo(), equalTo("O"));
     assertThat("bloodRh is set", firstDonation.getBloodRh(), equalTo("+"));
     assertThat("notes is set", firstDonation.getNotes(), equalTo("Notes"));
+    
+    DonationBatch firstDonationBatch = firstDonation.getDonationBatch();
+    assertThat("DonationBatch has been defined", firstDonationBatch, notNullValue());
+    assertThat("DonationBatch has a batch number", firstDonationBatch.getBatchNumber(), notNullValue());
+    assertThat("DonationBatch venue is set", firstDonationBatch.getVenue().getName(), equalTo("First"));
+    assertThat("DonationBatch is closed", firstDonationBatch.getIsClosed(), equalTo(true));
+    
+    Donation secondDonation = findDonationByDonationIdentificationNumber("32435");
+    assertThat("Same DonationBatch", secondDonation.getDonationBatch().getId(), equalTo(firstDonationBatch.getId()));
+    
+    Donation thirdDonation = findDonationByDonationIdentificationNumber("32432");
+    assertThat("Different DonationBatch", thirdDonation.getDonationBatch().getId(), not(equalTo(firstDonationBatch.getId())));
+    
+    Donation fourthDonation = findDonationByDonationIdentificationNumber("32431");
+    DonationBatch fourthDonationBatch = fourthDonation.getDonationBatch();
+    assertThat("DonationBatch venue is set", fourthDonationBatch.getVenue().getName(), equalTo("Fourth"));
+    assertThat("Different DonationBatch", fourthDonationBatch.getId(), not(equalTo(thirdDonation.getDonationBatch().getId())));
   }
   
   private Donation findDonationByDonationIdentificationNumber(String din) {

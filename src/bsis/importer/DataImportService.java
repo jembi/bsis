@@ -547,7 +547,7 @@ public class DataImportService {
           case "donationDate":
             try {
               donationBackingForm.setDonationDate(cell.getDateCellValue());
-              donationDate = new SimpleDateFormat("yyyy-mm-dd").format(donationBackingForm.getDonationDate());
+              donationDate = new SimpleDateFormat("yyyy-MM-dd").format(donationBackingForm.getDonationDate());
             } catch (IllegalStateException e) {
               errors.rejectValue("donation.donationDate", "donationDate.invalid", "Invalid donationDate");
             }
