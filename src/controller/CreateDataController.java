@@ -439,7 +439,7 @@ public class CreateDataController {
 
       donation.setPackType(packTypes.get(Math.abs(random.nextInt()) % packTypes.size()));
 
-      String donationDate = CustomDateFormatter.getDateTimeString(getRandomDonationDate());
+      Date donationDate = getRandomDonationDate();
       donation.setDonationDate(donationDate);
       donation.setDonor(donors.get(Math.abs(random.nextInt()) % donors.size()));
       donation.setNotes("notes sample " + i);

@@ -1,5 +1,6 @@
 package helpers.builders;
 
+import model.componenttype.ComponentType;
 import model.packtype.PackType;
 
 public class PackTypeBuilder extends AbstractEntityBuilder<PackType> {
@@ -9,6 +10,8 @@ public class PackTypeBuilder extends AbstractEntityBuilder<PackType> {
   private Boolean countAsDonation;
   private Integer periodBetweenDonations;
   private Boolean testSampleProduced;
+  private Boolean isDeleted;
+  private ComponentType componentType;
 
   public PackTypeBuilder withId(Long id) {
     this.id = id;
@@ -34,6 +37,21 @@ public class PackTypeBuilder extends AbstractEntityBuilder<PackType> {
     this.periodBetweenDonations = periodBetweenDonations;
     return this;
   }
+  
+  public PackTypeBuilder thatIsNotDeleted() {
+    this.isDeleted = false;
+    return this;
+  }
+  
+  public PackTypeBuilder thatIsDeleted() {
+    this.isDeleted = true;
+    return this;
+  }
+  
+  public PackTypeBuilder withComponentType(ComponentType componentType) {
+    this.componentType = componentType;
+    return this;
+  }
 
   @Override
   public PackType build() {
@@ -48,6 +66,8 @@ public class PackTypeBuilder extends AbstractEntityBuilder<PackType> {
     if (testSampleProduced != null) {
       packType.setTestSampleProduced(testSampleProduced);
     }
+    packType.setComponentType(componentType);
+    packType.setIsDeleted(isDeleted);
     return packType;
   }
 

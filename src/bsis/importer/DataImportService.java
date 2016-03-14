@@ -1,5 +1,8 @@
 package bsis.importer;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,31 +14,53 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
+import backingform.AdverseEventBackingForm;
+import backingform.AdverseEventTypeBackingForm;
 import backingform.DeferralBackingForm;
+import backingform.DonationBackingForm;
 import backingform.DonorBackingForm;
 import backingform.LocationBackingForm;
 import backingform.validator.DeferralBackingFormValidator;
+import backingform.validator.DonationBackingFormValidator;
 import backingform.validator.DonorBackingFormValidator;
 import backingform.validator.LocationBackingFormValidator;
 import model.address.AddressType;
 import model.address.ContactMethodType;
+import model.adverseevent.AdverseEventType;
+import model.donation.Donation;
+import model.donation.HaemoglobinLevel;
+import model.donationbatch.DonationBatch;
+import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.idtype.IdType;
 import model.location.Location;
+import model.packtype.PackType;
 import model.preferredlanguage.PreferredLanguage;
+import model.user.User;
 import model.util.Gender;
+import repository.AdverseEventTypeRepository;
 import repository.ContactMethodTypeRepository;
 import repository.DeferralReasonRepository;
+import repository.DonationBatchRepository;
+import repository.DonationRepository;
+import repository.DonationTypeRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
+import repository.PackTypeRepository;
 import repository.SequenceNumberRepository;
+import repository.UserRepository;
+import repository.bloodtesting.BloodTypingStatus;
+import security.BsisUserDetails;
+import service.DonationCRUDService;
 
 @Transactional
 @Service
@@ -58,29 +83,65 @@ public class DataImportService {
   private DeferralReasonRepository deferralReasonRepository;
   @Autowired
   private DeferralBackingFormValidator deferralBackingFormValidator;
+  @Autowired
+  private DonationTypeRepository donationTypeRepository;
+  @Autowired
+  private PackTypeRepository packTypeRepository;
+  @Autowired
+  private AdverseEventTypeRepository adverseEventTypeRepository;
+  @Autowired
+  private DonationBackingFormValidator donationBackingFormValidator;
+  @Autowired
+  private DonationRepository donationRepository;
+  @Autowired
+  private DonationBatchRepository donationBatchRepository;
+  @Autowired
+  private DonationCRUDService donationCRUDService;
+  @Autowired
+  private UserRepository userRepository;
 
   private Map<String, Donor> externalDonorIdToBsisId = new HashMap<>();
 
   private boolean validationOnly;
+  private String action;
 
 
-  public void importData(Workbook workbook, boolean validationOnly) {
-
+  public void importData(Workbook workbook, String username, boolean validationOnly) {
     this.validationOnly = validationOnly;
-    String action = validationOnly ? "Validation" : "Import";
+    action = validationOnly ? "Validated" : "Imported";
+    
+    initSpringSecurityUser(username);
 
-    System.out.println(action + " of Locations started");
+    System.out.println("Started import at " + new Date());
+
     importLocationData(workbook.getSheet("Locations"));
-    System.out.println(action + " of Locations completed");
-
-    System.out.println(action + " of Donors started");
     importDonorData(workbook.getSheet("Donors"));
-    System.out.println(action + " of Donors completed");
-
-    System.out.println(action + " of Deferrals started");
+    importDonationsData(workbook.getSheet("Donations"));
     importDeferralData(workbook.getSheet("Deferrals"));
-    System.out.println(action + " of Deferrals completed");
+    
+    System.out.println("Finished import at " + new Date());
+    
+    if (this.validationOnly) {
+      throw new RollbackException();
+    }
   }
+  
+  private void initSpringSecurityUser(String username) {
+
+    User user = userRepository.findUser(username);
+    if (user == null) {
+      throw new IllegalArgumentException("Invalid user: " + username);
+    }
+    BsisUserDetails bsisUser = new BsisUserDetails(user);
+    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(bsisUser, "Credentials");
+    SecurityContextHolder.getContext().setAuthentication(auth);
+
+  }
+
+  /**
+   * Exception class to handle rollbacks for validation only executions
+   */
+  class RollbackException extends RuntimeException { private static final long serialVersionUID = 1L; }
   
   private void importLocationData(Sheet sheet) {
     
@@ -136,6 +197,8 @@ public class DataImportService {
         }
       }
       
+      displayProgressMessage(action + " " + locationCount + " out of " + sheet.getLastRowNum() + " locations(s)");
+      
       BindException errors = new BindException(locationBackingForm, "LocationBackingForm");
       locationBackingFormValidator.validate(locationBackingForm, errors);
       
@@ -144,19 +207,9 @@ public class DataImportService {
         throw new IllegalArgumentException("Invalid location");
       }
 
-      // Only save if validationOnly is false
-      if (!validationOnly) {
-        locationRepository.saveLocation(locationBackingForm.getLocation());
-      }
+      locationRepository.saveLocation(locationBackingForm.getLocation());
     }
-
-
-    if (validationOnly) {
-      System.out.println("Validated " + locationCount + " location(s)");
-    } else {
-      System.out.println("Imported " + locationCount + " location(s)");
-    }
-
+    System.out.println(); // clear logging
   }
 
   private void importDonorData(Sheet sheet) {
@@ -178,9 +231,9 @@ public class DataImportService {
       if (headers == null) {
         headers = row;
         continue;
-      } else {
-        donorCount += 1;
       }
+      
+      donorCount += 1;
 
       DonorBackingForm donorBackingForm = new DonorBackingForm();
       BindException errors = new BindException(donorBackingForm, "DonorBackingForm");
@@ -416,6 +469,8 @@ public class DataImportService {
             break;
         }
       }
+      
+      displayProgressMessage(action + " " + donorCount + " out of " + sheet.getLastRowNum() + " donor(s)");
 
       donorBackingFormValidator.validate(donorBackingForm, errors);
 
@@ -424,25 +479,205 @@ public class DataImportService {
         throw new IllegalArgumentException("Invalid donor");
       }
       
-      if (!validationOnly) {
-        // only save if validationOnly is false
-        Donor donor = donorBackingForm.getDonor();
-        donor.setContact(donorBackingForm.getContact());
-        donor.setAddress(donorBackingForm.getAddress());
-        donor.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());
-        donorRepository.addDonor(donor);
-        // cache new donorNumber
-        externalDonorIdToBsisId.put(externalDonorId, donor);
+      // Save donation
+      Donor donor = donorBackingForm.getDonor();
+      donor.setContact(donorBackingForm.getContact());
+      donor.setAddress(donorBackingForm.getAddress());
+      donor.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());
+      donorRepository.addDonor(donor);
+      
+      // Cache new donor identifier
+      externalDonorIdToBsisId.put(externalDonorId, donor);
+
+    }
+    System.out.println(); // clear logging
+  }
+
+  private void importDonationsData(Sheet sheet) {
+    Map<String, Location> locationCache = buildLocationCache();
+    Map<String, DonationType> donationTypeCache = buildDonationTypeCache();
+    Map<String, PackType> packTypeCache = buildPackTypeCache();
+    Map<String, AdverseEventType> adverseEventTypeCache = buildAdverseEventTypeCache();
+    Map<String, DonationBatch> donationBatches = new HashMap<String, DonationBatch>();
+
+    // Keep a reference to the row containing the headers
+    Row headers = null;
+
+    int donationCount = 0;
+
+    for (Row row : sheet) {
+
+      String externalDonorId = null;
+
+      if (headers == null) {
+        headers = row;
+        continue;
+      }
+      
+      donationCount += 1;
+
+      DonationBackingForm donationBackingForm = new DonationBackingForm();
+      BindException errors = new BindException(donationBackingForm, "DonationBackingForm");
+
+      AdverseEventTypeBackingForm adverseEventTypeBackingForm = null;
+      String adverseEventComment = null;
+      Location venue = null;
+      String donationDate = null;
+
+      for (Cell cell : row) {
+
+        Cell header = headers.getCell(cell.getColumnIndex());
+
+        switch (header.getStringCellValue()) {
+
+          case "externalDonorId":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            externalDonorId = cell.getStringCellValue();
+            break;
+
+          case "donationIdentificationNumber":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            donationBackingForm.setDonationIdentificationNumber(cell.getStringCellValue());
+            break;
+
+          case "venue":
+            venue = locationCache.get(cell.getStringCellValue());
+            donationBackingForm.setVenue(venue);
+            break;
+
+          case "donationType":
+            donationBackingForm.setDonationType(donationTypeCache.get(cell.getStringCellValue()));
+            break;
+
+          case "packType":
+            donationBackingForm.setPackType(packTypeCache.get(cell.getStringCellValue()));
+            break;
+
+          case "donationDate":
+            try {
+              donationBackingForm.setDonationDate(cell.getDateCellValue());
+              donationDate = new SimpleDateFormat("yyyy-MM-dd").format(donationBackingForm.getDonationDate());
+            } catch (IllegalStateException e) {
+              errors.rejectValue("donation.donationDate", "donationDate.invalid", "Invalid donationDate");
+            }
+            break;
+
+          case "bleedStartTime":
+            donationBackingForm.setBleedStartTime(cell.getDateCellValue());
+            break;
+
+          case "bleedEndTime":
+            donationBackingForm.setBleedEndTime(cell.getDateCellValue());
+            break;
+
+          case "donorWeight":
+            donationBackingForm.setDonorWeight(BigDecimal.valueOf(cell.getNumericCellValue()));
+            break;
+
+          case "bloodPressureSystolic":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            donationBackingForm.setBloodPressureSystolic(Integer.valueOf(cell.getStringCellValue()));
+            break;
+
+          case "bloodPressureDiastolic":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            donationBackingForm.setBloodPressureDiastolic(Integer.valueOf(cell.getStringCellValue()));
+            break;
+
+          case "donorPulse":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            donationBackingForm.setDonorPulse(Integer.valueOf(cell.getStringCellValue()));
+            break;
+
+          case "haemoglobinCount":
+            donationBackingForm.setHaemoglobinCount(BigDecimal.valueOf(cell.getNumericCellValue()));
+            break;
+
+          case "haemoglobinLevel":
+            String haemoglobinLevelStr = cell.getStringCellValue();
+            HaemoglobinLevel haemoglobinLevel = null;
+            if (StringUtils.isNotEmpty(haemoglobinLevelStr)) {
+              try {
+                haemoglobinLevel = HaemoglobinLevel.valueOf(haemoglobinLevelStr);
+              } catch (Exception e) {
+                errors.rejectValue("donation.haemoglobinLevel", "haemoglobinLevel.invalid", "Invalid haemoglobinLevel");
+              }
+            }
+            donationBackingForm.setHaemoglobinLevel(haemoglobinLevel);
+            break;
+
+          case "adverseEventType":
+            AdverseEventType adverseEventType = adverseEventTypeCache.get(cell.getStringCellValue());
+            if (adverseEventType == null) {
+              errors.rejectValue("donation.adverseEvent.type", "type.invalid", "Invalid adverseEventType");
+              break;
+            }
+            adverseEventTypeBackingForm = new AdverseEventTypeBackingForm();
+            adverseEventTypeBackingForm.setId(adverseEventType.getId());
+            break;
+
+          case "adverseEventComment":
+            adverseEventComment = cell.getStringCellValue();
+            break;
+
+          case "bloodAbo":
+            donationBackingForm.setBloodAbo(cell.getStringCellValue());
+            break;
+
+          case "bloodRh":
+            donationBackingForm.setBloodRh(cell.getStringCellValue());
+            break;
+
+          case "notes":
+            donationBackingForm.setNotes(cell.getStringCellValue());
+            break;
+
+          default:
+            System.out.println("Unknown donation column: " + header.getStringCellValue());
+            break;
+        }
+      }
+      
+      displayProgressMessage(action + " " + donationCount + " out of " + sheet.getLastRowNum() + " donations(s)");
+
+      // Set adverse event if present
+      if (adverseEventTypeBackingForm != null) {
+        AdverseEventBackingForm adverseEventBackingForm = new AdverseEventBackingForm();
+        adverseEventBackingForm.setType(adverseEventTypeBackingForm);
+        adverseEventBackingForm.setComment(adverseEventComment);
+        donationBackingForm.setAdverseEvent(adverseEventBackingForm);
       }
 
-    }
+      // Get donor
+      Donor currentDonor = externalDonorIdToBsisId.get(externalDonorId);
+      if (currentDonor != null) {
+        donationBackingForm.setDonorNumber(currentDonor.getDonorNumber());
+        donationBackingForm.setDonor(currentDonor);
+      } else {
+        throw new IllegalArgumentException(
+            "Trying to create Donation but Donor doesn't exist for externalDonorId:" + externalDonorId);
+      }
 
-    if (validationOnly) {
-      System.out.println("Validated " + donorCount + " donor(s)");
-    } else {
-      System.out.println("Imported " + donorCount + " donor(s)");
-    }
+      // Get donation batch and validate
+      DonationBatch donationBatch = getDonationBatch(donationBatches, donationDate, venue);
+      donationBackingForm.setDonationBatch(donationBatch);
+      donationBackingFormValidator.validate(donationBackingForm, errors);
 
+      if (errors.hasErrors()) {
+        System.out.println("Invalid donation on row " + (row.getRowNum() + 1) + ". " + getErrorsString(errors));
+        throw new IllegalArgumentException("Invalid donation");
+      }
+
+      // Save donation
+      Donation donation = donationCRUDService.createDonation(donationBackingForm);
+
+      // Set bloodTypingStatus COMPLETE if bloodAbo and bloodRh are not empty
+      if (StringUtils.isNotEmpty(donation.getBloodAbo()) && StringUtils.isNotEmpty(donation.getBloodRh())) {
+        donation.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
+        donationRepository.saveDonation(donation);
+      }
+    }
+    System.out.println(); // clear logging
   }
 
   public void importDeferralData(Sheet sheet) {
@@ -462,9 +697,9 @@ public class DataImportService {
       if (headers == null) {
         headers = row;
         continue;
-      } else {
-        deferralCount += 1;
       }
+
+      deferralCount += 1;
 
       DeferralBackingForm deferralBackingForm = new DeferralBackingForm();
       BindException errors = new BindException(deferralBackingForm, "DeferralBackingForm");
@@ -513,6 +748,8 @@ public class DataImportService {
         }
       }
 
+      displayProgressMessage(action + " " + deferralCount + " out of " + sheet.getLastRowNum() + " deferral(s)");
+
       if (donor != null) {
         deferralBackingForm.setDeferredDonor(donor.getId());
       } else {
@@ -526,11 +763,58 @@ public class DataImportService {
         throw new IllegalArgumentException("Invalid deferral");
       }
 
-      if (!validationOnly) {
-        // only save if validationOnly is false
-        donorRepository.deferDonor(deferralBackingForm.getDonorDeferral());
-      }
+      // Save deferral
+      donorRepository.deferDonor(deferralBackingForm.getDonorDeferral());
     }
+
+    System.out.println(); // clear logging
+  }
+
+  private DonationBatch getDonationBatch(Map<String, DonationBatch> donationBatches, String donationDate,
+      Location venue) {
+
+    String key = donationDate + "_" + venue;
+
+    // Get donationBatch and save it if it hasn't been created yet for that date and venue
+    DonationBatch donationBatch = donationBatches.get(key);
+
+    if (donationBatch == null) {
+      donationBatch = new DonationBatch();
+      donationBatch.setBatchNumber(sequenceNumberRepository.getNextBatchNumber());
+      donationBatch.setVenue(venue);
+      donationBatch.setIsClosed(true);
+      donationBatch.setBackEntry(true);
+      donationBatchRepository.addDonationBatch(donationBatch);
+      donationBatches.put(key, donationBatch);
+    }
+    return donationBatch;
+  }
+
+  private Map<String, AdverseEventType> buildAdverseEventTypeCache() {
+    Map<String, AdverseEventType> adverseEventTypeCache = new HashMap<>();
+    List<AdverseEventType> adverseEventTypes = adverseEventTypeRepository.getAllAdverseEventTypes();
+    for (AdverseEventType adverseEventType : adverseEventTypes) {
+      adverseEventTypeCache.put(adverseEventType.getName(), adverseEventType);
+    }
+    return adverseEventTypeCache;
+  }
+
+  private Map<String, PackType> buildPackTypeCache() {
+    Map<String, PackType> packTypeCache = new HashMap<>();
+    List<PackType> packTypes = packTypeRepository.getAllEnabledPackTypes();
+    for (PackType packType : packTypes) {
+      packTypeCache.put(packType.getPackType(), packType);
+    }
+    return packTypeCache;
+  }
+
+  private Map<String, DonationType> buildDonationTypeCache() {
+    Map<String, DonationType> donationTypeCache = new HashMap<>();
+    List<DonationType> donationTypes = donationTypeRepository.getAllDonationTypes();
+    for (DonationType donationType : donationTypes) {
+      donationTypeCache.put(donationType.getDonationType(), donationType);
+    }
+    return donationTypeCache;
   }
 
   private Map<String, Location> buildLocationCache () {
@@ -599,4 +883,11 @@ public class DataImportService {
     return errorsStr;
   }
 
+  private void displayProgressMessage(String progressMessage) {
+    try {
+      System.out.write((progressMessage+"\r").getBytes());
+    } catch (Exception e) {
+      // just ignore
+    }
+  }
 }

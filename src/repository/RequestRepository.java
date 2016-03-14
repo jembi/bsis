@@ -437,7 +437,6 @@ public class RequestRepository {
   }
 
   private boolean bloodCrossmatch(String abo1, String rh1, String abo2, String rh2) {
-    System.out.println("matching " + abo1 + ", " + ", " + rh1 + ", " + abo2 + ", " + rh2);
     if (abo1.equals(abo2) && rh1.equals(rh2))
       return true;
     if (abo1.equals("O") && (rh1.equals(rh2) || rh1.equals("-")))

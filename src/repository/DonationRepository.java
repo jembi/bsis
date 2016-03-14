@@ -23,15 +23,6 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.bloodtesting.TTIStatus;
-import model.component.Component;
-import model.component.ComponentStatus;
-import model.componenttype.ComponentType;
-import model.donation.Donation;
-import model.donor.Donor;
-import model.packtype.PackType;
-import model.util.BloodGroup;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +32,14 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import constant.GeneralConfigConstants;
+import model.bloodtesting.TTIStatus;
+import model.component.Component;
+import model.component.ComponentStatus;
+import model.componenttype.ComponentType;
+import model.donation.Donation;
+import model.donor.Donor;
+import model.packtype.PackType;
+import model.util.BloodGroup;
 import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
@@ -337,6 +336,7 @@ public class DonationRepository {
     applicationContext.publishEvent(new DonationUpdatedEvent("10", donation));
 
     em.refresh(donation);
+    em.refresh(donation.getDonor());
 
     // Create initial component only if the countAsDonation is true and the config option is enabled
     if (donation.getPackType().getCountAsDonation() &&
