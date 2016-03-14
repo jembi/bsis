@@ -100,7 +100,7 @@ public class DataImportService {
   @Autowired
   private UserRepository userRepository;
 
-  private Map<String, Donor> externalDonorIdToBsisId = new HashMap<>();
+  private Map<String, Donor> externalDonorIdToBsisDonor = new HashMap<>();
 
   private boolean validationOnly;
   private String action;
@@ -487,7 +487,7 @@ public class DataImportService {
       donorRepository.addDonor(donor);
       
       // Cache new donor identifier
-      externalDonorIdToBsisId.put(externalDonorId, donor);
+      externalDonorIdToBsisDonor.put(externalDonorId, donor);
 
     }
     System.out.println(); // clear logging
@@ -649,7 +649,7 @@ public class DataImportService {
       }
 
       // Get donor
-      Donor currentDonor = externalDonorIdToBsisId.get(externalDonorId);
+      Donor currentDonor = externalDonorIdToBsisDonor.get(externalDonorId);
       if (currentDonor != null) {
         donationBackingForm.setDonorNumber(currentDonor.getDonorNumber());
         donationBackingForm.setDonor(currentDonor);
@@ -711,7 +711,7 @@ public class DataImportService {
           case "externalDonorId":
             cell.setCellType(Cell.CELL_TYPE_STRING);
             externalDonorId = cell.getStringCellValue();
-            donor = externalDonorIdToBsisId.get(externalDonorId);
+            donor = externalDonorIdToBsisDonor.get(externalDonorId);
             break;
 
           case "venue":
