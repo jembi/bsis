@@ -9,6 +9,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import org.apache.poi.EncryptedDocumentException;
@@ -34,6 +35,8 @@ import model.donation.HaemoglobinLevel;
 import model.donationbatch.DonationBatch;
 import model.donor.Donor;
 import model.donor.DonorStatus;
+import model.donordeferral.DeferralReason;
+import model.donordeferral.DonorDeferral;
 import model.idtype.IdType;
 import model.location.Location;
 import model.preferredlanguage.PreferredLanguage;
@@ -46,7 +49,7 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
   private DataImportService dataImportService;
   
   @Test
-  public void testDataImport() throws EncryptedDocumentException, InvalidFormatException, IOException {
+  public void testDataImport() throws EncryptedDocumentException, InvalidFormatException, IOException, ParseException {
     // Set up fixture and data
     FileInputStream fileInputStream = new FileInputStream("test/fixtures/BSIS-import.xlsx");
     Workbook workbook = WorkbookFactory.create(fileInputStream);
@@ -62,6 +65,7 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     assertImportLocationData_shouldCreateLocationsFromSpreadsheet();
     assertImportDonorData_shouldCreateDonorsFromSpreadsheet();
     assertImportDonationData_shouldCreateDonationsFromSpreadsheet();
+    assertImportDonationData_shouldCreateDeferralsFromSpreadsheet();
   }
   
   private void createSupportingTestData() {
@@ -168,6 +172,11 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     AdverseEventTypeBuilder.anAdverseEventType().withName("Haematoma")
         .thatIsNotDeleted()
         .buildAndPersist(entityManager);
+
+    // set up test data (Deferral)
+    DeferralReason deferralReason = new DeferralReason();
+    deferralReason.setReason("Nausea");
+    entityManager.persist(deferralReason);
 
     // Synchronize entities to the database before running the test
     entityManager.flush();
@@ -321,10 +330,26 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     assertThat("DonationBatch venue is set", fourthDonationBatch.getVenue().getName(), equalTo("Fourth"));
     assertThat("Different DonationBatch", fourthDonationBatch.getId(), not(equalTo(thirdDonation.getDonationBatch().getId())));
   }
-  
+
   private Donation findDonationByDonationIdentificationNumber(String din) {
     return entityManager.createQuery("SELECT d FROM Donation d WHERE d.donationIdentificationNumber = :din", Donation.class)
         .setParameter("din", din)
+        .getSingleResult();
+  }
+  
+  private void assertImportDonationData_shouldCreateDeferralsFromSpreadsheet() throws ParseException {
+    DonorDeferral deferral = findDeferralByDeferralReasonText("Had nausea");
+    
+    assertThat("venue is set", deferral.getVenue().getName(), equalTo("First"));
+    assertThat("deferral reason is set", deferral.getDeferralReason().getReason(), equalTo("Nausea"));
+    assertThat("createdDate is set", new SimpleDateFormat("yyyy-MM-dd").format(deferral.getCreatedDate()), equalTo("2016-01-03"));
+    assertThat("deferredUntil is set", new SimpleDateFormat("yyyy-MM-dd").format(deferral.getDeferredUntil()), equalTo("2016-06-03"));
+    assertThat("deferred donor is set", deferral.getDeferredDonor().getFirstName(), equalTo("David"));
+  }
+  
+  private DonorDeferral findDeferralByDeferralReasonText(String deferralReasonText) {
+    return entityManager.createQuery("SELECT d FROM DonorDeferral d WHERE d.deferralReasonText = :deferralReasonText", DonorDeferral.class)
+        .setParameter("deferralReasonText", deferralReasonText)
         .getSingleResult();
   }
 }
