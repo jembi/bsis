@@ -4,18 +4,25 @@ import static helpers.builders.LocationBuilder.aLocation;
 import static helpers.matchers.LocationMatcher.hasSameStateAsLocation;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNot.not;
-import helpers.builders.AdverseEventTypeBuilder;
-import helpers.builders.DonationTypeBuilder;
-import helpers.builders.FormFieldBuilder;
-import helpers.builders.PackTypeBuilder;
-import helpers.builders.UserBuilder;
+import static org.hamcrest.core.IsNull.notNullValue;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import helpers.builders.AdverseEventTypeBuilder;
+import helpers.builders.DonationTypeBuilder;
+import helpers.builders.FormFieldBuilder;
+import helpers.builders.PackTypeBuilder;
+import helpers.builders.UserBuilder;
 import model.address.AddressType;
 import model.address.ContactMethodType;
 import model.admin.DataType;
@@ -31,17 +38,9 @@ import model.idtype.IdType;
 import model.location.Location;
 import model.preferredlanguage.PreferredLanguage;
 import model.util.Gender;
+import suites.SecurityContextDependentTestSuite;
 
-import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import suites.ContextDependentTestSuite;
-
-public class DataImportServiceTests extends ContextDependentTestSuite {
+public class DataImportServiceTests extends SecurityContextDependentTestSuite {
   
   @Autowired
   private DataImportService dataImportService;
@@ -54,7 +53,7 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     createSupportingTestData();
 
     // Exercise SUT
-    dataImportService.importData(workbook, "superuser", false);
+    dataImportService.importData(workbook, false);
     
     // Ensure stale entities are cleared
     entityManager.clear();
