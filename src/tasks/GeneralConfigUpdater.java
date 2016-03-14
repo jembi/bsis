@@ -6,6 +6,7 @@ import com.google.gson.JsonSyntaxException;
 import model.admin.DataType;
 import model.admin.GeneralConfig;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
@@ -94,7 +95,12 @@ public class GeneralConfigUpdater {
   public void initializeGeneralConfigs() {
     //Set the application root log level at startup
     GeneralConfig generalConfig = generalConfigRepository.getGeneralConfigByName("log.level");
-    LoggerUtil.setLogLevel(generalConfig.getValue());
+    if (generalConfig == null || StringUtils.isBlank(generalConfig.getValue())) {
+      // perhaps the log.level configuration has not yet been loaded into the repository
+      LoggerUtil.setLogLevel("info");
+    } else {
+      LoggerUtil.setLogLevel(generalConfig.getValue());
+    }
   }
 
 
