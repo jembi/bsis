@@ -59,7 +59,7 @@ public class DataImportService {
   @Autowired
   private DeferralBackingFormValidator deferralBackingFormValidator;
 
-  private Map<String, Long> externalDonorIdToBsisId = new HashMap<>();
+  private Map<String, Donor> externalDonorIdToBsisId = new HashMap<>();
 
   private boolean validationOnly;
 
@@ -432,7 +432,7 @@ public class DataImportService {
         donor.setDonorNumber(sequenceNumberRepository.getNextDonorNumber());
         donorRepository.addDonor(donor);
         // cache new donorNumber
-        externalDonorIdToBsisId.put(externalDonorId, donor.getId());
+        externalDonorIdToBsisId.put(externalDonorId, donor);
       }
 
     }
@@ -456,7 +456,7 @@ public class DataImportService {
 
     for (Row row : sheet) {
 
-      Long donorId = null;
+      Donor donor = null;
       String externalDonorId = null;
 
       if (headers == null) {
@@ -476,7 +476,7 @@ public class DataImportService {
           case "externalDonorId":
             cell.setCellType(Cell.CELL_TYPE_STRING);
             externalDonorId = cell.getStringCellValue();
-            donorId = externalDonorIdToBsisId.get(externalDonorId);
+            donor = externalDonorIdToBsisId.get(externalDonorId);
             break;
 
           case "venue":
@@ -511,10 +511,12 @@ public class DataImportService {
             System.out.println("Unknown deferral column: " + header.getStringCellValue());
             break;
         }
+      }
 
-        if (donorId != null) {
-          deferralBackingForm.setDeferredDonor(donorId);
-        }
+      if (donor != null) {
+        deferralBackingForm.setDeferredDonor(donor.getId());
+      } else {
+        errors.rejectValue("donorDeferral.deferredDonor", "deferredDonor.invalid", "Invalid deferredDonor ");
       }
 
       deferralBackingFormValidator.validateForm(deferralBackingForm, errors);
@@ -526,8 +528,6 @@ public class DataImportService {
 
       if (!validationOnly) {
         // only save if validationOnly is false
-        Donor donor = new Donor();
-        donor.setId(donorId);
         donorRepository.deferDonor(deferralBackingForm.getDonorDeferral());
       }
     }
