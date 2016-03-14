@@ -17,3 +17,8 @@ after_success:
 script: mvn -Dsurefire.useFile=false clean install
 
 sudo: false
+
+notifications:
+  email:
+    on_success: change
+    on_failure: always
