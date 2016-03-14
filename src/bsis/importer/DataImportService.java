@@ -487,7 +487,10 @@ public class DataImportService {
       donorRepository.addDonor(donor);
       
       // Cache new donor identifier
-      externalDonorIdToBsisDonor.put(externalDonorId, donor);
+      Donor smallerDonor = new Donor();
+      smallerDonor.setId(donor.getId());
+      smallerDonor.setDonorNumber(donor.getDonorNumber());
+      externalDonorIdToBsisDonor.put(externalDonorId, smallerDonor);
 
     }
     System.out.println(); // clear logging
