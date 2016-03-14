@@ -684,6 +684,7 @@ public class DataImportService {
       donationBatch.setBatchNumber(sequenceNumberRepository.getNextBatchNumber());
       donationBatch.setVenue(venue);
       donationBatch.setIsClosed(true);
+      donationBatch.setBackEntry(true);
       donationBatchRepository.addDonationBatch(donationBatch);
       donationBatches.put(key, donationBatch);
     }
