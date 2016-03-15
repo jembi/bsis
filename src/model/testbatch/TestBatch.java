@@ -34,7 +34,7 @@ public class TestBatch extends BaseModificationTrackerEntity {
   @Lob
   private String notes;
 
-  private Boolean isDeleted;
+  private Boolean isDeleted = Boolean.FALSE;
 
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(length = 20, unique = true)

@@ -312,12 +312,15 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     assertThat("DonationBatch has a batch number", firstDonationBatch.getBatchNumber(), notNullValue());
     assertThat("DonationBatch venue is set", firstDonationBatch.getVenue().getName(), equalTo("First"));
     assertThat("DonationBatch is closed", firstDonationBatch.getIsClosed(), equalTo(true));
+    assertThat("DonationBatch has a test batch", firstDonationBatch.getTestBatch(), notNullValue());
     
     Donation secondDonation = findDonationByDonationIdentificationNumber("32435");
     assertThat("Same DonationBatch", secondDonation.getDonationBatch().getId(), equalTo(firstDonationBatch.getId()));
+    assertThat("Same TestBatch", secondDonation.getDonationBatch().getTestBatch(), equalTo(firstDonationBatch.getTestBatch()));
     
     Donation thirdDonation = findDonationByDonationIdentificationNumber("32432");
     assertThat("Different DonationBatch", thirdDonation.getDonationBatch().getId(), not(equalTo(firstDonationBatch.getId())));
+    assertThat("Different TestBatch", thirdDonation.getDonationBatch().getTestBatch(), not(equalTo(firstDonationBatch.getTestBatch())));
     
     Donation fourthDonation = findDonationByDonationIdentificationNumber("32431");
     DonationBatch fourthDonationBatch = fourthDonation.getDonationBatch();

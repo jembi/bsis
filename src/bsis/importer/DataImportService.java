@@ -40,6 +40,8 @@ import model.idtype.IdType;
 import model.location.Location;
 import model.packtype.PackType;
 import model.preferredlanguage.PreferredLanguage;
+import model.testbatch.TestBatch;
+import model.testbatch.TestBatchStatus;
 import model.util.Gender;
 import repository.AdverseEventTypeRepository;
 import repository.ContactMethodTypeRepository;
@@ -50,6 +52,7 @@ import repository.DonorRepository;
 import repository.LocationRepository;
 import repository.PackTypeRepository;
 import repository.SequenceNumberRepository;
+import repository.TestBatchRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import service.DonationCRUDService;
 
@@ -84,6 +87,8 @@ public class DataImportService {
   private DonationBatchRepository donationBatchRepository;
   @Autowired
   private DonationCRUDService donationCRUDService;
+  @Autowired
+  private TestBatchRepository testBatchRepository;
 
   private Map<String, Donor> externalDonorIdToBsisId = new HashMap<>();
 
@@ -468,7 +473,8 @@ public class DataImportService {
     Map<String, DonationType> donationTypeCache = buildDonationTypeCache();
     Map<String, PackType> packTypeCache = buildPackTypeCache();
     Map<String, AdverseEventType> adverseEventTypeCache = buildAdverseEventTypeCache();
-    Map<String, DonationBatch> donationBatches = new HashMap<String, DonationBatch>();
+    Map<String, DonationBatch> donationBatches = new HashMap<>();
+    Map<String, TestBatch> testBatches = new HashMap<>();
 
     // Keep a reference to the row containing the headers
     Row headers = null;
@@ -629,7 +635,7 @@ public class DataImportService {
       }
 
       // Get donation batch and validate
-      DonationBatch donationBatch = getDonationBatch(donationBatches, donationDate, venue);
+      DonationBatch donationBatch = getDonationBatch(donationBatches, testBatches, donationDate, venue);
       donationBackingForm.setDonationBatch(donationBatch);
       donationBackingFormValidator.validate(donationBackingForm, errors);
 
@@ -650,8 +656,19 @@ public class DataImportService {
     System.out.println(); // clear logging
   }
 
-  private DonationBatch getDonationBatch(Map<String, DonationBatch> donationBatches, String donationDate,
-      Location venue) {
+  private DonationBatch getDonationBatch(Map<String, DonationBatch> donationBatches, Map<String, TestBatch> testBatches,
+      String donationDate, Location venue) {
+
+    // Get testBatch and save it if it hasn't been created yet for that date
+    TestBatch testBatch = testBatches.get(donationDate);
+
+    if (testBatch == null) {
+      testBatch = new TestBatch();
+      testBatch.setBatchNumber(sequenceNumberRepository.getNextTestBatchNumber());
+      testBatch.setStatus(TestBatchStatus.CLOSED);
+      testBatchRepository.save(testBatch);
+      testBatches.put(donationDate, testBatch);
+    }
 
     String key = donationDate + "_" + venue;
 
@@ -664,9 +681,11 @@ public class DataImportService {
       donationBatch.setVenue(venue);
       donationBatch.setIsClosed(true);
       donationBatch.setBackEntry(true);
+      donationBatch.setTestBatch(testBatch);
       donationBatchRepository.addDonationBatch(donationBatch);
       donationBatches.put(key, donationBatch);
     }
+
     return donationBatch;
   }
 
