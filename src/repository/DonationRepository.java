@@ -145,14 +145,6 @@ public class DonationRepository {
     return countQuery.getSingleResult().longValue();
   }
 
-  public List<Donation> getAllDonations() {
-    TypedQuery<Donation> query = em.createQuery(
-        "SELECT c FROM Donation c WHERE c.isDeleted= :isDeleted",
-        Donation.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    return query.getResultList();
-  }
-
   public List<Donation> getDonations(Date fromDate, Date toDate) {
     TypedQuery<Donation> query = em
         .createQuery(

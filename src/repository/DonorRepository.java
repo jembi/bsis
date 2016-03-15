@@ -19,6 +19,13 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import model.address.AddressType;
 import model.donation.Donation;
 import model.donor.Donor;
@@ -28,14 +35,6 @@ import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.idtype.IdType;
 import model.preferredlanguage.PreferredLanguage;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import service.GeneralConfigAccessorService;
 import utils.DonorUtils;
 import viewmodel.DonorSummaryViewModel;
@@ -258,14 +257,6 @@ public class DonorRepository {
     }
     return new ArrayList<Donor>();
 
-  }
-
-  public void addAllDonors(List<Donor> donors) {
-    for (Donor donor : donors) {
-      updateDonorAutomaticFields(donor);
-      em.persist(donor);
-    }
-    em.flush();
   }
 
   private void updateDonorAutomaticFields(Donor donor) {

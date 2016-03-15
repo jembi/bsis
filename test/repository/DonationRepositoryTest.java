@@ -76,13 +76,6 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
-  public void testGetAllDonations() throws Exception {
-    List<Donation> all = donationRepository.getAllDonations();
-    Assert.assertNotNull("There are donations", all);
-    Assert.assertEquals("There are 6 donations", 6, all.size());
-  }
-
-  @Test
   public void testGetDonations() throws Exception {
     Date start = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01");
     Date end = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-10");
