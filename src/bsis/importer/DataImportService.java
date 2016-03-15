@@ -531,43 +531,77 @@ public class DataImportService {
           case "donationDate":
             try {
               donationBackingForm.setDonationDate(cell.getDateCellValue());
-            } catch (IllegalStateException e) {
+            } catch (Exception e) {
               errors.rejectValue("donation.donationDate", "donationDate.invalid", "Invalid donationDate");
+              // setting new Date() as donationDate to be able to create the donation batch and
+              // test batch and continue the validation
+              donationBackingForm.setDonationDate(new Date());
             }
             break;
 
           case "bleedStartTime":
-            donationBackingForm.setBleedStartTime(cell.getDateCellValue());
+            try {
+              donationBackingForm.setBleedStartTime(cell.getDateCellValue());
+            } catch (Exception e) {
+              errors.rejectValue("donation.bleedStartTime", "bleedStartTime.invalid", "Invalid bleedStartTime");
+            }
             break;
 
           case "bleedEndTime":
-            donationBackingForm.setBleedEndTime(cell.getDateCellValue());
+            try {
+              donationBackingForm.setBleedEndTime(cell.getDateCellValue());
+            } catch (Exception e) {
+              errors.rejectValue("donation.bleedEndTime", "bleedEndTime.invalid", "Invalid bleedEndTime");
+            }
             break;
 
           case "donorWeight":
-            donationBackingForm.setDonorWeight(BigDecimal.valueOf(cell.getNumericCellValue()));
+            try {
+              donationBackingForm.setDonorWeight(BigDecimal.valueOf(cell.getNumericCellValue()));
+            } catch (Exception e) {
+              errors.rejectValue("donation.donorWeight", "donorWeight.invalid", "Invalid donorWeight");
+            }
             break;
 
           case "bloodPressureSystolic":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            donationBackingForm.setBloodPressureSystolic(Integer.valueOf(cell.getStringCellValue()));
+            try {
+              donationBackingForm.setBloodPressureSystolic(Integer.valueOf(cell.getStringCellValue()));
+            } catch (Exception e) {
+              errors.rejectValue("donation.bloodPressureSystolic", "bloodPressureSystolic.invalid",
+                  "Invalid bloodPressureSystolic");
+            }
             break;
 
           case "bloodPressureDiastolic":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            donationBackingForm.setBloodPressureDiastolic(Integer.valueOf(cell.getStringCellValue()));
+            try {
+              donationBackingForm.setBloodPressureDiastolic(Integer.valueOf(cell.getStringCellValue()));
+            } catch (Exception e) {
+              errors.rejectValue("donation.bloodPressureDiastolic", "bloodPressureDiastolic.invalid",
+                  "Invalid bloodPressureDiastolic");
+            }
             break;
 
           case "donorPulse":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            donationBackingForm.setDonorPulse(Integer.valueOf(cell.getStringCellValue()));
+            try {
+              donationBackingForm.setDonorPulse(Integer.valueOf(cell.getStringCellValue()));
+            } catch (Exception e) {
+              errors.rejectValue("donation.donorPulse", "donorPulse.invalid", "Invalid donorPulse");
+            }
             break;
 
           case "haemoglobinCount":
-            donationBackingForm.setHaemoglobinCount(BigDecimal.valueOf(cell.getNumericCellValue()));
+            try {
+              donationBackingForm.setHaemoglobinCount(BigDecimal.valueOf(cell.getNumericCellValue()));
+            } catch (Exception e) {
+              errors.rejectValue("donation.haemoglobinCount", "haemoglobinCount.invalid", "Invalid haemoglobinCount");
+            }
             break;
 
           case "haemoglobinLevel":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             String haemoglobinLevelStr = cell.getStringCellValue();
             HaemoglobinLevel haemoglobinLevel = null;
             if (StringUtils.isNotEmpty(haemoglobinLevelStr)) {
@@ -581,6 +615,7 @@ public class DataImportService {
             break;
 
           case "adverseEventType":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             AdverseEventType adverseEventType = adverseEventTypeCache.get(cell.getStringCellValue());
             if (adverseEventType == null) {
               errors.rejectValue("donation.adverseEvent.type", "type.invalid", "Invalid adverseEventType");
@@ -591,18 +626,22 @@ public class DataImportService {
             break;
 
           case "adverseEventComment":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             adverseEventComment = cell.getStringCellValue();
             break;
 
           case "bloodAbo":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             donationBackingForm.setBloodAbo(cell.getStringCellValue());
             break;
 
           case "bloodRh":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             donationBackingForm.setBloodRh(cell.getStringCellValue());
             break;
 
           case "notes":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             donationBackingForm.setNotes(cell.getStringCellValue());
             break;
 
