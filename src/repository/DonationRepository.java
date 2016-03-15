@@ -25,7 +25,6 @@ import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,8 +41,6 @@ import model.util.BloodGroup;
 import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
-import repository.events.ApplicationContextProvider;
-import repository.events.DonationUpdatedEvent;
 import service.GeneralConfigAccessorService;
 import valueobject.CollectedDonationValueObject;
 import viewmodel.BloodTestingRuleResult;
@@ -305,11 +302,6 @@ public class DonationRepository {
     em.flush();
     em.refresh(donation);
     updateDonorFields(donation);
-
-    ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
-    applicationContext.publishEvent(new DonationUpdatedEvent("10", donation));
-
-    em.refresh(donation);
     em.flush();
     em.refresh(donation.getDonor());
 
@@ -389,6 +381,12 @@ public class DonationRepository {
 
     if (donor.getDueToDonate() == null || dueToDonateDate.getTime().after(donor.getDueToDonate())) {
       donor.setDueToDonate(dueToDonateDate.getTime());
+    }
+
+    // set dateOfLastDonation
+    Date dateOfLastDonation = donor.getDateOfLastDonation();
+    if (dateOfLastDonation == null || donation.getDonationDate().after(dateOfLastDonation)) {
+      donor.setDateOfLastDonation(donation.getDonationDate());
     }
   }
 

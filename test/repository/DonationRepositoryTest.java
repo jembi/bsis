@@ -248,6 +248,7 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
     donationRepository.addDonation(newDonation);
     Donation savedDonation = donationRepository.findDonationByDonationIdentificationNumber("JUNIT123");
     Assert.assertNotNull("Found new donation", savedDonation);
+    Assert.assertNotNull("Donor date of lastDonation has been set", savedDonation.getDonor().getDateOfLastDonation());
   }
 
   @Test(expected = javax.persistence.PersistenceException.class)
