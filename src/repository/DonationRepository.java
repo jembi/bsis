@@ -66,19 +66,6 @@ public class DonationRepository {
     em.flush();
   }
 
-  public Donation updateDonationDetails(Donation donation) throws NoResultException {
-    Donation existingDonation = findDonationById(donation.getId());
-    if (existingDonation == null) {
-      return null;
-    }
-    existingDonation.copy(donation);
-    existingDonation = em.merge(existingDonation);
-    ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
-    applicationContext.publishEvent(new DonationUpdatedEvent("10", donation));
-    em.flush();
-    return existingDonation;
-  }
-
   @Transactional(propagation = Propagation.MANDATORY)
   public Donation updateDonation(Donation donation) {
     return em.merge(donation);

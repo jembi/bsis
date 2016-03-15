@@ -266,7 +266,7 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
   public void testUpdateDonation() throws Exception {
     Donation existingDonation = donationRepository.findDonationById(1L);
     existingDonation.setDonorWeight(new BigDecimal(123));
-    donationRepository.updateDonationDetails(existingDonation);
+    donationRepository.updateDonation(existingDonation);
     Donation updatedDonation = donationRepository.findDonationById(1L);
     Assert.assertEquals("donor weight was updataed", new BigDecimal(123), updatedDonation.getDonorWeight());
   }
