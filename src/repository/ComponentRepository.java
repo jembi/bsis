@@ -21,6 +21,18 @@ import javax.persistence.PessimisticLockException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import backingform.ComponentCombinationBackingForm;
 import model.bloodtesting.TTIStatus;
 import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
@@ -38,25 +50,12 @@ import model.request.Request;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 import model.util.BloodGroup;
-
-import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-
 import repository.bloodtesting.BloodTypingStatus;
 import service.DonationConstraintChecker;
 import utils.CustomDateFormatter;
 import utils.SecurityUtils;
 import viewmodel.DonationViewModel;
 import viewmodel.MatchingComponentViewModel;
-import backingform.ComponentCombinationBackingForm;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Repository
 @Transactional
@@ -491,7 +490,6 @@ public class ComponentRepository {
     }
 
     for (Component component : query.getResultList()) {
-      System.out.println("here");
       Long componentId = component.getId();
       if (crossmatchTestMap.containsKey(componentId))
         continue;
@@ -569,14 +567,6 @@ public class ComponentRepository {
     m.put((long) 25, (long) 0); // 25 <= age < 30 days
     m.put((long) 30, (long) 0); // age > 30 days
     return m;
-  }
-
-  public void addAllComponents(List<Component> components) {
-    for (Component c : components) {
-      updateComponentInternalFields(c);
-      em.persist(c);
-    }
-    em.flush();
   }
 
   public void updateQuarantineStatus() {

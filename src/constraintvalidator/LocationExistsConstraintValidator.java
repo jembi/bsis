@@ -25,9 +25,6 @@ public class LocationExistsConstraintValidator implements
   }
 
   public boolean isValid(Location target, ConstraintValidatorContext context) {
-
-    System.out.println("here1: " + target);
-
     if (target == null)
       return true;
 

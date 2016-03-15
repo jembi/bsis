@@ -71,7 +71,7 @@ public class TestBatchCRUDService {
       testBatch.setDonationBatches(newDonationBatches);
     }
 
-    return testBatchRepository.updateTestBatch(testBatch);
+    return testBatchRepository.update(testBatch);
   }
 
   public void deleteTestBatch(Long testBatchId) {
@@ -107,7 +107,7 @@ public class TestBatchCRUDService {
     // Set the new status
     testBatch.setStatus(newStatus);
 
-    testBatch = testBatchRepository.updateTestBatch(testBatch);
+    testBatch = testBatchRepository.update(testBatch);
 
     if (oldStatus == TestBatchStatus.OPEN && newStatus == TestBatchStatus.RELEASED) {
       testBatchStatusChangeService.handleRelease(testBatch);

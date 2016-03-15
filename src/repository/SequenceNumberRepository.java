@@ -8,11 +8,11 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import model.sequencenumber.SequenceNumberStore;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import model.sequencenumber.SequenceNumberStore;
 
 @Repository
 @Transactional
@@ -233,51 +233,6 @@ public class SequenceNumberRepository {
 
     em.flush();
     return donationIdentificationNumbers;
-  }
-
-  synchronized public List<String> getBatchRequestNumbers(int numRequests) {
-    String queryStr = "SELECT s from SequenceNumberStore s " +
-        "where s.targetTable=:targetTable AND " +
-        " s.columnName=:columnName";
-    TypedQuery<SequenceNumberStore> query = em.createQuery(queryStr, SequenceNumberStore.class);
-    query.setParameter("targetTable", "Request");
-    query.setParameter("columnName", "requestNumber");
-
-    SequenceNumberStore seqNumStore = null;
-    Long lastNumber = (long) 0;
-    String prefix;
-    boolean valuePresentInTable = true;
-    try {
-      seqNumStore = query.getSingleResult();
-      lastNumber = seqNumStore.getLastNumber();
-      prefix = seqNumStore.getPrefix();
-    } catch (NoResultException ex) {
-      //ex.printStackTrace();
-      valuePresentInTable = false;
-      seqNumStore = new SequenceNumberStore();
-      seqNumStore.setTargetTable("Request");
-      seqNumStore.setColumnName("requestNumber");
-      prefix = "R";
-      seqNumStore.setPrefix(prefix);
-    }
-
-    List<String> requestNumbers = new ArrayList<String>();
-    for (int i = 0; i < numRequests; ++i) {
-      String lastNumberStr = String.format("%06d", lastNumber + i);
-      // may need a prefix for center where the number is generated
-      String requestNumber = prefix + lastNumberStr;
-      requestNumbers.add(requestNumber);
-    }
-    lastNumber = lastNumber + numRequests;
-    seqNumStore.setLastNumber(lastNumber);
-    if (valuePresentInTable) {
-      em.merge(seqNumStore);
-    } else {
-      em.persist(seqNumStore);
-    }
-
-    em.flush();
-    return requestNumbers;
   }
 
   private String getNextNumber(String targetTable, String columnName, String numberPrefix) {

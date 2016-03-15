@@ -9,14 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import model.component.Component;
-import model.component.ComponentStatus;
-import model.componentmovement.ComponentStatusChange;
-import model.componentmovement.ComponentStatusChangeReason;
-import model.componentmovement.ComponentStatusChangeType;
-import model.componenttype.ComponentType;
-import model.donation.Donation;
-
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.Assert;
@@ -25,6 +17,13 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import model.component.Component;
+import model.component.ComponentStatus;
+import model.componentmovement.ComponentStatusChange;
+import model.componentmovement.ComponentStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeType;
+import model.componenttype.ComponentType;
+import model.donation.Donation;
 import suites.DBUnitContextDependentTestSuite;
 
 /**
@@ -642,53 +641,5 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
     componentRepository.addComponent(newComponent);
     List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber("7654321");
     Assert.assertEquals("A new component was added", 1, components.size());
-  }
-
-  @Test
-  public void testAddAllComponents() throws Exception {
-    Component newComponent1 = new Component();
-    Donation newDonation1 = new Donation();
-    Component existingComponent1 = componentRepository.findComponent(1l);
-    newComponent1.setId(existingComponent1.getId());
-    newComponent1.copy(existingComponent1);
-    newComponent1.setId(null); // don't want to overwrite the old component
-    newDonation1.setId(existingComponent1.getDonation().getId());
-    newDonation1.copy(existingComponent1.getDonation());
-    newDonation1.setId(null); // don't want to overwrite the old donation
-    newDonation1.setDonationIdentificationNumber("7654321");
-    Calendar today = Calendar.getInstance();
-    newDonation1.setCreatedDate(today.getTime());
-    newDonation1.setBleedEndTime(today.getTime());
-    today.add(Calendar.MINUTE, -15);
-    newDonation1.setBleedStartTime(today.getTime());
-    donationRepository.addDonation(newDonation1);
-    newComponent1.setDonation(newDonation1);
-
-    Component newComponent2 = new Component();
-    Donation newDonation2 = new Donation();
-    Component existingComponent2 = componentRepository.findComponent(1l);
-    newComponent2.setId(existingComponent2.getId());
-    newComponent2.copy(existingComponent2);
-    newComponent2.setId(null); // don't want to overwrite the old component
-    newDonation2.setId(existingComponent2.getDonation().getId());
-    newDonation2.copy(existingComponent2.getDonation());
-    newDonation2.setId(null); // don't want to overwrite the old donation
-    newDonation2.setDonationIdentificationNumber("7654320");
-    newDonation2.setCreatedDate(today.getTime());
-    newDonation2.setBleedEndTime(today.getTime());
-    today.add(Calendar.MINUTE, -15);
-    newDonation2.setBleedStartTime(today.getTime());
-    donationRepository.addDonation(newDonation2);
-    newComponent2.setDonation(newDonation2);
-
-    List<Component> newComponents = new ArrayList<Component>();
-    newComponents.add(newComponent1);
-    newComponents.add(newComponent2);
-    componentRepository.addAllComponents(newComponents);
-
-    List<Component> components1 = componentRepository.findComponentsByDonationIdentificationNumber("7654321");
-    Assert.assertEquals("A new component was added", 1, components1.size());
-    List<Component> components2 = componentRepository.findComponentsByDonationIdentificationNumber("7654320");
-    Assert.assertEquals("A new component was added", 1, components2.size());
   }
 }

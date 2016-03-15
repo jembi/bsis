@@ -20,13 +20,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import model.component.Component;
-import model.component.ComponentStatus;
-import model.componentmovement.ComponentStatusChange;
-import model.componentmovement.ComponentStatusChangeType;
-import model.request.Request;
-import model.util.BloodGroup;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +27,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import model.component.Component;
+import model.component.ComponentStatus;
+import model.componentmovement.ComponentStatusChange;
+import model.componentmovement.ComponentStatusChangeType;
+import model.request.Request;
+import model.util.BloodGroup;
 import utils.SecurityUtils;
 
 @Repository
@@ -437,7 +436,6 @@ public class RequestRepository {
   }
 
   private boolean bloodCrossmatch(String abo1, String rh1, String abo2, String rh2) {
-    System.out.println("matching " + abo1 + ", " + ", " + rh1 + ", " + abo2 + ", " + rh2);
     if (abo1.equals(abo2) && rh1.equals(rh2))
       return true;
     if (abo1.equals("O") && (rh1.equals(rh2) || rh1.equals("-")))
@@ -536,14 +534,6 @@ public class RequestRepository {
       }
     }
     return resultMap;
-  }
-
-  public void addAllRequests(List<Request> requests) {
-    for (Request request : requests) {
-      updateNewRequestFields(request);
-      em.persist(request);
-    }
-    em.flush();
   }
 
   public void updateNewRequestFields(Request request) {

@@ -2,10 +2,7 @@ package repository;
 
 import java.util.*;
 
-
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import model.donationbatch.DonationBatch;
@@ -15,14 +12,9 @@ import model.testbatch.TestBatchStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Repository
 @Transactional
-public class TestBatchRepository {
-
-  @PersistenceContext
-  private EntityManager em;
-
+public class TestBatchRepository extends AbstractRepository<TestBatch> {
 
   public TestBatch saveTestBatch(TestBatch testBatch, String testBatchNumber) {
     testBatch.setIsDeleted(false);
@@ -36,17 +28,17 @@ public class TestBatchRepository {
 
     List<DonationBatch> donationBatches = testBatch.getDonationBatches();
     if (donationBatches != null && !donationBatches.isEmpty()) {
-      em.persist(testBatch);
+      entityManager.persist(testBatch);
       for (DonationBatch donationBatch : donationBatches) {
         donationBatch.setTestBatch(testBatch);
-        em.merge(donationBatch);
+        entityManager.merge(donationBatch);
       }
     }
 
   }
 
   public List<TestBatch> getAllTestBatch() {
-    TypedQuery<TestBatch> query = em.createQuery(
+    TypedQuery<TestBatch> query = entityManager.createQuery(
         "SELECT t FROM TestBatch t WHERE t.isDeleted= :isDeleted",
         TestBatch.class);
     query.setParameter("isDeleted", false);
@@ -54,15 +46,11 @@ public class TestBatchRepository {
   }
 
   public TestBatch findTestBatchById(Long id) throws NoResultException {
-    TypedQuery<TestBatch> query = em.createQuery(
+    TypedQuery<TestBatch> query = entityManager.createQuery(
         "SELECT t FROM TestBatch t WHERE t.id = :id", TestBatch.class);
     query.setParameter("id", id);
     TestBatch testBatch = query.getSingleResult();
     return testBatch;
-  }
-
-  public TestBatch updateTestBatch(TestBatch testBatch) {
-    return em.merge(testBatch);
   }
 
   public List<TestBatch> findTestBatches(List<TestBatchStatus> statuses, Date startDate, Date endDate) {
@@ -81,7 +69,7 @@ public class TestBatchRepository {
       queryStr += "AND t.modificationTracker.createdDate <= :endDate ";
     }
 
-    TypedQuery<TestBatch> query = em.createQuery(queryStr, TestBatch.class);
+    TypedQuery<TestBatch> query = entityManager.createQuery(queryStr, TestBatch.class);
 
     query.setParameter("deleted", false);
 
@@ -110,13 +98,13 @@ public class TestBatchRepository {
         donationBatch.setTestBatch(null); // remove association
       }
     }
-    em.merge(testBatch);
+    entityManager.merge(testBatch);
   }
 
   public List<TestBatch> getRecentlyClosedTestBatches(Integer numOfResults) {
     String queryStr = "SELECT tb FROM TestBatch tb "
         + "WHERE status = :status  ORDER BY lastUpdated DESC";
-    TypedQuery<TestBatch> query = em.createQuery(queryStr, TestBatch.class);
+    TypedQuery<TestBatch> query = entityManager.createQuery(queryStr, TestBatch.class);
     query.setParameter("status", TestBatchStatus.CLOSED);
     query.setMaxResults(numOfResults);
     return query.getResultList();
