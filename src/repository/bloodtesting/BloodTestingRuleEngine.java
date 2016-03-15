@@ -120,8 +120,11 @@ public class BloodTestingRuleEngine {
     // Determine if the pending Blood ABO/Rh tests are required
     updatePendingAboRhTests(resultSet);
 
+    //Determine if there are missing required basic blood typing tests
+    List<BloodTest> basicBloodTypingTests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING);
+
     // Determine the blood status based on ABO/Rh tests
-    setBloodMatchStatus(resultSet);
+    setBloodMatchStatus(resultSet, basicBloodTypingTests, availableTestResults);
 
     // Determine if there are missing required basic blood TTI tests
     List<BloodTest> basicTTITests = bloodTestingRepository.getBasicTTITests();
@@ -296,7 +299,10 @@ public class BloodTestingRuleEngine {
    * 
    * @param resultSet BloodTestingRuleResultSet that contains the processed test results.
    */
-  private void setBloodMatchStatus(BloodTestingRuleResultSet resultSet) {
+  private void setBloodMatchStatus(BloodTestingRuleResultSet resultSet,
+                                   List<BloodTest> basicBloodTypingTests,
+                                   Map<String, String> availableTestResults ) {
+
 
     BloodTypingStatus bloodTypingStatus = BloodTypingStatus.COMPLETE;
 
@@ -309,6 +315,17 @@ public class BloodTestingRuleEngine {
     } else if (resultSet.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NOT_DONE) {
       // There are no pending tests and the blood typing match has not been done
       bloodTypingStatus = BloodTypingStatus.NOT_DONE;
+    } else {
+      // There are no basic blood typing tests that have not been done
+      for (BloodTest bt : basicBloodTypingTests) {
+        if (availableTestResults.get(bt.getId().toString()) == null) {
+          if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(bt.getTestName() + " test has not been done");
+          }
+          bloodTypingStatus = BloodTypingStatus.NOT_DONE;
+          break;
+        }
+      }
     }
     
     if (LOGGER.isDebugEnabled()) {
