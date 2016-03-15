@@ -127,7 +127,7 @@ public class BloodTestingRuleEngine {
     setBloodMatchStatus(resultSet, basicBloodTypingTests, availableTestResults);
 
     // Determine if there are missing required basic blood TTI tests
-    List<BloodTest> basicTTITests = bloodTestingRepository.getBasicTTITests();
+    List<BloodTest> basicTTITests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI);
     setBasicTtiTestsNotDone(resultSet, basicTTITests, availableTestResults);
 
     // Determine the TTI status
