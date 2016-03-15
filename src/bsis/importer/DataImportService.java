@@ -14,8 +14,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
@@ -45,7 +43,8 @@ import model.idtype.IdType;
 import model.location.Location;
 import model.packtype.PackType;
 import model.preferredlanguage.PreferredLanguage;
-import model.user.User;
+import model.testbatch.TestBatch;
+import model.testbatch.TestBatchStatus;
 import model.util.Gender;
 import repository.AdverseEventTypeRepository;
 import repository.ContactMethodTypeRepository;
@@ -57,9 +56,8 @@ import repository.DonorRepository;
 import repository.LocationRepository;
 import repository.PackTypeRepository;
 import repository.SequenceNumberRepository;
-import repository.UserRepository;
+import repository.TestBatchRepository;
 import repository.bloodtesting.BloodTypingStatus;
-import security.BsisUserDetails;
 import service.DonationCRUDService;
 
 @Transactional
@@ -98,7 +96,7 @@ public class DataImportService {
   @Autowired
   private DonationCRUDService donationCRUDService;
   @Autowired
-  private UserRepository userRepository;
+  private TestBatchRepository testBatchRepository;
 
   private Map<String, Donor> externalDonorIdToBsisDonor = new HashMap<>();
 
@@ -106,11 +104,9 @@ public class DataImportService {
   private String action;
 
 
-  public void importData(Workbook workbook, String username, boolean validationOnly) {
+  public void importData(Workbook workbook, boolean validationOnly) {
     this.validationOnly = validationOnly;
     action = validationOnly ? "Validated" : "Imported";
-    
-    initSpringSecurityUser(username);
 
     System.out.println("Started import at " + new Date());
 
@@ -124,18 +120,6 @@ public class DataImportService {
     if (this.validationOnly) {
       throw new RollbackException();
     }
-  }
-  
-  private void initSpringSecurityUser(String username) {
-
-    User user = userRepository.findUser(username);
-    if (user == null) {
-      throw new IllegalArgumentException("Invalid user: " + username);
-    }
-    BsisUserDetails bsisUser = new BsisUserDetails(user);
-    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(bsisUser, "Credentials");
-    SecurityContextHolder.getContext().setAuthentication(auth);
-
   }
 
   /**
@@ -501,7 +485,8 @@ public class DataImportService {
     Map<String, DonationType> donationTypeCache = buildDonationTypeCache();
     Map<String, PackType> packTypeCache = buildPackTypeCache();
     Map<String, AdverseEventType> adverseEventTypeCache = buildAdverseEventTypeCache();
-    Map<String, DonationBatch> donationBatches = new HashMap<String, DonationBatch>();
+    Map<String, DonationBatch> donationBatches = new HashMap<>();
+    Map<String, TestBatch> testBatches = new HashMap<>();
 
     // Keep a reference to the row containing the headers
     Row headers = null;
@@ -525,7 +510,6 @@ public class DataImportService {
       AdverseEventTypeBackingForm adverseEventTypeBackingForm = null;
       String adverseEventComment = null;
       Location venue = null;
-      String donationDate = null;
 
       for (Cell cell : row) {
 
@@ -559,44 +543,77 @@ public class DataImportService {
           case "donationDate":
             try {
               donationBackingForm.setDonationDate(cell.getDateCellValue());
-              donationDate = new SimpleDateFormat("yyyy-MM-dd").format(donationBackingForm.getDonationDate());
-            } catch (IllegalStateException e) {
+            } catch (Exception e) {
               errors.rejectValue("donation.donationDate", "donationDate.invalid", "Invalid donationDate");
+              // setting new Date() as donationDate to be able to create the donation batch and
+              // test batch and continue the validation
+              donationBackingForm.setDonationDate(new Date());
             }
             break;
 
           case "bleedStartTime":
-            donationBackingForm.setBleedStartTime(cell.getDateCellValue());
+            try {
+              donationBackingForm.setBleedStartTime(cell.getDateCellValue());
+            } catch (Exception e) {
+              errors.rejectValue("donation.bleedStartTime", "bleedStartTime.invalid", "Invalid bleedStartTime");
+            }
             break;
 
           case "bleedEndTime":
-            donationBackingForm.setBleedEndTime(cell.getDateCellValue());
+            try {
+              donationBackingForm.setBleedEndTime(cell.getDateCellValue());
+            } catch (Exception e) {
+              errors.rejectValue("donation.bleedEndTime", "bleedEndTime.invalid", "Invalid bleedEndTime");
+            }
             break;
 
           case "donorWeight":
-            donationBackingForm.setDonorWeight(BigDecimal.valueOf(cell.getNumericCellValue()));
+            try {
+              donationBackingForm.setDonorWeight(BigDecimal.valueOf(cell.getNumericCellValue()));
+            } catch (Exception e) {
+              errors.rejectValue("donation.donorWeight", "donorWeight.invalid", "Invalid donorWeight");
+            }
             break;
 
           case "bloodPressureSystolic":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            donationBackingForm.setBloodPressureSystolic(Integer.valueOf(cell.getStringCellValue()));
+            try {
+              donationBackingForm.setBloodPressureSystolic(Integer.valueOf(cell.getStringCellValue()));
+            } catch (Exception e) {
+              errors.rejectValue("donation.bloodPressureSystolic", "bloodPressureSystolic.invalid",
+                  "Invalid bloodPressureSystolic");
+            }
             break;
 
           case "bloodPressureDiastolic":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            donationBackingForm.setBloodPressureDiastolic(Integer.valueOf(cell.getStringCellValue()));
+            try {
+              donationBackingForm.setBloodPressureDiastolic(Integer.valueOf(cell.getStringCellValue()));
+            } catch (Exception e) {
+              errors.rejectValue("donation.bloodPressureDiastolic", "bloodPressureDiastolic.invalid",
+                  "Invalid bloodPressureDiastolic");
+            }
             break;
 
           case "donorPulse":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            donationBackingForm.setDonorPulse(Integer.valueOf(cell.getStringCellValue()));
+            try {
+              donationBackingForm.setDonorPulse(Integer.valueOf(cell.getStringCellValue()));
+            } catch (Exception e) {
+              errors.rejectValue("donation.donorPulse", "donorPulse.invalid", "Invalid donorPulse");
+            }
             break;
 
           case "haemoglobinCount":
-            donationBackingForm.setHaemoglobinCount(BigDecimal.valueOf(cell.getNumericCellValue()));
+            try {
+              donationBackingForm.setHaemoglobinCount(BigDecimal.valueOf(cell.getNumericCellValue()));
+            } catch (Exception e) {
+              errors.rejectValue("donation.haemoglobinCount", "haemoglobinCount.invalid", "Invalid haemoglobinCount");
+            }
             break;
 
           case "haemoglobinLevel":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             String haemoglobinLevelStr = cell.getStringCellValue();
             HaemoglobinLevel haemoglobinLevel = null;
             if (StringUtils.isNotEmpty(haemoglobinLevelStr)) {
@@ -610,6 +627,7 @@ public class DataImportService {
             break;
 
           case "adverseEventType":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             AdverseEventType adverseEventType = adverseEventTypeCache.get(cell.getStringCellValue());
             if (adverseEventType == null) {
               errors.rejectValue("donation.adverseEvent.type", "type.invalid", "Invalid adverseEventType");
@@ -620,18 +638,22 @@ public class DataImportService {
             break;
 
           case "adverseEventComment":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             adverseEventComment = cell.getStringCellValue();
             break;
 
           case "bloodAbo":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             donationBackingForm.setBloodAbo(cell.getStringCellValue());
             break;
 
           case "bloodRh":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             donationBackingForm.setBloodRh(cell.getStringCellValue());
             break;
 
           case "notes":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             donationBackingForm.setNotes(cell.getStringCellValue());
             break;
 
@@ -662,7 +684,8 @@ public class DataImportService {
       }
 
       // Get donation batch and validate
-      DonationBatch donationBatch = getDonationBatch(donationBatches, donationDate, venue);
+      DonationBatch donationBatch = getDonationBatch(donationBatches, testBatches, donationBackingForm.getDonationDate(),
+          venue);
       donationBackingForm.setDonationBatch(donationBatch);
       donationBackingFormValidator.validate(donationBackingForm, errors);
 
@@ -773,8 +796,21 @@ public class DataImportService {
     System.out.println(); // clear logging
   }
 
-  private DonationBatch getDonationBatch(Map<String, DonationBatch> donationBatches, String donationDate,
-      Location venue) {
+  private DonationBatch getDonationBatch(Map<String, DonationBatch> donationBatches, Map<String, TestBatch> testBatches,
+      Date donationDate, Location venue) {
+
+    String donationDateString = new SimpleDateFormat("yyyy-MM-dd").format(donationDate);
+
+    // Get testBatch and save it if it hasn't been created yet for that date
+    TestBatch testBatch = testBatches.get(donationDateString);
+
+    if (testBatch == null) {
+      testBatch = new TestBatch();
+      testBatch.setBatchNumber(sequenceNumberRepository.getNextTestBatchNumber());
+      testBatch.setStatus(TestBatchStatus.CLOSED);
+      testBatch.setCreatedDate(donationDate);
+      testBatchRepository.save(testBatch);
+    }
 
     String key = donationDate + "_" + venue;
 
@@ -787,9 +823,12 @@ public class DataImportService {
       donationBatch.setVenue(venue);
       donationBatch.setIsClosed(true);
       donationBatch.setBackEntry(true);
+      donationBatch.setTestBatch(testBatch);
+      donationBatch.setCreatedDate(donationDate);
       donationBatchRepository.addDonationBatch(donationBatch);
       donationBatches.put(key, donationBatch);
     }
+
     return donationBatch;
   }
 

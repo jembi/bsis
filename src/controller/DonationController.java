@@ -362,7 +362,7 @@ public class DonationController {
       donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
     }
 
-    donation = donationRepository.updateDonationDetails(donation);
+    donation = donationRepository.updateDonation(donation);
 
     if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
       testBatchStatusChangeService.handleRelease(donation);

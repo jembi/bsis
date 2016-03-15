@@ -60,17 +60,6 @@ public class TestBatchStatusChangeService {
   }
 
   public void handleRelease(Donation donation) {
-
-    Donor donor = donation.getDonor();
-
-    if (donation.getBloodTypingMatchStatus() != BloodTypingMatchStatus.NO_TYPE_DETERMINED) {
-      // Update the donor's Abo/Rh values to match the donation
-      donor.setBloodAbo(donation.getBloodAbo());
-      donor.setBloodRh(donation.getBloodRh());
-      LOGGER.debug("Updating blood type of donor: " + donor + " to " + donation.getBloodAbo() + donation.getBloodRh());
-      donorRepository.saveDonor(donor);
-    }
-
     if (!donation.getPackType().getTestSampleProduced()) {
       LOGGER.debug("Skipping donation without test sample: " + donation);
       return;
@@ -79,6 +68,15 @@ public class TestBatchStatusChangeService {
     if (donationConstraintChecker.donationHasDiscrepancies(donation)) {
       LOGGER.info("Skipping donation with discrepancies: " + donation);
       return;
+    }
+
+    Donor donor = donation.getDonor();
+    if (donation.getBloodTypingMatchStatus() != BloodTypingMatchStatus.NO_TYPE_DETERMINED) {
+      // Update the donor's Abo/Rh values to match the donation
+      donor.setBloodAbo(donation.getBloodAbo());
+      donor.setBloodRh(donation.getBloodRh());
+      LOGGER.debug("Updating blood type of donor: " + donor + " to " + donation.getBloodAbo() + donation.getBloodRh());
+      donorRepository.saveDonor(donor);
     }
 
     // Mark this donation as released

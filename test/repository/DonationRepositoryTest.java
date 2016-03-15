@@ -10,8 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import model.donation.Donation;
-
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.Assert;
@@ -19,6 +17,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import model.donation.Donation;
 import suites.DBUnitContextDependentTestSuite;
 import viewmodel.BloodTestingRuleResult;
 
@@ -74,13 +73,6 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
   @Test(expected = javax.persistence.NoResultException.class)
   public void testFindDonationByIdUnknown() throws Exception {
     donationRepository.findDonationById(123L);
-  }
-
-  @Test
-  public void testGetAllDonations() throws Exception {
-    List<Donation> all = donationRepository.getAllDonations();
-    Assert.assertNotNull("There are donations", all);
-    Assert.assertEquals("There are 6 donations", 6, all.size());
   }
 
   @Test
@@ -249,6 +241,7 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
     donationRepository.addDonation(newDonation);
     Donation savedDonation = donationRepository.findDonationByDonationIdentificationNumber("JUNIT123");
     Assert.assertNotNull("Found new donation", savedDonation);
+    Assert.assertNotNull("Donor date of lastDonation has been set", savedDonation.getDonor().getDateOfLastDonation());
   }
 
   @Test(expected = javax.persistence.PersistenceException.class)
@@ -264,49 +257,10 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
-  public void testAddAllDonations() throws Exception {
-    Donation newDonation1 = new Donation();
-    Donation existingDonation1 = donationRepository.findDonationById(1L);
-    newDonation1.setDonor(existingDonation1.getDonor());
-    newDonation1.setVenue(existingDonation1.getVenue());
-    newDonation1.setDonationIdentificationNumber("JUNIT12345"); // note: doesn't do automatic "createInitialComponent"
-    newDonation1.setIsDeleted(false);
-    Calendar today = Calendar.getInstance();
-    newDonation1.setDonationDate(today.getTime());
-    newDonation1.setCreatedDate(today.getTime());
-    newDonation1.setBleedEndTime(today.getTime());
-    today.add(Calendar.MINUTE, -15);
-    newDonation1.setBleedStartTime(today.getTime());
-
-    Donation newDonation2 = new Donation();
-    Donation existingDonation2 = donationRepository.findDonationById(2L);
-    newDonation2.setDonor(existingDonation2.getDonor());
-    newDonation2.setVenue(existingDonation2.getVenue());
-    newDonation2.setDonationIdentificationNumber("JUNIT123456"); // note: doesn't do automatic "createInitialComponent"
-    newDonation2.setIsDeleted(false);
-    newDonation2.setDonationDate(today.getTime());
-    newDonation2.setCreatedDate(today.getTime());
-    newDonation2.setBleedEndTime(today.getTime());
-    today.add(Calendar.MINUTE, -15);
-    newDonation2.setBleedStartTime(today.getTime());
-
-    List<Donation> newDonations = new ArrayList<Donation>();
-    newDonations.add(newDonation1);
-    newDonations.add(newDonation2);
-    newDonations = donationRepository.addAllDonations(newDonations);
-    for (Donation d : newDonations) {
-      Donation savedDonation = donationRepository.findDonationByDonationIdentificationNumber(d
-          .getDonationIdentificationNumber());
-      //Donation savedDonation = donationRepository.findDonationById(d.getId());
-      Assert.assertNotNull("new donation created", savedDonation);
-    }
-  }
-
-  @Test
   public void testUpdateDonation() throws Exception {
     Donation existingDonation = donationRepository.findDonationById(1L);
     existingDonation.setDonorWeight(new BigDecimal(123));
-    donationRepository.updateDonationDetails(existingDonation);
+    donationRepository.updateDonation(existingDonation);
     Donation updatedDonation = donationRepository.findDonationById(1L);
     Assert.assertEquals("donor weight was updataed", new BigDecimal(123), updatedDonation.getDonorWeight());
   }

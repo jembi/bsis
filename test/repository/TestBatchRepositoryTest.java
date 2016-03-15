@@ -100,7 +100,7 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
   public void testUpdateTestBatch() throws Exception {
     TestBatch testBatch = testBatchRepository.findTestBatchById(2l);
     testBatch.setStatus(TestBatchStatus.RELEASED);
-    testBatchRepository.updateTestBatch(testBatch);
+    testBatchRepository.update(testBatch);
     TestBatch updatedTestBatch = testBatchRepository.findTestBatchById(2l);
     Assert.assertEquals("TestBatch status is correct", TestBatchStatus.RELEASED, updatedTestBatch.getStatus());
   }
@@ -133,7 +133,7 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
     // creating an extra closed batch
     TestBatch testBatch = testBatchRepository.findTestBatchById(2l);
     testBatch.setStatus(TestBatchStatus.CLOSED);
-    testBatchRepository.updateTestBatch(testBatch);
+    testBatchRepository.update(testBatch);
     // only get 1 closed test batch now
     List<TestBatch> all = testBatchRepository.getRecentlyClosedTestBatches(1);
     Assert.assertNotNull("Does not return a null list", all);

@@ -108,15 +108,6 @@ public class SequenceNumberRepositoryTest extends AbstractTransactionalJUnit4Spr
   }
 
   @Test
-  public void testGetBatchRequestNumbers() throws Exception {
-    List<String> next = sequenceNumberRepository.getBatchRequestNumbers(2);
-    Assert.assertNotNull("Next batch requestNumbers exist", next);
-    Assert.assertEquals("next batch requestNumbers are correct", 2, next.size());
-    Assert.assertEquals("next batch requestNumbers are correct", "R000005", next.get(0));
-    Assert.assertEquals("next batch requestNumbers are correct", "R000006", next.get(1));
-  }
-
-  @Test
   public void testGetSequenceNumber() throws Exception {
     String next = sequenceNumberRepository.getSequenceNumber("Test", "testNumber");
     Assert.assertEquals("next test number is correct", "000023", next);

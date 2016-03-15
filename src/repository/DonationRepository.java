@@ -24,9 +24,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,8 +41,6 @@ import model.util.BloodGroup;
 import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
-import repository.events.ApplicationContextProvider;
-import repository.events.DonationUpdatedEvent;
 import service.GeneralConfigAccessorService;
 import valueobject.CollectedDonationValueObject;
 import viewmodel.BloodTestingRuleResult;
@@ -53,12 +49,6 @@ import viewmodel.BloodTestingRuleResult;
 @Transactional
 public class DonationRepository {
 
-
-  /**
-   * The Constant LOGGER.
-   */
-  private static final Logger LOGGER = Logger.getLogger(DonationRepository.class);
-
   @PersistenceContext
   private EntityManager em;
 
@@ -66,30 +56,11 @@ public class DonationRepository {
   private BloodTestingRepository bloodTypingRepository;
 
   @Autowired
-  private WorksheetRepository worksheetRepository;
-
-  @Autowired
-  private ComponentRepository componentRepository;
-
-  @Autowired
   private GeneralConfigAccessorService generalConfigAccessorService;
 
   public void saveDonation(Donation donation) {
     em.persist(donation);
     em.flush();
-  }
-
-  public Donation updateDonationDetails(Donation donation) throws NoResultException {
-    Donation existingDonation = findDonationById(donation.getId());
-    if (existingDonation == null) {
-      return null;
-    }
-    existingDonation.copy(donation);
-    existingDonation = em.merge(existingDonation);
-    ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
-    applicationContext.publishEvent(new DonationUpdatedEvent("10", donation));
-    em.flush();
-    return existingDonation;
   }
 
   @Transactional(propagation = Propagation.MANDATORY)
@@ -172,14 +143,6 @@ public class DonationRepository {
       countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
     }
     return countQuery.getSingleResult().longValue();
-  }
-
-  public List<Donation> getAllDonations() {
-    TypedQuery<Donation> query = em.createQuery(
-        "SELECT c FROM Donation c WHERE c.isDeleted= :isDeleted",
-        Donation.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    return query.getResultList();
   }
 
   public List<Donation> getDonations(Date fromDate, Date toDate) {
@@ -331,11 +294,7 @@ public class DonationRepository {
     em.flush();
     em.refresh(donation);
     updateDonorFields(donation);
-
-    ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
-    applicationContext.publishEvent(new DonationUpdatedEvent("10", donation));
-
-    em.refresh(donation);
+    em.flush();
     em.refresh(donation.getDonor());
 
     // Create initial component only if the countAsDonation is true and the config option is enabled
@@ -415,19 +374,12 @@ public class DonationRepository {
     if (donor.getDueToDonate() == null || dueToDonateDate.getTime().after(donor.getDueToDonate())) {
       donor.setDueToDonate(dueToDonateDate.getTime());
     }
-  }
 
-  public List<Donation> addAllDonations(List<Donation> donations) {
-    ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
-    for (Donation c : donations) {
-      c.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
-      c.setTTIStatus(TTIStatus.NOT_DONE);
-      em.persist(c);
-      applicationContext.publishEvent(new DonationUpdatedEvent("10", c));
-      em.refresh(c);
+    // set dateOfLastDonation
+    Date dateOfLastDonation = donor.getDateOfLastDonation();
+    if (dateOfLastDonation == null || donation.getDonationDate().after(dateOfLastDonation)) {
+      donor.setDateOfLastDonation(donation.getDonationDate());
     }
-    em.flush();
-    return donations;
   }
 
   public Donation findDonationByDonationIdentificationNumber(
@@ -482,7 +434,6 @@ public class DonationRepository {
     return donations;
   }
 
-  // TODO: Test
   public int countDonationsForDonor(Donor donor) {
 
     return em.createNamedQuery(
@@ -494,7 +445,6 @@ public class DonationRepository {
         .intValue();
   }
 
-  // TODO: Test
   public Date findDateOfFirstDonationForDonor(long donorId) {
     List<Date> results = em.createNamedQuery(
         DonationNamedQueryConstants.NAME_FIND_ASCENDING_DONATION_DATES_FOR_DONOR,
@@ -507,7 +457,6 @@ public class DonationRepository {
     return results.isEmpty() ? null : results.get(0);
   }
 
-  // TODO: Test
   public Date findDateOfLastDonationForDonor(long donorId) {
     List<Date> results = em.createNamedQuery(
         DonationNamedQueryConstants.NAME_FIND_DESCENDING_DONATION_DATES_FOR_DONOR,

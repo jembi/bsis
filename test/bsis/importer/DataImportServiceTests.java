@@ -41,9 +41,9 @@ import model.idtype.IdType;
 import model.location.Location;
 import model.preferredlanguage.PreferredLanguage;
 import model.util.Gender;
-import suites.ContextDependentTestSuite;
+import suites.SecurityContextDependentTestSuite;
 
-public class DataImportServiceTests extends ContextDependentTestSuite {
+public class DataImportServiceTests extends SecurityContextDependentTestSuite {
   
   @Autowired
   private DataImportService dataImportService;
@@ -56,7 +56,7 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     createSupportingTestData();
 
     // Exercise SUT
-    dataImportService.importData(workbook, "superuser", false);
+    dataImportService.importData(workbook, false);
     
     // Ensure stale entities are cleared
     entityManager.clear();
@@ -312,18 +312,24 @@ public class DataImportServiceTests extends ContextDependentTestSuite {
     assertThat("bloodAbo is set", firstDonation.getBloodAbo(), equalTo("O"));
     assertThat("bloodRh is set", firstDonation.getBloodRh(), equalTo("+"));
     assertThat("notes is set", firstDonation.getNotes(), equalTo("Notes"));
+    assertThat("dateOfLastDonation is set on donor", dateSdf.format(firstDonation.getDonor().getDateOfLastDonation()), equalTo("2016-03-03"));
+    assertThat("dueToDonate is set on donor", firstDonation.getDonor().getDueToDonate(), notNullValue());
+    assertThat("dateOfFirstDonation is set on donor", firstDonation.getDonor().getDateOfFirstDonation(), notNullValue());
     
     DonationBatch firstDonationBatch = firstDonation.getDonationBatch();
     assertThat("DonationBatch has been defined", firstDonationBatch, notNullValue());
     assertThat("DonationBatch has a batch number", firstDonationBatch.getBatchNumber(), notNullValue());
     assertThat("DonationBatch venue is set", firstDonationBatch.getVenue().getName(), equalTo("First"));
     assertThat("DonationBatch is closed", firstDonationBatch.getIsClosed(), equalTo(true));
+    assertThat("DonationBatch has a test batch", firstDonationBatch.getTestBatch(), notNullValue());
     
     Donation secondDonation = findDonationByDonationIdentificationNumber("32435");
     assertThat("Same DonationBatch", secondDonation.getDonationBatch().getId(), equalTo(firstDonationBatch.getId()));
+    assertThat("Same TestBatch", secondDonation.getDonationBatch().getTestBatch(), equalTo(firstDonationBatch.getTestBatch()));
     
     Donation thirdDonation = findDonationByDonationIdentificationNumber("32432");
     assertThat("Different DonationBatch", thirdDonation.getDonationBatch().getId(), not(equalTo(firstDonationBatch.getId())));
+    assertThat("Different TestBatch", thirdDonation.getDonationBatch().getTestBatch(), not(equalTo(firstDonationBatch.getTestBatch())));
     
     Donation fourthDonation = findDonationByDonationIdentificationNumber("32431");
     DonationBatch fourthDonationBatch = fourthDonation.getDonationBatch();

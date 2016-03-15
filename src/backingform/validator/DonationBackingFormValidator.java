@@ -4,25 +4,22 @@ import java.util.Date;
 
 import javax.persistence.NoResultException;
 
-import model.donation.Donation;
-import model.donationbatch.DonationBatch;
-import model.donationtype.DonationType;
-import model.donor.Donor;
-import model.location.Location;
-import model.packtype.PackType;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
+import backingform.DonationBackingForm;
+import model.donation.Donation;
+import model.donationbatch.DonationBatch;
+import model.donor.Donor;
+import model.location.Location;
 import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import repository.DonorRepository;
 import repository.SequenceNumberRepository;
 import service.GeneralConfigAccessorService;
-import backingform.DonationBackingForm;
 
 @Component
 public class DonationBackingFormValidator extends BaseValidator<DonationBackingForm> {
@@ -57,8 +54,6 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
     validateDonor(form, errors);
     validateDonationBatch(form, errors);
     validateVenue(form, errors);
-    validatePackType(form, errors);
-    validateDonationType(form, errors);
     validateBloodPressure(form, errors);
     validateHaemoglobinCount(form, errors);
     validateWeight(form, errors);
@@ -183,20 +178,6 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
       errors.rejectValue("donation.venue", "venue.empty", "Venue is required.");
     } else if (venue.getIsVenue() == false) {
       errors.rejectValue("donation.venue", "venue.invalid", "Location is not a Venue.");
-    }
-  }
-  
-  private void validatePackType(DonationBackingForm form, Errors errors) {
-    PackType packType = form.getDonation().getPackType();
-    if (packType == null) {
-      errors.rejectValue("donation.packType", "packType.empty", "PackType is required.");
-    }
-  }
-  
-  private void validateDonationType(DonationBackingForm form, Errors errors) {
-    DonationType donationType = form.getDonation().getDonationType();
-    if (donationType == null) {
-      errors.rejectValue("donation.donationType", "donationType.empty", "DonationType is required.");
     }
   }
 
