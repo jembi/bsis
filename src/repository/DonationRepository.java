@@ -24,7 +24,6 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
@@ -53,23 +52,11 @@ import viewmodel.BloodTestingRuleResult;
 @Transactional
 public class DonationRepository {
 
-
-  /**
-   * The Constant LOGGER.
-   */
-  private static final Logger LOGGER = Logger.getLogger(DonationRepository.class);
-
   @PersistenceContext
   private EntityManager em;
 
   @Autowired
   private BloodTestingRepository bloodTypingRepository;
-
-  @Autowired
-  private WorksheetRepository worksheetRepository;
-
-  @Autowired
-  private ComponentRepository componentRepository;
 
   @Autowired
   private GeneralConfigAccessorService generalConfigAccessorService;
@@ -418,19 +405,6 @@ public class DonationRepository {
     }
   }
 
-  public List<Donation> addAllDonations(List<Donation> donations) {
-    ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
-    for (Donation c : donations) {
-      c.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
-      c.setTTIStatus(TTIStatus.NOT_DONE);
-      em.persist(c);
-      applicationContext.publishEvent(new DonationUpdatedEvent("10", c));
-      em.refresh(c);
-    }
-    em.flush();
-    return donations;
-  }
-
   public Donation findDonationByDonationIdentificationNumber(
       String donationIdentificationNumber) throws NoResultException, NonUniqueResultException {
     String queryString = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE c.donationIdentificationNumber = :donationIdentificationNumber and c.isDeleted = :isDeleted";
@@ -483,7 +457,6 @@ public class DonationRepository {
     return donations;
   }
 
-  // TODO: Test
   public int countDonationsForDonor(Donor donor) {
 
     return em.createNamedQuery(
@@ -495,7 +468,6 @@ public class DonationRepository {
         .intValue();
   }
 
-  // TODO: Test
   public Date findDateOfFirstDonationForDonor(long donorId) {
     List<Date> results = em.createNamedQuery(
         DonationNamedQueryConstants.NAME_FIND_ASCENDING_DONATION_DATES_FOR_DONOR,
@@ -508,7 +480,6 @@ public class DonationRepository {
     return results.isEmpty() ? null : results.get(0);
   }
 
-  // TODO: Test
   public Date findDateOfLastDonationForDonor(long donorId) {
     List<Date> results = em.createNamedQuery(
         DonationNamedQueryConstants.NAME_FIND_DESCENDING_DONATION_DATES_FOR_DONOR,
