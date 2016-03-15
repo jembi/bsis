@@ -498,7 +498,6 @@ public class DataImportService {
       AdverseEventTypeBackingForm adverseEventTypeBackingForm = null;
       String adverseEventComment = null;
       Location venue = null;
-      String donationDate = null;
 
       for (Cell cell : row) {
 
@@ -532,7 +531,6 @@ public class DataImportService {
           case "donationDate":
             try {
               donationBackingForm.setDonationDate(cell.getDateCellValue());
-              donationDate = new SimpleDateFormat("yyyy-MM-dd").format(donationBackingForm.getDonationDate());
             } catch (IllegalStateException e) {
               errors.rejectValue("donation.donationDate", "donationDate.invalid", "Invalid donationDate");
             }
@@ -635,7 +633,8 @@ public class DataImportService {
       }
 
       // Get donation batch and validate
-      DonationBatch donationBatch = getDonationBatch(donationBatches, testBatches, donationDate, venue);
+      DonationBatch donationBatch = getDonationBatch(donationBatches, testBatches, donationBackingForm.getDonationDate(),
+          venue);
       donationBackingForm.setDonationBatch(donationBatch);
       donationBackingFormValidator.validate(donationBackingForm, errors);
 
@@ -657,20 +656,23 @@ public class DataImportService {
   }
 
   private DonationBatch getDonationBatch(Map<String, DonationBatch> donationBatches, Map<String, TestBatch> testBatches,
-      String donationDate, Location venue) {
+      Date donationDate, Location venue) {
+
+    String donationDateString = new SimpleDateFormat("yyyy-MM-dd").format(donationDate);
 
     // Get testBatch and save it if it hasn't been created yet for that date
-    TestBatch testBatch = testBatches.get(donationDate);
+    TestBatch testBatch = testBatches.get(donationDateString);
 
     if (testBatch == null) {
       testBatch = new TestBatch();
       testBatch.setBatchNumber(sequenceNumberRepository.getNextTestBatchNumber());
       testBatch.setStatus(TestBatchStatus.CLOSED);
+      testBatch.setCreatedDate(donationDate);
       testBatchRepository.save(testBatch);
-      testBatches.put(donationDate, testBatch);
+      testBatches.put(donationDateString, testBatch);
     }
 
-    String key = donationDate + "_" + venue;
+    String key = donationDateString + "_" + venue;
 
     // Get donationBatch and save it if it hasn't been created yet for that date and venue
     DonationBatch donationBatch = donationBatches.get(key);
@@ -682,6 +684,7 @@ public class DataImportService {
       donationBatch.setIsClosed(true);
       donationBatch.setBackEntry(true);
       donationBatch.setTestBatch(testBatch);
+      donationBatch.setCreatedDate(donationDate);
       donationBatchRepository.addDonationBatch(donationBatch);
       donationBatches.put(key, donationBatch);
     }
