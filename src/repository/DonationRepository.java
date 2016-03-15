@@ -336,6 +336,7 @@ public class DonationRepository {
     applicationContext.publishEvent(new DonationUpdatedEvent("10", donation));
 
     em.refresh(donation);
+    em.flush();
     em.refresh(donation.getDonor());
 
     // Create initial component only if the countAsDonation is true and the config option is enabled

@@ -303,6 +303,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     assertThat("bloodAbo is set", firstDonation.getBloodAbo(), equalTo("O"));
     assertThat("bloodRh is set", firstDonation.getBloodRh(), equalTo("+"));
     assertThat("notes is set", firstDonation.getNotes(), equalTo("Notes"));
+    assertThat("dateOfLastDonation is set on donor", dateSdf.format(firstDonation.getDonor().getDateOfLastDonation()), equalTo("2016-03-03"));
     
     DonationBatch firstDonationBatch = firstDonation.getDonationBatch();
     assertThat("DonationBatch has been defined", firstDonationBatch, notNullValue());
