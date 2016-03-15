@@ -10,6 +10,8 @@ import static helpers.builders.TestBatchBuilder.aTestBatch;
 import static helpers.matchers.DonorMatcher.hasSameStateAsDonor;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.times;
@@ -87,6 +89,27 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     testBatchStatusChangeService.handleRelease(testBatch);
 
     verifyZeroInteractions(postDonationCounsellingCRUDService, donorDeferralCRUDService, componentCRUDService);
+  }
+  
+  @Test
+  public void testHandleReleaseWithADonationWithDiscrepancies_shouldNotSetDonorABORh() {
+
+    Donation donationWithDiscrepancies = aDonation()
+        .withDonor(aDonor().build())
+        .withPackType(aPackType().build())
+        .withBloodAbo("A")
+        .withBloodRh("+")
+        .build();
+    TestBatch testBatch = aTestBatch()
+        .withDonationBatch(aDonationBatch().withDonation(donationWithDiscrepancies).build())
+        .build();
+
+    when(donationConstraintChecker.donationHasDiscrepancies(donationWithDiscrepancies)).thenReturn(true);
+
+    testBatchStatusChangeService.handleRelease(testBatch);
+
+    assertThat(donationWithDiscrepancies.getDonor().getBloodAbo(), not(equalTo("A")));
+    assertThat(donationWithDiscrepancies.getDonor().getBloodRh(), not(equalTo("+")));
   }
 
   @Test
