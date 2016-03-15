@@ -75,29 +75,27 @@ public class DeferralBackingForm {
     return deferral.getVoidedDate();
   }
 
-  // FIXME: should return Long identifier instead of a String identifier
-  public String getDeferredDonor() {
+  public Long getDeferredDonor() {
     Donor deferredDonor = deferral.getDeferredDonor();
     if (deferredDonor == null || deferredDonor.getId() == null) {
       return null;
     }
 
-    return deferredDonor.getId().toString();
+    return deferredDonor.getId();
   }
 
-  // FIXME: should have Long identifier parameter instead of a String
-  public void setDeferredDonor(String deferredDonorId) {
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public void setCreatedDate(Date createdDate) {
+    deferral.setCreatedDate(createdDate);
+  }
+
+  public void setDeferredDonor(Long deferredDonorId) {
     if (deferredDonorId == null) {
       deferral.setDeferredDonor(null);
     } else {
       Donor d = new Donor();
-      try {
-        d.setId(Long.parseLong(deferredDonorId));
-        deferral.setDeferredDonor(d);
-      } catch (NumberFormatException ex) {
-        ex.printStackTrace();
-        deferral.setDeferredDonor(null);
-      }
+      d.setId(deferredDonorId);
+      deferral.setDeferredDonor(d);
     }
   }
 

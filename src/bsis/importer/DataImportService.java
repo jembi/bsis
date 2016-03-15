@@ -22,9 +22,11 @@ import org.springframework.validation.ObjectError;
 
 import backingform.AdverseEventBackingForm;
 import backingform.AdverseEventTypeBackingForm;
+import backingform.DeferralBackingForm;
 import backingform.DonationBackingForm;
 import backingform.DonorBackingForm;
 import backingform.LocationBackingForm;
+import backingform.validator.DeferralBackingFormValidator;
 import backingform.validator.DonationBackingFormValidator;
 import backingform.validator.DonorBackingFormValidator;
 import backingform.validator.LocationBackingFormValidator;
@@ -36,6 +38,7 @@ import model.donation.HaemoglobinLevel;
 import model.donationbatch.DonationBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
+import model.donordeferral.DeferralReason;
 import model.idtype.IdType;
 import model.location.Location;
 import model.packtype.PackType;
@@ -45,6 +48,7 @@ import model.testbatch.TestBatchStatus;
 import model.util.Gender;
 import repository.AdverseEventTypeRepository;
 import repository.ContactMethodTypeRepository;
+import repository.DeferralReasonRepository;
 import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import repository.DonationTypeRepository;
@@ -74,6 +78,10 @@ public class DataImportService {
   @Autowired
   private ContactMethodTypeRepository contactMethodTypeRepository;
   @Autowired
+  private DeferralReasonRepository deferralReasonRepository;
+  @Autowired
+  private DeferralBackingFormValidator deferralBackingFormValidator;
+  @Autowired
   private DonationTypeRepository donationTypeRepository;
   @Autowired
   private PackTypeRepository packTypeRepository;
@@ -90,7 +98,7 @@ public class DataImportService {
   @Autowired
   private TestBatchRepository testBatchRepository;
 
-  private Map<String, Donor> externalDonorIdToBsisId = new HashMap<>();
+  private Map<String, Donor> externalDonorIdToBsisDonor = new HashMap<>();
 
   private boolean validationOnly;
   private String action;
@@ -105,6 +113,7 @@ public class DataImportService {
     importLocationData(workbook.getSheet("Locations"));
     importDonorData(workbook.getSheet("Donors"));
     importDonationsData(workbook.getSheet("Donations"));
+    importDeferralData(workbook.getSheet("Deferrals"));
     
     System.out.println("Finished import at " + new Date());
     
@@ -462,7 +471,10 @@ public class DataImportService {
       donorRepository.addDonor(donor);
       
       // Cache new donor identifier
-      externalDonorIdToBsisId.put(externalDonorId, donor);
+      Donor smallerDonor = new Donor();
+      smallerDonor.setId(donor.getId());
+      smallerDonor.setDonorNumber(donor.getDonorNumber());
+      externalDonorIdToBsisDonor.put(externalDonorId, smallerDonor);
 
     }
     System.out.println(); // clear logging
@@ -662,7 +674,7 @@ public class DataImportService {
       }
 
       // Get donor
-      Donor currentDonor = externalDonorIdToBsisId.get(externalDonorId);
+      Donor currentDonor = externalDonorIdToBsisDonor.get(externalDonorId);
       if (currentDonor != null) {
         donationBackingForm.setDonorNumber(currentDonor.getDonorNumber());
         donationBackingForm.setDonor(currentDonor);
@@ -694,6 +706,96 @@ public class DataImportService {
     System.out.println(); // clear logging
   }
 
+  public void importDeferralData(Sheet sheet) {
+    Map<String, DeferralReason> deferralReasonCache = buildDeferralReasonCache();
+    Map<String, Location> locationCache = buildLocationCache();
+
+    // Keep a reference to the row containing the headers
+    Row headers = null;
+
+    int deferralCount = 0;
+
+    for (Row row : sheet) {
+
+      Donor donor = null;
+      String externalDonorId = null;
+
+      if (headers == null) {
+        headers = row;
+        continue;
+      }
+
+      deferralCount += 1;
+
+      DeferralBackingForm deferralBackingForm = new DeferralBackingForm();
+      BindException errors = new BindException(deferralBackingForm, "DeferralBackingForm");
+
+      for (Cell cell : row) {
+        Cell header = headers.getCell(cell.getColumnIndex());
+
+        switch (header.getStringCellValue()) {
+          case "externalDonorId":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            externalDonorId = cell.getStringCellValue();
+            donor = externalDonorIdToBsisDonor.get(externalDonorId);
+            break;
+
+          case "venue":
+            deferralBackingForm.setVenue(locationCache.get(cell.getStringCellValue()));
+            break;
+
+          case "deferralReason":
+            deferralBackingForm.setDeferralReason(deferralReasonCache.get(cell.getStringCellValue()));
+            break;
+
+          case "deferralReasonText":
+            deferralBackingForm.setDeferralReasonText(cell.getStringCellValue());
+            break;
+
+          case "createdDate":
+            try {
+              deferralBackingForm.setCreatedDate(cell.getDateCellValue());
+            } catch (IllegalStateException e) {
+              errors.rejectValue("donorDeferral.createdDate", "createdDate.invalid", "Invalid createdDate");
+            }
+            break;
+
+          case "deferredUntil":
+            try {
+              deferralBackingForm.setDeferredUntil(cell.getDateCellValue());
+            } catch (IllegalStateException e) {
+              errors.rejectValue("donorDeferral.deferredUntil", "deferredUntil.invalid", "Invalid deferredUntil");
+            }
+            break;
+
+          default:
+            System.out.println("Unknown deferral column: " + header.getStringCellValue());
+            break;
+        }
+      }
+
+      displayProgressMessage(action + " " + deferralCount + " out of " + sheet.getLastRowNum() + " deferral(s)");
+
+      if (donor != null) {
+        deferralBackingForm.setDeferredDonor(donor.getId());
+      } else {
+        errors.rejectValue("donorDeferral.deferredDonor", "deferredDonor.invalid", "Invalid deferredDonor ");
+      }
+
+      deferralBackingFormValidator.validateForm(deferralBackingForm, errors);
+
+      if (errors.hasErrors()) {
+        System.out.println("Invalid deferral on row " + (row.getRowNum() + 1) + ". " + getErrorsString(errors));
+        throw new IllegalArgumentException("Invalid deferral");
+      }
+
+      // Save deferral
+      donorRepository.deferDonor(deferralBackingForm.getDonorDeferral());
+    }
+
+    System.out.println(); // clear logging
+  }
+
   private DonationBatch getDonationBatch(Map<String, DonationBatch> donationBatches, Map<String, TestBatch> testBatches,
       Date donationDate, Location venue) {
 
@@ -708,10 +810,9 @@ public class DataImportService {
       testBatch.setStatus(TestBatchStatus.CLOSED);
       testBatch.setCreatedDate(donationDate);
       testBatchRepository.save(testBatch);
-      testBatches.put(donationDateString, testBatch);
     }
 
-    String key = donationDateString + "_" + venue;
+    String key = donationDate + "_" + venue;
 
     // Get donationBatch and save it if it hasn't been created yet for that date and venue
     DonationBatch donationBatch = donationBatches.get(key);
@@ -786,7 +887,7 @@ public class DataImportService {
   }
 
   private Map<String, ContactMethodType> buildContactMethodTypeCache() {
-    Map<java.lang.String, ContactMethodType>  contactMethodTypeMap = new HashMap<>();
+    Map<String, ContactMethodType>  contactMethodTypeMap = new HashMap<>();
     List<ContactMethodType> contactMethodTypes = contactMethodTypeRepository.getAllContactMethodTypes();
     for (ContactMethodType contactMethodType : contactMethodTypes) {
       contactMethodTypeMap.put(contactMethodType.getContactMethodType(), contactMethodType);
@@ -795,12 +896,21 @@ public class DataImportService {
   }
 
   private Map<String, AddressType> buildAddressTypeCache() {
-    Map<java.lang.String, AddressType>  addressTypeMap = new HashMap<>();
+    Map<String, AddressType>  addressTypeMap = new HashMap<>();
     List<AddressType> addressTypes = donorRepository.getAllAddressTypes();
     for (AddressType addressType : addressTypes) {
       addressTypeMap.put(addressType.getPreferredAddressType(), addressType);
     }
     return addressTypeMap;
+  }
+
+  private Map<String, DeferralReason> buildDeferralReasonCache() {
+    Map<String, DeferralReason>  deferralReasonMap = new HashMap<>();
+    List<DeferralReason> deferralReasons = deferralReasonRepository.getAllDeferralReasons();
+    for (DeferralReason deferralReason : deferralReasons) {
+      deferralReasonMap.put(deferralReason.getReason(), deferralReason);
+    }
+    return deferralReasonMap;
   }
 
   private String getErrorsString(BindException errors) {
