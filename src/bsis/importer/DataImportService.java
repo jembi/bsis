@@ -114,6 +114,7 @@ public class DataImportService {
     importDonorData(workbook.getSheet("Donors"));
     importDonationsData(workbook.getSheet("Donations"));
     importDeferralData(workbook.getSheet("Deferrals"));
+    importOutcomeData(workbook.getSheet("Outcomes"));
     
     System.out.println("Finished import at " + new Date());
     
@@ -794,6 +795,10 @@ public class DataImportService {
     }
 
     System.out.println(); // clear logging
+  }
+
+  public void importOutcomeData(Sheet sheet) {
+
   }
 
   private DonationBatch getDonationBatch(Map<String, DonationBatch> donationBatches, Map<String, TestBatch> testBatches,
