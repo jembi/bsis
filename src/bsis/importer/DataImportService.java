@@ -33,6 +33,7 @@ import backingform.validator.LocationBackingFormValidator;
 import model.address.AddressType;
 import model.address.ContactMethodType;
 import model.adverseevent.AdverseEventType;
+import model.bloodtesting.BloodTest;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
 import model.donationbatch.DonationBatch;
@@ -57,6 +58,7 @@ import repository.LocationRepository;
 import repository.PackTypeRepository;
 import repository.SequenceNumberRepository;
 import repository.TestBatchRepository;
+import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import service.DonationCRUDService;
 
@@ -97,8 +99,11 @@ public class DataImportService {
   private DonationCRUDService donationCRUDService;
   @Autowired
   private TestBatchRepository testBatchRepository;
+  @Autowired
+  private BloodTestingRepository bloodTestingRepository;
 
   private Map<String, Donor> externalDonorIdToBsisDonor = new HashMap<>();
+  private Map<String, Long> donationIdentificationNumberToDonationId = new HashMap<>();
 
   private boolean validationOnly;
   private String action;
@@ -702,6 +707,10 @@ public class DataImportService {
       if (StringUtils.isNotEmpty(donation.getBloodAbo()) && StringUtils.isNotEmpty(donation.getBloodRh())) {
         donation.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
         donationRepository.saveDonation(donation);
+
+        //Populate the cache for use later when importing outcomes
+        donationIdentificationNumberToDonationId.put(donation.getDonationIdentificationNumber(), donation.getId());
+
       }
     }
     System.out.println(); // clear logging
@@ -835,6 +844,15 @@ public class DataImportService {
     }
 
     return donationBatch;
+  }
+
+  private Map<String, BloodTest> buildBloodTestCache () {
+    Map <String, BloodTest> bloodTestCache = new HashMap<>();
+    List<BloodTest> bloodTests = bloodTestingRepository.getAllBloodTestsIncludeInactive();
+    for (BloodTest bloodTest : bloodTests) {
+      bloodTestCache.put(bloodTest.getTestName(), bloodTest);
+    }
+    return bloodTestCache;
   }
 
   private Map<String, AdverseEventType> buildAdverseEventTypeCache() {
