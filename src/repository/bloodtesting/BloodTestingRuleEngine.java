@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import factory.BloodTestingRuleResultViewModelFactory;
 import model.bloodtesting.BloodTest;
-import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.BloodTestType;
 import model.bloodtesting.TTIStatus;
@@ -122,6 +121,11 @@ public class BloodTestingRuleEngine {
 
     // Determine the blood status based on ABO/Rh tests
     setBloodMatchStatus(resultSet, availableTestResults);
+
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("Donation " + resultSet.getDonation().getId() + " for donor " +
+          resultSet.getDonation().getDonor().getId() + " has BloodTypingStatus of " + resultSet.getBloodTypingStatus());
+    }
 
     // Determine if there are missing required basic blood TTI tests
     List<BloodTest> basicTTITests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI);
@@ -296,9 +300,16 @@ public class BloodTestingRuleEngine {
    * 
    * @param resultSet BloodTestingRuleResultSet that contains the processed test results.
    */
-  private void setBloodMatchStatus(BloodTestingRuleResultSet resultSet,
-                                   Map<String, String> availableTestResults ) {
+  private void setBloodMatchStatus(BloodTestingRuleResultSet resultSet, Map<String, String> availableTestResults) {
 
+    // Determine if there are missing required basic blood typing tests
+    List<BloodTest> basicBloodTypingTests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING);
+    for (BloodTest bt : basicBloodTypingTests) {
+      if (availableTestResults.get(bt.getId().toString()) == null) {
+        resultSet.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+        return;
+      }
+    }
 
     BloodTypingStatus bloodTypingStatus = BloodTypingStatus.COMPLETE;
 
@@ -308,25 +319,6 @@ public class BloodTestingRuleEngine {
     if (numPendingAboTests > 0 || numPendingRhTests > 0) {
       // There are pending tests
       bloodTypingStatus = BloodTypingStatus.PENDING_TESTS;
-    } else if (resultSet.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NOT_DONE) {
-      // There are no pending tests and the blood typing match has not been done
-      bloodTypingStatus = BloodTypingStatus.NOT_DONE;
-    } else {
-      //Determine if there are missing required basic blood typing tests
-      List<BloodTest> basicBloodTypingTests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING);
-      for (BloodTest bt : basicBloodTypingTests) {
-        if (availableTestResults.get(bt.getId().toString()) == null) {
-          if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(bt.getTestName() + " test has not been done");
-          }
-          bloodTypingStatus = BloodTypingStatus.NOT_DONE;
-          break;
-        }
-      }
-    }
-    
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("donation " + resultSet.getDonation().getId() + " for donor " + resultSet.getDonation().getDonor().getId() + " has BloodTypingStatus of " + bloodTypingStatus);
     }
 
     resultSet.setBloodTypingStatus(bloodTypingStatus);

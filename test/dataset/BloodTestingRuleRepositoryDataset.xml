@@ -117,7 +117,7 @@
 	<BloodTest id="3" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
 		context="RECORD_BLOOD_TYPING_TESTS" isActive="1" isEmptyAllowed="0"
 		negativeResults="LOW" positiveResults="HIGH" rankInCategory="3"
-		testName="Titre" testNameShort="Titre" validResults="HIGH,LOW" flagComponentsForDiscard="0" />
+		testName="Titre" testNameShort="Titre" validResults="HIGH,LOW,NT" flagComponentsForDiscard="0" />
 
 	<BloodTest id="17" bloodTestType="BASIC_TTI" category="TTI"
 		context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
@@ -694,6 +694,10 @@
 		lastUpdated="2016-04-24 04:42:49.0" notes="" result="POS"
 		testedOn="2016-04-24 04:42:49.0" bloodTest_id="17" donation_id="17"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
+	<BloodTestResult id="57" createdDate="2016-01-26 02:09:23.0"
+		lastUpdated="2016-01-26 02:09:23.0" notes="" result="NT"
+		testedOn="2016-01-26 02:09:23.0" bloodTest_id="3" donation_id="10"
+		createdBy_id="1" lastUpdatedBy_id="1"  reEntryRequired="false"/>
 
 	<Component id="1" createdOn="2015-02-02 10:26:36.0" expiresOn="2015-03-09 10:26:36.0"
 		isDeleted="false" createdDate="2015-02-02 03:42:04.0" lastUpdated="2015-02-02 03:42:32.0"
