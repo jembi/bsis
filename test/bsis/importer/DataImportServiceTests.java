@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import helpers.builders.AdverseEventTypeBuilder;
+import helpers.builders.BloodTestBuilder;
 import helpers.builders.DonationTypeBuilder;
 import helpers.builders.FormFieldBuilder;
 import helpers.builders.PackTypeBuilder;
@@ -28,6 +29,7 @@ import model.address.AddressType;
 import model.address.ContactMethodType;
 import model.admin.DataType;
 import model.admin.GeneralConfig;
+import model.bloodtesting.BloodTestResult;
 import model.componenttype.ComponentType;
 import model.componenttype.ComponentTypeTimeUnits;
 import model.donation.Donation;
@@ -66,6 +68,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     assertImportDonorData_shouldCreateDonorsFromSpreadsheet();
     assertImportDonationData_shouldCreateDonationsFromSpreadsheet();
     assertImportDonationData_shouldCreateDeferralsFromSpreadsheet();
+    assertImportDonationData_shouldCreateOutcomesFromSpreadsheet();
   }
   
   private void createSupportingTestData() {
@@ -177,6 +180,10 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     DeferralReason deferralReason = new DeferralReason();
     deferralReason.setReason("Other reasons");
     entityManager.persist(deferralReason);
+
+    // set up test data (Outcomes)
+    BloodTestBuilder.aBloodTest().withValidResults("POS,NEG").withTestName("HIV")
+        .buildAndPersist(entityManager);
 
     // Synchronize entities to the database before running the test
     entityManager.flush();
@@ -356,6 +363,22 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
   private DonorDeferral findDeferralByDeferralReasonText(String deferralReasonText) {
     return entityManager.createQuery("SELECT d FROM DonorDeferral d WHERE d.deferralReasonText = :deferralReasonText", DonorDeferral.class)
         .setParameter("deferralReasonText", deferralReasonText)
+        .getSingleResult();
+  }
+  
+  private void assertImportDonationData_shouldCreateOutcomesFromSpreadsheet() {
+    Donation firstDonation = findDonationByDonationIdentificationNumber("32434");
+    BloodTestResult bloodTestOutcome = findBloodTestOutcomeByDonation(firstDonation);
+    
+    assertThat("testedOn is set", new SimpleDateFormat("yyyy-MM-dd").format(bloodTestOutcome.getTestedOn()), equalTo("2016-03-16"));
+    assertThat("bloodTest is set", bloodTestOutcome.getBloodTest().getTestName(), equalTo("HIV"));
+    assertThat("outcome is set", bloodTestOutcome.getResult(), equalTo("POS"));
+    assertThat("reEntryRequired is false", !bloodTestOutcome.getReEntryRequired());
+  }
+  
+  private BloodTestResult findBloodTestOutcomeByDonation(Donation donation) {
+    return entityManager.createQuery("SELECT tr FROM BloodTestResult tr WHERE tr.donation = :donation", BloodTestResult.class)
+        .setParameter("donation", donation)
         .getSingleResult();
   }
 }
