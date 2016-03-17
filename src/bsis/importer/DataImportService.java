@@ -896,6 +896,10 @@ public class DataImportService {
         System.out.println("Invalid outcome on row " + (row.getRowNum() + 1) + ". " + getErrorsString(errors));
         throw new IllegalArgumentException("Invalid test outcome");
       }
+
+      Donation donation = new Donation();
+      donation.setId(donationId);
+      bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, testedOn, null, false);
     }
     
     System.out.println(); // clear logging
