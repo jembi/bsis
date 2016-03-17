@@ -175,7 +175,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
 
     // set up test data (Deferral)
     DeferralReason deferralReason = new DeferralReason();
-    deferralReason.setReason("Nausea");
+    deferralReason.setReason("Other reasons");
     entityManager.persist(deferralReason);
 
     // Synchronize entities to the database before running the test
@@ -347,7 +347,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     DonorDeferral deferral = findDeferralByDeferralReasonText("Had nausea");
     
     assertThat("venue is set", deferral.getVenue().getName(), equalTo("First"));
-    assertThat("deferral reason is set", deferral.getDeferralReason().getReason(), equalTo("Nausea"));
+    assertThat("deferral reason is set", deferral.getDeferralReason().getReason(), equalTo("Other reasons"));
     assertThat("createdDate is set", new SimpleDateFormat("yyyy-MM-dd").format(deferral.getCreatedDate()), equalTo("2016-01-03"));
     assertThat("deferredUntil is set", new SimpleDateFormat("yyyy-MM-dd").format(deferral.getDeferredUntil()), equalTo("2016-06-03"));
     assertThat("deferred donor is set", deferral.getDeferredDonor().getFirstName(), equalTo("David"));
