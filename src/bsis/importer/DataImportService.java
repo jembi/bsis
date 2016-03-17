@@ -289,6 +289,7 @@ public class DataImportService {
             break;
 
           case "bloodAbo":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             String bloodABO = cell.getStringCellValue();
             if (isValidBloodTyping(bloodABO, DonationField.BLOODABO, bloodTestingRuleCache)) {
               donorBackingForm.setBloodAbo(bloodABO);
@@ -298,6 +299,7 @@ public class DataImportService {
             break;
 
           case "bloodRh":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             String bloodRh = cell.getStringCellValue();
             if (isValidBloodTyping(bloodRh, DonationField.BLOODRH, bloodTestingRuleCache)) {
               donorBackingForm.setBloodRh(bloodRh);
@@ -665,6 +667,7 @@ public class DataImportService {
             break;
             
           case "bloodAbo":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             String bloodABO = cell.getStringCellValue();
             if (isValidBloodTyping(bloodABO, DonationField.BLOODABO, bloodTestingRuleCache)) {
               donationBackingForm.setBloodAbo(bloodABO);
@@ -674,6 +677,7 @@ public class DataImportService {
             break;
 
           case "bloodRh":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
             String bloodRh = cell.getStringCellValue();
             if (isValidBloodTyping(bloodRh, DonationField.BLOODRH, bloodTestingRuleCache)) {
               donationBackingForm.setBloodRh(bloodRh);
