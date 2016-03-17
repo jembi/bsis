@@ -370,7 +370,10 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     Donation firstDonation = findDonationByDonationIdentificationNumber("32434");
     BloodTestResult bloodTestOutcome = findBloodTestOutcomeByDonation(firstDonation);
     
-    assertThat("testedOn is set", new SimpleDateFormat("yyyy-MM-dd").format(bloodTestOutcome.getTestedOn()), equalTo("2016-03-16"));
+    SimpleDateFormat dateSdf = new SimpleDateFormat("yyyy-MM-dd");
+    assertThat("testedOn date is set", dateSdf.format(bloodTestOutcome.getTestedOn()), equalTo("2016-03-16"));
+    SimpleDateFormat timeSdf = new SimpleDateFormat("HH:mm");
+    assertThat("testedOn time is set", timeSdf.format(bloodTestOutcome.getTestedOn()), equalTo("09:00"));
     assertThat("bloodTest is set", bloodTestOutcome.getBloodTest().getTestName(), equalTo("HIV"));
     assertThat("outcome is set", bloodTestOutcome.getResult(), equalTo("POS"));
     assertThat("reEntryRequired is false", !bloodTestOutcome.getReEntryRequired());
