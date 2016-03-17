@@ -6,30 +6,26 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.notNullValue;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
-import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import helpers.builders.AdverseEventTypeBuilder;
 import helpers.builders.BloodTestBuilder;
 import helpers.builders.DonationTypeBuilder;
 import helpers.builders.FormFieldBuilder;
 import helpers.builders.PackTypeBuilder;
 import helpers.builders.UserBuilder;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import model.address.AddressType;
 import model.address.ContactMethodType;
 import model.admin.DataType;
 import model.admin.GeneralConfig;
+import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestResult;
+import model.bloodtesting.rules.BloodTestingRule;
+import model.bloodtesting.rules.DonationField;
 import model.componenttype.ComponentType;
 import model.componenttype.ComponentTypeTimeUnits;
 import model.donation.Donation;
@@ -43,6 +39,14 @@ import model.idtype.IdType;
 import model.location.Location;
 import model.preferredlanguage.PreferredLanguage;
 import model.util.Gender;
+
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import suites.SecurityContextDependentTestSuite;
 
 public class DataImportServiceTests extends SecurityContextDependentTestSuite {
@@ -184,7 +188,37 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     // set up test data (Outcomes)
     BloodTestBuilder.aBloodTest().withValidResults("POS,NEG").withTestName("HIV")
         .buildAndPersist(entityManager);
-
+    BloodTestingRule aboBloodTestingRule1 = new BloodTestingRule();
+    aboBloodTestingRule1.setDonationFieldChanged(DonationField.BLOODABO);
+    aboBloodTestingRule1.setNewInformation("A");
+    aboBloodTestingRule1.setIsActive(true);
+    entityManager.persist(aboBloodTestingRule1);
+    BloodTestingRule aboBloodTestingRule2 = new BloodTestingRule();
+    aboBloodTestingRule2.setDonationFieldChanged(DonationField.BLOODABO);
+    aboBloodTestingRule2.setNewInformation("B");
+    aboBloodTestingRule2.setIsActive(true);
+    entityManager.persist(aboBloodTestingRule2);
+    BloodTestingRule aboBloodTestingRule3 = new BloodTestingRule();
+    aboBloodTestingRule3.setDonationFieldChanged(DonationField.BLOODABO);
+    aboBloodTestingRule3.setNewInformation("O");
+    aboBloodTestingRule3.setIsActive(true);
+    entityManager.persist(aboBloodTestingRule3);
+    BloodTestingRule aboBloodTestingRule4 = new BloodTestingRule();
+    aboBloodTestingRule4.setDonationFieldChanged(DonationField.BLOODABO);
+    aboBloodTestingRule4.setNewInformation("AB");
+    aboBloodTestingRule4.setIsActive(true);
+    entityManager.persist(aboBloodTestingRule4);
+    BloodTestingRule rhBloodTestingRule1 = new BloodTestingRule();
+    rhBloodTestingRule1.setDonationFieldChanged(DonationField.BLOODRH);
+    rhBloodTestingRule1.setNewInformation("+");
+    rhBloodTestingRule1.setIsActive(true);
+    entityManager.persist(rhBloodTestingRule1);
+    BloodTestingRule rhBloodTestingRule2 = new BloodTestingRule();
+    rhBloodTestingRule2.setDonationFieldChanged(DonationField.BLOODRH);
+    rhBloodTestingRule2.setNewInformation("-");
+    rhBloodTestingRule2.setIsActive(true);
+    entityManager.persist(rhBloodTestingRule2);
+    
     // Synchronize entities to the database before running the test
     entityManager.flush();
   }
