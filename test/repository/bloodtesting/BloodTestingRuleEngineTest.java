@@ -120,7 +120,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("bloodRh is -", "-", result.getBloodRh());
     Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
     Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
-    Assert.assertEquals("Available Test results", 8, result.getAvailableTestResults().size());
+    Assert.assertEquals("Available Test results", 7, result.getAvailableTestResults().size());
     Map<String, String> tests = result.getAvailableTestResults();
     Iterator<String> testIts = tests.values().iterator();
     Assert.assertEquals("Available test result value", "A", testIts.next());
@@ -130,7 +130,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("Available test result value", "NEG", testIts.next());
     Assert.assertEquals("Available test result value", "NEG", testIts.next());
     Assert.assertEquals("Available test result value", "LOW", testIts.next());
-    Assert.assertEquals("Available test result value", "NEG", testIts.next());
+
     Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
     Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
     Assert.assertFalse("No TTI Uninterpretable", result.getTtiUninterpretable());
@@ -182,7 +182,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     ttiTests.put(1l, "A");
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, ttiTests);
     Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE, result.getBloodTypingMatchStatus());
-    Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.PENDING_TESTS, result.getBloodTypingStatus());
+    Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.NOT_DONE, result.getBloodTypingStatus());
     Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
     Assert.assertEquals("bloodAb has a result", 1, result.getBloodAbo().length());
     Assert.assertEquals("bloodRh is empty", 0, result.getBloodRh().length());
@@ -206,14 +206,14 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("bloodRh is +", "+", result.getBloodRh());
     Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
     Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
-    Assert.assertEquals("Available Test results", 5, result.getAvailableTestResults().size());
+    Assert.assertEquals("Available Test results", 4, result.getAvailableTestResults().size());
     Map<String, String> tests = result.getAvailableTestResults();
     Iterator<String> testIts = tests.values().iterator();
     Assert.assertEquals("Available test result value", "B", testIts.next());
     Assert.assertEquals("Available test result value", "NEG", testIts.next());
     Assert.assertEquals("Available test result value", "POS", testIts.next());
     Assert.assertEquals("Available test result value", "LOW", testIts.next());
-    Assert.assertEquals("Available test result value", "NEG", testIts.next());
+
     Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
     Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
     Assert.assertFalse("No TTI Uninterpretable", result.getTtiUninterpretable());
@@ -231,7 +231,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("bloodRh is -", "-", result.getBloodRh());
     Assert.assertEquals("2 pending TTI tests", 2, result.getPendingTTITestsIds().size());
     Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
-    Assert.assertEquals("Available Test results", 8, result.getAvailableTestResults().size());
+    Assert.assertEquals("Available Test results", 7, result.getAvailableTestResults().size());
     Map<String, String> tests = result.getAvailableTestResults();
     Iterator<String> testIts = tests.values().iterator();
     Assert.assertEquals("Available test result value", "A", testIts.next());
@@ -241,7 +241,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("Available test result value", "NEG", testIts.next());
     Assert.assertEquals("Available test result value", "NEG", testIts.next());
     Assert.assertEquals("Available test result value", "LOW", testIts.next());
-    Assert.assertEquals("Available test result value", "NEG", testIts.next());
+
     Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
     Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
     Assert.assertFalse("No TTI Uninterpretable", result.getTtiUninterpretable());
@@ -297,7 +297,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Donation donation = donationRepository.findDonationById(8l);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("bloodTypingMatchStatus is set", BloodTypingMatchStatus.NO_MATCH, result.getBloodTypingMatchStatus());
-    Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.PENDING_TESTS, result.getBloodTypingStatus());
+    Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.NOT_DONE, result.getBloodTypingStatus());
     Assert.assertEquals("bloodAb is set", "O", result.getBloodAbo());
     Assert.assertEquals("bloodRh is set", "-", result.getBloodRh());
     Assert.assertEquals("Pending blood typing tests", 2, result.getPendingBloodTypingTestsIds().size());
@@ -316,7 +316,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("bloodAb is set", "O", result.getBloodAbo());
     Assert.assertEquals("bloodRh is set", "-", result.getBloodRh());
     Assert.assertEquals("Pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
-    Assert.assertEquals("Availale test results", 4, result.getAvailableTestResults().size());
+    Assert.assertEquals("Availale test results", 5, result.getAvailableTestResults().size());
     Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
     Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
   }
@@ -331,7 +331,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("bloodAb is set", "O", result.getBloodAbo());
     Assert.assertEquals("bloodRh is set", "-", result.getBloodRh());
     Assert.assertEquals("Pending blood typing tests", 2, result.getPendingBloodTypingTestsIds().size());
-    Assert.assertEquals("Availale test results", 2, result.getAvailableTestResults().size());
+    Assert.assertEquals("Availale test results", 3, result.getAvailableTestResults().size());
     Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
     Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
   }
@@ -346,7 +346,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("bloodAb is set", "O", result.getBloodAbo());
     Assert.assertEquals("bloodRh is set", "-", result.getBloodRh());
     Assert.assertEquals("Pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
-    Assert.assertEquals("Availale test results", 4, result.getAvailableTestResults().size());
+    Assert.assertEquals("Availale test results", 5, result.getAvailableTestResults().size());
     Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
     Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
   }

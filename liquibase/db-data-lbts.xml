@@ -1401,6 +1401,13 @@
 			<column name="isTimeField" value="0"></column>
 		</insert>
     </changeSet>
+
+    <changeSet id="20160315-1355" author="bausmeier">
+        <comment>Add NT (NOT-TESTED) as a valid option for titre and antibody screening blood tests</comment>
+        <sql>
+            UPDATE BloodTest SET validResults = CONCAT(validResults, ',NT') WHERE id IN (3, 33);
+        </sql>
+    </changeSet>
 	
     <changeSet id="20160309-1132" author="timler">
         <comment>Removed useParametersFromBatch from Donation FormFields</comment>
