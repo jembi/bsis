@@ -893,7 +893,7 @@ public class DataImportService {
       }
 
       displayProgressMessage(
-          action + " " + testResultsCount + " out of " + sheet.getLastRowNum() + " test  outcome(s)");
+          action + " " + testResultsCount + " out of " + sheet.getLastRowNum() + " test outcome(s)");
       
       if (errors.hasErrors()) {
         System.out.println("Invalid outcome on row " + (row.getRowNum() + 1) + ". " + getErrorsString(errors));
@@ -902,7 +902,7 @@ public class DataImportService {
 
       Donation donation = new Donation();
       donation.setId(donationId);
-      bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, testedOn, null, false);
+      bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, testedOn, null, true);
     }
     
     System.out.println(); // clear logging

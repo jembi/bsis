@@ -172,7 +172,7 @@ public class BloodTestingRepository {
       BloodTestResult btResult = mostRecentTestResults.get(testId);
       updateOrCreateBloodTestResult(btResult, testId, bloodTestResultsForDonation.get(testId), donation, testedOn, reEntry);
     }
-    if (reEntry) {
+    if (reEntry && ruleResult != null) {
       updateDonationWithTestResults(donation, ruleResult);
       em.persist(donation);
     }
