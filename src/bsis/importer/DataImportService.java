@@ -7,34 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindException;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
-
-import backingform.AdverseEventBackingForm;
-import backingform.AdverseEventTypeBackingForm;
-import backingform.DeferralBackingForm;
-import backingform.DonationBackingForm;
-import backingform.DonorBackingForm;
-import backingform.LocationBackingForm;
-import backingform.TestResultBackingForm;
-import backingform.validator.DeferralBackingFormValidator;
-import backingform.validator.DonationBackingFormValidator;
-import backingform.validator.DonorBackingFormValidator;
-import backingform.validator.LocationBackingFormValidator;
 import model.address.AddressType;
 import model.address.ContactMethodType;
 import model.adverseevent.AdverseEventType;
 import model.bloodtesting.BloodTest;
+import model.bloodtesting.rules.BloodTestingRule;
+import model.bloodtesting.rules.DonationField;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
 import model.donationbatch.DonationBatch;
@@ -48,6 +26,20 @@ import model.preferredlanguage.PreferredLanguage;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 import model.util.Gender;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+
 import repository.AdverseEventTypeRepository;
 import repository.ContactMethodTypeRepository;
 import repository.DeferralReasonRepository;
@@ -62,6 +54,17 @@ import repository.TestBatchRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import service.DonationCRUDService;
+import backingform.AdverseEventBackingForm;
+import backingform.AdverseEventTypeBackingForm;
+import backingform.DeferralBackingForm;
+import backingform.DonationBackingForm;
+import backingform.DonorBackingForm;
+import backingform.LocationBackingForm;
+import backingform.TestResultBackingForm;
+import backingform.validator.DeferralBackingFormValidator;
+import backingform.validator.DonationBackingFormValidator;
+import backingform.validator.DonorBackingFormValidator;
+import backingform.validator.LocationBackingFormValidator;
 
 @Transactional
 @Service
@@ -209,6 +212,7 @@ public class DataImportService {
     Map<String, IdType> idTypeCache = buildIdTypeCache();
     Map<String, ContactMethodType> contactMethodTypeCache = buildContactMethodTypeCache();
     Map<String, AddressType> addressTypeCache = buildAddressTypeCache();
+    List<BloodTestingRule> bloodTestingRuleCache = bloodTestingRepository.getActiveBloodTestingRules();
 
     // Keep a reference to the row containing the headers
     Row headers = null;
@@ -285,11 +289,21 @@ public class DataImportService {
             break;
 
           case "bloodAbo":
-            donorBackingForm.setBloodAbo(cell.getStringCellValue());
+            String bloodABO = cell.getStringCellValue();
+            if (isValidBloodTyping(bloodABO, DonationField.BLOODABO, bloodTestingRuleCache)) {
+              donorBackingForm.setBloodAbo(bloodABO);
+            } else {
+              errors.rejectValue("donor.bloodAbo", "bloodAbo.invalid", "Invalid blood ABO value");
+            }
             break;
 
           case "bloodRh":
-            donorBackingForm.setBloodRh(cell.getStringCellValue());
+            String bloodRh = cell.getStringCellValue();
+            if (isValidBloodTyping(bloodRh, DonationField.BLOODRH, bloodTestingRuleCache)) {
+              donorBackingForm.setBloodRh(bloodRh);
+            } else {
+              errors.rejectValue("donor.bloodRh", "bloodRh.invalid", "Invalid blood Rh value");
+            }
             break;
 
           case "notes":
@@ -494,6 +508,7 @@ public class DataImportService {
     Map<String, AdverseEventType> adverseEventTypeCache = buildAdverseEventTypeCache();
     Map<String, DonationBatch> donationBatches = new HashMap<>();
     Map<String, TestBatch> testBatches = new HashMap<>();
+    List<BloodTestingRule> bloodTestingRuleCache = bloodTestingRepository.getActiveBloodTestingRules();
 
     // Keep a reference to the row containing the headers
     Row headers = null;
@@ -648,15 +663,23 @@ public class DataImportService {
             cell.setCellType(Cell.CELL_TYPE_STRING);
             adverseEventComment = cell.getStringCellValue();
             break;
-
+            
           case "bloodAbo":
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-            donationBackingForm.setBloodAbo(cell.getStringCellValue());
+            String bloodABO = cell.getStringCellValue();
+            if (isValidBloodTyping(bloodABO, DonationField.BLOODABO, bloodTestingRuleCache)) {
+              donationBackingForm.setBloodAbo(bloodABO);
+            } else {
+              errors.rejectValue("donor.bloodAbo", "bloodAbo.invalid", "Invalid blood ABO value");
+            }
             break;
 
           case "bloodRh":
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-            donationBackingForm.setBloodRh(cell.getStringCellValue());
+            String bloodRh = cell.getStringCellValue();
+            if (isValidBloodTyping(bloodRh, DonationField.BLOODRH, bloodTestingRuleCache)) {
+              donationBackingForm.setBloodRh(bloodRh);
+            } else {
+              errors.rejectValue("donor.bloodRh", "bloodRh.invalid", "Invalid blood Rh value");
+            }
             break;
 
           case "notes":
@@ -907,6 +930,17 @@ public class DataImportService {
     
     System.out.println(); // clear logging
     
+  }
+  
+  private boolean isValidBloodTyping(String value, DonationField donationField, List<BloodTestingRule> bloodTestingRules) {
+    for (BloodTestingRule bloodTestingRule : bloodTestingRules) {
+      if (bloodTestingRule.getDonationFieldChanged().equals(donationField)) {
+        if (value.equals(bloodTestingRule.getNewInformation())) {
+          return true; // match found
+        }
+      }
+    }
+    return false; // never found a match for the value
   }
 
   private DonationBatch getDonationBatch(Map<String, DonationBatch> donationBatches, Map<String, TestBatch> testBatches,
