@@ -26,6 +26,7 @@ import backingform.DeferralBackingForm;
 import backingform.DonationBackingForm;
 import backingform.DonorBackingForm;
 import backingform.LocationBackingForm;
+import backingform.TestResultBackingForm;
 import backingform.validator.DeferralBackingFormValidator;
 import backingform.validator.DonationBackingFormValidator;
 import backingform.validator.DonorBackingFormValidator;
@@ -807,7 +808,98 @@ public class DataImportService {
   }
 
   public void importOutcomeData(Sheet sheet) {
+    Map<String, BloodTest> bloodTestCache = buildBloodTestCache();
+    
+    // Keep a reference to the row containing the headers
+    Row headers = null;
 
+    int testResultsCount = 0;
+
+    for (Row row : sheet) {
+
+      if (headers == null) {
+        headers = row;
+        continue;
+      }
+
+      testResultsCount += 1;
+
+      // There's no existing TestResultBackingFormValidator, and the existing form is a bit
+      // different from what the import requires.
+      // We'll just use this form for presenting error messages.
+      TestResultBackingForm testOutcomeBackingForm = new TestResultBackingForm();
+      BindException errors = new BindException(testOutcomeBackingForm, "TestResultBackingForm");
+
+      Date testedOn = null;
+      Long donationId = null;
+      BloodTest bloodTest = null;
+      String outcome = null;
+      Map<Long, String> testResults = new HashMap<>();
+
+      for (Cell cell : row) {
+        Cell header = headers.getCell(cell.getColumnIndex());
+
+        switch (header.getStringCellValue()) {
+          case "donationIdentificationNumber":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            donationId = donationIdentificationNumberToDonationId.get(cell.getStringCellValue());
+            if (donationId == null) {
+              errors.rejectValue("donationIdentificationNumber", "donationIdentificationNumber.invalid",
+                  "Invalid donationIdentificationNumber");
+            }
+            break;
+
+          case "testedOn":
+            try {
+              testedOn = cell.getDateCellValue();
+            } catch (Exception e) {
+              errors.rejectValue("testResults", "testResults.invalid", "Invalid date testedOn");
+            }
+            break;
+
+          case "bloodTestName":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            bloodTest = bloodTestCache.get(cell.getStringCellValue());
+            break;
+            
+          case "outcome":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            outcome = cell.getStringCellValue();
+            if (bloodTest != null) {
+              testResults.put(bloodTest.getId(), cell.getStringCellValue());
+            }
+            testOutcomeBackingForm.setTestResults(testResults);
+            break;
+
+          default:
+            System.out.println("Unknown deferral column: " + header.getStringCellValue());
+            break;
+        }
+      }
+
+      // Do validation specific for test outcomes import (the system accepts saving empty test
+      // outcomes, but the import doesn't)
+      if (bloodTest == null) {
+        errors.rejectValue("testResults", "testResults.required", "bloodTestName is required");
+      }
+      if (outcome == null) {
+        errors.rejectValue("testResults", "testResults.required", "outcome is required");
+      }
+      if (testedOn == null) {
+        errors.rejectValue("testResults", "testResults.required", "Date testedOn is required");
+      }
+
+      displayProgressMessage(
+          action + " " + testResultsCount + " out of " + sheet.getLastRowNum() + " test  outcome(s)");
+      
+      if (errors.hasErrors()) {
+        System.out.println("Invalid outcome on row " + (row.getRowNum() + 1) + ". " + getErrorsString(errors));
+        throw new IllegalArgumentException("Invalid test outcome");
+      }
+    }
+    
+    System.out.println(); // clear logging
+    
   }
 
   private DonationBatch getDonationBatch(Map<String, DonationBatch> donationBatches, Map<String, TestBatch> testBatches,
@@ -846,7 +938,7 @@ public class DataImportService {
     return donationBatch;
   }
 
-  private Map<String, BloodTest> buildBloodTestCache () {
+  private Map<String, BloodTest> buildBloodTestCache() {
     Map <String, BloodTest> bloodTestCache = new HashMap<>();
     List<BloodTest> bloodTests = bloodTestingRepository.getAllBloodTestsIncludeInactive();
     for (BloodTest bloodTest : bloodTests) {
