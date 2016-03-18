@@ -3,7 +3,9 @@ package factory;
 import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.TestBatchBuilder.aTestBatch;
 import static helpers.builders.TestBatchFullViewModelBuilder.aTestBatchFullViewModel;
+import static helpers.builders.TestBatchViewModelBuilder.aTestBatchViewModel;
 import static helpers.matchers.TestBatchFullViewModelMatcher.hasSameStateAsTestBatchFullViewModel;
+import static helpers.matchers.TestBatchViewModelMatcher.hasSameStateAsTestBatchViewModel;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -24,6 +26,7 @@ import service.TestBatchConstraintChecker.CanReleaseResult;
 import suites.UnitTestSuite;
 import viewmodel.DonationBatchViewModel;
 import viewmodel.TestBatchFullViewModel;
+import viewmodel.TestBatchViewModel;
 
 public class TestBatchViewModelFactoryTests extends UnitTestSuite {
 
@@ -44,11 +47,17 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
   private TestBatchConstraintChecker testBatchConstraintChecker;
 
   @Test
-  public void testCreateTestBatchViewModelsWithDonationBatches_shouldReturnTestBatchViewModelsWithTheCorrectState() {
+  public void testCreateTestBatchBasicViewModel_shouldReturnTestBatchViewModelsWithTheCorrectState() {
 
     DonationBatch donationBatch = aDonationBatch().build();
 
-    TestBatch testBatch = aTestBatch()
+    TestBatch testBatch1 =
+        aTestBatch().withId(IRRELEVANT_ID).withStatus(IRRELEVANT_STATUS).withBatchNumber(IRRELEVANT_BATCH_NUMBER)
+            .withCreatedDate(IRRELEVANT_CREATED_DATE).withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
+            .withDonationBatches(Arrays.asList(donationBatch)).withNotes(IRRELEVANT_NOTES).build();
+
+    TestBatch testBatch2 =
+        aTestBatch()
         .withId(IRRELEVANT_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
@@ -60,33 +69,29 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
 
     DonationBatchViewModel donationBatchViewModel = new DonationBatchViewModel();
 
-    TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
+    TestBatchViewModel expectedViewModel = aTestBatchViewModel()
         .withId(IRRELEVANT_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withNotes(IRRELEVANT_NOTES)
-        .withDonationBatches(Arrays.asList(donationBatchViewModel))
-        .withPermission("canRelease", false)
-        .withPermission("canClose", false)
-        .withPermission("canDelete", false)
-        .withPermission("canEdit", false)
-        .withPermission("canReopen", false)
-        .withPermission("canEditDonationBatches", false)
         .build();
+    
+    List<TestBatch> testBatches = Arrays.asList(new TestBatch[]{testBatch1, testBatch2});
 
-    when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(CANT_RELEASE);
+    when(testBatchConstraintChecker.canReleaseTestBatch(testBatch1)).thenReturn(CANT_RELEASE);
+    when(testBatchConstraintChecker.canReleaseTestBatch(testBatch2)).thenReturn(CANT_RELEASE);
     when(donationBatchViewModelFactory.createDonationBatchViewModelWithoutDonationPermissions(donationBatch, true))
         .thenReturn(donationBatchViewModel);
 
-    TestBatchFullViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchFullViewModel(testBatch, false);
+    List<TestBatchViewModel> returnedViewModels = testBatchViewModelFactory.createTestBatchBasicViewModels(testBatches);
 
-    assertThat(returnedViewModel, hasSameStateAsTestBatchFullViewModel(expectedViewModel));
+    assertThat(returnedViewModels.get(0), hasSameStateAsTestBatchViewModel(expectedViewModel));
   }
 
   @Test
-  public void testCreateTestBatchViewModelWithDonationBatches_shouldReturnTestBatchViewModelWithTheCorrectState() {
+  public void testCreateTestBatchFullViewModel_shouldReturnTestBatchFullViewModelWithTheCorrectState() {
 
     DonationBatch donationBatch = aDonationBatch().build();
 
