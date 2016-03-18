@@ -185,7 +185,7 @@ public class TestBatchController {
       return Arrays.asList(new DonationBatchViewModel[0]);
     List<DonationBatchViewModel> donationBatchViewModels = new ArrayList<DonationBatchViewModel>();
     for (DonationBatch donationBatch : donationBatches) {
-      donationBatchViewModels.add(donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch));
+      donationBatchViewModels.add(donationBatchViewModelFactory.createDonationBatchBasicViewModel(donationBatch));
     }
     return donationBatchViewModels;
   }

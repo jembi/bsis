@@ -4,10 +4,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import model.testbatch.TestBatchStatus;
 import utils.DateTimeSerialiser;
-
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class TestBatchViewModel {
 
@@ -17,7 +17,7 @@ public class TestBatchViewModel {
   private TestBatchStatus status;
   private String batchNumber;
   private String notes;
-  private List<DonationBatchViewModel> donationBatchViewModels;
+  private List<DonationBatchFullViewModel> donationBatchViewModels;
   private Map<String, Boolean> permissions;
   private int readyForReleaseCount;
 
@@ -60,7 +60,7 @@ public class TestBatchViewModel {
     }
 
     int count = 0;
-    for (DonationBatchViewModel donationBatchViewModel : donationBatchViewModels) {
+    for (DonationBatchFullViewModel donationBatchViewModel : donationBatchViewModels) {
       count += donationBatchViewModel.getNumDonations();
     }
     return count;
@@ -74,11 +74,11 @@ public class TestBatchViewModel {
     this.notes = notes;
   }
 
-  public List<DonationBatchViewModel> getDonationBatches() {
+  public List<DonationBatchFullViewModel> getDonationBatches() {
     return donationBatchViewModels;
   }
 
-  public void setDonationBatches(List<DonationBatchViewModel> donationBatchViewModels) {
+  public void setDonationBatches(List<DonationBatchFullViewModel> donationBatchViewModels) {
     this.donationBatchViewModels = donationBatchViewModels;
   }
 

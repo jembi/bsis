@@ -1,19 +1,16 @@
 package viewmodel;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import utils.DateTimeSerialiser;
 
 public class DonationBatchViewModel {
 
   private Long id;
   private String batchNumber;
   private String notes;
-  private List<DonationViewModel> donations;
   private Date createdDate;
   private Date lastUpdatedDate;
   private String createdByUsername;
@@ -21,7 +18,7 @@ public class DonationBatchViewModel {
   private Boolean closed;
   private LocationViewModel venue;
   private boolean backEntry;
-  private Map<String, Boolean> permissions;
+  private Integer numDonations;
 
   public DonationBatchViewModel() {
   }
@@ -48,18 +45,6 @@ public class DonationBatchViewModel {
 
   public void setNotes(String notes) {
     this.notes = notes;
-  }
-
-  public List<DonationViewModel> getDonations() {
-    return donations;
-  }
-
-  public void setDonations(List<DonationViewModel> donations) {
-    this.donations = donations;
-  }
-
-  public Integer getNumDonations() {
-    return donations == null ? 0 : donations.size();
   }
 
   @JsonSerialize(using = DateTimeSerialiser.class)
@@ -120,11 +105,13 @@ public class DonationBatchViewModel {
     this.backEntry = backEntry;
   }
 
-  public Map<String, Boolean> getPermissions() {
-    return permissions;
+  public Integer getNumDonations() {
+    return numDonations;
   }
 
-  public void setPermissions(Map<String, Boolean> permissions) {
-    this.permissions = permissions;
+  public void setNumDonations(Integer numDonations) {
+    this.numDonations = numDonations;
   }
+
+
 }

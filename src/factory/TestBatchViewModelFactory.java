@@ -5,15 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import model.donationbatch.DonationBatch;
-import model.testbatch.TestBatch;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import model.donationbatch.DonationBatch;
+import model.testbatch.TestBatch;
 import service.TestBatchConstraintChecker;
 import service.TestBatchConstraintChecker.CanReleaseResult;
-import viewmodel.DonationBatchViewModel;
+import viewmodel.DonationBatchFullViewModel;
 import viewmodel.TestBatchViewModel;
 
 @Service
@@ -68,10 +67,10 @@ public class TestBatchViewModelFactory {
     testBatchViewModel.setNotes(testBatch.getNotes());
 
     // Add all donation batch view models
-    List<DonationBatchViewModel> donationBatchViewModels = new ArrayList<>();
+    List<DonationBatchFullViewModel> donationBatchViewModels = new ArrayList<>();
     if (testBatch.getDonationBatches() != null) {
       for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-        donationBatchViewModels.add(donationBatchViewModelFactory.createDonationBatchViewModelWithoutDonationPermissions(donationBatch,
+        donationBatchViewModels.add(donationBatchViewModelFactory.createDonationBatchFullViewModelWithoutDonationPermissions(donationBatch,
             true));
       }
     }

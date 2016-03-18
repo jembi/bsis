@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import model.testbatch.TestBatchStatus;
-import viewmodel.DonationBatchViewModel;
+import viewmodel.DonationBatchFullViewModel;
 import viewmodel.TestBatchViewModel;
 
 public class TestBatchViewModelBuilder extends AbstractBuilder<TestBatchViewModel> {
@@ -17,7 +17,7 @@ public class TestBatchViewModelBuilder extends AbstractBuilder<TestBatchViewMode
   private Date createdDate;
   private Date lastUpdatedDate;
   private String notes;
-  private List<DonationBatchViewModel> donationBatches;
+  private List<DonationBatchFullViewModel> donationBatches;
   private Map<String, Boolean> permissions;
   private int readyForReleaseCount;
 
@@ -51,7 +51,7 @@ public class TestBatchViewModelBuilder extends AbstractBuilder<TestBatchViewMode
     return this;
   }
 
-  public TestBatchViewModelBuilder withDonationBatches(List<DonationBatchViewModel> donationBatches) {
+  public TestBatchViewModelBuilder withDonationBatches(List<DonationBatchFullViewModel> donationBatches) {
     this.donationBatches = donationBatches;
     return this;
   }
