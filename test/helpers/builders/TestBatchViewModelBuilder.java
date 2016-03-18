@@ -1,12 +1,8 @@
 package helpers.builders;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import model.testbatch.TestBatchStatus;
-import viewmodel.DonationBatchViewModel;
 import viewmodel.TestBatchViewModel;
 
 public class TestBatchViewModelBuilder extends AbstractBuilder<TestBatchViewModel> {
@@ -17,9 +13,7 @@ public class TestBatchViewModelBuilder extends AbstractBuilder<TestBatchViewMode
   private Date createdDate;
   private Date lastUpdatedDate;
   private String notes;
-  private List<DonationBatchViewModel> donationBatches;
-  private Map<String, Boolean> permissions;
-  private int readyForReleaseCount;
+  private Integer numSamples;
 
   public TestBatchViewModelBuilder withId(Long id) {
     this.id = id;
@@ -51,26 +45,8 @@ public class TestBatchViewModelBuilder extends AbstractBuilder<TestBatchViewMode
     return this;
   }
 
-  public TestBatchViewModelBuilder withDonationBatches(List<DonationBatchViewModel> donationBatches) {
-    this.donationBatches = donationBatches;
-    return this;
-  }
-
-  public TestBatchViewModelBuilder withPermissions(Map<String, Boolean> permissions) {
-    this.permissions = permissions;
-    return this;
-  }
-
-  public TestBatchViewModelBuilder withPermission(String key, Boolean value) {
-    if (permissions == null) {
-      permissions = new HashMap<>();
-    }
-    permissions.put(key, value);
-    return this;
-  }
-
-  public TestBatchViewModelBuilder withReadyForReleaseCount(int readyToReleaseCount) {
-    this.readyForReleaseCount = readyToReleaseCount;
+  public TestBatchViewModelBuilder withNumSamples(Integer numSamples) {
+    this.numSamples = numSamples;
     return this;
   }
 
@@ -83,9 +59,7 @@ public class TestBatchViewModelBuilder extends AbstractBuilder<TestBatchViewMode
     testBatchViewModel.setCreatedDate(createdDate);
     testBatchViewModel.setLastUpdated(lastUpdatedDate);
     testBatchViewModel.setNotes(notes);
-    testBatchViewModel.setDonationBatches(donationBatches);
-    testBatchViewModel.setPermissions(permissions);
-    testBatchViewModel.setReadyForReleaseCount(readyForReleaseCount);
+    testBatchViewModel.setNumSamples(numSamples);
     return testBatchViewModel;
   }
 

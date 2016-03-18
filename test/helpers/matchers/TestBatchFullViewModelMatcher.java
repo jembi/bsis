@@ -5,13 +5,13 @@ import java.util.Objects;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
-import viewmodel.TestBatchViewModel;
+import viewmodel.TestBatchFullViewModel;
 
-public class TestBatchViewModelMatcher extends TypeSafeMatcher<TestBatchViewModel> {
+public class TestBatchFullViewModelMatcher extends TypeSafeMatcher<TestBatchFullViewModel> {
 
-  private TestBatchViewModel expected;
+  private TestBatchFullViewModel expected;
 
-  public TestBatchViewModelMatcher(TestBatchViewModel expected) {
+  public TestBatchFullViewModelMatcher(TestBatchFullViewModel expected) {
     this.expected = expected;
   }
 
@@ -30,7 +30,7 @@ public class TestBatchViewModelMatcher extends TypeSafeMatcher<TestBatchViewMode
   }
 
   @Override
-  protected void describeMismatchSafely(TestBatchViewModel actual, Description description) {
+  protected void describeMismatchSafely(TestBatchFullViewModel actual, Description description) {
 
     description.appendText("The following fields did not match:");
 
@@ -81,7 +81,7 @@ public class TestBatchViewModelMatcher extends TypeSafeMatcher<TestBatchViewMode
   }
 
   @Override
-  public boolean matchesSafely(TestBatchViewModel actual) {
+  public boolean matchesSafely(TestBatchFullViewModel actual) {
     return Objects.equals(actual.getId(), expected.getId()) &&
         Objects.equals(actual.getStatus(), expected.getStatus()) &&
         Objects.equals(actual.getBatchNumber(), expected.getBatchNumber()) &&
@@ -93,8 +93,8 @@ public class TestBatchViewModelMatcher extends TypeSafeMatcher<TestBatchViewMode
         Objects.equals(actual.getReadyForReleaseCount(), expected.getReadyForReleaseCount());
   }
 
-  public static TestBatchViewModelMatcher hasSameStateAsTestBatchViewModel(TestBatchViewModel expected) {
-    return new TestBatchViewModelMatcher(expected);
+  public static TestBatchFullViewModelMatcher hasSameStateAsTestBatchFullViewModel(TestBatchFullViewModel expected) {
+    return new TestBatchFullViewModelMatcher(expected);
   }
 
 }

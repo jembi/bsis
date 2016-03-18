@@ -2,8 +2,8 @@ package factory;
 
 import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.TestBatchBuilder.aTestBatch;
-import static helpers.builders.TestBatchViewModelBuilder.aTestBatchViewModel;
-import static helpers.matchers.TestBatchViewModelMatcher.hasSameStateAsTestBatchViewModel;
+import static helpers.builders.TestBatchFullViewModelBuilder.aTestBatchFullViewModel;
+import static helpers.matchers.TestBatchFullViewModelMatcher.hasSameStateAsTestBatchFullViewModel;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -12,19 +12,18 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import model.donationbatch.DonationBatch;
-import model.testbatch.TestBatch;
-import model.testbatch.TestBatchStatus;
-
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import model.donationbatch.DonationBatch;
+import model.testbatch.TestBatch;
+import model.testbatch.TestBatchStatus;
 import service.TestBatchConstraintChecker;
 import service.TestBatchConstraintChecker.CanReleaseResult;
 import suites.UnitTestSuite;
 import viewmodel.DonationBatchViewModel;
-import viewmodel.TestBatchViewModel;
+import viewmodel.TestBatchFullViewModel;
 
 public class TestBatchViewModelFactoryTests extends UnitTestSuite {
 
@@ -61,7 +60,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
 
     DonationBatchViewModel donationBatchViewModel = new DonationBatchViewModel();
 
-    TestBatchViewModel expectedViewModel = aTestBatchViewModel()
+    TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
         .withId(IRRELEVANT_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
@@ -81,9 +80,9 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
     when(donationBatchViewModelFactory.createDonationBatchViewModelWithoutDonationPermissions(donationBatch, true))
         .thenReturn(donationBatchViewModel);
 
-    TestBatchViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchViewModel(testBatch, false);
+    TestBatchFullViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchFullViewModel(testBatch, false);
 
-    assertThat(returnedViewModel, hasSameStateAsTestBatchViewModel(expectedViewModel));
+    assertThat(returnedViewModel, hasSameStateAsTestBatchFullViewModel(expectedViewModel));
   }
 
   @Test
@@ -113,7 +112,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
 
     DonationBatchViewModel donationBatchViewModel = new DonationBatchViewModel();
 
-    TestBatchViewModel expectedViewModel1 = aTestBatchViewModel()
+    TestBatchFullViewModel expectedViewModel1 = aTestBatchFullViewModel()
         .withId(IRRELEVANT_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
@@ -121,8 +120,14 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withNotes(IRRELEVANT_NOTES)
         .withDonationBatches(Arrays.asList(donationBatchViewModel))
+        .withPermission("canRelease", false)
+        .withPermission("canClose", false)
+        .withPermission("canDelete", false)
+        .withPermission("canEdit", false)
+        .withPermission("canReopen", false)
+        .withPermission("canEditDonationBatches", false)
         .build();
-    TestBatchViewModel expectedViewModel2 = aTestBatchViewModel()
+    TestBatchFullViewModel expectedViewModel2 = aTestBatchFullViewModel()
         .withId(ANOTHER_IRRELEVANT_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
@@ -130,16 +135,24 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withNotes(IRRELEVANT_NOTES)
         .withDonationBatches(Arrays.asList(donationBatchViewModel))
+        .withPermission("canRelease", false)
+        .withPermission("canClose", false)
+        .withPermission("canDelete", false)
+        .withPermission("canEdit", false)
+        .withPermission("canReopen", false)
+        .withPermission("canEditDonationBatches", false)
         .build();
 
     when(testBatchConstraintChecker.canReleaseTestBatch(testBatch1)).thenReturn(CANT_RELEASE);
+    when(testBatchConstraintChecker.canReleaseTestBatch(testBatch2)).thenReturn(CANT_RELEASE);
     when(donationBatchViewModelFactory.createDonationBatchViewModelWithoutDonationPermissions(donationBatch, true))
         .thenReturn(donationBatchViewModel);
 
-    List<TestBatchViewModel> returnedViewModels = testBatchViewModelFactory.createTestBatchViewModels(testBatches, false);
+    List<TestBatchFullViewModel> returnedViewModels =
+        testBatchViewModelFactory.createTestBatchFullViewModels(testBatches, false);
 
-    assertThat(returnedViewModels.get(0), hasSameStateAsTestBatchViewModel(expectedViewModel1));
-    assertThat(returnedViewModels.get(1), hasSameStateAsTestBatchViewModel(expectedViewModel2));
+    assertThat(returnedViewModels.get(0), hasSameStateAsTestBatchFullViewModel(expectedViewModel1));
+    assertThat(returnedViewModels.get(1), hasSameStateAsTestBatchFullViewModel(expectedViewModel2));
   }
 
   @Test
@@ -158,7 +171,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
 
     CanReleaseResult canReleaseResult = new CanReleaseResult(true, expectedReadyCount);
 
-    TestBatchViewModel expectedViewModel = aTestBatchViewModel()
+    TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
         .withId(IRRELEVANT_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
@@ -182,9 +195,9 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch)).thenReturn(false);
 
-    TestBatchViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchViewModel(testBatch, true);
+    TestBatchFullViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchFullViewModel(testBatch, true);
 
-    assertThat(returnedViewModel, hasSameStateAsTestBatchViewModel(expectedViewModel));
+    assertThat(returnedViewModel, hasSameStateAsTestBatchFullViewModel(expectedViewModel));
   }
 
   @Test
@@ -199,7 +212,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
         .withNotes(IRRELEVANT_NOTES)
         .build();
 
-    TestBatchViewModel expectedViewModel = aTestBatchViewModel()
+    TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
         .withId(IRRELEVANT_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
@@ -222,9 +235,9 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch)).thenReturn(false);
 
-    TestBatchViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchViewModel(testBatch, true);
+    TestBatchFullViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchFullViewModel(testBatch, true);
 
-    assertThat(returnedViewModel, hasSameStateAsTestBatchViewModel(expectedViewModel));
+    assertThat(returnedViewModel, hasSameStateAsTestBatchFullViewModel(expectedViewModel));
   }
 
   @Test
@@ -239,7 +252,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
         .withNotes(IRRELEVANT_NOTES)
         .build();
 
-    TestBatchViewModel expectedViewModel = aTestBatchViewModel()
+    TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
         .withId(IRRELEVANT_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
@@ -262,9 +275,9 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch)).thenReturn(false);
 
-    TestBatchViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchViewModel(testBatch, true);
+    TestBatchFullViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchFullViewModel(testBatch, true);
 
-    assertThat(returnedViewModel, hasSameStateAsTestBatchViewModel(expectedViewModel));
+    assertThat(returnedViewModel, hasSameStateAsTestBatchFullViewModel(expectedViewModel));
   }
 
   @Test
@@ -279,7 +292,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
         .withNotes(IRRELEVANT_NOTES)
         .build();
 
-    TestBatchViewModel expectedViewModel = aTestBatchViewModel()
+    TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
         .withId(IRRELEVANT_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
@@ -302,8 +315,8 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch)).thenReturn(false);
 
-    TestBatchViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchViewModel(testBatch, true);
+    TestBatchFullViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchFullViewModel(testBatch, true);
 
-    assertThat(returnedViewModel, hasSameStateAsTestBatchViewModel(expectedViewModel));
+    assertThat(returnedViewModel, hasSameStateAsTestBatchFullViewModel(expectedViewModel));
   }
 }
