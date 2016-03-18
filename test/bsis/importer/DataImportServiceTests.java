@@ -6,28 +6,26 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.notNullValue;
+import helpers.builders.AdverseEventTypeBuilder;
+import helpers.builders.BloodTestBuilder;
+import helpers.builders.DonationTypeBuilder;
+import helpers.builders.FormFieldBuilder;
+import helpers.builders.PackTypeBuilder;
+import helpers.builders.UserBuilder;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import helpers.builders.AdverseEventTypeBuilder;
-import helpers.builders.DonationTypeBuilder;
-import helpers.builders.FormFieldBuilder;
-import helpers.builders.PackTypeBuilder;
-import helpers.builders.UserBuilder;
 import model.address.AddressType;
 import model.address.ContactMethodType;
 import model.admin.DataType;
 import model.admin.GeneralConfig;
+import model.bloodtesting.BloodTest;
+import model.bloodtesting.BloodTestResult;
+import model.bloodtesting.rules.BloodTestingRule;
+import model.bloodtesting.rules.DonationField;
 import model.componenttype.ComponentType;
 import model.componenttype.ComponentTypeTimeUnits;
 import model.donation.Donation;
@@ -41,6 +39,14 @@ import model.idtype.IdType;
 import model.location.Location;
 import model.preferredlanguage.PreferredLanguage;
 import model.util.Gender;
+
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import suites.SecurityContextDependentTestSuite;
 
 public class DataImportServiceTests extends SecurityContextDependentTestSuite {
@@ -66,6 +72,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     assertImportDonorData_shouldCreateDonorsFromSpreadsheet();
     assertImportDonationData_shouldCreateDonationsFromSpreadsheet();
     assertImportDonationData_shouldCreateDeferralsFromSpreadsheet();
+    assertImportDonationData_shouldCreateOutcomesFromSpreadsheet();
   }
   
   private void createSupportingTestData() {
@@ -175,9 +182,43 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
 
     // set up test data (Deferral)
     DeferralReason deferralReason = new DeferralReason();
-    deferralReason.setReason("Nausea");
+    deferralReason.setReason("Other reasons");
     entityManager.persist(deferralReason);
 
+    // set up test data (Outcomes)
+    BloodTestBuilder.aBloodTest().withValidResults("POS,NEG").withTestName("HIV")
+        .buildAndPersist(entityManager);
+    BloodTestingRule aboBloodTestingRule1 = new BloodTestingRule();
+    aboBloodTestingRule1.setDonationFieldChanged(DonationField.BLOODABO);
+    aboBloodTestingRule1.setNewInformation("A");
+    aboBloodTestingRule1.setIsActive(true);
+    entityManager.persist(aboBloodTestingRule1);
+    BloodTestingRule aboBloodTestingRule2 = new BloodTestingRule();
+    aboBloodTestingRule2.setDonationFieldChanged(DonationField.BLOODABO);
+    aboBloodTestingRule2.setNewInformation("B");
+    aboBloodTestingRule2.setIsActive(true);
+    entityManager.persist(aboBloodTestingRule2);
+    BloodTestingRule aboBloodTestingRule3 = new BloodTestingRule();
+    aboBloodTestingRule3.setDonationFieldChanged(DonationField.BLOODABO);
+    aboBloodTestingRule3.setNewInformation("O");
+    aboBloodTestingRule3.setIsActive(true);
+    entityManager.persist(aboBloodTestingRule3);
+    BloodTestingRule aboBloodTestingRule4 = new BloodTestingRule();
+    aboBloodTestingRule4.setDonationFieldChanged(DonationField.BLOODABO);
+    aboBloodTestingRule4.setNewInformation("AB");
+    aboBloodTestingRule4.setIsActive(true);
+    entityManager.persist(aboBloodTestingRule4);
+    BloodTestingRule rhBloodTestingRule1 = new BloodTestingRule();
+    rhBloodTestingRule1.setDonationFieldChanged(DonationField.BLOODRH);
+    rhBloodTestingRule1.setNewInformation("+");
+    rhBloodTestingRule1.setIsActive(true);
+    entityManager.persist(rhBloodTestingRule1);
+    BloodTestingRule rhBloodTestingRule2 = new BloodTestingRule();
+    rhBloodTestingRule2.setDonationFieldChanged(DonationField.BLOODRH);
+    rhBloodTestingRule2.setNewInformation("-");
+    rhBloodTestingRule2.setIsActive(true);
+    entityManager.persist(rhBloodTestingRule2);
+    
     // Synchronize entities to the database before running the test
     entityManager.flush();
   }
@@ -347,7 +388,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     DonorDeferral deferral = findDeferralByDeferralReasonText("Had nausea");
     
     assertThat("venue is set", deferral.getVenue().getName(), equalTo("First"));
-    assertThat("deferral reason is set", deferral.getDeferralReason().getReason(), equalTo("Nausea"));
+    assertThat("deferral reason is set", deferral.getDeferralReason().getReason(), equalTo("Other reasons"));
     assertThat("createdDate is set", new SimpleDateFormat("yyyy-MM-dd").format(deferral.getCreatedDate()), equalTo("2016-01-03"));
     assertThat("deferredUntil is set", new SimpleDateFormat("yyyy-MM-dd").format(deferral.getDeferredUntil()), equalTo("2016-06-03"));
     assertThat("deferred donor is set", deferral.getDeferredDonor().getFirstName(), equalTo("David"));
@@ -356,6 +397,25 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
   private DonorDeferral findDeferralByDeferralReasonText(String deferralReasonText) {
     return entityManager.createQuery("SELECT d FROM DonorDeferral d WHERE d.deferralReasonText = :deferralReasonText", DonorDeferral.class)
         .setParameter("deferralReasonText", deferralReasonText)
+        .getSingleResult();
+  }
+  
+  private void assertImportDonationData_shouldCreateOutcomesFromSpreadsheet() {
+    Donation firstDonation = findDonationByDonationIdentificationNumber("32434");
+    BloodTestResult bloodTestOutcome = findBloodTestOutcomeByDonation(firstDonation);
+    
+    SimpleDateFormat dateSdf = new SimpleDateFormat("yyyy-MM-dd");
+    assertThat("testedOn date is set", dateSdf.format(bloodTestOutcome.getTestedOn()), equalTo("2016-03-16"));
+    SimpleDateFormat timeSdf = new SimpleDateFormat("HH:mm");
+    assertThat("testedOn time is set", timeSdf.format(bloodTestOutcome.getTestedOn()), equalTo("09:00"));
+    assertThat("bloodTest is set", bloodTestOutcome.getBloodTest().getTestName(), equalTo("HIV"));
+    assertThat("outcome is set", bloodTestOutcome.getResult(), equalTo("POS"));
+    assertThat("reEntryRequired is false", !bloodTestOutcome.getReEntryRequired());
+  }
+  
+  private BloodTestResult findBloodTestOutcomeByDonation(Donation donation) {
+    return entityManager.createQuery("SELECT tr FROM BloodTestResult tr WHERE tr.donation = :donation", BloodTestResult.class)
+        .setParameter("donation", donation)
         .getSingleResult();
   }
 }

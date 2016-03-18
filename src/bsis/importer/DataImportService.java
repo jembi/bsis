@@ -7,32 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindException;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
-
-import backingform.AdverseEventBackingForm;
-import backingform.AdverseEventTypeBackingForm;
-import backingform.DeferralBackingForm;
-import backingform.DonationBackingForm;
-import backingform.DonorBackingForm;
-import backingform.LocationBackingForm;
-import backingform.validator.DeferralBackingFormValidator;
-import backingform.validator.DonationBackingFormValidator;
-import backingform.validator.DonorBackingFormValidator;
-import backingform.validator.LocationBackingFormValidator;
 import model.address.AddressType;
 import model.address.ContactMethodType;
 import model.adverseevent.AdverseEventType;
+import model.bloodtesting.BloodTest;
+import model.bloodtesting.rules.BloodTestingRule;
+import model.bloodtesting.rules.DonationField;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
 import model.donationbatch.DonationBatch;
@@ -46,6 +26,20 @@ import model.preferredlanguage.PreferredLanguage;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 import model.util.Gender;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+
 import repository.AdverseEventTypeRepository;
 import repository.ContactMethodTypeRepository;
 import repository.DeferralReasonRepository;
@@ -57,8 +51,20 @@ import repository.LocationRepository;
 import repository.PackTypeRepository;
 import repository.SequenceNumberRepository;
 import repository.TestBatchRepository;
+import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import service.DonationCRUDService;
+import backingform.AdverseEventBackingForm;
+import backingform.AdverseEventTypeBackingForm;
+import backingform.DeferralBackingForm;
+import backingform.DonationBackingForm;
+import backingform.DonorBackingForm;
+import backingform.LocationBackingForm;
+import backingform.TestResultBackingForm;
+import backingform.validator.DeferralBackingFormValidator;
+import backingform.validator.DonationBackingFormValidator;
+import backingform.validator.DonorBackingFormValidator;
+import backingform.validator.LocationBackingFormValidator;
 
 @Transactional
 @Service
@@ -97,8 +103,11 @@ public class DataImportService {
   private DonationCRUDService donationCRUDService;
   @Autowired
   private TestBatchRepository testBatchRepository;
+  @Autowired
+  private BloodTestingRepository bloodTestingRepository;
 
   private Map<String, Donor> externalDonorIdToBsisDonor = new HashMap<>();
+  private Map<String, Long> donationIdentificationNumberToDonationId = new HashMap<>();
 
   private boolean validationOnly;
   private String action;
@@ -114,6 +123,7 @@ public class DataImportService {
     importDonorData(workbook.getSheet("Donors"));
     importDonationsData(workbook.getSheet("Donations"));
     importDeferralData(workbook.getSheet("Deferrals"));
+    importOutcomeData(workbook.getSheet("Outcomes"));
     
     System.out.println("Finished import at " + new Date());
     
@@ -202,6 +212,7 @@ public class DataImportService {
     Map<String, IdType> idTypeCache = buildIdTypeCache();
     Map<String, ContactMethodType> contactMethodTypeCache = buildContactMethodTypeCache();
     Map<String, AddressType> addressTypeCache = buildAddressTypeCache();
+    List<BloodTestingRule> bloodTestingRuleCache = bloodTestingRepository.getActiveBloodTestingRules();
 
     // Keep a reference to the row containing the headers
     Row headers = null;
@@ -278,11 +289,23 @@ public class DataImportService {
             break;
 
           case "bloodAbo":
-            donorBackingForm.setBloodAbo(cell.getStringCellValue());
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            String bloodABO = cell.getStringCellValue();
+            if (isValidBloodTyping(bloodABO, DonationField.BLOODABO, bloodTestingRuleCache)) {
+              donorBackingForm.setBloodAbo(bloodABO);
+            } else {
+              errors.rejectValue("donor.bloodAbo", "bloodAbo.invalid", "Invalid blood ABO value");
+            }
             break;
 
           case "bloodRh":
-            donorBackingForm.setBloodRh(cell.getStringCellValue());
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            String bloodRh = cell.getStringCellValue();
+            if (isValidBloodTyping(bloodRh, DonationField.BLOODRH, bloodTestingRuleCache)) {
+              donorBackingForm.setBloodRh(bloodRh);
+            } else {
+              errors.rejectValue("donor.bloodRh", "bloodRh.invalid", "Invalid blood Rh value");
+            }
             break;
 
           case "notes":
@@ -487,6 +510,7 @@ public class DataImportService {
     Map<String, AdverseEventType> adverseEventTypeCache = buildAdverseEventTypeCache();
     Map<String, DonationBatch> donationBatches = new HashMap<>();
     Map<String, TestBatch> testBatches = new HashMap<>();
+    List<BloodTestingRule> bloodTestingRuleCache = bloodTestingRepository.getActiveBloodTestingRules();
 
     // Keep a reference to the row containing the headers
     Row headers = null;
@@ -641,15 +665,25 @@ public class DataImportService {
             cell.setCellType(Cell.CELL_TYPE_STRING);
             adverseEventComment = cell.getStringCellValue();
             break;
-
+            
           case "bloodAbo":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            donationBackingForm.setBloodAbo(cell.getStringCellValue());
+            String bloodABO = cell.getStringCellValue();
+            if (isValidBloodTyping(bloodABO, DonationField.BLOODABO, bloodTestingRuleCache)) {
+              donationBackingForm.setBloodAbo(bloodABO);
+            } else {
+              errors.rejectValue("donor.bloodAbo", "bloodAbo.invalid", "Invalid blood ABO value");
+            }
             break;
 
           case "bloodRh":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            donationBackingForm.setBloodRh(cell.getStringCellValue());
+            String bloodRh = cell.getStringCellValue();
+            if (isValidBloodTyping(bloodRh, DonationField.BLOODRH, bloodTestingRuleCache)) {
+              donationBackingForm.setBloodRh(bloodRh);
+            } else {
+              errors.rejectValue("donor.bloodRh", "bloodRh.invalid", "Invalid blood Rh value");
+            }
             break;
 
           case "notes":
@@ -701,6 +735,10 @@ public class DataImportService {
       if (StringUtils.isNotEmpty(donation.getBloodAbo()) && StringUtils.isNotEmpty(donation.getBloodRh())) {
         donation.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
         donationRepository.saveDonation(donation);
+
+        //Populate the cache for use later when importing outcomes
+        donationIdentificationNumberToDonationId.put(donation.getDonationIdentificationNumber(), donation.getId());
+
       }
     }
     System.out.println(); // clear logging
@@ -796,6 +834,119 @@ public class DataImportService {
     System.out.println(); // clear logging
   }
 
+  public void importOutcomeData(Sheet sheet) {
+    Map<String, BloodTest> bloodTestCache = buildBloodTestCache();
+    
+    // Keep a reference to the row containing the headers
+    Row headers = null;
+
+    int testResultsCount = 0;
+
+    for (Row row : sheet) {
+
+      if (headers == null) {
+        headers = row;
+        continue;
+      }
+
+      testResultsCount += 1;
+
+      // There's no existing TestResultBackingFormValidator, and the existing form is a bit
+      // different from what the import requires.
+      // We'll just use this form for presenting error messages.
+      TestResultBackingForm testOutcomeBackingForm = new TestResultBackingForm();
+      BindException errors = new BindException(testOutcomeBackingForm, "TestResultBackingForm");
+
+      Date testedOn = null;
+      Long donationId = null;
+      BloodTest bloodTest = null;
+      String outcome = null;
+      Map<Long, String> testResults = new HashMap<>();
+
+      for (Cell cell : row) {
+        Cell header = headers.getCell(cell.getColumnIndex());
+
+        switch (header.getStringCellValue()) {
+          case "donationIdentificationNumber":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            donationId = donationIdentificationNumberToDonationId.get(cell.getStringCellValue());
+            if (donationId == null) {
+              errors.rejectValue("donationIdentificationNumber", "donationIdentificationNumber.invalid",
+                  "Invalid donationIdentificationNumber");
+            }
+            break;
+
+          case "testedOn":
+            try {
+              testedOn = cell.getDateCellValue();
+            } catch (Exception e) {
+              errors.rejectValue("testResults", "testResults.invalid", "Invalid date testedOn");
+            }
+            break;
+
+          case "bloodTestName":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            bloodTest = bloodTestCache.get(cell.getStringCellValue());
+            break;
+            
+          case "outcome":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            outcome = cell.getStringCellValue();
+            if (bloodTest != null) {
+              testResults.put(bloodTest.getId(), cell.getStringCellValue());
+              if (!bloodTest.getValidResultsList().contains(cell.getStringCellValue())) {
+                errors.rejectValue("testResults", "testResults.invalid", "Invalid outcome");
+              }
+            }
+            testOutcomeBackingForm.setTestResults(testResults);
+            break;
+
+          default:
+            System.out.println("Unknown deferral column: " + header.getStringCellValue());
+            break;
+        }
+      }
+
+      // Do validation specific for test outcomes import (the system accepts saving empty test
+      // outcomes, but the import doesn't)
+      if (bloodTest == null) {
+        errors.rejectValue("testResults", "testResults.required", "bloodTestName is required");
+      }
+      if (outcome == null) {
+        errors.rejectValue("testResults", "testResults.required", "outcome is required");
+      }
+      if (testedOn == null) {
+        errors.rejectValue("testResults", "testResults.required", "Date testedOn is required");
+      }
+
+      displayProgressMessage(
+          action + " " + testResultsCount + " out of " + sheet.getLastRowNum() + " test outcome(s)");
+      
+      if (errors.hasErrors()) {
+        System.out.println("Invalid outcome on row " + (row.getRowNum() + 1) + ". " + getErrorsString(errors));
+        throw new IllegalArgumentException("Invalid test outcome");
+      }
+
+      Donation donation = new Donation();
+      donation.setId(donationId);
+      bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, testedOn, null, true);
+    }
+    
+    System.out.println(); // clear logging
+    
+  }
+  
+  private boolean isValidBloodTyping(String value, DonationField donationField, List<BloodTestingRule> bloodTestingRules) {
+    for (BloodTestingRule bloodTestingRule : bloodTestingRules) {
+      if (bloodTestingRule.getDonationFieldChanged().equals(donationField)) {
+        if (value.equals(bloodTestingRule.getNewInformation())) {
+          return true; // match found
+        }
+      }
+    }
+    return false; // never found a match for the value
+  }
+
   private DonationBatch getDonationBatch(Map<String, DonationBatch> donationBatches, Map<String, TestBatch> testBatches,
       Date donationDate, Location venue) {
 
@@ -830,6 +981,15 @@ public class DataImportService {
     }
 
     return donationBatch;
+  }
+
+  private Map<String, BloodTest> buildBloodTestCache() {
+    Map <String, BloodTest> bloodTestCache = new HashMap<>();
+    List<BloodTest> bloodTests = bloodTestingRepository.getAllBloodTestsIncludeInactive();
+    for (BloodTest bloodTest : bloodTests) {
+      bloodTestCache.put(bloodTest.getTestName(), bloodTest);
+    }
+    return bloodTestCache;
   }
 
   private Map<String, AdverseEventType> buildAdverseEventTypeCache() {
