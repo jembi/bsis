@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -349,6 +350,7 @@ public class DonationController {
 
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONATION + "')")
   @RequestMapping(value = "{id}/bloodTypingResolution", method = RequestMethod.PUT)
+  @Transactional
   public void saveBloodTypingResolution(
       @PathVariable(value = "id") Long id,
       @RequestBody @Valid BloodTypingResolutionBackingForm bloodTypingResolutionBackingForm) {
