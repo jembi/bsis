@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import service.TestBatchConstraintChecker;
@@ -77,15 +78,12 @@ public class TestBatchViewModelFactory {
   }
 
   /**
-   * Populate basic view model. Returns a list of donations with samples. This is fetched here,
-   * because the number of test samples for that batch needs to be calculated at this stage.
+   * Populate basic view model.
    *
    * @param testBatch the test batch
    * @param testBatchViewModel the test batch view model
-   * @return the list of donations with test samples
    */
-  private List<DonationBatchViewModel> populateBasicViewModel(TestBatch testBatch,
-      TestBatchViewModel testBatchViewModel) {
+  private void populateBasicViewModel(TestBatch testBatch, TestBatchViewModel testBatchViewModel) {
     testBatchViewModel.setId(testBatch.getId());
     testBatchViewModel.setStatus(testBatch.getStatus());
     testBatchViewModel.setBatchNumber(testBatch.getBatchNumber());
@@ -93,17 +91,16 @@ public class TestBatchViewModelFactory {
     testBatchViewModel.setLastUpdated(testBatch.getLastUpdated());
     testBatchViewModel.setNotes(testBatch.getNotes());
 
-    // Return list of donation with test samples
-    List<DonationBatchViewModel> donationBatchViewModels = new ArrayList<>();
-    if (testBatch.getDonationBatches() != null) {
-      for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-        donationBatchViewModels.add(
-            donationBatchViewModelFactory.createDonationBatchViewModelWithoutDonationPermissions(donationBatch, true));
+    // Calculate number of samples (only consider donations with test samples)
+    int numSamples = 0;
+    for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
+      for (Donation donation : donationBatch.getDonations()) {
+        if (donation.getPackType().getTestSampleProduced()) {
+          numSamples++;
+        }
       }
     }
-
-    testBatchViewModel.setNumSamples(donationBatchViewModels.size());
-    return donationBatchViewModels;
+    testBatchViewModel.setNumSamples(numSamples);
   }
 
   /**
@@ -117,8 +114,17 @@ public class TestBatchViewModelFactory {
   private TestBatchFullViewModel populateFullViewModel(TestBatch testBatch, TestBatchFullViewModel testBatchViewModel,
       boolean isTestingSupervisor) {
 
-    // First populate basic fields and set donations with test samples
-    List<DonationBatchViewModel> donationsWithTestSamples = populateBasicViewModel(testBatch, testBatchViewModel);
+    // First populate basic fields
+    populateBasicViewModel(testBatch, testBatchViewModel);
+
+    // Get list of donation view models with test samples
+    List<DonationBatchViewModel> donationsWithTestSamples = new ArrayList<>();
+    if (testBatch.getDonationBatches() != null) {
+      for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
+        donationsWithTestSamples.add(
+            donationBatchViewModelFactory.createDonationBatchViewModelWithoutDonationPermissions(donationBatch, true));
+      }
+    }
     testBatchViewModel.setDonationBatches(donationsWithTestSamples);
 
     // Check if this test batch can be released
