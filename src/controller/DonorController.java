@@ -8,11 +8,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import model.counselling.PostDonationCounselling;
-import model.donation.Donation;
-import model.donor.Donor;
-import model.donordeferral.DonorDeferral;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +23,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import backingform.DonorBackingForm;
+import backingform.DuplicateDonorsBackingForm;
+import backingform.validator.DonorBackingFormValidator;
+import constant.GeneralConfigConstants;
+import factory.DonationViewModelFactory;
+import factory.DonorDeferralViewModelFactory;
+import factory.DonorViewModelFactory;
+import factory.PostDonationCounsellingViewModelFactory;
+import model.counselling.PostDonationCounselling;
+import model.donation.Donation;
+import model.donor.Donor;
+import model.donordeferral.DonorDeferral;
 import repository.AdverseEventRepository;
 import repository.ContactMethodTypeRepository;
 import repository.DonationBatchRepository;
@@ -42,19 +49,12 @@ import service.DuplicateDonorService;
 import service.GeneralConfigAccessorService;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
+import valueobject.DuplicateDonorValueObject;
 import viewmodel.DonationViewModel;
 import viewmodel.DonorDeferralViewModel;
 import viewmodel.DonorSummaryViewModel;
 import viewmodel.DonorViewModel;
 import viewmodel.PostDonationCounsellingViewModel;
-import backingform.DonorBackingForm;
-import backingform.DuplicateDonorsBackingForm;
-import backingform.validator.DonorBackingFormValidator;
-import constant.GeneralConfigConstants;
-import factory.DonationViewModelFactory;
-import factory.DonorDeferralViewModelFactory;
-import factory.DonorViewModelFactory;
-import factory.PostDonationCounsellingViewModelFactory;
 
 @RestController
 @RequestMapping("donors")
@@ -385,25 +385,9 @@ public class DonorController {
   @RequestMapping(value = "/duplicates/all", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DUPLICATE_DONORS + "')")
   public Map<String, Object> findDuplicateDonors() {
-
     Map<String, Object> map = new HashMap<String, Object>();
-
-    List<Donor> donors = donorRepository.getAllDonors();
-    Map<String, List<Donor>> duplicates = duplicateDonorService.findDuplicateDonors(donors);
-
-    // convert Donors to DonorViewModels
-    Map<String, List<DonorViewModel>> duplicateViewModels = new HashMap<String, List<DonorViewModel>>();
-    for (String key : duplicates.keySet()) {
-      List<Donor> donorList = duplicates.get(key);
-      List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
-      for (Donor donor : donorList) {
-        DonorViewModel donorViewModel = donorViewModelFactory.createDonorViewModelWithPermissions(donor);
-        donorViewModels.add(donorViewModel);
-      }
-      duplicateViewModels.put(key, donorViewModels);
-    }
-
-    map.put("duplicates", duplicateViewModels);
+    List<DuplicateDonorValueObject> duplicates = duplicateDonorService.findDuplicateDonors();
+    map.put("duplicates", donorViewModelFactory.createDuplicateDonorViewModels(duplicates));
     return map;
   }
 
