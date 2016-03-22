@@ -45,6 +45,7 @@ import model.user.User;
 import model.util.Gender;
 import suites.DBUnitContextDependentTestSuite;
 import utils.CustomDateFormatter;
+import valueobject.DuplicateDonorValueObject;
 import viewmodel.DonorSummaryViewModel;
 
 public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
@@ -1027,20 +1028,10 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     DonorSummaryViewModel donorSummary = donorRepository.findDonorSummaryByDonorNumber("000001");
   }
 
-//    @Test
-//    /**
-//     *Test Passes if Id Number saved In database
-//     */
-//    public void SaveIdNumber_shouldPersist(){
-//        Donor donor = new Donor();
-//        donor.setId(1l);
-//        IdType idType = new IdType();
-//        idType.setId(1l);
-//        IdNumber idNumber = new IdNumber();
-//        idNumber.setIdNumber("123");
-//        idNumber.setDonorId(donor);
-//        idNumber.setIdType(idType);
-//        donorRepository.saveIdNumber(idNumber);
-//        assertNotNull("Expected : INT but Found :  NULL" ,idNumber.getId());
-//    }
+  @Test
+  public void testGetDuplicateDonors() throws Exception {
+    List<DuplicateDonorValueObject> duplicateDonors = donorRepository.getDuplicateDonors();
+    Assert.assertEquals("There are 6 duplicates", duplicateDonors.get(0).getCount(), 6);
+  }
+
 }

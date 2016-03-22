@@ -37,6 +37,7 @@ import model.idtype.IdType;
 import model.preferredlanguage.PreferredLanguage;
 import service.GeneralConfigAccessorService;
 import utils.DonorUtils;
+import valueobject.DuplicateDonorValueObject;
 import viewmodel.DonorSummaryViewModel;
 
 @Repository
@@ -450,5 +451,15 @@ public class DonorRepository {
     }
     em.flush();
     return newDonor;
+  }
+
+  public List<DuplicateDonorValueObject> getDuplicateDonors() {
+    return em.createQuery(
+        "SELECT NEW valueobject.DuplicateDonorValueObject(MIN(d.donorNumber), d.firstName, d.lastName, d.birthDate, d.gender, COUNT(d)) " +
+        "FROM Donor d " +
+        "GROUP BY d.firstName, d.lastName, d.birthDate, d.gender " +
+        "HAVING  COUNT(d.firstName) > 1",
+        DuplicateDonorValueObject.class).getResultList();
+
   }
 }
