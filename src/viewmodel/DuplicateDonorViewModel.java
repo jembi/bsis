@@ -6,7 +6,7 @@ import model.util.Gender;
 
 public class DuplicateDonorViewModel {
 
-  private String donorNumber;
+  private String groupKey;
 
   private String firstName;
 
@@ -22,12 +22,12 @@ public class DuplicateDonorViewModel {
     super();
   }
 
-  public String getDonorNumber() {
-    return donorNumber;
+  public String getGroupKey() {
+    return groupKey;
   }
 
-  public void setDonorNumber(String donorNumber) {
-    this.donorNumber = donorNumber;
+  public void setGroupKey(String groupKey) {
+    this.groupKey = groupKey;
   }
 
   public String getFirstName() {

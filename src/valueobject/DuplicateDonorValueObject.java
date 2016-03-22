@@ -6,7 +6,7 @@ import model.util.Gender;
 
 public class DuplicateDonorValueObject {
 
-  private String donorNumber;
+  private String groupKey;
 
   private String firstName;
 
@@ -18,16 +18,14 @@ public class DuplicateDonorValueObject {
 
   private long count;
 
-
-
   public DuplicateDonorValueObject() {
     super();
   }
 
-  public DuplicateDonorValueObject(String donorNumber, String firstName, String lastName, Date birthDate, Gender gender,
+  public DuplicateDonorValueObject(String groupKey, String firstName, String lastName, Date birthDate, Gender gender,
       long count) {
     super();
-    this.donorNumber = donorNumber;
+    this.groupKey = groupKey;
     this.firstName = firstName;
     this.lastName = lastName;
     this.birthDate = birthDate;
@@ -35,12 +33,12 @@ public class DuplicateDonorValueObject {
     this.count = count;
   }
 
-  public String getDonorNumber() {
-    return donorNumber;
+  public String getGroupKey() {
+    return groupKey;
   }
 
-  public void setDonorNumber(String donorNumber) {
-    this.donorNumber = donorNumber;
+  public void setGroupKey(String groupKey) {
+    this.groupKey = groupKey;
   }
 
   public String getFirstName() {

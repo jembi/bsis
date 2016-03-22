@@ -65,7 +65,7 @@ public class DonorViewModelFactory {
   private DuplicateDonorViewModel createDuplicateDonorViewModel(DuplicateDonorValueObject duplicateDonorValueObject) {
 
     DuplicateDonorViewModel duplicateDonorViewModel = new DuplicateDonorViewModel();
-    duplicateDonorViewModel.setDonorNumber(duplicateDonorValueObject.getDonorNumber());
+    duplicateDonorViewModel.setGroupKey(duplicateDonorValueObject.getGroupKey());
     duplicateDonorViewModel.setBirthDate(duplicateDonorValueObject.getBirthDate());
     duplicateDonorViewModel.setCount(duplicateDonorValueObject.getCount());
     duplicateDonorViewModel.setFirstName(duplicateDonorValueObject.getFirstName());
