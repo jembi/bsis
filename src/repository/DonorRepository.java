@@ -294,21 +294,6 @@ public class DonorRepository {
     return donor;
   }
 
-
-  /*y
-   public Donor findDonorByDonorNumberIncludeDeleted(String donorNumber) {
-   String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.donations  WHERE d.donorNumber = :donorNumber";
-   TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
-   Donor donor = null;
-   try {
-   donor = query.setParameter("donorNumber", donorNumber).getSingleResult();
-   } catch (NoResultException ex) {
-   LOGGER.error("could not find record with donorNumber :" + donorNumber);
-   LOGGER.error(ex.getMessage());
-   }
-   return donor;
-   }
-   */
   public List<PreferredLanguage> getAllLanguages() {
     TypedQuery<PreferredLanguage> query = em.createQuery(
         "SELECT l FROM PreferredLanguage l", PreferredLanguage.class);
@@ -454,12 +439,7 @@ public class DonorRepository {
   }
 
   public List<DuplicateDonorValueObject> getDuplicateDonors() {
-    return em.createQuery(
-        "SELECT NEW valueobject.DuplicateDonorValueObject(MIN(d.donorNumber), d.firstName, d.lastName, d.birthDate, d.gender, COUNT(d)) " +
-        "FROM Donor d " +
-        "GROUP BY d.firstName, d.lastName, d.birthDate, d.gender " +
-        "HAVING  COUNT(d.firstName) > 1",
-        DuplicateDonorValueObject.class).getResultList();
-
+    return em.createNamedQuery(DonorNamedQueryConstants.NAME_GET_DUPLICATE_DONORS, DuplicateDonorValueObject.class)
+        .getResultList();
   }
 }

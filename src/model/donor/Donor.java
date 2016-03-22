@@ -12,22 +12,12 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import model.BaseModificationTrackerEntity;
-import model.address.Address;
-import model.address.AddressType;
-import model.address.Contact;
-import model.address.ContactMethodType;
-import model.donation.Donation;
-import model.donordeferral.DonorDeferral;
-import model.idtype.IdType;
-import model.location.Location;
-import model.preferredlanguage.PreferredLanguage;
-import model.util.Gender;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -39,13 +29,28 @@ import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Length;
 
-import utils.DonorUtils;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import constraintvalidator.LocationExists;
+import model.BaseModificationTrackerEntity;
+import model.address.Address;
+import model.address.AddressType;
+import model.address.Contact;
+import model.address.ContactMethodType;
+import model.donation.Donation;
+import model.donordeferral.DonorDeferral;
+import model.idtype.IdType;
+import model.location.Location;
+import model.preferredlanguage.PreferredLanguage;
+import model.util.Gender;
+import repository.DonorNamedQueryConstants;
+import utils.DonorUtils;
 
+@NamedQueries({
+  @NamedQuery(name = DonorNamedQueryConstants.NAME_GET_DUPLICATE_DONORS,
+      query = DonorNamedQueryConstants.QUERY_GET_DUPLICATE_DONORS)
+})
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
