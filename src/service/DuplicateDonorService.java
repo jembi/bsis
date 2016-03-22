@@ -6,9 +6,12 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import model.donation.Donation;
 import model.donor.Donor;
@@ -17,14 +20,9 @@ import model.donor.DuplicateDonorBackup;
 import model.donordeferral.DonorDeferral;
 import model.packtype.PackType;
 import model.util.Gender;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import repository.DonorRepository;
 import repository.SequenceNumberRepository;
+import valueobject.DuplicateDonorValueObject;
 import viewmodel.BloodTestingRuleResult;
 
 /**
@@ -243,35 +241,10 @@ public class DuplicateDonorService {
   /**
    * Identifies the duplicate donors matching on first name, last name, gender and date of birth.
    *
-   * @param donors List<Donor> list of donors to check
-   * @return Map<List<Donor>> map of duplicate donors found, will not be null or contain nulls
+   * @return list of duplicate donors found, will not be null or contain nulls
    */
-  public Map<String, List<Donor>> findDuplicateDonors(List<Donor> donors) {
-    Map<String, List<Donor>> duplicateDonors = new HashMap<String, List<Donor>>();
-    if (donors != null) {
-      List<Donor> potentialDuplicates = new ArrayList<Donor>(donors);
-      for (int i = 0; i < potentialDuplicates.size(); i++) {
-        Donor d1 = potentialDuplicates.get(i);
-        List<Donor> duplicates = new ArrayList<Donor>();
-        // find the duplicates starting from the next element in the list of Donors
-        for (int j = i + 1; j < potentialDuplicates.size(); j++) {
-          Donor d2 = potentialDuplicates.get(j);
-          if (match(d1, d2)) {
-            duplicates.add(d2);
-          }
-        }
-        if (!duplicates.isEmpty()) {
-          // remove the found duplicates from the potential list
-          for (Donor d3 : duplicates) {
-            potentialDuplicates.remove(d3);
-          }
-          // add the new duplicates to the duplicate map
-          duplicates.add(d1);
-          duplicateDonors.put(String.valueOf(d1.getDonorNumber()), duplicates);
-        }
-      }
-    }
-    return duplicateDonors;
+  public List<DuplicateDonorValueObject> findDuplicateDonors() {
+    return donorRepository.getDuplicateDonors();
   }
 
   /**
