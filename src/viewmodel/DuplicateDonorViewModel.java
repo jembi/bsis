@@ -69,4 +69,12 @@ public class DuplicateDonorViewModel {
   public void setCount(long count) {
     this.count = count;
   }
+
+  @Override
+  public String toString() {
+    return "DuplicateDonorViewModel [groupKey=" + groupKey + ", firstName=" + firstName + ", lastName=" + lastName
+        + ", gender=" + gender + ", birthDate=" + birthDate + ", count=" + count + "]";
+  }
+
+
 }
