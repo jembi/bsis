@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import constant.GeneralConfigConstants;
+import dto.CollectedDonationDTO;
 import model.bloodtesting.TTIStatus;
 import model.component.Component;
 import model.component.ComponentStatus;
@@ -42,7 +43,6 @@ import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
 import service.GeneralConfigAccessorService;
-import valueobject.CollectedDonationValueObject;
 import viewmodel.BloodTestingRuleResult;
 
 @Repository
@@ -469,10 +469,10 @@ public class DonationRepository {
     return results.isEmpty() ? null : results.get(0);
   }
 
-  public List<CollectedDonationValueObject> findCollectedDonationsReportIndicators(Date startDate, Date endDate) {
+  public List<CollectedDonationDTO> findCollectedDonationsReportIndicators(Date startDate, Date endDate) {
     return em.createNamedQuery(
         DonationNamedQueryConstants.NAME_FIND_COLLECTED_DONATION_VALUE_OBJECTS_FOR_DATE_RANGE,
-        CollectedDonationValueObject.class)
+        CollectedDonationDTO.class)
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
         .setParameter("deleted", false)

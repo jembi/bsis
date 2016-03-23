@@ -27,6 +27,7 @@ import backingform.DonorBackingForm;
 import backingform.DuplicateDonorsBackingForm;
 import backingform.validator.DonorBackingFormValidator;
 import constant.GeneralConfigConstants;
+import dto.DuplicateDonorDTO;
 import factory.DonationViewModelFactory;
 import factory.DonorDeferralViewModelFactory;
 import factory.DonorViewModelFactory;
@@ -49,7 +50,6 @@ import service.DuplicateDonorService;
 import service.GeneralConfigAccessorService;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
-import valueobject.DuplicateDonorValueObject;
 import viewmodel.DonationViewModel;
 import viewmodel.DonorDeferralViewModel;
 import viewmodel.DonorSummaryViewModel;
@@ -386,7 +386,7 @@ public class DonorController {
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DUPLICATE_DONORS + "')")
   public Map<String, Object> findDuplicateDonors() {
     Map<String, Object> map = new HashMap<String, Object>();
-    List<DuplicateDonorValueObject> duplicates = duplicateDonorService.findDuplicateDonors();
+    List<DuplicateDonorDTO> duplicates = duplicateDonorService.findDuplicateDonors();
     map.put("duplicates", donorViewModelFactory.createDuplicateDonorViewModels(duplicates));
     return map;
   }

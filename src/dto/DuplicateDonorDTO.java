@@ -1,10 +1,10 @@
-package valueobject;
+package dto;
 
 import java.util.Date;
 
 import model.util.Gender;
 
-public class DuplicateDonorValueObject {
+public class DuplicateDonorDTO {
 
   private String groupKey;
 
@@ -18,11 +18,11 @@ public class DuplicateDonorValueObject {
 
   private long count;
 
-  public DuplicateDonorValueObject() {
+  public DuplicateDonorDTO() {
     super();
   }
 
-  public DuplicateDonorValueObject(String groupKey, String firstName, String lastName, Date birthDate, Gender gender,
+  public DuplicateDonorDTO(String groupKey, String firstName, String lastName, Date birthDate, Gender gender,
       long count) {
     super();
     this.groupKey = groupKey;

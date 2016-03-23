@@ -26,6 +26,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import dto.DuplicateDonorDTO;
 import model.address.AddressType;
 import model.donation.Donation;
 import model.donor.Donor;
@@ -37,7 +38,6 @@ import model.idtype.IdType;
 import model.preferredlanguage.PreferredLanguage;
 import service.GeneralConfigAccessorService;
 import utils.DonorUtils;
-import valueobject.DuplicateDonorValueObject;
 import viewmodel.DonorSummaryViewModel;
 
 @Repository
@@ -438,8 +438,8 @@ public class DonorRepository {
     return newDonor;
   }
 
-  public List<DuplicateDonorValueObject> getDuplicateDonors() {
-    return em.createNamedQuery(DonorNamedQueryConstants.NAME_GET_DUPLICATE_DONORS, DuplicateDonorValueObject.class)
+  public List<DuplicateDonorDTO> getDuplicateDonors() {
+    return em.createNamedQuery(DonorNamedQueryConstants.NAME_GET_DUPLICATE_DONORS, DuplicateDonorDTO.class)
         .getResultList();
   }
 }

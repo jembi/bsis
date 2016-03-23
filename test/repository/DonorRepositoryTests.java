@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import suites.ContextDependentTestSuite;
-import valueobject.DuplicateDonorValueObject;
+import dto.DuplicateDonorDTO;
 
 public class DonorRepositoryTests extends ContextDependentTestSuite {
   
@@ -36,7 +36,7 @@ public class DonorRepositoryTests extends ContextDependentTestSuite {
     donors.add(DonorBuilder.aDonor().withDonorNumber("4").withFirstName("Nancy").withLastName("Drew")
         .withGender(Gender.female).withBirthDate("1964-11-20").withDonorStatus(DonorStatus.NORMAL)
         .thatIsNotDeleted().buildAndPersist(entityManager));
-    List<DuplicateDonorValueObject> duplicateDonors = donorRepository.getDuplicateDonors();
+    List<DuplicateDonorDTO> duplicateDonors = donorRepository.getDuplicateDonors();
     Assert.assertEquals("One set of matching donors", 1, duplicateDonors.size());
     Assert.assertEquals("Two matching donors", 2, duplicateDonors.get(0).getCount());
     Assert.assertEquals("David is matching Donor", "David", duplicateDonors.get(0).getFirstName());
@@ -66,7 +66,7 @@ public class DonorRepositoryTests extends ContextDependentTestSuite {
     donors.add(DonorBuilder.aDonor().withDonorNumber("7").withFirstName("David").withLastName("Smith")
         .withGender(Gender.male).withBirthDate("1977-10-20").withDonorStatus(DonorStatus.NORMAL)
         .thatIsNotDeleted().buildAndPersist(entityManager));
-    List<DuplicateDonorValueObject> duplicateDonors = donorRepository.getDuplicateDonors();
+    List<DuplicateDonorDTO> duplicateDonors = donorRepository.getDuplicateDonors();
     Assert.assertEquals("Two sets of matching donors", 2, duplicateDonors.size());
     Assert.assertEquals("Three matching donors", 3, duplicateDonors.get(0).getCount());
     Assert.assertEquals("David is matching Donor", "David", duplicateDonors.get(0).getFirstName());
@@ -83,7 +83,7 @@ public class DonorRepositoryTests extends ContextDependentTestSuite {
     donors.add(DonorBuilder.aDonor().withDonorNumber("2").withFirstName("David").withLastName("Smith")
         .withGender(Gender.male).withBirthDate("1977-10-20").withDonorStatus(DonorStatus.MERGED)
         .thatIsNotDeleted().buildAndPersist(entityManager));
-    List<DuplicateDonorValueObject> duplicateDonors = donorRepository.getDuplicateDonors();
+    List<DuplicateDonorDTO> duplicateDonors = donorRepository.getDuplicateDonors();
     Assert.assertEquals("No duplicate donors", 0, duplicateDonors.size());
   }
   
@@ -96,7 +96,7 @@ public class DonorRepositoryTests extends ContextDependentTestSuite {
     donors.add(DonorBuilder.aDonor().withDonorNumber("3").withFirstName("David").withLastName("Smith")
         .withGender(Gender.male).withBirthDate("1977-10-20").withDonorStatus(DonorStatus.NORMAL)
         .thatIsDeleted().buildAndPersist(entityManager));
-    List<DuplicateDonorValueObject> duplicateDonors = donorRepository.getDuplicateDonors();
+    List<DuplicateDonorDTO> duplicateDonors = donorRepository.getDuplicateDonors();
     Assert.assertEquals("No duplicate donors", 0, duplicateDonors.size());
   }
 }

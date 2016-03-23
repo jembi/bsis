@@ -1,4 +1,4 @@
-package valueobject;
+package dto;
 
 import java.util.Objects;
 
@@ -6,7 +6,7 @@ import model.donationtype.DonationType;
 import model.location.Location;
 import model.util.Gender;
 
-public class CollectedDonationValueObject {
+public class CollectedDonationDTO {
 
   private DonationType donationType;
   private Gender gender;
@@ -15,11 +15,11 @@ public class CollectedDonationValueObject {
   private long count;
   private Location venue;
 
-  public CollectedDonationValueObject() {
+  public CollectedDonationDTO() {
     // Default constructor
   }
 
-  public CollectedDonationValueObject(DonationType donationType, Gender gender, String bloodAbo, String bloodRh,
+  public CollectedDonationDTO(DonationType donationType, Gender gender, String bloodAbo, String bloodRh,
                                       Location venue, long count) {
     this.donationType = donationType;
     this.gender = gender;
@@ -83,11 +83,11 @@ public class CollectedDonationValueObject {
       return true;
     }
 
-    if (!(obj instanceof CollectedDonationValueObject)) {
+    if (!(obj instanceof CollectedDonationDTO)) {
       return false;
     }
 
-    CollectedDonationValueObject other = (CollectedDonationValueObject) obj;
+    CollectedDonationDTO other = (CollectedDonationDTO) obj;
 
     return Objects.equals(getDonationType(), other.getDonationType()) &&
         Objects.equals(getGender(), other.getGender()) &&

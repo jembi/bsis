@@ -8,9 +8,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import dto.DuplicateDonorDTO;
 import model.donor.Donor;
 import service.DonorConstraintChecker;
-import valueobject.DuplicateDonorValueObject;
 import viewmodel.DonorViewModel;
 import viewmodel.DuplicateDonorViewModel;
 
@@ -44,14 +44,14 @@ public class DonorViewModelFactory {
   /**
    * Creates a new DonorViewModel object.
    *
-   * @param duplicateDonorValueObjects the duplicate donor value objects
+   * @param duplicateDonorDTOs the duplicate donor value objects
    * @return the list< duplicate donor view model>
    */
   public List<DuplicateDonorViewModel> createDuplicateDonorViewModels(
-      List<DuplicateDonorValueObject> duplicateDonorValueObjects) {
+      List<DuplicateDonorDTO> duplicateDonorDTOs) {
     List<DuplicateDonorViewModel> duplicateDonorViewModels = new ArrayList<>();
-    for (DuplicateDonorValueObject duplicateDonorValueObject : duplicateDonorValueObjects) {
-      duplicateDonorViewModels.add(createDuplicateDonorViewModel(duplicateDonorValueObject));
+    for (DuplicateDonorDTO duplicateDonorDTO : duplicateDonorDTOs) {
+      duplicateDonorViewModels.add(createDuplicateDonorViewModel(duplicateDonorDTO));
     }
     return duplicateDonorViewModels;
   }
@@ -59,18 +59,18 @@ public class DonorViewModelFactory {
   /**
    * Creates a new DonorViewModel object.
    *
-   * @param duplicateDonorValueObject the duplicate donor value object
+   * @param duplicateDonorDTO the duplicate donor value object
    * @return the duplicate donor view model
    */
-  private DuplicateDonorViewModel createDuplicateDonorViewModel(DuplicateDonorValueObject duplicateDonorValueObject) {
+  private DuplicateDonorViewModel createDuplicateDonorViewModel(DuplicateDonorDTO duplicateDonorDTO) {
 
     DuplicateDonorViewModel duplicateDonorViewModel = new DuplicateDonorViewModel();
-    duplicateDonorViewModel.setGroupKey(duplicateDonorValueObject.getGroupKey());
-    duplicateDonorViewModel.setBirthDate(duplicateDonorValueObject.getBirthDate());
-    duplicateDonorViewModel.setCount(duplicateDonorValueObject.getCount());
-    duplicateDonorViewModel.setFirstName(duplicateDonorValueObject.getFirstName());
-    duplicateDonorViewModel.setLastName(duplicateDonorValueObject.getLastName());
-    duplicateDonorViewModel.setGender(duplicateDonorValueObject.getGender());
+    duplicateDonorViewModel.setGroupKey(duplicateDonorDTO.getGroupKey());
+    duplicateDonorViewModel.setBirthDate(duplicateDonorDTO.getBirthDate());
+    duplicateDonorViewModel.setCount(duplicateDonorDTO.getCount());
+    duplicateDonorViewModel.setFirstName(duplicateDonorDTO.getFirstName());
+    duplicateDonorViewModel.setLastName(duplicateDonorDTO.getLastName());
+    duplicateDonorViewModel.setGender(duplicateDonorDTO.getGender());
 
     return duplicateDonorViewModel;
 

@@ -31,6 +31,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import backingform.DonorBackingForm;
+import dto.DuplicateDonorDTO;
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
@@ -45,7 +46,6 @@ import model.user.User;
 import model.util.Gender;
 import suites.DBUnitContextDependentTestSuite;
 import utils.CustomDateFormatter;
-import valueobject.DuplicateDonorValueObject;
 import viewmodel.DonorSummaryViewModel;
 
 public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
@@ -1030,7 +1030,7 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testGetDuplicateDonors() throws Exception {
-    List<DuplicateDonorValueObject> duplicateDonors = donorRepository.getDuplicateDonors();
+    List<DuplicateDonorDTO> duplicateDonors = donorRepository.getDuplicateDonors();
     Assert.assertEquals("There are 5 duplicates", duplicateDonors.get(0).getCount(), 5);
   }
 

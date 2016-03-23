@@ -38,7 +38,7 @@ import repository.DonorRepository;
 import repository.SequenceNumberRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import scala.actors.threadpool.Arrays;
-import valueobject.DuplicateDonorValueObject;
+import dto.DuplicateDonorDTO;
 import viewmodel.BloodTestingRuleResult;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -61,8 +61,8 @@ public class DuplicateDonorServiceTest {
 
   @Test
   public void testFindDuplicateDonors() throws Exception {
-    when(donorRepository.getDuplicateDonors()).thenReturn(new ArrayList<DuplicateDonorValueObject>());
-    List<DuplicateDonorValueObject> duplicateDonors = service.findDuplicateDonors();
+    when(donorRepository.getDuplicateDonors()).thenReturn(new ArrayList<DuplicateDonorDTO>());
+    List<DuplicateDonorDTO> duplicateDonors = service.findDuplicateDonors();
     Assert.assertTrue("No matching donors", duplicateDonors.isEmpty());
   }
 

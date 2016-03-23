@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import dto.DuplicateDonorDTO;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.donor.DonorStatus;
@@ -22,7 +23,6 @@ import model.packtype.PackType;
 import model.util.Gender;
 import repository.DonorRepository;
 import repository.SequenceNumberRepository;
-import valueobject.DuplicateDonorValueObject;
 import viewmodel.BloodTestingRuleResult;
 
 /**
@@ -243,7 +243,7 @@ public class DuplicateDonorService {
    *
    * @return list of duplicate donors found, will not be null or contain nulls
    */
-  public List<DuplicateDonorValueObject> findDuplicateDonors() {
+  public List<DuplicateDonorDTO> findDuplicateDonors() {
     return donorRepository.getDuplicateDonors();
   }
 
