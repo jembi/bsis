@@ -1031,7 +1031,7 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
   @Test
   public void testGetDuplicateDonors() throws Exception {
     List<DuplicateDonorValueObject> duplicateDonors = donorRepository.getDuplicateDonors();
-    Assert.assertEquals("There are 6 duplicates", duplicateDonors.get(0).getCount(), 6);
+    Assert.assertEquals("There are 5 duplicates", duplicateDonors.get(0).getCount(), 5);
   }
 
 }
