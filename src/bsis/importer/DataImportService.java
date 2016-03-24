@@ -963,7 +963,7 @@ public class DataImportService {
       testBatchRepository.save(testBatch);
     }
 
-    String key = donationDate + "_" + venue;
+    String key = donationDateString + "_" + venue;
 
     // Get donationBatch and save it if it hasn't been created yet for that date and venue
     DonationBatch donationBatch = donationBatches.get(key);
