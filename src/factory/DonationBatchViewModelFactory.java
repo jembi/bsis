@@ -64,7 +64,7 @@ public class DonationBatchViewModelFactory {
    */
   public DonationBatchFullViewModel createDonationBatchFullViewModel(DonationBatch donationBatch) {
     DonationBatchFullViewModel donationBatchViewModel = new DonationBatchFullViewModel();
-    populateFullViewModel(donationBatch, donationBatchViewModel, false, false);
+    populateFullViewModel(donationBatch, donationBatchViewModel, false);
     return donationBatchViewModel;
   }
 
@@ -80,7 +80,7 @@ public class DonationBatchViewModelFactory {
   public DonationBatchFullViewModel createDonationBatchFullViewModelWithoutDonationPermissions(
       DonationBatch donationBatch, boolean excludeDonationsWithoutTestSamples) {
     DonationBatchFullViewModel donationBatchViewModel = new DonationBatchFullViewModel();
-    populateFullViewModel(donationBatch, donationBatchViewModel, excludeDonationsWithoutTestSamples, true);
+    populateFullViewModel(donationBatch, donationBatchViewModel, excludeDonationsWithoutTestSamples);
     return donationBatchViewModel;
   }
 
@@ -123,12 +123,12 @@ public class DonationBatchViewModelFactory {
    * @param withDonationPermissions the with donation permissions
    */
   private void populateFullViewModel(DonationBatch donationBatch, DonationBatchFullViewModel donationBatchViewModel,
-      boolean excludeDonationsWithoutTestSamples, boolean excludeDonationPermissions) {
+      boolean excludeDonationsWithoutTestSamples) {
 
     populateBasicViewModel(donationBatch, donationBatchViewModel);
     
     donationBatchViewModel.setDonations(
-        createDonationViewModels(donationBatch, excludeDonationsWithoutTestSamples, excludeDonationPermissions));
+        createDonationViewModels(donationBatch, excludeDonationsWithoutTestSamples));
 
     Map<String, Boolean> permissions = new HashMap<>();
     permissions.put("canDelete", donationBatchConstraintChecker.canDeleteDonationBatch(donationBatch.getId()));
@@ -150,7 +150,7 @@ public class DonationBatchViewModelFactory {
    * @return the list< donation view model>
    */
   private List<DonationViewModel> createDonationViewModels(DonationBatch donationBatch,
-      boolean excludeDonationsWithoutTestSamples, boolean excludeDonationPermissions) {
+      boolean excludeDonationsWithoutTestSamples) {
     List<DonationViewModel> donationViewModels = new ArrayList<>();
     if (donationBatch.getDonations() != null) {
       for (Donation donation : donationBatch.getDonations()) {
@@ -158,11 +158,7 @@ public class DonationBatchViewModelFactory {
           // This donation did not produce a test sample so skip it
           continue;
         }
-        if (excludeDonationPermissions) {
-          donationViewModels.add(donationViewModelFactory.createDonationViewModelWithoutPermissions(donation));
-        } else {
-          donationViewModels.add(donationViewModelFactory.createDonationViewModelWithPermissions(donation));
-        }
+        donationViewModels.add(donationViewModelFactory.createDonationViewModelWithoutPermissions(donation));
       }
     }
     return donationViewModels;

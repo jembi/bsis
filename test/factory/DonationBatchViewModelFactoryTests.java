@@ -94,14 +94,10 @@ public class DonationBatchViewModelFactoryTests {
     // expected data
     DonationViewModel expectedDonationViewModel = aDonationViewModel()
         .withDonation(donation)
-        .withPermission("canDelete", true)
-        .withPermission("canUpdateDonationFields", true)
-        .withPermission("canDonate", true)
-        .withPermission("isBackEntry", true)
         .build();
 
     // set up mocks
-    when(donationViewModelFactory.createDonationViewModelWithPermissions(donation)).thenReturn(expectedDonationViewModel);
+    when(donationViewModelFactory.createDonationViewModelWithoutPermissions(donation)).thenReturn(expectedDonationViewModel);
     when(donationBatchConstraintChecker.canDeleteDonationBatch(donationBatchId)).thenReturn(false);
     when(donationBatchConstraintChecker.canCloseDonationBatch(donationBatchId)).thenReturn(false);
     when(donationBatchConstraintChecker.canReopenDonationBatch(donationBatchId)).thenReturn(false);
