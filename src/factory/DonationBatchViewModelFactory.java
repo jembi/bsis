@@ -5,12 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.user.User;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import service.DonationBatchConstraintChecker;
 import viewmodel.DonationBatchFullViewModel;
 import viewmodel.DonationBatchViewModel;
@@ -36,6 +37,22 @@ public class DonationBatchViewModelFactory {
     DonationBatchViewModel donationBatchViewModel = new DonationBatchViewModel();
     populateBasicViewModel(donationBatch, donationBatchViewModel);
     return donationBatchViewModel;
+  }
+  
+  /**
+   * Create a list basic view model for the given donation batches.
+   *
+   * @param donationBatches List of DonationBatches to convert
+   * @return List<DonationBatchViewModel> representation of the given DonationBatches
+   */
+  public List<DonationBatchViewModel> createDonationBatchBasicViewModels(List<DonationBatch> donationBatches) {
+    List<DonationBatchViewModel> donationBatchViewModels = new ArrayList<DonationBatchViewModel>();
+    if (donationBatches != null) {
+      for (DonationBatch donationBatch : donationBatches) {
+        donationBatchViewModels.add(createDonationBatchBasicViewModel(donationBatch));
+      }
+    }
+    return donationBatchViewModels;
   }
   
   /**

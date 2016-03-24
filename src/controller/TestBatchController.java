@@ -84,7 +84,8 @@ public class TestBatchController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("status", TestBatchStatus.values());
-    map.put("donationBatches", getDonationBatchViewModels(donationBatchRepository.findUnassignedDonationBatches()));
+    map.put("donationBatches", donationBatchViewModelFactory
+        .createDonationBatchBasicViewModels(donationBatchRepository.findUnassignedDonationBatches()));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
@@ -175,19 +176,7 @@ public class TestBatchController {
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
-  public String getNextTestBatchNumber() {
+  private String getNextTestBatchNumber() {
     return sequenceNumberRepository.getNextTestBatchNumber();
   }
-
-  public List<DonationBatchViewModel> getDonationBatchViewModels(
-      List<DonationBatch> donationBatches) {
-    if (donationBatches == null)
-      return Arrays.asList(new DonationBatchViewModel[0]);
-    List<DonationBatchViewModel> donationBatchViewModels = new ArrayList<DonationBatchViewModel>();
-    for (DonationBatch donationBatch : donationBatches) {
-      donationBatchViewModels.add(donationBatchViewModelFactory.createDonationBatchBasicViewModel(donationBatch));
-    }
-    return donationBatchViewModels;
-  }
-
 }

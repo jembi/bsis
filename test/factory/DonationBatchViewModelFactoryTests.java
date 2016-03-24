@@ -6,11 +6,18 @@ import static helpers.builders.PackTypeBuilder.aPackType;
 import static helpers.matchers.DonationViewModelMatcher.hasSameStateAsDonationViewModel;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
+import helpers.builders.DonationBatchBuilder;
+import helpers.builders.DonationBuilder;
+import helpers.builders.LocationBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import model.donation.Donation;
+import model.donationbatch.DonationBatch;
+import model.location.Location;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,10 +26,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import helpers.builders.DonationBatchBuilder;
-import helpers.builders.DonationBuilder;
-import model.donation.Donation;
-import model.donationbatch.DonationBatch;
 import service.DonationBatchConstraintChecker;
 import viewmodel.DonationBatchFullViewModel;
 import viewmodel.DonationBatchViewModel;
@@ -43,17 +46,41 @@ public class DonationBatchViewModelFactoryTests {
   public void testCreateDonationBatchBasicViewModel() {
     // set up test data
     Long donationBatchId = new Long(1);
+    String batchNumber = "BATCH123";
+    Location venue = LocationBuilder.aLocation().withName("Venue").build();
     List<Donation> donations = new ArrayList<>();
     donations.add(DonationBuilder.aDonation().build());
-    DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonations(donations).build();
-
+    DonationBatch donationBatch = new DonationBatchBuilder()
+      .withId(donationBatchId).withBatchNumber(batchNumber).withVenue(venue).withDonations(donations).thatIsClosed()
+      .build();
+    
     // run tests
     DonationBatchViewModel viewModel = donationBatchViewModelFactory.createDonationBatchBasicViewModel(donationBatch);
 
     // do asserts
     Assert.assertNotNull("view model was created", viewModel);
-    Assert.assertTrue("numDonations was set to 1", viewModel.getNumDonations() == 1);
+    Assert.assertEquals("id was set", donationBatchId, viewModel.getId());
+    Assert.assertEquals("numDonations was set", Integer.valueOf(1), viewModel.getNumDonations());
+    Assert.assertEquals("batchNumber was set", batchNumber, viewModel.getBatchNumber());
+    Assert.assertEquals("venue was set", venue.getName(), viewModel.getVenue().getName());
+    Assert.assertEquals("closed is set", true, viewModel.getIsClosed());
+    
 
+  }
+  
+  @Test
+  public void testCreateDonationBatchBasicViewModels() {
+    // set up test data
+    List<DonationBatch> donationBatches = new ArrayList<DonationBatch>();
+    donationBatches.add(new DonationBatchBuilder().withId(1L).withDonation(DonationBuilder.aDonation().build()).build());
+    donationBatches.add(new DonationBatchBuilder().withId(2L).withDonation(DonationBuilder.aDonation().build()).build());
+
+    // run tests
+    List<DonationBatchViewModel> viewModels = donationBatchViewModelFactory.createDonationBatchBasicViewModels(donationBatches);
+
+    // do asserts
+    Assert.assertNotNull("view models wer created", viewModels);
+    Assert.assertEquals("correct number of view models created", 2, viewModels.size());
   }
 
   @Test

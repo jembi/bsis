@@ -98,9 +98,9 @@ public class DonationBatchController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("addDonationBatchForm", form);
-    Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("donationbatch");
-    addEditSelectorOptions(map);
+    map.put("venues", locationRepository.getAllVenues());
     // to ensure custom field names are displayed in the form
+    Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("donationbatch");
     map.put("donationBatchFields", formFields);
     return map;
   }
@@ -148,11 +148,6 @@ public class DonationBatchController {
     map.put("donationBatch", donationBatchViewModel);
 
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
-  }
-
-
-  private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("venues", locationRepository.getAllVenues());
   }
 
   private List<DonationBatchViewModel> getDonationBatchViewModels(List<DonationBatch> donationBatches) {
