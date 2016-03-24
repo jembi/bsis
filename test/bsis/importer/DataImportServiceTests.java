@@ -22,7 +22,6 @@ import model.address.AddressType;
 import model.address.ContactMethodType;
 import model.admin.DataType;
 import model.admin.GeneralConfig;
-import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.bloodtesting.rules.DonationField;
@@ -330,6 +329,10 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
         .getSingleResult();
   }
 
+  private long countTestBatches() {
+    return entityManager.createQuery("SELECT COUNT(tb) FROM TestBatch tb", Number.class).getSingleResult().longValue();
+  }
+
   private void assertImportDonationData_shouldCreateDonationsFromSpreadsheet()
       throws EncryptedDocumentException, InvalidFormatException, IOException {
     Donation firstDonation = findDonationByDonationIdentificationNumber("32434");
@@ -376,6 +379,10 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     DonationBatch fourthDonationBatch = fourthDonation.getDonationBatch();
     assertThat("DonationBatch venue is set", fourthDonationBatch.getVenue().getName(), equalTo("Fourth"));
     assertThat("Different DonationBatch", fourthDonationBatch.getId(), not(equalTo(thirdDonation.getDonationBatch().getId())));
+
+    // The first pair of donations are in the same donation batch and test batch
+    // The second pair of donations are in different donation batches but the same test batch
+    assertThat("the correct number of test batches are created", countTestBatches(), equalTo(2L));
   }
 
   private Donation findDonationByDonationIdentificationNumber(String din) {

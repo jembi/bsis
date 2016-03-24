@@ -1002,6 +1002,7 @@ public class DataImportService {
       testBatch.setStatus(TestBatchStatus.CLOSED);
       testBatch.setCreatedDate(donationDate);
       testBatchRepository.save(testBatch);
+      testBatches.put(donationDateString, testBatch);
     }
 
     String key = donationDate + "_" + venue;
