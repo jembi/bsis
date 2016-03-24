@@ -509,7 +509,7 @@ public class DataImportService {
       externalDonorIdToBsisDonor.put(externalDonorId, smallerDonor);
 
       // Periodically flush data
-      if (donorCount % 500 == 0) {
+      if (donorCount % 250 == 0) {
         entityManager.flush();
         entityManager.clear();
       }
@@ -760,7 +760,7 @@ public class DataImportService {
       }
 
       // Periodically flush data
-      if (donationCount % 100 == 0) {
+      if (donationCount % 50 == 0) {
         entityManager.flush();
         entityManager.clear();
       }
