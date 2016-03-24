@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import backingform.DonationBatchBackingForm;
 import backingform.validator.DonationBatchBackingFormValidator;
 import factory.DonationBatchViewModelFactory;
+import factory.LocationViewModelFactory;
 import model.donationbatch.DonationBatch;
 import repository.DonationBatchRepository;
 import repository.LocationRepository;
@@ -59,6 +60,9 @@ public class DonationBatchController {
 
   @Autowired
   DonationBatchBackingFormValidator donationBatchBackingFormValidator;
+  
+  @Autowired
+  private LocationViewModelFactory locationViewModelFactory;
 
   public DonationBatchController() {
   }
@@ -98,7 +102,7 @@ public class DonationBatchController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("addDonationBatchForm", form);
-    map.put("venues", locationRepository.getAllVenues());
+    map.put("venues", locationViewModelFactory.createLocationViewModels(locationRepository.getAllVenues()));
     // to ensure custom field names are displayed in the form
     Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("donationbatch");
     map.put("donationBatchFields", formFields);
