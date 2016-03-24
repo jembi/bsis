@@ -760,7 +760,7 @@ public class DataImportService {
       }
 
       // Periodically flush data
-      if (donationCount % 500 == 0) {
+      if (donationCount % 100 == 0) {
         entityManager.flush();
         entityManager.clear();
       }
