@@ -1,12 +1,12 @@
 package factory;
 
+import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonationViewModelBuilder.aDonationViewModel;
 import static helpers.builders.PackTypeBuilder.aPackType;
 import static helpers.matchers.DonationViewModelMatcher.hasSameStateAsDonationViewModel;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
-import helpers.builders.DonationBatchBuilder;
 import helpers.builders.DonationBuilder;
 import helpers.builders.LocationBuilder;
 
@@ -50,9 +50,13 @@ public class DonationBatchViewModelFactoryTests {
     Location venue = LocationBuilder.aLocation().withName("Venue").build();
     List<Donation> donations = new ArrayList<>();
     donations.add(DonationBuilder.aDonation().build());
-    DonationBatch donationBatch = new DonationBatchBuilder()
-      .withId(donationBatchId).withBatchNumber(batchNumber).withVenue(venue).withDonations(donations).thatIsClosed()
-      .build();
+    DonationBatch donationBatch = aDonationBatch()
+        .withId(donationBatchId)
+        .withBatchNumber(batchNumber)
+        .withVenue(venue)
+        .withDonations(donations)
+        .thatIsClosed()
+        .build();
     
     // run tests
     DonationBatchViewModel viewModel = donationBatchViewModelFactory.createDonationBatchBasicViewModel(donationBatch);
@@ -72,14 +76,14 @@ public class DonationBatchViewModelFactoryTests {
   public void testCreateDonationBatchBasicViewModels() {
     // set up test data
     List<DonationBatch> donationBatches = new ArrayList<DonationBatch>();
-    donationBatches.add(new DonationBatchBuilder().withId(1L).withDonation(DonationBuilder.aDonation().build()).build());
-    donationBatches.add(new DonationBatchBuilder().withId(2L).withDonation(DonationBuilder.aDonation().build()).build());
+    donationBatches.add(aDonationBatch().withId(1L).withDonation(DonationBuilder.aDonation().build()).build());
+    donationBatches.add(aDonationBatch().withId(2L).withDonation(DonationBuilder.aDonation().build()).build());
 
     // run tests
     List<DonationBatchViewModel> viewModels = donationBatchViewModelFactory.createDonationBatchBasicViewModels(donationBatches);
 
     // do asserts
-    Assert.assertNotNull("view models wer created", viewModels);
+    Assert.assertNotNull("view models were created", viewModels);
     Assert.assertEquals("correct number of view models created", 2, viewModels.size());
   }
 
@@ -87,9 +91,9 @@ public class DonationBatchViewModelFactoryTests {
   public void testCreateDonationBatchFullViewModel() {
     // set up test data
     Long donationId = new Long(1);
-    Donation donation = new DonationBuilder().withId(donationId).build();
+    Donation donation = aDonation().withId(donationId).build();
     Long donationBatchId = new Long(1);
-    DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonation(donation).build();
+    DonationBatch donationBatch = aDonationBatch().withId(donationBatchId).withDonation(donation).build();
 
     // expected data
     DonationViewModel expectedDonationViewModel = aDonationViewModel()
@@ -143,7 +147,7 @@ public class DonationBatchViewModelFactoryTests {
     List<Donation> donations = Arrays.asList(new Donation[]{donation1, donation2});
 
     Long donationBatchId = new Long(1);
-    DonationBatch donationBatch = new DonationBatchBuilder().withId(donationBatchId).withDonations(donations).build();
+    DonationBatch donationBatch = aDonationBatch().withId(donationBatchId).withDonations(donations).build();
 
     // expected data (no permissions)
     DonationViewModel expectedDonation1ViewModel = aDonationViewModel()
