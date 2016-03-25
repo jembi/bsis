@@ -300,20 +300,26 @@ public class DataImportService {
           case "bloodAbo":
             cell.setCellType(Cell.CELL_TYPE_STRING);
             String bloodABO = cell.getStringCellValue();
-            if (isValidBloodTyping(bloodABO, DonationField.BLOODABO, bloodTestingRuleCache)) {
-              donorBackingForm.setBloodAbo(bloodABO);
-            } else {
-              errors.rejectValue("donor.bloodAbo", "bloodAbo.invalid", "Invalid blood ABO value");
+            
+            if (!bloodABO.isEmpty()){
+              if (isValidBloodTyping(bloodABO, DonationField.BLOODABO, bloodTestingRuleCache)) {
+                donorBackingForm.setBloodAbo(bloodABO);
+              } else {
+                errors.rejectValue("donor.bloodAbo", "bloodAbo.invalid", "Invalid blood ABO value");
+              }
             }
             break;
 
           case "bloodRh":
             cell.setCellType(Cell.CELL_TYPE_STRING);
             String bloodRh = cell.getStringCellValue();
-            if (isValidBloodTyping(bloodRh, DonationField.BLOODRH, bloodTestingRuleCache)) {
-              donorBackingForm.setBloodRh(bloodRh);
-            } else {
-              errors.rejectValue("donor.bloodRh", "bloodRh.invalid", "Invalid blood Rh value");
+            
+            if (!bloodRh.isEmpty()){
+              if (isValidBloodTyping(bloodRh, DonationField.BLOODRH, bloodTestingRuleCache)) {
+                donorBackingForm.setBloodRh(bloodRh);
+              } else {
+                errors.rejectValue("donor.bloodRh", "bloodRh.invalid", "Invalid blood Rh value");
+              }
             }
             break;
 
