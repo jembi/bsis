@@ -616,97 +616,119 @@ public class DataImportService {
             break;
 
           case "donorWeight":
-            try {
-              donationBackingForm.setDonorWeight(BigDecimal.valueOf(cell.getNumericCellValue()));
-            } catch (Exception e) {
-              errors.rejectValue("donation.donorWeight", "donorWeight.invalid", "Invalid donorWeight");
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            if(!cell.getStringCellValue().isEmpty()){
+              try {
+                donationBackingForm.setDonorWeight(BigDecimal.valueOf(Double.valueOf(cell.getStringCellValue())));
+              } catch (Exception e) {
+                errors.rejectValue("donation.donorWeight", "donorWeight.invalid", "Invalid donorWeight");
+              }
             }
             break;
 
           case "bloodPressureSystolic":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            try {
-              donationBackingForm.setBloodPressureSystolic(Integer.valueOf(cell.getStringCellValue()));
-            } catch (Exception e) {
-              errors.rejectValue("donation.bloodPressureSystolic", "bloodPressureSystolic.invalid",
-                  "Invalid bloodPressureSystolic");
+            if(!cell.getStringCellValue().isEmpty()){
+              try {
+                donationBackingForm.setBloodPressureSystolic(Integer.valueOf(cell.getStringCellValue()));
+              } catch (Exception e) {
+                errors.rejectValue("donation.bloodPressureSystolic", "bloodPressureSystolic.invalid",
+                    "Invalid bloodPressureSystolic");
+              }
             }
             break;
 
           case "bloodPressureDiastolic":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            try {
-              donationBackingForm.setBloodPressureDiastolic(Integer.valueOf(cell.getStringCellValue()));
-            } catch (Exception e) {
-              errors.rejectValue("donation.bloodPressureDiastolic", "bloodPressureDiastolic.invalid",
-                  "Invalid bloodPressureDiastolic");
+            if(!cell.getStringCellValue().isEmpty()){
+              try {
+                donationBackingForm.setBloodPressureDiastolic(Integer.valueOf(cell.getStringCellValue()));
+              } catch (Exception e) {
+                errors.rejectValue("donation.bloodPressureDiastolic", "bloodPressureDiastolic.invalid",
+                    "Invalid bloodPressureDiastolic");
+              }
             }
             break;
 
           case "donorPulse":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            try {
-              donationBackingForm.setDonorPulse(Integer.valueOf(cell.getStringCellValue()));
-            } catch (Exception e) {
-              errors.rejectValue("donation.donorPulse", "donorPulse.invalid", "Invalid donorPulse");
+            if(!cell.getStringCellValue().isEmpty()){
+              try {
+                donationBackingForm.setDonorPulse(Integer.valueOf(cell.getStringCellValue()));
+              } catch (Exception e) {
+                errors.rejectValue("donation.donorPulse", "donorPulse.invalid", "Invalid donorPulse");
+              }
             }
             break;
 
           case "haemoglobinCount":
-            try {
-              donationBackingForm.setHaemoglobinCount(BigDecimal.valueOf(cell.getNumericCellValue()));
-            } catch (Exception e) {
-              errors.rejectValue("donation.haemoglobinCount", "haemoglobinCount.invalid", "Invalid haemoglobinCount");
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            if(!cell.getStringCellValue().isEmpty()){
+              try {
+                donationBackingForm.setHaemoglobinCount(BigDecimal.valueOf(Double.valueOf(cell.getStringCellValue())));
+              } catch (Exception e) {
+                errors.rejectValue("donation.haemoglobinCount", "haemoglobinCount.invalid", "Invalid haemoglobinCount");
+              }
             }
             break;
 
           case "haemoglobinLevel":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            String haemoglobinLevelStr = cell.getStringCellValue();
-            HaemoglobinLevel haemoglobinLevel = null;
-            if (StringUtils.isNotEmpty(haemoglobinLevelStr)) {
-              try {
-                haemoglobinLevel = HaemoglobinLevel.valueOf(haemoglobinLevelStr);
-              } catch (Exception e) {
-                errors.rejectValue("donation.haemoglobinLevel", "haemoglobinLevel.invalid", "Invalid haemoglobinLevel");
+            if(!cell.getStringCellValue().isEmpty()){
+              String haemoglobinLevelStr = cell.getStringCellValue();
+              HaemoglobinLevel haemoglobinLevel = null;
+              if (StringUtils.isNotEmpty(haemoglobinLevelStr)) {
+                try {
+                  haemoglobinLevel = HaemoglobinLevel.valueOf(haemoglobinLevelStr);
+                } catch (Exception e) {
+                  errors.rejectValue("donation.haemoglobinLevel", "haemoglobinLevel.invalid", "Invalid haemoglobinLevel");
+                }
               }
+              donationBackingForm.setHaemoglobinLevel(haemoglobinLevel);
             }
-            donationBackingForm.setHaemoglobinLevel(haemoglobinLevel);
             break;
 
           case "adverseEventType":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            AdverseEventType adverseEventType = adverseEventTypeCache.get(cell.getStringCellValue());
-            if (adverseEventType == null) {
-              errors.rejectValue("donation.adverseEvent.type", "type.invalid", "Invalid adverseEventType");
-              break;
+            if(!cell.getStringCellValue().isEmpty()){
+              AdverseEventType adverseEventType = adverseEventTypeCache.get(cell.getStringCellValue());
+              if (adverseEventType == null) {
+                errors.rejectValue("donation.adverseEvent.type", "type.invalid", "Invalid adverseEventType");
+                break;
+              }
+              adverseEventTypeBackingForm = new AdverseEventTypeBackingForm();
+              adverseEventTypeBackingForm.setId(adverseEventType.getId());
             }
-            adverseEventTypeBackingForm = new AdverseEventTypeBackingForm();
-            adverseEventTypeBackingForm.setId(adverseEventType.getId());
             break;
 
           case "adverseEventComment":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            adverseEventComment = cell.getStringCellValue();
+            if(!cell.getStringCellValue().isEmpty()){
+              adverseEventComment = cell.getStringCellValue();
+            }
             break;
             
           case "bloodAbo":
             cell.setCellType(Cell.CELL_TYPE_STRING);
             String bloodABO = cell.getStringCellValue();
-            if (isValidBloodTyping(bloodABO, DonationField.BLOODABO, bloodTestingRuleCache)) {
-              donationBackingForm.setBloodAbo(bloodABO);
-            } else {
-              errors.rejectValue("donor.bloodAbo", "bloodAbo.invalid", "Invalid blood ABO value");
+            if(!cell.getStringCellValue().isEmpty()){
+              if (isValidBloodTyping(bloodABO, DonationField.BLOODABO, bloodTestingRuleCache)) {
+                donationBackingForm.setBloodAbo(bloodABO);
+              } else {
+                errors.rejectValue("donor.bloodAbo", "bloodAbo.invalid", "Invalid blood ABO value");
+              }
             }
             break;
 
           case "bloodRh":
             cell.setCellType(Cell.CELL_TYPE_STRING);
             String bloodRh = cell.getStringCellValue();
-            if (isValidBloodTyping(bloodRh, DonationField.BLOODRH, bloodTestingRuleCache)) {
-              donationBackingForm.setBloodRh(bloodRh);
-            } else {
-              errors.rejectValue("donor.bloodRh", "bloodRh.invalid", "Invalid blood Rh value");
+            if(!cell.getStringCellValue().isEmpty()){
+              if (isValidBloodTyping(bloodRh, DonationField.BLOODRH, bloodTestingRuleCache)) {
+                donationBackingForm.setBloodRh(bloodRh);
+              } else {
+                errors.rejectValue("donor.bloodRh", "bloodRh.invalid", "Invalid blood Rh value");
+              }
             }
             break;
 
