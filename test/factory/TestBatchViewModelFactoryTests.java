@@ -27,6 +27,7 @@ import model.testbatch.TestBatchStatus;
 import service.TestBatchConstraintChecker;
 import service.TestBatchConstraintChecker.CanReleaseResult;
 import suites.UnitTestSuite;
+import viewmodel.DonationBatchFullViewModel;
 import viewmodel.DonationBatchViewModel;
 import viewmodel.TestBatchFullViewModel;
 import viewmodel.TestBatchViewModel;
@@ -77,7 +78,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
         .withNotes(IRRELEVANT_NOTES)
         .build();
 
-    DonationBatchViewModel donationBatchViewModel = new DonationBatchViewModel();
+    DonationBatchFullViewModel donationBatchViewModel = new DonationBatchFullViewModel();
 
     TestBatchViewModel expectedViewModel = aTestBatchViewModel()
         .withId(IRRELEVANT_ID)
@@ -92,7 +93,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
 
     when(testBatchConstraintChecker.canReleaseTestBatch(testBatch1)).thenReturn(CANT_RELEASE);
     when(testBatchConstraintChecker.canReleaseTestBatch(testBatch2)).thenReturn(CANT_RELEASE);
-    when(donationBatchViewModelFactory.createDonationBatchViewModelWithoutDonationPermissions(donationBatch, true))
+    when(donationBatchViewModelFactory.createDonationBatchViewModelWithTestSamples(donationBatch))
         .thenReturn(donationBatchViewModel);
 
     List<TestBatchViewModel> returnedViewModels = testBatchViewModelFactory.createTestBatchBasicViewModels(testBatches);
@@ -104,8 +105,8 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
   public void testCreateTestBatchFullViewModel_shouldReturnTestBatchFullViewModelWithTheCorrectState() {
 
     DonationBatch donationBatch = createDonationBatch();
-    DonationBatchViewModel donationBatchViewModel =
-        donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch);
+    DonationBatchFullViewModel donationBatchViewModel =
+        donationBatchViewModelFactory.createDonationBatchFullViewModel(donationBatch);
 
     TestBatch testBatch1 = aTestBatch()
         .withId(IRRELEVANT_ID)
@@ -126,8 +127,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
         .withDonationBatch(donationBatch)
         .withNotes(IRRELEVANT_NOTES)
         .build();
-
-    List<TestBatch> testBatches = Arrays.asList(testBatch1, testBatch2);
+    List<TestBatch> testBatches = Arrays.asList(new TestBatch[]{testBatch1, testBatch2});
 
     TestBatchFullViewModel expectedViewModel1 = aTestBatchFullViewModel()
         .withId(IRRELEVANT_ID)
@@ -136,7 +136,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withNotes(IRRELEVANT_NOTES)
-        .withDonationBatches(Arrays.asList(donationBatchViewModel))
+        .withDonationBatches(Arrays.<DonationBatchViewModel>asList(donationBatchViewModel))
         .withPermission("canRelease", false)
         .withPermission("canClose", false)
         .withPermission("canDelete", false)
@@ -151,7 +151,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withNotes(IRRELEVANT_NOTES)
-        .withDonationBatches(Arrays.asList(donationBatchViewModel))
+        .withDonationBatches(Arrays.<DonationBatchViewModel>asList(donationBatchViewModel))
         .withPermission("canRelease", false)
         .withPermission("canClose", false)
         .withPermission("canDelete", false)
@@ -162,7 +162,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
 
     when(testBatchConstraintChecker.canReleaseTestBatch(testBatch1)).thenReturn(CANT_RELEASE);
     when(testBatchConstraintChecker.canReleaseTestBatch(testBatch2)).thenReturn(CANT_RELEASE);
-    when(donationBatchViewModelFactory.createDonationBatchViewModelWithoutDonationPermissions(donationBatch, true))
+    when(donationBatchViewModelFactory.createDonationBatchViewModelWithTestSamples(donationBatch))
         .thenReturn(donationBatchViewModel);
 
     List<TestBatchFullViewModel> returnedViewModels =
@@ -179,7 +179,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
     
     DonationBatch donationBatch = createDonationBatch();
     DonationBatchViewModel donationBatchViewModel =
-        donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch);
+        donationBatchViewModelFactory.createDonationBatchFullViewModel(donationBatch);
 
 
     TestBatch testBatch = aTestBatch()
@@ -228,7 +228,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
 
     DonationBatch donationBatch = createDonationBatch();
     DonationBatchViewModel donationBatchViewModel =
-        donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch);
+        donationBatchViewModelFactory.createDonationBatchFullViewModel(donationBatch);
 
     TestBatch testBatch = aTestBatch()
         .withId(IRRELEVANT_ID)
@@ -273,7 +273,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
 
     DonationBatch donationBatch = createDonationBatch();
     DonationBatchViewModel donationBatchViewModel =
-        donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch);
+        donationBatchViewModelFactory.createDonationBatchFullViewModel(donationBatch);
     
     TestBatch testBatch = aTestBatch()
         .withId(IRRELEVANT_ID)
@@ -318,7 +318,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
 
     DonationBatch donationBatch = createDonationBatch();
     DonationBatchViewModel donationBatchViewModel =
-        donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch);
+        donationBatchViewModelFactory.createDonationBatchFullViewModel(donationBatch);
     
     TestBatch testBatch = aTestBatch()
         .withId(IRRELEVANT_ID)

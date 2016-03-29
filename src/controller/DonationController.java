@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -260,25 +261,12 @@ public class DonationController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONATION + "')")
-  public Map<String, Object> donationSummaryGenerator(
-      @PathVariable Long id) {
+  public Map<String, Object> getDonation(@PathVariable("id") Long donationId) {
+    
+    Donation donation = donationRepository.findDonationById(donationId);
 
-    Map<String, Object> map = new HashMap<String, Object>();
-
-    Donation donation = null;
-    if (id != null) {
-      donation = donationRepository.findDonationById(id);
-      if (donation != null) {
-        map.put("existingDonation", true);
-      } else {
-        map.put("existingDonation", false);
-      }
-    }
-
-    DonationViewModel donationViewModel = new DonationViewModel(donation);
-    map.put("donation", donationViewModel);
-
-
+    Map<String, Object> map = new HashMap<>();
+    map.put("donation", donationViewModelFactory.createDonationViewModelWithPermissions(donation));
     return map;
   }
 
@@ -349,6 +337,7 @@ public class DonationController {
 
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONATION + "')")
   @RequestMapping(value = "{id}/bloodTypingResolution", method = RequestMethod.PUT)
+  @Transactional
   public void saveBloodTypingResolution(
       @PathVariable(value = "id") Long id,
       @RequestBody @Valid BloodTypingResolutionBackingForm bloodTypingResolutionBackingForm) {

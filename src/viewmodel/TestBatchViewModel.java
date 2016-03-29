@@ -4,6 +4,8 @@ import java.util.Date;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import model.testbatch.TestBatchStatus;
 import utils.DateTimeSerialiser;
 

@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import model.address.AddressType;
 import model.address.ContactMethodType;
 import model.adverseevent.AdverseEventType;
@@ -105,6 +108,8 @@ public class DataImportService {
   private TestBatchRepository testBatchRepository;
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
+  @PersistenceContext
+  private EntityManager entityManager;
 
   private Map<String, Donor> externalDonorIdToBsisDonor = new HashMap<>();
   private Map<String, Long> donationIdentificationNumberToDonationId = new HashMap<>();
@@ -204,6 +209,10 @@ public class DataImportService {
       locationRepository.saveLocation(locationBackingForm.getLocation());
     }
     System.out.println(); // clear logging
+
+    // Flush remaining data
+    entityManager.flush();
+    entityManager.clear();
   }
 
   private void importDonorData(Sheet sheet) {
@@ -499,8 +508,17 @@ public class DataImportService {
       smallerDonor.setDonorNumber(donor.getDonorNumber());
       externalDonorIdToBsisDonor.put(externalDonorId, smallerDonor);
 
+      // Periodically flush data
+      if (donorCount % 250 == 0) {
+        entityManager.flush();
+        entityManager.clear();
+      }
     }
     System.out.println(); // clear logging
+
+    // Flush remaining data
+    entityManager.flush();
+    entityManager.clear();
   }
 
   private void importDonationsData(Sheet sheet) {
@@ -740,8 +758,18 @@ public class DataImportService {
         donationIdentificationNumberToDonationId.put(donation.getDonationIdentificationNumber(), donation.getId());
 
       }
+
+      // Periodically flush data
+      if (donationCount % 50 == 0) {
+        entityManager.flush();
+        entityManager.clear();
+      }
     }
     System.out.println(); // clear logging
+
+    // Flush remaining data
+    entityManager.flush();
+    entityManager.clear();
   }
 
   public void importDeferralData(Sheet sheet) {
@@ -832,6 +860,10 @@ public class DataImportService {
     }
 
     System.out.println(); // clear logging
+
+    // Flush remaining data
+    entityManager.flush();
+    entityManager.clear();
   }
 
   public void importOutcomeData(Sheet sheet) {
@@ -930,10 +962,19 @@ public class DataImportService {
       Donation donation = new Donation();
       donation.setId(donationId);
       bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, testedOn, null, true);
+
+      // Periodically flush data
+      if (testResultsCount % 1000 == 0) {
+        entityManager.flush();
+        entityManager.clear();
+      }
     }
     
     System.out.println(); // clear logging
     
+    // Flush remaining data
+    entityManager.flush();
+    entityManager.clear();
   }
   
   private boolean isValidBloodTyping(String value, DonationField donationField, List<BloodTestingRule> bloodTestingRules) {
@@ -961,9 +1002,10 @@ public class DataImportService {
       testBatch.setStatus(TestBatchStatus.CLOSED);
       testBatch.setCreatedDate(donationDate);
       testBatchRepository.save(testBatch);
+      testBatches.put(donationDateString, testBatch);
     }
 
-    String key = donationDate + "_" + venue;
+    String key = donationDateString + "_" + venue;
 
     // Get donationBatch and save it if it hasn't been created yet for that date and venue
     DonationBatch donationBatch = donationBatches.get(key);

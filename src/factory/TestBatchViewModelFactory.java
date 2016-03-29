@@ -13,6 +13,7 @@ import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import service.TestBatchConstraintChecker;
 import service.TestBatchConstraintChecker.CanReleaseResult;
+import viewmodel.DonationBatchFullViewModel;
 import viewmodel.DonationBatchViewModel;
 import viewmodel.TestBatchFullViewModel;
 import viewmodel.TestBatchViewModel;
@@ -122,7 +123,7 @@ public class TestBatchViewModelFactory {
     if (testBatch.getDonationBatches() != null) {
       for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
         donationsWithTestSamples.add(
-            donationBatchViewModelFactory.createDonationBatchViewModelWithoutDonationPermissions(donationBatch, true));
+            donationBatchViewModelFactory.createDonationBatchViewModelWithTestSamples(donationBatch));
       }
     }
     testBatchViewModel.setDonationBatches(donationsWithTestSamples);
