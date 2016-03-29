@@ -100,7 +100,7 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
       Integer bloodPressureDiastolicMax = Integer.parseInt(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.bpDiastolicMax"));
       Integer bloodPressureDiastolic = donationBackingForm.getBloodPressureDiastolic().intValue();
       if (bloodPressureDiastolic < bloodPressureDiastolicMin)
-        errors.rejectValue("donation.bloodPressureDiastolic", "bloodPressureDiastolic.outOfRange", "BP value should be above " + bloodPressureDiastolicMax);
+        errors.rejectValue("donation.bloodPressureDiastolic", "bloodPressureDiastolic.outOfRange", "BP value should be above " + bloodPressureDiastolicMin);
       if (bloodPressureDiastolic > bloodPressureDiastolicMax)
         errors.rejectValue("donation.bloodPressureDiastolic", "bloodPressureDiastolic.outOfRange", "BP value should be below " + bloodPressureDiastolicMax);
     }
