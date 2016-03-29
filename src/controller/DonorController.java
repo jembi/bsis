@@ -8,7 +8,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.log4j.Logger;
+import model.counselling.PostDonationCounselling;
+import model.donation.Donation;
+import model.donor.Donor;
+import model.donordeferral.DonorDeferral;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,19 +27,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import backingform.DonorBackingForm;
-import backingform.DuplicateDonorsBackingForm;
-import backingform.validator.DonorBackingFormValidator;
-import constant.GeneralConfigConstants;
-import dto.DuplicateDonorDTO;
-import factory.DonationViewModelFactory;
-import factory.DonorDeferralViewModelFactory;
-import factory.DonorViewModelFactory;
-import factory.PostDonationCounsellingViewModelFactory;
-import model.counselling.PostDonationCounselling;
-import model.donation.Donation;
-import model.donor.Donor;
-import model.donordeferral.DonorDeferral;
 import repository.AdverseEventRepository;
 import repository.ContactMethodTypeRepository;
 import repository.DonationBatchRepository;
@@ -55,15 +46,19 @@ import viewmodel.DonorDeferralViewModel;
 import viewmodel.DonorSummaryViewModel;
 import viewmodel.DonorViewModel;
 import viewmodel.PostDonationCounsellingViewModel;
+import backingform.DonorBackingForm;
+import backingform.DuplicateDonorsBackingForm;
+import backingform.validator.DonorBackingFormValidator;
+import constant.GeneralConfigConstants;
+import dto.DuplicateDonorDTO;
+import factory.DonationViewModelFactory;
+import factory.DonorDeferralViewModelFactory;
+import factory.DonorViewModelFactory;
+import factory.PostDonationCounsellingViewModelFactory;
 
 @RestController
 @RequestMapping("donors")
 public class DonorController {
-
-  /**
-   * The Constant LOGGER.
-   */
-  private static final Logger LOGGER = Logger.getLogger(DonorController.class);
 
   @Autowired
   private DonorRepository donorRepository;
@@ -367,18 +362,11 @@ public class DonorController {
 
     Map<String, Object> map = new HashMap<String, Object>();
 
-    List<Donor> donors = donorRepository.getAllDonors();
     Donor donor = donorRepository.findDonorByDonorNumber(donorNumber, false);
-    List<Donor> duplicates = duplicateDonorService.findDuplicateDonors(donor, donors);
-
-    // convert Donors to DonorViewModels
-    List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
-    for (Donor d : duplicates) {
-      DonorViewModel donorViewModel = donorViewModelFactory.createDonorViewModelWithPermissions(d);
-      donorViewModels.add(donorViewModel);
-    }
-
+    List<Donor> duplicates = duplicateDonorService.findDuplicateDonors(donor);
+    List<DonorViewModel> donorViewModels = donorViewModelFactory.createDonorViewModels(duplicates);
     map.put("duplicates", donorViewModels);
+
     return map;
   }
 

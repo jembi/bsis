@@ -99,4 +99,62 @@ public class DonorRepositoryTests extends ContextDependentTestSuite {
     List<DuplicateDonorDTO> duplicateDonors = donorRepository.getDuplicateDonors();
     Assert.assertEquals("No duplicate donors", 0, duplicateDonors.size());
   }
+  
+  @Test
+  public void testFindDuplicateDonorsMatchingOneBasic() throws Exception {
+    Donor donor = DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith")
+        .withGender(Gender.male).withBirthDate("1977-10-20").withDonorStatus(DonorStatus.NORMAL)
+        .thatIsNotDeleted().buildAndPersist(entityManager);
+    DonorBuilder.aDonor().withDonorNumber("2").withFirstName("David").withLastName("Smith")
+        .withGender(Gender.male).withBirthDate("1977-10-20").withDonorStatus(DonorStatus.NORMAL)
+        .thatIsNotDeleted().buildAndPersist(entityManager);
+    DonorBuilder.aDonor().withDonorNumber("3").withFirstName("Jo").withLastName("Smith")
+        .withGender(Gender.female).withBirthDate("1978-10-20").withDonorStatus(DonorStatus.NORMAL)
+        .thatIsNotDeleted().buildAndPersist(entityManager);
+    DonorBuilder.aDonor().withDonorNumber("4").withFirstName("Nancy").withLastName("Drew")
+        .withGender(Gender.female).withBirthDate("1964-11-20").withDonorStatus(DonorStatus.NORMAL)
+        .thatIsNotDeleted().buildAndPersist(entityManager);
+
+    List<Donor> duplicateDonors = donorRepository.getDuplicateDonors(donor.getFirstName(), donor.getLastName(), 
+        donor.getBirthDate(), donor.getGender());
+    
+    Assert.assertEquals("Two matching donors", 2, duplicateDonors.size());
+    Assert.assertEquals("David is matching Donor", "David", duplicateDonors.get(0).getFirstName());
+    Assert.assertEquals("David is matching Donor", "David", duplicateDonors.get(1).getFirstName());
+  }
+
+  @Test
+  public void testFindDuplicateMatchingOneDonorsDouble() throws Exception {
+    DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith")
+        .withGender(Gender.male).withBirthDate("1977-10-20").withDonorStatus(DonorStatus.NORMAL)
+        .thatIsNotDeleted().buildAndPersist(entityManager);
+    DonorBuilder.aDonor().withDonorNumber("2").withFirstName("David").withLastName("Smith")
+        .withGender(Gender.male).withBirthDate("1977-10-20").withDonorStatus(DonorStatus.NORMAL)
+        .thatIsNotDeleted().buildAndPersist(entityManager);
+    DonorBuilder.aDonor().withDonorNumber("3").withFirstName("Jo").withLastName("Smith")
+        .withGender(Gender.female).withBirthDate("1978-10-20").withDonorStatus(DonorStatus.NORMAL)
+        .thatIsNotDeleted().buildAndPersist(entityManager);
+    DonorBuilder.aDonor().withDonorNumber("4").withFirstName("Sue").withLastName("Simpson")
+        .withGender(Gender.female).withBirthDate("1982-02-20").withDonorStatus(DonorStatus.NORMAL)
+        .thatIsNotDeleted().buildAndPersist(entityManager);
+    DonorBuilder.aDonor().withDonorNumber("5").withFirstName("Nancy").withLastName("Drew")
+        .withGender(Gender.female).withBirthDate("1964-11-20").withDonorStatus(DonorStatus.NORMAL)
+        .thatIsNotDeleted().buildAndPersist(entityManager);
+    Donor donor = DonorBuilder.aDonor().withDonorNumber("6").withFirstName("Sue").withLastName("Simpson")
+        .withGender(Gender.female).withBirthDate("1982-02-20").withDonorStatus(DonorStatus.NORMAL)
+        .thatIsNotDeleted().buildAndPersist(entityManager);
+    DonorBuilder.aDonor().withDonorNumber("7").withFirstName("David").withLastName("Smith")
+        .withGender(Gender.male).withBirthDate("1977-10-20").withDonorStatus(DonorStatus.NORMAL)
+        .thatIsNotDeleted().buildAndPersist(entityManager);
+    DonorBuilder.aDonor().withDonorNumber("8").withFirstName("Sue").withLastName("Simpson")
+        .withGender(Gender.female).withBirthDate("1982-02-20").withDonorStatus(DonorStatus.MERGED)
+        .thatIsNotDeleted().buildAndPersist(entityManager);
+
+    List<Donor> duplicateDonors = donorRepository.getDuplicateDonors(donor.getFirstName(), donor.getLastName(), 
+        donor.getBirthDate(), donor.getGender());
+
+    Assert.assertEquals("Two matching donors", 2, duplicateDonors.size());
+    Assert.assertEquals("Sue is matching Donor", "Sue", duplicateDonors.get(0).getFirstName());
+    Assert.assertEquals("Sue is matching Donor", "Sue", duplicateDonors.get(1).getFirstName());
+  }
 }

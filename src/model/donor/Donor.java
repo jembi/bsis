@@ -19,20 +19,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.apache.commons.lang3.text.WordUtils;
-import org.hibernate.annotations.Index;
-import org.hibernate.annotations.Where;
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
-import org.hibernate.envers.RelationTargetAuditMode;
-import org.hibernate.validator.constraints.Length;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import constraintvalidator.LocationExists;
 import model.BaseModificationTrackerEntity;
 import model.address.Address;
 import model.address.AddressType;
@@ -44,11 +30,29 @@ import model.idtype.IdType;
 import model.location.Location;
 import model.preferredlanguage.PreferredLanguage;
 import model.util.Gender;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.text.WordUtils;
+import org.hibernate.annotations.Index;
+import org.hibernate.annotations.Where;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
+import org.hibernate.validator.constraints.Length;
+
 import repository.DonorNamedQueryConstants;
 import utils.DonorUtils;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import constraintvalidator.LocationExists;
+
 @NamedQueries({
-  @NamedQuery(name = DonorNamedQueryConstants.NAME_GET_DUPLICATE_DONORS,
+  @NamedQuery(name = DonorNamedQueryConstants.NAME_GET_ALL_DUPLICATE_DONORS,
+      query = DonorNamedQueryConstants.QUERY_GET_ALL_DUPLICATE_DONORS),
+      @NamedQuery(name = DonorNamedQueryConstants.NAME_GET_DUPLICATE_DONORS,
       query = DonorNamedQueryConstants.QUERY_GET_DUPLICATE_DONORS)
 })
 @Entity

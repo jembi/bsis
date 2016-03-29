@@ -23,6 +23,23 @@ public class DonorViewModelFactory {
   /** The donor constraint checker. */
   @Autowired
   private DonorConstraintChecker donorConstraintChecker;
+  
+  /**
+   * Creates an array of DonorViewModels
+   *
+   * @param donors List of Donors 
+   * @return List of DonorViewModels
+   */
+  public List<DonorViewModel> createDonorViewModels(List<Donor> donors) {
+    List<DonorViewModel> viewModels = new ArrayList<>();
+    if (donors != null) {
+      for (Donor donor : donors) {
+        DonorViewModel donorViewModel = new DonorViewModel(donor);
+        viewModels.add(donorViewModel);
+      }
+    }
+    return viewModels;
+  }
 
   /**
    * Creates a new DonorViewModel object.
