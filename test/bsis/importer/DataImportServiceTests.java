@@ -6,6 +6,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.IsNull.nullValue;
 import helpers.builders.AdverseEventTypeBuilder;
 import helpers.builders.BloodTestBuilder;
 import helpers.builders.DonationTypeBuilder;
@@ -262,6 +263,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     // Verify
     Donor firstDonor = findDonorByName("David", "Smith");
     Donor secondDonor = findDonorByName("Jane", "Doe");
+    Donor thirdDonor = findDonorByName("Donald", "Brown");
     
     // first Donor
     assertThat("Donor status is correct", firstDonor.getDonorStatus(), equalTo(DonorStatus.NORMAL));
@@ -320,6 +322,11 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     assertThat("BloodRh matches", secondDonor.getBloodRh(), equalTo("+"));
     assertThat("Venue matches", secondDonor.getVenue().getName(), equalTo("Second"));
     assertThat("Id number matches", secondDonor.getIdNumber(), equalTo("7210030162086"));
+    
+    // Minimal donor
+    assertThat("BloodAbo not set", thirdDonor.getBloodAbo(), equalTo(""));
+    assertThat("BloodRh not set", thirdDonor.getBloodRh(), equalTo(""));
+    assertThat("Id number not set", thirdDonor.getIdNumber(), equalTo(""));
   }
   
   private Donor findDonorByName(String firstName, String lastName) {
@@ -335,7 +342,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
 
   private void assertImportDonationData_shouldCreateDonationsFromSpreadsheet()
       throws EncryptedDocumentException, InvalidFormatException, IOException {
-    Donation firstDonation = findDonationByDonationIdentificationNumber("32434");
+    Donation firstDonation = findDonationByDonationIdentificationNumber("3243400");
 
     assertThat("venue is set", firstDonation.getVenue().getName(), equalTo("First"));
     assertThat("donationType is set", firstDonation.getDonationType().getDonationType(), equalTo("Voluntary"));
@@ -367,22 +374,35 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     assertThat("DonationBatch is closed", firstDonationBatch.getIsClosed(), equalTo(true));
     assertThat("DonationBatch has a test batch", firstDonationBatch.getTestBatch(), notNullValue());
     
-    Donation secondDonation = findDonationByDonationIdentificationNumber("32435");
+    Donation secondDonation = findDonationByDonationIdentificationNumber("3243500");
     assertThat("Same DonationBatch", secondDonation.getDonationBatch().getId(), equalTo(firstDonationBatch.getId()));
     assertThat("Same TestBatch", secondDonation.getDonationBatch().getTestBatch(), equalTo(firstDonationBatch.getTestBatch()));
     
-    Donation thirdDonation = findDonationByDonationIdentificationNumber("32432");
+    Donation thirdDonation = findDonationByDonationIdentificationNumber("3243200");
     assertThat("Different DonationBatch", thirdDonation.getDonationBatch().getId(), not(equalTo(firstDonationBatch.getId())));
     assertThat("Different TestBatch", thirdDonation.getDonationBatch().getTestBatch(), not(equalTo(firstDonationBatch.getTestBatch())));
     
-    Donation fourthDonation = findDonationByDonationIdentificationNumber("32431");
+    Donation fourthDonation = findDonationByDonationIdentificationNumber("3243100");
     DonationBatch fourthDonationBatch = fourthDonation.getDonationBatch();
     assertThat("DonationBatch venue is set", fourthDonationBatch.getVenue().getName(), equalTo("Fourth"));
     assertThat("Different DonationBatch", fourthDonationBatch.getId(), not(equalTo(thirdDonation.getDonationBatch().getId())));
 
     // The first pair of donations are in the same donation batch and test batch
     // The second pair of donations are in different donation batches but the same test batch
-    assertThat("the correct number of test batches are created", countTestBatches(), equalTo(2L));
+    assertThat("the correct number of test batches are created", countTestBatches(), equalTo(3L));
+    
+    Donation fifthDonation = findDonationByDonationIdentificationNumber("3243600");
+    assertThat("donorWeight is not set", fifthDonation.getDonorWeight(), nullValue());
+    assertThat("bloodPressureSystolic is not set", fifthDonation.getBloodPressureSystolic(), nullValue());
+    assertThat("bloodPressureDiastolic is not set", fifthDonation.getBloodPressureDiastolic(), nullValue());
+    assertThat("donorPulse is not set", fifthDonation.getDonorPulse(), nullValue());
+    assertThat("haemoglobinCount is not set", fifthDonation.getHaemoglobinCount(), nullValue());
+    assertThat("haemoglobinLevel is not set", fifthDonation.getHaemoglobinLevel(), nullValue());
+    assertThat("adverseEventType is not set", fifthDonation.getAdverseEvent(), nullValue());
+    assertThat("adverseEventComment is not set", fifthDonation.getAdverseEvent(), nullValue());
+    assertThat("bloodAbo is not set", fifthDonation.getBloodAbo(), nullValue());
+    assertThat("bloodRh is not set", fifthDonation.getBloodRh(), nullValue());
+    assertThat("notes is not set", fifthDonation.getNotes(), equalTo(""));
   }
 
   private Donation findDonationByDonationIdentificationNumber(String din) {
@@ -392,13 +412,16 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
   }
   
   private void assertImportDonationData_shouldCreateDeferralsFromSpreadsheet() throws ParseException {
-    DonorDeferral deferral = findDeferralByDeferralReasonText("Had nausea");
+    DonorDeferral firstDeferral = findDeferralByDeferralReasonText("Had nausea");
     
-    assertThat("venue is set", deferral.getVenue().getName(), equalTo("First"));
-    assertThat("deferral reason is set", deferral.getDeferralReason().getReason(), equalTo("Other reasons"));
-    assertThat("createdDate is set", new SimpleDateFormat("yyyy-MM-dd").format(deferral.getCreatedDate()), equalTo("2016-01-03"));
-    assertThat("deferredUntil is set", new SimpleDateFormat("yyyy-MM-dd").format(deferral.getDeferredUntil()), equalTo("2016-06-03"));
-    assertThat("deferred donor is set", deferral.getDeferredDonor().getFirstName(), equalTo("David"));
+    assertThat("venue is set", firstDeferral.getVenue().getName(), equalTo("First"));
+    assertThat("deferral reason is set", firstDeferral.getDeferralReason().getReason(), equalTo("Other reasons"));
+    assertThat("createdDate is set", new SimpleDateFormat("yyyy-MM-dd").format(firstDeferral.getCreatedDate()), equalTo("2016-01-03"));
+    assertThat("deferredUntil is set", new SimpleDateFormat("yyyy-MM-dd").format(firstDeferral.getDeferredUntil()), equalTo("2016-06-03"));
+    assertThat("deferred donor is set", firstDeferral.getDeferredDonor().getFirstName(), equalTo("David"));
+    
+    DonorDeferral secondDeferral = findDeferralByDonor("Donald", "Brown");
+    assertThat("reason text is not set", secondDeferral.getDeferralReasonText(), equalTo(""));
   }
   
   private DonorDeferral findDeferralByDeferralReasonText(String deferralReasonText) {
@@ -407,8 +430,16 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
         .getSingleResult();
   }
   
+  private DonorDeferral findDeferralByDonor(String donorFirstName, String donorLastName) {
+    return entityManager.createQuery("SELECT d FROM DonorDeferral d WHERE d.deferredDonor.firstName = :firstName "
+        + "AND d.deferredDonor.lastName = :lastName", DonorDeferral.class)
+        .setParameter("firstName", donorFirstName)
+        .setParameter("lastName", donorLastName)
+        .getSingleResult();
+  }
+  
   private void assertImportDonationData_shouldCreateOutcomesFromSpreadsheet() {
-    Donation firstDonation = findDonationByDonationIdentificationNumber("32434");
+    Donation firstDonation = findDonationByDonationIdentificationNumber("3243400");
     BloodTestResult bloodTestOutcome = findBloodTestOutcomeByDonation(firstDonation);
     
     SimpleDateFormat dateSdf = new SimpleDateFormat("yyyy-MM-dd");
