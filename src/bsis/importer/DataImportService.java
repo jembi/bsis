@@ -301,7 +301,7 @@ public class DataImportService {
             cell.setCellType(Cell.CELL_TYPE_STRING);
             String bloodABO = cell.getStringCellValue();
             
-            if (!bloodABO.isEmpty()){
+            if (!bloodABO.isEmpty()) {
               if (isValidBloodTyping(bloodABO, DonationField.BLOODABO, bloodTestingRuleCache)) {
                 donorBackingForm.setBloodAbo(bloodABO);
               } else {
@@ -314,7 +314,7 @@ public class DataImportService {
             cell.setCellType(Cell.CELL_TYPE_STRING);
             String bloodRh = cell.getStringCellValue();
             
-            if (!bloodRh.isEmpty()){
+            if (!bloodRh.isEmpty()) {
               if (isValidBloodTyping(bloodRh, DonationField.BLOODRH, bloodTestingRuleCache)) {
                 donorBackingForm.setBloodRh(bloodRh);
               } else {
@@ -617,7 +617,7 @@ public class DataImportService {
 
           case "donorWeight":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            if(!cell.getStringCellValue().isEmpty()){
+            if (!cell.getStringCellValue().isEmpty()) {
               try {
                 donationBackingForm.setDonorWeight(BigDecimal.valueOf(Double.valueOf(cell.getStringCellValue())));
               } catch (Exception e) {
@@ -628,7 +628,7 @@ public class DataImportService {
 
           case "bloodPressureSystolic":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            if(!cell.getStringCellValue().isEmpty()){
+            if (!cell.getStringCellValue().isEmpty()) {
               try {
                 donationBackingForm.setBloodPressureSystolic(Integer.valueOf(cell.getStringCellValue()));
               } catch (Exception e) {
@@ -640,7 +640,7 @@ public class DataImportService {
 
           case "bloodPressureDiastolic":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            if(!cell.getStringCellValue().isEmpty()){
+            if (!cell.getStringCellValue().isEmpty()) {
               try {
                 donationBackingForm.setBloodPressureDiastolic(Integer.valueOf(cell.getStringCellValue()));
               } catch (Exception e) {
@@ -652,7 +652,7 @@ public class DataImportService {
 
           case "donorPulse":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            if(!cell.getStringCellValue().isEmpty()){
+            if (!cell.getStringCellValue().isEmpty()) {
               try {
                 donationBackingForm.setDonorPulse(Integer.valueOf(cell.getStringCellValue()));
               } catch (Exception e) {
@@ -663,7 +663,7 @@ public class DataImportService {
 
           case "haemoglobinCount":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            if(!cell.getStringCellValue().isEmpty()){
+            if (!cell.getStringCellValue().isEmpty()) {
               try {
                 donationBackingForm.setHaemoglobinCount(BigDecimal.valueOf(Double.valueOf(cell.getStringCellValue())));
               } catch (Exception e) {
@@ -674,7 +674,7 @@ public class DataImportService {
 
           case "haemoglobinLevel":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            if(!cell.getStringCellValue().isEmpty()){
+            if (!cell.getStringCellValue().isEmpty()) {
               String haemoglobinLevelStr = cell.getStringCellValue();
               HaemoglobinLevel haemoglobinLevel = null;
               if (StringUtils.isNotEmpty(haemoglobinLevelStr)) {
@@ -690,7 +690,7 @@ public class DataImportService {
 
           case "adverseEventType":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            if(!cell.getStringCellValue().isEmpty()){
+            if (!cell.getStringCellValue().isEmpty()) {
               AdverseEventType adverseEventType = adverseEventTypeCache.get(cell.getStringCellValue());
               if (adverseEventType == null) {
                 errors.rejectValue("donation.adverseEvent.type", "type.invalid", "Invalid adverseEventType");
@@ -703,7 +703,7 @@ public class DataImportService {
 
           case "adverseEventComment":
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            if(!cell.getStringCellValue().isEmpty()){
+            if (!cell.getStringCellValue().isEmpty()) {
               adverseEventComment = cell.getStringCellValue();
             }
             break;
@@ -711,7 +711,7 @@ public class DataImportService {
           case "bloodAbo":
             cell.setCellType(Cell.CELL_TYPE_STRING);
             String bloodABO = cell.getStringCellValue();
-            if(!cell.getStringCellValue().isEmpty()){
+            if (!cell.getStringCellValue().isEmpty()) {
               if (isValidBloodTyping(bloodABO, DonationField.BLOODABO, bloodTestingRuleCache)) {
                 donationBackingForm.setBloodAbo(bloodABO);
               } else {
@@ -723,7 +723,7 @@ public class DataImportService {
           case "bloodRh":
             cell.setCellType(Cell.CELL_TYPE_STRING);
             String bloodRh = cell.getStringCellValue();
-            if(!cell.getStringCellValue().isEmpty()){
+            if (!cell.getStringCellValue().isEmpty()) {
               if (isValidBloodTyping(bloodRh, DonationField.BLOODRH, bloodTestingRuleCache)) {
                 donationBackingForm.setBloodRh(bloodRh);
               } else {
