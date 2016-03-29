@@ -43,7 +43,7 @@ import utils.PermissionConstants;
 import utils.PermissionUtils;
 import viewmodel.DonationBatchViewModel;
 import viewmodel.DonationSummaryViewModel;
-import viewmodel.TestBatchViewModel;
+import viewmodel.TestBatchFullViewModel;
 
 @RestController
 @RequestMapping("testbatches")
@@ -91,11 +91,11 @@ public class TestBatchController {
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_TEST_BATCH+"')")
-  public ResponseEntity<TestBatchViewModel> addTestBatch(@Valid @RequestBody TestBatchBackingForm form) {
+  public ResponseEntity<TestBatchFullViewModel> addTestBatch(@Valid @RequestBody TestBatchBackingForm form) {
 
     TestBatch testBatch = testBatchRepository.saveTestBatch(form.getTestBatch(), getNextTestBatchNumber());
     boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
-    return new ResponseEntity<>(testBatchViewModelFactory.createTestBatchViewModel(testBatch, isTestingSupervisor),
+    return new ResponseEntity<>(testBatchViewModelFactory.createTestBatchFullViewModel(testBatch, isTestingSupervisor),
         HttpStatus.CREATED);
   }
 
@@ -107,19 +107,19 @@ public class TestBatchController {
     Map<String, Object> map = new HashMap<String, Object>();
     TestBatch testBatch = testBatchRepository.findTestBatchById(id);
     boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
-    map.put("testBatch", testBatchViewModelFactory.createTestBatchViewModel(testBatch, isTestingSupervisor));
+    map.put("testBatch", testBatchViewModelFactory.createTestBatchFullViewModel(testBatch, isTestingSupervisor));
     return new ResponseEntity<>(map, HttpStatus.OK);
 
   }
 
   @RequestMapping(value = "{id}",  method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_TEST_BATCH+"')")
-  public ResponseEntity<TestBatchViewModel> updateTestBatch(@PathVariable Long id,
+  public ResponseEntity<TestBatchFullViewModel> updateTestBatch(@PathVariable Long id,
       @Valid @RequestBody TestBatchBackingForm form){
 
     TestBatch testBatch = testBatchCRUDService.updateTestBatch(id, form.getTestBatch().getStatus(), form.getTestBatch()
         .getCreatedDate(), form.getDonationBatchIds());
-    return new ResponseEntity<>(testBatchViewModelFactory.createTestBatchViewModel(testBatch, true), HttpStatus.OK);
+    return new ResponseEntity<>(testBatchViewModelFactory.createTestBatchFullViewModel(testBatch, true), HttpStatus.OK);
   }
 
   @RequestMapping(value = "/search", method = RequestMethod.GET)
@@ -130,10 +130,8 @@ public class TestBatchController {
       @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
 
     List<TestBatch> testBatches = testBatchRepository.findTestBatches(statuses, startDate, endDate);
-
     Map<String, Object> map = new HashMap<>();
-    boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
-    map.put("testBatches", testBatchViewModelFactory.createTestBatchViewModels(testBatches, isTestingSupervisor));
+    map.put("testBatches", testBatchViewModelFactory.createTestBatchBasicViewModels(testBatches));
 
     return new ResponseEntity<>(map, HttpStatus.OK);
 
@@ -156,7 +154,7 @@ public class TestBatchController {
 
     Map<String, Object> map = new HashMap<String, Object>();   
     boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
-    map.put("testBatches", testBatchViewModelFactory.createTestBatchViewModels(testBatches, isTestingSupervisor));
+    map.put("testBatches", testBatchViewModelFactory.createTestBatchFullViewModels(testBatches, isTestingSupervisor));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
