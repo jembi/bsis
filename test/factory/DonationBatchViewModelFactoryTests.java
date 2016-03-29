@@ -98,14 +98,10 @@ public class DonationBatchViewModelFactoryTests {
     // expected data
     DonationViewModel expectedDonationViewModel = aDonationViewModel()
         .withDonation(donation)
-        .withPermission("canDelete", true)
-        .withPermission("canUpdateDonationFields", true)
-        .withPermission("canDonate", true)
-        .withPermission("isBackEntry", true)
         .build();
 
     // set up mocks
-    when(donationViewModelFactory.createDonationViewModelWithPermissions(donation)).thenReturn(expectedDonationViewModel);
+    when(donationViewModelFactory.createDonationViewModelWithoutPermissions(donation)).thenReturn(expectedDonationViewModel);
     when(donationBatchConstraintChecker.canDeleteDonationBatch(donationBatchId)).thenReturn(false);
     when(donationBatchConstraintChecker.canCloseDonationBatch(donationBatchId)).thenReturn(false);
     when(donationBatchConstraintChecker.canReopenDonationBatch(donationBatchId)).thenReturn(false);
@@ -144,7 +140,7 @@ public class DonationBatchViewModelFactoryTests {
     Donation donation2 = aDonation().withId(donation2Id)
         .withPackType(aPackType().withTestSampleProduced(false).build())
         .build();
-    List<Donation> donations = Arrays.asList(new Donation[]{donation1, donation2});
+    List<Donation> donations = Arrays.asList(donation1, donation2);
 
     Long donationBatchId = new Long(1);
     DonationBatch donationBatch = aDonationBatch().withId(donationBatchId).withDonations(donations).build();
@@ -156,16 +152,10 @@ public class DonationBatchViewModelFactoryTests {
 
     // set up mocks
     when(donationViewModelFactory.createDonationViewModelWithoutPermissions(donation1)).thenReturn(expectedDonation1ViewModel);
-    when(donationBatchConstraintChecker.canDeleteDonationBatch(donationBatchId)).thenReturn(false);
-    when(donationBatchConstraintChecker.canCloseDonationBatch(donationBatchId)).thenReturn(false);
-    when(donationBatchConstraintChecker.canReopenDonationBatch(donationBatchId)).thenReturn(false);
-    when(donationBatchConstraintChecker.canEditDonationBatch(donationBatchId)).thenReturn(false);
-    when(donationBatchConstraintChecker.canEditDonationBatchDate(donationBatchId))
-        .thenReturn(false);
 
     // run tests
     DonationBatchFullViewModel returnedDonationBatchViewModel =
-        donationBatchViewModelFactory.createDonationBatchFullViewModelWithoutDonationPermissions(donationBatch, true);
+        donationBatchViewModelFactory.createDonationBatchViewModelWithTestSamples(donationBatch);
 
     // do asserts
     Assert.assertNotNull("view model was created", returnedDonationBatchViewModel);

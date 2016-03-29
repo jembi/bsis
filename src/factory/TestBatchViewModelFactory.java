@@ -70,8 +70,7 @@ public class TestBatchViewModelFactory {
     List<DonationBatchFullViewModel> donationBatchViewModels = new ArrayList<>();
     if (testBatch.getDonationBatches() != null) {
       for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-        donationBatchViewModels.add(donationBatchViewModelFactory.createDonationBatchFullViewModelWithoutDonationPermissions(donationBatch,
-            true));
+        donationBatchViewModels.add(donationBatchViewModelFactory.createDonationBatchViewModelWithTestSamples(donationBatch));
       }
     }
     testBatchViewModel.setDonationBatches(donationBatchViewModels);
