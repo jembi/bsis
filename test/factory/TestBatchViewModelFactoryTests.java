@@ -49,7 +49,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
   @Mock
   private TestBatchConstraintChecker testBatchConstraintChecker;
 
-  private DonationBatch getDonationBatch() {
+  private DonationBatch createDonationBatch() {
     PackType packType = PackTypeBuilder.aPackType().withTestSampleProduced(true).build();
     Donation donation = aDonation().withPackType(packType).build();
     DonationBatch donationBatch = aDonationBatch().withDonation(donation).build();
@@ -59,7 +59,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateTestBatchBasicViewModel_shouldReturnTestBatchViewModelsWithTheCorrectState() {
 
-    DonationBatch donationBatch = getDonationBatch();
+    DonationBatch donationBatch = createDonationBatch();
 
     TestBatch testBatch1 =
         aTestBatch().withId(IRRELEVANT_ID).withStatus(IRRELEVANT_STATUS).withBatchNumber(IRRELEVANT_BATCH_NUMBER)
@@ -103,7 +103,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateTestBatchFullViewModel_shouldReturnTestBatchFullViewModelWithTheCorrectState() {
 
-    DonationBatch donationBatch = getDonationBatch();
+    DonationBatch donationBatch = createDonationBatch();
     DonationBatchViewModel donationBatchViewModel =
         donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch);
 
@@ -127,7 +127,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
         .withNotes(IRRELEVANT_NOTES)
         .build();
 
-    List<TestBatch> testBatches = Arrays.asList(new TestBatch[]{testBatch1, testBatch2});
+    List<TestBatch> testBatches = Arrays.asList(testBatch1, testBatch2);
 
     TestBatchFullViewModel expectedViewModel1 = aTestBatchFullViewModel()
         .withId(IRRELEVANT_ID)
@@ -177,7 +177,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
 
     int expectedReadyCount = 2;
     
-    DonationBatch donationBatch = getDonationBatch();
+    DonationBatch donationBatch = createDonationBatch();
     DonationBatchViewModel donationBatchViewModel =
         donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch);
 
@@ -226,7 +226,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateTestBatchViewModelWithTestingSupervisorThatCanCloseTestBatch_shouldReturnTestBatchViewModelWithTheCorrectState() {
 
-    DonationBatch donationBatch = getDonationBatch();
+    DonationBatch donationBatch = createDonationBatch();
     DonationBatchViewModel donationBatchViewModel =
         donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch);
 
@@ -271,7 +271,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateTestBatchViewModelWithTestingSupervisorAndConstraints_shouldReturnTestBatchViewModelWithTheCorrectState() {
 
-    DonationBatch donationBatch = getDonationBatch();
+    DonationBatch donationBatch = createDonationBatch();
     DonationBatchViewModel donationBatchViewModel =
         donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch);
     
@@ -316,7 +316,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateTestBatchViewModelWithTestingSupervisorThatCanDeleteTestBatch_shouldReturnTestBatchViewModelWithTheCorrectState() {
 
-    DonationBatch donationBatch = getDonationBatch();
+    DonationBatch donationBatch = createDonationBatch();
     DonationBatchViewModel donationBatchViewModel =
         donationBatchViewModelFactory.createDonationBatchViewModel(donationBatch);
     
