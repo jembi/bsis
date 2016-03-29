@@ -77,7 +77,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
         .build();
 
     when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(CANT_RELEASE);
-    when(donationBatchViewModelFactory.createDonationBatchFullViewModelWithoutDonationPermissions(donationBatch, true))
+    when(donationBatchViewModelFactory.createDonationBatchViewModelWithTestSamples(donationBatch))
         .thenReturn(donationBatchViewModel);
 
     TestBatchViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchViewModel(testBatch, false);
@@ -132,7 +132,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
         .build();
 
     when(testBatchConstraintChecker.canReleaseTestBatch(testBatch1)).thenReturn(CANT_RELEASE);
-    when(donationBatchViewModelFactory.createDonationBatchFullViewModelWithoutDonationPermissions(donationBatch, true))
+    when(donationBatchViewModelFactory.createDonationBatchViewModelWithTestSamples(donationBatch))
         .thenReturn(donationBatchViewModel);
 
     List<TestBatchViewModel> returnedViewModels = testBatchViewModelFactory.createTestBatchViewModels(testBatches, false);

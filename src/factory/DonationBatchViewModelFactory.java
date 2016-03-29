@@ -64,23 +64,21 @@ public class DonationBatchViewModelFactory {
    */
   public DonationBatchFullViewModel createDonationBatchFullViewModel(DonationBatch donationBatch) {
     DonationBatchFullViewModel donationBatchViewModel = new DonationBatchFullViewModel();
-    populateFullViewModel(donationBatch, donationBatchViewModel, false);
+    populateFullViewModel(donationBatch, donationBatchViewModel);
     return donationBatchViewModel;
   }
 
   /**
-   * Create a full view model for the given donation batch that excludes donation permissions, and
-   * optionally excludes donations without test samples.
+   * Create a full view model for the given donation batch that excludes donation permissions and
+   * donations without test samples.
    *
    * @param donationBatch The donation batch.
-   * @param excludeDonationsWithoutTestSamples Whether or not to exclude donations without test
-   *        samples.
    * @return The populated view model.
    */
-  public DonationBatchFullViewModel createDonationBatchFullViewModelWithoutDonationPermissions(
-      DonationBatch donationBatch, boolean excludeDonationsWithoutTestSamples) {
+  public DonationBatchFullViewModel createDonationBatchViewModelWithTestSamples(DonationBatch donationBatch) {
     DonationBatchFullViewModel donationBatchViewModel = new DonationBatchFullViewModel();
-    populateFullViewModel(donationBatch, donationBatchViewModel, excludeDonationsWithoutTestSamples);
+    populateBasicViewModel(donationBatch, donationBatchViewModel);
+    donationBatchViewModel.setDonations(createDonationViewModels(donationBatch, true));
     return donationBatchViewModel;
   }
 
@@ -119,16 +117,13 @@ public class DonationBatchViewModelFactory {
    *
    * @param donationBatch the donation batch
    * @param donationBatchViewModel the donation batch view model
-   * @param excludeDonationsWithoutTestSamples the exclude donations without test samples
    * @param withDonationPermissions the with donation permissions
    */
-  private void populateFullViewModel(DonationBatch donationBatch, DonationBatchFullViewModel donationBatchViewModel,
-      boolean excludeDonationsWithoutTestSamples) {
+  private void populateFullViewModel(DonationBatch donationBatch, DonationBatchFullViewModel donationBatchViewModel) {
 
     populateBasicViewModel(donationBatch, donationBatchViewModel);
     
-    donationBatchViewModel.setDonations(
-        createDonationViewModels(donationBatch, excludeDonationsWithoutTestSamples));
+    donationBatchViewModel.setDonations(createDonationViewModels(donationBatch));
 
     Map<String, Boolean> permissions = new HashMap<>();
     permissions.put("canDelete", donationBatchConstraintChecker.canDeleteDonationBatch(donationBatch.getId()));
@@ -139,14 +134,16 @@ public class DonationBatchViewModelFactory {
     donationBatchViewModel.setPermissions(permissions);
   }
 
+  private List<DonationViewModel> createDonationViewModels(DonationBatch donationBatch) {
+    return createDonationViewModels(donationBatch, false);
+  }
 
   /**
    * Create a list of view models for the given donation batch. Optionally excludes donations
-   * without test samples, and donation permissions.
+   * without test samples.
    *
    * @param donationBatch the donation batch
    * @param excludeDonationsWithoutTestSamples the exclude donations without test samples
-   * @param withDonationPermissions the with donation permissions
    * @return the list< donation view model>
    */
   private List<DonationViewModel> createDonationViewModels(DonationBatch donationBatch,
