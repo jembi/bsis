@@ -7,13 +7,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-
-import model.location.Location;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import model.location.Location;
 
 @Repository
 @Transactional
@@ -24,11 +23,6 @@ public class LocationRepository {
   public void saveLocation(Location location) {
     em.persist(location);
     em.flush();
-  }
-
-  public void deleteAllLocations() {
-    Query query = em.createQuery("DELETE FROM Location l");
-    query.executeUpdate();
   }
 
   public List<Location> getAllLocations() {
@@ -78,32 +72,6 @@ public class LocationRepository {
         locationNames.add(l.getName());
     }
     return locationNames;
-  }
-
-  public Long getIDByName(String name) {
-    List<Location> locations = getAllLocations();
-    for (Location l : locations) {
-      if (l.getName().equals(name))
-        return l.getId();
-    }
-    return (long) -1;
-  }
-
-  public void saveAllLocations(List<Location> locations) {
-    for (Location location : locations) {
-      if (location.getId() == null) {
-        location.setIsDeleted(false);
-        em.persist(location);
-      } else {
-        Location existingLocation = em.find(Location.class, location.getId());
-        if (existingLocation != null) {
-          existingLocation.setIsDeleted(false);
-          existingLocation.copy(location);
-          em.merge(existingLocation);
-        }
-      }
-    }
-    em.flush();
   }
 
   public List<Location> getAllVenues() {
