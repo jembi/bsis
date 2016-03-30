@@ -97,7 +97,7 @@ public class DonorViewModelFactoryTests {
   }
 
   @Test
-  public void testCreateDonorViewModels_shouldReturnEmptyViewModels() {
+  public void testCreateDonorViewModels_shouldReturnExpectedViewModels() {
     List<Donor> donors = new ArrayList<>();
     Donor donor1 = aDonor().withId(1L).build();
     donors.add(donor1);
