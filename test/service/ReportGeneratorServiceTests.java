@@ -1,7 +1,7 @@
 package service;
 
 import static helpers.builders.CohortBuilder.aCohort;
-import static helpers.builders.CollectedDonationValueObjectBuilder.aCollectedDonationValueObject;
+import static helpers.builders.CollectedDonationDTOBuilder.aCollectedDonationDTO;
 import static helpers.builders.DonationTypeBuilder.aDonationType;
 import static helpers.builders.IndicatorBuilder.anIndicator;
 import static helpers.builders.ReportBuilder.aReport;
@@ -24,9 +24,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import constant.CohortConstants;
+import dto.CollectedDonationDTO;
 import repository.DonationRepository;
 import suites.UnitTestSuite;
-import valueobject.CollectedDonationValueObject;
 
 public class ReportGeneratorServiceTests extends UnitTestSuite {
 
@@ -41,8 +41,8 @@ public class ReportGeneratorServiceTests extends UnitTestSuite {
     Date irrelevantStartDate = new Date();
     Date irrelevantEndDate = new Date();
 
-    List<CollectedDonationValueObject> valueObjects = Arrays.asList(
-        aCollectedDonationValueObject()
+    List<CollectedDonationDTO> dtos = Arrays.asList(
+        aCollectedDonationDTO()
             .withDonationType(aDonationType().withName("Family").build())
             .withGender(Gender.female)
             .withBloodAbo("A")
@@ -81,7 +81,7 @@ public class ReportGeneratorServiceTests extends UnitTestSuite {
         .build();
 
     when(donationRepository.findCollectedDonationsReportIndicators(irrelevantStartDate, irrelevantEndDate))
-        .thenReturn(valueObjects);
+        .thenReturn(dtos);
 
     Report returnedReport = reportGeneratorService.generateCollectedDonationsReport(irrelevantStartDate,
         irrelevantEndDate);

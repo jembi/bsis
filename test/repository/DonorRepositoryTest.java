@@ -19,18 +19,6 @@ import java.util.Map;
 
 import javax.persistence.NoResultException;
 
-import org.apache.commons.lang.time.DateUtils;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.ReplacementDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.security.core.userdetails.UserDetailsService;
-
-import backingform.DonorBackingForm;
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
@@ -43,9 +31,23 @@ import model.donordeferral.DonorDeferral;
 import model.location.Location;
 import model.user.User;
 import model.util.Gender;
+
+import org.apache.commons.lang.time.DateUtils;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ReplacementDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 import suites.DBUnitContextDependentTestSuite;
 import utils.CustomDateFormatter;
 import viewmodel.DonorSummaryViewModel;
+import backingform.DonorBackingForm;
+import dto.DuplicateDonorDTO;
 
 public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
 
@@ -309,32 +311,6 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
       isValid = false;
     }
     assertTrue("Donor with donation matching DIN returned", isValid);
-  }
-
-  @Test
-  /**
-   * Should return all non-deleted donors in the database. getAllDonors()
-   */
-  public void getAllDonors_shouldReturnNoneDeleteDonor() {
-    List<Donor> listDonor = donorRepository.getAllDonors();
-    for (Donor donor : listDonor) {
-      assertFalse("Deleted Donor should not part of donor list.",
-          donor.getIsDeleted());
-    }
-  }
-
-  @Test
-  /**
-   * Should not return donors who have been deleted. getAllDonors()
-   */
-  public void getAllDonors_shouldNotReturnDeletedDonor() {
-    List<Donor> listDonor = donorRepository.getAllDonors();
-    for (Donor donor : listDonor) {
-      // 2 is deleted donor id.
-      assertNotSame(
-          "Donor's id 2 is deleted from database. so Deleted Donor should not included in the list.",
-          2, donor.getId());
-    }
   }
 
   @Test
@@ -1027,20 +1003,25 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     DonorSummaryViewModel donorSummary = donorRepository.findDonorSummaryByDonorNumber("000001");
   }
 
-//    @Test
-//    /**
-//     *Test Passes if Id Number saved In database
-//     */
-//    public void SaveIdNumber_shouldPersist(){
-//        Donor donor = new Donor();
-//        donor.setId(1l);
-//        IdType idType = new IdType();
-//        idType.setId(1l);
-//        IdNumber idNumber = new IdNumber();
-//        idNumber.setIdNumber("123");
-//        idNumber.setDonorId(donor);
-//        idNumber.setIdType(idType);
-//        donorRepository.saveIdNumber(idNumber);
-//        assertNotNull("Expected : INT but Found :  NULL" ,idNumber.getId());
-//    }
+  @Test
+  public void testGetAllDuplicateDonors() throws Exception {
+    List<DuplicateDonorDTO> duplicateDonors = donorRepository.getDuplicateDonors();
+    Assert.assertEquals("There are 5 duplicates", duplicateDonors.get(0).getCount(), 5);
+  }
+
+  @Test
+  public void testGetDuplicateDonors() throws Exception {
+    String firstName = "firstName";
+    String lastName = "lastName";
+    Date birthDate = new SimpleDateFormat("yyyy-MM-dd").parse("1991-06-10");
+    Gender gender = Gender.male;
+    List<Donor> duplicateDonors = donorRepository.getDuplicateDonors(firstName, lastName, birthDate, gender);
+    Assert.assertEquals("There are 5 duplicates", duplicateDonors.size(), 5);
+    for (Donor donor : duplicateDonors) {
+      Assert.assertEquals("First name correct", firstName, donor.getFirstName());
+      Assert.assertEquals("Last name correct", lastName, donor.getLastName());
+      Assert.assertEquals("birth date correct", birthDate, donor.getBirthDate());
+      Assert.assertEquals("gender correct", gender, donor.getGender());
+    }
+  }
 }

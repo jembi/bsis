@@ -19,13 +19,6 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import model.address.AddressType;
 import model.donation.Donation;
 import model.donor.Donor;
@@ -35,9 +28,19 @@ import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.idtype.IdType;
 import model.preferredlanguage.PreferredLanguage;
+import model.util.Gender;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import service.GeneralConfigAccessorService;
 import utils.DonorUtils;
 import viewmodel.DonorSummaryViewModel;
+import dto.DuplicateDonorDTO;
 
 @Repository
 @Transactional
@@ -177,14 +180,6 @@ public class DonorRepository {
 
   }
 
-  public List<Donor> getAllDonors() {
-    TypedQuery<Donor> query = em.createQuery(
-        "SELECT d FROM Donor d WHERE d.isDeleted = :isDeleted and d.donorStatus not in :donorStatus", Donor.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("donorStatus", Arrays.asList(DonorStatus.MERGED));
-    return query.getResultList();
-  }
-
   public Donor addDonor(Donor donor) throws PersistenceException {
     updateDonorAutomaticFields(donor);
     em.persist(donor);
@@ -293,21 +288,6 @@ public class DonorRepository {
     return donor;
   }
 
-
-  /*y
-   public Donor findDonorByDonorNumberIncludeDeleted(String donorNumber) {
-   String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.donations  WHERE d.donorNumber = :donorNumber";
-   TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
-   Donor donor = null;
-   try {
-   donor = query.setParameter("donorNumber", donorNumber).getSingleResult();
-   } catch (NoResultException ex) {
-   LOGGER.error("could not find record with donorNumber :" + donorNumber);
-   LOGGER.error(ex.getMessage());
-   }
-   return donor;
-   }
-   */
   public List<PreferredLanguage> getAllLanguages() {
     TypedQuery<PreferredLanguage> query = em.createQuery(
         "SELECT l FROM PreferredLanguage l", PreferredLanguage.class);
@@ -450,5 +430,19 @@ public class DonorRepository {
     }
     em.flush();
     return newDonor;
+  }
+
+  public List<DuplicateDonorDTO> getDuplicateDonors() {
+    return em.createNamedQuery(DonorNamedQueryConstants.NAME_GET_ALL_DUPLICATE_DONORS, DuplicateDonorDTO.class)
+        .getResultList();
+  }
+  
+  public List<Donor> getDuplicateDonors(String firstName, String lastName, Date birthDate, Gender gender) {
+    return em.createNamedQuery(DonorNamedQueryConstants.NAME_GET_DUPLICATE_DONORS, Donor.class)
+        .setParameter("firstName", firstName)
+        .setParameter("lastName", lastName)
+        .setParameter("birthDate", birthDate)
+        .setParameter("gender", gender)
+        .getResultList();
   }
 }

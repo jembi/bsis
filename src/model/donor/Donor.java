@@ -12,6 +12,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -39,6 +41,7 @@ import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Length;
 
+import repository.DonorNamedQueryConstants;
 import utils.DonorUtils;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -46,6 +49,12 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import constraintvalidator.LocationExists;
 
+@NamedQueries({
+  @NamedQuery(name = DonorNamedQueryConstants.NAME_GET_ALL_DUPLICATE_DONORS,
+      query = DonorNamedQueryConstants.QUERY_GET_ALL_DUPLICATE_DONORS),
+      @NamedQuery(name = DonorNamedQueryConstants.NAME_GET_DUPLICATE_DONORS,
+      query = DonorNamedQueryConstants.QUERY_GET_DUPLICATE_DONORS)
+})
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")

@@ -29,9 +29,9 @@ public class DonationNamedQueryConstants {
           "ORDER BY d.donationDate DESC ";
 
   public static final String NAME_FIND_COLLECTED_DONATION_VALUE_OBJECTS_FOR_DATE_RANGE =
-      "Donation.findCollectedDonationValueObjectsForDateRange";
+      "Donation.findCollectedDonationDtosForDateRange";
   public static final String QUERY_FIND_COLLECTED_DONATION_VALUE_OBJECTS_FOR_DATE_RANGE =
-      "SELECT NEW valueobject.CollectedDonationValueObject(d.donationType, d.donor.gender, d.bloodAbo, d.bloodRh, d.donor.venue, COUNT(d)) " +
+      "SELECT NEW dto.CollectedDonationDTO(d.donationType, d.donor.gender, d.bloodAbo, d.bloodRh, d.donor.venue, COUNT(d)) " +
           "FROM Donation d " +
           "WHERE d.donationDate BETWEEN :startDate AND :endDate " +
           "AND d.isDeleted = :deleted " +

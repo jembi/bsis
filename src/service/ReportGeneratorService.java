@@ -4,18 +4,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import constant.CohortConstants;
+import dto.CollectedDonationDTO;
 import model.donationtype.DonationType;
 import model.reporting.Cohort;
 import model.reporting.Comparator;
 import model.reporting.Indicator;
 import model.reporting.Report;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import constant.CohortConstants;
 import repository.DonationRepository;
-import valueobject.CollectedDonationValueObject;
 
 @Service
 public class ReportGeneratorService {
@@ -34,36 +33,36 @@ public class ReportGeneratorService {
     report.setStartDate(startDate);
     report.setEndDate(endDate);
 
-    List<CollectedDonationValueObject> valueObjects = donationRepository.findCollectedDonationsReportIndicators(
+    List<CollectedDonationDTO> dtos = donationRepository.findCollectedDonationsReportIndicators(
         startDate, endDate);
 
-    List<Indicator> indicators = new ArrayList<>(valueObjects.size());
+    List<Indicator> indicators = new ArrayList<>(dtos.size());
 
-    for (CollectedDonationValueObject valueObject : valueObjects) {
+    for (CollectedDonationDTO dto : dtos) {
 
       Indicator indicator = new Indicator();
       indicator.setStartDate(startDate);
       indicator.setEndDate(endDate);
-      indicator.setVenue(valueObject.getVenue());
-      indicator.setValue(valueObject.getCount());
+      indicator.setVenue(dto.getVenue());
+      indicator.setValue(dto.getCount());
 
       Cohort donationTypeCohort = new Cohort();
       donationTypeCohort.setCategory(CohortConstants.DONATION_TYPE_CATEGORY);
       donationTypeCohort.setComparator(Comparator.EQUALS);
-      DonationType donationType = valueObject.getDonationType();
+      DonationType donationType = dto.getDonationType();
       donationTypeCohort.setOption(donationType.getDonationType());
       indicator.addCohort(donationTypeCohort);
 
       Cohort genderCohort = new Cohort();
       genderCohort.setCategory(CohortConstants.GENDER_CATEGORY);
       genderCohort.setComparator(Comparator.EQUALS);
-      genderCohort.setOption(valueObject.getGender());
+      genderCohort.setOption(dto.getGender());
       indicator.addCohort(genderCohort);
 
       Cohort bloodTypeCohort = new Cohort();
       bloodTypeCohort.setCategory(CohortConstants.BLOOD_TYPE_CATEGORY);
       bloodTypeCohort.setComparator(Comparator.EQUALS);
-      bloodTypeCohort.setOption(valueObject.getBloodAbo() + valueObject.getBloodRh());
+      bloodTypeCohort.setOption(dto.getBloodAbo() + dto.getBloodRh());
       indicator.addCohort(bloodTypeCohort);
 
       indicators.add(indicator);

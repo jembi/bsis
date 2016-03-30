@@ -13,7 +13,6 @@ import model.donation.Donation;
 import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +50,7 @@ import backingform.DonorBackingForm;
 import backingform.DuplicateDonorsBackingForm;
 import backingform.validator.DonorBackingFormValidator;
 import constant.GeneralConfigConstants;
+import dto.DuplicateDonorDTO;
 import factory.DonationViewModelFactory;
 import factory.DonorDeferralViewModelFactory;
 import factory.DonorViewModelFactory;
@@ -59,11 +59,6 @@ import factory.PostDonationCounsellingViewModelFactory;
 @RestController
 @RequestMapping("donors")
 public class DonorController {
-
-  /**
-   * The Constant LOGGER.
-   */
-  private static final Logger LOGGER = Logger.getLogger(DonorController.class);
 
   @Autowired
   private DonorRepository donorRepository;
@@ -367,43 +362,20 @@ public class DonorController {
 
     Map<String, Object> map = new HashMap<String, Object>();
 
-    List<Donor> donors = donorRepository.getAllDonors();
     Donor donor = donorRepository.findDonorByDonorNumber(donorNumber, false);
-    List<Donor> duplicates = duplicateDonorService.findDuplicateDonors(donor, donors);
-
-    // convert Donors to DonorViewModels
-    List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
-    for (Donor d : duplicates) {
-      DonorViewModel donorViewModel = donorViewModelFactory.createDonorViewModelWithPermissions(d);
-      donorViewModels.add(donorViewModel);
-    }
-
+    List<Donor> duplicates = duplicateDonorService.findDuplicateDonors(donor);
+    List<DonorViewModel> donorViewModels = donorViewModelFactory.createDonorViewModels(duplicates);
     map.put("duplicates", donorViewModels);
+
     return map;
   }
 
   @RequestMapping(value = "/duplicates/all", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DUPLICATE_DONORS + "')")
   public Map<String, Object> findDuplicateDonors() {
-
     Map<String, Object> map = new HashMap<String, Object>();
-
-    List<Donor> donors = donorRepository.getAllDonors();
-    Map<String, List<Donor>> duplicates = duplicateDonorService.findDuplicateDonors(donors);
-
-    // convert Donors to DonorViewModels
-    Map<String, List<DonorViewModel>> duplicateViewModels = new HashMap<String, List<DonorViewModel>>();
-    for (String key : duplicates.keySet()) {
-      List<Donor> donorList = duplicates.get(key);
-      List<DonorViewModel> donorViewModels = new ArrayList<DonorViewModel>();
-      for (Donor donor : donorList) {
-        DonorViewModel donorViewModel = donorViewModelFactory.createDonorViewModelWithPermissions(donor);
-        donorViewModels.add(donorViewModel);
-      }
-      duplicateViewModels.put(key, donorViewModels);
-    }
-
-    map.put("duplicates", duplicateViewModels);
+    List<DuplicateDonorDTO> duplicates = duplicateDonorService.findDuplicateDonors();
+    map.put("duplicates", donorViewModelFactory.createDuplicateDonorViewModels(duplicates));
     return map;
   }
 

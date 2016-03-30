@@ -1,6 +1,6 @@
 package repository;
 
-import static helpers.builders.CollectedDonationValueObjectBuilder.aCollectedDonationValueObject;
+import static helpers.builders.CollectedDonationDTOBuilder.aCollectedDonationDTO;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonationTypeBuilder.aDonationType;
 import static helpers.builders.DonorBuilder.aDonor;
@@ -24,8 +24,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import dto.CollectedDonationDTO;
 import suites.ContextDependentTestSuite;
-import valueobject.CollectedDonationValueObject;
 
 public class DonationRepositoryTests extends ContextDependentTestSuite {
 
@@ -83,8 +83,8 @@ public class DonationRepositoryTests extends ContextDependentTestSuite {
         .withBloodRh(expectedBloodRh)
         .buildAndPersist(entityManager);
 
-    List<CollectedDonationValueObject> expectedValueObjects = Arrays.asList(
-        aCollectedDonationValueObject()
+    List<CollectedDonationDTO> expectedDtos = Arrays.asList(
+        aCollectedDonationDTO()
             .withVenue(expectedVenue)
             .withDonationType(expectedDonationType)
             .withGender(expectedGender)
@@ -94,10 +94,10 @@ public class DonationRepositoryTests extends ContextDependentTestSuite {
             .build()
     );
 
-    List<CollectedDonationValueObject> returnedValueObjects = donationRepository.findCollectedDonationsReportIndicators(
+    List<CollectedDonationDTO> returnedDtos = donationRepository.findCollectedDonationsReportIndicators(
         irrelevantStartDate, irrelevantEndDate);
 
-    assertThat(returnedValueObjects, is(expectedValueObjects));
+    assertThat(returnedDtos, is(expectedDtos));
   }
 
   @Test
