@@ -15,32 +15,22 @@ public class LocationViewModel {
   }
 
   public String getName() {
-    if (location.getName() == null)
-      return "";
     return location.getName();
   }
 
-  public String getIsDeleted() {
-    if (location.getIsDeleted() == null)
-      return "";
-    return location.getIsDeleted().toString();
+  public boolean getIsDeleted() {
+    return location.getIsDeleted();
   }
 
-  public String getIsUsageSite() {
-    if (location.getIsUsageSite() == null)
-      return "";
-    return location.getIsUsageSite().toString();
+  public boolean getIsUsageSite() {
+    return location.getIsUsageSite();
   }
 
-  public String getIsMobileSite() {
-    if (location.getIsMobileSite() == null)
-      return "";
-    return location.getIsMobileSite().toString();
+  public boolean getIsMobileSite() {
+    return location.getIsMobileSite();
   }
 
-  public String getIsVenue() {
-    if (location.getIsVenue() == null)
-      return "";
-    return location.getIsVenue().toString();
+  public boolean getIsVenue() {
+    return location.getIsVenue();
   }
 }

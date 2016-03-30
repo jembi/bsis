@@ -1,11 +1,7 @@
 package factory;
 
-import helpers.builders.LocationBuilder;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import model.location.Location;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,6 +9,8 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import helpers.builders.LocationBuilder;
+import model.location.Location;
 import viewmodel.LocationViewModel;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -28,7 +26,7 @@ public class LocationViewModelFactoryTests {
     Location venue = LocationBuilder.aLocation().withId(venueId).withName(venueName).thatIsVenue().build();
     LocationViewModel venueViewModel = locationViewModelFactory.createLocationViewModel(venue);
     Assert.assertNotNull("venue view model was created", venueViewModel);
-    Assert.assertEquals("isVenue is correct", "true", venueViewModel.getIsVenue());
+    Assert.assertEquals("isVenue is correct", true, venueViewModel.getIsVenue());
     Assert.assertEquals("name is correct", venueName, venueViewModel.getName());
     Assert.assertEquals("id is correct", venueId, venueViewModel.getId());
   }
