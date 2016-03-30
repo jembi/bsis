@@ -26,16 +26,14 @@ public class LocationRepository {
   }
 
   public List<Location> getAllLocations() {
-    TypedQuery<Location> query = em
-        .createQuery("SELECT l FROM Location l", Location.class);
-
+    TypedQuery<Location> query =
+        em.createNamedQuery(LocationNamedQueryConstants.NAME_GET_ALL_LOCATIONS, Location.class);
     return query.getResultList();
   }
 
   public List<Location> getAllUsageSites() {
-    TypedQuery<Location> query = em.createQuery(
-        "SELECT l from Location l where l.isUsageSite=:isUsageSite and l.isDeleted=:isDeleted",
-        Location.class);
+    TypedQuery<Location> query =
+        em.createNamedQuery(LocationNamedQueryConstants.NAME_GET_ALL_USAGE_SITES, Location.class);
     query.setParameter("isUsageSite", true);
     query.setParameter("isDeleted", false);
     return query.getResultList();
@@ -75,9 +73,7 @@ public class LocationRepository {
   }
 
   public List<Location> getAllVenues() {
-    TypedQuery<Location> query = em.createQuery(
-        "SELECT l from Location l where l.isVenue=:isVenue and l.isDeleted=:isDeleted",
-        Location.class);
+    TypedQuery<Location> query = em.createNamedQuery(LocationNamedQueryConstants.NAME_GET_ALL_VENUES, Location.class);
     query.setParameter("isVenue", true);
     query.setParameter("isDeleted", false);
     return query.getResultList();

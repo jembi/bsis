@@ -2,15 +2,26 @@ package model.location;
 
 import javax.persistence.Entity;
 import javax.persistence.Lob;
-
-import model.BaseEntity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotBlank;
 
+import model.BaseEntity;
+import repository.LocationNamedQueryConstants;
+
 /**
  * Entity representing a place where Donations can be made and/or used.
  */
+@NamedQueries({
+  @NamedQuery(name = LocationNamedQueryConstants.NAME_GET_ALL_LOCATIONS,
+      query = LocationNamedQueryConstants.QUERY_GET_ALL_LOCATIONS),
+  @NamedQuery(name = LocationNamedQueryConstants.NAME_GET_ALL_VENUES,
+      query = LocationNamedQueryConstants.QUERY_GET_ALL_VENUES),
+  @NamedQuery(name = LocationNamedQueryConstants.NAME_GET_ALL_USAGE_SITES,
+      query = LocationNamedQueryConstants.QUERY_GET_ALL_USAGE_SITES)
+})
 @Entity
 @Audited
 public class Location extends BaseEntity {
