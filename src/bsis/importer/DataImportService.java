@@ -776,15 +776,13 @@ public class DataImportService {
 
       // Save donation
       Donation donation = donationCRUDService.createDonation(donationBackingForm);
+      // Populate the cache for use later when importing outcomes
+      donationIdentificationNumberToDonationId.put(donation.getDonationIdentificationNumber(), donation.getId());
 
       // Set bloodTypingStatus COMPLETE if bloodAbo and bloodRh are not empty
       if (StringUtils.isNotEmpty(donation.getBloodAbo()) && StringUtils.isNotEmpty(donation.getBloodRh())) {
         donation.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
         donationRepository.saveDonation(donation);
-
-        //Populate the cache for use later when importing outcomes
-        donationIdentificationNumberToDonationId.put(donation.getDonationIdentificationNumber(), donation.getId());
-
       }
 
       // Periodically flush data
