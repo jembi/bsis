@@ -88,54 +88,61 @@ public class DonorRepository {
         .getSingleResult();
   }
 
+  private String createLikeExpression(String search, String searchMode) {
+
+    switch (searchMode) {
+
+      case "start":
+        return search + "%";
+
+      case "end":
+        return "%" + search;
+
+      default:
+        return "%" + search + "%";
+    }
+  }
+
   public List<Donor> findAnyDonor(String firstName, String lastName, Boolean usePhraseMatch) {
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
     Root<Donor> root = cq.from(Donor.class);
-    Predicate firstNameExp, lastNameExp;
+
+    List<Predicate> expressions = new ArrayList<>();
 
     String donorSearchMode = generalConfigAccessorService.getGeneralConfigValueByName("donor.searchMode");
 
     if (!usePhraseMatch) {
-      firstNameExp = cb.equal(root.<String>get("firstName"), firstName);
-      lastNameExp = cb.equal(root.<String>get("lastName"), lastName);
+
+      if (StringUtils.isNotEmpty(firstName)) {
+        // Match on exact first name
+        expressions.add(cb.equal(root.<String>get("firstName"), firstName));
+      }
+
+      if (StringUtils.isNotEmpty(lastName)) {
+        // Match on exact last name
+        expressions.add(cb.equal(root.<String>get("lastName"), lastName));
+      }
     } else {
-      if (firstName.trim().equals("")) {
-        firstNameExp = cb.disjunction();
-      } else {
-        if ("start".equals(donorSearchMode))
-          firstNameExp = cb.like(root.<String>get("firstName"), firstName + "%");
-        else if ("end".equals(donorSearchMode))
-          firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName);
-        else
-          firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName + "%");
+
+      if (StringUtils.isNotEmpty(firstName)) {
+        // Match on similar first name
+        expressions.add(cb.like(root.<String>get("firstName"), createLikeExpression(firstName, donorSearchMode)));
       }
 
-      if (lastName.trim().equals("")) {
-        lastNameExp = cb.disjunction();
-      } else {
-        if ("start".equals(donorSearchMode))
-          lastNameExp = cb.like(root.<String>get("lastName"), lastName + "%");
-        else if ("end".equals(donorSearchMode))
-          lastNameExp = cb.like(root.<String>get("lastName"), "%" + lastName);
-        else
-          lastNameExp = cb.like(root.<String>get("lastName"), "%" + lastName + "%");
+      if (StringUtils.isNotEmpty(lastName)) {
+        // Match on similar last name
+        expressions.add(cb.like(root.<String>get("lastName"), createLikeExpression(lastName, donorSearchMode)));
       }
     }
 
-    Expression<Boolean> exp2 = cb.conjunction();
+    // Exclude deleted donors
+    expressions.add(cb.equal(root.<String>get("isDeleted"), false));
+    // Exclude donors with a status of merged
+    expressions.add(cb.not(root.get("donorStatus").in(Arrays.asList(DonorStatus.MERGED))));
 
-    if (!StringUtils.isBlank(firstName)) {
-      exp2 = cb.and(exp2, firstNameExp);
-    }
-
-    if (!StringUtils.isBlank(lastName)) {
-      exp2 = cb.and(exp2, lastNameExp);
-    }
-
-    Predicate notMerged = cb.not(root.get("donorStatus").in(Arrays.asList(DonorStatus.MERGED)));
-    Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
-    cq.where(cb.and(notMerged, cb.and(notDeleted, exp2)));
+    // Build the where clause
+    cq.where(cb.and(expressions.toArray(new Predicate[expressions.size()])));
 
     return em.createQuery(cq).getResultList();
 
