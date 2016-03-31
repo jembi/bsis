@@ -114,15 +114,6 @@ public class DonationController {
     binder.setValidator(bloodTypingResolutionBackingFormValidator);
   }
 
-  public static String getUrl(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString();
-    String queryString = req.getQueryString();   // d=789
-    if (queryString != null) {
-      reqUrl += "?" + queryString;
-    }
-    return reqUrl;
-  }
-
   /**
    * Datatables on the client side expects a json response for rendering data from the server in
    * jquery datatables. Remember of columns is important and should match the column headings

@@ -3,11 +3,7 @@ package controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
-import model.compatibility.CompatibilityTest;
-import model.request.Request;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,14 +17,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import backingform.CompatibilityTestBackingForm;
+import backingform.validator.CompatibilityTestBackingFormValidator;
+import model.compatibility.CompatibilityTest;
+import model.request.Request;
 import repository.CompatibilityTestRepository;
 import repository.CrossmatchTypeRepository;
 import repository.RequestRepository;
 import repository.TipsRepository;
 import service.FormFieldAccessorService;
 import utils.PermissionConstants;
-import backingform.CompatibilityTestBackingForm;
-import backingform.validator.CompatibilityTestBackingFormValidator;
 
 @RestController
 @RequestMapping("compatibility")
@@ -58,15 +56,6 @@ public class CompatibilityTestsController {
   @InitBinder
   public void initBinder(WebDataBinder binder) {
     binder.addValidators(compatibilityTestBackingFormValidator);
-  }
-
-  public static String getUrl(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString();
-    String queryString = req.getQueryString();   // d=789
-    if (queryString != null) {
-      reqUrl += "?" + queryString;
-    }
-    return reqUrl;
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {

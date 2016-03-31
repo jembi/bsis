@@ -115,15 +115,6 @@ public class DonorController {
     binder.setValidator(donorBackingFormValidator);
   }
 
-  public static String getUrl(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString();
-    String queryString = req.getQueryString();   // d=789
-    if (queryString != null) {
-      reqUrl += "?" + queryString;
-    }
-    return reqUrl;
-  }
-
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
   public ResponseEntity<Map<String, Object>> donorSummaryGenerator(HttpServletRequest request,
