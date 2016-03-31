@@ -151,13 +151,6 @@ public class DonorRepository {
     query.setFirstResult(start);
     query.setMaxResults(length);
 
-    CriteriaQuery<Long> countCriteriaQuery = cb.createQuery(Long.class);
-    Root<Donor> countRoot = countCriteriaQuery.from(Donor.class);
-    countCriteriaQuery.where(cb.and(notMerged, cb.and(notDeleted, exp2)));
-    countCriteriaQuery.select(cb.countDistinct(countRoot));
-
-    TypedQuery<Long> countQuery = em.createQuery(countCriteriaQuery);
-    Long totalResults = countQuery.getSingleResult().longValue();
     List<Donor> donorResults = query.getResultList();
     boolean looped = false;
     if (!StringUtils.isBlank(donationIdentificationNumber)) {
@@ -175,7 +168,6 @@ public class DonorRepository {
     if (looped == true) {
       return null;
     }
-    //return Arrays.asList(donorResults, totalResults);
     return donorResults;
 
   }
