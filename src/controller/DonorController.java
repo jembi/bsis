@@ -329,18 +329,9 @@ public class DonorController {
 
     Map<String, Object> map = new HashMap<String, Object>();
 
-
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-
-    pagingParams.put("sortColumn", "id");
-    //pagingParams.put("start", "0");
-    //pagingParams.put("length", "10");
-    pagingParams.put("sortDirection", "asc");
-
-
     List<Donor> results = new ArrayList<Donor>();
     results = donorRepository.findAnyDonor(donorNumber, firstName,
-        lastName, pagingParams, usePhraseMatch, donationIdentificationNumber);
+        lastName, usePhraseMatch, donationIdentificationNumber);
 
     List<DonorViewModel> donors = new ArrayList<DonorViewModel>();
 

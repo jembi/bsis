@@ -80,7 +80,7 @@ public class DonorRepository {
   }
 
   public List<Donor> findAnyDonor(String donorNumber, String firstName,
-                                  String lastName, Map<String, Object> pagingParams, Boolean usePhraseMatch, String donationIdentificationNumber) {
+                                  String lastName, Boolean usePhraseMatch, String donationIdentificationNumber) {
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
     Root<Donor> root = cq.from(Donor.class);
@@ -134,22 +134,7 @@ public class DonorRepository {
     Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
     cq.where(cb.and(notMerged, cb.and(notDeleted, exp2)));
 
-    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
-    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
-
-    if (pagingParams.containsKey("sortColumn") && pagingParams.containsKey("sortDirection")) {
-      List<Order> order = new ArrayList<Order>();
-      if (pagingParams.get("sortDirection").equals("asc")) {
-        order.add(cb.asc(root.<String>get((String) pagingParams.get("sortColumn"))));
-      } else {
-        order.add(cb.desc(root.<String>get((String) pagingParams.get("sortColumn"))));
-      }
-      cq.orderBy(order);
-    }
-
     TypedQuery<Donor> query = em.createQuery(cq);
-    query.setFirstResult(start);
-    query.setMaxResults(length);
 
     List<Donor> donorResults = query.getResultList();
     boolean looped = false;

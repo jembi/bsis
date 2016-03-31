@@ -153,12 +153,10 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     String donorFirstName = "xxx";
     String donorLastName = "";
     String donationIdentificationNumber = "";
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    setPaginationParam(pagingParams);
 
     assertEquals("List size should be zero, no matching search results.",
         0, ((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
-            donorFirstName, donorLastName, pagingParams,
+            donorFirstName, donorLastName,
             true, donationIdentificationNumber))).size());
   }
 
@@ -173,12 +171,10 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     String donorFirstName = "fir";
     String donorLastName = "";
     String donationIdentificationNumber = "";
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    setPaginationParam(pagingParams);
 
     List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
         searchDonorNumber, donorFirstName, donorLastName,
-        pagingParams, true, donationIdentificationNumber)));
+        true, donationIdentificationNumber)));
 
     assertNotSame(
         "List size should not zero.Matching records is found base on firstname.",
@@ -207,12 +203,10 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     String donorFirstName = "firstName";
     String donorLastName = "";
     String donationIdentificationNumber = "";
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    setPaginationParam(pagingParams);
 
     List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
         searchDonorNumber, donorFirstName, donorLastName,
-        pagingParams, false, donationIdentificationNumber)));
+        false, donationIdentificationNumber)));
 
     assertNotSame(
         "List size should not zero.Matching records is found base on firstname.",
@@ -241,11 +235,9 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     String donorFirstName = "";
     String donorLastName = "las";
     String donationIdentificationNumber = "";
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    setPaginationParam(pagingParams);
 
     List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
-        searchDonorNumber, donorFirstName, donorLastName, pagingParams, true, donationIdentificationNumber)));
+        searchDonorNumber, donorFirstName, donorLastName, true, donationIdentificationNumber)));
 
     assertNotSame(
         "List size should not zero.Matching records is found base on lastname.",
@@ -272,11 +264,9 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     String donorFirstName = "fir";
     String donorLastName = "";
     String donationIdentificationNumber = "";
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    setPaginationParam(pagingParams);
 
     List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
-        searchDonorNumber, donorFirstName, donorLastName, pagingParams, true, donationIdentificationNumber));
+        searchDonorNumber, donorFirstName, donorLastName, true, donationIdentificationNumber));
 
     for (Donor donor : listDonor) {
       // 2 is deleted donor id
@@ -297,12 +287,10 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     String donorFirstName = "";
     String donorLastName = "";
     String donationIdentificationNumber = "000001";
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    setPaginationParam(pagingParams);
 
     List<Donor> donorList = (List<Donor>) (donorRepository.findAnyDonor(
         searchDonorNumber, donorFirstName, donorLastName,
-        pagingParams, false, donationIdentificationNumber));
+        false, donationIdentificationNumber));
     assertEquals("Should return a single Donor result", 1, donorList.size());
     boolean isValid = false;
     if (donorList.get(0).getDonorNumber().equals("000001")) {
@@ -741,14 +729,6 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    */
   public void getAllIdTypes_shuouldReturnNonEmptyList() {
     assertTrue("IDTypes List  should not be empty", !donorRepository.getAllIdTypes().isEmpty());
-  }
-
-  public void setPaginationParam(Map<String, Object> pagingParams) {
-    pagingParams.put("sortColumn", "id");
-    pagingParams.put("start", "0");
-    pagingParams.put("sortColumnId", "0");
-    pagingParams.put("length", "10");
-    pagingParams.put("sortDirection", "asc");
   }
 
   /**
