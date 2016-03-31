@@ -118,4 +118,14 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
     Location savedOne = locationRepository.findLocationByName("Clara");
     Assert.assertEquals("The location is saved", "Clara", savedOne.getName());
   }
+  
+  @Test
+  public void testEntityExists() throws Exception {
+    Assert.assertTrue("Location exists",locationRepository.verifyLocationExists(1L));
+  }
+  
+  @Test
+  public void testEntityDoesNotExist() throws Exception {
+    Assert.assertFalse("Location does not exist",locationRepository.verifyLocationExists(123L));
+  }
 }

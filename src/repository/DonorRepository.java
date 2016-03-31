@@ -46,9 +46,7 @@ import dto.DuplicateDonorDTO;
 @Transactional
 public class DonorRepository {
 
-  /**
-   * The Constant LOGGER.
-   */
+  @SuppressWarnings("unused")
   private static final Logger LOGGER = Logger.getLogger(DonorRepository.class);
   public static final int ID_LENGTH = 12;
 
@@ -444,5 +442,15 @@ public class DonorRepository {
         .setParameter("birthDate", birthDate)
         .setParameter("gender", gender)
         .getResultList();
+  }
+  
+  public boolean verifyDonorExists(Long id) {
+    Long count = em.createNamedQuery(DonorNamedQueryConstants.NAME_COUNT_DONOR_WITH_ID, Long.class)
+        .setParameter("id", id)
+        .getSingleResult();
+    if (count == 1) {
+      return true;
+    }
+    return false;
   }
 }

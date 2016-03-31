@@ -1024,4 +1024,14 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
       Assert.assertEquals("gender correct", gender, donor.getGender());
     }
   }
+  
+  @Test
+  public void testEntityExists() throws Exception {
+    Assert.assertTrue("Donor exists",donorRepository.verifyDonorExists(1L));
+  }
+  
+  @Test
+  public void testEntityDoesNotExist() throws Exception {
+    Assert.assertFalse("Donor does not exist",donorRepository.verifyDonorExists(123L));
+  }
 }
