@@ -1,10 +1,12 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -13,6 +15,7 @@ import model.donation.Donation;
 import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -327,23 +330,33 @@ public class DonorController {
       @RequestParam(value = "usePhraseMatch", required = false) boolean usePhraseMatch,
       @RequestParam(value = "donationIdentificationNumber", required = false) String donationIdentificationNumber) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
+    List<Donor> results = new ArrayList<>();
 
-    List<Donor> results = new ArrayList<Donor>();
-    results = donorRepository.findAnyDonor(donorNumber, firstName,
-        lastName, usePhraseMatch, donationIdentificationNumber);
+    if (StringUtils.isNotEmpty(donorNumber)) {
+      try {
+        results = Arrays.asList(donorRepository.findDonorByDonorNumber(donorNumber));
+      } catch (NoResultException nre) {
+        // Do nothing
+      }
+    } else if (StringUtils.isNotEmpty(donationIdentificationNumber)) {
+      try {
+        results = Arrays.asList(donorRepository.findDonorByDonationIdentificationNumber(donationIdentificationNumber));
+      } catch (NoResultException nre) {
+        // Do nothing
+      }
+    } else {
+      results = donorRepository.findAnyDonor(firstName, lastName, usePhraseMatch);
+    }
 
     List<DonorViewModel> donors = new ArrayList<DonorViewModel>();
 
-    if (results != null) {
-      for (Donor donor : results) {
-        donors.add(donorViewModelFactory.createDonorViewModelWithPermissions(donor));
-      }
+    for (Donor donor : results) {
+      donors.add(donorViewModelFactory.createDonorViewModelWithPermissions(donor));
     }
 
+    Map<String, Object> map = new HashMap<>();
     map.put("donors", donors);
     map.put("canAddDonors", canAddDonors());
-
     return map;
   }
 

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -15,12 +14,10 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import model.address.AddressType;
-import model.donation.Donation;
 import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.donor.DuplicateDonorBackup;
@@ -79,12 +76,22 @@ public class DonorRepository {
     return findDonorById(Long.parseLong(donorId));
   }
 
-  public List<Donor> findAnyDonor(String donorNumber, String firstName,
-                                  String lastName, Boolean usePhraseMatch, String donationIdentificationNumber) {
+  public Donor findDonorByDonorNumber(String donorNumber) throws NoResultException {
+    return em.createNamedQuery(DonorNamedQueryConstants.NAME_FIND_DONOR_BY_DONOR_NUMBER, Donor.class)
+        .setParameter("donorNumber", donorNumber)
+        .getSingleResult();
+  }
+
+  public Donor findDonorByDonationIdentificationNumber(String donationIdentificationNumber) throws NoResultException {
+    return em.createNamedQuery(DonorNamedQueryConstants.NAME_FIND_DONOR_BY_DONATION_IDENTIFICATION_NUMBER, Donor.class)
+        .setParameter("donationIdentificationNumber", donationIdentificationNumber)
+        .getSingleResult();
+  }
+
+  public List<Donor> findAnyDonor(String firstName, String lastName, Boolean usePhraseMatch) {
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
     Root<Donor> root = cq.from(Donor.class);
-    Predicate donorNumberExp = cb.equal(root.<String>get("donorNumber"), donorNumber);
     Predicate firstNameExp, lastNameExp;
 
     String donorSearchMode = generalConfigAccessorService.getGeneralConfigValueByName("donor.searchMode");
@@ -118,10 +125,6 @@ public class DonorRepository {
 
     Expression<Boolean> exp2 = cb.conjunction();
 
-    if (!StringUtils.isBlank(donorNumber)) {
-      exp2 = cb.and(exp2, donorNumberExp);
-    }
-
     if (!StringUtils.isBlank(firstName)) {
       exp2 = cb.and(exp2, firstNameExp);
     }
@@ -134,26 +137,7 @@ public class DonorRepository {
     Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
     cq.where(cb.and(notMerged, cb.and(notDeleted, exp2)));
 
-    TypedQuery<Donor> query = em.createQuery(cq);
-
-    List<Donor> donorResults = query.getResultList();
-    boolean looped = false;
-    if (!StringUtils.isBlank(donationIdentificationNumber)) {
-      List<Donor> uniqueResult = new ArrayList<Donor>();
-      looped = true;
-      for (Donor donor : donorResults) {
-        for (Donation donation : donor.getDonations()) {
-          if (donation.getDonationIdentificationNumber().equals(donationIdentificationNumber)) {
-            uniqueResult.add(donor);
-            return uniqueResult;
-          }
-        }
-      }
-    }
-    if (looped == true) {
-      return null;
-    }
-    return donorResults;
+    return em.createQuery(cq).getResultList();
 
   }
 

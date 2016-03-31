@@ -1,20 +1,25 @@
 package repository;
 
-import helpers.builders.DonorBuilder;
+import static helpers.builders.DonationBuilder.aDonation;
+import static helpers.builders.DonorBuilder.aDonor;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import model.donor.Donor;
-import model.donor.DonorStatus;
-import model.util.Gender;
+import javax.persistence.NoResultException;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import suites.ContextDependentTestSuite;
 import dto.DuplicateDonorDTO;
+import helpers.builders.DonorBuilder;
+import model.donor.Donor;
+import model.donor.DonorStatus;
+import model.util.Gender;
+import suites.ContextDependentTestSuite;
 
 public class DonorRepositoryTests extends ContextDependentTestSuite {
   
@@ -156,5 +161,50 @@ public class DonorRepositoryTests extends ContextDependentTestSuite {
     Assert.assertEquals("Two matching donors", 2, duplicateDonors.size());
     Assert.assertEquals("Sue is matching Donor", "Sue", duplicateDonors.get(0).getFirstName());
     Assert.assertEquals("Sue is matching Donor", "Sue", duplicateDonors.get(1).getFirstName());
+  }
+
+  @Test
+  public void testFindDonorByDonorNumberWithExistingDonor_shouldReturnDonor() {
+    // Set up
+    String donorNumber = "000001";
+    Donor expectedDonor = aDonor().withDonorNumber(donorNumber).buildAndPersist(entityManager);
+    aDonor().withDonorNumber("667754").buildAndPersist(entityManager);
+
+    // Test
+    Donor returnedDonor = donorRepository.findDonorByDonorNumber(donorNumber);
+
+    // Verify
+    assertThat(returnedDonor, is(expectedDonor));
+  }
+
+  @Test(expected = NoResultException.class)
+  public void testFindDonorByDonorNumberWithNoExistingDonor_shouldThrowNoResultException() {
+    donorRepository.findDonorByDonorNumber("000001");
+  }
+
+  @Test
+  public void testFindDonorByDonationIdentificationNumberWithExistingDonor_shouldReturnDonor() {
+    // Set up
+    String donationIdentificationNumber = "0000001";
+    Donor expectedDonor = aDonor().buildAndPersist(entityManager);
+    aDonation()
+        .withDonationIdentificationNumber(donationIdentificationNumber)
+        .withDonor(expectedDonor)
+        .buildAndPersist(entityManager);
+    aDonation()
+        .withDonationIdentificationNumber("5687411")
+        .withDonor(aDonor().build())
+        .buildAndPersist(entityManager);
+
+    // Test
+    Donor returnedDonor = donorRepository.findDonorByDonationIdentificationNumber(donationIdentificationNumber);
+
+    // Verify
+    assertThat(returnedDonor, is(expectedDonor));
+  }
+
+  @Test(expected = NoResultException.class)
+  public void testFindDonorByDonationIdentificationNumberWithNoExistingDonor_shouldThrowNoResultException() {
+    donorRepository.findDonorByDonationIdentificationNumber("0000001");
   }
 }
