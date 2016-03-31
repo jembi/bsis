@@ -7,13 +7,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-
-import model.location.Location;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import model.location.Location;
 
 @Repository
 @Transactional
@@ -26,22 +25,15 @@ public class LocationRepository {
     em.flush();
   }
 
-  public void deleteAllLocations() {
-    Query query = em.createQuery("DELETE FROM Location l");
-    query.executeUpdate();
-  }
-
   public List<Location> getAllLocations() {
-    TypedQuery<Location> query = em
-        .createQuery("SELECT l FROM Location l", Location.class);
-
+    TypedQuery<Location> query =
+        em.createNamedQuery(LocationNamedQueryConstants.NAME_GET_ALL_LOCATIONS, Location.class);
     return query.getResultList();
   }
 
   public List<Location> getAllUsageSites() {
-    TypedQuery<Location> query = em.createQuery(
-        "SELECT l from Location l where l.isUsageSite=:isUsageSite and l.isDeleted=:isDeleted",
-        Location.class);
+    TypedQuery<Location> query =
+        em.createNamedQuery(LocationNamedQueryConstants.NAME_GET_ALL_USAGE_SITES, Location.class);
     query.setParameter("isUsageSite", true);
     query.setParameter("isDeleted", false);
     return query.getResultList();
@@ -80,36 +72,8 @@ public class LocationRepository {
     return locationNames;
   }
 
-  public Long getIDByName(String name) {
-    List<Location> locations = getAllLocations();
-    for (Location l : locations) {
-      if (l.getName().equals(name))
-        return l.getId();
-    }
-    return (long) -1;
-  }
-
-  public void saveAllLocations(List<Location> locations) {
-    for (Location location : locations) {
-      if (location.getId() == null) {
-        location.setIsDeleted(false);
-        em.persist(location);
-      } else {
-        Location existingLocation = em.find(Location.class, location.getId());
-        if (existingLocation != null) {
-          existingLocation.setIsDeleted(false);
-          existingLocation.copy(location);
-          em.merge(existingLocation);
-        }
-      }
-    }
-    em.flush();
-  }
-
   public List<Location> getAllVenues() {
-    TypedQuery<Location> query = em.createQuery(
-        "SELECT l from Location l where l.isVenue=:isVenue and l.isDeleted=:isDeleted",
-        Location.class);
+    TypedQuery<Location> query = em.createNamedQuery(LocationNamedQueryConstants.NAME_GET_ALL_VENUES, Location.class);
     query.setParameter("isVenue", true);
     query.setParameter("isDeleted", false);
     return query.getResultList();
