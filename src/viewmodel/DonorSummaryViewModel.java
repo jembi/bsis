@@ -2,8 +2,9 @@ package viewmodel;
 
 import java.util.Date;
 
-import utils.CustomDateFormatter;
 import model.util.Gender;
+import repository.DonorRepository;
+import utils.CustomDateFormatter;
 
 /**
  * View model representing a summarised view of a donor.
@@ -15,6 +16,8 @@ public class DonorSummaryViewModel {
   private String lastName;
   private Gender gender;
   private Date birthDate;
+  private String donorNumber;
+  private String venueName;
 
   public DonorSummaryViewModel() {
     // no-args constructor
@@ -71,6 +74,22 @@ public class DonorSummaryViewModel {
 
   public void setBirthDate(Date birthDate) {
     this.birthDate = birthDate;
+  }
+
+  public String getDonorNumber() {
+    return donorNumber;
+  }
+
+  public void setDonorNumber(String donorNumber) {
+    this.donorNumber = donorNumber;
+  }
+
+  public String getVenueName() {
+    return venueName;
+  }
+
+  public void setVenueName(String venueName) {
+    this.venueName = venueName;
   }
 
 }

@@ -19,6 +19,19 @@ import java.util.Map;
 
 import javax.persistence.NoResultException;
 
+import org.apache.commons.lang.time.DateUtils;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ReplacementDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
+import backingform.DonorBackingForm;
+import dto.DuplicateDonorDTO;
 import model.address.Address;
 import model.address.AddressType;
 import model.address.Contact;
@@ -31,23 +44,9 @@ import model.donordeferral.DonorDeferral;
 import model.location.Location;
 import model.user.User;
 import model.util.Gender;
-
-import org.apache.commons.lang.time.DateUtils;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.ReplacementDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.security.core.userdetails.UserDetailsService;
-
 import suites.DBUnitContextDependentTestSuite;
 import utils.CustomDateFormatter;
 import viewmodel.DonorSummaryViewModel;
-import backingform.DonorBackingForm;
-import dto.DuplicateDonorDTO;
 
 public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
 
@@ -149,17 +148,11 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    *
    */
   public void findAnyDonor_listSizeShouldZero() {
-    String searchDonorNumber = "";
     String donorFirstName = "xxx";
     String donorLastName = "";
-    String donationIdentificationNumber = "";
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    setPaginationParam(pagingParams);
 
     assertEquals("List size should be zero, no matching search results.",
-        0, ((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
-            donorFirstName, donorLastName, pagingParams,
-            true, donationIdentificationNumber))).size());
+        0, donorRepository.findAnyDonor(donorFirstName, donorLastName, true).size());
   }
 
   @Test
@@ -169,16 +162,10 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    * Object>, Boolean)
    */
   public void findAnyDonor_listSizeShouldNotZeroPartialFirstNameMatch() {
-    String searchDonorNumber = "";
     String donorFirstName = "fir";
     String donorLastName = "";
-    String donationIdentificationNumber = "";
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    setPaginationParam(pagingParams);
 
-    List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
-        searchDonorNumber, donorFirstName, donorLastName,
-        pagingParams, true, donationIdentificationNumber)));
+    List<Donor> listDonors = donorRepository.findAnyDonor(donorFirstName, donorLastName, true);
 
     assertNotSame(
         "List size should not zero.Matching records is found base on firstname.",
@@ -203,16 +190,10 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    * Object>, Boolean)
    */
   public void findAnyDonor_listSizeShouldNotZeroFullyFirstNameMatch() {
-    String searchDonorNumber = "";
     String donorFirstName = "firstName";
     String donorLastName = "";
-    String donationIdentificationNumber = "";
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    setPaginationParam(pagingParams);
 
-    List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
-        searchDonorNumber, donorFirstName, donorLastName,
-        pagingParams, false, donationIdentificationNumber)));
+    List<Donor> listDonors = donorRepository.findAnyDonor(donorFirstName, donorLastName, false);
 
     assertNotSame(
         "List size should not zero.Matching records is found base on firstname.",
@@ -237,15 +218,10 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    * Object>, Boolean)
    */
   public void findAnyDonor_listSizeShouldNotZeroPartialLastNameMatch() {
-    String searchDonorNumber = "";
     String donorFirstName = "";
     String donorLastName = "las";
-    String donationIdentificationNumber = "";
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    setPaginationParam(pagingParams);
 
-    List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
-        searchDonorNumber, donorFirstName, donorLastName, pagingParams, true, donationIdentificationNumber)));
+    List<Donor> listDonors = donorRepository.findAnyDonor(donorFirstName, donorLastName, true);
 
     assertNotSame(
         "List size should not zero.Matching records is found base on lastname.",
@@ -268,15 +244,10 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    * Object>, Boolean)
    */
   public void findAnyDonor_deleteObjectShouldNotPartOfList() {
-    String searchDonorNumber = "";
     String donorFirstName = "fir";
     String donorLastName = "";
-    String donationIdentificationNumber = "";
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    setPaginationParam(pagingParams);
 
-    List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
-        searchDonorNumber, donorFirstName, donorLastName, pagingParams, true, donationIdentificationNumber));
+    List<Donor> listDonor = donorRepository.findAnyDonor(donorFirstName, donorLastName, true);
 
     for (Donor donor : listDonor) {
       // 2 is deleted donor id
@@ -284,33 +255,6 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
           "Donor's id 2 is deleted from database. so Deleted Donor should not included in the list.",
           donor.getId() == 2 ? true : false);
     }
-  }
-
-  @Test
-  /**
-   * Should return donor with donation matching DIN
-   * findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String,
-   * Object>, Boolean)
-   */
-  public void findAnyDonor_shouldReturnDonorWithDonationMatchingDIN() {
-    String searchDonorNumber = "";
-    String donorFirstName = "";
-    String donorLastName = "";
-    String donationIdentificationNumber = "000001";
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    setPaginationParam(pagingParams);
-
-    List<Donor> donorList = (List<Donor>) (donorRepository.findAnyDonor(
-        searchDonorNumber, donorFirstName, donorLastName,
-        pagingParams, false, donationIdentificationNumber));
-    assertEquals("Should return a single Donor result", 1, donorList.size());
-    boolean isValid = false;
-    if (donorList.get(0).getDonorNumber().equals("000001")) {
-      isValid = true;
-    } else {
-      isValid = false;
-    }
-    assertTrue("Donor with donation matching DIN returned", isValid);
   }
 
   @Test
@@ -355,135 +299,6 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     donorBackingForm = new DonorBackingForm(editDonor);
     setBackingUpdateFormValue(donorBackingForm);
     donorRepository.updateDonorDetails(donorBackingForm.getDonor());
-  }
-
-  @Test
-  /**
-   * Should return empty List if search string is less than 2 characters
-   * findAnyDonorStartsWith(String)
-   */
-  public void findAnyDonorStartsWith_stringLengthLessthan2() {
-    assertEquals(
-        "Search String length is less than 2,List size should be zero.",
-        donorRepository.findAnyDonorStartsWith("F").size(), 0);
-  }
-
-  @Test
-  /**
-   * Should allow search if search string is 2 or more characters
-   * findAnyDonorStartsWith(String)
-   */
-  public void findAnyDonorStartsWith_stringLengthGreaterthan2() {
-    List<Donor> searchResultList = donorRepository
-        .findAnyDonorStartsWith("fi");
-    assertNotSame(
-        "Search String length is Greater than 2,List size should not zero.",
-        searchResultList.size(), 0);
-    boolean isValid = false;
-    for (Donor donor : searchResultList) {
-      if (donor.getFirstName().startsWith("fi")) {
-        isValid = true;
-      } else {
-        isValid = false;
-        break;
-      }
-    }
-    assertTrue("Donor's First Name should be start with 'fi'.", isValid);
-  }
-
-  @Test
-  /**
-   * Should return empty list (instead of a null object) when no match is
-   * found findAnyDonorStartsWith(String)
-   */
-  public void findAnyDonorStartsWith_NoMatchingRecordFound() {
-    assertEquals(
-        "List size should be zero,because there is no matching record into donor's table which is match with 'xx' value.",
-        donorRepository.findAnyDonorStartsWith("xx").size(), 0);
-  }
-
-  @Test
-  /**
-   * Should fetch all donors having a donor number that partially matches the
-   * search string. findAnyDonorStartsWith(String)
-   */
-  public void findAnyDonorStartsWith_searchWithDonorNumber() {
-    List<Donor> searchResultList = donorRepository
-        .findAnyDonorStartsWith("00");
-    assertNotSame(
-        "List size should not zero,because partically matching donor number is found.",
-        searchResultList.size(), 0);
-    boolean isValid = false;
-    for (Donor donor : searchResultList) {
-      if (donor.getDonorNumber().startsWith("00")) {
-        isValid = true;
-      } else {
-        isValid = false;
-        break;
-      }
-    }
-    assertTrue("Donor's Donor Number should be start with '00'.", isValid);
-  }
-
-  @Test
-  /**
-   * Should fetch all donors having a first name that partially matches the
-   * search string. findAnyDonorStartsWith(String)
-   */
-  public void findAnyDonorStartsWith_searchWithDonorFirstNameMatch() {
-    List<Donor> searchResultList = donorRepository
-        .findAnyDonorStartsWith("fi");
-    assertNotSame(
-        "List size should not zero,because partically matching firstname is found.",
-        searchResultList.size(), 0);
-    boolean isValid = false;
-    for (Donor donor : searchResultList) {
-      if (donor.getFirstName().startsWith("fi")) {
-        isValid = true;
-      } else {
-        isValid = false;
-        break;
-      }
-    }
-    assertTrue("Donor's First Name should be start with 'fi'.", isValid);
-  }
-
-  @Test
-  /**
-   * Should fetch all donors having a last name that partially matches the
-   * search string findAnyDonorStartsWith(String)
-   */
-  public void findAnyDonorStartsWith_searchWithDonorLastNameMatch() {
-    List<Donor> searchResultList = donorRepository
-        .findAnyDonorStartsWith("la");
-    assertNotSame(
-        "List size should not zero,because partically matching lastname is found.",
-        searchResultList.size(), 0);
-    boolean isValid = false;
-    for (Donor donor : searchResultList) {
-      if (donor.getLastName().startsWith("la")) {
-        isValid = true;
-      } else {
-        isValid = false;
-        break;
-      }
-    }
-    assertTrue("Donor's Last Name should be start with 'la'.", isValid);
-  }
-
-  @Test
-  /**
-   * Should not return donors who have been deleted
-   * findAnyDonorStartsWith(String)
-   */
-  public void findAnyDonorStartsWith_softDeleteRecordNotInclude() {
-    List<Donor> listDonor = donorRepository.findAnyDonorStartsWith("00");
-    for (Donor donor : listDonor) {
-      // 2 is Deleted Donor's ID
-      assertNotSame(
-          "Donor Id 2 is deleted from donor table so, that record should not part of list.",
-          2, donor.getId());
-    }
   }
 
   @Test
@@ -607,46 +422,6 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   /**
-   * Should add Deferral for Donor deferDonor(String,String,String,String)
-   */
-  public void deferDonor_ShouldPersist() throws ParseException {
-    DonorDeferral donorDeferral = new DonorDeferral();
-    donorDeferral.setDeferredDonor(donorRepository.findDonorById(1l));
-    donorDeferral.setDeferredUntil(dateFormat.parse("2015-07-19"));
-    donorDeferral.setDeferralReason(donorRepository.findDeferralReasonById("3"));
-    donorRepository.deferDonor(donorDeferral);
-    assertTrue("DeferDonor object Should persist.", donorDeferral.getId() != 0 ? true : false);
-  }
-
-  @Test
-  /**
-   * Should return non-deleted deferral reasons in the database
-   * findDeferralReasonById(String)
-   */
-  public void findDeferralReasonById_shouldReturnNoneDeletedDeferralReason() {
-    // 1 is DeferralReason ID.
-    DeferralReason deferralReason = donorRepository
-        .findDeferralReasonById("1");
-    assertNotNull("DeferralReason's object should not null.",
-        deferralReason);
-    assertTrue("Deferral's Reason Id should be 1.",
-        deferralReason.getId() == 1 ? true : false);
-
-  }
-
-
-  /**
-   * Should return null deferral reason where deferral reason is deleted from the database
-   * findDeferralReasonById(String)
-   */
-  @Test(expected = NoResultException.class)
-  public void findDeferralReasonById_shouldExpectNoResultExceptionWhenDeferralReason() {
-    // 7 ID is deleted from DeferralReason.
-    donorRepository.findDeferralReasonById("7");
-  }
-
-  @Test
-  /**
    * DonorDeferral list size should be zero getDonorDeferrals(Long)
    */
   public void getDonorDeferrals_listSizeShouldZero() {
@@ -741,14 +516,6 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    */
   public void getAllIdTypes_shuouldReturnNonEmptyList() {
     assertTrue("IDTypes List  should not be empty", !donorRepository.getAllIdTypes().isEmpty());
-  }
-
-  public void setPaginationParam(Map<String, Object> pagingParams) {
-    pagingParams.put("sortColumn", "id");
-    pagingParams.put("start", "0");
-    pagingParams.put("sortColumnId", "0");
-    pagingParams.put("length", "10");
-    pagingParams.put("sortDirection", "asc");
   }
 
   /**
