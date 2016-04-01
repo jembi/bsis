@@ -148,17 +148,11 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    *
    */
   public void findAnyDonor_listSizeShouldZero() {
-    String searchDonorNumber = "";
     String donorFirstName = "xxx";
     String donorLastName = "";
-    String donationIdentificationNumber = "";
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    setPaginationParam(pagingParams);
 
     assertEquals("List size should be zero, no matching search results.",
-        0, ((List<Donor>) (donorRepository.findAnyDonor(searchDonorNumber,
-            donorFirstName, donorLastName, pagingParams,
-            true, donationIdentificationNumber))).size());
+        0, donorRepository.findAnyDonor(donorFirstName, donorLastName, true).size());
   }
 
   @Test
@@ -168,16 +162,10 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    * Object>, Boolean)
    */
   public void findAnyDonor_listSizeShouldNotZeroPartialFirstNameMatch() {
-    String searchDonorNumber = "";
     String donorFirstName = "fir";
     String donorLastName = "";
-    String donationIdentificationNumber = "";
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    setPaginationParam(pagingParams);
 
-    List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
-        searchDonorNumber, donorFirstName, donorLastName,
-        pagingParams, true, donationIdentificationNumber)));
+    List<Donor> listDonors = donorRepository.findAnyDonor(donorFirstName, donorLastName, true);
 
     assertNotSame(
         "List size should not zero.Matching records is found base on firstname.",
@@ -202,16 +190,10 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    * Object>, Boolean)
    */
   public void findAnyDonor_listSizeShouldNotZeroFullyFirstNameMatch() {
-    String searchDonorNumber = "";
     String donorFirstName = "firstName";
     String donorLastName = "";
-    String donationIdentificationNumber = "";
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    setPaginationParam(pagingParams);
 
-    List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
-        searchDonorNumber, donorFirstName, donorLastName,
-        pagingParams, false, donationIdentificationNumber)));
+    List<Donor> listDonors = donorRepository.findAnyDonor(donorFirstName, donorLastName, false);
 
     assertNotSame(
         "List size should not zero.Matching records is found base on firstname.",
@@ -236,15 +218,10 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    * Object>, Boolean)
    */
   public void findAnyDonor_listSizeShouldNotZeroPartialLastNameMatch() {
-    String searchDonorNumber = "";
     String donorFirstName = "";
     String donorLastName = "las";
-    String donationIdentificationNumber = "";
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    setPaginationParam(pagingParams);
 
-    List<Donor> listDonors = ((List<Donor>) (donorRepository.findAnyDonor(
-        searchDonorNumber, donorFirstName, donorLastName, pagingParams, true, donationIdentificationNumber)));
+    List<Donor> listDonors = donorRepository.findAnyDonor(donorFirstName, donorLastName, true);
 
     assertNotSame(
         "List size should not zero.Matching records is found base on lastname.",
@@ -267,15 +244,10 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    * Object>, Boolean)
    */
   public void findAnyDonor_deleteObjectShouldNotPartOfList() {
-    String searchDonorNumber = "";
     String donorFirstName = "fir";
     String donorLastName = "";
-    String donationIdentificationNumber = "";
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    setPaginationParam(pagingParams);
 
-    List<Donor> listDonor = (List<Donor>) (donorRepository.findAnyDonor(
-        searchDonorNumber, donorFirstName, donorLastName, pagingParams, true, donationIdentificationNumber));
+    List<Donor> listDonor = donorRepository.findAnyDonor(donorFirstName, donorLastName, true);
 
     for (Donor donor : listDonor) {
       // 2 is deleted donor id
@@ -283,33 +255,6 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
           "Donor's id 2 is deleted from database. so Deleted Donor should not included in the list.",
           donor.getId() == 2 ? true : false);
     }
-  }
-
-  @Test
-  /**
-   * Should return donor with donation matching DIN
-   * findAnyDonor(String,String,String,List<BloodGroup>,String,Map<String,
-   * Object>, Boolean)
-   */
-  public void findAnyDonor_shouldReturnDonorWithDonationMatchingDIN() {
-    String searchDonorNumber = "";
-    String donorFirstName = "";
-    String donorLastName = "";
-    String donationIdentificationNumber = "000001";
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    setPaginationParam(pagingParams);
-
-    List<Donor> donorList = (List<Donor>) (donorRepository.findAnyDonor(
-        searchDonorNumber, donorFirstName, donorLastName,
-        pagingParams, false, donationIdentificationNumber));
-    assertEquals("Should return a single Donor result", 1, donorList.size());
-    boolean isValid = false;
-    if (donorList.get(0).getDonorNumber().equals("000001")) {
-      isValid = true;
-    } else {
-      isValid = false;
-    }
-    assertTrue("Donor with donation matching DIN returned", isValid);
   }
 
   @Test
@@ -571,14 +516,6 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    */
   public void getAllIdTypes_shuouldReturnNonEmptyList() {
     assertTrue("IDTypes List  should not be empty", !donorRepository.getAllIdTypes().isEmpty());
-  }
-
-  public void setPaginationParam(Map<String, Object> pagingParams) {
-    pagingParams.put("sortColumn", "id");
-    pagingParams.put("start", "0");
-    pagingParams.put("sortColumnId", "0");
-    pagingParams.put("length", "10");
-    pagingParams.put("sortDirection", "asc");
   }
 
   /**

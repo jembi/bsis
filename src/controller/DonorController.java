@@ -1,12 +1,16 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -316,20 +320,27 @@ public class DonorController {
       @RequestParam(value = "usePhraseMatch", required = false) boolean usePhraseMatch,
       @RequestParam(value = "donationIdentificationNumber", required = false) String donationIdentificationNumber) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
+    List<Donor> donors = new ArrayList<>();
 
-    pagingParams.put("sortColumn", "id");
-    pagingParams.put("sortDirection", "asc");
+    if (StringUtils.isNotBlank(donorNumber)) {
+      try {
+        donors = Arrays.asList(donorRepository.findDonorByDonorNumber(donorNumber));
+      } catch (NoResultException nre) {
+        // Do nothing
+      }
+    } else if (StringUtils.isNotBlank(donationIdentificationNumber)) {
+      try {
+        donors = Arrays.asList(donorRepository.findDonorByDonationIdentificationNumber(donationIdentificationNumber));
+      } catch (NoResultException nre) {
+        // Do nothing
+      }
+    } else {
+      donors = donorRepository.findAnyDonor(firstName, lastName, usePhraseMatch);
+    }
 
-    List<Donor> donors = donorRepository.findAnyDonor(donorNumber, firstName, lastName, pagingParams, usePhraseMatch,
-        donationIdentificationNumber);
-
-    List<DonorSummaryViewModel> donorSummaryViewModels = donorViewModelFactory.createDonorSummaryViewModels(donors);
-
-    map.put("donors", donorSummaryViewModels);
+    Map<String, Object> map = new HashMap<>();
+    map.put("donors", donorViewModelFactory.createDonorSummaryViewModels(donors));
     map.put("canAddDonors", canAddDonors());
-
     return map;
   }
 

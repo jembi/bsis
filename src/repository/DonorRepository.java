@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -15,7 +14,6 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -27,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import dto.DuplicateDonorDTO;
 import model.address.AddressType;
-import model.donation.Donation;
 import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.donor.DuplicateDonorBackup;
@@ -64,102 +61,75 @@ public class DonorRepository {
 
   }
 
-  public List<Donor> findAnyDonor(String donorNumber, String firstName,
-                                  String lastName, Map<String, Object> pagingParams, Boolean usePhraseMatch, String donationIdentificationNumber) {
-    CriteriaBuilder cb = em.getCriteriaBuilder();
-    CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
-    Root<Donor> root = cq.from(Donor.class);
-    Predicate donorNumberExp = cb.equal(root.<String>get("donorNumber"), donorNumber);
-    Predicate firstNameExp, lastNameExp;
+  public Donor findDonorByDonorNumber(String donorNumber) throws NoResultException {
+    return em.createNamedQuery(DonorNamedQueryConstants.NAME_FIND_DONOR_BY_DONOR_NUMBER, Donor.class)
+        .setParameter("donorNumber", donorNumber)
+        .getSingleResult();
+  }
+
+  public Donor findDonorByDonationIdentificationNumber(String donationIdentificationNumber) throws NoResultException {
+    return em.createNamedQuery(DonorNamedQueryConstants.NAME_FIND_DONOR_BY_DONATION_IDENTIFICATION_NUMBER, Donor.class)
+        .setParameter("donationIdentificationNumber", donationIdentificationNumber)
+        .getSingleResult();
+  }
+
+  public List<Donor> findAnyDonor(String firstName, String lastName, boolean usePhraseMatch) {
+    CriteriaBuilder builder = em.getCriteriaBuilder();
+    CriteriaQuery<Donor> query = builder.createQuery(Donor.class);
+    Root<Donor> root = query.from(Donor.class);
+
+    List<Predicate> expressions = new ArrayList<>();
 
     String donorSearchMode = generalConfigAccessorService.getGeneralConfigValueByName("donor.searchMode");
 
     if (!usePhraseMatch) {
-      firstNameExp = cb.equal(root.<String>get("firstName"), firstName);
-      lastNameExp = cb.equal(root.<String>get("lastName"), lastName);
+
+      if (StringUtils.isNotBlank(firstName)) {
+        // Match on exact first name
+        expressions.add(builder.equal(root.<String>get("firstName"), firstName));
+      }
+
+      if (StringUtils.isNotBlank(lastName)) {
+        // Match on exact last name
+        expressions.add(builder.equal(root.<String>get("lastName"), lastName));
+      }
     } else {
-      if (firstName.trim().equals("")) {
-        firstNameExp = cb.disjunction();
-      } else {
-        if ("start".equals(donorSearchMode))
-          firstNameExp = cb.like(root.<String>get("firstName"), firstName + "%");
-        else if ("end".equals(donorSearchMode))
-          firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName);
-        else
-          firstNameExp = cb.like(root.<String>get("firstName"), "%" + firstName + "%");
+
+      if (StringUtils.isNotBlank(firstName)) {
+        // Match on similar first name
+        expressions.add(builder.like(root.<String>get("firstName"), createLikeExpression(firstName, donorSearchMode)));
       }
 
-      if (lastName.trim().equals("")) {
-        lastNameExp = cb.disjunction();
-      } else {
-        if ("start".equals(donorSearchMode))
-          lastNameExp = cb.like(root.<String>get("lastName"), lastName + "%");
-        else if ("end".equals(donorSearchMode))
-          lastNameExp = cb.like(root.<String>get("lastName"), "%" + lastName);
-        else
-          lastNameExp = cb.like(root.<String>get("lastName"), "%" + lastName + "%");
+      if (StringUtils.isNotBlank(lastName)) {
+        // Match on similar last name
+        expressions.add(builder.like(root.<String>get("lastName"), createLikeExpression(lastName, donorSearchMode)));
       }
     }
 
-    Expression<Boolean> exp2 = cb.conjunction();
+    // Exclude deleted donors
+    expressions.add(builder.equal(root.<String>get("isDeleted"), false));
+    // Exclude donors with a status of merged
+    expressions.add(builder.not(root.get("donorStatus").in(Arrays.asList(DonorStatus.MERGED))));
 
-    if (!StringUtils.isBlank(donorNumber)) {
-      exp2 = cb.and(exp2, donorNumberExp);
+    // Build the where clause
+    query.where(builder.and(expressions.toArray(new Predicate[expressions.size()])));
+
+    return em.createQuery(query).getResultList();
+  }
+
+  private String createLikeExpression(String search, String searchMode) {
+
+    switch (searchMode) {
+
+      case "start":
+        return search + "%";
+
+      case "end":
+        return "%" + search;
+
+      default:
+        return "%" + search + "%";
     }
-
-    if (!StringUtils.isBlank(firstName)) {
-      exp2 = cb.and(exp2, firstNameExp);
-    }
-
-    if (!StringUtils.isBlank(lastName)) {
-      exp2 = cb.and(exp2, lastNameExp);
-    }
-
-    Predicate notMerged = cb.not(root.get("donorStatus").in(Arrays.asList(DonorStatus.MERGED)));
-    Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
-    cq.where(cb.and(notMerged, cb.and(notDeleted, exp2)));
-
-    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
-    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
-
-    if (pagingParams.containsKey("sortColumn") && pagingParams.containsKey("sortDirection")) {
-      List<Order> order = new ArrayList<Order>();
-      if (pagingParams.get("sortDirection").equals("asc")) {
-        order.add(cb.asc(root.<String>get((String) pagingParams.get("sortColumn"))));
-      } else {
-        order.add(cb.desc(root.<String>get((String) pagingParams.get("sortColumn"))));
-      }
-      cq.orderBy(order);
-    }
-
-    TypedQuery<Donor> query = em.createQuery(cq);
-    query.setFirstResult(start);
-    query.setMaxResults(length);
-
-    CriteriaQuery<Long> countCriteriaQuery = cb.createQuery(Long.class);
-    Root<Donor> countRoot = countCriteriaQuery.from(Donor.class);
-    countCriteriaQuery.where(cb.and(notMerged, cb.and(notDeleted, exp2)));
-    countCriteriaQuery.select(cb.countDistinct(countRoot));
-
-    List<Donor> donorResults = query.getResultList();
-    boolean looped = false;
-    if (!StringUtils.isBlank(donationIdentificationNumber)) {
-      List<Donor> uniqueResult = new ArrayList<Donor>();
-      looped = true;
-      for (Donor donor : donorResults) {
-        for (Donation donation : donor.getDonations()) {
-          if (donation.getDonationIdentificationNumber().equals(donationIdentificationNumber)) {
-            uniqueResult.add(donor);
-            return uniqueResult;
-          }
-        }
-      }
-    }
-    if (looped == true) {
-      return null;
-    }
-    return donorResults;
-
   }
 
   public Donor addDonor(Donor donor) throws PersistenceException {
