@@ -11,12 +11,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import model.bloodtesting.TTIStatus;
-import model.component.Component;
-import model.component.ComponentStatus;
-import model.donation.Donation;
-import model.donation.LotReleaseConstant;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,12 +22,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import backingform.validator.DonationBackingFormValidator;
+import model.bloodtesting.TTIStatus;
+import model.component.Component;
+import model.component.ComponentStatus;
+import model.donation.Donation;
+import model.donation.LotReleaseConstant;
 import repository.ComponentRepository;
 import repository.DonationRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import utils.PermissionConstants;
-import backingform.validator.AdverseEventBackingFormValidator;
-import backingform.validator.DonationBackingFormValidator;
 
 @RestController
 @RequestMapping("labels")
@@ -54,15 +52,6 @@ public class LotReleaseController {
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(donationBackingFormValidator);
-  }
-
-  public static String getUrl(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString();
-    String queryString = req.getQueryString();
-    if (queryString != null) {
-      reqUrl += "?" + queryString;
-    }
-    return reqUrl;
   }
 
   @RequestMapping(value = "/status/{donationIdentificationNumber}", method = RequestMethod.GET)

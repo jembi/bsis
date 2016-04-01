@@ -1,17 +1,11 @@
 package controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
-import model.counselling.PostDonationCounselling;
-import model.donation.Donation;
-import model.donor.Donor;
-import model.donordeferral.DonorDeferral;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +21,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import backingform.DonorBackingForm;
+import backingform.DuplicateDonorsBackingForm;
+import backingform.validator.DonorBackingFormValidator;
+import constant.GeneralConfigConstants;
+import dto.DuplicateDonorDTO;
+import factory.DonationViewModelFactory;
+import factory.DonorDeferralViewModelFactory;
+import factory.DonorViewModelFactory;
+import factory.PostDonationCounsellingViewModelFactory;
+import model.counselling.PostDonationCounselling;
+import model.donation.Donation;
+import model.donor.Donor;
+import model.donordeferral.DonorDeferral;
 import repository.AdverseEventRepository;
 import repository.ContactMethodTypeRepository;
 import repository.DonationBatchRepository;
@@ -46,15 +53,6 @@ import viewmodel.DonorDeferralViewModel;
 import viewmodel.DonorSummaryViewModel;
 import viewmodel.DonorViewModel;
 import viewmodel.PostDonationCounsellingViewModel;
-import backingform.DonorBackingForm;
-import backingform.DuplicateDonorsBackingForm;
-import backingform.validator.DonorBackingFormValidator;
-import constant.GeneralConfigConstants;
-import dto.DuplicateDonorDTO;
-import factory.DonationViewModelFactory;
-import factory.DonorDeferralViewModelFactory;
-import factory.DonorViewModelFactory;
-import factory.PostDonationCounsellingViewModelFactory;
 
 @RestController
 @RequestMapping("donors")
@@ -115,15 +113,6 @@ public class DonorController {
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(donorBackingFormValidator);
-  }
-
-  public static String getUrl(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString();
-    String queryString = req.getQueryString();   // d=789
-    if (queryString != null) {
-      reqUrl += "?" + queryString;
-    }
-    return reqUrl;
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
@@ -328,29 +317,17 @@ public class DonorController {
       @RequestParam(value = "donationIdentificationNumber", required = false) String donationIdentificationNumber) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-
-
     Map<String, Object> pagingParams = new HashMap<String, Object>();
 
     pagingParams.put("sortColumn", "id");
-    //pagingParams.put("start", "0");
-    //pagingParams.put("length", "10");
     pagingParams.put("sortDirection", "asc");
 
+    List<Donor> donors = donorRepository.findAnyDonor(donorNumber, firstName, lastName, pagingParams, usePhraseMatch,
+        donationIdentificationNumber);
 
-    List<Donor> results = new ArrayList<Donor>();
-    results = donorRepository.findAnyDonor(donorNumber, firstName,
-        lastName, pagingParams, usePhraseMatch, donationIdentificationNumber);
+    List<DonorSummaryViewModel> donorSummaryViewModels = donorViewModelFactory.createDonorSummaryViewModels(donors);
 
-    List<DonorViewModel> donors = new ArrayList<DonorViewModel>();
-
-    if (results != null) {
-      for (Donor donor : results) {
-        donors.add(donorViewModelFactory.createDonorViewModelWithPermissions(donor));
-      }
-    }
-
-    map.put("donors", donors);
+    map.put("donors", donorSummaryViewModels);
     map.put("canAddDonors", canAddDonors());
 
     return map;

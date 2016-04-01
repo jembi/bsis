@@ -1,9 +1,11 @@
 package factory;
 
 import static helpers.builders.DonorBuilder.aDonor;
+import static helpers.builders.DonorSummaryViewModelBuilder.aDonorSummaryViewModel;
 import static helpers.builders.DonorViewModelBuilder.aDonorViewModel;
 import static helpers.builders.DuplicateDonorDTOBuilder.aDuplicateDonorDTO;
 import static helpers.builders.DuplicateDonorViewModelBuilder.aDuplicateDonorViewModel;
+import static helpers.matchers.DonorSummaryViewModelMatcher.hasSameStateAsDonorSummaryViewModel;
 import static helpers.matchers.DonorViewModelMatcher.hasSameStateAsDonorViewModel;
 import static helpers.matchers.DuplicateDonorViewModelMatcher.hasSameStateAsDuplicateDonorViewModel;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -14,9 +16,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import model.donor.Donor;
-import model.util.Gender;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,10 +23,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import dto.DuplicateDonorDTO;
+import helpers.builders.LocationBuilder;
+import model.donor.Donor;
+import model.location.Location;
+import model.util.Gender;
 import service.DonorConstraintChecker;
+import viewmodel.DonorSummaryViewModel;
 import viewmodel.DonorViewModel;
 import viewmodel.DuplicateDonorViewModel;
-import dto.DuplicateDonorDTO;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DonorViewModelFactoryTests {
@@ -111,5 +115,39 @@ public class DonorViewModelFactoryTests {
     
     assertThat(returnedDonorViewModels.get(0), hasSameStateAsDonorViewModel(expectedDonorViewModel1));
     assertThat(returnedDonorViewModels.get(1), hasSameStateAsDonorViewModel(expectedDonorViewModel2));
+  }
+
+  @Test
+  public void testCreateDonorSummaryViewModels_shouldReturnExpectedViewModels() {
+    Location venue = LocationBuilder.aVenue().withName("Venue").build();
+    List<Donor> donors = new ArrayList<>();
+    Donor donor1 = aDonor().withId(1L).withVenue(venue).build();
+    donors.add(donor1);
+    Donor donor2 = aDonor().withId(2L).withVenue(venue).build();
+    donors.add(donor2);
+
+    DonorSummaryViewModel expectedDonorSummaryViewModel1 = aDonorSummaryViewModel()
+        .withBirthDate(donor1.getBirthDate())
+        .withFirstName(donor1.getFirstName())
+        .withGender(donor1.getGender())
+        .withId(donor1.getId())
+        .withLastName(donor1.getLastName())
+        .withVenueName("Venue")
+        .build();
+    DonorSummaryViewModel expectedDonorSummaryViewModel2 = aDonorSummaryViewModel()
+        .withBirthDate(donor2.getBirthDate())
+        .withFirstName(donor2.getFirstName())
+        .withGender(donor2.getGender())
+        .withId(donor2.getId())
+        .withLastName(donor2.getLastName())
+        .withVenueName("Venue")
+        .build();
+
+    List<DonorSummaryViewModel> returnedDonorSummaryViewModels = donorViewModelFactory.createDonorSummaryViewModels(donors);
+
+    assertThat(returnedDonorSummaryViewModels.get(0),
+        hasSameStateAsDonorSummaryViewModel(expectedDonorSummaryViewModel1));
+    assertThat(returnedDonorSummaryViewModels.get(1),
+        hasSameStateAsDonorSummaryViewModel(expectedDonorSummaryViewModel2));
   }
 }

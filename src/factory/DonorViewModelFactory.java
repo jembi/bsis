@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import dto.DuplicateDonorDTO;
 import model.donor.Donor;
 import service.DonorConstraintChecker;
+import viewmodel.DonorSummaryViewModel;
 import viewmodel.DonorViewModel;
 import viewmodel.DuplicateDonorViewModel;
 
@@ -24,6 +25,27 @@ public class DonorViewModelFactory {
   @Autowired
   private DonorConstraintChecker donorConstraintChecker;
   
+  public List<DonorSummaryViewModel> createDonorSummaryViewModels(List<Donor> donors) {
+    List<DonorSummaryViewModel> viewModels = new ArrayList<>();
+    if (donors != null) {
+      for (Donor donor : donors) {
+        DonorSummaryViewModel donorSummaryViewModel = new DonorSummaryViewModel();
+        populateDonorSummaryViewModel(donor, donorSummaryViewModel);
+        viewModels.add(donorSummaryViewModel);
+      }
+    }
+    return viewModels;
+  }
+
+  private void populateDonorSummaryViewModel(Donor donor, DonorSummaryViewModel donorSummaryViewModel) {
+    donorSummaryViewModel.setBirthDate(donor.getBirthDate());
+    donorSummaryViewModel.setFirstName(donor.getFirstName());
+    donorSummaryViewModel.setGender(donor.getGender());
+    donorSummaryViewModel.setLastName(donor.getLastName());
+    donorSummaryViewModel.setVenueName(donor.getVenue().getName());
+    donorSummaryViewModel.setDonorNumber(donor.getDonorNumber());
+  }
+
   /**
    * Creates an array of DonorViewModels
    *
