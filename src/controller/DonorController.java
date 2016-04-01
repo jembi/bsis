@@ -332,13 +332,13 @@ public class DonorController {
 
     List<Donor> results = new ArrayList<>();
 
-    if (StringUtils.isNotEmpty(donorNumber)) {
+    if (StringUtils.isNotBlank(donorNumber)) {
       try {
         results = Arrays.asList(donorRepository.findDonorByDonorNumber(donorNumber));
       } catch (NoResultException nre) {
         // Do nothing
       }
-    } else if (StringUtils.isNotEmpty(donationIdentificationNumber)) {
+    } else if (StringUtils.isNotBlank(donationIdentificationNumber)) {
       try {
         results = Arrays.asList(donorRepository.findDonorByDonationIdentificationNumber(donationIdentificationNumber));
       } catch (NoResultException nre) {

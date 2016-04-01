@@ -88,6 +88,50 @@ public class DonorRepository {
         .getSingleResult();
   }
 
+  public List<Donor> findAnyDonor(String firstName, String lastName, boolean usePhraseMatch) {
+    CriteriaBuilder builder = em.getCriteriaBuilder();
+    CriteriaQuery<Donor> query = builder.createQuery(Donor.class);
+    Root<Donor> root = query.from(Donor.class);
+
+    List<Predicate> expressions = new ArrayList<>();
+
+    String donorSearchMode = generalConfigAccessorService.getGeneralConfigValueByName("donor.searchMode");
+
+    if (!usePhraseMatch) {
+
+      if (StringUtils.isNotBlank(firstName)) {
+        // Match on exact first name
+        expressions.add(builder.equal(root.<String>get("firstName"), firstName));
+      }
+
+      if (StringUtils.isNotBlank(lastName)) {
+        // Match on exact last name
+        expressions.add(builder.equal(root.<String>get("lastName"), lastName));
+      }
+    } else {
+
+      if (StringUtils.isNotBlank(firstName)) {
+        // Match on similar first name
+        expressions.add(builder.like(root.<String>get("firstName"), createLikeExpression(firstName, donorSearchMode)));
+      }
+
+      if (StringUtils.isNotBlank(lastName)) {
+        // Match on similar last name
+        expressions.add(builder.like(root.<String>get("lastName"), createLikeExpression(lastName, donorSearchMode)));
+      }
+    }
+
+    // Exclude deleted donors
+    expressions.add(builder.equal(root.<String>get("isDeleted"), false));
+    // Exclude donors with a status of merged
+    expressions.add(builder.not(root.get("donorStatus").in(Arrays.asList(DonorStatus.MERGED))));
+
+    // Build the where clause
+    query.where(builder.and(expressions.toArray(new Predicate[expressions.size()])));
+
+    return em.createQuery(query).getResultList();
+  }
+
   private String createLikeExpression(String search, String searchMode) {
 
     switch (searchMode) {
@@ -101,51 +145,6 @@ public class DonorRepository {
       default:
         return "%" + search + "%";
     }
-  }
-
-  public List<Donor> findAnyDonor(String firstName, String lastName, Boolean usePhraseMatch) {
-    CriteriaBuilder cb = em.getCriteriaBuilder();
-    CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
-    Root<Donor> root = cq.from(Donor.class);
-
-    List<Predicate> expressions = new ArrayList<>();
-
-    String donorSearchMode = generalConfigAccessorService.getGeneralConfigValueByName("donor.searchMode");
-
-    if (!usePhraseMatch) {
-
-      if (StringUtils.isNotEmpty(firstName)) {
-        // Match on exact first name
-        expressions.add(cb.equal(root.<String>get("firstName"), firstName));
-      }
-
-      if (StringUtils.isNotEmpty(lastName)) {
-        // Match on exact last name
-        expressions.add(cb.equal(root.<String>get("lastName"), lastName));
-      }
-    } else {
-
-      if (StringUtils.isNotEmpty(firstName)) {
-        // Match on similar first name
-        expressions.add(cb.like(root.<String>get("firstName"), createLikeExpression(firstName, donorSearchMode)));
-      }
-
-      if (StringUtils.isNotEmpty(lastName)) {
-        // Match on similar last name
-        expressions.add(cb.like(root.<String>get("lastName"), createLikeExpression(lastName, donorSearchMode)));
-      }
-    }
-
-    // Exclude deleted donors
-    expressions.add(cb.equal(root.<String>get("isDeleted"), false));
-    // Exclude donors with a status of merged
-    expressions.add(cb.not(root.get("donorStatus").in(Arrays.asList(DonorStatus.MERGED))));
-
-    // Build the where clause
-    cq.where(cb.and(expressions.toArray(new Predicate[expressions.size()])));
-
-    return em.createQuery(cq).getResultList();
-
   }
 
   public Donor addDonor(Donor donor) throws PersistenceException {
