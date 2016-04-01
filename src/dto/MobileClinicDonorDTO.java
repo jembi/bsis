@@ -1,76 +1,52 @@
-package model.donor;
+package dto;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Index;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import model.BaseModificationTrackerEntity;
+import model.donor.DonorStatus;
 import model.location.Location;
 import model.util.Gender;
 
-import org.hibernate.envers.Audited;
-import org.hibernate.validator.constraints.Length;
+public class MobileClinicDonorDTO {
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import constraintvalidator.LocationExists;
-
-@Entity
-@Audited
-@Table(name = "Donor",
-    indexes = {
-        @Index(name = "donor_donorNumber_index", columnList = "id", unique = true),
-        @Index(name = "donor_firstName_index", columnList = "firstName", unique = false),
-        @Index(name = "donor_lastName_index", columnList = "lastName", unique = false)
-    })
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class MobileClinicDonor extends BaseModificationTrackerEntity {
-
-  private static final long serialVersionUID = 1L;
-
-  @Column(length = 20, unique = true)
-  @Length(max = 20)
+  private Long id;
   private String donorNumber;
-
-  @Column(length = 20)
-  @Length(max = 20)
   private String firstName;
-
-  @Length(max = 20)
-  @Column(length = 20)
   private String lastName;
-
-  @Enumerated(EnumType.STRING)
-  @Column(length = 15)
   private Gender gender;
-
-  @Column(length = 10)
   private String bloodAbo;
-
-  @Column(length = 10)
   private String bloodRh;
-
-  @Enumerated(EnumType.STRING)
-  @Column(length = 20)
   private DonorStatus donorStatus;
-
-  @Temporal(TemporalType.DATE)
   private Date birthDate;
-
-  @LocationExists
-  @ManyToOne
   private Location venue;
-
   private Boolean isDeleted;
+  
+  public MobileClinicDonorDTO() {
+    super();
+  }
+  
+  public MobileClinicDonorDTO(Long id, String donorNumber, String firstName, String lastName, Gender gender, String bloodAbo,
+      String bloodRh, DonorStatus donorStatus, Date birthDate, Location venue, Boolean isDeleted) {
+    super();
+    this.id = id;
+    this.donorNumber = donorNumber;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.gender = gender;
+    this.bloodAbo = bloodAbo;
+    this.bloodRh = bloodRh;
+    this.donorStatus = donorStatus;
+    this.birthDate = birthDate;
+    this.venue = venue;
+    this.isDeleted = isDeleted;
+  }
+  
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
 
   public String getDonorNumber() {
     return donorNumber;

@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import model.donor.MobileClinicDonor;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,10 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import repository.DonorRepository;
 import repository.LocationRepository;
-import repository.MobileClinicRepository;
 import utils.PermissionConstants;
 import viewmodel.MobileClinicLookUpDonorViewModel;
+import dto.MobileClinicDonorDTO;
 import factory.MobileClinicDonorViewModelFactory;
 
 @RestController
@@ -38,7 +37,7 @@ public class MobileClinicController {
   private static final Logger LOGGER = Logger.getLogger(MobileClinicController.class);
 
   @Autowired
-  private MobileClinicRepository mobileClinicRepository;
+  private DonorRepository donorRepository;
 
   @Autowired
   private LocationRepository locationRepository;
@@ -76,8 +75,8 @@ public class MobileClinicController {
 
     Map<String, Object> map = new HashMap<String, Object>();
 
-    List<MobileClinicDonor> mobileClinicDonors = mobileClinicRepository.findMobileClinicDonorsByVenue(venueId);
-    List<MobileClinicLookUpDonorViewModel> donors = mobileClinicDonorViewModelFactory.createMobileClinicDonorViewModels(mobileClinicDonors, clinicDate);
+    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenue(venueId);
+    List<MobileClinicLookUpDonorViewModel> donors = mobileClinicDonorViewModelFactory.createMobileClinicDonorViewModels(mobileClinicDonorDTOs, clinicDate);
 
     map.put("donors", donors);
 

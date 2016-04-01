@@ -36,6 +36,7 @@ import model.util.Gender;
 import service.GeneralConfigAccessorService;
 import utils.DonorUtils;
 import viewmodel.DonorSummaryViewModel;
+import dto.MobileClinicDonorDTO;
 
 @Repository
 @Transactional
@@ -321,6 +322,14 @@ public class DonorRepository {
         .setParameter("lastName", lastName)
         .setParameter("birthDate", birthDate)
         .setParameter("gender", gender)
+        .getResultList();
+  }
+
+  public List<MobileClinicDonorDTO> findMobileClinicDonorsByVenue(Long venueId) throws NoResultException {
+    return em.createNamedQuery(DonorNamedQueryConstants.NAME_MOBILE_CLINIC_LOOKUP, MobileClinicDonorDTO.class)
+        .setParameter("venueId", venueId)
+        .setParameter("isDeleted", false)
+        .setParameter("excludedStatuses", Arrays.asList(DonorStatus.MERGED))
         .getResultList();
   }
   
