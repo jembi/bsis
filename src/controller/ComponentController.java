@@ -14,16 +14,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import model.component.Component;
-import model.component.ComponentStatus;
-import model.componentmovement.ComponentStatusChange;
-import model.componentmovement.ComponentStatusChangeReason;
-import model.componentmovement.ComponentStatusChangeReasonCategory;
-import model.componenttype.ComponentType;
-import model.componenttype.ComponentTypeCombination;
-import model.componenttype.ComponentTypeTimeUnits;
-import model.donation.Donation;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +29,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import backingform.ComponentCombinationBackingForm;
+import backingform.RecordComponentBackingForm;
+import backingform.validator.ComponentCombinationBackingFormValidator;
+import model.component.Component;
+import model.component.ComponentStatus;
+import model.componentmovement.ComponentStatusChange;
+import model.componentmovement.ComponentStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeReasonCategory;
+import model.componenttype.ComponentType;
+import model.componenttype.ComponentTypeCombination;
+import model.componenttype.ComponentTypeTimeUnits;
+import model.donation.Donation;
 import repository.ComponentRepository;
 import repository.ComponentStatusChangeReasonRepository;
 import repository.ComponentTypeRepository;
@@ -49,13 +55,6 @@ import viewmodel.ComponentStatusChangeViewModel;
 import viewmodel.ComponentTypeCombinationViewModel;
 import viewmodel.ComponentTypeViewModel;
 import viewmodel.ComponentViewModel;
-import backingform.ComponentCombinationBackingForm;
-import backingform.RecordComponentBackingForm;
-import backingform.validator.ComponentCombinationBackingFormValidator;
-
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("components")
@@ -82,24 +81,6 @@ public class ComponentController {
   @InitBinder("componentCombinationForm")
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(componentCombinationBackingFormValidator);
-  }
-
-  public static String getUrl(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString();
-    String queryString = req.getQueryString();   // d=789
-    if (queryString != null) {
-      reqUrl += "?" + queryString;
-    }
-    return reqUrl;
-  }
-
-  public static String getNextPageUrl(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString().replaceFirst("findComponent.html", "search.html");
-    String queryString = req.getQueryString();   // d=789
-    if (queryString != null) {
-      reqUrl += "?" + queryString;
-    }
-    return reqUrl;
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
@@ -572,15 +553,6 @@ public class ComponentController {
 
   private void addEditSelectorOptionsForNewRecord(Map<String, Object> m) {
     m.put("componentTypes", getComponentTypeViewModels(componentTypeRepository.getAllParentComponentTypes()));
-  }
-
-  public static String getUrlForNewComponent(HttpServletRequest req, String qString) {
-    String reqUrl = req.getRequestURL().toString();
-    String queryString[] = qString.split("-");
-    if (queryString != null) {
-      reqUrl += "?donationIdentificationNumber=" + queryString[0];
-    }
-    return reqUrl;
   }
 
   public static String getNextPageUrlForNewRecordComponent(HttpServletRequest req, String qString) {

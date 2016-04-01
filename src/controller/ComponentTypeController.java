@@ -9,9 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import model.componenttype.ComponentType;
-import model.componenttype.ComponentTypeCombination;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import backingform.ComponentTypeBackingForm;
+import backingform.ComponentTypeCombinationBackingForm;
+import model.componenttype.ComponentType;
+import model.componenttype.ComponentTypeCombination;
 import repository.ComponentTypeRepository;
 import utils.PermissionConstants;
 import viewmodel.ComponentTypeCombinationViewModel;
 import viewmodel.ComponentTypeViewModel;
-import backingform.ComponentTypeBackingForm;
-import backingform.ComponentTypeCombinationBackingForm;
 
 @RestController
 @RequestMapping("componenttypes")
@@ -37,15 +36,6 @@ public class ComponentTypeController {
   private ComponentTypeRepository componentTypeRepository;
 
   public ComponentTypeController() {
-  }
-
-  public static String getUrl(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString();
-    String queryString = req.getQueryString();   // d=789
-    if (queryString != null) {
-      reqUrl += "?" + queryString;
-    }
-    return reqUrl;
   }
 
   @RequestMapping(method = RequestMethod.GET)

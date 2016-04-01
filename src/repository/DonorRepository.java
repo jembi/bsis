@@ -17,6 +17,13 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import dto.DuplicateDonorDTO;
 import model.address.AddressType;
 import model.donor.Donor;
 import model.donor.DonorStatus;
@@ -26,28 +33,13 @@ import model.donordeferral.DonorDeferral;
 import model.idtype.IdType;
 import model.preferredlanguage.PreferredLanguage;
 import model.util.Gender;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import service.GeneralConfigAccessorService;
 import utils.DonorUtils;
 import viewmodel.DonorSummaryViewModel;
-import dto.DuplicateDonorDTO;
 
 @Repository
 @Transactional
 public class DonorRepository {
-
-  /**
-   * The Constant LOGGER.
-   */
-  private static final Logger LOGGER = Logger.getLogger(DonorRepository.class);
-  public static final int ID_LENGTH = 12;
 
   @PersistenceContext
   private EntityManager em;
@@ -67,13 +59,6 @@ public class DonorRepository {
     query.setParameter("donorStatus", Arrays.asList(DonorStatus.MERGED));
     return query.setParameter("donorId", donorId).getSingleResult();
 
-  }
-
-  public Donor findDonorById(String donorId) {
-    if (StringUtils.isBlank(donorId)) {
-      return null;
-    }
-    return findDonorById(Long.parseLong(donorId));
   }
 
   public Donor findDonorByDonorNumber(String donorNumber) throws NoResultException {
@@ -173,54 +158,6 @@ public class DonorRepository {
     return em.merge(donor);
   }
 
-  public Donor findDonorByNumber(String donorNumber) throws NoResultException {
-    String queryString = "SELECT d FROM Donor d WHERE d.donorNumber = :donorNumber and d.isDeleted = :isDeleted and d.donorStatus not in :donorStatus";
-    TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("donorStatus", Arrays.asList(DonorStatus.MERGED));
-    return query.setParameter("donorNumber", donorNumber).getSingleResult();
-  }
-
-  public List<Donor> findAnyDonorStartsWith(String term) throws NoResultException {
-
-    term = term.trim();
-    if (term.length() < 2) {
-      return Arrays.asList(new Donor[0]);
-    }
-
-    CriteriaBuilder cb = em.getCriteriaBuilder();
-    CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
-    Root<Donor> root = cq.from(Donor.class);
-
-    Predicate donorNumberExp = cb.like(root.<String>get("donorNumber"), term + "%");
-    Predicate firstNameExp;
-    if (term.equals("")) {
-      firstNameExp = cb.disjunction();
-    } else {
-      firstNameExp = cb.like(root.<String>get("firstName"), term + "%");
-    }
-
-    Predicate lastNameExp;
-    if (term.equals("")) {
-      lastNameExp = cb.disjunction();
-    } else {
-      lastNameExp = cb.like(root.<String>get("lastName"), term + "%");
-    }
-    Expression<Boolean> exp = cb.or(donorNumberExp, firstNameExp, lastNameExp);
-
-    Predicate notMerged = cb.not(root.get("donorStatus").in(Arrays.asList(DonorStatus.MERGED)));
-    Predicate notDeleted = cb.equal(root.<String>get("isDeleted"), false);
-    cq.where(cb.and(notMerged, cb.and(notDeleted, exp)));
-
-    TypedQuery<Donor> query = em.createQuery(cq);
-    List<Donor> donors = query.getResultList();
-    if (donors != null && donors.size() > 0) {
-      return donors;
-    }
-    return new ArrayList<Donor>();
-
-  }
-
   private void updateDonorAutomaticFields(Donor donor) {
     if (donor.getDonorStatus() == null) {
       donor.setDonorStatus(DonorStatus.NORMAL);
@@ -280,30 +217,11 @@ public class DonorRepository {
     return deferral;
   }
 
-  public DeferralReason findDeferralReasonById(String deferralReasonId) throws NoResultException {
-    String queryString = "SELECT d FROM DeferralReason d WHERE "
-        + "d.id = :deferralReasonId AND d.isDeleted=:isDeleted";
-    TypedQuery<DeferralReason> query = em.createQuery(queryString, DeferralReason.class);
-    query.setParameter("deferralReasonId", Long.parseLong(deferralReasonId));
-    query.setParameter("isDeleted", false);
-    return query.getSingleResult();
-
-  }
-
   public List<DonorDeferral> getDonorDeferrals(Long donorId) throws NoResultException {
     String queryString = "SELECT d from DonorDeferral d WHERE "
         + " d.deferredDonor.id=:donorId AND d.isVoided=:isVoided";
     TypedQuery<DonorDeferral> query = em.createQuery(queryString, DonorDeferral.class);
     query.setParameter("donorId", donorId);
-    query.setParameter("isVoided", Boolean.FALSE);
-    return query.getResultList();
-  }
-
-  public List<DonorDeferral> getDonorDeferrals(List<Long> donorIds) throws NoResultException {
-    String queryString = "SELECT d from DonorDeferral d WHERE "
-        + " d.deferredDonor.id in (:donorIds) AND d.isVoided=:isVoided";
-    TypedQuery<DonorDeferral> query = em.createQuery(queryString, DonorDeferral.class);
-    query.setParameter("donorIds", donorIds);
     query.setParameter("isVoided", Boolean.FALSE);
     return query.getResultList();
   }
@@ -342,13 +260,6 @@ public class DonorRepository {
     return lastDeferral;
   }
 
-
-  /**
-   * To be used in adding multiple donor numbers
-   */
-   /* public void saveIdNumber(IdNumber idNumber){
-        em.persist(idNumber);
-    }*/
   public List<AddressType> getAllAddressTypes() {
     TypedQuery<AddressType> query = em.createQuery(
         "SELECT addressType FROM AddressType addressType", AddressType.class);
