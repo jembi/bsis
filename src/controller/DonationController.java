@@ -326,7 +326,7 @@ public class DonationController {
     return viewModels;
   }
 
-  @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONATION + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
   @RequestMapping(value = "{id}/bloodTypingResolution", method = RequestMethod.PUT)
   @Transactional
   public void saveBloodTypingResolution(
