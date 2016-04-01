@@ -9,10 +9,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import model.donor.Donor;
-import model.location.Location;
-import model.util.BloodGroup;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import model.donor.Donor;
+import model.location.Location;
+import model.util.BloodGroup;
 import repository.DonorCommunicationsRepository;
 import repository.LocationRepository;
 import service.FormFieldAccessorService;
@@ -71,15 +70,6 @@ public class DonorCommunicationsController {
     return map;
   }
 
-  public static String getNextPageUrlForDonorCommunication(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString().replaceFirst("findDonorCommunicationsForm.html", "findDonorCommunicationsPagination.html");
-    String queryString = req.getQueryString();
-    if (queryString != null) {
-      reqUrl += "?" + queryString;
-    }
-    return reqUrl;
-  }
-
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
   public
@@ -120,15 +110,6 @@ public class DonorCommunicationsController {
     map.put("donors", donors);
     return map;
 
-  }
-
-  public static String getUrl(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString();
-    String queryString = req.getQueryString(); // d=789
-    if (queryString != null) {
-      reqUrl += "?" + queryString;
-    }
-    return reqUrl;
   }
 
   private DonorViewModel getDonorsViewModel(Donor donor) {

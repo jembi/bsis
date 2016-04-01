@@ -6,9 +6,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import model.request.Request;
-import model.usage.ComponentUsage;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import backingform.ComponentUsageBackingForm;
+import backingform.validator.UsageBackingFormValidator;
+import model.request.Request;
+import model.usage.ComponentUsage;
 import repository.ComponentRepository;
 import repository.ComponentTypeRepository;
 import repository.RequestRepository;
@@ -29,8 +30,6 @@ import service.FormFieldAccessorService;
 import utils.PermissionConstants;
 import viewmodel.ComponentUsageViewModel;
 import viewmodel.RequestViewModel;
-import backingform.ComponentUsageBackingForm;
-import backingform.validator.UsageBackingFormValidator;
 
 @RestController
 @RequestMapping("usages")
@@ -60,15 +59,6 @@ public class UsageController {
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(usageBackingFormValidator);
-  }
-
-  public static String getUrl(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString();
-    String queryString = req.getQueryString();   // d=789
-    if (queryString != null) {
-      reqUrl += "?" + queryString;
-    }
-    return reqUrl;
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)

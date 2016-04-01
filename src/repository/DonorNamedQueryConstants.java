@@ -25,4 +25,18 @@ public class DonorNamedQueryConstants {
           "AND d.isDeleted = :isDeleted " +
           "AND d.donorStatus NOT IN :excludedStatuses " +
           "ORDER BY d.lastName asc, d.firstName asc";
+
+  public static final String NAME_FIND_DONOR_BY_DONOR_NUMBER = "Donor.findDonorByDonorNumber";
+  public static final String QUERY_FIND_DONOR_BY_DONOR_NUMBER =
+      "SELECT d " +
+      "FROM Donor d " +
+      "WHERE d.donorNumber = :donorNumber ";
+
+  public static final String NAME_FIND_DONOR_BY_DONATION_IDENTIFICATION_NUMBER =
+      "Donor.findDonorByDonationIdentificationNumber";
+  public static final String QUERY_FIND_DONOR_BY_DONATION_IDENTIFICATION_NUMBER =
+      "SELECT d.donor " +
+      "FROM Donation d " +
+      "WHERE d.donationIdentificationNumber = :donationIdentificationNumber";
+
 }

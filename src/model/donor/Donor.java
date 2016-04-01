@@ -56,6 +56,10 @@ import constraintvalidator.LocationExists;
       query = DonorNamedQueryConstants.QUERY_GET_DUPLICATE_DONORS),
   @NamedQuery(name = DonorNamedQueryConstants.NAME_MOBILE_CLINIC_LOOKUP,
       query = DonorNamedQueryConstants.QUERY_MOBILE_CLINIC_LOOKUP),
+  @NamedQuery(name = DonorNamedQueryConstants.NAME_FIND_DONOR_BY_DONOR_NUMBER,
+      query = DonorNamedQueryConstants.QUERY_FIND_DONOR_BY_DONOR_NUMBER),
+  @NamedQuery(name = DonorNamedQueryConstants.NAME_FIND_DONOR_BY_DONATION_IDENTIFICATION_NUMBER,
+      query = DonorNamedQueryConstants.QUERY_FIND_DONOR_BY_DONATION_IDENTIFICATION_NUMBER)
 })
 @Entity
 @Audited

@@ -11,9 +11,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import model.component.Component;
-import model.request.Request;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +25,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import backingform.RequestBackingForm;
+import backingform.validator.RequestBackingFormValidator;
+import model.component.Component;
+import model.request.Request;
 import repository.ComponentRepository;
 import repository.ComponentTypeRepository;
 import repository.GenericConfigRepository;
@@ -39,8 +40,6 @@ import utils.PermissionConstants;
 import viewmodel.ComponentViewModel;
 import viewmodel.MatchingComponentViewModel;
 import viewmodel.RequestViewModel;
-import backingform.RequestBackingForm;
-import backingform.validator.RequestBackingFormValidator;
 
 @RestController
 @RequestMapping("requests")
@@ -76,25 +75,6 @@ public class RequestsController {
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(requestBackingFormValidator);
-  }
-
-  public static String getUrl(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString();
-    String queryString = req.getQueryString();   // d=789
-    if (queryString != null) {
-      reqUrl += "?" + queryString;
-    }
-    return reqUrl;
-  }
-
-
-  private String getNextPageUrl(HttpServletRequest request) {
-    String reqUrl = request.getRequestURL().toString().replaceFirst("findRequest.html", "findRequestPagination.html");
-    String queryString = request.getQueryString();   // d=789
-    if (queryString != null) {
-      reqUrl += "?" + queryString;
-    }
-    return reqUrl;
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
