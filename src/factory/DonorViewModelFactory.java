@@ -44,6 +44,7 @@ public class DonorViewModelFactory {
     donorSummaryViewModel.setLastName(donor.getLastName());
     donorSummaryViewModel.setVenueName(donor.getVenue().getName());
     donorSummaryViewModel.setDonorNumber(donor.getDonorNumber());
+    donorSummaryViewModel.setId(donor.getId());
   }
 
   /**
