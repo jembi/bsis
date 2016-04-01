@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import backingform.TestResultBackingForm;
+import factory.TestBatchViewModelFactory;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.BloodTestType;
 import model.bloodtesting.TTIStatus;
@@ -36,8 +38,10 @@ import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 import viewmodel.BloodTestResultViewModel;
 import viewmodel.BloodTestingRuleResult;
+import viewmodel.DonationTestOutcomesReportViewModel;
 import viewmodel.DonationViewModel;
 
+@Transactional
 @RestController
 @RequestMapping("testresults")
 public class TestResultController {
@@ -53,6 +57,9 @@ public class TestResultController {
 
   @Autowired
   private BloodTestsService bloodTestsService;
+
+  @Autowired
+  private TestBatchViewModelFactory testBatchViewModelFactory;
 
   public TestResultController() {
   }
@@ -102,6 +109,20 @@ public class TestResultController {
     map.put("testBatchCreatedDate", CustomDateFormatter.format(testBatch.getCreatedDate()));
     map.put("numberOfDonations", numberOfDonations);
 
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+
+  @RequestMapping(value = "/report", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
+  public ResponseEntity<Map<String, Object>> getTestBatchOutcomesReport(HttpServletRequest request,
+      @RequestParam(value = "testBatch", required = true) Long testBatchId) {
+
+    Map<String, Object> map = new HashMap<String, Object>();
+    TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
+    List<DonationTestOutcomesReportViewModel> testBatchReport =
+        testBatchViewModelFactory.createDonationTestOutcomesReportViewModels(testBatch);
+
+    map.put("testResults", testBatchReport);
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
