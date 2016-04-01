@@ -1,22 +1,15 @@
 package backingform.validator;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
-import javax.persistence.NoResultException;
-
-import backingform.DeferralBackingForm;
-import model.donor.Donor;
-import model.location.Location;
 import repository.DonorRepository;
 import repository.LocationRepository;
+import backingform.DeferralBackingForm;
 
 @Component
 public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingForm> {
-
-  private static final Logger LOGGER = Logger.getLogger(DeferralBackingFormValidator.class);
 
   @Autowired
   private LocationRepository locationRepository;
@@ -33,13 +26,7 @@ public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingF
     if (form.getVenue() == null) {
       errors.rejectValue("venue", "deferral.venue.required", "Venue is required");
     } else {
-      Location location = null;
-      try {
-        location = locationRepository.getLocation(form.getVenue().getId());
-      } catch (NoResultException ex) {
-        LOGGER.warn("Location not found id: " + form.getVenue().getId());
-      }
-      if (location == null) {
+      if (!locationRepository.verifyLocationExists(form.getVenue().getId())) {
         errors.rejectValue("venue", "deferral.venue.required", "Venue does not exist");
       }
     }
@@ -51,13 +38,7 @@ public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingF
     if (form.getDeferredDonor() == null) {
       errors.rejectValue("deferredDonor", "deferral.deferredDonor.required", "Deferred donor is required");
     } else {
-      Donor deferredDonor = null;
-      try {
-        deferredDonor = donorRepository.findDonorById(form.getDeferredDonor());
-      } catch (NoResultException nre) {
-        LOGGER.warn("Donor not found for id: " + form.getDeferredDonor());
-      }
-      if (deferredDonor == null) {
+      if (!donorRepository.verifyDonorExists(form.getDeferredDonor())) {
         errors.rejectValue("deferredDonor", "deferral.deferredDonor.required", "Deferred donor does not exist");
       }
     }

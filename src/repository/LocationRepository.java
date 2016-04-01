@@ -91,4 +91,14 @@ public class LocationRepository {
     }
     return location;
   }
+  
+  public boolean verifyLocationExists(Long id) {
+    Long count = em.createNamedQuery(LocationNamedQueryConstants.NAME_COUNT_LOCATION_WITH_ID, Long.class)
+        .setParameter("id", id)
+        .getSingleResult();
+    if (count == 1) {
+      return true;
+    }
+    return false;
+  }
 }

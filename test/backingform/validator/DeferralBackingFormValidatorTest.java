@@ -2,14 +2,13 @@ package backingform.validator;
 
 import static helpers.builders.DeferralBackingFormBuilder.aDeferralBackingForm;
 import static helpers.builders.DeferralReasonBuilder.aDeferralReason;
-import static helpers.builders.DonorBuilder.aDonor;
 import static helpers.builders.LocationBuilder.aLocation;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
 import java.util.HashMap;
 
-import javax.persistence.NoResultException;
+import model.location.Location;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,11 +17,10 @@ import org.mockito.Mock;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
-import backingform.DeferralBackingForm;
-import model.location.Location;
 import repository.DonorRepository;
 import repository.LocationRepository;
 import suites.UnitTestSuite;
+import backingform.DeferralBackingForm;
 
 public class DeferralBackingFormValidatorTest extends UnitTestSuite {
   
@@ -47,8 +45,8 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .withDeferredDonorId(DEFERRED_DONOR_ID)
         .build();
     
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
-    when(donorRepository.findDonorById(DEFERRED_DONOR_ID)).thenReturn(aDonor().withId(DEFERRED_DONOR_ID).build());
+    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
+    when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "deferral");
@@ -69,8 +67,8 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .withDeferredDonorId(DEFERRED_DONOR_ID)
         .build();
 
-    when(locationRepository.getLocation(1L)).thenThrow(new NoResultException());
-    when(donorRepository.findDonorById(DEFERRED_DONOR_ID)).thenReturn(aDonor().withId(DEFERRED_DONOR_ID).build());
+    when(locationRepository.verifyLocationExists(1L)).thenReturn(false);
+    when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "deferral");
@@ -89,7 +87,7 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .withDeferredDonorId(DEFERRED_DONOR_ID)
         .build();
 
-    when(donorRepository.findDonorById(DEFERRED_DONOR_ID)).thenReturn(aDonor().withId(DEFERRED_DONOR_ID).build());
+    when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "deferral");
@@ -110,8 +108,8 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .withDeferredDonorId(DEFERRED_DONOR_ID)
         .build();
     
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
-    when(donorRepository.findDonorById(DEFERRED_DONOR_ID)).thenReturn(aDonor().withId(DEFERRED_DONOR_ID).build());
+    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
+    when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "deferral");
@@ -132,8 +130,8 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .withDeferredDonorId(DEFERRED_DONOR_ID)
         .build();
     
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
-    when(donorRepository.findDonorById(DEFERRED_DONOR_ID)).thenReturn(aDonor().withId(DEFERRED_DONOR_ID).build());
+    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
+    when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "deferral");
@@ -154,7 +152,7 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .withDeferredUntil(DEFERRED_UNTIL)
         .build();
     
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "deferral");
@@ -176,8 +174,8 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .withDeferredDonorId(DEFERRED_DONOR_ID)
         .build();
     
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
-    when(donorRepository.findDonorById(DEFERRED_DONOR_ID)).thenThrow(new NoResultException());
+    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
+    when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(false);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "deferral");
