@@ -324,12 +324,22 @@ public class DonorRepository {
         .setParameter("gender", gender)
         .getResultList();
   }
-  
+
   public List<MobileClinicDonorDTO> findMobileClinicDonorsByVenue(Long venueId) throws NoResultException {
     return em.createNamedQuery(DonorNamedQueryConstants.NAME_MOBILE_CLINIC_LOOKUP, MobileClinicDonorDTO.class)
         .setParameter("venueId", venueId)
         .setParameter("isDeleted", false)
         .setParameter("excludedStatuses", Arrays.asList(DonorStatus.MERGED))
         .getResultList();
+  }
+  
+  public boolean verifyDonorExists(Long id) {
+    Long count = em.createNamedQuery(DonorNamedQueryConstants.NAME_COUNT_DONOR_WITH_ID, Long.class)
+        .setParameter("id", id)
+        .getSingleResult();
+    if (count == 1) {
+      return true;
+    }
+    return false;
   }
 }
