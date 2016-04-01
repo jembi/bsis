@@ -5,30 +5,40 @@ import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.TestBatchBuilder.aTestBatch;
 import static helpers.builders.TestBatchFullViewModelBuilder.aTestBatchFullViewModel;
 import static helpers.builders.TestBatchViewModelBuilder.aTestBatchViewModel;
+import static helpers.matchers.DonationTestOutcomesReportViewModelMatcher.hasSameStateAsDonationTestOutcomesReportViewModel;
 import static helpers.matchers.TestBatchFullViewModelMatcher.hasSameStateAsTestBatchFullViewModel;
 import static helpers.matchers.TestBatchViewModelMatcher.hasSameStateAsTestBatchViewModel;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import helpers.builders.DonationTestOutcomesReportViewModelBuilder;
+import helpers.builders.DonorBuilder;
 import helpers.builders.PackTypeBuilder;
+import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
+import model.donor.Donor;
 import model.packtype.PackType;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
+import repository.bloodtesting.BloodTypingStatus;
 import service.TestBatchConstraintChecker;
 import service.TestBatchConstraintChecker.CanReleaseResult;
 import suites.UnitTestSuite;
 import viewmodel.DonationBatchFullViewModel;
 import viewmodel.DonationBatchViewModel;
+import viewmodel.DonationTestOutcomesReportViewModel;
 import viewmodel.TestBatchFullViewModel;
 import viewmodel.TestBatchViewModel;
 
@@ -357,4 +367,84 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
 
     assertThat(returnedViewModel, hasSameStateAsTestBatchFullViewModel(expectedViewModel));
   }
+
+  @Test
+  public void testCreateTestBatchOutcomesReport_shouldReturnCorrectPreviousDonationAboRh() {
+      
+    Donor donor = DonorBuilder.aDonor().build();
+    
+    DateTime date1 = new DateTime();
+    DateTime date2 = date1.plusDays(2);
+    DateTime date3 = date1.plusDays(3);
+    DateTime date4 = date1.plusDays(4);
+    
+    Donation donation1 = aDonation().withDonationDate(date1.toDate()).withDonor(donor).withBloodAbo("A1")
+        .withBloodRh("B1").withDonationIdentificationNumber("A1").build();
+    Donation donation2 = aDonation().withDonationDate(date2.toDate()).withDonor(donor).withBloodAbo("A2")
+        .withBloodRh("B2").withDonationIdentificationNumber("A2").build();
+    Donation donation3 = aDonation().withDonationDate(date3.toDate()).withDonor(donor).withBloodAbo("A3")
+        .withBloodRh("B3").withDonationIdentificationNumber("A3").build();
+    Donation donation4 = aDonation().withDonationDate(date4.toDate()).withDonor(donor).withBloodAbo("A4")
+        .withBloodRh("B4").withDonationIdentificationNumber("A4").build();
+    List<Donation> donations = new ArrayList<>();
+    donations.add(donation1);
+    donations.add(donation2);
+    donations.add(donation3);
+    donations.add(donation4);
+    
+    donor.setDonations(donations);
+
+    DonationBatch donationBatch = aDonationBatch().withDonations(donations).build();
+    
+    TestBatch testBatch = aTestBatch().withDonationBatch(donationBatch).build();
+    
+    List<DonationTestOutcomesReportViewModel> report =
+        testBatchViewModelFactory.createDonationTestOutcomesReportViewModels(testBatch);
+
+    assertThat("Donation 1 has no previous abo/rh", report.get(0).getPreviousDonationAboRhOutcome().isEmpty());
+    assertThat("Donation 2 has correct previous abo/rh", report.get(1).getPreviousDonationAboRhOutcome().equals("A1B1"));
+    assertThat("Donation 3 has correct previous abo/rh", report.get(2).getPreviousDonationAboRhOutcome().equals("A2B2"));
+    assertThat("Donation 4 has correct previous abo/rh", report.get(3).getPreviousDonationAboRhOutcome().equals("A3B3"));
+  }
+  
+  @Test
+  public void testCreateTestBatchOutcomesReport_shouldReturnExpectedObject() {
+      
+    Donor donor = DonorBuilder.aDonor().build();
+    
+    Donation donation1 = aDonation()
+        .withDonationDate(IRRELEVANT_CREATED_DATE)
+        .withDonor(donor)
+        .withBloodAbo("A1")
+        .withBloodRh("B1")
+        .withDonationIdentificationNumber("1234567")
+        .withTTIStatus(TTIStatus.NOT_DONE)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .build();
+    List<Donation> donations = new ArrayList<>();
+    donations.add(donation1);
+    
+    donor.setDonations(donations);
+
+    DonationBatch donationBatch = aDonationBatch().withDonations(donations).build();
+    
+    TestBatch testBatch = aTestBatch().withDonationBatch(donationBatch).build();
+    
+    DonationTestOutcomesReportViewModel expectedViewModel =
+        DonationTestOutcomesReportViewModelBuilder
+        .aDonationTestOutcomesReportViewModel()
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withTTIStatus(TTIStatus.NOT_DONE)
+        .withPreviousDonationAboRhOutcome("")
+        .withDonationIdentificationNumber("1234567")
+        .withBloodTestOutcomes(new HashMap<String, String>())
+        .build();
+    
+    List<DonationTestOutcomesReportViewModel> returnedViewModels =
+        testBatchViewModelFactory.createDonationTestOutcomesReportViewModels(testBatch);
+
+    assertThat(returnedViewModels.get(0), hasSameStateAsDonationTestOutcomesReportViewModel(expectedViewModel));
+  }
+
+  
 }
