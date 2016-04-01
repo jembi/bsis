@@ -1,58 +1,58 @@
 package viewmodel;
 
-import model.donor.MobileClinicDonor;
 import model.util.Gender;
 
 import org.apache.commons.lang3.StringUtils;
 
+import dto.MobileClinicDonorDTO;
 import utils.CustomDateFormatter;
 
 public class MobileClinicLookUpDonorViewModel {
 
-  private MobileClinicDonor mobileClinicDonor;
+  private MobileClinicDonorDTO mobileClinicDonorDTO;
 
   private Boolean eligibility;
 
   public MobileClinicLookUpDonorViewModel() {
-    mobileClinicDonor = new MobileClinicDonor();
+    mobileClinicDonorDTO = new MobileClinicDonorDTO();
   }
 
-  public MobileClinicLookUpDonorViewModel(MobileClinicDonor mobileClinicDonor) {
-    this.mobileClinicDonor = mobileClinicDonor;
+  public MobileClinicLookUpDonorViewModel(MobileClinicDonorDTO mobileClinicDonorDTO) {
+    this.mobileClinicDonorDTO = mobileClinicDonorDTO;
   }
 
   public long getId() {
-    return mobileClinicDonor.getId();
+    return mobileClinicDonorDTO.getId();
   }
 
   public void setId(long id) {
-    mobileClinicDonor.setId(id);
+    mobileClinicDonorDTO.setId(id);
   }
 
   public String getDonorNumber() {
-    return mobileClinicDonor.getDonorNumber();
+    return mobileClinicDonorDTO.getDonorNumber();
   }
 
   public String getFirstName() {
-    return mobileClinicDonor.getFirstName();
+    return mobileClinicDonorDTO.getFirstName();
   }
 
   public String getLastName() {
-    return mobileClinicDonor.getLastName();
+    return mobileClinicDonorDTO.getLastName();
   }
 
   public String getGender() {
-    Gender gender = mobileClinicDonor.getGender();
+    Gender gender = mobileClinicDonorDTO.getGender();
     return gender == null ? "" : gender.name();
   }
 
   public String getBirthDate() {
-    return CustomDateFormatter.getDateString(mobileClinicDonor.getBirthDate());
+    return CustomDateFormatter.getDateString(mobileClinicDonorDTO.getBirthDate());
   }
 
   public String getBloodType() {
-    String bloodAbo = mobileClinicDonor.getBloodAbo();
-    String bloodRh = mobileClinicDonor.getBloodRh();
+    String bloodAbo = mobileClinicDonorDTO.getBloodAbo();
+    String bloodRh = mobileClinicDonorDTO.getBloodRh();
     if (StringUtils.isBlank(bloodAbo) || StringUtils.isBlank(bloodRh))
       return "";
     else

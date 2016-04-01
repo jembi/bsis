@@ -16,4 +16,13 @@ public class DonorNamedQueryConstants {
       "WHERE d.donorStatus <> 'MERGED' AND d.isDeleted <> 1 " +
       "AND d.firstName = :firstName AND d.lastName = :lastName " +
       "AND d.birthDate = :birthDate AND d.gender = :gender ";
+  
+  public static final String NAME_MOBILE_CLINIC_LOOKUP = "Donor.mobileClinicLookup";
+  public static final String QUERY_MOBILE_CLINIC_LOOKUP = 
+      "SELECT NEW dto.MobileClinicDonorDTO(d.id, d.donorNumber, d.firstName, d.lastName, d.gender, d.bloodAbo, d.bloodRh,"
+      + "d.donorStatus, d.birthDate, d.venue, d.isDeleted) FROM Donor d " +
+          "WHERE d.venue.id = :venueId " +
+          "AND d.isDeleted = :isDeleted " +
+          "AND d.donorStatus NOT IN :excludedStatuses " +
+          "ORDER BY d.lastName asc, d.firstName asc";
 }

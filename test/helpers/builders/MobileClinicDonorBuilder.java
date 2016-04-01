@@ -1,18 +1,15 @@
 package helpers.builders;
 
-import helpers.persisters.AbstractEntityPersister;
-import helpers.persisters.MobileClinicDonorPersister;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import model.donor.DonorStatus;
-import model.donor.MobileClinicDonor;
 import model.location.Location;
 import model.util.Gender;
+import dto.MobileClinicDonorDTO;
 
-public class MobileClinicDonorBuilder extends AbstractEntityBuilder<MobileClinicDonor> {
+public class MobileClinicDonorBuilder extends AbstractBuilder<MobileClinicDonorDTO> {
 
   private Long id;
   private String donorNumber;
@@ -82,23 +79,18 @@ public class MobileClinicDonorBuilder extends AbstractEntityBuilder<MobileClinic
 
 
   @Override
-  public MobileClinicDonor build() {
-    MobileClinicDonor donor = new MobileClinicDonor();
-    donor.setId(id);
-    donor.setDonorNumber(donorNumber);
-    donor.setFirstName(firstName);
-    donor.setLastName(lastName);
-    donor.setGender(gender);
-    donor.setBirthDate(birthDate);
-    donor.setIsDeleted(deleted);
-    donor.setDonorStatus(donorStatus);
-    donor.setVenue(venue);
-    return donor;
-  }
-
-  @Override
-  public AbstractEntityPersister<MobileClinicDonor> getPersister() {
-    return new MobileClinicDonorPersister();
+  public MobileClinicDonorDTO build() {
+    MobileClinicDonorDTO donorDTO = new MobileClinicDonorDTO();
+    donorDTO.setId(id);
+    donorDTO.setDonorNumber(donorNumber);
+    donorDTO.setFirstName(firstName);
+    donorDTO.setLastName(lastName);
+    donorDTO.setGender(gender);
+    donorDTO.setBirthDate(birthDate);
+    donorDTO.setIsDeleted(deleted);
+    donorDTO.setDonorStatus(donorStatus);
+    donorDTO.setVenue(venue);
+    return donorDTO;
   }
 
   public static MobileClinicDonorBuilder aMobileClinicDonor() {

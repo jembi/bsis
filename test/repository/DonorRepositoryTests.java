@@ -1,12 +1,17 @@
 package repository;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import helpers.builders.DonorBuilder;
+import helpers.builders.LocationBuilder;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import model.donor.Donor;
 import model.donor.DonorStatus;
+import model.location.Location;
 import model.util.Gender;
 
 import org.junit.Assert;
@@ -15,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import suites.ContextDependentTestSuite;
 import dto.DuplicateDonorDTO;
+import dto.MobileClinicDonorDTO;
 
 public class DonorRepositoryTests extends ContextDependentTestSuite {
   
@@ -156,5 +162,162 @@ public class DonorRepositoryTests extends ContextDependentTestSuite {
     Assert.assertEquals("Two matching donors", 2, duplicateDonors.size());
     Assert.assertEquals("Sue is matching Donor", "Sue", duplicateDonors.get(0).getFirstName());
     Assert.assertEquals("Sue is matching Donor", "Sue", duplicateDonors.get(1).getFirstName());
+  }
+  
+  @Test
+  public void testMobileClinicDonorsCanBeFound() throws Exception {
+
+    Location venue = LocationBuilder.aLocation()
+        .withName("test")
+        .buildAndPersist(entityManager);
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    DonorBuilder.aDonor()
+        .withDonorNumber("D1")
+        .withFirstName("Clara")
+        .withLastName("Donor")
+        .withBirthDate(sdf.parse("20/02/1975"))
+        .withGender(Gender.female)
+        .withDonorStatus(DonorStatus.NORMAL)
+        .withVenue(venue)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+    DonorBuilder.aDonor()
+        .withDonorNumber("D2")
+        .withFirstName("Bobby")
+        .withLastName("ADonor")
+        .withBirthDate(sdf.parse("5/12/1982"))
+        .withGender(Gender.male)
+        .withDonorStatus(DonorStatus.NORMAL)
+        .withVenue(venue)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+    DonorBuilder.aDonor()
+        .withDonorNumber("D3")
+        .withFirstName("Abigail")
+        .withLastName("Donor")
+        .withBirthDate(sdf.parse("10/10/1985"))
+        .withGender(Gender.female)
+        .withDonorStatus(DonorStatus.NORMAL)
+        .withVenue(venue)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+
+    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenue(venue.getId());
+
+    assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonorDTOs.size(), is(3));
+    // check sorting
+    MobileClinicDonorDTO returnedDonor1 = mobileClinicDonorDTOs.get(0);
+    Assert.assertEquals("MobileClinicDonor sorting is correct", "D2", returnedDonor1.getDonorNumber());
+    MobileClinicDonorDTO returnedDonor2 = mobileClinicDonorDTOs.get(1);
+    Assert.assertEquals("MobileClinicDonor sorting is correct", "D3", returnedDonor2.getDonorNumber());
+    MobileClinicDonorDTO returnedDonor3 = mobileClinicDonorDTOs.get(2);
+    Assert.assertEquals("MobileClinicDonor sorting is correct", "D1", returnedDonor3.getDonorNumber());
+  }
+
+  @Test
+  public void testDeletedMobileClinicDonorsAreNotReturned() throws Exception {
+
+    Location venue = LocationBuilder.aLocation()
+        .withName("test")
+        .buildAndPersist(entityManager);
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    DonorBuilder.aDonor()
+        .withDonorNumber("D1")
+        .withFirstName("Test")
+        .withLastName("DonorOne")
+        .withBirthDate(sdf.parse("20/02/1975"))
+        .withGender(Gender.female)
+        .withDonorStatus(DonorStatus.NORMAL)
+        .withVenue(venue)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+    Donor donor2 = DonorBuilder.aDonor()
+        .withDonorNumber("D2")
+        .withFirstName("Test")
+        .withLastName("DonorTwo")
+        .withBirthDate(sdf.parse("5/12/1982"))
+        .withGender(Gender.male)
+        .withDonorStatus(DonorStatus.NORMAL)
+        .withVenue(venue)
+        .thatIsDeleted()
+        .buildAndPersist(entityManager);
+
+    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenue(venue.getId());
+
+    assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonorDTOs.size(), is(1));
+    Assert.assertFalse("Deleted MobileClinicDonor not returned", mobileClinicDonorDTOs.contains(donor2));
+  }
+
+  @Test
+  public void testMergedMobileClinicDonorsAreNotReturned() throws Exception {
+
+    Location venue = LocationBuilder.aLocation()
+        .withName("test")
+        .buildAndPersist(entityManager);
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    DonorBuilder.aDonor()
+        .withDonorNumber("D1")
+        .withFirstName("Test")
+        .withLastName("DonorOne")
+        .withBirthDate(sdf.parse("20/02/1975"))
+        .withGender(Gender.female)
+        .withDonorStatus(DonorStatus.NORMAL)
+        .withVenue(venue)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+    Donor donor2 = DonorBuilder.aDonor()
+        .withDonorNumber("D2")
+        .withFirstName("Test")
+        .withLastName("DonorTwo")
+        .withBirthDate(sdf.parse("5/12/1982"))
+        .withGender(Gender.male)
+        .withDonorStatus(DonorStatus.MERGED)
+        .withVenue(venue)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+
+    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenue(venue.getId());
+
+    assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonorDTOs.size(), is(1));
+    Assert.assertFalse("Deleted MobileClinicDonor not returned", mobileClinicDonorDTOs.contains(donor2));
+  }
+
+  @Test
+  public void testMobileClinicDonorsAreInCorrectVenue() throws Exception {
+
+    Location venue1 = LocationBuilder.aLocation()
+        .withName("test1")
+        .buildAndPersist(entityManager);
+    Location venue2 = LocationBuilder.aLocation()
+        .withName("test2")
+        .buildAndPersist(entityManager);
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    DonorBuilder.aDonor()
+        .withDonorNumber("D1")
+        .withFirstName("Test")
+        .withLastName("DonorOne")
+        .withBirthDate(sdf.parse("20/02/1975"))
+        .withGender(Gender.female)
+        .withDonorStatus(DonorStatus.NORMAL)
+        .withVenue(venue1)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+    DonorBuilder.aDonor()
+        .withDonorNumber("D2")
+        .withFirstName("Test")
+        .withLastName("DonorTwo")
+        .withBirthDate(sdf.parse("5/12/1982"))
+        .withGender(Gender.male)
+        .withDonorStatus(DonorStatus.NORMAL)
+        .withVenue(venue2)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+
+    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenue(venue1.getId());
+
+    assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonorDTOs.size(), is(1));
+    for (MobileClinicDonorDTO d : mobileClinicDonorDTOs) {
+      Assert.assertEquals("MobileClinicDonor in correct venue", venue1, d.getVenue());
+    }
   }
 }

@@ -1,7 +1,6 @@
 package factory;
 
 import static org.mockito.Mockito.when;
-
 import helpers.builders.LocationBuilder;
 import helpers.builders.MobileClinicDonorBuilder;
 
@@ -11,7 +10,6 @@ import java.util.Date;
 import java.util.List;
 
 import model.donor.DonorStatus;
-import model.donor.MobileClinicDonor;
 import model.location.Location;
 import model.util.Gender;
 
@@ -23,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import dto.MobileClinicDonorDTO;
 import service.DonorConstraintChecker;
 import utils.CustomDateFormatter;
 import viewmodel.MobileClinicLookUpDonorViewModel;
@@ -39,7 +38,7 @@ public class MobileClinicDonorViewModelFactoryTests {
   public void testCreateMobileClinicDonor() throws Exception {
     Location venue = LocationBuilder.aLocation().withName("test").build();
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-    MobileClinicDonor donor = MobileClinicDonorBuilder.aMobileClinicDonor()
+    MobileClinicDonorDTO donor = MobileClinicDonorBuilder.aMobileClinicDonor()
         .withId(1L)
         .withDonorNumber("D1")
         .withFirstName("Test")
@@ -70,7 +69,7 @@ public class MobileClinicDonorViewModelFactoryTests {
   public void testCreateMobileClinicDonors() throws Exception {
     Location venue = LocationBuilder.aLocation().withName("test").build();
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-    MobileClinicDonor donor1 = MobileClinicDonorBuilder.aMobileClinicDonor()
+    MobileClinicDonorDTO donor1 = MobileClinicDonorBuilder.aMobileClinicDonor()
         .withId(1L)
         .withDonorNumber("D1")
         .withFirstName("Test")
@@ -81,7 +80,7 @@ public class MobileClinicDonorViewModelFactoryTests {
         .withVenue(venue)
         .thatIsNotDeleted()
         .build();
-    MobileClinicDonor donor2 = MobileClinicDonorBuilder.aMobileClinicDonor()
+    MobileClinicDonorDTO donor2 = MobileClinicDonorBuilder.aMobileClinicDonor()
         .withId(2L)
         .withDonorNumber("D2")
         .withFirstName("Test")
@@ -93,7 +92,7 @@ public class MobileClinicDonorViewModelFactoryTests {
         .thatIsNotDeleted()
         .build();
 
-    List<MobileClinicDonor> donors = new ArrayList<>();
+    List<MobileClinicDonorDTO> donors = new ArrayList<>();
     donors.add(donor1);
     donors.add(donor2);
 
