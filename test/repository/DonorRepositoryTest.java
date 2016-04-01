@@ -995,12 +995,14 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
 
   }
 
-  @Test(expected = javax.persistence.NoResultException.class)
+  @Test(expected = NoResultException.class)
   public void testFindDonorSummaryByDonorNumberMerged() throws Exception {
+    // Set up
     Donor donor = donorRepository.findDonorByDonorNumber("000001", false);
     donor.setDonorStatus(DonorStatus.MERGED);
     donorRepository.saveDonor(donor);
-    DonorSummaryViewModel donorSummary = donorRepository.findDonorSummaryByDonorNumber("000001");
+    // Test
+    donorRepository.findDonorSummaryByDonorNumber("000001");
   }
 
   @Test
@@ -1027,11 +1029,11 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
   
   @Test
   public void testEntityExists() throws Exception {
-    Assert.assertTrue("Donor exists",donorRepository.verifyDonorExists(1L));
+    Assert.assertTrue("Donor exists", donorRepository.verifyDonorExists(1L));
   }
   
   @Test
   public void testEntityDoesNotExist() throws Exception {
-    Assert.assertFalse("Donor does not exist",donorRepository.verifyDonorExists(123L));
+    Assert.assertFalse("Donor does not exist", donorRepository.verifyDonorExists(123L));
   }
 }

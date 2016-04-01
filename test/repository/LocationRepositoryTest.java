@@ -121,11 +121,11 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
   
   @Test
   public void testEntityExists() throws Exception {
-    Assert.assertTrue("Location exists",locationRepository.verifyLocationExists(1L));
+    Assert.assertTrue("Location exists", locationRepository.verifyLocationExists(1L));
   }
   
   @Test
   public void testEntityDoesNotExist() throws Exception {
-    Assert.assertFalse("Location does not exist",locationRepository.verifyLocationExists(123L));
+    Assert.assertFalse("Location does not exist", locationRepository.verifyLocationExists(123L));
   }
 }
