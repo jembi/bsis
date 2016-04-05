@@ -1,6 +1,8 @@
 package factory;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,8 +15,8 @@ import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import service.TestBatchConstraintChecker;
 import service.TestBatchConstraintChecker.CanReleaseResult;
-import viewmodel.DonationBatchFullViewModel;
 import viewmodel.DonationBatchViewModel;
+import viewmodel.DonationTestOutcomesReportViewModel;
 import viewmodel.TestBatchFullViewModel;
 import viewmodel.TestBatchViewModel;
 
@@ -147,5 +149,48 @@ public class TestBatchViewModelFactory {
     testBatchViewModel.setPermissions(permissions);
 
     return testBatchViewModel;
+  }
+
+  public List<DonationTestOutcomesReportViewModel> createDonationTestOutcomesReportViewModels(TestBatch testBatch) {
+
+    List<DonationTestOutcomesReportViewModel> donationTestOutcomesReportViewModels = new ArrayList<>();
+
+    for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
+      for (Donation donation : donationBatch.getDonations()) {
+        DonationTestOutcomesReportViewModel donationTestOutcomesReportViewModel =
+            new DonationTestOutcomesReportViewModel();
+        donationTestOutcomesReportViewModel.setBloodTypingStatus(donation.getBloodTypingStatus());
+        donationTestOutcomesReportViewModel.setTtiStatus(donation.getTTIStatus());
+        donationTestOutcomesReportViewModel.setDonationIdentificationNumber(donation.getDonationIdentificationNumber());
+        donationTestOutcomesReportViewModel.setBloodTestOutcomes(donation.getBloodTestResults());
+        donationTestOutcomesReportViewModel.setPreviousDonationAboRhOutcome(getPreviousDonationAboRhOutcome(donation));
+        donationTestOutcomesReportViewModels.add(donationTestOutcomesReportViewModel);
+      }
+    }
+    return donationTestOutcomesReportViewModels;
+
+  }
+
+  private String getPreviousDonationAboRhOutcome(Donation thisDonation) {
+  
+    List<Donation> donorDonations = new ArrayList<Donation>(thisDonation.getDonor().getDonations());
+    String aboRh = "";
+
+    if (donorDonations.size() > 1) {
+      // Order donations for that donor by date desc to be able to find the previous donation
+      Collections.sort(donorDonations, new Comparator<Donation>() {
+        public int compare(Donation d1, Donation d2) {
+          return d2.getDonationDate().compareTo(d1.getDonationDate());
+        }
+      });
+      for (Donation donation : donorDonations) {
+        // Find previous donation and return abo/rh outcome
+        if (donation.getDonationDate().before(thisDonation.getDonationDate())) {
+          aboRh = donation.getBloodAbo() + donation.getBloodRh();
+          break;
+        }
+      }
+    }
+    return aboRh;
   }
 }
