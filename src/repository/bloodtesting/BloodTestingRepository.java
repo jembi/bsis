@@ -22,19 +22,11 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
-import backingform.BloodTestBackingForm;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestContext;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.BloodTestType;
-import model.bloodtesting.TSVFileHeaderName;
 import model.bloodtesting.TTIStatus;
 import model.bloodtesting.WellType;
 import model.bloodtesting.rules.BloodTestSubCategory;
@@ -44,12 +36,20 @@ import model.donation.Donation;
 import model.microtiterplate.MachineReading;
 import model.microtiterplate.MicrotiterPlate;
 import model.microtiterplate.PlateSession;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import repository.GenericConfigRepository;
 import repository.WellTypeRepository;
 import viewmodel.BloodTestResultViewModel;
 import viewmodel.BloodTestingRuleResult;
+import backingform.BloodTestBackingForm;
 
 @Repository
 @Transactional
@@ -817,34 +817,6 @@ public class BloodTestingRepository {
     TypedQuery<BloodTestingRule> query = em.createQuery(queryStr, BloodTestingRule.class);
     query.setParameter("isActive", true);
     return query.getResultList();
-  }
-
-  public void saveTestResultsToDatabase(
-      List<TSVFileHeaderName> tSVFileHeaderNameList) {
-    for (TSVFileHeaderName ts : tSVFileHeaderNameList) {
-
-      Donation cs = donationRepository
-          .findDonationByDonationIdentificationNumber(ts.getSID());
-      if (cs != null) {
-
-        try {
-
-          Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForDonations = new HashMap<Long, BloodTestingRuleResult>();
-
-          BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
-              cs, new HashMap<Long, String>());
-          bloodTestRuleResultsForDonations.put(cs.getId(), ruleResult);
-
-          saveBloodTestResultToDatabase(Long.valueOf(ts.getAssayNumber()),
-              ts.getInterpretation(), cs, ts.getCompleted(), ruleResult, false);
-
-        } catch (Exception ex) {
-          LOGGER.fatal("Cannot save TTI Test Result to DB", ex);
-        }
-
-      }
-
-    }
   }
 
   /**
