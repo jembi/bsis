@@ -89,7 +89,7 @@ public class DonationBatchController {
         donationBatchRepository.findDonationBatches(isClosed, venues, startDate, endDate);
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("donationBatches", getDonationBatchViewModels(donationBatches));
+    map.put("donationBatches", donationBatchViewModelFactory.createDonationBatchBasicViewModels(donationBatches));
 
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
@@ -152,15 +152,5 @@ public class DonationBatchController {
     map.put("donationBatch", donationBatchViewModel);
 
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
-  }
-
-  private List<DonationBatchViewModel> getDonationBatchViewModels(List<DonationBatch> donationBatches) {
-    if (donationBatches == null)
-      return Arrays.asList(new DonationBatchViewModel[0]);
-    List<DonationBatchViewModel> donationBatchViewModels = new ArrayList<DonationBatchViewModel>();
-    for (DonationBatch donationBatch : donationBatches) {
-      donationBatchViewModels.add(donationBatchViewModelFactory.createDonationBatchBasicViewModel(donationBatch));
-    }
-    return donationBatchViewModels;
   }
 }
