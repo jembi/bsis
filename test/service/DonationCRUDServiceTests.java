@@ -2,13 +2,12 @@ package service;
 
 import static helpers.builders.AdverseEventBackingFormBuilder.anAdverseEventBackingForm;
 import static helpers.builders.AdverseEventBuilder.anAdverseEvent;
-import static helpers.builders.AdverseEventTypeBuilder.anAdverseEventType;
 import static helpers.builders.AdverseEventTypeBackingFormBuilder.anAdverseEventTypeBackingForm;
+import static helpers.builders.AdverseEventTypeBuilder.anAdverseEventType;
 import static helpers.builders.DonationBackingFormBuilder.aDonationBackingForm;
 import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
-import static helpers.builders.PostDonationCounsellingBuilder.aPostDonationCounselling;
 import static helpers.builders.PackTypeBuilder.aPackType;
 import static helpers.matchers.DonationMatcher.hasSameStateAsDonation;
 import static helpers.matchers.DonorMatcher.hasSameStateAsDonor;
@@ -22,14 +21,6 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import model.adverseevent.AdverseEvent;
-import model.counselling.PostDonationCounselling;
-import model.donation.Donation;
-import model.donation.HaemoglobinLevel;
-import model.donationbatch.DonationBatch;
-import model.donor.Donor;
-import model.packtype.PackType;
-
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,12 +28,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import backingform.AdverseEventBackingForm;
+import backingform.DonationBackingForm;
+import model.adverseevent.AdverseEvent;
+import model.donation.Donation;
+import model.donation.HaemoglobinLevel;
+import model.donationbatch.DonationBatch;
+import model.donor.Donor;
+import model.packtype.PackType;
 import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import repository.DonorRepository;
 import repository.PackTypeRepository;
-import backingform.AdverseEventBackingForm;
-import backingform.DonationBackingForm;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DonationCRUDServiceTests {
@@ -187,9 +184,14 @@ public class DonationCRUDServiceTests {
   public void testUpdateDonationWithUpdatedBleedStartTimeAndCannotUpdate_shouldThrow() {
 
     // Set up fixture
-    Donation existingDonation = aDonation().withId(IRRELEVANT_DONATION_ID).build();
+    Donation existingDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withBleedEndTime(IRRELEVANT_DATE_OF_FIRST_DONATION)
+        .withBleedStartTime(IRRELEVANT_DATE_OF_FIRST_DONATION)
+        .build();
     DonationBackingForm donationBackingForm = aDonationBackingForm()
         .withBleedStartTime(new Date())
+        .withBleedEndTime(IRRELEVANT_DATE_OF_FIRST_DONATION)
         .build();
 
     // Set up expectations
@@ -204,9 +206,14 @@ public class DonationCRUDServiceTests {
   public void testUpdateDonationWithUpdatedBleedEndTimeAndCannotUpdate_shouldThrow() {
 
     // Set up fixture
-    Donation existingDonation = aDonation().withId(IRRELEVANT_DONATION_ID).build();
+    Donation existingDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withBleedEndTime(IRRELEVANT_DATE_OF_FIRST_DONATION)
+        .withBleedStartTime(IRRELEVANT_DATE_OF_FIRST_DONATION)
+        .build();
     DonationBackingForm donationBackingForm = aDonationBackingForm()
         .withBleedEndTime(new Date())
+        .withBleedStartTime(IRRELEVANT_DATE_OF_FIRST_DONATION)
         .build();
 
     // Set up expectations
@@ -245,8 +252,6 @@ public class DonationCRUDServiceTests {
     String donationBatchNumber = "000001";
 
     Donor expectedDonor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
-
-    DonationBatch donationBatch = aDonationBatch().build();
 
     Donation existingDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
