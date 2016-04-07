@@ -2,7 +2,6 @@ package controller;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +9,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import model.donationbatch.DonationBatch;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,11 +27,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import backingform.DonationBatchBackingForm;
-import backingform.validator.DonationBatchBackingFormValidator;
-import factory.DonationBatchViewModelFactory;
-import factory.LocationViewModelFactory;
-import model.donationbatch.DonationBatch;
 import repository.DonationBatchRepository;
 import repository.LocationRepository;
 import service.DonationBatchCRUDService;
@@ -38,6 +34,10 @@ import service.FormFieldAccessorService;
 import utils.PermissionConstants;
 import viewmodel.DonationBatchFullViewModel;
 import viewmodel.DonationBatchViewModel;
+import backingform.DonationBatchBackingForm;
+import backingform.validator.DonationBatchBackingFormValidator;
+import factory.DonationBatchViewModelFactory;
+import factory.LocationViewModelFactory;
 
 @RestController
 @RequestMapping("/donationbatches")
@@ -89,7 +89,7 @@ public class DonationBatchController {
         donationBatchRepository.findDonationBatches(isClosed, venues, startDate, endDate);
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("donationBatches", getDonationBatchViewModels(donationBatches));
+    map.put("donationBatches", donationBatchViewModelFactory.createDonationBatchBasicViewModels(donationBatches));
 
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
@@ -116,8 +116,8 @@ public class DonationBatchController {
     DonationBatch donationBatch = form.getDonationBatch();
     donationBatch.setIsDeleted(false);
     donationBatchRepository.addDonationBatch(donationBatch);
-    return new ResponseEntity<DonationBatchViewModel>(donationBatchViewModelFactory.createDonationBatchBasicViewModel(
-        donationBatch), HttpStatus.CREATED);
+    return new ResponseEntity<DonationBatchViewModel>(
+        donationBatchViewModelFactory.createDonationBatchFullViewModel(donationBatch), HttpStatus.CREATED);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
@@ -128,10 +128,8 @@ public class DonationBatchController {
 
     donationBatchCRUDService.updateDonationBatch(form.getDonationBatch());
 
-    DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(form.getId()); // the donation batch returned by the CRUD service has components which are unnecessary
-    DonationBatchViewModel donationBatchViewModel = donationBatchViewModelFactory
-        .createDonationBatchBasicViewModel(donationBatch);
-    map.put("donationBatch", donationBatchViewModel);
+    DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(form.getId());
+    map.put("donationBatch", donationBatchViewModelFactory.createDonationBatchFullViewModel(donationBatch));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 
@@ -152,15 +150,5 @@ public class DonationBatchController {
     map.put("donationBatch", donationBatchViewModel);
 
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
-  }
-
-  private List<DonationBatchViewModel> getDonationBatchViewModels(List<DonationBatch> donationBatches) {
-    if (donationBatches == null)
-      return Arrays.asList(new DonationBatchViewModel[0]);
-    List<DonationBatchViewModel> donationBatchViewModels = new ArrayList<DonationBatchViewModel>();
-    for (DonationBatch donationBatch : donationBatches) {
-      donationBatchViewModels.add(donationBatchViewModelFactory.createDonationBatchBasicViewModel(donationBatch));
-    }
-    return donationBatchViewModels;
   }
 }
