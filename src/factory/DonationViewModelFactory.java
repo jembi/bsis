@@ -5,11 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import model.donation.Donation;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import model.donation.Donation;
 import service.DonationConstraintChecker;
 import service.DonorConstraintChecker;
 import viewmodel.AdverseEventViewModel;
@@ -29,6 +28,14 @@ public class DonationViewModelFactory {
     List<DonationViewModel> donationViewModels = new ArrayList<>();
     for (Donation donation : donations) {
       donationViewModels.add(createDonationViewModelWithPermissions(donation));
+    }
+    return donationViewModels;
+  }
+
+  public List<DonationViewModel> createDonationViewModelsWithoutPermissions(List<Donation> donations) {
+    List<DonationViewModel> donationViewModels = new ArrayList<>();
+    for (Donation donation : donations) {
+      donationViewModels.add(createDonationViewModelWithoutPermissions(donation));
     }
     return donationViewModels;
   }
