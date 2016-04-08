@@ -2044,5 +2044,11 @@
       <where>bloodTypingStatus IN ("AMBIGUOUS", "NO_MATCH")</where>
     </update>
   </changeSet>
+  
+  <changeSet id="20160408-1321" author="lauravignoli">
+  	<comment>BSIS-734 - Make bleed start and end time not nullable</comment>
+    <addNotNullConstraint columnName="bleedStartTime" tableName="Donation" columnDataType="datetime"/>
+    <addNotNullConstraint columnName="bleedEndTime" tableName="Donation" columnDataType="datetime"/>
+  </changeSet>
 
 </databaseChangeLog>
