@@ -26,10 +26,9 @@ sudo apt-get install --quiet --assume-yes \
 if [ -d "/opt/bsis/.git" ]; then
   # Checkout the latest version
   cd /opt/bsis
-  git fetch
-  git checkout ${1:-master}
-  git merge --ff-only origin/${1:-master}
-else 
+  git fetch origin ${1:-master}
+  git checkout FETCH_HEAD
+else
   # Clone the repository
   sudo mkdir --parents /opt/bsis
   sudo chown --recursive $(whoami):$(groups | awk '{print $1;}') /opt/bsis

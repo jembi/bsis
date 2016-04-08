@@ -5,9 +5,8 @@ set -o nounset
 
 # Checkout the latest version
 cd /opt/bsis
-git fetch
-git checkout ${1:-master}
-git merge --ff-only origin/${1:-master}
+git fetch origin ${1:-master}
+git checkout FETCH_HEAD
 
 # Build the war and create the database
 mvn clean install
