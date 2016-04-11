@@ -12,6 +12,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +23,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import constant.GeneralConfigConstants;
+import helpers.builders.BloodTestBuilder;
+import model.bloodtesting.BloodTest;
+import model.bloodtesting.BloodTestType;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
@@ -121,6 +126,16 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     verify(bloodTestingRepository, times(2)).saveBloodTestResultsToDatabase(eq(bloodTestResults), eq(donation),
         any(Date.class), eq(bloodTestingRuleResult), eq(true));
     assertThat(returnedBloodTestingRuleResult, is(bloodTestingRuleResult));
+  }
+
+  @Test
+  public void testAddTestNamesToMap() {
+
+    BloodTest hiv =
+        BloodTestBuilder.aBloodTest().withBloodTestType(BloodTestType.BASIC_TTI).withTestNameShort("HIV").build();
+    when(bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)).thenReturn(Arrays.asList(hiv));
+    Map<String, Object> map = bloodTestsService.getBloodTestShortNames();
+    assertThat(((ArrayList<String>) map.get("basicTtiTestNames")), is(Arrays.asList("HIV")));
   }
 
 }

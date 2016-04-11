@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import backingform.TestResultBackingForm;
 import factory.TestBatchViewModelFactory;
-import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.BloodTestType;
 import model.bloodtesting.TTIStatus;
@@ -115,16 +114,14 @@ public class TestResultController {
 
   @RequestMapping(value = "/report", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
-  public ResponseEntity<Map<String, Object>> getTestBatchOutcomesReport(HttpServletRequest request,
-      @RequestParam(value = "testBatch", required = true) Long testBatchId) {
+  public ResponseEntity<Map<String, Object>> getTestBatchOutcomesReport(@RequestParam(value = "testBatch", required = true) Long testBatchId) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     List<DonationTestOutcomesReportViewModel> donationTestOutcomesReports =
         testBatchViewModelFactory.createDonationTestOutcomesReportViewModels(testBatch);
 
+    Map<String, Object> map = bloodTestsService.getBloodTestShortNames();
     map.put("donationTestOutcomesReports", donationTestOutcomesReports);
-    addTestNamesToMap(map);
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
@@ -261,30 +258,6 @@ public class TestResultController {
       }
     }
     return new ResponseEntity<>(responseMap, responseStatus);
-  }
-
-  private void addTestNamesToMap(Map<String, Object> map) {
-    List<String> basicTtiTestNames = new ArrayList<String>();
-    List<String> repeatTtiTestNames = new ArrayList<String>();
-    List<String> basicBloodTypingTestNames = new ArrayList<String>();
-    List<String> repeatBloodTypingTestNames = new ArrayList<String>();
-
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
-      basicTtiTestNames.add(rawBloodTest.getTestNameShort());
-    }
-    map.put("basicTtiTestNames", basicTtiTestNames);
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
-      repeatTtiTestNames.add(rawBloodTest.getTestNameShort());
-    }
-    map.put("repeatTtiTestNames", repeatTtiTestNames);
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
-      basicBloodTypingTestNames.add(rawBloodTest.getTestNameShort());
-    }
-    map.put("basicBloodTypingTestNames", basicBloodTypingTestNames);
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)) {
-      repeatBloodTypingTestNames.add(rawBloodTest.getTestNameShort());
-    }
-    map.put("repeatBloodTypingTestNames", repeatBloodTypingTestNames);
   }
 
 }
