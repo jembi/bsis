@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import backingform.TestResultBackingForm;
 import factory.TestBatchViewModelFactory;
+import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.BloodTestType;
 import model.bloodtesting.TTIStatus;
@@ -119,10 +120,11 @@ public class TestResultController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
-    List<DonationTestOutcomesReportViewModel> testBatchReport =
+    List<DonationTestOutcomesReportViewModel> donationTestOutcomesReports =
         testBatchViewModelFactory.createDonationTestOutcomesReportViewModels(testBatch);
 
-    map.put("testResults", testBatchReport);
+    map.put("donationTestOutcomesReports", donationTestOutcomesReports);
+    map.put("testNames", getTestNames());
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
@@ -259,6 +261,25 @@ public class TestResultController {
       }
     }
     return new ResponseEntity<>(responseMap, responseStatus);
+  }
+
+  private List<String> getTestNames() {
+    List<String> testNames = new ArrayList<String>();
+    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
+      testNames.add(rawBloodTest.getTestNameShort());
+    }
+    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
+      testNames.add(rawBloodTest.getTestNameShort());
+    }
+    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
+      testNames.add(rawBloodTest.getTestNameShort());
+    }
+    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)) {
+      testNames.add(rawBloodTest.getTestNameShort());
+    }
+
+    System.out.println("testNames: " + testNames);
+    return testNames;
   }
 
 }
