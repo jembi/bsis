@@ -124,7 +124,7 @@ public class TestResultController {
         testBatchViewModelFactory.createDonationTestOutcomesReportViewModels(testBatch);
 
     map.put("donationTestOutcomesReports", donationTestOutcomesReports);
-    map.put("testNames", getTestNames());
+    addTestNamesToMap(map);
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
@@ -263,23 +263,28 @@ public class TestResultController {
     return new ResponseEntity<>(responseMap, responseStatus);
   }
 
-  private List<String> getTestNames() {
-    List<String> testNames = new ArrayList<String>();
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
-      testNames.add(rawBloodTest.getTestNameShort());
-    }
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
-      testNames.add(rawBloodTest.getTestNameShort());
-    }
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
-      testNames.add(rawBloodTest.getTestNameShort());
-    }
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)) {
-      testNames.add(rawBloodTest.getTestNameShort());
-    }
+  private void addTestNamesToMap(Map<String, Object> map) {
+    List<String> basicTtiTestNames = new ArrayList<String>();
+    List<String> repeatTtiTestNames = new ArrayList<String>();
+    List<String> basicBloodTypingTestNames = new ArrayList<String>();
+    List<String> repeatBloodTypingTestNames = new ArrayList<String>();
 
-    System.out.println("testNames: " + testNames);
-    return testNames;
+    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
+      basicTtiTestNames.add(rawBloodTest.getTestNameShort());
+    }
+    map.put("basicTtiTestNames", basicTtiTestNames);
+    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
+      repeatTtiTestNames.add(rawBloodTest.getTestNameShort());
+    }
+    map.put("repeatTtiTestNames", repeatTtiTestNames);
+    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
+      basicBloodTypingTestNames.add(rawBloodTest.getTestNameShort());
+    }
+    map.put("basicBloodTypingTestNames", basicBloodTypingTestNames);
+    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)) {
+      repeatBloodTypingTestNames.add(rawBloodTest.getTestNameShort());
+    }
+    map.put("repeatBloodTypingTestNames", repeatBloodTypingTestNames);
   }
 
 }
