@@ -385,7 +385,7 @@ public class DonorController {
     // Get all the Donations, process the Test Results and update necessary newDonor and Donation fields
     List<Donation> donations = duplicateDonorService.getAllDonationsToMerge(newDonor, donorNumbers);
     List<DonationViewModel> donationViewModels = donationViewModelFactory
-        .createDonationViewModelsWithPermissions(donations);
+        .createDonationViewModelsWithoutPermissions(donations);
 
     // gather all Deferrals
     List<DonorDeferral> donorDeferrals = duplicateDonorService.getAllDeferralsToMerge(newDonor, donorNumbers);
