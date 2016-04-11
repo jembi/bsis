@@ -5,19 +5,18 @@ import java.util.Objects;
 
 import javax.persistence.NoResultException;
 
-import model.adverseevent.AdverseEvent;
-import model.adverseevent.AdverseEventType;
-import model.donation.Donation;
-import model.donationbatch.DonationBatch;
-import model.donor.Donor;
-import model.packtype.PackType;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import backingform.AdverseEventBackingForm;
 import backingform.DonationBackingForm;
+import model.adverseevent.AdverseEvent;
+import model.adverseevent.AdverseEventType;
+import model.donation.Donation;
+import model.donationbatch.DonationBatch;
+import model.donor.Donor;
+import model.packtype.PackType;
 import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import repository.DonorRepository;
@@ -119,8 +118,8 @@ public class DonationCRUDService {
     // Check if pack type or bleed times have been updated
     boolean packTypeUpdated = !Objects.equals(donation.getPackType(), donationBackingForm.getPackType());
     boolean donationFieldsUpdated = packTypeUpdated ||
-        !Objects.equals(donation.getBleedStartTime(), donationBackingForm.getBleedStartTime()) ||
-        !Objects.equals(donation.getBleedEndTime(), donationBackingForm.getBleedEndTime());
+        donation.getBleedStartTime().getTime() != donationBackingForm.getBleedStartTime().getTime() ||
+        donation.getBleedEndTime().getTime() != donationBackingForm.getBleedEndTime().getTime();
 
     if (donationFieldsUpdated && !donationConstraintChecker.canUpdateDonationFields(donationId)) {
       throw new IllegalArgumentException("Cannot update donation fields");
