@@ -25,13 +25,13 @@ import model.donor.DonorStatus;
 import model.donordeferral.DonorDeferral;
 import model.location.Location;
 import model.util.BloodGroup;
-import utils.CustomDateFormatter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import utils.CustomDateFormatter;
 
 @Repository
 @Transactional
@@ -40,6 +40,7 @@ public class DonorCommunicationsRepository {
   /**
    * The Constant LOGGER.
    */
+  @SuppressWarnings("unused")
   private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsRepository.class);
 
   @PersistenceContext
@@ -137,13 +138,6 @@ public class DonorCommunicationsRepository {
     TypedQuery<Donor> query = em.createQuery(cq);
     query.setFirstResult(start);
     query.setMaxResults(length);
-
-    CriteriaQuery<Long> countCriteriaQuery = cb.createQuery(Long.class);
-    Root<Donor> countRoot = countCriteriaQuery.from(Donor.class);
-    countCriteriaQuery.where(venuePredicates.toArray(new Predicate[0]));
-    countCriteriaQuery.select(cb.countDistinct(countRoot));
-
-    TypedQuery<Long> countQuery = em.createQuery(countCriteriaQuery);
 
     List<Donor> donorResults = query.getResultList();
 
