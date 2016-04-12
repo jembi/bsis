@@ -1,16 +1,17 @@
 package repository;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
-
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
@@ -99,14 +100,5 @@ public class TestBatchRepository extends AbstractRepository<TestBatch> {
       }
     }
     entityManager.merge(testBatch);
-  }
-
-  public List<TestBatch> getRecentlyClosedTestBatches(Integer numOfResults) {
-    String queryStr = "SELECT tb FROM TestBatch tb "
-        + "WHERE status = :status  ORDER BY lastUpdated DESC";
-    TypedQuery<TestBatch> query = entityManager.createQuery(queryStr, TestBatch.class);
-    query.setParameter("status", TestBatchStatus.CLOSED);
-    query.setMaxResults(numOfResults);
-    return query.getResultList();
   }
 }

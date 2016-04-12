@@ -1,7 +1,5 @@
 package controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +28,6 @@ import backingform.validator.TestBatchBackingFormValidator;
 import factory.DonationBatchViewModelFactory;
 import factory.DonationSummaryViewModelFactory;
 import factory.TestBatchViewModelFactory;
-import model.donationbatch.DonationBatch;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 import repository.DonationBatchRepository;
@@ -41,7 +38,6 @@ import service.TestBatchCRUDService;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 import utils.PermissionUtils;
-import viewmodel.DonationBatchViewModel;
 import viewmodel.DonationSummaryViewModel;
 import viewmodel.TestBatchFullViewModel;
 
@@ -142,20 +138,6 @@ public class TestBatchController {
   @PreAuthorize("hasRole('" + PermissionConstants.VOID_TEST_BATCH + "')")
   public void deleteTestBatchById(@PathVariable Long id) {
     testBatchCRUDService.deleteTestBatch(id);
-  }
-
-  @RequestMapping(value = "/recent/{count}" ,method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")  
-  @Transactional(readOnly = true)
-  public ResponseEntity<Map<String, Object>> getRecentlyClosedTestBatches(
-      @PathVariable Integer count) {
-
-    List<TestBatch> testBatches = testBatchRepository.getRecentlyClosedTestBatches(count);
-
-    Map<String, Object> map = new HashMap<String, Object>();   
-    boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
-    map.put("testBatches", testBatchViewModelFactory.createTestBatchFullViewModels(testBatches, isTestingSupervisor));
-    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @RequestMapping(value = "/{id}/donations", method = RequestMethod.GET)
