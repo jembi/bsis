@@ -539,51 +539,6 @@ public class BloodTestingRepository {
     query.executeUpdate();
   }
 
-  public List<BloodTestingRule> getBloodTypingRules(boolean onlyActiveRules) {
-    String queryStr = "SELECT r FROM BloodTestingRule r WHERE r.category=:category AND "
-        + "r.context=:context";
-    if (onlyActiveRules) {
-      queryStr = queryStr + " AND r.isActive=:isActive";
-    }
-    TypedQuery<BloodTestingRule> query = em.createQuery(queryStr,
-        BloodTestingRule.class);
-    BloodTestContext context = genericConfigRepository
-        .getCurrentBloodTypingContext();
-    query.setParameter("category", BloodTestCategory.BLOODTYPING);
-    query.setParameter("context", context);
-    if (onlyActiveRules)
-      query.setParameter("isActive", true);
-    return query.getResultList();
-  }
-
-  public BloodTestingRule getBloodTestingRuleById(Long ruleId) {
-    String queryStr = "SELECT r from BloodTestingRule r WHERE r.id=:ruleId";
-    TypedQuery<BloodTestingRule> query = em.createQuery(queryStr,
-        BloodTestingRule.class);
-    query.setParameter("ruleId", ruleId);
-    return query.getSingleResult();
-  }
-
-  public BloodTestingRule saveBloodTypingRule(
-      BloodTestingRule bloodTestingRule) {
-    bloodTestingRule.setIsActive(Boolean.TRUE);
-    em.persist(bloodTestingRule);
-    return bloodTestingRule;
-  }
-
-  public BloodTestingRule updateBloodTypingRule(BloodTestingRule bloodTestingRule) {
-    return em.merge(bloodTestingRule);
-  }
-
-  public void deleteBloodTestingRule(Long ruleId) {
-    String queryStr = "UPDATE BloodTestingRule r SET isActive=:isActive WHERE r.id=:ruleId";
-    Query query = em.createQuery(queryStr);
-    query.setParameter("isActive", false);
-    query.setParameter("ruleId", ruleId);
-    query.executeUpdate();
-    em.flush();
-  }
-
   public Map<String, Map<Long, Long>> findNumberOfPositiveTests(
       List<String> ttiTests, Date donationDateFrom,
       Date donationDateTo, String aggregationCriteria,
