@@ -110,21 +110,6 @@ public class DonationController {
     binder.setValidator(bloodTypingResolutionBackingFormValidator);
   }
 
-  private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("venues", locationRepository.getAllVenues());
-    m.put("donationTypes", donorTypeRepository.getAllDonationTypes());
-    m.put("packTypes", getPackTypeViewModels(packTypeRepository.getAllEnabledPackTypes()));
-    List<Map<String, Object>> haemoglobinLevels = new ArrayList<>();
-    for (HaemoglobinLevel value : HaemoglobinLevel.values()) {
-      Map<String, Object> haemoglobinLevel = new HashMap<>();
-      haemoglobinLevel.put("value", value.name());
-      haemoglobinLevel.put("label", value.getLabel());
-      haemoglobinLevels.add(haemoglobinLevel);
-    }
-    m.put("haemoglobinLevels", haemoglobinLevels);
-    m.put("adverseEventTypes", adverseEventTypeRepository.findNonDeletedAdverseEventTypeViewModels());
-  }
-
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONATION_INFORMATION + "')")
   public Map<String, Object> addDonationFormGenerator(HttpServletRequest request) {
@@ -211,14 +196,6 @@ public class DonationController {
     return Collections.emptyList();
   }
 
-  private List<PackTypeViewModel> getPackTypeViewModels(List<PackType> packTypes) {
-    List<PackTypeViewModel> viewModels = new ArrayList<PackTypeViewModel>();
-    for (PackType packtType : packTypes) {
-      viewModels.add(new PackTypeViewModel(packtType));
-    }
-    return viewModels;
-  }
-
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
   @RequestMapping(value = "{id}/bloodTypingResolution", method = RequestMethod.PUT)
   @Transactional
@@ -242,4 +219,26 @@ public class DonationController {
     }
   }
 
+  private void addEditSelectorOptions(Map<String, Object> m) {
+    m.put("venues", locationRepository.getAllVenues());
+    m.put("donationTypes", donorTypeRepository.getAllDonationTypes());
+    m.put("packTypes", getPackTypeViewModels(packTypeRepository.getAllEnabledPackTypes()));
+    List<Map<String, Object>> haemoglobinLevels = new ArrayList<>();
+    for (HaemoglobinLevel value : HaemoglobinLevel.values()) {
+      Map<String, Object> haemoglobinLevel = new HashMap<>();
+      haemoglobinLevel.put("value", value.name());
+      haemoglobinLevel.put("label", value.getLabel());
+      haemoglobinLevels.add(haemoglobinLevel);
+    }
+    m.put("haemoglobinLevels", haemoglobinLevels);
+    m.put("adverseEventTypes", adverseEventTypeRepository.findNonDeletedAdverseEventTypeViewModels());
+  }
+  
+  private List<PackTypeViewModel> getPackTypeViewModels(List<PackType> packTypes) {
+    List<PackTypeViewModel> viewModels = new ArrayList<PackTypeViewModel>();
+    for (PackType packtType : packTypes) {
+      viewModels.add(new PackTypeViewModel(packtType));
+    }
+    return viewModels;
+  }
 }
