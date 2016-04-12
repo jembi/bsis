@@ -1,9 +1,6 @@
 package controller;
 
-import java.lang.reflect.InvocationTargetException;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,7 +11,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.commons.beanutils.BeanUtils;
+import model.donation.Donation;
+import model.donation.HaemoglobinLevel;
+import model.packtype.PackType;
+import model.testbatch.TestBatchStatus;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -32,16 +33,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import backingform.BloodTypingResolutionBackingForm;
-import backingform.DonationBackingForm;
-import backingform.validator.BloodTypingResolutionBackingFormValidator;
-import backingform.validator.DonationBackingFormValidator;
-import factory.DonationSummaryViewModelFactory;
-import factory.DonationViewModelFactory;
-import model.donation.Donation;
-import model.donation.HaemoglobinLevel;
-import model.packtype.PackType;
-import model.testbatch.TestBatchStatus;
 import repository.AdverseEventTypeRepository;
 import repository.DonationRepository;
 import repository.DonationTypeRepository;
@@ -55,8 +46,13 @@ import service.TestBatchStatusChangeService;
 import utils.PermissionConstants;
 import utils.PermissionUtils;
 import viewmodel.DonationSummaryViewModel;
-import viewmodel.DonationViewModel;
 import viewmodel.PackTypeViewModel;
+import backingform.BloodTypingResolutionBackingForm;
+import backingform.DonationBackingForm;
+import backingform.validator.BloodTypingResolutionBackingFormValidator;
+import backingform.validator.DonationBackingFormValidator;
+import factory.DonationSummaryViewModelFactory;
+import factory.DonationViewModelFactory;
 
 @RestController
 @RequestMapping("/donations")
@@ -114,48 +110,6 @@ public class DonationController {
     binder.setValidator(bloodTypingResolutionBackingFormValidator);
   }
 
-  /**
-   * Datatables on the client side expects a json response for rendering data from the server in
-   * jquery datatables. Remember of columns is important and should match the column headings
-   */
-  private Map<String, Object> generateDatatablesMap(List<Donation> donations, Long totalRecords, Map<String, Map<String, Object>> formFields) {
-    Map<String, Object> donationsMap = new HashMap<String, Object>();
-
-    ArrayList<Object> donationList = new ArrayList<Object>();
-
-    for (DonationViewModel donation : getDonationViewModels(donations)) {
-
-      List<Object> row = new ArrayList<Object>();
-
-      row.add(donation.getId().toString());
-
-      for (String property : Arrays.asList("donationIdentificationNumber", "donationDate", "packType", "venue")) {
-        if (formFields.containsKey(property)) {
-          Map<String, Object> properties = (Map<String, Object>) formFields.get(property);
-          if (properties.get("hidden").equals(false)) {
-            String propertyValue = property;
-            try {
-              propertyValue = BeanUtils.getProperty(donation, property);
-            } catch (IllegalAccessException e) {
-              e.printStackTrace();
-            } catch (InvocationTargetException e) {
-              e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-              e.printStackTrace();
-            }
-            row.add(propertyValue.toString());
-          }
-        }
-      }
-
-      donationList.add(row);
-    }
-    donationsMap.put("aaData", donationList);
-    donationsMap.put("iTotalRecords", totalRecords);
-    donationsMap.put("iTotalDisplayRecords", totalRecords);
-    return donationsMap;
-  }
-
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("venues", locationRepository.getAllVenues());
     m.put("donationTypes", donorTypeRepository.getAllDonationTypes());
@@ -179,22 +133,6 @@ public class DonationController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("addDonationForm", form);
-    addEditSelectorOptions(map);
-    Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("donation");
-    // to ensure custom field names are displayed in the form
-    map.put("donationFields", formFields);
-    return map;
-  }
-
-  @RequestMapping(value = "{id}/edit/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONATION + "')")
-  public Map<String, Object> editDonationFormGenerator(HttpServletRequest request,
-                                                       @PathVariable Long id) {
-
-    Donation donation = donationRepository.findDonationById(id);
-    DonationBackingForm form = new DonationBackingForm(donation);
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("editDonationForm", form);
     addEditSelectorOptions(map);
     Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("donation");
     // to ensure custom field names are displayed in the form
@@ -232,17 +170,6 @@ public class DonationController {
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 
-  private List<DonationViewModel> getDonationViewModels(
-      List<Donation> donations) {
-    if (donations == null)
-      return Arrays.asList(new DonationViewModel[0]);
-    List<DonationViewModel> donationViewModels = new ArrayList<DonationViewModel>();
-    for (Donation donation : donations) {
-      donationViewModels.add(new DonationViewModel(donation));
-    }
-    return donationViewModels;
-  }
-
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('" + PermissionConstants.VOID_DONATION + "')")
@@ -259,40 +186,6 @@ public class DonationController {
     Map<String, Object> map = new HashMap<>();
     map.put("donation", donationViewModelFactory.createDonationViewModelWithPermissions(donation));
     return map;
-  }
-
-  @RequestMapping(value = "/search", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONATION + "')")
-  public Map<String, Object> findDonationPagination(
-      @RequestParam(value = "donationIdentificationNumber", required = false) String donationIdentificationNumber,
-      @RequestParam(value = "venues", required = false) List<Long> venueIds,
-      @RequestParam(value = "packTypes", required = false) List<Long> packTypeIds,
-      @RequestParam(value = "donationDateFrom", required = false) String donationDateFrom,
-      @RequestParam(value = "donationDateTo", required = false) String donationDateTo,
-      @RequestParam(value = "includeTestedDonations", required = true) boolean includeTestedDonations) throws ParseException {
-
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    pagingParams.put("sortColumn", "id");
-//      pagingParams.put("start", "0");
-//      pagingParams.put("length", "10");
-    pagingParams.put("sortDirection", "asc");
-
-    Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("Donation");
-
-    if (donationIdentificationNumber != null)
-      donationIdentificationNumber = donationIdentificationNumber.trim();
-
-    List<Object> results;
-    results = donationRepository.findDonations(
-        donationIdentificationNumber,
-        packTypeIds, venueIds,
-        donationDateFrom, donationDateTo, includeTestedDonations, pagingParams);
-
-    @SuppressWarnings("unchecked")
-    List<Donation> donations = (List<Donation>) results.get(0);
-    Long totalRecords = (Long) results.get(1);
-
-    return generateDatatablesMap(donations, totalRecords, formFields);
   }
 
   @RequestMapping(value = "/summaries", method = RequestMethod.GET)
