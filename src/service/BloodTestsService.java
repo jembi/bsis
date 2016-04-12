@@ -1,5 +1,6 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import constant.GeneralConfigConstants;
-import model.component.Component;
+import model.bloodtesting.BloodTest;
+import model.bloodtesting.BloodTestType;
 import model.donation.Donation;
 import model.testbatch.TestBatchStatus;
 import repository.ComponentRepository;
@@ -118,26 +120,35 @@ public class BloodTestsService {
     return bloodTestingRepository.updateDonationWithTestResults(donation, ruleResult);
   }
 
-  /**
-   * Updates Components as a result of Blood Tests being done on a Donation. The updates include the
-   * Component Status - and should result in Components being discarded if a Donation is marked as
-   * TTI_UNSAFE.
-   *
-   * @param donation   Donation on which the tests were run
-   * @param ruleResult BloodTestingRuleResult results from the Blood Tests.
-   */
-  public void updateComponentsWithTestResults(Donation donation, BloodTestingRuleResult ruleResult) {
-    List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber(donation
-        .getDonationIdentificationNumber());
-    if (components != null) {
-      for (Component component : components) {
-        // FIXME: this method should be in this service, but it has too many references in ComponentRepository
-        componentRepository.updateComponentInternalFields(component);
-      }
-    }
-  }
-
   protected void setBloodTestingRepository(BloodTestingRepository bloodTestingRepository) {
     this.bloodTestingRepository = bloodTestingRepository;
+  }
+
+  public Map<String, Object> getBloodTestShortNames() {
+    List<String> basicTtiTestNames = new ArrayList<String>();
+    List<String> repeatTtiTestNames = new ArrayList<String>();
+    List<String> basicBloodTypingTestNames = new ArrayList<String>();
+    List<String> repeatBloodTypingTestNames = new ArrayList<String>();
+
+    Map<String, Object> map = new HashMap<String, Object>();
+
+    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
+      basicTtiTestNames.add(rawBloodTest.getTestNameShort());
+    }
+    map.put("basicTtiTestNames", basicTtiTestNames);
+    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
+      repeatTtiTestNames.add(rawBloodTest.getTestNameShort());
+    }
+    map.put("repeatTtiTestNames", repeatTtiTestNames);
+    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
+      basicBloodTypingTestNames.add(rawBloodTest.getTestNameShort());
+    }
+    map.put("basicBloodTypingTestNames", basicBloodTypingTestNames);
+    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)) {
+      repeatBloodTypingTestNames.add(rawBloodTest.getTestNameShort());
+    }
+    map.put("repeatBloodTypingTestNames", repeatBloodTypingTestNames);
+
+    return map;
   }
 }

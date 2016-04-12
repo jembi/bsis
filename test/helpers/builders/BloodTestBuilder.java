@@ -12,6 +12,7 @@ public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
   private String validResults;
   private Boolean isEmptyAllowed;
   private String testName;
+  private String testNameShort;
 
   public BloodTestBuilder withId(Long id) {
     this.id = id;
@@ -48,6 +49,11 @@ public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
     return this;
   }
 
+  public BloodTestBuilder withTestNameShort(String testNameShort) {
+    this.testNameShort = testNameShort;
+    return this;
+  }
+
   @Override
   public BloodTest build() {
     BloodTest bloodTest = new BloodTest();
@@ -58,6 +64,7 @@ public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
     bloodTest.setValidResults(validResults);
     bloodTest.setIsEmptyAllowed(isEmptyAllowed);
     bloodTest.setTestName(testName);
+    bloodTest.setTestNameShort(testNameShort);
     return bloodTest;
   }
 

@@ -114,15 +114,14 @@ public class TestResultController {
 
   @RequestMapping(value = "/report", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
-  public ResponseEntity<Map<String, Object>> getTestBatchOutcomesReport(HttpServletRequest request,
-      @RequestParam(value = "testBatch", required = true) Long testBatchId) {
+  public ResponseEntity<Map<String, Object>> getTestBatchOutcomesReport(@RequestParam(value = "testBatch", required = true) Long testBatchId) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
-    List<DonationTestOutcomesReportViewModel> testBatchReport =
+    List<DonationTestOutcomesReportViewModel> donationTestOutcomesReports =
         testBatchViewModelFactory.createDonationTestOutcomesReportViewModels(testBatch);
 
-    map.put("testResults", testBatchReport);
+    Map<String, Object> map = bloodTestsService.getBloodTestShortNames();
+    map.put("donationTestOutcomesReports", donationTestOutcomesReports);
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
