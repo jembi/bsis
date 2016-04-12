@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import model.donationbatch.DonationBatch;
-import model.testbatch.TestBatch;
-import model.testbatch.TestBatchStatus;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import model.donationbatch.DonationBatch;
+import model.testbatch.TestBatch;
+import model.testbatch.TestBatchStatus;
 import repository.DonationBatchRepository;
 import repository.TestBatchRepository;
 
@@ -35,6 +34,10 @@ public class TestBatchCRUDService {
   public TestBatch updateTestBatch(Long testBatchId, TestBatchStatus newStatus, Date newCreatedDate, List<Long> newDonationBatchIds) {
 
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
+
+    if (newDonationBatchIds == null || newDonationBatchIds.size() == 0) {
+      throw new IllegalStateException("The test batch must contain at least one donation batch.");
+    }
 
     if (newStatus != null) {
       testBatch = changeTestBatchStatus(testBatch, newStatus);
