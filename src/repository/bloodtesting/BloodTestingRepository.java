@@ -22,6 +22,12 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestContext;
@@ -29,27 +35,17 @@ import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.BloodTestType;
 import model.bloodtesting.TTIStatus;
 import model.bloodtesting.WellType;
-import model.bloodtesting.rules.BloodTestSubCategory;
 import model.bloodtesting.rules.BloodTestingRule;
-import model.bloodtesting.rules.DonationField;
 import model.donation.Donation;
 import model.microtiterplate.MachineReading;
 import model.microtiterplate.MicrotiterPlate;
 import model.microtiterplate.PlateSession;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import repository.GenericConfigRepository;
 import repository.WellTypeRepository;
 import viewmodel.BloodTestResultViewModel;
 import viewmodel.BloodTestingRuleResult;
-import backingform.BloodTestBackingForm;
 
 @Repository
 @Transactional
@@ -370,14 +366,6 @@ public class BloodTestingRepository {
     return query.getSingleResult();
   }
 
-  public BloodTest findBloodTestWithWorksheetTypesById(Long bloodTestId) {
-    String queryStr = "SELECT bt FROM BloodTest bt LEFT JOIN FETCH bt.worksheetTypes WHERE "
-        + "bt.id=:bloodTestId";
-    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
-    query.setParameter("bloodTestId", bloodTestId);
-    return query.getSingleResult();
-  }
-
   public Map<String, Object> saveTTIResultsOnPlate(
       Map<String, Map<String, Object>> ttiResultsMap, Long ttiTestId) {
 
@@ -594,121 +582,6 @@ public class BloodTestingRepository {
     query.setParameter("ruleId", ruleId);
     query.executeUpdate();
     em.flush();
-  }
-
-  public void saveBloodTest(BloodTestBackingForm form) {
-    BloodTest bt = form.getBloodTest();
-    bt.setIsEmptyAllowed(false);
-    //		bt.setNegativeResults("");
-    //		bt.setPositiveResults("");
-    //		bt.setValidResults("+,-");
-    bt.setRankInCategory(1);
-    bt.setIsActive(true);
-    BloodTestCategory category = bt.getCategory();
-    if (category.equals(BloodTestCategory.BLOODTYPING)) {
-      bt.setBloodTestType(BloodTestType.ADVANCED_BLOODTYPING);
-      bt.setContext(genericConfigRepository
-          .getCurrentBloodTypingContext());
-      em.persist(bt);
-    } else {
-      bt.setBloodTestType(BloodTestType.BASIC_TTI);
-      bt.setContext(BloodTestContext.RECORD_TTI_TESTS);
-      Integer numConfirmtatoryTests = 0;
-      if (form.getNumberOfConfirmatoryTests() != null)
-        numConfirmtatoryTests = form.getNumberOfConfirmatoryTests();
-      List<Long> pendingTestIds = new ArrayList<Long>();
-      em.persist(bt);
-      em.refresh(bt);
-
-      BloodTestingRule ttiSafeRule = new BloodTestingRule();
-      ttiSafeRule.setBloodTestsIds("" + bt.getId());
-      ttiSafeRule.setPattern("-");
-      ttiSafeRule.setDonationFieldChanged(DonationField.TTISTATUS);
-      ttiSafeRule.setNewInformation(TTIStatus.TTI_SAFE.toString());
-      ttiSafeRule.setExtraInformation("");
-      ttiSafeRule.setContext(BloodTestContext.RECORD_TTI_TESTS);
-      ttiSafeRule.setCategory(BloodTestCategory.TTI);
-      ttiSafeRule.setSubCategory(BloodTestSubCategory.TTI);
-      ttiSafeRule.setPendingTestsIds("");
-      ttiSafeRule.setMarkSampleAsUnsafe(false);
-      ttiSafeRule.setIsActive(true);
-      em.persist(ttiSafeRule);
-
-      for (int i = 1; i <= numConfirmtatoryTests; ++i) {
-        BloodTest confirmatoryBloodTest = new BloodTest();
-        confirmatoryBloodTest.setTestName(bt.getTestName()
-            + " Confirmatory " + i);
-        confirmatoryBloodTest.setTestNameShort(bt.getTestNameShort()
-            + " Conf " + i);
-        confirmatoryBloodTest.setCategory(category);
-        confirmatoryBloodTest
-            .setBloodTestType(BloodTestType.CONFIRMATORY_TTI);
-        confirmatoryBloodTest
-            .setContext(BloodTestContext.RECORD_TTI_TESTS);
-        confirmatoryBloodTest.setIsEmptyAllowed(false);
-        confirmatoryBloodTest.setNegativeResults("");
-        confirmatoryBloodTest.setPositiveResults("");
-        confirmatoryBloodTest.setValidResults("+,-");
-        confirmatoryBloodTest.setRankInCategory(1);
-        confirmatoryBloodTest.setIsActive(true);
-        em.persist(confirmatoryBloodTest);
-        em.refresh(confirmatoryBloodTest);
-        pendingTestIds.add(Long.valueOf(i));
-
-        BloodTestingRule confirmatoryTestRule = new BloodTestingRule();
-        confirmatoryTestRule.setBloodTestsIds(""
-            + confirmatoryBloodTest.getId());
-        confirmatoryTestRule.setPattern("+");
-        confirmatoryTestRule
-            .setDonationFieldChanged(DonationField.TTISTATUS);
-        confirmatoryTestRule.setNewInformation(TTIStatus.TTI_UNSAFE
-            .toString());
-        confirmatoryTestRule.setExtraInformation("");
-        confirmatoryTestRule
-            .setContext(BloodTestContext.RECORD_TTI_TESTS);
-        confirmatoryTestRule.setCategory(BloodTestCategory.TTI);
-        confirmatoryTestRule.setSubCategory(BloodTestSubCategory.TTI);
-        confirmatoryTestRule.setPendingTestsIds("");
-        confirmatoryTestRule.setMarkSampleAsUnsafe(false);
-        confirmatoryTestRule.setIsActive(true);
-        em.persist(confirmatoryTestRule);
-      }
-
-      BloodTestingRule ttiUnsafeRule = new BloodTestingRule();
-      ttiUnsafeRule.setBloodTestsIds("" + bt.getId());
-      ttiUnsafeRule.setPattern("+");
-      ttiUnsafeRule.setDonationFieldChanged(DonationField.TTISTATUS);
-      ttiUnsafeRule.setNewInformation(TTIStatus.TTI_UNSAFE.toString());
-      ttiUnsafeRule.setExtraInformation("");
-      ttiUnsafeRule.setContext(BloodTestContext.RECORD_TTI_TESTS);
-      ttiUnsafeRule.setCategory(BloodTestCategory.TTI);
-      ttiUnsafeRule.setSubCategory(BloodTestSubCategory.TTI);
-      ttiUnsafeRule.setPendingTestsIds(StringUtils.join(pendingTestIds,
-          ","));
-      ttiUnsafeRule.setMarkSampleAsUnsafe(false);
-      ttiUnsafeRule.setIsActive(true);
-      em.persist(ttiUnsafeRule);
-    }
-  }
-
-  /**
-   * TODO - To be improved issue - #225
-   */
-  public BloodTest updateBloodTest(BloodTestBackingForm backingObject){
-    return em.merge(backingObject.getBloodTest());
-  }
-
-
-  public void deactivateBloodTest(Long bloodTestId) {
-    BloodTest bt = findBloodTestById(bloodTestId);
-    bt.setIsActive(false);
-    em.merge(bt);
-  }
-
-  public void activateBloodTest(Long bloodTestId) {
-    BloodTest bt = findBloodTestById(bloodTestId);
-    bt.setIsActive(true);
-    em.merge(bt);
   }
 
   public Map<String, Map<Long, Long>> findNumberOfPositiveTests(
