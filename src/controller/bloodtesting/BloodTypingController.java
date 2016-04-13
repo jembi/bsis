@@ -26,9 +26,6 @@ public class BloodTypingController {
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
 
-  public BloodTypingController() {
-  }
-
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_BLOOD_TYPING_OUTCOME + "')")
   public Map<String, Object> getBloodTypingForm(HttpServletRequest request) {
