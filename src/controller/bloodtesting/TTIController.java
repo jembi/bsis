@@ -26,9 +26,6 @@ public class TTIController {
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
 
-  public TTIController() {
-  }
-
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TTI_OUTCOME + "')")
   public Map<String, Object> getTTIForm(HttpServletRequest request) {
