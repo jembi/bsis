@@ -107,50 +107,6 @@ public class BloodTestingRepository {
   }
 
   /**
-   * FIXME: This method should be in BloodTestsService, but due to references in this repository, it was not moved
-   * FIXME: param donationId is not used
-   */
-  public Map<Long, String> validateTestResultValues(Map<Long, String> bloodTypingTestResults) {
-
-    /**
-     * Build a map of active blood test ids to the active blood tests.
-     */
-    Map<String, BloodTest> activeBloodTestsMap = new HashMap<>();
-    for (BloodTest bloodTypingTest : findActiveBloodTests()) {
-      activeBloodTestsMap.put(bloodTypingTest.getId().toString(), bloodTypingTest);
-    }
-
-    Map<Long, String> errorMap = new HashMap<>();
-
-    for (Long testId : bloodTypingTestResults.keySet()) {
-
-      BloodTest activeBloodTest = activeBloodTestsMap.get(testId.toString());
-
-      if (activeBloodTest == null) {
-        // No active test was found for the provided id
-        errorMap.put(testId, "Invalid test");
-        break;
-      }
-
-      String result = bloodTypingTestResults.get(testId);
-
-      if (!activeBloodTest.getIsEmptyAllowed() && StringUtils.isBlank(result)) {
-        // Empty results are not allowed for this test and the provided result is empty
-        errorMap.put(testId, "No value specified");
-        break;
-      }
-
-      if (!activeBloodTest.getValidResultsList().contains(result)) {
-        // The provided result is not in the list of valid results
-        errorMap.put(testId, "Invalid value specified");
-        break;
-      }
-    }
-
-    return errorMap;
-  }
-
-  /**
    * Save the BloodTestingRuleResult and update the Donation blood ABO/Rh and blood typing statuses
    *
    * @param bloodTestResultsForDonation Map of test results with the BloodTest identifier as the

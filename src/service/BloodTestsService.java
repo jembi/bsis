@@ -59,20 +59,6 @@ public class BloodTestsService {
     return ruleResult;
   }
 
-
-  /**
-   * Validate the test results to ensure that the test results comply with the BloodTests
-   * configured
-   *
-   * @param bloodTypingTestResults Map<Long, String> containing String results mapped to BloodTest
-   *                               identifiers
-   * @return Map<Long, String> of errors mapped to BloodTest identifiers
-   */
-  public Map<Long, String> validateTestResultValues(Map<Long, String> bloodTypingTestResults) {
-    // FIXME: this method should be in this service but due to the many references in BloodTestingRepository, it was not moved
-    return bloodTestingRepository.validateTestResultValues(bloodTypingTestResults);
-  }
-
   /**
    * Saves the BloodTest results for a list of donations and updates each donation (bloodAbo/Rh and
    * statuses)
