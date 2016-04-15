@@ -13,19 +13,20 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.reporting.Report;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import model.reporting.Report;
 import repository.DonationRepository;
+import repository.DonorReportsRepository;
 import repository.LocationRepository;
 import repository.ComponentRepository;
 import repository.RequestRepository;
@@ -34,6 +35,7 @@ import repository.bloodtesting.BloodTestingRepository;
 import service.ReportGeneratorService;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
+import viewmodel.ReportViewModel;
 
 @RestController
 @RequestMapping("reports")
@@ -59,6 +61,28 @@ public class ReportsController {
 
   @Autowired
   private TipsRepository tipsRepository;
+  
+  @Autowired
+  private DonorReportsRepository donorReportsRepository;
+  
+  @RequestMapping(value = "/donors/{type}", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_REPORTING_INFORMATION + "')")
+  public ReportViewModel getDonorReport(@PathVariable String type) {
+    model.dto.Report report = new model.dto.Report();
+
+    // Populate the report fields based on the type
+    switch (type) {
+
+      case "donorPanels":
+        report.setRows(donorReportsRepository.generateDonorByDonorPanelReport());
+        break;
+
+      default:
+        throw new IllegalArgumentException("Invalid report type: " + type);
+    }
+
+    return new ReportViewModel(report);
+  }
 
   @RequestMapping(value = "/inventory/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_REPORTING_INFORMATION + "')")
