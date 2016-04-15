@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import backingform.TestResultBackingForm;
+import backingform.TestResultsBackingForm;
 import factory.TestBatchViewModelFactory;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.BloodTestType;
@@ -232,7 +232,7 @@ public class TestResultController {
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
   @RequestMapping(method = RequestMethod.POST)
   public ResponseEntity<Map<String, Object>> saveTestResults(
-      @RequestBody @Valid List<TestResultBackingForm> testResultsBackingForms,
+      @RequestBody @Valid List<TestResultsBackingForm> testResultsBackingForms,
       @RequestParam(value = "reEntry", required = false, defaultValue = "false") boolean reEntry) {
 
     HttpStatus responseStatus = HttpStatus.CREATED;
@@ -240,7 +240,7 @@ public class TestResultController {
     
     // Validate test results
     Map<Long, String> errors = new HashMap<>();
-    for (TestResultBackingForm form : testResultsBackingForms) {
+    for (TestResultsBackingForm form : testResultsBackingForms) {
       errors = bloodTestsService.validateTestResultValues(form.getTestResults());
       if (!errors.isEmpty()) {
         break;

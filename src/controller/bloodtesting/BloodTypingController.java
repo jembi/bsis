@@ -25,7 +25,7 @@ import utils.PermissionConstants;
 import viewmodel.BloodTestViewModel;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.DonationViewModel;
-import backingform.TestResultBackingForm;
+import backingform.TestResultsBackingForm;
 
 @RestController
 @RequestMapping("bloodgroupingtests")

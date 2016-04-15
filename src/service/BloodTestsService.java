@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import backingform.TestResultBackingForm;
+import backingform.TestResultsBackingForm;
 import constant.GeneralConfigConstants;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestType;
@@ -80,9 +80,9 @@ public class BloodTestsService {
    * @param forms the forms
    * @param reEntry the re entry
    */
-  public void saveBloodTests(List<TestResultBackingForm> forms, boolean reEntry) {
+  public void saveBloodTests(List<TestResultsBackingForm> forms, boolean reEntry) {
 
-    for (TestResultBackingForm form:forms) {
+    for (TestResultsBackingForm form:forms) {
 
       // Get donation
       Donation donation = donationRepository.findDonationByDonationIdentificationNumber(form.getDonationIdentificationNumber());

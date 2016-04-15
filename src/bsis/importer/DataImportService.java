@@ -63,7 +63,7 @@ import backingform.DeferralBackingForm;
 import backingform.DonationBackingForm;
 import backingform.DonorBackingForm;
 import backingform.LocationBackingForm;
-import backingform.TestResultBackingForm;
+import backingform.TestResultsBackingForm;
 import backingform.validator.DeferralBackingFormValidator;
 import backingform.validator.DonationBackingFormValidator;
 import backingform.validator.DonorBackingFormValidator;
@@ -912,7 +912,7 @@ public class DataImportService {
       // There's no existing TestResultBackingFormValidator, and the existing form is a bit
       // different from what the import requires.
       // We'll just use this form for presenting error messages.
-      TestResultBackingForm testOutcomeBackingForm = new TestResultBackingForm();
+      TestResultsBackingForm testOutcomeBackingForm = new TestResultsBackingForm();
       BindException errors = new BindException(testOutcomeBackingForm, "TestResultBackingForm");
 
       Date testedOn = null;
