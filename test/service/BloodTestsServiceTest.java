@@ -1,6 +1,9 @@
 package service;
 
 
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -19,9 +22,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import backingform.TestResultsBackingForm;
 import constant.GeneralConfigConstants;
 import helpers.builders.BloodTestBuilder;
 import helpers.builders.BloodTestResultBuilder;
@@ -29,6 +32,7 @@ import helpers.builders.BloodTestingRuleResultBuilder;
 import helpers.builders.DonationBatchBuilder;
 import helpers.builders.DonationBuilder;
 import helpers.builders.TestBatchBuilder;
+import helpers.builders.TestResultsBackingFormBuilder;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
@@ -45,6 +49,9 @@ import viewmodel.BloodTestingRuleResult;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BloodTestsServiceTest {
+
+  private static final String IRRELEVANT_DONATION_DIN_1 = "1111111";
+  private static final String IRRELEVANT_DONATION_DIN_2 = "2222222";
 
   @InjectMocks
   BloodTestsService service;
@@ -393,152 +400,7 @@ public class BloodTestsServiceTest {
     Assert.assertTrue("Extra information set correctly", "test3test1,test2".equals(updatedExtraInformation) || "test3test2,test1".equals(updatedExtraInformation));
   }
 
-  @Test
-  public void testValidateTestResultValuesValidResult() throws Exception {
-    // set up data
-    Map<Long, String> bloodTypingTestResults = new HashMap<>();
-    bloodTypingTestResults.put(1l, "A"); // invalid result
-    bloodTypingTestResults.put(2l, "POS"); // invalid result
 
-    List<BloodTest> tests = new ArrayList<>();
-    tests.add(BloodTestBuilder.aBloodTest().withId(1l).withValidResults("A,B,AB,O").withIsEmptyAllowed(true).build());
-    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,NEG").withIsEmptyAllowed(true).build());
-
-    // set up mocks
-    //when(bloodTestingRepository.findActiveBloodTests()).thenReturn(tests);
-    when(entityManager.createQuery("SELECT b FROM BloodTest b WHERE b.isActive = :isActive ", BloodTest.class)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
-    when(typedQuery.getResultList()).thenReturn(tests);
-
-    // run test
-    Map<Long, String> errorMap = service.validateTestResultValues(bloodTypingTestResults);
-
-    // do asserts
-    Assert.assertNotNull("Results returned", errorMap);
-    Assert.assertEquals("errors found", 0, errorMap.size());
-  }
-
-  @Test
-  public void testValidateTestResultValuesInvalidResult() throws Exception {
-    // set up data
-    Map<Long, String> bloodTypingTestResults = new HashMap<>();
-    bloodTypingTestResults.put(1l, "G"); // invalid result
-    bloodTypingTestResults.put(2l, "FALSE"); // invalid result
-
-    List<BloodTest> tests = new ArrayList<>();
-    tests.add(BloodTestBuilder.aBloodTest().withId(1l).withValidResults("A,B,AB,O").withIsEmptyAllowed(true).build());
-    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,NEG").withIsEmptyAllowed(true).build());
-
-    // set up mocks
-    //when(bloodTestingRepository.findActiveBloodTests()).thenReturn(tests);
-    when(entityManager.createQuery("SELECT b FROM BloodTest b WHERE b.isActive = :isActive ", BloodTest.class)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
-    when(typedQuery.getResultList()).thenReturn(tests);
-
-    // run test
-    Map<Long, String> errorMap = service.validateTestResultValues(bloodTypingTestResults);
-
-    // do asserts
-    Assert.assertNotNull("Results returned", errorMap);
-    Assert.assertEquals("errors found", 1, errorMap.size()); // note: stops after 1st error encountered
-    Assert.assertEquals("error message correct", "Invalid value specified", errorMap.get(1l));
-  }
-
-  @Test
-  public void testValidateTestResultValuesNoTestResults() throws Exception {
-    // set up data
-    Map<Long, String> bloodTypingTestResults = new HashMap<>();
-
-    List<BloodTest> tests = new ArrayList<>();
-    tests.add(BloodTestBuilder.aBloodTest().withId(1l).withValidResults("A,B,AB,O").withIsEmptyAllowed(true).build());
-    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,NEG").withIsEmptyAllowed(true).build());
-
-    // set up mocks
-    //when(bloodTestingRepository.findActiveBloodTests()).thenReturn(tests);
-    when(entityManager.createQuery("SELECT b FROM BloodTest b WHERE b.isActive = :isActive ", BloodTest.class)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
-    when(typedQuery.getResultList()).thenReturn(tests);
-
-    // run test
-    Map<Long, String> errorMap = service.validateTestResultValues(bloodTypingTestResults);
-
-    // do asserts
-    Assert.assertNotNull("Results returned", errorMap);
-    Assert.assertEquals("errors found", 0, errorMap.size());
-  }
-
-  @Test
-  public void testValidateTestResultValuesNoValueSpecified() throws Exception {
-    // set up data
-    Map<Long, String> bloodTypingTestResults = new HashMap<>();
-    bloodTypingTestResults.put(2l, "");
-
-    List<BloodTest> tests = new ArrayList<>();
-    tests.add(BloodTestBuilder.aBloodTest().withId(1l).withValidResults("A,B,AB,O").withIsEmptyAllowed(false).build());
-    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,NEG").withIsEmptyAllowed(false).build());
-
-    // set up mocks
-    //when(bloodTestingRepository.findActiveBloodTests()).thenReturn(tests);
-    when(entityManager.createQuery("SELECT b FROM BloodTest b WHERE b.isActive = :isActive ", BloodTest.class)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
-    when(typedQuery.getResultList()).thenReturn(tests);
-
-    // run test
-    Map<Long, String> errorMap = service.validateTestResultValues(bloodTypingTestResults);
-
-    // do asserts
-    Assert.assertNotNull("Results returned", errorMap);
-    Assert.assertEquals("errors found", 1, errorMap.size());
-    Assert.assertEquals("error message correct", "No value specified", errorMap.get(2l));
-  }
-
-  @Test
-  public void testValidateTestResultValuesNoValueSpecifiedEmptyAllowed() throws Exception {
-    // set up data
-    Map<Long, String> bloodTypingTestResults = new HashMap<>();
-    bloodTypingTestResults.put(2l, "");
-
-    List<BloodTest> tests = new ArrayList<>();
-    // FIXME: had to force an empty string into the valid results
-    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,,NEG").withIsEmptyAllowed(true).build());
-
-    // set up mocks
-    //when(bloodTestingRepository.findActiveBloodTests()).thenReturn(tests);
-    when(entityManager.createQuery("SELECT b FROM BloodTest b WHERE b.isActive = :isActive ", BloodTest.class)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
-    when(typedQuery.getResultList()).thenReturn(tests);
-
-    // run test
-    Map<Long, String> errorMap = service.validateTestResultValues(bloodTypingTestResults);
-
-    // do asserts
-    Assert.assertNotNull("Results returned", errorMap);
-    Assert.assertEquals("errors found", 0, errorMap.size());
-  }
-
-  @Test
-  public void testValidateTestResultValuesInvalidTest() throws Exception {
-    // set up data
-    Map<Long, String> bloodTypingTestResults = new HashMap<>();
-    bloodTypingTestResults.put(123l, "FALSE");
-
-    List<BloodTest> tests = new ArrayList<>();
-    tests.add(BloodTestBuilder.aBloodTest().withId(1l).build());
-
-    // set up mocks
-    //when(bloodTestingRepository.findActiveBloodTests()).thenReturn(tests);
-    when(entityManager.createQuery("SELECT b FROM BloodTest b WHERE b.isActive = :isActive ", BloodTest.class)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
-    when(typedQuery.getResultList()).thenReturn(tests);
-
-    // run test
-    Map<Long, String> errorMap = service.validateTestResultValues(bloodTypingTestResults);
-
-    // check asserts
-    Assert.assertNotNull("Results returned", errorMap);
-    Assert.assertEquals("errors found", 1, errorMap.size());
-    Assert.assertEquals("error message correct", "Invalid test", errorMap.get(123l));
-  }
 
   @Test
   public void testSaveBloodTestingResultsTestBatchNotReleased() throws Exception {
@@ -546,7 +408,7 @@ public class BloodTestsServiceTest {
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.OPEN).build();
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
     Donation donation = DonationBuilder.aDonation()
-        .withId(1l)
+        .withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
@@ -570,6 +432,7 @@ public class BloodTestsServiceTest {
 
     // set up mocks
     when(donationRepository.findDonationById(donation.getId())).thenReturn(donation);
+    when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)).thenReturn(donation);
     when(ruleEngine.applyBloodTests(donation, bloodTestResults)).thenReturn(ruleResult);
     when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE " + "bt.donation.id=:donationId",
         BloodTestResult.class)).thenReturn(typedQuery);
@@ -581,12 +444,17 @@ public class BloodTestsServiceTest {
     when(typedQuery.getSingleResult()).thenReturn(bloodTest);
 
     // run test
-    BloodTestingRuleResult returnedRuleResult = service.saveBloodTests(donation.getId(), bloodTestResults, true);
+    TestResultsBackingForm form = TestResultsBackingFormBuilder.aTestResultsBackingForm()
+        .withDonationIdentificationNumber(donation.getDonationIdentificationNumber())
+        .withTestResults(bloodTestResults)
+        .build();
+    ArrayList<TestResultsBackingForm> forms = new ArrayList<>();
+    forms.add(form);
+    service.saveBloodTests(forms, true);
 
     // check asserts
-    Assert.assertNotNull("ruleResult returned", returnedRuleResult);
     Assert.assertEquals("ABO correct", "AB", donation.getBloodAbo());
-    Mockito.verify(testBatchStatusChangeService, Mockito.never()).handleRelease(donation);
+    verify(testBatchStatusChangeService, never()).handleRelease(donation);
   }
   
   @Test
@@ -595,7 +463,7 @@ public class BloodTestsServiceTest {
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.RELEASED).build();
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
     Donation donation = DonationBuilder.aDonation()
-        .withId(1l)
+        .withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
@@ -618,7 +486,7 @@ public class BloodTestsServiceTest {
         .build();
 
     // set up mocks
-    when(donationRepository.findDonationById(donation.getId())).thenReturn(donation);
+    when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)).thenReturn(donation);
     when(ruleEngine.applyBloodTests(donation, bloodTestResults)).thenReturn(ruleResult);
     when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE " + "bt.donation.id=:donationId",
         BloodTestResult.class)).thenReturn(typedQuery);
@@ -630,12 +498,16 @@ public class BloodTestsServiceTest {
     when(typedQuery.getSingleResult()).thenReturn(bloodTest);
 
     // run test
-    BloodTestingRuleResult returnedRuleResult = service.saveBloodTests(donation.getId(), bloodTestResults, true);
-
+    TestResultsBackingForm form = TestResultsBackingFormBuilder.aTestResultsBackingForm()
+        .withDonationIdentificationNumber(donation.getDonationIdentificationNumber())
+        .withTestResults(bloodTestResults)
+        .build();
+    ArrayList<TestResultsBackingForm> forms = new ArrayList<>();
+    forms.add(form);
+    service.saveBloodTests(forms, true);
     // check asserts
-    Assert.assertNotNull("ruleResult returned", returnedRuleResult);
     Assert.assertEquals("ABO correct", "AB", donation.getBloodAbo());
-    Mockito.verify(testBatchStatusChangeService).handleRelease(donation);
+    verify(testBatchStatusChangeService).handleRelease(donation);
   }
   
   @Test
@@ -644,7 +516,7 @@ public class BloodTestsServiceTest {
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.OPEN).build();
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
     Donation donation = DonationBuilder.aDonation()
-        .withId(1l)
+        .withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
@@ -670,7 +542,7 @@ public class BloodTestsServiceTest {
         .build();
 
     // set up mocks
-    when(donationRepository.findDonationById(donation.getId())).thenReturn(donation);
+    when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)).thenReturn(donation);
     when(ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults)).thenReturn(ruleResult).thenReturn(ruleResult);
     when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE " + "bt.donation.id=:donationId",
         BloodTestResult.class)).thenReturn(typedQuery);
@@ -683,10 +555,16 @@ public class BloodTestsServiceTest {
     when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.TESTING_RE_ENTRY_REQUIRED, true)).thenReturn(true);
 
     // run test
-    service.saveBloodTests(donation.getId(), bloodTestResults, false);
+    TestResultsBackingForm form = TestResultsBackingFormBuilder.aTestResultsBackingForm()
+        .withDonationIdentificationNumber(donation.getDonationIdentificationNumber())
+        .withTestResults(bloodTestResults)
+        .build();
+    ArrayList<TestResultsBackingForm> forms = new ArrayList<>();
+    forms.add(form);
+    service.saveBloodTests(forms, false);
 
     // check asserts
-    Mockito.verify(ruleEngine, Mockito.times(2)).applyBloodTests(donation, reEnteredBloodTestResults);
+    verify(ruleEngine, times(2)).applyBloodTests(donation, reEnteredBloodTestResults);
   }
 
   @Test
@@ -694,8 +572,11 @@ public class BloodTestsServiceTest {
     // set up data
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.RELEASED).build();
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
-    Donation donation = DonationBuilder.aDonation().withId(1l).withTTIStatus(TTIStatus.TTI_SAFE)
-        .withBloodTypingStatus(BloodTypingStatus.COMPLETE).withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+    Donation donation = DonationBuilder.aDonation()
+        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withDonationBatch(donationBatch).build();
 
     Map<Long, String> bloodTestResults = new HashMap<>();
@@ -709,7 +590,7 @@ public class BloodTestsServiceTest {
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withExtraInformation(new HashSet<String>()).build();
 
     // set up mocks
-    when(donationRepository.findDonationById(donation.getId())).thenReturn(donation);
+    when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)).thenReturn(donation);
     when(ruleEngine.applyBloodTests(donation, bloodTestResults)).thenReturn(ruleResult);
     when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE " + "bt.donation.id=:donationId",
         BloodTestResult.class)).thenReturn(typedQuery);
@@ -722,12 +603,78 @@ public class BloodTestsServiceTest {
     when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.TESTING_RE_ENTRY_REQUIRED, true)).thenReturn(true);
 
     // run test with re-entry = false
-    service.saveBloodTests(donation.getId(), bloodTestResults, false);
-    Mockito.verify(testBatchStatusChangeService, Mockito.never()).handleRelease(donation);
+    TestResultsBackingForm form = TestResultsBackingFormBuilder.aTestResultsBackingForm()
+        .withDonationIdentificationNumber(donation.getDonationIdentificationNumber())
+        .withTestResults(bloodTestResults)
+        .build();
+    ArrayList<TestResultsBackingForm> forms = new ArrayList<>();
+    forms.add(form);
+    service.saveBloodTests(forms, false);
+    
+    verify(testBatchStatusChangeService, never()).handleRelease(donation);
 
     // run test with re-entry = true
-    service.saveBloodTests(donation.getId(), bloodTestResults, true);
-    Mockito.verify(testBatchStatusChangeService).handleRelease(donation);
+    service.saveBloodTests(forms, true);
+    verify(testBatchStatusChangeService).handleRelease(donation);
+
+  }
+  
+  @Test
+  public void testSaveBloodTestingResultsForListOfDonations() throws Exception {
+    // set up data
+    TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.OPEN).build();
+    DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
+    Donation donation1 = DonationBuilder.aDonation()
+        .withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
+        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+        .withDonationBatch(donationBatch)
+        .build();
+    Donation donation2 = DonationBuilder.aDonation()
+        .withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_2)
+        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+        .withDonationBatch(donationBatch)
+        .build();
+
+    Map<Long, String> bloodTestResults = new HashMap<>();
+    bloodTestResults.put(1l, "AB");
+    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(17l).build();
+    List<BloodTestResult> bloodTestResultList = new ArrayList<>();
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1l).withBloodTest(bloodTest).build());
+    
+    // set up mocks
+    when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1))
+        .thenReturn(donation1);
+    when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_2))
+        .thenReturn(donation2);
+    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE " + "bt.donation.id=:donationId",
+        BloodTestResult.class)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
+    when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
+    when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
+        .thenReturn(typedQuery);
+    when(typedQuery.setParameter("bloodTestId", 17)).thenReturn(typedQuery);
+
+    // run test
+    TestResultsBackingForm form1 = TestResultsBackingFormBuilder.aTestResultsBackingForm()
+        .withDonationIdentificationNumber(donation1.getDonationIdentificationNumber())
+        .withTestResults(bloodTestResults)
+        .build();
+    TestResultsBackingForm form2 = TestResultsBackingFormBuilder.aTestResultsBackingForm()
+        .withDonationIdentificationNumber(donation2.getDonationIdentificationNumber())
+        .withTestResults(bloodTestResults)
+        .build();
+    ArrayList<TestResultsBackingForm> forms = new ArrayList<>();
+    forms.add(form1);
+    forms.add(form2);
+    service.saveBloodTests(forms, true);
+
+    // check asserts
+    verify(ruleEngine, times(2)).applyBloodTests(donation1, bloodTestResults);
+    verify(ruleEngine, times(2)).applyBloodTests(donation2, bloodTestResults);
 
   }
 }
