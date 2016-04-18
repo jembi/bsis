@@ -2,7 +2,7 @@ package backingform;
 
 import java.util.Map;
 
-public class TestResultBackingForm {
+public class TestResultsBackingForm {
 
   private String donationIdentificationNumber;
   private Map<Long, String> testResults;

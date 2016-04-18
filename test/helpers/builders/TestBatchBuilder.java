@@ -77,5 +77,11 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
   public static TestBatchBuilder aTestBatch() {
     return new TestBatchBuilder();
   }
+  
+  public static TestBatchBuilder aReleasedTestBatch() {
+    TestBatchBuilder builder = new TestBatchBuilder();
+    builder.withStatus(TestBatchStatus.RELEASED);
+    return builder;
+  }
 
 }

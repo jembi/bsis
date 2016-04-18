@@ -6,13 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import backingform.TestResultBackingForm;
+import backingform.TestResultsBackingForms;
+import backingform.validator.TestResultsBackingFormsValidator;
 import factory.TestBatchViewModelFactory;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.BloodTestType;
@@ -61,7 +64,12 @@ public class TestResultController {
   @Autowired
   private TestBatchViewModelFactory testBatchViewModelFactory;
 
-  public TestResultController() {
+  @Autowired
+  private TestResultsBackingFormsValidator testResultsBackingFormsValidator;
+  
+  @InitBinder
+  protected void initDonationFormBinder(WebDataBinder binder) {
+    binder.setValidator(testResultsBackingFormsValidator);
   }
 
   @RequestMapping(value = "{donationIdentificationNumber}", method = RequestMethod.GET)
@@ -232,31 +240,12 @@ public class TestResultController {
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
   @RequestMapping(method = RequestMethod.POST)
   public ResponseEntity<Map<String, Object>> saveTestResults(
-      @RequestBody @Valid TestResultBackingForm form,
+      @RequestBody @Valid TestResultsBackingForms testResultsBackingForms,
       @RequestParam(value = "reEntry", required = false, defaultValue = "false") boolean reEntry) {
 
     HttpStatus responseStatus = HttpStatus.CREATED;
     Map<String, Object> responseMap = new HashMap<>();
-
-    Donation donation = donationRepository.verifyDonationIdentificationNumber(form.getDonationIdentificationNumber());
-    if (donation == null) {
-      responseStatus = HttpStatus.NOT_FOUND;
-    } else {
-      Map<Long, String> testResults = form.getTestResults();
-      Map<Long, String> errors = bloodTestsService.validateTestResultValues(testResults);
-      if (errors.isEmpty()) {
-        // No errors
-        BloodTestingRuleResult ruleResult = bloodTestsService.saveBloodTests(donation.getId(), form.getTestResults(), reEntry);
-        responseMap.put("success", true);
-        responseMap.put("testresults", ruleResult);
-      } else {
-        // Errors found
-        responseMap.put("success", false);
-        responseMap.put("errorMap", errors);
-        responseMap.put("errorMessage", "There were errors adding tests.");
-        responseStatus = HttpStatus.BAD_REQUEST;
-      }
-    }
+    bloodTestsService.saveBloodTests(testResultsBackingForms.getTestOutcomesForDonations(), reEntry);
     return new ResponseEntity<>(responseMap, responseStatus);
   }
 

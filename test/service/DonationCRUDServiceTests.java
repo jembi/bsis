@@ -4,11 +4,15 @@ import static helpers.builders.AdverseEventBackingFormBuilder.anAdverseEventBack
 import static helpers.builders.AdverseEventBuilder.anAdverseEvent;
 import static helpers.builders.AdverseEventTypeBackingFormBuilder.anAdverseEventTypeBackingForm;
 import static helpers.builders.AdverseEventTypeBuilder.anAdverseEventType;
+import static helpers.builders.BloodTypingResolutionBackingFormBuilder.aBloodTypingResolutionBackingForm;
+import static helpers.builders.BloodTypingResolutionsBackingFormBuilder.aBloodTypingResolutionsBackingForm;
 import static helpers.builders.DonationBackingFormBuilder.aDonationBackingForm;
 import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
 import static helpers.builders.PackTypeBuilder.aPackType;
+import static helpers.builders.TestBatchBuilder.aReleasedTestBatch;
+import static helpers.builders.TestBatchBuilder.aTestBatch;
 import static helpers.matchers.DonationMatcher.hasSameStateAsDonation;
 import static helpers.matchers.DonorMatcher.hasSameStateAsDonor;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,6 +33,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import backingform.AdverseEventBackingForm;
+import backingform.BloodTypingResolutionBackingForm;
 import backingform.DonationBackingForm;
 import model.adverseevent.AdverseEvent;
 import model.donation.Donation;
@@ -40,6 +45,7 @@ import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import repository.DonorRepository;
 import repository.PackTypeRepository;
+import repository.bloodtesting.BloodTypingMatchStatus;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DonationCRUDServiceTests {
@@ -69,7 +75,9 @@ public class DonationCRUDServiceTests {
   @Mock
   private DonorService donorService;
   @Mock
-  PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
+  private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
+  @Mock
+  private TestBatchStatusChangeService testBatchStatusChangeService;
 
   @Test(expected = IllegalStateException.class)
   public void testDeleteDonationWithConstraints_shouldThrow() {
@@ -415,6 +423,69 @@ public class DonationCRUDServiceTests {
     verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafe(donation);
     verify(postDonationCounsellingCRUDService).createPostDonationCounsellingForDonation(donation);
     assertThat(returnedDonation, is(donation));
+  }
+  
+  @Test
+  public void testUpdateDonationsBloodTypingResolutions_withResolvedStatus() {
+    BloodTypingResolutionBackingForm bloodTypingResolutionBackingForm = aBloodTypingResolutionBackingForm()
+        .withDonationId(IRRELEVANT_DONATION_ID)
+        .withStatus(BloodTypingMatchStatus.RESOLVED)
+        .withBloodAbo("A")
+        .withBloodRh("POS")
+        .build();
+    DonationBatch donationBatch = aDonationBatch().withTestBatch(aReleasedTestBatch().build()).build();
+    Donation donation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS)
+        .withBloodAbo("B")
+        .withBloodRh("NEG")
+        .withDonationBatch(donationBatch)
+        .build();
+    Donation expectedDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+        .withBloodAbo("A")
+        .withBloodRh("POS")
+        .withDonationBatch(donationBatch)
+        .build();
+    
+    when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(donation);
+    when(donationRepository.updateDonation(donation)).thenReturn(donation);
+    
+    donationCRUDService.updateDonationsBloodTypingResolutions(aBloodTypingResolutionsBackingForm()
+        .withBloodTypingResolution(bloodTypingResolutionBackingForm)
+        .build());
+    
+    verify(donationRepository).updateDonation(argThat(hasSameStateAsDonation(expectedDonation)));
+    verify(testBatchStatusChangeService).handleRelease(donation);
+  }
+  
+  @Test
+  public void testUpdateDonationsBloodTypingResolutions_withNoTypeDeterminedStatus() {
+    BloodTypingResolutionBackingForm bloodTypingResolutionBackingForm = aBloodTypingResolutionBackingForm()
+        .withDonationId(IRRELEVANT_DONATION_ID)
+        .withStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED)
+        .build();
+    DonationBatch donationBatch = aDonationBatch().withTestBatch(aTestBatch().build()).build();
+    Donation donation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS)
+        .withDonationBatch(donationBatch)
+        .build();
+    Donation expectedDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED)
+        .withDonationBatch(donationBatch)
+        .build();
+    
+    when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(donation);
+    when(donationRepository.updateDonation(donation)).thenReturn(donation);
+    
+    donationCRUDService.updateDonationsBloodTypingResolutions(aBloodTypingResolutionsBackingForm()
+        .withBloodTypingResolution(bloodTypingResolutionBackingForm)
+        .build());
+    
+    verify(donationRepository).updateDonation(argThat(hasSameStateAsDonation(expectedDonation)));
   }
 
 }

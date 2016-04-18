@@ -22,8 +22,10 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import backingform.TestResultsBackingForm;
 import constant.GeneralConfigConstants;
 import helpers.builders.BloodTestBuilder;
+import helpers.builders.TestResultsBackingFormBuilder;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestType;
 import model.donation.Donation;
@@ -38,7 +40,7 @@ import viewmodel.BloodTestingRuleResult;
 
 public class BloodTestsServiceTests extends UnitTestSuite {
   
-  private static final Long IRRELEVANT_DONATION_ID = 111L;
+  private static final String IRRELEVANT_DONATION_DIN = "1234567";
   
   @InjectMocks
   private BloodTestsService bloodTestsService;
@@ -57,23 +59,28 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     // Set up fixture
     TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.OPEN).build();
     DonationBatch donationBatch = aDonationBatch().withTestBatch(testBatch).build();
-    Donation donation = aDonation().withId(IRRELEVANT_DONATION_ID).withDonationBatch(donationBatch).build();
+    Donation donation = aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN)
+        .withDonationBatch(donationBatch).build();
     Map<Long, String> bloodTestResults = new HashMap<>();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
     
     // Set up expectations
-    when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(donation);
+    when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN)).thenReturn(donation);
     when(bloodTestingRuleEngine.applyBloodTests(donation, bloodTestResults)).thenReturn(bloodTestingRuleResult);
     
     // Exercise SUT
-    BloodTestingRuleResult returnedBloodTestingRuleResult = bloodTestsService.saveBloodTests(IRRELEVANT_DONATION_ID,
-        bloodTestResults, true);
+    TestResultsBackingForm form = TestResultsBackingFormBuilder.aTestResultsBackingForm()
+        .withDonationIdentificationNumber(donation.getDonationIdentificationNumber())
+        .withTestResults(bloodTestResults)
+        .build();
+    ArrayList<TestResultsBackingForm> forms = new ArrayList<>();
+    forms.add(form);
+    bloodTestsService.saveBloodTests(forms, true);
     
     // Verify
     verify(bloodTestingRuleEngine, times(2)).applyBloodTests(donation, bloodTestResults);
     verify(bloodTestingRepository, times(2)).saveBloodTestResultsToDatabase(eq(bloodTestResults), eq(donation),
         any(Date.class), eq(bloodTestingRuleResult), eq(true));
-    assertThat(returnedBloodTestingRuleResult, is(bloodTestingRuleResult));
   }
   
   @Test
@@ -82,24 +89,28 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     // Set up fixture
     TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.OPEN).build();
     DonationBatch donationBatch = aDonationBatch().withTestBatch(testBatch).build();
-    Donation donation = aDonation().withId(IRRELEVANT_DONATION_ID).withDonationBatch(donationBatch).build();
+    Donation donation = aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN).withDonationBatch(donationBatch).build();
     Map<Long, String> bloodTestResults = new HashMap<>();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
     
     // Set up expectations
     when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.TESTING_RE_ENTRY_REQUIRED, true)).thenReturn(true);
-    when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(donation);
+    when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN)).thenReturn(donation);
     when(bloodTestingRuleEngine.applyBloodTests(donation, bloodTestResults)).thenReturn(bloodTestingRuleResult);
     
     // Exercise SUT
-    BloodTestingRuleResult returnedBloodTestingRuleResult = bloodTestsService.saveBloodTests(IRRELEVANT_DONATION_ID,
-        bloodTestResults, false);
+    TestResultsBackingForm form = TestResultsBackingFormBuilder.aTestResultsBackingForm()
+        .withDonationIdentificationNumber(donation.getDonationIdentificationNumber())
+        .withTestResults(bloodTestResults)
+        .build();
+    ArrayList<TestResultsBackingForm> forms = new ArrayList<>();
+    forms.add(form);
+    bloodTestsService.saveBloodTests(forms, false);
     
     // Verify
     verify(bloodTestingRuleEngine, times(2)).applyBloodTests(donation, bloodTestResults);
     verify(bloodTestingRepository, times(2)).saveBloodTestResultsToDatabase(eq(bloodTestResults), eq(donation),
         any(Date.class), eq(bloodTestingRuleResult), eq(false));
-    assertThat(returnedBloodTestingRuleResult, is(bloodTestingRuleResult));
   }
   
   @Test
@@ -108,24 +119,29 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     // Set up fixture
     TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.OPEN).build();
     DonationBatch donationBatch = aDonationBatch().withTestBatch(testBatch).build();
-    Donation donation = aDonation().withId(IRRELEVANT_DONATION_ID).withDonationBatch(donationBatch).build();
+    Donation donation = aDonation().withDonationBatch(donationBatch)
+        .withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN).build();
     Map<Long, String> bloodTestResults = new HashMap<>();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
     
     // Set up expectations
     when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.TESTING_RE_ENTRY_REQUIRED, true)).thenReturn(false);
-    when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(donation);
+    when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN)).thenReturn(donation);
     when(bloodTestingRuleEngine.applyBloodTests(donation, bloodTestResults)).thenReturn(bloodTestingRuleResult);
     
     // Exercise SUT
-    BloodTestingRuleResult returnedBloodTestingRuleResult = bloodTestsService.saveBloodTests(IRRELEVANT_DONATION_ID,
-        bloodTestResults, false);
+    TestResultsBackingForm form = TestResultsBackingFormBuilder.aTestResultsBackingForm()
+        .withDonationIdentificationNumber(donation.getDonationIdentificationNumber())
+        .withTestResults(bloodTestResults)
+        .build();
+    ArrayList<TestResultsBackingForm> forms = new ArrayList<>();
+    forms.add(form);
+    bloodTestsService.saveBloodTests(forms, false);
     
     // Verify
     verify(bloodTestingRuleEngine, times(2)).applyBloodTests(donation, bloodTestResults);
     verify(bloodTestingRepository, times(2)).saveBloodTestResultsToDatabase(eq(bloodTestResults), eq(donation),
         any(Date.class), eq(bloodTestingRuleResult), eq(true));
-    assertThat(returnedBloodTestingRuleResult, is(bloodTestingRuleResult));
   }
 
   @Test

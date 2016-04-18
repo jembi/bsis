@@ -21,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,26 +31,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import backingform.BloodTypingResolutionBackingForm;
+import backingform.BloodTypingResolutionsBackingForm;
 import backingform.DonationBackingForm;
-import backingform.validator.BloodTypingResolutionBackingFormValidator;
+import backingform.validator.BloodTypingResolutionsBackingFormValidator;
 import backingform.validator.DonationBackingFormValidator;
 import factory.DonationSummaryViewModelFactory;
 import factory.DonationViewModelFactory;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
 import model.packtype.PackType;
-import model.testbatch.TestBatchStatus;
 import repository.AdverseEventTypeRepository;
 import repository.DonationRepository;
 import repository.DonationTypeRepository;
 import repository.LocationRepository;
 import repository.PackTypeRepository;
 import repository.PostDonationCounsellingRepository;
-import repository.bloodtesting.BloodTypingMatchStatus;
 import service.DonationCRUDService;
 import service.FormFieldAccessorService;
-import service.TestBatchStatusChangeService;
 import utils.PermissionConstants;
 import utils.PermissionUtils;
 import viewmodel.DonationSummaryViewModel;
@@ -96,10 +92,7 @@ public class DonationController {
   private DonationSummaryViewModelFactory donationSummaryViewModelFactory;
 
   @Autowired
-  private TestBatchStatusChangeService testBatchStatusChangeService;
-
-  @Autowired
-  private BloodTypingResolutionBackingFormValidator bloodTypingResolutionBackingFormValidator;
+  private BloodTypingResolutionsBackingFormValidator bloodTypingResolutionBackingFormsValidator;
 
   public DonationController() {
   }
@@ -109,9 +102,9 @@ public class DonationController {
     binder.setValidator(donationBackingFormValidator);
   }
 
-  @InitBinder("bloodTypingResolutionBackingForm")
+  @InitBinder("bloodTypingResolutionBackingForms")
   protected void initResolutionBinder(WebDataBinder binder) {
-    binder.setValidator(bloodTypingResolutionBackingFormValidator);
+    binder.setValidator(bloodTypingResolutionBackingFormsValidator);
   }
 
   /**
@@ -327,26 +320,9 @@ public class DonationController {
   }
 
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
-  @RequestMapping(value = "{id}/bloodTypingResolution", method = RequestMethod.PUT)
-  @Transactional
-  public void saveBloodTypingResolution(
-      @PathVariable(value = "id") Long id,
-      @RequestBody @Valid BloodTypingResolutionBackingForm bloodTypingResolutionBackingForm) {
-
-    Donation donation = donationRepository.findDonationById(id);
-    if (bloodTypingResolutionBackingForm.getStatus().equals(BloodTypingMatchStatus.RESOLVED)) {
-      donation.setBloodAbo(bloodTypingResolutionBackingForm.getBloodAbo());
-      donation.setBloodRh(bloodTypingResolutionBackingForm.getBloodRh());
-      donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.RESOLVED);
-    } else {
-      donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
-    }
-
-    donation = donationRepository.updateDonation(donation);
-
-    if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
-      testBatchStatusChangeService.handleRelease(donation);
-    }
+  @RequestMapping(value = "bloodTypingResolutions", method = RequestMethod.POST)
+  public void saveBloodTypingResolutions(@RequestBody @Valid BloodTypingResolutionsBackingForm backingForm) {
+    donationCRUDService.updateDonationsBloodTypingResolutions(backingForm);
   }
 
 }

@@ -3,6 +3,8 @@ package backingform;
 import repository.bloodtesting.BloodTypingMatchStatus;
 
 public class BloodTypingResolutionBackingForm {
+  
+  private long donationId;
 
   private String bloodAbo;
 
@@ -12,6 +14,14 @@ public class BloodTypingResolutionBackingForm {
 
   public BloodTypingResolutionBackingForm() {
     super();
+  }
+
+  public long getDonationId() {
+    return donationId;
+  }
+
+  public void setDonationId(long donationId) {
+    this.donationId = donationId;
   }
 
   public String getBloodAbo() {
