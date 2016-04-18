@@ -49,13 +49,15 @@ public class TestResultsBackingFormsValidator extends BaseValidator<TestResultsB
       if (activeBloodTest == null) {
         // No active test was found for the provided id
         errors.rejectValue("testOutcomesForDonations[" + index + "].testResults", "invalid", "Invalid test");
+        return;
       }
 
       String result = form.getTestResults().get(testId);
 
       if (!activeBloodTest.getIsEmptyAllowed() && StringUtils.isBlank(result)) {
         // Empty results are not allowed for this test and the provided result is empty
-        errors.rejectValue("testOutcomesForDonations[" + index + "].testResults", "required", "Invalid test");
+        errors.rejectValue("testOutcomesForDonations[" + index + "].testResults", "required", "No value specified");
+        return;
       }
 
       if (!activeBloodTest.getValidResultsList().contains(result)) {
