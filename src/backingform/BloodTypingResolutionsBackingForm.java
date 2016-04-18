@@ -2,7 +2,7 @@ package backingform;
 
 import java.util.List;
 
-public class BloodTypingResolutionBackingFormList {
+public class BloodTypingResolutionsBackingForm {
   
   private List<BloodTypingResolutionBackingForm> bloodTypingResolutions;
 

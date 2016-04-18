@@ -5,7 +5,7 @@ import static helpers.builders.AdverseEventBuilder.anAdverseEvent;
 import static helpers.builders.AdverseEventTypeBackingFormBuilder.anAdverseEventTypeBackingForm;
 import static helpers.builders.AdverseEventTypeBuilder.anAdverseEventType;
 import static helpers.builders.BloodTypingResolutionBackingFormBuilder.aBloodTypingResolutionBackingForm;
-import static helpers.builders.BloodTypingResolutionBackingFormListBuilder.aBloodTypingResolutionBackingFormList;
+import static helpers.builders.BloodTypingResolutionsBackingFormBuilder.aBloodTypingResolutionsBackingForm;
 import static helpers.builders.DonationBackingFormBuilder.aDonationBackingForm;
 import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.DonationBuilder.aDonation;
@@ -452,7 +452,7 @@ public class DonationCRUDServiceTests {
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(donation);
     when(donationRepository.updateDonation(donation)).thenReturn(donation);
     
-    donationCRUDService.updateDonationsBloodTypingResolutions(aBloodTypingResolutionBackingFormList()
+    donationCRUDService.updateDonationsBloodTypingResolutions(aBloodTypingResolutionsBackingForm()
         .withBloodTypingResolution(bloodTypingResolutionBackingForm)
         .build());
     
@@ -481,7 +481,7 @@ public class DonationCRUDServiceTests {
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(donation);
     when(donationRepository.updateDonation(donation)).thenReturn(donation);
     
-    donationCRUDService.updateDonationsBloodTypingResolutions(aBloodTypingResolutionBackingFormList()
+    donationCRUDService.updateDonationsBloodTypingResolutions(aBloodTypingResolutionsBackingForm()
         .withBloodTypingResolution(bloodTypingResolutionBackingForm)
         .build());
     

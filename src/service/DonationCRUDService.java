@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import backingform.AdverseEventBackingForm;
 import backingform.BloodTypingResolutionBackingForm;
-import backingform.BloodTypingResolutionBackingFormList;
+import backingform.BloodTypingResolutionsBackingForm;
 import backingform.DonationBackingForm;
 import model.adverseevent.AdverseEvent;
 import model.adverseevent.AdverseEventType;
@@ -186,8 +186,8 @@ public class DonationCRUDService {
     donation.setAdverseEvent(adverseEvent);
   }
   
-  public void updateDonationsBloodTypingResolutions(BloodTypingResolutionBackingFormList backingFormList) {
-    for (BloodTypingResolutionBackingForm form : backingFormList.getBloodTypingResolutions()) {
+  public void updateDonationsBloodTypingResolutions(BloodTypingResolutionsBackingForm backingForm) {
+    for (BloodTypingResolutionBackingForm form : backingForm.getBloodTypingResolutions()) {
       updateDonationBloodTypingResolution(form);
     }
   }

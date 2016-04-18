@@ -7,15 +7,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import backingform.BloodTypingResolutionBackingForm;
-import backingform.BloodTypingResolutionBackingFormList;
+import backingform.BloodTypingResolutionsBackingForm;
 import repository.bloodtesting.BloodTypingMatchStatus;
 
 @Component
-public class BloodTypingResolutionBackingFormListValidator extends BaseValidator<BloodTypingResolutionBackingFormList> {
+public class BloodTypingResolutionsBackingFormValidator extends BaseValidator<BloodTypingResolutionsBackingForm> {
 
   @Override
-  public void validateForm(BloodTypingResolutionBackingFormList bloodTypingResolutionBackingFormList, Errors errors) {
-    List<BloodTypingResolutionBackingForm> forms = bloodTypingResolutionBackingFormList.getBloodTypingResolutions();
+  public void validateForm(BloodTypingResolutionsBackingForm backingForm, Errors errors) {
+    List<BloodTypingResolutionBackingForm> forms = backingForm.getBloodTypingResolutions();
     for (int i = 0; i < forms.size(); i++) {
       validateForm(forms.get(i), errors, i);
     }
@@ -42,7 +42,7 @@ public class BloodTypingResolutionBackingFormListValidator extends BaseValidator
 
   @Override
   public String getFormName() {
-    return "bloodTypingResolutionBackingFormList";
+    return "bloodTypingResolutionsBackingForm";
   }
 
 }

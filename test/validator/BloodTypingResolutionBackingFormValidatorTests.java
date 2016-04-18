@@ -1,6 +1,6 @@
 package validator;
 
-import static helpers.builders.BloodTypingResolutionBackingFormListBuilder.aBloodTypingResolutionBackingFormList;
+import static helpers.builders.BloodTypingResolutionsBackingFormBuilder.aBloodTypingResolutionsBackingForm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -12,15 +12,15 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 
 import backingform.BloodTypingResolutionBackingForm;
-import backingform.BloodTypingResolutionBackingFormList;
-import backingform.validator.BloodTypingResolutionBackingFormListValidator;
+import backingform.BloodTypingResolutionsBackingForm;
+import backingform.validator.BloodTypingResolutionsBackingFormValidator;
 import repository.bloodtesting.BloodTypingMatchStatus;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BloodTypingResolutionBackingFormValidatorTests {
 
   @InjectMocks
-  private BloodTypingResolutionBackingFormListValidator validator;
+  private BloodTypingResolutionsBackingFormValidator validator;
 
   @Test
   public void testValidateEmptyAboAndRhFieldsAndResolved() {
@@ -29,7 +29,7 @@ public class BloodTypingResolutionBackingFormValidatorTests {
     backingForm.setBloodAbo(null);
     backingForm.setBloodRh(null);
     
-    BloodTypingResolutionBackingFormList backingFormList = aBloodTypingResolutionBackingFormList()
+    BloodTypingResolutionsBackingForm backingFormList = aBloodTypingResolutionsBackingForm()
         .withBloodTypingResolution(backingForm)
         .build();
 
@@ -46,7 +46,7 @@ public class BloodTypingResolutionBackingFormValidatorTests {
     backingForm.setBloodAbo(null);
     backingForm.setBloodRh(null);
     
-    BloodTypingResolutionBackingFormList backingFormList = aBloodTypingResolutionBackingFormList()
+    BloodTypingResolutionsBackingForm backingFormList = aBloodTypingResolutionsBackingForm()
         .withBloodTypingResolution(backingForm)
         .build();
 
@@ -63,7 +63,7 @@ public class BloodTypingResolutionBackingFormValidatorTests {
     backingForm.setBloodAbo("O");
     backingForm.setBloodRh(null);
     
-    BloodTypingResolutionBackingFormList backingFormList = aBloodTypingResolutionBackingFormList()
+    BloodTypingResolutionsBackingForm backingFormList = aBloodTypingResolutionsBackingForm()
         .withBloodTypingResolution(backingForm)
         .build();
 
@@ -80,7 +80,7 @@ public class BloodTypingResolutionBackingFormValidatorTests {
     backingForm.setBloodAbo(null);
     backingForm.setBloodRh("+");
     
-    BloodTypingResolutionBackingFormList backingFormList = aBloodTypingResolutionBackingFormList()
+    BloodTypingResolutionsBackingForm backingFormList = aBloodTypingResolutionsBackingForm()
         .withBloodTypingResolution(backingForm)
         .build();
 
@@ -97,7 +97,7 @@ public class BloodTypingResolutionBackingFormValidatorTests {
     backingForm.setBloodAbo("O");
     backingForm.setBloodRh("+");
     
-    BloodTypingResolutionBackingFormList backingFormList = aBloodTypingResolutionBackingFormList()
+    BloodTypingResolutionsBackingForm backingFormList = aBloodTypingResolutionsBackingForm()
         .withBloodTypingResolution(backingForm)
         .build();
 
@@ -114,7 +114,7 @@ public class BloodTypingResolutionBackingFormValidatorTests {
     backingForm.setBloodAbo("O");
     backingForm.setBloodRh("+");
     
-    BloodTypingResolutionBackingFormList backingFormList = aBloodTypingResolutionBackingFormList()
+    BloodTypingResolutionsBackingForm backingFormList = aBloodTypingResolutionsBackingForm()
         .withBloodTypingResolution(backingForm)
         .build();
 
@@ -131,7 +131,7 @@ public class BloodTypingResolutionBackingFormValidatorTests {
     backingForm.setBloodAbo("O");
     backingForm.setBloodRh("+");
     
-    BloodTypingResolutionBackingFormList backingFormList = aBloodTypingResolutionBackingFormList()
+    BloodTypingResolutionsBackingForm backingFormList = aBloodTypingResolutionsBackingForm()
         .withBloodTypingResolution(backingForm)
         .build();
 

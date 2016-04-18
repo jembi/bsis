@@ -31,9 +31,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import backingform.BloodTypingResolutionBackingFormList;
+import backingform.BloodTypingResolutionsBackingForm;
 import backingform.DonationBackingForm;
-import backingform.validator.BloodTypingResolutionBackingFormListValidator;
+import backingform.validator.BloodTypingResolutionsBackingFormValidator;
 import backingform.validator.DonationBackingFormValidator;
 import factory.DonationSummaryViewModelFactory;
 import factory.DonationViewModelFactory;
@@ -92,7 +92,7 @@ public class DonationController {
   private DonationSummaryViewModelFactory donationSummaryViewModelFactory;
 
   @Autowired
-  private BloodTypingResolutionBackingFormListValidator bloodTypingResolutionBackingFormsValidator;
+  private BloodTypingResolutionsBackingFormValidator bloodTypingResolutionBackingFormsValidator;
 
   public DonationController() {
   }
@@ -321,8 +321,8 @@ public class DonationController {
 
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
   @RequestMapping(value = "bloodTypingResolutions", method = RequestMethod.POST)
-  public void saveBloodTypingResolution(@RequestBody @Valid BloodTypingResolutionBackingFormList backingFormList) {
-    donationCRUDService.updateDonationsBloodTypingResolutions(backingFormList);
+  public void saveBloodTypingResolutions(@RequestBody @Valid BloodTypingResolutionsBackingForm backingForm) {
+    donationCRUDService.updateDonationsBloodTypingResolutions(backingForm);
   }
 
 }
