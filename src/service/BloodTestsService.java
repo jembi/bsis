@@ -11,6 +11,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import backingform.TestResultsBackingForm;
 import constant.GeneralConfigConstants;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestType;
@@ -58,53 +59,51 @@ public class BloodTestsService {
     return ruleResult;
   }
 
-
   /**
-   * Validate the test results to ensure that the test results comply with the BloodTests
-   * configured
+   * Saves the BloodTest results for a list of donations and updates each donation (bloodAbo/Rh and
+   * statuses)
    *
-   * @param bloodTypingTestResults Map<Long, String> containing String results mapped to BloodTest
-   *                               identifiers
-   * @return Map<Long, String> of errors mapped to BloodTest identifiers
+   * @param forms the forms
+   * @param reEntry the re entry
    */
-  public Map<Long, String> validateTestResultValues(Map<Long, String> bloodTypingTestResults) {
-    // FIXME: this method should be in this service but due to the many references in BloodTestingRepository, it was not moved
-    return bloodTestingRepository.validateTestResultValues(null, bloodTypingTestResults);
-  }
+  public void saveBloodTests(List<TestResultsBackingForm> forms, boolean reEntry) {
 
-  /**
-   * Saves the BloodTest results and updates the Donation (bloodAbo/Rh and statuses)
-   *
-   * @param donationId       Long identifier of the donation that should be updated with new test
-   *                         results
-   * @param bloodTestResults Map of test results
-   * @param reEntry          boolean true if the results are the re-entry and false if the results are first entry
-   * @return BloodTestingRuleResult containing the results of the Blood Test Rules Engine
-   */
-  public BloodTestingRuleResult saveBloodTests(Long donationId, Map<Long, String> bloodTestResults, boolean reEntry) {
-    Donation donation = donationRepository.findDonationById(donationId);
-    Map<Long, String> reEnteredBloodTestResults = bloodTestResults;
-    
-    if (!reEntry && !generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.TESTING_RE_ENTRY_REQUIRED, true)) {
-      // This is not re-entry, but re-entry is not required, so just set reEntry to true
-      // The result of this is that no blood test results will be marked as requiring re-entry
-      reEntry = true;
+    for (TestResultsBackingForm form:forms) {
+
+      // Get donation
+      Donation donation = donationRepository.findDonationByDonationIdentificationNumber(form.getDonationIdentificationNumber());
+
+      // Get testResults from form
+      Map<Long, String> bloodTestResults = form.getTestResults();
+
+      // Apply reEntry system config
+      if (!reEntry && !generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.TESTING_RE_ENTRY_REQUIRED, true)) {
+        // This is not re-entry, but re-entry is not required, so just set reEntry to true
+        // The result of this is that no blood test results will be marked as requiring re-entry
+        reEntry = true;
+      }
+
+      // Run rule engine for the 1st time and save testResults
+      Map<Long, String> reEnteredBloodTestResults = bloodTestResults;
+      if (!reEntry) {
+        // only outcomes that have been entered twice will be considered by the rules engine
+        reEnteredBloodTestResults = new HashMap<>();
+      }
+      BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults);
+      bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
+
+      // Run rule engine for the 2nd time and save testResults
+      // Note: Rules engine will only provide the correct BloodTyping statuses on the 2nd execution
+      // because the Donation Abo/Rh is only updated after the 1st execution
+      ruleResult = ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults);
+      bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
+
+      // Update donation
+      if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED && reEntry) {
+        testBatchStatusChangeService.handleRelease(donation);
+      }
     }
-    
-    if (!reEntry) {
-      // only outcomes that have been entered twice will be considered by the rules engine
-      reEnteredBloodTestResults = new HashMap<>();
-    }
-    BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults);
-    bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
-    // Note: Rules engine will only provide the correct BloodTyping statuses on the 2nd execution
-    // because the Donation Abo/Rh is only updated after the 1st execution
-    ruleResult = ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults);
-    bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
-    if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED && reEntry) {
-      testBatchStatusChangeService.handleRelease(donation);
-    }
-    return ruleResult;
+
   }
 
   /**

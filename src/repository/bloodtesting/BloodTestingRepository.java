@@ -20,12 +20,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestContext;
@@ -34,6 +28,13 @@ import model.bloodtesting.BloodTestType;
 import model.bloodtesting.TTIStatus;
 import model.bloodtesting.rules.BloodTestingRule;
 import model.donation.Donation;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import viewmodel.BloodTestResultViewModel;
@@ -78,50 +79,6 @@ public class BloodTestingRepository {
     query.setParameter("isActive", true);
     List<BloodTest> bloodTests = query.getResultList();
     return bloodTests;
-  }
-
-  /**
-   * FIXME: This method should be in BloodTestsService, but due to references in this repository, it was not moved
-   * FIXME: param donationId is not used
-   */
-  public Map<Long, String> validateTestResultValues(Long donationId, Map<Long, String> bloodTypingTestResults) {
-
-    /**
-     * Build a map of active blood test ids to the active blood tests.
-     */
-    Map<String, BloodTest> activeBloodTestsMap = new HashMap<>();
-    for (BloodTest bloodTypingTest : findActiveBloodTests()) {
-      activeBloodTestsMap.put(bloodTypingTest.getId().toString(), bloodTypingTest);
-    }
-
-    Map<Long, String> errorMap = new HashMap<>();
-
-    for (Long testId : bloodTypingTestResults.keySet()) {
-
-      BloodTest activeBloodTest = activeBloodTestsMap.get(testId.toString());
-
-      if (activeBloodTest == null) {
-        // No active test was found for the provided id
-        errorMap.put(testId, "Invalid test");
-        break;
-      }
-
-      String result = bloodTypingTestResults.get(testId);
-
-      if (!activeBloodTest.getIsEmptyAllowed() && StringUtils.isBlank(result)) {
-        // Empty results are not allowed for this test and the provided result is empty
-        errorMap.put(testId, "No value specified");
-        break;
-      }
-
-      if (!activeBloodTest.getValidResultsList().contains(result)) {
-        // The provided result is not in the list of valid results
-        errorMap.put(testId, "Invalid value specified");
-        break;
-      }
-    }
-
-    return errorMap;
   }
 
   /**
@@ -184,7 +141,7 @@ public class BloodTestingRepository {
     return btResult;
   }
 
-  private List<BloodTest> findActiveBloodTests() {
+  public List<BloodTest> findActiveBloodTests() {
 
     return em.createQuery(
         "SELECT b " +

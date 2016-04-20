@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import backingform.AdverseEventBackingForm;
+import backingform.BloodTypingResolutionBackingForm;
+import backingform.BloodTypingResolutionsBackingForm;
 import backingform.DonationBackingForm;
 import model.adverseevent.AdverseEvent;
 import model.adverseevent.AdverseEventType;
@@ -17,10 +19,12 @@ import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.donor.Donor;
 import model.packtype.PackType;
+import model.testbatch.TestBatchStatus;
 import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import repository.DonorRepository;
 import repository.PackTypeRepository;
+import repository.bloodtesting.BloodTypingMatchStatus;
 
 @Transactional
 @Service
@@ -30,8 +34,6 @@ public class DonationCRUDService {
   private DonationRepository donationRepository;
   @Autowired
   private DonationConstraintChecker donationConstraintChecker;
-  @Autowired
-  private DonorCRUDService donorCRUDService;
   @Autowired
   private DonorRepository donorRepository;
   @Autowired
@@ -46,6 +48,8 @@ public class DonationCRUDService {
   private DonorService donorService;
   @Autowired
   private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
+  @Autowired
+  private TestBatchStatusChangeService testBatchStatusChangeService;
 
   public void deleteDonation(long donationId) throws IllegalStateException, NoResultException {
 
@@ -180,6 +184,30 @@ public class DonationCRUDService {
     adverseEvent.setComment(adverseEventBackingForm.getComment());
 
     donation.setAdverseEvent(adverseEvent);
+  }
+  
+  public void updateDonationsBloodTypingResolutions(BloodTypingResolutionsBackingForm backingForm) {
+    for (BloodTypingResolutionBackingForm form : backingForm.getBloodTypingResolutions()) {
+      updateDonationBloodTypingResolution(form);
+    }
+  }
+  
+  public void updateDonationBloodTypingResolution(BloodTypingResolutionBackingForm form) {
+
+    Donation donation = donationRepository.findDonationById(form.getDonationId());
+    if (form.getStatus().equals(BloodTypingMatchStatus.RESOLVED)) {
+      donation.setBloodAbo(form.getBloodAbo());
+      donation.setBloodRh(form.getBloodRh());
+      donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.RESOLVED);
+    } else {
+      donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
+    }
+
+    donation = donationRepository.updateDonation(donation);
+
+    if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
+      testBatchStatusChangeService.handleRelease(donation);
+    }
   }
 
 }

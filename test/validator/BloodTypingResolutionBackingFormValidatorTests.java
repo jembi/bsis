@@ -1,5 +1,6 @@
 package validator;
 
+import static helpers.builders.BloodTypingResolutionsBackingFormBuilder.aBloodTypingResolutionsBackingForm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -11,14 +12,15 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 
 import backingform.BloodTypingResolutionBackingForm;
-import backingform.validator.BloodTypingResolutionBackingFormValidator;
+import backingform.BloodTypingResolutionsBackingForm;
+import backingform.validator.BloodTypingResolutionsBackingFormValidator;
 import repository.bloodtesting.BloodTypingMatchStatus;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BloodTypingResolutionBackingFormValidatorTests {
 
   @InjectMocks
-  private BloodTypingResolutionBackingFormValidator validator;
+  private BloodTypingResolutionsBackingFormValidator validator;
 
   @Test
   public void testValidateEmptyAboAndRhFieldsAndResolved() {
@@ -26,9 +28,13 @@ public class BloodTypingResolutionBackingFormValidatorTests {
     backingForm.setStatus(BloodTypingMatchStatus.RESOLVED);
     backingForm.setBloodAbo(null);
     backingForm.setBloodRh(null);
+    
+    BloodTypingResolutionsBackingForm backingFormList = aBloodTypingResolutionsBackingForm()
+        .withBloodTypingResolution(backingForm)
+        .build();
 
-    Errors errors = new BindException(backingForm, "bloodTypingResolutionBackingForm");
-    validator.validate(backingForm, errors);
+    Errors errors = new BindException(backingFormList, "bloodTypingResolutionBackingFormList");
+    validator.validate(backingFormList, errors);
 
     assertThat(errors.getErrorCount(), is(2));
   }
@@ -39,9 +45,13 @@ public class BloodTypingResolutionBackingFormValidatorTests {
     backingForm.setStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
     backingForm.setBloodAbo(null);
     backingForm.setBloodRh(null);
+    
+    BloodTypingResolutionsBackingForm backingFormList = aBloodTypingResolutionsBackingForm()
+        .withBloodTypingResolution(backingForm)
+        .build();
 
-    Errors errors = new BindException(backingForm, "bloodTypingResolutionBackingForm");
-    validator.validate(backingForm, errors);
+    Errors errors = new BindException(backingFormList, "bloodTypingResolutionBackingFormList");
+    validator.validate(backingFormList, errors);
 
     assertThat(errors.getErrorCount(), is(0));
   }
@@ -52,9 +62,13 @@ public class BloodTypingResolutionBackingFormValidatorTests {
     backingForm.setStatus(BloodTypingMatchStatus.RESOLVED);
     backingForm.setBloodAbo("O");
     backingForm.setBloodRh(null);
+    
+    BloodTypingResolutionsBackingForm backingFormList = aBloodTypingResolutionsBackingForm()
+        .withBloodTypingResolution(backingForm)
+        .build();
 
-    Errors errors = new BindException(backingForm, "bloodTypingResolutionBackingForm");
-    validator.validate(backingForm, errors);
+    Errors errors = new BindException(backingFormList, "bloodTypingResolutionBackingFormList");
+    validator.validate(backingFormList, errors);
 
     assertThat(errors.getErrorCount(), is(1));
   }
@@ -65,9 +79,13 @@ public class BloodTypingResolutionBackingFormValidatorTests {
     backingForm.setStatus(BloodTypingMatchStatus.RESOLVED);
     backingForm.setBloodAbo(null);
     backingForm.setBloodRh("+");
+    
+    BloodTypingResolutionsBackingForm backingFormList = aBloodTypingResolutionsBackingForm()
+        .withBloodTypingResolution(backingForm)
+        .build();
 
-    Errors errors = new BindException(backingForm, "bloodTypingResolutionBackingForm");
-    validator.validate(backingForm, errors);
+    Errors errors = new BindException(backingFormList, "bloodTypingResolutionBackingFormList");
+    validator.validate(backingFormList, errors);
 
     assertThat(errors.getErrorCount(), is(1));
   }
@@ -78,9 +96,13 @@ public class BloodTypingResolutionBackingFormValidatorTests {
     backingForm.setStatus(BloodTypingMatchStatus.RESOLVED);
     backingForm.setBloodAbo("O");
     backingForm.setBloodRh("+");
+    
+    BloodTypingResolutionsBackingForm backingFormList = aBloodTypingResolutionsBackingForm()
+        .withBloodTypingResolution(backingForm)
+        .build();
 
-    Errors errors = new BindException(backingForm, "bloodTypingResolutionBackingForm");
-    validator.validate(backingForm, errors);
+    Errors errors = new BindException(backingFormList, "bloodTypingResolutionBackingFormList");
+    validator.validate(backingFormList, errors);
 
     assertThat(errors.getErrorCount(), is(0));
   }
@@ -91,9 +113,13 @@ public class BloodTypingResolutionBackingFormValidatorTests {
     backingForm.setStatus(null);
     backingForm.setBloodAbo("O");
     backingForm.setBloodRh("+");
+    
+    BloodTypingResolutionsBackingForm backingFormList = aBloodTypingResolutionsBackingForm()
+        .withBloodTypingResolution(backingForm)
+        .build();
 
-    Errors errors = new BindException(backingForm, "bloodTypingResolutionBackingForm");
-    validator.validate(backingForm, errors);
+    Errors errors = new BindException(backingFormList, "bloodTypingResolutionBackingFormList");
+    validator.validate(backingFormList, errors);
 
     assertThat(errors.getErrorCount(), is(1));
   }
@@ -104,9 +130,13 @@ public class BloodTypingResolutionBackingFormValidatorTests {
     backingForm.setStatus(BloodTypingMatchStatus.AMBIGUOUS);
     backingForm.setBloodAbo("O");
     backingForm.setBloodRh("+");
+    
+    BloodTypingResolutionsBackingForm backingFormList = aBloodTypingResolutionsBackingForm()
+        .withBloodTypingResolution(backingForm)
+        .build();
 
-    Errors errors = new BindException(backingForm, "bloodTypingResolutionBackingForm");
-    validator.validate(backingForm, errors);
+    Errors errors = new BindException(backingFormList, "bloodTypingResolutionBackingFormList");
+    validator.validate(backingFormList, errors);
 
     assertThat(errors.getErrorCount(), is(1));
   }
