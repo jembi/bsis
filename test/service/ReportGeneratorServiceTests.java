@@ -3,7 +3,7 @@ package service;
 import static helpers.builders.CohortBuilder.aCohort;
 import static helpers.builders.CollectedDonationDTOBuilder.aCollectedDonationDTO;
 import static helpers.builders.DonationTypeBuilder.aDonationType;
-import static helpers.builders.IndicatorBuilder.anIndicator;
+import static helpers.builders.DataValueBuilder.aDataValue;
 import static helpers.builders.ReportBuilder.aReport;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 import model.reporting.Comparator;
-import model.reporting.Indicator;
+import model.reporting.DataValue;
 import model.reporting.Report;
 import model.util.Gender;
 
@@ -51,8 +51,8 @@ public class ReportGeneratorServiceTests extends UnitTestSuite {
             .build()
     );
 
-    List<Indicator> expectedIndicators = Arrays.asList(
-        anIndicator()
+    List<DataValue> expectedDataValues = Arrays.asList(
+        aDataValue()
             .withStartDate(irrelevantStartDate)
             .withEndDate(irrelevantEndDate)
             .withValue(2L)
@@ -77,7 +77,7 @@ public class ReportGeneratorServiceTests extends UnitTestSuite {
     Report expectedReport = aReport()
         .withStartDate(irrelevantStartDate)
         .withEndDate(irrelevantEndDate)
-        .withIndicators(expectedIndicators)
+        .withDataValues(expectedDataValues)
         .build();
 
     when(donationRepository.findCollectedDonationsReportIndicators(irrelevantStartDate, irrelevantEndDate))

@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import model.reporting.Indicator;
+import model.reporting.DataValue;
 import model.reporting.Report;
 
 public class ReportBuilder extends AbstractBuilder<Report> {
 
   private Date startDate;
   private Date endDate;
-  private List<Indicator> indicators;
+  private List<DataValue> dataValues;
 
   public ReportBuilder withStartDate(Date startDate) {
     this.startDate = startDate;
@@ -23,16 +23,16 @@ public class ReportBuilder extends AbstractBuilder<Report> {
     return this;
   }
 
-  public ReportBuilder withIndicator(Indicator indicator) {
-    if (indicators == null) {
-      indicators = new ArrayList<>();
+  public ReportBuilder withDataValue(DataValue dataValue) {
+    if (dataValues == null) {
+      dataValues = new ArrayList<>();
     }
-    indicators.add(indicator);
+    dataValues.add(dataValue);
     return this;
   }
 
-  public ReportBuilder withIndicators(List<Indicator> indicators) {
-    this.indicators = indicators;
+  public ReportBuilder withDataValues(List<DataValue> dataValues) {
+    this.dataValues = dataValues;
     return this;
   }
 
@@ -41,7 +41,7 @@ public class ReportBuilder extends AbstractBuilder<Report> {
     Report report = new Report();
     report.setStartDate(startDate);
     report.setEndDate(endDate);
-    report.setIndicators(indicators);
+    report.setDataValues(dataValues);
     return report;
   }
 
