@@ -1,6 +1,5 @@
 package repository.bloodtesting;
 
-import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,7 +10,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -22,31 +20,23 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
-import backingform.BloodTestBackingForm;
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestCategory;
 import model.bloodtesting.BloodTestContext;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.BloodTestType;
 import model.bloodtesting.TTIStatus;
-import model.bloodtesting.WellType;
-import model.bloodtesting.rules.BloodTestSubCategory;
 import model.bloodtesting.rules.BloodTestingRule;
-import model.bloodtesting.rules.DonationField;
 import model.donation.Donation;
-import model.microtiterplate.MachineReading;
-import model.microtiterplate.MicrotiterPlate;
-import model.microtiterplate.PlateSession;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import repository.DonationBatchRepository;
 import repository.DonationRepository;
-import repository.GenericConfigRepository;
-import repository.WellTypeRepository;
 import viewmodel.BloodTestResultViewModel;
 import viewmodel.BloodTestingRuleResult;
 
@@ -57,7 +47,7 @@ public class BloodTestingRepository {
   private static final Logger LOGGER = Logger.getLogger(BloodTestingRepository.class);
 
   @PersistenceContext
-  EntityManager em;
+  private EntityManager em;
 
   @Autowired
   private DonationRepository donationRepository;
@@ -67,21 +57,6 @@ public class BloodTestingRepository {
 
   @Autowired
   private BloodTestingRuleEngine ruleEngine;
-
-  @Autowired
-  private WellTypeRepository wellTypeRepository;
-
-  @Autowired
-  private GenericConfigRepository genericConfigRepository;
-
-  public MicrotiterPlate getPlate(String plateKey) {
-    String queryStr = "SELECT p from MicrotiterPlate p "
-        + "WHERE p.plateKey=:plateKey";
-    TypedQuery<MicrotiterPlate> query = em.createQuery(queryStr,
-        MicrotiterPlate.class);
-    query.setParameter("plateKey", plateKey);
-    return query.getSingleResult();
-  }
 
   public List<BloodTest> getBloodTypingTests() {
     String queryStr = "SELECT b FROM BloodTest b WHERE b.isActive=:isActive AND b.category=:category";
@@ -96,7 +71,7 @@ public class BloodTestingRepository {
     return getBloodTestsOfTypes(Arrays.asList(type));
   }
 
-  public List<BloodTest> getBloodTestsOfTypes(List<BloodTestType> types) {
+  private List<BloodTest> getBloodTestsOfTypes(List<BloodTestType> types) {
     String queryStr = "SELECT b FROM BloodTest b WHERE "
         + "b.bloodTestType IN (:types) AND " + "b.isActive=:isActive";
     TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
@@ -132,21 +107,6 @@ public class BloodTestingRepository {
       em.persist(donation);
     }
   }
-  
-  private BloodTestResult saveBloodTestResultToDatabase(Long testId, String testResult, Donation donation,
-      Date testedOn, BloodTestingRuleResult ruleResult, boolean reEntry) {
-
-    Map<Long, BloodTestResult> mostRecentTestResults = getRecentTestResultsForDonation(donation.getId());
-    // if the blood test result is being edited, update the existing one and set reEntryRequired
-    // to true.
-    BloodTestResult btResult = mostRecentTestResults.get(testId);
-    btResult = updateOrCreateBloodTestResult(btResult, testId, testResult, donation, testedOn, reEntry);
-    if (reEntry) {
-      updateDonationWithTestResults(donation, ruleResult);
-      em.persist(donation);
-    }
-    return btResult;
-  }
 
   private BloodTestResult updateOrCreateBloodTestResult(BloodTestResult btResult, Long testId, String testResult,
       Donation donation, Date testedOn, boolean reEntry) {
@@ -181,13 +141,6 @@ public class BloodTestingRepository {
     return btResult;
   }
 
-  private boolean isResultValidForBloodTest(BloodTest test, String result) {
-    if (StringUtils.isBlank(result)) {
-      return false;
-    }
-    return test.getValidResultsList().contains(result);
-  }
-
   public List<BloodTest> findActiveBloodTests() {
 
     return em.createQuery(
@@ -204,30 +157,6 @@ public class BloodTestingRepository {
     TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
     List<BloodTest> bloodTests = query.getResultList();
     return bloodTests;
-  }
-
-  public Map<String, Object> getAllTestsStatusForDonations(
-      List<String> donationIds) {
-    // linked hashmap is required to ensure that results are returned in the
-    // same order as inserted
-    Map<Long, Donation> donationsMap = new LinkedHashMap<Long, Donation>();
-    Map<Long, BloodTestingRuleResult> bloodTypingResultsForDonations = new LinkedHashMap<Long, BloodTestingRuleResult>();
-
-    for (String donationIdStr : donationIds) {
-      Long donationId = Long.parseLong(donationIdStr);
-      Donation donation = donationRepository
-          .findDonationById(donationId);
-      BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
-          donation, new HashMap<Long, String>());
-      donationsMap.put(donation.getId(), donation);
-      bloodTypingResultsForDonations.put(donation.getId(),
-          ruleResult);
-    }
-
-    Map<String, Object> results = new HashMap<String, Object>();
-    results.put("donations", donationsMap);
-    results.put("bloodTestingResults", bloodTypingResultsForDonations);
-    return results;
   }
 
   public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatches(
@@ -317,167 +246,12 @@ public class BloodTestingRepository {
     return recentBloodTestResults;
   }
 
-  public BloodTest findBloodTestById(Long bloodTestId) {
+  private BloodTest findBloodTestById(Long bloodTestId) {
     String queryStr = "SELECT bt FROM BloodTest bt WHERE "
         + "bt.id=:bloodTestId";
     TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
     query.setParameter("bloodTestId", bloodTestId);
     return query.getSingleResult();
-  }
-
-  public BloodTest findBloodTestWithWorksheetTypesById(Long bloodTestId) {
-    String queryStr = "SELECT bt FROM BloodTest bt LEFT JOIN FETCH bt.worksheetTypes WHERE "
-        + "bt.id=:bloodTestId";
-    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
-    query.setParameter("bloodTestId", bloodTestId);
-    return query.getSingleResult();
-  }
-
-  public Map<String, Object> saveTTIResultsOnPlate(
-      Map<String, Map<String, Object>> ttiResultsMap, Long ttiTestId) {
-
-    Map<String, Object> results = new HashMap<String, Object>();
-    Map<String, List<String>> errorsByWellNumber = new HashMap<String, List<String>>();
-    Map<String, Long> donationIdByWellNumber = new HashMap<String, Long>();
-    Map<Long, String> errorsByDonationId = new HashMap<Long, String>();
-
-    Map<Long, Donation> donationIdMap = new HashMap<Long, Donation>();
-
-    Map<Long, MachineReading> machineReadingsForDonations = new HashMap<Long, MachineReading>();
-    List<MachineReading> specialMachineReadings = new ArrayList<MachineReading>();
-
-    BloodTest bloodTest = findBloodTestById(ttiTestId);
-
-    PlateSession plateSession = new PlateSession();
-    Date testedOn = new Date();
-    plateSession.setPlateUsedOn(testedOn);
-
-    Map<Long, Map<Long, String>> bloodTestResultsMap = new HashMap<Long, Map<Long, String>>();
-
-    boolean errorsFound = false;
-
-    for (String rowNum : ttiResultsMap.keySet()) {
-      Map<String, Object> rowData = ttiResultsMap.get(rowNum);
-      for (String colNum : rowData.keySet()) {
-
-        String wellNumber = rowNum + "," + colNum;
-
-        MachineReading machineReading = new MachineReading();
-        @SuppressWarnings("unchecked")
-        Map<String, String> wellData = (Map<String, String>) rowData
-        .get(colNum);
-
-        if (wellData.isEmpty())
-          continue;
-
-        // store well type in machine configuration
-        Long wellTypeId = Long.parseLong(wellData.get("welltype"));
-        WellType wellType = wellTypeRepository
-            .getWellTypeById(wellTypeId);
-        machineReading.setWellType(wellType);
-
-        machineReading.setRowNumber(Integer.parseInt(rowNum));
-        machineReading.setColumnNumber(Integer.parseInt(colNum));
-        machineReading.setPlateSession(plateSession);
-        try {
-          if (StringUtils.isNotBlank(wellData.get("machineReading")))
-            machineReading.setMachineReading(new BigDecimal(
-                wellData.get("machineReading")));
-        } catch (NumberFormatException ex) {
-
-          LOGGER.error(ex.getMessage() + ex.getStackTrace());
-          errorsFound = true;
-          addErrorToWell(errorsByWellNumber, wellNumber,
-              "Invalid value for machine reading");
-        }
-
-        if (wellType.getRequiresSample()) {
-          String donationIdentificationNumber = wellData.get("donationIdentificationNumber");
-          Donation donation = donationRepository
-              .findDonationByDonationIdentificationNumber(donationIdentificationNumber);
-          if (donation == null) {
-            addErrorToWell(errorsByWellNumber, wellNumber,
-                "Invalid donation identification number");
-            errorsFound = true;
-          } else {
-            String result = wellData.get("testResult");
-            donationIdMap.put(donation.getId(), donation);
-            if (bloodTestResultsMap.containsKey(donation.getId())) {
-              errorsFound = true;
-              addErrorToWell(errorsByWellNumber, wellNumber,
-                  "Duplicate donation identification number");
-              errorsByDonationId.put(donation.getId(),
-                  "Duplicate donation identification number");
-              donationIdByWellNumber.put(wellNumber,
-                  donation.getId());
-            }
-            if (!isResultValidForBloodTest(bloodTest, result)) {
-              errorsFound = true;
-              addErrorToWell(errorsByWellNumber, wellNumber,
-                  "Invalid test result specified");
-            }
-            Map<Long, String> resultsForDonation = new HashMap<Long, String>();
-            resultsForDonation.put(ttiTestId, result);
-            bloodTestResultsMap.put(donation.getId(),
-                resultsForDonation);
-            machineReadingsForDonations.put(donation.getId(),
-                machineReading);
-          }
-        } else {
-          specialMachineReadings.add(machineReading);
-        }
-      }
-    }
-
-    Map<Long, BloodTestingRuleResult> bloodTestRuleResultsForDonations = new HashMap<Long, BloodTestingRuleResult>();
-
-    if (!errorsFound) {
-      em.persist(plateSession);
-      // first determine whether there are any uninterpretable results
-      for (Long donationId : donationIdMap.keySet()) {
-        Map<Long, String> bloodTestResultsForDonation = bloodTestResultsMap
-            .get(donationId);
-        MachineReading machineReading = machineReadingsForDonations
-            .get(donationId);
-        Donation donation = donationIdMap
-            .get(donationId);
-        BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
-            donation, bloodTestResultsForDonation);
-        bloodTestRuleResultsForDonations
-            .put(donationId, ruleResult);
-        BloodTestResult btResult = saveBloodTestResultToDatabase(
-            new Long(ttiTestId),
-            bloodTestResultsForDonation.get(ttiTestId),
-            donation, testedOn, ruleResult, false);
-        // no need to worry about uninterpretable results here
-        btResult.setMachineReading(machineReading);
-        // bidirectional relationship with blood test result as the
-        // owning side
-        // must set in both directions and persist the machine reading
-        // first
-        // otherwise there will be a transient object in the entity
-        // manager
-        machineReading.setBloodTestResult(btResult);
-        // must persist
-        em.persist(machineReading);
-        em.merge(btResult);
-      }
-    }
-
-    results.put("donations", donationIdMap);
-    results.put("bloodTestingResults", bloodTestRuleResultsForDonations);
-    results.put("errorsFound", errorsFound);
-    results.put("errorsByDonationId", errorsByDonationId);
-    results.put("errorsByWellNumber", errorsByWellNumber);
-    return results;
-  }
-
-  private void addErrorToWell(Map<String, List<String>> errorsByWellNumber,
-      String wellNumber, String errorMessage) {
-    if (!errorsByWellNumber.containsKey(wellNumber)) {
-      errorsByWellNumber.put(wellNumber, new ArrayList<String>());
-    }
-    errorsByWellNumber.get(wellNumber).add(errorMessage);
   }
 
   public void activateTests(BloodTestContext context) {
@@ -504,166 +278,6 @@ public class BloodTestingRepository {
     query.setParameter("isActive", false);
     query.setParameter("context", context);
     query.executeUpdate();
-  }
-
-  public List<BloodTestingRule> getBloodTypingRules(boolean onlyActiveRules) {
-    String queryStr = "SELECT r FROM BloodTestingRule r WHERE r.category=:category AND "
-        + "r.context=:context";
-    if (onlyActiveRules) {
-      queryStr = queryStr + " AND r.isActive=:isActive";
-    }
-    TypedQuery<BloodTestingRule> query = em.createQuery(queryStr,
-        BloodTestingRule.class);
-    BloodTestContext context = genericConfigRepository
-        .getCurrentBloodTypingContext();
-    query.setParameter("category", BloodTestCategory.BLOODTYPING);
-    query.setParameter("context", context);
-    if (onlyActiveRules)
-      query.setParameter("isActive", true);
-    return query.getResultList();
-  }
-
-  public BloodTestingRule getBloodTestingRuleById(Long ruleId) {
-    String queryStr = "SELECT r from BloodTestingRule r WHERE r.id=:ruleId";
-    TypedQuery<BloodTestingRule> query = em.createQuery(queryStr,
-        BloodTestingRule.class);
-    query.setParameter("ruleId", ruleId);
-    return query.getSingleResult();
-  }
-
-  public BloodTestingRule saveBloodTypingRule(
-      BloodTestingRule bloodTestingRule) {
-    bloodTestingRule.setIsActive(Boolean.TRUE);
-    em.persist(bloodTestingRule);
-    return bloodTestingRule;
-  }
-
-  public BloodTestingRule updateBloodTypingRule(BloodTestingRule bloodTestingRule) {
-    return em.merge(bloodTestingRule);
-  }
-
-  public void deleteBloodTestingRule(Long ruleId) {
-    String queryStr = "UPDATE BloodTestingRule r SET isActive=:isActive WHERE r.id=:ruleId";
-    Query query = em.createQuery(queryStr);
-    query.setParameter("isActive", false);
-    query.setParameter("ruleId", ruleId);
-    query.executeUpdate();
-    em.flush();
-  }
-
-  public void saveBloodTest(BloodTestBackingForm form) {
-    BloodTest bt = form.getBloodTest();
-    bt.setIsEmptyAllowed(false);
-    //		bt.setNegativeResults("");
-    //		bt.setPositiveResults("");
-    //		bt.setValidResults("+,-");
-    bt.setRankInCategory(1);
-    bt.setIsActive(true);
-    BloodTestCategory category = bt.getCategory();
-    if (category.equals(BloodTestCategory.BLOODTYPING)) {
-      bt.setBloodTestType(BloodTestType.ADVANCED_BLOODTYPING);
-      bt.setContext(genericConfigRepository
-          .getCurrentBloodTypingContext());
-      em.persist(bt);
-    } else {
-      bt.setBloodTestType(BloodTestType.BASIC_TTI);
-      bt.setContext(BloodTestContext.RECORD_TTI_TESTS);
-      Integer numConfirmtatoryTests = 0;
-      if (form.getNumberOfConfirmatoryTests() != null)
-        numConfirmtatoryTests = form.getNumberOfConfirmatoryTests();
-      List<Long> pendingTestIds = new ArrayList<Long>();
-      em.persist(bt);
-      em.refresh(bt);
-
-      BloodTestingRule ttiSafeRule = new BloodTestingRule();
-      ttiSafeRule.setBloodTestsIds("" + bt.getId());
-      ttiSafeRule.setPattern("-");
-      ttiSafeRule.setDonationFieldChanged(DonationField.TTISTATUS);
-      ttiSafeRule.setNewInformation(TTIStatus.TTI_SAFE.toString());
-      ttiSafeRule.setExtraInformation("");
-      ttiSafeRule.setContext(BloodTestContext.RECORD_TTI_TESTS);
-      ttiSafeRule.setCategory(BloodTestCategory.TTI);
-      ttiSafeRule.setSubCategory(BloodTestSubCategory.TTI);
-      ttiSafeRule.setPendingTestsIds("");
-      ttiSafeRule.setMarkSampleAsUnsafe(false);
-      ttiSafeRule.setIsActive(true);
-      em.persist(ttiSafeRule);
-
-      for (int i = 1; i <= numConfirmtatoryTests; ++i) {
-        BloodTest confirmatoryBloodTest = new BloodTest();
-        confirmatoryBloodTest.setTestName(bt.getTestName()
-            + " Confirmatory " + i);
-        confirmatoryBloodTest.setTestNameShort(bt.getTestNameShort()
-            + " Conf " + i);
-        confirmatoryBloodTest.setCategory(category);
-        confirmatoryBloodTest
-            .setBloodTestType(BloodTestType.CONFIRMATORY_TTI);
-        confirmatoryBloodTest
-            .setContext(BloodTestContext.RECORD_TTI_TESTS);
-        confirmatoryBloodTest.setIsEmptyAllowed(false);
-        confirmatoryBloodTest.setNegativeResults("");
-        confirmatoryBloodTest.setPositiveResults("");
-        confirmatoryBloodTest.setValidResults("+,-");
-        confirmatoryBloodTest.setRankInCategory(1);
-        confirmatoryBloodTest.setIsActive(true);
-        em.persist(confirmatoryBloodTest);
-        em.refresh(confirmatoryBloodTest);
-        pendingTestIds.add(Long.valueOf(i));
-
-        BloodTestingRule confirmatoryTestRule = new BloodTestingRule();
-        confirmatoryTestRule.setBloodTestsIds(""
-            + confirmatoryBloodTest.getId());
-        confirmatoryTestRule.setPattern("+");
-        confirmatoryTestRule
-            .setDonationFieldChanged(DonationField.TTISTATUS);
-        confirmatoryTestRule.setNewInformation(TTIStatus.TTI_UNSAFE
-            .toString());
-        confirmatoryTestRule.setExtraInformation("");
-        confirmatoryTestRule
-            .setContext(BloodTestContext.RECORD_TTI_TESTS);
-        confirmatoryTestRule.setCategory(BloodTestCategory.TTI);
-        confirmatoryTestRule.setSubCategory(BloodTestSubCategory.TTI);
-        confirmatoryTestRule.setPendingTestsIds("");
-        confirmatoryTestRule.setMarkSampleAsUnsafe(false);
-        confirmatoryTestRule.setIsActive(true);
-        em.persist(confirmatoryTestRule);
-      }
-
-      BloodTestingRule ttiUnsafeRule = new BloodTestingRule();
-      ttiUnsafeRule.setBloodTestsIds("" + bt.getId());
-      ttiUnsafeRule.setPattern("+");
-      ttiUnsafeRule.setDonationFieldChanged(DonationField.TTISTATUS);
-      ttiUnsafeRule.setNewInformation(TTIStatus.TTI_UNSAFE.toString());
-      ttiUnsafeRule.setExtraInformation("");
-      ttiUnsafeRule.setContext(BloodTestContext.RECORD_TTI_TESTS);
-      ttiUnsafeRule.setCategory(BloodTestCategory.TTI);
-      ttiUnsafeRule.setSubCategory(BloodTestSubCategory.TTI);
-      ttiUnsafeRule.setPendingTestsIds(StringUtils.join(pendingTestIds,
-          ","));
-      ttiUnsafeRule.setMarkSampleAsUnsafe(false);
-      ttiUnsafeRule.setIsActive(true);
-      em.persist(ttiUnsafeRule);
-    }
-  }
-
-  /**
-   * TODO - To be improved issue - #225
-   */
-  public BloodTest updateBloodTest(BloodTestBackingForm backingObject){
-    return em.merge(backingObject.getBloodTest());
-  }
-
-
-  public void deactivateBloodTest(Long bloodTestId) {
-    BloodTest bt = findBloodTestById(bloodTestId);
-    bt.setIsActive(false);
-    em.merge(bt);
-  }
-
-  public void activateBloodTest(Long bloodTestId) {
-    BloodTest bt = findBloodTestById(bloodTestId);
-    bt.setIsActive(true);
-    em.merge(bt);
   }
 
   public Map<String, Map<Long, Long>> findNumberOfPositiveTests(
@@ -842,7 +456,7 @@ public class BloodTestingRepository {
   /**
    * FIXME: this method also belongs in the BloodTestsService (see above updateDonationWithTestResults)
    */
-  protected String addNewExtraInformation(String donationExtraInformation, Set<String> extraInformationNewSet) {
+  private String addNewExtraInformation(String donationExtraInformation, Set<String> extraInformationNewSet) {
     String newExtraInformation;
     Set<String> oldExtraInformationSet = new HashSet<String>();
     if (StringUtils.isNotBlank(donationExtraInformation)) {
