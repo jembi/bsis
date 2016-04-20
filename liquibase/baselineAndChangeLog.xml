@@ -9,5 +9,6 @@
 	<include file="./liquibase/db-data-lbts.xml" />
 	<include file="./liquibase/db-after-data.xml" />
 	<include file="./liquibase/db-fix-ids.xml" />
+	<include file="./liquibase/updates/676-delete-unused-endpoints.xml" />
 
 </databaseChangeLog>
