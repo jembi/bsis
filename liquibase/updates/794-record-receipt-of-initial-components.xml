@@ -1,0 +1,53 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="20160421-1056" author="timler">
+		<comment>BSIS-794 - Add ComponentBatch entity.</comment>
+		<createTable tableName="ComponentBatch">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"  />
+            </column>
+            <column name="venue_id" type="BIGINT">
+                <constraints foreignKeyName="fk_ComponentBatch_Location" references="Location(id)"/>
+            </column>
+            <column name="donationBatch_id" type="BIGINT">
+                <constraints foreignKeyName="fk_ComponentBatch_DonationBatch" references="DonationBatch(id)"/>
+            </column>
+            <column name="status" type="VARCHAR(20)"/>
+            <column name="bloodTransportBoxCount" type="INT"/>
+            <column name="collectionDate" type="TIMESTAMP"/>
+            <column name="deliveryDate" type="TIMESTAMP"/>
+            <column name="isDeleted" type="tinyint(1)"/>
+			<column name="createdDate" type="TIMESTAMP" />
+			<column name="createdBy_id" type="BIGINT" />
+			<column name="lastUpdated" type="TIMESTAMP" />
+			<column name="lastUpdatedBy_id" type="BIGINT" />
+        </createTable>
+        <createTable tableName="ComponentBatch_AUD">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"  />
+            </column>
+            <column name="venue_id" type="BIGINT"/>
+            <column name="donationBatch_id" type="BIGINT"/>
+            <column name="bloodTransportBoxCount" type="INT"/>
+            <column name="collectionDate" type="TIMESTAMP"/>
+            <column name="deliveryDate" type="TIMESTAMP"/>
+            <column name="isDeleted" type="tinyint(1)"/>
+			<column name="createdDate" type="TIMESTAMP"/>
+			<column name="createdBy_id" type="BIGINT">
+			    <constraints foreignKeyName="fk_ComponentBatch_createdBy" references="User(id)"/>
+			</column>
+			<column name="lastUpdated" type="TIMESTAMP"/>
+			<column name="lastUpdatedBy_id" type="BIGINT">
+			    <constraints foreignKeyName="fk_ComponentBatch_lastUpdatedBy" references="User(id)"/>
+			</column>
+            <column name="REV" type="int">
+                <constraints primaryKey="true"  />
+            </column>
+            <column name="REVTYPE" type="tinyint(4)"></column>
+        </createTable>
+	</changeSet>
+
+</databaseChangeLog>
