@@ -61,6 +61,11 @@
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" venue_id="1"
                    backEntry="false"
                    testBatch_id="1"/>
+	<ComponentBatch id="1" venue_id="1" 
+               status="OPEN" bloodTransportBoxCount="0" isDeleted="0" donationBatch_id="1"
+               collectionDate="2015-08-11 09:06:27.0" deliveryDate="2015-08-11 09:06:27.0"
+               createdDate="2015-08-11 09:06:27.0" createdBy_id="1" 
+               lastUpdated="2015-08-11 09:06:27.0" lastUpdatedBy_id="1"/>
     <ComponentType id="1" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Single Pack - CPDA"
@@ -76,6 +81,7 @@
     <PackType id="1" packType="Single" isDeleted="false" testSampleProduced="false"
               componentType_id="1" countAsDonation="true" periodBetweenDonations="90"/>
     <DonationType id="1" donationType="Voluntary" isDeleted="false"/>
+
     <Donation id="1" bloodTypingStatus="NOT_DONE" donationDate="2015-08-11 09:05:56.0"
               donationIdentificationNumber="1111111" donorWeight="85.00" isDeleted="false"
               createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:06:27.0"
@@ -120,7 +126,8 @@
                isDeleted="false" createdDate="2015-08-11 09:06:27.0"
                lastUpdated="2015-08-11 09:07:29.0"
                status="PROCESSED" donation_id="1" createdBy_id="1" lastUpdatedBy_id="1"
-               componentType_id="1" componentIdentificationNumber="1111111-0011"/>
+               componentType_id="1" componentIdentificationNumber="1111111-0011"
+               componentBatch_id="1" />
     <Component id="2" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
                isDeleted="false" createdDate="2015-08-11 09:07:29.0"
                lastUpdated="2015-08-11 09:07:29.0"
@@ -154,6 +161,7 @@
                lastUpdated="2015-08-11 09:07:29.0"
                status="QUARANTINED" donation_id="5" createdBy_id="1" lastUpdatedBy_id="1"
                componentType_id="6" componentIdentificationNumber="5555555-0011"/>
+    
     <ComponentStatusChangeReason id="5" category="DISCARDED"
                                  isDeleted="false" statusChangeReason="Storage Problems"/>
     <ComponentStatusChangeReason id="7" category="RETURNED"

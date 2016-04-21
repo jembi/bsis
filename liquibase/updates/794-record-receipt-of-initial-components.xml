@@ -87,5 +87,20 @@
             <column name="REVTYPE" type="tinyint(4)"></column>
         </createTable>
 	</changeSet>
+	
+	<changeSet id="20160421-1518" author="timler">
+	    <preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="Component" columnName="componentBatch_id"/></not>
+		</preConditions>
+		<comment>BSIS-794 - add relationship between Component and ComponentBatch.</comment>
+    	<addColumn tableName="Component">
+			<column name="componentBatch_id" type="BIGINT"> 
+				<constraints foreignKeyName="fk_Compoment_ComponentBatch" references="Component(id)"/>
+			</column>
+		</addColumn>
+    	<addColumn tableName="Component_AUD">
+			<column name="componentBatch_id" type="BIGINT"/> 
+		</addColumn>
+	</changeSet>
 
 </databaseChangeLog>
