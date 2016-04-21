@@ -1,0 +1,57 @@
+package model.componentbatch;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+
+import model.BaseModificationTrackerEntity;
+
+import org.hibernate.envers.Audited;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+@Entity
+@Audited
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
+public class BloodTransportBox extends BaseModificationTrackerEntity {
+
+  private static final long serialVersionUID = 1L;
+
+  @Column
+  private Double temperature;
+  
+  @ManyToOne(optional = true)
+  private ComponentBatch componentBatch;
+  
+  @Column
+  private boolean isDeleted = false;
+  
+  public BloodTransportBox() {
+    super();
+  }
+
+  public Double getTemperature() {
+    return temperature;
+  }
+
+  public void setTemperature(Double temperature) {
+    this.temperature = temperature;
+  }
+
+  public ComponentBatch getComponentBatch() {
+    return componentBatch;
+  }
+
+  public void setComponentBatch(ComponentBatch componentBatch) {
+    this.componentBatch = componentBatch;
+  }
+  
+  public boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
+}

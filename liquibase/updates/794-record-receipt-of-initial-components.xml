@@ -49,5 +49,43 @@
             <column name="REVTYPE" type="tinyint(4)"></column>
         </createTable>
 	</changeSet>
+	
+	<changeSet id="20160421-1026" author="timler">
+		<comment>BSIS-794 - Add BloodTransportBox entity.</comment>
+		<createTable tableName="BloodTransportBox">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"  />
+            </column>
+            <column name="temperature" type="DECIMAL(3,2)" />
+            <column name="componentBatch_id" type="BIGINT" >
+                <constraints foreignKeyName="fk_BloodTransportBox_ComponentBatch" references="ComponentBatch(id)"/>
+            </column>
+            <column name="isDeleted" type="tinyint(1)"/>
+			<column name="createdDate" type="TIMESTAMP" />
+			<column name="createdBy_id" type="BIGINT" >
+			    <constraints foreignKeyName="fk_BloodTransportBox_createdBy" references="User(id)"/>
+			</column>
+			<column name="lastUpdated" type="TIMESTAMP" />
+			<column name="lastUpdatedBy_id" type="BIGINT" >
+			    <constraints foreignKeyName="fk_BloodTransportBox_lastUpdatedBy" references="User(id)"/>
+			</column>
+        </createTable>
+        <createTable tableName="BloodTransportBox_AUD">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"  />
+            </column>
+            <column name="temperature" type="DECIMAL(3,2)"/>
+            <column name="componentBatch_id" type="BIGINT"/>
+            <column name="isDeleted" type="tinyint(1)"/>
+			<column name="createdDate" type="TIMESTAMP"/>
+			<column name="createdBy_id" type="BIGINT"/>
+			<column name="lastUpdated" type="TIMESTAMP"/>
+			<column name="lastUpdatedBy_id" type="BIGINT"/>
+            <column name="REV" type="int">
+                <constraints primaryKey="true"  />
+            </column>
+            <column name="REVTYPE" type="tinyint(4)"></column>
+        </createTable>
+	</changeSet>
 
 </databaseChangeLog>
