@@ -12,9 +12,6 @@
             <column name="venue_id" type="BIGINT">
                 <constraints foreignKeyName="fk_ComponentBatch_Location" references="Location(id)"/>
             </column>
-            <column name="donationBatch_id" type="BIGINT">
-                <constraints foreignKeyName="fk_ComponentBatch_DonationBatch" references="DonationBatch(id)"/>
-            </column>
             <column name="status" type="VARCHAR(20)"/>
             <column name="bloodTransportBoxCount" type="INT"/>
             <column name="collectionDate" type="TIMESTAMP"/>
@@ -30,7 +27,6 @@
                 <constraints primaryKey="true"  />
             </column>
             <column name="venue_id" type="BIGINT"/>
-            <column name="donationBatch_id" type="BIGINT"/>
             <column name="bloodTransportBoxCount" type="INT"/>
             <column name="collectionDate" type="TIMESTAMP"/>
             <column name="deliveryDate" type="TIMESTAMP"/>
@@ -100,6 +96,15 @@
 		</addColumn>
     	<addColumn tableName="Component_AUD">
 			<column name="componentBatch_id" type="BIGINT"/> 
+		</addColumn>
+	</changeSet>
+	
+	<changeSet id="20160422-1529" author="lauravignoli">
+		<comment>BSIS-794 - add relationship between DonationBatch and ComponentBatch.</comment>
+		<addColumn tableName="DonationBatch">
+			<column name="componentBatch_id" type="BIGINT">
+				<constraints foreignKeyName="fk_DonationBatch_ComponentBatch" references="ComponentBatch(id)"/>
+			</column>
 		</addColumn>
 	</changeSet>
 

@@ -9,16 +9,16 @@ import java.util.List;
 
 import javax.persistence.NoResultException;
 
-import model.donation.Donation;
-import model.donationbatch.DonationBatch;
-import model.location.Location;
-
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import model.componentbatch.ComponentBatch;
+import model.donation.Donation;
+import model.donationbatch.DonationBatch;
+import model.location.Location;
 import suites.DBUnitContextDependentTestSuite;
 
 /**
@@ -156,5 +156,12 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
     List<DonationBatch> batches = donationBatchRepository.findDonationBatches(false, locationIds, df.parse(startDate), df.parse(endDate));
     Assert.assertNotNull("There are batches in this date range", batches);
     Assert.assertEquals("There are 2 donation batches in this date range", 2, batches.size());
+  }
+
+  @Test
+  public void testDonationBatchHasComponentBatch() throws Exception {
+    DonationBatch one = donationBatchRepository.findDonationBatchById(1l);
+    ComponentBatch componentBatch = one.getComponentBatch();
+    Assert.assertEquals("There are 5 boxes on component batch", 5, componentBatch.getBloodTransportBoxCount().intValue());
   }
 }

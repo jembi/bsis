@@ -9,15 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
-
-import model.BaseModificationTrackerEntity;
-import model.component.Component;
-import model.donationbatch.DonationBatch;
-import model.location.Location;
 
 import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
@@ -28,6 +22,9 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import constraintvalidator.LocationExists;
+import model.BaseModificationTrackerEntity;
+import model.component.Component;
+import model.location.Location;
 
 @Entity
 @Audited
@@ -55,10 +52,6 @@ public class ComponentBatch extends BaseModificationTrackerEntity {
   @Where(clause = "isDeleted = 0")
   private Set<Component> components = Collections.EMPTY_SET;
   
-  @OneToOne(fetch=FetchType.LAZY)
-  @JoinColumn(name="donationBatch_id")
-  private DonationBatch donationBatch;
-  
   @Enumerated(EnumType.STRING)
   @Column(length = 20)
   private ComponentBatchStatus status = ComponentBatchStatus.OPEN;
@@ -85,14 +78,6 @@ public class ComponentBatch extends BaseModificationTrackerEntity {
 
   public void setVenue(Location venue) {
     this.venue = venue;
-  }
-
-  public DonationBatch getDonationBatch() {
-    return donationBatch;
-  }
-
-  public void setDonationBatch(DonationBatch donationBatch) {
-    this.donationBatch = donationBatch;
   }
 
   public ComponentBatchStatus getStatus() {
