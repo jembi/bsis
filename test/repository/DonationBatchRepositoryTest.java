@@ -162,6 +162,6 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
   public void testDonationBatchHasComponentBatch() throws Exception {
     DonationBatch one = donationBatchRepository.findDonationBatchById(1l);
     ComponentBatch componentBatch = one.getComponentBatch();
-    Assert.assertEquals("There are 5 boxes on component batch", 5, componentBatch.getBloodTransportBoxCount().intValue());
+    Assert.assertEquals("There are 5 boxes on component batch", 5, componentBatch.getBloodTransportBoxCount());
   }
 }

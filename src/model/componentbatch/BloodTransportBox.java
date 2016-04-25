@@ -19,7 +19,7 @@ public class BloodTransportBox extends BaseModificationTrackerEntity {
   private static final long serialVersionUID = 1L;
 
   @Column
-  private Double temperature;
+  private double temperature;
   
   @ManyToOne(optional = true)
   private ComponentBatch componentBatch;
@@ -31,11 +31,11 @@ public class BloodTransportBox extends BaseModificationTrackerEntity {
     super();
   }
 
-  public Double getTemperature() {
+  public double getTemperature() {
     return temperature;
   }
 
-  public void setTemperature(Double temperature) {
+  public void setTemperature(double temperature) {
     this.temperature = temperature;
   }
 
