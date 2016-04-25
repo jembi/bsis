@@ -9,23 +9,34 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
+
+import model.BaseModificationTrackerEntity;
+import model.component.Component;
+import model.location.Location;
 
 import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
+import repository.ComponentBatchNamedQueryConstants;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import constraintvalidator.LocationExists;
-import model.BaseModificationTrackerEntity;
-import model.component.Component;
-import model.location.Location;
 
+@NamedQueries({
+  @NamedQuery(name = ComponentBatchNamedQueryConstants.NAME_FIND_COMPONENT_BATCHES_BY_STATUS,
+      query = ComponentBatchNamedQueryConstants.QUERY_FIND_COMPONENT_BATCHES_BY_STATUS),
+  @NamedQuery(name = ComponentBatchNamedQueryConstants.NAME_FIND_COMPONENT_BATCH_BY_ID,
+      query = ComponentBatchNamedQueryConstants.QUERY_FIND_COMPONENT_BATCH_BY_ID)
+})
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
