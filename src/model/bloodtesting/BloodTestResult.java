@@ -9,7 +9,6 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -18,7 +17,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import model.BaseModificationTrackerEntity;
 import model.donation.Donation;
-import model.microtiterplate.MachineReading;
 import repository.BloodTestResultNamedQueryConstants;
 
 /**
@@ -47,9 +45,6 @@ public class BloodTestResult extends BaseModificationTrackerEntity {
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date testedOn;
-
-  @OneToOne(cascade = {CascadeType.MERGE})
-  private MachineReading machineReading;
 
   @Lob
   private String notes;
@@ -101,14 +96,6 @@ public class BloodTestResult extends BaseModificationTrackerEntity {
 
   public void setTestedOn(Date testedOn) {
     this.testedOn = testedOn;
-  }
-
-  public MachineReading getMachineReading() {
-    return machineReading;
-  }
-
-  public void setMachineReading(MachineReading machineReading) {
-    this.machineReading = machineReading;
   }
 
   public String getReagentLotNumber() {

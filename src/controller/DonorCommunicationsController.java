@@ -9,6 +9,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import model.donor.Donor;
+import model.location.Location;
+import model.util.BloodGroup;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,14 +24,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import model.donor.Donor;
-import model.location.Location;
-import model.util.BloodGroup;
 import repository.DonorCommunicationsRepository;
 import repository.LocationRepository;
 import service.FormFieldAccessorService;
 import utils.PermissionConstants;
-import viewmodel.DonorViewModel;
+import factory.DonorViewModelFactory;
 
 @RestController
 @RequestMapping("donorcommunications")
@@ -37,6 +38,7 @@ public class DonorCommunicationsController {
    * The Constant LOGGER.
    */
   private static final Logger LOGGER = Logger.getLogger(DonorCommunicationsController.class);
+
   @Autowired
   private DonorCommunicationsRepository donorCommunicationsRepository;
 
@@ -45,6 +47,9 @@ public class DonorCommunicationsController {
 
   @Autowired
   private LocationRepository locationRepository;
+  
+  @Autowired
+  private DonorViewModelFactory donorViewModelFactory;
 
   public DonorCommunicationsController() {
   }
@@ -66,7 +71,6 @@ public class DonorCommunicationsController {
     // to ensure custom field names are displayed in the form
     map.put("donorFields", formFieldAccessorService.getFormFieldsForForm("donor"));
     addEditSelectorOptions(map);
-    // map.put("donorCommunicationsForm", dbform);
     return map;
   }
 
@@ -84,37 +88,19 @@ public class DonorCommunicationsController {
       @RequestParam(value = "noBloodGroup", required = false) boolean noBloodGroup) throws ParseException {
 
     LOGGER.debug("Start DonorCommunicationsController:findDonorCommunicationsPagination");
-    //    String eligibleClinicDate = getEligibleDonorDate(clinicDate);
-
-    Map<String, Object> map = new HashMap<String, Object>();
 
     Map<String, Object> pagingParams = new HashMap<String, Object>();
     pagingParams.put("sortColumn", "id");
-    //pagingParams.put("start", "0");
-    //pagingParams.put("length", "10");
     pagingParams.put("sortDirection", "asc");
 
     List<Donor> results = new ArrayList<Donor>();
     results = donorCommunicationsRepository.findDonors(setLocations(venues), clinicDate, lastDonationFromDate,
         lastDonationToDate, setBloodGroups(bloodGroups), anyBloodGroup, noBloodGroup, pagingParams, clinicDate);
 
-    List<DonorViewModel> donors = new ArrayList<DonorViewModel>();
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("donors", donorViewModelFactory.createDonorViewModels(results));
 
-    if (results != null) {
-      for (Donor donor : results) {
-        DonorViewModel donorViewModel = getDonorsViewModel(donor);
-        donors.add(donorViewModel);
-      }
-    }
-
-    map.put("donors", donors);
     return map;
-
-  }
-
-  private DonorViewModel getDonorsViewModel(Donor donor) {
-    DonorViewModel donorViewModel = new DonorViewModel(donor);
-    return donorViewModel;
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
@@ -122,7 +108,7 @@ public class DonorCommunicationsController {
     m.put("bloodGroups", BloodGroup.getBloodgroups());
   }
 
-  public List<Location> setLocations(List<String> locations) {
+  private List<Location> setLocations(List<String> locations) {
 
     List<Location> venues = new ArrayList<Location>();
 
@@ -135,7 +121,7 @@ public class DonorCommunicationsController {
     return venues;
   }
 
-  public List<BloodGroup> setBloodGroups(List<String> bloodGroups) {
+  private List<BloodGroup> setBloodGroups(List<String> bloodGroups) {
     if (bloodGroups == null) {
       return Collections.emptyList();
     }

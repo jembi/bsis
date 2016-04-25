@@ -7,16 +7,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import model.donationbatch.DonationBatch;
-import model.testbatch.TestBatch;
-import model.testbatch.TestBatchStatus;
-
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import model.donationbatch.DonationBatch;
+import model.testbatch.TestBatch;
+import model.testbatch.TestBatchStatus;
 import suites.DBUnitContextDependentTestSuite;
 
 /**
@@ -121,22 +120,4 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
     Assert.assertNotNull("DonationBatch was linked to TestBatch", updatedDonationBatch.getTestBatch());
   }
 
-  @Test
-  public void testGetRecentlyClosedTestBatches() throws Exception {
-    List<TestBatch> all = testBatchRepository.getRecentlyClosedTestBatches(1);
-    Assert.assertNotNull("Does not return a null list", all);
-    Assert.assertEquals("One TestBatch returned", 1, all.size());
-  }
-
-  @Test
-  public void testGetRecentlyClosedTestBatchesWithLimit() throws Exception {
-    // creating an extra closed batch
-    TestBatch testBatch = testBatchRepository.findTestBatchById(2l);
-    testBatch.setStatus(TestBatchStatus.CLOSED);
-    testBatchRepository.update(testBatch);
-    // only get 1 closed test batch now
-    List<TestBatch> all = testBatchRepository.getRecentlyClosedTestBatches(1);
-    Assert.assertNotNull("Does not return a null list", all);
-    Assert.assertEquals("One TestBatch returned", 1, all.size());
-  }
 }

@@ -163,7 +163,7 @@ public class DonorController {
     map.put("isEligible", donorConstraintChecker.isDonorEligibleToDonate(id));
     map.put("birthDate", CustomDateFormatter.getDateString(donor.getBirthDate()));
     if (donations.size() > 0) {
-      map.put("lastDonation", getDonationViewModel(donations.get(donations.size() - 1)));
+      map.put("lastDonation", donationViewModelFactory.createDonationViewModelWithoutPermissions(donations.get(donations.size() - 1)));
       map.put("dateOfFirstDonation", CustomDateFormatter.getDateString(donations.get(0).getDonationDate()));
       map.put("totalDonations", getNumberOfDonations(donations));
       map.put("dueToDonate", CustomDateFormatter.getDateString(donor.getDueToDonate()));
@@ -442,11 +442,6 @@ public class DonorController {
     m.put("languages", donorRepository.getAllLanguages());
     m.put("idTypes", donorRepository.getAllIdTypes());
     m.put("addressTypes", donorRepository.getAllAddressTypes());
-  }
-
-  private DonationViewModel getDonationViewModel(Donation donation) {
-    DonationViewModel donationViewModel = new DonationViewModel(donation);
-    return donationViewModel;
   }
 
   private int getNumberOfDonations(List<Donation> donations) {

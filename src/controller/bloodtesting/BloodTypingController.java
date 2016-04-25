@@ -9,39 +9,23 @@ import javax.servlet.http.HttpServletRequest;
 
 import model.bloodtesting.BloodTest;
 import model.bloodtesting.BloodTestType;
-import model.donation.Donation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import repository.DonationRepository;
-import repository.GenericConfigRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import utils.PermissionConstants;
 import viewmodel.BloodTestViewModel;
-import viewmodel.BloodTestingRuleResult;
-import viewmodel.DonationViewModel;
-import backingform.TestResultsBackingForm;
 
 @RestController
 @RequestMapping("bloodgroupingtests")
 public class BloodTypingController {
 
   @Autowired
-  private DonationRepository donationRepository;
-
-  @Autowired
-  private GenericConfigRepository genericConfigRepository;
-
-  @Autowired
   private BloodTestingRepository bloodTestingRepository;
-
-  public BloodTypingController() {
-  }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_BLOOD_TYPING_OUTCOME + "')")
@@ -82,19 +66,5 @@ public class BloodTypingController {
       tests.add(new BloodTestViewModel(rawBloodTest));
     }
     return tests;
-  }
-
-  @RequestMapping(value = "/results/{donationId}", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_BLOOD_TYPING_OUTCOME + "')")
-  public Map<String, Object> showBloodTypingResultsForDonation(
-      @PathVariable Long donationId) {
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    Donation donation = donationRepository.findDonationById(donationId);
-    BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForDonation(donationId);
-    map.put("donation", new DonationViewModel(donation));
-    map.put("overview", ruleResult);
-
-    return map;
   }
 }
