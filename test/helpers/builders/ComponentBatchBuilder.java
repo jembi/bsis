@@ -8,6 +8,7 @@ import model.component.Component;
 import model.componentbatch.BloodTransportBox;
 import model.componentbatch.ComponentBatch;
 import model.componentbatch.ComponentBatchStatus;
+import model.donationbatch.DonationBatch;
 
 public class ComponentBatchBuilder extends AbstractEntityBuilder<ComponentBatch> {
 
@@ -19,6 +20,7 @@ public class ComponentBatchBuilder extends AbstractEntityBuilder<ComponentBatch>
   private Set<BloodTransportBox> bloodTransportBoxes = new HashSet<>();
   private ComponentBatchStatus status;
   private boolean deleted;
+  private DonationBatch donationBatch;
 
   public ComponentBatchBuilder withId(Long id) {
     this.id = id;
@@ -51,6 +53,11 @@ public class ComponentBatchBuilder extends AbstractEntityBuilder<ComponentBatch>
     return this;
   }
 
+  public ComponentBatchBuilder withDonationBatch(DonationBatch donationBatch) {
+    this.donationBatch = donationBatch;
+    return this;
+  }
+
   public ComponentBatchBuilder thatIsDeleted() {
     deleted = true;
     return this;
@@ -67,6 +74,7 @@ public class ComponentBatchBuilder extends AbstractEntityBuilder<ComponentBatch>
     componentBatch.setBloodTransportBoxCount(bloodTransportBoxCount);
     componentBatch.setBloodTransportBoxes(bloodTransportBoxes);
     componentBatch.setIsDeleted(deleted);
+    componentBatch.setDonationBatch(donationBatch);
     return componentBatch;
   }
 

@@ -13,14 +13,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import model.component.Component;
-import model.componentbatch.BloodTransportBox;
-import model.componentbatch.ComponentBatch;
-import model.componentbatch.ComponentBatchStatus;
-import model.donation.Donation;
-import model.donationbatch.DonationBatch;
-import model.location.Location;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +20,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import model.component.Component;
+import model.componentbatch.BloodTransportBox;
+import model.componentbatch.ComponentBatch;
+import model.componentbatch.ComponentBatchStatus;
+import model.donation.Donation;
+import model.donationbatch.DonationBatch;
+import model.location.Location;
 import viewmodel.BloodTransportBoxViewModel;
 import viewmodel.ComponentBatchViewModel;
 import viewmodel.ComponentViewModel;
@@ -73,7 +72,8 @@ public class ComponentBatchViewModelFactoryTests {
         .withBloodTransportBox(box)
         .withComponent(component)
         .withDeliveryDate(deliveryDate)
-        .withCollectionDate(collectionDate)
+        .withCollectionDate(collectionDate)   
+        .withDonationBatch(donationBatch)
         .build();
     
     // set up mocks

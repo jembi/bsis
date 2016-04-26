@@ -2,6 +2,7 @@ package model.componentbatch;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -15,21 +16,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
-import model.BaseModificationTrackerEntity;
-import model.component.Component;
-import model.location.Location;
-
 import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
-import repository.ComponentBatchNamedQueryConstants;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import constraintvalidator.LocationExists;
+import model.BaseModificationTrackerEntity;
+import model.component.Component;
+import model.donationbatch.DonationBatch;
+import model.location.Location;
+import repository.ComponentBatchNamedQueryConstants;
 
 @NamedQueries({
   @NamedQuery(name = ComponentBatchNamedQueryConstants.NAME_FIND_COMPONENT_BATCHES_BY_STATUS,
@@ -79,6 +79,11 @@ public class ComponentBatch extends BaseModificationTrackerEntity {
   @Column
   private boolean isDeleted = false;
   
+  // This should have been a OneToOne relationship but we couldn't manage to solve an error saying "cannot simultaneously fetch multiple bags". 
+  // The solution was to use a set of DonationBatch objects instead of just one donationBatch.
+  @OneToMany(mappedBy = "componentBatch")
+  private Set<DonationBatch> donationBatches = new HashSet<DonationBatch>();
+
   public ComponentBatch() {
     super();
   }
@@ -145,5 +150,13 @@ public class ComponentBatch extends BaseModificationTrackerEntity {
 
   public void setIsDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
+  }
+
+  public DonationBatch getDonationBatch() {
+    return donationBatches.iterator().next();
+  }
+
+  public void setDonationBatch(DonationBatch donationBatch) {
+    donationBatches.add(donationBatch);
   }
 }

@@ -40,12 +40,7 @@ public class ComponentBatchViewModelFactory {
     viewModel.setDeliveryDate(componentBatch.getDeliveryDate());
     viewModel.setStatus(String.valueOf(componentBatch.getStatus()));
     viewModel.setComponents(componentViewModelFactory.createComponentViewModels(componentBatch.getComponents()));
-    // FIXME: round about way to get DonationBatch
-    if (componentBatch.getComponents() != null && !componentBatch.getComponents().isEmpty()) {
-      Component component = componentBatch.getComponents().iterator().next();
-      DonationBatch donationBatch = component.getDonation().getDonationBatch();
-      viewModel.setDonationBatch(donationBatchViewModelFactory.createDonationBatchBasicViewModel(donationBatch));
-    }
+    viewModel.setDonationBatch(donationBatchViewModelFactory.createDonationBatchBasicViewModel(componentBatch.getDonationBatch()));
     viewModel.setCollectionDate(componentBatch.getCollectionDate());
     viewModel.setBloodTransportBoxes(bloodTransportBoxViewModelFactory.createBloodTransportBoxViewModels(componentBatch.getBloodTransportBoxes()));
     viewModel.setBloodTransportBoxCount(componentBatch.getBloodTransportBoxCount());
