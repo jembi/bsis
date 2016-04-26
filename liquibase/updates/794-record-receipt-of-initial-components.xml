@@ -156,5 +156,12 @@
 			<column name="isTimeField" value="0"></column>			
 		</insert>
 	</changeSet>
+	
+	<changeSet id="20160426-1702" author="lauravignoli">
+		<comment>BSIS-794 - add componentBatch_id column to DonationBatch_AUD.</comment>
+		<addColumn tableName="DonationBatch_AUD">
+			<column name="componentBatch_id" type="BIGINT"/>
+		</addColumn>
+	</changeSet>
 
 </databaseChangeLog>
