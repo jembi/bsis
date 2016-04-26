@@ -1,5 +1,7 @@
 [![Build Status](https://secure.travis-ci.org/jembi/bsis.png)](http://travis-ci.org/jembi/bsis)
 
+[![codecov.io](https://codecov.io/github/jembi/bsis/coverage.svg?branch=master)](https://codecov.io/github/jembi/bsis?branch=master)
+
 BSIS
 ====
 
