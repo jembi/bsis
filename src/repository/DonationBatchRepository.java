@@ -13,7 +13,6 @@ import javax.persistence.TypedQuery;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 
-
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -162,4 +161,11 @@ public class DonationBatchRepository {
         .getSingleResult()
         .intValue();
   }
+  
+  public boolean verifyDonationBatchExists(Long id) {
+    return em.createNamedQuery(DonationBatchQueryConstants.NAME_VERIFY_DONATION_BATCH_WITH_ID_EXISTS, Boolean.class)
+        .setParameter("id", id)
+        .setParameter("deleted", false)
+        .getSingleResult();
+    }
 }

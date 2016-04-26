@@ -4,7 +4,7 @@ public class BloodTransportBoxBackingForm {
 
   private Long id;
   private boolean isDeleted = false;
-  private double temperature;
+  private Double temperature;
 
   public BloodTransportBoxBackingForm() {
     super();
@@ -26,11 +26,11 @@ public class BloodTransportBoxBackingForm {
     this.isDeleted = isDeleted;
   }
 
-  public double getTemperature() {
+  public Double getTemperature() {
     return temperature;
   }
 
-  public void setTemperature(double temperature) {
+  public void setTemperature(Double temperature) {
     this.temperature = temperature;
   }
 }

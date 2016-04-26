@@ -164,4 +164,16 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
     ComponentBatch componentBatch = one.getComponentBatch();
     Assert.assertEquals("There are 5 boxes on component batch", 5, componentBatch.getBloodTransportBoxCount());
   }
+  
+  @Test
+  public void testVerifyDonationBatchExists() throws Exception {
+    boolean exists = donationBatchRepository.verifyDonationBatchExists(1L);
+    Assert.assertTrue("DonationBatch exists", exists);
+  }
+  
+  @Test
+  public void testVerifyDonationBatchDoesntExist() throws Exception {
+    boolean exists = donationBatchRepository.verifyDonationBatchExists(11111111L);
+    Assert.assertFalse("DonationBatch doesn't exist", exists);
+  }
 }

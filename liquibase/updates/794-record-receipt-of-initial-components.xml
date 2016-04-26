@@ -107,5 +107,54 @@
 			</column>
 		</addColumn>
 	</changeSet>
+	
+	<changeSet id="20160426-0924" author="timler">
+		<comment>BSIS-794 - add FormField for ComponentBatch and BloodTransportBox.</comment>
+		<insert tableName="FormField">
+			<column name="form" value="ComponentBatch"></column>
+			<column name="field" value="deliveryDate"></column>
+			<column name="defaultDisplayName" value="Delivery date/time"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="0"></column>
+			<column name="isRequired" value="1"></column>
+			<column name="canBeOptional" value="0"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="1"></column>			
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="ComponentBatch"></column>
+			<column name="field" value="donationBatch"></column>
+			<column name="defaultDisplayName" value="Donation Batch"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="0"></column>
+			<column name="isRequired" value="1"></column>
+			<column name="canBeOptional" value="0"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="BloodTransportBox"></column>
+			<column name="field" value="temperature"></column>
+			<column name="defaultDisplayName" value="Temperature"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="0"></column>
+			<column name="isRequired" value="1"></column>
+			<column name="canBeOptional" value="0"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+	</changeSet>
 
 </databaseChangeLog>
