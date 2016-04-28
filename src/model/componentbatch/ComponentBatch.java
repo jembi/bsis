@@ -16,20 +16,18 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
+import model.BaseModificationTrackerEntity;
+import model.component.Component;
+import model.donationbatch.DonationBatch;
+import model.location.Location;
+
 import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import constraintvalidator.LocationExists;
-import model.BaseModificationTrackerEntity;
-import model.component.Component;
-import model.donationbatch.DonationBatch;
-import model.location.Location;
 import repository.ComponentBatchNamedQueryConstants;
+import constraintvalidator.LocationExists;
 
 @NamedQueries({
   @NamedQuery(name = ComponentBatchNamedQueryConstants.NAME_FIND_COMPONENT_BATCHES_BY_STATUS,
