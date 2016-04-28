@@ -16,10 +16,10 @@ public class ComponentBatchRepository extends AbstractRepository<ComponentBatch>
     return entityManager.find(ComponentBatch.class, id);
   }
 
-  public List<ComponentBatch> findByStatus(ComponentBatchStatus... excludeStatuses) {
+  public List<ComponentBatch> findByStatus(ComponentBatchStatus... statuses) {
     return entityManager.createNamedQuery(
         ComponentBatchNamedQueryConstants.NAME_FIND_COMPONENT_BATCHES_BY_STATUS, ComponentBatch.class)
-        .setParameter("statuses", Arrays.asList(excludeStatuses))
+        .setParameter("statuses", Arrays.asList(statuses))
         .setParameter("isDeleted", false)
         .getResultList();
   }
