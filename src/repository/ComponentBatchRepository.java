@@ -1,13 +1,12 @@
 package repository;
 
+import java.util.Arrays;
 import java.util.List;
 
 import model.componentbatch.ComponentBatch;
 import model.componentbatch.ComponentBatchStatus;
 
 import org.springframework.stereotype.Repository;
-
-import scala.actors.threadpool.Arrays;
 
 @Repository
 public class ComponentBatchRepository extends AbstractRepository<ComponentBatch> {
