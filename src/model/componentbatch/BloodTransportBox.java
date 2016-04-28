@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Audited
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class BloodTransportBox extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;

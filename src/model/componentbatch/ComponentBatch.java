@@ -39,7 +39,6 @@ import repository.ComponentBatchNamedQueryConstants;
 })
 @Entity
 @Audited
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class ComponentBatch extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
