@@ -164,4 +164,15 @@
 		</addColumn>
 	</changeSet>
 
+  <changeSet id="20160503-1305" author="bausmeier">
+    <addColumn tableName="Location">
+      <column name="isProcessingSite" type="TINYINT(1)" defaultValue="0">
+        <constraints nullable="false" />
+      </column>
+    </addColumn>
+    <addColumn tableName="Location_AUD">
+      <column name="isProcessingSite" type="TINYINT(1)"></column>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

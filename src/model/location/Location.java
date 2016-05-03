@@ -39,6 +39,8 @@ public class Location extends BaseEntity {
   private Boolean isMobileSite;
 
   private Boolean isVenue;
+  
+  private boolean isProcessingSite;
 
   private Boolean isDeleted;
 
@@ -103,5 +105,13 @@ public class Location extends BaseEntity {
 
   public void setIsVenue(Boolean isVenue) {
     this.isVenue = isVenue;
+  }
+
+  public boolean isProcessingSite() {
+    return isProcessingSite;
+  }
+
+  public void setProcessingSite(boolean isProcessingSite) {
+    this.isProcessingSite = isProcessingSite;
   }
 }

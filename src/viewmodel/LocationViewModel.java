@@ -33,4 +33,8 @@ public class LocationViewModel {
   public boolean getIsVenue() {
     return location.getIsVenue();
   }
+  
+  public boolean isProcessingSite() {
+    return location.isProcessingSite();
+  }
 }

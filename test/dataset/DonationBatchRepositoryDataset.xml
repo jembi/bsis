@@ -3,11 +3,11 @@
     <user id="1" emailId="admin" firstName="admin" isactive="1"
           isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin"/>
 
-    <Location id="1" isDeleted="false" isVenue="true"
+    <Location isProcessingSite="0" id="1" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Maseru" notes=""/>
-    <Location id="2" isDeleted="false" isVenue="true"
+    <Location isProcessingSite="0" id="2" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Leribe" notes=""/>
-    <Location id="3" isDeleted="false" isVenue="true"
+    <Location isProcessingSite="0" id="3" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Mohale" notes=""/>
 
     <TestBatch id="1" batchNumber="TB0215000000" isDeleted="false"
