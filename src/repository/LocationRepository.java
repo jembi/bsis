@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import model.location.Location;
+import model.location.LocationType;
 
 @Repository
 @Transactional
@@ -23,6 +24,32 @@ public class LocationRepository {
   public void saveLocation(Location location) {
     em.persist(location);
     em.flush();
+  }
+
+  public List<Location> getLocationsByType(LocationType locationType) {
+    List<Location> locations = null;
+
+    TypedQuery<Location> query =
+        em.createNamedQuery(LocationNamedQueryConstants.NAME_GET_LOCATIONS_BY_TYPE, Location.class);
+    query.setParameter("isDeleted", false);
+    boolean isVenue = false;
+    boolean isUsageSite = false;
+    boolean isProcessingSite = false;
+
+    if (locationType.equals(LocationType.VENUE)) {
+      isVenue = true;
+    } else if (locationType.equals(LocationType.USAGE_SITE)) {
+      isUsageSite = true;
+    } else if (locationType.equals(LocationType.PROCESSING_SITE)) {
+      isProcessingSite = true;
+    }
+
+    query.setParameter("isVenue", isVenue);
+    query.setParameter("isUsageSite", isUsageSite);
+    query.setParameter("isProcessingSite", isProcessingSite);
+    locations = query.getResultList();
+
+    return locations;
   }
 
   public List<Location> getAllLocations() {
@@ -63,7 +90,7 @@ public class LocationRepository {
   }
 
   public List<String> getAllUsageSitesAsString() {
-    List<Location> locations = getAllUsageSites();
+    List<Location> locations = getLocationsByType(LocationType.USAGE_SITE);
     List<String> locationNames = new ArrayList<String>();
     for (Location l : locations) {
       if (l.getIsUsageSite())

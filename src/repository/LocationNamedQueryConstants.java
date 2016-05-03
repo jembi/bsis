@@ -16,4 +16,8 @@ public class LocationNamedQueryConstants {
   public static final String NAME_COUNT_LOCATION_WITH_ID = "Location.countLocationWithId";
   public static final String QUERY_COUNT_LOCATION_WITH_ID =
       "SELECT count(*) FROM Location l WHERE l.id=:id AND l.isDeleted = false";
+
+  public static final String NAME_GET_LOCATIONS_BY_TYPE = "Location.getLocationsByType";
+  public static final String QUERY_GET_LOCATIONS_BY_TYPE =
+      "SELECT l from Location l where l.isProcessingSite=:isProcessingSite and l.isVenue=:isVenue and l.isUsageSite=:isUsageSite and l.isDeleted=:isDeleted ORDER BY name ASC";
 }
