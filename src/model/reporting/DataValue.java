@@ -10,7 +10,7 @@ import utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class Indicator {
+public class DataValue {
 
   private Date startDate;
   private Date endDate;
@@ -73,11 +73,11 @@ public class Indicator {
       return true;
     }
 
-    if (!(obj instanceof Indicator)) {
+    if (!(obj instanceof DataValue)) {
       return false;
     }
 
-    Indicator other = (Indicator) obj;
+    DataValue other = (DataValue) obj;
 
     return Objects.equals(getStartDate(), other.getStartDate()) &&
         Objects.equals(getEndDate(), other.getEndDate()) &&

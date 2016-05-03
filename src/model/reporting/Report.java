@@ -12,7 +12,7 @@ public class Report {
 
   private Date startDate;
   private Date endDate;
-  private List<Indicator> indicators;
+  private List<DataValue> dataValues;
 
   @JsonSerialize(using = DateTimeSerialiser.class)
   public Date getStartDate() {
@@ -32,12 +32,12 @@ public class Report {
     this.endDate = endDate;
   }
 
-  public List<Indicator> getIndicators() {
-    return indicators;
+  public List<DataValue> getDataValues() {
+    return dataValues;
   }
 
-  public void setIndicators(List<Indicator> indicators) {
-    this.indicators = indicators;
+  public void setDataValues(List<DataValue> dataValues) {
+    this.dataValues = dataValues;
   }
 
   @Override
@@ -54,12 +54,12 @@ public class Report {
 
     return Objects.equals(getStartDate(), other.getStartDate()) &&
         Objects.equals(getEndDate(), other.getEndDate()) &&
-        Objects.equals(getIndicators(), other.getIndicators());
+        Objects.equals(getDataValues(), other.getDataValues());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getStartDate(), getEndDate(), getIndicators());
+    return Objects.hash(getStartDate(), getEndDate(), getDataValues());
   }
 
 }
