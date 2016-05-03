@@ -9,10 +9,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import model.donor.Donor;
-import model.location.Location;
-import model.util.BloodGroup;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,11 +20,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import factory.DonorViewModelFactory;
+import model.donor.Donor;
+import model.location.Location;
+import model.location.LocationType;
+import model.util.BloodGroup;
 import repository.DonorCommunicationsRepository;
 import repository.LocationRepository;
 import service.FormFieldAccessorService;
 import utils.PermissionConstants;
-import factory.DonorViewModelFactory;
 
 @RestController
 @RequestMapping("donorcommunications")
@@ -104,7 +104,7 @@ public class DonorCommunicationsController {
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("venues", locationRepository.getAllVenues());
+    m.put("venues", locationRepository.getLocationsByType(LocationType.VENUE));
     m.put("bloodGroups", BloodGroup.getBloodgroups());
   }
 

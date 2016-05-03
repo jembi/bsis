@@ -58,14 +58,6 @@ public class LocationRepository {
     return query.getResultList();
   }
 
-  public List<Location> getAllUsageSites() {
-    TypedQuery<Location> query =
-        em.createNamedQuery(LocationNamedQueryConstants.NAME_GET_ALL_USAGE_SITES, Location.class);
-    query.setParameter("isUsageSite", true);
-    query.setParameter("isDeleted", false);
-    return query.getResultList();
-  }
-
   public Location getLocation(Long selectedLocationId) {
     TypedQuery<Location> query = em.createQuery(
         "SELECT l FROM Location l where l.id= :locationId",
@@ -97,13 +89,6 @@ public class LocationRepository {
         locationNames.add(l.getName());
     }
     return locationNames;
-  }
-
-  public List<Location> getAllVenues() {
-    TypedQuery<Location> query = em.createNamedQuery(LocationNamedQueryConstants.NAME_GET_ALL_VENUES, Location.class);
-    query.setParameter("isVenue", true);
-    query.setParameter("isDeleted", false);
-    return query.getResultList();
   }
 
   public Location findLocationByName(String locationName) throws NoResultException, NonUniqueResultException {

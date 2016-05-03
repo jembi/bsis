@@ -17,10 +17,6 @@ import repository.LocationNamedQueryConstants;
 @NamedQueries({
   @NamedQuery(name = LocationNamedQueryConstants.NAME_GET_ALL_LOCATIONS,
       query = LocationNamedQueryConstants.QUERY_GET_ALL_LOCATIONS),
-  @NamedQuery(name = LocationNamedQueryConstants.NAME_GET_ALL_VENUES,
-      query = LocationNamedQueryConstants.QUERY_GET_ALL_VENUES),
-  @NamedQuery(name = LocationNamedQueryConstants.NAME_GET_ALL_USAGE_SITES,
-      query = LocationNamedQueryConstants.QUERY_GET_ALL_USAGE_SITES),
   @NamedQuery(name = LocationNamedQueryConstants.NAME_COUNT_LOCATION_WITH_ID,
       query = LocationNamedQueryConstants.QUERY_COUNT_LOCATION_WITH_ID),
   @NamedQuery(name = LocationNamedQueryConstants.NAME_GET_LOCATIONS_BY_TYPE,

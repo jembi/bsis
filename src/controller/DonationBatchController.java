@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import model.donationbatch.DonationBatch;
+import model.location.LocationType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -102,7 +103,7 @@ public class DonationBatchController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("addDonationBatchForm", form);
-    map.put("venues", locationViewModelFactory.createLocationViewModels(locationRepository.getAllVenues()));
+    map.put("venues", locationViewModelFactory.createLocationViewModels(locationRepository.getLocationsByType(LocationType.VENUE)));
     // to ensure custom field names are displayed in the form
     Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("donationbatch");
     map.put("donationBatchFields", formFields);

@@ -41,20 +41,6 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
-  public void testGetAllUsageSites() throws Exception {
-    List<Location> all = locationRepository.getAllUsageSites();
-    Assert.assertNotNull("There are usage site Locations", all);
-    Assert.assertEquals("There are 2 usage site Location", 2, all.size());
-  }
-
-  @Test
-  public void testGetAllVenues() throws Exception {
-    List<Location> all = locationRepository.getAllVenues();
-    Assert.assertNotNull("There are venue Locations", all);
-    Assert.assertEquals("There are 3 venue Locations", 3, all.size());
-  }
-
-  @Test
   public void testGetLocation() throws Exception {
     Location one = locationRepository.getLocation(1l);
     Assert.assertNotNull("There is a Location", one);
