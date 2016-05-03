@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,11 +58,11 @@ public class LotReleaseController {
   @RequestMapping(value = "/status/{donationIdentificationNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DISCARDS + "')")
   public ResponseEntity findlotRelease(HttpServletRequest request,
-      @PathVariable String donationIdentificationNumber) {
+      @PathVariable String donationIdentificationNumber, @QueryParam(value = "componentType") long componentType) {
     Map<String, Object> componentMap = new HashMap<String, Object>();
 
     Donation donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
-    List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
+    List<Component> components = componentRepository.findComponentsByDINAndType(donationIdentificationNumber, componentType);
     List<Map<String, Object>> componentStatuses = getComponentLabellingStatus(donation, components);
 
     componentMap.put("donationNumber", donationIdentificationNumber);

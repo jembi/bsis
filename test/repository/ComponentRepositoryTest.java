@@ -182,15 +182,15 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testFindComponentByDINAndComponentTypeId() throws Exception {
-    Component one = componentRepository.findComponent("1111111", "1");
-    Assert.assertNotNull("There is a Component with DIN 1111111", one);
-    Assert.assertEquals("Component is linked to the correct Donation", "1111111", one.getDonationIdentificationNumber());
+    List<Component> one = componentRepository.findComponentsByDINAndType("1111111", 1);
+    Assert.assertNotNull("There is a Component with DIN 1111111", one.get(0));
+    Assert.assertEquals("Component is linked to the correct Donation", "1111111", one.get(0).getDonationIdentificationNumber());
   }
 
   @Test
   public void testFindComponentByDINAndComponentTypeIdUnknown() throws Exception {
-    Component one = componentRepository.findComponent("1111112", "1");
-    Assert.assertNull("There is no a Component with DIN 1111112", one);
+    List<Component> one = componentRepository.findComponentsByDINAndType("1111112", 1);
+    Assert.assertEquals("There is no a Component with DIN 1111112", 0, one.size());
   }
 
   @Test
