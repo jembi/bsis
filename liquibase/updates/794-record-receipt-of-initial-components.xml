@@ -27,6 +27,7 @@
                 <constraints primaryKey="true"  />
             </column>
             <column name="venue_id" type="BIGINT"/>
+            <column name="status" type="VARCHAR(20)"/>
             <column name="bloodTransportBoxCount" type="INT"/>
             <column name="collectionDate" type="TIMESTAMP"/>
             <column name="deliveryDate" type="TIMESTAMP"/>
