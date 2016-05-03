@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -49,7 +50,7 @@ public class ComponentBatch extends BaseModificationTrackerEntity {
   @SuppressWarnings("unchecked")
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy = "componentBatch", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "componentBatch", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @Where(clause = "isDeleted = 0")
   private Set<BloodTransportBox> bloodTransportBoxes = Collections.EMPTY_SET;
   

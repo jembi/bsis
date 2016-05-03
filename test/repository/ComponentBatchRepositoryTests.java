@@ -1,12 +1,24 @@
 package repository;
 
+import static helpers.builders.ComponentBuilder.aComponent;
+import static helpers.builders.ComponentTypeBuilder.aComponentType;
+import static helpers.builders.DonationBatchBuilder.aDonationBatch;
+import static helpers.builders.DonationBuilder.aDonation;
+import static helpers.builders.PackTypeBuilder.aPackType;
 import helpers.builders.BloodTransportBoxBuilder;
 import helpers.builders.ComponentBatchBuilder;
 
+import java.util.Arrays;
 import java.util.List;
 
+import model.component.Component;
+import model.componentbatch.BloodTransportBox;
 import model.componentbatch.ComponentBatch;
 import model.componentbatch.ComponentBatchStatus;
+import model.componenttype.ComponentType;
+import model.donation.Donation;
+import model.donationbatch.DonationBatch;
+import model.packtype.PackType;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,6 +30,36 @@ public class ComponentBatchRepositoryTests extends ContextDependentTestSuite {
 
   @Autowired
   private ComponentBatchRepository componentBatchRepository;
+  
+  @Test
+  public void testPersist() throws Exception {
+    // set up data
+    ComponentType componentType = aComponentType().buildAndPersist(entityManager);
+    PackType packType = aPackType().withPackType("packType").withComponentType(componentType).buildAndPersist(entityManager);
+    Donation donation = aDonation().withDonationIdentificationNumber("DIN123").withPackType(packType).buildAndPersist(entityManager);
+    Component component = aComponent().withComponentType(componentType).withDonation(donation).buildAndPersist(entityManager);
+    donation.setComponents(Arrays.asList(component));
+    DonationBatch donationBatch = aDonationBatch().withDonation(donation).buildAndPersist(entityManager);    
+    ComponentBatch entity = ComponentBatchBuilder.aComponentBatch()
+        .withBloodTransportBox(BloodTransportBoxBuilder.aBloodTransportBox().withTemperature(0.5).build())
+        .withBloodTransportBox(BloodTransportBoxBuilder.aBloodTransportBox().withTemperature(12).build())
+        .withBloodTransportBox(BloodTransportBoxBuilder.aBloodTransportBox().withTemperature(-2.5).build())
+        .withStatus(ComponentBatchStatus.OPEN)
+        .withDonationBatch(donationBatch)
+        .build();
+
+    // run test
+    componentBatchRepository.save(entity);
+    
+    // do checks
+    Assert.assertNotNull("Entity was saved", entity.getId());
+    ComponentBatch savedEntity = componentBatchRepository.findById(entity.getId());
+    Assert.assertNotNull("Entity was saved", savedEntity);
+    Assert.assertNotNull("Entity's associations were saved", savedEntity.getBloodTransportBoxes());
+    BloodTransportBox box = savedEntity.getBloodTransportBoxes().iterator().next();
+    Assert.assertNotNull("Entity's associations were saved", box.getId());
+    Assert.assertEquals("Status was persisted", ComponentBatchStatus.OPEN, savedEntity.getStatus());
+  }
 
   @Test(expected = javax.persistence.NoResultException.class)
   public void testFindById_cannotFindUnknownId() throws Exception {
