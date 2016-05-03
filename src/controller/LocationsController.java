@@ -104,7 +104,7 @@ public class LocationsController {
   public Map<String, Object> getLocationsByType(@PathVariable LocationType locationType) {
     Map<String, Object> map = new HashMap<String, Object>();
     List<Location> locations = locationRepository.getLocationsByType(locationType);
-    map.put("allLocations", locationViewModelFactory.createLocationViewModels(locations));
+    map.put("locations", locationViewModelFactory.createLocationViewModels(locations));
     return map;
   }
 }

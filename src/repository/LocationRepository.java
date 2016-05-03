@@ -1,6 +1,5 @@
 package repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -27,29 +26,13 @@ public class LocationRepository {
   }
 
   public List<Location> getLocationsByType(LocationType locationType) {
-    List<Location> locations = null;
-
     TypedQuery<Location> query =
         em.createNamedQuery(LocationNamedQueryConstants.NAME_GET_LOCATIONS_BY_TYPE, Location.class);
     query.setParameter("isDeleted", false);
-    boolean isVenue = false;
-    boolean isUsageSite = false;
-    boolean isProcessingSite = false;
-
-    if (locationType.equals(LocationType.VENUE)) {
-      isVenue = true;
-    } else if (locationType.equals(LocationType.USAGE_SITE)) {
-      isUsageSite = true;
-    } else if (locationType.equals(LocationType.PROCESSING_SITE)) {
-      isProcessingSite = true;
-    }
-
-    query.setParameter("isVenue", isVenue);
-    query.setParameter("isUsageSite", isUsageSite);
-    query.setParameter("isProcessingSite", isProcessingSite);
-    locations = query.getResultList();
-
-    return locations;
+    query.setParameter("isVenue", locationType.equals(LocationType.VENUE));
+    query.setParameter("isUsageSite", locationType.equals(LocationType.USAGE_SITE));
+    query.setParameter("isProcessingSite", locationType.equals(LocationType.PROCESSING_SITE));
+    return query.getResultList();
   }
 
   public List<Location> getAllLocations() {
@@ -79,16 +62,6 @@ public class LocationRepository {
     existingLocation.setIsDeleted(Boolean.TRUE);
     em.merge(existingLocation);
     em.flush();
-  }
-
-  public List<String> getAllUsageSitesAsString() {
-    List<Location> locations = getLocationsByType(LocationType.USAGE_SITE);
-    List<String> locationNames = new ArrayList<String>();
-    for (Location l : locations) {
-      if (l.getIsUsageSite())
-        locationNames.add(l.getName());
-    }
-    return locationNames;
   }
 
   public Location findLocationByName(String locationName) throws NoResultException, NonUniqueResultException {

@@ -69,14 +69,6 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
-  public void testGetAllUsageSitesAsString() throws Exception {
-    List<String> all = locationRepository.getAllUsageSitesAsString();
-    Assert.assertNotNull("Does not return a null list", all);
-    Assert.assertEquals("There are two usage sites", 2, all.size());
-    Assert.assertTrue("Leribe Hospital is in the list", all.contains("Leribe Hospital"));
-  }
-
-  @Test
   public void testDeleteLocation() throws Exception {
     locationRepository.deleteLocation(1L);
     Location one = locationRepository.getLocation(1L);
