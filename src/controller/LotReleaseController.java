@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import backingform.validator.DonationBackingFormValidator;
@@ -58,11 +59,11 @@ public class LotReleaseController {
   @RequestMapping(value = "/status/{donationIdentificationNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DISCARDS + "')")
   public ResponseEntity findlotRelease(HttpServletRequest request,
-      @PathVariable String donationIdentificationNumber, @QueryParam(value = "componentType") long componentType) {
+      @PathVariable String donationIdentificationNumber, @RequestParam(required = true, value = "componentType") long componentTypeId) {
     Map<String, Object> componentMap = new HashMap<String, Object>();
 
     Donation donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
-    List<Component> components = componentRepository.findComponentsByDINAndType(donationIdentificationNumber, componentType);
+    List<Component> components = componentRepository.findComponentsByDINAndType(donationIdentificationNumber, componentTypeId);
     List<Map<String, Object>> componentStatuses = getComponentLabellingStatus(donation, components);
 
     componentMap.put("donationNumber", donationIdentificationNumber);
