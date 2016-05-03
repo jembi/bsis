@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import backingform.ComponentTypeBackingForm;
@@ -40,11 +41,19 @@ public class ComponentTypeController {
 
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_TYPES + "')")
-  public ResponseEntity<Map<String, Object>> getComponentTypes() {
-    Map<String, Object> map = new HashMap<String, Object>();
-    List<ComponentType> componentTypes = componentTypeRepository.getAllComponentTypesIncludeDeleted();
+  public ResponseEntity<Map<String, Object>> getComponentTypes(
+      @RequestParam(required = false, defaultValue = "true") boolean includeDeleted) {
+
+    List<ComponentType> componentTypes;
+    if (includeDeleted) {
+      componentTypes = componentTypeRepository.getAllComponentTypesIncludeDeleted();
+    } else {
+      componentTypes = componentTypeRepository.getAllComponentTypes();
+    }
+
+    Map<String, Object> map = new HashMap<>();
     map.put("componentTypes", getComponentTypeViewModels(componentTypes));
-    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
