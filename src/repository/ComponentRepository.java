@@ -796,20 +796,14 @@ public class ComponentRepository {
     return resultMap;
   }
 
-  public Component findComponent(String donationIdentificationNumber, String componentTypeId) {
+  public List<Component> findComponentsByDINAndType(String donationIdentificationNumber, long componentTypeId) {
     String queryStr = "SELECT c from Component c WHERE " +
         "c.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
         "c.componentType.id = :componentTypeId";
     TypedQuery<Component> query = em.createQuery(queryStr, Component.class);
     query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
-    query.setParameter("componentTypeId", Long.parseLong(componentTypeId));
-    Component component = null;
-    try {
-      component = query.getSingleResult();
-    } catch (NoResultException ex) {
-      ex.printStackTrace();
-    }
-    return component;
+    query.setParameter("componentTypeId", componentTypeId);
+    return query.getResultList();
   }
 
   public void returnComponent(Long componentId,
