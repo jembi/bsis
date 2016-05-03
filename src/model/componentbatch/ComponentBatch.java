@@ -151,6 +151,9 @@ public class ComponentBatch extends BaseModificationTrackerEntity {
   }
 
   public DonationBatch getDonationBatch() {
+    if (donationBatches == null || donationBatches.isEmpty()) {
+      return null;
+    }
     return donationBatches.iterator().next();
   }
 

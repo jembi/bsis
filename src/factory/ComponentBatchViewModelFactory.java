@@ -3,7 +3,6 @@ package factory;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.component.Component;
 import model.componentbatch.ComponentBatch;
 import model.donationbatch.DonationBatch;
 
@@ -40,7 +39,10 @@ public class ComponentBatchViewModelFactory {
     viewModel.setDeliveryDate(componentBatch.getDeliveryDate());
     viewModel.setStatus(String.valueOf(componentBatch.getStatus()));
     viewModel.setComponents(componentViewModelFactory.createComponentViewModels(componentBatch.getComponents()));
-    viewModel.setDonationBatch(donationBatchViewModelFactory.createDonationBatchBasicViewModel(componentBatch.getDonationBatch()));
+    DonationBatch donationBatch = componentBatch.getDonationBatch();
+    if (donationBatch != null) {
+      viewModel.setDonationBatch(donationBatchViewModelFactory.createDonationBatchBasicViewModel(donationBatch));
+    }
     viewModel.setCollectionDate(componentBatch.getCollectionDate());
     viewModel.setBloodTransportBoxes(bloodTransportBoxViewModelFactory.createBloodTransportBoxViewModels(componentBatch.getBloodTransportBoxes()));
     viewModel.setBloodTransportBoxCount(componentBatch.getBloodTransportBoxCount());
