@@ -1,13 +1,23 @@
 package repository;
 
+import static helpers.builders.ComponentBuilder.aComponent;
+
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.NoResultException;
+
+import model.component.Component;
+import model.componentbatch.ComponentBatch;
+import model.componenttype.ComponentType;
+import model.donation.Donation;
+import model.donationbatch.DonationBatch;
+import model.location.Location;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -15,10 +25,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import model.componentbatch.ComponentBatch;
-import model.donation.Donation;
-import model.donationbatch.DonationBatch;
-import model.location.Location;
 import suites.DBUnitContextDependentTestSuite;
 
 /**
@@ -175,5 +181,37 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
   public void testVerifyDonationBatchDoesntExist() throws Exception {
     boolean exists = donationBatchRepository.verifyDonationBatchExists(11111111L);
     Assert.assertFalse("DonationBatch doesn't exist", exists);
+  }
+  
+  @Test
+  public void testFindUnassignedDonationBatchesForComponentBatch() throws Exception {
+    List<DonationBatch> donationBatches = donationBatchRepository.findUnassignedDonationBatchesForComponentBatch();
+    Assert.assertNotNull("DonationBatches returned", donationBatches);
+    Assert.assertEquals("DonationBatches is correct size", 0, donationBatches.size());
+  }
+  
+  @Test
+  public void findUnassignedDonationBatchesForComponentBatchWithComponents() throws Exception {
+    // create test data
+    DonationBatch donationBatch1 = donationBatchRepository.findDonationBatchById(1L);
+    DonationBatch donationBatch2 = donationBatchRepository.findDonationBatchById(2L);
+    Donation donation1 = donationBatch1.getDonations().get(0);
+    Donation donation2 = donationBatch2.getDonations().get(0);
+    ComponentType intialComponent = donation1.getPackType().getComponentType();
+    // assigned to component batch
+    Component component1 = aComponent().withComponentType(intialComponent).withDonation(donation1).buildAndPersist(entityManager);
+    donation1.setComponents(Arrays.asList(component1));
+    // not assigned to component batch
+    Component component2 = aComponent().withComponentType(intialComponent).withDonation(donation2).buildAndPersist(entityManager);
+    donation2.setComponents(Arrays.asList(component2));
+    donationBatchRepository.updateDonationBatch(donationBatch1);
+    donationBatchRepository.updateDonationBatch(donationBatch2);
+
+    List<DonationBatch> unassigned = donationBatchRepository.findUnassignedDonationBatchesForComponentBatch();
+
+    Assert.assertNotNull("TShould not return a null list", unassigned);
+    Assert.assertEquals("There is 1 unassigned donation batch", 1, unassigned.size());
+    DonationBatch donationBatch = unassigned.get(0);
+    Assert.assertEquals("Correct unassigned donation batch", Long.valueOf(2), donationBatch.getId());
   }
 }

@@ -167,5 +167,10 @@ public class DonationBatchRepository {
         .setParameter("id", id)
         .setParameter("deleted", false)
         .getSingleResult();
-    }
+  }
+  
+  public List<DonationBatch> findUnassignedDonationBatchesForComponentBatch() {
+    return em.createNamedQuery(DonationBatchQueryConstants.NAME_FIND_UNASSIGNED_DONATION_BATCH_WITH_COMPONENT_BATCH, 
+        DonationBatch.class).getResultList();
+  }
 }

@@ -34,7 +34,9 @@ import repository.DonationBatchQueryConstants;
     @NamedQuery(name = DonationBatchQueryConstants.NAME_COUNT_DONATION_BATCHES,
         query = DonationBatchQueryConstants.QUERY_COUNT_DONATION_BATCHES),
     @NamedQuery(name = DonationBatchQueryConstants.NAME_VERIFY_DONATION_BATCH_WITH_ID_EXISTS,
-        query = DonationBatchQueryConstants.QUERY_VERIFY_DONATION_BATCH_WITH_ID_EXISTS)
+        query = DonationBatchQueryConstants.QUERY_VERIFY_DONATION_BATCH_WITH_ID_EXISTS),
+    @NamedQuery(name = DonationBatchQueryConstants.NAME_FIND_UNASSIGNED_DONATION_BATCH_WITH_COMPONENT_BATCH,
+        query = DonationBatchQueryConstants.QUERY_FIND_UNASSIGNED_DONATION_BATCH_WITH_COMPONENT_BATCH)
 })
 @Entity
 @Audited
