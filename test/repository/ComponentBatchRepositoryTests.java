@@ -46,6 +46,7 @@ public class ComponentBatchRepositoryTests extends ContextDependentTestSuite {
         .withBloodTransportBox(BloodTransportBoxBuilder.aBloodTransportBox().withTemperature(-2.5).build())
         .withStatus(ComponentBatchStatus.OPEN)
         .withDonationBatch(donationBatch)
+        .withComponent(component)
         .build();
     component.setComponentBatch(entity);
 
@@ -61,10 +62,10 @@ public class ComponentBatchRepositoryTests extends ContextDependentTestSuite {
     Assert.assertNotNull("BloodTransportBox association was saved", savedEntity.getBloodTransportBoxes());
     BloodTransportBox savedBox = savedEntity.getBloodTransportBoxes().iterator().next();
     Assert.assertNotNull("BloodTransportBox association was saved", savedBox.getId());
-    //Assert.assertNotNull("Component association was saved", savedEntity.getComponents());
-    //Assert.assertFalse("Component association was saved", savedEntity.getComponents().isEmpty());
-    //Component savedComponent = savedEntity.getComponents().iterator().next();
-    //Assert.assertNotNull("Component association was saved", savedComponent.getComponentBatch());   
+    Assert.assertNotNull("Component association was saved", savedEntity.getComponents());
+    Assert.assertFalse("Component association was saved", savedEntity.getComponents().isEmpty());
+    Component savedComponent = savedEntity.getComponents().iterator().next();
+    Assert.assertNotNull("Component association was saved", savedComponent.getComponentBatch());   
   }
 
   @Test(expected = javax.persistence.NoResultException.class)
