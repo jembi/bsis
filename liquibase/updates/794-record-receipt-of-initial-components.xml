@@ -13,7 +13,6 @@
                 <constraints foreignKeyName="fk_ComponentBatch_Location" references="Location(id)"/>
             </column>
             <column name="status" type="VARCHAR(20)"/>
-            <column name="bloodTransportBoxCount" type="INT"/>
             <column name="collectionDate" type="TIMESTAMP"/>
             <column name="deliveryDate" type="TIMESTAMP"/>
             <column name="isDeleted" type="tinyint(1)"/>
@@ -28,7 +27,6 @@
             </column>
             <column name="venue_id" type="BIGINT"/>
             <column name="status" type="VARCHAR(20)"/>
-            <column name="bloodTransportBoxCount" type="INT"/>
             <column name="collectionDate" type="TIMESTAMP"/>
             <column name="deliveryDate" type="TIMESTAMP"/>
             <column name="isDeleted" type="tinyint(1)"/>

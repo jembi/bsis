@@ -16,7 +16,6 @@ public class ComponentBatchBuilder extends AbstractEntityBuilder<ComponentBatch>
   private Date deliveryDate;
   private Date collectionDate;
   private Set<Component> components = new HashSet<>();
-  private int bloodTransportBoxCount;
   private Set<BloodTransportBox> bloodTransportBoxes = new HashSet<>();
   private ComponentBatchStatus status;
   private boolean deleted;
@@ -29,7 +28,6 @@ public class ComponentBatchBuilder extends AbstractEntityBuilder<ComponentBatch>
 
   public ComponentBatchBuilder withBloodTransportBox(BloodTransportBox bloodTransportBox) {
     bloodTransportBoxes.add(bloodTransportBox);
-    bloodTransportBoxCount++;
     return this;
   }
   
@@ -71,7 +69,6 @@ public class ComponentBatchBuilder extends AbstractEntityBuilder<ComponentBatch>
     componentBatch.setDeliveryDate(deliveryDate);
     componentBatch.setCollectionDate(collectionDate);
     componentBatch.setComponents(components);
-    componentBatch.setBloodTransportBoxCount(bloodTransportBoxCount);
     componentBatch.setBloodTransportBoxes(bloodTransportBoxes);
     componentBatch.setIsDeleted(deleted);
     componentBatch.setDonationBatch(donationBatch);

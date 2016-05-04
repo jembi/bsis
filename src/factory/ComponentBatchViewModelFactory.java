@@ -45,7 +45,6 @@ public class ComponentBatchViewModelFactory {
     }
     viewModel.setCollectionDate(componentBatch.getCollectionDate());
     viewModel.setBloodTransportBoxes(bloodTransportBoxViewModelFactory.createBloodTransportBoxViewModels(componentBatch.getBloodTransportBoxes()));
-    viewModel.setBloodTransportBoxCount(componentBatch.getBloodTransportBoxCount());
     return viewModel;
   }
 }

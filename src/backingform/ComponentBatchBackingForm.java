@@ -41,7 +41,6 @@ public class ComponentBatchBackingForm {
       box.setComponentBatch(componentBatch);
       boxes.add(box);
     }
-    componentBatch.setBloodTransportBoxCount(boxes.size());
     componentBatch.setBloodTransportBoxes(boxes);
 
     if (getDonationBatch() != null) {

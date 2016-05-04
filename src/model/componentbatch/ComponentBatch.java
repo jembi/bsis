@@ -64,10 +64,7 @@ public class ComponentBatch extends BaseModificationTrackerEntity {
   @Enumerated(EnumType.STRING)
   @Column(length = 20)
   private ComponentBatchStatus status = ComponentBatchStatus.OPEN;
-  
-  @Column
-  private int bloodTransportBoxCount;
-  
+
   @Column
   private Date collectionDate;
   
@@ -116,14 +113,6 @@ public class ComponentBatch extends BaseModificationTrackerEntity {
 
   public void setComponents(Set<Component> components) {
     this.components = components;
-  }
-
-  public int getBloodTransportBoxCount() {
-    return bloodTransportBoxCount;
-  }
-
-  public void setBloodTransportBoxCount(int bloodTransportBoxCount) {
-    this.bloodTransportBoxCount = bloodTransportBoxCount;
   }
 
   public Date getCollectionDate() {

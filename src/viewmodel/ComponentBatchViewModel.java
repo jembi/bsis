@@ -14,7 +14,6 @@ public class ComponentBatchViewModel {
   private Date deliveryDate;
   private Date collectionDate;
   private DonationBatchViewModel donationBatch;
-  private int bloodTransportBoxCount;
   private List<BloodTransportBoxViewModel> bloodTransportBoxes;
   private List<ComponentViewModel> components;
   
@@ -62,14 +61,6 @@ public class ComponentBatchViewModel {
 
   public void setDonationBatch(DonationBatchViewModel donationBatch) {
     this.donationBatch = donationBatch;
-  }
-
-  public int getBloodTransportBoxCount() {
-    return bloodTransportBoxCount;
-  }
-
-  public void setBloodTransportBoxCount(int bloodTransportBoxCount) {
-    this.bloodTransportBoxCount = bloodTransportBoxCount;
   }
 
   public List<BloodTransportBoxViewModel> getBloodTransportBoxes() {

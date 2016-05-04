@@ -9,11 +9,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.NoResultException;
 
 import model.component.Component;
+import model.componentbatch.BloodTransportBox;
 import model.componentbatch.ComponentBatch;
+import model.componentbatch.ComponentBatchStatus;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
@@ -168,7 +171,7 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
   public void testDonationBatchHasComponentBatch() throws Exception {
     DonationBatch one = donationBatchRepository.findDonationBatchById(1l);
     ComponentBatch componentBatch = one.getComponentBatch();
-    Assert.assertEquals("There are 5 boxes on component batch", 5, componentBatch.getBloodTransportBoxCount());
+    Assert.assertEquals("ComponentBatch is there", Long.valueOf(1), componentBatch.getId());
   }
   
   @Test

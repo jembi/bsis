@@ -85,7 +85,6 @@ public class ComponentBatchRepositoryTests extends ContextDependentTestSuite {
     Assert.assertNotNull("ComponentBatch is found",  componentBatch);
     Assert.assertEquals("Correct ComponentBatch is returned",  newComponentBatch.getId(), componentBatch.getId());
     
-    Assert.assertEquals("Correct number of boxes", 3, componentBatch.getBloodTransportBoxCount());
     Assert.assertFalse("Boxes are persisted", componentBatch.getBloodTransportBoxes().isEmpty());
     Assert.assertEquals("Box temperature correct", 0.5, 
         componentBatch.getBloodTransportBoxes().iterator().next().getTemperature(), 0);

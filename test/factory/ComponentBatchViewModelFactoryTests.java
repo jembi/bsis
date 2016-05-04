@@ -99,7 +99,6 @@ public class ComponentBatchViewModelFactoryTests {
     Assert.assertNotNull("DonationBatchViewModel is set", viewModel.getDonationBatch());
     Assert.assertNotNull("ComponentViewModels are set", viewModel.getComponents());
     Assert.assertFalse("ComponentViewModels are set", viewModel.getComponents().isEmpty());
-    Assert.assertEquals("View model is correct", 1, viewModel.getBloodTransportBoxCount());
     Assert.assertNotNull("BloodTransportBoxViewModels are set", viewModel.getBloodTransportBoxes());
     Assert.assertFalse("BloodTransportBoxViewModels are set", viewModel.getBloodTransportBoxes().isEmpty());
   }
