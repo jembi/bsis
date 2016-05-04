@@ -40,6 +40,12 @@ public class PermissionConstants {
   public static final String VIEW_COMPONENT = "View Component";
   public static final String EDIT_COMPONENT = "Edit Component";
   public static final String VOID_COMPONENT = "Void Component";
+  
+  // Component Batch Permissions
+  public static final String ADD_COMPONENT_BATCH = "Add Component Batch";
+  public static final String VIEW_COMPONENT_BATCH = "View Component Batch";
+  public static final String EDIT_COMPONENT_BATCH = "Edit Component Batch";
+  public static final String VOID_COMPONENT_BATCH = "Void Component Batch";
 
   //Request Permissions
   public static final String ADD_REQUEST = "Add Request";

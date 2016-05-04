@@ -1,5 +1,9 @@
 package backingform;
 
+import model.componentbatch.BloodTransportBox;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class BloodTransportBoxBackingForm {
 
   private Long id;
@@ -8,6 +12,16 @@ public class BloodTransportBoxBackingForm {
 
   public BloodTransportBoxBackingForm() {
     super();
+  }
+  
+  @JsonIgnore
+  public BloodTransportBox getBloodTransportBox() {
+    BloodTransportBox box = new BloodTransportBox();
+    box.setId(getId());
+    if (getTemperature() != null) { // can't autobox null into a primative
+      box.setTemperature(getTemperature());
+    }
+    return box;
   }
 
   public Long getId() {

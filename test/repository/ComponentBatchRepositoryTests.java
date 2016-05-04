@@ -47,18 +47,24 @@ public class ComponentBatchRepositoryTests extends ContextDependentTestSuite {
         .withStatus(ComponentBatchStatus.OPEN)
         .withDonationBatch(donationBatch)
         .build();
+    component.setComponentBatch(entity);
 
     // run test
     componentBatchRepository.save(entity);
     
     // do checks
     Assert.assertNotNull("Entity was saved", entity.getId());
-    ComponentBatch savedEntity = componentBatchRepository.findById(entity.getId());
+    ComponentBatch savedEntity = entityManager.find(ComponentBatch.class, entity.getId());
     Assert.assertNotNull("Entity was saved", savedEntity);
-    Assert.assertNotNull("Entity's associations were saved", savedEntity.getBloodTransportBoxes());
-    BloodTransportBox box = savedEntity.getBloodTransportBoxes().iterator().next();
-    Assert.assertNotNull("Entity's associations were saved", box.getId());
     Assert.assertEquals("Status was persisted", ComponentBatchStatus.OPEN, savedEntity.getStatus());
+    Assert.assertNotNull("DonationBatch association was saved", savedEntity.getDonationBatch());
+    Assert.assertNotNull("BloodTransportBox association was saved", savedEntity.getBloodTransportBoxes());
+    BloodTransportBox savedBox = savedEntity.getBloodTransportBoxes().iterator().next();
+    Assert.assertNotNull("BloodTransportBox association was saved", savedBox.getId());
+    //Assert.assertNotNull("Component association was saved", savedEntity.getComponents());
+    //Assert.assertFalse("Component association was saved", savedEntity.getComponents().isEmpty());
+    //Component savedComponent = savedEntity.getComponents().iterator().next();
+    //Assert.assertNotNull("Component association was saved", savedComponent.getComponentBatch());   
   }
 
   @Test(expected = javax.persistence.NoResultException.class)

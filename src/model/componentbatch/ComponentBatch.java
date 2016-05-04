@@ -57,7 +57,7 @@ public class ComponentBatch extends BaseModificationTrackerEntity {
   @SuppressWarnings("unchecked")
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy = "componentBatch", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "componentBatch", fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
   @Where(clause = "isDeleted = 0")
   private Set<Component> components = Collections.EMPTY_SET;
   
@@ -158,6 +158,9 @@ public class ComponentBatch extends BaseModificationTrackerEntity {
   }
 
   public void setDonationBatch(DonationBatch donationBatch) {
-    donationBatches.add(donationBatch);
+    donationBatches.clear();
+    if (donationBatch != null) {
+      donationBatches.add(donationBatch);
+    }
   }
 }
