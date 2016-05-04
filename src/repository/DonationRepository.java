@@ -350,6 +350,9 @@ public class DonationRepository {
     cal.add(Calendar.DATE, componentType.getExpiresAfter());
     Date expiresOn = cal.getTime();
 
+    // assign componentBatch (might be null if it hasn't been created yet)
+    component.setComponentBatch(donation.getDonationBatch().getComponentBatch());
+
     component.setExpiresOn(expiresOn);
     component.setComponentType(componentType);
     em.persist(component);

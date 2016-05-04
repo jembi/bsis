@@ -5,9 +5,6 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import backingform.validator.DeferralBackingFormValidator;
-import model.donordeferral.DonorDeferral;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +18,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import backingform.DeferralBackingForm;
+import backingform.EndDeferralBackingForm;
+import backingform.validator.DeferralBackingFormValidator;
+import factory.DonorDeferralViewModelFactory;
+import model.donordeferral.DonorDeferral;
+import model.location.LocationType;
 import repository.DonorRepository;
 import repository.LocationRepository;
 import service.DonorDeferralCRUDService;
 import utils.PermissionConstants;
 import viewmodel.DonorDeferralViewModel;
-import backingform.DeferralBackingForm;
-import backingform.EndDeferralBackingForm;
-import factory.DonorDeferralViewModelFactory;
 
 @RestController
 @RequestMapping("deferrals")
@@ -60,7 +60,7 @@ public class DeferralController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("deferralReasons", donorRepository.getDeferralReasons());
-    map.put("venues", locationRepository.getAllVenues());
+    map.put("venues", locationRepository.getLocationsByType(LocationType.VENUE));
     return map;
   }
 

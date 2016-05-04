@@ -17,13 +17,14 @@ import repository.LocationNamedQueryConstants;
 @NamedQueries({
   @NamedQuery(name = LocationNamedQueryConstants.NAME_GET_ALL_LOCATIONS,
       query = LocationNamedQueryConstants.QUERY_GET_ALL_LOCATIONS),
-  @NamedQuery(name = LocationNamedQueryConstants.NAME_GET_ALL_VENUES,
-      query = LocationNamedQueryConstants.QUERY_GET_ALL_VENUES),
-  @NamedQuery(name = LocationNamedQueryConstants.NAME_GET_ALL_USAGE_SITES,
-      query = LocationNamedQueryConstants.QUERY_GET_ALL_USAGE_SITES),
   @NamedQuery(name = LocationNamedQueryConstants.NAME_COUNT_LOCATION_WITH_ID,
-      query = LocationNamedQueryConstants.QUERY_COUNT_LOCATION_WITH_ID)
-      
+      query = LocationNamedQueryConstants.QUERY_COUNT_LOCATION_WITH_ID),
+  @NamedQuery(name = LocationNamedQueryConstants.NAME_FIND_VENUES,
+      query = LocationNamedQueryConstants.QUERY_FIND_VENUES),
+  @NamedQuery(name = LocationNamedQueryConstants.NAME_FIND_PROCESSING_SITES,
+      query = LocationNamedQueryConstants.QUERY_FIND_PROCESSING_SITES),
+  @NamedQuery(name = LocationNamedQueryConstants.NAME_FIND_USAGE_SITES,
+      query = LocationNamedQueryConstants.QUERY_FIND_USAGE_SITES)
 })
 @Entity
 @Audited
@@ -39,6 +40,8 @@ public class Location extends BaseEntity {
   private Boolean isMobileSite;
 
   private Boolean isVenue;
+  
+  private boolean isProcessingSite;
 
   private Boolean isDeleted;
 
@@ -103,5 +106,13 @@ public class Location extends BaseEntity {
 
   public void setIsVenue(Boolean isVenue) {
     this.isVenue = isVenue;
+  }
+
+  public boolean isProcessingSite() {
+    return isProcessingSite;
+  }
+
+  public void setProcessingSite(boolean isProcessingSite) {
+    this.isProcessingSite = isProcessingSite;
   }
 }

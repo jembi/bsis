@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import backingform.RequestBackingForm;
 import backingform.validator.RequestBackingFormValidator;
 import model.component.Component;
+import model.location.LocationType;
 import model.request.Request;
 import repository.ComponentRepository;
 import repository.ComponentTypeRepository;
@@ -80,7 +81,7 @@ public class RequestsController {
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("componentTypes", componentTypeRepository.getAllComponentTypes());
     m.put("requestTypes", requestTypeRepository.getAllRequestTypes());
-    m.put("sites", locationRepository.getAllUsageSites());
+    m.put("sites", locationRepository.getLocationsByType(LocationType.USAGE_SITE));
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)

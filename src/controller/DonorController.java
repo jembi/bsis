@@ -38,6 +38,7 @@ import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
+import model.location.LocationType;
 import repository.AdverseEventRepository;
 import repository.ContactMethodTypeRepository;
 import repository.DonationBatchRepository;
@@ -437,7 +438,7 @@ public class DonorController {
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("venues", locationRepository.getAllVenues());
+    m.put("venues", locationRepository.getLocationsByType(LocationType.VENUE));
     m.put("preferredContactMethods", contactMethodTypeRepository.getAllContactMethodTypes());
     m.put("languages", donorRepository.getAllLanguages());
     m.put("idTypes", donorRepository.getAllIdTypes());

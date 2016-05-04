@@ -22,9 +22,9 @@ public class LocationBackingFormValidator extends BaseValidator<LocationBackingF
     } else if (isDuplicateLocationName(form.getLocation())) {
       errors.rejectValue("name", "400", "Location name already exists.");
     }
-    if (!form.getIsUsageSite() && !form.getIsVenue() && !form.getIsMobilesite()) {
+    if (!form.getIsUsageSite() && !form.getIsVenue() && !form.getIsMobilesite() && !form.getIsProcessingSite()) {
       errors.reject("400",
-          "Location type must be usage site, venue or mobile site, but all of them are false for this location.");
+          "Location type must be venue, processing site, mobile site, or usage site but all of them are false for this location.");
     }
 
   }

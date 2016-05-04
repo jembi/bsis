@@ -77,4 +77,12 @@ public class LocationBackingForm {
   public void setNotes(String notes) {
     location.setNotes(notes);
   }
+  
+  public boolean getIsProcessingSite() {
+    return location.isProcessingSite();
+  }
+  
+  public void setIsProcessingSite(boolean isProcessingSite) {
+    location.setProcessingSite(isProcessingSite);
+  }
 }

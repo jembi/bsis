@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import model.location.Location;
+import model.location.LocationType;
 import model.user.User;
 import suites.DBUnitContextDependentTestSuite;
 
@@ -36,21 +37,7 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
   public void testGetAllLocations() throws Exception {
     List<Location> all = locationRepository.getAllLocations();
     Assert.assertNotNull("There are Locations", all);
-    Assert.assertEquals("There are 7 Locations", 7, all.size());
-  }
-
-  @Test
-  public void testGetAllUsageSites() throws Exception {
-    List<Location> all = locationRepository.getAllUsageSites();
-    Assert.assertNotNull("There are usage site Locations", all);
-    Assert.assertEquals("There are 2 usage site Location", 2, all.size());
-  }
-
-  @Test
-  public void testGetAllVenues() throws Exception {
-    List<Location> all = locationRepository.getAllVenues();
-    Assert.assertNotNull("There are venue Locations", all);
-    Assert.assertEquals("There are 3 venue Locations", 3, all.size());
+    Assert.assertEquals("There are 8 Locations", 8, all.size());
   }
 
   @Test
@@ -79,14 +66,6 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
     Location one = locationRepository.findLocationByName("Hlotse");
     Assert.assertNotNull("There is a Location", one);
     Assert.assertEquals("The Location matches", "Hlotse", one.getName());
-  }
-
-  @Test
-  public void testGetAllUsageSitesAsString() throws Exception {
-    List<String> all = locationRepository.getAllUsageSitesAsString();
-    Assert.assertNotNull("Does not return a null list", all);
-    Assert.assertEquals("There are two usage sites", 2, all.size());
-    Assert.assertTrue("Leribe Hospital is in the list", all.contains("Leribe Hospital"));
   }
 
   @Test
@@ -127,5 +106,26 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
   @Test
   public void testEntityDoesNotExist() throws Exception {
     Assert.assertFalse("Location does not exist", locationRepository.verifyLocationExists(123L));
+  }
+
+  @Test
+  public void testGetLocationsByUsageSiteType() throws Exception {
+    List<Location> all = locationRepository.getLocationsByType(LocationType.USAGE_SITE);
+    Assert.assertNotNull("There are usage site Locations", all);
+    Assert.assertEquals("There are 2 usage site Location", 2, all.size());
+  }
+
+  @Test
+  public void testGetLocationsByVenueType() throws Exception {
+    List<Location> all = locationRepository.getLocationsByType(LocationType.VENUE);
+    Assert.assertNotNull("There are venue Locations", all);
+    Assert.assertEquals("There are 3 venue Locations", 4, all.size());
+  }
+
+  @Test
+  public void testGetLocationsByProcessingSiteType() throws Exception {
+    List<Location> all = locationRepository.getLocationsByType(LocationType.PROCESSING_SITE);
+    Assert.assertNotNull("There are processing site Locations", all);
+    Assert.assertEquals("There is 1 processing site", 1, all.size());
   }
 }
