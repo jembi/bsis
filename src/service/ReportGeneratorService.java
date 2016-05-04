@@ -12,7 +12,7 @@ import dto.CollectedDonationDTO;
 import model.donationtype.DonationType;
 import model.reporting.Cohort;
 import model.reporting.Comparator;
-import model.reporting.Indicator;
+import model.reporting.DataValue;
 import model.reporting.Report;
 import repository.DonationRepository;
 
@@ -36,39 +36,39 @@ public class ReportGeneratorService {
     List<CollectedDonationDTO> dtos = donationRepository.findCollectedDonationsReportIndicators(
         startDate, endDate);
 
-    List<Indicator> indicators = new ArrayList<>(dtos.size());
+    List<DataValue> dataValues = new ArrayList<>(dtos.size());
 
     for (CollectedDonationDTO dto : dtos) {
 
-      Indicator indicator = new Indicator();
-      indicator.setStartDate(startDate);
-      indicator.setEndDate(endDate);
-      indicator.setVenue(dto.getVenue());
-      indicator.setValue(dto.getCount());
+      DataValue dataValue = new DataValue();
+      dataValue.setStartDate(startDate);
+      dataValue.setEndDate(endDate);
+      dataValue.setVenue(dto.getVenue());
+      dataValue.setValue(dto.getCount());
 
       Cohort donationTypeCohort = new Cohort();
       donationTypeCohort.setCategory(CohortConstants.DONATION_TYPE_CATEGORY);
       donationTypeCohort.setComparator(Comparator.EQUALS);
       DonationType donationType = dto.getDonationType();
       donationTypeCohort.setOption(donationType.getDonationType());
-      indicator.addCohort(donationTypeCohort);
+      dataValue.addCohort(donationTypeCohort);
 
       Cohort genderCohort = new Cohort();
       genderCohort.setCategory(CohortConstants.GENDER_CATEGORY);
       genderCohort.setComparator(Comparator.EQUALS);
       genderCohort.setOption(dto.getGender());
-      indicator.addCohort(genderCohort);
+      dataValue.addCohort(genderCohort);
 
       Cohort bloodTypeCohort = new Cohort();
       bloodTypeCohort.setCategory(CohortConstants.BLOOD_TYPE_CATEGORY);
       bloodTypeCohort.setComparator(Comparator.EQUALS);
       bloodTypeCohort.setOption(dto.getBloodAbo() + dto.getBloodRh());
-      indicator.addCohort(bloodTypeCohort);
+      dataValue.addCohort(bloodTypeCohort);
 
-      indicators.add(indicator);
+      dataValues.add(dataValue);
     }
 
-    report.setIndicators(indicators);
+    report.setDataValues(dataValues);
 
     return report;
   }
