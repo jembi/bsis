@@ -26,13 +26,38 @@ public class LocationRepository {
   }
 
   public List<Location> getLocationsByType(LocationType locationType) {
-    TypedQuery<Location> query =
-        em.createNamedQuery(LocationNamedQueryConstants.NAME_GET_LOCATIONS_BY_TYPE, Location.class);
-    query.setParameter("isDeleted", false);
-    query.setParameter("isVenue", locationType.equals(LocationType.VENUE));
-    query.setParameter("isUsageSite", locationType.equals(LocationType.USAGE_SITE));
-    query.setParameter("isProcessingSite", locationType.equals(LocationType.PROCESSING_SITE));
-    return query.getResultList();
+    
+    switch (locationType) {
+      case VENUE:
+        return getVenues();
+      case PROCESSING_SITE:
+        return getProcessingSites();
+      case USAGE_SITE:
+        return getUsageSites();
+      default:
+        throw new IllegalArgumentException("Can't get locations for type: " + locationType);
+    }
+  }
+  
+  private List<Location> getVenues() {
+    return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_VENUES, Location.class)
+        .setParameter("isVenue", true)
+        .setParameter("isDeleted", false)
+        .getResultList();
+  }
+  
+  private List<Location> getProcessingSites() {
+    return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_PROCESSING_SITES, Location.class)
+        .setParameter("isProcessingSite", true)
+        .setParameter("isDeleted", false)
+        .getResultList();
+  }
+  
+  private List<Location> getUsageSites() {
+    return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_USAGE_SITES, Location.class)
+        .setParameter("isUsageSite", true)
+        .setParameter("isDeleted", false)
+        .getResultList();
   }
 
   public List<Location> getAllLocations() {

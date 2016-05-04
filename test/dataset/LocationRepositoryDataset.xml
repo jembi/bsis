@@ -17,6 +17,6 @@
               isMobileSite="false" isUsageSite="true" name="Leribe Clinic" notes=""/>
     <Location isProcessingSite="0" id="7" isDeleted="true" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Hlotse" notes=""/>
-    <Location isProcessingSite="1" id="8" isDeleted="false" isVenue="false"
+    <Location isProcessingSite="1" id="8" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Processing" notes=""/>
 </dataset>

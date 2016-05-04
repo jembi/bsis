@@ -119,7 +119,7 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
   public void testGetLocationsByVenueType() throws Exception {
     List<Location> all = locationRepository.getLocationsByType(LocationType.VENUE);
     Assert.assertNotNull("There are venue Locations", all);
-    Assert.assertEquals("There are 3 venue Locations", 3, all.size());
+    Assert.assertEquals("There are 3 venue Locations", 4, all.size());
   }
 
   @Test

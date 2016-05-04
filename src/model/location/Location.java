@@ -19,8 +19,12 @@ import repository.LocationNamedQueryConstants;
       query = LocationNamedQueryConstants.QUERY_GET_ALL_LOCATIONS),
   @NamedQuery(name = LocationNamedQueryConstants.NAME_COUNT_LOCATION_WITH_ID,
       query = LocationNamedQueryConstants.QUERY_COUNT_LOCATION_WITH_ID),
-  @NamedQuery(name = LocationNamedQueryConstants.NAME_GET_LOCATIONS_BY_TYPE,
-      query = LocationNamedQueryConstants.QUERY_GET_LOCATIONS_BY_TYPE)
+  @NamedQuery(name = LocationNamedQueryConstants.NAME_FIND_VENUES,
+      query = LocationNamedQueryConstants.QUERY_FIND_VENUES),
+  @NamedQuery(name = LocationNamedQueryConstants.NAME_FIND_PROCESSING_SITES,
+      query = LocationNamedQueryConstants.QUERY_FIND_PROCESSING_SITES),
+  @NamedQuery(name = LocationNamedQueryConstants.NAME_FIND_USAGE_SITES,
+      query = LocationNamedQueryConstants.QUERY_FIND_USAGE_SITES)
 })
 @Entity
 @Audited
