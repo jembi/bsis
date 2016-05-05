@@ -38,6 +38,7 @@ public class ComponentBatchViewModelFactory {
     viewModel.setId(componentBatch.getId());
     viewModel.setDeliveryDate(componentBatch.getDeliveryDate());
     viewModel.setStatus(String.valueOf(componentBatch.getStatus()));
+    viewModel.setLocation(componentBatch.getLocation());
     viewModel.setComponents(componentViewModelFactory.createComponentViewModels(componentBatch.getComponents()));
     DonationBatch donationBatch = componentBatch.getDonationBatch();
     if (donationBatch != null) {

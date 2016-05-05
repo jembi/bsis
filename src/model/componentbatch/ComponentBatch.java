@@ -45,7 +45,7 @@ public class ComponentBatch extends BaseModificationTrackerEntity {
   @OneToOne
   @LocationExists
   @NotNull
-  private Location venue;
+  private Location location;
 
   @SuppressWarnings("unchecked")
   @NotAudited
@@ -83,12 +83,12 @@ public class ComponentBatch extends BaseModificationTrackerEntity {
     super();
   }
   
-  public Location getVenue() {
-    return venue;
+  public Location getLocation() {
+    return location;
   }
 
-  public void setVenue(Location venue) {
-    this.venue = venue;
+  public void setLocation(Location location) {
+    this.location = location;
   }
 
   public ComponentBatchStatus getStatus() {

@@ -22,6 +22,7 @@ public class ComponentBatchBackingForm {
   private DonationBatchBackingForm donationBatch;
   private List<BloodTransportBoxBackingForm> bloodTransportBoxes = new ArrayList<>();
   private Date deliveryDate;
+  private LocationBackingForm location;
 
   public ComponentBatchBackingForm() {
     super();
@@ -34,6 +35,10 @@ public class ComponentBatchBackingForm {
     componentBatch.setId(getId());
     componentBatch.setStatus(getStatus());
     componentBatch.setDeliveryDate(getDeliveryDate());
+    
+    if (getLocation() != null) {
+      componentBatch.setLocation(getLocation().getLocation());
+    }
     
     Set<BloodTransportBox> boxes = new HashSet<>();
     for (BloodTransportBoxBackingForm boxForm : getBloodTransportBoxes()) {
@@ -92,5 +97,13 @@ public class ComponentBatchBackingForm {
   @JsonSerialize(using = DateTimeSerialiser.class)
   public void setDeliveryDate(Date deliveryDate) {
     this.deliveryDate = deliveryDate;
-  } 
+  }
+
+  public LocationBackingForm getLocation() {
+    return location;
+  }
+
+  public void setLocation(LocationBackingForm location) {
+    this.location = location;
+  }
 }

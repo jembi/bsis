@@ -6,6 +6,7 @@ import static helpers.builders.ComponentBuilder.aComponent;
 import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.LocationBuilder.aVenue;
+import static helpers.builders.LocationBuilder.aLocation;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class ComponentBatchViewModelFactoryTests {
   public void testCreateComponentBatchViewModel_createOneComponentBatch() throws Exception {
     // set up data
     Location venue = aVenue().withId(1L).withName("venue").build();
+    Location location = aLocation().withId(2L).withName("distribution site").thatIsUsageSite().build();
     DonationBatch donationBatch = aDonationBatch()
         .withId(1L)
         .withBatchNumber("BN1234")
@@ -74,6 +76,7 @@ public class ComponentBatchViewModelFactoryTests {
         .withDeliveryDate(deliveryDate)
         .withCollectionDate(collectionDate)   
         .withDonationBatch(donationBatch)
+        .withLocation(location)
         .build();
     
     // set up mocks
@@ -96,6 +99,7 @@ public class ComponentBatchViewModelFactoryTests {
     Assert.assertEquals("View model is correct", "OPEN", viewModel.getStatus());
     Assert.assertEquals("View model is correct", deliveryDate, viewModel.getDeliveryDate());
     Assert.assertEquals("View model is correct", collectionDate, viewModel.getCollectionDate());
+    Assert.assertEquals("View model is correct", location, viewModel.getLocation());
     Assert.assertNotNull("DonationBatchViewModel is set", viewModel.getDonationBatch());
     Assert.assertNotNull("ComponentViewModels are set", viewModel.getComponents());
     Assert.assertFalse("ComponentViewModels are set", viewModel.getComponents().isEmpty());

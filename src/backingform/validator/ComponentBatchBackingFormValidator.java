@@ -7,15 +7,20 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import repository.DonationBatchRepository;
+import repository.LocationRepository;
 import backingform.BloodTransportBoxBackingForm;
 import backingform.ComponentBatchBackingForm;
 import backingform.DonationBatchBackingForm;
+import backingform.LocationBackingForm;
 
 @Component
 public class ComponentBatchBackingFormValidator extends BaseValidator<ComponentBatchBackingForm> {
   
   @Autowired
   private DonationBatchRepository donationBatchRepository;
+  
+  @Autowired
+  private LocationRepository locationRepository;
   
   @Autowired
   private BloodTransportBoxBackingFormValidator bloodTransportBoxBackingFormValidator;
@@ -32,6 +37,18 @@ public class ComponentBatchBackingFormValidator extends BaseValidator<ComponentB
         errors.rejectValue("componentBatch.donationBatch", "donationBatch.invalid", "DonationBatch is invalid.");
       }
     }
+
+    // location is specified
+    LocationBackingForm locationBackingForm = form.getLocation();
+    if (locationBackingForm == null || locationBackingForm.getId() == null) {
+      errors.rejectValue("componentBatch.location", "location.empty", "Location is required.");
+    } else {
+      // donation batch exists
+      if (!locationRepository.verifyLocationExists(locationBackingForm.getId())) {
+        errors.rejectValue("componentBatch.location", "location.invalid", "Location is invalid.");
+      }
+    }
+    
     // blood transport boxes
     if (form.getBloodTransportBoxes() != null) {
       Iterator<BloodTransportBoxBackingForm> it = form.getBloodTransportBoxes().iterator();

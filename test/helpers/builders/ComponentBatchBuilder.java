@@ -9,6 +9,7 @@ import model.componentbatch.BloodTransportBox;
 import model.componentbatch.ComponentBatch;
 import model.componentbatch.ComponentBatchStatus;
 import model.donationbatch.DonationBatch;
+import model.location.Location;
 
 public class ComponentBatchBuilder extends AbstractEntityBuilder<ComponentBatch> {
 
@@ -20,6 +21,7 @@ public class ComponentBatchBuilder extends AbstractEntityBuilder<ComponentBatch>
   private ComponentBatchStatus status;
   private boolean deleted;
   private DonationBatch donationBatch;
+  private Location location;
 
   public ComponentBatchBuilder withId(Long id) {
     this.id = id;
@@ -55,6 +57,11 @@ public class ComponentBatchBuilder extends AbstractEntityBuilder<ComponentBatch>
     this.donationBatch = donationBatch;
     return this;
   }
+  
+  public ComponentBatchBuilder withLocation(Location location) {
+    this.location = location;
+    return this;
+  }
 
   public ComponentBatchBuilder thatIsDeleted() {
     deleted = true;
@@ -72,6 +79,7 @@ public class ComponentBatchBuilder extends AbstractEntityBuilder<ComponentBatch>
     componentBatch.setBloodTransportBoxes(bloodTransportBoxes);
     componentBatch.setIsDeleted(deleted);
     componentBatch.setDonationBatch(donationBatch);
+    componentBatch.setLocation(location);
     return componentBatch;
   }
 

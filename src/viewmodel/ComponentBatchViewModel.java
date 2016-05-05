@@ -3,6 +3,7 @@ package viewmodel;
 import java.util.Date;
 import java.util.List;
 
+import model.location.Location;
 import utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -12,6 +13,7 @@ public class ComponentBatchViewModel {
   private Long id;
   private String status;
   private Date deliveryDate;
+  private Location location;
   private Date collectionDate;
   private DonationBatchViewModel donationBatch;
   private List<BloodTransportBoxViewModel> bloodTransportBoxes;
@@ -44,6 +46,14 @@ public class ComponentBatchViewModel {
 
   public void setDeliveryDate(Date deliveryDate) {
     this.deliveryDate = deliveryDate;
+  }
+
+  public Location getLocation() {
+    return location;
+  }
+
+  public void setLocation(Location location) {
+    this.location = location;
   }
 
   @JsonSerialize(using = DateTimeSerialiser.class)

@@ -61,7 +61,7 @@
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" venue_id="1"
                    backEntry="false"
                    testBatch_id="1"/>
-	<ComponentBatch id="1" venue_id="1" 
+	<ComponentBatch id="1" location_id="1" 
                status="OPEN" isDeleted="0"
                collectionDate="2015-08-11 09:06:27.0" deliveryDate="2015-08-11 09:06:27.0"
                createdDate="2015-08-11 09:06:27.0" createdBy_id="1" 
