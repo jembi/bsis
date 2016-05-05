@@ -24,9 +24,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import suites.ContextDependentTestSuite;
+import suites.SecurityContextDependentTestSuite;
 
-public class ComponentBatchRepositoryTests extends ContextDependentTestSuite {
+public class ComponentBatchRepositoryTests extends SecurityContextDependentTestSuite {
 
   @Autowired
   private ComponentBatchRepository componentBatchRepository;
@@ -53,11 +53,12 @@ public class ComponentBatchRepositoryTests extends ContextDependentTestSuite {
     // run test
     componentBatchRepository.save(entity);
     
-    // do checks
+    // do checks - entity was saved
     Assert.assertNotNull("Entity was saved", entity.getId());
     ComponentBatch savedEntity = entityManager.find(ComponentBatch.class, entity.getId());
     Assert.assertNotNull("Entity was saved", savedEntity);
     Assert.assertEquals("Status was persisted", ComponentBatchStatus.OPEN, savedEntity.getStatus());
+    // do checks - associations were persisted through Cascades
     Assert.assertNotNull("DonationBatch association was saved", savedEntity.getDonationBatch());
     Assert.assertNotNull("BloodTransportBox association was saved", savedEntity.getBloodTransportBoxes());
     BloodTransportBox savedBox = savedEntity.getBloodTransportBoxes().iterator().next();
@@ -65,7 +66,16 @@ public class ComponentBatchRepositoryTests extends ContextDependentTestSuite {
     Assert.assertNotNull("Component association was saved", savedEntity.getComponents());
     Assert.assertFalse("Component association was saved", savedEntity.getComponents().isEmpty());
     Component savedComponent = savedEntity.getComponents().iterator().next();
-    Assert.assertNotNull("Component association was saved", savedComponent.getComponentBatch());   
+    Assert.assertNotNull("Component association was saved", savedComponent.getComponentBatch());
+    // do checks - audit fields were set By Entity
+    Assert.assertNotNull("Audit fields were set", savedEntity.getCreatedBy());
+    Assert.assertNotNull("Audit fields were set", savedEntity.getLastUpdatedBy());
+    Assert.assertNotNull("Audit fields were set", savedEntity.getCreatedDate());
+    Assert.assertNotNull("Audit fields were set", savedEntity.getLastUpdated());
+    Assert.assertNotNull("Audit fields were set", savedBox.getCreatedBy());
+    Assert.assertNotNull("Audit fields were set", savedBox.getLastUpdatedBy());
+    Assert.assertNotNull("Audit fields were set", savedBox.getCreatedDate());
+    Assert.assertNotNull("Audit fields were set", savedBox.getLastUpdated());
   }
 
   @Test(expected = javax.persistence.NoResultException.class)

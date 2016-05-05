@@ -20,8 +20,6 @@ import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-//import com.mysql.jdbc.Security;
-
 import security.BsisUserDetails;
 
 @Component
@@ -41,56 +39,24 @@ public class EntitySaveListener implements PersistEventListener, MergeEventListe
   }
 
   public void onPersist(PersistEvent event) throws HibernateException {
-    if (SecurityContextHolder.getContext() != null
-        && SecurityContextHolder.getContext().getAuthentication() != null) {
-      Object principal = SecurityContextHolder.getContext()
-          .getAuthentication().getPrincipal();
-      if (principal != null && principal instanceof BsisUserDetails) {
-        User user = ((BsisUserDetails) principal).getUser();
-        if (event.getObject() instanceof ModificationTracker &&
-            user != null) {
-          ModificationTracker entity = (ModificationTracker) event.getObject();
-          if (entity.getCreatedDate() == null) {
-            entity.setCreatedDate(new Date());
-          }
-          entity.setCreatedBy(user);
-          entity.setLastUpdated(new Date());
-          entity.setLastUpdatedBy(user);
-        }
-      }
-    }
+    setModificationTrackerProperties(event);
   }
 
   @SuppressWarnings("rawtypes")
   @Override
-  public void onPersist(PersistEvent event, Map arg1)
-      throws HibernateException {
-    // TODO Auto-generated method stub
+  public void onPersist(PersistEvent event, Map arg1) throws HibernateException {
+    setModificationTrackerProperties(event);
   }
 
   @Override
   public void onMerge(MergeEvent event) throws HibernateException {
-    if (SecurityContextHolder.getContext() != null
-        && SecurityContextHolder.getContext().getAuthentication() != null) {
-      Object principal = SecurityContextHolder.getContext()
-          .getAuthentication().getPrincipal();
-      if (principal != null && principal instanceof BsisUserDetails) {
-        User user = ((BsisUserDetails) principal).getUser();
-        if (event.getEntity() instanceof ModificationTracker
-            && user != null) {
-          ModificationTracker entity = (ModificationTracker) event
-              .getEntity();
-          entity.setLastUpdated(new Date());
-          entity.setLastUpdatedBy(user);
-        }
-      }
-    }
+    setModificationTrackerProperties(event);
   }
 
   @SuppressWarnings("rawtypes")
   @Override
-  public void onMerge(MergeEvent arg0, Map arg1) throws HibernateException {
-    // TODO Auto-generated method stub
+  public void onMerge(MergeEvent event, Map arg1) throws HibernateException {
+    setModificationTrackerProperties(event);
   }
 
   @Override
@@ -99,4 +65,39 @@ public class EntitySaveListener implements PersistEventListener, MergeEventListe
     return false;
   }
 
+  private void setModificationTrackerProperties(PersistEvent event) {
+    if (SecurityContextHolder.getContext() != null
+        && SecurityContextHolder.getContext().getAuthentication() != null) {
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      if (principal != null && principal instanceof BsisUserDetails) {
+        User user = ((BsisUserDetails) principal).getUser();
+        if (event.getObject() instanceof ModificationTracker && user != null) {
+          ModificationTracker entity = (ModificationTracker) event.getObject();
+          if (entity.getCreatedDate() == null) {
+            entity.setCreatedDate(new Date());
+          }
+          if (entity.getCreatedBy() == null) {
+            entity.setCreatedBy(user);
+          }
+          entity.setLastUpdated(new Date());
+          entity.setLastUpdatedBy(user);
+        }
+      }
+    }
+  }
+  
+  private void setModificationTrackerProperties(MergeEvent event) {
+    if (SecurityContextHolder.getContext() != null 
+        && SecurityContextHolder.getContext().getAuthentication() != null) {
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      if (principal != null && principal instanceof BsisUserDetails) {
+        User user = ((BsisUserDetails) principal).getUser();
+        if (event.getEntity() instanceof ModificationTracker && user != null) {
+          ModificationTracker entity = (ModificationTracker) event.getEntity();
+          entity.setLastUpdated(new Date());
+          entity.setLastUpdatedBy(user);
+        }
+      }
+    }
+  }
 }
