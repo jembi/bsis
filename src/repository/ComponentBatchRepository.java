@@ -1,12 +1,15 @@
 package repository;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+
+import javax.persistence.TypedQuery;
+
+import org.springframework.stereotype.Repository;
 
 import model.componentbatch.ComponentBatch;
 import model.componentbatch.ComponentBatchStatus;
-
-import org.springframework.stereotype.Repository;
 
 @Repository
 public class ComponentBatchRepository extends AbstractRepository<ComponentBatch> {
@@ -29,5 +32,26 @@ public class ComponentBatchRepository extends AbstractRepository<ComponentBatch>
         .setParameter("id", id)
         .setParameter("isDeleted", false)
         .getSingleResult();
+  }
+
+  public List<ComponentBatch> findComponentBatches(Date startDate, Date endDate) {
+    String queryStr = "SELECT cb from ComponentBatch cb WHERE cb.isDeleted=:isDeleted ";
+
+    if (startDate != null) {
+      queryStr += "AND cb.modificationTracker.createdDate >= :startDate ";
+    }
+    if (endDate != null) {
+      queryStr += "AND cb.modificationTracker.createdDate <= :endDate ";
+    }
+
+    TypedQuery<ComponentBatch> query = entityManager.createQuery(queryStr, ComponentBatch.class);
+    query.setParameter("isDeleted", false);
+    if (startDate != null) {
+      query.setParameter("startDate", startDate);
+    }
+    if (endDate != null) {
+      query.setParameter("endDate", endDate);
+    }
+    return query.getResultList();
   }
 }

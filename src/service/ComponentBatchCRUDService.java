@@ -1,9 +1,15 @@
 package service;
 
+import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.NoResultException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import model.component.Component;
 import model.componentbatch.ComponentBatch;
@@ -11,11 +17,6 @@ import model.componentbatch.ComponentBatchStatus;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import repository.ComponentBatchRepository;
 import repository.DonationBatchRepository;
 
@@ -85,6 +86,10 @@ public class ComponentBatchCRUDService {
       }
     }
     componentBatch.setComponents(components);
+  }
+
+  public List<ComponentBatch> findComponentBatches(Date startDate, Date endDate) {
+    return componentBatchRepository.findComponentBatches(startDate, endDate);
   }
 
 }

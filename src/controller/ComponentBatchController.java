@@ -1,6 +1,7 @@
 package controller;
 
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,12 +9,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import model.componentbatch.ComponentBatch;
-import model.donationbatch.DonationBatch;
-import model.location.Location;
-import model.location.LocationType;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,20 +20,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import backingform.ComponentBatchBackingForm;
+import backingform.validator.ComponentBatchBackingFormValidator;
+import factory.ComponentBatchViewModelFactory;
+import factory.DonationBatchViewModelFactory;
+import factory.LocationViewModelFactory;
+import model.componentbatch.ComponentBatch;
+import model.donationbatch.DonationBatch;
+import model.location.Location;
+import model.location.LocationType;
 import repository.DonationBatchRepository;
 import repository.LocationRepository;
 import service.ComponentBatchCRUDService;
 import service.FormFieldAccessorService;
 import utils.PermissionConstants;
 import viewmodel.ComponentBatchViewModel;
-import backingform.ComponentBatchBackingForm;
-import backingform.validator.ComponentBatchBackingFormValidator;
-import factory.ComponentBatchViewModelFactory;
-import factory.DonationBatchViewModelFactory;
-import factory.LocationViewModelFactory;
 
 @RestController
 @RequestMapping("/componentbatches")
@@ -123,4 +125,17 @@ public class ComponentBatchController {
     return new ResponseEntity<>(
         componentBatchViewModelFactory.createComponentBatchViewModel(componentBatch), HttpStatus.OK);
   }
+  
+  @RequestMapping(value = "/search", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT_BATCH + "')")
+  public ResponseEntity<Map<String, Object>> findComponentBatches(
+      @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+      @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    List<ComponentBatch> componentBatches = componentBatchCRUDService.findComponentBatches(startDate, endDate);
+    map.put("componentBatches", componentBatchViewModelFactory.createComponentBatchViewModels(componentBatches));
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+
+  }
+
 }
