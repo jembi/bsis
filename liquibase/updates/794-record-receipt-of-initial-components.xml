@@ -174,4 +174,91 @@
     </addColumn>
   </changeSet>
 
+	<changeSet id="20160426-1333" author="timler">
+		<comment>BSIS-794 - add permissions for ComponentBatch processing.</comment>
+		<insert tableName="Permission">
+			<column name="id" value="102"></column>
+			<column name="name" value="Add Component Batch"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="102"></column>
+			<column name="roles_id" value="1"></column> <!-- Super User -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="102"></column>
+			<column name="roles_id" value="2"></column> <!-- Admin -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="102"></column>
+			<column name="roles_id" value="9"></column> <!-- Component Supervisor -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="102"></column>
+			<column name="roles_id" value="10"></column> <!-- Component Staff -->
+		</insert>
+
+		<insert tableName="Permission">
+			<column name="id" value="103"></column>
+			<column name="name" value="View Component Batch"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="103"></column>
+			<column name="roles_id" value="1"></column> <!-- Super User -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="103"></column>
+			<column name="roles_id" value="2"></column> <!-- Admin -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="103"></column>
+			<column name="roles_id" value="9"></column> <!-- Component Supervisor -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="103"></column>
+			<column name="roles_id" value="10"></column> <!-- Component Staff -->
+		</insert>
+
+		<insert tableName="Permission">
+			<column name="id" value="104"></column>
+			<column name="name" value="Edit Component Batch"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="104"></column>
+			<column name="roles_id" value="1"></column> <!-- Super User -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="104"></column>
+			<column name="roles_id" value="2"></column> <!-- Admin -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="104"></column>
+			<column name="roles_id" value="9"></column> <!-- Component Supervisor -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="104"></column>
+			<column name="roles_id" value="10"></column> <!-- Component Staff -->
+		</insert>
+
+		<insert tableName="Permission">
+			<column name="id" value="105"></column>
+			<column name="name" value="Void Component Batch"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="105"></column>
+			<column name="roles_id" value="1"></column> <!-- Super User -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="105"></column>
+			<column name="roles_id" value="2"></column> <!-- Admin -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="105"></column>
+			<column name="roles_id" value="9"></column> <!-- Component Supervisor -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="105"></column>
+			<column name="roles_id" value="10"></column> <!-- Component Staff -->
+		</insert>
+	</changeSet>
+
 </databaseChangeLog>
