@@ -10,6 +10,8 @@ import javax.validation.Valid;
 
 import model.componentbatch.ComponentBatch;
 import model.donationbatch.DonationBatch;
+import model.location.Location;
+import model.location.LocationType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import repository.DonationBatchRepository;
+import repository.LocationRepository;
 import service.ComponentBatchCRUDService;
 import service.FormFieldAccessorService;
 import utils.PermissionConstants;
@@ -33,6 +36,7 @@ import backingform.ComponentBatchBackingForm;
 import backingform.validator.ComponentBatchBackingFormValidator;
 import factory.ComponentBatchViewModelFactory;
 import factory.DonationBatchViewModelFactory;
+import factory.LocationViewModelFactory;
 
 @RestController
 @RequestMapping("/componentbatches")
@@ -54,7 +58,13 @@ public class ComponentBatchController {
   private DonationBatchRepository donationBatchRepository;
   
   @Autowired
+  private LocationRepository locationRepository;
+  
+  @Autowired
   private DonationBatchViewModelFactory donationBatchViewModelFactory;
+  
+  @Autowired
+  private LocationViewModelFactory locationViewModelFactory;
 
   public ComponentBatchController() {
   }
@@ -70,11 +80,13 @@ public class ComponentBatchController {
     Map<String, Object> map = new HashMap<String, Object>();
     
     List<DonationBatch> donationBatches = donationBatchRepository.findUnassignedDonationBatchesForComponentBatch();
+    List<Location> locations = locationRepository.getLocationsByType(LocationType.PROCESSING_SITE);
     
     map.put("addComponentBatchForm", new ComponentBatchBackingForm());
     map.put("donationBatches", donationBatchViewModelFactory.createDonationBatchBasicViewModels(donationBatches));
     map.put("componentBatchFields", formFieldAccessorService.getFormFieldsForForm("ComponentBatch"));
     map.put("bloodTransportBoxFields", formFieldAccessorService.getFormFieldsForForm("BloodTransportBox"));
+    map.put("processingSites", locationViewModelFactory.createLocationViewModels(locations));
 
     return map;
   }
