@@ -1,5 +1,7 @@
 package backingform.validator;
 
+import static helpers.builders.LocationBuilder.aProcessingSite;
+import static helpers.builders.LocationBuilder.aVenue;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -15,13 +17,13 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
-import repository.DonationBatchRepository;
-import repository.FormFieldRepository;
-import repository.LocationRepository;
 import backingform.BloodTransportBoxBackingForm;
 import backingform.ComponentBatchBackingForm;
 import backingform.DonationBatchBackingForm;
 import backingform.LocationBackingForm;
+import repository.DonationBatchRepository;
+import repository.FormFieldRepository;
+import repository.LocationRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ComponentBatchBackingFormValidatorTest {
@@ -57,7 +59,7 @@ public class ComponentBatchBackingFormValidatorTest {
     
     // set up mocks
     when(donationBatchRepository.verifyDonationBatchExists(1L)).thenReturn(true);
-    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
+    when(locationRepository.getLocation(1L)).thenReturn(aProcessingSite().withId(1L).build());
     
     // run test
     validator.validate(form, errors);
@@ -76,7 +78,7 @@ public class ComponentBatchBackingFormValidatorTest {
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentBatch");
     
     // set up mocks
-    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
+    when(locationRepository.getLocation(1L)).thenReturn(aProcessingSite().withId(1L).build());
     
     // run test
     validator.validate(form, errors);
@@ -97,7 +99,7 @@ public class ComponentBatchBackingFormValidatorTest {
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentBatch");
     
     // set up mocks
-    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
+    when(locationRepository.getLocation(1L)).thenReturn(aProcessingSite().withId(1L).build());
     
     // run test
     validator.validate(form, errors);
@@ -120,7 +122,7 @@ public class ComponentBatchBackingFormValidatorTest {
     
     // set up mocks
     when(donationBatchRepository.verifyDonationBatchExists(1L)).thenReturn(false);
-    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
+    when(locationRepository.getLocation(1L)).thenReturn(aProcessingSite().withId(1L).build());
     
     // run test
     validator.validate(form, errors);
@@ -140,7 +142,7 @@ public class ComponentBatchBackingFormValidatorTest {
     
     // set up mocks
     when(donationBatchRepository.verifyDonationBatchExists(1L)).thenReturn(true);
-    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
+    when(locationRepository.getLocation(1L)).thenReturn(aProcessingSite().withId(1L).build());
     
     // run test
     validator.validate(form, errors);
@@ -162,7 +164,7 @@ public class ComponentBatchBackingFormValidatorTest {
     
     // set up mocks
     when(donationBatchRepository.verifyDonationBatchExists(1L)).thenReturn(true);
-    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
+    when(locationRepository.getLocation(1L)).thenReturn(aProcessingSite().withId(1L).build());
     
     // run test
     validator.validate(form, errors);
@@ -185,7 +187,53 @@ public class ComponentBatchBackingFormValidatorTest {
     
     // set up mocks
     when(donationBatchRepository.verifyDonationBatchExists(1L)).thenReturn(true);
-    when(locationRepository.verifyLocationExists(1L)).thenReturn(false);
+    when(locationRepository.getLocation(1L)).thenReturn(null);
+    
+    // run test
+    validator.validate(form, errors);
+
+    // do checks
+    Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
+    Assert.assertNotNull("Error: No Location", errors.getFieldError("componentBatch.location"));
+  }
+  
+  @Test
+  public void testValidate_locationIsDeleted() throws Exception {
+    // set up data
+    ComponentBatchBackingForm form = new ComponentBatchBackingForm();
+    form.setDonationBatch(new DonationBatchBackingForm());
+    form.getDonationBatch().setId(1L);
+    LocationBackingForm locationForm = new LocationBackingForm();
+    locationForm.setId(1L);
+    form.setLocation(locationForm);
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentBatch");
+    
+    // set up mocks
+    when(donationBatchRepository.verifyDonationBatchExists(1L)).thenReturn(true);
+    when(locationRepository.getLocation(1L)).thenReturn(aProcessingSite().thatIsDeleted().withId(1L).build());
+    
+    // run test
+    validator.validate(form, errors);
+
+    // do checks
+    Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
+    Assert.assertNotNull("Error: No Location", errors.getFieldError("componentBatch.location"));
+  }
+  
+  @Test
+  public void testValidate_locationIsNotAProcessingSite() throws Exception {
+    // set up data
+    ComponentBatchBackingForm form = new ComponentBatchBackingForm();
+    form.setDonationBatch(new DonationBatchBackingForm());
+    form.getDonationBatch().setId(1L);
+    LocationBackingForm locationForm = new LocationBackingForm();
+    locationForm.setId(1L);
+    form.setLocation(locationForm);
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentBatch");
+    
+    // set up mocks
+    when(donationBatchRepository.verifyDonationBatchExists(1L)).thenReturn(true);
+    when(locationRepository.getLocation(1L)).thenReturn(aVenue().withId(1L).build());
     
     // run test
     validator.validate(form, errors);

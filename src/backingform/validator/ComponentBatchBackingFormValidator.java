@@ -12,6 +12,7 @@ import backingform.BloodTransportBoxBackingForm;
 import backingform.ComponentBatchBackingForm;
 import backingform.DonationBatchBackingForm;
 import backingform.LocationBackingForm;
+import model.location.Location;
 
 @Component
 public class ComponentBatchBackingFormValidator extends BaseValidator<ComponentBatchBackingForm> {
@@ -43,8 +44,9 @@ public class ComponentBatchBackingFormValidator extends BaseValidator<ComponentB
     if (locationBackingForm == null || locationBackingForm.getId() == null) {
       errors.rejectValue("componentBatch.location", "location.empty", "Location is required.");
     } else {
-      // donation batch exists
-      if (!locationRepository.verifyLocationExists(locationBackingForm.getId())) {
+      // location exists and is a processing site
+      Location location = locationRepository.getLocation(locationBackingForm.getId());
+      if (location == null || location.getIsDeleted() || !location.isProcessingSite()) {
         errors.rejectValue("componentBatch.location", "location.invalid", "Location is invalid.");
       }
     }
