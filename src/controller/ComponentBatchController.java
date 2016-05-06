@@ -129,10 +129,10 @@ public class ComponentBatchController {
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT_BATCH + "')")
   public ResponseEntity<Map<String, Object>> findComponentBatches(
-      @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
-      @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
+      @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startCollectionDate,
+      @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endCollectionDate) {
     Map<String, Object> map = new HashMap<String, Object>();
-    List<ComponentBatch> componentBatches = componentBatchCRUDService.findComponentBatches(startDate, endDate);
+    List<ComponentBatch> componentBatches = componentBatchCRUDService.findComponentBatches(startCollectionDate, endCollectionDate);
     map.put("componentBatches", componentBatchViewModelFactory.createComponentBatchViewModels(componentBatches));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 

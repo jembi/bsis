@@ -34,23 +34,24 @@ public class ComponentBatchRepository extends AbstractRepository<ComponentBatch>
         .getSingleResult();
   }
 
-  public List<ComponentBatch> findComponentBatches(Date startDate, Date endDate) {
-    String queryStr = "SELECT cb from ComponentBatch cb WHERE cb.isDeleted=:isDeleted ";
+  public List<ComponentBatch> findComponentBatches(Date startCollectionDate, Date endCollectionDate) {
+    String queryStr = "SELECT cb FROM ComponentBatch cb "
+        + "LEFT JOIN FETCH cb.donationBatches WHERE cb.isDeleted=:isDeleted ";
 
-    if (startDate != null) {
-      queryStr += "AND cb.modificationTracker.createdDate >= :startDate ";
+    if (startCollectionDate != null) {
+      queryStr += "AND cb.collectionDate >= :startDate ";
     }
-    if (endDate != null) {
-      queryStr += "AND cb.modificationTracker.createdDate <= :endDate ";
+    if (endCollectionDate != null) {
+      queryStr += "AND cb.collectionDate <= :endDate ";
     }
 
     TypedQuery<ComponentBatch> query = entityManager.createQuery(queryStr, ComponentBatch.class);
     query.setParameter("isDeleted", false);
-    if (startDate != null) {
-      query.setParameter("startDate", startDate);
+    if (startCollectionDate != null) {
+      query.setParameter("startDate", startCollectionDate);
     }
-    if (endDate != null) {
-      query.setParameter("endDate", endDate);
+    if (endCollectionDate != null) {
+      query.setParameter("endDate", endCollectionDate);
     }
     return query.getResultList();
   }

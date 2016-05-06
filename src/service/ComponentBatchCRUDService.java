@@ -88,8 +88,8 @@ public class ComponentBatchCRUDService {
     componentBatch.setComponents(components);
   }
 
-  public List<ComponentBatch> findComponentBatches(Date startDate, Date endDate) {
-    return componentBatchRepository.findComponentBatches(startDate, endDate);
+  public List<ComponentBatch> findComponentBatches(Date startCollectionDate, Date endCollectionDate) {
+    return componentBatchRepository.findComponentBatches(startCollectionDate, endCollectionDate);
   }
 
 }

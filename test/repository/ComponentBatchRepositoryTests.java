@@ -5,12 +5,18 @@ import static helpers.builders.ComponentTypeBuilder.aComponentType;
 import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.PackTypeBuilder.aPackType;
-import helpers.builders.BloodTransportBoxBuilder;
-import helpers.builders.ComponentBatchBuilder;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
+import org.joda.time.DateTime;
+import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import helpers.builders.BloodTransportBoxBuilder;
+import helpers.builders.ComponentBatchBuilder;
 import model.component.Component;
 import model.componentbatch.BloodTransportBox;
 import model.componentbatch.ComponentBatch;
@@ -19,11 +25,6 @@ import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.packtype.PackType;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import suites.SecurityContextDependentTestSuite;
 
 public class ComponentBatchRepositoryTests extends SecurityContextDependentTestSuite {
@@ -144,5 +145,22 @@ public class ComponentBatchRepositoryTests extends SecurityContextDependentTestS
     Assert.assertNotNull("ComponentBatches are found",  componentBatches);
     Assert.assertFalse("ComponentBatches are found",  componentBatches.isEmpty());
     Assert.assertEquals("ComponentBatches are found", 3,  componentBatches.size());
+  }
+
+  @Test
+  public void testFindComponentBatches_returnsComponentBatchesForSearchDates() throws Exception {
+
+    DateTime now = new DateTime();
+    Date aDayAgo = now.minusDays(1).toDate();
+    Date twoDaysAgo = now.minusDays(2).toDate();
+    Date threeDaysAgo = now.minusDays(3).toDate();
+
+    ComponentBatchBuilder.aComponentBatch().withCollectionDate(aDayAgo).buildAndPersist(entityManager);
+    ComponentBatchBuilder.aComponentBatch().withCollectionDate(twoDaysAgo).buildAndPersist(entityManager);
+    ComponentBatchBuilder.aComponentBatch().withCollectionDate(threeDaysAgo).buildAndPersist(entityManager);
+
+    List<ComponentBatch> componentBatches = componentBatchRepository.findComponentBatches(twoDaysAgo, now.toDate());
+
+    Assert.assertEquals("Two componentBatches are found", 2, componentBatches.size());
   }
 }

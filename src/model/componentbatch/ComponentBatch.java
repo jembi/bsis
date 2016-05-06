@@ -75,7 +75,7 @@ public class ComponentBatch extends BaseModificationTrackerEntity {
   
   // This should have been a OneToOne relationship but we couldn't manage to solve an error saying "cannot simultaneously fetch multiple bags". 
   // The solution was to use a set of DonationBatch objects instead of just one donationBatch.
-  @OneToMany(mappedBy = "componentBatch", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "componentBatch")
   private Set<DonationBatch> donationBatches = new HashSet<DonationBatch>();
 
   public ComponentBatch() {
