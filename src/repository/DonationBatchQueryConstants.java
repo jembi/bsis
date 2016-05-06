@@ -21,7 +21,7 @@ public class DonationBatchQueryConstants {
   public static final String NAME_FIND_UNASSIGNED_DONATION_BATCH_WITH_COMPONENT_BATCH =
       "DonationBatch.findUnassignedDonationBatchWithComponentBatch";
   public static final String QUERY_FIND_UNASSIGNED_DONATION_BATCH_WITH_COMPONENT_BATCH =
-      "SELECT db " +
+      "SELECT DISTINCT db " +
           "FROM DonationBatch db " +
           "LEFT JOIN FETCH db.donations d " +
           "WHERE d.components is not empty " +

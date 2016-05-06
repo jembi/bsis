@@ -9,14 +9,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.NoResultException;
 
 import model.component.Component;
-import model.componentbatch.BloodTransportBox;
 import model.componentbatch.ComponentBatch;
-import model.componentbatch.ComponentBatchStatus;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
@@ -200,6 +197,7 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
     DonationBatch donationBatch2 = donationBatchRepository.findDonationBatchById(2L);
     Donation donation1 = donationBatch1.getDonations().get(0);
     Donation donation2 = donationBatch2.getDonations().get(0);
+    Donation donation3 = donationBatch2.getDonations().get(1);
     ComponentType intialComponent = donation1.getPackType().getComponentType();
     // assigned to component batch
     Component component1 = aComponent().withComponentType(intialComponent).withDonation(donation1).buildAndPersist(entityManager);
@@ -207,6 +205,8 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
     // not assigned to component batch
     Component component2 = aComponent().withComponentType(intialComponent).withDonation(donation2).buildAndPersist(entityManager);
     donation2.setComponents(Arrays.asList(component2));
+    Component component3 = aComponent().withComponentType(intialComponent).withDonation(donation3).buildAndPersist(entityManager);
+    donation3.setComponents(Arrays.asList(component3));
     donationBatchRepository.updateDonationBatch(donationBatch1);
     donationBatchRepository.updateDonationBatch(donationBatch2);
 
