@@ -23,6 +23,7 @@ import model.componentbatch.ComponentBatch;
 import model.componentmovement.ComponentStatusChange;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
+import model.inventory.InventoryStatus;
 import model.request.Request;
 import model.usage.ComponentUsage;
 
@@ -115,6 +116,10 @@ public class Component extends BaseModificationTrackerEntity {
 
   @Column(length = 20)
   private String componentIdentificationNumber;
+  
+  @Column(length = 30, nullable = false)
+  @Enumerated(EnumType.STRING)
+  private InventoryStatus inventoryStatus = InventoryStatus.NOT_LABELLED;
 
   public Component() {
     super();
@@ -270,5 +275,13 @@ public class Component extends BaseModificationTrackerEntity {
 
   public void setComponentBatch(ComponentBatch componentBatch) {
     this.componentBatch = componentBatch;
+  }
+
+  public InventoryStatus getInventoryStatus() {
+    return inventoryStatus;
+  }
+
+  public void setInventoryStatus(InventoryStatus inventoryStatus) {
+    this.inventoryStatus = inventoryStatus;
   }
 }

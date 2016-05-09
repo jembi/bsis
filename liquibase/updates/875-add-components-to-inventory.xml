@@ -9,4 +9,15 @@
       <column name="isDistributionSite" type="TINYINT(1)" />
     </addColumn>
   </changeSet>
+  
+  <changeSet id="20160509-0942" author="bausmeier">
+    <addColumn tableName="Component">
+      <column name="inventoryStatus" type="VARCHAR(30)">
+        <constraints nullable="false" />
+      </column>
+    </addColumn>
+    <addColumn tableName="Component_AUD">
+      <column name="inventoryStatus" type="VARCHAR(30)" />
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>
