@@ -1,9 +1,13 @@
 package helpers.builders;
 
+import static helpers.builders.LocationBuilder.aProcessingSite;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import helpers.persisters.AbstractEntityPersister;
+import helpers.persisters.ComponentBatchPersister;
 import model.component.Component;
 import model.componentbatch.BloodTransportBox;
 import model.componentbatch.ComponentBatch;
@@ -21,7 +25,7 @@ public class ComponentBatchBuilder extends AbstractEntityBuilder<ComponentBatch>
   private ComponentBatchStatus status;
   private boolean deleted;
   private DonationBatch donationBatch;
-  private Location location;
+  private Location location = aProcessingSite().build();
 
   public ComponentBatchBuilder withId(Long id) {
     this.id = id;
@@ -66,6 +70,11 @@ public class ComponentBatchBuilder extends AbstractEntityBuilder<ComponentBatch>
   public ComponentBatchBuilder thatIsDeleted() {
     deleted = true;
     return this;
+  }
+
+  @Override
+  public AbstractEntityPersister<ComponentBatch> getPersister() {
+    return new ComponentBatchPersister();
   }
 
   @Override
