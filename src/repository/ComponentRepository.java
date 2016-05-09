@@ -1,6 +1,5 @@
 package repository;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,7 +16,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PessimisticLockException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
@@ -30,9 +28,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import backingform.ComponentCombinationBackingForm;
 import model.bloodtesting.TTIStatus;
 import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
@@ -43,7 +38,6 @@ import model.componentmovement.ComponentStatusChangeReason;
 import model.componentmovement.ComponentStatusChangeReasonCategory;
 import model.componentmovement.ComponentStatusChangeType;
 import model.componenttype.ComponentType;
-import model.componenttype.ComponentTypeCombination;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.request.Request;
@@ -52,7 +46,6 @@ import model.testbatch.TestBatchStatus;
 import model.util.BloodGroup;
 import repository.bloodtesting.BloodTypingStatus;
 import service.DonationConstraintChecker;
-import utils.CustomDateFormatter;
 import utils.SecurityUtils;
 import viewmodel.DonationViewModel;
 import viewmodel.MatchingComponentViewModel;
@@ -66,9 +59,6 @@ public class ComponentRepository {
 
   @Autowired
   private DonationRepository donationRepository;
-
-  @Autowired
-  private ComponentTypeRepository componentTypeRepository;
 
   @Autowired
   private RequestRepository requestRepository;
@@ -842,39 +832,6 @@ public class ComponentRepository {
     query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
     query.setParameter("isDeleted", false);
     return query.getResultList();
-  }
-
-  @SuppressWarnings("unchecked")
-  public List<Component> addComponentCombination(ComponentCombinationBackingForm form) throws PessimisticLockException, ParseException {
-    List<Component> components = new ArrayList<Component>();
-    String expiresOn = form.getExpiresOn();
-    ObjectMapper mapper = new ObjectMapper();
-
-    Map<String, String> expiryDateByComponentType = null;
-    try {
-      expiryDateByComponentType = mapper.readValue(expiresOn, HashMap.class);
-    } catch (IOException ex) {
-      ex.printStackTrace();
-    }
-
-    ComponentTypeCombination componentTypeCombination;
-    componentTypeCombination = componentTypeRepository.getComponentTypeCombinationById(Long.parseLong(form.getComponentTypeCombination()));
-    for (ComponentType componentType : componentTypeCombination.getComponentTypes()) {
-      Component component = new Component();
-      component.setDonation(form.getDonation());
-      component.setComponentType(componentType);
-      component.setCreatedOn(form.getComponent().getCreatedOn());
-      String expiryDateStr = expiryDateByComponentType.get(componentType.getId().toString());
-      component.setExpiresOn(CustomDateFormatter.getDateTimeFromString(expiryDateStr));
-      component.setIsDeleted(false);
-      updateComponentInternalFields(component);
-      em.persist(component);
-      em.flush();
-      em.refresh(component);
-      components.add(component);
-    }
-
-    return components;
   }
 
   public boolean splitComponent(Long componentId, Integer numComponentsAfterSplitting) {
