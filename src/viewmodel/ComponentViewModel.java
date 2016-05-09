@@ -83,6 +83,13 @@ public class ComponentViewModel {
       return "";
     return getComponent().getDonation().getId().toString();
   }
+  
+  public PackTypeBasicViewModel getPackType() {
+    if (component.getDonation() == null || component.getDonation().getPackType() == null) {
+      return null;
+    }
+    return new PackTypeBasicViewModel(component.getDonation().getPackType());
+  }
 
   public String getAge() {
     DateTime today = new DateTime();
