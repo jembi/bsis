@@ -352,6 +352,8 @@ public class DonationRepository {
 
     // assign componentBatch (might be null if it hasn't been created yet)
     component.setComponentBatch(donation.getDonationBatch().getComponentBatch());
+    // Set the location of the component to the venue that the donation
+    component.setLocation(donation.getDonationBatch().getVenue());
 
     component.setExpiresOn(expiresOn);
     component.setComponentType(componentType);

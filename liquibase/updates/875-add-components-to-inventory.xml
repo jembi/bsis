@@ -23,4 +23,31 @@
     </update>
     <addNotNullConstraint tableName="Component" columnName="inventoryStatus" columnDataType="VARCHAR(30)" />
   </changeSet>
+  
+  <changeSet id="20160509-1148" author="bausmeier">
+    <addColumn tableName="Component">
+      <column name="location_id" type="BIGINT(20)" defaultValue="NULL" />
+    </addColumn>
+    <addColumn tableName="Component_AUD">
+      <column name="location_id" type="BIGINT(20)" defaultValue="NULL" />
+    </addColumn>
+    <sql>
+      UPDATE Component c
+      JOIN ComponentBatch cb ON c.componentBatch_id = cb.id
+      JOIN Location l ON cb.location_id = l.id
+      SET c.location_id = l.id
+      WHERE c.location_id IS NULL
+      AND c.componentBatch_id IS NOT NULL;
+    </sql>
+    <sql>
+      UPDATE Component c
+      JOIN Donation d ON c.donation_id = d.id
+      JOIN DonationBatch db ON d.donationBatch_id = db.id
+      JOIN Location l ON db.venue_id = l.id
+      SET c.location_id = l.id
+      WHERE c.location_id IS NULL;
+    </sql>
+    <addNotNullConstraint tableName="Component" columnName="location_id" columnDataType="BIGINT(20)" />
+    <addForeignKeyConstraint constraintName="FK_COMPONENT_LOCATION_ID" referencedTableName="Location" baseColumnNames="location_id" baseTableName="Component" referencedColumnNames="id" />
+  </changeSet>
 </databaseChangeLog>

@@ -396,6 +396,7 @@ public class ComponentController {
           component.setParentComponent(parentComponent);
           component.setStatus(initialComponentStatus);
           component.setCreatedOn(donation.getDonationDate());
+          component.setLocation(parentComponent.getLocation());
 
           Calendar cal = Calendar.getInstance();
           Date createdOn = cal.getTime();
