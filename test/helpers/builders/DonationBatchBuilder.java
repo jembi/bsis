@@ -1,8 +1,13 @@
 package helpers.builders;
 
+import static helpers.builders.LocationBuilder.aVenue;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import helpers.persisters.AbstractEntityPersister;
+import helpers.persisters.DonationBatchPersister;
+import model.componentbatch.ComponentBatch;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.location.Location;
@@ -13,11 +18,12 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
   private Long id;
   private String batchNumber;
   private List<Donation> donations;
-  private Location venue;
+  private Location venue = aVenue().build();
   private TestBatch testBatch;
   private boolean deleted;
   private boolean closed;
   private boolean backEntry;
+  private ComponentBatch componentBatch;
 
   public DonationBatchBuilder withId(Long id) {
     this.id = id;
@@ -67,6 +73,16 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     return this;
   }
 
+  public DonationBatchBuilder withComponentBatch(ComponentBatch componentBatch) {
+    this.componentBatch = componentBatch;
+    return this;
+  }
+
+  @Override
+  public AbstractEntityPersister<DonationBatch> getPersister() {
+    return new DonationBatchPersister();
+  }
+
   @Override
   public DonationBatch build() {
     DonationBatch donationBatch = new DonationBatch();
@@ -78,6 +94,7 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     donationBatch.setVenue(venue);
     donationBatch.setBackEntry(backEntry);
     donationBatch.setTestBatch(testBatch);
+    donationBatch.setComponentBatch(componentBatch);
     return donationBatch;
   }
 

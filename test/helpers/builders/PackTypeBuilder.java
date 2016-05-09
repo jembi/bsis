@@ -1,5 +1,9 @@
 package helpers.builders;
 
+import static helpers.builders.ComponentTypeBuilder.aComponentType;
+
+import helpers.persisters.AbstractEntityPersister;
+import helpers.persisters.PackTypePersister;
 import model.componenttype.ComponentType;
 import model.packtype.PackType;
 
@@ -8,10 +12,10 @@ public class PackTypeBuilder extends AbstractEntityBuilder<PackType> {
   private Long id;
   private String type;
   private Boolean countAsDonation;
-  private Integer periodBetweenDonations;
+  private int periodBetweenDonations;
   private Boolean testSampleProduced;
   private Boolean isDeleted;
-  private ComponentType componentType;
+  private ComponentType componentType = aComponentType().build();
 
   public PackTypeBuilder withId(Long id) {
     this.id = id;
@@ -51,6 +55,11 @@ public class PackTypeBuilder extends AbstractEntityBuilder<PackType> {
   public PackTypeBuilder withComponentType(ComponentType componentType) {
     this.componentType = componentType;
     return this;
+  }
+
+  @Override
+  public AbstractEntityPersister<PackType> getPersister() {
+    return new PackTypePersister();
   }
 
   @Override

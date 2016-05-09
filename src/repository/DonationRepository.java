@@ -34,6 +34,7 @@ import dto.CollectedDonationDTO;
 import model.bloodtesting.TTIStatus;
 import model.component.Component;
 import model.component.ComponentStatus;
+import model.componentbatch.ComponentBatch;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.donor.Donor;
@@ -350,10 +351,16 @@ public class DonationRepository {
     cal.add(Calendar.DATE, componentType.getExpiresAfter());
     Date expiresOn = cal.getTime();
 
-    // assign componentBatch (might be null if it hasn't been created yet)
-    component.setComponentBatch(donation.getDonationBatch().getComponentBatch());
-    // Set the location of the component to the venue that the donation
-    component.setLocation(donation.getDonationBatch().getVenue());
+    ComponentBatch componentBatch = donation.getDonationBatch().getComponentBatch();
+    if (componentBatch == null) {
+      // Set the location to the venue of the donation batch
+      component.setLocation(donation.getDonationBatch().getVenue());
+    } else {
+      // Assign the component to the component batch
+      component.setComponentBatch(componentBatch);
+      // Set the location to the processing site of the component batch
+      component.setLocation(componentBatch.getLocation());
+    }
 
     component.setExpiresOn(expiresOn);
     component.setComponentType(componentType);

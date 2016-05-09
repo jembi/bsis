@@ -7,6 +7,7 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
   private Long id;
   private String componentTypeName;
   private Boolean isDeleted;
+  private int expiresAfter;
 
   public ComponentTypeBuilder withId(Long id) {
     this.id = id;
@@ -34,6 +35,7 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
     componentType.setId(id);
     componentType.setComponentTypeName(componentTypeName);
     componentType.setIsDeleted(isDeleted);
+    componentType.setExpiresAfter(expiresAfter);
     return componentType;
   }
 
