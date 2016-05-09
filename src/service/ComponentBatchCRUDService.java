@@ -7,16 +7,16 @@ import java.util.Set;
 
 import javax.persistence.NoResultException;
 
+import model.component.Component;
+import model.componentbatch.ComponentBatch;
+import model.componentbatch.ComponentBatchStatus;
+import model.donation.Donation;
+import model.donationbatch.DonationBatch;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import model.component.Component;
-import model.componentbatch.ComponentBatch;
-import model.componentbatch.ComponentBatchStatus;
-import model.componenttype.ComponentType;
-import model.donation.Donation;
-import model.donationbatch.DonationBatch;
 import repository.ComponentBatchRepository;
 import repository.DonationBatchRepository;
 
@@ -31,14 +31,7 @@ public class ComponentBatchCRUDService {
   private DonationBatchRepository donationBatchRepository;
 
   public ComponentBatch getComponentBatchById(Long id) throws NoResultException {
-    ComponentBatch componentBatch = componentBatchRepository.findById(id);
-
-    // initialise lazy collections
-    componentBatch.getDonationBatch();
-    componentBatch.getComponents();
-    componentBatch.getBloodTransportBoxes();
-
-    return componentBatch;
+    return componentBatchRepository.findByIdEager(id);
   }
 
   public void deleteComponentBatch(Long id) throws NoResultException {
@@ -75,9 +68,8 @@ public class ComponentBatchCRUDService {
     componentBatch.getComponents().clear();
     Set<Component> components = new HashSet<>();
     for (Donation donation : donationBatch.getDonations()) {
-      ComponentType donationComponentType = donation.getPackType().getComponentType();
       for (Component component : donation.getComponents()) {
-        if (donationComponentType.equals(component.getComponentType())) {
+        if (component.getParentComponent() == null) {
           // found initial component
           components.add(component);
           component.setComponentBatch(componentBatch);

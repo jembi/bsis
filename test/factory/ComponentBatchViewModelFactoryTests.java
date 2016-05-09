@@ -5,8 +5,8 @@ import static helpers.builders.ComponentBatchBuilder.aComponentBatch;
 import static helpers.builders.ComponentBuilder.aComponent;
 import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.DonationBuilder.aDonation;
-import static helpers.builders.LocationBuilder.aVenue;
 import static helpers.builders.LocationBuilder.aLocation;
+import static helpers.builders.LocationBuilder.aVenue;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -29,6 +29,7 @@ import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.location.Location;
 import viewmodel.BloodTransportBoxViewModel;
+import viewmodel.ComponentBatchBasicViewModel;
 import viewmodel.ComponentBatchViewModel;
 import viewmodel.ComponentViewModel;
 import viewmodel.DonationBatchViewModel;
@@ -91,7 +92,8 @@ public class ComponentBatchViewModelFactoryTests {
       .thenReturn(Arrays.asList(boxViewModel));
     
     // run test
-    ComponentBatchViewModel viewModel = componentBatchViewModelFactory.createComponentBatchViewModel(componentBatch);
+    ComponentBatchViewModel viewModel =
+        componentBatchViewModelFactory.createComponentBatchFullViewModel(componentBatch);
     
     // do asserts
     Assert.assertNotNull("View model returned", viewModel);
@@ -108,9 +110,10 @@ public class ComponentBatchViewModelFactoryTests {
   }
   
   @Test
-  public void testCreateComponentBatchViewModels_nullList() throws Exception {   
+  public void testCreateComponentBatchBasicViewModels_nullList() throws Exception {
     // run test
-    List<ComponentBatchViewModel> viewModels = componentBatchViewModelFactory.createComponentBatchViewModels(null);
+    List<ComponentBatchBasicViewModel> viewModels =
+        componentBatchViewModelFactory.createComponentBatchBasicViewModels(null);
     
     // do asserts
     Assert.assertNotNull("View models list returned", viewModels);
@@ -118,7 +121,7 @@ public class ComponentBatchViewModelFactoryTests {
   }
   
   @Test
-  public void testCreateComponentBatchViewModels_ComponentBatchList() throws Exception {
+  public void testCreateComponentBatchBasicViewModels_ComponentBatchList() throws Exception {
     // set up data
     List<ComponentBatch> componentBatches = new ArrayList<>();
     componentBatches.add(aComponentBatch().withId(1L).build());
@@ -127,7 +130,8 @@ public class ComponentBatchViewModelFactoryTests {
     // set up mocks
     
     // run test
-    List<ComponentBatchViewModel> viewModels = componentBatchViewModelFactory.createComponentBatchViewModels(componentBatches);
+    List<ComponentBatchBasicViewModel> viewModels =
+        componentBatchViewModelFactory.createComponentBatchBasicViewModels(componentBatches);
     
     // do asserts
     Assert.assertNotNull("View models list returned", viewModels);

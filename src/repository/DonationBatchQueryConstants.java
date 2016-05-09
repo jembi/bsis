@@ -18,9 +18,9 @@ public class DonationBatchQueryConstants {
           "WHERE db.id = :id " +
           "AND db.isDeleted = :deleted ";
   
-  public static final String NAME_FIND_UNASSIGNED_DONATION_BATCH_WITH_COMPONENT_BATCH =
+  public static final String NAME_FIND_UNASSIGNED_DONATION_BATCHES_WITH_COMPONENTS =
       "DonationBatch.findUnassignedDonationBatchWithComponentBatch";
-  public static final String QUERY_FIND_UNASSIGNED_DONATION_BATCH_WITH_COMPONENT_BATCH =
+  public static final String QUERY_FIND_UNASSIGNED_DONATION_BATCHES_WITH_COMPONENTS =
       "SELECT DISTINCT db " +
           "FROM DonationBatch db " +
           "LEFT JOIN FETCH db.donations d " +

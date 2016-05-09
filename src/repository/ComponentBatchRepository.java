@@ -33,6 +33,14 @@ public class ComponentBatchRepository extends AbstractRepository<ComponentBatch>
         .setParameter("isDeleted", false)
         .getSingleResult();
   }
+  
+  public ComponentBatch findByIdEager(Long id) {
+    return entityManager.createNamedQuery(
+        ComponentBatchNamedQueryConstants.NAME_FIND_COMPONENT_BATCH_BY_ID_EAGER, ComponentBatch.class)
+        .setParameter("id", id)
+        .setParameter("isDeleted", false)
+        .getSingleResult();
+  }
 
   public List<ComponentBatch> findComponentBatches(Date startCollectionDate, Date endCollectionDate) {
     String queryStr = "SELECT cb FROM ComponentBatch cb "
@@ -44,6 +52,8 @@ public class ComponentBatchRepository extends AbstractRepository<ComponentBatch>
     if (endCollectionDate != null) {
       queryStr += "AND cb.collectionDate <= :endDate ";
     }
+
+    queryStr += "ORDER BY cb.collectionDate DESC";
 
     TypedQuery<ComponentBatch> query = entityManager.createQuery(queryStr, ComponentBatch.class);
     query.setParameter("isDeleted", false);

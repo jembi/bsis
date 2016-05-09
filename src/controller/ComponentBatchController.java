@@ -99,7 +99,7 @@ public class ComponentBatchController {
     ComponentBatch componentBatch = form.getComponentBatch();
     componentBatch = componentBatchCRUDService.createComponentBatch(componentBatch);
     return new ResponseEntity<>(
-        componentBatchViewModelFactory.createComponentBatchViewModel(componentBatch), HttpStatus.CREATED);
+        componentBatchViewModelFactory.createComponentBatchFullViewModel(componentBatch), HttpStatus.CREATED);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
@@ -108,7 +108,7 @@ public class ComponentBatchController {
     ComponentBatch componentBatch = form.getComponentBatch();
     componentBatch = componentBatchCRUDService.updateComponentBatch(componentBatch);
     return new ResponseEntity<>(
-        componentBatchViewModelFactory.createComponentBatchViewModel(componentBatch), HttpStatus.OK);
+        componentBatchViewModelFactory.createComponentBatchFullViewModel(componentBatch), HttpStatus.OK);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
@@ -123,7 +123,7 @@ public class ComponentBatchController {
   public ResponseEntity<ComponentBatchViewModel> getComponentBatch(@PathVariable Long id) {
     ComponentBatch componentBatch = componentBatchCRUDService.getComponentBatchById(id);
     return new ResponseEntity<>(
-        componentBatchViewModelFactory.createComponentBatchViewModel(componentBatch), HttpStatus.OK);
+        componentBatchViewModelFactory.createComponentBatchFullViewModel(componentBatch), HttpStatus.OK);
   }
   
   @RequestMapping(value = "/search", method = RequestMethod.GET)
@@ -133,7 +133,7 @@ public class ComponentBatchController {
       @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endCollectionDate) {
     Map<String, Object> map = new HashMap<String, Object>();
     List<ComponentBatch> componentBatches = componentBatchCRUDService.findComponentBatches(startCollectionDate, endCollectionDate);
-    map.put("componentBatches", componentBatchViewModelFactory.createComponentBatchViewModels(componentBatches));
+    map.put("componentBatches", componentBatchViewModelFactory.createComponentBatchBasicViewModels(componentBatches));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 
   }
