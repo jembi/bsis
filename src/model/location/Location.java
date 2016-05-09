@@ -42,6 +42,8 @@ public class Location extends BaseEntity {
   private Boolean isVenue;
   
   private boolean isProcessingSite;
+  
+  private boolean isDistributionSite;
 
   private Boolean isDeleted;
 
@@ -114,5 +116,13 @@ public class Location extends BaseEntity {
 
   public void setProcessingSite(boolean isProcessingSite) {
     this.isProcessingSite = isProcessingSite;
+  }
+
+  public boolean isDistributionSite() {
+    return isDistributionSite;
+  }
+
+  public void setDistributionSite(boolean isDistributionSite) {
+    this.isDistributionSite = isDistributionSite;
   }
 }
