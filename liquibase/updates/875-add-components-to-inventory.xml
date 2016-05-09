@@ -12,12 +12,15 @@
   
   <changeSet id="20160509-0942" author="bausmeier">
     <addColumn tableName="Component">
-      <column name="inventoryStatus" type="VARCHAR(30)">
-        <constraints nullable="false" />
-      </column>
+      <column name="inventoryStatus" type="VARCHAR(30)" defaultValue="NULL" />
     </addColumn>
     <addColumn tableName="Component_AUD">
-      <column name="inventoryStatus" type="VARCHAR(30)" />
+      <column name="inventoryStatus" type="VARCHAR(30)" defaultValue="NULL" />
     </addColumn>
+    <update tableName="Component">
+      <column name="inventoryStatus" value="NOT_LABELLED" type="VARCHAR(30)" />
+      <where>inventoryStatus IS NULL</where>
+    </update>
+    <addNotNullConstraint tableName="Component" columnName="inventoryStatus" columnDataType="VARCHAR(30)" />
   </changeSet>
 </databaseChangeLog>
