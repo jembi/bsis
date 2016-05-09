@@ -85,4 +85,12 @@ public class LocationBackingForm {
   public void setIsProcessingSite(boolean isProcessingSite) {
     location.setProcessingSite(isProcessingSite);
   }
+  
+  public boolean getIsDistributionSite() {
+    return location.isDistributionSite();
+  }
+  
+  public void setIsDistributionSite(boolean isDistributionSite) {
+    location.setDistributionSite(isDistributionSite);
+  }
 }
