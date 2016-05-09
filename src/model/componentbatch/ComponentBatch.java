@@ -33,7 +33,9 @@ import repository.ComponentBatchNamedQueryConstants;
   @NamedQuery(name = ComponentBatchNamedQueryConstants.NAME_FIND_COMPONENT_BATCHES_BY_STATUS,
       query = ComponentBatchNamedQueryConstants.QUERY_FIND_COMPONENT_BATCHES_BY_STATUS),
   @NamedQuery(name = ComponentBatchNamedQueryConstants.NAME_FIND_COMPONENT_BATCH_BY_ID,
-      query = ComponentBatchNamedQueryConstants.QUERY_FIND_COMPONENT_BATCH_BY_ID)
+      query = ComponentBatchNamedQueryConstants.QUERY_FIND_COMPONENT_BATCH_BY_ID),
+  @NamedQuery(name = ComponentBatchNamedQueryConstants.NAME_FIND_COMPONENT_BATCH_BY_ID_EAGER,
+      query = ComponentBatchNamedQueryConstants.QUERY_FIND_COMPONENT_BATCH_BY_ID_EAGER),
 })
 @Entity
 @Audited

@@ -170,7 +170,7 @@ public class DonationBatchRepository {
   }
   
   public List<DonationBatch> findUnassignedDonationBatchesForComponentBatch() {
-    return em.createNamedQuery(DonationBatchQueryConstants.NAME_FIND_UNASSIGNED_DONATION_BATCH_WITH_COMPONENT_BATCH, 
+    return em.createNamedQuery(DonationBatchQueryConstants.NAME_FIND_UNASSIGNED_DONATION_BATCHES_WITH_COMPONENTS, 
         DonationBatch.class).getResultList();
   }
 }

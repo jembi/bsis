@@ -101,6 +101,28 @@ public class ComponentBatchRepositoryTests extends SecurityContextDependentTestS
     Assert.assertEquals("Box temperature correct", 0.5, 
         componentBatch.getBloodTransportBoxes().iterator().next().getTemperature(), 0);
   }
+  
+  @Test
+  public void testFindByIdEager_returnsComponentBatchAndLazyDependencies() throws Exception {
+    ComponentType componentType = aComponentType().buildAndPersist(entityManager);
+    PackType packType = aPackType().withPackType("packType").withComponentType(componentType).buildAndPersist(entityManager);
+    Donation donation = aDonation().withDonationIdentificationNumber("DIN123").withPackType(packType).buildAndPersist(entityManager);
+    Component component = aComponent().withComponentType(componentType).withDonation(donation).buildAndPersist(entityManager);
+    donation.setComponents(Arrays.asList(component));
+    DonationBatch donationBatch = aDonationBatch().withDonation(donation).buildAndPersist(entityManager);
+    ComponentBatch newComponentBatch = ComponentBatchBuilder.aComponentBatch()
+        .withComponent(component)
+        .withDonationBatch(donationBatch)
+        .buildAndPersist(entityManager);
+    component.setComponentBatch(newComponentBatch);
+    
+    ComponentBatch componentBatch = componentBatchRepository.findByIdEager(newComponentBatch.getId());
+    
+    Assert.assertNotNull("ComponentBatch is found",  componentBatch);
+    Assert.assertEquals("Correct ComponentBatch is returned",  newComponentBatch.getId(), componentBatch.getId());
+    Assert.assertFalse("Components are returned", componentBatch.getComponents().isEmpty());
+    Assert.assertNotNull("DonationBatch is returned", componentBatch.getDonationBatch());
+  }
 
   @Test(expected = javax.persistence.NoResultException.class)
   public void testFindById_doesNotReturnDeletedComponentBatch() throws Exception {
