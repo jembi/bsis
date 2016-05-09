@@ -13,6 +13,10 @@ public class LocationBackingForm {
   public LocationBackingForm() {
     location = new Location();
   }
+  
+  public LocationBackingForm(Location location) {
+    this.location = location;
+  }
 
   public Location getLocation() {
     return location;

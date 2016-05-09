@@ -18,6 +18,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
 import backingform.DonorBackingForm;
+import backingform.LocationBackingForm;
 import helpers.builders.FormFieldBuilder;
 import helpers.builders.LocationBuilder;
 import model.admin.FormField;
@@ -56,7 +57,7 @@ public class DonorBackingFormValidatorTest {
     donorForm.setFirstName("First");
     donorForm.setLastName("Last");
     donorForm.setGender(Gender.female);
-    donorForm.setVenue(LocationBuilder.aVenue().withId(1l).withName("Venue").build());
+    donorForm.setVenue(new LocationBackingForm(LocationBuilder.aVenue().withId(1l).withName("Venue").build()));
     donorForm.setPreferredLanguage(preferredLanguage);
     return donorForm;
   }

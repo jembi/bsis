@@ -31,6 +31,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import backingform.DonorBackingForm;
+import backingform.LocationBackingForm;
 import dto.DuplicateDonorDTO;
 import model.address.Address;
 import model.address.AddressType;
@@ -544,7 +545,7 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     user = new User();
     user.setId(userDbId);
     donorBackingForm.setHomeAddressDistrict("District");
-    donorBackingForm.setVenue(l);
+    donorBackingForm.setVenue(new LocationBackingForm(l));
     donorBackingForm.setIdNumber("1111");
     donorBackingForm.setNotes("Notes");
     donorBackingForm.setMobileNumber("9999999999");
@@ -589,7 +590,7 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     donorBackingForm.setHomeAddressCity("City_update");
     donorBackingForm.setHomeAddressCountry("country_update");
     donorBackingForm.setHomeAddressDistrict("District_update");
-    donorBackingForm.setVenue(l);
+    donorBackingForm.setVenue(new LocationBackingForm(l));
     donorBackingForm.setIdNumber("1212");
     donorBackingForm.setNotes("Notes_update");
     donorBackingForm.setMobileNumber("9878787878");

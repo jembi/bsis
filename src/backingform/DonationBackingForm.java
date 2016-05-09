@@ -14,7 +14,6 @@ import model.donation.HaemoglobinLevel;
 import model.donationbatch.DonationBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
-import model.location.Location;
 import model.packtype.PackType;
 import model.user.User;
 
@@ -365,11 +364,11 @@ public class DonationBackingForm {
     }
   }
 
-  public void setVenue(Location venue) {
+  public void setVenue(LocationBackingForm venue) {
     if (venue == null || venue.getId() == null) {
       donation.setVenue(null);
     } else {
-      donation.setVenue(venue);
+      donation.setVenue(venue.getLocation());
     }
 
   }
