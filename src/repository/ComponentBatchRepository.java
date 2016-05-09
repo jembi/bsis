@@ -45,6 +45,8 @@ public class ComponentBatchRepository extends AbstractRepository<ComponentBatch>
       queryStr += "AND cb.collectionDate <= :endDate ";
     }
 
+    queryStr += "ORDER BY cb.collectionDate DESC";
+
     TypedQuery<ComponentBatch> query = entityManager.createQuery(queryStr, ComponentBatch.class);
     query.setParameter("isDeleted", false);
     if (startCollectionDate != null) {
