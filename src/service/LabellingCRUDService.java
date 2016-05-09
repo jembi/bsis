@@ -16,6 +16,7 @@ import model.component.Component;
 import model.component.ComponentStatus;
 import model.donation.Donation;
 import model.donation.LotReleaseConstant;
+import model.inventory.InventoryStatus;
 import repository.ComponentRepository;
 import repository.DonationRepository;
 import repository.bloodtesting.BloodTypingStatus;
@@ -40,12 +41,18 @@ public class LabellingCRUDService {
     Component component = componentRepository.findComponentById(componentId);
     Donation donation = component.getDonation();
 
-    // check to make sure label can be printed
+    // Check to make sure label can be printed
     if (!checkDonationIdentificationNumber(donation)) {
       throw new IllegalArgumentException("Pack Label can't be printed");
     }
 
-    // label can be printed
+    // If current status is NOT_LABELLED, update inventory status to IN_STOCK for this component
+    if (component.getInventoryStatus().equals(InventoryStatus.NOT_LABELLED)) {
+      component.setInventoryStatus(InventoryStatus.IN_STOCK);
+      componentRepository.updateComponent(component);
+    }
+
+    // Generate label
     DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     String bloodABO = donation.getBloodAbo();
     String bloodRh = "";

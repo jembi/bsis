@@ -17,6 +17,16 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Index;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import constraintvalidator.ComponentTypeExists;
+import constraintvalidator.DonationExists;
 import model.BaseModificationTrackerEntity;
 import model.compatibility.CompatibilityTest;
 import model.componentbatch.ComponentBatch;
@@ -27,19 +37,7 @@ import model.inventory.InventoryStatus;
 import model.location.Location;
 import model.request.Request;
 import model.usage.ComponentUsage;
-
-import org.hibernate.annotations.Index;
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
-import org.hibernate.envers.RelationTargetAuditMode;
-
 import repository.ComponentNamedQueryConstants;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import constraintvalidator.ComponentTypeExists;
-import constraintvalidator.DonationExists;
 
 @NamedQueries({
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUSES_FOR_DONOR,
@@ -138,6 +136,7 @@ public class Component extends BaseModificationTrackerEntity {
     this.notes = component.notes;
     this.componentIdentificationNumber = component.componentIdentificationNumber;
     this.location = component.location;
+    this.inventoryStatus = component.inventoryStatus;
   }
 
   public Donation getDonation() {
