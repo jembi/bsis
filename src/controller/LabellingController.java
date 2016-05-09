@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,7 +36,7 @@ import utils.PermissionConstants;
 
 @RestController
 @RequestMapping("labels")
-public class LotReleaseController {
+public class LabellingController {
 
   @Autowired
   private DonationRepository donationRepository;
@@ -47,9 +46,6 @@ public class LotReleaseController {
 
   @Autowired
   private DonationBackingFormValidator donationBackingFormValidator;
-
-  public LotReleaseController() {
-  }
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
