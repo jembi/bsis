@@ -222,37 +222,11 @@ public class ComponentRepository {
     return query.getResultList();
   }
 
-  public List<Component> findComponentByDonationIdentificationNumber(
-      String donationIdentificationNumber, List<ComponentStatus> status, Map<String, Object> pagingParams) {
-
-    TypedQuery<Component> query;
-    String queryStr = "SELECT DISTINCT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +
-        "c.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
-        "c.status IN :status AND " +
-        "c.isDeleted= :isDeleted";
-
-    String queryStrWithoutJoin = "SELECT c FROM Component c WHERE " +
-        "c.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
-        "c.status IN :status AND " +
-        "c.isDeleted= :isDeleted";
-
-    if (pagingParams.containsKey("sortColumn")) {
-      queryStr += " ORDER BY c." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
-    }
-
-    query = em.createQuery(queryStr, Component.class);
-    query.setParameter("status", status);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
-
-    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
-    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
-
-    query.setFirstResult(start);
-    query.setMaxResults(length);
-
-    //return Arrays.asList(query.getResultList(), getResultCount(queryStrWithoutJoin, query));
-    return query.getResultList();
+  public List<Component> findComponentsByDonationIdentificationNumber(String donationIdentificationNumber) {
+    return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_BY_DIN, Component.class)
+        .setParameter("isDeleted", Boolean.FALSE)
+        .setParameter("donationIdentificationNumber", donationIdentificationNumber)
+        .getResultList();
   }
 
   public List<Component> findComponentByComponentTypes(
@@ -802,15 +776,6 @@ public class ComponentRepository {
     query.setParameter("componentId", component.getId());
     List<ComponentStatusChange> statusChanges = query.getResultList();
     return statusChanges;
-  }
-
-  public List<Component> findComponentsByDonationIdentificationNumber(String donationIdentificationNumber) {
-    String queryStr = "SELECT c from Component c WHERE " +
-        "c.donation.donationIdentificationNumber=:donationIdentificationNumber AND c.isDeleted=:isDeleted";
-    TypedQuery<Component> query = em.createQuery(queryStr, Component.class);
-    query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
-    query.setParameter("isDeleted", false);
-    return query.getResultList();
   }
 
   public boolean splitComponent(Long componentId, Integer numComponentsAfterSplitting) {

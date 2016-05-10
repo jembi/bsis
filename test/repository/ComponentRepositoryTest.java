@@ -220,37 +220,6 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
-  public void testFindComponentByDINAndStatus() throws Exception {
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    List<ComponentStatus> status = new ArrayList<ComponentStatus>();
-    status.add(ComponentStatus.QUARANTINED);
-    status.add(ComponentStatus.PROCESSED);
-    List<Component> all = componentRepository.findComponentByDonationIdentificationNumber("1111111", status, pagingParams);
-    Assert.assertNotNull("There is a Component with DIN 1111111", all);
-    Assert.assertFalse("There is a Component with DIN 1111111", all.isEmpty());
-    Assert.assertEquals("There should be two components", 2, all.size());
-  }
-
-  @Test
-  public void testFindComponentByDINAndStatusNone() throws Exception {
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    List<ComponentStatus> status = new ArrayList<ComponentStatus>();
-    status.add(ComponentStatus.EXPIRED);
-    List<Component> all = componentRepository.findComponentByDonationIdentificationNumber("1111111", status, pagingParams);
-    Assert.assertTrue("There should be 0 components", all.isEmpty());
-  }
-
-  @Test
-  public void testFindComponentByDINAndStatusUnknown() throws Exception {
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    List<ComponentStatus> status = new ArrayList<ComponentStatus>();
-    status.add(ComponentStatus.QUARANTINED);
-    status.add(ComponentStatus.PROCESSED);
-    List<Component> all = componentRepository.findComponentByDonationIdentificationNumber("1111112", status, pagingParams);
-    Assert.assertTrue("There should be 0 components", all.isEmpty());
-  }
-
-  @Test
   public void testFindAnyComponentDIN() throws Exception {
     Map<String, Object> pagingParams = new HashMap<String, Object>();
     List<Component> all = componentRepository.findAnyComponent("1111111", null, null, null, null, pagingParams);

@@ -174,14 +174,8 @@ public class ComponentController {
     
     Component discardedComponent = componentCRUDService.discardComponent(id, discardReasonId, discardReasonText);
 
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    pagingParams.put("sortColumn", "id");
-    pagingParams.put("sortDirection", "asc");
-    List<ComponentStatus> statusList = Arrays.asList(ComponentStatus.values());
-
-    List<Component> results = componentRepository.findComponentByDonationIdentificationNumber(
-        discardedComponent.getDonation().getDonationIdentificationNumber(), 
-        statusList, pagingParams);
+    List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(
+        discardedComponent.getDonation().getDonationIdentificationNumber());
 
     List<ComponentViewModel> components = componentViewModelFactory.createComponentViewModels(results);
 
@@ -234,28 +228,15 @@ public class ComponentController {
     return HttpStatus.NO_CONTENT;
   }
 
-  @SuppressWarnings("unchecked")
   @RequestMapping(value = "/donations/{donationNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
-  public Map<String, Object> findComponentByPackNumberPagination(HttpServletRequest request, @PathVariable String donationNumber) {
+  public Map<String, Object> findComponentByDonationIdentificationNumber(HttpServletRequest request, @PathVariable String donationNumber) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
-
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    pagingParams.put("sortColumn", "id");
-    //pagingParams.put("start", "0");
-    //pagingParams.put("length", "10");
-    pagingParams.put("sortDirection", "asc");
-
-    List<Component> results = new ArrayList<Component>();
-    List<ComponentStatus> status = Arrays.asList(ComponentStatus.values());
-
-    results = componentRepository.findComponentByDonationIdentificationNumber(
-        donationNumber, status,
-        pagingParams);
+    List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(donationNumber);
 
     List<ComponentViewModel> componentViewModels = componentViewModelFactory.createComponentViewModels(results);
 
+    Map<String, Object> map = new HashMap<String, Object>();
     map.put("components", componentViewModels);
     return map;
   }
@@ -354,19 +335,14 @@ public class ComponentController {
       }
     }
 
-    Map<String, Object> map = new HashMap<String, Object>();
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    pagingParams.put("sortColumn", "id");
-    pagingParams.put("sortDirection", "asc");
-    List<Component> results = new ArrayList<Component>();
-    List<ComponentStatus> statusList = Arrays.asList(ComponentStatus.values());
+    
 
-    results = componentRepository.findComponentByDonationIdentificationNumber(
-        donation.getDonationIdentificationNumber(), statusList,
-        pagingParams);
+    List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(
+        donation.getDonationIdentificationNumber());
 
     List<ComponentViewModel> componentViewModels = componentViewModelFactory.createComponentViewModels(results);
 
+    Map<String, Object> map = new HashMap<String, Object>();
     map.put("components", componentViewModels);
 
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
