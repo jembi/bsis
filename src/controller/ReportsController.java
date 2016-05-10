@@ -13,8 +13,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.reporting.Report;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -25,9 +23,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import model.location.LocationType;
+import model.reporting.Report;
+import repository.ComponentRepository;
 import repository.DonationRepository;
 import repository.LocationRepository;
-import repository.ComponentRepository;
 import repository.RequestRepository;
 import repository.TipsRepository;
 import repository.bloodtesting.BloodTestingRepository;
@@ -66,7 +66,7 @@ public class ReportsController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("report.inventory.generate", tipsRepository.getTipsContent("report.inventory.generate"));
     map.put("report.inventory.componentinventorychart", tipsRepository.getTipsContent("report.inventory.componentinventorychart"));
-    map.put("venues", locationRepository.getAllVenues());
+    map.put("venues", locationRepository.getLocationsByType(LocationType.VENUE));
     map.put("model", map);
     return map;
   }
@@ -106,7 +106,7 @@ public class ReportsController {
   public Map<String, Object> donationsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("report.donations.donationsreport", tipsRepository.getTipsContent("report.donations.donationsreport"));
-    map.put("venues", locationRepository.getAllVenues());
+    map.put("venues", locationRepository.getLocationsByType(LocationType.VENUE));
     return map;
   }
 
@@ -115,7 +115,7 @@ public class ReportsController {
   public Map<String, Object> requestsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("report.requests.requestsreport", tipsRepository.getTipsContent("report.requests.requestsreport"));
-    map.put("sites", locationRepository.getAllUsageSites());
+    map.put("sites", locationRepository.getLocationsByType(LocationType.USAGE_SITE));
     return map;
   }
 
@@ -124,7 +124,7 @@ public class ReportsController {
   public Map<String, Object> discardedComponentsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("report.components.discardedcomponentsreport", tipsRepository.getTipsContent("report.components.discardedcomponentsreport"));
-    map.put("venues", locationRepository.getAllVenues());
+    map.put("venues", locationRepository.getLocationsByType(LocationType.VENUE));
     map.put("model", map);
     return map;
   }
@@ -134,7 +134,7 @@ public class ReportsController {
   public Map<String, Object> issuedComponentsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("report.components.issuedcomponentsreport", tipsRepository.getTipsContent("report.components.issuedcomponentsreport"));
-    map.put("venues", locationRepository.getAllVenues());
+    map.put("venues", locationRepository.getLocationsByType(LocationType.VENUE));
     return map;
   }
 
@@ -350,7 +350,7 @@ public class ReportsController {
   public Map<String, Object> testResultsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("ttiTests", bloodTestingRepository.getTTITests());
-    map.put("venues", locationRepository.getAllVenues());
+    map.put("venues", locationRepository.getLocationsByType(LocationType.VENUE));
     map.put("report.donations.testresultsreport", tipsRepository.getTipsContent("report.donations.testresultsreport"));
     return map;
   }

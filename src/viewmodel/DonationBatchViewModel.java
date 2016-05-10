@@ -19,6 +19,7 @@ public class DonationBatchViewModel {
   private LocationViewModel venue;
   private boolean backEntry;
   private Integer numDonations;
+  private String status;
 
   public DonationBatchViewModel() {
   }
@@ -113,5 +114,8 @@ public class DonationBatchViewModel {
     this.numDonations = numDonations;
   }
 
+  public String getStatus() {
+    return getIsClosed().booleanValue() == true ? "CLOSED" : "OPEN";
+  }
 
 }

@@ -3,11 +3,11 @@
     <user id="1" emailId="admin" firstName="admin" isactive="1"
           isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin"/>
 
-    <Location id="1" isDeleted="false" isVenue="true"
+    <Location isProcessingSite="0" id="1" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Maseru" notes=""/>
-    <Location id="2" isDeleted="false" isVenue="true"
+    <Location isProcessingSite="0" id="2" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Leribe" notes=""/>
-    <Location id="3" isDeleted="false" isVenue="true"
+    <Location isProcessingSite="0" id="3" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Mohale" notes=""/>
 
     <TestBatch id="1" batchNumber="TB0215000000" isDeleted="false"
@@ -16,12 +16,18 @@
     <TestBatch id="2" batchNumber="TB0415000000" isDeleted="false"
                createdDate="2015-04-24 04:42:17.0" lastUpdated="2015-04-24 04:42:17.0"
                status="OPEN" createdBy_id="1" lastUpdatedBy_id="1"/>
+               
+    <ComponentBatch id="1" location_id="1" 
+               status="OPEN" isDeleted="0"
+               collectionDate="2015-08-11 09:06:27.0" deliveryDate="2015-08-11 09:06:27.0"
+               createdDate="2015-08-11 09:06:27.0" createdBy_id="1" 
+               lastUpdated="2015-08-11 09:06:27.0" lastUpdatedBy_id="1"/>
 
     <DonationBatch id="1" batchNumber="B0215000000"
                    isDeleted="false" createdDate="2015-02-02 03:41:09.0"
                    lastUpdated="2015-02-02 03:42:55.0"
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" testBatch_id="1"
-                   venue_id="1" backEntry="false"/>
+                   venue_id="1" backEntry="false" componentBatch_id="1" />
     <DonationBatch id="2" batchNumber="B0215000001"
                    isDeleted="false" createdDate="2015-02-02 03:43:00.0"
                    lastUpdated="2015-04-24 04:42:09.0"
@@ -199,4 +205,12 @@
               venue_id="1" bleedStartTime="1970-01-01 11:24:30.0"
               bleedEndTime="1970-01-01 11:44:30.0"
               bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0"/>
+    <Donation id="4" bloodAbo="A" bloodRh="-" bloodTypingStatus="COMPLETE"
+              donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1212130"
+              extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-18 07:53:57.0"
+              lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
+              packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="2"
+              createdBy_id="1" lastUpdatedBy_id="1" venue_id="2"
+              bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
+              bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0"/>
 </dataset>

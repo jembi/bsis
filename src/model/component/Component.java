@@ -19,6 +19,7 @@ import javax.persistence.TemporalType;
 
 import model.BaseModificationTrackerEntity;
 import model.compatibility.CompatibilityTest;
+import model.componentbatch.ComponentBatch;
 import model.componentmovement.ComponentStatusChange;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
@@ -103,6 +104,9 @@ public class Component extends BaseModificationTrackerEntity {
 
   @OneToOne(mappedBy = "component")
   private ComponentUsage usage;
+  
+  @ManyToOne
+  private ComponentBatch componentBatch;
 
   @Lob
   private String notes;
@@ -260,4 +264,11 @@ public class Component extends BaseModificationTrackerEntity {
     this.componentIdentificationNumber = componentIdentificationNumber;
   }
 
+  public ComponentBatch getComponentBatch() {
+    return componentBatch;
+  }
+
+  public void setComponentBatch(ComponentBatch componentBatch) {
+    this.componentBatch = componentBatch;
+  }
 }

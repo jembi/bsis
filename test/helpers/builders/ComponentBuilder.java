@@ -4,12 +4,20 @@ import helpers.persisters.AbstractEntityPersister;
 import helpers.persisters.ComponentPersister;
 import model.component.Component;
 import model.component.ComponentStatus;
+import model.componenttype.ComponentType;
 import model.donation.Donation;
 
 public class ComponentBuilder extends AbstractEntityBuilder<Component> {
 
+  private Long id;
   private ComponentStatus status;
   private Donation donation;
+  private ComponentType componentType;
+  
+  public ComponentBuilder withId(Long id) {
+    this.id = id;
+    return this;
+  }
 
   public ComponentBuilder withStatus(ComponentStatus status) {
     this.status = status;
@@ -20,12 +28,19 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     this.donation = donation;
     return this;
   }
+  
+  public ComponentBuilder withComponentType(ComponentType componentType) {
+    this.componentType = componentType;
+    return this;
+  }
 
   @Override
   public Component build() {
     Component component = new Component();
+    component.setId(id);
     component.setStatus(status);
     component.setDonation(donation);
+    component.setComponentType(componentType);
     return component;
   }
 

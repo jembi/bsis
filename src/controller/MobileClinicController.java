@@ -19,12 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import dto.MobileClinicDonorDTO;
+import factory.MobileClinicDonorViewModelFactory;
+import model.location.LocationType;
 import repository.DonorRepository;
 import repository.LocationRepository;
 import utils.PermissionConstants;
 import viewmodel.MobileClinicLookUpDonorViewModel;
-import dto.MobileClinicDonorDTO;
-import factory.MobileClinicDonorViewModelFactory;
 
 @RestController
 @RequestMapping("mobileclinic")
@@ -59,7 +60,7 @@ public class MobileClinicController {
   Map<String, Object> mobileClinicLookUpFormGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("venues", locationRepository.getAllVenues());
+    map.put("venues", locationRepository.getLocationsByType(LocationType.VENUE));
     return map;
   }
 

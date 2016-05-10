@@ -1,18 +1,12 @@
 package controller;
 
 import static org.mockito.Mockito.when;
-import helpers.builders.LocationBuilder;
-import helpers.builders.MobileClinicDonorBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import model.donor.DonorStatus;
-import model.location.Location;
-import model.util.Gender;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,11 +16,17 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 
+import dto.MobileClinicDonorDTO;
+import factory.MobileClinicDonorViewModelFactory;
+import helpers.builders.LocationBuilder;
+import helpers.builders.MobileClinicDonorBuilder;
+import model.donor.DonorStatus;
+import model.location.Location;
+import model.location.LocationType;
+import model.util.Gender;
 import repository.DonorRepository;
 import repository.LocationRepository;
 import viewmodel.MobileClinicLookUpDonorViewModel;
-import dto.MobileClinicDonorDTO;
-import factory.MobileClinicDonorViewModelFactory;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MobileClinicControllerTests {
@@ -47,7 +47,7 @@ public class MobileClinicControllerTests {
     Location venue1 = LocationBuilder.aLocation().withId(1L).withName("test").build();
     venues.add(venue1);
 
-    when(locationRepository.getAllVenues()).thenReturn(venues);
+    when(locationRepository.getLocationsByType(LocationType.VENUE)).thenReturn(venues);
 
     Map<String, Object> map = mobileClinicController.mobileClinicLookUpFormGenerator();
     Assert.assertNotNull("map is returned", map);

@@ -13,7 +13,6 @@ import javax.persistence.TypedQuery;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 
-
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -161,5 +160,17 @@ public class DonationBatchRepository {
         .setParameter("deleted", false)
         .getSingleResult()
         .intValue();
+  }
+  
+  public boolean verifyDonationBatchExists(Long id) {
+    return em.createNamedQuery(DonationBatchQueryConstants.NAME_VERIFY_DONATION_BATCH_WITH_ID_EXISTS, Boolean.class)
+        .setParameter("id", id)
+        .setParameter("deleted", false)
+        .getSingleResult();
+  }
+  
+  public List<DonationBatch> findUnassignedDonationBatchesForComponentBatch() {
+    return em.createNamedQuery(DonationBatchQueryConstants.NAME_FIND_UNASSIGNED_DONATION_BATCHES_WITH_COMPONENTS, 
+        DonationBatch.class).getResultList();
   }
 }

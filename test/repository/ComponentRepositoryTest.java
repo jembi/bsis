@@ -9,6 +9,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import model.component.Component;
+import model.component.ComponentStatus;
+import model.componentmovement.ComponentStatusChange;
+import model.componentmovement.ComponentStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeType;
+import model.componenttype.ComponentType;
+import model.donation.Donation;
+
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.Assert;
@@ -17,13 +25,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import model.component.Component;
-import model.component.ComponentStatus;
-import model.componentmovement.ComponentStatusChange;
-import model.componentmovement.ComponentStatusChangeReason;
-import model.componentmovement.ComponentStatusChangeType;
-import model.componenttype.ComponentType;
-import model.donation.Donation;
 import suites.DBUnitContextDependentTestSuite;
 
 /**
@@ -142,6 +143,7 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
     Component one = componentRepository.findComponent(1l);
     Assert.assertNotNull("There is a Component with id 1", one);
     Assert.assertEquals("Component is linked to the correct Donation", "1111111", one.getDonationIdentificationNumber());
+    Assert.assertNotNull("There is a ComponentBatch", one.getComponentBatch());
   }
 
   @Test

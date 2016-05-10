@@ -1,6 +1,5 @@
 package repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import model.location.Location;
+import model.location.LocationType;
 
 @Repository
 @Transactional
@@ -25,17 +25,44 @@ public class LocationRepository {
     em.flush();
   }
 
+  public List<Location> getLocationsByType(LocationType locationType) {
+    
+    switch (locationType) {
+      case VENUE:
+        return getVenues();
+      case PROCESSING_SITE:
+        return getProcessingSites();
+      case USAGE_SITE:
+        return getUsageSites();
+      default:
+        throw new IllegalArgumentException("Can't get locations for type: " + locationType);
+    }
+  }
+  
+  private List<Location> getVenues() {
+    return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_VENUES, Location.class)
+        .setParameter("isVenue", true)
+        .setParameter("isDeleted", false)
+        .getResultList();
+  }
+  
+  private List<Location> getProcessingSites() {
+    return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_PROCESSING_SITES, Location.class)
+        .setParameter("isProcessingSite", true)
+        .setParameter("isDeleted", false)
+        .getResultList();
+  }
+  
+  private List<Location> getUsageSites() {
+    return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_USAGE_SITES, Location.class)
+        .setParameter("isUsageSite", true)
+        .setParameter("isDeleted", false)
+        .getResultList();
+  }
+
   public List<Location> getAllLocations() {
     TypedQuery<Location> query =
         em.createNamedQuery(LocationNamedQueryConstants.NAME_GET_ALL_LOCATIONS, Location.class);
-    return query.getResultList();
-  }
-
-  public List<Location> getAllUsageSites() {
-    TypedQuery<Location> query =
-        em.createNamedQuery(LocationNamedQueryConstants.NAME_GET_ALL_USAGE_SITES, Location.class);
-    query.setParameter("isUsageSite", true);
-    query.setParameter("isDeleted", false);
     return query.getResultList();
   }
 
@@ -60,23 +87,6 @@ public class LocationRepository {
     existingLocation.setIsDeleted(Boolean.TRUE);
     em.merge(existingLocation);
     em.flush();
-  }
-
-  public List<String> getAllUsageSitesAsString() {
-    List<Location> locations = getAllUsageSites();
-    List<String> locationNames = new ArrayList<String>();
-    for (Location l : locations) {
-      if (l.getIsUsageSite())
-        locationNames.add(l.getName());
-    }
-    return locationNames;
-  }
-
-  public List<Location> getAllVenues() {
-    TypedQuery<Location> query = em.createNamedQuery(LocationNamedQueryConstants.NAME_GET_ALL_VENUES, Location.class);
-    query.setParameter("isVenue", true);
-    query.setParameter("isDeleted", false);
-    return query.getResultList();
   }
 
   public Location findLocationByName(String locationName) throws NoResultException, NonUniqueResultException {

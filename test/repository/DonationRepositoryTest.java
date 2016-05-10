@@ -4,6 +4,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,7 +18,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import model.component.Component;
+import model.component.ComponentStatus;
 import model.donation.Donation;
+import model.donationbatch.DonationBatch;
 import suites.DBUnitContextDependentTestSuite;
 import viewmodel.BloodTestingRuleResult;
 
@@ -28,6 +32,12 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Autowired
   DonationRepository donationRepository;
+
+  @Autowired
+  private ComponentRepository componentRepository;
+
+  @Autowired
+  private DonationBatchRepository donationBatchRepository;
 
   @Override
   protected IDataSet getDataSet() throws Exception {
@@ -263,6 +273,31 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
     donationRepository.updateDonation(existingDonation);
     Donation updatedDonation = donationRepository.findDonationById(1L);
     Assert.assertEquals("donor weight was updataed", new BigDecimal(123), updatedDonation.getDonorWeight());
+  }
+
+  @Test
+  public void testAddDonation_shouldCreateInitialComponentWithComponentBatch() {
+
+    DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(1L);
+    Donation newDonation = new Donation();
+    Donation existingDonation = donationRepository.findDonationById(1L);
+    newDonation.setId(existingDonation.getId());
+    newDonation.copy(existingDonation);
+    newDonation.setId(null); // don't want to override, just save time with the copy
+    newDonation.getPackType().setCountAsDonation(true);
+    newDonation.setDonationIdentificationNumber("1111111");
+    newDonation.setDonationBatch(donationBatch);
+    newDonation.setBleedStartTime(new Date());
+
+    donationRepository.addDonation(newDonation);
+
+    Map<String, Object> pagingParams = new HashMap<>();
+    List<Component> results = new ArrayList<Component>();
+    List<ComponentStatus> status = Arrays.asList(ComponentStatus.values());
+
+    results = componentRepository.findComponentByDonationIdentificationNumber("1111111", status, pagingParams);
+    Assert.assertEquals("Component batch with id 1l has been assigned to the initial component", 1l,
+        results.get(0).getComponentBatch().getId().longValue());
   }
 
 }

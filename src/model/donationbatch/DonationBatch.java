@@ -14,26 +14,29 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
-import model.BaseModificationTrackerEntity;
-import model.donation.Donation;
-import model.location.Location;
-import model.testbatch.TestBatch;
-
 import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
-import repository.DonationBatchQueryConstants;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import constraintvalidator.LocationExists;
+import model.BaseModificationTrackerEntity;
+import model.componentbatch.ComponentBatch;
+import model.donation.Donation;
+import model.location.Location;
+import model.testbatch.TestBatch;
+import repository.DonationBatchQueryConstants;
 
 @NamedQueries({
     @NamedQuery(name = DonationBatchQueryConstants.NAME_COUNT_DONATION_BATCHES,
-        query = DonationBatchQueryConstants.QUERY_COUNT_DONATION_BATCHES)
+        query = DonationBatchQueryConstants.QUERY_COUNT_DONATION_BATCHES),
+    @NamedQuery(name = DonationBatchQueryConstants.NAME_VERIFY_DONATION_BATCH_WITH_ID_EXISTS,
+        query = DonationBatchQueryConstants.QUERY_VERIFY_DONATION_BATCH_WITH_ID_EXISTS),
+    @NamedQuery(name = DonationBatchQueryConstants.NAME_FIND_UNASSIGNED_DONATION_BATCHES_WITH_COMPONENTS,
+        query = DonationBatchQueryConstants.QUERY_FIND_UNASSIGNED_DONATION_BATCHES_WITH_COMPONENTS)
 })
 @Entity
 @Audited
@@ -60,6 +63,9 @@ public class DonationBatch extends BaseModificationTrackerEntity {
 
   @ManyToOne
   private TestBatch testBatch;
+
+  @OneToOne(fetch = FetchType.LAZY)
+  private ComponentBatch componentBatch;
 
   private boolean isDeleted;
   private boolean isClosed;
@@ -143,5 +149,15 @@ public class DonationBatch extends BaseModificationTrackerEntity {
   public void setBackEntry(boolean backEntry) {
     this.backEntry = backEntry;
   }
+
+  public ComponentBatch getComponentBatch() {
+    return componentBatch;
+  }
+
+  public void setComponentBatch(ComponentBatch componentBatch) {
+    this.componentBatch = componentBatch;
+  }
+
+
 
 }

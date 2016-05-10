@@ -11,10 +11,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import model.donation.Donation;
-import model.donation.HaemoglobinLevel;
-import model.packtype.PackType;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -31,6 +27,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import backingform.BloodTypingResolutionsBackingForm;
+import backingform.DonationBackingForm;
+import backingform.validator.BloodTypingResolutionsBackingFormValidator;
+import backingform.validator.DonationBackingFormValidator;
+import factory.DonationSummaryViewModelFactory;
+import factory.DonationViewModelFactory;
+import model.donation.Donation;
+import model.donation.HaemoglobinLevel;
+import model.location.LocationType;
+import model.packtype.PackType;
 import repository.AdverseEventTypeRepository;
 import repository.DonationRepository;
 import repository.DonationTypeRepository;
@@ -43,12 +49,6 @@ import utils.PermissionConstants;
 import utils.PermissionUtils;
 import viewmodel.DonationSummaryViewModel;
 import viewmodel.PackTypeViewModel;
-import backingform.BloodTypingResolutionsBackingForm;
-import backingform.DonationBackingForm;
-import backingform.validator.BloodTypingResolutionsBackingFormValidator;
-import backingform.validator.DonationBackingFormValidator;
-import factory.DonationSummaryViewModelFactory;
-import factory.DonationViewModelFactory;
 
 @RestController
 @RequestMapping("/donations")
@@ -196,7 +196,7 @@ public class DonationController {
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("venues", locationRepository.getAllVenues());
+    m.put("venues", locationRepository.getLocationsByType(LocationType.VENUE));
     m.put("donationTypes", donorTypeRepository.getAllDonationTypes());
     m.put("packTypes", getPackTypeViewModels(packTypeRepository.getAllEnabledPackTypes()));
     List<Map<String, Object>> haemoglobinLevels = new ArrayList<>();
