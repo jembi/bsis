@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,10 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +44,6 @@ import model.donation.Donation;
 import repository.ComponentRepository;
 import repository.ComponentStatusChangeReasonRepository;
 import repository.ComponentTypeRepository;
-import repository.DonationRepository;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 import viewmodel.ComponentStatusChangeViewModel;
@@ -62,9 +57,6 @@ public class ComponentController {
 
   @Autowired
   private ComponentRepository componentRepository;
-
-  @Autowired
-  private DonationRepository donationRepository;
 
   @Autowired
   private ComponentStatusChangeReasonRepository componentStatusChangeReasonRepository;
@@ -127,30 +119,6 @@ public class ComponentController {
     addEditSelectorOptions(map);
 
     return map;
-  }
-
-  @RequestMapping(value = "/combination", method = RequestMethod.POST)
-  @PreAuthorize("hasRole('" + PermissionConstants.ADD_COMPONENT + "')")
-  public ResponseEntity<Map<String, Object>> addComponentCombination(
-      @Valid @RequestBody ComponentCombinationBackingForm componentCombinationForm) throws ParseException {
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    HttpStatus httpStatus = HttpStatus.CREATED;
-    addEditSelectorOptions(map);
-
-    List<Component> savedComponents = null;
-    savedComponents = componentRepository.addComponentCombination(componentCombinationForm);
-    map.put("hasErrors", false);
-    componentCombinationForm = new ComponentCombinationBackingForm();
-
-    // at least one  should be created, all s should have the same donation number
-    map.put("donationIdentificationNumber", savedComponents.get(0).getDonationIdentificationNumber());
-    map.put("createdComponents", getComponentViewModels(savedComponents));
-    List<Component> allComponentsForDonation = componentRepository.findComponentsByDonationIdentificationNumber(savedComponents.get(0).getDonationIdentificationNumber());
-    map.put("allComponentsForDonation", getComponentViewModels(allComponentsForDonation));
-    map.put("addAnotherComponentUrl", "addComponentCombinationFormGenerator.html");
-
-    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
 
   private ComponentViewModel getComponentViewModel(Component component) {
@@ -334,8 +302,6 @@ public class ComponentController {
 
     Map<String, Object> map = new HashMap<String, Object>();
 
-    List<Component> components = Arrays.asList(new Component[0]);
-
     Map<String, Object> pagingParams = new HashMap<String, Object>();
     pagingParams.put("sortColumn", "id");
     //pagingParams.put("start", "0");
@@ -430,6 +396,7 @@ public class ComponentController {
           component.setParentComponent(parentComponent);
           component.setStatus(initialComponentStatus);
           component.setCreatedOn(donation.getDonationDate());
+          component.setLocation(parentComponent.getLocation());
 
           Calendar cal = Calendar.getInstance();
           Date createdOn = cal.getTime();
@@ -567,50 +534,6 @@ public class ComponentController {
       reqUrl += "?donationIdentificationNumber=" + queryString[0];
     }
     return reqUrl;
-  }
-
-  /**
-   * Datatables on the client side expects a json response for rendering data from the server in
-   * jquery datatables. Remember of columns is important and should match the column headings in
-   * recordComponentTable.jsp.
-   */
-  private Map<String, Object> generateRecordComponentTablesMap(List<Component> components, Long totalRecords, Map<String, Map<String, Object>> formFields) {
-    Map<String, Object> componentsMap = new HashMap<String, Object>();
-    ArrayList<Object> componentList = new ArrayList<Object>();
-    for (ComponentViewModel component : getComponentViewModels(components)) {
-      List<Object> row = new ArrayList<Object>();
-
-      row.add(component.getId().toString());
-      row.add(component.getDonation().getId());
-      for (String property : Arrays.asList("componentType", "donationIdentificationNumber", "createdOn", "expiresOn", "status", "createdBy")) {
-        if (formFields.containsKey(property)) {
-          Map<String, Object> properties = (Map<String, Object>) formFields.get(property);
-          if (properties.get("hidden").equals(false)) {
-            String propertyValue = property;
-            try {
-              propertyValue = BeanUtils.getProperty(component, property);
-            } catch (IllegalAccessException e) {
-              e.printStackTrace();
-            } catch (InvocationTargetException e) {
-              e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-              e.printStackTrace();
-            }
-            if (property.equals("componentType") &&
-                StringUtils.isNotBlank(component.getSubdivisionCode())) {
-              propertyValue = propertyValue + " (" + component.getSubdivisionCode() + ")";
-            }
-            row.add(propertyValue.toString());
-          }
-        }
-      }
-
-      componentList.add(row);
-    }
-    componentsMap.put("aaData", componentList);
-    componentsMap.put("iTotalRecords", totalRecords);
-    componentsMap.put("iTotalDisplayRecords", totalRecords);
-    return componentsMap;
   }
 
   private List<ComponentStatus> statusStringToComponentStatus(List<String> statusList) {

@@ -92,6 +92,7 @@ public class ComponentBatchCRUDServiceTest {
     Assert.assertEquals("ComponentBatch has Components", 2, componentBatch.getComponents().size());
     Component component = componentBatch.getComponents().iterator().next();
     Assert.assertNotNull("Component has a ComponentBatch", component.getComponentBatch());
+    Assert.assertEquals("Component has correct location", componentBatch.getLocation(), component.getLocation());
   }
   
   @Test

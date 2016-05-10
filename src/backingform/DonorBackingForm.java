@@ -259,7 +259,7 @@ public class DonorBackingForm {
     return venue.getId().toString();
   }
 
-  public void setVenue(Location venue) {
+  public void setVenue(LocationBackingForm venue) {
     if (venue == null || venue.getId() == null) {
       donor.setVenue(null);
     } else {

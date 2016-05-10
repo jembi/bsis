@@ -39,7 +39,7 @@ public class LocationRepository {
     }
   }
   
-  private List<Location> getVenues() {
+  public List<Location> getVenues() {
     return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_VENUES, Location.class)
         .setParameter("isVenue", true)
         .setParameter("isDeleted", false)

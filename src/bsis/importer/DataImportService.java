@@ -328,7 +328,8 @@ public class DataImportService {
             break;
 
           case "venue":
-            donorBackingForm.setVenue(locationCache.get(cell.getStringCellValue()));
+            Location venue = locationCache.get(cell.getStringCellValue());
+            donorBackingForm.setVenue(new LocationBackingForm(venue));
             break;
 
           case "idType":
@@ -577,7 +578,7 @@ public class DataImportService {
 
           case "venue":
             venue = locationCache.get(cell.getStringCellValue());
-            donationBackingForm.setVenue(venue);
+            donationBackingForm.setVenue(new LocationBackingForm(venue));
             break;
 
           case "donationType":

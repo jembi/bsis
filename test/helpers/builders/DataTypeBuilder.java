@@ -1,6 +1,7 @@
 package helpers.builders;
 
 import model.admin.DataType;
+import model.admin.EnumDataType;
 
 public class DataTypeBuilder extends AbstractEntityBuilder<DataType> {
 
@@ -17,6 +18,11 @@ public class DataTypeBuilder extends AbstractEntityBuilder<DataType> {
     return this;
   }
 
+  public DataTypeBuilder withDataType(EnumDataType dataTypeValue) {
+    this.dataTypeValue = dataTypeValue.name();
+    return this;
+  }
+
   @Override
   public DataType build() {
     DataType dataType = new DataType();
@@ -27,6 +33,10 @@ public class DataTypeBuilder extends AbstractEntityBuilder<DataType> {
 
   public static DataTypeBuilder aDataType() {
     return new DataTypeBuilder();
+  }
+  
+  public static DataTypeBuilder aBooleanDataType() {
+    return new DataTypeBuilder().withDataType(EnumDataType.BOOLEAN);
   }
 
 }

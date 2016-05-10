@@ -1,12 +1,12 @@
 package helpers.builders;
 
+import static helpers.builders.DonationBatchBuilder.aDonationBatch;
+import static helpers.builders.DonorBuilder.aDonor;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import model.donationbatch.DonationBatch;
-import repository.bloodtesting.BloodTypingMatchStatus;
-import repository.bloodtesting.BloodTypingStatus;
 import helpers.persisters.AbstractEntityPersister;
 import helpers.persisters.DonationPersister;
 import model.adverseevent.AdverseEvent;
@@ -14,15 +14,18 @@ import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
+import model.donationbatch.DonationBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
 import model.packtype.PackType;
+import repository.bloodtesting.BloodTypingMatchStatus;
+import repository.bloodtesting.BloodTypingStatus;
 
 public class DonationBuilder extends AbstractEntityBuilder<Donation> {
 
   private Long id;
-  private Donor donor;
+  private Donor donor = aDonor().build();
   private Date donationDate;
   private Location venue;
   private String donationIdentificationNumber;
@@ -45,8 +48,9 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
   private List<BloodTestResult> bloodTestResults;
   private BloodTypingMatchStatus bloodTypingMatchStatus;
   private BloodTypingStatus bloodTypingStatus;
-  private DonationBatch donationBatch;
+  private DonationBatch donationBatch = aDonationBatch().build();
   private String extraBloodTypeInformation;
+  private Date createdDate = new Date();
 
   public DonationBuilder withId(Long id) {
     this.id = id;
@@ -212,6 +216,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     donation.setBloodTypingStatus(bloodTypingStatus);
     donation.setDonationBatch(donationBatch);
     donation.setExtraBloodTypeInformation(extraBloodTypeInformation);
+    donation.setCreatedDate(createdDate);
     return donation;
   }
 

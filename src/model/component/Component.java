@@ -17,27 +17,27 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import model.BaseModificationTrackerEntity;
-import model.compatibility.CompatibilityTest;
-import model.componentbatch.ComponentBatch;
-import model.componentmovement.ComponentStatusChange;
-import model.componenttype.ComponentType;
-import model.donation.Donation;
-import model.request.Request;
-import model.usage.ComponentUsage;
-
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
-
-import repository.ComponentNamedQueryConstants;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import constraintvalidator.ComponentTypeExists;
 import constraintvalidator.DonationExists;
+import model.BaseModificationTrackerEntity;
+import model.compatibility.CompatibilityTest;
+import model.componentbatch.ComponentBatch;
+import model.componentmovement.ComponentStatusChange;
+import model.componenttype.ComponentType;
+import model.donation.Donation;
+import model.inventory.InventoryStatus;
+import model.location.Location;
+import model.request.Request;
+import model.usage.ComponentUsage;
+import repository.ComponentNamedQueryConstants;
 
 @NamedQueries({
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUSES_FOR_DONOR,
@@ -115,6 +115,13 @@ public class Component extends BaseModificationTrackerEntity {
 
   @Column(length = 20)
   private String componentIdentificationNumber;
+  
+  @Column(length = 30, nullable = false)
+  @Enumerated(EnumType.STRING)
+  private InventoryStatus inventoryStatus = InventoryStatus.NOT_LABELLED;
+  
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  private Location location;
 
   public Component() {
     super();
@@ -128,6 +135,8 @@ public class Component extends BaseModificationTrackerEntity {
     this.expiresOn = component.expiresOn;
     this.notes = component.notes;
     this.componentIdentificationNumber = component.componentIdentificationNumber;
+    this.location = component.location;
+    this.inventoryStatus = component.inventoryStatus;
   }
 
   public Donation getDonation() {
@@ -270,5 +279,21 @@ public class Component extends BaseModificationTrackerEntity {
 
   public void setComponentBatch(ComponentBatch componentBatch) {
     this.componentBatch = componentBatch;
+  }
+
+  public InventoryStatus getInventoryStatus() {
+    return inventoryStatus;
+  }
+
+  public void setInventoryStatus(InventoryStatus inventoryStatus) {
+    this.inventoryStatus = inventoryStatus;
+  }
+
+  public Location getLocation() {
+    return location;
+  }
+
+  public void setLocation(Location location) {
+    this.location = location;
   }
 }

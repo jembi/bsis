@@ -73,6 +73,8 @@ public class ComponentBatchCRUDService {
           // found initial component
           components.add(component);
           component.setComponentBatch(componentBatch);
+          // Move received components to the component batch's location
+          component.setLocation(componentBatch.getLocation());
           break;
         }
       }

@@ -266,9 +266,9 @@
     <PackType id="8" packType="Did Not Bleed" testSampleProduced="true"
               isDeleted="false" countAsDonation="false" periodBetweenDonations="0"/>
 
-    <Location isProcessingSite="0" id="1" isDeleted="false" isVenue="true"
+    <Location isDistributionSite="0" isProcessingSite="0" id="1" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Maseru" notes=""/>
-    <Location isProcessingSite="0" id="2" isDeleted="false" isVenue="true"
+    <Location isDistributionSite="0" isProcessingSite="0" id="2" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Leribe" notes=""/>
 
     <TestBatch id="1" batchNumber="TB0215000000" isDeleted="false"
@@ -552,38 +552,38 @@
 		testedOn="2016-02-05 09:17:06.0" bloodTest_id="26" donation_id="8"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false" />
 
-    <Component id="1" createdOn="2015-02-02 10:26:36.0" expiresOn="2015-03-09 10:26:36.0"
+    <Component location_id="1" inventoryStatus="NOT_LABELLED" id="1" createdOn="2015-02-02 10:26:36.0" expiresOn="2015-03-09 10:26:36.0"
                isDeleted="false" createdDate="2015-02-02 03:42:04.0"
                lastUpdated="2015-02-02 03:42:32.0"
                status="PROCESSED" donation_id="1" createdBy_id="1"
                lastUpdatedBy_id="1" componentType_id="3"
                componentIdentificationNumber="1234567-0013"/>
-    <Component id="2" createdOn="2015-02-02 03:42:31.0" expiresOn="2015-02-07 00:00:00.0"
+    <Component location_id="1" inventoryStatus="NOT_LABELLED" id="2" createdOn="2015-02-02 03:42:31.0" expiresOn="2015-02-07 00:00:00.0"
                isDeleted="false" createdDate="2015-02-07 00:06:53.0"
                lastUpdated="2015-02-06 02:09:23.0"
                status="EXPIRED" donation_id="1" createdBy_id="1"
                lastUpdatedBy_id="1" parentComponent_id="1" componentType_id="12"
                componentIdentificationNumber="1234567-4001"/>
-    <Component id="3" createdOn="2015-02-02 03:42:31.0" expiresOn="2016-02-02 00:00:00.0"
+    <Component location_id="1" inventoryStatus="NOT_LABELLED" id="3" createdOn="2015-02-02 03:42:31.0" expiresOn="2016-02-02 00:00:00.0"
                isDeleted="false" createdDate="2015-02-02 03:42:31.0"
                lastUpdated="2015-02-06 02:09:23.0"
                status="AVAILABLE" donation_id="1" createdBy_id="1"
                lastUpdatedBy_id="1" parentComponent_id="1" componentType_id="10"
                componentIdentificationNumber="1234567-3001"/>
-    <Component id="4" createdOn="2015-02-02 03:42:32.0" discardedOn="2015-06-29 05:49:00.0"
+    <Component location_id="1" inventoryStatus="NOT_LABELLED" id="4" createdOn="2015-02-02 03:42:32.0" discardedOn="2015-06-29 05:49:00.0"
                expiresOn="2015-03-16 00:00:00.0" isDeleted="false"
                createdDate="2015-03-16 00:09:35.0"
                lastUpdated="2015-06-29 05:49:00.0" status="DISCARDED"
                donation_id="1" createdBy_id="1" lastUpdatedBy_id="1"
                parentComponent_id="1" componentType_id="9"
                componentIdentificationNumber="1234567-2011"/>
-    <Component id="5" createdOn="2015-02-02 14:53:37.0" expiresOn="2015-03-09 14:53:37.0"
+    <Component location_id="1" inventoryStatus="NOT_LABELLED" id="5" createdOn="2015-02-02 14:53:37.0" expiresOn="2015-03-09 14:53:37.0"
                isDeleted="false" createdDate="2015-02-18 07:53:57.0"
                lastUpdated="2015-04-24 04:42:49.0"
                status="EXPIRED" donation_id="2" createdBy_id="1"
                lastUpdatedBy_id="1" componentType_id="1"
                componentIdentificationNumber="1212129-0011"/>
-    <Component id="6" createdOn="2015-06-26 11:24:30.0" expiresOn="2015-07-31 11:24:30.0"
+    <Component location_id="1" inventoryStatus="NOT_LABELLED" id="6" createdOn="2015-06-26 11:24:30.0" expiresOn="2015-07-31 11:24:30.0"
                isDeleted="false" createdDate="2015-06-29 05:24:35.0"
                lastUpdated="2015-06-29 05:24:35.0"
                status="QUARANTINED" donation_id="3" createdBy_id="1"

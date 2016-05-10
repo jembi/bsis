@@ -19,6 +19,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
 import backingform.DonationBackingForm;
+import backingform.LocationBackingForm;
 import helpers.builders.DonationBatchBuilder;
 import helpers.builders.DonationBuilder;
 import helpers.builders.DonationTypeBuilder;
@@ -635,7 +636,7 @@ public class DonationBackingFormValidatorTest {
     form.setBleedStartTime(new Date());
     form.setBleedEndTime(new Date());
     form.setDonationBatchNumber("DB123");
-    form.setVenue(venue);
+    form.setVenue(new LocationBackingForm(venue));
     form.setBloodPressureDiastolic(80);
     form.setBloodPressureSystolic(100);
     form.setHaemoglobinCount(BigDecimal.valueOf(12));

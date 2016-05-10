@@ -1,5 +1,6 @@
 package helpers.persisters;
 
+import static helpers.persisters.EntityPersisterFactory.aDonationBatchPersister;
 import static helpers.persisters.EntityPersisterFactory.aDonationTypePersister;
 import static helpers.persisters.EntityPersisterFactory.aDonorPersister;
 import static helpers.persisters.EntityPersisterFactory.aLocationPersister;
@@ -32,6 +33,10 @@ public class DonationPersister extends AbstractEntityPersister<Donation> {
 
     if (donation.getPackType() != null) {
       aPackTypePersister().deepPersist(donation.getPackType(), entityManager);
+    }
+    
+    if (donation.getDonationBatch() != null) {
+      aDonationBatchPersister().deepPersist(donation.getDonationBatch(), entityManager);
     }
 
     return persist(donation, entityManager);

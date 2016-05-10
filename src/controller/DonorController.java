@@ -33,12 +33,13 @@ import dto.DuplicateDonorDTO;
 import factory.DonationViewModelFactory;
 import factory.DonorDeferralViewModelFactory;
 import factory.DonorViewModelFactory;
+import factory.LocationViewModelFactory;
 import factory.PostDonationCounsellingViewModelFactory;
 import model.counselling.PostDonationCounselling;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.donordeferral.DonorDeferral;
-import model.location.LocationType;
+import model.location.Location;
 import repository.AdverseEventRepository;
 import repository.ContactMethodTypeRepository;
 import repository.DonationBatchRepository;
@@ -71,6 +72,8 @@ public class DonorController {
 
   @Autowired
   private LocationRepository locationRepository;
+  @Autowired
+  private LocationViewModelFactory locationViewModelFactory;
 
   @Autowired
   private ContactMethodTypeRepository contactMethodTypeRepository;
@@ -438,7 +441,8 @@ public class DonorController {
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("venues", locationRepository.getLocationsByType(LocationType.VENUE));
+    List<Location> venues = locationRepository.getVenues();
+    m.put("venues", locationViewModelFactory.createLocationViewModels(venues));
     m.put("preferredContactMethods", contactMethodTypeRepository.getAllContactMethodTypes());
     m.put("languages", donorRepository.getAllLanguages());
     m.put("idTypes", donorRepository.getAllIdTypes());
