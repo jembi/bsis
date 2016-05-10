@@ -94,24 +94,20 @@ public class ComponentController {
     return map;
   }
 
-  @SuppressWarnings("unchecked")
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
   public Map<String, Object> findComponentPagination(HttpServletRequest request,
-                                                     @RequestParam(value = "componentNumber", required = false, defaultValue = "") String componentNumber,
-                                                     @RequestParam(value = "donationIdentificationNumber", required = false, defaultValue = "") String donationIdentificationNumber,
-                                                     @RequestParam(value = "componentTypes", required = false, defaultValue = "") List<Long> componentTypeIds,
-                                                     @RequestParam(value = "status", required = false, defaultValue = "") List<String> status,
-                                                     @RequestParam(value = "donationDateFrom", required = false, defaultValue = "") String donationDateFrom,
-                                                     @RequestParam(value = "donationDateTo", required = false, defaultValue = "") String donationDateTo) throws ParseException {
-
+      @RequestParam(value = "componentNumber", required = false, defaultValue = "") String componentNumber,
+      @RequestParam(value = "donationIdentificationNumber", required = false, defaultValue = "") String donationIdentificationNumber,
+      @RequestParam(value = "componentTypes", required = false, defaultValue = "") List<Long> componentTypeIds,
+      @RequestParam(value = "status", required = false, defaultValue = "") List<String> status,
+      @RequestParam(value = "donationDateFrom", required = false, defaultValue = "") String donationDateFrom,
+      @RequestParam(value = "donationDateTo", required = false, defaultValue = "") String donationDateTo) throws ParseException {
 
     Map<String, Object> map = new HashMap<String, Object>();
 
     Map<String, Object> pagingParams = new HashMap<String, Object>();
     pagingParams.put("sortColumn", "id");
-    //pagingParams.put("start", "0");
-    //pagingParams.put("length", "10");
     pagingParams.put("sortDirection", "asc");
 
     List<Component> results = new ArrayList<Component>();
@@ -335,8 +331,6 @@ public class ComponentController {
       }
     }
 
-    
-
     List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(
         donation.getDonationIdentificationNumber());
 
@@ -348,40 +342,8 @@ public class ComponentController {
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
 
-  @RequestMapping(value = "/record/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
-  public Map<String, Object> getRecordNewComponents(HttpServletRequest request,
-                                                    @RequestParam(value = "componentTypeNames") List<String> componentTypes,
-                                                    @RequestParam(value = "donationIdentificationNumber") String donationIdentificationNumber) {
-
-    ComponentType componentType = null;
-    if (componentTypes != null) {
-      String componentTypeName = componentTypes.get(componentTypes.size() - 1);
-      componentType = componentRepository.findComponentTypeByComponentTypeName(componentTypeName);
-    }
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("allComponents", new ComponentViewModel());
-
-    if (componentTypes != null) {
-      addEditSelectorOptionsForNewRecordByList(map, componentType);
-    } else {
-      addEditSelectorOptionsForNewRecord(map);
-    }
-
-    return map;
-  }
-
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("componentTypes", getComponentTypeViewModels(componentTypeRepository.getAllComponentTypes()));
-  }
-
-  private void addEditSelectorOptionsForNewRecordByList(Map<String, Object> m, ComponentType componentType) {
-    m.put("componentTypes", getComponentTypeViewModels(componentTypeRepository.getComponentTypeByIdList(componentType.getId())));
-  }
-
-  private void addEditSelectorOptionsForNewRecord(Map<String, Object> m) {
-    m.put("componentTypes", getComponentTypeViewModels(componentTypeRepository.getAllParentComponentTypes()));
   }
 
   private List<ComponentStatus> statusStringToComponentStatus(List<String> statusList) {
@@ -394,8 +356,8 @@ public class ComponentController {
     return componentStatusList;
   }
 
-  public List<ComponentTypeCombinationViewModel>
-  getComponentTypeCombinationViewModels(List<ComponentTypeCombination> componentTypeCombinations) {
+  public List<ComponentTypeCombinationViewModel> getComponentTypeCombinationViewModels(
+      List<ComponentTypeCombination> componentTypeCombinations) {
     List<ComponentTypeCombinationViewModel> componentTypeCombinationViewModels
         = new ArrayList<ComponentTypeCombinationViewModel>();
     for (ComponentTypeCombination componentTypeCombination : componentTypeCombinations)
