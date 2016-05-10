@@ -225,11 +225,8 @@ public class ComponentController {
       @PathVariable Long id,
       @RequestParam(value = "discardReasonId") Long discardReasonId,
       @RequestParam(value = "discardReasonText", required = false) String discardReasonText) {
-
-    ComponentStatusChangeReason statusChangeReason = new ComponentStatusChangeReason();
-    statusChangeReason.setId(discardReasonId);
     
-    Component discardedComponent = componentCRUDService.discardComponent(id, statusChangeReason, discardReasonText);
+    Component discardedComponent = componentCRUDService.discardComponent(id, discardReasonId, discardReasonText);
 
     Map<String, Object> pagingParams = new HashMap<String, Object>();
     pagingParams.put("sortColumn", "id");

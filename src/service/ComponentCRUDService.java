@@ -68,7 +68,7 @@ public class ComponentCRUDService {
     }
   }
 
-  public Component discardComponent(Long componentId, ComponentStatusChangeReason discardReason, String discardReasonText) {
+  public Component discardComponent(Long componentId, Long discardReasonId, String discardReasonText) {
     Component existingComponent = componentRepository.findComponentById(componentId);
     
     // update existing component status
@@ -80,6 +80,8 @@ public class ComponentCRUDService {
     statusChange.setStatusChangeType(ComponentStatusChangeType.DISCARDED);
     statusChange.setNewStatus(ComponentStatus.DISCARDED);
     statusChange.setStatusChangedOn(new Date());
+    ComponentStatusChangeReason discardReason = new ComponentStatusChangeReason();
+    discardReason.setId(discardReasonId);
     statusChange.setStatusChangeReason(discardReason);
     statusChange.setStatusChangeReasonText(discardReasonText);
     statusChange.setChangedBy(SecurityUtils.getCurrentUser());

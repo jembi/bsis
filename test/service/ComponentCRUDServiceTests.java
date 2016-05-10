@@ -11,7 +11,6 @@ import java.util.Arrays;
 import model.component.Component;
 import model.component.ComponentStatus;
 import model.componentmovement.ComponentStatusChange;
-import model.componentmovement.ComponentStatusChangeReason;
 import model.componentmovement.ComponentStatusChangeType;
 import model.donation.Donation;
 import model.donor.Donor;
@@ -62,8 +61,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   public void testDiscardComponent() throws Exception {
     // set up data
     Component component = aComponent().build();
-    ComponentStatusChangeReason discardReason = new ComponentStatusChangeReason();
-    discardReason.setId(1L);
+    Long discardReasonId = 1L;
     String reasonText = "junit";
     
     // set up mocks
@@ -71,7 +69,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentRepository.updateComponent(component)).thenReturn(component);
     
     // run test
-    componentCRUDService.discardComponent(1L, discardReason, reasonText);
+    componentCRUDService.discardComponent(1L, 1L, reasonText);
     
     // check asserts
     Assert.assertNotNull("Status change has been set", component.getStatusChanges());
@@ -79,7 +77,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     ComponentStatusChange statusChange = component.getStatusChanges().get(0);
     Assert.assertEquals("Status change is correct", ComponentStatusChangeType.DISCARDED, statusChange.getStatusChangeType());
     Assert.assertEquals("Status change is correct", ComponentStatus.DISCARDED, statusChange.getNewStatus());
-    Assert.assertEquals("Status change is correct", discardReason, statusChange.getStatusChangeReason());
+    Assert.assertEquals("Status change is correct", discardReasonId, statusChange.getStatusChangeReason().getId());
     Assert.assertEquals("Status change is correct", reasonText, statusChange.getStatusChangeReasonText());
     Assert.assertEquals("Status change is correct", loggedInUser, statusChange.getChangedBy());
   }
@@ -88,16 +86,13 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   public void testDiscardInStockComponent() throws Exception {
     // set up data
     Component component = aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).build();
-    ComponentStatusChangeReason discardReason = new ComponentStatusChangeReason();
-    discardReason.setId(1L);
-    String reasonText = "junit";
     
     // set up mocks
     when(componentRepository.findComponentById(1L)).thenReturn(component);
     when(componentRepository.updateComponent(component)).thenReturn(component);
     
     // run test
-    componentCRUDService.discardComponent(1L, discardReason, reasonText);
+    componentCRUDService.discardComponent(1L, 1L, "junit");
     
     // check asserts
     Assert.assertEquals("Component is now removed from stock", InventoryStatus.REMOVED, component.getInventoryStatus());
