@@ -3,7 +3,6 @@ package controller;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,8 +30,6 @@ import model.componentmovement.ComponentStatusChangeReason;
 import model.componentmovement.ComponentStatusChangeReasonCategory;
 import model.componenttype.ComponentType;
 import model.componenttype.ComponentTypeCombination;
-import model.componenttype.ComponentTypeTimeUnits;
-import model.donation.Donation;
 import repository.ComponentRepository;
 import repository.ComponentStatusChangeReasonRepository;
 import repository.ComponentTypeRepository;
@@ -129,27 +126,6 @@ public class ComponentController {
 
     map.put("components", components);
     return map;
-  }
-
-  public static List<ComponentStatusChangeViewModel> getComponentStatusChangeViewModels(List<ComponentStatusChange> componentStatusChanges) {
-    if (componentStatusChanges == null)
-      return Arrays.asList(new ComponentStatusChangeViewModel[0]);
-    List<ComponentStatusChangeViewModel> componentStatusChangeViewModels = new ArrayList<ComponentStatusChangeViewModel>();
-    for (ComponentStatusChange componentStatusChange : componentStatusChanges) {
-      componentStatusChangeViewModels.add(new ComponentStatusChangeViewModel(componentStatusChange));
-    }
-    return componentStatusChangeViewModels;
-  }
-
-  public static List<ComponentTypeViewModel> getComponentTypeViewModels(
-      List<ComponentType> componentTypes) {
-    if (componentTypes == null)
-      return Arrays.asList(new ComponentTypeViewModel[0]);
-    List<ComponentTypeViewModel> componentTypeViewModels = new ArrayList<ComponentTypeViewModel>();
-    for (ComponentType componentType : componentTypes) {
-      componentTypeViewModels.add(new ComponentTypeViewModel(componentType));
-    }
-    return componentTypeViewModels;
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
@@ -251,91 +227,10 @@ public class ComponentController {
   public ResponseEntity<Map<String, Object>> recordNewComponentCombinations(
       @RequestBody RecordComponentBackingForm recordComponentForm) throws ParseException {
 
-    Component parentComponent = componentRepository.findComponentById(Long.valueOf(recordComponentForm.getParentComponentId()));
-    Donation donation = parentComponent.getDonation();
-    String donationIdentificationNumber = donation.getDonationIdentificationNumber();
-    ComponentStatus parentStatus = parentComponent.getStatus();
-    long componentId = Long.valueOf(recordComponentForm.getParentComponentId());
-
-
-    // map of new components, storing component type and num. of units
-    Map<ComponentType, Integer> newComponents = new HashMap<ComponentType, Integer>();
-
-    // iterate over components in combination, adding them to the new components map, along with the num. of units of each component
-    for (ComponentType pt : recordComponentForm.getComponentTypeCombination().getComponentTypes()) {
-      boolean check = false;
-      for (ComponentType ptm : newComponents.keySet()) {
-        if (pt.getId() == ptm.getId()) {
-          Integer count = newComponents.get(ptm) + 1;
-          newComponents.put(ptm, count);
-          check = true;
-          break;
-        }
-      }
-      if (!check) {
-        newComponents.put(pt, 1);
-      }
-    }
-
-    // If the parent is unsafe then set new components to unsafe as well
-    ComponentStatus initialComponentStatus = parentStatus == ComponentStatus.UNSAFE ?
-        ComponentStatus.UNSAFE : ComponentStatus.QUARANTINED;
-
-    for (ComponentType pt : newComponents.keySet()) {
-
-      String componentTypeCode = pt.getComponentTypeNameShort();
-      int noOfUnits = newComponents.get(pt);
-      String createdPackNumber = donationIdentificationNumber + "-" + componentTypeCode;
-
-      // Add New component
-      if (!parentStatus.equals(ComponentStatus.PROCESSED) && !parentStatus.equals(ComponentStatus.DISCARDED)) {
-
-        for (int i = 1; i <= noOfUnits; i++) {
-          Component component = new Component();
-          component.setIsDeleted(false);
-
-          // if there is more than one unit of the component, append unit number suffix
-          if (noOfUnits > 1) {
-            component.setComponentIdentificationNumber(createdPackNumber + "-0" + i);
-          } else {
-            component.setComponentIdentificationNumber(createdPackNumber);
-          }
-          component.setComponentType(pt);
-          component.setDonation(donation);
-          component.setParentComponent(parentComponent);
-          component.setStatus(initialComponentStatus);
-          component.setCreatedOn(donation.getDonationDate());
-          component.setLocation(parentComponent.getLocation());
-
-          Calendar cal = Calendar.getInstance();
-          Date createdOn = cal.getTime();
-          cal.setTime(component.getCreatedOn());
-
-          //set component expiry date
-          if (pt.getExpiresAfterUnits() == ComponentTypeTimeUnits.DAYS)
-            cal.add(Calendar.DAY_OF_YEAR, pt.getExpiresAfter());
-          else if (pt.getExpiresAfterUnits() == ComponentTypeTimeUnits.HOURS)
-            cal.add(Calendar.HOUR, pt.getExpiresAfter());
-          else if (pt.getExpiresAfterUnits() == ComponentTypeTimeUnits.YEARS)
-            cal.add(Calendar.YEAR, pt.getExpiresAfter());
-
-          Date expiresOn = cal.getTime();
-          component.setCreatedOn(createdOn);
-          component.setExpiresOn(expiresOn);
-
-          componentRepository.addComponent(component);
-
-          // Set source component status to PROCESSED
-          componentRepository.setComponentStatusToProcessed(componentId);
-        }
-      }
-    }
-
+    Component parentComponent = componentCRUDService.processComponent(recordComponentForm);
     List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(
-        donation.getDonationIdentificationNumber());
-
+        parentComponent.getDonationIdentificationNumber());
     List<ComponentViewModel> componentViewModels = componentViewModelFactory.createComponentViewModels(results);
-
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("components", componentViewModels);
 
@@ -344,6 +239,28 @@ public class ComponentController {
 
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("componentTypes", getComponentTypeViewModels(componentTypeRepository.getAllComponentTypes()));
+  }
+
+  private static List<ComponentStatusChangeViewModel> getComponentStatusChangeViewModels(
+      List<ComponentStatusChange> componentStatusChanges) {
+    if (componentStatusChanges == null)
+      return Arrays.asList(new ComponentStatusChangeViewModel[0]);
+    List<ComponentStatusChangeViewModel> componentStatusChangeViewModels =
+        new ArrayList<ComponentStatusChangeViewModel>();
+    for (ComponentStatusChange componentStatusChange : componentStatusChanges) {
+      componentStatusChangeViewModels.add(new ComponentStatusChangeViewModel(componentStatusChange));
+    }
+    return componentStatusChangeViewModels;
+  }
+
+  private static List<ComponentTypeViewModel> getComponentTypeViewModels(List<ComponentType> componentTypes) {
+    if (componentTypes == null)
+      return Arrays.asList(new ComponentTypeViewModel[0]);
+    List<ComponentTypeViewModel> componentTypeViewModels = new ArrayList<ComponentTypeViewModel>();
+    for (ComponentType componentType : componentTypes) {
+      componentTypeViewModels.add(new ComponentTypeViewModel(componentType));
+    }
+    return componentTypeViewModels;
   }
 
   private List<ComponentStatus> statusStringToComponentStatus(List<String> statusList) {
