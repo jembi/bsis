@@ -1,10 +1,15 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import model.component.Component;
 import model.component.ComponentStatus;
+import model.componentmovement.ComponentStatusChange;
+import model.componentmovement.ComponentStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeType;
 import model.donation.Donation;
 import model.donor.Donor;
 
@@ -15,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import repository.ComponentRepository;
 import repository.DonationRepository;
+import utils.SecurityUtils;
 
 @Transactional
 @Service
@@ -61,4 +67,28 @@ public class ComponentCRUDService {
     }
   }
 
+  public Component discardComponent(Long componentId, ComponentStatusChangeReason discardReason, String discardReasonText) {
+    Component existingComponent = componentRepository.findComponentById(componentId);
+    
+    existingComponent.setStatus(ComponentStatus.DISCARDED);
+    existingComponent.setDiscardedOn(new Date());
+    
+    ComponentStatusChange statusChange = new ComponentStatusChange();
+    statusChange.setStatusChangeType(ComponentStatusChangeType.DISCARDED);
+    statusChange.setNewStatus(ComponentStatus.DISCARDED);
+    statusChange.setStatusChangedOn(new Date());
+    statusChange.setStatusChangeReason(discardReason);
+    statusChange.setStatusChangeReasonText(discardReasonText);
+    statusChange.setChangedBy(SecurityUtils.getCurrentUser());
+    
+    if (existingComponent.getStatusChanges() == null) {
+      existingComponent.setStatusChanges(new ArrayList<ComponentStatusChange>());
+    }
+    existingComponent.getStatusChanges().add(statusChange);
+    statusChange.setComponent(existingComponent);
+    
+    componentRepository.updateComponent(existingComponent);
+    
+    return existingComponent;
+  }
 }

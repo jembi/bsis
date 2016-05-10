@@ -399,19 +399,6 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   // FIXME: issue with package dependencies here - ComponentRepository uses UtilController to retrieve the logged in user.
-  public void testDiscardComponent() throws Exception {
-    ComponentStatusChangeReason discardReason = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(5l);
-    componentRepository.discardComponent(1l, discardReason, "junit");
-    Component component = componentRepository.findComponent(1l);
-    List<ComponentStatusChange> changes = componentRepository.getComponentStatusChanges(component);
-    Assert.assertNotNull("Not empty list", changes);
-    Assert.assertEquals("1 ComponentStatusChange", 1, changes.size());
-    Assert.assertEquals("Correct ComponentStatusChangeType", ComponentStatusChangeType.DISCARDED, changes.get(0)
-        .getStatusChangeType());
-  }
-
-  @Test
-  // FIXME: issue with package dependencies here - ComponentRepository uses UtilController to retrieve the logged in user.
   public void testReturnComponent() throws Exception {
     ComponentStatusChangeReason returnReason = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(7l);
     componentRepository.returnComponent(1l, returnReason, "junit");

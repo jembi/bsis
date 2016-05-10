@@ -12,6 +12,16 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import model.component.Component;
+import model.component.ComponentStatus;
+import model.componentmovement.ComponentStatusChange;
+import model.componentmovement.ComponentStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeReasonCategory;
+import model.componenttype.ComponentType;
+import model.componenttype.ComponentTypeCombination;
+import model.componenttype.ComponentTypeTimeUnits;
+import model.donation.Donation;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,31 +35,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import backingform.ComponentCombinationBackingForm;
-import backingform.RecordComponentBackingForm;
-import backingform.validator.ComponentCombinationBackingFormValidator;
-import model.component.Component;
-import model.component.ComponentStatus;
-import model.componentmovement.ComponentStatusChange;
-import model.componentmovement.ComponentStatusChangeReason;
-import model.componentmovement.ComponentStatusChangeReasonCategory;
-import model.componenttype.ComponentType;
-import model.componenttype.ComponentTypeCombination;
-import model.componenttype.ComponentTypeTimeUnits;
-import model.donation.Donation;
 import repository.ComponentRepository;
 import repository.ComponentStatusChangeReasonRepository;
 import repository.ComponentTypeRepository;
+import service.ComponentCRUDService;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 import viewmodel.ComponentStatusChangeViewModel;
 import viewmodel.ComponentTypeCombinationViewModel;
 import viewmodel.ComponentTypeViewModel;
 import viewmodel.ComponentViewModel;
+import backingform.ComponentCombinationBackingForm;
+import backingform.RecordComponentBackingForm;
+import backingform.validator.ComponentCombinationBackingFormValidator;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("components")
@@ -63,6 +65,9 @@ public class ComponentController {
 
   @Autowired
   private ComponentTypeRepository componentTypeRepository;
+  
+  @Autowired
+  private ComponentCRUDService componentCRUDService;
 
   @Autowired
   private ComponentCombinationBackingFormValidator componentCombinationBackingFormValidator;
@@ -216,29 +221,26 @@ public class ComponentController {
 
   @RequestMapping(value = "{id}/discard", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.DISCARD_COMPONENT + "')")
-  public ResponseEntity discardComponent(
+  public ResponseEntity<Map<String, Object>> discardComponent(
       @PathVariable Long id,
       @RequestParam(value = "discardReasonId") Long discardReasonId,
       @RequestParam(value = "discardReasonText", required = false) String discardReasonText) {
 
     ComponentStatusChangeReason statusChangeReason = new ComponentStatusChangeReason();
     statusChangeReason.setId(discardReasonId);
-    Donation donation = componentRepository.findComponentById(id).getDonation();
-    componentRepository.discardComponent(id, statusChangeReason, discardReasonText);
+    
+    Component discardedComponent = componentCRUDService.discardComponent(id, statusChangeReason, discardReasonText);
 
-    Map<String, Object> map = new HashMap<String, Object>();
     Map<String, Object> pagingParams = new HashMap<String, Object>();
     pagingParams.put("sortColumn", "id");
     pagingParams.put("sortDirection", "asc");
-    List<Component> results = new ArrayList<Component>();
     List<ComponentStatus> statusList = Arrays.asList(ComponentStatus.values());
 
-    results = componentRepository.findComponentByDonationIdentificationNumber(
-        donation.getDonationIdentificationNumber(), statusList,
-        pagingParams);
+    List<Component> results = componentRepository.findComponentByDonationIdentificationNumber(
+        discardedComponent.getDonation().getDonationIdentificationNumber(), 
+        statusList, pagingParams);
 
     List<ComponentViewModel> components = new ArrayList<ComponentViewModel>();
-
     if (results != null) {
       for (Component component : results) {
         ComponentViewModel componentViewModel = getComponentViewModel(component);
@@ -246,9 +248,9 @@ public class ComponentController {
       }
     }
 
+    Map<String, Object> map = new HashMap<String, Object>();
     map.put("components", components);
-
-    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @RequestMapping(value = "{id}/split", method = RequestMethod.PUT)

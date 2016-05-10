@@ -19,15 +19,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-
 import model.bloodtesting.TTIStatus;
 import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
@@ -44,6 +35,16 @@ import model.request.Request;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 import model.util.BloodGroup;
+
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
 import repository.bloodtesting.BloodTypingStatus;
 import service.DonationConstraintChecker;
 import utils.SecurityUtils;
@@ -569,28 +570,6 @@ public class ComponentRepository {
       updateComponentInternalFields(component);
       em.merge(component);
     }
-    em.flush();
-  }
-
-  public void discardComponent(Long componentId,
-                               ComponentStatusChangeReason discardReason,
-                               String discardReasonText) {
-    Component existingComponent = findComponentById(componentId);
-    existingComponent.setStatus(ComponentStatus.DISCARDED);
-    existingComponent.setDiscardedOn(new Date());
-    ComponentStatusChange statusChange = new ComponentStatusChange();
-    statusChange.setStatusChangeType(ComponentStatusChangeType.DISCARDED);
-    statusChange.setNewStatus(ComponentStatus.DISCARDED);
-    statusChange.setStatusChangedOn(new Date());
-    statusChange.setStatusChangeReason(discardReason);
-    statusChange.setStatusChangeReasonText(discardReasonText);
-    statusChange.setChangedBy(SecurityUtils.getCurrentUser());
-    if (existingComponent.getStatusChanges() == null)
-      existingComponent.setStatusChanges(new ArrayList<ComponentStatusChange>());
-    existingComponent.getStatusChanges().add(statusChange);
-    statusChange.setComponent(existingComponent);
-    em.persist(statusChange);
-    em.merge(existingComponent);
     em.flush();
   }
 
