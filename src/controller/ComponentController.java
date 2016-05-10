@@ -1,6 +1,5 @@
 package controller;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,13 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import backingform.ComponentCombinationBackingForm;
 import backingform.RecordComponentBackingForm;
-import backingform.validator.ComponentCombinationBackingFormValidator;
 import factory.ComponentViewModelFactory;
 import model.component.Component;
 import model.component.ComponentStatus;
@@ -70,18 +61,7 @@ public class ComponentController {
   private ComponentCRUDService componentCRUDService;
 
   @Autowired
-  private ComponentCombinationBackingFormValidator componentCombinationBackingFormValidator;
-
-  @Autowired
   private ComponentViewModelFactory componentViewModelFactory;
-
-  public ComponentController() {
-  }
-
-  @InitBinder("componentCombinationForm")
-  protected void initBinder(WebDataBinder binder) {
-    binder.setValidator(componentCombinationBackingFormValidator);
-  }
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
@@ -111,21 +91,6 @@ public class ComponentController {
         componentStatusChangeReasonRepository.getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.DISCARDED);
     map.put("discardReasons", statusChangeReasons);
     map.put("findComponentByPackNumberForm", new RecordComponentBackingForm());
-    return map;
-  }
-
-  @RequestMapping(value = "/combination/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
-  public Map<String, Object> addComponentCombinationFormGenerator() {
-
-    ComponentCombinationBackingForm form = new ComponentCombinationBackingForm();
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("addComponentCombinationForm", form);
-
-    addOptionsForAddComponentsCombinationForm(map);
-    addEditSelectorOptions(map);
-
     return map;
   }
 
@@ -421,7 +386,6 @@ public class ComponentController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("allComponents", new ComponentViewModel());
-    map.put("nextPageUrl", getNextPageUrlForNewRecordComponent(request, donationIdentificationNumber));
 
     if (componentTypes != null) {
       addEditSelectorOptionsForNewRecordByList(map, componentType);
@@ -430,43 +394,6 @@ public class ComponentController {
     }
 
     return map;
-  }
-
-  private void addOptionsForAddComponentsCombinationForm(Map<String, Object> m) {
-    m.put("componentTypes", componentTypeRepository.getAllComponentTypes());
-
-    List<ComponentTypeCombination> componentTypeCombinations = componentTypeRepository.getAllComponentTypeCombinations();
-    m.put("componentTypeCombinations", componentTypeCombinations);
-
-    ObjectMapper mapper = new ObjectMapper();
-    Map<Long, String> componentTypeCombinationsMap = new HashMap<Long, String>();
-    for (ComponentTypeCombination componentTypeCombination : componentTypeCombinations) {
-      Map<String, String> componentExpiryIntervals = new HashMap<String, String>();
-      for (ComponentType componentType : componentTypeCombination.getComponentTypes()) {
-        Integer expiryIntervalMinutes = componentType.getExpiryIntervalMinutes();
-        componentExpiryIntervals.put(componentType.getId().toString(), expiryIntervalMinutes.toString());
-      }
-
-      try {
-        componentTypeCombinationsMap.put(componentTypeCombination.getId(), mapper.writeValueAsString(componentExpiryIntervals));
-      } catch (JsonGenerationException e) {
-        e.printStackTrace();
-      } catch (JsonMappingException e) {
-        e.printStackTrace();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    }
-    m.put("componentTypeCombinationsMap", componentTypeCombinationsMap);
-  }
-
-  public static String getNextPageUrlForRecordComponent(HttpServletRequest req) {
-    String reqUrl = req.getRequestURL().toString().replaceFirst("findComponentByPackNumber.html", "findComponentByPackNumberPagination.html");
-    String queryString = req.getQueryString();   // d=789
-    if (queryString != null) {
-      reqUrl += "?" + queryString;
-    }
-    return reqUrl;
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
@@ -479,20 +406,6 @@ public class ComponentController {
 
   private void addEditSelectorOptionsForNewRecord(Map<String, Object> m) {
     m.put("componentTypes", getComponentTypeViewModels(componentTypeRepository.getAllParentComponentTypes()));
-  }
-
-  public static String getNextPageUrlForNewRecordComponent(HttpServletRequest req, String qString) {
-    String reqUrl = "";
-    if (req.getRequestURI().contains("recordnewcomponents")) {
-      reqUrl = req.getRequestURL().toString().replaceFirst("recordNewComponents.html", "findComponentByPackNumberPagination.html");
-    } else {
-      reqUrl = req.getRequestURL().toString().replaceFirst("getRecordNewComponents.html", "findComponentByPackNumberPagination.html");
-    }
-    String queryString[] = qString.split("-");
-    if (queryString != null) {
-      reqUrl += "?donationIdentificationNumber=" + queryString[0];
-    }
-    return reqUrl;
   }
 
   private List<ComponentStatus> statusStringToComponentStatus(List<String> statusList) {
