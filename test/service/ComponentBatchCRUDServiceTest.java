@@ -73,7 +73,12 @@ public class ComponentBatchCRUDServiceTest {
     Component component3 = aComponent().withId(2L).withComponentType(componentType2).withDonation(donation2).build();
     donation2.setComponents(Arrays.asList(component2, component3));
     
-    DonationBatch donationBatch = aDonationBatch().withId(1L).withDonation(donation1).withDonation(donation2).build();
+    DonationBatch donationBatch = aDonationBatch()
+        .withId(1L)
+        .withDonation(donation1)
+        .withDonation(donation2)
+        .withCreatedDate(new Date())
+        .build();
     ComponentBatch componentBatch = aComponentBatch()
         .withDonationBatch(aDonationBatch().withId(1L).build())
         .withDeliveryDate(new Date())
@@ -88,6 +93,7 @@ public class ComponentBatchCRUDServiceTest {
     // do asserts
     Mockito.verify(componentBatchRepository).save(componentBatch);
     Assert.assertEquals("ComponentBatch has status OPEN", ComponentBatchStatus.OPEN, componentBatch.getStatus());
+    Assert.assertEquals("ComponentBatch has collection date", donationBatch.getCreatedDate(), componentBatch.getCollectionDate());
     Assert.assertNotNull("ComponentBatch has Components", componentBatch.getComponents());
     Assert.assertEquals("ComponentBatch has Components", 2, componentBatch.getComponents().size());
     Component component = componentBatch.getComponents().iterator().next();

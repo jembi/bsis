@@ -46,6 +46,7 @@ public class ComponentBatchCRUDService {
         donationBatchRepository.findDonationBatchById(componentBatch.getDonationBatch().getId());
     donationBatch.setComponentBatch(componentBatch);
     componentBatch.setDonationBatch(donationBatch);
+    componentBatch.setCollectionDate(donationBatch.getCreatedDate());
     setInitialComponentsFromDonationBatch(donationBatch, componentBatch);
     componentBatch.setStatus(ComponentBatchStatus.OPEN);
 

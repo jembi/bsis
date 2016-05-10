@@ -4,6 +4,7 @@ import static helpers.builders.ComponentBuilder.aComponent;
 import static helpers.builders.ComponentTypeBuilder.aComponentType;
 import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.DonationBuilder.aDonation;
+import static helpers.builders.LocationBuilder.aProcessingSite;
 import static helpers.builders.PackTypeBuilder.aPackType;
 
 import java.util.Arrays;
@@ -24,6 +25,7 @@ import model.componentbatch.ComponentBatchStatus;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.donationbatch.DonationBatch;
+import model.location.Location;
 import model.packtype.PackType;
 import suites.SecurityContextDependentTestSuite;
 
@@ -41,6 +43,7 @@ public class ComponentBatchRepositoryTests extends SecurityContextDependentTestS
     Component component = aComponent().withComponentType(componentType).withDonation(donation).buildAndPersist(entityManager);
     donation.setComponents(Arrays.asList(component));
     DonationBatch donationBatch = aDonationBatch().withDonation(donation).buildAndPersist(entityManager);    
+    Location location = aProcessingSite().buildAndPersist(entityManager);
     ComponentBatch entity = ComponentBatchBuilder.aComponentBatch()
         .withBloodTransportBox(BloodTransportBoxBuilder.aBloodTransportBox().withTemperature(0.5).build())
         .withBloodTransportBox(BloodTransportBoxBuilder.aBloodTransportBox().withTemperature(12).build())
@@ -48,6 +51,7 @@ public class ComponentBatchRepositoryTests extends SecurityContextDependentTestS
         .withStatus(ComponentBatchStatus.OPEN)
         .withDonationBatch(donationBatch)
         .withComponent(component)
+        .withLocation(location)
         .build();
     component.setComponentBatch(entity);
 

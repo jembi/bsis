@@ -1,5 +1,6 @@
 package helpers.builders;
 
+import static helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static helpers.builders.LocationBuilder.aProcessingSite;
 
 import java.util.Date;
@@ -18,13 +19,13 @@ import model.location.Location;
 public class ComponentBatchBuilder extends AbstractEntityBuilder<ComponentBatch> {
 
   private Long id;
-  private Date deliveryDate;
-  private Date collectionDate;
+  private Date deliveryDate = new Date();
+  private Date collectionDate = new Date();
   private Set<Component> components = new HashSet<>();
   private Set<BloodTransportBox> bloodTransportBoxes = new HashSet<>();
-  private ComponentBatchStatus status;
+  private ComponentBatchStatus status = ComponentBatchStatus.OPEN;
   private boolean deleted;
-  private DonationBatch donationBatch;
+  private DonationBatch donationBatch = aDonationBatch().build();
   private Location location = aProcessingSite().build();
 
   public ComponentBatchBuilder withId(Long id) {
