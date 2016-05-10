@@ -3,6 +3,7 @@ package helpers.builders;
 import static helpers.builders.LocationBuilder.aVenue;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import helpers.persisters.AbstractEntityPersister;
@@ -24,6 +25,7 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
   private boolean closed;
   private boolean backEntry;
   private ComponentBatch componentBatch;
+  private Date createdDate;
 
   public DonationBatchBuilder withId(Long id) {
     this.id = id;
@@ -78,6 +80,11 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     return this;
   }
 
+  public DonationBatchBuilder withCreatedDate(Date createdDate) {
+    this.createdDate = createdDate;
+    return this;
+  }
+
   @Override
   public AbstractEntityPersister<DonationBatch> getPersister() {
     return new DonationBatchPersister();
@@ -95,6 +102,7 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     donationBatch.setBackEntry(backEntry);
     donationBatch.setTestBatch(testBatch);
     donationBatch.setComponentBatch(componentBatch);
+    donationBatch.setCreatedDate(createdDate);
     return donationBatch;
   }
 

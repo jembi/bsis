@@ -43,7 +43,7 @@ public class ComponentBatch extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
   
-  @OneToOne
+  @OneToOne(optional = false)
   @LocationExists
   @NotNull
   private Location location;
@@ -63,13 +63,13 @@ public class ComponentBatch extends BaseModificationTrackerEntity {
   private Set<Component> components = Collections.EMPTY_SET;
   
   @Enumerated(EnumType.STRING)
-  @Column(length = 20)
+  @Column(length = 20, nullable = false)
   private ComponentBatchStatus status = ComponentBatchStatus.OPEN;
 
-  @Column
+  @Column(nullable = false)
   private Date collectionDate;
   
-  @Column
+  @Column(nullable = false)
   private Date deliveryDate;
   
   @Column
