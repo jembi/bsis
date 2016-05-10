@@ -12,6 +12,7 @@ import model.componentmovement.ComponentStatusChangeReason;
 import model.componentmovement.ComponentStatusChangeType;
 import model.donation.Donation;
 import model.donor.Donor;
+import model.inventory.InventoryStatus;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,9 +71,11 @@ public class ComponentCRUDService {
   public Component discardComponent(Long componentId, ComponentStatusChangeReason discardReason, String discardReasonText) {
     Component existingComponent = componentRepository.findComponentById(componentId);
     
+    // update existing component status
     existingComponent.setStatus(ComponentStatus.DISCARDED);
     existingComponent.setDiscardedOn(new Date());
     
+    // create a component status change for the component
     ComponentStatusChange statusChange = new ComponentStatusChange();
     statusChange.setStatusChangeType(ComponentStatusChangeType.DISCARDED);
     statusChange.setNewStatus(ComponentStatus.DISCARDED);
@@ -86,6 +89,11 @@ public class ComponentCRUDService {
     }
     existingComponent.getStatusChanges().add(statusChange);
     statusChange.setComponent(existingComponent);
+    
+    // remove component from inventory
+    if (existingComponent.getInventoryStatus() == InventoryStatus.IN_STOCK) {
+      existingComponent.setInventoryStatus(InventoryStatus.REMOVED);
+    }
     
     componentRepository.updateComponent(existingComponent);
     
