@@ -12,16 +12,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import model.component.Component;
-import model.component.ComponentStatus;
-import model.componentmovement.ComponentStatusChange;
-import model.componentmovement.ComponentStatusChangeReason;
-import model.componentmovement.ComponentStatusChangeReasonCategory;
-import model.componenttype.ComponentType;
-import model.componenttype.ComponentTypeCombination;
-import model.componenttype.ComponentTypeTimeUnits;
-import model.donation.Donation;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +25,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import backingform.ComponentCombinationBackingForm;
+import backingform.RecordComponentBackingForm;
+import backingform.validator.ComponentCombinationBackingFormValidator;
+import factory.ComponentViewModelFactory;
+import model.component.Component;
+import model.component.ComponentStatus;
+import model.componentmovement.ComponentStatusChange;
+import model.componentmovement.ComponentStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeReasonCategory;
+import model.componenttype.ComponentType;
+import model.componenttype.ComponentTypeCombination;
+import model.componenttype.ComponentTypeTimeUnits;
+import model.donation.Donation;
 import repository.ComponentRepository;
 import repository.ComponentStatusChangeReasonRepository;
 import repository.ComponentTypeRepository;
@@ -45,13 +52,6 @@ import viewmodel.ComponentStatusChangeViewModel;
 import viewmodel.ComponentTypeCombinationViewModel;
 import viewmodel.ComponentTypeViewModel;
 import viewmodel.ComponentViewModel;
-import backingform.ComponentCombinationBackingForm;
-import backingform.RecordComponentBackingForm;
-import backingform.validator.ComponentCombinationBackingFormValidator;
-
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("components")
@@ -72,6 +72,9 @@ public class ComponentController {
   @Autowired
   private ComponentCombinationBackingFormValidator componentCombinationBackingFormValidator;
 
+  @Autowired
+  private ComponentViewModelFactory componentViewModelFactory;
+
   public ComponentController() {
   }
 
@@ -88,7 +91,7 @@ public class ComponentController {
     Map<String, Object> map = new HashMap<String, Object>();
     Component component = componentRepository.findComponentById(id);
 
-    ComponentViewModel componentViewModel = getComponentViewModels(Arrays.asList(component)).get(0);
+    ComponentViewModel componentViewModel = componentViewModelFactory.createComponentViewModel(component);
     addEditSelectorOptions(map);
     map.put("component", componentViewModel);
     map.put("componentStatusChangeReasons",
@@ -126,10 +129,6 @@ public class ComponentController {
     return map;
   }
 
-  private ComponentViewModel getComponentViewModel(Component component) {
-    return new ComponentViewModel(component);
-  }
-
   @SuppressWarnings("unchecked")
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
@@ -165,14 +164,7 @@ public class ComponentController {
         donationIdentificationNumber, componentTypeIds, statusStringToComponentStatus(status),
         dateFrom, dateTo, pagingParams);
 
-    List<ComponentViewModel> components = new ArrayList<ComponentViewModel>();
-
-    if (results != null) {
-      for (Component component : results) {
-        ComponentViewModel componentViewModel = getComponentViewModel(component);
-        components.add(componentViewModel);
-      }
-    }
+    List<ComponentViewModel> components = componentViewModelFactory.createComponentViewModels(results);
 
     map.put("components", components);
     return map;
@@ -186,17 +178,6 @@ public class ComponentController {
       componentStatusChangeViewModels.add(new ComponentStatusChangeViewModel(componentStatusChange));
     }
     return componentStatusChangeViewModels;
-  }
-
-  public static List<ComponentViewModel> getComponentViewModels(
-      List<Component> components) {
-    if (components == null)
-      return Arrays.asList(new ComponentViewModel[0]);
-    List<ComponentViewModel> componentViewModels = new ArrayList<ComponentViewModel>();
-    for (Component component : components) {
-      componentViewModels.add(new ComponentViewModel(component));
-    }
-    return componentViewModels;
   }
 
   public static List<ComponentTypeViewModel> getComponentTypeViewModels(
@@ -237,13 +218,7 @@ public class ComponentController {
         discardedComponent.getDonation().getDonationIdentificationNumber(), 
         statusList, pagingParams);
 
-    List<ComponentViewModel> components = new ArrayList<ComponentViewModel>();
-    if (results != null) {
-      for (Component component : results) {
-        ComponentViewModel componentViewModel = getComponentViewModel(component);
-        components.add(componentViewModel);
-      }
-    }
+    List<ComponentViewModel> components = componentViewModelFactory.createComponentViewModels(results);
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("components", components);
@@ -271,7 +246,7 @@ public class ComponentController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Component component = componentRepository.findComponentById(id);
-    ComponentViewModel componentViewModel = getComponentViewModel(component);
+    ComponentViewModel componentViewModel = componentViewModelFactory.createComponentViewModel(component);
     map.put("component", componentViewModel);
     List<ComponentStatusChange> componentStatusChangeList = componentRepository.getComponentStatusChanges(component);
     List<ComponentStatusChangeViewModel> componentStatusChanges = getComponentStatusChangeViewModels(componentStatusChangeList);
@@ -314,14 +289,7 @@ public class ComponentController {
         donationNumber, status,
         pagingParams);
 
-    List<ComponentViewModel> componentViewModels = new ArrayList<ComponentViewModel>();
-
-    if (results != null) {
-      for (Component component : results) {
-        ComponentViewModel componentViewModel = getComponentViewModel(component);
-        componentViewModels.add(componentViewModel);
-      }
-    }
+    List<ComponentViewModel> componentViewModels = componentViewModelFactory.createComponentViewModels(results);
 
     map.put("components", componentViewModels);
     return map;
@@ -432,16 +400,9 @@ public class ComponentController {
         donation.getDonationIdentificationNumber(), statusList,
         pagingParams);
 
-    List<ComponentViewModel> components = new ArrayList<ComponentViewModel>();
+    List<ComponentViewModel> componentViewModels = componentViewModelFactory.createComponentViewModels(results);
 
-    if (results != null) {
-      for (Component component : results) {
-        ComponentViewModel componentViewModel = getComponentViewModel(component);
-        components.add(componentViewModel);
-      }
-    }
-
-    map.put("components", components);
+    map.put("components", componentViewModels);
 
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
@@ -457,10 +418,9 @@ public class ComponentController {
       String componentTypeName = componentTypes.get(componentTypes.size() - 1);
       componentType = componentRepository.findComponentTypeByComponentTypeName(componentTypeName);
     }
-    List<Component> components = Arrays.asList(new Component[0]);
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("allComponents", getComponentViewModels(components));
+    map.put("allComponents", new ComponentViewModel());
     map.put("nextPageUrl", getNextPageUrlForNewRecordComponent(request, donationIdentificationNumber));
 
     if (componentTypes != null) {
