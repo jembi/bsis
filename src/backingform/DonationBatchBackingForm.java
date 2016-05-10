@@ -123,4 +123,8 @@ public class DonationBatchBackingForm {
     donationBatch.setBackEntry(backEntry);
   }
 
+  @JsonIgnore
+  public void setStatus(String status) {
+    // Ignore
+  }
 }
