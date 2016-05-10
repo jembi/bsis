@@ -1,5 +1,6 @@
 package repository;
 
+
 public class ComponentNamedQueryConstants {
 
   public static final String NAME_COUNT_CHANGED_COMPONENTS_FOR_DONATION =
@@ -36,4 +37,10 @@ public class ComponentNamedQueryConstants {
           "WHERE c.status IN :oldStatuses " +
           "AND c.donation = :donation ";
 
+  public static final String NAME_FIND_COMPONENTS_BY_DIN =
+      "Component.findComponentsByDIN";
+  public static final String QUERY_FIND_COMPONENTS_BY_DIN =
+      "SELECT DISTINCT c FROM Component c " + 
+          "WHERE c.donation.donationIdentificationNumber = :donationIdentificationNumber " +
+          "AND c.isDeleted= :isDeleted";
 }

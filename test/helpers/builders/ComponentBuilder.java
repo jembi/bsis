@@ -1,13 +1,13 @@
 package helpers.builders;
 
 import static helpers.builders.LocationBuilder.aVenue;
-
 import helpers.persisters.AbstractEntityPersister;
 import helpers.persisters.ComponentPersister;
 import model.component.Component;
 import model.component.ComponentStatus;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
+import model.inventory.InventoryStatus;
 import model.location.Location;
 
 public class ComponentBuilder extends AbstractEntityBuilder<Component> {
@@ -16,6 +16,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
   private ComponentStatus status;
   private Donation donation;
   private ComponentType componentType;
+  private InventoryStatus inventoryStatus = InventoryStatus.NOT_LABELLED;
   private Location location = aVenue().build();
   
   public ComponentBuilder withId(Long id) {
@@ -42,6 +43,11 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     this.location = location;
     return this;
   }
+  
+  public ComponentBuilder withInventoryStatus(InventoryStatus inventoryStatus) {
+    this.inventoryStatus = inventoryStatus;
+    return this;
+  }
 
   @Override
   public Component build() {
@@ -51,6 +57,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     component.setDonation(donation);
     component.setComponentType(componentType);
     component.setLocation(location);
+    component.setInventoryStatus(inventoryStatus);
     return component;
   }
 

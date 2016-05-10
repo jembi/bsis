@@ -291,11 +291,7 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
 
     donationRepository.addDonation(newDonation);
 
-    Map<String, Object> pagingParams = new HashMap<>();
-    List<Component> results = new ArrayList<Component>();
-    List<ComponentStatus> status = Arrays.asList(ComponentStatus.values());
-
-    results = componentRepository.findComponentByDonationIdentificationNumber("1111111", status, pagingParams);
+    List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber("1111111");
     Assert.assertEquals("Component batch with id 1l has been assigned to the initial component", 1l,
         results.get(0).getComponentBatch().getId().longValue());
   }
