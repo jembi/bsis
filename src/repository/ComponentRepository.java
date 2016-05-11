@@ -21,7 +21,6 @@ import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -47,7 +46,6 @@ import model.util.BloodGroup;
 import repository.bloodtesting.BloodTypingStatus;
 import service.DonationConstraintChecker;
 import utils.SecurityUtils;
-import viewmodel.DonationViewModel;
 import viewmodel.MatchingComponentViewModel;
 
 @Repository
@@ -487,76 +485,6 @@ public class ComponentRepository {
     }
 
     return matchingComponents;
-  }
-
-  public Map<String, Object> generateInventorySummaryFast(List<String> status, List<Long> venueIds) {
-    Map<String, Object> inventory = new HashMap<String, Object>();
-    // IMPORTANT: Distinct is necessary to avoid a cartesian product of test results and components from being returned
-    // Also LEFT JOIN FETCH prevents the N+1 queries problem associated with Lazy Many-to-One joins
-    TypedQuery<Component> q = em.createQuery(
-        "SELECT DISTINCT c from Component c " +
-            "WHERE c.status IN :status AND " +
-            "c.donation.venue.id IN (:venueIds) AND " +
-            "c.isDeleted=:isDeleted",
-        Component.class);
-    List<ComponentStatus> componentStatus = new ArrayList<ComponentStatus>();
-    for (String s : status) {
-      componentStatus.add(ComponentStatus.lookup(s));
-    }
-    q.setParameter("status", componentStatus);
-    q.setParameter("venueIds", venueIds);
-    q.setParameter("isDeleted", false);
-//    q.setParameter("expiresOn", DateUtils.round(new Date(), Calendar.DATE));
-
-    TypedQuery<ComponentType> componentTypeQuery = em.createQuery("SELECT pt FROM ComponentType pt", ComponentType.class);
-
-    for (ComponentType componentType : componentTypeQuery.getResultList()) {
-      Map<String, Map<Long, Long>> inventoryByBloodGroup = new HashMap<String, Map<Long, Long>>();
-
-      inventoryByBloodGroup.put("", getMapWithNumDaysWindows());
-      inventoryByBloodGroup.put("A+", getMapWithNumDaysWindows());
-      inventoryByBloodGroup.put("B+", getMapWithNumDaysWindows());
-      inventoryByBloodGroup.put("AB+", getMapWithNumDaysWindows());
-      inventoryByBloodGroup.put("O+", getMapWithNumDaysWindows());
-      inventoryByBloodGroup.put("A-", getMapWithNumDaysWindows());
-      inventoryByBloodGroup.put("B-", getMapWithNumDaysWindows());
-      inventoryByBloodGroup.put("AB-", getMapWithNumDaysWindows());
-      inventoryByBloodGroup.put("O-", getMapWithNumDaysWindows());
-
-      inventory.put(componentType.getComponentTypeName(), inventoryByBloodGroup);
-    }
-
-    DateTime today = new DateTime();
-    for (Component component : q.getResultList()) {
-      String componentType = component.getComponentType().getComponentTypeName();
-      @SuppressWarnings("unchecked")
-      Map<String, Map<Long, Long>> inventoryByBloodGroup = (Map<String, Map<Long, Long>>) inventory.get(componentType);
-      DonationViewModel donation;
-      donation = new DonationViewModel(component.getDonation());
-      Map<Long, Long> numDayMap = inventoryByBloodGroup.get(donation.getBloodGroup());
-      DateTime createdOn = new DateTime(component.getCreatedOn().getTime());
-      Long age = (long) Days.daysBetween(createdOn, today).getDays();
-      // compute window based on age
-      age = Math.abs((age / 5) * 5);
-      if (age > 30)
-        age = (long) 30;
-      Long count = numDayMap.get(age);
-      numDayMap.put(age, count + 1);
-    }
-
-    return inventory;
-  }
-
-  private Map<Long, Long> getMapWithNumDaysWindows() {
-    Map<Long, Long> m = new HashMap<Long, Long>();
-    m.put((long) 0, (long) 0); // age < 5 days
-    m.put((long) 5, (long) 0); // 5 <= age < 10 days
-    m.put((long) 10, (long) 0); // 10 <= age < 15 days
-    m.put((long) 15, (long) 0); // 15 <= age < 20 days
-    m.put((long) 20, (long) 0); // 20 <= age < 25 days
-    m.put((long) 25, (long) 0); // 25 <= age < 30 days
-    m.put((long) 30, (long) 0); // age > 30 days
-    return m;
   }
 
   public void updateQuarantineStatus() {
