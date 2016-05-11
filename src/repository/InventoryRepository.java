@@ -24,4 +24,9 @@ public class InventoryRepository {
         StockLevelDTO.class).setParameter("location", location).setParameter("deleted", false)
         .setParameter("inventoryStatus", inventoryStatus).getResultList();
   }
+
+  public List<StockLevelDTO> findStockLevels(InventoryStatus inventoryStatus) {
+    return em.createNamedQuery(InventoryNamedQueryConstants.NAME_FIND_STOCK_LEVELS, StockLevelDTO.class)
+        .setParameter("deleted", false).setParameter("inventoryStatus", inventoryStatus).getResultList();
+  }
 }

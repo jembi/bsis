@@ -80,10 +80,20 @@ public class ReportGeneratorService {
     return report;
   }
   
-  public Report generateStockLevelsReport(Location location, InventoryStatus inventoryStatus) {
+  public Report generateStockLevelsReport(InventoryStatus inventoryStatus) {
+    return generateStockLevelsForLocationReport(null, inventoryStatus);
+  }
+
+  public Report generateStockLevelsForLocationReport(Location location, InventoryStatus inventoryStatus) {
     Report report = new Report();
 
-    List<StockLevelDTO> dtos = inventoryRepository.findStockLevelsForLocation(location, inventoryStatus);
+    List<StockLevelDTO> dtos = new ArrayList<>();
+
+    if (location == null) {
+      dtos = inventoryRepository.findStockLevels(inventoryStatus);
+    } else {
+      dtos = inventoryRepository.findStockLevelsForLocation(location, inventoryStatus);
+    }
 
     List<DataValue> dataValues = new ArrayList<>(dtos.size());
 

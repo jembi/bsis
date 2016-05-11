@@ -98,7 +98,7 @@ public class ReportGeneratorServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testStockLevelsReport() {
+  public void testStockLevelsForLocationReport() {
 
     Location location = LocationBuilder.aLocation().withName("PSite").build();
     List<StockLevelDTO> dtos = Arrays.asList(aStockLevelDTO().withComponentType(aComponentType().withComponentTypeName("Type1").build())
@@ -116,7 +116,7 @@ public class ReportGeneratorServiceTests extends UnitTestSuite {
 
     Report expectedReport = aReport().withDataValues(expectedDataValues).build();
     when(inventoryRepository.findStockLevelsForLocation(location, InventoryStatus.IN_STOCK)).thenReturn(dtos);
-    Report returnedReport = reportGeneratorService.generateStockLevelsReport(location, InventoryStatus.IN_STOCK);
+    Report returnedReport = reportGeneratorService.generateStockLevelsForLocationReport(location, InventoryStatus.IN_STOCK);
 
     assertThat(returnedReport, is(equalTo(expectedReport)));
   }

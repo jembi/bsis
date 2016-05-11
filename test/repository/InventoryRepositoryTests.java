@@ -22,9 +22,35 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
 
   @Autowired
   private InventoryRepository inventoryRepository;
+  
+  @Test
+  public void testFindStockForLocationLevels_verifyCorrectLocation() {
+    
+    Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").buildAndPersist(entityManager);
+    ComponentType type1 = ComponentTypeBuilder.aComponentType().withComponentTypeName("type1").buildAndPersist(entityManager);
+    ComponentType type2 = ComponentTypeBuilder.aComponentType().withComponentTypeName("type2").buildAndPersist(entityManager);
+    Location location1 = LocationBuilder.aProcessingSite().withName("PSite1").buildAndPersist(entityManager);
+    Location location2 = LocationBuilder.aProcessingSite().withName("PSite2").buildAndPersist(entityManager);
+
+    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withComponentType(type1)
+        .withDonation(donation).withLocation(location1).buildAndPersist(entityManager);
+
+    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withComponentType(type2)
+        .withDonation(donation).withLocation(location2).buildAndPersist(entityManager);
+    
+    
+    List<StockLevelDTO> levels = inventoryRepository.findStockLevelsForLocation(location1, InventoryStatus.IN_STOCK);
+    
+    // Verify levels returned
+    Assert.assertEquals("Verify levels returned", 1, levels.size());
+
+    // Verify right component was returned
+    Assert.assertEquals("Verify componentType", type1, levels.get(0).getComponentType());
+
+  }
 
   @Test
-  public void testFindStockLevelsForLocation_verifyInStockResults() {
+  public void testFindStockLevels_verifyInStockResults() {
     
     Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").buildAndPersist(entityManager);
     ComponentType type1 = ComponentTypeBuilder.aComponentType().withComponentTypeName("type1").buildAndPersist(entityManager);
@@ -45,7 +71,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
         .withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
     
-    List<StockLevelDTO> levels = inventoryRepository.findStockLevelsForLocation(location, InventoryStatus.IN_STOCK);
+    List<StockLevelDTO> levels = inventoryRepository.findStockLevels(InventoryStatus.IN_STOCK);
     
     // Verify levels returned
     Assert.assertEquals("Verify levels returned", 2, levels.size());
@@ -65,7 +91,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
   }
   
   @Test
-  public void testFindStockLevelsForLocation_verifyNotLabelledResults() {
+  public void testFindStockLevels_verifyNotLabelledResults() {
     
     Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").buildAndPersist(entityManager);
     ComponentType type1 = ComponentTypeBuilder.aComponentType().withComponentTypeName("type1").buildAndPersist(entityManager);
@@ -86,7 +112,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
         .withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
     
-    List<StockLevelDTO> levels = inventoryRepository.findStockLevelsForLocation(location, InventoryStatus.NOT_LABELLED);
+    List<StockLevelDTO> levels = inventoryRepository.findStockLevels(InventoryStatus.NOT_LABELLED);
     
     // Verify levels returned
     Assert.assertEquals("Verify levels returned", 2, levels.size());

@@ -48,7 +48,9 @@ import repository.InventoryNamedQueryConstants;
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUSES_FOR_DONATION,
         query = ComponentNamedQueryConstants.QUERY_UPDATE_COMPONENT_STATUSES_FOR_DONATION),
     @NamedQuery(name = InventoryNamedQueryConstants.NAME_FIND_STOCK_LEVELS_FOR_LOCATION,
-        query = InventoryNamedQueryConstants.QUERY_FIND_STOCK_LEVELS_FOR_LOCATION)
+        query = InventoryNamedQueryConstants.QUERY_FIND_STOCK_LEVELS_FOR_LOCATION),
+    @NamedQuery(name = InventoryNamedQueryConstants.NAME_FIND_STOCK_LEVELS,
+        query = InventoryNamedQueryConstants.QUERY_FIND_STOCK_LEVELS)
 })
 @Entity
 @Audited
