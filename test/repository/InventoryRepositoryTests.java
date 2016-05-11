@@ -39,7 +39,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
         .withDonation(donation).withLocation(location2).buildAndPersist(entityManager);
     
     
-    List<StockLevelDTO> levels = inventoryRepository.findStockLevelsForLocation(location1, InventoryStatus.IN_STOCK);
+    List<StockLevelDTO> levels = inventoryRepository.findStockLevelsForLocation(location1.getId(), InventoryStatus.IN_STOCK);
     
     // Verify levels returned
     Assert.assertEquals("Verify levels returned", 1, levels.size());

@@ -100,13 +100,13 @@ public class ReportGeneratorServiceTests extends UnitTestSuite {
   @Test
   public void testStockLevelsForLocationReport() {
 
-    Location location = LocationBuilder.aLocation().withName("PSite").build();
+    Location location = LocationBuilder.aLocation().withId(1L).build();
     List<StockLevelDTO> dtos = Arrays.asList(aStockLevelDTO().withComponentType(aComponentType().withComponentTypeName("Type1").build())
-            .withBloodAbo("A").withBloodRh("+").withCount(2).withVenue(location).build()
+            .withBloodAbo("A").withBloodRh("+").withCount(2).build()
     );
 
     List<DataValue> expectedDataValues = Arrays.asList(
-        aDataValue().withValue(2L).withVenue(location)
+        aDataValue().withValue(2L)
             .withCohort(aCohort().withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
                 .withComparator(Comparator.EQUALS).withOption("Type1").build())
             .withCohort(aCohort().withCategory(CohortConstants.BLOOD_TYPE_CATEGORY).withComparator(Comparator.EQUALS)
@@ -115,8 +115,8 @@ public class ReportGeneratorServiceTests extends UnitTestSuite {
     );
 
     Report expectedReport = aReport().withDataValues(expectedDataValues).build();
-    when(inventoryRepository.findStockLevelsForLocation(location, InventoryStatus.IN_STOCK)).thenReturn(dtos);
-    Report returnedReport = reportGeneratorService.generateStockLevelsForLocationReport(location, InventoryStatus.IN_STOCK);
+    when(inventoryRepository.findStockLevelsForLocation(location.getId(), InventoryStatus.IN_STOCK)).thenReturn(dtos);
+    Report returnedReport = reportGeneratorService.generateStockLevelsForLocationReport(location.getId(), InventoryStatus.IN_STOCK);
 
     assertThat(returnedReport, is(equalTo(expectedReport)));
   }

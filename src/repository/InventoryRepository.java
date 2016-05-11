@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import dto.StockLevelDTO;
 import model.inventory.InventoryStatus;
-import model.location.Location;
 
 @Repository
 @Transactional
@@ -19,9 +18,9 @@ public class InventoryRepository {
   @PersistenceContext
   private EntityManager em;
 
-  public List<StockLevelDTO> findStockLevelsForLocation(Location location, InventoryStatus inventoryStatus) {
+  public List<StockLevelDTO> findStockLevelsForLocation(Long locationId, InventoryStatus inventoryStatus) {
     return em.createNamedQuery(InventoryNamedQueryConstants.NAME_FIND_STOCK_LEVELS_FOR_LOCATION,
-        StockLevelDTO.class).setParameter("location", location).setParameter("deleted", false)
+        StockLevelDTO.class).setParameter("locationId", locationId).setParameter("deleted", false)
         .setParameter("inventoryStatus", inventoryStatus).getResultList();
   }
 

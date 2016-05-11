@@ -1,7 +1,6 @@
 package dto;
 
 import model.componenttype.ComponentType;
-import model.location.Location;
 
 public class StockLevelDTO {
 
@@ -9,17 +8,15 @@ public class StockLevelDTO {
   private String bloodAbo;
   private String bloodRh;
   private long count;
-  private Location location;
 
   public StockLevelDTO() {
     // Default constructor
   }
 
-  public StockLevelDTO(Location location, ComponentType componentType, String bloodAbo, String bloodRh, long count) {
+  public StockLevelDTO(ComponentType componentType, String bloodAbo, String bloodRh, long count) {
     this.componentType = componentType;
     this.bloodAbo = bloodAbo;
     this.bloodRh = bloodRh;
-    this.location = location;
     this.count = count;
   }
 
@@ -54,21 +51,5 @@ public class StockLevelDTO {
   public void setCount(long count) {
     this.count = count;
   }
-
-  public Location getLocation() {
-    return location;
-  }
-
-  public void setLocation(Location location) {
-    this.location = location;
-  }
-
-  @Override
-  public String toString() {
-    return "StockLevelsDTO [componentType=" + componentType + ", bloodAbo=" + bloodAbo + ", bloodRh=" + bloodRh
-        + ", count=" + count + ", location=" + location + "]";
-  }
-
-
 
 }

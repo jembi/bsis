@@ -12,7 +12,6 @@ import dto.CollectedDonationDTO;
 import dto.StockLevelDTO;
 import model.donationtype.DonationType;
 import model.inventory.InventoryStatus;
-import model.location.Location;
 import model.reporting.Cohort;
 import model.reporting.Comparator;
 import model.reporting.DataValue;
@@ -79,20 +78,16 @@ public class ReportGeneratorService {
 
     return report;
   }
-  
-  public Report generateStockLevelsReport(InventoryStatus inventoryStatus) {
-    return generateStockLevelsForLocationReport(null, inventoryStatus);
-  }
 
-  public Report generateStockLevelsForLocationReport(Location location, InventoryStatus inventoryStatus) {
+  public Report generateStockLevelsForLocationReport(Long locationId, InventoryStatus inventoryStatus) {
     Report report = new Report();
 
     List<StockLevelDTO> dtos = new ArrayList<>();
 
-    if (location == null) {
+    if (locationId == null) {
       dtos = inventoryRepository.findStockLevels(inventoryStatus);
     } else {
-      dtos = inventoryRepository.findStockLevelsForLocation(location, inventoryStatus);
+      dtos = inventoryRepository.findStockLevelsForLocation(locationId, inventoryStatus);
     }
 
     List<DataValue> dataValues = new ArrayList<>(dtos.size());
@@ -100,7 +95,6 @@ public class ReportGeneratorService {
     for (StockLevelDTO dto : dtos) {
 
       DataValue dataValue = new DataValue();
-      dataValue.setVenue(dto.getLocation());
       dataValue.setValue(dto.getCount());
 
       Cohort componentTypeCohort = new Cohort();

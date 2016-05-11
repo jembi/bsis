@@ -2,7 +2,6 @@ package helpers.builders;
 
 import dto.StockLevelDTO;
 import model.componenttype.ComponentType;
-import model.location.Location;
 
 public class StockLevelDTOBuilder extends AbstractBuilder<StockLevelDTO> {
 
@@ -10,7 +9,6 @@ public class StockLevelDTOBuilder extends AbstractBuilder<StockLevelDTO> {
   private String bloodAbo;
   private String bloodRh;
   private long count;
-  private Location location;
 
   public StockLevelDTOBuilder withComponentType(ComponentType componentType) {
     this.componentType = componentType;
@@ -32,11 +30,6 @@ public class StockLevelDTOBuilder extends AbstractBuilder<StockLevelDTO> {
     return this;
   }
 
-  public StockLevelDTOBuilder withVenue(Location location) {
-    this.location = location;
-    return this;
-  }
-
   @Override
   public StockLevelDTO build() {
     StockLevelDTO stockLevelDTO = new StockLevelDTO();
@@ -44,7 +37,6 @@ public class StockLevelDTOBuilder extends AbstractBuilder<StockLevelDTO> {
     stockLevelDTO.setBloodAbo(bloodAbo);
     stockLevelDTO.setBloodRh(bloodRh);
     stockLevelDTO.setCount(count);
-    stockLevelDTO.setLocation(location);
     return stockLevelDTO;
   }
 
