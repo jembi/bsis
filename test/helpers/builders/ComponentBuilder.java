@@ -17,8 +17,8 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
   private ComponentStatus status;
   private Donation donation;
   private ComponentType componentType;
-  private Location location = aVenue().build();
   private InventoryStatus inventoryStatus = InventoryStatus.NOT_LABELLED;
+  private Location location = aVenue().build();
   private boolean isDeleted = false;
   
   public ComponentBuilder withId(Long id) {
@@ -45,7 +45,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     this.location = location;
     return this;
   }
-
+  
   public ComponentBuilder withInventoryStatus(InventoryStatus inventoryStatus) {
     this.inventoryStatus = inventoryStatus;
     return this;

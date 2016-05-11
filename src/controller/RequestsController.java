@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import backingform.RequestBackingForm;
 import backingform.validator.RequestBackingFormValidator;
+import factory.ComponentViewModelFactory;
 import model.component.Component;
 import model.location.LocationType;
 import model.request.Request;
@@ -69,6 +70,9 @@ public class RequestsController {
 
   @Autowired
   private RequestBackingFormValidator requestBackingFormValidator;
+  
+  @Autowired
+  private ComponentViewModelFactory componentViewModelFactory;
 
   public RequestsController() {
   }
@@ -264,8 +268,7 @@ public class RequestsController {
     Map<String, Object> map = new HashMap<String, Object>();
     addEditSelectorOptions(map);
     List<Component> issuedComponents = requestRepository.getIssuedComponentsForRequest(id);
-    List<ComponentViewModel> issuedComponentViewModels = null;
-    issuedComponentViewModels = ComponentController.getComponentViewModels(issuedComponents);
+    List<ComponentViewModel> issuedComponentViewModels = componentViewModelFactory.createComponentViewModels(issuedComponents);
     map.put("issuedComponents", issuedComponentViewModels);
     map.put("componentTypeFields", formFieldAccessorService.getFormFieldsForForm("ComponentType"));
     return map;

@@ -220,37 +220,6 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
-  public void testFindComponentByDINAndStatus() throws Exception {
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    List<ComponentStatus> status = new ArrayList<ComponentStatus>();
-    status.add(ComponentStatus.QUARANTINED);
-    status.add(ComponentStatus.PROCESSED);
-    List<Component> all = componentRepository.findComponentByDonationIdentificationNumber("1111111", status, pagingParams);
-    Assert.assertNotNull("There is a Component with DIN 1111111", all);
-    Assert.assertFalse("There is a Component with DIN 1111111", all.isEmpty());
-    Assert.assertEquals("There should be two components", 2, all.size());
-  }
-
-  @Test
-  public void testFindComponentByDINAndStatusNone() throws Exception {
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    List<ComponentStatus> status = new ArrayList<ComponentStatus>();
-    status.add(ComponentStatus.EXPIRED);
-    List<Component> all = componentRepository.findComponentByDonationIdentificationNumber("1111111", status, pagingParams);
-    Assert.assertTrue("There should be 0 components", all.isEmpty());
-  }
-
-  @Test
-  public void testFindComponentByDINAndStatusUnknown() throws Exception {
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    List<ComponentStatus> status = new ArrayList<ComponentStatus>();
-    status.add(ComponentStatus.QUARANTINED);
-    status.add(ComponentStatus.PROCESSED);
-    List<Component> all = componentRepository.findComponentByDonationIdentificationNumber("1111112", status, pagingParams);
-    Assert.assertTrue("There should be 0 components", all.isEmpty());
-  }
-
-  @Test
   public void testFindAnyComponentDIN() throws Exception {
     Map<String, Object> pagingParams = new HashMap<String, Object>();
     List<Component> all = componentRepository.findAnyComponent("1111111", null, null, null, null, pagingParams);
@@ -395,19 +364,6 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
     Map<Long, Long> abMinusResults = results.get("AB-");
     Long abMinus2015Results = abMinusResults.get(formattedDate.getTime());
     Assert.assertEquals("0 AB- donations", new Long(0), abMinus2015Results);
-  }
-
-  @Test
-  // FIXME: issue with package dependencies here - ComponentRepository uses UtilController to retrieve the logged in user.
-  public void testDiscardComponent() throws Exception {
-    ComponentStatusChangeReason discardReason = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(5l);
-    componentRepository.discardComponent(1l, discardReason, "junit");
-    Component component = componentRepository.findComponent(1l);
-    List<ComponentStatusChange> changes = componentRepository.getComponentStatusChanges(component);
-    Assert.assertNotNull("Not empty list", changes);
-    Assert.assertEquals("1 ComponentStatusChange", 1, changes.size());
-    Assert.assertEquals("Correct ComponentStatusChangeType", ComponentStatusChangeType.DISCARDED, changes.get(0)
-        .getStatusChangeType());
   }
 
   @Test

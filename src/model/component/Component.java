@@ -3,6 +3,7 @@ package model.component;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -50,7 +51,9 @@ import repository.InventoryNamedQueryConstants;
     @NamedQuery(name = InventoryNamedQueryConstants.NAME_FIND_STOCK_LEVELS_FOR_LOCATION,
         query = InventoryNamedQueryConstants.QUERY_FIND_STOCK_LEVELS_FOR_LOCATION),
     @NamedQuery(name = InventoryNamedQueryConstants.NAME_FIND_STOCK_LEVELS,
-        query = InventoryNamedQueryConstants.QUERY_FIND_STOCK_LEVELS)
+        query = InventoryNamedQueryConstants.QUERY_FIND_STOCK_LEVELS),
+    @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_BY_DIN,
+        query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENTS_BY_DIN)
 })
 @Entity
 @Audited
@@ -98,7 +101,7 @@ public class Component extends BaseModificationTrackerEntity {
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy = "component", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "component", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
   private List<ComponentStatusChange> statusChanges;
 
   @Column(length = 3)
