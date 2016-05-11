@@ -8,6 +8,7 @@ import model.component.Component;
 import model.component.ComponentStatus;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
+import model.inventory.InventoryStatus;
 import model.location.Location;
 
 public class ComponentBuilder extends AbstractEntityBuilder<Component> {
@@ -17,6 +18,8 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
   private Donation donation;
   private ComponentType componentType;
   private Location location = aVenue().build();
+  private InventoryStatus inventoryStatus = InventoryStatus.NOT_LABELLED;
+  private boolean isDeleted = false;
   
   public ComponentBuilder withId(Long id) {
     this.id = id;
@@ -43,6 +46,16 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     return this;
   }
 
+  public ComponentBuilder withInventoryStatus(InventoryStatus inventoryStatus) {
+    this.inventoryStatus = inventoryStatus;
+    return this;
+  }
+
+  public ComponentBuilder withIsDeleted(boolean isDeleted) {
+    this.isDeleted = isDeleted;
+    return this;
+  }
+
   @Override
   public Component build() {
     Component component = new Component();
@@ -51,6 +64,8 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     component.setDonation(donation);
     component.setComponentType(componentType);
     component.setLocation(location);
+    component.setInventoryStatus(inventoryStatus);
+    component.setIsDeleted(isDeleted);
     return component;
   }
 

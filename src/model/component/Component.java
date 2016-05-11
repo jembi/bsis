@@ -38,6 +38,7 @@ import model.location.Location;
 import model.request.Request;
 import model.usage.ComponentUsage;
 import repository.ComponentNamedQueryConstants;
+import repository.InventoryNamedQueryConstants;
 
 @NamedQueries({
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUSES_FOR_DONOR,
@@ -46,6 +47,8 @@ import repository.ComponentNamedQueryConstants;
         query = ComponentNamedQueryConstants.QUERY_COUNT_CHANGED_COMPONENTS_FOR_DONATION),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUSES_FOR_DONATION,
         query = ComponentNamedQueryConstants.QUERY_UPDATE_COMPONENT_STATUSES_FOR_DONATION),
+    @NamedQuery(name = InventoryNamedQueryConstants.NAME_FIND_STOCK_LEVELS_FOR_LOCATION,
+        query = InventoryNamedQueryConstants.QUERY_FIND_STOCK_LEVELS_FOR_LOCATION)
 })
 @Entity
 @Audited
