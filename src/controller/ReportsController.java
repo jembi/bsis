@@ -56,10 +56,10 @@ public class ReportsController {
   @Autowired
   private TipsRepository tipsRepository;
   
-  @RequestMapping(value = "/inventories/generate", method = RequestMethod.GET)
+  @RequestMapping(value = "/stockLevels/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
   public Report findStockLevels(@RequestParam(value = "location", required = false) Long locationId,
-      @RequestParam(value = "inventoryStatus", required = false) InventoryStatus inventoryStatus) {
+      @RequestParam(value = "inventoryStatus", required = true) InventoryStatus inventoryStatus) {
 
     return reportGeneratorService.generateStockLevelsForLocationReport(locationId, inventoryStatus);
   }
