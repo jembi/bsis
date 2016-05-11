@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import model.inventory.InventoryStatus;
 import model.location.LocationType;
 import model.reporting.Report;
 import repository.ComponentRepository;
@@ -59,6 +60,14 @@ public class ReportsController {
 
   @Autowired
   private TipsRepository tipsRepository;
+  
+  @RequestMapping(value = "/inventories/generate", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
+  public Report findStockLevels(@RequestParam(value = "location", required = false) Long locationId,
+      @RequestParam(value = "inventoryStatus", required = false) InventoryStatus inventoryStatus) {
+
+    return reportGeneratorService.generateStockLevelsForLocationReport(locationId, inventoryStatus);
+  }
 
   @RequestMapping(value = "/inventory/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_REPORTING_INFORMATION + "')")
