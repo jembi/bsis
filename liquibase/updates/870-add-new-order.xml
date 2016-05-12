@@ -45,4 +45,91 @@
   </createTable>
  </changeSet>
 
+	<changeSet id="20160511-1651" author="lauravignoli">
+		<comment>BSIS-868 - add permissions for OrderForm.</comment>
+		<insert tableName="Permission">
+			<column name="id" value="106"></column>
+			<column name="name" value="Add Order Form"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="106"></column>
+			<column name="roles_id" value="1"></column> <!-- Super User -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="106"></column>
+			<column name="roles_id" value="2"></column> <!-- Admin -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="106"></column>
+			<column name="roles_id" value="9"></column> <!-- Component Supervisor -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="106"></column>
+			<column name="roles_id" value="10"></column> <!-- Component Staff -->
+		</insert>
+
+		<insert tableName="Permission">
+			<column name="id" value="107"></column>
+			<column name="name" value="View Order Form"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="107"></column>
+			<column name="roles_id" value="1"></column> <!-- Super User -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="107"></column>
+			<column name="roles_id" value="2"></column> <!-- Admin -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="107"></column>
+			<column name="roles_id" value="9"></column> <!-- Component Supervisor -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="107"></column>
+			<column name="roles_id" value="10"></column> <!-- Component Staff -->
+		</insert>
+
+		<insert tableName="Permission">
+			<column name="id" value="108"></column>
+			<column name="name" value="Edit Order Form"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="108"></column>
+			<column name="roles_id" value="1"></column> <!-- Super User -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="108"></column>
+			<column name="roles_id" value="2"></column> <!-- Admin -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="108"></column>
+			<column name="roles_id" value="9"></column> <!-- Component Supervisor -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="108"></column>
+			<column name="roles_id" value="10"></column> <!-- Component Staff -->
+		</insert>
+
+		<insert tableName="Permission">
+			<column name="id" value="109"></column>
+			<column name="name" value="Void Order Form"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="109"></column>
+			<column name="roles_id" value="1"></column> <!-- Super User -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="109"></column>
+			<column name="roles_id" value="2"></column> <!-- Admin -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="109"></column>
+			<column name="roles_id" value="9"></column> <!-- Component Supervisor -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="109"></column>
+			<column name="roles_id" value="10"></column> <!-- Component Staff -->
+		</insert>
+	</changeSet>
+
 </databaseChangeLog>
