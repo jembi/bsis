@@ -27,10 +27,7 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
     } else if (isLocationInvalid(form.getDispatchedTo().getId())) {
       errors.rejectValue("dispatchedTo", "invalid", "Invalid dispatchedTo");
     }
-    // Validate orderDate
-    if (form.getOrderDate() == null) {
-      errors.rejectValue("orderDate", "required", "orderDate is required");
-    }
+    commonFieldChecks(form, errors);
   }
 
   private boolean isLocationInvalid(Long id) {

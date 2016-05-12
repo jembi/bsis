@@ -5,6 +5,7 @@ import static helpers.builders.OrderFormBackingFormBuilder.anOrderFormBackingFor
 import static org.mockito.Mockito.when;
 
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -19,6 +20,7 @@ import org.springframework.validation.MapBindingResult;
 
 import backingform.OrderFormBackingForm;
 import model.location.Location;
+import repository.FormFieldRepository;
 import repository.LocationRepository;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -29,6 +31,9 @@ public class OrderFormBackingFormValidatorTest {
 
   @Mock
   private LocationRepository locationRepository;
+
+  @Mock
+  private FormFieldRepository formFieldRepository;
 
   private OrderFormBackingForm getBaseOrderFormBackingForm() throws ParseException {
     Location dispatchedFrom = aLocation().withName("LocFrom").withId(1l).build();
@@ -44,9 +49,10 @@ public class OrderFormBackingFormValidatorTest {
     // set up data
     OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
 
-    // // set up mocks
+    // set up mocks
     when(locationRepository.verifyLocationExists(1l)).thenReturn(true);
     when(locationRepository.verifyLocationExists(2l)).thenReturn(true);
+    when(formFieldRepository.getRequiredFormFields("orderForm")).thenReturn(Arrays.asList(new String[] {"orderDate"}));
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "orderForm");
@@ -62,16 +68,18 @@ public class OrderFormBackingFormValidatorTest {
     OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
     backingForm.setOrderDate(null);
 
-    // // set up mocks
+    // set up mocks
     when(locationRepository.verifyLocationExists(1l)).thenReturn(true);
     when(locationRepository.verifyLocationExists(2l)).thenReturn(true);
+    when(formFieldRepository.getRequiredFormFields("orderForm")).thenReturn(Arrays.asList(new String[] {"orderDate"}));
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "orderForm");
     orderFormBackingFormValidator.validate(backingForm, errors);
 
     // check asserts
-    Assert.assertEquals("orderDate is required", errors.getFieldErrors().get(0).getDefaultMessage());
+    Assert.assertEquals("This information is required", errors.getFieldErrors().get(0).getDefaultMessage());
+    Assert.assertEquals("orderForm.orderDate", errors.getFieldErrors().get(0).getField());
   }
 
   @Test
@@ -81,9 +89,10 @@ public class OrderFormBackingFormValidatorTest {
     backingForm.setDispatchedFrom(null);
     backingForm.setDispatchedTo(null);
 
-    // // set up mocks
+    // set up mocks
     when(locationRepository.verifyLocationExists(1l)).thenReturn(true);
     when(locationRepository.verifyLocationExists(2l)).thenReturn(true);
+    when(formFieldRepository.getRequiredFormFields("orderForm")).thenReturn(Arrays.asList(new String[] {"orderDate"}));
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "orderForm");
@@ -99,9 +108,10 @@ public class OrderFormBackingFormValidatorTest {
     // set up data
     OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
 
-    // // set up mocks
+    // set up mocks
     when(locationRepository.verifyLocationExists(1l)).thenReturn(false);
     when(locationRepository.verifyLocationExists(2l)).thenReturn(false);
+    when(formFieldRepository.getRequiredFormFields("orderForm")).thenReturn(Arrays.asList(new String[] {"orderDate"}));
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "orderForm");
