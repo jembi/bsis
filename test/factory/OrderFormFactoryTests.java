@@ -39,7 +39,7 @@ public class OrderFormFactoryTests {
     OrderFormBackingForm backingForm = anOrderFormBackingForm().withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo).withOrderDate(orderDate).build();
 
-    OrderForm convertedEntity = orderFormFactory.toEntity(backingForm);
+    OrderForm convertedEntity = orderFormFactory.createEntity(backingForm);
    
     assertThat(convertedEntity, hasSameStateAsOrderForm(expectedEntity));
   }
@@ -56,7 +56,7 @@ public class OrderFormFactoryTests {
     OrderForm entity = anOrderForm().withDispatchedFrom(dispatchedFrom).withDispatchedTo(dispatchedTo)
         .withOrderDate(orderDate).withId(1L).build();
 
-    OrderFormViewModel convertedViewModel = orderFormFactory.toViewModel(entity);
+    OrderFormViewModel convertedViewModel = orderFormFactory.createViewModel(entity);
 
     assertThat(convertedViewModel, hasSameStateAsOrderFormViewModel(expectedViewModel));
   }

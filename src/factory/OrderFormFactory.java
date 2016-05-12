@@ -12,7 +12,7 @@ import viewmodel.OrderFormViewModel;
 @Service
 public class OrderFormFactory {
 
-  public OrderForm toEntity(OrderFormBackingForm backingForm) {
+  public OrderForm createEntity(OrderFormBackingForm backingForm) {
     OrderForm entity = new OrderForm();
     entity.setDispatchedFrom(backingForm.getDispatchedFrom());
     entity.setDispatchedTo(backingForm.getDispatchedTo());
@@ -20,7 +20,7 @@ public class OrderFormFactory {
     return entity;
   }
 
-  public OrderFormViewModel toViewModel(OrderForm entity) {
+  public OrderFormViewModel createViewModel(OrderForm entity) {
     OrderFormViewModel viewModel = new OrderFormViewModel();
     viewModel.setId(entity.getId());
     viewModel.setDispatchedFrom(entity.getDispatchedFrom());

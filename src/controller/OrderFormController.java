@@ -46,7 +46,7 @@ public class OrderFormController {
   public ResponseEntity<Map<String, Object>> addOrderForm(@Valid @RequestBody OrderFormBackingForm backingForm) {
     Map<String, Object> map = new HashMap<String, Object>();
     OrderForm orderForm = orderFormCRUDService.createOrderForm(backingForm);
-    map.put("orderForm", orderFormFactory.toViewModel(orderForm));
+    map.put("orderForm", orderFormFactory.createViewModel(orderForm));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
 

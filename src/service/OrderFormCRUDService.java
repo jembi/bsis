@@ -21,7 +21,7 @@ public class OrderFormCRUDService {
   private OrderFormRepository orderFormRepository;
 
   public OrderForm createOrderForm(OrderFormBackingForm backingForm) {
-    OrderForm entity = orderFormFactory.toEntity(backingForm);
+    OrderForm entity = orderFormFactory.createEntity(backingForm);
     orderFormRepository.save(entity);
     return entity;
   }
