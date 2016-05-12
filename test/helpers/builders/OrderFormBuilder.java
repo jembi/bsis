@@ -11,9 +11,15 @@ import model.order.OrderForm;
 
 public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
   
+  private Long id;
   private Date orderDate = new Date();
   private Location dispatchedFrom = aLocation().build();
   private Location dispatchedTo = aLocation().build();
+
+  public OrderFormBuilder withId(Long id) {
+    this.id = id;
+    return this;
+  }
 
   public OrderFormBuilder withOrderDate(Date orderDate) {
     this.orderDate = orderDate;
@@ -33,6 +39,7 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
   @Override
   public OrderForm build() {
     OrderForm orderForm = new OrderForm();
+    orderForm.setId(id);
     orderForm.setOrderDate(orderDate);
     orderForm.setDispatchedFrom(dispatchedFrom);
     orderForm.setDispatchedTo(dispatchedTo);
