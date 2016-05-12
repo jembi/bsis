@@ -11,10 +11,10 @@
    <column name="orderDate" type="DATETIME">
     <constraints nullable="false" />
    </column>
-   <column name="dispatchedFrom" type="BIGINT(20)">
+   <column name="dispatchedFrom_id" type="BIGINT(20)">
     <constraints nullable="false" foreignKeyName="fk_OrderForm_dispatchedFrom" references="Location(id)" />
    </column>
-   <column name="dispatchedTo" type="BIGINT(20)">
+   <column name="dispatchedTo_id" type="BIGINT(20)">
     <constraints nullable="false" foreignKeyName="fk_OrderForm_dispatchedTo" references="Location(id)" />
    </column>
    <column name="createdDate" type="TIMESTAMP" />
@@ -32,8 +32,8 @@
     <constraints primaryKey="true" />
    </column>
    <column name="orderDate" type="DATETIME" />
-   <column name="dispatchedFrom" type="BIGINT(20)" />
-   <column name="dispatchedTo" type="BIGINT(20)" />
+   <column name="dispatchedFrom_id" type="BIGINT(20)" />
+   <column name="dispatchedTo_id" type="BIGINT(20)" />
    <column name="createdDate" type="TIMESTAMP" />
    <column name="createdBy_id" type="BIGINT(20)" />
    <column name="lastUpdated" type="TIMESTAMP" />
