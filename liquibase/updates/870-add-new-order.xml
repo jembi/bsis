@@ -61,11 +61,7 @@
 		</insert>
 		<insert tableName="Permission_Role">
 			<column name="permissions_id" value="106"></column>
-			<column name="roles_id" value="9"></column> <!-- Component Supervisor -->
-		</insert>
-		<insert tableName="Permission_Role">
-			<column name="permissions_id" value="106"></column>
-			<column name="roles_id" value="10"></column> <!-- Component Staff -->
+			<column name="roles_id" value="15"></column> <!-- Inventory Staff -->
 		</insert>
 
 		<insert tableName="Permission">
@@ -82,11 +78,7 @@
 		</insert>
 		<insert tableName="Permission_Role">
 			<column name="permissions_id" value="107"></column>
-			<column name="roles_id" value="9"></column> <!-- Component Supervisor -->
-		</insert>
-		<insert tableName="Permission_Role">
-			<column name="permissions_id" value="107"></column>
-			<column name="roles_id" value="10"></column> <!-- Component Staff -->
+			<column name="roles_id" value="15"></column> <!-- Inventory Staff -->
 		</insert>
 
 		<insert tableName="Permission">
@@ -103,11 +95,7 @@
 		</insert>
 		<insert tableName="Permission_Role">
 			<column name="permissions_id" value="108"></column>
-			<column name="roles_id" value="9"></column> <!-- Component Supervisor -->
-		</insert>
-		<insert tableName="Permission_Role">
-			<column name="permissions_id" value="108"></column>
-			<column name="roles_id" value="10"></column> <!-- Component Staff -->
+			<column name="roles_id" value="15"></column> <!-- Inventory Staff -->
 		</insert>
 
 		<insert tableName="Permission">
@@ -124,11 +112,7 @@
 		</insert>
 		<insert tableName="Permission_Role">
 			<column name="permissions_id" value="109"></column>
-			<column name="roles_id" value="9"></column> <!-- Component Supervisor -->
-		</insert>
-		<insert tableName="Permission_Role">
-			<column name="permissions_id" value="109"></column>
-			<column name="roles_id" value="10"></column> <!-- Component Staff -->
+			<column name="roles_id" value="15"></column> <!-- Inventory Staff -->
 		</insert>
 	</changeSet>
 	
