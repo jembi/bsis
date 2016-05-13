@@ -15,7 +15,7 @@ public class OrderFormBackingForm {
 
   private LocationBackingForm dispatchedTo;
 
-  private OrderStatus status = OrderStatus.CREATED;
+  private OrderStatus status;
 
   private OrderType type;
 
@@ -66,5 +66,7 @@ public class OrderFormBackingForm {
   public void setType(OrderType type) {
     this.type = type;
   }
+
+
 
 }

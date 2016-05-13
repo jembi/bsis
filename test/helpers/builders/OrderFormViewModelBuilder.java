@@ -2,6 +2,8 @@ package helpers.builders;
 
 import java.util.Date;
 
+import model.order.OrderStatus;
+import model.order.OrderType;
 import viewmodel.LocationViewModel;
 import viewmodel.OrderFormViewModel;
 
@@ -11,6 +13,9 @@ public class OrderFormViewModelBuilder extends AbstractBuilder<OrderFormViewMode
   private Date orderDate;
   private LocationViewModel dispatchedFrom;
   private LocationViewModel dispatchedTo;
+  private OrderStatus status = OrderStatus.CREATED;
+  private OrderType type = OrderType.ISSUE;
+  private boolean isDeleted = false;
 
   public OrderFormViewModelBuilder withId(Long id) {
     this.id = id;
@@ -32,13 +37,31 @@ public class OrderFormViewModelBuilder extends AbstractBuilder<OrderFormViewMode
     return this;
   }
 
+  public OrderFormViewModelBuilder withOrderStatus(OrderStatus status) {
+    this.status = status;
+    return this;
+  }
+
+  public OrderFormViewModelBuilder withOrderType(OrderType type) {
+    this.type = type;
+    return this;
+  }
+
+  public OrderFormViewModelBuilder withIsDeleted(boolean isDeleted) {
+    this.isDeleted = isDeleted;
+    return this;
+  }
+
   public OrderFormViewModel build() {
-    OrderFormViewModel backingForm = new OrderFormViewModel();
-    backingForm.setId(id);
-    backingForm.setDispatchedFrom(dispatchedFrom);
-    backingForm.setDispatchedTo(dispatchedTo);
-    backingForm.setOrderDate(orderDate);
-    return backingForm;
+    OrderFormViewModel viewModel = new OrderFormViewModel();
+    viewModel.setId(id);
+    viewModel.setDispatchedFrom(dispatchedFrom);
+    viewModel.setDispatchedTo(dispatchedTo);
+    viewModel.setOrderDate(orderDate);
+    viewModel.setStatus(status);
+    viewModel.setType(type);
+    viewModel.setIsDeleted(isDeleted);
+    return viewModel;
   }
 
   public static OrderFormViewModelBuilder anOrderFormViewModel() {
