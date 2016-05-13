@@ -5,7 +5,6 @@ import java.util.Objects;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
-import viewmodel.DonorViewModel;
 import viewmodel.OrderFormViewModel;
 
 public class OrderFormViewModelMatcher extends TypeSafeMatcher<OrderFormViewModel> {

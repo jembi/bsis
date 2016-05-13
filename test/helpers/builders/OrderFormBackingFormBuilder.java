@@ -2,15 +2,15 @@ package helpers.builders;
 
 import java.util.Date;
 
+import backingform.LocationBackingForm;
 import backingform.OrderFormBackingForm;
-import model.location.Location;
 
 public class OrderFormBackingFormBuilder {
 
   private Long id;
   private Date orderDate;
-  private Location dispatchedFrom;
-  private Location dispatchedTo;
+  private LocationBackingForm dispatchedFrom;
+  private LocationBackingForm dispatchedTo;
 
   public OrderFormBackingFormBuilder withId(Long id) {
     this.id = id;
@@ -22,12 +22,12 @@ public class OrderFormBackingFormBuilder {
     return this;
   }
 
-  public OrderFormBackingFormBuilder withDispatchedFrom(Location dispatchedFrom) {
+  public OrderFormBackingFormBuilder withDispatchedFrom(LocationBackingForm dispatchedFrom) {
     this.dispatchedFrom = dispatchedFrom;
     return this;
   }
 
-  public OrderFormBackingFormBuilder withDispatchedTo(Location dispatchedTo) {
+  public OrderFormBackingFormBuilder withDispatchedTo(LocationBackingForm dispatchedTo) {
     this.dispatchedTo = dispatchedTo;
     return this;
   }

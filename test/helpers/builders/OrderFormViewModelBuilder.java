@@ -2,15 +2,15 @@ package helpers.builders;
 
 import java.util.Date;
 
-import model.location.Location;
+import viewmodel.LocationViewModel;
 import viewmodel.OrderFormViewModel;
 
 public class OrderFormViewModelBuilder extends AbstractBuilder<OrderFormViewModel> {
 
   private Long id;
   private Date orderDate;
-  private Location dispatchedFrom;
-  private Location dispatchedTo;
+  private LocationViewModel dispatchedFrom;
+  private LocationViewModel dispatchedTo;
 
   public OrderFormViewModelBuilder withId(Long id) {
     this.id = id;
@@ -22,12 +22,12 @@ public class OrderFormViewModelBuilder extends AbstractBuilder<OrderFormViewMode
     return this;
   }
 
-  public OrderFormViewModelBuilder withDispatchedFrom(Location dispatchedFrom) {
+  public OrderFormViewModelBuilder withDispatchedFrom(LocationViewModel dispatchedFrom) {
     this.dispatchedFrom = dispatchedFrom;
     return this;
   }
 
-  public OrderFormViewModelBuilder withDispatchedTo(Location dispatchedTo) {
+  public OrderFormViewModelBuilder withDispatchedTo(LocationViewModel dispatchedTo) {
     this.dispatchedTo = dispatchedTo;
     return this;
   }

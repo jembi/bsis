@@ -21,6 +21,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
+import backingform.LocationBackingForm;
 import backingform.OrderFormBackingForm;
 import model.location.Location;
 import repository.FormFieldRepository;
@@ -42,8 +43,8 @@ public class OrderFormBackingFormValidatorTest {
     Location dispatchedFrom = aDistributionSite().withName("LocFrom").withId(1l).build();
     Location dispatchedTo = aDistributionSite().withName("LocTo").withId(2l).build();
     Date orderDate = new Date();
-    OrderFormBackingForm backingForm = anOrderFormBackingForm().withDispatchedFrom(dispatchedFrom)
-        .withDispatchedTo(dispatchedTo).withOrderDate(orderDate).build();
+    OrderFormBackingForm backingForm = anOrderFormBackingForm().withDispatchedFrom(new LocationBackingForm(dispatchedFrom))
+        .withDispatchedTo(new LocationBackingForm(dispatchedTo)).withOrderDate(orderDate).build();
     return backingForm;
   }
 
@@ -53,8 +54,8 @@ public class OrderFormBackingFormValidatorTest {
     OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(backingForm.getDispatchedFrom());
-    when(locationRepository.getLocation(2l)).thenReturn(backingForm.getDispatchedTo());
+    when(locationRepository.getLocation(1l)).thenReturn(backingForm.getDispatchedFrom().getLocation());
+    when(locationRepository.getLocation(2l)).thenReturn(backingForm.getDispatchedTo().getLocation());
     when(formFieldRepository.getRequiredFormFields("orderForm")).thenReturn(Arrays.asList(new String[] {"orderDate"}));
 
     // run test
@@ -72,8 +73,8 @@ public class OrderFormBackingFormValidatorTest {
     backingForm.setOrderDate(null);
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(backingForm.getDispatchedFrom());
-    when(locationRepository.getLocation(2l)).thenReturn(backingForm.getDispatchedTo());
+    when(locationRepository.getLocation(1l)).thenReturn(backingForm.getDispatchedFrom().getLocation());
+    when(locationRepository.getLocation(2l)).thenReturn(backingForm.getDispatchedTo().getLocation());
     when(formFieldRepository.getRequiredFormFields("orderForm")).thenReturn(Arrays.asList(new String[] {"orderDate"}));
 
     // run test

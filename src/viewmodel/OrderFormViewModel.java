@@ -2,17 +2,15 @@ package viewmodel;
 
 import java.util.Date;
 
-import model.location.Location;
-
 public class OrderFormViewModel {
 
   private long id;
 
   private Date orderDate;
 
-  private Location dispatchedFrom;
+  private LocationViewModel dispatchedFrom;
 
-  private Location dispatchedTo;
+  private LocationViewModel dispatchedTo;
 
   public Date getOrderDate() {
     return orderDate;
@@ -30,19 +28,19 @@ public class OrderFormViewModel {
     this.orderDate = orderDate;
   }
 
-  public Location getDispatchedFrom() {
+  public LocationViewModel getDispatchedFrom() {
     return dispatchedFrom;
   }
 
-  public void setDispatchedFrom(Location dispatchedFrom) {
+  public void setDispatchedFrom(LocationViewModel dispatchedFrom) {
     this.dispatchedFrom = dispatchedFrom;
   }
 
-  public Location getDispatchedTo() {
+  public LocationViewModel getDispatchedTo() {
     return dispatchedTo;
   }
 
-  public void setDispatchedTo(Location dispatchedTo) {
+  public void setDispatchedTo(LocationViewModel dispatchedTo) {
     this.dispatchedTo = dispatchedTo;
   }
 

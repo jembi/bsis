@@ -2,17 +2,15 @@ package backingform;
 
 import java.util.Date;
 
-import model.location.Location;
-
 public class OrderFormBackingForm {
 
   private Long id;
 
   private Date orderDate;
 
-  private Location dispatchedFrom;
+  private LocationBackingForm dispatchedFrom;
 
-  private Location dispatchedTo;
+  private LocationBackingForm dispatchedTo;
 
   public Long getId() {
     return id;
@@ -30,19 +28,19 @@ public class OrderFormBackingForm {
     this.orderDate = orderDate;
   }
 
-  public Location getDispatchedFrom() {
+  public LocationBackingForm getDispatchedFrom() {
     return dispatchedFrom;
   }
 
-  public void setDispatchedFrom(Location dispatchedFrom) {
+  public void setDispatchedFrom(LocationBackingForm dispatchedFrom) {
     this.dispatchedFrom = dispatchedFrom;
   }
 
-  public Location getDispatchedTo() {
+  public LocationBackingForm getDispatchedTo() {
     return dispatchedTo;
   }
 
-  public void setDispatchedTo(Location dispatchedTo) {
+  public void setDispatchedTo(LocationBackingForm dispatchedTo) {
     this.dispatchedTo = dispatchedTo;
   }
 
