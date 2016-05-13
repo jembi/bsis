@@ -28,6 +28,8 @@ public class OrderFormFactory {
     entity.setDispatchedFrom(from);
     entity.setDispatchedTo(to);
     entity.setOrderDate(backingForm.getOrderDate());
+    entity.setStatus(backingForm.getStatus());
+    entity.setType(backingForm.getType());
     return entity;
   }
 
@@ -37,6 +39,9 @@ public class OrderFormFactory {
     viewModel.setDispatchedFrom(new LocationViewModel(entity.getDispatchedFrom()));
     viewModel.setDispatchedTo(new LocationViewModel(entity.getDispatchedTo()));
     viewModel.setOrderDate(entity.getOrderDate());
+    viewModel.setStatus(entity.getStatus());
+    viewModel.setType(entity.getType());
+    viewModel.setIsDeleted(entity.getIsDeleted());
     return viewModel;
   }
 

@@ -56,10 +56,10 @@ public class OrderFormBackingFormValidatorTest {
     // set up mocks
     when(locationRepository.getLocation(1l)).thenReturn(backingForm.getDispatchedFrom().getLocation());
     when(locationRepository.getLocation(2l)).thenReturn(backingForm.getDispatchedTo().getLocation());
-    when(formFieldRepository.getRequiredFormFields("orderForm")).thenReturn(Arrays.asList(new String[] {"orderDate"}));
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate"}));
 
     // run test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "orderForm");
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
     orderFormBackingFormValidator.validate(backingForm, errors);
 
     // check asserts
@@ -75,15 +75,15 @@ public class OrderFormBackingFormValidatorTest {
     // set up mocks
     when(locationRepository.getLocation(1l)).thenReturn(backingForm.getDispatchedFrom().getLocation());
     when(locationRepository.getLocation(2l)).thenReturn(backingForm.getDispatchedTo().getLocation());
-    when(formFieldRepository.getRequiredFormFields("orderForm")).thenReturn(Arrays.asList(new String[] {"orderDate"}));
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate"}));
 
     // run test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "orderForm");
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
     orderFormBackingFormValidator.validate(backingForm, errors);
 
     // check asserts
     Assert.assertEquals("This information is required", errors.getFieldErrors().get(0).getDefaultMessage());
-    Assert.assertEquals("orderForm.orderDate", errors.getFieldErrors().get(0).getField());
+    Assert.assertEquals("orderDate", errors.getFieldErrors().get(0).getField());
   }
 
   @Test
@@ -94,10 +94,10 @@ public class OrderFormBackingFormValidatorTest {
     backingForm.setDispatchedTo(null);
 
     // set up mocks
-    when(formFieldRepository.getRequiredFormFields("orderForm")).thenReturn(Arrays.asList(new String[] {"orderDate"}));
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate"}));
 
     // run test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "orderForm");
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
     orderFormBackingFormValidator.validate(backingForm, errors);
 
     // check asserts
@@ -114,10 +114,10 @@ public class OrderFormBackingFormValidatorTest {
     // set up mocks
     when(locationRepository.getLocation(1l)).thenThrow(NoResultException.class);
     when(locationRepository.getLocation(2l)).thenThrow(NoResultException.class);
-    when(formFieldRepository.getRequiredFormFields("orderForm")).thenReturn(Arrays.asList(new String[] {"orderDate"}));
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate"}));
 
     // run test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "orderForm");
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
     orderFormBackingFormValidator.validate(backingForm, errors);
 
     // check asserts
@@ -137,10 +137,10 @@ public class OrderFormBackingFormValidatorTest {
     // set up mocks
     when(locationRepository.getLocation(1l)).thenReturn(venue1);
     when(locationRepository.getLocation(2l)).thenReturn(venue2);
-    when(formFieldRepository.getRequiredFormFields("orderForm")).thenReturn(Arrays.asList(new String[] {"orderDate"}));
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate"}));
 
     // run test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "orderForm");
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
     orderFormBackingFormValidator.validate(backingForm, errors);
 
     // check asserts

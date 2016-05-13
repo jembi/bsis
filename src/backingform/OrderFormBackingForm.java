@@ -2,6 +2,9 @@ package backingform;
 
 import java.util.Date;
 
+import model.order.OrderStatus;
+import model.order.OrderType;
+
 public class OrderFormBackingForm {
 
   private Long id;
@@ -11,6 +14,10 @@ public class OrderFormBackingForm {
   private LocationBackingForm dispatchedFrom;
 
   private LocationBackingForm dispatchedTo;
+
+  private OrderStatus status = OrderStatus.CREATED;
+
+  private OrderType type;
 
   public Long getId() {
     return id;
@@ -44,5 +51,20 @@ public class OrderFormBackingForm {
     this.dispatchedTo = dispatchedTo;
   }
 
+  public OrderStatus getStatus() {
+    return status;
+  }
+
+  public void setStatus(OrderStatus status) {
+    this.status = status;
+  }
+
+  public OrderType getType() {
+    return type;
+  }
+
+  public void setType(OrderType type) {
+    this.type = type;
+  }
 
 }

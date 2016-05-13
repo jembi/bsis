@@ -2,6 +2,9 @@ package viewmodel;
 
 import java.util.Date;
 
+import model.order.OrderStatus;
+import model.order.OrderType;
+
 public class OrderFormViewModel {
 
   private long id;
@@ -11,6 +14,12 @@ public class OrderFormViewModel {
   private LocationViewModel dispatchedFrom;
 
   private LocationViewModel dispatchedTo;
+
+  private OrderStatus status;;
+
+  private OrderType type;
+
+  private boolean isDeleted;
 
   public Date getOrderDate() {
     return orderDate;
@@ -43,5 +52,31 @@ public class OrderFormViewModel {
   public void setDispatchedTo(LocationViewModel dispatchedTo) {
     this.dispatchedTo = dispatchedTo;
   }
+
+  public OrderStatus getStatus() {
+    return status;
+  }
+
+  public void setStatus(OrderStatus status) {
+    this.status = status;
+  }
+
+  public OrderType getType() {
+    return type;
+  }
+
+  public void setType(OrderType type) {
+    this.type = type;
+  }
+
+  public boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
+
+
 
 }

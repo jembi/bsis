@@ -50,6 +50,11 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
 
   @Override
   public String getFormName() {
-    return "orderForm";
+    return "OrderForm";
+  }
+
+  @Override
+  public String getEntityName() {
+    return "";
   }
 }

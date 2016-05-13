@@ -8,6 +8,8 @@ import helpers.persisters.AbstractEntityPersister;
 import helpers.persisters.OrderFormPersister;
 import model.location.Location;
 import model.order.OrderForm;
+import model.order.OrderStatus;
+import model.order.OrderType;
 
 public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
   
@@ -15,6 +17,9 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
   private Date orderDate = new Date();
   private Location dispatchedFrom = aLocation().build();
   private Location dispatchedTo = aLocation().build();
+  private OrderStatus status = OrderStatus.CREATED;
+  private OrderType type = OrderType.ISSUE;
+  private boolean isDeleted = false;
 
   public OrderFormBuilder withId(Long id) {
     this.id = id;
@@ -36,6 +41,21 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
     return this;
   }
 
+  public OrderFormBuilder withOrderStatus(OrderStatus status) {
+    this.status = status;
+    return this;
+  }
+
+  public OrderFormBuilder withOrderType(OrderType type) {
+    this.type = type;
+    return this;
+  }
+
+  public OrderFormBuilder withIsDeleted(boolean isDeleted) {
+    this.isDeleted = isDeleted;
+    return this;
+  }
+
   @Override
   public OrderForm build() {
     OrderForm orderForm = new OrderForm();
@@ -43,6 +63,9 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
     orderForm.setOrderDate(orderDate);
     orderForm.setDispatchedFrom(dispatchedFrom);
     orderForm.setDispatchedTo(dispatchedTo);
+    orderForm.setStatus(status);
+    orderForm.setType(type);
+    orderForm.setIsDeleted(isDeleted);
     return orderForm;
   }
 
