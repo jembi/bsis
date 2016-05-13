@@ -19,4 +19,6 @@
               isMobileSite="false" isUsageSite="false" name="Hlotse" notes=""/>
     <Location isDistributionSite="0" isProcessingSite="1" id="8" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Processing" notes=""/>
+    <Location isDistributionSite="1" isProcessingSite="0" id="9" isDeleted="false" isVenue="false"
+              isMobileSite="false" isUsageSite="false" name="Distribution" notes=""/>
 </dataset>

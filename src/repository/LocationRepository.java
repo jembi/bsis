@@ -34,6 +34,8 @@ public class LocationRepository {
         return getProcessingSites();
       case USAGE_SITE:
         return getUsageSites();
+      case DISTRIBUTION_SITE:
+        return getDistributionSites();
       default:
         throw new IllegalArgumentException("Can't get locations for type: " + locationType);
     }
@@ -53,9 +55,16 @@ public class LocationRepository {
         .getResultList();
   }
   
-  private List<Location> getUsageSites() {
+  public List<Location> getUsageSites() {
     return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_USAGE_SITES, Location.class)
         .setParameter("isUsageSite", true)
+        .setParameter("isDeleted", false)
+        .getResultList();
+  }
+
+  public List<Location> getDistributionSites() {
+    return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_DISTRIBUTION_SITES, Location.class)
+        .setParameter("isDistributionSite", true)
         .setParameter("isDeleted", false)
         .getResultList();
   }
