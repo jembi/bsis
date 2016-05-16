@@ -1,12 +1,17 @@
 package model.order;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.hibernate.envers.Audited;
 
@@ -38,6 +43,9 @@ public class OrderForm extends BaseModificationTrackerEntity {
 
   @Column
   private boolean isDeleted = false;
+
+  @OneToMany(mappedBy = "orderForm", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+  private List<OrderFormItem> items = new ArrayList<OrderFormItem>();
 
   public Date getOrderDate() {
     return orderDate;
@@ -87,6 +95,16 @@ public class OrderForm extends BaseModificationTrackerEntity {
     this.isDeleted = isDeleted;
   }
 
+  public List<OrderFormItem> getItems() {
+    return items;
+  }
 
+  public void setItems(List<OrderFormItem> items) {
+    this.items = items;
+  }
+
+  public void setDeleted(boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
 
 }

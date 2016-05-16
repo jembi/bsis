@@ -2,12 +2,15 @@ package helpers.builders;
 
 import static helpers.builders.LocationBuilder.aLocation;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import helpers.persisters.AbstractEntityPersister;
 import helpers.persisters.OrderFormPersister;
 import model.location.Location;
 import model.order.OrderForm;
+import model.order.OrderFormItem;
 import model.order.OrderStatus;
 import model.order.OrderType;
 
@@ -20,6 +23,7 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
   private OrderStatus status = OrderStatus.CREATED;
   private OrderType type = OrderType.ISSUE;
   private boolean isDeleted = false;
+  private List<OrderFormItem> items = new ArrayList<>();
 
   public OrderFormBuilder withId(Long id) {
     this.id = id;
@@ -56,6 +60,11 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
     return this;
   }
 
+  public OrderFormBuilder withOrderFormItem(OrderFormItem item) {
+    items.add(item);
+    return this;
+  }
+
   @Override
   public OrderForm build() {
     OrderForm orderForm = new OrderForm();
@@ -66,6 +75,7 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
     orderForm.setStatus(status);
     orderForm.setType(type);
     orderForm.setIsDeleted(isDeleted);
+    orderForm.setItems(items);
     return orderForm;
   }
 

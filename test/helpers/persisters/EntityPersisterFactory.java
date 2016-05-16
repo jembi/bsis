@@ -11,6 +11,7 @@ import helpers.builders.DonationBuilder;
 import helpers.builders.DonationTypeBuilder;
 import helpers.builders.DonorBuilder;
 import helpers.builders.LocationBuilder;
+import helpers.builders.OrderFormBuilder;
 import helpers.builders.PackTypeBuilder;
 import model.admin.DataType;
 import model.adverseevent.AdverseEvent;
@@ -23,6 +24,7 @@ import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.location.Location;
+import model.order.OrderForm;
 import model.packtype.PackType;
 
 public class EntityPersisterFactory {
@@ -73,6 +75,10 @@ public class EntityPersisterFactory {
 
   public static AbstractEntityPersister<ComponentBatch> aComponentBatchPersister() {
     return new ComponentBatchBuilder().getPersister();
+  }
+
+  public static AbstractEntityPersister<OrderForm> anOrderFormPersister() {
+    return new OrderFormBuilder().getPersister();
   }
 
 }
