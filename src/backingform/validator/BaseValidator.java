@@ -73,13 +73,13 @@ public abstract class BaseValidator<T> implements Validator {
   public abstract String getFormName();
 
   /**
-   * Specifies the name of the form entity, if there is one. It's used to generate error keys. By
-   * default is the form name.
+   * Specifies if the form has a base entity. This will be used when generating the error keys. By
+   * default is true.
    *
-   * @return String name of the form
+   * @return true, if successful
    */
-  protected String getEntityName() {
-    return getFormName();
+  protected boolean formHasBaseEntity() {
+    return true;
   }
 
   /**
@@ -124,9 +124,9 @@ public abstract class BaseValidator<T> implements Validator {
         Integer maxLength = maxLengths.get(field);
         if (fieldValue != null && maxLength > 0
             && (fieldValue instanceof String && ((String) fieldValue).length() > maxLength)) {
-          String fieldName = getEntityName() + "." + field;;
-          if (getEntityName().isEmpty()) {
-            fieldName = field;
+          String fieldName = field;
+          if (formHasBaseEntity()) {
+            fieldName = getFormName() + "." + field;
           }
           errors.rejectValue(fieldName, "fieldLength.error",
               "Maximum length for this field is " + maxLength);
@@ -154,9 +154,9 @@ public abstract class BaseValidator<T> implements Validator {
       if (properties.containsKey(requiredField)) {
         Object fieldValue = properties.get(requiredField);
         if (fieldValue == null || (fieldValue instanceof String && StringUtils.isBlank((String) fieldValue))) {
-          String fieldName = getEntityName() + "." + requiredField;
-          if (getEntityName().isEmpty()) {
-            fieldName = requiredField;
+          String fieldName = requiredField;
+          if (formHasBaseEntity()) {
+            fieldName = getFormName() + "." + requiredField;
           }
           errors.rejectValue(fieldName, "requiredField.error", "This information is required");
         }
