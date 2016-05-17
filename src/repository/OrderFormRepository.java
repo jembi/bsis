@@ -1,5 +1,7 @@
 package repository;
 
+import javax.persistence.NoResultException;
+
 import org.springframework.stereotype.Repository;
 
 import model.order.OrderForm;
@@ -8,7 +10,11 @@ import model.order.OrderForm;
 public class OrderFormRepository extends AbstractRepository<OrderForm> {
 
   public OrderForm findById(Long id) {
-    return entityManager.find(OrderForm.class, id);
+    OrderForm orderForm = entityManager.find(OrderForm.class, id);
+    if (orderForm == null) {
+      throw new NoResultException("OrderForm not found for id " + id);
+    }
+    return orderForm;
   }
 
 }

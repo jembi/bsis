@@ -1,5 +1,9 @@
 package repository;
 
+import static helpers.builders.OrderFormBuilder.anOrderForm;
+
+import javax.persistence.NoResultException;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +37,24 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     
     // do checks
     Assert.assertNotNull("Item was persisted", orderForm.getItems().get(0).getId());
+  }
+  
+  @Test
+  public void testFindOrderFormWithExistingOrderForm() {
+    // Set up
+    OrderForm orderForm = anOrderForm().buildAndPersist(entityManager);
+
+    // Test
+    OrderForm returnedOrderForm = orderFormRepository.findById(orderForm.getId());
+    
+    // Verify
+    Assert.assertEquals("Order form was found", orderForm, returnedOrderForm);
+  }
+  
+  @Test(expected = NoResultException.class)
+  public void testFindOrderFormWithNoExistingOrderForm() {
+    // Test
+    orderFormRepository.findById(1L);
   }
   
 }

@@ -25,6 +25,7 @@ import factory.OrderFormFactory;
 import model.location.Location;
 import model.order.OrderForm;
 import repository.LocationRepository;
+import repository.OrderFormRepository;
 import service.OrderFormCRUDService;
 import utils.PermissionConstants;
 
@@ -46,6 +47,9 @@ public class OrderFormController {
   
   @Autowired
   private LocationViewModelFactory locationViewModelFactory;
+  
+  @Autowired
+  private OrderFormRepository orderFormRepository;
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
@@ -84,6 +88,16 @@ public class OrderFormController {
 
     Map<String, Object> map = new HashMap<>();
     OrderForm orderForm = orderFormCRUDService.updateOrderForm(backingForm);
+    map.put("orderForm", orderFormFactory.createViewModel(orderForm));
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+  
+  @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_ORDER_FORM + "')")
+  public ResponseEntity<Map<String, Object>> getOrderForm(@PathVariable Long id) {
+    OrderForm orderForm = orderFormRepository.findById(id);
+    
+    Map<String, Object> map = new HashMap<>();
     map.put("orderForm", orderFormFactory.createViewModel(orderForm));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
