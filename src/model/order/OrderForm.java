@@ -13,6 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 
 import model.BaseModificationTrackerEntity;
@@ -45,6 +46,7 @@ public class OrderForm extends BaseModificationTrackerEntity {
   private boolean isDeleted = false;
 
   @OneToMany(mappedBy = "orderForm", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+  @Where(clause = "isDeleted = 0")
   private List<OrderFormItem> items = new ArrayList<OrderFormItem>();
 
   public Date getOrderDate() {

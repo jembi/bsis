@@ -1,27 +1,19 @@
 package model.order;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
 
-import model.BaseEntity;
+import model.BaseModificationTrackerEntity;
 import model.componenttype.ComponentType;
 
 @Entity
 @Audited
-public class OrderFormItem extends BaseEntity {
+public class OrderFormItem extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
-
-  @Temporal(TemporalType.TIMESTAMP)
-  @Column(columnDefinition = "TIMESTAMP")
-  private Date createdDate = new Date();
 
   @ManyToOne(optional = false)
   private ComponentType componentType;
@@ -33,6 +25,8 @@ public class OrderFormItem extends BaseEntity {
   private String bloodRh;
   
   private int numberOfUnits;
+
+  private boolean isDeleted = false;
 
   @ManyToOne(optional = false)
   private OrderForm orderForm;
@@ -77,12 +71,12 @@ public class OrderFormItem extends BaseEntity {
     this.orderForm = orderForm;
   }
 
-  public Date getCreatedDate() {
-    return createdDate;
+  public boolean isDeleted() {
+    return isDeleted;
   }
 
-  public void setCreatedDate(Date createdDate) {
-    this.createdDate = createdDate;
+  public void setDeleted(boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
 
 }

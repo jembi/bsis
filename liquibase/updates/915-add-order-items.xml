@@ -25,7 +25,21 @@
 			</column>
 			<column name="numberOfUnits" type="INT">
 				<constraints nullable="false" />
-			</column>	
+			</column>
+			<column name="isDeleted" type="tinyint(1)">
+				<constraints nullable="false" />
+			</column>
+			<column name="createdDate" type="TIMESTAMP" />
+			<column name="createdBy_id" type="BIGINT(20)">
+				<constraints foreignKeyName="fk_OrderForm_createdBy"
+					references="User(id)" />
+			</column>
+			<column name="lastUpdated" type="TIMESTAMP" />
+			<column name="lastUpdatedBy_id" type="BIGINT(20)">
+				<constraints foreignKeyName="fk_OrderForm_lastUpdatedBy"
+					references="User(id)" />
+			</column>
+	
 		</createTable>
 
 		<createTable tableName="OrderFormItem_AUD">
@@ -37,11 +51,16 @@
 			<column name="orderForm_id" type="BIGINT(20)"/>
 			<column name="bloodAbo" type="VARCHAR(20)"/>
 			<column name="bloodRh" type="VARCHAR(20)"/>
-			<column name="numberOfUnits" type="INT">
+			<column name="numberOfUnits" type="INT"/>
+			<column name="isDeleted" type="tinyint(1)"/>
+			<column name="createdDate" type="TIMESTAMP" />
+			<column name="createdBy_id" type="BIGINT(20)"/>
+			<column name="lastUpdated" type="TIMESTAMP" />
+			<column name="lastUpdatedBy_id" type="BIGINT(20)"/>
 			<column name="REV" type="INT(11)">
 				<constraints primaryKey="true" />
 			</column>
-			<column name="REVTYPE" type="TINYINT(4)"></column>
+			<column name="REVTYPE" type="TINYINT(4)"/>
 		</createTable>
 	</changeSet>
 </databaseChangeLog>
