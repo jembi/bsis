@@ -1,17 +1,12 @@
 package controller;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import model.inventory.InventoryStatus;
 import model.location.LocationType;
 import model.reporting.Report;
 import repository.ComponentRepository;
@@ -59,46 +55,13 @@ public class ReportsController {
 
   @Autowired
   private TipsRepository tipsRepository;
+  
+  @RequestMapping(value = "/stockLevels/generate", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
+  public Report findStockLevels(@RequestParam(value = "location", required = false) Long locationId,
+      @RequestParam(value = "inventoryStatus", required = true) InventoryStatus inventoryStatus) {
 
-  @RequestMapping(value = "/inventory/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_REPORTING_INFORMATION + "')")
-  public Map<String, Object> inventoryReportFormGenerator() {
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("report.inventory.generate", tipsRepository.getTipsContent("report.inventory.generate"));
-    map.put("report.inventory.componentinventorychart", tipsRepository.getTipsContent("report.inventory.componentinventorychart"));
-    map.put("venues", locationRepository.getLocationsByType(LocationType.VENUE));
-    map.put("model", map);
-    return map;
-  }
-
-  @RequestMapping(value = "/inventory/generate", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_REPORTING_INFORMATION + "')")
-  public Map<String, Object> generateInventoryReport(
-      HttpServletRequest request, HttpServletResponse response,
-      @RequestParam(value = "status") String status,
-      @RequestParam(value = "venues") String venues
-  ) {
-
-    List<String> componentStatuses = Arrays.asList(status.split("\\|"));
-    List<String> centerIds = Arrays.asList(venues.split("\\|"));
-
-    List<Long> centerIdsLong = new ArrayList<Long>();
-    centerIdsLong.add((long) -1);
-    for (String centerId : centerIds) {
-      if (centerId.trim().equals(""))
-        continue;
-      centerIdsLong.add(Long.parseLong(centerId));
-    }
-
-    Map<String, Object> data = null;
-
-    try {
-      data = componentRepository.generateInventorySummaryFast(componentStatuses, centerIdsLong);
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-    }
-    return data;
+    return reportGeneratorService.generateStockLevelsForLocationReport(locationId, inventoryStatus);
   }
 
   @RequestMapping(value = "/donations/form", method = RequestMethod.GET)

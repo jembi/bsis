@@ -1,6 +1,7 @@
 package helpers.builders;
 
 import static helpers.builders.LocationBuilder.aVenue;
+
 import helpers.persisters.AbstractEntityPersister;
 import helpers.persisters.ComponentPersister;
 import model.component.Component;
@@ -18,6 +19,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
   private ComponentType componentType;
   private InventoryStatus inventoryStatus = InventoryStatus.NOT_LABELLED;
   private Location location = aVenue().build();
+  private boolean isDeleted = false;
   
   public ComponentBuilder withId(Long id) {
     this.id = id;
@@ -49,6 +51,11 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     return this;
   }
 
+  public ComponentBuilder withIsDeleted(boolean isDeleted) {
+    this.isDeleted = isDeleted;
+    return this;
+  }
+
   @Override
   public Component build() {
     Component component = new Component();
@@ -58,6 +65,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     component.setComponentType(componentType);
     component.setLocation(location);
     component.setInventoryStatus(inventoryStatus);
+    component.setIsDeleted(isDeleted);
     return component;
   }
 
