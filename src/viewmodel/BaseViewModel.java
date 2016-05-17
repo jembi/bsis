@@ -1,6 +1,6 @@
 package viewmodel;
 
-public abstract class BasicViewModel {
+public abstract class BaseViewModel {
 
   private Long id;
 
@@ -28,7 +28,7 @@ public abstract class BasicViewModel {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    BasicViewModel other = (BasicViewModel) obj;
+    BaseViewModel other = (BaseViewModel) obj;
     if (id == null) {
       if (other.id != null)
         return false;

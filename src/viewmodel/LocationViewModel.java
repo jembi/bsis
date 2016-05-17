@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import model.location.Location;
 
-public class LocationViewModel extends BasicViewModel {
+public class LocationViewModel extends BaseViewModel {
 
   @JsonIgnore
   private Location location;
