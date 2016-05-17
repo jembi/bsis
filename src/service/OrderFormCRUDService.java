@@ -27,4 +27,17 @@ public class OrderFormCRUDService {
     orderFormRepository.save(entity);
     return entity;
   }
+  
+  public OrderForm updateOrderForm(OrderFormBackingForm backingForm) {
+    OrderForm updatedOrderForm = orderFormFactory.createEntity(backingForm);
+
+    OrderForm existingOrderForm = orderFormRepository.findById(backingForm.getId());
+    existingOrderForm.setOrderDate(updatedOrderForm.getOrderDate());
+    existingOrderForm.setStatus(updatedOrderForm.getStatus());
+    existingOrderForm.setType(updatedOrderForm.getType());
+    existingOrderForm.setDispatchedFrom(updatedOrderForm.getDispatchedFrom());
+    existingOrderForm.setDispatchedTo(updatedOrderForm.getDispatchedTo());
+    existingOrderForm.setItems(updatedOrderForm.getItems());
+    return orderFormRepository.update(existingOrderForm);
+  }
 }

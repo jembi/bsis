@@ -65,6 +65,11 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
     return this;
   }
 
+  public OrderFormBuilder withOrderFormItems(List<OrderFormItem> items) {
+    this.items = items;
+    return this;
+  }
+
   @Override
   public OrderForm build() {
     OrderForm orderForm = new OrderForm();

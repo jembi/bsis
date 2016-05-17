@@ -71,13 +71,13 @@ public class OrderFormFactoryTests {
     Location dispatchedTo = aDistributionSite().withName("LocTo").withId(2l).build();
     Date orderDate = new Date();
 
-    OrderFormItem expectedItem1 = anOrderItemForm().withBloodAbo("A").withBloodRh("+").build();
-    OrderFormItem expectedItem2 = anOrderItemForm().withBloodAbo("A").withBloodRh("+").build();
+    OrderFormItem expectedItem1 = anOrderItemForm().withId(1L).withBloodAbo("A").withBloodRh("+").build();
+    OrderFormItem expectedItem2 = anOrderItemForm().withId(2L).withBloodAbo("A").withBloodRh("+").build();
     OrderForm expectedEntity = anOrderForm().withDispatchedFrom(dispatchedFrom).withDispatchedTo(dispatchedTo)
         .withOrderDate(orderDate).withOrderFormItem(expectedItem1).withOrderFormItem(expectedItem2).build();
     
-    OrderFormItemBackingForm item1 = anOrderFormItemBackingForm().withBloodAbo("A").withBloodRh("+").build();
-    OrderFormItemBackingForm item2 = anOrderFormItemBackingForm().withBloodAbo("B").withBloodRh("+").build();
+    OrderFormItemBackingForm item1 = anOrderFormItemBackingForm().withId(1L).withBloodAbo("A").withBloodRh("+").build();
+    OrderFormItemBackingForm item2 = anOrderFormItemBackingForm().withId(2L).withBloodAbo("B").withBloodRh("+").build();
     OrderFormBackingForm backingForm = anOrderFormBackingForm().withDispatchedFrom(new LocationBackingForm(dispatchedFrom))
         .withDispatchedTo(new LocationBackingForm(dispatchedTo)).withOrderDate(orderDate)
         .withItem(item1).withItem(item2).build();

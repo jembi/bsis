@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -67,10 +68,24 @@ public class OrderFormController {
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_ORDER_FORM + "')")
   public ResponseEntity<Map<String, Object>> addOrderForm(@Valid @RequestBody OrderFormBackingForm backingForm) {
-    Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<>();
     OrderForm orderForm = orderFormCRUDService.createOrderForm(backingForm);
     map.put("orderForm", orderFormFactory.createViewModel(orderForm));
-    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
+    return new ResponseEntity<>(map, HttpStatus.CREATED);
+  }
+
+  @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+  @PreAuthorize("hasRole('" + PermissionConstants.EDIT_ORDER_FORM + "')")
+  public ResponseEntity<Map<String, Object>> updateOrderForm(@PathVariable("id") Long orderFormId,
+      @Valid @RequestBody OrderFormBackingForm backingForm) {
+    
+    // Use the id parameter from the path
+    backingForm.setId(orderFormId);
+
+    Map<String, Object> map = new HashMap<>();
+    OrderForm orderForm = orderFormCRUDService.updateOrderForm(backingForm);
+    map.put("orderForm", orderFormFactory.createViewModel(orderForm));
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
 }
