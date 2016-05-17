@@ -38,7 +38,7 @@ public class OrderFormItemFactoryTests {
     Assert.assertEquals("Entity is correct", "A", convertedEntity.getBloodAbo());
     Assert.assertEquals("Entity is correct", "+", convertedEntity.getBloodRh());
     Assert.assertEquals("Entity is correct", 2, convertedEntity.getNumberOfUnits());
-    Assert.assertEquals("Entity is correct", false, convertedEntity.isDeleted());
+    Assert.assertEquals("Entity is correct", false, convertedEntity.getIsDeleted());
     Assert.assertEquals("Entity is correct", componentType, convertedEntity.getComponentType());
   }
 

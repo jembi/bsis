@@ -71,11 +71,11 @@ public class OrderFormItem extends BaseModificationTrackerEntity {
     this.orderForm = orderForm;
   }
 
-  public boolean isDeleted() {
+  public boolean getIsDeleted() {
     return isDeleted;
   }
 
-  public void setDeleted(boolean isDeleted) {
+  public void setIsDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
 

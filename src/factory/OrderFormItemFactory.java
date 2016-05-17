@@ -23,7 +23,7 @@ public class OrderFormItemFactory {
     entity.setBloodRh(backingForm.getBloodRh());
     entity.setNumberOfUnits(backingForm.getNumberOfUnits());
     entity.setOrderForm(orderForm);
-    entity.setDeleted(backingForm.getIsDeleted());
+    entity.setIsDeleted(backingForm.getIsDeleted());
     return entity;
   }
 

@@ -104,9 +104,4 @@ public class OrderForm extends BaseModificationTrackerEntity {
   public void setItems(List<OrderFormItem> items) {
     this.items = items;
   }
-
-  public void setDeleted(boolean isDeleted) {
-    this.isDeleted = isDeleted;
-  }
-
 }
