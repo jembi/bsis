@@ -2,7 +2,6 @@ package helpers.builders;
 
 import static helpers.builders.ComponentTypeBuilder.aComponentType;
 import static helpers.builders.OrderFormBuilder.anOrderForm;
-
 import helpers.persisters.AbstractEntityPersister;
 import helpers.persisters.OrderFormItemPersister;
 import model.componenttype.ComponentType;

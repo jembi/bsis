@@ -1,11 +1,14 @@
 package helpers.builders;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import backingform.LocationBackingForm;
-import backingform.OrderFormBackingForm;
 import model.order.OrderStatus;
 import model.order.OrderType;
+import backingform.LocationBackingForm;
+import backingform.OrderFormBackingForm;
+import backingform.OrderFormItemBackingForm;
 
 public class OrderFormBackingFormBuilder {
 
@@ -15,6 +18,7 @@ public class OrderFormBackingFormBuilder {
   private LocationBackingForm dispatchedTo;
   private OrderStatus status = OrderStatus.CREATED;
   private OrderType type = OrderType.ISSUE;
+  private List<OrderFormItemBackingForm> items;
 
   public OrderFormBackingFormBuilder withId(Long id) {
     this.id = id;
@@ -45,6 +49,14 @@ public class OrderFormBackingFormBuilder {
     this.type = type;
     return this;
   }
+  
+  public OrderFormBackingFormBuilder withItem(OrderFormItemBackingForm item) {
+    if (items == null) {
+      items = new ArrayList<>();
+    }
+    items.add(item);
+    return this;
+  }
 
   public OrderFormBackingForm build() {
     OrderFormBackingForm backingForm = new OrderFormBackingForm();
@@ -54,6 +66,7 @@ public class OrderFormBackingFormBuilder {
     backingForm.setOrderDate(orderDate);
     backingForm.setStatus(status);
     backingForm.setType(type);
+    backingForm.setItems(items);
     return backingForm;
   }
 

@@ -1,10 +1,13 @@
 package helpers.builders;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import model.order.OrderStatus;
 import model.order.OrderType;
 import viewmodel.LocationViewModel;
+import viewmodel.OrderFormItemViewModel;
 import viewmodel.OrderFormViewModel;
 
 public class OrderFormViewModelBuilder extends AbstractBuilder<OrderFormViewModel> {
@@ -16,6 +19,7 @@ public class OrderFormViewModelBuilder extends AbstractBuilder<OrderFormViewMode
   private OrderStatus status = OrderStatus.CREATED;
   private OrderType type = OrderType.ISSUE;
   private boolean isDeleted = false;
+  private List<OrderFormItemViewModel> items = new ArrayList<>();
 
   public OrderFormViewModelBuilder withId(Long id) {
     this.id = id;
@@ -51,6 +55,11 @@ public class OrderFormViewModelBuilder extends AbstractBuilder<OrderFormViewMode
     this.isDeleted = isDeleted;
     return this;
   }
+  
+  public OrderFormViewModelBuilder withItem(OrderFormItemViewModel item) {
+    this.items.add(item);
+    return this;
+  }
 
   public OrderFormViewModel build() {
     OrderFormViewModel viewModel = new OrderFormViewModel();
@@ -61,6 +70,7 @@ public class OrderFormViewModelBuilder extends AbstractBuilder<OrderFormViewMode
     viewModel.setStatus(status);
     viewModel.setType(type);
     viewModel.setIsDeleted(isDeleted);
+    viewModel.setItems(items);
     return viewModel;
   }
 

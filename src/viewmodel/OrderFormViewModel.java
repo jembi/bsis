@@ -1,6 +1,8 @@
 package viewmodel;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import model.order.OrderStatus;
 import model.order.OrderType;
@@ -15,9 +17,11 @@ public class OrderFormViewModel {
 
   private LocationViewModel dispatchedTo;
 
-  private OrderStatus status;;
+  private OrderStatus status;
 
   private OrderType type;
+  
+  private List<OrderFormItemViewModel> items = new ArrayList<>();
 
   private boolean isDeleted;
 
@@ -69,6 +73,14 @@ public class OrderFormViewModel {
     this.type = type;
   }
 
+  public List<OrderFormItemViewModel> getItems() {
+    return items;
+  }
+
+  public void setItems(List<OrderFormItemViewModel> items) {
+    this.items = items;
+  }
+
   public boolean getIsDeleted() {
     return isDeleted;
   }
@@ -76,7 +88,4 @@ public class OrderFormViewModel {
   public void setIsDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
-
-
-
 }
