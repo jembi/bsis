@@ -32,4 +32,12 @@ public class LocationNamedQueryConstants {
       + "WHERE l.isUsageSite = :isUsageSite "
       + "AND l.isDeleted = :isDeleted "
       + "ORDER BY l.name ASC";
+
+  public static final String NAME_FIND_DISTRIBUTION_SITES = "Location.findDistributionSites";
+  public static final String QUERY_FIND_DISTRIBUTION_SITES =
+      "SELECT l "
+      + "FROM Location l "
+      + "WHERE l.isDistributionSite = :isDistributionSite "
+      + "AND l.isDeleted = :isDeleted "
+      + "ORDER BY l.name ASC";
 }

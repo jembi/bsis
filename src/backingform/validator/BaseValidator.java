@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import model.admin.FormField;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -17,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import model.admin.FormField;
 import repository.FormFieldRepository;
 
 /**
@@ -67,12 +66,21 @@ public abstract class BaseValidator<T> implements Validator {
   public abstract void validateForm(T form, Errors errors);
 
   /**
-   * Specifies the name of the form which is used to retrieve Form configuration and generate error
-   * keys
+   * Specifies the name of the form which is used to retrieve Form configuration
    *
    * @return String name of the form
    */
   public abstract String getFormName();
+
+  /**
+   * Specifies if the form has a base entity. This will be used when generating the error keys. By
+   * default is true.
+   *
+   * @return true, if successful
+   */
+  protected boolean formHasBaseEntity() {
+    return true;
+  }
 
   /**
    * Performs the common field checks which are: 1) checking that the required fields have been
@@ -115,9 +123,14 @@ public abstract class BaseValidator<T> implements Validator {
         Object fieldValue = properties.get(field);
         Integer maxLength = maxLengths.get(field);
         if (fieldValue != null && maxLength > 0
-            && (fieldValue instanceof String && ((String) fieldValue).length() > maxLength))
-          errors.rejectValue(getFormName() + "." + field, "fieldLength.error",
+            && (fieldValue instanceof String && ((String) fieldValue).length() > maxLength)) {
+          String fieldName = field;
+          if (formHasBaseEntity()) {
+            fieldName = getFormName() + "." + field;
+          }
+          errors.rejectValue(fieldName, "fieldLength.error",
               "Maximum length for this field is " + maxLength);
+        }
       }
     }
   }
@@ -141,8 +154,11 @@ public abstract class BaseValidator<T> implements Validator {
       if (properties.containsKey(requiredField)) {
         Object fieldValue = properties.get(requiredField);
         if (fieldValue == null || (fieldValue instanceof String && StringUtils.isBlank((String) fieldValue))) {
-          errors.rejectValue(getFormName() + "." + requiredField, "requiredField.error",
-              "This information is required");
+          String fieldName = requiredField;
+          if (formHasBaseEntity()) {
+            fieldName = getFormName() + "." + requiredField;
+          }
+          errors.rejectValue(fieldName, "requiredField.error", "This information is required");
         }
       }
     }
