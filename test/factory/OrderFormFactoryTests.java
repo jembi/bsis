@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import repository.LocationRepository;
@@ -72,19 +73,19 @@ public class OrderFormFactoryTests {
     Date orderDate = new Date();
 
     OrderFormItem expectedItem1 = anOrderItemForm().withId(1L).withBloodAbo("A").withBloodRh("+").build();
-    OrderFormItem expectedItem2 = anOrderItemForm().withId(2L).withBloodAbo("A").withBloodRh("+").build();
     OrderForm expectedEntity = anOrderForm().withDispatchedFrom(dispatchedFrom).withDispatchedTo(dispatchedTo)
-        .withOrderDate(orderDate).withOrderFormItem(expectedItem1).withOrderFormItem(expectedItem2).build();
+        .withOrderDate(orderDate).withOrderFormItem(expectedItem1).build();
     
     OrderFormItemBackingForm item1 = anOrderFormItemBackingForm().withId(1L).withBloodAbo("A").withBloodRh("+").build();
-    OrderFormItemBackingForm item2 = anOrderFormItemBackingForm().withId(2L).withBloodAbo("B").withBloodRh("+").build();
     OrderFormBackingForm backingForm = anOrderFormBackingForm().withDispatchedFrom(new LocationBackingForm(dispatchedFrom))
         .withDispatchedTo(new LocationBackingForm(dispatchedTo)).withOrderDate(orderDate)
-        .withItem(item1).withItem(item2).build();
+        .withItem(item1).build();
 
     // Setup mock
     when(locationRepository.getLocation(1l)).thenReturn(dispatchedFrom);
     when(locationRepository.getLocation(2l)).thenReturn(dispatchedTo);
+    when(orderFormItemFactory.createEntity(Mockito.any(OrderForm.class), Mockito.any(OrderFormItemBackingForm.class)))
+      .thenReturn(expectedItem1);
 
     OrderForm convertedEntity = orderFormFactory.createEntity(backingForm);
    
@@ -124,6 +125,9 @@ public class OrderFormFactoryTests {
     OrderFormItem item2 = anOrderItemForm().withBloodAbo("A").withBloodRh("+").build();
     OrderForm entity = anOrderForm().withDispatchedFrom(dispatchedFrom).withDispatchedTo(dispatchedTo)
         .withOrderDate(orderDate).withId(1L).withOrderFormItem(item1).withOrderFormItem(item2).build();
+    
+    when(orderFormItemFactory.createViewModel(item1)).thenReturn(expectedItem1);
+    when(orderFormItemFactory.createViewModel(item2)).thenReturn(expectedItem2);
 
     OrderFormViewModel convertedViewModel = orderFormFactory.createViewModel(entity);
 

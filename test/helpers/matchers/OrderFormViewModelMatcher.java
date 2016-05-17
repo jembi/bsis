@@ -29,7 +29,8 @@ public class OrderFormViewModelMatcher extends TypeSafeMatcher<OrderFormViewMode
     return Objects.equals(actual.getId(), expected.getId()) &&
         Objects.equals(actual.getOrderDate(), expected.getOrderDate()) &&
         Objects.equals(actual.getDispatchedFrom(), expected.getDispatchedFrom()) &&
-        Objects.equals(actual.getDispatchedTo(), expected.getDispatchedTo());
+        Objects.equals(actual.getDispatchedTo(), expected.getDispatchedTo()) &&
+        Objects.equals(actual.getItems(), expected.getItems());
   }
 
   public static OrderFormViewModelMatcher hasSameStateAsOrderFormViewModel(OrderFormViewModel expected) {

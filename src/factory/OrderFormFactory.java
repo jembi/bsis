@@ -2,6 +2,9 @@ package factory;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import model.location.Location;
 import model.order.OrderForm;
 import model.order.OrderFormItem;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import repository.LocationRepository;
 import viewmodel.LocationViewModel;
+import viewmodel.OrderFormItemViewModel;
 import viewmodel.OrderFormViewModel;
 import backingform.OrderFormBackingForm;
 import backingform.OrderFormItemBackingForm;
@@ -36,11 +40,13 @@ public class OrderFormFactory {
     entity.setOrderDate(backingForm.getOrderDate());
     entity.setStatus(backingForm.getStatus());
     entity.setType(backingForm.getType());
+    List<OrderFormItem> items = new ArrayList<>();
     if (backingForm.getItems() != null) {
       for (OrderFormItemBackingForm item : backingForm.getItems()) {
-        entity.getItems().add(orderFormItemFactory.createEntity(entity, item));
+        items.add(orderFormItemFactory.createEntity(entity, item));
       }
     }
+    entity.setItems(items);
     return entity;
   }
 
@@ -53,9 +59,11 @@ public class OrderFormFactory {
     viewModel.setStatus(entity.getStatus());
     viewModel.setType(entity.getType());
     viewModel.setIsDeleted(entity.getIsDeleted());
+    List<OrderFormItemViewModel> items = new ArrayList<>();
     for (OrderFormItem item : entity.getItems()) {
-      viewModel.getItems().add(orderFormItemFactory.createViewModel(item));
+      items.add(orderFormItemFactory.createViewModel(item));
     }
+    viewModel.setItems(items);
     return viewModel;
   }
 
