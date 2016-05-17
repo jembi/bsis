@@ -1,6 +1,7 @@
 package backingform.validator;
 
 import static helpers.builders.LocationBuilder.aDistributionSite;
+import static helpers.builders.LocationBuilder.aUsageSite;
 import static helpers.builders.LocationBuilder.aVenue;
 import static helpers.builders.OrderFormBackingFormBuilder.anOrderFormBackingForm;
 import static org.mockito.Mockito.when;
@@ -49,7 +50,7 @@ public class OrderFormBackingFormValidatorTest {
   }
 
   @Test
-  public void testValidateOrderFormBackingForm_noErrors() throws Exception {
+  public void testValid_noErrors() throws Exception {
     // set up data
     OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
 
@@ -67,7 +68,7 @@ public class OrderFormBackingFormValidatorTest {
   }
 
   @Test
-  public void testValidateOrderFormBackingForm_dispatchedFromAndToRequiredError() throws Exception {
+  public void testValidateDispatchedFromAndTo_getRequiredError() throws Exception {
     // set up data
     OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
     backingForm.setDispatchedFrom(null);
@@ -87,7 +88,7 @@ public class OrderFormBackingFormValidatorTest {
 
   @SuppressWarnings("unchecked")
   @Test
-  public void testValidateOrderFormBackingForm_dispatchedFromAndToInvalidError() throws Exception {
+  public void testValidateDispatchedFromAndToId_getInvalidError() throws Exception {
     // set up data
     OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
 
@@ -106,13 +107,13 @@ public class OrderFormBackingFormValidatorTest {
   }
 
   @Test
-  public void testValidateOrderFormBackingForm_dispatchedFromAndToInvalidTypeError() throws Exception {
+  public void testValidateDispatchedFromAndToCantBeVenue_getInvalidLocationTypeError() throws Exception {
     // set up data
     OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
 
     // dispatchedFrom and to can't be a venue
     Location venue1 = aVenue().withId(1l).build();
-    Location venue2 = aVenue().withId(1l).build();
+    Location venue2 = aVenue().withId(2l).build();
 
     // set up mocks
     when(locationRepository.getLocation(1l)).thenReturn(venue1);
@@ -126,6 +127,48 @@ public class OrderFormBackingFormValidatorTest {
     // check asserts
     Assert.assertEquals("dispatchedFrom must be a distribution site", errors.getFieldErrors().get(0).getDefaultMessage());
     Assert.assertEquals("dispatchedTo must be a distribution or usage site", errors.getFieldErrors().get(1).getDefaultMessage());
+  }
+
+  @Test
+  public void testValidateDispatchedToCanBeUsageSite_noErrors() throws Exception {
+    // set up data
+    OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
+
+    // dispatchedTo can be a usageSite
+    Location usageSite = aDistributionSite().withId(2l).build();
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(backingForm.getDispatchedFrom().getLocation());
+    when(locationRepository.getLocation(2l)).thenReturn(usageSite);
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("No errors", 0, errors.getErrorCount());
+  }
+  
+  @Test
+  public void testValidateDispatchedFromCantBeUsageSite_getDispatchedFromError() throws Exception {
+    // set up data
+    OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
+
+    // dispatchedTo can be a usageSite
+    Location usageSite = aUsageSite().withId(1l).build();
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(usageSite);
+    when(locationRepository.getLocation(2l)).thenReturn(backingForm.getDispatchedTo().getLocation());
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("dispatchedFrom must be a distribution site", errors.getFieldErrors().get(0).getDefaultMessage());
   }
 
   @Test

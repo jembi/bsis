@@ -35,4 +35,9 @@ public class OrderFormRoundTripTests extends ContextDependentTestSuite {
     anOrderForm().withOrderType(null).buildAndPersist(entityManager);
   }
 
+  @Test(expected = PersistenceException.class)
+  public void testPersistOrderFormWithNoStatus_shouldThrow() {
+    anOrderForm().withOrderStatus(null).buildAndPersist(entityManager);
+  }
+
 }
