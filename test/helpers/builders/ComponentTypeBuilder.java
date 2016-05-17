@@ -6,7 +6,7 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
 
   private Long id;
   private String componentTypeName;
-  private Boolean isDeleted;
+  private Boolean isDeleted = false;
   private int expiresAfter;
 
   public ComponentTypeBuilder withId(Long id) {
