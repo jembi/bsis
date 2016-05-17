@@ -24,7 +24,9 @@ import repository.LocationNamedQueryConstants;
   @NamedQuery(name = LocationNamedQueryConstants.NAME_FIND_PROCESSING_SITES,
       query = LocationNamedQueryConstants.QUERY_FIND_PROCESSING_SITES),
   @NamedQuery(name = LocationNamedQueryConstants.NAME_FIND_USAGE_SITES,
-      query = LocationNamedQueryConstants.QUERY_FIND_USAGE_SITES)
+      query = LocationNamedQueryConstants.QUERY_FIND_USAGE_SITES),
+  @NamedQuery(name = LocationNamedQueryConstants.NAME_FIND_DISTRIBUTION_SITES,
+      query = LocationNamedQueryConstants.QUERY_FIND_DISTRIBUTION_SITES)
 })
 @Entity
 @Audited

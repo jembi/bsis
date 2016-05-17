@@ -3,11 +3,14 @@ package backingform;
 
 import javax.validation.Valid;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import model.location.Location;
 
 public class LocationBackingForm {
 
   @Valid
+  @JsonIgnore
   private Location location;
 
   public LocationBackingForm() {

@@ -12,5 +12,6 @@
 	<include file="./liquibase/updates/676-delete-unused-endpoints.xml" />
 	<include file="./liquibase/updates/794-record-receipt-of-initial-components.xml" />
 	<include file="./liquibase/updates/875-add-components-to-inventory.xml" />
+	<include file="./liquibase/updates/870-add-new-order.xml" />
 
 </databaseChangeLog>

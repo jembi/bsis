@@ -75,6 +75,12 @@ public class PermissionConstants {
   public static final String EDIT_TEST_BATCH = "Edit Test Batch";
   public static final String VOID_TEST_BATCH = "Void Test Batch";
 
+  // Order Form Permissions
+  public static final String ADD_ORDER_FORM = "Add Order Form";
+  public static final String VIEW_ORDER_FORM = "View Order Form";
+  public static final String EDIT_ORDER_FORM = "Edit Order Form";
+  public static final String VOID_ORDER_FORM = "Void Order Form";
+
   // Blood Bank Staff Permissions
   public static final String BLOOD_CROSS_MATCH_CHECK = "Blood Cross Match Check";
   public static final String ISSUE_COMPONENT = "Issue Component";
