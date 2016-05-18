@@ -10,7 +10,6 @@ import model.address.ContactMethodType;
 import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.idtype.IdType;
-import model.location.Location;
 import model.preferredlanguage.PreferredLanguage;
 import model.user.User;
 
@@ -136,8 +135,8 @@ public class DonorViewModel {
     return user.getUsername();
   }
 
-  public Location getVenue() {
-    return donor.getVenue();
+  public LocationViewModel getVenue() {
+    return new LocationViewModel(donor.getVenue());
   }
 
   public String getDateOfLastDonation() {

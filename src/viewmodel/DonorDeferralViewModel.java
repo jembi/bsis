@@ -4,7 +4,6 @@ import java.util.Map;
 
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
-import model.location.Location;
 import utils.CustomDateFormatter;
 import model.user.User;
 
@@ -71,8 +70,8 @@ public class DonorDeferralViewModel {
     return donorDeferral.getDeferredDonor().getDonorNumber();
   }
 
-  public Location getVenue() {
-    return donorDeferral.getVenue();
+  public LocationViewModel getVenue() {
+    return new LocationViewModel(donorDeferral.getVenue());
   }
   
   // FIXME: The name of this method is misleading, but it is made to match the backing form.

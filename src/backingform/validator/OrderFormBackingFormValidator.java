@@ -24,7 +24,7 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
     } else {
       try {
         Location dispatchedFrom = locationRepository.getLocation(form.getDispatchedFrom().getId());
-        if (!dispatchedFrom.isDistributionSite()) {
+        if (!dispatchedFrom.getIsDistributionSite()) {
           errors.rejectValue("dispatchedFrom", "invalid", "dispatchedFrom must be a distribution site");
         }
       } catch (NoResultException e) {
@@ -38,7 +38,7 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
     } else {
       try {
         Location dispatchedTo = locationRepository.getLocation(form.getDispatchedTo().getId());
-        if (!dispatchedTo.isDistributionSite() && !dispatchedTo.getIsUsageSite()) {
+        if (!dispatchedTo.getIsDistributionSite() && !dispatchedTo.getIsUsageSite()) {
           errors.rejectValue("dispatchedTo", "invalid", "dispatchedTo must be a distribution or usage site");
         }
       } catch (NoResultException e) {

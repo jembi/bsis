@@ -37,17 +37,17 @@ public class Location extends BaseEntity {
   @NotBlank
   private String name;
 
-  private Boolean isUsageSite;
+  private Boolean isUsageSite = Boolean.FALSE;
 
-  private Boolean isMobileSite;
+  private Boolean isMobileSite = Boolean.FALSE;
 
-  private Boolean isVenue;
+  private Boolean isVenue = Boolean.FALSE;
   
   private boolean isProcessingSite;
   
   private boolean isDistributionSite;
 
-  private Boolean isDeleted;
+  private Boolean isDeleted = Boolean.FALSE;
 
   @Lob
   private String notes;
@@ -112,19 +112,19 @@ public class Location extends BaseEntity {
     this.isVenue = isVenue;
   }
 
-  public boolean isProcessingSite() {
+  public boolean getIsProcessingSite() {
     return isProcessingSite;
   }
 
-  public void setProcessingSite(boolean isProcessingSite) {
+  public void setIsProcessingSite(boolean isProcessingSite) {
     this.isProcessingSite = isProcessingSite;
   }
 
-  public boolean isDistributionSite() {
+  public boolean getIsDistributionSite() {
     return isDistributionSite;
   }
 
-  public void setDistributionSite(boolean isDistributionSite) {
+  public void setIsDistributionSite(boolean isDistributionSite) {
     this.isDistributionSite = isDistributionSite;
   }
 }
