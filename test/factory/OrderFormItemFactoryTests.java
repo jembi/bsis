@@ -31,7 +31,7 @@ public class OrderFormItemFactoryTests {
   public void testConvertOrderFormItemBackingFormToOrderFormItemEntity_shouldReturnExpectedEntity() {
     ComponentType componentType = ComponentTypeBuilder.aComponentType().build();
     OrderFormItemBackingForm backingForm = anOrderFormItemBackingForm().withId(1L)
-        .withBloodAbo("A").withBloodRh("+").withNumberOfUnits(2)
+        .withBloodGroup("A+").withNumberOfUnits(2)
         .withComponentType(componentType).build();
     
     OrderForm orderForm = anOrderForm().build();
@@ -56,8 +56,7 @@ public class OrderFormItemFactoryTests {
 
     Assert.assertNotNull("ViewModel was created", convertedViewModel);
     Assert.assertEquals("ViewModel is correct", Long.valueOf(1), convertedViewModel.getId());
-    Assert.assertEquals("ViewModel is correct", "A", convertedViewModel.getBloodAbo());
-    Assert.assertEquals("ViewModel is correct", "+", convertedViewModel.getBloodRh());
+    Assert.assertEquals("ViewModel is correct", "A+", convertedViewModel.getBloodGroup());
     Assert.assertEquals("ViewModel is correct", 2, convertedViewModel.getNumberOfUnits());
   }
 }

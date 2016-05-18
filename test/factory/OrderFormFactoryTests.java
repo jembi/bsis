@@ -76,7 +76,7 @@ public class OrderFormFactoryTests {
     OrderForm expectedEntity = anOrderForm().withDispatchedFrom(dispatchedFrom).withDispatchedTo(dispatchedTo)
         .withOrderDate(orderDate).withOrderFormItem(expectedItem1).build();
     
-    OrderFormItemBackingForm item1 = anOrderFormItemBackingForm().withId(1L).withBloodAbo("A").withBloodRh("+").build();
+    OrderFormItemBackingForm item1 = anOrderFormItemBackingForm().withId(1L).withBloodGroup("A+").build();
     OrderFormBackingForm backingForm = anOrderFormBackingForm().withDispatchedFrom(new LocationBackingForm(dispatchedFrom))
         .withDispatchedTo(new LocationBackingForm(dispatchedTo)).withOrderDate(orderDate)
         .withItem(item1).build();
@@ -115,8 +115,8 @@ public class OrderFormFactoryTests {
     Location dispatchedTo = aDistributionSite().withName("LocTo").build();
     Date orderDate = new Date();
 
-    OrderFormItemViewModel expectedItem1 = anOrderFormItemViewModel().withBloodAbo("A").withBloodRh("+").build();
-    OrderFormItemViewModel expectedItem2 = anOrderFormItemViewModel().withBloodAbo("B").withBloodRh("+").build();
+    OrderFormItemViewModel expectedItem1 = anOrderFormItemViewModel().withBloodGroup("A+").build();
+    OrderFormItemViewModel expectedItem2 = anOrderFormItemViewModel().withBloodGroup("B+").build();
     OrderFormViewModel expectedViewModel = anOrderFormViewModel().withDispatchedFrom(new LocationViewModel(dispatchedFrom))
         .withDispatchedTo(new LocationViewModel(dispatchedTo)).withOrderDate(orderDate).withId(1L)
         .withItem(expectedItem1).withItem(expectedItem2).build();

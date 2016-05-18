@@ -8,8 +8,7 @@ public class OrderFormItemViewModelBuilder extends AbstractBuilder<OrderFormItem
 
   private Long id;
   private ComponentTypeViewModel componentType;
-  private String bloodAbo;
-  private String bloodRh;
+  private String bloodGroup;
   private int numberOfUnits;
 
   public OrderFormItemViewModelBuilder withId(Long id) {
@@ -17,13 +16,8 @@ public class OrderFormItemViewModelBuilder extends AbstractBuilder<OrderFormItem
     return this;
   }
 
-  public OrderFormItemViewModelBuilder withBloodAbo(String bloodAbo) {
-    this.bloodAbo = bloodAbo;
-    return this;
-  }
-  
-  public OrderFormItemViewModelBuilder withBloodRh(String bloodRh) {
-    this.bloodRh = bloodRh;
+  public OrderFormItemViewModelBuilder withBloodGroup(String bloodGroup) {
+    this.bloodGroup = bloodGroup;
     return this;
   }
 
@@ -41,8 +35,7 @@ public class OrderFormItemViewModelBuilder extends AbstractBuilder<OrderFormItem
     OrderFormItemViewModel viewModel = new OrderFormItemViewModel();
     viewModel.setId(id);
     viewModel.setComponentType(componentType);
-    viewModel.setBloodAbo(bloodAbo);
-    viewModel.setBloodRh(bloodRh);
+    viewModel.setBloodGroup(bloodGroup);
     viewModel.setNumberOfUnits(numberOfUnits);
     return viewModel;
   }

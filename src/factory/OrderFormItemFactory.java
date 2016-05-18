@@ -2,6 +2,7 @@ package factory;
 
 import model.order.OrderForm;
 import model.order.OrderFormItem;
+import model.util.BloodGroup;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,19 +23,18 @@ public class OrderFormItemFactory {
     OrderFormItem entity = new OrderFormItem();
     entity.setId(backingForm.getId());
     entity.setComponentType(backingForm.getComponentType().getComponentType());
-    entity.setBloodAbo(backingForm.getBloodAbo());
-    entity.setBloodRh(backingForm.getBloodRh());
+    BloodGroup bloodGroup = new BloodGroup(backingForm.getBloodGroup());
+    entity.setBloodAbo(bloodGroup.getBloodAbo());
+    entity.setBloodRh(bloodGroup.getBloodRh());
     entity.setNumberOfUnits(backingForm.getNumberOfUnits());
     entity.setOrderForm(orderForm);
-    entity.setIsDeleted(backingForm.getIsDeleted());
     return entity;
   }
 
   public OrderFormItemViewModel createViewModel(OrderFormItem entity) {
     OrderFormItemViewModel viewModel = new OrderFormItemViewModel();
     viewModel.setId(entity.getId());
-    viewModel.setBloodAbo(entity.getBloodAbo());
-    viewModel.setBloodRh(entity.getBloodRh());
+    viewModel.setBloodGroup(entity.getBloodAbo()+entity.getBloodRh());
     viewModel.setComponentType(componentTypeFactory.createViewModel(entity.getComponentType()));
     viewModel.setNumberOfUnits(entity.getNumberOfUnits());
     return viewModel;

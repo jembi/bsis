@@ -7,13 +7,9 @@ public class OrderFormItemBackingForm {
   
   private ComponentTypeBackingForm componentType;
   
-  private String bloodAbo;
-  
-  private String bloodRh;
+  private String bloodGroup;
   
   private int numberOfUnits;
-  
-  private boolean isDeleted;
 
   public Long getId() {
     return id;
@@ -31,20 +27,12 @@ public class OrderFormItemBackingForm {
     this.componentType = componentType;
   }
 
-  public String getBloodAbo() {
-    return bloodAbo;
+  public String getBloodGroup() {
+    return bloodGroup;
   }
 
-  public void setBloodAbo(String bloodAbo) {
-    this.bloodAbo = bloodAbo;
-  }
-
-  public String getBloodRh() {
-    return bloodRh;
-  }
-
-  public void setBloodRh(String bloodRh) {
-    this.bloodRh = bloodRh;
+  public void setBloodGroup(String bloodGroup) {
+    this.bloodGroup = bloodGroup;
   }
 
   public int getNumberOfUnits() {
@@ -53,13 +41,5 @@ public class OrderFormItemBackingForm {
 
   public void setNumberOfUnits(int numberOfUnits) {
     this.numberOfUnits = numberOfUnits;
-  }
-
-  public boolean getIsDeleted() {
-    return isDeleted;
-  }
-
-  public void setIsDeleted(boolean isDeleted) {
-    this.isDeleted = isDeleted;
   }
 }

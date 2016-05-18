@@ -8,23 +8,16 @@ public class OrderFormItemBackingFormBuilder {
 
   private Long id;
   private ComponentTypeBackingForm componentType;
-  private String bloodAbo;
-  private String bloodRh;
+  private String bloodGroup;
   private int numberOfUnits;
-  private boolean isDeleted = false;
 
   public OrderFormItemBackingFormBuilder withId(Long id) {
     this.id = id;
     return this;
   }
 
-  public OrderFormItemBackingFormBuilder withBloodAbo(String bloodAbo) {
-    this.bloodAbo = bloodAbo;
-    return this;
-  }
-  
-  public OrderFormItemBackingFormBuilder withBloodRh(String bloodRh) {
-    this.bloodRh = bloodRh;
+  public OrderFormItemBackingFormBuilder withBloodGroup(String bloodGroup) {
+    this.bloodGroup = bloodGroup;
     return this;
   }
 
@@ -43,20 +36,13 @@ public class OrderFormItemBackingFormBuilder {
     this.componentType.setComponentType(componentType);
     return this;
   }
-  
-  public OrderFormItemBackingFormBuilder thatIsDeleted() {
-    this.isDeleted = true;
-    return this;
-  }
 
   public OrderFormItemBackingForm build() {
     OrderFormItemBackingForm backingForm = new OrderFormItemBackingForm();
     backingForm.setId(id);
     backingForm.setComponentType(componentType);
-    backingForm.setBloodAbo(bloodAbo);
-    backingForm.setBloodRh(bloodRh);
+    backingForm.setBloodGroup(bloodGroup);
     backingForm.setNumberOfUnits(numberOfUnits);
-    backingForm.setIsDeleted(isDeleted);
     return backingForm;
   }
 

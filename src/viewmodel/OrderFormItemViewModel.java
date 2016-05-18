@@ -7,9 +7,7 @@ public class OrderFormItemViewModel {
   
   private ComponentTypeViewModel componentType;
   
-  private String bloodAbo;
-  
-  private String bloodRh;
+  private String bloodGroup;
   
   private int numberOfUnits;
   
@@ -29,20 +27,12 @@ public class OrderFormItemViewModel {
     this.componentType = componentType;
   }
 
-  public String getBloodAbo() {
-    return bloodAbo;
+  public String getBloodGroup() {
+    return bloodGroup;
   }
 
-  public void setBloodAbo(String bloodAbo) {
-    this.bloodAbo = bloodAbo;
-  }
-
-  public String getBloodRh() {
-    return bloodRh;
-  }
-
-  public void setBloodRh(String bloodRh) {
-    this.bloodRh = bloodRh;
+  public void setBloodGroup(String bloodGroup) {
+    this.bloodGroup = bloodGroup;
   }
 
   public int getNumberOfUnits() {
