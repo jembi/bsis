@@ -58,7 +58,6 @@ public class OrderFormFactory {
     viewModel.setOrderDate(entity.getOrderDate());
     viewModel.setStatus(entity.getStatus());
     viewModel.setType(entity.getType());
-    viewModel.setIsDeleted(entity.getIsDeleted());
     List<OrderFormItemViewModel> items = new ArrayList<>();
     for (OrderFormItem item : entity.getItems()) {
       items.add(orderFormItemFactory.createViewModel(item));

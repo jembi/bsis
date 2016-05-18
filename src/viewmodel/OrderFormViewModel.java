@@ -23,8 +23,6 @@ public class OrderFormViewModel {
   
   private List<OrderFormItemViewModel> items = new ArrayList<>();
 
-  private boolean isDeleted;
-
   public Date getOrderDate() {
     return orderDate;
   }
@@ -79,13 +77,5 @@ public class OrderFormViewModel {
 
   public void setItems(List<OrderFormItemViewModel> items) {
     this.items = items;
-  }
-
-  public boolean getIsDeleted() {
-    return isDeleted;
-  }
-
-  public void setIsDeleted(boolean isDeleted) {
-    this.isDeleted = isDeleted;
   }
 }
