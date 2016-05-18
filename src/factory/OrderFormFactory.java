@@ -35,6 +35,7 @@ public class OrderFormFactory {
     OrderForm entity = new OrderForm();
     Location from = locationRepository.getLocation(backingForm.getDispatchedFrom().getId());
     Location to = locationRepository.getLocation(backingForm.getDispatchedTo().getId());
+    entity.setId(backingForm.getId());
     entity.setDispatchedFrom(from);
     entity.setDispatchedTo(to);
     entity.setOrderDate(backingForm.getOrderDate());
