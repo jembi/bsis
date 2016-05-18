@@ -3,9 +3,9 @@ package factory;
 import model.order.OrderForm;
 import model.order.OrderFormItem;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import viewmodel.ComponentTypeViewModel;
 import viewmodel.OrderFormItemViewModel;
 import backingform.OrderFormItemBackingForm;
 
@@ -14,6 +14,9 @@ import backingform.OrderFormItemBackingForm;
  */
 @Service
 public class OrderFormItemFactory {
+  
+  @Autowired
+  ComponentTypeFactory componentTypeFactory;
 
   public OrderFormItem createEntity(OrderForm orderForm, OrderFormItemBackingForm backingForm) {
     OrderFormItem entity = new OrderFormItem();
@@ -32,7 +35,7 @@ public class OrderFormItemFactory {
     viewModel.setId(entity.getId());
     viewModel.setBloodAbo(entity.getBloodAbo());
     viewModel.setBloodRh(entity.getBloodRh());
-    viewModel.setComponentType(new ComponentTypeViewModel(entity.getComponentType()));
+    viewModel.setComponentType(componentTypeFactory.createViewModel(entity.getComponentType()));
     viewModel.setNumberOfUnits(entity.getNumberOfUnits());
     return viewModel;
   }

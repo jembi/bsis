@@ -20,6 +20,7 @@ public class PackTypeViewModel {
 
   public ComponentTypeViewModel getComponentType() {
     if (packType.getComponentType() != null) {
+      // FIXME: use factory
       return new ComponentTypeViewModel(packType.getComponentType());
     } else {
       return null;

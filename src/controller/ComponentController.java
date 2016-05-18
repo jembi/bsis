@@ -10,6 +10,13 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import model.component.Component;
+import model.component.ComponentStatus;
+import model.componentmovement.ComponentStatusChange;
+import model.componentmovement.ComponentStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeReasonCategory;
+import model.componenttype.ComponentTypeCombination;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,15 +28,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import backingform.RecordComponentBackingForm;
-import factory.ComponentViewModelFactory;
-import model.component.Component;
-import model.component.ComponentStatus;
-import model.componentmovement.ComponentStatusChange;
-import model.componentmovement.ComponentStatusChangeReason;
-import model.componentmovement.ComponentStatusChangeReasonCategory;
-import model.componenttype.ComponentType;
-import model.componenttype.ComponentTypeCombination;
 import repository.ComponentRepository;
 import repository.ComponentStatusChangeReasonRepository;
 import repository.ComponentTypeRepository;
@@ -38,8 +36,10 @@ import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 import viewmodel.ComponentStatusChangeViewModel;
 import viewmodel.ComponentTypeCombinationViewModel;
-import viewmodel.ComponentTypeViewModel;
 import viewmodel.ComponentViewModel;
+import backingform.RecordComponentBackingForm;
+import factory.ComponentTypeFactory;
+import factory.ComponentViewModelFactory;
 
 @RestController
 @RequestMapping("components")
@@ -59,6 +59,9 @@ public class ComponentController {
 
   @Autowired
   private ComponentViewModelFactory componentViewModelFactory;
+  
+  @Autowired
+  private ComponentTypeFactory componentTypeFactory;
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
@@ -238,7 +241,7 @@ public class ComponentController {
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("componentTypes", getComponentTypeViewModels(componentTypeRepository.getAllComponentTypes()));
+    m.put("componentTypes", componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes()));
   }
 
   private static List<ComponentStatusChangeViewModel> getComponentStatusChangeViewModels(
@@ -251,16 +254,6 @@ public class ComponentController {
       componentStatusChangeViewModels.add(new ComponentStatusChangeViewModel(componentStatusChange));
     }
     return componentStatusChangeViewModels;
-  }
-
-  private static List<ComponentTypeViewModel> getComponentTypeViewModels(List<ComponentType> componentTypes) {
-    if (componentTypes == null)
-      return Arrays.asList(new ComponentTypeViewModel[0]);
-    List<ComponentTypeViewModel> componentTypeViewModels = new ArrayList<ComponentTypeViewModel>();
-    for (ComponentType componentType : componentTypes) {
-      componentTypeViewModels.add(new ComponentTypeViewModel(componentType));
-    }
-    return componentTypeViewModels;
   }
 
   private List<ComponentStatus> statusStringToComponentStatus(List<String> statusList) {

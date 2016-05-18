@@ -36,11 +36,6 @@ public class OrderFormItemViewModelBuilder extends AbstractBuilder<OrderFormItem
     this.componentType = componentType;
     return this;
   }
-  
-  public OrderFormItemViewModelBuilder withComponentType(ComponentType componentType) {
-    this.componentType = new ComponentTypeViewModel(componentType);
-    return this;
-  }
 
   public OrderFormItemViewModel build() {
     OrderFormItemViewModel viewModel = new OrderFormItemViewModel();

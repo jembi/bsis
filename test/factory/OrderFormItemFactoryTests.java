@@ -12,6 +12,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import viewmodel.OrderFormItemViewModel;
@@ -22,6 +23,9 @@ public class OrderFormItemFactoryTests {
 
   @InjectMocks
   private OrderFormItemFactory orderFormItemFactory;
+  
+  @Mock
+  private ComponentTypeFactory componentTypeFactory;
 
   @Test
   public void testConvertOrderFormItemBackingFormToOrderFormItemEntity_shouldReturnExpectedEntity() {
@@ -55,6 +59,5 @@ public class OrderFormItemFactoryTests {
     Assert.assertEquals("ViewModel is correct", "A", convertedViewModel.getBloodAbo());
     Assert.assertEquals("ViewModel is correct", "+", convertedViewModel.getBloodRh());
     Assert.assertEquals("ViewModel is correct", 2, convertedViewModel.getNumberOfUnits());
-    Assert.assertEquals("ViewModel is correct", componentType, convertedViewModel.getComponentType().getComponentType());
   }
 }
