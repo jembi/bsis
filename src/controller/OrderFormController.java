@@ -6,6 +6,9 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import model.location.Location;
+import model.order.OrderForm;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +21,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import backingform.OrderFormBackingForm;
-import backingform.validator.OrderFormBackingFormValidator;
-import factory.LocationViewModelFactory;
-import factory.OrderFormFactory;
-import model.location.Location;
-import model.order.OrderForm;
+import repository.ComponentTypeRepository;
 import repository.LocationRepository;
 import repository.OrderFormRepository;
 import service.OrderFormCRUDService;
 import utils.PermissionConstants;
+import backingform.OrderFormBackingForm;
+import backingform.OrderFormItemBackingForm;
+import backingform.validator.OrderFormBackingFormValidator;
+import factory.ComponentTypeFactory;
+import factory.LocationViewModelFactory;
+import factory.OrderFormFactory;
 
 @RestController
 @RequestMapping("orderForms")
@@ -46,10 +50,16 @@ public class OrderFormController {
   private LocationRepository locationRepository;
   
   @Autowired
+  private ComponentTypeRepository componentTypeRepository;
+  
+  @Autowired
   private LocationViewModelFactory locationViewModelFactory;
   
   @Autowired
   private OrderFormRepository orderFormRepository;
+  
+  @Autowired
+  private ComponentTypeFactory componentTypeFactory;
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
@@ -66,6 +76,15 @@ public class OrderFormController {
     map.put("orderForm", new OrderFormBackingForm());
     map.put("usageSites", locationViewModelFactory.createLocationViewModels(usageSites));
     map.put("distributionSites", locationViewModelFactory.createLocationViewModels(distributionSites));
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+  
+  @RequestMapping(method = RequestMethod.GET, value = "/items/form")
+  @PreAuthorize("hasRole('" + PermissionConstants.ADD_ORDER_FORM + "')")
+  public ResponseEntity<Map<String, Object>> getOrderFormItemForm() {
+    Map<String, Object> map = new HashMap<>();
+    map.put("orderFormItem", new OrderFormItemBackingForm());
+    map.put("componentTypes", componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes()));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
