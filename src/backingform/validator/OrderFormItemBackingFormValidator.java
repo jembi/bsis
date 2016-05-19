@@ -30,7 +30,7 @@ public class OrderFormItemBackingFormValidator extends BaseValidator<OrderFormIt
     
     // check bloodGroup;
     if (StringUtils.isBlank(form.getBloodGroup())) {
-      errors.rejectValue("items.bloodGroup", "required", "bloodGroup is required");
+      errors.rejectValue("bloodGroup", "required", "bloodGroup is required");
     } else {
       BloodGroup bloodGroup = new BloodGroup(form.getBloodGroup());
       if (StringUtils.isBlank(bloodGroup.getBloodAbo()) || StringUtils.isBlank(bloodGroup.getBloodRh())) {
@@ -40,7 +40,7 @@ public class OrderFormItemBackingFormValidator extends BaseValidator<OrderFormIt
     
     // numberOfUnits;
     if (form.getNumberOfUnits() < 0) {
-      errors.rejectValue("numberOfUnits", "invalid", "numberOfUnits should be greater than 0");
+      errors.rejectValue("numberOfUnits", "invalid", "numberOfUnits should be greater than or equal to 0");
     }
   }
 
