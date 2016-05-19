@@ -178,6 +178,6 @@ public class OrderFormItemBackingFormValidatorTest {
     orderFormItemBackingFormValidator.validate(backingForm, errors);
 
     // check asserts
-    Assert.assertEquals("numberOfUnits should be greater than 0", errors.getFieldErrors().get(0).getDefaultMessage());
+    Assert.assertEquals("numberOfUnits should be greater than or equal to 0", errors.getFieldErrors().get(0).getDefaultMessage());
   }
 }
