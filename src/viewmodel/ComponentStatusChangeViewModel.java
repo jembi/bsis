@@ -10,7 +10,6 @@ import model.component.ComponentStatus;
 import model.componentmovement.ComponentStatusChange;
 import model.componentmovement.ComponentStatusChangeReason;
 import model.componentmovement.ComponentStatusChangeType;
-import model.componenttype.ComponentType;
 import model.user.User;
 
 public class ComponentStatusChangeViewModel {

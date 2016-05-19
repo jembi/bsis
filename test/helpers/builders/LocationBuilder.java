@@ -67,9 +67,9 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
     location.setNotes(notes);
     location.setIsVenue(venue);
     location.setIsUsageSite(usageSite);
-    location.setProcessingSite(processingSite);
+    location.setIsProcessingSite(processingSite);
     location.setIsMobileSite(mobileSite);
-    location.setDistributionSite(distributionSite);
+    location.setIsDistributionSite(distributionSite);
     location.setIsDeleted(deleted);
     return location;
   }

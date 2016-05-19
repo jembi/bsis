@@ -3,7 +3,6 @@ package viewmodel;
 import java.util.List;
 
 import model.component.Component;
-import model.location.Location;
 import model.modificationtracker.RowModificationTracker;
 import model.request.Request;
 import model.requesttype.RequestType;
@@ -78,8 +77,8 @@ public class RequestViewModel {
     return request.getComponentType().getComponentTypeNameShort();
   }
 
-  public Location getRequestSite() {
-    return request.getRequestSite();
+  public LocationViewModel getRequestSite() {
+    return new LocationViewModel(request.getRequestSite());
   }
 
   public Boolean getIsDeleted() {

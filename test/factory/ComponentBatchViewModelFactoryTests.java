@@ -33,6 +33,7 @@ import viewmodel.ComponentBatchBasicViewModel;
 import viewmodel.ComponentBatchViewModel;
 import viewmodel.ComponentViewModel;
 import viewmodel.DonationBatchViewModel;
+import viewmodel.LocationViewModel;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ComponentBatchViewModelFactoryTests {
@@ -101,7 +102,7 @@ public class ComponentBatchViewModelFactoryTests {
     Assert.assertEquals("View model is correct", "OPEN", viewModel.getStatus());
     Assert.assertEquals("View model is correct", deliveryDate, viewModel.getDeliveryDate());
     Assert.assertEquals("View model is correct", collectionDate, viewModel.getCollectionDate());
-    Assert.assertEquals("View model is correct", location, viewModel.getLocation());
+    Assert.assertEquals("View model is correct", new LocationViewModel(location), viewModel.getLocation());
     Assert.assertNotNull("DonationBatchViewModel is set", viewModel.getDonationBatch());
     Assert.assertNotNull("ComponentViewModels are set", viewModel.getComponents());
     Assert.assertFalse("ComponentViewModels are set", viewModel.getComponents().isEmpty());
