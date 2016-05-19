@@ -10,6 +10,7 @@ import factory.OrderFormFactory;
 import model.order.OrderForm;
 import model.order.OrderStatus;
 import repository.OrderFormRepository;
+import viewmodel.OrderFormViewModel;
 
 @Service
 @Transactional
@@ -28,10 +29,14 @@ public class OrderFormCRUDService {
     return entity;
   }
   
-  public OrderForm updateOrderForm(OrderFormBackingForm backingForm) {
-    OrderForm updatedOrderForm = orderFormFactory.createEntity(backingForm);
-
-    OrderForm existingOrderForm = orderFormRepository.findById(backingForm.getId());
+  public OrderFormViewModel updateOrderForm(OrderFormBackingForm backingForm) {
+    OrderForm orderForm = orderFormFactory.createEntity(backingForm);
+    OrderForm updatedOrderForm = updateOrderForm(orderForm);
+    return orderFormFactory.createViewModel(updatedOrderForm);
+  }
+  
+  public OrderForm updateOrderForm(OrderForm updatedOrderForm) {
+    OrderForm existingOrderForm = orderFormRepository.findById(updatedOrderForm.getId());
     existingOrderForm.setOrderDate(updatedOrderForm.getOrderDate());
     existingOrderForm.setStatus(updatedOrderForm.getStatus());
     existingOrderForm.setType(updatedOrderForm.getType());

@@ -24,6 +24,7 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
   private OrderType type = OrderType.ISSUE;
   private boolean isDeleted = false;
   private List<OrderFormItem> items = new ArrayList<>();
+  private Date createdDate;
 
   public OrderFormBuilder withId(Long id) {
     this.id = id;
@@ -69,11 +70,17 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
     this.items = items;
     return this;
   }
+  
+  public OrderFormBuilder withCreatedDate(Date createdDate) {
+    this.createdDate = createdDate;
+    return this;
+  }
 
   @Override
   public OrderForm build() {
     OrderForm orderForm = new OrderForm();
     orderForm.setId(id);
+    orderForm.setCreatedDate(createdDate);
     orderForm.setOrderDate(orderDate);
     orderForm.setDispatchedFrom(dispatchedFrom);
     orderForm.setDispatchedTo(dispatchedTo);

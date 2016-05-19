@@ -106,8 +106,7 @@ public class OrderFormController {
     backingForm.setId(orderFormId);
 
     Map<String, Object> map = new HashMap<>();
-    OrderForm orderForm = orderFormCRUDService.updateOrderForm(backingForm);
-    map.put("orderForm", orderFormFactory.createViewModel(orderForm));
+    map.put("orderForm", orderFormCRUDService.updateOrderForm(backingForm));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
   

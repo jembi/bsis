@@ -4,8 +4,11 @@ import static helpers.builders.LocationBuilder.aDistributionSite;
 import static helpers.builders.OrderFormBackingFormBuilder.anOrderFormBackingForm;
 import static helpers.builders.OrderFormBuilder.anOrderForm;
 import static helpers.builders.OrderFormItemBuilder.anOrderItemForm;
+import static helpers.builders.OrderFormViewModelBuilder.anOrderFormViewModel;
 import static helpers.matchers.OrderFormMatcher.hasSameStateAsOrderForm;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -25,6 +28,7 @@ import model.order.OrderStatus;
 import model.order.OrderType;
 import repository.OrderFormRepository;
 import suites.UnitTestSuite;
+import viewmodel.OrderFormViewModel;
 
 public class OrderFormCRUDServiceTests extends UnitTestSuite {
   
@@ -42,12 +46,13 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testUpdateOrderForm_shouldUpdateFieldsCorrectly() {
     // Fixture
+    Date createdDate = new Date();
     Date orderDate = new Date();
     Location dispatchedFrom = aDistributionSite().build();
     Location dispatchedTo = aDistributionSite().build();
     List<OrderFormItem> orderFormItems = Arrays.asList(anOrderItemForm().build(), anOrderItemForm().build());
     
-    OrderForm existingOrderForm = anOrderForm().withId(ORDER_FORM_ID).build();
+    OrderForm existingOrderForm = anOrderForm().withId(ORDER_FORM_ID).withCreatedDate(createdDate).build();
     OrderFormBackingForm backingForm = anOrderFormBackingForm().withId(ORDER_FORM_ID).build();
     OrderForm orderFormCreatedFromBackingForm = anOrderForm()
         .withId(ORDER_FORM_ID)
@@ -58,14 +63,9 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
         .withDispatchedTo(dispatchedTo)
         .withOrderFormItems(orderFormItems)
         .build();
-    
-    // Expectations
-    when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
-    when(orderFormFactory.createEntity(backingForm)).thenReturn(orderFormCreatedFromBackingForm);
-    when(orderFormRepository.update(existingOrderForm)).thenReturn(existingOrderForm);
-
     OrderForm expectedOrderForm = anOrderForm()
         .withId(ORDER_FORM_ID)
+        .withCreatedDate(createdDate)
         .withOrderStatus(OrderStatus.DISPATCHED)
         .withOrderDate(orderDate)
         .withOrderType(OrderType.TRANSFER)
@@ -73,12 +73,19 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
         .withDispatchedTo(dispatchedTo)
         .withOrderFormItems(orderFormItems)
         .build();
+    OrderFormViewModel expectedViewModel = anOrderFormViewModel().withId(ORDER_FORM_ID).build();
+    
+    // Expectations
+    when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
+    when(orderFormFactory.createEntity(backingForm)).thenReturn(orderFormCreatedFromBackingForm);
+    when(orderFormRepository.update(existingOrderForm)).thenReturn(existingOrderForm);
+    when(orderFormFactory.createViewModel(argThat(hasSameStateAsOrderForm(expectedOrderForm)))).thenReturn(expectedViewModel);
     
     // Test
-    OrderForm updatedOrderForm = orderFormCRUDService.updateOrderForm(backingForm);
+    OrderFormViewModel returnedViewModel = orderFormCRUDService.updateOrderForm(backingForm);
     
     // Assertions
-    assertThat(updatedOrderForm, hasSameStateAsOrderForm(expectedOrderForm));
+    assertThat(returnedViewModel, is(expectedViewModel));
   }
 
 }
