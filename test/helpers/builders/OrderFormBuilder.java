@@ -1,13 +1,14 @@
 package helpers.builders;
 
 import static helpers.builders.LocationBuilder.aLocation;
+import helpers.persisters.AbstractEntityPersister;
+import helpers.persisters.OrderFormPersister;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import helpers.persisters.AbstractEntityPersister;
-import helpers.persisters.OrderFormPersister;
+import model.component.Component;
 import model.location.Location;
 import model.order.OrderForm;
 import model.order.OrderFormItem;
@@ -25,6 +26,7 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
   private boolean isDeleted = false;
   private List<OrderFormItem> items = new ArrayList<>();
   private Date createdDate;
+  private List<Component> components = new ArrayList<>();
 
   public OrderFormBuilder withId(Long id) {
     this.id = id;
@@ -75,6 +77,16 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
     this.createdDate = createdDate;
     return this;
   }
+  
+  public OrderFormBuilder withComponents(List<Component> components) {
+    this.components = components;
+    return this;
+  }
+  
+  public OrderFormBuilder withComponent(Component component) {
+    this.components.add(component);
+    return this;
+  }
 
   @Override
   public OrderForm build() {
@@ -88,6 +100,7 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
     orderForm.setType(type);
     orderForm.setIsDeleted(isDeleted);
     orderForm.setItems(items);
+    orderForm.setComponents(components);
     return orderForm;
   }
 
