@@ -36,15 +36,11 @@ public class ComponentTypeRepository {
     return query.getResultList();
   }
 
-  public boolean isComponentTypeValid(String checkComponentType) {
-    String queryString = "SELECT ct from ComponentType ct where ct.isDeleted=:isDeleted";
-    TypedQuery<ComponentType> query = em.createQuery(queryString, ComponentType.class);
-    query.setParameter("isDeleted", false);
-    for (ComponentType componentType : query.getResultList()) {
-      if (componentType.getComponentTypeName().equals(checkComponentType))
-        return true;
-    }
-    return false;
+  public boolean verifyComponentTypeExists(Long id) {
+    return em.createNamedQuery(ComponentTypeQueryConstants.NAME_VERIFY_COMPONENT_TYPE_WITH_ID_EXISTS, Boolean.class)
+        .setParameter("id", id)
+        .setParameter("deleted", false)
+        .getSingleResult();
   }
 
   public ComponentType getComponentTypeById(Long id) throws NoResultException, NonUniqueResultException {

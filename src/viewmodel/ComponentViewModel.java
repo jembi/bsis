@@ -45,7 +45,8 @@ public class ComponentViewModel {
   }
 
   public ComponentTypeViewModel getComponentType() {
-    return new ComponentTypeViewModel(component.getComponentType());
+    // FIXME: use factory
+    return new ComponentTypeFullViewModel(component.getComponentType());
   }
 
   public String getNotes() {

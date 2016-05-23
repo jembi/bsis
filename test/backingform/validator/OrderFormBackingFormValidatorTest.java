@@ -5,6 +5,7 @@ import static helpers.builders.LocationBuilder.aUsageSite;
 import static helpers.builders.LocationBuilder.aVenue;
 import static helpers.builders.OrderFormBackingFormBuilder.anOrderFormBackingForm;
 import static org.mockito.Mockito.when;
+import helpers.builders.ComponentTypeBuilder;
 
 import java.text.ParseException;
 import java.util.Arrays;
@@ -12,6 +13,8 @@ import java.util.Date;
 import java.util.HashMap;
 
 import javax.persistence.NoResultException;
+
+import model.location.Location;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,11 +25,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
-import backingform.LocationBackingForm;
-import backingform.OrderFormBackingForm;
-import model.location.Location;
 import repository.FormFieldRepository;
 import repository.LocationRepository;
+import backingform.ComponentTypeBackingForm;
+import backingform.LocationBackingForm;
+import backingform.OrderFormBackingForm;
+import backingform.OrderFormItemBackingForm;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OrderFormBackingFormValidatorTest {
@@ -39,6 +43,9 @@ public class OrderFormBackingFormValidatorTest {
 
   @Mock
   private FormFieldRepository formFieldRepository;
+  
+  @Mock
+  private OrderFormItemBackingFormValidator orderFormItemBackingFormValidator; 
 
   private OrderFormBackingForm getBaseOrderFormBackingForm() throws ParseException {
     Location dispatchedFrom = aDistributionSite().withName("LocFrom").withId(1l).build();
@@ -48,11 +55,22 @@ public class OrderFormBackingFormValidatorTest {
         .withDispatchedTo(new LocationBackingForm(dispatchedTo)).withOrderDate(orderDate).build();
     return backingForm;
   }
+  
+  private OrderFormItemBackingForm getBaseOrderFormItemBackingForm() throws ParseException {
+    OrderFormItemBackingForm backingForm = new OrderFormItemBackingForm();
+    backingForm.setBloodGroup("A+");
+    backingForm.setNumberOfUnits(22);
+    ComponentTypeBackingForm componentType = new ComponentTypeBackingForm();
+    componentType.setComponentType(ComponentTypeBuilder.aComponentType().withId(1L).build());
+    backingForm.setComponentType(componentType);
+    return backingForm;
+  }
 
   @Test
   public void testValid_noErrors() throws Exception {
     // set up data
     OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
+    backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
 
     // set up mocks
     when(locationRepository.getLocation(1l)).thenReturn(backingForm.getDispatchedFrom().getLocation());

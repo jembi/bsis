@@ -1,20 +1,27 @@
 package backingform.validator;
 
+import java.util.List;
+
 import javax.persistence.NoResultException;
+
+import model.location.Location;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
-import backingform.OrderFormBackingForm;
-import model.location.Location;
 import repository.LocationRepository;
+import backingform.OrderFormBackingForm;
+import backingform.OrderFormItemBackingForm;
 
 @Component
 public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackingForm> {
 
   @Autowired
   private LocationRepository locationRepository;
+  
+  @Autowired
+  private OrderFormItemBackingFormValidator orderFormItemBackingFormValidator;
 
   @Override
   public void validateForm(OrderFormBackingForm form, Errors errors) {
@@ -45,6 +52,21 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
         errors.rejectValue("dispatchedTo", "invalid", "Invalid dispatchedTo");
       }
     }
+    
+    // Validate OrderFormItems
+    if (form.getItems() != null) { // it can be null if the Order has just been created
+      List<OrderFormItemBackingForm> items = form.getItems();
+      for (int i=0, len=items.size(); i<len; i++) {
+        OrderFormItemBackingForm item = items.get(i); 
+        errors.pushNestedPath("items["+i+"]");
+        try {
+          orderFormItemBackingFormValidator.validate(item, errors);
+        } finally {
+          errors.popNestedPath();
+        }
+      }
+    }
+    
     commonFieldChecks(form, errors);
   }
 
