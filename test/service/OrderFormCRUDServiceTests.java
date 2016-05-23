@@ -13,7 +13,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -43,6 +42,9 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
   @Mock
   private OrderFormRepository orderFormRepository;
   
+  @Mock
+  private OrderFormItemCRUDService orderFormItemCRUDService;
+  
   @Test
   public void testUpdateOrderForm_shouldUpdateFieldsCorrectly() {
     // Fixture
@@ -50,7 +52,7 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
     Date orderDate = new Date();
     Location dispatchedFrom = aDistributionSite().build();
     Location dispatchedTo = aDistributionSite().build();
-    List<OrderFormItem> orderFormItems = Arrays.asList(anOrderItemForm().build(), anOrderItemForm().build());
+    OrderFormItem orderFormItem = anOrderItemForm().withId(7L).build();
     
     OrderForm existingOrderForm = anOrderForm().withId(ORDER_FORM_ID).withCreatedDate(createdDate).build();
     OrderFormBackingForm backingForm = anOrderFormBackingForm().withId(ORDER_FORM_ID).build();
@@ -61,7 +63,7 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
         .withOrderType(OrderType.TRANSFER)
         .withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo)
-        .withOrderFormItems(orderFormItems)
+        .withOrderFormItems(Arrays.asList(orderFormItem))
         .build();
     OrderForm expectedOrderForm = anOrderForm()
         .withId(ORDER_FORM_ID)
@@ -71,13 +73,14 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
         .withOrderType(OrderType.TRANSFER)
         .withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo)
-        .withOrderFormItems(orderFormItems)
+        .withOrderFormItems(Arrays.asList(orderFormItem))
         .build();
     OrderFormViewModel expectedViewModel = anOrderFormViewModel().withId(ORDER_FORM_ID).build();
     
     // Expectations
     when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
     when(orderFormFactory.createEntity(backingForm)).thenReturn(orderFormCreatedFromBackingForm);
+    when(orderFormItemCRUDService.createOrUpdateOrderFormItem(orderFormItem)).thenReturn(orderFormItem);
     when(orderFormRepository.update(existingOrderForm)).thenReturn(existingOrderForm);
     when(orderFormFactory.createViewModel(argThat(hasSameStateAsOrderForm(expectedOrderForm)))).thenReturn(expectedViewModel);
     
