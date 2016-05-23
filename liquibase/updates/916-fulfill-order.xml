@@ -36,9 +36,7 @@
 		    columnNames="component_id, orderForm_id" />
 
 		<createTable tableName="OrderForm_Component_AUD">
-			<column name="id" type="BIGINT(20)" autoIncrement="true">
-				<constraints primaryKey="true" />
-			</column>
+			<column name="id" type="BIGINT(20)" />
 			<column name="orderForm_id" type="BIGINT(20)" />
 			<column name="component_id" type="BIGINT(20)" />
 			<column name="isDeleted" type="tinyint(1)" />
