@@ -39,11 +39,11 @@ public class LocationViewModel extends BaseViewModel {
   }
   
   public boolean getIsProcessingSite() {
-    return location.isProcessingSite();
+    return location.getIsProcessingSite();
   }
   
   public boolean getIsDistributionSite() {
-    return location.isDistributionSite();
+    return location.getIsDistributionSite();
   }
 
 }

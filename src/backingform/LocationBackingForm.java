@@ -86,18 +86,18 @@ public class LocationBackingForm {
   }
   
   public boolean getIsProcessingSite() {
-    return location.isProcessingSite();
+    return location.getIsProcessingSite();
   }
   
   public void setIsProcessingSite(boolean isProcessingSite) {
-    location.setProcessingSite(isProcessingSite);
+    location.setIsProcessingSite(isProcessingSite);
   }
   
   public boolean getIsDistributionSite() {
-    return location.isDistributionSite();
+    return location.getIsDistributionSite();
   }
   
   public void setIsDistributionSite(boolean isDistributionSite) {
-    location.setDistributionSite(isDistributionSite);
+    location.setIsDistributionSite(isDistributionSite);
   }
 }

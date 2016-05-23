@@ -46,7 +46,7 @@ public class ComponentBatchBackingFormValidator extends BaseValidator<ComponentB
     } else {
       // location exists and is a processing site
       Location location = locationRepository.getLocation(locationBackingForm.getId());
-      if (location == null || location.getIsDeleted() || !location.isProcessingSite()) {
+      if (location == null || location.getIsDeleted() || !location.getIsProcessingSite()) {
         errors.rejectValue("componentBatch.location", "location.invalid", "Location is invalid.");
       }
     }
