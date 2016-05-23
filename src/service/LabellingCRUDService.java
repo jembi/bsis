@@ -203,7 +203,7 @@ public class LabellingCRUDService {
       Map<String, Object> componentLabellingStatus = new HashMap<String, Object>();
       componentLabellingStatus.put("componentId", component.getId());
       componentLabellingStatus.put("componentName", component.getComponentType().getComponentTypeName());
-      componentLabellingStatus.put("componentIdentificationNumber", component.getComponentIdentificationNumber());
+      componentLabellingStatus.put("componentCode", component.getComponentCode());
 
       if (unsafeDonation || componentStatus.equals(ComponentStatus.UNSAFE) ||
           componentStatus.toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED)) {

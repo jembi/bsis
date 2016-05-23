@@ -67,7 +67,7 @@ public class ComponentControllerTest {
           try {
             Component component = new Component();
             component.setIsDeleted(false);
-            component.setComponentIdentificationNumber(componentTypeCode + "-" + i);
+            component.setComponentCode(componentTypeCode + "-" + i);
             Calendar c = new GregorianCalendar();
             System.out.println("after :" + componentTypeRepository.getComponentTypeById(1l).getExpiryIntervalMinutes());
             c.add(Calendar.MINUTE, componentTypeRepository.getComponentTypeById(1l).getExpiryIntervalMinutes());
@@ -100,7 +100,7 @@ public class ComponentControllerTest {
         try {
           Component component = new Component();
           component.setIsDeleted(false);
-          component.setComponentIdentificationNumber(componentTypeCode);
+          component.setComponentCode(componentTypeCode);
 
           Calendar c = new GregorianCalendar();
           System.out.println("after :" + componentTypeRepository.getComponentTypeById(1l).getExpiryIntervalMinutes());

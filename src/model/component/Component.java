@@ -122,7 +122,7 @@ public class Component extends BaseModificationTrackerEntity {
   private Boolean isDeleted;
 
   @Column(length = 20)
-  private String componentIdentificationNumber;
+  private String componentCode;
   
   @Column(length = 30, nullable = false)
   @Enumerated(EnumType.STRING)
@@ -142,7 +142,7 @@ public class Component extends BaseModificationTrackerEntity {
     this.createdOn = component.createdOn;
     this.expiresOn = component.expiresOn;
     this.notes = component.notes;
-    this.componentIdentificationNumber = component.componentIdentificationNumber;
+    this.componentCode = component.componentCode;
     this.location = component.location;
     this.inventoryStatus = component.inventoryStatus;
   }
@@ -273,12 +273,12 @@ public class Component extends BaseModificationTrackerEntity {
     this.parentComponent = parentComponent;
   }
 
-  public String getComponentIdentificationNumber() {
-    return componentIdentificationNumber;
+  public String getComponentCode() {
+    return componentCode;
   }
 
-  public void setComponentIdentificationNumber(String componentIdentificationNumber) {
-    this.componentIdentificationNumber = componentIdentificationNumber;
+  public void setComponentCode(String componentCode) {
+    this.componentCode = componentCode;
   }
 
   public ComponentBatch getComponentBatch() {

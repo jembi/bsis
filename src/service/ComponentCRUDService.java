@@ -118,9 +118,9 @@ public class ComponentCRUDService {
 
           // if there is more than one unit of the component, append unit number suffix
           if (noOfUnits > 1) {
-            component.setComponentIdentificationNumber(componentTypeCode + "-0" + i);
+            component.setComponentCode(componentTypeCode + "-0" + i);
           } else {
-            component.setComponentIdentificationNumber(componentTypeCode);
+            component.setComponentCode(componentTypeCode);
           }
           component.setComponentType(pt);
           component.setDonation(donation);

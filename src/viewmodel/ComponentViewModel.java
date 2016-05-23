@@ -176,8 +176,8 @@ public class ComponentViewModel {
         .contains(component.getStatus());
   }
 
-  public String getComponentIdentificationNumber() {
-    return component.getComponentIdentificationNumber();
+  public String getComponentCode() {
+    return component.getComponentCode();
   }
 
 }
