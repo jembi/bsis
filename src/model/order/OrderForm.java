@@ -10,10 +10,14 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import model.BaseModificationTrackerEntity;
+import model.component.Component;
 import model.location.Location;
 
 import org.hibernate.annotations.Where;
@@ -49,9 +53,10 @@ public class OrderForm extends BaseModificationTrackerEntity {
   @Where(clause = "isDeleted = 0")
   private List<OrderFormItem> items = new ArrayList<OrderFormItem>();
 
-  @OneToMany(mappedBy = "orderForm", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+  @ManyToMany(fetch = FetchType.EAGER)
   @Where(clause = "isDeleted = 0")
-  private List<OrderFormComponent> components = new ArrayList<>();
+  @JoinTable(name = "OrderForm_Component", joinColumns = {@JoinColumn(name = "orderForm_id", referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "component_id", referencedColumnName = "id")})
+  private List<Component> components = new ArrayList<Component>();
 
   public Date getOrderDate() {
     return orderDate;
@@ -109,11 +114,11 @@ public class OrderForm extends BaseModificationTrackerEntity {
     this.items = items;
   }
 
-  public List<OrderFormComponent> getComponents() {
+  public List<Component> getComponents() {
     return components;
   }
 
-  public void setComponents(List<OrderFormComponent> components) {
+  public void setComponents(List<Component> components) {
     this.components = components;
   }
 }

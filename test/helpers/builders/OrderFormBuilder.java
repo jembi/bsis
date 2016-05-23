@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import model.component.Component;
 import model.location.Location;
 import model.order.OrderForm;
-import model.order.OrderFormComponent;
 import model.order.OrderFormItem;
 import model.order.OrderStatus;
 import model.order.OrderType;
@@ -26,7 +26,7 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
   private boolean isDeleted = false;
   private List<OrderFormItem> items = new ArrayList<>();
   private Date createdDate;
-  private List<OrderFormComponent> components = new ArrayList<>();
+  private List<Component> components = new ArrayList<>();
 
   public OrderFormBuilder withId(Long id) {
     this.id = id;
@@ -78,12 +78,12 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
     return this;
   }
   
-  public OrderFormBuilder withComponents(List<OrderFormComponent> components) {
+  public OrderFormBuilder withComponents(List<Component> components) {
     this.components = components;
     return this;
   }
   
-  public OrderFormBuilder withComponent(OrderFormComponent component) {
+  public OrderFormBuilder withComponent(Component component) {
     this.components.add(component);
     return this;
   }
