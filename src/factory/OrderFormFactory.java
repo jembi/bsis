@@ -15,7 +15,6 @@ import model.order.OrderForm;
 import model.order.OrderFormItem;
 import repository.ComponentRepository;
 import repository.LocationRepository;
-import viewmodel.LocationViewModel;
 import viewmodel.OrderFormItemViewModel;
 import viewmodel.OrderFormViewModel;
 
@@ -36,6 +35,9 @@ public class OrderFormFactory {
 
   @Autowired
   private ComponentViewModelFactory componentViewModelFactory;
+
+  @Autowired
+  private LocationViewModelFactory locationViewModelFactory;
 
   public OrderForm createEntity(OrderFormBackingForm backingForm) {
     OrderForm entity = new OrderForm();
@@ -67,8 +69,8 @@ public class OrderFormFactory {
   public OrderFormViewModel createViewModel(OrderForm entity) {
     OrderFormViewModel viewModel = new OrderFormViewModel();
     viewModel.setId(entity.getId());
-    viewModel.setDispatchedFrom(new LocationViewModel(entity.getDispatchedFrom()));
-    viewModel.setDispatchedTo(new LocationViewModel(entity.getDispatchedTo()));
+    viewModel.setDispatchedFrom(locationViewModelFactory.createLocationViewModel(entity.getDispatchedFrom()));
+    viewModel.setDispatchedTo(locationViewModelFactory.createLocationViewModel(entity.getDispatchedTo()));
     viewModel.setOrderDate(entity.getOrderDate());
     viewModel.setStatus(entity.getStatus());
     viewModel.setType(entity.getType());
