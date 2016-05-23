@@ -1,5 +1,7 @@
 package factory;
 
+import static helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
+import static helpers.builders.ComponentBuilder.aComponent;
 import static helpers.builders.OrderFormBackingFormBuilder.anOrderFormBackingForm;
 import static helpers.builders.OrderFormBuilder.anOrderForm;
 import static helpers.builders.OrderFormItemBackingFormBuilder.anOrderFormItemBackingForm;
@@ -20,15 +22,20 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import backingform.ComponentBackingForm;
 import backingform.LocationBackingForm;
 import backingform.OrderFormBackingForm;
 import backingform.OrderFormItemBackingForm;
 import helpers.builders.LocationBackingFormBuilder;
 import helpers.builders.LocationBuilder;
+import model.component.Component;
+import model.inventory.InventoryStatus;
 import model.location.Location;
 import model.order.OrderForm;
 import model.order.OrderFormItem;
+import repository.ComponentRepository;
 import repository.LocationRepository;
+import viewmodel.ComponentViewModel;
 import viewmodel.OrderFormItemViewModel;
 import viewmodel.OrderFormViewModel;
 
@@ -50,6 +57,9 @@ public class OrderFormFactoryTests {
   @Mock
   private LocationViewModelFactory locationViewModelFactory;
 
+  @Mock
+  private ComponentRepository componentRepository;
+ 
   private Location getBaseDispatchedFromLocation() {
     return LocationBuilder.aDistributionSite().withName("LocFrom").withId(1l).build();
   }
@@ -163,6 +173,62 @@ public class OrderFormFactoryTests {
     
     when(orderFormItemFactory.createViewModel(item1)).thenReturn(expectedItem1);
     when(orderFormItemFactory.createViewModel(item2)).thenReturn(expectedItem2);
+
+    OrderFormViewModel convertedViewModel = orderFormFactory.createViewModel(entity);
+
+    assertThat(convertedViewModel, hasSameStateAsOrderFormViewModel(expectedViewModel));
+  }
+  
+  @Test
+  public void testConvertOrderFormBackingFormToOrderFormEntityWithComponents_shouldReturnExpectedEntity() {
+    Location dispatchedFrom = getBaseDispatchedFromLocation();
+    Location dispatchedTo = getBaseDispatchedToLocation();
+    Date orderDate = new Date();
+
+    Component expectedComponent =
+        aComponent().withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withLocation(dispatchedFrom).withId(1L).build();
+    ComponentBackingForm componentBackingForm = aComponentBackingForm().withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withLocation(getBaseDispatchedFromLocationBackingForm()).withId(1L).build();
+
+    OrderForm expectedEntity = anOrderForm()
+        .withDispatchedFrom(dispatchedFrom)
+        .withDispatchedTo(dispatchedTo)
+        .withOrderDate(orderDate).withComponent(expectedComponent).build();
+
+    OrderFormBackingForm backingForm = anOrderFormBackingForm()
+        .withDispatchedFrom(getBaseDispatchedFromLocationBackingForm())
+        .withDispatchedTo(getBaseDispatchedToLocationBackingForm())
+        .withOrderDate(orderDate).withComponent(componentBackingForm).build();
+
+    // Setup mock
+    when(locationRepository.getLocation(1l)).thenReturn(dispatchedFrom);
+    when(locationRepository.getLocation(2l)).thenReturn(dispatchedTo);
+    when(componentRepository.findComponent(1L)).thenReturn(expectedComponent);
+
+    OrderForm convertedEntity = orderFormFactory.createEntity(backingForm);
+
+    assertThat(convertedEntity, hasSameStateAsOrderForm(expectedEntity));
+  }
+  
+  @Test
+  public void testConvertEntityToOrderFormViewModelWithComponents_shouldReturnExpectedViewModel() {
+    Location dispatchedFrom = getBaseDispatchedFromLocation();
+    Location dispatchedTo = getBaseDispatchedToLocation();
+    Date orderDate = new Date();
+
+    Component component = aComponent().withId(1L).withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(dispatchedFrom).build();
+    OrderFormViewModel expectedViewModel = anOrderFormViewModel()
+        .withDispatchedFrom(locationViewModelFactory.createLocationViewModel(dispatchedFrom))
+        .withDispatchedTo(locationViewModelFactory.createLocationViewModel(dispatchedTo))
+        .withOrderDate(orderDate).withId(1L)
+        .withComponent(componentViewModelFactory.createComponentViewModel(component)).build();
+
+    OrderForm entity = anOrderForm()
+        .withDispatchedFrom(dispatchedFrom)
+        .withDispatchedTo(dispatchedTo)
+        .withOrderDate(orderDate)
+        .withId(1L).withComponent(component).build();
 
     OrderFormViewModel convertedViewModel = orderFormFactory.createViewModel(entity);
 
