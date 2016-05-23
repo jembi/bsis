@@ -78,6 +78,10 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     Assert.assertNotNull("Component was persisted", savedOrderForm.getComponents());
     Assert.assertFalse("Component was persisted", savedOrderForm.getComponents().isEmpty());
     Assert.assertNotNull("Component was persisted", savedOrderForm.getComponents().get(0).getId());
+    Assert.assertNotNull("Component audit fields were added", savedOrderForm.getComponents().get(0).getCreatedDate());
+    Assert.assertNotNull("Component audit fields were added", savedOrderForm.getComponents().get(0).getCreatedBy());
+    Assert.assertNotNull("Component audit fields were added", savedOrderForm.getComponents().get(0).getLastUpdatedBy());
+    Assert.assertNotNull("Component audit fields were added", savedOrderForm.getComponents().get(0).getLastUpdated());
   }
   
   @Test
