@@ -1,5 +1,8 @@
 package service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +11,7 @@ import org.springframework.stereotype.Service;
 import backingform.OrderFormBackingForm;
 import factory.OrderFormFactory;
 import model.order.OrderForm;
+import model.order.OrderFormItem;
 import model.order.OrderStatus;
 import repository.OrderFormRepository;
 import viewmodel.OrderFormViewModel;
@@ -21,6 +25,9 @@ public class OrderFormCRUDService {
 
   @Autowired
   private OrderFormRepository orderFormRepository;
+  
+  @Autowired
+  private OrderFormItemCRUDService orderFormItemCRUDService;
 
   public OrderForm createOrderForm(OrderFormBackingForm backingForm) {
     OrderForm entity = orderFormFactory.createEntity(backingForm);
@@ -42,7 +49,11 @@ public class OrderFormCRUDService {
     existingOrderForm.setType(updatedOrderForm.getType());
     existingOrderForm.setDispatchedFrom(updatedOrderForm.getDispatchedFrom());
     existingOrderForm.setDispatchedTo(updatedOrderForm.getDispatchedTo());
-    existingOrderForm.setItems(updatedOrderForm.getItems());
+    List<OrderFormItem> items = new ArrayList<>();
+    for (OrderFormItem item : updatedOrderForm.getItems()) {
+      items.add(orderFormItemCRUDService.createOrUpdateOrderFormItem(item));
+    }
+    existingOrderForm.setItems(items);
     return orderFormRepository.update(existingOrderForm);
   }
 }

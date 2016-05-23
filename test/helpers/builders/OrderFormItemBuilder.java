@@ -2,11 +2,15 @@ package helpers.builders;
 
 import static helpers.builders.ComponentTypeBuilder.aComponentType;
 import static helpers.builders.OrderFormBuilder.anOrderForm;
+
+import java.util.Date;
+
 import helpers.persisters.AbstractEntityPersister;
 import helpers.persisters.OrderFormItemPersister;
 import model.componenttype.ComponentType;
 import model.order.OrderForm;
 import model.order.OrderFormItem;
+import model.user.User;
 
 public class OrderFormItemBuilder extends AbstractEntityBuilder<OrderFormItem> {
   
@@ -16,6 +20,8 @@ public class OrderFormItemBuilder extends AbstractEntityBuilder<OrderFormItem> {
   private String bloodRh = "+";
   private int numberOfUnits = 5;
   private OrderForm orderForm = anOrderForm().build();
+  private Date lastUpdated;
+  private User lastUpdatedBy;
 
   public OrderFormItemBuilder withId(Long id) {
     this.id = id;
@@ -46,6 +52,16 @@ public class OrderFormItemBuilder extends AbstractEntityBuilder<OrderFormItem> {
     this.orderForm = orderForm;
     return this;
   }
+  
+  public OrderFormItemBuilder withLastUpdated(Date lastUpdated) {
+    this.lastUpdated = lastUpdated;
+    return this;
+  }
+  
+  public OrderFormItemBuilder withLastUpdatedBy(User lastUpdatedBy) {
+    this.lastUpdatedBy = lastUpdatedBy;
+    return this;
+  }
 
   @Override
   public OrderFormItem build() {
@@ -56,6 +72,8 @@ public class OrderFormItemBuilder extends AbstractEntityBuilder<OrderFormItem> {
     item.setBloodRh(bloodRh);
     item.setComponentType(componentType);
     item.setNumberOfUnits(numberOfUnits);
+    item.setLastUpdated(lastUpdated);
+    item.setLastUpdatedBy(lastUpdatedBy);
     return item;
   }
   
