@@ -1,6 +1,5 @@
 package factory;
 
-import static helpers.builders.LocationBuilder.aDistributionSite;
 import static helpers.builders.OrderFormBackingFormBuilder.anOrderFormBackingForm;
 import static helpers.builders.OrderFormBuilder.anOrderForm;
 import static helpers.builders.OrderFormItemBackingFormBuilder.anOrderFormItemBackingForm;
@@ -14,10 +13,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.Date;
 
-import model.location.Location;
-import model.order.OrderForm;
-import model.order.OrderFormItem;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -25,13 +20,17 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import repository.LocationRepository;
-import viewmodel.LocationViewModel;
-import viewmodel.OrderFormItemViewModel;
-import viewmodel.OrderFormViewModel;
 import backingform.LocationBackingForm;
 import backingform.OrderFormBackingForm;
 import backingform.OrderFormItemBackingForm;
+import helpers.builders.LocationBackingFormBuilder;
+import helpers.builders.LocationBuilder;
+import model.location.Location;
+import model.order.OrderForm;
+import model.order.OrderFormItem;
+import repository.LocationRepository;
+import viewmodel.OrderFormItemViewModel;
+import viewmodel.OrderFormViewModel;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OrderFormFactoryTests {
@@ -45,17 +44,39 @@ public class OrderFormFactoryTests {
   @Mock
   private OrderFormItemFactory orderFormItemFactory;
 
+  @Mock
+  private ComponentViewModelFactory componentViewModelFactory;
+  
+  @Mock
+  private LocationViewModelFactory locationViewModelFactory;
+
+  private Location getBaseDispatchedFromLocation() {
+    return LocationBuilder.aDistributionSite().withName("LocFrom").withId(1l).build();
+  }
+
+  private Location getBaseDispatchedToLocation() {
+    return LocationBuilder.aDistributionSite().withName("LocTo").withId(2l).build();
+  }
+
+  private LocationBackingForm getBaseDispatchedFromLocationBackingForm() {
+    return LocationBackingFormBuilder.aDistributionSite().withName("LocFrom").withId(1l).build();
+  }
+
+  private LocationBackingForm getBaseDispatchedToLocationBackingForm() {
+    return LocationBackingFormBuilder.aDistributionSite().withName("LocTo").withId(2l).build();
+  }
+
   @Test
   public void testConvertOrderFormBackingFormToOrderFormEntity_shouldReturnExpectedEntity() {
-    Location dispatchedFrom = aDistributionSite().withName("LocFrom").withId(1l).build();
-    Location dispatchedTo = aDistributionSite().withName("LocTo").withId(2l).build();
+    Location dispatchedFrom = getBaseDispatchedFromLocation();
+    Location dispatchedTo = getBaseDispatchedToLocation();
     Date orderDate = new Date();
 
     OrderForm expectedEntity = anOrderForm().withDispatchedFrom(dispatchedFrom).withDispatchedTo(dispatchedTo)
         .withOrderDate(orderDate).build();
     
-    OrderFormBackingForm backingForm = anOrderFormBackingForm().withDispatchedFrom(new LocationBackingForm(dispatchedFrom))
-        .withDispatchedTo(new LocationBackingForm(dispatchedTo)).withOrderDate(orderDate).build();
+    OrderFormBackingForm backingForm = anOrderFormBackingForm().withDispatchedFrom(getBaseDispatchedFromLocationBackingForm())
+        .withDispatchedTo(getBaseDispatchedToLocationBackingForm()).withOrderDate(orderDate).build();
 
     // Setup mock
     when(locationRepository.getLocation(1l)).thenReturn(dispatchedFrom);
@@ -68,17 +89,22 @@ public class OrderFormFactoryTests {
   
   @Test
   public void testConvertOrderFormBackingFormToOrderFormEntityWithItems_shouldReturnExpectedEntity() {
-    Location dispatchedFrom = aDistributionSite().withName("LocFrom").withId(1l).build();
-    Location dispatchedTo = aDistributionSite().withName("LocTo").withId(2l).build();
+    Location dispatchedFrom = getBaseDispatchedFromLocation();
+    Location dispatchedTo = getBaseDispatchedToLocation();
     Date orderDate = new Date();
 
     OrderFormItem expectedItem1 = anOrderItemForm().withId(1L).withBloodAbo("A").withBloodRh("+").build();
-    OrderForm expectedEntity = anOrderForm().withDispatchedFrom(dispatchedFrom).withDispatchedTo(dispatchedTo)
-        .withOrderDate(orderDate).withOrderFormItem(expectedItem1).build();
+    OrderForm expectedEntity = anOrderForm()
+        .withDispatchedFrom(dispatchedFrom)
+        .withDispatchedTo(dispatchedTo)
+        .withOrderDate(orderDate)
+        .withOrderFormItem(expectedItem1).build();
     
     OrderFormItemBackingForm item1 = anOrderFormItemBackingForm().withId(1L).withBloodGroup("A+").build();
-    OrderFormBackingForm backingForm = anOrderFormBackingForm().withDispatchedFrom(new LocationBackingForm(dispatchedFrom))
-        .withDispatchedTo(new LocationBackingForm(dispatchedTo)).withOrderDate(orderDate)
+    OrderFormBackingForm backingForm = anOrderFormBackingForm()
+        .withDispatchedFrom(getBaseDispatchedFromLocationBackingForm())
+        .withDispatchedTo(getBaseDispatchedToLocationBackingForm())
+        .withOrderDate(orderDate)
         .withItem(item1).build();
 
     // Setup mock
@@ -94,14 +120,18 @@ public class OrderFormFactoryTests {
 
   @Test
   public void testConvertEntityToOrderFormViewModel_shouldReturnExpectedViewModel() {
-    Location dispatchedFrom = aDistributionSite().withName("LocFrom").build();
-    Location dispatchedTo = aDistributionSite().withName("LocTo").build();
+    Location dispatchedFrom = getBaseDispatchedFromLocation();
+    Location dispatchedTo = getBaseDispatchedToLocation();
     Date orderDate = new Date();
 
-    OrderFormViewModel expectedViewModel = anOrderFormViewModel().withDispatchedFrom(new LocationViewModel(dispatchedFrom))
-        .withDispatchedTo(new LocationViewModel(dispatchedTo)).withOrderDate(orderDate).withId(1L).build();
+    OrderFormViewModel expectedViewModel = anOrderFormViewModel()
+        .withDispatchedFrom(locationViewModelFactory.createLocationViewModel(dispatchedFrom))
+        .withDispatchedTo(locationViewModelFactory.createLocationViewModel(dispatchedTo))
+        .withOrderDate(orderDate).withId(1L).build();
 
-    OrderForm entity = anOrderForm().withDispatchedFrom(dispatchedFrom).withDispatchedTo(dispatchedTo)
+    OrderForm entity = anOrderForm()
+        .withDispatchedFrom(dispatchedFrom)
+        .withDispatchedTo(dispatchedTo)
         .withOrderDate(orderDate).withId(1L).build();
 
     OrderFormViewModel convertedViewModel = orderFormFactory.createViewModel(entity);
@@ -111,20 +141,25 @@ public class OrderFormFactoryTests {
 
   @Test
   public void testConvertEntityToOrderFormViewModelWithItems_shouldReturnExpectedViewModel() {
-    Location dispatchedFrom = aDistributionSite().withName("LocFrom").build();
-    Location dispatchedTo = aDistributionSite().withName("LocTo").build();
+    Location dispatchedFrom = getBaseDispatchedFromLocation();
+    Location dispatchedTo = getBaseDispatchedToLocation();
     Date orderDate = new Date();
 
     OrderFormItemViewModel expectedItem1 = anOrderFormItemViewModel().withBloodGroup("A+").build();
     OrderFormItemViewModel expectedItem2 = anOrderFormItemViewModel().withBloodGroup("B+").build();
-    OrderFormViewModel expectedViewModel = anOrderFormViewModel().withDispatchedFrom(new LocationViewModel(dispatchedFrom))
-        .withDispatchedTo(new LocationViewModel(dispatchedTo)).withOrderDate(orderDate).withId(1L)
+    OrderFormViewModel expectedViewModel = anOrderFormViewModel()
+        .withDispatchedFrom(locationViewModelFactory.createLocationViewModel(dispatchedFrom))
+        .withDispatchedTo(locationViewModelFactory.createLocationViewModel(dispatchedTo))
+        .withOrderDate(orderDate).withId(1L)
         .withItem(expectedItem1).withItem(expectedItem2).build();
 
     OrderFormItem item1 = anOrderItemForm().withBloodAbo("A").withBloodRh("+").build();
     OrderFormItem item2 = anOrderItemForm().withBloodAbo("A").withBloodRh("+").build();
-    OrderForm entity = anOrderForm().withDispatchedFrom(dispatchedFrom).withDispatchedTo(dispatchedTo)
-        .withOrderDate(orderDate).withId(1L).withOrderFormItem(item1).withOrderFormItem(item2).build();
+    OrderForm entity = anOrderForm()
+        .withDispatchedFrom(dispatchedFrom)
+        .withDispatchedTo(dispatchedTo)
+        .withOrderDate(orderDate)
+        .withId(1L).withOrderFormItem(item1).withOrderFormItem(item2).build();
     
     when(orderFormItemFactory.createViewModel(item1)).thenReturn(expectedItem1);
     when(orderFormItemFactory.createViewModel(item2)).thenReturn(expectedItem2);
