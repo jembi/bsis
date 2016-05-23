@@ -58,6 +58,9 @@
   <renameColumn tableName="ComponentType_AUD" oldColumnName="componentTypeNameShort" newColumnName="componentTypeCode" columnDataType="VARCHAR(30)" />
   <renameColumn tableName="Component" oldColumnName="componentIdentificationNumber" newColumnName="componentCode" columnDataType="VARCHAR(20)" />
   <renameColumn tableName="Component_AUD" oldColumnName="componentIdentificationNumber" newColumnName="componentCode" columnDataType="VARCHAR(20)" />
+  <sql>
+    UPDATE Component SET componentCode = SUBSTR(componentCode, INSTR(componentCode, '-') + 1);
+  </sql>
  </changeSet>
 
 </databaseChangeLog>
