@@ -313,7 +313,7 @@ public class DonationRepository {
 
     Component component = new Component();
     component.setIsDeleted(false);
-    component.setComponentIdentificationNumber(donation.getDonationIdentificationNumber() + "-" + componentType.getComponentTypeNameShort());
+    component.setComponentIdentificationNumber(componentType.getComponentTypeCode());
     component.setDonation(donation);
     component.setStatus(ComponentStatus.QUARANTINED);
     component.setCreatedDate(donation.getCreatedDate());

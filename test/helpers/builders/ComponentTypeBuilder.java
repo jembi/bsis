@@ -14,7 +14,7 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
   private Boolean isDeleted = false;
   private int expiresAfter;
   private ComponentTypeTimeUnits expiresAfterUnits = ComponentTypeTimeUnits.DAYS;
-  private String componentTypeNameShort;
+  private String componentTypeCode;
   private String description;
   private boolean hasBloodGroup = false;
   private Integer lowStorageTemperature;
@@ -62,8 +62,8 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
     return this;
   }
   
-  public ComponentTypeBuilder withComponentTypeNameShort(String componentTypeNameShort) {
-    this.componentTypeNameShort = componentTypeNameShort;
+  public ComponentTypeBuilder withComponentTypeCode(String componentTypeCode) {
+    this.componentTypeCode = componentTypeCode;
     return this;
   }
   
@@ -95,7 +95,7 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
     componentType.setIsDeleted(isDeleted);
     componentType.setExpiresAfter(expiresAfter);
     componentType.setExpiresAfterUnits(expiresAfterUnits);
-    componentType.setComponentTypeNameShort(componentTypeNameShort);
+    componentType.setComponentTypeCode(componentTypeCode);
     componentType.setDescription(description);
     componentType.setHasBloodGroup(hasBloodGroup);
     componentType.setLowStorageTemperature(lowStorageTemperature);

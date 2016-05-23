@@ -50,5 +50,10 @@
 			<column name="REVTYPE" type="TINYINT(4)"/>
 		</createTable>
 	</changeSet>
+ 
+ <changeSet id="20160523-1202" author="bausmeier">
+  <renameColumn tableName="ComponentType" oldColumnName="componentTypeNameShort" newColumnName="componentTypeCode" columnDataType="VARCHAR(30)" />
+  <renameColumn tableName="ComponentType_AUD" oldColumnName="componentTypeNameShort" newColumnName="componentTypeCode" columnDataType="VARCHAR(30)" />
+ </changeSet>
 
 </databaseChangeLog>

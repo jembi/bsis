@@ -168,7 +168,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
 
     // set up test data (Donation)
     ComponentType componentType = new ComponentType();
-    componentType.setComponentTypeNameShort("0011");
+    componentType.setComponentTypeCode("0011");
     componentType.setExpiresAfter(35);
     componentType.setExpiresAfterUnits(ComponentTypeTimeUnits.DAYS);
     entityManager.persist(componentType);

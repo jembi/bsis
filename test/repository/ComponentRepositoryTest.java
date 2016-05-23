@@ -265,7 +265,7 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
   public void testFindComponentTypeByComponentTypeName() throws Exception {
     ComponentType one = componentRepository.findComponentTypeByComponentTypeName("Whole Blood Single Pack - CPDA");
     Assert.assertNotNull("ComponentType match", one);
-    Assert.assertEquals("ComponentType is correct", "0011", one.getComponentTypeNameShort());
+    Assert.assertEquals("ComponentType is correct", "0011", one.getComponentTypeCode());
   }
 
   @Test

@@ -69,14 +69,14 @@
     <ComponentType id="1" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Single Pack - CPDA"
-                   componentTypeNameShort="0011"/>
+                   componentTypeCode="0011"/>
     <ComponentType id="14" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Packed Red Cells - Paediatric - CPDA"
-                   componentTypeNameShort="2101"/>
+                   componentTypeCode="2101"/>
     <ComponentType id="6" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-                   componentTypeName="Whole Blood - CPDA" componentTypeNameShort="1001"
+                   componentTypeName="Whole Blood - CPDA" componentTypeCode="1001"
                    pediComponentType_id="14"/>
     <PackType id="1" packType="Single" isDeleted="false" testSampleProduced="false"
               componentType_id="1" countAsDonation="true" periodBetweenDonations="90"/>

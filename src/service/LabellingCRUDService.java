@@ -89,7 +89,7 @@ public class LabellingCRUDService {
             "^FD>:" + component.getDonationIdentificationNumber() + "^FS" +
             "^FT66,608^A0N,20,21^FH\\^FD" + component.getComponentType().getComponentTypeName() + "^FS" +
             "^BY3,3,77^FT69,535^BCN,,Y,N" +
-            "^FD>:" + component.getComponentType().getComponentTypeNameShort() + "^FS" +
+            "^FD>:" + component.getComponentType().getComponentTypeCode() + "^FS" +
             "^BY2,3,84^FT65,296^BCN,,Y,N" +
             "^FD>:" + donationDate + "^FS" +
             //inverse+

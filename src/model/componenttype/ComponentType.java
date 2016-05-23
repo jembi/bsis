@@ -42,7 +42,7 @@ public class ComponentType extends BaseEntity {
   private String componentTypeName;
 
   @Column(length = 30)
-  private String componentTypeNameShort;
+  private String componentTypeCode;
 
   private Integer expiresAfter;
 
@@ -113,12 +113,12 @@ public class ComponentType extends BaseEntity {
     this.description = description;
   }
 
-  public String getComponentTypeNameShort() {
-    return componentTypeNameShort;
+  public String getComponentTypeCode() {
+    return componentTypeCode;
   }
 
-  public void setComponentTypeNameShort(String componentTypeShortName) {
-    this.componentTypeNameShort = componentTypeShortName;
+  public void setComponentTypeCode(String componentTypeCode) {
+    this.componentTypeCode = componentTypeCode;
   }
 
   public ComponentTypeTimeUnits getExpiresAfterUnits() {
@@ -228,7 +228,7 @@ public class ComponentType extends BaseEntity {
 
   public void copy(ComponentType componentType) {
     this.componentTypeName = componentType.getComponentTypeName();
-    this.componentTypeNameShort = componentType.getComponentTypeNameShort();
+    this.componentTypeCode = componentType.getComponentTypeCode();
     this.expiresAfter = componentType.getExpiresAfter();
     this.expiresAfterUnits = componentType.getExpiresAfterUnits();
     this.description = componentType.getDescription();

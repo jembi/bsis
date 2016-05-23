@@ -77,7 +77,6 @@ public class ComponentCRUDService {
     Component parentComponent =
         componentRepository.findComponentById(Long.valueOf(recordComponentForm.getParentComponentId()));
     Donation donation = parentComponent.getDonation();
-    String donationIdentificationNumber = donation.getDonationIdentificationNumber();
     ComponentStatus parentStatus = parentComponent.getStatus();
     long componentId = Long.valueOf(recordComponentForm.getParentComponentId());
 
@@ -107,9 +106,8 @@ public class ComponentCRUDService {
 
     for (ComponentType pt : newComponents.keySet()) {
 
-      String componentTypeCode = pt.getComponentTypeNameShort();
+      String componentTypeCode = pt.getComponentTypeCode();
       int noOfUnits = newComponents.get(pt);
-      String createdPackNumber = donationIdentificationNumber + "-" + componentTypeCode;
 
       // Add New component
       if (!parentStatus.equals(ComponentStatus.PROCESSED) && !parentStatus.equals(ComponentStatus.DISCARDED)) {
@@ -120,9 +118,9 @@ public class ComponentCRUDService {
 
           // if there is more than one unit of the component, append unit number suffix
           if (noOfUnits > 1) {
-            component.setComponentIdentificationNumber(createdPackNumber + "-0" + i);
+            component.setComponentIdentificationNumber(componentTypeCode + "-0" + i);
           } else {
-            component.setComponentIdentificationNumber(createdPackNumber);
+            component.setComponentIdentificationNumber(componentTypeCode);
           }
           component.setComponentType(pt);
           component.setDonation(donation);

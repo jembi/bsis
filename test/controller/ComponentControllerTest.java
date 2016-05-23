@@ -55,11 +55,9 @@ public class ComponentControllerTest {
     if (donationIdentificationNumber.contains("-")) {
       donationIdentificationNumber = donationIdentificationNumber.split("-")[0];
     }
-    String sortName = componentType2.getComponentTypeNameShort();
+    String componentTypeCode = componentType2.getComponentTypeCode();
     int noOfUnits = 3;
     long donationId = 1;
-
-    String createdPackNumber = donationIdentificationNumber + "-" + sortName;
 
     // Add New component
     if (!status.equalsIgnoreCase("PROCESSED")) {
@@ -69,7 +67,7 @@ public class ComponentControllerTest {
           try {
             Component component = new Component();
             component.setIsDeleted(false);
-            component.setComponentIdentificationNumber(createdPackNumber + "-" + i);
+            component.setComponentIdentificationNumber(componentTypeCode + "-" + i);
             Calendar c = new GregorianCalendar();
             System.out.println("after :" + componentTypeRepository.getComponentTypeById(1l).getExpiryIntervalMinutes());
             c.add(Calendar.MINUTE, componentTypeRepository.getComponentTypeById(1l).getExpiryIntervalMinutes());
@@ -102,7 +100,7 @@ public class ComponentControllerTest {
         try {
           Component component = new Component();
           component.setIsDeleted(false);
-          component.setComponentIdentificationNumber(createdPackNumber);
+          component.setComponentIdentificationNumber(componentTypeCode);
 
           Calendar c = new GregorianCalendar();
           System.out.println("after :" + componentTypeRepository.getComponentTypeById(1l).getExpiryIntervalMinutes());

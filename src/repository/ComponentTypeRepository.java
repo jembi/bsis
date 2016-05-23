@@ -99,7 +99,7 @@ public class ComponentTypeRepository {
 
     for (ComponentType componentType : componentTypeCombination.getComponentTypes()) {
       componentTypes.add(componentType);
-      combinationNameList.add(componentType.getComponentTypeNameShort());
+      combinationNameList.add(componentType.getComponentTypeCode());
     }
 
     if (StringUtils.isBlank(combinationName)) {
