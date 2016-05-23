@@ -4,6 +4,9 @@
 
 	<changeSet id="20160519-1442" author="timler">
 		<createTable tableName="OrderForm_Component">
+			<column name="id" type="BIGINT(20)" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
 			<column name="orderForm_id" type="BIGINT(20)">
 				<constraints nullable="false" foreignKeyName="fk_OrderForm_Component_OrderForm"
 					references="OrderForm(id)" />
@@ -26,7 +29,14 @@
 					references="User(id)" />
 			</column>	
 		</createTable>
+
+		<addUniqueConstraint 
+		    tableName="OrderForm_Component"
+		    constraintName="compositekey_OrderForm_Component"
+		    columnNames="component_id, orderForm_id" />
+
 		<createTable tableName="OrderForm_Component_AUD">
+			<column name="id" type="BIGINT(20)" />
 			<column name="orderForm_id" type="BIGINT(20)" />
 			<column name="component_id" type="BIGINT(20)" />
 			<column name="isDeleted" type="tinyint(1)" />
