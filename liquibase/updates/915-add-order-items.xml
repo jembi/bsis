@@ -42,7 +42,9 @@
 		</createTable>
 
 		<createTable tableName="OrderFormItem_AUD">
-			<column name="id" type="BIGINT(20)" />
+			<column name="id" type="BIGINT(20)" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
 			<column name="componentType_id" type="BIGINT(20)"/>
 			<column name="orderForm_id" type="BIGINT(20)"/>
 			<column name="bloodAbo" type="VARCHAR(20)"/>
@@ -58,6 +60,5 @@
 			</column>
 			<column name="REVTYPE" type="TINYINT(4)"/>
 		</createTable>
-
 	</changeSet>
 </databaseChangeLog>
