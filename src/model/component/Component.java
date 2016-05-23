@@ -128,7 +128,7 @@ public class Component extends BaseModificationTrackerEntity {
   @Enumerated(EnumType.STRING)
   private InventoryStatus inventoryStatus = InventoryStatus.NOT_LABELLED;
   
-  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @ManyToOne(optional = false, fetch = FetchType.EAGER)
   private Location location;
 
   public Component() {

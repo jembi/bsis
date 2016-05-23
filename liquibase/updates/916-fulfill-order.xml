@@ -12,7 +12,7 @@
 				<constraints nullable="false" foreignKeyName="fk_OrderForm_Component_Component"
 					references="Component(id)" />
 			</column>
-			<column name="isDeleted" type="tinyint(1)">
+			<column name="isDeleted" type="tinyint(1)" defaultValue="0">
 				<constraints nullable="false" />
 			</column>
 			<column name="createdDate" type="TIMESTAMP" />
