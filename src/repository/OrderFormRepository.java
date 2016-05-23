@@ -1,6 +1,6 @@
 package repository;
 
-import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 
@@ -10,11 +10,10 @@ import model.order.OrderForm;
 public class OrderFormRepository extends AbstractRepository<OrderForm> {
 
   public OrderForm findById(Long id) {
-    OrderForm orderForm = entityManager.find(OrderForm.class, id);
-    if (orderForm == null) {
-      throw new NoResultException("OrderForm not found for id " + id);
-    }
-    return orderForm;
+    String queryString = "SELECT d FROM OrderForm d WHERE d.id = :id";
+    TypedQuery<OrderForm> query = entityManager.createQuery(queryString, OrderForm.class);
+    query.setParameter("id", id);
+    return query.getSingleResult();
   }
 
 }
