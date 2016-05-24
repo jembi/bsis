@@ -3,7 +3,10 @@ package backingform.validator;
 import static helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
 import static helpers.builders.ComponentBuilder.aComponent;
 import static helpers.builders.ComponentTypeBuilder.aComponentType;
-import static helpers.builders.LocationBackingFormBuilder.aDistributionSite;
+import static helpers.builders.LocationBackingFormBuilder.aDistributionSiteBackingForm;
+import static helpers.builders.LocationBuilder.aDistributionSite;
+import static helpers.builders.LocationBuilder.aUsageSite;
+import static helpers.builders.LocationBuilder.aVenue;
 import static helpers.builders.OrderFormBackingFormBuilder.anOrderFormBackingForm;
 import static org.mockito.Mockito.when;
 
@@ -28,7 +31,6 @@ import backingform.ComponentTypeBackingForm;
 import backingform.LocationBackingForm;
 import backingform.OrderFormBackingForm;
 import backingform.OrderFormItemBackingForm;
-import helpers.builders.LocationBuilder;
 import model.component.Component;
 import model.inventory.InventoryStatus;
 import model.location.Location;
@@ -55,8 +57,8 @@ public class OrderFormBackingFormValidatorTest {
   private ComponentRepository componentRepository;
 
   private OrderFormBackingForm getBaseOrderFormBackingForm() throws ParseException {
-    LocationBackingForm dispatchedFrom = aDistributionSite().withName("LocFrom").withId(1l).build();
-    LocationBackingForm dispatchedTo = aDistributionSite().withName("LocTo").withId(2l).build();
+    LocationBackingForm dispatchedFrom = aDistributionSiteBackingForm().withName("LocFrom").withId(1l).build();
+    LocationBackingForm dispatchedTo = aDistributionSiteBackingForm().withName("LocTo").withId(2l).build();
     Date orderDate = new Date();
     OrderFormBackingForm backingForm = anOrderFormBackingForm().withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo).withOrderDate(orderDate).build();
@@ -74,18 +76,16 @@ public class OrderFormBackingFormValidatorTest {
   }
 
   private ComponentBackingForm getBaseOrderFormComponentBackingForm() {
-    LocationBackingForm location = aDistributionSite().withName("LocFrom").withId(1l).build();
-    ComponentBackingForm component = aComponentBackingForm().withLocation(location)
-        .withInventoryStatus(InventoryStatus.IN_STOCK).withId(1L).build();
+    ComponentBackingForm component = aComponentBackingForm().withId(1L).build();
     return component;
   }
 
   private Location getBaseDispatchedFrom() {
-    return LocationBuilder.aDistributionSite().withName("LocFrom").withId(1l).build();
+    return aDistributionSite().withName("LocFrom").withId(1l).build();
   }
 
   private Location getBaseDispatchedTo() {
-    return LocationBuilder.aDistributionSite().withName("LocTo").withId(2l).build();
+    return aDistributionSite().withName("LocTo").withId(2l).build();
   }
   
   private Component getBaseComponent() {
@@ -159,8 +159,8 @@ public class OrderFormBackingFormValidatorTest {
     OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
 
     // dispatchedFrom and to can't be a venue
-    Location venue1 = LocationBuilder.aVenue().withId(1l).build();
-    Location venue2 = LocationBuilder.aVenue().withId(2l).build();
+    Location venue1 = aVenue().withId(1l).build();
+    Location venue2 = aVenue().withId(2l).build();
 
     // set up mocks
     when(locationRepository.getLocation(1l)).thenReturn(venue1);
@@ -182,7 +182,7 @@ public class OrderFormBackingFormValidatorTest {
     OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
 
     // dispatchedTo can be a usageSite
-    Location usageSite = LocationBuilder.aDistributionSite().withId(2l).build();
+    Location usageSite = aDistributionSite().withId(2l).build();
 
     // set up mocks
     when(locationRepository.getLocation(1l)).thenReturn(getBaseDispatchedFrom());
@@ -203,7 +203,7 @@ public class OrderFormBackingFormValidatorTest {
     OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
 
     // dispatchedTo can be a usageSite
-    Location usageSite = LocationBuilder.aUsageSite().withId(1l).build();
+    Location usageSite = aUsageSite().withId(1l).build();
 
     // set up mocks
     when(locationRepository.getLocation(1l)).thenReturn(usageSite);
@@ -252,7 +252,7 @@ public class OrderFormBackingFormValidatorTest {
     OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
     
     // create a component with a different location from dispatchedFrom
-    Location differentLocation = LocationBuilder.aDistributionSite().withName("DifferentLocation").withId(3l).build();
+    Location differentLocation = aDistributionSite().withName("DifferentLocation").withId(3l).build();
     Component component =
         aComponent().withInventoryStatus(InventoryStatus.IN_STOCK)
         .withLocation(differentLocation).build();

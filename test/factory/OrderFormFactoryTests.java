@@ -2,6 +2,8 @@ package factory;
 
 import static helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
 import static helpers.builders.ComponentBuilder.aComponent;
+import static helpers.builders.LocationBackingFormBuilder.aDistributionSiteBackingForm;
+import static helpers.builders.LocationBuilder.aDistributionSite;
 import static helpers.builders.OrderFormBackingFormBuilder.anOrderFormBackingForm;
 import static helpers.builders.OrderFormBuilder.anOrderForm;
 import static helpers.builders.OrderFormItemBackingFormBuilder.anOrderFormItemBackingForm;
@@ -26,8 +28,6 @@ import backingform.ComponentBackingForm;
 import backingform.LocationBackingForm;
 import backingform.OrderFormBackingForm;
 import backingform.OrderFormItemBackingForm;
-import helpers.builders.LocationBackingFormBuilder;
-import helpers.builders.LocationBuilder;
 import model.component.Component;
 import model.inventory.InventoryStatus;
 import model.location.Location;
@@ -35,7 +35,6 @@ import model.order.OrderForm;
 import model.order.OrderFormItem;
 import repository.ComponentRepository;
 import repository.LocationRepository;
-import viewmodel.ComponentViewModel;
 import viewmodel.OrderFormItemViewModel;
 import viewmodel.OrderFormViewModel;
 
@@ -61,19 +60,19 @@ public class OrderFormFactoryTests {
   private ComponentRepository componentRepository;
  
   private Location getBaseDispatchedFromLocation() {
-    return LocationBuilder.aDistributionSite().withName("LocFrom").withId(1l).build();
+    return aDistributionSite().withName("LocFrom").withId(1l).build();
   }
 
   private Location getBaseDispatchedToLocation() {
-    return LocationBuilder.aDistributionSite().withName("LocTo").withId(2l).build();
+    return aDistributionSite().withName("LocTo").withId(2l).build();
   }
 
   private LocationBackingForm getBaseDispatchedFromLocationBackingForm() {
-    return LocationBackingFormBuilder.aDistributionSite().withName("LocFrom").withId(1l).build();
+    return aDistributionSiteBackingForm().withName("LocFrom").withId(1l).build();
   }
 
   private LocationBackingForm getBaseDispatchedToLocationBackingForm() {
-    return LocationBackingFormBuilder.aDistributionSite().withName("LocTo").withId(2l).build();
+    return aDistributionSiteBackingForm().withName("LocTo").withId(2l).build();
   }
 
   @Test

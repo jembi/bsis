@@ -73,23 +73,23 @@ public class LocationBackingFormBuilder {
     return location;
   }
 
-  public static LocationBackingFormBuilder aLocation() {
+  public static LocationBackingFormBuilder aLocationBackingForm() {
     return new LocationBackingFormBuilder();
   }
 
-  public static LocationBackingFormBuilder aVenue() {
+  public static LocationBackingFormBuilder aVenueBackingForm() {
     return new LocationBackingFormBuilder().thatIsVenue();
   }
   
-  public static LocationBackingFormBuilder aProcessingSite() {
+  public static LocationBackingFormBuilder aProcessingSiteBackingForm() {
     return new LocationBackingFormBuilder().thatIsProcessingSite();
   }
 
-  public static LocationBackingFormBuilder aDistributionSite() {
+  public static LocationBackingFormBuilder aDistributionSiteBackingForm() {
     return new LocationBackingFormBuilder().thatIsDistributionSite();
   }
 
-  public static LocationBackingFormBuilder aUsageSite() {
+  public static LocationBackingFormBuilder aUsageSiteBackingForm() {
     return new LocationBackingFormBuilder().thatIsUsageSite();
   }
 
