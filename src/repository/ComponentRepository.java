@@ -819,4 +819,11 @@ public class ComponentRepository {
         .setParameter("donation", donation)
         .executeUpdate();
   }
+  
+  public Component findComponentByCodeAndDIN(String componentCode, String donationIdentificationNumber) {
+    return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_COMPONENT_BY_CODE_AND_DIN, Component.class)
+        .setParameter("donationIdentificationNumber", donationIdentificationNumber)
+        .setParameter("componentCode", componentCode)
+        .getSingleResult();
+  }
 }

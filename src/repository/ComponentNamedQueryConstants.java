@@ -43,4 +43,13 @@ public class ComponentNamedQueryConstants {
       "SELECT DISTINCT c FROM Component c " + 
           "WHERE c.donation.donationIdentificationNumber = :donationIdentificationNumber " +
           "AND c.isDeleted= :isDeleted";
+  
+  public static final String NAME_FIND_COMPONENT_BY_CODE_AND_DIN =
+      "Component.findComponentByCodeAndDIN";
+  public static final String QUERY_FIND_COMPONENT_BY_CODE_AND_DIN =
+      "SELECT c "
+      + "FROM Component c "
+      + "WHERE c.donation.donationIdentificationNumber = :donationIdentificationNumber "
+      + "AND c.componentCode = :componentCode ";
+  
 }
