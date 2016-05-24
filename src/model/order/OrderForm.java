@@ -54,7 +54,6 @@ public class OrderForm extends BaseModificationTrackerEntity {
   private List<OrderFormItem> items = new ArrayList<OrderFormItem>();
 
   @ManyToMany(fetch = FetchType.EAGER)
-  @Where(clause = "isDeleted = 0")
   @JoinTable(name = "OrderForm_Component", joinColumns = {@JoinColumn(name = "orderForm_id", referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "component_id", referencedColumnName = "id")})
   private List<Component> components = new ArrayList<Component>();
 
