@@ -187,8 +187,7 @@ public class OrderFormFactoryTests {
     Component expectedComponent =
         aComponent().withInventoryStatus(InventoryStatus.IN_STOCK)
         .withLocation(dispatchedFrom).withId(1L).build();
-    ComponentBackingForm componentBackingForm = aComponentBackingForm().withInventoryStatus(InventoryStatus.IN_STOCK)
-        .withLocation(getBaseDispatchedFromLocationBackingForm()).withId(1L).build();
+    ComponentBackingForm componentBackingForm = aComponentBackingForm().withId(1L).build();
 
     OrderForm expectedEntity = anOrderForm()
         .withDispatchedFrom(dispatchedFrom)

@@ -1,72 +1,95 @@
 package backingform;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import model.component.ComponentStatus;
 import model.componenttype.ComponentType;
-import model.donation.Donation;
 import model.inventory.InventoryStatus;
+import model.location.Location;
+import model.packtype.PackType;
 
 public class ComponentBackingForm {
 
   private Long id;
 
-  private LocationBackingForm location;
-
-  private InventoryStatus inventoryStatus;
-
-  private ComponentStatus status;
-
-  private Donation donation;
-
-  private ComponentType componentType;
+  public void setId(Long id) {
+    this.id = id;
+  }
 
   public Long getId() {
     return id;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  @JsonIgnore
+  public void setNotes(String notes) {
+    // ignore
   }
 
-  public LocationBackingForm getLocation() {
-    return location;
-  }
-
-  public void setLocation(LocationBackingForm location) {
-    this.location = location;
-  }
-
-  public InventoryStatus getInventoryStatus() {
-    return inventoryStatus;
-  }
-
-  public void setInventoryStatus(InventoryStatus inventoryStatus) {
-    this.inventoryStatus = inventoryStatus;
-  }
-
-  public ComponentStatus getStatus() {
-    return status;
-  }
-
-  public void setStatus(ComponentStatus status) {
-    this.status = status;
-  }
-
-  public Donation getDonation() {
-    return donation;
-  }
-
-  public void setDonation(Donation donation) {
-    this.donation = donation;
-  }
-
-  public ComponentType getComponentType() {
-    return componentType;
-  }
-
+  @JsonIgnore
   public void setComponentType(ComponentType componentType) {
-    this.componentType = componentType;
+    // ignore
+  }
+
+  @JsonIgnore
+  public void setExpiresOn(Date expiresOn) {
+    // ignore
+  }
+
+  @JsonIgnore
+  public void setCreatedOn(Date createdOn) {
+    // ignore
+  }
+
+  @JsonIgnore
+  public void setCreatedDate(Date createdDate) {
+    // ignore
+  }
+
+  @JsonIgnore
+  public void setStatus(ComponentStatus status) {
+    // ignore
+  }
+
+  @JsonIgnore
+  public void setDiscardedOn(Date discardedOn) {
+    // ignore
+  }
+
+  @JsonIgnore
+  public void setIssuedOn(Date issuedOn) {
+    // ignore
+  }
+
+  @JsonIgnore
+  public void setComponentCode(String componentCode) {
+    // ignore
+  }
+
+  @JsonIgnore
+  public void setInventoryStatus(InventoryStatus inventoryStatus) {
+    // ignore
+  }
+
+  @JsonIgnore
+  public void setLocation(Location location) {
+    // ignore
+  }
+
+  @JsonIgnore
+  public void setDonationIdentificationNumber(String donationIdentificationNumber) {
+    // Ignore
+  }
+
+  @JsonIgnore
+  public void setPackType(PackType packType) {
+    // Ignore
+  }
+
+  @JsonIgnore
+  public void setExpiryStatus(String expiryStatus) {
+    // Ignore
   }
 
   @JsonIgnore
