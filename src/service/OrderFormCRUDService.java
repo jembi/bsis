@@ -54,6 +54,7 @@ public class OrderFormCRUDService {
       items.add(orderFormItemCRUDService.createOrUpdateOrderFormItem(item));
     }
     existingOrderForm.setItems(items);
+    existingOrderForm.setComponents(updatedOrderForm.getComponents());
     return orderFormRepository.update(existingOrderForm);
   }
 }
