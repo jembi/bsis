@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import backingform.RecordComponentBackingForm;
+import factory.ComponentViewModelFactory;
 import model.component.Component;
 import model.component.ComponentStatus;
 import model.componentmovement.ComponentStatusChange;
@@ -25,8 +26,8 @@ import model.donation.Donation;
 import model.donor.Donor;
 import model.inventory.InventoryStatus;
 import repository.ComponentRepository;
-import repository.DonationRepository;
 import utils.SecurityUtils;
+import viewmodel.ComponentViewModel;
 
 @Transactional
 @Service
@@ -39,7 +40,7 @@ public class ComponentCRUDService {
   @Autowired
   private ComponentRepository componentRepository;
   @Autowired
-  private DonationRepository donationRepository;
+  private ComponentViewModelFactory componentViewModelFactory;
 
   /**
    * Change the status of components belonging to the donor from AVAILABLE to UNSAFE.
@@ -188,5 +189,10 @@ public class ComponentCRUDService {
     componentRepository.updateComponent(existingComponent);
     
     return existingComponent;
+  }
+  
+  public ComponentViewModel findComponentByCodeAndDIN(String componentCode, String donationIdentificationNumber) {
+    Component component = componentRepository.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber);
+    return componentViewModelFactory.createComponentViewModel(component);
   }
 }

@@ -63,6 +63,15 @@ public class ComponentController {
   @Autowired
   private ComponentTypeFactory componentTypeFactory;
 
+  @RequestMapping(method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
+  public Map<String, Object> findComponent(@RequestParam(required = true) String componentCode,
+      @RequestParam(required = true) String donationIdentificationNumber) {
+    Map<String, Object> map = new HashMap<>();
+    map.put("component", componentCRUDService.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber));
+    return map;
+  }
+
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
   public Map<String, Object> componentSummaryGenerator(HttpServletRequest request,

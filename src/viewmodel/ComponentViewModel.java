@@ -166,6 +166,14 @@ public class ComponentViewModel {
     DonationViewModel donationViewModel = new DonationViewModel(component.getDonation());
     return donationViewModel.getBloodGroup();
   }
+  
+  public String getBloodAbo() {
+    return component.getDonation().getBloodAbo();
+  }
+  
+  public String getBloodRh() {
+    return component.getDonation().getBloodRh();
+  }
 
   public String getSubdivisionCode() {
     return component.getSubdivisionCode();

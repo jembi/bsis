@@ -1,5 +1,7 @@
 package backingform;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import model.component.ComponentStatus;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
@@ -67,5 +69,14 @@ public class ComponentBackingForm {
     this.componentType = componentType;
   }
 
+  @JsonIgnore
+  public void setBloodAbo(String bloodAbo) {
+    // Ignore
+  }
+
+  @JsonIgnore
+  public void setBloodRh(String bloodRh) {
+    // Ignore
+  }
 
 }
