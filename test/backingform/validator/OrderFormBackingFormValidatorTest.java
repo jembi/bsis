@@ -321,4 +321,46 @@ public class OrderFormBackingFormValidatorTest {
     // check asserts
     Assert.assertEquals("component inventory status must be IN_STOCK", errors.getFieldErrors().get(0).getDefaultMessage());
   }
+  
+  @Test
+  public void testValidateComponentNotFound_invalidComponentIdError() throws Exception {
+    // set up data
+    OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
+    backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getBaseDispatchedFrom());
+    when(locationRepository.getLocation(2l)).thenReturn(getBaseDispatchedTo());
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+    when(componentRepository.findComponent(1L)).thenReturn(null);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("component id is invalid.", errors.getFieldErrors().get(0).getDefaultMessage());
+  }
+  
+  @Test
+  public void testValidateNoComponentId_requiredComponentIdError() throws Exception {
+    // set up data
+    OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
+    
+    // component backing form with null id
+    ComponentBackingForm componentBackingForm = aComponentBackingForm().withId(null).build();
+    backingForm.setComponents(Arrays.asList(componentBackingForm));
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getBaseDispatchedFrom());
+    when(locationRepository.getLocation(2l)).thenReturn(getBaseDispatchedTo());
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("component id is required.", errors.getFieldErrors().get(0).getDefaultMessage());
+  }
 }
