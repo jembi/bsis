@@ -5,35 +5,26 @@
 	<changeSet id="20160519-1442" author="timler">
 		<createTable tableName="OrderForm_Component">
 			<column name="orderForm_id" type="BIGINT(20)">
-				<constraints nullable="false" foreignKeyName="fk_OrderForm_Component_OrderForm"
+				<constraints primaryKey="true" nullable="false" foreignKeyName="fk_OrderForm_Component_OrderForm"
 					references="OrderForm(id)" />
 			</column>
 			<column name="component_id" type="BIGINT(20)">
-				<constraints nullable="false" foreignKeyName="fk_OrderForm_Component_Component"
+				<constraints primaryKey="true" nullable="false" foreignKeyName="fk_OrderForm_Component_Component"
 					references="Component(id)" />
 			</column>
 			<column name="isDeleted" type="tinyint(1)" defaultValue="0">
 				<constraints nullable="false" />
-			</column>
-			<column name="createdDate" type="TIMESTAMP" />
-			<column name="createdBy_id" type="BIGINT(20)">
-				<constraints foreignKeyName="fk_OrderForm_Component_createdBy"
-					references="User(id)" />
-			</column>
-			<column name="lastUpdated" type="TIMESTAMP" />
-			<column name="lastUpdatedBy_id" type="BIGINT(20)">
-				<constraints foreignKeyName="fk_OrderForm_Component_lastUpdatedBy"
-					references="User(id)" />
 			</column>	
 		</createTable>
+
 		<createTable tableName="OrderForm_Component_AUD">
-			<column name="orderForm_id" type="BIGINT(20)" />
-			<column name="component_id" type="BIGINT(20)" />
+			<column name="orderForm_id" type="BIGINT(20)">
+			    <constraints primaryKey="true" />
+			</column>
+			<column name="component_id" type="BIGINT(20)">
+			    <constraints primaryKey="true" />
+			</column>
 			<column name="isDeleted" type="tinyint(1)" />
-			<column name="createdDate" type="TIMESTAMP" />
-			<column name="createdBy_id" type="BIGINT(20)" />
-			<column name="lastUpdated" type="TIMESTAMP" />
-			<column name="lastUpdatedBy_id" type="BIGINT(20)" />
 			<column name="REV" type="INT(11)">
 				<constraints primaryKey="true" />
 			</column>
