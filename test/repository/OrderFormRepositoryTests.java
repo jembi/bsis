@@ -1,20 +1,21 @@
 package repository;
 
 import static helpers.builders.ComponentBuilder.aComponent;
-import static helpers.builders.ComponentTypeBuilder.aComponentType;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.OrderFormBuilder.anOrderForm;
 import static helpers.builders.PackTypeBuilder.aPackType;
 
 import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 import javax.persistence.NoResultException;
 
+import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import helpers.builders.ComponentBuilder;
 import helpers.builders.ComponentTypeBuilder;
 import helpers.builders.LocationBuilder;
 import helpers.builders.OrderFormBuilder;
@@ -95,4 +96,82 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     orderFormRepository.findById(1L);
   }
   
+  @Test
+  public void testFindOrderFormsNoQueryParams_shouldReturnAllOrders() {
+    // Set up
+    DateTime now = new DateTime();
+    Date aDayAgo = now.minusDays(1).toDate();
+    Date twoDaysAgo = now.minusDays(2).toDate();
+    Date threeDaysAgo = now.minusDays(3).toDate();
+    anOrderForm().withOrderDate(aDayAgo).buildAndPersist(entityManager);
+    anOrderForm().withOrderDate(twoDaysAgo).buildAndPersist(entityManager);
+    anOrderForm().withOrderDate(threeDaysAgo).buildAndPersist(entityManager);
+
+    // Test
+    List<OrderForm> orders = orderFormRepository.findOrderForms(null, null, null, null);
+
+    // Verify
+    Assert.assertEquals("Found 3 orders", 3, orders.size());
+  }
+
+  @Test
+  public void testFindOrderFormsByPeriod_shouldReturnOrdersInPeriod() {
+    // Set up
+    DateTime now = new DateTime();
+    Date aDayAgo = now.minusDays(1).toDate();
+    Date twoDaysAgo = now.minusDays(2).toDate();
+    Date threeDaysAgo = now.minusDays(3).toDate();
+    OrderForm orderForm1 = anOrderForm().withOrderDate(aDayAgo).buildAndPersist(entityManager);
+    OrderForm orderForm2 = anOrderForm().withOrderDate(twoDaysAgo).buildAndPersist(entityManager);
+    anOrderForm().withOrderDate(threeDaysAgo).buildAndPersist(entityManager);
+
+    // Test
+    List<OrderForm> orders = orderFormRepository.findOrderForms(twoDaysAgo, aDayAgo, null, null);
+
+    // Verify
+    Assert.assertEquals("Found 2 orders", 2, orders.size());
+    Assert.assertEquals("Verify right order was returned", orderForm1, orders.get(0));
+    Assert.assertEquals("Verify right order was returned", orderForm2, orders.get(1));
+  }
+
+  @Test
+  public void testFindOrderFormsByLocations_shouldReturnRightOrders() {
+    // Set up
+    Location dispatchedFrom = LocationBuilder.aDistributionSite().withName("site1").build();
+    Location dispatchedTo = LocationBuilder.aDistributionSite().withName("site2").build();
+    OrderForm orderForm = anOrderForm().withDispatchedFrom(dispatchedFrom).withDispatchedTo(dispatchedTo).buildAndPersist(entityManager);
+    anOrderForm().withDispatchedFrom(dispatchedFrom).buildAndPersist(entityManager);
+    anOrderForm().buildAndPersist(entityManager);
+
+    // Test
+    List<OrderForm> orders = orderFormRepository.findOrderForms(null, null, dispatchedFrom, dispatchedTo);
+
+    // Verify
+    Assert.assertEquals("Found 1 order", 1, orders.size());
+    Assert.assertEquals("Verify right order was returned", orderForm, orders.get(0));
+  }
+
+  @Test
+  public void testFindOrderFormsByPeriodAndLocation_shouldReturnRightOrders() {
+    // Set up
+    DateTime now = new DateTime();
+    Date aDayAgo = now.minusDays(1).toDate();
+    Date twoDaysAgo = now.minusDays(2).toDate();
+    Date threeDaysAgo = now.minusDays(3).toDate();
+    Location dispatchedFrom = LocationBuilder.aDistributionSite().withName("site1").build();
+    Location dispatchedTo = LocationBuilder.aDistributionSite().withName("site2").build();
+    OrderForm orderForm = anOrderForm()
+        .withOrderDate(aDayAgo).withOrderDate(twoDaysAgo)
+        .withDispatchedFrom(dispatchedFrom).withDispatchedTo(dispatchedTo).buildAndPersist(entityManager);
+    anOrderForm().withDispatchedFrom(dispatchedFrom).withDispatchedTo(dispatchedTo).buildAndPersist(entityManager);
+    anOrderForm().withOrderDate(threeDaysAgo).buildAndPersist(entityManager);
+
+    // Test
+    List<OrderForm> orders = orderFormRepository.findOrderForms(twoDaysAgo, aDayAgo, dispatchedFrom, dispatchedTo);
+
+    // Verify
+    Assert.assertEquals("Found 1 order", 1, orders.size());
+    Assert.assertEquals("Verify right order was returned", orderForm, orders.get(0));
+  }
+
 }
