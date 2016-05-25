@@ -7,12 +7,16 @@ import java.util.List;
 
 import model.component.Component;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import viewmodel.ComponentViewModel;
 
 @Service
 public class ComponentViewModelFactory {
+  
+  @Autowired
+  LocationViewModelFactory locationViewModelFactory;
 
   public List<ComponentViewModel> createComponentViewModels(Collection<Component> components) {
     List<ComponentViewModel> viewModels = new ArrayList<>();
@@ -26,6 +30,10 @@ public class ComponentViewModelFactory {
   }
   
   public ComponentViewModel createComponentViewModel(Component component) {
-    return new ComponentViewModel(component);
+    ComponentViewModel viewModel = new ComponentViewModel(component);
+    if (component.getLocation() != null) {
+      viewModel.setLocation(locationViewModelFactory.createLocationViewModel(component.getLocation()));
+    }
+    return viewModel;
   }
 }

@@ -2,18 +2,22 @@ package viewmodel;
 
 import java.util.Date;
 
+import model.component.Component;
+import model.inventory.InventoryStatus;
+
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import model.component.Component;
 import utils.CustomDateFormatter;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ComponentViewModel {
 
   @JsonIgnore
   private Component component;
+  
+  private LocationViewModel location;
 
   public ComponentViewModel() {
   }
@@ -108,5 +112,16 @@ public class ComponentViewModel {
   public String getComponentCode() {
     return component.getComponentCode();
   }
+  
+  public InventoryStatus getInventoryStatus() {
+    return component.getInventoryStatus();
+  }
+  
+  public void setLocation(LocationViewModel location) {
+    this.location = location;
+  }
 
+  public LocationViewModel getLocation() {
+    return location;
+  }
 }
