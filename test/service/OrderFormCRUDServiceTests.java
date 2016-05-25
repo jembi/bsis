@@ -145,4 +145,19 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
     verify(componentDispatchService).issueComponent(component, dispatchedTo);
   }
 
+  @Test(expected = IllegalStateException.class)
+  public void testUpdatePreviouslyDispatchedOrderForm_shouldThrow() {
+    // Fixture
+    OrderFormBackingForm backingForm = anOrderFormBackingForm().withId(ORDER_FORM_ID).build();
+    OrderForm existingOrderForm = anOrderForm().withId(ORDER_FORM_ID).withOrderStatus(OrderStatus.DISPATCHED).build();
+    OrderForm orderFormCreatedFromBackingForm = anOrderForm().withId(ORDER_FORM_ID).build();
+
+    // Expectations
+    when(orderFormFactory.createEntity(backingForm)).thenReturn(orderFormCreatedFromBackingForm);
+    when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
+
+    // Test
+    orderFormCRUDService.updateOrderForm(backingForm);
+  }
+
 }

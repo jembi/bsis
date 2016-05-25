@@ -50,6 +50,11 @@ public class OrderFormCRUDService {
   public OrderForm updateOrderForm(OrderForm updatedOrderForm) {
     OrderForm existingOrderForm = orderFormRepository.findById(updatedOrderForm.getId());
     
+    // Check that only orders in CREATED status can be updated
+    if (existingOrderForm.getStatus() != OrderStatus.CREATED) {
+      throw new IllegalStateException("Dispatched order forms can't be updated.");
+    }
+
     // If the order is being dispatched then transfer or issue each component
     if (existingOrderForm.getStatus() == OrderStatus.CREATED && updatedOrderForm.getStatus() == OrderStatus.DISPATCHED) {
       for (Component component : updatedOrderForm.getComponents()) {
