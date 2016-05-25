@@ -22,6 +22,8 @@ public class OrderFormBackingForm {
   
   private List<OrderFormItemBackingForm> items;
 
+  private List<ComponentBackingForm> components;
+
   public Long getId() {
     return id;
   }
@@ -76,6 +78,14 @@ public class OrderFormBackingForm {
 
   public void setItems(List<OrderFormItemBackingForm> items) {
     this.items = items;
+  }
+
+  public List<ComponentBackingForm> getComponents() {
+    return components;
+  }
+
+  public void setComponents(List<ComponentBackingForm> components) {
+    this.components = components;
   }
 
 }

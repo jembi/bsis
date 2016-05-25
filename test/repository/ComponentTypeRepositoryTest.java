@@ -112,7 +112,7 @@ public class ComponentTypeRepositoryTest extends DBUnitContextDependentTestSuite
   public void testSaveComponentType() throws Exception {
     ComponentType componentType = new ComponentType();
     componentType.setComponentTypeName("Junit");
-    componentType.setComponentTypeNameShort("j");
+    componentType.setComponentTypeCode("j");
     componentType.setExpiresAfter(1);
     componentType.setExpiresAfterUnits(ComponentTypeTimeUnits.DAYS);
     componentType.setHasBloodGroup(true);

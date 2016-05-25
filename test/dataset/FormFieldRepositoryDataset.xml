@@ -620,7 +620,7 @@
                isTimeField="false" maxLength="0" useCurrentTime="false"/>
     <FormField id="145" autoGenerate="false" canBeOptional="true"
                defaultDisplayName="Component Identification Number" defaultValue=""
-               field="componentIdentificationNumber" form="Component" hidden="false"
+               field="componentCode" form="Component" hidden="false"
                isAutoGeneratable="false" isHidable="true" isRequired="false"
                isTimeField="false" maxLength="0" useCurrentTime="false"/>
     <FormField id="146" autoGenerate="false" canBeOptional="true"

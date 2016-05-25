@@ -20,6 +20,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
   private InventoryStatus inventoryStatus = InventoryStatus.NOT_LABELLED;
   private Location location = aVenue().build();
   private boolean isDeleted = false;
+  private String componentCode;
   
   public ComponentBuilder withId(Long id) {
     this.id = id;
@@ -56,6 +57,11 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     return this;
   }
 
+  public ComponentBuilder withComponentCode(String componentCode) {
+    this.componentCode = componentCode;
+    return this;
+  }
+
   @Override
   public Component build() {
     Component component = new Component();
@@ -66,6 +72,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     component.setLocation(location);
     component.setInventoryStatus(inventoryStatus);
     component.setIsDeleted(isDeleted);
+    component.setComponentCode(componentCode);
     return component;
   }
 

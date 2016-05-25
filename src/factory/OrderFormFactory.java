@@ -1,23 +1,22 @@
 package factory;
 
-
-
 import java.util.ArrayList;
 import java.util.List;
-
-import model.location.Location;
-import model.order.OrderForm;
-import model.order.OrderFormItem;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import repository.LocationRepository;
-import viewmodel.LocationViewModel;
-import viewmodel.OrderFormItemViewModel;
-import viewmodel.OrderFormViewModel;
+import backingform.ComponentBackingForm;
 import backingform.OrderFormBackingForm;
 import backingform.OrderFormItemBackingForm;
+import model.component.Component;
+import model.location.Location;
+import model.order.OrderForm;
+import model.order.OrderFormItem;
+import repository.ComponentRepository;
+import repository.LocationRepository;
+import viewmodel.OrderFormItemViewModel;
+import viewmodel.OrderFormViewModel;
 
 /**
  * A factory for creating OrderForm related objects.
@@ -30,6 +29,15 @@ public class OrderFormFactory {
   
   @Autowired
   private OrderFormItemFactory orderFormItemFactory;
+
+  @Autowired
+  private ComponentRepository componentRepository;
+
+  @Autowired
+  private ComponentViewModelFactory componentViewModelFactory;
+
+  @Autowired
+  private LocationViewModelFactory locationViewModelFactory;
 
   public OrderForm createEntity(OrderFormBackingForm backingForm) {
     OrderForm entity = new OrderForm();
@@ -47,15 +55,22 @@ public class OrderFormFactory {
         items.add(orderFormItemFactory.createEntity(entity, item));
       }
     }
+    List<Component> components = new ArrayList<>();
+    if (backingForm.getComponents() != null) {
+      for (ComponentBackingForm component : backingForm.getComponents()) {
+        components.add(componentRepository.findComponent(component.getId()));
+      }
+    }
     entity.setItems(items);
+    entity.setComponents(components);
     return entity;
   }
 
   public OrderFormViewModel createViewModel(OrderForm entity) {
     OrderFormViewModel viewModel = new OrderFormViewModel();
     viewModel.setId(entity.getId());
-    viewModel.setDispatchedFrom(new LocationViewModel(entity.getDispatchedFrom()));
-    viewModel.setDispatchedTo(new LocationViewModel(entity.getDispatchedTo()));
+    viewModel.setDispatchedFrom(locationViewModelFactory.createLocationViewModel(entity.getDispatchedFrom()));
+    viewModel.setDispatchedTo(locationViewModelFactory.createLocationViewModel(entity.getDispatchedTo()));
     viewModel.setOrderDate(entity.getOrderDate());
     viewModel.setStatus(entity.getStatus());
     viewModel.setType(entity.getType());
@@ -64,6 +79,7 @@ public class OrderFormFactory {
       items.add(orderFormItemFactory.createViewModel(item));
     }
     viewModel.setItems(items);
+    viewModel.setComponents(componentViewModelFactory.createComponentViewModels(entity.getComponents()));
     return viewModel;
   }
 

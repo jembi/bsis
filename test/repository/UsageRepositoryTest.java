@@ -48,8 +48,8 @@ public class UsageRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
-  public void testFindUsageByComponentIdentificationNumber() throws Exception {
-    ComponentUsage usage = usageRepository.findUsageByComponentIdentificationNumber("3333333-0011");
+  public void testFindUsageByComponentCode() throws Exception {
+    ComponentUsage usage = usageRepository.findUsageByComponentCode("3333333-0011");
     Assert.assertNotNull("ComponentUsage found", usage);
     Assert.assertEquals("ComponentUsage correct", Long.valueOf(3), usage.getId());
   }
@@ -98,7 +98,7 @@ public class UsageRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
-  @Ignore("Bug - error in HSQL: dateUsed of: model.usage.ComponentUsage [SELECT u FROM model.usage.ComponentUsage u WHERE (u.component.componentIdentificationNumber = :componentIdentificationNumber OR u.useIndication IN (:useIndications)) AND (u.dateUsed BETWEEN :dateUsedFrom AND :dateUsedTo) AND (u.isDeleted= :isDeleted)]")
+  @Ignore("Bug - error in HSQL: dateUsed of: model.usage.ComponentUsage [SELECT u FROM model.usage.ComponentUsage u WHERE (u.component.componentCode = :componentCode OR u.useIndication IN (:useIndications)) AND (u.dateUsed BETWEEN :dateUsedFrom AND :dateUsedTo) AND (u.isDeleted= :isDeleted)]")
   public void testFindAnyUsageMatching() throws Exception {
     List<String> usages = new ArrayList<String>();
     usages.add("Operation");

@@ -23,6 +23,8 @@ public class OrderFormViewModel {
   
   private List<OrderFormItemViewModel> items = new ArrayList<>();
 
+  private List<ComponentViewModel> components = new ArrayList<>();
+
   public Date getOrderDate() {
     return orderDate;
   }
@@ -78,4 +80,14 @@ public class OrderFormViewModel {
   public void setItems(List<OrderFormItemViewModel> items) {
     this.items = items;
   }
+
+  public List<ComponentViewModel> getComponents() {
+    return components;
+  }
+
+  public void setComponents(List<ComponentViewModel> components) {
+    this.components = components;
+  }
+
+
 }

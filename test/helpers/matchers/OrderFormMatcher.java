@@ -25,7 +25,8 @@ public class OrderFormMatcher extends TypeSafeMatcher<OrderForm> {
         .appendText("\nOrder Date: ").appendValue(expected.getOrderDate())
         .appendText("\nDispatched From: ").appendValue(expected.getDispatchedFrom())
         .appendText("\nDispatched To: ").appendValue(expected.getDispatchedTo())
-        .appendText("\nItems: ").appendValue(expected.getItems());
+        .appendText("\nItems: ").appendValue(expected.getItems())
+        .appendText("\nComponents: ").appendValue(expected.getComponents());
   }
   
   @Override
@@ -37,7 +38,8 @@ public class OrderFormMatcher extends TypeSafeMatcher<OrderForm> {
         Objects.equals(actual.getOrderDate(), expected.getOrderDate()) &&
         Objects.equals(actual.getDispatchedFrom(), expected.getDispatchedFrom()) &&
         Objects.equals(actual.getDispatchedTo(), expected.getDispatchedTo()) &&
-        Objects.equals(actual.getItems(), expected.getItems());
+        Objects.equals(actual.getItems(), expected.getItems()) &&
+        Objects.equals(actual.getComponents(), expected.getComponents());
   }
 
   public static OrderFormMatcher hasSameStateAsOrderForm(OrderForm expected) {

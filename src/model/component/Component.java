@@ -53,7 +53,9 @@ import repository.InventoryNamedQueryConstants;
     @NamedQuery(name = InventoryNamedQueryConstants.NAME_FIND_STOCK_LEVELS,
         query = InventoryNamedQueryConstants.QUERY_FIND_STOCK_LEVELS),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_BY_DIN,
-        query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENTS_BY_DIN)
+        query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENTS_BY_DIN),
+    @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENT_BY_CODE_AND_DIN,
+        query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENT_BY_CODE_AND_DIN)
 })
 @Entity
 @Audited
@@ -122,13 +124,13 @@ public class Component extends BaseModificationTrackerEntity {
   private Boolean isDeleted;
 
   @Column(length = 20)
-  private String componentIdentificationNumber;
+  private String componentCode;
   
   @Column(length = 30, nullable = false)
   @Enumerated(EnumType.STRING)
   private InventoryStatus inventoryStatus = InventoryStatus.NOT_LABELLED;
   
-  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @ManyToOne(optional = false, fetch = FetchType.EAGER)
   private Location location;
 
   public Component() {
@@ -142,7 +144,7 @@ public class Component extends BaseModificationTrackerEntity {
     this.createdOn = component.createdOn;
     this.expiresOn = component.expiresOn;
     this.notes = component.notes;
-    this.componentIdentificationNumber = component.componentIdentificationNumber;
+    this.componentCode = component.componentCode;
     this.location = component.location;
     this.inventoryStatus = component.inventoryStatus;
   }
@@ -273,12 +275,12 @@ public class Component extends BaseModificationTrackerEntity {
     this.parentComponent = parentComponent;
   }
 
-  public String getComponentIdentificationNumber() {
-    return componentIdentificationNumber;
+  public String getComponentCode() {
+    return componentCode;
   }
 
-  public void setComponentIdentificationNumber(String componentIdentificationNumber) {
-    this.componentIdentificationNumber = componentIdentificationNumber;
+  public void setComponentCode(String componentCode) {
+    this.componentCode = componentCode;
   }
 
   public ComponentBatch getComponentBatch() {

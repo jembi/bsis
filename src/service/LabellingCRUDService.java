@@ -89,7 +89,7 @@ public class LabellingCRUDService {
             "^FD>:" + component.getDonationIdentificationNumber() + "^FS" +
             "^FT66,608^A0N,20,21^FH\\^FD" + component.getComponentType().getComponentTypeName() + "^FS" +
             "^BY3,3,77^FT69,535^BCN,,Y,N" +
-            "^FD>:" + component.getComponentType().getComponentTypeNameShort() + "^FS" +
+            "^FD>:" + component.getComponentCode() + "^FS" +
             "^BY2,3,84^FT65,296^BCN,,Y,N" +
             "^FD>:" + donationDate + "^FS" +
             //inverse+
@@ -203,7 +203,7 @@ public class LabellingCRUDService {
       Map<String, Object> componentLabellingStatus = new HashMap<String, Object>();
       componentLabellingStatus.put("componentId", component.getId());
       componentLabellingStatus.put("componentName", component.getComponentType().getComponentTypeName());
-      componentLabellingStatus.put("componentIdentificationNumber", component.getComponentIdentificationNumber());
+      componentLabellingStatus.put("componentCode", component.getComponentCode());
 
       if (unsafeDonation || componentStatus.equals(ComponentStatus.UNSAFE) ||
           componentStatus.toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED)) {

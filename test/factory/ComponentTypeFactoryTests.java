@@ -30,7 +30,7 @@ public class ComponentTypeFactoryTests {
     ComponentType entity = ComponentTypeBuilder.aComponentType()
         .withId(1L)
         .withComponentTypeName("name")
-        .withComponentTypeNameShort("0001")
+        .withComponentTypeCode("0001")
         .withDescription("descr")
         .withExpiresAfter(90)
         .withHighStorageTemperature(10)
@@ -44,7 +44,7 @@ public class ComponentTypeFactoryTests {
     Assert.assertNotNull("View Model was created", viewModel);
     Assert.assertEquals("View Model correct", Long.valueOf(1), viewModel.getId());
     Assert.assertEquals("View Model correct", "name", viewModel.getComponentTypeName());
-    Assert.assertEquals("View Model correct", "0001", viewModel.getComponentTypeNameShort());
+    Assert.assertEquals("View Model correct", "0001", viewModel.getComponentTypeCode());
     Assert.assertEquals("View Model correct", "descr", viewModel.getDescription());
     Assert.assertEquals("View Model correct", Integer.valueOf(90), viewModel.getExpiresAfter());
     Assert.assertEquals("View Model correct", ComponentTypeTimeUnits.DAYS, viewModel.getExpiresAfterUnits());
@@ -60,7 +60,7 @@ public class ComponentTypeFactoryTests {
     ComponentType entity = ComponentTypeBuilder.aComponentType()
         .withId(1L)
         .withComponentTypeName("name")
-        .withComponentTypeNameShort("0001")
+        .withComponentTypeCode("0001")
         .withDescription("descr")
         .build();
 
@@ -69,7 +69,7 @@ public class ComponentTypeFactoryTests {
     Assert.assertNotNull("View Model was created", viewModel);
     Assert.assertEquals("View Model correct", Long.valueOf(1), viewModel.getId());
     Assert.assertEquals("View Model correct", "name", viewModel.getComponentTypeName());
-    Assert.assertEquals("View Model correct", "0001", viewModel.getComponentTypeNameShort());
+    Assert.assertEquals("View Model correct", "0001", viewModel.getComponentTypeCode());
     Assert.assertEquals("View Model correct", "descr", viewModel.getDescription());
   }
   

@@ -69,14 +69,14 @@
     <ComponentType id="1" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Single Pack - CPDA"
-                   componentTypeNameShort="0011"/>
+                   componentTypeCode="0011"/>
     <ComponentType id="14" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Packed Red Cells - Paediatric - CPDA"
-                   componentTypeNameShort="2101"/>
+                   componentTypeCode="2101"/>
     <ComponentType id="6" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-                   componentTypeName="Whole Blood - CPDA" componentTypeNameShort="1001"
+                   componentTypeName="Whole Blood - CPDA" componentTypeCode="1001"
                    pediComponentType_id="14"/>
     <PackType id="1" packType="Single" isDeleted="false" testSampleProduced="false"
               componentType_id="1" countAsDonation="true" periodBetweenDonations="90"/>
@@ -126,41 +126,41 @@
                isDeleted="false" createdDate="2015-08-11 09:06:27.0"
                lastUpdated="2015-08-11 09:07:29.0"
                status="PROCESSED" donation_id="1" createdBy_id="1" lastUpdatedBy_id="1"
-               componentType_id="1" componentIdentificationNumber="1111111-0011"
+               componentType_id="1" componentCode="1111111-0011"
                componentBatch_id="1" />
     <Component location_id="1" inventoryStatus="NOT_LABELLED" id="2" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
                isDeleted="false" createdDate="2015-08-11 09:07:29.0"
                lastUpdated="2015-08-11 09:07:29.0"
                status="QUARANTINED" donation_id="1" createdBy_id="1"
                lastUpdatedBy_id="1" parentComponent_id="1" componentType_id="6"
-               componentIdentificationNumber="1111111-1001"/>
+               componentCode="1111111-1001"/>
     <Component location_id="1" inventoryStatus="NOT_LABELLED" id="3" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
                isDeleted="false" createdDate="2015-08-11 09:06:27.0"
                lastUpdated="2015-08-11 09:07:29.0"
                status="PROCESSED" donation_id="2" createdBy_id="1" lastUpdatedBy_id="1"
-               componentType_id="1" componentIdentificationNumber="2222222-0011"/>
+               componentType_id="1" componentCode="2222222-0011"/>
     <Component location_id="1" inventoryStatus="NOT_LABELLED" id="4" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
                isDeleted="false" createdDate="2015-08-11 09:07:29.0"
                lastUpdated="2015-08-11 09:07:29.0"
                status="QUARANTINED" donation_id="2" createdBy_id="1"
                lastUpdatedBy_id="1" parentComponent_id="3" componentType_id="6"
-               componentIdentificationNumber="2222222-1001"/>
+               componentCode="2222222-1001"/>
     <Component location_id="1" inventoryStatus="NOT_LABELLED" id="5" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
                isDeleted="false" createdDate="2015-08-11 09:06:27.0"
                lastUpdated="2015-08-11 09:07:29.0"
                status="PROCESSED" donation_id="3" createdBy_id="1" lastUpdatedBy_id="1"
-               componentType_id="1" componentIdentificationNumber="3333333-0011"/>
+               componentType_id="1" componentCode="3333333-0011"/>
     <Component location_id="1" inventoryStatus="NOT_LABELLED" id="6" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
                discardedOn="2015-08-11 16:13:00.0" isDeleted="false"
                createdDate="2015-08-11 09:07:29.0"
                lastUpdated="2015-08-11 09:07:29.0" status="DISCARDED" donation_id="3"
                createdBy_id="1" lastUpdatedBy_id="1" parentComponent_id="5"
-               componentType_id="6" componentIdentificationNumber="3333333-1001"/>
+               componentType_id="6" componentCode="3333333-1001"/>
     <Component location_id="1" inventoryStatus="NOT_LABELLED" id="7" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
                isDeleted="false" createdDate="2015-08-11 09:06:27.0"
                lastUpdated="2015-08-11 09:07:29.0"
                status="QUARANTINED" donation_id="5" createdBy_id="1" lastUpdatedBy_id="1"
-               componentType_id="6" componentIdentificationNumber="5555555-0011"/>
+               componentType_id="6" componentCode="5555555-0011"/>
     
     <ComponentStatusChangeReason id="5" category="DISCARDED"
                                  isDeleted="false" statusChangeReason="Storage Problems"/>

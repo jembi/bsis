@@ -1,12 +1,9 @@
 package viewmodel;
 
-import java.util.Arrays;
 import java.util.Date;
 
 import model.component.Component;
-import model.component.ComponentStatus;
-import model.donation.Donation;
-import model.user.User;
+import model.inventory.InventoryStatus;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -19,6 +16,8 @@ public class ComponentViewModel {
 
   @JsonIgnore
   private Component component;
+  
+  private LocationViewModel location;
 
   public ComponentViewModel() {
   }
@@ -39,11 +38,6 @@ public class ComponentViewModel {
     return component.getId();
   }
 
-  @JsonIgnore
-  public Donation getDonation() {
-    return component.getDonation();
-  }
-
   public ComponentTypeViewModel getComponentType() {
     // FIXME: use factory
     return new ComponentTypeFullViewModel(component.getComponentType());
@@ -51,10 +45,6 @@ public class ComponentViewModel {
 
   public String getNotes() {
     return component.getNotes();
-  }
-
-  public Boolean getIsDeleted() {
-    return component.getIsDeleted();
   }
 
   public String getCreatedOn() {
@@ -76,27 +66,12 @@ public class ComponentViewModel {
       return "";
     return getComponent().getDonation().getDonationIdentificationNumber();
   }
-
-  public String getDonationID() {
-    if (getComponent() == null || getComponent().getDonation() == null ||
-        getComponent().getDonation().getId() == null
-        )
-      return "";
-    return getComponent().getDonation().getId().toString();
-  }
   
   public PackTypeBasicViewModel getPackType() {
     if (component.getDonation() == null || component.getDonation().getPackType() == null) {
       return null;
     }
     return new PackTypeBasicViewModel(component.getDonation().getPackType());
-  }
-
-  public String getAge() {
-    DateTime today = new DateTime();
-    DateTime createdOn = new DateTime(component.getCreatedOn().getTime());
-    Long age = (long) Days.daysBetween(createdOn, today).getDays();
-    return age + " days old";
   }
 
   public String getStatus() {
@@ -114,70 +89,39 @@ public class ComponentViewModel {
     }
   }
 
-  public String getLastUpdated() {
-    return CustomDateFormatter.getDateTimeString(component.getLastUpdated());
-  }
-
   public String getCreatedDate() {
     return CustomDateFormatter.getDateTimeString(component.getCreatedDate());
-  }
-
-  @JsonIgnore
-  public String getCreatedBy() {
-    User user = component.getCreatedBy();
-    if (user == null || user.getUsername() == null)
-      return "";
-    return user.getUsername();
-  }
-
-  @JsonIgnore
-  public String getLastUpdatedBy() {
-    User user = component.getLastUpdatedBy();
-    if (user == null || user.getUsername() == null)
-      return "";
-    return user.getUsername();
   }
 
   public String getIssuedOn() {
     return CustomDateFormatter.getDateTimeString(component.getIssuedOn());
   }
 
-  @JsonIgnore
-  public RequestViewModel getIssuedTo() {
-    ComponentStatus status = component.getStatus();
-    if (status == null)
-      return null;
-    else if (!status.equals(ComponentStatus.ISSUED))
-      return null;
-    else
-      return new RequestViewModel(component.getIssuedTo());
-  }
-
   public String getDiscardedOn() {
     return CustomDateFormatter.getDateTimeString(component.getDiscardedOn());
   }
-
-  @JsonIgnore
-  public String getBloodGroup() {
-    if (component == null || component.getDonation() == null ||
-        component.getDonation().getDonationIdentificationNumber() == null
-        )
-      return "";
-    DonationViewModel donationViewModel = new DonationViewModel(component.getDonation());
-    return donationViewModel.getBloodGroup();
+  
+  public String getBloodAbo() {
+    return component.getDonation().getBloodAbo();
+  }
+  
+  public String getBloodRh() {
+    return component.getDonation().getBloodRh();
   }
 
-  public String getSubdivisionCode() {
-    return component.getSubdivisionCode();
+  public String getComponentCode() {
+    return component.getComponentCode();
+  }
+  
+  public InventoryStatus getInventoryStatus() {
+    return component.getInventoryStatus();
+  }
+  
+  public void setLocation(LocationViewModel location) {
+    this.location = location;
   }
 
-  public Boolean getStatusAllowsSplitting() {
-    return Arrays.asList(ComponentStatus.AVAILABLE, ComponentStatus.QUARANTINED)
-        .contains(component.getStatus());
+  public LocationViewModel getLocation() {
+    return location;
   }
-
-  public String getComponentIdentificationNumber() {
-    return component.getComponentIdentificationNumber();
-  }
-
 }

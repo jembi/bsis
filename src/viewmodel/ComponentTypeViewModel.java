@@ -29,8 +29,8 @@ public class ComponentTypeViewModel {
     return componentType.getComponentTypeName();
   }
 
-  public String getComponentTypeNameShort() {
-    return componentType.getComponentTypeNameShort();
+  public String getComponentTypeCode() {
+    return componentType.getComponentTypeCode();
   }
 
   public String getDescription() {

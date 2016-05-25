@@ -8,14 +8,13 @@ import static org.hamcrest.Matchers.is;
 
 import java.util.Arrays;
 
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import model.component.Component;
 import model.component.ComponentStatus;
 import model.donation.Donation;
 import model.donor.Donor;
-
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import suites.ContextDependentTestSuite;
 
 public class ComponentRepositoryTests extends ContextDependentTestSuite {
@@ -99,6 +98,41 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
     assertThat(firstComponentToUpdate.getStatus(), is(newStatus));
     assertThat(secondComponentToUpdate.getStatus(), is(newStatus));
     assertThat(componentExcludedByStatus.getStatus(), is(ComponentStatus.USED));
+  }
+  
+  @Test
+  public void testFindComponentByCodeAndDIN_shouldReturnMatchingComponent() {
+    
+    String componentCode = "0011-01";
+    String donationIdentificationNumber = "0000002";
+    
+    Donation donationWithExpectedDonationIdentificationNumber = aDonation()
+        .withDonationIdentificationNumber(donationIdentificationNumber)
+        .buildAndPersist(entityManager);
+    
+    // Excluded by component code
+    aComponent()
+        .withComponentCode("0011-02")
+        .withDonation(donationWithExpectedDonationIdentificationNumber)
+        .buildAndPersist(entityManager);
+    
+    // Excluded by donation identification number
+    aComponent()
+        .withComponentCode(componentCode)
+        .withDonation(aDonation().withDonationIdentificationNumber("1000007").build())
+        .buildAndPersist(entityManager);
+    
+    // Expected
+    Component expectedComponent = aComponent()
+        .withComponentCode(componentCode)
+        .withDonation(donationWithExpectedDonationIdentificationNumber)
+        .buildAndPersist(entityManager);
+    
+    // Test
+    Component returnedComponent = componentRepository.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber);;
+    
+    // Verify
+    assertThat(returnedComponent, is(expectedComponent));
   }
 
 }

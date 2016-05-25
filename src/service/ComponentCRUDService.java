@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import backingform.RecordComponentBackingForm;
+import factory.ComponentViewModelFactory;
 import model.component.Component;
 import model.component.ComponentStatus;
 import model.componentmovement.ComponentStatusChange;
@@ -25,8 +26,8 @@ import model.donation.Donation;
 import model.donor.Donor;
 import model.inventory.InventoryStatus;
 import repository.ComponentRepository;
-import repository.DonationRepository;
 import utils.SecurityUtils;
+import viewmodel.ComponentViewModel;
 
 @Transactional
 @Service
@@ -39,7 +40,7 @@ public class ComponentCRUDService {
   @Autowired
   private ComponentRepository componentRepository;
   @Autowired
-  private DonationRepository donationRepository;
+  private ComponentViewModelFactory componentViewModelFactory;
 
   /**
    * Change the status of components belonging to the donor from AVAILABLE to UNSAFE.
@@ -77,7 +78,6 @@ public class ComponentCRUDService {
     Component parentComponent =
         componentRepository.findComponentById(Long.valueOf(recordComponentForm.getParentComponentId()));
     Donation donation = parentComponent.getDonation();
-    String donationIdentificationNumber = donation.getDonationIdentificationNumber();
     ComponentStatus parentStatus = parentComponent.getStatus();
     long componentId = Long.valueOf(recordComponentForm.getParentComponentId());
 
@@ -107,9 +107,8 @@ public class ComponentCRUDService {
 
     for (ComponentType pt : newComponents.keySet()) {
 
-      String componentTypeCode = pt.getComponentTypeNameShort();
+      String componentTypeCode = pt.getComponentTypeCode();
       int noOfUnits = newComponents.get(pt);
-      String createdPackNumber = donationIdentificationNumber + "-" + componentTypeCode;
 
       // Add New component
       if (!parentStatus.equals(ComponentStatus.PROCESSED) && !parentStatus.equals(ComponentStatus.DISCARDED)) {
@@ -120,9 +119,9 @@ public class ComponentCRUDService {
 
           // if there is more than one unit of the component, append unit number suffix
           if (noOfUnits > 1) {
-            component.setComponentIdentificationNumber(createdPackNumber + "-0" + i);
+            component.setComponentCode(componentTypeCode + "-0" + i);
           } else {
-            component.setComponentIdentificationNumber(createdPackNumber);
+            component.setComponentCode(componentTypeCode);
           }
           component.setComponentType(pt);
           component.setDonation(donation);
@@ -190,5 +189,10 @@ public class ComponentCRUDService {
     componentRepository.updateComponent(existingComponent);
     
     return existingComponent;
+  }
+  
+  public ComponentViewModel findComponentByCodeAndDIN(String componentCode, String donationIdentificationNumber) {
+    Component component = componentRepository.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber);
+    return componentViewModelFactory.createComponentViewModel(component);
   }
 }
