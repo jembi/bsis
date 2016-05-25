@@ -15,5 +15,6 @@
 	<include file="./liquibase/updates/870-add-new-order.xml" />
 	<include file="./liquibase/updates/915-add-order-items.xml" />
 	<include file="./liquibase/updates/916-fulfill-order.xml" />
+	<include file="./liquibase/updates/917-dispatch-order.xml" />
 
 </databaseChangeLog>
