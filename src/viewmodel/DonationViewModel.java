@@ -64,12 +64,12 @@ public class DonationViewModel {
     return donation.getDonationType();
   }
 
-  public PackTypeViewModel getPackType() {
+  public PackTypeViewFullModel getPackType() {
     if (donation.getPackType() == null) {
       return null;
     }
     // FIXME: use a factory
-    return new PackTypeViewModel(donation.getPackType());
+    return new PackTypeViewFullModel(donation.getPackType());
   }
 
   public String getNotes() {
