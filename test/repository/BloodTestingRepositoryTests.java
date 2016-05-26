@@ -53,42 +53,36 @@ public class BloodTestingRepositoryTests extends ContextDependentTestSuite{
     aBloodTestResult()
         .withDonation(expectedDonationStartDate)
         .withBloodTest(expectedBloodTest)
-        .withResult("POS")
         .buildAndPersist(entityManager);
     
     // Expected
     aBloodTestResult()
         .withDonation(expectedDonationEndDate)
         .withBloodTest(expectedBloodTest)
-        .withResult("POS")
         .buildAndPersist(entityManager);
     
     // Excluded by date
     aBloodTestResult()
         .withDonation(expectedDonationCurrentDate)
         .withBloodTest(expectedBloodTest)
-        .withResult("POS")
         .buildAndPersist(entityManager);
     
     // Excluded - donation deleted
     aBloodTestResult()
         .withDonation(deletedDonation)
         .withBloodTest(expectedBloodTest)
-        .withResult("POS")
         .buildAndPersist(entityManager);
     
     // Excluded by blood test type
     aBloodTestResult()
         .withDonation(expectedDonationStartDate)
         .withBloodTest(unexpectedBloodTest)
-        .withResult("POS")
         .buildAndPersist(entityManager);
      
     
     List<BloodTestResultDTO> expectedDtos = Arrays.asList(
         aBloodTestResultDTO()
             .withBloodTest(expectedBloodTest)
-            .withResult("POS")
             .withVenue(expectedVenue)
             .withGender(expectedGender)
             .withCount(2)

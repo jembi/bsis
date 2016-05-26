@@ -113,6 +113,12 @@ public class ReportGeneratorService {
       bloodTestCohort.setComparator(Comparator.EQUALS);
       bloodTestCohort.setOption(dto.getBloodTest().getTestName());
       dataValue.addCohort(bloodTestCohort);
+      
+      Cohort bloodTestResultCohort = new Cohort();
+      bloodTestResultCohort.setCategory(CohortConstants.BLOOD_TEST_RESULT_CATEGORY);
+      bloodTestResultCohort.setComparator(Comparator.EQUALS);
+      bloodTestResultCohort.setOption(dto.getResult());
+      dataValue.addCohort(bloodTestResultCohort);
 
       Cohort genderCohort = new Cohort();
       genderCohort.setCategory(CohortConstants.GENDER_CATEGORY);
