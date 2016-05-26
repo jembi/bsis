@@ -3,20 +3,22 @@ package factory;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import backingform.ComponentBackingForm;
-import backingform.OrderFormBackingForm;
-import backingform.OrderFormItemBackingForm;
 import model.component.Component;
 import model.location.Location;
 import model.order.OrderForm;
 import model.order.OrderFormItem;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import repository.ComponentRepository;
 import repository.LocationRepository;
-import viewmodel.OrderFormItemViewModel;
 import viewmodel.OrderFormFullViewModel;
+import viewmodel.OrderFormItemViewModel;
+import viewmodel.OrderFormViewModel;
+import backingform.ComponentBackingForm;
+import backingform.OrderFormBackingForm;
+import backingform.OrderFormItemBackingForm;
 
 /**
  * A factory for creating OrderForm related objects.
@@ -68,12 +70,7 @@ public class OrderFormFactory {
 
   public OrderFormFullViewModel createFullViewModel(OrderForm entity) {
     OrderFormFullViewModel viewModel = new OrderFormFullViewModel();
-    viewModel.setId(entity.getId());
-    viewModel.setDispatchedFrom(locationViewModelFactory.createLocationViewModel(entity.getDispatchedFrom()));
-    viewModel.setDispatchedTo(locationViewModelFactory.createLocationViewModel(entity.getDispatchedTo()));
-    viewModel.setOrderDate(entity.getOrderDate());
-    viewModel.setStatus(entity.getStatus());
-    viewModel.setType(entity.getType());
+    populateBasicViewModel(entity, viewModel);
     List<OrderFormItemViewModel> items = new ArrayList<>();
     for (OrderFormItem item : entity.getItems()) {
       items.add(orderFormItemFactory.createViewModel(item));
@@ -83,4 +80,28 @@ public class OrderFormFactory {
     return viewModel;
   }
 
+  public OrderFormViewModel createViewModel(OrderForm entity) {
+    OrderFormViewModel viewModel = new OrderFormViewModel();
+    populateBasicViewModel(entity, viewModel);
+    return viewModel;
+  }
+  
+  public List<OrderFormViewModel> createViewModels(List<OrderForm> entities) {
+    List<OrderFormViewModel> viewModels = new ArrayList<>();
+    if (entities != null) {
+      for (OrderForm entity : entities) {
+        viewModels.add(createViewModel(entity));
+      }
+    }
+    return viewModels;
+  }
+  
+  private void populateBasicViewModel(OrderForm entity, OrderFormViewModel viewModel) {
+    viewModel.setId(entity.getId());
+    viewModel.setDispatchedFrom(locationViewModelFactory.createLocationViewModel(entity.getDispatchedFrom()));
+    viewModel.setDispatchedTo(locationViewModelFactory.createLocationViewModel(entity.getDispatchedTo()));
+    viewModel.setOrderDate(entity.getOrderDate());
+    viewModel.setStatus(entity.getStatus());
+    viewModel.setType(entity.getType());
+  }
 }

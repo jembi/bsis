@@ -6,16 +6,26 @@ import static helpers.builders.LocationBackingFormBuilder.aDistributionSiteBacki
 import static helpers.builders.LocationBuilder.aDistributionSite;
 import static helpers.builders.OrderFormBackingFormBuilder.anOrderFormBackingForm;
 import static helpers.builders.OrderFormBuilder.anOrderForm;
+import static helpers.builders.OrderFormFullViewModelBuilder.anOrderFormFullViewModel;
 import static helpers.builders.OrderFormItemBackingFormBuilder.anOrderFormItemBackingForm;
 import static helpers.builders.OrderFormItemBuilder.anOrderItemForm;
 import static helpers.builders.OrderFormItemViewModelBuilder.anOrderFormItemViewModel;
-import static helpers.builders.OrderFormFullViewModelBuilder.anOrderFormFullViewModel;
-import static helpers.matchers.OrderFormMatcher.hasSameStateAsOrderForm;
+import static helpers.builders.OrderFormViewModelBuilder.anOrderFormViewModel;
 import static helpers.matchers.OrderFormFullViewModelMatcher.hasSameStateAsOrderFormFullViewModel;
+import static helpers.matchers.OrderFormMatcher.hasSameStateAsOrderForm;
+import static helpers.matchers.OrderFormViewModelMatcher.hasSameStateAsOrderFormViewModel;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+
+import model.component.Component;
+import model.inventory.InventoryStatus;
+import model.location.Location;
+import model.order.OrderForm;
+import model.order.OrderFormItem;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,19 +34,15 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import repository.ComponentRepository;
+import repository.LocationRepository;
+import viewmodel.OrderFormFullViewModel;
+import viewmodel.OrderFormItemViewModel;
+import viewmodel.OrderFormViewModel;
 import backingform.ComponentBackingForm;
 import backingform.LocationBackingForm;
 import backingform.OrderFormBackingForm;
 import backingform.OrderFormItemBackingForm;
-import model.component.Component;
-import model.inventory.InventoryStatus;
-import model.location.Location;
-import model.order.OrderForm;
-import model.order.OrderFormItem;
-import repository.ComponentRepository;
-import repository.LocationRepository;
-import viewmodel.OrderFormItemViewModel;
-import viewmodel.OrderFormFullViewModel;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OrderFormFactoryTests {
@@ -231,5 +237,60 @@ public class OrderFormFactoryTests {
     OrderFormFullViewModel convertedViewModel = orderFormFactory.createFullViewModel(entity);
 
     assertThat(convertedViewModel, hasSameStateAsOrderFormFullViewModel(expectedViewModel));
+  }
+  
+  @Test
+  public void testConvertEntityToOrderFormViewModel_shouldReturnExpectedViewModel() {
+    Location dispatchedFrom = getBaseDispatchedFromLocation();
+    Location dispatchedTo = getBaseDispatchedToLocation();
+    Date orderDate = new Date();
+
+    OrderFormViewModel expectedViewModel = anOrderFormViewModel()
+        .withDispatchedFrom(locationViewModelFactory.createLocationViewModel(dispatchedFrom))
+        .withDispatchedTo(locationViewModelFactory.createLocationViewModel(dispatchedTo))
+        .withOrderDate(orderDate).withId(1L).build();
+
+    OrderForm entity = anOrderForm()
+        .withDispatchedFrom(dispatchedFrom)
+        .withDispatchedTo(dispatchedTo)
+        .withOrderDate(orderDate).withId(1L).build();
+
+    OrderFormViewModel convertedViewModel = orderFormFactory.createViewModel(entity);
+
+    assertThat(convertedViewModel, hasSameStateAsOrderFormViewModel(expectedViewModel));
+  }
+  
+  @Test
+  public void testConvertEntitiesToOrderFormViewModels_shouldReturnExpectedViewModels() {
+    Location dispatchedFrom = getBaseDispatchedFromLocation();
+    Location dispatchedTo = getBaseDispatchedToLocation();
+    Date orderDate1 = new Date();
+    Date orderDate2 = new Date();
+
+    OrderFormViewModel expectedViewModel1 = anOrderFormViewModel()
+        .withDispatchedFrom(locationViewModelFactory.createLocationViewModel(dispatchedFrom))
+        .withDispatchedTo(locationViewModelFactory.createLocationViewModel(dispatchedTo))
+        .withOrderDate(orderDate1).withId(1L).build();
+    
+    OrderFormViewModel expectedViewModel2 = anOrderFormViewModel()
+        .withDispatchedFrom(locationViewModelFactory.createLocationViewModel(dispatchedFrom))
+        .withDispatchedTo(locationViewModelFactory.createLocationViewModel(dispatchedTo))
+        .withOrderDate(orderDate2).withId(2L).build();
+
+    OrderForm entity1 = anOrderForm()
+        .withDispatchedFrom(dispatchedFrom)
+        .withDispatchedTo(dispatchedTo)
+        .withOrderDate(orderDate1).withId(1L).build();
+    
+    OrderForm entity2 = anOrderForm()
+        .withDispatchedFrom(dispatchedFrom)
+        .withDispatchedTo(dispatchedTo)
+        .withOrderDate(orderDate2).withId(2L).build();
+
+    List<OrderFormViewModel> convertedViewModels = orderFormFactory.createViewModels(Arrays.asList(entity1, entity2));
+
+    assertThat("2 OrderFormViewModels returned", convertedViewModels.size() == 2);
+    assertThat(convertedViewModels.get(0), hasSameStateAsOrderFormViewModel(expectedViewModel1));
+    assertThat(convertedViewModels.get(1), hasSameStateAsOrderFormViewModel(expectedViewModel2));
   }
 }
