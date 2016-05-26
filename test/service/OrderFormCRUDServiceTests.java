@@ -53,6 +53,44 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
   private ComponentDispatchService componentDispatchService;
   
   @Test
+  public void testUpdateOrderFormWithoutStatusChange_shouldUpdateFieldsCorrectly() {
+    // Fixture
+    Date createdDate = new Date();
+    Date orderDate = new Date();
+    Location dispatchedFrom = aDistributionSite().build();
+    Location dispatchedTo = aDistributionSite().build();
+    
+    OrderForm existingOrderForm = anOrderForm().withId(ORDER_FORM_ID).withCreatedDate(createdDate).build();
+    OrderFormBackingForm backingForm = anOrderFormBackingForm().withId(ORDER_FORM_ID).build();
+    OrderForm orderFormCreatedFromBackingForm = anOrderForm()
+        .withId(ORDER_FORM_ID)
+        .withOrderDate(orderDate)
+        .withDispatchedFrom(dispatchedFrom)
+        .withDispatchedTo(dispatchedTo)
+        .build();
+    OrderForm expectedOrderForm = anOrderForm()
+        .withId(ORDER_FORM_ID)
+        .withCreatedDate(createdDate)
+        .withOrderDate(orderDate)
+        .withDispatchedFrom(dispatchedFrom)
+        .withDispatchedTo(dispatchedTo)
+        .build();
+    OrderFormViewModel expectedViewModel = anOrderFormViewModel().withId(ORDER_FORM_ID).build();
+    
+    // Expectations
+    when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
+    when(orderFormFactory.createEntity(backingForm)).thenReturn(orderFormCreatedFromBackingForm);
+    when(orderFormRepository.update(existingOrderForm)).thenReturn(existingOrderForm);
+    when(orderFormFactory.createViewModel(argThat(hasSameStateAsOrderForm(expectedOrderForm)))).thenReturn(expectedViewModel);
+    
+    // Test
+    OrderFormViewModel returnedViewModel = orderFormCRUDService.updateOrderForm(backingForm);
+    
+    // Assertions
+    assertThat(returnedViewModel, is(expectedViewModel));
+  }
+  
+  @Test
   public void testUpdateTransferOrderForm_shouldUpdateFieldsCorrectly() {
     // Fixture
     Date createdDate = new Date();
