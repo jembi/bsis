@@ -33,8 +33,8 @@ public class ComponentTypeBackingForm {
     componentType.setComponentTypeName(componentTypeName);
   }
 
-  public void setComponentTypeNameShort(String componentTypeNameShort) {
-    componentType.setComponentTypeNameShort(componentTypeNameShort);
+  public void setComponentTypeCode(String componentTypeCode) {
+    componentType.setComponentTypeCode(componentTypeCode);
   }
 
   public void setExpiresAfter(Integer expiresAfter) {

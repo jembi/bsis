@@ -1,226 +1,105 @@
 package backingform;
 
-import java.text.ParseException;
 import java.util.Date;
-import java.util.List;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import model.component.Component;
-import model.component.ComponentStatus;
-import model.componenttype.ComponentType;
-import model.donation.Donation;
-import model.user.User;
-
-import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import utils.CustomDateFormatter;
+import model.component.ComponentStatus;
+import model.componenttype.ComponentType;
+import model.inventory.InventoryStatus;
+import model.location.Location;
+import model.packtype.PackType;
 
 public class ComponentBackingForm {
 
-  public static final int ID_LENGTH = 12;
+  private Long id;
 
-  @NotNull
-  @Valid
-  private Component component;
-
-  private String createdOn;
-
-  private String expiresOn;
-
-  private List<String> componentTypes;
-
-  public ComponentBackingForm() {
-    setComponent(new Component());
-  }
-
-  public ComponentBackingForm(boolean autoGenerate) {
-    setComponent(new Component());
-  }
-
-  public ComponentBackingForm(Component component) {
-    this.setComponent(component);
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public Long getId() {
-    return component.getId();
-  }
-
-  public Donation getDonation() {
-    return component.getDonation();
-  }
-
-  public String getComponentType() {
-    ComponentType componentType = component.getComponentType();
-    if (componentType == null)
-      return "";
-    else
-      return componentType.getId().toString();
+    return id;
   }
 
   @JsonIgnore
-  public Date getLastUpdated() {
-    return component.getLastUpdated();
-  }
-
-  @JsonIgnore
-  public Date getCreatedDate() {
-    return component.getCreatedDate();
-  }
-
-  @JsonIgnore
-  public User getCreatedBy() {
-    return component.getCreatedBy();
-  }
-
-  @JsonIgnore
-  public User getLastUpdatedBy() {
-    return component.getLastUpdatedBy();
-  }
-
-  public String getNotes() {
-    return component.getNotes();
-  }
-
-  public Boolean getIsDeleted() {
-    return component.getIsDeleted();
-  }
-
-  public int hashCode() {
-    return component.hashCode();
-  }
-
-  public void setId(Long id) {
-    component.setId(id);
-  }
-
-  public void setDonation(Donation donation) {
-    component.setDonation(donation);
-  }
-
-  public void setComponentType(String componentTypeId) {
-    if (StringUtils.isBlank(componentTypeId)) {
-      component.setComponentType(null);
-    } else {
-      ComponentType pt = new ComponentType();
-      try {
-        pt.setId(Long.parseLong(componentTypeId));
-        component.setComponentType(pt);
-      } catch (Exception ex) {
-        ex.printStackTrace();
-        component.setComponentType(null);
-      }
-    }
-  }
-
-  public String getCreatedOn() {
-    if (createdOn != null)
-      return createdOn;
-    if (getComponent() == null)
-      return "";
-    return CustomDateFormatter.getDateTimeString(component.getCreatedOn());
-  }
-
-  public String getExpiresOn() {
-    if (expiresOn != null)
-      return expiresOn;
-    if (getComponent() == null)
-      return "";
-    return CustomDateFormatter.getDateString(component.getExpiresOn());
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    component.setLastUpdated(lastUpdated);
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    component.setCreatedDate(createdDate);
-  }
-
-  public void setCreatedBy(User createdBy) {
-    component.setCreatedBy(createdBy);
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    component.setLastUpdatedBy(lastUpdatedBy);
-  }
-
   public void setNotes(String notes) {
-    component.setNotes(notes);
+    // ignore
   }
 
-  public void setIsDeleted(Boolean isDeleted) {
-    component.setIsDeleted(isDeleted);
+  @JsonIgnore
+  public void setComponentType(ComponentType componentType) {
+    // ignore
   }
 
-  public void setCreatedOn(String createdOn) {
-    this.createdOn = createdOn;
-    try {
-      component.setCreatedOn(CustomDateFormatter.getDateTimeFromString(createdOn));
-    } catch (ParseException ex) {
-      ex.printStackTrace();
-      component.setCreatedOn(null);
-    }
+  @JsonIgnore
+  public void setExpiresOn(Date expiresOn) {
+    // ignore
   }
 
-  public void setExpiresOn(String expiresOn) {
-    this.expiresOn = expiresOn;
-    try {
-      component.setExpiresOn(CustomDateFormatter.getDateTimeFromString(expiresOn));
-    } catch (ParseException ex) {
-      ex.printStackTrace();
-      component.setExpiresOn(null);
-    }
+  @JsonIgnore
+  public void setCreatedOn(Date createdOn) {
+    // ignore
   }
 
-  public String toString() {
-    return component.toString();
+  @JsonIgnore
+  public void setCreatedDate(Date createdDate) {
+    // ignore
   }
 
-  public List<String> getComponentTypes() {
-    return componentTypes;
+  @JsonIgnore
+  public void setStatus(ComponentStatus status) {
+    // ignore
   }
 
-  public void setComponentTypes(List<String> componentTypes) {
-    this.componentTypes = componentTypes;
+  @JsonIgnore
+  public void setDiscardedOn(Date discardedOn) {
+    // ignore
   }
 
-  public String getDonationIdentificationNumber() {
-    if (component == null || component.getDonation() == null ||
-        component.getDonation().getDonationIdentificationNumber() == null
-        )
-      return "";
-    return component.getDonation().getDonationIdentificationNumber();
+  @JsonIgnore
+  public void setIssuedOn(Date issuedOn) {
+    // ignore
   }
 
+  @JsonIgnore
+  public void setComponentCode(String componentCode) {
+    // ignore
+  }
+
+  @JsonIgnore
+  public void setInventoryStatus(InventoryStatus inventoryStatus) {
+    // ignore
+  }
+
+  @JsonIgnore
+  public void setLocation(Location location) {
+    // ignore
+  }
+
+  @JsonIgnore
   public void setDonationIdentificationNumber(String donationIdentificationNumber) {
-    Donation donation = new Donation();
-    donation.setDonationIdentificationNumber(donationIdentificationNumber);
-    component.setDonation(donation);
+    // Ignore
   }
 
   @JsonIgnore
-  public Component getComponent() {
-    return component;
-  }
-
-  public void setComponent(Component component) {
-    this.component = component;
+  public void setPackType(PackType packType) {
+    // Ignore
   }
 
   @JsonIgnore
-  public String getStatus() {
-    ComponentStatus status = component.getStatus();
-    if (status == null)
-      return "";
-    else
-      return component.getStatus().toString();
+  public void setExpiryStatus(String expiryStatus) {
+    // Ignore
   }
 
-  public void setStatus(String status) {
-    component.setStatus(ComponentStatus.valueOf(status));
+  @JsonIgnore
+  public void setBloodAbo(String bloodAbo) {
+    // Ignore
   }
+
+  @JsonIgnore
+  public void setBloodRh(String bloodRh) {
+    // Ignore
+  }
+
 }

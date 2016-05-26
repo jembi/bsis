@@ -9,6 +9,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
 import model.BaseEntity;
@@ -19,10 +21,16 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
+import repository.ComponentTypeQueryConstants;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+@NamedQueries({
+  @NamedQuery(name = ComponentTypeQueryConstants.NAME_VERIFY_COMPONENT_TYPE_WITH_ID_EXISTS,
+      query = ComponentTypeQueryConstants.QUERY_VERIFY_COMPONENT_TYPE_WITH_ID_EXISTS)
+})
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
@@ -34,7 +42,7 @@ public class ComponentType extends BaseEntity {
   private String componentTypeName;
 
   @Column(length = 30)
-  private String componentTypeNameShort;
+  private String componentTypeCode;
 
   private Integer expiresAfter;
 
@@ -105,12 +113,12 @@ public class ComponentType extends BaseEntity {
     this.description = description;
   }
 
-  public String getComponentTypeNameShort() {
-    return componentTypeNameShort;
+  public String getComponentTypeCode() {
+    return componentTypeCode;
   }
 
-  public void setComponentTypeNameShort(String componentTypeShortName) {
-    this.componentTypeNameShort = componentTypeShortName;
+  public void setComponentTypeCode(String componentTypeCode) {
+    this.componentTypeCode = componentTypeCode;
   }
 
   public ComponentTypeTimeUnits getExpiresAfterUnits() {
@@ -220,7 +228,7 @@ public class ComponentType extends BaseEntity {
 
   public void copy(ComponentType componentType) {
     this.componentTypeName = componentType.getComponentTypeName();
-    this.componentTypeNameShort = componentType.getComponentTypeNameShort();
+    this.componentTypeCode = componentType.getComponentTypeCode();
     this.expiresAfter = componentType.getExpiresAfter();
     this.expiresAfterUnits = componentType.getExpiresAfterUnits();
     this.description = componentType.getDescription();

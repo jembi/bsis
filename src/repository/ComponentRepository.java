@@ -44,15 +44,6 @@ import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 import model.util.BloodGroup;
 
-import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-
 import repository.bloodtesting.BloodTypingStatus;
 import service.DonationConstraintChecker;
 import utils.SecurityUtils;
@@ -160,14 +151,14 @@ public class ComponentRepository {
     return false;
   }
 
-  public Component findComponent(String componentIdentificationNumber) {
+  public Component findComponent(String componentCode) {
     Component component = null;
-    if (componentIdentificationNumber != null && componentIdentificationNumber.length() > 0) {
-      String queryString = "SELECT c FROM Component c WHERE c.componentIdentificationNumber = :componentIdentificationNumber and c.isDeleted= :isDeleted";
+    if (componentCode != null && componentCode.length() > 0) {
+      String queryString = "SELECT c FROM Component c WHERE c.componentCode = :componentCode and c.isDeleted= :isDeleted";
       TypedQuery<Component> query = em.createQuery(queryString, Component.class);
       query.setParameter("isDeleted", Boolean.FALSE);
-      List<Component> components = query.setParameter("componentIdentificationNumber",
-          componentIdentificationNumber).getResultList();
+      List<Component> components = query.setParameter("componentCode",
+          componentCode).getResultList();
       if (components != null && components.size() > 0) {
         component = components.get(0);
       }
@@ -827,5 +818,12 @@ public class ComponentRepository {
         .setParameter("newStatus", newStatus)
         .setParameter("donation", donation)
         .executeUpdate();
+  }
+  
+  public Component findComponentByCodeAndDIN(String componentCode, String donationIdentificationNumber) {
+    return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_COMPONENT_BY_CODE_AND_DIN, Component.class)
+        .setParameter("donationIdentificationNumber", donationIdentificationNumber)
+        .setParameter("componentCode", componentCode)
+        .getSingleResult();
   }
 }

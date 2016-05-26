@@ -1,34 +1,20 @@
 package repository;
 
 import java.io.File;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.sql.DataSource;
 
 import model.componenttype.ComponentType;
 import model.componenttype.ComponentTypeCombination;
 import model.componenttype.ComponentTypeTimeUnits;
 import model.user.User;
 
-import org.dbunit.database.DatabaseConfig;
-import org.dbunit.database.DatabaseDataSourceConnection;
-import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
-import org.dbunit.operation.DatabaseOperation;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import suites.DBUnitContextDependentTestSuite;
@@ -68,19 +54,19 @@ public class ComponentTypeRepositoryTest extends DBUnitContextDependentTestSuite
 
   @Test
   public void testIsComponentTypeValidTrue() throws Exception {
-    boolean valid = componentTypeRepository.isComponentTypeValid("Whole Blood Single Pack - CPDA");
+    boolean valid = componentTypeRepository.verifyComponentTypeExists(1L);
     Assert.assertTrue("Is a valid ComponentType", valid);
   }
 
   @Test
   public void testIsComponentTypeValidFalse() throws Exception {
-    boolean valid = componentTypeRepository.isComponentTypeValid("Test");
+    boolean valid = componentTypeRepository.verifyComponentTypeExists(56L);
     Assert.assertFalse("Is not a valid ComponentType", valid);
   }
 
   @Test
   public void testIsComponentTypeValidDeleted() throws Exception {
-    boolean valid = componentTypeRepository.isComponentTypeValid("Ignore me");
+    boolean valid = componentTypeRepository.verifyComponentTypeExists(17L);
     Assert.assertFalse("Is not a valid ComponentType", valid);
   }
 
@@ -126,7 +112,7 @@ public class ComponentTypeRepositoryTest extends DBUnitContextDependentTestSuite
   public void testSaveComponentType() throws Exception {
     ComponentType componentType = new ComponentType();
     componentType.setComponentTypeName("Junit");
-    componentType.setComponentTypeNameShort("j");
+    componentType.setComponentTypeCode("j");
     componentType.setExpiresAfter(1);
     componentType.setExpiresAfterUnits(ComponentTypeTimeUnits.DAYS);
     componentType.setHasBloodGroup(true);

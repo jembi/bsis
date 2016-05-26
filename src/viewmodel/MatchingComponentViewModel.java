@@ -3,7 +3,6 @@ package viewmodel;
 import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
 import model.component.Component;
-import model.donation.Donation;
 
 public class MatchingComponentViewModel {
 
@@ -35,36 +34,16 @@ public class MatchingComponentViewModel {
     return componentViewModel.getId();
   }
 
-  public Donation getDonation() {
-    return componentViewModel.getDonation();
-  }
-
   public ComponentTypeViewModel getComponentType() {
     return componentViewModel.getComponentType();
-  }
-
-  public String getLastUpdated() {
-    return componentViewModel.getLastUpdated();
   }
 
   public String getCreatedDate() {
     return componentViewModel.getCreatedDate();
   }
 
-  public String getCreatedBy() {
-    return componentViewModel.getCreatedBy();
-  }
-
-  public String getLastUpdatedBy() {
-    return componentViewModel.getLastUpdatedBy();
-  }
-
   public String getNotes() {
     return componentViewModel.getNotes();
-  }
-
-  public Boolean getIsDeleted() {
-    return componentViewModel.getIsDeleted();
   }
 
   public String getCreatedOn() {
@@ -79,21 +58,10 @@ public class MatchingComponentViewModel {
     return componentViewModel.getDonationIdentificationNumber();
   }
 
-  public String getAge() {
-    return componentViewModel.getAge();
-  }
-
   public String getIsCompatible() {
     if (compatibilityTest == null)
       return CompatibilityResult.NOT_KNOWN.toString();
     return compatibilityTest.getCompatibilityResult().toString();
   }
 
-  public String getBloodGroup() {
-    return componentViewModel.getBloodGroup();
-  }
-
-  public String getSubdivisionCode() {
-    return componentViewModel.getSubdivisionCode();
-  }
 }

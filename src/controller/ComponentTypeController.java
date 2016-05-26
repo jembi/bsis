@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import model.componenttype.ComponentType;
+import model.componenttype.ComponentTypeCombination;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,14 +23,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import backingform.ComponentTypeBackingForm;
-import backingform.ComponentTypeCombinationBackingForm;
-import model.componenttype.ComponentType;
-import model.componenttype.ComponentTypeCombination;
 import repository.ComponentTypeRepository;
 import utils.PermissionConstants;
 import viewmodel.ComponentTypeCombinationViewModel;
-import viewmodel.ComponentTypeViewModel;
+import backingform.ComponentTypeBackingForm;
+import backingform.ComponentTypeCombinationBackingForm;
+import factory.ComponentTypeFactory;
 
 @RestController
 @RequestMapping("componenttypes")
@@ -35,6 +36,9 @@ public class ComponentTypeController {
 
   @Autowired
   private ComponentTypeRepository componentTypeRepository;
+  
+  @Autowired
+  private ComponentTypeFactory componentTypeFactory;
 
   public ComponentTypeController() {
   }
@@ -52,7 +56,7 @@ public class ComponentTypeController {
     }
 
     Map<String, Object> map = new HashMap<>();
-    map.put("componentTypes", getComponentTypeViewModels(componentTypes));
+    map.put("componentTypes", componentTypeFactory.createViewModels(componentTypes));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
@@ -62,7 +66,7 @@ public class ComponentTypeController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     ComponentType componentType = componentTypeRepository.getComponentTypeById(id);
-    map.put("componentType", new ComponentTypeViewModel(componentType));
+    map.put("componentType", componentTypeFactory.createFullViewModel(componentType));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 
@@ -71,7 +75,7 @@ public class ComponentTypeController {
   public ResponseEntity saveComponentType(@Valid @RequestBody ComponentTypeBackingForm form) {
 
     ComponentType componentType = componentTypeRepository.saveComponentType(form.getComponentType());
-    return new ResponseEntity(new ComponentTypeViewModel(componentType), HttpStatus.CREATED);
+    return new ResponseEntity(componentTypeFactory.createFullViewModel(componentType), HttpStatus.CREATED);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
@@ -82,7 +86,7 @@ public class ComponentTypeController {
     ComponentType componentType = form.getComponentType();
     componentType.setId(id);
     componentType = componentTypeRepository.updateComponentType(componentType);
-    return new ResponseEntity(new ComponentTypeViewModel(componentType), HttpStatus.OK);
+    return new ResponseEntity(componentTypeFactory.createFullViewModel(componentType), HttpStatus.OK);
   }
 
   @RequestMapping(value = "{id}/deactivate", method = RequestMethod.PUT)
@@ -158,16 +162,6 @@ public class ComponentTypeController {
 
     componentTypeRepository.activateComponentTypeCombination(id);
     return new ResponseEntity(HttpStatus.OK);
-  }
-
-  private List<ComponentTypeViewModel> getComponentTypeViewModels(List<ComponentType> componentTypes) {
-
-    List<ComponentTypeViewModel> componentTypeViewModels = new ArrayList<ComponentTypeViewModel>();
-    for (ComponentType componentType : componentTypes)
-      componentTypeViewModels.add(new ComponentTypeViewModel(componentType));
-
-    return componentTypeViewModels;
-
   }
 
   private List<ComponentTypeCombinationViewModel>

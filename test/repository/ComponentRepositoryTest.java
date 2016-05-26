@@ -161,9 +161,9 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
-  public void testFindComponentByComponentNumber() throws Exception {
+  public void testFindComponentByComponentCode() throws Exception {
     Component component = componentRepository.findComponent("5555555-0011");
-    Assert.assertNotNull("Found Component by componentIdentificationNumber", component);
+    Assert.assertNotNull("Found Component by componentCode", component);
     Assert.assertEquals("Found correct Component", Long.valueOf(7), component.getId());
   }
 
@@ -265,7 +265,7 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
   public void testFindComponentTypeByComponentTypeName() throws Exception {
     ComponentType one = componentRepository.findComponentTypeByComponentTypeName("Whole Blood Single Pack - CPDA");
     Assert.assertNotNull("ComponentType match", one);
-    Assert.assertEquals("ComponentType is correct", "0011", one.getComponentTypeNameShort());
+    Assert.assertEquals("ComponentType is correct", "0011", one.getComponentTypeCode());
   }
 
   @Test
@@ -416,10 +416,10 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
   @Test
   public void testUpdateComponent() throws Exception {
     Component componentToUpdate = componentRepository.findComponent(2l);
-    componentToUpdate.setComponentIdentificationNumber("junit123");
+    componentToUpdate.setComponentCode("junit123");
     componentRepository.updateComponent(componentToUpdate);
     Component updatedComponent = componentRepository.findComponent(2l);
-    Assert.assertEquals("Component has been updated", "junit123", updatedComponent.getComponentIdentificationNumber());
+    Assert.assertEquals("Component has been updated", "junit123", updatedComponent.getComponentCode());
   }
 
   @Test

@@ -1,5 +1,9 @@
 package backingform.validator;
 
+import static helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
+import static helpers.builders.ComponentBuilder.aComponent;
+import static helpers.builders.ComponentTypeBuilder.aComponentType;
+import static helpers.builders.LocationBackingFormBuilder.aDistributionSiteBackingForm;
 import static helpers.builders.LocationBuilder.aDistributionSite;
 import static helpers.builders.LocationBuilder.aUsageSite;
 import static helpers.builders.LocationBuilder.aVenue;
@@ -22,9 +26,15 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
+import backingform.ComponentBackingForm;
+import backingform.ComponentTypeBackingForm;
 import backingform.LocationBackingForm;
 import backingform.OrderFormBackingForm;
+import backingform.OrderFormItemBackingForm;
+import model.component.Component;
+import model.inventory.InventoryStatus;
 import model.location.Location;
+import repository.ComponentRepository;
 import repository.FormFieldRepository;
 import repository.LocationRepository;
 
@@ -39,25 +49,61 @@ public class OrderFormBackingFormValidatorTest {
 
   @Mock
   private FormFieldRepository formFieldRepository;
+  
+  @Mock
+  private OrderFormItemBackingFormValidator orderFormItemBackingFormValidator; 
+
+  @Mock
+  private ComponentRepository componentRepository;
 
   private OrderFormBackingForm getBaseOrderFormBackingForm() throws ParseException {
-    Location dispatchedFrom = aDistributionSite().withName("LocFrom").withId(1l).build();
-    Location dispatchedTo = aDistributionSite().withName("LocTo").withId(2l).build();
+    LocationBackingForm dispatchedFrom = aDistributionSiteBackingForm().withName("LocFrom").withId(1l).build();
+    LocationBackingForm dispatchedTo = aDistributionSiteBackingForm().withName("LocTo").withId(2l).build();
     Date orderDate = new Date();
-    OrderFormBackingForm backingForm = anOrderFormBackingForm().withDispatchedFrom(new LocationBackingForm(dispatchedFrom))
-        .withDispatchedTo(new LocationBackingForm(dispatchedTo)).withOrderDate(orderDate).build();
+    OrderFormBackingForm backingForm = anOrderFormBackingForm().withDispatchedFrom(dispatchedFrom)
+        .withDispatchedTo(dispatchedTo).withOrderDate(orderDate).build();
     return backingForm;
+  }
+  
+  private OrderFormItemBackingForm getBaseOrderFormItemBackingForm() throws ParseException {
+    OrderFormItemBackingForm backingForm = new OrderFormItemBackingForm();
+    backingForm.setBloodGroup("A+");
+    backingForm.setNumberOfUnits(22);
+    ComponentTypeBackingForm componentType = new ComponentTypeBackingForm();
+    componentType.setComponentType(aComponentType().withId(1L).build());
+    backingForm.setComponentType(componentType);
+    return backingForm;
+  }
+
+  private ComponentBackingForm getBaseOrderFormComponentBackingForm() {
+    ComponentBackingForm component = aComponentBackingForm().withId(1L).build();
+    return component;
+  }
+
+  private Location getBaseDispatchedFrom() {
+    return aDistributionSite().withName("LocFrom").withId(1l).build();
+  }
+
+  private Location getBaseDispatchedTo() {
+    return aDistributionSite().withName("LocTo").withId(2l).build();
+  }
+  
+  private Component getBaseComponent() {
+    return aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(getBaseDispatchedFrom()).build();
   }
 
   @Test
   public void testValid_noErrors() throws Exception {
     // set up data
     OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
+    backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
+    backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(backingForm.getDispatchedFrom().getLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(backingForm.getDispatchedTo().getLocation());
+    when(locationRepository.getLocation(1l)).thenReturn(getBaseDispatchedFrom());
+    when(locationRepository.getLocation(2l)).thenReturn(getBaseDispatchedTo());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -65,6 +111,7 @@ public class OrderFormBackingFormValidatorTest {
 
     // check asserts
     Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
+
   }
 
   @Test
@@ -138,7 +185,7 @@ public class OrderFormBackingFormValidatorTest {
     Location usageSite = aDistributionSite().withId(2l).build();
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(backingForm.getDispatchedFrom().getLocation());
+    when(locationRepository.getLocation(1l)).thenReturn(getBaseDispatchedFrom());
     when(locationRepository.getLocation(2l)).thenReturn(usageSite);
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
 
@@ -160,7 +207,7 @@ public class OrderFormBackingFormValidatorTest {
 
     // set up mocks
     when(locationRepository.getLocation(1l)).thenReturn(usageSite);
-    when(locationRepository.getLocation(2l)).thenReturn(backingForm.getDispatchedTo().getLocation());
+    when(locationRepository.getLocation(2l)).thenReturn(getBaseDispatchedTo());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
 
     // run test
@@ -180,8 +227,8 @@ public class OrderFormBackingFormValidatorTest {
     backingForm.setOrderDate(null);
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(backingForm.getDispatchedFrom().getLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(backingForm.getDispatchedTo().getLocation());
+    when(locationRepository.getLocation(1l)).thenReturn(getBaseDispatchedFrom());
+    when(locationRepository.getLocation(2l)).thenReturn(getBaseDispatchedTo());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
 
     // run test
@@ -197,5 +244,123 @@ public class OrderFormBackingFormValidatorTest {
 
     Assert.assertEquals("This information is required", errors.getFieldErrors().get(2).getDefaultMessage());
     Assert.assertEquals("type", errors.getFieldErrors().get(2).getField());
+  }
+
+  @Test
+  public void testValidateComponentLocation_invalidLocation() throws Exception {
+    // set up data
+    OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
+    
+    // create a component with a different location from dispatchedFrom
+    Location differentLocation = aDistributionSite().withName("DifferentLocation").withId(3l).build();
+    Component component =
+        aComponent().withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withLocation(differentLocation).build();
+    backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getBaseDispatchedFrom());
+    when(locationRepository.getLocation(2l)).thenReturn(getBaseDispatchedTo());
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+    when(componentRepository.findComponent(1L)).thenReturn(component);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("component doesn't exist in LocFrom", errors.getFieldErrors().get(0).getDefaultMessage());
+  }
+  
+  @Test
+  public void testValidateComponentInventoryStatusRemoved_invalidInventoryStatus() throws Exception {
+    // set up data
+    OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
+    
+    // create a component with a different location from dispatchedFrom
+    Component component =
+        aComponent().withInventoryStatus(InventoryStatus.REMOVED)
+        .withLocation(getBaseDispatchedFrom()).build();
+    backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getBaseDispatchedFrom());
+    when(locationRepository.getLocation(2l)).thenReturn(getBaseDispatchedTo());
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+    when(componentRepository.findComponent(1L)).thenReturn(component);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("component inventory status must be IN_STOCK", errors.getFieldErrors().get(0).getDefaultMessage());
+  }
+  
+  @Test
+  public void testValidateComponentInventoryStatusNotLabelled_invalidInventoryStatus() throws Exception {
+    // set up data
+    OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
+    
+    // create a component with a different location from dispatchedFrom
+    Component component =
+        aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED)
+        .withLocation(getBaseDispatchedFrom()).build();
+    backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getBaseDispatchedFrom());
+    when(locationRepository.getLocation(2l)).thenReturn(getBaseDispatchedTo());
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+    when(componentRepository.findComponent(1L)).thenReturn(component);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("component inventory status must be IN_STOCK", errors.getFieldErrors().get(0).getDefaultMessage());
+  }
+  
+  @Test
+  public void testValidateComponentNotFound_invalidComponentIdError() throws Exception {
+    // set up data
+    OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
+    backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getBaseDispatchedFrom());
+    when(locationRepository.getLocation(2l)).thenReturn(getBaseDispatchedTo());
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+    when(componentRepository.findComponent(1L)).thenReturn(null);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("component id is invalid.", errors.getFieldErrors().get(0).getDefaultMessage());
+  }
+  
+  @Test
+  public void testValidateNoComponentId_requiredComponentIdError() throws Exception {
+    // set up data
+    OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
+    
+    // component backing form with null id
+    ComponentBackingForm componentBackingForm = aComponentBackingForm().withId(null).build();
+    backingForm.setComponents(Arrays.asList(componentBackingForm));
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getBaseDispatchedFrom());
+    when(locationRepository.getLocation(2l)).thenReturn(getBaseDispatchedTo());
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("component id is required.", errors.getFieldErrors().get(0).getDefaultMessage());
   }
 }

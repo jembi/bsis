@@ -74,7 +74,7 @@ public class RequestViewModel {
   }
 
   public String getComponentType() {
-    return request.getComponentType().getComponentTypeNameShort();
+    return request.getComponentType().getComponentTypeCode();
   }
 
   public LocationViewModel getRequestSite() {

@@ -34,6 +34,7 @@ public class ComponentTypeCombinationViewModel {
   }
 
   public List<ComponentTypeViewModel> getComponentTypes() {
+    // FIXME: use factory
     return getComponentTypeViewModels(componentTypeCombination.getComponentTypes());
   }
 

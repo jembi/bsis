@@ -1,13 +1,19 @@
 package backingform.validator;
 
+import java.util.List;
+
 import javax.persistence.NoResultException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
+import backingform.ComponentBackingForm;
 import backingform.OrderFormBackingForm;
+import backingform.OrderFormItemBackingForm;
+import model.inventory.InventoryStatus;
 import model.location.Location;
+import repository.ComponentRepository;
 import repository.LocationRepository;
 
 @Component
@@ -15,15 +21,22 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
 
   @Autowired
   private LocationRepository locationRepository;
+  
+  @Autowired
+  private OrderFormItemBackingFormValidator orderFormItemBackingFormValidator;
+
+  @Autowired
+  private ComponentRepository componentRepository;
 
   @Override
   public void validateForm(OrderFormBackingForm form, Errors errors) {
     // Validate dispatchedFrom
+    Location dispatchedFrom = null;
     if (form.getDispatchedFrom() == null || form.getDispatchedFrom().getId() == null) {
       errors.rejectValue("dispatchedFrom", "required", "dispatchedFrom is required");
     } else {
       try {
-        Location dispatchedFrom = locationRepository.getLocation(form.getDispatchedFrom().getId());
+        dispatchedFrom = locationRepository.getLocation(form.getDispatchedFrom().getId());
         if (!dispatchedFrom.getIsDistributionSite()) {
           errors.rejectValue("dispatchedFrom", "invalid", "dispatchedFrom must be a distribution site");
         }
@@ -45,7 +58,54 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
         errors.rejectValue("dispatchedTo", "invalid", "Invalid dispatchedTo");
       }
     }
+    
+    // Validate OrderFormItems
+    if (form.getItems() != null) { // it can be null if the Order has just been created
+      List<OrderFormItemBackingForm> items = form.getItems();
+      for (int i=0, len=items.size(); i<len; i++) {
+        OrderFormItemBackingForm item = items.get(i); 
+        errors.pushNestedPath("items["+i+"]");
+        try {
+          orderFormItemBackingFormValidator.validate(item, errors);
+        } finally {
+          errors.popNestedPath();
+        }
+      }
+    }
+    
+    // Validate components
+    if (form.getComponents() != null) { // it can be null if the Order has just been created
+      List<ComponentBackingForm> components = form.getComponents();
+      for (int i = 0, len = components.size(); i < len; i++) {
+        errors.pushNestedPath("components[" + i + "]");
+        try {
+          validateComponentForm(components.get(i), dispatchedFrom, errors);
+        } finally {
+          errors.popNestedPath();
+        }
+      }
+    }
+
     commonFieldChecks(form, errors);
+  }
+
+  private void validateComponentForm(ComponentBackingForm componentBackingForm, Location dispatchedFrom, Errors errors) {
+    if (componentBackingForm.getId() == null) {
+      errors.rejectValue("id", "required", "component id is required.");
+    } else {
+      model.component.Component component = componentRepository.findComponent(componentBackingForm.getId());
+      if (component == null) {
+        errors.rejectValue("id", "invalid", "component id is invalid.");
+      } else {
+
+        if (dispatchedFrom != null && !component.getLocation().equals(dispatchedFrom)) {
+          errors.rejectValue("location", "invalid location", "component doesn't exist in " + dispatchedFrom.getName());
+        }
+        if (!component.getInventoryStatus().equals(InventoryStatus.IN_STOCK)) {
+          errors.rejectValue("inventoryStatus", "invalid inventory status", "component inventory status must be IN_STOCK");
+        }
+      }
+    }
   }
 
   @Override

@@ -211,6 +211,7 @@ public class DonationController {
   }
   
   private List<PackTypeViewModel> getPackTypeViewModels(List<PackType> packTypes) {
+    // FIXME: use a factory
     List<PackTypeViewModel> viewModels = new ArrayList<PackTypeViewModel>();
     for (PackType packtType : packTypes) {
       viewModels.add(new PackTypeViewModel(packtType));

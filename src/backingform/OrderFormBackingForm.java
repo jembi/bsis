@@ -1,6 +1,7 @@
 package backingform;
 
 import java.util.Date;
+import java.util.List;
 
 import model.order.OrderStatus;
 import model.order.OrderType;
@@ -18,6 +19,10 @@ public class OrderFormBackingForm {
   private OrderStatus status;
 
   private OrderType type;
+  
+  private List<OrderFormItemBackingForm> items;
+
+  private List<ComponentBackingForm> components;
 
   public Long getId() {
     return id;
@@ -67,6 +72,20 @@ public class OrderFormBackingForm {
     this.type = type;
   }
 
+  public List<OrderFormItemBackingForm> getItems() {
+    return items;
+  }
 
+  public void setItems(List<OrderFormItemBackingForm> items) {
+    this.items = items;
+  }
+
+  public List<ComponentBackingForm> getComponents() {
+    return components;
+  }
+
+  public void setComponents(List<ComponentBackingForm> components) {
+    this.components = components;
+  }
 
 }

@@ -1,20 +1,15 @@
 package service;
 
 import static helpers.builders.ComponentBuilder.aComponent;
+import static helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
-
-import model.component.Component;
-import model.component.ComponentStatus;
-import model.componentmovement.ComponentStatusChange;
-import model.componentmovement.ComponentStatusChangeType;
-import model.donation.Donation;
-import model.donor.Donor;
-import model.inventory.InventoryStatus;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,8 +18,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import factory.ComponentViewModelFactory;
+import model.component.Component;
+import model.component.ComponentStatus;
+import model.componentmovement.ComponentStatusChange;
+import model.componentmovement.ComponentStatusChangeType;
+import model.donation.Donation;
+import model.donor.Donor;
+import model.inventory.InventoryStatus;
 import repository.ComponentRepository;
 import suites.UnitTestSuite;
+import viewmodel.ComponentViewModel;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ComponentCRUDServiceTests extends UnitTestSuite {
@@ -33,6 +37,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   private ComponentCRUDService componentCRUDService;
   @Mock
   private ComponentRepository componentRepository;
+  @Mock
+  private ComponentViewModelFactory componentViewModelFactory;
 
   @Test
   public void testMarkComponentsBelongingToDonorAsUnsafe_shouldDelegateToRepositoryWithCorrectParameters() {
@@ -96,5 +102,27 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // check asserts
     Assert.assertEquals("Component is now removed from stock", InventoryStatus.REMOVED, component.getInventoryStatus());
+  }
+  
+  @Test
+  public void testFindComponentByCodeAndDIN_shouldFindAndReturnComponent() {
+    // Set up fixture
+    String componentCode = "0014";
+    String donationIdentificationNumber = "0000001";
+
+    Component component = aComponent().build();
+    
+    // Set up expectations
+    ComponentViewModel expectedComponentViewModel = aComponentViewModel().build();
+
+    when(componentRepository.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber)).thenReturn(component);
+    when(componentViewModelFactory.createComponentViewModel(component)).thenReturn(expectedComponentViewModel);
+    
+    // Test method
+    ComponentViewModel returnedComponentViewModel = componentCRUDService.findComponentByCodeAndDIN(componentCode,
+        donationIdentificationNumber);
+    
+    // Verify
+    assertThat(returnedComponentViewModel, is(expectedComponentViewModel));
   }
 }

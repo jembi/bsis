@@ -1,11 +1,6 @@
 package viewmodel;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import model.componenttype.ComponentType;
-import model.componenttype.ComponentTypeCombination;
-import model.componenttype.ComponentTypeTimeUnits;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -16,7 +11,7 @@ public class ComponentTypeViewModel {
   }
 
   @JsonIgnore
-  private ComponentType componentType;
+  ComponentType componentType;
 
   public ComponentType getComponentType() {
     return componentType;
@@ -34,62 +29,11 @@ public class ComponentTypeViewModel {
     return componentType.getComponentTypeName();
   }
 
-  public String getComponentTypeNameShort() {
-    return componentType.getComponentTypeNameShort();
-  }
-
-  public boolean getHasBloodGroup() {
-    return componentType.getHasBloodGroup();
-  }
-
-  public Integer getExpiresAfter() {
-    return componentType.getExpiresAfter();
-  }
-
-  public ComponentTypeTimeUnits getExpiresAfterUnits() {
-    return componentType.getExpiresAfterUnits();
+  public String getComponentTypeCode() {
+    return componentType.getComponentTypeCode();
   }
 
   public String getDescription() {
     return componentType.getDescription();
   }
-
-  public Integer getLowStorageTemperature() {
-    return componentType.getLowStorageTemperature();
-  }
-
-  public Integer getHighStorageTemperature() {
-    return componentType.getHighStorageTemperature();
-  }
-
-  public Integer getLowTransportTemperature() {
-    return componentType.getLowTransportTemperature();
-  }
-
-  public Integer getHighTransportTemperature() {
-    return componentType.getHighTransportTemperature();
-  }
-
-  public String getPreparationInfo() {
-    return componentType.getPreparationInfo();
-  }
-
-  public List<ComponentTypeCombinationViewModel> getProducedComponentTypeCombinations() {
-    return getComponentTypeCombinationViewModels(componentType.getProducedComponentTypeCombinations());
-  }
-
-  @JsonIgnore
-  public List<ComponentTypeCombinationViewModel>
-  getComponentTypeCombinationViewModels(List<ComponentTypeCombination> componentTypeCombinations) {
-
-    List<ComponentTypeCombinationViewModel> componentTypeCombinationViewModels
-        = new ArrayList<ComponentTypeCombinationViewModel>();
-    for (ComponentTypeCombination componentTypeCombination : componentTypeCombinations)
-      componentTypeCombinationViewModels.add(new ComponentTypeCombinationViewModel(componentTypeCombination));
-
-    return componentTypeCombinationViewModels;
-
-  }
-
-
 }

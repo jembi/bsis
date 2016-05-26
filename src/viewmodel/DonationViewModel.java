@@ -68,6 +68,7 @@ public class DonationViewModel {
     if (donation.getPackType() == null) {
       return null;
     }
+    // FIXME: use a factory
     return new PackTypeViewModel(donation.getPackType());
   }
 
