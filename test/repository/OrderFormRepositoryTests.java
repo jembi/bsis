@@ -26,6 +26,7 @@ import model.donation.Donation;
 import model.location.Location;
 import model.order.OrderForm;
 import model.order.OrderFormItem;
+import model.order.OrderStatus;
 import model.packtype.PackType;
 import suites.SecurityContextDependentTestSuite;
 
@@ -172,6 +173,34 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     // Verify
     Assert.assertEquals("Found 1 order", 1, orders.size());
     Assert.assertEquals("Verify right order was returned", orderForm, orders.get(0));
+  }
+
+  @Test
+  public void testFindOrderFormsByCreatedStatus_shouldReturnRightOrder() {
+    // Set up
+    OrderForm createdOrderForm = anOrderForm().withOrderStatus(OrderStatus.CREATED).buildAndPersist(entityManager);
+    anOrderForm().withOrderStatus(OrderStatus.DISPATCHED).buildAndPersist(entityManager);
+
+    // Test
+    List<OrderForm> orders = orderFormRepository.findByStatus(OrderStatus.CREATED);
+
+    // Verify
+    Assert.assertEquals("Found 1 order", 1, orders.size());
+    Assert.assertEquals("Verify right order was returned", createdOrderForm, orders.get(0));
+  }
+  
+  @Test
+  public void testFindOrderFormsByDispatchedStatus_shouldReturnRightOrder() {
+    // Set up
+    OrderForm dispatchedOrderForm = anOrderForm().withOrderStatus(OrderStatus.DISPATCHED).buildAndPersist(entityManager);
+    anOrderForm().withOrderStatus(OrderStatus.CREATED).buildAndPersist(entityManager);
+
+    // Test
+    List<OrderForm> orders = orderFormRepository.findByStatus(OrderStatus.DISPATCHED);
+
+    // Verify
+    Assert.assertEquals("Found 1 order", 1, orders.size());
+    Assert.assertEquals("Verify right order was returned", dispatchedOrderForm, orders.get(0));
   }
 
 }

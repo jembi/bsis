@@ -14,15 +14,23 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-
-import model.BaseModificationTrackerEntity;
-import model.component.Component;
-import model.location.Location;
 
 import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 
+import model.BaseModificationTrackerEntity;
+import model.component.Component;
+import model.location.Location;
+import repository.OrderFormNamedQueryConstants;
+
+@NamedQueries({
+    @NamedQuery(name = OrderFormNamedQueryConstants.NAME_FIND_BY_ID,
+        query = OrderFormNamedQueryConstants.QUERY_FIND_BY_ID),
+    @NamedQuery(name = OrderFormNamedQueryConstants.NAME_FIND_BY_STATUS,
+        query = OrderFormNamedQueryConstants.QUERY_FIND_BY_STATUS)})
 @Entity
 @Audited
 public class OrderForm extends BaseModificationTrackerEntity {

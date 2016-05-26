@@ -9,15 +9,22 @@ import org.springframework.stereotype.Repository;
 
 import model.location.Location;
 import model.order.OrderForm;
+import model.order.OrderStatus;
 
 @Repository
 public class OrderFormRepository extends AbstractRepository<OrderForm> {
 
   public OrderForm findById(Long id) {
-    String queryString = "SELECT d FROM OrderForm d WHERE d.id = :id";
-    TypedQuery<OrderForm> query = entityManager.createQuery(queryString, OrderForm.class);
-    query.setParameter("id", id);
+    TypedQuery<OrderForm> query = entityManager.createNamedQuery(OrderFormNamedQueryConstants.NAME_FIND_BY_ID, OrderForm.class);
+    query.setParameter("id", id).setParameter("isDeleted", false);
+
     return query.getSingleResult();
+  }
+
+  public List<OrderForm> findByStatus(OrderStatus status) {
+    TypedQuery<OrderForm> query = entityManager.createNamedQuery(OrderFormNamedQueryConstants.NAME_FIND_BY_STATUS, OrderForm.class);
+    query.setParameter("status", status).setParameter("isDeleted", false);
+    return query.getResultList();
   }
 
   public List<OrderForm> findOrderForms(Date orderDateFrom, Date orderDateTo, Location dispatchedFrom,
