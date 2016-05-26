@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import constant.CohortConstants;
 import dto.CollectedDonationDTO;
 import dto.StockLevelDTO;
+import dto.BloodTestResultDTO;
 import model.donationtype.DonationType;
 import model.inventory.InventoryStatus;
 import model.reporting.Cohort;
@@ -18,12 +19,16 @@ import model.reporting.DataValue;
 import model.reporting.Report;
 import repository.DonationRepository;
 import repository.InventoryRepository;
+import repository.bloodtesting.BloodTestingRepository;
 
 @Service
 public class ReportGeneratorService {
 
   @Autowired
   private DonationRepository donationRepository;
+  
+  @Autowired
+  private BloodTestingRepository bloodTestingRepository;
   
   @Autowired
   private InventoryRepository inventoryRepository;
@@ -70,6 +75,50 @@ public class ReportGeneratorService {
       bloodTypeCohort.setComparator(Comparator.EQUALS);
       bloodTypeCohort.setOption(dto.getBloodAbo() + dto.getBloodRh());
       dataValue.addCohort(bloodTypeCohort);
+
+      dataValues.add(dataValue);
+    }
+
+    report.setDataValues(dataValues);
+
+    return report;
+  }
+  
+  /**
+   * Report listing TTI prevalence within a selected date range by collection site,
+   * categorised by donor gender and blood test types.
+   *
+   * @return The report.
+   */
+  public Report generateTTIPrevalenceReport(Date startDate, Date endDate) {
+    Report report = new Report();
+    report.setStartDate(startDate);
+    report.setEndDate(endDate);
+
+    List<BloodTestResultDTO> dtos = bloodTestingRepository.findTTIPrevalenceReportIndicators(
+        startDate, endDate);
+
+    List<DataValue> dataValues = new ArrayList<>(dtos.size());
+
+    for (BloodTestResultDTO dto : dtos) {
+
+      DataValue dataValue = new DataValue();
+      dataValue.setStartDate(startDate);
+      dataValue.setEndDate(endDate);
+      dataValue.setVenue(dto.getVenue());
+      dataValue.setValue(dto.getCount());
+      
+      Cohort bloodTestCohort = new Cohort();
+      bloodTestCohort.setCategory(CohortConstants.BLOOD_TEST_CATEGORY);
+      bloodTestCohort.setComparator(Comparator.EQUALS);
+      bloodTestCohort.setOption(dto.getBloodTest().getTestName());
+      dataValue.addCohort(bloodTestCohort);
+
+      Cohort genderCohort = new Cohort();
+      genderCohort.setCategory(CohortConstants.GENDER_CATEGORY);
+      genderCohort.setComparator(Comparator.EQUALS);
+      genderCohort.setOption(dto.getGender());
+      dataValue.addCohort(genderCohort);
 
       dataValues.add(dataValue);
     }

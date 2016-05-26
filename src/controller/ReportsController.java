@@ -374,5 +374,13 @@ public class ReportsController {
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
     return reportGeneratorService.generateCollectedDonationsReport(startDate, endDate);
   }
+  
+  @RequestMapping(value = "/ttiprevalence/generate", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.TTI_REPORTING + "')")
+  public Report getTTIPrevalenceReport(
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
+    return reportGeneratorService.generateTTIPrevalenceReport(startDate, endDate);
+  }
 
 }
