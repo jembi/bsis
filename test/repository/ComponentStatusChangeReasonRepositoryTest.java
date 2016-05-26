@@ -40,7 +40,7 @@ public class ComponentStatusChangeReasonRepositoryTest extends DBUnitContextDepe
   public void testGetAll() throws Exception {
     List<ComponentStatusChangeReason> all = componentStatusChangeReasonRepository.getAllComponentStatusChangeReasons();
     Assert.assertNotNull("There are ComponentStatusChangeReason", all);
-    Assert.assertEquals("There are 11 ComponentStatusChangeReason", 11, all.size());
+    Assert.assertEquals("There are 11 ComponentStatusChangeReason", 12, all.size());
   }
 
   @Test
@@ -56,7 +56,7 @@ public class ComponentStatusChangeReasonRepositoryTest extends DBUnitContextDepe
     List<ComponentStatusChangeReason> all = componentStatusChangeReasonRepository
         .getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.ISSUED);
     Assert.assertNotNull("Doesn't return a null list", all);
-    Assert.assertEquals("There are 0 ISSUED ComponentStatusChangeReason", 0, all.size());
+    Assert.assertEquals("There is 1 ISSUED ComponentStatusChangeReason", 1, all.size());
   }
 
   @Test
@@ -80,5 +80,13 @@ public class ComponentStatusChangeReasonRepositoryTest extends DBUnitContextDepe
         .getAllComponentStatusChangeReasonsAsMap();
     Assert.assertNotNull("Does not return a null map", result);
     Assert.assertEquals("There are 3 ComponentStatusChangeReasonCategory with ComponentStatusChangeReason", 3, result.size());
+  }
+  
+  @Test
+  public void testFindFirstComponentStatusChangeReasonForCategory() {
+    ComponentStatusChangeReason returnedReason = componentStatusChangeReasonRepository.findFirstComponentStatusChangeReasonForCategory(
+        ComponentStatusChangeReasonCategory.ISSUED);
+    Assert.assertNotNull("A reason is returned", returnedReason);
+    Assert.assertEquals("The correct reason is returned", (Long) 15L, returnedReason.getId());
   }
 }
