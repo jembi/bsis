@@ -2,13 +2,12 @@ package backingform;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import model.component.ComponentStatus;
 import model.componenttype.ComponentType;
 import model.inventory.InventoryStatus;
-import model.location.Location;
 import model.packtype.PackType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ComponentBackingForm {
 
@@ -20,6 +19,18 @@ public class ComponentBackingForm {
 
   public Long getId() {
     return id;
+  }
+  
+  @JsonIgnore
+  public LocationBackingForm getLocation() {
+    // ignore
+    return null;
+  }
+  
+  @JsonIgnore
+  public InventoryStatus getInventoryStatus() {
+    // ignore
+    return null;
   }
 
   @JsonIgnore
@@ -73,7 +84,7 @@ public class ComponentBackingForm {
   }
 
   @JsonIgnore
-  public void setLocation(Location location) {
+  public void setLocation(LocationBackingForm location) {
     // ignore
   }
 

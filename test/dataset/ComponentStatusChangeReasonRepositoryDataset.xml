@@ -27,4 +27,8 @@
                                  isDeleted="true" statusChangeReason="Ignore"/>
     <ComponentStatusChangeReason id="14" category="DISCARDED"
                                  isDeleted="true" statusChangeReason="Ignore"/>
+    <ComponentStatusChangeReason id="15" category="ISSUED"
+                                 isDeleted="false" statusChangeReason="Issued"/>
+    <ComponentStatusChangeReason id="16" category="ISSUED"
+                                 isDeleted="true" statusChangeReason="Ignore"/>
 </dataset>

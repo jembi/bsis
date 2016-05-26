@@ -1,5 +1,6 @@
 package model.component;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -249,6 +250,13 @@ public class Component extends BaseModificationTrackerEntity {
 
   public void setStatusChanges(List<ComponentStatusChange> statusChanges) {
     this.statusChanges = statusChanges;
+  }
+
+  public void addStatusChange(ComponentStatusChange statusChange) {
+    if (statusChanges == null) {
+      statusChanges = new ArrayList<>();
+    }
+    statusChanges.add(statusChange);
   }
 
   public ComponentUsage getUsage() {
