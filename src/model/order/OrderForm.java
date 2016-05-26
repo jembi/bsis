@@ -28,9 +28,7 @@ import repository.OrderFormNamedQueryConstants;
 
 @NamedQueries({
     @NamedQuery(name = OrderFormNamedQueryConstants.NAME_FIND_BY_ID,
-        query = OrderFormNamedQueryConstants.QUERY_FIND_BY_ID),
-    @NamedQuery(name = OrderFormNamedQueryConstants.NAME_FIND_BY_STATUS,
-        query = OrderFormNamedQueryConstants.QUERY_FIND_BY_STATUS)})
+    query = OrderFormNamedQueryConstants.QUERY_FIND_BY_ID)})
 @Entity
 @Audited
 public class OrderForm extends BaseModificationTrackerEntity {

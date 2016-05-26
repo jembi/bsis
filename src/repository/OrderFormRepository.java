@@ -7,7 +7,6 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 
-import model.location.Location;
 import model.order.OrderForm;
 import model.order.OrderStatus;
 
@@ -21,14 +20,8 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
     return query.getSingleResult();
   }
 
-  public List<OrderForm> findByStatus(OrderStatus status) {
-    TypedQuery<OrderForm> query = entityManager.createNamedQuery(OrderFormNamedQueryConstants.NAME_FIND_BY_STATUS, OrderForm.class);
-    query.setParameter("status", status).setParameter("isDeleted", false);
-    return query.getResultList();
-  }
-
-  public List<OrderForm> findOrderForms(Date orderDateFrom, Date orderDateTo, Location dispatchedFrom,
-      Location dispatchedTo) {
+  public List<OrderForm> findOrderForms(Date orderDateFrom, Date orderDateTo, Long dispatchedFromId,
+      Long dispatchedToId, OrderStatus status) {
     String queryString = "SELECT o FROM OrderForm o WHERE o.isDeleted=:isDeleted ";
     if (orderDateFrom != null) {
       queryString = queryString + "AND o.orderDate >= :orderDateFrom ";
@@ -36,11 +29,14 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
     if (orderDateTo != null) {
       queryString = queryString + "AND o.orderDate <= :orderDateTo ";
     }
-    if (dispatchedFrom != null) {
-      queryString = queryString + "AND o.dispatchedFrom = :dispatchedFrom ";
+    if (dispatchedFromId != null) {
+      queryString = queryString + "AND o.dispatchedFrom.id = :dispatchedFromId ";
     }
-    if (dispatchedTo != null) {
-      queryString = queryString + "AND o.dispatchedTo = :dispatchedTo ";
+    if (dispatchedToId != null) {
+      queryString = queryString + "AND o.dispatchedTo.id = :dispatchedToId ";
+    }
+    if (status != null) {
+      queryString = queryString + "AND o.status = :status ";
     }
 
     queryString = queryString + "ORDER BY o.orderDate DESC";
@@ -54,11 +50,14 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
     if (orderDateTo != null) {
       query.setParameter("orderDateTo", orderDateTo);
     }
-    if (dispatchedFrom != null) {
-      query.setParameter("dispatchedFrom", dispatchedFrom);
+    if (dispatchedFromId != null) {
+      query.setParameter("dispatchedFromId", dispatchedFromId);
     }
-    if (dispatchedTo != null) {
-      query.setParameter("dispatchedTo", dispatchedTo);
+    if (dispatchedToId != null) {
+      query.setParameter("dispatchedToId", dispatchedToId);
+    }
+    if (status != null) {
+      query.setParameter("status", status);
     }
 
     return query.getResultList();

@@ -109,7 +109,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     anOrderForm().withOrderDate(threeDaysAgo).buildAndPersist(entityManager);
 
     // Test
-    List<OrderForm> orders = orderFormRepository.findOrderForms(null, null, null, null);
+    List<OrderForm> orders = orderFormRepository.findOrderForms(null, null, null, null, null);
 
     // Verify
     Assert.assertEquals("Found 3 orders", 3, orders.size());
@@ -127,7 +127,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     anOrderForm().withOrderDate(threeDaysAgo).buildAndPersist(entityManager);
 
     // Test
-    List<OrderForm> orders = orderFormRepository.findOrderForms(twoDaysAgo, aDayAgo, null, null);
+    List<OrderForm> orders = orderFormRepository.findOrderForms(twoDaysAgo, aDayAgo, null, null, null);
 
     // Verify
     Assert.assertEquals("Found 2 orders", 2, orders.size());
@@ -145,7 +145,8 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     anOrderForm().buildAndPersist(entityManager);
 
     // Test
-    List<OrderForm> orders = orderFormRepository.findOrderForms(null, null, dispatchedFrom, dispatchedTo);
+    List<OrderForm> orders =
+        orderFormRepository.findOrderForms(null, null, dispatchedFrom.getId(), dispatchedTo.getId(), null);
 
     // Verify
     Assert.assertEquals("Found 1 order", 1, orders.size());
@@ -168,7 +169,8 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     anOrderForm().withOrderDate(threeDaysAgo).buildAndPersist(entityManager);
 
     // Test
-    List<OrderForm> orders = orderFormRepository.findOrderForms(twoDaysAgo, aDayAgo, dispatchedFrom, dispatchedTo);
+    List<OrderForm> orders =
+        orderFormRepository.findOrderForms(twoDaysAgo, aDayAgo, dispatchedFrom.getId(), dispatchedTo.getId(), null);
 
     // Verify
     Assert.assertEquals("Found 1 order", 1, orders.size());
@@ -182,7 +184,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     anOrderForm().withOrderStatus(OrderStatus.DISPATCHED).buildAndPersist(entityManager);
 
     // Test
-    List<OrderForm> orders = orderFormRepository.findByStatus(OrderStatus.CREATED);
+    List<OrderForm> orders = orderFormRepository.findOrderForms(null, null, null, null, OrderStatus.CREATED);
 
     // Verify
     Assert.assertEquals("Found 1 order", 1, orders.size());
@@ -196,7 +198,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     anOrderForm().withOrderStatus(OrderStatus.CREATED).buildAndPersist(entityManager);
 
     // Test
-    List<OrderForm> orders = orderFormRepository.findByStatus(OrderStatus.DISPATCHED);
+    List<OrderForm> orders = orderFormRepository.findOrderForms(null, null, null, null, OrderStatus.DISPATCHED);
 
     // Verify
     Assert.assertEquals("Found 1 order", 1, orders.size());
