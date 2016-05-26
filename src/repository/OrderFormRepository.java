@@ -15,8 +15,8 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
 
   public OrderForm findById(Long id) {
     TypedQuery<OrderForm> query = entityManager.createNamedQuery(OrderFormNamedQueryConstants.NAME_FIND_BY_ID, OrderForm.class);
-    query.setParameter("id", id).setParameter("isDeleted", false);
-
+    query.setParameter("id", id);
+    query.setParameter("isDeleted", false);
     return query.getSingleResult();
   }
 
