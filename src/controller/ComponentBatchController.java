@@ -38,7 +38,7 @@ import repository.LocationRepository;
 import service.ComponentBatchCRUDService;
 import service.FormFieldAccessorService;
 import utils.PermissionConstants;
-import viewmodel.ComponentBatchViewModel;
+import viewmodel.ComponentBatchFullViewModel;
 
 @RestController
 @RequestMapping("/componentbatches")
@@ -95,7 +95,7 @@ public class ComponentBatchController {
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_COMPONENT_BATCH + "')")
-  public ResponseEntity<ComponentBatchViewModel> addComponentBatch(@RequestBody @Valid ComponentBatchBackingForm form) {
+  public ResponseEntity<ComponentBatchFullViewModel> addComponentBatch(@RequestBody @Valid ComponentBatchBackingForm form) {
     ComponentBatch componentBatch = form.getComponentBatch();
     componentBatch = componentBatchCRUDService.createComponentBatch(componentBatch);
     return new ResponseEntity<>(
@@ -104,7 +104,7 @@ public class ComponentBatchController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_COMPONENT_BATCH + "')")
-  public ResponseEntity<ComponentBatchViewModel> updateComponentBatch(@PathVariable Long id, @RequestBody @Valid ComponentBatchBackingForm form) {
+  public ResponseEntity<ComponentBatchFullViewModel> updateComponentBatch(@PathVariable Long id, @RequestBody @Valid ComponentBatchBackingForm form) {
     ComponentBatch componentBatch = form.getComponentBatch();
     componentBatch = componentBatchCRUDService.updateComponentBatch(componentBatch);
     return new ResponseEntity<>(
@@ -120,7 +120,7 @@ public class ComponentBatchController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT_BATCH + "')")
-  public ResponseEntity<ComponentBatchViewModel> getComponentBatch(@PathVariable Long id) {
+  public ResponseEntity<ComponentBatchFullViewModel> getComponentBatch(@PathVariable Long id) {
     ComponentBatch componentBatch = componentBatchCRUDService.getComponentBatchById(id);
     return new ResponseEntity<>(
         componentBatchViewModelFactory.createComponentBatchFullViewModel(componentBatch), HttpStatus.OK);
@@ -133,7 +133,7 @@ public class ComponentBatchController {
       @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endCollectionDate) {
     Map<String, Object> map = new HashMap<String, Object>();
     List<ComponentBatch> componentBatches = componentBatchCRUDService.findComponentBatches(startCollectionDate, endCollectionDate);
-    map.put("componentBatches", componentBatchViewModelFactory.createComponentBatchBasicViewModels(componentBatches));
+    map.put("componentBatches", componentBatchViewModelFactory.createComponentBatchViewModels(componentBatches));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 
   }
