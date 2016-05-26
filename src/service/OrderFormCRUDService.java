@@ -52,7 +52,7 @@ public class OrderFormCRUDService {
     
     // Check that only orders in CREATED status can be updated
     if (existingOrderForm.getStatus() != OrderStatus.CREATED) {
-      throw new IllegalStateException("Dispatched order forms can't be updated.");
+      throw new IllegalStateException("Only orders with CREATED status can be updated.");
     }
 
     // If the order is being dispatched then transfer or issue each component
