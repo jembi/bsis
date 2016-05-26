@@ -26,6 +26,7 @@ import model.donation.Donation;
 import model.donor.Donor;
 import model.inventory.InventoryStatus;
 import repository.ComponentRepository;
+import repository.ComponentTypeRepository;
 import utils.SecurityUtils;
 import viewmodel.ComponentViewModel;
 
@@ -41,6 +42,8 @@ public class ComponentCRUDService {
   private ComponentRepository componentRepository;
   @Autowired
   private ComponentViewModelFactory componentViewModelFactory;
+  @Autowired
+  private ComponentTypeRepository componentTypeRepository;
 
   /**
    * Change the status of components belonging to the donor from AVAILABLE to UNSAFE.
@@ -88,16 +91,17 @@ public class ComponentCRUDService {
     // num. of units of each component
     for (ComponentType pt : recordComponentForm.getComponentTypeCombination().getComponentTypes()) {
       boolean check = false;
+      ComponentType componentType = componentTypeRepository.getComponentTypeById(pt.getId());
       for (ComponentType ptm : newComponents.keySet()) {
         if (pt.getId() == ptm.getId()) {
           Integer count = newComponents.get(ptm) + 1;
-          newComponents.put(ptm, count);
+          newComponents.put(componentType, count);
           check = true;
           break;
         }
       }
       if (!check) {
-        newComponents.put(pt, 1);
+        newComponents.put(componentType, 1);
       }
     }
 
