@@ -9,9 +9,9 @@ import model.order.OrderType;
 import viewmodel.ComponentViewModel;
 import viewmodel.LocationViewModel;
 import viewmodel.OrderFormItemViewModel;
-import viewmodel.OrderFormViewModel;
+import viewmodel.OrderFormFullViewModel;
 
-public class OrderFormViewModelBuilder extends AbstractBuilder<OrderFormViewModel> {
+public class OrderFormFullViewModelBuilder extends AbstractBuilder<OrderFormFullViewModel> {
 
   private Long id;
   private Date orderDate;
@@ -22,48 +22,48 @@ public class OrderFormViewModelBuilder extends AbstractBuilder<OrderFormViewMode
   private List<OrderFormItemViewModel> items = new ArrayList<>();
   private List<ComponentViewModel> components = new ArrayList<>();
 
-  public OrderFormViewModelBuilder withId(Long id) {
+  public OrderFormFullViewModelBuilder withId(Long id) {
     this.id = id;
     return this;
   }
 
-  public OrderFormViewModelBuilder withOrderDate(Date orderDate) {
+  public OrderFormFullViewModelBuilder withOrderDate(Date orderDate) {
     this.orderDate = orderDate;
     return this;
   }
 
-  public OrderFormViewModelBuilder withDispatchedFrom(LocationViewModel dispatchedFrom) {
+  public OrderFormFullViewModelBuilder withDispatchedFrom(LocationViewModel dispatchedFrom) {
     this.dispatchedFrom = dispatchedFrom;
     return this;
   }
 
-  public OrderFormViewModelBuilder withDispatchedTo(LocationViewModel dispatchedTo) {
+  public OrderFormFullViewModelBuilder withDispatchedTo(LocationViewModel dispatchedTo) {
     this.dispatchedTo = dispatchedTo;
     return this;
   }
 
-  public OrderFormViewModelBuilder withOrderStatus(OrderStatus status) {
+  public OrderFormFullViewModelBuilder withOrderStatus(OrderStatus status) {
     this.status = status;
     return this;
   }
 
-  public OrderFormViewModelBuilder withOrderType(OrderType type) {
+  public OrderFormFullViewModelBuilder withOrderType(OrderType type) {
     this.type = type;
     return this;
   }
   
-  public OrderFormViewModelBuilder withItem(OrderFormItemViewModel item) {
+  public OrderFormFullViewModelBuilder withItem(OrderFormItemViewModel item) {
     this.items.add(item);
     return this;
   }
 
-  public OrderFormViewModelBuilder withComponent(ComponentViewModel component) {
+  public OrderFormFullViewModelBuilder withComponent(ComponentViewModel component) {
     this.components.add(component);
     return this;
   }
 
-  public OrderFormViewModel build() {
-    OrderFormViewModel viewModel = new OrderFormViewModel();
+  public OrderFormFullViewModel build() {
+    OrderFormFullViewModel viewModel = new OrderFormFullViewModel();
     viewModel.setId(id);
     viewModel.setDispatchedFrom(dispatchedFrom);
     viewModel.setDispatchedTo(dispatchedTo);
@@ -75,8 +75,8 @@ public class OrderFormViewModelBuilder extends AbstractBuilder<OrderFormViewMode
     return viewModel;
   }
 
-  public static OrderFormViewModelBuilder anOrderFormViewModel() {
-    return new OrderFormViewModelBuilder();
+  public static OrderFormFullViewModelBuilder anOrderFormFullViewModel() {
+    return new OrderFormFullViewModelBuilder();
   }
 
 }

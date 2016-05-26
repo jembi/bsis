@@ -14,7 +14,7 @@ import model.order.OrderForm;
 import model.order.OrderFormItem;
 import model.order.OrderStatus;
 import repository.OrderFormRepository;
-import viewmodel.OrderFormViewModel;
+import viewmodel.OrderFormFullViewModel;
 
 @Service
 @Transactional
@@ -36,10 +36,10 @@ public class OrderFormCRUDService {
     return entity;
   }
   
-  public OrderFormViewModel updateOrderForm(OrderFormBackingForm backingForm) {
+  public OrderFormFullViewModel updateOrderForm(OrderFormBackingForm backingForm) {
     OrderForm orderForm = orderFormFactory.createEntity(backingForm);
     OrderForm updatedOrderForm = updateOrderForm(orderForm);
-    return orderFormFactory.createViewModel(updatedOrderForm);
+    return orderFormFactory.createFullViewModel(updatedOrderForm);
   }
   
   public OrderForm updateOrderForm(OrderForm updatedOrderForm) {

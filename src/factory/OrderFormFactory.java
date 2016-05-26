@@ -16,7 +16,7 @@ import model.order.OrderFormItem;
 import repository.ComponentRepository;
 import repository.LocationRepository;
 import viewmodel.OrderFormItemViewModel;
-import viewmodel.OrderFormViewModel;
+import viewmodel.OrderFormFullViewModel;
 
 /**
  * A factory for creating OrderForm related objects.
@@ -66,8 +66,8 @@ public class OrderFormFactory {
     return entity;
   }
 
-  public OrderFormViewModel createViewModel(OrderForm entity) {
-    OrderFormViewModel viewModel = new OrderFormViewModel();
+  public OrderFormFullViewModel createFullViewModel(OrderForm entity) {
+    OrderFormFullViewModel viewModel = new OrderFormFullViewModel();
     viewModel.setId(entity.getId());
     viewModel.setDispatchedFrom(locationViewModelFactory.createLocationViewModel(entity.getDispatchedFrom()));
     viewModel.setDispatchedTo(locationViewModelFactory.createLocationViewModel(entity.getDispatchedTo()));

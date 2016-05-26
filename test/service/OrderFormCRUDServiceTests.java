@@ -4,7 +4,7 @@ import static helpers.builders.LocationBuilder.aDistributionSite;
 import static helpers.builders.OrderFormBackingFormBuilder.anOrderFormBackingForm;
 import static helpers.builders.OrderFormBuilder.anOrderForm;
 import static helpers.builders.OrderFormItemBuilder.anOrderItemForm;
-import static helpers.builders.OrderFormViewModelBuilder.anOrderFormViewModel;
+import static helpers.builders.OrderFormFullViewModelBuilder.anOrderFormFullViewModel;
 import static helpers.matchers.OrderFormMatcher.hasSameStateAsOrderForm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -27,7 +27,7 @@ import model.order.OrderStatus;
 import model.order.OrderType;
 import repository.OrderFormRepository;
 import suites.UnitTestSuite;
-import viewmodel.OrderFormViewModel;
+import viewmodel.OrderFormFullViewModel;
 
 public class OrderFormCRUDServiceTests extends UnitTestSuite {
   
@@ -75,17 +75,17 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
         .withDispatchedTo(dispatchedTo)
         .withOrderFormItems(Arrays.asList(orderFormItem))
         .build();
-    OrderFormViewModel expectedViewModel = anOrderFormViewModel().withId(ORDER_FORM_ID).build();
+    OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel().withId(ORDER_FORM_ID).build();
     
     // Expectations
     when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
     when(orderFormFactory.createEntity(backingForm)).thenReturn(orderFormCreatedFromBackingForm);
     when(orderFormItemCRUDService.createOrUpdateOrderFormItem(orderFormItem)).thenReturn(orderFormItem);
     when(orderFormRepository.update(existingOrderForm)).thenReturn(existingOrderForm);
-    when(orderFormFactory.createViewModel(argThat(hasSameStateAsOrderForm(expectedOrderForm)))).thenReturn(expectedViewModel);
+    when(orderFormFactory.createFullViewModel(argThat(hasSameStateAsOrderForm(expectedOrderForm)))).thenReturn(expectedViewModel);
     
     // Test
-    OrderFormViewModel returnedViewModel = orderFormCRUDService.updateOrderForm(backingForm);
+    OrderFormFullViewModel returnedViewModel = orderFormCRUDService.updateOrderForm(backingForm);
     
     // Assertions
     assertThat(returnedViewModel, is(expectedViewModel));

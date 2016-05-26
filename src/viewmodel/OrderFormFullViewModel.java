@@ -7,7 +7,7 @@ import java.util.List;
 import model.order.OrderStatus;
 import model.order.OrderType;
 
-public class OrderFormViewModel {
+public class OrderFormFullViewModel {
 
   private long id;
 

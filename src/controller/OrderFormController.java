@@ -93,7 +93,7 @@ public class OrderFormController {
   public ResponseEntity<Map<String, Object>> addOrderForm(@Valid @RequestBody OrderFormBackingForm backingForm) {
     Map<String, Object> map = new HashMap<>();
     OrderForm orderForm = orderFormCRUDService.createOrderForm(backingForm);
-    map.put("orderForm", orderFormFactory.createViewModel(orderForm));
+    map.put("orderForm", orderFormFactory.createFullViewModel(orderForm));
     return new ResponseEntity<>(map, HttpStatus.CREATED);
   }
 
@@ -116,7 +116,7 @@ public class OrderFormController {
     OrderForm orderForm = orderFormRepository.findById(id);
     
     Map<String, Object> map = new HashMap<>();
-    map.put("orderForm", orderFormFactory.createViewModel(orderForm));
+    map.put("orderForm", orderFormFactory.createFullViewModel(orderForm));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
