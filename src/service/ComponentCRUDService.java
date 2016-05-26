@@ -199,4 +199,8 @@ public class ComponentCRUDService {
     Component component = componentRepository.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber);
     return componentViewModelFactory.createComponentViewModel(component);
   }
+  
+  public Component updateComponent(Component component) {
+    return componentRepository.updateComponent(component);
+  }
 }

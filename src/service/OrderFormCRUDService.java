@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 
 import backingform.OrderFormBackingForm;
 import factory.OrderFormFactory;
+import model.component.Component;
 import model.order.OrderForm;
 import model.order.OrderFormItem;
 import model.order.OrderStatus;
+import model.order.OrderType;
 import repository.OrderFormRepository;
 import viewmodel.OrderFormViewModel;
 
@@ -28,6 +30,9 @@ public class OrderFormCRUDService {
   
   @Autowired
   private OrderFormItemCRUDService orderFormItemCRUDService;
+  
+  @Autowired
+  private ComponentDispatchService componentDispatchService;
 
   public OrderForm createOrderForm(OrderFormBackingForm backingForm) {
     OrderForm entity = orderFormFactory.createEntity(backingForm);
@@ -44,6 +49,23 @@ public class OrderFormCRUDService {
   
   public OrderForm updateOrderForm(OrderForm updatedOrderForm) {
     OrderForm existingOrderForm = orderFormRepository.findById(updatedOrderForm.getId());
+    
+    // Check that only orders in CREATED status can be updated
+    if (existingOrderForm.getStatus() != OrderStatus.CREATED) {
+      throw new IllegalStateException("Only orders with CREATED status can be updated.");
+    }
+
+    // If the order is being dispatched then transfer or issue each component
+    if (existingOrderForm.getStatus() == OrderStatus.CREATED && updatedOrderForm.getStatus() == OrderStatus.DISPATCHED) {
+      for (Component component : updatedOrderForm.getComponents()) {
+        if (updatedOrderForm.getType() == OrderType.ISSUE) {
+          componentDispatchService.issueComponent(component, updatedOrderForm.getDispatchedTo());
+        } else if (updatedOrderForm.getType() == OrderType.TRANSFER) {
+          componentDispatchService.transferComponent(component, updatedOrderForm.getDispatchedTo());
+        }
+      }
+    }
+
     existingOrderForm.setOrderDate(updatedOrderForm.getOrderDate());
     existingOrderForm.setStatus(updatedOrderForm.getStatus());
     existingOrderForm.setType(updatedOrderForm.getType());
