@@ -1,6 +1,7 @@
 package service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import backingform.OrderFormBackingForm;
+import factory.LocationViewModelFactory;
 import factory.OrderFormFactory;
 import model.order.OrderForm;
 import model.order.OrderFormItem;
@@ -28,6 +30,9 @@ public class OrderFormCRUDService {
   
   @Autowired
   private OrderFormItemCRUDService orderFormItemCRUDService;
+
+  @Autowired
+  private LocationViewModelFactory locationViewModelFactory;
 
   public OrderForm createOrderForm(OrderFormBackingForm backingForm) {
     OrderForm entity = orderFormFactory.createEntity(backingForm);
@@ -56,5 +61,10 @@ public class OrderFormCRUDService {
     existingOrderForm.setItems(items);
     existingOrderForm.setComponents(updatedOrderForm.getComponents());
     return orderFormRepository.update(existingOrderForm);
+  }
+
+  public List<OrderForm> findOrderForms(Date orderDateFrom, Date orderDateTo, Long dispatchedFromId,
+      Long dispatchedToId, OrderStatus status) {
+    return orderFormRepository.findOrderForms(orderDateFrom, orderDateTo, dispatchedFromId, dispatchedToId, status);
   }
 }
