@@ -56,7 +56,9 @@ import repository.InventoryNamedQueryConstants;
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_BY_DIN,
         query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENTS_BY_DIN),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENT_BY_CODE_AND_DIN,
-        query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENT_BY_CODE_AND_DIN)
+        query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENT_BY_CODE_AND_DIN),
+    @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENT_BY_CODE_DIN_AND_INVENTORY_STATUS,
+        query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENT_BY_CODE_DIN_AND_INVENTORY_STATUS)
 })
 @Entity
 @Audited

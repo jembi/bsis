@@ -8,6 +8,8 @@ import static org.hamcrest.Matchers.is;
 
 import java.util.Arrays;
 
+import javax.persistence.NoResultException;
+
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,6 +17,7 @@ import model.component.Component;
 import model.component.ComponentStatus;
 import model.donation.Donation;
 import model.donor.Donor;
+import model.inventory.InventoryStatus;
 import suites.ContextDependentTestSuite;
 
 public class ComponentRepositoryTests extends ContextDependentTestSuite {
@@ -133,6 +136,69 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
     
     // Verify
     assertThat(returnedComponent, is(expectedComponent));
+  }
+  
+  @Test(expected = NoResultException.class)
+  public void testFindNonExistentComponentByCodeAndDIN_shoulThrow() {
+    // Test
+    componentRepository.findComponentByCodeAndDIN("", "");
+  }
+
+  @Test
+  public void testFindComponentByCodeDINAndInventoryStatus_shouldReturnMatchingComponent() {
+    
+    String componentCode = "0011-01";
+    String donationIdentificationNumber = "0000002";
+    
+    Donation donationWithExpectedDonationIdentificationNumber = aDonation()
+        .withDonationIdentificationNumber(donationIdentificationNumber)
+        .buildAndPersist(entityManager);
+    
+    // Excluded by component code
+    aComponent()
+        .withComponentCode("0011-02")
+        .withDonation(donationWithExpectedDonationIdentificationNumber)
+        .buildAndPersist(entityManager);
+    
+    // Excluded by donation identification number
+    aComponent()
+        .withComponentCode(componentCode)
+        .withDonation(aDonation().withDonationIdentificationNumber("1000007").build())
+        .buildAndPersist(entityManager);
+    
+    // Excluded by inventoryStatus = NOT_LABELLED
+    aComponent()
+        .withComponentCode(componentCode)
+        .withDonation(donationWithExpectedDonationIdentificationNumber)
+        .withInventoryStatus(InventoryStatus.NOT_LABELLED)
+        .buildAndPersist(entityManager);
+    
+    // Excluded by inventoryStatus = REMOVED
+    aComponent()
+        .withComponentCode(componentCode)
+        .withDonation(donationWithExpectedDonationIdentificationNumber)
+        .withInventoryStatus(InventoryStatus.REMOVED)
+        .buildAndPersist(entityManager);
+    
+    // Expected
+    Component expectedComponent = aComponent()
+        .withComponentCode(componentCode)
+        .withDonation(donationWithExpectedDonationIdentificationNumber)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .buildAndPersist(entityManager);
+    
+    // Test
+    Component returnedComponent = componentRepository.findComponentByCodeDINAndInventoryStatus(componentCode,
+        donationIdentificationNumber, InventoryStatus.IN_STOCK);
+    
+    // Verify
+    assertThat(returnedComponent, is(expectedComponent));
+  }
+
+  @Test(expected = NoResultException.class)
+  public void testFindNonExistentComponentByCodeDINAndInventoryStatus_shoulThrow() {
+    // Test
+    componentRepository.findComponentByCodeDINAndInventoryStatus("0011-01", "0000002", InventoryStatus.IN_STOCK);
   }
 
 }

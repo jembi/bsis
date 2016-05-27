@@ -39,6 +39,7 @@ import model.componentmovement.ComponentStatusChangeType;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.donor.Donor;
+import model.inventory.InventoryStatus;
 import model.request.Request;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
@@ -824,6 +825,14 @@ public class ComponentRepository {
     return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_COMPONENT_BY_CODE_AND_DIN, Component.class)
         .setParameter("donationIdentificationNumber", donationIdentificationNumber)
         .setParameter("componentCode", componentCode)
+        .getSingleResult();
+  }
+  
+  public Component findComponentByCodeDINAndInventoryStatus(String componentCode, String donationIdentificationNumber, InventoryStatus inventoryStatus) {
+    return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_COMPONENT_BY_CODE_DIN_AND_INVENTORY_STATUS, Component.class)
+        .setParameter("donationIdentificationNumber", donationIdentificationNumber)
+        .setParameter("componentCode", componentCode)
+        .setParameter("inventoryStatus", inventoryStatus)
         .getSingleResult();
   }
 }
