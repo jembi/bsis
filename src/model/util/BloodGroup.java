@@ -1,8 +1,8 @@
 package model.util;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Collection;
 
 public class BloodGroup {
 
@@ -28,13 +28,18 @@ public class BloodGroup {
   }
 
   public BloodGroup(String bloodGroup) {
-    BloodGroup bg = bloodgroups.get(bloodGroup.toLowerCase());
-    if (bg == null) {
+    if (bloodGroup != null) {
+      BloodGroup bg = bloodgroups.get(bloodGroup.toLowerCase());
+      if (bg == null) {
+        abo = "";
+        rh = "";
+      } else {
+        abo = bg.abo;
+        rh = bg.rh;
+      }
+    } else {
       abo = "";
       rh = "";
-    } else {
-      abo = bg.abo;
-      rh = bg.rh;
     }
   }
 

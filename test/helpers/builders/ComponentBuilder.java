@@ -2,6 +2,8 @@ package helpers.builders;
 
 import static helpers.builders.LocationBuilder.aVenue;
 
+import java.util.Date;
+
 import helpers.persisters.AbstractEntityPersister;
 import helpers.persisters.ComponentPersister;
 import model.component.Component;
@@ -21,6 +23,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
   private Location location = aVenue().build();
   private boolean isDeleted = false;
   private String componentCode;
+  private Date expiresOn;
   
   public ComponentBuilder withId(Long id) {
     this.id = id;
@@ -62,6 +65,11 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     return this;
   }
 
+  public ComponentBuilder withExpiresOn(Date expiresOn) {
+    this.expiresOn = expiresOn;
+    return this;
+  }
+
   @Override
   public Component build() {
     Component component = new Component();
@@ -73,6 +81,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     component.setInventoryStatus(inventoryStatus);
     component.setIsDeleted(isDeleted);
     component.setComponentCode(componentCode);
+    component.setExpiresOn(expiresOn);
     return component;
   }
 

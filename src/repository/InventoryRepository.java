@@ -1,10 +1,13 @@
 package repository;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,5 +39,49 @@ public class InventoryRepository {
         .setParameter("componentCode", componentCode)
         .setParameter("inventoryStatus", inventoryStatus)
         .getSingleResult();
+  }
+
+  public List<Component> findComponentsInStock(Long locationId, Long componentTypeId, Date dueToExpireBy,
+      String bloodAbo, String bloodRh) {
+
+    String queryString =
+        "SELECT c FROM Component c WHERE c.isDeleted = :isDeleted AND c.inventoryStatus = :inventoryStatus ";
+    if (locationId != null) {
+      queryString = queryString + "AND c.location.id = :locationId ";
+    }
+    if (componentTypeId != null) {
+      queryString = queryString + "AND c.componentType.id = :componentTypeId ";
+    }
+    if (dueToExpireBy != null) {
+      queryString = queryString + "AND c.expiresOn <= :dueToExpireBy ";
+    }
+    if (StringUtils.isNotEmpty(bloodAbo)) {
+      queryString = queryString + "AND c.donation.bloodAbo = :bloodAbo ";
+    }
+    if (StringUtils.isNotEmpty(bloodRh)) {
+      queryString = queryString + "AND c.donation.bloodRh = :bloodRh ";
+    }
+
+    TypedQuery<Component> query = em.createQuery(queryString, Component.class);
+    query.setParameter("isDeleted", false);
+    query.setParameter("inventoryStatus", InventoryStatus.IN_STOCK);
+
+    if (locationId != null) {
+      query.setParameter("locationId", locationId);
+    }
+    if (componentTypeId != null) {
+      query.setParameter("componentTypeId", componentTypeId);
+    }
+    if (dueToExpireBy != null) {
+      query.setParameter("dueToExpireBy", dueToExpireBy);
+    }
+    if (StringUtils.isNotEmpty(bloodAbo)) {
+      query.setParameter("bloodAbo", bloodAbo);
+    }
+    if (StringUtils.isNotEmpty(bloodRh)) {
+      query.setParameter("bloodRh", bloodRh);
+    }
+
+    return query.getResultList();
   }
 }

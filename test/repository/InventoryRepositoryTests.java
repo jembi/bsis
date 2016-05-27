@@ -2,9 +2,11 @@ package repository;
 
 import static helpers.builders.ComponentBuilder.aComponent;
 import static helpers.builders.DonationBuilder.aDonation;
+import static helpers.builders.LocationBuilder.aDistributionSite;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -191,6 +193,82 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
   public void testFindNonExistentComponentByCodeDINAndInventoryStatus_shoulThrow() {
     // Test
     inventoryRepository.findComponentByCodeDINAndInventoryStatus("0011-01", "0000002", InventoryStatus.IN_STOCK);
+  }
+
+  @Test
+  public void testFindComponentsInStockNoParams_shouldReturnAllComponentsInStock() {
+    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).buildAndPersist(entityManager);
+    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).buildAndPersist(entityManager);
+    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).buildAndPersist(entityManager);
+
+    // Test
+    List<Component> components = inventoryRepository.findComponentsInStock(null, null, null, null, null);
+
+    // Verify
+    Assert.assertEquals("Found 3 component", 3, components.size());
+  }
+
+  @Test
+  public void testFindComponentsInStockWithParams_shouldReturnMatchingComponent() {
+    // Set up
+    Location loc = aDistributionSite().buildAndPersist(entityManager);
+    ComponentType componentType = ComponentTypeBuilder.aComponentType().buildAndPersist(entityManager);
+    Donation donation = aDonation().withBloodAbo("A").withBloodRh("-").buildAndPersist(entityManager);
+    Date expiresOn = new Date();
+    Component expected = aComponent()
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withLocation(loc)
+        .withComponentType(componentType)
+        .withDonation(donation)
+        .withExpiresOn(expiresOn)
+        .buildAndPersist(entityManager);
+    
+    // Excluded: not in stock
+    aComponent()
+    .withLocation(loc)  
+    .withComponentType(componentType)
+    .withDonation(donation)
+    .withExpiresOn(expiresOn)
+    .buildAndPersist(entityManager);
+    
+    // Excluded: different location
+    aComponent()
+    .withInventoryStatus(InventoryStatus.IN_STOCK)
+    .withComponentType(componentType)
+    .withDonation(donation)
+    .withExpiresOn(expiresOn)
+    .buildAndPersist(entityManager);
+    
+    // Excluded: different componentType
+    aComponent()
+    .withInventoryStatus(InventoryStatus.IN_STOCK)
+    .withLocation(loc)
+    .withDonation(donation)
+    .withExpiresOn(expiresOn)
+    .buildAndPersist(entityManager);
+    
+    // Excluded: different bloodGroup
+    aComponent()
+    .withInventoryStatus(InventoryStatus.IN_STOCK)
+    .withLocation(loc)
+    .withComponentType(componentType)
+    .withExpiresOn(expiresOn)
+    .buildAndPersist(entityManager);
+    
+    // Excluded: different expiresOn
+    aComponent()
+    .withInventoryStatus(InventoryStatus.IN_STOCK)
+    .withLocation(loc)
+    .withComponentType(componentType)
+    .withDonation(donation)
+    .buildAndPersist(entityManager);
+
+    // Test
+    List<Component> components = inventoryRepository.findComponentsInStock(loc.getId(), componentType.getId(), expiresOn, donation.getBloodAbo(), donation.getBloodRh());
+
+    // Verify
+    Assert.assertEquals("Found 1 component", 1, components.size());
+    Assert.assertEquals(expected, components.get(0));
   }
 
 }
