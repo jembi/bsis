@@ -5,8 +5,8 @@ import static helpers.builders.LocationBuilder.aDistributionSite;
 import static helpers.builders.LocationBuilder.aUsageSite;
 import static helpers.builders.OrderFormBackingFormBuilder.anOrderFormBackingForm;
 import static helpers.builders.OrderFormBuilder.anOrderForm;
-import static helpers.builders.OrderFormItemBuilder.anOrderItemForm;
 import static helpers.builders.OrderFormFullViewModelBuilder.anOrderFormFullViewModel;
+import static helpers.builders.OrderFormItemBuilder.anOrderItemForm;
 import static helpers.matchers.OrderFormMatcher.hasSameStateAsOrderForm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -75,16 +75,16 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
         .withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo)
         .build();
-    OrderFormViewModel expectedViewModel = anOrderFormViewModel().withId(ORDER_FORM_ID).build();
+    OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel().withId(ORDER_FORM_ID).build();
     
     // Expectations
     when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
     when(orderFormFactory.createEntity(backingForm)).thenReturn(orderFormCreatedFromBackingForm);
     when(orderFormRepository.update(existingOrderForm)).thenReturn(existingOrderForm);
-    when(orderFormFactory.createViewModel(argThat(hasSameStateAsOrderForm(expectedOrderForm)))).thenReturn(expectedViewModel);
+    when(orderFormFactory.createFullViewModel(argThat(hasSameStateAsOrderForm(expectedOrderForm)))).thenReturn(expectedViewModel);
     
     // Test
-    OrderFormViewModel returnedViewModel = orderFormCRUDService.updateOrderForm(backingForm);
+    OrderFormFullViewModel returnedViewModel = orderFormCRUDService.updateOrderForm(backingForm);
     
     // Assertions
     assertThat(returnedViewModel, is(expectedViewModel));
@@ -167,16 +167,16 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
         .withDispatchedTo(dispatchedTo)
         .withComponent(component)
         .build();
-    OrderFormViewModel expectedViewModel = anOrderFormViewModel().withId(ORDER_FORM_ID).build();
-    
+    OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel().withId(ORDER_FORM_ID).build();
+
     // Expectations
     when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
     when(orderFormFactory.createEntity(backingForm)).thenReturn(orderFormCreatedFromBackingForm);
     when(orderFormRepository.update(existingOrderForm)).thenReturn(existingOrderForm);
-    when(orderFormFactory.createViewModel(argThat(hasSameStateAsOrderForm(expectedOrderForm)))).thenReturn(expectedViewModel);
+    when(orderFormFactory.createFullViewModel(argThat(hasSameStateAsOrderForm(expectedOrderForm)))).thenReturn(expectedViewModel);
     
     // Test
-    OrderFormViewModel returnedViewModel = orderFormCRUDService.updateOrderForm(backingForm);
+    OrderFormFullViewModel returnedViewModel = orderFormCRUDService.updateOrderForm(backingForm);
     
     // Assertions
     assertThat(returnedViewModel, is(expectedViewModel));
