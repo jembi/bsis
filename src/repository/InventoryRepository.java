@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import dto.StockLevelDTO;
+import model.component.Component;
 import model.inventory.InventoryStatus;
 
 @Repository
@@ -27,5 +28,13 @@ public class InventoryRepository {
   public List<StockLevelDTO> findStockLevels(InventoryStatus inventoryStatus) {
     return em.createNamedQuery(InventoryNamedQueryConstants.NAME_FIND_STOCK_LEVELS, StockLevelDTO.class)
         .setParameter("deleted", false).setParameter("inventoryStatus", inventoryStatus).getResultList();
+  }
+  
+  public Component findComponentByCodeDINAndInventoryStatus(String componentCode, String donationIdentificationNumber, InventoryStatus inventoryStatus) {
+    return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_COMPONENT_BY_CODE_DIN_AND_INVENTORY_STATUS, Component.class)
+        .setParameter("donationIdentificationNumber", donationIdentificationNumber)
+        .setParameter("componentCode", componentCode)
+        .setParameter("inventoryStatus", inventoryStatus)
+        .getSingleResult();
   }
 }
