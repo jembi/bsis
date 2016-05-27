@@ -30,6 +30,7 @@ import factory.OrderFormFactory;
 import model.location.Location;
 import model.order.OrderForm;
 import model.order.OrderStatus;
+import model.order.OrderType;
 import repository.ComponentTypeRepository;
 import repository.LocationRepository;
 import repository.OrderFormRepository;
@@ -130,9 +131,10 @@ public class OrderFormController {
       @RequestParam(value = "orderDateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date orderDateTo,
       @RequestParam(value = "dispatchedFromId", required = false) Long dispatchedFromId,
       @RequestParam(value = "dispatchedToId", required = false) Long dispatchedToId,
+      @RequestParam(value = "type", required = false) OrderType type,
       @RequestParam(value = "status", required = false) OrderStatus status) {
     Map<String, Object> map = new HashMap<String, Object>();
-    List<OrderForm> orderForms = orderFormCRUDService.findOrderForms(orderDateFrom, orderDateTo, dispatchedFromId, dispatchedToId, status);
+    List<OrderForm> orderForms = orderFormCRUDService.findOrderForms(orderDateFrom, orderDateTo, dispatchedFromId, dispatchedToId, type, status);
     map.put("orderForms", orderFormFactory.createViewModels(orderForms));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 

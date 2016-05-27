@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import backingform.OrderFormBackingForm;
-import factory.LocationViewModelFactory;
 import factory.OrderFormFactory;
 import model.component.Component;
 import model.order.OrderForm;
@@ -35,9 +34,6 @@ public class OrderFormCRUDService {
   
   @Autowired
   private ComponentDispatchService componentDispatchService;
-
-  @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
 
   public OrderForm createOrderForm(OrderFormBackingForm backingForm) {
     OrderForm entity = orderFormFactory.createEntity(backingForm);
@@ -86,7 +82,7 @@ public class OrderFormCRUDService {
   }
 
   public List<OrderForm> findOrderForms(Date orderDateFrom, Date orderDateTo, Long dispatchedFromId,
-      Long dispatchedToId, OrderStatus status) {
-    return orderFormRepository.findOrderForms(orderDateFrom, orderDateTo, dispatchedFromId, dispatchedToId, status);
+      Long dispatchedToId, OrderType type, OrderStatus status) {
+    return orderFormRepository.findOrderForms(orderDateFrom, orderDateTo, dispatchedFromId, dispatchedToId, type, status);
   }
 }

@@ -27,6 +27,7 @@ import model.location.Location;
 import model.order.OrderForm;
 import model.order.OrderFormItem;
 import model.order.OrderStatus;
+import model.order.OrderType;
 import model.packtype.PackType;
 import suites.SecurityContextDependentTestSuite;
 
@@ -109,7 +110,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     anOrderForm().withOrderDate(threeDaysAgo).buildAndPersist(entityManager);
 
     // Test
-    List<OrderForm> orders = orderFormRepository.findOrderForms(null, null, null, null, null);
+    List<OrderForm> orders = orderFormRepository.findOrderForms(null, null, null, null, null, null);
 
     // Verify
     Assert.assertEquals("Found 3 orders", 3, orders.size());
@@ -127,7 +128,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     anOrderForm().withOrderDate(threeDaysAgo).buildAndPersist(entityManager);
 
     // Test
-    List<OrderForm> orders = orderFormRepository.findOrderForms(twoDaysAgo, aDayAgo, null, null, null);
+    List<OrderForm> orders = orderFormRepository.findOrderForms(twoDaysAgo, aDayAgo, null, null, null, null);
 
     // Verify
     Assert.assertEquals("Found 2 orders", 2, orders.size());
@@ -146,7 +147,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Test
     List<OrderForm> orders =
-        orderFormRepository.findOrderForms(null, null, dispatchedFrom.getId(), dispatchedTo.getId(), null);
+        orderFormRepository.findOrderForms(null, null, dispatchedFrom.getId(), dispatchedTo.getId(), null, null);
 
     // Verify
     Assert.assertEquals("Found 1 order", 1, orders.size());
@@ -170,11 +171,40 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Test
     List<OrderForm> orders =
-        orderFormRepository.findOrderForms(twoDaysAgo, aDayAgo, dispatchedFrom.getId(), dispatchedTo.getId(), null);
+ orderFormRepository.findOrderForms(twoDaysAgo, aDayAgo, dispatchedFrom.getId(),
+        dispatchedTo.getId(), null, null);
 
     // Verify
     Assert.assertEquals("Found 1 order", 1, orders.size());
     Assert.assertEquals("Verify right order was returned", orderForm, orders.get(0));
+  }
+
+  @Test
+  public void testFindOrderFormsByIssueType_shouldReturnRightOrder() {
+    // Set up
+    OrderForm createdOrderForm = anOrderForm().withOrderType(OrderType.ISSUE).buildAndPersist(entityManager);
+    anOrderForm().withOrderType(OrderType.TRANSFER).buildAndPersist(entityManager);
+
+    // Test
+    List<OrderForm> orders = orderFormRepository.findOrderForms(null, null, null, null, OrderType.ISSUE, null);
+
+    // Verify
+    Assert.assertEquals("Found 1 order", 1, orders.size());
+    Assert.assertEquals("Verify right order was returned", createdOrderForm, orders.get(0));
+  }
+
+  @Test
+  public void testFindOrderFormsByTransferType_shouldReturnRightOrder() {
+    // Set up
+    OrderForm dispatchedOrderForm = anOrderForm().withOrderType(OrderType.TRANSFER).buildAndPersist(entityManager);
+    anOrderForm().withOrderType(OrderType.ISSUE).buildAndPersist(entityManager);
+
+    // Test
+    List<OrderForm> orders = orderFormRepository.findOrderForms(null, null, null, null, OrderType.TRANSFER, null);
+
+    // Verify
+    Assert.assertEquals("Found 1 order", 1, orders.size());
+    Assert.assertEquals("Verify right order was returned", dispatchedOrderForm, orders.get(0));
   }
 
   @Test
@@ -184,7 +214,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     anOrderForm().withOrderStatus(OrderStatus.DISPATCHED).buildAndPersist(entityManager);
 
     // Test
-    List<OrderForm> orders = orderFormRepository.findOrderForms(null, null, null, null, OrderStatus.CREATED);
+    List<OrderForm> orders = orderFormRepository.findOrderForms(null, null, null, null, null, OrderStatus.CREATED);
 
     // Verify
     Assert.assertEquals("Found 1 order", 1, orders.size());
@@ -198,7 +228,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     anOrderForm().withOrderStatus(OrderStatus.CREATED).buildAndPersist(entityManager);
 
     // Test
-    List<OrderForm> orders = orderFormRepository.findOrderForms(null, null, null, null, OrderStatus.DISPATCHED);
+    List<OrderForm> orders = orderFormRepository.findOrderForms(null, null, null, null, null, OrderStatus.DISPATCHED);
 
     // Verify
     Assert.assertEquals("Found 1 order", 1, orders.size());

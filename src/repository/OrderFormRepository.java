@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import model.order.OrderForm;
 import model.order.OrderStatus;
+import model.order.OrderType;
 
 @Repository
 public class OrderFormRepository extends AbstractRepository<OrderForm> {
@@ -21,7 +22,7 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
   }
 
   public List<OrderForm> findOrderForms(Date orderDateFrom, Date orderDateTo, Long dispatchedFromId,
-      Long dispatchedToId, OrderStatus status) {
+      Long dispatchedToId, OrderType type, OrderStatus status) {
     String queryString = "SELECT o FROM OrderForm o WHERE o.isDeleted=:isDeleted ";
     if (orderDateFrom != null) {
       queryString = queryString + "AND o.orderDate >= :orderDateFrom ";
@@ -37,6 +38,9 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
     }
     if (status != null) {
       queryString = queryString + "AND o.status = :status ";
+    }
+    if (type != null) {
+      queryString = queryString + "AND o.type = :type ";
     }
 
     queryString = queryString + "ORDER BY o.orderDate DESC";
@@ -58,6 +62,9 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
     }
     if (status != null) {
       query.setParameter("status", status);
+    }
+    if (type != null) {
+      query.setParameter("type", type);
     }
 
     return query.getResultList();
