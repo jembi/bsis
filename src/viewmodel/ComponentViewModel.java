@@ -67,11 +67,11 @@ public class ComponentViewModel {
     return getComponent().getDonation().getDonationIdentificationNumber();
   }
   
-  public PackTypeBasicViewModel getPackType() {
+  public PackTypeViewModel getPackType() {
     if (component.getDonation() == null || component.getDonation().getPackType() == null) {
       return null;
     }
-    return new PackTypeBasicViewModel(component.getDonation().getPackType());
+    return new PackTypeViewModel(component.getDonation().getPackType());
   }
 
   public String getStatus() {

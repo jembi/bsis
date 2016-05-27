@@ -29,8 +29,8 @@ import model.donation.Donation;
 import model.donationbatch.DonationBatch;
 import model.location.Location;
 import viewmodel.BloodTransportBoxViewModel;
-import viewmodel.ComponentBatchBasicViewModel;
 import viewmodel.ComponentBatchViewModel;
+import viewmodel.ComponentBatchFullViewModel;
 import viewmodel.ComponentViewModel;
 import viewmodel.DonationBatchViewModel;
 import viewmodel.LocationViewModel;
@@ -93,7 +93,7 @@ public class ComponentBatchViewModelFactoryTests {
       .thenReturn(Arrays.asList(boxViewModel));
     
     // run test
-    ComponentBatchViewModel viewModel =
+    ComponentBatchFullViewModel viewModel =
         componentBatchViewModelFactory.createComponentBatchFullViewModel(componentBatch);
     
     // do asserts
@@ -111,10 +111,10 @@ public class ComponentBatchViewModelFactoryTests {
   }
   
   @Test
-  public void testCreateComponentBatchBasicViewModels_nullList() throws Exception {
+  public void testCreateComponentBatchViewModels_nullList() throws Exception {
     // run test
-    List<ComponentBatchBasicViewModel> viewModels =
-        componentBatchViewModelFactory.createComponentBatchBasicViewModels(null);
+    List<ComponentBatchViewModel> viewModels =
+        componentBatchViewModelFactory.createComponentBatchViewModels(null);
     
     // do asserts
     Assert.assertNotNull("View models list returned", viewModels);
@@ -122,7 +122,7 @@ public class ComponentBatchViewModelFactoryTests {
   }
   
   @Test
-  public void testCreateComponentBatchBasicViewModels_ComponentBatchList() throws Exception {
+  public void testCreateComponentBatchViewModels_ComponentBatchList() throws Exception {
     // set up data
     List<ComponentBatch> componentBatches = new ArrayList<>();
     componentBatches.add(aComponentBatch().withId(1L).build());
@@ -131,8 +131,8 @@ public class ComponentBatchViewModelFactoryTests {
     // set up mocks
     
     // run test
-    List<ComponentBatchBasicViewModel> viewModels =
-        componentBatchViewModelFactory.createComponentBatchBasicViewModels(componentBatches);
+    List<ComponentBatchViewModel> viewModels =
+        componentBatchViewModelFactory.createComponentBatchViewModels(componentBatches);
     
     // do asserts
     Assert.assertNotNull("View models list returned", viewModels);

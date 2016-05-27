@@ -1,6 +1,7 @@
 package service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -16,7 +17,7 @@ import model.order.OrderFormItem;
 import model.order.OrderStatus;
 import model.order.OrderType;
 import repository.OrderFormRepository;
-import viewmodel.OrderFormViewModel;
+import viewmodel.OrderFormFullViewModel;
 
 @Service
 @Transactional
@@ -41,10 +42,10 @@ public class OrderFormCRUDService {
     return entity;
   }
   
-  public OrderFormViewModel updateOrderForm(OrderFormBackingForm backingForm) {
+  public OrderFormFullViewModel updateOrderForm(OrderFormBackingForm backingForm) {
     OrderForm orderForm = orderFormFactory.createEntity(backingForm);
     OrderForm updatedOrderForm = updateOrderForm(orderForm);
-    return orderFormFactory.createViewModel(updatedOrderForm);
+    return orderFormFactory.createFullViewModel(updatedOrderForm);
   }
   
   public OrderForm updateOrderForm(OrderForm updatedOrderForm) {
@@ -78,5 +79,10 @@ public class OrderFormCRUDService {
     existingOrderForm.setItems(items);
     existingOrderForm.setComponents(updatedOrderForm.getComponents());
     return orderFormRepository.update(existingOrderForm);
+  }
+
+  public List<OrderForm> findOrderForms(Date orderDateFrom, Date orderDateTo, Long dispatchedFromId,
+      Long dispatchedToId, OrderType type, OrderStatus status) {
+    return orderFormRepository.findOrderForms(orderDateFrom, orderDateTo, dispatchedFromId, dispatchedToId, type, status);
   }
 }

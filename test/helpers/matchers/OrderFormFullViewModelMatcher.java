@@ -5,13 +5,13 @@ import java.util.Objects;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
-import viewmodel.OrderFormViewModel;
+import viewmodel.OrderFormFullViewModel;
 
-public class OrderFormViewModelMatcher extends TypeSafeMatcher<OrderFormViewModel> {
+public class OrderFormFullViewModelMatcher extends TypeSafeMatcher<OrderFormFullViewModel> {
 
-  private OrderFormViewModel expected;
+  private OrderFormFullViewModel expected;
 
-  public OrderFormViewModelMatcher(OrderFormViewModel expected) {
+  public OrderFormFullViewModelMatcher(OrderFormFullViewModel expected) {
     this.expected = expected;
   }
 
@@ -25,15 +25,16 @@ public class OrderFormViewModelMatcher extends TypeSafeMatcher<OrderFormViewMode
   }
 
   @Override
-  public boolean matchesSafely(OrderFormViewModel actual) {
+  public boolean matchesSafely(OrderFormFullViewModel actual) {
     return Objects.equals(actual.getId(), expected.getId()) &&
         Objects.equals(actual.getOrderDate(), expected.getOrderDate()) &&
         Objects.equals(actual.getDispatchedFrom(), expected.getDispatchedFrom()) &&
-        Objects.equals(actual.getDispatchedTo(), expected.getDispatchedTo());
+        Objects.equals(actual.getDispatchedTo(), expected.getDispatchedTo()) &&
+        Objects.equals(actual.getItems(), expected.getItems());
   }
 
-  public static OrderFormViewModelMatcher hasSameStateAsOrderFormViewModel(OrderFormViewModel expected) {
-    return new OrderFormViewModelMatcher(expected);
+  public static OrderFormFullViewModelMatcher hasSameStateAsOrderFormFullViewModel(OrderFormFullViewModel expected) {
+    return new OrderFormFullViewModelMatcher(expected);
   }
 
 }
