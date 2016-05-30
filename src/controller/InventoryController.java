@@ -5,10 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import model.component.Component;
-import model.componenttype.ComponentType;
-import model.location.Location;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -19,13 +15,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import factory.ComponentTypeFactory;
+import factory.InventoryFactory;
+import factory.LocationViewModelFactory;
+import model.component.Component;
+import model.componenttype.ComponentType;
+import model.location.Location;
 import repository.ComponentTypeRepository;
 import repository.LocationRepository;
 import service.InventoryCRUDService;
 import utils.PermissionConstants;
-import factory.ComponentTypeFactory;
-import factory.ComponentViewModelFactory;
-import factory.LocationViewModelFactory;
 
 @RestController
 @RequestMapping("inventories")
@@ -35,7 +34,7 @@ public class InventoryController {
   private InventoryCRUDService inventoryCRUDService;
   
   @Autowired
-  private ComponentViewModelFactory componentViewModelFactory;
+  private InventoryFactory inventoryFactory;
   
   @Autowired
   private LocationRepository locationRepository;
@@ -72,7 +71,7 @@ public class InventoryController {
     Map<String, Object> map = new HashMap<String, Object>();
     List<Component> components =
         inventoryCRUDService.findComponentsInStock(donationIdentificationNumber, componentCode, locationId, componentTypeId, dueToExpireBy, bloodGroup);
-    map.put("components", componentViewModelFactory.createComponentViewModels(components));
+    map.put("inventories", inventoryFactory.createInventoryViewModels(components));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 
   }

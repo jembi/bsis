@@ -24,6 +24,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
   private boolean isDeleted = false;
   private String componentCode;
   private Date expiresOn;
+  private Date createdOn;
   
   public ComponentBuilder withId(Long id) {
     this.id = id;
@@ -70,6 +71,11 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     return this;
   }
 
+  public ComponentBuilder withCreatedOn(Date createdOn) {
+    this.createdOn = createdOn;
+    return this;
+  }
+
   @Override
   public Component build() {
     Component component = new Component();
@@ -82,6 +88,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     component.setIsDeleted(isDeleted);
     component.setComponentCode(componentCode);
     component.setExpiresOn(expiresOn);
+    component.setCreatedOn(createdOn);
     return component;
   }
 
