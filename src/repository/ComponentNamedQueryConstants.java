@@ -59,6 +59,6 @@ public class ComponentNamedQueryConstants {
       + "FROM Component c "
       + "WHERE c.donation.donationIdentificationNumber = :donationIdentificationNumber "
       + "AND c.componentCode = :componentCode "
-      + "AND c.inventoryStatus = :inventoryStatus ";
+      + "AND c.inventoryStatus = 'IN_STOCK' ";
   
 }

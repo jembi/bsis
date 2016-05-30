@@ -37,7 +37,6 @@ public class InventoryRepository {
     return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_COMPONENT_BY_CODE_AND_DIN_IN_STOCK, Component.class)
         .setParameter("donationIdentificationNumber", donationIdentificationNumber)
         .setParameter("componentCode", componentCode)
-        .setParameter("inventoryStatus", InventoryStatus.IN_STOCK)
         .getSingleResult();
   }
 
