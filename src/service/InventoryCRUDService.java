@@ -38,7 +38,7 @@ public class InventoryCRUDService {
    */
   public List<Component> findComponentsInStock(String donationIdentificationNumber, String componentCode, Long locationId, Long componentTypeId, Date dueToExpireBy, String bloodGroup) {
 
-    BloodGroup bloodGroupObj = null;
+    BloodGroup bloodGroupObj = new BloodGroup(bloodGroup);
     
     // Check that if donationIdentificationNumber or componentCode are present, both are present
     boolean searchByCodeAndDIN = false;
@@ -50,7 +50,6 @@ public class InventoryCRUDService {
       }
     } else if (StringUtils.isNotEmpty(bloodGroup)) {
       // Check that bloodGroup is valid
-      bloodGroupObj = new BloodGroup(bloodGroup);
       if (StringUtils.isEmpty(bloodGroupObj.getBloodAbo())) {
         throw new IllegalArgumentException("Invalid bloodGroup.");
       }

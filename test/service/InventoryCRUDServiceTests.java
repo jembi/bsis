@@ -53,4 +53,10 @@ public class InventoryCRUDServiceTests extends UnitTestSuite {
     inventoryCRUDService.findComponentsInStock(null, null, 1L, 1L, dueToExpireBy, "WrongBloodGroup");
   }
 
+  @Test
+  public void findComponentsInStockWithNoParams_callsRightMethod() {
+    inventoryCRUDService.findComponentsInStock(null, null, null, null, null, null);
+    verify(inventoryRepository).findComponentsInStock(null, null, null, "", "");
+  }
+
 }
