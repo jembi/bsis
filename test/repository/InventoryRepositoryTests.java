@@ -139,7 +139,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
   }
   
   @Test
-  public void testFindComponentByCodeDINAndInventoryStatus_shouldReturnMatchingComponent() {
+  public void testFindComponentByCodeAndDINInStock_shouldReturnMatchingComponent() {
     
     String componentCode = "0011-01";
     String donationIdentificationNumber = "0000002";
@@ -190,7 +190,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
   }
 
   @Test(expected = NoResultException.class)
-  public void testFindNonExistentComponentByCodeDINAndInventoryStatus_shoulThrow() {
+  public void testFindNonExistentComponentByCodeAndDINInStock_shoulThrow() {
     // Test
     inventoryRepository.findComponentByCodeAndDINInStock("0011-01", "0000002");
   }
