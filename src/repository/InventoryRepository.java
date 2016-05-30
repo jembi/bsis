@@ -33,11 +33,11 @@ public class InventoryRepository {
         .setParameter("deleted", false).setParameter("inventoryStatus", inventoryStatus).getResultList();
   }
   
-  public Component findComponentByCodeDINAndInventoryStatus(String componentCode, String donationIdentificationNumber, InventoryStatus inventoryStatus) {
+  public Component findComponentByCodeAndDINInStock(String componentCode, String donationIdentificationNumber) {
     return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_COMPONENT_BY_CODE_DIN_AND_INVENTORY_STATUS, Component.class)
         .setParameter("donationIdentificationNumber", donationIdentificationNumber)
         .setParameter("componentCode", componentCode)
-        .setParameter("inventoryStatus", inventoryStatus)
+        .setParameter("inventoryStatus", InventoryStatus.IN_STOCK)
         .getSingleResult();
   }
 

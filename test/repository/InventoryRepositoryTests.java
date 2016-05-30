@@ -182,8 +182,8 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
         .buildAndPersist(entityManager);
     
     // Test
-    Component returnedComponent = inventoryRepository.findComponentByCodeDINAndInventoryStatus(componentCode,
-        donationIdentificationNumber, InventoryStatus.IN_STOCK);
+    Component returnedComponent = inventoryRepository.findComponentByCodeAndDINInStock(componentCode,
+        donationIdentificationNumber);
     
     // Verify
     assertThat(returnedComponent, is(expectedComponent));
@@ -192,7 +192,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
   @Test(expected = NoResultException.class)
   public void testFindNonExistentComponentByCodeDINAndInventoryStatus_shoulThrow() {
     // Test
-    inventoryRepository.findComponentByCodeDINAndInventoryStatus("0011-01", "0000002", InventoryStatus.IN_STOCK);
+    inventoryRepository.findComponentByCodeAndDINInStock("0011-01", "0000002");
   }
 
   @Test
