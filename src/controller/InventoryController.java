@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import model.component.Component;
+import model.componenttype.ComponentType;
+import model.location.Location;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -15,10 +19,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import factory.ComponentViewModelFactory;
-import model.component.Component;
+import repository.ComponentTypeRepository;
+import repository.LocationRepository;
 import service.InventoryCRUDService;
 import utils.PermissionConstants;
+import factory.ComponentTypeFactory;
+import factory.ComponentViewModelFactory;
+import factory.LocationViewModelFactory;
 
 @RestController
 @RequestMapping("inventories")
@@ -29,6 +36,29 @@ public class InventoryController {
   
   @Autowired
   private ComponentViewModelFactory componentViewModelFactory;
+  
+  @Autowired
+  private LocationRepository locationRepository;
+  
+  @Autowired
+  private LocationViewModelFactory locationViewModelFactory;
+  
+  @Autowired
+  private ComponentTypeRepository componentTypeRepository;
+  
+  @Autowired
+  private ComponentTypeFactory componentTypeFactory;
+  
+  @RequestMapping(method = RequestMethod.GET, value = "/search/form")
+  @PreAuthorize("hasRole('" + PermissionConstants.ADD_ORDER_FORM + "')")
+  public ResponseEntity<Map<String, Object>> getOrderFormForm() {
+    List<ComponentType> componentTypes = componentTypeRepository.getAllComponentTypes();
+    List<Location> distributionSites = locationRepository.getDistributionSites();
+    Map<String, Object> map = new HashMap<>();
+    map.put("distributionSites", locationViewModelFactory.createLocationViewModels(distributionSites));
+    map.put("componentTypes", componentTypeFactory.createViewModels(componentTypes));
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
 
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
