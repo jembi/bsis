@@ -33,13 +33,15 @@ public class InventoryController {
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
   public ResponseEntity<Map<String, Object>> findComponentBatches(
+      @RequestParam(value = "donationIdentificationNumber", required = false) String donationIdentificationNumber,
+      @RequestParam(value = "componentCode", required = false) String componentCode,
       @RequestParam(value = "locationId", required = false) Long locationId,
       @RequestParam(value = "componentTypeId", required = false) Long componentTypeId,
       @RequestParam(value = "dueToExpireBy", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date dueToExpireBy,
       @RequestParam(value = "bloodGroup", required = false) String bloodGroup) {
     Map<String, Object> map = new HashMap<String, Object>();
     List<Component> components =
-        inventoryCRUDService.findComponentsInStock(locationId, componentTypeId, dueToExpireBy, bloodGroup);
+        inventoryCRUDService.findComponentsInStock(donationIdentificationNumber, componentCode, locationId, componentTypeId, dueToExpireBy, bloodGroup);
     map.put("components", componentViewModelFactory.createComponentViewModels(components));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 
