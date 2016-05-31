@@ -49,7 +49,7 @@ public class InventoryController {
   private ComponentTypeFactory componentTypeFactory;
   
   @RequestMapping(method = RequestMethod.GET, value = "/search/form")
-  @PreAuthorize("hasRole('" + PermissionConstants.ADD_ORDER_FORM + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
   public ResponseEntity<Map<String, Object>> getOrderFormForm() {
     List<ComponentType> componentTypes = componentTypeRepository.getAllComponentTypes();
     List<Location> distributionSites = locationRepository.getDistributionSites();
