@@ -67,10 +67,10 @@ public class InventoryController {
       @RequestParam(value = "locationId", required = false) Long locationId,
       @RequestParam(value = "componentTypeId", required = false) Long componentTypeId,
       @RequestParam(value = "dueToExpireBy", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date dueToExpireBy,
-      @RequestParam(value = "bloodGroup", required = false) String bloodGroup) {
+      @RequestParam(value = "bloodGroup", required = false) List<String> bloodGroups) {
     Map<String, Object> map = new HashMap<String, Object>();
-    List<Component> components =
-        inventoryCRUDService.findComponentsInStock(donationIdentificationNumber, componentCode, locationId, componentTypeId, dueToExpireBy, bloodGroup);
+    List<Component> components = inventoryCRUDService.findComponentsInStock(donationIdentificationNumber, componentCode,
+        locationId, componentTypeId, dueToExpireBy, bloodGroups);
     map.put("inventories", inventoryFactory.createInventoryViewModels(components));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 

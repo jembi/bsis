@@ -1,5 +1,6 @@
 package repository;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -7,13 +8,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import dto.StockLevelDTO;
 import model.component.Component;
 import model.inventory.InventoryStatus;
+import model.util.BloodGroup;
 
 @Repository
 @Transactional
@@ -40,8 +41,7 @@ public class InventoryRepository {
         .getSingleResult();
   }
 
-  public List<Component> findComponentsInStock(Long locationId, Long componentTypeId, Date dueToExpireBy,
-      String bloodAbo, String bloodRh) {
+  public List<Component> findComponentsInStock(Long locationId, Long componentTypeId, Date dueToExpireBy, List<BloodGroup> bloodGroups) {
 
     String queryString =
         "SELECT c FROM Component c WHERE c.isDeleted = :isDeleted AND c.inventoryStatus = :inventoryStatus ";
@@ -54,12 +54,8 @@ public class InventoryRepository {
     if (dueToExpireBy != null) {
       queryString = queryString + "AND c.expiresOn <= :dueToExpireBy ";
     }
-    if (StringUtils.isNotEmpty(bloodAbo)) {
-      queryString = queryString + "AND c.donation.bloodAbo = :bloodAbo ";
-    }
-    if (StringUtils.isNotEmpty(bloodRh)) {
-      queryString = queryString + "AND c.donation.bloodRh = :bloodRh ";
-    }
+
+    queryString = generateBloodGroupsQueryString(queryString, bloodGroups);
 
     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", false);
@@ -74,13 +70,26 @@ public class InventoryRepository {
     if (dueToExpireBy != null) {
       query.setParameter("dueToExpireBy", dueToExpireBy);
     }
-    if (StringUtils.isNotEmpty(bloodAbo)) {
-      query.setParameter("bloodAbo", bloodAbo);
-    }
-    if (StringUtils.isNotEmpty(bloodRh)) {
-      query.setParameter("bloodRh", bloodRh);
-    }
 
     return query.getResultList();
+  }
+
+  private String generateBloodGroupsQueryString(String queryString, List<BloodGroup> bloodGroups) {
+    String bloodAboQueryString = "";
+    String bloodRhQueryString = "";
+    if (bloodGroups != null && bloodGroups.size() > 0) {
+      bloodAboQueryString = "AND c.donation.bloodAbo IN (";
+      bloodRhQueryString = "AND c.donation.bloodRh IN (";
+      for (BloodGroup bloodGroup : bloodGroups) {
+        String bloodAbo = bloodGroup.getBloodAbo();
+        String bloodRh = bloodGroup.getBloodRh();
+
+        bloodAboQueryString = bloodAboQueryString + "'" + bloodAbo + "', ";
+        bloodRhQueryString = bloodRhQueryString + "'" + bloodRh + "', ";
+      }
+      bloodAboQueryString = bloodAboQueryString.substring(0, bloodAboQueryString.length() - 2) + ") ";
+      bloodRhQueryString = bloodRhQueryString.substring(0, bloodRhQueryString.length() - 2) + ") ";
+    }
+    return queryString + bloodAboQueryString + bloodRhQueryString;
   }
 }

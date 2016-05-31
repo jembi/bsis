@@ -91,4 +91,37 @@ public class BloodGroup {
   public static Collection<BloodGroup> getAllBloodGroups() {
     return bloodgroups.values();
   }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((abo == null) ? 0 : abo.hashCode());
+    result = prime * result + ((rh == null) ? 0 : rh.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    BloodGroup other = (BloodGroup) obj;
+    if (abo == null) {
+      if (other.abo != null)
+        return false;
+    } else if (!abo.equals(other.abo))
+      return false;
+    if (rh == null) {
+      if (other.rh != null)
+        return false;
+    } else if (!rh.equals(other.rh))
+      return false;
+    return true;
+  }
+
+
 }

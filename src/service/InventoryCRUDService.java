@@ -36,9 +36,8 @@ public class InventoryCRUDService {
    * @param bloodGroup the blood group
    * @return the list
    */
-  public List<Component> findComponentsInStock(String donationIdentificationNumber, String componentCode, Long locationId, Long componentTypeId, Date dueToExpireBy, String bloodGroup) {
-
-    BloodGroup bloodGroupObj = new BloodGroup(bloodGroup);
+  public List<Component> findComponentsInStock(String donationIdentificationNumber, String componentCode,
+      Long locationId, Long componentTypeId, Date dueToExpireBy, List<String> bloodGroups) {
     
     // Check that if donationIdentificationNumber or componentCode are present, both are present
     boolean searchByCodeAndDIN = false;
@@ -48,11 +47,6 @@ public class InventoryCRUDService {
       } else {
         throw new IllegalArgumentException("Both donationIdentificationNumber and componentCode are required if one of them is present.");
       }
-    } else if (StringUtils.isNotEmpty(bloodGroup)) {
-      // Check that bloodGroup is valid
-      if (StringUtils.isEmpty(bloodGroupObj.getBloodAbo())) {
-        throw new IllegalArgumentException("Invalid bloodGroup.");
-      }
     }
 
     List<Component> components = new ArrayList<>();
@@ -60,9 +54,27 @@ public class InventoryCRUDService {
       Component component = inventoryRepository.findComponentByCodeAndDINInStock(componentCode, donationIdentificationNumber);
       components.add(component);
     } else {
-      components = inventoryRepository.findComponentsInStock(locationId, componentTypeId, dueToExpireBy, bloodGroupObj.getBloodAbo(), bloodGroupObj.getBloodRh());
+      components = inventoryRepository.findComponentsInStock(locationId, componentTypeId, dueToExpireBy,
+          setBloodGroups(bloodGroups));
     }
     return components;
+  }
+
+  private List<BloodGroup> setBloodGroups(List<String> bloodGroups) {
+    if (bloodGroups == null) {
+      return null;
+    }
+    List<BloodGroup> bloodGroupsList = new ArrayList<BloodGroup>();
+    for (String bloodGroup : bloodGroups) {
+      BloodGroup bg = new BloodGroup(bloodGroup);
+
+      if (StringUtils.isEmpty(bg.getBloodAbo())) {
+        throw new IllegalArgumentException("Invalid bloodGroup.");
+      }
+
+      bloodGroupsList.add(bg);
+    }
+    return bloodGroupsList;
   }
 
 }

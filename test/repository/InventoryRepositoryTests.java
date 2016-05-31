@@ -6,6 +6,7 @@ import static helpers.builders.LocationBuilder.aDistributionSite;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.inventory.InventoryStatus;
 import model.location.Location;
+import model.util.BloodGroup;
 import suites.ContextDependentTestSuite;
 
 public class InventoryRepositoryTests extends ContextDependentTestSuite {
@@ -202,7 +204,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).buildAndPersist(entityManager);
 
     // Test
-    List<Component> components = inventoryRepository.findComponentsInStock(null, null, null, null, null);
+    List<Component> components = inventoryRepository.findComponentsInStock(null, null, null, null);
 
     // Verify
     Assert.assertEquals("Found 3 component", 3, components.size());
@@ -213,7 +215,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     // Set up
     Location loc = aDistributionSite().buildAndPersist(entityManager);
     ComponentType componentType = ComponentTypeBuilder.aComponentType().buildAndPersist(entityManager);
-    Donation donation = aDonation().withBloodAbo("A").withBloodRh("-").buildAndPersist(entityManager);
+    Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").buildAndPersist(entityManager);
     Date expiresOn = new Date();
     Component expected = aComponent()
         .withInventoryStatus(InventoryStatus.IN_STOCK)
@@ -264,11 +266,45 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     .buildAndPersist(entityManager);
 
     // Test
-    List<Component> components = inventoryRepository.findComponentsInStock(loc.getId(), componentType.getId(), expiresOn, donation.getBloodAbo(), donation.getBloodRh());
+    List<BloodGroup> bloodGroups = new ArrayList<>();
+    bloodGroups.add(new BloodGroup("A+"));
+    List<Component> components = inventoryRepository.findComponentsInStock(loc.getId(), componentType.getId(), expiresOn, bloodGroups);
 
     // Verify
     Assert.assertEquals("Found 1 component", 1, components.size());
     Assert.assertEquals(expected, components.get(0));
+  }
+  
+  @Test
+  public void testFindComponentsInStockWithManyBloodGroupsParam_shouldReturnMatchingComponents() {
+    
+    // Set up
+    Donation donation1 = aDonation().withBloodAbo("A").withBloodRh("+").buildAndPersist(entityManager);
+    Donation donation2 = aDonation().withBloodAbo("A").withBloodRh("-").buildAndPersist(entityManager);
+    Donation donation3 = aDonation().withBloodAbo("B").withBloodRh("+").buildAndPersist(entityManager);
+    Component component1 = aComponent()
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withDonation(donation1)
+        .buildAndPersist(entityManager);
+    Component component2 = aComponent()
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withDonation(donation2)
+        .buildAndPersist(entityManager);
+    aComponent()
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withDonation(donation3)
+        .buildAndPersist(entityManager);
+    
+    // Test
+    List<BloodGroup> bloodGroups = new ArrayList<>();
+    bloodGroups.add(new BloodGroup("A+"));
+    bloodGroups.add(new BloodGroup("A-"));
+    List<Component> components = inventoryRepository.findComponentsInStock(null, null, null, bloodGroups);
+
+    // Verify
+    Assert.assertEquals("Found 2 components", 2, components.size());
+    Assert.assertEquals(component1, components.get(0));
+    Assert.assertEquals(component2, components.get(1));
   }
 
 }
