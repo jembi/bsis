@@ -2,8 +2,11 @@ package viewmodel;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import model.order.OrderStatus;
 import model.order.OrderType;
+import utils.DateTimeSerialiser;
 
 public class OrderFormViewModel extends BaseViewModel {
 
@@ -17,10 +20,12 @@ public class OrderFormViewModel extends BaseViewModel {
 
   private OrderType type;
 
+  @JsonSerialize(using = DateTimeSerialiser.class)
   public Date getOrderDate() {
     return orderDate;
   }
 
+  @JsonSerialize(using = DateTimeSerialiser.class)
   public void setOrderDate(Date orderDate) {
     this.orderDate = orderDate;
   }
