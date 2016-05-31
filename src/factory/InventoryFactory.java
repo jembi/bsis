@@ -41,7 +41,8 @@ public class InventoryFactory {
     viewModel.setExpiryStatus(getExpiryStatus(component));
     viewModel.setDonationIdentificationNumber(component.getDonationIdentificationNumber());
     viewModel.setInventoryStatus(component.getInventoryStatus());
-    viewModel.setBloodGroup(component.getDonation().getBloodAbo() + component.getDonation().getBloodRh());
+    String bloodGroup = component.getDonation().getBloodAbo() + component.getDonation().getBloodRh();
+    viewModel.setBloodGroup(bloodGroup.replace("null", ""));
     return viewModel;
   }
 
