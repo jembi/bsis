@@ -67,7 +67,7 @@ public class InventoryController {
       @RequestParam(value = "locationId", required = false) Long locationId,
       @RequestParam(value = "componentTypeId", required = false) Long componentTypeId,
       @RequestParam(value = "dueToExpireBy", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date dueToExpireBy,
-      @RequestParam(value = "bloodGroup", required = false) List<String> bloodGroups) {
+      @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) {
     Map<String, Object> map = new HashMap<String, Object>();
     List<Component> components = inventoryCRUDService.findComponentsInStock(donationIdentificationNumber, componentCode,
         locationId, componentTypeId, dueToExpireBy, bloodGroups);
