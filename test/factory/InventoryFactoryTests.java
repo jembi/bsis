@@ -4,6 +4,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Date;
 
+import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,7 +55,7 @@ public class InventoryFactoryTests {
         .thenReturn(componentTypeViewModel);
     
     // Run test
-    InventoryViewModel viewModel = inventoryFactory.createInventoryViewModel(component);
+    InventoryViewModel viewModel = inventoryFactory.createViewModel(component);
 
     // Verify
     Assert.assertNotNull("view model was created", viewModel);
@@ -67,6 +68,74 @@ public class InventoryFactoryTests {
     Assert.assertEquals("createdOn is correct", component.getCreatedOn(), viewModel.getCreatedOn());
     Assert.assertEquals("id is correct", component.getId(), viewModel.getId());
     Assert.assertEquals("componentType is correct", componentTypeViewModel, viewModel.getComponentType());
+
+  }
+
+  @Test
+  public void testExpiryStatusWithNoExpiryDate_shouldBeEmpty() {
+
+    // Setup
+    Component component = ComponentBuilder.aComponent()
+        .withDonation(DonationBuilder.aDonation().build())
+        .withExpiresOn(null).build();
+
+    // Setup mocks
+    LocationViewModel locationViewModel = new LocationViewModel(component.getLocation());
+    when(locationViewModelFactory.createLocationViewModel(component.getLocation())).thenReturn(locationViewModel);
+    ComponentTypeViewModel componentTypeViewModel = new ComponentTypeViewModel(component.getComponentType());
+    when(componentTypeFactory.createViewModel(component.getComponentType())).thenReturn(componentTypeViewModel);
+
+    // Run test
+    InventoryViewModel viewModel = inventoryFactory.createViewModel(component);
+
+    // Verify
+    Assert.assertEquals("correct expiry status", "", viewModel.getExpiryStatus());
+
+  }
+
+  @Test
+  public void testExpiryStatusWithFutureExpiryDate_shouldReturnDaysUntilExpiry() {
+
+    // Setup
+    DateTime expiresOn = (new DateTime()).plusDays(20);
+    Component component = ComponentBuilder.aComponent()
+        .withDonation(DonationBuilder.aDonation().build())
+        .withExpiresOn(expiresOn.toDate()).build();
+
+    // Setup mocks
+    LocationViewModel locationViewModel = new LocationViewModel(component.getLocation());
+    when(locationViewModelFactory.createLocationViewModel(component.getLocation())).thenReturn(locationViewModel);
+    ComponentTypeViewModel componentTypeViewModel = new ComponentTypeViewModel(component.getComponentType());
+    when(componentTypeFactory.createViewModel(component.getComponentType())).thenReturn(componentTypeViewModel);
+
+    // Run test
+    InventoryViewModel viewModel = inventoryFactory.createViewModel(component);
+
+    // Verify
+    Assert.assertEquals("correct expiry status", "19 days to expire", viewModel.getExpiryStatus());
+
+  }
+  
+  @Test
+  public void testExpiryStatusWithPastExpiryDate_shouldReturnAlreadyExpiredMsg() {
+
+    // Setup
+    DateTime expiresOn = (new DateTime()).minusDays(20);
+    Component component = ComponentBuilder.aComponent()
+        .withDonation(DonationBuilder.aDonation().build())
+        .withExpiresOn(expiresOn.toDate()).build();
+
+    // Setup mocks
+    LocationViewModel locationViewModel = new LocationViewModel(component.getLocation());
+    when(locationViewModelFactory.createLocationViewModel(component.getLocation())).thenReturn(locationViewModel);
+    ComponentTypeViewModel componentTypeViewModel = new ComponentTypeViewModel(component.getComponentType());
+    when(componentTypeFactory.createViewModel(component.getComponentType())).thenReturn(componentTypeViewModel);
+
+    // Run test
+    InventoryViewModel viewModel = inventoryFactory.createViewModel(component);
+
+    // Verify
+    Assert.assertEquals("correct expiry status", "Already expired", viewModel.getExpiryStatus());
 
   }
 
