@@ -15,6 +15,7 @@
 	<include file="./liquibase/updates/870-add-new-order.xml" />
 	<include file="./liquibase/updates/915-add-order-items.xml" />
 	<include file="./liquibase/updates/916-fulfill-order.xml" />
+	<include file="./liquibase/updates/992-assign-discard-permission-to-component-supervisor.xml" />
 	<include file="./liquibase/updates/917-dispatch-order.xml" />
 	<include file="./liquibase/updates/981-add-returns.xml" />
 

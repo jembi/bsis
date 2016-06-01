@@ -21,17 +21,17 @@ public class InventoryFactory {
   @Autowired
   private LocationViewModelFactory locationViewModelFactory;
 
-  public List<InventoryViewModel> createInventoryViewModels(List<Component> components) {
+  public List<InventoryViewModel> createViewModels(List<Component> components) {
     List<InventoryViewModel> viewModels = new ArrayList<>();
     if (components != null) {
       for (Component component : components) {
-        viewModels.add(createInventoryViewModel(component));
+        viewModels.add(createViewModel(component));
       }
     }
     return viewModels;
   }
 
-  public InventoryViewModel createInventoryViewModel(Component component) {
+  public InventoryViewModel createViewModel(Component component) {
     InventoryViewModel viewModel = new InventoryViewModel();
     viewModel.setId(component.getId());
     viewModel.setComponentCode(component.getComponentCode());
@@ -47,17 +47,17 @@ public class InventoryFactory {
   }
 
   private String getExpiryStatus(Component component) {
-    if (component.getExpiresOn() != null) {
-      Date today = new Date();
-      if (today.equals(component.getExpiresOn()) || today.before(component.getExpiresOn())) {
-        DateTime expiresOn = new DateTime(component.getExpiresOn().getTime());
-        Long age = (long) Days.daysBetween(expiresOn, new DateTime()).getDays();
-        return Math.abs(age) + " days to expire";
-      } else {
-        return "Already expired";
-      }
-    } else {
+    if (component.getExpiresOn() == null) {
       return "";
     }
+    Date today = new Date();
+    if (today.equals(component.getExpiresOn()) || today.before(component.getExpiresOn())) {
+      DateTime expiresOn = new DateTime(component.getExpiresOn().getTime());
+      Long age = (long) Days.daysBetween(expiresOn, new DateTime()).getDays();
+      return Math.abs(age) + " days to expire";
+    } else {
+      return "Already expired";
+    }
+
   }
 }
