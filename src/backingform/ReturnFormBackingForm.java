@@ -2,7 +2,10 @@ package backingform;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import model.returnform.ReturnStatus;
+import utils.DateTimeSerialiser;
 
 public class ReturnFormBackingForm {
 
@@ -28,6 +31,7 @@ public class ReturnFormBackingForm {
     return returnDate;
   }
 
+  @JsonSerialize(using = DateTimeSerialiser.class)
   public void setReturnDate(Date returnDate) {
     this.returnDate = returnDate;
   }

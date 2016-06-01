@@ -25,7 +25,6 @@ public class OrderFormViewModel extends BaseViewModel {
     return orderDate;
   }
 
-  @JsonSerialize(using = DateTimeSerialiser.class)
   public void setOrderDate(Date orderDate) {
     this.orderDate = orderDate;
   }

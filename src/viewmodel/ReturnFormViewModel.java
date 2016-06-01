@@ -22,7 +22,6 @@ public class ReturnFormViewModel extends BaseViewModel {
     return returnDate;
   }
 
-  @JsonSerialize(using = DateTimeSerialiser.class)
   public void setReturnDate(Date orderDate) {
     this.returnDate = orderDate;
   }
