@@ -2,8 +2,15 @@ package repository;
 
 import static helpers.builders.ComponentBuilder.aComponent;
 import static helpers.builders.DonationBuilder.aDonation;
+import static helpers.builders.LocationBuilder.aDistributionSite;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import javax.persistence.NoResultException;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,10 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import dto.StockLevelDTO;
 import helpers.builders.ComponentTypeBuilder;
 import helpers.builders.LocationBuilder;
+import model.component.Component;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.inventory.InventoryStatus;
 import model.location.Location;
+import model.util.BloodGroup;
 import suites.ContextDependentTestSuite;
 
 public class InventoryRepositoryTests extends ContextDependentTestSuite {
@@ -129,6 +138,173 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     Assert.assertEquals("Verify blood group", "A+", levels.get(0).getBloodAbo() + levels.get(0).getBloodRh());
     Assert.assertEquals("Verify blood group", "A+", levels.get(1).getBloodAbo() + levels.get(0).getBloodRh());
 
+  }
+  
+  @Test
+  public void testFindComponentByCodeAndDINInStock_shouldReturnMatchingComponent() {
+    
+    String componentCode = "0011-01";
+    String donationIdentificationNumber = "0000002";
+    
+    Donation donationWithExpectedDonationIdentificationNumber = aDonation()
+        .withDonationIdentificationNumber(donationIdentificationNumber)
+        .buildAndPersist(entityManager);
+    
+    // Excluded by component code
+    aComponent()
+        .withComponentCode("0011-02")
+        .withDonation(donationWithExpectedDonationIdentificationNumber)
+        .buildAndPersist(entityManager);
+    
+    // Excluded by donation identification number
+    aComponent()
+        .withComponentCode(componentCode)
+        .withDonation(aDonation().withDonationIdentificationNumber("1000007").build())
+        .buildAndPersist(entityManager);
+    
+    // Excluded by inventoryStatus = NOT_LABELLED
+    aComponent()
+        .withComponentCode(componentCode)
+        .withDonation(donationWithExpectedDonationIdentificationNumber)
+        .withInventoryStatus(InventoryStatus.NOT_LABELLED)
+        .buildAndPersist(entityManager);
+    
+    // Excluded by inventoryStatus = REMOVED
+    aComponent()
+        .withComponentCode(componentCode)
+        .withDonation(donationWithExpectedDonationIdentificationNumber)
+        .withInventoryStatus(InventoryStatus.REMOVED)
+        .buildAndPersist(entityManager);
+    
+    // Expected
+    Component expectedComponent = aComponent()
+        .withComponentCode(componentCode)
+        .withDonation(donationWithExpectedDonationIdentificationNumber)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .buildAndPersist(entityManager);
+    
+    // Test
+    Component returnedComponent = inventoryRepository.findComponentByCodeAndDINInStock(componentCode,
+        donationIdentificationNumber);
+    
+    // Verify
+    assertThat(returnedComponent, is(expectedComponent));
+  }
+
+  @Test(expected = NoResultException.class)
+  public void testFindNonExistentComponentByCodeAndDINInStock_shoulThrow() {
+    // Test
+    inventoryRepository.findComponentByCodeAndDINInStock("0011-01", "0000002");
+  }
+
+  @Test
+  public void testFindComponentsInStockNoParams_shouldReturnAllComponentsInStock() {
+    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).buildAndPersist(entityManager);
+    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).buildAndPersist(entityManager);
+    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).buildAndPersist(entityManager);
+
+    // Test
+    List<Component> components = inventoryRepository.findComponentsInStock(null, null, null, null);
+
+    // Verify
+    Assert.assertEquals("Found 3 component", 3, components.size());
+  }
+
+  @Test
+  public void testFindComponentsInStockWithParams_shouldReturnMatchingComponent() {
+    // Set up
+    Location loc = aDistributionSite().buildAndPersist(entityManager);
+    ComponentType componentType = ComponentTypeBuilder.aComponentType().buildAndPersist(entityManager);
+    Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").buildAndPersist(entityManager);
+    Date expiresOn = new Date();
+    Component expected = aComponent()
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withLocation(loc)
+        .withComponentType(componentType)
+        .withDonation(donation)
+        .withExpiresOn(expiresOn)
+        .buildAndPersist(entityManager);
+    
+    // Excluded: not in stock
+    aComponent()
+    .withLocation(loc)  
+    .withComponentType(componentType)
+    .withDonation(donation)
+    .withExpiresOn(expiresOn)
+    .buildAndPersist(entityManager);
+    
+    // Excluded: different location
+    aComponent()
+    .withInventoryStatus(InventoryStatus.IN_STOCK)
+    .withComponentType(componentType)
+    .withDonation(donation)
+    .withExpiresOn(expiresOn)
+    .buildAndPersist(entityManager);
+    
+    // Excluded: different componentType
+    aComponent()
+    .withInventoryStatus(InventoryStatus.IN_STOCK)
+    .withLocation(loc)
+    .withDonation(donation)
+    .withExpiresOn(expiresOn)
+    .buildAndPersist(entityManager);
+    
+    // Excluded: different bloodGroup
+    aComponent()
+    .withInventoryStatus(InventoryStatus.IN_STOCK)
+    .withLocation(loc)
+    .withComponentType(componentType)
+    .withExpiresOn(expiresOn)
+    .buildAndPersist(entityManager);
+    
+    // Excluded: different expiresOn
+    aComponent()
+    .withInventoryStatus(InventoryStatus.IN_STOCK)
+    .withLocation(loc)
+    .withComponentType(componentType)
+    .withDonation(donation)
+    .buildAndPersist(entityManager);
+
+    // Test
+    List<BloodGroup> bloodGroups = new ArrayList<>();
+    bloodGroups.add(new BloodGroup("A+"));
+    List<Component> components = inventoryRepository.findComponentsInStock(loc.getId(), componentType.getId(), expiresOn, bloodGroups);
+
+    // Verify
+    Assert.assertEquals("Found 1 component", 1, components.size());
+    Assert.assertEquals(expected, components.get(0));
+  }
+  
+  @Test
+  public void testFindComponentsInStockWithManyBloodGroupsParam_shouldReturnMatchingComponents() {
+    
+    // Set up
+    Donation donation1 = aDonation().withBloodAbo("A").withBloodRh("+").buildAndPersist(entityManager);
+    Donation donation2 = aDonation().withBloodAbo("A").withBloodRh("-").buildAndPersist(entityManager);
+    Donation donation3 = aDonation().withBloodAbo("B").withBloodRh("+").buildAndPersist(entityManager);
+    Component component1 = aComponent()
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withDonation(donation1)
+        .buildAndPersist(entityManager);
+    Component component2 = aComponent()
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withDonation(donation2)
+        .buildAndPersist(entityManager);
+    aComponent()
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withDonation(donation3)
+        .buildAndPersist(entityManager);
+    
+    // Test
+    List<BloodGroup> bloodGroups = new ArrayList<>();
+    bloodGroups.add(new BloodGroup("A+"));
+    bloodGroups.add(new BloodGroup("A-"));
+    List<Component> components = inventoryRepository.findComponentsInStock(null, null, null, bloodGroups);
+
+    // Verify
+    Assert.assertEquals("Found 2 components", 2, components.size());
+    Assert.assertEquals(component1, components.get(0));
+    Assert.assertEquals(component2, components.get(1));
   }
 
 }

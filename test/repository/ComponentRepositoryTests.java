@@ -8,6 +8,8 @@ import static org.hamcrest.Matchers.is;
 
 import java.util.Arrays;
 
+import javax.persistence.NoResultException;
+
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -133,6 +135,12 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
     
     // Verify
     assertThat(returnedComponent, is(expectedComponent));
+  }
+  
+  @Test(expected = NoResultException.class)
+  public void testFindNonExistentComponentByCodeAndDIN_shoulThrow() {
+    // Test
+    componentRepository.findComponentByCodeAndDIN("", "");
   }
 
 }

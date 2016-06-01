@@ -43,7 +43,6 @@ import model.request.Request;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 import model.util.BloodGroup;
-
 import repository.bloodtesting.BloodTypingStatus;
 import service.DonationConstraintChecker;
 import utils.SecurityUtils;
