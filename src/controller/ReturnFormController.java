@@ -17,7 +17,7 @@ import controllerservice.ReturnFormControllerService;
 import utils.PermissionConstants;
 
 @RestController
-@RequestMapping("returnForms")
+@RequestMapping("returnforms")
 public class ReturnFormController {
 
   @Autowired
