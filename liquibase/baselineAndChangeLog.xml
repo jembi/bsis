@@ -17,5 +17,6 @@
 	<include file="./liquibase/updates/916-fulfill-order.xml" />
 	<include file="./liquibase/updates/992-assign-discard-permission-to-component-supervisor.xml" />
 	<include file="./liquibase/updates/917-dispatch-order.xml" />
+	<include file="./liquibase/updates/981-add-returns.xml" />
 
 </databaseChangeLog>

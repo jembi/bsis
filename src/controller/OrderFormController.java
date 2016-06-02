@@ -38,7 +38,7 @@ import service.OrderFormCRUDService;
 import utils.PermissionConstants;
 
 @RestController
-@RequestMapping("orderForms")
+@RequestMapping("orderforms")
 public class OrderFormController {
 
   @Autowired

@@ -55,40 +55,44 @@ public class DonationRepositoryTests extends ContextDependentTestSuite {
     aDonation()
         .thatIsNotDeleted()
         .withDonationDate(irrelevantStartDate)
-        .withDonor(aDonor().withGender(expectedGender).withVenue(expectedVenue).build())
+        .withDonor(aDonor().withGender(expectedGender).build())
         .withDonationType(expectedDonationType)
         .withBloodAbo(expectedBloodAbo)
         .withBloodRh(expectedBloodRh)
+        .withVenue(expectedVenue)
         .buildAndPersist(entityManager);
 
     // Expected
     aDonation()
         .thatIsNotDeleted()
         .withDonationDate(irrelevantEndDate)
-        .withDonor(aDonor().withGender(expectedGender).withVenue(expectedVenue).build())
+        .withDonor(aDonor().withGender(expectedGender).build())
         .withDonationType(expectedDonationType)
         .withBloodAbo(expectedBloodAbo)
         .withBloodRh(expectedBloodRh)
+        .withVenue(expectedVenue)
         .buildAndPersist(entityManager);
 
     // Excluded by date
     aDonation()
         .thatIsNotDeleted()
         .withDonationDate(new Date())
-        .withDonor(aDonor().withGender(expectedGender).withVenue(expectedVenue).build())
+        .withDonor(aDonor().withGender(expectedGender).build())
         .withDonationType(expectedDonationType)
         .withBloodAbo(expectedBloodAbo)
         .withBloodRh(expectedBloodRh)
+        .withVenue(expectedVenue)
         .buildAndPersist(entityManager);
 
     // Excluded by deleted
     aDonation()
         .thatIsDeleted()
         .withDonationDate(irrelevantStartDate)
-        .withDonor(aDonor().withGender(expectedGender).withVenue(expectedVenue).build())
+        .withDonor(aDonor().withGender(expectedGender).build())
         .withDonationType(expectedDonationType)
         .withBloodAbo(expectedBloodAbo)
         .withBloodRh(expectedBloodRh)
+        .withVenue(expectedVenue)
         .buildAndPersist(entityManager);
 
     List<CollectedDonationDTO> expectedDtos = Arrays.asList(
