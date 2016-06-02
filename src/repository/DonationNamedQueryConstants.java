@@ -31,12 +31,12 @@ public class DonationNamedQueryConstants {
   public static final String NAME_FIND_COLLECTED_DONATION_VALUE_OBJECTS_FOR_DATE_RANGE =
       "Donation.findCollectedDonationDtosForDateRange";
   public static final String QUERY_FIND_COLLECTED_DONATION_VALUE_OBJECTS_FOR_DATE_RANGE =
-      "SELECT NEW dto.CollectedDonationDTO(d.donationType, do.gender, d.bloodAbo, d.bloodRh, d.venue, COUNT(d)) " +
-          "FROM Donation d, Donor do " +
-          "WHERE d.donor = do AND d.donationDate BETWEEN :startDate AND :endDate " +
+      "SELECT NEW dto.CollectedDonationDTO(d.donationType, d.donor.gender, d.bloodAbo, d.bloodRh, d.donor.venue, COUNT(d)) " +
+          "FROM Donation d " +
+          "WHERE d.donationDate BETWEEN :startDate AND :endDate " +
           "AND d.isDeleted = :deleted " +
-          "GROUP BY d.venue, do.gender, d.donationType, d.bloodAbo, d.bloodRh " +
-          "ORDER BY d.venue, do.gender, d.donationType, d.bloodAbo, d.bloodRh";
+          "GROUP BY d.donor.venue, d.donor.gender, d.donationType, d.bloodAbo, d.bloodRh " +
+          "ORDER BY d.donor.venue, d.donor.gender, d.donationType, d.bloodAbo, d.bloodRh";
 
   public static final String NAME_FIND_LATEST_DUE_TO_DONATE_DATE_FOR_DONOR =
       "Donation.findLatestDueToDonateDateForDonor";
