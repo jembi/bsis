@@ -1,5 +1,6 @@
 package model.component;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -55,7 +56,9 @@ import repository.InventoryNamedQueryConstants;
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_BY_DIN,
         query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENTS_BY_DIN),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENT_BY_CODE_AND_DIN,
-        query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENT_BY_CODE_AND_DIN)
+        query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENT_BY_CODE_AND_DIN),
+    @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENT_BY_CODE_AND_DIN_IN_STOCK,
+        query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENT_BY_CODE_AND_DIN_IN_STOCK)
 })
 @Entity
 @Audited
@@ -249,6 +252,13 @@ public class Component extends BaseModificationTrackerEntity {
 
   public void setStatusChanges(List<ComponentStatusChange> statusChanges) {
     this.statusChanges = statusChanges;
+  }
+
+  public void addStatusChange(ComponentStatusChange statusChange) {
+    if (statusChanges == null) {
+      statusChanges = new ArrayList<>();
+    }
+    statusChanges.add(statusChange);
   }
 
   public ComponentUsage getUsage() {

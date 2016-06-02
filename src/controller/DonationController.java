@@ -48,7 +48,7 @@ import service.FormFieldAccessorService;
 import utils.PermissionConstants;
 import utils.PermissionUtils;
 import viewmodel.DonationSummaryViewModel;
-import viewmodel.PackTypeViewModel;
+import viewmodel.PackTypeViewFullModel;
 
 @RestController
 @RequestMapping("/donations")
@@ -210,11 +210,11 @@ public class DonationController {
     m.put("adverseEventTypes", adverseEventTypeRepository.findNonDeletedAdverseEventTypeViewModels());
   }
   
-  private List<PackTypeViewModel> getPackTypeViewModels(List<PackType> packTypes) {
+  private List<PackTypeViewFullModel> getPackTypeViewModels(List<PackType> packTypes) {
     // FIXME: use a factory
-    List<PackTypeViewModel> viewModels = new ArrayList<PackTypeViewModel>();
+    List<PackTypeViewFullModel> viewModels = new ArrayList<PackTypeViewFullModel>();
     for (PackType packtType : packTypes) {
-      viewModels.add(new PackTypeViewModel(packtType));
+      viewModels.add(new PackTypeViewFullModel(packtType));
     }
     return viewModels;
   }

@@ -10,6 +10,7 @@ import javax.persistence.TypedQuery;
 
 import model.componentmovement.ComponentStatusChangeReason;
 import model.componentmovement.ComponentStatusChangeReasonCategory;
+import repository.constant.ComponentStatusChangeReasonNamedQueryConstants;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,5 +63,16 @@ public class ComponentStatusChangeReasonRepository {
       statusChangeReasonMap.put(statusChangeReason.getCategory(), statusChangeReason);
     }
     return statusChangeReasonMap;
+  }
+  
+  public ComponentStatusChangeReason findFirstComponentStatusChangeReasonForCategory(
+      ComponentStatusChangeReasonCategory category) {
+    return em.createNamedQuery(
+        ComponentStatusChangeReasonNamedQueryConstants.NAME_FIND_FIRST_COMPONENT_STATUS_CHANGE_REASON_FOR_CATEGORY,
+        ComponentStatusChangeReason.class)
+        .setParameter("category", category)
+        .setParameter("deleted", false)
+        .getResultList()
+        .get(0);
   }
 }

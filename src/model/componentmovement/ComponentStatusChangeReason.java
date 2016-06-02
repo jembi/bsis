@@ -4,12 +4,18 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import model.BaseEntity;
+import repository.constant.ComponentStatusChangeReasonNamedQueryConstants;
 
 import org.hibernate.envers.Audited;
 
-
+@NamedQueries({
+  @NamedQuery(name = ComponentStatusChangeReasonNamedQueryConstants.NAME_FIND_FIRST_COMPONENT_STATUS_CHANGE_REASON_FOR_CATEGORY,
+      query = ComponentStatusChangeReasonNamedQueryConstants.QUERY_FIND_FIRST_COMPONENT_STATUS_CHANGE_REASON_FOR_CATEGORY)
+})
 @Entity
 @Audited
 public class ComponentStatusChangeReason extends BaseEntity {

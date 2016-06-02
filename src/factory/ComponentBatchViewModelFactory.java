@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import model.componentbatch.ComponentBatch;
 import model.donationbatch.DonationBatch;
-import viewmodel.ComponentBatchBasicViewModel;
 import viewmodel.ComponentBatchViewModel;
+import viewmodel.ComponentBatchFullViewModel;
 
 @Service
 public class ComponentBatchViewModelFactory {
@@ -23,27 +23,27 @@ public class ComponentBatchViewModelFactory {
   @Autowired
   DonationBatchViewModelFactory donationBatchViewModelFactory;
   
-  public List<ComponentBatchBasicViewModel> createComponentBatchBasicViewModels(List<ComponentBatch> componentBatches) {
-    List<ComponentBatchBasicViewModel> viewModels = new ArrayList<>();
+  public List<ComponentBatchViewModel> createComponentBatchViewModels(List<ComponentBatch> componentBatches) {
+    List<ComponentBatchViewModel> viewModels = new ArrayList<>();
     if (componentBatches != null) {
       for (ComponentBatch componentBatch : componentBatches) {
-        viewModels.add(createComponentBatchBasicViewModel(componentBatch));
+        viewModels.add(createComponentBatchViewModel(componentBatch));
       }
     }
     return viewModels;
   }
   
-  public ComponentBatchBasicViewModel createComponentBatchBasicViewModel(ComponentBatch componentBatch) {
-    return populateBasicViewModel(componentBatch, new ComponentBatchBasicViewModel());
+  public ComponentBatchViewModel createComponentBatchViewModel(ComponentBatch componentBatch) {
+    return populateViewModel(componentBatch, new ComponentBatchViewModel());
   }
   
-  public ComponentBatchViewModel createComponentBatchFullViewModel(ComponentBatch componentBatch) {
-    ComponentBatchViewModel viewModel = new ComponentBatchViewModel();
+  public ComponentBatchFullViewModel createComponentBatchFullViewModel(ComponentBatch componentBatch) {
+    ComponentBatchFullViewModel viewModel = new ComponentBatchFullViewModel();
     populateFullViewModel(componentBatch, viewModel);
     return viewModel;
   }
   
-  private ComponentBatchBasicViewModel populateBasicViewModel(ComponentBatch componentBatch, ComponentBatchBasicViewModel viewModel) {
+  private ComponentBatchViewModel populateViewModel(ComponentBatch componentBatch, ComponentBatchViewModel viewModel) {
     viewModel.setId(componentBatch.getId());
     viewModel.setDeliveryDate(componentBatch.getDeliveryDate());
     viewModel.setStatus(String.valueOf(componentBatch.getStatus()));
@@ -58,9 +58,9 @@ public class ComponentBatchViewModelFactory {
     return viewModel;
   }
 
-  private void populateFullViewModel(ComponentBatch componentBatch, ComponentBatchViewModel viewModel) {
+  private void populateFullViewModel(ComponentBatch componentBatch, ComponentBatchFullViewModel viewModel) {
 
-    populateBasicViewModel(componentBatch, viewModel);
+    populateViewModel(componentBatch, viewModel);
     viewModel.setComponents(componentViewModelFactory.createComponentViewModels(componentBatch.getComponents()));
     viewModel.setBloodTransportBoxes(
         bloodTransportBoxViewModelFactory.createBloodTransportBoxViewModels(componentBatch.getBloodTransportBoxes()));

@@ -52,4 +52,13 @@ public class ComponentNamedQueryConstants {
       + "WHERE c.donation.donationIdentificationNumber = :donationIdentificationNumber "
       + "AND c.componentCode = :componentCode ";
   
+  public static final String NAME_FIND_COMPONENT_BY_CODE_AND_DIN_IN_STOCK =
+      "Component.findComponentByCodeAndDINInStock";
+  public static final String QUERY_FIND_COMPONENT_BY_CODE_AND_DIN_IN_STOCK =
+      "SELECT c "
+      + "FROM Component c "
+      + "WHERE c.donation.donationIdentificationNumber = :donationIdentificationNumber "
+      + "AND c.componentCode = :componentCode "
+      + "AND c.inventoryStatus = 'IN_STOCK' ";
+  
 }

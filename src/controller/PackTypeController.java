@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import repository.PackTypeRepository;
 import utils.PermissionConstants;
-import viewmodel.PackTypeViewModel;
+import viewmodel.PackTypeViewFullModel;
 import backingform.PackTypeBackingForm;
 import backingform.validator.PackTypeBackingFormValidator;
 
@@ -61,7 +61,7 @@ public class PackTypeController {
   public ResponseEntity<PackType> getPackTypeById(@PathVariable Long id) {
     Map<String, Object> map = new HashMap<String, Object>();
     PackType packType = packTypeRepository.getPackTypeById(id);
-    map.put("packtype", new PackTypeViewModel(packType)); // FIXME: use a factory
+    map.put("packtype", new PackTypeViewFullModel(packType)); // FIXME: use a factory
     return new ResponseEntity(map, HttpStatus.OK);
   }
 
@@ -70,7 +70,7 @@ public class PackTypeController {
   public ResponseEntity savePackType(@Valid @RequestBody PackTypeBackingForm formData) {
     PackType packType = formData.getType();
     packType = packTypeRepository.savePackType(packType);
-    return new ResponseEntity(new PackTypeViewModel(packType), HttpStatus.CREATED); // FIXME: use a factory
+    return new ResponseEntity(new PackTypeViewFullModel(packType), HttpStatus.CREATED); // FIXME: use a factory
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
@@ -80,7 +80,7 @@ public class PackTypeController {
     PackType packType = formData.getType();
     packType.setId(id);
     packType = packTypeRepository.updatePackType(packType);
-    map.put("packtype", new PackTypeViewModel(packType)); // FIXME: use a factory
+    map.put("packtype", new PackTypeViewFullModel(packType)); // FIXME: use a factory
     return new ResponseEntity(map, HttpStatus.OK);
   }
 
@@ -88,11 +88,11 @@ public class PackTypeController {
     m.put("allPackTypes", getPackTypeViewModels(packTypeRepository.getAllPackTypes()));
   }
 
-  private List<PackTypeViewModel> getPackTypeViewModels(List<PackType> packTypes) {
+  private List<PackTypeViewFullModel> getPackTypeViewModels(List<PackType> packTypes) {
 
-    List<PackTypeViewModel> viewModels = new ArrayList<PackTypeViewModel>();
+    List<PackTypeViewFullModel> viewModels = new ArrayList<PackTypeViewFullModel>();
     for (PackType packtType : packTypes) {
-      viewModels.add(new PackTypeViewModel(packtType)); // FIXME: use a factory
+      viewModels.add(new PackTypeViewFullModel(packtType)); // FIXME: use a factory
     }
     return viewModels;
   }
