@@ -38,14 +38,14 @@ public class BloodTestingRepositoryTests extends ContextDependentTestSuite{
 
     Location expectedVenue = aVenue().build();
     Gender expectedGender = Gender.male;
-    Donation expectedDonationStartDate = aDonation().thatIsNotDeleted().withDonationDate(irrelevantStartDate)
-        .withDonor(aDonor().withGender(expectedGender).withVenue(expectedVenue).build()).buildAndPersist(entityManager);
-    Donation expectedDonationEndDate = aDonation().thatIsNotDeleted().withDonationDate(irrelevantEndDate)
-        .withDonor(aDonor().withGender(expectedGender).withVenue(expectedVenue).build()).buildAndPersist(entityManager);
-    Donation expectedDonationCurrentDate = aDonation().thatIsNotDeleted().withDonationDate(new Date())
-        .withDonor(aDonor().withGender(expectedGender).withVenue(expectedVenue).build()).buildAndPersist(entityManager);
-    Donation deletedDonation = aDonation().thatIsDeleted().withDonationDate(irrelevantStartDate)
-        .withDonor(aDonor().withGender(expectedGender).withVenue(expectedVenue).build()).buildAndPersist(entityManager);
+    Donation expectedDonationStartDate = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantStartDate)
+        .withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
+    Donation expectedDonationEndDate = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantEndDate)
+        .withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
+    Donation expectedDonationCurrentDate = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(new Date())
+        .withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
+    Donation deletedDonation = aDonation().withVenue(expectedVenue).thatIsDeleted().withDonationDate(irrelevantStartDate)
+        .withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
     BloodTest expectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_TTI).buildAndPersist(entityManager);
     BloodTest unexpectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_BLOODTYPING).buildAndPersist(entityManager);
     

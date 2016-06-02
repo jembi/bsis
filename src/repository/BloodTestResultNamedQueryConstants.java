@@ -12,11 +12,11 @@ public class BloodTestResultNamedQueryConstants {
   public static final String NAME_FIND_BLOOD_TEST_RESULT_VALUE_OBJECTS_FOR_DATE_RANGE =
       "BloodTestResult.findBloodTestResultDtosForDateRange";
   public static final String QUERY_FIND_BLOOD_TEST_RESULT_VALUE_OBJECTS_FOR_DATE_RANGE =
-      "SELECT NEW dto.BloodTestResultDTO(b.bloodTest, b.result, b.donation.donor.gender, b.donation.donor.venue, COUNT(b)) " +
-          "FROM BloodTestResult b " +
-          "WHERE b.donation.donationDate BETWEEN :startDate AND :endDate " +
-          "AND b.donation.isDeleted = :deleted " +
+      "SELECT NEW dto.BloodTestResultDTO(b.bloodTest, b.result, do.gender, d.venue, COUNT(b)) " +
+          "FROM BloodTestResult b, Donation d, Donor do " +
+          "WHERE b.donation = d AND d.donor = do AND d.donationDate BETWEEN :startDate AND :endDate " +
+          "AND d.isDeleted = :deleted " +
           "AND b.bloodTest.bloodTestType = :bloodTestType " +
-          "GROUP BY b.donation.donor.venue, b.donation.donor.gender, b.bloodTest, b.result " +
-          "ORDER BY b.donation.donor.venue, b.donation.donor.gender, b.bloodTest, b.result";
+          "GROUP BY d.venue, do.gender, b.bloodTest, b.result " +
+          "ORDER BY d.venue, do.gender, b.bloodTest, b.result";
 }
