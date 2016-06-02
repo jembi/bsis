@@ -47,6 +47,7 @@
 
   <context:component-scan base-package="bsis" />
   <context:component-scan base-package="controller" />
+  <context:component-scan base-package="controllerservice" />
   <context:component-scan base-package="repository" />
   <context:component-scan base-package="model" />
   <context:component-scan base-package="viewmodel" />

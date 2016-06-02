@@ -234,11 +234,18 @@
     <intercept-url pattern="/componentbatches/**" access="isFullyAuthenticated()" />
   </http>
   
-  <http pattern="/orderForms/**" create-session="never" use-expressions="true">
+  <http pattern="/orderforms/**" create-session="never" use-expressions="true">
     <http-basic />
     <session-management />
-    <intercept-url pattern="/orderForms/**" access="isAnonymous()" method="OPTIONS"/>
-    <intercept-url pattern="/orderForms/**" access="isFullyAuthenticated()" />
+    <intercept-url pattern="/orderforms/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/orderforms/**" access="isFullyAuthenticated()" />
+  </http>
+  
+  <http pattern="/returnforms/**" create-session="never" use-expressions="true">
+    <http-basic />
+    <session-management />
+    <intercept-url pattern="/returnforms/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/returnforms/**" access="isFullyAuthenticated()" />
   </http>
   
   <http pattern="/inventories/**" create-session="never" use-expressions="true">
