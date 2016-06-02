@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import model.location.Location;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +23,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import backingform.LocationBackingForm;
-import backingform.validator.LocationBackingFormValidator;
-import factory.LocationViewModelFactory;
-import model.location.Location;
-import model.location.LocationType;
 import repository.LocationRepository;
 import utils.PermissionConstants;
 import viewmodel.LocationViewModel;
+import backingform.LocationBackingForm;
+import backingform.validator.LocationBackingFormValidator;
+import factory.LocationViewModelFactory;
 
 @RestController
 @RequestMapping("locations")
@@ -97,14 +97,5 @@ public class LocationsController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteLocation(@PathVariable Long id) {
     locationRepository.deleteLocation(id);
-  }
-
-  @RequestMapping(value = "type/{locationType}", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
-  public Map<String, Object> getLocationsByType(@PathVariable LocationType locationType) {
-    Map<String, Object> map = new HashMap<String, Object>();
-    List<Location> locations = locationRepository.getLocationsByType(locationType);
-    map.put("locations", locationViewModelFactory.createLocationViewModels(locations));
-    return map;
   }
 }
