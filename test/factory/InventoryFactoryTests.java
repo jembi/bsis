@@ -97,7 +97,7 @@ public class InventoryFactoryTests {
   public void testExpiryStatusWithFutureExpiryDate_shouldReturnDaysUntilExpiry() {
 
     // Setup
-    DateTime expiresOn = (new DateTime()).plusDays(20);
+    DateTime expiresOn = (new DateTime()).plusHours(99);
     Component component = ComponentBuilder.aComponent()
         .withDonation(DonationBuilder.aDonation().build())
         .withExpiresOn(expiresOn.toDate()).build();
@@ -112,7 +112,7 @@ public class InventoryFactoryTests {
     InventoryViewModel viewModel = inventoryFactory.createViewModel(component);
 
     // Verify
-    Assert.assertEquals("correct expiry status", "19 days to expire", viewModel.getExpiryStatus());
+    Assert.assertEquals("correct expiry status", "4 days to expire", viewModel.getExpiryStatus());
 
   }
   
