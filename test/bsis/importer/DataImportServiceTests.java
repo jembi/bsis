@@ -416,7 +416,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     
     assertThat("venue is set", firstDeferral.getVenue().getName(), equalTo("First"));
     assertThat("deferral reason is set", firstDeferral.getDeferralReason().getReason(), equalTo("Other reasons"));
-    assertThat("createdDate is set", new SimpleDateFormat("yyyy-MM-dd").format(firstDeferral.getCreatedDate()), equalTo("2016-01-03"));
+    assertThat("createdDate is set", new SimpleDateFormat("yyyy-MM-dd").format(firstDeferral.getDeferralDate()), equalTo("2016-01-03"));
     assertThat("deferredUntil is set", new SimpleDateFormat("yyyy-MM-dd").format(firstDeferral.getDeferredUntil()), equalTo("2016-06-03"));
     assertThat("deferred donor is set", firstDeferral.getDeferredDonor().getFirstName(), equalTo("David"));
     

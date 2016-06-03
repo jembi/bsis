@@ -1,10 +1,9 @@
 package helpers.builders;
 
-import helpers.persisters.AbstractEntityPersister;
-import helpers.persisters.DonorDeferralPersister;
-
 import java.util.Date;
 
+import helpers.persisters.AbstractEntityPersister;
+import helpers.persisters.DonorDeferralPersister;
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
@@ -13,13 +12,14 @@ import model.location.Location;
 public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
 
   private Long id;
-  private Donor deferredDonor;
-  private DeferralReason deferralReason;
+  private Donor deferredDonor = DonorBuilder.aDonor().build();
+  private DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().build();
   private Date deferredUntil;
   private Date createdDate;
   private Boolean voided;
   private String deferralReasonText;
-  private Location venue;
+  private Location venue = LocationBuilder.aLocation().build();
+  private Date deferralDate = new Date();
 
   public DonorDeferralBuilder withId(Long id) {
     this.id = id;
@@ -61,6 +61,11 @@ public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
     return this;
   }
 
+  public DonorDeferralBuilder withDeferralDate(Date deferralDate) {
+    this.deferralDate = deferralDate;
+    return this;
+  }
+
   @Override
   public DonorDeferral build() {
     DonorDeferral donorDeferral = new DonorDeferral();
@@ -74,6 +79,7 @@ public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
     }
     donorDeferral.setDeferralReasonText(deferralReasonText);
     donorDeferral.setCreatedDate(createdDate);
+    donorDeferral.setDeferralDate(deferralDate);
     return donorDeferral;
   }
 

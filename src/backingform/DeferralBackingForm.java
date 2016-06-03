@@ -5,15 +5,15 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
 import model.location.Location;
 import model.user.User;
 import utils.DateTimeSerialiser;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class DeferralBackingForm {
 
@@ -86,7 +86,7 @@ public class DeferralBackingForm {
 
   @JsonSerialize(using = DateTimeSerialiser.class)
   public void setCreatedDate(Date createdDate) {
-    deferral.setCreatedDate(createdDate);
+    deferral.setDeferralDate(createdDate);
   }
 
   public void setDeferredDonor(Long deferredDonorId) {

@@ -97,17 +97,17 @@
                     durationType="TEMPORARY"
                     type="NORMAL"/>
 
-    <donordeferral id="1" deferralReasonText="" createdDate="${today}"
+    <donordeferral id="1" deferralReasonText="" createdDate="${today}" deferralDate="${today}"
                    deferredUntil="${sixMonthsAhead}" deferralReason_id="1" createdBy_id="1"
-                   deferredDonor_id="1"/>
-    <donordeferral id="2" deferralReasonText="" createdDate="${oneMonthAgo}"
+                   deferredDonor_id="1" venue_id="1"/>
+    <donordeferral id="2" deferralReasonText="" createdDate="${oneMonthAgo}" deferralDate="${today}"
                    deferredUntil="${twoWeeksAgo}" deferralReason_id="1" createdBy_id="1"
-                   deferredDonor_id="1"/>
-    <donordeferral id="3" deferralReasonText="" createdDate="${oneMonthAgo}"
+                   deferredDonor_id="1" venue_id="1"/>
+    <donordeferral id="3" deferralReasonText="" createdDate="${oneMonthAgo}" deferralDate="${today}"
                    deferredUntil="${twoWeeksAgo}" deferralReason_id="1" createdBy_id="1"
-                   deferredDonor_id="3"/>
-    <donordeferral id="4" deferralReasonText="" createdDate="${oneMonthAgo}"
+                   deferredDonor_id="3" venue_id="1"/>
+    <donordeferral id="4" deferralReasonText="" createdDate="${oneMonthAgo}" deferralDate="${today}"
                    deferredUntil="${twoWeeksAgo}" deferralReason_id="1" createdBy_id="1"
-                   deferredDonor_id="4"/>
+                   deferredDonor_id="4" venue_id="1"/>
 
 </dataset>

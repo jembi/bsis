@@ -1,0 +1,18 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="20160603-1205" author="lauravignoli">
+		<addColumn tableName="DonorDeferral">
+			<column name="deferralDate" type="DATETIME" defaultValue="NULL" />
+		</addColumn>
+		<sql>
+			UPDATE DonorDeferral dd SET dd.deferralDate = dd.createdDate where dd.deferralDate IS NULL;
+		</sql>
+		<addNotNullConstraint tableName="DonorDeferral" columnName="deferralDate" columnDataType="DATETIME" />
+		<addNotNullConstraint tableName="DonorDeferral" columnName="venue_id" columnDataType="bigint(20)" />
+		<addNotNullConstraint tableName="DonorDeferral" columnName="deferralReason_id" columnDataType="bigint(20)" />
+	</changeSet>
+
+</databaseChangeLog>

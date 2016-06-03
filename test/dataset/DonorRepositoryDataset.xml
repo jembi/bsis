@@ -274,22 +274,22 @@
                isAutoGeneratable="1" isHidable="0" isRequired="1" isTimeField="0"
                maxLength="15" useCurrentTime="0"/>
 
-    <donordeferral id="1" deferralReasonText="" createdDate="${DateDeferredOn}"
-                   deferredUntil="${DateDeferredUnit}" deferralReason_id="2" createdBy_id="1"
+    <donordeferral id="1" deferralReasonText="" createdDate="${DateDeferredOn}" deferralDate="${DateDeferredOn}"
+                   deferredUntil="${DateDeferredUnit}" deferralReason_id="2" createdBy_id="1" venue_id="1"
                    deferredDonor_id="1" isVoided="false"/>
-    <donordeferral id="2" deferralReasonText="" createdDate="2014-03-01"
-                   deferredUntil="2014-05-14" deferralReason_id="2" createdBy_id="1"
+    <donordeferral id="2" deferralReasonText="" createdDate="2014-03-01" deferralDate="${DateDeferredOn}"
+                   deferredUntil="2014-05-14" deferralReason_id="2" createdBy_id="1" venue_id="1"
                    deferredDonor_id="1" isVoided="false"/>
-    <donordeferral id="3" deferralReasonText="" createdDate="2014-01-11"
-                   deferredUntil="2014-08-22" deferralReason_id="2" createdBy_id="1"
+    <donordeferral id="3" deferralReasonText="" createdDate="2014-01-11" deferralDate="${DateDeferredOn}"
+                   deferredUntil="2014-08-22" deferralReason_id="2" createdBy_id="1" venue_id="1"
                    deferredDonor_id="1" isVoided="false"/>
-    <donordeferral id="4" deferralReasonText="" createdDate="2014-01-11"
-                   deferredUntil="2014-02-22" deferralReason_id="2" createdBy_id="1"
+    <donordeferral id="4" deferralReasonText="" createdDate="2014-01-11" deferralDate="${DateDeferredOn}"
+                   deferredUntil="2014-02-22" deferralReason_id="2" createdBy_id="1" venue_id="1"
                    deferredDonor_id="4" isVoided="false"/>
-    <donordeferral id="5" deferralReasonText=""
+    <donordeferral id="5" deferralReasonText="" deferralDate="${DateDeferredOn}" venue_id="1"
                    createdDate="${DateDeferredOn}" deferredUntil="${DateDeferredOn}"
                    deferralReason_id="2" createdBy_id="1" deferredDonor_id="4" isVoided="false"/>
-    <donordeferral id="6" deferralReasonText=""
+    <donordeferral id="6" deferralReasonText="" deferralDate="${DateDeferredOn}" venue_id="1"
                    createdDate="${DateDeferredOn}" deferredUntil="${DateDeferredUnit}"
                    deferralReason_id="2" createdBy_id="1" deferredDonor_id="6" isVoided="false"/>
 

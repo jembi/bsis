@@ -2,6 +2,7 @@ package model.donordeferral;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -10,17 +11,16 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.envers.Audited;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import model.BaseModificationTrackerEntity;
 import model.donor.Donor;
 import model.location.Location;
 import model.user.User;
-
-import org.hibernate.envers.Audited;
-
 import repository.DonorDeferralNamedQueryConstants;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @NamedQueries({
     @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_COUNT_DONOR_DEFERRALS_FOR_DONOR,
@@ -39,7 +39,11 @@ public class DonorDeferral extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @ManyToOne
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(nullable = false)
+  private Date deferralDate;
+
+  @ManyToOne(optional = false)
   private Donor deferredDonor;
 
   @Temporal(TemporalType.DATE)
@@ -48,7 +52,7 @@ public class DonorDeferral extends BaseModificationTrackerEntity {
   @ManyToOne
   private DeferralReason deferralReason;
   
-  @ManyToOne
+  @ManyToOne(optional = false)
   private Location venue;
 
   @ManyToOne
@@ -148,15 +152,12 @@ public class DonorDeferral extends BaseModificationTrackerEntity {
     this.voidedDate = voidedDate;
   }
 
-  public void copy(DonorDeferral deferral) {
-    assert (deferral.getId().equals(this.getId()));
-    setDeferredDonor(deferral.getDeferredDonor());
-    setDeferredUntil(deferral.getDeferredUntil());
-    setDeferralReason(deferral.getDeferralReason());
-    setDeferralReasonText(deferral.getDeferralReasonText());
-    setIsVoided(deferral.getIsVoided());
-    setVoidedBy(deferral.getVoidedBy());
-    setVoidedDate(deferral.getVoidedDate());
+  public Date getDeferralDate() {
+    return deferralDate;
+  }
+
+  public void setDeferralDate(Date deferralDate) {
+    this.deferralDate = deferralDate;
   }
 
 }

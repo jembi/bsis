@@ -41,22 +41,26 @@
     <DeferralReason id="3" isDeleted="false" reason="TTI Unsafe"
                     durationType="PERMANENT" type="AUTOMATED_TTI_UNSAFE"/>
 
-    <DonorDeferral id="1" deferredDonor_id="1" deferredUntil="2014-12-29"
+    <DonorDeferral id="1" deferredDonor_id="1" deferredUntil="2014-12-29" 
                    deferralReason_id="1" createdDate="2015-01-29 11:49:06.0"
                    lastUpdated="2015-01-29 11:49:06.0" venue_id="1"
-                   createdBy_id="1" lastUpdatedBy_id="1" isVoided="false"/>
+                   createdBy_id="1" lastUpdatedBy_id="1" isVoided="false" 
+                   deferralDate="2015-01-29 11:49:06.0"/>
     <DonorDeferral id="2" deferredDonor_id="1" deferredUntil="2015-08-29"
                    deferralReason_id="2" createdDate="2015-01-29 11:49:06.0"
                    lastUpdated="2015-01-29 11:49:06.0" venue_id="1"
-                   createdBy_id="1" lastUpdatedBy_id="1" isVoided="false"/>
+                   createdBy_id="1" lastUpdatedBy_id="1" isVoided="false"
+                   deferralDate="2015-01-29 11:49:06.0"/>
     <DonorDeferral id="3" deferredDonor_id="2" deferredUntil="2014-12-29"
                    deferralReason_id="2" createdDate="2015-10-13 09:30:23.0"
                    lastUpdated="2015-01-29 11:53:42.0" venue_id="1"
-                   createdBy_id="1" lastUpdatedBy_id="1" isVoided="false"/>
+                   createdBy_id="1" lastUpdatedBy_id="1" isVoided="false"
+                   deferralDate="2015-10-13 09:30:23.0"/>
     <DonorDeferral id="4" deferredDonor_id="3" deferredUntil="2100-01-01"
                    deferralReason_id="3" createdDate="2015-02-16 14:47:02.0"
                    lastUpdated="2015-02-16 14:47:02.0" venue_id="1"
-                   createdBy_id="1" lastUpdatedBy_id="1" isVoided="false"/>
+                   createdBy_id="1" lastUpdatedBy_id="1" isVoided="false"
+                   deferralDate="2015-02-16 14:47:02.0"/>
 
 
 </dataset>
