@@ -1,11 +1,12 @@
 package viewmodel;
 
+import java.util.Date;
 import java.util.Map;
 
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DonorDeferral;
-import utils.CustomDateFormatter;
 import model.user.User;
+import utils.CustomDateFormatter;
 
 public class DonorDeferralViewModel {
 
@@ -40,30 +41,11 @@ public class DonorDeferralViewModel {
     this.permissions = permissions;
   }
 
-  public String getLastUpdated() {
-    return CustomDateFormatter.getDateTimeString(donorDeferral.getLastUpdated());
-  }
-
-  public String getCreatedDate() {
-    return CustomDateFormatter.getDateString(donorDeferral.getCreatedDate());
-  }
-
   public String getCreatedBy() {
     User user = donorDeferral.getCreatedBy();
     if (user == null || user.getUsername() == null)
       return "";
     return user.getUsername();
-  }
-
-  public String getLastUpdatedBy() {
-    User user = donorDeferral.getLastUpdatedBy();
-    if (user == null || user.getUsername() == null)
-      return "";
-    return user.getUsername();
-  }
-
-  public String getVoidedDate() {
-    return CustomDateFormatter.getDateString(donorDeferral.getVoidedDate());
   }
 
   public String getDonorNumber() {
@@ -77,5 +59,9 @@ public class DonorDeferralViewModel {
   // FIXME: The name of this method is misleading, but it is made to match the backing form.
   public Long getDeferredDonor() {
     return donorDeferral.getDeferredDonor().getId();
+  }
+
+  public Date getDeferralDate(Date deferralDate) {
+    return donorDeferral.getDeferralDate();
   }
 }

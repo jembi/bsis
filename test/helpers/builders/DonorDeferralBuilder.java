@@ -15,7 +15,6 @@ public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
   private Donor deferredDonor = DonorBuilder.aDonor().build();
   private DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().build();
   private Date deferredUntil;
-  private Date createdDate;
   private Boolean voided;
   private String deferralReasonText;
   private Location venue = LocationBuilder.aLocation().build();
@@ -51,11 +50,6 @@ public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
     return this;
   }
 
-  public DonorDeferralBuilder withCreatedDate(Date createdDate) {
-    this.createdDate = createdDate;
-    return this;
-  }
-
   public DonorDeferralBuilder withVenue(Location venue) {
     this.venue = venue;
     return this;
@@ -78,7 +72,6 @@ public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
       donorDeferral.setIsVoided(voided);
     }
     donorDeferral.setDeferralReasonText(deferralReasonText);
-    donorDeferral.setCreatedDate(createdDate);
     donorDeferral.setDeferralDate(deferralDate);
     return donorDeferral;
   }

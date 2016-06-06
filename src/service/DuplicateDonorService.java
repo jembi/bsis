@@ -6,21 +6,20 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import dto.DuplicateDonorDTO;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.donor.DonorStatus;
 import model.donor.DuplicateDonorBackup;
 import model.donordeferral.DonorDeferral;
 import model.packtype.PackType;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import repository.DonorRepository;
 import repository.SequenceNumberRepository;
 import viewmodel.BloodTestingRuleResult;
-import dto.DuplicateDonorDTO;
 
 /**
  * Service that provides functionality in order to identify and merge duplicate Donors
@@ -229,7 +228,7 @@ public class DuplicateDonorService {
 
       @Override
       public int compare(DonorDeferral d1, DonorDeferral d2) {
-        return d1.getCreatedDate().compareTo(d2.getCreatedDate());
+        return d1.getDeferralDate().compareTo(d2.getDeferralDate());
       }
     });
     return combinedDeferrals;

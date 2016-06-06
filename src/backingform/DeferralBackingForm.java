@@ -46,33 +46,8 @@ public class DeferralBackingForm {
   }
 
   @JsonIgnore
-  public Date getLastUpdated() {
-    return deferral.getLastUpdated();
-  }
-
-  @JsonIgnore
-  public Date getCreatedDate() {
-    return deferral.getCreatedDate();
-  }
-
-  @JsonIgnore
   public User getCreatedBy() {
     return deferral.getCreatedBy();
-  }
-
-  @JsonIgnore
-  public User getLastUpdatedBy() {
-    return deferral.getLastUpdatedBy();
-  }
-
-  @JsonIgnore
-  public User getVoidedBy() {
-    return deferral.getVoidedBy();
-  }
-
-  @JsonIgnore
-  public Date getVoidedDate() {
-    return deferral.getVoidedDate();
   }
 
   public Long getDeferredDonor() {
@@ -82,11 +57,6 @@ public class DeferralBackingForm {
     }
 
     return deferredDonor.getId();
-  }
-
-  @JsonSerialize(using = DateTimeSerialiser.class)
-  public void setCreatedDate(Date createdDate) {
-    deferral.setDeferralDate(createdDate);
   }
 
   public void setDeferredDonor(Long deferredDonorId) {
@@ -168,6 +138,15 @@ public class DeferralBackingForm {
 
   public Location getVenue() {
     return deferral.getVenue();
+  }
+
+  public Date getDeferralDate() {
+    return deferral.getDeferralDate();
+  }
+
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public void setDeferralDate(Date deferralDate) {
+    deferral.setDeferralDate(deferralDate);
   }
 
 }

@@ -10,6 +10,30 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+
+import backingform.AdverseEventBackingForm;
+import backingform.AdverseEventTypeBackingForm;
+import backingform.DeferralBackingForm;
+import backingform.DonationBackingForm;
+import backingform.DonorBackingForm;
+import backingform.LocationBackingForm;
+import backingform.TestResultsBackingForm;
+import backingform.validator.DeferralBackingFormValidator;
+import backingform.validator.DonationBackingFormValidator;
+import backingform.validator.DonorBackingFormValidator;
+import backingform.validator.LocationBackingFormValidator;
 import model.address.AddressType;
 import model.address.ContactMethodType;
 import model.adverseevent.AdverseEventType;
@@ -29,20 +53,6 @@ import model.preferredlanguage.PreferredLanguage;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 import model.util.Gender;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindException;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
-
 import repository.AdverseEventTypeRepository;
 import repository.ContactMethodTypeRepository;
 import repository.DeferralReasonRepository;
@@ -57,17 +67,6 @@ import repository.TestBatchRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import service.DonationCRUDService;
-import backingform.AdverseEventBackingForm;
-import backingform.AdverseEventTypeBackingForm;
-import backingform.DeferralBackingForm;
-import backingform.DonationBackingForm;
-import backingform.DonorBackingForm;
-import backingform.LocationBackingForm;
-import backingform.TestResultsBackingForm;
-import backingform.validator.DeferralBackingFormValidator;
-import backingform.validator.DonationBackingFormValidator;
-import backingform.validator.DonorBackingFormValidator;
-import backingform.validator.LocationBackingFormValidator;
 
 @Transactional
 @Service
@@ -847,7 +846,7 @@ public class DataImportService {
 
           case "createdDate":
             try {
-              deferralBackingForm.setCreatedDate(cell.getDateCellValue());
+              deferralBackingForm.setDeferralDate(cell.getDateCellValue());
             } catch (IllegalStateException e) {
               errors.rejectValue("donorDeferral.createdDate", "createdDate.invalid", "Invalid createdDate");
             }

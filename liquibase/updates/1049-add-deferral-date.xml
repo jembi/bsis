@@ -13,6 +13,10 @@
 		<addNotNullConstraint tableName="DonorDeferral" columnName="deferralDate" columnDataType="DATETIME" />
 		<addNotNullConstraint tableName="DonorDeferral" columnName="venue_id" columnDataType="bigint(20)" />
 		<addNotNullConstraint tableName="DonorDeferral" columnName="deferralReason_id" columnDataType="bigint(20)" />
+		<addColumn tableName="DonorDeferral_AUD">
+			<column name="deferralDate" type="DATETIME" />
+		</addColumn>
 	</changeSet>
+	
 
 </databaseChangeLog>

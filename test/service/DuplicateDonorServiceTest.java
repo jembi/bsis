@@ -1,18 +1,27 @@
 package service;
 
 import static org.mockito.Mockito.when;
-import helpers.builders.BloodTestingRuleResultBuilder;
-import helpers.builders.DeferralReasonBuilder;
-import helpers.builders.DonationBuilder;
-import helpers.builders.DonorBuilder;
-import helpers.builders.DonorDeferralBuilder;
-import helpers.builders.PackTypeBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Matchers;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import dto.DuplicateDonorDTO;
+import helpers.builders.BloodTestingRuleResultBuilder;
+import helpers.builders.DeferralReasonBuilder;
+import helpers.builders.DonationBuilder;
+import helpers.builders.DonorBuilder;
+import helpers.builders.DonorDeferralBuilder;
+import helpers.builders.PackTypeBuilder;
 import model.bloodtesting.TTIStatus;
 import model.donation.Donation;
 import model.donor.Donor;
@@ -24,21 +33,11 @@ import model.donordeferral.DonorDeferral;
 import model.donordeferral.DurationType;
 import model.packtype.PackType;
 import model.util.Gender;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Matchers;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-
 import repository.DonorRepository;
 import repository.SequenceNumberRepository;
 import repository.bloodtesting.BloodTypingStatus;
 import scala.actors.threadpool.Arrays;
 import viewmodel.BloodTestingRuleResult;
-import dto.DuplicateDonorDTO;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DuplicateDonorServiceTest {
@@ -216,15 +215,15 @@ public class DuplicateDonorServiceTest {
             .withDurationType(DurationType.PERMANENT)
             .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
 
-    Date dd1CreatedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2015-01-01");
+    Date dd1DeferralDate = new SimpleDateFormat("yyyy-MM-dd").parse("2015-01-01");
     DonorDeferral dd1 =
         DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferralReason(deferralReason)
-            .withDeferredUntil(new Date()).withCreatedDate(dd1CreatedDate).build();
+            .withDeferredUntil(new Date()).withDeferralDate(dd1DeferralDate).build();
 
-    Date dd2CreatedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2014-01-01");
+    Date dd2DeferralDate = new SimpleDateFormat("yyyy-MM-dd").parse("2014-01-01");
     DonorDeferral dd2 =
         DonorDeferralBuilder.aDonorDeferral().withId(2l).withDeferralReason(deferralReason)
-            .withDeferredUntil(new Date()).withCreatedDate(dd2CreatedDate).build();
+        .withDeferredUntil(new Date()).withDeferralDate(dd2DeferralDate).build();
 
     Donor d1 =
         DonorBuilder.aDonor().withDonorNumber(donorNumber1).withFirstName("David")
