@@ -35,6 +35,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import dto.BloodTestResultDTO;
+import repository.BloodTestResultNamedQueryConstants;
 import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import viewmodel.BloodTestResultViewModel;
@@ -278,6 +280,17 @@ public class BloodTestingRepository {
     query.setParameter("isActive", false);
     query.setParameter("context", context);
     query.executeUpdate();
+  }
+  
+  public List<BloodTestResultDTO> findTTIPrevalenceReportIndicators(Date startDate, Date endDate) {
+    return em.createNamedQuery(
+        BloodTestResultNamedQueryConstants.NAME_FIND_BLOOD_TEST_RESULT_VALUE_OBJECTS_FOR_DATE_RANGE,
+        BloodTestResultDTO.class)
+        .setParameter("startDate", startDate)
+        .setParameter("endDate", endDate)
+        .setParameter("deleted", false)
+        .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
+        .getResultList();
   }
 
   public Map<String, Map<Long, Long>> findNumberOfPositiveTests(

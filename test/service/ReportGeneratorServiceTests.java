@@ -5,8 +5,10 @@ import static helpers.builders.CollectedDonationDTOBuilder.aCollectedDonationDTO
 import static helpers.builders.ComponentTypeBuilder.aComponentType;
 import static helpers.builders.DataValueBuilder.aDataValue;
 import static helpers.builders.DonationTypeBuilder.aDonationType;
+import static helpers.builders.BloodTestBuilder.aBloodTest;
 import static helpers.builders.ReportBuilder.aReport;
 import static helpers.builders.StockLevelDTOBuilder.aStockLevelDTO;
+import static helpers.builders.BloodTestResultDTOBuilder.aBloodTestResultDTO;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -21,6 +23,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import constant.CohortConstants;
+import dto.BloodTestResultDTO;
 import dto.CollectedDonationDTO;
 import dto.StockLevelDTO;
 import helpers.builders.LocationBuilder;
@@ -32,6 +35,7 @@ import model.reporting.Report;
 import model.util.Gender;
 import repository.DonationRepository;
 import repository.InventoryRepository;
+import repository.bloodtesting.BloodTestingRepository;
 import suites.UnitTestSuite;
 
 public class ReportGeneratorServiceTests extends UnitTestSuite {
@@ -42,6 +46,8 @@ public class ReportGeneratorServiceTests extends UnitTestSuite {
   private DonationRepository donationRepository;
   @Mock
   private InventoryRepository inventoryRepository;
+  @Mock
+  private BloodTestingRepository bloodTestingRepository;
 
   @Test
   public void testGenerateCollectedDonationsReport() {
@@ -117,6 +123,59 @@ public class ReportGeneratorServiceTests extends UnitTestSuite {
     Report expectedReport = aReport().withDataValues(expectedDataValues).build();
     when(inventoryRepository.findStockLevelsForLocation(location.getId(), InventoryStatus.IN_STOCK)).thenReturn(dtos);
     Report returnedReport = reportGeneratorService.generateStockLevelsForLocationReport(location.getId(), InventoryStatus.IN_STOCK);
+
+    assertThat(returnedReport, is(equalTo(expectedReport)));
+  }
+  
+  @Test
+  public void testGenerateTTIPrevalenceReport() {
+
+    Date irrelevantStartDate = new Date();
+    Date irrelevantEndDate = new Date();
+
+    List<BloodTestResultDTO> dtos = Arrays.asList(
+        aBloodTestResultDTO()
+            .withBloodTest(aBloodTest().withTestName("HCV").build())
+            .withResult("POS")
+            .withGender(Gender.female)
+            .withCount(2)
+            .build()
+    );
+
+    List<DataValue> expectedDataValues = Arrays.asList(
+        aDataValue()
+            .withStartDate(irrelevantStartDate)
+            .withEndDate(irrelevantEndDate)
+            .withValue(2L)
+            .withCohort(aCohort()
+                .withCategory(CohortConstants.BLOOD_TEST_CATEGORY)
+                .withComparator(Comparator.EQUALS)
+                .withOption("HCV")
+                .build())
+            .withCohort(aCohort()
+                .withCategory(CohortConstants.BLOOD_TEST_RESULT_CATEGORY)
+                .withComparator(Comparator.EQUALS)
+                .withOption("POS")
+                .build())
+            .withCohort(aCohort()
+                .withCategory(CohortConstants.GENDER_CATEGORY)
+                .withComparator(Comparator.EQUALS)
+                .withOption(Gender.female)
+                .build())
+            .build()
+    );
+
+    Report expectedReport = aReport()
+        .withStartDate(irrelevantStartDate)
+        .withEndDate(irrelevantEndDate)
+        .withDataValues(expectedDataValues)
+        .build();
+
+    when(bloodTestingRepository.findTTIPrevalenceReportIndicators(irrelevantStartDate, irrelevantEndDate))
+        .thenReturn(dtos);
+
+    Report returnedReport = reportGeneratorService.generateTTIPrevalenceReport(irrelevantStartDate,
+        irrelevantEndDate);
 
     assertThat(returnedReport, is(equalTo(expectedReport)));
   }
