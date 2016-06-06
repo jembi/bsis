@@ -61,7 +61,7 @@ public class DonorDeferralViewModel {
     return donorDeferral.getDeferredDonor().getId();
   }
 
-  public Date getDeferralDate(Date deferralDate) {
+  public Date getDeferralDate() {
     return donorDeferral.getDeferralDate();
   }
 }
