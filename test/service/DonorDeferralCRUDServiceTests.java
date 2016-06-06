@@ -10,22 +10,11 @@ import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import helpers.builders.DeferralReasonBuilder;
-import helpers.builders.DonorBuilder;
-import helpers.builders.DonorDeferralBuilder;
-import helpers.builders.LocationBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-
-import model.donor.Donor;
-import model.donordeferral.DeferralReason;
-import model.donordeferral.DeferralReasonType;
-import model.donordeferral.DonorDeferral;
-import model.donordeferral.DurationType;
-import model.location.Location;
 
 import org.joda.time.DateTime;
 import org.junit.Assert;
@@ -33,6 +22,16 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import helpers.builders.DeferralReasonBuilder;
+import helpers.builders.DonorBuilder;
+import helpers.builders.DonorDeferralBuilder;
+import helpers.builders.LocationBuilder;
+import model.donor.Donor;
+import model.donordeferral.DeferralReason;
+import model.donordeferral.DeferralReasonType;
+import model.donordeferral.DonorDeferral;
+import model.donordeferral.DurationType;
+import model.location.Location;
 import repository.DeferralReasonRepository;
 import repository.DonorDeferralRepository;
 import suites.UnitTestSuite;

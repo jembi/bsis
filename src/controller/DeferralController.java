@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import backingform.DeferralBackingForm;
 import backingform.EndDeferralBackingForm;
 import backingform.validator.DeferralBackingFormValidator;
+import controllerservice.DeferralControllerService;
 import factory.DonorDeferralViewModelFactory;
 import model.donordeferral.DonorDeferral;
 import model.location.LocationType;
@@ -48,6 +49,9 @@ public class DeferralController {
 
   @Autowired
   private DeferralBackingFormValidator deferralBackingFormValidator;
+
+  @Autowired
+  private DeferralControllerService deferralControllerService;
 
   @InitBinder("deferralBackingForm")
   protected void initBinder(WebDataBinder binder) {
@@ -78,21 +82,11 @@ public class DeferralController {
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_DEFERRAL + "')")
   public ResponseEntity<Map<String, Object>> deferDonor(@Valid @RequestBody DeferralBackingForm deferralBackingForm) {
-
     HttpStatus httpStatus = HttpStatus.CREATED;
     Map<String, Object> map = new HashMap<String, Object>();
-    DonorDeferral savedDeferral = null;
-
-    DonorDeferral deferral = deferralViewModelFactory.createEntity(deferralBackingForm);
-    deferral.setIsVoided(false);
-    savedDeferral = donorRepository.deferDonor(deferral);
     map.put("hasErrors", false);
-
-    map.put("deferralId", savedDeferral.getId());
-    map.put("deferral", deferralViewModelFactory.createDonorDeferralViewModel(donorDeferralCRUDService.findDeferralById(savedDeferral.getId())));
-
+    map.put("deferral", deferralControllerService.createDeferral(deferralBackingForm));
     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
-
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)

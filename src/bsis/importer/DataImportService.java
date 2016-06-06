@@ -61,6 +61,7 @@ import repository.DeferralReasonRepository;
 import repository.DonationBatchRepository;
 import repository.DonationRepository;
 import repository.DonationTypeRepository;
+import repository.DonorDeferralRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
 import repository.PackTypeRepository;
@@ -109,6 +110,8 @@ public class DataImportService {
   private TestBatchRepository testBatchRepository;
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
+  @Autowired
+  private DonorDeferralRepository donorDeferralRepository;
   @PersistenceContext
   private EntityManager entityManager;
 
@@ -893,7 +896,7 @@ public class DataImportService {
       donorDeferral.setVenue(deferralBackingForm.getVenue().getLocation());
       donorDeferral.setDeferredUntil(deferralBackingForm.getDeferredUntil());
       donorDeferral.setDeferralReasonText(deferralBackingForm.getDeferralReasonText());
-      donorRepository.deferDonor(donorDeferral);
+      donorDeferralRepository.save(donorDeferral);
     }
 
     System.out.println(); // clear logging

@@ -38,7 +38,12 @@ public class DonorDeferralCRUDService {
   @Autowired
   private DateGeneratorService dateGeneratorService;
   @Autowired
-  DeferralConstraintChecker deferralConstraintChecker;
+  private DeferralConstraintChecker deferralConstraintChecker;
+  
+  public DonorDeferral createDeferral(DonorDeferral donorDeferral) {
+    donorDeferralRepository.save(donorDeferral);
+    return donorDeferral;
+  }
 
   public DonorDeferral createDeferralForDonorWithVenueAndDeferralReasonType(Donor donor, Location venue, DeferralReasonType deferralReasonType)
       throws NoResultException, NonUniqueResultException {
