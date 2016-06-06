@@ -3,23 +3,24 @@ package helpers.builders;
 import java.util.Date;
 
 import backingform.DeferralBackingForm;
-import model.donordeferral.DeferralReason;
-import model.location.Location;
+import backingform.DeferralReasonBackingForm;
+import backingform.DonorBackingForm;
+import backingform.LocationBackingForm;
 
 public class DeferralBackingFormBuilder extends AbstractBuilder<DeferralBackingForm> {
   
-  private DeferralReason deferralReason;
-  private Location venue;
+  private DeferralReasonBackingForm deferralReason;
+  private LocationBackingForm venue;
   private Date deferredUntil;
-  private Long deferredDonorId;
+  private DonorBackingForm deferredDonor;
   private Date deferralDate;
 
-  public DeferralBackingFormBuilder withDeferralReason(DeferralReason deferralReason) {
+  public DeferralBackingFormBuilder withDeferralReason(DeferralReasonBackingForm deferralReason) {
     this.deferralReason = deferralReason;
     return this;
   }
   
-  public DeferralBackingFormBuilder withVenue(Location venue) {
+  public DeferralBackingFormBuilder withVenue(LocationBackingForm venue) {
     this.venue = venue;
     return this;
   }
@@ -29,8 +30,8 @@ public class DeferralBackingFormBuilder extends AbstractBuilder<DeferralBackingF
     return this;
   }
   
-  public DeferralBackingFormBuilder withDeferredDonorId(Long deferredDonorId) {
-    this.deferredDonorId = deferredDonorId;
+  public DeferralBackingFormBuilder withDeferredDonor(DonorBackingForm deferredDonor) {
+    this.deferredDonor = deferredDonor;
     return this;
   }
   
@@ -45,7 +46,7 @@ public class DeferralBackingFormBuilder extends AbstractBuilder<DeferralBackingF
     deferralBackingForm.setDeferralReason(deferralReason);
     deferralBackingForm.setVenue(venue);
     deferralBackingForm.setDeferredUntil(deferredUntil);
-    deferralBackingForm.setDeferredDonor(deferredDonorId);
+    deferralBackingForm.setDeferredDonor(deferredDonor);
     deferralBackingForm.setDeferralDate(deferralDate);
     return deferralBackingForm;
   }

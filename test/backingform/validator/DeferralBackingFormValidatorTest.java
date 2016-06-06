@@ -1,16 +1,15 @@
 package backingform.validator;
 
 import static helpers.builders.DeferralBackingFormBuilder.aDeferralBackingForm;
-import static helpers.builders.DeferralReasonBuilder.aDeferralReason;
-import static helpers.builders.LocationBuilder.aLocation;
+import static helpers.builders.DeferralReasonBackingFormBuilder.aDeferralReasonBackingForm;
+import static helpers.builders.DonorBackingFormBuilder.aDonorBackingForm;
+import static helpers.builders.LocationBackingFormBuilder.aLocationBackingForm;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
-import model.location.Location;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,11 +18,12 @@ import org.mockito.Mock;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
+import backingform.DeferralBackingForm;
+import backingform.LocationBackingForm;
 import repository.DonorRepository;
 import repository.FormFieldRepository;
 import repository.LocationRepository;
 import suites.UnitTestSuite;
-import backingform.DeferralBackingForm;
 
 public class DeferralBackingFormValidatorTest extends UnitTestSuite {
   
@@ -47,13 +47,13 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
 
   @Test
   public void testValid() throws Exception {
-    Location venue = aLocation().withId(1L).build();
+    LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
 
     DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
-        .withDeferralReason(aDeferralReason().withId(1L).build())
+        .withDeferralReason(aDeferralReasonBackingForm().withId(1L).build())
         .withVenue(venue)
         .withDeferredUntil(DEFERRED_UNTIL)
-        .withDeferredDonorId(DEFERRED_DONOR_ID)
+        .withDeferredDonor(aDonorBackingForm().withId(DEFERRED_DONOR_ID).build())
         .withDeferralDate(new Date())
         .build();
     
@@ -71,13 +71,13 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
 
   @Test
   public void testInvalidVenueDoesNotExist() throws Exception {
-    Location venue = aLocation().withId(1L).build();
+    LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
 
     DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
-        .withDeferralReason(aDeferralReason().withId(1L).build())
+        .withDeferralReason(aDeferralReasonBackingForm().withId(1L).build())
         .withVenue(venue)
         .withDeferredUntil(DEFERRED_UNTIL)
-        .withDeferredDonorId(DEFERRED_DONOR_ID)
+        .withDeferredDonor(aDonorBackingForm().withId(DEFERRED_DONOR_ID).build())
         .withDeferralDate(new Date())
         .build();
 
@@ -97,9 +97,9 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
   @Test
   public void testInvalidVenueNotSpecified() throws Exception {
     DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
-        .withDeferralReason(aDeferralReason().withId(1L).build())
+        .withDeferralReason(aDeferralReasonBackingForm().withId(1L).build())
         .withDeferredUntil(DEFERRED_UNTIL)
-        .withDeferredDonorId(DEFERRED_DONOR_ID)
+        .withDeferredDonor(aDonorBackingForm().withId(DEFERRED_DONOR_ID).build())
         .withDeferralDate(new Date())
         .build();
 
@@ -117,12 +117,12 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
 
   @Test
   public void testInvalidDeferralReasonNotSpecified() throws Exception {
-    Location venue = aLocation().withId(1L).build();
+    LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
 
     DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
         .withVenue(venue)
         .withDeferredUntil(DEFERRED_UNTIL)
-        .withDeferredDonorId(DEFERRED_DONOR_ID)
+        .withDeferredDonor(aDonorBackingForm().withId(DEFERRED_DONOR_ID).build())
         .withDeferralDate(new Date())
         .build();
     
@@ -141,12 +141,12 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
 
   @Test
   public void testInvalidDeferredUntilNotSpecified() throws Exception {
-    Location venue = aLocation().withId(1L).build();
+    LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
 
     DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
-        .withDeferralReason(aDeferralReason().withId(1L).build())
+        .withDeferralReason(aDeferralReasonBackingForm().withId(1L).build())
         .withVenue(venue)
-        .withDeferredDonorId(DEFERRED_DONOR_ID)
+        .withDeferredDonor(aDonorBackingForm().withId(DEFERRED_DONOR_ID).build())
         .withDeferralDate(new Date())
         .build();
     
@@ -165,10 +165,10 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
 
   @Test
   public void testInvalidDeferredDonorNotSpecified() throws Exception {
-    Location venue = aLocation().withId(1L).build();
+    LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
 
     DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
-        .withDeferralReason(aDeferralReason().withId(1L).build())
+        .withDeferralReason(aDeferralReasonBackingForm().withId(1L).build())
         .withVenue(venue)
         .withDeferredUntil(DEFERRED_UNTIL)
         .withDeferralDate(new Date())
@@ -188,13 +188,13 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
 
   @Test
   public void testInvalidDeferredDonorDoesNotExist() throws Exception {
-    Location venue = aLocation().withId(1L).build();
+    LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
 
     DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
-        .withDeferralReason(aDeferralReason().withId(1L).build())
+        .withDeferralReason(aDeferralReasonBackingForm().withId(1L).build())
         .withVenue(venue)
         .withDeferredUntil(DEFERRED_UNTIL)
-        .withDeferredDonorId(DEFERRED_DONOR_ID)
+        .withDeferredDonor(aDonorBackingForm().withId(DEFERRED_DONOR_ID).build())
         .withDeferralDate(new Date())
         .build();
     
@@ -213,13 +213,13 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
 
   @Test
   public void testInvalidDeferralDateNotSpecified() throws Exception {
-    Location venue = aLocation().withId(1L).build();
+    LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
 
     DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
-        .withDeferralReason(aDeferralReason().withId(1L).build())
+        .withDeferralReason(aDeferralReasonBackingForm().withId(1L).build())
         .withVenue(venue)
         .withDeferredUntil(DEFERRED_UNTIL)
-        .withDeferredDonorId(DEFERRED_DONOR_ID)
+        .withDeferredDonor(aDonorBackingForm().withId(DEFERRED_DONOR_ID).build())
         .build();
     
     mockFormFields();

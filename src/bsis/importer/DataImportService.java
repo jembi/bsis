@@ -26,6 +26,7 @@ import org.springframework.validation.ObjectError;
 import backingform.AdverseEventBackingForm;
 import backingform.AdverseEventTypeBackingForm;
 import backingform.DeferralBackingForm;
+import backingform.DeferralReasonBackingForm;
 import backingform.DonationBackingForm;
 import backingform.DonorBackingForm;
 import backingform.LocationBackingForm;
@@ -46,6 +47,7 @@ import model.donationbatch.DonationBatch;
 import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.donordeferral.DeferralReason;
+import model.donordeferral.DonorDeferral;
 import model.idtype.IdType;
 import model.location.Location;
 import model.packtype.PackType;
@@ -833,11 +835,13 @@ public class DataImportService {
             break;
 
           case "venue":
-            deferralBackingForm.setVenue(locationCache.get(cell.getStringCellValue()));
+            deferralBackingForm.setVenue(new LocationBackingForm(locationCache.get(cell.getStringCellValue())));
             break;
 
           case "deferralReason":
-            deferralBackingForm.setDeferralReason(deferralReasonCache.get(cell.getStringCellValue()));
+            DeferralReasonBackingForm deferralReasonBackingForm = new DeferralReasonBackingForm();
+            deferralReasonBackingForm.setDeferralReason(deferralReasonCache.get(cell.getStringCellValue()));
+            deferralBackingForm.setDeferralReason(deferralReasonBackingForm);
             break;
 
           case "deferralReasonText":
@@ -869,7 +873,7 @@ public class DataImportService {
       displayProgressMessage(action + " " + deferralCount + " out of " + sheet.getLastRowNum() + " deferral(s)");
 
       if (donor != null) {
-        deferralBackingForm.setDeferredDonor(donor.getId());
+        deferralBackingForm.setDeferredDonor(new DonorBackingForm(donor));
       } else {
         errors.rejectValue("donorDeferral.deferredDonor", "deferredDonor.invalid", "Invalid deferredDonor ");
       }
@@ -882,7 +886,14 @@ public class DataImportService {
       }
 
       // Save deferral
-      donorRepository.deferDonor(deferralBackingForm.getDonorDeferral());
+      DonorDeferral donorDeferral = new DonorDeferral();
+      donorDeferral.setDeferralDate(deferralBackingForm.getDeferralDate());
+      donorDeferral.setDeferralReason(deferralBackingForm.getDeferralReason().getDeferralReason());
+      donorDeferral.setDeferredDonor(deferralBackingForm.getDeferredDonor().getDonor());
+      donorDeferral.setVenue(deferralBackingForm.getVenue().getLocation());
+      donorDeferral.setDeferredUntil(deferralBackingForm.getDeferredUntil());
+      donorDeferral.setDeferralReasonText(deferralBackingForm.getDeferralReasonText());
+      donorRepository.deferDonor(donorDeferral);
     }
 
     System.out.println(); // clear logging

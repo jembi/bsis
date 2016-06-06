@@ -84,7 +84,7 @@ public class DeferralController {
     Map<String, Object> map = new HashMap<String, Object>();
     DonorDeferral savedDeferral = null;
 
-    DonorDeferral deferral = deferralBackingForm.getDonorDeferral();
+    DonorDeferral deferral = deferralViewModelFactory.createEntity(deferralBackingForm);
     deferral.setIsVoided(false);
     deferral.setDeferralDate(new Date());
     savedDeferral = donorRepository.deferDonor(deferral);
@@ -104,10 +104,10 @@ public class DeferralController {
     HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<String, Object>();
     DonorDeferral updatedDeferral = null;
+    deferralBackingForm.setId(id);
 
-    DonorDeferral deferral = deferralBackingForm.getDonorDeferral();
+    DonorDeferral deferral = deferralViewModelFactory.createEntity(deferralBackingForm);
     deferral.setIsVoided(false);
-    deferral.setId(id);
 
     updatedDeferral = donorDeferralCRUDService.updateDeferral(deferral);
 

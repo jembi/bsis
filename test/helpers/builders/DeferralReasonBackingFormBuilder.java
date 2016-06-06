@@ -1,14 +1,15 @@
 package helpers.builders;
 
+import backingform.DeferralReasonBackingForm;
 import model.donordeferral.DeferralReason;
 import model.donordeferral.DurationType;
-import backingform.DeferralReasonBackingForm;
 
 public class DeferralReasonBackingFormBuilder {
 
-  private DeferralReason deferralReason;
+  private DeferralReason deferralReason = new DeferralReason();
   private int defaultDuration;
-  private DurationType durationType;
+  private DurationType durationType = DurationType.TEMPORARY;
+  private Long id;
 
   public DeferralReasonBackingFormBuilder withDeferralReason(DeferralReason deferralReason) {
     this.deferralReason = deferralReason;
@@ -25,11 +26,17 @@ public class DeferralReasonBackingFormBuilder {
     return this;
   }
 
+  public DeferralReasonBackingFormBuilder withId(long id) {
+    this.id = id;
+    return this;
+  }
+
   public DeferralReasonBackingForm build() {
     DeferralReasonBackingForm backingForm = new DeferralReasonBackingForm();
     backingForm.setDeferralReason(deferralReason);
     backingForm.setDefaultDuration(defaultDuration);
     backingForm.setDurationType(durationType);
+    backingForm.setId(id);
     return backingForm;
   }
 

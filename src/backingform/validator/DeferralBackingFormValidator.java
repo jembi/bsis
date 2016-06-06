@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
+import backingform.DeferralBackingForm;
 import repository.DonorRepository;
 import repository.LocationRepository;
-import backingform.DeferralBackingForm;
 
 @Component
 public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingForm> {
@@ -25,7 +25,7 @@ public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingF
       errors.rejectValue("venue", "deferral.venue.required", "Venue does not exist");
     }
   
-    if (form.getDeferredDonor() != null && !donorRepository.verifyDonorExists(form.getDeferredDonor())) {
+    if (form.getDeferredDonor() != null && !donorRepository.verifyDonorExists(form.getDeferredDonor().getId())) {
       errors.rejectValue("deferredDonor", "deferral.deferredDonor.required", "Deferred donor does not exist");
     }
   }
