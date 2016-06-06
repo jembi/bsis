@@ -12,6 +12,7 @@ public class DeferralBackingFormBuilder extends AbstractBuilder<DeferralBackingF
   private Location venue;
   private Date deferredUntil;
   private Long deferredDonorId;
+  private Date deferralDate;
 
   public DeferralBackingFormBuilder withDeferralReason(DeferralReason deferralReason) {
     this.deferralReason = deferralReason;
@@ -32,6 +33,11 @@ public class DeferralBackingFormBuilder extends AbstractBuilder<DeferralBackingF
     this.deferredDonorId = deferredDonorId;
     return this;
   }
+  
+  public DeferralBackingFormBuilder withDeferralDate(Date deferralDate) {
+    this.deferralDate = deferralDate;
+    return this;
+  }
 
   @Override
   public DeferralBackingForm build() {
@@ -40,6 +46,7 @@ public class DeferralBackingFormBuilder extends AbstractBuilder<DeferralBackingF
     deferralBackingForm.setVenue(venue);
     deferralBackingForm.setDeferredUntil(deferredUntil);
     deferralBackingForm.setDeferredDonor(deferredDonorId);
+    deferralBackingForm.setDeferralDate(deferralDate);
     return deferralBackingForm;
   }
   

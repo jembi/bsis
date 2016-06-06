@@ -5,8 +5,10 @@ import static helpers.builders.DeferralReasonBuilder.aDeferralReason;
 import static helpers.builders.LocationBuilder.aLocation;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import model.location.Location;
 
@@ -18,6 +20,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
 import repository.DonorRepository;
+import repository.FormFieldRepository;
 import repository.LocationRepository;
 import suites.UnitTestSuite;
 import backingform.DeferralBackingForm;
@@ -28,11 +31,19 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
   private static final Long DEFERRED_DONOR_ID = 88L;
   
   @InjectMocks
-  DeferralBackingFormValidator deferralBackingFormValidator;
+  private DeferralBackingFormValidator deferralBackingFormValidator;
   @Mock
-  LocationRepository locationRepository;
+  private LocationRepository locationRepository;
   @Mock
-  DonorRepository donorRepository;
+  private DonorRepository donorRepository;
+  @Mock
+  private FormFieldRepository formFieldRepository;
+  
+  private void mockFormFields() {
+    List<String> requiredFormFields = Arrays.asList("deferredUntil", "deferralReason", "deferralDate", "venue",
+        "deferredDonor");
+    when(formFieldRepository.getRequiredFormFields("DonorDeferral")).thenReturn(requiredFormFields);
+  }
 
   @Test
   public void testValid() throws Exception {
@@ -43,8 +54,10 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .withVenue(venue)
         .withDeferredUntil(DEFERRED_UNTIL)
         .withDeferredDonorId(DEFERRED_DONOR_ID)
+        .withDeferralDate(new Date())
         .build();
     
+    mockFormFields();
     when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
     when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
 
@@ -65,8 +78,10 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .withVenue(venue)
         .withDeferredUntil(DEFERRED_UNTIL)
         .withDeferredDonorId(DEFERRED_DONOR_ID)
+        .withDeferralDate(new Date())
         .build();
 
+    mockFormFields();
     when(locationRepository.verifyLocationExists(1L)).thenReturn(false);
     when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
 
@@ -85,8 +100,10 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .withDeferralReason(aDeferralReason().withId(1L).build())
         .withDeferredUntil(DEFERRED_UNTIL)
         .withDeferredDonorId(DEFERRED_DONOR_ID)
+        .withDeferralDate(new Date())
         .build();
 
+    mockFormFields();
     when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
 
     // run test
@@ -106,8 +123,10 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .withVenue(venue)
         .withDeferredUntil(DEFERRED_UNTIL)
         .withDeferredDonorId(DEFERRED_DONOR_ID)
+        .withDeferralDate(new Date())
         .build();
     
+    mockFormFields();
     when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
     when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
 
@@ -128,8 +147,10 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .withDeferralReason(aDeferralReason().withId(1L).build())
         .withVenue(venue)
         .withDeferredDonorId(DEFERRED_DONOR_ID)
+        .withDeferralDate(new Date())
         .build();
     
+    mockFormFields();
     when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
     when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
 
@@ -150,8 +171,10 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .withDeferralReason(aDeferralReason().withId(1L).build())
         .withVenue(venue)
         .withDeferredUntil(DEFERRED_UNTIL)
+        .withDeferralDate(new Date())
         .build();
     
+    mockFormFields();
     when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
 
     // run test
@@ -172,8 +195,10 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .withVenue(venue)
         .withDeferredUntil(DEFERRED_UNTIL)
         .withDeferredDonorId(DEFERRED_DONOR_ID)
+        .withDeferralDate(new Date())
         .build();
     
+    mockFormFields();
     when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
     when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(false);
 
@@ -184,6 +209,30 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
     Assert.assertNotNull("Error on deferredDonor", errors.getFieldError("deferredDonor"));
+  }
+
+  @Test
+  public void testInvalidDeferralDateNotSpecified() throws Exception {
+    Location venue = aLocation().withId(1L).build();
+
+    DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
+        .withDeferralReason(aDeferralReason().withId(1L).build())
+        .withVenue(venue)
+        .withDeferredUntil(DEFERRED_UNTIL)
+        .withDeferredDonorId(DEFERRED_DONOR_ID)
+        .build();
+    
+    mockFormFields();
+    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
+    when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "deferral");
+    deferralBackingFormValidator.validate(deferralBackingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
+    Assert.assertNotNull("Error on deferredDonor", errors.getFieldError("deferralDate"));
   }
 
 }

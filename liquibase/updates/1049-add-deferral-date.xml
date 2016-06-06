@@ -19,4 +19,59 @@
 	</changeSet>
 	
 
+ <changeSet id="20160606-1107" author="bausmeier">
+  <delete tableName="FormField">
+   <where>form = "DonorDeferral" AND field IN ("deferredOn", "deferredBy")</where>
+  </delete>
+  <update tableName="FormField">
+    <column name="maxLength" type="int(11)" value="0" />
+    <where>form = "DonorDeferral"</where>
+  </update>
+  <insert tableName="FormField">
+   <column name="form" value="DonorDeferral"></column>
+   <column name="field" value="deferralDate"></column>
+   <column name="defaultDisplayName" value="Deferral date"></column>
+   <column name="defaultValue" value=""></column>
+   <column name="maxLength" value="0"></column>
+   <column name="hidden" value="0"></column>
+   <column name="isHidable" value="0"></column>
+   <column name="isRequired" value="1"></column>
+   <column name="canBeOptional" value="0"></column>
+   <column name="autoGenerate" value="0"></column>
+   <column name="isAutoGeneratable" value="0"></column>
+   <column name="useCurrentTime" value="0"></column>
+   <column name="isTimeField" value="0"></column>
+  </insert>
+  <insert tableName="FormField">
+   <column name="form" value="DonorDeferral"></column>
+   <column name="field" value="venue"></column>
+   <column name="defaultDisplayName" value="Deferral venue"></column>
+   <column name="defaultValue" value=""></column>
+   <column name="maxLength" value="0"></column>
+   <column name="hidden" value="0"></column>
+   <column name="isHidable" value="0"></column>
+   <column name="isRequired" value="1"></column>
+   <column name="canBeOptional" value="0"></column>
+   <column name="autoGenerate" value="0"></column>
+   <column name="isAutoGeneratable" value="0"></column>
+   <column name="useCurrentTime" value="0"></column>
+   <column name="isTimeField" value="0"></column>
+  </insert>
+  <insert tableName="FormField">
+   <column name="form" value="DonorDeferral"></column>
+   <column name="field" value="deferredDonor"></column>
+   <column name="defaultDisplayName" value="Deferred donor"></column>
+   <column name="defaultValue" value=""></column>
+   <column name="maxLength" value="0"></column>
+   <column name="hidden" value="0"></column>
+   <column name="isHidable" value="0"></column>
+   <column name="isRequired" value="1"></column>
+   <column name="canBeOptional" value="0"></column>
+   <column name="autoGenerate" value="0"></column>
+   <column name="isAutoGeneratable" value="0"></column>
+   <column name="useCurrentTime" value="0"></column>
+   <column name="isTimeField" value="0"></column>
+  </insert>
+ </changeSet>
+
 </databaseChangeLog>

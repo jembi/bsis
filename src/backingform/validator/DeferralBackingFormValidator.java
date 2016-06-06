@@ -18,34 +18,25 @@ public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingF
 
   @Override
   public void validateForm(DeferralBackingForm form, Errors errors) {
-    
-    if (form.getDeferralReason() == null) {
-      errors.rejectValue("deferralReason", "deferral.deferralReason.required", "Deferral reason is required");
+
+    commonFieldChecks(form, errors);
+
+    if (form.getVenue() != null && !locationRepository.verifyLocationExists(form.getVenue().getId())) {
+      errors.rejectValue("venue", "deferral.venue.required", "Venue does not exist");
     }
-    
-    if (form.getVenue() == null) {
-      errors.rejectValue("venue", "deferral.venue.required", "Venue is required");
-    } else {
-      if (!locationRepository.verifyLocationExists(form.getVenue().getId())) {
-        errors.rejectValue("venue", "deferral.venue.required", "Venue does not exist");
-      }
-    }
-    
-    if (form.getDeferredUntil() == null) {
-      errors.rejectValue("deferredUntil", "deferral.deferredUntil.required", "Deferred until is required");
-    }
-    
-    if (form.getDeferredDonor() == null) {
-      errors.rejectValue("deferredDonor", "deferral.deferredDonor.required", "Deferred donor is required");
-    } else {
-      if (!donorRepository.verifyDonorExists(form.getDeferredDonor())) {
-        errors.rejectValue("deferredDonor", "deferral.deferredDonor.required", "Deferred donor does not exist");
-      }
+  
+    if (form.getDeferredDonor() != null && !donorRepository.verifyDonorExists(form.getDeferredDonor())) {
+      errors.rejectValue("deferredDonor", "deferral.deferredDonor.required", "Deferred donor does not exist");
     }
   }
 
   @Override
   public String getFormName() {
-    return "deferral";
+    return "DonorDeferral";
+  }
+
+  @Override
+  protected boolean formHasBaseEntity() {
+    return false;
   }
 }
