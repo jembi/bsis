@@ -1,6 +1,5 @@
 package controller;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,7 +85,6 @@ public class DeferralController {
 
     DonorDeferral deferral = deferralViewModelFactory.createEntity(deferralBackingForm);
     deferral.setIsVoided(false);
-    deferral.setDeferralDate(new Date());
     savedDeferral = donorRepository.deferDonor(deferral);
     map.put("hasErrors", false);
 
