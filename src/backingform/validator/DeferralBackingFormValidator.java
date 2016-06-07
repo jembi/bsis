@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import backingform.DeferralBackingForm;
+import repository.DeferralReasonRepository;
 import repository.DonorRepository;
 import repository.LocationRepository;
 
@@ -15,6 +16,8 @@ public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingF
   private LocationRepository locationRepository;
   @Autowired
   private DonorRepository donorRepository;
+  @Autowired
+  private DeferralReasonRepository deferralReasonRepository;
 
   @Override
   public void validateForm(DeferralBackingForm form, Errors errors) {
@@ -27,6 +30,10 @@ public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingF
   
     if (form.getDeferredDonor() != null && !donorRepository.verifyDonorExists(form.getDeferredDonor().getId())) {
       errors.rejectValue("deferredDonor", "deferral.deferredDonor.required", "Deferred donor does not exist");
+    }
+    
+    if (form.getDeferralReason() != null && !deferralReasonRepository.verifyDeferralReasonExists(form.getDeferralReason().getId())) {
+      errors.rejectValue("deferralReason", "deferral.deferralReason.required", "Deferral reason does not exist");
     }
   }
 

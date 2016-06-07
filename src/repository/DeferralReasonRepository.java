@@ -93,4 +93,13 @@ public class DeferralReasonRepository {
         .setParameter("deleted", false)
         .getSingleResult();
   }
+  
+  public boolean verifyDeferralReasonExists(long id) {
+    long count = em.createNamedQuery(DeferralReasonNamedQueryConstants.NAME_COUNT_DEFERRAL_REASONS_FOR_ID, Number.class)
+        .setParameter("id", id)
+        .setParameter("deleted", false)
+        .getSingleResult()
+        .longValue();
+    return count > 0;
+  }
 }
