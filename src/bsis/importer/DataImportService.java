@@ -10,26 +10,6 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import model.address.AddressType;
-import model.address.ContactMethodType;
-import model.adverseevent.AdverseEventType;
-import model.bloodtesting.BloodTest;
-import model.bloodtesting.rules.BloodTestingRule;
-import model.bloodtesting.rules.DonationField;
-import model.donation.Donation;
-import model.donation.HaemoglobinLevel;
-import model.donationbatch.DonationBatch;
-import model.donationtype.DonationType;
-import model.donor.Donor;
-import model.donordeferral.DeferralReason;
-import model.idtype.IdType;
-import model.location.Location;
-import model.packtype.PackType;
-import model.preferredlanguage.PreferredLanguage;
-import model.testbatch.TestBatch;
-import model.testbatch.TestBatchStatus;
-import model.util.Gender;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -43,23 +23,10 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
-import repository.AdverseEventTypeRepository;
-import repository.ContactMethodTypeRepository;
-import repository.DeferralReasonRepository;
-import repository.DonationBatchRepository;
-import repository.DonationRepository;
-import repository.DonationTypeRepository;
-import repository.DonorRepository;
-import repository.LocationRepository;
-import repository.PackTypeRepository;
-import repository.SequenceNumberRepository;
-import repository.TestBatchRepository;
-import repository.bloodtesting.BloodTestingRepository;
-import repository.bloodtesting.BloodTypingStatus;
-import service.DonationCRUDService;
 import backingform.AdverseEventBackingForm;
 import backingform.AdverseEventTypeBackingForm;
 import backingform.DeferralBackingForm;
+import backingform.DeferralReasonBackingForm;
 import backingform.DonationBackingForm;
 import backingform.DonorBackingForm;
 import backingform.LocationBackingForm;
@@ -68,6 +35,41 @@ import backingform.validator.DeferralBackingFormValidator;
 import backingform.validator.DonationBackingFormValidator;
 import backingform.validator.DonorBackingFormValidator;
 import backingform.validator.LocationBackingFormValidator;
+import model.address.AddressType;
+import model.address.ContactMethodType;
+import model.adverseevent.AdverseEventType;
+import model.bloodtesting.BloodTest;
+import model.bloodtesting.rules.BloodTestingRule;
+import model.bloodtesting.rules.DonationField;
+import model.donation.Donation;
+import model.donation.HaemoglobinLevel;
+import model.donationbatch.DonationBatch;
+import model.donationtype.DonationType;
+import model.donor.Donor;
+import model.donordeferral.DeferralReason;
+import model.donordeferral.DonorDeferral;
+import model.idtype.IdType;
+import model.location.Location;
+import model.packtype.PackType;
+import model.preferredlanguage.PreferredLanguage;
+import model.testbatch.TestBatch;
+import model.testbatch.TestBatchStatus;
+import model.util.Gender;
+import repository.AdverseEventTypeRepository;
+import repository.ContactMethodTypeRepository;
+import repository.DeferralReasonRepository;
+import repository.DonationBatchRepository;
+import repository.DonationRepository;
+import repository.DonationTypeRepository;
+import repository.DonorDeferralRepository;
+import repository.DonorRepository;
+import repository.LocationRepository;
+import repository.PackTypeRepository;
+import repository.SequenceNumberRepository;
+import repository.TestBatchRepository;
+import repository.bloodtesting.BloodTestingRepository;
+import repository.bloodtesting.BloodTypingStatus;
+import service.DonationCRUDService;
 
 @Transactional
 @Service
@@ -108,6 +110,8 @@ public class DataImportService {
   private TestBatchRepository testBatchRepository;
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
+  @Autowired
+  private DonorDeferralRepository donorDeferralRepository;
   @PersistenceContext
   private EntityManager entityManager;
 
@@ -834,11 +838,13 @@ public class DataImportService {
             break;
 
           case "venue":
-            deferralBackingForm.setVenue(locationCache.get(cell.getStringCellValue()));
+            deferralBackingForm.setVenue(new LocationBackingForm(locationCache.get(cell.getStringCellValue())));
             break;
 
           case "deferralReason":
-            deferralBackingForm.setDeferralReason(deferralReasonCache.get(cell.getStringCellValue()));
+            DeferralReasonBackingForm deferralReasonBackingForm = new DeferralReasonBackingForm();
+            deferralReasonBackingForm.setDeferralReason(deferralReasonCache.get(cell.getStringCellValue()));
+            deferralBackingForm.setDeferralReason(deferralReasonBackingForm);
             break;
 
           case "deferralReasonText":
@@ -847,7 +853,7 @@ public class DataImportService {
 
           case "createdDate":
             try {
-              deferralBackingForm.setCreatedDate(cell.getDateCellValue());
+              deferralBackingForm.setDeferralDate(cell.getDateCellValue());
             } catch (IllegalStateException e) {
               errors.rejectValue("donorDeferral.createdDate", "createdDate.invalid", "Invalid createdDate");
             }
@@ -870,7 +876,7 @@ public class DataImportService {
       displayProgressMessage(action + " " + deferralCount + " out of " + sheet.getLastRowNum() + " deferral(s)");
 
       if (donor != null) {
-        deferralBackingForm.setDeferredDonor(donor.getId());
+        deferralBackingForm.setDeferredDonor(new DonorBackingForm(donor));
       } else {
         errors.rejectValue("donorDeferral.deferredDonor", "deferredDonor.invalid", "Invalid deferredDonor ");
       }
@@ -883,7 +889,14 @@ public class DataImportService {
       }
 
       // Save deferral
-      donorRepository.deferDonor(deferralBackingForm.getDonorDeferral());
+      DonorDeferral donorDeferral = new DonorDeferral();
+      donorDeferral.setDeferralDate(deferralBackingForm.getDeferralDate());
+      donorDeferral.setDeferralReason(deferralBackingForm.getDeferralReason().getDeferralReason());
+      donorDeferral.setDeferredDonor(deferralBackingForm.getDeferredDonor().getDonor());
+      donorDeferral.setVenue(deferralBackingForm.getVenue().getLocation());
+      donorDeferral.setDeferredUntil(deferralBackingForm.getDeferredUntil());
+      donorDeferral.setDeferralReasonText(deferralBackingForm.getDeferralReasonText());
+      donorDeferralRepository.save(donorDeferral);
     }
 
     System.out.println(); // clear logging

@@ -1,12 +1,13 @@
 
 package backingform;
 
+import javax.validation.Valid;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import model.donordeferral.DeferralReason;
+import model.donordeferral.DeferralReasonType;
 import model.donordeferral.DurationType;
-
-import javax.validation.Valid;
 
 public class DeferralReasonBackingForm {
 
@@ -63,6 +64,11 @@ public class DeferralReasonBackingForm {
       return;
     }
     deferralReason.setDurationType(durationType);
+  }
+
+  @JsonIgnore
+  public void setType(DeferralReasonType type) {
+    // ignore
   }
 
 }

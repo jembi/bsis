@@ -13,7 +13,6 @@ import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -24,6 +23,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import dto.DuplicateDonorDTO;
+import dto.MobileClinicDonorDTO;
 import model.address.AddressType;
 import model.donor.Donor;
 import model.donor.DonorStatus;
@@ -36,7 +36,6 @@ import model.util.Gender;
 import service.GeneralConfigAccessorService;
 import utils.DonorUtils;
 import viewmodel.DonorSummaryViewModel;
-import dto.MobileClinicDonorDTO;
 
 @Repository
 @Transactional
@@ -210,12 +209,6 @@ public class DonorRepository {
     TypedQuery<DeferralReason> query = em.createQuery(queryString, DeferralReason.class);
     query.setParameter("isDeleted", false);
     return query.getResultList();
-  }
-
-  public DonorDeferral deferDonor(DonorDeferral deferral) throws PersistenceException {
-    em.persist(deferral);
-    em.flush();
-    return deferral;
   }
 
   public List<DonorDeferral> getDonorDeferrals(Long donorId) throws NoResultException {

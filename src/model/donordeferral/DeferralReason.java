@@ -15,7 +15,9 @@ import repository.DeferralReasonNamedQueryConstants;
 
 @NamedQueries({
     @NamedQuery(name = DeferralReasonNamedQueryConstants.NAME_FIND_DEFERRAL_REASON_BY_TYPE,
-        query = DeferralReasonNamedQueryConstants.QUERY_FIND_DEFERRAL_REASON_BY_TYPE)
+        query = DeferralReasonNamedQueryConstants.QUERY_FIND_DEFERRAL_REASON_BY_TYPE),
+    @NamedQuery(name = DeferralReasonNamedQueryConstants.NAME_COUNT_DEFERRAL_REASONS_FOR_ID,
+        query = DeferralReasonNamedQueryConstants.QUERY_COUNT_DEFERRAL_REASONS_FOR_ID)
 })
 @Entity
 @Audited

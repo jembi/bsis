@@ -3,143 +3,83 @@ package backingform;
 import java.util.Date;
 import java.util.Map;
 
-import javax.validation.Valid;
-
-import model.donor.Donor;
-import model.donordeferral.DeferralReason;
-import model.donordeferral.DonorDeferral;
-import model.location.Location;
-import model.user.User;
-import utils.DateTimeSerialiser;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import utils.DateTimeSerialiser;
+
 public class DeferralBackingForm {
 
-  @Valid
-  @JsonIgnore
-  private DonorDeferral deferral;
+  private Long id;
 
-  public DeferralBackingForm() {
-    deferral = new DonorDeferral();
+  private DonorBackingForm deferredDonor;
+
+  private DeferralReasonBackingForm deferralReason;
+
+  private String deferralReasonText;
+
+  private Date deferredUntil;
+
+  private LocationBackingForm venue;
+
+  private Date deferralDate;
+
+  public DonorBackingForm getDeferredDonor() {
+    return deferredDonor;
   }
 
-  public DeferralBackingForm(DonorDeferral deferral) {
-    this.deferral = deferral;
+  public void setDeferredDonor(DonorBackingForm deferredDonor) {
+    this.deferredDonor = deferredDonor;
   }
 
-  public DonorDeferral getDonorDeferral() {
-    return deferral;
+  public DeferralReasonBackingForm getDeferralReason() {
+    return deferralReason;
   }
 
-  public boolean equals(Object obj) {
-    return deferral.equals(obj);
-  }
-
-  public Long getId() {
-    return deferral.getId();
-  }
-
-  public void setId(Long id) {
-    deferral.setId(id);
-  }
-
-  @JsonIgnore
-  public Date getLastUpdated() {
-    return deferral.getLastUpdated();
-  }
-
-  @JsonIgnore
-  public Date getCreatedDate() {
-    return deferral.getCreatedDate();
-  }
-
-  @JsonIgnore
-  public User getCreatedBy() {
-    return deferral.getCreatedBy();
-  }
-
-  @JsonIgnore
-  public User getLastUpdatedBy() {
-    return deferral.getLastUpdatedBy();
-  }
-
-  @JsonIgnore
-  public User getVoidedBy() {
-    return deferral.getVoidedBy();
-  }
-
-  @JsonIgnore
-  public Date getVoidedDate() {
-    return deferral.getVoidedDate();
-  }
-
-  public Long getDeferredDonor() {
-    Donor deferredDonor = deferral.getDeferredDonor();
-    if (deferredDonor == null || deferredDonor.getId() == null) {
-      return null;
-    }
-
-    return deferredDonor.getId();
-  }
-
-  @JsonSerialize(using = DateTimeSerialiser.class)
-  public void setCreatedDate(Date createdDate) {
-    deferral.setCreatedDate(createdDate);
-  }
-
-  public void setDeferredDonor(Long deferredDonorId) {
-    if (deferredDonorId == null) {
-      deferral.setDeferredDonor(null);
-    } else {
-      Donor d = new Donor();
-      d.setId(deferredDonorId);
-      deferral.setDeferredDonor(d);
-    }
-  }
-
-  // FIXME: getter does not match setter
-  public String getDeferralReason() {
-    DeferralReason deferralReason = deferral.getDeferralReason();
-    if (deferralReason == null || deferralReason.getId() == null) {
-      return null;
-    }
-
-    return deferralReason.getId().toString();
-  }
-
-  // FIXME: getter does not match setter. 
-  public void setDeferralReason(DeferralReason deferralReason) {
-    if (deferralReason == null || deferralReason.getId() == null) {
-      deferral.setDeferralReason(null);
-    } else {
-      DeferralReason dr = new DeferralReason();
-      try {
-        dr.setId(deferralReason.getId());
-        deferral.setDeferralReason(dr);
-      } catch (NumberFormatException ex) {
-        ex.printStackTrace();
-        deferral.setDeferralReason(null);
-      }
-    }
+  public void setDeferralReason(DeferralReasonBackingForm deferralReason) {
+    this.deferralReason = deferralReason;
   }
 
   public String getDeferralReasonText() {
-    return deferral.getDeferralReasonText();
+    return deferralReasonText;
   }
 
   public void setDeferralReasonText(String deferralReasonText) {
-    deferral.setDeferralReasonText(deferralReasonText);
+    this.deferralReasonText = deferralReasonText;
   }
 
   public Date getDeferredUntil() {
-     return deferral.getDeferredUntil();
+    return deferredUntil;
   }
 
   @JsonSerialize(using = DateTimeSerialiser.class)
   public void setDeferredUntil(Date deferredUntil) {
-    deferral.setDeferredUntil(deferredUntil);
+    this.deferredUntil = deferredUntil;
+  }
+
+  public LocationBackingForm getVenue() {
+    return venue;
+  }
+
+  public void setVenue(LocationBackingForm venue) {
+    this.venue = venue;
+  }
+
+  public Date getDeferralDate() {
+    return deferralDate;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public void setDeferralDate(Date deferralDate) {
+    this.deferralDate = deferralDate;
   }
 
   @JsonIgnore
@@ -147,27 +87,14 @@ public class DeferralBackingForm {
     // Ignore
   }
 
+  @JsonIgnore
+  public void setCreatedBy(String createdBy) {
+    // Ignore
+  }
+
+  @JsonIgnore
   public void setDonorNumber(String donorNumber) {
-    if (donorNumber == null) {
-      deferral.setDeferredDonor(null);
-    } else {
-      Donor d = new Donor();
-      d.setDonorNumber(donorNumber);
-    }
-  }
-
-  public void setVenue(Location venue) {
-    if (venue == null || venue.getId() == null) {
-      deferral.setVenue(null);
-    } else {
-      Location location = new Location();
-      location.setId(venue.getId());
-      deferral.setVenue(location);       
-    }
-  }
-
-  public Location getVenue() {
-    return deferral.getVenue();
+    // Ignore
   }
 
 }

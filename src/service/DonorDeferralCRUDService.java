@@ -6,13 +6,6 @@ import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 
-import model.donor.Donor;
-import model.donordeferral.DeferralReason;
-import model.donordeferral.DeferralReasonType;
-import model.donordeferral.DonorDeferral;
-import model.donordeferral.DurationType;
-import model.location.Location;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -20,6 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import model.donor.Donor;
+import model.donordeferral.DeferralReason;
+import model.donordeferral.DeferralReasonType;
+import model.donordeferral.DonorDeferral;
+import model.donordeferral.DurationType;
+import model.location.Location;
 import repository.DeferralReasonRepository;
 import repository.DonorDeferralRepository;
 import utils.SecurityUtils;
@@ -39,7 +38,12 @@ public class DonorDeferralCRUDService {
   @Autowired
   private DateGeneratorService dateGeneratorService;
   @Autowired
-  DeferralConstraintChecker deferralConstraintChecker;
+  private DeferralConstraintChecker deferralConstraintChecker;
+  
+  public DonorDeferral createDeferral(DonorDeferral donorDeferral) {
+    donorDeferralRepository.save(donorDeferral);
+    return donorDeferral;
+  }
 
   public DonorDeferral createDeferralForDonorWithVenueAndDeferralReasonType(Donor donor, Location venue, DeferralReasonType deferralReasonType)
       throws NoResultException, NonUniqueResultException {
@@ -68,10 +72,12 @@ public class DonorDeferralCRUDService {
     donorDeferral.setDeferralReason(deferralReason);
     donorDeferral.setIsVoided(Boolean.FALSE);
 
+    Date now = dateGeneratorService.generateDate();
+    donorDeferral.setDeferralDate(now);
+
     if (permanentDeferral) {
       donorDeferral.setDeferredUntil(PERMANENT_DEFERRAL_DATE);
     } else {
-      Date now = dateGeneratorService.generateDate();
       Date deferredUntilDate = new DateTime(now).plusDays(deferralReason.getDefaultDuration()).toDate();
       donorDeferral.setDeferredUntil(deferredUntilDate);
     }

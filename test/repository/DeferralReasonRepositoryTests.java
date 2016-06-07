@@ -66,5 +66,30 @@ public class DeferralReasonRepositoryTests extends ContextDependentTestSuite {
 
     assertThat(returnedDeferralReason, is(expectedDeferralReason));
   }
+  
+  @Test
+  public void testVerifyDeferralReasonExistsWithNoDeferralReason_shouldReturnFalse() {
+    boolean result = deferralReasonRepository.verifyDeferralReasonExists(37L);
+    
+    assertThat(result, is(false));
+  }
+  
+  @Test
+  public void testVerifyDeferralReasonExistsWithExistingDeferralReason_shouldReturnTrue() {
+    DeferralReason existingDeferralReason = aDeferralReason().thatIsNotDeleted().buildAndPersist(entityManager);
+    
+    boolean result = deferralReasonRepository.verifyDeferralReasonExists(existingDeferralReason.getId());
+    
+    assertThat(result, is(true));
+  }
+  
+  @Test
+  public void testVerifyDeferralReasonExistsWithDeletedDeferralReason_shouldReturnFalse() {
+    DeferralReason deletedDeferralReason = aDeferralReason().thatIsDeleted().buildAndPersist(entityManager);
+    
+    boolean result = deferralReasonRepository.verifyDeferralReasonExists(deletedDeferralReason.getId());
+    
+    assertThat(result, is(false));
+  }
 
 }
