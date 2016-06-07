@@ -20,6 +20,7 @@ import dto.StockLevelDTO;
 import helpers.builders.ComponentTypeBuilder;
 import helpers.builders.LocationBuilder;
 import model.component.Component;
+import model.component.ComponentStatus;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.inventory.InventoryStatus;
@@ -41,12 +42,11 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     Location location1 = LocationBuilder.aProcessingSite().withName("PSite1").buildAndPersist(entityManager);
     Location location2 = LocationBuilder.aProcessingSite().withName("PSite2").buildAndPersist(entityManager);
 
-    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withComponentType(type1)
-        .withDonation(donation).withLocation(location1).buildAndPersist(entityManager);
+    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withStatus(ComponentStatus.AVAILABLE)
+        .withComponentType(type1).withDonation(donation).withLocation(location1).buildAndPersist(entityManager);
 
-    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withComponentType(type2)
-        .withDonation(donation).withLocation(location2).buildAndPersist(entityManager);
-    
+    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withStatus(ComponentStatus.EXPIRED)
+        .withComponentType(type2).withDonation(donation).withLocation(location2).buildAndPersist(entityManager);
     
     List<StockLevelDTO> levels = inventoryRepository.findStockLevelsForLocation(location1.getId(), InventoryStatus.IN_STOCK);
     
@@ -67,17 +67,17 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     ComponentType type3 = ComponentTypeBuilder.aComponentType().withComponentTypeName("type3").buildAndPersist(entityManager);
     Location location = LocationBuilder.aProcessingSite().withName("PSite").buildAndPersist(entityManager);
 
-    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withComponentType(type1)
-        .withDonation(donation).withLocation(location).buildAndPersist(entityManager);
+    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withStatus(ComponentStatus.AVAILABLE)
+        .withComponentType(type1).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
 
-    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withComponentType(type2)
-        .withDonation(donation).withLocation(location).buildAndPersist(entityManager);
+    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withStatus(ComponentStatus.AVAILABLE)
+        .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
-    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withComponentType(type2)
-        .withDonation(donation).withLocation(location).buildAndPersist(entityManager);
+    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withStatus(ComponentStatus.AVAILABLE)
+        .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
 
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withComponentType(type3)
-        .withDonation(donation).withLocation(location).buildAndPersist(entityManager);
+    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.QUARANTINED)
+        .withComponentType(type3).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
     
     List<StockLevelDTO> levels = inventoryRepository.findStockLevels(InventoryStatus.IN_STOCK);
@@ -108,17 +108,17 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     ComponentType type3 = ComponentTypeBuilder.aComponentType().withComponentTypeName("type3").buildAndPersist(entityManager);
     Location location = LocationBuilder.aProcessingSite().withName("PSite").buildAndPersist(entityManager);
 
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withComponentType(type1)
-        .withDonation(donation).withLocation(location).buildAndPersist(entityManager);
+    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.QUARANTINED)
+        .withComponentType(type1).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
 
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withComponentType(type2)
-        .withDonation(donation).withLocation(location).buildAndPersist(entityManager);
+    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.AVAILABLE)
+        .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withComponentType(type2)
-        .withDonation(donation).withLocation(location).buildAndPersist(entityManager);
+    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.AVAILABLE)
+        .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
 
-    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withComponentType(type3)
-        .withDonation(donation).withLocation(location).buildAndPersist(entityManager);
+    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withStatus(ComponentStatus.QUARANTINED)
+        .withComponentType(type3).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
     
     List<StockLevelDTO> levels = inventoryRepository.findStockLevels(InventoryStatus.NOT_LABELLED);
@@ -167,6 +167,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
         .withComponentCode(componentCode)
         .withDonation(donationWithExpectedDonationIdentificationNumber)
         .withInventoryStatus(InventoryStatus.NOT_LABELLED)
+        .withStatus(ComponentStatus.QUARANTINED)
         .buildAndPersist(entityManager);
     
     // Excluded by inventoryStatus = REMOVED
@@ -174,6 +175,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
         .withComponentCode(componentCode)
         .withDonation(donationWithExpectedDonationIdentificationNumber)
         .withInventoryStatus(InventoryStatus.REMOVED)
+        .withStatus(ComponentStatus.ISSUED)
         .buildAndPersist(entityManager);
     
     // Expected
@@ -181,6 +183,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
         .withComponentCode(componentCode)
         .withDonation(donationWithExpectedDonationIdentificationNumber)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withStatus(ComponentStatus.AVAILABLE)
         .buildAndPersist(entityManager);
     
     // Test
@@ -199,9 +202,9 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
 
   @Test
   public void testFindComponentsInStockNoParams_shouldReturnAllComponentsInStock() {
-    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).buildAndPersist(entityManager);
-    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).buildAndPersist(entityManager);
-    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).buildAndPersist(entityManager);
+    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withStatus(ComponentStatus.AVAILABLE).buildAndPersist(entityManager);
+    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withStatus(ComponentStatus.AVAILABLE).buildAndPersist(entityManager);
+    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withStatus(ComponentStatus.AVAILABLE).buildAndPersist(entityManager);
 
     // Test
     List<Component> components = inventoryRepository.findComponentsInStock(null, null, null, null);
@@ -219,6 +222,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     Date expiresOn = new Date();
     Component expected = aComponent()
         .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withStatus(ComponentStatus.AVAILABLE)
         .withLocation(loc)
         .withComponentType(componentType)
         .withDonation(donation)
@@ -227,6 +231,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     
     // Excluded: not in stock
     aComponent()
+    .withStatus(ComponentStatus.PROCESSED)
     .withLocation(loc)  
     .withComponentType(componentType)
     .withDonation(donation)
@@ -236,6 +241,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     // Excluded: different location
     aComponent()
     .withInventoryStatus(InventoryStatus.IN_STOCK)
+    .withStatus(ComponentStatus.AVAILABLE)
     .withComponentType(componentType)
     .withDonation(donation)
     .withExpiresOn(expiresOn)
@@ -244,6 +250,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     // Excluded: different componentType
     aComponent()
     .withInventoryStatus(InventoryStatus.IN_STOCK)
+    .withStatus(ComponentStatus.AVAILABLE)
     .withLocation(loc)
     .withDonation(donation)
     .withExpiresOn(expiresOn)
@@ -252,6 +259,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     // Excluded: different bloodGroup
     aComponent()
     .withInventoryStatus(InventoryStatus.IN_STOCK)
+    .withStatus(ComponentStatus.AVAILABLE)
     .withLocation(loc)
     .withComponentType(componentType)
     .withExpiresOn(expiresOn)
@@ -260,6 +268,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     // Excluded: different expiresOn
     aComponent()
     .withInventoryStatus(InventoryStatus.IN_STOCK)
+    .withStatus(ComponentStatus.AVAILABLE)
     .withLocation(loc)
     .withComponentType(componentType)
     .withDonation(donation)
@@ -284,14 +293,17 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     Donation donation3 = aDonation().withBloodAbo("B").withBloodRh("+").buildAndPersist(entityManager);
     Component component1 = aComponent()
         .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withStatus(ComponentStatus.AVAILABLE)
         .withDonation(donation1)
         .buildAndPersist(entityManager);
     Component component2 = aComponent()
         .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withStatus(ComponentStatus.AVAILABLE)
         .withDonation(donation2)
         .buildAndPersist(entityManager);
     aComponent()
         .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withStatus(ComponentStatus.AVAILABLE)
         .withDonation(donation3)
         .buildAndPersist(entityManager);
     
