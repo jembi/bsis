@@ -183,6 +183,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     // set up test data (Deferral)
     DeferralReason deferralReason = new DeferralReason();
     deferralReason.setReason("Other reasons");
+    deferralReason.setIsDeleted(false);
     entityManager.persist(deferralReason);
 
     // set up test data (Outcomes)
