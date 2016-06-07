@@ -87,4 +87,14 @@ public class DeferralBackingForm {
     // Ignore
   }
 
+  @JsonIgnore
+  public void setCreatedBy(String createdBy) {
+    // Ignore
+  }
+
+  @JsonIgnore
+  public void setDonorNumber(String donorNumber) {
+    // Ignore
+  }
+
 }
