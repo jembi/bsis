@@ -29,6 +29,7 @@ import backingform.DonorBackingForm;
 import backingform.DuplicateDonorsBackingForm;
 import backingform.validator.DonorBackingFormValidator;
 import constant.GeneralConfigConstants;
+import controllerservice.DonorControllerService;
 import dto.DuplicateDonorDTO;
 import factory.DonationViewModelFactory;
 import factory.DonorDeferralViewModelFactory;
@@ -114,6 +115,8 @@ public class DonorController {
 
   @Autowired
   private DonorBackingFormValidator donorBackingFormValidator;
+  @Autowired
+  private DonorControllerService donorControllerService;
 
   public DonorController() {
   }
@@ -202,8 +205,7 @@ public class DonorController {
                                                               @PathVariable Long id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    Donor donor = donorRepository.findDonorById(id);
-    map.put("allDonations", donationViewModelFactory.createDonationViewModelsWithPermissions(donor.getDonations()));
+    map.put("allDonations", donorControllerService.findDonationsForDonor(id));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 

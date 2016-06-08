@@ -15,6 +15,8 @@ public class PostDonationCounsellingViewModel {
 
   private Map<String, Boolean> permissions;
 
+  private DonationViewModel donation;
+
   public PostDonationCounsellingViewModel(PostDonationCounselling postDonationCounselling) {
     this.postDonationCounselling = postDonationCounselling;
   }
@@ -43,8 +45,12 @@ public class PostDonationCounsellingViewModel {
     return postDonationCounselling.getDonation().getNotes();
   }
 
+  public void setDonation(DonationViewModel donation) {
+    this.donation = donation;
+  }
+
   public DonationViewModel getDonation() {
-    return new DonationViewModel(postDonationCounselling.getDonation());
+    return donation;
   }
 
   public DonorViewModel getDonor() {

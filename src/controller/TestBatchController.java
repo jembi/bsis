@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import backingform.TestBatchBackingForm;
 import backingform.validator.TestBatchBackingFormValidator;
+import controllerservice.TestBatchControllerService;
 import factory.DonationBatchViewModelFactory;
 import factory.DonationSummaryViewModelFactory;
 import factory.TestBatchViewModelFactory;
@@ -69,6 +70,9 @@ public class TestBatchController {
   @Autowired
   private DonationSummaryViewModelFactory donationSummaryViewModelFactory;
 
+  @Autowired
+  private TestBatchControllerService testBatchControllerService;
+
   @InitBinder
   public void initBinder(WebDataBinder binder) {
     binder.addValidators(testBatchBackingFormValidator);
@@ -111,11 +115,8 @@ public class TestBatchController {
   @RequestMapping(value = "{id}",  method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_TEST_BATCH+"')")
   public ResponseEntity<TestBatchFullViewModel> updateTestBatch(@PathVariable Long id,
-      @Valid @RequestBody TestBatchBackingForm form){
-
-    TestBatch testBatch = testBatchCRUDService.updateTestBatch(id, form.getTestBatch().getStatus(), form.getTestBatch()
-        .getCreatedDate(), form.getDonationBatchIds());
-    return new ResponseEntity<>(testBatchViewModelFactory.createTestBatchFullViewModel(testBatch, true), HttpStatus.OK);
+      @Valid @RequestBody TestBatchBackingForm form) {
+    return new ResponseEntity<>(testBatchControllerService.updateTestBatch(form), HttpStatus.OK);
   }
 
   @RequestMapping(value = "/search", method = RequestMethod.GET)

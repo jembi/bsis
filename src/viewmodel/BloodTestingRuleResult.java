@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Set;
 
 import model.bloodtesting.TTIStatus;
-import model.donation.Donation;
 import repository.bloodtesting.BloodTypingMatchStatus;
 import repository.bloodtesting.BloodTypingStatus;
 
@@ -57,8 +56,8 @@ public class BloodTestingRuleResult {
     return donation;
   }
 
-  public void setDonation(Donation donation) {
-    this.donation = new DonationViewModel(donation);
+  public void setDonation(DonationViewModel donation) {
+    this.donation = donation;
   }
 
   public Set<String> getAllBloodAboChanges() {

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import backingform.TestResultsBackingForms;
 import backingform.validator.TestResultsBackingFormsValidator;
+import factory.DonationViewModelFactory;
 import factory.TestBatchViewModelFactory;
 import model.bloodtesting.BloodTestResult;
 import model.bloodtesting.BloodTestType;
@@ -42,7 +43,6 @@ import utils.PermissionConstants;
 import viewmodel.BloodTestResultViewModel;
 import viewmodel.BloodTestingRuleResult;
 import viewmodel.DonationTestOutcomesReportViewModel;
-import viewmodel.DonationViewModel;
 
 @Transactional
 @RestController
@@ -66,7 +66,10 @@ public class TestResultController {
 
   @Autowired
   private TestResultsBackingFormsValidator testResultsBackingFormsValidator;
-  
+
+  @Autowired
+  private DonationViewModelFactory donationViewModelFactory;
+
   @InitBinder
   protected void initDonationFormBinder(WebDataBinder binder) {
     binder.setValidator(testResultsBackingFormsValidator);
@@ -78,7 +81,7 @@ public class TestResultController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Donation c = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
-    map.put("donation", new DonationViewModel(c));
+    map.put("donation", donationViewModelFactory.createDonationViewModelWithoutPermissions(c));
 
     if (c.getPackType().getTestSampleProduced()) {
       BloodTestingRuleResult results = bloodTestingRepository.getAllTestsStatusForDonation(c.getId());

@@ -97,7 +97,7 @@ public class DonationBatchViewModelFactoryTests {
 
     // expected data
     DonationViewModel expectedDonationViewModel = aDonationViewModel()
-        .withDonation(donation)
+        .withId(donationId)
         .build();
 
     // set up mocks
@@ -147,7 +147,7 @@ public class DonationBatchViewModelFactoryTests {
 
     // expected data (no permissions)
     DonationViewModel expectedDonation1ViewModel = aDonationViewModel()
-        .withDonation(donation1)
+        .withId(donation1Id)
         .build();
 
     // set up mocks

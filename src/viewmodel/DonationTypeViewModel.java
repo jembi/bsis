@@ -2,7 +2,7 @@ package viewmodel;
 
 import model.donationtype.DonationType;
 
-public class DonationTypeViewModel {
+public class DonationTypeViewModel extends BaseViewModel {
 
   private DonationType donationType;
 
@@ -10,6 +10,7 @@ public class DonationTypeViewModel {
     this.donationType = donationType;
   }
 
+  @Override
   public Long getId() {
     return donationType.getId();
   }
