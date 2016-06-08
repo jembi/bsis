@@ -108,18 +108,37 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     ComponentType type3 = ComponentTypeBuilder.aComponentType().withComponentTypeName("type3").buildAndPersist(entityManager);
     Location location = LocationBuilder.aProcessingSite().withName("PSite").buildAndPersist(entityManager);
 
+    // components that match
     aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.QUARANTINED)
         .withComponentType(type1).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
 
     aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.AVAILABLE)
-        .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
-
-    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withStatus(ComponentStatus.QUARANTINED)
-        .withComponentType(type3).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
+    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.EXPIRED)
+    .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
+    // components that don't match
+    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.PROCESSED)
+    .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
+    
+    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.SPLIT)
+    .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
+    
+    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.UNSAFE)
+    .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
+    
+    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.DISCARDED)
+    .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
+    
+    aComponent().withInventoryStatus(InventoryStatus.REMOVED).withStatus(ComponentStatus.USED)
+    .withComponentType(type3).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
+    
+    aComponent().withInventoryStatus(InventoryStatus.REMOVED).withStatus(ComponentStatus.ISSUED)
+    .withComponentType(type3).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
+    
+    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withStatus(ComponentStatus.QUARANTINED)
+    .withComponentType(type3).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
     List<StockLevelDTO> levels = inventoryRepository.findStockLevels(InventoryStatus.NOT_LABELLED);
     
@@ -138,6 +157,62 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     Assert.assertEquals("Verify blood group", "A+", levels.get(0).getBloodAbo() + levels.get(0).getBloodRh());
     Assert.assertEquals("Verify blood group", "A+", levels.get(1).getBloodAbo() + levels.get(0).getBloodRh());
 
+  }
+  
+  @Test
+  public void testFindStockForLocationLevels_verifyCorrectLocationNotLabelled() {
+    
+    Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").buildAndPersist(entityManager);
+    ComponentType type1 = ComponentTypeBuilder.aComponentType().withComponentTypeName("type1").buildAndPersist(entityManager);
+    ComponentType type2 = ComponentTypeBuilder.aComponentType().withComponentTypeName("type2").buildAndPersist(entityManager);
+    Location location1 = LocationBuilder.aProcessingSite().withName("PSite1").buildAndPersist(entityManager);
+    Location location2 = LocationBuilder.aProcessingSite().withName("PSite2").buildAndPersist(entityManager);
+    
+    // components that match
+    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.QUARANTINED)
+    .withComponentType(type1).withDonation(donation).withLocation(location1).buildAndPersist(entityManager);
+    
+    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.EXPIRED)
+    .withComponentType(type2).withDonation(donation).withLocation(location1).buildAndPersist(entityManager);
+
+    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.AVAILABLE)
+        .withComponentType(type1).withDonation(donation).withLocation(location1).buildAndPersist(entityManager);
+    
+    // components that don't match
+    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.PROCESSED)
+    .withComponentType(type2).withDonation(donation).withLocation(location1).buildAndPersist(entityManager);
+    
+    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.SPLIT)
+    .withComponentType(type2).withDonation(donation).withLocation(location1).buildAndPersist(entityManager);
+    
+    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.UNSAFE)
+    .withComponentType(type2).withDonation(donation).withLocation(location1).buildAndPersist(entityManager);
+    
+    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.DISCARDED)
+    .withComponentType(type2).withDonation(donation).withLocation(location1).buildAndPersist(entityManager);
+
+    aComponent().withInventoryStatus(InventoryStatus.REMOVED).withStatus(ComponentStatus.USED)
+    .withComponentType(type2).withDonation(donation).withLocation(location1).buildAndPersist(entityManager);
+    
+    aComponent().withInventoryStatus(InventoryStatus.REMOVED).withStatus(ComponentStatus.ISSUED)
+    .withComponentType(type2).withDonation(donation).withLocation(location1).buildAndPersist(entityManager);
+    
+    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withStatus(ComponentStatus.AVAILABLE)
+    .withComponentType(type1).withDonation(donation).withLocation(location1).buildAndPersist(entityManager);
+    
+    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.AVAILABLE)
+    .withComponentType(type2).withDonation(donation).withLocation(location2).buildAndPersist(entityManager);
+    
+    List<StockLevelDTO> levels = inventoryRepository.findStockLevelsForLocation(location1.getId(), InventoryStatus.NOT_LABELLED);
+    
+    // Verify levels returned
+    Assert.assertEquals("Verify levels returned", 2, levels.size());
+
+    // Verify right components were returned
+    Assert.assertEquals("Verify componentType", type1, levels.get(0).getComponentType());
+    Assert.assertEquals("Verify componentType count", 2, levels.get(0).getCount());
+    Assert.assertEquals("Verify componentType", type2, levels.get(1).getComponentType());
+    Assert.assertEquals("Verify componentType count", 1, levels.get(1).getCount());
   }
   
   @Test
