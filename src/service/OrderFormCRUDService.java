@@ -6,19 +6,18 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import backingform.OrderFormBackingForm;
+import factory.OrderFormFactory;
 import model.component.Component;
 import model.order.OrderForm;
 import model.order.OrderFormItem;
 import model.order.OrderStatus;
 import model.order.OrderType;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import repository.OrderFormRepository;
 import viewmodel.OrderFormFullViewModel;
-import backingform.OrderFormBackingForm;
-import factory.OrderFormFactory;
 
 @Service
 @Transactional
@@ -55,13 +54,13 @@ public class OrderFormCRUDService {
   public OrderForm updateOrderForm(OrderForm updatedOrderForm) {
     OrderForm existingOrderForm = orderFormRepository.findById(updatedOrderForm.getId());
     
-    // Check that only orders in CREATED status can be updated
-    if (existingOrderForm.getStatus() != OrderStatus.CREATED) {
-      throw new IllegalStateException("Only orders with CREATED status can be updated.");
+    // Check that OrderForm can be edited
+    if (!orderFormConstraintChecker.canEdit(existingOrderForm)) {
+      throw new IllegalStateException("Cannot edit OrderForm.");
     }
 
     // If the order is being dispatched then transfer or issue each component
-    if (existingOrderForm.getStatus() == OrderStatus.CREATED && updatedOrderForm.getStatus() == OrderStatus.DISPATCHED) {
+    if (updatedOrderForm.getStatus() == OrderStatus.DISPATCHED) {
 
       // Check that OrderForm can be dispatched
       if (!orderFormConstraintChecker.canDispatch(existingOrderForm)) {
