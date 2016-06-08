@@ -21,12 +21,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import model.component.Component;
-import model.inventory.InventoryStatus;
-import model.location.Location;
-import model.order.OrderForm;
-import model.order.OrderFormItem;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -34,15 +28,21 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import repository.ComponentRepository;
-import repository.LocationRepository;
-import viewmodel.OrderFormFullViewModel;
-import viewmodel.OrderFormItemViewModel;
-import viewmodel.OrderFormViewModel;
 import backingform.ComponentBackingForm;
 import backingform.LocationBackingForm;
 import backingform.OrderFormBackingForm;
 import backingform.OrderFormItemBackingForm;
+import model.component.Component;
+import model.inventory.InventoryStatus;
+import model.location.Location;
+import model.order.OrderForm;
+import model.order.OrderFormItem;
+import repository.ComponentRepository;
+import repository.LocationRepository;
+import service.OrderFormConstraintChecker;
+import viewmodel.OrderFormFullViewModel;
+import viewmodel.OrderFormItemViewModel;
+import viewmodel.OrderFormViewModel;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OrderFormFactoryTests {
@@ -64,6 +64,9 @@ public class OrderFormFactoryTests {
 
   @Mock
   private ComponentRepository componentRepository;
+
+  @Mock
+  private OrderFormConstraintChecker orderFormConstraintChecker;
  
   private Location getBaseDispatchedFromLocation() {
     return aDistributionSite().withName("LocFrom").withId(1l).build();
@@ -142,12 +145,17 @@ public class OrderFormFactoryTests {
     OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel()
         .withDispatchedFrom(locationViewModelFactory.createLocationViewModel(dispatchedFrom))
         .withDispatchedTo(locationViewModelFactory.createLocationViewModel(dispatchedTo))
-        .withOrderDate(orderDate).withId(1L).build();
+        .withOrderDate(orderDate).withPermission("canDispatch", true).withPermission("canEdit", true)
+        .withId(1L).build();
 
     OrderForm entity = anOrderForm()
         .withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo)
         .withOrderDate(orderDate).withId(1L).build();
+
+    // Setup mocks
+    when(orderFormConstraintChecker.canDispatch(entity)).thenReturn(true);
+    when(orderFormConstraintChecker.canEdit(entity)).thenReturn(true);
 
     OrderFormFullViewModel convertedViewModel = orderFormFactory.createFullViewModel(entity);
 
@@ -165,6 +173,7 @@ public class OrderFormFactoryTests {
     OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel()
         .withDispatchedFrom(locationViewModelFactory.createLocationViewModel(dispatchedFrom))
         .withDispatchedTo(locationViewModelFactory.createLocationViewModel(dispatchedTo))
+        .withPermission("canDispatch", true).withPermission("canEdit", true)
         .withOrderDate(orderDate).withId(1L)
         .withItem(expectedItem1).withItem(expectedItem2).build();
 
@@ -176,8 +185,11 @@ public class OrderFormFactoryTests {
         .withOrderDate(orderDate)
         .withId(1L).withOrderFormItem(item1).withOrderFormItem(item2).build();
     
+    // Setup mocks
     when(orderFormItemFactory.createViewModel(item1)).thenReturn(expectedItem1);
     when(orderFormItemFactory.createViewModel(item2)).thenReturn(expectedItem2);
+    when(orderFormConstraintChecker.canDispatch(entity)).thenReturn(true);
+    when(orderFormConstraintChecker.canEdit(entity)).thenReturn(true);
 
     OrderFormFullViewModel convertedViewModel = orderFormFactory.createFullViewModel(entity);
 
@@ -225,6 +237,7 @@ public class OrderFormFactoryTests {
     OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel()
         .withDispatchedFrom(locationViewModelFactory.createLocationViewModel(dispatchedFrom))
         .withDispatchedTo(locationViewModelFactory.createLocationViewModel(dispatchedTo))
+        .withPermission("canDispatch", true).withPermission("canEdit", true)
         .withOrderDate(orderDate).withId(1L)
         .withComponent(componentViewModelFactory.createComponentViewModel(component)).build();
 
@@ -233,6 +246,10 @@ public class OrderFormFactoryTests {
         .withDispatchedTo(dispatchedTo)
         .withOrderDate(orderDate)
         .withId(1L).withComponent(component).build();
+
+    // Setup mocks
+    when(orderFormConstraintChecker.canDispatch(entity)).thenReturn(true);
+    when(orderFormConstraintChecker.canEdit(entity)).thenReturn(true);
 
     OrderFormFullViewModel convertedViewModel = orderFormFactory.createFullViewModel(entity);
 
