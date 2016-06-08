@@ -260,5 +260,21 @@
 			<column name="roles_id" value="10"></column> <!-- Component Staff -->
 		</insert>
 	</changeSet>
+	
+	<changeSet id="20160607-11:43" author="timler">
+	    <comment>BSIS-925 - fix foreign keys for modification tracker fields.</comment>
+	    <!-- drop foreign keys & indexes on ComponentBatch_AUD table -->
+	    <dropForeignKeyConstraint baseTableName="ComponentBatch_AUD" constraintName="fk_ComponentBatch_createdBy"/>
+	    <dropForeignKeyConstraint baseTableName="ComponentBatch_AUD" constraintName="fk_ComponentBatch_lastUpdatedBy"/>
+    	<dropIndex tableName="ComponentBatch_AUD" indexName="fk_ComponentBatch_createdBy"/>
+    	<dropIndex tableName="ComponentBatch_AUD" indexName="fk_ComponentBatch_lastUpdatedBy"/>
+    	<!-- add foreign keys & indexes on ComponentBatch table -->
+    	<addForeignKeyConstraint constraintName="fk_ComponentBatch_createdBy" 
+    	    baseColumnNames="createdBy_id" baseTableName="ComponentBatch"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<addForeignKeyConstraint constraintName="fk_ComponentBatch_lastUpdatedBy" 
+    	    baseColumnNames="lastUpdatedBy_id" baseTableName="ComponentBatch"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+	</changeSet>
 
 </databaseChangeLog>
