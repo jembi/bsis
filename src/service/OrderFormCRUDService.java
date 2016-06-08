@@ -6,18 +6,19 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import backingform.OrderFormBackingForm;
-import factory.OrderFormFactory;
 import model.component.Component;
 import model.order.OrderForm;
 import model.order.OrderFormItem;
 import model.order.OrderStatus;
 import model.order.OrderType;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import repository.OrderFormRepository;
 import viewmodel.OrderFormFullViewModel;
+import backingform.OrderFormBackingForm;
+import factory.OrderFormFactory;
 
 @Service
 @Transactional
@@ -34,6 +35,9 @@ public class OrderFormCRUDService {
   
   @Autowired
   private ComponentDispatchService componentDispatchService;
+  
+  @Autowired
+  private OrderFormConstraintChecker orderFormConstraintChecker;
 
   public OrderForm createOrderForm(OrderFormBackingForm backingForm) {
     OrderForm entity = orderFormFactory.createEntity(backingForm);
@@ -58,6 +62,12 @@ public class OrderFormCRUDService {
 
     // If the order is being dispatched then transfer or issue each component
     if (existingOrderForm.getStatus() == OrderStatus.CREATED && updatedOrderForm.getStatus() == OrderStatus.DISPATCHED) {
+
+      // Check that OrderForm can be dispatched
+      if (!orderFormConstraintChecker.canDispatch(existingOrderForm)) {
+        throw new IllegalStateException("Cannot dispatch OrderForm");
+      }
+
       for (Component component : updatedOrderForm.getComponents()) {
         if (updatedOrderForm.getType() == OrderType.ISSUE) {
           componentDispatchService.issueComponent(component, updatedOrderForm.getDispatchedTo());
