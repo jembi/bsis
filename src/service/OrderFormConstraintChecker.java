@@ -11,7 +11,10 @@ import model.order.OrderStatus;
 public class OrderFormConstraintChecker {
 
   public boolean canDispatch(OrderForm orderForm) {
-    return orderForm.getStatus().equals(OrderStatus.CREATED);
+    return 
+        orderForm.getStatus().equals(OrderStatus.CREATED) && 
+        orderForm.getComponents() != null && 
+        orderForm.getComponents().size() > 0;
   }
   
   public boolean canEdit(OrderForm orderForm) {
