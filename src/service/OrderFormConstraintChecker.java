@@ -13,4 +13,8 @@ public class OrderFormConstraintChecker {
   public boolean canDispatch(OrderForm orderForm) {
     return orderForm.getStatus().equals(OrderStatus.CREATED);
   }
+  
+  public boolean canEdit(OrderForm orderForm) {
+    return orderForm.getStatus().equals(OrderStatus.CREATED);
+  }
 }

@@ -31,4 +31,20 @@ public class OrderFormConstraintCheckerTests {
     // Verify
     Assert.assertFalse("Can't dispatch", orderFormConstraintChecker.canDispatch(orderForm));
   }
+  
+  @Test
+  public void testCanEdit_shouldReturnTrue() {
+    OrderForm orderForm = OrderFormBuilder.anOrderForm().withOrderStatus(OrderStatus.CREATED).build();
+
+    // Verify
+    Assert.assertTrue("Can edit", orderFormConstraintChecker.canEdit(orderForm));
+  }
+
+  @Test
+  public void testCanEdit_shouldReturnFalse() {
+    OrderForm orderForm = OrderFormBuilder.anOrderForm().withOrderStatus(OrderStatus.DISPATCHED).build();
+
+    // Verify
+    Assert.assertFalse("Can't edit", orderFormConstraintChecker.canEdit(orderForm));
+  }
 }
