@@ -157,7 +157,7 @@ public class DonationBackingForm {
     donation.setDonor(donor);
   }
 
-  public void setDonationType(DonationType donationType) {
+  public void setDonationType(DonationTypeBackingForm donationType) {
     if (donationType == null) {
       donation.setDonationType(null);
     } else if (donationType.getId() == null) {

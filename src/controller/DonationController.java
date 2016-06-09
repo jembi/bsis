@@ -32,9 +32,11 @@ import backingform.DonationBackingForm;
 import backingform.validator.BloodTypingResolutionsBackingFormValidator;
 import backingform.validator.DonationBackingFormValidator;
 import factory.DonationSummaryViewModelFactory;
+import factory.DonationTypeFactory;
 import factory.DonationViewModelFactory;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
+import model.donationtype.DonationType;
 import model.location.LocationType;
 import model.packtype.PackType;
 import repository.AdverseEventTypeRepository;
@@ -89,6 +91,9 @@ public class DonationController {
 
   @Autowired
   private BloodTypingResolutionsBackingFormValidator bloodTypingResolutionBackingFormsValidator;
+  
+  @Autowired
+  private DonationTypeFactory donationTypeFactory;
 
   public DonationController() {
   }
@@ -197,7 +202,8 @@ public class DonationController {
 
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("venues", locationRepository.getLocationsByType(LocationType.VENUE));
-    m.put("donationTypes", donorTypeRepository.getAllDonationTypes());
+    List<DonationType> donationTypes = donorTypeRepository.getAllDonationTypes();
+    m.put("donationTypes", donationTypeFactory.createDonationTypeViewModels(donationTypes));
     m.put("packTypes", getPackTypeViewModels(packTypeRepository.getAllEnabledPackTypes()));
     List<Map<String, Object>> haemoglobinLevels = new ArrayList<>();
     for (HaemoglobinLevel value : HaemoglobinLevel.values()) {
