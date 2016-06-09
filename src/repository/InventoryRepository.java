@@ -1,6 +1,6 @@
 package repository;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -8,13 +8,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import model.component.Component;
+import model.component.ComponentStatus;
+import model.inventory.InventoryStatus;
+import model.util.BloodGroup;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import dto.StockLevelDTO;
-import model.component.Component;
-import model.inventory.InventoryStatus;
-import model.util.BloodGroup;
 
 @Repository
 @Transactional
@@ -24,14 +26,20 @@ public class InventoryRepository {
   private EntityManager em;
 
   public List<StockLevelDTO> findStockLevelsForLocation(Long locationId, InventoryStatus inventoryStatus) {
-    return em.createNamedQuery(InventoryNamedQueryConstants.NAME_FIND_STOCK_LEVELS_FOR_LOCATION,
-        StockLevelDTO.class).setParameter("locationId", locationId).setParameter("deleted", false)
-        .setParameter("inventoryStatus", inventoryStatus).getResultList();
+    return em.createNamedQuery(InventoryNamedQueryConstants.NAME_FIND_STOCK_LEVELS_FOR_LOCATION, StockLevelDTO.class)
+        .setParameter("locationId", locationId)
+        .setParameter("deleted", false)
+        .setParameter("inventoryStatus", inventoryStatus)
+        .setParameter("statuses", Arrays.asList(ComponentStatus.AVAILABLE, ComponentStatus.QUARANTINED, ComponentStatus.EXPIRED))
+        .getResultList();
   }
 
   public List<StockLevelDTO> findStockLevels(InventoryStatus inventoryStatus) {
     return em.createNamedQuery(InventoryNamedQueryConstants.NAME_FIND_STOCK_LEVELS, StockLevelDTO.class)
-        .setParameter("deleted", false).setParameter("inventoryStatus", inventoryStatus).getResultList();
+        .setParameter("deleted", false)
+        .setParameter("inventoryStatus", inventoryStatus)
+        .setParameter("statuses", Arrays.asList(ComponentStatus.AVAILABLE, ComponentStatus.QUARANTINED, ComponentStatus.EXPIRED))
+        .getResultList();
   }
   
   public Component findComponentByCodeAndDINInStock(String componentCode, String donationIdentificationNumber) {
