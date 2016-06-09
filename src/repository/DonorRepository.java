@@ -332,6 +332,7 @@ public class DonorRepository {
     Long count = em.createNamedQuery(DonorNamedQueryConstants.NAME_COUNT_DONOR_WITH_ID, Long.class)
         .setParameter("id", id)
         .setParameter("excludedStatuses", Arrays.asList(DonorStatus.MERGED))
+        .setParameter("isDeleted", false)
         .getSingleResult();
     if (count == 1) {
       return true;

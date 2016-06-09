@@ -1,14 +1,13 @@
 package helpers.builders;
 
-import helpers.persisters.AbstractEntityPersister;
-import helpers.persisters.DonorPersister;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import helpers.persisters.AbstractEntityPersister;
+import helpers.persisters.DonorPersister;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.donor.DonorStatus;
@@ -25,10 +24,10 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
   private Gender gender;
   private Date birthDate;
   private String notes;
-  private Boolean deleted;
+  private Boolean deleted = false;
   private Date dateOfFirstDonation;
   private Date dateOfLastDonation;
-  private DonorStatus donorStatus;
+  private DonorStatus donorStatus = DonorStatus.NORMAL;
   private Location venue;
   private List<DonorDeferral> deferrals;
   private List<Donation> donations;

@@ -383,19 +383,25 @@ public class DonorRepositoryTests extends ContextDependentTestSuite {
   }
 
   @Test
-  public void testEntityExists() {
-    Donor donor = DonorBuilder.aDonor().build();
+  public void testVerifyDonorExists() {
+    Donor donor = DonorBuilder.aDonor().buildAndPersist(entityManager);
     Assert.assertTrue("Donor exists", donorRepository.verifyDonorExists(donor.getId()));
   }
 
   @Test
-  public void testEntityWithInvalidId_doesNotExist() {
+  public void testVerifyDonorExistsWithInvalidId_shouldNotExist() {
     Assert.assertFalse("Donor does not exist", donorRepository.verifyDonorExists(123L));
   }
 
   @Test
-  public void testEntityWithMergeStatus_doesNotExist() {
-    Donor mergedDonor = DonorBuilder.aDonor().withDonorStatus(DonorStatus.MERGED).build();
+  public void testVerifyDonorExistsWithMergedStatus_shouldNotExist() {
+    Donor mergedDonor = DonorBuilder.aDonor().withDonorStatus(DonorStatus.MERGED).buildAndPersist(entityManager);
     Assert.assertFalse("Donor does not exist", donorRepository.verifyDonorExists(mergedDonor.getId()));
+  }
+
+  @Test
+  public void testVerifyDonorExistsThatIsDeleted_shouldNotExist() {
+    Donor deletedDonor = DonorBuilder.aDonor().thatIsDeleted().buildAndPersist(entityManager);
+    Assert.assertFalse("Donor does not exist", donorRepository.verifyDonorExists(deletedDonor.getId()));
   }
 }
