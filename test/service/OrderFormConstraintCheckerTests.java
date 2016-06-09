@@ -45,6 +45,14 @@ public class OrderFormConstraintCheckerTests {
   }
   
   @Test
+  public void testCanDispatchNullComponents_shouldReturnFalse() {
+    OrderForm orderForm = OrderFormBuilder.anOrderForm().withOrderStatus(OrderStatus.CREATED).withComponents(null).build();
+
+    // Verify
+    Assert.assertFalse("Can't dispatch", orderFormConstraintChecker.canDispatch(orderForm));
+  }
+  
+  @Test
   public void testCanEdit_shouldReturnTrue() {
     OrderForm orderForm = OrderFormBuilder.anOrderForm().withOrderStatus(OrderStatus.CREATED).build();
 
