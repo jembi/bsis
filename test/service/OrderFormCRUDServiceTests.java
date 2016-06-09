@@ -209,13 +209,14 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
   @Test(expected = IllegalStateException.class)
   public void testDispatchNotDispatchableOrderForm_shouldThrow() {
     // Fixture
-    OrderFormBackingForm backingForm = anOrderFormBackingForm().withId(ORDER_FORM_ID).build();
+    OrderFormBackingForm backingForm = anOrderFormBackingForm().withId(ORDER_FORM_ID).withOrderStatus(OrderStatus.DISPATCHED).build();
     OrderForm existingOrderForm = anOrderForm().withId(ORDER_FORM_ID).build();
-    OrderForm orderFormCreatedFromBackingForm = anOrderForm().withId(ORDER_FORM_ID).build();
+    OrderForm orderFormCreatedFromBackingForm = anOrderForm().withId(ORDER_FORM_ID).withOrderStatus(OrderStatus.DISPATCHED).build();
 
     // Expectations
     when(orderFormFactory.createEntity(backingForm)).thenReturn(orderFormCreatedFromBackingForm);
     when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
+    when(orderFormConstraintChecker.canEdit(existingOrderForm)).thenReturn(true);
     when(orderFormConstraintChecker.canDispatch(existingOrderForm)).thenReturn(false);
 
     // Test
