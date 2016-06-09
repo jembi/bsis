@@ -369,4 +369,21 @@ public class DonorRepositoryTests extends ContextDependentTestSuite {
     donorRepository.findDonorByDonationIdentificationNumber("0000001");
 
   }
+
+  @Test
+  public void testEntityExists() {
+    Donor donor = DonorBuilder.aDonor().build();
+    Assert.assertTrue("Donor exists", donorRepository.verifyDonorExists(donor.getId()));
+  }
+
+  @Test
+  public void testEntityWithInvalidId_doesNotExist() {
+    Assert.assertFalse("Donor does not exist", donorRepository.verifyDonorExists(123L));
+  }
+
+  @Test
+  public void testEntityWithMergeStatus_doesNotExist() {
+    Donor mergedDonor = DonorBuilder.aDonor().withDonorStatus(DonorStatus.MERGED).build();
+    Assert.assertFalse("Donor does not exist", donorRepository.verifyDonorExists(mergedDonor.getId()));
+  }
 }

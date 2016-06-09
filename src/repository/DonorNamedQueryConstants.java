@@ -41,5 +41,5 @@ public class DonorNamedQueryConstants {
 
   public static final String NAME_COUNT_DONOR_WITH_ID = "Donor.countDonorWithId";
   public static final String QUERY_COUNT_DONOR_WITH_ID =
-      "SELECT count(*) FROM Donor d WHERE d.id=:id AND d.isDeleted = false";
+      "SELECT count(*) FROM Donor d WHERE d.id=:id AND d.isDeleted = false AND donorStatus NOT IN :excludedStatuses";
 }
