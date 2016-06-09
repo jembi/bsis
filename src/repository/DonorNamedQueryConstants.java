@@ -30,7 +30,7 @@ public class DonorNamedQueryConstants {
   public static final String QUERY_FIND_DONOR_BY_DONOR_NUMBER =
       "SELECT d " +
       "FROM Donor d " +
-      "WHERE d.donorNumber = :donorNumber ";
+      "WHERE d.donorNumber = :donorNumber AND d.isDeleted = :isDeleted AND d.donorStatus NOT IN :excludedStatuses";
 
   public static final String NAME_FIND_DONOR_BY_DONATION_IDENTIFICATION_NUMBER =
       "Donor.findDonorByDonationIdentificationNumber";

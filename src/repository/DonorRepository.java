@@ -64,6 +64,8 @@ public class DonorRepository {
   public Donor findDonorByDonorNumber(String donorNumber) throws NoResultException {
     return em.createNamedQuery(DonorNamedQueryConstants.NAME_FIND_DONOR_BY_DONOR_NUMBER, Donor.class)
         .setParameter("donorNumber", donorNumber)
+        .setParameter("excludedStatuses", Arrays.asList(DonorStatus.MERGED))
+        .setParameter("isDeleted", Boolean.FALSE)
         .getSingleResult();
   }
 
