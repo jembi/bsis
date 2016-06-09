@@ -345,13 +345,13 @@ public class DonorRepositoryTests extends ContextDependentTestSuite {
 
   @Test(expected = NoResultException.class)
   public void testFindDonorByDonorNumberWithMergedDonor_shouldThrowNoResultException() {
-    DonorBuilder.aDonor().withDonorStatus(DonorStatus.MERGED).withDonorNumber("000001").build();
+    DonorBuilder.aDonor().withDonorStatus(DonorStatus.MERGED).withDonorNumber("000001").buildAndPersist(entityManager);
     donorRepository.findDonorByDonorNumber("000001");
   }
 
   @Test(expected = NoResultException.class)
   public void testFindDonorByDonorNumberWithDeletedDonor_shouldThrowNoResultException() {
-    DonorBuilder.aDonor().thatIsDeleted().withDonorNumber("000001").build();
+    DonorBuilder.aDonor().thatIsDeleted().withDonorNumber("000001").buildAndPersist(entityManager);
     donorRepository.findDonorByDonorNumber("000001");
   }
 
