@@ -2,7 +2,7 @@ package viewmodel;
 
 import model.packtype.PackType;
 
-public class PackTypeViewFullModel {
+public class PackTypeViewFullModel extends BaseViewModel {
 
   private PackType packType;
 
@@ -10,6 +10,7 @@ public class PackTypeViewFullModel {
     this.packType = packType;
   }
 
+  @Override
   public Long getId() {
     return packType.getId();
   }

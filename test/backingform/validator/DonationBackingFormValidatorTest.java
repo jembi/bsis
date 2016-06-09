@@ -1,5 +1,6 @@
 package backingform.validator;
 
+import static helpers.builders.DonationTypeBackingFormBuilder.aDonationTypeBackingForm;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -19,10 +20,10 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
 import backingform.DonationBackingForm;
+import backingform.DonationTypeBackingForm;
 import backingform.LocationBackingForm;
 import helpers.builders.DonationBatchBuilder;
 import helpers.builders.DonationBuilder;
-import helpers.builders.DonationTypeBuilder;
 import helpers.builders.DonorBuilder;
 import helpers.builders.FormFieldBuilder;
 import helpers.builders.LocationBuilder;
@@ -30,7 +31,6 @@ import helpers.builders.PackTypeBuilder;
 import model.donation.Donation;
 import model.donation.HaemoglobinLevel;
 import model.donationbatch.DonationBatch;
-import model.donationtype.DonationType;
 import model.donor.Donor;
 import model.location.Location;
 import model.packtype.PackType;
@@ -614,7 +614,7 @@ public class DonationBackingFormValidatorTest {
   private DonationBackingForm createBasicBackingForm() throws Exception {
     Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
     PackType packType = PackTypeBuilder.aPackType().withId(1L).withPackType("Single").build();
-    DonationType donationType = DonationTypeBuilder.aDonationType().withId(1L).withName("Voluntary").build();
+    DonationTypeBackingForm donationType = aDonationTypeBackingForm().withId(1L).withType("Voluntary").build();
 
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch()
         .withBatchNumber("DB123")

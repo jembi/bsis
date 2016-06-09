@@ -28,6 +28,7 @@ import backingform.AdverseEventTypeBackingForm;
 import backingform.DeferralBackingForm;
 import backingform.DeferralReasonBackingForm;
 import backingform.DonationBackingForm;
+import backingform.DonationTypeBackingForm;
 import backingform.DonorBackingForm;
 import backingform.LocationBackingForm;
 import backingform.TestResultsBackingForm;
@@ -586,7 +587,9 @@ public class DataImportService {
             break;
 
           case "donationType":
-            donationBackingForm.setDonationType(donationTypeCache.get(cell.getStringCellValue()));
+            DonationTypeBackingForm donationTypeBackingForm = new DonationTypeBackingForm();
+            donationTypeBackingForm.setDonationType(donationTypeCache.get(cell.getStringCellValue()));
+            donationBackingForm.setDonationType(donationTypeBackingForm);
             break;
 
           case "packType":

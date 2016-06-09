@@ -21,17 +21,20 @@ import viewmodel.BloodTestingRuleResult;
 public class BloodTestingRuleResultViewModelFactory {
 
   @Autowired
-  BloodTestResultConstraintChecker bloodTestResultConstraintChecker;
+  private BloodTestResultConstraintChecker bloodTestResultConstraintChecker;
 
   @Autowired
-  DonationConstraintChecker donationConstraintChecker;
+  private DonationConstraintChecker donationConstraintChecker;
+
+  @Autowired
+  private DonationViewModelFactory donationViewModelFactory;
 
   public BloodTestingRuleResult createBloodTestResultViewModel(BloodTestingRuleResultSet bloodTestingRuleResultSet) {
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
 
     // the blood donation
     Donation donation = bloodTestingRuleResultSet.getDonation();
-    ruleResult.setDonation(donation);
+    ruleResult.setDonation(donationViewModelFactory.createDonationViewModelWithoutPermissions(donation));
 
     // pending tests
     List<String> pendingBloodTypingTestsIds = new ArrayList<String>();

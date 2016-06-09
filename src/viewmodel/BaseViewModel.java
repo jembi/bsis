@@ -16,7 +16,7 @@ public abstract class BaseViewModel {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
     return result;
   }
 
@@ -29,10 +29,10 @@ public abstract class BaseViewModel {
     if (getClass() != obj.getClass())
       return false;
     BaseViewModel other = (BaseViewModel) obj;
-    if (id == null) {
-      if (other.id != null)
+    if (getId() == null) {
+      if (other.getId() != null)
         return false;
-    } else if (!id.equals(other.id))
+    } else if (!getId().equals(other.getId()))
       return false;
     return true;
   }

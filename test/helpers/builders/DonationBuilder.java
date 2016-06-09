@@ -51,6 +51,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
   private DonationBatch donationBatch = aDonationBatch().build();
   private String extraBloodTypeInformation;
   private Date createdDate = new Date();
+  private boolean released;
 
   public DonationBuilder withId(Long id) {
     this.id = id;
@@ -187,6 +188,11 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     return this;
   }
 
+  public DonationBuilder thatIsReleased() {
+    this.released = true;
+    return this;
+  }
+
   @Override
   public Donation build() {
     Donation donation = new Donation();
@@ -217,6 +223,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     donation.setDonationBatch(donationBatch);
     donation.setExtraBloodTypeInformation(extraBloodTypeInformation);
     donation.setCreatedDate(createdDate);
+    donation.setReleased(released);
     return donation;
   }
 

@@ -12,7 +12,9 @@ import model.donation.Donation;
 import service.DonationConstraintChecker;
 import service.DonorConstraintChecker;
 import viewmodel.AdverseEventViewModel;
+import viewmodel.DonationTypeViewModel;
 import viewmodel.DonationViewModel;
+import viewmodel.PackTypeViewFullModel;
 
 @Service
 public class DonationViewModelFactory {
@@ -23,6 +25,8 @@ public class DonationViewModelFactory {
   private AdverseEventViewModelFactory adverseEventViewModelFactory;
   @Autowired
   private DonorConstraintChecker donorConstraintChecker;
+  @Autowired
+  private LocationViewModelFactory locationViewModelFactory;
 
   public List<DonationViewModel> createDonationViewModelsWithPermissions(List<Donation> donations) {
     List<DonationViewModel> donationViewModels = new ArrayList<>();
@@ -58,7 +62,34 @@ public class DonationViewModelFactory {
   }
 
   public DonationViewModel createDonationViewModelWithoutPermissions(Donation donation) {
-    DonationViewModel donationViewModel = new DonationViewModel(donation);
+    DonationViewModel donationViewModel = new DonationViewModel();
+    donationViewModel.setId(donation.getId());
+    donationViewModel.setDonationDate(donation.getDonationDate());
+    donationViewModel.setDonationIdentificationNumber(donation.getDonationIdentificationNumber());
+    // FIXME: Use donation type factory when it exists
+    donationViewModel.setDonationType(new DonationTypeViewModel(donation.getDonationType()));
+    // FIXME: Use pack type factory when it exists
+    donationViewModel.setPackType(new PackTypeViewFullModel(donation.getPackType()));
+    donationViewModel.setNotes(donation.getNotes());
+    donationViewModel.setDonorNumber(donation.getDonorNumber());
+    donationViewModel.setLastUpdated(donation.getLastUpdated());
+    donationViewModel.setCreatedDate(donation.getCreatedDate());
+    donationViewModel.setTTIStatus(donation.getTTIStatus());
+    donationViewModel.setDonationBatchNumber(donation.getDonationBatchNumber());
+    donationViewModel.setBloodTypingStatus(donation.getBloodTypingStatus());
+    donationViewModel.setBloodTypingMatchStatus(donation.getBloodTypingMatchStatus());
+    donationViewModel.setBloodAbo(donation.getBloodAbo());
+    donationViewModel.setBloodRh(donation.getBloodRh());
+    donationViewModel.setHaemoglobinCount(donation.getHaemoglobinCount());
+    donationViewModel.setHaemoglobinLevel(donation.getHaemoglobinLevel());
+    donationViewModel.setDonorWeight(donation.getDonorWeight());
+    donationViewModel.setDonorPulse(donation.getDonorPulse());
+    donationViewModel.setBloodPressureSystolic(donation.getBloodPressureSystolic());
+    donationViewModel.setBloodPressureDiastolic(donation.getBloodPressureDiastolic());
+    donationViewModel.setBleedStartTime(donation.getBleedStartTime());
+    donationViewModel.setBleedEndTime(donation.getBleedEndTime());
+    donationViewModel.setVenue(locationViewModelFactory.createLocationViewModel(donation.getVenue()));
+    donationViewModel.setReleased(donation.isReleased());
 
     if (donation.getAdverseEvent() != null) {
       AdverseEventViewModel adverseEventViewModel =
