@@ -116,6 +116,7 @@ public class TestBatchController {
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_TEST_BATCH+"')")
   public ResponseEntity<TestBatchFullViewModel> updateTestBatch(@PathVariable Long id,
       @Valid @RequestBody TestBatchBackingForm form) {
+    form.setId(id);
     return new ResponseEntity<>(testBatchControllerService.updateTestBatch(form), HttpStatus.OK);
   }
 
