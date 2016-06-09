@@ -163,6 +163,12 @@ public class DuplicateDonorService {
 
   private void executeTestsAndUpdate(Donor newDonor, List<Donation> combinedDonations) {
     for (Donation donation : combinedDonations) {
+
+      // if there's no test samples continue
+      if (!donation.getPackType().getTestSampleProduced()) {
+        continue;
+      }
+
       // analyse the Blood Tests
       BloodTestingRuleResult ruleResult = bloodTestsService.executeTests(donation);
       // FIXME: note: donation was updated after running the tests (not persisted) - see line 337 of BloodTestingRuleEngine
