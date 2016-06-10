@@ -32,7 +32,7 @@ import backingform.ComponentBackingForm;
 import backingform.LocationBackingForm;
 import backingform.ReturnFormBackingForm;
 import model.component.Component;
-import model.inventory.InventoryStatus;
+import model.component.ComponentStatus;
 import model.location.Location;
 import model.returnform.ReturnStatus;
 import repository.ComponentRepository;
@@ -158,7 +158,7 @@ public class ReturnFormBackingFormValidatorTest {
   }
 
   @Test
-  public void testValidateReturnFormBackingForm_requiredCommonFieldsErrors() throws Exception {
+  public void testValidateReturnFormBackingForm_getRequiredCommonFieldsErrors() throws Exception {
     // set up data
     ReturnFormBackingForm backingForm = getBaseReturnFormBackingForm();
     backingForm.setStatus(null);
@@ -182,18 +182,62 @@ public class ReturnFormBackingFormValidatorTest {
   }
 
   @Test
-  public void testValidateComponentInventoryStatusNotLabelledAndInStock_invalidInventoryStatusForBothComponents() throws Exception {
+  public void testValidateComponentIssued_getNoErrors() throws Exception {
     // set up data
     ReturnFormBackingForm backingForm = getBaseReturnFormBackingForm();
 
-    // create components with statuses NOT_LABELLED and IN_STOCK
-    Component component1 = aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withLocation(getBaseReturnedFrom()).build();
-    Component component2 = aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(getBaseReturnedFrom()).build();
+    // create component that can be returned: status ISSUED
+    Component component = aComponent()
+        .withStatus(ComponentStatus.ISSUED)
+        .withLocation(getBaseReturnedFrom()).withId(1L).build();
+ 
+    backingForm.setComponents(Arrays.asList(getBaseReturnFormComponentBackingForm()));
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getBaseReturnedFrom());
+    when(locationRepository.getLocation(2l)).thenReturn(getBaseReturnedTo());
+    when(formFieldRepository.getRequiredFormFields("ReturnForm")).thenReturn(Arrays.asList(new String[] {"returnDate", "status"}));
+    when(componentRepository.findComponent(1L)).thenReturn(component);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ReturnForm");
+    returnFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("No errors", 0, errors.getErrorCount());
+  }
+  
+  @Test
+  public void testValidateComponentWithStatusOtherThanIssued_getInvalidStatusErrors() throws Exception {
+    // set up data
+    ReturnFormBackingForm backingForm = getBaseReturnFormBackingForm();
+
+    // create components with statuses QUARANTINED, AVAILABLE, EXPIRED, SPLIT, USED, UNSAFE, DISCARDED and PROCESSED
+    Component component1 = aComponent().withStatus(ComponentStatus.QUARANTINED).withLocation(getBaseReturnedFrom()).build();
+    Component component2 = aComponent().withStatus(ComponentStatus.AVAILABLE).withLocation(getBaseReturnedFrom()).build();
+    Component component3 = aComponent().withStatus(ComponentStatus.EXPIRED).withLocation(getBaseReturnedFrom()).build();
+    Component component4 = aComponent().withStatus(ComponentStatus.SPLIT).withLocation(getBaseReturnedFrom()).build();
+    Component component5 = aComponent().withStatus(ComponentStatus.USED).withLocation(getBaseReturnedFrom()).build();
+    Component component6 = aComponent().withStatus(ComponentStatus.UNSAFE).withLocation(getBaseReturnedFrom()).build();
+    Component component7 = aComponent().withStatus(ComponentStatus.DISCARDED).withLocation(getBaseReturnedFrom()).build();
+    Component component8 = aComponent().withStatus(ComponentStatus.PROCESSED).withLocation(getBaseReturnedFrom()).build();
     ComponentBackingForm componentBackingForm1 = aComponentBackingForm().withId(1L).build();
-    ComponentBackingForm componentBackingForm2 = aComponentBackingForm().withId(1L).build();
+    ComponentBackingForm componentBackingForm2 = aComponentBackingForm().withId(2L).build();
+    ComponentBackingForm componentBackingForm3 = aComponentBackingForm().withId(3L).build();
+    ComponentBackingForm componentBackingForm4 = aComponentBackingForm().withId(4L).build();
+    ComponentBackingForm componentBackingForm5 = aComponentBackingForm().withId(5L).build();
+    ComponentBackingForm componentBackingForm6 = aComponentBackingForm().withId(6L).build();
+    ComponentBackingForm componentBackingForm7 = aComponentBackingForm().withId(7L).build();
+    ComponentBackingForm componentBackingForm8 = aComponentBackingForm().withId(8L).build();
     List<ComponentBackingForm> componentBackingForms = new ArrayList<>();
     componentBackingForms.add(componentBackingForm1);
     componentBackingForms.add(componentBackingForm2);
+    componentBackingForms.add(componentBackingForm3);
+    componentBackingForms.add(componentBackingForm4);
+    componentBackingForms.add(componentBackingForm5);
+    componentBackingForms.add(componentBackingForm6);
+    componentBackingForms.add(componentBackingForm7);
+    componentBackingForms.add(componentBackingForm8);
     backingForm.setComponents(componentBackingForms);
 
     // set up mocks
@@ -201,19 +245,32 @@ public class ReturnFormBackingFormValidatorTest {
     when(locationRepository.getLocation(2l)).thenReturn(getBaseReturnedTo());
     when(formFieldRepository.getRequiredFormFields("ReturnForm")).thenReturn(Arrays.asList(new String[] {"returnDate", "status"}));
     when(componentRepository.findComponent(1L)).thenReturn(component1);
-    when(componentRepository.findComponent(1L)).thenReturn(component2);
+    when(componentRepository.findComponent(2L)).thenReturn(component2);
+    when(componentRepository.findComponent(3L)).thenReturn(component3);
+    when(componentRepository.findComponent(4L)).thenReturn(component4);
+    when(componentRepository.findComponent(5L)).thenReturn(component5);
+    when(componentRepository.findComponent(6L)).thenReturn(component6);
+    when(componentRepository.findComponent(7L)).thenReturn(component7);
+    when(componentRepository.findComponent(8L)).thenReturn(component8);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ReturnForm");
     returnFormBackingFormValidator.validate(backingForm, errors);
 
     // check asserts
-    Assert.assertEquals("component inventory status must be REMOVED", errors.getFieldErrors().get(0).getDefaultMessage());
-    Assert.assertEquals("component inventory status must be REMOVED", errors.getFieldErrors().get(1).getDefaultMessage());
+    Assert.assertEquals("8 errors", 8, errors.getErrorCount());
+    Assert.assertEquals("component status must be ISSUED", errors.getFieldErrors().get(0).getDefaultMessage());
+    Assert.assertEquals("component status must be ISSUED", errors.getFieldErrors().get(1).getDefaultMessage());
+    Assert.assertEquals("component status must be ISSUED", errors.getFieldErrors().get(2).getDefaultMessage());
+    Assert.assertEquals("component status must be ISSUED", errors.getFieldErrors().get(3).getDefaultMessage());
+    Assert.assertEquals("component status must be ISSUED", errors.getFieldErrors().get(4).getDefaultMessage());
+    Assert.assertEquals("component status must be ISSUED", errors.getFieldErrors().get(5).getDefaultMessage());
+    Assert.assertEquals("component status must be ISSUED", errors.getFieldErrors().get(6).getDefaultMessage());
+    Assert.assertEquals("component status must be ISSUED", errors.getFieldErrors().get(7).getDefaultMessage());
   }
 
   @Test
-  public void testValidateComponentNotFound_invalidComponentIdError() throws Exception {
+  public void testValidateComponentNotFound_getInvalidComponentIdError() throws Exception {
     // set up data
     ReturnFormBackingForm backingForm = getBaseReturnFormBackingForm();
     backingForm.setComponents(Arrays.asList(getBaseReturnFormComponentBackingForm()));
@@ -233,7 +290,7 @@ public class ReturnFormBackingFormValidatorTest {
   }
 
   @Test
-  public void testValidateNoComponentId_requiredComponentIdError() throws Exception {
+  public void testValidateNoComponentId_getRequiredComponentIdError() throws Exception {
     // set up data
     ReturnFormBackingForm backingForm = getBaseReturnFormBackingForm();
 

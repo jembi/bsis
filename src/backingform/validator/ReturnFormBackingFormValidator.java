@@ -10,7 +10,7 @@ import org.springframework.validation.Errors;
 
 import backingform.ComponentBackingForm;
 import backingform.ReturnFormBackingForm;
-import model.inventory.InventoryStatus;
+import model.component.ComponentStatus;
 import model.location.Location;
 import repository.ComponentRepository;
 import repository.LocationRepository;
@@ -79,9 +79,8 @@ public class ReturnFormBackingFormValidator extends BaseValidator<ReturnFormBack
       if (component == null) {
         errors.rejectValue("id", "invalid", "component id is invalid.");
       } else {
-
-        if (!component.getInventoryStatus().equals(InventoryStatus.REMOVED)) {
-          errors.rejectValue("inventoryStatus", "invalid inventory status", "component inventory status must be REMOVED");
+        if (!component.getStatus().equals(ComponentStatus.ISSUED)) {
+          errors.rejectValue("status", "invalid status", "component status must be ISSUED");
         }
       }
     }
