@@ -1,16 +1,19 @@
 package backingform.validator;
 
-import javax.persistence.NoResultException;
+import java.util.List;
 
-import model.location.Location;
+import javax.persistence.NoResultException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
+import backingform.ComponentBackingForm;
+import backingform.ReturnFormBackingForm;
+import model.inventory.InventoryStatus;
+import model.location.Location;
 import repository.ComponentRepository;
 import repository.LocationRepository;
-import backingform.ReturnFormBackingForm;
 
 @Component
 public class ReturnFormBackingFormValidator extends BaseValidator<ReturnFormBackingForm> {
@@ -50,7 +53,38 @@ public class ReturnFormBackingFormValidator extends BaseValidator<ReturnFormBack
         errors.rejectValue("returnedTo", "invalid", "Invalid returnedTo");
       }
     }
+
+    // Validate components
+    if (form.getComponents() != null) { // it can be null if the Return form has just been created
+      List<ComponentBackingForm> components = form.getComponents();
+      for (int i = 0, len = components.size(); i < len; i++) {
+        errors.pushNestedPath("components[" + i + "]");
+        try {
+          validateComponentForm(components.get(i), errors);
+        } finally {
+          errors.popNestedPath();
+        }
+      }
+    }
+
     commonFieldChecks(form, errors);
+
+  }
+  
+  private void validateComponentForm(ComponentBackingForm componentBackingForm, Errors errors) {
+    if (componentBackingForm.getId() == null) {
+      errors.rejectValue("id", "required", "component id is required.");
+    } else {
+      model.component.Component component = componentRepository.findComponent(componentBackingForm.getId());
+      if (component == null) {
+        errors.rejectValue("id", "invalid", "component id is invalid.");
+      } else {
+
+        if (!component.getInventoryStatus().equals(InventoryStatus.REMOVED)) {
+          errors.rejectValue("inventoryStatus", "invalid inventory status", "component inventory status must be REMOVED");
+        }
+      }
+    }
   }
 
   @Override

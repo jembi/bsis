@@ -1,5 +1,7 @@
 package backingform.validator;
 
+import static helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
+import static helpers.builders.ComponentBuilder.aComponent;
 import static helpers.builders.LocationBackingFormBuilder.aDistributionSiteBackingForm;
 import static helpers.builders.LocationBackingFormBuilder.aUsageSiteBackingForm;
 import static helpers.builders.LocationBuilder.aDistributionSite;
@@ -9,14 +11,13 @@ import static helpers.builders.ReturnFormBackingFormBuilder.aReturnFormBackingFo
 import static org.mockito.Mockito.when;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.persistence.NoResultException;
-
-import model.location.Location;
-import model.returnform.ReturnStatus;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,10 +28,16 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
-import repository.FormFieldRepository;
-import repository.LocationRepository;
+import backingform.ComponentBackingForm;
 import backingform.LocationBackingForm;
 import backingform.ReturnFormBackingForm;
+import model.component.Component;
+import model.inventory.InventoryStatus;
+import model.location.Location;
+import model.returnform.ReturnStatus;
+import repository.ComponentRepository;
+import repository.FormFieldRepository;
+import repository.LocationRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ReturnFormBackingFormValidatorTest {
@@ -43,6 +50,9 @@ public class ReturnFormBackingFormValidatorTest {
 
   @Mock
   private FormFieldRepository formFieldRepository;
+
+  @Mock
+  private ComponentRepository componentRepository;
 
   private ReturnFormBackingForm getBaseReturnFormBackingForm() throws ParseException {
     LocationBackingForm returnedFrom = aUsageSiteBackingForm().withName("LocFrom").withId(1l).build();
@@ -62,6 +72,11 @@ public class ReturnFormBackingFormValidatorTest {
 
   private Location getBaseReturnedTo() {
     return aDistributionSite().withName("LocTo").withId(2l).build();
+  }
+
+  private ComponentBackingForm getBaseReturnFormComponentBackingForm() {
+    ComponentBackingForm component = aComponentBackingForm().withId(1L).build();
+    return component;
   }
 
   @Test
@@ -164,5 +179,78 @@ public class ReturnFormBackingFormValidatorTest {
 
     Assert.assertEquals("This information is required", errors.getFieldErrors().get(1).getDefaultMessage());
     Assert.assertEquals("status", errors.getFieldErrors().get(1).getField());
+  }
+
+  @Test
+  public void testValidateComponentInventoryStatusNotLabelledAndInStock_invalidInventoryStatusForBothComponents() throws Exception {
+    // set up data
+    ReturnFormBackingForm backingForm = getBaseReturnFormBackingForm();
+
+    // create components with statuses NOT_LABELLED and IN_STOCK
+    Component component1 = aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withLocation(getBaseReturnedFrom()).build();
+    Component component2 = aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(getBaseReturnedFrom()).build();
+    ComponentBackingForm componentBackingForm1 = aComponentBackingForm().withId(1L).build();
+    ComponentBackingForm componentBackingForm2 = aComponentBackingForm().withId(1L).build();
+    List<ComponentBackingForm> componentBackingForms = new ArrayList<>();
+    componentBackingForms.add(componentBackingForm1);
+    componentBackingForms.add(componentBackingForm2);
+    backingForm.setComponents(componentBackingForms);
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getBaseReturnedFrom());
+    when(locationRepository.getLocation(2l)).thenReturn(getBaseReturnedTo());
+    when(formFieldRepository.getRequiredFormFields("ReturnForm")).thenReturn(Arrays.asList(new String[] {"returnDate", "status"}));
+    when(componentRepository.findComponent(1L)).thenReturn(component1);
+    when(componentRepository.findComponent(1L)).thenReturn(component2);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ReturnForm");
+    returnFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("component inventory status must be REMOVED", errors.getFieldErrors().get(0).getDefaultMessage());
+    Assert.assertEquals("component inventory status must be REMOVED", errors.getFieldErrors().get(1).getDefaultMessage());
+  }
+
+  @Test
+  public void testValidateComponentNotFound_invalidComponentIdError() throws Exception {
+    // set up data
+    ReturnFormBackingForm backingForm = getBaseReturnFormBackingForm();
+    backingForm.setComponents(Arrays.asList(getBaseReturnFormComponentBackingForm()));
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getBaseReturnedFrom());
+    when(locationRepository.getLocation(2l)).thenReturn(getBaseReturnedTo());
+    when(formFieldRepository.getRequiredFormFields("ReturnForm")).thenReturn(Arrays.asList(new String[] {"returnDate", "status"}));
+    when(componentRepository.findComponent(1L)).thenReturn(null);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ReturnForm");
+    returnFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("component id is invalid.", errors.getFieldErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
+  public void testValidateNoComponentId_requiredComponentIdError() throws Exception {
+    // set up data
+    ReturnFormBackingForm backingForm = getBaseReturnFormBackingForm();
+
+    // component backing form with null id
+    ComponentBackingForm componentBackingForm = aComponentBackingForm().withId(null).build();
+    backingForm.setComponents(Arrays.asList(componentBackingForm));
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getBaseReturnedFrom());
+    when(locationRepository.getLocation(2l)).thenReturn(getBaseReturnedTo());
+    when(formFieldRepository.getRequiredFormFields("ReturnForm")).thenReturn(Arrays.asList(new String[] {"returnDate", "status"}));
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ReturnForm");
+    returnFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("component id is required.", errors.getFieldErrors().get(0).getDefaultMessage());
   }
 }
