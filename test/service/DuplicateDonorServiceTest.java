@@ -1,5 +1,6 @@
 package service;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.text.SimpleDateFormat;
@@ -13,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import dto.DuplicateDonorDTO;
@@ -290,6 +292,53 @@ public class DuplicateDonorServiceTest {
 
     Assert.assertNotNull("List was returned", donations);
     Assert.assertEquals("Correct number of Deferrals in the list", 4, donations.size());
+    Assert.assertEquals("Donations in the correct order", Long.valueOf(2), donations.get(0).getId());
+    Assert.assertEquals("Donations in the correct order", Long.valueOf(4), donations.get(1).getId());
+    Assert.assertEquals("Donations in the correct order", Long.valueOf(1), donations.get(2).getId());
+    Assert.assertEquals("Donations in the correct order", Long.valueOf(3), donations.get(3).getId());
+  }
+  
+  @Test
+  public void testGetAllDonationsToMerge_shouldRunExecuteTestsOnlyForDonationsWithTestSamplesButReturnAll()
+      throws Exception {
+    // create test data
+    String donorNumber1 = "1000001";
+    String donorNumber2 = "1000002";
+    List<String> donorNumbers = Arrays.asList(new String[]{donorNumber1, donorNumber2});
+
+    PackType packType = PackTypeBuilder.aPackType().withPeriodBetweenDonations(90).build();
+    PackType packTypeNoTestSamples = PackTypeBuilder.aPackType().withTestSampleProduced(false).withPeriodBetweenDonations(90).build();
+    Donation d1 = DonationBuilder.aDonation().withId(1l).withPackType(packType)
+        .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-07-01")).build();
+    Donation d2NoTestSamples = DonationBuilder.aDonation().withId(2l).withPackType(packTypeNoTestSamples)
+        .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01")).build();
+    Donation d3NoTestSamples = DonationBuilder.aDonation().withId(3l).withPackType(packTypeNoTestSamples)
+        .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-09-01")).build();
+    Donation d4 = DonationBuilder.aDonation().withId(4l).withPackType(packType)
+        .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-05-01")).build();
+
+    Donor david = DonorBuilder.aDonor().withDonorNumber(donorNumber1).withFirstName("David").withLastName("Smith").withGender(Gender.male)
+        .withBirthDate("1978-10-20").withDonations(Arrays.asList(new Donation[]{d1, d2NoTestSamples, d3NoTestSamples})).build();
+
+    Donor john = DonorBuilder.aDonor().withDonorNumber(donorNumber2).withFirstName("John").withLastName("Smith").withGender(Gender.male)
+        .withBirthDate("1958-10-20").withDonations(Arrays.asList(new Donation[]{d4})).build();
+
+    List<Donor> donors = Arrays.asList(new Donor[]{david, john});
+
+    // setup mocks
+    when(donorRepository.findDonorsByNumbers(donorNumbers)).thenReturn(donors);
+
+    // run test
+    List<Donation> donations = service.getAllDonationsToMerge(new Donor(), donorNumbers);
+
+    // verify
+    verify(bloodTestsService, Mockito.times(1)).executeTests(d1);
+    verify(bloodTestsService, Mockito.times(0)).executeTests(d2NoTestSamples);
+    verify(bloodTestsService, Mockito.times(0)).executeTests(d3NoTestSamples);
+    verify(bloodTestsService, Mockito.times(1)).executeTests(d4);
+
+    Assert.assertNotNull("List was returned", donations);
+    Assert.assertEquals("Correct number of Donations in the list", 4, donations.size());
     Assert.assertEquals("Donations in the correct order", Long.valueOf(2), donations.get(0).getId());
     Assert.assertEquals("Donations in the correct order", Long.valueOf(4), donations.get(1).getId());
     Assert.assertEquals("Donations in the correct order", Long.valueOf(1), donations.get(2).getId());
