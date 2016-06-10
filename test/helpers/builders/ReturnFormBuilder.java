@@ -2,10 +2,13 @@ package helpers.builders;
 
 import static helpers.builders.LocationBuilder.aLocation;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import helpers.persisters.AbstractEntityPersister;
 import helpers.persisters.ReturnFormPersister;
+import model.component.Component;
 import model.location.Location;
 import model.returnform.ReturnForm;
 import model.returnform.ReturnStatus;
@@ -18,6 +21,7 @@ public class ReturnFormBuilder extends AbstractEntityBuilder<ReturnForm> {
   private Location returnedFrom = aLocation().build();
   private Location returnedTo = aLocation().build();
   private ReturnStatus status = ReturnStatus.CREATED;
+  private List<Component> components = new ArrayList<>();
 
   public ReturnFormBuilder withId(Long id) {
     this.id = id;
@@ -49,6 +53,11 @@ public class ReturnFormBuilder extends AbstractEntityBuilder<ReturnForm> {
     return this;
   }
 
+  public ReturnFormBuilder withComponent(Component component) {
+    components.add(component);
+    return this;
+  }
+
   @Override
   public ReturnForm build() {
     ReturnForm returnForm = new ReturnForm();
@@ -58,6 +67,7 @@ public class ReturnFormBuilder extends AbstractEntityBuilder<ReturnForm> {
     returnForm.setReturnedFrom(returnedFrom);
     returnForm.setReturnedTo(returnedTo);
     returnForm.setStatus(status);
+    returnForm.setComponents(components);
     return returnForm;
   }
 

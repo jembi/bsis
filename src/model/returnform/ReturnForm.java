@@ -1,16 +1,23 @@
 package model.returnform;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.envers.Audited;
 
 import model.BaseModificationTrackerEntity;
+import model.component.Component;
 import model.location.Location;
 
 @Entity
@@ -34,6 +41,10 @@ public class ReturnForm extends BaseModificationTrackerEntity {
 
   @Column
   private boolean isDeleted = false;
+  
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "ReturnForm_Component", joinColumns = {@JoinColumn(name = "returnForm_id", referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "component_id", referencedColumnName = "id")})
+  private List<Component> components = new ArrayList<Component>();
 
   public Date getReturnDate() {
     return returnDate;
@@ -73,6 +84,14 @@ public class ReturnForm extends BaseModificationTrackerEntity {
 
   public void setIsDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
+  }
+
+  public List<Component> getComponents() {
+    return components;
+  }
+
+  public void setComponents(List<Component> components) {
+    this.components = components;
   }
 
 }

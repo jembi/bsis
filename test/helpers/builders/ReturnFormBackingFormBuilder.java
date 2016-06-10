@@ -1,7 +1,10 @@
 package helpers.builders;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import backingform.ComponentBackingForm;
 import backingform.LocationBackingForm;
 import backingform.ReturnFormBackingForm;
 import model.returnform.ReturnStatus;
@@ -13,6 +16,7 @@ public class ReturnFormBackingFormBuilder {
   private LocationBackingForm returnedFrom;
   private LocationBackingForm returnedTo;
   private ReturnStatus status = ReturnStatus.CREATED;
+  private List<ComponentBackingForm> components = new ArrayList<>();
 
   public ReturnFormBackingFormBuilder withId(Long id) {
     this.id = id;
@@ -39,6 +43,11 @@ public class ReturnFormBackingFormBuilder {
     return this;
   }
 
+  public ReturnFormBackingFormBuilder withComponent(ComponentBackingForm component) {
+    components.add(component);
+    return this;
+  }
+
   public ReturnFormBackingForm build() {
     ReturnFormBackingForm backingForm = new ReturnFormBackingForm();
     backingForm.setId(id);
@@ -46,6 +55,7 @@ public class ReturnFormBackingFormBuilder {
     backingForm.setReturnedTo(returnedTo);
     backingForm.setReturnDate(returnDate);
     backingForm.setStatus(status);
+    backingForm.setComponents(components);
     return backingForm;
   }
 

@@ -5,13 +5,13 @@ import java.util.Objects;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
-import model.returnform.ReturnForm;
+import viewmodel.ReturnFormFullViewModel;
 
-public class ReturnFormMatcher extends TypeSafeMatcher<ReturnForm> {
+public class ReturnFormFullViewModelMatcher extends TypeSafeMatcher<ReturnFormFullViewModel> {
 
-  private ReturnForm expected;
+  private ReturnFormFullViewModel expected;
 
-  public ReturnFormMatcher(ReturnForm expected) {
+  public ReturnFormFullViewModelMatcher(ReturnFormFullViewModel expected) {
     this.expected = expected;
   }
 
@@ -19,7 +19,6 @@ public class ReturnFormMatcher extends TypeSafeMatcher<ReturnForm> {
   public void describeTo(Description description) {
     description.appendText("An order form entity with the following state:")
         .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nCreated Date: ").appendValue(expected.getCreatedDate())
         .appendText("\nStatus: ").appendValue(expected.getStatus())
         .appendText("\nReturn Date: ").appendValue(expected.getReturnDate())
         .appendText("\nReturned From: ").appendValue(expected.getReturnedFrom())
@@ -28,9 +27,8 @@ public class ReturnFormMatcher extends TypeSafeMatcher<ReturnForm> {
   }
   
   @Override
-  public boolean matchesSafely(ReturnForm actual) {
+  public boolean matchesSafely(ReturnFormFullViewModel actual) {
     return Objects.equals(actual.getId(), expected.getId()) &&
-        Objects.equals(actual.getCreatedDate(), expected.getCreatedDate()) &&
         Objects.equals(actual.getStatus(), expected.getStatus()) &&
         Objects.equals(actual.getReturnDate(), expected.getReturnDate()) &&
         Objects.equals(actual.getReturnedFrom(), expected.getReturnedFrom()) &&
@@ -38,8 +36,8 @@ public class ReturnFormMatcher extends TypeSafeMatcher<ReturnForm> {
         Objects.equals(actual.getComponents(), expected.getComponents());
   }
 
-  public static ReturnFormMatcher hasSameStateAsReturnForm(ReturnForm expected) {
-    return new ReturnFormMatcher(expected);
+  public static ReturnFormFullViewModelMatcher hasSameStateAsReturnFormFullViewModel(ReturnFormFullViewModel expected) {
+    return new ReturnFormFullViewModelMatcher(expected);
   }
 
 }
