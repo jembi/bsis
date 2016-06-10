@@ -64,12 +64,16 @@ public class DonorRepository {
   public Donor findDonorByDonorNumber(String donorNumber) throws NoResultException {
     return em.createNamedQuery(DonorNamedQueryConstants.NAME_FIND_DONOR_BY_DONOR_NUMBER, Donor.class)
         .setParameter("donorNumber", donorNumber)
+        .setParameter("excludedStatuses", Arrays.asList(DonorStatus.MERGED))
+        .setParameter("isDeleted", Boolean.FALSE)
         .getSingleResult();
   }
 
   public Donor findDonorByDonationIdentificationNumber(String donationIdentificationNumber) throws NoResultException {
     return em.createNamedQuery(DonorNamedQueryConstants.NAME_FIND_DONOR_BY_DONATION_IDENTIFICATION_NUMBER, Donor.class)
         .setParameter("donationIdentificationNumber", donationIdentificationNumber)
+        .setParameter("excludedStatuses", Arrays.asList(DonorStatus.MERGED))
+        .setParameter("isDeleted", Boolean.FALSE)
         .getSingleResult();
   }
 
@@ -329,6 +333,8 @@ public class DonorRepository {
   public boolean verifyDonorExists(Long id) {
     Long count = em.createNamedQuery(DonorNamedQueryConstants.NAME_COUNT_DONOR_WITH_ID, Long.class)
         .setParameter("id", id)
+        .setParameter("excludedStatuses", Arrays.asList(DonorStatus.MERGED))
+        .setParameter("isDeleted", false)
         .getSingleResult();
     if (count == 1) {
       return true;

@@ -343,6 +343,18 @@ public class DonorRepositoryTests extends ContextDependentTestSuite {
     donorRepository.findDonorByDonorNumber("000001");
   }
 
+  @Test(expected = NoResultException.class)
+  public void testFindDonorByDonorNumberWithMergedDonor_shouldThrowNoResultException() {
+    DonorBuilder.aDonor().withDonorStatus(DonorStatus.MERGED).withDonorNumber("000001").buildAndPersist(entityManager);
+    donorRepository.findDonorByDonorNumber("000001");
+  }
+
+  @Test(expected = NoResultException.class)
+  public void testFindDonorByDonorNumberWithDeletedDonor_shouldThrowNoResultException() {
+    DonorBuilder.aDonor().thatIsDeleted().withDonorNumber("000001").buildAndPersist(entityManager);
+    donorRepository.findDonorByDonorNumber("000001");
+  }
+
   @Test
   public void testFindDonorByDonationIdentificationNumberWithExistingDonor_shouldReturnDonor() {
     // Set up
@@ -368,5 +380,50 @@ public class DonorRepositoryTests extends ContextDependentTestSuite {
   public void testFindDonorByDonationIdentificationNumberWithNoExistingDonor_shouldThrowNoResultException() {
     donorRepository.findDonorByDonationIdentificationNumber("0000001");
 
+  }
+  
+  @Test(expected = NoResultException.class)
+  public void testFindDonorByDonationIdentificationNumberWithMergedStatus_shouldThrowNoResultException() {
+    String din = "0000001";
+    Donor mergedDonor = aDonor().withDonorStatus(DonorStatus.MERGED).buildAndPersist(entityManager);
+    aDonation()
+      .withDonationIdentificationNumber(din)
+      .withDonor(mergedDonor)
+      .buildAndPersist(entityManager);
+    donorRepository.findDonorByDonationIdentificationNumber(din);
+  }
+  
+  @Test(expected = NoResultException.class)
+  public void testFindDonorByDonationIdentificationNumberThatIsDeleted_shouldThrowNoResultException() {
+    String din = "0000001";
+    Donor deletedDonor = aDonor().thatIsDeleted().buildAndPersist(entityManager);
+    aDonation()
+      .withDonationIdentificationNumber(din)
+      .withDonor(deletedDonor)
+      .buildAndPersist(entityManager);
+    donorRepository.findDonorByDonationIdentificationNumber(din);
+  }
+
+  @Test
+  public void testVerifyDonorExists() {
+    Donor donor = DonorBuilder.aDonor().buildAndPersist(entityManager);
+    Assert.assertTrue("Donor exists", donorRepository.verifyDonorExists(donor.getId()));
+  }
+
+  @Test
+  public void testVerifyDonorExistsWithInvalidId_shouldNotExist() {
+    Assert.assertFalse("Donor does not exist", donorRepository.verifyDonorExists(123L));
+  }
+
+  @Test
+  public void testVerifyDonorExistsWithMergedStatus_shouldNotExist() {
+    Donor mergedDonor = DonorBuilder.aDonor().withDonorStatus(DonorStatus.MERGED).buildAndPersist(entityManager);
+    Assert.assertFalse("Donor does not exist", donorRepository.verifyDonorExists(mergedDonor.getId()));
+  }
+
+  @Test
+  public void testVerifyDonorExistsThatIsDeleted_shouldNotExist() {
+    Donor deletedDonor = DonorBuilder.aDonor().thatIsDeleted().buildAndPersist(entityManager);
+    Assert.assertFalse("Donor does not exist", donorRepository.verifyDonorExists(deletedDonor.getId()));
   }
 }
