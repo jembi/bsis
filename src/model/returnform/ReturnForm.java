@@ -13,13 +13,19 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
 
 import model.BaseModificationTrackerEntity;
 import model.component.Component;
 import model.location.Location;
+import repository.ReturnFormNamedQueryConstants;
 
+@NamedQueries({
+  @NamedQuery(name = ReturnFormNamedQueryConstants.NAME_FIND_BY_ID,
+  query = ReturnFormNamedQueryConstants.QUERY_FIND_BY_ID)})
 @Entity
 @Audited
 public class ReturnForm extends BaseModificationTrackerEntity {
