@@ -19,6 +19,9 @@ public class ReturnFormCRUDService {
 
   @Autowired
   private ComponentReturnService componentReturnService;
+  
+  @Autowired
+  private ReturnFormConstraintChecker returnFormConstraintChecker;
 
   public ReturnForm createReturnForm(ReturnForm returnForm) {
     returnForm.setStatus(ReturnStatus.CREATED);
@@ -28,9 +31,18 @@ public class ReturnFormCRUDService {
 
   public ReturnForm updateReturnForm(ReturnForm updatedReturnForm) {
     ReturnForm existingReturnForm = returnFormRepository.findById(updatedReturnForm.getId());
+    
+    if (!returnFormConstraintChecker.canEdit(existingReturnForm)) {
+      throw new IllegalStateException("Cannot edit ReturnForm");
+    }
 
     // If the form is being returned then update each component
     if (updatedReturnForm.getStatus() == ReturnStatus.RETURNED) {
+      
+      if (!returnFormConstraintChecker.canReturn(updatedReturnForm)) {
+        throw new IllegalStateException("Cannot return ReturnForm");
+      }
+      
       for (Component component : updatedReturnForm.getComponents()) {
         componentReturnService.returnComponent(component, updatedReturnForm.getReturnedTo());
       }

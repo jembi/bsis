@@ -3,12 +3,14 @@ package service;
 import static helpers.builders.ComponentBuilder.aComponent;
 import static helpers.builders.LocationBuilder.aDistributionSite;
 import static helpers.builders.LocationBuilder.aUsageSite;
+import static helpers.builders.ReturnFormBuilder.aReturnForm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import java.util.Date;
 
 import org.junit.Test;
@@ -34,6 +36,9 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
 
   @Mock
   private ComponentReturnService componentReturnService;
+  
+  @Mock
+  private ReturnFormConstraintChecker returnFormConstraintChecker;
 
   @Test
   public void testCreateReturnForm_shouldPersist() {
@@ -60,6 +65,39 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
     verifyZeroInteractions(componentReturnService);
   }
   
+  @Test(expected = IllegalStateException.class)
+  public void testUpdateReturnFormWhenCannotEdit_shouldThrow() {
+    // Set up data
+    ReturnForm existingReturnForm = aReturnForm().withId(1L).withReturnStatus(ReturnStatus.RETURNED).build();
+    ReturnForm updatedReturnForm = aReturnForm().withId(1L).withReturnStatus(ReturnStatus.RETURNED).build();
+    
+    // Set up mocks
+    when(returnFormRepository.findById(1L)).thenReturn(existingReturnForm);
+    when(returnFormConstraintChecker.canEdit(existingReturnForm)).thenReturn(false);
+    
+    // Run test
+    returnFormCRUDService.updateReturnForm(updatedReturnForm);
+  }
+  
+  @Test(expected = IllegalStateException.class)
+  public void testUpdateReturnFormWhenCannotReturn_shouldThrow() {
+    // Set up data
+    ReturnForm existingReturnForm = aReturnForm().withId(1L).withReturnStatus(ReturnStatus.CREATED).build();
+    ReturnForm updatedReturnForm = aReturnForm()
+        .withId(1L)
+        .withReturnStatus(ReturnStatus.RETURNED)
+        .withComponents(Collections.<Component>emptyList())
+        .build();
+    
+    // Set up mocks
+    when(returnFormRepository.findById(1L)).thenReturn(existingReturnForm);
+    when(returnFormConstraintChecker.canEdit(existingReturnForm)).thenReturn(true);
+    when(returnFormConstraintChecker.canReturn(existingReturnForm)).thenReturn(false);
+    
+    // Run test
+    returnFormCRUDService.updateReturnForm(updatedReturnForm);
+  }
+  
   @Test
   public void testAddComponentsToReturnForm_shouldUpdateFieldsCorrectly() {
     // Setup data
@@ -83,6 +121,7 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
 
     // Setup mocks
     when(returnFormRepository.findById(1L)).thenReturn(existingReturnForm);
+    when(returnFormConstraintChecker.canEdit(existingReturnForm)).thenReturn(true);
     when(returnFormRepository.update(updatedReturnForm)).thenReturn(updatedReturnForm);
     
     // Run test
@@ -117,6 +156,8 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
 
     // Setup mocks
     when(returnFormRepository.findById(1L)).thenReturn(existingReturnForm);
+    when(returnFormConstraintChecker.canEdit(existingReturnForm)).thenReturn(true);
+    when(returnFormConstraintChecker.canReturn(updatedReturnForm)).thenReturn(true);
     when(returnFormRepository.update(updatedReturnForm)).thenReturn(updatedReturnForm);
     
     // Run test
