@@ -1,7 +1,9 @@
 package factory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import model.location.Location;
 import model.returnform.ReturnForm;
 import repository.ComponentRepository;
 import repository.LocationRepository;
+import service.ReturnFormConstraintChecker;
 import viewmodel.ReturnFormFullViewModel;
 import viewmodel.ReturnFormViewModel;
 
@@ -30,6 +33,9 @@ public class ReturnFormFactory {
 
   @Autowired
   private ComponentRepository componentRepository;
+  
+  @Autowired
+  private ReturnFormConstraintChecker returnFormConstraintChecker;
 
   public ReturnForm createEntity(ReturnFormBackingForm backingForm) {
     ReturnForm entity = new ReturnForm();
@@ -53,9 +59,14 @@ public class ReturnFormFactory {
   public ReturnFormFullViewModel createFullViewModel(ReturnForm entity) {
     ReturnFormFullViewModel viewModel = new ReturnFormFullViewModel();
     populateBasicViewModel(entity, viewModel);
-    System.out.println(entity.getComponents());
     viewModel.setComponents(componentViewModelFactory.createComponentViewModels(entity.getComponents()));
-    System.out.println(viewModel.getComponents());
+
+    // Set permissions
+    Map<String, Boolean> permissions = new HashMap<>();
+    permissions.put("canEdit", returnFormConstraintChecker.canEdit(entity));
+    permissions.put("canReturn", returnFormConstraintChecker.canReturn(entity));
+    viewModel.setPermissions(permissions);
+
     return viewModel;
   }
 

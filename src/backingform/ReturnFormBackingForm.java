@@ -2,7 +2,9 @@ package backingform;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import model.returnform.ReturnStatus;
@@ -69,6 +71,11 @@ public class ReturnFormBackingForm {
 
   public void setComponents(List<ComponentBackingForm> components) {
     this.components = components;
+  }
+  
+  @JsonIgnore
+  public void setPermissions(Map<String, Boolean> permissions) {
+    // Ignore
   }
 
 }

@@ -28,6 +28,7 @@ import model.location.Location;
 import model.returnform.ReturnForm;
 import repository.ComponentRepository;
 import repository.LocationRepository;
+import service.ReturnFormConstraintChecker;
 import viewmodel.ComponentViewModel;
 import viewmodel.LocationViewModel;
 import viewmodel.ReturnFormFullViewModel;
@@ -46,6 +47,8 @@ public class ReturnFormFactoryTests {
   private ComponentRepository componentRepository;
   @Mock
   private ComponentViewModelFactory componentViewModelFactory;
+  @Mock
+  private ReturnFormConstraintChecker returnFormConstraintChecker;
 
   @Test
   public void testConvertBackingFormToReturnFormEntity_shouldReturnExpectedEntity() {
@@ -124,6 +127,8 @@ public class ReturnFormFactoryTests {
         .withReturnedTo(new LocationViewModel(returnedTo))
         .withReturnDate(returnDate)
         .withComponent(new ComponentViewModel(component))
+        .withPermission("canEdit", true)
+        .withPermission("canReturn", true)
         .build();
 
     ReturnForm entity = ReturnFormBuilder.aReturnForm()
@@ -137,6 +142,8 @@ public class ReturnFormFactoryTests {
     when(componentViewModelFactory.createComponentViewModels(entity.getComponents())).thenReturn(expectedViewModel.getComponents());
     when(locationViewModelFactory.createLocationViewModel(returnedFrom)).thenReturn(new LocationViewModel(returnedFrom));
     when(locationViewModelFactory.createLocationViewModel(returnedTo)).thenReturn(new LocationViewModel(returnedTo));
+    when(returnFormConstraintChecker.canEdit(entity)).thenReturn(true);
+    when(returnFormConstraintChecker.canReturn(entity)).thenReturn(true);
 
     // Run test
     ReturnFormFullViewModel convertedViewModel = returnFormFactory.createFullViewModel(entity);

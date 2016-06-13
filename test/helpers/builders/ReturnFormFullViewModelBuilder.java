@@ -2,7 +2,9 @@ package helpers.builders;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import model.returnform.ReturnStatus;
 import viewmodel.ComponentViewModel;
@@ -17,6 +19,7 @@ public class ReturnFormFullViewModelBuilder extends AbstractBuilder<ReturnFormFu
   private LocationViewModel returnedTo;
   private ReturnStatus status = ReturnStatus.CREATED;
   private List<ComponentViewModel> components = new ArrayList<>();
+  private Map<String, Boolean> permissions = new HashMap<>();
 
   public ReturnFormFullViewModelBuilder withId(Long id) {
     this.id = id;
@@ -47,6 +50,11 @@ public class ReturnFormFullViewModelBuilder extends AbstractBuilder<ReturnFormFu
     components.add(component);
     return this;
   }
+  
+  public ReturnFormFullViewModelBuilder withPermission(String name, boolean value) {
+    permissions.put(name, value);
+    return this;
+  }
 
   public ReturnFormFullViewModel build() {
     ReturnFormFullViewModel viewModel = new ReturnFormFullViewModel();
@@ -56,6 +64,7 @@ public class ReturnFormFullViewModelBuilder extends AbstractBuilder<ReturnFormFu
     viewModel.setReturnDate(returnDate);
     viewModel.setStatus(status);
     viewModel.setComponents(components);
+    viewModel.setPermissions(permissions);
     return viewModel;
   }
 

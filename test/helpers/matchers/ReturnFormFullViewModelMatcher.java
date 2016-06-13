@@ -23,7 +23,8 @@ public class ReturnFormFullViewModelMatcher extends TypeSafeMatcher<ReturnFormFu
         .appendText("\nReturn Date: ").appendValue(expected.getReturnDate())
         .appendText("\nReturned From: ").appendValue(expected.getReturnedFrom())
         .appendText("\nReturned To: ").appendValue(expected.getReturnedTo())
-        .appendText("\nComponents: ").appendValue(expected.getComponents());
+        .appendText("\nComponents: ").appendValue(expected.getComponents())
+        .appendText("\nPermissions: ").appendValue(expected.getPermissions());
   }
   
   @Override
@@ -33,7 +34,8 @@ public class ReturnFormFullViewModelMatcher extends TypeSafeMatcher<ReturnFormFu
         Objects.equals(actual.getReturnDate(), expected.getReturnDate()) &&
         Objects.equals(actual.getReturnedFrom(), expected.getReturnedFrom()) &&
         Objects.equals(actual.getReturnedTo(), expected.getReturnedTo()) &&
-        Objects.equals(actual.getComponents(), expected.getComponents());
+        Objects.equals(actual.getComponents(), expected.getComponents()) &&
+        Objects.equals(actual.getPermissions(), expected.getPermissions());
   }
 
   public static ReturnFormFullViewModelMatcher hasSameStateAsReturnFormFullViewModel(ReturnFormFullViewModel expected) {
