@@ -34,19 +34,13 @@ public class ComponentReturnService {
       throw new IllegalArgumentException(
           "Can't return a component to a location which is not a distribution site: " + returnedTo);
     }
-    Date now = dateGeneratorService.generateDate();
 
-    // Check if component is expired and set the component status accordingly
-    if (component.getExpiresOn().before(now)) {
-      component.setStatus(ComponentStatus.EXPIRED);
-    } else {
-      component.setStatus(ComponentStatus.AVAILABLE);
-    }
-
+    component.setStatus(ComponentStatus.AVAILABLE);
     component.setInventoryStatus(InventoryStatus.IN_STOCK);
     component.setLocation(returnedTo);
 
     // Create a component status change for the component
+    Date now = dateGeneratorService.generateDate();
     ComponentStatusChange statusChange = new ComponentStatusChange();
     statusChange.setStatusChangeType(ComponentStatusChangeType.RETURNED);
     statusChange.setNewStatus(component.getStatus());
