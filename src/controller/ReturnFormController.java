@@ -6,25 +6,25 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import model.location.Location;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import repository.LocationRepository;
-import utils.PermissionConstants;
 import backingform.ReturnFormBackingForm;
 import backingform.validator.ReturnFormBackingFormValidator;
 import controllerservice.ReturnFormControllerService;
 import factory.LocationViewModelFactory;
+import model.location.Location;
+import repository.LocationRepository;
+import utils.PermissionConstants;
 
 @RestController
 @RequestMapping("returnforms")
@@ -66,6 +66,14 @@ public class ReturnFormController {
     Map<String, Object> map = new HashMap<>();
     map.put("returnForm", returnFormControllerService.createReturnForm(backingForm));
     return new ResponseEntity<>(map, HttpStatus.CREATED);
+  }
+
+  @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_ORDER_FORM + "')")
+  public ResponseEntity<Map<String, Object>> getReturnForm(@PathVariable Long id) {
+    Map<String, Object> map = new HashMap<>();
+    map.put("orderForm", returnFormControllerService.findById(id));
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
 }
