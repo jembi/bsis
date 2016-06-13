@@ -41,6 +41,7 @@ import repository.ComponentRepository;
 import repository.LocationRepository;
 import viewmodel.ComponentViewModel;
 import viewmodel.LocationViewModel;
+import service.OrderFormConstraintChecker;
 import viewmodel.OrderFormFullViewModel;
 import viewmodel.OrderFormItemViewModel;
 import viewmodel.OrderFormViewModel;
@@ -65,6 +66,9 @@ public class OrderFormFactoryTests {
 
   @Mock
   private ComponentRepository componentRepository;
+
+  @Mock
+  private OrderFormConstraintChecker orderFormConstraintChecker;
  
   private Location getBaseDispatchedFromLocation() {
     return aDistributionSite().withName("LocFrom").withId(1l).build();
@@ -143,7 +147,8 @@ public class OrderFormFactoryTests {
     OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel()
         .withDispatchedFrom(new LocationViewModel(dispatchedFrom))
         .withDispatchedTo(new LocationViewModel(dispatchedTo))
-        .withOrderDate(orderDate).withId(1L).build();
+        .withOrderDate(orderDate).withPermission("canDispatch", true).withPermission("canEdit", true)
+        .withId(1L).build();
 
     OrderForm entity = anOrderForm()
         .withDispatchedFrom(dispatchedFrom)
@@ -153,6 +158,8 @@ public class OrderFormFactoryTests {
     // Setup mock
     when(locationViewModelFactory.createLocationViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
     when(locationViewModelFactory.createLocationViewModel(dispatchedTo)).thenReturn(expectedViewModel.getDispatchedTo());
+    when(orderFormConstraintChecker.canDispatch(entity)).thenReturn(true);
+    when(orderFormConstraintChecker.canEdit(entity)).thenReturn(true);
 
     OrderFormFullViewModel convertedViewModel = orderFormFactory.createFullViewModel(entity);
 
@@ -170,6 +177,7 @@ public class OrderFormFactoryTests {
     OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel()
         .withDispatchedFrom(new LocationViewModel(dispatchedFrom))
         .withDispatchedTo(new LocationViewModel(dispatchedTo))
+        .withPermission("canDispatch", true).withPermission("canEdit", true)
         .withOrderDate(orderDate).withId(1L)
         .withItem(expectedItem1).withItem(expectedItem2).build();
 
@@ -180,12 +188,14 @@ public class OrderFormFactoryTests {
         .withDispatchedTo(dispatchedTo)
         .withOrderDate(orderDate)
         .withId(1L).withOrderFormItem(item1).withOrderFormItem(item2).build();
-    
+
     // Setup mock
     when(locationViewModelFactory.createLocationViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
     when(locationViewModelFactory.createLocationViewModel(dispatchedTo)).thenReturn(expectedViewModel.getDispatchedTo());
     when(orderFormItemFactory.createViewModel(item1)).thenReturn(expectedItem1);
     when(orderFormItemFactory.createViewModel(item2)).thenReturn(expectedItem2);
+    when(orderFormConstraintChecker.canDispatch(entity)).thenReturn(true);
+    when(orderFormConstraintChecker.canEdit(entity)).thenReturn(true);
 
     OrderFormFullViewModel convertedViewModel = orderFormFactory.createFullViewModel(entity);
 
@@ -233,6 +243,7 @@ public class OrderFormFactoryTests {
     OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel()
         .withDispatchedFrom(new LocationViewModel(dispatchedFrom))
         .withDispatchedTo(new LocationViewModel(dispatchedTo))
+        .withPermission("canDispatch", true).withPermission("canEdit", true)
         .withOrderDate(orderDate).withId(1L)
         .withComponent(new ComponentViewModel(component)).build();
 
@@ -246,6 +257,8 @@ public class OrderFormFactoryTests {
     when(componentViewModelFactory.createComponentViewModels(entity.getComponents())).thenReturn(expectedViewModel.getComponents());
     when(locationViewModelFactory.createLocationViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
     when(locationViewModelFactory.createLocationViewModel(dispatchedTo)).thenReturn(expectedViewModel.getDispatchedTo());
+    when(orderFormConstraintChecker.canDispatch(entity)).thenReturn(true);
+    when(orderFormConstraintChecker.canEdit(entity)).thenReturn(true);
 
     OrderFormFullViewModel convertedViewModel = orderFormFactory.createFullViewModel(entity);
 

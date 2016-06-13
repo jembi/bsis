@@ -1,24 +1,26 @@
 package factory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import model.component.Component;
-import model.location.Location;
-import model.order.OrderForm;
-import model.order.OrderFormItem;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import repository.ComponentRepository;
-import repository.LocationRepository;
-import viewmodel.OrderFormFullViewModel;
-import viewmodel.OrderFormItemViewModel;
-import viewmodel.OrderFormViewModel;
 import backingform.ComponentBackingForm;
 import backingform.OrderFormBackingForm;
 import backingform.OrderFormItemBackingForm;
+import model.component.Component;
+import model.location.Location;
+import model.order.OrderForm;
+import model.order.OrderFormItem;
+import repository.ComponentRepository;
+import repository.LocationRepository;
+import service.OrderFormConstraintChecker;
+import viewmodel.OrderFormFullViewModel;
+import viewmodel.OrderFormItemViewModel;
+import viewmodel.OrderFormViewModel;
 
 /**
  * A factory for creating OrderForm related objects.
@@ -40,6 +42,9 @@ public class OrderFormFactory {
 
   @Autowired
   private LocationViewModelFactory locationViewModelFactory;
+
+  @Autowired
+  private OrderFormConstraintChecker orderFormConstraintChecker;
 
   public OrderForm createEntity(OrderFormBackingForm backingForm) {
     OrderForm entity = new OrderForm();
@@ -77,6 +82,11 @@ public class OrderFormFactory {
     }
     viewModel.setItems(items);
     viewModel.setComponents(componentViewModelFactory.createComponentViewModels(entity.getComponents()));
+
+    Map<String, Boolean> permissions = new HashMap<>();
+    permissions.put("canDispatch", orderFormConstraintChecker.canDispatch(entity));
+    permissions.put("canEdit", orderFormConstraintChecker.canEdit(entity));
+    viewModel.setPermissions(permissions);
     return viewModel;
   }
 

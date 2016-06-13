@@ -2,14 +2,16 @@ package helpers.builders;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import model.order.OrderStatus;
 import model.order.OrderType;
 import viewmodel.ComponentViewModel;
 import viewmodel.LocationViewModel;
-import viewmodel.OrderFormItemViewModel;
 import viewmodel.OrderFormFullViewModel;
+import viewmodel.OrderFormItemViewModel;
 
 public class OrderFormFullViewModelBuilder extends AbstractBuilder<OrderFormFullViewModel> {
 
@@ -21,6 +23,7 @@ public class OrderFormFullViewModelBuilder extends AbstractBuilder<OrderFormFull
   private OrderType type = OrderType.ISSUE;
   private List<OrderFormItemViewModel> items = new ArrayList<>();
   private List<ComponentViewModel> components = new ArrayList<>();
+  private Map<String, Boolean> permissions = new HashMap<>();
 
   public OrderFormFullViewModelBuilder withId(Long id) {
     this.id = id;
@@ -62,6 +65,11 @@ public class OrderFormFullViewModelBuilder extends AbstractBuilder<OrderFormFull
     return this;
   }
 
+  public OrderFormFullViewModelBuilder withPermission(String key, boolean value) {
+    this.permissions.put(key, value);
+    return this;
+  }
+
   public OrderFormFullViewModel build() {
     OrderFormFullViewModel viewModel = new OrderFormFullViewModel();
     viewModel.setId(id);
@@ -72,6 +80,7 @@ public class OrderFormFullViewModelBuilder extends AbstractBuilder<OrderFormFull
     viewModel.setType(type);
     viewModel.setItems(items);
     viewModel.setComponents(components);
+    viewModel.setPermissions(permissions);
     return viewModel;
   }
 

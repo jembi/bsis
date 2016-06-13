@@ -30,16 +30,18 @@ public class DonorNamedQueryConstants {
   public static final String QUERY_FIND_DONOR_BY_DONOR_NUMBER =
       "SELECT d " +
       "FROM Donor d " +
-      "WHERE d.donorNumber = :donorNumber ";
+      "WHERE d.donorNumber = :donorNumber AND d.isDeleted = :isDeleted AND d.donorStatus NOT IN :excludedStatuses";
 
   public static final String NAME_FIND_DONOR_BY_DONATION_IDENTIFICATION_NUMBER =
       "Donor.findDonorByDonationIdentificationNumber";
   public static final String QUERY_FIND_DONOR_BY_DONATION_IDENTIFICATION_NUMBER =
       "SELECT d.donor " +
       "FROM Donation d " +
-      "WHERE d.donationIdentificationNumber = :donationIdentificationNumber";
+      "WHERE d.donationIdentificationNumber = :donationIdentificationNumber " +
+      "AND d.donor.isDeleted = :isDeleted " +
+      "AND d.donor.donorStatus NOT IN :excludedStatuses";
 
   public static final String NAME_COUNT_DONOR_WITH_ID = "Donor.countDonorWithId";
   public static final String QUERY_COUNT_DONOR_WITH_ID =
-      "SELECT count(*) FROM Donor d WHERE d.id=:id AND d.isDeleted = false";
+      "SELECT count(*) FROM Donor d WHERE d.id=:id AND d.isDeleted = :isDeleted AND d.donorStatus NOT IN :excludedStatuses";
 }
