@@ -4,8 +4,10 @@ import static helpers.builders.ComponentBuilder.aComponent;
 import static helpers.builders.LocationBuilder.aDistributionSite;
 import static helpers.builders.LocationBuilder.aUsageSite;
 import static helpers.builders.ReturnFormBuilder.aReturnForm;
+import static helpers.matchers.ReturnFormMatcher.hasSameStateAsReturnForm;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -73,7 +75,7 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
     
     // Set up mocks
     when(returnFormRepository.findById(1L)).thenReturn(existingReturnForm);
-    when(returnFormConstraintChecker.canEdit(existingReturnForm)).thenReturn(false);
+    when(returnFormConstraintChecker.canEdit(argThat(hasSameStateAsReturnForm(existingReturnForm)))).thenReturn(false);
     
     // Run test
     returnFormCRUDService.updateReturnForm(updatedReturnForm);
@@ -91,8 +93,8 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
     
     // Set up mocks
     when(returnFormRepository.findById(1L)).thenReturn(existingReturnForm);
-    when(returnFormConstraintChecker.canEdit(existingReturnForm)).thenReturn(true);
-    when(returnFormConstraintChecker.canReturn(existingReturnForm)).thenReturn(false);
+    when(returnFormConstraintChecker.canEdit(argThat(hasSameStateAsReturnForm(existingReturnForm)))).thenReturn(true);
+    when(returnFormConstraintChecker.canReturn(argThat(hasSameStateAsReturnForm(existingReturnForm)))).thenReturn(false);
     
     // Run test
     returnFormCRUDService.updateReturnForm(updatedReturnForm);
@@ -121,8 +123,8 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
 
     // Setup mocks
     when(returnFormRepository.findById(1L)).thenReturn(existingReturnForm);
-    when(returnFormConstraintChecker.canEdit(existingReturnForm)).thenReturn(true);
-    when(returnFormRepository.update(updatedReturnForm)).thenReturn(updatedReturnForm);
+    when(returnFormConstraintChecker.canEdit(argThat(hasSameStateAsReturnForm(existingReturnForm)))).thenReturn(true);
+    when(returnFormRepository.update(argThat(hasSameStateAsReturnForm(updatedReturnForm)))).thenReturn(updatedReturnForm);
     
     // Run test
     ReturnForm mergedReturnForm = returnFormCRUDService.updateReturnForm(updatedReturnForm);
@@ -156,9 +158,9 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
 
     // Setup mocks
     when(returnFormRepository.findById(1L)).thenReturn(existingReturnForm);
-    when(returnFormConstraintChecker.canEdit(existingReturnForm)).thenReturn(true);
-    when(returnFormConstraintChecker.canReturn(updatedReturnForm)).thenReturn(true);
-    when(returnFormRepository.update(updatedReturnForm)).thenReturn(updatedReturnForm);
+    when(returnFormConstraintChecker.canEdit(argThat(hasSameStateAsReturnForm(existingReturnForm)))).thenReturn(true);
+    when(returnFormConstraintChecker.canReturn(argThat(hasSameStateAsReturnForm(existingReturnForm)))).thenReturn(true);
+    when(returnFormRepository.update(argThat(hasSameStateAsReturnForm(updatedReturnForm)))).thenReturn(updatedReturnForm);
     
     // Run test
     ReturnForm mergedReturnForm = returnFormCRUDService.updateReturnForm(updatedReturnForm);
