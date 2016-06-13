@@ -38,8 +38,8 @@ public class ReturnFormCRUDService {
 
     // If the form is being returned then update each component
     if (updatedReturnForm.getStatus() == ReturnStatus.RETURNED) {
-      
-      if (!returnFormConstraintChecker.canReturn(updatedReturnForm)) {
+
+      if (!returnFormConstraintChecker.canReturn(existingReturnForm)) {
         throw new IllegalStateException("Cannot return ReturnForm");
       }
       

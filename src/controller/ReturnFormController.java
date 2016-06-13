@@ -72,7 +72,20 @@ public class ReturnFormController {
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_ORDER_FORM + "')")
   public ResponseEntity<Map<String, Object>> getReturnForm(@PathVariable Long id) {
     Map<String, Object> map = new HashMap<>();
-    map.put("orderForm", returnFormControllerService.findById(id));
+    map.put("returnForm", returnFormControllerService.findById(id));
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+
+  @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+  @PreAuthorize("hasRole('" + PermissionConstants.EDIT_ORDER_FORM + "')")
+  public ResponseEntity<Map<String, Object>> updateReturnForm(@PathVariable("id") Long id,
+      @Valid @RequestBody ReturnFormBackingForm backingForm) {
+
+    // Use the id parameter from the path
+    backingForm.setId(id);
+
+    Map<String, Object> map = new HashMap<>();
+    map.put("returnForm", returnFormControllerService.updateReturnForm(backingForm));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 

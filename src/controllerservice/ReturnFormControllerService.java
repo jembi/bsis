@@ -32,7 +32,7 @@ public class ReturnFormControllerService {
     return returnFormFactory.createViewModel(returnForm);
   }
   
-  public ReturnFormFullViewModel updateOrderForm(ReturnFormBackingForm backingForm) {
+  public ReturnFormFullViewModel updateReturnForm(ReturnFormBackingForm backingForm) {
     ReturnForm returnForm = returnFormFactory.createEntity(backingForm);
     ReturnForm updatedReturnForm = returnFormCRUDService.updateReturnForm(returnForm);
     return returnFormFactory.createFullViewModel(updatedReturnForm);
