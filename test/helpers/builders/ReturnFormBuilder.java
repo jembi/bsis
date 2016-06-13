@@ -53,6 +53,11 @@ public class ReturnFormBuilder extends AbstractEntityBuilder<ReturnForm> {
     return this;
   }
 
+  public ReturnFormBuilder withComponents(List<Component> components) {
+    this.components = components;
+    return this;
+  }
+
   public ReturnFormBuilder withComponent(Component component) {
     components.add(component);
     return this;

@@ -13,4 +13,8 @@ public class ReturnFormConstraintChecker {
   public boolean canEdit(ReturnForm returnForm) {
     return returnForm.getStatus() == ReturnStatus.CREATED;
   }
+  
+  public boolean canReturn(ReturnForm returnForm) {
+    return returnForm.getStatus() == ReturnStatus.CREATED && !returnForm.getComponents().isEmpty();
+  }
 }
