@@ -196,8 +196,8 @@ public class DonationController {
 
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
   @RequestMapping(value = "bloodTypingResolutions", method = RequestMethod.POST)
-  public void saveBloodTypingResolutions(@RequestBody @Valid BloodTypingResolutionsBackingForm backingForm) {
-    donationCRUDService.updateDonationsBloodTypingResolutions(backingForm);
+  public void saveBloodTypingResolutions(@RequestBody @Valid BloodTypingResolutionsBackingForm bloodTypingResolutionBackingForms) {
+    donationCRUDService.updateDonationsBloodTypingResolutions(bloodTypingResolutionBackingForms);
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
