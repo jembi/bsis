@@ -1,28 +1,25 @@
 package controllerservice;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.transaction.Transactional;
-
-import model.component.Component;
-import model.component.ComponentStatus;
-import model.componentmovement.ComponentStatusChangeReason;
-import model.componentmovement.ComponentStatusChangeReasonCategory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import factory.ComponentTypeFactory;
+import factory.ComponentViewModelFactory;
+import model.component.Component;
+import model.component.ComponentStatus;
+import model.componentmovement.ComponentStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeReasonCategory;
 import repository.ComponentRepository;
 import repository.ComponentStatusChangeReasonRepository;
 import repository.ComponentTypeRepository;
 import service.ComponentCRUDService;
 import viewmodel.ComponentTypeViewModel;
 import viewmodel.ComponentViewModel;
-import factory.ComponentTypeFactory;
-import factory.ComponentViewModelFactory;
 
 @Service
 @Transactional
@@ -65,17 +62,9 @@ public class ComponentControllerService {
 
   public List<ComponentViewModel> findAnyComponent(String donationIdentificationNumber, List<Long> componentTypeIds,
       List<ComponentStatus> statusStringToComponentStatus, Date dateFrom, Date dateTo) {
-    
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    pagingParams.put("sortColumn", "id");
-    pagingParams.put("sortDirection", "asc");
-
-    List<Component> results = componentRepository.findAnyComponent(
-        donationIdentificationNumber, componentTypeIds, statusStringToComponentStatus,
-        dateFrom, dateTo, pagingParams);
-
+    List<Component> results = componentRepository.findAnyComponent(donationIdentificationNumber, componentTypeIds,
+        statusStringToComponentStatus, dateFrom, dateTo);
     List<ComponentViewModel> components = componentViewModelFactory.createComponentViewModels(results);
-    
     return components;
   }
 
@@ -88,10 +77,6 @@ public class ComponentControllerService {
     List<ComponentViewModel> components = componentViewModelFactory.createComponentViewModels(results);
     
     return components;
-  }
-  
-  public void deleteComponent(Long id) {
-    componentRepository.deleteComponent(id);
   }
   
   public List<ComponentStatusChangeReason> getReturnReasons() {

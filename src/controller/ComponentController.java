@@ -1,7 +1,6 @@
 package controller;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import backingform.RecordComponentBackingForm;
+import controllerservice.ComponentControllerService;
 import factory.ComponentTypeFactory;
 import factory.ComponentViewModelFactory;
 import model.component.Component;
@@ -56,6 +56,17 @@ public class ComponentController {
   
   @Autowired
   private ComponentTypeFactory componentTypeFactory;
+
+  @Autowired
+  private ComponentControllerService componentControllerService;
+
+  @RequestMapping(value = "/discard/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.DISCARD_COMPONENT + "')")
+  public Map<String, Object> findComponentFormGenerator() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("discardReasons", componentControllerService.getDiscardReasons());
+    return map;
+  }
 
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
