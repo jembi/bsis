@@ -27,4 +27,12 @@
 			<column name="REVTYPE" type="TINYINT(4)" />
 		</createTable>
 	</changeSet>
+
+	<changeSet id="20160511-1651" author="lauravignoli">
+		<comment>Add permission VIEW_COMPONENT to role Inventory Staff.</comment>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="21"></column><!-- View Component -->
+			<column name="roles_id" value="15"></column> <!-- Inventory Staff -->
+		</insert>
+	</changeSet>
 </databaseChangeLog>
