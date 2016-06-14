@@ -25,7 +25,10 @@ import repository.ReturnFormNamedQueryConstants;
 
 @NamedQueries({
   @NamedQuery(name = ReturnFormNamedQueryConstants.NAME_FIND_BY_ID,
-  query = ReturnFormNamedQueryConstants.QUERY_FIND_BY_ID)})
+      query = ReturnFormNamedQueryConstants.QUERY_FIND_BY_ID),
+  @NamedQuery(name = ReturnFormNamedQueryConstants.NAME_FIND_CREATED_RETURN_FORMS,
+      query = ReturnFormNamedQueryConstants.QUERY_FIND_CREATED_RETURN_FORMS)
+})
 @Entity
 @Audited
 public class ReturnForm extends BaseModificationTrackerEntity {
