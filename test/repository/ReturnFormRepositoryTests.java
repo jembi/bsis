@@ -8,9 +8,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import helpers.builders.ComponentBuilder;
-import helpers.builders.LocationBuilder;
-import helpers.builders.ReturnFormBuilder;
+import static helpers.builders.ComponentBuilder.aComponent;
+import static helpers.builders.LocationBuilder.aUsageSite;
+import static helpers.builders.LocationBuilder.aDistributionSite;
+import static helpers.builders.ReturnFormBuilder.aReturnForm;
 import model.component.Component;
 import model.location.Location;
 import model.returnform.ReturnForm;
@@ -25,10 +26,10 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
   @Test
   public void testSaveReturnForm_shouldPersistCorrectly() throws Exception {
     // Set up data
-    Location returnedFrom = LocationBuilder.aUsageSite().buildAndPersist(entityManager);
-    Location returnedTo = LocationBuilder.aDistributionSite().buildAndPersist(entityManager);
-    Component component = ComponentBuilder.aComponent().build();
-    ReturnForm returnForm = ReturnFormBuilder.aReturnForm()
+    Location returnedFrom = aUsageSite().buildAndPersist(entityManager);
+    Location returnedTo = aDistributionSite().buildAndPersist(entityManager);
+    Component component = aComponent().build();
+    ReturnForm returnForm = aReturnForm()
         .withId(null)
         .withReturnedFrom(returnedFrom)
         .withReturnedTo(returnedTo)
@@ -51,15 +52,7 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
   @Test
   public void testFindById_shouldReturnReturnForm() throws Exception {
     // Set up data
-    Location returnedFrom = LocationBuilder.aUsageSite().buildAndPersist(entityManager);
-    Location returnedTo = LocationBuilder.aDistributionSite().buildAndPersist(entityManager);
-    Component component = ComponentBuilder.aComponent().build();
-    ReturnForm returnForm = ReturnFormBuilder.aReturnForm()
-        .withId(null)
-        .withReturnedFrom(returnedFrom)
-        .withReturnedTo(returnedTo)
-        .withComponent(component)
-        .buildAndPersist(entityManager);
+    ReturnForm returnForm = aReturnForm().buildAndPersist(entityManager);
 
     // Run test
     ReturnForm persistedReturnForm = returnFormRepository.findById(returnForm.getId());
@@ -74,41 +67,17 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
   }
   
   public void testFindReturnForms_shouldReturnReturnFormsInDateRange() throws Exception {
-    // Set up data
-    Location returnedFrom = LocationBuilder.aUsageSite().buildAndPersist(entityManager);
-    Location returnedTo = LocationBuilder.aDistributionSite().buildAndPersist(entityManager);
-    
+    // Set up data   
     Calendar calendar = Calendar.getInstance();
-    
     calendar.add(Calendar.DAY_OF_MONTH, -20);
     Date returnDate1 = calendar.getTime();
-    ReturnForm returnForm1 = ReturnFormBuilder.aReturnForm()
-        .withId(null)
-        .withReturnDate(returnDate1)
-        .withReturnedFrom(returnedFrom)
-        .withReturnedTo(returnedTo)
-        .withComponent(ComponentBuilder.aComponent().build())
-        .buildAndPersist(entityManager);
-    
+    ReturnForm returnForm1 = aReturnForm().withReturnDate(returnDate1).buildAndPersist(entityManager);
     calendar.add(Calendar.DAY_OF_MONTH, 10);
     Date returnDate2 = calendar.getTime();
-    ReturnForm returnForm2 = ReturnFormBuilder.aReturnForm()
-        .withId(null)
-        .withReturnDate(returnDate2)
-        .withReturnedFrom(returnedFrom)
-        .withReturnedTo(returnedTo)
-        .withComponent(ComponentBuilder.aComponent().build())
-        .buildAndPersist(entityManager);
-    
+    ReturnForm returnForm2 = aReturnForm().withReturnDate(returnDate2).buildAndPersist(entityManager);
     calendar.add(Calendar.DAY_OF_MONTH, 5);
     Date returnDate3 = calendar.getTime();
-    ReturnForm returnForm3 = ReturnFormBuilder.aReturnForm()
-        .withId(null)
-        .withReturnDate(returnDate3)
-        .withReturnedFrom(returnedFrom)
-        .withReturnedTo(returnedTo)
-        .withComponent(ComponentBuilder.aComponent().build())
-        .buildAndPersist(entityManager);
+    ReturnForm returnForm3 = aReturnForm().withReturnDate(returnDate3).buildAndPersist(entityManager);
 
     // Run test
     List<ReturnForm> returnForms = returnFormRepository.findReturnForms(returnDate2, returnDate3, null, null, null);
@@ -122,41 +91,17 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
   
   @Test
   public void testFindReturnForms_shouldReturnReturnFormsBeforeDate() throws Exception {
-    // Set up data
-    Location returnedFrom = LocationBuilder.aUsageSite().buildAndPersist(entityManager);
-    Location returnedTo = LocationBuilder.aDistributionSite().buildAndPersist(entityManager);
-    
+    // Set up data   
     Calendar calendar = Calendar.getInstance();
-    
     calendar.add(Calendar.DAY_OF_MONTH, -20);
     Date returnDate1 = calendar.getTime();
-    ReturnForm returnForm1 = ReturnFormBuilder.aReturnForm()
-        .withId(null)
-        .withReturnDate(returnDate1)
-        .withReturnedFrom(returnedFrom)
-        .withReturnedTo(returnedTo)
-        .withComponent(ComponentBuilder.aComponent().build())
-        .buildAndPersist(entityManager);
-    
+    ReturnForm returnForm1 = aReturnForm().withReturnDate(returnDate1).buildAndPersist(entityManager);
     calendar.add(Calendar.DAY_OF_MONTH, 10);
     Date returnDate2 = calendar.getTime();
-    ReturnForm returnForm2 = ReturnFormBuilder.aReturnForm()
-        .withId(null)
-        .withReturnDate(returnDate2)
-        .withReturnedFrom(returnedFrom)
-        .withReturnedTo(returnedTo)
-        .withComponent(ComponentBuilder.aComponent().build())
-        .buildAndPersist(entityManager);
-    
+    ReturnForm returnForm2 = aReturnForm().withReturnDate(returnDate2).buildAndPersist(entityManager);
     calendar.add(Calendar.DAY_OF_MONTH, 5);
     Date returnDate3 = calendar.getTime();
-    ReturnForm returnForm3 = ReturnFormBuilder.aReturnForm()
-        .withId(null)
-        .withReturnDate(returnDate3)
-        .withReturnedFrom(returnedFrom)
-        .withReturnedTo(returnedTo)
-        .withComponent(ComponentBuilder.aComponent().build())
-        .buildAndPersist(entityManager);
+    ReturnForm returnForm3 = aReturnForm().withReturnDate(returnDate3).buildAndPersist(entityManager);
 
     // Run test
     List<ReturnForm> returnForms = returnFormRepository.findReturnForms(null, returnDate2, null, null, null);
@@ -170,41 +115,17 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
   
   @Test
   public void testFindReturnForms_shouldReturnReturnFormsAfterDate() throws Exception {
-    // Set up data
-    Location returnedFrom = LocationBuilder.aUsageSite().buildAndPersist(entityManager);
-    Location returnedTo = LocationBuilder.aDistributionSite().buildAndPersist(entityManager);
-    
+    // Set up data    
     Calendar calendar = Calendar.getInstance();
-    
     calendar.add(Calendar.DAY_OF_MONTH, -20);
     Date returnDate1 = calendar.getTime();
-    ReturnForm returnForm1 = ReturnFormBuilder.aReturnForm()
-        .withId(null)
-        .withReturnDate(returnDate1)
-        .withReturnedFrom(returnedFrom)
-        .withReturnedTo(returnedTo)
-        .withComponent(ComponentBuilder.aComponent().build())
-        .buildAndPersist(entityManager);
-    
+    ReturnForm returnForm1 = aReturnForm().withReturnDate(returnDate1).buildAndPersist(entityManager);
     calendar.add(Calendar.DAY_OF_MONTH, 10);
     Date returnDate2 = calendar.getTime();
-    ReturnForm returnForm2 = ReturnFormBuilder.aReturnForm()
-        .withId(null)
-        .withReturnDate(returnDate2)
-        .withReturnedFrom(returnedFrom)
-        .withReturnedTo(returnedTo)
-        .withComponent(ComponentBuilder.aComponent().build())
-        .buildAndPersist(entityManager);
-    
+    ReturnForm returnForm2 = aReturnForm().withReturnDate(returnDate2).buildAndPersist(entityManager);
     calendar.add(Calendar.DAY_OF_MONTH, 5);
     Date returnDate3 = calendar.getTime();
-    ReturnForm returnForm3 = ReturnFormBuilder.aReturnForm()
-        .withId(null)
-        .withReturnDate(returnDate3)
-        .withReturnedFrom(returnedFrom)
-        .withReturnedTo(returnedTo)
-        .withComponent(ComponentBuilder.aComponent().build())
-        .buildAndPersist(entityManager);
+    ReturnForm returnForm3 = aReturnForm().withReturnDate(returnDate3).buildAndPersist(entityManager);
 
     // Run test
     List<ReturnForm> returnForms = returnFormRepository.findReturnForms(returnDate2, null, null, null, null);
@@ -219,23 +140,10 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
   @Test
   public void testFindReturnForms_shouldReturnReturnFormsReturnedFromLocation() throws Exception {
     // Set up data
-    Location returnedFrom1 = LocationBuilder.aUsageSite().buildAndPersist(entityManager);
-    Location returnedFrom2 = LocationBuilder.aUsageSite().buildAndPersist(entityManager);
-    Location returnedTo = LocationBuilder.aDistributionSite().buildAndPersist(entityManager);
-    ReturnForm returnForm1 = ReturnFormBuilder.aReturnForm()
-        .withId(null)
-        .withReturnDate(new Date())
-        .withReturnedFrom(returnedFrom1)
-        .withReturnedTo(returnedTo)
-        .withComponent(ComponentBuilder.aComponent().build())
-        .buildAndPersist(entityManager);
-    ReturnForm returnForm2 = ReturnFormBuilder.aReturnForm()
-        .withId(null)
-        .withReturnDate(new Date())
-        .withReturnedFrom(returnedFrom2)
-        .withReturnedTo(returnedTo)
-        .withComponent(ComponentBuilder.aComponent().build())
-        .buildAndPersist(entityManager);
+    Location returnedFrom1 = aUsageSite().buildAndPersist(entityManager);
+    Location returnedFrom2 = aUsageSite().buildAndPersist(entityManager);
+    ReturnForm returnForm1 = aReturnForm().withReturnedFrom(returnedFrom1).buildAndPersist(entityManager);
+    ReturnForm returnForm2 = aReturnForm().withReturnedFrom(returnedFrom2).buildAndPersist(entityManager);
 
     // Run test
     List<ReturnForm> returnForms = returnFormRepository.findReturnForms(null, null, returnedFrom1.getId(), null, null);
@@ -249,23 +157,10 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
   @Test
   public void testFindReturnForms_shouldReturnReturnFormsReturnedToLocation() throws Exception {
     // Set up data
-    Location returnedFrom = LocationBuilder.aUsageSite().buildAndPersist(entityManager);
-    Location returnedTo1 = LocationBuilder.aDistributionSite().buildAndPersist(entityManager);
-    Location returnedTo2 = LocationBuilder.aDistributionSite().buildAndPersist(entityManager);
-    ReturnForm returnForm1 = ReturnFormBuilder.aReturnForm()
-        .withId(null)
-        .withReturnDate(new Date())
-        .withReturnedFrom(returnedFrom)
-        .withReturnedTo(returnedTo1)
-        .withComponent(ComponentBuilder.aComponent().build())
-        .buildAndPersist(entityManager);
-    ReturnForm returnForm2 = ReturnFormBuilder.aReturnForm()
-        .withId(null)
-        .withReturnDate(new Date())
-        .withReturnedFrom(returnedFrom)
-        .withReturnedTo(returnedTo2)
-        .withComponent(ComponentBuilder.aComponent().build())
-        .buildAndPersist(entityManager);
+    Location returnedTo1 = aDistributionSite().buildAndPersist(entityManager);
+    Location returnedTo2 = aDistributionSite().buildAndPersist(entityManager);
+    ReturnForm returnForm1 = aReturnForm().withReturnedTo(returnedTo1).buildAndPersist(entityManager);
+    ReturnForm returnForm2 = aReturnForm().withReturnedTo(returnedTo2).buildAndPersist(entityManager);
 
     // Run test
     List<ReturnForm> returnForms = returnFormRepository.findReturnForms(null, null, null, returnedTo2.getId(), null);
@@ -279,30 +174,9 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
   @Test
   public void testFindReturnForms_shouldReturnAllNotDeletedReturnForms() throws Exception {
     // Set up data
-    Location returnedFrom = LocationBuilder.aUsageSite().buildAndPersist(entityManager);
-    Location returnedTo = LocationBuilder.aDistributionSite().buildAndPersist(entityManager);
-    ReturnForm returnForm1 = ReturnFormBuilder.aReturnForm()
-        .withId(null)
-        .withReturnDate(new Date())
-        .withReturnedFrom(returnedFrom)
-        .withReturnedTo(returnedTo)
-        .withComponent(ComponentBuilder.aComponent().build())
-        .buildAndPersist(entityManager);
-    ReturnForm returnForm2 = ReturnFormBuilder.aReturnForm()
-        .withId(null)
-        .withReturnDate(new Date())
-        .withReturnedFrom(returnedFrom)
-        .withReturnedTo(returnedTo)
-        .withComponent(ComponentBuilder.aComponent().build())
-        .buildAndPersist(entityManager);
-    ReturnForm returnForm3 = ReturnFormBuilder.aReturnForm()
-        .withId(null)
-        .withReturnDate(new Date())
-        .withReturnedFrom(returnedFrom)
-        .withReturnedTo(returnedTo)
-        .withComponent(ComponentBuilder.aComponent().build())
-        .withIsDeleted(true)
-        .buildAndPersist(entityManager);
+    ReturnForm returnForm1 = aReturnForm().buildAndPersist(entityManager);
+    ReturnForm returnForm2 = aReturnForm().buildAndPersist(entityManager);
+    ReturnForm returnForm3 = aReturnForm().withIsDeleted(true).buildAndPersist(entityManager);
 
     // Run test
     List<ReturnForm> returnForms = returnFormRepository.findReturnForms(null, null, null, null, null);
@@ -317,10 +191,10 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
   @Test
   public void testFindReturnFormsByStatus_shouldReturnMatchingReturnForms() throws Exception {
     // Set up data
-    ReturnForm expectedReturnForm = ReturnFormBuilder.aReturnForm()
+    ReturnForm expectedReturnForm = aReturnForm()
         .withReturnStatus(ReturnStatus.CREATED)
         .buildAndPersist(entityManager);
-    ReturnForm excludedReturnForm = ReturnFormBuilder.aReturnForm()
+    ReturnForm excludedReturnForm = aReturnForm()
         .withReturnStatus(ReturnStatus.RETURNED)
         .buildAndPersist(entityManager);
         
@@ -336,31 +210,25 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
   @Test
   public void testFindReturnForms_shouldReturnMatchingReturnForms() throws Exception {
     // Set up data
-    Location returnedFrom = LocationBuilder.aUsageSite().buildAndPersist(entityManager);
-    Location returnedTo = LocationBuilder.aDistributionSite().buildAndPersist(entityManager);
+    Location returnedFrom = aUsageSite().buildAndPersist(entityManager);
+    Location returnedTo = aDistributionSite().buildAndPersist(entityManager);
     ReturnStatus returnStatus = ReturnStatus.RETURNED;
-    ReturnForm returnForm1 = ReturnFormBuilder.aReturnForm()
-        .withId(null)
+    ReturnForm returnForm1 = aReturnForm()
         .withReturnDate(new Date())
         .withReturnedFrom(returnedFrom)
         .withReturnedTo(returnedTo)
-        .withComponent(ComponentBuilder.aComponent().build())
         .withReturnStatus(returnStatus)
         .buildAndPersist(entityManager);
-    ReturnForm returnForm2 = ReturnFormBuilder.aReturnForm()
-        .withId(null)
+    ReturnForm returnForm2 = aReturnForm()
         .withReturnDate(new Date())
         .withReturnedFrom(returnedFrom)
         .withReturnedTo(returnedTo)
-        .withComponent(ComponentBuilder.aComponent().build())
         .withReturnStatus(returnStatus)
         .buildAndPersist(entityManager);
-    ReturnForm returnForm3 = ReturnFormBuilder.aReturnForm()
-        .withId(null)
+    ReturnForm returnForm3 = aReturnForm()
         .withReturnDate(new Date())
         .withReturnedFrom(returnedFrom)
         .withReturnedTo(returnedTo)
-        .withComponent(ComponentBuilder.aComponent().build())
         .withReturnStatus(returnStatus)
         .buildAndPersist(entityManager);
         
