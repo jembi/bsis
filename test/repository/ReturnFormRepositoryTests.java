@@ -14,6 +14,7 @@ import helpers.builders.ReturnFormBuilder;
 import model.component.Component;
 import model.location.Location;
 import model.returnform.ReturnForm;
+import model.returnform.ReturnStatus;
 import suites.SecurityContextDependentTestSuite;
 
 public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite {
@@ -110,7 +111,7 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
         .buildAndPersist(entityManager);
 
     // Run test
-    List<ReturnForm> returnForms = returnFormRepository.findReturnForms(returnDate2, returnDate3, null, null);
+    List<ReturnForm> returnForms = returnFormRepository.findReturnForms(returnDate2, returnDate3, null, null, null);
     
     // Verify
     Assert.assertEquals("Correct number of ReturnForms returned", 2, returnForms.size());
@@ -158,7 +159,7 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
         .buildAndPersist(entityManager);
 
     // Run test
-    List<ReturnForm> returnForms = returnFormRepository.findReturnForms(null, returnDate2, null, null);
+    List<ReturnForm> returnForms = returnFormRepository.findReturnForms(null, returnDate2, null, null, null);
     
     // Verify
     Assert.assertEquals("Correct number of ReturnForms returned", 2, returnForms.size());
@@ -206,7 +207,7 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
         .buildAndPersist(entityManager);
 
     // Run test
-    List<ReturnForm> returnForms = returnFormRepository.findReturnForms(returnDate2, null, null, null);
+    List<ReturnForm> returnForms = returnFormRepository.findReturnForms(returnDate2, null, null, null, null);
     
     // Verify
     Assert.assertEquals("Correct number of ReturnForms returned", 2, returnForms.size());
@@ -237,7 +238,7 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
         .buildAndPersist(entityManager);
 
     // Run test
-    List<ReturnForm> returnForms = returnFormRepository.findReturnForms(null, null, returnedFrom1.getId(), null);
+    List<ReturnForm> returnForms = returnFormRepository.findReturnForms(null, null, returnedFrom1.getId(), null, null);
     
     // Verify
     Assert.assertEquals("Correct number of ReturnForms returned", 1, returnForms.size());
@@ -267,7 +268,7 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
         .buildAndPersist(entityManager);
 
     // Run test
-    List<ReturnForm> returnForms = returnFormRepository.findReturnForms(null, null, null, returnedTo2.getId());
+    List<ReturnForm> returnForms = returnFormRepository.findReturnForms(null, null, null, returnedTo2.getId(), null);
     
     // Verify
     Assert.assertEquals("Correct number of ReturnForms returned", 1, returnForms.size());
@@ -304,7 +305,7 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
         .buildAndPersist(entityManager);
 
     // Run test
-    List<ReturnForm> returnForms = returnFormRepository.findReturnForms(null, null, null, null);
+    List<ReturnForm> returnForms = returnFormRepository.findReturnForms(null, null, null, null, null);
     
     // Verify
     Assert.assertEquals("Correct number of ReturnForms returned", 2, returnForms.size());
@@ -314,16 +315,37 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
   }
   
   @Test
+  public void testFindReturnFormsByStatus_shouldReturnMatchingReturnForms() throws Exception {
+    // Set up data
+    ReturnForm expectedReturnForm = ReturnFormBuilder.aReturnForm()
+        .withReturnStatus(ReturnStatus.CREATED)
+        .buildAndPersist(entityManager);
+    ReturnForm excludedReturnForm = ReturnFormBuilder.aReturnForm()
+        .withReturnStatus(ReturnStatus.RETURNED)
+        .buildAndPersist(entityManager);
+        
+    // Run test
+    List<ReturnForm> returnForms = returnFormRepository.findReturnForms(null, null, null, null, ReturnStatus.CREATED);
+    
+    // Verify
+    Assert.assertEquals("Correct number of ReturnForms returned", 1, returnForms.size());
+    Assert.assertTrue("Correct ReturnForm returned", returnForms.contains(expectedReturnForm));
+    Assert.assertFalse("Correct ReturnForm returned", returnForms.contains(excludedReturnForm));
+  }
+  
+  @Test
   public void testFindReturnForms_shouldReturnMatchingReturnForms() throws Exception {
     // Set up data
     Location returnedFrom = LocationBuilder.aUsageSite().buildAndPersist(entityManager);
     Location returnedTo = LocationBuilder.aDistributionSite().buildAndPersist(entityManager);
+    ReturnStatus returnStatus = ReturnStatus.RETURNED;
     ReturnForm returnForm1 = ReturnFormBuilder.aReturnForm()
         .withId(null)
         .withReturnDate(new Date())
         .withReturnedFrom(returnedFrom)
         .withReturnedTo(returnedTo)
         .withComponent(ComponentBuilder.aComponent().build())
+        .withReturnStatus(returnStatus)
         .buildAndPersist(entityManager);
     ReturnForm returnForm2 = ReturnFormBuilder.aReturnForm()
         .withId(null)
@@ -331,6 +353,7 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
         .withReturnedFrom(returnedFrom)
         .withReturnedTo(returnedTo)
         .withComponent(ComponentBuilder.aComponent().build())
+        .withReturnStatus(returnStatus)
         .buildAndPersist(entityManager);
     ReturnForm returnForm3 = ReturnFormBuilder.aReturnForm()
         .withId(null)
@@ -338,6 +361,7 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
         .withReturnedFrom(returnedFrom)
         .withReturnedTo(returnedTo)
         .withComponent(ComponentBuilder.aComponent().build())
+        .withReturnStatus(returnStatus)
         .buildAndPersist(entityManager);
         
     Calendar calendar = Calendar.getInstance();
@@ -348,7 +372,7 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
 
     // Run test
     List<ReturnForm> returnForms = returnFormRepository.findReturnForms(returnedDateFrom, returnedDateTo, 
-      returnedFrom.getId(), returnedTo.getId());
+      returnedFrom.getId(), returnedTo.getId(), returnStatus);
     
     // Verify
     Assert.assertEquals("Correct number of ReturnForms returned", 3, returnForms.size());

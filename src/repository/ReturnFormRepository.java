@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.TypedQuery;
 
 import model.returnform.ReturnForm;
+import model.returnform.ReturnStatus;
 
 import org.springframework.stereotype.Repository;
 
@@ -19,7 +20,8 @@ public class ReturnFormRepository extends AbstractRepository<ReturnForm> {
     return query.getSingleResult();
   }
 
-  public List<ReturnForm> findReturnForms(Date returnDateFrom, Date returnDateTo, Long returnedFromId, Long returnedToId) {
+  public List<ReturnForm> findReturnForms(Date returnDateFrom, Date returnDateTo, Long returnedFromId,
+      Long returnedToId, ReturnStatus status) {
     String queryString = "SELECT r FROM ReturnForm r WHERE r.isDeleted = :isDeleted ";
 
     if (returnDateFrom != null) {
@@ -33,6 +35,9 @@ public class ReturnFormRepository extends AbstractRepository<ReturnForm> {
     }
     if (returnedToId != null) {
       queryString = queryString + "AND r.returnedTo.id = :returnedToId ";
+    }
+    if (status != null) {
+      queryString = queryString + "AND r.status = :status ";
     }
 
     queryString = queryString + "ORDER BY r.returnDate DESC";
@@ -51,6 +56,9 @@ public class ReturnFormRepository extends AbstractRepository<ReturnForm> {
     }
     if (returnedToId != null) {
       query.setParameter("returnedToId", returnedToId);
+    }
+    if (status != null) {
+      query.setParameter("status", status);
     }
 
     return query.getResultList();
