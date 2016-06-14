@@ -1,7 +1,10 @@
 package backingform;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import model.returnform.ReturnStatus;
@@ -18,6 +21,8 @@ public class ReturnFormBackingForm {
   private LocationBackingForm returnedTo;
 
   private ReturnStatus status;
+
+  private List<ComponentBackingForm> components;
 
   public Long getId() {
     return id;
@@ -58,6 +63,19 @@ public class ReturnFormBackingForm {
 
   public void setStatus(ReturnStatus status) {
     this.status = status;
+  }
+
+  public List<ComponentBackingForm> getComponents() {
+    return components;
+  }
+
+  public void setComponents(List<ComponentBackingForm> components) {
+    this.components = components;
+  }
+  
+  @JsonIgnore
+  public void setPermissions(Map<String, Boolean> permissions) {
+    // Ignore
   }
 
 }

@@ -2,12 +2,12 @@ package backingform;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import model.component.ComponentStatus;
 import model.componenttype.ComponentType;
 import model.inventory.InventoryStatus;
 import model.packtype.PackType;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ComponentBackingForm {
 
@@ -29,6 +29,12 @@ public class ComponentBackingForm {
   
   @JsonIgnore
   public InventoryStatus getInventoryStatus() {
+    // ignore
+    return null;
+  }
+
+  @JsonIgnore
+  public ComponentStatus getStatus() {
     // ignore
     return null;
   }
