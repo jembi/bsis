@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,7 +32,6 @@ import repository.ComponentRepository;
 import repository.ComponentStatusChangeReasonRepository;
 import repository.ComponentTypeRepository;
 import service.ComponentCRUDService;
-import utils.CustomDateFormatter;
 import utils.PermissionConstants;
 import viewmodel.ComponentViewModel;
 
@@ -103,33 +103,14 @@ public class ComponentController {
       @RequestParam(value = "componentNumber", required = false, defaultValue = "") String componentNumber,
       @RequestParam(value = "donationIdentificationNumber", required = false, defaultValue = "") String donationIdentificationNumber,
       @RequestParam(value = "componentTypes", required = false, defaultValue = "") List<Long> componentTypeIds,
-      @RequestParam(value = "status", required = false, defaultValue = "") List<String> status,
-      @RequestParam(value = "donationDateFrom", required = false, defaultValue = "") String donationDateFrom,
-      @RequestParam(value = "donationDateTo", required = false, defaultValue = "") String donationDateTo) throws ParseException {
+      @RequestParam(value = "status", required = false) List<ComponentStatus> statuses,
+      @RequestParam(value = "donationDateFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateFrom,
+      @RequestParam(value = "donationDateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateTo) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    pagingParams.put("sortColumn", "id");
-    pagingParams.put("sortDirection", "asc");
-
-    List<Component> results = new ArrayList<Component>();
-    Date dateFrom = null;
-    Date dateTo = null;
-
-    if (!donationDateFrom.equals("")) {
-      dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
-    }
-    if (!donationDateTo.equals("")) {
-      dateTo = CustomDateFormatter.getDateFromString(donationDateTo);
-    }
-
-    results = componentRepository.findAnyComponent(
-        donationIdentificationNumber, componentTypeIds, statusStringToComponentStatus(status),
-        dateFrom, dateTo, pagingParams);
-
+    List<Component> results = componentRepository.findAnyComponent(donationIdentificationNumber, componentTypeIds, statuses,
+        donationDateFrom, donationDateTo);
     List<ComponentViewModel> components = componentViewModelFactory.createComponentViewModels(results);
-
     map.put("components", components);
     return map;
   }
@@ -179,16 +160,6 @@ public class ComponentController {
     map.put("components", componentViewModels);
 
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
-  }
-
-  private List<ComponentStatus> statusStringToComponentStatus(List<String> statusList) {
-    List<ComponentStatus> componentStatusList = new ArrayList<ComponentStatus>();
-    if (statusList != null) {
-      for (String status : statusList) {
-        componentStatusList.add(ComponentStatus.lookup(status));
-      }
-    }
-    return componentStatusList;
   }
 
 }

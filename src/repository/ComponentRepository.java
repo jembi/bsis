@@ -143,7 +143,7 @@ public class ComponentRepository {
   }
 
   public List<Component> findAnyComponent(String donationIdentificationNumber, List<Long> componentTypes, List<ComponentStatus> status,
-                                          Date donationDateFrom, Date donationDateTo, Map<String, Object> pagingParams) {
+      Date donationDateFrom, Date donationDateTo) {
     TypedQuery<Component> query;
     String queryStr = "SELECT DISTINCT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +
         "c.isDeleted= :isDeleted ";
@@ -164,9 +164,7 @@ public class ComponentRepository {
       queryStr += "AND c.donation.donationDate <= :donationDateTo ";
     }
 
-    if (pagingParams.containsKey("sortColumn")) {
-      queryStr += " ORDER BY c." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
-    }
+    queryStr += " ORDER BY c.id ASC";
 
     query = em.createQuery(queryStr, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -186,12 +184,6 @@ public class ComponentRepository {
     if (donationDateTo != null) {
       query.setParameter("donationDateTo", donationDateTo);
     }
-
-    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
-    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
-
-    query.setFirstResult(start);
-    query.setMaxResults(length);
 
     return query.getResultList();
   }
