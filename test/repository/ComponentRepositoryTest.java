@@ -9,14 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import model.component.Component;
-import model.component.ComponentStatus;
-import model.componentmovement.ComponentStatusChange;
-import model.componentmovement.ComponentStatusChangeReason;
-import model.componentmovement.ComponentStatusChangeType;
-import model.componenttype.ComponentType;
-import model.donation.Donation;
-
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.Assert;
@@ -25,6 +17,9 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import model.component.Component;
+import model.component.ComponentStatus;
+import model.donation.Donation;
 import suites.DBUnitContextDependentTestSuite;
 
 /**
@@ -60,37 +55,6 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
-  public void testGetComponents() throws Exception {
-    Date fromDate = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-10");
-    Date toDate = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
-    List<Component> all = componentRepository.getComponents(fromDate, toDate);
-    Assert.assertNotNull("There are Components", all);
-    Assert.assertEquals("There are 7 Components", 7, all.size());
-  }
-
-  @Test
-  public void testGetComponentsFromComponentIds() throws Exception {
-    String[] componentIds = new String[]{"1", "2", "4"};
-    List<Component> all = componentRepository.getComponentsFromComponentIds(componentIds);
-    Assert.assertNotNull("There are Components", all);
-    Assert.assertEquals("There are 3 Components", 3, all.size());
-  }
-
-  @Test
-  @Ignore("Bug - problem in HSQL: could not resolve property: donationIdentificationNumber of: model.component.Component [SELECT c FROM model.component.Component c WHERE c.donationIdentificationNumber = :donationIdentificationNumber and c.isDeleted = :isDeleted]")
-  public void isComponentCreatedFalse() throws Exception {
-    boolean created = componentRepository.isComponentCreated("4444444");
-    Assert.assertFalse("Component not created", created);
-  }
-
-  @Test
-  @Ignore("Bug - problem in HSQL: could not resolve property: donationIdentificationNumber of: model.component.Component [SELECT c FROM model.component.Component c WHERE c.donationIdentificationNumber = :donationIdentificationNumber and c.isDeleted = :isDeleted]")
-  public void isComponentCreatedTrue() throws Exception {
-    boolean created = componentRepository.isComponentCreated("3333333");
-    Assert.assertTrue("Component created", created);
-  }
-
-  @Test
   @Ignore("Bug - error in HQL: could not resolve property: isIssued of: model.component.Component [SELECT c FROM model.component.Component c where c.isDeleted = :isDeleted and c.isIssued= :isIssued]")
   public void testGetAllUnissuedComponents() throws Exception {
     List<Component> all = componentRepository.getAllUnissuedComponents();
@@ -99,41 +63,9 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
-  @Ignore("Bug - error in HQL: could not resolve property: isIssued of: model.component.Component [SELECT c FROM model.component.Component c where c.isDeleted = :isDeleted and c.isIssued= :isIssued]")
-  public void testGetAllUnissuedComponentsAboRhd() throws Exception {
-    List<Component> all = componentRepository.getAllUnissuedComponents("PROCESSED", "A", "+");
-    Assert.assertNotNull("There are Components", all);
-    Assert.assertEquals("There are 0 Components", 0, all.size());
-  }
-
-  @Test
   @Ignore("Bug - error in HQL: could not resolve property: isIssued of: model.component.Component [SELECT p FROM model.component.Component p where p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.createdOn > :minDate]")
   public void testGetAllUnissuedThirtyFiveDayComponents() throws Exception {
     List<Component> all = componentRepository.getAllUnissuedThirtyFiveDayComponents();
-    Assert.assertNotNull("There are Components", all);
-    Assert.assertEquals("There are 0 Components", 0, all.size());
-  }
-
-  @Test
-  @Ignore("Bug - error in HQL: could not resolve property: type of: model.component.Component [SELECT p FROM model.component.Component p where p.type = :componentType and p.abo= :abo and p.rhd= :rhd and p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.createdOn > :minDate]")
-  public void testGetAllUnissuedThirtyFiveDayComponentsWithParameters() throws Exception {
-    List<Component> all = componentRepository.getAllUnissuedThirtyFiveDayComponents("PROCESSED", "A", "+");
-    Assert.assertNotNull("There are Components", all);
-    Assert.assertEquals("There are 0 Components", 0, all.size());
-  }
-
-  @Test
-  @Ignore("There appears to be a bug in the HQL: could not resolve property: type of: model.component.Component")
-  public void testGetAllComponentsWithComponentTypeQUARANTINED() throws Exception {
-    List<Component> all = componentRepository.getAllComponents("QUARANTINED");
-    Assert.assertNotNull("There are Components", all);
-    Assert.assertEquals("There are 3 Components", 3, all.size());
-  }
-
-  @Test
-  @Ignore("There appears to be a bug in the HQL: could not resolve property: type of: model.component.Component")
-  public void testGetAllComponentsWithComponentTypeEXPIRED() throws Exception {
-    List<Component> all = componentRepository.getAllComponents("EXPIRED");
     Assert.assertNotNull("There are Components", all);
     Assert.assertEquals("There are 0 Components", 0, all.size());
   }
@@ -158,13 +90,6 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
   public void testFindComponentByIdUnknown() throws Exception {
     Component one = componentRepository.findComponent(1111l);
     Assert.assertNull("There is no Component with id 1111", one);
-  }
-
-  @Test
-  public void testFindComponentByComponentCode() throws Exception {
-    Component component = componentRepository.findComponent("5555555-0011");
-    Assert.assertNotNull("Found Component by componentCode", component);
-    Assert.assertEquals("Found correct Component", Long.valueOf(7), component.getId());
   }
 
   @Test
@@ -193,30 +118,6 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
   public void testFindComponentByDINAndComponentTypeIdUnknown() throws Exception {
     List<Component> one = componentRepository.findComponentsByDINAndType("1111112", 1);
     Assert.assertEquals("There is no a Component with DIN 1111112", 0, one.size());
-  }
-
-  @Test
-  public void testFindComponentByComponentTypes() throws Exception {
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    List<ComponentStatus> status = new ArrayList<ComponentStatus>();
-    status.add(ComponentStatus.PROCESSED);
-    List<Long> componentTypeIds = new ArrayList<Long>();
-    componentTypeIds.add(1l);
-    List<Component> all = componentRepository.findComponentByComponentTypes(componentTypeIds, status, pagingParams);
-    Assert.assertNotNull("Does not return an null", all);
-    Assert.assertEquals("There are 3 'Whole Blood Single Pack - CPDA' Components", 3, all.size());
-  }
-
-  @Test
-  public void testFindComponentByComponentTypesNone() throws Exception {
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    List<ComponentStatus> status = new ArrayList<ComponentStatus>();
-    status.add(ComponentStatus.QUARANTINED);
-    List<Long> componentTypeIds = new ArrayList<Long>();
-    componentTypeIds.add(1l);
-    List<Component> all = componentRepository.findComponentByComponentTypes(componentTypeIds, status, pagingParams);
-    Assert.assertNotNull("Does not return a null list", all);
-    Assert.assertTrue("There are no Components", all.isEmpty());
   }
 
   @Test
@@ -258,44 +159,6 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
     List<Component> all = componentRepository.findAnyComponent(null, null, null, start, end, pagingParams);
     Assert.assertNotNull("There are matching components", all);
     Assert.assertEquals("There should be 7 components", 7, all.size());
-  }
-
-  @Test
-  @Ignore("Bug - error in the HQL:  org.hibernate.QueryException: could not resolve property: componentType of: model.componenttype.ComponentType [SELECT p FROM model.componenttype.ComponentType p where p.componentType = :componentTypeName]")
-  public void testFindComponentTypeByComponentTypeName() throws Exception {
-    ComponentType one = componentRepository.findComponentTypeByComponentTypeName("Whole Blood Single Pack - CPDA");
-    Assert.assertNotNull("ComponentType match", one);
-    Assert.assertEquals("ComponentType is correct", "0011", one.getComponentTypeCode());
-  }
-
-  @Test
-  public void testFindComponentTypeByComponentTypeId() throws Exception {
-    ComponentType one = componentRepository.findComponentTypeBySelectedComponentType(1l);
-    Assert.assertNotNull("ComponentType match", one);
-    Assert.assertEquals("ComponentType is correct", "Whole Blood Single Pack - CPDA", one.getComponentTypeName());
-  }
-
-  @Test(expected = javax.persistence.NoResultException.class)
-  @Transactional
-  public void testFindComponentTypeByComponentTypeIdUnknown() throws Exception {
-    componentRepository.findComponentTypeBySelectedComponentType(123l);
-  }
-
-  @Test
-  public void testGetComponentStatusChanges() throws Exception {
-    Component discardedComponent = componentRepository.findComponent(6l);
-    List<ComponentStatusChange> changes = componentRepository.getComponentStatusChanges(discardedComponent);
-    Assert.assertNotNull("Not empty list", changes);
-    Assert.assertEquals("1 ComponentStatusChange", 1, changes.size());
-    Assert.assertEquals("Component was DISCARDED", "DISCARDED", changes.get(0).getNewStatus().toString());
-  }
-
-  @Test
-  public void testGetComponentStatusChangesNone() throws Exception {
-    Component quarantinedComponent = componentRepository.findComponent(4l);
-    List<ComponentStatusChange> changes = componentRepository.getComponentStatusChanges(quarantinedComponent);
-    Assert.assertNotNull("Not empty list", changes);
-    Assert.assertTrue("0 ComponentStatusChange", changes.isEmpty());
   }
 
   @Test
@@ -364,53 +227,6 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
     Map<Long, Long> abMinusResults = results.get("AB-");
     Long abMinus2015Results = abMinusResults.get(formattedDate.getTime());
     Assert.assertEquals("0 AB- donations", new Long(0), abMinus2015Results);
-  }
-
-  @Test
-  // FIXME: issue with package dependencies here - ComponentRepository uses UtilController to retrieve the logged in user.
-  public void testReturnComponent() throws Exception {
-    ComponentStatusChangeReason returnReason = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(7l);
-    componentRepository.returnComponent(1l, returnReason, "junit");
-    Component component = componentRepository.findComponent(1l);
-    List<ComponentStatusChange> changes = componentRepository.getComponentStatusChanges(component);
-    Assert.assertNotNull("Not empty list", changes);
-    Assert.assertEquals("1 ComponentStatusChange", 1, changes.size());
-    Assert.assertEquals("Correct ComponentStatusChangeType", ComponentStatusChangeType.RETURNED, changes.get(0)
-        .getStatusChangeType());
-  }
-
-  @Test
-  // FIXME: issue with package dependencies here - ComponentRepository uses UtilController to retrieve the logged in user.
-  public void testSplitComponent() throws Exception {
-    boolean split = componentRepository.splitComponent(2l, 2);
-    Assert.assertTrue("Split was successful", split);
-    Component component = componentRepository.findComponent(2l);
-    Assert.assertEquals("Status is changed to SPLIT", ComponentStatus.SPLIT, component.getStatus());
-    List<ComponentStatusChange> changes = componentRepository.getComponentStatusChanges(component);
-    Assert.assertEquals("1 ComponentStatusChange", 1, changes.size());
-    Assert.assertEquals("Correct ComponentStatusChangeType", ComponentStatusChangeType.SPLIT, changes.get(0)
-        .getStatusChangeType());
-    List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber("1111111");
-    // FIXME: I'm not sure that numComponentsAfterSplitting is correctly named - expected only 1 extra component to be created after the split
-    Assert.assertEquals("4 components after split", 4, components.size());
-  }
-
-  @Test
-  public void testSplitComponentTwice() throws Exception {
-    componentRepository.splitComponent(2l, 1);
-    List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber("1111111");
-    for (Component p : components) {
-      if (p.getStatus() == ComponentStatus.SPLIT) {
-        boolean split = componentRepository.splitComponent(p.getId(), 1);
-        Assert.assertFalse("Cannot split a component that has already been split", split);
-      }
-    }
-  }
-
-  @Test
-  public void testSplitComponentUnknown() throws Exception {
-    boolean split = componentRepository.splitComponent(123l, 2);
-    Assert.assertFalse("Unknown component", split);
   }
 
   @Test
@@ -558,23 +374,6 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
     boolean updatedComponentStatus = componentRepository.updateComponentInternalFields(component);
     Assert.assertTrue("UNSAFE component status is changed", updatedComponentStatus);
     Assert.assertEquals("Component status is actually UNSAFE", ComponentStatus.UNSAFE, component.getStatus());
-  }
-
-  @Test
-  @Ignore("Bug - this won't work if there are foreign key references such as ComponentStatusChange entries...")
-  public void testDeleteAllComponents() throws Exception {
-    componentRepository.deleteAllComponents();
-    List<Component> all = componentRepository.getAllComponents();
-    Assert.assertNotNull("Doesn't return null object", all);
-    Assert.assertTrue("No components left", all.isEmpty());
-  }
-
-  @Test
-  public void testDeleteComponent() throws Exception {
-    componentRepository.deleteComponent(1l);
-    Component deletedComponent = componentRepository.findComponent(1l);
-    Assert.assertNotNull("Component isn't actually deleted", deletedComponent);
-    Assert.assertTrue("Component is marked as isDeleted", deletedComponent.getIsDeleted());
   }
 
   @Test

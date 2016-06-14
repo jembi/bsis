@@ -2,20 +2,12 @@ package controller;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-
-import model.component.Component;
-import model.component.ComponentStatus;
-import model.componentmovement.ComponentStatusChange;
-import model.componentmovement.ComponentStatusChangeReason;
-import model.componentmovement.ComponentStatusChangeReasonCategory;
-import model.componenttype.ComponentTypeCombination;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,18 +20,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import backingform.RecordComponentBackingForm;
+import factory.ComponentTypeFactory;
+import factory.ComponentViewModelFactory;
+import model.component.Component;
+import model.component.ComponentStatus;
+import model.componentmovement.ComponentStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeReasonCategory;
 import repository.ComponentRepository;
 import repository.ComponentStatusChangeReasonRepository;
 import repository.ComponentTypeRepository;
 import service.ComponentCRUDService;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
-import viewmodel.ComponentStatusChangeViewModel;
-import viewmodel.ComponentTypeCombinationViewModel;
 import viewmodel.ComponentViewModel;
-import backingform.RecordComponentBackingForm;
-import factory.ComponentTypeFactory;
-import factory.ComponentViewModelFactory;
 
 @RestController
 @RequestMapping("components")
@@ -81,7 +75,7 @@ public class ComponentController {
     Component component = componentRepository.findComponentById(id);
 
     ComponentViewModel componentViewModel = componentViewModelFactory.createComponentViewModel(component);
-    addEditSelectorOptions(map);
+    map.put("componentTypes", componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes()));
     map.put("component", componentViewModel);
     map.put("componentStatusChangeReasons",
         componentStatusChangeReasonRepository.getAllComponentStatusChangeReasonsAsMap());
@@ -92,7 +86,7 @@ public class ComponentController {
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT_INFORMATION + "')")
   public Map<String, Object> findComponentFormGenerator(HttpServletRequest request) {
     Map<String, Object> map = new HashMap<String, Object>();
-    addEditSelectorOptions(map);
+    map.put("componentTypes", componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes()));
     List<ComponentStatusChangeReason> statusChangeReasons =
         componentStatusChangeReasonRepository.getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.RETURNED);
     map.put("returnReasons", statusChangeReasons);
@@ -140,15 +134,6 @@ public class ComponentController {
     return map;
   }
 
-  @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-  @PreAuthorize("hasRole('" + PermissionConstants.VOID_COMPONENT + "')")
-  public HttpStatus deleteComponent(
-      @PathVariable Long id) {
-
-    componentRepository.deleteComponent(id);
-    return HttpStatus.NO_CONTENT;
-  }
-
   @RequestMapping(value = "{id}/discard", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.DISCARD_COMPONENT + "')")
   public ResponseEntity<Map<String, Object>> discardComponent(
@@ -168,50 +153,6 @@ public class ComponentController {
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
-  @RequestMapping(value = "{id}/split", method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('" + PermissionConstants.ADD_COMPONENT + "')")
-  public ResponseEntity discardComponent(
-      @PathVariable Long id,
-      @RequestParam("numComponentsAfterSplitting") Integer numComponentsAfterSplitting) {
-
-    boolean success = true;
-    success = componentRepository.splitComponent(id, numComponentsAfterSplitting);
-    if (!success)
-      return new ResponseEntity(HttpStatus.BAD_GATEWAY);
-
-    return new ResponseEntity(HttpStatus.NO_CONTENT);
-  }
-
-  @RequestMapping(value = "{id}/history", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
-  public Map<String, Object> viewComponentHistory(
-      @PathVariable Long id) {
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    Component component = componentRepository.findComponentById(id);
-    ComponentViewModel componentViewModel = componentViewModelFactory.createComponentViewModel(component);
-    map.put("component", componentViewModel);
-    List<ComponentStatusChange> componentStatusChangeList = componentRepository.getComponentStatusChanges(component);
-    List<ComponentStatusChangeViewModel> componentStatusChanges = getComponentStatusChangeViewModels(componentStatusChangeList);
-
-    map.put("componentStatusChanges", componentStatusChanges);
-    return map;
-  }
-
-  @RequestMapping(value = "{id}/return", method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('" + PermissionConstants.DISCARD_COMPONENT + "')")
-  public HttpStatus returnComponent(
-      @PathVariable Long id,
-      @RequestParam("returnReasonId") Long returnReasonId,
-      @RequestParam("returnReasonText") String returnReasonText) {
-
-    ComponentStatusChangeReason statusChangeReason = new ComponentStatusChangeReason();
-    statusChangeReason.setId(returnReasonId);
-    componentRepository.returnComponent(id, statusChangeReason, returnReasonText);
-
-    return HttpStatus.NO_CONTENT;
-  }
-
   @RequestMapping(value = "/donations/{donationNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
   public Map<String, Object> findComponentByDonationIdentificationNumber(HttpServletRequest request, @PathVariable String donationNumber) {
@@ -222,15 +163,6 @@ public class ComponentController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("components", componentViewModels);
-    return map;
-  }
-
-  @RequestMapping(value = "/combinations", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
-  public Map<String, Object> getComponentTypeCombinations() {
-    Map<String, Object> map = new HashMap<String, Object>();
-    List<ComponentTypeCombination> allComponentTypeCombinationsIncludeDeleted = componentTypeRepository.getAllComponentTypeCombinationsIncludeDeleted();
-    map.put("combinations", getComponentTypeCombinationViewModels(allComponentTypeCombinationsIncludeDeleted));
     return map;
   }
 
@@ -249,22 +181,6 @@ public class ComponentController {
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
 
-  private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("componentTypes", componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes()));
-  }
-
-  private static List<ComponentStatusChangeViewModel> getComponentStatusChangeViewModels(
-      List<ComponentStatusChange> componentStatusChanges) {
-    if (componentStatusChanges == null)
-      return Arrays.asList(new ComponentStatusChangeViewModel[0]);
-    List<ComponentStatusChangeViewModel> componentStatusChangeViewModels =
-        new ArrayList<ComponentStatusChangeViewModel>();
-    for (ComponentStatusChange componentStatusChange : componentStatusChanges) {
-      componentStatusChangeViewModels.add(new ComponentStatusChangeViewModel(componentStatusChange));
-    }
-    return componentStatusChangeViewModels;
-  }
-
   private List<ComponentStatus> statusStringToComponentStatus(List<String> statusList) {
     List<ComponentStatus> componentStatusList = new ArrayList<ComponentStatus>();
     if (statusList != null) {
@@ -273,17 +189,6 @@ public class ComponentController {
       }
     }
     return componentStatusList;
-  }
-
-  public List<ComponentTypeCombinationViewModel> getComponentTypeCombinationViewModels(
-      List<ComponentTypeCombination> componentTypeCombinations) {
-    List<ComponentTypeCombinationViewModel> componentTypeCombinationViewModels
-        = new ArrayList<ComponentTypeCombinationViewModel>();
-    for (ComponentTypeCombination componentTypeCombination : componentTypeCombinations)
-      componentTypeCombinationViewModels.add(new ComponentTypeCombinationViewModel(componentTypeCombination));
-
-    return componentTypeCombinationViewModels;
-
   }
 
 }
