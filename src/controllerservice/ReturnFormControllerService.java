@@ -1,17 +1,22 @@
 package controllerservice;
 
+import java.util.Date;
+import java.util.List;
+
 import javax.transaction.Transactional;
+
+import model.returnform.ReturnForm;
+import model.returnform.ReturnStatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import backingform.ReturnFormBackingForm;
-import factory.ReturnFormFactory;
-import model.returnform.ReturnForm;
 import repository.ReturnFormRepository;
 import service.ReturnFormCRUDService;
 import viewmodel.ReturnFormFullViewModel;
 import viewmodel.ReturnFormViewModel;
+import backingform.ReturnFormBackingForm;
+import factory.ReturnFormFactory;
 
 @Service
 @Transactional
@@ -43,4 +48,12 @@ public class ReturnFormControllerService {
     return returnFormFactory.createFullViewModel(returnForm);
   }
 
+  public List<ReturnFormViewModel> findReturnForms(Date returnDateFrom, Date returnDateTo, 
+      Long returnedFromId, Long returnedToId, ReturnStatus status) {
+
+    List<ReturnForm> returnForms = returnFormRepository.findReturnForms(returnDateFrom, returnDateTo, 
+        returnedFromId, returnedToId, status);
+    
+    return returnFormFactory.createViewModels(returnForms);
+  }
 }

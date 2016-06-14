@@ -1,12 +1,17 @@
 package controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
+import model.location.Location;
+import model.returnform.ReturnStatus;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,15 +21,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import repository.LocationRepository;
+import utils.PermissionConstants;
 import backingform.ReturnFormBackingForm;
 import backingform.validator.ReturnFormBackingFormValidator;
 import controllerservice.ReturnFormControllerService;
 import factory.LocationViewModelFactory;
-import model.location.Location;
-import repository.LocationRepository;
-import utils.PermissionConstants;
 
 @RestController
 @RequestMapping("returnforms")
@@ -89,4 +94,19 @@ public class ReturnFormController {
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
+  @RequestMapping(value = "/search", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_ORDER_FORM + "')")
+  public ResponseEntity<Map<String, Object>> findReturnForms(
+      @RequestParam(value = "returnDateFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date returnDateFrom,
+      @RequestParam(value = "returnDateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date returnDateTo,
+      @RequestParam(value = "returnedFromId", required = false) Long returnedFromId,
+      @RequestParam(value = "returnedToId", required = false) Long returnedToId,
+      @RequestParam(value = "status", required = false) ReturnStatus status) {
+
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("returnForms", returnFormControllerService.findReturnForms(returnDateFrom, returnDateTo, 
+        returnedFromId, returnedToId, status));
+
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+  }
 }

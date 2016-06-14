@@ -2,16 +2,6 @@ package factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
-
-import java.util.Date;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-
-import backingform.ReturnFormBackingForm;
 import helpers.builders.ComponentBackingFormBuilder;
 import helpers.builders.ComponentBuilder;
 import helpers.builders.LocationBackingFormBuilder;
@@ -23,9 +13,22 @@ import helpers.builders.ReturnFormViewModelBuilder;
 import helpers.matchers.ReturnFormFullViewModelMatcher;
 import helpers.matchers.ReturnFormMatcher;
 import helpers.matchers.ReturnFormViewModelMatcher;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 import model.component.Component;
 import model.location.Location;
 import model.returnform.ReturnForm;
+
+import org.hamcrest.Matchers;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
 import repository.ComponentRepository;
 import repository.LocationRepository;
 import service.ReturnFormConstraintChecker;
@@ -33,6 +36,7 @@ import viewmodel.ComponentViewModel;
 import viewmodel.LocationViewModel;
 import viewmodel.ReturnFormFullViewModel;
 import viewmodel.ReturnFormViewModel;
+import backingform.ReturnFormBackingForm;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ReturnFormFactoryTests {
@@ -152,5 +156,58 @@ public class ReturnFormFactoryTests {
     assertThat(convertedViewModel, ReturnFormFullViewModelMatcher.hasSameStateAsReturnFormFullViewModel(expectedViewModel));
   }
 
+  @Test
+  public void testConvertNullToReturnFormViewModels_shouldReturnEmptyList() {
+    // Run test
+    List<ReturnFormViewModel> convertedViewModels = returnFormFactory.createViewModels(null);
+
+    // Verify
+    assertThat(convertedViewModels, Matchers.notNullValue());
+  }
   
+  @Test
+  public void testConvertEntitiesToReturnFormViewModels_shouldReturnList() {
+    // Set up data
+    Location returnedFrom1 = LocationBuilder.aUsageSite().withId(1L).build();
+    Location returnedTo1 = LocationBuilder.aDistributionSite().withId(2L).build();
+    Date returnDate1 = new Date();
+    ReturnFormViewModel expectedViewModel1 = ReturnFormViewModelBuilder.aReturnFormViewModel()
+        .withReturnedFrom(new LocationViewModel(returnedFrom1))
+        .withReturnedTo(new LocationViewModel(returnedTo1))
+        .withReturnDate(returnDate1)
+        .build();
+    ReturnForm entity1 = ReturnFormBuilder.aReturnForm()
+        .withReturnedFrom(returnedFrom1)
+        .withReturnedTo(returnedTo1)
+        .withReturnDate(returnDate1)
+        .build();
+    
+    Location returnedFrom2 = LocationBuilder.aUsageSite().withId(1L).build();
+    Location returnedTo2 = LocationBuilder.aDistributionSite().withId(2L).build();
+    Date returnDate2 = new Date();
+    ReturnFormViewModel expectedViewModel2 = ReturnFormViewModelBuilder.aReturnFormViewModel()
+        .withReturnedFrom(new LocationViewModel(returnedFrom2))
+        .withReturnedTo(new LocationViewModel(returnedTo2))
+        .withReturnDate(returnDate2)
+        .build();
+    ReturnForm entity2 = ReturnFormBuilder.aReturnForm()
+        .withReturnedFrom(returnedFrom2)
+        .withReturnedTo(returnedTo2)
+        .withReturnDate(returnDate2)
+        .build();
+    
+    // Setup mocks
+    when(locationViewModelFactory.createLocationViewModel(returnedFrom1)).thenReturn(new LocationViewModel(returnedFrom1));
+    when(locationViewModelFactory.createLocationViewModel(returnedFrom2)).thenReturn(new LocationViewModel(returnedFrom2));
+    when(locationViewModelFactory.createLocationViewModel(returnedTo1)).thenReturn(new LocationViewModel(returnedTo1));
+    when(locationViewModelFactory.createLocationViewModel(returnedTo2)).thenReturn(new LocationViewModel(returnedTo2));
+
+    // Run test
+    List<ReturnFormViewModel> convertedViewModels = returnFormFactory.createViewModels(Arrays.asList(entity1, entity2));
+
+    // Verify
+    assertThat(convertedViewModels, Matchers.notNullValue());
+    assertThat(convertedViewModels.get(0), ReturnFormViewModelMatcher.hasSameStateAsReturnFormViewModel(expectedViewModel1));
+    assertThat(convertedViewModels.get(1), ReturnFormViewModelMatcher.hasSameStateAsReturnFormViewModel(expectedViewModel2));
+  }
 }
