@@ -1,27 +1,19 @@
 package repository;
 
-import static helpers.builders.ComponentBuilder.aComponent;
-import static helpers.builders.ReturnFormBuilder.aReturnForm;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import helpers.builders.ComponentBuilder;
-import helpers.builders.LocationBuilder;
-import helpers.builders.ReturnFormBuilder;
-
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import model.component.Component;
-import model.location.Location;
-import model.returnform.ReturnForm;
-import model.returnform.ReturnStatus;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import helpers.builders.ComponentBuilder;
+import helpers.builders.LocationBuilder;
+import helpers.builders.ReturnFormBuilder;
+import model.component.Component;
+import model.location.Location;
+import model.returnform.ReturnForm;
 import suites.SecurityContextDependentTestSuite;
 
 public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite {
@@ -78,32 +70,6 @@ public class ReturnFormRepositoryTests extends SecurityContextDependentTestSuite
   @Test(expected = javax.persistence.NoResultException.class)
   public void testFindById_shouldThrowException() throws Exception {
     returnFormRepository.findById(123L);
-  }
-  
-  @Test
-  public void testFindCreatedReturnForms_shouldReturnMatchingReturnForms() {
-    // Set up fixture
-    List<ReturnForm> expectedReturnForms = Arrays.asList(
-        aReturnForm()
-            .withReturnStatus(ReturnStatus.CREATED)
-            .buildAndPersist(entityManager),
-        aReturnForm()
-            .withReturnStatus(ReturnStatus.CREATED)
-            .withComponent(aComponent().buildAndPersist(entityManager))
-            .buildAndPersist(entityManager)
-    );
-    
-    // Excluded by return status
-    aReturnForm().withReturnStatus(ReturnStatus.RETURNED).buildAndPersist(entityManager);
-    
-    // Excluded by deleted
-    aReturnForm().withReturnStatus(ReturnStatus.CREATED).withIsDeleted(true).buildAndPersist(entityManager);
-    
-    // Exercise SUT
-    List<ReturnForm> returnedReturnForms = returnFormRepository.findCreatedReturnForms();
-    
-    // Verify
-    assertThat(returnedReturnForms, is(expectedReturnForms));
   }
   
   public void testFindReturnForms_shouldReturnReturnFormsInDateRange() throws Exception {

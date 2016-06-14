@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.TypedQuery;
 
 import model.returnform.ReturnForm;
-import model.returnform.ReturnStatus;
 
 import org.springframework.stereotype.Repository;
 
@@ -18,13 +17,6 @@ public class ReturnFormRepository extends AbstractRepository<ReturnForm> {
     query.setParameter("id", id);
     query.setParameter("isDeleted", false);
     return query.getSingleResult();
-  }
-  
-  public List<ReturnForm> findCreatedReturnForms() {
-    return entityManager.createNamedQuery(ReturnFormNamedQueryConstants.NAME_FIND_CREATED_RETURN_FORMS, ReturnForm.class)
-        .setParameter("status", ReturnStatus.CREATED)
-        .setParameter("deleted", false)
-        .getResultList();
   }
 
   public List<ReturnForm> findReturnForms(Date returnDateFrom, Date returnDateTo, Long returnedFromId, Long returnedToId) {
