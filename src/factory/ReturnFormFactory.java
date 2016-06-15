@@ -75,6 +75,16 @@ public class ReturnFormFactory {
     populateBasicViewModel(entity, viewModel);
     return viewModel;
   }
+  
+  public List<ReturnFormViewModel> createViewModels(List<ReturnForm> returnForms) {
+    List<ReturnFormViewModel> viewModels = new ArrayList<>();
+    if (returnForms != null) {
+      for (ReturnForm returnForm : returnForms) {
+        viewModels.add(createViewModel(returnForm));
+      }
+    }
+    return viewModels;
+  }
 
   private void populateBasicViewModel(ReturnForm entity, ReturnFormViewModel viewModel) {
     viewModel.setId(entity.getId());
