@@ -85,7 +85,9 @@ public class DiscardReasonRepository {
   
   public boolean verifyDiscardReasonExists(Long id) {
     Long count = em.createNamedQuery(ComponentStatusChangeReasonNamedQueryConstants.NAME_COUNT_DISCARD_REASON_WITH_ID, Long.class)
-        .setParameter("id", id).getSingleResult();
+        .setParameter("id", id)
+        .setParameter("category", ComponentStatusChangeReasonCategory.DISCARDED)
+        .getSingleResult();
     if (count == 1) {
       return true;
     }
