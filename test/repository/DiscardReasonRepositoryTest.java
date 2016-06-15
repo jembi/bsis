@@ -3,16 +3,15 @@ package repository;
 import java.io.File;
 import java.util.List;
 
-import model.componentmovement.ComponentStatusChangeReason;
-import model.componentmovement.ComponentStatusChangeReasonCategory;
-import model.user.User;
-
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import model.componentmovement.ComponentStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeReasonCategory;
+import model.user.User;
 import suites.DBUnitContextDependentTestSuite;
 
 /**
@@ -84,4 +83,15 @@ public class DiscardReasonRepositoryTest extends DBUnitContextDependentTestSuite
     Assert.assertNotNull("There are Discard reasons defined", all);
     Assert.assertEquals("There are 7 Discard reasons defined", 7, all.size());
   }
+
+  @Test
+  public void testDiscardReasonExists() throws Exception {
+    Assert.assertTrue("DiscardReason exists", discardReasonRepository.verifyDiscardReasonExists(1L));
+  }
+
+  @Test
+  public void testEntityDoesNotExist() throws Exception {
+    Assert.assertFalse("DiscardReason does not exist", discardReasonRepository.verifyDiscardReasonExists(123L));
+  }
+
 }

@@ -10,9 +10,11 @@ import java.util.Arrays;
 
 import javax.persistence.NoResultException;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import helpers.builders.ComponentBuilder;
 import model.component.Component;
 import model.component.ComponentStatus;
 import model.donation.Donation;
@@ -141,6 +143,18 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
   public void testFindNonExistentComponentByCodeAndDIN_shoulThrow() {
     // Test
     componentRepository.findComponentByCodeAndDIN("", "");
+  }
+
+
+  @Test
+  public void testComponentExists() throws Exception {
+    Component component = ComponentBuilder.aComponent().buildAndPersist(entityManager);
+    Assert.assertTrue("Component exists", componentRepository.verifyComponentExists(component.getId()));
+  }
+
+  @Test
+  public void testEntityDoesNotExist() throws Exception {
+    Assert.assertFalse("Component does not exist", componentRepository.verifyComponentExists(1L));
   }
 
 }
