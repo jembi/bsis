@@ -28,8 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 import repository.ComponentRepository;
 import repository.ComponentTypeRepository;
 import utils.SecurityUtils;
-import viewmodel.ComponentViewModel;
-import factory.ComponentViewModelFactory;
 
 @Transactional
 @Service
@@ -41,8 +39,7 @@ public class ComponentCRUDService {
 
   @Autowired
   private ComponentRepository componentRepository;
-  @Autowired
-  private ComponentViewModelFactory componentViewModelFactory;
+
   @Autowired
   private ComponentTypeRepository componentTypeRepository;
 
@@ -194,11 +191,6 @@ public class ComponentCRUDService {
     componentRepository.updateComponent(existingComponent);
     
     return existingComponent;
-  }
-  
-  public ComponentViewModel findComponentByCodeAndDIN(String componentCode, String donationIdentificationNumber) {
-    Component component = componentRepository.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber);
-    return componentViewModelFactory.createComponentViewModel(component);
   }
   
   public Component updateComponent(Component component) {
