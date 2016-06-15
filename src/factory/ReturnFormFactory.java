@@ -65,6 +65,7 @@ public class ReturnFormFactory {
     Map<String, Boolean> permissions = new HashMap<>();
     permissions.put("canEdit", returnFormConstraintChecker.canEdit(entity));
     permissions.put("canReturn", returnFormConstraintChecker.canReturn(entity));
+    permissions.put("canDiscard", returnFormConstraintChecker.canDiscard(entity));
     viewModel.setPermissions(permissions);
 
     return viewModel;
