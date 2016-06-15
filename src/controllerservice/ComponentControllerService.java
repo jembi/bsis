@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import backingform.RecordComponentBackingForm;
 import factory.ComponentTypeFactory;
 import factory.ComponentViewModelFactory;
 import model.component.Component;
@@ -77,6 +78,15 @@ public class ComponentControllerService {
     List<ComponentViewModel> components = componentViewModelFactory.createComponentViewModels(results);
     
     return components;
+  }
+  
+  public List<ComponentViewModel> processComponent(RecordComponentBackingForm recordComponentForm) {
+    Component parentComponent = componentCRUDService.processComponent(recordComponentForm.getParentComponentId(), 
+        recordComponentForm.getComponentTypeCombination());
+    List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(
+        parentComponent.getDonationIdentificationNumber());
+    List<ComponentViewModel> componentViewModels = componentViewModelFactory.createComponentViewModels(results);
+    return componentViewModels;
   }
   
   public List<ComponentStatusChangeReason> getReturnReasons() {

@@ -8,6 +8,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import model.component.ComponentStatus;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -20,49 +22,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import utils.PermissionConstants;
 import backingform.RecordComponentBackingForm;
 import controllerservice.ComponentControllerService;
-import factory.ComponentTypeFactory;
-import factory.ComponentViewModelFactory;
-import model.component.Component;
-import model.component.ComponentStatus;
-import model.componentmovement.ComponentStatusChangeReason;
-import model.componentmovement.ComponentStatusChangeReasonCategory;
-import repository.ComponentRepository;
-import repository.ComponentStatusChangeReasonRepository;
-import repository.ComponentTypeRepository;
-import service.ComponentCRUDService;
-import utils.PermissionConstants;
-import viewmodel.ComponentViewModel;
 
 @RestController
 @RequestMapping("components")
 public class ComponentController {
 
   @Autowired
-  private ComponentRepository componentRepository;
-
-  @Autowired
-  private ComponentStatusChangeReasonRepository componentStatusChangeReasonRepository;
-
-  @Autowired
-  private ComponentTypeRepository componentTypeRepository;
-  
-  @Autowired
-  private ComponentCRUDService componentCRUDService;
-
-  @Autowired
-  private ComponentViewModelFactory componentViewModelFactory;
-  
-  @Autowired
-  private ComponentTypeFactory componentTypeFactory;
-
-  @Autowired
   private ComponentControllerService componentControllerService;
 
   @RequestMapping(value = "/discard/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.DISCARD_COMPONENT + "')")
-  public Map<String, Object> findComponentFormGenerator() {
+  public Map<String, Object> getComponentDiscardForm() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("discardReasons", componentControllerService.getDiscardReasons());
     return map;
@@ -70,41 +43,32 @@ public class ComponentController {
 
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
-  public Map<String, Object> findComponent(@RequestParam(required = true) String componentCode,
+  public Map<String, Object> findComponent(
+      @RequestParam(required = true) String componentCode,
       @RequestParam(required = true) String donationIdentificationNumber) {
+
     Map<String, Object> map = new HashMap<>();
-    map.put("component", componentCRUDService.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber));
+    map.put("component", componentControllerService.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber));
     return map;
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
-  public Map<String, Object> componentSummaryGenerator(HttpServletRequest request,
-                                                       @PathVariable Long id) {
-
+  public Map<String, Object> componentSummaryGenerator(@PathVariable Long id) {
     Map<String, Object> map = new HashMap<String, Object>();
-    Component component = componentRepository.findComponentById(id);
-
-    ComponentViewModel componentViewModel = componentViewModelFactory.createComponentViewModel(component);
-    map.put("componentTypes", componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes()));
-    map.put("component", componentViewModel);
-    map.put("componentStatusChangeReasons",
-        componentStatusChangeReasonRepository.getAllComponentStatusChangeReasonsAsMap());
+    map.put("componentTypes", componentControllerService.getComponentTypes());
+    map.put("component", componentControllerService.findComponentById(id));
     return map;
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT_INFORMATION + "')")
-  public Map<String, Object> findComponentFormGenerator(HttpServletRequest request) {
+  public Map<String, Object> getFindComponentForm() {
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("componentTypes", componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes()));
-    List<ComponentStatusChangeReason> statusChangeReasons =
-        componentStatusChangeReasonRepository.getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.RETURNED);
-    map.put("returnReasons", statusChangeReasons);
-    statusChangeReasons =
-        componentStatusChangeReasonRepository.getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.DISCARDED);
-    map.put("discardReasons", statusChangeReasons);
-    map.put("findComponentByPackNumberForm", new RecordComponentBackingForm());
+    map.put("componentTypes", componentControllerService.getComponentTypes());
+    map.put("returnReasons", componentControllerService.getReturnReasons());
+    map.put("discardReasons", componentControllerService.getDiscardReasons());
+    map.put("recordComponentForm", new RecordComponentBackingForm());
     return map;
   }
 
@@ -119,10 +83,8 @@ public class ComponentController {
       @RequestParam(value = "donationDateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateTo) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    List<Component> results = componentRepository.findAnyComponent(donationIdentificationNumber, componentTypeIds, statuses,
-        donationDateFrom, donationDateTo);
-    List<ComponentViewModel> components = componentViewModelFactory.createComponentViewModels(results);
-    map.put("components", components);
+    map.put("components", componentControllerService.findAnyComponent(donationIdentificationNumber, 
+        componentTypeIds, statuses, donationDateFrom, donationDateTo));
     return map;
   }
 
@@ -132,29 +94,19 @@ public class ComponentController {
       @PathVariable Long id,
       @RequestParam(value = "discardReasonId") Long discardReasonId,
       @RequestParam(value = "discardReasonText", required = false) String discardReasonText) {
-    
-    Component discardedComponent = componentCRUDService.discardComponent(id, discardReasonId, discardReasonText);
-
-    List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(
-        discardedComponent.getDonation().getDonationIdentificationNumber());
-
-    List<ComponentViewModel> components = componentViewModelFactory.createComponentViewModels(results);
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("components", components);
+    map.put("components", componentControllerService.discardComponent(id, discardReasonId, discardReasonText));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @RequestMapping(value = "/donations/{donationNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
-  public Map<String, Object> findComponentByDonationIdentificationNumber(HttpServletRequest request, @PathVariable String donationNumber) {
-
-    List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(donationNumber);
-
-    List<ComponentViewModel> componentViewModels = componentViewModelFactory.createComponentViewModels(results);
+  public Map<String, Object> findComponentByDonationIdentificationNumber(
+      @PathVariable String donationNumber) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("components", componentViewModels);
+    map.put("components", componentControllerService.findComponentsByDonationIdentificationNumber(donationNumber));
     return map;
   }
 
@@ -163,14 +115,8 @@ public class ComponentController {
   public ResponseEntity<Map<String, Object>> recordNewComponentCombinations(
       @RequestBody RecordComponentBackingForm recordComponentForm) throws ParseException {
 
-    Component parentComponent = componentCRUDService.processComponent(recordComponentForm);
-    List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(
-        parentComponent.getDonationIdentificationNumber());
-    List<ComponentViewModel> componentViewModels = componentViewModelFactory.createComponentViewModels(results);
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("components", componentViewModels);
-
+    map.put("components", componentControllerService.processComponent(recordComponentForm));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
-
 }
