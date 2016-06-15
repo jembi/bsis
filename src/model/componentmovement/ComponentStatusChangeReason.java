@@ -14,7 +14,9 @@ import org.hibernate.envers.Audited;
 
 @NamedQueries({
   @NamedQuery(name = ComponentStatusChangeReasonNamedQueryConstants.NAME_FIND_FIRST_COMPONENT_STATUS_CHANGE_REASON_FOR_CATEGORY,
-      query = ComponentStatusChangeReasonNamedQueryConstants.QUERY_FIND_FIRST_COMPONENT_STATUS_CHANGE_REASON_FOR_CATEGORY)
+      query = ComponentStatusChangeReasonNamedQueryConstants.QUERY_FIND_FIRST_COMPONENT_STATUS_CHANGE_REASON_FOR_CATEGORY),
+  @NamedQuery(name = ComponentStatusChangeReasonNamedQueryConstants.NAME_COUNT_DISCARD_REASON_WITH_ID,
+      query = ComponentStatusChangeReasonNamedQueryConstants.QUERY_COUNT_DISCARD_REASON_WITH_ID)  
 })
 @Entity
 @Audited

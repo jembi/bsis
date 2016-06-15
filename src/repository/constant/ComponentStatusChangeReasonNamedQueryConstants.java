@@ -10,4 +10,8 @@ public class ComponentStatusChangeReasonNamedQueryConstants {
       + "WHERE cscr.category = :category "
       + "AND cscr.isDeleted = :deleted ";
   
+  public static final String NAME_COUNT_DISCARD_REASON_WITH_ID = "ComponentStatusChangeReason.countDiscardReasonWithId";
+  public static final String QUERY_COUNT_DISCARD_REASON_WITH_ID =
+      "SELECT count(*) FROM ComponentStatusChangeReason c WHERE c.id=:id AND c.isDeleted = false";
+
 }

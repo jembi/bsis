@@ -569,4 +569,13 @@ public class ComponentRepository {
         .setParameter("componentCode", componentCode)
         .getSingleResult();
   }
+
+  public boolean verifyComponentExists(Long id) {
+    Long count = em.createNamedQuery(ComponentNamedQueryConstants.NAME_COUNT_COMPONENT_WITH_ID, Long.class)
+        .setParameter("id", id).getSingleResult();
+    if (count == 1) {
+      return true;
+    }
+    return false;
+  }
 }
