@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import backingform.RecordComponentBackingForm;
+import backingform.DiscardComponentsBackingForm;
 import factory.ComponentTypeFactory;
 import factory.ComponentViewModelFactory;
 import model.component.Component;
@@ -99,6 +100,11 @@ public class ComponentControllerService {
   
   public List<ComponentTypeViewModel> getComponentTypes() {
     return componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes());
+  }
+
+  public void discardComponents(DiscardComponentsBackingForm discardComponentsBackingForm) {
+    componentCRUDService.discardComponents(discardComponentsBackingForm.getComponentIds(),
+        discardComponentsBackingForm.getDiscardReason().getId(), discardComponentsBackingForm.getDiscardReasonText());
   }
   
 }

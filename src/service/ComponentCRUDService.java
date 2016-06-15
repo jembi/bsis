@@ -159,6 +159,12 @@ public class ComponentCRUDService {
     return parentComponent;
   }
 
+  public void discardComponents(List<Long> componentIds, Long discardReasonId, String discardReasonText) {
+    for (Long id : componentIds) {
+      discardComponent(id, discardReasonId, discardReasonText);
+    }
+  }
+
   public Component discardComponent(Long componentId, Long discardReasonId, String discardReasonText) {
     Component existingComponent = componentRepository.findComponentById(componentId);
     

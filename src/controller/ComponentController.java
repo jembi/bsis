@@ -7,14 +7,15 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-
-import model.component.ComponentStatus;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,9 +23,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import utils.PermissionConstants;
+import backingform.DiscardComponentsBackingForm;
 import backingform.RecordComponentBackingForm;
+import backingform.validator.DiscardComponentsBackingFormValidator;
 import controllerservice.ComponentControllerService;
+import model.component.ComponentStatus;
+import utils.PermissionConstants;
 
 @RestController
 @RequestMapping("components")
@@ -33,12 +37,29 @@ public class ComponentController {
   @Autowired
   private ComponentControllerService componentControllerService;
 
+  @Autowired
+  private DiscardComponentsBackingFormValidator discardComponentsBackingFormValidator;
+
+  @InitBinder
+  protected void initBinder(WebDataBinder binder) {
+    binder.setValidator(discardComponentsBackingFormValidator);
+  }
+
   @RequestMapping(value = "/discard/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.DISCARD_COMPONENT + "')")
-  public Map<String, Object> getComponentDiscardForm() {
+  public Map<String, Object> discardComponentsFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("discardReasons", componentControllerService.getDiscardReasons());
+    map.put("discardComponentsForm", new DiscardComponentsBackingForm());
     return map;
+  }
+
+  @RequestMapping(value = "/discard", method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('" + PermissionConstants.DISCARD_COMPONENT + "')")
+  public ResponseEntity<Map<String, Object>> discardComponents(
+      @Valid @RequestBody DiscardComponentsBackingForm discardComponentsBackingForm) {
+    componentControllerService.discardComponents(discardComponentsBackingForm);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @RequestMapping(method = RequestMethod.GET)
