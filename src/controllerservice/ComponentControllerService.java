@@ -8,8 +8,9 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import backingform.RecordComponentBackingForm;
 import backingform.DiscardComponentsBackingForm;
+import backingform.RecordComponentBackingForm;
+import factory.ComponentStatusChangeReasonFactory;
 import factory.ComponentTypeFactory;
 import factory.ComponentViewModelFactory;
 import model.component.Component;
@@ -22,6 +23,7 @@ import repository.ComponentTypeRepository;
 import service.ComponentCRUDService;
 import viewmodel.ComponentTypeViewModel;
 import viewmodel.ComponentViewModel;
+import viewmodel.DiscardReasonViewModel;
 
 @Service
 @Transactional
@@ -44,6 +46,9 @@ public class ComponentControllerService {
   
   @Autowired
   private ComponentTypeFactory componentTypeFactory;
+
+  @Autowired
+  private ComponentStatusChangeReasonFactory componentStatusChangeReasonFactory;
 
   public ComponentViewModel findComponentById(Long id) {
     Component component = componentRepository.findComponentById(id);
@@ -94,8 +99,9 @@ public class ComponentControllerService {
     return componentStatusChangeReasonRepository.getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.RETURNED);
   }
   
-  public List<ComponentStatusChangeReason> getDiscardReasons() {
-    return componentStatusChangeReasonRepository.getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.DISCARDED);
+  public List<DiscardReasonViewModel> getDiscardReasons() {
+    List<ComponentStatusChangeReason> reasons = componentStatusChangeReasonRepository.getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.DISCARDED);
+    return componentStatusChangeReasonFactory.createDiscardReasonViewModels(reasons);
   }
   
   public List<ComponentTypeViewModel> getComponentTypes() {

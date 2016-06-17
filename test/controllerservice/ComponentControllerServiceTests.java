@@ -1,26 +1,30 @@
 package controllerservice;
 
-import helpers.builders.ComponentBuilder;
-import helpers.builders.ComponentTypeBuilder;
-import helpers.builders.ComponentViewModelBuilder;
-import helpers.builders.DonationBuilder;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
-import model.component.Component;
-import model.component.ComponentStatus;
-import model.componentmovement.ComponentStatusChangeReason;
-import model.componentmovement.ComponentStatusChangeReasonCategory;
-import model.componenttype.ComponentType;
-import model.componenttype.ComponentTypeCombination;
 
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
+import backingform.RecordComponentBackingForm;
+import factory.ComponentStatusChangeReasonFactory;
+import factory.ComponentTypeFactory;
+import factory.ComponentViewModelFactory;
+import helpers.builders.ComponentBuilder;
+import helpers.builders.ComponentTypeBuilder;
+import helpers.builders.ComponentViewModelBuilder;
+import helpers.builders.DonationBuilder;
+import model.component.Component;
+import model.component.ComponentStatus;
+import model.componentmovement.ComponentStatusChangeReason;
+import model.componentmovement.ComponentStatusChangeReasonCategory;
+import model.componenttype.ComponentType;
+import model.componenttype.ComponentTypeCombination;
 import repository.ComponentRepository;
 import repository.ComponentStatusChangeReasonRepository;
 import repository.ComponentTypeRepository;
@@ -28,9 +32,6 @@ import service.ComponentCRUDService;
 import suites.UnitTestSuite;
 import viewmodel.ComponentTypeViewModel;
 import viewmodel.ComponentViewModel;
-import backingform.RecordComponentBackingForm;
-import factory.ComponentTypeFactory;
-import factory.ComponentViewModelFactory;
 
 public class ComponentControllerServiceTests extends UnitTestSuite {
   
@@ -49,6 +50,8 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   private ComponentTypeFactory componentTypeFactory;
   @Mock
   private ComponentStatusChangeReasonRepository componentStatusChangeReasonRepository;
+  @Mock
+  private ComponentStatusChangeReasonFactory componentStatusChangeReasonFactory;
 
   @Test
   public void testFindComponentById_shouldCallRepositoryAndFactory() throws Exception {
@@ -236,21 +239,20 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testGetDiscardReasons_shouldCallRepository() throws Exception {
+  public void testGetDiscardReasons_shouldCallRepositoryAndFactory() throws Exception {
     // setup data
-    List<ComponentStatusChangeReason> reasons = Arrays.asList(
-        new ComponentStatusChangeReason(),
-        new ComponentStatusChangeReason()
-    );
+    ComponentStatusChangeReason reason = new ComponentStatusChangeReason();
+    List<ComponentStatusChangeReason> reasons = Arrays.asList(reason, reason);
     
     // setup mocks
-    Mockito.when(componentStatusChangeReasonRepository.getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.DISCARDED)).thenReturn(reasons);
+    when(componentStatusChangeReasonRepository.getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.DISCARDED)).thenReturn(reasons);
     
     // SUT
     componentControllerService.getDiscardReasons();
     
     // verify
     Mockito.verify(componentStatusChangeReasonRepository).getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.DISCARDED);
+    Mockito.verify(componentStatusChangeReasonFactory).createDiscardReasonViewModels(reasons);
   }
   
   @Test
