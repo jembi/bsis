@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import service.LabellingCRUDService;
 import utils.PermissionConstants;
+import controllerservice.LabellingControllerService;
 
 @RestController
 @RequestMapping("labels")
@@ -26,6 +27,17 @@ public class LabellingController {
 
   @Autowired
   private LabellingCRUDService labellingService;
+  
+  @Autowired
+  private LabellingControllerService labellingControllerService;
+  
+  @RequestMapping(value = "/components/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.DISCARD_COMPONENT + "')")
+  public Map<String, Object> findComponentFormGenerator() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("componentTypes", labellingControllerService.getComponentTypes());
+    return map;
+  }
 
   @RequestMapping(value = "/status/{donationIdentificationNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DISCARDS + "')")
