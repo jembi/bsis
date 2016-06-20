@@ -30,7 +30,7 @@ public class LabellingController {
   private LabellingControllerService labellingControllerService;
   
   @RequestMapping(value = "/components/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.DISCARD_COMPONENT + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
   public Map<String, Object> findComponentFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("componentTypes", labellingControllerService.getComponentTypes());
