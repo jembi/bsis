@@ -26,19 +26,16 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import model.bloodtesting.TTIStatus;
-import model.compatibility.CompatibilityResult;
-import model.compatibility.CompatibilityTest;
 import model.component.Component;
 import model.component.ComponentStatus;
 import model.donation.Donation;
 import model.donor.Donor;
-import model.request.Request;
 import model.testbatch.TestBatch;
 import model.testbatch.TestBatchStatus;
 import model.util.BloodGroup;
 import repository.bloodtesting.BloodTypingStatus;
 import service.DonationConstraintChecker;
-import viewmodel.MatchingComponentViewModel;
+
 
 @Repository
 @Transactional
@@ -49,9 +46,6 @@ public class ComponentRepository {
 
   @Autowired
   private DonationRepository donationRepository;
-
-  @Autowired
-  private RequestRepository requestRepository;
 
   @Autowired
   private DonationConstraintChecker donationConstraintChecker;
@@ -225,7 +219,7 @@ public class ComponentRepository {
   }
 
   public Component findComponentById(Long componentId) throws NoResultException {
-    String queryString = "SELECT c FROM Component c LEFT JOIN FETCH c.donation LEFT JOIN FETCH c.issuedTo where c.id = :componentId AND c.isDeleted = :isDeleted";
+    String queryString = "SELECT c FROM Component c LEFT JOIN FETCH c.donation where c.id = :componentId AND c.isDeleted = :isDeleted";
     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("componentId", componentId);
@@ -252,65 +246,6 @@ public class ComponentRepository {
     //em.flush();
     em.refresh(component);
     return component;
-  }
-
-  public List<MatchingComponentViewModel> findMatchingComponentsForRequest(Long requestId) {
-
-    Date today = new Date();
-    Request request = requestRepository.findRequestById(requestId);
-
-    TypedQuery<Component> query = em.createQuery(
-        "SELECT c from Component c LEFT JOIN FETCH c.donation WHERE " +
-            "c.componentType = :componentType AND " +
-            "c.expiresOn >= :today AND " +
-            "c.status = :status AND " +
-            "c.donation.ttiStatus = :ttiStatus AND " +
-            "((c.donation.bloodAbo = :bloodAbo AND c.donation.bloodRh = :bloodRh) OR " +
-            "(c.donation.bloodAbo = :bloodAboO AND c.donation.bloodRh = :bloodRhNeg)) AND " +
-            "c.isDeleted = :isDeleted " +
-            "ORDER BY c.expiresOn ASC",
-        Component.class);
-
-    query.setParameter("componentType", request.getComponentType());
-    query.setParameter("today", today);
-    query.setParameter("status", ComponentStatus.AVAILABLE);
-    query.setParameter("ttiStatus", TTIStatus.TTI_SAFE);
-    query.setParameter("bloodAbo", request.getPatientBloodAbo());
-    query.setParameter("bloodRh", request.getPatientBloodRh());
-    query.setParameter("bloodAboO", "O");
-    query.setParameter("bloodRhNeg", "-");
-    query.setParameter("isDeleted", false);
-
-    TypedQuery<CompatibilityTest> crossmatchQuery = em.createQuery(
-        "SELECT ct from CompatibilityTest ct where ct.forRequest.id=:forRequestId AND " +
-            "ct.testedComponent.status = :testedComponentStatus AND " +
-            "isDeleted=:isDeleted", CompatibilityTest.class);
-
-    crossmatchQuery.setParameter("forRequestId", requestId);
-    crossmatchQuery.setParameter("testedComponentStatus", ComponentStatus.AVAILABLE);
-    crossmatchQuery.setParameter("isDeleted", false);
-
-    List<CompatibilityTest> crossmatchTests = crossmatchQuery.getResultList();
-    List<MatchingComponentViewModel> matchingComponents = new ArrayList<MatchingComponentViewModel>();
-
-    Map<Long, CompatibilityTest> crossmatchTestMap = new HashMap<Long, CompatibilityTest>();
-    for (CompatibilityTest crossmatchTest : crossmatchTests) {
-      Component component = crossmatchTest.getTestedComponent();
-      if (component == null)
-        continue;
-      crossmatchTestMap.put(component.getId(), crossmatchTest);
-      if (!crossmatchTest.getCompatibilityResult().equals(CompatibilityResult.NOT_COMPATIBLE))
-        matchingComponents.add(new MatchingComponentViewModel(component, crossmatchTest));
-    }
-
-    for (Component component : query.getResultList()) {
-      Long componentId = component.getId();
-      if (crossmatchTestMap.containsKey(componentId))
-        continue;
-      matchingComponents.add(new MatchingComponentViewModel(component));
-    }
-
-    return matchingComponents;
   }
 
   public void updateQuarantineStatus() {

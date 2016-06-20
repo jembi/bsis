@@ -8,11 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import model.inventory.InventoryStatus;
-import model.location.Location;
-import model.location.LocationType;
-import model.reporting.Report;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -23,16 +18,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import factory.LocationViewModelFactory;
+import model.inventory.InventoryStatus;
+import model.location.Location;
+import model.location.LocationType;
+import model.reporting.Report;
 import repository.ComponentRepository;
 import repository.DonationRepository;
 import repository.LocationRepository;
-import repository.RequestRepository;
 import repository.TipsRepository;
 import repository.bloodtesting.BloodTestingRepository;
 import service.ReportGeneratorService;
 import utils.CustomDateFormatter;
 import utils.PermissionConstants;
-import factory.LocationViewModelFactory;
 
 @RestController
 @RequestMapping("reports")
@@ -46,9 +44,6 @@ public class ReportsController {
 
   @Autowired
   private LocationRepository locationRepository;
-
-  @Autowired
-  private RequestRepository requestRepository;
 
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
@@ -164,55 +159,6 @@ public class ReportsController {
 
     map.put("donationDateFromUTC", dateFrom.getTime());
     map.put("donationDateToUTC", dateTo.getTime());
-
-    return new ResponseEntity<Map<String, Object>>(map, httpStatus);
-  }
-
-  @RequestMapping(value = "/requests/generate", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.REQUESTS_REPORTING + "')")
-  public ResponseEntity<Map<String, Object>> getRequestsReport(
-      @RequestParam(value = "donationDateFrom", required = false) String donationDateFrom,
-      @RequestParam(value = "donationDateTo", required = false) String donationDateTo,
-      @RequestParam(value = "aggregationCriteria", required = false) String aggregationCriteria,
-      @RequestParam(value = "venues", required = false) List<String> venues,
-      @RequestParam(value = "bloodGroups", required = false) List<String> bloodGroups) throws ParseException {
-
-    HttpStatus httpStatus = HttpStatus.OK;
-    Map<String, Object> map = new HashMap<String, Object>();
-
-    Date dateTo;
-    if (donationDateTo == null || donationDateTo.equals(""))
-      dateTo = new Date();
-    else
-      dateTo = CustomDateFormatter.getDateFromString(donationDateTo);
-
-    Calendar gcal = new GregorianCalendar();
-    gcal.setTime(dateTo);
-    gcal.add(Calendar.DATE, 1);
-    dateTo = CustomDateFormatter.getDateFromString(CustomDateFormatter.getDateString(gcal.getTime()));
-
-    Date dateFrom;
-    if (donationDateFrom == null || donationDateFrom.equals(""))
-      dateFrom = dateSubtract(dateTo, Calendar.MONTH, 1);
-    else
-      dateFrom = CustomDateFormatter.getDateFromString(donationDateFrom);
-
-    Map<String, Map<Long, Long>> numRequests = requestRepository
-        .findNumberOfRequests(dateFrom, dateTo,
-            aggregationCriteria, venues, bloodGroups);
-    // TODO: potential leap year bug here
-    Long interval = (long) (24 * 3600 * 1000);
-
-    if (aggregationCriteria.equals("monthly"))
-      interval = interval * 30;
-    else if (aggregationCriteria.equals("yearly"))
-      interval = interval * 365;
-
-    map.put("interval", interval);
-    map.put("numRequests", numRequests);
-
-    map.put("dateRequestedFromUTC", dateFrom.getTime());
-    map.put("dateRequestedToUTC", dateTo.getTime());
 
     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
