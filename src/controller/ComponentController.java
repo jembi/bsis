@@ -40,7 +40,7 @@ public class ComponentController {
   @Autowired
   private DiscardComponentsBackingFormValidator discardComponentsBackingFormValidator;
 
-  @InitBinder
+  @InitBinder("discardComponentsBackingForm")
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(discardComponentsBackingFormValidator);
   }
