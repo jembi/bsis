@@ -1,21 +1,22 @@
 package service;
 
 import static helpers.builders.ComponentBuilder.aComponent;
-import static helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
 import static helpers.builders.DonationBuilder.aDonation;
 import static helpers.builders.DonorBuilder.aDonor;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import factory.ComponentViewModelFactory;
@@ -28,11 +29,11 @@ import model.donor.Donor;
 import model.inventory.InventoryStatus;
 import repository.ComponentRepository;
 import suites.UnitTestSuite;
-import viewmodel.ComponentViewModel;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ComponentCRUDServiceTests extends UnitTestSuite {
 
+  @Spy
   @InjectMocks
   private ComponentCRUDService componentCRUDService;
   @Mock
@@ -78,6 +79,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     componentCRUDService.discardComponent(1L, 1L, reasonText);
     
     // check asserts
+    Assert.assertEquals("Component status is discarded", ComponentStatus.DISCARDED, component.getStatus());
     Assert.assertNotNull("Status change has been set", component.getStatusChanges());
     Assert.assertEquals("Status change has been set", 1, component.getStatusChanges().size());
     ComponentStatusChange statusChange = component.getStatusChanges().get(0);
@@ -88,6 +90,31 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Assert.assertEquals("Status change is correct", loggedInUser, statusChange.getChangedBy());
   }
   
+  @Test
+  public void testDiscardComponents() throws Exception {
+    // set up data
+    Component component1 = aComponent().withStatus(ComponentStatus.DISCARDED).withId(1L).build();
+    Component component2 = aComponent().withStatus(ComponentStatus.DISCARDED).withId(2L).build();
+    Component component3 = aComponent().withStatus(ComponentStatus.DISCARDED).withId(3L).build();
+    List<Long> componentIds = Arrays.asList(1L,2L,3L);
+    Long discardReasonId = 1L;
+    String reasonText = "junit";
+
+    // set up mocks (because we already tested discardComponent we use a "spy" mockup of
+    // discardComponent to test discardComponents)
+    doReturn(component1).when(componentCRUDService).discardComponent(1L, discardReasonId, reasonText);
+    doReturn(component2).when(componentCRUDService).discardComponent(2L, discardReasonId, reasonText);
+    doReturn(component3).when(componentCRUDService).discardComponent(3L, discardReasonId, reasonText);
+
+    // run test
+    componentCRUDService.discardComponents(componentIds, discardReasonId, reasonText);
+
+    // Verify
+    verify(componentCRUDService, times(1)).discardComponent(componentIds.get(0), discardReasonId, reasonText);
+    verify(componentCRUDService, times(1)).discardComponent(componentIds.get(1), discardReasonId, reasonText);
+    verify(componentCRUDService, times(1)).discardComponent(componentIds.get(2), discardReasonId, reasonText);
+  }
+
   @Test
   public void testDiscardInStockComponent() throws Exception {
     // set up data
@@ -102,27 +129,5 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // check asserts
     Assert.assertEquals("Component is now removed from stock", InventoryStatus.REMOVED, component.getInventoryStatus());
-  }
-  
-  @Test
-  public void testFindComponentByCodeAndDIN_shouldFindAndReturnComponent() {
-    // Set up fixture
-    String componentCode = "0014";
-    String donationIdentificationNumber = "0000001";
-
-    Component component = aComponent().build();
-    
-    // Set up expectations
-    ComponentViewModel expectedComponentViewModel = aComponentViewModel().build();
-
-    when(componentRepository.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber)).thenReturn(component);
-    when(componentViewModelFactory.createComponentViewModel(component)).thenReturn(expectedComponentViewModel);
-    
-    // Test method
-    ComponentViewModel returnedComponentViewModel = componentCRUDService.findComponentByCodeAndDIN(componentCode,
-        donationIdentificationNumber);
-    
-    // Verify
-    assertThat(returnedComponentViewModel, is(expectedComponentViewModel));
   }
 }

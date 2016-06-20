@@ -133,6 +133,7 @@ public class ReturnFormFactoryTests {
         .withComponent(new ComponentViewModel(component))
         .withPermission("canEdit", true)
         .withPermission("canReturn", true)
+        .withPermission("canDiscard", true)
         .build();
 
     ReturnForm entity = ReturnFormBuilder.aReturnForm()
@@ -148,6 +149,7 @@ public class ReturnFormFactoryTests {
     when(locationViewModelFactory.createLocationViewModel(returnedTo)).thenReturn(new LocationViewModel(returnedTo));
     when(returnFormConstraintChecker.canEdit(entity)).thenReturn(true);
     when(returnFormConstraintChecker.canReturn(entity)).thenReturn(true);
+    when(returnFormConstraintChecker.canDiscard(entity)).thenReturn(true);
 
     // Run test
     ReturnFormFullViewModel convertedViewModel = returnFormFactory.createFullViewModel(entity);

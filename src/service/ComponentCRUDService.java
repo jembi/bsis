@@ -8,27 +8,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import backingform.RecordComponentBackingForm;
-import factory.ComponentViewModelFactory;
 import model.component.Component;
 import model.component.ComponentStatus;
 import model.componentmovement.ComponentStatusChange;
 import model.componentmovement.ComponentStatusChangeReason;
 import model.componentmovement.ComponentStatusChangeType;
 import model.componenttype.ComponentType;
+import model.componenttype.ComponentTypeCombination;
 import model.componenttype.ComponentTypeTimeUnits;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.inventory.InventoryStatus;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import repository.ComponentRepository;
 import repository.ComponentTypeRepository;
 import utils.SecurityUtils;
-import viewmodel.ComponentViewModel;
 
 @Transactional
 @Service
@@ -40,8 +39,7 @@ public class ComponentCRUDService {
 
   @Autowired
   private ComponentRepository componentRepository;
-  @Autowired
-  private ComponentViewModelFactory componentViewModelFactory;
+
   @Autowired
   private ComponentTypeRepository componentTypeRepository;
 
@@ -77,19 +75,19 @@ public class ComponentCRUDService {
     }
   }
 
-  public Component processComponent(RecordComponentBackingForm recordComponentForm) {
+  public Component processComponent(String parentComponentId, ComponentTypeCombination componentTypeCombination) {
     Component parentComponent =
-        componentRepository.findComponentById(Long.valueOf(recordComponentForm.getParentComponentId()));
+        componentRepository.findComponentById(Long.valueOf(parentComponentId));
     Donation donation = parentComponent.getDonation();
     ComponentStatus parentStatus = parentComponent.getStatus();
-    long componentId = Long.valueOf(recordComponentForm.getParentComponentId());
+    long componentId = Long.valueOf(parentComponentId);
 
     // map of new components, storing component type and num. of units
     Map<ComponentType, Integer> newComponents = new HashMap<ComponentType, Integer>();
 
     // iterate over components in combination, adding them to the new components map, along with the
     // num. of units of each component
-    for (ComponentType pt : recordComponentForm.getComponentTypeCombination().getComponentTypes()) {
+    for (ComponentType pt : componentTypeCombination.getComponentTypes()) {
       boolean check = false;
       ComponentType componentType = componentTypeRepository.getComponentTypeById(pt.getId());
       for (ComponentType ptm : newComponents.keySet()) {
@@ -161,6 +159,12 @@ public class ComponentCRUDService {
     return parentComponent;
   }
 
+  public void discardComponents(List<Long> componentIds, Long discardReasonId, String discardReasonText) {
+    for (Long id : componentIds) {
+      discardComponent(id, discardReasonId, discardReasonText);
+    }
+  }
+
   public Component discardComponent(Long componentId, Long discardReasonId, String discardReasonText) {
     Component existingComponent = componentRepository.findComponentById(componentId);
     
@@ -193,11 +197,6 @@ public class ComponentCRUDService {
     componentRepository.updateComponent(existingComponent);
     
     return existingComponent;
-  }
-  
-  public ComponentViewModel findComponentByCodeAndDIN(String componentCode, String donationIdentificationNumber) {
-    Component component = componentRepository.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber);
-    return componentViewModelFactory.createComponentViewModel(component);
   }
   
   public Component updateComponent(Component component) {

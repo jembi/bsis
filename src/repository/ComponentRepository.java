@@ -14,7 +14,6 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -25,18 +24,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import model.bloodtesting.TTIStatus;
 import model.compatibility.CompatibilityResult;
 import model.compatibility.CompatibilityTest;
 import model.component.Component;
 import model.component.ComponentStatus;
-import model.componentmovement.ComponentStatusChange;
-import model.componentmovement.ComponentStatusChangeReason;
-import model.componentmovement.ComponentStatusChangeReasonCategory;
-import model.componentmovement.ComponentStatusChangeType;
-import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.donor.Donor;
 import model.request.Request;
@@ -45,7 +38,6 @@ import model.testbatch.TestBatchStatus;
 import model.util.BloodGroup;
 import repository.bloodtesting.BloodTypingStatus;
 import service.DonationConstraintChecker;
-import utils.SecurityUtils;
 import viewmodel.MatchingComponentViewModel;
 
 @Repository
@@ -150,23 +142,8 @@ public class ComponentRepository {
     return false;
   }
 
-  public Component findComponent(String componentCode) {
-    Component component = null;
-    if (componentCode != null && componentCode.length() > 0) {
-      String queryString = "SELECT c FROM Component c WHERE c.componentCode = :componentCode and c.isDeleted= :isDeleted";
-      TypedQuery<Component> query = em.createQuery(queryString, Component.class);
-      query.setParameter("isDeleted", Boolean.FALSE);
-      List<Component> components = query.setParameter("componentCode",
-          componentCode).getResultList();
-      if (components != null && components.size() > 0) {
-        component = components.get(0);
-      }
-    }
-    return component;
-  }
-
   public List<Component> findAnyComponent(String donationIdentificationNumber, List<Long> componentTypes, List<ComponentStatus> status,
-                                          Date donationDateFrom, Date donationDateTo, Map<String, Object> pagingParams) {
+      Date donationDateFrom, Date donationDateTo) {
     TypedQuery<Component> query;
     String queryStr = "SELECT DISTINCT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +
         "c.isDeleted= :isDeleted ";
@@ -187,9 +164,7 @@ public class ComponentRepository {
       queryStr += "AND c.donation.donationDate <= :donationDateTo ";
     }
 
-    if (pagingParams.containsKey("sortColumn")) {
-      queryStr += " ORDER BY c." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
-    }
+    queryStr += " ORDER BY c.id ASC";
 
     query = em.createQuery(queryStr, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -210,12 +185,6 @@ public class ComponentRepository {
       query.setParameter("donationDateTo", donationDateTo);
     }
 
-    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
-    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
-
-    query.setFirstResult(start);
-    query.setMaxResults(length);
-
     return query.getResultList();
   }
 
@@ -224,49 +193,6 @@ public class ComponentRepository {
         .setParameter("isDeleted", Boolean.FALSE)
         .setParameter("donationIdentificationNumber", donationIdentificationNumber)
         .getResultList();
-  }
-
-  public List<Component> findComponentByComponentTypes(
-      List<Long> componentTypeIds, List<ComponentStatus> status,
-      Map<String, Object> pagingParams) {
-
-    String queryStr = "SELECT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +
-        "c.componentType.id IN (:componentTypeIds) AND " +
-        "c.status IN :status AND " +
-        "c.isDeleted= :isDeleted";
-
-    String queryStrWithoutJoin = "SELECT c FROM Component c WHERE " +
-        "c.componentType.id IN (:componentTypeIds) AND " +
-        "c.status IN :status AND " +
-        "c.isDeleted= :isDeleted";
-
-
-    if (pagingParams.containsKey("sortColumn")) {
-      queryStr += " ORDER BY c." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
-    }
-
-    TypedQuery<Component> query = em.createQuery(queryStr, Component.class);
-    query.setParameter("status", status);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("componentTypeIds", componentTypeIds);
-
-    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
-    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
-
-    query.setFirstResult(start);
-    query.setMaxResults(length);
-
-    //return Arrays.asList(query.getResultList(), getResultCount(queryStrWithoutJoin, query));
-    return query.getResultList();
-  }
-
-  private Long getResultCount(String queryStr, Query query) {
-    String countQueryStr = queryStr.replaceFirst("SELECT c", "SELECT COUNT(c)");
-    TypedQuery<Long> countQuery = em.createQuery(countQueryStr, Long.class);
-    for (Parameter<?> parameter : query.getParameters()) {
-      countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
-    }
-    return countQuery.getSingleResult().longValue();
   }
 
   public List<Component> getAllUnissuedComponents() {
@@ -291,73 +217,6 @@ public class ComponentRepository {
     String queryString = "SELECT c FROM Component c where c.isDeleted = :isDeleted";
     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
-    return query.getResultList();
-  }
-
-  public boolean isComponentCreated(String donationIdentificationNumber) {
-    String queryString = "SELECT c FROM Component c WHERE c.donationIdentificationNumber = :donationIdentificationNumber and c.isDeleted = :isDeleted";
-    TypedQuery<Component> query = em.createQuery(queryString, Component.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    List<Component> components = query.setParameter("donationIdentificationNumber",
-        donationIdentificationNumber).getResultList();
-    if (components != null && components.size() > 0) {
-      return true;
-    }
-    return false;
-  }
-
-  public void deleteAllComponents() {
-    Query query = em.createQuery("DELETE FROM Component c");
-    query.executeUpdate();
-  }
-
-  public List<Component> getAllComponents(String componentType) {
-    String queryString = "SELECT c FROM Component c where c.type = :componentType and c.isDeleted = :isDeleted";
-    TypedQuery<Component> query = em.createQuery(queryString, Component.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("componentType", componentType);
-    return query.getResultList();
-  }
-
-  public List<Component> getComponents(Date fromDate, Date toDate) {
-    TypedQuery<Component> query = em
-        .createQuery(
-            "SELECT c FROM Component c WHERE  c.createdOn >= :fromDate and c.createdOn<= :toDate and c.isDeleted = :isDeleted",
-            Component.class);
-    query.setParameter("fromDate", fromDate);
-    query.setParameter("toDate", toDate);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    List<Component> components = query.getResultList();
-    if (CollectionUtils.isEmpty(components)) {
-      return new ArrayList<Component>();
-    }
-    return components;
-  }
-
-  public List<Component> getAllUnissuedComponents(String componentType, String abo,
-                                                  String rhd) {
-    String queryString = "SELECT c FROM Component c where c.type = :componentType and c.abo= :abo and c.rhd= :rhd and c.isDeleted = :isDeleted and c.isIssued= :isIssued";
-    TypedQuery<Component> query = em.createQuery(queryString, Component.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("isIssued", Boolean.FALSE);
-    query.setParameter("componentType", componentType);
-    query.setParameter("abo", abo);
-    query.setParameter("rhd", rhd);
-    return query.getResultList();
-  }
-
-  public List<Component> getAllUnissuedThirtyFiveDayComponents(String componentType,
-                                                               String abo, String rhd) {
-    String queryString = "SELECT c FROM Component c where c.type = :componentType and c.abo= :abo and c.rhd= :rhd and c.isDeleted = :isDeleted and c.isIssued= :isIssued and c.createdOn > :minDate";
-    TypedQuery<Component> query = em.createQuery(queryString, Component.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("isIssued", Boolean.FALSE);
-    query.setParameter("componentType", componentType);
-    query.setParameter("abo", abo);
-    query.setParameter("rhd", rhd);
-    query.setParameter("minDate", new DateTime(new Date()).minusDays(35)
-        .toDate());
-
     return query.getResultList();
   }
 
@@ -393,13 +252,6 @@ public class ComponentRepository {
     //em.flush();
     em.refresh(component);
     return component;
-  }
-
-  public void deleteComponent(Long componentId) throws IllegalArgumentException {
-    Component existingComponent = findComponentById(componentId);
-    existingComponent.setIsDeleted(Boolean.TRUE);
-    em.merge(existingComponent);
-    em.flush();
   }
 
   public List<MatchingComponentViewModel> findMatchingComponentsForRequest(Long requestId) {
@@ -482,16 +334,7 @@ public class ComponentRepository {
     query.setParameter("status", ComponentStatus.EXPIRED);
     query.setParameter("availableStatus", ComponentStatus.AVAILABLE);
     query.setParameter("today", new Date());
-    int numUpdated = query.executeUpdate();
-    //System.out.println("Number of rows updated: " + numUpdated);
-  }
-
-  public List<Component> getComponentsFromComponentIds(String[] componentIds) {
-    List<Component> components = new ArrayList<Component>();
-    for (String componentId : componentIds) {
-      components.add(findComponentById(Long.parseLong(componentId)));
-    }
-    return components;
+    query.executeUpdate();
   }
 
   public Map<String, Map<Long, Long>> findNumberOfDiscardedComponents(
@@ -676,105 +519,6 @@ public class ComponentRepository {
     return query.getResultList();
   }
 
-  public void returnComponent(Long componentId,
-                              ComponentStatusChangeReason returnReason, String returnReasonText) {
-    Component existingComponent = findComponentById(componentId);
-    updateComponentStatus(existingComponent);
-    ComponentStatusChange statusChange = new ComponentStatusChange();
-    statusChange.setStatusChangedOn(new Date());
-    statusChange.setStatusChangeType(ComponentStatusChangeType.RETURNED);
-    statusChange.setStatusChangeReason(returnReason);
-    statusChange.setNewStatus(existingComponent.getStatus());
-    statusChange.setStatusChangeReasonText(returnReasonText);
-    statusChange.setChangedBy(SecurityUtils.getCurrentUser());
-    if (existingComponent.getStatusChanges() == null)
-      existingComponent.setStatusChanges(new ArrayList<ComponentStatusChange>());
-    existingComponent.getStatusChanges().add(statusChange);
-    statusChange.setComponent(existingComponent);
-    em.persist(statusChange);
-    em.merge(existingComponent);
-    em.flush();
-  }
-
-  public List<ComponentStatusChange> getComponentStatusChanges(Component component) {
-    String queryStr = "SELECT p FROM ComponentStatusChange p WHERE " +
-        "p.component.id=:componentId";
-    TypedQuery<ComponentStatusChange> query = em.createQuery(queryStr, ComponentStatusChange.class);
-    query.setParameter("componentId", component.getId());
-    List<ComponentStatusChange> statusChanges = query.getResultList();
-    return statusChanges;
-  }
-
-  public boolean splitComponent(Long componentId, Integer numComponentsAfterSplitting) {
-
-    Component component = findComponent(componentId);
-    if (component == null || component.getStatus().equals(ComponentStatus.SPLIT))
-      return false;
-
-    ComponentType pediComponentType = component.getComponentType().getPediComponentType();
-    if (pediComponentType == null) {
-      return false;
-    }
-
-    char nextSubdivisionCode = 'A';
-    for (int i = 0; i < numComponentsAfterSplitting; ++i) {
-      Component newComponent = new Component();
-      // just set the id temporarily before copying all the fields
-      newComponent.setId(componentId);
-      newComponent.copy(component);
-      newComponent.setId(null);
-      newComponent.setComponentType(pediComponentType);
-      newComponent.setSubdivisionCode("" + nextSubdivisionCode);
-      newComponent.setParentComponent(component);
-      newComponent.setIsDeleted(false);
-      updateComponentInternalFields(newComponent);
-      em.persist(newComponent);
-      // Assuming we do not split into more than 26 components this should be fine
-      nextSubdivisionCode++;
-    }
-
-    component.setStatus(ComponentStatus.SPLIT);
-    ComponentStatusChange statusChange = new ComponentStatusChange();
-    statusChange.setStatusChangeType(ComponentStatusChangeType.SPLIT);
-    statusChange.setNewStatus(ComponentStatus.SPLIT);
-
-    String queryStr = "SELECT p FROM ComponentStatusChangeReason p WHERE " +
-        "p.category=:category AND p.isDeleted=:isDeleted";
-    TypedQuery<ComponentStatusChangeReason> query = em.createQuery(queryStr,
-        ComponentStatusChangeReason.class);
-    query.setParameter("category", ComponentStatusChangeReasonCategory.SPLIT);
-    query.setParameter("isDeleted", false);
-    List<ComponentStatusChangeReason> componentStatusChangeReasons = query.getResultList();
-    statusChange.setStatusChangedOn(new Date());
-    // expect only one component status change reason
-    statusChange.setStatusChangeReason(componentStatusChangeReasons.get(0));
-    statusChange.setStatusChangeReasonText("");
-    statusChange.setChangedBy(SecurityUtils.getCurrentUser());
-    if (component.getStatusChanges() == null)
-      component.setStatusChanges(new ArrayList<ComponentStatusChange>());
-    component.getStatusChanges().add(statusChange);
-    statusChange.setComponent(component);
-    em.persist(statusChange);
-    em.merge(component);
-    return true;
-  }
-
-  public ComponentType findComponentTypeBySelectedComponentType(Long componentTypeId) throws NoResultException {
-    String queryString = "SELECT p FROM ComponentType p where p.id = :componentTypeId";
-    TypedQuery<ComponentType> query = em.createQuery(queryString, ComponentType.class);
-    query.setParameter("componentTypeId", componentTypeId);
-    ComponentType componentType = componentType = query.getSingleResult();
-    return componentType;
-  }
-
-  public ComponentType findComponentTypeByComponentTypeName(String componentTypeName) throws NoResultException {
-    String queryString = "SELECT p FROM ComponentType p where p.componentType = :componentTypeName";
-    TypedQuery<ComponentType> query = em.createQuery(queryString, ComponentType.class);
-    query.setParameter("componentTypeName", componentTypeName);
-    ComponentType componentType = componentType = query.getSingleResult();
-    return componentType;
-  }
-
   public void setComponentStatusToProcessed(long componentId) throws NoResultException {
     String queryString = "SELECT c FROM Component c where c.id = :componentId";
     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
@@ -824,5 +568,14 @@ public class ComponentRepository {
         .setParameter("donationIdentificationNumber", donationIdentificationNumber)
         .setParameter("componentCode", componentCode)
         .getSingleResult();
+  }
+
+  public boolean verifyComponentExists(Long id) {
+    Long count = em.createNamedQuery(ComponentNamedQueryConstants.NAME_COUNT_COMPONENT_WITH_ID, Long.class)
+        .setParameter("id", id).getSingleResult();
+    if (count == 1) {
+      return true;
+    }
+    return false;
   }
 }

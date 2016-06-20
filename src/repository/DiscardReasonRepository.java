@@ -2,6 +2,7 @@ package repository;
 
 import model.componentmovement.ComponentStatusChangeReason;
 import model.componentmovement.ComponentStatusChangeReasonCategory;
+import repository.constant.ComponentStatusChangeReasonNamedQueryConstants;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,5 +81,16 @@ public class DiscardReasonRepository {
     em.merge(existingDiscardReason);
     em.flush();
     return existingDiscardReason;
+  }
+  
+  public boolean verifyDiscardReasonExists(Long id) {
+    Long count = em.createNamedQuery(ComponentStatusChangeReasonNamedQueryConstants.NAME_COUNT_DISCARD_REASON_WITH_ID, Long.class)
+        .setParameter("id", id)
+        .setParameter("category", ComponentStatusChangeReasonCategory.DISCARDED)
+        .getSingleResult();
+    if (count == 1) {
+      return true;
+    }
+    return false;
   }
 }

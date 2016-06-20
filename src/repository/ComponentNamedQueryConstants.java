@@ -60,5 +60,9 @@ public class ComponentNamedQueryConstants {
       + "WHERE c.donation.donationIdentificationNumber = :donationIdentificationNumber "
       + "AND c.componentCode = :componentCode "
       + "AND c.inventoryStatus = 'IN_STOCK' ";
+
+  public static final String NAME_COUNT_COMPONENT_WITH_ID = "Component.countComponentsWithId";
+  public static final String QUERY_COUNT_COMPONENT_WITH_ID =
+      "SELECT count(*) FROM Component c WHERE c.id=:id AND c.isDeleted = false";
   
 }
