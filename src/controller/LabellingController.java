@@ -5,8 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import controllerservice.LabellingControllerService;
 import service.LabellingCRUDService;
 import utils.PermissionConstants;
-import controllerservice.LabellingControllerService;
 
 @RestController
 @RequestMapping("labels")
@@ -39,9 +37,10 @@ public class LabellingController {
     return map;
   }
 
-  @RequestMapping(value = "/status/{donationIdentificationNumber}", method = RequestMethod.GET)
+  @RequestMapping(value = "/components", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DISCARDS + "')")
-  public ResponseEntity findlotRelease(HttpServletRequest request, @PathVariable String donationIdentificationNumber,
+  public ResponseEntity findlotRelease(
+      @RequestParam(required = true, value = "donationIdentificationNumber") String donationIdentificationNumber,
       @RequestParam(required = true, value = "componentType") long componentTypeId) {
     Map<String, Object> componentMap = new HashMap<String, Object>();
     List<Map<String, Object>> componentStatuses = labellingService.findlotRelease(donationIdentificationNumber, componentTypeId);
