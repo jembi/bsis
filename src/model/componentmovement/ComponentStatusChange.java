@@ -11,16 +11,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import model.BaseEntity;
-import model.component.Component;
-import model.component.ComponentStatus;
-import model.request.Request;
-import model.user.User;
-
 import org.hibernate.envers.Audited;
 
 import constraintvalidator.ComponentExists;
-import constraintvalidator.RequestExists;
+import model.BaseEntity;
+import model.component.Component;
+import model.component.ComponentStatus;
+import model.user.User;
 
 @Entity
 @Audited
@@ -42,10 +39,6 @@ public class ComponentStatusChange extends BaseEntity {
   @Enumerated(EnumType.STRING)
   @Column(length = 30)
   private ComponentStatus newStatus;
-
-  @RequestExists
-  @ManyToOne
-  private Request issuedTo;
 
   @ManyToOne
   private User changedBy;
@@ -81,14 +74,6 @@ public class ComponentStatusChange extends BaseEntity {
 
   public void setNewStatus(ComponentStatus newStatus) {
     this.newStatus = newStatus;
-  }
-
-  public Request getIssuedTo() {
-    return issuedTo;
-  }
-
-  public void setIssuedTo(Request issuedTo) {
-    this.issuedTo = issuedTo;
   }
 
   public User getChangedBy() {

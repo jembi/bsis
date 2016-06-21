@@ -30,14 +30,12 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import constraintvalidator.ComponentTypeExists;
 import constraintvalidator.DonationExists;
 import model.BaseModificationTrackerEntity;
-import model.compatibility.CompatibilityTest;
 import model.componentbatch.ComponentBatch;
 import model.componentmovement.ComponentStatusChange;
 import model.componenttype.ComponentType;
 import model.donation.Donation;
 import model.inventory.InventoryStatus;
 import model.location.Location;
-import model.request.Request;
 import model.usage.ComponentUsage;
 import repository.ComponentNamedQueryConstants;
 import repository.InventoryNamedQueryConstants;
@@ -91,20 +89,12 @@ public class Component extends BaseModificationTrackerEntity {
   @Column(columnDefinition = "DATETIME")
   private Date discardedOn;
 
-  @ManyToOne
-  private Request issuedTo;
-
   @Temporal(TemporalType.TIMESTAMP)
   private Date issuedOn;
 
   @Enumerated(EnumType.STRING)
   @Column(length = 30)
   private ComponentStatus status;
-
-  @NotAudited
-  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToMany(mappedBy = "testedComponent", fetch = FetchType.LAZY)
-  private List<CompatibilityTest> compatibilityTests;
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
@@ -216,28 +206,12 @@ public class Component extends BaseModificationTrackerEntity {
     this.status = status;
   }
 
-  public List<CompatibilityTest> getCompatibilityTests() {
-    return compatibilityTests;
-  }
-
-  public void setCompatibilityTests(List<CompatibilityTest> compatibilityTests) {
-    this.compatibilityTests = compatibilityTests;
-  }
-
   public Date getDiscardedOn() {
     return discardedOn;
   }
 
   public void setDiscardedOn(Date discardedOn) {
     this.discardedOn = discardedOn;
-  }
-
-  public Request getIssuedTo() {
-    return issuedTo;
-  }
-
-  public void setIssuedTo(Request issuedTo) {
-    this.issuedTo = issuedTo;
   }
 
   public Date getIssuedOn() {

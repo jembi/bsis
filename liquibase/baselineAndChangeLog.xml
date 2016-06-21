@@ -20,5 +20,6 @@
 	<include file="./liquibase/updates/981-add-returns.xml" />
 	<include file="./liquibase/updates/1049-add-deferral-date.xml" />
 	<include file="./liquibase/updates/872-fulfil-return.xml" />
+	<include file="./liquibase/updates/994-delete-request-resources.xml" />
 
 </databaseChangeLog>

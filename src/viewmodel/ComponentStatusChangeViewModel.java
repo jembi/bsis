@@ -1,16 +1,14 @@
 package viewmodel;
 
-import utils.CustomDateFormatter;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import model.request.Request;
 import model.component.Component;
 import model.component.ComponentStatus;
 import model.componentmovement.ComponentStatusChange;
 import model.componentmovement.ComponentStatusChangeReason;
 import model.componentmovement.ComponentStatusChangeType;
 import model.user.User;
+import utils.CustomDateFormatter;
 
 public class ComponentStatusChangeViewModel {
 
@@ -47,10 +45,6 @@ public class ComponentStatusChangeViewModel {
 
   public ComponentStatus getNewStatus() {
     return componentStatusChange.getNewStatus();
-  }
-
-  public Request getIssuedTo() {
-    return componentStatusChange.getIssuedTo();
   }
 
   public String getChangedBy() {
