@@ -31,7 +31,7 @@ if [ -d "/opt/bsis/.git" ]; then
 else
   # Clone the repository
   sudo mkdir --parents /opt/bsis
-  sudo chown --recursive $(whoami):$(groups | awk '{print $1;}') /opt/bsis
+  sudo chown --recursive $(id --user --name):$(id --group --name) /opt/bsis
   git clone --branch ${1:-master} --no-single-branch --depth=1 http://github.com/jembi/bsis.git /opt/bsis
   cd /opt/bsis
 fi
