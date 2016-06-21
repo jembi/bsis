@@ -25,6 +25,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
   private String componentCode;
   private Date expiresOn;
   private Date createdOn;
+  private Component parentComponent;
   
   public ComponentBuilder withId(Long id) {
     this.id = id;
@@ -75,6 +76,11 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     this.createdOn = createdOn;
     return this;
   }
+  
+  public ComponentBuilder withParentComponent(Component parentComponent) {
+    this.parentComponent = parentComponent;
+    return this;
+  }
 
   @Override
   public Component build() {
@@ -89,6 +95,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     component.setComponentCode(componentCode);
     component.setExpiresOn(expiresOn);
     component.setCreatedOn(createdOn);
+    component.setParentComponent(parentComponent);
     return component;
   }
 

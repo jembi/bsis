@@ -250,13 +250,6 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
-  public void testSetComponentStatusToProcessed() throws Exception {
-    componentRepository.setComponentStatusToProcessed(2l);
-    Component processedComponent = componentRepository.findComponent(2l);
-    Assert.assertEquals("Component has been processed", ComponentStatus.PROCESSED, processedComponent.getStatus());
-  }
-
-  @Test
   @Ignore("It seems impossible to get components in a NULL status - by default it is set to QUARANTINED")
   public void testUpdateQuarantineStatus() throws Exception {
     // create component with null status
