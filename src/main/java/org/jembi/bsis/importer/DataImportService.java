@@ -1,4 +1,4 @@
-package org.jembi.bsis.bsis.importer;
+package org.jembi.bsis.importer;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;

@@ -1,4 +1,4 @@
-package org.jembi.bsis.bsis.importer;
+package org.jembi.bsis.importer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -17,13 +17,13 @@ import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.jembi.bsis.bsis.importer.DataImportService;
 import org.jembi.bsis.helpers.builders.AdverseEventTypeBuilder;
 import org.jembi.bsis.helpers.builders.BloodTestBuilder;
 import org.jembi.bsis.helpers.builders.DonationTypeBuilder;
 import org.jembi.bsis.helpers.builders.FormFieldBuilder;
 import org.jembi.bsis.helpers.builders.PackTypeBuilder;
 import org.jembi.bsis.helpers.builders.UserBuilder;
+import org.jembi.bsis.importer.DataImportService;
 import org.jembi.bsis.model.address.AddressType;
 import org.jembi.bsis.model.address.ContactMethodType;
 import org.jembi.bsis.model.admin.DataType;
