@@ -454,16 +454,6 @@ public class ComponentRepository {
     return query.getResultList();
   }
 
-  public void setComponentStatusToProcessed(long componentId) throws NoResultException {
-    String queryString = "SELECT c FROM Component c where c.id = :componentId";
-    TypedQuery<Component> query = em.createQuery(queryString, Component.class);
-    query.setParameter("componentId", componentId);
-    Component component = null;
-    component = query.getSingleResult();
-    component.setStatus(ComponentStatus.PROCESSED);
-    em.merge(component);
-  }
-
   // TODO: Test
   public int countChangedComponentsForDonation(long donationId) {
     return em.createNamedQuery(

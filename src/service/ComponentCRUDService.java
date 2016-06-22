@@ -76,11 +76,10 @@ public class ComponentCRUDService {
   }
 
   public Component processComponent(String parentComponentId, ComponentTypeCombination componentTypeCombination) {
-    Component parentComponent =
-        componentRepository.findComponentById(Long.valueOf(parentComponentId));
+
+    Component parentComponent = componentRepository.findComponentById(Long.valueOf(parentComponentId));
     Donation donation = parentComponent.getDonation();
     ComponentStatus parentStatus = parentComponent.getStatus();
-    long componentId = Long.valueOf(parentComponentId);
 
     // map of new components, storing component type and num. of units
     Map<ComponentType, Integer> newComponents = new HashMap<ComponentType, Integer>();
@@ -106,6 +105,11 @@ public class ComponentCRUDService {
     // If the parent is unsafe then set new components to unsafe as well
     ComponentStatus initialComponentStatus =
         parentStatus == ComponentStatus.UNSAFE ? ComponentStatus.UNSAFE : ComponentStatus.QUARANTINED;
+    
+    // Remove parent component from inventory
+    if (parentComponent.getInventoryStatus() == InventoryStatus.IN_STOCK) {
+      parentComponent.setInventoryStatus(InventoryStatus.REMOVED);
+    }
 
     for (ComponentType pt : newComponents.keySet()) {
 
@@ -151,12 +155,12 @@ public class ComponentCRUDService {
           componentRepository.addComponent(component);
 
           // Set source component status to PROCESSED
-          componentRepository.setComponentStatusToProcessed(componentId);
+          parentComponent.setStatus(ComponentStatus.PROCESSED);
         }
       }
     }
-
-    return parentComponent;
+    
+    return componentRepository.updateComponent(parentComponent);
   }
 
   public void discardComponents(List<Long> componentIds, Long discardReasonId, String discardReasonText) {
