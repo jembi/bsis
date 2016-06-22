@@ -1,0 +1,25 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<include file="./src/main/resources/liquibase/db-baseline.xml" />
+ 	<include file="./src/main/resources/liquibase/db-changelog.xml" />
+	<include file="./src/main/resources/liquibase/db-config.xml" />
+	<include file="./src/main/resources/liquibase/db-data-lbts.xml" />
+	<include file="./src/main/resources/liquibase/db-after-data.xml" />
+	<include file="./src/main/resources/liquibase/db-fix-ids.xml" />
+	<include file="./src/main/resources/liquibase/updates/676-delete-unused-endpoints.xml" />
+	<include file="./src/main/resources/liquibase/updates/794-record-receipt-of-initial-components.xml" />
+	<include file="./src/main/resources/liquibase/updates/875-add-components-to-inventory.xml" />
+	<include file="./src/main/resources/liquibase/updates/870-add-new-order.xml" />
+	<include file="./src/main/resources/liquibase/updates/915-add-order-items.xml" />
+	<include file="./src/main/resources/liquibase/updates/916-fulfill-order.xml" />
+	<include file="./src/main/resources/liquibase/updates/992-assign-discard-permission-to-component-supervisor.xml" />
+	<include file="./src/main/resources/liquibase/updates/917-dispatch-order.xml" />
+	<include file="./src/main/resources/liquibase/updates/981-add-returns.xml" />
+	<include file="./src/main/resources/liquibase/updates/1049-add-deferral-date.xml" />
+	<include file="./src/main/resources/liquibase/updates/872-fulfil-return.xml" />
+	<include file="./src/main/resources/liquibase/updates/994-delete-request-resources.xml" />
+
+</databaseChangeLog>
