@@ -274,7 +274,7 @@
     </authentication-provider>
   </authentication-manager>
 
-  <beans:bean id="userDetailsService" class="security.LoginUserService">
+  <beans:bean id="userDetailsService" class="org.jembi.bsis.security.LoginUserService">
   </beans:bean>
 
 </beans:beans>

@@ -1,1 +1,1 @@
-interceptor.CustomIntegrator
+org.jembi.bsis.interceptor.CustomIntegrator
