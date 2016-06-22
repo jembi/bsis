@@ -1,0 +1,15 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+  logicalFilePath="./liquibase/updates/992-assign-discard-permission-to-component-supervisor.xml">
+
+	<changeSet id="20160523-1210" author="danfuterman">
+		<comment>BSIS-992 - Assign Discard Component permission to Component Supervisor role</comment>
+	    <insert tableName="Permission_Role">
+	       <column name="permissions_id" value="33"></column>
+	       <column name="roles_id" value="9"></column>
+	    </insert>
+	</changeSet>
+		
+</databaseChangeLog>

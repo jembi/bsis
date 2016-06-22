@@ -1,0 +1,22 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+  logicalFilePath="./liquibase/updates/994-delete-request-resources.xml">
+
+	<changeSet id="20160620-1346" author="lauravignoli">
+	 	<dropForeignKeyConstraint baseTableName="ComponentStatusChange" constraintName="FKCCE48CB1994002DF" />
+		<dropColumn columnName="issuedTo_id" tableName="ComponentStatusChange" />
+		<dropForeignKeyConstraint baseTableName="Component" constraintName="FK50C664CF994002DF" />
+		<dropColumn columnName="issuedTo_id" tableName="Component" /> 
+		<dropTable tableName="CompatibilityTest" cascadeConstraints="true" />
+		<dropTable tableName="CompatibilityTest_AUD" cascadeConstraints="true" />
+		<dropTable tableName="CrossmatchType" cascadeConstraints="true" />
+		<dropTable tableName="CrossmatchType_AUD" cascadeConstraints="true" />
+		<dropTable tableName="Request" cascadeConstraints="true" />
+		<dropTable tableName="Request_AUD" cascadeConstraints="true" />
+		<dropTable tableName="RequestType" cascadeConstraints="true" />
+		<dropTable tableName="RequestType_AUD" cascadeConstraints="true" />
+	</changeSet>
+
+</databaseChangeLog>

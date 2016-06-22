@@ -1,0 +1,184 @@
+package org.jembi.bsis.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
+import org.jembi.bsis.backingform.UserBackingForm;
+import org.jembi.bsis.backingform.validator.UserBackingFormValidator;
+import org.jembi.bsis.model.user.Role;
+import org.jembi.bsis.model.user.User;
+import org.jembi.bsis.repository.RoleRepository;
+import org.jembi.bsis.repository.UserRepository;
+import org.jembi.bsis.service.UserCRUDService;
+import org.jembi.bsis.utils.PermissionConstants;
+import org.jembi.bsis.viewmodel.UserViewModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/users")
+public class UserController {
+
+  @Autowired
+  private UserRepository userRepository;
+
+  @Autowired
+  private RoleRepository roleRepository;
+
+  @Autowired
+  private UserBackingFormValidator userBackingFormValidator;
+
+  @Autowired
+  private UserCRUDService userCRUDService;
+
+  @InitBinder
+  protected void initBinder(WebDataBinder binder) {
+    binder.setValidator(userBackingFormValidator);
+  }
+
+  @RequestMapping(method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+  public Map<String, Object> configureUsersFormGenerator(HttpServletRequest request) {
+
+    Map<String, Object> map = new HashMap<String, Object>();
+    addAllUsersToModel(map);
+    map.put("roles", roleRepository.getAllRoles());
+    return map;
+  }
+
+  @RequestMapping(value = "/roles", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+  public ResponseEntity getRoles() {
+    UserBackingForm form = new UserBackingForm();
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("roles", roleRepository.getAllRoles());
+    return new ResponseEntity(map, HttpStatus.OK);
+  }
+
+  @RequestMapping(value = "{id}", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+  public ResponseEntity getUserDetails(@PathVariable Long id) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    User user = userRepository.findUserById(id);
+    map.put("user", new UserViewModel(user));
+    return new ResponseEntity(map, HttpStatus.OK);
+  }
+
+
+  @RequestMapping(method = RequestMethod.POST)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+  public ResponseEntity
+  addUser(@Valid @RequestBody UserBackingForm form) {
+
+    User user = form.getUser();
+    String hashedPassword = getHashedPassword(user.getPassword());
+    user.setPassword(hashedPassword);
+    user.setIsDeleted(false);
+    user.setIsActive(true);
+    user = userRepository.addUser(user);
+    return new ResponseEntity(new UserViewModel(user), HttpStatus.CREATED);
+  }
+
+  @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+  public ResponseEntity updateUser(
+      @Valid @RequestBody UserBackingForm form,
+      @PathVariable Long id) {
+
+    form.setIsDeleted(false);
+    User user = form.getUser();
+    user.setId(id);
+    boolean modifyPassword = form.isModifyPassword();
+    if (modifyPassword) {
+      String hashedPassword = getHashedPassword(user.getPassword());
+      user.setPassword(hashedPassword);
+      user.setPasswordReset(false);
+    }
+    user.setIsActive(true);
+    userRepository.updateUser(user, modifyPassword);
+
+    return new ResponseEntity(user, HttpStatus.OK);
+  }
+
+
+  @RequestMapping(method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('" + PermissionConstants.AUTHENTICATED + "')")
+  public ResponseEntity<UserViewModel> updateLoginUserInfo(
+      @Valid @RequestBody UserBackingForm form) {
+
+    User user = form.getUser();
+    user.setId(getLoginUser().getId());
+    boolean modifyPassword = form.isModifyPassword();
+    if (modifyPassword) {
+      String hashedPassword = getHashedPassword(user.getPassword());
+      user.setPassword(hashedPassword);
+      user.setPasswordReset(false);
+    }
+    userRepository.updateBasicUserInfo(user, modifyPassword);
+    return new ResponseEntity<UserViewModel>(new UserViewModel(user), HttpStatus.OK);
+  }
+
+
+  @RequestMapping(value = "/login-user-details", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.AUTHENTICATED + "' )")
+  public ResponseEntity getUserDetails() {
+    User user = getLoginUser();
+    return new ResponseEntity(new UserViewModel(user), HttpStatus.OK);
+  }
+
+  @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
+  @ResponseStatus(value = HttpStatus.NO_CONTENT)
+  public void deleteUser(@PathVariable Long id) {
+    userCRUDService.deleteUser(id);
+  }
+
+  private void addAllUsersToModel(Map<String, Object> m) {
+    List<UserViewModel> users = userRepository.getAllUsers();
+    m.put("users", users);
+  }
+
+  public String userRole(Long id) {
+    String userRole = "";
+    User user = userRepository.findUserById(id);
+    List<Role> roles = user.getRoles();
+    if (roles != null && roles.size() > 0) {
+      for (Role r : roles) {
+        userRole = userRole + " " + r.getId();
+      }
+
+    }
+    return userRole;
+  }
+
+  private User getLoginUser() {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String userName = auth.getName(); //get logged in username
+    return userRepository.findUser(userName);
+  }
+
+  private String getHashedPassword(String rawPassword) {
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    String hashedPassword = passwordEncoder.encode(rawPassword);
+    return hashedPassword;
+  }
+
+}

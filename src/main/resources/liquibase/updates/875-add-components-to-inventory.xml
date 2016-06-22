@@ -1,0 +1,53 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd" logicalFilePath="./liquibase/updates/875-add-components-to-inventory.xml">
+  <changeSet id="20160509-0909" author="bausmeier">
+    <addColumn tableName="Location">
+      <column name="isDistributionSite" type="TINYINT(1)" defaultValue="0">
+        <constraints nullable="false" />
+      </column>
+    </addColumn>
+    <addColumn tableName="Location_AUD">
+      <column name="isDistributionSite" type="TINYINT(1)" />
+    </addColumn>
+  </changeSet>
+  
+  <changeSet id="20160509-0942" author="bausmeier">
+    <addColumn tableName="Component">
+      <column name="inventoryStatus" type="VARCHAR(30)" defaultValue="NULL" />
+    </addColumn>
+    <addColumn tableName="Component_AUD">
+      <column name="inventoryStatus" type="VARCHAR(30)" defaultValue="NULL" />
+    </addColumn>
+    <update tableName="Component">
+      <column name="inventoryStatus" value="NOT_LABELLED" type="VARCHAR(30)" />
+      <where>inventoryStatus IS NULL</where>
+    </update>
+    <addNotNullConstraint tableName="Component" columnName="inventoryStatus" columnDataType="VARCHAR(30)" />
+  </changeSet>
+  
+  <changeSet id="20160509-1148" author="bausmeier">
+    <addColumn tableName="Component">
+      <column name="location_id" type="BIGINT(20)" defaultValue="NULL" />
+    </addColumn>
+    <addColumn tableName="Component_AUD">
+      <column name="location_id" type="BIGINT(20)" defaultValue="NULL" />
+    </addColumn>
+    <sql>
+      UPDATE Component c
+      JOIN ComponentBatch cb ON c.componentBatch_id = cb.id
+      JOIN Location l ON cb.location_id = l.id
+      SET c.location_id = l.id
+      WHERE c.location_id IS NULL
+      AND c.componentBatch_id IS NOT NULL;
+    </sql>
+    <sql>
+      UPDATE Component c
+      JOIN Donation d ON c.donation_id = d.id
+      JOIN DonationBatch db ON d.donationBatch_id = db.id
+      JOIN Location l ON db.venue_id = l.id
+      SET c.location_id = l.id
+      WHERE c.location_id IS NULL;
+    </sql>
+    <addNotNullConstraint tableName="Component" columnName="location_id" columnDataType="BIGINT(20)" />
+    <addForeignKeyConstraint constraintName="FK_COMPONENT_LOCATION_ID" referencedTableName="Location" baseColumnNames="location_id" baseTableName="Component" referencedColumnNames="id" />
+  </changeSet>
+</databaseChangeLog>

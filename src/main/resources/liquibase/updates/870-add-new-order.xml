@@ -1,0 +1,181 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+ logicalFilePath="./liquibase/updates/870-add-new-order.xml">
+
+ <changeSet id="20160511-1143" author="bausmeier">
+
+  <createTable tableName="OrderForm">
+   <column name="id" type="BIGINT(20)" autoIncrement="true">
+    <constraints primaryKey="true" />
+   </column>
+   <column name="orderDate" type="DATETIME">
+    <constraints nullable="false" />
+   </column>
+   <column name="dispatchedFrom_id" type="BIGINT(20)">
+    <constraints nullable="false" foreignKeyName="fk_OrderForm_dispatchedFrom" references="Location(id)" />
+   </column>
+   <column name="dispatchedTo_id" type="BIGINT(20)">
+    <constraints nullable="false" foreignKeyName="fk_OrderForm_dispatchedTo" references="Location(id)" />
+   </column>
+   <column name="createdDate" type="TIMESTAMP" />
+   <column name="createdBy_id" type="BIGINT(20)">
+    <constraints foreignKeyName="fk_OrderForm_createdBy" references="User(id)" />
+   </column>
+   <column name="lastUpdated" type="TIMESTAMP" />
+   <column name="lastUpdatedBy_id" type="BIGINT(20)">
+    <constraints foreignKeyName="fk_OrderForm_lastUpdatedBy" references="User(id)" />
+   </column>
+   <column name="isDeleted" type="tinyint(1)">
+    <constraints nullable="false" />
+   </column>
+   <column name="status" type="VARCHAR(20)">
+   	<constraints nullable="false" />
+   </column>
+   <column name="type" type="VARCHAR(20)">
+   	<constraints nullable="false" />
+   </column>
+  </createTable>
+
+  <createTable tableName="OrderForm_AUD">
+   <column name="id" type="BIGINT(20)">
+    <constraints primaryKey="true" />
+   </column>
+   <column name="orderDate" type="DATETIME" />
+   <column name="dispatchedFrom_id" type="BIGINT(20)" />
+   <column name="dispatchedTo_id" type="BIGINT(20)" />
+   <column name="createdDate" type="TIMESTAMP" />
+   <column name="createdBy_id" type="BIGINT(20)" />
+   <column name="lastUpdated" type="TIMESTAMP" />
+   <column name="lastUpdatedBy_id" type="BIGINT(20)" />
+   <column name="isDeleted" type="tinyint(1)"/>
+   <column name="status" type="VARCHAR(20)"/>
+   <column name="type" type="VARCHAR(20)"/>
+   <column name="REV" type="INT(11)">
+    <constraints primaryKey="true" />
+   </column>
+   <column name="REVTYPE" type="TINYINT(4)"></column>
+  </createTable>
+ </changeSet>
+
+	<changeSet id="20160511-1651" author="lauravignoli">
+		<comment>BSIS-870 - add permissions for OrderForm.</comment>
+		<insert tableName="Permission">
+			<column name="id" value="106"></column>
+			<column name="name" value="Add Order Form"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="106"></column>
+			<column name="roles_id" value="1"></column> <!-- Super User -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="106"></column>
+			<column name="roles_id" value="2"></column> <!-- Admin -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="106"></column>
+			<column name="roles_id" value="15"></column> <!-- Inventory Staff -->
+		</insert>
+
+		<insert tableName="Permission">
+			<column name="id" value="107"></column>
+			<column name="name" value="View Order Form"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="107"></column>
+			<column name="roles_id" value="1"></column> <!-- Super User -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="107"></column>
+			<column name="roles_id" value="2"></column> <!-- Admin -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="107"></column>
+			<column name="roles_id" value="15"></column> <!-- Inventory Staff -->
+		</insert>
+
+		<insert tableName="Permission">
+			<column name="id" value="108"></column>
+			<column name="name" value="Edit Order Form"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="108"></column>
+			<column name="roles_id" value="1"></column> <!-- Super User -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="108"></column>
+			<column name="roles_id" value="2"></column> <!-- Admin -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="108"></column>
+			<column name="roles_id" value="15"></column> <!-- Inventory Staff -->
+		</insert>
+
+		<insert tableName="Permission">
+			<column name="id" value="109"></column>
+			<column name="name" value="Void Order Form"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="109"></column>
+			<column name="roles_id" value="1"></column> <!-- Super User -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="109"></column>
+			<column name="roles_id" value="2"></column> <!-- Admin -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="109"></column>
+			<column name="roles_id" value="15"></column> <!-- Inventory Staff -->
+		</insert>
+	</changeSet>
+
+	<changeSet id="20160512-0924" author="lauravignoli">
+		<comment>BSIS-870 - add FormFields for OrderForm.</comment>
+		<insert tableName="FormField">
+			<column name="form" value="OrderForm"></column>
+			<column name="field" value="orderDate"></column>
+			<column name="defaultDisplayName" value="Order Date"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="0"></column>
+			<column name="isRequired" value="1"></column>
+			<column name="canBeOptional" value="0"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="1"></column>			
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="OrderForm"></column>
+			<column name="field" value="status"></column>
+			<column name="defaultDisplayName" value="Status"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="20"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="0"></column>
+			<column name="isRequired" value="1"></column>
+			<column name="canBeOptional" value="0"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="OrderForm"></column>
+			<column name="field" value="type"></column>
+			<column name="defaultDisplayName" value="Type"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="20"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="0"></column>
+			<column name="isRequired" value="1"></column>
+			<column name="canBeOptional" value="0"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+	</changeSet>
+
+</databaseChangeLog>

@@ -35,18 +35,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
   <!-- Configures the @Controller programming model -->
   <mvc:annotation-driven />
 
-  <context:component-scan base-package="bsis" />
-  <context:component-scan base-package="controller" />
-  <context:component-scan base-package="controllerservice" />
-  <context:component-scan base-package="repository" />
-  <context:component-scan base-package="model" />
-  <context:component-scan base-package="viewmodel" />
-  <context:component-scan base-package="tasks" />
-  <context:component-scan base-package="utils" />
-  <context:component-scan base-package="security" />
-  <context:component-scan base-package="service" />
-  <context:component-scan base-package="factory" />
-  <context:component-scan base-package="backingform.validator" />
+  <context:component-scan base-package="org.jembi.bsis" />
 
   <bean id="messageSource"
     class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
@@ -76,7 +65,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
     <property name="persistenceXmlLocation" value="classpath:/META-INF/persistenceTest.xml"/>
     <property name="jpaProperties">
       <props>
-        <prop key="hibernate.dialect">dialect.BSISTestDialect</prop>
+        <prop key="hibernate.dialect">org.jembi.bsis.dialect.BSISTestDialect</prop>
         <prop key="hibernate.show_sql">false</prop>
         <prop key="javax.persistence.validation.mode">none</prop>
       </props>
@@ -87,7 +76,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
     <property name="entityManagerFactory" ref="entityManagerFactory" />
   </bean>
 
-  <bean id="applicationContextProvider" class="repository.events.ApplicationContextProvider"></bean>
+  <bean id="applicationContextProvider" class="org.jembi.bsis.repository.events.ApplicationContextProvider"></bean>
   <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
   </bean>
 
@@ -105,7 +94,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
   </bean>
 
   <mvc:interceptors>
-    <bean id="loggingInterceptor" class="interceptor.LoggingInterceptor" />
+    <bean id="loggingInterceptor" class="org.jembi.bsis.interceptor.LoggingInterceptor" />
   </mvc:interceptors>
 
   <tx:annotation-driven transaction-manager="transactionManager" />

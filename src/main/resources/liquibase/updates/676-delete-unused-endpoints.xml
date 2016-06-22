@@ -1,0 +1,24 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+    logicalFilePath="./liquibase/updates/676-delete-unused-endpoints.xml">
+
+	<changeSet id="20160414-1346" author="lauravignoli">
+		<comment>BSIS-792 - Remove unused tables from db</comment>
+		<dropForeignKeyConstraint baseTableName="BloodTestResult"
+			constraintName="FK39946CC9E104121F" />
+		<dropColumn columnName="machineReading_id" tableName="BloodTestResult" />
+		<dropTable tableName="MachineReading" cascadeConstraints="true" />
+		<dropTable tableName="MicrotiterPlate" cascadeConstraints="true" />
+		<dropTable tableName="MicrotiterPlate_AUD"
+			cascadeConstraints="true" />
+		<dropTable tableName="PlateSession_BloodTestResult"
+			cascadeConstraints="true" />
+		<dropTable tableName="PlateSession" cascadeConstraints="true" />
+		<dropTable tableName="PlateSession_AUD" cascadeConstraints="true" />
+		<dropTable tableName="WellType" cascadeConstraints="true" />
+		<dropTable tableName="WellType_AUD" cascadeConstraints="true" />
+	</changeSet>
+
+</databaseChangeLog>

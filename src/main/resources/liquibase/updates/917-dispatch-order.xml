@@ -1,0 +1,14 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+ logicalFilePath="./liquibase/updates/917-dispatch-order.xml">
+ 
+ <changeSet id="20160525-1539" author="bausmeier">
+  <insert tableName="ComponentStatusChangeReason">
+    <column name="category" value="ISSUED" />
+    <column name="statusChangeReason" value="Issued" />
+    <column name="isDeleted" value="0" />
+  </insert>
+ </changeSet>
+ 
+ </databaseChangeLog>

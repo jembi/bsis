@@ -1,0 +1,97 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+  logicalFilePath="./liquibase/updates/981-add-returns.xml">
+
+	<changeSet id="20160531-1323" author="lauravignoli">
+
+		<createTable tableName="ReturnForm">
+			<column name="id" type="BIGINT(20)" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="returnDate" type="DATETIME">
+				<constraints nullable="false" />
+			</column>
+			<column name="returnedFrom_id" type="BIGINT(20)">
+				<constraints nullable="false" foreignKeyName="fk_ReturnForm_returnedFrom"
+					references="Location(id)" />
+			</column>
+			<column name="returnedTo_id" type="BIGINT(20)">
+				<constraints nullable="false" foreignKeyName="fk_ReturnForm_returnedTo"
+					references="Location(id)" />
+			</column>
+			<column name="createdDate" type="TIMESTAMP">
+				<constraints nullable="false" />
+			</column>
+			<column name="createdBy_id" type="BIGINT(20)">
+				<constraints foreignKeyName="fk_ReturnForm_createdBy"
+					references="User(id)" />
+			</column>
+			<column name="lastUpdated" type="TIMESTAMP" />
+			<column name="lastUpdatedBy_id" type="BIGINT(20)">
+				<constraints foreignKeyName="fk_ReturnForm_lastUpdatedBy"
+					references="User(id)" />
+			</column>
+			<column name="isDeleted" type="tinyint(1)">
+				<constraints nullable="false" />
+			</column>
+			<column name="status" type="VARCHAR(20)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createTable tableName="ReturnForm_AUD">
+			<column name="id" type="BIGINT(20)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="returnDate" type="DATETIME" />
+			<column name="returnedFrom_id" type="BIGINT(20)" />
+			<column name="returnedTo_id" type="BIGINT(20)" />
+			<column name="createdDate" type="TIMESTAMP" />
+			<column name="createdBy_id" type="BIGINT(20)" />
+			<column name="lastUpdated" type="TIMESTAMP" />
+			<column name="lastUpdatedBy_id" type="BIGINT(20)" />
+			<column name="isDeleted" type="tinyint(1)" />
+			<column name="status" type="VARCHAR(20)" />
+			<column name="REV" type="INT(11)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="REVTYPE" type="TINYINT(4)"></column>
+		</createTable>
+	</changeSet>
+	
+	<changeSet id="20160601-1333" author="timler">
+		<comment>BSIS-981 - add FormFields for ReturnForm.</comment>
+		<insert tableName="FormField">
+			<column name="form" value="ReturnForm"></column>
+			<column name="field" value="returnDate"></column>
+			<column name="defaultDisplayName" value="Return Date"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="0"></column>
+			<column name="isRequired" value="1"></column>
+			<column name="canBeOptional" value="0"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="1"></column>			
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="ReturnForm"></column>
+			<column name="field" value="status"></column>
+			<column name="defaultDisplayName" value="Status"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="20"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="0"></column>
+			<column name="isRequired" value="1"></column>
+			<column name="canBeOptional" value="0"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+	</changeSet>
+
+</databaseChangeLog>

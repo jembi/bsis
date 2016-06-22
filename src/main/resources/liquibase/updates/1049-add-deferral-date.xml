@@ -1,0 +1,78 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+  logicalFilePath="./liquibase/updates/1049-add-deferral-date.xml">
+
+	<changeSet id="20160603-1205" author="lauravignoli">
+		<addColumn tableName="DonorDeferral">
+			<column name="deferralDate" type="DATETIME" defaultValue="NULL" />
+		</addColumn>
+		<sql>
+			UPDATE DonorDeferral dd SET dd.deferralDate = dd.createdDate where dd.deferralDate IS NULL;
+		</sql>
+		<addNotNullConstraint tableName="DonorDeferral" columnName="deferralDate" columnDataType="DATETIME" />
+		<addNotNullConstraint tableName="DonorDeferral" columnName="venue_id" columnDataType="bigint(20)" />
+		<addNotNullConstraint tableName="DonorDeferral" columnName="deferralReason_id" columnDataType="bigint(20)" />
+		<addColumn tableName="DonorDeferral_AUD">
+			<column name="deferralDate" type="DATETIME" />
+		</addColumn>
+	</changeSet>
+	
+
+ <changeSet id="20160606-1107" author="bausmeier">
+  <delete tableName="FormField">
+   <where>form = "DonorDeferral" AND field IN ("deferredOn", "deferredBy")</where>
+  </delete>
+  <update tableName="FormField">
+    <column name="maxLength" type="int(11)" value="0" />
+    <where>form = "DonorDeferral"</where>
+  </update>
+  <insert tableName="FormField">
+   <column name="form" value="DonorDeferral"></column>
+   <column name="field" value="deferralDate"></column>
+   <column name="defaultDisplayName" value="Deferral date"></column>
+   <column name="defaultValue" value=""></column>
+   <column name="maxLength" value="0"></column>
+   <column name="hidden" value="0"></column>
+   <column name="isHidable" value="0"></column>
+   <column name="isRequired" value="1"></column>
+   <column name="canBeOptional" value="0"></column>
+   <column name="autoGenerate" value="0"></column>
+   <column name="isAutoGeneratable" value="0"></column>
+   <column name="useCurrentTime" value="0"></column>
+   <column name="isTimeField" value="0"></column>
+  </insert>
+  <insert tableName="FormField">
+   <column name="form" value="DonorDeferral"></column>
+   <column name="field" value="venue"></column>
+   <column name="defaultDisplayName" value="Deferral venue"></column>
+   <column name="defaultValue" value=""></column>
+   <column name="maxLength" value="0"></column>
+   <column name="hidden" value="0"></column>
+   <column name="isHidable" value="0"></column>
+   <column name="isRequired" value="1"></column>
+   <column name="canBeOptional" value="0"></column>
+   <column name="autoGenerate" value="0"></column>
+   <column name="isAutoGeneratable" value="0"></column>
+   <column name="useCurrentTime" value="0"></column>
+   <column name="isTimeField" value="0"></column>
+  </insert>
+  <insert tableName="FormField">
+   <column name="form" value="DonorDeferral"></column>
+   <column name="field" value="deferredDonor"></column>
+   <column name="defaultDisplayName" value="Deferred donor"></column>
+   <column name="defaultValue" value=""></column>
+   <column name="maxLength" value="0"></column>
+   <column name="hidden" value="0"></column>
+   <column name="isHidable" value="0"></column>
+   <column name="isRequired" value="1"></column>
+   <column name="canBeOptional" value="0"></column>
+   <column name="autoGenerate" value="0"></column>
+   <column name="isAutoGeneratable" value="0"></column>
+   <column name="useCurrentTime" value="0"></column>
+   <column name="isTimeField" value="0"></column>
+  </insert>
+ </changeSet>
+
+</databaseChangeLog>

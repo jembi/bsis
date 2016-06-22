@@ -14,17 +14,17 @@
         <spring-version>4.1.0.RELEASE</spring-version>
         <spring-security-version>3.2.5.RELEASE</spring-security-version>
         <hibernate-version>4.3.7.Final</hibernate-version>
-        <liquibase.propertyFile>liquibase/liquibase.properties</liquibase.propertyFile>
+        <liquibase.propertyFile>src/main/resources/liquibase/liquibase.properties</liquibase.propertyFile>
     </properties>
 
     <build>
         <finalName>${webapp.name}</finalName>
-        <sourceDirectory>src</sourceDirectory>
-        <testSourceDirectory>test</testSourceDirectory>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
 
         <resources>
             <resource>
-                <directory>src</directory>
+              <directory>src/main/resources</directory>
                 <excludes>
                     <exclude>**/*.java</exclude>
                 </excludes>
@@ -35,7 +35,7 @@
 
         <testResources>
             <testResource>
-                <directory>test</directory>
+              <directory>src/test/resources</directory>
                 <filtering>false</filtering>
                 <includes>
                     <include>**/*.xml</include>

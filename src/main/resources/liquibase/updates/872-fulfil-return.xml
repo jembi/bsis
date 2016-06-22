@@ -1,0 +1,39 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+ logicalFilePath="./liquibase/updates/872-fulfil-return.xml">
+
+	<changeSet id="20160610-1159" author="lauravignoli">
+		<createTable tableName="ReturnForm_Component">
+			<column name="returnForm_id" type="BIGINT(20)">
+				<constraints primaryKey="true" nullable="false"
+					foreignKeyName="fk_ReturnForm_Component_ReturnForm" references="ReturnForm(id)" />
+			</column>
+			<column name="component_id" type="BIGINT(20)">
+				<constraints primaryKey="true" nullable="false"
+					foreignKeyName="fk_ReturnForm_Component_Component" references="Component(id)" />
+			</column>
+		</createTable>
+
+		<createTable tableName="ReturnForm_Component_AUD">
+			<column name="returnForm_id" type="BIGINT(20)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="component_id" type="BIGINT(20)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="REV" type="INT(11)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="REVTYPE" type="TINYINT(4)" />
+		</createTable>
+	</changeSet>
+
+	<changeSet id="20160511-1651" author="lauravignoli">
+		<comment>Add permission VIEW_COMPONENT to role Inventory Staff.</comment>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="21"></column><!-- View Component -->
+			<column name="roles_id" value="15"></column> <!-- Inventory Staff -->
+		</insert>
+	</changeSet>
+</databaseChangeLog>

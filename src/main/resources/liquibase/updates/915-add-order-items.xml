@@ -1,0 +1,65 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+ logicalFilePath="./liquibase/updates/915-add-order-items.xml">
+
+	<changeSet id="20160516-1025" author="lauravignoli">
+
+		<createTable tableName="OrderFormItem">
+			<column name="id" type="BIGINT(20)" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="componentType_id" type="BIGINT(20)">
+				<constraints nullable="false" foreignKeyName="fk_OrderFormItem_componentType"
+					references="ComponentType(id)" />
+			</column>
+			<column name="orderForm_id" type="BIGINT(20)">
+				<constraints nullable="false" foreignKeyName="fk_OrderFormItem_orderForm"
+					references="OrderForm(id)" />
+			</column>
+			<column name="bloodAbo" type="VARCHAR(20)">
+				<constraints nullable="false" />
+			</column>
+			<column name="bloodRh" type="VARCHAR(20)">
+				<constraints nullable="false" />
+			</column>
+			<column name="numberOfUnits" type="INT">
+				<constraints nullable="false" />
+			</column>
+			<column name="isDeleted" type="tinyint(1)">
+				<constraints nullable="false" />
+			</column>
+			<column name="createdDate" type="TIMESTAMP" />
+			<column name="createdBy_id" type="BIGINT(20)">
+				<constraints foreignKeyName="fk_OrderFormItem_createdBy"
+					references="User(id)" />
+			</column>
+			<column name="lastUpdated" type="TIMESTAMP" />
+			<column name="lastUpdatedBy_id" type="BIGINT(20)">
+				<constraints foreignKeyName="fk_OrderFormItem_lastUpdatedBy"
+					references="User(id)" />
+			</column>
+	
+		</createTable>
+
+		<createTable tableName="OrderFormItem_AUD">
+			<column name="id" type="BIGINT(20)" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="componentType_id" type="BIGINT(20)"/>
+			<column name="orderForm_id" type="BIGINT(20)"/>
+			<column name="bloodAbo" type="VARCHAR(20)"/>
+			<column name="bloodRh" type="VARCHAR(20)"/>
+			<column name="numberOfUnits" type="INT"/>
+			<column name="isDeleted" type="tinyint(1)"/>
+			<column name="createdDate" type="TIMESTAMP" />
+			<column name="createdBy_id" type="BIGINT(20)"/>
+			<column name="lastUpdated" type="TIMESTAMP" />
+			<column name="lastUpdatedBy_id" type="BIGINT(20)"/>
+			<column name="REV" type="INT(11)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="REVTYPE" type="TINYINT(4)"/>
+		</createTable>
+	</changeSet>
+</databaseChangeLog>

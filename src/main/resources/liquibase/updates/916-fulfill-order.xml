@@ -1,0 +1,42 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+ logicalFilePath="./liquibase/updates/916-fulfill-order.xml">
+
+	<changeSet id="20160519-1442" author="timler">
+		<createTable tableName="OrderForm_Component">
+			<column name="orderForm_id" type="BIGINT(20)">
+				<constraints primaryKey="true" nullable="false" foreignKeyName="fk_OrderForm_Component_OrderForm"
+					references="OrderForm(id)" />
+			</column>
+			<column name="component_id" type="BIGINT(20)">
+				<constraints primaryKey="true" nullable="false" foreignKeyName="fk_OrderForm_Component_Component"
+					references="Component(id)" />
+			</column>
+		</createTable>
+
+		<createTable tableName="OrderForm_Component_AUD">
+			<column name="orderForm_id" type="BIGINT(20)">
+			    <constraints primaryKey="true" />
+			</column>
+			<column name="component_id" type="BIGINT(20)">
+			    <constraints primaryKey="true" />
+			</column>
+			<column name="REV" type="INT(11)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="REVTYPE" type="TINYINT(4)"/>
+		</createTable>
+	</changeSet>
+ 
+ <changeSet id="20160523-1202" author="bausmeier">
+  <renameColumn tableName="ComponentType" oldColumnName="componentTypeNameShort" newColumnName="componentTypeCode" columnDataType="VARCHAR(30)" />
+  <renameColumn tableName="ComponentType_AUD" oldColumnName="componentTypeNameShort" newColumnName="componentTypeCode" columnDataType="VARCHAR(30)" />
+  <renameColumn tableName="Component" oldColumnName="componentIdentificationNumber" newColumnName="componentCode" columnDataType="VARCHAR(20)" />
+  <renameColumn tableName="Component_AUD" oldColumnName="componentIdentificationNumber" newColumnName="componentCode" columnDataType="VARCHAR(20)" />
+  <sql>
+    UPDATE Component SET componentCode = SUBSTR(componentCode, INSTR(componentCode, '-') + 1);
+  </sql>
+ </changeSet>
+
+</databaseChangeLog>

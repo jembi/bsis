@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+    logicalFilePath="./liquibase/db-after-data.xml">
+    
+    <changeSet id="20150917-1505" author="bausmeier">
+        <addNotNullConstraint tableName="PackType" columnName="testSampleProduced" columnDataType="tinyint(1)" />
+    </changeSet>
+
+
+    <changeSet author="debonair" id="20150928-1214">
+        <dropForeignKeyConstraint baseTableName="Donor" constraintName="FK3F25E463043805"/>
+        <dropForeignKeyConstraint baseTableName="Donation" constraintName="FK_donation_Location"/>
+        <dropForeignKeyConstraint baseTableName="DonationBatch" constraintName="FK_DonationBatch_Location"/>
+        <renameColumn tableName="Donor" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
+        <renameColumn tableName="Donor_AUD" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
+        <renameColumn tableName="Donation" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
+        <renameColumn tableName="Donation_AUD" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
+        <renameColumn tableName="DonationBatch" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
+        <renameColumn tableName="DonationBatch_AUD" oldColumnName="donorPanel_id" newColumnName="venue_id" columnDataType="bigint"/>
+        <renameColumn tableName="Location" oldColumnName="isDonorPanel" newColumnName="isVenue" columnDataType="boolean"/>
+        <renameColumn tableName="Location_AUD" oldColumnName="isDonorPanel" newColumnName="isVenue" columnDataType="boolean"/>
+        <addForeignKeyConstraint baseColumnNames="venue_id"
+                                 baseTableName="Donor"
+                                 constraintName="fk_donor_venue"
+                                 referencedColumnNames="id"
+                                 referencedTableName="Location"/>
+        <addForeignKeyConstraint baseColumnNames="venue_id"
+                                 baseTableName="Donation"
+                                 constraintName="FK_donation_Location"
+                                 referencedColumnNames="id"
+                                 referencedTableName="Location"/>
+        <addForeignKeyConstraint baseColumnNames="venue_id"
+                                 baseTableName="DonationBatch"
+                                 constraintName="FK_DonationBatch_Location"
+                                 referencedColumnNames="id"
+                                 referencedTableName="Location"/>
+
+    </changeSet>
+    
+	<!-- Adding column 'venue_id' to DonorDeferral -->
+	<changeSet id="20160219-1448" author="timler">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="DonorDeferral" columnName="venue_id" />
+			</not>
+		</preConditions>
+		<comment>Adding column venue_id to DonorDeferral</comment>
+		<addColumn tableName="DonorDeferral">
+			<column name="venue_id" type="bigint(20)"></column>
+		</addColumn>
+		<addColumn tableName="DonorDeferral_AUD">
+			<column name="venue_id" type="bigint(20)"></column>
+		</addColumn>
+	</changeSet>
+	<changeSet id="20160219-1447" author="timler">
+		<comment>Migrate existing data and set venue_id to Donors venue</comment>
+		<sql>
+			UPDATE DonorDeferral dd
+			JOIN Donor d ON dd.deferredDonor_id = d.id
+			SET dd.venue_id = d.venue_id
+			where dd.venue_id is null;
+		</sql>
+	</changeSet>
+	<changeSet id="20160219-1452" author="timler">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<foreignKeyConstraintExists foreignKeyName="fk_DonorDeferral_Location" />
+			</not>
+		</preConditions>
+		<comment>Adding foreign key constraints for DonorDeferral venue_id</comment>
+		<addNotNullConstraint columnName="venue_id"
+			tableName="DonorDeferral" columnDataType="bigint(20)" />
+		<addForeignKeyConstraint constraintName="fk_DonorDeferral_Location"
+			baseColumnNames="venue_id" baseTableName="DonorDeferral"
+			referencedColumnNames="id" referencedTableName="Location" />
+	</changeSet>
+	
+	<changeSet id="20160308-1210" author="timler">
+	    <comment>Adding defaults to Donor table</comment>
+	    <addDefaultValue tableName="Donor" columnName="donorStatus" columnDataType="varchar(20)" defaultValue="NORMAL"/>
+	    <addDefaultValue tableName="Donor" columnName="isDeleted" columnDataType="tinyint(1)" defaultValue="0"/>
+	</changeSet>
+    
+</databaseChangeLog>

@@ -1,0 +1,2055 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+  logicalFilePath="./liquibase/db-changelog.xml">
+
+	<!-- ALWAYS USE A UNIQUE IDENTIFIER of format id="yyyymmdd-hhmm" eg: id="20140225-1815" -->
+	<!-- ALWAYS UPDATE YOUR LOCAL REPO FROM GITHUB AND VERIFY YOUR id IS UNIQUE -->
+	<!-- NEVER DELETE OR MODIFY EXISTING CHANGE SETS - instead add new change sets 
+		 reversing the previous ones if you need to change or delete info from another changeset-->
+
+	<!-- For issue 62 [Allow for entry of donor haemoglobin count] -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-0900" author="gtldevang">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM FormField 
+				where form = 'Donation' and field = 'haemoglobinCount';
+				]]>
+			</sqlCheck>
+		</preConditions>
+		<insert tableName="FormField">
+			<column name="form" value="Donation"></column>
+			<column name="FIELD" value="haemoglobinCount"></column>
+			<column name="defaultDisplayName" value="Haemoglobin Count"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<update tableName="Donation">
+			<column name="haemoglobinCount" type="DECIMAL(7,1)" defaultValue="NULL"></column>
+		</update>
+		<update tableName="Donation_AUD">
+			<column name="haemoglobinCount" type="DECIMAL(7,1)" defaultValue="NULL"></column>
+		</update>
+	</changeSet>
+
+	<!-- For issue 69 [Allow for entry of donor weight] -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-0901" author="gtldevang">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM FormField 
+				where form = 'Donation' and field = 'donorWeight';
+				]]>
+			</sqlCheck>
+		</preConditions>
+		<insert tableName="FormField">
+			<column name="form" value="Donation"></column>
+			<column name="FIELD" value="donorWeight"></column>
+			<column name="defaultDisplayName" value="Donor Weight"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<update tableName="Donation">
+			<column name="donorWeight" type="DECIMAL(7,1)" defaultValue="NULL"></column>
+		</update>
+		<update tableName="Donation_AUD">
+			<column name="donorWeight" type="DECIMAL(7,1)" defaultValue="NULL"></column>
+		</update>
+	</changeSet>
+	
+	<!-- For issue 61 [Add donor blood pressure (systolic & diastolic)] -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-0902" author="gtldevang">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM FormField 
+				where form = 'Donation' and field = 'bloodPressureSystolic';
+				]]>
+			</sqlCheck>
+		</preConditions>
+		<insert tableName="FormField">
+			<column name="form" value="Donation"></column>
+			<column name="FIELD" value="bloodPressureSystolic"></column>
+			<column name="defaultDisplayName" value="Blood Pressure Systolic"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>                        
+		</insert>
+	</changeSet>
+
+	<!-- For issue 61 [Add donor blood pressure (systolic & diastolic)] -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-0903" author="gtldevang">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM FormField 
+				where form = 'Donation' and field = 'bloodPressureDiastolic';
+				]]>
+			</sqlCheck>
+		</preConditions>
+		<insert tableName="FormField">
+			<column name="form" value="Donation"></column>
+			<column name="FIELD" value="bloodPressureDiastolic"></column>
+			<column name="defaultDisplayName" value="Blood Pressure Diastolic"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>                        
+		</insert>
+	</changeSet>
+	
+	<!-- For issue 61 [Add donor blood pressure (systolic & diastolic)] -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-0904" author="gtldevang">
+	    <preConditions onFail="MARK_RAN">
+		    <columnExists tableName="Donation" columnName="bloodPressure"/>
+		</preConditions>
+		<update tableName="Donation">
+			<column name="bloodPressure" type="int" defaultValue="NULL"></column>
+		</update>
+		<renameColumn tableName="Donation" oldColumnName="bloodPressure" newColumnName="bloodPressureSystolic" columnDataType="int"/>
+		<addColumn tableName="Donation">
+			<column name="bloodPressureDiastolic" type="int" defaultValue="NULL"></column>
+		</addColumn>
+	</changeSet>
+
+		<!-- For issue 61 [Add donor blood pressure (systolic & diastolic)] -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-0905" author="gtldevang">
+	    <preConditions onFail="MARK_RAN">
+		    <columnExists tableName="Donation_AUD" columnName="bloodPressure"/>
+		</preConditions>
+		<update tableName="Donation_AUD">
+			<column name="bloodPressure" type="int" defaultValue="NULL"></column>
+		</update>
+		<renameColumn tableName="Donation_AUD" oldColumnName="bloodPressure" newColumnName="bloodPressureSystolic" columnDataType="int"/>
+		<addColumn tableName="Donation_AUD">
+			<column name="bloodPressureDiastolic" type="int" defaultValue="NULL"></column>
+		</addColumn>                        
+	</changeSet>
+	
+	<!-- For issue 70 [Allow for entry of donor pulse] -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-0906" author="gtldevang">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM FormField 
+				where form = 'Donation' and field = 'donorPulse';
+				]]>
+			</sqlCheck>
+		</preConditions>
+		<insert tableName="FormField">
+			<column name="form" value="Donation"></column>
+			<column name="FIELD" value="donorPulse"></column>
+			<column name="defaultDisplayName" value="Donor Pulse"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+	</changeSet>
+
+		<!-- For issue 70 [Allow for entry of donor pulse] -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-0907" author="gtldevang">
+	    <preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="Donation" columnName="donorPulse" /></not>
+		</preConditions>
+		<addColumn tableName="Donation">
+			<column name="donorPulse" type="int" defaultValue="NULL"></column>
+		</addColumn>
+		<addColumn tableName="Donation_AUD">
+			<column name="donorPulse" type="int" defaultValue="NULL"></column>
+		</addColumn>		
+	</changeSet>
+
+	<!-- For issue 39 [Add in Date of first donation field to Donor form] -->
+	<changeSet id="20131025-1212" author="gtlankur">
+		<addColumn tableName="Donor">
+			<column name="dateOfFirstDonation" type="DATE" defaultValue="NULL"></column>
+		</addColumn>
+		<addColumn tableName="Donor_AUD">
+			<column name="dateOfFirstDonation" type="DATE" defaultValue="NULL"></column>
+		</addColumn>		
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="dateOfFirstDonation"></column>
+			<column name="defaultDisplayName" value="Date of First Donation"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+	</changeSet>
+
+	<!-- For issue 27 [Add 'Record Component' tab to Component Processing] -->
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20151708-0349" author="gtlankur">
+	    <preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="Component" columnName="componentIdentificationNumber"/></not>
+		</preConditions>
+		<addColumn tableName="Component">
+			<column name="componentIdentificationNumber" type="VARCHAR(30)" defaultValue=""></column>
+		</addColumn>
+		<addColumn tableName="Component_AUD">
+			<column name="componentIdentificationNumber" type="VARCHAR(30)" defaultValue=""></column>
+		</addColumn>
+		<insert tableName="FormField">
+			<column name="form" value="Component"></column>
+			<column name="FIELD" value="componentIdentificationNumber"></column>
+			<column name="defaultDisplayName" value="Component Identification Number"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>	
+		<insert tableName="FormField">
+			<column name="form" value="Component"></column>
+			<column name="FIELD" value="numUnits"></column>
+			<column name="defaultDisplayName" value="Num. Units"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+	</changeSet>
+	
+	<!-- For issue 102 [Add Request Type 'Bulk Transfer' Flag] -->
+	<changeSet id="20131108-1617" author="gtldevang">
+		<addColumn tableName="RequestType">
+			<column name="bulkTransfer" type="TINYINT(1)"/>
+		</addColumn>
+		<addColumn tableName="RequestType_AUD">
+			<column name="bulkTransfer" type="TINYINT(1)"/>
+		</addColumn>
+	</changeSet>
+
+	<!-- For issue 104 [Add Lot Release Functionality] -->
+	<changeSet id="20131111-1726" author="gtldevang">
+		<insert tableName="GenericConfig">
+			<column name="id" value="48"></column>
+			<column name="propertyName" value="lotRelease"></column>
+			<column name="propertyOwner" value="labsetup"></column>
+			<column name="propertyValue" value="TRUE"></column>
+		</insert>
+	</changeSet>
+
+	<!-- For issue 95 [Add TTI Test Result import mechanism and UI] -->
+	 <changeSet id="20131107-1517" author="gtldevang">
+		 <addColumn tableName="BloodTestResult">
+			<column name="reagentLotNumber" type="varchar(20)" />
+		 </addColumn>
+		 <insert tableName="GenericConfig">
+			<column name="id" value="47"></column>
+			<column name="propertyName" value="ttiUploadResult"></column>
+			<column name="propertyOwner" value="labsetup"></column>
+			<column name="propertyValue" value="true"></column>
+		 </insert>
+   </changeSet>
+   
+   <!-- For issue 58 [Add ability to update Deferrals] -->
+	 <changeSet id="20131125-1517" author="gtldevang">
+		 <addColumn tableName="DonorDeferral">
+			<column name="isVoided" type="tinyint(1)" />
+			<column name="voidedBy_id" type="smallint(6)" />
+			<column name="voidedDate" type="date" />
+		 </addColumn>
+		<addForeignKeyConstraint constraintName="fk_voidedBy"
+			baseTableName="DonorDeferral" baseColumnNames="voidedBy_id"
+			referencedTableName="User" referencedColumnNames="id"/>
+   </changeSet>
+   
+	<changeSet id="20131125-1525" author="gtldevang">
+		 <addColumn tableName="DonorDeferral_AUD">
+			<column name="isVoided" type="tinyint(1)" />
+			<column name="voidedBy_id" type="smallint(6)" />
+			<column name="voidedDate" type="date" />
+		 </addColumn>
+		<addForeignKeyConstraint constraintName="fk_voidedBy_aud"
+			baseTableName="DonorDeferral" baseColumnNames="voidedBy_id"
+			referencedTableName="User" referencedColumnNames="id"/>
+   </changeSet>
+
+   <!-- For issue 64 [Add isDeleted field to BloodTest and BloodTest_AUD Tables] -->
+	 <changeSet id="20140114-0950" author="srikanthmalyala">
+		 <addColumn tableName="BloodTest">
+			<column name="isDeleted" type="TINYINT(1)" />
+		 </addColumn>
+		 
+		 <addColumn tableName="BloodTest_AUD">
+			<column name="isDeleted" type="TINYINT(1)" />
+		 </addColumn>
+	</changeSet>
+   
+	<!-- For issue 117 [Configure Role] -->
+	<changeSet id="20131129-1312" author="gtlnikita">
+		<addColumn tableName="Role">
+			<column name="description" type="longtext"></column>
+		</addColumn>
+	</changeSet>
+	<changeSet id="20131129-1313" author="gtlnikita">
+		<addColumn tableName="Role_AUD">
+			<column name="description" type="longtext"></column>
+		</addColumn>
+	</changeSet>
+	
+	<!-- For issue 117 [for issue role management] -->
+	<changeSet id="20140131-1410" author="srikanthmalyala">
+		<insert tableName="FormField">
+			<column name="form" value="Role"></column>
+			<column name="FIELD" value="name"></column>
+			<column name="defaultDisplayName" value="Role Name"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="1"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		</changeSet>
+		
+	<!-- For issue 118[improve admin UI to manage users ] -->
+	<changeSet id="20140203-1608" author="srikanthmalyala">
+		<insert tableName="FormField">
+			<column name="form" value="User"></column>
+			<column name="FIELD" value="username"></column>
+			<column name="defaultDisplayName" value="Username"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="1"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+	</changeSet>
+	
+	<!-- For issue 118[improve admin UI to manage users ] -->
+	<changeSet id="20140203-1615" author="srikanthmalyala">
+		<insert tableName="FormField">
+			<column name="form" value="User"></column>
+			<column name="FIELD" value="firstName"></column>
+			<column name="defaultDisplayName" value="Firstname"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		
+		<insert tableName="FormField">
+			<column name="form" value="User"></column>
+			<column name="FIELD" value="lastname"></column>
+			<column name="defaultDisplayName" value="Lastname"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+	</changeSet>
+
+	<!-- For issue 71 [Include additional columns in Donation History table] -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150721-0850" author="srikanthmalyala">
+   	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM FormField 
+				where displayName = 'DIN' and field = 'donationIdentificationNumber';
+				]]>
+			</sqlCheck>
+		</preConditions>
+		<update tableName="FormField">
+			<column name="displayName" value="DIN" />
+			<where>field = "donationIdentificationNumber"</where>
+		</update>
+		<update tableName="FormField">
+			<column name="displayName" value="HGB" />
+			<where>field = "haemoglobinCount"</where>
+		</update>
+		<update tableName="FormField">
+			<column name="displayName" value="HR" />
+			<where>field = "donorPulse"</where>
+		</update>
+		<update tableName="FormField">
+			<column name="displayName" value="WT" />
+			<where>field = "donorWeight"</where>
+		</update>
+
+		<insert tableName="FormField">
+			<column name="form" value="Donation"></column>
+			<column name="FIELD" value="bloodPressure"></column>
+			<column name="defaultDisplayName" value="Blood Pressure"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>	
+			<column name="displayName" value="BP"></column>		
+		</insert>
+	</changeSet>
+	
+	<!-- For issue 172[Add in additional donor demographic fields] --> 
+	<changeSet id="20140520-1458" author="srikanthmalyala">
+
+		<createTable  tableName="IdType">
+			<column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="idType" type="varchar(255)"/> 
+			<column name="regExp" type="varchar(255)" defaultValue="NULL"/>
+		</createTable>
+
+		<createTable  tableName="PreferredLanguage">
+			<column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="preferredLanguage" type="varchar(255)"/> 
+		</createTable>
+
+		<dropColumn  columnName="address" tableName="Donor"/>
+		<dropColumn  columnName="phoneNumber" tableName="Donor"/>
+
+		<addColumn tableName="Donor">
+			<column name="idType_id" type="BIGINT" defaultValue="NULL">
+				<constraints foreignKeyName="Donor_Idtype_FK" references="IdType(id)"/>
+			</column>
+		</addColumn>
+
+		<addColumn tableName="Donor">
+			<column name="preferredLanguage_id" type="BIGINT" defaultValue="NULL"> </column>
+		</addColumn>
+
+		<addForeignKeyConstraint baseColumnNames="preferredLanguage_id"
+			 baseTableName="Donor"
+			 constraintName="fk_donor_preferredLanguage"
+			 referencedColumnNames="id"
+			 referencedTableName="PreferredLanguage"/>
+
+		<!-- For issue 38 [Add Donor Title field] -->
+		<addColumn tableName="Donor">
+			<column name="title" type="VARCHAR(15)"></column>
+		</addColumn>
+
+		<addColumn tableName="Donor_AUD">
+			<column name="title" type="VARCHAR(15)" defaultValue="Blank"></column>
+		</addColumn>
+
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="title"></column>
+			<column name="defaultDisplayName" value="Title"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="0"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+	</changeSet>
+
+	<changeSet id="20131024-1526" author="gtlnikita">
+		<sql>
+			ALTER TABLE DeferralReason AUTO_INCREMENT=1;
+		</sql>
+	</changeSet>
+
+	<!--For Issue #36[Add Donor Codes Functionality] -->
+	<changeSet id="20140504-1130" author="srikanthmalyala">
+
+		<createTable  tableName="DonorCodeGroup">
+			<column name="id" type="BIGINT" autoIncrement = "true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="donorCodeGroup" type="varchar(255)"/> 
+		</createTable>
+	
+		<createTable  tableName="DonorCode">
+			<column name="id" type="BIGINT" autoIncrement="true">
+			<constraints primaryKey="true" nullable="false" />
+			 </column>
+			  <column name="donorCode" type="varchar(255)"/> 
+			 <column name="donorCodeGroupId" type="BIGINT">
+				<constraints  nullable="false" />
+			 </column>
+		</createTable>
+		<addForeignKeyConstraint baseColumnNames="donorCodeGroupId"
+			 baseTableName="DonorCode"
+			 constraintName="fk_DonorCode_DonorCodeGroup"
+			 referencedColumnNames="id"
+			 referencedTableName="DonorCodeGroup"/>
+
+		<createTable  tableName="DonorDonorCode">
+			<column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="donorId" type="BIGINT">
+				<constraints  nullable="false" />
+			</column>
+			<column name="donorCodeId" type="BIGINT">
+				<constraints  nullable="false" />
+			</column>
+			<column name="createdDate" type="TIMESTAMP"/>
+			<column name="lastUpdated" type="TIMESTAMP"/>
+			<column name="createdBy_id" type="SMALLINT"/>
+			<column name="lastUpdatedBy_id" type="SMALLINT"/>
+		</createTable>
+		<addForeignKeyConstraint baseColumnNames="donorCodeId"
+			  baseTableName="DonorDonorCode"
+			  constraintName="fk_DonorDonorCode_DonorCode"
+			  referencedColumnNames="id"
+			  referencedTableName="DonorCode"/>
+		<addForeignKeyConstraint baseColumnNames="donorId"
+			  baseTableName="DonorDonorCode"
+			  constraintName="fk_DonorDonorCode_Donor"
+			  referencedColumnNames="id"
+			  referencedTableName="Donor"/>
+
+		<createTable  tableName="DonorDonorCode_AUD">
+			 <column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="REV" type="INT">
+				<constraints  primaryKey="true" nullable="false" />
+			</column>
+			<column name="REVTYPE" type="TINYINT"/>
+			<column name="createdDate" type="TIMESTAMP"/>
+			<column name="lastUpdated" type="TIMESTAMP"/>
+			<column name="createdBy_id" type="SMALLINT"/>
+			<column name="lastUpdatedBy_id" type="SMALLINT"/>
+		</createTable>
+	</changeSet>
+
+	<!-- For issue 172[Add in additional donor demographic fields] -->
+	<changeSet id="20140504-1341" author="srikanthmalyala">
+		<addColumn tableName="Donor">
+			<column name="addressId" type="int" defaultValue="NULL"></column>
+		</addColumn>
+		<addColumn tableName="Donor">
+			<column name="contactId" type="int" defaultValue="NULL"></column>
+		</addColumn>
+		<addColumn tableName="Donor">
+			<column name="idNumber" type="VARCHAR(255)" ></column>
+		</addColumn>
+		<addColumn tableName="Donor_AUD">
+			<column name="idNumber" type="VARCHAR(255)" ></column>
+		</addColumn>
+
+		<createTable  tableName="AddressType">
+			<column name="id" type="BIGINT" autoIncrement = "true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="preferredAddressType" type="varchar(255)"/> 
+		</createTable>
+
+		<createTable  tableName="Address">
+			<column name="id" type="BIGINT" autoIncrement = "true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+
+			<column name="homeAddressLine1" type="varchar(255)"/> 
+			<column name="homeAddressLine2" type="varchar(255)"/> 
+			<column name="homeAddressCity" type="varchar(255)"/> 
+			<column name="homeAddressProvince" type="varchar(255)"/> 
+			<column name="homeAddressDistrict" type="varchar(255)"/> 
+			<column name="homeAddressState" type="varchar(255)"/> 
+			<column name="homeAddressCountry" type="varchar(255)"/> 
+			<column name="homeAddressZipcode" type="varchar(255)"/> 
+
+			<column name="workAddressLine1" type="varchar(255)"/> 
+			<column name="workAddressLine2" type="varchar(255)"/> 
+			<column name="workAddressCity" type="varchar(255)"/> 
+			<column name="workAddressProvince" type="varchar(255)"/> 
+			<column name="workAddressDistrict" type="varchar(255)"/> 
+			<column name="workAddressCountry" type="varchar(255)"/> 
+			<column name="workAddressState" type="varchar(255)"/> 
+			<column name="workAddressZipcode" type="varchar(255)"/> 
+
+			<column name="postalAddressLine1" type="varchar(255)"/> 
+			<column name="postalAddressLine2" type="varchar(255)"/> 
+			<column name="postalAddressCity" type="varchar(255)"/> 
+			<column name="postalAddressProvince" type="varchar(255)"/> 
+			<column name="postalAddressDistrict" type="varchar(255)"/> 
+			<column name="postalAddressCountry" type="varchar(255)"/> 
+			<column name="postalAddressState" type="varchar(255)"/> 
+			<column name="postalAddressZipcode" type="varchar(255)"/> 
+		</createTable>
+
+		<dropForeignKeyConstraint baseTableName="Donor" constraintName="FK3F25E46FCE9E976"/>
+
+		<createTable  tableName="Contact">
+			<column name="id" type="BIGINT" autoIncrement = "true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+
+			<column name="mobileNumber" type="varchar(255)"/> 
+			<column name="homeNumber" type="varchar(255)"/> 
+			<column name="workNumber" type="varchar(255)"/> 
+			<column name="email" type="varchar(255)"/>
+		</createTable>
+
+		<dropColumn  columnName="city" tableName="Donor"/>
+		<dropColumn  columnName="province" tableName="Donor"/>
+		<dropColumn  columnName="district" tableName="Donor"/>
+		<dropColumn  columnName="country" tableName="Donor"/>
+		<dropColumn  columnName="state" tableName="Donor"/>
+		<dropColumn  columnName="zipcode" tableName="Donor"/>
+		<dropColumn  columnName="nationalId" tableName="Donor"/>
+		<dropColumn  columnName="otherPhoneNumber" tableName="Donor"/>
+
+		<dropColumn  columnName="city" tableName="Donor_AUD"/>
+		<dropColumn  columnName="province" tableName="Donor_AUD"/>
+		<dropColumn  columnName="district" tableName="Donor_AUD"/>
+		<dropColumn  columnName="country" tableName="Donor_AUD"/>
+		<dropColumn  columnName="state" tableName="Donor_AUD"/>
+		<dropColumn  columnName="zipcode" tableName="Donor_AUD"/>
+		<dropColumn  columnName="nationalId" tableName="Donor_AUD"/>
+		<dropColumn  columnName="otherPhoneNumber" tableName="Donor_AUD"/>
+
+		<addColumn tableName="Donor">
+			<column name="contactMethodType_id" type="SMALLINT(6)">
+					<constraints foreignKeyName="Contact_ContactType_FK" references="ContactMethodType(id)"/>
+			</column> 
+		</addColumn>
+		<addColumn tableName="Donor">
+			<column name="addressTypeId" type="BIGINT"> 
+				<constraints foreignKeyName="Address_AddressType_fk" references="AddressType(id)"/>
+			</column>
+		</addColumn>
+
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="mobileNumber"></column>
+			<column name="defaultDisplayName" value="Mobile Number"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="idNumber"></column>
+			<column name="defaultDisplayName" value="ID Number"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="workNumber"></column>
+			<column name="defaultDisplayName" value="Work Number"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="callingName"></column>
+			<column name="defaultDisplayName" value="Calling Name"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="idType"></column>
+			<column name="defaultDisplayName" value="Id Type"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="homeNumber"></column>
+			<column name="defaultDisplayName" value="Home Number"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="email"></column>
+			<column name="defaultDisplayName" value="Email"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="addressLine1"></column>
+			<column name="defaultDisplayName" value="Address Line1"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="addressLine2"></column>
+			<column name="defaultDisplayName" value="Address Line2"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="preferredAddressType"></column>
+			<column name="defaultDisplayName" value="Preferred Address Type"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="workAddress"></column>
+			<column name="defaultDisplayName" value="Work Address"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="homeAddress"></column>
+			<column name="defaultDisplayName" value="Home Address"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="postalAddress"></column>
+			<column name="defaultDisplayName" value="Postal Address"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="contactMethodType"></column>
+			<column name="defaultDisplayName" value="Contact Method Type"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="preferredLanguage"></column>
+			<column name="defaultDisplayName" value="Preferred Language"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+	</changeSet>
+
+	<!-- Add in 'isClosed' field to DonationBatch tables -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150716-1036" author="danfuterman">
+	    <preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="DonationBatch" columnName="isClosed"/></not>
+		</preConditions>
+		<addColumn tableName="DonationBatch">
+			<column name="isClosed" type="tinyint(1)" defaultValue="0"></column>
+		</addColumn>
+		<addColumn tableName="DonationBatch_AUD">
+			<column name="isClosed" type="tinyint(1)" defaultValue="0"></column>
+		</addColumn>
+	</changeSet>
+
+	<!-- For issue 229 [Create testBatch table]  -->
+	<changeSet id="20131112-2005" author="gtlnikita">
+		<createTable tableName="TestBatch">
+			<column name="id" type="smallint(6)" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="batchNumber" type="varchar(20)"></column>
+			<column name="isDeleted" type="tinyint(1)"></column>
+			<column name="createdDate" type="timestamp"></column>
+			<column name="lastUpdated" type="timestamp"></column>
+			<column name="notes" type="longtext"></column>
+			<column name="status" type="varchar(20)"></column>
+			<column name="createdBy_id" type="smallint(6)"></column>
+			<column name="lastUpdatedBy_id" type="smallint(6)"></column>
+		</createTable>
+	</changeSet>
+
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150716-1040" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="DonationBatch" columnName="testBatch_id"/></not>
+		</preConditions>
+		<addColumn tableName="DonationBatch">
+			<column name="testBatch_id" type="smallint(6)"></column>
+		</addColumn>
+		<addForeignKeyConstraint constraintName="testBatch_id_FK" 
+			 referencedTableName="TestBatch" 
+			 baseColumnNames="testBatch_id" 
+			 baseTableName="DonationBatch" 
+			 referencedColumnNames="id"/>
+	</changeSet>
+
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150716-1041" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="DonationBatch_AUD" columnName="testBatch_id"/></not>
+		</preConditions>
+		<addColumn tableName="DonationBatch_AUD">
+				<column name="testBatch_id" type="smallint(6)"></column>
+		</addColumn>
+		<addForeignKeyConstraint constraintName="testBatch_id_aud_FK" 
+			 referencedTableName="TestBatch" 
+			 baseColumnNames="testBatch_id" 
+			 baseTableName="DonationBatch_AUD" 
+			 referencedColumnNames="id"/>
+	</changeSet>
+
+	<changeSet id="20131113-1933" author="srikanthmalyala">
+		<createTable tableName="TestBatch_AUD">
+			<column name="id" type="smallint(6)">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="batchNumber" type="varchar(20)"></column>
+			<column name="isDeleted" type="tinyint(1)"></column>
+			<column name="createdDate" type="timestamp"></column>
+			<column name="lastUpdated" type="timestamp"></column>
+			<column name="notes" type="longtext"></column>
+			<column name="status" type="varchar(20)"></column>
+			<column name="createdBy_id" type="smallint(6)"></column>
+			<column name="lastUpdatedBy_id" type="smallint(6)"></column>
+			<column name="REV" type="INT">
+				<constraints  primaryKey="true" nullable="false" />
+			</column>
+			<column name="REVTYPE" type="tinyint(4)"></column>
+		</createTable>
+	</changeSet>
+
+	<!-- #246 Adapt Donations to use single Location field -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-1201" author="srikanthmalyala">
+		<preConditions onFail="MARK_RAN">
+			<not><columnExists tableName="Donation" columnName="donorPanel_id" /></not>
+		</preConditions>
+		<addColumn tableName="Donation">
+			<column name="donorPanel_id" type="bigint">
+				<constraints foreignKeyName="FK_donation_Location" references="Location(id)"/>
+			</column>
+		</addColumn>
+		<addColumn tableName="Donation_AUD">
+			<column name="donorPanel_id" type="bigint"></column>
+		</addColumn>
+	</changeSet>
+
+	<!-- #246 Adapt Donations to use single Location field -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150716-1058" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="DonationBatch" columnName="donorPanel_id"/></not>
+		</preConditions>
+		<addColumn tableName="DonationBatch">
+			<column name="donorPanel_id" type="bigint">
+				<constraints foreignKeyName="FK_DonationBatch_Location" references="Location(id)"/>
+			</column>
+		</addColumn>
+		<addColumn tableName="DonationBatch_AUD">
+			<column name="donorPanel_id" type="bigint"></column>
+		</addColumn>
+	</changeSet>
+
+	<!-- Add donation bleed time fields -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-1203" author="srikanthmalyala">
+		<preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="Donation" columnName="bleedStartTime" /></not>
+		</preConditions>
+		<addColumn tableName="Donation">
+			<column name="bleedStartTime" type="DATETIME"></column>
+		</addColumn>
+		<addColumn tableName="Donation">
+			<column name="bleedEndTime" type="DATETIME"></column>
+		</addColumn>
+		<addColumn tableName="Donation_AUD">
+			<column name="bleedStartTime" type="DATETIME"></column>
+		</addColumn>
+		<addColumn tableName="Donation_AUD">
+			<column name="bleedEndTime" type="DATETIME"></column>
+		</addColumn>
+	</changeSet>
+
+	<!-- Add Component Storage labelling fields to Component Types #238 -->
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20150817-1000" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+	        <not><columnExists tableName="ComponentType" columnName="lowStorageTemperature"/></not>
+	    </preConditions>
+		<addColumn tableName="ComponentType">
+			 <column name="lowStorageTemperature" type="smallint(6)"></column>
+			 <column name="highStorageTemperature" type="smallint(6)"></column>
+		</addColumn>
+
+			<addColumn tableName="ComponentType_AUD">
+			 <column name="lowStorageTemperature" type="smallint(6)"></column>
+			 <column name="highStorageTemperature" type="smallint(6)"></column>
+		</addColumn>
+	</changeSet>
+
+	<!-- Add Component Transport labelling fields to Component Types #238 -->
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20150817-1005" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+	        <not><columnExists tableName="ComponentType" columnName="lowTransportTemperature"/></not>
+	    </preConditions>
+		<addColumn tableName="ComponentType">
+			 <column name="lowTransportTemperature" type="smallint(6)"></column>
+			 <column name="highTransportTemperature" type="smallint(6)"></column>
+		</addColumn>
+
+		<addColumn tableName="ComponentType_AUD">
+			 <column name="lowTransportTemperature" type="smallint(6)"></column>
+			 <column name="highTransportTemperature" type="smallint(6)"></column>
+		</addColumn>
+	</changeSet>
+
+	<!-- Add Component Preparation labelling fields to Component Types #238 -->
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20150817-1010" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+	        <not><columnExists tableName="ComponentType" columnName="preparationInfo"/></not>
+	    </preConditions>
+		<addColumn tableName="ComponentType">
+			 <column name="preparationInfo" type="text"></column>
+		</addColumn>
+
+			<addColumn tableName="ComponentType_AUD">
+			 <column name="preparationInfo" type="text"></column>
+		</addColumn>
+	</changeSet>
+	
+		<!-- #234 Associate Pack Type with Initial Component Type in Donation -->
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<!-- Updated (timler): for #328 (refactoring) -->
+	<changeSet id="20150818-1238" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+	        <not><columnExists tableName="PackType" columnName="componentType_id"/></not>
+	    </preConditions>
+		<addColumn tableName="PackType">
+			<column name="componentType_id" type="smallint(6)"></column>
+		</addColumn>
+		<addColumn tableName="PackType_AUD">
+			<column name="componentType_id" type="smallint(6)"></column>
+		</addColumn>
+		<addForeignKeyConstraint baseColumnNames="componentType_id"
+			baseTableName="PackType"
+			constraintName="fk_packType_componentType"
+			onDelete="CASCADE"
+			onUpdate="RESTRICT"
+			referencedColumnNames="id"
+			referencedTableName="ComponentType"
+		/>
+	</changeSet>
+
+	<!-- #236 Incorporate use of countAsDonation field -->
+	<!-- Updated (timler): for #328 (refactoring) -->
+	<changeSet id="20150818-1239" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+	        <not><columnExists tableName="PackType" columnName="countAsDonation"/></not>
+	    </preConditions>
+		<addColumn tableName="PackType">
+			<column name="countAsDonation" type="tinyint(1)"></column>
+		</addColumn>
+		<addColumn tableName="PackType_AUD">
+			<column name="countAsDonation" type="tinyint(1)"></column>
+		</addColumn>
+	</changeSet>
+
+	<!-- #236 Incorporate use of periodBetweenDonation field -->
+	<!-- Updated (timler): for #328 (refactoring) -->
+	<changeSet id="20150818-1240" author="srikanthmalyala">
+	    <preConditions onFail="MARK_RAN">
+	        <not><columnExists tableName="PackType" columnName="periodBetweenDonations"/></not>
+	    </preConditions>
+		<addColumn tableName="PackType">
+			<column name="periodBetweenDonations" type="smallint(6)"></column>
+		</addColumn>
+		<addColumn tableName="PackType_AUD">
+			<column name="periodBetweenDonations" type="smallint(6)"></column>
+		</addColumn>
+	</changeSet>
+
+	<!-- #236 Incorporate use of dueToDonate field -->
+	<changeSet id="20141112-1358" author="srikanthmalyala">
+		<addColumn tableName="Donor">
+			<column name="dueToDonate" type="date"></column>
+		</addColumn>
+		<addColumn tableName="Donor_AUD">
+			<column name="dueToDonate" type="date"></column>
+		</addColumn>
+	</changeSet>
+	
+	<!-- #263 Add ComponentTypeCombinationRule table -->
+	<!-- Updated (timler): for #294 (refactoring) -->
+	<changeSet id="20150817-1020" author="danfuterman">
+	    <preConditions onFail="MARK_RAN">
+	        <not><tableExists tableName="ComponentType_ComponentTypeCombination" /></not>
+	    </preConditions>
+		<createTable tableName="ComponentType_ComponentTypeCombination">
+			<column name="id" type="INT" autoIncrement = "true">
+				<constraints primaryKey="true" nullable="false" />
+				
+			</column>
+			<column name="sourceComponentTypes_id" type="SMALLINT">
+			<constraints foreignKeyName="pTID_FK" references="ComponentType(id)"/>
+			</column> 
+			<column name="producedComponentTypeCombinations_id" type="SMALLINT">
+			<constraints foreignKeyName="pTCID_FK" references="ComponentTypeCombination(id)"/>
+			</column>
+		</createTable>
+	</changeSet>
+	
+	<!-- #263 Add bloodTypingMatchStatus field to Donation -->
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="20150714-1204" author="danfuterman">
+		<preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="Donation" columnName="bloodTypingMatchStatus" /></not>
+		</preConditions>
+		<addColumn tableName="Donation">
+			<column name="bloodTypingMatchStatus" type="VARCHAR(20)"></column>
+		</addColumn>
+		<addColumn tableName="Donation_AUD">
+			<column name="bloodTypingMatchStatus" type="VARCHAR(20)"></column>
+		</addColumn>
+	</changeSet>
+	
+	<!-- Remove sequenceNumberContext field from SequenceNumberStore -->
+	<changeSet id="20150210-1026" author="danfuterman">
+		<dropColumn columnName="sequenceNumberContext" tableName="SequenceNumberStore"/>
+	</changeSet>
+
+	<!-- #194 Add General Configuration tables -->
+	<changeSet id="20150601-1124" author="debonair">
+		<createTable  tableName="DataType">
+			<column name="id" type="smallint" autoIncrement = "true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="dataType"  type="varchar(25)"/>
+		</createTable>
+		<insert tableName="DataType">
+			<column name="id" value="1"></column>
+			<column name="dataType" value="text"></column>
+		</insert>
+		<insert tableName="DataType">
+			<column name="id" value="2"></column>
+			<column name="dataType" value="integer"></column>
+		</insert>
+		<insert tableName="DataType">
+			<column name="id" value="3"></column>
+			<column name="dataType" value="decimal"></column>
+		</insert>
+		<insert tableName="DataType">
+			<column name="id" value="4"></column>
+			<column name="dataType" value="boolean"></column>
+		</insert>
+		<createTable  tableName="GeneralConfig">
+			<column name="id" type="int" autoIncrement = "true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name"  type="varchar(255)">
+				<constraints unique="true" nullable="false" />
+			</column>
+			<column name="value" type="varchar(255)"/>
+			<column name="description"  type="longtext"/>
+			<column name="dataType_id"  type="smallint">
+				<constraints foreignKeyName="Config_DataType_FK" references="DataType(id)"/>
+			</column>
+		</createTable>
+		
+		<insert tableName="FormField">
+			<column name="form" value="GeneralConfig"></column>
+			<column name="FIELD" value="name"></column>
+			<column name="defaultDisplayName" value="Name"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="GeneralConfig"></column>
+			<column name="FIELD" value="value"></column>
+			<column name="defaultDisplayName" value="Value"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="GeneralConfig"></column>
+			<column name="FIELD" value="description"></column>
+			<column name="defaultDisplayName" value="Description"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="0"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+	</changeSet>
+
+	<!-- #194 Add General Configuration sample rows -->
+	<changeSet id="20150601-1125" author="debonair">
+		<insert tableName="GeneralConfig">
+			<column name="id" value="1"></column>
+			<column name="name" value="donation.bpSystolicMax"></column>
+			<column name="value" value="250"></column>
+			<column name="description" value="Blood Pressure systolic value cannot be more than 250"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="id" value="2"></column>
+			<column name="name" value="donation.bpDiastolicMax"></column>
+			<column name="value" value="150"></column>
+			<column name="description" value="Blood Pressure diastolic value cannot be less than 0"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="id" value="3"></column>
+			<column name="name" value="donation.daysBetweenDonations"></column>
+			<column name="value" value="56"></column>
+			<column name="description" value="Period between donations is restrcited to 56 days"></column>
+			<column name="dataType_id" value="3"></column>
+		</insert>
+	</changeSet>
+
+	<!-- Add default date and dateTime formats to GeneralConfig -->
+	<changeSet id="20150611-1409" author="debonair">
+		<comment>Add date and time formats</comment>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="dateFormat"></column>
+			<column name="value" value="dd/MM/yyyy"></column>
+			<column name="description" value="Global Date Format"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="dateTimeFormat"></column>
+			<column name="value" value="dd/MM/yyyy hh:mm:ss a"></column>
+			<column name="description" value="Global DateTime Format"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="timeFormat"></column>
+			<column name="value" value="hh:mm:ss a"></column>
+			<column name="description" value="Global Time Format"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+	</changeSet>
+
+	<!-- ##288 change id of BloodTestingRule to smallint as mediumint is not 
+		supported in dbunit and it is unnecessary -->
+	<changeSet id="20150707-2214" author="timler">
+		<comment>Change BloodTestingRule Id to smallint</comment>
+		<modifyDataType columnName="id" newDataType="smallint"
+			tableName="BloodTestingRule" />
+	</changeSet>
+	
+	<changeSet id="20150720-1611" author="bausmeier">
+	   <comment>Add password reset column to user</comment>
+	   <addColumn tableName="User">
+	       <column name="passwordReset" type="tinyint(1)" defaultValue="0">
+	           <constraints nullable="false" />
+	       </column>
+	   </addColumn>
+	   <addColumn tableName="User_AUD">
+	       <column name="passwordReset" type="tinyint(1)" defaultValue="0">
+	           <constraints nullable="false" />
+	       </column>
+	   </addColumn>
+	</changeSet>
+	
+	<changeSet id="20150727-1140" author="bausmeier">
+	   <comment>Add haemoglobin level column to donation</comment>
+	   <addColumn tableName="Donation">
+	       <column name="haemoglobinLevel" type="varchar(20)"></column>
+	   </addColumn>
+	   <addColumn tableName="Donation_AUD">
+	       <column name="haemoglobinLevel" type="varchar(20)"></column>
+	   </addColumn>
+	</changeSet>
+
+	<changeSet id="20150728-1553" author="bausmeier">
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.hbNumericValue"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Allow capturing of numeric haemoglobin value"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.hbQualitativeValue"></column>
+			<column name="value" value="false"></column>
+			<column name="description" value="Allow capturing of qualitative haemoglobin value"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+  </changeSet>
+
+	<changeSet id="20150729-1109" author="debonair">
+		<comment>Add Donation-related properties to General Configs</comment>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.donor.bpSystolicMin"></column>
+			<column name="value" value="70"></column>
+			<column name="description" value="Donation Donor bpSystolicMin"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.donor.bpSystolicMax"></column>
+			<column name="value" value="190"></column>
+			<column name="description" value="Donation Donor bpSystolicMax"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.donor.bpDiastolicMin"></column>
+			<column name="value" value="40"></column>
+			<column name="description" value="Donation Donor bpDiastolicMin"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.donor.bpDiastolicMax"></column>
+			<column name="value" value="100"></column>
+			<column name="description" value="Donation Donor bpDiastolicMax"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.donor.hbMin"></column>
+			<column name="value" value="1"></column>
+			<column name="description" value="Donation Donor hbMin"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.donor.hbMax"></column>
+			<column name="value" value="25"></column>
+			<column name="description" value="Donation Donor hbMax"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.donor.weightMin"></column>
+			<column name="value" value="30"></column>
+			<column name="description" value="Donation Donor weightMin"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.donor.weightMax"></column>
+			<column name="value" value="300"></column>
+			<column name="description" value="Donation Donor weightMax"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.donor.pulseMin"></column>
+			<column name="value" value="30"></column>
+			<column name="description" value="Donation Donor pulseMin"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.donor.pulseMax"></column>
+			<column name="value" value="200"></column>
+			<column name="description" value="Donation Donor pulseMax"></column>
+			<column name="dataType_id" value="2"></column>
+		</insert>
+
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.bpUnit"></column>
+			<column name="value" value="mmHg"></column>
+			<column name="description" value="Donation Blood Pressure Unit"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.hbUnit"></column>
+			<column name="value" value="g/dL"></column>
+			<column name="description" value="Donation HB unit"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.weightUnit"></column>
+			<column name="value" value="kg"></column>
+			<column name="description" value="Donation Weight Unit"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donation.pulseUnit"></column>
+			<column name="value" value="bpm"></column>
+			<column name="description" value="Donation Pulse Unit"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+	</changeSet>
+
+	<changeSet id="20150729-1129" author="debonair">
+		<comment>UI Related Properties</comment>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.donorsTabEnabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Donors Tab Enabled"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.componentsTabEnabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Components Tab Enabled"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.testingTabEnabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Testing Tab Enabled"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.labellingTabEnabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Labelling Tab Enabled"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.inventoryTabEnabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Inventory Tab Enabled"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.reportsTabEnabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Reports Tab Enabled"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.mobileClinicTabEnabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Mobile Clinic Tab Enabled"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+	</changeSet>
+
+	<changeSet id="20150729-1139" author="debonair">
+		<comment>Identifier Related Properties</comment>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donor.donorNumberFormat"></column>
+			<column name="value" value="%06d"></column>
+			<column name="description" value="Donor Number Format"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+	</changeSet>
+
+	<changeSet id="20150729-1149" author="debonair">
+		<comment>Other Properties</comment>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="locale.default"></column>
+			<column name="value" value="en"></column>
+			<column name="description" value="Default Locale"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="log.level"></column>
+			<column name="value" value="info"></column>
+			<column name="description" value="Log Level"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donor.searchMode"></column>
+			<column name="value" value="start_and_end"></column>
+			<column name="description" value="Donor Search Mode"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+	</changeSet>
+
+	<changeSet id="20150811-1546" author="bausmeier">
+		<comment>Option to block donor registration</comment>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="donors.registration.openBatchRequired"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Block donor registration when no donation batches are open"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+  </changeSet>
+
+	<changeSet id="20150817-1523" author="bausmeier">
+		<comment>Add post donation counselling table</comment>
+
+		<createTable tableName="PostDonationCounselling">
+			<column name="id" type="bigint(20)" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="donation_id" type="bigint(20)">
+				<constraints foreignKeyName="FK_POST_DONATION_COUNSELLING_DONATION_ID" references="Donation(id)" />
+			</column>
+			<column name="flaggedForCounselling" type="tinyint(1)">
+				<constraints nullable="false" />
+			</column>
+			<column name="counsellingStatus" type="varchar(30)"></column>
+			<column name="counsellingDate" type="date"></column>
+		</createTable>
+
+		<createTable tableName="PostDonationCounselling_AUD">
+			<column name="id" type="bigint(20)" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="donation_id" type="bigint(20)">
+				<constraints foreignKeyName="FK_POST_DONATION_COUNSELLING_AUD_DONATION_ID" references="Donation(id)" />
+			</column>
+			<column name="flaggedForCounselling" type="tinyint(1)">
+				<constraints nullable="false" />
+			</column>
+			<column name="counsellingStatus" type="varchar(30)"></column>
+			<column name="counsellingDate" type="date"></column>
+			<column name="REV" type="int">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="REVTYPE" type="tinyint(4)"></column>
+		</createTable>
+	</changeSet>
+	
+	<changeSet id="20150903-1118" author="bausmeier">
+	   <comment>Add default duration days to deferral reasons.</comment>
+	
+	   <addColumn tableName="DeferralReason">
+	       <column name="defaultDuration" type="SMALLINT UNSIGNED" defaultValue="NULL" />
+	   </addColumn>
+
+	   <addColumn tableName="DeferralReason_AUD">
+	       <column name="defaultDuration" type="SMALLINT UNSIGNED" defaultValue="NULL" />
+	   </addColumn>
+	</changeSet>
+	
+	<changeSet id="20150907-0917" author="bausmeier">
+		<comment>Add deferral reason durationType column.</comment>
+	   
+	   <addColumn tableName="DeferralReason">
+	       <column name="durationType" type="VARCHAR(30)">
+	           <constraints nullable="false" />
+	       </column>
+	   </addColumn>
+	   
+	   <addColumn tableName="DeferralReason_AUD">
+	       <column name="durationType" type="VARCHAR(30)">
+	           <constraints nullable="false" />
+	       </column>
+	   </addColumn>
+
+		<update tableName="DeferralReason">
+       		<column name="durationType" value="TEMPORARY" />
+   		</update>
+	</changeSet>
+	
+	<changeSet id="20150907-0918" author="bausmeier">
+		<comment>Add Deferral Reason type column and TTI unsafe deferral reason.</comment>
+		
+			<addColumn tableName="DeferralReason">
+		       <column name="type" type="VARCHAR(30)">
+		           <constraints nullable="false" />
+		       </column>
+		   </addColumn>
+	
+		   <addColumn tableName="DeferralReason_AUD">
+		       <column name="type" type="VARCHAR(30)">
+		           <constraints nullable="false" />
+		       </column>
+		   </addColumn>
+	
+		   <update tableName="DeferralReason">
+		       <column name="type" value="NORMAL" />
+		   </update>
+	
+		   <insert tableName="DeferralReason">
+		       <column name="reason">TTI Unsafe</column>
+		       <column name="type">AUTOMATED_TTI_UNSAFE</column>
+		       <column name="durationType">PERMANENT</column>
+		       <column name="isDeleted">0</column>
+		   </insert>
+	   
+	</changeSet>
+
+    <changeSet id="20150907-1149" author="bausmeier">
+
+        <createTable tableName="AdverseEventType">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="varchar(30)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="UQ_ADVERSE_EVENT_TYPE_NAME" />
+            </column>
+            <column name="description" type="longtext" />
+            <column name="isDeleted" type="tinyint(1)" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <createTable tableName="AdverseEventType_AUD">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="varchar(30)">
+                <constraints nullable="false" />
+            </column>
+            <column name="description" type="longtext" />
+            <column name="isDeleted" type="tinyint(1)" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+            <column name="REV" type="int">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="REVTYPE" type="tinyint(4)"></column>
+        </createTable>
+    </changeSet>
+    
+    <changeSet id="20150908-1613" author="bausmeier">
+
+        <createTable tableName="AdverseEvent">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="type_id" type="bigint">
+				<constraints nullable="false" foreignKeyName="FK_ADVERSE_EVENT_ADVERSE_EVENT_TYPE_ID"
+                        references="AdverseEventType(id)" />
+            </column>
+            <column name="comment" type="longtext" />
+        </createTable>
+
+        <createTable tableName="AdverseEvent_AUD">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="type_id" type="bigint">
+				<constraints nullable="true" foreignKeyName="FK_ADVERSE_EVENT_AUD_ADVERSE_EVENT_TYPE_ID"
+                        references="AdverseEventType(id)" />
+            </column>
+            <column name="comment" type="longtext" />
+            <column name="REV" type="int">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="REVTYPE" type="tinyint(4)"></column>
+        </createTable>
+        
+        <addColumn tableName="Donation">
+            <column name="adverseEvent_id" type="bigint">
+				<constraints nullable="true" foreignKeyName="FK_DONATION_ADVERSE_EVENT_ID"
+                        references="AdverseEvent(id)" />
+            </column>
+        </addColumn>
+        
+        <addColumn tableName="Donation_AUD">
+            <column name="adverseEvent_id" type="bigint" />
+        </addColumn>
+    </changeSet>
+    
+    <changeSet id="20150917-1347" author="bausmeier">
+
+        <addColumn tableName="PackType">
+            <column name="testSampleProduced" type="tinyint(1)" />
+        </addColumn>
+
+        <addColumn tableName="PackType_AUD">
+            <column name="testSampleProduced" type="tinyint(1)" />
+        </addColumn>
+    </changeSet>
+    
+    <changeSet id="20150922-1408" author="timler">
+        <createTable tableName="DuplicateDonorBackup">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="newDonorNumber" type="varchar(20)">
+				<constraints nullable="false" foreignKeyName="FK_DUPLICATE_DONOR_BACKUP_NEW_DONOR_NUMBER"
+                        references="Donor(donorNumber)" />
+            </column>
+            <column name="mergedDonorNumber" type="varchar(20)">
+				<constraints nullable="false" foreignKeyName="FK_DUPLICATE_DONOR_BACKUP_MERGED_DONOR_NUMBER"
+                        references="Donor(donorNumber)" />
+            </column>
+            <column name="donation_id" type="bigint">
+				<constraints nullable="true" foreignKeyName="FK_DUPLICATE_DONOR_BACKUP_DONATION_ID"
+                        references="Donation(id)" />
+            </column>
+            <column name="donorDeferral_id" type="bigint">
+				<constraints nullable="true" foreignKeyName="FK_DUPLICATE_DONOR_BACKUP_DEFERRAL_ID"
+                        references="DonorDeferral(id)" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20151005-1213" author="bausmeier">
+        <comment>Add missing autoincrement on id column</comment>
+        <addAutoIncrement tableName="BloodTestingRule" columnName="id" columnDataType="smallint(6)" />
+    </changeSet>
+    
+    <changeSet id="20151006-1200" author="bausmeier">
+        <addColumn tableName="BloodTest">
+            <column name="flagComponentsForDiscard" type="tinyint(1)" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+	<changeSet id="20151021-1307" author="debonair">
+		<comment>UI Related Properties: Address Fields</comment>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.addressLine1.enabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Determines whether address line 1 is visible"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.addressLine1.displayName"></column>
+			<column name="value" value="Address"></column>
+			<column name="description" value="Address line 1 display name"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.addressLine2.enabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Determines whether address line 2 is visible"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.addressLine2.displayName"></column>
+			<column name="value" value=""></column>
+			<column name="description" value="Address line 2 display name"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.cityTownVillage.enabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Determines whether city / town / village is visible"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.cityTownVillage.displayName"></column>
+			<column name="value" value="City"></column>
+			<column name="description" value="City / town / village display name"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.districtRegion.enabled"></column>
+			<column name="value" value="false"></column>
+			<column name="description" value="Determines whether district / region is visible"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.districtRegion.displayName"></column>
+			<column name="value" value="District"></column>
+			<column name="description" value="District / region display name"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.province.enabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Determines whether province is visible"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.province.displayName"></column>
+			<column name="value" value="Province"></column>
+			<column name="description" value="Province display name"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.state.enabled"></column>
+			<column name="value" value="false"></column>
+			<column name="description" value="Determines whether state is visible"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.state.displayName"></column>
+			<column name="value" value="State"></column>
+			<column name="description" value="State display name"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.country.enabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Determines whether country is visible"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.country.displayName"></column>
+			<column name="value" value="Country"></column>
+			<column name="description" value="Country display name"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.postalCode.enabled"></column>
+			<column name="value" value="true"></column>
+			<column name="description" value="Determines whether postal / zip code is visible"></column>
+			<column name="dataType_id" value="4"></column>
+		</insert>
+		<insert tableName="GeneralConfig">
+			<column name="name" value="ui.address.postalCode.displayName"></column>
+			<column name="value" value="Postal Code"></column>
+			<column name="description" value="Postal / zip code display name"></column>
+			<column name="dataType_id" value="1"></column>
+		</insert>
+	</changeSet>
+
+	<changeSet id="20151026-1145" author="debonair">
+		<comment>385 - Refactor out Donor Code</comment>
+		<dropForeignKeyConstraint baseTableName="DonorDonorCode" constraintName="fk_DonorDonorCode_DonorCode" />
+		<dropForeignKeyConstraint baseTableName="DonorDonorCode" constraintName="fk_DonorDonorCode_Donor" />
+		<dropForeignKeyConstraint baseTableName="DonorCode" constraintName="fk_DonorCode_DonorCodeGroup" />
+		<dropTable tableName="DonorDonorCode" cascadeConstraints="true" />
+		<dropTable tableName="DonorCodeGroup" cascadeConstraints="true" />
+		<dropTable tableName="DonorCode" cascadeConstraints="true" />
+		<dropTable tableName="DonorDonorCode_AUD" cascadeConstraints="true" />
+	</changeSet>
+
+    <changeSet id="20151026-1513" author="bausmeier">
+        <addColumn tableName="DonationBatch">
+            <column name="backEntry" type="tinyint(1)" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <addColumn tableName="DonationBatch_AUD">
+            <column name="backEntry" type="tinyint(1)" />
+        </addColumn>
+    </changeSet>
+
+	<changeSet id="20151027-1053" author="debonair">
+		<delete tableName="GeneralConfig">
+			<where>id = 1</where>
+		</delete>
+		<delete tableName="GeneralConfig">
+			<where>id = 2</where>
+		</delete>
+	</changeSet>
+    
+    <changeSet id="20151110-1024" author="bausmeier">
+        <addColumn tableName="Donation">
+            <column name="ineligibleDonor" type="tinyint(1)" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <addColumn tableName="Donation_AUD">
+            <column name="ineligibleDonor" type="tinyint(1)" />
+        </addColumn>
+    </changeSet>
+    
+	<changeSet id="20151127-0748" author="danfuterman">
+		<comment>Update name of Permanent Deferral Reason</comment>
+		<update tableName="DeferralReason">
+            <column name="reason" value="Test Outcomes" type="varchar(100)"></column>
+            <where>reason = 'TTI Unsafe'</where>
+        </update>
+	</changeSet>
+    
+    <changeSet id="20151125-1306" author="bausmeier">
+
+        <delete tableName="GenericConfig">
+            <where>propertyName IN ("minimumAge", "maximumAge", "ageLimitsEnabled")</where>
+        </delete>
+        
+        <insert tableName="GeneralConfig">
+			<column name="name" value="donors.minimumAge"></column>
+			<column name="value" value="16"></column>
+			<column name="description" value="The minimum age of a new donor"></column>
+			<column name="dataType_id" value="2"></column>
+        </insert>
+        
+        <insert tableName="GeneralConfig">
+			<column name="name" value="donors.maximumAge"></column>
+			<column name="value" value="65"></column>
+			<column name="description" value="The maximum age of a new donor"></column>
+			<column name="dataType_id" value="2"></column>
+        </insert>
+    </changeSet>
+
+	<!-- For issue 386 [Add isDeleted field to PostDonationCounselling and PostDonationCounselling_AUD Tables] -->
+	<changeSet id="20151117-1509" author="debonair">
+		<addColumn tableName="PostDonationCounselling">
+			<column name="isDeleted" type="TINYINT(1)">
+				<constraints nullable="false" />
+			</column>
+			<column name="createdDate" type="TIMESTAMP"/>
+			<column name="lastUpdated" type="TIMESTAMP"/>
+			<column name="createdBy_id" type="SMALLINT"/>
+			<column name="lastUpdatedBy_id" type="SMALLINT"/>
+		</addColumn>
+
+		<addColumn tableName="PostDonationCounselling_AUD">
+			<column name="isDeleted" type="TINYINT(1)">
+				<constraints nullable="false" />
+			</column>
+			<column name="createdDate" type="TIMESTAMP"/>
+			<column name="lastUpdated" type="TIMESTAMP"/>
+			<column name="createdBy_id" type="SMALLINT"/>
+			<column name="lastUpdatedBy_id" type="SMALLINT"/>
+		</addColumn>
+	</changeSet>
+    
+    <changeSet id="201512031635" author="bausmeier">
+
+        <addColumn tableName="Donation">
+            <column name="released" type="TINYINT(1)" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+
+        <addColumn tableName="Donation_AUD">
+            <column name="released" type="TINYINT(1)" defaultValue="0" />
+        </addColumn>
+
+        <!-- Set donations belonging to CLOSED or RELEASED test batches to released -->
+        <sql>
+            UPDATE Donation d
+            JOIN DonationBatch db ON d.donationBatch_id = db.id
+            JOIN TestBatch tb ON db.testBatch_id = tb.id
+            SET d.released = 1
+            WHERE tb.status IN ("CLOSED", "RELEASED");
+        </sql>
+    </changeSet>
+
+	<changeSet id="20160105-0907" author="timler">
+		<comment>#440 - added missing columns to Donor_AUD</comment>
+		<dropColumn columnName="address" tableName="Donor_AUD" />
+		<dropColumn columnName="phoneNumber" tableName="Donor_AUD" />
+		<addColumn tableName="Donor_AUD">
+			<column name="idType_id" type="BIGINT" defaultValue="NULL"></column>
+			<column name="preferredLanguage_id" type="BIGINT" defaultValue="NULL"></column>
+			<column name="addressId" type="int" defaultValue="NULL"></column>
+			<column name="contactId" type="int" defaultValue="NULL"></column>
+			<column name="contactMethodType_id" type="SMALLINT(6)"></column>
+			<column name="addressTypeId" type="BIGINT"></column>
+		</addColumn>
+	</changeSet>
+	
+	<changeSet id="20160127-1000" author="timler">
+		<comment>BSIS-358 - Add double-entry column for BloodTestResult</comment>
+		<addColumn tableName="BloodTestResult">
+			<column name="doubleEntry" type="TINYINT(1)" defaultValue="0"></column>
+		</addColumn>
+	</changeSet>
+	
+	<changeSet id="20160203-1422" author="lauravignoli">		
+		<comment>BSIS-358 - Rename doubleEntry to doubleEntryRequired for BloodTestResult</comment>
+		<renameColumn tableName="BloodTestResult" oldColumnName="doubleEntry" newColumnName="doubleEntryRequired" columnDataType="TINYINT(1)"/>
+	</changeSet>
+	
+	<changeSet id="20160209-1312" author="lauravignoli">		
+		<comment>BSIS-403 - Rename doubleEntryRequired to reEntryRequired for BloodTestResult</comment>
+		<renameColumn tableName="BloodTestResult" oldColumnName="doubleEntryRequired" newColumnName="reEntryRequired" columnDataType="TINYINT(1)"/>
+	</changeSet>
+ 
+  <changeSet id="20160210-1543" author="bausmeier">
+    <update tableName="Donation">
+      <column name="bloodTypingStatus" value="PENDING_TESTS" type="VARCHAR(20)"></column>
+      <where>bloodTypingStatus IN ("AMBIGUOUS", "NO_MATCH")</where>
+    </update>
+  </changeSet>
+  
+  <changeSet id="20160408-1321" author="lauravignoli">
+  	<comment>BSIS-734 - Make bleed start and end time not nullable</comment>
+    <addNotNullConstraint columnName="bleedStartTime" tableName="Donation" columnDataType="datetime"/>
+    <addNotNullConstraint columnName="bleedEndTime" tableName="Donation" columnDataType="datetime"/>
+  </changeSet>
+
+</databaseChangeLog>

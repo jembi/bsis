@@ -1,0 +1,840 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog 
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+ logicalFilePath="./liquibase/db-fix-ids.xml">
+    
+	<!-- This file contains all the change sets necessary for #438: Modify all entity ids to long/bigint(20) -->
+	
+	<changeSet id="20151209-1000" author="timler">
+		<comment>Change BloodTest id</comment>
+		<!-- drop foreign key constaints -->
+		<dropForeignKeyConstraint baseTableName="BloodTestResult" constraintName="FK39946CC945027987"/>
+		<dropIndex tableName="BloodTestResult" indexName="FK39946CC945027987"/>
+		<dropForeignKeyConstraint baseTableName="BloodTest_WorksheetType" constraintName="FK7A6DA3B5BC5F90CC"/>
+		<dropIndex tableName="BloodTest_WorksheetType" indexName="FK7A6DA3B5BC5F90CC"/>
+		<!-- change id columns: BloodTest and BloodTest_AUD -->
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="BloodTest"/>
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="BloodTest_AUD"/>
+		<addNotNullConstraint columnName="id" tableName="BloodTest" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="BloodTest" columnDataType="bigint(20)" />
+		<!-- change: BloodTestingResult reference -->
+		<modifyDataType columnName="bloodTest_id" newDataType="bigint(20)" tableName="BloodTestResult"/>
+		<createIndex tableName="BloodTestResult" indexName="fk_BloodTestResult_BloodTest">
+        	<column name="bloodTest_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint 
+    	    constraintName="fk_BloodTestResult_BloodTest"
+    	    baseColumnNames="bloodTest_id" baseTableName="BloodTestResult"
+               referencedColumnNames="id" referencedTableName="BloodTest"/>	    	
+   		<!-- change: BloodTest_WorksheetType reference -->
+		<modifyDataType columnName="bloodTests_id" newDataType="bigint(20)" tableName="BloodTest_WorksheetType"/>
+		<modifyDataType columnName="bloodTests_id" newDataType="bigint(20)" tableName="BloodTest_WorksheetType_AUD"/>
+		<createIndex tableName="BloodTest_WorksheetType" indexName="fk_BloodTest_WorksheetType_BloodTest">
+        	<column name="bloodTests_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint 
+    	    constraintName="fk_BloodTest_WorksheetType_BloodTest"
+    	    baseColumnNames="bloodTests_id" baseTableName="BloodTest_WorksheetType"
+    	    referencedColumnNames="id" referencedTableName="BloodTest"/>
+	</changeSet>
+
+	<changeSet id="20151209-1100" author="timler">
+		<comment>Change BloodTestingRule id</comment>
+		<!-- change id columns: BloodTestingRule and BloodTestingRule_AUD -->
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="BloodTestingRule"/>
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="BloodTestingRule_AUD"/>
+		<addNotNullConstraint columnName="id" tableName="BloodTestingRule" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="BloodTestingRule" columnDataType="bigint(20)" />
+	</changeSet>
+
+	<changeSet id="20151209-1110" author="timler">
+		<comment>Change ComponentStatusChangeReason id</comment>
+		<!-- drop foreign key constaints -->
+		<dropForeignKeyConstraint baseTableName="ComponentStatusChange" constraintName="FKCCE48CB18BFC6394"/>
+		<dropIndex tableName="ComponentStatusChange" indexName="FKCCE48CB18BFC6394"/>
+		<!-- change id columns: ComponentStatusChangeReason & ComponentStatusChangeReason_AUD -->
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="ComponentStatusChangeReason"/>
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="ComponentStatusChangeReason_AUD"/>
+		<addNotNullConstraint columnName="id" tableName="ComponentStatusChangeReason" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="ComponentStatusChangeReason" columnDataType="bigint(20)" />
+		<!-- change: ComponentStatusChange reference -->
+		<modifyDataType columnName="statusChangeReason_id" newDataType="bigint(20)" tableName="ComponentStatusChange"/>
+		<modifyDataType columnName="statusChangeReason_id" newDataType="bigint(20)" tableName="ComponentStatusChange_AUD"/>
+		<createIndex tableName="ComponentStatusChange" indexName="fk_ComponentStatusChange_ComponentStatusChangeReason">
+        	<column name="statusChangeReason_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_ComponentStatusChange_ComponentStatusChangeReason" 
+    	    baseColumnNames="statusChangeReason_id" baseTableName="ComponentStatusChange"
+    	    referencedColumnNames="id" referencedTableName="ComponentStatusChangeReason"/>
+	</changeSet>
+
+	<changeSet id="20151209-1120" author="timler">
+		<comment>Change ComponentType id</comment>
+		<!-- drop foreign key constaints -->
+		<dropForeignKeyConstraint baseTableName="ComponentType" constraintName="FKA8168A93E7CEF4A"/>
+		<dropIndex tableName="ComponentType" indexName="FKA8168A93E7CEF4A"/>
+		<dropForeignKeyConstraint baseTableName="Component" constraintName="FK50C664CF73AC2B90"/>
+		<dropIndex tableName="Component" indexName="FK50C664CF73AC2B90"/>
+		<dropForeignKeyConstraint baseTableName="ComponentTypeCombination_ComponentType" constraintName="FK3F670450EE5B3BAF"/>
+   		<dropIndex tableName="ComponentTypeCombination_ComponentType" indexName="FK3F670450EE5B3BAF"/>
+		<dropForeignKeyConstraint baseTableName="Request" constraintName="FKA4878A6F73AC2B90"/>
+   		<dropIndex tableName="Request" indexName="FKA4878A6F73AC2B90"/>
+		<dropForeignKeyConstraint baseTableName="PackType" constraintName="fk_packType_componentType"/>
+		<dropIndex tableName="PackType" indexName="fk_packType_componentType"/>
+		<dropForeignKeyConstraint baseTableName="ComponentType_ComponentTypeCombination" constraintName="pTID_FK"/>
+		<dropIndex tableName="ComponentType_ComponentTypeCombination" indexName="pTID_FK"/>
+    	<!-- change id columns: ComponentType and ComponentType_AUD -->
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="ComponentType"/>
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="ComponentType_AUD"/>
+		<addNotNullConstraint columnName="id" tableName="ComponentType" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="ComponentType" columnDataType="bigint(20)" />
+		<!-- change: pediComponentType reference -->
+		<modifyDataType columnName="pediComponentType_id" newDataType="bigint(20)" tableName="ComponentType"/>
+		<modifyDataType columnName="pediComponentType_id" newDataType="bigint(20)" tableName="ComponentType_AUD"/>
+		<createIndex tableName="ComponentType" indexName="fk_ComponentType_ComponentType">
+        	<column name="pediComponentType_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_ComponentType_ComponentType" 
+    	    baseColumnNames="pediComponentType_id" baseTableName="ComponentType"
+    	    referencedColumnNames="id" referencedTableName="ComponentType"/>
+    	<!-- change: Component reference -->
+		<modifyDataType columnName="componentType_id" newDataType="bigint(20)" tableName="Component"/>
+		<modifyDataType columnName="componentType_id" newDataType="bigint(20)" tableName="Component_AUD"/>
+		<createIndex tableName="Component" indexName="fk_Component_ComponentType">
+        	<column name="componentType_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_Component_ComponentType" 
+    	    baseColumnNames="componentType_id" baseTableName="Component"
+    	    referencedColumnNames="id" referencedTableName="ComponentType"/>
+   		<!-- change: ComponentTypeCombination reference -->
+		<modifyDataType columnName="componentTypes_id" newDataType="bigint(20)" tableName="ComponentTypeCombination_ComponentType"/>
+		<createIndex tableName="ComponentTypeCombination_ComponentType" indexName="fk_ComponentTypeCombination_ComponentType_ComponentType">
+        	<column name="componentTypes_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_ComponentTypeCombination_ComponentType_ComponentType" 
+    	    baseColumnNames="componentTypes_id" baseTableName="ComponentTypeCombination_ComponentType"
+    	    referencedColumnNames="id" referencedTableName="ComponentType"/>
+   		<!-- change: PackType reference -->
+		<modifyDataType columnName="componentType_id" newDataType="bigint(20)" tableName="PackType"/>
+		<modifyDataType columnName="componentType_id" newDataType="bigint(20)" tableName="PackType_AUD"/>
+		<createIndex tableName="PackType" indexName="fk_packType_componentType">
+        	<column name="componentType_id" type="bigint(20)"/>
+    	</createIndex>
+		<addForeignKeyConstraint baseColumnNames="componentType_id"
+			baseTableName="PackType"
+			constraintName="fk_packType_componentType"
+			onDelete="CASCADE"
+			onUpdate="RESTRICT"
+			referencedColumnNames="id"
+			referencedTableName="ComponentType"/>
+   		<!-- change: Request reference -->
+		<modifyDataType columnName="componentType_id" newDataType="bigint(20)" tableName="Request"/>
+		<modifyDataType columnName="componentType_id" newDataType="bigint(20)" tableName="Request_AUD"/>
+		<createIndex tableName="Request" indexName="fk_Request_ComponentType">
+        	<column name="componentType_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_Request_ComponentType" 
+    	    baseColumnNames="componentType_id" baseTableName="Request"
+    	    referencedColumnNames="id" referencedTableName="ComponentType"/>
+    	<!-- change: ComponentType_ComponentTypeCombination reference -->
+    	<modifyDataType columnName="sourceComponentTypes_id" newDataType="bigint(20)" tableName="ComponentType_ComponentTypeCombination"/>
+		<createIndex tableName="ComponentType_ComponentTypeCombination" indexName="fk_ComponentType_ComponentTypeCombination_ComponentType">
+        	<column name="sourceComponentTypes_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_ComponentType_ComponentTypeCombination_ComponentType" 
+    	    baseColumnNames="sourceComponentTypes_id" baseTableName="ComponentType_ComponentTypeCombination"
+    	    referencedColumnNames="id" referencedTableName="ComponentType"/>
+	</changeSet>
+	
+	<changeSet id="20151209-1200" author="timler">
+		<comment>Change ComponentTypeCombination id</comment>
+		<!-- drop foreign key constaints -->
+		<dropForeignKeyConstraint baseTableName="ComponentTypeCombination_ComponentType" constraintName="FK3F6704507548F61D"/>
+		<dropIndex tableName="ComponentTypeCombination_ComponentType" indexName="FK3F6704507548F61D"/>
+   		<dropForeignKeyConstraint baseTableName="ComponentType_ComponentTypeCombination" constraintName="pTCID_FK"/>
+   		<dropIndex tableName="ComponentType_ComponentTypeCombination" indexName="pTCID_FK"/>
+	    <!-- change id columns: ComponentTypeCombination and ComponentTypeCombination_AUD -->
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="ComponentTypeCombination"/>
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="ComponentTypeCombination_AUD"/>
+		<addNotNullConstraint columnName="id" tableName="ComponentTypeCombination" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="ComponentTypeCombination" columnDataType="bigint(20)" />
+		<!-- change: ComponentTypeCombination_ComponentType componentTypeCombinations_id reference -->
+		<modifyDataType columnName="componentTypeCombinations_id" newDataType="bigint(20)" tableName="ComponentTypeCombination_ComponentType"/>
+		<createIndex tableName="ComponentTypeCombination_ComponentType" indexName="fk_ComponentTypeCombination_ComponentType_ComponentTypeComb">
+        	<column name="componentTypeCombinations_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_ComponentTypeCombination_ComponentType_ComponentTypeComb" 
+    	    baseColumnNames="componentTypeCombinations_id" baseTableName="ComponentTypeCombination_ComponentType"
+    	    referencedColumnNames="id" referencedTableName="ComponentTypeCombination"/>
+    	<!-- change: ComponentType_ComponentTypeCombination producedComponentTypeCombinations_id reference -->
+		<modifyDataType columnName="producedComponentTypeCombinations_id" newDataType="bigint(20)" tableName="ComponentType_ComponentTypeCombination"/>
+		<createIndex tableName="ComponentType_ComponentTypeCombination" indexName="fk_ComponentType_ComponentTypeCombination_ComponentTypeComb">
+        	<column name="producedComponentTypeCombinations_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_ComponentType_ComponentTypeCombination_ComponentTypeComb" 
+    	    baseColumnNames="producedComponentTypeCombinations_id" baseTableName="ComponentType_ComponentTypeCombination"
+    	    referencedColumnNames="id" referencedTableName="ComponentTypeCombination"/>
+	</changeSet>
+
+	<!-- Delete preferredContactMethod_id which should have been removed in changeset id 20140504-1341 -->
+	<changeSet id="20151210-1101" author="timler">
+		<comment>Fix for Donor.contactMethodType</comment>
+		<!-- drop column  -->
+		<dropColumn columnName="preferredContactMethod_id" tableName="Donor"/>
+		<dropColumn columnName="preferredContactMethod_id" tableName="Donor_AUD"/>
+	</changeSet>
+	
+	<changeSet id="20151209-1210" author="timler">
+		<comment>Change ContractMethodType id</comment>
+        <!-- drop foreign key constaints -->
+        <dropForeignKeyConstraint baseTableName="Donor" constraintName="Contact_ContactType_FK"/>
+        <dropIndex tableName="Donor" indexName="Contact_ContactType_FK"/>
+	    <!-- change column ids: ContactMethodType & ContactMethodType_AUD -->
+	    <modifyDataType columnName="id" newDataType="bigint(20)" tableName="ContactMethodType"/>
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="ContactMethodType_AUD"/>
+		<addNotNullConstraint columnName="id" tableName="ContactMethodType" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="ContactMethodType" columnDataType="bigint(20)" />
+    	<!-- change: Donor references -->
+		<modifyDataType columnName="contactMethodType_id" newDataType="bigint(20)" tableName="Donor"/>
+		<!-- <modifyDataType columnName="contactMethodType_id" newDataType="bigint(20)" tableName="Donor_AUD"/>-->
+		<createIndex tableName="Donor" indexName="fk_Donor_ContactMethodType">
+        	<column name="contactMethodType_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_Donor_ContactMethodType" 
+    	    baseColumnNames="contactMethodType_id" baseTableName="Donor"
+    	    referencedColumnNames="id" referencedTableName="ContactMethodType"/>	    	
+	</changeSet>
+
+	<changeSet id="20151209-1220" author="timler">
+		<comment>Change CrossmatchType id</comment>
+		<!-- drop foreign key constaints -->
+		<dropForeignKeyConstraint baseTableName="CompatibilityTest" constraintName="FK927986028631CA7D"/>
+		<dropIndex tableName="CompatibilityTest" indexName="FK927986028631CA7D"/>
+	    <!-- change id columns: CrossmatchType && CrossmatchType_AUD -->
+	    <modifyDataType columnName="id" newDataType="bigint(20)" tableName="CrossmatchType"/>
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="CrossmatchType_AUD"/>
+		<addNotNullConstraint columnName="id" tableName="CrossmatchType" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="CrossmatchType" columnDataType="bigint(20)" />
+    	<!-- change: CompatibilityTest references -->
+		<modifyDataType columnName="crossmatchType_id" newDataType="bigint(20)" tableName="CompatibilityTest"/>
+		<modifyDataType columnName="crossmatchType_id" newDataType="bigint(20)" tableName="CompatibilityTest_AUD"/>
+		<createIndex tableName="CompatibilityTest" indexName="fk_CompatibilityTest_CrossmatchType">
+        	<column name="crossmatchType_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_CompatibilityTest_CrossmatchType" 
+    	    baseColumnNames="crossmatchType_id" baseTableName="CompatibilityTest"
+    	    referencedColumnNames="id" referencedTableName="CrossmatchType"/>	    	
+	</changeSet>
+
+	<changeSet id="20151209-1300" author="timler">
+		<comment>Change DeferralReason id</comment>
+		<!-- drop foreign key constaints -->
+		<dropForeignKeyConstraint baseTableName="DonorDeferral" constraintName="FKC7E323D1C9CCBBFC"/>
+		<dropIndex tableName="DonorDeferral" indexName="FKC7E323D1C9CCBBFC"/>
+	    <!-- change id columns: DeferralReason and DeferralReason_AUD -->
+	    <modifyDataType columnName="id" newDataType="bigint(20)" tableName="DeferralReason"/>
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="DeferralReason_AUD"/>
+		<addNotNullConstraint columnName="id" tableName="DeferralReason" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="DeferralReason" columnDataType="bigint(20)" />
+    	<!-- change: DonorDeferral references -->
+		<modifyDataType columnName="deferralReason_id" newDataType="bigint(20)" tableName="DonorDeferral"/>
+		<modifyDataType columnName="deferralReason_id" newDataType="bigint(20)" tableName="DonorDeferral_AUD"/>
+		<createIndex tableName="DonorDeferral" indexName="fk_DonorDeferral_DeferralReason">
+        	<column name="deferralReason_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_DonorDeferral_DeferralReason" 
+    	    baseColumnNames="deferralReason_id" baseTableName="DonorDeferral"
+    	    referencedColumnNames="id" referencedTableName="DeferralReason"/>
+	</changeSet>
+
+	<changeSet id="20151209-1310" author="timler">
+		<comment>Change DonationBatch id</comment>
+		<!-- drop foreign key constaints -->
+		<dropForeignKeyConstraint baseTableName="Donation" constraintName="FKF0658A33E5D4FEA3"/>
+		<dropIndex tableName="Donation" indexName="FKF0658A33E5D4FEA3"/>
+	    <!-- change id columns: DonationBatch and DonationBatch_AUD -->
+	    <modifyDataType columnName="id" newDataType="bigint(20)" tableName="DonationBatch"/>
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="DonationBatch_AUD"/>
+		<addNotNullConstraint columnName="id" tableName="DonationBatch" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="DonationBatch" columnDataType="bigint(20)" />
+    	<!-- change: Donation references -->
+		<modifyDataType columnName="donationBatch_id" newDataType="bigint(20)" tableName="Donation"/>
+		<modifyDataType columnName="donationBatch_id" newDataType="bigint(20)" tableName="Donation_AUD"/>
+		<createIndex tableName="Donation" indexName="fk_Donation_DonationBatch">
+        	<column name="donationBatch_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_Donation_DonationBatch" 
+    	    baseColumnNames="donationBatch_id" baseTableName="Donation"
+    	    referencedColumnNames="id" referencedTableName="DonationBatch"/>
+	</changeSet>
+
+	<changeSet id="20151209-1320" author="timler">
+		<comment>Change DonationType id</comment>
+		<!-- drop foreign key constraints -->
+		<dropForeignKeyConstraint baseTableName="Donation" constraintName="FKF0658A338461A8D7"/>
+		<dropIndex tableName="Donation" indexName="FKF0658A338461A8D7"/>
+	    <!-- change id columns: DonationType & DonationType_AUD -->
+	    <modifyDataType columnName="id" newDataType="bigint(20)" tableName="DonationType"/>
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="DonationType_AUD"/>
+		<addNotNullConstraint columnName="id" tableName="DonationType" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="DonationType" columnDataType="bigint(20)" />
+    	<!-- Donation references -->
+		<modifyDataType columnName="donationType_id" newDataType="bigint(20)" tableName="Donation"/>
+		<modifyDataType columnName="donationType_id" newDataType="bigint(20)" tableName="Donation_AUD"/>
+		<createIndex tableName="Donation" indexName="fk_Donation_DonationType">
+        	<column name="donationType_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_Donation_DonationType" 
+    	    baseColumnNames="donationType_id" baseTableName="Donation"
+    	    referencedColumnNames="id" referencedTableName="DonationType"/>	    	
+	</changeSet>
+
+	<changeSet id="20151209-1330" author="timler">
+		<comment>Change GeneralConfig id</comment>
+	    <!-- change id column: GeneralConfig -->
+	    <modifyDataType columnName="id" newDataType="bigint(20)" tableName="GeneralConfig"/>
+		<addNotNullConstraint columnName="id" tableName="GeneralConfig" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="GeneralConfig" columnDataType="bigint(20)" />
+	</changeSet>
+
+	<changeSet id="20151209-1335" author="timler">
+		<comment>Change MicrotiterPlate id</comment>
+	    <!-- change id columns: MicrotiterPlate and MicrotiterPlate_AUD -->
+	    <modifyDataType columnName="id" newDataType="bigint(20)" tableName="MicrotiterPlate"/>
+	    <modifyDataType columnName="id" newDataType="bigint(20)" tableName="MicrotiterPlate_AUD"/>
+		<addNotNullConstraint columnName="id" tableName="MicrotiterPlate" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="MicrotiterPlate" columnDataType="bigint(20)" />
+	</changeSet>
+
+	<changeSet id="20151209-1340" author="timler">
+		<comment>Change PackType id</comment>
+		<!-- drop foreign key constaints -->
+		<dropForeignKeyConstraint baseTableName="Donation" constraintName="FKF0658A331D73927B"/>
+		<dropIndex tableName="Donation" indexName="FKF0658A331D73927B"/>
+		<!-- change id columns: PackType & PackType_AUD -->
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="PackType"/>
+	    <modifyDataType columnName="id" newDataType="bigint(20)" tableName="PackType_AUD"/>
+		<addNotNullConstraint columnName="id" tableName="PackType" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="PackType" columnDataType="bigint(20)" />
+		<!-- change: Donation references -->
+		<modifyDataType columnName="packType_id" newDataType="bigint(20)" tableName="Donation"/>
+		<modifyDataType columnName="packType_id" newDataType="bigint(20)" tableName="Donation_AUD"/>
+		<createIndex tableName="Donation" indexName="fk_Donation_PackType">
+        	<column name="packType_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_Donation_PackType" 
+    	    baseColumnNames="packType_id" baseTableName="Donation"
+    	    referencedColumnNames="id" referencedTableName="PackType"/>
+	</changeSet>
+
+	<changeSet id="20151209-1350" author="timler">
+		<comment>Change RequestType id</comment>
+		<!-- drop foreign key constaints -->
+		<dropForeignKeyConstraint baseTableName="Request" constraintName="FKA4878A6F537AAD30"/>
+		<dropIndex tableName="Request" indexName="FKA4878A6F537AAD30"/>
+	    <!-- change id columns: RequestType and RequestType_AUD -->
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="RequestType"/>
+	    <modifyDataType columnName="id" newDataType="bigint(20)" tableName="RequestType_AUD"/>
+		<addNotNullConstraint columnName="id" tableName="RequestType" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="RequestType" columnDataType="bigint(20)" />
+    	<!-- Request references -->
+		<modifyDataType columnName="requestType_id" newDataType="bigint(20)" tableName="Request"/>
+		<modifyDataType columnName="requestType_id" newDataType="bigint(20)" tableName="Request_AUD"/>
+		<createIndex tableName="Request" indexName="fk_Request_RequestType">
+        	<column name="requestType_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_Request_RequestType" 
+    	    baseColumnNames="requestType_id" baseTableName="Request"
+    	    referencedColumnNames="id" referencedTableName="RequestType"/>
+	</changeSet>
+		
+	<!-- #438 change all entity ids to long -->
+	<changeSet id="20151209-1400" author="timler">
+		<comment>Change User id</comment>
+		<!-- drop foreign key constaints -->
+		<dropForeignKeyConstraint baseTableName="User_Role" constraintName="FK8B9F886A1D314A5B"/>
+		<dropIndex tableName="User_Role" indexName="FK8B9F886A1D314A5B"/>
+		<dropForeignKeyConstraint baseTableName="Worksheet" constraintName="FKB98678CEA49787C4"/>
+		<dropIndex tableName="Worksheet" indexName="FKB98678CEA49787C4"/>
+		<dropForeignKeyConstraint baseTableName="Worksheet" constraintName="FKB98678CED0AFB367"/>
+		<dropIndex tableName="Worksheet" indexName="FKB98678CED0AFB367"/>
+		<dropForeignKeyConstraint baseTableName="BloodTestResult" constraintName="FK39946CC9A49787C4"/>
+		<dropIndex tableName="BloodTestResult" indexName="FK39946CC9A49787C4"/>
+		<dropForeignKeyConstraint baseTableName="BloodTestResult" constraintName="FK39946CC9D0AFB367"/>
+    	<dropIndex tableName="BloodTestResult" indexName="FK39946CC9D0AFB367"/>
+		<dropForeignKeyConstraint baseTableName="Donation" constraintName="FKF0658A33A49787C4"/>
+    	<dropIndex tableName="Donation" indexName="FKF0658A33A49787C4"/>
+		<dropForeignKeyConstraint baseTableName="Donation" constraintName="FKF0658A33D04A4456"/>
+    	<dropIndex tableName="Donation" indexName="FKF0658A33D04A4456"/>
+		<dropForeignKeyConstraint baseTableName="Donation" constraintName="FKF0658A33D0AFB367"/>
+    	<dropIndex tableName="Donation" indexName="FKF0658A33D0AFB367"/>
+		<dropForeignKeyConstraint baseTableName="DonationBatch" constraintName="FK227631CA49787C4"/>
+    	<dropIndex tableName="DonationBatch" indexName="FK227631CA49787C4"/>
+		<dropForeignKeyConstraint baseTableName="DonationBatch" constraintName="FK227631CD0AFB367"/>
+    	<dropIndex tableName="DonationBatch" indexName="FK227631CD0AFB367"/>
+		<dropForeignKeyConstraint baseTableName="CompatibilityTest" constraintName="FK92798602A49787C4"/>
+    	<dropIndex tableName="CompatibilityTest" indexName="FK92798602A49787C4"/>
+		<dropForeignKeyConstraint baseTableName="CompatibilityTest" constraintName="FK92798602D0AFB367"/>
+    	<dropIndex tableName="CompatibilityTest" indexName="FK92798602D0AFB367"/>
+		<dropForeignKeyConstraint baseTableName="Donor" constraintName="FK3F25E46A49787C4"/>
+    	<dropIndex tableName="Donor" indexName="FK3F25E46A49787C4"/>
+		<dropForeignKeyConstraint baseTableName="Donor" constraintName="FK3F25E46D0AFB367"/>
+    	<dropIndex tableName="Donor" indexName="FK3F25E46D0AFB367"/>
+		<dropForeignKeyConstraint baseTableName="DonorDeferral" constraintName="FKC7E323D1ED3A012D"/>
+    	<dropIndex tableName="DonorDeferral" indexName="FKC7E323D1ED3A012D"/>
+		<dropForeignKeyConstraint baseTableName="Component" constraintName="FK50C664CFA49787C4"/>
+    	<dropIndex tableName="Component" indexName="FK50C664CFA49787C4"/>
+		<dropForeignKeyConstraint baseTableName="Component" constraintName="FK50C664CFD0AFB367"/>
+    	<dropIndex tableName="Component" indexName="FK50C664CFD0AFB367"/>
+		<dropForeignKeyConstraint baseTableName="ComponentStatusChange" constraintName="FKCCE48CB1438D2378"/>
+    	<dropIndex tableName="ComponentStatusChange" indexName="FKCCE48CB1438D2378"/>
+		<dropForeignKeyConstraint baseTableName="ComponentUsage" constraintName="FK45B6D212A49787C4"/>
+    	<dropIndex tableName="ComponentUsage" indexName="FK45B6D212A49787C4"/>
+		<dropForeignKeyConstraint baseTableName="ComponentUsage" constraintName="FK45B6D212D0AFB367"/>
+    	<dropIndex tableName="ComponentUsage" indexName="FK45B6D212D0AFB367"/>
+		<dropForeignKeyConstraint baseTableName="Request" constraintName="FKA4878A6FA49787C4"/>
+    	<dropIndex tableName="Request" indexName="FKA4878A6FA49787C4"/>
+		<dropForeignKeyConstraint baseTableName="Request" constraintName="FKA4878A6FD0AFB367"/>
+    	<dropIndex tableName="Request" indexName="FKA4878A6FD0AFB367"/>
+	 	<dropForeignKeyConstraint baseTableName="DonorDeferral" constraintName="fk_voidedBy"/>
+	 	<dropForeignKeyConstraint baseTableName="DonorDeferral" constraintName="fk_voidedBy_aud"/>
+		<dropIndex tableName="DonorDeferral" indexName="fk_voidedBy_aud"/>
+	    <!-- change id columns: User and User_AUD -->
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="User"/>
+	    <modifyDataType columnName="id" newDataType="bigint(20)" tableName="User_AUD"/>
+		<addNotNullConstraint columnName="id" tableName="User" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="User" columnDataType="bigint(20)" />
+    	<!-- change User_Role reference: users_id -->
+		<modifyDataType columnName="users_id" newDataType="bigint(20)" tableName="User_Role"/>
+		<modifyDataType columnName="users_id" newDataType="bigint(20)" tableName="User_Role_AUD"/>
+		<createIndex tableName="User_Role" indexName="fk_User_Role_User_users_id">
+        	<column name="users_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_User_Role_User_users_id" 
+    	    baseColumnNames="users_id" baseTableName="User_Role"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change Worksheet reference: createdBy_id -->
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="Worksheet"/>
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="Worksheet_AUD"/>
+		<createIndex tableName="Worksheet" indexName="fk_Worksheet_User_createdBy_id">
+        	<column name="createdBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_Worksheet_User_createdBy_id" 
+    	    baseColumnNames="createdBy_id" baseTableName="Worksheet"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change Worksheet reference: lastUpdatedBy_id -->
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="Worksheet"/>
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="Worksheet_AUD"/>
+		<createIndex tableName="Worksheet" indexName="fk_Worksheet_User_lastUpdatedBy_id">
+        	<column name="lastUpdatedBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_Worksheet_User_lastUpdatedBy_id" 
+    	    baseColumnNames="lastUpdatedBy_id" baseTableName="Worksheet"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change BloodTestResult reference: createdBy_id -->
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="BloodTestResult"/>
+		<createIndex tableName="BloodTestResult" indexName="fk_BloodTestResult_User_createdBy_id">
+        	<column name="createdBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_BloodTestResult_User_createdBy_id" 
+    	    baseColumnNames="createdBy_id" baseTableName="BloodTestResult"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change BloodTestResult reference: lastUpdatedBy_id -->
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="BloodTestResult"/>
+		<createIndex tableName="BloodTestResult" indexName="fk_BloodTestResult_User_lastUpdatedBy_id">
+        	<column name="lastUpdatedBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_BloodTestResult_User_lastUpdatedBy_id" 
+    	    baseColumnNames="lastUpdatedBy_id" baseTableName="BloodTestResult"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change Donation reference: createdBy_id -->
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="Donation"/>
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="Donation_AUD"/>
+		<createIndex tableName="Donation" indexName="fk_Donation_User_createdBy_id">
+        	<column name="createdBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_Donation_User_createdBy_id" 
+    	    baseColumnNames="createdBy_id" baseTableName="Donation"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change Donation reference: donationCreatedBy_id -->
+		<modifyDataType columnName="donationCreatedBy_id" newDataType="bigint(20)" tableName="Donation"/>
+		<modifyDataType columnName="donationCreatedBy_id" newDataType="bigint(20)" tableName="Donation_AUD"/>
+		<createIndex tableName="Donation" indexName="fk_Donation_User_donationCreatedBy_id">
+        	<column name="donationCreatedBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_Donation_User_donationCreatedBy_id" 
+    	    baseColumnNames="donationCreatedBy_id" baseTableName="Donation"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change Donation reference: lastUpdatedBy_id -->
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="Donation"/>
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="Donation_AUD"/>
+		<createIndex tableName="Donation" indexName="fk_Donation_User_lastUpdatedBy_id">
+        	<column name="lastUpdatedBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_Donation_User_lastUpdatedBy_id" 
+    	    baseColumnNames="lastUpdatedBy_id" baseTableName="Donation"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change DonationBatch reference: createdBy_id -->
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="DonationBatch"/>
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="DonationBatch_AUD"/>
+		<createIndex tableName="DonationBatch" indexName="fk_DonationBatch_User_createdBy_id">
+        	<column name="createdBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_DonationBatch_User_createdBy_id" 
+    	    baseColumnNames="createdBy_id" baseTableName="DonationBatch"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change DonationBatch reference: lastUpdatedBy_id -->
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="DonationBatch"/>
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="DonationBatch_AUD"/>
+		<createIndex tableName="DonationBatch" indexName="fk_DonationBatch_User_lastUpdatedBy_id">
+        	<column name="lastUpdatedBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_DonationBatch_User_lastUpdatedBy_id" 
+    	    baseColumnNames="lastUpdatedBy_id" baseTableName="DonationBatch"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change CompatibilityTest reference: createdBy_id -->
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="CompatibilityTest"/>
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="CompatibilityTest_AUD"/>
+		<createIndex tableName="CompatibilityTest" indexName="fk_CompatibilityTest_User_createdBy_id">
+        	<column name="createdBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_CompatibilityTest_User_createdBy_id" 
+    	    baseColumnNames="createdBy_id" baseTableName="CompatibilityTest"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change CompatibilityTest reference: lastUpdatedBy_id -->
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="CompatibilityTest"/>
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="CompatibilityTest_AUD"/>
+		<createIndex tableName="CompatibilityTest" indexName="fk_CompatibilityTest_User_lastUpdatedBy_id">
+        	<column name="lastUpdatedBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_CompatibilityTest_User_lastUpdatedBy_id" 
+    	    baseColumnNames="lastUpdatedBy_id" baseTableName="CompatibilityTest"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change Donor reference: createdBy_id -->
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="Donor"/>
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="Donor_AUD"/>
+		<createIndex tableName="Donor" indexName="fk_Donor_User_createdBy_id">
+        	<column name="createdBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_Donor_User_createdBy_id" 
+    	    baseColumnNames="createdBy_id" baseTableName="Donor"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change Donor reference: lastUpdatedBy_id -->
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="Donor"/>
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="Donor_AUD"/>
+		<createIndex tableName="Donor" indexName="fk_Donor_User_lastUpdatedBy_id">
+        	<column name="lastUpdatedBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_Donor_User_lastUpdatedBy_id" 
+    	    baseColumnNames="lastUpdatedBy_id" baseTableName="Donor"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change DonorDeferral reference: createdBy_id -->
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="DonorDeferral"/>
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="DonorDeferral_AUD"/>
+		<createIndex tableName="DonorDeferral" indexName="fk_DonorDeferral_User_createdBy_id">
+        	<column name="createdBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_DonorDeferral_User_createdBy_id" 
+    	    baseColumnNames="createdBy_id" baseTableName="DonorDeferral"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change DonorDeferral reference: lastUpdatedBy_id -->
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="DonorDeferral"/>
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="DonorDeferral_AUD"/>
+		<createIndex tableName="DonorDeferral" indexName="fk_DonorDeferral_User_lastUpdatedBy_id">
+        	<column name="lastUpdatedBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_DonorDeferral_User_lastUpdatedBy_id" 
+    	    baseColumnNames="lastUpdatedBy_id" baseTableName="DonorDeferral"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+		<!-- change DonorDeferral reference: voidedBy_id -->
+		<modifyDataType columnName="voidedBy_id" newDataType="bigint(20)" tableName="DonorDeferral"/>
+		<modifyDataType columnName="voidedBy_id" newDataType="bigint(20)" tableName="DonorDeferral_AUD"/>
+		<createIndex tableName="DonorDeferral" indexName="fk_DonorDeferral_User_voidedBy_id">
+        	<column name="voidedBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_DonorDeferral_User_voidedBy_id" 
+    	    baseColumnNames="voidedBy_id" baseTableName="DonorDeferral"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change Component reference: createdBy_id -->
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="Component"/>
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="Component_AUD"/>
+		<createIndex tableName="Component" indexName="fk_Component_User_createdBy_id">
+        	<column name="createdBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_Componentl_User_createdBy_id" 
+    	    baseColumnNames="createdBy_id" baseTableName="Component"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change Component reference: lastUpdatedBy_id -->
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="Component"/>
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="Component_AUD"/>
+		<createIndex tableName="Component" indexName="fk_Component_User_lastUpdatedBy_id">
+        	<column name="lastUpdatedBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_Component_User_lastUpdatedBy_id" 
+    	    baseColumnNames="lastUpdatedBy_id" baseTableName="Component"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change ComponentStatusChange reference: changedBy_id -->
+		<modifyDataType columnName="changedBy_id" newDataType="bigint(20)" tableName="ComponentStatusChange"/>
+		<modifyDataType columnName="changedBy_id" newDataType="bigint(20)" tableName="ComponentStatusChange_AUD"/>
+		<createIndex tableName="ComponentStatusChange" indexName="fk_ComponentStatusChange_User_changedBy_id">
+        	<column name="changedBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_ComponentStatusChange_User_changedBy_id" 
+    	    baseColumnNames="changedBy_id" baseTableName="ComponentStatusChange"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change ComponentUsage reference: createdBy_id -->
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="ComponentUsage"/>
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="ComponentUsage_AUD"/>
+		<createIndex tableName="ComponentUsage" indexName="fk_ComponentUsage_User_createdBy_id">
+        	<column name="createdBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_ComponentUsage_User_createdBy_id" 
+    	    baseColumnNames="createdBy_id" baseTableName="ComponentUsage"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change ComponentUsage reference: lastUpdatedBy_id -->
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="ComponentUsage"/>
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="ComponentUsage_AUD"/>
+		<createIndex tableName="ComponentUsage" indexName="fk_ComponentUsage_User_lastUpdatedBy_id">
+        	<column name="lastUpdatedBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_ComponentUsage_User_lastUpdatedBy_id" 
+    	    baseColumnNames="lastUpdatedBy_id" baseTableName="ComponentUsage"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change Request reference: createdBy_id -->
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="Request"/>
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="Request_AUD"/>
+		<createIndex tableName="Request" indexName="fk_Request_User_createdBy_id">
+        	<column name="createdBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_Request_User_createdBy_id" 
+    	    baseColumnNames="createdBy_id" baseTableName="Request"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change Request reference: lastUpdatedBy_id -->
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="Request"/>
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="Request_AUD"/>
+		<createIndex tableName="Request" indexName="fk_Request_User_lastUpdatedBy_id">
+        	<column name="lastUpdatedBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_Request_User_lastUpdatedBy_id" 
+    	    baseColumnNames="lastUpdatedBy_id" baseTableName="Request"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change PostDonationCounselling reference: createdBy_id -->
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="PostDonationCounselling"/>
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="PostDonationCounselling_AUD"/>
+		<createIndex tableName="PostDonationCounselling" indexName="fk_PostDonationCounselling_User_createdBy_id">
+        	<column name="createdBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_PostDonationCounselling_User_createdBy_id" 
+    	    baseColumnNames="createdBy_id" baseTableName="PostDonationCounselling"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change PostDonationCounselling reference: lastUpdatedBy_id -->
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="PostDonationCounselling"/>
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="PostDonationCounselling_AUD"/>
+		<createIndex tableName="PostDonationCounselling" indexName="fk_PostDonationCounselling_User_lastUpdatedBy_id">
+        	<column name="lastUpdatedBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_PostDonationCounselling_User_lastUpdatedBy_id" 
+    	    baseColumnNames="lastUpdatedBy_id" baseTableName="PostDonationCounselling"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change TestBatch reference: createdBy_id -->
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="TestBatch"/>
+		<modifyDataType columnName="createdBy_id" newDataType="bigint(20)" tableName="TestBatch_AUD"/>
+		<createIndex tableName="TestBatch" indexName="fk_TestBatch_User_createdBy_id">
+        	<column name="createdBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_TestBatch_User_createdBy_id" 
+    	    baseColumnNames="createdBy_id" baseTableName="TestBatch"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<!-- change TestBatch reference: lastUpdatedBy_id -->
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="TestBatch"/>
+		<modifyDataType columnName="lastUpdatedBy_id" newDataType="bigint(20)" tableName="TestBatch_AUD"/>
+		<createIndex tableName="TestBatch" indexName="fk_TestBatch_User_lastUpdatedBy_id">
+        	<column name="lastUpdatedBy_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_TestBatch_User_lastUpdatedBy_id" 
+    	    baseColumnNames="lastUpdatedBy_id" baseTableName="TestBatch"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+	</changeSet>
+
+	<changeSet id="20151209-1500" author="timler">
+		<comment>Change WellType id</comment>
+	    <!-- drop foreign key constraints -->
+	    <dropForeignKeyConstraint baseTableName="MachineReading" constraintName="FK4CF2E0652531C00D"/>
+		<dropIndex tableName="MachineReading" indexName="FK4CF2E0652531C00D"/>
+	    <!-- change id column: WellType and WellType_AUD -->
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="WellType"/>
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="WellType_AUD"/>
+		<addNotNullConstraint columnName="id" tableName="WellType" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="WellType" columnDataType="bigint(20)" />
+    	<!-- change MachineReading reference: wellType_id -->
+		<modifyDataType columnName="wellType_id" newDataType="bigint(20)" tableName="MachineReading"/>
+		<createIndex tableName="MachineReading" indexName="fk_MachineReading_wellType_id">
+        	<column name="wellType_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_MachineReading_wellType_id" 
+    	    baseColumnNames="wellType_id" baseTableName="MachineReading"
+    	    referencedColumnNames="id" referencedTableName="WellType"/>
+	</changeSet>
+
+	<changeSet id="20160301-1221" author="timler">
+		<preConditions onFail="MARK_RAN">
+			<not><changeSetExecuted id="20151209-1510" author="timler" changeLogFile="./liquibase/db-fix-ids.xml" /></not>
+		</preConditions>
+		<comment>Change WorksheetType id</comment>
+	    <!-- drop foreign key constraints -->
+	    <dropForeignKeyConstraint baseTableName="Worksheet" constraintName="FKB98678CEBC88FBF5"/>
+    	<dropIndex tableName="Worksheet" indexName="FKB98678CEBC88FBF5"/>
+		<dropForeignKeyConstraint baseTableName="BloodTest_WorksheetType" constraintName="FK7A6DA3B518CB61F2"/>
+    	<dropIndex tableName="BloodTest_WorksheetType" indexName="FK7A6DA3B518CB61F2"/>
+	    <!-- change id columns: WorksheetType & WorksheetType_AUD -->
+	    <modifyDataType columnName="id" newDataType="bigint(20)" tableName="WorksheetType"/>
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="WorksheetType_AUD"/>
+		<addNotNullConstraint columnName="id" tableName="WorksheetType" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="WorksheetType" columnDataType="bigint(20)" />
+    	<!-- change Worksheet worksheetType_id -->
+		<modifyDataType columnName="worksheetType_id" newDataType="bigint(20)" tableName="Worksheet"/>
+		<modifyDataType columnName="worksheetType_id" newDataType="bigint(20)" tableName="Worksheet_AUD"/>
+		<createIndex tableName="Worksheet" indexName="fk_Worksheet_worksheetType_id">
+        	<column name="worksheetType_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_Worksheet_worksheetType_id" 
+    	    baseColumnNames="worksheetType_id" baseTableName="Worksheet"
+    	    referencedColumnNames="id" referencedTableName="WorksheetType"/>
+    	<!-- change BloodTest_WorksheetType worksheetTypes_id -->
+		<modifyDataType columnName="worksheetTypes_id" newDataType="bigint(20)" tableName="BloodTest_WorksheetType"/>
+		<modifyDataType columnName="worksheetTypes_id" newDataType="bigint(20)" tableName="BloodTest_WorksheetType_AUD"/>
+		<createIndex tableName="BloodTest_WorksheetType" indexName="fk_BloodTest_WorksheetType_worksheetTypes_id">
+        	<column name="worksheetTypes_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_BloodTest_WorksheetType_worksheetTypes_id" 
+    	    baseColumnNames="worksheetTypes_id" baseTableName="BloodTest_WorksheetType"
+    	    referencedColumnNames="id" referencedTableName="WorksheetType"/>
+	</changeSet>
+
+	<changeSet id="20151209-2130" author="timler">
+		<comment>Change TestBatch id</comment>
+	    <!-- drop foreign key constraints -->
+	    <dropForeignKeyConstraint baseTableName="DonationBatch" constraintName="testBatch_id_FK"/>
+    	<dropIndex tableName="DonationBatch" indexName="testBatch_id_FK"/>
+		<dropForeignKeyConstraint baseTableName="DonationBatch_AUD" constraintName="testBatch_id_aud_FK"/>
+    	<dropIndex tableName="DonationBatch_AUD" indexName="testBatch_id_aud_FK"/>
+	    <!-- change id columns: TestBatch & TestBatch_AUD -->
+	    <modifyDataType columnName="id" newDataType="bigint(20)" tableName="TestBatch"/>
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="TestBatch_AUD"/>
+		<addNotNullConstraint columnName="id" tableName="TestBatch" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="TestBatch" columnDataType="bigint(20)" />
+    	<!-- change DonationBatch testBatch_id -->
+		<modifyDataType columnName="testBatch_id" newDataType="bigint(20)" tableName="DonationBatch"/>
+		<modifyDataType columnName="testBatch_id" newDataType="bigint(20)" tableName="DonationBatch_AUD"/>
+		<createIndex tableName="DonationBatch" indexName="fk_DonationBatch_TestBatch">
+        	<column name="testBatch_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_DonationBatch_TestBatch" 
+    	    baseColumnNames="testBatch_id" baseTableName="DonationBatch"
+    	    referencedColumnNames="id" referencedTableName="TestBatch"/>
+	</changeSet>
+	
+	<changeSet id="20151209-2145" author="timler">
+		<comment>Change DataType id</comment>
+	    <!-- drop foreign key constraints -->
+	    <dropForeignKeyConstraint baseTableName="GeneralConfig" constraintName="Config_DataType_FK"/>
+	    <dropIndex tableName="GeneralConfig" indexName="Config_DataType_FK"/>
+	    <!-- change id columns: DataType -->
+	    <modifyDataType columnName="id" newDataType="bigint(20)" tableName="DataType"/>
+		<addNotNullConstraint columnName="id" tableName="DataType" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="DataType" columnDataType="bigint(20)" />
+    	<!-- change DonationBatch testBatch_id -->
+		<modifyDataType columnName="dataType_id" newDataType="bigint(20)" tableName="GeneralConfig"/>
+		<createIndex tableName="GeneralConfig" indexName="fk_DataType_GeneralConfig">
+        	<column name="dataType_id" type="bigint(20)"/>
+    	</createIndex>
+    	<addForeignKeyConstraint
+    	    constraintName="fk_DataType_GeneralConfig" 
+    	    baseColumnNames="dataType_id" baseTableName="GeneralConfig"
+    	    referencedColumnNames="id" referencedTableName="DataType"/>
+	</changeSet>
+	
+	<changeSet id="20151210-0740" author="timler">
+		<comment>Change ComponentType_ComponentTypeCombination id</comment>
+		<!-- change id columns: ComponentType_ComponentTypeCombination -->
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="ComponentType_ComponentTypeCombination"/>
+		<addNotNullConstraint columnName="id" tableName="ComponentType_ComponentTypeCombination" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="ComponentType_ComponentTypeCombination" columnDataType="bigint(20)" />
+	</changeSet>
+	
+	<changeSet id="20151210-0840" author="timler">
+		<comment>Change ComponentTypeCombination_ComponentType id</comment>
+		<!-- change id columns: ComponentTypeCombination_ComponentType -->
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="ComponentTypeCombination_ComponentType"/>
+		<addNotNullConstraint columnName="id" tableName="ComponentTypeCombination_ComponentType" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="ComponentTypeCombination_ComponentType" columnDataType="bigint(20)" />
+	</changeSet>
+	
+	<changeSet id="20151210-1300" author="timler">
+		<comment>Change EntityModification id</comment>
+		<!-- change id columns: EntityModification -->
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="EntityModification"/>
+		<addNotNullConstraint columnName="id" tableName="EntityModification" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="EntityModification" columnDataType="bigint(20)" />
+	</changeSet>
+	
+	<changeSet id="20151210-1315" author="timler">
+		<comment>Change SequenceNumberStore id</comment>
+		<!-- change id columns: SequenceNumberStore -->
+		<modifyDataType columnName="id" newDataType="bigint(20)" tableName="SequenceNumberStore"/>
+		<addNotNullConstraint columnName="id" tableName="SequenceNumberStore" columnDataType="bigint(20)" />
+		<addAutoIncrement columnName="id" tableName="SequenceNumberStore" columnDataType="bigint(20)" />
+	</changeSet>
+
+</databaseChangeLog>

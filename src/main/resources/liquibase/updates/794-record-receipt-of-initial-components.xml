@@ -1,0 +1,281 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+  logicalFilePath="./liquibase/updates/794-record-receipt-of-initial-components.xml">
+
+	<changeSet id="20160421-1056" author="timler">
+		<comment>BSIS-794 - Add ComponentBatch entity.</comment>
+		<createTable tableName="ComponentBatch">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"  />
+            </column>
+            <column name="location_id" type="BIGINT">
+                <constraints foreignKeyName="fk_ComponentBatch_Location" references="Location(id)"/>
+            </column>
+            <column name="status" type="VARCHAR(20)"/>
+            <column name="collectionDate" type="TIMESTAMP"/>
+            <column name="deliveryDate" type="TIMESTAMP"/>
+            <column name="isDeleted" type="tinyint(1)"/>
+			<column name="createdDate" type="TIMESTAMP" />
+			<column name="createdBy_id" type="BIGINT" />
+			<column name="lastUpdated" type="TIMESTAMP" />
+			<column name="lastUpdatedBy_id" type="BIGINT" />
+        </createTable>
+        <createTable tableName="ComponentBatch_AUD">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"  />
+            </column>
+            <column name="location_id" type="BIGINT"/>
+            <column name="status" type="VARCHAR(20)"/>
+            <column name="collectionDate" type="TIMESTAMP"/>
+            <column name="deliveryDate" type="TIMESTAMP"/>
+            <column name="isDeleted" type="tinyint(1)"/>
+			<column name="createdDate" type="TIMESTAMP"/>
+			<column name="createdBy_id" type="BIGINT">
+			    <constraints foreignKeyName="fk_ComponentBatch_createdBy" references="User(id)"/>
+			</column>
+			<column name="lastUpdated" type="TIMESTAMP"/>
+			<column name="lastUpdatedBy_id" type="BIGINT">
+			    <constraints foreignKeyName="fk_ComponentBatch_lastUpdatedBy" references="User(id)"/>
+			</column>
+            <column name="REV" type="int">
+                <constraints primaryKey="true"  />
+            </column>
+            <column name="REVTYPE" type="tinyint(4)"></column>
+        </createTable>
+	</changeSet>
+	
+	<changeSet id="20160421-1026" author="timler">
+		<comment>BSIS-794 - Add BloodTransportBox entity.</comment>
+		<createTable tableName="BloodTransportBox">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"  />
+            </column>
+            <column name="temperature" type="DECIMAL(5,2)" />
+            <column name="componentBatch_id" type="BIGINT" >
+                <constraints foreignKeyName="fk_BloodTransportBox_ComponentBatch" references="ComponentBatch(id)"/>
+            </column>
+            <column name="isDeleted" type="tinyint(1)"/>
+			<column name="createdDate" type="TIMESTAMP" />
+			<column name="createdBy_id" type="BIGINT" >
+			    <constraints foreignKeyName="fk_BloodTransportBox_createdBy" references="User(id)"/>
+			</column>
+			<column name="lastUpdated" type="TIMESTAMP" />
+			<column name="lastUpdatedBy_id" type="BIGINT" >
+			    <constraints foreignKeyName="fk_BloodTransportBox_lastUpdatedBy" references="User(id)"/>
+			</column>
+        </createTable>
+        <createTable tableName="BloodTransportBox_AUD">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"  />
+            </column>
+            <column name="temperature" type="DECIMAL(5,2)"/>
+            <column name="componentBatch_id" type="BIGINT"/>
+            <column name="isDeleted" type="tinyint(1)"/>
+			<column name="createdDate" type="TIMESTAMP"/>
+			<column name="createdBy_id" type="BIGINT"/>
+			<column name="lastUpdated" type="TIMESTAMP"/>
+			<column name="lastUpdatedBy_id" type="BIGINT"/>
+            <column name="REV" type="int">
+                <constraints primaryKey="true"  />
+            </column>
+            <column name="REVTYPE" type="tinyint(4)"></column>
+        </createTable>
+	</changeSet>
+	
+	<changeSet id="20160421-1518" author="timler">
+	    <preConditions onFail="MARK_RAN">
+		    <not><columnExists tableName="Component" columnName="componentBatch_id"/></not>
+		</preConditions>
+		<comment>BSIS-794 - add relationship between Component and ComponentBatch.</comment>
+    	<addColumn tableName="Component">
+			<column name="componentBatch_id" type="BIGINT"> 
+				<constraints foreignKeyName="fk_Compoment_ComponentBatch" references="Component(id)"/>
+			</column>
+		</addColumn>
+    	<addColumn tableName="Component_AUD">
+			<column name="componentBatch_id" type="BIGINT"/> 
+		</addColumn>
+	</changeSet>
+	
+	<changeSet id="20160422-1529" author="lauravignoli">
+		<comment>BSIS-794 - add relationship between DonationBatch and ComponentBatch.</comment>
+		<addColumn tableName="DonationBatch">
+			<column name="componentBatch_id" type="BIGINT">
+				<constraints foreignKeyName="fk_DonationBatch_ComponentBatch" references="ComponentBatch(id)"/>
+			</column>
+		</addColumn>
+	</changeSet>
+	
+	<changeSet id="20160426-0924" author="timler">
+		<comment>BSIS-794 - add FormField for ComponentBatch and BloodTransportBox.</comment>
+		<insert tableName="FormField">
+			<column name="form" value="ComponentBatch"></column>
+			<column name="field" value="deliveryDate"></column>
+			<column name="defaultDisplayName" value="Delivery date/time"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="0"></column>
+			<column name="isRequired" value="1"></column>
+			<column name="canBeOptional" value="0"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="1"></column>			
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="ComponentBatch"></column>
+			<column name="field" value="donationBatch"></column>
+			<column name="defaultDisplayName" value="Donation Batch"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="0"></column>
+			<column name="isRequired" value="1"></column>
+			<column name="canBeOptional" value="0"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+		<insert tableName="FormField">
+			<column name="form" value="BloodTransportBox"></column>
+			<column name="field" value="temperature"></column>
+			<column name="defaultDisplayName" value="Temperature"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="0"></column>
+			<column name="isRequired" value="1"></column>
+			<column name="canBeOptional" value="0"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>			
+		</insert>
+	</changeSet>
+	
+	<changeSet id="20160426-1702" author="lauravignoli">
+		<comment>BSIS-794 - add componentBatch_id column to DonationBatch_AUD.</comment>
+		<addColumn tableName="DonationBatch_AUD">
+			<column name="componentBatch_id" type="BIGINT"/>
+		</addColumn>
+	</changeSet>
+
+  <changeSet id="20160503-1305" author="bausmeier">
+    <addColumn tableName="Location">
+      <column name="isProcessingSite" type="TINYINT(1)" defaultValue="0">
+        <constraints nullable="false" />
+      </column>
+    </addColumn>
+    <addColumn tableName="Location_AUD">
+      <column name="isProcessingSite" type="TINYINT(1)"></column>
+    </addColumn>
+  </changeSet>
+
+	<changeSet id="20160426-1333" author="timler">
+		<comment>BSIS-794 - add permissions for ComponentBatch processing.</comment>
+		<insert tableName="Permission">
+			<column name="id" value="102"></column>
+			<column name="name" value="Add Component Batch"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="102"></column>
+			<column name="roles_id" value="1"></column> <!-- Super User -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="102"></column>
+			<column name="roles_id" value="2"></column> <!-- Admin -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="102"></column>
+			<column name="roles_id" value="9"></column> <!-- Component Supervisor -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="102"></column>
+			<column name="roles_id" value="10"></column> <!-- Component Staff -->
+		</insert>
+
+		<insert tableName="Permission">
+			<column name="id" value="103"></column>
+			<column name="name" value="View Component Batch"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="103"></column>
+			<column name="roles_id" value="1"></column> <!-- Super User -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="103"></column>
+			<column name="roles_id" value="2"></column> <!-- Admin -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="103"></column>
+			<column name="roles_id" value="9"></column> <!-- Component Supervisor -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="103"></column>
+			<column name="roles_id" value="10"></column> <!-- Component Staff -->
+		</insert>
+
+		<insert tableName="Permission">
+			<column name="id" value="104"></column>
+			<column name="name" value="Edit Component Batch"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="104"></column>
+			<column name="roles_id" value="1"></column> <!-- Super User -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="104"></column>
+			<column name="roles_id" value="2"></column> <!-- Admin -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="104"></column>
+			<column name="roles_id" value="9"></column> <!-- Component Supervisor -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="104"></column>
+			<column name="roles_id" value="10"></column> <!-- Component Staff -->
+		</insert>
+
+		<insert tableName="Permission">
+			<column name="id" value="105"></column>
+			<column name="name" value="Void Component Batch"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="105"></column>
+			<column name="roles_id" value="1"></column> <!-- Super User -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="105"></column>
+			<column name="roles_id" value="2"></column> <!-- Admin -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="105"></column>
+			<column name="roles_id" value="9"></column> <!-- Component Supervisor -->
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="105"></column>
+			<column name="roles_id" value="10"></column> <!-- Component Staff -->
+		</insert>
+	</changeSet>
+	
+	<changeSet id="20160607-11:43" author="timler">
+	    <comment>BSIS-925 - fix foreign keys for modification tracker fields.</comment>
+	    <!-- drop foreign keys & indexes on ComponentBatch_AUD table -->
+	    <dropForeignKeyConstraint baseTableName="ComponentBatch_AUD" constraintName="fk_ComponentBatch_createdBy"/>
+	    <dropForeignKeyConstraint baseTableName="ComponentBatch_AUD" constraintName="fk_ComponentBatch_lastUpdatedBy"/>
+    	<dropIndex tableName="ComponentBatch_AUD" indexName="fk_ComponentBatch_createdBy"/>
+    	<dropIndex tableName="ComponentBatch_AUD" indexName="fk_ComponentBatch_lastUpdatedBy"/>
+    	<!-- add foreign keys & indexes on ComponentBatch table -->
+    	<addForeignKeyConstraint constraintName="fk_ComponentBatch_createdBy" 
+    	    baseColumnNames="createdBy_id" baseTableName="ComponentBatch"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+    	<addForeignKeyConstraint constraintName="fk_ComponentBatch_lastUpdatedBy" 
+    	    baseColumnNames="lastUpdatedBy_id" baseTableName="ComponentBatch"
+    	    referencedColumnNames="id" referencedTableName="User"/>
+	</changeSet>
+
+</databaseChangeLog>
