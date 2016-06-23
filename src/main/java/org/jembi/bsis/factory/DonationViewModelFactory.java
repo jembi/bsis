@@ -11,7 +11,6 @@ import org.jembi.bsis.service.DonorConstraintChecker;
 import org.jembi.bsis.viewmodel.AdverseEventViewModel;
 import org.jembi.bsis.viewmodel.DonationTypeViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
-import org.jembi.bsis.viewmodel.PackTypeViewFullModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +25,8 @@ public class DonationViewModelFactory {
   private DonorConstraintChecker donorConstraintChecker;
   @Autowired
   private LocationViewModelFactory locationViewModelFactory;
+  @Autowired
+  private PackTypeFactory packTypeFactory;
 
   public List<DonationViewModel> createDonationViewModelsWithPermissions(List<Donation> donations) {
     List<DonationViewModel> donationViewModels = new ArrayList<>();
@@ -67,8 +68,7 @@ public class DonationViewModelFactory {
     donationViewModel.setDonationIdentificationNumber(donation.getDonationIdentificationNumber());
     // FIXME: Use donation type factory when it exists
     donationViewModel.setDonationType(new DonationTypeViewModel(donation.getDonationType()));
-    // FIXME: Use pack type factory when it exists
-    donationViewModel.setPackType(new PackTypeViewFullModel(donation.getPackType()));
+    donationViewModel.setPackType(packTypeFactory.createFullViewModel(donation.getPackType()));
     donationViewModel.setNotes(donation.getNotes());
     donationViewModel.setDonorNumber(donation.getDonorNumber());
     donationViewModel.setLastUpdated(donation.getLastUpdated());

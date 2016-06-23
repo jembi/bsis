@@ -1,60 +1,65 @@
 package org.jembi.bsis.viewmodel;
 
-import org.jembi.bsis.model.packtype.PackType;
+public class PackTypeViewFullModel extends PackTypeViewModel {
 
-public class PackTypeViewFullModel extends BaseViewModel {
-
-  private PackType packType;
-
-  public PackTypeViewFullModel(PackType packType) {
-    this.packType = packType;
-  }
-
-  @Override
-  public Long getId() {
-    return packType.getId();
-  }
-
-  public String getPackType() {
-    return packType.getPackType();
-  }
+  private ComponentTypeViewModel componentType;
+  private Boolean canPool;
+  private Boolean canSplit;
+  private Boolean isDeleted;
+  private Boolean countAsDonation;
+  private Boolean testSampleProduced;
+  private int periodBetweenDonations;
 
   public ComponentTypeViewModel getComponentType() {
-    if (packType.getComponentType() != null) {
-      // FIXME: use factory
-      return new ComponentTypeViewModel(packType.getComponentType());
-    } else {
-      return null;
-    }
+    return componentType;
+  }
+
+  public void setComponentType(ComponentTypeViewModel componentType) {
+    this.componentType = componentType;
   }
 
   public Boolean getCanPool() {
-    return packType.getCanPool();
+    return canPool;
   }
 
+  public void setCanPool(Boolean canPool) {
+    this.canPool = canPool;
+  }
   public Boolean getCanSplit() {
-    return packType.getCanSplit();
+    return canSplit;
   }
 
+  public void setCanSplit(Boolean canSplit) {
+    this.canSplit = canSplit;
+  }
   public Boolean getIsDeleted() {
-    return packType.getIsDeleted();
+    return isDeleted;
   }
 
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
   public Boolean getCountAsDonation() {
-    return packType.getCountAsDonation();
+    return countAsDonation;
   }
 
+  public void setCountAsDonation(Boolean countAsDonation) {
+    this.countAsDonation = countAsDonation;
+  }
   public Boolean getTestSampleProduced() {
-    return packType.getTestSampleProduced();
+    return testSampleProduced;
   }
 
-  public Integer getPeriodBetweenDonations() {
-    return packType.getPeriodBetweenDonations();
+  public void setTestSampleProduced(Boolean testSampleProduced) {
+    this.testSampleProduced = testSampleProduced;
   }
 
-  @Override
-  public String toString() {
-    return packType.toString();
+  public int getPeriodBetweenDonations() {
+    return periodBetweenDonations;
+  }
+
+  public void setPeriodBetweenDonations(int periodBetweenDonations) {
+    this.periodBetweenDonations = periodBetweenDonations;
   }
 
 }

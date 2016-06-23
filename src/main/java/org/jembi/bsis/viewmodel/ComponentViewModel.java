@@ -69,7 +69,10 @@ public class ComponentViewModel {
     if (component.getDonation() == null || component.getDonation().getPackType() == null) {
       return null;
     }
-    return new PackTypeViewModel(component.getDonation().getPackType());
+    PackTypeViewModel viewModel = new PackTypeViewModel();
+    viewModel.setId(component.getDonation().getPackType().getId());
+    viewModel.setPackType(component.getDonation().getPackType().getPackType());
+    return viewModel;
   }
 
   public String getStatus() {

@@ -10,6 +10,7 @@ import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonation
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
+import static org.jembi.bsis.helpers.builders.PackTypeViewFullModelBuilder.aPackTypeViewFullModel;
 import static org.jembi.bsis.helpers.matchers.DonationViewModelMatcher.hasSameStateAsDonationViewModel;
 import static org.mockito.Mockito.when;
 
@@ -18,9 +19,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.jembi.bsis.factory.AdverseEventViewModelFactory;
-import org.jembi.bsis.factory.DonationViewModelFactory;
-import org.jembi.bsis.factory.LocationViewModelFactory;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.donation.Donation;
@@ -50,6 +48,7 @@ public class DonationViewModelFactoryTests {
   private static final long ANOTHER_IRRELEVANT_DONATION_ID = 90;
   private static final long IRRELEVANT_DONOR_ID = 89;
   private static final long ANOTHER_IRRELEVANT_DONOR_ID = 90;
+  private static final long IRRELEVANT_PACKTYPE_ID = 99;
 
   @InjectMocks
   private DonationViewModelFactory donationViewModelFactory;
@@ -61,6 +60,8 @@ public class DonationViewModelFactoryTests {
   private DonorConstraintChecker donorConstraintChecker;
   @Mock
   private LocationViewModelFactory locationViewModelFactory;
+  @Mock
+  private PackTypeFactory packTypeFactory;
 
   @Test
   public void testCreateDonationViewModelWithPermissions_shouldReturnViewModelWithCorrectDonationAndPermissions() {
@@ -75,7 +76,8 @@ public class DonationViewModelFactoryTests {
     String donationIdentificationNumber = "0000001";
     String donorNumber = "000001";
     DonationType donationType = aDonationType().withId(23L).build();
-    PackType packType = aPackType().withId(99L).build();
+    PackType packType = aPackType().withId(IRRELEVANT_PACKTYPE_ID).build();
+    PackTypeViewFullModel packTypeFullViewModel = aPackTypeViewFullModel().withId(IRRELEVANT_PACKTYPE_ID).build();
     String notes = "some notes";
     TTIStatus ttiStatus = TTIStatus.NOT_DONE;
     String batchNumber = "010100";
@@ -129,7 +131,7 @@ public class DonationViewModelFactoryTests {
         .withPermission("canDonate", irrelevantCanDonatePermission)
         .withPermission("isBackEntry", irrelevantIsBackEntryPermission)
         .withAdverseEvent(adverseEventViewModel)
-        .withPackType(new PackTypeViewFullModel(packType))
+            .withPackType(packTypeFullViewModel)
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .withDonationDate(donationDate)
         .withDonationType(new DonationTypeViewModel(donationType))
@@ -158,6 +160,7 @@ public class DonationViewModelFactoryTests {
     when(donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID)).thenReturn(irrelevantCanDonatePermission);
     when(adverseEventViewModelFactory.createAdverseEventViewModel(adverseEvent)).thenReturn(adverseEventViewModel);
     when(locationViewModelFactory.createLocationViewModel(venue)).thenReturn(new LocationViewModel(venue));
+    when(packTypeFactory.createFullViewModel(packType)).thenReturn(packTypeFullViewModel);
 
     DonationViewModel returnedDonationViewModel = donationViewModelFactory.createDonationViewModelWithPermissions(
         donation);
@@ -170,7 +173,8 @@ public class DonationViewModelFactoryTests {
 
     Long irrelevantAdverseEventId = 11L;
     AdverseEvent adverseEvent = anAdverseEvent().withId(irrelevantAdverseEventId).build();
-    PackType packType = aPackType().withId(99L).build();
+    PackType packType = aPackType().withId(IRRELEVANT_PACKTYPE_ID).build();
+    PackTypeViewFullModel packTypeFullViewModel = aPackTypeViewFullModel().withId(IRRELEVANT_PACKTYPE_ID).build();
     DonationType donationType = aDonationType().withId(23L).build();
     Donation donation1 = aDonation().withId(IRRELEVANT_DONATION_ID)
         .withDonor(aDonor().withId(IRRELEVANT_DONOR_ID).build())
@@ -196,7 +200,7 @@ public class DonationViewModelFactoryTests {
         .withPermission("canDonate", true)
         .withPermission("isBackEntry", true)
         .withAdverseEvent(adverseEventViewModel)
-        .withPackType(new PackTypeViewFullModel(packType))
+        .withPackType(packTypeFullViewModel)
         .withDonationType(new DonationTypeViewModel(donationType))
         .build();
     DonationViewModel expectedDonation2ViewModel = aDonationViewModel()
@@ -205,7 +209,7 @@ public class DonationViewModelFactoryTests {
         .withPermission("canUpdateDonationFields", true)
         .withPermission("canDonate", false)
         .withPermission("isBackEntry", false)
-        .withPackType(new PackTypeViewFullModel(packType))
+        .withPackType(packTypeFullViewModel)
         .withDonationType(new DonationTypeViewModel(donationType))
         .build();
 
@@ -218,6 +222,7 @@ public class DonationViewModelFactoryTests {
     when(donationConstraintChecker.canUpdateDonationFields(ANOTHER_IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donorConstraintChecker.isDonorEligibleToDonate(ANOTHER_IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donorConstraintChecker.isDonorDeferred(ANOTHER_IRRELEVANT_DONATION_ID)).thenReturn(true);
+    when(packTypeFactory.createFullViewModel(packType)).thenReturn(packTypeFullViewModel);
 
     List<DonationViewModel> returnedDonationViewModels = donationViewModelFactory.createDonationViewModelsWithPermissions(donations);
 

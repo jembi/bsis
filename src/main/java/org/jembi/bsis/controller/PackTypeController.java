@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.jembi.bsis.backingform.PackTypeBackingForm;
 import org.jembi.bsis.backingform.validator.PackTypeBackingFormValidator;
+import org.jembi.bsis.factory.PackTypeFactory;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.PackTypeRepository;
 import org.jembi.bsis.utils.PermissionConstants;
@@ -38,6 +39,9 @@ public class PackTypeController {
   @Autowired
   private PackTypeBackingFormValidator packTypeBackingFormValidator;
 
+  @Autowired
+  private PackTypeFactory packTypeFactory;
+
   public PackTypeController() {
   }
 
@@ -59,7 +63,7 @@ public class PackTypeController {
   public ResponseEntity<PackType> getPackTypeById(@PathVariable Long id) {
     Map<String, Object> map = new HashMap<String, Object>();
     PackType packType = packTypeRepository.getPackTypeById(id);
-    map.put("packtype", new PackTypeViewFullModel(packType)); // FIXME: use a factory
+    map.put("packtype", packTypeFactory.createFullViewModel(packType));
     return new ResponseEntity(map, HttpStatus.OK);
   }
 
@@ -68,7 +72,7 @@ public class PackTypeController {
   public ResponseEntity savePackType(@Valid @RequestBody PackTypeBackingForm formData) {
     PackType packType = formData.getType();
     packType = packTypeRepository.savePackType(packType);
-    return new ResponseEntity(new PackTypeViewFullModel(packType), HttpStatus.CREATED); // FIXME: use a factory
+    return new ResponseEntity(packTypeFactory.createFullViewModel(packType), HttpStatus.CREATED);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
@@ -78,7 +82,7 @@ public class PackTypeController {
     PackType packType = formData.getType();
     packType.setId(id);
     packType = packTypeRepository.updatePackType(packType);
-    map.put("packtype", new PackTypeViewFullModel(packType)); // FIXME: use a factory
+    map.put("packtype", packTypeFactory.createFullViewModel(packType));
     return new ResponseEntity(map, HttpStatus.OK);
   }
 
@@ -89,8 +93,8 @@ public class PackTypeController {
   private List<PackTypeViewFullModel> getPackTypeViewModels(List<PackType> packTypes) {
 
     List<PackTypeViewFullModel> viewModels = new ArrayList<PackTypeViewFullModel>();
-    for (PackType packtType : packTypes) {
-      viewModels.add(new PackTypeViewFullModel(packtType)); // FIXME: use a factory
+    for (PackType packType : packTypes) {
+      viewModels.add(packTypeFactory.createFullViewModel(packType));
     }
     return viewModels;
   }
