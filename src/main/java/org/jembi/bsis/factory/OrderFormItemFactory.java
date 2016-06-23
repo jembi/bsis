@@ -1,5 +1,8 @@
 package org.jembi.bsis.factory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jembi.bsis.backingform.OrderFormItemBackingForm;
 import org.jembi.bsis.model.order.OrderForm;
 import org.jembi.bsis.model.order.OrderFormItem;
@@ -27,6 +30,14 @@ public class OrderFormItemFactory {
     entity.setNumberOfUnits(backingForm.getNumberOfUnits());
     entity.setOrderForm(orderForm);
     return entity;
+  }
+
+  public List<OrderFormItemViewModel> createViewModels(List<OrderFormItem> entities) {
+    List<OrderFormItemViewModel> items = new ArrayList<>();
+    for (OrderFormItem item : entities) {
+      items.add(createViewModel(item));
+    }
+    return items;
   }
 
   public OrderFormItemViewModel createViewModel(OrderFormItem entity) {

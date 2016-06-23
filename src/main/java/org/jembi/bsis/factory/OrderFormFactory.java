@@ -16,7 +16,6 @@ import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.OrderFormConstraintChecker;
 import org.jembi.bsis.viewmodel.OrderFormFullViewModel;
-import org.jembi.bsis.viewmodel.OrderFormItemViewModel;
 import org.jembi.bsis.viewmodel.OrderFormViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,11 +74,7 @@ public class OrderFormFactory {
   public OrderFormFullViewModel createFullViewModel(OrderForm entity) {
     OrderFormFullViewModel viewModel = new OrderFormFullViewModel();
     populateBasicViewModel(entity, viewModel);
-    List<OrderFormItemViewModel> items = new ArrayList<>();
-    for (OrderFormItem item : entity.getItems()) {
-      items.add(orderFormItemFactory.createViewModel(item));
-    }
-    viewModel.setItems(items);
+    viewModel.setItems(orderFormItemFactory.createViewModels(entity.getItems()));
     viewModel.setComponents(componentViewModelFactory.createComponentViewModels(entity.getComponents()));
 
     Map<String, Boolean> permissions = new HashMap<>();

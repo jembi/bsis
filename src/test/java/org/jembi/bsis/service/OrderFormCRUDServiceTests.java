@@ -26,10 +26,6 @@ import org.jembi.bsis.model.order.OrderFormItem;
 import org.jembi.bsis.model.order.OrderStatus;
 import org.jembi.bsis.model.order.OrderType;
 import org.jembi.bsis.repository.OrderFormRepository;
-import org.jembi.bsis.service.ComponentDispatchService;
-import org.jembi.bsis.service.OrderFormCRUDService;
-import org.jembi.bsis.service.OrderFormConstraintChecker;
-import org.jembi.bsis.service.OrderFormItemCRUDService;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.OrderFormFullViewModel;
 import org.junit.Test;
@@ -48,9 +44,6 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
   
   @Mock
   private OrderFormRepository orderFormRepository;
-  
-  @Mock
-  private OrderFormItemCRUDService orderFormItemCRUDService;
   
   @Mock
   private ComponentDispatchService componentDispatchService;
@@ -135,7 +128,6 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
     // Expectations
     when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
     when(orderFormFactory.createEntity(backingForm)).thenReturn(orderFormCreatedFromBackingForm);
-    when(orderFormItemCRUDService.createOrUpdateOrderFormItem(orderFormItem)).thenReturn(orderFormItem);
     when(orderFormRepository.update(existingOrderForm)).thenReturn(existingOrderForm);
     when(orderFormFactory.createFullViewModel(argThat(hasSameStateAsOrderForm(expectedOrderForm)))).thenReturn(expectedViewModel);
     when(orderFormConstraintChecker.canDispatch(existingOrderForm)).thenReturn(true);

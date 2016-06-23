@@ -49,6 +49,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import javassist.CodeConverter.ArrayAccessReplacementMethodNames;
+
 @RunWith(MockitoJUnitRunner.class)
 public class OrderFormFactoryTests {
 
@@ -195,8 +197,7 @@ public class OrderFormFactoryTests {
     // Setup mock
     when(locationViewModelFactory.createLocationViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
     when(locationViewModelFactory.createLocationViewModel(dispatchedTo)).thenReturn(expectedViewModel.getDispatchedTo());
-    when(orderFormItemFactory.createViewModel(item1)).thenReturn(expectedItem1);
-    when(orderFormItemFactory.createViewModel(item2)).thenReturn(expectedItem2);
+    when(orderFormItemFactory.createViewModels(Arrays.asList(item1, item2))).thenReturn(Arrays.asList(expectedItem1, expectedItem2));
     when(orderFormConstraintChecker.canDispatch(entity)).thenReturn(true);
     when(orderFormConstraintChecker.canEdit(entity)).thenReturn(true);
 
