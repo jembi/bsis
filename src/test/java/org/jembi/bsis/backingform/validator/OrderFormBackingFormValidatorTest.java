@@ -305,7 +305,7 @@ public class OrderFormBackingFormValidatorTest {
     
     // create a component with a different location from dispatchedFrom
     Component component =
-        aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED)
+        aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
         .withLocation(getBaseDispatchedFrom()).build();
     backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
 
