@@ -1,0 +1,19 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20160623-1236" author="bausmeier">
+		<dropForeignKeyConstraint constraintName="fk_OrderFormItem_createdBy" baseTableName="OrderFormItem" />
+    <dropColumn columnName="createdBy_id" tableName="OrderFormItem" /> 
+    <dropColumn columnName="createdDate" tableName="OrderFormItem" /> 
+		<dropForeignKeyConstraint constraintName="fk_OrderFormItem_lastUpdatedBy" baseTableName="OrderFormItem" />
+    <dropColumn columnName="lastUpdatedBy_id" tableName="OrderFormItem" /> 
+    <dropColumn columnName="lastUpdated" tableName="OrderFormItem" /> 
+    <dropColumn columnName="createdBy_id" tableName="OrderFormItem_AUD" /> 
+    <dropColumn columnName="createdDate" tableName="OrderFormItem_AUD" /> 
+    <dropColumn columnName="lastUpdatedBy_id" tableName="OrderFormItem_AUD" /> 
+    <dropColumn columnName="lastUpdated" tableName="OrderFormItem_AUD" /> 
+  </changeSet>
+
+</databaseChangeLog>

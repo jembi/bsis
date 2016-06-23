@@ -5,12 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseEntity;
 import org.jembi.bsis.model.componenttype.ComponentType;
 
 @Entity
 @Audited
-public class OrderFormItem extends BaseModificationTrackerEntity {
+public class OrderFormItem extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 

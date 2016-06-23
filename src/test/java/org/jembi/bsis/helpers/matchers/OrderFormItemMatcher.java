@@ -21,9 +21,7 @@ public class OrderFormItemMatcher extends TypeSafeMatcher<OrderFormItem> {
       .appendText("\nBloodAbo: ").appendValue(expected.getBloodAbo())
       .appendText("\nBloodRh: ").appendValue(expected.getBloodRh())
       .appendText("\nComponentType: ").appendValue(expected.getComponentType())
-      .appendText("\nNumberOfUnits: ").appendValue(expected.getNumberOfUnits())
-      .appendText("\nLastUpdated: ").appendValue(expected.getLastUpdated())
-      .appendText("\nLastUpdatedBy: ").appendValue(expected.getLastUpdatedBy());
+      .appendText("\nNumberOfUnits: ").appendValue(expected.getNumberOfUnits());
   }
 
   @Override
@@ -32,9 +30,7 @@ public class OrderFormItemMatcher extends TypeSafeMatcher<OrderFormItem> {
         && Objects.equals(actual.getBloodAbo(), expected.getBloodAbo())
         && Objects.equals(actual.getBloodRh(), expected.getBloodRh())
         && Objects.equals(actual.getComponentType(), expected.getComponentType())
-        && Objects.equals(actual.getNumberOfUnits(), expected.getNumberOfUnits())
-        && Objects.equals(actual.getLastUpdated(), expected.getLastUpdated())
-        && Objects.equals(actual.getLastUpdatedBy(), expected.getLastUpdatedBy());
+        && Objects.equals(actual.getNumberOfUnits(), expected.getNumberOfUnits());
   }
   
   public static OrderFormItemMatcher hasSameStateAsOrderFormItem(OrderFormItem expected) {
