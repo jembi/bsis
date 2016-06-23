@@ -4,7 +4,7 @@ public enum InventoryStatus {
   /**
    * The component has not been labelled yet. This is the initial status.
    */
-  NOT_LABELLED,
+  NOT_IN_STOCK,
   /**
    * The component has been labelled and is now in stock.
    */

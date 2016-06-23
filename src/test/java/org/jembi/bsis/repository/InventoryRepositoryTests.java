@@ -125,7 +125,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     Location location = LocationBuilder.aProcessingSite().withName("PSite1").buildAndPersist(entityManager);
     
     // components that match
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.EXPIRED)
+    aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.EXPIRED)
     .withComponentType(type1).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
     // components that don't match due to Inventory Statuses
@@ -135,7 +135,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withStatus(ComponentStatus.EXPIRED)
     .withComponentType(type1).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
-    List<StockLevelDTO> levels = inventoryRepository.findStockLevelsForLocation(location.getId(), InventoryStatus.NOT_LABELLED);
+    List<StockLevelDTO> levels = inventoryRepository.findStockLevelsForLocation(location.getId(), InventoryStatus.NOT_IN_STOCK);
     
     // Verify levels returned
     Assert.assertEquals("Verify levels returned", 1, levels.size());
@@ -155,29 +155,29 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     Location location = LocationBuilder.aProcessingSite().withName("PSite1").buildAndPersist(entityManager);
     
     // components that match
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.QUARANTINED)
+    aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.QUARANTINED)
     .withComponentType(type1).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.EXPIRED)
+    aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.EXPIRED)
     .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
 
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.AVAILABLE)
+    aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(type1).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
     // components that don't match due to Component Status (note that USED and ISSUED belong to a Inventory Status.REMOVED)
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.PROCESSED)
+    aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.PROCESSED)
     .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.SPLIT)
+    aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.SPLIT)
     .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.UNSAFE)
+    aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.UNSAFE)
     .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.DISCARDED)
+    aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.DISCARDED)
     .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
-    List<StockLevelDTO> levels = inventoryRepository.findStockLevelsForLocation(location.getId(), InventoryStatus.NOT_LABELLED);
+    List<StockLevelDTO> levels = inventoryRepository.findStockLevelsForLocation(location.getId(), InventoryStatus.NOT_IN_STOCK);
     
     // Verify levels returned
     Assert.assertEquals("Verify levels returned", 2, levels.size());
@@ -210,7 +210,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
         .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
 
     // Components that do not match due to Inventory Status
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.AVAILABLE)
+    aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(type3).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
     aComponent().withInventoryStatus(InventoryStatus.REMOVED).withStatus(ComponentStatus.EXPIRED)
@@ -274,15 +274,15 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     Location location = LocationBuilder.aProcessingSite().withName("PSite").buildAndPersist(entityManager);
 
     // Component that does match
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.EXPIRED)
+    aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.EXPIRED)
         .withComponentType(type).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
 
     // Component that does not match due to being deleted
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.EXPIRED).withIsDeleted(true)
+    aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.EXPIRED).withIsDeleted(true)
         .withComponentType(type).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
     
-    List<StockLevelDTO> levels = inventoryRepository.findStockLevels(InventoryStatus.NOT_LABELLED);
+    List<StockLevelDTO> levels = inventoryRepository.findStockLevels(InventoryStatus.NOT_IN_STOCK);
     
     // Verify levels returned
     Assert.assertEquals("Verify levels returned", 1, levels.size());
@@ -300,29 +300,29 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     Location location = LocationBuilder.aProcessingSite().withName("PSite").buildAndPersist(entityManager);
 
     // components that match
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.QUARANTINED)
+    aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.QUARANTINED)
         .withComponentType(type1).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
 
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.AVAILABLE)
+    aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.EXPIRED)
+    aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.EXPIRED)
     .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
     // components that don't match due to Component Status (note that USED and ISSUED belong to a Inventory Status.REMOVED)
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.PROCESSED)
+    aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.PROCESSED)
     .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.SPLIT)
+    aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.SPLIT)
     .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.UNSAFE)
+    aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.UNSAFE)
     .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
-    aComponent().withInventoryStatus(InventoryStatus.NOT_LABELLED).withStatus(ComponentStatus.DISCARDED)
+    aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.DISCARDED)
     .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
-    List<StockLevelDTO> levels = inventoryRepository.findStockLevels(InventoryStatus.NOT_LABELLED);
+    List<StockLevelDTO> levels = inventoryRepository.findStockLevels(InventoryStatus.NOT_IN_STOCK);
     
     // Verify levels returned
     Assert.assertEquals("Verify levels returned", 2, levels.size());
@@ -394,11 +394,11 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
         .withDonation(aDonation().withDonationIdentificationNumber("1000007").build())
         .buildAndPersist(entityManager);
     
-    // Excluded by inventoryStatus = NOT_LABELLED
+    // Excluded by inventoryStatus = NOT_IN_STOCK
     aComponent()
         .withComponentCode(componentCode)
         .withDonation(donationWithExpectedDonationIdentificationNumber)
-        .withInventoryStatus(InventoryStatus.NOT_LABELLED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
         .withStatus(ComponentStatus.QUARANTINED)
         .buildAndPersist(entityManager);
     
