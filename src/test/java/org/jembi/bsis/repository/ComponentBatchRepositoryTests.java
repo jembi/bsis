@@ -22,7 +22,6 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
-import org.jembi.bsis.repository.ComponentBatchRepository;
 import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
 import org.joda.time.DateTime;
 import org.junit.Assert;
@@ -77,10 +76,6 @@ public class ComponentBatchRepositoryTests extends SecurityContextDependentTestS
     Assert.assertNotNull("Audit fields were set", savedEntity.getLastUpdatedBy());
     Assert.assertNotNull("Audit fields were set", savedEntity.getCreatedDate());
     Assert.assertNotNull("Audit fields were set", savedEntity.getLastUpdated());
-    Assert.assertNotNull("Audit fields were set", savedBox.getCreatedBy());
-    Assert.assertNotNull("Audit fields were set", savedBox.getLastUpdatedBy());
-    Assert.assertNotNull("Audit fields were set", savedBox.getCreatedDate());
-    Assert.assertNotNull("Audit fields were set", savedBox.getLastUpdated());
   }
 
   @Test(expected = javax.persistence.NoResultException.class)

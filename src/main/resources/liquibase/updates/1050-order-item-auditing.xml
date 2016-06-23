@@ -15,5 +15,17 @@
     <dropColumn columnName="lastUpdatedBy_id" tableName="OrderFormItem_AUD" /> 
     <dropColumn columnName="lastUpdated" tableName="OrderFormItem_AUD" /> 
   </changeSet>
+  <changeSet id="20160623-1636" author="lauravignoli">
+	<dropForeignKeyConstraint constraintName="fk_BloodTransportBox_lastUpdatedBy" baseTableName="BloodTransportBox" />
+	<dropForeignKeyConstraint constraintName="fk_BloodTransportBox_createdBy" baseTableName="BloodTransportBox" />
+	<dropColumn columnName="createdBy_id" tableName="BloodTransportBox" /> 
+    <dropColumn columnName="createdDate" tableName="BloodTransportBox" /> 
+    <dropColumn columnName="lastUpdatedBy_id" tableName="BloodTransportBox" /> 
+    <dropColumn columnName="lastUpdated" tableName="BloodTransportBox" /> 
+    <dropColumn columnName="createdBy_id" tableName="BloodTransportBox_AUD" /> 
+    <dropColumn columnName="createdDate" tableName="BloodTransportBox_AUD" /> 
+    <dropColumn columnName="lastUpdatedBy_id" tableName="BloodTransportBox_AUD" /> 
+    <dropColumn columnName="lastUpdated" tableName="BloodTransportBox_AUD" /> 
+  </changeSet>
 
 </databaseChangeLog>
