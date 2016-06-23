@@ -8,5 +8,9 @@
       <column name="inventoryStatus" value="NOT_IN_STOCK" type="VARCHAR(30)"></column>
       <where>inventoryStatus = "NOT_LABELLED"</where>
     </update>
+    <update tableName="Component_AUD">
+      <column name="inventoryStatus" value="NOT_IN_STOCK" type="VARCHAR(30)"></column>
+      <where>inventoryStatus = "NOT_LABELLED"</where>
+    </update>
   </changeSet>
 </databaseChangeLog>
