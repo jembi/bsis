@@ -3,6 +3,7 @@ package org.jembi.bsis.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jembi.bsis.backingform.ComponentTypeBackingForm;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.viewmodel.ComponentTypeFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
@@ -10,6 +11,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ComponentTypeFactory {
+  
+  public ComponentType createEntity(ComponentTypeBackingForm backingForm) {
+    return backingForm.getComponentType();
+  }
   
   public ComponentTypeViewModel createViewModel(ComponentType entity) {
     ComponentTypeViewModel viewModel = new ComponentTypeViewModel(entity);

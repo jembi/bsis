@@ -1,65 +1,87 @@
 package org.jembi.bsis.backingform;
 
-import javax.validation.Valid;
-
-import org.jembi.bsis.model.componenttype.ComponentType;
-import org.jembi.bsis.model.packtype.PackType;
-
 public class PackTypeBackingForm {
 
-  @Valid
-  private PackType type;
-
-  public PackTypeBackingForm() {
-    type = new PackType();
-  }
-
-  public PackType getType() {
-    return type;
-  }
-
-  public void setType(PackType packType) {
-    this.type = packType;
+  private Long id;
+  private String packType;
+  private ComponentTypeBackingForm componentType;
+  private Boolean canPool;
+  private Boolean canSplit;
+  private Boolean isDeleted;
+  private Boolean countAsDonation;
+  private Boolean testSampleProduced;
+  private Integer periodBetweenDonations;
+  
+  public Long getId() {
+    return id;
   }
 
   public void setId(Long id) {
-    type.setId(id);
-  }
-
-  public void setPackType(String packTypeStr) {
-    type.setPackType(packTypeStr);
+    this.id = id;
   }
 
   public String getPackType() {
-    return type.getPackType();
+    return packType;
   }
 
-  public void setComponentType(ComponentType componentType) {
-    type.setComponentType(componentType);
+  public void setPackType(String packType) {
+    this.packType = packType;
+  }
+  
+  public ComponentTypeBackingForm getComponentType() {
+    return componentType;
+  }
+
+  public void setComponentType(ComponentTypeBackingForm componentType) {
+    this.componentType = componentType;
+  }
+  
+  public Boolean getCanPool() {
+    return canPool;
   }
 
   public void setCanPool(Boolean canPool) {
-    type.setCanPool(canPool);
+    this.canPool = canPool;
+  }
+
+  public Boolean getCanSplit() {
+    return canSplit;
   }
 
   public void setCanSplit(Boolean canSplit) {
-    type.setCanSplit(canSplit);
+    this.canSplit = canSplit;
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
   }
 
   public void setIsDeleted(Boolean isDeleted) {
-    type.setIsDeleted(isDeleted);
+    this.isDeleted = isDeleted;
+  }
+
+  public Boolean getCountAsDonation() {
+    return countAsDonation;
   }
 
   public void setCountAsDonation(Boolean countAsDonation) {
-    type.setCountAsDonation(countAsDonation);
+    this.countAsDonation = countAsDonation;
+  }
+
+  public Boolean getTestSampleProduced() {
+    return testSampleProduced;
   }
 
   public void setTestSampleProduced(Boolean testSampleProduced) {
-    type.setTestSampleProduced(testSampleProduced);
+    this.testSampleProduced = testSampleProduced;
+  }
+
+  public Integer getPeriodBetweenDonations() {
+    return periodBetweenDonations;
   }
 
   public void setPeriodBetweenDonations(Integer periodBetweenDonations) {
-    type.setPeriodBetweenDonations(periodBetweenDonations);
+    this.periodBetweenDonations = periodBetweenDonations;
   }
 
 }

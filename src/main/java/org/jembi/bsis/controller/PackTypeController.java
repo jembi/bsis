@@ -11,6 +11,7 @@ import org.jembi.bsis.factory.PackTypeFactory;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.PackTypeRepository;
 import org.jembi.bsis.utils.PermissionConstants;
+import org.jembi.bsis.viewmodel.PackTypeViewFullModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,30 +52,31 @@ public class PackTypeController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_PACK_TYPES + "')")
-  public ResponseEntity<PackType> getPackTypeById(@PathVariable Long id) {
+  public ResponseEntity<Map<String, Object>> getPackTypeById(@PathVariable Long id) {
     Map<String, Object> map = new HashMap<String, Object>();
     PackType packType = packTypeRepository.getPackTypeById(id);
     map.put("packtype", packTypeFactory.createFullViewModel(packType));
-    return new ResponseEntity(map, HttpStatus.OK);
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_PACK_TYPES + "')")
-  public ResponseEntity savePackType(@Valid @RequestBody PackTypeBackingForm formData) {
-    PackType packType = formData.getType();
+  public ResponseEntity<PackTypeViewFullModel> savePackType(@Valid @RequestBody PackTypeBackingForm formData) {
+    PackType packType = packTypeFactory.createEntity(formData);
     packType = packTypeRepository.savePackType(packType);
-    return new ResponseEntity(packTypeFactory.createFullViewModel(packType), HttpStatus.CREATED);
+    return new ResponseEntity<>(packTypeFactory.createFullViewModel(packType), HttpStatus.CREATED);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_PACK_TYPES + "')")
-  public ResponseEntity updatePackType(@Valid @RequestBody PackTypeBackingForm formData, @PathVariable Long id) {
+  public ResponseEntity<Map<String, Object>> updatePackType(@Valid @RequestBody PackTypeBackingForm formData,
+      @PathVariable Long id) {
     Map<String, Object> map = new HashMap<String, Object>();
-    PackType packType = formData.getType();
+    PackType packType = packTypeFactory.createEntity(formData);
     packType.setId(id);
     packType = packTypeRepository.updatePackType(packType);
     map.put("packtype", packTypeFactory.createFullViewModel(packType));
-    return new ResponseEntity(map, HttpStatus.OK);
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
 }

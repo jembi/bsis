@@ -13,12 +13,14 @@ public class PackTypeBuilder extends AbstractEntityBuilder<PackType> {
   private String type;
   private Boolean countAsDonation;
   private int periodBetweenDonations;
-  private Boolean testSampleProduced = true;
   private Boolean isDeleted;
   private ComponentType componentType = aComponentType().build();
   private Integer maxWeight;
   private Integer minWeight;
   private Integer lowVolumeWeight;
+  private Boolean testSampleProduced = Boolean.TRUE;
+  private Boolean canPool;
+  private Boolean canSplit;
 
   public PackTypeBuilder withId(Long id) {
     this.id = id;
@@ -59,6 +61,21 @@ public class PackTypeBuilder extends AbstractEntityBuilder<PackType> {
     this.componentType = componentType;
     return this;
   }
+  
+  public PackTypeBuilder withCanPool(Boolean canPool) {
+    this.canPool = canPool;
+    return this;
+  }
+
+  public PackTypeBuilder withCanSplit(Boolean canSplit) {
+    this.canSplit = canSplit;
+    return this;
+  }
+
+  public PackTypeBuilder withIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
+    return this;
+  }
 
   public PackTypeBuilder withMaxWeight(Integer maxWeight) {
     this.maxWeight = maxWeight;
@@ -93,6 +110,8 @@ public class PackTypeBuilder extends AbstractEntityBuilder<PackType> {
     packType.setMaxWeight(maxWeight);
     packType.setMinWeight(minWeight);
     packType.setLowVolumeWeight(lowVolumeWeight);
+    packType.setCanPool(canPool);
+    packType.setCanSplit(canSplit);
     return packType;
   }
 

@@ -3,6 +3,7 @@ package org.jembi.bsis.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jembi.bsis.backingform.PackTypeBackingForm;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.viewmodel.PackTypeViewFullModel;
 import org.jembi.bsis.viewmodel.PackTypeViewModel;
@@ -14,6 +15,20 @@ public class PackTypeFactory {
 
   @Autowired
   private ComponentTypeFactory componentTypeFactory;
+  
+  public PackType createEntity(PackTypeBackingForm backingForm) {
+    PackType packType = new PackType();
+    packType.setId(backingForm.getId());
+    packType.setPackType(backingForm.getPackType());
+    packType.setComponentType(componentTypeFactory.createEntity(backingForm.getComponentType()));
+    packType.setCanPool(backingForm.getCanPool());
+    packType.setCanSplit(backingForm.getCanSplit());
+    packType.setIsDeleted(backingForm.getIsDeleted());
+    packType.setCountAsDonation(backingForm.getCountAsDonation());
+    packType.setTestSampleProduced(backingForm.getTestSampleProduced());
+    packType.setPeriodBetweenDonations(backingForm.getPeriodBetweenDonations());
+    return packType;
+  }
 
   public PackTypeViewModel createViewModel(PackType packType) {
     PackTypeViewModel viewModel = new PackTypeViewModel();
