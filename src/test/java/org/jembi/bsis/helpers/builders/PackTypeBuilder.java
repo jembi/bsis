@@ -13,9 +13,12 @@ public class PackTypeBuilder extends AbstractEntityBuilder<PackType> {
   private String type;
   private Boolean countAsDonation;
   private int periodBetweenDonations;
-  private Boolean testSampleProduced;
+  private Boolean testSampleProduced = true;
   private Boolean isDeleted;
   private ComponentType componentType = aComponentType().build();
+  private Integer maxWeight;
+  private Integer minWeight;
+  private Integer lowVolumeWeight;
 
   public PackTypeBuilder withId(Long id) {
     this.id = id;
@@ -57,6 +60,21 @@ public class PackTypeBuilder extends AbstractEntityBuilder<PackType> {
     return this;
   }
 
+  public PackTypeBuilder withMaxWeight(Integer maxWeight) {
+    this.maxWeight = maxWeight;
+    return this;
+  }
+
+  public PackTypeBuilder withMinWeight(Integer minWeight) {
+    this.minWeight = minWeight;
+    return this;
+  }
+
+  public PackTypeBuilder withLowVolumeWeight(Integer lowVolumeWeight) {
+    this.lowVolumeWeight = lowVolumeWeight;
+    return this;
+  }
+
   @Override
   public AbstractEntityPersister<PackType> getPersister() {
     return new PackTypePersister();
@@ -67,16 +85,14 @@ public class PackTypeBuilder extends AbstractEntityBuilder<PackType> {
     PackType packType = new PackType();
     packType.setId(id);
     packType.setPackType(type);
-    if (testSampleProduced != null) {
-      packType.setTestSampleProduced(testSampleProduced);
-    }
+    packType.setTestSampleProduced(testSampleProduced);
     packType.setCountAsDonation(countAsDonation);
     packType.setPeriodBetweenDonations(periodBetweenDonations);
-    if (testSampleProduced != null) {
-      packType.setTestSampleProduced(testSampleProduced);
-    }
     packType.setComponentType(componentType);
     packType.setIsDeleted(isDeleted);
+    packType.setMaxWeight(maxWeight);
+    packType.setMinWeight(minWeight);
+    packType.setLowVolumeWeight(lowVolumeWeight);
     return packType;
   }
 
