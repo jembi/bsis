@@ -52,5 +52,8 @@ public class PackTypeFactory {
     viewModel.setIsDeleted(packType.getIsDeleted());
     viewModel.setPeriodBetweenDonations(packType.getPeriodBetweenDonations());
     viewModel.setTestSampleProduced(packType.getTestSampleProduced());
+    viewModel.setMinWeight(packType.getMinWeight());
+    viewModel.setMaxWeight(packType.getMaxWeight());
+    viewModel.setLowVolumeWeight(packType.getLowVolumeWeight());
   }
 }

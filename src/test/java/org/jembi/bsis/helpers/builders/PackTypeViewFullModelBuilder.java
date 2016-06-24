@@ -12,6 +12,9 @@ public class PackTypeViewFullModelBuilder {
   private Boolean testSampleProduced;
   private Boolean isDeleted;
   private ComponentTypeViewModel componentType;
+  private Integer maxWeight;
+  private Integer minWeight;
+  private Integer lowVolumeWeight;
 
   public PackTypeViewFullModelBuilder withId(Long id) {
     this.id = id;
@@ -53,6 +56,21 @@ public class PackTypeViewFullModelBuilder {
     return this;
   }
 
+  public PackTypeViewFullModelBuilder withMaxWeight(Integer maxWeight) {
+    this.maxWeight = maxWeight;
+    return this;
+  }
+
+  public PackTypeViewFullModelBuilder withMinWeight(Integer minWeight) {
+    this.minWeight = minWeight;
+    return this;
+  }
+
+  public PackTypeViewFullModelBuilder withLowVolumeWeight(Integer lowVolumeWeight) {
+    this.lowVolumeWeight = lowVolumeWeight;
+    return this;
+  }
+
   public PackTypeViewFullModel build() {
     PackTypeViewFullModel viewModel = new PackTypeViewFullModel();
     viewModel.setId(id);
@@ -62,6 +80,9 @@ public class PackTypeViewFullModelBuilder {
     viewModel.setPeriodBetweenDonations(periodBetweenDonations);
     viewModel.setTestSampleProduced(testSampleProduced);
     viewModel.setCountAsDonation(countAsDonation);
+    viewModel.setMaxWeight(maxWeight);
+    viewModel.setMinWeight(minWeight);
+    viewModel.setLowVolumeWeight(lowVolumeWeight);
     return viewModel;
   }
 

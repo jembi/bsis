@@ -23,7 +23,10 @@ public class PackTypeFullViewModelMatcher extends TypeSafeMatcher<PackTypeViewFu
         .appendText("\nIs deleted: ").appendValue(expected.getIsDeleted())
         .appendText("\nCount as donation: ").appendValue(expected.getCountAsDonation())
         .appendText("\nComponent type: ").appendValue(expected.getComponentType())
-        .appendText("\nPack type: ").appendValue(expected.getPackType());
+        .appendText("\nPack type: ").appendValue(expected.getPackType())
+        .appendText("\nMin weight: ").appendValue(expected.getMinWeight())
+        .appendText("\nMax weight: ").appendValue(expected.getMaxWeight())
+        .appendText("\nLow volume weight: ").appendValue(expected.getLowVolumeWeight());
 
   }
 
@@ -35,7 +38,10 @@ public class PackTypeFullViewModelMatcher extends TypeSafeMatcher<PackTypeViewFu
         Objects.equals(actual.getIsDeleted(), expected.getIsDeleted()) &&
         Objects.equals(actual.getCountAsDonation(), expected.getCountAsDonation()) &&
         Objects.equals(actual.getComponentType(), expected.getComponentType()) &&
-        Objects.equals(actual.getPackType(), expected.getPackType());
+        Objects.equals(actual.getPackType(), expected.getPackType()) &&
+        Objects.equals(actual.getMinWeight(), expected.getMinWeight()) &&
+        Objects.equals(actual.getMaxWeight(), expected.getMaxWeight()) &&
+        Objects.equals(actual.getLowVolumeWeight(), expected.getLowVolumeWeight());
   }
 
   public static PackTypeFullViewModelMatcher hasSameStateAsPackTypeViewFullModel(PackTypeViewFullModel expected) {

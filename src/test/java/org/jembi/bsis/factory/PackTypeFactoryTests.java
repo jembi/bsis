@@ -35,6 +35,9 @@ public class PackTypeFactoryTests {
         .withPeriodBetweenDonations(90)
         .withTestSampleProduced(true)
         .withCountAsDonation(true)
+        .withMinWeight(222)
+        .withMaxWeight(999)
+        .withLowVolumeWeight(555)
         .withId(1L).build();
 
     PackType packType = PackTypeBuilder.aPackType()
@@ -43,6 +46,9 @@ public class PackTypeFactoryTests {
         .withPeriodBetweenDonations(90)
         .withTestSampleProduced(true)
         .withCountAsDonation(true)
+        .withMinWeight(222)
+        .withMaxWeight(999)
+        .withLowVolumeWeight(555)
         .withId(1L).build();
 
     // Setup mocks

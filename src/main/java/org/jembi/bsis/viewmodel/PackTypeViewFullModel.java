@@ -9,6 +9,9 @@ public class PackTypeViewFullModel extends PackTypeViewModel {
   private Boolean countAsDonation;
   private Boolean testSampleProduced;
   private int periodBetweenDonations;
+  private Integer maxWeight;
+  private Integer minWeight;
+  private Integer lowVolumeWeight;
 
   public ComponentTypeViewModel getComponentType() {
     return componentType;
@@ -60,6 +63,30 @@ public class PackTypeViewFullModel extends PackTypeViewModel {
 
   public void setPeriodBetweenDonations(int periodBetweenDonations) {
     this.periodBetweenDonations = periodBetweenDonations;
+  }
+
+  public Integer getMaxWeight() {
+    return maxWeight;
+  }
+
+  public void setMaxWeight(Integer maxWeight) {
+    this.maxWeight = maxWeight;
+  }
+
+  public Integer getMinWeight() {
+    return minWeight;
+  }
+
+  public void setMinWeight(Integer minWeight) {
+    this.minWeight = minWeight;
+  }
+
+  public Integer getLowVolumeWeight() {
+    return lowVolumeWeight;
+  }
+
+  public void setLowVolumeWeight(Integer lowVolumeWeight) {
+    this.lowVolumeWeight = lowVolumeWeight;
   }
 
 }
