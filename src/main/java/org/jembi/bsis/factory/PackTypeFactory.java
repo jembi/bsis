@@ -27,6 +27,9 @@ public class PackTypeFactory {
     packType.setCountAsDonation(backingForm.getCountAsDonation());
     packType.setTestSampleProduced(backingForm.getTestSampleProduced());
     packType.setPeriodBetweenDonations(backingForm.getPeriodBetweenDonations());
+    packType.setMinWeight(backingForm.getMinWeight());
+    packType.setMaxWeight(backingForm.getMaxWeight());
+    packType.setLowVolumeWeight(backingForm.getLowVolumeWeight());
     return packType;
   }
 

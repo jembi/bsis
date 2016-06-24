@@ -11,6 +11,9 @@ public class PackTypeBackingForm {
   private Boolean countAsDonation;
   private Boolean testSampleProduced;
   private Integer periodBetweenDonations;
+  private Integer maxWeight;
+  private Integer minWeight;
+  private Integer lowVolumeWeight;
   
   public Long getId() {
     return id;
@@ -82,6 +85,30 @@ public class PackTypeBackingForm {
 
   public void setPeriodBetweenDonations(Integer periodBetweenDonations) {
     this.periodBetweenDonations = periodBetweenDonations;
+  }
+
+  public Integer getMaxWeight() {
+    return maxWeight;
+  }
+
+  public void setMaxWeight(Integer maxWeight) {
+    this.maxWeight = maxWeight;
+  }
+
+  public Integer getMinWeight() {
+    return minWeight;
+  }
+
+  public void setMinWeight(Integer minWeight) {
+    this.minWeight = minWeight;
+  }
+
+  public Integer getLowVolumeWeight() {
+    return lowVolumeWeight;
+  }
+
+  public void setLowVolumeWeight(Integer lowVolumeWeight) {
+    this.lowVolumeWeight = lowVolumeWeight;
   }
 
 }

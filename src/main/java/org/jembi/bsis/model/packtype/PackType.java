@@ -151,5 +151,8 @@ public class PackType extends BaseEntity {
     this.countAsDonation = packType.getCountAsDonation();
     this.isDeleted = packType.getIsDeleted();
     this.testSampleProduced = packType.getTestSampleProduced();
+    this.minWeight = packType.getMinWeight();
+    this.maxWeight = packType.getMaxWeight();
+    this.lowVolumeWeight = packType.getLowVolumeWeight();
   }
 }
