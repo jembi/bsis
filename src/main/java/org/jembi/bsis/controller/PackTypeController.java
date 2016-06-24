@@ -1,20 +1,16 @@
 package org.jembi.bsis.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.apache.log4j.Logger;
 import org.jembi.bsis.backingform.PackTypeBackingForm;
 import org.jembi.bsis.backingform.validator.PackTypeBackingFormValidator;
 import org.jembi.bsis.factory.PackTypeFactory;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.PackTypeRepository;
 import org.jembi.bsis.utils.PermissionConstants;
-import org.jembi.bsis.viewmodel.PackTypeViewFullModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("packtypes")
 public class PackTypeController {
 
-  private static final Logger LOGGER = Logger.getLogger(PackTypeController.class);
-
   @Autowired
   PackTypeRepository packTypeRepository;
 
@@ -41,9 +35,6 @@ public class PackTypeController {
 
   @Autowired
   private PackTypeFactory packTypeFactory;
-
-  public PackTypeController() {
-  }
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
@@ -54,7 +45,7 @@ public class PackTypeController {
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_PACK_TYPES + "')")
   public Map<String, Object> getPackTypes() {
     Map<String, Object> map = new HashMap<String, Object>();
-    addAllPackTypesToModel(map);
+    map.put("allPackTypes", packTypeFactory.createFullViewModels(packTypeRepository.getAllPackTypes()));
     return map;
   }
 
@@ -84,19 +75,6 @@ public class PackTypeController {
     packType = packTypeRepository.updatePackType(packType);
     map.put("packtype", packTypeFactory.createFullViewModel(packType));
     return new ResponseEntity(map, HttpStatus.OK);
-  }
-
-  private void addAllPackTypesToModel(Map<String, Object> m) {
-    m.put("allPackTypes", getPackTypeViewModels(packTypeRepository.getAllPackTypes()));
-  }
-
-  private List<PackTypeViewFullModel> getPackTypeViewModels(List<PackType> packTypes) {
-
-    List<PackTypeViewFullModel> viewModels = new ArrayList<PackTypeViewFullModel>();
-    for (PackType packType : packTypes) {
-      viewModels.add(packTypeFactory.createFullViewModel(packType));
-    }
-    return viewModels;
   }
 
 }

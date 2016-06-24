@@ -1,5 +1,8 @@
 package org.jembi.bsis.factory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.viewmodel.PackTypeViewFullModel;
 import org.jembi.bsis.viewmodel.PackTypeViewModel;
@@ -24,6 +27,15 @@ public class PackTypeFactory {
     return viewModel;
   }
 
+  public List<PackTypeViewFullModel> createFullViewModels(List<PackType> packTypes) {
+
+    List<PackTypeViewFullModel> viewModels = new ArrayList<PackTypeViewFullModel>();
+    for (PackType packType : packTypes) {
+      viewModels.add(createFullViewModel(packType));
+    }
+    return viewModels;
+  }
+
   private void populateViewModel(PackType packType, PackTypeViewModel viewModel) {
     viewModel.setId(packType.getId());
     viewModel.setPackType(packType.getPackType());
@@ -33,13 +45,12 @@ public class PackTypeFactory {
     populateViewModel(packType, viewModel);
     viewModel.setCanPool(packType.getCanPool());
     viewModel.setCanSplit(packType.getCanSplit());
-    viewModel.setComponentType(componentTypeFactory.createViewModel(packType.getComponentType()));
+    if (packType.getComponentType() != null) {
+      viewModel.setComponentType(componentTypeFactory.createViewModel(packType.getComponentType()));
+    }
     viewModel.setCountAsDonation(packType.getCountAsDonation());
     viewModel.setIsDeleted(packType.getIsDeleted());
     viewModel.setPeriodBetweenDonations(packType.getPeriodBetweenDonations());
     viewModel.setTestSampleProduced(packType.getTestSampleProduced());
-
-    System.out.println(viewModel.getComponentType());
   }
-
 }
