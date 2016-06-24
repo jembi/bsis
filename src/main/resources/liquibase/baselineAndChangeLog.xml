@@ -21,6 +21,7 @@
 	<include file="./src/main/resources/liquibase/updates/1049-add-deferral-date.xml" />
 	<include file="./src/main/resources/liquibase/updates/872-fulfil-return.xml" />
 	<include file="./src/main/resources/liquibase/updates/994-delete-request-resources.xml" />
+	<include file="./src/main/resources/liquibase/updates/1050-order-item-auditing.xml" />
   <include file="./src/main/resources/liquibase/updates/1165-rename-inventory-status.xml" />
 
 </databaseChangeLog>

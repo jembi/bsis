@@ -3,14 +3,11 @@ package org.jembi.bsis.helpers.builders;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.OrderFormBuilder.anOrderForm;
 
-import java.util.Date;
-
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.OrderFormItemPersister;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.order.OrderForm;
 import org.jembi.bsis.model.order.OrderFormItem;
-import org.jembi.bsis.model.user.User;
 
 public class OrderFormItemBuilder extends AbstractEntityBuilder<OrderFormItem> {
   
@@ -20,8 +17,6 @@ public class OrderFormItemBuilder extends AbstractEntityBuilder<OrderFormItem> {
   private String bloodRh = "+";
   private int numberOfUnits = 5;
   private OrderForm orderForm = anOrderForm().build();
-  private Date lastUpdated;
-  private User lastUpdatedBy;
 
   public OrderFormItemBuilder withId(Long id) {
     this.id = id;
@@ -53,16 +48,6 @@ public class OrderFormItemBuilder extends AbstractEntityBuilder<OrderFormItem> {
     return this;
   }
   
-  public OrderFormItemBuilder withLastUpdated(Date lastUpdated) {
-    this.lastUpdated = lastUpdated;
-    return this;
-  }
-  
-  public OrderFormItemBuilder withLastUpdatedBy(User lastUpdatedBy) {
-    this.lastUpdatedBy = lastUpdatedBy;
-    return this;
-  }
-
   @Override
   public OrderFormItem build() {
     OrderFormItem item = new OrderFormItem();
@@ -72,8 +57,6 @@ public class OrderFormItemBuilder extends AbstractEntityBuilder<OrderFormItem> {
     item.setBloodRh(bloodRh);
     item.setComponentType(componentType);
     item.setNumberOfUnits(numberOfUnits);
-    item.setLastUpdated(lastUpdated);
-    item.setLastUpdatedBy(lastUpdatedBy);
     return item;
   }
   

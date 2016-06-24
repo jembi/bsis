@@ -1,6 +1,5 @@
 package org.jembi.bsis.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +9,6 @@ import org.jembi.bsis.backingform.OrderFormBackingForm;
 import org.jembi.bsis.factory.OrderFormFactory;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.order.OrderForm;
-import org.jembi.bsis.model.order.OrderFormItem;
 import org.jembi.bsis.model.order.OrderStatus;
 import org.jembi.bsis.model.order.OrderType;
 import org.jembi.bsis.repository.OrderFormRepository;
@@ -27,9 +25,6 @@ public class OrderFormCRUDService {
 
   @Autowired
   private OrderFormRepository orderFormRepository;
-  
-  @Autowired
-  private OrderFormItemCRUDService orderFormItemCRUDService;
   
   @Autowired
   private ComponentDispatchService componentDispatchService;
@@ -80,11 +75,7 @@ public class OrderFormCRUDService {
     existingOrderForm.setType(updatedOrderForm.getType());
     existingOrderForm.setDispatchedFrom(updatedOrderForm.getDispatchedFrom());
     existingOrderForm.setDispatchedTo(updatedOrderForm.getDispatchedTo());
-    List<OrderFormItem> items = new ArrayList<>();
-    for (OrderFormItem item : updatedOrderForm.getItems()) {
-      items.add(orderFormItemCRUDService.createOrUpdateOrderFormItem(item));
-    }
-    existingOrderForm.setItems(items);
+    existingOrderForm.setItems(updatedOrderForm.getItems());
     existingOrderForm.setComponents(updatedOrderForm.getComponents());
     return orderFormRepository.update(existingOrderForm);
   }
