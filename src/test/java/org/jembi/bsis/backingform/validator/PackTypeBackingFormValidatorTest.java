@@ -123,7 +123,7 @@ public class PackTypeBackingFormValidatorTest {
 
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error: packtype exists", errors.getFieldError("type.packType"));
+    Assert.assertNotNull("Error: packtype exists", errors.getFieldError("packType"));
   }
 
   @Test
@@ -144,6 +144,6 @@ public class PackTypeBackingFormValidatorTest {
 
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error: can't count as donation if no test sample produced", errors.getFieldError("type.countAsDonation"));
+    Assert.assertNotNull("Error: can't count as donation if no test sample produced", errors.getFieldError("countAsDonation"));
   }
 }
