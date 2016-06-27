@@ -8,7 +8,7 @@ import org.jembi.bsis.model.audit.EntityModification;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.viewmodel.AuditRevisionViewModel;
 
-public class AuditRevisionViewModelBuilder {
+public class AuditRevisionViewModelBuilder extends AbstractBuilder<AuditRevisionViewModel> {
 
   private int id;
   private Date revisionDate;
@@ -35,6 +35,7 @@ public class AuditRevisionViewModelBuilder {
     return this;
   }
 
+  @Override
   public AuditRevisionViewModel build() {
     AuditRevisionViewModel viewModel = new AuditRevisionViewModel();
     viewModel.setId(id);

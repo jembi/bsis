@@ -8,7 +8,7 @@ import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 
-public class ComponentManagementViewModelBuilder {
+public class ComponentManagementViewModelBuilder extends AbstractBuilder<ComponentManagementViewModel> {
 
   private Long id;
   private ComponentTypeViewModel componentType;
@@ -59,6 +59,7 @@ public class ComponentManagementViewModelBuilder {
     return this;
   }
 
+  @Override
   public ComponentManagementViewModel build() {
     ComponentManagementViewModel viewModel = new ComponentManagementViewModel();
     viewModel.setId(id);

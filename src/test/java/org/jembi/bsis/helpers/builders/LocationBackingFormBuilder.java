@@ -2,7 +2,7 @@ package org.jembi.bsis.helpers.builders;
 
 import org.jembi.bsis.backingform.LocationBackingForm;
 
-public class LocationBackingFormBuilder {
+public class LocationBackingFormBuilder extends AbstractBuilder<LocationBackingForm> {
 
   private Long id;
   private boolean venue;
@@ -59,6 +59,7 @@ public class LocationBackingFormBuilder {
     return this;
   }
 
+  @Override
   public LocationBackingForm build() {
     LocationBackingForm location = new LocationBackingForm();
     location.setId(id);

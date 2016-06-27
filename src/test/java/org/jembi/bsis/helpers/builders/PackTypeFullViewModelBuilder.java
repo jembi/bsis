@@ -3,7 +3,7 @@ package org.jembi.bsis.helpers.builders;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
 
-public class PackTypeFullViewModelBuilder {
+public class PackTypeFullViewModelBuilder extends AbstractBuilder<PackTypeFullViewModel> {
 
   private Long id;
   private String packType;
@@ -71,6 +71,7 @@ public class PackTypeFullViewModelBuilder {
     return this;
   }
 
+  @Override
   public PackTypeFullViewModel build() {
     PackTypeFullViewModel viewModel = new PackTypeFullViewModel();
     viewModel.setId(id);

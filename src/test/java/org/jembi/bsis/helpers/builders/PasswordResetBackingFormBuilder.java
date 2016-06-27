@@ -2,7 +2,7 @@ package org.jembi.bsis.helpers.builders;
 
 import org.jembi.bsis.backingform.PasswordResetBackingForm;
 
-public class PasswordResetBackingFormBuilder {
+public class PasswordResetBackingFormBuilder extends AbstractBuilder<PasswordResetBackingForm> {
 
   private String username;
 
@@ -11,6 +11,7 @@ public class PasswordResetBackingFormBuilder {
     return this;
   }
 
+  @Override
   public PasswordResetBackingForm build() {
     PasswordResetBackingForm form = new PasswordResetBackingForm();
     form.setUsername(username);
