@@ -55,6 +55,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   private ComponentViewModelFactory componentViewModelFactory;
   @Mock
   private ComponentTypeRepository componentTypeRepository;
+  @Mock
+  private ComponentStatusCalculator componentStatusCalculator;
 
   @Test
   public void testMarkComponentsBelongingToDonorAsUnsafe_shouldDelegateToRepositoryWithCorrectParameters() {
@@ -476,5 +478,70 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // verify results
     verify(componentRepository, times(0)).addComponent(Mockito.any(Component.class));
+  }
+  
+  @Test
+  public void testFindComponentById_shouldCallRepository() throws Exception {
+    // set up data
+    Long id = Long.valueOf(1);
+    
+    // mocks
+    when(componentRepository.findComponentById(id)).thenReturn(aComponent().build());
+    
+    // SUT
+    componentCRUDService.findComponentById(id);
+    
+    // check
+    verify(componentRepository).findComponentById(id);
+  }
+  
+  @Test
+  public void testFindComponentsByDINAndType_shouldCallRepository() throws Exception {
+    // set up data
+    String din = String.valueOf("1234567");
+    Long id = Long.valueOf(1);
+    
+    // mocks
+    when(componentRepository.findComponentsByDINAndType(din, id)).thenReturn(Arrays.asList(aComponent().build()));
+    
+    // SUT
+    componentCRUDService.findComponentsByDINAndType(din, id);
+    
+    // check
+    verify(componentRepository).findComponentsByDINAndType(din, id);
+  }
+  
+  @Test
+  public void testAddComponent_shouldCallStatusCalculatorAndRepository() throws Exception {
+    // set up data
+    Component component = aComponent().withId(1L).build();
+    
+    // mocks
+    when(componentStatusCalculator.updateComponentStatus(component)).thenReturn(false);
+    when(componentRepository.addComponent(component)).thenReturn(component);
+    
+    // SUT
+    componentCRUDService.addComponent(component);
+    
+    // check
+    verify(componentStatusCalculator).updateComponentStatus(component);
+    verify(componentRepository).addComponent(component);
+  }
+  
+  @Test
+  public void testUpdateComponent_shouldCallStatusCalculatorAndRepository() throws Exception {
+    // set up data
+    Component component = aComponent().withId(1L).build();
+    
+    // mocks
+    when(componentStatusCalculator.updateComponentStatus(component)).thenReturn(false);
+    when(componentRepository.updateComponent(component)).thenReturn(component);
+    
+    // SUT
+    componentCRUDService.updateComponent(component);
+    
+    // check
+    verify(componentStatusCalculator).updateComponentStatus(component);
+    verify(componentRepository).updateComponent(component);
   }
 }

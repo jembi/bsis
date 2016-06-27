@@ -40,6 +40,9 @@ public class ComponentCRUDService {
 
   @Autowired
   private ComponentTypeRepository componentTypeRepository;
+  
+  @Autowired
+  private ComponentStatusCalculator componentStatusCalculator;
 
   /**
    * Change the status of components belonging to the donor from AVAILABLE to UNSAFE.
@@ -67,7 +70,7 @@ public class ComponentCRUDService {
 
     for (Component component : donation.getComponents()) {
 
-      if (!component.getIsDeleted() && componentRepository.updateComponentInternalFields(component)) {
+      if (!component.getIsDeleted() && componentStatusCalculator.updateComponentStatus(component)) {
         componentRepository.updateComponent(component);
       }
     }
@@ -150,7 +153,7 @@ public class ComponentCRUDService {
           component.setCreatedOn(createdOn);
           component.setExpiresOn(expiresOn);
 
-          componentRepository.addComponent(component);
+          addComponent(component);
 
           // Set source component status to PROCESSED
           parentComponent.setStatus(ComponentStatus.PROCESSED);
@@ -158,7 +161,7 @@ public class ComponentCRUDService {
       }
     }
     
-    return componentRepository.updateComponent(parentComponent);
+    return updateComponent(parentComponent);
   }
 
   public void discardComponents(List<Long> componentIds, Long discardReasonId, String discardReasonText) {
@@ -196,12 +199,26 @@ public class ComponentCRUDService {
       existingComponent.setInventoryStatus(InventoryStatus.REMOVED);
     }
     
-    componentRepository.updateComponent(existingComponent);
+    updateComponent(existingComponent);
     
     return existingComponent;
   }
   
+  public Component addComponent(Component component) {
+    componentStatusCalculator.updateComponentStatus(component);
+    return componentRepository.addComponent(component);
+  }
+  
   public Component updateComponent(Component component) {
+    componentStatusCalculator.updateComponentStatus(component);
     return componentRepository.updateComponent(component);
+  }
+  
+  public Component findComponentById(Long id) {
+    return componentRepository.findComponentById(id);
+  }
+  
+  public List<Component> findComponentsByDINAndType(String donationIdentificationNumber, Long componentTypeId) {
+    return componentRepository.findComponentsByDINAndType(donationIdentificationNumber, componentTypeId);
   }
 }

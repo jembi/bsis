@@ -14,7 +14,6 @@ import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.LotReleaseConstant;
 import org.jembi.bsis.model.inventory.InventoryStatus;
-import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +26,17 @@ public class LabellingCRUDService {
   private DonationRepository donationRepository;
 
   @Autowired
-  private ComponentRepository componentRepository;
+  private ComponentCRUDService componentCRUDService;
   
   public List<Map<String, Object>> findlotRelease(String donationIdentificationNumber, long componentTypeId) {
     Donation donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
-    List<Component> components = componentRepository.findComponentsByDINAndType(donationIdentificationNumber, componentTypeId);
+    List<Component> components = componentCRUDService.findComponentsByDINAndType(donationIdentificationNumber, componentTypeId);
     List<Map<String, Object>> componentStatuses = getComponentLabellingStatus(donation, components);
     return componentStatuses;
   }
 
   public String printPackLabel(Long componentId) {
-    Component component = componentRepository.findComponentById(componentId);
+    Component component = componentCRUDService.findComponentById(componentId);
     Donation donation = component.getDonation();
 
     // Check to make sure label can be printed
@@ -48,7 +47,7 @@ public class LabellingCRUDService {
     // If current status is NOT_IN_STOCK, update inventory status to IN_STOCK for this component
     if (component.getInventoryStatus().equals(InventoryStatus.NOT_IN_STOCK)) {
       component.setInventoryStatus(InventoryStatus.IN_STOCK);
-      componentRepository.updateComponent(component);
+      componentCRUDService.updateComponent(component);
     }
 
     // Generate label
@@ -103,7 +102,7 @@ public class LabellingCRUDService {
   }
 
   public String printDiscardLabel(Long componentId) {
-    Component component = componentRepository.findComponentById(componentId);
+    Component component = componentCRUDService.findComponentById(componentId);
     
     // check to make sure discard label can be printed
     if (!checkComponentForDiscard(component)) {
