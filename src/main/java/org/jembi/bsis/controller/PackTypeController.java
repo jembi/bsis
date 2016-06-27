@@ -7,9 +7,7 @@ import javax.validation.Valid;
 
 import org.jembi.bsis.backingform.PackTypeBackingForm;
 import org.jembi.bsis.backingform.validator.PackTypeBackingFormValidator;
-import org.jembi.bsis.factory.PackTypeFactory;
-import org.jembi.bsis.model.packtype.PackType;
-import org.jembi.bsis.repository.PackTypeRepository;
+import org.jembi.bsis.controllerservice.PackTypeControllerService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.viewmodel.PackTypeViewFullModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class PackTypeController {
 
   @Autowired
-  PackTypeRepository packTypeRepository;
-
-  @Autowired
   private PackTypeBackingFormValidator packTypeBackingFormValidator;
-
   @Autowired
-  private PackTypeFactory packTypeFactory;
+  private PackTypeControllerService packTypeControllerService;
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
@@ -45,37 +39,34 @@ public class PackTypeController {
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_PACK_TYPES + "')")
   public Map<String, Object> getPackTypes() {
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("allPackTypes", packTypeFactory.createFullViewModels(packTypeRepository.getAllPackTypes()));
+    Map<String, Object> map = new HashMap<>();
+    map.put("allPackTypes", packTypeControllerService.getAllPackTypes());
     return map;
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_PACK_TYPES + "')")
   public ResponseEntity<Map<String, Object>> getPackTypeById(@PathVariable Long id) {
-    Map<String, Object> map = new HashMap<String, Object>();
-    PackType packType = packTypeRepository.getPackTypeById(id);
-    map.put("packtype", packTypeFactory.createFullViewModel(packType));
+    Map<String, Object> map = new HashMap<>();
+    map.put("packtype", packTypeControllerService.getPackTypeById(id));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_PACK_TYPES + "')")
   public ResponseEntity<PackTypeViewFullModel> savePackType(@Valid @RequestBody PackTypeBackingForm formData) {
-    PackType packType = packTypeFactory.createEntity(formData);
-    packType = packTypeRepository.savePackType(packType);
-    return new ResponseEntity<>(packTypeFactory.createFullViewModel(packType), HttpStatus.CREATED);
+    PackTypeViewFullModel packType = packTypeControllerService.createPackType(formData);
+    return new ResponseEntity<>(packType, HttpStatus.CREATED);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_PACK_TYPES + "')")
   public ResponseEntity<Map<String, Object>> updatePackType(@Valid @RequestBody PackTypeBackingForm formData,
       @PathVariable Long id) {
-    Map<String, Object> map = new HashMap<String, Object>();
-    PackType packType = packTypeFactory.createEntity(formData);
-    packType.setId(id);
-    packType = packTypeRepository.updatePackType(packType);
-    map.put("packtype", packTypeFactory.createFullViewModel(packType));
+    // Use the id from the path
+    formData.setId(id);
+    Map<String, Object> map = new HashMap<>();
+    map.put("packtype", packTypeControllerService.updatePackType(formData));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
