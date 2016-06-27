@@ -17,7 +17,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
 
   private Long id;
   private ComponentStatus status;
-  private Donation donation;
+  private Donation donation = DonationBuilder.aDonation().build();
   private ComponentType componentType;
   private InventoryStatus inventoryStatus = InventoryStatus.NOT_IN_STOCK;
   private Location location = aVenue().build();

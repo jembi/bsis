@@ -14,10 +14,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.jembi.bsis.factory.BloodTransportBoxViewModelFactory;
-import org.jembi.bsis.factory.ComponentBatchViewModelFactory;
-import org.jembi.bsis.factory.ComponentViewModelFactory;
-import org.jembi.bsis.factory.DonationBatchViewModelFactory;
+import org.jembi.bsis.helpers.builders.ComponentViewModelBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.componentbatch.BloodTransportBox;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
@@ -85,7 +82,7 @@ public class ComponentBatchViewModelFactoryTests {
         .build();
     
     // set up mocks
-    ComponentViewModel componentViewModel = new ComponentViewModel(component);
+    ComponentViewModel componentViewModel = ComponentViewModelBuilder.aComponentViewModel().build();
     when(componentViewModelFactory.createComponentViewModels(componentBatch.getComponents())).thenReturn(Arrays.asList(componentViewModel));
     
     DonationBatchViewModel donationBatchViewModel = new DonationBatchViewModel();

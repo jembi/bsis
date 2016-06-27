@@ -9,11 +9,9 @@ import java.util.List;
 
 import org.hamcrest.Matchers;
 import org.jembi.bsis.backingform.ReturnFormBackingForm;
-import org.jembi.bsis.factory.ComponentViewModelFactory;
-import org.jembi.bsis.factory.LocationViewModelFactory;
-import org.jembi.bsis.factory.ReturnFormFactory;
 import org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder;
 import org.jembi.bsis.helpers.builders.ComponentBuilder;
+import org.jembi.bsis.helpers.builders.ComponentViewModelBuilder;
 import org.jembi.bsis.helpers.builders.LocationBackingFormBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.builders.ReturnFormBackingFormBuilder;
@@ -126,12 +124,13 @@ public class ReturnFormFactoryTests {
     Location returnedTo = LocationBuilder.aDistributionSite().withId(2L).build();
     Date returnDate = new Date();
     Component component = ComponentBuilder.aComponent().withId(1L).build();
+    ComponentViewModel componentViewModel = ComponentViewModelBuilder.aComponentViewModel().withId(1L).build();
 
     ReturnFormFullViewModel expectedViewModel = ReturnFormFullViewModelBuilder.aReturnFormFullViewModel()
         .withReturnedFrom(new LocationViewModel(returnedFrom))
         .withReturnedTo(new LocationViewModel(returnedTo))
         .withReturnDate(returnDate)
-        .withComponent(new ComponentViewModel(component))
+        .withComponent(componentViewModel)
         .withPermission("canEdit", true)
         .withPermission("canReturn", true)
         .withPermission("canDiscard", true)
