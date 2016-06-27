@@ -6,7 +6,7 @@ import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 
-public class ComponentViewModelBuilder extends AbstractBuilder<ComponentViewModel> {
+public class ComponentViewModelBuilder {
 
   private Long id;
   private LocationViewModel location;
@@ -51,7 +51,6 @@ public class ComponentViewModelBuilder extends AbstractBuilder<ComponentViewMode
     return this;
   }
 
-  @Override
   public ComponentViewModel build() {
     ComponentViewModel viewModel = new ComponentViewModel();
     viewModel.setId(id);

@@ -2,13 +2,17 @@ package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
+import static org.jembi.bsis.helpers.matchers.ComponentManagementViewModelMatcher.hasSameStateAsComponentManagementViewModel;
 import static org.jembi.bsis.helpers.matchers.ComponentViewModelMatcher.hasSameStateAsComponentViewModel;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.jembi.bsis.controller.ComponentConstraintChecker;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.helpers.builders.ComponentViewModelBuilder;
 import org.jembi.bsis.helpers.builders.DonationBuilder;
@@ -18,6 +22,7 @@ import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
@@ -32,16 +37,19 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class ComponentViewModelFactoryTests {
   
   @InjectMocks
-  ComponentViewModelFactory componentViewModelFactory;
+  private ComponentViewModelFactory componentViewModelFactory;
   
   @Mock
-  LocationViewModelFactory locationViewModelFactory;
+  private LocationViewModelFactory locationViewModelFactory;
 
   @Mock
-  ComponentTypeFactory componentTypeFactory;
+  private ComponentTypeFactory componentTypeFactory;
 
   @Mock
-  PackTypeFactory packTypeFactory;
+  private PackTypeFactory packTypeFactory;
+
+  @Mock
+  private ComponentConstraintChecker componentConstraintChecker;
 
   @Test
   public void createComponentViewModel_oneComponent() throws Exception {
@@ -107,5 +115,41 @@ public class ComponentViewModelFactoryTests {
     // do asserts
     Assert.assertNotNull("View models created", viewModels);
     Assert.assertTrue("No view models", viewModels.isEmpty());
+  }
+
+  @Test
+  public void createManagementViewModel_oneComponent() {
+    // set up data
+    Date createdOn = new Date();
+    ComponentType componentType = ComponentTypeBuilder.aComponentType().build();
+    Component component = aComponent()
+        .withId(1L)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withComponentCode("0011")
+        .withComponentType(componentType)
+        .withCreatedOn(createdOn)
+        .withWeight(222)
+        .build();
+    ComponentManagementViewModel expectedViewModel = aComponentManagementViewModel()
+        .withId(1L)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withComponentCode("0011")
+        .withComponentType(new ComponentTypeViewModel(componentType))
+        .withCreatedOn(createdOn)
+        .withWeigth(222)
+        .withPermission("canDiscard", true)
+        .withExpiryStatus("")
+        .build();
+
+    // setup mocks
+    when(componentTypeFactory.createViewModel(componentType)).thenReturn(new ComponentTypeViewModel(componentType));
+    when(componentConstraintChecker.canDiscard(component)).thenReturn(true);
+
+    // run test
+    ComponentManagementViewModel convertedViewModel = componentViewModelFactory.createManagementViewModel(component);
+
+    // do asserts
+    Assert.assertNotNull("View model created", convertedViewModel);
+    assertThat("Created correctly", convertedViewModel, hasSameStateAsComponentManagementViewModel(expectedViewModel));
   }
 }

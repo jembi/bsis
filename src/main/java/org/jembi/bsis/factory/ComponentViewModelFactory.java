@@ -3,10 +3,14 @@ package org.jembi.bsis.factory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import org.jembi.bsis.controller.ComponentConstraintChecker;
 import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -24,6 +28,37 @@ public class ComponentViewModelFactory {
 
   @Autowired
   private PackTypeFactory packTypeFactory;
+
+  @Autowired
+  private ComponentConstraintChecker componentConstraintChecker;
+
+  public List<ComponentManagementViewModel> createManagementViewModels(Collection<Component> components) {
+    List<ComponentManagementViewModel> viewModels = new ArrayList<>();
+    if (components != null) {
+      Iterator<Component> it = components.iterator();
+      while (it.hasNext()) {
+        viewModels.add(createManagementViewModel(it.next()));
+      }
+    }
+    return viewModels;
+  }
+
+  public ComponentManagementViewModel createManagementViewModel(Component component) {
+    ComponentManagementViewModel viewModel = new ComponentManagementViewModel();
+    viewModel.setComponentCode(component.getComponentCode());
+    viewModel.setComponentType(componentTypeFactory.createViewModel(component.getComponentType()));
+    viewModel.setCreatedOn(component.getCreatedOn());
+    viewModel.setExpiryStatus(getExpiryStatus(component));
+    viewModel.setId(component.getId());
+    viewModel.setStatus(component.getStatus());
+    viewModel.setWeight(component.getWeight());
+
+    // Set permissions
+    Map<String, Boolean> permissions = new HashMap<>();
+    permissions.put("canDiscard", componentConstraintChecker.canDiscard(component));
+    viewModel.setPermissions(permissions);
+    return viewModel;
+  }
 
   public List<ComponentViewModel> createComponentViewModels(Collection<Component> components) {
     List<ComponentViewModel> viewModels = new ArrayList<>();
