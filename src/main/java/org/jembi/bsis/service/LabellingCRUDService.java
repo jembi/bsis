@@ -45,8 +45,8 @@ public class LabellingCRUDService {
       throw new IllegalArgumentException("Pack Label can't be printed");
     }
 
-    // If current status is NOT_LABELLED, update inventory status to IN_STOCK for this component
-    if (component.getInventoryStatus().equals(InventoryStatus.NOT_LABELLED)) {
+    // If current status is NOT_IN_STOCK, update inventory status to IN_STOCK for this component
+    if (component.getInventoryStatus().equals(InventoryStatus.NOT_IN_STOCK)) {
       component.setInventoryStatus(InventoryStatus.IN_STOCK);
       componentRepository.updateComponent(component);
     }

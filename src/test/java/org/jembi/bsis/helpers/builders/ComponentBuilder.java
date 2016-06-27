@@ -19,7 +19,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
   private ComponentStatus status;
   private Donation donation;
   private ComponentType componentType;
-  private InventoryStatus inventoryStatus = InventoryStatus.NOT_LABELLED;
+  private InventoryStatus inventoryStatus = InventoryStatus.NOT_IN_STOCK;
   private Location location = aVenue().build();
   private boolean isDeleted = false;
   private String componentCode;
