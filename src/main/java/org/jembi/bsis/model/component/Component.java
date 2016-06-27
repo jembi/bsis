@@ -92,7 +92,7 @@ public class Component extends BaseModificationTrackerEntity {
   private Date issuedOn;
 
   @Enumerated(EnumType.STRING)
-  @Column(length = 30)
+  @Column(length = 30, nullable = false)
   private ComponentStatus status;
 
   @NotAudited

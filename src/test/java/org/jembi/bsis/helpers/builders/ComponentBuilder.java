@@ -16,7 +16,7 @@ import org.jembi.bsis.model.location.Location;
 public class ComponentBuilder extends AbstractEntityBuilder<Component> {
 
   private Long id;
-  private ComponentStatus status;
+  private ComponentStatus status = ComponentStatus.QUARANTINED;
   private Donation donation = DonationBuilder.aDonation().build();
   private ComponentType componentType;
   private InventoryStatus inventoryStatus = InventoryStatus.NOT_IN_STOCK;
