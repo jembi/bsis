@@ -1,9 +1,9 @@
 package org.jembi.bsis.helpers.builders;
 
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
-import org.jembi.bsis.viewmodel.PackTypeViewFullModel;
+import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
 
-public class PackTypeViewFullModelBuilder {
+public class PackTypeFullViewModelBuilder {
 
   private Long id;
   private String packType;
@@ -16,63 +16,63 @@ public class PackTypeViewFullModelBuilder {
   private Integer minWeight;
   private Integer lowVolumeWeight;
 
-  public PackTypeViewFullModelBuilder withId(Long id) {
+  public PackTypeFullViewModelBuilder withId(Long id) {
     this.id = id;
     return this;
   }
 
-  public PackTypeViewFullModelBuilder withPackType(String packType) {
+  public PackTypeFullViewModelBuilder withPackType(String packType) {
     this.packType = packType;
     return this;
   }
 
-  public PackTypeViewFullModelBuilder withTestSampleProduced(boolean testSampleProduced) {
+  public PackTypeFullViewModelBuilder withTestSampleProduced(boolean testSampleProduced) {
     this.testSampleProduced = testSampleProduced;
     return this;
   }
 
-  public PackTypeViewFullModelBuilder withCountAsDonation(boolean countAsDonation) {
+  public PackTypeFullViewModelBuilder withCountAsDonation(boolean countAsDonation) {
     this.countAsDonation = countAsDonation;
     return this;
   }
 
-  public PackTypeViewFullModelBuilder withPeriodBetweenDonations(int periodBetweenDonations) {
+  public PackTypeFullViewModelBuilder withPeriodBetweenDonations(int periodBetweenDonations) {
     this.periodBetweenDonations = periodBetweenDonations;
     return this;
   }
 
-  public PackTypeViewFullModelBuilder thatIsNotDeleted() {
+  public PackTypeFullViewModelBuilder thatIsNotDeleted() {
     this.isDeleted = false;
     return this;
   }
 
-  public PackTypeViewFullModelBuilder thatIsDeleted() {
+  public PackTypeFullViewModelBuilder thatIsDeleted() {
     this.isDeleted = true;
     return this;
   }
 
-  public PackTypeViewFullModelBuilder withComponentType(ComponentTypeViewModel componentType) {
+  public PackTypeFullViewModelBuilder withComponentType(ComponentTypeViewModel componentType) {
     this.componentType = componentType;
     return this;
   }
 
-  public PackTypeViewFullModelBuilder withMaxWeight(Integer maxWeight) {
+  public PackTypeFullViewModelBuilder withMaxWeight(Integer maxWeight) {
     this.maxWeight = maxWeight;
     return this;
   }
 
-  public PackTypeViewFullModelBuilder withMinWeight(Integer minWeight) {
+  public PackTypeFullViewModelBuilder withMinWeight(Integer minWeight) {
     this.minWeight = minWeight;
     return this;
   }
 
-  public PackTypeViewFullModelBuilder withLowVolumeWeight(Integer lowVolumeWeight) {
+  public PackTypeFullViewModelBuilder withLowVolumeWeight(Integer lowVolumeWeight) {
     this.lowVolumeWeight = lowVolumeWeight;
     return this;
   }
 
-  public PackTypeViewFullModel build() {
-    PackTypeViewFullModel viewModel = new PackTypeViewFullModel();
+  public PackTypeFullViewModel build() {
+    PackTypeFullViewModel viewModel = new PackTypeFullViewModel();
     viewModel.setId(id);
     viewModel.setComponentType(componentType);
     viewModel.setPackType(packType);
@@ -86,8 +86,8 @@ public class PackTypeViewFullModelBuilder {
     return viewModel;
   }
 
-  public static PackTypeViewFullModelBuilder aPackTypeViewFullModel() {
-    return new PackTypeViewFullModelBuilder();
+  public static PackTypeFullViewModelBuilder aPackTypeViewFullModel() {
+    return new PackTypeFullViewModelBuilder();
   }
 
 }

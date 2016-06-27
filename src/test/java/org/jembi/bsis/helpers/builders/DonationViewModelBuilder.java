@@ -13,14 +13,14 @@ import org.jembi.bsis.viewmodel.AdverseEventViewModel;
 import org.jembi.bsis.viewmodel.DonationTypeViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
-import org.jembi.bsis.viewmodel.PackTypeViewFullModel;
+import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
 
 public class DonationViewModelBuilder extends AbstractBuilder<DonationViewModel> {
 
   private Long id;
   private Map<String, Boolean> permissions;
   private AdverseEventViewModel adverseEvent;
-  private PackTypeViewFullModel packType;
+  private PackTypeFullViewModel packType;
   private Date donationDate;
   private String donationIdentificationNumber;
   private String donorNumber;
@@ -61,7 +61,7 @@ public class DonationViewModelBuilder extends AbstractBuilder<DonationViewModel>
     return this;
   }
 
-  public DonationViewModelBuilder withPackType(PackTypeViewFullModel packType) {
+  public DonationViewModelBuilder withPackType(PackTypeFullViewModel packType) {
     this.packType = packType;
     return this;
   }

@@ -9,7 +9,7 @@ import org.jembi.bsis.backingform.PackTypeBackingForm;
 import org.jembi.bsis.backingform.validator.PackTypeBackingFormValidator;
 import org.jembi.bsis.controllerservice.PackTypeControllerService;
 import org.jembi.bsis.utils.PermissionConstants;
-import org.jembi.bsis.viewmodel.PackTypeViewFullModel;
+import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,8 +54,8 @@ public class PackTypeController {
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_PACK_TYPES + "')")
-  public ResponseEntity<PackTypeViewFullModel> savePackType(@Valid @RequestBody PackTypeBackingForm formData) {
-    PackTypeViewFullModel packType = packTypeControllerService.createPackType(formData);
+  public ResponseEntity<PackTypeFullViewModel> savePackType(@Valid @RequestBody PackTypeBackingForm formData) {
+    PackTypeFullViewModel packType = packTypeControllerService.createPackType(formData);
     return new ResponseEntity<>(packType, HttpStatus.CREATED);
   }
 

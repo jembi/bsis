@@ -1,6 +1,6 @@
 package org.jembi.bsis.viewmodel;
 
-public class PackTypeViewFullModel extends PackTypeViewModel {
+public class PackTypeFullViewModel extends PackTypeViewModel {
 
   private ComponentTypeViewModel componentType;
   private Boolean canPool;

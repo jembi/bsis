@@ -14,6 +14,9 @@ public class PackTypeBackingFormBuilder extends AbstractBuilder<PackTypeBackingF
   private Boolean countAsDonation;
   private Boolean testSampleProduced;
   private Integer periodBetweenDonations;
+  private Integer maxWeight;
+  private Integer minWeight;
+  private Integer lowVolumeWeight;
 
   public PackTypeBackingFormBuilder withId(Long id) {
     this.id = id;
@@ -60,6 +63,21 @@ public class PackTypeBackingFormBuilder extends AbstractBuilder<PackTypeBackingF
     return this;
   }
   
+  public PackTypeBackingFormBuilder withMinWeight(Integer minWeight) {
+    this.minWeight = minWeight;
+    return this;
+  }
+  
+  public PackTypeBackingFormBuilder withMaxWeight(Integer maxWeight) {
+    this.maxWeight = maxWeight;
+    return this;
+  }
+  
+  public PackTypeBackingFormBuilder withLowVolumeWeight(Integer lowVolumeWeight) {
+    this.lowVolumeWeight = lowVolumeWeight;
+    return this;
+  }
+  
   @Override
   public PackTypeBackingForm build() {
     PackTypeBackingForm form = new PackTypeBackingForm();
@@ -72,6 +90,9 @@ public class PackTypeBackingFormBuilder extends AbstractBuilder<PackTypeBackingF
     form.setCountAsDonation(countAsDonation);
     form.setTestSampleProduced(testSampleProduced);
     form.setPeriodBetweenDonations(periodBetweenDonations);
+    form.setMinWeight(minWeight);
+    form.setMaxWeight(maxWeight);
+    form.setLowVolumeWeight(lowVolumeWeight);
     return form;
   }
   

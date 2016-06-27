@@ -4,7 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.PackTypeBackingFormBuilder.aPackTypeBackingForm;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
-import static org.jembi.bsis.helpers.builders.PackTypeViewFullModelBuilder.aPackTypeViewFullModel;
+import static org.jembi.bsis.helpers.builders.PackTypeFullViewModelBuilder.aPackTypeViewFullModel;
 import static org.jembi.bsis.helpers.matchers.PackTypeMatcher.hasSameStateAsPackType;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.when;
@@ -17,7 +17,7 @@ import org.jembi.bsis.factory.PackTypeFactory;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.PackTypeRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
-import org.jembi.bsis.viewmodel.PackTypeViewFullModel;
+import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -35,7 +35,7 @@ public class PackTypeControllerServiceTests extends UnitTestSuite {
   public void testGetAllPackTypes_shouldFindAndReturnAllPackTypes() {
     // Set up
     List<PackType> packTypes = Arrays.asList(aPackType().withId(1L).build(), aPackType().withId(2L).build());
-    List<PackTypeViewFullModel> expectedPackTypeViewModels = Arrays.asList(aPackTypeViewFullModel().withId(1L).build(),
+    List<PackTypeFullViewModel> expectedPackTypeViewModels = Arrays.asList(aPackTypeViewFullModel().withId(1L).build(),
         aPackTypeViewFullModel().withId(2L).build());
 
     // Mock
@@ -43,7 +43,7 @@ public class PackTypeControllerServiceTests extends UnitTestSuite {
     when(packTypeFactory.createFullViewModels(packTypes)).thenReturn(expectedPackTypeViewModels);
     
     // Exercise SUT
-    List<PackTypeViewFullModel> returnedPackTypes = packTypeControllerService.getAllPackTypes();
+    List<PackTypeFullViewModel> returnedPackTypes = packTypeControllerService.getAllPackTypes();
     
     // Verify
     assertThat(returnedPackTypes, is(expectedPackTypeViewModels));
@@ -54,14 +54,14 @@ public class PackTypeControllerServiceTests extends UnitTestSuite {
     // Set up
     long packTypeId = 88L;
     PackType packType = aPackType().withId(packTypeId).build();
-    PackTypeViewFullModel expectedPackTypeViewModel = aPackTypeViewFullModel().withId(packTypeId).build();
+    PackTypeFullViewModel expectedPackTypeViewModel = aPackTypeViewFullModel().withId(packTypeId).build();
     
     // Mock
     when(packTypeRepository.getPackTypeById(packTypeId)).thenReturn(packType);
     when(packTypeFactory.createFullViewModel(packType)).thenReturn(expectedPackTypeViewModel);
     
     // Exercise SUT
-    PackTypeViewFullModel returnedPackTypeViewModel = packTypeControllerService.getPackTypeById(packTypeId);
+    PackTypeFullViewModel returnedPackTypeViewModel = packTypeControllerService.getPackTypeById(packTypeId);
     
     // Verify
     assertThat(returnedPackTypeViewModel, is(expectedPackTypeViewModel));
@@ -73,7 +73,7 @@ public class PackTypeControllerServiceTests extends UnitTestSuite {
     PackTypeBackingForm packTypeBackingForm = aPackTypeBackingForm().withPackType("Test").build();
     PackType packTypeFromBackingForm = aPackType().withPackType("Test").build();
     PackType createdPackType = aPackType().withId(1L).withPackType("Test").build();
-    PackTypeViewFullModel expectedPackTypeViewModel = aPackTypeViewFullModel().withPackType("Test").build();
+    PackTypeFullViewModel expectedPackTypeViewModel = aPackTypeViewFullModel().withPackType("Test").build();
     
     // Mock
     when(packTypeFactory.createEntity(packTypeBackingForm)).thenReturn(packTypeFromBackingForm);
@@ -81,7 +81,7 @@ public class PackTypeControllerServiceTests extends UnitTestSuite {
     when(packTypeFactory.createFullViewModel(createdPackType)).thenReturn(expectedPackTypeViewModel);
     
     // Exercise SUT
-    PackTypeViewFullModel returnedPackTypeViewModel = packTypeControllerService.createPackType(packTypeBackingForm);
+    PackTypeFullViewModel returnedPackTypeViewModel = packTypeControllerService.createPackType(packTypeBackingForm);
     
     // Verify
     assertThat(returnedPackTypeViewModel, is(expectedPackTypeViewModel));
@@ -93,7 +93,7 @@ public class PackTypeControllerServiceTests extends UnitTestSuite {
     PackTypeBackingForm packTypeBackingForm = aPackTypeBackingForm().withPackType("Test").build();
     PackType packTypeFromBackingForm = aPackType().withId(1L).withPackType("Test").build();
     PackType updatedPackType = aPackType().withId(1L).withPackType("Test").build();
-    PackTypeViewFullModel expectedPackTypeViewModel = aPackTypeViewFullModel().withPackType("Test").build();
+    PackTypeFullViewModel expectedPackTypeViewModel = aPackTypeViewFullModel().withPackType("Test").build();
     
     // Mock
     when(packTypeFactory.createEntity(packTypeBackingForm)).thenReturn(packTypeFromBackingForm);
@@ -101,7 +101,7 @@ public class PackTypeControllerServiceTests extends UnitTestSuite {
     when(packTypeFactory.createFullViewModel(updatedPackType)).thenReturn(expectedPackTypeViewModel);
     
     // Exercise SUT
-    PackTypeViewFullModel returnedPackTypeViewModel = packTypeControllerService.updatePackType(packTypeBackingForm);
+    PackTypeFullViewModel returnedPackTypeViewModel = packTypeControllerService.updatePackType(packTypeBackingForm);
     
     // Verify
     assertThat(returnedPackTypeViewModel, is(expectedPackTypeViewModel));

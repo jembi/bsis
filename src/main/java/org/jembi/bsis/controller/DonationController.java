@@ -35,7 +35,7 @@ import org.jembi.bsis.service.FormFieldAccessorService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.utils.PermissionUtils;
 import org.jembi.bsis.viewmodel.DonationSummaryViewModel;
-import org.jembi.bsis.viewmodel.PackTypeViewFullModel;
+import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -219,9 +219,9 @@ public class DonationController {
     m.put("adverseEventTypes", adverseEventTypeRepository.findNonDeletedAdverseEventTypeViewModels());
   }
   
-  private List<PackTypeViewFullModel> getPackTypeViewModels(List<PackType> packTypes) {
+  private List<PackTypeFullViewModel> getPackTypeViewModels(List<PackType> packTypes) {
     // FIXME: use a factory
-    List<PackTypeViewFullModel> viewModels = new ArrayList<PackTypeViewFullModel>();
+    List<PackTypeFullViewModel> viewModels = new ArrayList<PackTypeFullViewModel>();
     for (PackType packtType : packTypes) {
       viewModels.add(packTypeFactory.createFullViewModel(packtType));
     }

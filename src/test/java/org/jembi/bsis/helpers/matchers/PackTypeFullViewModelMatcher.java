@@ -4,13 +4,13 @@ import java.util.Objects;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
-import org.jembi.bsis.viewmodel.PackTypeViewFullModel;
+import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
 
-public class PackTypeFullViewModelMatcher extends TypeSafeMatcher<PackTypeViewFullModel> {
+public class PackTypeFullViewModelMatcher extends TypeSafeMatcher<PackTypeFullViewModel> {
 
-  private PackTypeViewFullModel expected;
+  private PackTypeFullViewModel expected;
 
-  public PackTypeFullViewModelMatcher(PackTypeViewFullModel expected) {
+  public PackTypeFullViewModelMatcher(PackTypeFullViewModel expected) {
     this.expected = expected;
   }
 
@@ -31,7 +31,7 @@ public class PackTypeFullViewModelMatcher extends TypeSafeMatcher<PackTypeViewFu
   }
 
   @Override
-  public boolean matchesSafely(PackTypeViewFullModel actual) {
+  public boolean matchesSafely(PackTypeFullViewModel actual) {
     return Objects.equals(actual.getId(), expected.getId()) &&
         Objects.equals(actual.getTestSampleProduced(), expected.getTestSampleProduced()) &&
         Objects.equals(actual.getPeriodBetweenDonations(), expected.getPeriodBetweenDonations()) &&
@@ -44,7 +44,7 @@ public class PackTypeFullViewModelMatcher extends TypeSafeMatcher<PackTypeViewFu
         Objects.equals(actual.getLowVolumeWeight(), expected.getLowVolumeWeight());
   }
 
-  public static PackTypeFullViewModelMatcher hasSameStateAsPackTypeViewFullModel(PackTypeViewFullModel expected) {
+  public static PackTypeFullViewModelMatcher hasSameStateAsPackTypeViewFullModel(PackTypeFullViewModel expected) {
     return new PackTypeFullViewModelMatcher(expected);
   }
 

@@ -17,18 +17,35 @@ public class PackTypeBackingFormValidator extends BaseValidator<PackTypeBackingF
   @Override
   public void validateForm(PackTypeBackingForm form, Errors errors) {
     if (!form.getTestSampleProduced() && form.getCountAsDonation()) {
-      errors.rejectValue("type.countAsDonation", "countAsDonation.notAllowed", "Pack types that don't produce " +
+      errors.rejectValue("countAsDonation", "countAsDonation.notAllowed", "Pack types that don't produce " +
           "a test sample cannot be counted as a donation");
     }
 
     if (isDuplicatePackTypeName(form)) {
-      errors.rejectValue("type.packType", "name.exists", "Pack Type name already exists.");
+      errors.rejectValue("packType", "name.exists", "Pack Type name already exists.");
+    }
+    
+    if (form.getCountAsDonation()) {
+      if (form.getMinWeight() == null) {
+        errors.rejectValue("minWeight", "minWeight.required", "minWeight required for Pack types that can produce Components");
+      }
+      if (form.getMaxWeight() == null) {
+        errors.rejectValue("maxWeight", "maxWeight.required", "maxWeight required for Pack types that can produce Components");
+      }
+      if (form.getLowVolumeWeight() == null) {
+        errors.rejectValue("lowVolumeWeight", "lowVolumeWeight.required", "lowVolumeWeight required for Pack types that can produce Components");
+      }
     }
   }
 
   @Override
   public String getFormName() {
     return "packType";
+  }
+
+  @Override
+  protected boolean formHasBaseEntity() {
+    return false;
   }
 
   private boolean isDuplicatePackTypeName(PackTypeBackingForm packType) {
