@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -125,74 +124,6 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
     List<Component> all = componentRepository.findAnyComponent(null, null, null, start, end);
     Assert.assertNotNull("There are matching components", all);
     Assert.assertEquals("There should be 7 components", 7, all.size());
-  }
-
-  @Test
-  public void testFindNumberOfDiscardedComponentsDaily() throws Exception {
-    Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-10");
-    Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
-    List<String> venues = new ArrayList<String>();
-    venues.add("1");
-    List<String> bloodGroups = new ArrayList<String>();
-    bloodGroups.add("AB+");
-    bloodGroups.add("AB-");
-    Map<String, Map<Long, Long>> results = componentRepository.findNumberOfDiscardedComponents(donationDateFrom,
-        donationDateTo, "daily", venues, bloodGroups);
-    Assert.assertEquals("2 blood types searched", 2, results.size());
-    Date formattedDate = new SimpleDateFormat("dd/MM/yyyy").parse("11/08/2015");
-    Map<Long, Long> abPlusResults = results.get("AB+");
-    Assert.assertEquals("3 days in the searched period", 3, abPlusResults.size());
-    Long abPlus11thResults = abPlusResults.get(formattedDate.getTime());
-    Assert.assertEquals("1 AB+ discarded donations", new Long(1), abPlus11thResults);
-    Map<Long, Long> abMinusResults = results.get("AB-");
-    Long abMinus11thResults = abMinusResults.get(formattedDate.getTime());
-    Assert.assertEquals("0 AB- donations", new Long(0), abMinus11thResults);
-  }
-
-  @Test
-  public void testFindNumberOfDiscardedComponentsMonthly() throws Exception {
-    Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-10");
-    Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
-    List<String> venues = new ArrayList<String>();
-    venues.add("1");
-    List<String> bloodGroups = new ArrayList<String>();
-    bloodGroups.add("AB+");
-    bloodGroups.add("AB-");
-    bloodGroups.add("O-");
-    bloodGroups.add("O+");
-    Map<String, Map<Long, Long>> results = componentRepository.findNumberOfDiscardedComponents(donationDateFrom,
-        donationDateTo, "monthly", venues, bloodGroups);
-    Assert.assertEquals("4 blood types searched", 4, results.size());
-    Date formattedDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/08/2015");
-    Map<Long, Long> abPlusResults = results.get("AB+");
-    Assert.assertEquals("1 month in the searched period", 1, abPlusResults.size());
-    Long abPlusAugResults = abPlusResults.get(formattedDate.getTime());
-    Assert.assertEquals("1 AB+ discarded donations", new Long(1), abPlusAugResults);
-    Map<Long, Long> abMinusResults = results.get("AB-");
-    Long abMinusAugResults = abMinusResults.get(formattedDate.getTime());
-    Assert.assertEquals("0 AB- donations", new Long(0), abMinusAugResults);
-  }
-
-  @Test
-  public void testFindNumberOfDiscardedComponentsYearly() throws Exception {
-    Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2014-08-10");
-    Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
-    List<String> venues = new ArrayList<String>();
-    venues.add("1");
-    List<String> bloodGroups = new ArrayList<String>();
-    bloodGroups.add("AB-");
-    bloodGroups.add("AB+");
-    Map<String, Map<Long, Long>> results = componentRepository.findNumberOfDiscardedComponents(donationDateFrom,
-        donationDateTo, "yearly", venues, bloodGroups);
-    Assert.assertEquals("2 blood types searched", 2, results.size());
-    Date formattedDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2015");
-    Map<Long, Long> abPlusResults = results.get("AB+");
-    Assert.assertEquals("2 year in the searched period", 2, abPlusResults.size());
-    Long abPlus2015Results = abPlusResults.get(formattedDate.getTime());
-    Assert.assertEquals("1 AB+ discarded donations", new Long(1), abPlus2015Results);
-    Map<Long, Long> abMinusResults = results.get("AB-");
-    Long abMinus2015Results = abMinusResults.get(formattedDate.getTime());
-    Assert.assertEquals("0 AB- donations", new Long(0), abMinus2015Results);
   }
 
   @Test
