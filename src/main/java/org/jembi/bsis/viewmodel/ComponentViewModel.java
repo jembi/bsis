@@ -16,7 +16,7 @@ public class ComponentViewModel extends BaseViewModel {
   private Date expiresOn;
   private String donationIdentificationNumber;
   private String notes;
-  private PackTypeViewFullModel packType;
+  private PackTypeFullViewModel packType;
   private ComponentStatus status;
   private String expiryStatus;
   private Date createdDate;
@@ -76,11 +76,11 @@ public class ComponentViewModel extends BaseViewModel {
     this.notes = notes;
   }
 
-  public PackTypeViewFullModel getPackType() {
+  public PackTypeFullViewModel getPackType() {
     return packType;
   }
 
-  public void setPackType(PackTypeViewFullModel packType) {
+  public void setPackType(PackTypeFullViewModel packType) {
     this.packType = packType;
   }
 
