@@ -29,7 +29,6 @@ import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.model.util.BloodGroup;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.service.DonationConstraintChecker;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -186,31 +185,6 @@ public class ComponentRepository {
         .setParameter("isDeleted", Boolean.FALSE)
         .setParameter("donationIdentificationNumber", donationIdentificationNumber)
         .getResultList();
-  }
-
-  public List<Component> getAllUnissuedComponents() {
-    String queryString = "SELECT c FROM Component c where c.isDeleted = :isDeleted and c.isIssued= :isIssued";
-    TypedQuery<Component> query = em.createQuery(queryString, Component.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("isIssued", Boolean.FALSE);
-    return query.getResultList();
-  }
-
-  public List<Component> getAllUnissuedThirtyFiveDayComponents() {
-    String queryString = "SELECT c FROM Component c where c.isDeleted = :isDeleted and c.isIssued= :isIssued and c.createdOn > :minDate";
-    TypedQuery<Component> query = em.createQuery(queryString, Component.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("isIssued", Boolean.FALSE);
-    query.setParameter("minDate", new DateTime(new Date()).minusDays(35)
-        .toDate());
-    return query.getResultList();
-  }
-
-  public List<Component> getAllComponents() {
-    String queryString = "SELECT c FROM Component c where c.isDeleted = :isDeleted";
-    TypedQuery<Component> query = em.createQuery(queryString, Component.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    return query.getResultList();
   }
 
   public Component findComponent(Long componentId) {

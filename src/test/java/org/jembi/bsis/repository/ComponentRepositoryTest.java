@@ -13,9 +13,6 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.repository.ComponentRepository;
-import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
-import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -41,34 +38,6 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
   protected IDataSet getDataSet() throws Exception {
     File file = new File("src/test/resources/dataset/ComponentRepositoryDataset.xml");
     return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
-  }
-
-  // TODO: test the following methods
-  //findMatchingComponentsForRequest
-  //findNumberOfIssuedComponents
-  //addComponentCombination
-
-  @Test
-  public void testGetAllComponents() throws Exception {
-    List<Component> all = componentRepository.getAllComponents();
-    Assert.assertNotNull("There are Components", all);
-    Assert.assertEquals("There are 7 Components", 7, all.size());
-  }
-
-  @Test
-  @Ignore("Bug - error in HQL: could not resolve property: isIssued of: org.jembi.bsis.model.component.Component [SELECT c FROM org.jembi.bsis.model.component.Component c where c.isDeleted = :isDeleted and c.isIssued= :isIssued]")
-  public void testGetAllUnissuedComponents() throws Exception {
-    List<Component> all = componentRepository.getAllUnissuedComponents();
-    Assert.assertNotNull("There are Components", all);
-    Assert.assertEquals("There are 3 Components", 3, all.size());
-  }
-
-  @Test
-  @Ignore("Bug - error in HQL: could not resolve property: isIssued of: org.jembi.bsis.model.component.Component [SELECT p FROM org.jembi.bsis.model.component.Component p where p.isDeleted = :isDeleted and p.isIssued= :isIssued and p.createdOn > :minDate]")
-  public void testGetAllUnissuedThirtyFiveDayComponents() throws Exception {
-    List<Component> all = componentRepository.getAllUnissuedThirtyFiveDayComponents();
-    Assert.assertNotNull("There are Components", all);
-    Assert.assertEquals("There are 0 Components", 0, all.size());
   }
 
   @Test
