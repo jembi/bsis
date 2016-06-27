@@ -126,6 +126,8 @@ public class Component extends BaseModificationTrackerEntity {
   
   @ManyToOne(optional = false, fetch = FetchType.EAGER)
   private Location location;
+  
+  private Integer weight;
 
   public Component() {
     super();
@@ -290,5 +292,13 @@ public class Component extends BaseModificationTrackerEntity {
 
   public void setLocation(Location location) {
     this.location = location;
+  }
+
+  public Integer getWeight() {
+    return weight;
+  }
+
+  public void setWeight(Integer weight) {
+    this.weight = weight;
   }
 }
