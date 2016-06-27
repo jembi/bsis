@@ -5,7 +5,7 @@ import static org.jembi.bsis.helpers.builders.ComponentTypeBackingFormBuilder.aC
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.PackTypeBackingFormBuilder.aPackTypeBackingForm;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
-import static org.jembi.bsis.helpers.builders.PackTypeViewFullModelBuilder.aPackTypeViewFullModel;
+import static org.jembi.bsis.helpers.builders.PackTypeFullViewModelBuilder.aPackTypeViewFullModel;
 import static org.jembi.bsis.helpers.matchers.PackTypeFullViewModelMatcher.hasSameStateAsPackTypeViewFullModel;
 import static org.jembi.bsis.helpers.matchers.PackTypeMatcher.hasSameStateAsPackType;
 import static org.mockito.Mockito.when;
@@ -18,7 +18,7 @@ import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
-import org.jembi.bsis.viewmodel.PackTypeViewFullModel;
+import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -34,7 +34,7 @@ public class PackTypeFactoryTests extends UnitTestSuite {
   public void testConvertEntityToPackTypeFullViewModel_shouldReturnExpectedViewModel() {
     ComponentType componentType = ComponentTypeBuilder.aComponentType().withId(1L).build();
     ComponentTypeViewModel componentTypeViewModel = new ComponentTypeViewModel(componentType);
-    PackTypeViewFullModel expectedViewModel = aPackTypeViewFullModel()
+    PackTypeFullViewModel expectedViewModel = aPackTypeViewFullModel()
         .withComponentType(componentTypeViewModel)
         .withPackType("Single")
         .withPeriodBetweenDonations(90)
@@ -59,7 +59,7 @@ public class PackTypeFactoryTests extends UnitTestSuite {
     // Setup mocks
     when(componentTypeFactory.createViewModel(componentType)).thenReturn(componentTypeViewModel);
 
-    PackTypeViewFullModel convertedViewModel = packTypeFactory.createFullViewModel(packType);
+    PackTypeFullViewModel convertedViewModel = packTypeFactory.createFullViewModel(packType);
 
     assertThat(convertedViewModel, hasSameStateAsPackTypeViewFullModel(expectedViewModel));
   }

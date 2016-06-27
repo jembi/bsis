@@ -10,7 +10,7 @@ import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonation
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
-import static org.jembi.bsis.helpers.builders.PackTypeViewFullModelBuilder.aPackTypeViewFullModel;
+import static org.jembi.bsis.helpers.builders.PackTypeFullViewModelBuilder.aPackTypeViewFullModel;
 import static org.jembi.bsis.helpers.matchers.DonationViewModelMatcher.hasSameStateAsDonationViewModel;
 import static org.mockito.Mockito.when;
 
@@ -34,7 +34,7 @@ import org.jembi.bsis.viewmodel.AdverseEventViewModel;
 import org.jembi.bsis.viewmodel.DonationTypeViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
-import org.jembi.bsis.viewmodel.PackTypeViewFullModel;
+import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -77,7 +77,7 @@ public class DonationViewModelFactoryTests {
     String donorNumber = "000001";
     DonationType donationType = aDonationType().withId(23L).build();
     PackType packType = aPackType().withId(IRRELEVANT_PACKTYPE_ID).build();
-    PackTypeViewFullModel packTypeFullViewModel = aPackTypeViewFullModel().withId(IRRELEVANT_PACKTYPE_ID).build();
+    PackTypeFullViewModel packTypeFullViewModel = aPackTypeViewFullModel().withId(IRRELEVANT_PACKTYPE_ID).build();
     String notes = "some notes";
     TTIStatus ttiStatus = TTIStatus.NOT_DONE;
     String batchNumber = "010100";
@@ -174,7 +174,7 @@ public class DonationViewModelFactoryTests {
     Long irrelevantAdverseEventId = 11L;
     AdverseEvent adverseEvent = anAdverseEvent().withId(irrelevantAdverseEventId).build();
     PackType packType = aPackType().withId(IRRELEVANT_PACKTYPE_ID).build();
-    PackTypeViewFullModel packTypeFullViewModel = aPackTypeViewFullModel().withId(IRRELEVANT_PACKTYPE_ID).build();
+    PackTypeFullViewModel packTypeFullViewModel = aPackTypeViewFullModel().withId(IRRELEVANT_PACKTYPE_ID).build();
     DonationType donationType = aDonationType().withId(23L).build();
     Donation donation1 = aDonation().withId(IRRELEVANT_DONATION_ID)
         .withDonor(aDonor().withId(IRRELEVANT_DONOR_ID).build())

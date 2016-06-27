@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.jembi.bsis.backingform.PackTypeBackingForm;
 import org.jembi.bsis.model.packtype.PackType;
-import org.jembi.bsis.viewmodel.PackTypeViewFullModel;
+import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
 import org.jembi.bsis.viewmodel.PackTypeViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,15 +39,15 @@ public class PackTypeFactory {
     return viewModel;
   }
 
-  public PackTypeViewFullModel createFullViewModel(PackType packType) {
-    PackTypeViewFullModel viewModel = new PackTypeViewFullModel();
+  public PackTypeFullViewModel createFullViewModel(PackType packType) {
+    PackTypeFullViewModel viewModel = new PackTypeFullViewModel();
     populateFullViewModel(packType, viewModel);
     return viewModel;
   }
 
-  public List<PackTypeViewFullModel> createFullViewModels(List<PackType> packTypes) {
+  public List<PackTypeFullViewModel> createFullViewModels(List<PackType> packTypes) {
 
-    List<PackTypeViewFullModel> viewModels = new ArrayList<PackTypeViewFullModel>();
+    List<PackTypeFullViewModel> viewModels = new ArrayList<PackTypeFullViewModel>();
     for (PackType packType : packTypes) {
       viewModels.add(createFullViewModel(packType));
     }
@@ -59,7 +59,7 @@ public class PackTypeFactory {
     viewModel.setPackType(packType.getPackType());
   }
 
-  private void populateFullViewModel(PackType packType, PackTypeViewFullModel viewModel) {
+  private void populateFullViewModel(PackType packType, PackTypeFullViewModel viewModel) {
     populateViewModel(packType, viewModel);
     viewModel.setCanPool(packType.getCanPool());
     viewModel.setCanSplit(packType.getCanSplit());
