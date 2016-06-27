@@ -30,13 +30,38 @@ public class PackTypeBackingFormValidatorTest {
   private FormFieldRepository formFieldRepository;
 
   @Test
-  public void testValid() throws Exception {
+  public void testValidCountAsDonation() throws Exception {
     // set up data
     String packTypeName = "PACKTYPE";
 
     PackTypeBackingForm form = aPackTypeBackingForm()
         .withPackType(packTypeName)
         .withCountAsDonation(true)
+        .withTestSampleProduced(true)
+        .withMaxWeight(100)
+        .withMinWeight(10)
+        .withLowVolumeWeight(25)
+        .build();
+
+    // set up mocks
+    when(packTypeRepository.findPackTypeByName(packTypeName)).thenReturn(null);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<>(), "packType");
+    packTypeBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
+  }
+  
+  @Test
+  public void testValidTestSampleOnly() throws Exception {
+    // set up data
+    String packTypeName = "PACKTYPE";
+
+    PackTypeBackingForm form = aPackTypeBackingForm()
+        .withPackType(packTypeName)
+        .withCountAsDonation(false)
         .withTestSampleProduced(true)
         .build();
 
@@ -60,14 +85,14 @@ public class PackTypeBackingFormValidatorTest {
     PackType packType = aPackType()
         .withId(packTypeId)
         .withPackType(packTypeName)
-        .withCountAsDonation(true)
+        .withCountAsDonation(false)
         .withTestSampleProduced(true)
         .build();
 
     PackTypeBackingForm form = aPackTypeBackingForm()
         .withId(packTypeId)
         .withPackType(packTypeName)
-        .withCountAsDonation(true)
+        .withCountAsDonation(false)
         .withTestSampleProduced(true)
         .build();
 
@@ -88,7 +113,7 @@ public class PackTypeBackingFormValidatorTest {
     PackTypeBackingForm form = aPackTypeBackingForm()
         .withId(1L)
         .withPackType("")
-        .withCountAsDonation(true)
+        .withCountAsDonation(false)
         .withTestSampleProduced(true)
         .build();
 
@@ -108,7 +133,7 @@ public class PackTypeBackingFormValidatorTest {
     PackTypeBackingForm form = aPackTypeBackingForm()
         .withId(1L)
         .withPackType(packTypeName)
-        .withCountAsDonation(true)
+        .withCountAsDonation(false)
         .withTestSampleProduced(true)
         .build();
 
@@ -136,6 +161,9 @@ public class PackTypeBackingFormValidatorTest {
         .withPackType(packTypeName)
         .withCountAsDonation(true)
         .withTestSampleProduced(false)
+        .withMaxWeight(100)
+        .withMinWeight(10)
+        .withLowVolumeWeight(25)
         .build();
 
     // run test
@@ -145,5 +173,30 @@ public class PackTypeBackingFormValidatorTest {
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
     Assert.assertNotNull("Error: can't count as donation if no test sample produced", errors.getFieldError("countAsDonation"));
+  }
+  
+  @Test
+  public void testInvalidWeights() throws Exception {
+    // set up data
+    String packTypeName = "PACKTYPE";
+
+    PackTypeBackingForm form = aPackTypeBackingForm()
+        .withPackType(packTypeName)
+        .withCountAsDonation(true)
+        .withTestSampleProduced(true)
+        .build();
+
+    // set up mocks
+    when(packTypeRepository.findPackTypeByName(packTypeName)).thenReturn(null);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<>(), "packType");
+    packTypeBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("Errors exist", 3, errors.getErrorCount());
+    Assert.assertNotNull("Error: minWeight", errors.getFieldError("minWeight"));
+    Assert.assertNotNull("Error: maxWeight", errors.getFieldError("maxWeight"));
+    Assert.assertNotNull("Error: lowVolumeWeight", errors.getFieldError("lowVolumeWeight"));
   }
 }

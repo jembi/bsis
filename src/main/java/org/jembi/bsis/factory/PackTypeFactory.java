@@ -20,7 +20,9 @@ public class PackTypeFactory {
     PackType packType = new PackType();
     packType.setId(backingForm.getId());
     packType.setPackType(backingForm.getPackType());
-    packType.setComponentType(componentTypeFactory.createEntity(backingForm.getComponentType()));
+    if (backingForm.getComponentType() != null) {
+      packType.setComponentType(componentTypeFactory.createEntity(backingForm.getComponentType()));
+    }
     packType.setCanPool(backingForm.getCanPool());
     packType.setCanSplit(backingForm.getCanSplit());
     packType.setIsDeleted(backingForm.getIsDeleted());
