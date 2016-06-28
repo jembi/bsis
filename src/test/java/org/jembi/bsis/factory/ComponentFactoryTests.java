@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.jembi.bsis.backingform.ComponentBackingForm;
-import org.jembi.bsis.controller.ComponentConstraintChecker;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.helpers.builders.ComponentViewModelBuilder;
 import org.jembi.bsis.helpers.builders.DonationBuilder;
@@ -26,6 +25,7 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ComponentRepository;
+import org.jembi.bsis.service.ComponentConstraintChecker;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;

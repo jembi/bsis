@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 
-import org.jembi.bsis.controller.ComponentConstraintChecker;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.returnform.ReturnForm;

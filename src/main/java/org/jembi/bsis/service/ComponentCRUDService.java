@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.jembi.bsis.controller.ComponentConstraintChecker;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;

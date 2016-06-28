@@ -18,7 +18,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.jembi.bsis.factory.ComponentFactory;
-import org.jembi.bsis.controller.ComponentConstraintChecker;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;

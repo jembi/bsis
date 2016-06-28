@@ -1,4 +1,4 @@
-package org.jembi.bsis.controller;
+package org.jembi.bsis.service;
 
 import java.util.Arrays;
 import java.util.List;

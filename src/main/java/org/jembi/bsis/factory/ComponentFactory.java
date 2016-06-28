@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.jembi.bsis.backingform.ComponentBackingForm;
-import org.jembi.bsis.controller.ComponentConstraintChecker;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.repository.ComponentRepository;
+import org.jembi.bsis.service.ComponentConstraintChecker;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.joda.time.DateTime;

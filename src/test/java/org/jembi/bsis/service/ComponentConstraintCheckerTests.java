@@ -4,7 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 
-import org.jembi.bsis.controller.ComponentConstraintChecker;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.suites.UnitTestSuite;
