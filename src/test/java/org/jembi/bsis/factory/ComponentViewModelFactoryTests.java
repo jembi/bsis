@@ -138,12 +138,16 @@ public class ComponentViewModelFactoryTests {
         .withCreatedOn(createdOn)
         .withWeigth(222)
         .withPermission("canDiscard", true)
+        .withPermission("canProcess", true)
+        .withPermission("canRecordWeight", true)
         .withExpiryStatus("")
         .build();
 
     // setup mocks
     when(componentTypeFactory.createViewModel(componentType)).thenReturn(new ComponentTypeViewModel(componentType));
     when(componentConstraintChecker.canDiscard(component)).thenReturn(true);
+    when(componentConstraintChecker.canProcess(component)).thenReturn(true);
+    when(componentConstraintChecker.canRecordWeight(component)).thenReturn(true);
 
     // run test
     ComponentManagementViewModel convertedViewModel = componentViewModelFactory.createManagementViewModel(component);

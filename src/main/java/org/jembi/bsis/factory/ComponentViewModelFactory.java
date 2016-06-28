@@ -56,6 +56,8 @@ public class ComponentViewModelFactory {
     // Set permissions
     Map<String, Boolean> permissions = new HashMap<>();
     permissions.put("canDiscard", componentConstraintChecker.canDiscard(component));
+    permissions.put("canProcess", componentConstraintChecker.canProcess(component));
+    permissions.put("canRecordWeight", componentConstraintChecker.canRecordWeight(component));
     viewModel.setPermissions(permissions);
     return viewModel;
   }

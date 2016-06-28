@@ -79,4 +79,82 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
     assertThat(canDiscard, is(false));
   }
 
+  @Test
+  public void testCanProcessWithQuarantinedComponent_shouldReturnTrue() {
+    Component component = aComponent().withStatus(ComponentStatus.QUARANTINED).build();
+    boolean canProcess = componentConstraintChecker.canProcess(component);
+    assertThat(canProcess, is(true));
+  }
+
+  @Test
+  public void testCanProcessWithAvailableComponent_shouldReturnTrue() {
+    Component component = aComponent().withStatus(ComponentStatus.AVAILABLE).build();
+    boolean canProcess = componentConstraintChecker.canProcess(component);
+    assertThat(canProcess, is(true));
+  }
+
+  @Test
+  public void testCanProcessWithUnsafeComponent_shouldReturnTrue() {
+    Component component = aComponent().withStatus(ComponentStatus.UNSAFE).build();
+    boolean canProcess = componentConstraintChecker.canProcess(component);
+    assertThat(canProcess, is(true));
+  }
+
+  @Test
+  public void testCanProcessWithExpiredComponent_shouldReturnTrue() {
+    Component component = aComponent().withStatus(ComponentStatus.EXPIRED).build();
+    boolean canProcess = componentConstraintChecker.canProcess(component);
+    assertThat(canProcess, is(true));
+  }
+
+  @Test
+  public void testCanProcessWithIssuedComponent_shouldReturnFalse() {
+    Component component = aComponent().withStatus(ComponentStatus.ISSUED).build();
+    boolean canProcess = componentConstraintChecker.canProcess(component);
+    assertThat(canProcess, is(false));
+  }
+
+  @Test
+  public void testCanProcessWithUsedComponent_shouldReturnFalse() {
+    Component component = aComponent().withStatus(ComponentStatus.USED).build();
+    boolean canProcess = componentConstraintChecker.canProcess(component);
+    assertThat(canProcess, is(false));
+  }
+
+  @Test
+  public void testCanProcessWithDiscardedComponent_shouldReturnFalse() {
+    Component component = aComponent().withStatus(ComponentStatus.DISCARDED).build();
+    boolean canProcess = componentConstraintChecker.canProcess(component);
+    assertThat(canProcess, is(false));
+  }
+
+  @Test
+  public void testCanProcessWithProcessedComponent_shouldReturnFalse() {
+    Component component = aComponent().withStatus(ComponentStatus.PROCESSED).build();
+    boolean canProcess = componentConstraintChecker.canProcess(component);
+    assertThat(canProcess, is(false));
+  }
+
+  @Test
+  public void testCanProcessWithSplitComponent_shouldReturnFalse() {
+    Component component = aComponent().withStatus(ComponentStatus.SPLIT).build();
+    boolean canProcess = componentConstraintChecker.canProcess(component);
+    assertThat(canProcess, is(false));
+  }
+
+  @Test
+  public void testCanRecordWeigthWithInitialComponent_shouldReturnTrue() {
+    Component component = aComponent().withParentComponent(null).build();
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(true));
+  }
+
+  @Test
+  public void testCanRecordWeigthWithNotAnInitialComponent_shouldReturnFalse() {
+    Component parentComponent = aComponent().build();
+    Component component = aComponent().withParentComponent(parentComponent).build();
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(false));
+  }
+
 }
