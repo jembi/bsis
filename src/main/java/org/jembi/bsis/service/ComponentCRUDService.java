@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.jembi.bsis.controller.ComponentConstraintChecker;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
@@ -43,6 +44,9 @@ public class ComponentCRUDService {
   
   @Autowired
   private ComponentStatusCalculator componentStatusCalculator;
+  
+  @Autowired
+  private ComponentConstraintChecker componentConstraintChecker;
 
   /**
    * Change the status of components belonging to the donor from AVAILABLE to UNSAFE.
@@ -79,6 +83,11 @@ public class ComponentCRUDService {
   public Component processComponent(String parentComponentId, ComponentTypeCombination componentTypeCombination) {
 
     Component parentComponent = componentRepository.findComponentById(Long.valueOf(parentComponentId));
+    
+    if (!componentConstraintChecker.canProcess(parentComponent)) {
+      throw new IllegalStateException("Component " + parentComponentId + " cannot be processed.");
+    }
+    
     Donation donation = parentComponent.getDonation();
     ComponentStatus parentStatus = parentComponent.getStatus();
 
