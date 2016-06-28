@@ -1,44 +1,26 @@
-package org.jembi.bsis.backingform;
+package org.jembi.bsis.viewmodel;
 
-public class PackTypeBackingForm {
+public class PackTypeFullViewModel extends PackTypeViewModel {
 
-  private Long id;
-  private String packType;
-  private ComponentTypeBackingForm componentType;
+  private ComponentTypeViewModel componentType;
   private Boolean canPool;
   private Boolean canSplit;
   private Boolean isDeleted;
   private Boolean countAsDonation;
   private Boolean testSampleProduced;
-  private Integer periodBetweenDonations;
+  private int periodBetweenDonations;
   private Integer maxWeight;
   private Integer minWeight;
   private Integer lowVolumeWeight;
-  
-  public Long getId() {
-    return id;
-  }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getPackType() {
-    return packType;
-  }
-
-  public void setPackType(String packType) {
-    this.packType = packType;
-  }
-  
-  public ComponentTypeBackingForm getComponentType() {
+  public ComponentTypeViewModel getComponentType() {
     return componentType;
   }
 
-  public void setComponentType(ComponentTypeBackingForm componentType) {
+  public void setComponentType(ComponentTypeViewModel componentType) {
     this.componentType = componentType;
   }
-  
+
   public Boolean getCanPool() {
     return canPool;
   }
@@ -46,7 +28,6 @@ public class PackTypeBackingForm {
   public void setCanPool(Boolean canPool) {
     this.canPool = canPool;
   }
-
   public Boolean getCanSplit() {
     return canSplit;
   }
@@ -54,7 +35,6 @@ public class PackTypeBackingForm {
   public void setCanSplit(Boolean canSplit) {
     this.canSplit = canSplit;
   }
-
   public Boolean getIsDeleted() {
     return isDeleted;
   }
@@ -62,7 +42,6 @@ public class PackTypeBackingForm {
   public void setIsDeleted(Boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
-
   public Boolean getCountAsDonation() {
     return countAsDonation;
   }
@@ -70,7 +49,6 @@ public class PackTypeBackingForm {
   public void setCountAsDonation(Boolean countAsDonation) {
     this.countAsDonation = countAsDonation;
   }
-
   public Boolean getTestSampleProduced() {
     return testSampleProduced;
   }
@@ -79,11 +57,11 @@ public class PackTypeBackingForm {
     this.testSampleProduced = testSampleProduced;
   }
 
-  public Integer getPeriodBetweenDonations() {
+  public int getPeriodBetweenDonations() {
     return periodBetweenDonations;
   }
 
-  public void setPeriodBetweenDonations(Integer periodBetweenDonations) {
+  public void setPeriodBetweenDonations(int periodBetweenDonations) {
     this.periodBetweenDonations = periodBetweenDonations;
   }
 

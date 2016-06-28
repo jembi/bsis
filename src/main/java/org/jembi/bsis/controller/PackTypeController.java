@@ -1,19 +1,15 @@
 package org.jembi.bsis.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.apache.log4j.Logger;
 import org.jembi.bsis.backingform.PackTypeBackingForm;
 import org.jembi.bsis.backingform.validator.PackTypeBackingFormValidator;
-import org.jembi.bsis.model.packtype.PackType;
-import org.jembi.bsis.repository.PackTypeRepository;
+import org.jembi.bsis.controllerservice.PackTypeControllerService;
 import org.jembi.bsis.utils.PermissionConstants;
-import org.jembi.bsis.viewmodel.PackTypeViewFullModel;
+import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,16 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("packtypes")
 public class PackTypeController {
 
-  private static final Logger LOGGER = Logger.getLogger(PackTypeController.class);
-
-  @Autowired
-  PackTypeRepository packTypeRepository;
-
   @Autowired
   private PackTypeBackingFormValidator packTypeBackingFormValidator;
-
-  public PackTypeController() {
-  }
+  @Autowired
+  private PackTypeControllerService packTypeControllerService;
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
@@ -49,50 +39,35 @@ public class PackTypeController {
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_PACK_TYPES + "')")
   public Map<String, Object> getPackTypes() {
-    Map<String, Object> map = new HashMap<String, Object>();
-    addAllPackTypesToModel(map);
+    Map<String, Object> map = new HashMap<>();
+    map.put("allPackTypes", packTypeControllerService.getAllPackTypes());
     return map;
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_PACK_TYPES + "')")
-  public ResponseEntity<PackType> getPackTypeById(@PathVariable Long id) {
-    Map<String, Object> map = new HashMap<String, Object>();
-    PackType packType = packTypeRepository.getPackTypeById(id);
-    map.put("packtype", new PackTypeViewFullModel(packType)); // FIXME: use a factory
-    return new ResponseEntity(map, HttpStatus.OK);
+  public ResponseEntity<Map<String, Object>> getPackTypeById(@PathVariable Long id) {
+    Map<String, Object> map = new HashMap<>();
+    map.put("packtype", packTypeControllerService.getPackTypeById(id));
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_PACK_TYPES + "')")
-  public ResponseEntity savePackType(@Valid @RequestBody PackTypeBackingForm formData) {
-    PackType packType = formData.getType();
-    packType = packTypeRepository.savePackType(packType);
-    return new ResponseEntity(new PackTypeViewFullModel(packType), HttpStatus.CREATED); // FIXME: use a factory
+  public ResponseEntity<PackTypeFullViewModel> savePackType(@Valid @RequestBody PackTypeBackingForm formData) {
+    PackTypeFullViewModel packType = packTypeControllerService.createPackType(formData);
+    return new ResponseEntity<>(packType, HttpStatus.CREATED);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_PACK_TYPES + "')")
-  public ResponseEntity updatePackType(@Valid @RequestBody PackTypeBackingForm formData, @PathVariable Long id) {
-    Map<String, Object> map = new HashMap<String, Object>();
-    PackType packType = formData.getType();
-    packType.setId(id);
-    packType = packTypeRepository.updatePackType(packType);
-    map.put("packtype", new PackTypeViewFullModel(packType)); // FIXME: use a factory
-    return new ResponseEntity(map, HttpStatus.OK);
-  }
-
-  private void addAllPackTypesToModel(Map<String, Object> m) {
-    m.put("allPackTypes", getPackTypeViewModels(packTypeRepository.getAllPackTypes()));
-  }
-
-  private List<PackTypeViewFullModel> getPackTypeViewModels(List<PackType> packTypes) {
-
-    List<PackTypeViewFullModel> viewModels = new ArrayList<PackTypeViewFullModel>();
-    for (PackType packtType : packTypes) {
-      viewModels.add(new PackTypeViewFullModel(packtType)); // FIXME: use a factory
-    }
-    return viewModels;
+  public ResponseEntity<Map<String, Object>> updatePackType(@Valid @RequestBody PackTypeBackingForm formData,
+      @PathVariable Long id) {
+    // Use the id from the path
+    formData.setId(id);
+    Map<String, Object> map = new HashMap<>();
+    map.put("packtype", packTypeControllerService.updatePackType(formData));
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
 }

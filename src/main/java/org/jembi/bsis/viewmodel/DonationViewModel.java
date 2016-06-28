@@ -16,7 +16,7 @@ public class DonationViewModel extends BaseViewModel {
   private Date donationDate;
   private String donationIdentificationNumber;
   private DonationTypeViewModel donationType;
-  private PackTypeViewFullModel packType;
+  private PackTypeFullViewModel packType;
   private String notes;
   private String donorNumber;
   private Date lastUpdated;
@@ -67,11 +67,11 @@ public class DonationViewModel extends BaseViewModel {
     return donationType;
   }
 
-  public void setPackType(PackTypeViewFullModel packType) {
+  public void setPackType(PackTypeFullViewModel packType) {
     this.packType = packType;
   }
   
-  public PackTypeViewFullModel getPackType() {
+  public PackTypeFullViewModel getPackType() {
     return packType;
   }
   

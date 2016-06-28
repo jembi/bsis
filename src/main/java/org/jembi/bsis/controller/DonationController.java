@@ -18,6 +18,7 @@ import org.jembi.bsis.backingform.validator.DonationBackingFormValidator;
 import org.jembi.bsis.factory.DonationSummaryViewModelFactory;
 import org.jembi.bsis.factory.DonationTypeFactory;
 import org.jembi.bsis.factory.DonationViewModelFactory;
+import org.jembi.bsis.factory.PackTypeFactory;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.HaemoglobinLevel;
 import org.jembi.bsis.model.donationtype.DonationType;
@@ -34,7 +35,7 @@ import org.jembi.bsis.service.FormFieldAccessorService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.utils.PermissionUtils;
 import org.jembi.bsis.viewmodel.DonationSummaryViewModel;
-import org.jembi.bsis.viewmodel.PackTypeViewFullModel;
+import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -93,6 +94,9 @@ public class DonationController {
   
   @Autowired
   private DonationTypeFactory donationTypeFactory;
+
+  @Autowired
+  private PackTypeFactory packTypeFactory;
 
   public DonationController() {
   }
@@ -215,11 +219,11 @@ public class DonationController {
     m.put("adverseEventTypes", adverseEventTypeRepository.findNonDeletedAdverseEventTypeViewModels());
   }
   
-  private List<PackTypeViewFullModel> getPackTypeViewModels(List<PackType> packTypes) {
+  private List<PackTypeFullViewModel> getPackTypeViewModels(List<PackType> packTypes) {
     // FIXME: use a factory
-    List<PackTypeViewFullModel> viewModels = new ArrayList<PackTypeViewFullModel>();
+    List<PackTypeFullViewModel> viewModels = new ArrayList<PackTypeFullViewModel>();
     for (PackType packtType : packTypes) {
-      viewModels.add(new PackTypeViewFullModel(packtType));
+      viewModels.add(packTypeFactory.createFullViewModel(packtType));
     }
     return viewModels;
   }

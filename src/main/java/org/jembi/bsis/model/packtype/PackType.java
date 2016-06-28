@@ -50,6 +50,12 @@ public class PackType extends BaseEntity {
 
   private Integer periodBetweenDonations;
 
+  private Integer maxWeight;
+
+  private Integer minWeight;
+
+  private Integer lowVolumeWeight;
+
   public Boolean getIsDeleted() {
     return isDeleted;
   }
@@ -114,6 +120,30 @@ public class PackType extends BaseEntity {
     this.periodBetweenDonations = periodBetweenDonations;
   }
 
+  public Integer getMaxWeight() {
+    return maxWeight;
+  }
+
+  public void setMaxWeight(Integer maxWeight) {
+    this.maxWeight = maxWeight;
+  }
+
+  public Integer getMinWeight() {
+    return minWeight;
+  }
+
+  public void setMinWeight(Integer minWeight) {
+    this.minWeight = minWeight;
+  }
+
+  public Integer getLowVolumeWeight() {
+    return lowVolumeWeight;
+  }
+
+  public void setLowVolumeWeight(Integer lowVolumeWeight) {
+    this.lowVolumeWeight = lowVolumeWeight;
+  }
+
   public void copy(PackType packType) {
     this.packType = packType.getPackType();
     this.componentType = packType.getComponentType();
@@ -121,5 +151,8 @@ public class PackType extends BaseEntity {
     this.countAsDonation = packType.getCountAsDonation();
     this.isDeleted = packType.getIsDeleted();
     this.testSampleProduced = packType.getTestSampleProduced();
+    this.minWeight = packType.getMinWeight();
+    this.maxWeight = packType.getMaxWeight();
+    this.lowVolumeWeight = packType.getLowVolumeWeight();
   }
 }
