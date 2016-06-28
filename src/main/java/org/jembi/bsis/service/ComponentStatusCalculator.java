@@ -47,32 +47,29 @@ public class ComponentStatusCalculator {
     return false;
   }
 
-  /*
-   * FIXME: This method needs comprehensive tests and the allowed status changes should be documented. It would be
-   * best to write tests for the expected behaviours and check that the method handles those rather than basing the
-   * tests on what is currently implemented.
+  /**
+   * Updates the status of a Component. 
+   * 
+   * This method looks at the existing status of the Component, the Donation's 
+   * TTI and Blood Group statuses and the TestBatch status in order to determine 
+   * a new status for the Component.
+   * 
+   * These statuses will never be updated, as they are Component end statuses:
+   *  - ComponentStatus.DISCARDED, 
+   *   - ComponentStatus.ISSUED,
+   *   - ComponentStatus.USED,  
+   *   - ComponentStatus.SPLIT, 
+   *   - ComponentStatus.PROCESSED
+   *   
+   * Also if a Component with an existing status of UNSAFE will never
+   * be taken out of that status even if the TTI status of the Donation
+   * has been changed to SAFE.
+   * 
+   * @param component
+   * @return
    */
   public boolean updateComponentStatus(Component component) {
 
-    // if a component has been explicitly discarded maintain that status.
-    // if the component has been issued do not change its status.
-    // suppose a component from a donation tested as safe was issued
-    // then some additional tests were done for some reason and it was
-    // discovered that the component was actually unsafe and it should not
-    // have been issued then it should be easy to track down all components
-    // created from that sample which were issued. By maintaining the status as
-    // issued even if the component is unsafe we can search for all components created
-    // from that donation and then look at which ones were already issued.
-    // Conclusion is do not change the component status once it is marked as issued.
-    // Similar reasoning for not changing USED status for a component. It should be
-    // easy to track which used components were made from unsafe donations.
-    // of course if the test results are not available or the donation is known
-    // to be unsafe it should not have been issued in the first place.
-    // In exceptional cases an admin can always delete this component and create a new one
-    // if he wants to change the status to a new one.
-    // once a component has been labeled as split it does not exist anymore so we just mark
-    // it as SPLIT/PROCESSED. Even if the donation is found to be unsafe later it should not matter
-    // as SPLIT/PROCESSED components are not allowed to be issued
     List<ComponentStatus> statusNotToBeChanged =
         Arrays.asList(ComponentStatus.DISCARDED, ComponentStatus.ISSUED,
             ComponentStatus.USED, ComponentStatus.SPLIT, ComponentStatus.PROCESSED);
