@@ -28,6 +28,10 @@ public class ComponentConstraintChecker {
   }
 
   public boolean canProcess(Component component) {
+    if (component.getParentComponent() == null && component.getWeight() == null) {
+      // Can't process initial components with no recorded weight
+      return false;
+    }
     return CAN_DISCARD_OR_PROCESS_STATUSES.contains(component.getStatus());
   }
 
