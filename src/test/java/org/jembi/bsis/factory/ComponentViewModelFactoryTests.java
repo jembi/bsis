@@ -37,7 +37,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class ComponentViewModelFactoryTests {
   
   @InjectMocks
-  private ComponentViewModelFactory componentViewModelFactory;
+  private ComponentFactory componentFactory;
   
   @Mock
   private LocationViewModelFactory locationViewModelFactory;
@@ -79,7 +79,7 @@ public class ComponentViewModelFactoryTests {
     when(componentTypeFactory.createViewModel(componentType)).thenReturn(new ComponentTypeViewModel(componentType));
 
     // run test
-    ComponentViewModel convertedViewModel = componentViewModelFactory.createComponentViewModel(component);
+    ComponentViewModel convertedViewModel = componentFactory.createComponentViewModel(component);
     
     // do asserts
     Assert.assertNotNull("View model created", convertedViewModel);
@@ -95,7 +95,7 @@ public class ComponentViewModelFactoryTests {
     components.add(aComponent().withId(2L).withStatus(ComponentStatus.DISCARDED).withDonation(donation).build());
     
     // run test
-    List<ComponentViewModel> viewModels = componentViewModelFactory.createComponentViewModels(components);
+    List<ComponentViewModel> viewModels = componentFactory.createComponentViewModels(components);
     
     // do asserts
     Assert.assertNotNull("View models created", viewModels);
@@ -110,7 +110,7 @@ public class ComponentViewModelFactoryTests {
     components.add(aComponent().withId(2L).withStatus(ComponentStatus.DISCARDED).build());
     
     // run test
-    List<ComponentViewModel> viewModels = componentViewModelFactory.createComponentViewModels(null);
+    List<ComponentViewModel> viewModels = componentFactory.createComponentViewModels(null);
     
     // do asserts
     Assert.assertNotNull("View models created", viewModels);
@@ -150,7 +150,7 @@ public class ComponentViewModelFactoryTests {
     when(componentConstraintChecker.canRecordWeight(component)).thenReturn(true);
 
     // run test
-    ComponentManagementViewModel convertedViewModel = componentViewModelFactory.createManagementViewModel(component);
+    ComponentManagementViewModel convertedViewModel = componentFactory.createManagementViewModel(component);
 
     // do asserts
     Assert.assertNotNull("View model created", convertedViewModel);

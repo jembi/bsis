@@ -49,7 +49,7 @@ public class ReturnFormFactoryTests {
   @Mock
   private ComponentRepository componentRepository;
   @Mock
-  private ComponentViewModelFactory componentViewModelFactory;
+  private ComponentFactory componentFactory;
   @Mock
   private ReturnFormConstraintChecker returnFormConstraintChecker;
 
@@ -144,7 +144,7 @@ public class ReturnFormFactoryTests {
         .build();
 
     // Setup mocks
-    when(componentViewModelFactory.createComponentViewModels(entity.getComponents())).thenReturn(expectedViewModel.getComponents());
+    when(componentFactory.createComponentViewModels(entity.getComponents())).thenReturn(expectedViewModel.getComponents());
     when(locationViewModelFactory.createLocationViewModel(returnedFrom)).thenReturn(new LocationViewModel(returnedFrom));
     when(locationViewModelFactory.createLocationViewModel(returnedTo)).thenReturn(new LocationViewModel(returnedTo));
     when(returnFormConstraintChecker.canEdit(entity)).thenReturn(true);

@@ -17,7 +17,7 @@ public class ComponentBatchViewModelFactory {
   BloodTransportBoxViewModelFactory bloodTransportBoxViewModelFactory;
   
   @Autowired
-  ComponentViewModelFactory componentViewModelFactory;
+  ComponentFactory componentFactory;
   
   @Autowired
   DonationBatchViewModelFactory donationBatchViewModelFactory;
@@ -60,7 +60,7 @@ public class ComponentBatchViewModelFactory {
   private void populateFullViewModel(ComponentBatch componentBatch, ComponentBatchFullViewModel viewModel) {
 
     populateViewModel(componentBatch, viewModel);
-    viewModel.setComponents(componentViewModelFactory.createComponentViewModels(componentBatch.getComponents()));
+    viewModel.setComponents(componentFactory.createComponentViewModels(componentBatch.getComponents()));
     viewModel.setBloodTransportBoxes(
         bloodTransportBoxViewModelFactory.createBloodTransportBoxViewModels(componentBatch.getBloodTransportBoxes()));
   }

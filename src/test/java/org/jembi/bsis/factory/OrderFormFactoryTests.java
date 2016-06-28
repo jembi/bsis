@@ -59,7 +59,7 @@ public class OrderFormFactoryTests {
   private OrderFormItemFactory orderFormItemFactory;
 
   @Mock
-  private ComponentViewModelFactory componentViewModelFactory;
+  private ComponentFactory componentFactory;
   
   @Mock
   private LocationViewModelFactory locationViewModelFactory;
@@ -255,7 +255,7 @@ public class OrderFormFactoryTests {
         .withId(1L).withComponent(component).build();
     
     // Setup mock
-    when(componentViewModelFactory.createComponentViewModels(entity.getComponents())).thenReturn(expectedViewModel.getComponents());
+    when(componentFactory.createComponentViewModels(entity.getComponents())).thenReturn(expectedViewModel.getComponents());
     when(locationViewModelFactory.createLocationViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
     when(locationViewModelFactory.createLocationViewModel(dispatchedTo)).thenReturn(expectedViewModel.getDispatchedTo());
     when(orderFormConstraintChecker.canDispatch(entity)).thenReturn(true);

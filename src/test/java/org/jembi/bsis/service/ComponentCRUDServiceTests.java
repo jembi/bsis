@@ -17,7 +17,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.jembi.bsis.factory.ComponentViewModelFactory;
+import org.jembi.bsis.factory.ComponentFactory;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
@@ -52,7 +52,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   @Mock
   private ComponentRepository componentRepository;
   @Mock
-  private ComponentViewModelFactory componentViewModelFactory;
+  private ComponentFactory componentFactory;
   @Mock
   private ComponentTypeRepository componentTypeRepository;
   @Mock

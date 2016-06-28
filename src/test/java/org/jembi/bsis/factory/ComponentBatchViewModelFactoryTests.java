@@ -43,7 +43,7 @@ public class ComponentBatchViewModelFactoryTests {
   @Mock
   BloodTransportBoxViewModelFactory bloodTransportBoxViewModelFactory;
   @Mock
-  ComponentViewModelFactory componentViewModelFactory;
+  ComponentFactory componentFactory;
   @Mock
   DonationBatchViewModelFactory donationBatchViewModelFactory;
   
@@ -83,7 +83,7 @@ public class ComponentBatchViewModelFactoryTests {
     
     // set up mocks
     ComponentViewModel componentViewModel = ComponentViewModelBuilder.aComponentViewModel().build();
-    when(componentViewModelFactory.createComponentViewModels(componentBatch.getComponents())).thenReturn(Arrays.asList(componentViewModel));
+    when(componentFactory.createComponentViewModels(componentBatch.getComponents())).thenReturn(Arrays.asList(componentViewModel));
     
     DonationBatchViewModel donationBatchViewModel = new DonationBatchViewModel();
     when(donationBatchViewModelFactory.createDonationBatchBasicViewModel(donationBatch)).thenReturn(donationBatchViewModel);

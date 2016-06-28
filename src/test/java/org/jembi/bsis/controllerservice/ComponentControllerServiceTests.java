@@ -10,7 +10,7 @@ import org.jembi.bsis.backingform.RecordComponentBackingForm;
 import org.jembi.bsis.controllerservice.ComponentControllerService;
 import org.jembi.bsis.factory.ComponentStatusChangeReasonFactory;
 import org.jembi.bsis.factory.ComponentTypeFactory;
-import org.jembi.bsis.factory.ComponentViewModelFactory;
+import org.jembi.bsis.factory.ComponentFactory;
 import org.jembi.bsis.helpers.builders.ComponentBuilder;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.helpers.builders.ComponentViewModelBuilder;
@@ -43,7 +43,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   @Mock
   private ComponentCRUDService componentCRUDService;
   @Mock
-  private ComponentViewModelFactory componentViewModelFactory;
+  private ComponentFactory componentFactory;
   @Mock
   private ComponentTypeRepository componentTypeRepository;
   @Mock
@@ -62,14 +62,14 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     
     // setup mocks
     Mockito.when(componentRepository.findComponentById(componentId)).thenReturn(component);
-    Mockito.when(componentViewModelFactory.createComponentViewModel(component)).thenReturn(componentViewModel);
+    Mockito.when(componentFactory.createComponentViewModel(component)).thenReturn(componentViewModel);
     
     // SUT
     componentControllerService.findComponentById(1L);
     
     // verify
     Mockito.verify(componentRepository).findComponentById(componentId);
-    Mockito.verify(componentViewModelFactory).createComponentViewModel(component);
+    Mockito.verify(componentFactory).createComponentViewModel(component);
   }
   
   @Test
@@ -83,14 +83,14 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     
     // setup mocks
     Mockito.when(componentRepository.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber)).thenReturn(component);
-    Mockito.when(componentViewModelFactory.createComponentViewModel(component)).thenReturn(componentViewModel);
+    Mockito.when(componentFactory.createComponentViewModel(component)).thenReturn(componentViewModel);
     
     // SUT
     componentControllerService.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber);
     
     // verify
     Mockito.verify(componentRepository).findComponentByCodeAndDIN(componentCode, donationIdentificationNumber);
-    Mockito.verify(componentViewModelFactory).createComponentViewModel(component);
+    Mockito.verify(componentFactory).createComponentViewModel(component);
   }
   
   @Test
@@ -108,14 +108,14 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     
     // setup mocks
     Mockito.when(componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber)).thenReturn(components);
-    Mockito.when(componentViewModelFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
+    Mockito.when(componentFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
     componentControllerService.findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
     
     // verify
     Mockito.verify(componentRepository).findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
-    Mockito.verify(componentViewModelFactory).createComponentViewModels(components);
+    Mockito.verify(componentFactory).createComponentViewModels(components);
   }
   
   @Test
@@ -138,7 +138,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     // setup mocks
     Mockito.when(componentRepository.findAnyComponent(donationIdentificationNumber, componentTypeIds, 
         statusStringToComponentStatus, dateFrom, dateTo)).thenReturn(components);
-    Mockito.when(componentViewModelFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
+    Mockito.when(componentFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
     componentControllerService.findAnyComponent(donationIdentificationNumber, componentTypeIds, 
@@ -147,7 +147,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     // verify
     Mockito.verify(componentRepository).findAnyComponent(donationIdentificationNumber, componentTypeIds, 
         statusStringToComponentStatus, dateFrom, dateTo);
-    Mockito.verify(componentViewModelFactory).createComponentViewModels(components);
+    Mockito.verify(componentFactory).createComponentViewModels(components);
   }
   
   @Test
@@ -171,7 +171,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     // setup mocks       
     Mockito.when(componentCRUDService.discardComponent(id, discardReasonId, discardReasonText)).thenReturn(components.get(0));
     Mockito.when(componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber)).thenReturn(components);
-    Mockito.when(componentViewModelFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
+    Mockito.when(componentFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
     componentControllerService.discardComponent(id, discardReasonId, discardReasonText);
@@ -179,7 +179,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     // verify
     Mockito.verify(componentCRUDService).discardComponent(id, discardReasonId, discardReasonText);
     Mockito.verify(componentRepository).findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
-    Mockito.verify(componentViewModelFactory).createComponentViewModels(components);
+    Mockito.verify(componentFactory).createComponentViewModels(components);
   }
   
   @Test
@@ -203,7 +203,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     // setup mocks   
     Mockito.when(componentCRUDService.processComponent(form.getParentComponentId(), form.getComponentTypeCombination())).thenReturn(components.get(0));
     Mockito.when(componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber)).thenReturn(components);
-    Mockito.when(componentViewModelFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
+    Mockito.when(componentFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
     componentControllerService.processComponent(form);
@@ -211,7 +211,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     // verify
     Mockito.verify(componentCRUDService).processComponent(form.getParentComponentId(), form.getComponentTypeCombination());
     Mockito.verify(componentRepository).findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
-    Mockito.verify(componentViewModelFactory).createComponentViewModels(components);
+    Mockito.verify(componentFactory).createComponentViewModels(components);
   }
   
   @Test
