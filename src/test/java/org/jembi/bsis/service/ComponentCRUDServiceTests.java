@@ -1,10 +1,13 @@
 package org.jembi.bsis.service;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
+import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.doReturn;
@@ -561,5 +564,45 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // check
     verify(componentStatusCalculator).updateComponentStatus(component);
     verify(componentRepository).update(component);
+  }
+  
+  @Test
+  public void testUpdateComponent_shouldDiscardComponentIfWeightTooLow() throws Exception {
+    // set up data
+    Component component = aComponent()
+        .withId(1L)
+        .withWeight(320)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .build();
+    
+    // mocks
+    when(componentStatusCalculator.updateComponentStatus(component)).thenReturn(false);
+    when(componentRepository.update(component)).thenReturn(component);
+    
+    // SUT
+    Component updatedComponent = componentCRUDService.updateComponent(component);
+    
+    // check
+    assertThat("Component was flagged for discard", updatedComponent.getStatus(), is(ComponentStatus.UNSAFE));
+  }
+  
+  @Test
+  public void testUpdateComponent_shouldDiscardComponentIfWeightTooHigh() throws Exception {
+    // set up data
+    Component component = aComponent()
+        .withId(1L)
+        .withWeight(520)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .build();
+    
+    // mocks
+    when(componentStatusCalculator.updateComponentStatus(component)).thenReturn(false);
+    when(componentRepository.update(component)).thenReturn(component);
+    
+    // SUT
+    Component updatedComponent = componentCRUDService.updateComponent(component);
+    
+    // check
+    assertThat("Component was flagged for discard", updatedComponent.getStatus(), is(ComponentStatus.UNSAFE));
   }
 }
