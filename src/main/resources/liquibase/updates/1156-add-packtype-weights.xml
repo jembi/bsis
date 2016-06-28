@@ -15,7 +15,7 @@
 		</addColumn>
 	</changeSet>
 	
-	<changeSet id="20160627-2040" author="timler">
+	<changeSet id="20160628-1343" author="timler">
 	    <preConditions onFail="MARK_RAN">
 		    <sqlCheck expectedResult="0"> 
 				<![CDATA[
@@ -75,9 +75,9 @@
 			<column name="countAsDonation" value="1"/>
 			<column name="periodBetweenDonations" value="30"/>
 			<column name="testSampleProduced" value="1"/>
-			<column name="minWeight" value="426"/>
-			<column name="maxWeight" value="520"/>
-			<column name="lowVolumeWeight" value="316"/>
+			<column name="minWeight" value="1"/>
+			<column name="maxWeight" value="600"/>
+			<column name="lowVolumeWeight" value="1"/>
 		</insert>
 		<insert tableName = "PackType">
 			<column name="packType" value="Dry Pack"/>
