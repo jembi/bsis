@@ -1,10 +1,12 @@
 package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.matchers.ComponentManagementViewModelMatcher.hasSameStateAsComponentManagementViewModel;
+import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.jembi.bsis.helpers.matchers.ComponentViewModelMatcher.hasSameStateAsComponentViewModel;
 import static org.mockito.Mockito.when;
 
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.controller.ComponentConstraintChecker;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.helpers.builders.ComponentViewModelBuilder;
@@ -22,6 +25,7 @@ import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
@@ -50,6 +54,9 @@ public class ComponentFactoryTests {
 
   @Mock
   private ComponentConstraintChecker componentConstraintChecker;
+  
+  @Mock
+  private ComponentRepository componentRepository;
 
   @Test
   public void createComponentViewModel_oneComponent() throws Exception {
@@ -155,5 +162,22 @@ public class ComponentFactoryTests {
     // do asserts
     Assert.assertNotNull("View model created", convertedViewModel);
     assertThat("Created correctly", convertedViewModel, hasSameStateAsComponentManagementViewModel(expectedViewModel));
+  }
+  
+  @Test
+  public void testCreateEntity_createsEntityWithWeight() throws Exception {
+    // setup data
+    Long componentId = Long.valueOf(1);
+    ComponentBackingForm backingForm = aComponentBackingForm().withId(componentId).withWeight(123).build();
+    Component expectedEntity = aComponent().withId(componentId).withWeight(123).build();
+    
+    // mocks
+    when(componentRepository.findComponent(componentId)).thenReturn(expectedEntity);
+    
+    // SUT
+    Component entity = componentFactory.createEntity(backingForm);
+    
+    // checks
+    assertThat("Created correctly", entity, hasSameStateAsComponent(expectedEntity));
   }
 }

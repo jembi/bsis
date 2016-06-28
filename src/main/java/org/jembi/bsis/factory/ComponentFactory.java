@@ -8,8 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.controller.ComponentConstraintChecker;
 import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.joda.time.DateTime;
@@ -31,6 +33,15 @@ public class ComponentFactory {
 
   @Autowired
   private ComponentConstraintChecker componentConstraintChecker;
+  
+  @Autowired
+  private ComponentRepository componentRepository;
+  
+  public Component createEntity(ComponentBackingForm backingForm) {
+    Component component = componentRepository.findComponent(backingForm.getId());
+    component.setWeight(backingForm.getWeight());    
+    return component;
+  }
 
   public List<ComponentManagementViewModel> createManagementViewModels(Collection<Component> components) {
     List<ComponentManagementViewModel> viewModels = new ArrayList<>();
