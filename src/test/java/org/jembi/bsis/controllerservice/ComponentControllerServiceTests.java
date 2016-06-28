@@ -1,11 +1,14 @@
 package org.jembi.bsis.controllerservice;
 
+import static org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
+import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
 import org.jembi.bsis.controllerservice.ComponentControllerService;
 import org.jembi.bsis.factory.ComponentStatusChangeReasonFactory;
@@ -271,5 +274,26 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     
     // verify
     Mockito.verify(componentStatusChangeReasonRepository).getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.RETURNED);
+  }
+  
+  @Test
+  public void testUpdateComponent_shouldCallServiceRepositoryAndFactory() throws Exception {
+    // setup data
+    Long componentId = Long.valueOf(1);
+    ComponentBackingForm backingForm = aComponentBackingForm().withId(componentId).withWeight(123).build();
+    Component component = aComponent().withId(componentId).withWeight(123).build();
+    
+    // setup mocks
+    Mockito.when(componentFactory.createEntity(backingForm)).thenReturn(component);
+    Mockito.when(componentCRUDService.updateComponent(component)).thenReturn(component);
+    Mockito.when(componentFactory.createComponentViewModel(component)).thenReturn(ComponentViewModelBuilder.aComponentViewModel().build());
+    
+    // SUT
+    componentControllerService.updateComponent(backingForm);
+    
+    // verify
+    Mockito.verify(componentFactory).createEntity(backingForm);
+    Mockito.verify(componentCRUDService).updateComponent(component);
+    Mockito.verify(componentFactory).createComponentViewModel(component);
   }
 }

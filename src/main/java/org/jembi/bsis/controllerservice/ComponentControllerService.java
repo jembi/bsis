@@ -95,6 +95,12 @@ public class ComponentControllerService {
     return componentViewModels;
   }
   
+  public ComponentViewModel updateComponent(ComponentBackingForm componentBackingForm) {
+    Component component = componentFactory.createEntity(componentBackingForm);
+    component = componentCRUDService.updateComponent(component);
+    return componentFactory.createComponentViewModel(component);
+  }
+  
   public List<ComponentStatusChangeReason> getReturnReasons() {
     return componentStatusChangeReasonRepository.getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.RETURNED);
   }

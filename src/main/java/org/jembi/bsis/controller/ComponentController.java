@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.DiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
 import org.jembi.bsis.backingform.validator.DiscardComponentsBackingFormValidator;
@@ -138,5 +139,15 @@ public class ComponentController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("components", componentControllerService.processComponent(recordComponentForm));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
+  }
+  
+  @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('" + PermissionConstants.EDIT_COMPONENT + "')")
+  public ResponseEntity<Map<String, Object>> updateComponent(
+      @PathVariable("id") Long componentId,
+      @RequestBody @Valid ComponentBackingForm componentBackingForm) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("component", componentControllerService.updateComponent(componentBackingForm));
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 }
