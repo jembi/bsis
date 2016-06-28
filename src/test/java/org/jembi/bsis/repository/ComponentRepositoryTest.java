@@ -14,7 +14,6 @@ import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -130,7 +129,7 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
   public void testUpdateComponent() throws Exception {
     Component componentToUpdate = componentRepository.findComponent(2l);
     componentToUpdate.setComponentCode("junit123");
-    componentRepository.updateComponent(componentToUpdate);
+    componentRepository.update(componentToUpdate);
     Component updatedComponent = componentRepository.findComponent(2l);
     Assert.assertEquals("Component has been updated", "junit123", updatedComponent.getComponentCode());
   }
@@ -155,7 +154,7 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
     newDonation.setBleedStartTime(today.getTime());
     donationRepository.addDonation(newDonation);
     newComponent.setDonation(newDonation);
-    componentRepository.addComponent(newComponent);
+    componentRepository.save(newComponent);
     List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber("7654321");
     Assert.assertEquals("A new component was added", 1, components.size());
   }

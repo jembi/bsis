@@ -71,7 +71,7 @@ public class ComponentCRUDService {
     for (Component component : donation.getComponents()) {
 
       if (!component.getIsDeleted() && componentStatusCalculator.updateComponentStatus(component)) {
-        componentRepository.updateComponent(component);
+        componentRepository.update(component);
       }
     }
   }
@@ -206,12 +206,13 @@ public class ComponentCRUDService {
   
   public Component addComponent(Component component) {
     componentStatusCalculator.updateComponentStatus(component);
-    return componentRepository.addComponent(component);
+    componentRepository.save(component);
+    return component;
   }
   
   public Component updateComponent(Component component) {
     componentStatusCalculator.updateComponentStatus(component);
-    return componentRepository.updateComponent(component);
+    return componentRepository.update(component);
   }
   
   public Component findComponentById(Long id) {

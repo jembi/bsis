@@ -21,19 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class ComponentRepository {
+public class ComponentRepository extends AbstractRepository<Component> {
 
   @PersistenceContext
   private EntityManager em;
-
-  /**
-   * some fields like component status are cached internally. must be called whenever any changes
-   * are made to rows related to the component. eg. Test result update should update the component
-   * status.
-   */
-  /*public boolean updateComponentInternalFields(Component component) {
-    return updateComponentStatus(component);
-  }*/
 
   public List<Component> findAnyComponent(String donationIdentificationNumber, List<Long> componentTypes, List<ComponentStatus> status,
       Date donationDateFrom, Date donationDateTo) {
@@ -99,23 +90,6 @@ public class ComponentRepository {
     query.setParameter("componentId", componentId);
     Component component = null;
     component = query.getSingleResult();
-    return component;
-  }
-
-  public Component updateComponent(Component component) {
-    Component existingComponent = findComponentById(component.getId());
-    if (existingComponent == null) {
-      return null;
-    }
-    existingComponent.copy(component);
-    em.merge(existingComponent);
-    em.flush();
-    return existingComponent;
-  }
-
-  public Component addComponent(Component component) {
-    em.persist(component);
-    em.refresh(component);
     return component;
   }
 

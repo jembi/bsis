@@ -90,7 +90,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // set up mocks
     when(componentRepository.findComponentById(1L)).thenReturn(component);
-    when(componentRepository.updateComponent(component)).thenReturn(component);
+    when(componentRepository.update(component)).thenReturn(component);
     
     // run test
     componentCRUDService.discardComponent(1L, 1L, reasonText);
@@ -139,7 +139,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // set up mocks
     when(componentRepository.findComponentById(1L)).thenReturn(component);
-    when(componentRepository.updateComponent(component)).thenReturn(component);
+    when(componentRepository.update(component)).thenReturn(component);
     
     // run test
     componentCRUDService.discardComponent(1L, 1L, "junit");
@@ -257,21 +257,17 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
     when(componentTypeRepository.getComponentTypeById(componentTypeId2)).thenReturn(componentType2);
     when(componentTypeRepository.getComponentTypeById(componentTypeId3)).thenReturn(componentType3);
-    when(componentRepository.addComponent(argThat(hasSameStateAsComponent(expectedComponent1)))).thenReturn(expectedComponent1);
-    when(componentRepository.addComponent(argThat(hasSameStateAsComponent(expectedComponent2)))).thenReturn(expectedComponent2);
-    when(componentRepository.addComponent(argThat(hasSameStateAsComponent(expectedComponent3)))).thenReturn(expectedComponent3);
-    when(componentRepository.addComponent(argThat(hasSameStateAsComponent(expectedComponent4)))).thenReturn(expectedComponent4);
-    when(componentRepository.updateComponent(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
+    when(componentRepository.update(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
     
     // SUT
     componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
     
     // verify results
-    verify(componentRepository).updateComponent(argThat(hasSameStateAsComponent(expectedParentComponent)));
-    verify(componentRepository).addComponent(argThat(hasSameStateAsComponent(expectedComponent1)));
-    verify(componentRepository).addComponent(argThat(hasSameStateAsComponent(expectedComponent2)));
-    verify(componentRepository).addComponent(argThat(hasSameStateAsComponent(expectedComponent3)));
-    verify(componentRepository).addComponent(argThat(hasSameStateAsComponent(expectedComponent4)));
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
+    verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponent1)));
+    verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponent2)));
+    verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponent3)));
+    verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponent4)));
   }
   
   @Test
@@ -328,15 +324,14 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // set up mocks
     when(componentRepository.findComponentById(parentComponentId)).thenReturn(parentComponent);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
-    when(componentRepository.addComponent(argThat(hasSameStateAsComponent(expectedComponent1)))).thenReturn(expectedComponent1);
-    when(componentRepository.updateComponent(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
+    when(componentRepository.update(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
     
     // SUT
     componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
     
     // verify results
-    verify(componentRepository).updateComponent(argThat(hasSameStateAsComponent(expectedParentComponent)));
-    verify(componentRepository).addComponent(argThat(hasSameStateAsComponent(expectedComponent1)));
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
+    verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponent1)));
   }
   
   @Test
@@ -393,15 +388,14 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // set up mocks
     when(componentRepository.findComponentById(parentComponentId)).thenReturn(parentComponent);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
-    when(componentRepository.addComponent(argThat(hasSameStateAsComponent(expectedComponent1)))).thenReturn(expectedComponent1);
-    when(componentRepository.updateComponent(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
+    when(componentRepository.update(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
     
     // SUT
     componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
     
     // verify results
-    verify(componentRepository).updateComponent(argThat(hasSameStateAsComponent(expectedParentComponent)));
-    verify(componentRepository).addComponent(argThat(hasSameStateAsComponent(expectedComponent1)));
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
+    verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponent1)));
   }
   
   @Test
@@ -439,7 +433,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
     
     // verify results
-    verify(componentRepository, times(0)).addComponent(Mockito.any(Component.class));
+    verify(componentRepository, times(0)).save(Mockito.any(Component.class));
   }
   
   @Test
@@ -477,7 +471,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
     
     // verify results
-    verify(componentRepository, times(0)).addComponent(Mockito.any(Component.class));
+    verify(componentRepository, times(0)).save(Mockito.any(Component.class));
   }
   
   @Test
@@ -518,14 +512,13 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // mocks
     when(componentStatusCalculator.updateComponentStatus(component)).thenReturn(false);
-    when(componentRepository.addComponent(component)).thenReturn(component);
     
     // SUT
     componentCRUDService.addComponent(component);
     
     // check
     verify(componentStatusCalculator).updateComponentStatus(component);
-    verify(componentRepository).addComponent(component);
+    verify(componentRepository).save(component);
   }
   
   @Test
@@ -535,13 +528,13 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // mocks
     when(componentStatusCalculator.updateComponentStatus(component)).thenReturn(false);
-    when(componentRepository.updateComponent(component)).thenReturn(component);
+    when(componentRepository.update(component)).thenReturn(component);
     
     // SUT
     componentCRUDService.updateComponent(component);
     
     // check
     verify(componentStatusCalculator).updateComponentStatus(component);
-    verify(componentRepository).updateComponent(component);
+    verify(componentRepository).update(component);
   }
 }
