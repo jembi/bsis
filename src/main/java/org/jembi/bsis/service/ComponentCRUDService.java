@@ -245,11 +245,13 @@ public class ComponentCRUDService {
       // mark all child components as deleted
       if (comp.getId() != component.getId()) {
         comp.setIsDeleted(true);
+        componentRepository.update(comp);
       }
       component.setStatus(ComponentStatus.QUARANTINED);
       componentStatusCalculator.updateComponentStatus(component);
     }
 
+    component = componentRepository.update(component);
     return component;
   }
 }

@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.jembi.bsis.factory.ComponentFactory;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
+import org.jembi.bsis.helpers.matchers.ComponentMatcher;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
@@ -35,7 +36,6 @@ import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
-import org.jembi.bsis.service.ComponentCRUDService;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
@@ -587,4 +587,38 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // check
     assertThat("Component was flagged for discard", updatedComponent.getStatus(), is(ComponentStatus.UNSAFE));
   }
+  
+  @Test
+  public void testUnprocessComponent_shouldDeleteAllChildrenAndSetStatusToAvailable() throws Exception {
+    // set up data
+    Component parentComponent = aComponent().withId(1L).build();
+    Component child1 = aComponent().withId(2L).build();
+    Component child2 = aComponent().withId(3L).build();
+
+    Component componentToUpdate = parentComponent;
+    componentToUpdate.setStatus(ComponentStatus.QUARANTINED);
+    Component updatedComponent = aComponent().withId(1L).withStatus(ComponentStatus.AVAILABLE).build();
+    
+    Component child1Updated = child1;
+    child1Updated.setIsDeleted(true);
+    Component child2Updated = child2;
+    child2Updated.setIsDeleted(true);
+
+    // mocks
+    when(componentConstraintChecker.canUnprocess(parentComponent)).thenReturn(true);
+    when(componentRepository.findComponentsByDonationIdentificationNumber(null)).thenReturn(Arrays.asList(parentComponent, child1, child2));
+    when(componentRepository.update(argThat(ComponentMatcher.hasSameStateAsComponent(componentToUpdate)))).thenReturn(updatedComponent);
+    when(componentRepository.update(argThat(ComponentMatcher.hasSameStateAsComponent(child1Updated)))).thenReturn(child1Updated);
+    when(componentRepository.update(argThat(ComponentMatcher.hasSameStateAsComponent(child2Updated)))).thenReturn(child2Updated);
+    
+    // SUT
+    Component uprocessedComponent = componentCRUDService.unprocessComponent(parentComponent);
+
+    // check
+    assertThat("Parent component status is AVAILABLE", uprocessedComponent.getStatus(), is(ComponentStatus.AVAILABLE));
+    assertThat("child1 is deleted", child1Updated.getIsDeleted(), is(true));
+    assertThat("child2 is deleted", child2Updated.getIsDeleted(), is(true));
+  }
+  
+  
 }
