@@ -14,5 +14,95 @@
 			<column name="lowVolumeWeight" type="int(3)"/>
 		</addColumn>
 	</changeSet>
+	
+	<changeSet id="20160628-1343" author="timler">
+	    <preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM PackType;
+				]]>
+			</sqlCheck>
+ 		</preConditions>
+		<comment>Add pack types with weight</comment>
+		<insert tableName = "PackType">
+			<column name="packType" value="Single"/>
+			<column name="isDeleted" value="0"/>
+			<column name="componentType_id" value="1"/>
+			<column name="countAsDonation" value="1"/>
+			<column name="periodBetweenDonations" value="90"/>
+			<column name="testSampleProduced" value="1"/>
+			<column name="minWeight" value="426"/>
+			<column name="maxWeight" value="520"/>
+			<column name="lowVolumeWeight" value="316"/>
+		</insert>
+		<insert tableName = "PackType">
+			<column name="packType" value="Double"/>
+			<column name="isDeleted" value="0"/>
+			<column name="componentType_id" value="2"/>
+			<column name="countAsDonation" value="1"/>
+			<column name="periodBetweenDonations" value="90"/>
+			<column name="testSampleProduced" value="1"/>
+			<column name="minWeight" value="426"/>
+			<column name="maxWeight" value="520"/>
+			<column name="lowVolumeWeight" value="316"/>
+		</insert>
+		<insert tableName = "PackType">
+			<column name="packType" value="Triple"/>
+			<column name="isDeleted" value="0"/>
+			<column name="componentType_id" value="3"/>
+			<column name="countAsDonation" value="1"/>
+			<column name="periodBetweenDonations" value="90"/>
+			<column name="testSampleProduced" value="1"/>
+			<column name="minWeight" value="426"/>
+			<column name="maxWeight" value="520"/>
+			<column name="lowVolumeWeight" value="316"/>
+		</insert>
+		<insert tableName = "PackType">
+			<column name="packType" value="Quad"/>
+			<column name="isDeleted" value="0"/>
+			<column name="componentType_id" value="4"/>
+			<column name="countAsDonation" value="1"/>
+			<column name="periodBetweenDonations" value="90"/>
+			<column name="testSampleProduced" value="1"/>
+			<column name="minWeight" value="426"/>
+			<column name="maxWeight" value="520"/>
+			<column name="lowVolumeWeight" value="316"/>
+		</insert>
+		<insert tableName = "PackType">
+			<column name="packType" value="Apheresis"/>
+			<column name="isDeleted" value="0"/>
+			<column name="componentType_id" value="5"/>
+			<column name="countAsDonation" value="1"/>
+			<column name="periodBetweenDonations" value="30"/>
+			<column name="testSampleProduced" value="1"/>
+			<column name="minWeight" value="1"/>
+			<column name="maxWeight" value="600"/>
+			<column name="lowVolumeWeight" value="1"/>
+		</insert>
+		<insert tableName = "PackType">
+			<column name="packType" value="Dry Pack"/>
+			<column name="isDeleted" value="0"/>
+			<column name="componentType_id" value="NULL"/>
+			<column name="countAsDonation" value="0"/>
+			<column name="periodBetweenDonations" value="0"/>
+			<column name="testSampleProduced" value="1"/>
+		</insert>
+		<insert tableName = "PackType">
+			<column name="packType" value="Test Only"/>
+			<column name="isDeleted" value="0"/>
+			<column name="componentType_id" value="NULL"/>
+			<column name="countAsDonation" value="0"/>
+			<column name="periodBetweenDonations" value="0"/>
+			<column name="testSampleProduced" value="1"/>
+		</insert>
+		<insert tableName = "PackType">
+			<column name="packType" value="Did Not Bleed"/>
+			<column name="isDeleted" value="0"/>
+			<column name="componentType_id" value="NULL"/>
+			<column name="countAsDonation" value="0"/>
+			<column name="periodBetweenDonations" value="0"/>
+			<column name="testSampleProduced" value="0"/>
+		</insert>
+	</changeSet>
 
 </databaseChangeLog>

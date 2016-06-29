@@ -252,75 +252,6 @@
 			<column name="isDeleted" value="0"/>
 		</insert>
 	</changeSet>
-	
-	<!-- Updated (timler): for #294 (refactoring) -->
-	<!-- Updated (timler): for #328 (refactoring) -->
-	<changeSet id="20150818-1244" author="danfuterman">
-	    <preConditions onFail="MARK_RAN">
-		    <sqlCheck expectedResult="0"> 
-				<![CDATA[
-				SELECT count(*) FROM PackType WHERE packType = "Single";
-				]]>
-			</sqlCheck>
- 		</preConditions>
-		<comment>add pack types</comment>
-		<insert tableName = "PackType">
-			<column name="packType" value="Single"/>
-			<column name="isDeleted" value="0"/>
-			<column name="componentType_id" value="1"/>
-			<column name="countAsDonation" value="1"/>
-			<column name="periodBetweenDonations" value="90"/>
-		</insert>
-		<insert tableName = "PackType">
-			<column name="packType" value="Double"/>
-			<column name="isDeleted" value="0"/>
-			<column name="componentType_id" value="2"/>
-			<column name="countAsDonation" value="1"/>
-			<column name="periodBetweenDonations" value="90"/>
-		</insert>
-		<insert tableName = "PackType">
-			<column name="packType" value="Triple"/>
-			<column name="isDeleted" value="0"/>
-			<column name="componentType_id" value="3"/>
-			<column name="countAsDonation" value="1"/>
-			<column name="periodBetweenDonations" value="90"/>
-		</insert>
-		<insert tableName = "PackType">
-			<column name="packType" value="Quad"/>
-			<column name="isDeleted" value="0"/>
-			<column name="componentType_id" value="4"/>
-			<column name="countAsDonation" value="1"/>
-			<column name="periodBetweenDonations" value="90"/>
-		</insert>
-		<insert tableName = "PackType">
-			<column name="packType" value="Apheresis"/>
-			<column name="isDeleted" value="0"/>
-			<column name="componentType_id" value="5"/>
-			<column name="countAsDonation" value="1"/>
-			<column name="periodBetweenDonations" value="30"/>
-		</insert>
-		<insert tableName = "PackType">
-			<column name="packType" value="Dry Pack"/>
-			<column name="isDeleted" value="0"/>
-			<column name="componentType_id" value="NULL"/>
-			<column name="countAsDonation" value="0"/>
-			<column name="periodBetweenDonations" value="0"/>
-		</insert>
-		<insert tableName = "PackType">
-			<column name="packType" value="Test Only"/>
-			<column name="isDeleted" value="0"/>
-			<column name="componentType_id" value="NULL"/>
-			<column name="countAsDonation" value="0"/>
-			<column name="periodBetweenDonations" value="0"/>
-		</insert>
-		<insert tableName = "PackType">
-			<column name="packType" value="Did Not Bleed"/>
-			<column name="isDeleted" value="0"/>
-			<column name="componentType_id" value="NULL"/>
-			<column name="countAsDonation" value="0"/>
-			<column name="periodBetweenDonations" value="0"/>
-		</insert>
-	</changeSet>
 
 	<!-- Updated (timler): for #294 (refactoring) -->
 	<changeSet id="20150817-1552" author="danfuterman">
@@ -917,20 +848,6 @@
 			<column name="preferredAddressType" value="Postal Address"></column>
 		</insert>
 	</changeSet>
-    
-    <changeSet id="201509171503" author="bausmeier">
-        
-        <update tableName="PackType">
-            <column name="testSampleProduced" value="1"></column>
-            <where>id != 8</where>
-        </update>
-
-        <update tableName="PackType">
-            <column name="testSampleProduced" value="0"></column>
-            <where>id = 8</where>
-        </update>
-
-    </changeSet>
     
     <changeSet id="20150922-1100" author="danfuterman">
 		<comment>Add default adverse event types</comment>

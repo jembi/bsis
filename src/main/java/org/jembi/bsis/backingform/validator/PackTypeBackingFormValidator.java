@@ -28,12 +28,27 @@ public class PackTypeBackingFormValidator extends BaseValidator<PackTypeBackingF
     if (form.getCountAsDonation()) {
       if (form.getMinWeight() == null) {
         errors.rejectValue("minWeight", "minWeight.required", "minWeight required for Pack types that can produce Components");
+      } else {
+        Integer minWeight = form.getMinWeight();
+        if (minWeight <= 0 || minWeight >= 1000) {
+          errors.rejectValue("minWeight", "minWeight.invalid", "minWeight should be between 0 and 1000");
+        }
       }
       if (form.getMaxWeight() == null) {
         errors.rejectValue("maxWeight", "maxWeight.required", "maxWeight required for Pack types that can produce Components");
+      } else {
+        Integer maxWeight = form.getMaxWeight();
+        if (maxWeight <= 0 || maxWeight >= 1000) {
+          errors.rejectValue("maxWeight", "maxWeight.invalid", "maxWeight should be between 0 and 1000");
+        }
       }
       if (form.getLowVolumeWeight() == null) {
         errors.rejectValue("lowVolumeWeight", "lowVolumeWeight.required", "lowVolumeWeight required for Pack types that can produce Components");
+      } else {
+        Integer lowVolumeWeight = form.getLowVolumeWeight();
+        if (lowVolumeWeight <= 0 || lowVolumeWeight >= 1000) {
+          errors.rejectValue("lowVolumeWeight", "lowVolumeWeight.invalid", "lowVolumeWeight should be between 0 and 1000");
+        }
       }
     }
   }
