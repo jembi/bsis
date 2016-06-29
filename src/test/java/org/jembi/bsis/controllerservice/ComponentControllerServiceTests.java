@@ -29,6 +29,7 @@ import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.service.ComponentCRUDService;
 import org.jembi.bsis.suites.UnitTestSuite;
+import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.junit.Test;
@@ -104,21 +105,21 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
         ComponentBuilder.aComponent().withId(1L).build(),
         ComponentBuilder.aComponent().withId(2L).build()
     );
-    List<ComponentViewModel> componentViewModels = Arrays.asList(
-        ComponentViewModelBuilder.aComponentViewModel().build(),
-        ComponentViewModelBuilder.aComponentViewModel().build()
+    List<ComponentManagementViewModel> componentViewModels = Arrays.asList(
+        ComponentManagementViewModelBuilder.aComponentManagementViewModel().build(),
+        ComponentManagementViewModelBuilder.aComponentManagementViewModel().build()
     );
     
     // setup mocks
     Mockito.when(componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber)).thenReturn(components);
-    Mockito.when(componentFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
+    Mockito.when(componentFactory.createManagementViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
     componentControllerService.findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
     
     // verify
     Mockito.verify(componentRepository).findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
-    Mockito.verify(componentFactory).createComponentViewModels(components);
+    Mockito.verify(componentFactory).createManagementViewModels(components);
   }
   
   @Test
@@ -195,9 +196,9 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
           .build(),
         ComponentBuilder.aComponent().withId(2L).build()
     );
-    List<ComponentViewModel> componentViewModels = Arrays.asList(
-        ComponentViewModelBuilder.aComponentViewModel().build(),
-        ComponentViewModelBuilder.aComponentViewModel().build()
+    List<ComponentManagementViewModel> componentViewModels = Arrays.asList(
+        ComponentManagementViewModelBuilder.aComponentManagementViewModel().build(),
+        ComponentManagementViewModelBuilder.aComponentManagementViewModel().build()
     );
     RecordComponentBackingForm form = new RecordComponentBackingForm();
     form.setParentComponentId("1");
@@ -206,7 +207,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     // setup mocks   
     Mockito.when(componentCRUDService.processComponent(form.getParentComponentId(), form.getComponentTypeCombination())).thenReturn(components.get(0));
     Mockito.when(componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber)).thenReturn(components);
-    Mockito.when(componentFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
+    Mockito.when(componentFactory.createManagementViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
     componentControllerService.processComponent(form);
@@ -214,7 +215,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     // verify
     Mockito.verify(componentCRUDService).processComponent(form.getParentComponentId(), form.getComponentTypeCombination());
     Mockito.verify(componentRepository).findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
-    Mockito.verify(componentFactory).createComponentViewModels(components);
+    Mockito.verify(componentFactory).createManagementViewModels(components);
   }
   
   @Test
