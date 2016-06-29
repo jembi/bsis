@@ -201,16 +201,78 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
+  public void testCanRecordWeightWithQuarantinedComponent_shouldReturnTrue() {
+    Component component = aComponent().withStatus(ComponentStatus.QUARANTINED).build();
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(true));
+  }
+
+  @Test
+  public void testCanRecordWeightWithAvailableComponent_shouldReturnTrue() {
+    Component component = aComponent().withStatus(ComponentStatus.AVAILABLE).build();
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(true));
+  }
+
+  @Test
+  public void testCanRecordWeightWithUnsafeComponent_shouldReturnTrue() {
+    Component component = aComponent().withStatus(ComponentStatus.UNSAFE).build();
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(true));
+  }
+
+  @Test
+  public void testCanRecordWeightWithExpiredComponent_shouldReturnTrue() {
+    Component component = aComponent().withStatus(ComponentStatus.EXPIRED).build();
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(true));
+  }
+
+  @Test
+  public void testCanRecordWeightWithIssuedComponent_shouldReturnFalse() {
+    Component component = aComponent().withStatus(ComponentStatus.ISSUED).build();
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(false));
+  }
+
+  @Test
+  public void testCanRecordWeightWithUsedComponent_shouldReturnFalse() {
+    Component component = aComponent().withStatus(ComponentStatus.USED).build();
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(false));
+  }
+
+  @Test
+  public void testCanRecordWeightWithRecordWeightedComponent_shouldReturnFalse() {
+    Component component = aComponent().withStatus(ComponentStatus.DISCARDED).build();
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(false));
+  }
+
+  @Test
+  public void testCanRecordWeightWithProcessedComponent_shouldReturnFalse() {
+    Component component = aComponent().withStatus(ComponentStatus.PROCESSED).build();
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(false));
+  }
+
+  @Test
+  public void testCanRecordWeightWithSplitComponent_shouldReturnFalse() {
+    Component component = aComponent().withStatus(ComponentStatus.SPLIT).build();
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(false));
+  }
+
+  @Test
   public void testCanRecordWeigthWithInitialComponent_shouldReturnTrue() {
-    Component component = aComponent().withParentComponent(null).build();
+    Component component = aComponent().withStatus(ComponentStatus.AVAILABLE).withParentComponent(null).build();
     boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
     assertThat(canRecordWeight, is(true));
   }
 
   @Test
   public void testCanRecordWeigthWithNotAnInitialComponent_shouldReturnFalse() {
-    Component parentComponent = aComponent().build();
-    Component component = aComponent().withParentComponent(parentComponent).build();
+    Component component = aComponent().withStatus(ComponentStatus.AVAILABLE).withParentComponent(aComponent().build()).build();
     boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
     assertThat(canRecordWeight, is(false));
   }

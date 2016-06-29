@@ -12,19 +12,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ComponentConstraintChecker {
   
-  // Statuses for which a component can be discarded or processed
-  private static final List<ComponentStatus> CAN_DISCARD_OR_PROCESS_STATUSES = Arrays.asList(
+  // Statuses for which a component can be discarded or processed or weight can be recorded for
+  private static final List<ComponentStatus> CAN_DISCARD_OR_PROCESS_OR_RECORD_WEIGHT_STATUSES = Arrays.asList(
       ComponentStatus.QUARANTINED,
       ComponentStatus.AVAILABLE,
       ComponentStatus.UNSAFE,
       ComponentStatus.EXPIRED);
   
   public boolean canDiscard(Component component) {
-    return CAN_DISCARD_OR_PROCESS_STATUSES.contains(component.getStatus());
+    return CAN_DISCARD_OR_PROCESS_OR_RECORD_WEIGHT_STATUSES.contains(component.getStatus());
   }
 
   public boolean canRecordWeight(Component component) {
-    return component.getParentComponent() == null;
+    if (component.getParentComponent() != null) {
+      return false;
+    }
+    return CAN_DISCARD_OR_PROCESS_OR_RECORD_WEIGHT_STATUSES.contains(component.getStatus());
   }
 
   public boolean canProcess(Component component) {
@@ -37,7 +40,7 @@ public class ComponentConstraintChecker {
       // There must be component type combinations for that component type to be able to process it
       return false;
     }
-    return CAN_DISCARD_OR_PROCESS_STATUSES.contains(component.getStatus());
+    return CAN_DISCARD_OR_PROCESS_OR_RECORD_WEIGHT_STATUSES.contains(component.getStatus());
   }
 
 }
