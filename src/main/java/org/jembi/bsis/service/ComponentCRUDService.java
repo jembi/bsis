@@ -20,7 +20,6 @@ import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.inventory.InventoryStatus;
-import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.utils.SecurityUtils;
@@ -220,14 +219,9 @@ public class ComponentCRUDService {
   }
   
   public Component updateComponent(Component component) {
-    // check initial component weight and discard if too low or high
-    if (component.getParentComponent() == null && component.getWeight() != null) {
-      PackType packType = component.getDonation().getPackType();
-      Integer weight = component.getWeight();
-      if (weight > packType.getMaxWeight() || weight < packType.getMinWeight()) {
-        LOGGER.info("Flagging component for discard due to its weight " + component);
-        component.setStatus(ComponentStatus.UNSAFE);
-      }
+    if (componentStatusCalculator.shouldComponentBeDiscarded(component)) {
+      LOGGER.info("Flagging component for discard " + component);
+      component.setStatus(ComponentStatus.UNSAFE);
     }
     componentStatusCalculator.updateComponentStatus(component);
     return componentRepository.update(component);

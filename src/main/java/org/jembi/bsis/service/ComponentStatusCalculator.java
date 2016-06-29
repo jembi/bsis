@@ -10,6 +10,7 @@ import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationRepository;
@@ -44,6 +45,29 @@ public class ComponentStatusCalculator {
     }
 
     // There are no positive blood tests which flag components for discard
+    return false;
+  }
+  
+  /**
+   * Determines if the Component should be flagged for discard.
+   * 
+   * Reasons:
+   *  - initial component weight not between the PackType min and max weight
+   * 
+   * @param component
+   * @return
+   */
+  public boolean shouldComponentBeDiscarded(Component component) {
+    if (component.getParentComponent() == null && component.getWeight() != null) {
+      PackType packType = component.getDonation().getPackType();
+      if (packType.getMinWeight() == null || packType.getMaxWeight() == null) {
+        throw new IllegalStateException("PackType does not have a min and max weight specified: " + packType);
+      }
+      Integer weight = component.getWeight();
+      if (weight > packType.getMaxWeight() || weight < packType.getMinWeight()) {
+        return true;
+      }
+    }
     return false;
   }
 

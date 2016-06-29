@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
+import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aReleasedTestBatch;
 
@@ -96,6 +97,105 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     boolean result = componentStatusCalculator.shouldComponentsBeDiscarded(bloodTestResults);
 
     assertThat(result, is(true));
+  }
+  
+  @Test
+  public void testShouldComponentBeDiscardedLowWeight_shouldReturnTrue() throws Exception {
+    // set up data
+    Component component = aComponent()
+        .withId(1L)
+        .withWeight(320)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .build();
+    
+    // set up mocks
+    
+    // SUT
+    boolean discarded = componentStatusCalculator.shouldComponentBeDiscarded(component);
+    
+    // verify
+    assertThat("component should be discarded", discarded, is(true));
+  }
+  
+  @Test
+  public void testShouldComponentBeDiscardedHighWeight_shouldReturnTrue() throws Exception {
+    // set up data
+    Component component = aComponent()
+        .withId(1L)
+        .withWeight(520)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .build();
+    
+    // set up mocks
+    
+    // SUT
+    boolean discarded = componentStatusCalculator.shouldComponentBeDiscarded(component);
+    
+    // verify
+    assertThat("component should be discarded", discarded, is(true));
+  }
+  
+  @Test
+  public void testShouldComponentBeDiscarded_shouldReturnFalse() throws Exception {
+    // set up data
+    Component component = aComponent()
+        .withId(1L)
+        .withWeight(420)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .build();
+    
+    // set up mocks
+    
+    // SUT
+    boolean discarded = componentStatusCalculator.shouldComponentBeDiscarded(component);
+    
+    // verify
+    assertThat("component shouldn't be discarded", discarded, is(false));
+  }
+  
+  @Test(expected=java.lang.IllegalStateException.class)
+  public void testShouldComponentBeDiscardedNoMinAndMaxWeight_shouldThrowAnException() throws Exception {
+    // set up data
+    Component component = aComponent()
+        .withId(1L)
+        .withWeight(420)
+        .withDonation(aDonation().withPackType(aPackType().build()).build())
+        .build();
+    
+    // set up mocks
+    
+    // SUT
+    componentStatusCalculator.shouldComponentBeDiscarded(component);
+  }
+
+  @Test(expected=java.lang.IllegalStateException.class)
+  public void testShouldComponentBeDiscardedNoMinWeight_shouldThrowAnException() throws Exception {
+    // set up data
+    Component component = aComponent()
+        .withId(1L)
+        .withWeight(420)
+        .withDonation(aDonation().withPackType(aPackType().withMaxWeight(500).build()).build())
+        .build();
+    
+    // set up mocks
+    
+    // SUT
+    componentStatusCalculator.shouldComponentBeDiscarded(component);
+  }
+  
+  @Test(expected=java.lang.IllegalStateException.class)
+  public void testShouldComponentBeDiscardedNoMaxWeight_shouldThrowAnException() throws Exception {
+    // set up data
+    Component component = aComponent()
+        .withId(1L)
+        .withWeight(420)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).build()).build())
+        .build();
+    
+    // set up mocks
+    
+    // SUT
+    componentStatusCalculator.shouldComponentBeDiscarded(component);
   }
 
   @Test
