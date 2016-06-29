@@ -234,4 +234,22 @@ public class ComponentCRUDService {
   public List<Component> findComponentsByDINAndType(String donationIdentificationNumber, Long componentTypeId) {
     return componentRepository.findComponentsByDINAndType(donationIdentificationNumber, componentTypeId);
   }
+
+  public Component unprocessComponent(Component component) {
+    if (!componentConstraintChecker.canUnprocess(component)) {
+      throw new IllegalStateException("Component " + component.getId() + " cannot be unprocessed.");
+    }
+    LOGGER.info("Unprocessing component: " + component);
+    List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber(component.getDonationIdentificationNumber());
+    for (Component comp:components) {
+      // mark all child components as deleted
+      if (comp.getId() != component.getId()) {
+        comp.setIsDeleted(true);
+      }
+      component.setStatus(ComponentStatus.QUARANTINED);
+      componentStatusCalculator.updateComponentStatus(component);
+    }
+
+    return component;
+  }
 }

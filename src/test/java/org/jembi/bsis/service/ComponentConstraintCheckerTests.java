@@ -5,18 +5,27 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
+import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
 
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.inventory.InventoryStatus;
+import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 public class ComponentConstraintCheckerTests extends UnitTestSuite {
   
   @InjectMocks
   private ComponentConstraintChecker componentConstraintChecker;
   
+  @Mock
+  private ComponentRepository componentRepository;
+
   @Test
   public void testCanDiscardWithQuarantinedComponent_shouldReturnTrue() {
     Component component = aComponent().withStatus(ComponentStatus.QUARANTINED).build();
@@ -334,10 +343,39 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCanUnprocessWithProcessedComponent_shouldReturnTrue() {
-    Component component = aComponent().withStatus(ComponentStatus.PROCESSED).build();
-    boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
+  public void testCanUnprocessWithAvailableNotInStockChildren_shouldReturnTrue() {
+    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
+    Component child1 = aComponent().withId(2L).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+    Component child2 = aComponent().withId(3L).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+
+    when(componentRepository.findComponentsByDonationIdentificationNumber(null)).thenReturn(Arrays.asList(parentComponent, child1, child2));
+
+    boolean canUnprocess = componentConstraintChecker.canUnprocess(parentComponent);
     assertThat(canUnprocess, is(true));
+  }
+  
+  @Test
+  public void testCanUnprocessWithWrongStatusChild_shouldReturnFalse() {
+    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
+    Component child1 = aComponent().withId(2L).withStatus(ComponentStatus.DISCARDED).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+    Component child2 = aComponent().withId(3L).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+
+    when(componentRepository.findComponentsByDonationIdentificationNumber(null)).thenReturn(Arrays.asList(parentComponent, child1, child2));
+
+    boolean canUnprocess = componentConstraintChecker.canUnprocess(parentComponent);
+    assertThat(canUnprocess, is(false));
+  }
+  
+  @Test
+  public void testCanUnprocessWithWrongInventoryStatusChild_shouldReturnFalse() {
+    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
+    Component child1 = aComponent().withId(2L).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.IN_STOCK).build();
+    Component child2 = aComponent().withId(3L).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+
+    when(componentRepository.findComponentsByDonationIdentificationNumber(null)).thenReturn(Arrays.asList(parentComponent, child1, child2));
+
+    boolean canUnprocess = componentConstraintChecker.canUnprocess(parentComponent);
+    assertThat(canUnprocess, is(false));
   }
 
 }
