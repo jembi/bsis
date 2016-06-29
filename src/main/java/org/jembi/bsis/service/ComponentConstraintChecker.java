@@ -32,6 +32,11 @@ public class ComponentConstraintChecker {
       // Can't process initial components with no recorded weight
       return false;
     }
+    if (component.getComponentType().getProducedComponentTypeCombinations() == null
+        || component.getComponentType().getProducedComponentTypeCombinations().size() == 0) {
+      // There must be component type combinations for that component type to be able to process it
+      return false;
+    }
     return CAN_DISCARD_OR_PROCESS_STATUSES.contains(component.getStatus());
   }
 
