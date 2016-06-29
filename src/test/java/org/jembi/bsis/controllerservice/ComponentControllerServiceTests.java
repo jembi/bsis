@@ -10,11 +10,11 @@ import java.util.List;
 
 import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
-import org.jembi.bsis.controllerservice.ComponentControllerService;
+import org.jembi.bsis.factory.ComponentFactory;
 import org.jembi.bsis.factory.ComponentStatusChangeReasonFactory;
 import org.jembi.bsis.factory.ComponentTypeFactory;
-import org.jembi.bsis.factory.ComponentFactory;
 import org.jembi.bsis.helpers.builders.ComponentBuilder;
+import org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.helpers.builders.ComponentViewModelBuilder;
 import org.jembi.bsis.helpers.builders.DonationBuilder;
@@ -286,7 +286,8 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     // setup mocks
     Mockito.when(componentFactory.createEntity(backingForm)).thenReturn(component);
     Mockito.when(componentCRUDService.updateComponent(component)).thenReturn(component);
-    Mockito.when(componentFactory.createComponentViewModel(component)).thenReturn(ComponentViewModelBuilder.aComponentViewModel().build());
+    Mockito.when(componentFactory.createManagementViewModel(component))
+    .thenReturn(ComponentManagementViewModelBuilder.aComponentManagementViewModel().build());
     
     // SUT
     componentControllerService.updateComponent(backingForm);
@@ -294,6 +295,6 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     // verify
     Mockito.verify(componentFactory).createEntity(backingForm);
     Mockito.verify(componentCRUDService).updateComponent(component);
-    Mockito.verify(componentFactory).createComponentViewModel(component);
+    Mockito.verify(componentFactory).createManagementViewModel(component);
   }
 }
