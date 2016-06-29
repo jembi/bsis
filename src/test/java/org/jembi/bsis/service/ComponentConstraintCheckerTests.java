@@ -178,4 +178,67 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
     assertThat(canRecordWeight, is(false));
   }
 
+  @Test
+  public void testCanUnprocessWithQuarantinedComponent_shouldReturnFalse() {
+    Component component = aComponent().withStatus(ComponentStatus.QUARANTINED).build();
+    boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
+    assertThat(canUnprocess, is(false));
+  }
+
+  @Test
+  public void testCanUnprocessWithAvailableComponent_shouldReturnFalse() {
+    Component component = aComponent().withStatus(ComponentStatus.AVAILABLE).build();
+    boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
+    assertThat(canUnprocess, is(false));
+  }
+
+  @Test
+  public void testCanUnprocessWithUnsafeComponent_shouldReturnFalse() {
+    Component component = aComponent().withStatus(ComponentStatus.UNSAFE).build();
+    boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
+    assertThat(canUnprocess, is(false));
+  }
+
+  @Test
+  public void testCanUnprocessWithExpiredComponent_shouldReturnFalse() {
+    Component component = aComponent().withStatus(ComponentStatus.EXPIRED).build();
+    boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
+    assertThat(canUnprocess, is(false));
+  }
+
+  @Test
+  public void testCanUnprocessWithIssuedComponent_shouldReturnFalse() {
+    Component component = aComponent().withStatus(ComponentStatus.ISSUED).build();
+    boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
+    assertThat(canUnprocess, is(false));
+  }
+
+  @Test
+  public void testCanUnprocessWithUsedComponent_shouldReturnFalse() {
+    Component component = aComponent().withStatus(ComponentStatus.USED).build();
+    boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
+    assertThat(canUnprocess, is(false));
+  }
+
+  @Test
+  public void testCanUnprocessWithDiscardedComponent_shouldReturnFalse() {
+    Component component = aComponent().withStatus(ComponentStatus.DISCARDED).build();
+    boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
+    assertThat(canUnprocess, is(false));
+  }
+
+  @Test
+  public void testCanUnprocessWithSplitComponent_shouldReturnFalse() {
+    Component component = aComponent().withStatus(ComponentStatus.SPLIT).build();
+    boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
+    assertThat(canUnprocess, is(false));
+  }
+
+  @Test
+  public void testCanUnprocessWithProcessedComponent_shouldReturnTrue() {
+    Component component = aComponent().withStatus(ComponentStatus.PROCESSED).build();
+    boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
+    assertThat(canUnprocess, is(true));
+  }
+
 }

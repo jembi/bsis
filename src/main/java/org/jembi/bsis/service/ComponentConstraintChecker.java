@@ -35,4 +35,8 @@ public class ComponentConstraintChecker {
     return CAN_DISCARD_OR_PROCESS_STATUSES.contains(component.getStatus());
   }
 
+  public boolean canUnprocess(Component component) {
+    return component.getStatus().equals(ComponentStatus.PROCESSED);
+  }
+
 }
