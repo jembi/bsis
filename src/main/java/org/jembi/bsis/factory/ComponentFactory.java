@@ -57,7 +57,7 @@ public class ComponentFactory {
   public ComponentManagementViewModel createManagementViewModel(Component component) {
     ComponentManagementViewModel viewModel = new ComponentManagementViewModel();
     viewModel.setComponentCode(component.getComponentCode());
-    viewModel.setComponentType(componentTypeFactory.createViewModel(component.getComponentType()));
+    viewModel.setComponentType(componentTypeFactory.createFullViewModel(component.getComponentType()));
     viewModel.setCreatedOn(component.getCreatedOn());
     viewModel.setExpiryStatus(getExpiryStatus(component));
     viewModel.setId(component.getId());
