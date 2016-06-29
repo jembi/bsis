@@ -27,6 +27,7 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.service.ComponentConstraintChecker;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
+import org.jembi.bsis.viewmodel.ComponentTypeFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
@@ -141,7 +142,7 @@ public class ComponentFactoryTests {
         .withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentCode("0011")
-        .withComponentType(new ComponentTypeViewModel(componentType))
+        .withComponentType(new ComponentTypeFullViewModel(componentType))
         .withCreatedOn(createdOn)
         .withWeigth(222)
         .withPermission("canDiscard", true)
@@ -151,7 +152,7 @@ public class ComponentFactoryTests {
         .build();
 
     // setup mocks
-    when(componentTypeFactory.createViewModel(componentType)).thenReturn(new ComponentTypeViewModel(componentType));
+    when(componentTypeFactory.createFullViewModel(componentType)).thenReturn(new ComponentTypeFullViewModel(componentType));
     when(componentConstraintChecker.canDiscard(component)).thenReturn(true);
     when(componentConstraintChecker.canProcess(component)).thenReturn(true);
     when(componentConstraintChecker.canRecordWeight(component)).thenReturn(true);

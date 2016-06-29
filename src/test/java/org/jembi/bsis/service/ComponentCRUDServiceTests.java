@@ -555,6 +555,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Component component = aComponent().withId(1L).build();
     
     // mocks
+    when(componentStatusCalculator.shouldComponentBeDiscarded(component)).thenReturn(false);
     when(componentStatusCalculator.updateComponentStatus(component)).thenReturn(false);
     when(componentRepository.update(component)).thenReturn(component);
     
@@ -567,7 +568,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testUpdateComponent_shouldDiscardComponentIfWeightTooLow() throws Exception {
+  public void testUpdateComponent_shouldDiscardComponent() throws Exception {
     // set up data
     Component component = aComponent()
         .withId(1L)
@@ -576,26 +577,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .build();
     
     // mocks
-    when(componentStatusCalculator.updateComponentStatus(component)).thenReturn(false);
-    when(componentRepository.update(component)).thenReturn(component);
-    
-    // SUT
-    Component updatedComponent = componentCRUDService.updateComponent(component);
-    
-    // check
-    assertThat("Component was flagged for discard", updatedComponent.getStatus(), is(ComponentStatus.UNSAFE));
-  }
-  
-  @Test
-  public void testUpdateComponent_shouldDiscardComponentIfWeightTooHigh() throws Exception {
-    // set up data
-    Component component = aComponent()
-        .withId(1L)
-        .withWeight(520)
-        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
-        .build();
-    
-    // mocks
+    when(componentStatusCalculator.shouldComponentBeDiscarded(component)).thenReturn(true);
     when(componentStatusCalculator.updateComponentStatus(component)).thenReturn(false);
     when(componentRepository.update(component)).thenReturn(component);
     
