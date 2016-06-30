@@ -60,6 +60,7 @@ public class ComponentFactory {
     component.setDiscardedOn(existingComponent.getDiscardedOn());
     component.setIssuedOn(existingComponent.getIssuedOn());
     component.setNotes(existingComponent.getNotes());
+    component.setIsDeleted(existingComponent.getIsDeleted());
 
     return component;
   }
