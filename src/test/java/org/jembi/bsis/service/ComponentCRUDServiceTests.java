@@ -639,7 +639,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // set up data
     Donation d = aDonation().build();
     Location l = aLocation().build();
-    Component parentComponent = aComponent().withId(1L).withDonation(d).withLocation(l).build();
+    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).withDonation(d).withLocation(l).build();
     Component child1 = aComponent().withId(2L).withDonation(d).withLocation(l).build();
     Component child2 = aComponent().withId(3L).withDonation(d).withLocation(l).build();
 
@@ -651,7 +651,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
 
     // mocks
     when(componentConstraintChecker.canRollback(parentComponent)).thenReturn(true);
-    when(componentRepository.findComponentsByDonationIdentificationNumber(null)).thenReturn(Arrays.asList(parentComponent, child1, child2));
+    when(componentRepository.findChildComponents(parentComponent)).thenReturn(Arrays.asList(child1, child2));
     when(componentRepository.update(argThat(ComponentMatcher.hasSameStateAsComponent(componentToUpdate)))).thenReturn(updatedComponent);
     
     // SUT
