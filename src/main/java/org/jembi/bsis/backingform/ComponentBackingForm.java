@@ -1,6 +1,7 @@
 package org.jembi.bsis.backingform;
 
 import java.util.Date;
+import java.util.Map;
 
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
@@ -125,6 +126,11 @@ public class ComponentBackingForm {
 
   @JsonIgnore
   public void setBloodRh(String bloodRh) {
+    // Ignore
+  }
+  
+  @JsonIgnore
+  public void setPermissions(Map<String, Boolean> permissions) {
     // Ignore
   }
 
