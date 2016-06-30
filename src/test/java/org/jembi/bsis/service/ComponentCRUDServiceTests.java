@@ -7,8 +7,10 @@ import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentTyp
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
@@ -634,35 +636,35 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testRollbackComponent_shouldDeleteAllChildrenAndSetStatusToAvailable() throws Exception {
+  public void testRollbackComponent_shouldDeleteAllChildrenSetStatusToAvailableAndWeightToNull() throws Exception {
     // set up data
-    Component parentComponent = aComponent().withId(1L).build();
-    Component child1 = aComponent().withId(2L).build();
-    Component child2 = aComponent().withId(3L).build();
+    Donation d = aDonation().build();
+    Location l = aLocation().build();
+    Component parentComponent = aComponent().withId(1L).withWeight(555).withDonation(d).withLocation(l).build();
+    Component child1 = aComponent().withId(2L).withDonation(d).withLocation(l).build();
+    Component child2 = aComponent().withId(3L).withDonation(d).withLocation(l).build();
 
-    Component componentToUpdate = parentComponent;
-    componentToUpdate.setStatus(ComponentStatus.QUARANTINED);
-    Component updatedComponent = aComponent().withId(1L).withStatus(ComponentStatus.AVAILABLE).build();
-    
-    Component child1Updated = child1;
-    child1Updated.setIsDeleted(true);
-    Component child2Updated = child2;
-    child2Updated.setIsDeleted(true);
+    Component componentToUpdate = aComponent().withId(1L).withDonation(d).withLocation(l).withStatus(ComponentStatus.QUARANTINED).build();
+
+    Component updatedComponent = aComponent().withId(1L).withDonation(d).withLocation(l).withStatus(ComponentStatus.AVAILABLE).build();
+    Component child1Deleted = aComponent().withId(2L).withDonation(d).withLocation(l).withIsDeleted(true).build();
+    Component child2Deleted = aComponent().withId(3L).withDonation(d).withLocation(l).withIsDeleted(true).build();
 
     // mocks
     when(componentConstraintChecker.canRollback(parentComponent)).thenReturn(true);
     when(componentRepository.findComponentsByDonationIdentificationNumber(null)).thenReturn(Arrays.asList(parentComponent, child1, child2));
     when(componentRepository.update(argThat(ComponentMatcher.hasSameStateAsComponent(componentToUpdate)))).thenReturn(updatedComponent);
-    when(componentRepository.update(argThat(ComponentMatcher.hasSameStateAsComponent(child1Updated)))).thenReturn(child1Updated);
-    when(componentRepository.update(argThat(ComponentMatcher.hasSameStateAsComponent(child2Updated)))).thenReturn(child2Updated);
     
     // SUT
-    Component uprocessedComponent = componentCRUDService.rollbackComponent(parentComponent);
+    Component rolledBackComponent = componentCRUDService.rollbackComponent(parentComponent);
 
     // check
-    assertThat("Parent component status is AVAILABLE", uprocessedComponent.getStatus(), is(ComponentStatus.AVAILABLE));
-    assertThat("child1 is deleted", child1Updated.getIsDeleted(), is(true));
-    assertThat("child2 is deleted", child2Updated.getIsDeleted(), is(true));
+    verify(componentRepository, times(1)).update(argThat(ComponentMatcher.hasSameStateAsComponent(componentToUpdate)));
+    verify(componentRepository, times(1)).update(argThat(ComponentMatcher.hasSameStateAsComponent(child1Deleted)));
+    verify(componentRepository, times(1)).update(argThat(ComponentMatcher.hasSameStateAsComponent(child2Deleted)));
+
+    assertThat("Parent component status is AVAILABLE", rolledBackComponent.getStatus(), is(ComponentStatus.AVAILABLE));
+    assertNull("Parent component weight is null", rolledBackComponent.getWeight());
   }
   
   
