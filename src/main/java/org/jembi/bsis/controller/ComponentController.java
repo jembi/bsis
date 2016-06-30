@@ -146,6 +146,9 @@ public class ComponentController {
   public ResponseEntity<Map<String, Object>> updateComponent(
       @PathVariable("id") Long componentId,
       @RequestBody @Valid ComponentBackingForm componentBackingForm) {
+
+    componentBackingForm.setId(componentId); // Use the id parameter from the path
+
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("component", componentControllerService.updateComponent(componentBackingForm));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);

@@ -378,4 +378,11 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
     assertThat(canRollback, is(false));
   }
 
+  @Test
+  public void testCanRecordWeigthWithAlreadyRecordedWeight_shouldReturnFalse() {
+    Component component = aComponent().withStatus(ComponentStatus.AVAILABLE).withWeight(450).build();
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(false));
+  }
+
 }

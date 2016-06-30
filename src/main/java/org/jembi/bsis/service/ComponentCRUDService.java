@@ -161,7 +161,7 @@ public class ComponentCRUDService {
           component.setCreatedOn(createdOn);
           component.setExpiresOn(expiresOn);
 
-          addComponent(component);
+          add(component);
 
           // Set source component status to PROCESSED
           parentComponent.setStatus(ComponentStatus.PROCESSED);
@@ -169,7 +169,7 @@ public class ComponentCRUDService {
       }
     }
     
-    return updateComponent(parentComponent);
+    return update(parentComponent);
   }
 
   public void discardComponents(List<Long> componentIds, Long discardReasonId, String discardReasonText) {
@@ -207,24 +207,32 @@ public class ComponentCRUDService {
       existingComponent.setInventoryStatus(InventoryStatus.REMOVED);
     }
     
-    updateComponent(existingComponent);
+    update(existingComponent);
     
     return existingComponent;
   }
   
-  public Component addComponent(Component component) {
-    componentStatusCalculator.updateComponentStatus(component);
-    componentRepository.save(component);
-    return component;
-  }
-  
   public Component updateComponent(Component component) {
-    if (componentStatusCalculator.shouldComponentBeDiscarded(component)) {
-      LOGGER.info("Flagging component for discard " + component);
-      component.setStatus(ComponentStatus.UNSAFE);
+    Component existingComponent = componentRepository.findComponentById(component.getId());
+
+    // check if the weight is being updated
+    if (existingComponent.getWeight() != component.getWeight()) {
+      // check if it is possible to update the weight
+      if (!componentConstraintChecker.canRecordWeight(existingComponent)) {
+        throw new IllegalStateException("The weight of Component " + component.getId() 
+            + " cannot be updated from " + existingComponent.getWeight() + " to " + component.getWeight());
+      }
+      // it's OK to update the weight
+      existingComponent.setWeight(component.getWeight());
     }
-    componentStatusCalculator.updateComponentStatus(component);
-    return componentRepository.update(component);
+
+    // check if the component should be discarded 
+    if (componentStatusCalculator.shouldComponentBeDiscarded(existingComponent)) {
+      LOGGER.info("Flagging component for discard " + component);
+      existingComponent.setStatus(ComponentStatus.UNSAFE);
+    }
+
+    return update(existingComponent);
   }
   
   public Component findComponentById(Long id) {
@@ -254,4 +262,16 @@ public class ComponentCRUDService {
     component = componentRepository.update(component);
     return component;
   }
+  
+  private Component add(Component component) {
+    componentStatusCalculator.updateComponentStatus(component);
+    componentRepository.save(component);
+    return component;
+  }
+  
+  private Component update(Component component) {
+    componentStatusCalculator.updateComponentStatus(component);
+    return componentRepository.update(component);
+  }
+
 }

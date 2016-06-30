@@ -6,7 +6,6 @@ import java.util.Objects;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
-import org.jembi.bsis.viewmodel.ComponentViewModel;
 
 public class ComponentManagementViewModelMatcher extends TypeSafeMatcher<ComponentManagementViewModel> {
 
@@ -27,7 +26,8 @@ public class ComponentManagementViewModelMatcher extends TypeSafeMatcher<Compone
         .appendText("\nExpiry status: ").appendValue(expected.getExpiryStatus())
         .appendText("\nCreatedOn: ").appendValue(expected.getCreatedOn())
         .appendText("\nWeight: ").appendValue(expected.getWeight())
-        .appendText("\nPermissions: ").appendValue(expected.getPermissions());
+        .appendText("\nPermissions: ").appendValue(expected.getPermissions())
+        .appendText("\nPack type: ").appendValue(expected.getPackType());
   }
 
   @Override
@@ -39,7 +39,8 @@ public class ComponentManagementViewModelMatcher extends TypeSafeMatcher<Compone
         Objects.equals(actual.getStatus(), expected.getStatus()) &&
         Objects.equals(actual.getExpiryStatus(), expected.getExpiryStatus()) &&
         Objects.equals(actual.getPermissions(), expected.getPermissions()) &&
-        (Objects.equals(actual.getCreatedOn(), expected.getCreatedOn()) || Objects.equals(sdf.format(actual.getCreatedOn()), sdf.format(expected.getCreatedOn())));
+        (Objects.equals(actual.getCreatedOn(), expected.getCreatedOn()) || Objects.equals(sdf.format(actual.getCreatedOn()), sdf.format(expected.getCreatedOn()))) &&
+        Objects.equals(actual.getPackType(), expected.getPackType());
   }
 
   public static ComponentManagementViewModelMatcher hasSameStateAsComponentManagementViewModel(ComponentManagementViewModel expected) {
