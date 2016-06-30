@@ -38,8 +38,29 @@ public class ComponentFactory {
   private ComponentRepository componentRepository;
   
   public Component createEntity(ComponentBackingForm backingForm) {
-    Component component = componentRepository.findComponent(backingForm.getId());
-    component.setWeight(backingForm.getWeight());    
+    Component component = new Component();
+    
+    // set values from backing form
+    component.setId(backingForm.getId());
+    component.setWeight(backingForm.getWeight());
+    
+    // set values from existing Component
+    Component existingComponent = componentRepository.findComponent(backingForm.getId());
+    component.setComponentCode(existingComponent.getComponentCode());
+    component.setComponentType(existingComponent.getComponentType());
+    component.setStatus(existingComponent.getStatus());
+    component.setInventoryStatus(existingComponent.getInventoryStatus());
+    component.setParentComponent(existingComponent.getParentComponent());
+    component.setStatusChanges(existingComponent.getStatusChanges());
+    component.setDonation(existingComponent.getDonation());
+    component.setLocation(existingComponent.getLocation());
+    component.setComponentBatch(existingComponent.getComponentBatch());
+    component.setCreatedOn(existingComponent.getCreatedOn());
+    component.setExpiresOn(existingComponent.getExpiresOn());
+    component.setDiscardedOn(existingComponent.getDiscardedOn());
+    component.setIssuedOn(existingComponent.getIssuedOn());
+    component.setNotes(existingComponent.getNotes());
+
     return component;
   }
 
