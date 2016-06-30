@@ -24,7 +24,7 @@ public class ComponentConstraintChecker {
   }
 
   public boolean canRecordWeight(Component component) {
-    if (component.getParentComponent() != null) {
+    if (component.getWeight() != null || component.getParentComponent() != null) {
       return false;
     }
     return CAN_DISCARD_OR_PROCESS_OR_RECORD_WEIGHT_STATUSES.contains(component.getStatus());
