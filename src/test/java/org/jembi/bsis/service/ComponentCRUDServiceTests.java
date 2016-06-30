@@ -89,7 +89,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testDiscardComponent() throws Exception {
     // set up data
-    Component component = aComponent().build();
+    Component component = aComponent().withId(1L).build();
     Long discardReasonId = 1L;
     String reasonText = "junit";
     
@@ -140,7 +140,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testDiscardInStockComponent() throws Exception {
     // set up data
-    Component component = aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).build();
+    Component component = aComponent().withId(1L).withInventoryStatus(InventoryStatus.IN_STOCK).build();
     
     // set up mocks
     when(componentRepository.findComponentById(1L)).thenReturn(component);
@@ -549,34 +549,44 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     verify(componentRepository).save(component);
   }
   
-  @Test
-  public void testUpdateComponent_shouldCallStatusCalculatorAndRepository() throws Exception {
+  @Test(expected = java.lang.IllegalStateException.class)
+  public void testUpdateComponentWeight_shouldThrowException() throws Exception {
     // set up data
-    Component component = aComponent().withId(1L).build();
-    
-    // mocks
-    when(componentStatusCalculator.shouldComponentBeDiscarded(component)).thenReturn(false);
-    when(componentStatusCalculator.updateComponentStatus(component)).thenReturn(false);
-    when(componentRepository.update(component)).thenReturn(component);
-    
-    // SUT
-    componentCRUDService.updateComponent(component);
-    
-    // check
-    verify(componentStatusCalculator).updateComponentStatus(component);
-    verify(componentRepository).update(component);
-  }
-  
-  @Test
-  public void testUpdateComponent_shouldDiscardComponent() throws Exception {
-    // set up data
+    Long componentId = Long.valueOf(1);
+    Component oldComponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.PROCESSED)
+        .build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(componentId)
         .withWeight(320)
         .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
         .build();
     
     // mocks
+    when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
+    when(componentConstraintChecker.canRecordWeight(component)).thenReturn(false);
+    
+    // SUT
+    componentCRUDService.updateComponent(component);
+  }
+
+  @Test
+  public void testUpdateComponentWeight_shouldDiscardComponent() throws Exception {
+    // set up data
+    Long componentId = Long.valueOf(1);
+    Component oldComponent = aComponent()
+        .withId(componentId)
+        .build();
+    Component component = aComponent()
+        .withId(componentId)
+        .withWeight(320)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .build();
+    
+    // mocks
+    when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
+    when(componentConstraintChecker.canRecordWeight(component)).thenReturn(true);
     when(componentStatusCalculator.shouldComponentBeDiscarded(component)).thenReturn(true);
     when(componentStatusCalculator.updateComponentStatus(component)).thenReturn(false);
     when(componentRepository.update(component)).thenReturn(component);
@@ -586,5 +596,55 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // check
     assertThat("Component was flagged for discard", updatedComponent.getStatus(), is(ComponentStatus.UNSAFE));
+  }
+  
+  @Test
+  public void testUpdateComponentWeight_shouldNotDiscardComponent() throws Exception {
+    // set up data
+    Long componentId = Long.valueOf(1);
+    Component oldComponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .build();
+    Component component = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withWeight(420)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .build();
+    
+    // mocks
+    when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
+    when(componentConstraintChecker.canRecordWeight(component)).thenReturn(true);
+    when(componentStatusCalculator.shouldComponentBeDiscarded(component)).thenReturn(false);
+    when(componentStatusCalculator.updateComponentStatus(component)).thenReturn(false);
+    when(componentRepository.update(component)).thenReturn(component);
+    
+    // SUT
+    Component updatedComponent = componentCRUDService.updateComponent(component);
+    
+    // check
+    assertThat("Component was not flagged for discard", updatedComponent.getStatus(), is(ComponentStatus.QUARANTINED));
+  }
+  
+  @Test
+  public void testUpdateComponent_shouldJustSave() throws Exception {
+    // set up data
+    Long componentId = Long.valueOf(1);
+    Component component = aComponent()
+        .withId(componentId)
+        .build();
+    
+    // mocks
+    when(componentRepository.findComponentById(componentId)).thenReturn(component);
+    when(componentStatusCalculator.shouldComponentBeDiscarded(component)).thenReturn(false);
+    when(componentStatusCalculator.updateComponentStatus(component)).thenReturn(false);
+    when(componentRepository.update(component)).thenReturn(component);
+    
+    // SUT
+    componentCRUDService.updateComponent(component);
+    
+    // check
+    verify(componentRepository).update(component);
   }
 }

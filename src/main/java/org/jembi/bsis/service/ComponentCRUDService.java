@@ -219,11 +219,25 @@ public class ComponentCRUDService {
   }
   
   public Component updateComponent(Component component) {
+    // check if the weight is being updated
+    Component oldComponent = componentRepository.findComponentById(component.getId());
+    if (oldComponent.getWeight() != component.getWeight()) {
+      // check if it is possible to update the weight
+      if (!componentConstraintChecker.canRecordWeight(component)) {
+        throw new IllegalStateException("The weight of Component " + component.getId() 
+            + " cannot be updated from " + oldComponent.getWeight() + " to " + component.getWeight());
+      }
+    }
+
+    // check if the component should be discarded 
     if (componentStatusCalculator.shouldComponentBeDiscarded(component)) {
       LOGGER.info("Flagging component for discard " + component);
       component.setStatus(ComponentStatus.UNSAFE);
     }
+
+    // ensure the component status is correct
     componentStatusCalculator.updateComponentStatus(component);
+
     return componentRepository.update(component);
   }
   
