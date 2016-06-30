@@ -18,6 +18,7 @@ public class ComponentManagementViewModel extends BaseViewModel {
   private String componentCode;
   private Integer weight;
   private Map<String, Boolean> permissions = new HashMap<>();
+  private PackTypeFullViewModel packType;
 
   public ComponentTypeViewModel getComponentType() {
     return componentType;
@@ -73,6 +74,14 @@ public class ComponentManagementViewModel extends BaseViewModel {
 
   public void setPermissions(Map<String, Boolean> permissions) {
     this.permissions = permissions;
+  }
+
+  public PackTypeFullViewModel getPackType() {
+    return packType;
+  }
+
+  public void setPackType(PackTypeFullViewModel packType) {
+    this.packType = packType;
   }
 
 }

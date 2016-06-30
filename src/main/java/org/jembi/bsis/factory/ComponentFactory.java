@@ -63,6 +63,7 @@ public class ComponentFactory {
     viewModel.setId(component.getId());
     viewModel.setStatus(component.getStatus());
     viewModel.setWeight(component.getWeight());
+    viewModel.setPackType(packTypeFactory.createFullViewModel(component.getDonation().getPackType()));
 
     // Set permissions
     Map<String, Boolean> permissions = new HashMap<>();
