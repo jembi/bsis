@@ -533,22 +533,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     verify(componentRepository).findComponentsByDINAndType(din, id);
   }
   
-  @Test
-  public void testAddComponent_shouldCallStatusCalculatorAndRepository() throws Exception {
-    // set up data
-    Component component = aComponent().withId(1L).build();
-    
-    // mocks
-    when(componentStatusCalculator.updateComponentStatus(component)).thenReturn(false);
-    
-    // SUT
-    componentCRUDService.addComponent(component);
-    
-    // check
-    verify(componentStatusCalculator).updateComponentStatus(component);
-    verify(componentRepository).save(component);
-  }
-  
   @Test(expected = java.lang.IllegalStateException.class)
   public void testUpdateComponentWeight_shouldThrowException() throws Exception {
     // set up data
@@ -577,6 +561,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Long componentId = Long.valueOf(1);
     Component oldComponent = aComponent()
         .withId(componentId)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
         .build();
     Component component = aComponent()
         .withId(componentId)
@@ -586,10 +571,10 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
-    when(componentConstraintChecker.canRecordWeight(component)).thenReturn(true);
-    when(componentStatusCalculator.shouldComponentBeDiscarded(component)).thenReturn(true);
-    when(componentStatusCalculator.updateComponentStatus(component)).thenReturn(false);
-    when(componentRepository.update(component)).thenReturn(component);
+    when(componentConstraintChecker.canRecordWeight(oldComponent)).thenReturn(true);
+    when(componentStatusCalculator.shouldComponentBeDiscarded(oldComponent)).thenReturn(true);
+    when(componentStatusCalculator.updateComponentStatus(oldComponent)).thenReturn(false);
+    when(componentRepository.update(oldComponent)).thenReturn(oldComponent);
     
     // SUT
     Component updatedComponent = componentCRUDService.updateComponent(component);
@@ -615,10 +600,10 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
-    when(componentConstraintChecker.canRecordWeight(component)).thenReturn(true);
-    when(componentStatusCalculator.shouldComponentBeDiscarded(component)).thenReturn(false);
-    when(componentStatusCalculator.updateComponentStatus(component)).thenReturn(false);
-    when(componentRepository.update(component)).thenReturn(component);
+    when(componentConstraintChecker.canRecordWeight(oldComponent)).thenReturn(true);
+    when(componentStatusCalculator.shouldComponentBeDiscarded(oldComponent)).thenReturn(false);
+    when(componentStatusCalculator.updateComponentStatus(oldComponent)).thenReturn(false);
+    when(componentRepository.update(oldComponent)).thenReturn(oldComponent);
     
     // SUT
     Component updatedComponent = componentCRUDService.updateComponent(component);
