@@ -259,9 +259,6 @@ public class ComponentCRUDService {
       componentStatusCalculator.updateComponentStatus(component);
     }
 
-    // rollback component weight too
-    component.setWeight(null);
-
     component = componentRepository.update(component);
     return component;
   }

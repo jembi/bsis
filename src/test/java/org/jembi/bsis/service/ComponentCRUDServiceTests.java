@@ -10,7 +10,6 @@ import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
-import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
@@ -636,11 +635,11 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testRollbackComponent_shouldDeleteAllChildrenSetStatusToAvailableAndWeightToNull() throws Exception {
+  public void testRollbackComponent_shouldDeleteAllChildrenAndSetStatusToAvailable() throws Exception {
     // set up data
     Donation d = aDonation().build();
     Location l = aLocation().build();
-    Component parentComponent = aComponent().withId(1L).withWeight(555).withDonation(d).withLocation(l).build();
+    Component parentComponent = aComponent().withId(1L).withDonation(d).withLocation(l).build();
     Component child1 = aComponent().withId(2L).withDonation(d).withLocation(l).build();
     Component child2 = aComponent().withId(3L).withDonation(d).withLocation(l).build();
 
@@ -664,7 +663,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     verify(componentRepository, times(1)).update(argThat(ComponentMatcher.hasSameStateAsComponent(child2Deleted)));
 
     assertThat("Parent component status is AVAILABLE", rolledBackComponent.getStatus(), is(ComponentStatus.AVAILABLE));
-    assertNull("Parent component weight is null", rolledBackComponent.getWeight());
   }
   
   
