@@ -7,6 +7,7 @@ import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 
 import java.util.Arrays;
+import java.util.List;
 
 import javax.persistence.NoResultException;
 
@@ -15,7 +16,6 @@ import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
-import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
@@ -155,6 +155,19 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
   @Test
   public void testEntityDoesNotExist() throws Exception {
     Assert.assertFalse("Component does not exist", componentRepository.verifyComponentExists(1L));
+  }
+
+  @Test
+  public void testfindChildComponents() throws Exception {
+    Component parentComponent = aComponent().buildAndPersist(entityManager);
+    Component child1 = aComponent().withParentComponent(parentComponent).buildAndPersist(entityManager);
+    Component child2 = aComponent().withParentComponent(parentComponent).buildAndPersist(entityManager);
+
+    List<Component> children = componentRepository.findChildComponents(parentComponent);
+
+    Assert.assertTrue("contains child1", children.contains(child1));
+    Assert.assertTrue("contains child2", children.contains(child2));
+
   }
 
 }

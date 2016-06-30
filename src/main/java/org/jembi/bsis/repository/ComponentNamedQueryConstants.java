@@ -65,4 +65,10 @@ public class ComponentNamedQueryConstants {
   public static final String QUERY_COUNT_COMPONENT_WITH_ID =
       "SELECT count(*) FROM Component c WHERE c.id=:id AND c.isDeleted = false";
   
+  public static final String NAME_FIND_CHILD_COMPONENTS = "Component.findChildComponents";
+  public static final String QUERY_FIND_CHILD_COMPONENTS =
+      "SELECT c FROM Component c WHERE c.parentComponent=:parentComponent AND c.isDeleted = false";
+
+
+
 }
