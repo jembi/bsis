@@ -343,31 +343,95 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCanRollbackWithAvailableNotInStockChildren_shouldReturnTrue() {
+  public void testCanRollbackWithQuarantinedChildComponent_shouldReturnTrue() {  
     Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
-    Component child1 = aComponent().withId(2L).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
-    Component child2 = aComponent().withId(3L).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+    Component child = aComponent().withId(2L).withStatus(ComponentStatus.QUARANTINED).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
 
-    when(componentRepository.findComponentsByDonationIdentificationNumber(null)).thenReturn(Arrays.asList(parentComponent, child1, child2));
+    when(componentRepository.findComponentsByDonationIdentificationNumber(null)).thenReturn(Arrays.asList(parentComponent, child));
 
     boolean canRollback = componentConstraintChecker.canRollback(parentComponent);
     assertThat(canRollback, is(true));
   }
-  
-  @Test
-  public void testCanRollbackWithWrongStatusChild_shouldReturnFalse() {
-    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
-    Component child1 = aComponent().withId(2L).withStatus(ComponentStatus.DISCARDED).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
-    Component child2 = aComponent().withId(3L).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
 
-    when(componentRepository.findComponentsByDonationIdentificationNumber(null)).thenReturn(Arrays.asList(parentComponent, child1, child2));
+  @Test
+  public void testCanRollbackWithAvailableChildComponent_shouldReturnTrue() {
+    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
+    Component child = aComponent().withId(2L).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+
+    when(componentRepository.findComponentsByDonationIdentificationNumber(null)).thenReturn(Arrays.asList(parentComponent, child));
+
+    boolean canRollback = componentConstraintChecker.canRollback(parentComponent);
+    assertThat(canRollback, is(true));
+  }
+
+  @Test
+  public void testCanRollbackWithUnsafeChildComponent_shouldReturnTrue() {
+    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
+    Component child = aComponent().withId(2L).withStatus(ComponentStatus.UNSAFE).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+
+    when(componentRepository.findComponentsByDonationIdentificationNumber(null)).thenReturn(Arrays.asList(parentComponent, child));
+
+    boolean canRollback = componentConstraintChecker.canRollback(parentComponent);
+    assertThat(canRollback, is(true));
+  }
+
+  @Test
+  public void testCanRollbackWithExpiredChildComponent_shouldReturnTrue() {
+    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
+    Component child = aComponent().withId(2L).withStatus(ComponentStatus.EXPIRED).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+
+    when(componentRepository.findComponentsByDonationIdentificationNumber(null)).thenReturn(Arrays.asList(parentComponent, child));
+
+    boolean canRollback = componentConstraintChecker.canRollback(parentComponent);
+    assertThat(canRollback, is(true));
+  }
+
+  @Test
+  public void testCanRollbackWithIssuedChildComponent_shouldReturnFalse() {
+    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
+    Component child = aComponent().withId(2L).withStatus(ComponentStatus.ISSUED).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+
+    when(componentRepository.findComponentsByDonationIdentificationNumber(null)).thenReturn(Arrays.asList(parentComponent, child));
+
+    boolean canRollback = componentConstraintChecker.canRollback(parentComponent);
+    assertThat(canRollback, is(false));
+  }
+
+  @Test
+  public void testCanRollbackWithUsedChildComponent_shouldReturnFalse() {
+    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
+    Component child = aComponent().withId(2L).withStatus(ComponentStatus.USED).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+
+    when(componentRepository.findComponentsByDonationIdentificationNumber(null)).thenReturn(Arrays.asList(parentComponent, child));
+
+    boolean canRollback = componentConstraintChecker.canRollback(parentComponent);
+    assertThat(canRollback, is(false));
+  }
+
+  @Test
+  public void testCanRollbackWithDiscardedChildComponent_shouldReturnFalse() {
+    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
+    Component child = aComponent().withId(2L).withStatus(ComponentStatus.DISCARDED).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+
+    when(componentRepository.findComponentsByDonationIdentificationNumber(null)).thenReturn(Arrays.asList(parentComponent, child));
+
+    boolean canRollback = componentConstraintChecker.canRollback(parentComponent);
+    assertThat(canRollback, is(false));
+  }
+
+  @Test
+  public void testCanRollbackWithSplitChildComponent_shouldReturnFalse() {
+    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
+    Component child = aComponent().withId(2L).withStatus(ComponentStatus.SPLIT).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+
+    when(componentRepository.findComponentsByDonationIdentificationNumber(null)).thenReturn(Arrays.asList(parentComponent, child));
 
     boolean canRollback = componentConstraintChecker.canRollback(parentComponent);
     assertThat(canRollback, is(false));
   }
   
   @Test
-  public void testCanRollbackWithWrongInventoryStatusChild_shouldReturnFalse() {
+  public void testCanRollbackWithWrongLabelledChildComponent_shouldReturnFalse() {
     Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
     Component child1 = aComponent().withId(2L).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.IN_STOCK).build();
     Component child2 = aComponent().withId(3L).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();

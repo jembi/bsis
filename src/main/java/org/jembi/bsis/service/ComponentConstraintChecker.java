@@ -57,9 +57,10 @@ public class ComponentConstraintChecker {
 
     List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber(parentComponent.getDonationIdentificationNumber());
     for (Component component : components) {
-      // check that status is available and it hasn't been labelled (not in stock) for all child components
+      // check that status is correct and it hasn't been labelled (not in stock) for all child components
       if (component.getId() != parentComponent.getId()) {
-        if (!(component.getStatus().equals(ComponentStatus.AVAILABLE) && component.getInventoryStatus().equals(InventoryStatus.NOT_IN_STOCK))) {
+        if (!(CAN_DISCARD_OR_PROCESS_OR_RECORD_WEIGHT_STATUSES.contains(component.getStatus())
+            && component.getInventoryStatus().equals(InventoryStatus.NOT_IN_STOCK))) {
           return false;
         }
       }
