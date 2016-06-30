@@ -589,7 +589,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testUnprocessComponent_shouldDeleteAllChildrenAndSetStatusToAvailable() throws Exception {
+  public void testRollbackComponent_shouldDeleteAllChildrenAndSetStatusToAvailable() throws Exception {
     // set up data
     Component parentComponent = aComponent().withId(1L).build();
     Component child1 = aComponent().withId(2L).build();
@@ -605,14 +605,14 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     child2Updated.setIsDeleted(true);
 
     // mocks
-    when(componentConstraintChecker.canUnprocess(parentComponent)).thenReturn(true);
+    when(componentConstraintChecker.canRollback(parentComponent)).thenReturn(true);
     when(componentRepository.findComponentsByDonationIdentificationNumber(null)).thenReturn(Arrays.asList(parentComponent, child1, child2));
     when(componentRepository.update(argThat(ComponentMatcher.hasSameStateAsComponent(componentToUpdate)))).thenReturn(updatedComponent);
     when(componentRepository.update(argThat(ComponentMatcher.hasSameStateAsComponent(child1Updated)))).thenReturn(child1Updated);
     when(componentRepository.update(argThat(ComponentMatcher.hasSameStateAsComponent(child2Updated)))).thenReturn(child2Updated);
     
     // SUT
-    Component uprocessedComponent = componentCRUDService.unprocessComponent(parentComponent);
+    Component uprocessedComponent = componentCRUDService.rollbackComponent(parentComponent);
 
     // check
     assertThat("Parent component status is AVAILABLE", uprocessedComponent.getStatus(), is(ComponentStatus.AVAILABLE));

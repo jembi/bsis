@@ -151,12 +151,12 @@ public class ComponentController {
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   
-  @RequestMapping(value = "{id}/unprocess", method = RequestMethod.PUT)
+  @RequestMapping(value = "{id}/rollback", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.VOID_COMPONENT + "')")
-  public ResponseEntity<Map<String, Object>> unprocessComponent(
+  public ResponseEntity<Map<String, Object>> rollbackComponent(
       @PathVariable("id") Long componentId) {
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("component", componentControllerService.unprocessComponent(componentId));
+    map.put("component", componentControllerService.rollbackComponent(componentId));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 }

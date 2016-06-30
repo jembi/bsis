@@ -287,95 +287,95 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCanUnprocessWithQuarantinedComponent_shouldReturnFalse() {
+  public void testCanRollbackWithQuarantinedComponent_shouldReturnFalse() {
     Component component = aComponent().withStatus(ComponentStatus.QUARANTINED).build();
-    boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
-    assertThat(canUnprocess, is(false));
+    boolean canRollback = componentConstraintChecker.canRollback(component);
+    assertThat(canRollback, is(false));
   }
 
   @Test
-  public void testCanUnprocessWithAvailableComponent_shouldReturnFalse() {
+  public void testCanRollbackWithAvailableComponent_shouldReturnFalse() {
     Component component = aComponent().withStatus(ComponentStatus.AVAILABLE).build();
-    boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
-    assertThat(canUnprocess, is(false));
+    boolean canRollback = componentConstraintChecker.canRollback(component);
+    assertThat(canRollback, is(false));
   }
 
   @Test
-  public void testCanUnprocessWithUnsafeComponent_shouldReturnFalse() {
+  public void testCanRollbackWithUnsafeComponent_shouldReturnFalse() {
     Component component = aComponent().withStatus(ComponentStatus.UNSAFE).build();
-    boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
-    assertThat(canUnprocess, is(false));
+    boolean canRollback = componentConstraintChecker.canRollback(component);
+    assertThat(canRollback, is(false));
   }
 
   @Test
-  public void testCanUnprocessWithExpiredComponent_shouldReturnFalse() {
+  public void testCanRollbackWithExpiredComponent_shouldReturnFalse() {
     Component component = aComponent().withStatus(ComponentStatus.EXPIRED).build();
-    boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
-    assertThat(canUnprocess, is(false));
+    boolean canRollback = componentConstraintChecker.canRollback(component);
+    assertThat(canRollback, is(false));
   }
 
   @Test
-  public void testCanUnprocessWithIssuedComponent_shouldReturnFalse() {
+  public void testCanRollbackWithIssuedComponent_shouldReturnFalse() {
     Component component = aComponent().withStatus(ComponentStatus.ISSUED).build();
-    boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
-    assertThat(canUnprocess, is(false));
+    boolean canRollback = componentConstraintChecker.canRollback(component);
+    assertThat(canRollback, is(false));
   }
 
   @Test
-  public void testCanUnprocessWithUsedComponent_shouldReturnFalse() {
+  public void testCanRollbackWithUsedComponent_shouldReturnFalse() {
     Component component = aComponent().withStatus(ComponentStatus.USED).build();
-    boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
-    assertThat(canUnprocess, is(false));
+    boolean canRollback = componentConstraintChecker.canRollback(component);
+    assertThat(canRollback, is(false));
   }
 
   @Test
-  public void testCanUnprocessWithDiscardedComponent_shouldReturnFalse() {
+  public void testCanRollbackWithDiscardedComponent_shouldReturnFalse() {
     Component component = aComponent().withStatus(ComponentStatus.DISCARDED).build();
-    boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
-    assertThat(canUnprocess, is(false));
+    boolean canRollback = componentConstraintChecker.canRollback(component);
+    assertThat(canRollback, is(false));
   }
 
   @Test
-  public void testCanUnprocessWithSplitComponent_shouldReturnFalse() {
+  public void testCanRollbackWithSplitComponent_shouldReturnFalse() {
     Component component = aComponent().withStatus(ComponentStatus.SPLIT).build();
-    boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
-    assertThat(canUnprocess, is(false));
+    boolean canRollback = componentConstraintChecker.canRollback(component);
+    assertThat(canRollback, is(false));
   }
 
   @Test
-  public void testCanUnprocessWithAvailableNotInStockChildren_shouldReturnTrue() {
+  public void testCanRollbackWithAvailableNotInStockChildren_shouldReturnTrue() {
     Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
     Component child1 = aComponent().withId(2L).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
     Component child2 = aComponent().withId(3L).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
 
     when(componentRepository.findComponentsByDonationIdentificationNumber(null)).thenReturn(Arrays.asList(parentComponent, child1, child2));
 
-    boolean canUnprocess = componentConstraintChecker.canUnprocess(parentComponent);
-    assertThat(canUnprocess, is(true));
+    boolean canRollback = componentConstraintChecker.canRollback(parentComponent);
+    assertThat(canRollback, is(true));
   }
   
   @Test
-  public void testCanUnprocessWithWrongStatusChild_shouldReturnFalse() {
+  public void testCanRollbackWithWrongStatusChild_shouldReturnFalse() {
     Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
     Component child1 = aComponent().withId(2L).withStatus(ComponentStatus.DISCARDED).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
     Component child2 = aComponent().withId(3L).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
 
     when(componentRepository.findComponentsByDonationIdentificationNumber(null)).thenReturn(Arrays.asList(parentComponent, child1, child2));
 
-    boolean canUnprocess = componentConstraintChecker.canUnprocess(parentComponent);
-    assertThat(canUnprocess, is(false));
+    boolean canRollback = componentConstraintChecker.canRollback(parentComponent);
+    assertThat(canRollback, is(false));
   }
   
   @Test
-  public void testCanUnprocessWithWrongInventoryStatusChild_shouldReturnFalse() {
+  public void testCanRollbackWithWrongInventoryStatusChild_shouldReturnFalse() {
     Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
     Component child1 = aComponent().withId(2L).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.IN_STOCK).build();
     Component child2 = aComponent().withId(3L).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
 
     when(componentRepository.findComponentsByDonationIdentificationNumber(null)).thenReturn(Arrays.asList(parentComponent, child1, child2));
 
-    boolean canUnprocess = componentConstraintChecker.canUnprocess(parentComponent);
-    assertThat(canUnprocess, is(false));
+    boolean canRollback = componentConstraintChecker.canRollback(parentComponent);
+    assertThat(canRollback, is(false));
   }
 
 }

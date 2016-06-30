@@ -120,9 +120,9 @@ public class ComponentControllerService {
         discardComponentsBackingForm.getDiscardReason().getId(), discardComponentsBackingForm.getDiscardReasonText());
   }
 
-  public ComponentManagementViewModel unprocessComponent(Long componentId) {
+  public ComponentManagementViewModel rollbackComponent(Long componentId) {
     Component component = componentRepository.findComponentById(componentId);
-    component = componentCRUDService.unprocessComponent(component);
+    component = componentCRUDService.rollbackComponent(component);
     return componentFactory.createManagementViewModel(component);
   }
   

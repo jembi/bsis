@@ -235,11 +235,11 @@ public class ComponentCRUDService {
     return componentRepository.findComponentsByDINAndType(donationIdentificationNumber, componentTypeId);
   }
 
-  public Component unprocessComponent(Component component) {
-    if (!componentConstraintChecker.canUnprocess(component)) {
-      throw new IllegalStateException("Component " + component.getId() + " cannot be unprocessed.");
+  public Component rollbackComponent(Component component) {
+    if (!componentConstraintChecker.canRollback(component)) {
+      throw new IllegalStateException("Component " + component.getId() + " cannot be rolled back.");
     }
-    LOGGER.info("Unprocessing component: " + component);
+    LOGGER.info("Rolling back component: " + component);
     List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber(component.getDonationIdentificationNumber());
     for (Component comp:components) {
       // mark all child components as deleted
