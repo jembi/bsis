@@ -226,10 +226,13 @@ public class ComponentCRUDService {
       existingComponent.setWeight(component.getWeight());
     }
 
-    // check if the component should be discarded 
+    // check if the component should be discarded or re-evaluated
     if (componentStatusCalculator.shouldComponentBeDiscarded(existingComponent)) {
       LOGGER.info("Flagging component for discard " + component);
       existingComponent.setStatus(ComponentStatus.UNSAFE);
+    } else if (existingComponent.getStatus().equals(ComponentStatus.UNSAFE)) {
+      // re-evaluate the status as it might have been set to UNSAFE because of a previous unsafe weight
+      existingComponent.setStatus(ComponentStatus.QUARANTINED);
     }
 
     return update(existingComponent);
