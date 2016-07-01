@@ -213,10 +213,14 @@ public class ComponentCRUDService {
   }
   
   public Component undiscardComponent(long componentId) {
-    LOGGER.info("Undiscarding component " + componentId);
-
     Component existingComponent = componentRepository.findComponentById(componentId);
     
+    if (!componentConstraintChecker.canUndiscard(existingComponent)) {
+      throw new IllegalStateException("Component " + componentId + " cannot be undiscarded.");
+    }
+    
+    LOGGER.info("Undiscarding component " + componentId);
+
     // Set the status back to quarantined so that it can be recalculated
     existingComponent.setStatus(ComponentStatus.QUARANTINED);
     

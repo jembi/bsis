@@ -719,6 +719,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .build();
     
     when(componentRepository.findComponentById(componentId)).thenReturn(existingComponentThatWasInStock);
+    when(componentConstraintChecker.canUndiscard(existingComponentThatWasInStock)).thenReturn(true);
     when(componentRepository.update(updatedComponent)).thenReturn(updatedComponent);
     
     // Exercise SUT
@@ -750,6 +751,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .build();
     
     when(componentRepository.findComponentById(componentId)).thenReturn(existingComponentThatWasNotInStock);
+    when(componentConstraintChecker.canUndiscard(existingComponentThatWasNotInStock)).thenReturn(true);
     when(componentRepository.update(updatedComponent)).thenReturn(updatedComponent);
     
     // Exercise SUT
@@ -761,6 +763,23 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     verify(componentStatusCalculator).updateComponentStatus(updatedComponent);
     
     assertThat(returnedComponent, is(updatedComponent));
+  }
+  
+  @Test(expected = IllegalStateException.class)
+  public void testUndiscardComponentWithComponentThatCannotBeUndiscarded_shouldThrow() {
+    // Set up fixture
+    long componentId = 76L;
+    Component existingComponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .build();
+    
+    // Set up expectations
+    when(componentRepository.findComponentById(componentId)).thenReturn(existingComponent);
+    when(componentConstraintChecker.canUndiscard(existingComponent)).thenReturn(false);
+    
+    // Exercise SUT
+    componentCRUDService.undiscardComponent(componentId);
   }
   
 }
