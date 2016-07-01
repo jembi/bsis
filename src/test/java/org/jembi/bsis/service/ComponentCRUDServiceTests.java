@@ -635,34 +635,34 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testRollbackComponent_shouldDeleteAllChildrenAndSetStatusToAvailable() throws Exception {
+  public void testUnprocessComponent_shouldDeleteAllChildrenAndSetStatusToAvailable() throws Exception {
     // set up data
-    Donation d = aDonation().build();
-    Location l = aLocation().build();
-    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).withDonation(d).withLocation(l).build();
-    Component child1 = aComponent().withId(2L).withDonation(d).withLocation(l).build();
-    Component child2 = aComponent().withId(3L).withDonation(d).withLocation(l).build();
+    Donation donation = aDonation().build();
+    Location location = aLocation().build();
+    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).withDonation(donation).withLocation(location).build();
+    Component child1 = aComponent().withId(2L).withDonation(donation).withLocation(location).build();
+    Component child2 = aComponent().withId(3L).withDonation(donation).withLocation(location).build();
 
-    Component componentToUpdate = aComponent().withId(1L).withDonation(d).withLocation(l).withStatus(ComponentStatus.QUARANTINED).build();
+    Component componentToUpdate = aComponent().withId(1L).withDonation(donation).withLocation(location).withStatus(ComponentStatus.QUARANTINED).build();
 
-    Component updatedComponent = aComponent().withId(1L).withDonation(d).withLocation(l).withStatus(ComponentStatus.AVAILABLE).build();
-    Component child1Deleted = aComponent().withId(2L).withDonation(d).withLocation(l).withIsDeleted(true).build();
-    Component child2Deleted = aComponent().withId(3L).withDonation(d).withLocation(l).withIsDeleted(true).build();
+    Component updatedComponent = aComponent().withId(1L).withDonation(donation).withLocation(location).withStatus(ComponentStatus.AVAILABLE).build();
+    Component child1Deleted = aComponent().withId(2L).withDonation(donation).withLocation(location).withIsDeleted(true).build();
+    Component child2Deleted = aComponent().withId(3L).withDonation(donation).withLocation(location).withIsDeleted(true).build();
 
     // mocks
-    when(componentConstraintChecker.canRollback(parentComponent)).thenReturn(true);
+    when(componentConstraintChecker.canUnprocess(parentComponent)).thenReturn(true);
     when(componentRepository.findChildComponents(parentComponent)).thenReturn(Arrays.asList(child1, child2));
     when(componentRepository.update(argThat(ComponentMatcher.hasSameStateAsComponent(componentToUpdate)))).thenReturn(updatedComponent);
     
     // SUT
-    Component rolledBackComponent = componentCRUDService.rollbackComponent(parentComponent);
+    Component unprocessedComponent = componentCRUDService.unprocessComponent(parentComponent);
 
     // check
     verify(componentRepository, times(1)).update(argThat(ComponentMatcher.hasSameStateAsComponent(componentToUpdate)));
     verify(componentRepository, times(1)).update(argThat(ComponentMatcher.hasSameStateAsComponent(child1Deleted)));
     verify(componentRepository, times(1)).update(argThat(ComponentMatcher.hasSameStateAsComponent(child2Deleted)));
 
-    assertThat("Parent component status is AVAILABLE", rolledBackComponent.getStatus(), is(ComponentStatus.AVAILABLE));
+    assertThat("Parent component status is AVAILABLE", unprocessedComponent.getStatus(), is(ComponentStatus.AVAILABLE));
   }
   
   

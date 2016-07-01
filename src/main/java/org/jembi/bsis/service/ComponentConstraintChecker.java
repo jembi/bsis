@@ -49,7 +49,7 @@ public class ComponentConstraintChecker {
     return CAN_DISCARD_OR_PROCESS_OR_RECORD_WEIGHT_STATUSES.contains(component.getStatus());
   }
 
-  public boolean canRollback(Component parentComponent) {
+  public boolean canUnprocess(Component parentComponent) {
     
     if (!parentComponent.getStatus().equals(ComponentStatus.PROCESSED)) {
       return false;
