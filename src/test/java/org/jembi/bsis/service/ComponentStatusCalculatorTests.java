@@ -503,6 +503,35 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   }
   
   @Test
+  public void testUpdateComponentStatusUnsafe_shouldNotChangeStatusToExpired() throws Exception {
+    // set up data
+    Long donationId = Long.valueOf(1234);
+    Donation donation = aDonation()
+        .withId(donationId)
+        .withBloodTypingStatus(BloodTypingStatus.NOT_DONE)
+        .withTTIStatus(TTIStatus.NOT_DONE)
+        .build();
+    Calendar cal = Calendar.getInstance();
+    cal.add(Calendar.DAY_OF_YEAR, -10);
+    Date expiresOn = cal.getTime();
+    Component component = aComponent().withId(1L)
+        .withStatus(ComponentStatus.UNSAFE)
+        .withExpiresOn(expiresOn)
+        .withDonation(donation)
+        .build();
+    
+    // set up mocks
+    when(donationRepository.findDonationById(donationId)).thenReturn(donation);
+    
+    // SUT
+    boolean statusChanged = componentStatusCalculator.updateComponentStatus(component);
+    
+    // verify
+    assertThat("status is changed", statusChanged, is(false));
+    assertThat("status is EXPIRED", component.getStatus(), is(ComponentStatus.UNSAFE));
+  }
+  
+  @Test
   public void testUpdateComponentStatusQuarantinedBloodGroupingCompleteTTIUnSafe_shouldChangeStatusToUnsafe() throws Exception {
     // set up data
     Long donationId = Long.valueOf(1234);

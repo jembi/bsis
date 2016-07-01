@@ -96,7 +96,7 @@ public class ComponentStatusCalculator {
 
     List<ComponentStatus> statusNotToBeChanged =
         Arrays.asList(ComponentStatus.DISCARDED, ComponentStatus.ISSUED,
-            ComponentStatus.USED, ComponentStatus.SPLIT, ComponentStatus.PROCESSED);
+            ComponentStatus.USED, ComponentStatus.SPLIT, ComponentStatus.PROCESSED, ComponentStatus.UNSAFE);
 
     ComponentStatus oldComponentStatus = component.getStatus();
 
