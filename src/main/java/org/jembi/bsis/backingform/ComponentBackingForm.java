@@ -133,5 +133,15 @@ public class ComponentBackingForm {
   public void setPermissions(Map<String, Boolean> permissions) {
     // Ignore
   }
+  
+  @JsonIgnore
+  public void setComponentTypeCombination(Long componentTypeCombinationId) {
+    // Ignore
+  }
+  
+  @JsonIgnore
+  public void setComponentTypeCombination(ComponentTypeCombinationBackingForm componentTypeCombination) {
+    // Ignore
+  }
 
 }
