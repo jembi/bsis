@@ -528,7 +528,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     
     // verify
     assertThat("status is changed", statusChanged, is(false));
-    assertThat("status is EXPIRED", component.getStatus(), is(ComponentStatus.UNSAFE));
+    assertThat("status is UNSAFE", component.getStatus(), is(ComponentStatus.UNSAFE));
   }
   
   @Test
