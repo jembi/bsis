@@ -153,4 +153,13 @@ public class ComponentController {
     map.put("component", componentControllerService.updateComponent(componentBackingForm));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
+  
+  @RequestMapping(value = "{id}/unprocess", method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('" + PermissionConstants.VOID_COMPONENT + "')")
+  public ResponseEntity<Map<String, Object>> unprocessComponent(
+      @PathVariable("id") Long componentId) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("component", componentControllerService.unprocessComponent(componentId));
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+  }
 }

@@ -7,6 +7,7 @@ import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentTyp
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.mockito.Matchers.argThat;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import org.jembi.bsis.factory.ComponentFactory;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
+import org.jembi.bsis.helpers.matchers.ComponentMatcher;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
@@ -667,4 +669,37 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // check
     verify(componentRepository).update(component);
   }
+  
+  @Test
+  public void testUnprocessComponent_shouldDeleteAllChildrenAndSetStatusToAvailable() throws Exception {
+    // set up data
+    Donation donation = aDonation().build();
+    Location location = aLocation().build();
+    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).withDonation(donation).withLocation(location).build();
+    Component child1 = aComponent().withId(2L).withDonation(donation).withLocation(location).build();
+    Component child2 = aComponent().withId(3L).withDonation(donation).withLocation(location).build();
+
+    Component componentToUpdate = aComponent().withId(1L).withDonation(donation).withLocation(location).withStatus(ComponentStatus.QUARANTINED).build();
+
+    Component updatedComponent = aComponent().withId(1L).withDonation(donation).withLocation(location).withStatus(ComponentStatus.AVAILABLE).build();
+    Component child1Deleted = aComponent().withId(2L).withDonation(donation).withLocation(location).withIsDeleted(true).build();
+    Component child2Deleted = aComponent().withId(3L).withDonation(donation).withLocation(location).withIsDeleted(true).build();
+
+    // mocks
+    when(componentConstraintChecker.canUnprocess(parentComponent)).thenReturn(true);
+    when(componentRepository.findChildComponents(parentComponent)).thenReturn(Arrays.asList(child1, child2));
+    when(componentRepository.update(argThat(ComponentMatcher.hasSameStateAsComponent(componentToUpdate)))).thenReturn(updatedComponent);
+    
+    // SUT
+    Component unprocessedComponent = componentCRUDService.unprocessComponent(parentComponent);
+
+    // check
+    verify(componentRepository, times(1)).update(argThat(ComponentMatcher.hasSameStateAsComponent(componentToUpdate)));
+    verify(componentRepository, times(1)).update(argThat(ComponentMatcher.hasSameStateAsComponent(child1Deleted)));
+    verify(componentRepository, times(1)).update(argThat(ComponentMatcher.hasSameStateAsComponent(child2Deleted)));
+
+    assertThat("Parent component status is AVAILABLE", unprocessedComponent.getStatus(), is(ComponentStatus.AVAILABLE));
+  }
+  
+  
 }

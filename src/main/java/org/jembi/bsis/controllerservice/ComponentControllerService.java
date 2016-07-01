@@ -119,5 +119,11 @@ public class ComponentControllerService {
     componentCRUDService.discardComponents(discardComponentsBackingForm.getComponentIds(),
         discardComponentsBackingForm.getDiscardReason().getId(), discardComponentsBackingForm.getDiscardReasonText());
   }
+
+  public ComponentManagementViewModel unprocessComponent(Long componentId) {
+    Component component = componentRepository.findComponentById(componentId);
+    component = componentCRUDService.unprocessComponent(component);
+    return componentFactory.createManagementViewModel(component);
+  }
   
 }

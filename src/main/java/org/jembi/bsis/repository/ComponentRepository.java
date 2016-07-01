@@ -163,4 +163,10 @@ public class ComponentRepository extends AbstractRepository<Component> {
     }
     return false;
   }
+
+  public List<Component> findChildComponents(Component parentComponent) {
+    return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_CHILD_COMPONENTS, Component.class)
+        .setParameter("parentComponent", parentComponent)
+        .getResultList();
+  }
 }
