@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.packtype.PackType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,27 +21,45 @@ public class ComponentConstraintChecker {
       ComponentStatus.EXPIRED);
   
   public boolean canDiscard(Component component) {
+    // Check component status is allowed to discard
     return CAN_DISCARD_OR_PROCESS_OR_RECORD_WEIGHT_STATUSES.contains(component.getStatus());
+
   }
 
   public boolean canRecordWeight(Component component) {
+    // Only initial components can record weight
     if (component.getParentComponent() != null) {
       return false;
     }
+    // Check component status is allowed to record weight
     return CAN_DISCARD_OR_PROCESS_OR_RECORD_WEIGHT_STATUSES.contains(component.getStatus());
   }
 
   public boolean canProcess(Component component) {
-    if (component.getParentComponent() == null && component.getWeight() == null) {
-      // Can't process initial components with no recorded weight
-      return false;
+    // If it's an initial component, check that weight is valid
+    if (component.getParentComponent() == null) {
+      if (!isWeightValid(component)) {
+        return false;
+      }
     }
+    // There must be component type combinations for that component type to be able to process it
     if (component.getComponentType().getProducedComponentTypeCombinations() == null
         || component.getComponentType().getProducedComponentTypeCombinations().size() == 0) {
-      // There must be component type combinations for that component type to be able to process it
       return false;
     }
+    // Check component status is allowed to process
     return CAN_DISCARD_OR_PROCESS_OR_RECORD_WEIGHT_STATUSES.contains(component.getStatus());
+  }
+
+  private boolean isWeightValid(Component component) {
+    if (component.getWeight() != null) {
+      PackType packType = component.getDonation().getPackType();
+      Integer weight = component.getWeight();
+      if (weight <= packType.getMaxWeight() && weight >= packType.getMinWeight()) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }
