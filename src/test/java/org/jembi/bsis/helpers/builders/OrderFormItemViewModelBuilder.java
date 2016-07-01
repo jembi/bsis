@@ -1,6 +1,5 @@
 package org.jembi.bsis.helpers.builders;
 
-import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.OrderFormItemViewModel;
 

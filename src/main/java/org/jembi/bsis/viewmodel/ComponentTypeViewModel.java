@@ -4,7 +4,7 @@ import org.jembi.bsis.model.componenttype.ComponentType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class ComponentTypeViewModel {
+public class ComponentTypeViewModel extends BaseViewModel {
 
   public ComponentTypeViewModel(ComponentType componentType) {
     this.componentType = componentType;
@@ -21,6 +21,7 @@ public class ComponentTypeViewModel {
     this.componentType = componentType;
   }
 
+  @Override
   public Long getId() {
     return componentType.getId();
   }

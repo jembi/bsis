@@ -9,7 +9,7 @@ import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.ReturnFormBackingForm;
 import org.jembi.bsis.model.returnform.ReturnStatus;
 
-public class ReturnFormBackingFormBuilder {
+public class ReturnFormBackingFormBuilder extends AbstractBuilder<ReturnFormBackingForm> {
 
   private Long id;
   private Date returnDate;
@@ -48,6 +48,7 @@ public class ReturnFormBackingFormBuilder {
     return this;
   }
 
+  @Override
   public ReturnFormBackingForm build() {
     ReturnFormBackingForm backingForm = new ReturnFormBackingForm();
     backingForm.setId(id);

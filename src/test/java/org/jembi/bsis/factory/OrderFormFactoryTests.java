@@ -25,10 +25,7 @@ import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.OrderFormBackingForm;
 import org.jembi.bsis.backingform.OrderFormItemBackingForm;
-import org.jembi.bsis.factory.ComponentViewModelFactory;
-import org.jembi.bsis.factory.LocationViewModelFactory;
-import org.jembi.bsis.factory.OrderFormFactory;
-import org.jembi.bsis.factory.OrderFormItemFactory;
+import org.jembi.bsis.helpers.builders.ComponentViewModelBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
@@ -49,8 +46,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import javassist.CodeConverter.ArrayAccessReplacementMethodNames;
-
 @RunWith(MockitoJUnitRunner.class)
 public class OrderFormFactoryTests {
 
@@ -64,7 +59,7 @@ public class OrderFormFactoryTests {
   private OrderFormItemFactory orderFormItemFactory;
 
   @Mock
-  private ComponentViewModelFactory componentViewModelFactory;
+  private ComponentFactory componentFactory;
   
   @Mock
   private LocationViewModelFactory locationViewModelFactory;
@@ -244,12 +239,14 @@ public class OrderFormFactoryTests {
     Date orderDate = new Date();
 
     Component component = aComponent().withId(1L).withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(dispatchedFrom).build();
+    ComponentViewModel componentViewModel = ComponentViewModelBuilder.aComponentViewModel().withId(1L)
+        .withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(new LocationViewModel(dispatchedFrom)).build();
     OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel()
         .withDispatchedFrom(new LocationViewModel(dispatchedFrom))
         .withDispatchedTo(new LocationViewModel(dispatchedTo))
         .withPermission("canDispatch", true).withPermission("canEdit", true)
         .withOrderDate(orderDate).withId(1L)
-        .withComponent(new ComponentViewModel(component)).build();
+        .withComponent(componentViewModel).build();
 
     OrderForm entity = anOrderForm()
         .withDispatchedFrom(dispatchedFrom)
@@ -258,7 +255,7 @@ public class OrderFormFactoryTests {
         .withId(1L).withComponent(component).build();
     
     // Setup mock
-    when(componentViewModelFactory.createComponentViewModels(entity.getComponents())).thenReturn(expectedViewModel.getComponents());
+    when(componentFactory.createComponentViewModels(entity.getComponents())).thenReturn(expectedViewModel.getComponents());
     when(locationViewModelFactory.createLocationViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
     when(locationViewModelFactory.createLocationViewModel(dispatchedTo)).thenReturn(expectedViewModel.getDispatchedTo());
     when(orderFormConstraintChecker.canDispatch(entity)).thenReturn(true);

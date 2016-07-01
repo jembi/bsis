@@ -1,10 +1,13 @@
 package org.jembi.bsis.service;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
+import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.doReturn;
@@ -17,7 +20,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.jembi.bsis.factory.ComponentViewModelFactory;
+import org.jembi.bsis.factory.ComponentFactory;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
@@ -32,7 +35,6 @@ import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
-import org.jembi.bsis.service.ComponentCRUDService;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
@@ -52,9 +54,13 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   @Mock
   private ComponentRepository componentRepository;
   @Mock
-  private ComponentViewModelFactory componentViewModelFactory;
+  private ComponentFactory componentFactory;
   @Mock
   private ComponentTypeRepository componentTypeRepository;
+  @Mock
+  private ComponentStatusCalculator componentStatusCalculator;
+  @Mock
+  private ComponentConstraintChecker componentConstraintChecker;
 
   @Test
   public void testMarkComponentsBelongingToDonorAsUnsafe_shouldDelegateToRepositoryWithCorrectParameters() {
@@ -82,13 +88,13 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testDiscardComponent() throws Exception {
     // set up data
-    Component component = aComponent().build();
+    Component component = aComponent().withId(1L).build();
     Long discardReasonId = 1L;
     String reasonText = "junit";
     
     // set up mocks
     when(componentRepository.findComponentById(1L)).thenReturn(component);
-    when(componentRepository.updateComponent(component)).thenReturn(component);
+    when(componentRepository.update(component)).thenReturn(component);
     
     // run test
     componentCRUDService.discardComponent(1L, 1L, reasonText);
@@ -133,11 +139,11 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testDiscardInStockComponent() throws Exception {
     // set up data
-    Component component = aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).build();
+    Component component = aComponent().withId(1L).withInventoryStatus(InventoryStatus.IN_STOCK).build();
     
     // set up mocks
     when(componentRepository.findComponentById(1L)).thenReturn(component);
-    when(componentRepository.updateComponent(component)).thenReturn(component);
+    when(componentRepository.update(component)).thenReturn(component);
     
     // run test
     componentCRUDService.discardComponent(1L, 1L, "junit");
@@ -252,24 +258,21 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // set up mocks
     when(componentRepository.findComponentById(parentComponentId)).thenReturn(parentComponent);
+    when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
     when(componentTypeRepository.getComponentTypeById(componentTypeId2)).thenReturn(componentType2);
     when(componentTypeRepository.getComponentTypeById(componentTypeId3)).thenReturn(componentType3);
-    when(componentRepository.addComponent(argThat(hasSameStateAsComponent(expectedComponent1)))).thenReturn(expectedComponent1);
-    when(componentRepository.addComponent(argThat(hasSameStateAsComponent(expectedComponent2)))).thenReturn(expectedComponent2);
-    when(componentRepository.addComponent(argThat(hasSameStateAsComponent(expectedComponent3)))).thenReturn(expectedComponent3);
-    when(componentRepository.addComponent(argThat(hasSameStateAsComponent(expectedComponent4)))).thenReturn(expectedComponent4);
-    when(componentRepository.updateComponent(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
+    when(componentRepository.update(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
     
     // SUT
     componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
     
     // verify results
-    verify(componentRepository).updateComponent(argThat(hasSameStateAsComponent(expectedParentComponent)));
-    verify(componentRepository).addComponent(argThat(hasSameStateAsComponent(expectedComponent1)));
-    verify(componentRepository).addComponent(argThat(hasSameStateAsComponent(expectedComponent2)));
-    verify(componentRepository).addComponent(argThat(hasSameStateAsComponent(expectedComponent3)));
-    verify(componentRepository).addComponent(argThat(hasSameStateAsComponent(expectedComponent4)));
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
+    verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponent1)));
+    verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponent2)));
+    verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponent3)));
+    verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponent4)));
   }
   
   @Test
@@ -325,16 +328,16 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // set up mocks
     when(componentRepository.findComponentById(parentComponentId)).thenReturn(parentComponent);
+    when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
-    when(componentRepository.addComponent(argThat(hasSameStateAsComponent(expectedComponent1)))).thenReturn(expectedComponent1);
-    when(componentRepository.updateComponent(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
+    when(componentRepository.update(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
     
     // SUT
     componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
     
     // verify results
-    verify(componentRepository).updateComponent(argThat(hasSameStateAsComponent(expectedParentComponent)));
-    verify(componentRepository).addComponent(argThat(hasSameStateAsComponent(expectedComponent1)));
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
+    verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponent1)));
   }
   
   @Test
@@ -390,16 +393,16 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // set up mocks
     when(componentRepository.findComponentById(parentComponentId)).thenReturn(parentComponent);
+    when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
-    when(componentRepository.addComponent(argThat(hasSameStateAsComponent(expectedComponent1)))).thenReturn(expectedComponent1);
-    when(componentRepository.updateComponent(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
+    when(componentRepository.update(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
     
     // SUT
     componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
     
     // verify results
-    verify(componentRepository).updateComponent(argThat(hasSameStateAsComponent(expectedParentComponent)));
-    verify(componentRepository).addComponent(argThat(hasSameStateAsComponent(expectedComponent1)));
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
+    verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponent1)));
   }
   
   @Test
@@ -431,13 +434,14 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // set up mocks
     when(componentRepository.findComponentById(parentComponentId)).thenReturn(parentComponent);
+    when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
     
     // SUT
     componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
     
     // verify results
-    verify(componentRepository, times(0)).addComponent(Mockito.any(Component.class));
+    verify(componentRepository, times(0)).save(Mockito.any(Component.class));
   }
   
   @Test
@@ -469,12 +473,198 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // set up mocks
     when(componentRepository.findComponentById(parentComponentId)).thenReturn(parentComponent);
+    when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
     
     // SUT
     componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
     
     // verify results
-    verify(componentRepository, times(0)).addComponent(Mockito.any(Component.class));
+    verify(componentRepository, times(0)).save(Mockito.any(Component.class));
+  }
+  
+  @Test(expected = IllegalStateException.class)
+  public void testProcessComponentThatCannotBeProcessed_shouldThrow() {
+    // set up data
+    Long parentComponentId = 11L;
+    Component parentComponent = aComponent().withId(parentComponentId).build();
+    ComponentTypeCombination componentTypeCombination = aComponentTypeCombination().withId(1L)
+        .withCombinationName("Combination")
+        .withComponentTypes(Arrays.asList(aComponentType().build()))
+        .build();
+    
+    // set up mocks
+    when(componentRepository.findComponentById(parentComponentId)).thenReturn(parentComponent);
+    when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(false);
+    
+    // SUT
+    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
+  }
+  
+  @Test
+  public void testFindComponentById_shouldCallRepository() throws Exception {
+    // set up data
+    Long id = Long.valueOf(1);
+    
+    // mocks
+    when(componentRepository.findComponentById(id)).thenReturn(aComponent().build());
+    
+    // SUT
+    componentCRUDService.findComponentById(id);
+    
+    // check
+    verify(componentRepository).findComponentById(id);
+  }
+  
+  @Test
+  public void testFindComponentsByDINAndType_shouldCallRepository() throws Exception {
+    // set up data
+    String din = String.valueOf("1234567");
+    Long id = Long.valueOf(1);
+    
+    // mocks
+    when(componentRepository.findComponentsByDINAndType(din, id)).thenReturn(Arrays.asList(aComponent().build()));
+    
+    // SUT
+    componentCRUDService.findComponentsByDINAndType(din, id);
+    
+    // check
+    verify(componentRepository).findComponentsByDINAndType(din, id);
+  }
+  
+  @Test(expected = java.lang.IllegalStateException.class)
+  public void testUpdateComponentWeight_shouldThrowException() throws Exception {
+    // set up data
+    Long componentId = Long.valueOf(1);
+    Component oldComponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.PROCESSED)
+        .build();
+    Component component = aComponent()
+        .withId(componentId)
+        .withWeight(320)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .build();
+    
+    // mocks
+    when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
+    when(componentConstraintChecker.canRecordWeight(component)).thenReturn(false);
+    
+    // SUT
+    componentCRUDService.updateComponent(component);
+  }
+
+  @Test
+  public void testUpdateComponentWeight_shouldDiscardComponent() throws Exception {
+    // set up data
+    Long componentId = Long.valueOf(1);
+    Component oldComponent = aComponent()
+        .withId(componentId)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .build();
+    Component component = aComponent()
+        .withId(componentId)
+        .withWeight(320)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .build();
+    
+    // mocks
+    when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
+    when(componentConstraintChecker.canRecordWeight(oldComponent)).thenReturn(true);
+    when(componentStatusCalculator.shouldComponentBeDiscarded(oldComponent)).thenReturn(true);
+    when(componentStatusCalculator.updateComponentStatus(oldComponent)).thenReturn(false);
+    when(componentRepository.update(oldComponent)).thenReturn(oldComponent);
+    
+    // SUT
+    Component updatedComponent = componentCRUDService.updateComponent(component);
+    
+    // check
+    assertThat("Component was flagged for discard", updatedComponent.getStatus(), is(ComponentStatus.UNSAFE));
+  }
+  
+  @Test
+  public void testUpdateComponentWeight_shouldNotDiscardComponent() throws Exception {
+    // set up data
+    Long componentId = Long.valueOf(1);
+    Component oldComponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .build();
+    Component component = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withWeight(420)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .build();
+    
+    // mocks
+    when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
+    when(componentConstraintChecker.canRecordWeight(oldComponent)).thenReturn(true);
+    when(componentStatusCalculator.shouldComponentBeDiscarded(oldComponent)).thenReturn(false);
+    when(componentStatusCalculator.updateComponentStatus(oldComponent)).thenReturn(false);
+    when(componentRepository.update(oldComponent)).thenReturn(oldComponent);
+    
+    // SUT
+    Component updatedComponent = componentCRUDService.updateComponent(component);
+    
+    // check
+    assertThat("Component was not flagged for discard", updatedComponent.getStatus(), is(ComponentStatus.QUARANTINED));
+  }
+  
+  @Test
+  public void testUpdateComponentWeight_shouldReEvaluateUnsafeStatus() throws Exception {
+    // set up data
+    Long componentId = Long.valueOf(1);
+    Component oldComponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.UNSAFE)
+        .withWeight(111)
+        .build();
+    Component componentToUpdate = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.UNSAFE)
+        .withWeight(420)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .build();
+    Component reEvaluatedcomponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withWeight(420)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .build();
+    
+    // mocks
+    when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
+    when(componentConstraintChecker.canRecordWeight(oldComponent)).thenReturn(true);
+    when(componentStatusCalculator.shouldComponentBeDiscarded(oldComponent)).thenReturn(false);
+    when(componentStatusCalculator.updateComponentStatus(oldComponent)).thenReturn(true);
+    when(componentRepository.update(reEvaluatedcomponent)).thenReturn(reEvaluatedcomponent);
+    
+    // SUT
+    Component updatedComponent = componentCRUDService.updateComponent(componentToUpdate);
+    
+    // check
+    assertThat("Component status was re-evaluated", updatedComponent.getStatus(), is(ComponentStatus.QUARANTINED));
+  }
+  
+  @Test
+  public void testUpdateComponent_shouldJustSave() throws Exception {
+    // set up data
+    Long componentId = Long.valueOf(1);
+    Component component = aComponent()
+        .withId(componentId)
+        .build();
+    
+    // mocks
+    when(componentRepository.findComponentById(componentId)).thenReturn(component);
+    when(componentStatusCalculator.shouldComponentBeDiscarded(component)).thenReturn(false);
+    when(componentStatusCalculator.updateComponentStatus(component)).thenReturn(false);
+    when(componentRepository.update(component)).thenReturn(component);
+    
+    // SUT
+    componentCRUDService.updateComponent(component);
+    
+    // check
+    verify(componentRepository).update(component);
   }
 }

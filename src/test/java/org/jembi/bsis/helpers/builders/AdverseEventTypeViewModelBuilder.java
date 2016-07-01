@@ -2,7 +2,7 @@ package org.jembi.bsis.helpers.builders;
 
 import org.jembi.bsis.viewmodel.AdverseEventTypeViewModel;
 
-public class AdverseEventTypeViewModelBuilder {
+public class AdverseEventTypeViewModelBuilder extends AbstractBuilder<AdverseEventTypeViewModel> {
 
   private Long id;
   private String name;
@@ -29,6 +29,7 @@ public class AdverseEventTypeViewModelBuilder {
     return this;
   }
 
+  @Override
   public AdverseEventTypeViewModel build() {
     AdverseEventTypeViewModel viewModel = new AdverseEventTypeViewModel();
     viewModel.setId(id);

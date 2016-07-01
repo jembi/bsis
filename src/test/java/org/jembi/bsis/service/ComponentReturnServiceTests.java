@@ -13,9 +13,6 @@ import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
-import org.jembi.bsis.service.ComponentCRUDService;
-import org.jembi.bsis.service.ComponentReturnService;
-import org.jembi.bsis.service.DateGeneratorService;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -48,13 +45,15 @@ public class ComponentReturnServiceTests extends UnitTestSuite {
     Component componentToReturn = aComponent()
         .withLocation(aUsageSite().build())
         .withStatus(ComponentStatus.ISSUED)
-        .withInventoryStatus(InventoryStatus.REMOVED).build();
+        .withInventoryStatus(InventoryStatus.REMOVED)
+        .withDonation(null).build();
     Location returnedTo = aDistributionSite().build();
     
     Component expectedComponent = aComponent()
         .withLocation(returnedTo)
         .withStatus(ComponentStatus.AVAILABLE)
-        .withInventoryStatus(InventoryStatus.IN_STOCK).build();
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withDonation(null).build();
     
     // Set up mocks
     when(componentCRUDService.updateComponent(argThat(hasSameStateAsComponent(expectedComponent)))).thenReturn(expectedComponent);

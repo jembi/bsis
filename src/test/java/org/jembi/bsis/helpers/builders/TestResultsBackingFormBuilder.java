@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.jembi.bsis.backingform.TestResultsBackingForm;
 
-public class TestResultsBackingFormBuilder {
+public class TestResultsBackingFormBuilder extends AbstractBuilder<TestResultsBackingForm> {
 
   private String donationIdentificationNumber;
   private Map<Long, String> testResults;
@@ -26,6 +26,7 @@ public class TestResultsBackingFormBuilder {
     return this;
   }
 
+  @Override
   public TestResultsBackingForm build() {
     TestResultsBackingForm backingForm = new TestResultsBackingForm();
     backingForm.setDonationIdentificationNumber(donationIdentificationNumber);

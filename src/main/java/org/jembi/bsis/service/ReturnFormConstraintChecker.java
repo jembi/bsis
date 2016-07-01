@@ -1,6 +1,5 @@
 package org.jembi.bsis.service;
 
-import org.jembi.bsis.controller.ComponentConstraintChecker;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.returnform.ReturnForm;
 import org.jembi.bsis.model.returnform.ReturnStatus;

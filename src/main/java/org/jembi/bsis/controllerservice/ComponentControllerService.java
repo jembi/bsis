@@ -5,11 +5,12 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.DiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
+import org.jembi.bsis.factory.ComponentFactory;
 import org.jembi.bsis.factory.ComponentStatusChangeReasonFactory;
 import org.jembi.bsis.factory.ComponentTypeFactory;
-import org.jembi.bsis.factory.ComponentViewModelFactory;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
@@ -18,6 +19,7 @@ import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.service.ComponentCRUDService;
+import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.jembi.bsis.viewmodel.DiscardReasonViewModel;
@@ -35,7 +37,7 @@ public class ComponentControllerService {
   private ComponentCRUDService componentCRUDService;
 
   @Autowired
-  private ComponentViewModelFactory componentViewModelFactory;
+  private ComponentFactory componentFactory;
   
   @Autowired
   private ComponentStatusChangeReasonRepository componentStatusChangeReasonRepository;
@@ -51,18 +53,18 @@ public class ComponentControllerService {
 
   public ComponentViewModel findComponentById(Long id) {
     Component component = componentRepository.findComponentById(id);
-    ComponentViewModel componentViewModel = componentViewModelFactory.createComponentViewModel(component);
+    ComponentViewModel componentViewModel = componentFactory.createComponentViewModel(component);
     return componentViewModel;
   }
   
   public ComponentViewModel findComponentByCodeAndDIN(String componentCode, String donationIdentificationNumber) {
     Component component = componentRepository.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber);
-    return componentViewModelFactory.createComponentViewModel(component);
+    return componentFactory.createComponentViewModel(component);
   }
   
-  public List<ComponentViewModel> findComponentsByDonationIdentificationNumber(String donationNumber) {
+  public List<ComponentManagementViewModel> findComponentsByDonationIdentificationNumber(String donationNumber) {
     List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(donationNumber);
-    List<ComponentViewModel> componentViewModels = componentViewModelFactory.createComponentViewModels(results);
+    List<ComponentManagementViewModel> componentViewModels = componentFactory.createManagementViewModels(results);
     return componentViewModels;
   }
 
@@ -70,7 +72,7 @@ public class ComponentControllerService {
       List<ComponentStatus> statusStringToComponentStatus, Date dateFrom, Date dateTo) {
     List<Component> results = componentRepository.findAnyComponent(donationIdentificationNumber, componentTypeIds,
         statusStringToComponentStatus, dateFrom, dateTo);
-    List<ComponentViewModel> components = componentViewModelFactory.createComponentViewModels(results);
+    List<ComponentViewModel> components = componentFactory.createComponentViewModels(results);
     return components;
   }
 
@@ -80,18 +82,24 @@ public class ComponentControllerService {
     List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(
         discardedComponent.getDonation().getDonationIdentificationNumber());
 
-    List<ComponentViewModel> components = componentViewModelFactory.createComponentViewModels(results);
+    List<ComponentViewModel> components = componentFactory.createComponentViewModels(results);
     
     return components;
   }
   
-  public List<ComponentViewModel> processComponent(RecordComponentBackingForm recordComponentForm) {
+  public List<ComponentManagementViewModel> processComponent(RecordComponentBackingForm recordComponentForm) {
     Component parentComponent = componentCRUDService.processComponent(recordComponentForm.getParentComponentId(), 
         recordComponentForm.getComponentTypeCombination());
     List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(
         parentComponent.getDonationIdentificationNumber());
-    List<ComponentViewModel> componentViewModels = componentViewModelFactory.createComponentViewModels(results);
+    List<ComponentManagementViewModel> componentViewModels = componentFactory.createManagementViewModels(results);
     return componentViewModels;
+  }
+  
+  public ComponentManagementViewModel updateComponent(ComponentBackingForm componentBackingForm) {
+    Component component = componentFactory.createEntity(componentBackingForm);
+    component = componentCRUDService.updateComponent(component);
+    return componentFactory.createManagementViewModel(component);
   }
   
   public List<ComponentStatusChangeReason> getReturnReasons() {

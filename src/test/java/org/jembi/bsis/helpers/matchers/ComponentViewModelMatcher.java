@@ -5,19 +5,19 @@ import java.util.Objects;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
-import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.viewmodel.ComponentViewModel;
 
-public class ComponentMatcher extends TypeSafeMatcher<Component> {
+public class ComponentViewModelMatcher extends TypeSafeMatcher<ComponentViewModel> {
 
-  private Component expected;
+  private ComponentViewModel expected;
 
-  public ComponentMatcher(Component expected) {
+  public ComponentViewModelMatcher(ComponentViewModel expected) {
     this.expected = expected;
   }
 
   @Override
   public void describeTo(Description description) {
-    description.appendText("A Component with the following state:")
+    description.appendText("A ComponentViewModel with the following state:")
         .appendText("\nId: ").appendValue(expected.getId())
         .appendText("\nComponentCode: ").appendValue(expected.getComponentCode())
         .appendText("\nComponentType: ").appendValue(expected.getComponentType())
@@ -26,14 +26,13 @@ public class ComponentMatcher extends TypeSafeMatcher<Component> {
         .appendText("\nLocation: ").appendValue(expected.getLocation())
         .appendText("\nCreatedOn: ").appendValue(expected.getCreatedOn())
         .appendText("\nExpiresOn: ").appendValue(expected.getExpiresOn())
-        .appendText("\nParentComponent: ").appendValue(expected.getParentComponent())
-        .appendText("\nDonation: ").appendValue(expected.getDonation())
-        .appendText("\nWeight: ").appendValue(expected.getWeight())
+        .appendText("\nBlood ABO: ").appendValue(expected.getBloodAbo())
+        .appendText("\nBlood Rh: ").appendValue(expected.getBloodRh())
         ;
   }
 
   @Override
-  public boolean matchesSafely(Component actual) {
+  public boolean matchesSafely(ComponentViewModel actual) {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     return Objects.equals(actual.getId(), expected.getId()) &&
         Objects.equals(actual.getComponentCode(), expected.getComponentCode()) &&
@@ -43,13 +42,12 @@ public class ComponentMatcher extends TypeSafeMatcher<Component> {
         Objects.equals(actual.getLocation(), expected.getLocation()) &&
         (Objects.equals(actual.getCreatedOn(), expected.getCreatedOn()) || Objects.equals(sdf.format(actual.getCreatedOn()), sdf.format(expected.getCreatedOn()))) &&
         (Objects.equals(actual.getExpiresOn(), expected.getExpiresOn()) || Objects.equals(sdf.format(actual.getExpiresOn()), sdf.format(expected.getExpiresOn()))) &&
-        Objects.equals(actual.getParentComponent(), expected.getParentComponent()) &&
-        Objects.equals(actual.getDonation(), expected.getDonation()) &&
-        Objects.equals(actual.getWeight(), expected.getWeight());
+        Objects.equals(actual.getBloodAbo(), expected.getBloodAbo()) &&
+        Objects.equals(actual.getBloodAbo(), expected.getBloodAbo());
   }
 
-  public static ComponentMatcher hasSameStateAsComponent(Component expected) {
-    return new ComponentMatcher(expected);
+  public static ComponentViewModelMatcher hasSameStateAsComponentViewModel(ComponentViewModel expected) {
+    return new ComponentViewModelMatcher(expected);
   }
 
 }

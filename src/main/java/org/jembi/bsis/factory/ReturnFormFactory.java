@@ -28,7 +28,7 @@ public class ReturnFormFactory {
   private LocationViewModelFactory locationViewModelFactory;
 
   @Autowired
-  private ComponentViewModelFactory componentViewModelFactory;
+  private ComponentFactory componentFactory;
 
   @Autowired
   private ComponentRepository componentRepository;
@@ -58,7 +58,7 @@ public class ReturnFormFactory {
   public ReturnFormFullViewModel createFullViewModel(ReturnForm entity) {
     ReturnFormFullViewModel viewModel = new ReturnFormFullViewModel();
     populateBasicViewModel(entity, viewModel);
-    viewModel.setComponents(componentViewModelFactory.createComponentViewModels(entity.getComponents()));
+    viewModel.setComponents(componentFactory.createComponentViewModels(entity.getComponents()));
 
     // Set permissions
     Map<String, Boolean> permissions = new HashMap<>();

@@ -92,7 +92,7 @@ public class Component extends BaseModificationTrackerEntity {
   private Date issuedOn;
 
   @Enumerated(EnumType.STRING)
-  @Column(length = 30)
+  @Column(length = 30, nullable = false)
   private ComponentStatus status;
 
   @NotAudited
@@ -126,6 +126,8 @@ public class Component extends BaseModificationTrackerEntity {
   
   @ManyToOne(optional = false, fetch = FetchType.EAGER)
   private Location location;
+  
+  private Integer weight;
 
   public Component() {
     super();
@@ -290,5 +292,13 @@ public class Component extends BaseModificationTrackerEntity {
 
   public void setLocation(Location location) {
     this.location = location;
+  }
+
+  public Integer getWeight() {
+    return weight;
+  }
+
+  public void setWeight(Integer weight) {
+    this.weight = weight;
   }
 }

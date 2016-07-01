@@ -2,127 +2,160 @@ package org.jembi.bsis.viewmodel;
 
 import java.util.Date;
 
-import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
-import org.jembi.bsis.utils.CustomDateFormatter;
-import org.joda.time.DateTime;
-import org.joda.time.Days;
+import org.jembi.bsis.utils.DateTimeSerialiser;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class ComponentViewModel {
+public class ComponentViewModel extends BaseViewModel {
 
-  @JsonIgnore
-  private Component component;
-  
+  private ComponentTypeViewModel componentType;
   private LocationViewModel location;
-
-  public ComponentViewModel() {
-  }
-
-  public ComponentViewModel(Component component) {
-    this.component = component;
-  }
-
-  public Component getComponent() {
-    return component;
-  }
-
-  public void setComponent(Component component) {
-    this.component = component;
-  }
-
-  public Long getId() {
-    return component.getId();
-  }
+  private Date createdOn;
+  private Date expiresOn;
+  private String donationIdentificationNumber;
+  private String notes;
+  private PackTypeFullViewModel packType;
+  private ComponentStatus status;
+  private String expiryStatus;
+  private Date createdDate;
+  private Date issuedOn;
+  private Date discardedOn;
+  private String bloodAbo;
+  private String bloodRh;
+  private String componentCode;
+  private InventoryStatus inventoryStatus;
 
   public ComponentTypeViewModel getComponentType() {
-    // FIXME: use factory
-    return new ComponentTypeFullViewModel(component.getComponentType());
+    return componentType;
   }
 
-  public String getNotes() {
-    return component.getNotes();
-  }
-
-  public String getCreatedOn() {
-    if (component.getCreatedOn() == null)
-      return "";
-    return CustomDateFormatter.getDateTimeString(component.getCreatedOn());
-  }
-
-  public String getExpiresOn() {
-    if (component.getExpiresOn() == null)
-      return "";
-    return CustomDateFormatter.getDateTimeString(component.getExpiresOn());
-  }
-
-  public String getDonationIdentificationNumber() {
-    if (getComponent() == null || getComponent().getDonation() == null ||
-        getComponent().getDonation().getDonationIdentificationNumber() == null
-        )
-      return "";
-    return getComponent().getDonation().getDonationIdentificationNumber();
-  }
-  
-  public PackTypeViewModel getPackType() {
-    if (component.getDonation() == null || component.getDonation().getPackType() == null) {
-      return null;
-    }
-    PackTypeViewModel viewModel = new PackTypeViewModel();
-    viewModel.setId(component.getDonation().getPackType().getId());
-    viewModel.setPackType(component.getDonation().getPackType().getPackType());
-    return viewModel;
-  }
-
-  public String getStatus() {
-    return component.getStatus().toString();
-  }
-
-  public String getExpiryStatus() {
-    Date today = new Date();
-    if (today.equals(component.getExpiresOn()) || today.before(component.getExpiresOn())) {
-      DateTime expiresOn = new DateTime(component.getExpiresOn().getTime());
-      Long age = (long) Days.daysBetween(expiresOn, new DateTime()).getDays();
-      return Math.abs(age) + " days to expire";
-    } else {
-      return "Already expired";
-    }
-  }
-
-  public String getCreatedDate() {
-    return CustomDateFormatter.getDateTimeString(component.getCreatedDate());
-  }
-
-  public String getIssuedOn() {
-    return CustomDateFormatter.getDateTimeString(component.getIssuedOn());
-  }
-
-  public String getDiscardedOn() {
-    return CustomDateFormatter.getDateTimeString(component.getDiscardedOn());
-  }
-  
-  public String getBloodAbo() {
-    return component.getDonation().getBloodAbo();
-  }
-  
-  public String getBloodRh() {
-    return component.getDonation().getBloodRh();
-  }
-
-  public String getComponentCode() {
-    return component.getComponentCode();
-  }
-  
-  public InventoryStatus getInventoryStatus() {
-    return component.getInventoryStatus();
-  }
-  
-  public void setLocation(LocationViewModel location) {
-    this.location = location;
+  public void setComponentType(ComponentTypeViewModel componentType) {
+    this.componentType = componentType;
   }
 
   public LocationViewModel getLocation() {
     return location;
   }
+
+  public void setLocation(LocationViewModel location) {
+    this.location = location;
+  }
+
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public Date getCreatedOn() {
+    return createdOn;
+  }
+
+  public void setCreatedOn(Date createdOn) {
+    this.createdOn = createdOn;
+  }
+
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public Date getExpiresOn() {
+    return expiresOn;
+  }
+
+  public void setExpiresOn(Date expiresOn) {
+    this.expiresOn = expiresOn;
+  }
+  public String getDonationIdentificationNumber() {
+    return donationIdentificationNumber;
+  }
+
+  public void setDonationIdentificationNumber(String donationIdentificationNumber) {
+    this.donationIdentificationNumber = donationIdentificationNumber;
+  }
+
+  public String getNotes() {
+    return notes;
+  }
+
+  public void setNotes(String notes) {
+    this.notes = notes;
+  }
+
+  public PackTypeFullViewModel getPackType() {
+    return packType;
+  }
+
+  public void setPackType(PackTypeFullViewModel packType) {
+    this.packType = packType;
+  }
+
+  public ComponentStatus getStatus() {
+    return status;
+  }
+
+  public void setStatus(ComponentStatus status) {
+    this.status = status;
+  }
+  public String getExpiryStatus() {
+    return expiryStatus;
+  }
+
+  public void setExpiryStatus(String expiryStatus) {
+    this.expiryStatus = expiryStatus;
+  }
+
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public Date getCreatedDate() {
+    return createdDate;
+  }
+
+  public void setCreatedDate(Date createdDate) {
+    this.createdDate = createdDate;
+  }
+
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public Date getIssuedOn() {
+    return issuedOn;
+  }
+
+  public void setIssuedOn(Date issuedOn) {
+    this.issuedOn = issuedOn;
+  }
+
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public Date getDiscardedOn() {
+    return discardedOn;
+  }
+
+  public void setDiscardedOn(Date discardedOn) {
+    this.discardedOn = discardedOn;
+  }
+
+  public String getBloodAbo() {
+    return bloodAbo;
+  }
+
+  public void setBloodAbo(String bloodAbo) {
+    this.bloodAbo = bloodAbo;
+  }
+  public String getBloodRh() {
+    return bloodRh;
+  }
+
+  public void setBloodRh(String bloodRh) {
+    this.bloodRh = bloodRh;
+  }
+  public String getComponentCode() {
+    return componentCode;
+  }
+
+  public void setComponentCode(String componentCode) {
+    this.componentCode = componentCode;
+  }
+
+  public InventoryStatus getInventoryStatus() {
+    return inventoryStatus;
+  }
+
+  public void setInventoryStatus(InventoryStatus inventoryStatus) {
+    this.inventoryStatus = inventoryStatus;
+  }
+
+  
+
 }

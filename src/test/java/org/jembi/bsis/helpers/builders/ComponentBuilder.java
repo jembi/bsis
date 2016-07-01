@@ -16,8 +16,8 @@ import org.jembi.bsis.model.location.Location;
 public class ComponentBuilder extends AbstractEntityBuilder<Component> {
 
   private Long id;
-  private ComponentStatus status;
-  private Donation donation;
+  private ComponentStatus status = ComponentStatus.QUARANTINED;
+  private Donation donation = DonationBuilder.aDonation().build();
   private ComponentType componentType;
   private InventoryStatus inventoryStatus = InventoryStatus.NOT_IN_STOCK;
   private Location location = aVenue().build();
@@ -26,6 +26,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
   private Date expiresOn;
   private Date createdOn;
   private Component parentComponent;
+  private Integer weight;
   
   public ComponentBuilder withId(Long id) {
     this.id = id;
@@ -82,6 +83,11 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     return this;
   }
 
+  public ComponentBuilder withWeight(Integer weight) {
+    this.weight = weight;
+    return this;
+  }
+
   @Override
   public Component build() {
     Component component = new Component();
@@ -96,6 +102,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     component.setExpiresOn(expiresOn);
     component.setCreatedOn(createdOn);
     component.setParentComponent(parentComponent);
+    component.setWeight(weight);
     return component;
   }
 
