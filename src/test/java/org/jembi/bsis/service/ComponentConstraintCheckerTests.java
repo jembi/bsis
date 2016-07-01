@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -174,15 +176,29 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCanProcessWithWeightForInitialComponent_shouldReturnTrue() {
+  public void testCanProcessWithValidWeightForInitialComponent_shouldReturnTrue() {
     Component component = aComponent()
         .withStatus(ComponentStatus.AVAILABLE)
         .withParentComponent(null)
         .withWeight(450)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
         .withComponentType(aComponentType().withProducedComponentTypeCombination(aComponentTypeCombination().build()).build())
         .build();
     boolean canProcess = componentConstraintChecker.canProcess(component);
     assertThat(canProcess, is(true));
+  }
+
+  @Test
+  public void testCanProcessWithInvalidWeightForInitialComponent_shouldReturnFalse() {
+    Component component = aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withParentComponent(null)
+        .withWeight(350)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .withComponentType(aComponentType().withProducedComponentTypeCombination(aComponentTypeCombination().build()).build())
+        .build();
+    boolean canProcess = componentConstraintChecker.canProcess(component);
+    assertThat(canProcess, is(false));
   }
   
   @Test
@@ -191,6 +207,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withStatus(ComponentStatus.AVAILABLE)
         .withParentComponent(null)
         .withWeight(450)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
         .withComponentType(aComponentType().build())
         .build();
     boolean canProcess = componentConstraintChecker.canProcess(component);
@@ -203,6 +220,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withStatus(ComponentStatus.AVAILABLE)
         .withParentComponent(null)
         .withWeight(450)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
         .withComponentType(aComponentType().withProducedComponentTypeCombination(aComponentTypeCombination().build()).build())
         .build();
     boolean canProcess = componentConstraintChecker.canProcess(component);
@@ -440,13 +458,6 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
 
     boolean canUnprocess = componentConstraintChecker.canUnprocess(parentComponent);
     assertThat(canUnprocess, is(false));
-  }
-
-  @Test
-  public void testCanRecordWeigthWithAlreadyRecordedWeight_shouldReturnFalse() {
-    Component component = aComponent().withStatus(ComponentStatus.AVAILABLE).withWeight(450).build();
-    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
-    assertThat(canRecordWeight, is(false));
   }
 
 }

@@ -614,6 +614,42 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
   
   @Test
+  public void testUpdateComponentWeight_shouldReEvaluateUnsafeStatus() throws Exception {
+    // set up data
+    Long componentId = Long.valueOf(1);
+    Component oldComponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.UNSAFE)
+        .withWeight(111)
+        .build();
+    Component componentToUpdate = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.UNSAFE)
+        .withWeight(420)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .build();
+    Component reEvaluatedcomponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withWeight(420)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .build();
+    
+    // mocks
+    when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
+    when(componentConstraintChecker.canRecordWeight(oldComponent)).thenReturn(true);
+    when(componentStatusCalculator.shouldComponentBeDiscarded(oldComponent)).thenReturn(false);
+    when(componentStatusCalculator.updateComponentStatus(oldComponent)).thenReturn(true);
+    when(componentRepository.update(reEvaluatedcomponent)).thenReturn(reEvaluatedcomponent);
+    
+    // SUT
+    Component updatedComponent = componentCRUDService.updateComponent(componentToUpdate);
+    
+    // check
+    assertThat("Component status was re-evaluated", updatedComponent.getStatus(), is(ComponentStatus.QUARANTINED));
+  }
+  
+  @Test
   public void testUpdateComponent_shouldJustSave() throws Exception {
     // set up data
     Long componentId = Long.valueOf(1);
