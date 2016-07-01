@@ -701,5 +701,66 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     assertThat("Parent component status is AVAILABLE", unprocessedComponent.getStatus(), is(ComponentStatus.AVAILABLE));
   }
   
+  @Test
+  public void testUndiscardComponentThatWasInStock_shouldUndiscardAndReturnComponent() {
+    // Set up fixture
+    long componentId = 76L;
+    Component existingComponentThatWasInStock = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withInventoryStatus(InventoryStatus.REMOVED)
+        .build();
+    
+    // Set up expectations
+    Component updatedComponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withInventoryStatus(InventoryStatus.REMOVED)
+        .build();
+    
+    when(componentRepository.findComponentById(componentId)).thenReturn(existingComponentThatWasInStock);
+    when(componentRepository.update(updatedComponent)).thenReturn(updatedComponent);
+    
+    // Exercise SUT
+    Component returnedComponent = componentCRUDService.undiscardComponent(componentId);
+    
+    // Verify
+    
+    // Ensure that the status was recalculate
+    verify(componentStatusCalculator).updateComponentStatus(updatedComponent);
+    
+    assertThat(returnedComponent, is(updatedComponent));
+  }
+  
+  @Test
+  public void testUndiscardComponentThatWasInNotStock_shouldUndiscardAndReturnComponent() {
+    // Set up fixture
+    long componentId = 76L;
+    Component existingComponentThatWasNotInStock = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .build();
+    
+    // Set up expectations
+    Component updatedComponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .build();
+    
+    when(componentRepository.findComponentById(componentId)).thenReturn(existingComponentThatWasNotInStock);
+    when(componentRepository.update(updatedComponent)).thenReturn(updatedComponent);
+    
+    // Exercise SUT
+    Component returnedComponent = componentCRUDService.undiscardComponent(componentId);
+    
+    // Verify
+    
+    // Ensure that the status was recalculate
+    verify(componentStatusCalculator).updateComponentStatus(updatedComponent);
+    
+    assertThat(returnedComponent, is(updatedComponent));
+  }
   
 }

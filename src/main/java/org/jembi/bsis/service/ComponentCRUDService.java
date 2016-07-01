@@ -212,6 +212,22 @@ public class ComponentCRUDService {
     return existingComponent;
   }
   
+  public Component undiscardComponent(long componentId) {
+    LOGGER.info("Undiscarding component " + componentId);
+
+    Component existingComponent = componentRepository.findComponentById(componentId);
+    
+    // Set the status back to quarantined so that it can be recalculated
+    existingComponent.setStatus(ComponentStatus.QUARANTINED);
+    
+    // Add component back into inventory if it has previously been removed
+    if (existingComponent.getInventoryStatus() == InventoryStatus.REMOVED) {
+      existingComponent.setInventoryStatus(InventoryStatus.IN_STOCK);
+    }
+
+    return update(existingComponent);
+  }
+  
   public Component updateComponent(Component component) {
     Component existingComponent = componentRepository.findComponentById(component.getId());
 

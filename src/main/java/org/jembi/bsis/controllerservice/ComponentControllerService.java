@@ -1,5 +1,6 @@
 package org.jembi.bsis.controllerservice;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -124,6 +125,15 @@ public class ComponentControllerService {
     Component component = componentRepository.findComponentById(componentId);
     component = componentCRUDService.unprocessComponent(component);
     return componentFactory.createManagementViewModel(component);
+  }
+  
+  public List<ComponentManagementViewModel> undiscardComponents(List<Long> componentIds) {
+    List<ComponentManagementViewModel> componentViewModels = new ArrayList<>();
+    for (Long componentId : componentIds) {
+      Component undiscardedComponent = componentCRUDService.undiscardComponent(componentId);
+      componentViewModels.add(componentFactory.createManagementViewModel(undiscardedComponent));
+    }
+    return componentViewModels;
   }
   
 }

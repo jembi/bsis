@@ -1,7 +1,10 @@
 package org.jembi.bsis.controllerservice;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -297,5 +300,34 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     Mockito.verify(componentFactory).createEntity(backingForm);
     Mockito.verify(componentCRUDService).updateComponent(component);
     Mockito.verify(componentFactory).createManagementViewModel(component);
+  }
+  
+  @Test
+  public void testUndiscardComponents_shouldUndiscardAndReturnComponents() {
+    // Set up fixture
+    long firstComponentId = 1L;
+    long secondComponentId = 3L;
+    
+    Component firstComponent = aComponent().withId(firstComponentId).build();
+    Component secondComponent = aComponent().withId(secondComponentId).build();
+    
+    ComponentManagementViewModel firstComponentViewModel = aComponentManagementViewModel().withId(firstComponentId).build();
+    ComponentManagementViewModel secondComponentViewModel = aComponentManagementViewModel().withId(secondComponentId).build();
+
+    List<Long> componentIds = Arrays.asList(firstComponentId, secondComponentId);
+    
+    // Set up expectations
+    List<ComponentManagementViewModel> expectedViewModels = Arrays.asList(firstComponentViewModel, secondComponentViewModel);
+    
+    when(componentCRUDService.undiscardComponent(firstComponentId)).thenReturn(firstComponent);
+    when(componentCRUDService.undiscardComponent(secondComponentId)).thenReturn(secondComponent);
+    when(componentFactory.createManagementViewModel(firstComponent)).thenReturn(firstComponentViewModel);
+    when(componentFactory.createManagementViewModel(secondComponent)).thenReturn(secondComponentViewModel);
+    
+    // Exercise SUT
+    List<ComponentManagementViewModel> returnedViewModels = componentControllerService.undiscardComponents(componentIds);
+    
+    // Verify
+    assertThat(returnedViewModels, is(expectedViewModels));
   }
 }

@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.DiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
+import org.jembi.bsis.backingform.UndiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.validator.DiscardComponentsBackingFormValidator;
 import org.jembi.bsis.controllerservice.ComponentControllerService;
 import org.jembi.bsis.model.component.ComponentStatus;
@@ -60,6 +61,14 @@ public class ComponentController {
       @Valid @RequestBody DiscardComponentsBackingForm discardComponentsBackingForm) {
     componentControllerService.discardComponents(discardComponentsBackingForm);
     return new ResponseEntity<>(HttpStatus.OK);
+  }
+  
+  @RequestMapping(value = "/undiscard", method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('" + PermissionConstants.DISCARD_COMPONENT + "')")
+  public ResponseEntity<Map<String, Object>> undsicardComponents(@RequestBody UndiscardComponentsBackingForm backingForm) {
+    Map<String, Object> map = new HashMap<>();
+    map.put("components", componentControllerService.undiscardComponents(backingForm.getComponentIds()));
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @RequestMapping(method = RequestMethod.GET)
