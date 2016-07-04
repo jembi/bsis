@@ -20,6 +20,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Index;
+import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
@@ -100,6 +101,7 @@ public class Component extends BaseModificationTrackerEntity {
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy = "component", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+  @Where(clause = "isDeleted = 0")
   private List<ComponentStatusChange> statusChanges;
 
   @Column(length = 3)

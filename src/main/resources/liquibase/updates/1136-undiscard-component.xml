@@ -1,0 +1,17 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+	logicalFilePath="./liquibase/updates/1136-undiscard-component.xml">
+
+ 	<changeSet id="20160704-0943" author="timler">
+ 	    <comment>Add isDeleted column to ComponentStatus</comment>
+ 	    <addColumn tableName="ComponentStatusChange">
+			<column name="isDeleted" type="TINYINT(1)" defaultValue="0" />
+		</addColumn>
+ 	    <addColumn tableName="ComponentStatusChange_AUD">
+			<column name="isDeleted" type="TINYINT(1)" defaultValue="0" />
+		</addColumn>
+	</changeSet>
+
+</databaseChangeLog>

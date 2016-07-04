@@ -48,6 +48,8 @@ public class ComponentStatusChange extends BaseEntity {
   @ManyToOne
   private ComponentStatusChangeReason statusChangeReason;
 
+  boolean isDeleted = false;
+
   public ComponentStatusChange() {
   }
 
@@ -121,5 +123,13 @@ public class ComponentStatusChange extends BaseEntity {
 
   public void setStatusChangeType(ComponentStatusChangeType statusChangeType) {
     this.statusChangeType = statusChangeType;
+  }
+
+  public boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
 }

@@ -3,6 +3,8 @@ package org.jembi.bsis.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -228,7 +230,23 @@ public class ComponentCRUDService {
     if (existingComponent.getInventoryStatus() == InventoryStatus.REMOVED) {
       existingComponent.setInventoryStatus(InventoryStatus.IN_STOCK);
     }
-
+    
+    // void the latest discarded ComponentStatusChange
+    ComponentStatusChange lastDiscardComponentStatusChange = null;
+    if (existingComponent.getStatusChanges() != null) {
+      for (ComponentStatusChange statusChange : existingComponent.getStatusChanges()) {
+        if (statusChange.getStatusChangeType() == ComponentStatusChangeType.DISCARDED) {
+          if (lastDiscardComponentStatusChange == null || 
+              statusChange.getStatusChangedOn().after(lastDiscardComponentStatusChange.getStatusChangedOn())) {
+            lastDiscardComponentStatusChange = statusChange;
+          }
+        }
+      }
+    }
+    if (lastDiscardComponentStatusChange != null) {
+      lastDiscardComponentStatusChange.setIsDeleted(true);
+    }
+    
     return update(existingComponent);
   }
   

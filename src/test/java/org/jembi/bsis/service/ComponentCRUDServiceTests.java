@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.jembi.bsis.factory.ComponentFactory;
+import org.jembi.bsis.helpers.builders.ComponentStatusChangeBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.matchers.ComponentMatcher;
 import org.jembi.bsis.model.component.Component;
@@ -763,6 +764,63 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     verify(componentStatusCalculator).updateComponentStatus(updatedComponent);
     
     assertThat(returnedComponent, is(updatedComponent));
+  }
+  
+  @Test
+  public void testUndiscardComponentWithStatusChange_shouldVoidComponentStatusChange() {
+    // Set up fixture
+    long componentId = 76L;
+    Component component = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withComponentStatusChange(ComponentStatusChangeBuilder.aDiscardedStatusChange().withStatusChangedOn(new Date()).build())
+        .build();
+    
+    when(componentRepository.findComponentById(componentId)).thenReturn(component);
+    when(componentConstraintChecker.canUndiscard(component)).thenReturn(true);
+    when(componentRepository.update(component)).thenReturn(component);
+    
+    // Exercise SUT
+    Component returnedComponent = componentCRUDService.undiscardComponent(componentId);
+    
+    // Verify
+    
+    assertThat(returnedComponent.getStatusChanges().get(0).getIsDeleted(), is(true));
+  }
+  
+  @Test
+  public void testUndiscardComponentWithManyStatusChanges_shouldVoidCorrectComponentStatusChange() {
+    // Set up fixture
+    Calendar cal = Calendar.getInstance();
+    cal.add(Calendar.DAY_OF_MONTH, -10);
+    Date discardDate1 = cal.getTime();
+    cal.add(Calendar.DAY_OF_MONTH, 5);
+    Date returnDate = cal.getTime();
+    cal.add(Calendar.DAY_OF_MONTH, 4);
+    Date discardDate2 = cal.getTime();
+    long componentId = 76L;
+    Component component = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withComponentStatusChange(ComponentStatusChangeBuilder.aDiscardedStatusChange().withStatusChangedOn(discardDate1).build())
+        .withComponentStatusChange(ComponentStatusChangeBuilder.aDiscardedStatusChange().withStatusChangedOn(discardDate2).build())
+        .withComponentStatusChange(ComponentStatusChangeBuilder.aReturnedStatusChange().withStatusChangedOn(returnDate).build())
+        .build();
+    
+    when(componentRepository.findComponentById(componentId)).thenReturn(component);
+    when(componentConstraintChecker.canUndiscard(component)).thenReturn(true);
+    when(componentRepository.update(component)).thenReturn(component);
+    
+    // Exercise SUT
+    Component returnedComponent = componentCRUDService.undiscardComponent(componentId);
+    
+    // Verify
+    assertThat(returnedComponent.getStatusChanges().get(0).getIsDeleted(), is(false));
+    assertThat(returnedComponent.getStatusChanges().get(1).getStatusChangedOn(), is(discardDate2));
+    assertThat(returnedComponent.getStatusChanges().get(1).getIsDeleted(), is(true));
+    assertThat(returnedComponent.getStatusChanges().get(2).getIsDeleted(), is(false));
   }
   
   @Test(expected = IllegalStateException.class)
