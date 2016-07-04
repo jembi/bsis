@@ -44,6 +44,8 @@ public class ComponentMatcher extends TypeSafeMatcher<Component> {
         Objects.equals(actual.getLocation(), expected.getLocation()) &&
         (Objects.equals(actual.getCreatedOn(), expected.getCreatedOn()) || Objects.equals(sdf.format(actual.getCreatedOn()), sdf.format(expected.getCreatedOn()))) &&
         (Objects.equals(actual.getExpiresOn(), expected.getExpiresOn()) || Objects.equals(sdf.format(actual.getExpiresOn()), sdf.format(expected.getExpiresOn()))) &&
+        (Objects.equals(actual.getIssuedOn(), expected.getIssuedOn()) || Objects.equals(sdf.format(actual.getIssuedOn()), sdf.format(expected.getIssuedOn()))) &&
+        (Objects.equals(actual.getDiscardedOn(), expected.getDiscardedOn()) || Objects.equals(sdf.format(actual.getDiscardedOn()), sdf.format(expected.getDiscardedOn()))) &&
         Objects.equals(actual.getParentComponent(), expected.getParentComponent()) &&
         Objects.equals(actual.getDonation(), expected.getDonation()) &&
         Objects.equals(actual.getWeight(), expected.getWeight()) &&

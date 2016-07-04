@@ -38,6 +38,7 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
+import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -701,5 +702,53 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     assertThat("Parent component status is AVAILABLE", unprocessedComponent.getStatus(), is(ComponentStatus.AVAILABLE));
   }
   
+  
+  @Test
+  public void testUpdateComponent_shouldUpdateAllFields() {
+    // Set up fixture
+    DateTime now = new DateTime();
+    Date date1 = now.plusDays(10).toDate();
+    Date date2 = now.plusDays(20).toDate();
+    Component component1 = aComponent().withId(1L)
+        .withDonation(aDonation().withId(1L).build())
+        .withCreatedOn(date1)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withLocation(aLocation().withId(1L).build())
+        .withComponentCode("0001")
+        .withExpiresOn(date1)
+        .withDiscardedOn(date1)
+        .withIssuedOn(date1)
+        .withIsDeleted(true)
+        .withParentComponent(aComponent().withId(1L).build())
+        .withComponentType(aComponentType().withId(1L).build())
+        .build();
+    
+    Component component2 = aComponent().withId(1L)
+        .withDonation(aDonation().withId(2L).build())
+        .withCreatedOn(date2)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withLocation(aLocation().withId(2L).build())
+        .withComponentCode("0002")
+        .withExpiresOn(date2)
+        .withDiscardedOn(date2)
+        .withIssuedOn(date2)
+        .withIsDeleted(false)
+        .withParentComponent(aComponent().withId(2L).build())
+        .withComponentType(aComponentType().withId(2L).build())
+        .build();
+
+    // Set up expectations
+    when(componentRepository.findComponentById(1L)).thenReturn(component1);
+
+    // Run test
+    componentCRUDService.updateComponent(component2);
+
+    // Verify
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(component2)));
+
+
+  }
   
 }

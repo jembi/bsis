@@ -3,11 +3,13 @@ package org.jembi.bsis.helpers.builders;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 
 import java.util.Date;
+import java.util.List;
 
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.ComponentPersister;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.inventory.InventoryStatus;
@@ -27,6 +29,9 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
   private Date createdOn;
   private Component parentComponent;
   private Integer weight;
+  private List<ComponentStatusChange> statusChanges;
+  private Date discardedOn;
+  private Date issuedOn;
   
   public ComponentBuilder withId(Long id) {
     this.id = id;
@@ -88,6 +93,16 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     return this;
   }
 
+  public ComponentBuilder withDiscardedOn(Date discardedOn) {
+    this.discardedOn = discardedOn;
+    return this;
+  }
+
+  public ComponentBuilder withIssuedOn(Date issuedOn) {
+    this.issuedOn = issuedOn;
+    return this;
+  }
+
   @Override
   public Component build() {
     Component component = new Component();
@@ -103,6 +118,9 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     component.setCreatedOn(createdOn);
     component.setParentComponent(parentComponent);
     component.setWeight(weight);
+    component.setStatusChanges(statusChanges);
+    component.setDiscardedOn(discardedOn);
+    component.setIssuedOn(issuedOn);
     return component;
   }
 
