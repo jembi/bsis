@@ -797,16 +797,19 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Date discardDate1 = cal.getTime();
     cal.add(Calendar.DAY_OF_MONTH, 5);
     Date returnDate = cal.getTime();
-    cal.add(Calendar.DAY_OF_MONTH, 4);
+    cal.add(Calendar.DAY_OF_MONTH, 2);
     Date discardDate2 = cal.getTime();
+    cal.add(Calendar.DAY_OF_MONTH, 2);
+    Date discardDate3 = cal.getTime();
     long componentId = 76L;
     Component component = aComponent()
         .withId(componentId)
         .withStatus(ComponentStatus.DISCARDED)
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
         .withComponentStatusChange(ComponentStatusChangeBuilder.aDiscardedStatusChange().withStatusChangedOn(discardDate1).build())
-        .withComponentStatusChange(ComponentStatusChangeBuilder.aDiscardedStatusChange().withStatusChangedOn(discardDate2).build())
+        .withComponentStatusChange(ComponentStatusChangeBuilder.aDiscardedStatusChange().withStatusChangedOn(discardDate3).build())
         .withComponentStatusChange(ComponentStatusChangeBuilder.aReturnedStatusChange().withStatusChangedOn(returnDate).build())
+        .withComponentStatusChange(ComponentStatusChangeBuilder.aDiscardedStatusChange().withStatusChangedOn(discardDate2).build())
         .build();
     
     when(componentRepository.findComponentById(componentId)).thenReturn(component);
@@ -818,9 +821,10 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // Verify
     assertThat(returnedComponent.getStatusChanges().get(0).getIsDeleted(), is(false));
-    assertThat(returnedComponent.getStatusChanges().get(1).getStatusChangedOn(), is(discardDate2));
+    assertThat(returnedComponent.getStatusChanges().get(1).getStatusChangedOn(), is(discardDate3));
     assertThat(returnedComponent.getStatusChanges().get(1).getIsDeleted(), is(true));
     assertThat(returnedComponent.getStatusChanges().get(2).getIsDeleted(), is(false));
+    assertThat(returnedComponent.getStatusChanges().get(3).getIsDeleted(), is(false));
   }
   
   @Test(expected = IllegalStateException.class)
