@@ -118,18 +118,6 @@ public class ComponentController {
     return map;
   }
 
-  @RequestMapping(value = "{id}/discard", method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('" + PermissionConstants.DISCARD_COMPONENT + "')")
-  public ResponseEntity<Map<String, Object>> discardComponent(
-      @PathVariable Long id,
-      @RequestParam(value = "discardReasonId") Long discardReasonId,
-      @RequestParam(value = "discardReasonText", required = false) String discardReasonText) {
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("components", componentControllerService.discardComponent(id, discardReasonId, discardReasonText));
-    return new ResponseEntity<>(map, HttpStatus.OK);
-  }
-
   @RequestMapping(value = "/donations/{donationNumber}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
   public Map<String, Object> findComponentByDonationIdentificationNumber(

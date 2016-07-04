@@ -158,38 +158,6 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testDiscardComponent_shouldCallServiceRepositoryAndFactory() throws Exception {
-    // setup data
-    Long id = 1L;
-    Long discardReasonId = 1L;
-    String discardReasonText = "Other reasons";
-    String donationIdentificationNumber = "1234567";
-    List<Component> components = Arrays.asList(
-        ComponentBuilder.aComponent().withId(1L)
-          .withDonation(DonationBuilder.aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build())
-          .build(),
-        ComponentBuilder.aComponent().withId(2L).build()
-    );
-    List<ComponentViewModel> componentViewModels = Arrays.asList(
-        ComponentViewModelBuilder.aComponentViewModel().build(),
-        ComponentViewModelBuilder.aComponentViewModel().build()
-    );
-    
-    // setup mocks       
-    Mockito.when(componentCRUDService.discardComponent(id, discardReasonId, discardReasonText)).thenReturn(components.get(0));
-    Mockito.when(componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber)).thenReturn(components);
-    Mockito.when(componentFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
-    
-    // SUT
-    componentControllerService.discardComponent(id, discardReasonId, discardReasonText);
-    
-    // verify
-    Mockito.verify(componentCRUDService).discardComponent(id, discardReasonId, discardReasonText);
-    Mockito.verify(componentRepository).findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
-    Mockito.verify(componentFactory).createComponentViewModels(components);
-  }
-  
-  @Test
   public void testProcessComponent_shouldCallServiceRepositoryAndFactory() throws Exception {
     // setup data
     String donationIdentificationNumber = "1234567";

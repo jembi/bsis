@@ -76,17 +76,6 @@ public class ComponentControllerService {
     List<ComponentViewModel> components = componentFactory.createComponentViewModels(results);
     return components;
   }
-
-  public List<ComponentViewModel> discardComponent(Long id, Long discardReasonId, String discardReasonText) {
-    Component discardedComponent = componentCRUDService.discardComponent(id, discardReasonId, discardReasonText);
-
-    List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(
-        discardedComponent.getDonation().getDonationIdentificationNumber());
-
-    List<ComponentViewModel> components = componentFactory.createComponentViewModels(results);
-    
-    return components;
-  }
   
   public List<ComponentManagementViewModel> processComponent(RecordComponentBackingForm recordComponentForm) {
     Component parentComponent = componentCRUDService.processComponent(recordComponentForm.getParentComponentId(), 
