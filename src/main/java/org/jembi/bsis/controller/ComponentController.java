@@ -65,7 +65,7 @@ public class ComponentController {
   
   @RequestMapping(value = "/undiscard", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.DISCARD_COMPONENT + "')")
-  public ResponseEntity<Map<String, Object>> undsicardComponents(@RequestBody UndiscardComponentsBackingForm backingForm) {
+  public ResponseEntity<Map<String, Object>> undiscardComponents(@RequestBody UndiscardComponentsBackingForm backingForm) {
     Map<String, Object> map = new HashMap<>();
     map.put("components", componentControllerService.undiscardComponents(backingForm.getComponentIds()));
     return new ResponseEntity<>(map, HttpStatus.OK);
