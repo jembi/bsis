@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.DiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
+import org.jembi.bsis.backingform.UndiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.validator.DiscardComponentsBackingFormValidator;
 import org.jembi.bsis.controllerservice.ComponentControllerService;
 import org.jembi.bsis.model.component.ComponentStatus;
@@ -61,6 +62,14 @@ public class ComponentController {
     componentControllerService.discardComponents(discardComponentsBackingForm);
     return new ResponseEntity<>(HttpStatus.OK);
   }
+  
+  @RequestMapping(value = "/undiscard", method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('" + PermissionConstants.DISCARD_COMPONENT + "')")
+  public ResponseEntity<Map<String, Object>> undiscardComponents(@RequestBody UndiscardComponentsBackingForm backingForm) {
+    Map<String, Object> map = new HashMap<>();
+    map.put("components", componentControllerService.undiscardComponents(backingForm.getComponentIds()));
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
 
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
@@ -107,18 +116,6 @@ public class ComponentController {
     map.put("components", componentControllerService.findAnyComponent(donationIdentificationNumber, 
         componentTypeIds, statuses, donationDateFrom, donationDateTo));
     return map;
-  }
-
-  @RequestMapping(value = "{id}/discard", method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('" + PermissionConstants.DISCARD_COMPONENT + "')")
-  public ResponseEntity<Map<String, Object>> discardComponent(
-      @PathVariable Long id,
-      @RequestParam(value = "discardReasonId") Long discardReasonId,
-      @RequestParam(value = "discardReasonText", required = false) String discardReasonText) {
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("components", componentControllerService.discardComponent(id, discardReasonId, discardReasonText));
-    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @RequestMapping(value = "/donations/{donationNumber}", method = RequestMethod.GET)

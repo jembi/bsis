@@ -20,7 +20,7 @@ import org.jembi.bsis.model.user.User;
 
 @Entity
 @Audited
-public class ComponentStatusChange extends BaseEntity {
+public class ComponentStatusChange extends BaseEntity implements Comparable<ComponentStatusChange> {
 
   private static final long serialVersionUID = 1L;
 
@@ -47,6 +47,8 @@ public class ComponentStatusChange extends BaseEntity {
 
   @ManyToOne
   private ComponentStatusChangeReason statusChangeReason;
+
+  boolean isDeleted = false;
 
   public ComponentStatusChange() {
   }
@@ -121,5 +123,24 @@ public class ComponentStatusChange extends BaseEntity {
 
   public void setStatusChangeType(ComponentStatusChangeType statusChangeType) {
     this.statusChangeType = statusChangeType;
+  }
+
+  public boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
+
+  @Override
+  public int compareTo(ComponentStatusChange other) {
+    if (this.getStatusChangedOn() == null) {
+      return -1;
+    }
+    if (other.getStatusChangedOn() == null) {
+      return 1;
+    }
+    return this.getStatusChangedOn().compareTo(other.getStatusChangedOn());
   }
 }

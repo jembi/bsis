@@ -19,9 +19,11 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.jembi.bsis.factory.ComponentFactory;
+import org.jembi.bsis.helpers.builders.ComponentStatusChangeBuilder;
 import org.jembi.bsis.helpers.builders.ComponentBatchBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.matchers.ComponentMatcher;
@@ -107,7 +109,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Assert.assertEquals("Component status is discarded", ComponentStatus.DISCARDED, component.getStatus());
     Assert.assertNotNull("Status change has been set", component.getStatusChanges());
     Assert.assertEquals("Status change has been set", 1, component.getStatusChanges().size());
-    ComponentStatusChange statusChange = component.getStatusChanges().get(0);
+    ComponentStatusChange statusChange = component.getStatusChanges().iterator().next();
     Assert.assertEquals("Status change is correct", ComponentStatusChangeType.DISCARDED, statusChange.getStatusChangeType());
     Assert.assertEquals("Status change is correct", ComponentStatus.DISCARDED, statusChange.getNewStatus());
     Assert.assertEquals("Status change is correct", discardReasonId, statusChange.getStatusChangeReason().getId());
@@ -703,6 +705,149 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     assertThat("Parent component status is AVAILABLE", unprocessedComponent.getStatus(), is(ComponentStatus.AVAILABLE));
   }
   
+  @Test
+  public void testUndiscardComponentThatWasInStock_shouldUndiscardAndReturnComponent() {
+    // Set up fixture
+    long componentId = 76L;
+    Component existingComponentThatWasInStock = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withInventoryStatus(InventoryStatus.REMOVED)
+        .build();
+    
+    // Set up expectations
+    Component updatedComponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withInventoryStatus(InventoryStatus.REMOVED)
+        .build();
+    
+    when(componentRepository.findComponentById(componentId)).thenReturn(existingComponentThatWasInStock);
+    when(componentConstraintChecker.canUndiscard(existingComponentThatWasInStock)).thenReturn(true);
+    when(componentRepository.update(updatedComponent)).thenReturn(updatedComponent);
+    
+    // Exercise SUT
+    Component returnedComponent = componentCRUDService.undiscardComponent(componentId);
+    
+    // Verify
+    
+    // Ensure that the status was recalculate
+    verify(componentStatusCalculator).updateComponentStatus(updatedComponent);
+    
+    assertThat(returnedComponent, is(updatedComponent));
+  }
+  
+  @Test
+  public void testUndiscardComponentThatWasInNotStock_shouldUndiscardAndReturnComponent() {
+    // Set up fixture
+    long componentId = 76L;
+    Component existingComponentThatWasNotInStock = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .build();
+    
+    // Set up expectations
+    Component updatedComponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .build();
+    
+    when(componentRepository.findComponentById(componentId)).thenReturn(existingComponentThatWasNotInStock);
+    when(componentConstraintChecker.canUndiscard(existingComponentThatWasNotInStock)).thenReturn(true);
+    when(componentRepository.update(updatedComponent)).thenReturn(updatedComponent);
+    
+    // Exercise SUT
+    Component returnedComponent = componentCRUDService.undiscardComponent(componentId);
+    
+    // Verify
+    
+    // Ensure that the status was recalculate
+    verify(componentStatusCalculator).updateComponentStatus(updatedComponent);
+    
+    assertThat(returnedComponent, is(updatedComponent));
+  }
+  
+  @Test
+  public void testUndiscardComponentWithStatusChange_shouldVoidComponentStatusChange() {
+    // Set up fixture
+    long componentId = 76L;
+    Component component = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withComponentStatusChange(ComponentStatusChangeBuilder.aDiscardedStatusChange().withStatusChangedOn(new Date()).build())
+        .build();
+    
+    when(componentRepository.findComponentById(componentId)).thenReturn(component);
+    when(componentConstraintChecker.canUndiscard(component)).thenReturn(true);
+    when(componentRepository.update(component)).thenReturn(component);
+    
+    // Exercise SUT
+    Component returnedComponent = componentCRUDService.undiscardComponent(componentId);
+    
+    // Verify
+    
+    assertThat(returnedComponent.getStatusChanges().iterator().next().getIsDeleted(), is(true));
+  }
+  
+  @Test
+  public void testUndiscardComponentWithManyStatusChanges_shouldVoidCorrectComponentStatusChange() {
+    // Set up fixture
+    Calendar cal = Calendar.getInstance();
+    cal.add(Calendar.DAY_OF_MONTH, -10);
+    Date discardDate1 = cal.getTime();
+    cal.add(Calendar.DAY_OF_MONTH, 5);
+    Date returnDate = cal.getTime();
+    cal.add(Calendar.DAY_OF_MONTH, 2);
+    Date discardDate2 = cal.getTime();
+    cal.add(Calendar.DAY_OF_MONTH, 2);
+    Date discardDate3 = cal.getTime();
+    long componentId = 76L;
+    Component component = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withComponentStatusChange(ComponentStatusChangeBuilder.aDiscardedStatusChange().withStatusChangedOn(discardDate1).build())
+        .withComponentStatusChange(ComponentStatusChangeBuilder.aDiscardedStatusChange().withStatusChangedOn(discardDate3).build())
+        .withComponentStatusChange(ComponentStatusChangeBuilder.aReturnedStatusChange().withStatusChangedOn(returnDate).build())
+        .withComponentStatusChange(ComponentStatusChangeBuilder.aDiscardedStatusChange().withStatusChangedOn(discardDate2).build())
+        .build();
+    
+    when(componentRepository.findComponentById(componentId)).thenReturn(component);
+    when(componentConstraintChecker.canUndiscard(component)).thenReturn(true);
+    when(componentRepository.update(component)).thenReturn(component);
+    
+    // Exercise SUT
+    Component returnedComponent = componentCRUDService.undiscardComponent(componentId);
+    
+    // Verify
+    Iterator<ComponentStatusChange> it = returnedComponent.getStatusChanges().iterator();
+    assertThat(it.next().getIsDeleted(), is(false));
+    assertThat(it.next().getIsDeleted(), is(false));
+    assertThat(it.next().getIsDeleted(), is(false));
+    ComponentStatusChange discarded3 = it.next();
+    assertThat(discarded3.getStatusChangedOn(), is(discardDate3));
+    assertThat(discarded3.getIsDeleted(), is(true));
+  }
+  
+  @Test(expected = IllegalStateException.class)
+  public void testUndiscardComponentWithComponentThatCannotBeUndiscarded_shouldThrow() {
+    // Set up fixture
+    long componentId = 76L;
+    Component existingComponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .build();
+    
+    // Set up expectations
+    when(componentRepository.findComponentById(componentId)).thenReturn(existingComponent);
+    when(componentConstraintChecker.canUndiscard(existingComponent)).thenReturn(false);
+    
+    // Exercise SUT
+    componentCRUDService.undiscardComponent(componentId);
+  }
   
   @Test
   public void testUpdateComponent_shouldUpdateAllFields() {
