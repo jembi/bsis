@@ -55,7 +55,6 @@ public class OrderForm extends BaseModificationTrackerEntity {
   private boolean isDeleted = false;
 
   @OneToMany(mappedBy = "orderForm", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-  @Where(clause = "isDeleted = 0")
   private List<OrderFormItem> items = new ArrayList<OrderFormItem>();
 
   @ManyToMany(fetch = FetchType.EAGER)
