@@ -30,6 +30,8 @@ public class ComponentMatcher extends TypeSafeMatcher<Component> {
         .appendText("\nDonation: ").appendValue(expected.getDonation())
         .appendText("\nWeight: ").appendValue(expected.getWeight())
         .appendText("\nIsDeleted: ").appendValue(expected.getIsDeleted())
+        .appendText("\nNotes: ").appendValue(expected.getNotes())
+        .appendText("\nComponentBatch: ").appendValue(expected.getComponentBatch())
         ;
   }
 
@@ -49,7 +51,9 @@ public class ComponentMatcher extends TypeSafeMatcher<Component> {
         Objects.equals(actual.getParentComponent(), expected.getParentComponent()) &&
         Objects.equals(actual.getDonation(), expected.getDonation()) &&
         Objects.equals(actual.getWeight(), expected.getWeight()) &&
-        Objects.equals(actual.getIsDeleted(), expected.getIsDeleted());
+        Objects.equals(actual.getIsDeleted(), expected.getIsDeleted()) &&
+        Objects.equals(actual.getNotes(), expected.getNotes()) &&
+        Objects.equals(actual.getComponentBatch(), expected.getComponentBatch());
   }
 
   public static ComponentMatcher hasSameStateAsComponent(Component expected) {

@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.jembi.bsis.factory.ComponentFactory;
+import org.jembi.bsis.helpers.builders.ComponentBatchBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.matchers.ComponentMatcher;
 import org.jembi.bsis.model.component.Component;
@@ -722,6 +723,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withIsDeleted(true)
         .withParentComponent(aComponent().withId(1L).build())
         .withComponentType(aComponentType().withId(1L).build())
+        .withNotes("notes1")
+        .withComponentBatch(ComponentBatchBuilder.aComponentBatch().withId(1L).build())
         .build();
     
     Component component2 = aComponent().withId(1L)
@@ -737,6 +740,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withIsDeleted(false)
         .withParentComponent(aComponent().withId(2L).build())
         .withComponentType(aComponentType().withId(2L).build())
+        .withNotes("notes2")
+        .withComponentBatch(ComponentBatchBuilder.aComponentBatch().withId(2L).build())
         .build();
 
     // Set up expectations
