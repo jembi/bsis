@@ -1,7 +1,7 @@
 package org.jembi.bsis.model.component;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
@@ -104,7 +104,7 @@ public class Component extends BaseModificationTrackerEntity {
   @OneToMany(mappedBy = "component", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
   @Where(clause = "isDeleted = 0")
   @SortNatural
-  private Set<ComponentStatusChange> statusChanges;
+  private SortedSet<ComponentStatusChange> statusChanges;
 
   @Column(length = 3)
   private String subdivisionCode;
@@ -229,11 +229,11 @@ public class Component extends BaseModificationTrackerEntity {
     this.issuedOn = issuedOn;
   }
 
-  public Set<ComponentStatusChange> getStatusChanges() {
+  public SortedSet<ComponentStatusChange> getStatusChanges() {
     return statusChanges;
   }
 
-  public void setStatusChanges(Set<ComponentStatusChange> statusChanges) {
+  public void setStatusChanges(SortedSet<ComponentStatusChange> statusChanges) {
     this.statusChanges = statusChanges;
   }
 
