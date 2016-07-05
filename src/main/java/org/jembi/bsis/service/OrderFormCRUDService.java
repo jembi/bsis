@@ -60,6 +60,12 @@ public class OrderFormCRUDService {
 
   public OrderForm deleteOrderForm(Long id) {
     OrderForm existingOrderForm = orderFormRepository.findById(id);
+    
+    // Check that OrderForm can be edited
+    if (!orderFormConstraintChecker.canDelete(existingOrderForm)) {
+      throw new IllegalStateException("Cannot delete OrderForm.");
+    }
+    
     existingOrderForm.setIsDeleted(true);
     return orderFormRepository.update(existingOrderForm);
   }

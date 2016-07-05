@@ -209,18 +209,49 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testDeleteOrderForm_shouldMarkAsDeleted() {
     // Data
-    OrderForm existingOrderForm = anOrderForm().withId(ORDER_FORM_ID).withIsDeleted(false).build();
-    OrderForm expectedOrderForm = anOrderForm().withId(ORDER_FORM_ID).withIsDeleted(true).build();
+    OrderForm existingOrderForm = anOrderForm()
+        .withId(ORDER_FORM_ID)
+        .withOrderStatus(OrderStatus.CREATED)
+        .withIsDeleted(false)
+        .build();
+    OrderForm expectedOrderForm = anOrderForm()
+        .withId(ORDER_FORM_ID)
+        .withOrderStatus(OrderStatus.CREATED)
+        .withIsDeleted(true)
+        .build();
     
     // Mocks
     when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
+    when(orderFormConstraintChecker.canDelete(existingOrderForm)).thenReturn(true);
     when(orderFormRepository.update(expectedOrderForm)).thenReturn(expectedOrderForm);
-    when(orderFormConstraintChecker.canDispatch(existingOrderForm)).thenReturn(false);
     
     // Test
     OrderForm returnedOrderForm = orderFormCRUDService.deleteOrderForm(ORDER_FORM_ID);
     
     // Assertions
     assertThat(returnedOrderForm, is(expectedOrderForm));
+  }
+  
+  @Test(expected = IllegalStateException.class)
+  public void testDeleteOrderForm_shouldThrow() {
+    // Data
+    OrderForm existingOrderForm = anOrderForm()
+        .withId(ORDER_FORM_ID)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withIsDeleted(false)
+        .build();
+    OrderForm expectedOrderForm = anOrderForm()
+        .withId(ORDER_FORM_ID)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withIsDeleted(true)
+        .build();
+    
+    // Mocks
+    when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
+    when(orderFormConstraintChecker.canDelete(existingOrderForm)).thenReturn(false);
+    when(orderFormRepository.update(expectedOrderForm)).thenReturn(expectedOrderForm);
+    
+    // Test
+    orderFormCRUDService.deleteOrderForm(ORDER_FORM_ID);
   }
 }
