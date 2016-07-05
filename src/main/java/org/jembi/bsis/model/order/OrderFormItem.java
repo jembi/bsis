@@ -25,8 +25,6 @@ public class OrderFormItem extends BaseEntity {
   
   private int numberOfUnits;
 
-  private boolean isDeleted = false;
-
   @ManyToOne(optional = false)
   private OrderForm orderForm;
 
@@ -68,14 +66,6 @@ public class OrderFormItem extends BaseEntity {
 
   public void setOrderForm(OrderForm orderForm) {
     this.orderForm = orderForm;
-  }
-
-  public boolean getIsDeleted() {
-    return isDeleted;
-  }
-
-  public void setIsDeleted(boolean isDeleted) {
-    this.isDeleted = isDeleted;
   }
 
 }
