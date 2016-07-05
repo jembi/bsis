@@ -267,7 +267,25 @@ public class ComponentCRUDService {
     } else if (existingComponent.getStatus().equals(ComponentStatus.UNSAFE)) {
       // re-evaluate the status as it might have been set to UNSAFE because of a previous unsafe weight
       existingComponent.setStatus(ComponentStatus.QUARANTINED);
+    } else {
+      existingComponent.setStatus(component.getStatus());
     }
+
+    // update other fields
+    existingComponent.setComponentCode(component.getComponentCode());
+    existingComponent.setComponentType(component.getComponentType());
+    existingComponent.setInventoryStatus(component.getInventoryStatus());
+    existingComponent.setParentComponent(component.getParentComponent());
+    existingComponent.setStatusChanges(component.getStatusChanges());
+    existingComponent.setDonation(component.getDonation());
+    existingComponent.setLocation(component.getLocation());
+    existingComponent.setComponentBatch(component.getComponentBatch());
+    existingComponent.setCreatedOn(component.getCreatedOn());
+    existingComponent.setExpiresOn(component.getExpiresOn());
+    existingComponent.setDiscardedOn(component.getDiscardedOn());
+    existingComponent.setIssuedOn(component.getIssuedOn());
+    existingComponent.setNotes(component.getNotes());
+    existingComponent.setIsDeleted(component.getIsDeleted());
 
     return update(existingComponent);
   }

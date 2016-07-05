@@ -10,6 +10,7 @@ import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.ComponentPersister;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
@@ -31,6 +32,10 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
   private Component parentComponent;
   private Integer weight;
   private SortedSet<ComponentStatusChange> statusChanges;
+  private Date discardedOn;
+  private Date issuedOn;
+  private String notes;
+  private ComponentBatch componentBatch;
   
   public ComponentBuilder withId(Long id) {
     this.id = id;
@@ -100,6 +105,26 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     return this;
   }
 
+  public ComponentBuilder withDiscardedOn(Date discardedOn) {
+    this.discardedOn = discardedOn;
+    return this;
+  }
+
+  public ComponentBuilder withIssuedOn(Date issuedOn) {
+    this.issuedOn = issuedOn;
+    return this;
+  }
+
+  public ComponentBuilder withNotes(String notes) {
+    this.notes = notes;
+    return this;
+  }
+
+  public ComponentBuilder withComponentBatch(ComponentBatch componentBatch) {
+    this.componentBatch = componentBatch;
+    return this;
+  }
+
   @Override
   public Component build() {
     Component component = new Component();
@@ -116,6 +141,10 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     component.setParentComponent(parentComponent);
     component.setWeight(weight);
     component.setStatusChanges(statusChanges);
+    component.setDiscardedOn(discardedOn);
+    component.setIssuedOn(issuedOn);
+    component.setComponentBatch(componentBatch);
+    component.setNotes(notes);
     return component;
   }
 
