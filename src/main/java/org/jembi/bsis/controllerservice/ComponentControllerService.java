@@ -1,5 +1,6 @@
 package org.jembi.bsis.controllerservice;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -75,17 +76,6 @@ public class ComponentControllerService {
     List<ComponentViewModel> components = componentFactory.createComponentViewModels(results);
     return components;
   }
-
-  public List<ComponentViewModel> discardComponent(Long id, Long discardReasonId, String discardReasonText) {
-    Component discardedComponent = componentCRUDService.discardComponent(id, discardReasonId, discardReasonText);
-
-    List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(
-        discardedComponent.getDonation().getDonationIdentificationNumber());
-
-    List<ComponentViewModel> components = componentFactory.createComponentViewModels(results);
-    
-    return components;
-  }
   
   public List<ComponentManagementViewModel> processComponent(RecordComponentBackingForm recordComponentForm) {
     Component parentComponent = componentCRUDService.processComponent(recordComponentForm.getParentComponentId(), 
@@ -124,6 +114,15 @@ public class ComponentControllerService {
     Component component = componentRepository.findComponentById(componentId);
     component = componentCRUDService.unprocessComponent(component);
     return componentFactory.createManagementViewModel(component);
+  }
+  
+  public List<ComponentManagementViewModel> undiscardComponents(List<Long> componentIds) {
+    List<ComponentManagementViewModel> componentViewModels = new ArrayList<>();
+    for (Long componentId : componentIds) {
+      Component undiscardedComponent = componentCRUDService.undiscardComponent(componentId);
+      componentViewModels.add(componentFactory.createManagementViewModel(undiscardedComponent));
+    }
+    return componentViewModels;
   }
   
 }

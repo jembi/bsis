@@ -29,7 +29,11 @@ public class ComponentConstraintChecker {
   public boolean canDiscard(Component component) {
     // Check component status is allowed to discard
     return CAN_DISCARD_OR_PROCESS_OR_RECORD_WEIGHT_STATUSES.contains(component.getStatus());
-
+  }
+  
+  public boolean canUndiscard(Component component) {
+    // Check component status is allowed to undiscard
+    return component.getStatus() == ComponentStatus.DISCARDED;
   }
 
   public boolean canRecordWeight(Component component) {

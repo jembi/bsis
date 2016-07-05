@@ -3,6 +3,8 @@ package org.jembi.bsis.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -195,12 +197,8 @@ public class ComponentCRUDService {
     statusChange.setStatusChangeReason(discardReason);
     statusChange.setStatusChangeReasonText(discardReasonText);
     statusChange.setChangedBy(SecurityUtils.getCurrentUser());
-    
-    if (existingComponent.getStatusChanges() == null) {
-      existingComponent.setStatusChanges(new ArrayList<ComponentStatusChange>());
-    }
-    existingComponent.getStatusChanges().add(statusChange);
     statusChange.setComponent(existingComponent);
+    existingComponent.addStatusChange(statusChange);
     
     // remove component from inventory
     if (existingComponent.getInventoryStatus() == InventoryStatus.IN_STOCK) {
@@ -210,6 +208,42 @@ public class ComponentCRUDService {
     update(existingComponent);
     
     return existingComponent;
+  }
+  
+  public Component undiscardComponent(long componentId) {
+    Component existingComponent = componentRepository.findComponentById(componentId);
+    
+    if (!componentConstraintChecker.canUndiscard(existingComponent)) {
+      throw new IllegalStateException("Component " + componentId + " cannot be undiscarded.");
+    }
+    
+    LOGGER.info("Undiscarding component " + componentId);
+
+    // Set the status back to quarantined so that it can be recalculated
+    existingComponent.setStatus(ComponentStatus.QUARANTINED);
+    
+    // Add component back into inventory if it has previously been removed
+    if (existingComponent.getInventoryStatus() == InventoryStatus.REMOVED) {
+      existingComponent.setInventoryStatus(InventoryStatus.IN_STOCK);
+    }
+    
+    // void the latest discarded ComponentStatusChange
+    ComponentStatusChange lastDiscardComponentStatusChange = null;
+    if (existingComponent.getStatusChanges() != null) {
+      for (ComponentStatusChange statusChange : existingComponent.getStatusChanges()) {
+        if (statusChange.getStatusChangeType() == ComponentStatusChangeType.DISCARDED) {
+          if (lastDiscardComponentStatusChange == null || 
+              statusChange.getStatusChangedOn().after(lastDiscardComponentStatusChange.getStatusChangedOn())) {
+            lastDiscardComponentStatusChange = statusChange;
+          }
+        }
+      }
+    }
+    if (lastDiscardComponentStatusChange != null) {
+      lastDiscardComponentStatusChange.setIsDeleted(true);
+    }
+    
+    return update(existingComponent);
   }
   
   public Component updateComponent(Component component) {
