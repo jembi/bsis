@@ -87,4 +87,8 @@ public class OrderFormControllerService {
   public List<ComponentTypeViewModel> getAllComponentTypes() {
     return componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes());
   }
+
+  public void deleteOrderForm(Long id) {
+    orderFormCRUDService.deleteOrderForm(id);
+  }
 }

@@ -57,4 +57,10 @@ public class OrderFormCRUDService {
     existingOrderForm.setComponents(updatedOrderForm.getComponents());
     return orderFormRepository.update(existingOrderForm);
   }
+
+  public OrderForm deleteOrderForm(Long id) {
+    OrderForm existingOrderForm = orderFormRepository.findById(id);
+    existingOrderForm.setIsDeleted(true);
+    return orderFormRepository.update(existingOrderForm);
+  }
 }

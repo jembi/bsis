@@ -6,6 +6,7 @@ import static org.jembi.bsis.helpers.builders.OrderFormBuilder.anOrderForm;
 import static org.jembi.bsis.helpers.builders.OrderFormFullViewModelBuilder.anOrderFormFullViewModel;
 import static org.jembi.bsis.helpers.matchers.OrderFormMatcher.hasSameStateAsOrderForm;
 import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
@@ -20,7 +21,6 @@ import org.jembi.bsis.viewmodel.OrderFormFullViewModel;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 
 public class OrderFormControllerServiceTests extends UnitTestSuite {
   
@@ -67,8 +67,24 @@ public class OrderFormControllerServiceTests extends UnitTestSuite {
     orderFormControllerService.updateOrderForm(backingForm);
     
     // Assertions
-    Mockito.verify(orderFormFactory).createEntity(backingForm);
-    Mockito.verify(orderFormCRUDService).updateOrderForm(orderFormCreatedFromBackingForm);
-    Mockito.verify(orderFormFactory).createFullViewModel(argThat(hasSameStateAsOrderForm(expectedOrderForm)));
+    verify(orderFormFactory).createEntity(backingForm);
+    verify(orderFormCRUDService).updateOrderForm(orderFormCreatedFromBackingForm);
+    verify(orderFormFactory).createFullViewModel(argThat(hasSameStateAsOrderForm(expectedOrderForm)));
+  }
+  
+  @Test
+  public void testDeleteOrderForm_should() {
+    // Data
+    Long orderFormId = Long.valueOf(1);
+    OrderForm expectedOrderForm = anOrderForm().withId(orderFormId).withIsDeleted(true).build();
+    
+    // Mocks
+    when(orderFormCRUDService.deleteOrderForm(orderFormId)).thenReturn(expectedOrderForm);
+    
+    // Test
+    orderFormControllerService.deleteOrderForm(orderFormId);
+    
+    // Assertions
+    verify(orderFormCRUDService).deleteOrderForm(orderFormId);
   }
 }

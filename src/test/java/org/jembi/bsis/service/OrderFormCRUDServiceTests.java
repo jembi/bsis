@@ -5,20 +5,14 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aUsageSite;
-import static org.jembi.bsis.helpers.builders.OrderFormBackingFormBuilder.anOrderFormBackingForm;
 import static org.jembi.bsis.helpers.builders.OrderFormBuilder.anOrderForm;
-import static org.jembi.bsis.helpers.builders.OrderFormFullViewModelBuilder.anOrderFormFullViewModel;
 import static org.jembi.bsis.helpers.builders.OrderFormItemBuilder.anOrderItemForm;
-import static org.jembi.bsis.helpers.matchers.OrderFormMatcher.hasSameStateAsOrderForm;
-import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Date;
 
-import org.jembi.bsis.backingform.OrderFormBackingForm;
-import org.jembi.bsis.factory.OrderFormFactory;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.order.OrderForm;
@@ -27,7 +21,6 @@ import org.jembi.bsis.model.order.OrderStatus;
 import org.jembi.bsis.model.order.OrderType;
 import org.jembi.bsis.repository.OrderFormRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
-import org.jembi.bsis.viewmodel.OrderFormFullViewModel;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -176,7 +169,6 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
     // Fixture
     OrderForm orderForm = anOrderForm().withId(ORDER_FORM_ID).build();
     OrderForm existingOrderForm = anOrderForm().withId(ORDER_FORM_ID).withOrderStatus(OrderStatus.DISPATCHED).build();
-    OrderForm orderFormCreatedFromBackingForm = anOrderForm().withId(ORDER_FORM_ID).build();
 
     // Expectations
     when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
@@ -214,4 +206,21 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
     orderFormCRUDService.updateOrderForm(orderForm);
   }
 
+  @Test
+  public void testDeleteOrderForm_shouldMarkAsDeleted() {
+    // Data
+    OrderForm existingOrderForm = anOrderForm().withId(ORDER_FORM_ID).withIsDeleted(false).build();
+    OrderForm expectedOrderForm = anOrderForm().withId(ORDER_FORM_ID).withIsDeleted(true).build();
+    
+    // Mocks
+    when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
+    when(orderFormRepository.update(expectedOrderForm)).thenReturn(expectedOrderForm);
+    when(orderFormConstraintChecker.canDispatch(existingOrderForm)).thenReturn(false);
+    
+    // Test
+    OrderForm returnedOrderForm = orderFormCRUDService.deleteOrderForm(ORDER_FORM_ID);
+    
+    // Assertions
+    assertThat(returnedOrderForm, is(expectedOrderForm));
+  }
 }
