@@ -19,6 +19,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.jembi.bsis.factory.ComponentFactory;
@@ -106,7 +107,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Assert.assertEquals("Component status is discarded", ComponentStatus.DISCARDED, component.getStatus());
     Assert.assertNotNull("Status change has been set", component.getStatusChanges());
     Assert.assertEquals("Status change has been set", 1, component.getStatusChanges().size());
-    ComponentStatusChange statusChange = component.getStatusChanges().get(0);
+    ComponentStatusChange statusChange = component.getStatusChanges().iterator().next();
     Assert.assertEquals("Status change is correct", ComponentStatusChangeType.DISCARDED, statusChange.getStatusChangeType());
     Assert.assertEquals("Status change is correct", ComponentStatus.DISCARDED, statusChange.getNewStatus());
     Assert.assertEquals("Status change is correct", discardReasonId, statusChange.getStatusChangeReason().getId());
@@ -786,7 +787,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // Verify
     
-    assertThat(returnedComponent.getStatusChanges().get(0).getIsDeleted(), is(true));
+    assertThat(returnedComponent.getStatusChanges().iterator().next().getIsDeleted(), is(true));
   }
   
   @Test
@@ -820,11 +821,13 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Component returnedComponent = componentCRUDService.undiscardComponent(componentId);
     
     // Verify
-    assertThat(returnedComponent.getStatusChanges().get(0).getIsDeleted(), is(false));
-    assertThat(returnedComponent.getStatusChanges().get(1).getStatusChangedOn(), is(discardDate3));
-    assertThat(returnedComponent.getStatusChanges().get(1).getIsDeleted(), is(true));
-    assertThat(returnedComponent.getStatusChanges().get(2).getIsDeleted(), is(false));
-    assertThat(returnedComponent.getStatusChanges().get(3).getIsDeleted(), is(false));
+    Iterator<ComponentStatusChange> it = returnedComponent.getStatusChanges().iterator();
+    assertThat(it.next().getIsDeleted(), is(false));
+    assertThat(it.next().getIsDeleted(), is(false));
+    assertThat(it.next().getIsDeleted(), is(false));
+    ComponentStatusChange discarded3 = it.next();
+    assertThat(discarded3.getStatusChangedOn(), is(discardDate3));
+    assertThat(discarded3.getIsDeleted(), is(true));
   }
   
   @Test(expected = IllegalStateException.class)

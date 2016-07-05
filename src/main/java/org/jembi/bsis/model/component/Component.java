@@ -1,8 +1,8 @@
 package org.jembi.bsis.model.component;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,6 +20,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Index;
+import org.hibernate.annotations.SortNatural;
 import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -102,7 +103,8 @@ public class Component extends BaseModificationTrackerEntity {
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy = "component", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
   @Where(clause = "isDeleted = 0")
-  private List<ComponentStatusChange> statusChanges;
+  @SortNatural
+  private Set<ComponentStatusChange> statusChanges;
 
   @Column(length = 3)
   private String subdivisionCode;
@@ -227,17 +229,17 @@ public class Component extends BaseModificationTrackerEntity {
     this.issuedOn = issuedOn;
   }
 
-  public List<ComponentStatusChange> getStatusChanges() {
+  public Set<ComponentStatusChange> getStatusChanges() {
     return statusChanges;
   }
 
-  public void setStatusChanges(List<ComponentStatusChange> statusChanges) {
+  public void setStatusChanges(Set<ComponentStatusChange> statusChanges) {
     this.statusChanges = statusChanges;
   }
 
   public void addStatusChange(ComponentStatusChange statusChange) {
     if (statusChanges == null) {
-      statusChanges = new ArrayList<>();
+      statusChanges = new TreeSet<>();
     }
     statusChanges.add(statusChange);
   }

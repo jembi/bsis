@@ -2,9 +2,9 @@ package org.jembi.bsis.helpers.builders;
 
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.ComponentPersister;
@@ -30,7 +30,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
   private Date createdOn;
   private Component parentComponent;
   private Integer weight;
-  private List<ComponentStatusChange> statusChanges;
+  private Set<ComponentStatusChange> statusChanges;
   
   public ComponentBuilder withId(Long id) {
     this.id = id;
@@ -94,7 +94,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
   
   public ComponentBuilder withComponentStatusChange(ComponentStatusChange statusChange) {
     if (this.statusChanges == null) {
-      this.statusChanges = new ArrayList<>();
+      this.statusChanges = new TreeSet<>();
     }
     this.statusChanges.add(statusChange);
     return this;

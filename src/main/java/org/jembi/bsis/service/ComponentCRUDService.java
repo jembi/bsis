@@ -197,12 +197,8 @@ public class ComponentCRUDService {
     statusChange.setStatusChangeReason(discardReason);
     statusChange.setStatusChangeReasonText(discardReasonText);
     statusChange.setChangedBy(SecurityUtils.getCurrentUser());
-    
-    if (existingComponent.getStatusChanges() == null) {
-      existingComponent.setStatusChanges(new ArrayList<ComponentStatusChange>());
-    }
-    existingComponent.getStatusChanges().add(statusChange);
     statusChange.setComponent(existingComponent);
+    existingComponent.addStatusChange(statusChange);
     
     // remove component from inventory
     if (existingComponent.getInventoryStatus() == InventoryStatus.IN_STOCK) {
