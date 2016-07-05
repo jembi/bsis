@@ -40,9 +40,6 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
   private OrderFormCRUDService orderFormCRUDService;
   
   @Mock
-  private OrderFormFactory orderFormFactory;
-  
-  @Mock
   private OrderFormRepository orderFormRepository;
   
   @Mock
@@ -60,8 +57,7 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
     Location dispatchedTo = aDistributionSite().build();
     
     OrderForm existingOrderForm = anOrderForm().withId(ORDER_FORM_ID).withCreatedDate(createdDate).build();
-    OrderFormBackingForm backingForm = anOrderFormBackingForm().withId(ORDER_FORM_ID).build();
-    OrderForm orderFormCreatedFromBackingForm = anOrderForm()
+    OrderForm orderForm = anOrderForm()
         .withId(ORDER_FORM_ID)
         .withOrderDate(orderDate)
         .withDispatchedFrom(dispatchedFrom)
@@ -74,20 +70,17 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
         .withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo)
         .build();
-    OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel().withId(ORDER_FORM_ID).build();
     
     // Expectations
     when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
-    when(orderFormFactory.createEntity(backingForm)).thenReturn(orderFormCreatedFromBackingForm);
     when(orderFormRepository.update(existingOrderForm)).thenReturn(existingOrderForm);
-    when(orderFormFactory.createFullViewModel(argThat(hasSameStateAsOrderForm(expectedOrderForm)))).thenReturn(expectedViewModel);
     when(orderFormConstraintChecker.canEdit(existingOrderForm)).thenReturn(true);
     
     // Test
-    OrderFormFullViewModel returnedViewModel = orderFormCRUDService.updateOrderForm(backingForm);
+    OrderForm returnedOrderForm = orderFormCRUDService.updateOrderForm(orderForm);
     
     // Assertions
-    assertThat(returnedViewModel, is(expectedViewModel));
+    assertThat(returnedOrderForm, is(expectedOrderForm));
   }
   
   @Test
@@ -101,8 +94,7 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
     Component component = aComponent().build();
     
     OrderForm existingOrderForm = anOrderForm().withId(ORDER_FORM_ID).withCreatedDate(createdDate).build();
-    OrderFormBackingForm backingForm = anOrderFormBackingForm().withId(ORDER_FORM_ID).build();
-    OrderForm orderFormCreatedFromBackingForm = anOrderForm()
+    OrderForm orderForm = anOrderForm()
         .withId(ORDER_FORM_ID)
         .withOrderDate(orderDate)
         .withOrderStatus(OrderStatus.DISPATCHED)
@@ -123,21 +115,18 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
         .withOrderFormItems(Arrays.asList(orderFormItem))
         .withComponent(component)
         .build();
-    OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel().withId(ORDER_FORM_ID).build();
     
     // Expectations
     when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
-    when(orderFormFactory.createEntity(backingForm)).thenReturn(orderFormCreatedFromBackingForm);
     when(orderFormRepository.update(existingOrderForm)).thenReturn(existingOrderForm);
-    when(orderFormFactory.createFullViewModel(argThat(hasSameStateAsOrderForm(expectedOrderForm)))).thenReturn(expectedViewModel);
     when(orderFormConstraintChecker.canDispatch(existingOrderForm)).thenReturn(true);
     when(orderFormConstraintChecker.canEdit(existingOrderForm)).thenReturn(true);
     
     // Test
-    OrderFormFullViewModel returnedViewModel = orderFormCRUDService.updateOrderForm(backingForm);
+    OrderForm returnedOrderForm = orderFormCRUDService.updateOrderForm(orderForm);
     
     // Assertions
-    assertThat(returnedViewModel, is(expectedViewModel));
+    assertThat(returnedOrderForm, is(expectedOrderForm));
     verify(componentDispatchService).transferComponent(component, dispatchedTo);
   }
   
@@ -150,8 +139,7 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
     Component component = aComponent().build();
     
     OrderForm existingOrderForm = anOrderForm().withId(ORDER_FORM_ID).withCreatedDate(createdDate).build();
-    OrderFormBackingForm backingForm = anOrderFormBackingForm().withId(ORDER_FORM_ID).build();
-    OrderForm orderFormCreatedFromBackingForm = anOrderForm()
+    OrderForm orderForm = anOrderForm()
         .withId(ORDER_FORM_ID)
         .withOrderStatus(OrderStatus.DISPATCHED)
         .withOrderType(OrderType.ISSUE)
@@ -168,70 +156,62 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
         .withDispatchedTo(dispatchedTo)
         .withComponent(component)
         .build();
-    OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel().withId(ORDER_FORM_ID).build();
 
     // Expectations
     when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
-    when(orderFormFactory.createEntity(backingForm)).thenReturn(orderFormCreatedFromBackingForm);
     when(orderFormRepository.update(existingOrderForm)).thenReturn(existingOrderForm);
-    when(orderFormFactory.createFullViewModel(argThat(hasSameStateAsOrderForm(expectedOrderForm)))).thenReturn(expectedViewModel);
     when(orderFormConstraintChecker.canDispatch(existingOrderForm)).thenReturn(true);
     when(orderFormConstraintChecker.canEdit(existingOrderForm)).thenReturn(true);
     
     // Test
-    OrderFormFullViewModel returnedViewModel = orderFormCRUDService.updateOrderForm(backingForm);
+    OrderForm returnedOrderForm = orderFormCRUDService.updateOrderForm(orderForm);
     
     // Assertions
-    assertThat(returnedViewModel, is(expectedViewModel));
+    assertThat(returnedOrderForm, is(expectedOrderForm));
     verify(componentDispatchService).issueComponent(component, dispatchedTo);
   }
 
   @Test(expected = IllegalStateException.class)
   public void testUpdatePreviouslyDispatchedOrderForm_shouldThrow() {
     // Fixture
-    OrderFormBackingForm backingForm = anOrderFormBackingForm().withId(ORDER_FORM_ID).build();
+    OrderForm orderForm = anOrderForm().withId(ORDER_FORM_ID).build();
     OrderForm existingOrderForm = anOrderForm().withId(ORDER_FORM_ID).withOrderStatus(OrderStatus.DISPATCHED).build();
     OrderForm orderFormCreatedFromBackingForm = anOrderForm().withId(ORDER_FORM_ID).build();
 
     // Expectations
-    when(orderFormFactory.createEntity(backingForm)).thenReturn(orderFormCreatedFromBackingForm);
     when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
 
     // Test
-    orderFormCRUDService.updateOrderForm(backingForm);
+    orderFormCRUDService.updateOrderForm(orderForm);
   }
   
   @Test(expected = IllegalStateException.class)
   public void testDispatchNotDispatchableOrderForm_shouldThrow() {
     // Fixture
-    OrderFormBackingForm backingForm = anOrderFormBackingForm().withId(ORDER_FORM_ID).withOrderStatus(OrderStatus.DISPATCHED).build();
     OrderForm existingOrderForm = anOrderForm().withId(ORDER_FORM_ID).build();
-    OrderForm orderFormCreatedFromBackingForm = anOrderForm().withId(ORDER_FORM_ID).withOrderStatus(OrderStatus.DISPATCHED).build();
+    OrderForm orderForm = anOrderForm().withId(ORDER_FORM_ID).withOrderStatus(OrderStatus.DISPATCHED).build();
 
     // Expectations
-    when(orderFormFactory.createEntity(backingForm)).thenReturn(orderFormCreatedFromBackingForm);
     when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
     when(orderFormConstraintChecker.canEdit(existingOrderForm)).thenReturn(true);
     when(orderFormConstraintChecker.canDispatch(existingOrderForm)).thenReturn(false);
 
     // Test
-    orderFormCRUDService.updateOrderForm(backingForm);
+    orderFormCRUDService.updateOrderForm(orderForm);
   }
   
   @Test(expected = IllegalStateException.class)
   public void testUpdateNonEditableOrderForm_shouldThrow() {
     // Fixture
-    OrderFormBackingForm backingForm = anOrderFormBackingForm().withId(ORDER_FORM_ID).build();
     OrderForm existingOrderForm = anOrderForm().withId(ORDER_FORM_ID).withOrderStatus(OrderStatus.DISPATCHED).build();
-    OrderForm orderFormCreatedFromBackingForm = anOrderForm().withId(ORDER_FORM_ID).withOrderStatus(OrderStatus.DISPATCHED).build();
+    OrderForm orderForm = anOrderForm().withId(ORDER_FORM_ID).withOrderStatus(OrderStatus.DISPATCHED).build();
 
     // Expectations
-    when(orderFormFactory.createEntity(backingForm)).thenReturn(orderFormCreatedFromBackingForm);
     when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
     when(orderFormConstraintChecker.canEdit(existingOrderForm)).thenReturn(false);
 
     // Test
-    orderFormCRUDService.updateOrderForm(backingForm);
+    orderFormCRUDService.updateOrderForm(orderForm);
   }
 
 }

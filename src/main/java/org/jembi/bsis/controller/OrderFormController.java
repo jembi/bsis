@@ -2,7 +2,6 @@ package org.jembi.bsis.controller;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -10,17 +9,9 @@ import javax.validation.Valid;
 import org.jembi.bsis.backingform.OrderFormBackingForm;
 import org.jembi.bsis.backingform.OrderFormItemBackingForm;
 import org.jembi.bsis.backingform.validator.OrderFormBackingFormValidator;
-import org.jembi.bsis.factory.ComponentTypeFactory;
-import org.jembi.bsis.factory.LocationViewModelFactory;
-import org.jembi.bsis.factory.OrderFormFactory;
-import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.model.order.OrderForm;
+import org.jembi.bsis.controllerservice.OrderFormControllerService;
 import org.jembi.bsis.model.order.OrderStatus;
 import org.jembi.bsis.model.order.OrderType;
-import org.jembi.bsis.repository.ComponentTypeRepository;
-import org.jembi.bsis.repository.LocationRepository;
-import org.jembi.bsis.repository.OrderFormRepository;
-import org.jembi.bsis.service.OrderFormCRUDService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -41,28 +32,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderFormController {
 
   @Autowired
-  private OrderFormFactory orderFormFactory;
-
-  @Autowired
-  private OrderFormCRUDService orderFormCRUDService;
-
-  @Autowired
   private OrderFormBackingFormValidator validator;
   
   @Autowired
-  private LocationRepository locationRepository;
-  
-  @Autowired
-  private ComponentTypeRepository componentTypeRepository;
-  
-  @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
-  
-  @Autowired
-  private OrderFormRepository orderFormRepository;
-  
-  @Autowired
-  private ComponentTypeFactory componentTypeFactory;
+  private OrderFormControllerService orderFormControllerService;
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
@@ -72,13 +45,10 @@ public class OrderFormController {
   @RequestMapping(method = RequestMethod.GET, value = "/form")
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_ORDER_FORM + "')")
   public ResponseEntity<Map<String, Object>> getOrderFormForm() {
-    List<Location> usageSites = locationRepository.getUsageSites();
-    List<Location> distributionSites = locationRepository.getDistributionSites();
-
     Map<String, Object> map = new HashMap<>();
     map.put("orderForm", new OrderFormBackingForm());
-    map.put("usageSites", locationViewModelFactory.createLocationViewModels(usageSites));
-    map.put("distributionSites", locationViewModelFactory.createLocationViewModels(distributionSites));
+    map.put("usageSites", orderFormControllerService.getUsageSites());
+    map.put("distributionSites", orderFormControllerService.getDistributionSites());
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
@@ -87,7 +57,7 @@ public class OrderFormController {
   public ResponseEntity<Map<String, Object>> getOrderFormItemForm() {
     Map<String, Object> map = new HashMap<>();
     map.put("orderFormItem", new OrderFormItemBackingForm());
-    map.put("componentTypes", componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes()));
+    map.put("componentTypes", orderFormControllerService.getAllComponentTypes());
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
@@ -95,8 +65,7 @@ public class OrderFormController {
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_ORDER_FORM + "')")
   public ResponseEntity<Map<String, Object>> addOrderForm(@Valid @RequestBody OrderFormBackingForm backingForm) {
     Map<String, Object> map = new HashMap<>();
-    OrderForm orderForm = orderFormCRUDService.createOrderForm(backingForm);
-    map.put("orderForm", orderFormFactory.createFullViewModel(orderForm));
+    map.put("orderForm", orderFormControllerService.createOrderForm(backingForm));
     return new ResponseEntity<>(map, HttpStatus.CREATED);
   }
 
@@ -109,17 +78,15 @@ public class OrderFormController {
     backingForm.setId(orderFormId);
 
     Map<String, Object> map = new HashMap<>();
-    map.put("orderForm", orderFormCRUDService.updateOrderForm(backingForm));
+    map.put("orderForm", orderFormControllerService.updateOrderForm(backingForm));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
   @RequestMapping(method = RequestMethod.GET, value = "/{id}")
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_ORDER_FORM + "')")
   public ResponseEntity<Map<String, Object>> getOrderForm(@PathVariable Long id) {
-    OrderForm orderForm = orderFormRepository.findById(id);
-    
     Map<String, Object> map = new HashMap<>();
-    map.put("orderForm", orderFormFactory.createFullViewModel(orderForm));
+    map.put("orderForm", orderFormControllerService.findOrderForm(id));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
@@ -133,10 +100,7 @@ public class OrderFormController {
       @RequestParam(value = "type", required = false) OrderType type,
       @RequestParam(value = "status", required = false) OrderStatus status) {
     Map<String, Object> map = new HashMap<String, Object>();
-    List<OrderForm> orderForms = orderFormCRUDService.findOrderForms(orderDateFrom, orderDateTo, dispatchedFromId, dispatchedToId, type, status);
-    map.put("orderForms", orderFormFactory.createViewModels(orderForms));
+    map.put("orderForms", orderFormControllerService.findOrderForms(orderDateFrom, orderDateTo, dispatchedFromId, dispatchedToId, type, status));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
-
   }
-
 }
