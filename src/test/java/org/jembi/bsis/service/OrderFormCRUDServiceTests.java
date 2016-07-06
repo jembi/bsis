@@ -7,6 +7,8 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aUsageSite;
 import static org.jembi.bsis.helpers.builders.OrderFormBuilder.anOrderForm;
 import static org.jembi.bsis.helpers.builders.OrderFormItemBuilder.anOrderItemForm;
+import static org.jembi.bsis.helpers.matchers.OrderFormMatcher.hasSameStateAsOrderForm;
+import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -217,19 +219,22 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
     OrderForm expectedOrderForm = anOrderForm()
         .withId(ORDER_FORM_ID)
         .withOrderStatus(OrderStatus.CREATED)
+        .withOrderDate(existingOrderForm.getOrderDate())
+        .withDispatchedFrom(existingOrderForm.getDispatchedFrom())
+        .withDispatchedTo(existingOrderForm.getDispatchedTo())
         .withIsDeleted(true)
         .build();
     
     // Mocks
     when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
     when(orderFormConstraintChecker.canDelete(existingOrderForm)).thenReturn(true);
-    when(orderFormRepository.update(expectedOrderForm)).thenReturn(expectedOrderForm);
+    when(orderFormRepository.update(argThat(hasSameStateAsOrderForm(expectedOrderForm)))).thenReturn(expectedOrderForm);
     
     // Test
     OrderForm returnedOrderForm = orderFormCRUDService.deleteOrderForm(ORDER_FORM_ID);
     
     // Assertions
-    assertThat(returnedOrderForm, is(expectedOrderForm));
+    assertThat(returnedOrderForm, hasSameStateAsOrderForm(expectedOrderForm));
   }
   
   @Test(expected = IllegalStateException.class)

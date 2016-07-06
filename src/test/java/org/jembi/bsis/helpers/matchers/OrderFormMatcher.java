@@ -38,7 +38,8 @@ public class OrderFormMatcher extends TypeSafeMatcher<OrderForm> {
         Objects.equals(actual.getDispatchedFrom(), expected.getDispatchedFrom()) &&
         Objects.equals(actual.getDispatchedTo(), expected.getDispatchedTo()) &&
         Objects.equals(actual.getItems(), expected.getItems()) &&
-        Objects.equals(actual.getComponents(), expected.getComponents());
+        Objects.equals(actual.getComponents(), expected.getComponents()) &&
+        Objects.equals(actual.getIsDeleted(),  expected.getIsDeleted());
   }
 
   public static OrderFormMatcher hasSameStateAsOrderForm(OrderForm expected) {
