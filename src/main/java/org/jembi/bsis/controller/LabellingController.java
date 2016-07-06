@@ -1,12 +1,9 @@
 package org.jembi.bsis.controller;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 
 import org.jembi.bsis.controllerservice.LabellingControllerService;
-import org.jembi.bsis.service.LabellingCRUDService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,9 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("labels")
 public class LabellingController {
 
-  @Autowired
-  private LabellingCRUDService labellingService;
-  
   @Autowired
   private LabellingControllerService labellingControllerService;
   
@@ -42,9 +36,8 @@ public class LabellingController {
       @RequestParam(required = true, value = "donationIdentificationNumber") String donationIdentificationNumber,
       @RequestParam(required = true, value = "componentType") long componentTypeId) {
     Map<String, Object> componentMap = new HashMap<String, Object>();
-    List<Map<String, Object>> componentStatuses = labellingService.findlotRelease(donationIdentificationNumber, componentTypeId);
     componentMap.put("donationNumber", donationIdentificationNumber);
-    componentMap.put("components", new HashSet(componentStatuses));
+    componentMap.put("components", labellingControllerService.getComponentsLabelling(donationIdentificationNumber, componentTypeId));
     return new ResponseEntity(componentMap, HttpStatus.OK);
   }
 
@@ -52,8 +45,7 @@ public class LabellingController {
   @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
   public ResponseEntity<Map<String, Object>> printLabel(@PathVariable Long componentId) {
     Map<String, Object> map = new HashMap<String, Object>();
-    String labelZPL = labellingService.printPackLabel(componentId);
-    map.put("labelZPL", labelZPL);
+    map.put("labelZPL", labellingControllerService.printPackLabel(componentId));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 
@@ -61,8 +53,7 @@ public class LabellingController {
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DISCARDS + "')")
   public ResponseEntity<Map<String, Object>> printDiscard(@PathVariable Long componentId) {
     Map<String, Object> map = new HashMap<String, Object>();
-    String labelZPL = labellingService.printDiscardLabel(componentId);
-    map.put("labelZPL", labelZPL);
+    map.put("labelZPL", labellingControllerService.printDiscardLabel(componentId));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 

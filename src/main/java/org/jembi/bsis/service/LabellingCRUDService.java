@@ -2,20 +2,11 @@ package org.jembi.bsis.service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.component.Component;
-import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.donation.LotReleaseConstant;
 import org.jembi.bsis.model.inventory.InventoryStatus;
-import org.jembi.bsis.repository.DonationRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,24 +14,17 @@ import org.springframework.stereotype.Service;
 public class LabellingCRUDService {
 
   @Autowired
-  private DonationRepository donationRepository;
-
-  @Autowired
   private ComponentCRUDService componentCRUDService;
-  
-  public List<Map<String, Object>> findlotRelease(String donationIdentificationNumber, long componentTypeId) {
-    Donation donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
-    List<Component> components = componentCRUDService.findComponentsByDINAndType(donationIdentificationNumber, componentTypeId);
-    List<Map<String, Object>> componentStatuses = getComponentLabellingStatus(donation, components);
-    return componentStatuses;
-  }
 
   public String printPackLabel(Long componentId) {
     Component component = componentCRUDService.findComponentById(componentId);
     Donation donation = component.getDonation();
 
+    // TODO: Use constraint checker
+    boolean canPrintPackLabel = false;
+
     // Check to make sure label can be printed
-    if (!checkDonationIdentificationNumber(donation)) {
+    if (canPrintPackLabel) {
       throw new IllegalArgumentException("Pack Label can't be printed");
     }
 
@@ -97,15 +81,18 @@ public class LabellingCRUDService {
             "^FT62,204^A0N,17,38^FH\\^FDDate Bled^FS" +
             "^FT65,387^A0N,20,24^FH\\^FDNot intended for actual use^FS" +
             "^PQ1,0,1,Y^XZ";
-      
-      return labelZPL;
+
+    return labelZPL;
   }
 
   public String printDiscardLabel(Long componentId) {
     Component component = componentCRUDService.findComponentById(componentId);
-    
+
+    // TODO: Use constraint checker
+    boolean canPrintDiscardLabel = false;
+
     // check to make sure discard label can be printed
-    if (!checkComponentForDiscard(component)) {
+    if (canPrintDiscardLabel) {
       throw new IllegalArgumentException("Discard Label can't be printed");
     }
 
@@ -133,100 +120,8 @@ public class LabellingCRUDService {
             "^FD>:" + component.getDonationIdentificationNumber() + "^FS" +
             "^FT88,118^A0N,28,28^FH\\^FD2013/01/01^FS" +
             "^PQ1,0,1,Y^XZ^XA^ID000.GRF^FS^XZ";
-        
+
     return labelZPL;
-  }
-
-
-  private boolean checkDonationIdentificationNumber(Donation donation) {
-    boolean success = false;
-    if (donation != null) {
-      success = true;
-      if (donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE)
-          || donation.getTTIStatus().equals(TTIStatus.NOT_DONE)
-          ) {
-        success = false;
-      } else if (donation.getDonor() != null && donation.getDonor().getDonorStatus().equals(LotReleaseConstant.POSITIVE_TTI)) {
-        success = false;
-      }
-      // TODO: improve component & blood test checks, or remove if not relevant
-      /*
-    	else if(donation.getComponents()!=null && !donation.getComponents().isEmpty() && 
-    			(donation.getComponents().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED) 
-    			|| donation.getComponents().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_EXPIRED)
-    			|| donation.getComponents().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_QUARANTINED) 
-    			|| donation.getComponents().get(0).getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_SPLIT))){   		
-    		success=false;
-    	}else if(donation.getBloodTestResults()!=null 
-    			&& !donation.getBloodTestResults().isEmpty() 
-    			&& !donation.getBloodTestResults().get(0).getBloodTest().getPositiveResults().equals(LotReleaseConstant.POSITIVE_BLOOD)){
-    		success=false;
-    	}
-       */
-      else if(donation.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE) 
-          || donation.getBloodTypingStatus().equals(BloodTypingStatus.PENDING_TESTS)
-          ){
-        success = false;
-      }
-      // TODO: improve deferrals check - should only flag donors that are CURRENTLY deferred 
-      /*else if(donation.getDonor().getDeferrals()!=null 
-    			&& ! donation.getDonor().getDeferrals().isEmpty()){
-    		success=false;
-    	}
-       */
-
-    } else {
-      success = false;
-    }
-    return success;
-  }
-
-  // TODO: Move this method out of the controller and add tests.
-  private List<Map<String, Object>> getComponentLabellingStatus(Donation donation, List<Component> components) {
-
-    List<Map<String, Object>> componentsList = new ArrayList<Map<String, Object>>();
-
-    boolean unsafeDonation = donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE);
-
-    for (Component component : components) {
-
-      ComponentStatus componentStatus = component.getStatus();
-
-      if (componentStatus.equals(ComponentStatus.PROCESSED) ||
-          componentStatus.equals(ComponentStatus.SPLIT)) {
-        // Don't label processed or split components
-        continue;
-      }
-
-      Map<String, Object> componentLabellingStatus = new HashMap<String, Object>();
-      componentLabellingStatus.put("componentId", component.getId());
-      componentLabellingStatus.put("componentName", component.getComponentType().getComponentTypeName());
-      componentLabellingStatus.put("componentCode", component.getComponentCode());
-
-      if (unsafeDonation || componentStatus.equals(ComponentStatus.UNSAFE) ||
-          componentStatus.toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED)) {
-        // Discard label
-        componentLabellingStatus.put("discardPackLabel", true);
-        componentLabellingStatus.put("printPackLabel", false);
-      } else {
-        // Print label
-        componentLabellingStatus.put("discardPackLabel", false);
-        componentLabellingStatus.put("printPackLabel", checkDonationIdentificationNumber(donation));
-      }
-
-      componentsList.add(componentLabellingStatus);
-    }
-
-    return componentsList;
-  }
-
-  private Boolean checkComponentForDiscard(Component component) {
-    if (component.getDonation().getTTIStatus().equals(TTIStatus.TTI_UNSAFE))
-      return true;
-
-    if (component.getStatus().toString().equals(LotReleaseConstant.DONATION_FLAG_DISCARDED))
-      return true;
-    return false;
   }
 
 }
