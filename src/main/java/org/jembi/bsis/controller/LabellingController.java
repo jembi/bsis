@@ -29,7 +29,7 @@ public class LabellingController {
   private LabellingControllerService labellingControllerService;
   
   @RequestMapping(value = "/components/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
   public Map<String, Object> findComponentFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("componentTypes", labellingControllerService.getComponentTypes());
@@ -37,7 +37,7 @@ public class LabellingController {
   }
 
   @RequestMapping(value = "/components", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DISCARDS + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
   public ResponseEntity findlotRelease(
       @RequestParam(required = true, value = "donationIdentificationNumber") String donationIdentificationNumber,
       @RequestParam(required = true, value = "componentType") long componentTypeId) {
@@ -49,7 +49,7 @@ public class LabellingController {
   }
 
   @RequestMapping(value = "/print/packlabel/{componentId}", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
   public ResponseEntity<Map<String, Object>> printLabel(@PathVariable Long componentId) {
     Map<String, Object> map = new HashMap<String, Object>();
     String labelZPL = labellingService.printPackLabel(componentId);
@@ -58,7 +58,7 @@ public class LabellingController {
   }
 
   @RequestMapping(value = "/print/discardlabel/{componentId}", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.ISSUE_COMPONENT + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DISCARDS + "')")
   public ResponseEntity<Map<String, Object>> printDiscard(@PathVariable Long componentId) {
     Map<String, Object> map = new HashMap<String, Object>();
     String labelZPL = labellingService.printDiscardLabel(componentId);
