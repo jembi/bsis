@@ -56,7 +56,7 @@ public class OrderFormControllerService {
     return orderFormFactory.createViewModels(orderForms);
   }
   
-  public OrderFormFullViewModel findOrderForm(Long id) {
+  public OrderFormFullViewModel findOrderForm(long id) {
     OrderForm orderForm = orderFormRepository.findById(id);
     return orderFormFactory.createFullViewModel(orderForm);
   }
@@ -88,7 +88,7 @@ public class OrderFormControllerService {
     return componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes());
   }
 
-  public void deleteOrderForm(Long id) {
+  public void deleteOrderForm(long id) {
     orderFormCRUDService.deleteOrderForm(id);
   }
 }

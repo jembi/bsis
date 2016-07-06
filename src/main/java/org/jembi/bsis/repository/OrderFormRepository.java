@@ -3,6 +3,7 @@ package org.jembi.bsis.repository;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import org.jembi.bsis.model.order.OrderForm;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class OrderFormRepository extends AbstractRepository<OrderForm> {
 
-  public OrderForm findById(Long id) {
+  public OrderForm findById(long id) throws NoResultException {
     TypedQuery<OrderForm> query = entityManager.createNamedQuery(OrderFormNamedQueryConstants.NAME_FIND_BY_ID, OrderForm.class);
     query.setParameter("id", id);
     query.setParameter("isDeleted", false);

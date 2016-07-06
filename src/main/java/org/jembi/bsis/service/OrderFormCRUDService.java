@@ -58,7 +58,7 @@ public class OrderFormCRUDService {
     return orderFormRepository.update(existingOrderForm);
   }
 
-  public OrderForm deleteOrderForm(Long id) {
+  public OrderForm deleteOrderForm(long id) {
     OrderForm existingOrderForm = orderFormRepository.findById(id);
     
     // Check that OrderForm can be edited
