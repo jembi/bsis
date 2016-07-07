@@ -50,7 +50,7 @@ public class ComponentNamedQueryConstants {
       "SELECT c "
       + "FROM Component c "
       + "WHERE c.donation.donationIdentificationNumber = :donationIdentificationNumber "
-      + "AND c.componentCode = :componentCode ";
+      + "AND c.componentCode = :componentCode AND c.isDeleted = false ";
   
   public static final String NAME_FIND_COMPONENT_BY_CODE_AND_DIN_IN_STOCK =
       "Component.findComponentByCodeAndDINInStock";
@@ -59,7 +59,7 @@ public class ComponentNamedQueryConstants {
       + "FROM Component c "
       + "WHERE c.donation.donationIdentificationNumber = :donationIdentificationNumber "
       + "AND c.componentCode = :componentCode "
-      + "AND c.inventoryStatus = 'IN_STOCK' ";
+      + "AND c.inventoryStatus = 'IN_STOCK' AND c.isDeleted = false ";
 
   public static final String NAME_COUNT_COMPONENT_WITH_ID = "Component.countComponentsWithId";
   public static final String QUERY_COUNT_COMPONENT_WITH_ID =
