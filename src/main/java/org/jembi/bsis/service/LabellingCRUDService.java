@@ -25,7 +25,7 @@ public class LabellingCRUDService {
     boolean canPrintPackLabel = labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component);
 
     // Check to make sure label can be printed
-    if (canPrintPackLabel) {
+    if (!canPrintPackLabel) {
       throw new IllegalArgumentException("Pack Label can't be printed");
     }
 
