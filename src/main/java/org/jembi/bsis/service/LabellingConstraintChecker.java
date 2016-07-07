@@ -1,5 +1,8 @@
 package org.jembi.bsis.service;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.component.Component;
@@ -56,6 +59,26 @@ public class LabellingConstraintChecker {
     }
     
     return canPrintPackLabel(component);
+  }
+  
+  public boolean canPrintDiscardLabel(Component component) {
+    
+    // Check that the status belongs to the canPrintDiscardLabelStatuses list
+    List<ComponentStatus> canPrintDiscardLabelStatuses = Arrays.asList(
+        ComponentStatus.EXPIRED,
+        ComponentStatus.UNSAFE,
+        ComponentStatus.DISCARDED); 
+    if (!canPrintDiscardLabelStatuses.contains(component.getStatus())) {
+      return false;
+    }
+    
+    // Check that if the status in unsafe, the donation has been released
+    if (component.getStatus().equals(ComponentStatus.UNSAFE)) {
+      return component.getDonation().isReleased();
+    }
+    
+    return true;
+
   }
 
 }

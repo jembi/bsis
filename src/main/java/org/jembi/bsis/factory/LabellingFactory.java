@@ -34,8 +34,7 @@ public class LabellingFactory {
     viewModel.setComponentName(component.getComponentType().getComponentTypeName());
     viewModel.setPermissions(new HashMap<String, Boolean>());
     Map<String, Boolean> permissions = new HashMap<>();
-    // TODO: Set permission from constraint checker
-    permissions.put("canPrintDiscardLabel", false);
+    permissions.put("canPrintDiscardLabel", labellingConstraintChecker.canPrintDiscardLabel(component));
     permissions.put("canPrintPackLabel", labellingConstraintChecker.canPrintPackLabel(component));
     viewModel.setPermissions(permissions);
     return viewModel;

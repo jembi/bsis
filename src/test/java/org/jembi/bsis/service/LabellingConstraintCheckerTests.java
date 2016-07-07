@@ -176,5 +176,129 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
     // Verify
     assertThat(canPrintPackLabel, is(false));
   }
+  
+  @Test
+  public void testCanPrintDiscardLabelWithUnsafeComponentWithDonationNotReleased_shouldReturnFalse() {
+    // Set up
+    Donation donation = aDonation().thatIsNotReleased().build();
+    Component component = aComponent().withId(1L).withDonation(donation).withStatus(ComponentStatus.UNSAFE).build();
+    
+    // Exercise SUT
+    boolean canPrintDiscardLabel = labellingConstraintChecker.canPrintDiscardLabel(component);
+    
+    // Verify
+    assertThat(canPrintDiscardLabel, is(false));
+  }
+  
+  @Test
+  public void testCanPrintDiscardLabelWithUnsafeComponentWithDonationReleased_shouldReturnTrue() {
+    // Set up
+    Donation donation = aDonation().thatIsReleased().build();
+    Component component = aComponent().withId(1L).withDonation(donation).withStatus(ComponentStatus.UNSAFE).build();
+
+    // Exercise SUT
+    boolean canPrintDiscardLabel = labellingConstraintChecker.canPrintDiscardLabel(component);
+
+    // Verify
+    assertThat(canPrintDiscardLabel, is(true));
+  }
+
+  @Test
+  public void testCanPrintDiscardLabelWithExpiredComponent_shouldReturnTrue() {
+    // Set up
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.EXPIRED).build();
+
+    // Exercise SUT
+    boolean canPrintDiscardLabel = labellingConstraintChecker.canPrintDiscardLabel(component);
+
+    // Verify
+    assertThat(canPrintDiscardLabel, is(true));
+  }
+
+  @Test
+  public void testCanPrintDiscardLabelWithDiscardedComponent_shouldReturnTrue() {
+    // Set up
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.DISCARDED).build();
+
+    // Exercise SUT
+    boolean canPrintDiscardLabel = labellingConstraintChecker.canPrintDiscardLabel(component);
+
+    // Verify
+    assertThat(canPrintDiscardLabel, is(true));
+  }
+
+  @Test
+  public void testCanPrintDiscardLabelWithQuarantinedComponent_shouldReturnFalse() {
+    // Set up
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.QUARANTINED).build();
+
+    // Exercise SUT
+    boolean canPrintDiscardLabel = labellingConstraintChecker.canPrintDiscardLabel(component);
+
+    // Verify
+    assertThat(canPrintDiscardLabel, is(false));
+  }
+
+  @Test
+  public void testCanPrintDiscardLabelWithIssuedComponent_shouldReturnFalse() {
+    // Set up
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.ISSUED).build();
+
+    // Exercise SUT
+    boolean canPrintDiscardLabel = labellingConstraintChecker.canPrintDiscardLabel(component);
+
+    // Verify
+    assertThat(canPrintDiscardLabel, is(false));
+  }
+
+  @Test
+  public void testCanPrintDiscardLabelWithSplitComponent_shouldReturnFalse() {
+    // Set up
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.SPLIT).build();
+
+    // Exercise SUT
+    boolean canPrintDiscardLabel = labellingConstraintChecker.canPrintDiscardLabel(component);
+
+    // Verify
+    assertThat(canPrintDiscardLabel, is(false));
+  }
+
+  @Test
+  public void testCanPrintDiscardLabelWithUsedComponent_shouldReturnFalse() {
+    // Set up
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.USED).build();
+
+    // Exercise SUT
+    boolean canPrintDiscardLabel = labellingConstraintChecker.canPrintDiscardLabel(component);
+
+    // Verify
+    assertThat(canPrintDiscardLabel, is(false));
+  }
+
+  @Test
+  public void testCanPrintDiscardLabelWithProcessedComponent_shouldReturnFalse() {
+    // Set up
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
+
+    // Exercise SUT
+    boolean canPrintDiscardLabel = labellingConstraintChecker.canPrintDiscardLabel(component);
+
+    // Verify
+    assertThat(canPrintDiscardLabel, is(false));
+  }
+
+  @Test
+  public void testCanPrintDiscardLabelWithAvailableComponent_shouldReturnFalse() {
+    // Set up
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.AVAILABLE).build();
+
+    // Exercise SUT
+    boolean canPrintDiscardLabel = labellingConstraintChecker.canPrintDiscardLabel(component);
+
+    // Verify
+    assertThat(canPrintDiscardLabel, is(false));
+  }
+
+  
 
 }

@@ -37,11 +37,12 @@ public class LabellingFactoryTests extends UnitTestSuite {
         .build(); 
     
     Map<String, Boolean> permissions = new HashMap<>();
-    permissions.put("canPrintDiscardLabel", false);
+    permissions.put("canPrintDiscardLabel", true);
     permissions.put("canPrintPackLabel", true);
     
     // Mock
     when(labellingConstraintChecker.canPrintPackLabel(component)).thenReturn(true);
+    when(labellingConstraintChecker.canPrintDiscardLabel(component)).thenReturn(true);
 
     // Run test
     LabellingViewModel viewModel = labellingFactory.createViewModel(component);

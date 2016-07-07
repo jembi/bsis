@@ -89,11 +89,10 @@ public class LabellingCRUDService {
   public String printDiscardLabel(Long componentId) {
     Component component = componentCRUDService.findComponentById(componentId);
 
-    // TODO: Use constraint checker
-    boolean canPrintDiscardLabel = false;
+    boolean canPrintDiscardLabel = labellingConstraintChecker.canPrintDiscardLabel(component);
 
     // check to make sure discard label can be printed
-    if (canPrintDiscardLabel) {
+    if (!canPrintDiscardLabel) {
       throw new IllegalArgumentException("Discard Label can't be printed");
     }
 
