@@ -24,7 +24,7 @@ public class LabellingFactoryTests extends UnitTestSuite {
   private LabellingConstraintChecker labellingConstraintChecker;
 
   @Test
-  public void testCreateInventoryViewModel_shouldReturnViewModelWithTheCorrectState() {
+  public void testCreateLabellingViewModel_shouldReturnViewModelWithTheCorrectState() {
 
     // Setup
     Component component = ComponentBuilder.aComponent()
