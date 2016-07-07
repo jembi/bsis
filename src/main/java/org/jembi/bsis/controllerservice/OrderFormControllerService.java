@@ -1,0 +1,94 @@
+package org.jembi.bsis.controllerservice;
+
+import java.util.Date;
+import java.util.List;
+
+import javax.transaction.Transactional;
+
+import org.jembi.bsis.backingform.OrderFormBackingForm;
+import org.jembi.bsis.factory.ComponentTypeFactory;
+import org.jembi.bsis.factory.LocationViewModelFactory;
+import org.jembi.bsis.factory.OrderFormFactory;
+import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.order.OrderForm;
+import org.jembi.bsis.model.order.OrderStatus;
+import org.jembi.bsis.model.order.OrderType;
+import org.jembi.bsis.repository.ComponentTypeRepository;
+import org.jembi.bsis.repository.LocationRepository;
+import org.jembi.bsis.repository.OrderFormRepository;
+import org.jembi.bsis.service.OrderFormCRUDService;
+import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
+import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.OrderFormFullViewModel;
+import org.jembi.bsis.viewmodel.OrderFormViewModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+@Transactional
+public class OrderFormControllerService {
+  
+  @Autowired
+  private OrderFormFactory orderFormFactory;
+  
+  @Autowired
+  private OrderFormRepository orderFormRepository;
+  
+  @Autowired
+  private OrderFormCRUDService orderFormCRUDService;
+  
+  @Autowired
+  private LocationRepository locationRepository;
+  
+  @Autowired
+  private ComponentTypeRepository componentTypeRepository;
+  
+  @Autowired
+  private LocationViewModelFactory locationViewModelFactory;
+  
+  @Autowired
+  private ComponentTypeFactory componentTypeFactory;
+  
+  public List<OrderFormViewModel> findOrderForms(Date orderDateFrom, Date orderDateTo, Long dispatchedFromId,
+      Long dispatchedToId, OrderType type, OrderStatus status) {
+    List<OrderForm> orderForms = orderFormRepository.findOrderForms(orderDateFrom, orderDateTo, dispatchedFromId, 
+        dispatchedToId, type, status);
+    return orderFormFactory.createViewModels(orderForms);
+  }
+  
+  public OrderFormFullViewModel findOrderForm(long id) {
+    OrderForm orderForm = orderFormRepository.findById(id);
+    return orderFormFactory.createFullViewModel(orderForm);
+  }
+
+  public OrderFormFullViewModel createOrderForm(OrderFormBackingForm backingForm) {
+    OrderForm entity = orderFormFactory.createEntity(backingForm);
+    entity.setStatus(OrderStatus.CREATED);
+    orderFormRepository.save(entity);
+    return orderFormFactory.createFullViewModel(entity);
+  }
+  
+  public OrderFormFullViewModel updateOrderForm(OrderFormBackingForm backingForm) {
+    OrderForm orderForm = orderFormFactory.createEntity(backingForm);
+    OrderForm updatedOrderForm = orderFormCRUDService.updateOrderForm(orderForm);
+    return orderFormFactory.createFullViewModel(updatedOrderForm);
+  }
+  
+  public List<LocationViewModel> getUsageSites() {
+    List<Location> usageSites = locationRepository.getUsageSites();
+    return locationViewModelFactory.createLocationViewModels(usageSites);
+  }
+  
+  public List<LocationViewModel> getDistributionSites() {
+    List<Location> distributionSites = locationRepository.getDistributionSites();
+    return locationViewModelFactory.createLocationViewModels(distributionSites);
+  }
+  
+  public List<ComponentTypeViewModel> getAllComponentTypes() {
+    return componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes());
+  }
+
+  public void deleteOrderForm(long id) {
+    orderFormCRUDService.deleteOrderForm(id);
+  }
+}

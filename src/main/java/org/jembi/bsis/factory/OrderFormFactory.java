@@ -80,6 +80,7 @@ public class OrderFormFactory {
     Map<String, Boolean> permissions = new HashMap<>();
     permissions.put("canDispatch", orderFormConstraintChecker.canDispatch(entity));
     permissions.put("canEdit", orderFormConstraintChecker.canEdit(entity));
+    permissions.put("canDelete", orderFormConstraintChecker.canDelete(entity));
     viewModel.setPermissions(permissions);
     return viewModel;
   }

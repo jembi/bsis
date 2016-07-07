@@ -67,4 +67,20 @@ public class OrderFormConstraintCheckerTests {
     // Verify
     Assert.assertFalse("Can't edit", orderFormConstraintChecker.canEdit(orderForm));
   }
+  
+  @Test
+  public void testCanDelete_shouldReturnTrue() {
+    OrderForm orderForm = OrderFormBuilder.anOrderForm().withOrderStatus(OrderStatus.CREATED).build();
+
+    // Verify
+    Assert.assertTrue("Can delete", orderFormConstraintChecker.canDelete(orderForm));
+  }
+  
+  @Test
+  public void testCanDelete_shouldReturnFalse() {
+    OrderForm orderForm = OrderFormBuilder.anOrderForm().withOrderStatus(OrderStatus.DISPATCHED).build();
+
+    // Verify
+    Assert.assertFalse("Can delete", orderFormConstraintChecker.canDelete(orderForm));
+  }
 }
