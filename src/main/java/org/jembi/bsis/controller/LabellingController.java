@@ -32,13 +32,13 @@ public class LabellingController {
 
   @RequestMapping(value = "/components", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
-  public ResponseEntity findlotRelease(
+  public ResponseEntity<Map<String, Object>> findlotRelease(
       @RequestParam(required = true, value = "donationIdentificationNumber") String donationIdentificationNumber,
       @RequestParam(required = true, value = "componentType") long componentTypeId) {
     Map<String, Object> componentMap = new HashMap<String, Object>();
     componentMap.put("donationNumber", donationIdentificationNumber);
     componentMap.put("components", labellingControllerService.getComponentsForLabelling(donationIdentificationNumber, componentTypeId));
-    return new ResponseEntity(componentMap, HttpStatus.OK);
+    return new ResponseEntity<>(componentMap, HttpStatus.OK);
   }
 
   @RequestMapping(value = "/print/packlabel/{componentId}", method = RequestMethod.GET)
