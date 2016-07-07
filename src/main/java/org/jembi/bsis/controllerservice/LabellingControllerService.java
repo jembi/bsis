@@ -7,7 +7,7 @@ import org.jembi.bsis.factory.LabellingFactory;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.service.ComponentCRUDService;
-import org.jembi.bsis.service.LabellingCRUDService;
+import org.jembi.bsis.service.LabellingService;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.LabellingViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class LabellingControllerService {
   private ComponentCRUDService componentCRUDService;
 
   @Autowired
-  private LabellingCRUDService labellingCRUDService;
+  private LabellingService labellingService;
 
   public List<ComponentTypeViewModel> getComponentTypes() {
     return componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes());
@@ -43,10 +43,10 @@ public class LabellingControllerService {
   }
 
   public String printPackLabel(long componentId) {
-    return labellingCRUDService.printPackLabel(componentId);
+    return labellingService.printPackLabel(componentId);
   }
 
   public String printDiscardLabel(long componentId) {
-    return labellingCRUDService.printDiscardLabel(componentId);
+    return labellingService.printDiscardLabel(componentId);
   }
 }
