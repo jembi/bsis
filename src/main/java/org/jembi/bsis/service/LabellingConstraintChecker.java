@@ -72,9 +72,9 @@ public class LabellingConstraintChecker {
       return false;
     }
     
-    // Check that if the status in unsafe, the donation has been released
-    if (component.getStatus().equals(ComponentStatus.UNSAFE)) {
-      return component.getDonation().isReleased();
+    // Check that if the status is unsafe, the donation has to be released
+    if (component.getStatus().equals(ComponentStatus.UNSAFE) && !component.getDonation().isReleased()) {
+      return false;
     }
     
     return true;
