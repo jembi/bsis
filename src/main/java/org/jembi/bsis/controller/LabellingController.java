@@ -37,7 +37,7 @@ public class LabellingController {
       @RequestParam(required = true, value = "componentType") long componentTypeId) {
     Map<String, Object> componentMap = new HashMap<String, Object>();
     componentMap.put("donationNumber", donationIdentificationNumber);
-    componentMap.put("components", labellingControllerService.getComponentsLabelling(donationIdentificationNumber, componentTypeId));
+    componentMap.put("components", labellingControllerService.getComponentsForLabelling(donationIdentificationNumber, componentTypeId));
     return new ResponseEntity(componentMap, HttpStatus.OK);
   }
 

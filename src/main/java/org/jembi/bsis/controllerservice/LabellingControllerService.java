@@ -37,7 +37,7 @@ public class LabellingControllerService {
     return componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes());
   }
   
-  public List<LabellingViewModel> getComponentsLabelling(String donationIdentificationNumber, long componentTypeId) {
+  public List<LabellingViewModel> getComponentsForLabelling(String donationIdentificationNumber, long componentTypeId) {
     List<Component> components = componentCRUDService.findComponentsByDINAndType(donationIdentificationNumber, componentTypeId);
     return labellingFactory.createViewModels(components);
   }
