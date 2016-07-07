@@ -26,5 +26,6 @@
   <include file="./src/main/resources/liquibase/updates/1165-rename-inventory-status.xml" />
   <include file="./src/main/resources/liquibase/updates/776-record-pack-weight-before-processing.xml" />
   <include file="./src/main/resources/liquibase/updates/1138-edit-order-items.xml" />
+  <include file="./src/main/resources/liquibase/updates/1136-undiscard-component.xml" />
 
 </databaseChangeLog>

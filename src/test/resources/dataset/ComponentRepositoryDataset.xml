@@ -170,7 +170,7 @@
                                  isDeleted="false" statusChangeReason="Split"/>
     <ComponentStatusChange id="1" newStatus="DISCARDED"
                            statusChangeType="DISCARDED" statusChangedOn="2015-08-11 16:13:00.0"
-                           changedBy_id="1" component_id="6" statusChangeReason_id="5"/>
+                           changedBy_id="1" component_id="6" statusChangeReason_id="5"  isDeleted="0"/>
     <DataType id="4" dataType="boolean"/>
     <GeneralConfig id="1" name="components.createInitialComponents" value="true" dataType_id="4"/>
 </dataset>

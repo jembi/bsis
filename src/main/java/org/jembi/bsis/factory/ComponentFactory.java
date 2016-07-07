@@ -93,6 +93,7 @@ public class ComponentFactory {
     permissions.put("canProcess", componentConstraintChecker.canProcess(component));
     permissions.put("canRecordWeight", componentConstraintChecker.canRecordWeight(component));
     permissions.put("canUnprocess", componentConstraintChecker.canUnprocess(component));
+    permissions.put("canUndiscard", componentConstraintChecker.canUndiscard(component));
     viewModel.setPermissions(permissions);
     return viewModel;
   }

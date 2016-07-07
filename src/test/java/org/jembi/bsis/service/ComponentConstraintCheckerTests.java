@@ -459,5 +459,103 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
     boolean canUnprocess = componentConstraintChecker.canUnprocess(parentComponent);
     assertThat(canUnprocess, is(false));
   }
+  
+  @Test
+  public void testCanUndiscardComponentWithDiscardedStatusThatWasInStock_shouldReturnTrue() {
+    Component component = aComponent()
+        .withId(1L)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withInventoryStatus(InventoryStatus.REMOVED)
+        .build();
+    
+    boolean canUndiscard = componentConstraintChecker.canUndiscard(component);
+    
+    assertThat(canUndiscard, is(true));
+  }
+  
+  @Test
+  public void testCanUndiscardComponentWithDiscardedStatusThatWasNotInStock_shouldReturnTrue() {
+    Component component = aComponent()
+        .withId(1L)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .build();
+    
+    boolean canUndiscard = componentConstraintChecker.canUndiscard(component);
+    
+    assertThat(canUndiscard, is(true));
+  }
+  
+  @Test
+  public void testCanUndiscardComponentWithQuarantinedStatus_shouldReturnFalse() {
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.QUARANTINED).build();
+    
+    boolean canUndiscard = componentConstraintChecker.canUndiscard(component);
+    
+    assertThat(canUndiscard, is(false));
+  }
+  
+  @Test
+  public void testCanUndiscardComponentWithAvailableStatus_shouldReturnFalse() {
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.AVAILABLE).build();
+    
+    boolean canUndiscard = componentConstraintChecker.canUndiscard(component);
+    
+    assertThat(canUndiscard, is(false));
+  }
+  
+  @Test
+  public void testCanUndiscardComponentWithExpiredStatus_shouldReturnFalse() {
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.EXPIRED).build();
+    
+    boolean canUndiscard = componentConstraintChecker.canUndiscard(component);
+    
+    assertThat(canUndiscard, is(false));
+  }
+  
+  @Test
+  public void testCanUndiscardComponentWithIssuedStatus_shouldReturnFalse() {
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.ISSUED).build();
+    
+    boolean canUndiscard = componentConstraintChecker.canUndiscard(component);
+    
+    assertThat(canUndiscard, is(false));
+  }
+  
+  @Test
+  public void testCanUndiscardComponentWithSplitStatus_shouldReturnFalse() {
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.SPLIT).build();
+    
+    boolean canUndiscard = componentConstraintChecker.canUndiscard(component);
+    
+    assertThat(canUndiscard, is(false));
+  }
+  
+  @Test
+  public void testCanUndiscardComponentWithUsedStatus_shouldReturnFalse() {
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.USED).build();
+    
+    boolean canUndiscard = componentConstraintChecker.canUndiscard(component);
+    
+    assertThat(canUndiscard, is(false));
+  }
+  
+  @Test
+  public void testCanUndiscardComponentWithUnsafeStatus_shouldReturnFalse() {
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.UNSAFE).build();
+    
+    boolean canUndiscard = componentConstraintChecker.canUndiscard(component);
+    
+    assertThat(canUndiscard, is(false));
+  }
+  
+  @Test
+  public void testCanUndiscardComponentWithProcessedStatus_shouldReturnFalse() {
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
+    
+    boolean canUndiscard = componentConstraintChecker.canUndiscard(component);
+    
+    assertThat(canUndiscard, is(false));
+  }
 
 }

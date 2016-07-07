@@ -149,6 +149,7 @@ public class ComponentFactoryTests {
         .withPermission("canProcess", true)
         .withPermission("canRecordWeight", true)
         .withPermission("canUnprocess", true)
+        .withPermission("canUndiscard", true)
         .withExpiryStatus("")
         .build();
 
@@ -158,6 +159,7 @@ public class ComponentFactoryTests {
     when(componentConstraintChecker.canProcess(component)).thenReturn(true);
     when(componentConstraintChecker.canRecordWeight(component)).thenReturn(true);
     when(componentConstraintChecker.canUnprocess(component)).thenReturn(true);
+    when(componentConstraintChecker.canUndiscard(component)).thenReturn(true);
 
     // run test
     ComponentManagementViewModel convertedViewModel = componentFactory.createManagementViewModel(component);
