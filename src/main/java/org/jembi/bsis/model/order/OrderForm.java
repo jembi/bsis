@@ -18,7 +18,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.component.Component;
@@ -54,8 +53,7 @@ public class OrderForm extends BaseModificationTrackerEntity {
   @Column
   private boolean isDeleted = false;
 
-  @OneToMany(mappedBy = "orderForm", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-  @Where(clause = "isDeleted = 0")
+  @OneToMany(mappedBy = "orderForm", fetch = FetchType.EAGER, cascade = {CascadeType.ALL}, orphanRemoval = true)
   private List<OrderFormItem> items = new ArrayList<OrderFormItem>();
 
   @ManyToMany(fetch = FetchType.EAGER)

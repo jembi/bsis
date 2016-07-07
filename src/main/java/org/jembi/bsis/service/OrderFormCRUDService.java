@@ -70,12 +70,15 @@ public class OrderFormCRUDService {
       }
     }
 
+    // Reset orderFormItems so that hibernate can execute the orphan removal
+    existingOrderForm.getItems().clear();
+    existingOrderForm.getItems().addAll(updatedOrderForm.getItems());
+
     existingOrderForm.setOrderDate(updatedOrderForm.getOrderDate());
     existingOrderForm.setStatus(updatedOrderForm.getStatus());
     existingOrderForm.setType(updatedOrderForm.getType());
     existingOrderForm.setDispatchedFrom(updatedOrderForm.getDispatchedFrom());
     existingOrderForm.setDispatchedTo(updatedOrderForm.getDispatchedTo());
-    existingOrderForm.setItems(updatedOrderForm.getItems());
     existingOrderForm.setComponents(updatedOrderForm.getComponents());
     return orderFormRepository.update(existingOrderForm);
   }
