@@ -43,7 +43,7 @@ public class LabellingController {
 
   @RequestMapping(value = "/print/packlabel/{componentId}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
-  public ResponseEntity<Map<String, Object>> printLabel(@PathVariable Long componentId) {
+  public ResponseEntity<Map<String, Object>> printLabel(@PathVariable long componentId) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("labelZPL", labellingControllerService.printPackLabel(componentId));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
@@ -51,7 +51,7 @@ public class LabellingController {
 
   @RequestMapping(value = "/print/discardlabel/{componentId}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
-  public ResponseEntity<Map<String, Object>> printDiscard(@PathVariable Long componentId) {
+  public ResponseEntity<Map<String, Object>> printDiscard(@PathVariable long componentId) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("labelZPL", labellingControllerService.printDiscardLabel(componentId));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);

@@ -18,7 +18,7 @@ public class LabellingCRUDService {
   @Autowired
   private LabellingConstraintChecker labellingConstraintChecker;
 
-  public String printPackLabel(Long componentId) {
+  public String printPackLabel(long componentId) {
     Component component = componentCRUDService.findComponentById(componentId);
     Donation donation = component.getDonation();
 
@@ -86,7 +86,7 @@ public class LabellingCRUDService {
     return labelZPL;
   }
 
-  public String printDiscardLabel(Long componentId) {
+  public String printDiscardLabel(long componentId) {
     Component component = componentCRUDService.findComponentById(componentId);
 
     boolean canPrintDiscardLabel = labellingConstraintChecker.canPrintDiscardLabel(component);

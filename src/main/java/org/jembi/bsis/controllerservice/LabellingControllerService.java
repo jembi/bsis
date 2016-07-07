@@ -8,8 +8,8 @@ import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.service.ComponentCRUDService;
 import org.jembi.bsis.service.LabellingCRUDService;
-import org.jembi.bsis.viewmodel.LabellingViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
+import org.jembi.bsis.viewmodel.LabellingViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,11 +42,11 @@ public class LabellingControllerService {
     return labellingFactory.createViewModels(components);
   }
 
-  public String printPackLabel(Long componentId) {
+  public String printPackLabel(long componentId) {
     return labellingCRUDService.printPackLabel(componentId);
   }
 
-  public String printDiscardLabel(Long componentId) {
+  public String printDiscardLabel(long componentId) {
     return labellingCRUDService.printDiscardLabel(componentId);
   }
 }
