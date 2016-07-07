@@ -15,13 +15,14 @@ public class LabellingCRUDService {
 
   @Autowired
   private ComponentCRUDService componentCRUDService;
+  @Autowired
+  private LabellingConstraintChecker labellingConstraintChecker;
 
   public String printPackLabel(Long componentId) {
     Component component = componentCRUDService.findComponentById(componentId);
     Donation donation = component.getDonation();
 
-    // TODO: Use constraint checker
-    boolean canPrintPackLabel = false;
+    boolean canPrintPackLabel = labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component);
 
     // Check to make sure label can be printed
     if (canPrintPackLabel) {

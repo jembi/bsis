@@ -1,23 +1,27 @@
 package org.jembi.bsis.factory;
 
+import static org.mockito.Mockito.when;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import org.jembi.bsis.helpers.builders.ComponentBuilder;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.service.LabellingConstraintChecker;
+import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.LabellingViewModel;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.Mock;
 
-@RunWith(MockitoJUnitRunner.class)
-public class LabellingFactoryTests {
+public class LabellingFactoryTests extends UnitTestSuite {
 
   @InjectMocks
   private LabellingFactory labellingFactory;
+  @Mock
+  private LabellingConstraintChecker labellingConstraintChecker;
 
   @Test
   public void testCreateInventoryViewModel_shouldReturnViewModelWithTheCorrectState() {
@@ -34,7 +38,10 @@ public class LabellingFactoryTests {
     
     Map<String, Boolean> permissions = new HashMap<>();
     permissions.put("canPrintDiscardLabel", false);
-    permissions.put("canPrintPackLabel", false);
+    permissions.put("canPrintPackLabel", true);
+    
+    // Mock
+    when(labellingConstraintChecker.canPrintPackLabel(component)).thenReturn(true);
 
     // Run test
     LabellingViewModel viewModel = labellingFactory.createViewModel(component);
