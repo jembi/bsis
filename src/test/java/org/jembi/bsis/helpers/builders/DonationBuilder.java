@@ -193,6 +193,11 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     return this;
   }
 
+  public DonationBuilder thatIsNotReleased() {
+    this.released = false;
+    return this;
+  }
+
   @Override
   public Donation build() {
     Donation donation = new Donation();

@@ -3,8 +3,13 @@ package org.jembi.bsis.controllerservice;
 import java.util.List;
 
 import org.jembi.bsis.factory.ComponentTypeFactory;
+import org.jembi.bsis.factory.LabellingFactory;
+import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.repository.ComponentTypeRepository;
+import org.jembi.bsis.service.ComponentCRUDService;
+import org.jembi.bsis.service.LabellingService;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
+import org.jembi.bsis.viewmodel.LabellingViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,13 +19,34 @@ import org.springframework.transaction.annotation.Transactional;
 public class LabellingControllerService {
   
   @Autowired
-  ComponentTypeRepository componentTypeRepository;
+  private ComponentTypeRepository componentTypeRepository;
   
   @Autowired
-  ComponentTypeFactory componentTypeFactory;
+  private ComponentTypeFactory componentTypeFactory;
   
+  @Autowired
+  private LabellingFactory labellingFactory;
+  
+  @Autowired
+  private ComponentCRUDService componentCRUDService;
+
+  @Autowired
+  private LabellingService labellingService;
 
   public List<ComponentTypeViewModel> getComponentTypes() {
     return componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes());
+  }
+  
+  public List<LabellingViewModel> getComponentsForLabelling(String donationIdentificationNumber, long componentTypeId) {
+    List<Component> components = componentCRUDService.findComponentsByDINAndType(donationIdentificationNumber, componentTypeId);
+    return labellingFactory.createViewModels(components);
+  }
+
+  public String printPackLabel(long componentId) {
+    return labellingService.printPackLabel(componentId);
+  }
+
+  public String printDiscardLabel(long componentId) {
+    return labellingService.printDiscardLabel(componentId);
   }
 }
