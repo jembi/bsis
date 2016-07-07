@@ -50,7 +50,7 @@ public class LabellingController {
   }
 
   @RequestMapping(value = "/print/discardlabel/{componentId}", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DISCARDS + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
   public ResponseEntity<Map<String, Object>> printDiscard(@PathVariable Long componentId) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("labelZPL", labellingControllerService.printDiscardLabel(componentId));
