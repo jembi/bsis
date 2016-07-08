@@ -1,0 +1,13 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="20160708-1501" author="lauravignoli">
+	<comment>Add NT (NOT-TESTED) as a valid option for screening tti tests</comment>
+	<update tableName="BloodTest">
+		<column name="validResults" type="varchar" value="POS,NEG,NT" />
+		<where>bloodTestType='BASIC_TTI'</where>
+	</update>
+</changeSet>
+</databaseChangeLog>
