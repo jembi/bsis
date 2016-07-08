@@ -92,8 +92,7 @@ public class RoleRepository {
   public void deleteRole(Long id) {
     Role role = findRoleDetailById(id);
     em.remove(role);
-  }
-
+ }
   public Permission findPermissionByPermissionId(long permissionId) {
     // TODO Auto-generated method stub
     TypedQuery<Permission> query = em.createQuery("Select p FROM Permission p where p.id = :permissionId",

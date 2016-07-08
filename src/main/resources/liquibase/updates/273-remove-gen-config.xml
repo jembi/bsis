@@ -1,0 +1,15 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+  logicalFilePath="./liquibase/updates/1049-add-deferral-date.xml">
+
+	<changeSet id="20160707-`1712" author="tumijacob">
+	   <delete tableName="GeneralConfig">
+	   	<where>id = 3</where>
+	   </delete>
+	   <delete tableName="GenericConfig">
+	   	<where>id = 3</where>
+	   </delete>
+ 	</changeSet>
+</databaseChangeLog>
