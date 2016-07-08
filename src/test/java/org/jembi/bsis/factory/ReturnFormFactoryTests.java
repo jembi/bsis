@@ -134,6 +134,7 @@ public class ReturnFormFactoryTests {
         .withPermission("canEdit", true)
         .withPermission("canReturn", true)
         .withPermission("canDiscard", true)
+        .withPermission("canDelete", true)
         .build();
 
     ReturnForm entity = ReturnFormBuilder.aReturnForm()
@@ -150,6 +151,7 @@ public class ReturnFormFactoryTests {
     when(returnFormConstraintChecker.canEdit(entity)).thenReturn(true);
     when(returnFormConstraintChecker.canReturn(entity)).thenReturn(true);
     when(returnFormConstraintChecker.canDiscard(entity)).thenReturn(true);
+    when(returnFormConstraintChecker.canDelete(entity)).thenReturn(true);
 
     // Run test
     ReturnFormFullViewModel convertedViewModel = returnFormFactory.createFullViewModel(entity);
