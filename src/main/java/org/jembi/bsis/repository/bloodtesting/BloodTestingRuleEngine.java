@@ -434,21 +434,19 @@ public class BloodTestingRuleEngine {
   private void setTTIStatus(BloodTestingRuleResultSet resultSet) {
     TTIStatus ttiStatus = TTIStatus.NOT_DONE;
 
+    boolean basicTTITestsDone = resultSet.getBasicTtiTestsNotDone().isEmpty();
+
     Set<String> ttiStatusChanges = resultSet.getTtiStatusChanges();
     if (!ttiStatusChanges.isEmpty()) {
       if (ttiStatusChanges.contains(TTIStatus.TTI_UNSAFE.toString())) {
         ttiStatus = TTIStatus.TTI_UNSAFE;
-      } else if (ttiStatusChanges.size() == 1 && ttiStatusChanges.contains(TTIStatus.TTI_SAFE.toString())) {
+      } else if (ttiStatusChanges.contains(TTIStatus.INDETERMINATE.toString()) && basicTTITestsDone) {
+        ttiStatus = TTIStatus.INDETERMINATE;
+      } else if (ttiStatusChanges.size() == 1 && ttiStatusChanges.contains(TTIStatus.TTI_SAFE.toString()) && basicTTITestsDone) {
         ttiStatus = TTIStatus.TTI_SAFE;
-      }
+      } 
     }
 
-    Set<Long> basicTtiTestsNotDone = resultSet.getBasicTtiTestsNotDone();
-    if (ttiStatus.equals(TTIStatus.TTI_SAFE) && !basicTtiTestsNotDone.isEmpty()) {
-      // the test has been marked as safe while some basic TTI Tests were not done
-      ttiStatus = TTIStatus.NOT_DONE;
-    }
-    
     if (LOGGER.isDebugEnabled()) {
       LOGGER.debug("donation " + resultSet.getDonation().getId() + " for donor " + resultSet.getDonation().getDonor().getId() + " has TTIStatus of " + ttiStatus);
     }
