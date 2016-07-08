@@ -1,13 +1,56 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<changeSet id="20160708-1501" author="lauravignoli">
-	<comment>Add NT (NOT-TESTED) as a valid option for screening tti tests</comment>
-	<update tableName="BloodTest">
-		<column name="validResults" type="varchar" value="POS,NEG,NT" />
-		<where>bloodTestType='BASIC_TTI'</where>
-	</update>
-</changeSet>
+		<comment>Add NT (NOT-TESTED) as a valid option for screening tti tests</comment>
+		<update tableName="BloodTest">
+			<column name="validResults" type="varchar" value="POS,NEG,NT" />
+			<where>bloodTestType='BASIC_TTI'</where>
+		</update>
+		<insert tableName="BloodTestingRule">
+			<column name="bloodTestsIds" value="17"></column>
+			<column name="category" value="TTI"></column>
+			<column name="donationFieldChanged" value="TTISTATUS"></column>
+			<column name="context" value="RECORD_TTI_TESTS"></column>
+			<column name="isActive" value="1"></column>
+			<column name="markSampleAsUnsafe" value="0"></column>
+			<column name="newInformation" value="INDETERMINATE"></column>
+			<column name="pattern" value="NT"></column>
+			<column name="subCategory" value="TTI"></column>
+		</insert>
+		<insert tableName="BloodTestingRule">
+			<column name="bloodTestsIds" value="20"></column>
+			<column name="category" value="TTI"></column>
+			<column name="donationFieldChanged" value="TTISTATUS"></column>
+			<column name="context" value="RECORD_TTI_TESTS"></column>
+			<column name="isActive" value="1"></column>
+			<column name="markSampleAsUnsafe" value="0"></column>
+			<column name="newInformation" value="INDETERMINATE"></column>
+			<column name="pattern" value="NT"></column>
+			<column name="subCategory" value="TTI"></column>
+		</insert>
+		<insert tableName="BloodTestingRule">
+			<column name="bloodTestsIds" value="23"></column>
+			<column name="category" value="TTI"></column>
+			<column name="donationFieldChanged" value="TTISTATUS"></column>
+			<column name="context" value="RECORD_TTI_TESTS"></column>
+			<column name="isActive" value="1"></column>
+			<column name="markSampleAsUnsafe" value="0"></column>
+			<column name="newInformation" value="INDETERMINATE"></column>
+			<column name="pattern" value="NT"></column>
+			<column name="subCategory" value="TTI"></column>
+		</insert>
+		<insert tableName="BloodTestingRule">
+			<column name="bloodTestsIds" value="26"></column>
+			<column name="category" value="TTI"></column>
+			<column name="donationFieldChanged" value="TTISTATUS"></column>
+			<column name="context" value="RECORD_TTI_TESTS"></column>
+			<column name="isActive" value="1"></column>
+			<column name="markSampleAsUnsafe" value="0"></column>
+			<column name="newInformation" value="INDETERMINATE"></column>
+			<column name="pattern" value="NT"></column>
+			<column name="subCategory" value="TTI"></column>
+		</insert>
+	</changeSet>
 </databaseChangeLog>
