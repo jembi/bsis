@@ -24,9 +24,8 @@ public class LocationBackingFormValidator extends BaseValidator<LocationBackingF
     if (!form.getIsUsageSite() && !form.getIsVenue() && !form.getIsProcessingSite() 
         && !form.getIsDistributionSite() && !form.getIsTestingSite()) {
       errors.reject("400",
-          "Location type must be venue, processing site, distribution site, mobile site, or usage site but all of them are false for this location.");
+          "Location must be a venue, or a processing, distribution, testing or usage site.");
     }
-
   }
 
   @Override
