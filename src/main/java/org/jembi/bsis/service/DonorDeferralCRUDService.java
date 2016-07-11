@@ -70,10 +70,10 @@ public class DonorDeferralCRUDService {
     donorDeferral.setDeferredDonor(donor);
     donorDeferral.setDeferralReason(deferralReason);
     donorDeferral.setIsVoided(Boolean.FALSE);
-
+    System.out.println("1");
     Date now = dateGeneratorService.generateDate();
     donorDeferral.setDeferralDate(now);
-
+    System.out.println("2");
     if (permanentDeferral) {
       donorDeferral.setDeferredUntil(PERMANENT_DEFERRAL_DATE);
     } else {
