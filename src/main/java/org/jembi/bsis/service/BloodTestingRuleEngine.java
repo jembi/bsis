@@ -1,4 +1,4 @@
-package org.jembi.bsis.repository.bloodtesting;
+package org.jembi.bsis.service;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -19,12 +19,16 @@ import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
+import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
+import org.jembi.bsis.repository.bloodtesting.BloodTestingRuleResultSet;
+import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
+import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+@Service
 @Transactional
 public class BloodTestingRuleEngine {
 
@@ -434,21 +438,19 @@ public class BloodTestingRuleEngine {
   private void setTTIStatus(BloodTestingRuleResultSet resultSet) {
     TTIStatus ttiStatus = TTIStatus.NOT_DONE;
 
+    boolean basicTTITestsDone = resultSet.getBasicTtiTestsNotDone().isEmpty();
+
     Set<String> ttiStatusChanges = resultSet.getTtiStatusChanges();
     if (!ttiStatusChanges.isEmpty()) {
       if (ttiStatusChanges.contains(TTIStatus.TTI_UNSAFE.toString())) {
         ttiStatus = TTIStatus.TTI_UNSAFE;
-      } else if (ttiStatusChanges.size() == 1 && ttiStatusChanges.contains(TTIStatus.TTI_SAFE.toString())) {
+      } else if (ttiStatusChanges.contains(TTIStatus.INDETERMINATE.toString()) && basicTTITestsDone) {
+        ttiStatus = TTIStatus.INDETERMINATE;
+      } else if (ttiStatusChanges.size() == 1 && ttiStatusChanges.contains(TTIStatus.TTI_SAFE.toString()) && basicTTITestsDone) {
         ttiStatus = TTIStatus.TTI_SAFE;
-      }
+      } 
     }
 
-    Set<Long> basicTtiTestsNotDone = resultSet.getBasicTtiTestsNotDone();
-    if (ttiStatus.equals(TTIStatus.TTI_SAFE) && !basicTtiTestsNotDone.isEmpty()) {
-      // the test has been marked as safe while some basic TTI Tests were not done
-      ttiStatus = TTIStatus.NOT_DONE;
-    }
-    
     if (LOGGER.isDebugEnabled()) {
       LOGGER.debug("donation " + resultSet.getDonation().getId() + " for donor " + resultSet.getDonation().getDonor().getId() + " has TTIStatus of " + ttiStatus);
     }
