@@ -100,6 +100,10 @@ public class TestBatchStatusChangeService {
       LOGGER.info("Handling donation with components flagged for discard: " + donation);
       componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
 
+    } else if (donation.getTTIStatus() == TTIStatus.INDETERMINATE) {
+      LOGGER.info("Handling donation with INDETERMINATE ttiStatus: " + donation);
+      componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
+
     } else if (donation.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.NO_TYPE_DETERMINED)) {
       LOGGER.info("Handling donation with NO_TYPE_DETERMINED bloodTypingMatchStatus: " + donation);
       componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
