@@ -805,7 +805,7 @@ public class DataImportService {
     entityManager.clear();
   }
 
-  public void importDeferralData(Sheet sheet) {
+  private void importDeferralData(Sheet sheet) {
     Map<String, DeferralReason> deferralReasonCache = buildDeferralReasonCache();
     Map<String, Location> locationCache = buildLocationCache();
 
@@ -908,7 +908,7 @@ public class DataImportService {
     entityManager.clear();
   }
 
-  public void importOutcomeData(Sheet sheet) {
+  private void importOutcomeData(Sheet sheet) {
     Map<String, BloodTest> bloodTestCache = buildBloodTestCache();
     
     // Keep a reference to the row containing the headers
