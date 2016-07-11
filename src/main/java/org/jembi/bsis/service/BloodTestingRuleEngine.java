@@ -1,4 +1,4 @@
-package org.jembi.bsis.repository.bloodtesting;
+package org.jembi.bsis.service;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -19,12 +19,16 @@ import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
+import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
+import org.jembi.bsis.repository.bloodtesting.BloodTestingRuleResultSet;
+import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
+import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+@Service
 @Transactional
 public class BloodTestingRuleEngine {
 

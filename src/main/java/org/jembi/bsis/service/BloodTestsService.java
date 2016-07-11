@@ -17,7 +17,6 @@ import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRuleEngine;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
