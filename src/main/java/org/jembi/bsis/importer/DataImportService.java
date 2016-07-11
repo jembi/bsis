@@ -186,6 +186,18 @@ public class DataImportService {
             locationBackingForm.setIsVenue(cell.getBooleanCellValue());
             break;
             
+          case "isProcessingSite":
+            locationBackingForm.setIsProcessingSite(cell.getBooleanCellValue());
+            break;
+            
+          case "isDistributionSite":
+            locationBackingForm.setIsDistributionSite(cell.getBooleanCellValue());
+            break;
+            
+          case "isTestingSite":
+            locationBackingForm.setIsTestingSite(cell.getBooleanCellValue());
+            break;
+            
           case "isDeleted":
             locationBackingForm.setIsDeleted(cell.getBooleanCellValue());
             break;
