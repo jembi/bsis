@@ -17,7 +17,6 @@ import org.jembi.bsis.factory.LocationViewModelFactory;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.model.location.LocationType;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.ComponentBatchCRUDService;
@@ -81,7 +80,7 @@ public class ComponentBatchController {
     Map<String, Object> map = new HashMap<String, Object>();
     
     List<DonationBatch> donationBatches = donationBatchRepository.findUnassignedDonationBatchesForComponentBatch();
-    List<Location> locations = locationRepository.getLocationsByType(LocationType.PROCESSING_SITE);
+    List<Location> locations = locationRepository.getProcessingSites();
     
     map.put("addComponentBatchForm", new ComponentBatchBackingForm());
     map.put("donationBatches", donationBatchViewModelFactory.createDonationBatchBasicViewModels(donationBatches));
