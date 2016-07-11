@@ -3,7 +3,7 @@
     <user id="1" emailId="admin" firstName="admin" isactive="1"
           isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin"/>
 
-    <Location isDistributionSite="0" isProcessingSite="0" id="1" name="location 1"/>
+    <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="0" id="1" name="location 1"/>
 
     <Contact id="1"/>
     <Contact id="2"/>

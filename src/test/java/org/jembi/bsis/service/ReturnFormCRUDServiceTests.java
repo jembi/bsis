@@ -172,5 +172,52 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
     verify(componentReturnService).returnComponent(component, returnedTo);
     verify(returnFormRepository).update(updatedReturnForm);
   }
+  
+  @Test(expected = IllegalStateException.class)
+  public void testDeleteReturnFormThatCannotBeDeleted_shouldThrow() {
+    // Set up fixture
+    long returnFormId = 17L;
+    ReturnForm existingReturnForm = aReturnForm().withId(returnFormId).build();
+    
+    // Set up expectations
+    when(returnFormRepository.findById(returnFormId)).thenReturn(existingReturnForm);
+    when(returnFormConstraintChecker.canDelete(argThat(hasSameStateAsReturnForm(existingReturnForm)))).thenReturn(false);
+    
+    // Exercise SUT
+    returnFormCRUDService.deleteReturnForm(returnFormId);
+  }
+  
+  @Test
+  public void testDeleteReturnForm_shouldUpdateReturnFormStatusToDeleted() {
+    // Set up fixture
+    long returnFormId = 17L;
+    Location returnedFrom = aDistributionSite().withId(7L).build();
+    Location returnedTo = aUsageSite().withId(55L).build();
+    Date returnDate = new Date();
+
+    ReturnForm existingReturnForm = aReturnForm()
+        .withId(returnFormId)
+        .withReturnedFrom(returnedFrom)
+        .withReturnedTo(returnedTo)
+        .withReturnDate(returnDate)
+        .build();
+    ReturnForm expectedReturnForm = aReturnForm()
+        .withId(returnFormId)
+        .withReturnedFrom(returnedFrom)
+        .withReturnedTo(returnedTo)
+        .withReturnDate(returnDate)
+        .withIsDeleted(true)
+        .build();
+    
+    // Set up expectations
+    when(returnFormRepository.findById(returnFormId)).thenReturn(existingReturnForm);
+    when(returnFormConstraintChecker.canDelete(argThat(hasSameStateAsReturnForm(existingReturnForm)))).thenReturn(true);
+    
+    // Exercise SUT
+    returnFormCRUDService.deleteReturnForm(returnFormId);
+    
+    // Verify
+    verify(returnFormRepository).update(argThat(hasSameStateAsReturnForm(expectedReturnForm)));
+  }
 
 }

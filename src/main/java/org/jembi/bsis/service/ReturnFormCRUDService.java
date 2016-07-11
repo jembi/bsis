@@ -54,5 +54,15 @@ public class ReturnFormCRUDService {
     existingReturnForm.setComponents(updatedReturnForm.getComponents());
     return returnFormRepository.update(existingReturnForm);
   }
+  
+  public void deleteReturnForm(long returnFormId) {
+    ReturnForm existingReturnForm = returnFormRepository.findById(returnFormId);
+    
+    if (!returnFormConstraintChecker.canDelete(existingReturnForm)) {
+      throw new IllegalStateException("Cannot delete ReturnForm");
+    }
+    existingReturnForm.setIsDeleted(true);
+    returnFormRepository.update(existingReturnForm);
+  }
 
 }

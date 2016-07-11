@@ -186,6 +186,18 @@ public class DataImportService {
             locationBackingForm.setIsVenue(cell.getBooleanCellValue());
             break;
             
+          case "isProcessingSite":
+            locationBackingForm.setIsProcessingSite(cell.getBooleanCellValue());
+            break;
+            
+          case "isDistributionSite":
+            locationBackingForm.setIsDistributionSite(cell.getBooleanCellValue());
+            break;
+            
+          case "isTestingSite":
+            locationBackingForm.setIsTestingSite(cell.getBooleanCellValue());
+            break;
+            
           case "isDeleted":
             locationBackingForm.setIsDeleted(cell.getBooleanCellValue());
             break;
@@ -805,7 +817,7 @@ public class DataImportService {
     entityManager.clear();
   }
 
-  public void importDeferralData(Sheet sheet) {
+  private void importDeferralData(Sheet sheet) {
     Map<String, DeferralReason> deferralReasonCache = buildDeferralReasonCache();
     Map<String, Location> locationCache = buildLocationCache();
 
@@ -908,7 +920,7 @@ public class DataImportService {
     entityManager.clear();
   }
 
-  public void importOutcomeData(Sheet sheet) {
+  private void importOutcomeData(Sheet sheet) {
     Map<String, BloodTest> bloodTestCache = buildBloodTestCache();
     
     // Keep a reference to the row containing the headers

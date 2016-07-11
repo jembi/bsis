@@ -38,4 +38,8 @@ public class ReturnFormConstraintChecker {
 
     return false;
   }
+
+  public boolean canDelete(ReturnForm returnForm) {
+    return returnForm.getStatus() == ReturnStatus.CREATED;
+  }
 }
