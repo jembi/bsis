@@ -314,6 +314,13 @@ public class BloodTestingRuleEngine {
       }
     }
     
+    // Determine if one of the basic blood typing tests have NT as the result
+    if (resultSet.getBloodAboChanges().isEmpty() || resultSet.getBloodRhChanges().isEmpty()) {
+      resultSet.setBloodTypingStatus(BloodTypingStatus.INDETERMINATE);
+      resultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
+      return;
+    }
+    
     // Check if there are pending tests.
     if (!resultSet.getPendingAboTestsIds().isEmpty() || !resultSet.getPendingRhTestsIds().isEmpty()) {
       resultSet.setBloodTypingStatus(BloodTypingStatus.PENDING_TESTS);

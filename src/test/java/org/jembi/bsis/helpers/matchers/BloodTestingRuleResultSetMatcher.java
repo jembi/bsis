@@ -17,12 +17,16 @@ public class BloodTestingRuleResultSetMatcher extends TypeSafeMatcher<BloodTesti
   @Override
   public void describeTo(Description description) {
     description.appendText("A BloodTestingRuleResultSet with the following state:")
-        .appendText("\nTtiStatus: ").appendValue(expected.getTtiStatus());
+        .appendText("\nTtiStatus: ").appendValue(expected.getTtiStatus())
+        .appendText("\nBloodTypingStatus: ").appendValue(expected.getBloodTypingStatus())
+        .appendText("\nBloodTypingMatchStatus: ").appendValue(expected.getBloodTypingMatchStatus());
   }
 
   @Override
   public boolean matchesSafely(BloodTestingRuleResultSet actual) {
-    return Objects.equals(actual.getTtiStatus(), expected.getTtiStatus());
+    return Objects.equals(actual.getTtiStatus(), expected.getTtiStatus())
+        && Objects.equals(actual.getBloodTypingStatus(), expected.getBloodTypingStatus())
+        && Objects.equals(actual.getBloodTypingMatchStatus(), expected.getBloodTypingMatchStatus());
   }
 
   public static BloodTestingRuleResultSetMatcher hasSameStateAsBloodTestingRuleResultSet(BloodTestingRuleResultSet expected) {

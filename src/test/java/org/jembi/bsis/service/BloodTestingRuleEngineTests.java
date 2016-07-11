@@ -26,6 +26,8 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRuleResultSet;
+import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
+import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -46,6 +48,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
   private List<BloodTestingRule> rules;
   private BloodTest hivBloodTest;
   private BloodTest hbvBloodTest;
+  private BloodTest aboBloodTest;
+  private BloodTest rhBloodTest;
 
   private void setupFixtures() {
     // Setup blood tests
@@ -59,27 +63,43 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
         .withPositiveResults("POS,NEG,NT")
         .withTestNameShort("HBV")
         .build();
+    aboBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_BLOODTYPING)
+        .withId(3L)
+        .withPositiveResults("A,B,AB,O,NT")
+        .withTestNameShort("ABO")
+        .build();
+    rhBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_BLOODTYPING)
+        .withId(4L)
+        .withPositiveResults("POS,NEG,NT")
+        .withTestNameShort("Rh")
+        .build();
     
     // Setup rules
-    BloodTestingRule rule1 = BloodTestingRuleBuilder.aBloodTestingRule().withDonationFieldChange(DonationField.TTISTATUS)
-        .withPattern("NT").withNewInformation("INDETERMINATE").withBloodTestsIds("1").build();
-    BloodTestingRule rule2 = BloodTestingRuleBuilder.aBloodTestingRule().withDonationFieldChange(DonationField.TTISTATUS)
-        .withPattern("POS").withNewInformation("TTI_UNSAFE").withBloodTestsIds("1").build();
-    BloodTestingRule rule3 = BloodTestingRuleBuilder.aBloodTestingRule().withDonationFieldChange(DonationField.TTISTATUS)
-        .withPattern("NEG").withNewInformation("TTI_SAFE").withBloodTestsIds("1").build();
-    BloodTestingRule rule4 = BloodTestingRuleBuilder.aBloodTestingRule().withDonationFieldChange(DonationField.TTISTATUS)
-        .withPattern("NT").withNewInformation("INDETERMINATE").withBloodTestsIds("2").build();
-    BloodTestingRule rule5 = BloodTestingRuleBuilder.aBloodTestingRule().withDonationFieldChange(DonationField.TTISTATUS)
-        .withPattern("POS").withNewInformation("TTI_UNSAFE").withBloodTestsIds("2").build();
-    BloodTestingRule rule6 = BloodTestingRuleBuilder.aBloodTestingRule().withDonationFieldChange(DonationField.TTISTATUS)
-        .withPattern("NEG").withNewInformation("TTI_SAFE").withBloodTestsIds("2").build();
     rules = new ArrayList<>();
-    rules.add(rule1);
-    rules.add(rule2);
-    rules.add(rule3);
-    rules.add(rule4);
-    rules.add(rule5);
-    rules.add(rule6);
+    rules.add(BloodTestingRuleBuilder.aBloodTestingRule().withDonationFieldChange(DonationField.TTISTATUS)
+        .withPattern("NT").withNewInformation("INDETERMINATE").withBloodTestsIds("1").build());
+    rules.add(BloodTestingRuleBuilder.aBloodTestingRule().withDonationFieldChange(DonationField.TTISTATUS)
+        .withPattern("POS").withNewInformation("TTI_UNSAFE").withBloodTestsIds("1").build());
+    rules.add(BloodTestingRuleBuilder.aBloodTestingRule().withDonationFieldChange(DonationField.TTISTATUS)
+        .withPattern("NEG").withNewInformation("TTI_SAFE").withBloodTestsIds("1").build());
+    rules.add(BloodTestingRuleBuilder.aBloodTestingRule().withDonationFieldChange(DonationField.TTISTATUS)
+        .withPattern("NT").withNewInformation("INDETERMINATE").withBloodTestsIds("2").build());
+    rules.add(BloodTestingRuleBuilder.aBloodTestingRule().withDonationFieldChange(DonationField.TTISTATUS)
+        .withPattern("POS").withNewInformation("TTI_UNSAFE").withBloodTestsIds("2").build());
+    rules.add(BloodTestingRuleBuilder.aBloodTestingRule().withDonationFieldChange(DonationField.TTISTATUS)
+        .withPattern("NEG").withNewInformation("TTI_SAFE").withBloodTestsIds("2").build());
+    rules.add(BloodTestingRuleBuilder.aBloodTestingRule().withDonationFieldChange(DonationField.BLOODABO)
+        .withPattern("O").withNewInformation("O").withBloodTestsIds("3").build());
+    rules.add(BloodTestingRuleBuilder.aBloodTestingRule().withDonationFieldChange(DonationField.BLOODABO)
+        .withPattern("A").withNewInformation("A").withBloodTestsIds("3").build());
+    rules.add(BloodTestingRuleBuilder.aBloodTestingRule().withDonationFieldChange(DonationField.BLOODABO)
+        .withPattern("B").withNewInformation("B").withBloodTestsIds("3").build());
+    rules.add(BloodTestingRuleBuilder.aBloodTestingRule().withDonationFieldChange(DonationField.BLOODABO)
+        .withPattern("AB").withNewInformation("AB").withBloodTestsIds("3").build());
+    rules.add(BloodTestingRuleBuilder.aBloodTestingRule().withDonationFieldChange(DonationField.BLOODRH)
+        .withPattern("POS").withNewInformation("+").withBloodTestsIds("4").build());
+    rules.add(BloodTestingRuleBuilder.aBloodTestingRule().withDonationFieldChange(DonationField.BLOODRH)
+        .withPattern("NEG").withNewInformation("-").withBloodTestsIds("4").build());
   }
 
   @Test
@@ -103,6 +123,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.INDETERMINATE);
+    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
+    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.INDETERMINATE);
 
     // Setup mocks
     when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
@@ -141,6 +163,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_SAFE);
+    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
+    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.INDETERMINATE);
 
     // Setup mocks
     when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
@@ -178,6 +202,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_UNSAFE);
+    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
+    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.INDETERMINATE);
 
     // Setup mocks
     when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
@@ -215,6 +241,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_UNSAFE);
+    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
+    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.INDETERMINATE);
 
     // Setup mocks
     when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
@@ -252,6 +280,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_UNSAFE);
+    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
+    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.INDETERMINATE);
 
     // Setup mocks
     when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
@@ -291,6 +321,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.INDETERMINATE);
+    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
+    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.INDETERMINATE);
 
     // Setup mocks
     when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
@@ -308,4 +340,146 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
   }
 
+  @Test
+  public void testApplyBloodTestsWithNTABOTest_bloodTypingStatusShouldBeIndeterminate() throws Exception {
+
+    // Setup fixtures
+    setupFixtures();
+
+    // Setup donation
+    PackType packType = aPackType().withTestSampleProduced(true).build();
+    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+
+    // Setup existing test results for that donation
+    Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
+    resultsMap.put(3L, aBloodTestResult().withBloodTest(aboBloodTest).withResult("NT").withReEntryRequired(false).build());
+    resultsMap.put(4L, aBloodTestResult().withBloodTest(rhBloodTest).withResult("POS").withReEntryRequired(false).build());
+
+    // Setup expected rule engine result set
+    BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
+        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+    expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
+    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
+    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.INDETERMINATE);
+
+    // Setup mocks
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(aboBloodTest, rhBloodTest));
+
+    // Apply test
+    bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+
+    // Verify last step of applyBloodTests before returning view model
+    Mockito.verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+        argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
+
+  }
+  
+  @Test
+  public void testApplyBloodTestsWithNTRhTest_bloodTypingStatusShouldBeIndeterminate() throws Exception {
+
+    // Setup fixtures
+    setupFixtures();
+
+    // Setup donation
+    PackType packType = aPackType().withTestSampleProduced(true).build();
+    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+
+    // Setup existing test results for that donation
+    Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
+    resultsMap.put(3L, aBloodTestResult().withBloodTest(aboBloodTest).withResult("A").withReEntryRequired(false).build());
+    resultsMap.put(4L, aBloodTestResult().withBloodTest(rhBloodTest).withResult("NT").withReEntryRequired(false).build());
+
+    // Setup expected rule engine result set
+    BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
+        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+    expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
+    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
+    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.INDETERMINATE);
+
+    // Setup mocks
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(aboBloodTest, rhBloodTest));
+
+    // Apply test
+    bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+
+    // Verify last step of applyBloodTests before returning view model
+    Mockito.verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+        argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
+
+  }
+  
+  @Test
+  public void testApplyBloodTestsWithOnlyNTABOTest_bloodTypingStatusShouldBeNotDone() throws Exception {
+
+    // Setup fixtures
+    setupFixtures();
+
+    // Setup donation
+    PackType packType = aPackType().withTestSampleProduced(true).build();
+    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+
+    // Setup existing test results for that donation
+    Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
+    resultsMap.put(3L, aBloodTestResult().withBloodTest(aboBloodTest).withResult("NT").withReEntryRequired(false).build());
+
+    // Setup expected rule engine result set
+    BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
+        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+    expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
+    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
+    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+
+    // Setup mocks
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(aboBloodTest, rhBloodTest));
+
+    // Apply test
+    bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+
+    // Verify last step of applyBloodTests before returning view model
+    Mockito.verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+        argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
+
+  }
+  
+  @Test
+  public void testApplyBloodTestsWithNTRhAndABOTest_bloodTypingStatusShouldBeIndeterminate() throws Exception {
+
+    // Setup fixtures
+    setupFixtures();
+
+    // Setup donation
+    PackType packType = aPackType().withTestSampleProduced(true).build();
+    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+
+    // Setup existing test results for that donation
+    Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
+    resultsMap.put(3L, aBloodTestResult().withBloodTest(aboBloodTest).withResult("NT").withReEntryRequired(false).build());
+    resultsMap.put(4L, aBloodTestResult().withBloodTest(rhBloodTest).withResult("NT").withReEntryRequired(false).build());
+
+    // Setup expected rule engine result set
+    BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
+        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+    expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
+    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
+    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.INDETERMINATE);
+
+    // Setup mocks
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(aboBloodTest, rhBloodTest));
+
+    // Apply test
+    bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+
+    // Verify last step of applyBloodTests before returning view model
+    Mockito.verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+        argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
+
+  }
 }
