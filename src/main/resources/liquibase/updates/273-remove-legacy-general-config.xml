@@ -4,12 +4,9 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
  >
 
-	<changeSet id="20160708-1236" author="tumijacob">
+	<changeSet id="20160711-0950" author="tumijacob">
 	   <delete tableName="GeneralConfig">
 	   	<where>id = 3</where>
 	   </delete>
-	   <delete tableName="GenericConfig">
-	   	<where>id = 3</where>
-	   </delete>
- 	</changeSet>
+	</changeSet>
 </databaseChangeLog>
