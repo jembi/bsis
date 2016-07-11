@@ -85,6 +85,7 @@ public class TestBatchController {
     map.put("status", TestBatchStatus.values());
     map.put("donationBatches", donationBatchViewModelFactory
         .createDonationBatchBasicViewModels(donationBatchRepository.findUnassignedDonationBatches()));
+    map.put("testingSites", testBatchControllerService.getTestingSites());
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
