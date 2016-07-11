@@ -84,9 +84,9 @@
     <PackType id="3" packType="Triple" isDeleted="false" testSampleProduced="true"
               componentType_id="3" countAsDonation="true" periodBetweenDonations="90"/>
 
-    <Location isDistributionSite="0" isProcessingSite="0" id="1" isDeleted="false" isVenue="true"
+    <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="0" id="1" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Maseru" notes=""/>
-    <Location isDistributionSite="0" isProcessingSite="0" id="2" isDeleted="false" isVenue="true"
+    <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="0" id="2" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Leribe" notes=""/>
     <TestBatch id="1" batchNumber="TB0215000000" isDeleted="false"
                createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0"

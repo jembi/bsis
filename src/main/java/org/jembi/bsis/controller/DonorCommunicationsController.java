@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 import org.jembi.bsis.factory.DonorViewModelFactory;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.model.location.LocationType;
 import org.jembi.bsis.model.util.BloodGroup;
 import org.jembi.bsis.repository.DonorCommunicationsRepository;
 import org.jembi.bsis.repository.LocationRepository;
@@ -103,7 +102,7 @@ public class DonorCommunicationsController {
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("venues", locationRepository.getLocationsByType(LocationType.VENUE));
+    m.put("venues", locationRepository.getVenues());
     m.put("bloodGroups", BloodGroup.getBloodgroups());
   }
 

@@ -22,7 +22,6 @@ import org.jembi.bsis.factory.PackTypeFactory;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.HaemoglobinLevel;
 import org.jembi.bsis.model.donationtype.DonationType;
-import org.jembi.bsis.model.location.LocationType;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.AdverseEventTypeRepository;
 import org.jembi.bsis.repository.DonationRepository;
@@ -204,7 +203,7 @@ public class DonationController {
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("venues", locationRepository.getLocationsByType(LocationType.VENUE));
+    m.put("venues", locationRepository.getVenues());
     List<DonationType> donationTypes = donorTypeRepository.getAllDonationTypes();
     m.put("donationTypes", donationTypeFactory.createDonationTypeViewModels(donationTypes));
     m.put("packTypes", getPackTypeViewModels(packTypeRepository.getAllEnabledPackTypes()));

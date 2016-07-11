@@ -46,4 +46,7 @@ public class LocationViewModel extends BaseViewModel {
     return location.getIsDistributionSite();
   }
 
+  public boolean getIsTestingSite() {
+    return location.getIsTestingSite();
+  }
 }

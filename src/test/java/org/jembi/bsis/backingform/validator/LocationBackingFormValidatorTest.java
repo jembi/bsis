@@ -33,7 +33,7 @@ public class LocationBackingFormValidatorTest {
   public void testValid() throws Exception {
     // set up data
     Location location = LocationBuilder.aLocation()
-        .withName("LOCATION")
+        .withName("VENUE")
         .thatIsVenue()
         .build();
 
@@ -41,7 +41,95 @@ public class LocationBackingFormValidatorTest {
     form.setLocation(location);
 
     // set up mocks
-    when(locationRepository.findLocationByName("LOCATION")).thenReturn(null);
+    when(locationRepository.findLocationByName("VENUE")).thenReturn(null);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "location");
+    locationBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
+  }
+  
+  @Test
+  public void testValidTestingSite() throws Exception {
+    // set up data
+    Location location = LocationBuilder.aLocation()
+        .withName("TESTING")
+        .thatIsTestingSite()
+        .build();
+
+    LocationBackingForm form = new LocationBackingForm();
+    form.setLocation(location);
+
+    // set up mocks
+    when(locationRepository.findLocationByName("TESTING")).thenReturn(null);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "location");
+    locationBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
+  }
+  
+  @Test
+  public void testValidProcessingSite() throws Exception {
+    // set up data
+    Location location = LocationBuilder.aLocation()
+        .withName("PROCESSING")
+        .thatIsProcessingSite()
+        .build();
+
+    LocationBackingForm form = new LocationBackingForm();
+    form.setLocation(location);
+
+    // set up mocks
+    when(locationRepository.findLocationByName("PROCESSING")).thenReturn(null);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "location");
+    locationBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
+  }
+  
+  @Test
+  public void testValidDistributionSite() throws Exception {
+    // set up data
+    Location location = LocationBuilder.aLocation()
+        .withName("DISTRIBUTION")
+        .thatIsDistributionSite()
+        .build();
+
+    LocationBackingForm form = new LocationBackingForm();
+    form.setLocation(location);
+
+    // set up mocks
+    when(locationRepository.findLocationByName("DISTRIBUTION")).thenReturn(null);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "location");
+    locationBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
+  }
+  
+  @Test
+  public void testValidUsageSite() throws Exception {
+    // set up data
+    Location location = LocationBuilder.aLocation()
+        .withName("USAGE")
+        .thatIsDistributionSite()
+        .build();
+
+    LocationBackingForm form = new LocationBackingForm();
+    form.setLocation(location);
+
+    // set up mocks
+    when(locationRepository.findLocationByName("USAGE")).thenReturn(null);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "location");
