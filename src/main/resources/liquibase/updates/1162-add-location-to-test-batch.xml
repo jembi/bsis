@@ -1,0 +1,31 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="20160711-1648" author="lauravignoli">
+		<insert tableName = "Location">
+			<column name="name" value="Default Testing Location"/>
+			<column name="isDeleted" value="0"/>
+			<column name="isVenue" value="0"/>
+			<column name="isMobileSite" value="0"/>
+			<column name="isUsageSite" value="0"/>
+			<column name="notes" value="NULL"/>
+			<column name="isTestingSite" value="1"/>
+		</insert>
+		<addColumn tableName="TestBatch">
+			<column name="location_id" type="BIGINT(20)" defaultValue="NULL" />
+		</addColumn>
+		<addColumn tableName="TestBatch_AUD">
+			<column name="location_id" type="BIGINT(20)" defaultValue="NULL" />
+		</addColumn>
+		<sql>
+			UPDATE TestBatch tb
+			SET tb.location_id = (SELECT l.id FROM Location l where l.name='Default Testing Location');
+		</sql>
+		<addNotNullConstraint tableName="TestBatch"
+			columnName="location_id" columnDataType="BIGINT(20)" />
+		<addForeignKeyConstraint constraintName="FK_TESTBATCH_LOCATION_ID"
+			referencedTableName="Location" baseColumnNames="location_id"
+			baseTableName="TestBatch" referencedColumnNames="id" />
+	</changeSet>
+</databaseChangeLog>

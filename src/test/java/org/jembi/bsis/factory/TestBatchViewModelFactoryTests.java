@@ -17,8 +17,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.jembi.bsis.factory.DonationBatchViewModelFactory;
-import org.jembi.bsis.factory.TestBatchViewModelFactory;
 import org.jembi.bsis.helpers.builders.DonationTestOutcomesReportViewModelBuilder;
 import org.jembi.bsis.helpers.builders.DonorBuilder;
 import org.jembi.bsis.helpers.builders.PackTypeBuilder;
@@ -60,6 +58,8 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
   private DonationBatchViewModelFactory donationBatchViewModelFactory;
   @Mock
   private TestBatchConstraintChecker testBatchConstraintChecker;
+  @Mock
+  private LocationViewModelFactory locationViewModelFactory;
 
   private DonationBatch createDonationBatch() {
     PackType packType = PackTypeBuilder.aPackType().withTestSampleProduced(true).build();

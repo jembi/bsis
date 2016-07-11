@@ -66,4 +66,8 @@ public class TestBatchBackingForm {
     // Ignore value
   }
 
+  public void setLocation(LocationBackingForm location) {
+    // TODO: Set location and add validation
+  }
+
 }

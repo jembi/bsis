@@ -4,6 +4,8 @@
           isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin"/>
     <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="0" id="1" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Maseru" notes=""/>
+    <Location isTestingSite="1" isDistributionSite="0" isProcessingSite="0" id="2" isDeleted="false" isVenue="false"
+              isMobileSite="false" isUsageSite="false" name="Testing" notes=""/>
     <Address id="1"/>
     <Address id="2"/>
     <Address id="3"/>
@@ -34,13 +36,13 @@
            lastUpdated="2015-06-29 05:24:35.0" createdBy_id="1" lastUpdatedBy_id="1"
            dateOfFirstDonation="2015-06-26" preferredLanguage_id="1" title="Mrs"
            addressId="3" contactId="3" dueToDonate="2015-09-24"/>
-    <TestBatch id="1" batchNumber="000000" isDeleted="false"
+    <TestBatch id="1" batchNumber="000000" isDeleted="false" location_id="2"
                createdDate="2015-08-11 05:44:40.0" lastUpdated="2015-08-11 05:44:40.0"
                status="CLOSED" createdBy_id="1" lastUpdatedBy_id="1"/>
-    <TestBatch id="2" batchNumber="000001" isDeleted="false"
+    <TestBatch id="2" batchNumber="000001" isDeleted="false" location_id="2"
                createdDate="2015-08-13 05:45:05.0" lastUpdated="2015-08-13 05:45:05.0"
                status="OPEN" createdBy_id="1" lastUpdatedBy_id="1"/>
-    <TestBatch id="3" batchNumber="000002" isDeleted="true"
+    <TestBatch id="3" batchNumber="000002" isDeleted="true" location_id="2"
                createdDate="2015-07-10 05:45:05.0" lastUpdated="2015-07-10 05:45:05.0"
                status="RELEASED" createdBy_id="1" lastUpdatedBy_id="1"/>
     <DonationBatch id="1" batchNumber="000000" isDeleted="false"

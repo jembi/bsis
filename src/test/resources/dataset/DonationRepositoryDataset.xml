@@ -88,10 +88,12 @@
               isMobileSite="false" isUsageSite="false" name="Maseru" notes=""/>
     <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="0" id="2" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Leribe" notes=""/>
-    <TestBatch id="1" batchNumber="TB0215000000" isDeleted="false"
+    <Location isTestingSite="1" isDistributionSite="0" isProcessingSite="0" id="3" isDeleted="false" isVenue="false"
+              isMobileSite="false" isUsageSite="false" name="Testing" notes=""/>
+    <TestBatch id="1" batchNumber="TB0215000000" isDeleted="false" location_id="3"
                createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0"
                status="CLOSED" createdBy_id="1" lastUpdatedBy_id="1"/>
-    <TestBatch id="2" batchNumber="TB0415000000" isDeleted="false"
+    <TestBatch id="2" batchNumber="TB0415000000" isDeleted="false" location_id="3"
                createdDate="2015-04-24 04:42:17.0" lastUpdated="2015-04-24 04:42:17.0"
                status="OPEN" createdBy_id="1" lastUpdatedBy_id="1"/>
                

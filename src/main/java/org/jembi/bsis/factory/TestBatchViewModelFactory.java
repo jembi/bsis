@@ -33,6 +33,9 @@ public class TestBatchViewModelFactory {
   @Autowired
   private TestBatchConstraintChecker testBatchConstraintChecker;
 
+  @Autowired
+  private LocationViewModelFactory locationViewModelFactory;
+
   /**
    * Creates a list of basic view models for the given list of test batches.
    *
@@ -92,6 +95,7 @@ public class TestBatchViewModelFactory {
     testBatchViewModel.setCreatedDate(testBatch.getCreatedDate());
     testBatchViewModel.setLastUpdated(testBatch.getLastUpdated());
     testBatchViewModel.setNotes(testBatch.getNotes());
+    testBatchViewModel.setLocation(locationViewModelFactory.createLocationViewModel(testBatch.getLocation()));
 
     // Calculate number of samples (only consider donations with test samples)
     int numSamples = 0;

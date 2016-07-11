@@ -120,6 +120,7 @@ public class DataImportService {
 
   private boolean validationOnly;
   private String action;
+  private Location testingSite = null;
 
 
   public void importData(Workbook workbook, boolean validationOnly) {
@@ -1052,6 +1053,9 @@ public class DataImportService {
 
     if (testBatch == null) {
       testBatch = new TestBatch();
+      // Assign default testing site
+      setTestingSite();
+      testBatch.setLocation(testingSite);
       testBatch.setBatchNumber(sequenceNumberRepository.getNextTestBatchNumber());
       testBatch.setStatus(TestBatchStatus.CLOSED);
       testBatch.setCreatedDate(donationDate);
@@ -1077,6 +1081,17 @@ public class DataImportService {
     }
 
     return donationBatch;
+  }
+
+  private void setTestingSite() {
+    if (testingSite == null) {
+      List<Location> testingSites = locationRepository.getTestingSites();
+      if (testingSites.size() > 0) {
+        testingSite = testingSites.get(0);
+      } else {
+        throw new IllegalArgumentException("Can't create test batch, there's no testing sites.");
+      }
+    }
   }
 
   private Map<String, BloodTest> buildBloodTestCache() {
