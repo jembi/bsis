@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -17,10 +16,8 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
-import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.StringUtils;
@@ -79,72 +76,6 @@ public class DonationRepository {
     }
   }
 
-  public List<Object> findDonations(
-      String donationIdentificationNumber, List<Long> packTypeIds, List<Long> venueIds, String donationDateFrom,
-      String donationDateTo, boolean includeTestedDonations, Map<String, Object> pagingParams) throws ParseException {
-
-    String queryStr = "";
-    if (StringUtils.isNotBlank(donationIdentificationNumber)) {
-      queryStr = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE " +
-          "c.donationIdentificationNumber = :donationIdentificationNumber AND " +
-          "c.packType.id IN :packTypeIds AND " +
-          "c.venue.id IN :venueIds AND " +
-          "c.donationDate >= :donationDateFrom AND c.donationDate <= :donationDateTo AND " +
-          "c.isDeleted=:isDeleted";
-    } else {
-      queryStr = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE " +
-          "c.packType.id IN :packTypeIds AND " +
-          "c.venue.id IN :venueIds AND " +
-          "c.donationDate >= :donationDateFrom AND c.donationDate <= :donationDateTo AND " +
-          "c.isDeleted=:isDeleted";
-    }
-
-    if (!includeTestedDonations)
-      queryStr = queryStr + " AND (c.bloodTypingStatus=:bloodTypingStatus OR c.ttiStatus=:ttiStatus)";
-
-    TypedQuery<Donation> query;
-    if (pagingParams.containsKey("sortColumn")) {
-      queryStr += " ORDER BY c." + pagingParams.get("sortColumn") + " " + pagingParams.get("sortDirection");
-    }
-
-    query = em.createQuery(queryStr, Donation.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-
-    if (StringUtils.isNotBlank(donationIdentificationNumber))
-      query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
-
-    if (!includeTestedDonations) {
-      query.setParameter("bloodTypingStatus", BloodTypingStatus.NOT_DONE);
-      query.setParameter("ttiStatus", TTIStatus.NOT_DONE);
-    }
-
-    query.setParameter("packTypeIds", packTypeIds);
-    query.setParameter("venueIds", venueIds);
-    query.setParameter("donationDateFrom", getDonationDateFromOrDefault(donationDateFrom));
-    query.setParameter("donationDateTo", getDonationDateToOrDefault(donationDateTo));
-
-
-    int start = ((pagingParams.get("start") != null) ? Integer.parseInt(pagingParams.get("start").toString()) : 0);
-    int length = ((pagingParams.get("length") != null) ? Integer.parseInt(pagingParams.get("length").toString()) : Integer.MAX_VALUE);
-
-    query.setFirstResult(start);
-    query.setMaxResults(length);
-
-    return Arrays.asList(query.getResultList(), getResultCount(queryStr, query));
-  }
-
-  private Long getResultCount(String queryStr, Query query) {
-    String countQueryStr = queryStr.replaceFirst("SELECT c", "SELECT COUNT(c)");
-    // removing the join fetch is important otherwise Hibernate will complain
-    // owner of the fetched association was not present in the select list
-    countQueryStr = countQueryStr.replaceFirst("LEFT JOIN FETCH c.donor", "");
-    TypedQuery<Long> countQuery = em.createQuery(countQueryStr, Long.class);
-    for (Parameter<?> parameter : query.getParameters()) {
-      countQuery.setParameter(parameter.getName(), query.getParameterValue(parameter));
-    }
-    return countQuery.getSingleResult().longValue();
-  }
-
   public List<Donation> getDonations(Date fromDate, Date toDate) {
     TypedQuery<Donation> query = em
         .createQuery(
@@ -184,25 +115,6 @@ public class DonationRepository {
 
     List<Donation> resultList = query.getResultList();
     return resultList;
-  }
-
-  private Date getDonationDateFromOrDefault(String donationDateFrom) throws ParseException {
-    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    Date from =
-        (donationDateFrom == null || donationDateFrom.equals("")) ? dateFormat
-            .parse("31/12/1970") : dateFormat.parse(donationDateFrom);
-
-
-    return from;
-  }
-
-  private Date getDonationDateToOrDefault(String donationDateTo) throws ParseException {
-    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    Date to = null;
-    to = (donationDateTo == null || donationDateTo.equals("")) ? new Date() :
-        dateFormat.parse(donationDateTo);
-
-    return to;
   }
 
   public Map<String, Map<Long, Long>> findNumberOfDonations(Date donationDateFrom,

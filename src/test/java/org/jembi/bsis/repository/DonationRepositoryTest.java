@@ -4,17 +4,14 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.jembi.bsis.model.component.Component;
-import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.repository.ComponentRepository;
@@ -179,45 +176,6 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
     Assert.assertNotNull("1 Donation matches", donations.size());
     Donation donation = donations.get(0);
     Assert.assertEquals("Donation has a matching DIN", "1234567", donation.getDonationIdentificationNumber());
-  }
-
-  @Test
-  @Ignore("findDonations has a bug in the HSQL when querying a DIN with parameter name venueIds/venueIds")
-  public void testFindDonationsDIN() throws Exception {
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    List<Long> packTypeIds = new ArrayList<Long>();
-    packTypeIds.add(new Long(1));
-    List<Long> venueIds = new ArrayList<Long>();
-    venueIds.add(new Long(1));
-    venueIds.add(new Long(2));
-    List<Object> donations = donationRepository.findDonations("1234567", packTypeIds, venueIds, "2015-02-01",
-        "2015-02-10", false, pagingParams);
-    Assert.assertNotNull("List is not null", donations);
-    Assert.assertNotNull("1 Donation matches", donations.size());
-    Donation donation = (Donation) donations.get(0);
-    Assert.assertEquals("Donation has a matching DIN", "1234567", donation.getDonationIdentificationNumber());
-  }
-
-  @Test
-  public void testFindDonations() throws Exception {
-    Map<String, Object> pagingParams = new HashMap<String, Object>();
-    List<Long> packTypeIds = new ArrayList<Long>();
-    packTypeIds.add(new Long(1));
-    List<Long> venueIds = new ArrayList<Long>();
-    venueIds.add(new Long(2));
-    List<Object> result = donationRepository.findDonations(null, packTypeIds, venueIds, "01/02/2015", "10/02/2015",
-        true, pagingParams);
-    Assert.assertNotNull("List is not null", result);
-    ArrayList<Donation> donations = (ArrayList<Donation>) result.get(0);
-    Assert.assertEquals("4 donations", 4, donations.size());
-    Date afterDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/02/2015");
-    Date beforeDate = new SimpleDateFormat("dd/MM/yyyy").parse("10/02/2015");
-    for (Donation donation : donations) {
-      Assert.assertTrue("Donation date before", donation.getDonationDate().before(beforeDate));
-      Assert.assertTrue("Donation date after", donation.getDonationDate().after(afterDate));
-      Assert.assertEquals("PackTypeId matches", new Long(1), donation.getPackType().getId());
-      Assert.assertEquals("venueId matches", new Long(2), donation.getDonationBatch().getVenue().getId());
-    }
   }
 
   @Test
