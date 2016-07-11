@@ -117,16 +117,6 @@ public class DonationConstraintChecker {
         return donationReleased;
     }
     
-    /**
-     * @return true if the Donation has no discrepancies and is in a TestBatch that is either closed or released 
-     */
-    public boolean donationIsReleased(TestBatch testBatch, Donation donation) {
-        boolean donationReleased = testBatch != null &&
-                testBatch.getStatus() != TestBatchStatus.OPEN &&
-                !donationHasDiscrepancies(donation);
-        return donationReleased;
-    }
-    
     public boolean donationHasOutstandingOutcomes(Donation donation, BloodTestingRuleResult bloodTestingRuleResult) {
         
         if (!donation.getPackType().getTestSampleProduced()) {
