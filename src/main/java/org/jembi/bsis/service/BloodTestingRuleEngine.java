@@ -123,7 +123,7 @@ public class BloodTestingRuleEngine {
     updatePendingAboRhTests(resultSet);
 
     // Determine the blood status based on ABO/Rh tests
-    setBloodMatchStatus(resultSet, availableTestResults);
+    setBloodTypingStatus(resultSet, availableTestResults);
 
     if (LOGGER.isDebugEnabled()) {
       LOGGER.debug("Donation " + resultSet.getDonation().getId() + " for donor " +
@@ -303,7 +303,7 @@ public class BloodTestingRuleEngine {
    * 
    * @param resultSet BloodTestingRuleResultSet that contains the processed test results.
    */
-  private void setBloodMatchStatus(BloodTestingRuleResultSet resultSet, Map<String, String> availableTestResults) {
+  private void setBloodTypingStatus(BloodTestingRuleResultSet resultSet, Map<String, String> availableTestResults) {
 
     // Determine if there are missing required basic blood typing tests
     List<BloodTest> basicBloodTypingTests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING);
@@ -313,18 +313,14 @@ public class BloodTestingRuleEngine {
         return;
       }
     }
-
-    BloodTypingStatus bloodTypingStatus = BloodTypingStatus.COMPLETE;
-
-    int numPendingAboTests = resultSet.getPendingAboTestsIds().size();
-    int numPendingRhTests = resultSet.getPendingRhTestsIds().size();
-
-    if (numPendingAboTests > 0 || numPendingRhTests > 0) {
-      // There are pending tests
-      bloodTypingStatus = BloodTypingStatus.PENDING_TESTS;
+    
+    // Check if there are pending tests.
+    if (!resultSet.getPendingAboTestsIds().isEmpty() || !resultSet.getPendingRhTestsIds().isEmpty()) {
+      resultSet.setBloodTypingStatus(BloodTypingStatus.PENDING_TESTS);
+      return;
     }
 
-    resultSet.setBloodTypingStatus(bloodTypingStatus);
+    resultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
   }
 
   private BloodTypingMatchStatus getBloodTypingMatchStatusForFirstTimeDonor(BloodTestingRuleResultSet resultSet) {
