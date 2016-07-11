@@ -193,5 +193,119 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
   }
+  
+  @Test
+  public void testApplyBloodTestsWithPosTests_ttiStatusShouldBeUnsafe() throws Exception {
+
+    // Setup fixtures
+    setupFixtures();
+
+    // Setup donation
+    PackType packType = aPackType().withTestSampleProduced(true).build();
+    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    
+    // Setup existing test results for that donation
+    BloodTestResult result1 = aBloodTestResult().withBloodTest(hivBloodTest).withResult("POS").withReEntryRequired(false).build();
+    BloodTestResult result2 = aBloodTestResult().withBloodTest(hbvBloodTest).withResult("POS").withReEntryRequired(false).build();
+    Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
+    resultsMap.put(1L, result1);
+    resultsMap.put(2L, result2);
+    
+    // Setup expected rule engine result set
+    BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
+        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+    expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_UNSAFE);
+
+    // Setup mocks
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    // assume hiv and hbv are the only basic tty tests
+    when(bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)).thenReturn(Arrays.asList(hivBloodTest, hbvBloodTest));
+
+    // Apply test
+    bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+
+    // Verify last step of applyBloodTests before returning view model
+    Mockito.verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+        argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
+
+  }
+  
+  @Test
+  public void testApplyBloodTestsWithNegAndPosTests_ttiStatusShouldBeUnsafe() throws Exception {
+
+    // Setup fixtures
+    setupFixtures();
+
+    // Setup donation
+    PackType packType = aPackType().withTestSampleProduced(true).build();
+    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    
+    // Setup existing test results for that donation
+    BloodTestResult result1 = aBloodTestResult().withBloodTest(hivBloodTest).withResult("NEG").withReEntryRequired(false).build();
+    BloodTestResult result2 = aBloodTestResult().withBloodTest(hbvBloodTest).withResult("POS").withReEntryRequired(false).build();
+    Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
+    resultsMap.put(1L, result1);
+    resultsMap.put(2L, result2);
+    
+    // Setup expected rule engine result set
+    BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
+        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+    expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_UNSAFE);
+
+    // Setup mocks
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    // assume hiv and hbv are the only basic tty tests
+    when(bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)).thenReturn(Arrays.asList(hivBloodTest, hbvBloodTest));
+
+    // Apply test
+    bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+
+    // Verify last step of applyBloodTests before returning view model
+    Mockito.verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+        argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
+
+  }
+
+  @Test
+  public void testApplyBloodTestsWithNTTests_ttiStatusShouldBeIndeterminate() throws Exception {
+
+    // Setup fixtures
+    setupFixtures();
+
+    // Setup donation
+    PackType packType = aPackType().withTestSampleProduced(true).build();
+    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+
+    // Setup existing test results for that donation
+    BloodTestResult result1 =
+        aBloodTestResult().withBloodTest(hivBloodTest).withResult("NT").withReEntryRequired(false).build();
+    BloodTestResult result2 =
+        aBloodTestResult().withBloodTest(hbvBloodTest).withResult("NT").withReEntryRequired(false).build();
+    Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
+    resultsMap.put(1L, result1);
+    resultsMap.put(2L, result2);
+
+    // Setup expected rule engine result set
+    BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
+        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+    expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.INDETERMINATE);
+
+    // Setup mocks
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    // assume hiv and hbv are the only basic tty tests
+    when(bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI))
+        .thenReturn(Arrays.asList(hivBloodTest, hbvBloodTest));
+
+    // Apply test
+    bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+
+    // Verify last step of applyBloodTests before returning view model
+    Mockito.verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+        argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
+
+  }
 
 }
