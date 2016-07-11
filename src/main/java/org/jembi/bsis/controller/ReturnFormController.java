@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -106,5 +107,12 @@ public class ReturnFormController {
         returnedFromId, returnedToId, status));
 
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+  }
+  
+  @RequestMapping(method = RequestMethod.DELETE, value = "{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasRole('" + PermissionConstants.VOID_ORDER_FORM + "')")
+  public void deleteReturnForm(@PathVariable("id") long returnFormId) {
+    returnFormControllerService.deleteReturnForm(returnFormId);
   }
 }

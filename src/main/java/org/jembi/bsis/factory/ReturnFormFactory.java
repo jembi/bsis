@@ -65,6 +65,7 @@ public class ReturnFormFactory {
     permissions.put("canEdit", returnFormConstraintChecker.canEdit(entity));
     permissions.put("canReturn", returnFormConstraintChecker.canReturn(entity));
     permissions.put("canDiscard", returnFormConstraintChecker.canDiscard(entity));
+    permissions.put("canDelete", returnFormConstraintChecker.canDelete(entity));
     viewModel.setPermissions(permissions);
 
     return viewModel;

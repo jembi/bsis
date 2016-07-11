@@ -23,7 +23,8 @@ public class ReturnFormMatcher extends TypeSafeMatcher<ReturnForm> {
         .appendText("\nReturn Date: ").appendValue(expected.getReturnDate())
         .appendText("\nReturned From: ").appendValue(expected.getReturnedFrom())
         .appendText("\nReturned To: ").appendValue(expected.getReturnedTo())
-        .appendText("\nComponents: ").appendValue(expected.getComponents());
+        .appendText("\nComponents: ").appendValue(expected.getComponents())
+        .appendText("\nDeleted: ").appendValue(expected.getIsDeleted());
   }
   
   @Override
@@ -34,7 +35,8 @@ public class ReturnFormMatcher extends TypeSafeMatcher<ReturnForm> {
         Objects.equals(actual.getReturnDate(), expected.getReturnDate()) &&
         Objects.equals(actual.getReturnedFrom(), expected.getReturnedFrom()) &&
         Objects.equals(actual.getReturnedTo(), expected.getReturnedTo()) &&
-        Objects.equals(actual.getComponents(), expected.getComponents());
+        Objects.equals(actual.getComponents(), expected.getComponents()) &&
+        Objects.equals(actual.getIsDeleted(), expected.getIsDeleted());
   }
 
   public static ReturnFormMatcher hasSameStateAsReturnForm(ReturnForm expected) {
