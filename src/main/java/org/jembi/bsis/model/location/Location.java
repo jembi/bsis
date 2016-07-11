@@ -132,11 +132,11 @@ public class Location extends BaseEntity {
     this.isDistributionSite = isDistributionSite;
   }
 
-  public boolean isTestingSite() {
+  public boolean getIsTestingSite() {
     return isTestingSite;
   }
 
-  public void setTestingSite(boolean isTestingSite) {
+  public void setIsTestingSite(boolean isTestingSite) {
     this.isTestingSite = isTestingSite;
   }
 }
