@@ -12,7 +12,6 @@ import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.returnform.ReturnForm;
 import org.jembi.bsis.model.returnform.ReturnStatus;
-import org.jembi.bsis.service.ReturnFormConstraintChecker;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -143,6 +142,30 @@ public class ReturnFormConstraintCheckerTests extends UnitTestSuite {
     
     // Verify
     assertThat(canDiscardComponents, is(true));
+  }
+
+  @Test
+  public void testCanDeleteWithCreatedReturnForm_shouldReturnTrue() {
+    // Set up
+    ReturnForm returnForm = aReturnForm().withReturnStatus(ReturnStatus.CREATED).build();
+
+    // Test
+    boolean canDelete = returnFormConstraintChecker.canDelete(returnForm);
+
+    // Verify
+    assertThat(canDelete, is(true));
+  }
+
+  @Test
+  public void testCanDeleteWithReturnedReturnForm_shouldReturnFalse() {
+    // Set up
+    ReturnForm returnForm = aReturnForm().withReturnStatus(ReturnStatus.RETURNED).build();
+
+    // Test
+    boolean canDelete = returnFormConstraintChecker.canDelete(returnForm);
+
+    // Verify
+    assertThat(canDelete, is(false));
   }
 
 }
