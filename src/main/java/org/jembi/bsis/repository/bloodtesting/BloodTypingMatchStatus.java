@@ -1,5 +1,26 @@
 package org.jembi.bsis.repository.bloodtesting;
 
 public enum BloodTypingMatchStatus {
-  MATCH, AMBIGUOUS, NO_MATCH, NOT_DONE, RESOLVED, NO_TYPE_DETERMINED;
+
+  /** Default - ABO/Rh test outcomes have not been captured */
+  NOT_DONE,
+  /** For first time donors, there is a missing ABO/Rh outcome */
+  NO_MATCH,
+  /** For first time donors, the repeat ABO/Rh outcomes did not match the initial outcomes
+   * For repeat donors, the ABO/Rh outcomes do no match the donor's ABO/Rh */
+  AMBIGUOUS,
+  /** For first time donors, the repeat ABO/Rh outcomes matched the initial outcomes. 
+   * For repeat donors, the ABO/Rh outcomes matched the donor's ABO/Rh */
+  MATCH,
+  /** ABO/Rh discrepancies (ambiguous outcomes) have been manually resolved */
+  RESOLVED,
+  /** ABO/Rh discrepancies cannot be resolved */
+  NO_TYPE_DETERMINED;
+
+  public boolean isEndState() {
+    if (this == MATCH || this == RESOLVED || this == NO_TYPE_DETERMINED) {
+      return true;
+    }
+    return false;
+  }
 }
