@@ -23,4 +23,11 @@ public enum BloodTypingMatchStatus {
     }
     return false;
   }
+  
+  public static boolean isResolvedState(BloodTypingMatchStatus status) {
+    if (status == RESOLVED || status == NO_TYPE_DETERMINED) {
+      return true;
+    }
+    return false;
+  }
 }
