@@ -17,8 +17,8 @@ public enum BloodTypingMatchStatus {
   /** ABO/Rh discrepancies cannot be resolved */
   NO_TYPE_DETERMINED;
 
-  public boolean isEndState() {
-    if (this == MATCH || this == RESOLVED || this == NO_TYPE_DETERMINED) {
+  public static boolean isEndState(BloodTypingMatchStatus status) {
+    if (status == MATCH || status == RESOLVED || status == NO_TYPE_DETERMINED) {
       return true;
     }
     return false;

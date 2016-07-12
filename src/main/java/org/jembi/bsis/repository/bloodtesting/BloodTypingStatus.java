@@ -11,8 +11,8 @@ public enum BloodTypingStatus {
   /** Either ABO or Rh tests have a result of NT (not tested) */
   INDETERMINATE;
   
-  public boolean isEndState() {
-    if (this == COMPLETE || this == INDETERMINATE) {
+  public static boolean isEndState(BloodTypingStatus status) {
+    if (status == COMPLETE || status == INDETERMINATE) {
       return true;
     }
     return false;
