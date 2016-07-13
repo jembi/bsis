@@ -62,12 +62,12 @@ public class TestBatchBackingForm {
     return testBatch.getLastUpdated();
   }
 
-  public void setReadyForReleaseCount(int count) {
-    // Ignore value
+  public void setLocation(LocationBackingForm location) {
+    testBatch.setLocation(location.getLocation());
   }
 
-  public void setLocation(LocationBackingForm location) {
-    // TODO: Set location and add validation
+  public void setReadyForReleaseCount(int count) {
+    // Ignore value
   }
 
 }
