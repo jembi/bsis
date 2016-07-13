@@ -65,6 +65,13 @@ public class TestBatchBackingForm {
   public void setLocation(LocationBackingForm location) {
     testBatch.setLocation(location.getLocation());
   }
+  
+  public LocationBackingForm getLocation() {
+    if (testBatch.getLocation() == null) {
+      return null;
+    }
+    return new LocationBackingForm(testBatch.getLocation());
+  }
 
   public void setReadyForReleaseCount(int count) {
     // Ignore value

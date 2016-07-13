@@ -69,7 +69,7 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
   @Test
   public void testDeleteLocation() throws Exception {
     locationRepository.deleteLocation(1L);
-    Location one = locationRepository.getLocation(1L);
+    Location one = entityManager.find(Location.class, 1L);
     Assert.assertNotNull("There is a Location", one);
     Assert.assertEquals("The Location is marked as deleted", true, one.getIsDeleted());
   }
