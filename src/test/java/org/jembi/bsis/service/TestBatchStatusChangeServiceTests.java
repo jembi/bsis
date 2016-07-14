@@ -280,14 +280,14 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testHandleReleaseWithIndeterminateBloodTyping_shouldNotSetBloodABORhOfDonor() {
+  public void testHandleReleaseWithNoTypeDeterminedBloodTyping_shouldNotSetBloodABORhOfDonor() {
 
     Location location = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
     List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
     String bloodAbo = "O";
     String bloodRh = "+";
     Donor donor = aDonor().withBloodAbo(bloodAbo).withBloodRh(bloodRh).build();
-    Donation indeterminateBloodTypingOutcomeDonation = aDonation()
+    Donation noTypeDeterminedBloodTypingOutcomeDonation = aDonation()
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED)
         .withBloodAbo("A") // note: invalid values
@@ -298,32 +298,32 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         .withPackType(aPackType().build())
         .build();
     TestBatch testBatch = aTestBatch()
-        .withDonationBatch(aDonationBatch().withDonation(indeterminateBloodTypingOutcomeDonation).build())
+        .withDonationBatch(aDonationBatch().withDonation(noTypeDeterminedBloodTypingOutcomeDonation).build())
         .build();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
 
-    when(donationConstraintChecker.donationHasDiscrepancies(indeterminateBloodTypingOutcomeDonation)).thenReturn(false);
+    when(donationConstraintChecker.donationHasDiscrepancies(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(false);
     when(donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults)).thenReturn(false);
-    when(bloodTestsService.executeTests(indeterminateBloodTypingOutcomeDonation)).thenReturn(bloodTestingRuleResult);
-    when(donationRepository.updateDonation(indeterminateBloodTypingOutcomeDonation)).thenReturn(indeterminateBloodTypingOutcomeDonation);
+    when(bloodTestsService.executeTests(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(bloodTestingRuleResult);
+    when(donationRepository.updateDonation(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(noTypeDeterminedBloodTypingOutcomeDonation);
 
     testBatchStatusChangeService.handleRelease(testBatch);
 
     verify(donorRepository, times(0)).saveDonor(any(Donor.class));
-    assertThat(indeterminateBloodTypingOutcomeDonation.isReleased(), is(true));
+    assertThat(noTypeDeterminedBloodTypingOutcomeDonation.isReleased(), is(true));
     assertThat(donor.getBloodAbo(), is(bloodAbo));
     assertThat(donor.getBloodRh(), is(bloodRh));
   }
   
   @Test
-  public void testHandleReleaseWithIndeterminateBloodTyping_shouldMarkComponentsAsUnsafe() {
+  public void testHandleReleaseWithNoTypeDeterminedBloodTyping_shouldMarkComponentsAsUnsafe() {
 
     Location location = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
     List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
     String bloodAbo = "O";
     String bloodRh = "+";
     Donor donor = aDonor().withBloodAbo(bloodAbo).withBloodRh(bloodRh).build();
-    Donation indeterminateBloodTypingOutcomeDonation = aDonation()
+    Donation noTypeDeterminedBloodTypingOutcomeDonation = aDonation()
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED)
         .withBloodAbo("A") // note: invalid values
@@ -334,19 +334,19 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         .withPackType(aPackType().build())
         .build();
     TestBatch testBatch = aTestBatch()
-        .withDonationBatch(aDonationBatch().withDonation(indeterminateBloodTypingOutcomeDonation).build())
+        .withDonationBatch(aDonationBatch().withDonation(noTypeDeterminedBloodTypingOutcomeDonation).build())
         .build();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
 
-    when(donationConstraintChecker.donationHasDiscrepancies(indeterminateBloodTypingOutcomeDonation)).thenReturn(false);
+    when(donationConstraintChecker.donationHasDiscrepancies(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(false);
     when(donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults)).thenReturn(false);
-    when(bloodTestsService.executeTests(indeterminateBloodTypingOutcomeDonation)).thenReturn(bloodTestingRuleResult);
-    when(donationRepository.updateDonation(indeterminateBloodTypingOutcomeDonation)).thenReturn(indeterminateBloodTypingOutcomeDonation);
+    when(bloodTestsService.executeTests(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(bloodTestingRuleResult);
+    when(donationRepository.updateDonation(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(noTypeDeterminedBloodTypingOutcomeDonation);
 
     testBatchStatusChangeService.handleRelease(testBatch);
 
-    verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafe(indeterminateBloodTypingOutcomeDonation);
-    assertThat(indeterminateBloodTypingOutcomeDonation.isReleased(), is(true));
+    verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafe(noTypeDeterminedBloodTypingOutcomeDonation);
+    assertThat(noTypeDeterminedBloodTypingOutcomeDonation.isReleased(), is(true));
   }
   
   @Test
