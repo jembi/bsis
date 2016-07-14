@@ -32,4 +32,11 @@ public enum BloodTypingMatchStatus {
     }
     return false;
   }
+  
+  public static boolean isBloodGroupConfirmed(BloodTypingMatchStatus status) {
+    if (status == MATCH || status == RESOLVED) {
+      return true;
+    }
+    return false;
+  }
 }
