@@ -8,7 +8,9 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.location.LocationType;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -101,5 +103,72 @@ public class LocationRepository {
       return true;
     }
     return false;
+  }
+  
+  public List<Location> findLocations(String name, boolean includeSimilarResults, LocationType locationType) {
+    // build up Query string
+    String queryString = "SELECT l FROM Location l WHERE l.isDeleted = :isDeleted ";
+    if (!StringUtils.isBlank(name)) {
+      if (includeSimilarResults) {
+        queryString = queryString + "AND l.name LIKE :name ";
+      } else {
+        queryString = queryString + "AND l.name = :name ";
+      }
+    }
+    if (locationType != null) {
+      switch(locationType) {
+        case VENUE:
+          queryString = queryString + "AND l.isVenue = :isVenue ";
+          break;
+        case PROCESSING_SITE:
+          queryString = queryString + "AND l.isProcessingSite = :isProcessingSite ";
+          break;
+        case DISTRIBUTION_SITE:
+          queryString = queryString + "AND l.isDistributionSite = :isDistributionSite ";
+          break;
+        case TESTING_SITE:
+          queryString = queryString + "AND l.isTestingSite = :isTestingSite ";
+          break;
+        case USAGE_SITE:
+          queryString = queryString + "AND l.isUsageSite = :isUsageSite ";
+          break;
+      }
+    }
+    queryString = queryString + "ORDER BY l.name ASC";
+
+    // create Query and set parameters
+    TypedQuery<Location> query = em.createQuery(queryString, Location.class);
+    query.setParameter("isDeleted", false);
+    
+    if (!StringUtils.isBlank(name)) {
+      if (includeSimilarResults) {
+        query.setParameter("name", "%"+name+"%");
+      } else {
+        query.setParameter("name", name);
+      }
+    }
+    
+    if (locationType != null) {
+      switch(locationType) {
+        case VENUE:
+          query.setParameter("isVenue", true);
+          break;
+        case PROCESSING_SITE:
+          query.setParameter("isProcessingSite", true);
+          break;
+        case DISTRIBUTION_SITE:
+          query.setParameter("isDistributionSite", true);
+          break;
+        case TESTING_SITE:
+          query.setParameter("isTestingSite", true);
+          break;
+        case USAGE_SITE:
+          query.setParameter("isUsageSite", true);
+          break;
+      }
+    }
+
+    // execute Query
+    return query.getResultList();
   }
 }
