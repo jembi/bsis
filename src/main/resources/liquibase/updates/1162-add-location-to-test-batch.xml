@@ -1,11 +1,12 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<changeSet id="20160711-1648" author="lauravignoli">
 		<sql dbms="mysql">
 			ALTER TABLE TestBatch CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 		</sql>
+		<modifyDataType tableName="Location" columnName="isVenue" newDataType="tinyint(1)"/>
 		<insert tableName = "Location">
 			<column name="name" value="Default Testing Location"/>
 			<column name="isDeleted" value="0"/>
