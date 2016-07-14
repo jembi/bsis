@@ -210,8 +210,8 @@ public class DonationConstraintCheckerTests {
   public void testDonationHasDiscrepanciesInDeterminateBloodTypingStatus_shouldReturnFalse() {
     Donation donation = aDonation()
         .withTTIStatus(TTIStatus.TTI_SAFE)
-        .withBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED)
-        .withBloodTypingStatus(BloodTypingStatus.INDETERMINATE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.INDETERMINATE)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withPackType(aPackType().build())
         .build();
 

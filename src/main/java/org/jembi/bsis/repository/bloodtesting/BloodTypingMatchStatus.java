@@ -15,10 +15,12 @@ public enum BloodTypingMatchStatus {
   /** ABO/Rh discrepancies (ambiguous outcomes) have been manually resolved */
   RESOLVED,
   /** ABO/Rh discrepancies cannot be resolved */
-  NO_TYPE_DETERMINED;
+  NO_TYPE_DETERMINED,
+  /** Either ABO or Rh tests have a result of NT (not tested) */
+  INDETERMINATE;
 
   public static boolean isEndState(BloodTypingMatchStatus status) {
-    if (status == MATCH || status == RESOLVED || status == NO_TYPE_DETERMINED) {
+    if (status == MATCH || status == RESOLVED || status == NO_TYPE_DETERMINED || status == INDETERMINATE) {
       return true;
     }
     return false;

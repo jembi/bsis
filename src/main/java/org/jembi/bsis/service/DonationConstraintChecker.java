@@ -98,7 +98,7 @@ public class DonationConstraintChecker {
         }
         
         if (!BloodTypingMatchStatus.isEndState(donation.getBloodTypingMatchStatus()) 
-            || !BloodTypingStatus.isEndState(donation.getBloodTypingStatus())) {
+            || donation.getBloodTypingStatus() != BloodTypingStatus.COMPLETE) {
             return true;
         }
         

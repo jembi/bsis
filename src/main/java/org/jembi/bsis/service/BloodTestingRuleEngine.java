@@ -301,12 +301,6 @@ public class BloodTestingRuleEngine {
    * BloodTypingStatus result in the resultSet.
    */
   private void setBloodTypingStatus(BloodTestingRuleResultSet resultSet, Map<String, String> availableTestResults, Donation donation) {
-    
-    //  Determine if the blood typing match status is resolved (so no more ABO/Rh processing is done)
-    if (BloodTypingMatchStatus.isResolvedState(donation.getBloodTypingMatchStatus())) {
-      resultSet.setBloodTypingStatus(donation.getBloodTypingStatus());
-      return;
-    }
 
     // Determine if there are missing required basic blood typing tests
     List<BloodTest> basicBloodTypingTests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING);
@@ -315,13 +309,6 @@ public class BloodTestingRuleEngine {
         resultSet.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
         return;
       }
-    }
-    
-    // Determine if one of the basic blood typing tests have NT as the result
-    if (resultSet.getBloodAboChanges().contains("") || resultSet.getBloodRhChanges().contains("")) {
-      resultSet.setBloodTypingStatus(BloodTypingStatus.INDETERMINATE);
-      resultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
-      return;
     }
     
     // Check if there are pending tests.
@@ -386,6 +373,10 @@ public class BloodTestingRuleEngine {
     if (BloodTypingMatchStatus.isResolvedState(donation.getBloodTypingMatchStatus())) {
       // The Abo/Rh values have already been resolved, so keep the match status the same
       bloodTypingMatchStatus = donation.getBloodTypingMatchStatus();
+      
+    } else if (resultSet.getBloodAboChanges().contains("") || resultSet.getBloodRhChanges().contains("")) {
+      // One of the basic blood typing tests have Not Tested (NT) as the result
+      bloodTypingMatchStatus = BloodTypingMatchStatus.INDETERMINATE;
 
     } else if (StringUtils.isNotEmpty(donation.getBloodAbo()) && StringUtils.isNotEmpty(donation.getBloodRh())) {
 

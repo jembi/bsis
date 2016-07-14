@@ -429,8 +429,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
-    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
-    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.INDETERMINATE);
+    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.INDETERMINATE);
+    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
     expectedBloodTestingRuleResultSet.addBloodAboChanges("");
     expectedBloodTestingRuleResultSet.addBloodRhChanges("+");
 
@@ -467,8 +467,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
-    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
-    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.INDETERMINATE);
+    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.INDETERMINATE);
+    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
     expectedBloodTestingRuleResultSet.addBloodAboChanges("A");
     expectedBloodTestingRuleResultSet.addBloodRhChanges("");
 
@@ -487,7 +487,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
   }
   
   @Test
-  public void testApplyBloodTestsWithOnlyNTABOTest_bloodTypingStatusShouldBeNotDone() throws Exception {
+  public void testApplyBloodTestsWithOnlyNTABOTest_bloodTypingStatusShouldBeNotDoneAndIndeterminate() throws Exception {
 
     // Setup fixtures
     setupFixtures();
@@ -504,7 +504,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
-    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
+    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.INDETERMINATE);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.addBloodAboChanges("");
 
@@ -541,8 +541,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
-    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
-    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.INDETERMINATE);
+    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.INDETERMINATE);
+    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
     expectedBloodTestingRuleResultSet.addBloodAboChanges("");
     expectedBloodTestingRuleResultSet.addBloodRhChanges("");
 
@@ -763,7 +763,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
   }
   
   @Test
-  public void testApplyBloodTestsWithIndeterminateBloodTyping_ABOAndRhRulesShouldNotBeProcessed() throws Exception {
+  public void testApplyBloodTestsWithNoTypeDeterminedMatchStatus_ABOAndRhRulesShouldNotBeProcessed() throws Exception {
 
     // Setup fixtures
     setupFixtures();
@@ -772,7 +772,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     PackType packType = aPackType().withTestSampleProduced(true).build();
     Donor donor = aDonor().withId(1L).build();
     Donation donation = aDonation().withId(1L).withPackType(packType).withDonor(donor)
-        .withBloodTypingStatus(BloodTypingStatus.INDETERMINATE)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED)
         .build();
 
@@ -786,7 +786,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
         new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
-    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.INDETERMINATE);
+    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
 
     // Setup mocks
     when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
