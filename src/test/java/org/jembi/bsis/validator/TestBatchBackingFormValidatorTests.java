@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 
 import javax.persistence.NoResultException;
@@ -53,7 +54,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(1l);
     backingForm.setDonationBatchIds(Arrays.asList(1l, 2l));
-    backingForm.setCreatedDate("2015-10-10");
+    backingForm.setCreatedDate(new Date());
 
     when(donationBatchRepository.findDonationBatchById(1l)).thenReturn(new DonationBatch());
     when(donationBatchRepository.findDonationBatchById(2l)).thenReturn(new DonationBatch());
@@ -71,7 +72,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(1l);
     backingForm.setDonationBatchIds(Arrays.asList(1l, 2l));
-    backingForm.setCreatedDate("2015-10-10");
+    backingForm.setCreatedDate(new Date());
     TestBatch tb2 = new TestBatch();
     tb2.setId(2l);
     Location venue = new Location();
@@ -97,7 +98,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(1l);
     backingForm.setDonationBatchIds(Arrays.asList(1l, 2l));
-    backingForm.setCreatedDate("2015-10-10");
+    backingForm.setCreatedDate(new Date());
     TestBatch tb1 = new TestBatch();
     tb1.setId(1l);
     Location venue = new Location();

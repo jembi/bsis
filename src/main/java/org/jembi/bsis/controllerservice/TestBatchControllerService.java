@@ -7,7 +7,7 @@ import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.factory.DonationBatchViewModelFactory;
 import org.jembi.bsis.factory.DonationSummaryViewModelFactory;
 import org.jembi.bsis.factory.LocationViewModelFactory;
-import org.jembi.bsis.factory.TestBatchViewModelFactory;
+import org.jembi.bsis.factory.TestBatchFactory;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
@@ -35,7 +35,7 @@ public class TestBatchControllerService {
   @Autowired
   private TestBatchCRUDService testBatchCRUDService;
   @Autowired
-  private TestBatchViewModelFactory testBatchViewModelFactory;
+  private TestBatchFactory testBatchFactory;
   @Autowired
   private LocationRepository locationRepository;
   @Autowired
@@ -57,10 +57,9 @@ public class TestBatchControllerService {
   private DonationSummaryViewModelFactory donationSummaryViewModelFactory;
 
   public TestBatchFullViewModel updateTestBatch(TestBatchBackingForm backingForm) {
-    TestBatch testBatch = testBatchCRUDService.updateTestBatch(backingForm.getTestBatch().getId(),
-        backingForm.getTestBatch().getStatus(), backingForm.getTestBatch().getCreatedDate(),
-        backingForm.getDonationBatchIds());
-    return testBatchViewModelFactory.createTestBatchFullViewModel(testBatch, true);
+    TestBatch testBatch = testBatchFactory.createEntity(backingForm);
+    testBatch = testBatchCRUDService.updateTestBatch(testBatch);
+    return testBatchFactory.createTestBatchFullViewModel(testBatch, true);
   }
 
   public List<LocationViewModel> getTestingSites() {
@@ -75,18 +74,18 @@ public class TestBatchControllerService {
   public TestBatchFullViewModel saveTestBatch(TestBatchBackingForm form) {
     TestBatch testBatch = testBatchRepository.saveTestBatch(form.getTestBatch(), sequenceNumberRepository.getNextTestBatchNumber());
     boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
-    return testBatchViewModelFactory.createTestBatchFullViewModel(testBatch, isTestingSupervisor);
+    return testBatchFactory.createTestBatchFullViewModel(testBatch, isTestingSupervisor);
   }
 
   public TestBatchFullViewModel getTestBatchById(long id) {
     TestBatch testBatch = testBatchRepository.findTestBatchById(id);
     boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
-    return testBatchViewModelFactory.createTestBatchFullViewModel(testBatch, isTestingSupervisor);
+    return testBatchFactory.createTestBatchFullViewModel(testBatch, isTestingSupervisor);
   }
 
   public List<TestBatchViewModel> findTestBatches(List<TestBatchStatus> statuses, Date startDate, Date endDate) {
     List<TestBatch> testBatches = testBatchRepository.findTestBatches(statuses, startDate, endDate);
-    return testBatchViewModelFactory.createTestBatchBasicViewModels(testBatches);
+    return testBatchFactory.createTestBatchBasicViewModels(testBatches);
   }
 
   public void deleteTestBatch(long id) {
