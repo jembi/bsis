@@ -12,6 +12,7 @@ import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.validator.LocationBackingFormValidator;
 import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.location.LocationType;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -95,5 +97,18 @@ public class LocationsController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteLocation(@PathVariable Long id) {
     locationRepository.deleteLocation(id);
+  }
+  
+  @RequestMapping(value = "/search", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
+  public ResponseEntity<Map<String, Object>> search (
+      @RequestParam(value = "name", required = false) String name,
+      @RequestParam(value = "includeSimilarResults", required = false, defaultValue = "false") Boolean includeSimilarResults,
+      @RequestParam(value = "locationType", required = false) LocationType locationType) {
+
+    Map<String, Object> map = new HashMap<String, Object>();
+    List<Location> locations = locationRepository.findLocations(name, includeSimilarResults, locationType);
+    map.put("locations", locationFactory.createViewModels(locations));
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 }
