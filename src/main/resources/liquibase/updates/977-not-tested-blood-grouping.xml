@@ -1,0 +1,47 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="20160711-1335" author="timler">
+		<comment>Add NT (NOT-TESTED) as a valid option for initial blood serology tests (ABO/Rh)</comment>
+		<update tableName="BloodTest">
+			<column name="validResults" type="varchar" value="A,B,AB,O,NT" />
+			<where>bloodTestType='BASIC_BLOODTYPING' and testName='ABO'</where>
+		</update>
+		<update tableName="BloodTest">
+			<column name="validResults" type="varchar" value="POS,NEG,NT" />
+			<where>bloodTestType='BASIC_BLOODTYPING' and testName='Rh'</where>
+		</update>
+	</changeSet>
+
+	<changeSet id="20160712-1006" author="timler">
+	    <comment>Add BloodTestingRules for NT results for the ABO and Rh tests</comment>
+	    <insert tableName="BloodTestingRule">
+			<column name="bloodTestsIds" value="1"></column>
+			<column name="category" value="BLOODTYPING"></column>
+			<column name="donationFieldChanged" value="BLOODABO"></column>
+			<column name="context" value="RECORD_BLOOD_TYPING_TESTS"></column>
+			<column name="extraInformation" value=""></column>
+			<column name="isActive" value="1"></column>
+			<column name="markSampleAsUnsafe" value="0"></column>
+			<column name="newInformation" value=""></column>
+			<column name="pattern" value="NT"></column>
+			<column name="pendingTestsIds" value=""></column>
+			<column name="subCategory" value="BLOODABO"></column>
+		</insert>
+	    <insert tableName="BloodTestingRule">
+			<column name="bloodTestsIds" value="2"></column>
+			<column name="category" value="BLOODTYPING"></column>
+			<column name="donationFieldChanged" value="BLOODRH"></column>
+			<column name="context" value="RECORD_BLOOD_TYPING_TESTS"></column>
+			<column name="extraInformation" value=""></column>
+			<column name="isActive" value="1"></column>
+			<column name="markSampleAsUnsafe" value="0"></column>
+			<column name="newInformation" value=""></column>
+			<column name="pattern" value="NT"></column>
+			<column name="pendingTestsIds" value=""></column>
+			<column name="subCategory" value="BLOODRH"></column>
+		</insert>
+	</changeSet>
+
+</databaseChangeLog>
