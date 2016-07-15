@@ -1,7 +1,6 @@
 package org.jembi.bsis.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,10 +9,8 @@ import javax.validation.Valid;
 
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.validator.LocationBackingFormValidator;
-import org.jembi.bsis.factory.LocationFactory;
-import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.controllerservice.LocationControllerService;
 import org.jembi.bsis.model.location.LocationType;
-import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +32,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class LocationsController {
 
   @Autowired
-  private LocationRepository locationRepository;
+  private LocationControllerService locationControlerService;
 
   @Autowired
   private LocationBackingFormValidator locationBackingFormValidator;
-
-  @Autowired
-  private LocationFactory locationFactory;
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
@@ -50,44 +44,37 @@ public class LocationsController {
 
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
-  public Map<String, Object> configureLocationsFormGenerator(
+  public Map<String, Object> getAllLocations(
       HttpServletRequest request, HttpServletResponse response) {
     Map<String, Object> map = new HashMap<String, Object>();
-    List<Location> allLocations = locationRepository.getAllLocations();
-    map.put("allLocations", locationFactory.createFullViewModels(allLocations));
+    map.put("allLocations", locationControlerService.getAllLocations());
     return map;
   }
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
   public ResponseEntity<LocationFullViewModel> addLocation(
-      @RequestBody @Valid LocationBackingForm formData) {
-    Location location = formData.getLocation();
-    location.setIsDeleted(false);
-    locationRepository.saveLocation(location);
-    return new ResponseEntity<>(locationFactory.createFullViewModel(location), HttpStatus.CREATED);
+      @RequestBody @Valid LocationBackingForm form) {
+    return new ResponseEntity<>(locationControlerService.addLocation(form), HttpStatus.CREATED);
 
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
-  public ResponseEntity<Map<String, Object>> updateLocation(@PathVariable Long id,
-                                       @RequestBody @Valid LocationBackingForm formData) {
+  public ResponseEntity<Map<String, Object>> updateLocation(@PathVariable long id,
+      @RequestBody @Valid LocationBackingForm form) {
     Map<String, Object> map = new HashMap<String, Object>();
-    Location location = formData.getLocation();
-    Location updatedLocation = locationRepository.updateLocation(id, location);
-    map.put("location", locationFactory.createFullViewModel(updatedLocation));
+    form.setId(id);
+    map.put("location", locationControlerService.updateLocation(form));
     return new ResponseEntity<>(map, HttpStatus.OK);
 
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
-  public ResponseEntity<Map<String, Object>> getLocationById(@PathVariable Long id) {
-
+  public ResponseEntity<Map<String, Object>> getLocationById(@PathVariable long id) {
     Map<String, Object> map = new HashMap<String, Object>();
-    Location location = locationRepository.getLocation(id);
-    map.put("location", locationFactory.createFullViewModel(location));
+    map.put("location", locationControlerService.getLocationById(id));
     return new ResponseEntity<>(map, HttpStatus.OK);
 
   }
@@ -95,20 +82,18 @@ public class LocationsController {
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteLocation(@PathVariable Long id) {
-    locationRepository.deleteLocation(id);
+  public void deleteLocation(@PathVariable long id) {
+    locationControlerService.deleteLocation(id);
   }
   
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
   public ResponseEntity<Map<String, Object>> search (
       @RequestParam(value = "name", required = false) String name,
-      @RequestParam(value = "includeSimilarResults", required = false, defaultValue = "false") Boolean includeSimilarResults,
+      @RequestParam(value = "includeSimilarResults", required = false, defaultValue = "false") boolean includeSimilarResults,
       @RequestParam(value = "locationType", required = false) LocationType locationType) {
-
     Map<String, Object> map = new HashMap<String, Object>();
-    List<Location> locations = locationRepository.findLocations(name, includeSimilarResults, locationType);
-    map.put("locations", locationFactory.createViewModels(locations));
+    map.put("locations", locationControlerService.findLocations(name, includeSimilarResults, locationType));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 }

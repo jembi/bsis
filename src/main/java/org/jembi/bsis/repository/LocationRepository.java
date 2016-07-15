@@ -67,8 +67,8 @@ public class LocationRepository {
     return query.getSingleResult();
   }
 
-  public Location updateLocation(Long locationId, Location location) {
-    Location existingLocation = em.find(Location.class, locationId);
+  public Location updateLocation(Location location) {
+    Location existingLocation = em.find(Location.class, location.getId());
     existingLocation.copy(location);
     em.merge(existingLocation);
     em.flush();

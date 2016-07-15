@@ -7,7 +7,6 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.user.User;
-import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
@@ -79,7 +78,7 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
   public void testUpdateLocation() throws Exception {
     Location one = locationRepository.findLocationByName("Maseru");
     one.setIsMobileSite(true);
-    locationRepository.updateLocation(1l, one);
+    locationRepository.updateLocation(one);
     Location savedOne = locationRepository.findLocationByName("Maseru");
     Assert.assertTrue("The location is saved", savedOne.getIsMobileSite());
   }
