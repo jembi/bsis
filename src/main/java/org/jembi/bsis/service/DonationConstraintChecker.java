@@ -97,10 +97,8 @@ public class DonationConstraintChecker {
             return true;
         }
         
-        if (!(donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.MATCH
-            || donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NO_TYPE_DETERMINED
-            || donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.RESOLVED) ||
-                donation.getBloodTypingStatus() != BloodTypingStatus.COMPLETE) {
+        if (!BloodTypingMatchStatus.isEndState(donation.getBloodTypingMatchStatus()) 
+            || donation.getBloodTypingStatus() != BloodTypingStatus.COMPLETE) {
             return true;
         }
         

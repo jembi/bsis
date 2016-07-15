@@ -101,8 +101,7 @@ public class BloodTestingRuleEngine {
     // Go through each rule and see if the pattern matches the available result and tally the TTI, ABO, RH results
     for (BloodTestingRule rule : rules) {
 
-      if ((donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.RESOLVED
-          || donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NO_TYPE_DETERMINED)
+      if (BloodTypingMatchStatus.isResolvedState(donation.getBloodTypingMatchStatus())
           && (rule.getSubCategory() == BloodTestSubCategory.BLOODABO
           || rule.getSubCategory() == BloodTestSubCategory.BLOODRH)) {
         // Don't process the rule if it is for blood typing and the blood typing is resolved
@@ -123,7 +122,7 @@ public class BloodTestingRuleEngine {
     updatePendingAboRhTests(resultSet);
 
     // Determine the blood status based on ABO/Rh tests
-    setBloodMatchStatus(resultSet, availableTestResults);
+    setBloodTypingStatus(resultSet, availableTestResults, donation);
 
     if (LOGGER.isDebugEnabled()) {
       LOGGER.debug("Donation " + resultSet.getDonation().getId() + " for donor " +
@@ -300,10 +299,8 @@ public class BloodTestingRuleEngine {
   /**
    * Determine the blood status based on ABO/Rh tests (and pending tests) results. Saves the
    * BloodTypingStatus result in the resultSet.
-   * 
-   * @param resultSet BloodTestingRuleResultSet that contains the processed test results.
    */
-  private void setBloodMatchStatus(BloodTestingRuleResultSet resultSet, Map<String, String> availableTestResults) {
+  private void setBloodTypingStatus(BloodTestingRuleResultSet resultSet, Map<String, String> availableTestResults, Donation donation) {
 
     // Determine if there are missing required basic blood typing tests
     List<BloodTest> basicBloodTypingTests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING);
@@ -313,18 +310,14 @@ public class BloodTestingRuleEngine {
         return;
       }
     }
-
-    BloodTypingStatus bloodTypingStatus = BloodTypingStatus.COMPLETE;
-
-    int numPendingAboTests = resultSet.getPendingAboTestsIds().size();
-    int numPendingRhTests = resultSet.getPendingRhTestsIds().size();
-
-    if (numPendingAboTests > 0 || numPendingRhTests > 0) {
-      // There are pending tests
-      bloodTypingStatus = BloodTypingStatus.PENDING_TESTS;
+    
+    // Check if there are pending tests.
+    if (!resultSet.getPendingAboTestsIds().isEmpty() || !resultSet.getPendingRhTestsIds().isEmpty()) {
+      resultSet.setBloodTypingStatus(BloodTypingStatus.PENDING_TESTS);
+      return;
     }
 
-    resultSet.setBloodTypingStatus(bloodTypingStatus);
+    resultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
   }
 
   private BloodTypingMatchStatus getBloodTypingMatchStatusForFirstTimeDonor(BloodTestingRuleResultSet resultSet) {
@@ -377,12 +370,14 @@ public class BloodTestingRuleEngine {
 
     Donor donor = donation.getDonor();
 
-    if (donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.RESOLVED) {
-      // The Abo/Rh values have already been confirmed so keep the status as MATCH
-      bloodTypingMatchStatus = BloodTypingMatchStatus.RESOLVED;
-    } else if (donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NO_TYPE_DETERMINED) {
-      // The ABO/Rh values cannot be determined so do nothing and keep this status
-      bloodTypingMatchStatus = BloodTypingMatchStatus.NO_TYPE_DETERMINED;
+    if (BloodTypingMatchStatus.isResolvedState(donation.getBloodTypingMatchStatus())) {
+      // The Abo/Rh values have already been resolved, so keep the match status the same
+      bloodTypingMatchStatus = donation.getBloodTypingMatchStatus();
+      
+    } else if (resultSet.getBloodAboChanges().contains("") || resultSet.getBloodRhChanges().contains("")) {
+      // One of the basic blood typing tests have Not Tested (NT) as the result
+      bloodTypingMatchStatus = BloodTypingMatchStatus.INDETERMINATE;
+
     } else if (StringUtils.isNotEmpty(donation.getBloodAbo()) && StringUtils.isNotEmpty(donation.getBloodRh())) {
 
       if (StringUtils.isEmpty(donor.getBloodAbo()) || StringUtils.isEmpty(donor.getBloodRh())) {
