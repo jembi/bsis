@@ -54,4 +54,8 @@ public class ReturnFormControllerService {
     
     return returnFormFactory.createViewModels(returnForms);
   }
+  
+  public void deleteReturnForm(long returnFormId) {
+    returnFormCRUDService.deleteReturnForm(returnFormId);
+  }
 }

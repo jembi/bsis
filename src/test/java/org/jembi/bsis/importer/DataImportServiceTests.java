@@ -228,6 +228,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     Location firstLocation = findLocationByName("First");
     Location secondLocation = findLocationByName("Second");
     Location thirdLocation = findLocationByName("Third");
+    Location fourthLocation = findLocationByName("Fourth");
     Location expectedFirstLocation = aLocation()
         .withId(firstLocation.getId())
         .withName("First")
@@ -238,17 +239,28 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
         .withId(secondLocation.getId())
         .withName("Second")
         .thatIsMobileSite()
+        .thatIsVenue()
         .thatIsDeleted()
         .build();
     Location expectedThirdLocation = aLocation()
         .withId(thirdLocation.getId())
         .withName("Third")
         .thatIsUsageSite()
+        .thatIsProcessingSite()
+        .thatIsDistributionSite()
+        .thatIsTestingSite()
+        .build();
+    Location expectedFourthLocation = aLocation()
+        .withId(fourthLocation.getId())
+        .withName("Fourth")
+        .thatIsVenue()
+        .withNotes("A venue")
         .build();
     
     assertThat(firstLocation, hasSameStateAsLocation(expectedFirstLocation));
     assertThat(secondLocation, hasSameStateAsLocation(expectedSecondLocation));
     assertThat(thirdLocation, hasSameStateAsLocation(expectedThirdLocation));
+    assertThat(fourthLocation, hasSameStateAsLocation(expectedFourthLocation));
   }
   
   private Location findLocationByName(String name) {

@@ -15,21 +15,18 @@ import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.builders.MobileClinicDonorBuilder;
 import org.jembi.bsis.model.donor.DonorStatus;
 import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.model.location.LocationType;
 import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.repository.LocationRepository;
+import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.MobileClinicLookUpDonorViewModel;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 
-@RunWith(MockitoJUnitRunner.class)
-public class MobileClinicControllerTests {
+public class MobileClinicControllerTests extends UnitTestSuite {
 
   @InjectMocks
   private MobileClinicController mobileClinicController;
@@ -47,7 +44,7 @@ public class MobileClinicControllerTests {
     Location venue1 = LocationBuilder.aLocation().withId(1L).withName("test").build();
     venues.add(venue1);
 
-    when(locationRepository.getLocationsByType(LocationType.VENUE)).thenReturn(venues);
+    when(locationRepository.getVenues()).thenReturn(venues);
 
     Map<String, Object> map = mobileClinicController.mobileClinicLookUpFormGenerator();
     Assert.assertNotNull("map is returned", map);

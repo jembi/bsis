@@ -29,5 +29,7 @@
   <include file="./src/main/resources/liquibase/updates/1136-undiscard-component.xml" />
   <include file="./src/main/resources/liquibase/updates/454-not-tested-tti-results.xml" />
   <include file="./src/main/resources/liquibase/updates/977-not-tested-blood-grouping.xml" />
+  <include file="./src/main/resources/liquibase/updates/1161-add-is-testing-site.xml" />
+  <include file="./src/main/resources/liquibase/updates/273-remove-legacy-general-config.xml" />
 
 </databaseChangeLog>

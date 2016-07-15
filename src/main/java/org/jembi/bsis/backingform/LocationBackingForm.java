@@ -100,4 +100,12 @@ public class LocationBackingForm {
   public void setIsDistributionSite(boolean isDistributionSite) {
     location.setIsDistributionSite(isDistributionSite);
   }
+
+  public boolean getIsTestingSite() {
+    return location.getIsTestingSite();
+  }
+  
+  public void setIsTestingSite(boolean isTestingSite) {
+    location.setIsTestingSite(isTestingSite);
+  }
 }

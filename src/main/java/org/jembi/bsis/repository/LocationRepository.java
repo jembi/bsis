@@ -9,7 +9,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.model.location.LocationType;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,22 +22,6 @@ public class LocationRepository {
     em.persist(location);
     em.flush();
   }
-
-  public List<Location> getLocationsByType(LocationType locationType) {
-    
-    switch (locationType) {
-      case VENUE:
-        return getVenues();
-      case PROCESSING_SITE:
-        return getProcessingSites();
-      case USAGE_SITE:
-        return getUsageSites();
-      case DISTRIBUTION_SITE:
-        return getDistributionSites();
-      default:
-        throw new IllegalArgumentException("Can't get locations for type: " + locationType);
-    }
-  }
   
   public List<Location> getVenues() {
     return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_VENUES, Location.class)
@@ -47,7 +30,7 @@ public class LocationRepository {
         .getResultList();
   }
   
-  private List<Location> getProcessingSites() {
+  public List<Location> getProcessingSites() {
     return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_PROCESSING_SITES, Location.class)
         .setParameter("isProcessingSite", true)
         .setParameter("isDeleted", false)

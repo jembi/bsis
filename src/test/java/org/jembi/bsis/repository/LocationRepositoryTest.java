@@ -6,7 +6,6 @@ import java.util.List;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.model.location.LocationType;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
@@ -110,28 +109,28 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testGetLocationsByUsageSiteType() throws Exception {
-    List<Location> all = locationRepository.getLocationsByType(LocationType.USAGE_SITE);
+    List<Location> all = locationRepository.getUsageSites();
     Assert.assertNotNull("There are usage site Locations", all);
     Assert.assertEquals("There are 2 usage site Location", 2, all.size());
   }
 
   @Test
   public void testGetLocationsByVenueType() throws Exception {
-    List<Location> all = locationRepository.getLocationsByType(LocationType.VENUE);
+    List<Location> all = locationRepository.getVenues();
     Assert.assertNotNull("There are venue Locations", all);
     Assert.assertEquals("There are 3 venue Locations", 4, all.size());
   }
 
   @Test
   public void testGetLocationsByProcessingSiteType() throws Exception {
-    List<Location> all = locationRepository.getLocationsByType(LocationType.PROCESSING_SITE);
+    List<Location> all = locationRepository.getProcessingSites();
     Assert.assertNotNull("There are processing site Locations", all);
     Assert.assertEquals("There is 1 processing site", 1, all.size());
   }
 
   @Test
   public void testGetLocationsByDistributionSiteType() throws Exception {
-    List<Location> all = locationRepository.getLocationsByType(LocationType.DISTRIBUTION_SITE);
+    List<Location> all = locationRepository.getDistributionSites();
     Assert.assertNotNull("There are distribution site Locations", all);
     Assert.assertEquals("There is 1 distribution site", 1, all.size());
   }
