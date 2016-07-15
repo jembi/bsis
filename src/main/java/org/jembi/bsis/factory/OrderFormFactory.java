@@ -103,8 +103,8 @@ public class OrderFormFactory {
   
   private void populateBasicViewModel(OrderForm entity, OrderFormViewModel viewModel) {
     viewModel.setId(entity.getId());
-    viewModel.setDispatchedFrom(locationViewModelFactory.createLocationViewModel(entity.getDispatchedFrom()));
-    viewModel.setDispatchedTo(locationViewModelFactory.createLocationViewModel(entity.getDispatchedTo()));
+    viewModel.setDispatchedFrom(locationViewModelFactory.createFullViewModel(entity.getDispatchedFrom()));
+    viewModel.setDispatchedTo(locationViewModelFactory.createFullViewModel(entity.getDispatchedTo()));
     viewModel.setOrderDate(entity.getOrderDate());
     viewModel.setStatus(entity.getStatus());
     viewModel.setType(entity.getType());

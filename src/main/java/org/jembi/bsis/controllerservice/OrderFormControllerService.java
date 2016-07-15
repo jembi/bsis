@@ -18,7 +18,7 @@ import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.OrderFormRepository;
 import org.jembi.bsis.service.OrderFormCRUDService;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
-import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.OrderFormFullViewModel;
 import org.jembi.bsis.viewmodel.OrderFormViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,14 +74,14 @@ public class OrderFormControllerService {
     return orderFormFactory.createFullViewModel(updatedOrderForm);
   }
   
-  public List<LocationViewModel> getUsageSites() {
+  public List<LocationFullViewModel> getUsageSites() {
     List<Location> usageSites = locationRepository.getUsageSites();
-    return locationViewModelFactory.createLocationViewModels(usageSites);
+    return locationViewModelFactory.createFullViewModels(usageSites);
   }
   
-  public List<LocationViewModel> getDistributionSites() {
+  public List<LocationFullViewModel> getDistributionSites() {
     List<Location> distributionSites = locationRepository.getDistributionSites();
-    return locationViewModelFactory.createLocationViewModels(distributionSites);
+    return locationViewModelFactory.createFullViewModels(distributionSites);
   }
   
   public List<ComponentTypeViewModel> getAllComponentTypes() {

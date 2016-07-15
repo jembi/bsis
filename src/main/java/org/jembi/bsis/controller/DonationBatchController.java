@@ -100,7 +100,7 @@ public class DonationBatchController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("addDonationBatchForm", form);
-    map.put("venues", locationViewModelFactory.createLocationViewModels(locationRepository.getVenues()));
+    map.put("venues", locationViewModelFactory.createFullViewModels(locationRepository.getVenues()));
     // to ensure custom field names are displayed in the form
     Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("donationbatch");
     map.put("donationBatchFields", formFields);

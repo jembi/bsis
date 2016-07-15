@@ -53,7 +53,7 @@ public class InventoryController {
     List<ComponentType> componentTypes = componentTypeRepository.getAllComponentTypes();
     List<Location> distributionSites = locationRepository.getDistributionSites();
     Map<String, Object> map = new HashMap<>();
-    map.put("distributionSites", locationViewModelFactory.createLocationViewModels(distributionSites));
+    map.put("distributionSites", locationViewModelFactory.createFullViewModels(distributionSites));
     map.put("componentTypes", componentTypeFactory.createViewModels(componentTypes));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }

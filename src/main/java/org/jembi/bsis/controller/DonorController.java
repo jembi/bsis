@@ -443,7 +443,7 @@ public class DonorController {
 
   private void addEditSelectorOptions(Map<String, Object> m) {
     List<Location> venues = locationRepository.getVenues();
-    m.put("venues", locationViewModelFactory.createLocationViewModels(venues));
+    m.put("venues", locationViewModelFactory.createFullViewModels(venues));
     m.put("preferredContactMethods", contactMethodTypeRepository.getAllContactMethodTypes());
     m.put("languages", donorRepository.getAllLanguages());
     m.put("idTypes", donorRepository.getAllIdTypes());

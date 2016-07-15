@@ -4,12 +4,12 @@ import org.jembi.bsis.model.location.Location;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class LocationViewModel extends BaseViewModel {
+public class LocationFullViewModel extends BaseViewModel {
 
   @JsonIgnore
   private Location location;
 
-  public LocationViewModel(Location location) {
+  public LocationFullViewModel(Location location) {
     this.location = location;
   }
 

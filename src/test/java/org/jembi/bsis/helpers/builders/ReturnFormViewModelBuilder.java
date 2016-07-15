@@ -3,15 +3,15 @@ package org.jembi.bsis.helpers.builders;
 import java.util.Date;
 
 import org.jembi.bsis.model.returnform.ReturnStatus;
-import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.ReturnFormViewModel;
 
 public class ReturnFormViewModelBuilder extends AbstractBuilder<ReturnFormViewModel> {
 
   private Long id;
   private Date returnDate;
-  private LocationViewModel returnedFrom;
-  private LocationViewModel returnedTo;
+  private LocationFullViewModel returnedFrom;
+  private LocationFullViewModel returnedTo;
   private ReturnStatus status = ReturnStatus.CREATED;
 
   public ReturnFormViewModelBuilder withId(Long id) {
@@ -24,12 +24,12 @@ public class ReturnFormViewModelBuilder extends AbstractBuilder<ReturnFormViewMo
     return this;
   }
 
-  public ReturnFormViewModelBuilder withReturnedFrom(LocationViewModel returnedFrom) {
+  public ReturnFormViewModelBuilder withReturnedFrom(LocationFullViewModel returnedFrom) {
     this.returnedFrom = returnedFrom;
     return this;
   }
 
-  public ReturnFormViewModelBuilder withReturnedTo(LocationViewModel returnedTo) {
+  public ReturnFormViewModelBuilder withReturnedTo(LocationFullViewModel returnedTo) {
     this.returnedTo = returnedTo;
     return this;
   }

@@ -36,7 +36,7 @@ public class InventoryFactory {
     viewModel.setComponentCode(component.getComponentCode());
     viewModel.setComponentType(componentTypeFactory.createViewModel(component.getComponentType()));
     viewModel.setCreatedOn(component.getCreatedOn());
-    viewModel.setLocation(locationViewModelFactory.createLocationViewModel(component.getLocation()));
+    viewModel.setLocation(locationViewModelFactory.createFullViewModel(component.getLocation()));
     viewModel.setExpiryStatus(getExpiryStatus(component));
     viewModel.setDonationIdentificationNumber(component.getDonationIdentificationNumber());
     viewModel.setInventoryStatus(component.getInventoryStatus());

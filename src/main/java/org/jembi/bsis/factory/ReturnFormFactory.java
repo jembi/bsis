@@ -89,8 +89,8 @@ public class ReturnFormFactory {
 
   private void populateBasicViewModel(ReturnForm entity, ReturnFormViewModel viewModel) {
     viewModel.setId(entity.getId());
-    viewModel.setReturnedFrom(locationViewModelFactory.createLocationViewModel(entity.getReturnedFrom()));
-    viewModel.setReturnedTo(locationViewModelFactory.createLocationViewModel(entity.getReturnedTo()));
+    viewModel.setReturnedFrom(locationViewModelFactory.createFullViewModel(entity.getReturnedFrom()));
+    viewModel.setReturnedTo(locationViewModelFactory.createFullViewModel(entity.getReturnedTo()));
     viewModel.setReturnDate(entity.getReturnDate());
     viewModel.setStatus(entity.getStatus());
   }

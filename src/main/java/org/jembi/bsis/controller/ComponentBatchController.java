@@ -86,7 +86,7 @@ public class ComponentBatchController {
     map.put("donationBatches", donationBatchViewModelFactory.createDonationBatchBasicViewModels(donationBatches));
     map.put("componentBatchFields", formFieldAccessorService.getFormFieldsForForm("ComponentBatch"));
     map.put("bloodTransportBoxFields", formFieldAccessorService.getFormFieldsForForm("BloodTransportBox"));
-    map.put("processingSites", locationViewModelFactory.createLocationViewModels(locations));
+    map.put("processingSites", locationViewModelFactory.createFullViewModels(locations));
 
     return map;
   }

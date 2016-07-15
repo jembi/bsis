@@ -4,12 +4,12 @@ import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
-import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.LocationFullViewModel;
 
 public class ComponentViewModelBuilder extends AbstractBuilder<ComponentViewModel> {
 
   private Long id;
-  private LocationViewModel location;
+  private LocationFullViewModel location;
   private InventoryStatus inventoryStatus;
   private ComponentStatus status;
   private String bloodRh;
@@ -21,7 +21,7 @@ public class ComponentViewModelBuilder extends AbstractBuilder<ComponentViewMode
     return this;
   }
 
-  public ComponentViewModelBuilder withLocation(LocationViewModel location) {
+  public ComponentViewModelBuilder withLocation(LocationFullViewModel location) {
     this.location = location;
     return this;
   }

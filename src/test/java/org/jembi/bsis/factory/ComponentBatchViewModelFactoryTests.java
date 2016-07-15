@@ -27,7 +27,7 @@ import org.jembi.bsis.viewmodel.ComponentBatchFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentBatchViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.jembi.bsis.viewmodel.DonationBatchViewModel;
-import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -102,7 +102,7 @@ public class ComponentBatchViewModelFactoryTests {
     Assert.assertEquals("View model is correct", "OPEN", viewModel.getStatus());
     Assert.assertEquals("View model is correct", deliveryDate, viewModel.getDeliveryDate());
     Assert.assertEquals("View model is correct", collectionDate, viewModel.getCollectionDate());
-    Assert.assertEquals("View model is correct", new LocationViewModel(location), viewModel.getLocation());
+    Assert.assertEquals("View model is correct", new LocationFullViewModel(location), viewModel.getLocation());
     Assert.assertNotNull("DonationBatchViewModel is set", viewModel.getDonationBatch());
     Assert.assertNotNull("ComponentViewModels are set", viewModel.getComponents());
     Assert.assertFalse("ComponentViewModels are set", viewModel.getComponents().isEmpty());

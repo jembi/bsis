@@ -14,7 +14,7 @@ import org.jembi.bsis.factory.LocationViewModelFactory;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.utils.PermissionConstants;
-import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,18 +52,18 @@ public class LocationsController {
       HttpServletRequest request, HttpServletResponse response) {
     Map<String, Object> map = new HashMap<String, Object>();
     List<Location> allLocations = locationRepository.getAllLocations();
-    map.put("allLocations", locationViewModelFactory.createLocationViewModels(allLocations));
+    map.put("allLocations", locationViewModelFactory.createFullViewModels(allLocations));
     return map;
   }
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
-  public ResponseEntity<LocationViewModel> addLocation(
+  public ResponseEntity<LocationFullViewModel> addLocation(
       @RequestBody @Valid LocationBackingForm formData) {
     Location location = formData.getLocation();
     location.setIsDeleted(false);
     locationRepository.saveLocation(location);
-    return new ResponseEntity<>(locationViewModelFactory.createLocationViewModel(location), HttpStatus.CREATED);
+    return new ResponseEntity<>(locationViewModelFactory.createFullViewModel(location), HttpStatus.CREATED);
 
   }
 
@@ -74,7 +74,7 @@ public class LocationsController {
     Map<String, Object> map = new HashMap<String, Object>();
     Location location = formData.getLocation();
     Location updatedLocation = locationRepository.updateLocation(id, location);
-    map.put("location", locationViewModelFactory.createLocationViewModel(updatedLocation));
+    map.put("location", locationViewModelFactory.createFullViewModel(updatedLocation));
     return new ResponseEntity<>(map, HttpStatus.OK);
 
   }
@@ -85,7 +85,7 @@ public class LocationsController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Location location = locationRepository.getLocation(id);
-    map.put("location", locationViewModelFactory.createLocationViewModel(location));
+    map.put("location", locationViewModelFactory.createFullViewModel(location));
     return new ResponseEntity<>(map, HttpStatus.OK);
 
   }

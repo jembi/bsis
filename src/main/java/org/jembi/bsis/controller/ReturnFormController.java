@@ -59,8 +59,8 @@ public class ReturnFormController {
 
     Map<String, Object> map = new HashMap<>();
     map.put("returnForm", new ReturnFormBackingForm());
-    map.put("usageSites", locationViewModelFactory.createLocationViewModels(usageSites));
-    map.put("distributionSites", locationViewModelFactory.createLocationViewModels(distributionSites));
+    map.put("usageSites", locationViewModelFactory.createFullViewModels(usageSites));
+    map.put("distributionSites", locationViewModelFactory.createFullViewModels(distributionSites));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 

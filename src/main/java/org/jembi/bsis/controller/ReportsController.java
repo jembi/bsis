@@ -65,7 +65,7 @@ public class ReportsController {
     List<Location> distributionSites = locationRepository.getDistributionSites();
 
     Map<String, Object> map = new HashMap<>();
-    map.put("distributionSites", locationViewModelFactory.createLocationViewModels(distributionSites));
+    map.put("distributionSites", locationViewModelFactory.createFullViewModels(distributionSites));
     return map;
   }
 

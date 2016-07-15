@@ -4,21 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LocationViewModelFactory {
   
-  public LocationViewModel createLocationViewModel(Location location) {
-    return new LocationViewModel(location);
+  public LocationFullViewModel createFullViewModel(Location location) {
+    return new LocationFullViewModel(location);
   }
 
-  public List<LocationViewModel> createLocationViewModels(List<Location> locations) {
-    List<LocationViewModel> viewModels = new ArrayList<>();
+  public List<LocationFullViewModel> createFullViewModels(List<Location> locations) {
+    List<LocationFullViewModel> viewModels = new ArrayList<>();
     if (locations != null) {
       for (Location location : locations) {
-        viewModels.add(new LocationViewModel(location));
+        viewModels.add(new LocationFullViewModel(location));
       }
     }
     return viewModels;

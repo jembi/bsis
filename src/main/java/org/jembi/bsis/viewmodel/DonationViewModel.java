@@ -35,7 +35,7 @@ public class DonationViewModel extends BaseViewModel {
   private Integer bloodPressureDiastolic;
   private Date bleedStartTime;
   private Date bleedEndTime;
-  private LocationViewModel venue;
+  private LocationFullViewModel venue;
   private boolean released;
   private Map<String, Boolean> permissions;
   private AdverseEventViewModel adverseEvent;
@@ -210,11 +210,11 @@ public class DonationViewModel extends BaseViewModel {
     return CustomDateFormatter.getTimeString(bleedEndTime);
   }
   
-  public void setVenue(LocationViewModel venue) {
+  public void setVenue(LocationFullViewModel venue) {
     this.venue = venue;
   }
 
-  public LocationViewModel getVenue() {
+  public LocationFullViewModel getVenue() {
     return venue;
   }
 

@@ -12,7 +12,7 @@ import org.jembi.bsis.service.DonationBatchConstraintChecker;
 import org.jembi.bsis.viewmodel.DonationBatchFullViewModel;
 import org.jembi.bsis.viewmodel.DonationBatchViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
-import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -93,7 +93,7 @@ public class DonationBatchViewModelFactory {
     donationBatchViewModel.setId(donationBatch.getId());
     donationBatchViewModel.setBatchNumber(donationBatch.getBatchNumber());
     donationBatchViewModel.setIsClosed(donationBatch.getIsClosed());
-    donationBatchViewModel.setVenue(new LocationViewModel(donationBatch.getVenue()));
+    donationBatchViewModel.setVenue(new LocationFullViewModel(donationBatch.getVenue()));
     donationBatchViewModel.setNotes(donationBatch.getNotes());
     donationBatchViewModel.setBackEntry(donationBatch.isBackEntry());
     donationBatchViewModel.setNumDonations(donationBatch.getDonations().size());
