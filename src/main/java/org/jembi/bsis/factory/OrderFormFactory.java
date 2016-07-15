@@ -39,7 +39,7 @@ public class OrderFormFactory {
   private ComponentFactory componentFactory;
 
   @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
 
   @Autowired
   private OrderFormConstraintChecker orderFormConstraintChecker;
@@ -103,8 +103,8 @@ public class OrderFormFactory {
   
   private void populateBasicViewModel(OrderForm entity, OrderFormViewModel viewModel) {
     viewModel.setId(entity.getId());
-    viewModel.setDispatchedFrom(locationViewModelFactory.createFullViewModel(entity.getDispatchedFrom()));
-    viewModel.setDispatchedTo(locationViewModelFactory.createFullViewModel(entity.getDispatchedTo()));
+    viewModel.setDispatchedFrom(locationFactory.createFullViewModel(entity.getDispatchedFrom()));
+    viewModel.setDispatchedTo(locationFactory.createFullViewModel(entity.getDispatchedTo()));
     viewModel.setOrderDate(entity.getOrderDate());
     viewModel.setStatus(entity.getStatus());
     viewModel.setType(entity.getType());

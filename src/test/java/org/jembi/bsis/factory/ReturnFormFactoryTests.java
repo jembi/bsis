@@ -45,7 +45,7 @@ public class ReturnFormFactoryTests {
   @Mock
   private LocationRepository locationRepository;
   @Mock
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
   @Mock
   private ComponentRepository componentRepository;
   @Mock
@@ -107,8 +107,8 @@ public class ReturnFormFactoryTests {
         .build();
     
     // Setup mocks
-    when(locationViewModelFactory.createFullViewModel(returnedFrom)).thenReturn(new LocationFullViewModel(returnedFrom));
-    when(locationViewModelFactory.createFullViewModel(returnedTo)).thenReturn(new LocationFullViewModel(returnedTo));
+    when(locationFactory.createFullViewModel(returnedFrom)).thenReturn(new LocationFullViewModel(returnedFrom));
+    when(locationFactory.createFullViewModel(returnedTo)).thenReturn(new LocationFullViewModel(returnedTo));
 
     // Run test
     ReturnFormViewModel convertedViewModel = returnFormFactory.createViewModel(entity);
@@ -146,8 +146,8 @@ public class ReturnFormFactoryTests {
 
     // Setup mocks
     when(componentFactory.createComponentViewModels(entity.getComponents())).thenReturn(expectedViewModel.getComponents());
-    when(locationViewModelFactory.createFullViewModel(returnedFrom)).thenReturn(new LocationFullViewModel(returnedFrom));
-    when(locationViewModelFactory.createFullViewModel(returnedTo)).thenReturn(new LocationFullViewModel(returnedTo));
+    when(locationFactory.createFullViewModel(returnedFrom)).thenReturn(new LocationFullViewModel(returnedFrom));
+    when(locationFactory.createFullViewModel(returnedTo)).thenReturn(new LocationFullViewModel(returnedTo));
     when(returnFormConstraintChecker.canEdit(entity)).thenReturn(true);
     when(returnFormConstraintChecker.canReturn(entity)).thenReturn(true);
     when(returnFormConstraintChecker.canDiscard(entity)).thenReturn(true);
@@ -201,10 +201,10 @@ public class ReturnFormFactoryTests {
         .build();
     
     // Setup mocks
-    when(locationViewModelFactory.createFullViewModel(returnedFrom1)).thenReturn(new LocationFullViewModel(returnedFrom1));
-    when(locationViewModelFactory.createFullViewModel(returnedFrom2)).thenReturn(new LocationFullViewModel(returnedFrom2));
-    when(locationViewModelFactory.createFullViewModel(returnedTo1)).thenReturn(new LocationFullViewModel(returnedTo1));
-    when(locationViewModelFactory.createFullViewModel(returnedTo2)).thenReturn(new LocationFullViewModel(returnedTo2));
+    when(locationFactory.createFullViewModel(returnedFrom1)).thenReturn(new LocationFullViewModel(returnedFrom1));
+    when(locationFactory.createFullViewModel(returnedFrom2)).thenReturn(new LocationFullViewModel(returnedFrom2));
+    when(locationFactory.createFullViewModel(returnedTo1)).thenReturn(new LocationFullViewModel(returnedTo1));
+    when(locationFactory.createFullViewModel(returnedTo2)).thenReturn(new LocationFullViewModel(returnedTo2));
 
     // Run test
     List<ReturnFormViewModel> convertedViewModels = returnFormFactory.createViewModels(Arrays.asList(entity1, entity2));

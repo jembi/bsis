@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jembi.bsis.factory.LocationViewModelFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.reporting.Report;
@@ -49,7 +49,7 @@ public class ReportsController {
   private TipsRepository tipsRepository;
   
   @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
   
   @RequestMapping(value = "/stockLevels/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
@@ -65,7 +65,7 @@ public class ReportsController {
     List<Location> distributionSites = locationRepository.getDistributionSites();
 
     Map<String, Object> map = new HashMap<>();
-    map.put("distributionSites", locationViewModelFactory.createFullViewModels(distributionSites));
+    map.put("distributionSites", locationFactory.createFullViewModels(distributionSites));
     return map;
   }
 

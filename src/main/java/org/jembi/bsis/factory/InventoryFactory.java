@@ -18,7 +18,7 @@ public class InventoryFactory {
   private ComponentTypeFactory componentTypeFactory;
 
   @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
 
   public List<InventoryViewModel> createViewModels(List<Component> components) {
     List<InventoryViewModel> viewModels = new ArrayList<>();
@@ -36,7 +36,7 @@ public class InventoryFactory {
     viewModel.setComponentCode(component.getComponentCode());
     viewModel.setComponentType(componentTypeFactory.createViewModel(component.getComponentType()));
     viewModel.setCreatedOn(component.getCreatedOn());
-    viewModel.setLocation(locationViewModelFactory.createFullViewModel(component.getLocation()));
+    viewModel.setLocation(locationFactory.createFullViewModel(component.getLocation()));
     viewModel.setExpiryStatus(getExpiryStatus(component));
     viewModel.setDonationIdentificationNumber(component.getDonationIdentificationNumber());
     viewModel.setInventoryStatus(component.getInventoryStatus());

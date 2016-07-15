@@ -20,7 +20,7 @@ import org.jembi.bsis.dto.DuplicateDonorDTO;
 import org.jembi.bsis.factory.DonationViewModelFactory;
 import org.jembi.bsis.factory.DonorDeferralViewModelFactory;
 import org.jembi.bsis.factory.DonorViewModelFactory;
-import org.jembi.bsis.factory.LocationViewModelFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.factory.PostDonationCounsellingViewModelFactory;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.donation.Donation;
@@ -73,7 +73,7 @@ public class DonorController {
   @Autowired
   private LocationRepository locationRepository;
   @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
 
   @Autowired
   private ContactMethodTypeRepository contactMethodTypeRepository;
@@ -443,7 +443,7 @@ public class DonorController {
 
   private void addEditSelectorOptions(Map<String, Object> m) {
     List<Location> venues = locationRepository.getVenues();
-    m.put("venues", locationViewModelFactory.createFullViewModels(venues));
+    m.put("venues", locationFactory.createFullViewModels(venues));
     m.put("preferredContactMethods", contactMethodTypeRepository.getAllContactMethodTypes());
     m.put("languages", donorRepository.getAllLanguages());
     m.put("idTypes", donorRepository.getAllIdTypes());

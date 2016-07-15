@@ -45,7 +45,7 @@ public class ComponentFactoryTests {
   private ComponentFactory componentFactory;
   
   @Mock
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
 
   @Mock
   private ComponentTypeFactory componentTypeFactory;
@@ -83,7 +83,7 @@ public class ComponentFactoryTests {
         .build();
 
     // setup mocks
-    when(locationViewModelFactory.createFullViewModel(location)).thenReturn(new LocationFullViewModel(location));
+    when(locationFactory.createFullViewModel(location)).thenReturn(new LocationFullViewModel(location));
     when(componentTypeFactory.createViewModel(componentType)).thenReturn(new ComponentTypeViewModel(componentType));
 
     // run test

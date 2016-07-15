@@ -59,7 +59,7 @@ public class DonationViewModelFactoryTests {
   @Mock
   private DonorConstraintChecker donorConstraintChecker;
   @Mock
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
   @Mock
   private PackTypeFactory packTypeFactory;
 
@@ -159,7 +159,7 @@ public class DonationViewModelFactoryTests {
     when(donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID)).thenReturn(irrelevantCanUpdatePermission);
     when(donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID)).thenReturn(irrelevantCanDonatePermission);
     when(adverseEventViewModelFactory.createAdverseEventViewModel(adverseEvent)).thenReturn(adverseEventViewModel);
-    when(locationViewModelFactory.createFullViewModel(venue)).thenReturn(new LocationFullViewModel(venue));
+    when(locationFactory.createFullViewModel(venue)).thenReturn(new LocationFullViewModel(venue));
     when(packTypeFactory.createFullViewModel(packType)).thenReturn(packTypeFullViewModel);
 
     DonationViewModel returnedDonationViewModel = donationViewModelFactory.createDonationViewModelWithPermissions(

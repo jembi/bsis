@@ -8,7 +8,7 @@ import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LocationViewModelFactory {
+public class LocationFactory {
   
   public LocationFullViewModel createFullViewModel(Location location) {
     return new LocationFullViewModel(location);

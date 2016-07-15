@@ -7,7 +7,7 @@ import javax.transaction.Transactional;
 
 import org.jembi.bsis.backingform.OrderFormBackingForm;
 import org.jembi.bsis.factory.ComponentTypeFactory;
-import org.jembi.bsis.factory.LocationViewModelFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.factory.OrderFormFactory;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.order.OrderForm;
@@ -44,7 +44,7 @@ public class OrderFormControllerService {
   private ComponentTypeRepository componentTypeRepository;
   
   @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
   
   @Autowired
   private ComponentTypeFactory componentTypeFactory;
@@ -76,12 +76,12 @@ public class OrderFormControllerService {
   
   public List<LocationFullViewModel> getUsageSites() {
     List<Location> usageSites = locationRepository.getUsageSites();
-    return locationViewModelFactory.createFullViewModels(usageSites);
+    return locationFactory.createFullViewModels(usageSites);
   }
   
   public List<LocationFullViewModel> getDistributionSites() {
     List<Location> distributionSites = locationRepository.getDistributionSites();
-    return locationViewModelFactory.createFullViewModels(distributionSites);
+    return locationFactory.createFullViewModels(distributionSites);
   }
   
   public List<ComponentTypeViewModel> getAllComponentTypes() {

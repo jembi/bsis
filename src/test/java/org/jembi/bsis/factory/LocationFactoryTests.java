@@ -13,17 +13,17 @@ import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class LocationViewModelFactoryTests {
+public class LocationFactoryTests {
 
   @InjectMocks
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
 
   @Test
   public void testCreateLocationFullViewModel_shouldReturnViewModelWithTheCorrectState() {
     Long venueId = 1L;
     String venueName = "location";
     Location venue = LocationBuilder.aLocation().withId(venueId).withName(venueName).thatIsVenue().build();
-    LocationFullViewModel venueViewModel = locationViewModelFactory.createFullViewModel(venue);
+    LocationFullViewModel venueViewModel = locationFactory.createFullViewModel(venue);
     Assert.assertNotNull("venue view model was created", venueViewModel);
     Assert.assertEquals("isVenue is correct", true, venueViewModel.getIsVenue());
     Assert.assertEquals("name is correct", venueName, venueViewModel.getName());
@@ -35,7 +35,7 @@ public class LocationViewModelFactoryTests {
     List<Location> locations = new ArrayList<Location>();
     locations.add(LocationBuilder.aLocation().build());
     locations.add(LocationBuilder.aLocation().build());
-    List<LocationFullViewModel> venueViewModels = locationViewModelFactory.createFullViewModels(locations);
+    List<LocationFullViewModel> venueViewModels = locationFactory.createFullViewModels(locations);
     Assert.assertNotNull("venue view models were created", venueViewModels);
     Assert.assertEquals("venue view models were created", 2, venueViewModels.size());
   }

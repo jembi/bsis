@@ -6,7 +6,7 @@ import java.util.Date;
 
 import org.jembi.bsis.factory.ComponentTypeFactory;
 import org.jembi.bsis.factory.InventoryFactory;
-import org.jembi.bsis.factory.LocationViewModelFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.helpers.builders.ComponentBuilder;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.helpers.builders.DonationBuilder;
@@ -33,7 +33,7 @@ public class InventoryFactoryTests {
   private ComponentTypeFactory componentTypeFactory;
 
   @Mock
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
 
   @Test
   public void testCreateInventoryViewModel_shouldReturnViewModelWithTheCorrectState() {
@@ -50,7 +50,7 @@ public class InventoryFactoryTests {
     
     // Setup mocks
     LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
-    when(locationViewModelFactory.createFullViewModel(component.getLocation()))
+    when(locationFactory.createFullViewModel(component.getLocation()))
         .thenReturn(locationFullViewModel);
     ComponentTypeViewModel componentTypeViewModel = new ComponentTypeViewModel(component.getComponentType());
     when(componentTypeFactory.createViewModel(component.getComponentType()))
@@ -83,7 +83,7 @@ public class InventoryFactoryTests {
 
     // Setup mocks
     LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
-    when(locationViewModelFactory.createFullViewModel(component.getLocation())).thenReturn(locationFullViewModel);
+    when(locationFactory.createFullViewModel(component.getLocation())).thenReturn(locationFullViewModel);
     ComponentTypeViewModel componentTypeViewModel = new ComponentTypeViewModel(component.getComponentType());
     when(componentTypeFactory.createViewModel(component.getComponentType())).thenReturn(componentTypeViewModel);
 
@@ -106,7 +106,7 @@ public class InventoryFactoryTests {
 
     // Setup mocks
     LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
-    when(locationViewModelFactory.createFullViewModel(component.getLocation())).thenReturn(locationFullViewModel);
+    when(locationFactory.createFullViewModel(component.getLocation())).thenReturn(locationFullViewModel);
     ComponentTypeViewModel componentTypeViewModel = new ComponentTypeViewModel(component.getComponentType());
     when(componentTypeFactory.createViewModel(component.getComponentType())).thenReturn(componentTypeViewModel);
 
@@ -129,7 +129,7 @@ public class InventoryFactoryTests {
 
     // Setup mocks
     LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
-    when(locationViewModelFactory.createFullViewModel(component.getLocation())).thenReturn(locationFullViewModel);
+    when(locationFactory.createFullViewModel(component.getLocation())).thenReturn(locationFullViewModel);
     ComponentTypeViewModel componentTypeViewModel = new ComponentTypeViewModel(component.getComponentType());
     when(componentTypeFactory.createViewModel(component.getComponentType())).thenReturn(componentTypeViewModel);
 
