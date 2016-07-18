@@ -7,7 +7,6 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.user.User;
-import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,7 +35,7 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
   public void testGetAllLocations() throws Exception {
     List<Location> all = locationRepository.getAllLocations();
     Assert.assertNotNull("There are Locations", all);
-    Assert.assertEquals("There are 8 Locations", 9, all.size());
+    Assert.assertEquals("There are 10 Locations", 10, all.size());
   }
 
   @Test
@@ -70,7 +69,7 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
   @Test
   public void testDeleteLocation() throws Exception {
     locationRepository.deleteLocation(1L);
-    Location one = locationRepository.getLocation(1L);
+    Location one = entityManager.find(Location.class, 1L);
     Assert.assertNotNull("There is a Location", one);
     Assert.assertEquals("The Location is marked as deleted", true, one.getIsDeleted());
   }
@@ -108,30 +107,37 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
-  public void testGetLocationsByUsageSiteType() throws Exception {
+  public void testGetUsageSites() throws Exception {
     List<Location> all = locationRepository.getUsageSites();
     Assert.assertNotNull("There are usage site Locations", all);
     Assert.assertEquals("There are 2 usage site Location", 2, all.size());
   }
 
   @Test
-  public void testGetLocationsByVenueType() throws Exception {
+  public void testGetVenues() throws Exception {
     List<Location> all = locationRepository.getVenues();
     Assert.assertNotNull("There are venue Locations", all);
     Assert.assertEquals("There are 3 venue Locations", 4, all.size());
   }
 
   @Test
-  public void testGetLocationsByProcessingSiteType() throws Exception {
+  public void testGetProcessingSites() throws Exception {
     List<Location> all = locationRepository.getProcessingSites();
     Assert.assertNotNull("There are processing site Locations", all);
     Assert.assertEquals("There is 1 processing site", 1, all.size());
   }
 
   @Test
-  public void testGetLocationsByDistributionSiteType() throws Exception {
+  public void testGetDistributionSites() throws Exception {
     List<Location> all = locationRepository.getDistributionSites();
     Assert.assertNotNull("There are distribution site Locations", all);
     Assert.assertEquals("There is 1 distribution site", 1, all.size());
+  }
+
+  @Test
+  public void testTestingSites() throws Exception {
+    List<Location> all = locationRepository.getTestingSites();
+    Assert.assertNotNull("There are testing site Locations", all);
+    Assert.assertEquals("There is 1 testing site", 1, all.size());
   }
 }

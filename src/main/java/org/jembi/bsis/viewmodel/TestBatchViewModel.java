@@ -7,8 +7,6 @@ import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 public class TestBatchViewModel {
 
   private Long id;
@@ -18,6 +16,7 @@ public class TestBatchViewModel {
   private String batchNumber;
   private String notes;
   private Integer numSamples;
+  private LocationViewModel location;
 
   @JsonSerialize(using = DateTimeSerialiser.class)
   public Date getCreatedDate() {
@@ -77,6 +76,12 @@ public class TestBatchViewModel {
     this.numSamples = numSamples;
   }
 
+  public LocationViewModel getLocation() {
+    return location;
+  }
 
+  public void setLocation(LocationViewModel location) {
+    this.location = location;
+  }
 
 }
