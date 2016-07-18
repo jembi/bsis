@@ -61,7 +61,6 @@ public class LocationsController {
   public ResponseEntity<LocationViewModel> addLocation(
       @RequestBody @Valid LocationBackingForm formData) {
     Location location = formData.getLocation();
-    location.setIsDeleted(false);
     locationRepository.saveLocation(location);
     return new ResponseEntity<>(locationViewModelFactory.createLocationViewModel(location), HttpStatus.CREATED);
 
