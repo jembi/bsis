@@ -1,5 +1,6 @@
 package org.jembi.bsis.controller;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -84,6 +85,14 @@ public class LocationsController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteLocation(@PathVariable long id) {
     locationControlerService.deleteLocation(id);
+  }
+  
+  @RequestMapping(method = RequestMethod.GET, value = "/form")
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
+  public ResponseEntity<Map<String, Object>> getSearchForm() {
+    Map<String, Object> map = new HashMap<>();
+    map.put("locationType", Arrays.asList(LocationType.values()));
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
   @RequestMapping(value = "/search", method = RequestMethod.GET)
