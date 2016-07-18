@@ -44,7 +44,7 @@ public class LocationsController {
   }
 
   @RequestMapping(method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_LOCATIONS + "')")
   public Map<String, Object> getAllLocations(
       HttpServletRequest request, HttpServletResponse response) {
     Map<String, Object> map = new HashMap<String, Object>();
@@ -53,7 +53,7 @@ public class LocationsController {
   }
 
   @RequestMapping(method = RequestMethod.POST)
-  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_LOCATIONS + "')")
   public ResponseEntity<LocationFullViewModel> addLocation(
       @RequestBody @Valid LocationBackingForm form) {
     return new ResponseEntity<>(locationControllerService.addLocation(form), HttpStatus.CREATED);
@@ -61,7 +61,7 @@ public class LocationsController {
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_LOCATIONS + "')")
   public ResponseEntity<Map<String, Object>> updateLocation(@PathVariable long id,
       @RequestBody @Valid LocationBackingForm form) {
     Map<String, Object> map = new HashMap<String, Object>();
@@ -72,7 +72,7 @@ public class LocationsController {
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_LOCATIONS + "')")
   public ResponseEntity<Map<String, Object>> getLocationById(@PathVariable long id) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("location", locationControllerService.getLocationById(id));
@@ -81,14 +81,14 @@ public class LocationsController {
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_LOCATIONS + "')")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteLocation(@PathVariable long id) {
     locationControllerService.deleteLocation(id);
   }
   
   @RequestMapping(method = RequestMethod.GET, value = "/search/form")
-  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_LOCATIONS + "')")
   public ResponseEntity<Map<String, Object>> getSearchForm() {
     Map<String, Object> map = new HashMap<>();
     map.put("locationType", Arrays.asList(LocationType.values()));
@@ -96,7 +96,7 @@ public class LocationsController {
   }
   
   @RequestMapping(value = "/search", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_LOCATIONS + "')")
   public ResponseEntity<Map<String, Object>> search (
       @RequestParam(value = "name", required = false) String name,
       @RequestParam(value = "includeSimilarResults", required = false) boolean includeSimilarResults,

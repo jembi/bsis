@@ -31,5 +31,6 @@
   <include file="./src/main/resources/liquibase/updates/977-not-tested-blood-grouping.xml" />
   <include file="./src/main/resources/liquibase/updates/1161-add-is-testing-site.xml" />
   <include file="./src/main/resources/liquibase/updates/273-remove-legacy-general-config.xml" />
+  <include file="./src/main/resources/liquibase/updates/1158-manage-locations.xml" />
 
 </databaseChangeLog>
