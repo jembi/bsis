@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 public class ComponentViewModel extends BaseViewModel {
 
   private ComponentTypeViewModel componentType;
-  private LocationViewModel location;
+  private LocationFullViewModel location;
   private Date createdOn;
   private Date expiresOn;
   private String donationIdentificationNumber;
@@ -35,11 +35,11 @@ public class ComponentViewModel extends BaseViewModel {
     this.componentType = componentType;
   }
 
-  public LocationViewModel getLocation() {
+  public LocationFullViewModel getLocation() {
     return location;
   }
 
-  public void setLocation(LocationViewModel location) {
+  public void setLocation(LocationFullViewModel location) {
     this.location = location;
   }
 

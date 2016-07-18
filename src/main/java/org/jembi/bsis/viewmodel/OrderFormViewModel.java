@@ -12,9 +12,9 @@ public class OrderFormViewModel extends BaseViewModel {
 
   private Date orderDate;
 
-  private LocationViewModel dispatchedFrom;
+  private LocationFullViewModel dispatchedFrom;
 
-  private LocationViewModel dispatchedTo;
+  private LocationFullViewModel dispatchedTo;
 
   private OrderStatus status;
 
@@ -29,19 +29,19 @@ public class OrderFormViewModel extends BaseViewModel {
     this.orderDate = orderDate;
   }
 
-  public LocationViewModel getDispatchedFrom() {
+  public LocationFullViewModel getDispatchedFrom() {
     return dispatchedFrom;
   }
 
-  public void setDispatchedFrom(LocationViewModel dispatchedFrom) {
+  public void setDispatchedFrom(LocationFullViewModel dispatchedFrom) {
     this.dispatchedFrom = dispatchedFrom;
   }
 
-  public LocationViewModel getDispatchedTo() {
+  public LocationFullViewModel getDispatchedTo() {
     return dispatchedTo;
   }
 
-  public void setDispatchedTo(LocationViewModel dispatchedTo) {
+  public void setDispatchedTo(LocationFullViewModel dispatchedTo) {
     this.dispatchedTo = dispatchedTo;
   }
 

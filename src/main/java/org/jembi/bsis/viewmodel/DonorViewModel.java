@@ -133,8 +133,8 @@ public class DonorViewModel {
     return user.getUsername();
   }
 
-  public LocationViewModel getVenue() {
-    return new LocationViewModel(donor.getVenue());
+  public LocationFullViewModel getVenue() {
+    return new LocationFullViewModel(donor.getVenue());
   }
 
   public String getDateOfLastDonation() {

@@ -12,7 +12,7 @@ import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.viewmodel.AdverseEventViewModel;
 import org.jembi.bsis.viewmodel.DonationTypeViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
-import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
 
 public class DonationViewModelBuilder extends AbstractBuilder<DonationViewModel> {
@@ -40,7 +40,7 @@ public class DonationViewModelBuilder extends AbstractBuilder<DonationViewModel>
   private Integer bloodPressureDiastolic;
   private Date bleedStartTime;
   private Date bleedEndTime;
-  private LocationViewModel venue;
+  private LocationFullViewModel venue;
   private boolean released;
 
   public DonationViewModelBuilder withId(Long id) {
@@ -161,7 +161,7 @@ public class DonationViewModelBuilder extends AbstractBuilder<DonationViewModel>
     return this;
   }
 
-  public DonationViewModelBuilder withVenue(LocationViewModel venue) {
+  public DonationViewModelBuilder withVenue(LocationFullViewModel venue) {
     this.venue = venue;
     return this;
   }

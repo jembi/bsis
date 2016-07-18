@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 public class ComponentFactory {
   
   @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
 
   @Autowired
   private ComponentTypeFactory componentTypeFactory;
@@ -124,7 +124,7 @@ public class ComponentFactory {
     viewModel.setId(component.getId());
     viewModel.setInventoryStatus(component.getInventoryStatus());
     viewModel.setIssuedOn(component.getIssuedOn());
-    viewModel.setLocation(locationViewModelFactory.createLocationViewModel(component.getLocation()));
+    viewModel.setLocation(locationFactory.createFullViewModel(component.getLocation()));
     viewModel.setNotes(component.getNotes());
     viewModel.setPackType(packTypeFactory.createFullViewModel(component.getDonation().getPackType()));
     viewModel.setStatus(component.getStatus());

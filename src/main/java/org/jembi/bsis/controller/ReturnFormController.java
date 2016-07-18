@@ -10,7 +10,7 @@ import javax.validation.Valid;
 import org.jembi.bsis.backingform.ReturnFormBackingForm;
 import org.jembi.bsis.backingform.validator.ReturnFormBackingFormValidator;
 import org.jembi.bsis.controllerservice.ReturnFormControllerService;
-import org.jembi.bsis.factory.LocationViewModelFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.returnform.ReturnStatus;
 import org.jembi.bsis.repository.LocationRepository;
@@ -44,7 +44,7 @@ public class ReturnFormController {
   private LocationRepository locationRepository;
   
   @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
   
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
@@ -59,8 +59,8 @@ public class ReturnFormController {
 
     Map<String, Object> map = new HashMap<>();
     map.put("returnForm", new ReturnFormBackingForm());
-    map.put("usageSites", locationViewModelFactory.createLocationViewModels(usageSites));
-    map.put("distributionSites", locationViewModelFactory.createLocationViewModels(distributionSites));
+    map.put("usageSites", locationFactory.createFullViewModels(usageSites));
+    map.put("distributionSites", locationFactory.createFullViewModels(distributionSites));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 

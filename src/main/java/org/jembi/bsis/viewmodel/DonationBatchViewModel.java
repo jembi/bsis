@@ -16,7 +16,7 @@ public class DonationBatchViewModel {
   private String createdByUsername;
   private String lastUpdatedByUsername;
   private Boolean closed;
-  private LocationViewModel venue;
+  private LocationFullViewModel venue;
   private boolean backEntry;
   private Integer numDonations;
   private String status;
@@ -90,11 +90,11 @@ public class DonationBatchViewModel {
     this.closed = closed;
   }
 
-  public LocationViewModel getVenue() {
+  public LocationFullViewModel getVenue() {
     return venue;
   }
 
-  public void setVenue(LocationViewModel venue) {
+  public void setVenue(LocationFullViewModel venue) {
     this.venue = venue;
   }
 

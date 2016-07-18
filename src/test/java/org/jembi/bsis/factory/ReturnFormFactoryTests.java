@@ -28,7 +28,7 @@ import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.ReturnFormConstraintChecker;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
-import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.ReturnFormFullViewModel;
 import org.jembi.bsis.viewmodel.ReturnFormViewModel;
 import org.junit.Test;
@@ -45,7 +45,7 @@ public class ReturnFormFactoryTests {
   @Mock
   private LocationRepository locationRepository;
   @Mock
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
   @Mock
   private ComponentRepository componentRepository;
   @Mock
@@ -95,8 +95,8 @@ public class ReturnFormFactoryTests {
     Date returnDate = new Date();
 
     ReturnFormViewModel expectedViewModel = ReturnFormViewModelBuilder.aReturnFormViewModel()
-        .withReturnedFrom(new LocationViewModel(returnedFrom))
-        .withReturnedTo(new LocationViewModel(returnedTo))
+        .withReturnedFrom(new LocationFullViewModel(returnedFrom))
+        .withReturnedTo(new LocationFullViewModel(returnedTo))
         .withReturnDate(returnDate)
         .build();
 
@@ -107,8 +107,8 @@ public class ReturnFormFactoryTests {
         .build();
     
     // Setup mocks
-    when(locationViewModelFactory.createLocationViewModel(returnedFrom)).thenReturn(new LocationViewModel(returnedFrom));
-    when(locationViewModelFactory.createLocationViewModel(returnedTo)).thenReturn(new LocationViewModel(returnedTo));
+    when(locationFactory.createFullViewModel(returnedFrom)).thenReturn(new LocationFullViewModel(returnedFrom));
+    when(locationFactory.createFullViewModel(returnedTo)).thenReturn(new LocationFullViewModel(returnedTo));
 
     // Run test
     ReturnFormViewModel convertedViewModel = returnFormFactory.createViewModel(entity);
@@ -127,8 +127,8 @@ public class ReturnFormFactoryTests {
     ComponentViewModel componentViewModel = ComponentViewModelBuilder.aComponentViewModel().withId(1L).build();
 
     ReturnFormFullViewModel expectedViewModel = ReturnFormFullViewModelBuilder.aReturnFormFullViewModel()
-        .withReturnedFrom(new LocationViewModel(returnedFrom))
-        .withReturnedTo(new LocationViewModel(returnedTo))
+        .withReturnedFrom(new LocationFullViewModel(returnedFrom))
+        .withReturnedTo(new LocationFullViewModel(returnedTo))
         .withReturnDate(returnDate)
         .withComponent(componentViewModel)
         .withPermission("canEdit", true)
@@ -146,8 +146,8 @@ public class ReturnFormFactoryTests {
 
     // Setup mocks
     when(componentFactory.createComponentViewModels(entity.getComponents())).thenReturn(expectedViewModel.getComponents());
-    when(locationViewModelFactory.createLocationViewModel(returnedFrom)).thenReturn(new LocationViewModel(returnedFrom));
-    when(locationViewModelFactory.createLocationViewModel(returnedTo)).thenReturn(new LocationViewModel(returnedTo));
+    when(locationFactory.createFullViewModel(returnedFrom)).thenReturn(new LocationFullViewModel(returnedFrom));
+    when(locationFactory.createFullViewModel(returnedTo)).thenReturn(new LocationFullViewModel(returnedTo));
     when(returnFormConstraintChecker.canEdit(entity)).thenReturn(true);
     when(returnFormConstraintChecker.canReturn(entity)).thenReturn(true);
     when(returnFormConstraintChecker.canDiscard(entity)).thenReturn(true);
@@ -176,8 +176,8 @@ public class ReturnFormFactoryTests {
     Location returnedTo1 = LocationBuilder.aDistributionSite().withId(2L).build();
     Date returnDate1 = new Date();
     ReturnFormViewModel expectedViewModel1 = ReturnFormViewModelBuilder.aReturnFormViewModel()
-        .withReturnedFrom(new LocationViewModel(returnedFrom1))
-        .withReturnedTo(new LocationViewModel(returnedTo1))
+        .withReturnedFrom(new LocationFullViewModel(returnedFrom1))
+        .withReturnedTo(new LocationFullViewModel(returnedTo1))
         .withReturnDate(returnDate1)
         .build();
     ReturnForm entity1 = ReturnFormBuilder.aReturnForm()
@@ -190,8 +190,8 @@ public class ReturnFormFactoryTests {
     Location returnedTo2 = LocationBuilder.aDistributionSite().withId(2L).build();
     Date returnDate2 = new Date();
     ReturnFormViewModel expectedViewModel2 = ReturnFormViewModelBuilder.aReturnFormViewModel()
-        .withReturnedFrom(new LocationViewModel(returnedFrom2))
-        .withReturnedTo(new LocationViewModel(returnedTo2))
+        .withReturnedFrom(new LocationFullViewModel(returnedFrom2))
+        .withReturnedTo(new LocationFullViewModel(returnedTo2))
         .withReturnDate(returnDate2)
         .build();
     ReturnForm entity2 = ReturnFormBuilder.aReturnForm()
@@ -201,10 +201,10 @@ public class ReturnFormFactoryTests {
         .build();
     
     // Setup mocks
-    when(locationViewModelFactory.createLocationViewModel(returnedFrom1)).thenReturn(new LocationViewModel(returnedFrom1));
-    when(locationViewModelFactory.createLocationViewModel(returnedFrom2)).thenReturn(new LocationViewModel(returnedFrom2));
-    when(locationViewModelFactory.createLocationViewModel(returnedTo1)).thenReturn(new LocationViewModel(returnedTo1));
-    when(locationViewModelFactory.createLocationViewModel(returnedTo2)).thenReturn(new LocationViewModel(returnedTo2));
+    when(locationFactory.createFullViewModel(returnedFrom1)).thenReturn(new LocationFullViewModel(returnedFrom1));
+    when(locationFactory.createFullViewModel(returnedFrom2)).thenReturn(new LocationFullViewModel(returnedFrom2));
+    when(locationFactory.createFullViewModel(returnedTo1)).thenReturn(new LocationFullViewModel(returnedTo1));
+    when(locationFactory.createFullViewModel(returnedTo2)).thenReturn(new LocationFullViewModel(returnedTo2));
 
     // Run test
     List<ReturnFormViewModel> convertedViewModels = returnFormFactory.createViewModels(Arrays.asList(entity1, entity2));
