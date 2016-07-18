@@ -1,11 +1,8 @@
 package org.jembi.bsis.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.jembi.bsis.backingform.LocationBackingForm;
@@ -44,16 +41,6 @@ public class LocationsController {
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(locationBackingFormValidator);
-  }
-
-  @RequestMapping(method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
-  public Map<String, Object> configureLocationsFormGenerator(
-      HttpServletRequest request, HttpServletResponse response) {
-    Map<String, Object> map = new HashMap<String, Object>();
-    List<Location> allLocations = locationRepository.getAllLocations();
-    map.put("allLocations", locationViewModelFactory.createLocationViewModels(allLocations));
-    return map;
   }
 
   @RequestMapping(method = RequestMethod.POST)
