@@ -87,7 +87,7 @@ public class LocationsController {
     locationControllerService.deleteLocation(id);
   }
   
-  @RequestMapping(method = RequestMethod.GET, value = "/form")
+  @RequestMapping(method = RequestMethod.GET, value = "/search/form")
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_SITES + "')")
   public ResponseEntity<Map<String, Object>> getSearchForm() {
     Map<String, Object> map = new HashMap<>();
