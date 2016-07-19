@@ -45,7 +45,7 @@ public class LocationControllerService {
   }
 
   public List<LocationViewModel> findLocations(String name, boolean includeSimilarResults, LocationType locationType) {
-    List<Location> locations = locationRepository.findLocations(name, includeSimilarResults, locationType);
+    List<Location> locations = locationRepository.findLocations(name, includeSimilarResults, locationType, true);
     return locationFactory.createViewModels(locations);
   }
 

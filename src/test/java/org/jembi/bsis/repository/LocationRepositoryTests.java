@@ -29,7 +29,7 @@ public class LocationRepositoryTests extends ContextDependentTestSuite {
     Location location4 = aLocation().withName("anything else").buildAndPersist(entityManager);
     Location location5 = aLocation().withName("testingthis").buildAndPersist(entityManager); // match
    
-    List<Location> locations = locationRepository.findLocations("test", true, null);
+    List<Location> locations = locationRepository.findLocations("test", true, null, true);
     
     // Verify locations returned
     Assert.assertEquals("Verify locations returned", 3, locations.size());
@@ -50,7 +50,7 @@ public class LocationRepositoryTests extends ContextDependentTestSuite {
     Location location4 = aLocation().withName("anything else").buildAndPersist(entityManager);
     Location location5 = aLocation().withName("testingthis").buildAndPersist(entityManager);
    
-    List<Location> locations = locationRepository.findLocations("testing", false, null);
+    List<Location> locations = locationRepository.findLocations("testing", false, null, true);
     
     // Verify locations returned
     Assert.assertEquals("Verify locations returned", 1, locations.size());
@@ -71,7 +71,7 @@ public class LocationRepositoryTests extends ContextDependentTestSuite {
     Location location4 = aVenue().withName("anything else").buildAndPersist(entityManager);
     Location location5 = aVenue().withName("testingthis").buildAndPersist(entityManager);
    
-    List<Location> locations = locationRepository.findLocations("retesting", true, LocationType.VENUE);
+    List<Location> locations = locationRepository.findLocations("retesting", true, LocationType.VENUE, true);
     
     // Verify locations returned
     Assert.assertEquals("Verify locations returned", 1, locations.size());
@@ -92,7 +92,7 @@ public class LocationRepositoryTests extends ContextDependentTestSuite {
     Location location4 = aTestingSite().withName("test4").buildAndPersist(entityManager);
     Location location5 = aUsageSite().withName("test5").buildAndPersist(entityManager);
    
-    List<Location> locations = locationRepository.findLocations("", true, LocationType.DISTRIBUTION_SITE);
+    List<Location> locations = locationRepository.findLocations("", true, LocationType.DISTRIBUTION_SITE, true);
     
     // Verify locations returned
     Assert.assertEquals("Verify locations returned", 2, locations.size());
@@ -113,7 +113,7 @@ public class LocationRepositoryTests extends ContextDependentTestSuite {
     Location location4 = aProcessingSite().withName("test4").buildAndPersist(entityManager); // match
     Location location5 = aUsageSite().withName("test5").buildAndPersist(entityManager);
    
-    List<Location> locations = locationRepository.findLocations(null, false, LocationType.PROCESSING_SITE);
+    List<Location> locations = locationRepository.findLocations(null, false, LocationType.PROCESSING_SITE, true);
     
     // Verify locations returned
     Assert.assertEquals("Verify locations returned", 2, locations.size());
@@ -134,7 +134,7 @@ public class LocationRepositoryTests extends ContextDependentTestSuite {
     Location location4 = aTestingSite().withName("test4").buildAndPersist(entityManager); // match
     Location location5 = aUsageSite().withName("test5").buildAndPersist(entityManager);
    
-    List<Location> locations = locationRepository.findLocations(null, true, LocationType.TESTING_SITE);
+    List<Location> locations = locationRepository.findLocations(null, true, LocationType.TESTING_SITE, true);
     
     // Verify locations returned
     Assert.assertEquals("Verify locations returned", 2, locations.size());
@@ -155,7 +155,7 @@ public class LocationRepositoryTests extends ContextDependentTestSuite {
     Location location4 = aTestingSite().withName("test4").buildAndPersist(entityManager);
     Location location5 = aUsageSite().withName("test5").buildAndPersist(entityManager); // match
    
-    List<Location> locations = locationRepository.findLocations(null, false, LocationType.USAGE_SITE);
+    List<Location> locations = locationRepository.findLocations(null, false, LocationType.USAGE_SITE, true);
     
     // Verify locations returned
     Assert.assertEquals("Verify locations returned", 1, locations.size());
@@ -176,7 +176,7 @@ public class LocationRepositoryTests extends ContextDependentTestSuite {
     Location location4 = aTestingSite().withName("test4").buildAndPersist(entityManager);
     Location location5 = aUsageSite().withName("test5").buildAndPersist(entityManager);
    
-    List<Location> locations = locationRepository.findLocations(null, false, null);
+    List<Location> locations = locationRepository.findLocations(null, false, null, false);
     
     // Verify locations returned
     Assert.assertEquals("Verify locations returned", 4, locations.size());
@@ -197,7 +197,7 @@ public class LocationRepositoryTests extends ContextDependentTestSuite {
     Location location4 = aTestingSite().withName("test4").buildAndPersist(entityManager);
     Location location5 = aUsageSite().withName("test5").buildAndPersist(entityManager);
    
-    List<Location> locations = locationRepository.findLocations("test", false, LocationType.VENUE);
+    List<Location> locations = locationRepository.findLocations("test", false, LocationType.VENUE, true);
     
     // Verify locations returned
     Assert.assertEquals("Verify locations returned", 0, locations.size());
